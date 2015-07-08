@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\read-me.md" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

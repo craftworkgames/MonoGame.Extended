@@ -11,6 +11,7 @@ namespace Game1
         private SpriteBatch _spriteBatch;
         private TextureRegion2D _textureRegion;
         private OrthographicCamera _camera;
+        private Texture2D _backgroundTexture;
 
         public Game1()
         {
@@ -21,13 +22,17 @@ namespace Game1
 
         protected override void Initialize()
         {
-            _camera = new OrthographicCamera();
+            _camera = new OrthographicCamera
+            {
+                Origin = new Vector2(GraphicsDevice.Viewport.Width / 2f, GraphicsDevice.Viewport.Height / 2f)
+            };
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _backgroundTexture = Content.Load<Texture2D>("hills");
 
             var texture = Content.Load<Texture2D>("shadedDark42");
             _textureRegion = new TextureRegion2D(texture, 5, 5, 32, 32);
@@ -39,14 +44,33 @@ namespace Game1
 
         protected override void Update(GameTime gameTime)
         {
+            var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
             var gamePadState = GamePad.GetState(PlayerIndex.One);
 
             if (gamePadState.Buttons.Back == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
+            var up = new Vector2(0, -250);
+            var right = new Vector2(250, 0);
+
+            if (keyboardState.IsKeyDown(Keys.Q))
+                _camera.Rotation -= deltaTime;
+
+            if (keyboardState.IsKeyDown(Keys.W))
+                _camera.Rotation += deltaTime;
+
             if (keyboardState.IsKeyDown(Keys.Up))
-                _camera.Position += new Vector2(-1, -1);
+                _camera.Position += up * deltaTime;
+
+            if (keyboardState.IsKeyDown(Keys.Down))
+                _camera.Position += -up * deltaTime;
+            
+            if (keyboardState.IsKeyDown(Keys.Left))
+                _camera.Position += -right * deltaTime;
+            
+            if (keyboardState.IsKeyDown(Keys.Right))
+                _camera.Position += right * deltaTime;
 
             base.Update(gameTime);
         }
@@ -57,6 +81,7 @@ namespace Game1
 
             var transformMatrix = _camera.CalculateTransformMatrix();
             _spriteBatch.Begin(transformMatrix: transformMatrix);
+            _spriteBatch.Draw(_backgroundTexture, Vector2.Zero);
             _spriteBatch.Draw(_textureRegion, Vector2.Zero, Color.White);
             _spriteBatch.End();
 
