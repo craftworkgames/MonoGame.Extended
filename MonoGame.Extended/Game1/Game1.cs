@@ -10,6 +10,7 @@ namespace Game1
         private GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
         private TextureRegion2D _textureRegion;
+        private OrthographicCamera _camera;
 
         public Game1()
         {
@@ -18,9 +19,16 @@ namespace Game1
             IsMouseVisible = true;
         }
 
+        protected override void Initialize()
+        {
+            _camera = new OrthographicCamera();
+            base.Initialize();
+        }
+
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
             var texture = Content.Load<Texture2D>("shadedDark42");
             _textureRegion = new TextureRegion2D(texture, 5, 5, 32, 32);
         }
@@ -37,6 +45,9 @@ namespace Game1
             if (gamePadState.Buttons.Back == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
+            if (keyboardState.IsKeyDown(Keys.Up))
+                _camera.Position += new Vector2(-1, -1);
+
             base.Update(gameTime);
         }
 
@@ -44,7 +55,8 @@ namespace Game1
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin();
+            var transformMatrix = _camera.CalculateTransformMatrix();
+            _spriteBatch.Begin(transformMatrix: transformMatrix);
             _spriteBatch.Draw(_textureRegion, Vector2.Zero, Color.White);
             _spriteBatch.End();
 

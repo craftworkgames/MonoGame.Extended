@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Camera.cs" />
+    <Compile Include="IMovable.cs" />
+    <Compile Include="IRotatable.cs" />
+    <Compile Include="OrthographicCamera.cs" />
     <Compile Include="SpriteBatchExtensions.cs" />
     <Compile Include="TextureRegion2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
