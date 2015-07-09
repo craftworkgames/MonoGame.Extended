@@ -1,15 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended
 {
-    public abstract class Camera : IMovable, IRotatable
+    public class Camera2D : IMovable, IRotatable
     {
-        protected Camera()
+        public Camera2D(Viewport viewport)
+            : this(viewport.Width, viewport.Height)
+        {
+        }
+
+        public Camera2D(int viewportWidth, int viewportHeight)
         {
             Position = Vector2.Zero;
             Rotation = 0;
             Zoom = 1;
-            Origin = Vector2.Zero;
+            Origin = new Vector2(viewportWidth / 2f, viewportHeight / 2f);
         }
 
         public Vector2 Position { get; set; }

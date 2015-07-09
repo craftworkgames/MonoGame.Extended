@@ -10,7 +10,7 @@ namespace Game1
         private GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
         private TextureRegion2D _textureRegion;
-        private OrthographicCamera _camera;
+        private Camera2D _camera;
         private Texture2D[] _backgroundTexture;
         private Texture2D _backgroundTextureClouds;
         private Texture2D _backgroundTextureSky;
@@ -24,10 +24,9 @@ namespace Game1
 
         protected override void Initialize()
         {
-            _camera = new OrthographicCamera
+            _camera = new Camera2D(GraphicsDevice.Viewport)
             {
-                Origin = new Vector2(GraphicsDevice.Viewport.Width / 2f, GraphicsDevice.Viewport.Height / 2f),
-                Zoom = 0.2f
+                Zoom = 0.5f
             };
             base.Initialize();
         }
