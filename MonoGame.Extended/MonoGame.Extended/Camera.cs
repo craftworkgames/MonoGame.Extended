@@ -56,10 +56,10 @@ namespace MonoGame.Extended
         //    return new Rectangle((int)min.X, (int)min.Y, (int)(max.X - min.X), (int)(max.Y - min.Y));
         //}
 
-        public Matrix CalculateTransformMatrix(float parallaxFactor)
+        public Matrix CalculateTransformMatrix(Vector2 parallaxFactor)
         {
-            var cx = (int)(Position.X * parallaxFactor);
-            var cy = (int)(Position.Y * parallaxFactor);
+            var cx = (int)(Position.X * parallaxFactor.X);
+            var cy = (int)(Position.Y * parallaxFactor.Y);
             return
                 Matrix.CreateTranslation(new Vector3(-cx, -cy, 0)) *
                 Matrix.CreateRotationZ(Rotation) *
@@ -70,7 +70,7 @@ namespace MonoGame.Extended
 
         public Matrix CalculateTransformMatrix()
         {
-            return CalculateTransformMatrix(1.0f);
+            return CalculateTransformMatrix(Vector2.One);
         }
     }
 }

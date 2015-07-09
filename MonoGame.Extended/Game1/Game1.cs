@@ -11,7 +11,9 @@ namespace Game1
         private SpriteBatch _spriteBatch;
         private TextureRegion2D _textureRegion;
         private OrthographicCamera _camera;
-        private Texture2D _backgroundTexture;
+        private Texture2D[] _backgroundTexture;
+        private Texture2D _backgroundTextureClouds;
+        private Texture2D _backgroundTextureSky;
 
         public Game1()
         {
@@ -24,7 +26,8 @@ namespace Game1
         {
             _camera = new OrthographicCamera
             {
-                Origin = new Vector2(GraphicsDevice.Viewport.Width / 2f, GraphicsDevice.Viewport.Height / 2f)
+                Origin = new Vector2(GraphicsDevice.Viewport.Width / 2f, GraphicsDevice.Viewport.Height / 2f),
+                Zoom = 0.2f
             };
             base.Initialize();
         }
@@ -32,7 +35,13 @@ namespace Game1
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _backgroundTexture = Content.Load<Texture2D>("hills");
+            _backgroundTexture = new Texture2D[4];
+            _backgroundTexture[0] = Content.Load<Texture2D>("Hills_1");
+            _backgroundTexture[1] = Content.Load<Texture2D>("Hills_2");
+            _backgroundTexture[2] = Content.Load<Texture2D>("Hills_3");
+            _backgroundTexture[3] = Content.Load<Texture2D>("Hills_4");
+            _backgroundTextureClouds = Content.Load<Texture2D>("Hills_Couds");
+            _backgroundTextureSky = Content.Load<Texture2D>("Hills_Sky");
 
             var texture = Content.Load<Texture2D>("shadedDark42");
             _textureRegion = new TextureRegion2D(texture, 5, 5, 32, 32);
@@ -79,11 +88,19 @@ namespace Game1
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            var transformMatrix = _camera.CalculateTransformMatrix();
-            _spriteBatch.Begin(transformMatrix: transformMatrix);
-            _spriteBatch.Draw(_backgroundTexture, Vector2.Zero);
-            _spriteBatch.Draw(_textureRegion, Vector2.Zero, Color.White);
+            _spriteBatch.Begin(transformMatrix: _camera.CalculateTransformMatrix());
+            _spriteBatch.Draw(_backgroundTextureSky, Vector2.Zero);
+            _spriteBatch.Draw(_backgroundTextureClouds, Vector2.Zero);
             _spriteBatch.End();
+            
+            for(var i = 0; i < 4; i++)
+            {
+                var parallaxFactor = new Vector2(1.0f + 0.2f * i, 1.0f);
+                var transformMatrix = _camera.CalculateTransformMatrix(parallaxFactor);
+                _spriteBatch.Begin(transformMatrix: transformMatrix);
+                _spriteBatch.Draw(_backgroundTexture[i], Vector2.Zero);
+                _spriteBatch.End();
+            }
 
             base.Draw(gameTime);
         }
