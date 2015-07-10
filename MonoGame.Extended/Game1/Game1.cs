@@ -46,10 +46,13 @@ namespace Game1
         {
         }
 
+        private int _previousScrollWheelValue = 0;
+
         protected override void Update(GameTime gameTime)
         {
             var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
+            var mouseState = Mouse.GetState();
             var gamePadState = GamePad.GetState(PlayerIndex.One);
 
             if (gamePadState.Buttons.Back == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Escape))
@@ -58,23 +61,41 @@ namespace Game1
             var up = new Vector2(0, -250);
             var right = new Vector2(250, 0);
 
+            // rotation
             if (keyboardState.IsKeyDown(Keys.Q))
                 _camera.Rotation -= deltaTime;
 
             if (keyboardState.IsKeyDown(Keys.W))
                 _camera.Rotation += deltaTime;
 
+            // movement
+            var direction = Vector2.Zero;
+
             if (keyboardState.IsKeyDown(Keys.Up))
-                _camera.Position += up * deltaTime;
+                direction += up * deltaTime;
 
             if (keyboardState.IsKeyDown(Keys.Down))
-                _camera.Position += -up * deltaTime;
+                direction += -up * deltaTime;
             
             if (keyboardState.IsKeyDown(Keys.Left))
-                _camera.Position += -right * deltaTime;
+                direction += -right * deltaTime;
             
             if (keyboardState.IsKeyDown(Keys.Right))
-                _camera.Position += right * deltaTime;
+                direction += right * deltaTime;
+
+            _camera.Move(direction);
+            
+            // zoom
+            var scrollWheelDelta = mouseState.ScrollWheelValue - _previousScrollWheelValue;
+
+            if (scrollWheelDelta != 0)
+                _camera.Zoom += scrollWheelDelta * 0.0001f;
+
+            _previousScrollWheelValue = mouseState.ScrollWheelValue;
+
+            // look at
+            if (mouseState.LeftButton == ButtonState.Pressed)
+                _camera.LookAt(_camera.ToScreenSpace(new Vector2(mouseState.X, mouseState.Y)));
 
             base.Update(gameTime);
         }
@@ -87,12 +108,12 @@ namespace Game1
             _spriteBatch.Draw(_backgroundTextureSky, Vector2.Zero);
             _spriteBatch.Draw(_backgroundTextureClouds, Vector2.Zero);
             _spriteBatch.End();
-            
-            for(var i = 0; i < 4; i++)
+
+            for (var i = 0; i < 4; i++)
             {
-                var parallaxFactor = new Vector2(1.0f + 0.2f * i, 1.0f - 0.05f * i);
-                var transformMatrix = _camera.GetViewMatrix(parallaxFactor);
-                _spriteBatch.Begin(transformMatrix: transformMatrix);
+                var parallaxFactor = new Vector2(0.5f + 0.25f * i, 1.0f - 0.05f * i);
+                var viewMatrix = _camera.GetViewMatrix(parallaxFactor);
+                _spriteBatch.Begin(transformMatrix: viewMatrix);
                 _spriteBatch.Draw(_backgroundTexture[i], Vector2.Zero);
                 _spriteBatch.End();
             }

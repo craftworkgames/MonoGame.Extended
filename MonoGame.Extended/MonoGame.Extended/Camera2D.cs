@@ -3,19 +3,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended
 {
-    public class Camera2D : IMovable, IRotatable
+    public class Camera2D
     {
-        public Camera2D(Viewport viewport)
-            : this(viewport.Width, viewport.Height)
-        {
-        }
+        private readonly Viewport _viewport;
 
-        public Camera2D(int viewportWidth, int viewportHeight)
+        public Camera2D(Viewport viewport)
         {
+            _viewport = viewport;
+
             Rotation = 0;
             Zoom = 1;
-            Origin = new Vector2(viewportWidth / 2f, viewportHeight / 2f);
-            Position = Origin;
+            Origin = new Vector2(viewport.Width / 2f, viewport.Height / 2f);
+            Position = Vector2.Zero;
         }
 
         public Vector2 Position { get; set; }
@@ -23,44 +22,25 @@ namespace MonoGame.Extended
         public float Zoom { get; set; }
         public Vector2 Origin { get; set; }
 
-        public Vector2 ToWorldSpace(Vector2 position)
+        public void Move(Vector2 direction)
         {
-            return Vector2.Transform(position, Matrix.Invert(GetViewMatrix()));
+            Position += Vector2.Transform(direction, Matrix.CreateRotationZ(-Rotation));
         }
 
-        public Vector2 ToWorldSpace(float x, float y)
+        public void LookAt(Vector2 position)
         {
-            return ToWorldSpace(new Vector2(x, y));
+            Position = position - new Vector2(_viewport.Width / 2f, _viewport.Height / 2f);
         }
 
-        public Vector2 ToScreenSpace(Vector2 position)
+        public Vector2 WorldToScreen(Vector2 worldPosition)
         {
-            return Vector2.Transform(position, GetViewMatrix());
+            return Vector2.Transform(worldPosition, GetViewMatrix());
         }
 
-        public Vector2 ToScreenSpace(float x, float y)
+        public Vector2 ScreenToWorld(Vector2 screenPosition)
         {
-            return ToScreenSpace(new Vector2(x, y));
+            return Vector2.Transform(screenPosition, Matrix.Invert(GetViewMatrix()));
         }
-
-        //public Rectangle GetVisibileRectangle(int screenWidth, int screenHeight)
-        //{
-        //    // NOT TESTED - Source: http://gamedev.stackexchange.com/questions/59301/xna-2d-camera-scrolling-why-use-matrix-transform
-        //    var viewMatrix = GetViewMatrix();
-        //    var inverseViewMatrix = Matrix.Invert(viewMatrix);
-        //    var topLeft = Vector2.Transform(Vector2.Zero, inverseViewMatrix);
-        //    var topRight = Vector2.Transform(new Vector2(screenWidth, 0), inverseViewMatrix);
-        //    var bottomLeft = Vector2.Transform(new Vector2(0, screenHeight), inverseViewMatrix);
-        //    var bottomRight = Vector2.Transform(new Vector2(screenWidth, screenHeight), inverseViewMatrix);
-        //    var min = new Vector2(
-        //        MathHelper.Min(topLeft.X, MathHelper.Min(topRight.X, MathHelper.Min(bottomLeft.X, bottomRight.X))),
-        //        MathHelper.Min(topLeft.Y, MathHelper.Min(topRight.Y, MathHelper.Min(bottomLeft.Y, bottomRight.Y))));
-        //    var max = new Vector2(
-        //        MathHelper.Max(topLeft.X, MathHelper.Max(topRight.X, MathHelper.Max(bottomLeft.X, bottomRight.X))),
-        //        MathHelper.Max(topLeft.Y, MathHelper.Max(topRight.Y, MathHelper.Max(bottomLeft.Y, bottomRight.Y))));
-
-        //    return new Rectangle((int)min.X, (int)min.Y, (int)(max.X - min.X), (int)(max.Y - min.Y));
-        //}
 
         public Matrix GetViewMatrix(Vector2 parallaxFactor)
         {
