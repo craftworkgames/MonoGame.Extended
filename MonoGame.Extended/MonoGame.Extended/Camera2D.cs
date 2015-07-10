@@ -12,10 +12,10 @@ namespace MonoGame.Extended
 
         public Camera2D(int viewportWidth, int viewportHeight)
         {
-            Position = Vector2.Zero;
             Rotation = 0;
             Zoom = 1;
             Origin = new Vector2(viewportWidth / 2f, viewportHeight / 2f);
+            Position = Origin;
         }
 
         public Vector2 Position { get; set; }
@@ -25,7 +25,7 @@ namespace MonoGame.Extended
 
         public Vector2 ToWorldSpace(Vector2 position)
         {
-            return Vector2.Transform(position, Matrix.Invert(CalculateTransformMatrix()));
+            return Vector2.Transform(position, Matrix.Invert(GetViewMatrix()));
         }
 
         public Vector2 ToWorldSpace(float x, float y)
@@ -35,7 +35,7 @@ namespace MonoGame.Extended
 
         public Vector2 ToScreenSpace(Vector2 position)
         {
-            return Vector2.Transform(position, CalculateTransformMatrix());
+            return Vector2.Transform(position, GetViewMatrix());
         }
 
         public Vector2 ToScreenSpace(float x, float y)
@@ -46,7 +46,7 @@ namespace MonoGame.Extended
         //public Rectangle GetVisibileRectangle(int screenWidth, int screenHeight)
         //{
         //    // NOT TESTED - Source: http://gamedev.stackexchange.com/questions/59301/xna-2d-camera-scrolling-why-use-matrix-transform
-        //    var viewMatrix = CalculateTransformMatrix();
+        //    var viewMatrix = GetViewMatrix();
         //    var inverseViewMatrix = Matrix.Invert(viewMatrix);
         //    var topLeft = Vector2.Transform(Vector2.Zero, inverseViewMatrix);
         //    var topRight = Vector2.Transform(new Vector2(screenWidth, 0), inverseViewMatrix);
@@ -62,21 +62,19 @@ namespace MonoGame.Extended
         //    return new Rectangle((int)min.X, (int)min.Y, (int)(max.X - min.X), (int)(max.Y - min.Y));
         //}
 
-        public Matrix CalculateTransformMatrix(Vector2 parallaxFactor)
+        public Matrix GetViewMatrix(Vector2 parallaxFactor)
         {
-            var cx = (int)(Position.X * parallaxFactor.X);
-            var cy = (int)(Position.Y * parallaxFactor.Y);
-            return
-                Matrix.CreateTranslation(new Vector3(-cx, -cy, 0)) *
+            return 
+                Matrix.CreateTranslation(new Vector3(-Position * parallaxFactor, 0.0f)) *
+                Matrix.CreateTranslation(new Vector3(-Origin, 0.0f)) *
                 Matrix.CreateRotationZ(Rotation) *
-                //Matrix.CreateScale(_viewport.Scale.X, _viewport.Scale.Y, 1.0f) *
-                Matrix.CreateScale(Zoom) *
-                Matrix.CreateTranslation(Origin.X, Origin.Y, 0);
+                Matrix.CreateScale(Zoom, Zoom, 1) *
+                Matrix.CreateTranslation(new Vector3(Origin, 0.0f)); 
         }
 
-        public Matrix CalculateTransformMatrix()
+        public Matrix GetViewMatrix()
         {
-            return CalculateTransformMatrix(Vector2.One);
+            return GetViewMatrix(Vector2.One);
         }
     }
 }

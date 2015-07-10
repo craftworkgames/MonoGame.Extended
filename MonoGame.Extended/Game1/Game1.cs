@@ -9,7 +9,6 @@ namespace Game1
     {
         private GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
-        private TextureRegion2D _textureRegion;
         private Camera2D _camera;
         private Texture2D[] _backgroundTexture;
         private Texture2D _backgroundTextureClouds;
@@ -24,10 +23,7 @@ namespace Game1
 
         protected override void Initialize()
         {
-            _camera = new Camera2D(GraphicsDevice.Viewport)
-            {
-                Zoom = 0.5f
-            };
+            _camera = new Camera2D(GraphicsDevice.Viewport);
             base.Initialize();
         }
 
@@ -42,8 +38,8 @@ namespace Game1
             _backgroundTextureClouds = Content.Load<Texture2D>("Hills_Couds");
             _backgroundTextureSky = Content.Load<Texture2D>("Hills_Sky");
 
-            var texture = Content.Load<Texture2D>("shadedDark42");
-            _textureRegion = new TextureRegion2D(texture, 5, 5, 32, 32);
+            //var texture = Content.Load<Texture2D>("shadedDark42");
+            //new TextureRegion2D(texture, 5, 5, 32, 32);
         }
 
         protected override void UnloadContent()
@@ -87,15 +83,15 @@ namespace Game1
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin(transformMatrix: _camera.CalculateTransformMatrix());
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.Draw(_backgroundTextureSky, Vector2.Zero);
             _spriteBatch.Draw(_backgroundTextureClouds, Vector2.Zero);
             _spriteBatch.End();
             
             for(var i = 0; i < 4; i++)
             {
-                var parallaxFactor = new Vector2(1.0f + 0.2f * i, 1.0f);
-                var transformMatrix = _camera.CalculateTransformMatrix(parallaxFactor);
+                var parallaxFactor = new Vector2(1.0f + 0.2f * i, 1.0f - 0.05f * i);
+                var transformMatrix = _camera.GetViewMatrix(parallaxFactor);
                 _spriteBatch.Begin(transformMatrix: transformMatrix);
                 _spriteBatch.Draw(_backgroundTexture[i], Vector2.Zero);
                 _spriteBatch.End();
