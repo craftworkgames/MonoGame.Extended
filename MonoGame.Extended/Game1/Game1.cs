@@ -94,24 +94,28 @@ namespace Game1
             _previousScrollWheelValue = mouseState.ScrollWheelValue;
 
             // look at
-            if (mouseState.LeftButton == ButtonState.Pressed)
-                _camera.LookAt(_camera.ToScreenSpace(new Vector2(mouseState.X, mouseState.Y)));
+            if (mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+                _camera.LookAt(_camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y)));
+
+            _previousMouseState = mouseState;
 
             base.Update(gameTime);
         }
+
+        private MouseState _previousMouseState;
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(new Vector2(0.0f, 1.0f)));
             _spriteBatch.Draw(_backgroundTextureSky, Vector2.Zero);
             _spriteBatch.Draw(_backgroundTextureClouds, Vector2.Zero);
             _spriteBatch.End();
 
             for (var i = 0; i < 4; i++)
             {
-                var parallaxFactor = new Vector2(0.5f + 0.25f * i, 1.0f - 0.05f * i);
+                var parallaxFactor = new Vector2(0.5f + 0.25f * i, 1.0f);
                 var viewMatrix = _camera.GetViewMatrix(parallaxFactor);
                 _spriteBatch.Begin(transformMatrix: viewMatrix);
                 _spriteBatch.Draw(_backgroundTexture[i], Vector2.Zero);
