@@ -14,7 +14,7 @@ namespace Game1
         private Texture2D[] _backgroundTexture;
         private Texture2D _backgroundTextureClouds;
         private Texture2D _backgroundTextureSky;
-        private VirtualScreen _virtualScreen;
+        private VirtualViewportAdapter _virtualViewportAdapter;
 
         public Game1()
         {
@@ -27,12 +27,12 @@ namespace Game1
 
         private void WindowOnClientSizeChanged(object sender, EventArgs eventArgs)
         {
-            _virtualScreen.OnClientSizeChanged();
+            _virtualViewportAdapter.OnClientSizeChanged();
         }
 
         protected override void Initialize()
         {
-            _virtualScreen = new VirtualScreen(GraphicsDevice, 800, 480);
+            _virtualViewportAdapter = new VirtualViewportAdapter(GraphicsDevice, 800, 480);
             _camera = new Camera2D(GraphicsDevice.Viewport);
             base.Initialize();
         }
@@ -103,11 +103,11 @@ namespace Game1
 
             _previousScrollWheelValue = mouseState.ScrollWheelValue;
 
-            // look at
-            if (mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
-                _camera.LookAt(_camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y)));
+            //// look at
+            //if (mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+            //    _camera.LookAt(_camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y)));
 
-            _previousMouseState = mouseState;
+            //_previousMouseState = mouseState;
 
             base.Update(gameTime);
         }
@@ -116,9 +116,9 @@ namespace Game1
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(new Vector2(0.0f, 1.0f)) * _virtualScreen.GetScaleMatrix());
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(new Vector2(0.0f, 1.0f)) * _virtualViewportAdapter.GetScaleMatrix());
             _spriteBatch.Draw(_backgroundTextureSky, Vector2.Zero);
             _spriteBatch.Draw(_backgroundTextureClouds, Vector2.Zero);
             _spriteBatch.End();
@@ -126,7 +126,7 @@ namespace Game1
             for (var i = 0; i < 4; i++)
             {
                 var parallaxFactor = new Vector2(0.5f + 0.25f * i, 1.0f);
-                var viewMatrix = _camera.GetViewMatrix(parallaxFactor) * _virtualScreen.GetScaleMatrix();
+                var viewMatrix = _camera.GetViewMatrix(parallaxFactor) * _virtualViewportAdapter.GetScaleMatrix();
                 _spriteBatch.Begin(transformMatrix: viewMatrix);
                 _spriteBatch.Draw(_backgroundTexture[i], Vector2.Zero);
                 _spriteBatch.End();

@@ -3,11 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended
 {
-    public class VirtualScreen
+    public class VirtualViewportAdapter
     {
         private readonly GraphicsDevice _graphicsDevice;
 
-        public VirtualScreen(GraphicsDevice graphicsDevice, int virtualWidth, int virtualHeight)
+        public VirtualViewportAdapter(GraphicsDevice graphicsDevice, int virtualWidth, int virtualHeight)
         {
             _graphicsDevice = graphicsDevice;
 
@@ -37,10 +37,20 @@ namespace MonoGame.Extended
 
         public void OnClientSizeChanged()
         {
+            var viewport = _graphicsDevice.Viewport;
             var aspectRatio = (float) VirtualWidth / VirtualHeight;
-            var newWidth = _graphicsDevice.Viewport.Width;
-            var newHeight = _graphicsDevice.Viewport.Height;
-            _graphicsDevice.Viewport = new Viewport(100, 100, 300, 300);
+            var width = viewport.Width;
+            var height = (int)(width / aspectRatio + 0.5f);
+
+            if (height > viewport.Height)
+            {
+                height = viewport.Height;
+                width = (int)(height * aspectRatio + 0.5f);
+            }
+
+            var x = (viewport.Width / 2) - (width / 2);
+            var y = (viewport.Height / 2) - (height / 2);
+            _graphicsDevice.Viewport = new Viewport(x, y, width, height);
         }
     }
 }
