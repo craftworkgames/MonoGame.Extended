@@ -5,15 +5,20 @@ namespace MonoGame.Extended
 {
     public class Camera2D
     {
-        private readonly Viewport _viewport;
+        private readonly ViewportAdapter _viewportAdapter;
 
-        public Camera2D(Viewport viewport)
+        public Camera2D(GraphicsDevice graphicsDevice)
+            : this(new ViewportAdapter(graphicsDevice))
         {
-            _viewport = viewport;
+        }
+
+        public Camera2D(ViewportAdapter viewportAdapter)
+        {
+            _viewportAdapter = viewportAdapter;
 
             Rotation = 0;
             Zoom = 1;
-            Origin = new Vector2(viewport.Width / 2f, viewport.Height / 2f);
+            Origin = new Vector2(viewportAdapter.VirtualWidth / 2f, viewportAdapter.VirtualHeight / 2f);
             Position = Vector2.Zero;
         }
 
@@ -29,7 +34,7 @@ namespace MonoGame.Extended
 
         public void LookAt(Vector2 position)
         {
-            Position = position - new Vector2(_viewport.Width / 2f, _viewport.Height / 2f);
+            Position = position - new Vector2(_viewportAdapter.VirtualWidth / 2f, _viewportAdapter.VirtualHeight / 2f);
         }
 
         public Vector2 WorldToScreen(Vector2 worldPosition)
@@ -49,7 +54,8 @@ namespace MonoGame.Extended
                 Matrix.CreateTranslation(new Vector3(-Origin, 0.0f)) *
                 Matrix.CreateRotationZ(Rotation) *
                 Matrix.CreateScale(Zoom, Zoom, 1) *
-                Matrix.CreateTranslation(new Vector3(Origin, 0.0f)); 
+                Matrix.CreateTranslation(new Vector3(Origin, 0.0f)) *
+                _viewportAdapter.GetScaleMatrix(); 
         }
 
         public Matrix GetViewMatrix()

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -14,26 +13,22 @@ namespace Game1
         private Texture2D[] _backgroundTexture;
         private Texture2D _backgroundTextureClouds;
         private Texture2D _backgroundTextureSky;
-        private VirtualViewportAdapter _virtualViewportAdapter;
 
         public Game1()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            Window.AllowUserResizing = true;
-            Window.ClientSizeChanged += WindowOnClientSizeChanged;
-        }
-
-        private void WindowOnClientSizeChanged(object sender, EventArgs eventArgs)
-        {
-            _virtualViewportAdapter.OnClientSizeChanged();
         }
 
         protected override void Initialize()
         {
-            _virtualViewportAdapter = new VirtualViewportAdapter(GraphicsDevice, 800, 480);
-            _camera = new Camera2D(GraphicsDevice.Viewport);
+            var viewportAdapter = new ViewportAdapter(GraphicsDevice);
+            _camera = new Camera2D(viewportAdapter);
+
+            Window.AllowUserResizing = true;
+            Window.ClientSizeChanged += (s,e) => viewportAdapter.OnClientSizeChanged();
+
             base.Initialize();
         }
 
@@ -112,21 +107,21 @@ namespace Game1
             base.Update(gameTime);
         }
 
-        private MouseState _previousMouseState;
+        //private MouseState _previousMouseState;
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(new Vector2(0.0f, 1.0f)) * _virtualViewportAdapter.GetScaleMatrix());
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(new Vector2(0.25f, 1.0f)));
             _spriteBatch.Draw(_backgroundTextureSky, Vector2.Zero);
             _spriteBatch.Draw(_backgroundTextureClouds, Vector2.Zero);
             _spriteBatch.End();
 
             for (var i = 0; i < 4; i++)
             {
-                var parallaxFactor = new Vector2(0.5f + 0.25f * i, 1.0f);
-                var viewMatrix = _camera.GetViewMatrix(parallaxFactor) * _virtualViewportAdapter.GetScaleMatrix();
+                var parallaxFactor = new Vector2(0.5f + 0.5f * i, 1.0f);
+                var viewMatrix = _camera.GetViewMatrix(parallaxFactor);
                 _spriteBatch.Begin(transformMatrix: viewMatrix);
                 _spriteBatch.Draw(_backgroundTexture[i], Vector2.Zero);
                 _spriteBatch.End();
