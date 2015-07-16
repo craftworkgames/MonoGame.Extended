@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended
@@ -37,6 +38,12 @@ namespace MonoGame.Extended
             var x = (viewport.Width / 2) - (width / 2);
             var y = (viewport.Height / 2) - (height / 2);
             GraphicsDevice.Viewport = new Viewport(x, y, width, height);
+        }
+
+        public override Point PointToScreen(Point point)
+        {
+            var viewport = GraphicsDevice.Viewport;
+            return base.PointToScreen(point.X - viewport.X, point.Y - viewport.Y);
         }
     }
 }

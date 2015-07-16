@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -13,21 +14,31 @@ namespace Game1
         private Texture2D[] _backgroundTexture;
         private Texture2D _backgroundTextureClouds;
         private Texture2D _backgroundTextureSky;
+        private MouseState _previousMouseState;
+        private ViewportAdapter _viewportAdapter;
 
         public Game1()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            Window.IsBorderless = false;
+            Window.Position = new Point(50, 50);
+            _graphicsDeviceManager.PreferredBackBufferWidth = 1024;
+            _graphicsDeviceManager.PreferredBackBufferHeight = 768;
         }
 
         protected override void Initialize()
         {
-            var viewportAdapter = new ViewportAdapter(GraphicsDevice);
-            _camera = new Camera2D(viewportAdapter);
+            _viewportAdapter = new BoxingViewportAdapter(GraphicsDevice, 800, 480);
+            _camera = new Camera2D(_viewportAdapter)
+            {
+                Zoom = 0.65f,
+                Position = new Vector2(900, 650)
+            };
 
             Window.AllowUserResizing = true;
-            Window.ClientSizeChanged += (s,e) => viewportAdapter.OnClientSizeChanged();
+            Window.ClientSizeChanged += (s, e) => _viewportAdapter.OnClientSizeChanged();
 
             base.Initialize();
         }
@@ -98,21 +109,22 @@ namespace Game1
 
             _previousScrollWheelValue = mouseState.ScrollWheelValue;
 
-            //// look at
-            //if (mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
-            //    _camera.LookAt(_camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y)));
+            // look at
+            if (mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+            {
+                var p = _viewportAdapter.PointToScreen(mouseState.X, mouseState.Y);
+                Trace.WriteLine(string.Format("{0},{1} => {2},{3}", mouseState.X, mouseState.Y, p.X, p.Y));
+            }
 
-            //_previousMouseState = mouseState;
+            _previousMouseState = mouseState;
 
             base.Update(gameTime);
         }
 
-        //private MouseState _previousMouseState;
-
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
+            
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(new Vector2(0.25f, 1.0f)));
             _spriteBatch.Draw(_backgroundTextureSky, Vector2.Zero);
             _spriteBatch.Draw(_backgroundTextureClouds, Vector2.Zero);

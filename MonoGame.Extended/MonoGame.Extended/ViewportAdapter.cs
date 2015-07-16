@@ -22,18 +22,29 @@ namespace MonoGame.Extended
             get { return ActualHeight; }
         }
 
-        public int ActualWidth
+        public virtual int ActualWidth
         {
             get { return GraphicsDevice.Viewport.Width; }
         }
 
-        public int ActualHeight
+        public virtual int ActualHeight
         {
             get { return GraphicsDevice.Viewport.Height; }
         }
 
         public virtual void OnClientSizeChanged()
         {
+        }
+
+        public virtual Point PointToScreen(Point point)
+        {
+            var matrix = Matrix.Invert(GetScaleMatrix());
+            return Vector2.Transform(point.ToVector2(), matrix).ToPoint();
+        }
+
+        public Point PointToScreen(int x, int y)
+        {
+            return PointToScreen(new Point(x, y));
         }
 
         public virtual Matrix GetScaleMatrix()
