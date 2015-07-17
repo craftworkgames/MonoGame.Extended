@@ -40,10 +40,10 @@ namespace MonoGame.Extended
             GraphicsDevice.Viewport = new Viewport(x, y, width, height);
         }
 
-        public override Point PointToScreen(Point point)
+        public override Point PointToScreen(int x, int y)
         {
             var viewport = GraphicsDevice.Viewport;
-            return base.PointToScreen(point.X - viewport.X, point.Y - viewport.Y);
+            return base.PointToScreen(x - viewport.X, y - viewport.Y);
         }
     }
 }

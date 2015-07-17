@@ -36,15 +36,15 @@ namespace MonoGame.Extended
         {
         }
 
-        public virtual Point PointToScreen(Point point)
+        public Point PointToScreen(Point point)
         {
-            var matrix = Matrix.Invert(GetScaleMatrix());
-            return Vector2.Transform(point.ToVector2(), matrix).ToPoint();
+            return PointToScreen(point.X, point.Y);
         }
 
-        public Point PointToScreen(int x, int y)
+        public virtual Point PointToScreen(int x, int y)
         {
-            return PointToScreen(new Point(x, y));
+            var matrix = Matrix.Invert(GetScaleMatrix());
+            return Vector2.Transform(new Vector2(x, y), matrix).ToPoint();
         }
 
         public virtual Matrix GetScaleMatrix()
