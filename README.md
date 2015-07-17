@@ -1,5 +1,7 @@
 # MonoGame.Extended
 
+[![Build Status](http://build.craftworkgames.com/app/rest/builds/buildType:(id:MonoGameExtended_CI)/statusIcon)](http://build.craftworkgames.com/viewType.html?buildTypeId=MonoGameExtended_CI&guest=1)
+
 MonoGame.Extended is an open source extension library for [MonoGame](http://www.monogame.net/). It contains a collection of classes and extension methods that provide functionality MonoGame doesn't provide out of the box.
 
 ## Development status
