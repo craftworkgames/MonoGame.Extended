@@ -24,6 +24,8 @@ namespace Game1
             IsMouseVisible = true;
             Window.IsBorderless = false;
             Window.Position = new Point(50, 50);
+            Window.Title = "MonoGame.Extended.Sandbox";
+
             _graphicsDeviceManager.PreferredBackBufferWidth = 1024;
             _graphicsDeviceManager.PreferredBackBufferHeight = 768;
         }
