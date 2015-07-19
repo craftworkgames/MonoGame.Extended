@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 
 namespace Game1
 {
@@ -16,6 +17,7 @@ namespace Game1
         private Texture2D _backgroundTextureSky;
         private MouseState _previousMouseState;
         private ViewportAdapter _viewportAdapter;
+        private BitmapFont _bitmapFont;
 
         public Game1()
         {
@@ -55,6 +57,9 @@ namespace Game1
             _backgroundTexture[3] = Content.Load<Texture2D>("Hills_4");
             _backgroundTextureClouds = Content.Load<Texture2D>("Hills_Couds");
             _backgroundTextureSky = Content.Load<Texture2D>("Hills_Sky");
+
+            //_bitmapFont = Content.Load<BitmapFont>("courier-new-32.fnt");
+            _bitmapFont = new BitmapFontLoader().Load(Content, "courier-new-32.fnt");
 
             //var texture = Content.Load<Texture2D>("shadedDark42");
             //new TextureRegion2D(texture, 5, 5, 32, 32);

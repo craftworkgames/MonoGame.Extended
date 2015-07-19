@@ -34,6 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BitmapFonts\BitmapFont.cs" />
+    <Compile Include="BitmapFonts\BitmapFontLoader.cs" />
+    <Compile Include="BitmapFonts\FontChar.cs" />
+    <Compile Include="BitmapFonts\FontCommon.cs" />
+    <Compile Include="BitmapFonts\FontFile.cs" />
+    <Compile Include="BitmapFonts\FontInfo.cs" />
+    <Compile Include="BitmapFonts\FontKerning.cs" />
+    <Compile Include="BitmapFonts\FontPage.cs" />
     <Compile Include="Camera2D.cs" />
     <Compile Include="DefaultViewportAdapter.cs" />
     <Compile Include="ScalingViewportAdapter.cs" />
