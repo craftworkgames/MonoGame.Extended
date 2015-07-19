@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Camera2D.cs" />
+    <Compile Include="DefaultViewportAdapter.cs" />
     <Compile Include="ScalingViewportAdapter.cs" />
     <Compile Include="SpriteBatchExtensions.cs" />
     <Compile Include="TextureRegion2D.cs" />

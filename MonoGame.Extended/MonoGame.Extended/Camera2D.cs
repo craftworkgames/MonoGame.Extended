@@ -8,7 +8,7 @@ namespace MonoGame.Extended
         private readonly ViewportAdapter _viewportAdapter;
 
         public Camera2D(GraphicsDevice graphicsDevice)
-            : this(new ViewportAdapter(graphicsDevice))
+            : this(new DefaultViewportAdapter(graphicsDevice))
         {
         }
 

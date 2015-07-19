@@ -32,10 +32,10 @@ namespace Game1
 
         protected override void Initialize()
         {
-            _viewportAdapter = new BoxingViewportAdapter(GraphicsDevice, 800, 480);
+            _viewportAdapter = new DefaultViewportAdapter(GraphicsDevice);
             _camera = new Camera2D(_viewportAdapter)
             {
-                Zoom = 0.65f,
+                Zoom = 0.5f,
                 Position = new Vector2(900, 650)
             };
 

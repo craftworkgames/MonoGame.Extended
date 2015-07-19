@@ -1,40 +1,19 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended
 {
-    public class ViewportAdapter
+    public abstract class ViewportAdapter
     {
-        public ViewportAdapter(GraphicsDevice graphicsDevice)
-        {
-            GraphicsDevice = graphicsDevice;
-        }
-
-        protected GraphicsDevice GraphicsDevice { get; private set; }
-
-        public virtual int VirtualWidth
-        {
-            get { return ActualWidth; }
-        }
-
-        public virtual int VirtualHeight
-        {
-            get { return ActualHeight; }
-        }
-
-        public virtual int ActualWidth
-        {
-            get { return GraphicsDevice.Viewport.Width; }
-        }
-
-        public virtual int ActualHeight
-        {
-            get { return GraphicsDevice.Viewport.Height; }
-        }
-
-        public virtual void OnClientSizeChanged()
+        protected ViewportAdapter()
         {
         }
+
+        public abstract int VirtualWidth { get; }
+        public abstract int VirtualHeight { get; }
+        public abstract int ActualWidth { get; }
+        public abstract int ActualHeight { get; }
+        public abstract void OnClientSizeChanged();
+        public abstract Matrix GetScaleMatrix();
 
         public Point PointToScreen(Point point)
         {
@@ -43,13 +22,9 @@ namespace MonoGame.Extended
 
         public virtual Point PointToScreen(int x, int y)
         {
-            var matrix = Matrix.Invert(GetScaleMatrix());
-            return Vector2.Transform(new Vector2(x, y), matrix).ToPoint();
-        }
-
-        public virtual Matrix GetScaleMatrix()
-        {
-            return Matrix.Identity;
+            var scaleMatrix = GetScaleMatrix();
+            var invertedMatrix = Matrix.Invert(scaleMatrix);
+            return Vector2.Transform(new Vector2(x, y), invertedMatrix).ToPoint();
         }
     }
 }
