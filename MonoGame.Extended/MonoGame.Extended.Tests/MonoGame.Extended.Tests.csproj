@@ -56,8 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera2DTests.cs" />
-    <Compile Include="TestHelper.cs" />
-    <Compile Include="TextureRegion2DTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
