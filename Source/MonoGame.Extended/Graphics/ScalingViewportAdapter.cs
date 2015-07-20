@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Extended
+namespace MonoGame.Extended.Graphics
 {
     public class ScalingViewportAdapter : ViewportAdapter
     {

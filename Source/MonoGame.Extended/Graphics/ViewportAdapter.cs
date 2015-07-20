@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended
+namespace MonoGame.Extended.Graphics
 {
     public abstract class ViewportAdapter
     {

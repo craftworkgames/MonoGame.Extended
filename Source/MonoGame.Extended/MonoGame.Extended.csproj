@@ -42,14 +42,14 @@
     <Compile Include="BitmapFonts\FontInfo.cs" />
     <Compile Include="BitmapFonts\FontKerning.cs" />
     <Compile Include="BitmapFonts\FontPage.cs" />
-    <Compile Include="Camera2D.cs" />
-    <Compile Include="DefaultViewportAdapter.cs" />
-    <Compile Include="ScalingViewportAdapter.cs" />
-    <Compile Include="SpriteBatchExtensions.cs" />
-    <Compile Include="TextureRegion2D.cs" />
+    <Compile Include="Graphics\Camera2D.cs" />
+    <Compile Include="Graphics\DefaultViewportAdapter.cs" />
+    <Compile Include="Graphics\ScalingViewportAdapter.cs" />
+    <Compile Include="Graphics\SpriteBatchExtensions.cs" />
+    <Compile Include="Graphics\TextureRegion2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BoxingViewportAdapter.cs" />
-    <Compile Include="ViewportAdapter.cs" />
+    <Compile Include="Graphics\BoxingViewportAdapter.cs" />
+    <Compile Include="Graphics\ViewportAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.1.2.0, Culture=neutral, processorArchitecture=MSIL">

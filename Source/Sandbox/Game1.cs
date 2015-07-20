@@ -2,14 +2,19 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Graphics;
 
-namespace Game1
+namespace Sandbox
 {
-    public class Game1 : Game
+    /// <summary>
+    /// You can use this sandbox game to test features that require manual interaction.
+    /// Code in this class is typically throw away testing. It's not part of the library.
+    /// </summary>
+    public class SandboxGame : Game
     {
-        private GraphicsDeviceManager _graphicsDeviceManager;
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+        private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
         private Camera2D _camera;
         private Texture2D[] _backgroundTexture;
@@ -19,7 +24,7 @@ namespace Game1
         private ViewportAdapter _viewportAdapter;
         private BitmapFont _bitmapFont;
 
-        public Game1()
+        public SandboxGame()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";

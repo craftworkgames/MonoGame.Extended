@@ -1,10 +1,9 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended.Graphics;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace MonoGame.Extended.Tests
+namespace MonoGame.Extended.Tests.Graphics
 {
     [TestFixture]
     public class Camera2DTests

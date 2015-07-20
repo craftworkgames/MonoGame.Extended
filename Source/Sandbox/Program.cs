@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Game1
+namespace Sandbox
 {
 #if WINDOWS || LINUX
     public static class Program
@@ -8,7 +8,7 @@ namespace Game1
         [STAThread]
         static void Main()
         {
-            using (var game = new Game1())
+            using (var game = new SandboxGame())
                 game.Run();
         }
     }
