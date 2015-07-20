@@ -62,5 +62,30 @@ namespace MonoGame.Extended
         {
             return GetViewMatrix(Vector2.One);
         }
+
+        public Matrix GetInverseViewMatrix() 
+        {
+            return Matrix.Invert(GetViewMatrix());
+        }
+
+        private Matrix GetProjectionMatrix(Matrix viewMatrix)
+        {
+            // Note: This projection matrix is the same one used inside of the MonoGame SpriteBatch by default.
+            Matrix projection = Matrix.CreateOrthographicOffCenter(0, _viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight, 0, -1, 0);
+
+            // Half pixel offset.
+            projection.M41 += -0.5f * projection.M11;
+            projection.M42 += -0.5f * projection.M22;
+
+            Matrix.Multiply(ref viewMatrix, ref projection, out projection);
+
+            return projection;
+        }
+
+        public BoundingFrustum GetBoundingFrustum() 
+        {
+            Matrix viewMatrix = GetViewMatrix();
+            return new BoundingFrustum(viewMatrix * GetProjectionMatrix(viewMatrix));
+        }
     }
 }
