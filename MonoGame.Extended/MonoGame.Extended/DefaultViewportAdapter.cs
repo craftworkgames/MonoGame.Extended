@@ -19,7 +19,7 @@ namespace MonoGame.Extended
 
         public override int VirtualHeight
         {
-            get { return _graphicsDevice.Viewport.Width; }
+            get { return _graphicsDevice.Viewport.Height; }
         }
 
         public override int ActualWidth
@@ -29,7 +29,7 @@ namespace MonoGame.Extended
 
         public override int ActualHeight
         {
-            get { return _graphicsDevice.Viewport.Width; }
+            get { return _graphicsDevice.Viewport.Height; }
         }
 
         public override void OnClientSizeChanged()

@@ -76,9 +76,9 @@ namespace Game1
             var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
-            var gamePadState = GamePad.GetState(PlayerIndex.One);
+            //var gamePadState = GamePad.GetState(PlayerIndex.One);
 
-            if (gamePadState.Buttons.Back == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Escape))
+            if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
             var up = new Vector2(0, -250);

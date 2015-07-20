@@ -71,7 +71,7 @@ namespace MonoGame.Extended
         private Matrix GetProjectionMatrix(Matrix viewMatrix)
         {
             // Note: This projection matrix is the same one used inside of the MonoGame SpriteBatch by default.
-            Matrix projection = Matrix.CreateOrthographicOffCenter(0, _viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight, 0, -1, 0);
+            var projection = Matrix.CreateOrthographicOffCenter(0, _viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight, 0, -1, 0);
 
             // Half pixel offset.
             projection.M41 += -0.5f * projection.M11;
@@ -84,7 +84,7 @@ namespace MonoGame.Extended
 
         public BoundingFrustum GetBoundingFrustum() 
         {
-            Matrix viewMatrix = GetViewMatrix();
+            var viewMatrix = GetViewMatrix();
             return new BoundingFrustum(viewMatrix * GetProjectionMatrix(viewMatrix));
         }
 
@@ -98,9 +98,12 @@ namespace MonoGame.Extended
             return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0));
         }
 
-        public ContainmentType Contains(Rectangle rectangle) 
+        public ContainmentType Contains(Rectangle rectangle)
         {
-            return GetBoundingFrustum().Contains(new BoundingBox(new Vector3(0, 0, 0), new Vector3(rectangle.Size.ToVector2(), 0)));
+            var max = new Vector3(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height, 0.5f);
+            var min = new Vector3(rectangle.X, rectangle.Y, 0.5f);
+            var boundingBox = new BoundingBox(min, max);
+            return GetBoundingFrustum().Contains(boundingBox);
         }
     }
 }

@@ -1,5 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.Xna.Framework;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -19,6 +20,48 @@ namespace MonoGame.Extended.Tests
             camera.LookAt(new Vector2(100, 200));
 
             Assert.AreEqual(new Vector2(-300, -40), camera.Position);
+        }
+
+        [Test]
+        public void Camera2D_GetBoundingFrustum_Test()
+        {
+            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var camera = new Camera2D(graphicsDevice);
+            var boundingFrustum = camera.GetBoundingFrustum();
+            var corners = boundingFrustum.GetCorners();
+
+            const float delta = 0.01f;
+            TestHelper.AreEqual(new Vector3(0.5f, 0.5f, 1), corners[0], delta);
+            TestHelper.AreEqual(new Vector3(800.5f, 0.5f, 1), corners[1], delta);
+            TestHelper.AreEqual(new Vector3(800.5f, 480.5f, 1), corners[2], delta);
+            TestHelper.AreEqual(new Vector3(0.5f, 480.5f, 1), corners[3], delta);
+            TestHelper.AreEqual(new Vector3(0.5f, 0.5f, 0), corners[4], delta);
+            TestHelper.AreEqual(new Vector3(800.5f, 0.5f, 0), corners[5], delta);
+            TestHelper.AreEqual(new Vector3(800.5f, 480.5f, 0), corners[6], delta);
+            TestHelper.AreEqual(new Vector3(0.5f, 480.5f, 0), corners[7], delta);
+        }
+
+        [Test]
+        public void Camera2D_ContainsPoint_Test()
+        {
+            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var camera = new Camera2D(graphicsDevice);
+
+            Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Point(1, 1)));
+            Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Point(800, 480)));
+            Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Point(0, 0)));
+            Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Point(801, 481)));
+        }
+
+        [Test]
+        public void Camera2D_ContainsRectangle_Test()
+        {
+            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var camera = new Camera2D(graphicsDevice);
+
+            Assert.AreEqual(ContainmentType.Intersects, camera.Contains(new Rectangle(-50, -50, 100, 100)));
+            Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Rectangle(50, 50, 100, 100)));
+            Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Rectangle(850, 500, 100, 100)));
         }
     }
 }
