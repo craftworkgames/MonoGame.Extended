@@ -93,24 +93,24 @@ namespace MonoGame.Extended
             return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0)) != ContainmentType.Disjoint;
         }
 
-        public ContainmentType Contains(Point point) 
-        {
-            return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0));
-        }
-
         public bool Contains(Vector2 point) 
         {
             return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0)) != ContainmentType.Disjoint;
         }
 
-        public ContainmentType Contains(Vector2 point) 
+        public bool Contains(Rectangle rectangle) 
+        {
+            return GetBoundingFrustum().Contains(new BoundingBox(new Vector3(0, 0, 0), new Vector3(15, 15, 0))) != ContainmentType.Disjoint;
+        }
+
+        public ContainmentType Contains(Point point)
         {
             return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0));
         }
 
-        public bool Contains(Rectangle rectangle) 
+        public ContainmentType Contains(Vector2 point)
         {
-            return GetBoundingFrustum().Contains(new BoundingBox(new Vector3(0, 0, 0), new Vector3(15, 15, 0))) != ContainmentType.Disjoint;
+            return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0));
         }
 
         public ContainmentType Contains(Rectangle rectangle) 
