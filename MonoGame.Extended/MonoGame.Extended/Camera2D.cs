@@ -87,5 +87,24 @@ namespace MonoGame.Extended
             Matrix viewMatrix = GetViewMatrix();
             return new BoundingFrustum(viewMatrix * GetProjectionMatrix(viewMatrix));
         }
+
+        #region Contains overloads
+
+        public bool Contains(Point point) 
+        {
+            return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0)) != ContainmentType.Disjoint;
+        }
+
+        public bool Contains(Vector2 point) 
+        {
+            return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0)) != ContainmentType.Disjoint;
+        }
+
+        public bool Contains(Rectangle rectangle) 
+        {
+            throw new System.NotImplementedException();
+        }
+
+        #endregion
     }
 }
