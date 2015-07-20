@@ -88,8 +88,6 @@ namespace MonoGame.Extended
             return new BoundingFrustum(viewMatrix * GetProjectionMatrix(viewMatrix));
         }
 
-        #region Contains overloads
-
         public bool Contains(Point point) 
         {
             return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0)) != ContainmentType.Disjoint;
@@ -104,7 +102,5 @@ namespace MonoGame.Extended
         {
             throw new System.NotImplementedException();
         }
-
-        #endregion
     }
 }
