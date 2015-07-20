@@ -62,5 +62,60 @@ namespace MonoGame.Extended
         {
             return GetViewMatrix(Vector2.One);
         }
+
+        public Matrix GetInverseViewMatrix() 
+        {
+            return Matrix.Invert(GetViewMatrix());
+        }
+
+        private Matrix GetProjectionMatrix(Matrix viewMatrix)
+        {
+            // Note: This projection matrix is the same one used inside of the MonoGame SpriteBatch by default.
+            Matrix projection = Matrix.CreateOrthographicOffCenter(0, _viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight, 0, -1, 0);
+
+            // Half pixel offset.
+            projection.M41 += -0.5f * projection.M11;
+            projection.M42 += -0.5f * projection.M22;
+
+            Matrix.Multiply(ref viewMatrix, ref projection, out projection);
+
+            return projection;
+        }
+
+        public BoundingFrustum GetBoundingFrustum() 
+        {
+            Matrix viewMatrix = GetViewMatrix();
+            return new BoundingFrustum(viewMatrix * GetProjectionMatrix(viewMatrix));
+        }
+
+        public bool Contains(Point point) 
+        {
+            return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0)) != ContainmentType.Disjoint;
+        }
+
+        public bool Contains(Vector2 point) 
+        {
+            return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0)) != ContainmentType.Disjoint;
+        }
+
+        public bool Contains(Rectangle rectangle) 
+        {
+            return GetBoundingFrustum().Contains(new BoundingBox(new Vector3(0, 0, 0), new Vector3(15, 15, 0))) != ContainmentType.Disjoint;
+        }
+
+        public ContainmentType Contains(Point point)
+        {
+            return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0));
+        }
+
+        public ContainmentType Contains(Vector2 point)
+        {
+            return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0));
+        }
+
+        public ContainmentType Contains(Rectangle rectangle) 
+        {
+            return GetBoundingFrustum().Contains(new BoundingBox(new Vector3(0, 0, 0), new Vector3(15, 15, 0)));
+        }
     }
 }
