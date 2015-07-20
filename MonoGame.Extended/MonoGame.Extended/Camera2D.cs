@@ -100,7 +100,7 @@ namespace MonoGame.Extended
 
         public ContainmentType Contains(Rectangle rectangle) 
         {
-            return GetBoundingFrustum().Contains(new BoundingBox(new Vector3(0, 0, 0), new Vector3(15, 15, 0)));
+            return GetBoundingFrustum().Contains(new BoundingBox(new Vector3(0, 0, 0), new Vector3(rectangle.Size.ToVector2(), 0)));
         }
     }
 }
