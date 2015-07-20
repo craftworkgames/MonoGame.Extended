@@ -88,21 +88,6 @@ namespace MonoGame.Extended
             return new BoundingFrustum(viewMatrix * GetProjectionMatrix(viewMatrix));
         }
 
-        public bool Contains(Point point) 
-        {
-            return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0)) != ContainmentType.Disjoint;
-        }
-
-        public bool Contains(Vector2 point) 
-        {
-            return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0)) != ContainmentType.Disjoint;
-        }
-
-        public bool Contains(Rectangle rectangle) 
-        {
-            return GetBoundingFrustum().Contains(new BoundingBox(new Vector3(0, 0, 0), new Vector3(15, 15, 0))) != ContainmentType.Disjoint;
-        }
-
         public ContainmentType Contains(Point point)
         {
             return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0));
