@@ -100,7 +100,7 @@ namespace MonoGame.Extended
 
         public bool Contains(Rectangle rectangle) 
         {
-            throw new System.NotImplementedException();
+            return GetBoundingFrustum().Contains(new BoundingBox(new Vector3(0, 0, 0), new Vector3(15, 15, 0))) != ContainmentType.Disjoint;
         }
     }
 }
