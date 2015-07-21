@@ -153,6 +153,7 @@ namespace Sandbox
 
             _spriteBatch.Begin();
             _spriteBatch.DrawString(_bitmapFont, "Hello World", new Vector2(100, 200), Color.Red);
+            _spriteBatch.DrawString(_bitmapFont, "This is a really long sentence and I like unicorns", new Vector2(100, 250), Color.Wheat, 200);
             _spriteBatch.End();
 
             base.Draw(gameTime);

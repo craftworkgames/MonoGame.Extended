@@ -1,3 +1,5 @@
+using System;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
@@ -11,7 +13,7 @@ namespace MonoGame.Extended.BitmapFonts
             var dx = position.X;
             var dy = position.Y;
 
-            foreach (var character in text)
+            foreach (char character in text)
             {
                 var fontRegion = bitmapFont.GetCharacterRegion(character);
 
@@ -32,33 +34,32 @@ namespace MonoGame.Extended.BitmapFonts
             }
         }
 
-        // TODO: DrawString with word wrap
-        //public void DrawString(this SpriteBatch spriteBatch, string text, int x, int y, int wrapWidth, Color color)
-        //{
-        //    var dw = 0;
-        //    var dx = x;
-        //    var dy = y;
-        //    var words = text.Split(new [] {' ','\n'}, StringSplitOptions.None);
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont bitmapFont, string text, Vector2 position, Color color, int wrapWidth)
+        {
+            var dw = 0;
+            var dx = position.X;
+            var dy = position.Y;
+            var words = text.Split(new[] { ' ', '\n' }, StringSplitOptions.None);
 
-        //    foreach (var word in words)
-        //    {
-        //        var size = GetStringRectangle(word, 0, 0);
+            foreach (var word in words)
+            {
+                var size = bitmapFont.GetStringRectangle(word, Vector2.Zero);
 
-        //        Draw(spriteBatch, word, dx, dy, color);
+                DrawString(spriteBatch, bitmapFont, word, new Vector2(dx, dy), color);
 
-        //        if (dw > wrapWidth)
-        //        {
-        //            dy += _fontFile.Common.LineHeight;
-        //            dw = 0;
-        //            dx = x;
-        //        }
-        //        else
-        //        {
-        //            dx += size.Width + _characterMap[' '].FontCharacter.XAdvance;
-        //        }
+                if (dw > wrapWidth)
+                {
+                    dy += bitmapFont.LineHeight;
+                    dw = 0;
+                    dx = position.X;
+                }
+                else
+                {
+                    dx += size.Width + bitmapFont.GetCharacterRegion(' ').FontCharacter.XAdvance;
+                }
 
-        //        dw += size.Width;
-        //    }
-        //}
+                dw += size.Width;
+            }
+        }
     }
 }
