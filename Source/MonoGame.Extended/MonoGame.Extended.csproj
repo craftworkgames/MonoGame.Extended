@@ -35,13 +35,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BitmapFonts\BitmapFont.cs" />
-    <Compile Include="BitmapFonts\BitmapFontLoader.cs" />
+    <Compile Include="BitmapFonts\BitmapFontContentLoader.cs" />
+    <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
+    <Compile Include="BitmapFonts\BitmapFontRegion.cs" />
     <Compile Include="BitmapFonts\FontChar.cs" />
     <Compile Include="BitmapFonts\FontCommon.cs" />
     <Compile Include="BitmapFonts\FontFile.cs" />
     <Compile Include="BitmapFonts\FontInfo.cs" />
     <Compile Include="BitmapFonts\FontKerning.cs" />
     <Compile Include="BitmapFonts\FontPage.cs" />
+    <Compile Include="Content\ContentLoader.cs" />
+    <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Graphics\Camera2D.cs" />
     <Compile Include="Graphics\DefaultViewportAdapter.cs" />
     <Compile Include="Graphics\ScalingViewportAdapter.cs" />

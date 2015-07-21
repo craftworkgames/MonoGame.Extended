@@ -53,6 +53,19 @@ namespace MonoGame.Extended.Tests.Graphics
         }
 
         [Test]
+        public void Camera2D_ContainsVector2_Test()
+        {
+            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var camera = new Camera2D(graphicsDevice);
+            
+            // the edge cases fall on the half pixel boundary
+            Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Vector2(0.45f, 0.45f)));
+            Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Vector2(800.45f, 480.45f)));
+            Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Vector2(0.55f, 0.55f)));
+            Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Vector2(800.55f, 480.55f)));
+        }
+
+        [Test]
         public void Camera2D_ContainsRectangle_Test()
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();

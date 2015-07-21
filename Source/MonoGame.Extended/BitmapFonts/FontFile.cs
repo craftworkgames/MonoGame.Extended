@@ -7,25 +7,25 @@ namespace MonoGame.Extended.BitmapFonts
 	// ---- By DeadlyDan @ deadlydan@gmail.com -------------------
 	// ---- There's no license restrictions, use as you will. ----
 	// ---- Credits to http://www.angelcode.com/ -----------------
-	[XmlRoot ( "font" )]
+	[XmlRoot("font")]
     public class FontFile
 	{
-		[XmlElement ( "info" )]
+		[XmlElement("info")]
 		public FontInfo Info { get; set; }
 		
-		[XmlElement ( "common" )]
+		[XmlElement("common")]
 		public FontCommon Common { get; set; }
 
-		[XmlArray ( "pages" )]
-		[XmlArrayItem ( "page" )]
+		[XmlArray("pages")]
+		[XmlArrayItem("page")]
 		public List<FontPage> Pages { get; set; }
 
-		[XmlArray ( "chars" )]
-		[XmlArrayItem ( "char" )]
+		[XmlArray("chars")]
+		[XmlArrayItem("char")]
 		public List<FontChar> Chars { get; set; }
 		
-		[XmlArray ( "kernings" )]
-		[XmlArrayItem ( "kerning" )]
+		[XmlArray("kernings")]
+		[XmlArrayItem("kerning")]
 		public List<FontKerning> Kernings { get; set; }
 	}	
 }

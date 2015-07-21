@@ -90,12 +90,12 @@ namespace MonoGame.Extended.Graphics
 
         public ContainmentType Contains(Point point)
         {
-            return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0));
+            return Contains(point.ToVector2());
         }
 
-        public ContainmentType Contains(Vector2 point)
+        public ContainmentType Contains(Vector2 vector2)
         {
-            return GetBoundingFrustum().Contains(new Vector3(point.X, point.Y, 0));
+            return GetBoundingFrustum().Contains(new Vector3(vector2.X, vector2.Y, 0));
         }
 
         public ContainmentType Contains(Rectangle rectangle)

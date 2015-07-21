@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Content;
 using MonoGame.Extended.Graphics;
 
 namespace Sandbox
@@ -62,9 +64,7 @@ namespace Sandbox
             _backgroundTexture[3] = Content.Load<Texture2D>("Hills_4");
             _backgroundTextureClouds = Content.Load<Texture2D>("Hills_Couds");
             _backgroundTextureSky = Content.Load<Texture2D>("Hills_Sky");
-
-            //_bitmapFont = Content.Load<BitmapFont>("courier-new-32.fnt");
-            _bitmapFont = new BitmapFontLoader().Load(Content, "courier-new-32.fnt");
+            _bitmapFont = Content.Load("courier-new-32.fnt", new BitmapFontContentLoader());
 
             //var texture = Content.Load<Texture2D>("shadedDark42");
             //new TextureRegion2D(texture, 5, 5, 32, 32);
@@ -150,6 +150,10 @@ namespace Sandbox
                 _spriteBatch.Draw(_backgroundTexture[i], Vector2.Zero);
                 _spriteBatch.End();
             }
+
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(_bitmapFont, "Hello World", new Vector2(100, 200), Color.Red);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
