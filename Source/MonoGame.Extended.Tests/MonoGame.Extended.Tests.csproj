@@ -51,7 +51,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphics\BoxingViewportAdapterTests.cs" />
     <Compile Include="Graphics\Camera2DTests.cs" />
+    <Compile Include="Graphics\DefaultViewportAdapterTests.cs" />
+    <Compile Include="Graphics\Texture2DTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper.cs" />
   </ItemGroup>

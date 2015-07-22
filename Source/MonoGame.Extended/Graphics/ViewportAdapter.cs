@@ -10,8 +10,8 @@ namespace MonoGame.Extended.Graphics
 
         public abstract int VirtualWidth { get; }
         public abstract int VirtualHeight { get; }
-        public abstract int ActualWidth { get; }
-        public abstract int ActualHeight { get; }
+        public abstract int ViewportWidth { get; }
+        public abstract int ViewportHeight { get; }
         public abstract void OnClientSizeChanged();
         public abstract Matrix GetScaleMatrix();
 

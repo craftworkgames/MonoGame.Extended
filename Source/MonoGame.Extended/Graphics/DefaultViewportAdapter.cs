@@ -22,12 +22,12 @@ namespace MonoGame.Extended.Graphics
             get { return _graphicsDevice.Viewport.Height; }
         }
 
-        public override int ActualWidth
+        public override int ViewportWidth
         {
             get { return _graphicsDevice.Viewport.Width; }
         }
 
-        public override int ActualHeight
+        public override int ViewportHeight
         {
             get { return _graphicsDevice.Viewport.Height; }
         }

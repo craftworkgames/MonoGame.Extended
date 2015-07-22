@@ -26,12 +26,12 @@ namespace MonoGame.Extended.Graphics
             get { return _virtualHeight; }
         }
 
-        public override int ActualWidth
+        public override int ViewportWidth
         {
             get { return GraphicsDevice.Viewport.Width; }
         }
 
-        public override int ActualHeight
+        public override int ViewportHeight
         {
             get { return GraphicsDevice.Viewport.Height; }
         }
@@ -42,8 +42,8 @@ namespace MonoGame.Extended.Graphics
 
         public override Matrix GetScaleMatrix()
         {
-            var scaleX = (float)ActualWidth / VirtualWidth;
-            var scaleY = (float)ActualHeight / VirtualHeight;
+            var scaleX = (float)ViewportWidth / VirtualWidth;
+            var scaleY = (float)ViewportHeight / VirtualHeight;
             return Matrix.CreateScale(scaleX, scaleY, 1.0f);
         }
     }
