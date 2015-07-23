@@ -21,7 +21,7 @@ namespace Sandbox
         private Texture2D _backgroundTexture;
         private MouseState _previousMouseState;
         private ViewportAdapter _viewportAdapter;
-        private BitmapFont _bitmapFont;
+        //private BitmapFont _bitmapFont;
 
         public SandboxGame()
         {
@@ -55,7 +55,7 @@ namespace Sandbox
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _backgroundTexture = Content.Load<Texture2D>("hills");
-            _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
+            //_bitmapFont = Content.Load<BitmapFont>("courier-new-32");
         }
 
         protected override void UnloadContent()
@@ -129,10 +129,10 @@ namespace Sandbox
             _spriteBatch.Draw(_backgroundTexture, Vector2.Zero, Color.White);
             _spriteBatch.End();
 
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(_bitmapFont, "Hello World", new Vector2(100, 200), Color.Red);
-            _spriteBatch.DrawString(_bitmapFont, "This is a really long sentence and I like unicorns", new Vector2(100, 250), Color.DarkBlue, 200);
-            _spriteBatch.End();
+            //_spriteBatch.Begin();
+            //_spriteBatch.DrawString(_bitmapFont, "Hello World", new Vector2(100, 200), Color.Red);
+            //_spriteBatch.DrawString(_bitmapFont, "This is a really long sentence and I like unicorns", new Vector2(100, 250), Color.DarkBlue, 200);
+            //_spriteBatch.End();
 
             base.Draw(gameTime);
         }
