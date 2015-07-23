@@ -1,14 +1,22 @@
+using System.IO;
+using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
-using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.BitmapFonts;
 
 namespace MonoGame.Extended.Content.Pipeline
 {
-    [ContentImporter(".fnt", DefaultProcessor = "BitmapFontProcessor", DisplayName = "Pixel Shader Importer")]
-    public class BitmapFontImporter : ContentImporter<BitmapFontIn>
+    [ContentImporter(".fnt", DefaultProcessor = "BitmapFontProcessor", DisplayName = "BMFont Importer - MonoGame.Extended")]
+    public class BitmapFontImporter : ContentImporter<FontFile>
     {
-        public override BitmapFontIn Import(string filename, ContentImporterContext context)
+        public override FontFile Import(string filename, ContentImporterContext context)
         {
-            return new BitmapFontIn();
+            context.Logger.LogMessage("Importing {0}", filename);
+
+            using (var streamReader = new StreamReader(filename))
+            {
+                var deserializer = new XmlSerializer(typeof(FontFile));
+                return (FontFile)deserializer.Deserialize(streamReader);
+            }
         }
     }
 }

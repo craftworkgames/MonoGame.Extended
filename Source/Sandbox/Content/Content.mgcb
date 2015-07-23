@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:E:\Github\MonoGame.Extended\Source\MonoGame.Extended.Content.Pipeline\bin\Debug\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -102,7 +103,9 @@
 /build:Hills_Sky.png
 
 #begin courier-new-32.fnt
-/copy:courier-new-32.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:courier-new-32.fnt
 
 #begin courier-new-32_0.png
 /importer:TextureImporter

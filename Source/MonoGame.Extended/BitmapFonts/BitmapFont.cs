@@ -7,11 +7,19 @@ namespace MonoGame.Extended.BitmapFonts
 {
     public class BitmapFont 
     {
+        public BitmapFont(FontFile fontFile)
+        {
+            _fontFile = fontFile;
+        }
+
         public BitmapFont(Texture2D texture, FontFile fontFile)
         {
             _fontFile = fontFile;
             _characterMap = BuildCharacterMap(fontFile, texture);
         }
+
+        public string TextureFilename { get; set; }
+        public Texture2D Texture { get; set; }
 
         private readonly FontFile _fontFile;
         private readonly Dictionary<char, BitmapFontRegion> _characterMap;

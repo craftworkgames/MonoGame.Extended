@@ -55,7 +55,7 @@ namespace Sandbox
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _backgroundTexture = Content.Load<Texture2D>("hills");
-            _bitmapFont = Content.Load("courier-new-32.fnt", new BitmapFontContentLoader());
+            _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
         }
 
         protected override void UnloadContent()
