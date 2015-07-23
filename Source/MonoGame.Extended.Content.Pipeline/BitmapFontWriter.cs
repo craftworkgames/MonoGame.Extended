@@ -6,11 +6,11 @@ using Newtonsoft.Json;
 namespace MonoGame.Extended.Content.Pipeline
 {
     [ContentTypeWriter]
-    public class BitmapFontWriter : ContentTypeWriter<BitmapFont>
+    public class BitmapFontWriter : ContentTypeWriter<BsonData>
     {
-        protected override void Write(ContentWriter output, BitmapFont value)
+        protected override void Write(ContentWriter output, BsonData value)
         {
-            output.Write("Hello world");
+            output.Write(value.Data);
         }
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)

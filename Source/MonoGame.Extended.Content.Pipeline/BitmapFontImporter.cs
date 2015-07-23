@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Content.Pipeline
     {
         public override FontFile Import(string filename, ContentImporterContext context)
         {
-            context.Logger.LogMessage("Importing {0}", filename);
+            context.Logger.LogMessage("Importing XML file: {0}", filename);
 
             using (var streamReader = new StreamReader(filename))
             {
