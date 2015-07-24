@@ -10,7 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:E:\Github\MonoGame.Extended\Source\MonoGame.Extended.Content.Pipeline\bin\Debug\MonoGame.Extended.Content.Pipeline.dll
+/reference:..\..\MonoGame.Extended.Content.Pipeline\bin\Debug\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -103,7 +103,15 @@
 /build:Hills_Sky.png
 
 #begin courier-new-32.fnt
-/copy:courier-new-32.fnt
+/importer:
+/processor:
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:courier-new-32.fnt
 
 #begin courier-new-32_0.png
 /importer:TextureImporter

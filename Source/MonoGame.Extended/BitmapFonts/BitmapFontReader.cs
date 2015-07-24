@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
@@ -8,11 +10,19 @@ namespace MonoGame.Extended.BitmapFonts
     {
         protected override BitmapFont Read(ContentReader input, BitmapFont existingInstance)
         {
-            // http://james.newtonking.com/archive/2009/12/26/json-net-3-5-release-6-binary-json-bson-support
+            var textureAssetCount = input.ReadInt32();
+            var assets = new List<string>();
+
+            for (var i = 0; i < textureAssetCount; i++)
+            {
+                var assetName = input.ReadString();
+                assets.Add(assetName);
+            }
+
             var json = input.ReadString();
-            var bitmapFont = JsonConvert.DeserializeObject<BitmapFont>(json);
-            bitmapFont.Texture = input.ContentManager.Load<Texture2D>(bitmapFont.TextureFilename);
-            return bitmapFont;
+            var fontFile = JsonConvert.DeserializeObject<FontFile>(json);
+            var texture = input.ContentManager.Load<Texture2D>(assets.First());
+            return new BitmapFont(texture, fontFile);
         }
     }
 }

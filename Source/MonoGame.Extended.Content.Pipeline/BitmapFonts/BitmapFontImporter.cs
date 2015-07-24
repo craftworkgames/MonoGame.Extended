@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.BitmapFonts;
 
-namespace MonoGame.Extended.Content.Pipeline
+namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
     [ContentImporter(".fnt", DefaultProcessor = "BitmapFontProcessor", DisplayName = "BMFont Importer - MonoGame.Extended")]
     public class BitmapFontImporter : ContentImporter<FontFile>
