@@ -36,29 +36,31 @@ namespace MonoGame.Extended.BitmapFonts
 
         public static void DrawString(this SpriteBatch spriteBatch, BitmapFont bitmapFont, string text, Vector2 position, Color color, int wrapWidth)
         {
-            var dw = 0;
             var dx = position.X;
             var dy = position.Y;
-            var words = text.Split(new[] { ' ', '\n' }, StringSplitOptions.None);
+            var sentences = text.Split(new[] {'\n'}, StringSplitOptions.None);
 
-            foreach (var word in words)
+            foreach (var sentence in sentences)
             {
-                var size = bitmapFont.GetStringRectangle(word, Vector2.Zero);
+                var words = sentence.Split(new[] { ' ' }, StringSplitOptions.None);
 
-                DrawString(spriteBatch, bitmapFont, word, new Vector2(dx, dy), color);
+                for (var i = 0; i < words.Length; i++)
+                {
+                    var word = words[i];
+                    var size = bitmapFont.GetStringRectangle(word, Vector2.Zero);
 
-                if (dw > wrapWidth)
-                {
-                    dy += bitmapFont.LineHeight;
-                    dw = 0;
-                    dx = position.X;
-                }
-                else
-                {
+                    if (i != 0 && dx + size.Width >= wrapWidth)
+                    {
+                        dy += bitmapFont.LineHeight;
+                        dx = position.X;
+                    }
+
+                    DrawString(spriteBatch, bitmapFont, word, new Vector2(dx, dy), color);
                     dx += size.Width + bitmapFont.GetCharacterRegion(' ').FontCharacter.XAdvance;
                 }
 
-                dw += size.Width;
+                dx = position.X;
+                dy += bitmapFont.LineHeight;
             }
         }
     }
