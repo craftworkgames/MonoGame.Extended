@@ -8,24 +8,24 @@ namespace MonoGame.Extended.BitmapFonts
 	// ---- There's no license restrictions, use as you will. ----
 	// ---- Credits to http://www.angelcode.com/ -----------------
 	[XmlRoot("font")]
-    public class FontFile
+    public class BitmapFontFile
 	{
 		[XmlElement("info")]
-		public FontInfo Info { get; set; }
+		public BitmapFontInfo Info { get; set; }
 		
 		[XmlElement("common")]
-		public FontCommon Common { get; set; }
+		public BitmapFontCommon Common { get; set; }
 
 		[XmlArray("pages")]
 		[XmlArrayItem("page")]
-		public List<FontPage> Pages { get; set; }
+		public List<BitmapFontPage> Pages { get; set; }
 
 		[XmlArray("chars")]
 		[XmlArrayItem("char")]
-		public List<FontChar> Chars { get; set; }
+		public List<BitmapFontChar> Chars { get; set; }
 		
 		[XmlArray("kernings")]
 		[XmlArrayItem("kerning")]
-		public List<FontKerning> Kernings { get; set; }
+		public List<BitmapFontKerning> Kernings { get; set; }
 	}	
 }

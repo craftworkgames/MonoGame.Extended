@@ -7,7 +7,7 @@ namespace MonoGame.Extended.BitmapFonts
 	// ---- By DeadlyDan @ deadlydan@gmail.com -------------------
 	// ---- There's no license restrictions, use as you will. ----
 	// ---- Credits to http://www.angelcode.com/ -----------------		
-    public class FontCommon
+    public class BitmapFontCommon
 	{
         [XmlAttribute("lineHeight")]
 		public Int32 LineHeight { get; set; }

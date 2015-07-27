@@ -7,12 +7,12 @@ namespace MonoGame.Extended.BitmapFonts
 	// ---- By DeadlyDan @ deadlydan@gmail.com -------------------
 	// ---- There's no license restrictions, use as you will. ----
 	// ---- Credits to http://www.angelcode.com/ -----------------	
-    public class FontPage
+    public class BitmapFontPage
 	{
 		[XmlAttribute ( "id" )]
         public Int32 ID { get; set; }
 		
 		[XmlAttribute ( "file" )]
-		public String File { get; set; }
+		public string File { get; set; }
 	}	
 }

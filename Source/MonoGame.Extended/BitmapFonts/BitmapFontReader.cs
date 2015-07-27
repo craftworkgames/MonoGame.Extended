@@ -20,9 +20,11 @@ namespace MonoGame.Extended.BitmapFonts
             }
 
             var json = input.ReadString();
-            var fontFile = JsonConvert.DeserializeObject<FontFile>(json);
-            var texture = input.ContentManager.Load<Texture2D>(assets.First());
-            return new BitmapFont(texture, fontFile);
+            var fontFile = JsonConvert.DeserializeObject<BitmapFontFile>(json);
+            var textures = assets
+                .Select(i => input.ContentManager.Load<Texture2D>(i))
+                .ToArray();
+            return new BitmapFont(textures, fontFile);
         }
     }
 }

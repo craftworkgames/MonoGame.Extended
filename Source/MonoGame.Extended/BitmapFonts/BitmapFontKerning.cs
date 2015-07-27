@@ -7,7 +7,7 @@ namespace MonoGame.Extended.BitmapFonts
 	// ---- By DeadlyDan @ deadlydan@gmail.com -------------------
 	// ---- There's no license restrictions, use as you will. ----
 	// ---- Credits to http://www.angelcode.com/ -----------------	
-    public class FontKerning
+    public class BitmapFontKerning
 	{
 		[XmlAttribute ( "first" )]
 		public Int32 First { get; set; }

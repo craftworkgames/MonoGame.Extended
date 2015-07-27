@@ -7,21 +7,19 @@ namespace MonoGame.Extended.BitmapFonts
 {
     public class BitmapFont 
     {
-        public BitmapFont(FontFile fontFile)
+        public BitmapFont(Texture2D[] textures, BitmapFontFile fontFile)
         {
             _fontFile = fontFile;
+            _characterMap = BuildCharacterMap(textures, _fontFile);
         }
 
-        public BitmapFont(Texture2D texture, FontFile fontFile)
+        public BitmapFont(Texture2D texture, BitmapFontFile fontFile)
         {
             _fontFile = fontFile;
-            _characterMap = BuildCharacterMap(fontFile, texture);
+            _characterMap = BuildCharacterMap(new [] { texture }, _fontFile);
         }
 
-        public string TextureFilename { get; set; }
-        public Texture2D Texture { get; set; }
-
-        private readonly FontFile _fontFile;
+        private readonly BitmapFontFile _fontFile;
         private readonly Dictionary<char, BitmapFontRegion> _characterMap;
 
         public int LineHeight
@@ -29,13 +27,15 @@ namespace MonoGame.Extended.BitmapFonts
             get { return _fontFile.Common.LineHeight; }
         }
 
-        private static Dictionary<char, BitmapFontRegion> BuildCharacterMap(FontFile fontFile, Texture2D texture)
+        private static Dictionary<char, BitmapFontRegion> BuildCharacterMap(Texture2D[] textures, BitmapFontFile fontFile)
         {
             var characterMap = new Dictionary<char, BitmapFontRegion>();
 
             foreach (var fontChar in fontFile.Chars)
             {
+                var pageIndex = fontChar.Page;
                 var character = (char)fontChar.ID;
+                var texture = textures[pageIndex];
                 var region = new TextureRegion2D(texture, fontChar.X, fontChar.Y, fontChar.Width, fontChar.Height);
                 var fontRegion = new BitmapFontRegion(region, fontChar);
                 characterMap.Add(character, fontRegion);

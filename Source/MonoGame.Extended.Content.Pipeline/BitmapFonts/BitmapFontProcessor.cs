@@ -7,9 +7,9 @@ using Newtonsoft.Json;
 namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
     [ContentProcessor(DisplayName = "BMFont Processor - MonoGame.Extended")]
-    public class BitmapFontProcessor : ContentProcessor<FontFile, FileFileData>
+    public class BitmapFontProcessor : ContentProcessor<BitmapFontFile, FileFileData>
     {
-        public override FileFileData Process(FontFile input, ContentProcessorContext context)
+        public override FileFileData Process(BitmapFontFile input, ContentProcessorContext context)
         {
             try
             {
