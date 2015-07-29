@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.Graphics
 {
@@ -9,6 +10,11 @@ namespace MonoGame.Extended.Graphics
         {
             var sourceRectangle = textureRegion.Bounds;
             spriteBatch.Draw(textureRegion.Texture, position, sourceRectangle, color);
+        }
+
+        public static void Draw(this SpriteBatch spriteBatch, Sprite sprite, Color color) 
+        {
+            spriteBatch.Draw(sprite.Texture, sprite.Position, color);
         }
     }
 }

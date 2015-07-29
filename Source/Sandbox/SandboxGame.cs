@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Sprites;
 
 namespace Sandbox
 {
@@ -19,6 +20,7 @@ namespace Sandbox
         private SpriteBatch _spriteBatch;
         private Camera2D _camera;
         private Texture2D _backgroundTexture;
+        private Sprite _stumpSprite;
         private MouseState _previousMouseState;
         private ViewportAdapter _viewportAdapter;
         private BitmapFont _bitmapFont;
@@ -56,6 +58,8 @@ namespace Sandbox
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _backgroundTexture = Content.Load<Texture2D>("hills");
             _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
+            _stumpSprite = new Sprite(Content.Load<Texture2D>("stump"));
+            _stumpSprite.Position = new Vector2(700, 1400);
         }
 
         protected override void UnloadContent()
@@ -127,6 +131,7 @@ namespace Sandbox
             
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.Draw(_backgroundTexture, Vector2.Zero, Color.White);
+            _spriteBatch.Draw(_stumpSprite, Color.White);
             _spriteBatch.End();
 
             _spriteBatch.Begin();

@@ -54,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Graphics\BoxingViewportAdapter.cs" />
     <Compile Include="Graphics\ViewportAdapter.cs" />
+    <Compile Include="Sprites\Sprite.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.1.2.0, Culture=neutral, processorArchitecture=MSIL">
