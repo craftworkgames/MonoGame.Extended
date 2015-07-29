@@ -1,0 +1,22 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MonoGame.Extended</id>
+    <version>0.1.0.0</version>
+    <title>MonoGame.Extended</title>
+    <authors>Dylan Wilson</authors>
+    <owners>Craftwork Games</owners>
+    <licenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>    
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Makes MonoGame more awesome.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2015 - Craftwork Games</copyright>
+    <tags>monogame</tags>
+  </metadata>
+  <files>
+    <file src="bin\Release\MonoGame.Extended*.dll" target="lib\net40" />
+    <file src="bin\Release\MonoGame.Extended*.dll" target="lib\net45" />
+    <file src="bin\Release\MonoGame.Extended*.dll" target="lib\portable-net45+sl50+MonoAndroid10+xamarinios10+MonoTouch10" />
+  </files>
+</package>
