@@ -3,10 +3,6 @@ using TiledSharp;
 
 namespace MonoGame.Extended.Content.Pipeline.TiledMaps
 {
-    public class TiledMapFile
-    {
-    }
-
     [ContentImporter(".tmx", DefaultProcessor = "TiledMapProcessor", DisplayName = "Tiled Map Importer - MonoGame.Extended")]
     public class TiledMapImporter : ContentImporter<TiledMapFile>
     {

@@ -57,12 +57,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileFileData.cs" />
+    <Compile Include="BitmapFonts\BitmapFontProcessorResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BitmapFonts\BitmapFontImporter.cs" />
     <Compile Include="BitmapFonts\BitmapFontProcessor.cs" />
     <Compile Include="BitmapFonts\BitmapFontWriter.cs" />
+    <Compile Include="TiledMaps\TiledMapFile.cs" />
     <Compile Include="TiledMaps\TiledMapImporter.cs" />
+    <Compile Include="TiledMaps\TiledMapProcessor.cs" />
+    <Compile Include="TiledMaps\TiledMapProcessorResult.cs" />
+    <Compile Include="TiledMaps\TiledMapWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

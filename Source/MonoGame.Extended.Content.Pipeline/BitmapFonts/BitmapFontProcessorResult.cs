@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
-namespace MonoGame.Extended.Content.Pipeline
+namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
-    public class FileFileData
+    public class BitmapFontProcessorResult
     {
-        public FileFileData(string json)
+        public BitmapFontProcessorResult(string json)
         {
             TextureAssets = new List<string>();
             Json = json;
