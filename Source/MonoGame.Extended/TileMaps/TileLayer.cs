@@ -24,9 +24,9 @@ namespace MonoGame.Extended.TileMaps
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            for (var x = 0; x < Width; x++)
+            for (var y = 0; y < Height; y++)
             {
-                for (var y = 0; y < Height; y++)
+                for (var x = 0; x < Width; x++)
                 {
                     var id = _data[x + y * Width];
                     var region = _tileMap.GetTileRegion(id);

@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Content;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.TileMaps;
 
@@ -16,6 +15,7 @@ namespace Sandbox
     public class SandboxGame : Game
     {
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+        // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
         private Camera2D _camera;
@@ -40,10 +40,10 @@ namespace Sandbox
 
         protected override void Initialize()
         {
-            _viewportAdapter = new DefaultViewportAdapter(GraphicsDevice);
+            _viewportAdapter = new ScalingViewportAdapter(GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter)
             {
-                Zoom = 1.0f,
+                Zoom = 0.5f,
                 Position = new Vector2(900, 650)
             };
 
@@ -134,15 +134,15 @@ namespace Sandbox
 
             _tileMap.Draw(_camera);
 
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(_bitmapFont, "Hello World", new Vector2(50, 50), Color.Red);
-            _spriteBatch.DrawString(_bitmapFont, 
-                "Contrary to popular belief, Lorem Ipsum is not simply random text.\n\n" + 
-                "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard " + 
-                "McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin " + 
-                "words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, " + 
-                "discovered the undoubtable source.", new Vector2(50, 100), new Color(Color.Black, 0.5f), _viewportAdapter.VirtualWidth - 50);
-            _spriteBatch.End();
+            //_spriteBatch.Begin();
+            //_spriteBatch.DrawString(_bitmapFont, "Hello World", new Vector2(50, 50), Color.Red);
+            //_spriteBatch.DrawString(_bitmapFont, 
+            //    "Contrary to popular belief, Lorem Ipsum is not simply random text.\n\n" + 
+            //    "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard " + 
+            //    "McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin " + 
+            //    "words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, " + 
+            //    "discovered the undoubtable source.", new Vector2(50, 100), new Color(Color.Black, 0.5f), _viewportAdapter.VirtualWidth - 50);
+            //_spriteBatch.End();
             
             base.Draw(gameTime);
         }

@@ -71,3 +71,19 @@
 /processor:TiledMapProcessor
 /build:level01.tmx
 
+#begin test-tileset.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:test-tileset.png
+
+#begin test-tileset-map1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:test-tileset-map1.tmx
+
