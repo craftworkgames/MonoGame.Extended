@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Content
 {
@@ -19,6 +20,13 @@ namespace MonoGame.Extended.Content
             {
                 return contentLoader.LoadContentFromStream(contentManager, stream);
             }
+        }
+
+        public static GraphicsDevice GetGraphicsDevice(this ContentManager contentManager)
+        {
+            // http://konaju.com/?p=21
+            var graphicsDeviceService = (IGraphicsDeviceService) contentManager.ServiceProvider.GetService(typeof(IGraphicsDeviceService));
+            return graphicsDeviceService.GraphicsDevice;
         }
     }
 }

@@ -62,7 +62,6 @@
     <Compile Include="BitmapFonts\BitmapFontImporter.cs" />
     <Compile Include="BitmapFonts\BitmapFontProcessor.cs" />
     <Compile Include="BitmapFonts\BitmapFontWriter.cs" />
-    <Compile Include="TiledMaps\TiledMapFile.cs" />
     <Compile Include="TiledMaps\TiledMapImporter.cs" />
     <Compile Include="TiledMaps\TiledMapProcessor.cs" />
     <Compile Include="TiledMaps\TiledMapProcessorResult.cs" />

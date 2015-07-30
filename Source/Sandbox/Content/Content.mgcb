@@ -68,6 +68,6 @@
 
 #begin level01.tmx
 /importer:TiledMapImporter
-/processor:
+/processor:TiledMapProcessor
 /build:level01.tmx
 

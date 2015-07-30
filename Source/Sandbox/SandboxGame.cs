@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Graphics;
+using MonoGame.Extended.TileMaps;
 
 namespace Sandbox
 {
@@ -22,6 +23,7 @@ namespace Sandbox
         private MouseState _previousMouseState;
         private ViewportAdapter _viewportAdapter;
         private BitmapFont _bitmapFont;
+        private TileMap _tileMap;
 
         public SandboxGame()
         {
@@ -56,6 +58,7 @@ namespace Sandbox
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _backgroundTexture = Content.Load<Texture2D>("hills");
             _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
+            _tileMap = Content.Load<TileMap>("level01");
         }
 
         protected override void UnloadContent()
@@ -129,6 +132,8 @@ namespace Sandbox
             _spriteBatch.Draw(_backgroundTexture, Vector2.Zero, Color.White);
             _spriteBatch.End();
 
+            _tileMap.Draw(_camera);
+
             _spriteBatch.Begin();
             _spriteBatch.DrawString(_bitmapFont, "Hello World", new Vector2(50, 50), Color.Red);
             _spriteBatch.DrawString(_bitmapFont, 
@@ -138,7 +143,7 @@ namespace Sandbox
                 "words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, " + 
                 "discovered the undoubtable source.", new Vector2(50, 100), new Color(Color.Black, 0.5f), _viewportAdapter.VirtualWidth - 50);
             _spriteBatch.End();
-
+            
             base.Draw(gameTime);
         }
     }
