@@ -134,7 +134,7 @@ namespace Sandbox
             
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.Draw(_backgroundTexture, Vector2.Zero, Color.White);
-            _spriteBatch.Draw(_stumpSprite, Color.White);
+            _spriteBatch.Draw(_stumpSprite);
             _spriteBatch.End();
 
             _tileMap.Draw(_camera);

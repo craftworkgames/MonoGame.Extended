@@ -8,7 +8,7 @@ using System.Text;
 
 namespace MonoGame.Extended.Sprites
 {
-    public class Sprite 
+    public class Sprite
     {
         public TextureRegion2D TextureRegion;
         public Color Color { get; set; }
@@ -19,34 +19,40 @@ namespace MonoGame.Extended.Sprites
         public float Rotation { get; set; }
         public Vector2 Origin { get; set; }
 
-        public Sprite(Texture2D texture) 
+        public Sprite(Texture2D texture)
         {
             TextureRegion = new TextureRegion2D(texture);
             Scale = Vector2.One;
+            IsVisible = true;
         }
 
-        public Sprite(Texture2D texture, Vector2 position) : this(texture)
+        public Sprite(Texture2D texture, Vector2 position)
+            : this(texture)
         {
             Position = position;
         }
 
-        public Sprite(Texture2D texture, Vector2 position, Color color) : this(texture, position) 
+        public Sprite(Texture2D texture, Vector2 position, Color color)
+            : this(texture, position)
         {
             Color = color;
         }
 
-        public Sprite(Texture2D texture, Vector2 position, Color? color, float? rotation, Vector2? scale) : this(texture, position)
+        public Sprite(Texture2D texture, Vector2 position, Color? color, float? rotation, Vector2? scale, bool isVisible)
+            : this(texture, position)
         {
             // If any parameters are null, provide them with suitable defaults.
             Color = color ?? Color.White;
             Rotation = rotation ?? 0;
             Scale = scale ?? Vector2.One;
+            IsVisible = isVisible;
         }
 
         public Sprite(TextureRegion2D texture)
         {
             TextureRegion = texture;
             Scale = Vector2.One;
+            IsVisible = true;
         }
 
         public Sprite(TextureRegion2D texture, Vector2 position)
@@ -61,13 +67,14 @@ namespace MonoGame.Extended.Sprites
             Color = color;
         }
 
-        public Sprite(TextureRegion2D texture, Vector2 position, Color? color, float? rotation, Vector2? scale)
+        public Sprite(TextureRegion2D texture, Vector2 position, Color? color, float? rotation, Vector2? scale, bool isVisible)
             : this(texture, position)
         {
             // If any parameters are null, provide them with suitable defaults.
             Color = color ?? Color.White;
             Rotation = rotation ?? 0;
             Scale = scale ?? Vector2.One;
+            IsVisible = isVisible;
         }
 
         public Rectangle GetBoundingRectangle()
