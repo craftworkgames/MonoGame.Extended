@@ -10,7 +10,9 @@ namespace MonoGame.Extended.Sprites
     public class Sprite 
     {
         public Texture2D Texture;
-        public Vector2 Position;
+        public Vector2 Position = Vector2.Zero;
+
+        public Vector2 Scale = Vector2.One;
 
         public Rectangle Bounds
         {

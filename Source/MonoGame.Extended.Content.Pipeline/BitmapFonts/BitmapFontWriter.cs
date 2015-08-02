@@ -5,9 +5,9 @@ using MonoGame.Extended.BitmapFonts;
 namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
     [ContentTypeWriter]
-    public class BitmapFontWriter : ContentTypeWriter<FileFileData>
+    public class BitmapFontWriter : ContentTypeWriter<BitmapFontProcessorResult>
     {
-        protected override void Write(ContentWriter output, FileFileData value)
+        protected override void Write(ContentWriter output, BitmapFontProcessorResult value)
         {
             output.Write(value.TextureAssets.Count);
 

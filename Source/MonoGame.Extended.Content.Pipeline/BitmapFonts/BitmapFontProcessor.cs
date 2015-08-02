@@ -7,15 +7,15 @@ using Newtonsoft.Json;
 namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
     [ContentProcessor(DisplayName = "BMFont Processor - MonoGame.Extended")]
-    public class BitmapFontProcessor : ContentProcessor<BitmapFontFile, FileFileData>
+    public class BitmapFontProcessor : ContentProcessor<BitmapFontFile, BitmapFontProcessorResult>
     {
-        public override FileFileData Process(BitmapFontFile input, ContentProcessorContext context)
+        public override BitmapFontProcessorResult Process(BitmapFontFile input, ContentProcessorContext context)
         {
             try
             {
                 context.Logger.LogMessage("Processing BMFont");
                 var json = JsonConvert.SerializeObject(input);
-                var output = new FileFileData(json);
+                var output = new BitmapFontProcessorResult(json);
 
                 foreach (var fontPage in input.Pages)
                 {
