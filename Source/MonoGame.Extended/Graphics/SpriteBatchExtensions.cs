@@ -12,9 +12,10 @@ namespace MonoGame.Extended.Graphics
             spriteBatch.Draw(textureRegion.Texture, position, sourceRectangle, color);
         }
 
-        public static void Draw(this SpriteBatch spriteBatch, Sprite sprite, Color color) 
+        public static void Draw(this SpriteBatch spriteBatch, Sprite sprite) 
         {
-            spriteBatch.Draw(sprite.Texture, sprite.Position, color);
+            if (sprite.IsVisible)
+                spriteBatch.Draw(sprite.TextureRegion.Texture, sprite.Position, sprite.GetBoundingRectangle(), sprite.TextureRegion.Bounds, sprite.Origin, sprite.Rotation, sprite.Scale, sprite.Color);
         }
 
         public static void Draw(this SpriteBatch spriteBatch, TextureRegion2D textureRegion, Rectangle destinationRectangle, Color color)
