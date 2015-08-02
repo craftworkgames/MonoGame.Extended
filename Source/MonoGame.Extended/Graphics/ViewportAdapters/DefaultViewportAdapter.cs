@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+// ReSharper disable once CheckNamespace
 namespace MonoGame.Extended.Graphics
 {
     public class DefaultViewportAdapter : ViewportAdapter

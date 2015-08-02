@@ -64,6 +64,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj">
+      <Project>{28CD24BD-432C-4987-9E9D-65CFCF120EA0}</Project>
+      <Name>MonoGame.Extended.Content.Pipeline</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724C52-3D50-45BB-81EB-3C8A247EAFD1}</Project>
       <Name>MonoGame.Extended</Name>
