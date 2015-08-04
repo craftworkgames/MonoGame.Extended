@@ -24,7 +24,7 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return "MonoGame.Extended.BitmapFonts.BitmapFontReader, MonoGame.Extended";
+            return typeof(BitmapFontReader).AssemblyQualifiedName;
         }
     }
 }

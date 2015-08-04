@@ -2,17 +2,17 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 
-namespace MonoGame.Extended.TileMaps
+namespace MonoGame.Extended.Tiled
 {
-    public class TileLayer
+    public class TiledLayer
     {
-        public TileLayer(TileMap tileMap, GraphicsDevice graphicsDevice, string name, int width, int height, int[] data)
+        public TiledLayer(TiledMap tiledMap, GraphicsDevice graphicsDevice, string name, int width, int height, int[] data)
         {
             Name = name;
             Width = width;
             Height = height;
 
-            _tileMap = tileMap;
+            _tiledMap = tiledMap;
             _data = data;
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
@@ -21,7 +21,7 @@ namespace MonoGame.Extended.TileMaps
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        private readonly TileMap _tileMap;
+        private readonly TiledMap _tiledMap;
         private readonly int[] _data;
         private readonly SpriteBatch _spriteBatch;
 
@@ -35,7 +35,7 @@ namespace MonoGame.Extended.TileMaps
                 for (var x = 0; x < Width; x++)
                 {
                     var id = _data[x + y * Width];
-                    var region = _tileMap.GetTileRegion(id);
+                    var region = _tiledMap.GetTileRegion(id);
 
                     if (region != null)
                     {

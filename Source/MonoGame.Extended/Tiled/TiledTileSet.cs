@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 
-namespace MonoGame.Extended.TileMaps
+namespace MonoGame.Extended.Tiled
 {
-    public class TileSet
+    public class TiledTileSet
     {
-        public TileSet(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
+        public TiledTileSet(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
         {
             Texture = texture;
             FirstId = firstId;

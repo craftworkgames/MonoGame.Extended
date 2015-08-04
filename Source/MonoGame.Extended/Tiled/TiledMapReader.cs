@@ -2,13 +2,13 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
 
-namespace MonoGame.Extended.TileMaps
+namespace MonoGame.Extended.Tiled
 {
-    public class TileMapReader : ContentTypeReader<TileMap>
+    public class TiledMapReader : ContentTypeReader<TiledMap>
     {
-        protected override TileMap Read(ContentReader input, TileMap existingInstance)
+        protected override TiledMap Read(ContentReader input, TiledMap existingInstance)
         {
-            var tileMap = new TileMap(
+            var tileMap = new TiledMap(
                 graphicsDevice: input.ContentManager.GetGraphicsDevice(), 
                 width: input.ReadInt32(),
                 height: input.ReadInt32(),

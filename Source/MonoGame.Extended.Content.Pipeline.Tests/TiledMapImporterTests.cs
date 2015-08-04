@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Content.Pipeline;
-using MonoGame.Extended.Content.Pipeline.TiledMaps;
+using MonoGame.Extended.Content.Pipeline.Tiled;
 using NSubstitute;
 using NUnit.Framework;
 

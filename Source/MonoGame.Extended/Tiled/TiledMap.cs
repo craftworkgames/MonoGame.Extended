@@ -4,11 +4,11 @@ using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 
-namespace MonoGame.Extended.TileMaps
+namespace MonoGame.Extended.Tiled
 {
-    public class TileMap
+    public class TiledMap
     {
-        public TileMap(GraphicsDevice graphicsDevice, int width, int height, int tileWidth, int tileHeight)
+        public TiledMap(GraphicsDevice graphicsDevice, int width, int height, int tileWidth, int tileHeight)
         {
             Width = width;
             Height = height;
@@ -16,12 +16,12 @@ namespace MonoGame.Extended.TileMaps
             TileHeight = tileHeight;
 
             _graphicsDevice = graphicsDevice;
-            _layers = new List<TileLayer>();
-            _tileSets = new List<TileSet>();
+            _layers = new List<TiledLayer>();
+            _tileSets = new List<TiledTileSet>();
         }
 
-        private readonly List<TileLayer> _layers;
-        private readonly List<TileSet> _tileSets;
+        private readonly List<TiledLayer> _layers;
+        private readonly List<TiledTileSet> _tileSets;
         private readonly GraphicsDevice _graphicsDevice;
  
         public int Width { get; private set; }
@@ -31,24 +31,24 @@ namespace MonoGame.Extended.TileMaps
 
         public int WidthInPixels
         {
-            get { return Width * TileWidth; }
+            get { return Width * TileWidth - Width; }       // annoyingly we have to compensate 1 pixel per tile, seems to be a bug in MonoGame?
         }
 
         public int HeightInPixels
         {
-            get { return Height * TileHeight; }
+            get { return Height * TileHeight - Height; }
         }
 
-        public TileSet CreateTileSet(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
+        public TiledTileSet CreateTileSet(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
         {
-            var tileSet = new TileSet(texture, firstId, tileWidth, tileHeight, spacing, margin);
+            var tileSet = new TiledTileSet(texture, firstId, tileWidth, tileHeight, spacing, margin);
             _tileSets.Add(tileSet);
             return tileSet;
         }
 
-        public TileLayer CreateLayer(string name, int width, int height, int[] data)
+        public TiledLayer CreateLayer(string name, int width, int height, int[] data)
         {
-            var layer = new TileLayer(this, _graphicsDevice, name, width, height, data);
+            var layer = new TiledLayer(this, _graphicsDevice, name, width, height, data);
             _layers.Add(layer);
             return layer;
         }

@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
-using MonoGame.Extended.TileMaps;
+using MonoGame.Extended.Tiled;
 
-namespace MonoGame.Extended.Content.Pipeline.TiledMaps
+namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     [ContentTypeWriter]
     public class TiledMapWriter : ContentTypeWriter<TiledMapProcessorResult>
@@ -46,12 +46,12 @@ namespace MonoGame.Extended.Content.Pipeline.TiledMaps
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            return typeof(TileMap).AssemblyQualifiedName;
+            return typeof(TiledMap).AssemblyQualifiedName;
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return "MonoGame.Extended.TileMaps.TileMapReader, MonoGame.Extended";
+            return typeof (TiledMapReader).AssemblyQualifiedName;
         }
     }
 }

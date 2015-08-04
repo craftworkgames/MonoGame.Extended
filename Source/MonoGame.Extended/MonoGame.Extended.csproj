@@ -50,10 +50,10 @@
     <Compile Include="Graphics\SpriteBatchExtensions.cs" />
     <Compile Include="Graphics\TextureRegion2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TileMaps\TileLayer.cs" />
-    <Compile Include="TileMaps\TileMap.cs" />
-    <Compile Include="TileMaps\TileMapReader.cs" />
-    <Compile Include="TileMaps\TileSet.cs" />
+    <Compile Include="Tiled\TiledLayer.cs" />
+    <Compile Include="Tiled\TiledMap.cs" />
+    <Compile Include="Tiled\TiledMapReader.cs" />
+    <Compile Include="Tiled\TiledTileSet.cs" />
     <Compile Include="Graphics\ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="Graphics\ViewportAdapters\DefaultViewportAdapter.cs" />
     <Compile Include="Graphics\ViewportAdapters\ScalingViewportAdapter.cs" />
@@ -81,7 +81,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Graphics\ViewportAdapters\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

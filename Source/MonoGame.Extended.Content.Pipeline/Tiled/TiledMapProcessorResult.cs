@@ -1,6 +1,6 @@
 using TiledSharp;
 
-namespace MonoGame.Extended.Content.Pipeline.TiledMaps
+namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     public class TiledMapProcessorResult
     {

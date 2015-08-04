@@ -62,10 +62,10 @@
     <Compile Include="BitmapFonts\BitmapFontImporter.cs" />
     <Compile Include="BitmapFonts\BitmapFontProcessor.cs" />
     <Compile Include="BitmapFonts\BitmapFontWriter.cs" />
-    <Compile Include="TiledMaps\TiledMapImporter.cs" />
-    <Compile Include="TiledMaps\TiledMapProcessor.cs" />
-    <Compile Include="TiledMaps\TiledMapProcessorResult.cs" />
-    <Compile Include="TiledMaps\TiledMapWriter.cs" />
+    <Compile Include="Tiled\TiledMapImporter.cs" />
+    <Compile Include="Tiled\TiledMapProcessor.cs" />
+    <Compile Include="Tiled\TiledMapProcessorResult.cs" />
+    <Compile Include="Tiled\TiledMapWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
