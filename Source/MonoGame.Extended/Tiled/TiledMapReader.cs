@@ -8,12 +8,16 @@ namespace MonoGame.Extended.Tiled
     {
         protected override TiledMap Read(ContentReader input, TiledMap existingInstance)
         {
+            var backgroundColor = input.ReadColor();
             var tileMap = new TiledMap(
-                graphicsDevice: input.ContentManager.GetGraphicsDevice(), 
+                graphicsDevice: input.ContentManager.GetGraphicsDevice(),
                 width: input.ReadInt32(),
                 height: input.ReadInt32(),
                 tileWidth: input.ReadInt32(),
-                tileHeight: input.ReadInt32());
+                tileHeight: input.ReadInt32())
+            {
+                BackgroundColor = backgroundColor
+            };
             
             var tileSetCount = input.ReadInt32();
 

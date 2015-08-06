@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 
@@ -28,6 +29,7 @@ namespace MonoGame.Extended.Tiled
         public int Height { get; private set; }
         public int TileWidth { get; private set; }
         public int TileHeight { get; private set; }
+        public Color? BackgroundColor { get; set; }
 
         public int WidthInPixels
         {
@@ -53,8 +55,11 @@ namespace MonoGame.Extended.Tiled
             return layer;
         }
 
-        public void Draw(Camera2D camera)
+        public void Draw(Camera2D camera, bool useMapBackgroundColor = false)
         {
+            if(useMapBackgroundColor && BackgroundColor.HasValue)
+                _graphicsDevice.Clear(BackgroundColor.Value);
+
             foreach (var layer in _layers)
                 layer.Draw(camera);
         }

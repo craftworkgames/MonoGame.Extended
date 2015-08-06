@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="20" height="10" tilewidth="128" tileheight="128">
+<map version="1.0" orientation="orthogonal" width="20" height="10" tilewidth="128" tileheight="128" backgroundcolor="#a6527c">
  <tileset firstgid="1" name="free-tileset" tilewidth="128" tileheight="128" spacing="2" margin="2">
   <image source="free-tileset.png" width="652" height="783"/>
  </tileset>

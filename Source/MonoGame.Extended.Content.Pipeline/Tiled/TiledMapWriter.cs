@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Tiled;
@@ -11,6 +12,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         protected override void Write(ContentWriter output, TiledMapProcessorResult value)
         {
             var map = value.Map;
+            output.Write(new Color(map.BackgroundColor.R, map.BackgroundColor.G, map.BackgroundColor.B));
             output.Write(map.Width);
             output.Write(map.Height);
             output.Write(map.TileWidth);

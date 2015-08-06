@@ -8,6 +8,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         public override TmxMap Import(string filename, ContentImporterContext context)
         {
+            // it's not ideal that the constructor reads the XML.
+            // in future we might pull apart TmxMap and implement our own parser.
             return new TmxMap(filename);
         }
     }
