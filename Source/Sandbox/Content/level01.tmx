@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="20" height="10" tilewidth="128" tileheight="128" backgroundcolor="#a6527c">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="128" tileheight="128" backgroundcolor="#a6527c" nextobjectid="1">
  <tileset firstgid="1" name="free-tileset" tilewidth="128" tileheight="128" spacing="2" margin="2">
   <image source="free-tileset.png" width="652" height="783"/>
+  <tile id="23">
+   <properties>
+    <property name="element" value="box"/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="hp" value="55"/>
+    <property name="mp" value="16"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="Tile Layer 2" width="20" height="10">
   <data>
@@ -127,7 +138,7 @@
    <tile gid="0"/>
    <tile gid="21"/>
    <tile gid="28"/>
-   <tile gid="0"/>
+   <tile gid="25"/>
    <tile gid="30"/>
    <tile gid="0"/>
    <tile gid="0"/>

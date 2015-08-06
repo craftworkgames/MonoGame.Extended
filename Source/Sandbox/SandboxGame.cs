@@ -34,8 +34,8 @@ namespace Sandbox
             Window.Position = new Point(50, 50);
             Window.Title = string.Format("MonoGame.Extended - {0}", GetType().Name);
 
-            //_graphicsDeviceManager.PreferredBackBufferWidth = 1024;
-            //_graphicsDeviceManager.PreferredBackBufferHeight = 768;
+            _graphicsDeviceManager.PreferredBackBufferWidth = 1024;
+            _graphicsDeviceManager.PreferredBackBufferHeight = 768;
         }
 
         protected override void Initialize()
