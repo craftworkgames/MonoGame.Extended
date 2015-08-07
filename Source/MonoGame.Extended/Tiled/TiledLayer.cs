@@ -40,8 +40,8 @@ namespace MonoGame.Extended.Tiled
                     if (region != null)
                     {
                         // not exactly sure why we need to compensate 1 pixel here. Could be a bug in MonoGame?
-                        var tx = x * (region.Width - 1);
-                        var ty = y * (region.Height - 1);
+                        var tx = x * (_tiledMap.TileWidth - 1);
+                        var ty = y * (_tiledMap.TileHeight - 1);
                         
                         _spriteBatch.Draw(region, new Rectangle(tx, ty, region.Width, region.Height), Color.White);
                     }

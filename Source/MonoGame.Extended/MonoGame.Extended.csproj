@@ -53,6 +53,7 @@
     <Compile Include="Tiled\TiledLayer.cs" />
     <Compile Include="Tiled\TiledMap.cs" />
     <Compile Include="Tiled\TiledMapReader.cs" />
+    <Compile Include="Tiled\TiledMapRenderOrder.cs" />
     <Compile Include="Tiled\TiledTileSet.cs" />
     <Compile Include="Graphics\ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="Graphics\ViewportAdapters\DefaultViewportAdapter.cs" />

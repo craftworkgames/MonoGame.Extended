@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Tiled;
+using TiledSharp;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
@@ -13,6 +14,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         {
             var map = value.Map;
             output.Write(new Color(map.BackgroundColor.R, map.BackgroundColor.G, map.BackgroundColor.B));
+            output.Write(ConvertRenderOrder(map.RenderOrder).ToString());
             output.Write(map.Width);
             output.Write(map.Height);
             output.Write(map.TileWidth);
@@ -54,6 +56,23 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
             return typeof (TiledMapReader).AssemblyQualifiedName;
+        }
+
+        private static TiledMapRenderOrder ConvertRenderOrder(TmxMap.RenderOrderType renderOrder)
+        {
+            switch (renderOrder)
+            {
+                case TmxMap.RenderOrderType.RightDown:
+                    return TiledMapRenderOrder.RightDown;
+                case TmxMap.RenderOrderType.RightUp:
+                    return TiledMapRenderOrder.RightUp;
+                case TmxMap.RenderOrderType.LeftDown:
+                    return TiledMapRenderOrder.LeftDown;
+                case TmxMap.RenderOrderType.LeftUp:
+                    return TiledMapRenderOrder.LeftUp;
+                default:
+                    return TiledMapRenderOrder.RightDown;
+            }
         }
     }
 }

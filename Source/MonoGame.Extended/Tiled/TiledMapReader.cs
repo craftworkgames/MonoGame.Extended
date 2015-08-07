@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
@@ -9,6 +10,7 @@ namespace MonoGame.Extended.Tiled
         protected override TiledMap Read(ContentReader input, TiledMap existingInstance)
         {
             var backgroundColor = input.ReadColor();
+            var renderOrder = (TiledMapRenderOrder) Enum.Parse(typeof (TiledMapRenderOrder), input.ReadString(), true);
             var tileMap = new TiledMap(
                 graphicsDevice: input.ContentManager.GetGraphicsDevice(),
                 width: input.ReadInt32(),
@@ -16,7 +18,8 @@ namespace MonoGame.Extended.Tiled
                 tileWidth: input.ReadInt32(),
                 tileHeight: input.ReadInt32())
             {
-                BackgroundColor = backgroundColor
+                BackgroundColor = backgroundColor,
+                RenderOrder = renderOrder
             };
             
             var tileSetCount = input.ReadInt32();

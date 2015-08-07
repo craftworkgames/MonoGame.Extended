@@ -87,3 +87,23 @@
 /processor:TiledMapProcessor
 /build:test-tileset-map1.tmx
 
+#begin test-tileset-left-down.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:test-tileset-left-down.tmx
+
+#begin test-tileset-left-up.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:test-tileset-left-up.tmx
+
+#begin test-tileset-right-down.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:test-tileset-right-down.tmx
+
+#begin test-tileset-right-up.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:test-tileset-right-up.tmx
+

@@ -43,8 +43,8 @@ namespace Sandbox
             _viewportAdapter = new BoxingViewportAdapter(GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter)
             {
-                Zoom = 0.5f,
-                Position = new Vector2(900, 650)
+                Zoom = 1.5f,
+                //Position = new Vector2(900, 650)
             };
 
             Window.AllowUserResizing = true;
@@ -58,7 +58,7 @@ namespace Sandbox
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _backgroundTexture = Content.Load<Texture2D>("hills");
             _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
-            _tiledMap = Content.Load<TiledMap>("level01");
+            _tiledMap = Content.Load<TiledMap>("test-tileset-left-down");
         }
 
         protected override void UnloadContent()

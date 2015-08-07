@@ -30,6 +30,7 @@ namespace MonoGame.Extended.Tiled
         public int TileWidth { get; private set; }
         public int TileHeight { get; private set; }
         public Color? BackgroundColor { get; set; }
+        public TiledMapRenderOrder RenderOrder { get; set; }
 
         public int WidthInPixels
         {
