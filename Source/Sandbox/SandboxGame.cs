@@ -44,7 +44,7 @@ namespace Sandbox
             _camera = new Camera2D(_viewportAdapter)
             {
                 Zoom = 1.5f,
-                //Position = new Vector2(900, 650)
+                Position = new Vector2(-200, -200)
             };
 
             Window.AllowUserResizing = true;
@@ -58,7 +58,7 @@ namespace Sandbox
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _backgroundTexture = Content.Load<Texture2D>("hills");
             _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
-            _tiledMap = Content.Load<TiledMap>("test-tileset-left-down");
+            _tiledMap = Content.Load<TiledMap>("test-tileset-right-down");
         }
 
         protected override void UnloadContent()
