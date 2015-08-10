@@ -13,6 +13,7 @@ namespace MonoGame.Extended.Tiled
             Name = name;
             Width = width;
             Height = height;
+            Properties = new TiledProperties();
             
             _tiledMap = tiledMap;
             _spriteBatch = new SpriteBatch(graphicsDevice);
@@ -22,6 +23,7 @@ namespace MonoGame.Extended.Tiled
         public string Name { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
+        public TiledProperties Properties { get; private set; }
 
         private readonly TiledMap _tiledMap;
         private readonly TiledTile[] _tiles;

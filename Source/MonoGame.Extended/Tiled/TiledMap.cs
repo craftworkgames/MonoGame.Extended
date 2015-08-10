@@ -15,22 +15,29 @@ namespace MonoGame.Extended.Tiled
             Height = height;
             TileWidth = tileWidth;
             TileHeight = tileHeight;
+            Properties = new TiledProperties();
 
             _graphicsDevice = graphicsDevice;
             _layers = new List<TiledLayer>();
-            _tileSets = new List<TiledTileSet>();
+            _tilesets = new List<TiledTileset>();
         }
-
-        private readonly List<TiledLayer> _layers;
-        private readonly List<TiledTileSet> _tileSets;
+        
+        private readonly List<TiledTileset> _tilesets;
         private readonly GraphicsDevice _graphicsDevice;
- 
+        private readonly List<TiledLayer> _layers;
+        
         public int Width { get; private set; }
         public int Height { get; private set; }
         public int TileWidth { get; private set; }
         public int TileHeight { get; private set; }
         public Color? BackgroundColor { get; set; }
         public TiledMapRenderOrder RenderOrder { get; set; }
+        public TiledProperties Properties { get; private set; }
+
+        public IEnumerable<TiledLayer> Layers
+        {
+            get { return _layers; }
+        }
 
         public int WidthInPixels
         {
@@ -42,11 +49,11 @@ namespace MonoGame.Extended.Tiled
             get { return Height * TileHeight - Height; }
         }
 
-        public TiledTileSet CreateTileSet(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
+        public TiledTileset CreateTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
         {
-            var tileSet = new TiledTileSet(texture, firstId, tileWidth, tileHeight, spacing, margin);
-            _tileSets.Add(tileSet);
-            return tileSet;
+            var tileset = new TiledTileset(texture, firstId, tileWidth, tileHeight, spacing, margin);
+            _tilesets.Add(tileset);
+            return tileset;
         }
 
         public TiledLayer CreateLayer(string name, int width, int height, int[] data)
@@ -54,6 +61,11 @@ namespace MonoGame.Extended.Tiled
             var layer = new TiledLayer(this, _graphicsDevice, name, width, height, data);
             _layers.Add(layer);
             return layer;
+        }
+
+        public TiledLayer GetLayer(string name)
+        {
+            return _layers.FirstOrDefault(i => i.Name == name);
         }
 
         public void Draw(Camera2D camera, bool useMapBackgroundColor = false)
@@ -70,10 +82,10 @@ namespace MonoGame.Extended.Tiled
             if (id == 0)
                 return null;
 
-            var tileset = _tileSets.LastOrDefault(i => i.FirstId <= id);
+            var tileset = _tilesets.LastOrDefault(i => i.FirstId <= id);
 
             if (tileset == null)
-                throw new InvalidOperationException(string.Format("No TileSet found for id {0}", id));
+                throw new InvalidOperationException(string.Format("No tileset found for id {0}", id));
 
             return tileset.GetTileRegion(id);
         }

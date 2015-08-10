@@ -10,41 +10,67 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     [ContentTypeWriter]
     public class TiledMapWriter : ContentTypeWriter<TiledMapProcessorResult>
     {
-        protected override void Write(ContentWriter output, TiledMapProcessorResult value)
+        protected override void Write(ContentWriter writer, TiledMapProcessorResult value)
         {
             var map = value.Map;
-            output.Write(new Color(map.BackgroundColor.R, map.BackgroundColor.G, map.BackgroundColor.B));
-            output.Write(ConvertRenderOrder(map.RenderOrder).ToString());
-            output.Write(map.Width);
-            output.Write(map.Height);
-            output.Write(map.TileWidth);
-            output.Write(map.TileHeight);
-            
-            output.Write(map.Tilesets.Count);
+            writer.Write(new Color(map.BackgroundColor.R, map.BackgroundColor.G, map.BackgroundColor.B));
+            writer.Write(ConvertRenderOrder(map.RenderOrder).ToString());
+            writer.Write(map.Width);
+            writer.Write(map.Height);
+            writer.Write(map.TileWidth);
+            writer.Write(map.TileHeight);
+            WriteCustomProperties(writer, map.Properties);
+
+            writer.Write(map.Tilesets.Count);
 
             foreach (var tileset in map.Tilesets)
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
-                output.Write(Path.GetFileNameWithoutExtension(tileset.Image.Source));
-                output.Write(tileset.FirstGid);
-                output.Write(tileset.TileWidth);
-                output.Write(tileset.TileHeight);
-                output.Write(tileset.Spacing);
-                output.Write(tileset.Margin);
+                writer.Write(Path.GetFileNameWithoutExtension(tileset.Image.Source));
+                writer.Write(tileset.FirstGid);
+                writer.Write(tileset.TileWidth);
+                writer.Write(tileset.TileHeight);
+                writer.Write(tileset.Spacing);
+                writer.Write(tileset.Margin);
+                WriteCustomProperties(writer, tileset.Properties);
             }
 
-            output.Write(map.Layers.Count);
+            writer.Write(map.Layers.Count);
 
             foreach (var layer in map.Layers)
             {
-                output.Write(layer.Tiles.Count);
+                writer.Write(layer.Tiles.Count);
 
                 foreach (var tile in layer.Tiles)
-                    output.Write(tile.Gid);
+                    writer.Write(tile.Gid);
 
-                output.Write(layer.Name);
-                output.Write(map.Width);   // layers should have separate width and height
-                output.Write(map.Height);
+                writer.Write(layer.Name);
+                writer.Write(map.Width);   // layers should have separate width and height
+                writer.Write(map.Height);
+                WriteCustomProperties(writer, layer.Properties);
+            }
+
+            // images layers don't work with TiledSharp apparently.
+            //writer.Write(map.ImageLayers.Count);
+
+            //foreach (var imageLayer in map.ImageLayers)
+            //{
+            //    var assetName = Path.GetFileNameWithoutExtension(imageLayer.Image.Source);
+            //    writer.Write(assetName);
+            //    writer.Write(imageLayer.Name);
+            //    writer.Write(imageLayer.Width);
+            //    writer.Write(imageLayer.Height);
+            //}
+        }
+
+        private static void WriteCustomProperties(ContentWriter writer, PropertyDict properties)
+        {
+            writer.Write(properties.Count);
+
+            foreach (var mapProperty in properties)
+            {
+                writer.Write(mapProperty.Key);
+                writer.Write(mapProperty.Value);
             }
         }
 

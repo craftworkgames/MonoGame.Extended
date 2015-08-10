@@ -43,8 +43,8 @@ namespace Sandbox
             _viewportAdapter = new BoxingViewportAdapter(GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter)
             {
-                Zoom = 1.5f,
-                Position = new Vector2(-200, -200)
+                Zoom = 0.5f,
+                Position = new Vector2(408, 270)
             };
 
             Window.AllowUserResizing = true;
@@ -58,7 +58,7 @@ namespace Sandbox
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _backgroundTexture = Content.Load<Texture2D>("hills");
             _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
-            _tiledMap = Content.Load<TiledMap>("test-tileset-right-down");
+            _tiledMap = Content.Load<TiledMap>("level01");
         }
 
         protected override void UnloadContent()
@@ -136,6 +136,7 @@ namespace Sandbox
 
             _spriteBatch.Begin();
             _spriteBatch.DrawString(_bitmapFont, "This is MonoGame.Extended", new Vector2(50, 50), new Color(Color.Black, 0.5f));
+            _spriteBatch.DrawString(_bitmapFont, string.Format("Camera: {0}", _camera.Position), new Vector2(50, 100), Color.Black);
             //_spriteBatch.DrawString(_bitmapFont, 
             //    "Contrary to popular belief, Lorem Ipsum is not simply random text.\n\n" + 
             //    "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard " + 

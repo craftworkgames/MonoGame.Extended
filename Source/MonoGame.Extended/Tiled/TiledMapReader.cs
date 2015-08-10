@@ -7,54 +7,67 @@ namespace MonoGame.Extended.Tiled
 {
     public class TiledMapReader : ContentTypeReader<TiledMap>
     {
-        protected override TiledMap Read(ContentReader input, TiledMap existingInstance)
+        protected override TiledMap Read(ContentReader reader, TiledMap existingInstance)
         {
-            var backgroundColor = input.ReadColor();
-            var renderOrder = (TiledMapRenderOrder) Enum.Parse(typeof (TiledMapRenderOrder), input.ReadString(), true);
+            var backgroundColor = reader.ReadColor();
+            var renderOrder = (TiledMapRenderOrder) Enum.Parse(typeof (TiledMapRenderOrder), reader.ReadString(), true);
             var tileMap = new TiledMap(
-                graphicsDevice: input.ContentManager.GetGraphicsDevice(),
-                width: input.ReadInt32(),
-                height: input.ReadInt32(),
-                tileWidth: input.ReadInt32(),
-                tileHeight: input.ReadInt32())
+                graphicsDevice: reader.ContentManager.GetGraphicsDevice(),
+                width: reader.ReadInt32(),
+                height: reader.ReadInt32(),
+                tileWidth: reader.ReadInt32(),
+                tileHeight: reader.ReadInt32())
             {
                 BackgroundColor = backgroundColor,
                 RenderOrder = renderOrder
             };
-            
-            var tileSetCount = input.ReadInt32();
 
-            for (var i = 0; i < tileSetCount; i++)
+            ReadCustomProperties(reader, tileMap.Properties);
+
+            var tilesetCount = reader.ReadInt32();
+
+            for (var i = 0; i < tilesetCount; i++)
             {
-                var assetName = input.ReadString();
-                var texture = input.ContentManager.Load<Texture2D>(assetName);
-                tileMap.CreateTileSet(
+                var assetName = reader.ReadString();
+                var texture = reader.ContentManager.Load<Texture2D>(assetName);
+                var tileset = tileMap.CreateTileset(
                     texture: texture,
-                    firstId: input.ReadInt32(),
-                    tileWidth: input.ReadInt32(),
-                    tileHeight: input.ReadInt32(),
-                    spacing: input.ReadInt32(),
-                    margin: input.ReadInt32());
+                    firstId: reader.ReadInt32(),
+                    tileWidth: reader.ReadInt32(),
+                    tileHeight: reader.ReadInt32(),
+                    spacing: reader.ReadInt32(),
+                    margin: reader.ReadInt32());
+                ReadCustomProperties(reader, tileset.Properties);
             }
 
-            var layerCount = input.ReadInt32();
+            var layerCount = reader.ReadInt32();
 
             for (var i = 0; i < layerCount; i++)
             {
-                var tileDataCount = input.ReadInt32();
+                var tileDataCount = reader.ReadInt32();
                 var tileData = new int[tileDataCount];
 
                 for (var d = 0; d < tileDataCount; d++)
-                    tileData[d] = input.ReadInt32();
+                    tileData[d] = reader.ReadInt32();
 
-                tileMap.CreateLayer(
-                    name: input.ReadString(),
-                    width: input.ReadInt32(),
-                    height: input.ReadInt32(),
+                var layer = tileMap.CreateLayer(
+                    name: reader.ReadString(),
+                    width: reader.ReadInt32(),
+                    height: reader.ReadInt32(),
                     data: tileData);
+
+                ReadCustomProperties(reader, layer.Properties);
             }
             
             return tileMap;
+        }
+
+        private void ReadCustomProperties(ContentReader reader, TiledProperties properties)
+        {
+            var count = reader.ReadInt32();
+
+            for (var i = 0; i < count; i++)
+                properties.Add(reader.ReadString(), reader.ReadString());
         }
     }
 }
