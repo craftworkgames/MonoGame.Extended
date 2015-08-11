@@ -1,5 +1,6 @@
-﻿using Microsoft.Xna.Framework.Content.Pipeline;
-using TiledSharp;
+﻿using System.IO;
+using System.Xml.Serialization;
+using Microsoft.Xna.Framework.Content.Pipeline;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
@@ -8,9 +9,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         public override TmxMap Import(string filename, ContentImporterContext context)
         {
-            // it's not ideal that the constructor reads the XML.
-            // in future we might pull apart TmxMap and implement our own parser.
-            return new TmxMap(filename);
+            using (var reader = new StreamReader(filename))
+            {
+                var serializer = new XmlSerializer(typeof(TmxMap));
+                return (TmxMap)serializer.Deserialize(reader);
+            }
         }
     }
 }

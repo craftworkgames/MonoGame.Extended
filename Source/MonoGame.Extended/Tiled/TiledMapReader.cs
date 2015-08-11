@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Tiled
     {
         protected override TiledMap Read(ContentReader reader, TiledMap existingInstance)
         {
-            var backgroundColor = reader.ReadColor();
+            //var backgroundColor = reader.ReadColor();
             var renderOrder = (TiledMapRenderOrder) Enum.Parse(typeof (TiledMapRenderOrder), reader.ReadString(), true);
             var tileMap = new TiledMap(
                 graphicsDevice: reader.ContentManager.GetGraphicsDevice(),
@@ -18,7 +18,7 @@ namespace MonoGame.Extended.Tiled
                 tileWidth: reader.ReadInt32(),
                 tileHeight: reader.ReadInt32())
             {
-                BackgroundColor = backgroundColor,
+                //BackgroundColor = backgroundColor,
                 RenderOrder = renderOrder
             };
 

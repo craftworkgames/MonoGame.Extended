@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Content.Pipeline;
-using TiledSharp;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {

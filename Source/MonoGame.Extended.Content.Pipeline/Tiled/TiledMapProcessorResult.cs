@@ -1,4 +1,3 @@
-using TiledSharp;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {

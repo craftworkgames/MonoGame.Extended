@@ -1,9 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Tiled;
-using TiledSharp;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
@@ -13,7 +13,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         protected override void Write(ContentWriter writer, TiledMapProcessorResult value)
         {
             var map = value.Map;
-            writer.Write(new Color(map.BackgroundColor.R, map.BackgroundColor.G, map.BackgroundColor.B));
+            //writer.Write(new Color(map.BackgroundColor.R, map.BackgroundColor.G, map.BackgroundColor.B));
             writer.Write(ConvertRenderOrder(map.RenderOrder).ToString());
             writer.Write(map.Width);
             writer.Write(map.Height);
@@ -39,9 +39,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
             foreach (var layer in map.Layers)
             {
-                writer.Write(layer.Tiles.Count);
+                writer.Write(layer.Data.Tiles.Count);
 
-                foreach (var tile in layer.Tiles)
+                foreach (var tile in layer.Data.Tiles)
                     writer.Write(tile.Gid);
 
                 writer.Write(layer.Name);
@@ -63,13 +63,13 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             //}
         }
 
-        private static void WriteCustomProperties(ContentWriter writer, PropertyDict properties)
+        private static void WriteCustomProperties(ContentWriter writer, List<TmxProperty> properties)
         {
             writer.Write(properties.Count);
 
             foreach (var mapProperty in properties)
             {
-                writer.Write(mapProperty.Key);
+                writer.Write(mapProperty.Name);
                 writer.Write(mapProperty.Value);
             }
         }
@@ -81,20 +81,20 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return typeof (TiledMapReader).AssemblyQualifiedName;
+            return typeof(TiledMapReader).AssemblyQualifiedName;
         }
 
-        private static TiledMapRenderOrder ConvertRenderOrder(TmxMap.RenderOrderType renderOrder)
+        private static TiledMapRenderOrder ConvertRenderOrder(TmxRenderOrder renderOrder)
         {
             switch (renderOrder)
             {
-                case TmxMap.RenderOrderType.RightDown:
+                case TmxRenderOrder.RightDown:
                     return TiledMapRenderOrder.RightDown;
-                case TmxMap.RenderOrderType.RightUp:
+                case TmxRenderOrder.RightUp:
                     return TiledMapRenderOrder.RightUp;
-                case TmxMap.RenderOrderType.LeftDown:
+                case TmxRenderOrder.LeftDown:
                     return TiledMapRenderOrder.LeftDown;
-                case TmxMap.RenderOrderType.LeftUp:
+                case TmxRenderOrder.LeftUp:
                     return TiledMapRenderOrder.LeftUp;
                 default:
                     return TiledMapRenderOrder.RightDown;
