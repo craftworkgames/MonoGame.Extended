@@ -1,6 +1,6 @@
 namespace MonoGame.Extended.Tiled
 {
-    public enum TiledMapRenderOrder
+    public enum TiledRenderOrder
     {
         RightDown,
         RightUp,

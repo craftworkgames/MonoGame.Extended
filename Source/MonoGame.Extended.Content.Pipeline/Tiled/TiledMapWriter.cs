@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
@@ -13,7 +14,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         protected override void Write(ContentWriter writer, TiledMapProcessorResult value)
         {
             var map = value.Map;
-            //writer.Write(new Color(map.BackgroundColor.R, map.BackgroundColor.G, map.BackgroundColor.B));
+            writer.Write(HexToColor(map.BackgroundColor));
             writer.Write(ConvertRenderOrder(map.RenderOrder).ToString());
             writer.Write(map.Width);
             writer.Write(map.Height);
@@ -74,6 +75,18 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             }
         }
 
+        private static Color HexToColor(string hexValue)
+        {
+            if (string.IsNullOrEmpty(hexValue))
+                return new Color(128, 128, 128);
+
+            hexValue = hexValue.TrimStart('#');
+            var r = int.Parse(hexValue.Substring(0, 2), NumberStyles.HexNumber);
+            var g = int.Parse(hexValue.Substring(2, 2), NumberStyles.HexNumber);
+            var b = int.Parse(hexValue.Substring(4, 2), NumberStyles.HexNumber);
+            return new Color(r, g, b);
+        }
+
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
             return typeof(TiledMap).AssemblyQualifiedName;
@@ -84,20 +97,20 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             return typeof(TiledMapReader).AssemblyQualifiedName;
         }
 
-        private static TiledMapRenderOrder ConvertRenderOrder(TmxRenderOrder renderOrder)
+        private static TiledRenderOrder ConvertRenderOrder(TmxRenderOrder renderOrder)
         {
             switch (renderOrder)
             {
                 case TmxRenderOrder.RightDown:
-                    return TiledMapRenderOrder.RightDown;
+                    return TiledRenderOrder.RightDown;
                 case TmxRenderOrder.RightUp:
-                    return TiledMapRenderOrder.RightUp;
+                    return TiledRenderOrder.RightUp;
                 case TmxRenderOrder.LeftDown:
-                    return TiledMapRenderOrder.LeftDown;
+                    return TiledRenderOrder.LeftDown;
                 case TmxRenderOrder.LeftUp:
-                    return TiledMapRenderOrder.LeftUp;
+                    return TiledRenderOrder.LeftUp;
                 default:
-                    return TiledMapRenderOrder.RightDown;
+                    return TiledRenderOrder.RightDown;
             }
         }
     }

@@ -79,13 +79,13 @@ namespace MonoGame.Extended.Tiled
         {
             switch (_tiledMap.RenderOrder)
             {
-                case TiledMapRenderOrder.LeftDown:
+                case TiledRenderOrder.LeftDown:
                     return GetTilesLeftDown;
-                case TiledMapRenderOrder.LeftUp:
+                case TiledRenderOrder.LeftUp:
                     return GetTilesLeftUp;
-                case TiledMapRenderOrder.RightDown:
+                case TiledRenderOrder.RightDown:
                     return GetTilesRightDown;
-                case TiledMapRenderOrder.RightUp:
+                case TiledRenderOrder.RightUp:
                     return GetTilesRightUp;
             }
 
