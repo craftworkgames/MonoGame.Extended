@@ -8,6 +8,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         {
         }
 
+        public TmxDataTile(int gid)
+        {
+            Gid = gid;
+        }
+
         public override string ToString()
         {
             return Gid.ToString();
