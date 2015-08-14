@@ -161,9 +161,7 @@
   <ItemGroup>
     <None Include="Content\read-me.md" />
     <Content Include="Icon.ico" />
-    <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
-    <None Include="Tao.Sdl.dll.config" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
