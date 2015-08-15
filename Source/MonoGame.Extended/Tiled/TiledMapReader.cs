@@ -44,21 +44,35 @@ namespace MonoGame.Extended.Tiled
 
             for (var i = 0; i < layerCount; i++)
             {
-                var tileDataCount = reader.ReadInt32();
-                var tileData = new int[tileDataCount];
+                var layerType = reader.ReadString();
 
-                for (var d = 0; d < tileDataCount; d++)
-                    tileData[d] = reader.ReadInt32();
+                if (layerType == "TileLayer")
+                {
+                    var tileDataCount = reader.ReadInt32();
+                    var tileData = new int[tileDataCount];
 
-                var layer = tileMap.CreateLayer(
-                    name: reader.ReadString(),
-                    width: reader.ReadInt32(),
-                    height: reader.ReadInt32(),
-                    data: tileData);
+                    for (var d = 0; d < tileDataCount; d++)
+                        tileData[d] = reader.ReadInt32();
 
-                ReadCustomProperties(reader, layer.Properties);
+                    var layer = tileMap.CreateTileLayer(
+                        name: reader.ReadString(),
+                        width: reader.ReadInt32(),
+                        height: reader.ReadInt32(),
+                        data: tileData);
+
+                    ReadCustomProperties(reader, layer.Properties);
+                }
+
+                if (layerType == "ImageLayer")
+                {
+                    var assetName = reader.ReadString();
+                    var layerName = reader.ReadString();
+                    var texture = reader.ContentManager.Load<Texture2D>(assetName);
+                    var layer = tileMap.CreateImageLayer(layerName, texture);
+                    ReadCustomProperties(reader, layer.Properties);
+                }
             }
-            
+
             return tileMap;
         }
 

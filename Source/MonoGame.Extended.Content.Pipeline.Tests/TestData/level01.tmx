@@ -226,6 +226,9 @@
       <tile gid="0"/>
     </data>
   </layer>
+  <imagelayer name="Image Layer 1" x="100" y="100">
+    <image source="hills.png"/>
+  </imagelayer>
   <layer name="Tile Layer 1" width="20" height="10">
     <properties>
       <property name="customlayerprop" value="1"/>

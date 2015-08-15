@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
-    [XmlRoot(DataType = "string", ElementName = "map")]
+    [XmlRoot(ElementName = "map")]
     public class TmxMap
     {
         public TmxMap()
@@ -12,7 +12,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             Tilesets = new List<TmxTileset>();
             Layers = new List<TmxLayer>();
             ObjectGroups = new List<TmxObjectGroup>();
-            ImageLayers = new List<TmxImageLayer>();
         }
 
         [XmlAttribute(AttributeName = "version")]
@@ -42,14 +41,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlElement(ElementName = "tileset")]
         public List<TmxTileset> Tilesets { get; set; }
 
-        [XmlElement(ElementName = "layer")]
-        public List<TmxLayer> Layers { get; set; }
-
         [XmlElement(ElementName = "objectgroup")]
         public List<TmxObjectGroup> ObjectGroups { get; set; }
-        
-        [XmlElement(ElementName = "imagelayer")]
-        public List<TmxImageLayer> ImageLayers { get; set; }
+
+        [XmlElement(ElementName = "layer", Type = typeof(TmxTileLayer))]
+        [XmlElement(ElementName = "imagelayer", Type = typeof(TmxImageLayer))]
+        public List<TmxLayer> Layers { get; set; }
 
         [XmlArray("properties")]
         [XmlArrayItem("property")]

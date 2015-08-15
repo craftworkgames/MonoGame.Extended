@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
-    public class TmxImageLayer
+    public class TmxImageLayer : TmxLayer
     {
         public TmxImageLayer()
         {

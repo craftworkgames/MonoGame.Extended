@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         public override TiledMapProcessorResult Process(TmxMap map, ContentProcessorContext context)
         {
-            foreach (var layer in map.Layers)
+            foreach (var layer in map.Layers.OfType<TmxTileLayer>())
             {
                 var data = layer.Data;
 

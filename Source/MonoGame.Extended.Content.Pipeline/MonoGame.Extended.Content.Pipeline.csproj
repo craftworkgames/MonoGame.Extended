@@ -70,7 +70,7 @@
     <Compile Include="Tiled\TmxData.cs" />
     <Compile Include="Tiled\TmxImage.cs" />
     <Compile Include="Tiled\TmxImageLayer.cs" />
-    <Compile Include="Tiled\TmxLayer.cs" />
+    <Compile Include="Tiled\TmxTileLayer.cs" />
     <Compile Include="Tiled\TmxMap.cs" />
     <Compile Include="Tiled\TmxObject.cs" />
     <Compile Include="Tiled\TmxObjectGroup.cs" />

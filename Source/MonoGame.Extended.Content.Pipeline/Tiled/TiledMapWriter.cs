@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using Microsoft.Xna.Framework;
@@ -40,28 +41,33 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
             foreach (var layer in map.Layers)
             {
-                writer.Write(layer.Data.Tiles.Count);
+                var tileLayer = layer as TmxTileLayer;
 
-                foreach (var tile in layer.Data.Tiles)
-                    writer.Write(tile.Gid);
+                if (tileLayer != null)
+                {
+                    writer.Write("TileLayer");
+                    writer.Write(tileLayer.Data.Tiles.Count);
 
-                writer.Write(layer.Name);
-                writer.Write(map.Width);   // layers should have separate width and height
-                writer.Write(map.Height);
-                WriteCustomProperties(writer, layer.Properties);
+                    foreach (var tile in tileLayer.Data.Tiles)
+                        writer.Write(tile.Gid);
+
+                    writer.Write(tileLayer.Name);
+                    writer.Write(tileLayer.Width); 
+                    writer.Write(tileLayer.Height);
+                    WriteCustomProperties(writer, tileLayer.Properties);
+                }
+
+                var imageLayer = layer as TmxImageLayer;
+
+                if (imageLayer != null)
+                {
+                    writer.Write("ImageLayer");
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    writer.Write(Path.GetFileNameWithoutExtension(imageLayer.Image.Source));
+                    writer.Write(imageLayer.Name);
+                    WriteCustomProperties(writer, imageLayer.Properties);
+                }
             }
-
-            // images layers don't work with TiledSharp apparently.
-            //writer.Write(map.ImageLayers.Count);
-
-            //foreach (var imageLayer in map.ImageLayers)
-            //{
-            //    var assetName = Path.GetFileNameWithoutExtension(imageLayer.Image.Source);
-            //    writer.Write(assetName);
-            //    writer.Write(imageLayer.Name);
-            //    writer.Write(imageLayer.Width);
-            //    writer.Write(imageLayer.Height);
-            //}
         }
 
         private static void WriteCustomProperties(ContentWriter writer, List<TmxProperty> properties)

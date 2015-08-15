@@ -3,9 +3,15 @@ using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
-    public class TmxLayer
+    [XmlInclude(typeof(TmxTileLayer))]
+    [XmlInclude(typeof(TmxImageLayer))]
+    public abstract class TmxLayer
     {
-        public TmxLayer()
+    }
+
+    public class TmxTileLayer : TmxLayer
+    {
+        public TmxTileLayer()
         {
             Opacity = 1.0f;
             Visible = true;

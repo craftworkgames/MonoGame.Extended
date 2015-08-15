@@ -39,6 +39,16 @@ namespace MonoGame.Extended.Tiled
             get { return _layers; }
         }
 
+        public IEnumerable<TiledImageLayer> ImageLayers
+        {
+            get { return _layers.OfType<TiledImageLayer>(); }
+        }
+
+        public IEnumerable<TiledTileLayer> TileLayers
+        {
+            get { return _layers.OfType<TiledTileLayer>(); }
+        }
+
         public int WidthInPixels
         {
             get { return Width * TileWidth - Width; }       // annoyingly we have to compensate 1 pixel per tile, seems to be a bug in MonoGame?
@@ -56,9 +66,16 @@ namespace MonoGame.Extended.Tiled
             return tileset;
         }
 
-        public TiledLayer CreateLayer(string name, int width, int height, int[] data)
+        public TiledTileLayer CreateTileLayer(string name, int width, int height, int[] data)
         {
-            var layer = new TiledLayer(this, _graphicsDevice, name, width, height, data);
+            var layer = new TiledTileLayer(this, _graphicsDevice, name, width, height, data);
+            _layers.Add(layer);
+            return layer;
+        }
+
+        public TiledImageLayer CreateImageLayer(string name, Texture2D texture)
+        {
+            var layer = new TiledImageLayer(_graphicsDevice, name, texture);
             _layers.Add(layer);
             return layer;
         }

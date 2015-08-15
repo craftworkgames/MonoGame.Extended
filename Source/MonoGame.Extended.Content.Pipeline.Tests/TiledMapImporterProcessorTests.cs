@@ -34,10 +34,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         {
             const string filename = @"TestData\test-tileset-xml.tmx";
             var map = ImportAndProcessMap(filename);
-            var actualData = map.Layers[0].Data.Tiles.Select(i => i.Gid).ToArray();
+            var layer = map.Layers.OfType<TmxTileLayer>().First();
+            var actualData = layer.Data.Tiles.Select(i => i.Gid).ToArray();
 
-            Assert.IsNull(map.Layers[0].Data.Encoding);
-            Assert.IsNull(map.Layers[0].Data.Compression);
+            Assert.IsNull(layer.Data.Encoding);
+            Assert.IsNull(layer.Data.Compression);
             Assert.IsTrue(new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(actualData));
         }
         
@@ -46,10 +47,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         {
             const string filename = @"TestData\test-tileset-csv.tmx";
             var map = ImportAndProcessMap(filename);
-            var data = map.Layers[0].Data.Tiles.Select(i => i.Gid).ToArray();
+            var layer = map.Layers.OfType<TmxTileLayer>().First();
+            var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
 
-            Assert.AreEqual("csv", map.Layers[0].Data.Encoding);
-            Assert.IsNull(map.Layers[0].Data.Compression);
+            Assert.AreEqual("csv", layer.Data.Encoding);
+            Assert.IsNull(layer.Data.Compression);
             Assert.IsTrue(new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(data));
         }
 
@@ -58,10 +60,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         {
             const string filename = @"TestData\test-tileset-base64.tmx";
             var map = ImportAndProcessMap(filename);
-            var data = map.Layers[0].Data.Tiles.Select(i => i.Gid).ToArray();
+            var layer = map.Layers.OfType<TmxTileLayer>().First();
+            var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
 
-            Assert.AreEqual("base64", map.Layers[0].Data.Encoding);
-            Assert.IsNull(map.Layers[0].Data.Compression);
+            Assert.AreEqual("base64", layer.Data.Encoding);
+            Assert.IsNull(layer.Data.Compression);
             Assert.IsTrue(new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(data));
         }
 
@@ -70,10 +73,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         {
             const string filename = @"TestData\test-tileset-gzip.tmx";
             var map = ImportAndProcessMap(filename);
-            var data = map.Layers[0].Data.Tiles.Select(i => i.Gid).ToArray();
+            var layer = map.Layers.OfType<TmxTileLayer>().First();
+            var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
 
-            Assert.AreEqual("base64", map.Layers[0].Data.Encoding);
-            Assert.AreEqual("gzip", map.Layers[0].Data.Compression);
+            Assert.AreEqual("base64", layer.Data.Encoding);
+            Assert.AreEqual("gzip", layer.Data.Compression);
             Assert.IsTrue(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(data));
         }
 
@@ -83,10 +87,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         {
             const string filename = @"TestData\test-tileset-zlib.tmx";
             var map = ImportAndProcessMap(filename);
-            var data = map.Layers[0].Data.Tiles.Select(i => i.Gid).ToArray();
+            var layer = map.Layers.OfType<TmxTileLayer>().First();
+            var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
 
-            Assert.AreEqual("base64", map.Layers[0].Data.Encoding);
-            Assert.AreEqual("zlib", map.Layers[0].Data.Compression);
+            Assert.AreEqual("base64", layer.Data.Encoding);
+            Assert.AreEqual("zlib", layer.Data.Compression);
             Assert.IsTrue(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(data));
         }
 

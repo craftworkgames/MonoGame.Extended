@@ -128,9 +128,9 @@ namespace Sandbox
         {
             GraphicsDevice.Clear(Color.Black);
             
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, _tiledMap.WidthInPixels, _tiledMap.HeightInPixels), Color.White);
-            _spriteBatch.End();
+            //_spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            //_spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, _tiledMap.WidthInPixels, _tiledMap.HeightInPixels), Color.White);
+            //_spriteBatch.End();
 
             _tiledMap.Draw(_camera);
 

@@ -50,7 +50,9 @@
     <Compile Include="Graphics\SpriteBatchExtensions.cs" />
     <Compile Include="Graphics\TextureRegion2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tiled\TiledImageLayer.cs" />
     <Compile Include="Tiled\TiledLayer.cs" />
+    <Compile Include="Tiled\TiledTileLayer.cs" />
     <Compile Include="Tiled\TiledMap.cs" />
     <Compile Include="Tiled\TiledMapReader.cs" />
     <Compile Include="Tiled\TiledRenderOrder.cs" />
