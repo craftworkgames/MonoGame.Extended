@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using Microsoft.Xna.Framework;
@@ -41,6 +40,10 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
             foreach (var layer in map.Layers)
             {
+                writer.Write(layer.Name);
+                writer.Write(layer.Visible);
+                writer.Write(layer.Opacity);
+
                 var tileLayer = layer as TmxTileLayer;
 
                 if (tileLayer != null)
@@ -51,10 +54,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     foreach (var tile in tileLayer.Data.Tiles)
                         writer.Write(tile.Gid);
 
-                    writer.Write(tileLayer.Name);
                     writer.Write(tileLayer.Width); 
                     writer.Write(tileLayer.Height);
-                    WriteCustomProperties(writer, tileLayer.Properties);
                 }
 
                 var imageLayer = layer as TmxImageLayer;
@@ -64,9 +65,10 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     writer.Write("ImageLayer");
                     // ReSharper disable once AssignNullToNotNullAttribute
                     writer.Write(Path.GetFileNameWithoutExtension(imageLayer.Image.Source));
-                    writer.Write(imageLayer.Name);
-                    WriteCustomProperties(writer, imageLayer.Properties);
+                    writer.Write(new Vector2(imageLayer.X, imageLayer.Y));
                 }
+
+                WriteCustomProperties(writer, layer.Properties);
             }
         }
 

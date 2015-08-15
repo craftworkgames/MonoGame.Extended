@@ -73,9 +73,9 @@ namespace MonoGame.Extended.Tiled
             return layer;
         }
 
-        public TiledImageLayer CreateImageLayer(string name, Texture2D texture)
+        public TiledImageLayer CreateImageLayer(string name, Texture2D texture, Vector2 position)
         {
-            var layer = new TiledImageLayer(_graphicsDevice, name, texture);
+            var layer = new TiledImageLayer(_graphicsDevice, name, texture, position);
             _layers.Add(layer);
             return layer;
         }

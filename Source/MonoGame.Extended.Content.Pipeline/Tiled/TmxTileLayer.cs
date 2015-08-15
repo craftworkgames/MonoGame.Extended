@@ -1,30 +1,12 @@
-using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
-    [XmlInclude(typeof(TmxTileLayer))]
-    [XmlInclude(typeof(TmxImageLayer))]
-    public abstract class TmxLayer
-    {
-    }
-
     public class TmxTileLayer : TmxLayer
     {
         public TmxTileLayer()
         {
-            Opacity = 1.0f;
-            Visible = true;
-            Properties = new List<TmxProperty>();
         }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        [XmlAttribute(AttributeName = "name")]
-        public string Name { get; set; }
 
         [XmlAttribute(AttributeName = "x")]
         public int X { get; set; }
@@ -37,18 +19,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         [XmlAttribute(AttributeName = "height")]
         public int Height { get; set; }
-
-        [XmlAttribute(AttributeName = "opacity")]
-        public float Opacity { get; set; }
-
-        [XmlAttribute(AttributeName = "visible")]
-        public bool Visible { get; set; }
-
+        
         [XmlElement(ElementName = "data")]
         public TmxData Data { get; set; }
-
-        [XmlArray("properties")]
-        [XmlArrayItem("property")]
-        public List<TmxProperty> Properties { get; set; }
     }
 }
