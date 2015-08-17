@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>MonoGame.Extended</id>
-    <version>0.1.0.0</version>
+    <version>0.2.0.0</version>
     <title>MonoGame.Extended</title>
     <authors>Dylan Wilson</authors>
     <owners>Craftwork Games</owners>
@@ -12,11 +12,15 @@
     <description>Makes MonoGame more awesome.</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2015 - Craftwork Games</copyright>
-    <tags>monogame</tags>
+    <tags>monogame pipeline bmfont tiled</tags>
+    <references>
+      <group targetFramework="portable-net45+sl50+MonoAndroid10+xamarinios10+MonoTouch10">
+        <reference file="MonoGame.Extended.dll" />
+      </group>
+    </references>
   </metadata>
   <files>
-    <file src="bin\Release\MonoGame.Extended*.dll" target="lib\net40" />
-    <file src="bin\Release\MonoGame.Extended*.dll" target="lib\net45" />
-    <file src="bin\Release\MonoGame.Extended*.dll" target="lib\portable-net45+sl50+MonoAndroid10+xamarinios10+MonoTouch10" />
+    <file src="MonoGame.Extended\bin\Release\MonoGame.Extended.dll" target="lib" />
+    <file src="MonoGame.Extended.Content.Pipeline\bin\Release\MonoGame.Extended.Content.Pipeline.dll" target="lib" />
   </files>
 </package>

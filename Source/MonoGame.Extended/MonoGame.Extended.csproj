@@ -50,28 +50,30 @@
     <Compile Include="Graphics\SpriteBatchExtensions.cs" />
     <Compile Include="Graphics\TextureRegion2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TileMaps\TileLayer.cs" />
-    <Compile Include="TileMaps\TileMap.cs" />
-    <Compile Include="TileMaps\TileMapReader.cs" />
-    <Compile Include="TileMaps\TileSet.cs" />
+    <Compile Include="Tiled\TiledImageLayer.cs" />
+    <Compile Include="Tiled\TiledLayer.cs" />
+    <Compile Include="Tiled\TiledTileLayer.cs" />
+    <Compile Include="Tiled\TiledMap.cs" />
+    <Compile Include="Tiled\TiledMapReader.cs" />
+    <Compile Include="Tiled\TiledRenderOrder.cs" />
+    <Compile Include="Tiled\TiledProperties.cs" />
+    <Compile Include="Tiled\TiledTile.cs" />
+    <Compile Include="Tiled\TiledTileSet.cs" />
     <Compile Include="Graphics\ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="Graphics\ViewportAdapters\DefaultViewportAdapter.cs" />
     <Compile Include="Graphics\ViewportAdapters\ScalingViewportAdapter.cs" />
     <Compile Include="Graphics\ViewportAdapters\ViewportAdapter.cs" />
   <Compile Include="Sprites\Sprite.cs" /> </ItemGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Framework, Version=3.1.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\MonoGame.Framework.Portable.3.2.99.1-Beta\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\MonoGame.Framework.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework">
+      <HintPath>..\..\Dependencies\MonoGame.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="MonoGame.Extended.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -82,7 +84,5 @@
   </Target>
 <<<<<<< HEAD
   -->
-  <ItemGroup>
-    <Folder Include="Graphics\ViewportAdapters\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

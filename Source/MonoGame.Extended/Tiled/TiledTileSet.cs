@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 
-namespace MonoGame.Extended.TileMaps
+namespace MonoGame.Extended.Tiled
 {
-    public class TileSet
+    public class TiledTileset
     {
-        public TileSet(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
+        public TiledTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
         {
             Texture = texture;
             FirstId = firstId;
@@ -14,6 +14,7 @@ namespace MonoGame.Extended.TileMaps
             TileHeight = tileHeight;
             Spacing = spacing;
             Margin = margin;
+            Properties = new TiledProperties();
 
             var id = FirstId;
             _regions = new Dictionary<int, TextureRegion2D>();
@@ -36,6 +37,7 @@ namespace MonoGame.Extended.TileMaps
         public int TileHeight { get; private set; }
         public int Spacing { get; private set; }
         public int Margin { get; private set; }
+        public TiledProperties Properties { get; private set; }
 
         public TextureRegion2D GetTileRegion(int id)
         {

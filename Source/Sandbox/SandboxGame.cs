@@ -4,8 +4,9 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Sprites;
-using MonoGame.Extended.TileMaps;
+using MonoGame.Extended.Tiled;
 using System.Diagnostics;
+using System;
 
 namespace Sandbox
 {
@@ -25,7 +26,7 @@ namespace Sandbox
         private MouseState _previousMouseState;
         private ViewportAdapter _viewportAdapter;
         private BitmapFont _bitmapFont;
-        private TileMap _tileMap;
+        private TiledMap _tiledMap;
 
         public SandboxGame()
         {
@@ -34,19 +35,19 @@ namespace Sandbox
             IsMouseVisible = true;
             Window.IsBorderless = false;
             Window.Position = new Point(50, 50);
-            Window.Title = "MonoGame.Extended.Sandbox";
+            Window.Title = string.Format("MonoGame.Extended - {0}", GetType().Name);
 
-            //_graphicsDeviceManager.PreferredBackBufferWidth = 1024;
-            //_graphicsDeviceManager.PreferredBackBufferHeight = 768;
+            _graphicsDeviceManager.PreferredBackBufferWidth = 1024;
+            _graphicsDeviceManager.PreferredBackBufferHeight = 768;
         }
 
         protected override void Initialize()
         {
-            _viewportAdapter = new ScalingViewportAdapter(GraphicsDevice, 800, 480);
+            _viewportAdapter = new BoxingViewportAdapter(GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter)
             {
                 Zoom = 0.5f,
-                Position = new Vector2(900, 650)
+                Position = new Vector2(408, 270)
             };
 
             Window.AllowUserResizing = true;
@@ -61,8 +62,8 @@ namespace Sandbox
             _backgroundTexture = Content.Load<Texture2D>("hills");
             _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
             _stumpSprite = new Sprite(Content.Load<Texture2D>("stump"));
-            _stumpSprite.Position = new Vector2(700, 1400);
-            _tileMap = Content.Load<TileMap>("level01");
+            _stumpSprite.Position = new Vector2(200, 200);
+            _tiledMap = Content.Load<TiledMap>("level01");
         }
 
         protected override void UnloadContent()
@@ -132,22 +133,27 @@ namespace Sandbox
         {
             GraphicsDevice.Clear(Color.Black);
             
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _spriteBatch.Draw(_backgroundTexture, Vector2.Zero, Color.White);
-            _spriteBatch.Draw(_stumpSprite);
-            _spriteBatch.End();
+            //_spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            //_spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, _tiledMap.WidthInPixels, _tiledMap.HeightInPixels), Color.White);
+            //_spriteBatch.End();
 
-            _tileMap.Draw(_camera);
+            _tiledMap.Draw(_camera);
 
-            //_spriteBatch.Begin();
-            //_spriteBatch.DrawString(_bitmapFont, "Hello World", new Vector2(50, 50), Color.Red);
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(_bitmapFont, "This is MonoGame.Extended", new Vector2(50, 50), new Color(Color.Black, 0.5f));
+            _spriteBatch.DrawString(_bitmapFont, string.Format("Camera: {0}", _camera.Position), new Vector2(50, 100), Color.Black);
             //_spriteBatch.DrawString(_bitmapFont, 
             //    "Contrary to popular belief, Lorem Ipsum is not simply random text.\n\n" + 
             //    "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard " + 
             //    "McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin " + 
             //    "words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, " + 
             //    "discovered the undoubtable source.", new Vector2(50, 100), new Color(Color.Black, 0.5f), _viewportAdapter.VirtualWidth - 50);
-            //_spriteBatch.End();
+            _spriteBatch.End();
+
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            //Console.WriteLine(_stumpSprite.Position);
+            _spriteBatch.Draw(_stumpSprite);
+            _spriteBatch.End();
             
             base.Draw(gameTime);
         }
