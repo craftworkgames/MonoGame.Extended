@@ -6,6 +6,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Sprites;
+using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Sandbox
@@ -22,7 +23,7 @@ namespace Sandbox
         private SpriteBatch _spriteBatch;
         private Camera2D _camera;
         private Texture2D _backgroundTexture;
-        private Sprite _stumpSprite;
+        private Sprite _sprite;
         private MouseState _previousMouseState;
         private ViewportAdapter _viewportAdapter;
         private BitmapFont _bitmapFont;
@@ -46,8 +47,9 @@ namespace Sandbox
             _viewportAdapter = new BoxingViewportAdapter(GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter)
             {
-                Zoom = 0.5f,
-                Position = new Vector2(408, 270)
+                //Zoom = 0.5f,
+                Origin = new Vector2(400, 240),
+                //Position = new Vector2(408, 270)
             };
 
             Window.AllowUserResizing = true;
@@ -61,8 +63,13 @@ namespace Sandbox
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _backgroundTexture = Content.Load<Texture2D>("hills");
             _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
-            _stumpSprite = new Sprite(Content.Load<Texture2D>("stump"));
-            _stumpSprite.Position = new Vector2(200, 200);
+
+            var spriteTexture = Content.Load<Texture2D>("test-tileset");
+            var textureRegion = new TextureRegion2D(spriteTexture, 2, 36, 32, 32);
+            _sprite = new Sprite(textureRegion)
+            {
+                Position = new Vector2(600, 240),
+            };
             _tiledMap = Content.Load<TiledMap>("level01");
         }
 
@@ -126,6 +133,8 @@ namespace Sandbox
 
             _previousMouseState = mouseState;
 
+            _sprite.Rotation += deltaTime;
+
             base.Update(gameTime);
         }
 
@@ -137,7 +146,7 @@ namespace Sandbox
             //_spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, _tiledMap.WidthInPixels, _tiledMap.HeightInPixels), Color.White);
             //_spriteBatch.End();
 
-            //_tiledMap.Draw(_camera);
+            _tiledMap.Draw(_camera);
 
             //_spriteBatch.Begin();
             //_spriteBatch.DrawString(_bitmapFont, "This is MonoGame.Extended", new Vector2(50, 50), new Color(Color.Black, 0.5f));
@@ -151,9 +160,10 @@ namespace Sandbox
             //_spriteBatch.End();
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            //Console.WriteLine(_stumpSprite.Position);
-            _spriteBatch.Draw(_stumpSprite);
+            _spriteBatch.Draw(_sprite);
             _spriteBatch.End();
+
+            Trace.WriteLine(_sprite.GetBoundingRectangle());
             
             base.Draw(gameTime);
         }

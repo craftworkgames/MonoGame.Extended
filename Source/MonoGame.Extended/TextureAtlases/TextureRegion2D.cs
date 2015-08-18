@@ -1,22 +1,25 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.TextureAtlases
 {
     public class TextureRegion2D
     {
-        public TextureRegion2D(Texture2D texture)
-            : this(texture, 0, 0, texture.Width, texture.Height)
-        {
-        }
-
         public TextureRegion2D(Texture2D texture, int x, int y, int width, int height)
         {
+            if (texture == null) throw new ArgumentNullException("texture");
+
             Texture = texture;
             X = x;
             Y = y;
             Width = width;
             Height = height;
+        }
+
+        public TextureRegion2D(Texture2D texture)
+            : this(texture, 0, 0, texture.Width, texture.Height)
+        {
         }
 
         public Texture2D Texture { get; protected set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
 
@@ -6,77 +7,60 @@ namespace MonoGame.Extended.Sprites
 {
     public class Sprite
     {
-        public TextureRegion2D TextureRegion { get; set; }
+        public Sprite(TextureRegion2D textureRegion)
+        {
+            if (textureRegion == null) throw new ArgumentNullException("textureRegion");
+
+            TextureRegion = textureRegion;
+            Color = Color.White;
+            IsVisible = true;
+            Scale = Vector2.One;
+            Effect = SpriteEffects.None;
+            OriginNormalized = new Vector2(0.5f, 0.5f);
+        }
+
+        public Sprite(Texture2D texture)
+            : this(new TextureRegion2D(texture))
+        {
+        }
+
         public Color Color { get; set; }
         public bool IsVisible { get; set; }
-
         public Vector2 Position { get; set; }
         public Vector2 Scale { get; set; }
         public float Rotation { get; set; }
         public Vector2 Origin { get; set; }
+        public SpriteEffects Effect { get; set; }
+        public object Tag { get; set; }
 
-        public Sprite(Texture2D texture)
+        private TextureRegion2D _textureRegion;
+        public TextureRegion2D TextureRegion
         {
-            TextureRegion = new TextureRegion2D(texture);
-            Scale = Vector2.One;
-            Color = Color.White;
-            IsVisible = true;
+            get { return _textureRegion; }
+            set
+            {
+                if (value == null)
+                    throw new InvalidOperationException("TextureRegion cannot be null");
+
+                _textureRegion = value;
+            }
         }
 
-        public Sprite(Texture2D texture, Vector2 position)
-            : this(texture)
+        public Vector2 OriginNormalized
         {
-            Position = position;
-        }
-
-        public Sprite(Texture2D texture, Vector2 position, Color color)
-            : this(texture, position)
-        {
-            Color = color;
-        }
-
-        public Sprite(Texture2D texture, Vector2 position, Color? color, float? rotation, Vector2? scale, bool isVisible)
-            : this(texture, position)
-        {
-            // If any parameters are null, provide them with suitable defaults.
-            Color = color ?? Color.White;
-            Rotation = rotation ?? 0;
-            Scale = scale ?? Vector2.One;
-            IsVisible = isVisible;
-        }
-
-        public Sprite(TextureRegion2D texture)
-        {
-            TextureRegion = texture;
-            Scale = Vector2.One;
-            IsVisible = true;
-        }
-
-        public Sprite(TextureRegion2D texture, Vector2 position)
-            : this(texture)
-        {
-            Position = position;
-        }
-
-        public Sprite(TextureRegion2D texture, Vector2 position, Color color)
-            : this(texture, position)
-        {
-            Color = color;
-        }
-
-        public Sprite(TextureRegion2D texture, Vector2 position, Color? color, float? rotation, Vector2? scale, bool isVisible)
-            : this(texture, position)
-        {
-            // If any parameters are null, provide them with suitable defaults.
-            Color = color ?? Color.White;
-            Rotation = rotation ?? 0;
-            Scale = scale ?? Vector2.One;
-            IsVisible = isVisible;
+            get { return new Vector2(Origin.Y / TextureRegion.Width, Origin.Y / TextureRegion.Height); }
+            set { Origin = new Vector2(value.X * TextureRegion.Width, value.Y * TextureRegion.Height); }
         }
 
         public Rectangle GetBoundingRectangle()
         {
-            return new Rectangle((int)Position.X, (int)Position.Y, TextureRegion.Bounds.Width, TextureRegion.Bounds.Height);
+            // TODO: the bounding rectangle should take origin, scaling and rotation into account
+            // http://stackoverflow.com/questions/622140/calculate-bounding-box-coordinates-from-a-rotated-rectangle-picture-inside
+            var x = (int) (Position.X - Origin.X);
+            var y = (int) (Position.Y - Origin.Y);
+            var width = TextureRegion.Width;
+            var height = TextureRegion.Height;
+            return new Rectangle(x, y, width, height);
         }
     }
 }

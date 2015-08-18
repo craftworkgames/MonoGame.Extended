@@ -75,8 +75,8 @@ namespace MonoGame.Extended
             var projection = Matrix.CreateOrthographicOffCenter(0, _viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight, 0, -1, 0);
 
             // Half pixel offset.
-            projection.M41 += -0.5f * projection.M11;
-            projection.M42 += -0.5f * projection.M22;
+            //projection.M41 += -0.5f * projection.M11;
+            //projection.M42 += -0.5f * projection.M22;
 
             Matrix.Multiply(ref viewMatrix, ref projection, out projection);
 
