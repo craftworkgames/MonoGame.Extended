@@ -1,16 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
 {
     public class Sprite
     {
-        public TextureRegion2D TextureRegion;
+        public TextureRegion2D TextureRegion { get; set; }
         public Color Color { get; set; }
         public bool IsVisible { get; set; }
 
@@ -23,6 +19,7 @@ namespace MonoGame.Extended.Sprites
         {
             TextureRegion = new TextureRegion2D(texture);
             Scale = Vector2.One;
+            Color = Color.White;
             IsVisible = true;
         }
 

@@ -47,10 +47,11 @@
     <Compile Include="Content\ContentLoader.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Camera2D.cs" />
+    <Compile Include="Sprites\SpriteBatchExtensions.cs" />
     <Compile Include="TextureAtlases\SpriteBatchExtensions.cs" />
     <Compile Include="TextureAtlases\TextureRegion2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sprites\Sprite.cs" /> </ItemGroup>
+    <Compile Include="Sprites\Sprite.cs" />
     <Compile Include="Maps\Tiled\TiledImageLayer.cs" />
     <Compile Include="Maps\Tiled\TiledLayer.cs" />
     <Compile Include="Maps\Tiled\TiledTileLayer.cs" />
