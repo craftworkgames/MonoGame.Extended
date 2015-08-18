@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics;
+using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.Tiled
+namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledMap
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.Graphics;
+using MonoGame.Extended.ViewportAdapters;
 using NSubstitute;
 using NUnit.Framework;
 

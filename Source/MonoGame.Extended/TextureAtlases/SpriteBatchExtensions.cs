@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
 
-namespace MonoGame.Extended.Graphics
+namespace MonoGame.Extended.TextureAtlases
 {
     public static class SpriteBatchExtensions
     {

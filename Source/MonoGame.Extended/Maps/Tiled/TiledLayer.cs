@@ -1,6 +1,4 @@
-using MonoGame.Extended.Graphics;
-
-namespace MonoGame.Extended.Tiled
+namespace MonoGame.Extended.Maps.Tiled
 {
     public abstract class TiledLayer
     {

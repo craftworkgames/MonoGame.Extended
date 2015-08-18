@@ -46,24 +46,25 @@
     <Compile Include="BitmapFonts\BitmapFontPage.cs" />
     <Compile Include="Content\ContentLoader.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
-    <Compile Include="Graphics\Camera2D.cs" />
-    <Compile Include="Graphics\SpriteBatchExtensions.cs" />
-    <Compile Include="Graphics\TextureRegion2D.cs" />
+    <Compile Include="Camera2D.cs" />
+    <Compile Include="TextureAtlases\SpriteBatchExtensions.cs" />
+    <Compile Include="TextureAtlases\TextureRegion2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tiled\TiledImageLayer.cs" />
-    <Compile Include="Tiled\TiledLayer.cs" />
-    <Compile Include="Tiled\TiledTileLayer.cs" />
-    <Compile Include="Tiled\TiledMap.cs" />
-    <Compile Include="Tiled\TiledMapReader.cs" />
-    <Compile Include="Tiled\TiledRenderOrder.cs" />
-    <Compile Include="Tiled\TiledProperties.cs" />
-    <Compile Include="Tiled\TiledTile.cs" />
-    <Compile Include="Tiled\TiledTileSet.cs" />
-    <Compile Include="Graphics\ViewportAdapters\BoxingViewportAdapter.cs" />
-    <Compile Include="Graphics\ViewportAdapters\DefaultViewportAdapter.cs" />
-    <Compile Include="Graphics\ViewportAdapters\ScalingViewportAdapter.cs" />
-    <Compile Include="Graphics\ViewportAdapters\ViewportAdapter.cs" />
-  <Compile Include="Sprites\Sprite.cs" /> </ItemGroup>
+    <Compile Include="Sprites\Sprite.cs" /> </ItemGroup>
+    <Compile Include="Maps\Tiled\TiledImageLayer.cs" />
+    <Compile Include="Maps\Tiled\TiledLayer.cs" />
+    <Compile Include="Maps\Tiled\TiledTileLayer.cs" />
+    <Compile Include="Maps\Tiled\TiledMap.cs" />
+    <Compile Include="Maps\Tiled\TiledMapReader.cs" />
+    <Compile Include="Maps\Tiled\TiledRenderOrder.cs" />
+    <Compile Include="Maps\Tiled\TiledProperties.cs" />
+    <Compile Include="Maps\Tiled\TiledTile.cs" />
+    <Compile Include="Maps\Tiled\TiledTileSet.cs" />
+    <Compile Include="ViewportAdapters\BoxingViewportAdapter.cs" />
+    <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />
+    <Compile Include="ViewportAdapters\ScalingViewportAdapter.cs" />
+    <Compile Include="ViewportAdapters\ViewportAdapter.cs" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>

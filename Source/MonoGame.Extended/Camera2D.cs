@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.ViewportAdapters;
 
-namespace MonoGame.Extended.Graphics
+namespace MonoGame.Extended
 {
     public class Camera2D
     {

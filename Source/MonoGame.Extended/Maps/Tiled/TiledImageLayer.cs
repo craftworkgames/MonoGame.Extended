@@ -1,8 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics;
 
-namespace MonoGame.Extended.Tiled
+namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledImageLayer : TiledLayer
     {
