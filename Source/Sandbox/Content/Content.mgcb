@@ -1,4 +1,3 @@
-
 #----------------------------- Global Properties ----------------------------#
 
 /outputDir:bin/Windows
@@ -87,6 +86,17 @@
 /processor:TiledMapProcessor
 /build:test-tileset-map1.tmx
 
+#begin stump.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:stump.png
+
 #begin test-tileset-left-down.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -106,4 +116,3 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:test-tileset-right-up.tmx
-
