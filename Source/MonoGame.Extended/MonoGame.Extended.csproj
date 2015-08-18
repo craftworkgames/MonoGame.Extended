@@ -50,6 +50,7 @@
     <Compile Include="TextureAtlases\SpriteBatchExtensions.cs" />
     <Compile Include="TextureAtlases\TextureRegion2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sprites\Sprite.cs" /> </ItemGroup>
     <Compile Include="Maps\Tiled\TiledImageLayer.cs" />
     <Compile Include="Maps\Tiled\TiledLayer.cs" />
     <Compile Include="Maps\Tiled\TiledTileLayer.cs" />
@@ -82,6 +83,7 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
+<<<<<<< HEAD
   -->
   <ItemGroup />
 </Project>

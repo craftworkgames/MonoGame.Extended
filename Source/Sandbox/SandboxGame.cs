@@ -1,9 +1,13 @@
-﻿using System.Diagnostics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
+<<<<<<< HEAD
+using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Sprites;
+using System.Diagnostics;
+using System;
 using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -21,6 +25,7 @@ namespace Sandbox
         private SpriteBatch _spriteBatch;
         private Camera2D _camera;
         private Texture2D _backgroundTexture;
+        private Sprite _stumpSprite;
         private MouseState _previousMouseState;
         private ViewportAdapter _viewportAdapter;
         private BitmapFont _bitmapFont;
@@ -59,6 +64,8 @@ namespace Sandbox
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _backgroundTexture = Content.Load<Texture2D>("hills");
             _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
+            _stumpSprite = new Sprite(Content.Load<Texture2D>("stump"));
+            _stumpSprite.Position = new Vector2(200, 200);
             _tiledMap = Content.Load<TiledMap>("level01");
         }
 
@@ -144,6 +151,11 @@ namespace Sandbox
             //    "McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin " + 
             //    "words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, " + 
             //    "discovered the undoubtable source.", new Vector2(50, 100), new Color(Color.Black, 0.5f), _viewportAdapter.VirtualWidth - 50);
+            _spriteBatch.End();
+
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            //Console.WriteLine(_stumpSprite.Position);
+            _spriteBatch.Draw(_stumpSprite);
             _spriteBatch.End();
             
             base.Draw(gameTime);
