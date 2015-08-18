@@ -2,9 +2,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Graphics;
-using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace Sandbox
 {

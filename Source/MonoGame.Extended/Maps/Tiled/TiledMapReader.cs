@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
 
-namespace MonoGame.Extended.Tiled
+namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledMapReader : ContentTypeReader<TiledMap>
     {

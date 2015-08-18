@@ -1,4 +1,4 @@
-﻿namespace MonoGame.Extended.Tiled
+﻿namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledTile
     {

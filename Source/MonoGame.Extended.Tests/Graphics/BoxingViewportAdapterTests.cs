@@ -1,5 +1,5 @@
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics;
+using MonoGame.Extended.ViewportAdapters;
 using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests.Graphics

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MonoGame.Extended.Tiled
+namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledProperties : Dictionary<string, string>
     {
