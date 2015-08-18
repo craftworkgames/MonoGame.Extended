@@ -27,6 +27,22 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             Assert.AreEqual("awesome", map.Properties[0].Name);
             Assert.AreEqual("42", map.Properties[0].Value);
             Assert.AreEqual(1, map.Tilesets.Count);
+
+            var tileset = map.Tilesets.First();
+            Assert.AreEqual(1, tileset.FirstGid);
+            Assert.AreEqual("free-tileset.png", tileset.Image.Source);
+            Assert.AreEqual(652, tileset.Image.Width);
+            Assert.AreEqual(783, tileset.Image.Height);
+            Assert.AreEqual(2, tileset.Margin);
+            Assert.AreEqual("free-tileset", tileset.Name);
+            Assert.AreEqual(null, tileset.Source);
+            Assert.AreEqual(2, tileset.Spacing);
+            Assert.AreEqual(0, tileset.TerrainTypes.Count);
+            Assert.AreEqual(0, tileset.Properties.Count);
+            Assert.AreEqual(128, tileset.TileHeight);
+            Assert.AreEqual(128, tileset.TileWidth);
+            Assert.AreEqual(0, tileset.TileOffset.X);
+            Assert.AreEqual(0, tileset.TileOffset.Y);
         }
 
         [Test]
