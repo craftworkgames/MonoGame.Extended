@@ -66,9 +66,12 @@ namespace Sandbox
 
             var spriteTexture = Content.Load<Texture2D>("test-tileset");
             var textureRegion = new TextureRegion2D(spriteTexture, 2, 36, 32, 32);
+            _textureRegion = new TextureRegion2D(spriteTexture, 2, 2, 32, 32);
             _sprite = new Sprite(textureRegion)
             {
                 Position = new Vector2(600, 240),
+                Scale = Vector2.One * 2.5f,
+                OriginNormalized = new Vector2(0.25f, 0.75f)
             };
             _tiledMap = Content.Load<TiledMap>("level01");
         }
@@ -78,6 +81,7 @@ namespace Sandbox
         }
 
         private int _previousScrollWheelValue;
+        private TextureRegion2D _textureRegion;
 
         protected override void Update(GameTime gameTime)
         {
@@ -160,10 +164,9 @@ namespace Sandbox
             //_spriteBatch.End();
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            _spriteBatch.Draw(_textureRegion, _sprite.GetBoundingRectangle(), Color.White);
             _spriteBatch.Draw(_sprite);
             _spriteBatch.End();
-
-            Trace.WriteLine(_sprite.GetBoundingRectangle());
             
             base.Draw(gameTime);
         }

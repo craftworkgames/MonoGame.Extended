@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
@@ -54,13 +55,43 @@ namespace MonoGame.Extended.Sprites
 
         public Rectangle GetBoundingRectangle()
         {
-            // TODO: the bounding rectangle should take origin, scaling and rotation into account
-            // http://stackoverflow.com/questions/622140/calculate-bounding-box-coordinates-from-a-rotated-rectangle-picture-inside
-            var x = (int) (Position.X - Origin.X);
-            var y = (int) (Position.Y - Origin.Y);
-            var width = TextureRegion.Width;
-            var height = TextureRegion.Height;
-            return new Rectangle(x, y, width, height);
+            var corners = GetCorners();
+            var min = new Vector2(corners.Min(i => i.X), corners.Min(i => i.Y));
+            var max = new Vector2(corners.Max(i => i.X), corners.Max(i => i.Y));
+            return new Rectangle((int)min.X, (int)min.Y, (int)(max.X - min.X), (int)(max.Y - min.Y));
+        }
+
+        public Vector2[] GetCorners()
+        {
+            var min = -Origin;
+            var max = min + new Vector2(TextureRegion.Width, TextureRegion.Height);
+            var offset = Position;
+
+            if (Scale != Vector2.One)
+            {
+                min = min * Scale;
+                max = max * Scale;
+            }
+
+            var corners = new Vector2[4];
+            corners[0] = min;
+            corners[1] = new Vector2(max.X, min.Y);
+            corners[2] = max;
+            corners[3] = new Vector2(min.X, max.Y);
+
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
+            if (Rotation != 0)
+            {
+                var matrix = Matrix.CreateRotationZ(Rotation);
+
+                for(var i = 0; i < 4; i++)
+                    corners[i] = Vector2.Transform(corners[i], matrix);
+            }
+
+            for (var i = 0; i < 4; i++)
+                corners[i] += offset;
+
+            return corners;
         }
     }
 }
