@@ -46,7 +46,7 @@ If you would like to contribute start with one of the following:
  
 ## Design goals
 
- - A clean and consistent API familiar to MonoGame devleopers.
+ - A clean and consistent API familiar to MonoGame developers.
  - It's *not* a game engine, but extends the framework with code to make games.
  - Follows [C# coding guidelines](https://msdn.microsoft.com/en-us/library/ms229002(v=vs.110).aspx).
 
