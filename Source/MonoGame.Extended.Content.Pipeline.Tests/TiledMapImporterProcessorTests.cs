@@ -27,6 +27,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             Assert.AreEqual("awesome", map.Properties[0].Name);
             Assert.AreEqual("42", map.Properties[0].Value);
             Assert.AreEqual(1, map.Tilesets.Count);
+            Assert.AreEqual(3, map.Layers.Count);
 
             var tileset = map.Tilesets.First();
             Assert.AreEqual(1, tileset.FirstGid);
@@ -43,7 +44,34 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             Assert.AreEqual(128, tileset.TileWidth);
             Assert.AreEqual(0, tileset.TileOffset.X);
             Assert.AreEqual(0, tileset.TileOffset.Y);
-        }
+
+            var tileLayer2 = (TmxTileLayer) map.Layers[0];
+            Assert.AreEqual("Tile Layer 2", tileLayer2.Name);
+            Assert.AreEqual(1, tileLayer2.Opacity);
+            Assert.AreEqual(0, tileLayer2.Properties.Count);
+            Assert.AreEqual(true, tileLayer2.Visible);
+            Assert.AreEqual(200, tileLayer2.Data.Tiles.Count);
+            Assert.AreEqual(0, tileLayer2.X);
+            Assert.AreEqual(0, tileLayer2.Y);
+
+            var imageLayer = (TmxImageLayer)map.Layers[1];
+            Assert.AreEqual("Image Layer 1", imageLayer.Name);
+            Assert.AreEqual(1, imageLayer.Opacity);
+            Assert.AreEqual(0, imageLayer.Properties.Count);
+            Assert.AreEqual(true, imageLayer.Visible);
+            Assert.AreEqual("hills.png", imageLayer.Image.Source);
+            Assert.AreEqual(100, imageLayer.X);
+            Assert.AreEqual(100, imageLayer.Y);
+
+            var tileLayer1 = (TmxTileLayer)map.Layers[2];
+            Assert.AreEqual("Tile Layer 1", tileLayer1.Name);
+            Assert.AreEqual(2, tileLayer1.Properties.Count);
+
+            Assert.AreEqual("customlayerprop", tileLayer1.Properties[0].Name);
+            Assert.AreEqual("1", tileLayer1.Properties[0].Value);
+
+            Assert.AreEqual("customlayerprop2", tileLayer1.Properties[1].Name);
+            Assert.AreEqual("2", tileLayer1.Properties[1].Value);}
 
         [Test]
         public void TiledMapImporter_Xml_Test()
