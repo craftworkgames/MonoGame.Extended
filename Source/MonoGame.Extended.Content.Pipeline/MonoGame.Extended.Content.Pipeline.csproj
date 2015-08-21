@@ -62,6 +62,13 @@
     <Compile Include="BitmapFonts\BitmapFontImporter.cs" />
     <Compile Include="BitmapFonts\BitmapFontProcessor.cs" />
     <Compile Include="BitmapFonts\BitmapFontWriter.cs" />
+    <Compile Include="TextureAtlases\TexturePackerJsonImporter.cs" />
+    <Compile Include="TextureAtlases\TexturePackerFile.cs" />
+    <Compile Include="TextureAtlases\TexturePackerFrame.cs" />
+    <Compile Include="TextureAtlases\TexturePackerMeta.cs" />
+    <Compile Include="TextureAtlases\TexturePackerPoint.cs" />
+    <Compile Include="TextureAtlases\TexturePackerRectangle.cs" />
+    <Compile Include="TextureAtlases\TexturePackerSize.cs" />
     <Compile Include="Tiled\TmxDataTile.cs" />
     <Compile Include="Tiled\TiledMapImporter.cs" />
     <Compile Include="Tiled\TiledMapProcessor.cs" />
@@ -92,6 +99,7 @@
       <Name>MonoGame.Extended</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

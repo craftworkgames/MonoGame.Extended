@@ -164,7 +164,7 @@ namespace Sandbox
             //_spriteBatch.End();
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _spriteBatch.Draw(_textureRegion, _sprite.GetBoundingRectangle(), Color.White);
+            //_spriteBatch.Draw(_textureRegion, _sprite.GetBoundingRectangle(), Color.White);
             _spriteBatch.Draw(_sprite);
             _spriteBatch.End();
             
