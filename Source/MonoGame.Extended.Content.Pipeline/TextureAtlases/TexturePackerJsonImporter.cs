@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {
-    [ContentImporter(".json", DefaultProcessor = "TexturePackerJsonProcessor", DisplayName = "Texture Packer JSON Importer - MonoGame.Extended")]
+    [ContentImporter(".json", DefaultProcessor = "TexturePackerProcessor", DisplayName = "TexturePacker JSON Importer - MonoGame.Extended")]
     public class TexturePackerJsonImporter : ContentImporter<TexturePackerFile>
     {
         public override TexturePackerFile Import(string filename, ContentImporterContext context)

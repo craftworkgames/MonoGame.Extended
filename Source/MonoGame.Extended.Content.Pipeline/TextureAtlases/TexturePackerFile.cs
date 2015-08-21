@@ -6,9 +6,9 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
     public class TexturePackerFile
     {
         [JsonProperty("frames")]
-        public List<TexturePackerFrame> Frames { get; set; }
+        public List<TexturePackerRegion> Regions { get; set; }
 
         [JsonProperty("meta")]
-        public TexturePackerMeta Meta { get; set; }
+        public TexturePackerMeta Metadata { get; set; }
     }
 }

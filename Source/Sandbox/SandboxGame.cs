@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -64,9 +65,9 @@ namespace Sandbox
             _backgroundTexture = Content.Load<Texture2D>("hills");
             _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
 
-            var spriteTexture = Content.Load<Texture2D>("test-tileset");
-            var textureRegion = new TextureRegion2D(spriteTexture, 2, 36, 32, 32);
-            _textureRegion = new TextureRegion2D(spriteTexture, 2, 2, 32, 32);
+            var textureAtlas = Content.Load<TextureAtlas>("test-tileset-atlas");
+            var textureRegion = textureAtlas.Regions.First();
+            _textureRegion = textureAtlas.Regions.Last();
             _sprite = new Sprite(textureRegion)
             {
                 Position = new Vector2(600, 240),
@@ -164,7 +165,7 @@ namespace Sandbox
             //_spriteBatch.End();
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            //_spriteBatch.Draw(_textureRegion, _sprite.GetBoundingRectangle(), Color.White);
+            _spriteBatch.Draw(_textureRegion, _sprite.GetBoundingRectangle(), Color.White);
             _spriteBatch.Draw(_sprite);
             _spriteBatch.End();
             

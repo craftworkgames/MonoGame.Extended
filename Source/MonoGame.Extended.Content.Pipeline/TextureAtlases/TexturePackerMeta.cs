@@ -20,9 +20,15 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
         public TexturePackerSize Size { get; set; }
 
         [JsonProperty("scale")]
-        public string Scale { get; set; }
+        public float Scale { get; set; }
 
         [JsonProperty("smartupdate")]
         public string SmartUpdate { get; set; }
+
+        public override string ToString()
+        {
+            return Image;
+        }
+
     }
 }

@@ -2,7 +2,7 @@
 
 namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {
-    public class TexturePackerFrame
+    public class TexturePackerRegion
     {
         [JsonProperty("filename")]
         public string Filename { get; set; }
@@ -11,18 +11,23 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
         public TexturePackerRectangle Frame { get; set; }
 
         [JsonProperty("rotated")]
-        public bool Rotated { get; set; }
+        public bool IsRotated { get; set; }
 
         [JsonProperty("trimmed")]
-        public bool Trimmed { get; set; }
+        public bool IsTrimmed { get; set; }
 
         [JsonProperty("spriteSourceSize")]
-        public TexturePackerRectangle SpriteSourceSize { get; set; }
+        public TexturePackerRectangle SourceRectangle { get; set; }
 
         [JsonProperty("sourceSize")]
         public TexturePackerSize SourceSize { get; set; }
 
         [JsonProperty("pivot")]
-        public TexturePackerPoint Pivot { get; set; }
+        public TexturePackerPoint PivotPoint { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0} {1}", Filename, Frame);
+        }
     }
 }

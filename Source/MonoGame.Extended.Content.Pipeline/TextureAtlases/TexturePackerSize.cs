@@ -9,5 +9,10 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 
         [JsonProperty("h")]
         public int Height { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0} {1}", Width, Height);
+        }
     }
 }

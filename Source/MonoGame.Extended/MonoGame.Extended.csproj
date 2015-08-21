@@ -48,6 +48,8 @@
     <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Camera2D.cs" />
     <Compile Include="Sprites\SpriteExtensions.cs" />
+    <Compile Include="TextureAtlases\TextureAtlas.cs" />
+    <Compile Include="TextureAtlases\TextureAtlasReader.cs" />
     <Compile Include="TextureAtlases\TextureRegion2DExtensions.cs" />
     <Compile Include="TextureAtlases\TextureRegion2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

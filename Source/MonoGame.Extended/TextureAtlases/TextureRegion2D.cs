@@ -33,5 +33,10 @@ namespace MonoGame.Extended.TextureAtlases
         {
             get { return new Rectangle(X, Y, Width, Height); }
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}", Bounds);
+        }
     }
 }
