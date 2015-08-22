@@ -9,6 +9,7 @@ using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
+using MonoGame.Extended.InputEvents;
 
 namespace Sandbox
 {
@@ -25,10 +26,14 @@ namespace Sandbox
         private Camera2D _camera;
         private Texture2D _backgroundTexture;
         private Sprite _sprite;
-        private MouseState _previousMouseState;
         private ViewportAdapter _viewportAdapter;
         private BitmapFont _bitmapFont;
         private TiledMap _tiledMap;
+
+        private Input _eventDrivenInput;
+
+        private Vector2 _cameraDirection = Vector2.Zero;
+        private float _cameraRotation = 0f;
 
         public SandboxGame()
         {
@@ -55,6 +60,8 @@ namespace Sandbox
 
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += (s, e) => _viewportAdapter.OnClientSizeChanged();
+            
+            SetUpInput();
 
             base.Initialize();
         }
@@ -86,59 +93,18 @@ namespace Sandbox
 
         protected override void Update(GameTime gameTime)
         {
-            var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
+            _eventDrivenInput.Update(gameTime);
+
+            var deltaTime = (float) gameTime.ElapsedGameTime.TotalMilliseconds * .001f;
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
             //var gamePadState = GamePad.GetState(PlayerIndex.One);
 
             if (keyboardState.IsKeyDown(Keys.Escape))
-                Exit();
-
-            var up = new Vector2(0, -250);
-            var right = new Vector2(250, 0);
-
-            // rotation
-            if (keyboardState.IsKeyDown(Keys.Q))
-                _camera.Rotation -= deltaTime;
-
-            if (keyboardState.IsKeyDown(Keys.W))
-                _camera.Rotation += deltaTime;
-
-            // movement
-            var direction = Vector2.Zero;
-
-            if (keyboardState.IsKeyDown(Keys.Up))
-                direction += up * deltaTime;
-
-            if (keyboardState.IsKeyDown(Keys.Down))
-                direction += -up * deltaTime;
+                Exit();                                    
             
-            if (keyboardState.IsKeyDown(Keys.Left))
-                direction += -right * deltaTime;
-            
-            if (keyboardState.IsKeyDown(Keys.Right))
-                direction += right * deltaTime;
-
-            _camera.Move(direction);
-            
-            // zoom
-            var scrollWheelDelta = mouseState.ScrollWheelValue - _previousScrollWheelValue;
-
-            if (scrollWheelDelta != 0)
-                _camera.Zoom += scrollWheelDelta * 0.0001f;
-
-            _previousScrollWheelValue = mouseState.ScrollWheelValue;
-
-            // look at
-            if (mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
-            {
-                var p = _viewportAdapter.PointToScreen(mouseState.X, mouseState.Y);
-                Trace.WriteLine(string.Format("{0},{1} => {2},{3}", mouseState.X, mouseState.Y, p.X, p.Y));
-            }
-
-            _previousMouseState = mouseState;
-
-            _sprite.Rotation += deltaTime;
+            _camera.Move(_cameraDirection * deltaTime);
+            _camera.Rotation += _cameraRotation * deltaTime;
 
             base.Update(gameTime);
         }
@@ -153,16 +119,17 @@ namespace Sandbox
 
             _tiledMap.Draw(_camera);
 
-            //_spriteBatch.Begin();
+            _spriteBatch.Begin();
             //_spriteBatch.DrawString(_bitmapFont, "This is MonoGame.Extended", new Vector2(50, 50), new Color(Color.Black, 0.5f));
             //_spriteBatch.DrawString(_bitmapFont, string.Format("Camera: {0}", _camera.Position), new Vector2(50, 100), Color.Black);
-            ////_spriteBatch.DrawString(_bitmapFont, 
-            ////    "Contrary to popular belief, Lorem Ipsum is not simply random text.\n\n" + 
-            ////    "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard " + 
-            ////    "McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin " + 
-            ////    "words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, " + 
-            ////    "discovered the undoubtable source.", new Vector2(50, 100), new Color(Color.Black, 0.5f), _viewportAdapter.VirtualWidth - 50);
-            //_spriteBatch.End();
+            //_spriteBatch.DrawString(_bitmapFont, string.Format("Camera Direction: {0}", _cameraDirection), new Vector2(50, 150), Color.Black);
+            //_spriteBatch.DrawString(_bitmapFont, 
+            //    "Contrary to popular belief, Lorem Ipsum is not simply random text.\n\n" + 
+            //    "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard " + 
+            //    "McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin " + 
+            //    "words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, " + 
+            //    "discovered the undoubtable source.", new Vector2(50, 100), new Color(Color.Black, 0.5f), _viewportAdapter.VirtualWidth - 50);
+            _spriteBatch.End();
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.Draw(_textureRegion, _sprite.GetBoundingRectangle(), Color.White);
@@ -170,6 +137,87 @@ namespace Sandbox
             _spriteBatch.End();
             
             base.Draw(gameTime);
+        }
+
+        private void SetUpInput()
+        {
+            _eventDrivenInput = new MonoGameInput(this);
+
+            var up = new Vector2(0, -250);
+            var right = new Vector2(250, 0);
+
+            //camera movment
+            _eventDrivenInput.KeyDown += (sender, keyDown) =>
+            {
+                switch (keyDown.Key)
+                {
+                    case Keys.Escape:
+                        Exit();
+                        break;
+
+                    case Keys.Q:                        
+                        _cameraRotation += 1;
+                        break;
+                    case Keys.W:
+                        _cameraRotation -= 1;
+                        break;
+
+                    case Keys.Up:
+                        _cameraDirection += up;
+                        break;
+                    case Keys.Down:
+                        _cameraDirection += -up;
+                        break;
+                    case Keys.Left:
+                        _cameraDirection += -right;
+                        break;
+                    case Keys.Right:
+                        _cameraDirection += right;
+                        break;
+                }
+            };
+        
+            _eventDrivenInput.KeyUp += (sender, keyUp) =>
+            {
+                switch (keyUp.Key)
+                {
+                    case Keys.Q:
+                        _cameraRotation -= 1;
+                        break;
+                    case Keys.W:
+                        _cameraRotation += 1;
+                        break;
+
+                    case Keys.Up:
+                        _cameraDirection -= up;
+                        break;
+                    case Keys.Down:
+                        _cameraDirection -= -up;
+                        break;
+                    case Keys.Left:
+                        _cameraDirection -= -right;
+                        break;
+                    case Keys.Right:                       
+                        _cameraDirection -= right;
+                        break;
+                }
+            };
+
+            // zoom
+            _eventDrivenInput.MouseWheel += (sender, mouseEvent) =>
+            {
+                _camera.Zoom += mouseEvent.Delta.Value * 0.0001f;
+            };
+
+            // look at
+            _eventDrivenInput.MouseUp += (sender, mouseUp) =>
+            {
+                if (mouseUp.Button == MouseButton.Left)
+                {
+                    var p = _viewportAdapter.PointToScreen(mouseUp.X, mouseUp.Y);
+                    Trace.WriteLine(string.Format("{0},{1} => {2},{3}", mouseUp.X, mouseUp.Y, p.X, p.Y));
+                }
+            };
         }
     }
 }
