@@ -1,4 +1,4 @@
-﻿namespace Microsoft.Xna.Framework.Input
+namespace MonoGame.Extended.InputListeners
 {
     public enum MouseButton
     {

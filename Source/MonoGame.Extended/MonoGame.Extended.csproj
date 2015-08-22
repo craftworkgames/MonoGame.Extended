@@ -47,19 +47,16 @@
     <Compile Include="Content\ContentLoader.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Camera2D.cs" />
-    <Compile Include="InputEvents\Input.cs" />
-    <Compile Include="InputEvents\MonoGame.Input\EventArgs\MonoGameMouseEventArgs.cs" />
-    <Compile Include="InputEvents\MonoGame.Input\Keyboard\MonoGameMouseEvents.cs" />
-    <Compile Include="InputEvents\MonoGame.Input\Mouse\MonoGameMouseEvents.cs" />
-    <Compile Include="InputEvents\MonoGame.Input\Touch\MonoGameTouchEvents.cs" />
-    <Compile Include="InputEvents\MonoGameInput.cs" />
-    <Compile Include="InputEvents\Shared\EventArgs\KeyboardCharacterEventArgs.cs" />
-    <Compile Include="InputEvents\Shared\EventArgs\KeyboardKeyEventArgs.cs" />
-    <Compile Include="InputEvents\Shared\EventArgs\MouseEventArgs.cs" />
-    <Compile Include="InputEvents\Shared\EventArgs\TouchEventArgs.cs" />
-    <Compile Include="InputEvents\Shared\Keyboard\KeyboardUtil.cs" />
-    <Compile Include="InputEvents\Shared\Keyboard\Modifiers.cs" />
-    <Compile Include="InputEvents\Shared\Mouse\MouseButton.cs" />
+    <Compile Include="InputListeners\KeyboardEventArgs.cs" />
+    <Compile Include="InputListeners\KeyboardModifiers.cs" />
+    <Compile Include="InputListeners\MouseButton.cs" />
+    <Compile Include="InputListeners\MouseEventArgs.cs" />
+    <Compile Include="InputListeners\KeyboardEventListener.cs" />
+    <Compile Include="InputListeners\MouseEventListener.cs" />
+    <Compile Include="InputListeners\EventListener.cs" />
+    <Compile Include="InputListeners\TouchEventArgs.cs" />
+    <Compile Include="InputListeners\TouchEventListener.cs" />
+    <Compile Include="InputListeners\EventListenerManager.cs" />
     <Compile Include="Sprites\SpriteExtensions.cs" />
     <Compile Include="TextureAtlases\TextureAtlas.cs" />
     <Compile Include="TextureAtlases\TextureAtlasReader.cs" />
@@ -90,7 +87,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="InputEvents\README.md" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

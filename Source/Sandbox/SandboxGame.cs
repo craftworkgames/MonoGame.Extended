@@ -5,11 +5,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
-using MonoGame.Extended.InputEvents;
 
 namespace Sandbox
 {
@@ -30,7 +30,7 @@ namespace Sandbox
         private BitmapFont _bitmapFont;
         private TiledMap _tiledMap;
 
-        private Input _eventDrivenInput;
+        private EventListenerManager _inputManager;
 
         private Vector2 _cameraDirection = Vector2.Zero;
         private float _cameraRotation = 0f;
@@ -88,16 +88,15 @@ namespace Sandbox
         {
         }
 
-        private int _previousScrollWheelValue;
         private TextureRegion2D _textureRegion;
 
         protected override void Update(GameTime gameTime)
         {
-            _eventDrivenInput.Update(gameTime);
+            _inputManager.Update(gameTime);
 
             var deltaTime = (float) gameTime.ElapsedGameTime.TotalMilliseconds * .001f;
             var keyboardState = Keyboard.GetState();
-            var mouseState = Mouse.GetState();
+            //var mouseState = Mouse.GetState();
             //var gamePadState = GamePad.GetState(PlayerIndex.One);
 
             if (keyboardState.IsKeyDown(Keys.Escape))
@@ -105,6 +104,8 @@ namespace Sandbox
             
             _camera.Move(_cameraDirection * deltaTime);
             _camera.Rotation += _cameraRotation * deltaTime;
+
+            _sprite.Rotation += deltaTime;
 
             base.Update(gameTime);
         }
@@ -141,15 +142,19 @@ namespace Sandbox
 
         private void SetUpInput()
         {
-            _eventDrivenInput = new MonoGameInput(this);
+            _inputManager = new EventListenerManager();
 
             var up = new Vector2(0, -250);
             var right = new Vector2(250, 0);
 
-            //camera movment
-            _eventDrivenInput.KeyDown += (sender, keyDown) =>
+            //camera movement
+            var keyboardListener = new KeyboardEventListener();
+            var mouseListener = new MouseEventListener();
+            _inputManager.Listeners.Add(keyboardListener);
+
+            keyboardListener.KeyPressed += (sender, args) =>
             {
-                switch (keyDown.Key)
+                switch (args.Key)
                 {
                     case Keys.Escape:
                         Exit();
@@ -176,10 +181,10 @@ namespace Sandbox
                         break;
                 }
             };
-        
-            _eventDrivenInput.KeyUp += (sender, keyUp) =>
+
+            keyboardListener.KeyReleased += (sender, args) =>
             {
-                switch (keyUp.Key)
+                switch (args.Key)
                 {
                     case Keys.Q:
                         _cameraRotation -= 1;
@@ -204,18 +209,18 @@ namespace Sandbox
             };
 
             // zoom
-            _eventDrivenInput.MouseWheel += (sender, mouseEvent) =>
+            mouseListener.MouseWheelMoved += (sender, args) =>
             {
-                _camera.Zoom += mouseEvent.Delta.Value * 0.0001f;
+                _camera.Zoom += args.Delta.Value * 0.0001f;
             };
 
             // look at
-            _eventDrivenInput.MouseUp += (sender, mouseUp) =>
+            mouseListener.ButtonReleased += (sender, args) =>
             {
-                if (mouseUp.Button == MouseButton.Left)
+                if (args.Button == MouseButton.Left)
                 {
-                    var p = _viewportAdapter.PointToScreen(mouseUp.X, mouseUp.Y);
-                    Trace.WriteLine(string.Format("{0},{1} => {2},{3}", mouseUp.X, mouseUp.Y, p.X, p.Y));
+                    var p = _viewportAdapter.PointToScreen(args.X, args.Y);
+                    Trace.WriteLine(string.Format("{0},{1} => {2},{3}", args.X, args.Y, p.X, p.Y));
                 }
             };
         }
