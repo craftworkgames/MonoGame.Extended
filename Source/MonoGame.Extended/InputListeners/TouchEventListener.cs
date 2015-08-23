@@ -6,11 +6,15 @@ namespace MonoGame.Extended.InputListeners
 {
     public class TouchEventListener : EventListener
     {
+        internal TouchEventListener()
+        {
+        }
+
 		public event EventHandler<TouchEventArgs> TouchStarted;
         public event EventHandler<TouchEventArgs> TouchEnded;
         public event EventHandler<TouchEventArgs> TouchMoved;
         public event EventHandler<TouchEventArgs> TouchCancelled;
-        
+      
 		public override void Update(GameTime gameTime)
 		{
 			var touchCollection = TouchPanel.GetState();

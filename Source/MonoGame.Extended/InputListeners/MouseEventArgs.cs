@@ -7,14 +7,14 @@ namespace MonoGame.Extended.InputListeners
     public class MouseEventArgs : EventArgs
     {
         public MouseEventArgs(TimeSpan time, MouseState previousState, MouseState currentState, 
-            MouseButton button = MouseButton.None, int? value = null, int? delta = null)
+            MouseButton button = MouseButton.None, int? scrollWheelValue = null, int? scrollWheelDelta = null)
         {
             PreviousState = previousState;
             CurrentState = currentState;
             Position = new Point(currentState.X, currentState.Y);
             Button = button;
-            Value = value;
-            Delta = delta;
+            ScrollWheelValue = scrollWheelValue;
+            ScrollWheelDelta = scrollWheelDelta;
             Time = time;
         }
 
@@ -22,8 +22,8 @@ namespace MonoGame.Extended.InputListeners
         public MouseState PreviousState { get; private set; }
         public MouseState CurrentState { get; private set; }
         public MouseButton Button { get; private set; }
-        public int? Value { get; private set; }
-        public int? Delta { get; private set; }
+        public int? ScrollWheelValue { get; private set; }
+        public int? ScrollWheelDelta { get; private set; }
         public Point Position { get; private set; }
     }
 }

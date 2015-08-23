@@ -5,6 +5,10 @@ namespace MonoGame.Extended.InputListeners
 {
     public abstract class EventListener
     {
+        protected EventListener()
+        {
+        }
+
         protected void RaiseEvent<T>(EventHandler<T> eventHandler, T args)
             where T : EventArgs
         {

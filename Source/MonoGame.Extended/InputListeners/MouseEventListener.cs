@@ -22,7 +22,7 @@ namespace MonoGame.Extended.InputListeners
         private GameTime _gameTime;
         private MouseEventArgs _lastClick;
 
-        public MouseEventListener(int doubleClickMilliseconds = 500, int dragThreshold = 2) // initial values are windows defaults
+        public MouseEventListener(int doubleClickMilliseconds, int dragThreshold) // initial values are windows defaults
         {
             _doubleClickMilliseconds = doubleClickMilliseconds;
             _dragThreshold = dragThreshold;

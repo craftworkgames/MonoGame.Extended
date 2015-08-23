@@ -148,8 +148,8 @@ namespace Sandbox
             var right = new Vector2(250, 0);
 
             //camera movement
-            var keyboardListener = new KeyboardEventListener();
-            var mouseListener = new MouseEventListener();
+            var keyboardListener = _inputManager.AddListener(new KeyboardEventListenerSettings());
+            var mouseListener = _inputManager.AddListener(new MouseEventListenerSettings());
             _inputManager.Listeners.Add(keyboardListener);
             _inputManager.Listeners.Add(mouseListener);
 
@@ -212,7 +212,7 @@ namespace Sandbox
             // zoom
             mouseListener.MouseWheelMoved += (sender, args) =>
             {
-                _camera.Zoom += args.Delta.Value * 0.0001f;
+                _camera.Zoom += args.ScrollWheelDelta.Value * 0.0001f;
             };
 
             // look at

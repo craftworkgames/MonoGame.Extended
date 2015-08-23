@@ -7,7 +7,7 @@ namespace MonoGame.Extended.InputListeners
 {
     public class KeyboardEventListener : EventListener
     {
-        public KeyboardEventListener(int initialDelay = 800, int repeatDelay = 50)
+        internal KeyboardEventListener(int initialDelay = 800, int repeatDelay = 50)
         {
             InitialDelay = initialDelay;
             RepeatDelay = repeatDelay;
