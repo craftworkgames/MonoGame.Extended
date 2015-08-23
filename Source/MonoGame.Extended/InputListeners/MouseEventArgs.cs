@@ -1,30 +1,29 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace MonoGame.Extended.InputListeners
 {
     public class MouseEventArgs : EventArgs
     {
-        public MouseEventArgs(int x, int y, TimeSpan time, MouseState previous, MouseState current, 
+        public MouseEventArgs(TimeSpan time, MouseState previousState, MouseState currentState, 
             MouseButton button = MouseButton.None, int? value = null, int? delta = null)
         {
-            X = x;
-            Y = y;
+            PreviousState = previousState;
+            CurrentState = currentState;
+            Position = new Point(currentState.X, currentState.Y);
             Button = button;
             Value = value;
             Delta = delta;
             Time = time;
-            Previous = previous;
-            Current = current;
         }
 
-        public TimeSpan Time { get; set; }
-        public MouseState Previous { get; private set; }
-        public MouseState Current { get; private set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public MouseButton Button { get; protected set; }
-        public int? Value { get; protected set; }
-        public int? Delta { get; protected set; }
+        public TimeSpan Time { get; private set; }
+        public MouseState PreviousState { get; private set; }
+        public MouseState CurrentState { get; private set; }
+        public MouseButton Button { get; private set; }
+        public int? Value { get; private set; }
+        public int? Delta { get; private set; }
+        public Point Position { get; private set; }
     }
 }

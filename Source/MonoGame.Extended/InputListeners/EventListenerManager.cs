@@ -3,18 +3,18 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.InputListeners
 {
-    public sealed class EventListenerManager
+    public class EventListenerManager
     {
+        public EventListenerManager()
+        {
+            _listeners = new List<EventListener>();
+        }
+
         private readonly List<EventListener> _listeners;
 
         public List<EventListener> Listeners
         {
             get { return _listeners; }
-        } 
-
-        public EventListenerManager()
-        {
-            _listeners = new List<EventListener>();
         }
 
         public void Update(GameTime gameTime) 

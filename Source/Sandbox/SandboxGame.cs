@@ -94,7 +94,7 @@ namespace Sandbox
         {
             _inputManager.Update(gameTime);
 
-            var deltaTime = (float) gameTime.ElapsedGameTime.TotalMilliseconds * .001f;
+            var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
             //var mouseState = Mouse.GetState();
             //var gamePadState = GamePad.GetState(PlayerIndex.One);
@@ -151,6 +151,7 @@ namespace Sandbox
             var keyboardListener = new KeyboardEventListener();
             var mouseListener = new MouseEventListener();
             _inputManager.Listeners.Add(keyboardListener);
+            _inputManager.Listeners.Add(mouseListener);
 
             keyboardListener.KeyPressed += (sender, args) =>
             {
@@ -215,14 +216,21 @@ namespace Sandbox
             };
 
             // look at
-            mouseListener.ButtonReleased += (sender, args) =>
+            mouseListener.MouseUp += (sender, args) =>
             {
                 if (args.Button == MouseButton.Left)
                 {
-                    var p = _viewportAdapter.PointToScreen(args.X, args.Y);
-                    Trace.WriteLine(string.Format("{0},{1} => {2},{3}", args.X, args.Y, p.X, p.Y));
+                    var p = _viewportAdapter.PointToScreen(args.Position);
+                    Trace.WriteLine(string.Format("{0} => {1}", args.Position, p));
                 }
             };
+
+            mouseListener.MouseDown += (sender, args) => Trace.WriteLine("MouseDown");
+            mouseListener.MouseUp += (sender, args) => Trace.WriteLine("MouseUp");
+            mouseListener.MouseClicked += (sender, args) => Trace.WriteLine("MouseClicked");
+            mouseListener.MouseDoubleClicked += (sender, args) => Trace.WriteLine("MouseDoubleClicked");
+            mouseListener.MouseWheelMoved += (sender, args) => Trace.WriteLine("MouseWheelMoved");
+            mouseListener.MouseDragged += (sender, args) => Trace.WriteLine("MouseDragged");
         }
     }
 }

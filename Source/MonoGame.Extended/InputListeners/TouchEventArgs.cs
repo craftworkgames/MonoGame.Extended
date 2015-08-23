@@ -1,33 +1,30 @@
+using System;
 using Microsoft.Xna.Framework.Input.Touch;
 
 namespace MonoGame.Extended.InputListeners
 {
-    public class TouchEventArgs : System.EventArgs
+    public class TouchEventArgs : EventArgs
     {
-        public TouchLocation TouchLocation { get; private set; }
-
-        internal TouchEventArgs(TouchLocation touchLocation)
+        internal TouchEventArgs(TouchLocation location)
         {
-            TouchLocation = touchLocation;
+            Location = location;
         }
 
-        public override bool Equals(System.Object obj)
+        public TouchLocation Location { get; private set; }
+
+        public override bool Equals(object other)
         {
-            if (obj == null) { return false; }
+            var args = other as TouchEventArgs;
 
-            // If parameter cannot be cast to Point return false.
-            TouchEventArgs t = obj as TouchEventArgs;
-            if ((System.Object)t == null)
-            {
+            if (args == null)
                 return false;
-            }
 
-            return TouchLocation.GetHashCode() == t.GetHashCode();
+            return ReferenceEquals(this, args) || Location.Equals(args.Location);
         }
 
         public override int GetHashCode()
         {
-            return TouchLocation.Id;
+            return Location.GetHashCode();
         }
     }
 }
