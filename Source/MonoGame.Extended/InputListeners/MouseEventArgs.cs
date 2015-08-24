@@ -6,7 +6,7 @@ namespace MonoGame.Extended.InputListeners
 {
     public class MouseEventArgs : EventArgs
     {
-        public MouseEventArgs(TimeSpan time, MouseState previousState, MouseState currentState, 
+        internal MouseEventArgs(TimeSpan time, MouseState previousState, MouseState currentState, 
             MouseButton button = MouseButton.None, int? scrollWheelValue = null, int? scrollWheelDelta = null)
         {
             PreviousState = previousState;

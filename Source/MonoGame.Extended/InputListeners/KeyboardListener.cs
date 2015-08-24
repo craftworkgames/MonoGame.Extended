@@ -5,14 +5,19 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MonoGame.Extended.InputListeners
 {
-    public class KeyboardEventListener : EventListener
+    public class KeyboardListener : InputListener
     {
-        internal KeyboardEventListener(int initialDelay = 800, int repeatDelay = 50)
+        internal KeyboardListener()
+            : this(new KeyboardListenerSettings())
         {
-            InitialDelay = initialDelay;
-            RepeatDelay = repeatDelay;
         }
 
+        internal KeyboardListener(KeyboardListenerSettings settings)
+        {
+            InitialDelay = settings.InitialDelayMilliseconds;
+            RepeatDelay = settings.RepeatDelayMilliseconds;
+        }
+        
         private Keys _previousKey;
         private TimeSpan _lastPressTime;
         private bool _isInitial;
@@ -25,7 +30,7 @@ namespace MonoGame.Extended.InputListeners
         public int InitialDelay { get; private set; }
         public int RepeatDelay { get; private set; }
 
-        public override void Update(GameTime gameTime)
+        internal override void Update(GameTime gameTime)
         {
             var currentState = Keyboard.GetState();
             

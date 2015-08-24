@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.InputListeners
 {
-    public abstract class EventListener
+    public abstract class InputListener
     {
-        protected EventListener()
+        protected InputListener()
         {
         }
 
@@ -18,6 +18,6 @@ namespace MonoGame.Extended.InputListeners
                 handler(this, args);
         }
 
-        public abstract void Update(GameTime gameTime);
+        internal abstract void Update(GameTime gameTime);
     }
 }

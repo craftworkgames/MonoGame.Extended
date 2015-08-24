@@ -4,22 +4,22 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.InputListeners
 {
-    public class EventListenerManager
+    public class InputListenerManager
     {
-        public EventListenerManager()
+        public InputListenerManager()
         {
-            _listeners = new List<EventListener>();
+            _listeners = new List<InputListener>();
         }
 
-        private readonly List<EventListener> _listeners;
+        private readonly List<InputListener> _listeners;
 
-        public List<EventListener> Listeners
+        public List<InputListener> Listeners
         {
             get { return _listeners; }
         }
 
-        public T AddListener<T>(EventListenerSettings<T> settings)
-            where T : EventListener
+        public T AddListener<T>(InputListenerSettings<T> settings)
+            where T : InputListener
         {
             var listener = settings.CreateListener();
             _listeners.Add(listener);
@@ -27,22 +27,22 @@ namespace MonoGame.Extended.InputListeners
         }
 
         public T AddListener<T>()
-            where T : EventListener
+            where T : InputListener
         {
             var listener = Activator.CreateInstance<T>();
             _listeners.Add(listener);
             return listener;
         }
 
-        public void RemoveListener(EventListener listener)
+        public void RemoveListener(InputListener listener)
         {
             _listeners.Remove(listener);
         }
 
         public void Update(GameTime gameTime) 
         {
-            foreach (var eventListener in _listeners)
-                eventListener.Update(gameTime);
+            foreach (var listener in _listeners)
+                listener.Update(gameTime);
         }
     }
 }

@@ -4,15 +4,21 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MonoGame.Extended.InputListeners
 {
-    public class MouseEventListener : EventListener
+    public class MouseListener : InputListener
     {
-        public event EventHandler<MouseEventArgs> MouseDown;
-        public event EventHandler<MouseEventArgs> MouseUp;
-        public event EventHandler<MouseEventArgs> MouseClicked;
-        public event EventHandler<MouseEventArgs> MouseDragged;
-        public event EventHandler<MouseEventArgs> MouseDoubleClicked;
-        public event EventHandler<MouseEventArgs> MouseMoved;
-        public event EventHandler<MouseEventArgs> MouseWheelMoved;
+        internal MouseListener()
+            : this(new MouseListenerSettings())
+        {
+        }
+
+        internal MouseListener(MouseListenerSettings settings)
+        {
+            _doubleClickMilliseconds = settings.DoubleClickMilliseconds;
+            _dragThreshold = settings.DragThreshold;
+
+            // TODO: Passing in TimeSpan.Zero here is probably a bug (first click is not registered)
+            _lastClick = new MouseEventArgs(TimeSpan.Zero, Mouse.GetState(), Mouse.GetState());
+        }
 
         private readonly int _doubleClickMilliseconds;
         private readonly int _dragThreshold;
@@ -22,14 +28,13 @@ namespace MonoGame.Extended.InputListeners
         private GameTime _gameTime;
         private MouseEventArgs _lastClick;
 
-        public MouseEventListener(int doubleClickMilliseconds, int dragThreshold) // initial values are windows defaults
-        {
-            _doubleClickMilliseconds = doubleClickMilliseconds;
-            _dragThreshold = dragThreshold;
-
-            // TODO: Passing in TimeSpan.Zero here is probably a bug (first click is not registered)
-            _lastClick = new MouseEventArgs(TimeSpan.Zero, Mouse.GetState(), Mouse.GetState());
-        }
+        public event EventHandler<MouseEventArgs> MouseDown;
+        public event EventHandler<MouseEventArgs> MouseUp;
+        public event EventHandler<MouseEventArgs> MouseClicked;
+        public event EventHandler<MouseEventArgs> MouseDragged;
+        public event EventHandler<MouseEventArgs> MouseDoubleClicked;
+        public event EventHandler<MouseEventArgs> MouseMoved;
+        public event EventHandler<MouseEventArgs> MouseWheelMoved;
 
         private void CheckButtonPressed(Func<MouseState, ButtonState> checkFunction, MouseButton button)
         {
@@ -75,7 +80,7 @@ namespace MonoGame.Extended.InputListeners
             }
         }
 
-        public override void Update(GameTime gameTime)
+        internal override void Update(GameTime gameTime)
         {
             _gameTime = gameTime;
             _currentState = Mouse.GetState();

@@ -5,7 +5,7 @@ namespace MonoGame.Extended.InputListeners
 {
     public class KeyboardEventArgs : EventArgs
     {
-        public KeyboardEventArgs(Keys key, KeyboardState keyboardState)
+        internal KeyboardEventArgs(Keys key, KeyboardState keyboardState)
         {
             Key = key;
 
@@ -29,7 +29,7 @@ namespace MonoGame.Extended.InputListeners
             get { return ToChar(Key, Modifiers); }
         }
 
-        internal static char? ToChar(Keys key, KeyboardModifiers modifiers = KeyboardModifiers.None)
+        private static char? ToChar(Keys key, KeyboardModifiers modifiers = KeyboardModifiers.None)
         {
             var isShiftDown = ((modifiers & KeyboardModifiers.Shift) == KeyboardModifiers.Shift);
 

@@ -30,7 +30,7 @@ namespace Sandbox
         private BitmapFont _bitmapFont;
         private TiledMap _tiledMap;
 
-        private EventListenerManager _inputManager;
+        private InputListenerManager _inputManager;
 
         private Vector2 _cameraDirection = Vector2.Zero;
         private float _cameraRotation = 0f;
@@ -142,14 +142,14 @@ namespace Sandbox
 
         private void SetUpInput()
         {
-            _inputManager = new EventListenerManager();
+            _inputManager = new InputListenerManager();
 
             var up = new Vector2(0, -250);
             var right = new Vector2(250, 0);
 
             //camera movement
-            var keyboardListener = _inputManager.AddListener(new KeyboardEventListenerSettings());
-            var mouseListener = _inputManager.AddListener(new MouseEventListenerSettings());
+            var keyboardListener = _inputManager.AddListener(new KeyboardListenerSettings());
+            var mouseListener = _inputManager.AddListener(new MouseListenerSettings());
             _inputManager.Listeners.Add(keyboardListener);
             _inputManager.Listeners.Add(mouseListener);
 

@@ -19,12 +19,12 @@ namespace MonoGame.Extended.InputListeners
             if (args == null)
                 return false;
 
-            return ReferenceEquals(this, args) || Location.Equals(args.Location);
+            return ReferenceEquals(this, args) || Location.Id.Equals(args.Location.Id);
         }
 
         public override int GetHashCode()
         {
-            return Location.GetHashCode();
+            return Location.Id.GetHashCode();
         }
     }
 }
