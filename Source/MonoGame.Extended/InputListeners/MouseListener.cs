@@ -15,9 +15,6 @@ namespace MonoGame.Extended.InputListeners
         {
             _doubleClickMilliseconds = settings.DoubleClickMilliseconds;
             _dragThreshold = settings.DragThreshold;
-
-            // TODO: Passing in TimeSpan.Zero here is probably a bug (first click is not registered)
-            _lastClick = new MouseEventArgs(TimeSpan.Zero, Mouse.GetState(), Mouse.GetState());
         }
 
         private readonly int _doubleClickMilliseconds;
@@ -26,7 +23,8 @@ namespace MonoGame.Extended.InputListeners
         private MouseState _currentState;
         private MouseState _previousState;
         private GameTime _gameTime;
-        private MouseEventArgs _lastClick;
+        private MouseEventArgs _previousClickArgs;
+        private MouseEventArgs _mouseDownArgs;
 
         public event EventHandler<MouseEventArgs> MouseDown;
         public event EventHandler<MouseEventArgs> MouseUp;
@@ -36,47 +34,53 @@ namespace MonoGame.Extended.InputListeners
         public event EventHandler<MouseEventArgs> MouseMoved;
         public event EventHandler<MouseEventArgs> MouseWheelMoved;
 
-        private void CheckButtonPressed(Func<MouseState, ButtonState> checkFunction, MouseButton button)
+        private void CheckButtonPressed(Func<MouseState, ButtonState> getButtonState, MouseButton button)
         {
-            if (checkFunction(_currentState) == ButtonState.Pressed && 
-                checkFunction(_previousState) == ButtonState.Released)
+            if (getButtonState(_currentState) == ButtonState.Pressed && 
+                getButtonState(_previousState) == ButtonState.Released)
             {
                 var args = new MouseEventArgs(_gameTime.TotalGameTime, _previousState, _currentState, button);
                 RaiseEvent(MouseDown, args);
+                _mouseDownArgs = args;
             }
         }
 
-        private void CheckButtonReleased(Func<MouseState, ButtonState> checkFunction, MouseButton button)
+        private void CheckButtonReleased(Func<MouseState, ButtonState> getButtonState, MouseButton button)
         {
-            if (checkFunction(_currentState) == ButtonState.Released &&
-                checkFunction(_previousState) == ButtonState.Pressed)
+            if (getButtonState(_currentState) == ButtonState.Released &&
+                getButtonState(_previousState) == ButtonState.Pressed)
             {
                 var args = new MouseEventArgs(_gameTime.TotalGameTime, _previousState, _currentState, button);
 
                 RaiseEvent(MouseUp, args);
 
-                if (_lastClick.Button == args.Button)
+                if (_mouseDownArgs.Button == args.Button)
                 {
-                    var clickMovement = DistanceBetween(args.Position, _lastClick.Position);
+                    var clickMovement = DistanceBetween(args.Position, _mouseDownArgs.Position);
 
-                    // If the mouse hasn't moved much
+                    // If the mouse hasn't moved much between mouse down and mouse up
                     if (clickMovement < _dragThreshold)
                     {
                         RaiseEvent(MouseClicked, args);
 
-                        // If the last click was recent
-                        var clickMilliseconds = (args.Time - _lastClick.Time).TotalMilliseconds;
+                        if (_previousClickArgs != null)
+                        {
+                            // If the last click was recent
+                            var clickMilliseconds = (args.Time - _previousClickArgs.Time).TotalMilliseconds;
 
-                        if (clickMilliseconds <= _doubleClickMilliseconds)
-                            RaiseEvent(MouseDoubleClicked, args);
+                            if (clickMilliseconds <= _doubleClickMilliseconds)
+                                RaiseEvent(MouseDoubleClicked, args);
+
+                            _previousClickArgs = null;
+                        }
                     }
-                    else // If the mouse has moved
+                    else // If the mouse has moved betweem mouse down and mouse up
                     {
                         RaiseEvent(MouseDragged, args);
                     }
                 }
 
-                _lastClick = args;
+                _previousClickArgs = args;
             }
         }
 
