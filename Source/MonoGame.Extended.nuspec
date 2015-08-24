@@ -7,12 +7,13 @@
     <authors>Dylan Wilson</authors>
     <owners>Craftwork Games</owners>
     <licenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>    
+    <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>
+    <iconUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/Logos/logo-nuget-128.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Makes MonoGame more awesome.</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2015 - Craftwork Games</copyright>
-    <tags>monogame pipeline bmfont tiled</tags>
+    <tags>monogame pipeline bmfont tiled texture atlas input event sprite</tags>
     <references>
       <group targetFramework="portable-net45+sl50+MonoAndroid10+xamarinios10+MonoTouch10">
         <reference file="MonoGame.Extended.dll" />
