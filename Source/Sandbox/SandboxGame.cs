@@ -212,7 +212,7 @@ namespace Sandbox
             // zoom
             mouseListener.MouseWheelMoved += (sender, args) =>
             {
-                _camera.Zoom += args.ScrollWheelDelta.Value * 0.0001f;
+                _camera.Zoom += args.ScrollWheelDelta * 0.001f;
             };
 
             // look at
@@ -229,7 +229,7 @@ namespace Sandbox
             mouseListener.MouseUp += (sender, args) => Trace.WriteLine("MouseUp");
             mouseListener.MouseClicked += (sender, args) => Trace.WriteLine("MouseClicked");
             mouseListener.MouseDoubleClicked += (sender, args) => Trace.WriteLine("MouseDoubleClicked");
-            mouseListener.MouseWheelMoved += (sender, args) => Trace.WriteLine("MouseWheelMoved");
+            mouseListener.MouseWheelMoved += (sender, args) => Trace.WriteLine(string.Format("MouseWheelMoved {0}", args.ScrollWheelValue));
             mouseListener.MouseDragged += (sender, args) => Trace.WriteLine("MouseDragged");
         }
     }

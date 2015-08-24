@@ -23,9 +23,9 @@ namespace MonoGame.Extended.InputListeners
 
         public MouseState PreviousState { get; private set; }
         public MouseState CurrentState { get; private set; }
-        public MouseButton Button { get; private set; }
-        public int? ScrollWheelValue { get; private set; }
-        public int? ScrollWheelDelta { get; private set; }
         public Point Position { get; private set; }
+        public MouseButton Button { get; private set; }
+        public int ScrollWheelValue { get; private set; }
+        public int ScrollWheelDelta { get; private set; }
     }
 }
