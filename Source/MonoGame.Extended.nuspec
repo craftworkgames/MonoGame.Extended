@@ -8,7 +8,7 @@
     <owners>Craftwork Games</owners>
     <licenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>
-    <iconUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/Logos/logo-nuget-128.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Makes MonoGame more awesome.</description>
     <releaseNotes></releaseNotes>
@@ -23,5 +23,6 @@
   <files>
     <file src="MonoGame.Extended\bin\Release\MonoGame.Extended.dll" target="lib" />
     <file src="MonoGame.Extended.Content.Pipeline\bin\Release\MonoGame.Extended.Content.Pipeline.dll" target="lib" />
+    <file src="readme.txt" target="" />
   </files>
 </package>
