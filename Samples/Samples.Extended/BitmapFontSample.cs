@@ -1,39 +1,27 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Graphics;
+using MonoGame.Extended.BitmapFonts;
 
-namespace DemoGame.Extended
+namespace Samples.Extended
 {
-    public class Game1 : Game
+    public class BitmapFontSample : Game
     {
         private GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
-        private Texture2D _texture;
-        private Camera2D _camera;
+        private BitmapFont _bitmapFont;
 
-        public Game1()
+        public BitmapFontSample()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-
-            _camera = new Camera2D(GraphicsDevice)
-            {
-                Zoom = 0.5f,
-                Position = new Vector2(400, 440)
-            };
-        }
-
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _texture = Content.Load<Texture2D>("hills");
+            _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
         }
 
         protected override void UnloadContent()
@@ -52,8 +40,14 @@ namespace DemoGame.Extended
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _spriteBatch.Draw(_texture, Vector2.Zero, Color.White);
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(_bitmapFont, "MonoGame.Extended BitmapFont Sample", new Vector2(50, 10), Color.White);
+            _spriteBatch.DrawString(_bitmapFont,
+                "Contrary to popular belief, Lorem Ipsum is not simply random text.\n\n" +
+                "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard " +
+                "McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin " +
+                "words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, " +
+                "discovered the undoubtable source.", new Vector2(50, 50), new Color(Color.Black, 0.5f), 750);
             _spriteBatch.End();
 
             base.Draw(gameTime);
