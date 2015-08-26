@@ -3,15 +3,15 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 
-namespace Samples.Extended
+namespace Samples.Extended.Samples
 {
-    public class BitmapFontSample : Game
+    public class BitmapFontsSample : Game
     {
         private GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFont;
 
-        public BitmapFontSample()
+        public BitmapFontsSample()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -47,7 +47,8 @@ namespace Samples.Extended
                 "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard " +
                 "McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin " +
                 "words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, " +
-                "discovered the undoubtable source.", new Vector2(50, 50), new Color(Color.Black, 0.5f), 750);
+                "discovered the undoubtable source.", new Vector2(50, 50), new Color(Color.Black, 0.5f), 
+                wrapWidth: 750);
             _spriteBatch.End();
 
             base.Draw(gameTime);

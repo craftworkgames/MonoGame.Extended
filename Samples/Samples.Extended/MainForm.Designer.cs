@@ -28,25 +28,37 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.BitmapFontButton = new System.Windows.Forms.Button();
+            this.BitmapFontsButton = new System.Windows.Forms.Button();
+            this.SpritesButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // BitmapFontButton
+            // BitmapFontsButton
             // 
-            this.BitmapFontButton.Location = new System.Drawing.Point(12, 12);
-            this.BitmapFontButton.Name = "BitmapFontButton";
-            this.BitmapFontButton.Size = new System.Drawing.Size(134, 58);
-            this.BitmapFontButton.TabIndex = 0;
-            this.BitmapFontButton.Text = "BitmapFont";
-            this.BitmapFontButton.UseVisualStyleBackColor = true;
-            this.BitmapFontButton.Click += new System.EventHandler(this.BitmapFontButton_Click);
+            this.BitmapFontsButton.Location = new System.Drawing.Point(12, 12);
+            this.BitmapFontsButton.Name = "BitmapFontsButton";
+            this.BitmapFontsButton.Size = new System.Drawing.Size(134, 58);
+            this.BitmapFontsButton.TabIndex = 0;
+            this.BitmapFontsButton.Text = "Bitmap Fonts";
+            this.BitmapFontsButton.UseVisualStyleBackColor = true;
+            this.BitmapFontsButton.Click += new System.EventHandler(this.BitmapFontsButton_Click);
+            // 
+            // SpritesButton
+            // 
+            this.SpritesButton.Location = new System.Drawing.Point(152, 12);
+            this.SpritesButton.Name = "SpritesButton";
+            this.SpritesButton.Size = new System.Drawing.Size(134, 58);
+            this.SpritesButton.TabIndex = 1;
+            this.SpritesButton.Text = "Sprites";
+            this.SpritesButton.UseVisualStyleBackColor = true;
+            this.SpritesButton.Click += new System.EventHandler(this.SpritesButton_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(568, 304);
-            this.Controls.Add(this.BitmapFontButton);
+            this.Controls.Add(this.SpritesButton);
+            this.Controls.Add(this.BitmapFontsButton);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MonoGame.Extended Samples";
@@ -56,6 +68,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button BitmapFontButton;
+        private System.Windows.Forms.Button BitmapFontsButton;
+        private System.Windows.Forms.Button SpritesButton;
     }
 }

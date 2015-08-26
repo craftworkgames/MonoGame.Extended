@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
+using Samples.Extended.Samples;
 
 namespace Samples.Extended
 {
@@ -13,9 +14,15 @@ namespace Samples.Extended
 
         public Game Sample { get; private set; }
 
-        private void BitmapFontButton_Click(object sender, EventArgs e)
+        private void BitmapFontsButton_Click(object sender, EventArgs e)
         {
-            Sample = new BitmapFontSample();
+            Sample = new BitmapFontsSample();
+            DialogResult = DialogResult.OK;
+        }
+
+        private void SpritesButton_Click(object sender, EventArgs e)
+        {
+            Sample = new SpritesSample();
             DialogResult = DialogResult.OK;
         }
     }
