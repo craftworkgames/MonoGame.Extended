@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.ViewportAdapters;
 using NUnit.Framework;
 
-namespace MonoGame.Extended.Tests.Graphics
+namespace MonoGame.Extended.Tests.ViewportAdapters
 {
     [TestFixture]
     public class DefaultViewportAdapterTests

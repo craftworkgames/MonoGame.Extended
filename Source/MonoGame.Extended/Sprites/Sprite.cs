@@ -12,7 +12,8 @@ namespace MonoGame.Extended.Sprites
         {
             if (textureRegion == null) throw new ArgumentNullException("textureRegion");
 
-            TextureRegion = textureRegion;
+            _textureRegion = textureRegion;
+
             Color = Color.White;
             IsVisible = true;
             Scale = Vector2.One;
@@ -43,13 +44,16 @@ namespace MonoGame.Extended.Sprites
                 if (value == null)
                     throw new InvalidOperationException("TextureRegion cannot be null");
 
+                // preserve the origin if the texture size changes
+                var originNormalized = OriginNormalized;
                 _textureRegion = value;
+                OriginNormalized = originNormalized;
             }
         }
 
         public Vector2 OriginNormalized
         {
-            get { return new Vector2(Origin.Y / TextureRegion.Width, Origin.Y / TextureRegion.Height); }
+            get { return new Vector2(Origin.X / TextureRegion.Width, Origin.Y / TextureRegion.Height); }
             set { Origin = new Vector2(value.X * TextureRegion.Width, value.Y * TextureRegion.Height); }
         }
 

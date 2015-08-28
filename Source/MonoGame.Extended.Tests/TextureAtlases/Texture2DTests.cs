@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
 using NUnit.Framework;
 
-namespace MonoGame.Extended.Tests.Graphics
+namespace MonoGame.Extended.Tests.TextureAtlases
 {
     [TestFixture]
     public class Texture2DTests

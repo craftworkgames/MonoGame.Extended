@@ -3,7 +3,7 @@ using MonoGame.Extended.ViewportAdapters;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace MonoGame.Extended.Tests.Graphics
+namespace MonoGame.Extended.Tests
 {
     [TestFixture]
     public class Camera2DTests
