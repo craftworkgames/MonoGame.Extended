@@ -148,10 +148,8 @@ namespace Sandbox
             var right = new Vector2(250, 0);
 
             //camera movement
-            var keyboardListener = _inputManager.AddListener(new KeyboardListenerSettings());
-            var mouseListener = _inputManager.AddListener(new MouseListenerSettings());
-            _inputManager.Listeners.Add(keyboardListener);
-            _inputManager.Listeners.Add(mouseListener);
+            var keyboardListener = _inputManager.AddListener<KeyboardListener>();
+            var mouseListener = _inputManager.AddListener<MouseListener>();
 
             keyboardListener.KeyPressed += (sender, args) =>
             {

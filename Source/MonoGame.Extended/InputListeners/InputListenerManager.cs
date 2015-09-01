@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.InputListeners
@@ -13,7 +15,7 @@ namespace MonoGame.Extended.InputListeners
 
         private readonly List<InputListener> _listeners;
 
-        public List<InputListener> Listeners
+        public IEnumerable<InputListener> Listeners
         {
             get { return _listeners; }
         }
@@ -29,7 +31,15 @@ namespace MonoGame.Extended.InputListeners
         public T AddListener<T>()
             where T : InputListener
         {
-            var listener = Activator.CreateInstance<T>();
+            var constructors = typeof(T)
+                .GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                .Where(c => !c.GetParameters().Any())
+                .ToArray();
+
+            if (!constructors.Any())
+                throw new InvalidOperationException(string.Format("No parameterless constructor defined for type {0}", typeof(T).Name));
+
+            var listener = (T)constructors[0].Invoke(new object[0]);
             _listeners.Add(listener);
             return listener;
         }
