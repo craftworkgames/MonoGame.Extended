@@ -12,36 +12,26 @@ namespace MonoGame.Extended.Shapes
 	[DebuggerDisplay("{DebugDisplayString,nq}")]
 	public struct Circle : IEquatable<Circle>
 	{
-		#region Private Fields
+	    private static readonly Circle _empty = new Circle();
 
-		private static Circle emptyCircle = new Circle();
+	    /// <summary>
+	    /// The point representing the center of this <see cref="Circle"/>.
+	    /// </summary>
+	    [DataMember]
+        public Vector2 Center;
 
-		#endregion
+	    /// <summary>
+	    /// The radius from the center of this <see cref="Circle"/>.
+	    /// </summary>
+	    [DataMember]
+        public float Radius;
 
-		#region Public Fields
-
-		/// <summary>
-		/// The point representing the center of this <see cref="Circle"/>.
-		/// </summary>
-		[DataMember]
-		public Vector2 Center;
-
-		/// <summary>
-		/// The radius from the center of this <see cref="Circle"/>.
-		/// </summary>
-		[DataMember]
-		public float Radius;
-
-		#endregion
-
-		#region Public Properties
-
-		/// <summary>
+	    /// <summary>
 		/// Returns a <see cref="Circle"/> with Point = Vector2.Zero and Radius= 0.
 		/// </summary>
 		public static Circle Empty
 		{
-			get { return emptyCircle; }
+			get { return _empty; }
 		}
 
 		/// <summary>
@@ -49,7 +39,7 @@ namespace MonoGame.Extended.Shapes
 		/// </summary>
 		public float Left
 		{
-			get { return (this.Center.X - this.Radius); }
+			get { return Center.X - Radius; }
 		}
 
 		/// <summary>
@@ -57,7 +47,7 @@ namespace MonoGame.Extended.Shapes
 		/// </summary>
 		public float Right
 		{
-			get { return (this.Center.X + this.Radius); }
+			get { return Center.X + Radius; }
 		}
 
 		/// <summary>
@@ -65,7 +55,7 @@ namespace MonoGame.Extended.Shapes
 		/// </summary>
 		public float Top
 		{
-			get { return (this.Center.Y - this.Radius); }
+			get { return Center.Y - Radius; }
 		}
 
 		/// <summary>
@@ -73,7 +63,7 @@ namespace MonoGame.Extended.Shapes
 		/// </summary>
 		public float Bottom
 		{
-			get { return (this.Center.Y + this.Radius); }
+			get { return Center.Y + Radius; }
 		}
 
 		/// <summary>
@@ -81,15 +71,8 @@ namespace MonoGame.Extended.Shapes
 		/// </summary>
 		public Point Location
 		{
-			get
-			{
-				return this.Center.ToPoint();
-			}
-			set
-			{
-				this.Center.X = value.X;
-				this.Center.Y = value.Y;
-			}
+			get { return Center.ToPoint(); }
+			set { Center  = value.ToVector2(); }
 		}
 
 		/// <summary>
@@ -97,7 +80,7 @@ namespace MonoGame.Extended.Shapes
 		/// </summary>
 		public float Diameter
 		{
-			get { return (this.Radius * 2.0f); }
+			get { return Radius * 2.0f; }
 		}
 
 		/// <summary>
@@ -105,7 +88,7 @@ namespace MonoGame.Extended.Shapes
 		/// </summary>
 		public float Circumference
 		{
-			get { return (2.0f * MathHelper.Pi * Radius); }
+			get { return 2.0f * MathHelper.Pi * Radius; }
 		}
 
 		/// <summary>
@@ -114,48 +97,28 @@ namespace MonoGame.Extended.Shapes
 		/// </summary>
 		public bool IsEmpty
 		{
-			get
-			{
-				return ((this.Radius == 0) && (this.Center == Vector2.Zero));
-			}
+			get { return Radius.Equals(0) && (Center == Vector2.Zero); }
 		}
 
-		#endregion
-
-		#region Internal Properties
-
-		internal string DebugDisplayString
+	    internal string DebugDisplayString
 		{
-			get
-			{
-				return string.Concat(
-					this.Center.ToString(), "  ",
-					this.Radius
-					);
-			}
+			get { return string.Format("{0} {1}", Center, Radius); }
 		}
 
-		#endregion
-
-		#region Constructors
-
-		/// <summary>
+	    /// <summary>
 		/// Creates a new instance of <see cref="Circle"/> struct, with the specified
 		/// position, and radius
 		/// </summary>
 		/// <param name="center">The position of the center of the created <see cref="Circle"/>.</param>
 		/// <param name="radius">The radius of the created <see cref="Circle"/>.</param>
-		public Circle(Vector2 center, float radius)
-		{
-			this.Center = center;
-			this.Radius = radius;
+		public Circle(Vector2 center, float radius) 
+            : this()
+	    {
+			Center = center;
+			Radius = radius;
 		}
 
-		#endregion
-
-		#region Operators
-
-		/// <summary>
+	    /// <summary>
 		/// Compares whether two <see cref="Circle"/> instances are equal.
 		/// </summary>
 		/// <param name="a"><see cref="Circle"/> instance on the left of the equal sign.</param>
@@ -163,7 +126,7 @@ namespace MonoGame.Extended.Shapes
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
 		public static bool operator ==(Circle a, Circle b)
 		{
-			return ((a.Center == b.Center) && (a.Radius == b.Radius));
+			return ((a.Center == b.Center) && a.Radius.Equals(b.Radius));
 		}
 
 		/// <summary>
@@ -177,19 +140,15 @@ namespace MonoGame.Extended.Shapes
 			return !(a == b);
 		}
 
-		#endregion
-
-		#region Public Methods
-
-		/// <summary>
+	    /// <summary>
 		/// Gets the point at the edge of this <see cref="Circle"/> from the provided angle
 		/// </summary>
 		/// <param name="angle">an angle in radians</param>
 		/// <returns><see cref="Vector2"/> representing the point on this <see cref="Circle"/>'s surface at the specified angle</returns>
 		public Vector2 GetPointAlongEdge(float angle)
 		{
-			return new Vector2(Center.X + (Radius * (float)Math.Cos((double)angle)),
-							   Center.Y + (Radius * (float)Math.Sin((double)angle)));
+			return new Vector2(Center.X + (Radius * (float)Math.Cos(angle)),
+							   Center.Y + (Radius * (float)Math.Sin(angle)));
 		}
 
 
@@ -251,8 +210,8 @@ namespace MonoGame.Extended.Shapes
 		/// <returns><c>true</c> if the provided <see cref="Circle"/>'s center lie entirely inside this <see cref="Circle"/>; <c>false</c> otherwise.</returns>
 		public bool Contains(Circle value)
 		{
-			Vector2 distanceOfCenter = value.Center - Center;
-			float radii = Radius - value.Radius;
+			var distanceOfCenter = value.Center - Center;
+			var radii = Radius - value.Radius;
 
 			return ((distanceOfCenter.X * distanceOfCenter.X) + (distanceOfCenter.Y * distanceOfCenter.Y) <= Math.Abs(radii * radii));
 		}
@@ -264,8 +223,8 @@ namespace MonoGame.Extended.Shapes
 		/// <param name="result"><c>true</c> if the provided <see cref="Circle"/>'s center lie entirely inside this <see cref="Circle"/>; <c>false</c> otherwise. As an output parameter.</param>
 		public void Contains(ref Circle value, out bool result)
 		{
-			Vector2 distanceOfCenter = value.Center - Center;
-			float radii = Radius - value.Radius;
+			var distanceOfCenter = value.Center - Center;
+			var radii = Radius - value.Radius;
 
 			result = ((distanceOfCenter.X * distanceOfCenter.X) + (distanceOfCenter.Y * distanceOfCenter.Y) <= Math.Abs(radii * radii));
 		}
@@ -296,14 +255,16 @@ namespace MonoGame.Extended.Shapes
 		/// <returns>Hash code of this <see cref="Circle"/>.</returns>
 		public override int GetHashCode()
 		{
-			return (Center.GetHashCode() ^ Radius.GetHashCode());
-		}
+		    // ReSharper disable NonReadonlyMemberInGetHashCode
+			return Center.GetHashCode() ^ Radius.GetHashCode();
+            // ReSharper restore NonReadonlyMemberInGetHashCode
+        }
 
-		/// <summary>
-		/// Adjusts the size of this <see cref="Circle"/> by specified radius amount. 
-		/// </summary>
-		/// <param name="radiusAmount">Value to adjust the radius by.</param>
-		public void Inflate(float radiusAmount)
+        /// <summary>
+        /// Adjusts the size of this <see cref="Circle"/> by specified radius amount. 
+        /// </summary>
+        /// <param name="radiusAmount">Value to adjust the radius by.</param>
+        public void Inflate(float radiusAmount)
 		{
 			Center -= new Vector2(radiusAmount);
 			Radius += radiusAmount * 2;
@@ -316,8 +277,8 @@ namespace MonoGame.Extended.Shapes
 		/// <returns><c>true</c> if other <see cref="Circle"/> intersects with this <see cref="Circle"/>; <c>false</c> otherwise.</returns>
 		public bool Intersects(Circle value)
 		{
-			Vector2 distanceOfCenter = value.Center - Center;
-			float radii = Radius + value.Radius;
+			var distanceOfCenter = value.Center - Center;
+			var radii = Radius + value.Radius;
 
 			return ((distanceOfCenter.X * distanceOfCenter.X) + (distanceOfCenter.Y * distanceOfCenter.Y) < (radii * radii));
 		}
@@ -329,8 +290,8 @@ namespace MonoGame.Extended.Shapes
 		/// <param name="result"><c>true</c> if other <see cref="Circle"/> intersects with this <see cref="Circle"/>; <c>false</c> otherwise. As an output parameter.</param>
 		public void Intersects(ref Circle value, out bool result)
 		{
-			Vector2 distanceOfCenter = value.Center - Center;
-			float radii = Radius + value.Radius;
+			var distanceOfCenter = value.Center - Center;
+			var radii = Radius + value.Radius;
 
 			result = ((distanceOfCenter.X * distanceOfCenter.X) + (distanceOfCenter.Y * distanceOfCenter.Y) < (radii * radii));
 		}
@@ -342,21 +303,25 @@ namespace MonoGame.Extended.Shapes
 		/// <returns><c>true</c> if other <see cref="Rectangle"/> intersects with this <see cref="Circle"/>; <c>false</c> otherwise.</returns>
 		public bool Intersects(Rectangle value)
 		{
-			Vector2 distance = new Vector2(Math.Abs(Center.X - value.X), Math.Abs(Center.Y - value.Y));
+			var distance = new Vector2(Math.Abs(Center.X - value.X), Math.Abs(Center.Y - value.Y));
 
-			if (distance.X > (value.Width / 2.0f + Radius))
-				return false;
-			if (distance.Y > (value.Height / 2.0f + Radius))
+			if (distance.X > value.Width / 2.0f + Radius)
 				return false;
 
-			if (distance.X <= (value.Width / 2.0f))
-				return true;
-			if (distance.Y <= (value.Height / 2.0f))
+            if (distance.Y > value.Height / 2.0f + Radius)
+				return false;
+
+			if (distance.X <= value.Width / 2.0f)
 				return true;
 
-
-			float distanceOfCorners = ((distance.X - value.Width / 2.0f) * (distance.X - value.Width / 2.0f) +
-									   (distance.Y - value.Height / 2.0f) * (distance.Y - value.Height / 2.0f));
+			if (distance.Y <= value.Height / 2.0f)
+				return true;
+            
+			var distanceOfCorners = 
+                (distance.X - value.Width / 2.0f) * 
+			    (distance.X - value.Width / 2.0f) +
+			    (distance.Y - value.Height / 2.0f) * 
+                (distance.Y - value.Height / 2.0f);
 
 			return (distanceOfCorners <= (Radius * Radius));
 		}
@@ -368,23 +333,7 @@ namespace MonoGame.Extended.Shapes
 		/// <param name="result"><c>true</c> if other <see cref="Rectangle"/> intersects with this <see cref="Circle"/>; <c>false</c> otherwise. As an output parameter.</param>
 		public void Intersects(ref Rectangle value, out bool result)
 		{
-			Vector2 distance = new Vector2(Math.Abs(Center.X - value.X), Math.Abs(Center.Y - value.Y));
-
-			if (distance.X > (value.Width / 2.0f + Radius))
-				result = false;
-			if (distance.Y > (value.Height / 2.0f + Radius))
-				result = false;
-
-			if (distance.X <= (value.Width / 2.0f))
-				result = true;
-			if (distance.Y <= (value.Height / 2.0f))
-				result = true;
-
-
-			float distanceOfCorners = ((distance.X - value.Width / 2.0f) * (distance.X - value.Width / 2.0f) +
-									   (distance.Y - value.Height / 2.0f) * (distance.Y - value.Height / 2.0f));
-
-			result = (distanceOfCorners <= (Radius * Radius));
+		    result = Intersects(value);
 		}
 
 		/*
@@ -429,8 +378,7 @@ namespace MonoGame.Extended.Shapes
 		/// <param name="offsetY">The y coordinate to add to this <see cref="Circle"/>.</param>
 		public void Offset(float offsetX, float offsetY)
 		{
-			Center.X += (int)offsetX;
-			Center.Y += (int)offsetY;
+		    Offset(new Vector2(offsetX, offsetY));
 		}
 
 		/// <summary>
@@ -439,8 +387,7 @@ namespace MonoGame.Extended.Shapes
 		/// <param name="amount">The x and y components to add to this <see cref="Circle"/>.</param>
 		public void Offset(Point amount)
 		{
-			Center.X += amount.X;
-			Center.Y += amount.Y;
+		    Offset(amount.ToVector2());
 		}
 
 		/// <summary>
@@ -449,8 +396,7 @@ namespace MonoGame.Extended.Shapes
 		/// <param name="amount">The x and y components to add to this <see cref="Circle"/>.</param>
 		public void Offset(Vector2 amount)
 		{
-			Center.X += amount.X;
-			Center.Y += amount.Y;
+		    Center += new Vector2(amount.X, amount.Y);
 		}
 
 		/// <summary>
@@ -460,7 +406,7 @@ namespace MonoGame.Extended.Shapes
 		/// <returns><see cref="String"/> representation of this <see cref="Circle"/>.</returns>
 		public override string ToString()
 		{
-			return "{Center:" + Center.ToString() + " Radius:" + Radius + "}";
+			return string.Format("{{Center:{0} Radius:{1}}}", Center, Radius);
 		}
 
 		/// <summary>
@@ -500,7 +446,5 @@ namespace MonoGame.Extended.Shapes
 			throw new NotImplementedException();
 		}
 		*/
-
-		#endregion
 	}
 }

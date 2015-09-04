@@ -1,62 +1,32 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.Shapes;
-using System.Linq;
 using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests.Shapes
 {
     [TestFixture]
-    public class CircleTest
+    public class CircleTests
     {
         [Test]
-        public void ConstructorsAndProperties()
+        public void Circle_ConstructorsAndProperties()
         {
             var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
 
-            // Constructor
-
             Assert.AreEqual(new Circle() { Center = new Vector2(200.0f, 300.0f), Radius = 100.0f }, circle);
-
-            // Left property
-
             Assert.AreEqual(200.0f - 100.0f, circle.Left);
-
-            // Right property
-
             Assert.AreEqual(200.0f + 100.0f, circle.Right);
-
-            // Top property
-
             Assert.AreEqual(300.0f - 100.0f, circle.Top);
-
-            // Bottom property
-
             Assert.AreEqual(300.0f + 100.0f, circle.Bottom);
-
-            // Location property
-
             Assert.AreEqual(new Point(200, 300), circle.Location);
-
-            // Center property
-
             Assert.AreEqual(new Vector2(200.0f, 300.0f), circle.Center);
-
-            // Radius property
-
             Assert.AreEqual(100.0f, circle.Radius);
-
-            // IsEmpty property
-
             Assert.AreEqual(false, circle.IsEmpty);
             Assert.AreEqual(true, new Circle().IsEmpty);
-
-            // Empty - static property 
-
             Assert.AreEqual(new Circle(), Circle.Empty);
         }
 
         [Test]
-        public void ContainsPoint()
+        public void Circle_ContainsPoint()
         {
             var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
 
@@ -87,7 +57,7 @@ namespace MonoGame.Extended.Tests.Shapes
         }
 
         [Test]
-        public void ContainsVector2()
+        public void Circle_ContainsVector2()
         {
             var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
 
@@ -118,7 +88,7 @@ namespace MonoGame.Extended.Tests.Shapes
         }
 
         [Test]
-        public void ContainsFloats()
+        public void Circle_ContainsFloats()
         {
             var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
 
@@ -136,41 +106,36 @@ namespace MonoGame.Extended.Tests.Shapes
         }
 
         [Test]
-        public void ContainsCircle()
+        public void Circle_ContainsCircle()
         {
             var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
-
-            var circ1 = new Circle(new Vector2(199.0f, 299.0f), 100.0f);
-            var circ2 = new Circle(new Vector2(200.0f, 300.0f), 25.0f);
-            var circ3 = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
-            var circ4 = new Circle(new Vector2(201.0f, 301.0f), 100.0f);
+            var circle1 = new Circle(new Vector2(199.0f, 299.0f), 100.0f);
+            var circle2 = new Circle(new Vector2(200.0f, 300.0f), 25.0f);
+            var circle3 = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
+            var circle4 = new Circle(new Vector2(201.0f, 301.0f), 100.0f);
 
             bool result;
 
-            circle.Contains(ref circ1, out result);
-
+            circle.Contains(ref circle1, out result);
             Assert.AreEqual(false, result);
 
-            circle.Contains(ref circ2, out result);
-
+            circle.Contains(ref circle2, out result);
             Assert.AreEqual(true, result);
 
-            circle.Contains(ref circ3, out result);
-
+            circle.Contains(ref circle3, out result);
             Assert.AreEqual(true, result);
 
-            circle.Contains(ref circ4, out result);
-
+            circle.Contains(ref circle4, out result);
             Assert.AreEqual(false, result);
 
-            Assert.AreEqual(false, circle.Contains(circ1));
-            Assert.AreEqual(true, circle.Contains(circ2));
-            Assert.AreEqual(true, circle.Contains(circ3));
-            Assert.AreEqual(false, circle.Contains(circ4));
+            Assert.AreEqual(false, circle.Contains(circle1));
+            Assert.AreEqual(true, circle.Contains(circle2));
+            Assert.AreEqual(true, circle.Contains(circle3));
+            Assert.AreEqual(false, circle.Contains(circle4));
         }
 
         [Test]
-        public void IntersectionTest()
+        public void Circle_IntersectionTest()
         {
             var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
 
@@ -200,7 +165,7 @@ namespace MonoGame.Extended.Tests.Shapes
         }
 
         [Test]
-        public void Inflate()
+        public void Circle_Inflate()
         {
             var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
             circle.Inflate(100.0f);
@@ -208,13 +173,13 @@ namespace MonoGame.Extended.Tests.Shapes
         }
 
         [Test]
-        public void ToStringTest()
+        public void Circle_ToStringTest()
         {
             Assert.AreEqual("{Center:{X:200 Y:300} Radius:100}", new Circle(new Vector2(200.0f, 300.0f), 100.0f).ToString());
         }
 
         [Test]
-        public void ToRectangleTest()
+        public void Circle_ToRectangleTest()
         {
             Assert.AreEqual(new Rectangle(150, 250, 100, 100), new Circle(new Vector2(200.0f, 300.0f), 100.0f).ToRectangle());
         }
