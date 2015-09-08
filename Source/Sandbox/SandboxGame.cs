@@ -213,15 +213,15 @@ namespace Sandbox
                 _camera.Zoom += args.ScrollWheelDelta * 0.001f;
             };
 
-            // look at
-            mouseListener.MouseUp += (sender, args) =>
-            {
-                if (args.Button == MouseButton.Left)
-                {
-                    var p = _viewportAdapter.PointToScreen(args.Position);
-                    Trace.WriteLine(string.Format("{0} => {1}", args.Position, p));
-                }
-            };
+            //// look at
+            //mouseListener.MouseUp += (sender, args) =>
+            //{
+            //    if (args.Button == MouseButton.Left)
+            //    {
+            //        var p = _viewportAdapter.PointToScreen(args.Position);
+            //        Trace.WriteLine(string.Format("{0} => {1}", args.Position, p));
+            //    }
+            //};
 
             mouseListener.MouseDown += (sender, args) => Trace.WriteLine("MouseDown");
             mouseListener.MouseUp += (sender, args) => Trace.WriteLine("MouseUp");

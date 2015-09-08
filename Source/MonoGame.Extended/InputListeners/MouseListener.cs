@@ -51,9 +51,7 @@ namespace MonoGame.Extended.InputListeners
                 getButtonState(_previousState) == ButtonState.Pressed)
             {
                 var args = new MouseEventArgs(_gameTime.TotalGameTime, _previousState, _currentState, button);
-
-                RaiseEvent(MouseUp, args);
-
+                
                 if (_mouseDownArgs.Button == args.Button)
                 {
                     var clickMovement = DistanceBetween(args.Position, _mouseDownArgs.Position);
@@ -74,11 +72,13 @@ namespace MonoGame.Extended.InputListeners
                             _previousClickArgs = null;
                         }
                     }
-                    else // If the mouse has moved betweem mouse down and mouse up
+                    else // If the mouse has moved between mouse down and mouse up
                     {
                         RaiseEvent(MouseDragged, args);
                     }
                 }
+
+                RaiseEvent(MouseUp, args);
 
                 _previousClickArgs = args;
             }
