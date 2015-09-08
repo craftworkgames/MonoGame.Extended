@@ -59,18 +59,24 @@ namespace MonoGame.Extended.InputListeners
                     // If the mouse hasn't moved much between mouse down and mouse up
                     if (clickMovement < DragThreshold)
                     {
-                        RaiseEvent(MouseClicked, args);
+                        var hasDoubleClicked = false;
 
                         if (_previousClickArgs != null)
                         {
                             // If the last click was recent
                             var clickMilliseconds = (args.Time - _previousClickArgs.Time).TotalMilliseconds;
-
+                            
                             if (clickMilliseconds <= DoubleClickMilliseconds)
+                            {
                                 RaiseEvent(MouseDoubleClicked, args);
+                                hasDoubleClicked = true;
+                            }
 
                             _previousClickArgs = null;
                         }
+
+                        if(!hasDoubleClicked)
+                            RaiseEvent(MouseClicked, args);
                     }
                     else // If the mouse has moved between mouse down and mouse up
                     {
