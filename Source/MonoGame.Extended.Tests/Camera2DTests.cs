@@ -30,14 +30,14 @@ namespace MonoGame.Extended.Tests
             var corners = boundingFrustum.GetCorners();
 
             const float delta = 0.01f;
-            TestHelper.AreEqual(new Vector3(0.5f, 0.5f, 1), corners[0], delta);
-            TestHelper.AreEqual(new Vector3(800.5f, 0.5f, 1), corners[1], delta);
-            TestHelper.AreEqual(new Vector3(800.5f, 480.5f, 1), corners[2], delta);
-            TestHelper.AreEqual(new Vector3(0.5f, 480.5f, 1), corners[3], delta);
-            TestHelper.AreEqual(new Vector3(0.5f, 0.5f, 0), corners[4], delta);
-            TestHelper.AreEqual(new Vector3(800.5f, 0.5f, 0), corners[5], delta);
-            TestHelper.AreEqual(new Vector3(800.5f, 480.5f, 0), corners[6], delta);
-            TestHelper.AreEqual(new Vector3(0.5f, 480.5f, 0), corners[7], delta);
+            TestHelper.AreEqual(new Vector3(0,   0,   1), corners[0], delta);
+            TestHelper.AreEqual(new Vector3(800, 0,   1), corners[1], delta);
+            TestHelper.AreEqual(new Vector3(800, 480, 1), corners[2], delta);
+            TestHelper.AreEqual(new Vector3(0,   480, 1), corners[3], delta);
+            TestHelper.AreEqual(new Vector3(0,   0,   0), corners[4], delta);
+            TestHelper.AreEqual(new Vector3(800, 0,   0), corners[5], delta);
+            TestHelper.AreEqual(new Vector3(800, 480, 0), corners[6], delta);
+            TestHelper.AreEqual(new Vector3(0,   480, 0), corners[7], delta);
         }
 
         [Test]
@@ -47,8 +47,8 @@ namespace MonoGame.Extended.Tests
             var camera = new Camera2D(graphicsDevice);
 
             Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Point(1, 1)));
-            Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Point(800, 480)));
-            Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Point(0, 0)));
+            Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Point(799, 479)));
+            Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Point(-1, -1)));
             Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Point(801, 481)));
         }
 
@@ -57,12 +57,15 @@ namespace MonoGame.Extended.Tests
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var camera = new Camera2D(graphicsDevice);
-            
-            // the edge cases fall on the half pixel boundary
-            Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Vector2(0.45f, 0.45f)));
-            Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Vector2(800.45f, 480.45f)));
-            Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Vector2(0.55f, 0.55f)));
-            Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Vector2(800.55f, 480.55f)));
+
+            Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Vector2(799.5f, 479.5f)));
+            Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Vector2(0.5f, 0.5f)));
+            Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Vector2(-0.5f, -0.5f)));
+            Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Vector2(800.5f, 480.5f)));
+            Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Vector2(-0.5f, 240f)));
+            Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Vector2(0.5f, 240f)));
+            Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Vector2(799.5f, 240f)));
+            Assert.AreEqual(ContainmentType.Disjoint, camera.Contains(new Vector2(800.5f, 240f)));
         }
 
         [Test]
