@@ -82,6 +82,8 @@
     <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\ScalingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\ViewportAdapter.cs" />
+    <Compile Include="Sprites\Animation.cs" />
+    <Compile Include="Sprites\AnimationExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
