@@ -113,7 +113,7 @@ namespace MonoGame.Extended.Sprites
                         }
                     }
 
-                    _timeElapsed = 0;
+                    _timeElapsed -= Speed;
                 }
             }
         }
