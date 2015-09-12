@@ -5,36 +5,26 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
-    public static class FPSCounter
+    public class FPSCounter
     {
-        #region Private Fields
+        private readonly Queue<float> _sampleBuffer = new Queue<float>();
 
-        private static int _maximumSamples = 100;
-        private static readonly Queue<float> _sampleBuffer = new Queue<float>();
+        public float AverageFramesPerSecond { get; private set; }
+        public float CurrentFramesPerSecond { get; private set; } 
 
-        #endregion
-
-        #region Public Fields
-
-        public static float AverageFramesPerSecond { get; private set; }
-        public static float CurrentFramesPerSecond { get; private set; } 
-
-        public static int MaximumSamples
+        private int _maximumSamples = 100;
+        public int MaximumSamples
         {
             get { return _maximumSamples; }
             set { _maximumSamples = value; }
         }
 
-        #endregion
-
-        #region Public Methods
-
-        public static void ResetCounter()
+        public void ResetCounter()
         {
             _sampleBuffer.Clear();
         }
 
-        public static void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             CurrentFramesPerSecond = 1.0f / deltaTime;
@@ -51,8 +41,6 @@ namespace MonoGame.Extended
                 AverageFramesPerSecond = CurrentFramesPerSecond;
             }
         }
-
-        #endregion
     }
 }
 
