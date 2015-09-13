@@ -29,6 +29,7 @@ namespace Sandbox
         private ViewportAdapter _viewportAdapter;
         private BitmapFont _bitmapFont;
         private TiledMap _tiledMap;
+        private FramesPerSecondCounter _fpsCounter;
 
         private InputListenerManager _inputManager;
 
@@ -50,6 +51,7 @@ namespace Sandbox
 
         protected override void Initialize()
         {
+            _fpsCounter = new FramesPerSecondCounter();
             _viewportAdapter = new BoxingViewportAdapter(GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter)
             {
@@ -112,6 +114,8 @@ namespace Sandbox
 
         protected override void Draw(GameTime gameTime)
         {
+            _fpsCounter.Update(gameTime);
+
             GraphicsDevice.Clear(Color.Black);
             
             //_spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
@@ -121,6 +125,7 @@ namespace Sandbox
             _tiledMap.Draw(_camera);
 
             _spriteBatch.Begin();
+            _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0}", _fpsCounter.AverageFramesPerSecond), Vector2.Zero, Color.White);
             //_spriteBatch.DrawString(_bitmapFont, "This is MonoGame.Extended", new Vector2(50, 50), new Color(Color.Black, 0.5f));
             //_spriteBatch.DrawString(_bitmapFont, string.Format("Camera: {0}", _camera.Position), new Vector2(50, 100), Color.Black);
             //_spriteBatch.DrawString(_bitmapFont, string.Format("Camera Direction: {0}", _cameraDirection), new Vector2(50, 150), Color.Black);
