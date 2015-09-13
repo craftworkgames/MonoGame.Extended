@@ -18,7 +18,7 @@ namespace MonoGame.Extended.Sprites
             IsVisible = true;
             Scale = Vector2.One;
             Effect = SpriteEffects.None;
-            OriginNormalized = new Vector2(0f, 0f);
+            OriginNormalized = new Vector2(0.5f, 0.5f);
         }
 
         public Sprite(Texture2D texture)
