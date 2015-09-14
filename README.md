@@ -40,7 +40,7 @@ If you would like to contribute start with one of the following:
  - Join the discussion on one of the [other issues](https://github.com/craftworkgames/MonoGame.Extended/issues)
  - Talk about it on your [blog](http://dylanwilson.net/) or [twitter](https://twitter.com/craftworkgames)
  - Vote on a task in the [Trello board](https://trello.com/b/Xi6Rfqhb)
- - Create demos and samples using MonoGame.Extended
+ - Create [demos and samples](https://github.com/craftworkgames/Samples.Extended) using MonoGame.Extended
  - and of course, you can fork the project to start making changes
 
  
