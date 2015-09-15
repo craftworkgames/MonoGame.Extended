@@ -7,14 +7,29 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
     [ContentTypeWriter]
     public class BitmapFontWriter : ContentTypeWriter<BitmapFontProcessorResult>
     {
-        protected override void Write(ContentWriter output, BitmapFontProcessorResult value)
+        protected override void Write(ContentWriter writer, BitmapFontProcessorResult result)
         {
-            output.Write(value.TextureAssets.Count);
+            writer.Write(result.TextureAssets.Count);
 
-            foreach (var textureAsset in value.TextureAssets)
-                output.Write(textureAsset);
-            
-            output.Write(value.Json);
+            foreach (var textureAsset in result.TextureAssets)
+                writer.Write(textureAsset);
+
+            var fontFile = result.FontFile;
+            writer.Write(fontFile.Common.LineHeight);
+            writer.Write(fontFile.Chars.Count);
+
+            foreach (var c in fontFile.Chars)
+            {
+                writer.Write(c.ID);
+                writer.Write(c.Page);
+                writer.Write(c.X);
+                writer.Write(c.Y);
+                writer.Write(c.Width);
+                writer.Write(c.Height);
+                writer.Write(c.XOffset);
+                writer.Write(c.YOffset);
+                writer.Write(c.XAdvance);
+            }
         }
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)

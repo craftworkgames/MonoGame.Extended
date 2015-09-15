@@ -1,7 +1,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace MonoGame.Extended.BitmapFonts
+namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
 	// ---- AngelCode BmFont XML serializer ----------------------
 	// ---- By DeadlyDan @ deadlydan@gmail.com -------------------
@@ -10,33 +10,33 @@ namespace MonoGame.Extended.BitmapFonts
     public class BitmapFontCommon
 	{
         [XmlAttribute("lineHeight")]
-		public Int32 LineHeight { get; set; }
+		public int LineHeight { get; set; }
 
         [XmlAttribute("base")]
-		public Int32 Base { get; set; }
+		public int Base { get; set; }
 
         [XmlAttribute("scaleW")]
-		public Int32 ScaleW { get; set; }
+		public int ScaleW { get; set; }
 
         [XmlAttribute("scaleH")]
-		public Int32 ScaleH { get; set; }
+		public int ScaleH { get; set; }
 
         [XmlAttribute("pages")]
-		public Int32 Pages { get; set; }
+		public int Pages { get; set; }
 
         [XmlAttribute("packed")]
-		public Int32 Packed { get; set; }
+		public int Packed { get; set; }
 
         [XmlAttribute("alphaChnl")]
-		public Int32 AlphaChannel { get; set; }
+		public int AlphaChannel { get; set; }
 
         [XmlAttribute("redChnl")]
-		public Int32 RedChannel { get; set; }
+		public int RedChannel { get; set; }
 
         [XmlAttribute("greenChnl")]
-		public Int32 GreenChannel { get; set; }
+		public int GreenChannel { get; set; }
 
         [XmlAttribute("blueChnl")]
-		public Int32 BlueChannel { get; set; }
+		public int BlueChannel { get; set; }
 	}	
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace MonoGame.Extended.BitmapFonts
+namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
 	// ---- AngelCode BmFont XML serializer ----------------------
 	// ---- By DeadlyDan @ deadlydan@gmail.com -------------------
@@ -10,12 +10,12 @@ namespace MonoGame.Extended.BitmapFonts
     public class BitmapFontKerning
 	{
 		[XmlAttribute ( "first" )]
-		public Int32 First { get; set; }
+		public int First { get; set; }
 		
 		[XmlAttribute ( "second" )]
-		public Int32 Second { get; set; }
+		public int Second { get; set; }
 		
 		[XmlAttribute ( "amount" )]
-		public Int32 Amount { get; set; }
+		public int Amount { get; set; }
 	}	
 }

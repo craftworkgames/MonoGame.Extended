@@ -38,12 +38,6 @@
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />
     <Compile Include="BitmapFonts\BitmapFontRegion.cs" />
-    <Compile Include="BitmapFonts\BitmapFontChar.cs" />
-    <Compile Include="BitmapFonts\BitmapFontCommon.cs" />
-    <Compile Include="BitmapFonts\BitmapFontFile.cs" />
-    <Compile Include="BitmapFonts\BitmapFontInfo.cs" />
-    <Compile Include="BitmapFonts\BitmapFontKerning.cs" />
-    <Compile Include="BitmapFonts\BitmapFontPage.cs" />
     <Compile Include="Content\ContentLoader.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Camera2D.cs" />
@@ -87,9 +81,6 @@
     <Compile Include="FramesPerSecondCounter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>..\..\Dependencies\MonoGame.Framework.dll</HintPath>
     </Reference>

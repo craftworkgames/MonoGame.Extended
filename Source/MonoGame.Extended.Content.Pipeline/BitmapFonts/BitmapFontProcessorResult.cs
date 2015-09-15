@@ -4,13 +4,13 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
     public class BitmapFontProcessorResult
     {
-        public BitmapFontProcessorResult(string json)
+        public BitmapFontProcessorResult(BitmapFontFile fontFile)
         {
+            FontFile = fontFile;
             TextureAssets = new List<string>();
-            Json = json;
         }
 
         public List<string> TextureAssets { get; private set; }
-        public string Json { get; private set; }
+        public BitmapFontFile FontFile { get; private set; }
     }
 }

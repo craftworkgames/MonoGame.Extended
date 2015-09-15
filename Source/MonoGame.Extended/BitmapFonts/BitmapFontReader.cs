@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json;
+using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.BitmapFonts
 {
@@ -19,12 +19,30 @@ namespace MonoGame.Extended.BitmapFonts
                 assets.Add(assetName);
             }
 
-            var json = reader.ReadString();
-            var fontFile = JsonConvert.DeserializeObject<BitmapFontFile>(json);
             var textures = assets
                 .Select(i => reader.ContentManager.Load<Texture2D>(i))
                 .ToArray();
-            return new BitmapFont(textures, fontFile);
+
+            var lineHeight = reader.ReadInt32();
+            var regionCount = reader.ReadInt32();
+            var regions = new BitmapFontRegion[regionCount];
+
+            for (var r = 0; r < regionCount; r++)
+            {
+                var character = (char)reader.ReadInt32();
+                var textureIndex = reader.ReadInt32();
+                var x = reader.ReadInt32();
+                var y = reader.ReadInt32();
+                var width = reader.ReadInt32();
+                var height = reader.ReadInt32();
+                var xOffset = reader.ReadInt32();
+                var yOffset = reader.ReadInt32();
+                var xAdvance = reader.ReadInt32();
+                var textureRegion = new TextureRegion2D(textures[textureIndex], x, y, width, height);
+                regions[r] = new BitmapFontRegion(textureRegion, character, xOffset, yOffset, xAdvance);
+            }
+            
+            return new BitmapFont(regions, lineHeight);
         }
     }
 }

@@ -57,6 +57,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitmapFonts\BitmapFontChar.cs" />
+    <Compile Include="BitmapFonts\BitmapFontCommon.cs" />
+    <Compile Include="BitmapFonts\BitmapFontFile.cs" />
+    <Compile Include="BitmapFonts\BitmapFontInfo.cs" />
+    <Compile Include="BitmapFonts\BitmapFontKerning.cs" />
+    <Compile Include="BitmapFonts\BitmapFontPage.cs" />
     <Compile Include="BitmapFonts\BitmapFontProcessorResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BitmapFonts\BitmapFontImporter.cs" />

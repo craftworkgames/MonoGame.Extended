@@ -9,22 +9,21 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
     [ContentProcessor(DisplayName = "BMFont Processor - MonoGame.Extended")]
     public class BitmapFontProcessor : ContentProcessor<BitmapFontFile, BitmapFontProcessorResult>
     {
-        public override BitmapFontProcessorResult Process(BitmapFontFile input, ContentProcessorContext context)
+        public override BitmapFontProcessorResult Process(BitmapFontFile bitmapFontFile, ContentProcessorContext context)
         {
             try
             {
                 context.Logger.LogMessage("Processing BMFont");
-                var json = JsonConvert.SerializeObject(input);
-                var output = new BitmapFontProcessorResult(json);
+                var result = new BitmapFontProcessorResult(bitmapFontFile);
 
-                foreach (var fontPage in input.Pages)
+                foreach (var fontPage in bitmapFontFile.Pages)
                 {
                     var assetName = Path.GetFileNameWithoutExtension(fontPage.File);
                     context.Logger.LogMessage("Expected texture asset: {0}", assetName);
-                    output.TextureAssets.Add(assetName);
+                    result.TextureAssets.Add(assetName);
                 }
 
-                return output;
+                return result;
 
             }
             catch (Exception ex)

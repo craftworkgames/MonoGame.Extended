@@ -1,48 +1,20 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.BitmapFonts
 {
     public class BitmapFont 
     {
-        public BitmapFont(Texture2D[] textures, BitmapFontFile fontFile)
+        internal BitmapFont(IEnumerable<BitmapFontRegion> regions, int lineHeight)
         {
-            _fontFile = fontFile;
-            _characterMap = BuildCharacterMap(textures, _fontFile);
+            _characterMap = regions.ToDictionary(r => r.Character);// BuildCharacterMap(textures, _fontFile);
+            LineHeight = lineHeight;
         }
 
-        public BitmapFont(Texture2D texture, BitmapFontFile fontFile)
-        {
-            _fontFile = fontFile;
-            _characterMap = BuildCharacterMap(new [] { texture }, _fontFile);
-        }
-
-        private readonly BitmapFontFile _fontFile;
         private readonly Dictionary<char, BitmapFontRegion> _characterMap;
 
-        public int LineHeight
-        {
-            get { return _fontFile.Common.LineHeight; }
-        }
-
-        private static Dictionary<char, BitmapFontRegion> BuildCharacterMap(Texture2D[] textures, BitmapFontFile fontFile)
-        {
-            var characterMap = new Dictionary<char, BitmapFontRegion>();
-
-            foreach (var fontChar in fontFile.Chars)
-            {
-                var pageIndex = fontChar.Page;
-                var character = (char)fontChar.ID;
-                var texture = textures[pageIndex];
-                var region = new TextureRegion2D(texture, fontChar.X, fontChar.Y, fontChar.Width, fontChar.Height);
-                var fontRegion = new BitmapFontRegion(region, fontChar);
-                characterMap.Add(character, fontRegion);
-            }
-
-            return characterMap;
-        }
+        public int LineHeight { get; private set; }
 
         public BitmapFontRegion GetCharacterRegion(char character)
         {
@@ -61,11 +33,10 @@ namespace MonoGame.Extended.BitmapFonts
 
                 if (_characterMap.TryGetValue(c, out fontRegion))
                 {
-                    var fc = fontRegion.FontCharacter;
-                    width += fc.XAdvance;
+                    width += fontRegion.XAdvance;
 
-                    if (fc.Height + fc.YOffset > height)
-                        height = fc.Height + fc.YOffset;
+                    if (fontRegion.Height + fontRegion.YOffset > height)
+                        height = fontRegion.Height + fontRegion.YOffset;
                 }
             }
 

@@ -1,7 +1,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace MonoGame.Extended.BitmapFonts
+namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
 	// ---- AngelCode BmFont XML serializer ----------------------
 	// ---- By DeadlyDan @ deadlydan@gmail.com -------------------
@@ -10,39 +10,39 @@ namespace MonoGame.Extended.BitmapFonts
     public class BitmapFontInfo
 	{
 		[XmlAttribute ( "face" )]
-		public String Face { get; set; }
+		public string Face { get; set; }
 
 		[XmlAttribute ( "size" )]
-		public Int32 Size { get; set; }
+		public int Size { get; set; }
 		
 		[XmlAttribute ( "bold" )]
-		public Int32 Bold { get; set; }
+		public int Bold { get; set; }
 		
 		[XmlAttribute ( "italic" )]
-		public Int32 Italic { get; set; }
+		public int Italic { get; set; }
 		
 		[XmlAttribute ( "charset" )]
-		public String CharSet { get; set; }
+		public string CharSet { get; set; }
 		
 		[XmlAttribute ( "unicode" )]
-		public Int32 Unicode { get; set; }
+		public int Unicode { get; set; }
 		
 		[XmlAttribute ( "stretchH" )]
-		public Int32 StretchHeight { get; set; }
+		public int StretchHeight { get; set; }
 		
 		[XmlAttribute ( "smooth" )]
-		public Int32 Smooth { get; set; }
+		public int Smooth { get; set; }
 
 		[XmlAttribute ( "aa" )]
-		public Int32 SuperSampling { get; set; }
+		public int SuperSampling { get; set; }
 
 		[XmlAttribute ( "padding" )]
-		public String Padding { get; set; }
+		public string Padding { get; set; }
 
 		[XmlAttribute ( "spacing" )]
-		public String Spacing { get; set; }
+		public string Spacing { get; set; }
 		
 		[XmlAttribute ( "outline" )]
-		public Int32 OutLine { get; set; }
+		public int OutLine { get; set; }
 	}	
 }

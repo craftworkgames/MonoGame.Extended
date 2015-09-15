@@ -18,11 +18,10 @@ namespace MonoGame.Extended.BitmapFonts
 
                 if (fontRegion != null)
                 {
-                    var fontChar = fontRegion.FontCharacter;
-                    var charPosition = new Vector2(dx + fontChar.XOffset, dy + fontChar.YOffset);
+                    var charPosition = new Vector2(dx + fontRegion.XOffset, dy + fontRegion.YOffset);
 
                     spriteBatch.Draw(fontRegion.TextureRegion, charPosition, color);
-                    dx += fontChar.XAdvance;
+                    dx += fontRegion.XAdvance;
                 }
 
                 if (character == '\n')
@@ -55,7 +54,7 @@ namespace MonoGame.Extended.BitmapFonts
                     }
 
                     DrawString(spriteBatch, bitmapFont, word, new Vector2(dx, dy), color);
-                    dx += size.Width + bitmapFont.GetCharacterRegion(' ').FontCharacter.XAdvance;
+                    dx += size.Width + bitmapFont.GetCharacterRegion(' ').XAdvance;
                 }
 
                 dx = position.X;
