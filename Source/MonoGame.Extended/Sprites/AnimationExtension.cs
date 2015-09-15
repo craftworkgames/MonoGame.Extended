@@ -6,7 +6,7 @@ namespace MonoGame.Extended.Sprites
     {
         public static void Draw(this SpriteBatch spriteBatch, Animation animation)
         {
-            spriteBatch.Draw(animation._sprites[animation.FrameIndex]);
+            spriteBatch.Draw(animation.CurrentSprite, animation.Position);
         }
     }
 }

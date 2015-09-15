@@ -10,47 +10,70 @@ namespace MonoGame.Extended.Sprites
 {
     public class Animation
     {
-        private void Initalize()
-        {
-            _sprites = new List<Sprite>();
-            _timeElapsed = 0;
-            _frameIndex = 0;
-            _speed = 0;
-            _playing = false;
-
-            Loop = true;
-        }
-
         public Animation(Sprite[] sprites)
         {
-            Initalize();
+            Loop = true;
+
+            _sprites = new List<Sprite>();
             _sprites.AddRange(sprites);
         }
 
         public Animation(Texture2D[] textures)
         {
-            Initalize();
+            Loop = true;
+
+            _sprites = new List<Sprite>();
             foreach (var t in textures)
                 _sprites.Add(new Sprite(t));
         }
 
-        public Animation(Texture2D texture, Vector2 startpoint, float framewidth, float frameheight, int rows, int cols, float rowborder, float colborder)
+        public Animation(Texture2D texture, Vector2 startpoint, float framewidth, float frameheight, int rows, int cols, float rowborder, float colborder, bool lefttop)
         {
-            Initalize();
-            for (float x = startpoint.X; x < startpoint.X + framewidth * cols; x += framewidth + colborder)
+            Loop = true;
+
+            _sprites = new List<Sprite>();
+
+            if (lefttop)
+            {
+                for (float x = startpoint.X; x < startpoint.X + framewidth * cols; x += framewidth + colborder)
+                    for (float y = startpoint.Y; y < startpoint.Y + frameheight * rows; y += frameheight + rowborder)
+                        _sprites.Add(new Sprite(new TextureRegion2D(texture, (int)x, (int)y, (int)framewidth, (int)frameheight)));
+            }
+            else
+            {
                 for (float y = startpoint.Y; y < startpoint.Y + frameheight * rows; y += frameheight + rowborder)
-                    _sprites.Add(new Sprite(new TextureRegion2D(texture, (int)x, (int)y, (int)framewidth, (int)frameheight)));
+                    for (float x = startpoint.X; x < startpoint.X + framewidth * cols; x += framewidth + colborder)
+                        _sprites.Add(new Sprite(new TextureRegion2D(texture, (int)x, (int)y, (int)framewidth, (int)frameheight)));
+            }
         }
 
-        internal List<Sprite> _sprites;
         private float _timeElapsed;
         public bool Loop { get; set; }
+
+        public Vector2 Position { get; set; }
 
         public Sprite CurrentSprite
         {
             get
             {
                 return _sprites[_frameIndex];
+            }
+        }
+
+        public int FrameCount
+        {
+            get
+            {
+                return _sprites.Count;
+            }
+        }
+
+        private List<Sprite> _sprites;
+        public List<Sprite> Sprites
+        {
+            get
+            {
+                return _sprites;
             }
         }
 
@@ -64,7 +87,7 @@ namespace MonoGame.Extended.Sprites
             set
             {
                 if (_speed < 0)
-                    throw new ArgumentOutOfRangeException("value", "AnimationSpeed has to be equal or higher than 0");
+                    throw new ArgumentOutOfRangeException("value", "Speed has to be equal or higher than 0.");
 
                 _speed = value;
             }
@@ -77,7 +100,7 @@ namespace MonoGame.Extended.Sprites
             set
             {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException("value", "FrameIndex has to be equal or higher than 0");
+                    throw new ArgumentOutOfRangeException("value", "FrameIndex has to be equal or higher than 0.");
 
                 if (value >= _sprites.Count)
                     throw new ArgumentOutOfRangeException("value", "FrameIndex cannot be higher than the ammount of frames that the sprite contains.");
@@ -136,6 +159,35 @@ namespace MonoGame.Extended.Sprites
         {
             _playing = false;
             _frameIndex = 0;
+        }
+
+        public void AddSprite(Sprite sprite)
+        {
+            AddSprite(sprite, _sprites.Count);
+        }
+
+        public void AddSprite(Sprite sprite, int position)
+        {
+            _sprites.Insert(position, sprite);
+        }
+
+        public void RemoveSprite(int index)
+        {
+            if (index < 0)
+                throw new ArgumentOutOfRangeException("index", "index has to be equal or higher than 0.");
+
+            if (index >= _sprites.Count)
+                throw new ArgumentOutOfRangeException("index", "index cannot be higher than the ammount of frames that the sprite contains.");
+
+            RemoveSprite(_sprites[index]);
+        }
+
+        public void RemoveSprite(Sprite sprite)
+        {
+            if (Sprites.Count == 1)
+                throw new Exception("Animation has to contain at least one sprite.");
+
+            _sprites.Remove(sprite);
         }
     }
 }
