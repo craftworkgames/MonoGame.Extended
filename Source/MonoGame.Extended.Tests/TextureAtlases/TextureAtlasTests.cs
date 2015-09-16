@@ -136,5 +136,69 @@ namespace MonoGame.Extended.Tests.TextureAtlases
                 index++;
             }
         }
+
+        [Test]
+        public void TextureAtlas_Create_WithDefaultParameters_Test()
+        {
+            var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 50, 100) {Name = "testTexture"};
+            var atlas = TextureAtlas.Create(texture, 25, 50);
+
+            Assert.AreEqual(4, atlas.RegionCount);
+            Assert.IsTrue(atlas.Regions.All(i => i.Width == 25));
+            Assert.IsTrue(atlas.Regions.All(i => i.Height == 50));
+            Assert.IsTrue(atlas.Regions.All(i => ReferenceEquals(i.Texture, texture)));
+            Assert.IsTrue(atlas.Regions.All(i => i.Name.StartsWith(texture.Name)));
+        }
+
+        [Test]
+        public void TextureAtlas_Create_WithMaxRegionCount_Test()
+        {
+            var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 64, 64);
+            var atlas = TextureAtlas.Create(texture, 32, 32, maxRegionCount: 3);
+
+            Assert.AreEqual(3, atlas.RegionCount);
+        }
+
+        [Test]
+        public void TextureAtlas_Create_WithMargin_Test()
+        {
+            var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 24, 24);
+            var atlas = TextureAtlas.Create(texture, 10, 10, margin: 2);
+
+            Assert.AreEqual(4, atlas.RegionCount);
+            Assert.IsTrue(atlas.Regions.All(i => i.Width == 10 && i.Height == 10));
+            Assert.AreEqual(atlas[0].X, 2);
+            Assert.AreEqual(atlas[0].Y, 2);
+            Assert.AreEqual(atlas[3].X, 12);
+            Assert.AreEqual(atlas[3].Y, 12);
+        }
+
+        [Test]
+        public void TextureAtlas_Create_WithSpacing_Test()
+        {
+            var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 24, 24);
+            var atlas = TextureAtlas.Create(texture, 10, 10, spacing: 2);
+
+            Assert.AreEqual(4, atlas.RegionCount);
+            Assert.IsTrue(atlas.Regions.All(i => i.Width == 10 && i.Height == 10));
+            Assert.AreEqual(atlas[0].X, 0);
+            Assert.AreEqual(atlas[0].Y, 0);
+            Assert.AreEqual(atlas[3].X, 12);
+            Assert.AreEqual(atlas[3].Y, 12);
+        }
+
+        [Test]
+        public void TextureAtlas_Create_WithMarginAndSpacing_Test()
+        {
+            var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 28, 28);
+            var atlas = TextureAtlas.Create(texture, 10, 10, margin: 3, spacing: 2);
+
+            Assert.AreEqual(4, atlas.RegionCount);
+            Assert.IsTrue(atlas.Regions.All(i => i.Width == 10 && i.Height == 10));
+            Assert.AreEqual(atlas[0].X, 3);
+            Assert.AreEqual(atlas[0].Y, 3);
+            Assert.AreEqual(atlas[3].X, 15);
+            Assert.AreEqual(atlas[3].Y, 15);
+        }
     }
 }

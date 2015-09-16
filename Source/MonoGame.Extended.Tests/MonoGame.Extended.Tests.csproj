@@ -54,7 +54,7 @@
     <Compile Include="ViewportAdapters\BoxingViewportAdapterTests.cs" />
     <Compile Include="Camera2DTests.cs" />
     <Compile Include="ViewportAdapters\DefaultViewportAdapterTests.cs" />
-    <Compile Include="TextureAtlases\Texture2DTests.cs" />
+    <Compile Include="TextureAtlases\TextureRegion2DTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper.cs" />
   </ItemGroup>
