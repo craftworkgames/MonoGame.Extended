@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace MonoGame.Extended.Tests.TextureAtlases
 {
     [TestFixture]
-    public class Texture2DTests
+    public class TextureRegion2DTests
     {
         [Test]
         public void TextureRegion2D_FromTexture_Test()

@@ -7,9 +7,20 @@ namespace MonoGame.Extended.TextureAtlases
     public class TextureRegion2D
     {
         public TextureRegion2D(Texture2D texture, int x, int y, int width, int height)
+            : this(null, texture, x, y, width, height)
+        {
+        }
+
+        public TextureRegion2D(Texture2D texture)
+            : this(texture.Name, texture, 0, 0, texture.Width, texture.Height)
+        {
+        }
+
+        public TextureRegion2D(string name, Texture2D texture, int x, int y, int width, int height)
         {
             if (texture == null) throw new ArgumentNullException("texture");
 
+            Name = name;
             Texture = texture;
             X = x;
             Y = y;
@@ -17,11 +28,7 @@ namespace MonoGame.Extended.TextureAtlases
             Height = height;
         }
 
-        public TextureRegion2D(Texture2D texture)
-            : this(texture, 0, 0, texture.Width, texture.Height)
-        {
-        }
-
+        public string Name { get; private set; }
         public Texture2D Texture { get; protected set; }
         public int X { get; private set; }
         public int Y { get; private set; }
@@ -36,7 +43,7 @@ namespace MonoGame.Extended.TextureAtlases
 
         public override string ToString()
         {
-            return string.Format("{0}", Bounds);
+            return string.Format("{0} {1}", Name ?? string.Empty, Bounds);
         }
     }
 }
