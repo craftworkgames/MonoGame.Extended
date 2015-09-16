@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Shapes\CircleTests.cs" />
     <Compile Include="Sprites\SpriteTests.cs" />
+    <Compile Include="TextureAtlases\TextureAtlasTests.cs" />
     <Compile Include="ViewportAdapters\BoxingViewportAdapterTests.cs" />
     <Compile Include="Camera2DTests.cs" />
     <Compile Include="ViewportAdapters\DefaultViewportAdapterTests.cs" />
