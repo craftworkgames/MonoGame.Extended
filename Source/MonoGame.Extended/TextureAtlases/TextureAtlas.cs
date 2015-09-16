@@ -20,7 +20,7 @@ namespace MonoGame.Extended.TextureAtlases
 
         public Texture2D Texture { get; private set; }
 
-        internal readonly List<TextureRegion2D> _regions;
+        private readonly List<TextureRegion2D> _regions;
         public IEnumerable<TextureRegion2D> Regions
         {
             get { return _regions; }
@@ -122,7 +122,7 @@ namespace MonoGame.Extended.TextureAtlases
             return textureAtlas;
         }
 
-        public static TextureAtlas Create(Texture2D texture, int framewidth, int frameheight, int rows, int cols, Vector2 startpoint = Vector2.Zero, int rowborder = 0, int colborder = 0, int frameCount = -1, bool lefttop = true)
+        public static TextureAtlas Create(Texture2D texture, int framewidth, int frameheight, int rows, int cols, Vector2 startpoint, int rowborder = 0, int colborder = 0, int frameCount = -1, bool lefttop = true)
         {
             var ret = new TextureAtlas(texture);
             int regid = 0;

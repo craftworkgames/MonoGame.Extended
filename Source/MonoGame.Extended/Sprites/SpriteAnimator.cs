@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
@@ -18,11 +14,11 @@ namespace MonoGame.Extended.Sprites
             _sprite = sprite;
             _textureAtlas = textureAtlas;
 
-            _sprite.TextureRegion = _textureAtlas._regions[_frameIndex];
+            _sprite.TextureRegion = _textureAtlas[_frameIndex];
         }
 
-        private Sprite _sprite;
-        private TextureAtlas _textureAtlas;
+        private readonly Sprite _sprite;
+        private readonly TextureAtlas _textureAtlas;
         private float _timeElapsed;
 
         public bool Loop { get; set; }
@@ -40,7 +36,7 @@ namespace MonoGame.Extended.Sprites
                     throw new ArgumentOutOfRangeException("value", "FrameIndex cannot be higher than the ammount of frames that the sprite contains.");
 
                 _frameIndex = value;
-                _sprite.TextureRegion = _textureAtlas._regions[_frameIndex];
+                _sprite.TextureRegion = _textureAtlas[_frameIndex];
             }
         }
 
@@ -60,15 +56,15 @@ namespace MonoGame.Extended.Sprites
             }
         }
 
-        private bool _playing;
-        public bool Playing
+        private bool _isPlaying;
+        public bool IsPlaying
         {
-            get { return _playing; }
+            get { return _isPlaying; }
         }
 
         public void Update(GameTime gameTIme)
         {
-            if (_playing && Speed > 0)
+            if (_isPlaying && Speed > 0)
             {
                 _timeElapsed += (float)gameTIme.ElapsedGameTime.TotalMilliseconds;
 
@@ -83,19 +79,19 @@ namespace MonoGame.Extended.Sprites
                         else
                         {
                             _frameIndex--;
-                            _playing = false;
+                            _isPlaying = false;
                         }
                     }
 
                     _timeElapsed -= Speed;
-                    _sprite.TextureRegion = _textureAtlas._regions[_frameIndex];
+                    _sprite.TextureRegion = _textureAtlas[_frameIndex];
                 }
             }
         }
 
         public void Play()
         {
-            _playing = true;
+            _isPlaying = true;
             _timeElapsed = 0;
 
             if (!Loop && _frameIndex == _textureAtlas.RegionCount - 1)
@@ -104,12 +100,12 @@ namespace MonoGame.Extended.Sprites
 
         public void Pause()
         {
-            _playing = false;
+            _isPlaying = false;
         }
 
         public void Stop()
         {
-            _playing = false;
+            _isPlaying = false;
             _frameIndex = 0;
         }
     }
