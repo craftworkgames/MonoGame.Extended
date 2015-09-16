@@ -76,9 +76,8 @@
     <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\ScalingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\ViewportAdapter.cs" />
-    <Compile Include="Sprites\Animation.cs" />
-    <Compile Include="Sprites\AnimationExtension.cs" />
     <Compile Include="FramesPerSecondCounter.cs" />
+    <Compile Include="Sprites\SpriteAnimator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

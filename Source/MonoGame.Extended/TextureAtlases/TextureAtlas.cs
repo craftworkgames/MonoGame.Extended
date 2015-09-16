@@ -2,11 +2,50 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace MonoGame.Extended.TextureAtlases
 {
     public class TextureAtlas : IEnumerable<TextureRegion2D>
     {
+        public static TextureAtlas Create(Texture2D texture, Vector2 startpoint, int framewidth, int frameheight, int rows, int cols, int rowborder, int colborder, int frameCount, bool lefttop)
+        {
+            var ret = new TextureAtlas(texture);
+            int regid = 0;
+
+            if (lefttop)
+            {
+                for (int x = (int)startpoint.X; x < startpoint.X + framewidth * cols; x += framewidth + colborder)
+                {
+                    for (int y = (int)startpoint.Y; y < startpoint.Y + frameheight * rows; y += frameheight + rowborder)
+                    {
+                        ret.CreateRegion(regid.ToString(), x, y, framewidth, frameheight);
+                        regid++;
+
+                        if (regid == frameCount)
+                            return ret;
+                    }
+                }
+            }
+            else
+            {
+                for (int y = (int)startpoint.Y; y < startpoint.Y + frameheight * rows; y += frameheight + rowborder)
+                {
+                    for (int x = (int)startpoint.X; x < startpoint.X + framewidth * cols; x += framewidth + colborder)
+                    {
+                        ret.CreateRegion(regid.ToString(), x, y, framewidth, frameheight);
+                        regid++;
+
+                        if (regid == frameCount)
+                            return ret;
+                    }
+                }
+            }
+
+            return ret;
+        }
+
         public TextureAtlas(Texture2D texture)
         {
             Texture = texture;
@@ -18,7 +57,7 @@ namespace MonoGame.Extended.TextureAtlases
 
         public Texture2D Texture { get; private set; }
 
-        private readonly List<TextureRegion2D> _regions;
+        internal readonly List<TextureRegion2D> _regions;
         public IEnumerable<TextureRegion2D> Regions
         {
             get { return _regions; }
