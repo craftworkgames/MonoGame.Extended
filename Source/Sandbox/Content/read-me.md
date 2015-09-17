@@ -12,4 +12,6 @@
 
     free-tileset.png
 
+## [Fireball Effect](http://opengameart.org/content/high-res-fire-ball)
 
+	fireball.png

@@ -6,22 +6,24 @@ namespace MonoGame.Extended.Sprites
 {
     public class SpriteAnimator
     {
-        public SpriteAnimator(Sprite sprite, TextureAtlas textureAtlas)
+        public SpriteAnimator(Sprite sprite, TextureAtlas textureAtlas, int framesPerSecond = 60)
         {
-            Loop = true;
-            Speed = 100;
-
+            IsLooping = true;
+            IsPlaying = true;
+            FramesPerSecond = framesPerSecond;
+            
             _sprite = sprite;
             _textureAtlas = textureAtlas;
-
+            _frameIndex = 0;
+            _nextFrameDelay = 0;
             _sprite.TextureRegion = _textureAtlas[_frameIndex];
         }
 
         private readonly Sprite _sprite;
         private readonly TextureAtlas _textureAtlas;
-        private float _timeElapsed;
+        private float _nextFrameDelay;
 
-        public bool Loop { get; set; }
+        public bool IsLooping { get; set; }
 
         private int _frameIndex;
         public int FrameIndex
@@ -40,74 +42,64 @@ namespace MonoGame.Extended.Sprites
             }
         }
 
-        private float _speed;
-        public float Speed
+        private float _framesPerSecond;
+        public float FramesPerSecond
         { 
             get
             {
-                return _speed;
+                return _framesPerSecond;
             }
             set
             {
-                if (_speed < 0)
-                    throw new ArgumentOutOfRangeException("value", "Speed has to be equal or higher than 0.");
+                if (_framesPerSecond < 0)
+                    throw new ArgumentOutOfRangeException("value", "FramesPerSecond has to be equal or higher than 0.");
 
-                _speed = value;
+                _framesPerSecond = value;
             }
         }
 
-        private bool _isPlaying;
-        public bool IsPlaying
-        {
-            get { return _isPlaying; }
-        }
+        public bool IsPlaying { get; set; }
 
-        public void Update(GameTime gameTIme)
+        public void Update(GameTime gameTime)
         {
-            if (_isPlaying && Speed > 0)
+            if (IsPlaying && FramesPerSecond > 0)
             {
-                _timeElapsed += (float)gameTIme.ElapsedGameTime.TotalMilliseconds;
-
-                if (_timeElapsed > Speed)
+                var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                
+                if(_nextFrameDelay <= 0)
                 {
+                    _nextFrameDelay = 1.0f / FramesPerSecond;
                     _frameIndex++;
 
-                    if (_frameIndex == _textureAtlas.RegionCount)
+                    if (_frameIndex >= _textureAtlas.RegionCount)
                     {
-                        if (Loop)
+                        if (IsLooping)
                             _frameIndex = 0;
                         else
-                        {
-                            _frameIndex--;
-                            _isPlaying = false;
-                        }
+                            IsPlaying = false;
                     }
 
-                    _timeElapsed -= Speed;
                     _sprite.TextureRegion = _textureAtlas[_frameIndex];
                 }
+
+                _nextFrameDelay -= deltaSeconds;
             }
         }
 
         public void Play()
         {
-            _isPlaying = true;
-            _timeElapsed = 0;
-
-            if (!Loop && _frameIndex == _textureAtlas.RegionCount - 1)
-                _frameIndex = 0;
+            IsPlaying = true;
         }
 
         public void Pause()
         {
-            _isPlaying = false;
+            IsPlaying = false;
         }
 
         public void Stop()
         {
-            _isPlaying = false;
+            IsPlaying = false;
             _frameIndex = 0;
         }
     }
 }
-

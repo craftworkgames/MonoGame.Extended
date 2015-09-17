@@ -24,29 +24,23 @@ namespace Sandbox
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
         private Camera2D _camera;
-        private Texture2D _backgroundTexture;
         private Sprite _sprite;
         private ViewportAdapter _viewportAdapter;
         private BitmapFont _bitmapFont;
         private TiledMap _tiledMap;
         private FramesPerSecondCounter _fpsCounter;
-
         private InputListenerManager _inputManager;
-
+        private SpriteAnimator _spriteAnimator;
         private Vector2 _cameraDirection = Vector2.Zero;
-        private float _cameraRotation = 0f;
+        private float _cameraRotation;
 
         public SandboxGame()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            Window.IsBorderless = false;
             Window.Position = new Point(50, 50);
             Window.Title = string.Format("MonoGame.Extended - {0}", GetType().Name);
-
-            _graphicsDeviceManager.PreferredBackBufferWidth = 1024;
-            _graphicsDeviceManager.PreferredBackBufferHeight = 768;
         }
 
         protected override void Initialize()
@@ -55,9 +49,9 @@ namespace Sandbox
             _viewportAdapter = new BoxingViewportAdapter(GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter)
             {
-                //Zoom = 0.5f,
+                Zoom = 0.5f,
                 Origin = new Vector2(400, 240),
-                //Position = new Vector2(408, 270)
+                Position = new Vector2(408, 270)
             };
 
             Window.AllowUserResizing = true;
@@ -71,43 +65,37 @@ namespace Sandbox
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _backgroundTexture = Content.Load<Texture2D>("hills");
             _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
-
-            var textureAtlas = Content.Load<TextureAtlas>("test-tileset-atlas");
-            var textureRegion = textureAtlas.Regions.First();
-            _textureRegion = textureAtlas.Regions.Last();
-            _sprite = new Sprite(textureRegion)
-            {
-                Position = new Vector2(600, 240),
-                Scale = Vector2.One * 2.5f,
-                OriginNormalized = new Vector2(0.25f, 0.75f)
-            };
             _tiledMap = Content.Load<TiledMap>("level01");
+
+            var fireballTexture = Content.Load<Texture2D>("fireball");
+            var spriteSheetAtlas = TextureAtlas.Create(fireballTexture, 512, 197);
+
+            _sprite = new Sprite(spriteSheetAtlas.First())
+            {
+                Position = new Vector2(850, 200),
+                Scale = new Vector2(0.5f)
+            };
+            _spriteAnimator = new SpriteAnimator(_sprite, spriteSheetAtlas, 15);
         }
 
         protected override void UnloadContent()
         {
         }
 
-        private TextureRegion2D _textureRegion;
-
         protected override void Update(GameTime gameTime)
         {
+            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             _inputManager.Update(gameTime);
 
-            var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
-            var keyboardState = Keyboard.GetState();
-            //var mouseState = Mouse.GetState();
-            //var gamePadState = GamePad.GetState(PlayerIndex.One);
+            _camera.Move(_cameraDirection * deltaSeconds);
+            _camera.Rotation += _cameraRotation * deltaSeconds;
+            _sprite.Position += new Vector2(-365, 0) * deltaSeconds;
+            _spriteAnimator.Update(gameTime);
 
-            if (keyboardState.IsKeyDown(Keys.Escape))
-                Exit();                                    
-            
-            _camera.Move(_cameraDirection * deltaTime);
-            _camera.Rotation += _cameraRotation * deltaTime;
-
-            _sprite.Rotation += deltaTime;
+            if (_sprite.Position.X < 0 - _sprite.GetBoundingRectangle().Width)
+                _sprite.Position = new Vector2(1900, _sprite.Position.Y);
 
             base.Update(gameTime);
         }
@@ -117,29 +105,15 @@ namespace Sandbox
             _fpsCounter.Update(gameTime);
 
             GraphicsDevice.Clear(Color.Black);
-            
-            //_spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            //_spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, _tiledMap.WidthInPixels, _tiledMap.HeightInPixels), Color.White);
-            //_spriteBatch.End();
 
             _tiledMap.Draw(_camera);
 
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0}", _fpsCounter.AverageFramesPerSecond), Vector2.Zero, Color.White);
-            //_spriteBatch.DrawString(_bitmapFont, "This is MonoGame.Extended", new Vector2(50, 50), new Color(Color.Black, 0.5f));
-            //_spriteBatch.DrawString(_bitmapFont, string.Format("Camera: {0}", _camera.Position), new Vector2(50, 100), Color.Black);
-            //_spriteBatch.DrawString(_bitmapFont, string.Format("Camera Direction: {0}", _cameraDirection), new Vector2(50, 150), Color.Black);
-            //_spriteBatch.DrawString(_bitmapFont, 
-            //    "Contrary to popular belief, Lorem Ipsum is not simply random text.\n\n" + 
-            //    "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard " + 
-            //    "McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin " + 
-            //    "words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, " + 
-            //    "discovered the undoubtable source.", new Vector2(50, 100), new Color(Color.Black, 0.5f), _viewportAdapter.VirtualWidth - 50);
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            _spriteBatch.Draw(_sprite);
             _spriteBatch.End();
 
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _spriteBatch.Draw(_textureRegion, _sprite.GetBoundingRectangle(), Color.White);
-            _spriteBatch.Draw(_sprite);
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0}", _fpsCounter.AverageFramesPerSecond), Vector2.Zero, Color.White);
             _spriteBatch.End();
             
             base.Draw(gameTime);
@@ -190,6 +164,10 @@ namespace Sandbox
             {
                 switch (args.Key)
                 {
+                    case Keys.Escape:
+                        Exit();
+                        break;
+                        
                     case Keys.Q:
                         _cameraRotation -= 1;
                         break;
