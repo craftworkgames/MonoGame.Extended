@@ -22,7 +22,7 @@
    </properties>
   </tile>
  </tileset>
- <imagelayer name="Image Layer 1" x="100" y="100">
+ <imagelayer name="Image Layer 1" x="0" y="0">
   <image source="hills.png"/>
  </imagelayer>
  <layer name="Tile Layer 2" width="20" height="10">

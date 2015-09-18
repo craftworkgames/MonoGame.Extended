@@ -91,7 +91,7 @@ namespace Sandbox
 
             _camera.Move(_cameraDirection * deltaSeconds);
             _camera.Rotation += _cameraRotation * deltaSeconds;
-            _sprite.Position += new Vector2(-365, 0) * deltaSeconds;
+            _sprite.Position += new Vector2(-500, 0) * deltaSeconds;
             _spriteAnimator.Update(gameTime);
 
             if (_sprite.Position.X < 0 - _sprite.GetBoundingRectangle().Width)
@@ -113,7 +113,8 @@ namespace Sandbox
             _spriteBatch.End();
 
             _spriteBatch.Begin();
-            _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0}", _fpsCounter.AverageFramesPerSecond), Vector2.Zero, Color.White);
+            _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0}", _fpsCounter.AverageFramesPerSecond), 
+                new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));
             _spriteBatch.End();
             
             base.Draw(gameTime);
