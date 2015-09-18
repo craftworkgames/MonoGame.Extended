@@ -51,8 +51,35 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\courier-new-32.fnt" />
+    <None Include="Content\desert.tmx" />
+    <None Include="Content\free-tileset.json" />
+    <None Include="Content\free-tileset.tps" />
+    <None Include="Content\level01.tmx" />
     <None Include="Content\read-me.md" />
+    <Content Include="Content\courier-new-32_0.png" />
+    <Content Include="Content\fireball.png" />
+    <Content Include="Content\free-tileset.png" />
+    <Content Include="Content\hills.png" />
+    <Content Include="Content\Hills_1.png" />
+    <Content Include="Content\Hills_2.png" />
+    <Content Include="Content\Hills_3.png" />
+    <Content Include="Content\Hills_4.png" />
+    <Content Include="Content\Hills_Couds.png" />
+    <Content Include="Content\Hills_Sky.png" />
+    <Content Include="Content\shadedDark42.png" />
+    <Content Include="Content\stump.png" />
+    <Content Include="Content\test-tileset.png" />
+    <Content Include="Content\tmw_desert_spacing.png" />
+    <Content Include="Content\zombie.png" />
     <Content Include="Icon.ico" />
+    <None Include="Content\test-tileset-atlas.json" />
+    <None Include="Content\test-tileset-left-down.tmx" />
+    <None Include="Content\test-tileset-left-up.tmx" />
+    <None Include="Content\test-tileset-map1.tmx" />
+    <None Include="Content\test-tileset-right-down.tmx" />
+    <None Include="Content\test-tileset-right-up.tmx" />
+    <None Include="Content\zombie-atlas.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

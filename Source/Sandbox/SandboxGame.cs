@@ -33,6 +33,8 @@ namespace Sandbox
         private SpriteAnimator _spriteAnimator;
         private Vector2 _cameraDirection = Vector2.Zero;
         private float _cameraRotation;
+        private Sprite _zombieSprite;
+        private SpriteAnimator _zombieAnimator;
 
         public SandboxGame()
         {
@@ -77,6 +79,15 @@ namespace Sandbox
                 Scale = new Vector2(0.5f)
             };
             _spriteAnimator = new SpriteAnimator(_sprite, spriteSheetAtlas, 15);
+
+            var zombieSheet = Content.Load<TextureAtlas>("zombie-atlas");
+            _zombieSprite = new Sprite(zombieSheet[0])
+            {
+                Position = new Vector2(300, 900),
+                OriginNormalized = new Vector2(0.5f, 1.0f),
+                Scale = new Vector2(0.5f)
+            };
+            _zombieAnimator = new SpriteAnimator(_zombieSprite, zombieSheet, 7);
         }
 
         protected override void UnloadContent()
@@ -92,7 +103,9 @@ namespace Sandbox
             _camera.Move(_cameraDirection * deltaSeconds);
             _camera.Rotation += _cameraRotation * deltaSeconds;
             _sprite.Position += new Vector2(-500, 0) * deltaSeconds;
+
             _spriteAnimator.Update(gameTime);
+            _zombieAnimator.Update(gameTime);
 
             if (_sprite.Position.X < 0 - _sprite.GetBoundingRectangle().Width)
                 _sprite.Position = new Vector2(1900, _sprite.Position.Y);
@@ -110,6 +123,7 @@ namespace Sandbox
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.Draw(_sprite);
+            _spriteBatch.Draw(_zombieSprite);
             _spriteBatch.End();
 
             _spriteBatch.Begin();
