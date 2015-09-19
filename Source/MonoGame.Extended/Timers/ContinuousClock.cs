@@ -1,49 +1,46 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Timers
 {
     public class ContinuousClock : IGameComponent
     {
-        public event EventHandler ReportTimePassed;
-
-        public TimerState TimerState;
-        public double ReportEveryXSeconds;
-
-        public TimeSpan CurrentTime { get; protected set; } = TimeSpan.Zero;
-        public TimeSpan NextReport { get; protected set; } = TimeSpan.Zero;
-
-        public ContinuousClock(double reportEveryXSeconds)
+        public ContinuousClock(double tickSeconds)
         {
-            ReportEveryXSeconds = reportEveryXSeconds;
+            TickSeconds = tickSeconds;
             Reset();
         }
 
-        void IGameComponent.Initialize() { Reset(); }
+        public event EventHandler Tick;
+
+        public TimerState State { get; protected set; }
+        public double TickSeconds { get; private set; }
+        public TimeSpan CurrentTime { get; protected set; }
+        public TimeSpan NextReport { get; protected set; }
+
+        void IGameComponent.Initialize()
+        {
+            Reset();
+        }
+
         public void Reset()
         {
-            TimerState = TimerState.Stopped;
+            State = TimerState.Stopped;
             CurrentTime = TimeSpan.Zero;
-            NextReport = CurrentTime + TimeSpan.FromSeconds(ReportEveryXSeconds);
+            NextReport = CurrentTime + TimeSpan.FromSeconds(TickSeconds);
         }
 
         public virtual void Update(GameTime gameTime)
         {
-            if (TimerState == TimerState.Stopped ||
-                TimerState == TimerState.Paused)
+            if (State == TimerState.Stopped || State == TimerState.Paused)
                 return;
 
             CurrentTime += gameTime.ElapsedGameTime;
 
             if (CurrentTime >= NextReport)
             {
-                NextReport = CurrentTime + TimeSpan.FromSeconds(ReportEveryXSeconds);
-
-                if (ReportTimePassed != null)
-                    ReportTimePassed(this, null);
+                NextReport = CurrentTime + TimeSpan.FromSeconds(TickSeconds);
+                Tick.Raise(this, EventArgs.Empty);
             }
         }
     }

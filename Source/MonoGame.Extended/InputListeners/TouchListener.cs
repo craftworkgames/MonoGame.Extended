@@ -30,16 +30,16 @@ namespace MonoGame.Extended.InputListeners
 				switch (touchLocation.State)
 				{
 					case TouchLocationState.Pressed:
-                        RaiseEvent(TouchStarted, new TouchEventArgs(touchLocation));
+                        TouchStarted.Raise(this, new TouchEventArgs(touchLocation));
 						break;
 					case TouchLocationState.Moved:
-                        RaiseEvent(TouchMoved, new TouchEventArgs(touchLocation));
+                        TouchMoved.Raise(this, new TouchEventArgs(touchLocation));
 						break;
 					case TouchLocationState.Released:
-                        RaiseEvent(TouchEnded, new TouchEventArgs(touchLocation));
+                        TouchEnded.Raise(this, new TouchEventArgs(touchLocation));
 						break;
 					case TouchLocationState.Invalid:
-                        RaiseEvent(TouchCancelled, new TouchEventArgs(touchLocation));
+                        TouchCancelled.Raise(this, new TouchEventArgs(touchLocation));
 						break;
 				}
 			}

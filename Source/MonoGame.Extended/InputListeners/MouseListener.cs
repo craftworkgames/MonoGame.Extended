@@ -40,7 +40,7 @@ namespace MonoGame.Extended.InputListeners
                 getButtonState(_previousState) == ButtonState.Released)
             {
                 var args = new MouseEventArgs(_gameTime.TotalGameTime, _previousState, _currentState, button);
-                RaiseEvent(MouseDown, args);
+                MouseDown.Raise(this, args);
                 _mouseDownArgs = args;
             }
         }
@@ -68,7 +68,7 @@ namespace MonoGame.Extended.InputListeners
                             
                             if (clickMilliseconds <= DoubleClickMilliseconds)
                             {
-                                RaiseEvent(MouseDoubleClicked, args);
+                                MouseDoubleClicked.Raise(this, args);
                                 hasDoubleClicked = true;
                             }
 
@@ -76,15 +76,15 @@ namespace MonoGame.Extended.InputListeners
                         }
 
                         if(!hasDoubleClicked)
-                            RaiseEvent(MouseClicked, args);
+                            MouseClicked.Raise(this, args);
                     }
                     else // If the mouse has moved between mouse down and mouse up
                     {
-                        RaiseEvent(MouseDragged, args);
+                        MouseDragged.Raise(this, args);
                     }
                 }
 
-                RaiseEvent(MouseUp, args);
+                MouseUp.Raise(this, args);
 
                 _previousClickArgs = args;
             }
@@ -109,11 +109,11 @@ namespace MonoGame.Extended.InputListeners
 
             // Check for any sort of mouse movement. 
             if (_previousState.X != _currentState.X || _previousState.Y != _currentState.Y)
-                RaiseEvent(MouseMoved, new MouseEventArgs(gameTime.TotalGameTime, _previousState, _currentState));
+                MouseMoved.Raise(this, new MouseEventArgs(gameTime.TotalGameTime, _previousState, _currentState));
 
             // Handle mouse wheel events.
             if (_previousState.ScrollWheelValue != _currentState.ScrollWheelValue)
-                RaiseEvent(MouseWheelMoved, new MouseEventArgs(gameTime.TotalGameTime, _previousState, _currentState));
+                MouseWheelMoved.Raise(this, new MouseEventArgs(gameTime.TotalGameTime, _previousState, _currentState));
 
             _previousState = _currentState;
         }
