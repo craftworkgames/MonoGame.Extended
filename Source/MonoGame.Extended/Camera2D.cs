@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -25,12 +26,81 @@ namespace MonoGame.Extended
 
         public Vector2 Position { get; set; }
         public float Rotation { get; set; }
-        public float Zoom { get; set; }
         public Vector2 Origin { get; set; }
+
+        private float _zoom;
+        public float Zoom 
+        {
+            get { return _zoom; }
+            set
+            {
+                if (value < MinimumZoom || value > MaximumZoom)
+                    throw new ArgumentException("Zoom must be between MinimumZoom and MaximumZoom");
+
+                _zoom = value;
+            }
+        }
+
+        private float _minimumZoom;
+        public float MinimumZoom
+        {
+            get { return _minimumZoom; }
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("MinimumZoom must be greater than zero");
+
+                if (Zoom < value)
+                    Zoom = MinimumZoom;
+
+                _minimumZoom = value;
+            }
+        }
+
+        private float _maximumZoom  = float.MaxValue;
+        public float MaximumZoom
+        {
+            get { return _maximumZoom; }
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("MaximumZoom must be greater than zero");
+
+                if (Zoom > value)
+                    Zoom = value;
+
+                _maximumZoom = value;
+            }
+        }
 
         public void Move(Vector2 direction)
         {
             Position += Vector2.Transform(direction, Matrix.CreateRotationZ(-Rotation));
+        }
+
+        public void Rotate(float deltaRadians)
+        {
+            Rotation += deltaRadians;
+        }
+
+        public void ZoomIn(float deltaZoom)
+        {
+            ClampZoom(Zoom + deltaZoom);
+        }
+
+        public void ZoomOut(float deltaZoom)
+        {
+            ClampZoom(Zoom - deltaZoom);
+        }
+
+        private void ClampZoom(float value)
+        {
+            if (value < MinimumZoom)
+                Zoom = MinimumZoom;
+            else if (value > MaximumZoom)
+                Zoom = MaximumZoom;
+            else
+                Zoom = value;
         }
 
         public void LookAt(Vector2 position)

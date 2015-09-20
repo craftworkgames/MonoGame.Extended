@@ -10,6 +10,8 @@ using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
+using OpenTK.Input;
+using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;
 
 namespace Sandbox
 {
@@ -51,6 +53,8 @@ namespace Sandbox
             _viewportAdapter = new BoxingViewportAdapter(GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter)
             {
+                MinimumZoom = 0.5f,
+                MaximumZoom = 2.0f,
                 Zoom = 0.5f,
                 Origin = new Vector2(400, 240),
                 Position = new Vector2(408, 270)
@@ -98,6 +102,12 @@ namespace Sandbox
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            if (Keyboard.GetState().IsKeyDown(Keys.R))
+                _camera.ZoomIn(deltaSeconds);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.F))
+                _camera.ZoomOut(deltaSeconds);
+
             _inputManager.Update(gameTime);
 
             _camera.Move(_cameraDirection * deltaSeconds);
@@ -127,7 +137,9 @@ namespace Sandbox
             _spriteBatch.End();
 
             _spriteBatch.Begin();
-            _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0}", _fpsCounter.AverageFramesPerSecond), 
+            _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", 
+                _fpsCounter.AverageFramesPerSecond,
+                _camera.Zoom), 
                 new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));
             _spriteBatch.End();
             
