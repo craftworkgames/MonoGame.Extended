@@ -12,6 +12,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             Tiles = new List<TmxTile>();
             Properties = new List<TmxProperty>();
             TerrainTypes = new List<TmxTerrain>();
+
         }
 
         public override string ToString()

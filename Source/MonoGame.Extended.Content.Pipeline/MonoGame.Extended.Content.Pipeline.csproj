@@ -97,7 +97,7 @@
     <Compile Include="Tiled\TmxTerrain.cs" />
     <Compile Include="Tiled\TmxTile.cs" />
     <Compile Include="Tiled\TmxTileOffset.cs" />
-    <Compile Include="Tiled\TmxTileSet.cs" />
+    <Compile Include="Tiled\TmxTileset.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
