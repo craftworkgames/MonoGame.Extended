@@ -2,6 +2,7 @@
 {
     public enum TimerState
     {
+        Started,
         Stopped,
         Paused,
         Completed

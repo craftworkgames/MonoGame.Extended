@@ -9,9 +9,8 @@ using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Timers;
 using MonoGame.Extended.ViewportAdapters;
-using OpenTK.Input;
-using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;
 
 namespace Sandbox
 {
@@ -37,6 +36,7 @@ namespace Sandbox
         private float _cameraRotation;
         private Sprite _zombieSprite;
         private SpriteAnimator _zombieAnimator;
+        private ContinuousClock _continuousClock;
 
         public SandboxGame()
         {
@@ -62,7 +62,10 @@ namespace Sandbox
 
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += (s, e) => _viewportAdapter.OnClientSizeChanged();
-            
+
+            _continuousClock = new ContinuousClock(1.0);
+            _continuousClock.Tick += (sender, args) => _camera.ZoomIn(0.1f);
+
             SetUpInput();
 
             base.Initialize();
@@ -101,6 +104,8 @@ namespace Sandbox
         protected override void Update(GameTime gameTime)
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            _continuousClock.Update(gameTime);
 
             if (Keyboard.GetState().IsKeyDown(Keys.R))
                 _camera.ZoomIn(deltaSeconds);

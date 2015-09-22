@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Timers
 {
-    public class CountdownTimer : IGameComponent
+    public class CountdownTimer
     {
         public CountdownTimer(TimeSpan interval)
         {
@@ -23,18 +23,13 @@ namespace MonoGame.Extended.Timers
             get { return Interval - CurrentTick; }
         }
 
-        void IGameComponent.Initialize()
-        {
-            Reset();
-        }
-
         public void Reset()
         {
             TimerState = TimerState.Stopped;
             CurrentTick = TimeSpan.Zero;
         }
 
-        public virtual void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             if (TimerState == TimerState.Stopped || TimerState == TimerState.Paused || TimerState == TimerState.Completed)
                 return;

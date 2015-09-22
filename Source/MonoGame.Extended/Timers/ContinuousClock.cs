@@ -3,31 +3,42 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Timers
 {
-    public class ContinuousClock : IGameComponent
+    public class ContinuousClock
     {
         public ContinuousClock(double tickSeconds)
         {
             TickSeconds = tickSeconds;
-            Reset();
+            Restart();
         }
 
         public event EventHandler Tick;
 
+        public double TickSeconds { get; set; }
         public TimerState State { get; protected set; }
-        public double TickSeconds { get; private set; }
         public TimeSpan CurrentTime { get; protected set; }
-        public TimeSpan NextReport { get; protected set; }
+        public TimeSpan NextTickTime { get; protected set; }
 
-        void IGameComponent.Initialize()
+        public void Start()
         {
-            Reset();
+            State = TimerState.Started;
         }
 
-        public void Reset()
+        public void Stop()
         {
             State = TimerState.Stopped;
             CurrentTime = TimeSpan.Zero;
-            NextReport = CurrentTime + TimeSpan.FromSeconds(TickSeconds);
+            NextTickTime = CurrentTime + TimeSpan.FromSeconds(TickSeconds);
+        }
+
+        public void Restart()
+        {
+            Stop();
+            Start();
+        }
+
+        public void Pause()
+        {
+            State = TimerState.Paused;
         }
 
         public virtual void Update(GameTime gameTime)
@@ -37,9 +48,9 @@ namespace MonoGame.Extended.Timers
 
             CurrentTime += gameTime.ElapsedGameTime;
 
-            if (CurrentTime >= NextReport)
+            if (CurrentTime >= NextTickTime)
             {
-                NextReport = CurrentTime + TimeSpan.FromSeconds(TickSeconds);
+                NextTickTime = CurrentTime + TimeSpan.FromSeconds(TickSeconds);
                 Tick.Raise(this, EventArgs.Empty);
             }
         }
