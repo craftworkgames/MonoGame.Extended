@@ -74,6 +74,7 @@
     <Compile Include="Maps\Tiled\TiledTileSet.cs" />
     <Compile Include="Timers\ContinuousClock.cs" />
     <Compile Include="Timers\CountdownTimer.cs" />
+    <Compile Include="Timers\GameTimer.cs" />
     <Compile Include="Timers\TimerState.cs" />
     <Compile Include="ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />

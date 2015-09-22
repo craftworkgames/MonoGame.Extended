@@ -37,6 +37,7 @@ namespace Sandbox
         private Sprite _zombieSprite;
         private SpriteAnimator _zombieAnimator;
         private ContinuousClock _continuousClock;
+        private CountdownTimer _countdownTimer;
 
         public SandboxGame()
         {
@@ -65,6 +66,9 @@ namespace Sandbox
 
             _continuousClock = new ContinuousClock(1.0);
             _continuousClock.Tick += (sender, args) => _camera.ZoomIn(0.1f);
+
+            _countdownTimer = new CountdownTimer(1.5);
+            _countdownTimer.Completed += (sender, args) => _camera.ZoomOut(2.0f);
 
             SetUpInput();
 
@@ -106,6 +110,7 @@ namespace Sandbox
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             _continuousClock.Update(gameTime);
+            _countdownTimer.Update(gameTime);
 
             if (Keyboard.GetState().IsKeyDown(Keys.R))
                 _camera.ZoomIn(deltaSeconds);
@@ -142,10 +147,12 @@ namespace Sandbox
             _spriteBatch.End();
 
             _spriteBatch.Begin();
-            _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", 
-                _fpsCounter.AverageFramesPerSecond,
-                _camera.Zoom), 
+            _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", _fpsCounter.AverageFramesPerSecond, _camera.Zoom), 
                 new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));
+            _spriteBatch.DrawString(_bitmapFont, string.Format("CC: {0}", _continuousClock.CurrentTime), 
+                new Vector2(5, 25), new Color(0.5f, 0.5f, 0.5f));
+            _spriteBatch.DrawString(_bitmapFont, string.Format("TR: {0}", _countdownTimer.TimeRemaining),
+                new Vector2(5, 45), new Color(0.5f, 0.5f, 0.5f));
             _spriteBatch.End();
             
             base.Draw(gameTime);
@@ -238,7 +245,7 @@ namespace Sandbox
             //    }
             //};
 
-            mouseListener.MouseDown += (sender, args) => Trace.WriteLine("MouseDown");
+            mouseListener.MouseDown += (sender, args) => _countdownTimer.Restart();
             mouseListener.MouseUp += (sender, args) => Trace.WriteLine("MouseUp");
             mouseListener.MouseClicked += (sender, args) => Trace.WriteLine("MouseClicked");
             mouseListener.MouseDoubleClicked += (sender, args) => Trace.WriteLine("MouseDoubleClicked");

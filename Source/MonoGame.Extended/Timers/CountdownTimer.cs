@@ -3,47 +3,38 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Timers
 {
-    public class CountdownTimer
+    public class CountdownTimer : GameTimer
     {
-        public CountdownTimer(TimeSpan interval)
+        public CountdownTimer(double intervalSeconds)
+            : base(intervalSeconds)
         {
-            Interval = interval;
-            Reset();
         }
 
-        public event EventHandler Tick;
+        public CountdownTimer(TimeSpan interval)
+            : base(interval)
+        {
+        }
+
+        public event EventHandler TimeRemainingChanged;
         public event EventHandler Completed;
 
-        public TimerState TimerState { get; private set; }
-        public TimeSpan CurrentTick { get; set; }
-        public TimeSpan Interval { get; set; }
+        public TimeSpan TimeRemaining { get; private set; }
 
-        public TimeSpan TimeRemaining
+        protected override void OnStopped()
         {
-            get { return Interval - CurrentTick; }
+            CurrentTime = TimeSpan.Zero;
         }
 
-        public void Reset()
+        protected override void OnUpdate(GameTime gameTime)
         {
-            TimerState = TimerState.Stopped;
-            CurrentTick = TimeSpan.Zero;
-        }
+            TimeRemaining = Interval - CurrentTime;
+            TimeRemainingChanged.Raise(this, EventArgs.Empty);
 
-        public void Update(GameTime gameTime)
-        {
-            if (TimerState == TimerState.Stopped || TimerState == TimerState.Paused || TimerState == TimerState.Completed)
-                return;
-
-            CurrentTick += gameTime.ElapsedGameTime;
-
-            if (CurrentTick < Interval)
+            if (CurrentTime >= Interval)
             {
-                Tick.Raise(this, EventArgs.Empty);
-            }
-            else
-            {
-                TimerState = TimerState.Completed;
-                CurrentTick = Interval;
+                State = TimerState.Completed;
+                CurrentTime = Interval;
+                TimeRemaining = TimeSpan.Zero;
                 Completed.Raise(this, EventArgs.Empty);
             }
         }
