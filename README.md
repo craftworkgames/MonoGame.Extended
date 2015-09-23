@@ -11,6 +11,9 @@ MonoGame.Extended is an open source extension library for [MonoGame](http://www.
 
 MonoGame.Extended is a work in progress. New classes are being added almost every day and I'm blogging about them on [dylanwilson.net](http://dylanwilson.net/). We have a very early [alpha Nuget package](https://www.nuget.org/packages/MonoGame.Extended/) released but keep in mind the API is likely to change as the project grows.
 
+## Usage
+
+MonoGame.Extended is designed to build on top of MonoGame, but may work with XNA/FNA (for now this is not confirmed, but it would most likely require a custom build). Samples and examples of uses for each feature can be found in the [Samples.Extended](https://github.com/craftworkgames/Samples.Extended) repository; we try to keep these up to date with the current feature list.
 
 ## How to install
 
