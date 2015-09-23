@@ -36,8 +36,6 @@ namespace Sandbox
         private float _cameraRotation;
         private Sprite _zombieSprite;
         private SpriteAnimator _zombieAnimator;
-        private ContinuousClock _continuousClock;
-        private CountdownTimer _countdownTimer;
 
         public SandboxGame()
         {
@@ -63,12 +61,6 @@ namespace Sandbox
 
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += (s, e) => _viewportAdapter.OnClientSizeChanged();
-
-            _continuousClock = new ContinuousClock(1.0);
-            _continuousClock.Tick += (sender, args) => _camera.ZoomIn(0.1f);
-
-            _countdownTimer = new CountdownTimer(1.5);
-            _countdownTimer.Completed += (sender, args) => _camera.ZoomOut(2.0f);
 
             SetUpInput();
 
@@ -96,9 +88,9 @@ namespace Sandbox
             {
                 Position = new Vector2(300, 900),
                 OriginNormalized = new Vector2(0.5f, 1.0f),
-                Scale = new Vector2(0.5f)
+                Scale = new Vector2(1.0f)
             };
-            _zombieAnimator = new SpriteAnimator(_zombieSprite, zombieSheet, 7);
+            _zombieAnimator = new SpriteAnimator(_zombieSprite, zombieSheet, 8);
         }
 
         protected override void UnloadContent()
@@ -108,9 +100,6 @@ namespace Sandbox
         protected override void Update(GameTime gameTime)
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            _continuousClock.Update(gameTime);
-            _countdownTimer.Update(gameTime);
 
             if (Keyboard.GetState().IsKeyDown(Keys.R))
                 _camera.ZoomIn(deltaSeconds);
@@ -149,10 +138,6 @@ namespace Sandbox
             _spriteBatch.Begin();
             _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", _fpsCounter.AverageFramesPerSecond, _camera.Zoom), 
                 new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));
-            _spriteBatch.DrawString(_bitmapFont, string.Format("CC: {0}", _continuousClock.CurrentTime), 
-                new Vector2(5, 25), new Color(0.5f, 0.5f, 0.5f));
-            _spriteBatch.DrawString(_bitmapFont, string.Format("TR: {0}", _countdownTimer.TimeRemaining),
-                new Vector2(5, 45), new Color(0.5f, 0.5f, 0.5f));
             _spriteBatch.End();
             
             base.Draw(gameTime);
@@ -245,7 +230,7 @@ namespace Sandbox
             //    }
             //};
 
-            mouseListener.MouseDown += (sender, args) => _countdownTimer.Restart();
+            mouseListener.MouseDown += (sender, args) => Trace.WriteLine("MouseDown");
             mouseListener.MouseUp += (sender, args) => Trace.WriteLine("MouseUp");
             mouseListener.MouseClicked += (sender, args) => Trace.WriteLine("MouseClicked");
             mouseListener.MouseDoubleClicked += (sender, args) => Trace.WriteLine("MouseDoubleClicked");
