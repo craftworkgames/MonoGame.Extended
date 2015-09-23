@@ -25,6 +25,7 @@ namespace MonoGame.Extended.InputListeners
         private GameTime _gameTime;
         private MouseEventArgs _previousClickArgs;
         private MouseEventArgs _mouseDownArgs;
+        private bool _hasDoubleClicked;
 
         public event EventHandler<MouseEventArgs> MouseDown;
         public event EventHandler<MouseEventArgs> MouseUp;
@@ -40,8 +41,23 @@ namespace MonoGame.Extended.InputListeners
                 getButtonState(_previousState) == ButtonState.Released)
             {
                 var args = new MouseEventArgs(_gameTime.TotalGameTime, _previousState, _currentState, button);
+
                 MouseDown.Raise(this, args);
                 _mouseDownArgs = args;
+
+                if (_previousClickArgs != null)
+                {
+                    // If the last click was recent
+                    var clickMilliseconds = (args.Time - _previousClickArgs.Time).TotalMilliseconds;
+
+                    if (clickMilliseconds <= DoubleClickMilliseconds)
+                    {
+                        MouseDoubleClicked.Raise(this, args);
+                        _hasDoubleClicked = true;
+                    }
+
+                    _previousClickArgs = null;
+                }
             }
         }
 
@@ -59,23 +75,7 @@ namespace MonoGame.Extended.InputListeners
                     // If the mouse hasn't moved much between mouse down and mouse up
                     if (clickMovement < DragThreshold)
                     {
-                        var hasDoubleClicked = false;
-
-                        if (_previousClickArgs != null)
-                        {
-                            // If the last click was recent
-                            var clickMilliseconds = (args.Time - _previousClickArgs.Time).TotalMilliseconds;
-                            
-                            if (clickMilliseconds <= DoubleClickMilliseconds)
-                            {
-                                MouseDoubleClicked.Raise(this, args);
-                                hasDoubleClicked = true;
-                            }
-
-                            _previousClickArgs = null;
-                        }
-
-                        if(!hasDoubleClicked)
+                        if(!_hasDoubleClicked)
                             MouseClicked.Raise(this, args);
                     }
                     else // If the mouse has moved between mouse down and mouse up
@@ -86,6 +86,7 @@ namespace MonoGame.Extended.InputListeners
 
                 MouseUp.Raise(this, args);
 
+                _hasDoubleClicked = false;
                 _previousClickArgs = args;
             }
         }
