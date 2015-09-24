@@ -70,7 +70,7 @@ namespace Sandbox
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _bitmapFont = Content.Load<BitmapFont>("courier-new-32");
+            _bitmapFont = Content.Load<BitmapFont>("Fonts/courier-new-32");
             _tiledMap = Content.Load<TiledMap>("level01");
 
             var fireballTexture = Content.Load<Texture2D>("fireball");

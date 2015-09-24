@@ -51,14 +51,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\courier-new-32.fnt" />
     <None Include="Content\desert.tmx" />
+    <None Include="Content\Fonts\courier-new-32.fnt" />
     <None Include="Content\free-tileset.json" />
     <None Include="Content\free-tileset.tps" />
     <None Include="Content\level01.tmx" />
     <None Include="Content\read-me.md" />
-    <Content Include="Content\courier-new-32_0.png" />
     <Content Include="Content\fireball.png" />
+    <Content Include="Content\Fonts\courier-new-32_0.png" />
     <Content Include="Content\free-tileset.png" />
     <Content Include="Content\hills.png" />
     <Content Include="Content\Hills_1.png" />

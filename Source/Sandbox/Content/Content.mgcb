@@ -6,7 +6,6 @@
 /platform:Windows
 /config:
 /profile:Reach
-/compress:False
 
 #-------------------------------- References --------------------------------#
 
@@ -25,23 +24,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:hills.png
-
-#begin courier-new-32.fnt
-/importer:BitmapFontImporter
-/processor:BitmapFontProcessor
-/build:courier-new-32.fnt
-
-#begin courier-new-32_0.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:courier-new-32_0.png
 
 #begin desert.tmx
 /copy:desert.tmx
@@ -157,4 +139,21 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:zombie.png
+
+#begin Fonts/courier-new-32.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:Fonts/courier-new-32.fnt
+
+#begin Fonts/courier-new-32_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Fonts/courier-new-32_0.png
 

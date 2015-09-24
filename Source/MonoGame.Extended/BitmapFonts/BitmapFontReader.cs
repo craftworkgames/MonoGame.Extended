@@ -10,6 +10,7 @@ namespace MonoGame.Extended.BitmapFonts
     {
         protected override BitmapFont Read(ContentReader reader, BitmapFont existingInstance)
         {
+            var relativeAssetFolder = GetRelativeAssetFolder(reader.AssetName);
             var textureAssetCount = reader.ReadInt32();
             var assets = new List<string>();
 
@@ -20,7 +21,7 @@ namespace MonoGame.Extended.BitmapFonts
             }
 
             var textures = assets
-                .Select(i => reader.ContentManager.Load<Texture2D>(i))
+                .Select(assetName => reader.ContentManager.Load<Texture2D>(relativeAssetFolder + assetName))
                 .ToArray();
 
             var lineHeight = reader.ReadInt32();
@@ -43,6 +44,16 @@ namespace MonoGame.Extended.BitmapFonts
             }
             
             return new BitmapFont(regions, lineHeight);
+        }
+
+        private string GetRelativeAssetFolder(string assetPath)
+        {
+            var pathNodes = assetPath.Split(new[] {'\\', '/'});
+
+            if (pathNodes.Length > 1)
+                return string.Join("/", pathNodes.Take(pathNodes.Length - 1).ToArray()) + "/";
+
+            return string.Empty;
         }
     }
 }
