@@ -217,7 +217,7 @@ namespace Sandbox
             // zoom
             mouseListener.MouseWheelMoved += (sender, args) =>
             {
-                _camera.Zoom += args.ScrollWheelDelta * 0.001f;
+                _camera.ZoomIn(args.ScrollWheelDelta * 0.001f);
             };
 
             //// look at

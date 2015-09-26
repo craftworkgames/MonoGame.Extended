@@ -32,14 +32,14 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly GraphicsDevice _graphicsDevice;
         private readonly List<TiledLayer> _layers;
         
-        public int Width { get; }
-        public int Height { get; }
-        public int TileWidth { get; }
-        public int TileHeight { get; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+        public int TileWidth { get; private set; }
+        public int TileHeight { get; private set; }
         public Color? BackgroundColor { get; set; }
         public TiledRenderOrder RenderOrder { get; set; }
         public TiledProperties Properties { get; private set; }
-        public TiledMapOrientation Orientation { get; }
+        public TiledMapOrientation Orientation { get; private set; }
 
         public IEnumerable<TiledLayer> Layers
         {
@@ -58,7 +58,8 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public int WidthInPixels
         {
-            get { return Width * TileWidth - Width; }       // annoyingly we have to compensate 1 pixel per tile, seems to be a bug in MonoGame?
+            // annoyingly we have to compensate 1 pixel per tile, seems to be a bug in MonoGame?
+            get { return Width * TileWidth - Width; }       
         }
 
         public int HeightInPixels

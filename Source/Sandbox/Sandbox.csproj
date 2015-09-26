@@ -55,6 +55,7 @@
     <None Include="Content\Fonts\courier-new-32.fnt" />
     <None Include="Content\free-tileset.json" />
     <None Include="Content\free-tileset.tps" />
+    <None Include="Content\isometric.tmx" />
     <None Include="Content\level01.tmx" />
     <None Include="Content\read-me.md" />
     <Content Include="Content\fireball.png" />
@@ -67,6 +68,7 @@
     <Content Include="Content\Hills_4.png" />
     <Content Include="Content\Hills_Couds.png" />
     <Content Include="Content\Hills_Sky.png" />
+    <Content Include="Content\isometric_tileset.png" />
     <Content Include="Content\shadedDark42.png" />
     <Content Include="Content\stump.png" />
     <Content Include="Content\test-tileset.png" />

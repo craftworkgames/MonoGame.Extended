@@ -54,9 +54,8 @@ namespace MonoGame.Extended.Maps.Tiled
             {
                 var region = _map.GetTileRegion(tile.Id);
 
-                if(region == null) continue;
-
-                RenderLayer(_map, tile, region);
+                if(region != null)
+                    RenderLayer(_map, tile, region);
             }
 
             _spriteBatch.End();
