@@ -73,7 +73,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             Assert.AreEqual("1", tileLayer1.Properties[0].Value);
 
             Assert.AreEqual("customlayerprop2", tileLayer1.Properties[1].Name);
-            Assert.AreEqual("2", tileLayer1.Properties[1].Value);}
+            Assert.AreEqual("2", tileLayer1.Properties[1].Value);
+        }
 
         [Test]
         public void TiledMapImporter_Xml_Test()
