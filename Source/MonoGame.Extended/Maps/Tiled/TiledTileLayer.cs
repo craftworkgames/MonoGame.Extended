@@ -91,33 +91,16 @@ namespace MonoGame.Extended.Maps.Tiled
 
         private void RenderIsometric(TiledTile tile, TextureRegion2D region)
         {
-            //drawPos.X = ((mapObject.Bounds.X) - (Camera.Position.X)) * Camera.Zoom;
-            //drawPos.Y = ((mapObject.Bounds.Y) - (Camera.Position.Y)) * Camera.Zoom;
+            var tx = (tile.X*(_map.TileWidth / 2)) - (tile.Y*(_map.TileWidth / 2)) 
+                //Center
+                + (_map.Width * (_map.TileWidth/2)) 
+                //Compensate Bug?
+                - (_map.TileWidth / 2);
+                
+            var ty = (tile.Y*(_map.TileHeight/2)) + (tile.X*(_map.TileHeight/2)) 
+                //Compensate Bug?
+                - (_map.TileWidth + _map.TileHeight);
 
-            ////Currently changing position and rotation when just rotating
-            //float rotation = 0;//MathHelper.ToRadians(mapObject.Rotation); 
-            //Texture2D texture = tileSet.Texture;
-            //Rectangle source = tile.Source;
-            //Color renderColor = mapObjectLayer.OpacityColor;
-            //Vector2 origin = tile.Origin;
-            //var effect = SpriteEffects.None;
-            //SpriteBatch.Draw(texture, drawPos, source, renderColor, rotation, origin, Camera.Zoom,
-            //    effect, 1.0f);
-
-            //nPos.X = ((tile.Bounds.X + tileSet.TileOffsetX + (map.TileWidth / 2)) - (Camera.Position.X)) * Camera.Zoom;
-            //nPos.Y = ((tile.Bounds.Y + tileSet.TileOffsetY + (map.TileHeight / 2)) - (Camera.Position.Y)) * Camera.Zoom;
-
-            //var tx = (tile.X + (_map.TileWidth/2));
-            //var ty = (tile.Y + (_map.TileHeight/2));
-
-            var tx = (tile.X*(_map.TileWidth/2)) - (tile.Y*(_map.TileWidth/2));
-            var ty = (tile.Y*(_map.TileHeight/2)) + (tile.X*(_map.TileHeight/2));
-
-            //var result = new Vector2
-            //{
-            //    X = (mapPosition.X * (map.TileWidth / 2)) - (mapPosition.Y * (map.TileWidth / 2)),
-            //    Y = (mapPosition.Y * (map.TileHeight / 2)) + (mapPosition.X * (map.TileHeight / 2)) - (map.TileHeight / 2)
-            //};
             _spriteBatch.Draw(region, new Rectangle(tx, ty, region.Width, region.Height), Color.White);
         }
 

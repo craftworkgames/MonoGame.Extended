@@ -8,6 +8,9 @@
    </properties>
   </tile>
  </tileset>
+ <imagelayer name="Background">
+  <image source="hills.png"/>
+ </imagelayer>
  <layer name="Ground" width="40" height="40">
   <data encoding="csv">
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,

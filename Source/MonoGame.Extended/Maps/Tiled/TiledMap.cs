@@ -9,7 +9,12 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledMap
     {
-        public TiledMap(GraphicsDevice graphicsDevice, int width, int height, int tileWidth, int tileHeight, TiledMapOrientation orientation)
+        public TiledMap(GraphicsDevice graphicsDevice, 
+            int width, 
+            int height, 
+            int tileWidth, 
+            int tileHeight, 
+            TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
         {
             Width = width;
             Height = height;
