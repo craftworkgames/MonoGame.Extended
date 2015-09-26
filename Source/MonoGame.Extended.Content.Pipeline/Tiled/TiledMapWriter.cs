@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Microsoft.Xna.Framework;
@@ -20,6 +21,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             writer.Write(map.Height);
             writer.Write(map.TileWidth);
             writer.Write(map.TileHeight);
+            writer.Write(Convert.ToInt32(map.Orientation));
             WriteCustomProperties(writer, map.Properties);
 
             writer.Write(map.Tilesets.Count);

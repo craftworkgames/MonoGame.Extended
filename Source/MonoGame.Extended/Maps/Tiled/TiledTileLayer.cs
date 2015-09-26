@@ -54,22 +54,59 @@ namespace MonoGame.Extended.Maps.Tiled
             {
                 var region = _map.GetTileRegion(tile.Id);
 
-                if (region != null)
-                {
-                    // not exactly sure why we need to compensate 1 pixel here. Could be a bug in MonoGame?
-                    var tx = tile.X * (_map.TileWidth - 1);
-                    var ty = tile.Y * (_map.TileHeight - 1);
-                        
-                    _spriteBatch.Draw(region, new Rectangle(tx, ty, region.Width, region.Height), Color.White);
-                }
+                if(region == null) continue;
+
+                RenderLayer(_map, tile, region);
             }
 
             _spriteBatch.End();
         }
-        
+
+        private void RenderLayer(TiledMap map, TiledTile tile, TextureRegion2D region)
+        {
+            switch (map.Orientation)
+            {
+                case TiledMapOrientation.Orthogonal:
+                    RenderOrthogonal(tile,region);
+                    break;
+                case TiledMapOrientation.Isometric:
+                    RenderIsometric(tile, region);
+                    break;
+                case TiledMapOrientation.Staggered:
+                    throw new NotImplementedException("Staggered maps are currently not supported");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void RenderOrthogonal(TiledTile tile, TextureRegion2D region)
+        {
+            // not exactly sure why we need to compensate 1 pixel here. Could be a bug in MonoGame?
+            var tx = tile.X*(_map.TileWidth - 1);
+            var ty = tile.Y*(_map.TileHeight - 1);
+
+            _spriteBatch.Draw(region, new Rectangle(tx, ty, region.Width, region.Height), Color.White);
+        }
+
+        private void RenderIsometric(TiledTile tile, TextureRegion2D region)
+        {
+            var tx = (tile.X*(_map.TileWidth / 2)) - (tile.Y*(_map.TileWidth / 2)) 
+                //Center
+                + (_map.Width * (_map.TileWidth/2)) 
+                //Compensate Bug?
+                - (_map.TileWidth / 2);
+                
+            var ty = (tile.Y*(_map.TileHeight/2)) + (tile.X*(_map.TileHeight/2)) 
+                //Compensate Bug?
+                - (_map.TileWidth + _map.TileHeight);
+
+            _spriteBatch.Draw(region, new Rectangle(tx, ty, region.Width, region.Height), Color.White);
+        }
+
         public TiledTile GetTile(int x, int y)
         {
-            return _tiles[x + y * Width];
+            return _tiles[x + y*Width];
         }
 
         private Func<IEnumerable<TiledTile>> GetRenderOrderFunction()
@@ -115,7 +152,7 @@ namespace MonoGame.Extended.Maps.Tiled
                     yield return GetTile(x, y);
             }
         }
-        
+
         private IEnumerable<TiledTile> GetTilesLeftUp()
         {
             for (var y = Height - 1; y >= 0; y--)
