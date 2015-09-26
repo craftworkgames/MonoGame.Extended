@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledMap
     {
-        public TiledMap(GraphicsDevice graphicsDevice, int width, int height, int tileWidth, int tileHeight)
+        public TiledMap(GraphicsDevice graphicsDevice, int width, int height, int tileWidth, int tileHeight, TiledMapOrientation orientation)
         {
             Width = width;
             Height = height;
@@ -20,19 +20,21 @@ namespace MonoGame.Extended.Maps.Tiled
             _graphicsDevice = graphicsDevice;
             _layers = new List<TiledLayer>();
             _tilesets = new List<TiledTileset>();
+            Orientation = orientation;
         }
         
         private readonly List<TiledTileset> _tilesets;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly List<TiledLayer> _layers;
         
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-        public int TileWidth { get; private set; }
-        public int TileHeight { get; private set; }
+        public int Width { get; }
+        public int Height { get; }
+        public int TileWidth { get; }
+        public int TileHeight { get; }
         public Color? BackgroundColor { get; set; }
         public TiledRenderOrder RenderOrder { get; set; }
         public TiledProperties Properties { get; private set; }
+        public TiledMapOrientation Orientation { get; }
 
         public IEnumerable<TiledLayer> Layers
         {

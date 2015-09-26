@@ -16,7 +16,8 @@ namespace MonoGame.Extended.Maps.Tiled
                 width: reader.ReadInt32(),
                 height: reader.ReadInt32(),
                 tileWidth: reader.ReadInt32(),
-                tileHeight: reader.ReadInt32())
+                tileHeight: reader.ReadInt32(),
+                orientation: (TiledMapOrientation)reader.ReadInt32())
             {
                 BackgroundColor = backgroundColor,
                 RenderOrder = renderOrder

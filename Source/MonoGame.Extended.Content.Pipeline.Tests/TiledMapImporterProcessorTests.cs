@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.Content.Pipeline.Tiled;
+using MonoGame.Extended.Maps.Tiled;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -28,6 +29,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             Assert.AreEqual("42", map.Properties[0].Value);
             Assert.AreEqual(1, map.Tilesets.Count);
             Assert.AreEqual(3, map.Layers.Count);
+            Assert.AreEqual(TmxOrientation.Orthogonal,map.Orientation);
 
             var tileset = map.Tilesets.First();
             Assert.AreEqual(1, tileset.FirstGid);
