@@ -15,6 +15,23 @@ MonoGame.Extended is a work in progress. New classes are being added almost ever
 
 MonoGame.Extended is designed to build on top of MonoGame, but may work with XNA/FNA (for now this is not confirmed, but it would most likely require a custom build). Samples and examples of uses for each feature can be found in the [Samples.Extended](https://github.com/craftworkgames/Samples.Extended) repository; we try to keep these up to date with the current feature list.
 
+## Features
+
+**Features up to v0.2:** (More informatino can be found at [the v0.2 release notes](http://dylanwilson.net/monogame-extended-v0-3-release-notes))
+- **Tile based maps** using [Tiled](http://www.mapeditor.org/) (orthogonal only in v0.3, isometric in master)
+- **Bitmap fonts** using [BMFont](http://www.angelcode.com/products/bmfont/)
+- **[Sprites](http://dylanwilson.net/sprites-and-spritebatch-extensions-in-monogame-extended)** (with SpriteBatch extensions!)
+- **Input listeners** for event driven input handling (Keyboard, Mouse, Touch)
+- **Texture Atlases** using the JSON format in [TexturePacker](https://www.codeandweb.com/texturepacker)
+- **2D Camera** with pan, zoom, and rotation
+- **Viewport Adapters** for resolution independent rendering
+
+**Added in v0.3:** (More information can be found in [the v0.3 release notes](http://dylanwilson.net/monogame-extended-v0-3-release-notes))
+- **Sprite Animators** using texture atlases
+- **Timers** including a continuous clock and a countdown timer w/ event integration
+- **FPS Counter** that is handy for debugging
+- **Circle** primative to complement Monogame's Rectangle
+
 ## How to install
 
 See the [How to install MonoGame.Extended](http://dylanwilson.net/how-to-install-monogame-extended) blog post. Here's the TL;DR version:
