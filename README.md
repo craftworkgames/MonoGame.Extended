@@ -29,7 +29,8 @@ MonoGame.Extended is designed to build on top of MonoGame, but may work with XNA
 **Added in v0.3:** (More information can be found in [the v0.3 release notes](http://dylanwilson.net/monogame-extended-v0-3-release-notes))
 - **Sprite Animators** using texture atlases
 - **Timers** including a continuous clock and a countdown timer w/ event integration
-- **FPS Counter** handy for debugging
+- **FPS Counter** that is handy for debugging
+- **Circle** primative to complement Monogame's Rectangle
 
 ## How to install
 
