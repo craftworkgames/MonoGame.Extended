@@ -17,7 +17,7 @@ MonoGame.Extended is designed to build on top of MonoGame, but may work with XNA
 
 ## Features
 
-**Features up to v0.2:** (More informatino can be found at [the v0.2 release notes](http://dylanwilson.net/monogame-extended-v0-3-release-notes))
+**Features up to v0.2:** (More information can be found at [the v0.2 release notes](http://dylanwilson.net/monogame-extended-v0-3-release-notes))
 - **Tile based maps** using [Tiled](http://www.mapeditor.org/) (orthogonal only in v0.3, isometric in master)
 - **Bitmap fonts** using [BMFont](http://www.angelcode.com/products/bmfont/)
 - **[Sprites](http://dylanwilson.net/sprites-and-spritebatch-extensions-in-monogame-extended)** (with SpriteBatch extensions!)
