@@ -45,10 +45,7 @@ namespace MonoGame.Extended.Sprites
         private float _framesPerSecond;
         public float FramesPerSecond
         { 
-            get
-            {
-                return _framesPerSecond;
-            }
+            get { return _framesPerSecond; }
             set
             {
                 if (_framesPerSecond < 0)

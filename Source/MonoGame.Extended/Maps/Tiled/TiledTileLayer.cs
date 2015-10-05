@@ -73,7 +73,6 @@ namespace MonoGame.Extended.Maps.Tiled
                     break;
                 case TiledMapOrientation.Staggered:
                     throw new NotImplementedException("Staggered maps are currently not supported");
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
