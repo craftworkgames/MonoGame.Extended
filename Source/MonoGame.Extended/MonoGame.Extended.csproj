@@ -59,6 +59,7 @@
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
     <Compile Include="Shapes\Circle.cs" />
     <Compile Include="Sprites\SpriteExtensions.cs" />
+    <Compile Include="Sprites\SpriteSheetAnimator.cs" />
     <Compile Include="TextureAtlases\TextureAtlas.cs" />
     <Compile Include="TextureAtlases\TextureAtlasReader.cs" />
     <Compile Include="TextureAtlases\TextureRegion2DExtensions.cs" />

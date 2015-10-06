@@ -25,10 +25,7 @@ namespace Sandbox
         private BitmapFont _bitmapFont;
         private TiledMap _tiledMap;
         private FramesPerSecondCounter _fpsCounter;
-        private InputListenerManager _inputManager;
         private SpriteAnimator _spriteAnimator;
-        private Vector2 _cameraDirection = Vector2.Zero;
-        private float _cameraRotation;
         private Zombie _zombie;
 
         public SandboxGame()
@@ -55,8 +52,6 @@ namespace Sandbox
 
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += (s, e) => _viewportAdapter.OnClientSizeChanged();
-
-            SetUpInput();
 
             base.Initialize();
         }
@@ -91,17 +86,26 @@ namespace Sandbox
         protected override void Update(GameTime gameTime)
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            var keyboardState = Keyboard.GetState();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.R))
+            if (keyboardState.IsKeyDown(Keys.R))
                 _camera.ZoomIn(deltaSeconds);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.F))
+            if (keyboardState.IsKeyDown(Keys.F))
                 _camera.ZoomOut(deltaSeconds);
 
-            _inputManager.Update(gameTime);
+            if (keyboardState.IsKeyDown(Keys.Left))
+                _zombie.Walk(-1.0f);
 
-            _camera.Move(_cameraDirection * deltaSeconds);
-            _camera.Rotation += _cameraRotation * deltaSeconds;
+            if (keyboardState.IsKeyDown(Keys.Right))
+                _zombie.Walk(1.0f);
+
+            if (keyboardState.IsKeyDown(Keys.Space))
+                _zombie.Attack();
+
+            if (keyboardState.IsKeyDown(Keys.Enter))
+                _zombie.Die();
+
             _sprite.Position += new Vector2(-500, 0) * deltaSeconds;
 
             _spriteAnimator.Update(gameTime);
@@ -132,101 +136,6 @@ namespace Sandbox
             _spriteBatch.End();
             
             base.Draw(gameTime);
-        }
-
-        private void SetUpInput()
-        {
-            _inputManager = new InputListenerManager();
-
-            var up = new Vector2(0, -250);
-            var right = new Vector2(250, 0);
-
-            //camera movement
-            var keyboardListener = _inputManager.AddListener<KeyboardListener>();
-            var mouseListener = _inputManager.AddListener<MouseListener>();
-
-            keyboardListener.KeyPressed += (sender, args) =>
-            {
-                switch (args.Key)
-                {
-                    case Keys.Escape:
-                        Exit();
-                        break;
-
-                    case Keys.Q:                        
-                        _cameraRotation += 1;
-                        break;
-                    case Keys.W:
-                        _cameraRotation -= 1;
-                        break;
-
-                    case Keys.Up:
-                        _cameraDirection += up;
-                        break;
-                    case Keys.Down:
-                        _cameraDirection += -up;
-                        break;
-                    case Keys.Left:
-                        _cameraDirection += -right;
-                        break;
-                    case Keys.Right:
-                        _cameraDirection += right;
-                        break;
-                }
-            };
-
-            keyboardListener.KeyReleased += (sender, args) =>
-            {
-                switch (args.Key)
-                {
-                    case Keys.Escape:
-                        Exit();
-                        break;
-                        
-                    case Keys.Q:
-                        _cameraRotation -= 1;
-                        break;
-                    case Keys.W:
-                        _cameraRotation += 1;
-                        break;
-
-                    case Keys.Up:
-                        _cameraDirection -= up;
-                        break;
-                    case Keys.Down:
-                        _cameraDirection -= -up;
-                        break;
-                    case Keys.Left:
-                        _cameraDirection -= -right;
-                        break;
-                    case Keys.Right:                       
-                        _cameraDirection -= right;
-                        break;
-                }
-            };
-
-            // zoom
-            mouseListener.MouseWheelMoved += (sender, args) =>
-            {
-                _camera.ZoomIn(args.ScrollWheelDelta * 0.001f);
-            };
-
-            //// look at
-            //mouseListener.MouseUp += (sender, args) =>
-            //{
-            //    if (args.Button == MouseButton.Left)
-            //    {
-            //        var p = _viewportAdapter.PointToScreen(args.Position);
-            //        Trace.WriteLine(string.Format("{0} => {1}", args.Position, p));
-            //    }
-            //};
-
-            mouseListener.MouseDown += (sender, args) => Trace.WriteLine("MouseDown");
-            mouseListener.MouseUp += (sender, args) => Trace.WriteLine("MouseUp");
-            mouseListener.MouseClicked += (sender, args) => Trace.WriteLine("MouseClicked");
-            mouseListener.MouseDoubleClicked += (sender, args) => Trace.WriteLine("MouseDoubleClicked");
-            mouseListener.MouseWheelMoved += (sender, args) => Trace.WriteLine(string.Format("MouseWheelMoved {0}", args.ScrollWheelValue));
-            mouseListener.MouseDragged += (sender, args) => Trace.WriteLine("MouseDragged");
         }
     }
 }

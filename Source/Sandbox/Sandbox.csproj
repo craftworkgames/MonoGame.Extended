@@ -39,8 +39,6 @@
     <Compile Include="SandboxGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpriteSheetAnimation.cs" />
-    <Compile Include="SpriteSheetAnimator.cs" />
     <Compile Include="Zombie.cs" />
   </ItemGroup>
   <ItemGroup>

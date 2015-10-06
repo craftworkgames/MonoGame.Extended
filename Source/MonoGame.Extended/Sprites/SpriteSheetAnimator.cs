@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Sprites;
@@ -24,6 +25,7 @@ namespace Sandbox
         private SpriteSheetAnimation _currentAnimation;
         private float _nextFrameDelay;
         private int _frameIndex;
+        private Action _onCompleteAction;
 
         public bool IsPlaying { get; private set; }
         public bool IsLooping { get; set; }
@@ -49,10 +51,14 @@ namespace Sandbox
             _animations.Remove(name);
         }
 
-        public void PlayAnimation(string name)
+        public void PlayAnimation(string name, Action onCompleteAction = null)
         {
+            if(_currentAnimation != null && _currentAnimation.Name == name)
+                return;
+            
             _currentAnimation = _animations[name];
             _frameIndex = 0;
+            _onCompleteAction = onCompleteAction;
         }
 
         public void Update(GameTime gameTime)
@@ -73,6 +79,11 @@ namespace Sandbox
                         _frameIndex = 0;
                     else
                         IsPlaying = false;
+
+                    var onCompleteAction = _onCompleteAction;
+
+                    if (onCompleteAction != null)
+                        onCompleteAction();
                 }
 
                 var atlasIndex = _currentAnimation.FrameIndicies[_frameIndex];
@@ -80,6 +91,20 @@ namespace Sandbox
             }
 
             _nextFrameDelay -= deltaSeconds;
+        }
+
+        private class SpriteSheetAnimation
+        {
+            public SpriteSheetAnimation(string name, int framesPerSecond, int[] frameIndicies)
+            {
+                Name = name;
+                FramesPerSecond = framesPerSecond;
+                FrameIndicies = frameIndicies;
+            }
+
+            public string Name { get; private set; }
+            public int FramesPerSecond { get; private set; }
+            public int[] FrameIndicies { get; private set; }
         }
     }
 }
