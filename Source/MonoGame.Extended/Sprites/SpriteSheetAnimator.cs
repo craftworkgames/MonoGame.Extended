@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
-namespace Sandbox
+namespace MonoGame.Extended.Sprites
 {
     public class SpriteSheetAnimator
     {

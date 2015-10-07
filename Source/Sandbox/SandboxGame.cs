@@ -65,7 +65,7 @@ namespace Sandbox
             var fireballTexture = Content.Load<Texture2D>("fireball");
             var spriteSheetAtlas = TextureAtlas.Create(fireballTexture, 512, 197);
 
-            _sprite = new Sprite(spriteSheetAtlas.First())
+            _sprite = new Sprite(spriteSheetAtlas[0])
             {
                 Position = new Vector2(850, 200),
                 Scale = new Vector2(0.5f)
@@ -107,9 +107,11 @@ namespace Sandbox
                 _zombie.Die();
 
             _sprite.Position += new Vector2(-500, 0) * deltaSeconds;
-
+            
             _spriteAnimator.Update(gameTime);
             _zombie.Update(gameTime);
+
+            _camera.LookAt(_zombie.Position);
 
             if (_sprite.Position.X < 0 - _sprite.GetBoundingRectangle().Width)
                 _sprite.Position = new Vector2(1900, _sprite.Position.Y);
