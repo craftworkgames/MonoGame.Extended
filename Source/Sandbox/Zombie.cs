@@ -1,12 +1,12 @@
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
 namespace Sandbox
 {
-    public class Zombie
+    public class Zombie : IUpdate
     {
         public Zombie(TextureAtlas textureAtlas)
         {

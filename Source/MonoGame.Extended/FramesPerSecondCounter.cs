@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
-    public class FramesPerSecondCounter
+    public class FramesPerSecondCounter : IUpdate
     {
         public FramesPerSecondCounter(int maximumSamples = 100)
         {

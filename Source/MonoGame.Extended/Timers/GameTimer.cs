@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Timers
 {
-    public abstract class GameTimer
+    public abstract class GameTimer : IUpdate
     {
         protected GameTimer(double intervalSeconds)
             : this(TimeSpan.FromSeconds(intervalSeconds))

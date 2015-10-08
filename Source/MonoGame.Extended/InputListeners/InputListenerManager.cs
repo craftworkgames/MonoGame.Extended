@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.InputListeners
 {
-    public class InputListenerManager
+    public class InputListenerManager : IUpdate
     {
         public InputListenerManager()
         {

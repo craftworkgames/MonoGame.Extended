@@ -5,7 +5,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
 {
-    public class SpriteSheetAnimator
+    public class SpriteSheetAnimator : IUpdate
     {
         public SpriteSheetAnimator(Sprite sprite, TextureAtlas textureAtlas)
         {
