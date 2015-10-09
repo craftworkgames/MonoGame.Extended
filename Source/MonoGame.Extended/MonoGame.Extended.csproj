@@ -42,6 +42,7 @@
     <Compile Include="Camera2D.cs" />
     <Compile Include="EventHandlerExtensions.cs" />
     <Compile Include="IDraw.cs" />
+    <Compile Include="IMovable.cs" />
     <Compile Include="InputListeners\InputListenerSettings.cs" />
     <Compile Include="InputListeners\KeyboardEventArgs.cs" />
     <Compile Include="InputListeners\KeyboardListenerSettings.cs" />
@@ -56,6 +57,8 @@
     <Compile Include="InputListeners\TouchListener.cs" />
     <Compile Include="InputListeners\InputListenerManager.cs" />
     <Compile Include="InputListeners\TouchListenerSettings.cs" />
+    <Compile Include="IRotatable.cs" />
+    <Compile Include="IScalable.cs" />
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
     <Compile Include="Shapes\Circle.cs" />
