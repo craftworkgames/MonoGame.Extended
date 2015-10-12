@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -24,6 +25,7 @@ namespace Sandbox
         private FramesPerSecondCounter _fpsCounter;
         private SpriteAnimator _spriteAnimator;
         private Zombie _zombie;
+        private CollisionGrid _collisionGrid;
 
         public SandboxGame()
         {
@@ -58,6 +60,12 @@ namespace Sandbox
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _bitmapFont = Content.Load<BitmapFont>("Fonts/courier-new-32");
             _tiledMap = Content.Load<TiledMap>("level01");
+            var collisionData = _tiledMap
+                .GetLayer<TiledTileLayer>("Tile Layer 1")
+                .Tiles
+                .Select(t => (byte) t.Id)
+                .ToArray();
+            _collisionGrid = new CollisionGrid(collisionData, _tiledMap.Width, _tiledMap.Height, _tiledMap.TileWidth, _tiledMap.TileHeight);
 
             var fireballTexture = Content.Load<Texture2D>("fireball");
             var spriteSheetAtlas = TextureAtlas.Create(fireballTexture, 512, 197);

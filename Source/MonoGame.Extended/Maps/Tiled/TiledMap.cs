@@ -93,6 +93,12 @@ namespace MonoGame.Extended.Maps.Tiled
             return _layers.FirstOrDefault(i => i.Name == name);
         }
 
+        public T GetLayer<T>(string name)
+            where T : TiledLayer
+        {
+            return (T) GetLayer(name);
+        }
+
         public void Draw(Camera2D camera, bool useMapBackgroundColor = false)
         {
             if(useMapBackgroundColor && BackgroundColor.HasValue)

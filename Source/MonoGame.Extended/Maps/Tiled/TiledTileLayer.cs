@@ -26,6 +26,11 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly TiledTile[] _tiles;
         private readonly SpriteBatch _spriteBatch;
 
+        public IEnumerable<TiledTile> Tiles
+        {
+            get { return _tiles; }
+        }
+
         private TiledTile[] CreateTiles(int[] data)
         {
             var tiles = new TiledTile[data.Length];
