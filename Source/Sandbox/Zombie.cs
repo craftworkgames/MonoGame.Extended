@@ -6,7 +6,17 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace Sandbox
 {
-    public class Zombie : IUpdate
+    public enum ZombieState
+    {
+        None,
+        Appearing,
+        Idle,
+        Walking,
+        Attacking,
+        Dying
+    }
+
+    public class Zombie : IUpdate, ICollidable
     {
         public Zombie(TextureAtlas textureAtlas)
         {
@@ -22,33 +32,68 @@ namespace Sandbox
             _animator.AddAnimation("attack", framesPerSecond: 8, firstFrameIndex: 29, lastFrameIndex: 35);
             _animator.AddAnimation("die", framesPerSecond: 8, firstFrameIndex: 11, lastFrameIndex: 18);
 
-            _animator.PlayAnimation("appear", ResumeIdle);
+            State = ZombieState.Appearing;
         }
 
         private float _direction = -1.0f;
-
-        private void ResumeIdle()
-        {
-            IsWalking = false;
-             _animator.PlayAnimation("idle");
-        }
-
         private readonly Sprite _sprite;
         private readonly SpriteSheetAnimator _animator;
 
-        public bool IsWalking { get; private set; }
+        private ZombieState _state;
+        public ZombieState State
+        {
+            get {  return _state;}
+            private set
+            {
+                if (_state != value)
+                {
+                    _state = value;
 
+                    switch (_state)
+                    {
+                        case ZombieState.Attacking:
+                            _animator.PlayAnimation("attack", () => State = ZombieState.Idle);
+                            break;
+                        case ZombieState.Dying:
+                            _animator.PlayAnimation("die", () => State = ZombieState.Appearing);
+                            break;
+                        case ZombieState.Idle:
+                            _animator.PlayAnimation("idle");
+                            break;
+                        case ZombieState.Appearing:
+                            _animator.PlayAnimation("appear", () => State = ZombieState.Idle);
+                            break;
+                        case ZombieState.Walking:
+                            _animator.PlayAnimation("walk", () => State = ZombieState.Idle);
+                            break;
+                    }
+                }
+            }
+        }
+
+        public bool IsReady
+        {
+            get { return State != ZombieState.Appearing && State != ZombieState.Dying; }
+        }
+
+        public Vector2 Velocity { get; set; }
+        
         public Vector2 Position
         {
             get { return _sprite.Position; }
             set { _sprite.Position = value; }
         }
 
+        public bool Contains(Vector2 position)
+        {
+            return _sprite.GetBoundingRectangle().Contains(position);
+        }
+
         public void Update(GameTime gameTime)
         {
             _animator.Update(gameTime);
 
-            if(IsWalking)
+            if(State == ZombieState.Walking)
                 Position += new Vector2(50f * _direction, 0) * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
@@ -61,20 +106,26 @@ namespace Sandbox
         {
             _sprite.Effect = _direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             _direction = direction;
-            IsWalking = true;
-            _animator.PlayAnimation("walk", ResumeIdle);
+
+            if (IsReady)
+                State = ZombieState.Walking;
         }
 
         public void Attack()
         {
-            IsWalking = false;
-            _animator.PlayAnimation("attack", ResumeIdle);
+            if(IsReady)
+                State = ZombieState.Attacking;
         }
 
         public void Die()
         {
-            IsWalking = false;
-            _animator.PlayAnimation("die", () => _animator.PlayAnimation("appear", ResumeIdle));
+            State = ZombieState.Dying;
+        }
+
+        public void Jump()
+        {
+            if (IsReady)
+                State = ZombieState.Attacking;
         }
     }
 }

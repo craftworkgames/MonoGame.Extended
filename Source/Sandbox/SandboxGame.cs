@@ -26,6 +26,7 @@ namespace Sandbox
         private SpriteAnimator _spriteAnimator;
         private Zombie _zombie;
         private CollisionGrid _collisionGrid;
+        private Point _mousePoint;
 
         public SandboxGame()
         {
@@ -80,7 +81,7 @@ namespace Sandbox
             var zombieSheet = Content.Load<TextureAtlas>("zombie-atlas");
             _zombie = new Zombie(zombieSheet)
             {
-                Position = new Vector2(300, 900)
+                Position = new Vector2(300, 500)
             };
         }
 
@@ -92,35 +93,57 @@ namespace Sandbox
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
+            var mouseState = Mouse.GetState();
 
+            _mousePoint = _camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y)).ToPoint();
+
+            // camera
             if (keyboardState.IsKeyDown(Keys.R))
                 _camera.ZoomIn(deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.F))
                 _camera.ZoomOut(deltaSeconds);
 
+            // zombie
             if (keyboardState.IsKeyDown(Keys.Left))
                 _zombie.Walk(-1.0f);
 
             if (keyboardState.IsKeyDown(Keys.Right))
                 _zombie.Walk(1.0f);
 
-            if (keyboardState.IsKeyDown(Keys.Space))
+            if (keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift))
                 _zombie.Attack();
 
+            if (keyboardState.IsKeyDown(Keys.Space))
+                _zombie.Jump();
+            
             if (keyboardState.IsKeyDown(Keys.Enter))
                 _zombie.Die();
 
-            _sprite.Position += new Vector2(-500, 0) * deltaSeconds;
-            
-            _spriteAnimator.Update(gameTime);
-            _zombie.Update(gameTime);
+            _zombie.Velocity += new Vector2(0, 10) * deltaSeconds;
+            _zombie.Position += _zombie.Velocity;
 
+            var collisions = _collisionGrid.CollidesWith(_zombie).ToArray();
+
+            if (collisions.Any())
+            {
+                foreach (var collisionInfo in collisions)
+                {
+                    _zombie.Position = collisionInfo.CollisionPoint;
+                    _zombie.Velocity = new Vector2(_zombie.Velocity.X, 0);
+                }
+            }
+
+            _zombie.Update(gameTime);
             _camera.LookAt(_zombie.Position);
+            
+            // fireball
+            _sprite.Position += new Vector2(-500, 0) * deltaSeconds;
+            _spriteAnimator.Update(gameTime);
 
             if (_sprite.Position.X < 0 - _sprite.GetBoundingRectangle().Width)
                 _sprite.Position = new Vector2(1900, _sprite.Position.Y);
-
+            
             base.Update(gameTime);
         }
 
@@ -137,9 +160,12 @@ namespace Sandbox
             _zombie.Draw(_spriteBatch);
             _spriteBatch.End();
 
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", _fpsCounter.AverageFramesPerSecond, _camera.Zoom), 
-                new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));
+            var x = _mousePoint.X / _collisionGrid.CellWidth;
+            var y = _mousePoint.Y / _collisionGrid.CellHeight;
+
+            _spriteBatch.Begin();            
+            _spriteBatch.DrawString(_bitmapFont, string.Format("CD: {0}, {1} = {2}", x, y, _collisionGrid.GetDataAtIndex(x, y)), new Vector2(5, 35), new Color(0.5f, 0.5f, 0.5f));
+            _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", _fpsCounter.AverageFramesPerSecond, _camera.Zoom), new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));
             _spriteBatch.End();
             
             base.Draw(gameTime);
