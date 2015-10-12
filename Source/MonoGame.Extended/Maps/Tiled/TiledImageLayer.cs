@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
-    public class TiledImageLayer : TiledLayer
+    public class TiledImageLayer : TiledLayer, IMovable
     {
         private readonly Texture2D _texture;
         private readonly SpriteBatch _spriteBatch;

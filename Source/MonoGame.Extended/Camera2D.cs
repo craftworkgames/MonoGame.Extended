@@ -5,7 +5,7 @@ using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended
 {
-    public class Camera2D
+    public class Camera2D : IMovable, IRotatable
     {
         private readonly ViewportAdapter _viewportAdapter;
 

@@ -6,7 +6,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
 {
-    public class Sprite
+    public class Sprite : IMovable, IRotatable, IScalable
     {
         public Sprite(TextureRegion2D textureRegion)
         {
