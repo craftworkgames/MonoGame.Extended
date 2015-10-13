@@ -120,20 +120,14 @@ namespace Sandbox
             if (keyboardState.IsKeyDown(Keys.Enter))
                 _zombie.Die();
 
-            _zombie.Velocity += new Vector2(0, 10) * deltaSeconds;
-            _zombie.Position += _zombie.Velocity;
+            _collisionGrid.CollidesWith(_zombie);
 
-            var collisions = _collisionGrid.CollidesWith(_zombie).ToArray();
+            _zombie.Velocity += new Vector2(0, 600) * deltaSeconds;
+            _zombie.Position += _zombie.Velocity * deltaSeconds;
 
-            if (collisions.Any())
-            {
-                foreach (var collisionInfo in collisions)
-                {
-                    _zombie.Position = collisionInfo.CollisionPoint;
-                    _zombie.Velocity = new Vector2(_zombie.Velocity.X, 0);
-                }
-            }
+            
 
+ 
             _zombie.Update(gameTime);
             _camera.LookAt(_zombie.Position);
             

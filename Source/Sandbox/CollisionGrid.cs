@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Shapes;
 
 namespace Sandbox
 {
@@ -8,7 +9,7 @@ namespace Sandbox
     {
         Vector2 Position { get; set; }
         Vector2 Velocity { get; set; }
-        bool Contains(Vector2 position);
+        Rectangle GetAxisAlignedBoundingBox();
     }
 
     public class CollisionGrid
@@ -34,7 +35,7 @@ namespace Sandbox
         {
             var index = x + y * Width;
 
-            if (index > _data.Length)
+            if (index < 0 || index >= _data.Length)
                 return 0;
 
             return _data[index];
@@ -47,22 +48,37 @@ namespace Sandbox
 
         public IEnumerable<CollisionInfo> CollidesWith(ICollidable collidable)
         {
+            var boundingBox = collidable.GetAxisAlignedBoundingBox();
+            var sx = boundingBox.Left / CellWidth;
+            var sy = boundingBox.Top / CellHeight;
+            var ex = (boundingBox.Right / CellWidth) + 1;
+            var ey = (boundingBox.Bottom / CellHeight) + 1;
             var collisions = new List<CollisionInfo>();
 
-            for (var y = 0; y < Height; y++)
+            for (var y = sy; y < ey; y++)
             {
-                for (var x = 0; x < Width; x++)
+                for (var x = sx; x < ex; x++)
                 {
                     if (GetDataAtIndex(x, y) != 0)
                     {
-                        var rectangle = GetCellRectangle(x, y);
+                        var cellRectangle = GetCellRectangle(x, y);
+                        var intersectingRectangle = Rectangle.Intersect(cellRectangle, boundingBox);
 
-                        if (rectangle.Contains(collidable.Position))
+                        if(!intersectingRectangle.IsEmpty)
                         {
-                            var collisionPoint = collidable.Position - collidable.Velocity;
-                            var collision = new CollisionInfo(collidable, collisionPoint);
+                            var w = intersectingRectangle.Width;
+                            var h = intersectingRectangle.Height;
 
-                            collisions.Add(collision);
+                            if (w < h)
+                            {
+                                collidable.Position = new Vector2((float)Math.Round(collidable.Position.X - w, 0), collidable.Position.Y);
+                                collidable.Velocity = new Vector2(0, collidable.Velocity.Y);
+                            }
+                            else
+                            {
+                                collidable.Position = new Vector2(collidable.Position.X, (float)Math.Round(collidable.Position.Y - h));
+                                collidable.Velocity = new Vector2(collidable.Velocity.X, 0);
+                            }
                         }
                     }
                 }

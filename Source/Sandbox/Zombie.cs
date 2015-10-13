@@ -77,16 +77,16 @@ namespace Sandbox
         }
 
         public Vector2 Velocity { get; set; }
-        
+
+        public Rectangle GetAxisAlignedBoundingBox()
+        {
+            return _sprite.GetBoundingRectangle();
+        }
+
         public Vector2 Position
         {
             get { return _sprite.Position; }
             set { _sprite.Position = value; }
-        }
-
-        public bool Contains(Vector2 position)
-        {
-            return _sprite.GetBoundingRectangle().Contains(position);
         }
 
         public void Update(GameTime gameTime)
@@ -94,7 +94,7 @@ namespace Sandbox
             _animator.Update(gameTime);
 
             if(State == ZombieState.Walking)
-                Position += new Vector2(50f * _direction, 0) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Position += new Vector2(100f * _direction, 0) * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -125,7 +125,10 @@ namespace Sandbox
         public void Jump()
         {
             if (IsReady)
-                State = ZombieState.Attacking;
+            {
+                State = ZombieState.None;
+                Velocity = new Vector2(Velocity.X, -600);
+            }
         }
     }
 }

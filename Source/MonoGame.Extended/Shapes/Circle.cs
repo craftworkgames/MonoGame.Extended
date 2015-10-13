@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 
 namespace MonoGame.Extended.Shapes
 {
-	/// <summary>
+    /// <summary>
 	/// Describes a 2D-circle. 
 	/// </summary>
 	[DataContract]
