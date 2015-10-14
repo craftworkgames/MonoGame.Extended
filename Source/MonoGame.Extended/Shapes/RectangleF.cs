@@ -328,10 +328,10 @@ namespace MonoGame.Extended.Shapes
         /// <returns><c>true</c> if other <see cref="RectangleF"/> intersects with this rectangle; <c>false</c> otherwise.</returns>
         public bool Intersects(RectangleF value)
         {
-            return value.Left < Right &&
-                   Left < value.Right &&
-                   value.Top < Bottom &&
-                   Top < value.Bottom;
+            return value.Left <= Right &&
+                   Left <= value.Right &&
+                   value.Top <= Bottom &&
+                   Top <= value.Bottom;
         }
 
 
