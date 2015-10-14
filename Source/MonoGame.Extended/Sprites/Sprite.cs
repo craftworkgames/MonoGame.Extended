@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
@@ -57,12 +58,12 @@ namespace MonoGame.Extended.Sprites
             set { Origin = new Vector2(value.X * TextureRegion.Width, value.Y * TextureRegion.Height); }
         }
 
-        public Rectangle GetBoundingRectangle()
+        public RectangleF GetBoundingRectangle()
         {
             var corners = GetCorners();
             var min = new Vector2(corners.Min(i => i.X), corners.Min(i => i.Y));
             var max = new Vector2(corners.Max(i => i.X), corners.Max(i => i.Y));
-            return new Rectangle((int)min.X, (int)min.Y, (int)(max.X - min.X), (int)(max.Y - min.Y));
+            return new RectangleF(min.X, min.Y, (max.X - min.X), (max.Y - min.Y));
         }
 
         public Vector2[] GetCorners()

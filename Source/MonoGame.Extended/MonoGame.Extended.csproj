@@ -38,6 +38,7 @@
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />
     <Compile Include="BitmapFonts\BitmapFontRegion.cs" />
+    <Compile Include="Collisions\CollisionGrid.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Camera2D.cs" />
     <Compile Include="Content\ContentTypeReaderHelper.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
     <Compile Include="Shapes\Circle.cs" />
+    <Compile Include="Shapes\RectangleF.cs" />
     <Compile Include="Shapes\RectangleExtensions.cs" />
     <Compile Include="Sprites\SpriteExtensions.cs" />
     <Compile Include="Sprites\SpriteSheetAnimator.cs" />

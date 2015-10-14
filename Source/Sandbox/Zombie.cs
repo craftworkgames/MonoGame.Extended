@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
@@ -16,7 +17,7 @@ namespace Sandbox
         Dying
     }
 
-    public class Zombie : IUpdate, ICollidable
+    public class Zombie : IUpdate
     {
         public Zombie(TextureAtlas textureAtlas)
         {
@@ -78,7 +79,7 @@ namespace Sandbox
 
         public Vector2 Velocity { get; set; }
 
-        public Rectangle GetAxisAlignedBoundingBox()
+        public RectangleF GetAxisAlignedBoundingBox()
         {
             return _sprite.GetBoundingRectangle();
         }
