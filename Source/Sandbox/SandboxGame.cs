@@ -60,7 +60,7 @@ namespace Sandbox
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _bitmapFont = Content.Load<BitmapFont>("Fonts/courier-new-32");
-            _tiledMap = Content.Load<TiledMap>("level01");
+            _tiledMap = Content.Load<TiledMap>("Tilesets/level01");
             var collisionData = _tiledMap
                 .GetLayer<TiledTileLayer>("Tile Layer 1")
                 .Tiles
@@ -68,7 +68,7 @@ namespace Sandbox
                 .ToArray();
             _collisionGrid = new CollisionGrid(collisionData, _tiledMap.Width, _tiledMap.Height, _tiledMap.TileWidth, _tiledMap.TileHeight);
 
-            var fireballTexture = Content.Load<Texture2D>("fireball");
+            var fireballTexture = Content.Load<Texture2D>("Sprites/fireball");
             var spriteSheetAtlas = TextureAtlas.Create(fireballTexture, 512, 197);
 
             _sprite = new Sprite(spriteSheetAtlas[0])
@@ -78,7 +78,7 @@ namespace Sandbox
             };
             _spriteAnimator = new SpriteAnimator(_sprite, spriteSheetAtlas, 15);
 
-            var zombieSheet = Content.Load<TextureAtlas>("zombie-atlas");
+            var zombieSheet = Content.Load<TextureAtlas>("Sprites/zombie-atlas");
             _zombie = new Zombie(zombieSheet)
             {
                 Position = new Vector2(300, 500)
@@ -124,10 +124,6 @@ namespace Sandbox
 
             _zombie.Velocity += new Vector2(0, 600) * deltaSeconds;
             _zombie.Position += _zombie.Velocity * deltaSeconds;
-
-            
-
- 
             _zombie.Update(gameTime);
             _camera.LookAt(_zombie.Position);
             

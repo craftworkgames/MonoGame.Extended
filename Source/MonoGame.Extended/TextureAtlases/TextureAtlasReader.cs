@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Content;
 
 namespace MonoGame.Extended.TextureAtlases
 {
@@ -7,8 +8,9 @@ namespace MonoGame.Extended.TextureAtlases
     {
         protected override TextureAtlas Read(ContentReader reader, TextureAtlas existingInstance)
         {
+            var assetDirectory = ContentTypeReaderHelper.GetDirectory(reader.AssetName);
             var assetName = reader.ReadString();
-            var texture = reader.ContentManager.Load<Texture2D>(assetName);
+            var texture = reader.ContentManager.Load<Texture2D>(assetDirectory + assetName);
             var atlas = new TextureAtlas(texture);
 
             var regionCount = reader.ReadInt32();

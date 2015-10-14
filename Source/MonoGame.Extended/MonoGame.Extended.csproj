@@ -40,6 +40,7 @@
     <Compile Include="BitmapFonts\BitmapFontRegion.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Camera2D.cs" />
+    <Compile Include="Content\ContentTypeReaderHelper.cs" />
     <Compile Include="EventHandlerExtensions.cs" />
     <Compile Include="IDraw.cs" />
     <Compile Include="IMovable.cs" />

@@ -9,6 +9,7 @@ namespace MonoGame.Extended.Maps.Tiled
     {
         protected override TiledMap Read(ContentReader reader, TiledMap existingInstance)
         {
+            var assetDirectory = ContentTypeReaderHelper.GetDirectory(reader.AssetName);
             var backgroundColor = reader.ReadColor();
             var renderOrder = (TiledRenderOrder) Enum.Parse(typeof (TiledRenderOrder), reader.ReadString(), true);
             var tiledMap = new TiledMap(
@@ -29,8 +30,8 @@ namespace MonoGame.Extended.Maps.Tiled
 
             for (var i = 0; i < tilesetCount; i++)
             {
-                var assetName = reader.ReadString();
-                var texture = reader.ContentManager.Load<Texture2D>(assetName);
+                var textureName = reader.ReadString();
+                var texture = reader.ContentManager.Load<Texture2D>(assetDirectory + textureName);
                 var tileset = tiledMap.CreateTileset(
                     texture: texture,
                     firstId: reader.ReadInt32(),
@@ -52,7 +53,7 @@ namespace MonoGame.Extended.Maps.Tiled
             return tiledMap;
         }
 
-        private void ReadCustomProperties(ContentReader reader, TiledProperties properties)
+        private static void ReadCustomProperties(ContentReader reader, TiledProperties properties)
         {
             var count = reader.ReadInt32();
 
@@ -63,8 +64,10 @@ namespace MonoGame.Extended.Maps.Tiled
         private TiledLayer ReadLayer(ContentReader reader, TiledMap tiledMap)
         {
             var layerName = reader.ReadString();
+            // ReSharper disable UnusedVariable
             var visible = reader.ReadBoolean();
             var opacity = reader.ReadSingle();
+            // ReSharper restore UnusedVariable
             var layerType = reader.ReadString();
 
             if (layerType == "TileLayer")
