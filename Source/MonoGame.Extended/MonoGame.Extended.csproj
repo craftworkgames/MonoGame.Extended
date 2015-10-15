@@ -38,7 +38,10 @@
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />
     <Compile Include="BitmapFonts\BitmapFontRegion.cs" />
+    <Compile Include="Collisions\CollisionBody.cs" />
     <Compile Include="Collisions\CollisionGrid.cs" />
+    <Compile Include="Collisions\CollisionWorld.cs" />
+    <Compile Include="Collisions\ICollidable.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Camera2D.cs" />
     <Compile Include="Content\ContentTypeReaderHelper.cs" />
@@ -62,6 +65,7 @@
     <Compile Include="IRotatable.cs" />
     <Compile Include="IScalable.cs" />
     <Compile Include="IUpdate.cs" />
+    <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
     <Compile Include="Shapes\Circle.cs" />
     <Compile Include="Shapes\RectangleF.cs" />

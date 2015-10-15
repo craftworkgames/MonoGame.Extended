@@ -31,6 +31,16 @@ namespace MonoGame.Extended.Maps.Tiled
             get { return _tiles; }
         }
 
+        public int TileWidth
+        {
+            get { return _map.TileWidth; }
+        }
+
+        public int TileHeight
+        {
+            get { return _map.TileHeight; }
+        }
+
         private TiledTile[] CreateTiles(int[] data)
         {
             var tiles = new TiledTile[data.Length];

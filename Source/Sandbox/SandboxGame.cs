@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -27,8 +25,9 @@ namespace Sandbox
         private FramesPerSecondCounter _fpsCounter;
         private SpriteAnimator _spriteAnimator;
         private Zombie _zombie;
-        private CollisionGrid _collisionGrid;
-        private Point _mousePoint;
+        //private CollisionGrid _collisionGrid;
+        //private Point _mousePoint;
+        private readonly CollisionWorld _world;
 
         public SandboxGame()
         {
@@ -37,6 +36,15 @@ namespace Sandbox
             IsMouseVisible = true;
             Window.Position = new Point(50, 50);
             Window.Title = string.Format("MonoGame.Extended - {0}", GetType().Name);
+
+            _world = new CollisionWorld(new Vector2(0, 900));
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _world.Dispose();
+
+            base.Dispose(disposing);
         }
 
         protected override void Initialize()
@@ -63,12 +71,8 @@ namespace Sandbox
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _bitmapFont = Content.Load<BitmapFont>("Fonts/courier-new-32");
             _tiledMap = Content.Load<TiledMap>("Tilesets/level01");
-            var collisionData = _tiledMap
-                .GetLayer<TiledTileLayer>("Tile Layer 1")
-                .Tiles
-                .Select(t => (byte) t.Id)
-                .ToArray();
-            _collisionGrid = new CollisionGrid(collisionData, _tiledMap.Width, _tiledMap.Height, _tiledMap.TileWidth, _tiledMap.TileHeight);
+
+            _world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
 
             var fireballTexture = Content.Load<Texture2D>("Sprites/fireball");
             var spriteSheetAtlas = TextureAtlas.Create(fireballTexture, 512, 197);
@@ -85,6 +89,8 @@ namespace Sandbox
             {
                 Position = new Vector2(300, 500)
             };
+
+            _world.CreateBody(_zombie);
         }
 
         protected override void UnloadContent()
@@ -97,7 +103,7 @@ namespace Sandbox
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
 
-            _mousePoint = _camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y)).ToPoint();
+            //_mousePoint = _camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y)).ToPoint();
 
             // camera
             if (keyboardState.IsKeyDown(Keys.R))
@@ -122,15 +128,14 @@ namespace Sandbox
             if (keyboardState.IsKeyDown(Keys.Enter))
                 _zombie.Die();
 
-            _zombie.Velocity += new Vector2(0, 900) * deltaSeconds;
-            _zombie.Position += _zombie.Velocity * deltaSeconds;
-
             // update must be called before collision detection
             _zombie.Update(gameTime);
 
-            var boundingBox = _zombie.GetAxisAlignedBoundingBox();
-            _collisionGrid.CollidesWith(boundingBox, _zombie.OnCollision);
-            
+            _world.Update(gameTime);
+
+            //var boundingBox = _zombie.GetAxisAlignedBoundingBox();
+            //_collisionGrid.CollidesWith(boundingBox, _zombie.OnCollision);
+
             _camera.LookAt(_zombie.Position);
             
             // fireball
@@ -156,11 +161,11 @@ namespace Sandbox
             _zombie.Draw(_spriteBatch);
             _spriteBatch.End();
 
-            var x = _mousePoint.X / _collisionGrid.CellWidth;
-            var y = _mousePoint.Y / _collisionGrid.CellHeight;
+            //var x = _mousePoint.X / _collisionGrid.CellWidth;
+            //var y = _mousePoint.Y / _collisionGrid.CellHeight;
 
             _spriteBatch.Begin();            
-            _spriteBatch.DrawString(_bitmapFont, string.Format("CD: {0}, {1} = {2}", x, y, _collisionGrid.GetDataAt(x, y)), new Vector2(5, 35), new Color(0.5f, 0.5f, 0.5f));
+            //_spriteBatch.DrawString(_bitmapFont, string.Format("CD: {0}, {1} = {2}", x, y, _collisionGrid.GetDataAt(x, y)), new Vector2(5, 35), new Color(0.5f, 0.5f, 0.5f));
             _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", _fpsCounter.AverageFramesPerSecond, _camera.Zoom), new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));
             _spriteBatch.End();
             

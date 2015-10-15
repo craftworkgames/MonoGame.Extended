@@ -18,7 +18,7 @@ namespace Sandbox
         Dying
     }
 
-    public class Zombie : IUpdate
+    public class Zombie : IUpdate, ICollidable
     {
         public Zombie(TextureAtlas textureAtlas)
         {
@@ -85,9 +85,7 @@ namespace Sandbox
 
         public RectangleF GetAxisAlignedBoundingBox()
         {
-            const float heightOffset = 52;
-            var spriteRectangle = _sprite.GetBoundingRectangle();
-            return new RectangleF(spriteRectangle.X, spriteRectangle.Y + heightOffset, spriteRectangle.Width, spriteRectangle.Height - heightOffset);
+            return _sprite.GetBoundingRectangle();
         }
 
         public Vector2 Position
@@ -102,8 +100,9 @@ namespace Sandbox
 
             _animator.Update(gameTime);
 
-            if(State == ZombieState.Walking)
-                Position += new Vector2(200f * _direction, 0) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Velocity = State == ZombieState.Walking 
+                ? new Vector2(200f*_direction, Velocity.Y) 
+                : new Vector2(0, Velocity.Y);
         }
 
         public void Draw(SpriteBatch spriteBatch)
