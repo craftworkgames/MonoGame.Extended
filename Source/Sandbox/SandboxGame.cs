@@ -113,37 +113,24 @@ namespace Sandbox
             if (keyboardState.IsKeyDown(Keys.Right))
                 _zombie.Walk(1.0f);
 
-            if (keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift))
+            if (keyboardState.IsKeyDown(Keys.Space))
                 _zombie.Attack();
 
-            if (keyboardState.IsKeyDown(Keys.Space))
+            if (keyboardState.IsKeyDown(Keys.Up))
                 _zombie.Jump();
             
             if (keyboardState.IsKeyDown(Keys.Enter))
                 _zombie.Die();
 
-
-            var boundingBox = _zombie.GetAxisAlignedBoundingBox();
-            _collisionGrid.CollidesWith(boundingBox, c =>
-            {
-                if (c.IntersectingRectangle.Width < c.IntersectingRectangle.Height)
-                {
-                    var d = _zombie.Position.X < c.CellRectangle.Center.X ? c.IntersectingRectangle.Width : -c.IntersectingRectangle.Width;
-                    _zombie.Position = new Vector2(_zombie.Position.X - d, _zombie.Position.Y);
-                    _zombie.Velocity = new Vector2(0, _zombie.Velocity.Y);
-                }
-                else
-                {
-                    var d = _zombie.Position.Y < c.CellRectangle.Center.Y ? c.IntersectingRectangle.Height : -c.IntersectingRectangle.Height;
-                    _zombie.Position = new Vector2(_zombie.Position.X, _zombie.Position.Y - d);
-                    _zombie.Velocity = new Vector2(_zombie.Velocity.X, 0);
-                }
-            });
-
             _zombie.Velocity += new Vector2(0, 900) * deltaSeconds;
             _zombie.Position += _zombie.Velocity * deltaSeconds;
+
+            // update must be called before collision detection
             _zombie.Update(gameTime);
 
+            var boundingBox = _zombie.GetAxisAlignedBoundingBox();
+            _collisionGrid.CollidesWith(boundingBox, _zombie.OnCollision);
+            
             _camera.LookAt(_zombie.Position);
             
             // fireball

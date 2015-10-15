@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
@@ -34,16 +35,19 @@ namespace Sandbox
             _animator.AddAnimation("die", framesPerSecond: 8, firstFrameIndex: 11, lastFrameIndex: 18);
 
             State = ZombieState.Appearing;
+            IsOnGround = false;
         }
 
         private float _direction = -1.0f;
         private readonly Sprite _sprite;
         private readonly SpriteSheetAnimator _animator;
 
+        public bool IsOnGround { get; private set; }
+
         private ZombieState _state;
         public ZombieState State
         {
-            get {  return _state;}
+            get { return _state;}
             private set
             {
                 if (_state != value)
@@ -81,7 +85,9 @@ namespace Sandbox
 
         public RectangleF GetAxisAlignedBoundingBox()
         {
-            return _sprite.GetBoundingRectangle();
+            const float heightOffset = 52;
+            var spriteRectangle = _sprite.GetBoundingRectangle();
+            return new RectangleF(spriteRectangle.X, spriteRectangle.Y + heightOffset, spriteRectangle.Width, spriteRectangle.Height - heightOffset);
         }
 
         public Vector2 Position
@@ -92,10 +98,12 @@ namespace Sandbox
 
         public void Update(GameTime gameTime)
         {
+            IsOnGround = false;
+
             _animator.Update(gameTime);
 
             if(State == ZombieState.Walking)
-                Position += new Vector2(100f * _direction, 0) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Position += new Vector2(200f * _direction, 0) * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -125,10 +133,33 @@ namespace Sandbox
 
         public void Jump()
         {
-            if (IsReady)
+            if (IsReady && IsOnGround)
             {
                 State = ZombieState.None;
-                Velocity = new Vector2(Velocity.X, -600);
+                Velocity = new Vector2(Velocity.X, -650);
+            }
+        }
+
+        public void OnCollision(CollisionInfo c)
+        {
+            if (c.IntersectingRectangle.Width < c.IntersectingRectangle.Height)
+            {
+                var d = Position.X < c.CellRectangle.Center.X
+                    ? c.IntersectingRectangle.Width
+                    : -c.IntersectingRectangle.Width;
+                Position = new Vector2(Position.X - d, Position.Y);
+                Velocity = new Vector2(0, Velocity.Y);
+            }
+            else
+            {
+                if (Velocity.Y > 0)
+                    IsOnGround = true;
+
+                var d = Position.Y < c.CellRectangle.Center.Y
+                    ? c.IntersectingRectangle.Height
+                    : -c.IntersectingRectangle.Height;
+                Position = new Vector2(Position.X, Position.Y - d);
+                Velocity = new Vector2(Velocity.X, 0);
             }
         }
     }

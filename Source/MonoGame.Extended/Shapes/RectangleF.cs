@@ -168,7 +168,11 @@ namespace MonoGame.Extended.Shapes
         /// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
         public static bool operator ==(RectangleF a, RectangleF b)
         {
-            return a.X.Equals(b.X) && a.Y.Equals(b.Y) && a.Width.Equals(b.Width) && a.Height.Equals(b.Height);
+            const float epsilon = 0.00001f;
+            return Math.Abs(a.X - b.X) < epsilon
+                && Math.Abs(a.Y - b.Y) < epsilon
+                && Math.Abs(a.Width - b.Width) < epsilon
+                && Math.Abs(a.Height - b.Height) < epsilon;
         }
 
         /// <summary>
