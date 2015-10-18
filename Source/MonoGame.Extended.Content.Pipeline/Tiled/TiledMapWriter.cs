@@ -29,7 +29,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             foreach (var tileset in map.Tilesets)
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
-                writer.Write(Path.GetFileNameWithoutExtension(tileset.Image.Source));
+                writer.Write(PathHelper.RemoveExtension(tileset.Image.Source));
                 writer.Write(tileset.FirstGid);
                 writer.Write(tileset.TileWidth);
                 writer.Write(tileset.TileHeight);
@@ -66,7 +66,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 {
                     writer.Write("ImageLayer");
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    writer.Write(Path.GetFileNameWithoutExtension(imageLayer.Image.Source));
+                    writer.Write(PathHelper.RemoveExtension(imageLayer.Image.Source));
                     writer.Write(new Vector2(imageLayer.X, imageLayer.Y));
                 }
 

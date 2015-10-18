@@ -11,7 +11,6 @@ namespace MonoGame.Extended.BitmapFonts
     {
         protected override BitmapFont Read(ContentReader reader, BitmapFont existingInstance)
         {
-            var assetDirectory = ContentTypeReaderHelper.GetDirectory(reader.AssetName);
             var textureAssetCount = reader.ReadInt32();
             var assets = new List<string>();
 
@@ -22,7 +21,7 @@ namespace MonoGame.Extended.BitmapFonts
             }
 
             var textures = assets
-                .Select(textureName => reader.ContentManager.Load<Texture2D>(assetDirectory + textureName))
+                .Select(textureName => reader.ContentManager.Load<Texture2D>(reader.GetRelativeAssetPath(textureName)))
                 .ToArray();
 
             var lineHeight = reader.ReadInt32();
