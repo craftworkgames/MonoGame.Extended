@@ -20,14 +20,14 @@ namespace MonoGame.Extended.Collisions
         private readonly List<CollisionBody> _bodies;
         private CollisionGrid _grid;
 
-        public CollisionBody CreateBody(ICollidable collidable)
+        public CollisionBody CreateBody(IDynamicCollidable collidable)
         {
             var body = new CollisionBody(collidable);
             _bodies.Add(body);
             return body;
         }
 
-        public CollisionGrid CreateGrid(byte[] data, int columns, int rows, int cellWidth, int cellHeight)
+        public CollisionGrid CreateGrid(int[] data, int columns, int rows, int cellWidth, int cellHeight)
         {
             if (_grid != null)
                 throw new InvalidOperationException("Only one collision grid can be created per world");
@@ -46,7 +46,10 @@ namespace MonoGame.Extended.Collisions
                 body.Position += body.Velocity * deltaTime;
 
                 if(_grid != null)
-                    _grid.CollidesWith(body.GetAxisAlignedBoundingBox(), body.OnCollision);
+                {
+                    var boundingBox = body.GetAxisAlignedBoundingBox();
+                    _grid.CollidesWith(boundingBox, body.OnCollision);
+                }
             }
         }
     }

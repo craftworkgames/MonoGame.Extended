@@ -3,14 +3,14 @@ using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Collisions
 {
-    public class CollisionBody : ICollidable
+    public class CollisionBody : IDynamicCollidable
     {
-        public CollisionBody(ICollidable target)
+        public CollisionBody(IDynamicCollidable target)
         {
             _target = target;
         }
 
-        private readonly ICollidable _target;
+        private readonly IDynamicCollidable _target;
 
         public Vector2 Velocity
         {

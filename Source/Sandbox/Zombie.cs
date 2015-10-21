@@ -18,7 +18,7 @@ namespace Sandbox
         Dying
     }
 
-    public class Zombie : IUpdate, ICollidable
+    public class Zombie : IUpdate, IDynamicCollidable
     {
         public Zombie(TextureAtlas textureAtlas)
         {
