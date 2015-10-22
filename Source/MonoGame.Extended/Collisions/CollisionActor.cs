@@ -3,21 +3,20 @@ using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Collisions
 {
-    public class CollisionBody : IDynamicCollidable
+    public class CollisionActor : IActor
     {
-        public CollisionBody(IDynamicCollidable target)
+        public CollisionActor(IActorTarget target, int width, int height)
         {
+            Width = width;
+            Height = height;
             _target = target;
         }
 
-        private readonly IDynamicCollidable _target;
+        private readonly IActorTarget _target;
 
-        public Vector2 Velocity
-        {
-            get { return _target.Velocity; }
-            set { _target.Velocity = value; }
-        }
-
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+        public Vector2 Velocity { get; set; }
         public Vector2 Position
         {
             get { return _target.Position; }
@@ -26,7 +25,7 @@ namespace MonoGame.Extended.Collisions
 
         public RectangleF GetAxisAlignedBoundingBox()
         {
-            return _target.GetAxisAlignedBoundingBox();
+            return new RectangleF(Position.X, Position.Y, Width, Height);
         }
 
         public void OnCollision(CollisionInfo collisionInfo)

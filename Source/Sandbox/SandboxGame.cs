@@ -90,7 +90,7 @@ namespace Sandbox
                 Position = new Vector2(300, 500)
             };
 
-            _world.CreateBody(_zombie);
+            _world.CreateActor(_zombie, 32, 42);
         }
 
         protected override void UnloadContent()

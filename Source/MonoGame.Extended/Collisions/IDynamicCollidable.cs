@@ -3,15 +3,13 @@ using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Collisions
 {
-    public interface ICollidable
+    public interface IActor
     {
-        RectangleF GetAxisAlignedBoundingBox();
         void OnCollision(CollisionInfo collisionInfo);
     }
 
-    public interface IDynamicCollidable : ICollidable
+    public interface IActorTarget : IMovable
     {
-        Vector2 Position { get; set; }
-        Vector2 Velocity { get; set; }
+        void OnCollision(CollisionInfo collisionInfo);
     }
 }

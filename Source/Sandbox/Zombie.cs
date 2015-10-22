@@ -18,7 +18,7 @@ namespace Sandbox
         Dying
     }
 
-    public class Zombie : IUpdate, IDynamicCollidable
+    public class Zombie : IUpdate, IActorTarget
     {
         public Zombie(TextureAtlas textureAtlas)
         {
@@ -82,11 +82,6 @@ namespace Sandbox
         }
 
         public Vector2 Velocity { get; set; }
-
-        public RectangleF GetAxisAlignedBoundingBox()
-        {
-            return _sprite.GetBoundingRectangle();
-        }
 
         public Vector2 Position
         {

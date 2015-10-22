@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Collisions
         public CollisionWorld(Vector2 gravity)
         {
             _gravity = gravity;
-            _bodies = new List<CollisionBody>();
+            _actors = new List<CollisionActor>();
         }
 
         public void Dispose()
@@ -17,14 +17,14 @@ namespace MonoGame.Extended.Collisions
         }
 
         private readonly Vector2 _gravity;
-        private readonly List<CollisionBody> _bodies;
+        private readonly List<CollisionActor> _actors;
         private CollisionGrid _grid;
 
-        public CollisionBody CreateBody(IDynamicCollidable collidable)
+        public CollisionActor CreateActor(IActorTarget target, int width, int height)
         {
-            var body = new CollisionBody(collidable);
-            _bodies.Add(body);
-            return body;
+            var actor = new CollisionActor(target, width, height);
+            _actors.Add(actor);
+            return actor;
         }
 
         public CollisionGrid CreateGrid(int[] data, int columns, int rows, int cellWidth, int cellHeight)
@@ -40,7 +40,7 @@ namespace MonoGame.Extended.Collisions
         {
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            foreach (var body in _bodies)
+            foreach (var body in _actors)
             {
                 body.Velocity += _gravity * deltaTime;
                 body.Position += body.Velocity * deltaTime;
