@@ -44,7 +44,7 @@
     <Compile Include="Collisions\CollisionGridCellFlag.cs" />
     <Compile Include="Collisions\CollisionInfo.cs" />
     <Compile Include="Collisions\CollisionWorld.cs" />
-    <Compile Include="Collisions\IDynamicCollidable.cs" />
+    <Compile Include="Collisions\IActorTarget.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Camera2D.cs" />
     <Compile Include="Content\ContentReaderExtensions.cs" />

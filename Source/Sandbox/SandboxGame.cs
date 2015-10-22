@@ -85,12 +85,9 @@ namespace Sandbox
             _spriteAnimator = new SpriteAnimator(_sprite, spriteSheetAtlas, 15);
 
             var zombieSheet = Content.Load<TextureAtlas>("Sprites/zombie-atlas");
-            _zombie = new Zombie(zombieSheet)
-            {
-                Position = new Vector2(300, 500)
-            };
-
-            _world.CreateActor(_zombie, 32, 42);
+            _zombie = new Zombie(zombieSheet);
+            var zombieActor = _world.CreateActor(_zombie);
+            zombieActor.Position = new Vector2(300, 900);
         }
 
         protected override void UnloadContent()
@@ -130,12 +127,7 @@ namespace Sandbox
 
             // update must be called before collision detection
             _zombie.Update(gameTime);
-
             _world.Update(gameTime);
-
-            //var boundingBox = _zombie.GetAxisAlignedBoundingBox();
-            //_collisionGrid.CollidesWith(boundingBox, _zombie.OnCollision);
-
             _camera.LookAt(_zombie.Position);
             
             // fireball
@@ -161,11 +153,7 @@ namespace Sandbox
             _zombie.Draw(_spriteBatch);
             _spriteBatch.End();
 
-            //var x = _mousePoint.X / _collisionGrid.CellWidth;
-            //var y = _mousePoint.Y / _collisionGrid.CellHeight;
-
             _spriteBatch.Begin();            
-            //_spriteBatch.DrawString(_bitmapFont, string.Format("CD: {0}, {1} = {2}", x, y, _collisionGrid.GetDataAt(x, y)), new Vector2(5, 35), new Color(0.5f, 0.5f, 0.5f));
             _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", _fpsCounter.AverageFramesPerSecond, _camera.Zoom), new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));
             _spriteBatch.End();
             

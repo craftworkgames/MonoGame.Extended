@@ -80,7 +80,7 @@ namespace Sandbox
         {
             get { return State != ZombieState.Appearing && State != ZombieState.Dying; }
         }
-
+        
         public Vector2 Velocity { get; set; }
 
         public Vector2 Position
@@ -89,15 +89,21 @@ namespace Sandbox
             set { _sprite.Position = value; }
         }
 
+        public RectangleF BoundingBox
+        {
+            get { return _sprite.GetBoundingRectangle(); }
+        }
+
         public void Update(GameTime gameTime)
         {
-            IsOnGround = false;
-
+            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            
             _animator.Update(gameTime);
 
-            Velocity = State == ZombieState.Walking 
-                ? new Vector2(200f*_direction, Velocity.Y) 
-                : new Vector2(0, Velocity.Y);
+            IsOnGround = false;
+            Position += Velocity * deltaSeconds;
+            Velocity *= 0.9f;
+
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -109,6 +115,8 @@ namespace Sandbox
         {
             _sprite.Effect = _direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             _direction = direction;
+
+            Velocity = new Vector2(200f * _direction, Velocity.Y);
 
             if (IsReady)
                 State = ZombieState.Walking;

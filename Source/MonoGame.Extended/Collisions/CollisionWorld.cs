@@ -20,9 +20,9 @@ namespace MonoGame.Extended.Collisions
         private readonly List<CollisionActor> _actors;
         private CollisionGrid _grid;
 
-        public CollisionActor CreateActor(IActorTarget target, int width, int height)
+        public CollisionActor CreateActor(IActorTarget target)
         {
-            var actor = new CollisionActor(target, width, height);
+            var actor = new CollisionActor(target);
             _actors.Add(actor);
             return actor;
         }
@@ -40,15 +40,15 @@ namespace MonoGame.Extended.Collisions
         {
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            foreach (var body in _actors)
+            foreach (var actor in _actors)
             {
-                body.Velocity += _gravity * deltaTime;
-                body.Position += body.Velocity * deltaTime;
+                //actor.Velocity += _gravity * deltaTime;
+                //actor.Position += actor.Velocity * deltaTime;
 
                 if(_grid != null)
                 {
-                    var boundingBox = body.GetAxisAlignedBoundingBox();
-                    _grid.CollidesWith(boundingBox, body.OnCollision);
+                    var boundingBox = actor.BoundingBox;
+                    _grid.CollidesWith(boundingBox, actor.OnCollision);
                 }
             }
         }
