@@ -98,7 +98,7 @@ namespace Sandbox
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
-            var mouseState = Mouse.GetState();
+            //var mouseState = Mouse.GetState();
 
             //_mousePoint = _camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y)).ToPoint();
 

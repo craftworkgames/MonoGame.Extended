@@ -66,7 +66,7 @@ namespace MonoGame.Extended.Collisions
             {
                 actor.Velocity += _gravity * deltaTime;
                 actor.Position += actor.Velocity * deltaTime;
-                
+
                 if(_grid != null)
                 {
                     foreach (var collidable in _grid.GetCollidables(actor.BoundingBox))
