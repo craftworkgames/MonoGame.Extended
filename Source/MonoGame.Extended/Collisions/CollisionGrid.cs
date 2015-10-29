@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Shapes;
 
@@ -16,7 +17,7 @@ namespace MonoGame.Extended.Collisions
                 for (var x = 0; x < columns; x++)
                 {
                     var index = x + y * columns;
-                    _data[index] = new CollisionGridCell(x, y, data[index]);
+                    _data[index] = new CollisionGridCell(this, x, y, data[index]);
                 }
             }
 
@@ -38,7 +39,7 @@ namespace MonoGame.Extended.Collisions
             var index = column + row * Columns;
 
             if (index < 0 || index >= _data.Length)
-                return new CollisionGridCell(column, row, 0);
+                return new CollisionGridCell(this, column, row, 0);
 
             return _data[index];
         }
@@ -65,34 +66,15 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
+        public IEnumerable<ICollidable> GetCollidables(RectangleF overlappingRectangle)
+        {
+            return GetCellsOverlappingRectangle(overlappingRectangle)
+                .Where(cell => cell.Flag != CollisionGridCellFlag.Empty);
+        }
+
         public Rectangle GetCellRectangle(int column, int row)
         {
             return new Rectangle(column * CellWidth, row * CellHeight, CellWidth, CellHeight);
-        }
-
-        public void CollidesWith(RectangleF boundingBox, Action<CollisionInfo> onCollision)
-        {
-            foreach (var cell in GetCellsOverlappingRectangle(boundingBox))
-            {
-                if (cell.Flag == CollisionGridCellFlag.Empty)
-                    continue;
-                
-                var cellRectangle = GetCellRectangle(cell.Column, cell.Row);
-                var intersectingRectangle = RectangleF.Intersect(cellRectangle.ToRectangleF(), boundingBox);
-
-                if (intersectingRectangle.IsEmpty)
-                    continue;
-
-                var collisionInfo = new CollisionInfo
-                {
-                    Row = cell.Row,
-                    Column = cell.Column,
-                    IntersectingRectangle = intersectingRectangle,
-                    CellRectangle = cellRectangle
-                };
-
-                onCollision(collisionInfo);
-            }
         }
     }
 }

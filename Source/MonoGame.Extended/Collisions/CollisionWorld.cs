@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Collisions
 {
@@ -36,6 +37,27 @@ namespace MonoGame.Extended.Collisions
             return _grid;
         }
 
+        private CollisionInfo GetCollisionInfo(ICollidable first, ICollidable second, RectangleF intersectingRectangle)
+        {
+            var info = new CollisionInfo
+            {
+                Other = second
+            };
+
+            if (intersectingRectangle.Width < intersectingRectangle.Height)
+            {
+                var d = first.BoundingBox.Center.X < second.BoundingBox.Center.X ? intersectingRectangle.Width : -intersectingRectangle.Width;
+                info.PenetrationVector = new Vector2(d, 0);
+            }
+            else
+            {
+               var d = first.BoundingBox.Center.Y < second.BoundingBox.Center.Y ? intersectingRectangle.Height : -intersectingRectangle.Height;
+                info.PenetrationVector = new Vector2(0, d);
+            }
+
+            return info;
+        }
+
         public void Update(GameTime gameTime)
         {
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -47,8 +69,16 @@ namespace MonoGame.Extended.Collisions
 
                 if(_grid != null)
                 {
-                    var boundingBox = actor.BoundingBox;
-                    _grid.CollidesWith(boundingBox, actor.OnCollision);
+                    foreach (var collidable in _grid.GetCollidables(actor.BoundingBox))
+                    {
+                        var intersection = RectangleF.Intersect(collidable.BoundingBox, actor.BoundingBox);
+
+                        if (intersection.IsEmpty)
+                            continue;
+
+                        var info = GetCollisionInfo(actor, collidable, intersection);
+                        actor.OnCollision(info);
+                    }
                 }
             }
         }

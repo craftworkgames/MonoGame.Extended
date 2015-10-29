@@ -103,7 +103,7 @@ namespace Sandbox
 
             IsOnGround = false;
             //Position += Velocity * deltaSeconds;
-            Velocity *= new Vector2(0.9f, 1.0f);
+            //Velocity *= 0.9f;
 
             if(State == ZombieState.Walking && Math.Abs(Velocity.X) < 0.1f)
                 State = ZombieState.Idle;
@@ -147,25 +147,24 @@ namespace Sandbox
 
         public void OnCollision(CollisionInfo c)
         {
-            if (c.IntersectingRectangle.Width < c.IntersectingRectangle.Height)
-            {
-                var d = Position.X < c.CellRectangle.Center.X
-                    ? c.IntersectingRectangle.Width
-                    : -c.IntersectingRectangle.Width;
-                Position = new Vector2(Position.X - d, Position.Y);
-                Velocity = new Vector2(0, Velocity.Y);
-            }
-            else
-            {
-                if (Velocity.Y > 0)
-                    IsOnGround = true;
+            Position -= c.PenetrationVector;
+            Velocity = Vector2.Zero;
+            //if (c.PenetrationVector.X != 0)
+            //{
+            //    Position -= c.PenetrationVector;
+            //    Velocity = new Vector2(0, Velocity.Y);
+            //}
+            //else
+            //{
+            //    if (Velocity.Y > 0)
+            //        IsOnGround = true;
 
-                var d = Position.Y < c.CellRectangle.Center.Y
-                    ? c.IntersectingRectangle.Height
-                    : -c.IntersectingRectangle.Height;
-                Position = new Vector2(Position.X, Position.Y - d);
-                Velocity = new Vector2(Velocity.X, 0);
-            }
+            //    var d = Position.Y < c.Other.BoundingBox.Center.Y
+            //        ? c.IntersectingRectangle.Height
+            //        : -c.IntersectingRectangle.Height;
+            //    Position = new Vector2(Position.X, Position.Y - d);
+            //    Velocity = new Vector2(Velocity.X, 0);
+            //}
         }
     }
 }
