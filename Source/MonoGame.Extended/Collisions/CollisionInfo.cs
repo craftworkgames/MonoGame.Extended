@@ -5,9 +5,7 @@ namespace MonoGame.Extended.Collisions
 {
     public class CollisionInfo
     {
-        public int Column { get; internal set; }
-        public int Row { get; internal set; }
-        public RectangleF IntersectingRectangle { get; internal set; }
-        public Rectangle CellRectangle { get; internal set; }
+        public ICollidable Other { get; internal set; }
+        public Vector2 PenetrationVector { get; internal set; }
     }
 }
