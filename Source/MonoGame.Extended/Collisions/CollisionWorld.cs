@@ -42,8 +42,8 @@ namespace MonoGame.Extended.Collisions
 
             foreach (var actor in _actors)
             {
-                //actor.Velocity += _gravity * deltaTime;
-                //actor.Position += actor.Velocity * deltaTime;
+                actor.Velocity += _gravity * deltaTime;
+                actor.Position += actor.Velocity * deltaTime;
 
                 if(_grid != null)
                 {

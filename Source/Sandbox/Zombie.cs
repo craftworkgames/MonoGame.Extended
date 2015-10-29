@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -30,7 +31,7 @@ namespace Sandbox
             _animator = new SpriteSheetAnimator(_sprite, textureAtlas);
             _animator.AddAnimation("appear", framesPerSecond: 8, firstFrameIndex: 0, lastFrameIndex: 10);
             _animator.AddAnimation("idle", framesPerSecond: 8, firstFrameIndex: 36, lastFrameIndex: 41);
-            _animator.AddAnimation("walk", framesPerSecond: 8, firstFrameIndex: 19, lastFrameIndex: 28);
+            _animator.AddAnimation("walk", framesPerSecond: 12, firstFrameIndex: 19, lastFrameIndex: 28);
             _animator.AddAnimation("attack", framesPerSecond: 8, firstFrameIndex: 29, lastFrameIndex: 35);
             _animator.AddAnimation("die", framesPerSecond: 8, firstFrameIndex: 11, lastFrameIndex: 18);
 
@@ -101,9 +102,11 @@ namespace Sandbox
             _animator.Update(gameTime);
 
             IsOnGround = false;
-            Position += Velocity * deltaSeconds;
-            Velocity *= 0.9f;
+            //Position += Velocity * deltaSeconds;
+            Velocity *= new Vector2(0.9f, 1.0f);
 
+            if(State == ZombieState.Walking && Math.Abs(Velocity.X) < 0.1f)
+                State = ZombieState.Idle;
         }
 
         public void Draw(SpriteBatch spriteBatch)
