@@ -181,7 +181,9 @@ namespace MonoGame.Extended.Tests.Shapes
         [Test]
         public void Circle_ToRectangleTest()
         {
-            Assert.AreEqual(new Rectangle(150, 250, 100, 100), new Circle(new Vector2(200.0f, 300.0f), 100.0f).ToRectangle());
+            var actual = new Circle(center: new Vector2(200, 300), radius: 100).ToRectangle();
+            var expected = new Rectangle(100, 200, 200, 200);
+            Assert.AreEqual(expected, actual);
         }
     }
 }

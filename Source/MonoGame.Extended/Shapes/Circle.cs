@@ -415,10 +415,7 @@ namespace MonoGame.Extended.Shapes
 		/// <returns><see cref="Rectangle"/> which contains this <see cref="Circle"/></returns>
 		public Rectangle ToRectangle()
 		{
-			return new Rectangle((int)(Center.X - (Radius / 2.0f)),
-								 (int)(Center.Y - (Radius / 2.0f)),
-								 (int)Radius,
-								 (int)Radius);
+			return new Rectangle((int)(Center.X - Radius), (int)(Center.Y - Radius), (int)Radius * 2, (int)Radius * 2);
 		}
 
 		/*
