@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.TextureAtlases;
 
@@ -8,9 +9,24 @@ namespace MonoGame.Extended.Sprites
     public class SpriteSheetAnimator : IUpdate
     {
         public SpriteSheetAnimator(Sprite sprite, TextureAtlas textureAtlas)
+            : this(sprite, textureAtlas.Select(t => t))
         {
-            _sprite = sprite;
-            _textureAtlas = textureAtlas;
+        }
+
+        public SpriteSheetAnimator(TextureAtlas textureAtlas)
+            : this(null, textureAtlas)
+        {
+        }
+
+        public SpriteSheetAnimator(IEnumerable<TextureRegion2D> regions)
+            : this(null, regions)
+        {
+        }
+
+        public SpriteSheetAnimator(Sprite sprite, IEnumerable<TextureRegion2D> regions)
+        {
+            Sprite = sprite;
+            _frames = new List<TextureRegion2D>(regions);
             _animations = new Dictionary<string, SpriteSheetAnimation>();
             _frameIndex = 0;
 
@@ -18,21 +34,37 @@ namespace MonoGame.Extended.Sprites
             IsLooping = true;
         }
 
-        private readonly Sprite _sprite;
-        private readonly TextureAtlas _textureAtlas;
+        private readonly List<TextureRegion2D> _frames;
         private readonly Dictionary<string, SpriteSheetAnimation> _animations;
         private SpriteSheetAnimation _currentAnimation;
         private float _nextFrameDelay;
         private int _frameIndex;
         private Action _onCompleteAction;
 
+        public Sprite Sprite { get; set; }
         public bool IsPlaying { get; private set; }
         public bool IsLooping { get; set; }
 
+        public int AddFrame(TextureRegion2D textureRegion)
+        {
+            var index = _frames.Count;
+            _frames.Add(textureRegion);
+            return index;
+        }
+
+        public bool RemoveFrame(TextureRegion2D textureRegion)
+        {
+            return _frames.Remove(textureRegion);
+        }
+
+        public void RemoveFrameAt(int frameIndex)
+        {
+            _frames.RemoveAt(frameIndex);
+        }
+
         public void AddAnimation(string name, int framesPerSecond, params int[] frameIndices)
         {
-            var animation = new SpriteSheetAnimation(name, framesPerSecond, frameIndices);
-            _animations.Add(name, animation);
+            _animations.Add(name, new SpriteSheetAnimation(name, framesPerSecond, frameIndices));
         }
 
         public void AddAnimation(string name, int framesPerSecond, int firstFrameIndex, int lastFrameIndex)
@@ -45,9 +77,13 @@ namespace MonoGame.Extended.Sprites
             AddAnimation(name, framesPerSecond, frameIndices);
         }
 
-        public void RemoveAnimation(string name)
+        public bool RemoveAnimation(string name)
         {
+            if (!_animations.ContainsKey(name))
+                return false;
+
             _animations.Remove(name);
+            return true;
         }
 
         public void PlayAnimation(string name, Action onCompleteAction = null)
@@ -86,7 +122,9 @@ namespace MonoGame.Extended.Sprites
                 }
 
                 var atlasIndex = _currentAnimation.FrameIndicies[_frameIndex];
-                _sprite.TextureRegion = _textureAtlas[atlasIndex];
+
+                if(Sprite != null)
+                    Sprite.TextureRegion = _frames[atlasIndex];
             }
 
             _nextFrameDelay -= deltaSeconds;
