@@ -37,6 +37,11 @@ namespace MonoGame.Extended.Sprites
                 Sprite.TextureRegion = _frames.First();
         }
 
+        public SpriteSheetAnimator()
+            : this(null, Enumerable.Empty<TextureRegion2D>())
+        {
+        }
+
         private readonly List<TextureRegion2D> _frames;
         private readonly Dictionary<string, SpriteSheetAnimation> _animations;
         private SpriteSheetAnimation _currentAnimation;
