@@ -142,7 +142,7 @@ namespace MonoGame.Extended.Sprites
 
         public void Update(GameTime gameTime)
         {
-            if(!IsPlaying || _currentAnimation == null)
+            if(!IsPlaying || _currentAnimation == null || _currentAnimation.FrameIndicies.Length == 0)
                 return;
 
             var deltaSeconds = (float) gameTime.ElapsedGameTime.TotalSeconds;
