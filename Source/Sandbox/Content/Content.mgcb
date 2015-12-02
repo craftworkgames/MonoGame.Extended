@@ -1,8 +1,8 @@
 
 #----------------------------- Global Properties ----------------------------#
 
-/outputDir:bin/Windows
-/intermediateDir:obj/Windows
+/outputDir:bin/WindowsGL
+/intermediateDir:obj/WindowsGL
 /platform:Windows
 /config:
 /profile:Reach
