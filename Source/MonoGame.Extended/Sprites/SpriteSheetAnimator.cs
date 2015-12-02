@@ -25,13 +25,21 @@ namespace MonoGame.Extended.Sprites
 
         public SpriteSheetAnimator(Sprite sprite, IEnumerable<TextureRegion2D> regions)
         {
-            Sprite = sprite;
             _frames = new List<TextureRegion2D>(regions);
             _animations = new Dictionary<string, SpriteSheetAnimation>();
             _frameIndex = 0;
 
+            Sprite = sprite;
             IsPlaying = true;
             IsLooping = true;
+
+            if (Sprite != null && _frames.Any())
+                Sprite.TextureRegion = _frames.First();
+        }
+
+        public SpriteSheetAnimator()
+            : this(null, Enumerable.Empty<TextureRegion2D>())
+        {
         }
 
         private readonly List<TextureRegion2D> _frames;
@@ -45,10 +53,24 @@ namespace MonoGame.Extended.Sprites
         public bool IsPlaying { get; private set; }
         public bool IsLooping { get; set; }
 
+        public IEnumerable<TextureRegion2D> Frames
+        {
+            get { return _frames; }
+        }
+
+        public IEnumerable<string> Animations
+        {
+            get { return _animations.Keys.OrderBy(i => i); }
+        } 
+        
         public int AddFrame(TextureRegion2D textureRegion)
         {
             var index = _frames.Count;
             _frames.Add(textureRegion);
+
+            if (Sprite != null && Sprite.TextureRegion == null)
+                Sprite.TextureRegion = textureRegion;
+
             return index;
         }
 
@@ -57,14 +79,31 @@ namespace MonoGame.Extended.Sprites
             return _frames.Remove(textureRegion);
         }
 
+        public bool RemoveFrame(string name)
+        {
+            var frame = GetFrame(name);
+            return RemoveFrame(frame);
+        }
+
         public void RemoveFrameAt(int frameIndex)
         {
             _frames.RemoveAt(frameIndex);
         }
 
-        public void AddAnimation(string name, int framesPerSecond, params int[] frameIndices)
+        public TextureRegion2D GetFrameAt(int index)
         {
-            _animations.Add(name, new SpriteSheetAnimation(name, framesPerSecond, frameIndices));
+            return _frames[index];
+        }
+
+        public TextureRegion2D GetFrame(string name)
+        {
+            return _frames.FirstOrDefault(f => f.Name == name);
+        }
+
+        public void AddAnimation(string name, int framesPerSecond, int[] frameIndices)
+        {
+            var animation = new SpriteSheetAnimation(name, framesPerSecond, frameIndices);
+            _animations.Add(name, animation);
         }
 
         public void AddAnimation(string name, int framesPerSecond, int firstFrameIndex, int lastFrameIndex)
@@ -79,8 +118,13 @@ namespace MonoGame.Extended.Sprites
 
         public bool RemoveAnimation(string name)
         {
-            if (!_animations.ContainsKey(name))
+            SpriteSheetAnimation animation;
+
+            if (!_animations.TryGetValue(name, out animation))
                 return false;
+
+            if (_currentAnimation == animation)
+                _currentAnimation = null;
 
             _animations.Remove(name);
             return true;
@@ -98,7 +142,7 @@ namespace MonoGame.Extended.Sprites
 
         public void Update(GameTime gameTime)
         {
-            if(!IsPlaying || _currentAnimation == null)
+            if(!IsPlaying || _currentAnimation == null || _currentAnimation.FrameIndicies.Length == 0)
                 return;
 
             var deltaSeconds = (float) gameTime.ElapsedGameTime.TotalSeconds;

@@ -6,7 +6,6 @@
 /platform:Windows
 /config:
 /profile:Reach
-/compress:False
 
 #-------------------------------- References --------------------------------#
 

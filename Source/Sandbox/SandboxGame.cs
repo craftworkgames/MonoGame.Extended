@@ -5,7 +5,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Maps.Tiled;
-using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -18,12 +17,10 @@ namespace Sandbox
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
         private Camera2D _camera;
-        private Sprite _sprite;
         private ViewportAdapter _viewportAdapter;
         private BitmapFont _bitmapFont;
         private TiledMap _tiledMap;
         private FramesPerSecondCounter _fpsCounter;
-        private SpriteAnimator _spriteAnimator;
         private Zombie _zombie;
         //private CollisionGrid _collisionGrid;
         //private Point _mousePoint;
@@ -74,16 +71,6 @@ namespace Sandbox
 
             _world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
 
-            var fireballTexture = Content.Load<Texture2D>("Sprites/fireball");
-            var spriteSheetAtlas = TextureAtlas.Create(fireballTexture, 512, 197);
-
-            _sprite = new Sprite(spriteSheetAtlas[0])
-            {
-                Position = new Vector2(850, 200),
-                Scale = new Vector2(0.5f)
-            };
-            _spriteAnimator = new SpriteAnimator(_sprite, spriteSheetAtlas, 15);
-
             var zombieSheet = Content.Load<TextureAtlas>("Sprites/zombie-atlas");
             _zombie = new Zombie(zombieSheet);
             var zombieActor = _world.CreateActor(_zombie);
@@ -130,13 +117,6 @@ namespace Sandbox
             _world.Update(gameTime);
             _camera.LookAt(_zombie.Position);
             
-            // fireball
-            _sprite.Position += new Vector2(-500, 0) * deltaSeconds;
-            _spriteAnimator.Update(gameTime);
-
-            if (_sprite.Position.X < 0 - _sprite.GetBoundingRectangle().Width)
-                _sprite.Position = new Vector2(1900, _sprite.Position.Y);
-            
             base.Update(gameTime);
         }
 
@@ -149,7 +129,6 @@ namespace Sandbox
             _tiledMap.Draw(_camera);
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _spriteBatch.Draw(_sprite);
             _zombie.Draw(_spriteBatch);
             _spriteBatch.End();
 

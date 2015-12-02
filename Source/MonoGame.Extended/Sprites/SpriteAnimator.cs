@@ -4,6 +4,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
 {
+    [Obsolete("Please use the SpriteSheetAnimator instead")]
     public class SpriteAnimator : IUpdate
     {
         public SpriteAnimator(Sprite sprite, TextureAtlas textureAtlas, int framesPerSecond = 60)
