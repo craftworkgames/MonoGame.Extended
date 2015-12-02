@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended
@@ -150,6 +151,17 @@ namespace MonoGame.Extended
         {
             var viewMatrix = GetViewMatrix();
             return new BoundingFrustum(viewMatrix * GetProjectionMatrix(viewMatrix));
+        }
+
+        public RectangleF GetBoundingRectangle()
+        {
+            var frustum = GetBoundingFrustum();
+            var corners = frustum.GetCorners();
+            var topLeft = corners[0];
+            var bottomRight = corners[2];
+            var width = bottomRight.X - topLeft.X;
+            var height = bottomRight.Y - topLeft.Y;
+            return new RectangleF(topLeft.X, topLeft.Y, width, height);
         }
 
         public ContainmentType Contains(Point point)
