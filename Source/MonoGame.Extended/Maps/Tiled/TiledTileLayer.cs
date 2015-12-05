@@ -19,6 +19,11 @@ namespace MonoGame.Extended.Maps.Tiled
             _tiles = CreateTiles(data);
         }
 
+        public override void Dispose()
+        {
+            _spriteBatch.Dispose();
+        }
+
         public int Width { get; private set; }
         public int Height { get; private set; }
 
@@ -96,23 +101,18 @@ namespace MonoGame.Extended.Maps.Tiled
         private void RenderOrthogonal(TiledTile tile, TextureRegion2D region)
         {
             // not exactly sure why we need to compensate 1 pixel here. Could be a bug in MonoGame?
-            var tx = tile.X*(_map.TileWidth - 1);
-            var ty = tile.Y*(_map.TileHeight - 1);
+            var tx = tile.X * _map.TileWidth;
+            var ty = tile.Y * _map.TileHeight;
 
             _spriteBatch.Draw(region, new Rectangle(tx, ty, region.Width, region.Height), Color.White);
         }
 
         private void RenderIsometric(TiledTile tile, TextureRegion2D region)
         {
-            var tx = (tile.X*(_map.TileWidth / 2)) - (tile.Y*(_map.TileWidth / 2)) 
-                //Center
-                + (_map.Width * (_map.TileWidth/2)) 
-                //Compensate Bug?
-                - (_map.TileWidth / 2);
-                
-            var ty = (tile.Y*(_map.TileHeight/2)) + (tile.X*(_map.TileHeight/2)) 
-                //Compensate Bug?
-                - (_map.TileWidth + _map.TileHeight);
+            var halfTileWidth = _map.TileWidth / 2;
+            var halfTileHeight = _map.TileHeight / 2;
+            var tx = tile.X * halfTileWidth - tile.Y * halfTileWidth + _map.Width * halfTileWidth;
+            var ty = tile.Y * halfTileHeight + tile.X * halfTileHeight - (_map.TileWidth + _map.TileHeight);
 
             _spriteBatch.Draw(region, new Rectangle(tx, ty, region.Width, region.Height), Color.White);
         }

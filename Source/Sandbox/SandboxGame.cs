@@ -22,9 +22,7 @@ namespace Sandbox
         private TiledMap _tiledMap;
         private FramesPerSecondCounter _fpsCounter;
         private Zombie _zombie;
-        //private CollisionGrid _collisionGrid;
-        //private Point _mousePoint;
-        private readonly CollisionWorld _world;
+        private CollisionWorld _world;
 
         public SandboxGame()
         {
@@ -33,15 +31,6 @@ namespace Sandbox
             IsMouseVisible = true;
             Window.Position = new Point(50, 50);
             Window.Title = string.Format("MonoGame.Extended - {0}", GetType().Name);
-
-            _world = new CollisionWorld(new Vector2(0, 900));
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            _world.Dispose();
-
-            base.Dispose(disposing);
         }
 
         protected override void Initialize()
@@ -50,9 +39,9 @@ namespace Sandbox
             _viewportAdapter = new BoxingViewportAdapter(GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter)
             {
-                MinimumZoom = 0.5f,
+                MinimumZoom = 0.1f,
                 MaximumZoom = 2.0f,
-                Zoom = 0.5f,
+                Zoom = 0.85f,
                 Origin = new Vector2(400, 240),
                 Position = new Vector2(408, 270)
             };
@@ -69,6 +58,7 @@ namespace Sandbox
             _bitmapFont = Content.Load<BitmapFont>("Fonts/courier-new-32");
             _tiledMap = Content.Load<TiledMap>("Tilesets/level01");
 
+            _world = new CollisionWorld(new Vector2(0, 900));
             _world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
 
             var zombieSheet = Content.Load<TextureAtlas>("Sprites/zombie-atlas");
@@ -79,6 +69,8 @@ namespace Sandbox
 
         protected override void UnloadContent()
         {
+            _tiledMap.Dispose();
+            _world.Dispose();
         }
 
         protected override void Update(GameTime gameTime)

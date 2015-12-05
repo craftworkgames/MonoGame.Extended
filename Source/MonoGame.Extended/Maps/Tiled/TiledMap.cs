@@ -7,13 +7,9 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
-    public class TiledMap
+    public class TiledMap : IDisposable
     {
-        public TiledMap(GraphicsDevice graphicsDevice, 
-            int width, 
-            int height, 
-            int tileWidth, 
-            int tileHeight, 
+        public TiledMap(GraphicsDevice graphicsDevice, int width, int height, int tileWidth, int tileHeight, 
             TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
         {
             Width = width;
@@ -28,6 +24,12 @@ namespace MonoGame.Extended.Maps.Tiled
             Orientation = orientation;
         }
         
+        public void Dispose()
+        {
+            foreach (var tiledLayer in _layers)
+                tiledLayer.Dispose();
+        }
+
         private readonly List<TiledTileset> _tilesets;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly List<TiledLayer> _layers;

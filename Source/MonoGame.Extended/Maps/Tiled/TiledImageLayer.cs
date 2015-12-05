@@ -17,6 +17,11 @@ namespace MonoGame.Extended.Maps.Tiled
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
 
+        public override void Dispose()
+        {
+            _spriteBatch.Dispose();
+        }
+
         public Vector2 Position { get; set; }
 
         public override void Draw(Camera2D camera)
