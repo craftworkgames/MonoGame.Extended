@@ -54,7 +54,6 @@
   <ItemGroup>
     <None Include="Content\Fonts\courier-new-32.fnt" />
     <None Include="Content\Tilesets\free-tileset.json" />
-    <None Include="Content\Tilesets\free-tileset.tps" />
     <None Include="Content\Tilesets\isometric.tmx" />
     <None Include="Content\Tilesets\level01.tmx" />
     <None Include="Content\read-me.md" />
