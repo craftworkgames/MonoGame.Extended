@@ -61,8 +61,8 @@ namespace MonoGame.Extended.Sprites
         public IEnumerable<string> Animations
         {
             get { return _animations.Keys.OrderBy(i => i); }
-        } 
-        
+        }
+
         public int AddFrame(TextureRegion2D textureRegion)
         {
             var index = _frames.Count;
@@ -100,20 +100,24 @@ namespace MonoGame.Extended.Sprites
             return _frames.FirstOrDefault(f => f.Name == name);
         }
 
-        public void AddAnimation(string name, int framesPerSecond, int[] frameIndices)
+        public SpriteSheetAnimation AddAnimation(string name, int framesPerSecond, int[] frameIndices)
         {
+            if (_animations.ContainsKey(name))
+                throw new InvalidOperationException(string.Format("Animator already contrains an animation called {0}", name));
+
             var animation = new SpriteSheetAnimation(name, framesPerSecond, frameIndices);
             _animations.Add(name, animation);
+            return animation;
         }
 
-        public void AddAnimation(string name, int framesPerSecond, int firstFrameIndex, int lastFrameIndex)
+        public SpriteSheetAnimation AddAnimation(string name, int framesPerSecond, int firstFrameIndex, int lastFrameIndex)
         {
             var frameIndices = new int[lastFrameIndex - firstFrameIndex + 1];
 
             for (var i = 0; i < frameIndices.Length; i++)
                 frameIndices[i] = firstFrameIndex + i;
 
-            AddAnimation(name, framesPerSecond, frameIndices);
+            return AddAnimation(name, framesPerSecond, frameIndices);
         }
 
         public bool RemoveAnimation(string name)
@@ -128,6 +132,14 @@ namespace MonoGame.Extended.Sprites
 
             _animations.Remove(name);
             return true;
+        }
+
+        public void PlayAnimation(SpriteSheetAnimation animation, Action onCompleteAction = null)
+        {
+            if (!_animations.ContainsValue(animation))
+                throw new InvalidOperationException("Animation does not belong to this animator");
+
+            PlayAnimation(animation.Name);
         }
 
         public void PlayAnimation(string name, Action onCompleteAction = null)
@@ -172,20 +184,6 @@ namespace MonoGame.Extended.Sprites
             }
 
             _nextFrameDelay -= deltaSeconds;
-        }
-
-        private class SpriteSheetAnimation
-        {
-            public SpriteSheetAnimation(string name, int framesPerSecond, int[] frameIndicies)
-            {
-                Name = name;
-                FramesPerSecond = framesPerSecond;
-                FrameIndicies = frameIndicies;
-            }
-
-            public string Name { get; private set; }
-            public int FramesPerSecond { get; private set; }
-            public int[] FrameIndicies { get; private set; }
         }
     }
 }
