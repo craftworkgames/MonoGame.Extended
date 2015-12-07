@@ -41,7 +41,7 @@ namespace Sandbox
             {
                 MinimumZoom = 0.1f,
                 MaximumZoom = 2.0f,
-                Zoom = 0.85f,
+                Zoom = 0.7833337f,
                 Origin = new Vector2(400, 240),
                 Position = new Vector2(408, 270)
             };
@@ -64,7 +64,7 @@ namespace Sandbox
             var zombieSheet = Content.Load<TextureAtlas>("Sprites/zombie-atlas");
             _zombie = new Zombie(zombieSheet);
             var zombieActor = _world.CreateActor(_zombie);
-            zombieActor.Position = new Vector2(300, 900);
+            zombieActor.Position = new Vector2(462.5f, 896f);
         }
 
         protected override void UnloadContent()

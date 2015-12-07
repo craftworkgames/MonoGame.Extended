@@ -12,15 +12,17 @@ namespace MonoGame.Extended.Maps.Tiled
         public TiledMap(GraphicsDevice graphicsDevice, int width, int height, int tileWidth, int tileHeight, 
             TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
         {
+            _graphicsDevice = graphicsDevice;
+            _renderTarget = new RenderTarget2D(graphicsDevice, width*tileWidth, height*tileHeight);
+            _spriteBatch = new SpriteBatch(graphicsDevice);
+            _layers = new List<TiledLayer>();
+            _tilesets = new List<TiledTileset>();
+
             Width = width;
             Height = height;
             TileWidth = tileWidth;
             TileHeight = tileHeight;
             Properties = new TiledProperties();
-
-            _graphicsDevice = graphicsDevice;
-            _layers = new List<TiledLayer>();
-            _tilesets = new List<TiledTileset>();
             Orientation = orientation;
         }
         
@@ -33,7 +35,9 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly List<TiledTileset> _tilesets;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly List<TiledLayer> _layers;
-        
+        private readonly RenderTarget2D _renderTarget;
+        private readonly SpriteBatch _spriteBatch;
+
         public int Width { get; private set; }
         public int Height { get; private set; }
         public int TileWidth { get; private set; }
@@ -106,8 +110,17 @@ namespace MonoGame.Extended.Maps.Tiled
             if(useMapBackgroundColor && BackgroundColor.HasValue)
                 _graphicsDevice.Clear(BackgroundColor.Value);
 
+            _graphicsDevice.SetRenderTarget(_renderTarget);
+
             foreach (var layer in _layers)
-                layer.Draw(camera);
+                layer.Draw();
+
+            _graphicsDevice.SetRenderTarget(null);
+
+            _spriteBatch.Begin(sortMode: SpriteSortMode.Immediate, blendState: BlendState.NonPremultiplied,
+                samplerState: SamplerState.PointClamp, transformMatrix: camera.GetViewMatrix());
+            _spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
+            _spriteBatch.End();
         }
 
         public TextureRegion2D GetTileRegion(int id)

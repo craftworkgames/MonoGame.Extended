@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -24,12 +25,16 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public Vector2 Position { get; set; }
 
-        public override void Draw(Camera2D camera)
+        public override void Draw()
         {
-            _spriteBatch.Begin(sortMode: SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend,
-                samplerState: SamplerState.PointClamp, transformMatrix: camera.GetViewMatrix());
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
             _spriteBatch.Draw(_texture, Position, Color.White);
             _spriteBatch.End();
+        }
+
+        [Obsolete("The camera is no longer required for drawing Tiled layers")]
+        public override void Draw(Camera2D camera)
+        {
         }
     }
 }

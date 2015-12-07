@@ -15,6 +15,7 @@ namespace MonoGame.Extended.Maps.Tiled
             Height = height;
             
             _map = map;
+            _graphicsDevice = graphicsDevice;
             _spriteBatch = new SpriteBatch(graphicsDevice);
             _tiles = CreateTiles(data);
         }
@@ -28,9 +29,10 @@ namespace MonoGame.Extended.Maps.Tiled
         public int Height { get; private set; }
 
         private readonly TiledMap _map;
+        private readonly GraphicsDevice _graphicsDevice;
         private readonly TiledTile[] _tiles;
         private readonly SpriteBatch _spriteBatch;
-
+        
         public IEnumerable<TiledTile> Tiles
         {
             get { return _tiles; }
@@ -63,22 +65,27 @@ namespace MonoGame.Extended.Maps.Tiled
             return tiles;
         }
 
-        public override void Draw(Camera2D camera)
+        public override void Draw()
         {
             var renderOrderFunction = GetRenderOrderFunction();
 
-            _spriteBatch.Begin(sortMode: SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend,
-                samplerState: SamplerState.PointClamp, transformMatrix: camera.GetViewMatrix());
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
 
             foreach (var tile in renderOrderFunction())
             {
                 var region = _map.GetTileRegion(tile.Id);
 
-                if(region != null)
+                if (region != null)
                     RenderLayer(_map, tile, region);
             }
 
             _spriteBatch.End();
+        }
+
+        [Obsolete("The camera is no longer required for drawing Tiled layers")]
+        public override void Draw(Camera2D camera)
+        {
+            Draw();
         }
 
         private void RenderLayer(TiledMap map, TiledTile tile, TextureRegion2D region)
