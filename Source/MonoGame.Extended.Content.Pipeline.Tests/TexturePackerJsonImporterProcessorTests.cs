@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             var importer = new TexturePackerJsonImporter();
             var input = importer.Import(filename, Substitute.For<ContentImporterContext>());
             var processor = new TexturePackerProcessor();
-            var output = processor.Process(input, Substitute.For<ContentProcessorContext>());
+            var output = processor.Process(input.Data, Substitute.For<ContentProcessorContext>());
 
             Assert.IsNotNull(output);
         }

@@ -69,6 +69,7 @@
     <Compile Include="BitmapFonts\BitmapFontKerning.cs" />
     <Compile Include="BitmapFonts\BitmapFontPage.cs" />
     <Compile Include="BitmapFonts\BitmapFontProcessorResult.cs" />
+    <Compile Include="ContentImporterResult.cs" />
     <Compile Include="PathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BitmapFonts\BitmapFontImporter.cs" />

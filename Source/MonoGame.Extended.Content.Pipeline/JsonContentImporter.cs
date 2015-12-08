@@ -4,15 +4,16 @@ using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Content.Pipeline
 {
-    public abstract class JsonContentImporter<T> : ContentImporter<T>
+    public abstract class JsonContentImporter<T> : ContentImporter<ContentImporterResult<T>>
     {
-        public override T Import(string filename, ContentImporterContext context)
+        public override ContentImporterResult<T> Import(string filename, ContentImporterContext context)
         {
             using (var streamReader = new StreamReader(filename))
             using (var jsonReader = new JsonTextReader(streamReader))
             {
                 var serializer = new JsonSerializer();
-                return serializer.Deserialize<T>(jsonReader);
+                var data = serializer.Deserialize<T>(jsonReader);
+                return new ContentImporterResult<T>(filename, data);
             }
         }
     }

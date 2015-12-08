@@ -11,7 +11,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         {
             const string filePath = @"TestData\astrid-animator.aa";
             var importer = new AstridAnimatorImporter();
-            var data = importer.Import(filePath, null);
+            var result = importer.Import(filePath, null);
+            var data = result.Data;
 
             Assert.AreEqual("astrid-animator-atlas.json", data.TextureAtlas);
             Assert.AreEqual(2, data.Animations.Count);
