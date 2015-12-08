@@ -6,6 +6,7 @@
 /platform:Windows
 /config:
 /profile:Reach
+/compress:False
 
 #-------------------------------- References --------------------------------#
 
@@ -247,4 +248,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/zombie.png
+
+#begin Sprites/zombie-animations.aa
+/importer:AstridAnimatorImporter
+/processor:AstridAnimatorProcessor
+/build:Sprites/zombie-animations.aa
 

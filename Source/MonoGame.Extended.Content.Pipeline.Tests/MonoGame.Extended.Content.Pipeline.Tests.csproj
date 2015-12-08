@@ -51,6 +51,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AstridAnimatorImporterTests.cs" />
+    <Compile Include="AstridAnimatorProcessorTests.cs" />
     <Compile Include="TexturePackerJsonImporterProcessorTests.cs" />
     <Compile Include="TiledMapImporterProcessorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,6 +80,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\test-tileset.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\astrid-animator.aa">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\astrid-animator-atlas.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

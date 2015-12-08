@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.Content.Pipeline.Tiled;
-using MonoGame.Extended.Maps.Tiled;
 using NSubstitute;
 using NUnit.Framework;
 

@@ -1,8 +1,6 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
-using MonoGame.Extended.BitmapFonts;
-using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {

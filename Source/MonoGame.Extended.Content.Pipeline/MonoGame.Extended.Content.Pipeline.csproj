@@ -57,8 +57,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animations\AstridAnimatorAnimation.cs" />
     <Compile Include="Animations\AstridAnimatorImporter.cs" />
     <Compile Include="Animations\AstridAnimatorFile.cs" />
+    <Compile Include="Animations\AstridAnimatorProcessor.cs" />
+    <Compile Include="Animations\AstridAnimatorProcessorResult.cs" />
     <Compile Include="BitmapFonts\BitmapFontChar.cs" />
     <Compile Include="BitmapFonts\BitmapFontCommon.cs" />
     <Compile Include="BitmapFonts\BitmapFontFile.cs" />
@@ -71,6 +74,7 @@
     <Compile Include="BitmapFonts\BitmapFontImporter.cs" />
     <Compile Include="BitmapFonts\BitmapFontProcessor.cs" />
     <Compile Include="BitmapFonts\BitmapFontWriter.cs" />
+    <Compile Include="JsonContentImporter.cs" />
     <Compile Include="TextureAtlases\TexturePackerJsonImporter.cs" />
     <Compile Include="TextureAtlases\TexturePackerFile.cs" />
     <Compile Include="TextureAtlases\TexturePackerProcessor.cs" />

@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Fonts\courier-new-32.fnt" />
+    <None Include="Content\Sprites\zombie-animations.aa" />
     <None Include="Content\Tilesets\free-tileset.json" />
     <None Include="Content\Tilesets\isometric.tmx" />
     <None Include="Content\Tilesets\level01.tmx" />
