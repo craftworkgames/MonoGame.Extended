@@ -57,6 +57,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animations\AstridAnimatorImporter.cs" />
+    <Compile Include="Animations\AstridAnimatorFile.cs" />
     <Compile Include="BitmapFonts\BitmapFontChar.cs" />
     <Compile Include="BitmapFonts\BitmapFontCommon.cs" />
     <Compile Include="BitmapFonts\BitmapFontFile.cs" />
