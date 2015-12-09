@@ -21,19 +21,21 @@ namespace Sandbox
 
     public class Zombie : IUpdate, IActorTarget
     {
-        public Zombie(TextureAtlas textureAtlas)
+        public Zombie(SpriteSheetAnimator animator)
         {
-            _sprite = new Sprite(textureAtlas[0])
-            {
-                OriginNormalized = new Vector2(0.5f, 1.0f)
-            };
+            //_sprite = new Sprite(textureAtlas[0])
+            //{
+            //    OriginNormalized = new Vector2(0.5f, 1.0f)
+            //};
 
-            _animator = new SpriteSheetAnimator(_sprite, textureAtlas);
-            _animator.AddAnimation("appear", framesPerSecond: 8, firstFrameIndex: 0, lastFrameIndex: 10);
-            _animator.AddAnimation("idle", framesPerSecond: 8, firstFrameIndex: 36, lastFrameIndex: 41);
-            _animator.AddAnimation("walk", framesPerSecond: 12, firstFrameIndex: 19, lastFrameIndex: 28);
-            _animator.AddAnimation("attack", framesPerSecond: 8, firstFrameIndex: 29, lastFrameIndex: 35);
-            _animator.AddAnimation("die", framesPerSecond: 8, firstFrameIndex: 11, lastFrameIndex: 18);
+            //_animator = new SpriteSheetAnimator(_sprite, textureAtlas);
+            //_animator.AddAnimation("appear", framesPerSecond: 8, firstFrameIndex: 0, lastFrameIndex: 10);
+            //_animator.AddAnimation("idle", framesPerSecond: 8, firstFrameIndex: 36, lastFrameIndex: 41);
+            //_animator.AddAnimation("walk", framesPerSecond: 12, firstFrameIndex: 19, lastFrameIndex: 28);
+            //_animator.AddAnimation("attack", framesPerSecond: 8, firstFrameIndex: 29, lastFrameIndex: 35);
+            //_animator.AddAnimation("die", framesPerSecond: 8, firstFrameIndex: 11, lastFrameIndex: 18);
+            _animator = animator;
+            _sprite = _animator.Sprite;
 
             State = ZombieState.Appearing;
             IsOnGround = false;

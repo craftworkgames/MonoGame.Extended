@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using MonoGame.Extended.Content.Pipeline.Animations;
 using NUnit.Framework;
 
@@ -10,24 +9,16 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void AstridAnimatorProcessor_Process_Test()
         {
-            var input  = new AstridAnimatorFile
-            {
-                TextureAtlas = "astrid-animator-atlas.json",
-                Animations = new List<AstridAnimatorAnimation>
-                {
-                    new AstridAnimatorAnimation("animation1", 8)
-                    {
-                        Frames = new List<string>
-                        {
-                            "frame01",
-                            "frame02"
-                        }
-                    }
-                }
-            };
-            var processor = new AstridAnimatorProcessor();
-            var result = processor.Process(input, null);
+            const string filePath = @"TestData\astrid-animator.aa";
 
+            var importer = new AstridAnimatorImporter();
+            var importerResult = importer.Import(filePath, null);
+
+            var processor = new AstridAnimatorProcessor();
+            var result = processor.Process(importerResult, null);
+
+            Assert.AreEqual("", result.TextureAtlasAssetName);
+            Assert.AreEqual("", result.Directory);
             Assert.IsNotNull(result);
         }
     }

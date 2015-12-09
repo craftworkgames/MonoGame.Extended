@@ -5,6 +5,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -61,8 +62,8 @@ namespace Sandbox
             _world = new CollisionWorld(new Vector2(0, 900));
             _world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
 
-            var zombieSheet = Content.Load<TextureAtlas>("Sprites/zombie-atlas");
-            _zombie = new Zombie(zombieSheet);
+            var zombieAnimator = Content.Load<SpriteSheetAnimator>("Sprites/zombie-animations");
+            _zombie = new Zombie(zombieAnimator);
             var zombieActor = _world.CreateActor(_zombie);
             zombieActor.Position = new Vector2(462.5f, 896f);
         }

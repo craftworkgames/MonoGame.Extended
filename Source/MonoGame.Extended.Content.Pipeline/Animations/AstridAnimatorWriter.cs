@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
         {
             var data = input.Data;
 
-            writer.Write(data.TextureAtlas);
+            writer.Write(input.TextureAtlasAssetName);
             writer.Write(input.Frames.Count);
 
             foreach (var frame in input.Frames)
@@ -31,7 +31,7 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
                 writer.Write(animation.Frames.Count);
 
                 foreach (var frame in animation.Frames)
-                    writer.Write(frame);
+                    writer.Write(input.Frames.IndexOf(frame));
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework.Content;
+using MonoGame.Extended.Content;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
@@ -9,7 +10,7 @@ namespace MonoGame.Extended.Animations
     {
         protected override SpriteSheetAnimator Read(ContentReader reader, SpriteSheetAnimator existingInstance)
         {
-            var textureAtlasAssetName = reader.ReadString();
+            var textureAtlasAssetName = reader.GetRelativeAssetPath(reader.ReadString());
             var textureAtlas = reader.ContentManager.Load<TextureAtlas>(textureAtlasAssetName);
             var sprite = new Sprite(textureAtlas.First());
             var animator = new SpriteSheetAnimator(sprite, textureAtlas);

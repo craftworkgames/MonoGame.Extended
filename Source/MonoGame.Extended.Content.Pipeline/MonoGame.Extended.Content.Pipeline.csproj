@@ -75,7 +75,6 @@
     <Compile Include="BitmapFonts\BitmapFontImporter.cs" />
     <Compile Include="BitmapFonts\BitmapFontProcessor.cs" />
     <Compile Include="BitmapFonts\BitmapFontWriter.cs" />
-    <Compile Include="JsonContentImporter.cs" />
     <Compile Include="TextureAtlases\TexturePackerJsonImporter.cs" />
     <Compile Include="TextureAtlases\TexturePackerFile.cs" />
     <Compile Include="TextureAtlases\TexturePackerProcessor.cs" />
