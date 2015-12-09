@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.Content.Pipeline.TextureAtlases;
 
@@ -16,9 +17,13 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
             //var atlasPath = Path.Combine(directory, data.TextureAtlas);
             //var atlasImporter = new TexturePackerJsonImporter();
             //var atlas = atlasImporter.Import(atlasPath, null);
-          
 
-            return new AstridAnimatorProcessorResult();
+            var frames = input.Animations
+                .SelectMany(i => i.Frames)
+                .OrderBy(f => f)
+                .Distinct();
+            var result = new AstridAnimatorProcessorResult(input, frames);
+            return result;
         }
     }
 }

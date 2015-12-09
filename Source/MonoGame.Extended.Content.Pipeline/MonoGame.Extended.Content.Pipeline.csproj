@@ -62,6 +62,7 @@
     <Compile Include="Animations\AstridAnimatorFile.cs" />
     <Compile Include="Animations\AstridAnimatorProcessor.cs" />
     <Compile Include="Animations\AstridAnimatorProcessorResult.cs" />
+    <Compile Include="Animations\AstridAnimatorWriter.cs" />
     <Compile Include="BitmapFonts\BitmapFontChar.cs" />
     <Compile Include="BitmapFonts\BitmapFontCommon.cs" />
     <Compile Include="BitmapFonts\BitmapFontFile.cs" />
