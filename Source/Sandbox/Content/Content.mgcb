@@ -249,8 +249,3 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/zombie.png
 
-#begin Sprites/zombie-animations.aa
-/importer:AstridAnimatorImporter
-/processor:AstridAnimatorProcessor
-/build:Sprites/zombie-animations.aa
-

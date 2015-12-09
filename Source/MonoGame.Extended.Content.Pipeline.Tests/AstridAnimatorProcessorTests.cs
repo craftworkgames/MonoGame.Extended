@@ -26,8 +26,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
                 }
             };
             var processor = new AstridAnimatorProcessor();
-            var importerResult = new ContentImporterResult<AstridAnimatorFile>(@"TestData\astrid-animator.aa", input);
-            var result = processor.Process(importerResult, null);
+            var result = processor.Process(input, null);
 
             Assert.IsNotNull(result);
         }
