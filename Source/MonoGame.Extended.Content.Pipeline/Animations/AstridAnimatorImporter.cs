@@ -4,18 +4,6 @@ using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Content.Pipeline.Animations
 {
-    public class ContentImporterResult<T>
-    {
-        public ContentImporterResult(string filePath, T data)
-        {
-            FilePath = filePath;
-            Data = data;
-        }
-
-        public string FilePath { get; private set; }
-        public T Data { get; private set; }
-    }
-
     [ContentImporter(".aa", DefaultProcessor = "AstridAnimatorProcessor", DisplayName = "Astrid Animator Importer - MonoGame.Extended")]
     public class AstridAnimatorImporter : ContentImporter<ContentImporterResult<AstridAnimatorFile>>
     {
