@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,14 +12,15 @@ namespace MonoGame.Extended.ViewportAdapters
 
     public class BoxingViewportAdapter : ScalingViewportAdapter
     {
-        public BoxingViewportAdapter(GraphicsDevice graphicsDevice, int virtualWidth, int virtualHeight)
+        public BoxingViewportAdapter(GameWindow window, GraphicsDevice graphicsDevice, int virtualWidth, int virtualHeight)
             : base(graphicsDevice, virtualWidth, virtualHeight)
         {
+            window.ClientSizeChanged += OnClientSizeChanged;
         }
 
         public BoxingMode BoxingMode { get; private set; }
         
-        public override void OnClientSizeChanged()
+        private void OnClientSizeChanged(object sender, EventArgs eventArgs)
         {
             var viewport = GraphicsDevice.Viewport;
             var aspectRatio = (float) VirtualWidth / VirtualHeight;

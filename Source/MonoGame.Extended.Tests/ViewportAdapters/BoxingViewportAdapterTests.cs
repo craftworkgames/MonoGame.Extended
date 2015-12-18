@@ -10,11 +10,12 @@ namespace MonoGame.Extended.Tests.ViewportAdapters
         [Test]
         public void BoxingViewportAdapter_Letterbox_Test()
         {
+            var gameWindow = new MockGameWindow();
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
-            var viewportAdapter = new BoxingViewportAdapter(graphicsDevice, 800, 480);
+            var viewportAdapter = new BoxingViewportAdapter(gameWindow, graphicsDevice, 800, 480);
 
             graphicsDevice.Viewport = new Viewport(0, 0, 1024, 768);
-            viewportAdapter.OnClientSizeChanged();
+            gameWindow.RaiseOnClientSizeChangedEvent();
 
             Assert.AreEqual(1024, graphicsDevice.Viewport.Width);
             Assert.AreEqual(614, graphicsDevice.Viewport.Height);
@@ -24,11 +25,12 @@ namespace MonoGame.Extended.Tests.ViewportAdapters
         [Test]
         public void BoxingViewportAdapter_Pillarbox_Test()
         {
+            var gameWindow = new MockGameWindow();
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
-            var viewportAdapter = new BoxingViewportAdapter(graphicsDevice, 800, 480);
+            var viewportAdapter = new BoxingViewportAdapter(gameWindow, graphicsDevice, 800, 480);
 
             graphicsDevice.Viewport = new Viewport(0, 0, 900, 500);
-            viewportAdapter.OnClientSizeChanged();
+            gameWindow.RaiseOnClientSizeChangedEvent();
 
             Assert.AreEqual(833, graphicsDevice.Viewport.Width);
             Assert.AreEqual(500, graphicsDevice.Viewport.Height);

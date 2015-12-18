@@ -48,6 +48,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MockGameWindow.cs" />
     <Compile Include="Shapes\CircleTests.cs" />
     <Compile Include="Sprites\SpriteTests.cs" />
     <Compile Include="TextureAtlases\TextureAtlasTests.cs" />

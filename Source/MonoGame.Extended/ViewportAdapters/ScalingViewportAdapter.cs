@@ -37,10 +37,6 @@ namespace MonoGame.Extended.ViewportAdapters
             get { return GraphicsDevice.Viewport.Height; }
         }
 
-        public override void OnClientSizeChanged()
-        {
-        }
-
         public override Matrix GetScaleMatrix()
         {
             var scaleX = (float)ViewportWidth / VirtualWidth;

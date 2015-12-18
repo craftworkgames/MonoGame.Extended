@@ -13,7 +13,6 @@ namespace MonoGame.Extended.ViewportAdapters
         public abstract int VirtualHeight { get; }
         public abstract int ViewportWidth { get; }
         public abstract int ViewportHeight { get; }
-        public abstract void OnClientSizeChanged();
         public abstract Matrix GetScaleMatrix();
 
         public Point PointToScreen(Point point)

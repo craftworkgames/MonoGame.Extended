@@ -37,7 +37,7 @@ namespace Sandbox
         protected override void Initialize()
         {
             _fpsCounter = new FramesPerSecondCounter();
-            _viewportAdapter = new BoxingViewportAdapter(GraphicsDevice, 800, 480);
+            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter)
             {
                 MinimumZoom = 0.1f,
@@ -48,7 +48,6 @@ namespace Sandbox
             };
 
             Window.AllowUserResizing = true;
-            Window.ClientSizeChanged += (s, e) => _viewportAdapter.OnClientSizeChanged();
 
             base.Initialize();
         }

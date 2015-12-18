@@ -33,10 +33,6 @@ namespace MonoGame.Extended.ViewportAdapters
             get { return _graphicsDevice.Viewport.Height; }
         }
 
-        public override void OnClientSizeChanged()
-        {
-        }
-
         public override Matrix GetScaleMatrix()
         {
             return Matrix.Identity;
