@@ -8,38 +8,60 @@ namespace MonoGame.Extended.Tests
     public class Vector2ExtensionsTests
     {
         [Test]
+        public void Vector2_EqualsWithTolerence_Test()
+        {
+            var a = new Vector2(1f, 1f);
+            var b = new Vector2(1.0000001f, 1.0000001f);
+
+            Assert.IsFalse(a.Equals(b));
+            Assert.IsTrue(a.EqualsWithTolerance(b));
+        }
+
+        [Test]
+        public void Vector2_NormalizedCopy_Test()
+        {
+            var a = new Vector2(5, -10);
+            var b = a.NormalizedCopy();
+
+            Assert.IsTrue(new Vector2(0.4472136f, -0.8944272f).EqualsWithTolerance(b));
+        }
+
+        [Test]
+        public void Vector2_Perpendicular_Test()
+        {
+            var a = new Vector2(5, -10);
+            var b = a.PerpendicularClockwise();
+            var c = a.PerpendicularCounterClockwise();
+
+            Assert.AreEqual(new Vector2(10, 5), b);
+            Assert.AreEqual(new Vector2(-10, -5), c);
+        }
+
+        [Test]
         public void Vector2_Rotate_90_Degrees_Test()
         {
-            var vector2 = new Vector2(0, -10);
-            var expected = new Vector2(10, 0);
-            var result = vector2.Rotate(MathHelper.ToRadians(90));
-            
-            Assert.IsTrue(Equals(expected, result));
+            var a = new Vector2(0, -10);
+            var b = a.Rotate(MathHelper.ToRadians(90));
+
+            Assert.IsTrue(new Vector2(10, 0).EqualsWithTolerance(b));
         }
 
         [Test]
         public void Vector2_Rotate_360_Degrees_Test()
         {
-            var vector2 = new Vector2(0, 10);
-            var expected = new Vector2(0, 10);
-            var result = vector2.Rotate(MathHelper.ToRadians(360));
+            var a = new Vector2(0, 10);
+            var b = a.Rotate(MathHelper.ToRadians(360));
 
-            Assert.IsTrue(Equals(expected, result));
+            Assert.IsTrue(new Vector2(0, 10).EqualsWithTolerance(b));
         }
 
         [Test]
         public void Vector2_Rotate_45_Degrees_Test()
         {
-            var vector2 = new Vector2(0, -10);
-            var expected = new Vector2(7.071068f, -7.071068f);
-            var result = vector2.Rotate(MathHelper.ToRadians(45));
+            var a = new Vector2(0, -10);
+            var b = a.Rotate(MathHelper.ToRadians(45));
 
-            Assert.IsTrue(Equals(expected, result));
-        }
-
-        private static bool Equals(Vector2 a, Vector2 b, float tolerence = 0.00001f)
-        {
-            return Math.Abs(a.X - b.X) <= tolerence && Math.Abs(a.Y - b.Y) <= tolerence;
+            Assert.IsTrue(new Vector2(7.071068f, -7.071068f).EqualsWithTolerance(b));
         }
     }
 }
