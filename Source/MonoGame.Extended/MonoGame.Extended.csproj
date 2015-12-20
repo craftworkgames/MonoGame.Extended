@@ -96,6 +96,7 @@
     <Compile Include="Timers\CountdownTimer.cs" />
     <Compile Include="Timers\GameTimer.cs" />
     <Compile Include="Timers\TimerState.cs" />
+    <Compile Include="Vector2Extensions.cs" />
     <Compile Include="ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\ScalingViewportAdapter.cs" />

@@ -109,9 +109,19 @@ namespace MonoGame.Extended
             Position = position - new Vector2(_viewportAdapter.VirtualWidth / 2f, _viewportAdapter.VirtualHeight / 2f);
         }
 
+        public Vector2 WorldToScreen(float x, float y)
+        {
+            return WorldToScreen(new Vector2(x, y));
+        }
+
         public Vector2 WorldToScreen(Vector2 worldPosition)
         {
             return Vector2.Transform(worldPosition, GetViewMatrix());
+        }
+
+        public Vector2 ScreenToWorld(float x, float y)
+        {
+            return ScreenToWorld(new Vector2(x, y));
         }
 
         public Vector2 ScreenToWorld(Vector2 screenPosition)
