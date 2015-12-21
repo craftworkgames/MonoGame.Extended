@@ -33,5 +33,23 @@ namespace MonoGame.Extended
         {
             return new Vector2(vector2.Y, -vector2.X);
         }
+
+        public static Vector2 Truncate(this Vector2 vector2, float maxLength)
+        {
+            if (vector2.LengthSquared() > maxLength * maxLength)
+                return vector2.NormalizedCopy() * maxLength;
+
+            return vector2;
+        }
+
+        public static bool IsNaN(this Vector2 vector2)
+        {
+            return float.IsNaN(vector2.X) || float.IsNaN(vector2.Y);
+        }
+
+        public static float ToAngle(this Vector2 vector2)
+        {
+            return (float) Math.Atan2(vector2.X, -vector2.Y);
+        }
     }
 }
