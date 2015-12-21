@@ -335,42 +335,7 @@ namespace MonoGame.Extended.Shapes
 		{
 		    result = Intersects(value);
 		}
-
-		/*
-		/// <summary>
-		/// Creates a new <see cref="Circle"/> that contains overlapping region of two other circles.
-		/// </summary>
-		/// <param name="value1">The first <see cref="Circle"/>.</param>
-		/// <param name="value2">The second <see cref="Circle"/>.</param>
-		/// <returns>Overlapping region of the two circles.</returns>
-		public static Circle Intersect(Circle value1, Circle value2)
-		{
-			Circle circle;
-			Intersect(ref value1, ref value2, out circle);
-			return circle;
-		}
-		*/
-
-		/*
-		/// <summary>
-		/// Creates a new <see cref="Circle"/> that contains overlapping region of two other circles.
-		/// </summary>
-		/// <param name="value1">The first <see cref="Circle"/>.</param>
-		/// <param name="value2">The second <see cref="Circle"/>.</param>
-		/// <param name="result">Overlapping region of the two circles as an output parameter.</param>
-		public static void Intersect(ref Circle value1, ref Circle value2, out Circle result)
-		{
-			if (value1.Intersects(value2))
-			{
-				throw new NotImplementedException();
-			}
-			else
-			{
-				result = new Circle(Vector2.Zero, 0.0f);
-			}
-		}
-		*/
-
+        
 		/// <summary>
 		/// Changes the <see cref="Location"/> of this <see cref="Circle"/>.
 		/// </summary>
@@ -417,31 +382,5 @@ namespace MonoGame.Extended.Shapes
 		{
 			return new Rectangle((int)(Center.X - Radius), (int)(Center.Y - Radius), (int)Radius * 2, (int)Radius * 2);
 		}
-
-		/*
-		/// <summary>
-		/// Creates a new <see cref="Circle"/> that completely contains two other circles.
-		/// </summary>
-		/// <param name="value1">The first <see cref="Circle"/>.</param>
-		/// <param name="value2">The second <see cref="Circle"/>.</param>
-		/// <returns>The union of the two circles.</returns>
-		public static Circle Union(Circle value1, Circle value2)
-		{
-			throw new NotImplementedException();
-		}
-		*/
-
-		/*
-		/// <summary>
-		/// Creates a new <see cref="Circle"/> that completely contains two other circles.
-		/// </summary>
-		/// <param name="value1">The first <see cref="Circle"/>.</param>
-		/// <param name="value2">The second <see cref="Circle"/>.</param>
-		/// <param name="result">The union of the two circles as an output parameter.</param>
-		public static void Union(ref Circle value1, ref Circle value2, out Circle result)
-		{
-			throw new NotImplementedException();
-		}
-		*/
 	}
 }
