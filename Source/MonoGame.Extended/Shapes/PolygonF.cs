@@ -17,12 +17,12 @@ namespace MonoGame.Extended.Shapes
             get { return _vertices; }
         }
 
-        public Polygon Transform(Vector2 position, Vector2 origin, float rotation, Vector2 scale)
+        public PolygonF Transform(Vector2 position, Vector2 origin, float rotation, Vector2 scale)
         {
-            var transformedVertices = new Vector2[_vertices.Length];
+            var newVertices = new Vector2[_vertices.Length];
             var isScaled = scale != Vector2.One;
 
-            for (var i = 0; i <= _vertices.Length; i++)
+            for (var i = 0; i < _vertices.Length; i++)
             {
                 var x = _vertices[i].X - origin.X;
                 var y = _vertices[i].Y - origin.Y;
@@ -45,11 +45,11 @@ namespace MonoGame.Extended.Shapes
                     y = sin * oldX + cos * y;
                 }
 
-                transformedVertices[i].X = position.X + x + origin.X;
-                transformedVertices[i].Y = position.Y + y + origin.Y;
+                newVertices[i].X = position.X + x + origin.X;
+                newVertices[i].Y = position.Y + y + origin.Y;
             }
 
-            return new Polygon(transformedVertices);
+            return new PolygonF(newVertices);
         }
 
         public RectangleF GetBoundingRectangle()

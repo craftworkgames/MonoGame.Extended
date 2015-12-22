@@ -49,7 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MockGameWindow.cs" />
-    <Compile Include="Shapes\PolygonTests.cs" />
+    <Compile Include="Shapes\PolygonFTests.cs" />
     <Compile Include="Shapes\CircleTests.cs" />
     <Compile Include="Sprites\SpriteTests.cs" />
     <Compile Include="TextureAtlases\TextureAtlasTests.cs" />
