@@ -74,6 +74,7 @@
     <Compile Include="Shapes\Circle.cs" />
     <Compile Include="Shapes\Line.cs" />
     <Compile Include="Shapes\Polygon.cs" />
+    <Compile Include="Shapes\PolygonF.cs" />
     <Compile Include="Shapes\RectangleF.cs" />
     <Compile Include="Shapes\RectangleExtensions.cs" />
     <Compile Include="Sprites\SpriteExtensions.cs" />
