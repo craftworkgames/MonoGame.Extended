@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Shapes
 {
-    public class PolygonF 
+    public class PolygonF : ShapeF<PolygonF>
     {
         public PolygonF (Vector2[] vertices)
         {
@@ -17,40 +17,32 @@ namespace MonoGame.Extended.Shapes
             get { return _vertices; }
         }
 
-        public PolygonF Transform(Vector2 position, Vector2 origin, float rotation, Vector2 scale)
+        public override PolygonF Transform(Vector2 translation, float rotation, Vector2 scale)
         {
             var newVertices = new Vector2[_vertices.Length];
             var isScaled = scale != Vector2.One;
 
             for (var i = 0; i < _vertices.Length; i++)
             {
-                var x = _vertices[i].X - origin.X;
-                var y = _vertices[i].Y - origin.Y;
-
-                // scale if needed
+                var p = _vertices[i];
+                
                 if (isScaled)
-                {
-                    x *= scale.X;
-                    y *= scale.Y;
-                }
+                    p *= scale;
 
-                // rotate if needed
                 // ReSharper disable once CompareOfFloatsByEqualityOperator
                 if (rotation != 0)
                 {
-                    var cos = (float)Math.Cos(rotation); // degrees?
-                    var sin = (float)Math.Sin(rotation);
-                    var oldX = x;
-                    x = cos * x - sin * y;
-                    y = sin * oldX + cos * y;
+                    var cos = (float) Math.Cos(rotation);
+                    var sin = (float) Math.Sin(rotation);
+                    p = new Vector2(cos * p.X - sin * p.Y, sin * p.X + cos * p.Y);
                 }
 
-                newVertices[i].X = position.X + x + origin.X;
-                newVertices[i].Y = position.Y + y + origin.Y;
+                newVertices[i] = p + translation;
             }
 
             return new PolygonF(newVertices);
         }
+
 
         public RectangleF GetBoundingRectangle()
         {
@@ -62,7 +54,7 @@ namespace MonoGame.Extended.Shapes
             return new RectangleF(minX, minY, maxX - minX, maxY - minY);
         }
 
-        public bool Contains(float x, float y)
+        public override bool Contains(float x, float y)
         {
             var intersects = 0;
 
@@ -78,11 +70,6 @@ namespace MonoGame.Extended.Shapes
             }
 
             return (intersects & 1) == 1;
-        }
-
-        public bool Contains(Vector2 point)
-        {
-            return Contains(point.X, point.Y);
         }
     }
 }

@@ -72,9 +72,11 @@
     <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
     <Compile Include="Shapes\Circle.cs" />
+    <Compile Include="Shapes\CircleF.cs" />
     <Compile Include="Shapes\PolygonF.cs" />
     <Compile Include="Shapes\RectangleF.cs" />
     <Compile Include="Shapes\RectangleExtensions.cs" />
+    <Compile Include="Shapes\ShapeF.cs" />
     <Compile Include="Sprites\SpriteExtensions.cs" />
     <Compile Include="Sprites\SpriteSheetAnimation.cs" />
     <Compile Include="Sprites\SpriteSheetAnimator.cs" />

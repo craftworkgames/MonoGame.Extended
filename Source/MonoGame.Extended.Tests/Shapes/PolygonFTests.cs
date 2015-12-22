@@ -28,9 +28,9 @@ namespace MonoGame.Extended.Tests.Shapes
         }
 
         [Test]
-        public void Polygon_Transform_Position_Test()
+        public void Polygon_Transform_Translation_Test()
         {
-            var vertices = new[]
+            var vertices = new[] 
             {
                 new Vector2(0, 0),
                 new Vector2(10, 0),
@@ -39,7 +39,7 @@ namespace MonoGame.Extended.Tests.Shapes
             };
 
             var polygon = new PolygonF(vertices)
-                .Transform(new Vector2(2, 3), Vector2.Zero, 0, Vector2.One);
+                .Transform(new Vector2(2, 3), 0, Vector2.One);
 
             Assert.AreEqual(new Vector2(2, 3), polygon.Vertices[0]);
             Assert.AreEqual(new Vector2(12, 3), polygon.Vertices[1]);
@@ -52,19 +52,37 @@ namespace MonoGame.Extended.Tests.Shapes
         {
             var vertices = new[]
             {
-                new Vector2(0, 0),
-                new Vector2(5, 0),
+                new Vector2(-5, -5),
                 new Vector2(5, 10),
-                new Vector2(0, 10)
+                new Vector2(-5, 10)
             };
 
             var polygon = new PolygonF(vertices)
-                .Transform(Vector2.Zero, new Vector2(2.5f, 5.0f), MathHelper.ToRadians(90), Vector2.One);
+                .Transform(Vector2.Zero, MathHelper.ToRadians(90), Vector2.One);
 
-        //    Assert.AreEqual(new Vector2(2, 3), polygon.Vertices[0]);
-        //    Assert.AreEqual(new Vector2(12, 3), polygon.Vertices[1]);
-        //    Assert.AreEqual(new Vector2(12, 13), polygon.Vertices[2]);
-        //    Assert.AreEqual(new Vector2(2, 13), polygon.Vertices[3]);
+            const float tolerance = 0.01f;
+            Assert.IsTrue(new Vector2(5, -5).EqualsWithTolerance(polygon.Vertices[0], tolerance));
+            Assert.IsTrue(new Vector2(-10, 5).EqualsWithTolerance(polygon.Vertices[1], tolerance));
+            Assert.IsTrue(new Vector2(-10, -5).EqualsWithTolerance(polygon.Vertices[2], tolerance));
+        }
+
+        [Test]
+        public void Polygon_Transform_Scale_Test()
+        {
+            var vertices = new[]
+            {
+                new Vector2(0, -1),
+                new Vector2(1, 1),
+                new Vector2(-1, 1)
+            };
+
+            var polygon = new PolygonF(vertices)
+                .Transform(Vector2.Zero, 0, new Vector2(2, 0.5f));
+
+            const float tolerance = 0.01f;
+            Assert.IsTrue(new Vector2(0, -0.5f).EqualsWithTolerance(polygon.Vertices[0], tolerance), "0");
+            Assert.IsTrue(new Vector2(2f, 0.5f).EqualsWithTolerance(polygon.Vertices[1], tolerance), "1");
+            Assert.IsTrue(new Vector2(-2f, 0.5f).EqualsWithTolerance(polygon.Vertices[2], tolerance), "2");
         }
     }
 }
