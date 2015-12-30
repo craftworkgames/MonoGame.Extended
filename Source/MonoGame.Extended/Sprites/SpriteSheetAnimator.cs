@@ -144,12 +144,13 @@ namespace MonoGame.Extended.Sprites
 
         public void PlayAnimation(string name, Action onCompleteAction = null)
         {
-            if(_currentAnimation != null && _currentAnimation.Name == name)
+            if(_currentAnimation != null && _currentAnimation.Name == name && IsPlaying)
                 return;
             
             _currentAnimation = _animations[name];
             _frameIndex = 0;
             _onCompleteAction = onCompleteAction;
+            IsPlaying = true;
         }
 
         public void Update(GameTime gameTime)
@@ -166,9 +167,9 @@ namespace MonoGame.Extended.Sprites
 
                 if (_frameIndex >= _currentAnimation.FrameIndicies.Length)
                 {
-                    if (IsLooping)
-                        _frameIndex = 0;
-                    else
+                    _frameIndex = 0;
+
+                    if (!IsLooping)
                         IsPlaying = false;
 
                     var onCompleteAction = _onCompleteAction;

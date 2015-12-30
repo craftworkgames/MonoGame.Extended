@@ -24,8 +24,8 @@ namespace MonoGame.Extended.Sprites
         public static void Draw(this SpriteBatch spriteBatch, SpriteSheetAnimator animator)
         {
             if (animator == null) throw new ArgumentNullException("animator");
-
-            if (animator.Sprite != null)
+            
+            if (animator.IsPlaying && animator.Sprite != null)
                 Draw(spriteBatch, animator.Sprite);
         }
 
