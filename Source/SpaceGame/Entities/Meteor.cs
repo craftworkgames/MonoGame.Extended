@@ -11,14 +11,14 @@ namespace SpaceGame.Entities
         public Meteor(TextureRegion2D textureRegion, Vector2 velocity)
         {
             _sprite = new Sprite(textureRegion);
-            _shape = new Circle(_sprite.Position, _radius);
+            _shape = new CircleF(_sprite.Position, _radius);
             Velocity = velocity;
             HealthPoints = 10;
         }
 
         private const float _radius = 55f;
         private readonly Sprite _sprite;
-        private Circle _shape;
+        private CircleF _shape;
 
         public int HealthPoints { get; private set; }
         public Vector2 Velocity { get; set; }

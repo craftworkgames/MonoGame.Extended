@@ -10,9 +10,9 @@ namespace MonoGame.Extended.Tests.Shapes
         [Test]
         public void Circle_ConstructorsAndProperties()
         {
-            var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
+            var circle = new CircleF(new Vector2(200.0f, 300.0f), 100.0f);
 
-            Assert.AreEqual(new Circle() { Center = new Vector2(200.0f, 300.0f), Radius = 100.0f }, circle);
+            Assert.AreEqual(new CircleF() { Center = new Vector2(200.0f, 300.0f), Radius = 100.0f }, circle);
             Assert.AreEqual(200.0f - 100.0f, circle.Left);
             Assert.AreEqual(200.0f + 100.0f, circle.Right);
             Assert.AreEqual(300.0f - 100.0f, circle.Top);
@@ -21,14 +21,14 @@ namespace MonoGame.Extended.Tests.Shapes
             Assert.AreEqual(new Vector2(200.0f, 300.0f), circle.Center);
             Assert.AreEqual(100.0f, circle.Radius);
             Assert.AreEqual(false, circle.IsEmpty);
-            Assert.AreEqual(true, new Circle().IsEmpty);
-            Assert.AreEqual(new Circle(), Circle.Empty);
+            Assert.AreEqual(true, new CircleF().IsEmpty);
+            Assert.AreEqual(new CircleF(), CircleF.Empty);
         }
 
         [Test]
         public void Circle_ContainsPoint()
         {
-            var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
+            var circle = new CircleF(new Vector2(200.0f, 300.0f), 100.0f);
 
             var p1 = new Point(-1, -1);
             var p2 = new Point(110, 300);
@@ -59,7 +59,7 @@ namespace MonoGame.Extended.Tests.Shapes
         [Test]
         public void Circle_ContainsVector2()
         {
-            var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
+            var circle = new CircleF(new Vector2(200.0f, 300.0f), 100.0f);
 
             var p1 = new Vector2(-1, -1);
             var p2 = new Vector2(110, 300);
@@ -90,7 +90,7 @@ namespace MonoGame.Extended.Tests.Shapes
         [Test]
         public void Circle_ContainsFloats()
         {
-            var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
+            var circle = new CircleF(new Vector2(200.0f, 300.0f), 100.0f);
 
             float x1 = -1; float y1 = -1;
             float x2 = 110; float y2 = 300;
@@ -108,11 +108,11 @@ namespace MonoGame.Extended.Tests.Shapes
         [Test]
         public void Circle_ContainsCircle()
         {
-            var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
-            var circle1 = new Circle(new Vector2(199.0f, 299.0f), 100.0f);
-            var circle2 = new Circle(new Vector2(200.0f, 300.0f), 25.0f);
-            var circle3 = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
-            var circle4 = new Circle(new Vector2(201.0f, 301.0f), 100.0f);
+            var circle = new CircleF(new Vector2(200.0f, 300.0f), 100.0f);
+            var circle1 = new CircleF(new Vector2(199.0f, 299.0f), 100.0f);
+            var circle2 = new CircleF(new Vector2(200.0f, 300.0f), 25.0f);
+            var circle3 = new CircleF(new Vector2(200.0f, 300.0f), 100.0f);
+            var circle4 = new CircleF(new Vector2(201.0f, 301.0f), 100.0f);
 
             bool result;
 
@@ -137,10 +137,10 @@ namespace MonoGame.Extended.Tests.Shapes
         [Test]
         public void Circle_IntersectionTest()
         {
-            var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
+            var circle = new CircleF(new Vector2(200.0f, 300.0f), 100.0f);
 
-            var circ1 = new Circle(new Vector2(350.0f, 300.0f), 100.0f);
-            var circ2 = new Circle(new Vector2(400.0f, 300.0f), 100.0f);
+            var circ1 = new CircleF(new Vector2(350.0f, 300.0f), 100.0f);
+            var circ2 = new CircleF(new Vector2(400.0f, 300.0f), 100.0f);
 
             var rect1 = new Rectangle(250, 300, 100, 100);
             var rect2 = new Rectangle(400, 300, 100, 100);
@@ -167,21 +167,21 @@ namespace MonoGame.Extended.Tests.Shapes
         [Test]
         public void Circle_Inflate()
         {
-            var circle = new Circle(new Vector2(200.0f, 300.0f), 100.0f);
+            var circle = new CircleF(new Vector2(200.0f, 300.0f), 100.0f);
             circle.Inflate(100.0f);
-            Assert.AreEqual(new Circle(new Vector2(100.0f, 200.0f), 300.0f), circle);
+            Assert.AreEqual(new CircleF(new Vector2(100.0f, 200.0f), 300.0f), circle);
         }
 
         [Test]
         public void Circle_ToStringTest()
         {
-            Assert.AreEqual("{Center:{X:200 Y:300} Radius:100}", new Circle(new Vector2(200.0f, 300.0f), 100.0f).ToString());
+            Assert.AreEqual("{Center:{X:200 Y:300} Radius:100}", new CircleF(new Vector2(200.0f, 300.0f), 100.0f).ToString());
         }
 
         [Test]
         public void Circle_ToRectangleTest()
         {
-            var actual = new Circle(center: new Vector2(200, 300), radius: 100).ToRectangle();
+            var actual = new CircleF(center: new Vector2(200, 300), radius: 100).ToRectangle();
             var expected = new Rectangle(100, 200, 200, 200);
             Assert.AreEqual(expected, actual);
         }
