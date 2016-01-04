@@ -114,7 +114,7 @@ namespace SpaceGame
             {
                 foreach (var meteor in _entityManager.Entities.Where(e => e is Meteor).Cast<Meteor>().ToArray())
                 {
-                    if (meteor.Shape.Contains(laser.Position))
+                    if (meteor.Contains(laser.Position))
                     {
                         meteor.Damage(1);
                         laser.Destroy();

@@ -1,30 +1,44 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Shapes
 {
-    public class PolygonF : ShapeF<PolygonF>
+    public class PolygonF : ShapeF
     {
-        public PolygonF (Vector2[] vertices)
+        public PolygonF (IEnumerable<Vector2> vertices)
         {
-            _vertices = vertices;
+            _localVertices = vertices.ToArray();
+            _transformedVertices = _localVertices;
         }
 
-        private readonly Vector2[] _vertices;
+        private readonly Vector2[] _localVertices;
+        private Vector2[] _transformedVertices;
+
         public Vector2[] Vertices
         {
-            get { return _vertices; }
+            get { return _transformedVertices; }
         }
 
-        public override PolygonF Transform(Vector2 translation, float rotation, Vector2 scale)
+        public void Rotate(float rotation)
         {
-            var newVertices = new Vector2[_vertices.Length];
+            Transform(Vector2.Zero, rotation, Vector2.One);
+        }
+
+        public void Scale(Vector2 scale)
+        {
+            Transform(Vector2.Zero, 0, scale);
+        }
+
+        private void Transform(Vector2 translation, float rotation, Vector2 scale)
+        {
+            var newVertices = new Vector2[_localVertices.Length];
             var isScaled = scale != Vector2.One;
 
-            for (var i = 0; i < _vertices.Length; i++)
+            for (var i = 0; i < _localVertices.Length; i++)
             {
-                var p = _vertices[i];
+                var p = _localVertices[i];
                 
                 if (isScaled)
                     p *= scale;
@@ -40,16 +54,15 @@ namespace MonoGame.Extended.Shapes
                 newVertices[i] = p + translation;
             }
 
-            return new PolygonF(newVertices);
+            _transformedVertices = newVertices;
         }
-
 
         public RectangleF GetBoundingRectangle()
         {
-            var minX = _vertices.Min(i => i.X);
-            var minY = _vertices.Min(i => i.Y);
-            var maxX = _vertices.Max(i => i.X);
-            var maxY = _vertices.Max(i => i.Y);
+            var minX = _transformedVertices.Min(i => i.X);
+            var minY = _transformedVertices.Min(i => i.Y);
+            var maxX = _transformedVertices.Max(i => i.X);
+            var maxY = _transformedVertices.Max(i => i.Y);
 
             return new RectangleF(minX, minY, maxX - minX, maxY - minY);
         }
@@ -58,18 +71,23 @@ namespace MonoGame.Extended.Shapes
         {
             var intersects = 0;
 
-            for (var i = 0; i < _vertices.Length; i++)
+            for (var i = 0; i < _transformedVertices.Length; i++)
             {
-                var x1 = _vertices[i].X;
-                var y1 = _vertices[i].Y;
-                var x2 = _vertices[(i + 1) % _vertices.Length].X;
-                var y2 = _vertices[(i + 1) % _vertices.Length].Y;
+                var x1 = _transformedVertices[i].X;
+                var y1 = _transformedVertices[i].Y;
+                var x2 = _transformedVertices[(i + 1) % _transformedVertices.Length].X;
+                var y2 = _transformedVertices[(i + 1) % _transformedVertices.Length].Y;
 
                 if ((y1 <= y && y < y2 || y2 <= y && y < y1) && x < (x2 - x1) / (y2 - y1) * (y - y1) + x1)
                     intersects++;
             }
 
             return (intersects & 1) == 1;
+        }
+
+        public void Offset(Vector2 amount)
+        {
+            throw new NotImplementedException();
         }
     }
 }

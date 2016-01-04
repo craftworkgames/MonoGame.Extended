@@ -18,13 +18,13 @@ namespace MonoGame.Extended.Shapes
 	    /// The point representing the center of this <see cref="Circle"/>.
 	    /// </summary>
 	    [DataMember]
-        public Vector2 Center;
+        public Vector2 Center { get; set; }
 
 	    /// <summary>
 	    /// The radius from the center of this <see cref="Circle"/>.
 	    /// </summary>
 	    [DataMember]
-        public float Radius;
+        public float Radius { get; set; }
 
 	    /// <summary>
 		/// Returns a <see cref="Circle"/> with Point = Vector2.Zero and Radius= 0.

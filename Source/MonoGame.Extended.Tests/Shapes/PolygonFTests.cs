@@ -38,8 +38,8 @@ namespace MonoGame.Extended.Tests.Shapes
                 new Vector2(0, 10)
             };
 
-            var polygon = new PolygonF(vertices)
-                .Transform(new Vector2(2, 3), 0, Vector2.One);
+            var polygon = new PolygonF(vertices);
+            polygon.Offset(new Vector2(2, 3));
 
             Assert.AreEqual(new Vector2(2, 3), polygon.Vertices[0]);
             Assert.AreEqual(new Vector2(12, 3), polygon.Vertices[1]);
@@ -57,8 +57,8 @@ namespace MonoGame.Extended.Tests.Shapes
                 new Vector2(-5, 10)
             };
 
-            var polygon = new PolygonF(vertices)
-                .Transform(Vector2.Zero, MathHelper.ToRadians(90), Vector2.One);
+            var polygon = new PolygonF(vertices);
+            polygon.Rotate(MathHelper.ToRadians(90));
 
             const float tolerance = 0.01f;
             Assert.IsTrue(new Vector2(5, -5).EqualsWithTolerance(polygon.Vertices[0], tolerance));
@@ -76,8 +76,8 @@ namespace MonoGame.Extended.Tests.Shapes
                 new Vector2(-1, 1)
             };
 
-            var polygon = new PolygonF(vertices)
-                .Transform(Vector2.Zero, 0, new Vector2(2, 0.5f));
+            var polygon = new PolygonF(vertices);
+            polygon.Scale(new Vector2(2, 0.5f));
 
             const float tolerance = 0.01f;
             Assert.IsTrue(new Vector2(0, -0.5f).EqualsWithTolerance(polygon.Vertices[0], tolerance), "0");
