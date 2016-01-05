@@ -77,7 +77,7 @@ namespace MonoGame.Extended.Tests.Shapes
             };
 
             var polygon = new PolygonF(vertices);
-            polygon.Scale(new Vector2(2, 0.5f));
+            polygon.Scale(new Vector2(1, -0.5f));
 
             const float tolerance = 0.01f;
             Assert.IsTrue(new Vector2(0, -0.5f).EqualsWithTolerance(polygon.Vertices[0], tolerance), "0");

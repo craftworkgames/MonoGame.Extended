@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Shapes
 	/// </summary>
 	[DataContract]
 	[DebuggerDisplay("{DebugDisplayString,nq}")]
-	public struct CircleF : IEquatable<CircleF>
+	public struct CircleF : IShapeF, IEquatable<CircleF>
 	{
 	    private static readonly CircleF _empty = new CircleF();
 
@@ -126,7 +126,7 @@ namespace MonoGame.Extended.Shapes
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
 		public static bool operator ==(CircleF a, CircleF b)
 		{
-			return ((a.Center == b.Center) && a.Radius.Equals(b.Radius));
+			return a.Center == b.Center && a.Radius.Equals(b.Radius);
 		}
 
 		/// <summary>
@@ -147,12 +147,22 @@ namespace MonoGame.Extended.Shapes
 		/// <returns><see cref="Vector2"/> representing the point on this <see cref="CircleF"/>'s surface at the specified angle</returns>
 		public Vector2 GetPointAlongEdge(float angle)
 		{
-			return new Vector2(Center.X + (Radius * (float)Math.Cos(angle)),
-							   Center.Y + (Radius * (float)Math.Sin(angle)));
+			return new Vector2(Center.X + Radius * (float)Math.Cos(angle),
+							   Center.Y + Radius * (float)Math.Sin(angle));
 		}
 
 
-		/// <summary>
+        public RectangleF GetBoundingRectangle()
+        {
+            var minX = Left;
+            var minY = Top;
+            var maxX = Right;
+            var maxY = Bottom;
+
+            return new RectangleF(minX, minY, maxX - minX, maxY - minY);
+        }
+
+        /// <summary>
 		/// Gets whether or not the provided coordinates lie within the bounds of this <see cref="CircleF"/>.
 		/// </summary>
 		/// <param name="x">The x coordinate of the point to check for containment.</param>
@@ -160,7 +170,7 @@ namespace MonoGame.Extended.Shapes
 		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="CircleF"/>; <c>false</c> otherwise.</returns>
 		public bool Contains(float x, float y)
 		{
-			return ((new Vector2(x, y) - Center).LengthSquared() <= Radius * Radius);
+			return (new Vector2(x, y) - Center).LengthSquared() <= Radius * Radius;
 		}
 
 		/// <summary>
@@ -170,7 +180,7 @@ namespace MonoGame.Extended.Shapes
 		/// <returns><c>true</c> if the provided <see cref="Point"/> lies inside this <see cref="CircleF"/>; <c>false</c> otherwise.</returns>
 		public bool Contains(Point value)
 		{
-			return ((value.ToVector2() - Center).LengthSquared() <= Radius * Radius);
+			return (value.ToVector2() - Center).LengthSquared() <= Radius * Radius;
 		}
 
 		/// <summary>
@@ -180,7 +190,7 @@ namespace MonoGame.Extended.Shapes
 		/// <param name="result"><c>true</c> if the provided <see cref="Point"/> lies inside this <see cref="CircleF"/>; <c>false</c> otherwise. As an output parameter.</param>
 		public void Contains(ref Point value, out bool result)
 		{
-			result = ((value.ToVector2() - Center).LengthSquared() <= Radius * Radius);
+			result = (value.ToVector2() - Center).LengthSquared() <= Radius * Radius;
 		}
 
 		/// <summary>
@@ -190,7 +200,7 @@ namespace MonoGame.Extended.Shapes
 		/// <returns><c>true</c> if the provided <see cref="Vector2"/> lies inside this <see cref="CircleF"/>; <c>false</c> otherwise.</returns>
 		public bool Contains(Vector2 value)
 		{
-			return ((value - Center).LengthSquared() <= Radius * Radius);
+			return (value - Center).LengthSquared() <= Radius * Radius;
 		}
 
 		/// <summary>
@@ -200,7 +210,7 @@ namespace MonoGame.Extended.Shapes
 		/// <param name="result"><c>true</c> if the provided <see cref="Vector2"/> lies inside this <see cref="CircleF"/>; <c>false</c> otherwise. As an output parameter.</param>
 		public void Contains(ref Vector2 value, out bool result)
 		{
-			result = ((value - Center).LengthSquared() <= Radius * Radius);
+			result = (value - Center).LengthSquared() <= Radius * Radius;
 		}
 
 		/// <summary>
@@ -213,7 +223,7 @@ namespace MonoGame.Extended.Shapes
 			var distanceOfCenter = value.Center - Center;
 			var radii = Radius - value.Radius;
 
-			return ((distanceOfCenter.X * distanceOfCenter.X) + (distanceOfCenter.Y * distanceOfCenter.Y) <= Math.Abs(radii * radii));
+			return distanceOfCenter.X * distanceOfCenter.X + distanceOfCenter.Y * distanceOfCenter.Y <= Math.Abs(radii * radii);
 		}
 
 		/// <summary>
@@ -226,7 +236,7 @@ namespace MonoGame.Extended.Shapes
 			var distanceOfCenter = value.Center - Center;
 			var radii = Radius - value.Radius;
 
-			result = ((distanceOfCenter.X * distanceOfCenter.X) + (distanceOfCenter.Y * distanceOfCenter.Y) <= Math.Abs(radii * radii));
+			result = distanceOfCenter.X * distanceOfCenter.X + distanceOfCenter.Y * distanceOfCenter.Y <= Math.Abs(radii * radii);
 		}
 
 		/// <summary>
@@ -236,7 +246,7 @@ namespace MonoGame.Extended.Shapes
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
 		public override bool Equals(object obj)
 		{
-			return (obj is CircleF) && this == ((CircleF)obj);
+			return obj is CircleF && this == (CircleF)obj;
 		}
 
 		/// <summary>
@@ -280,7 +290,7 @@ namespace MonoGame.Extended.Shapes
 			var distanceOfCenter = value.Center - Center;
 			var radii = Radius + value.Radius;
 
-			return ((distanceOfCenter.X * distanceOfCenter.X) + (distanceOfCenter.Y * distanceOfCenter.Y) < (radii * radii));
+			return distanceOfCenter.X * distanceOfCenter.X + distanceOfCenter.Y * distanceOfCenter.Y < radii * radii;
 		}
 
 		/// <summary>
@@ -293,7 +303,7 @@ namespace MonoGame.Extended.Shapes
 			var distanceOfCenter = value.Center - Center;
 			var radii = Radius + value.Radius;
 
-			result = ((distanceOfCenter.X * distanceOfCenter.X) + (distanceOfCenter.Y * distanceOfCenter.Y) < (radii * radii));
+			result = distanceOfCenter.X * distanceOfCenter.X + distanceOfCenter.Y * distanceOfCenter.Y < radii * radii;
 		}
 
 		/// <summary>
@@ -323,7 +333,7 @@ namespace MonoGame.Extended.Shapes
 			    (distance.Y - value.Height / 2.0f) * 
                 (distance.Y - value.Height / 2.0f);
 
-			return (distanceOfCorners <= (Radius * Radius));
+			return distanceOfCorners <= Radius * Radius;
 		}
 
 		/// <summary>

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Shapes
 {
-    public class PolygonF : ShapeF
+    public struct PolygonF : IShapeF, IEquatable<PolygonF>
     {
         public PolygonF (IEnumerable<Vector2> vertices)
         {
@@ -38,10 +38,10 @@ namespace MonoGame.Extended.Shapes
             }
         }
 
-        public override float Left { get { return Vertices.Min(v => v.X); } }
-        public override float Right { get { return Vertices.Max(v => v.X); } }
-        public override float Top { get { return Vertices.Min(v => v.Y); } }
-        public override float Bottom { get { return Vertices.Max(v => v.Y); } }
+        public float Left { get { return Vertices.Min(v => v.X); } }
+        public float Right { get { return Vertices.Max(v => v.X); } }
+        public float Top { get { return Vertices.Min(v => v.Y); } }
+        public float Bottom { get { return Vertices.Max(v => v.Y); } }
 
         public void Offset(Vector2 amount)
         {
@@ -87,7 +87,31 @@ namespace MonoGame.Extended.Shapes
             return newVertices;
         }
 
-        public override bool Contains(float x, float y)
+        public PolygonF TransformedCopy(Vector2 offset, float rotation, Vector2 scale)
+        {
+            var polygon = new PolygonF(_localVertices);
+            polygon.Offset(offset);
+            polygon.Rotate(rotation);
+            polygon.Scale(scale - Vector2.One);
+            return new PolygonF(polygon.Vertices);
+        }
+
+        public RectangleF GetBoundingRectangle()
+        {
+            var minX = Left;
+            var minY = Top;
+            var maxX = Right;
+            var maxY = Bottom;
+
+            return new RectangleF(minX, minY, maxX - minX, maxY - minY);
+        }
+
+        public bool Contains(Vector2 point)
+        {
+            return Contains(point.X, point.Y);
+        }
+
+        public bool Contains(float x, float y)
         {
             var intersects = 0;
             var vertices = Vertices;
@@ -104,6 +128,35 @@ namespace MonoGame.Extended.Shapes
             }
 
             return (intersects & 1) == 1;
+        }
+
+        public static bool operator ==(PolygonF a, PolygonF b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(PolygonF a, PolygonF b)
+        {
+            return !(a == b);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is PolygonF && Equals((PolygonF)obj);
+        }
+
+        public bool Equals(PolygonF other)
+        {
+            return Vertices.SequenceEqual(other.Vertices);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return Vertices.Aggregate(27, (current, v) => current + 13 * current + v.GetHashCode());
+            }
         }
     }
 }

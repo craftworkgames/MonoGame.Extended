@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Shapes
     /// </summary>
     [DataContract]
     [DebuggerDisplay("{DebugDisplayString,nq}")]
-    public struct RectangleF : IEquatable<RectangleF>
+    public struct RectangleF : IShapeF, IEquatable<RectangleF>
     {
         private static readonly RectangleF _emptyRectangle = new RectangleF();
 
@@ -197,6 +197,11 @@ namespace MonoGame.Extended.Shapes
             return X <= x && x < X + Width && Y <= y && y < Y + Height;
         }
 
+        public RectangleF GetBoundingRectangle()
+        {
+            return this;
+        }
+
         /// <summary>
         /// Gets whether or not the provided coordinates lie within the bounds of this <see cref="RectangleF"/>.
         /// </summary>
@@ -245,7 +250,7 @@ namespace MonoGame.Extended.Shapes
         /// <param name="result"><c>true</c> if the provided <see cref="Vector2"/> lies inside this <see cref="RectangleF"/>; <c>false</c> otherwise. As an output parameter.</param>
         public void Contains(ref Vector2 value, out bool result)
         {
-            result = ((((X <= value.X) && (value.X < (X + Width))) && (Y <= value.Y)) && (value.Y < (Y + Height)));
+            result = (X <= value.X) && (value.X < X + Width) && (Y <= value.Y) && (value.Y < Y + Height);
         }
 
         /// <summary>
@@ -255,7 +260,7 @@ namespace MonoGame.Extended.Shapes
         /// <returns><c>true</c> if the provided <see cref="RectangleF"/>'s bounds lie entirely inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
         public bool Contains(RectangleF value)
         {
-            return ((((X <= value.X) && ((value.X + value.Width) <= (X + Width))) && (Y <= value.Y)) && ((value.Y + value.Height) <= (Y + Height)));
+            return (X <= value.X) && (value.X + value.Width <= X + Width) && (Y <= value.Y) && (value.Y + value.Height <= Y + Height);
         }
 
         /// <summary>
@@ -265,7 +270,7 @@ namespace MonoGame.Extended.Shapes
         /// <param name="result"><c>true</c> if the provided <see cref="RectangleF"/>'s bounds lie entirely inside this <see cref="RectangleF"/>; <c>false</c> otherwise. As an output parameter.</param>
         public void Contains(ref RectangleF value, out bool result)
         {
-            result = ((((X <= value.X) && ((value.X + value.Width) <= (X + Width))) && (Y <= value.Y)) && ((value.Y + value.Height) <= (Y + Height)));
+            result = (X <= value.X) && (value.X + value.Width <= X + Width) && (Y <= value.Y) && (value.Y + value.Height <= Y + Height);
         }
 
         /// <summary>
@@ -275,7 +280,7 @@ namespace MonoGame.Extended.Shapes
         /// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
         public override bool Equals(object obj)
         {
-            return (obj is RectangleF) && this == ((RectangleF)obj);
+            return obj is RectangleF && this == (RectangleF)obj;
         }
 
         /// <summary>
@@ -319,10 +324,10 @@ namespace MonoGame.Extended.Shapes
         /// <param name="verticalAmount">Value to adjust the top and bottom edges.</param>
         public void Inflate(float horizontalAmount, float verticalAmount)
         {
-            X -= (int)horizontalAmount;
-            Y -= (int)verticalAmount;
-            Width += (int)horizontalAmount * 2;
-            Height += (int)verticalAmount * 2;
+            X -= horizontalAmount;
+            Y -= verticalAmount;
+            Width += horizontalAmount * 2;
+            Height += verticalAmount * 2;
         }
 
         /// <summary>
@@ -332,10 +337,8 @@ namespace MonoGame.Extended.Shapes
         /// <returns><c>true</c> if other <see cref="RectangleF"/> intersects with this rectangle; <c>false</c> otherwise.</returns>
         public bool Intersects(RectangleF value)
         {
-            return value.Left <= Right &&
-                   Left <= value.Right &&
-                   value.Top <= Bottom &&
-                   Top <= value.Bottom;
+            return value.Left <= Right && Left <= value.Right &&
+                   value.Top <= Bottom && Top <= value.Bottom;
         }
 
 
@@ -346,10 +349,8 @@ namespace MonoGame.Extended.Shapes
         /// <param name="result"><c>true</c> if other <see cref="RectangleF"/> intersects with this rectangle; <c>false</c> otherwise. As an output parameter.</param>
         public void Intersects(ref RectangleF value, out bool result)
         {
-            result = value.Left < Right &&
-                     Left < value.Right &&
-                     value.Top < Bottom &&
-                     Top < value.Bottom;
+            result = value.Left < Right && Left < value.Right &&
+                     value.Top < Bottom && Top < value.Bottom;
         }
 
         /// <summary>
@@ -405,8 +406,8 @@ namespace MonoGame.Extended.Shapes
         /// <param name="offsetY">The y coordinate to add to this <see cref="RectangleF"/>.</param>
         public void Offset(float offsetX, float offsetY)
         {
-            X += (int)offsetX;
-            Y += (int)offsetY;
+            X += offsetX;
+            Y += offsetY;
         }
 
         /// <summary>
@@ -425,8 +426,8 @@ namespace MonoGame.Extended.Shapes
         /// <param name="amount">The x and y components to add to this <see cref="RectangleF"/>.</param>
         public void Offset(Vector2 amount)
         {
-            X += (int)amount.X;
-            Y += (int)amount.Y;
+            X += amount.X;
+            Y += amount.Y;
         }
 
         /// <summary>
