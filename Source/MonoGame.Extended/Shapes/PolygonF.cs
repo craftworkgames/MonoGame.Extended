@@ -11,83 +11,99 @@ namespace MonoGame.Extended.Shapes
         {
             _localVertices = vertices.ToArray();
             _transformedVertices = _localVertices;
+            _offset = Vector2.Zero;
+            _rotation = 0;
+            _scale = Vector2.One;
+            _isDirty = false;
         }
 
         private readonly Vector2[] _localVertices;
         private Vector2[] _transformedVertices;
+        private Vector2 _offset;
+        private float _rotation;
+        private Vector2 _scale;
+        private bool _isDirty;
 
         public Vector2[] Vertices
         {
-            get { return _transformedVertices; }
+            get
+            {
+                if (_isDirty)
+                {
+                    _transformedVertices = GetTransformedVertices();
+                    _isDirty = false;
+                }
+
+                return _transformedVertices;
+            }
         }
 
-        public void Rotate(float rotation)
+        public override float Left { get { return Vertices.Min(v => v.X); } }
+        public override float Right { get { return Vertices.Max(v => v.X); } }
+        public override float Top { get { return Vertices.Min(v => v.Y); } }
+        public override float Bottom { get { return Vertices.Max(v => v.Y); } }
+
+        public void Offset(Vector2 amount)
         {
-            Transform(Vector2.Zero, rotation, Vector2.One);
+            _offset += amount;
+            _isDirty = true;
         }
 
-        public void Scale(Vector2 scale)
+        public void Rotate(float amount)
         {
-            Transform(Vector2.Zero, 0, scale);
+            _rotation += amount;
+            _isDirty = true;
         }
 
-        private void Transform(Vector2 translation, float rotation, Vector2 scale)
+        public void Scale(Vector2 amount)
+        {
+            _scale += amount;
+            _isDirty = true;
+        }
+
+        private Vector2[] GetTransformedVertices()
         {
             var newVertices = new Vector2[_localVertices.Length];
-            var isScaled = scale != Vector2.One;
+            var isScaled = _scale != Vector2.One;
 
             for (var i = 0; i < _localVertices.Length; i++)
             {
                 var p = _localVertices[i];
                 
                 if (isScaled)
-                    p *= scale;
+                    p *= _scale;
 
                 // ReSharper disable once CompareOfFloatsByEqualityOperator
-                if (rotation != 0)
+                if (_rotation != 0)
                 {
-                    var cos = (float) Math.Cos(rotation);
-                    var sin = (float) Math.Sin(rotation);
+                    var cos = (float) Math.Cos(_rotation);
+                    var sin = (float) Math.Sin(_rotation);
                     p = new Vector2(cos * p.X - sin * p.Y, sin * p.X + cos * p.Y);
                 }
 
-                newVertices[i] = p + translation;
+                newVertices[i] = p + _offset;
             }
 
-            _transformedVertices = newVertices;
-        }
-
-        public RectangleF GetBoundingRectangle()
-        {
-            var minX = _transformedVertices.Min(i => i.X);
-            var minY = _transformedVertices.Min(i => i.Y);
-            var maxX = _transformedVertices.Max(i => i.X);
-            var maxY = _transformedVertices.Max(i => i.Y);
-
-            return new RectangleF(minX, minY, maxX - minX, maxY - minY);
+            return newVertices;
         }
 
         public override bool Contains(float x, float y)
         {
             var intersects = 0;
+            var vertices = Vertices;
 
-            for (var i = 0; i < _transformedVertices.Length; i++)
+            for (var i = 0; i < vertices.Length; i++)
             {
-                var x1 = _transformedVertices[i].X;
-                var y1 = _transformedVertices[i].Y;
-                var x2 = _transformedVertices[(i + 1) % _transformedVertices.Length].X;
-                var y2 = _transformedVertices[(i + 1) % _transformedVertices.Length].Y;
+                var x1 = vertices[i].X;
+                var y1 = vertices[i].Y;
+                var x2 = vertices[(i + 1) % vertices.Length].X;
+                var y2 = vertices[(i + 1) % vertices.Length].Y;
 
                 if ((y1 <= y && y < y2 || y2 <= y && y < y1) && x < (x2 - x1) / (y2 - y1) * (y - y1) + x1)
                     intersects++;
             }
 
             return (intersects & 1) == 1;
-        }
-
-        public void Offset(Vector2 amount)
-        {
-            throw new NotImplementedException();
         }
     }
 }
