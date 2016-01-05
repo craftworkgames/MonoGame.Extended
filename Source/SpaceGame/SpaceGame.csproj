@@ -46,6 +46,7 @@
     <Compile Include="Entities\Spaceship.cs" />
     <Compile Include="EntityManager.cs" />
     <Compile Include="GameMain.cs" />
+    <Compile Include="MeteorFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

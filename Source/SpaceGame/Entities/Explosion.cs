@@ -16,11 +16,6 @@ namespace SpaceGame.Entities
             _animator.PlayAnimation("explode", Destroy);
         }
 
-        public override void Destroy()
-        {
-            base.Destroy();
-        }
-
         public override void Update(GameTime gameTime)
         {
             _animator.Update(gameTime);

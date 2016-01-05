@@ -1,10 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
@@ -46,7 +46,6 @@ namespace SpaceGame
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            var workingFolder = Directory.GetCurrentDirectory();
             _backgroundTexture = Content.Load<Texture2D>("black");
 
             var bulletTexture = Content.Load<Texture2D>("laserBlue03");
@@ -58,17 +57,23 @@ namespace SpaceGame
             _player = _entityManager.AddEntity(new Spaceship(spaceshipRegion, bulletFactory));
 
             var meteorTexture = Content.Load<Texture2D>("meteorBrown_big1");
-            var meteorRegion = new TextureRegion2D(meteorTexture);
+            _meteorRegion = new TextureRegion2D(meteorTexture);
 
-            for (var i = 0; i < 5; i++)
-            {
-                var x = _random.Next(2) == 0 ? 1 : -1;
-                var y = _random.Next(2) == 0 ? 1 : -1;
-                var velocity = new Vector2(x, y) * 10f;
-                var meteor = new Meteor(meteorRegion, velocity) {Position = new Vector2(100, 100) };
+            for (var i = 0; i < 13; i++)
+                SpawnMeteor(_meteorRegion);
+        }
 
-                _entityManager.AddEntity(meteor);
-            }
+        private void SpawnMeteor(TextureRegion2D meteorRegion)
+        {
+            var rotationSpeed = _random.Next(-10, 10)*0.1f;
+            var spawnCircle = new CircleF(_player.Position, 630);
+            var spawnAngle = MathHelper.ToRadians(_random.Next(0, 360));
+            var spawnPosition = spawnCircle.GetPointAlongEdge(spawnAngle);
+            var velocity = (_player.Position - spawnPosition)
+                .Rotate(MathHelper.ToRadians(_random.Next(-15, 15)))*_random.Next(3, 10)*0.01f;
+            var meteor = new Meteor(meteorRegion, spawnPosition, velocity, rotationSpeed);
+
+            _entityManager.AddEntity(meteor);
         }
 
         protected override void UnloadContent()
@@ -77,6 +82,7 @@ namespace SpaceGame
 
         private MouseState _previousMouseState;
         private ViewportAdapter _viewportAdapter;
+        private TextureRegion2D _meteorRegion;
 
         protected override void Update(GameTime gameTime)
         {
@@ -120,6 +126,7 @@ namespace SpaceGame
                         laser.Destroy();
                         var animator = Content.Load<SpriteSheetAnimator>("explosion-animations");
                         _entityManager.AddEntity(new Explosion(animator, meteor.Position));
+                        SpawnMeteor(_meteorRegion);
                         return;
                     }
                 }
