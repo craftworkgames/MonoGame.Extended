@@ -56,25 +56,14 @@ namespace SpaceGame
             var spaceshipRegion = new TextureRegion2D(spaceshipTexture);
             _player = _entityManager.AddEntity(new Spaceship(spaceshipRegion, bulletFactory));
 
+            _meteorFactory = new MeteorFactory(_entityManager, Content);
             var meteorTexture = Content.Load<Texture2D>("meteorBrown_big1");
             _meteorRegion = new TextureRegion2D(meteorTexture);
 
             for (var i = 0; i < 13; i++)
-                SpawnMeteor(_meteorRegion);
+                _meteorFactory.SpawnNewMeteor(_player.Position);
         }
 
-        private void SpawnMeteor(TextureRegion2D meteorRegion)
-        {
-            var rotationSpeed = _random.Next(-10, 10)*0.1f;
-            var spawnCircle = new CircleF(_player.Position, 630);
-            var spawnAngle = MathHelper.ToRadians(_random.Next(0, 360));
-            var spawnPosition = spawnCircle.GetPointAlongEdge(spawnAngle);
-            var velocity = (_player.Position - spawnPosition)
-                .Rotate(MathHelper.ToRadians(_random.Next(-15, 15)))*_random.Next(3, 10)*0.01f;
-            var meteor = new Meteor(meteorRegion, spawnPosition, velocity, rotationSpeed);
-
-            _entityManager.AddEntity(meteor);
-        }
 
         protected override void UnloadContent()
         {
@@ -83,6 +72,7 @@ namespace SpaceGame
         private MouseState _previousMouseState;
         private ViewportAdapter _viewportAdapter;
         private TextureRegion2D _meteorRegion;
+        private MeteorFactory _meteorFactory;
 
         protected override void Update(GameTime gameTime)
         {
@@ -124,10 +114,10 @@ namespace SpaceGame
                     {
                         meteor.Damage(1);
                         laser.Destroy();
+
                         var animator = Content.Load<SpriteSheetAnimator>("explosion-animations");
                         _entityManager.AddEntity(new Explosion(animator, meteor.Position));
-                        SpawnMeteor(_meteorRegion);
-                        return;
+                        _meteorFactory.SpawnNewMeteor(_player.Position);
                     }
                 }
 
