@@ -12,6 +12,7 @@ namespace SpaceGame.Entities
         {
             _animator = animator;
             _animator.Sprite.Position = position;
+            _animator.Sprite.Scale = Vector2.One*0.2f;
             _animator.IsLooping = false;
             _animator.PlayAnimation("explode", Destroy);
         }
