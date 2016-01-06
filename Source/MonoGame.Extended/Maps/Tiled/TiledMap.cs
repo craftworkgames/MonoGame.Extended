@@ -107,10 +107,11 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public void Draw(Camera2D camera, bool useMapBackgroundColor = false)
         {
+
+            _graphicsDevice.SetRenderTarget(_renderTarget); 
+
             if(useMapBackgroundColor && BackgroundColor.HasValue)
                 _graphicsDevice.Clear(BackgroundColor.Value);
-
-            _graphicsDevice.SetRenderTarget(_renderTarget);
 
             foreach (var layer in _layers)
                 layer.Draw();
