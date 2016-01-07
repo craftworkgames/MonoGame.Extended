@@ -92,7 +92,7 @@ namespace MonoGame.Extended.Maps.Tiled
             int numberOfColumns = (int)area.Width / _map.TileWidth + 3;
             int numberOfRows = (int)area.Height / _map.TileHeight + 3;
 
-            _spriteBatch.Begin(transformMatrix: camera.GetViewMatrix(), blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+            _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, samplerState: SamplerState.PointClamp);
             int index;
             for (int row = firstRow; row <= firstRow + numberOfRows; row++)
             {
