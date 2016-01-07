@@ -13,7 +13,7 @@ namespace MonoGame.Extended.Maps.Tiled
         {
             Width = width;
             Height = height;
-            
+
             _map = map;
             _graphicsDevice = graphicsDevice;
             _spriteBatch = new SpriteBatch(graphicsDevice);
@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly GraphicsDevice _graphicsDevice;
         private readonly TiledTile[] _tiles;
         private readonly SpriteBatch _spriteBatch;
-        
+
         public IEnumerable<TiledTile> Tiles
         {
             get { return _tiles; }
@@ -82,10 +82,36 @@ namespace MonoGame.Extended.Maps.Tiled
             _spriteBatch.End();
         }
 
-        [Obsolete("The camera is no longer required for drawing Tiled layers")]
         public override void Draw(Camera2D camera)
         {
-            Draw();
+            var area = camera.GetBoundingRectangle();
+            int firstCol = (int)Math.Floor(camera.Position.X / _map.TileWidth);
+            int firstRow = (int)Math.Floor(camera.Position.Y / _map.TileHeight);
+
+            // +3 to cover any gaps
+            int numberOfColumns = (int)area.Width / _map.TileWidth + 3;
+            int numberOfRows = (int)area.Height / _map.TileHeight + 3;
+
+            _spriteBatch.Begin(transformMatrix: camera.GetViewMatrix(), blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+            int index;
+            for (int row = firstRow; row <= firstRow + numberOfRows; row++)
+            {
+                index = row * _map.Width + firstCol;
+                for (int x = 0; x < numberOfColumns; x++)
+                {
+                    // index must be greater than 0 and less than _tiles.Length
+                    if (index >= 0 && index < _tiles.Length)
+                    {
+                        var region = _map.GetTileRegion(_tiles[index].Id);
+                        if (region != null)
+                        {
+                            RenderLayer(_map, _tiles[index], region);
+                        }
+                    }
+                    index++;
+                }
+            }
+            _spriteBatch.End();
         }
 
         private void RenderLayer(TiledMap map, TiledTile tile, TextureRegion2D region)
@@ -93,7 +119,7 @@ namespace MonoGame.Extended.Maps.Tiled
             switch (map.Orientation)
             {
                 case TiledMapOrientation.Orthogonal:
-                    RenderOrthogonal(tile,region);
+                    RenderOrthogonal(tile, region);
                     break;
                 case TiledMapOrientation.Isometric:
                     RenderIsometric(tile, region);
@@ -125,7 +151,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public TiledTile GetTile(int x, int y)
         {
-            return _tiles[x + y*Width];
+            return _tiles[x + y * Width];
         }
 
         private Func<IEnumerable<TiledTile>> GetRenderOrderFunction()

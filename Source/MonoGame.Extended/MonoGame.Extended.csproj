@@ -101,6 +101,7 @@
     <Compile Include="Vector2Extensions.cs" />
     <Compile Include="ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />
+    <Compile Include="ViewportAdapters\WindowViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\ScalingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\ViewportAdapter.cs" />
     <Compile Include="FramesPerSecondCounter.cs" />
