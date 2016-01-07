@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
@@ -22,6 +23,8 @@ namespace SpaceGame
         private readonly Random _random;
         private readonly EntityManager _entityManager;
         private Camera2D _camera;
+        private BitmapFont _font;
+        private int _score;
 
         public GameMain()
         {
@@ -43,6 +46,7 @@ namespace SpaceGame
         {
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter);
+            _font = Content.Load<BitmapFont>("Fonts/courier-new-32");
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -56,25 +60,14 @@ namespace SpaceGame
             var spaceshipRegion = new TextureRegion2D(spaceshipTexture);
             _player = _entityManager.AddEntity(new Spaceship(spaceshipRegion, bulletFactory));
 
+            _meteorFactory = new MeteorFactory(_entityManager, Content);
             var meteorTexture = Content.Load<Texture2D>("meteorBrown_big1");
             _meteorRegion = new TextureRegion2D(meteorTexture);
 
             for (var i = 0; i < 13; i++)
-                SpawnMeteor(_meteorRegion);
+                _meteorFactory.SpawnNewMeteor(_player.Position);
         }
 
-        private void SpawnMeteor(TextureRegion2D meteorRegion)
-        {
-            var rotationSpeed = _random.Next(-10, 10)*0.1f;
-            var spawnCircle = new CircleF(_player.Position, 630);
-            var spawnAngle = MathHelper.ToRadians(_random.Next(0, 360));
-            var spawnPosition = spawnCircle.GetPointAlongEdge(spawnAngle);
-            var velocity = (_player.Position - spawnPosition)
-                .Rotate(MathHelper.ToRadians(_random.Next(-15, 15)))*_random.Next(3, 10)*0.01f;
-            var meteor = new Meteor(meteorRegion, spawnPosition, velocity, rotationSpeed);
-
-            _entityManager.AddEntity(meteor);
-        }
 
         protected override void UnloadContent()
         {
@@ -83,6 +76,7 @@ namespace SpaceGame
         private MouseState _previousMouseState;
         private ViewportAdapter _viewportAdapter;
         private TextureRegion2D _meteorRegion;
+        private MeteorFactory _meteorFactory;
 
         protected override void Update(GameTime gameTime)
         {
@@ -115,43 +109,58 @@ namespace SpaceGame
 
             _entityManager.Update(gameTime);
 
+            CheckMeteorLaserCollisions();
 
-            foreach (var laser in _entityManager.Entities.Where(e => e is Laser).Cast<Laser>().ToArray())
+            _previousMouseState = mouseState;
+            _camera.LookAt(_player.Position +  _player.Velocity * 0.2f);
+
+            base.Update(gameTime);
+        }
+
+        private void CheckMeteorLaserCollisions()
+        {
+            var meteors = _entityManager.Entities.Where(e => e is Meteor).Cast<Meteor>().ToArray();
+            var lasers = _entityManager.Entities.Where(e => e is Laser).Cast<Laser>().ToArray();
+
+            foreach (var laser in lasers)
             {
-                foreach (var meteor in _entityManager.Entities.Where(e => e is Meteor).Cast<Meteor>().ToArray())
+                foreach (var meteor in meteors)
                 {
                     if (meteor.Contains(laser.Position))
                     {
                         meteor.Damage(1);
                         laser.Destroy();
+                        _score++;
+
                         var animator = Content.Load<SpriteSheetAnimator>("explosion-animations");
-                        _entityManager.AddEntity(new Explosion(animator, meteor.Position));
-                        SpawnMeteor(_meteorRegion);
-                        return;
+                        _entityManager.AddEntity(new Explosion(animator, laser.Position));
+
+                        if(meteor.Size >= 2)
+                            _meteorFactory.SplitMeteor(meteor);
                     }
                 }
-
             }
-
-            _previousMouseState = mouseState;
-
-            _camera.LookAt(_player.Position +  _player.Velocity * 0.2f);
-
-            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
 
+            // background
             var sourceRectangle = new Rectangle(0, 0, _viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight);
             sourceRectangle.Offset(_camera.Position);
             _spriteBatch.Begin(samplerState: SamplerState.LinearWrap, transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.Draw(_backgroundTexture, _camera.Position, sourceRectangle, Color.White);
             _spriteBatch.End();
 
+            // entities
             _spriteBatch.Begin(samplerState: SamplerState.LinearClamp, transformMatrix: _camera.GetViewMatrix());
             _entityManager.Draw(_spriteBatch);
+            _spriteBatch.End();
+
+            // hud
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(_font, string.Format("Score: {0}", _score), Vector2.One, Color.White);
             _spriteBatch.End();
 
             base.Draw(gameTime);

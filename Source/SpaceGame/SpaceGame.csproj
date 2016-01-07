@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\black.png" />
+    <Content Include="Content\Fonts\courier-new-32_0.png" />
     <Content Include="Content\laserBlue03.png" />
     <Content Include="Content\meteorBrown_big1.png" />
     <Content Include="Content\meteorBrown_big2.png" />
@@ -88,6 +89,7 @@
   <ItemGroup>
     <Content Include="Content\explosion-animations.aa" />
     <Content Include="Content\regular-explosion-sheet.json" />
+    <None Include="Content\Fonts\courier-new-32.fnt" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

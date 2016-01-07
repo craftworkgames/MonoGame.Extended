@@ -8,23 +8,26 @@ namespace SpaceGame.Entities
 {
     public class Meteor : Entity
     {
-        public Meteor(TextureRegion2D textureRegion, Vector2 position, Vector2 velocity, float rotationSpeed)
+        public Meteor(TextureRegion2D textureRegion, Vector2 position, Vector2 velocity, float rotationSpeed, int size)
         {
             _sprite = new Sprite(textureRegion);
-            _shape = new CircleF(_sprite.Position, _radius);
+            _shape = new CircleF(_sprite.Position, _radius * size);
+
             Position = position;
             Velocity = velocity;
             RotationSpeed = rotationSpeed;
             HealthPoints = 1;
+            Size = size;
         }
 
-        private const float _radius = 55f;
+        private const float _radius = 55f / 4f;
         private readonly Sprite _sprite;
         private CircleF _shape;
 
         public int HealthPoints { get; private set; }
         public float RotationSpeed { get; private set; }
         public Vector2 Velocity { get; set; }
+        public int Size { get; private set; }
 
         public Vector2 Position
         {
