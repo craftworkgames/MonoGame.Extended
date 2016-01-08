@@ -38,14 +38,14 @@ namespace Sandbox
         {
             _fpsCounter = new FramesPerSecondCounter();
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(_viewportAdapter)
-            {
-                MinimumZoom = 0.1f,
-                MaximumZoom = 2.0f,
-                Zoom = 0.7833337f,
-                Origin = new Vector2(400, 240),
-                Position = new Vector2(408, 270)
-            };
+            _camera = new Camera2D(_viewportAdapter);
+            //{
+            //    MinimumZoom = 0.1f,
+            //    MaximumZoom = 2.0f,
+            //    Zoom = 0.7833337f,
+            //    Origin = new Vector2(400, 240),
+            //    Position = new Vector2(408, 270)
+            //};
 
             Window.AllowUserResizing = true;
 
@@ -56,7 +56,7 @@ namespace Sandbox
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _bitmapFont = Content.Load<BitmapFont>("Fonts/courier-new-32");
-            _tiledMap = Content.Load<TiledMap>("Tilesets/level01");
+            _tiledMap = Content.Load<TiledMap>("Tilesets/test-tileset-left-up");
 
             _world = new CollisionWorld(new Vector2(0, 900));
             _world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
@@ -107,7 +107,7 @@ namespace Sandbox
             // update must be called before collision detection
             _zombie.Update(gameTime);
             _world.Update(gameTime);
-            _camera.LookAt(_zombie.Position);
+            //_camera.LookAt(_zombie.Position);
             
             base.Update(gameTime);
         }
@@ -116,17 +116,17 @@ namespace Sandbox
         {
             _fpsCounter.Update(gameTime);
 
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _tiledMap.Draw(_camera);
 
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _zombie.Draw(_spriteBatch);
-            _spriteBatch.End();
+            //_spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            //_zombie.Draw(_spriteBatch);
+            //_spriteBatch.End();
 
-            _spriteBatch.Begin();            
-            _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", _fpsCounter.AverageFramesPerSecond, _camera.Zoom), new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));
-            _spriteBatch.End();
+            //_spriteBatch.Begin();            
+            //_spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", _fpsCounter.AverageFramesPerSecond, _camera.Zoom), new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));
+            //_spriteBatch.End();
             
             base.Draw(gameTime);
         }

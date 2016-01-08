@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Maps.Tiled
@@ -15,7 +16,6 @@ namespace MonoGame.Extended.Maps.Tiled
             Height = height;
 
             _map = map;
-            _graphicsDevice = graphicsDevice;
             _spriteBatch = new SpriteBatch(graphicsDevice);
             _tiles = CreateTiles(data);
         }
@@ -29,7 +29,6 @@ namespace MonoGame.Extended.Maps.Tiled
         public int Height { get; private set; }
 
         private readonly TiledMap _map;
-        private readonly GraphicsDevice _graphicsDevice;
         private readonly TiledTile[] _tiles;
         private readonly SpriteBatch _spriteBatch;
 
@@ -65,96 +64,72 @@ namespace MonoGame.Extended.Maps.Tiled
             return tiles;
         }
 
-        public override void Draw()
+        public override void Draw(RectangleF visibleRectangle)
         {
             var renderOrderFunction = GetRenderOrderFunction();
-
-            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
-
-            foreach (var tile in renderOrderFunction())
-            {
-                var region = _map.GetTileRegion(tile.Id);
-
-                if (region != null)
-                    RenderLayer(_map, tile, region);
-            }
-
-            _spriteBatch.End();
-        }
-
-        public override void Draw(Camera2D camera)
-        {
-            var area = camera.GetBoundingRectangle();
-            int firstCol = (int)Math.Floor(camera.Position.X / _map.TileWidth);
-            int firstRow = (int)Math.Floor(camera.Position.Y / _map.TileHeight);
+            var tileLocationFunction = GetTileLocationFunction();
+            var firstCol = (int)Math.Floor(visibleRectangle.Left / _map.TileWidth);
+            var firstRow = (int)Math.Floor(visibleRectangle.Top / _map.TileHeight);
 
             // +3 to cover any gaps
-            int numberOfColumns = (int)area.Width / _map.TileWidth + 3;
-            int numberOfRows = (int)area.Height / _map.TileHeight + 3;
+            var columns = Math.Min(_map.Width, (int) visibleRectangle.Width / _map.TileWidth) + 3;
+            var rows = Math.Min(_map.Height, (int) visibleRectangle.Height / _map.TileHeight) + 3;
 
-            _spriteBatch.Begin(transformMatrix: camera.GetViewMatrix(), blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-            int index;
-            for (int row = firstRow; row <= firstRow + numberOfRows; row++)
+            _spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+
+            foreach (var tile in renderOrderFunction(firstCol, firstRow, firstCol + columns, firstRow + rows))
             {
-                index = row * _map.Width + firstCol;
-                for (int x = 0; x < numberOfColumns; x++)
+                var region = tile != null ? _map.GetTileRegion(tile.Id) : null;
+
+                if (region != null)
                 {
-                    // index must be greater than 0 and less than _tiles.Length
-                    if (index >= 0 && index < _tiles.Length)
-                    {
-                        var region = _map.GetTileRegion(_tiles[index].Id);
-                        if (region != null)
-                        {
-                            RenderLayer(_map, _tiles[index], region);
-                        }
-                    }
-                    index++;
+                    var point = tileLocationFunction(tile);
+                    var destinationRectangle = new Rectangle(point.X, point.Y, region.Width, region.Height);
+                    _spriteBatch.Draw(region, destinationRectangle, Color.White);
                 }
             }
+
             _spriteBatch.End();
         }
 
-        private void RenderLayer(TiledMap map, TiledTile tile, TextureRegion2D region)
+        private Func<TiledTile, Point> GetTileLocationFunction()
         {
-            switch (map.Orientation)
+            switch (_map.Orientation)
             {
                 case TiledMapOrientation.Orthogonal:
-                    RenderOrthogonal(tile, region);
-                    break;
+                    return GetOrthogonalLocation; 
                 case TiledMapOrientation.Isometric:
-                    RenderIsometric(tile, region);
-                    break;
+                    return GetIsometricLocation;
                 case TiledMapOrientation.Staggered:
-                    throw new NotImplementedException("Staggered maps are currently not supported");
+                    throw new NotImplementedException("Staggered maps are not yet implemented");
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new NotSupportedException(string.Format("{0} is not supported", _map.Orientation));
             }
         }
 
-        private void RenderOrthogonal(TiledTile tile, TextureRegion2D region)
+        private Point GetOrthogonalLocation(TiledTile tile)
         {
             var tx = tile.X * _map.TileWidth;
             var ty = tile.Y * _map.TileHeight;
-
-            _spriteBatch.Draw(region, new Rectangle(tx, ty, region.Width, region.Height), Color.White);
+            return new Point(tx, ty);
         }
 
-        private void RenderIsometric(TiledTile tile, TextureRegion2D region)
+        private Point GetIsometricLocation(TiledTile tile)
         {
             var halfTileWidth = _map.TileWidth / 2;
             var halfTileHeight = _map.TileHeight / 2;
             var tx = tile.X * halfTileWidth - tile.Y * halfTileWidth + _map.Width * halfTileWidth;
             var ty = tile.Y * halfTileHeight + tile.X * halfTileHeight - _map.TileWidth + _map.TileHeight;
-
-            _spriteBatch.Draw(region, new Rectangle(tx, ty, region.Width, region.Height), Color.White);
+            return new Point(tx, ty);
         }
 
         public TiledTile GetTile(int x, int y)
         {
-            return _tiles[x + y * Width];
+            var index = x + y * Width;
+            return index < 0 || index >= _tiles.Length ? null : _tiles[index];
         }
 
-        private Func<IEnumerable<TiledTile>> GetRenderOrderFunction()
+        private Func<int, int, int, int, IEnumerable<TiledTile>> GetRenderOrderFunction()
         {
             switch (_map.RenderOrder)
             {
@@ -166,43 +141,43 @@ namespace MonoGame.Extended.Maps.Tiled
                     return GetTilesRightDown;
                 case TiledRenderOrder.RightUp:
                     return GetTilesRightUp;
+                default:
+                    throw new NotSupportedException(string.Format("{0} is not supported", _map.RenderOrder));
             }
-
-            throw new NotSupportedException(string.Format("{0} is not supported", _map.RenderOrder));
         }
 
-        private IEnumerable<TiledTile> GetTilesRightDown()
+        private IEnumerable<TiledTile> GetTilesRightDown(int left, int top, int right, int bottom)
         {
-            for (var y = 0; y < Height; y++)
+            for (var y = top; y < bottom; y++)
             {
-                for (var x = 0; x < Width; x++)
+                for (var x = left; x < right; x++)
                     yield return GetTile(x, y);
             }
         }
 
-        private IEnumerable<TiledTile> GetTilesRightUp()
+        private IEnumerable<TiledTile> GetTilesRightUp(int left, int top, int right, int bottom)
         {
-            for (var y = Height - 1; y >= 0; y--)
+            for (var y = bottom - 1; y >= top; y--)
             {
-                for (var x = 0; x < Width; x++)
+                for (var x = left; x < right; x++)
                     yield return GetTile(x, y);
             }
         }
 
-        private IEnumerable<TiledTile> GetTilesLeftDown()
+        private IEnumerable<TiledTile> GetTilesLeftDown(int left, int top, int right, int bottom)
         {
-            for (var y = 0; y < Height; y++)
+            for (var y = top; y < bottom; y++)
             {
-                for (var x = Width - 1; x >= 0; x--)
+                for (var x = right - 1; x >= left; x--)
                     yield return GetTile(x, y);
             }
         }
 
-        private IEnumerable<TiledTile> GetTilesLeftUp()
+        private IEnumerable<TiledTile> GetTilesLeftUp(int left, int top, int right, int bottom)
         {
-            for (var y = Height - 1; y >= 0; y--)
+            for (var y = bottom - 1; y >= top; y--)
             {
-                for (var x = Width - 1; x >= 0; x--)
+                for (var x = right - 1; x >= left; x--)
                     yield return GetTile(x, y);
             }
         }

@@ -107,6 +107,10 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public void Draw(Camera2D camera, bool useMapBackgroundColor = false)
         {
+            // it's important to get the camera state before setting the render target
+            // because the render target changes the size of the viewport
+            var boundingRectangle = camera.GetBoundingRectangle();
+            var viewMatrix = camera.GetViewMatrix();
 
             _graphicsDevice.SetRenderTarget(_renderTarget); 
 
@@ -114,12 +118,11 @@ namespace MonoGame.Extended.Maps.Tiled
                 _graphicsDevice.Clear(BackgroundColor.Value);
 
             foreach (var layer in _layers)
-                layer.Draw();
+                layer.Draw(boundingRectangle);
 
             _graphicsDevice.SetRenderTarget(null);
-
-            _spriteBatch.Begin(sortMode: SpriteSortMode.Immediate, blendState: BlendState.NonPremultiplied,
-                samplerState: SamplerState.PointClamp, transformMatrix: camera.GetViewMatrix());
+            
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, transformMatrix: viewMatrix);
             _spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
             _spriteBatch.End();
         }
