@@ -80,7 +80,7 @@ namespace SpaceGame
 
         protected override void Update(GameTime gameTime)
         {
-            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            var deltaTime = gameTime.GetElapsedSeconds();
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
 
