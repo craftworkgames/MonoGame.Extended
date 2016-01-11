@@ -1,26 +1,25 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Content;
-using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Animations
 {
-    public class AstridAnimatorReader : ContentTypeReader<SpriteSheetAnimator>
+    public class SpriteSheetAnimationGroupReader : ContentTypeReader<SpriteSheetAnimationGroup>
     {
-        protected override SpriteSheetAnimator Read(ContentReader reader, SpriteSheetAnimator existingInstance)
+        protected override SpriteSheetAnimationGroup Read(ContentReader reader, SpriteSheetAnimationGroup existingInstance)
         {
             var textureAtlasAssetName = reader.GetRelativeAssetPath(reader.ReadString());
             var textureAtlas = reader.ContentManager.Load<TextureAtlas>(textureAtlasAssetName);
-            var sprite = new Sprite(textureAtlas.First());
-            var animator = new SpriteSheetAnimator(sprite, textureAtlas);
             var frameCount = reader.ReadInt32();
+            var regions = new List<TextureRegion2D>();
+            var animations = new List<SpriteSheetAnimation>();
 
             for (var i = 0; i < frameCount; i++)
             {
                 var frameName = reader.ReadString();
                 var textureRegion = textureAtlas[frameName];
-                animator.AddFrame(textureRegion);
+                regions.Add(textureRegion);
             }
 
             var animationCount = reader.ReadInt32();
@@ -36,10 +35,10 @@ namespace MonoGame.Extended.Animations
                 for (var f = 0; f < frameIndexCount; f++)
                     frameIndices[f] = reader.ReadInt32();
 
-                animator.AddAnimation(name, framesPerSecond, frameIndices);
+                animations.Add(new SpriteSheetAnimation(name, framesPerSecond, frameIndices));
             }
 
-            return animator;
+            return new SpriteSheetAnimationGroup(regions, animations);
         }
     }
 }

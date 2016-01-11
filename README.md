@@ -8,6 +8,7 @@
 
 MonoGame.Extended is an open source extension library for [MonoGame](http://www.monogame.net/). It is a collection of classes and extension methods to make it easier to make games with MonoGame. It makes MonoGame more awesome.
 
+We now have forums! Our forums are located on the MonoGame website which you can reach [here](http://community.monogame.net/category/extended)! Please ask any questions or post about problems or bugs that you have found there!
 
 ## Development status
 

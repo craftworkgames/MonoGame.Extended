@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Animations;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
@@ -29,9 +30,9 @@ namespace MonoGame.Extended.Sprites
                 Draw(spriteBatch, animator.Sprite);
         }
 
-        public static SpriteSheetAnimator CreateAnimator(this Sprite sprite, IEnumerable<TextureRegion2D> regions)
+        public static SpriteSheetAnimator CreateAnimator(this Sprite sprite, SpriteSheetAnimationGroup animationGroup)
         {
-            return new SpriteSheetAnimator(sprite, regions);
+            return new SpriteSheetAnimator(animationGroup, sprite);
         }
     }
 }

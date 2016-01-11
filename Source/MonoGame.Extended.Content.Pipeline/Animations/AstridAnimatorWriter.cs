@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
     {
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return typeof (AstridAnimatorReader).AssemblyQualifiedName;
+            return typeof (SpriteSheetAnimationGroupReader).AssemblyQualifiedName;
         }
 
         protected override void Write(ContentWriter writer, AstridAnimatorProcessorResult input)

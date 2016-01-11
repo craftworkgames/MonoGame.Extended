@@ -3,7 +3,7 @@
   "Animations": [
     {
       "Name": "explode",
-      "FramesPerSecond": 8,
+      "FramesPerSecond": 16,
       "Frames": [
         "regularExplosion00",
         "regularExplosion01",

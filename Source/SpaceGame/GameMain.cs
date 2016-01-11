@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Animations;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
@@ -20,7 +19,6 @@ namespace SpaceGame
         private SpriteBatch _spriteBatch;
         private Texture2D _backgroundTexture;
         private Spaceship _player;
-        private readonly Random _random;
         private readonly EntityManager _entityManager;
         private Camera2D _camera;
         private BitmapFont _font;
@@ -28,19 +26,24 @@ namespace SpaceGame
 
         public GameMain()
         {
-            _random = new Random();
-            _entityManager = new EntityManager();
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
-            //{
-                //IsFullScreen = true
-            //};
-            //_graphicsDeviceManager.ApplyChanges();
+            _entityManager = new EntityManager();
 
             Content.RootDirectory = "Content";
             Window.AllowUserResizing = true;
             IsMouseVisible = true;
 
         }
+
+        //protected override void Initialize()
+        //{
+        //    base.Initialize();
+
+        //    _graphicsDeviceManager.IsFullScreen = true;
+        //    _graphicsDeviceManager.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+        //    _graphicsDeviceManager.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+        //    _graphicsDeviceManager.ApplyChanges();
+        //}
 
         protected override void LoadContent()
         {
@@ -61,8 +64,6 @@ namespace SpaceGame
             _player = _entityManager.AddEntity(new Spaceship(spaceshipRegion, bulletFactory));
 
             _meteorFactory = new MeteorFactory(_entityManager, Content);
-            var meteorTexture = Content.Load<Texture2D>("meteorBrown_big1");
-            _meteorRegion = new TextureRegion2D(meteorTexture);
 
             for (var i = 0; i < 13; i++)
                 _meteorFactory.SpawnNewMeteor(_player.Position);
@@ -75,7 +76,6 @@ namespace SpaceGame
 
         private MouseState _previousMouseState;
         private ViewportAdapter _viewportAdapter;
-        private TextureRegion2D _meteorRegion;
         private MeteorFactory _meteorFactory;
 
         protected override void Update(GameTime gameTime)
@@ -132,8 +132,8 @@ namespace SpaceGame
                         laser.Destroy();
                         _score++;
 
-                        var animator = Content.Load<SpriteSheetAnimator>("explosion-animations");
-                        _entityManager.AddEntity(new Explosion(animator, laser.Position));
+                        var animator = Content.Load<SpriteSheetAnimationGroup>("explosion-animations");
+                        _entityManager.AddEntity(new Explosion(animator, laser.Position, meteor.Size));
 
                         if(meteor.Size >= 2)
                             _meteorFactory.SplitMeteor(meteor);
@@ -154,7 +154,7 @@ namespace SpaceGame
             _spriteBatch.End();
 
             // entities
-            _spriteBatch.Begin(samplerState: SamplerState.LinearClamp, transformMatrix: _camera.GetViewMatrix());
+            _spriteBatch.Begin(samplerState: SamplerState.LinearClamp, blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
             _entityManager.Draw(_spriteBatch);
             _spriteBatch.End();
 

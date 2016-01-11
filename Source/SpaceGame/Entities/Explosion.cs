@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Animations;
 using MonoGame.Extended.Sprites;
 
 namespace SpaceGame.Entities
@@ -8,12 +9,13 @@ namespace SpaceGame.Entities
     {
         private readonly SpriteSheetAnimator _animator;
 
-        public Explosion(SpriteSheetAnimator animator, Vector2 position)
+        public Explosion(SpriteSheetAnimationGroup animations, Vector2 position, float radius)
         {
-            _animator = animator;
-            _animator.Sprite.Position = position;
-            _animator.Sprite.Scale = Vector2.One*0.2f;
-            _animator.IsLooping = false;
+            _animator = new SpriteSheetAnimator(animations)
+            {
+                Sprite = { Position = position, Scale = Vector2.One * radius * 0.2f },
+                IsLooping = false
+            };
             _animator.PlayAnimation("explode", Destroy);
         }
 

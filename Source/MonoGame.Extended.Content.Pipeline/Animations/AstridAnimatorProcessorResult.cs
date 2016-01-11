@@ -12,6 +12,7 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
             Frames = new List<string>(frames);
             TextureAtlasAssetName = Path.GetFileNameWithoutExtension(data.TextureAtlas);
         }
+
         public string TextureAtlasAssetName { get; private set; }
         public string Directory { get; private set; }
         public AstridAnimatorFile Data { get; private set; }
