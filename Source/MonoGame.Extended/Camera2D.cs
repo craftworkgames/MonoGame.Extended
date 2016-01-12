@@ -160,7 +160,8 @@ namespace MonoGame.Extended
         public BoundingFrustum GetBoundingFrustum() 
         {
             var viewMatrix = GetViewMatrix();
-            return new BoundingFrustum(viewMatrix * GetProjectionMatrix(viewMatrix));
+            var projectionMatrix = GetProjectionMatrix(viewMatrix);
+            return new BoundingFrustum(projectionMatrix);
         }
 
         public RectangleF GetBoundingRectangle()
