@@ -38,15 +38,15 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BulletFactory.cs" />
+    <Compile Include="Entities\BulletFactory.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\Explosion.cs" />
     <Compile Include="Entities\Laser.cs" />
     <Compile Include="Entities\Meteor.cs" />
     <Compile Include="Entities\Spaceship.cs" />
-    <Compile Include="EntityManager.cs" />
+    <Compile Include="Entities\EntityManager.cs" />
     <Compile Include="GameMain.cs" />
-    <Compile Include="MeteorFactory.cs" />
+    <Compile Include="Entities\MeteorFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
