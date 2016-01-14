@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 
@@ -6,41 +7,26 @@ namespace MonoGame.Extended.Gui
 {
     public abstract class GuiDrawableControl : GuiControl
     {
-        protected GuiDrawableControl(GuiStyle defaultStyle)
+        protected GuiDrawableControl()
         {
-            SetStyle(defaultStyle);
         }
 
-        public Sprite Sprite { get; private set; }
+        public abstract GuiControlStyle CurrentStyle { get; }
 
-        public Vector2 Position
+        private IShapeF _shape;
+        public override IShapeF Shape
         {
-            get { return Sprite.Position; }
-            set { Sprite.Position = value; }
+            get { return _shape ?? CurrentStyle.BoundingShape; }
+            set { _shape = value; }
         }
 
-        private GuiStyle _currentStyle;
-
-        protected void SetStyle(GuiStyle style)
-        {
-            if(style == _currentStyle)
-                return;
-
-            _currentStyle = style;
-
-            Shape = style.TextureRegion.Bounds.ToRectangleF();
-
-            if (Sprite == null)
-                Sprite = new Sprite(style.TextureRegion);
-            else
-                Sprite.TextureRegion = style.TextureRegion;
-
-            Sprite.Color = style.Color;
-            Sprite.Effect = style.Effect;
-            Sprite.Rotation = style.Rotation;
-            Sprite.Scale = style.Scale;
-        }
+        public Vector2 Position { get; set; }
 
         public abstract override void Update(GameTime gameTime);
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            CurrentStyle.Draw(this, spriteBatch);
+        }
     }
 }

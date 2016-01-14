@@ -1,13 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.Gui
 {
     public class GuiManager : IDraw, IUpdate
     {
-        public GuiManager(GraphicsDevice graphicsDevice)
+        public GuiManager(ViewportAdapter viewportAdapter, GraphicsDevice graphicsDevice)
         {
-            _layout = new GuiLayout(graphicsDevice);
+            _layout = new GuiLayout(viewportAdapter, graphicsDevice);
         }
 
         private readonly GuiLayout _layout;

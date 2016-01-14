@@ -5,8 +5,7 @@ namespace MonoGame.Extended.Gui
 {
     public class GuiButton : GuiDrawableControl
     {
-        public GuiButton(GuiStyle normalStyle, GuiStyle pressedStyle, GuiStyle hoveredStyle)
-            : base(normalStyle)
+        public GuiButton(GuiControlStyle normalStyle, GuiControlStyle pressedStyle, GuiControlStyle hoveredStyle)
         {
             NormalStyle = normalStyle;
             PressedStyle = pressedStyle;
@@ -15,22 +14,25 @@ namespace MonoGame.Extended.Gui
             IsHovered = false;
         }
 
-        public GuiStyle NormalStyle { get; set; }
-        public GuiStyle PressedStyle { get; set; }
-        public GuiStyle HoveredStyle { get; set; }
+        public GuiControlStyle NormalStyle { get; set; }
+        public GuiControlStyle PressedStyle { get; set; }
+        public GuiControlStyle HoveredStyle { get; set; }
 
         public bool IsPressed { get; private set; }
         public bool IsHovered { get; private set; }
 
-        private GuiStyle GetCurrentStyle()
+        public override GuiControlStyle CurrentStyle
         {
-            if (IsPressed)
-                return PressedStyle;
+            get
+            {
+                if (IsPressed)
+                    return PressedStyle;
 
-            if (IsHovered)
-                return HoveredStyle;
+                if (IsHovered)
+                    return HoveredStyle;
 
-            return NormalStyle;
+                return NormalStyle;
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -39,8 +41,6 @@ namespace MonoGame.Extended.Gui
 
             IsHovered = Shape.Contains(mouseState.X, mouseState.Y);
             IsPressed = IsHovered && mouseState.LeftButton == ButtonState.Pressed;
-
-            SetStyle(GetCurrentStyle());
         }
     }
 }

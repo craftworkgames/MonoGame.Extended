@@ -56,18 +56,21 @@ namespace SpaceGame
 
         protected override void LoadContent()
         {
-            _guiManager = new GuiManager(_graphicsDeviceManager.GraphicsDevice);
+            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
 
-            var normalStyle = new GuiStyle(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-normal")));
-            var pressedStyle = new GuiStyle(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-clicked"))) { Scale = Vector2.One * 0.8f };
-            var hoveredStyle = new GuiStyle(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-hover"))) { Scale = Vector2.One * 1.1f };
+            _guiManager = new GuiManager(_viewportAdapter, GraphicsDevice);
+            var normalStyle = new GuiSpriteStyle(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-normal")));
+            var pressedStyle = new GuiSpriteStyle(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-clicked"))) { Scale = Vector2.One * 0.95f };
+            var hoveredStyle = new GuiSpriteStyle(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-hover"))) { Scale = Vector2.One * 1.05f };
             var button = new GuiButton(normalStyle, pressedStyle, hoveredStyle)
             {
                 Position = new Vector2(400, 370)
             };
             _guiManager.Layout.Controls.Add(button);
 
-            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+
+
+
             _camera = new Camera2D(_viewportAdapter);
             _font = Content.Load<BitmapFont>("Fonts/courier-new-32");
             _explosionAnimations = Content.Load<SpriteSheetAnimationGroup>("explosion-animations");

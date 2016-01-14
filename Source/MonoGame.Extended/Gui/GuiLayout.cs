@@ -2,14 +2,17 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Sprites;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.Gui
 {
     public class GuiLayout : IDraw, IUpdate
     {
-        public GuiLayout(GraphicsDevice graphicsDevice)
+        private readonly ViewportAdapter _viewportAdapter;
+
+        public GuiLayout(ViewportAdapter viewportAdapter, GraphicsDevice graphicsDevice)
         {
+            _viewportAdapter = viewportAdapter;
             _spriteBatch = new SpriteBatch(graphicsDevice);
 
             Controls = new List<GuiControl>();
@@ -21,10 +24,10 @@ namespace MonoGame.Extended.Gui
 
         public void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(transformMatrix: _viewportAdapter.GetScaleMatrix());
 
             foreach (var control in Controls.OfType<GuiDrawableControl>())
-                _spriteBatch.Draw(control.Sprite);
+                control.Draw(_spriteBatch);
 
             _spriteBatch.End();
         }
