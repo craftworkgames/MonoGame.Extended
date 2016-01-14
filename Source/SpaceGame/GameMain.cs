@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Gui;
+using MonoGame.Extended.Screens;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using SpaceGame.Entities;
@@ -16,6 +18,8 @@ namespace SpaceGame
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private readonly EntityManager _entityManager;
+        private readonly ScreenManager _screenManager;
+        private GuiManager _guiManager;
 
         private SpriteBatch _spriteBatch;
         private Texture2D _backgroundTexture;
@@ -32,6 +36,7 @@ namespace SpaceGame
         public GameMain()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
+            _screenManager = new ScreenManager(this);
             _entityManager = new EntityManager();
 
             Content.RootDirectory = "Content";
@@ -39,18 +44,29 @@ namespace SpaceGame
             IsMouseVisible = true;
         }
 
-        protected override void Initialize()
-        {
-            base.Initialize();
+        //protected override void Initialize()
+        //{
+        //    base.Initialize();
 
-            _graphicsDeviceManager.IsFullScreen = true;
-            _graphicsDeviceManager.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            _graphicsDeviceManager.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            _graphicsDeviceManager.ApplyChanges();
-        }
+        //    _graphicsDeviceManager.IsFullScreen = true;
+        //    _graphicsDeviceManager.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+        //    _graphicsDeviceManager.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+        //    _graphicsDeviceManager.ApplyChanges();
+        //}
 
         protected override void LoadContent()
         {
+            _guiManager = new GuiManager(_graphicsDeviceManager.GraphicsDevice);
+
+            var normalStyle = new GuiStyle(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-normal")));
+            var pressedStyle = new GuiStyle(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-clicked"))) { Scale = Vector2.One * 0.8f };
+            var hoveredStyle = new GuiStyle(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-hover"))) { Scale = Vector2.One * 1.1f };
+            var button = new GuiButton(normalStyle, pressedStyle, hoveredStyle)
+            {
+                Position = new Vector2(400, 370)
+            };
+            _guiManager.Layout.Controls.Add(button);
+
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter);
             _font = Content.Load<BitmapFont>("Fonts/courier-new-32");
@@ -123,6 +139,9 @@ namespace SpaceGame
             CheckCollisions();
 
             _previousMouseState = mouseState;
+
+
+            _guiManager.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -183,6 +202,8 @@ namespace SpaceGame
             _spriteBatch.Begin();
             _spriteBatch.DrawString(_font, string.Format("Score: {0}", _score), Vector2.One, Color.White);
             _spriteBatch.End();
+
+            _guiManager.Draw(gameTime);
 
             base.Draw(gameTime);
         }

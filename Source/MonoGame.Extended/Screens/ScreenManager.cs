@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Screens
 {
-    public class ScreenManager
+    public class ScreenManager : IDraw, IUpdate
     {
         private readonly Game _game;
 
@@ -14,6 +14,8 @@ namespace MonoGame.Extended.Screens
             _game.Window.OrientationChanged += WindowOnClientSizeChanged;
             _game.Activated += (s, e) => Resume();
             _game.Deactivated += (s, e) => Pause();
+
+            IsPaused = !_game.IsActive;
         }
 
         public bool IsPaused { get; private set; }

@@ -52,6 +52,12 @@
     <Compile Include="Content\ContentReaderExtensions.cs" />
     <Compile Include="EventHandlerExtensions.cs" />
     <Compile Include="GameTimeExtensions.cs" />
+    <Compile Include="Gui\GuiButton.cs" />
+    <Compile Include="Gui\GuiControl.cs" />
+    <Compile Include="Gui\GuiDrawableControl.cs" />
+    <Compile Include="Gui\GuiLayout.cs" />
+    <Compile Include="Gui\GuiManager.cs" />
+    <Compile Include="Gui\GuiStyle.cs" />
     <Compile Include="IDraw.cs" />
     <Compile Include="IMovable.cs" />
     <Compile Include="InputListeners\InputListenerSettings.cs" />

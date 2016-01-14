@@ -1,11 +1,9 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Screens
 {
-    public abstract class Screen : IDisposable
+    public abstract class Screen : IDraw, IUpdate
     {
-        public virtual void Dispose() { }
         public virtual void Show() { }
         public virtual void Hide() { }
         public virtual void Resize(int width, int height) { }
