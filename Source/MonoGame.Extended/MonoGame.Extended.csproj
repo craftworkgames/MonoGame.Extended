@@ -56,7 +56,6 @@
     <Compile Include="Gui\GuiControl.cs" />
     <Compile Include="Gui\GuiControlStyle.cs" />
     <Compile Include="Gui\GuiDrawableControl.cs" />
-    <Compile Include="Gui\GuiLayout.cs" />
     <Compile Include="Gui\GuiManager.cs" />
     <Compile Include="Gui\GuiSpriteStyle.cs" />
     <Compile Include="IDraw.cs" />
