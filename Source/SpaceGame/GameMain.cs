@@ -66,6 +66,10 @@ namespace SpaceGame
             {
                 Position = new Vector2(400, 370)
             };
+            button.Clicked += (sender, args) =>
+            {
+                _player.Destroy();
+            };
             _guiManager.Layout.Controls.Add(button);
 
 
