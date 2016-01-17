@@ -1,6 +1,5 @@
 using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.InputListeners;
 
 namespace MonoGame.Extended.Gui
@@ -13,7 +12,6 @@ namespace MonoGame.Extended.Gui
             PressedStyle = pressedStyle;
             HoveredStyle = hoveredStyle;
             IsPressed = false;
-            IsHovered = false;
         }
 
         public GuiControlStyle NormalStyle { get; set; }
@@ -21,7 +19,6 @@ namespace MonoGame.Extended.Gui
         public GuiControlStyle HoveredStyle { get; set; }
 
         public bool IsPressed { get; private set; }
-        public bool IsHovered { get; private set; }
 
         public event EventHandler<MouseEventArgs> Clicked;
 
@@ -52,16 +49,6 @@ namespace MonoGame.Extended.Gui
 
             IsPressed = false;
             base.OnMouseUp(sender, args);
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-
-            //IsHovered = Contains(mouseState.X, mouseState.Y);
-            //IsPressed = IsHovered && mouseState.LeftButton == ButtonState.Pressed;
-
-            //if(previouslyPressed && !IsPressed && IsHovered)
-            //    Clicked.Raise(this, EventArgs.Empty);
         }
     }
 }

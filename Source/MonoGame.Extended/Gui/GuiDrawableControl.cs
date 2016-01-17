@@ -22,8 +22,6 @@ namespace MonoGame.Extended.Gui
 
         public Vector2 Position { get; set; }
 
-        public abstract override void Update(GameTime gameTime);
-
         public void Draw(SpriteBatch spriteBatch)
         {
             CurrentStyle.Draw(this, spriteBatch);

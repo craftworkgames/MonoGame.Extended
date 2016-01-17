@@ -13,6 +13,7 @@ namespace MonoGame.Extended.Gui
         private readonly ViewportAdapter _viewportAdapter;
         private readonly InputListenerManager _inputManager;
         private readonly SpriteBatch _spriteBatch;
+        private GuiControl _focusedControl;
 
         public GuiManager(ViewportAdapter viewportAdapter, GraphicsDevice graphicsDevice)
         {
@@ -23,20 +24,33 @@ namespace MonoGame.Extended.Gui
             Controls = new List<GuiControl>();
 
             var mouseListener = _inputManager.AddListener<MouseListener>();
-            mouseListener.MouseMoved += (sender, args) => DelegateMouseEvent(args, c => c.OnMouseMoved(this, args));
+            mouseListener.MouseMoved += (sender, args) =>
+            {
+                if (_focusedControl != null)
+                    _focusedControl.OnMouseLeave(this, args);
+
+                _focusedControl = FindFocusedControl(args.Position);
+
+                if (_focusedControl != null)
+                    _focusedControl.OnMouseEnter(this, args);
+
+                DelegateMouseEvent(args, c => c.OnMouseMoved(this, args));
+            };
             mouseListener.MouseDown += (sender, args) => DelegateMouseEvent(args, c => c.OnMouseDown(this, args));
             mouseListener.MouseUp += (sender, args) => DelegateMouseEvent(args, c => c.OnMouseUp(this, args));
+        }
+
+        private GuiControl FindFocusedControl(Point position)
+        {
+            return Controls.LastOrDefault(c => c.Contains(position));
         }
 
         public List<GuiControl> Controls { get; private set; }
 
         private void DelegateMouseEvent(MouseEventArgs args, Action<GuiControl> action)
         {
-            foreach (var control in Controls
-                .Where(control => control.Contains(args.Position)))
-            {
+            foreach (var control in Controls.Where(c => c.Contains(args.Position)))
                 action(control);
-            }
         }
 
         public void Draw(GameTime gameTime)

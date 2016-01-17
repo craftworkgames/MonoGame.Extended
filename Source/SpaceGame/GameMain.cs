@@ -68,8 +68,12 @@ namespace SpaceGame
             };
             button.Clicked += (sender, args) =>
             {
-                Explode(_player.Position, 3);
-                _player.Destroy();
+                if (_player != null)
+                {
+                    Explode(_player.Position, 3);
+                    _player.Destroy();
+                    _player = null;
+                }
             };
             _guiManager.Controls.Add(button);
 
