@@ -6,6 +6,16 @@ namespace MonoGame.Extended.Gui
 {
     public class GuiButton : GuiDrawableControl
     {
+        public GuiButton(GuiControlStyle style)
+            : this(style, style, style)
+        {
+        }
+
+        public GuiButton(GuiControlStyle normalStyle, GuiControlStyle pressedStyle)
+            : this(normalStyle, pressedStyle, normalStyle)
+        {
+        }
+
         public GuiButton(GuiControlStyle normalStyle, GuiControlStyle pressedStyle, GuiControlStyle hoveredStyle)
         {
             NormalStyle = normalStyle;
