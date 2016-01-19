@@ -11,10 +11,13 @@ namespace MonoGame.Extended.Gui.Styles.Drawables
         public GuiTextureRegionDrawable(TextureRegion2D region)
         {
             _region = region;
+            Size = new Size(_region.Width, _region.Height);
             Color = Color.White;
         }
 
         public Color Color { get; set; }
+
+        public Size Size { get; private set; }
 
         public void Draw(SpriteBatch spriteBatch, Rectangle bounds)
         {

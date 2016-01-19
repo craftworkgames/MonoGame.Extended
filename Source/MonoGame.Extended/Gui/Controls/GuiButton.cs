@@ -1,50 +1,57 @@
 using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Gui.Styles;
 using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Gui.Controls
 {
+    public class GuiButtonStyle : GuiControlStyle<GuiButton>
+    {
+        public GuiButtonStyle(IGuiDrawable normal)
+            : this(normal, normal, normal)
+        {
+        }
+
+        public GuiButtonStyle(IGuiDrawable normal, IGuiDrawable pressed)
+            : this(normal, pressed, normal)
+        {
+        }
+
+        public GuiButtonStyle(IGuiDrawable normal, IGuiDrawable pressed, IGuiDrawable hovered)
+        {
+            Normal = normal;
+            Pressed = pressed;
+            Hovered = hovered;
+        }
+
+        public IGuiDrawable Normal { get; set; }
+        public IGuiDrawable Pressed { get; set; }
+        public IGuiDrawable Hovered { get; set; }
+
+        protected override IGuiDrawable GetCurrentDrawable(GuiButton control)
+        {
+            if (control.IsPressed)
+                return Pressed;
+
+            if (control.IsHovered)
+                return Hovered;
+            
+            return Normal;
+        }
+    }
+
     public class GuiButton : GuiControl
     {
-        public GuiButton(GuiControlStyle style)
-            : this(style, style, style)
+        public GuiButton(GuiButtonStyle style)
         {
-        }
-
-        public GuiButton(GuiControlStyle normalStyle, GuiControlStyle pressedStyle)
-            : this(normalStyle, pressedStyle, normalStyle)
-        {
-        }
-
-        public GuiButton(GuiControlStyle normalStyle, GuiControlStyle pressedStyle, GuiControlStyle hoveredStyle)
-        {
-            NormalStyle = normalStyle;
-            PressedStyle = pressedStyle;
-            HoveredStyle = hoveredStyle;
             IsPressed = false;
         }
-
-        public GuiControlStyle NormalStyle { get; set; }
-        public GuiControlStyle PressedStyle { get; set; }
-        public GuiControlStyle HoveredStyle { get; set; }
 
         public bool IsPressed { get; private set; }
 
         public event EventHandler<MouseEventArgs> Clicked;
-
-        public override GuiControlStyle CurrentStyle
-        {
-            get
-            {
-                if (IsPressed)
-                    return PressedStyle;
-
-                if (IsHovered)
-                    return HoveredStyle;
-
-                return NormalStyle;
-            }
-        }
 
         public override void OnMouseDown(object sender, MouseEventArgs args)
         {

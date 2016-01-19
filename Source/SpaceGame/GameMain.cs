@@ -8,6 +8,7 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Styles;
+using MonoGame.Extended.Gui.Styles.Drawables;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
@@ -61,10 +62,11 @@ namespace SpaceGame
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
 
             _guiManager = new GuiManager(_viewportAdapter, GraphicsDevice);
-            var normalStyle = new GuiSpriteStyle(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-normal")));
-            var pressedStyle = new GuiSpriteStyle(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-clicked"))) { Scale = Vector2.One * 0.95f };
-            var hoveredStyle = new GuiSpriteStyle(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-hover"))) { Scale = Vector2.One * 1.05f };
-            var button = new GuiButton(normalStyle, pressedStyle, hoveredStyle)
+            var normal = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-normal")));
+            var pressed = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-clicked")));
+            var hover = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-hover")));
+            var buttonStyle = new GuiButtonStyle(normal, pressed, hover);
+            var button = new GuiButton(buttonStyle)
             {
                 Position = new Vector2(400, 370)
             };

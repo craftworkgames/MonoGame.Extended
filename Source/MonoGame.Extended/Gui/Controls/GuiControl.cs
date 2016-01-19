@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Gui.Styles;
 using MonoGame.Extended.InputListeners;
@@ -15,20 +16,16 @@ namespace MonoGame.Extended.Gui.Controls
 
         public bool IsHovered { get; private set; }
 
-        public abstract GuiControlStyle CurrentStyle { get; }
-
-        private IShapeF _shape;
         public IShapeF Shape
         {
-            get { return _shape ?? CurrentStyle.BoundingShape; }
-            set { _shape = value; }
+            get { throw new NotImplementedException(); }
         }
 
         public Vector2 Position { get; set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            CurrentStyle.Draw(this, spriteBatch);
+            //CurrentStyle.Draw(this, spriteBatch);
         }
 
         public virtual void Update(GameTime gameTime) { }

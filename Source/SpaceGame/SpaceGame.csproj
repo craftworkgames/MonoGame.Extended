@@ -68,6 +68,8 @@
   <ItemGroup>
     <Content Include="Content\black.png" />
     <Content Include="Content\Fonts\courier-new-32_0.png" />
+    <Content Include="Content\Gui\9patch-1.png" />
+    <Content Include="Content\Gui\9patch-2.png" />
     <Content Include="Content\Gui\button-clicked.png" />
     <Content Include="Content\Gui\button-hover.png" />
     <Content Include="Content\Gui\button-locked.png" />

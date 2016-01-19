@@ -1,20 +1,32 @@
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Styles;
+using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Gui.Controls
 {
+    public class GuiLabelStyle : GuiControlStyle<GuiLabel>
+    {
+        private readonly BitmapFont _font;
+
+        public GuiLabelStyle(BitmapFont font)
+        {
+            _font = font;
+        }
+
+        protected override IGuiDrawable GetCurrentDrawable(GuiLabel control)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
     public class GuiLabel : GuiControl
     {
-        public GuiLabel(GuiTextStyle textStyle)
+        public GuiLabel(GuiLabelStyle style)
         {
-            TextStyle = textStyle;
+            Style = style;
         }
 
-        public GuiTextStyle TextStyle { get; set; }
+        public GuiLabelStyle Style { get; set; }
         public string Text { get; set; }
-
-        public override GuiControlStyle CurrentStyle
-        {
-            get { return TextStyle; }
-        }
     }
 }

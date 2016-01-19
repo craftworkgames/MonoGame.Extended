@@ -6,27 +6,27 @@ using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Gui.Styles
 {
-    public class GuiTextStyle : GuiControlStyle
-    {
-        private readonly BitmapFont _font;
+    //public class GuiTextStyle : GuiControlStyle
+    //{
+    //    private readonly BitmapFont _font;
 
-        public GuiTextStyle(BitmapFont font, string text)
-        {
-            _font = font;
-            Color = Color.White;
-        }
+    //    public GuiTextStyle(BitmapFont font, string text)
+    //    {
+    //        _font = font;
+    //        Color = Color.White;
+    //    }
 
-        public Color Color { get; set; }
-        public string Text { get; set; }
+    //    public Color Color { get; set; }
+    //    public string Text { get; set; }
 
-        public override IShapeF BoundingShape
-        {
-            get { return _font.GetStringRectangle(Text, Vector2.Zero).ToRectangleF(); }
-        }
+    //    public override IShapeF BoundingShape
+    //    {
+    //        get { return _font.GetStringRectangle(Text, Vector2.Zero).ToRectangleF(); }
+    //    }
 
-        public override void Draw(GuiControl control, SpriteBatch spriteBatch)
-        {
-            spriteBatch.DrawString(_font, Text, control.Position, Color);
-        }
-    }
+    //    public override void Draw(GuiControl control, SpriteBatch spriteBatch)
+    //    {
+    //        spriteBatch.DrawString(_font, Text, control.Position, Color);
+    //    }
+    //}
 }

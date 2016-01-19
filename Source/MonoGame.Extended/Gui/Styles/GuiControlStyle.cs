@@ -7,12 +7,25 @@ namespace MonoGame.Extended.Gui.Styles
 {
     public interface IGuiDrawable
     {
+        Size Size { get; }
         void Draw(SpriteBatch spriteBatch, Rectangle bounds);
     }
 
-    public abstract class GuiControlStyle
+    public abstract class GuiControlStyle<T>
+        where T : GuiControl
     {
-        public abstract IShapeF BoundingShape { get; }
-        public abstract void Draw(GuiControl control, SpriteBatch spriteBatch);
+        protected abstract IGuiDrawable GetCurrentDrawable(T control);
+
+        protected virtual Size GetDesiredSize(T control)
+        {
+            var drawable = GetCurrentDrawable(control);
+            return drawable.Size;
+        }
+
+        public virtual void Draw(T control, SpriteBatch spriteBatch, Rectangle rectangle)
+        {
+            var drawable = GetCurrentDrawable(control);
+            drawable.Draw(spriteBatch, rectangle);
+        }
     }
 }
