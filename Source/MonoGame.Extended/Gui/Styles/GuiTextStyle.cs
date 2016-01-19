@@ -1,9 +1,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Shapes;
 
-namespace MonoGame.Extended.Gui
+namespace MonoGame.Extended.Gui.Styles
 {
     public class GuiTextStyle : GuiControlStyle
     {
@@ -23,25 +24,9 @@ namespace MonoGame.Extended.Gui
             get { return _font.GetStringRectangle(Text, Vector2.Zero).ToRectangleF(); }
         }
 
-        public override void Draw(GuiDrawableControl control, SpriteBatch spriteBatch)
+        public override void Draw(GuiControl control, SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(_font, Text, control.Position, Color);
-        }
-    }
-
-    public class GuiLabel : GuiDrawableControl
-    {
-        public GuiLabel(GuiTextStyle textStyle)
-        {
-            TextStyle = textStyle;
-        }
-
-        public GuiTextStyle TextStyle { get; set; }
-        public string Text { get; set; }
-
-        public override GuiControlStyle CurrentStyle
-        {
-            get { return TextStyle; }
         }
     }
 }

@@ -1,10 +1,10 @@
 using System;
-using Microsoft.Xna.Framework;
+using MonoGame.Extended.Gui.Styles;
 using MonoGame.Extended.InputListeners;
 
-namespace MonoGame.Extended.Gui
+namespace MonoGame.Extended.Gui.Controls
 {
-    public class GuiButton : GuiDrawableControl
+    public class GuiButton : GuiControl
     {
         public GuiButton(GuiControlStyle style)
             : this(style, style, style)

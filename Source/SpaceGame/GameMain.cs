@@ -6,6 +6,8 @@ using MonoGame.Extended;
 using MonoGame.Extended.Animations;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
+using MonoGame.Extended.Gui.Controls;
+using MonoGame.Extended.Gui.Styles;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;

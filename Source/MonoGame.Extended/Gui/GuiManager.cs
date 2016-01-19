@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -57,7 +58,7 @@ namespace MonoGame.Extended.Gui
         {
             _spriteBatch.Begin(transformMatrix: _viewportAdapter.GetScaleMatrix());
 
-            foreach (var control in Controls.OfType<GuiDrawableControl>())
+            foreach (var control in Controls)
                 control.Draw(_spriteBatch);
 
             _spriteBatch.End();

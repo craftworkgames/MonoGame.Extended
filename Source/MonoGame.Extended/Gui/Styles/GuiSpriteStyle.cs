@@ -1,10 +1,11 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.Gui
+namespace MonoGame.Extended.Gui.Styles
 {
     public class GuiSpriteStyle : GuiControlStyle
     {
@@ -50,7 +51,7 @@ namespace MonoGame.Extended.Gui
             get { return _sprite.GetBoundingRectangle(); }
         }
 
-        public override void Draw(GuiDrawableControl control, SpriteBatch spriteBatch)
+        public override void Draw(GuiControl control, SpriteBatch spriteBatch)
         {
             _sprite.Position = control.Position;
             spriteBatch.Draw(_sprite);
