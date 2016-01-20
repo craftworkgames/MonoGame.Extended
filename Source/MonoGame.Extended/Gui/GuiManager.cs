@@ -59,7 +59,10 @@ namespace MonoGame.Extended.Gui
             _spriteBatch.Begin(transformMatrix: _viewportAdapter.GetScaleMatrix());
 
             foreach (var control in Controls)
-                control.Draw(_spriteBatch);
+            {
+                var viewportRectangle = new Rectangle(0, 0, _viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight);
+                control.Draw(_spriteBatch, viewportRectangle);
+            }
 
             _spriteBatch.End();
         }

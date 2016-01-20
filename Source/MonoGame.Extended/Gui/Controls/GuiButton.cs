@@ -7,7 +7,7 @@ using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public class GuiButtonStyle : GuiControlStyle<GuiButton>
+    public class GuiButtonStyle : GuiControlStyle
     {
         public GuiButtonStyle(IGuiDrawable normal)
             : this(normal, normal, normal)
@@ -29,29 +29,32 @@ namespace MonoGame.Extended.Gui.Controls
         public IGuiDrawable Normal { get; set; }
         public IGuiDrawable Pressed { get; set; }
         public IGuiDrawable Hovered { get; set; }
-
-        protected override IGuiDrawable GetCurrentDrawable(GuiButton control)
-        {
-            if (control.IsPressed)
-                return Pressed;
-
-            if (control.IsHovered)
-                return Hovered;
-            
-            return Normal;
-        }
     }
 
     public class GuiButton : GuiControl
     {
+        private readonly GuiButtonStyle _style;
+
         public GuiButton(GuiButtonStyle style)
         {
+            _style = style;
             IsPressed = false;
         }
 
         public bool IsPressed { get; private set; }
 
         public event EventHandler<MouseEventArgs> Clicked;
+
+        protected override IGuiDrawable GetCurrentDrawable()
+        {
+            if (IsPressed)
+                return _style.Pressed;
+
+            if (IsHovered)
+                return _style.Hovered;
+
+            return _style.Normal;
+        }
 
         public override void OnMouseDown(object sender, MouseEventArgs args)
         {

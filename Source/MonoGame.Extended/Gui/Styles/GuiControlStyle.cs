@@ -11,21 +11,7 @@ namespace MonoGame.Extended.Gui.Styles
         void Draw(SpriteBatch spriteBatch, Rectangle bounds);
     }
 
-    public abstract class GuiControlStyle<T>
-        where T : GuiControl
+    public abstract class GuiControlStyle
     {
-        protected abstract IGuiDrawable GetCurrentDrawable(T control);
-
-        protected virtual Size GetDesiredSize(T control)
-        {
-            var drawable = GetCurrentDrawable(control);
-            return drawable.Size;
-        }
-
-        public virtual void Draw(T control, SpriteBatch spriteBatch, Rectangle rectangle)
-        {
-            var drawable = GetCurrentDrawable(control);
-            drawable.Draw(spriteBatch, rectangle);
-        }
     }
 }

@@ -18,14 +18,27 @@ namespace MonoGame.Extended.Gui.Controls
 
         public IShapeF Shape
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                var desiredSize = GetDesiredSize();
+                var size = new Vector2(desiredSize.Width, desiredSize.Height);
+                return new RectangleF(Position, size);
+            }
         }
 
+        protected virtual Size GetDesiredSize()
+        {
+            return GetCurrentDrawable().Size;
+        }
+
+        protected abstract IGuiDrawable GetCurrentDrawable();
+        
         public Vector2 Position { get; set; }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Rectangle rectangle)
         {
-            //CurrentStyle.Draw(this, spriteBatch);
+            var drawable = GetCurrentDrawable();
+            drawable.Draw(spriteBatch, rectangle);
         }
 
         public virtual void Update(GameTime gameTime) { }
