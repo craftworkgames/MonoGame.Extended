@@ -24,7 +24,7 @@ MonoGame.Extended is designed to build on top of MonoGame, but may work with XNA
 - **Tile based maps** using [Tiled](http://www.mapeditor.org/) (orthogonal only in v0.3, isometric in master)
 - **Bitmap fonts** using [BMFont](http://www.angelcode.com/products/bmfont/)
 - **[Sprites](http://dylanwilson.net/sprites-and-spritebatch-extensions-in-monogame-extended)** (with SpriteBatch extensions!)
-- **Input listeners** for event driven input handling (Keyboard, Mouse, Touch)
+- **Input listeners** for event driven input handling (Keyboard, Mouse, Touch) (GamePad in master)
 - **Texture Atlases** using the JSON format in [TexturePacker](https://www.codeandweb.com/texturepacker)
 - **2D Camera** with pan, zoom, and rotation
 - **Viewport Adapters** for resolution independent rendering
