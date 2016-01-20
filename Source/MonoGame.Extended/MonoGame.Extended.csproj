@@ -55,12 +55,16 @@
     <Compile Include="Gui\Controls\GuiButton.cs" />
     <Compile Include="Gui\Controls\GuiButtonStyle.cs" />
     <Compile Include="Gui\Controls\GuiControl.cs" />
+    <Compile Include="Gui\Controls\GuiHorizontalAlignment.cs" />
     <Compile Include="Gui\Controls\GuiLabelStyle.cs" />
+    <Compile Include="Gui\Controls\GuiVerticalAlignment.cs" />
     <Compile Include="Gui\Drawables\GuiTextDrawable.cs" />
     <Compile Include="Gui\Controls\GuiControlStyle.cs" />
     <Compile Include="Gui\Controls\GuiLabel.cs" />
     <Compile Include="Gui\GuiManager.cs" />
     <Compile Include="Gui\Drawables\GuiTextureRegionDrawable.cs" />
+    <Compile Include="Gui\Layouts\GuiGridLayout.cs" />
+    <Compile Include="Gui\Layouts\GuiLayoutControl.cs" />
     <Compile Include="IDraw.cs" />
     <Compile Include="IMovable.cs" />
     <Compile Include="InputListeners\InputListenerSettings.cs" />

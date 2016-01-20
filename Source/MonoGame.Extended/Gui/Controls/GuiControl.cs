@@ -36,6 +36,9 @@ namespace MonoGame.Extended.Gui.Controls
             MouseUp.Raise(this, args);
         }
 
+        public GuiHorizontalAlignment HorizontalAlignment { get; set; }
+        public GuiVerticalAlignment VerticalAlignment { get; set; }
+
         public Vector2 Position { get; set; }
         public bool IsHovered { get; private set; }
 

@@ -86,7 +86,7 @@ namespace SpaceGame
             {
                 Position = new Vector2(100, 100)
             };
-            label.MouseUp += (sender, args) => label.Text = args.Position.ToString();
+            label.MouseMoved += (sender, args) => label.Text = args.Position.ToString();
             _guiManager.Controls.Add(label);
             
             _camera = new Camera2D(_viewportAdapter);
