@@ -7,8 +7,7 @@ using MonoGame.Extended.Animations;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
-using MonoGame.Extended.Gui.Styles;
-using MonoGame.Extended.Gui.Styles.Drawables;
+using MonoGame.Extended.Gui.Drawables;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
@@ -60,15 +59,16 @@ namespace SpaceGame
         protected override void LoadContent()
         {
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-
             _guiManager = new GuiManager(_viewportAdapter, GraphicsDevice);
+            _font = Content.Load<BitmapFont>("Fonts/courier-new-32");
+
             var normal = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-normal")));
             var pressed = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-clicked")));
             var hover = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-hover")));
             var buttonStyle = new GuiButtonStyle(normal, pressed, hover);
             var button = new GuiButton(buttonStyle)
             {
-                Position = new Vector2(400, 370)
+                Position = new Vector2(400, 240)
             };
             button.Clicked += (sender, args) =>
             {
@@ -81,11 +81,15 @@ namespace SpaceGame
             };
             _guiManager.Controls.Add(button);
 
-
-
-
+            var labelStyle = new GuiLabelStyle(_font);
+            var label = new GuiLabel(labelStyle, "Hello")
+            {
+                Position = new Vector2(100, 100)
+            };
+            label.MouseUp += (sender, args) => label.Text = args.Position.ToString();
+            _guiManager.Controls.Add(label);
+            
             _camera = new Camera2D(_viewportAdapter);
-            _font = Content.Load<BitmapFont>("Fonts/courier-new-32");
             _explosionAnimations = Content.Load<SpriteSheetAnimationGroup>("explosion-animations");
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);

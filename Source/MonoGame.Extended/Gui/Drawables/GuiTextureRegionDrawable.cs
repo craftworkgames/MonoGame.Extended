@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.Gui.Styles.Drawables
+namespace MonoGame.Extended.Gui.Drawables
 {
     public class GuiTextureRegionDrawable : IGuiDrawable
     {
@@ -11,17 +11,17 @@ namespace MonoGame.Extended.Gui.Styles.Drawables
         public GuiTextureRegionDrawable(TextureRegion2D region)
         {
             _region = region;
-            Size = new Size(_region.Width, _region.Height);
+
+            DesiredSize = new Size(_region.Width, _region.Height);
             Color = Color.White;
         }
 
         public Color Color { get; set; }
-
-        public Size Size { get; private set; }
+        public Size DesiredSize { get; private set; }
 
         public void Draw(SpriteBatch spriteBatch, Rectangle bounds)
         {
-            spriteBatch.Draw(_region, bounds, Color);
+            spriteBatch.Draw(_region, bounds.Location.ToVector2(), Color);
         }
     }
 }

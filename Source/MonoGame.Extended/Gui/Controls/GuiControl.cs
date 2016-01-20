@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Gui.Styles;
+using MonoGame.Extended.Gui.Drawables;
 using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.Shapes;
 
@@ -14,35 +14,59 @@ namespace MonoGame.Extended.Gui.Controls
             IsHovered = false;
         }
 
+        public event EventHandler<MouseEventArgs> MouseDown;
+        public event EventHandler<MouseEventArgs> MouseUp;
+        public event EventHandler<MouseEventArgs> MouseMoved;
+
+        protected abstract IGuiDrawable GetCurrentDrawable();
+        public virtual void Update(GameTime gameTime) { }
+
+        public virtual void OnMouseMoved(object sender, MouseEventArgs args)
+        {
+            MouseMoved.Raise(this, args);
+        }
+
+        public virtual void OnMouseDown(object sender, MouseEventArgs args)
+        {
+            MouseDown.Raise(this, args);
+        }
+
+        public virtual void OnMouseUp(object sender, MouseEventArgs args)
+        {
+            MouseUp.Raise(this, args);
+        }
+
+        public Vector2 Position { get; set; }
         public bool IsHovered { get; private set; }
 
+        private IShapeF _shape;
         public IShapeF Shape
         {
             get
             {
-                var desiredSize = GetDesiredSize();
+                if (_shape != null)
+                    return _shape;
+
+                var desiredSize = DesiredSize;
                 var size = new Vector2(desiredSize.Width, desiredSize.Height);
                 return new RectangleF(Position, size);
             }
+            set { _shape = value; }
         }
 
-        protected virtual Size GetDesiredSize()
+        public virtual Size DesiredSize
         {
-            return GetCurrentDrawable().Size;
+            get { return GetCurrentDrawable().DesiredSize; }
         }
-
-        protected abstract IGuiDrawable GetCurrentDrawable();
-        
-        public Vector2 Position { get; set; }
 
         public void Draw(SpriteBatch spriteBatch, Rectangle rectangle)
         {
             var drawable = GetCurrentDrawable();
-            drawable.Draw(spriteBatch, rectangle);
+            var size = DesiredSize;
+            var clientRectangle = new Rectangle((int)Position.X, (int)Position.Y, size.Width, size.Height);
+            drawable.Draw(spriteBatch, clientRectangle);
         }
-
-        public virtual void Update(GameTime gameTime) { }
-
+        
         public bool Contains(Vector2 point)
         {
             return Shape.Contains(point);
@@ -67,9 +91,5 @@ namespace MonoGame.Extended.Gui.Controls
         {
             IsHovered = false;
         }
-
-        public virtual void OnMouseMoved(object sender, MouseEventArgs args) { }
-        public virtual void OnMouseDown(object sender, MouseEventArgs args) { }
-        public virtual void OnMouseUp(object sender, MouseEventArgs args) { }
     }
 }

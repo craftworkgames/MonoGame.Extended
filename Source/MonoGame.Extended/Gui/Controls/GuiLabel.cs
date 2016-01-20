@@ -1,60 +1,54 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Gui.Styles;
-using MonoGame.Extended.Shapes;
+using MonoGame.Extended.Gui.Drawables;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public class GuiLabelStyle : GuiControlStyle
-    {
-        public GuiLabelStyle(BitmapFont font)
-        {
-            Font = font;
-        }
-
-        public BitmapFont Font { get; private set; }
-    }
-
-    public class GuiTextDrawable : IGuiDrawable
-    {
-        public GuiTextDrawable(BitmapFont font, string text)
-        {
-            Font = font;
-            Text = text;
-        }
-
-        public BitmapFont Font { get; private set; }
-        public string Text { get; private set; }
-
-        public Size Size
-        {
-            get
-            {
-                var stringRectangle = Font.GetStringRectangle(Text, Vector2.Zero);
-                return new Size(stringRectangle.Width, stringRectangle.Height);
-            }
-        }
-
-        public void Draw(SpriteBatch spriteBatch, Rectangle bounds)
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-
     public class GuiLabel : GuiControl
     {
         public GuiLabel(GuiLabelStyle style)
+            : this(style, string.Empty)
         {
-            Style = style;
         }
 
-        public GuiLabelStyle Style { get; set; }
-        public string Text { get; set; }
+        public GuiLabel(GuiLabelStyle style, string text)
+        {
+            Style = style;
+            Text = text;
+        }
+
+        private GuiTextDrawable _drawable;
+        private bool _propertyChanged;
+
+        private GuiLabelStyle _style;
+        public GuiLabelStyle Style
+        {
+            get { return _style; }
+            set
+            {
+                _style = value;
+                _propertyChanged = true;
+            }
+        }
+
+        private string _text;
+        public string Text
+        {
+            get { return _text; }
+            set
+            {
+                _text = value;
+                _propertyChanged = true;
+            }
+        }
 
         protected override IGuiDrawable GetCurrentDrawable()
         {
-            return new GuiTextDrawable(Style.Font, Text);
+            if (_propertyChanged)
+            {
+                _drawable = new GuiTextDrawable(Style.Font, Text, Style.Color);
+                _propertyChanged = false;
+            }
+
+            return _drawable;
         }
     }
 }

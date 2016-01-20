@@ -22,7 +22,7 @@ namespace MonoGame.Extended.BitmapFonts
             return _characterMap.TryGetValue(character, out region) ? region : null;
         }
 
-        public Rectangle GetStringRectangle(string text, Vector2 position)
+        public Size GetSize(string text)
         {
             var width = 0;
             var height = 0;
@@ -40,8 +40,14 @@ namespace MonoGame.Extended.BitmapFonts
                 }
             }
 
+            return new Size(width, height);
+        }
+
+        public Rectangle GetStringRectangle(string text, Vector2 position)
+        {
+            var size = GetSize(text);
             var p = position.ToPoint();
-            return new Rectangle(p.X, p.Y, width, height);
+            return new Rectangle(p.X, p.Y, size.Width, size.Height);
         }
     }
 }
