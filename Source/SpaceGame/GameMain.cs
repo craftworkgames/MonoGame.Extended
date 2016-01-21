@@ -35,6 +35,7 @@ namespace SpaceGame
         private SpriteSheetAnimationGroup _explosionAnimations;
         private BulletFactory _bulletFactory;
         private int _score;
+        private GuiLabel _scoreLabel;
 
         public GameMain()
         {
@@ -63,8 +64,6 @@ namespace SpaceGame
             _guiManager = new GuiManager(_viewportAdapter, GraphicsDevice);
             _font = Content.Load<BitmapFont>("Fonts/courier-new-32");
 
-            var gridLayout = new GuiGridLayout();
-
             var normal = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-normal")));
             var pressed = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-clicked")));
             var hover = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-hover")));
@@ -79,14 +78,15 @@ namespace SpaceGame
                     _player = null;
                 }
             };
-            gridLayout.Children.Add(button);
+            _guiManager.Layout.Children.Add(button);
 
             var labelStyle = new GuiLabelStyle(_font);
-            var label = new GuiLabel(labelStyle, "Hello");
-            label.MouseMoved += (sender, args) => label.Text = args.Position.ToString();
-
-            _guiManager.Controls.Add(gridLayout);
-            _guiManager.PerformLayout();
+            _scoreLabel = new GuiLabel(labelStyle, "Hello")
+            {
+                HorizontalAlignment = GuiHorizontalAlignment.Right,
+                VerticalAlignment = GuiVerticalAlignment.Top
+            };
+            _guiManager.Layout.Children.Add(_scoreLabel);
 
             _camera = new Camera2D(_viewportAdapter);
             _explosionAnimations = Content.Load<SpriteSheetAnimationGroup>("explosion-animations");
@@ -160,6 +160,7 @@ namespace SpaceGame
             _previousMouseState = mouseState;
 
 
+            _scoreLabel.Text = string.Format("Score: {0}", _score);
             _guiManager.Update(gameTime);
             base.Update(gameTime);
         }
@@ -215,11 +216,6 @@ namespace SpaceGame
             // entities
             _spriteBatch.Begin(samplerState: SamplerState.LinearClamp, blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
             _entityManager.Draw(_spriteBatch);
-            _spriteBatch.End();
-
-            // hud
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(_font, string.Format("Score: {0}", _score), Vector2.One, Color.White);
             _spriteBatch.End();
 
             _guiManager.Draw(gameTime);

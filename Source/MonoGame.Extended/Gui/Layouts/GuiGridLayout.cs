@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Gui.Drawables;
+﻿using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Gui.Layouts
 {

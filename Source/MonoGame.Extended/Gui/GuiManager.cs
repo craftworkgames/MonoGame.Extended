@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Gui.Controls;
+using MonoGame.Extended.Gui.Layouts;
 using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -18,11 +17,11 @@ namespace MonoGame.Extended.Gui
 
         public GuiManager(ViewportAdapter viewportAdapter, GraphicsDevice graphicsDevice)
         {
+            Layout = new GuiGridLayout();
+
             _viewportAdapter = viewportAdapter;
             _inputManager = new InputListenerManager(viewportAdapter);
             _spriteBatch = new SpriteBatch(graphicsDevice);
-
-            Controls = new List<GuiControl>();
 
             var mouseListener = _inputManager.AddListener<MouseListener>();
             mouseListener.MouseMoved += (sender, args) =>
@@ -30,55 +29,77 @@ namespace MonoGame.Extended.Gui
                 if (_focusedControl != null)
                     _focusedControl.OnMouseLeave(this, args);
 
-                _focusedControl = FindFocusedControl(args.Position);
+                _focusedControl = FindControlAtPoint(args.Position);
 
                 if (_focusedControl != null)
                     _focusedControl.OnMouseEnter(this, args);
 
-                DelegateMouseEvent(args, c => c.OnMouseMoved(this, args));
+                Layout.OnMouseMoved(this, args);
             };
-            mouseListener.MouseDown += (sender, args) => DelegateMouseEvent(args, c => c.OnMouseDown(this, args));
-            mouseListener.MouseUp += (sender, args) => DelegateMouseEvent(args, c => c.OnMouseUp(this, args));
+            mouseListener.MouseDown += (sender, args) => Layout.OnMouseDown(this, args);
+            mouseListener.MouseUp += (sender, args) => Layout.OnMouseUp(this, args);
         }
 
-        private GuiControl FindFocusedControl(Point position)
+        private GuiLayoutControl _layout;
+        public GuiLayoutControl Layout
         {
-            return Controls.LastOrDefault(c => c.Contains(position));
+            get { return _layout; }
+            set
+            {
+                if (value == null)
+                    throw new InvalidOperationException("Layout must not be null");
+
+                _layout = value;
+            }
         }
-
-        public List<GuiControl> Controls { get; private set; }
-
-        private void DelegateMouseEvent(MouseEventArgs args, Action<GuiControl> action)
-        {
-            foreach (var control in Controls.Where(c => c.Contains(args.Position)))
-                action(control);
-        }
-
+        
         public void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin(transformMatrix: _viewportAdapter.GetScaleMatrix());
-
-            foreach (var control in Controls)
-            {
-                var viewportRectangle = new Rectangle(0, 0, _viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight);
-                control.Draw(_spriteBatch, viewportRectangle);
-            }
-
+            Layout.Draw(_spriteBatch, _viewportAdapter.BoundingRectangle);
             _spriteBatch.End();
         }
 
         public void Update(GameTime gameTime)
         {
             _inputManager.Update(gameTime);
-
-            foreach (var control in Controls)
-                control.Update(gameTime);
+            Layout.Update(gameTime);
         }
 
-        public void PerformLayout()
+        protected GuiControl FindControlAtPoint(Point point)
         {
-            foreach (var control in Controls)
-                control.LayoutChildren(_viewportAdapter.BoundingRectangle);
+            var control = Layout;
+
+            foreach (var child in control.Children)
+            {
+                if (child.Contains(point))
+                    return child;
+            }
+
+            if (control.Contains(point))
+                return control;
+
+            return null;
+            //if (!Contains(point))
+            //    return null;
+
+            //foreach (var child in Children)
+            //{
+            //    var layoutControl = child as GuiLayoutControl;
+
+            //    if (layoutControl != null)
+            //    {
+            //        var control = layoutControl.FindControlAtPoint(point);
+
+            //        if (control != null)
+            //            return control;
+            //    }
+
+            //    if (child.Contains(point))
+            //        return child;
+            //}
+
+            //return this;
         }
     }
 }

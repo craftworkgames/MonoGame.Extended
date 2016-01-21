@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Drawables;
+using MonoGame.Extended.InputListeners;
 
 namespace MonoGame.Extended.Gui.Layouts
 {
@@ -28,7 +30,6 @@ namespace MonoGame.Extended.Gui.Layouts
         }
     }
 
-
     public abstract class GuiLayoutControl : GuiControl
     {
         protected GuiLayoutControl()
@@ -49,6 +50,30 @@ namespace MonoGame.Extended.Gui.Layouts
 
             foreach (var child in Children)
                 child.Update(gameTime);
+        }
+        
+        private void ForEachChildAtPoint(Point point, Action<GuiControl> action)
+        {
+            foreach (var control in Children.Where(c => c.Contains(point)))
+                action(control);
+        }
+
+        public override void OnMouseMoved(object sender, MouseEventArgs args)
+        {
+            base.OnMouseMoved(sender, args);
+            ForEachChildAtPoint(args.Position, c => c.OnMouseMoved(this, args));
+        }
+
+        public override void OnMouseDown(object sender, MouseEventArgs args)
+        {
+            base.OnMouseDown(sender, args);
+            ForEachChildAtPoint(args.Position, c => c.OnMouseDown(this, args));
+        }
+
+        public override void OnMouseUp(object sender, MouseEventArgs args)
+        {
+            base.OnMouseUp(sender, args);
+            ForEachChildAtPoint(args.Position, c => c.OnMouseUp(this, args));
         }
 
         protected int GetHorizontalAlignment(GuiControl control, Rectangle rectangle)
