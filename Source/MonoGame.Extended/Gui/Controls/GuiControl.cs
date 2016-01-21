@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Gui.Drawables;
 using MonoGame.Extended.InputListeners;
-using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -21,6 +20,10 @@ namespace MonoGame.Extended.Gui.Controls
         protected abstract IGuiDrawable GetCurrentDrawable();
         public virtual void Update(GameTime gameTime) { }
 
+        public virtual void LayoutChildren(Rectangle boundingRectangle)
+        {
+        }
+        
         public virtual void OnMouseMoved(object sender, MouseEventArgs args)
         {
             MouseMoved.Raise(this, args);
@@ -39,23 +42,16 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiHorizontalAlignment HorizontalAlignment { get; set; }
         public GuiVerticalAlignment VerticalAlignment { get; set; }
 
-        public Vector2 Position { get; set; }
+        public Point Location { get; set; }
         public bool IsHovered { get; private set; }
-
-        private IShapeF _shape;
-        public IShapeF Shape
-        {
-            get
-            {
-                if (_shape != null)
-                    return _shape;
-
-                var desiredSize = DesiredSize;
-                var size = new Vector2(desiredSize.Width, desiredSize.Height);
-                return new RectangleF(Position, size);
-            }
-            set { _shape = value; }
-        }
+        public int Left { get { return Location.X; } }
+        public int Top { get { return Location.Y; } }
+        public int Right { get { return Location.X + Width; } }
+        public int Bottom {  get { return Location.Y + Height; } }
+        public int Width { get { return DesiredSize.Width; } }
+        public int Height { get { return DesiredSize.Height; } }
+        public Size ActualSize {  get { return DesiredSize; } }
+        public Rectangle BoundingRectangle { get { return new Rectangle(Location, ActualSize); } }
 
         public virtual Size DesiredSize
         {
@@ -64,25 +60,22 @@ namespace MonoGame.Extended.Gui.Controls
 
         public void Draw(SpriteBatch spriteBatch, Rectangle rectangle)
         {
-            var drawable = GetCurrentDrawable();
-            var size = DesiredSize;
-            var clientRectangle = new Rectangle((int)Position.X, (int)Position.Y, size.Width, size.Height);
-            drawable.Draw(spriteBatch, clientRectangle);
+            GetCurrentDrawable().Draw(spriteBatch, BoundingRectangle);
         }
         
         public bool Contains(Vector2 point)
         {
-            return Shape.Contains(point);
+            return BoundingRectangle.Contains(point);
         }
 
         public bool Contains(Point point)
         {
-            return Shape.Contains(point.ToVector2());
+            return BoundingRectangle.Contains(point.ToVector2());
         }
 
         public bool Contains(int x, int y)
         {
-            return Shape.Contains(x, y);
+            return BoundingRectangle.Contains(x, y);
         }
 
         public virtual void OnMouseEnter(object sender, MouseEventArgs args)

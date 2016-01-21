@@ -19,9 +19,9 @@ namespace MonoGame.Extended.Gui.Drawables
         public Color Color { get; set; }
         public Size DesiredSize { get; private set; }
 
-        public void Draw(SpriteBatch spriteBatch, Rectangle bounds)
+        public void Draw(SpriteBatch spriteBatch, Rectangle rectangle)
         {
-            spriteBatch.Draw(_region, bounds.Location.ToVector2(), Color);
+            spriteBatch.Draw(_region, rectangle.Location.ToVector2(), Color);
         }
     }
 }

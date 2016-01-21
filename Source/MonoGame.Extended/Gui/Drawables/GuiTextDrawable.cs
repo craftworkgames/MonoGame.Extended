@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Gui.Drawables
     public interface IGuiDrawable
     {
         Size DesiredSize { get; }
-        void Draw(SpriteBatch spriteBatch, Rectangle bounds);
+        void Draw(SpriteBatch spriteBatch, Rectangle rectangle);
     }
 
     public class GuiTextDrawable : IGuiDrawable
@@ -28,9 +28,9 @@ namespace MonoGame.Extended.Gui.Drawables
             get { return Font.GetSize(Text); }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Rectangle bounds)
+        public void Draw(SpriteBatch spriteBatch, Rectangle rectangle)
         {
-            spriteBatch.DrawString(Font, Text, bounds.Location.ToVector2(), Color);
+            spriteBatch.DrawString(Font, Text, rectangle.Location.ToVector2(), Color);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Gui.Drawables;
 
 namespace MonoGame.Extended.Gui.Layouts
@@ -10,16 +11,13 @@ namespace MonoGame.Extended.Gui.Layouts
         {
         }
 
-        protected override IGuiDrawable GetCurrentDrawable()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void LayoutChildren(Rectangle bounds)
+        public override void LayoutChildren(Rectangle rectangle)
         {
             foreach (var child in Children)
             {
-                child.Position = new Vector2(bounds.X, bounds.Y);
+                var x = GetHorizontalAlignment(child, rectangle);
+                var y = GetVerticalAlignment(child, rectangle);
+                child.Location = new Point(x, y);
             }
         }
     }

@@ -8,6 +8,7 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Drawables;
+using MonoGame.Extended.Gui.Layouts;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
@@ -62,14 +63,13 @@ namespace SpaceGame
             _guiManager = new GuiManager(_viewportAdapter, GraphicsDevice);
             _font = Content.Load<BitmapFont>("Fonts/courier-new-32");
 
+            var gridLayout = new GuiGridLayout();
+
             var normal = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-normal")));
             var pressed = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-clicked")));
             var hover = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-hover")));
             var buttonStyle = new GuiButtonStyle(normal, pressed, hover);
-            var button = new GuiButton(buttonStyle)
-            {
-                Position = new Vector2(400, 240)
-            };
+            var button = new GuiButton(buttonStyle);
             button.Clicked += (sender, args) =>
             {
                 if (_player != null)
@@ -79,16 +79,15 @@ namespace SpaceGame
                     _player = null;
                 }
             };
-            _guiManager.Controls.Add(button);
+            gridLayout.Children.Add(button);
 
             var labelStyle = new GuiLabelStyle(_font);
-            var label = new GuiLabel(labelStyle, "Hello")
-            {
-                Position = new Vector2(100, 100)
-            };
+            var label = new GuiLabel(labelStyle, "Hello");
             label.MouseMoved += (sender, args) => label.Text = args.Position.ToString();
-            _guiManager.Controls.Add(label);
-            
+
+            _guiManager.Controls.Add(gridLayout);
+            _guiManager.PerformLayout();
+
             _camera = new Camera2D(_viewportAdapter);
             _explosionAnimations = Content.Load<SpriteSheetAnimationGroup>("explosion-animations");
 

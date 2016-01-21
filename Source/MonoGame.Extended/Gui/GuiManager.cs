@@ -74,5 +74,11 @@ namespace MonoGame.Extended.Gui
             foreach (var control in Controls)
                 control.Update(gameTime);
         }
+
+        public void PerformLayout()
+        {
+            foreach (var control in Controls)
+                control.LayoutChildren(_viewportAdapter.BoundingRectangle);
+        }
     }
 }

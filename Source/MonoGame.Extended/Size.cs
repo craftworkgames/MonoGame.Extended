@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
@@ -45,6 +46,16 @@ namespace MonoGame.Extended
         public bool Equals(Size other)
         {
             return Width == other.Width && Height == other.Height;
+        }
+
+        public static implicit operator Point(Size size)
+        {
+            return new Point(size.Width, size.Height);
+        }
+
+        public static implicit operator Vector2(Size size)
+        {
+            return new Vector2(size.Width, size.Height);
         }
 
         public override bool Equals(object obj)
