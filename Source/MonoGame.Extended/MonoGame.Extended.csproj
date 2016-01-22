@@ -67,6 +67,9 @@
     <Compile Include="Gui\Layouts\GuiLayoutControl.cs" />
     <Compile Include="IDraw.cs" />
     <Compile Include="IMovable.cs" />
+    <Compile Include="InputListeners\GamePadEventArgs.cs" />
+    <Compile Include="InputListeners\GamePadListener.cs" />
+    <Compile Include="InputListeners\GamePadListenerSettings.cs" />
     <Compile Include="InputListeners\InputListenerSettings.cs" />
     <Compile Include="InputListeners\KeyboardEventArgs.cs" />
     <Compile Include="InputListeners\KeyboardListenerSettings.cs" />

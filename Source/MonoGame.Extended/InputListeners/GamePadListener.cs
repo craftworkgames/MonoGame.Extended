@@ -28,8 +28,6 @@ namespace MonoGame.Extended.InputListeners
             _previousGameTime = new GameTime();
             _previousState = GamePadState.Default;
         }
-        
-        #region events
 
         /// <summary>
         /// This event fires whenever a controller connects or disconnects. <para>In order
@@ -69,10 +67,6 @@ namespace MonoGame.Extended.InputListeners
         /// is <see cref="GamePadListenerSettings.TriggerDeltaTreshold"/>.</para>
         /// </summary>
         public event EventHandler<GamePadEventArgs> TriggerMoved;
-        
-        #endregion
-
-        #region public properties
 
         /// <summary>
         /// If set to true, the static event <see cref="ControllerConnectionChanged"/>
@@ -165,10 +159,7 @@ namespace MonoGame.Extended.InputListeners
         /// </summary>
         public float ThumbstickDownTreshold { get; private set; }
 
-        #endregion
-
-        #region private fields
-        private static readonly bool[] GamePadConnections = new bool[4];
+        private static readonly bool[] _gamePadConnections = new bool[4];
 
         private float _vibrationStrengthLeft;
         private float _vibrationStrengthRight;
@@ -207,9 +198,7 @@ namespace MonoGame.Extended.InputListeners
             Buttons.LeftThumbstickDown, Buttons.LeftThumbstickUp, Buttons.LeftThumbstickRight, Buttons.LeftThumbstickLeft,
             Buttons.RightThumbstickLeft, Buttons.RightThumbstickRight, Buttons.RightThumbstickUp, Buttons.RightThumbstickDown
         };
-        
-        #endregion
-        
+
 
         /// <summary>
         /// Send a vibration command to the controller.
@@ -412,9 +401,9 @@ namespace MonoGame.Extended.InputListeners
 
             foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
             {
-                if (GamePad.GetState(index).IsConnected ^ GamePadConnections[(int) index])  // We need more XORs in this world
+                if (GamePad.GetState(index).IsConnected ^ _gamePadConnections[(int) index])  // We need more XORs in this world
                 {
-                    GamePadConnections[(int) index] = !GamePadConnections[(int) index];
+                    _gamePadConnections[(int) index] = !_gamePadConnections[(int) index];
                     ControllerConnectionChanged.Raise(null, 
                         new GamePadEventArgs(GamePadState.Default, GamePad.GetState(index), TimeSpan.Zero, index));
                 }
