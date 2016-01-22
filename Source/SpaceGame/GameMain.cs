@@ -8,7 +8,6 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Drawables;
-using MonoGame.Extended.Gui.Layouts;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
@@ -68,7 +67,7 @@ namespace SpaceGame
             var pressed = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-clicked")));
             var hover = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-hover")));
             var buttonStyle = new GuiButtonStyle(normal, pressed, hover);
-            var button = new GuiButton(buttonStyle);
+            var button = new GuiButton(buttonStyle) {VerticalAlignment = GuiVerticalAlignment.Bottom};
             button.Clicked += (sender, args) =>
             {
                 if (_player != null)
@@ -87,6 +86,7 @@ namespace SpaceGame
                 VerticalAlignment = GuiVerticalAlignment.Top
             };
             _guiManager.Layout.Children.Add(_scoreLabel);
+            _guiManager.PerformLayout();
 
             _camera = new Camera2D(_viewportAdapter);
             _explosionAnimations = Content.Load<SpriteSheetAnimationGroup>("explosion-animations");
@@ -161,7 +161,10 @@ namespace SpaceGame
 
 
             _scoreLabel.Text = string.Format("Score: {0}", _score);
+
             _guiManager.Update(gameTime);
+            _guiManager.PerformLayout(); // not ideal.
+
             base.Update(gameTime);
         }
 

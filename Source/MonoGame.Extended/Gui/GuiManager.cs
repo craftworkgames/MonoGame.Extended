@@ -29,7 +29,7 @@ namespace MonoGame.Extended.Gui
                 if (_focusedControl != null)
                     _focusedControl.OnMouseLeave(this, args);
 
-                _focusedControl = FindControlAtPoint(args.Position);
+                _focusedControl = FindControlAtPoint(Layout, args.Position);
 
                 if (_focusedControl != null)
                     _focusedControl.OnMouseEnter(this, args);
@@ -66,40 +66,33 @@ namespace MonoGame.Extended.Gui
             Layout.Update(gameTime);
         }
 
-        protected GuiControl FindControlAtPoint(Point point)
+        public void PerformLayout()
         {
-            var control = Layout;
+            Layout.LayoutChildren(_viewportAdapter.BoundingRectangle);
+        }
 
-            foreach (var child in control.Children)
+        private GuiControl FindControlAtPoint(GuiControl control, Point point)
+        {
+            var layoutControl = control as GuiLayoutControl;
+
+            if (layoutControl != null)
             {
-                if (child.Contains(point))
-                    return child;
+                foreach (var child in layoutControl.Children)
+                {
+                    if (child.Contains(point))
+                    {
+                        var c = FindControlAtPoint(child, point);
+
+                        if (c != null)
+                            return c;
+                    }
+                }
             }
 
             if (control.Contains(point))
                 return control;
 
             return null;
-            //if (!Contains(point))
-            //    return null;
-
-            //foreach (var child in Children)
-            //{
-            //    var layoutControl = child as GuiLayoutControl;
-
-            //    if (layoutControl != null)
-            //    {
-            //        var control = layoutControl.FindControlAtPoint(point);
-
-            //        if (control != null)
-            //            return control;
-            //    }
-
-            //    if (child.Contains(point))
-            //        return child;
-            //}
-
-            //return this;
         }
     }
 }
