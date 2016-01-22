@@ -3,16 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.InputListeners
 {
     public class InputListenerManager : IUpdate
     {
         public InputListenerManager()
+            : this(null)
         {
+        }
+
+        public InputListenerManager(ViewportAdapter viewportAdapter)
+        {
+            _viewportAdapter = viewportAdapter;
             _listeners = new List<InputListener>();
         }
 
+        private readonly ViewportAdapter _viewportAdapter;
         private readonly List<InputListener> _listeners;
 
         public IEnumerable<InputListener> Listeners
@@ -40,6 +48,7 @@ namespace MonoGame.Extended.InputListeners
                 throw new InvalidOperationException(string.Format("No parameterless constructor defined for type {0}", typeof(T).Name));
 
             var listener = (T)constructors[0].Invoke(new object[0]);
+            listener.ViewportAdapter = _viewportAdapter;
             _listeners.Add(listener);
             return listener;
         }
@@ -53,6 +62,8 @@ namespace MonoGame.Extended.InputListeners
         {
             foreach (var listener in _listeners)
                 listener.Update(gameTime);
+
+            GamePadListener.CheckConnections();
         }
     }
 }

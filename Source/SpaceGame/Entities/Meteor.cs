@@ -11,7 +11,7 @@ namespace SpaceGame.Entities
         public Meteor(TextureRegion2D textureRegion, Vector2 position, Vector2 velocity, float rotationSpeed, int size)
         {
             _sprite = new Sprite(textureRegion);
-            _shape = new CircleF(_sprite.Position, _radius * size);
+            _boundingCircle = new CircleF(_sprite.Position, _radius * size);
 
             Position = position;
             Velocity = velocity;
@@ -22,7 +22,6 @@ namespace SpaceGame.Entities
 
         private const float _radius = 55f / 4f;
         private readonly Sprite _sprite;
-        private CircleF _shape;
 
         public int HealthPoints { get; private set; }
         public float RotationSpeed { get; private set; }
@@ -35,7 +34,7 @@ namespace SpaceGame.Entities
             set
             {
                 _sprite.Position = value;
-                _shape.Center = _sprite.Position;
+                _boundingCircle.Center = _sprite.Position;
             }
         }
 
@@ -44,6 +43,9 @@ namespace SpaceGame.Entities
             get { return _sprite.Rotation; }
             set { _sprite.Rotation = value; }
         }
+
+        private CircleF _boundingCircle;
+        public CircleF BoundingCircle => _boundingCircle;
 
         public void Damage(int damage)
         {
@@ -67,7 +69,7 @@ namespace SpaceGame.Entities
 
         public bool Contains(Vector2 position)
         {
-            return _shape.Contains(position);
+            return _boundingCircle.Contains(position);
         }
     }
 }

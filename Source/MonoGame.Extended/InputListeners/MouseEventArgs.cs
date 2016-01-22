@@ -1,17 +1,20 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.InputListeners
 {
     public class MouseEventArgs : EventArgs
     {
-        internal MouseEventArgs(TimeSpan time, MouseState previousState, MouseState currentState, 
+        internal MouseEventArgs(ViewportAdapter viewportAdapter, TimeSpan time, MouseState previousState, MouseState currentState, 
             MouseButton button = MouseButton.None)
         {
             PreviousState = previousState;
             CurrentState = currentState;
-            Position = new Point(currentState.X, currentState.Y);
+            Position = viewportAdapter != null
+                ? viewportAdapter.PointToScreen(currentState.X, currentState.Y)
+                : new Point(currentState.X, currentState.Y); 
             Button = button;
             ScrollWheelValue = currentState.ScrollWheelValue;
             ScrollWheelDelta = currentState.ScrollWheelValue - previousState.ScrollWheelValue;

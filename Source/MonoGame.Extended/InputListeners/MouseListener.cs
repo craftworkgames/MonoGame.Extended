@@ -40,7 +40,7 @@ namespace MonoGame.Extended.InputListeners
             if (getButtonState(_currentState) == ButtonState.Pressed && 
                 getButtonState(_previousState) == ButtonState.Released)
             {
-                var args = new MouseEventArgs(_gameTime.TotalGameTime, _previousState, _currentState, button);
+                var args = new MouseEventArgs(ViewportAdapter, _gameTime.TotalGameTime, _previousState, _currentState, button);
 
                 MouseDown.Raise(this, args);
                 _mouseDownArgs = args;
@@ -66,7 +66,7 @@ namespace MonoGame.Extended.InputListeners
             if (getButtonState(_currentState) == ButtonState.Released &&
                 getButtonState(_previousState) == ButtonState.Pressed)
             {
-                var args = new MouseEventArgs(_gameTime.TotalGameTime, _previousState, _currentState, button);
+                var args = new MouseEventArgs(ViewportAdapter, _gameTime.TotalGameTime, _previousState, _currentState, button);
                 
                 if (_mouseDownArgs.Button == args.Button)
                 {
@@ -110,11 +110,11 @@ namespace MonoGame.Extended.InputListeners
 
             // Check for any sort of mouse movement. 
             if (_previousState.X != _currentState.X || _previousState.Y != _currentState.Y)
-                MouseMoved.Raise(this, new MouseEventArgs(gameTime.TotalGameTime, _previousState, _currentState));
+                MouseMoved.Raise(this, new MouseEventArgs(ViewportAdapter, gameTime.TotalGameTime, _previousState, _currentState));
 
             // Handle mouse wheel events.
             if (_previousState.ScrollWheelValue != _currentState.ScrollWheelValue)
-                MouseWheelMoved.Raise(this, new MouseEventArgs(gameTime.TotalGameTime, _previousState, _currentState));
+                MouseWheelMoved.Raise(this, new MouseEventArgs(ViewportAdapter, gameTime.TotalGameTime, _previousState, _currentState));
 
             _previousState = _currentState;
         }

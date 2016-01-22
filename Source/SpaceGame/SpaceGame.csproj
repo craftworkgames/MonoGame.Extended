@@ -38,15 +38,15 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BulletFactory.cs" />
+    <Compile Include="Entities\BulletFactory.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\Explosion.cs" />
     <Compile Include="Entities\Laser.cs" />
     <Compile Include="Entities\Meteor.cs" />
     <Compile Include="Entities\Spaceship.cs" />
-    <Compile Include="EntityManager.cs" />
+    <Compile Include="Entities\EntityManager.cs" />
     <Compile Include="GameMain.cs" />
-    <Compile Include="MeteorFactory.cs" />
+    <Compile Include="Entities\MeteorFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -68,6 +68,12 @@
   <ItemGroup>
     <Content Include="Content\black.png" />
     <Content Include="Content\Fonts\courier-new-32_0.png" />
+    <Content Include="Content\Gui\9patch-1.png" />
+    <Content Include="Content\Gui\9patch-2.png" />
+    <Content Include="Content\Gui\button-clicked.png" />
+    <Content Include="Content\Gui\button-hover.png" />
+    <Content Include="Content\Gui\button-locked.png" />
+    <Content Include="Content\Gui\button-normal.png" />
     <Content Include="Content\laserBlue03.png" />
     <Content Include="Content\meteorBrown_big1.png" />
     <Content Include="Content\meteorBrown_big2.png" />

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.InputListeners
 {
@@ -7,6 +8,8 @@ namespace MonoGame.Extended.InputListeners
         protected InputListener()
         {
         }
+
+        internal ViewportAdapter ViewportAdapter { get; set; }
 
         internal abstract void Update(GameTime gameTime);
     }

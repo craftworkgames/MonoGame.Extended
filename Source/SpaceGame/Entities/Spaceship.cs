@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
@@ -19,16 +20,23 @@ namespace SpaceGame.Entities
                 Scale = Vector2.One * 0.5f,
                 Position = new Vector2(400, 240)
             };
+            _boundingCircle = new CircleF(_sprite.Position, 20);
         }
 
         private readonly Sprite _sprite;
+        private float _fireCooldown;
 
         public Vector2 Velocity { get; set; }
+        public Vector2 Direction => Vector2.UnitX.Rotate(Rotation);
 
         public Vector2 Position
         {
             get { return _sprite.Position; }
-            set { _sprite.Position = value; }
+            set
+            {
+                _sprite.Position = value;
+                _boundingCircle.Center = value;
+            }
         }
 
         public float Rotation
@@ -37,9 +45,8 @@ namespace SpaceGame.Entities
             set { _sprite.Rotation = value + MathHelper.ToRadians(90); }
         }
 
-        public Vector2 Direction => Vector2.UnitX.Rotate(Rotation);
-
-        private float _fireCooldown;
+        private CircleF _boundingCircle;
+        public CircleF BoundingCircle => _boundingCircle;
 
         public override void Update(GameTime gameTime)
         {
