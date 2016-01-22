@@ -62,6 +62,8 @@ namespace MonoGame.Extended.InputListeners
         {
             foreach (var listener in _listeners)
                 listener.Update(gameTime);
+
+            GamePadListener.CheckConnections();
         }
     }
 }
