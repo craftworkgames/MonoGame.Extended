@@ -12,14 +12,20 @@ namespace MonoGame.Extended.ViewportAdapters
 
     public class BoxingViewportAdapter : ScalingViewportAdapter
     {
-        public BoxingViewportAdapter(GameWindow window, GraphicsDevice graphicsDevice, int virtualWidth, int virtualHeight)
-            : base(graphicsDevice, virtualWidth, virtualHeight)
+        private readonly GraphicsDeviceManager _graphicsDeviceManager;
+        private readonly GameWindow _window;
+
+        public BoxingViewportAdapter(GameWindow window, GraphicsDeviceManager graphicsDeviceManager, int virtualWidth, int virtualHeight)
+            : base(graphicsDeviceManager.GraphicsDevice, virtualWidth, virtualHeight)
         {
+            _graphicsDeviceManager = graphicsDeviceManager;
+            _window = window;
+
             window.ClientSizeChanged += OnClientSizeChanged;
         }
 
         public BoxingMode BoxingMode { get; private set; }
-        
+
         private void OnClientSizeChanged(object sender, EventArgs eventArgs)
         {
             var viewport = GraphicsDevice.Viewport;
@@ -41,6 +47,15 @@ namespace MonoGame.Extended.ViewportAdapters
             var x = (viewport.Width / 2) - (width / 2);
             var y = (viewport.Height / 2) - (height / 2);
             GraphicsDevice.Viewport = new Viewport(x, y, width, height);
+
+			// Needed for DirectX rendering
+			// see http://gamedev.stackexchange.com/questions/68914/issue-with-monogame-resizing
+			if (_graphicsDeviceManager.PreferredBackBufferWidth != _window.ClientBounds.Width || _graphicsDeviceManager.PreferredBackBufferHeight != _window.ClientBounds.Height)
+			{
+				_graphicsDeviceManager.PreferredBackBufferWidth = _window.ClientBounds.Width;
+				_graphicsDeviceManager.PreferredBackBufferHeight = _window.ClientBounds.Height;
+				_graphicsDeviceManager.ApplyChanges();
+            }
         }
 
         public override Point PointToScreen(int x, int y)
