@@ -20,6 +20,15 @@ namespace MonoGame.Extended.InputListeners
         public int DoubleClickMilliseconds { get; private set; }
         public int DragThreshold { get; private set; }
 
+        /// <summary>
+        /// Returns true if the mouse has moved between the current and previous frames.
+        /// </summary>
+        /// <value><c>true</c> if the mouse has moved; otherwise, <c>false</c>.</value>
+        public bool HasMouseMoved
+        {
+            get { return _previousState.X != _currentState.X || _previousState.Y != _currentState.Y; }
+        }
+
         private MouseState _currentState;
         private MouseState _previousState;
         private GameTime _gameTime;
@@ -95,11 +104,6 @@ namespace MonoGame.Extended.InputListeners
             }
         }
 
-        private bool MouseHasMoved()
-        {
-            return (_previousState.X != _currentState.X || _previousState.Y != _currentState.Y);
-        }
-
         private void CheckMouseDragged(Func<MouseState, ButtonState> getButtonState, MouseButton button)
         {
             if (getButtonState(_currentState) == ButtonState.Pressed &&
@@ -117,6 +121,7 @@ namespace MonoGame.Extended.InputListeners
                     {
                         // Only start to drag based on DragThreshold
                         var clickMovement = DistanceBetween(args.Position, _mouseDownArgs.Position);
+
                         if (clickMovement > DragThreshold)
                         {
                             _dragging = true;
@@ -145,7 +150,7 @@ namespace MonoGame.Extended.InputListeners
             CheckButtonReleased(s => s.XButton2, MouseButton.XButton2);
 
             // Check for any sort of mouse movement.
-            if (MouseHasMoved())
+            if (HasMouseMoved)
             {
                 MouseMoved.Raise(this, new MouseEventArgs(ViewportAdapter, gameTime.TotalGameTime, _previousState, _currentState));
 
