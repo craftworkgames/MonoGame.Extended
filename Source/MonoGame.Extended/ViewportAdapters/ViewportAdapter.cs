@@ -17,7 +17,7 @@ namespace MonoGame.Extended.ViewportAdapters
 
         public Rectangle BoundingRectangle
         {
-            get { return new Rectangle(0, 0, VirtualWidth, ViewportHeight); }
+            get { return new Rectangle(0, 0, VirtualWidth, VirtualHeight); }
         }
 
         public Point PointToScreen(Point point)
