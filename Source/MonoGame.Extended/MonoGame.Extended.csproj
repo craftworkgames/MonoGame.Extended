@@ -51,6 +51,7 @@
     <Compile Include="Camera2D.cs" />
     <Compile Include="Content\ContentReaderExtensions.cs" />
     <Compile Include="EventHandlerExtensions.cs" />
+    <Compile Include="FloatMath.cs" />
     <Compile Include="GameTimeExtensions.cs" />
     <Compile Include="Gui\Controls\GuiButton.cs" />
     <Compile Include="Gui\Controls\GuiButtonStyle.cs" />
