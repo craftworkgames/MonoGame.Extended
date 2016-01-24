@@ -63,9 +63,15 @@ namespace SpaceGame
             _guiManager = new GuiManager(_viewportAdapter, GraphicsDevice);
             _font = Content.Load<BitmapFont>("Fonts/courier-new-32");
 
-            var normal = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-normal")));
-            var pressed = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-clicked")));
-            var hover = new GuiTextureRegionDrawable(new TextureRegion2D(Content.Load<Texture2D>("Gui/button-hover")));
+            var checkedOn = Content.Load<Texture2D>("Gui/button-clicked").ToGuiDrawable();
+            var checkedOff = Content.Load<Texture2D>("Gui/button-normal").ToGuiDrawable();
+            var checkBoxStyle = new GuiCheckBoxStyle(checkedOn, checkedOff);
+            var checkBox = new GuiCheckBox(checkBoxStyle) {HorizontalAlignment = GuiHorizontalAlignment.Left};
+            _guiManager.Layout.Children.Add(checkBox);
+
+            var normal = Content.Load<Texture2D>("Gui/button-normal").ToGuiDrawable();
+            var pressed = Content.Load<Texture2D>("Gui/button-clicked").ToGuiDrawable();
+            var hover = Content.Load<Texture2D>("Gui/button-hover").ToGuiDrawable();
             var buttonStyle = new GuiButtonStyle(normal, pressed, hover);
             var button = new GuiButton(buttonStyle) {VerticalAlignment = GuiVerticalAlignment.Bottom};
             button.Clicked += (sender, args) =>
