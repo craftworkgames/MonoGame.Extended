@@ -72,8 +72,8 @@ namespace MonoGame.Extended.Maps.Tiled
             var firstRow = (int)Math.Floor(visibleRectangle.Top / _map.TileHeight);
 
             // +3 to cover any gaps
-            var columns = Math.Min(_map.Width, (int) visibleRectangle.Width / _map.TileWidth) + 3;
-            var rows = Math.Min(_map.Height, (int) visibleRectangle.Height / _map.TileHeight) + 3;
+            var columns = Math.Min(_map.Width, (int)visibleRectangle.Width / _map.TileWidth) + 3;
+            var rows = Math.Min(_map.Height, (int)visibleRectangle.Height / _map.TileHeight) + 3;
 
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
 
@@ -97,7 +97,7 @@ namespace MonoGame.Extended.Maps.Tiled
             switch (_map.Orientation)
             {
                 case TiledMapOrientation.Orthogonal:
-                    return GetOrthogonalLocation; 
+                    return GetOrthogonalLocation;
                 case TiledMapOrientation.Isometric:
                     return GetIsometricLocation;
                 case TiledMapOrientation.Staggered:
