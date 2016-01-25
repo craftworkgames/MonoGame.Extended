@@ -20,6 +20,11 @@ namespace MonoGame.Extended
             get { return new Size(0, 0); }
         }
 
+        public static Size MaxValue
+        {
+            get { return new Size(int.MaxValue, int.MaxValue); }
+        }
+
         public bool IsEmpty
         {
             get { return Width == 0 && Height == 0; }

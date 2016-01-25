@@ -60,6 +60,7 @@
     <Compile Include="Gui\Controls\GuiHorizontalAlignment.cs" />
     <Compile Include="Gui\Controls\GuiLabelStyle.cs" />
     <Compile Include="Gui\Controls\GuiVerticalAlignment.cs" />
+    <Compile Include="Gui\Drawables\GuiPatchDrawable.cs" />
     <Compile Include="Gui\Drawables\GuiTextDrawable.cs" />
     <Compile Include="Gui\Controls\GuiControlStyle.cs" />
     <Compile Include="Gui\Controls\GuiLabel.cs" />

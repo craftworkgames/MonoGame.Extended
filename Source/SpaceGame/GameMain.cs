@@ -92,6 +92,18 @@ namespace SpaceGame
                 VerticalAlignment = GuiVerticalAlignment.Top
             };
             _guiManager.Layout.Children.Add(_scoreLabel);
+
+
+            var textureRegion = new TextureRegion2D(Content.Load<Texture2D>("Gui/9patch-2"));
+            var dialogPatch = new GuiPatchDrawable(textureRegion, 100, 100, 122, 111, Color.White);
+            var dialogStyle = new GuiButtonStyle(dialogPatch);
+            var dialog = new GuiButton(dialogStyle)
+            {
+                HorizontalAlignment = GuiHorizontalAlignment.Stretch,
+                VerticalAlignment = GuiVerticalAlignment.Stretch
+            };
+            _guiManager.Layout.Children.Add(dialog);
+
             _guiManager.PerformLayout();
 
             _camera = new Camera2D(_viewportAdapter);
