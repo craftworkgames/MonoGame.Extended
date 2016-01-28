@@ -114,12 +114,8 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// A <see cref="Point"/> located in the center of this <see cref="RectangleF"/>.
+        /// A <see cref="Vector2"/> located in the center of this <see cref="RectangleF"/>.
         /// </summary>
-        /// <remarks>
-        /// If <see cref="Width"/> or <see cref="Height"/> is an odd number,
-        /// the center point will be rounded down.
-        /// </remarks>
         public Vector2 Center
         {
             get { return new Vector2(X + Width / 2f, Y + Height / 2f); }
@@ -160,6 +156,39 @@ namespace MonoGame.Extended.Shapes
             Height = size.Y;
         }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="RectangleF"/> struct, based on a <see cref="Rectangle"/>
+        /// </summary>
+        /// <param name="rect">The source <see cref="Rectangle"/>.</param>
+        public RectangleF(Rectangle rect)
+        {
+            X = rect.X;
+            Y = rect.Y;
+            Width = rect.Width;
+            Height = rect.Height;
+        }
+        
+        /// <summary>
+        /// Allow implict cast from a <see cref="Rectangle"/>
+        /// </summary>
+        /// <param name="rect">The <see cref="Rectangle"/> to be cast.</param>
+        public static implicit operator RectangleF(Rectangle rect)
+        {
+            return new RectangleF(rect);
+        }
+        
+        /// <summary>
+        /// Allow explict cast to a <see cref="Rectangle"/>
+        /// </summary>
+        /// <remark>
+        /// Loss of precision due to the trunkation of <see cref="float"/> to <see cref="int"/>.
+        /// </remark>
+        /// <param name="rect">The <see cref="RectangleF"/> to be cast.</param>
+        public static explicit operator Rectangle(RectangleF rect)
+        {
+            return new Rectangle((int)rect.X,(int)rect.Y,(int)rect.Width,(int)rect.Height);
+        }
+        
         /// <summary>
         /// Compares whether two <see cref="RectangleF"/> instances are equal.
         /// </summary>
