@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD}</ProjectGuid>
+    <ProjectGuid>{1AA1A796-CFC6-4663-8D23-FBB9CE62744B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpaceGame</RootNamespace>
-    <AssemblyName>SpaceGame</AssemblyName>
+    <RootNamespace>MonoGame.Extended.EmptyProjectTemplate</RootNamespace>
+    <AssemblyName>MonoGame.Extended.EmptyProjectTemplate</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>WindowsGL</MonoGamePlatform>
     <MonoGameContentBuilderExe>
@@ -38,25 +38,18 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Entities\BulletFactory.cs" />
-    <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Entities\Explosion.cs" />
-    <Compile Include="Entities\Laser.cs" />
-    <Compile Include="Entities\Meteor.cs" />
-    <Compile Include="Entities\Spaceship.cs" />
-    <Compile Include="Entities\EntityManager.cs" />
-    <Compile Include="GameMain.cs" />
-    <Compile Include="Entities\MeteorFactory.cs" />
+    <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="MonoGame.Extended, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Extended.0.4.64\lib\MonoGame.Extended.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MonoGame.Framework, Version=3.4.0.459, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\MonoGame.Framework.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="NVorbis">
-      <HintPath>$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\WindowsGL\NVorbis.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\OpenTK.dll</HintPath>
@@ -66,46 +59,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\black.png" />
-    <Content Include="Content\Fonts\courier-new-32_0.png" />
-    <Content Include="Content\Gui\9patch-1.png" />
-    <Content Include="Content\Gui\9patch-2.png" />
-    <Content Include="Content\Gui\button-clicked.png" />
-    <Content Include="Content\Gui\button-hover.png" />
-    <Content Include="Content\Gui\button-locked.png" />
-    <Content Include="Content\Gui\button-normal.png" />
-    <Content Include="Content\laserBlue03.png" />
-    <Content Include="Content\meteorBrown_big1.png" />
-    <Content Include="Content\meteorBrown_big2.png" />
-    <Content Include="Content\meteorBrown_big3.png" />
-    <Content Include="Content\meteorBrown_big4.png" />
-    <Content Include="Content\meteorBrown_med1.png" />
-    <Content Include="Content\meteorBrown_med3.png" />
-    <Content Include="Content\meteorBrown_small1.png" />
-    <Content Include="Content\meteorBrown_small2.png" />
-    <Content Include="Content\meteorBrown_tiny1.png" />
-    <Content Include="Content\meteorBrown_tiny2.png" />
-    <Content Include="Content\playerShip1_blue.png" />
-    <Content Include="Content\regular-explosion.png" />
-    <Content Include="Content\Screens\TitleScreen.xml">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Content\monogame-extended-logo.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\explosion-animations.aa" />
-    <Content Include="Content\regular-explosion-sheet.json" />
-    <None Include="Content\Fonts\courier-new-32.fnt" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj">
-      <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
-      <Name>MonoGame.Extended</Name>
-    </ProjectReference>
   </ItemGroup>
   <!-- Specify the search path explicitly so the ResolveAssemblyReferences task picks the right ones -->
   <Target Name="BeforeResolveReferences">

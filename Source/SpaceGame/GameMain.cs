@@ -63,15 +63,15 @@ namespace SpaceGame
             _guiManager = new GuiManager(_viewportAdapter, GraphicsDevice);
             _font = Content.Load<BitmapFont>("Fonts/courier-new-32");
 
-            var textureRegion = new TextureRegion2D(Content.Load<Texture2D>("Gui/9patch-2"));
-            var dialogPatch = new GuiPatchDrawable(textureRegion, 100, 100, 122, 111, Color.White);
-            var dialogStyle = new GuiButtonStyle(dialogPatch);
-            var dialog = new GuiButton(dialogStyle)
-            {
-                HorizontalAlignment = GuiHorizontalAlignment.Stretch,
-                VerticalAlignment = GuiVerticalAlignment.Stretch
-            };
-            _guiManager.Layout.Children.Add(dialog);
+            //var textureRegion = new TextureRegion2D(Content.Load<Texture2D>("Gui/9patch-2"));
+            //var dialogPatch = new GuiPatchDrawable(textureRegion, 100, 100, 122, 111, Color.White);
+            //var dialogStyle = new GuiButtonStyle(dialogPatch);
+            //var dialog = new GuiButton(dialogStyle)
+            //{
+            //    HorizontalAlignment = GuiHorizontalAlignment.Stretch,
+            //    VerticalAlignment = GuiVerticalAlignment.Stretch
+            //};
+            //_guiManager.Layout.Children.Add(dialog);
 
             var checkedOn = Content.Load<Texture2D>("Gui/button-clicked").ToGuiDrawable();
             var checkedOff = Content.Load<Texture2D>("Gui/button-normal").ToGuiDrawable();
