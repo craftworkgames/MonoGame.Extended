@@ -176,17 +176,17 @@ namespace MonoGame.Extended.Shapes
         {
             return new RectangleF(rect);
         }
-        
+
         /// <summary>
         /// Allow explict cast to a <see cref="Rectangle"/>
         /// </summary>
         /// <remark>
-        /// Loss of precision due to the trunkation of <see cref="float"/> to <see cref="int"/>.
+        /// Loss of precision due to the truncation from <see cref="float"/> to <see cref="int"/>.
         /// </remark>
         /// <param name="rect">The <see cref="RectangleF"/> to be cast.</param>
         public static explicit operator Rectangle(RectangleF rect)
         {
-            return new Rectangle((int)rect.X,(int)rect.Y,(int)rect.Width,(int)rect.Height);
+            return new Rectangle((int)rect.X, (int)rect.Y, (int)rect.Width, (int)rect.Height);
         }
         
         /// <summary>
