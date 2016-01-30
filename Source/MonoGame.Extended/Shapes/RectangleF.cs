@@ -178,6 +178,18 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
+        /// Allow implict cast from a <see cref="Rectangle"/>
+        /// </summary>
+        /// <param name="rect">The <see cref="Rectangle"/> to be cast.</param>
+        public static implicit operator RectangleF?(Rectangle? rect)
+        {
+            if (!rect.HasValue)
+                return null;
+
+            return new RectangleF(rect.Value);
+        }
+
+        /// <summary>
         /// Allow explict cast to a <see cref="Rectangle"/>
         /// </summary>
         /// <remark>

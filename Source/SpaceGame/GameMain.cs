@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,7 +9,9 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Drawables;
+using MonoGame.Extended.Primitives;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using SpaceGame.Entities;
@@ -171,6 +174,7 @@ namespace SpaceGame
                     _player.LookAt(_camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y)));
 
                 _camera.LookAt(_player.Position + _player.Velocity * 0.2f);
+                _camera.Zoom = 1.0f - (_player.Velocity.Length() / 500f);
             }
 
             _entityManager.Update(gameTime);
@@ -216,6 +220,13 @@ namespace SpaceGame
                     if(meteor.Size >= 2)
                         _meteorFactory.SplitMeteor(meteor);
                 }
+
+                if (_player != null && _shieldHealth > 0 && meteor.BoundingCircle.Intersects(new CircleF(_player.Position, 100 + (_shieldHealth - 10) * 5)))
+                {
+                    _shieldHealth--;
+                    Explode(meteor.Position, meteor.Size);
+                    meteor.Destroy();
+                }
             }
         }
 
@@ -225,6 +236,8 @@ namespace SpaceGame
             _entityManager.AddEntity(explosion);
         }
 
+        private int _shieldHealth = 10;
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
@@ -232,8 +245,8 @@ namespace SpaceGame
             // background
             var sourceRectangle = new Rectangle(0, 0, _viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight);
             sourceRectangle.Offset(_camera.Position);
-            _spriteBatch.Begin(samplerState: SamplerState.LinearWrap, transformMatrix: _camera.GetViewMatrix());
-            _spriteBatch.Draw(_backgroundTexture, _camera.Position, sourceRectangle, Color.White);
+            _spriteBatch.Begin(samplerState: SamplerState.LinearWrap);
+            _spriteBatch.Draw(_backgroundTexture, Vector2.Zero, sourceRectangle, Color.White);
             _spriteBatch.End();
 
             // entities
@@ -242,6 +255,18 @@ namespace SpaceGame
             _spriteBatch.End();
 
             _guiManager.Draw(gameTime);
+
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
+            _spriteBatch.DrawRectangle(new Rectangle(100, 100, 200, 300), Color.CornflowerBlue);
+            _spriteBatch.DrawLine(new Vector2(100, 100), new Vector2(300, 400), Color.Red,1);
+
+            if (_player != null && _shieldHealth > 0)
+            {
+                _spriteBatch.DrawCircle(_player.Position, 100 + (_shieldHealth - 10) * 5, 16, Color.Green, _shieldHealth);
+                _spriteBatch.DrawArc(_player.Position, 90, 16, 0, MathHelper.ToRadians(90), Color.Yellow);
+            }
+
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
