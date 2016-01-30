@@ -12,7 +12,7 @@ namespace MonoGame.Extended.BitmapFonts
             var dx = position.X;
             var dy = position.Y;
 
-            foreach (char character in text)
+            foreach (var character in text)
             {
                 var fontRegion = bitmapFont.GetCharacterRegion(character);
 

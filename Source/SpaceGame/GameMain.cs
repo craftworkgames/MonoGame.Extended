@@ -9,7 +9,6 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Drawables;
-using MonoGame.Extended.Primitives;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
@@ -256,7 +255,7 @@ namespace SpaceGame
 
             _guiManager.Draw(gameTime);
 
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.DrawRectangle(new Rectangle(100, 100, 200, 300), Color.CornflowerBlue);
             _spriteBatch.DrawLine(new Vector2(100, 100), new Vector2(300, 400), Color.Red,1);
 

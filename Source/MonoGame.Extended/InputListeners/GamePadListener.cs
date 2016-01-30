@@ -284,10 +284,10 @@ namespace MonoGame.Extended.InputListeners
 
         private void CheckTriggers(Func<GamePadState, float> getButtonState, Buttons button)
         {
-            float debounce = 0.05f; // Value used to qualify a trigger as coming Up from a Down state
+            var debounce = 0.05f; // Value used to qualify a trigger as coming Up from a Down state
             var curstate = getButtonState(_currentState);
-            bool curdown = curstate > TriggerDownTreshold;
-            bool prevdown = button == Buttons.RightTrigger ? _rightTriggerDown : _leftTriggerDown;
+            var curdown = curstate > TriggerDownTreshold;
+            var prevdown = button == Buttons.RightTrigger ? _rightTriggerDown : _leftTriggerDown;
 
             if (!prevdown && curdown)
             {
@@ -327,9 +327,9 @@ namespace MonoGame.Extended.InputListeners
         {
             const float debounce = 0.15f;
             var curVector = getButtonState(_currentState);
-            bool curdown = curVector.Length() > ThumbstickDownTreshold;
-            bool right = button == Buttons.RightStick;
-            bool prevdown = right ? _rightStickDown : _leftStickDown;
+            var curdown = curVector.Length() > ThumbstickDownTreshold;
+            var right = button == Buttons.RightStick;
+            var prevdown = right ? _rightStickDown : _leftStickDown;
 
             var prevdir = button == Buttons.RightStick ? _lastRightStickDirection : _lastLeftStickDirection;
             Buttons curdir;
