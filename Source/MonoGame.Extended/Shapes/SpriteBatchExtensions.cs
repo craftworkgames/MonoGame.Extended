@@ -24,7 +24,7 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// Draws a polygon from a <see cref="PolygonF"/> shape
+        /// Draws a closed polygon from a <see cref="PolygonF"/> shape
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// /// <param name="position">Where to position the polygon</param>
@@ -33,20 +33,23 @@ namespace MonoGame.Extended.Shapes
         /// <param name="thickness">The thickness of the lines</param>
         public static void DrawPolygon(this SpriteBatch spriteBatch, Vector2 position, PolygonF polygon, Color color, float thickness = 1f)
         {
-            DrawPolygon(spriteBatch, position, polygon.Vertices.ToList(), color, thickness);
+            DrawPolygon(spriteBatch, position, polygon.Vertices, color, thickness);
         }
 
         /// <summary>
-        /// Draws a polygon from a list of connecting points
+        /// Draws a closed polygon from an array of points
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// /// <param name="offset">Where to offset the points</param>
         /// <param name="points">The points to connect with lines</param>
         /// <param name="color">The color to use</param>
         /// <param name="thickness">The thickness of the lines</param>
-        public static void DrawPolygon(this SpriteBatch spriteBatch, Vector2 offset, List<Vector2> points, Color color, float thickness = 1f)
+        public static void DrawPolygon(this SpriteBatch spriteBatch, Vector2 offset, Vector2[] points, Color color, float thickness = 1f)
         {
-            if (points.Count == 1)
+            if (points.Length == 0)
+                return;
+
+            if (points.Length == 1)
             {
                 DrawPoint(spriteBatch, points[0], color, (int)thickness);
                 return;
@@ -54,16 +57,18 @@ namespace MonoGame.Extended.Shapes
 
             var texture = GetTexture(spriteBatch);
 
-            for (var i = 1; i < points.Count; i++)
-            {
-                var point1 = points[i - 1] + offset;
-                var point2 = points[i] + offset;
-                var length = Vector2.Distance(point1, point2);
-                var angle = (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
-                var scale = new Vector2(length, thickness);
-                
-                spriteBatch.Draw(texture, point1, color: color, rotation: angle, scale: scale);
-            }
+            for (var i = 0; i < points.Length - 1; i++)
+                DrawPolygonEdge(spriteBatch, texture, points[i] + offset, points[i + 1] + offset, color, thickness);
+
+            DrawPolygonEdge(spriteBatch, texture, points[points.Length - 1] + offset, points[0] + offset, color, thickness);
+        }
+
+        private static void DrawPolygonEdge(SpriteBatch spriteBatch, Texture2D texture, Vector2 point1, Vector2 point2, Color color, float thickness)
+        {
+            var length = Vector2.Distance(point1, point2);
+            var angle = (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
+            var scale = new Vector2(length, thickness);
+            spriteBatch.Draw(texture, point1, color: color, rotation: angle, scale: scale);
         }
 
         /// <summary>
@@ -250,25 +255,20 @@ namespace MonoGame.Extended.Shapes
             DrawPolygon(spriteBatch, new Vector2(x, y), CreateCircle(radius, sides), color, thickness);
         }
         
-        /// <summary>
-        /// Creates a list of vectors that represents a circle
-        /// </summary>
-        /// <param name="radius">The radius of the circle</param>
-        /// <param name="sides">The number of sides to generate</param>
-        /// <returns>A list of vectors that, if connected, will create a circle</returns>
-        private static List<Vector2> CreateCircle(double radius, int sides)
+        private static Vector2[] CreateCircle(double radius, int sides)
         {
-            var vectors = new List<Vector2>();
-
             const double max = 2.0 * Math.PI;
+            var points = new Vector2[sides];
             var step = max / sides;
+            var theta = 0.0;
 
-            for (var theta = 0.0; theta < max; theta += step)
-                vectors.Add(new Vector2((float)(radius * Math.Cos(theta)), (float)(radius * Math.Sin(theta))));
+            for (var i = 0; i < sides; i++)
+            {
+                points[i] = new Vector2((float) (radius*Math.Cos(theta)), (float) (radius*Math.Sin(theta)));
+                theta += step;
+            }
 
-            // then add the first vector again so it's a complete loop
-            vectors.Add(new Vector2((float)(radius * Math.Cos(0)), (float)(radius * Math.Sin(0))));
-            return vectors;
+            return points;
         }
     }
 }

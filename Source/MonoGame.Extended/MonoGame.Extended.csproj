@@ -149,7 +149,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Primitives\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

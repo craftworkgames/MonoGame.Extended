@@ -15,10 +15,8 @@ namespace MonoGame.Extended.ViewportAdapters
         public abstract int ViewportHeight { get; }
         public abstract Matrix GetScaleMatrix();
 
-        public Rectangle BoundingRectangle
-        {
-            get { return new Rectangle(0, 0, VirtualWidth, VirtualHeight); }
-        }
+        public Rectangle BoundingRectangle => new Rectangle(0, 0, VirtualWidth, VirtualHeight);
+        public Point Center => BoundingRectangle.Center;
 
         public Point PointToScreen(Point point)
         {

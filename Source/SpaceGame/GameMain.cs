@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -266,12 +267,17 @@ namespace SpaceGame
 
             //_spriteBatch.FillRectangle(new Rectangle(1, 1, 798, 478), Color.CornflowerBlue);
             _spriteBatch.DrawRectangle(new Rectangle(0, 0, 800, 480), Color.Red, 5);
-            
             _spriteBatch.DrawPoint(100, 100, Color.Blue, 5f);
-
             _spriteBatch.DrawRectangle(new Rectangle(100, 100, 1, 1), Color.Red);
-
             _spriteBatch.FillRectangle(new Rectangle(200, 200, 50, 100), Color.CornflowerBlue);
+
+            var points = new []
+            {
+                new Vector2(400, 0),
+                new Vector2(800, 480),
+                new Vector2(0, 480),
+            };
+            _spriteBatch.DrawPolygon(Vector2.Zero, points, Color.Orange, 5);
 
             _spriteBatch.End();
 
