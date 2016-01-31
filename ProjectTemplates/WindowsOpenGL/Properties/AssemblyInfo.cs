@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MonoGame.Extended.EmptyProjectTemplate")]
-[assembly: AssemblyProduct("MonoGame.Extended.EmptyProjectTemplate")]
+[assembly: AssemblyTitle("WindowsOpenGL")]
+[assembly: AssemblyProduct("WindowsOpenGL")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("48bdf3c4-3449-4c1e-9bce-ff1229c65955")]
+[assembly: Guid("9b7203c6-a9a6-40e9-a798-893df7f10bf1")]
 
 // Version information for an assembly consists of the following four values:
 //

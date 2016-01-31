@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1AA1A796-CFC6-4663-8D23-FBB9CE62744B}</ProjectGuid>
+    <ProjectGuid>{274091CB-D74C-4DCB-849D-75D29622ADD2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MonoGame.Extended.EmptyProjectTemplate</RootNamespace>
-    <AssemblyName>MonoGame.Extended.EmptyProjectTemplate</AssemblyName>
+    <RootNamespace>WindowsOpenGL</RootNamespace>
+    <AssemblyName>WindowsOpenGL</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>WindowsGL</MonoGamePlatform>
     <MonoGameContentBuilderExe>
@@ -59,7 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\monogame-extended-logo.png" />
+    <Content Include="Content\logo-square-512.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

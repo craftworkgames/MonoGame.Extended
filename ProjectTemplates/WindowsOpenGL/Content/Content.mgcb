@@ -10,11 +10,10 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:..\..\packages\MonoGame.Extended.0.4.64\lib\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
-#begin monogame-extended-logo.png
+#begin logo-square-512.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,5 +22,5 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:TextureFormat=Color
-/build:monogame-extended-logo.png
+/build:logo-square-512.png
 

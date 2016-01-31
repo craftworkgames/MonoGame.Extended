@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonoGame.Extended.EmptyProjectTemplate
+namespace WindowsOpenGL
 {
 #if WINDOWS || LINUX
     /// <summary>
