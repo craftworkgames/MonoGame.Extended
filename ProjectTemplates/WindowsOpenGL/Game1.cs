@@ -9,11 +9,11 @@ namespace WindowsOpenGL
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphicsDeviceManager;
+        private readonly GraphicsDeviceManager _graphicsDeviceManager;
+        private readonly bool _isFullScreen;
         private SpriteBatch _spriteBatch;
         private Camera2D _camera;
         private Sprite _sprite;
-        private readonly bool _isFullScreen;
 
         public Game1()
         {
