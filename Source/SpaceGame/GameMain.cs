@@ -221,9 +221,10 @@ namespace SpaceGame
                         _meteorFactory.SplitMeteor(meteor);
                 }
 
-                if (_player != null && _shieldHealth > 0 && meteor.BoundingCircle.Intersects(new CircleF(_player.Position, 100 + (_shieldHealth - 10) * 5)))
+                if (_player != null && _shieldHealth > 0 && meteor.BoundingCircle.Intersects(new CircleF(_player.Position, _shieldRadius)))
                 {
                     _shieldHealth--;
+                    _shieldRadius--;
                     Explode(meteor.Position, meteor.Size);
                     meteor.Destroy();
                 }
@@ -237,6 +238,7 @@ namespace SpaceGame
         }
 
         private int _shieldHealth = 10;
+        private float _shieldRadius = 50;
 
         protected override void Draw(GameTime gameTime)
         {
@@ -244,8 +246,9 @@ namespace SpaceGame
 
             // background
             var sourceRectangle = new Rectangle(0, 0, _viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight);
-            sourceRectangle.Offset(_camera.Position);
-            _spriteBatch.Begin(samplerState: SamplerState.LinearWrap);
+            sourceRectangle.Offset(_camera.Position * new Vector2(0.1f));
+
+            _spriteBatch.Begin(samplerState: SamplerState.LinearWrap, transformMatrix: _viewportAdapter.GetScaleMatrix());
             _spriteBatch.Draw(_backgroundTexture, Vector2.Zero, sourceRectangle, Color.White);
             _spriteBatch.End();
 
@@ -257,27 +260,9 @@ namespace SpaceGame
             _guiManager.Draw(gameTime);
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _spriteBatch.DrawRectangle(new Rectangle(100, 100, 200, 300), Color.CornflowerBlue, 1);
-            _spriteBatch.DrawLine(new Vector2(100, 100), new Vector2(300, 400), Color.Red, 10);
-
-            //_spriteBatch.DrawLine(new Vector2(10, 10), new Vector2(100, 10), Color.Red, 10);
 
             if (_player != null && _shieldHealth > 0)
-                _spriteBatch.DrawCircle(_player.Position, 100 + (_shieldHealth - 10)*5, 32, Color.Green, _shieldHealth);
-
-            //_spriteBatch.FillRectangle(new Rectangle(1, 1, 798, 478), Color.CornflowerBlue);
-            _spriteBatch.DrawRectangle(new Rectangle(0, 0, 800, 480), Color.Red, 5);
-            _spriteBatch.DrawPoint(100, 100, Color.Blue, 5f);
-            _spriteBatch.DrawRectangle(new Rectangle(100, 100, 1, 1), Color.Red);
-            _spriteBatch.FillRectangle(new Rectangle(200, 200, 50, 100), Color.CornflowerBlue);
-
-            var points = new []
-            {
-                new Vector2(400, 0),
-                new Vector2(800, 480),
-                new Vector2(0, 480),
-            };
-            _spriteBatch.DrawPolygon(Vector2.Zero, points, Color.Orange, 5);
+                _spriteBatch.DrawCircle(_player.Position, _shieldRadius, 32, Color.Green, _shieldHealth);
 
             _spriteBatch.End();
 
