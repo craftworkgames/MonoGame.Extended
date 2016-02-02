@@ -13,8 +13,13 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         public void TiledMapImporter_Import_Test()
         {
             const string filename = @"TestData\level01.tmx";
+
+            var logger = Substitute.For<ContentBuildLogger>();
             var importer = new TiledMapImporter();
-            var map = importer.Import(filename, Substitute.For<ContentImporterContext>());
+            var importerContext = Substitute.For<ContentImporterContext>();
+            importerContext.Logger.Returns(logger);
+
+            var map = importer.Import(filename, importerContext);
 
             Assert.AreEqual("1.0", map.Version);
             Assert.AreEqual(TmxOrientation.Orthogonal, map.Orientation);
@@ -143,10 +148,18 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
 
         private static TmxMap ImportAndProcessMap(string filename)
         {
+            var logger = Substitute.For<ContentBuildLogger>();
             var importer = new TiledMapImporter();
+            var importerContext = Substitute.For<ContentImporterContext>();
+            importerContext.Logger.Returns(logger);
+
             var processor = new TiledMapProcessor();
-            var import = importer.Import(filename, Substitute.For<ContentImporterContext>());
-            var result = processor.Process(import, Substitute.For<ContentProcessorContext>());
+            var processorContext = Substitute.For<ContentProcessorContext>();
+            processorContext.Logger.Returns(logger);
+
+            var import = importer.Import(filename, importerContext);
+            var result = processor.Process(import, processorContext);
+
             return result.Map;
         }
     }
