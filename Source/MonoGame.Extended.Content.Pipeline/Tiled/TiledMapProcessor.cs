@@ -12,42 +12,57 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         public override TiledMapProcessorResult Process(TmxMap map, ContentProcessorContext context)
         {
-            foreach (var layer in map.Layers.OfType<TmxTileLayer>())
+            var tileLayers = map.Layers.OfType<TmxTileLayer>().ToArray();
+            context.Logger.LogMessage($"Processing {tileLayers.Length} layers");
+
+            foreach (var tileLayer in tileLayers)
             {
-                var data = layer.Data;
+                var data = tileLayer.Data;
+                context.Logger.LogMessage($"layer: '{tileLayer.Name}', encoding: '{data.Encoding}', compression: '{data.Compression}'");
 
                 if (data.Encoding == "csv")
-                {
-                    data.Tiles = data.Value
-                        .Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(int.Parse)
-                        .Select(gid => new TmxDataTile(gid))
-                        .ToList();
-                }
+                    data.Tiles = DecodeCsvData(data);
 
                 if (data.Encoding == "base64")
+                    data.Tiles = DecodeBase64Data(data, tileLayer.Width, tileLayer.Height);
+
+                context.Logger.LogMessage($"{data.Tiles.Count} tiles processed");
+            }
+
+            return new TiledMapProcessorResult(map, context.Logger);
+        }
+
+        private static List<TmxDataTile> DecodeBase64Data(TmxData data, int width, int height)
+        {
+            var tileList = new List<TmxDataTile>();
+            var encodedData = data.Value.Trim();
+            var decodedData = Convert.FromBase64String(encodedData);
+
+            using (var stream = OpenStream(decodedData, data.Compression))
+            using (var reader = new BinaryReader(stream))
+            {
+                data.Tiles = new List<TmxDataTile>();
+
+                for (var y = 0; y < width; y++)
                 {
-                    var encodedData = data.Value.Trim();
-                    var decodedData = Convert.FromBase64String(encodedData);
-
-                    using (var stream = OpenStream(decodedData, data.Compression))
-                    using(var reader = new BinaryReader(stream))
+                    for (var x = 0; x < height; x++)
                     {
-                        data.Tiles = new List<TmxDataTile>();
-
-                        for (var y = 0; y < layer.Width; y++)
-                        {
-                            for (var x = 0; x < layer.Height; x++)
-                            {
-                                var gid = reader.ReadUInt32();
-                                data.Tiles.Add(new TmxDataTile((int) gid));
-                            }
-                        }
+                        var gid = reader.ReadUInt32();
+                        tileList.Add(new TmxDataTile((int) gid));
                     }
                 }
             }
 
-            return new TiledMapProcessorResult(map);
+            return tileList;
+        }
+
+        private static List<TmxDataTile> DecodeCsvData(TmxData data)
+        {
+            return data.Value
+                .Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse)
+                .Select(gid => new TmxDataTile(gid))
+                .ToList();
         }
 
         private static Stream OpenStream(byte[] decodedData, string compressionMode)

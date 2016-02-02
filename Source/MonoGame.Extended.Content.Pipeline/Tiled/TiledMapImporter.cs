@@ -11,13 +11,17 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         public override TmxMap Import(string filename, ContentImporterContext context)
         {
-            if (filename == null) throw new ArgumentNullException("filename");
+            if (filename == null) throw new ArgumentNullException(nameof(filename));
+
+            context.Logger.LogMessage($"Importing {filename}");
 
             using (var reader = new StreamReader(filename))
             {
                 var serializer = new XmlSerializer(typeof(TmxMap));
                 var map = (TmxMap)serializer.Deserialize(reader);
                 var xmlSerializer = new XmlSerializer(typeof(TmxTileset));
+
+                context.Logger.LogMessage($"Importing {map.Tilesets.Count} tilesets");
 
                 for (var i = 0; i < map.Tilesets.Count; i++)
                 {
@@ -31,6 +35,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                         Debug.Assert(directoryName != null, "directoryName != null");
                         var filePath = Path.Combine(directoryName, tilesetLocation);
 
+                        context.Logger.LogMessage($"Importing tileset {i}: {filePath}");
                         using (var file = new FileStream(filePath, FileMode.Open))
                         {
                             map.Tilesets[i] = (TmxTileset) xmlSerializer.Deserialize(file);
