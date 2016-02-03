@@ -5,10 +5,6 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Gui;
-using MonoGame.Extended.Gui.Controls;
-using MonoGame.Extended.Gui.Drawables;
-using MonoGame.Extended.Screens;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
@@ -21,8 +17,6 @@ namespace SpaceGame
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private readonly EntityManager _entityManager;
-        private readonly ScreenManager _screenManager;
-        private GuiManager _guiManager;
 
         private SpriteBatch _spriteBatch;
         private Texture2D _backgroundTexture;
@@ -35,12 +29,10 @@ namespace SpaceGame
         private SpriteSheetAnimationGroup _explosionAnimations;
         private BulletFactory _bulletFactory;
         private int _score;
-        private GuiLabel _scoreLabel;
 
         public GameMain()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
-            _screenManager = new ScreenManager(this);
             _entityManager = new EntityManager();
 
             Content.RootDirectory = "Content";
@@ -61,54 +53,8 @@ namespace SpaceGame
         protected override void LoadContent()
         {
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _guiManager = new GuiManager(_viewportAdapter, GraphicsDevice);
             _font = Content.Load<BitmapFont>("Fonts/courier-new-32");
-
-            //var textureRegion = new TextureRegion2D(Content.Load<Texture2D>("Gui/9patch-2"));
-            //var dialogPatch = new GuiPatchDrawable(textureRegion, 100, 100, 122, 111, Color.White);
-            //var dialogStyle = new GuiButtonStyle(dialogPatch);
-            //var dialog = new GuiButton(dialogStyle)
-            //{
-            //    HorizontalAlignment = GuiHorizontalAlignment.Stretch,
-            //    VerticalAlignment = GuiVerticalAlignment.Stretch
-            //};
-            //_guiManager.Layout.Children.Add(dialog);
-
-            var checkedOn = Content.Load<Texture2D>("Gui/button-clicked").ToGuiDrawable();
-            var checkedOff = Content.Load<Texture2D>("Gui/button-normal").ToGuiDrawable();
-            var checkBoxStyle = new GuiCheckBoxStyle(checkedOn, checkedOff);
-            var checkBox = new GuiCheckBox(checkBoxStyle) {HorizontalAlignment = GuiHorizontalAlignment.Left};
-            _guiManager.Layout.Children.Add(checkBox);
-
-            var normal = Content.Load<Texture2D>("Gui/button-normal").ToGuiDrawable();
-            var pressed = Content.Load<Texture2D>("Gui/button-clicked").ToGuiDrawable();
-            var hover = Content.Load<Texture2D>("Gui/button-hover").ToGuiDrawable();
-            var buttonStyle = new GuiButtonStyle(normal, pressed, hover);
-            var button = new GuiButton(buttonStyle) {VerticalAlignment = GuiVerticalAlignment.Bottom};
-            button.Clicked += (sender, args) =>
-            {
-                if (_player != null)
-                {
-                    Explode(_player.Position, 3);
-                    _player.Destroy();
-                    _player = null;
-                }
-            };
-            _guiManager.Layout.Children.Add(button);
-
-            var labelStyle = new GuiLabelStyle(_font);
-            _scoreLabel = new GuiLabel(labelStyle, "Hello")
-            {
-                HorizontalAlignment = GuiHorizontalAlignment.Right,
-                VerticalAlignment = GuiVerticalAlignment.Top
-            };
-            _guiManager.Layout.Children.Add(_scoreLabel);
-
-
-
-
-            _guiManager.PerformLayout();
-
+            
             _camera = new Camera2D(_viewportAdapter);
             _explosionAnimations = Content.Load<SpriteSheetAnimationGroup>("explosion-animations");
 
@@ -181,12 +127,6 @@ namespace SpaceGame
 
             _previousMouseState = mouseState;
 
-
-            _scoreLabel.Text = $"{_camera.Zoom} Score: {_score}";
-
-            _guiManager.Update(gameTime);
-            _guiManager.PerformLayout(); // not ideal.
-
             base.Update(gameTime);
         }
 
@@ -248,14 +188,13 @@ namespace SpaceGame
 
             _spriteBatch.Begin(samplerState: SamplerState.LinearWrap, transformMatrix: _viewportAdapter.GetScaleMatrix());
             _spriteBatch.Draw(_backgroundTexture, Vector2.Zero, sourceRectangle, Color.White);
+            _spriteBatch.DrawString(_font, $"{_score}", Vector2.One,  Color.White);
             _spriteBatch.End();
 
             // entities
             _spriteBatch.Begin(samplerState: SamplerState.LinearClamp, blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
             _entityManager.Draw(_spriteBatch);
             _spriteBatch.End();
-
-            _guiManager.Draw(gameTime);
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
 
