@@ -76,6 +76,9 @@
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
+    <Compile Include="SceneGraphs\SceneGraph.cs" />
+    <Compile Include="SceneGraphs\SceneNode.cs" />
+    <Compile Include="SceneGraphs\SceneNodeCollection.cs" />
     <Compile Include="Shapes\SpriteBatchExtensions.cs" />
     <Compile Include="Shapes\CircleF.cs" />
     <Compile Include="Shapes\PolygonF.cs" />

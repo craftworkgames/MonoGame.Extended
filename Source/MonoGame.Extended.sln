@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended", "MonoGame.Extended\MonoGame.Extended.csproj", "{41724C52-3D50-45BB-81EB-3C8A247EAFD1}"
 EndProject
@@ -29,6 +29,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceGame", "SpaceGame\Spac
 	ProjectSection(ProjectDependencies) = postProject
 		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.SceneGraphs", "Demo.SceneGraphs\Demo.SceneGraphs.csproj", "{274091CB-D74C-4DCB-849D-75D29622ADD2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{5730C502-0448-4A8B-A092-A4C961125D59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +88,13 @@ Global
 		{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD}.Release|Any CPU.ActiveCfg = Release|x86
 		{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD}.Release|x86.ActiveCfg = Release|x86
 		{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD}.Release|x86.Build.0 = Release|x86
+		{274091CB-D74C-4DCB-849D-75D29622ADD2}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{274091CB-D74C-4DCB-849D-75D29622ADD2}.Debug|Any CPU.Build.0 = Debug|x86
+		{274091CB-D74C-4DCB-849D-75D29622ADD2}.Debug|x86.ActiveCfg = Debug|x86
+		{274091CB-D74C-4DCB-849D-75D29622ADD2}.Debug|x86.Build.0 = Debug|x86
+		{274091CB-D74C-4DCB-849D-75D29622ADD2}.Release|Any CPU.ActiveCfg = Release|x86
+		{274091CB-D74C-4DCB-849D-75D29622ADD2}.Release|x86.ActiveCfg = Release|x86
+		{274091CB-D74C-4DCB-849D-75D29622ADD2}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,5 +102,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CEF2144F-7E98-45A5-BE08-E6DBC307A5C1} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
 		{75D76507-9CB0-4A60-BE46-696DF6E7AA6C} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
+		{274091CB-D74C-4DCB-849D-75D29622ADD2} = {5730C502-0448-4A8B-A092-A4C961125D59}
 	EndGlobalSection
 EndGlobal
