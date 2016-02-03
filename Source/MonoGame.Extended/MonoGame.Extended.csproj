@@ -102,7 +102,7 @@
     <Compile Include="Shapes\RectangleExtensions.cs" />
     <Compile Include="Shapes\ShapeF.cs" />
     <Compile Include="Size.cs" />
-    <Compile Include="Sprites\SpriteExtensions.cs" />
+    <Compile Include="Sprites\SpriteBatchExtensions.cs" />
     <Compile Include="Animations\SpriteSheetAnimation.cs" />
     <Compile Include="Animations\SpriteSheetAnimator.cs" />
     <Compile Include="TextureAtlases\TextureAtlas.cs" />

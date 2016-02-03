@@ -4,11 +4,16 @@ using MonoGame.Extended.Animations;
 
 namespace MonoGame.Extended.Sprites
 {
-    public static class SpriteExtensions
+    public static class SpriteBatchExtensions
     {
+        public static void Draw(this Sprite sprite, SpriteBatch spriteBatch)
+        {
+            Draw(spriteBatch, sprite);
+        }
+
         public static void Draw(this SpriteBatch spriteBatch, Sprite sprite)
         {
-            if (sprite == null) throw new ArgumentNullException("sprite");
+            if (sprite == null) throw new ArgumentNullException(nameof(sprite));
 
             if (sprite.IsVisible)
             {
@@ -20,9 +25,14 @@ namespace MonoGame.Extended.Sprites
             }
         }
 
+        public static void Draw(this SpriteSheetAnimator animator, SpriteBatch spriteBatch)
+        {
+            Draw(spriteBatch, animator);
+        }
+
         public static void Draw(this SpriteBatch spriteBatch, SpriteSheetAnimator animator)
         {
-            if (animator == null) throw new ArgumentNullException("animator");
+            if (animator == null) throw new ArgumentNullException(nameof(animator));
             
             if (animator.IsPlaying && animator.Sprite != null)
                 Draw(spriteBatch, animator.Sprite);
