@@ -11,8 +11,8 @@ namespace MonoGame.Extended.Sprites
         {
             Draw(spriteBatch, sprite);
         }
-
-        public static void Draw(this SpriteBatch spriteBatch, Sprite sprite, Vector2 offsetPosition, float offsetRotation, Vector2 offsetScale)
+        
+        public static void Draw(this SpriteBatch spriteBatch, Sprite sprite)
         {
             if (sprite == null) throw new ArgumentNullException(nameof(sprite));
 
@@ -20,18 +20,10 @@ namespace MonoGame.Extended.Sprites
             {
                 var texture = sprite.TextureRegion.Texture;
                 var sourceRectangle = sprite.TextureRegion.Bounds;
-                var position = offsetPosition + sprite.Position;
-                var rotation = offsetRotation + sprite.Rotation;
-                var scale = offsetScale * sprite.Scale;
 
-                spriteBatch.Draw(texture, position, sourceRectangle, sprite.Color, rotation, sprite.Origin, 
-                    scale, sprite.Effect, 0);
+                spriteBatch.Draw(texture, sprite.Position, sourceRectangle, sprite.Color, sprite.Rotation, sprite.Origin,
+                    sprite.Scale, sprite.Effect, 0);
             }
-        }
-
-        public static void Draw(this SpriteBatch spriteBatch, Sprite sprite)
-        {
-            Draw(spriteBatch, sprite, Vector2.Zero, 0, Vector2.One);
         }
 
         public static void Draw(this SpriteSheetAnimator animator, SpriteBatch spriteBatch)

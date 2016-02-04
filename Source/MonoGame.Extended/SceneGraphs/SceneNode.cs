@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
 
@@ -10,40 +12,114 @@ namespace MonoGame.Extended.SceneGraphs
 
     public class SceneNode : IMovable, IRotatable, IScalable
     {
-        public SceneNode()
+        private SceneNode(string name, SceneNode parent, Vector2 position, float rotation, Vector2 scale)
         {
-            Position = Vector2.Zero;
-            Rotation = 0;
-            Scale = Vector2.One;
-            Children = new SceneNodeCollection(this);
+            Name = name;
+            Parent = parent;
+            Position = position;
+            Rotation = rotation;
+            Scale = scale;
+
+            _children = new SceneNodeCollection(this);
+            _entities = new List<ISceneEntity>();
         }
 
+        private readonly SceneNodeCollection _children;
+        private readonly List<ISceneEntity> _entities;
+
+        public string Name { get; set; }
         public Vector2 Position { get; set; }
         public float Rotation { get; set; }
         public Vector2 Scale { get; set; }
-        public SceneNodeCollection Children { get; }
-
-        public ISceneEntity Entity { get; set; }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            var sprite = Entity as Sprite;
-
-            if (sprite != null)
-                spriteBatch.Draw(sprite, Position, Rotation, Scale);
-
-            foreach (var child in Children)
-                child.Draw(spriteBatch);
-        }
         
-        public void Update(GameTime gameTime)
+        public SceneNode Parent { get; private set; }
+        public IEnumerable<SceneNode> Children => _children;
+        public IEnumerable<ISceneEntity> Entities => _entities;
+         
+        internal static SceneNode CreateRootNode()
         {
-            // TODO
-            //var updatable = Entity as IUpdate;
-            //updatable?.Update(gameTime);
+            return new SceneNode(null, null, Vector2.Zero, 0, Vector2.One);
+        }
 
-            foreach (var child in Children)
-                child.Update(gameTime);
+        public SceneNode CreateChildSceneNode(string name, Vector2 position, float rotation, Vector2 scale)
+        {
+            var sceneNode = new SceneNode(name, this, position, rotation, scale);
+            _children.Add(sceneNode);
+            return sceneNode;
+        }
+
+        public SceneNode CreateChildSceneNode(string name, Vector2 position, float rotation)
+        {
+            return CreateChildSceneNode(name, position, rotation, Vector2.One);
+        }
+
+        public SceneNode CreateChildSceneNode(string name, Vector2 position)
+        {
+            return CreateChildSceneNode(name, position, 0, Vector2.One);
+        }
+
+        public SceneNode CreateChildSceneNode(string name)
+        {
+            return CreateChildSceneNode(name, Vector2.Zero, 0, Vector2.One);
+        }
+
+        public SceneNode CreateChildSceneNode()
+        {
+            return CreateChildSceneNode(null, Vector2.Zero, 0, Vector2.One);
+        }
+
+        public SceneNode CreateChildSceneNode(Vector2 position, float rotation, Vector2 scale)
+        {
+            return CreateChildSceneNode(null, position, rotation, scale);
+        }
+
+        public SceneNode CreateChildSceneNode(Vector2 position, float rotation)
+        {
+            return CreateChildSceneNode(null, position, rotation, Vector2.One);
+        }
+
+        public SceneNode CreateChildSceneNode(Vector2 position)
+        {
+            return CreateChildSceneNode(null, position, 0, Vector2.One);
+        }
+
+        public void RemoveChildSceneNode(int index)
+        {
+            RemoveChildSceneNode(_children[index]);
+        }
+
+        public void RemoveChildSceneNode(SceneNode sceneNode)
+        {
+            if (sceneNode.Parent != this)
+                throw new InvalidOperationException($"{sceneNode} does not belong to parent");
+
+            sceneNode.Parent = null;
+            _children.Remove(sceneNode);
+        }
+
+        public void Attach(ISceneEntity entity)
+        {
+            _entities.Add(entity);
+        }
+
+        public Vector2 GetWorldPosition()
+        {
+            return Parent == null ? Position : Parent.GetWorldPosition() + Position.Rotate(Parent.Rotation);
+        }
+
+        public float GetWorldRotation()
+        {
+            return Parent?.GetWorldRotation() + Rotation ?? Rotation;
+        }
+
+        public Vector2 GetWorldScale()
+        {
+            return Parent?.GetWorldScale() * Scale ?? Scale;
+        }
+
+        public override string ToString()
+        {
+            return $"name: {Name}, position: {Position}, rotation: {Rotation}, scale: {Scale}";
         }
     }
 }

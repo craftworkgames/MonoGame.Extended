@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -12,7 +13,6 @@ namespace Demo.SceneGraphs
     {
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private readonly bool _isFullScreen;
-        private SpriteBatch _spriteBatch;
         private Camera2D _camera;
         private SceneGraph _sceneGraph;
         
@@ -43,19 +43,17 @@ namespace Demo.SceneGraphs
         protected override void LoadContent()
         {
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-
             _camera = new Camera2D(viewportAdapter);
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _sceneGraph = new SceneGraph(GraphicsDevice, viewportAdapter, _camera);
 
             var texture = Content.Load<Texture2D>("logo-square-512");
-            _sceneGraph = new SceneGraph(GraphicsDevice, viewportAdapter, _camera)
-            {
-                RootNode = new SceneNode
-                {
-                    Position = viewportAdapter.Center.ToVector2(),
-                    Entity = new Sprite(texture) { Scale = Vector2.One * 0.5f }
-                }
-            };
+            _sceneGraph.RootNode.Position = viewportAdapter.Center.ToVector2();
+
+            var node1 = _sceneGraph.RootNode.CreateChildSceneNode(new Vector2(0, 200));
+            node1.Attach(new Sprite(texture) { Scale = Vector2.One * 0.25f });
+
+            var node2 = node1.CreateChildSceneNode(new Vector2(100, 0));
+            node2.Attach(new Sprite(texture) {Color = Color.DarkGray, Scale = Vector2.One*0.2f});
         }
 
         protected override void UnloadContent()
