@@ -127,6 +127,12 @@ namespace MonoGame.Extended.Maps.Tiled
             _spriteBatch.End();
         }
 
+        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        {
+            foreach (var layer in _layers)
+                layer.Draw(spriteBatch, position);
+        }
+
         public TextureRegion2D GetTileRegion(int id)
         {
             if (id == 0)

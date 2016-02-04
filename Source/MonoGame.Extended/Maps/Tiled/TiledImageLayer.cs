@@ -32,5 +32,10 @@ namespace MonoGame.Extended.Maps.Tiled
             _spriteBatch.Draw(_texture, Position, Color.White);
             _spriteBatch.End();
         }
+
+        public override void Draw(SpriteBatch spriteBatch, Vector2 position)
+        {
+            _spriteBatch.Draw(_texture, Position + position, Color.White);
+        }
     }
 }
