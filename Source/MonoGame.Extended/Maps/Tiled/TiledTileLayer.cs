@@ -92,6 +92,29 @@ namespace MonoGame.Extended.Maps.Tiled
             _spriteBatch.End();
         }
 
+        public override void Draw(SpriteBatch spriteBatch, Vector2 position)
+        {
+            var renderOrderFunction = GetRenderOrderFunction();
+            var tileLocationFunction = GetTileLocationFunction();
+            var firstCol = 0;
+            var firstRow = 0;
+
+            var columns = _map.Width + 3;
+            var rows = _map.Height + 3;
+
+            foreach (var tile in renderOrderFunction(firstCol, firstRow, firstCol + columns, firstRow + rows))
+            {
+                var region = tile != null ? _map.GetTileRegion(tile.Id) : null;
+
+                if (region != null)
+                {
+                    var point = tileLocationFunction(tile);
+                    var destinationRectangle = new Rectangle(point.X + (int)position.X, point.Y + (int)position.Y, region.Width, region.Height);
+                    spriteBatch.Draw(region, destinationRectangle, Color.White);
+                }
+            }
+        }
+
         private Func<TiledTile, Point> GetTileLocationFunction()
         {
             switch (_map.Orientation)
