@@ -14,9 +14,8 @@ namespace Demo.SceneGraphs
         private readonly bool _isFullScreen;
         private SpriteBatch _spriteBatch;
         private Camera2D _camera;
-        private Sprite _sprite;
         private SceneGraph _sceneGraph;
-
+        
         public Game1()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
@@ -49,12 +48,14 @@ namespace Demo.SceneGraphs
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             var texture = Content.Load<Texture2D>("logo-square-512");
-            _sprite = new Sprite(texture)
+            _sceneGraph = new SceneGraph(GraphicsDevice, viewportAdapter, _camera)
             {
-                Position = new Vector2(viewportAdapter.VirtualWidth / 2f, viewportAdapter.VirtualHeight / 2f)
+                RootNode = new SceneNode
+                {
+                    Position = viewportAdapter.Center.ToVector2(),
+                    Entity = new Sprite(texture) { Scale = Vector2.One * 0.5f }
+                }
             };
-
-            _sceneGraph = new SceneGraph(GraphicsDevice, viewportAdapter, _camera);
         }
 
         protected override void UnloadContent()
@@ -69,7 +70,7 @@ namespace Demo.SceneGraphs
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _sprite.Rotation += deltaTime;
+            _sceneGraph.RootNode.Rotation += deltaTime;
             _sceneGraph.Update(gameTime);
 
             base.Update(gameTime);
@@ -78,10 +79,6 @@ namespace Demo.SceneGraphs
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _spriteBatch.Draw(_sprite);
-            _spriteBatch.End();
 
             _sceneGraph.Draw(gameTime);
 

@@ -4,8 +4,11 @@ namespace MonoGame.Extended.SceneGraphs
 {
     public class SceneNodeCollection : Collection<SceneNode>
     {
-        public SceneNodeCollection()
+        public SceneNodeCollection(SceneNode parentNode)
         {
+            _parentNode = parentNode;
         }
+
+        private SceneNode _parentNode;
     }
 }
