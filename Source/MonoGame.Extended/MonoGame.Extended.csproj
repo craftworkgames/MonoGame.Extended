@@ -83,6 +83,7 @@
     <Compile Include="Shapes\RectangleExtensions.cs" />
     <Compile Include="Shapes\IShapeF.cs" />
     <Compile Include="Size.cs" />
+    <Compile Include="SizeF.cs" />
     <Compile Include="Sprites\SpriteBatchExtensions.cs" />
     <Compile Include="Animations\SpriteSheetAnimation.cs" />
     <Compile Include="Animations\SpriteSheetAnimator.cs" />
