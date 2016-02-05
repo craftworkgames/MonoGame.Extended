@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -53,7 +53,7 @@ namespace Demo.SceneGraphs
             node1.Attach(new Sprite(texture) { Scale = Vector2.One * 0.25f });
 
             var node2 = node1.CreateChildSceneNode(new Vector2(100, 0));
-            node2.Attach(new Sprite(texture) {Color = Color.DarkGray, Scale = Vector2.One*0.2f});
+            node2.Attach(new Sprite(texture) { Color = Color.DarkGray, Scale = Vector2.One*0.2f });
         }
 
         protected override void UnloadContent()
@@ -69,7 +69,8 @@ namespace Demo.SceneGraphs
                 Exit();
 
             _sceneGraph.RootNode.Rotation += deltaTime;
-            _sceneGraph.Update(gameTime);
+            _sceneGraph.RootNode.Children.First().Children.First().Rotation += deltaTime * 5;
+            //_sceneGraph.Update(gameTime);
 
             base.Update(gameTime);
         }

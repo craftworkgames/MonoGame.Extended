@@ -1,11 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.SceneGraphs
 {
-    public class SceneGraph : IDraw, IUpdate
+    public class SceneGraph : IDraw
     {
         public SceneGraph(GraphicsDevice graphicsDevice, ViewportAdapter viewportAdapter, Camera2D camera)
         {
@@ -27,29 +29,27 @@ namespace MonoGame.Extended.SceneGraphs
             if (RootNode != null)
             {
                 _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-
-                DrawNode(RootNode);
+                
+                DrawNode(RootNode, Matrix.Identity);
 
                 _spriteBatch.End();
             }
         }
 
-        public void DrawNode(SceneNode sceneNode)
+        public void DrawNode(SceneNode sceneNode, Matrix parentTransform)
         {
-            var position = sceneNode.GetWorldPosition();
-            var rotation = sceneNode.GetWorldRotation();
-            var scale = sceneNode.GetWorldScale();
+            var localTransform = sceneNode.GetLocalTransform();
+            var globalTransform = Matrix.Multiply(localTransform, parentTransform);
 
-            foreach (var entity in sceneNode.Entities)
-            {
-                var sprite = entity as Sprite;
+            Vector2 position, scale;
+            float rotation;
+            globalTransform.Decompose(out position, out rotation, out scale);
 
-                if (sprite != null)
-                    DrawSprite(sprite, position, rotation, scale);
-            }
+            foreach (var sprite in sceneNode.Entities.OfType<Sprite>())
+                DrawSprite(sprite, position, rotation, scale);
 
             foreach (var child in sceneNode.Children)
-                DrawNode(child);
+                DrawNode(child, globalTransform);
         }
         
         public void DrawSprite(Sprite sprite, Vector2 offsetPosition, float offsetRotation, Vector2 offsetScale)
@@ -66,9 +66,6 @@ namespace MonoGame.Extended.SceneGraphs
             }
         }
 
-        public void Update(GameTime gameTime)
-        {
-            //RootNode?.Update(gameTime);
-        }
+
     }
 }

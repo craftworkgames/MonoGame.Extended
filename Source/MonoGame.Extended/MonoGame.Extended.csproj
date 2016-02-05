@@ -76,6 +76,7 @@
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
+    <Compile Include="MatrixExtensions.cs" />
     <Compile Include="SceneGraphs\SceneGraph.cs" />
     <Compile Include="SceneGraphs\SceneNode.cs" />
     <Compile Include="SceneGraphs\SceneNodeCollection.cs" />

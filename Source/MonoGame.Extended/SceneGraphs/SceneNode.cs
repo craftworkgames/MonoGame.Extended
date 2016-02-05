@@ -35,7 +35,7 @@ namespace MonoGame.Extended.SceneGraphs
         public SceneNode Parent { get; private set; }
         public IEnumerable<SceneNode> Children => _children;
         public IEnumerable<ISceneEntity> Entities => _entities;
-         
+        
         internal static SceneNode CreateRootNode()
         {
             return new SceneNode(null, null, Vector2.Zero, 0, Vector2.One);
@@ -100,6 +100,15 @@ namespace MonoGame.Extended.SceneGraphs
         public void Attach(ISceneEntity entity)
         {
             _entities.Add(entity);
+        }
+
+        public Matrix GetLocalTransform()
+        {
+            var rotationMatrix = Matrix.CreateRotationZ(Rotation);
+            var scaleMatrix = Matrix.CreateScale(new Vector3(Scale.X, Scale.Y, 1));
+            var translationMatrix = Matrix.CreateTranslation(new Vector3(Position.X, Position.Y, 0));
+            var tempMatrix = Matrix.Multiply(scaleMatrix, rotationMatrix);
+            return Matrix.Multiply(tempMatrix, translationMatrix);
         }
 
         public Vector2 GetWorldPosition()
