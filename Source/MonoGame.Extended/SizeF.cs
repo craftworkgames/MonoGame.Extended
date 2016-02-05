@@ -3,10 +3,12 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
+    // See http://www.dotnetperls.com/struct
+    // See Struct Design in Framework Design Guidelines: https://msdn.microsoft.com/en-us/library/ms229031(v=vs.110).aspx
     public struct SizeF : IEquatable<SizeF>
     {
-        public float Width { get; }
-        public float Height { get; }
+        public readonly float Width;
+        public readonly float Height;
 
         public SizeF(float width, float height)
             : this()
@@ -36,6 +38,7 @@ namespace MonoGame.Extended
         {
             unchecked
             {
+               
                 return Width.GetHashCode() + Height.GetHashCode();
             }
         }
