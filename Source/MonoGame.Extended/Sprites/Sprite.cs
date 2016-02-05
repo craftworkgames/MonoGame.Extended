@@ -15,6 +15,7 @@ namespace MonoGame.Extended.Sprites
 
             _textureRegion = textureRegion;
 
+            Alpha = 1.0f;
             Color = Color.White;
             IsVisible = true;
             Scale = Vector2.One;
@@ -27,6 +28,7 @@ namespace MonoGame.Extended.Sprites
         {
         }
 
+        public float Alpha { get; set; }
         public Color Color { get; set; }
         public bool IsVisible { get; set; }
         public Vector2 Position { get; set; }
