@@ -114,8 +114,10 @@ namespace MonoGame.Extended.Maps.Tiled
 
             _graphicsDevice.SetRenderTarget(_renderTarget); 
 
-            if(useMapBackgroundColor && BackgroundColor.HasValue)
+            if (useMapBackgroundColor && BackgroundColor.HasValue)
                 _graphicsDevice.Clear(BackgroundColor.Value);
+            else
+                _graphicsDevice.Clear(Color.Transparent);
 
             foreach (var layer in _layers)
                 layer.Draw(boundingRectangle);
