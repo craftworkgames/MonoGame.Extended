@@ -70,7 +70,8 @@ namespace MonoGame.Extended
         {
             // https://en.wikipedia.org/wiki/Cross_product
             // http://mathworld.wolfram.com/CrossProduct.html
-            // A cross B = A.x * B.y - A.y * B.x = len(A) * len(B) * sin(theta) = det(A, B)
+            // A cross B = A.x * B.y - A.y * B.x = n * len(A) * len(B) * sin(theta) = det(A, B)
+            // n is the unit vector perpendicular to the plane of A and B
             return vector.X * value.Y - vector.Y * value.X;
         }
 
