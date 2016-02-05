@@ -65,7 +65,5 @@ namespace MonoGame.Extended.SceneGraphs
                 _spriteBatch.Draw(texture, position, sourceRectangle, sprite.Color, rotation, sprite.Origin, scale, sprite.Effect, 0);
             }
         }
-
-
     }
 }

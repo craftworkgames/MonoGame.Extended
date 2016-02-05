@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.SceneGraphs
 {
-    public interface ISceneEntity
-    {
-    }
-
     public class SceneNode : IMovable, IRotatable, IScalable
     {
         private SceneNode(string name, SceneNode parent, Vector2 position, float rotation, Vector2 scale)
@@ -20,21 +14,21 @@ namespace MonoGame.Extended.SceneGraphs
             Rotation = rotation;
             Scale = scale;
 
-            _children = new SceneNodeCollection(this);
+            _children = new List<SceneNode>();
             _entities = new List<ISceneEntity>();
         }
 
-        private readonly SceneNodeCollection _children;
+        private readonly List<SceneNode> _children;
         private readonly List<ISceneEntity> _entities;
 
         public string Name { get; set; }
         public Vector2 Position { get; set; }
         public float Rotation { get; set; }
         public Vector2 Scale { get; set; }
-        
         public SceneNode Parent { get; private set; }
         public IEnumerable<SceneNode> Children => _children;
         public IEnumerable<ISceneEntity> Entities => _entities;
+        public object Tag { get; set; }
         
         internal static SceneNode CreateRootNode()
         {
@@ -109,21 +103,6 @@ namespace MonoGame.Extended.SceneGraphs
             var translationMatrix = Matrix.CreateTranslation(new Vector3(Position.X, Position.Y, 0));
             var tempMatrix = Matrix.Multiply(scaleMatrix, rotationMatrix);
             return Matrix.Multiply(tempMatrix, translationMatrix);
-        }
-
-        public Vector2 GetWorldPosition()
-        {
-            return Parent == null ? Position : Parent.GetWorldPosition() + Position.Rotate(Parent.Rotation);
-        }
-
-        public float GetWorldRotation()
-        {
-            return Parent?.GetWorldRotation() + Rotation ?? Rotation;
-        }
-
-        public Vector2 GetWorldScale()
-        {
-            return Parent?.GetWorldScale() * Scale ?? Scale;
         }
 
         public override string ToString()
