@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Maps.Tiled
@@ -111,6 +112,7 @@ namespace MonoGame.Extended.Maps.Tiled
             // because the render target changes the size of the viewport
             var boundingRectangle = camera.GetBoundingRectangle();
             var viewMatrix = camera.GetViewMatrix();
+            var viewport = _graphicsDevice.Viewport;
 
             _graphicsDevice.SetRenderTarget(_renderTarget); 
 
@@ -121,7 +123,8 @@ namespace MonoGame.Extended.Maps.Tiled
                 layer.Draw(boundingRectangle);
 
             _graphicsDevice.SetRenderTarget(null);
-            
+
+            _graphicsDevice.Viewport = viewport;
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, transformMatrix: viewMatrix);
             _spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
             _spriteBatch.End();
