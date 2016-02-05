@@ -137,7 +137,17 @@ namespace MonoGame.Extended
                 Matrix.CreateRotationZ(Rotation) *
                 Matrix.CreateScale(Zoom, Zoom, 1) *
                 Matrix.CreateTranslation(new Vector3(Origin, 0.0f)) *
-                _viewportAdapter.GetScaleMatrix(); 
+                _viewportAdapter.GetScaleMatrix();
+        }
+
+        public Matrix GetViewMatrixWithoutViewportAdapter()
+        {
+            return
+                Matrix.CreateTranslation(new Vector3(-Position * Vector2.One, 0.0f)) *
+                Matrix.CreateTranslation(new Vector3(-Origin, 0.0f)) *
+                Matrix.CreateRotationZ(Rotation) *
+                Matrix.CreateScale(Zoom, Zoom, 1) *
+                Matrix.CreateTranslation(new Vector3(Origin, 0.0f));
         }
 
         public Matrix GetViewMatrix()
@@ -159,7 +169,7 @@ namespace MonoGame.Extended
 
         public BoundingFrustum GetBoundingFrustum() 
         {
-            var viewMatrix = GetViewMatrix();
+            var viewMatrix = _viewportAdapter is BoxingViewportAdapter ? GetViewMatrixWithoutViewportAdapter() : GetViewMatrix();
             var projectionMatrix = GetProjectionMatrix(viewMatrix);
             return new BoundingFrustum(projectionMatrix);
         }
