@@ -55,6 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\car-hull.png" />
+    <Content Include="Content\car-wheel.png" />
     <Content Include="Content\logo-square-512.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>

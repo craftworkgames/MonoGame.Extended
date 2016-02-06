@@ -15,7 +15,10 @@ namespace Demo.SceneGraphs
         private readonly bool _isFullScreen;
         private Camera2D _camera;
         private SceneGraph _sceneGraph;
-        
+        private SceneNode _leftWheelNode;
+        private SceneNode _rightWheelNode;
+        private SceneNode _carNode;
+
         public Game1()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
@@ -43,22 +46,31 @@ namespace Demo.SceneGraphs
         protected override void LoadContent()
         {
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            _camera = new Camera2D(viewportAdapter) {Zoom = 4.0f};
             _sceneGraph = new SceneGraph(GraphicsDevice, viewportAdapter, _camera);
 
-            var texture = Content.Load<Texture2D>("logo-square-512");
-            _sceneGraph.RootNode.Position = viewportAdapter.Center.ToVector2();
+            var carHullTexture = Content.Load<Texture2D>("car-hull");
+            var carHullSprite = new Sprite(carHullTexture);
+            var carWheelTexture = Content.Load<Texture2D>("car-wheel");
+            var carWheelSprite = new Sprite(carWheelTexture);
 
-            var node1 = _sceneGraph.RootNode.CreateChildSceneNode(new Vector2(0, 200));
-            node1.Attach(new Sprite(texture) { Scale = Vector2.One * 0.25f });
+            _carNode = _sceneGraph.RootNode.CreateChildSceneNode(viewportAdapter.Center.ToVector2());
+            _carNode.Attach(carHullSprite);
 
-            var node2 = node1.CreateChildSceneNode(new Vector2(100, 0));
-            node2.Attach(new Sprite(texture) { Color = Color.DarkGray, Scale = Vector2.One*0.2f });
+            _leftWheelNode = _carNode.CreateChildSceneNode(new Vector2(-29, 17));
+            _leftWheelNode.Attach(carWheelSprite);
+
+            _rightWheelNode = _carNode.CreateChildSceneNode(new Vector2(40, 17));
+            _rightWheelNode.Attach(carWheelSprite);
+
+            
         }
 
         protected override void UnloadContent()
         {
         }
+
+        private float _speed = 0;
 
         protected override void Update(GameTime gameTime)
         {
@@ -68,9 +80,17 @@ namespace Demo.SceneGraphs
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _sceneGraph.RootNode.Rotation += deltaTime;
-            _sceneGraph.RootNode.Children.First().Children.First().Rotation += deltaTime * 5;
+            if (keyboardState.IsKeyDown(Keys.W))
+                _speed += deltaTime * 0.01f;
+
+            if (keyboardState.IsKeyDown(Keys.S))
+                _speed -= deltaTime * 0.01f;
+
+
             //_sceneGraph.Update(gameTime);
+            _leftWheelNode.Rotation += _speed;
+            _rightWheelNode.Rotation = _leftWheelNode.Rotation;
+            _carNode.Position += new Vector2(_speed * 5, 0);
 
             base.Update(gameTime);
         }

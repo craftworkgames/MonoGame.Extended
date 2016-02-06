@@ -24,16 +24,17 @@ namespace MonoGame.Extended.SceneGraphs
 
         public SceneNode RootNode { get; }
 
-        public void Draw(GameTime gameTime)
+        public void Draw(SpriteBatch spriteBatch)
         {
             if (RootNode != null)
-            {
-                _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-                
                 DrawNode(RootNode, Matrix.Identity);
+        }
 
-                _spriteBatch.End();
-            }
+        public void Draw(GameTime gameTime)
+        {
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _camera.GetViewMatrix());
+            Draw(_spriteBatch);
+            _spriteBatch.End();
         }
 
         public void DrawNode(SceneNode sceneNode, Matrix parentTransform)
