@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.SceneGraphs;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -13,6 +13,7 @@ namespace Demo.SceneGraphs
     {
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private readonly bool _isFullScreen;
+        private SpriteBatch _spriteBatch;
         private Camera2D _camera;
         private SceneGraph _sceneGraph;
         private SceneNode _leftWheelNode;
@@ -45,9 +46,11 @@ namespace Demo.SceneGraphs
 
         protected override void LoadContent()
         {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter) {Zoom = 4.0f};
-            _sceneGraph = new SceneGraph(GraphicsDevice, viewportAdapter, _camera);
+            _camera = new Camera2D(viewportAdapter) {Zoom = 2.0f};
+            _sceneGraph = new SceneGraph();
 
             var carHullTexture = Content.Load<Texture2D>("car-hull");
             var carHullSprite = new Sprite(carHullTexture);
@@ -70,7 +73,7 @@ namespace Demo.SceneGraphs
         {
         }
 
-        private float _speed = 0;
+        private float _speed = 0.15f;
 
         protected override void Update(GameTime gameTime)
         {
@@ -81,25 +84,46 @@ namespace Demo.SceneGraphs
                 Exit();
 
             if (keyboardState.IsKeyDown(Keys.W))
-                _speed += deltaTime * 0.01f;
+                _speed += deltaTime * 0.5f;
 
             if (keyboardState.IsKeyDown(Keys.S))
-                _speed -= deltaTime * 0.01f;
+                _speed -= deltaTime * 0.5f;
 
-
-            //_sceneGraph.Update(gameTime);
             _leftWheelNode.Rotation += _speed;
             _rightWheelNode.Rotation = _leftWheelNode.Rotation;
             _carNode.Position += new Vector2(_speed * 5, 0);
+
+            // quick and dirty collision detection
+            const int maxX = 535;
+            if (_carNode.Position.X >= maxX)
+            {
+                _speed = -_speed * 0.2f;
+                _carNode.Position =  new Vector2(maxX, _carNode.Position.Y);
+            }
+
+            const int minX = 265;
+            if (_carNode.Position.X <= minX)
+            {
+                _speed = -_speed * 0.2f;
+                _carNode.Position = new Vector2(minX, _carNode.Position.Y);
+            }
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _sceneGraph.Draw(gameTime);
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _camera.GetViewMatrix());
+
+            _sceneGraph.Draw(_spriteBatch);
+
+            _spriteBatch.FillRectangle(0, 266, 800, 240, Color.DarkOliveGreen);
+            _spriteBatch.FillRectangle(200, 0, 5, 480, Color.DarkOliveGreen);
+            _spriteBatch.FillRectangle(595, 0, 5, 480, Color.DarkOliveGreen);
+
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

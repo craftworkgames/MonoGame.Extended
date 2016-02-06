@@ -1,43 +1,26 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
-using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.SceneGraphs
 {
-    public class SceneGraph : IDraw
+    public class SceneGraph
     {
-        public SceneGraph(GraphicsDevice graphicsDevice, ViewportAdapter viewportAdapter, Camera2D camera)
+        public SceneGraph()
         {
-            _viewportAdapter = viewportAdapter;
-            _camera = camera;
-            _spriteBatch = new SpriteBatch(graphicsDevice);
-
             RootNode = SceneNode.CreateRootNode();
         }
-
-        private readonly ViewportAdapter _viewportAdapter;
-        private readonly Camera2D _camera;
-        private readonly SpriteBatch _spriteBatch;
 
         public SceneNode RootNode { get; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             if (RootNode != null)
-                DrawNode(RootNode, Matrix.Identity);
+                DrawNode(spriteBatch, RootNode, Matrix.Identity);
         }
 
-        public void Draw(GameTime gameTime)
-        {
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _camera.GetViewMatrix());
-            Draw(_spriteBatch);
-            _spriteBatch.End();
-        }
-
-        public void DrawNode(SceneNode sceneNode, Matrix parentTransform)
+        public void DrawNode(SpriteBatch spriteBatch, SceneNode sceneNode, Matrix parentTransform)
         {
             var localTransform = sceneNode.GetLocalTransform();
             var globalTransform = Matrix.Multiply(localTransform, parentTransform);
@@ -47,13 +30,13 @@ namespace MonoGame.Extended.SceneGraphs
             globalTransform.Decompose(out position, out rotation, out scale);
 
             foreach (var sprite in sceneNode.Entities.OfType<Sprite>())
-                DrawSprite(sprite, position, rotation, scale);
+                DrawSprite(spriteBatch, sprite, position, rotation, scale);
 
             foreach (var child in sceneNode.Children)
-                DrawNode(child, globalTransform);
+                DrawNode(spriteBatch, child, globalTransform);
         }
         
-        public void DrawSprite(Sprite sprite, Vector2 offsetPosition, float offsetRotation, Vector2 offsetScale)
+        public void DrawSprite(SpriteBatch spriteBatch, Sprite sprite, Vector2 offsetPosition, float offsetRotation, Vector2 offsetScale)
         {
             if (sprite.IsVisible)
             {
@@ -63,7 +46,7 @@ namespace MonoGame.Extended.SceneGraphs
                 var rotation = offsetRotation + sprite.Rotation;
                 var scale = offsetScale * sprite.Scale;
 
-                _spriteBatch.Draw(texture, position, sourceRectangle, sprite.Color, rotation, sprite.Origin, scale, sprite.Effect, 0);
+                spriteBatch.Draw(texture, position, sourceRectangle, sprite.Color, rotation, sprite.Origin, scale, sprite.Effect, 0);
             }
         }
     }
