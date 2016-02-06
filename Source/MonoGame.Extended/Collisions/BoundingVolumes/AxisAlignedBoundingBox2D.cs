@@ -35,6 +35,14 @@ namespace MonoGame.Extended.Collisions.BoundingVolumes
             result = !(Math.Abs(Center.X - value.Center.X) > HalfSize.X + HalfSize.Y) && !(Math.Abs(Center.Y - value.Center.Y) > HalfSize.Y + HalfSize.Y);
         }
 
+        public void Transform(ref Matrix transformMatrix)
+        {
+            Center.X = Center.X * transformMatrix.M11 + Center.Y * transformMatrix.M21 + transformMatrix.M41;
+            Center.Y = Center.X * transformMatrix.M12 + Center.Y * transformMatrix.M22 + transformMatrix.M42;
+            HalfSize.X = HalfSize.X * Math.Abs(transformMatrix.M11) + HalfSize.Y * Math.Abs(transformMatrix.M12);
+            HalfSize.Y = HalfSize.X * Math.Abs(transformMatrix.M21) + HalfSize.Y * Math.Abs(transformMatrix.M22);
+        }
+
         public static bool operator ==(AxisAlignedBoundingBox2D a, AxisAlignedBoundingBox2D b)
         {
             return a.Center == b.Center && a.HalfSize == b.HalfSize;
