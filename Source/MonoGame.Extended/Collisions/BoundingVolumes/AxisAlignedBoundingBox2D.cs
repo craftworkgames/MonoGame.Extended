@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Collisions.BoundingVolumes
 {
