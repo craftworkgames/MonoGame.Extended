@@ -51,5 +51,41 @@ namespace MonoGame.Extended
         {
             return (float) Math.Atan2(vector2.X, -vector2.Y);
         }
+
+        // http://stackoverflow.com/questions/473782/inline-functions-in-c
+        // http://www.dotnetperls.com/inline-optimization
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float DotWith(this Vector2 vector, ref Vector2 value)
+        {
+            // https://en.wikipedia.org/wiki/Dot_product
+            // http://mathworld.wolfram.com/DotProduct.html
+            // A dot B = A.x * B.x + A.y + B.y = len(A) * len(A) * cos(theta)
+            return vector.X * value.X + vector.Y * value.Y;
+        }
+
+        // http://stackoverflow.com/questions/473782/inline-functions-in-c
+        // http://www.dotnetperls.com/inline-optimization
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float CrossWith(this Vector2 vector, ref Vector2 value)
+        {
+            // https://en.wikipedia.org/wiki/Cross_product
+            // http://mathworld.wolfram.com/CrossProduct.html
+            // A cross B = A.x * B.y - A.y * B.x = n * len(A) * len(B) * sin(theta) = det(A, B)
+            // n is the unit vector perpendicular to the plane of A and B
+            return vector.X * value.Y - vector.Y * value.X;
+        }
+
+        // http://stackoverflow.com/questions/473782/inline-functions-in-c
+        // http://www.dotnetperls.com/inline-optimization
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 ProjectOnto(this Vector2 vector, ref Vector2 value)
+        {
+            // https://en.wikipedia.org/wiki/Vector_projection
+            // http://mathworld.wolfram.com/Projection.html
+            // ((A dot B) / len(B)) * (B / len(B)) = (A dot B) / (len(B))^2 * B = (A dot B) / (B dot B) * B
+            var dotNumerator = vector.X * value.X + vector.Y * value.Y;
+            var dotDenominator = vector.X * vector.X + vector.Y * vector.Y;
+            return dotNumerator / dotDenominator * value;
+        }
     }
 }
