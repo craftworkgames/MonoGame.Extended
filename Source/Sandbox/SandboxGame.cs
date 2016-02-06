@@ -120,7 +120,9 @@ namespace Sandbox
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _tiledMap.Draw(_camera);
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            _tiledMap.Draw(_spriteBatch, _camera);
+            _spriteBatch.End();
 
             //_spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             //_zombie.Draw(_spriteBatch);

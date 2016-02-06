@@ -126,28 +126,29 @@ namespace MonoGame.Extended
 
         public Vector2 ScreenToWorld(Vector2 screenPosition)
         {
-            return Vector2.Transform(screenPosition, Matrix.Invert(GetViewMatrix()));
+            var worldPosition = Vector2.Transform(screenPosition, Matrix.Invert(GetViewMatrix()));
+            //worldPosition = new Vector2(worldPosition.X - _viewportAdapter.Viewport.X * 2, worldPosition.Y - _viewportAdapter.Viewport.Y * 2);
+            return worldPosition;
         }
 
         public Matrix GetViewMatrix(Vector2 parallaxFactor)
         {
-            return 
+            return GetVirtualViewMatrix(parallaxFactor) * _viewportAdapter.GetScaleMatrix();
+        }
+
+        private Matrix GetVirtualViewMatrix(Vector2 parallaxFactor)
+        {
+            return
                 Matrix.CreateTranslation(new Vector3(-Position * parallaxFactor, 0.0f)) *
                 Matrix.CreateTranslation(new Vector3(-Origin, 0.0f)) *
                 Matrix.CreateRotationZ(Rotation) *
                 Matrix.CreateScale(Zoom, Zoom, 1) *
-                Matrix.CreateTranslation(new Vector3(Origin, 0.0f)) *
-                _viewportAdapter.GetScaleMatrix();
+                Matrix.CreateTranslation(new Vector3(Origin, 0.0f));
         }
 
-        public Matrix GetViewMatrixWithoutViewportAdapter()
+        private Matrix GetVirtualViewMatrix()
         {
-            return
-                Matrix.CreateTranslation(new Vector3(-Position * Vector2.One, 0.0f)) *
-                Matrix.CreateTranslation(new Vector3(-Origin, 0.0f)) *
-                Matrix.CreateRotationZ(Rotation) *
-                Matrix.CreateScale(Zoom, Zoom, 1) *
-                Matrix.CreateTranslation(new Vector3(Origin, 0.0f));
+            return GetVirtualViewMatrix(Vector2.One);
         }
 
         public Matrix GetViewMatrix()
@@ -167,9 +168,9 @@ namespace MonoGame.Extended
             return projection;
         }
 
-        public BoundingFrustum GetBoundingFrustum() 
+        public BoundingFrustum GetBoundingFrustum()
         {
-            var viewMatrix = _viewportAdapter is BoxingViewportAdapter ? GetViewMatrixWithoutViewportAdapter() : GetViewMatrix();
+            var viewMatrix = GetVirtualViewMatrix();
             var projectionMatrix = GetProjectionMatrix(viewMatrix);
             return new BoundingFrustum(projectionMatrix);
         }

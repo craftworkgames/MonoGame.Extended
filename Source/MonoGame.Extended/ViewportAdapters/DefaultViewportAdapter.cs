@@ -9,29 +9,15 @@ namespace MonoGame.Extended.ViewportAdapters
         private readonly GraphicsDevice _graphicsDevice;
 
         public DefaultViewportAdapter(GraphicsDevice graphicsDevice)
+            : base(graphicsDevice)
         {
             _graphicsDevice = graphicsDevice;
         }
 
-        public override int VirtualWidth
-        {
-            get { return _graphicsDevice.Viewport.Width; }
-        }
-
-        public override int VirtualHeight
-        {
-            get { return _graphicsDevice.Viewport.Height; }
-        }
-
-        public override int ViewportWidth
-        {
-            get { return _graphicsDevice.Viewport.Width; }
-        }
-
-        public override int ViewportHeight
-        {
-            get { return _graphicsDevice.Viewport.Height; }
-        }
+        public override int VirtualWidth => _graphicsDevice.Viewport.Width;
+        public override int VirtualHeight => _graphicsDevice.Viewport.Height;
+        public override int ViewportWidth => _graphicsDevice.Viewport.Width;
+        public override int ViewportHeight => _graphicsDevice.Viewport.Height;
 
         public override Matrix GetScaleMatrix()
         {
