@@ -26,8 +26,8 @@
 /build:monogame-extended-logo.png
 
 #begin free-tileset.json
-/importer:
-/processor:
+/importer:TexturePackerJsonImporter
+/processor:TexturePackerProcessor
 /build:free-tileset.json
 
 #begin free-tileset.png
@@ -42,7 +42,7 @@
 /build:free-tileset.png
 
 #begin level01.tmx
-/importer:
-/processor:
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
 /build:level01.tmx
 

@@ -10,6 +10,7 @@ namespace Demo.TiledMaps
 {
     public class Game1 : Game
     {
+        // ReSharper disable once NotAccessedField.Local
         private GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
         private Texture2D _texture;
@@ -63,7 +64,7 @@ namespace Demo.TiledMaps
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.Draw(_sprite);
-            _tiledMap.Draw(_spriteBatch, _camera, useMapBackgroundColor: false);
+            _tiledMap.Draw(_spriteBatch, _camera);
             _spriteBatch.End();
             
             base.Draw(gameTime);

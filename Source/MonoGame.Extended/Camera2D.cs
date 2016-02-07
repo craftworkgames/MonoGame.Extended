@@ -116,7 +116,8 @@ namespace MonoGame.Extended
 
         public Vector2 WorldToScreen(Vector2 worldPosition)
         {
-            return Vector2.Transform(worldPosition, GetViewMatrix());
+            var viewport = _viewportAdapter.Viewport;
+            return Vector2.Transform(worldPosition + new Vector2(viewport.X, viewport.Y), GetViewMatrix());
         }
 
         public Vector2 ScreenToWorld(float x, float y)
@@ -126,9 +127,8 @@ namespace MonoGame.Extended
 
         public Vector2 ScreenToWorld(Vector2 screenPosition)
         {
-            var worldPosition = Vector2.Transform(screenPosition, Matrix.Invert(GetViewMatrix()));
-            //worldPosition = new Vector2(worldPosition.X - _viewportAdapter.Viewport.X * 2, worldPosition.Y - _viewportAdapter.Viewport.Y * 2);
-            return worldPosition;
+            var viewport = _viewportAdapter.Viewport;
+            return Vector2.Transform(screenPosition - new Vector2(viewport.X, viewport.Y), Matrix.Invert(GetViewMatrix())); 
         }
 
         public Matrix GetViewMatrix(Vector2 parallaxFactor)
