@@ -20,7 +20,7 @@ namespace MonoGame.Extended.SceneGraphs
                 DrawNode(spriteBatch, RootNode, Matrix.Identity);
         }
 
-        public void DrawNode(SpriteBatch spriteBatch, SceneNode sceneNode, Matrix parentTransform)
+        private void DrawNode(SpriteBatch spriteBatch, SceneNode sceneNode, Matrix parentTransform)
         {
             var localTransform = sceneNode.GetLocalTransform();
             var globalTransform = Matrix.Multiply(localTransform, parentTransform);
@@ -36,7 +36,7 @@ namespace MonoGame.Extended.SceneGraphs
                 DrawNode(spriteBatch, child, globalTransform);
         }
         
-        public void DrawSprite(SpriteBatch spriteBatch, Sprite sprite, Vector2 offsetPosition, float offsetRotation, Vector2 offsetScale)
+        private void DrawSprite(SpriteBatch spriteBatch, Sprite sprite, Vector2 offsetPosition, float offsetRotation, Vector2 offsetScale)
         {
             if (sprite.IsVisible)
             {
