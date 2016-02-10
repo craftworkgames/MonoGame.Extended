@@ -1,13 +1,18 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 // ReSharper disable once CheckNamespace
 namespace MonoGame.Extended.ViewportAdapters
 {
     public abstract class ViewportAdapter
     {
-        protected ViewportAdapter()
+        protected ViewportAdapter(GraphicsDevice graphicsDevice)
         {
+            GraphicsDevice = graphicsDevice;
         }
+
+        public GraphicsDevice GraphicsDevice { get; }
+        public Viewport Viewport => GraphicsDevice.Viewport;
 
         public abstract int VirtualWidth { get; }
         public abstract int VirtualHeight { get; }

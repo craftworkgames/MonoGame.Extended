@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
@@ -8,6 +9,9 @@ namespace MonoGame.Extended.Maps.Tiled
     {
         public TiledTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
         {
+            //if (texture.Width % tileWidth != 0 || texture.Height % tileHeight != 0)
+            //    throw new InvalidOperationException("The tileset texture must be an exact multiple of the tile size");
+
             Texture = texture;
             FirstId = firstId;
             TileWidth = tileWidth;
