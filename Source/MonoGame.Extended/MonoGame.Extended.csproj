@@ -78,6 +78,8 @@
     <Compile Include="RenderTarget2DExtensions.cs" />
     <Compile Include="Maps\Tiled\SpriteBatchExtensions.cs" />
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
+    <Compile Include="Maps\Tiled\TiledObject.cs" />
+    <Compile Include="Maps\Tiled\TiledObjectGroup.cs" />
     <Compile Include="Shapes\SpriteBatchExtensions.cs" />
     <Compile Include="Shapes\CircleF.cs" />
     <Compile Include="Shapes\PolygonF.cs" />

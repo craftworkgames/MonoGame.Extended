@@ -16,6 +16,7 @@ namespace MonoGame.Extended.Maps.Tiled
             _graphicsDevice = graphicsDevice;
             _renderTarget = new RenderTarget2D(graphicsDevice, width*tileWidth, height*tileHeight);
             _layers = new List<TiledLayer>();
+            _objectGroups = new List<TiledObjectGroup>();
             _tilesets = new List<TiledTileset>();
 
             Width = width;
@@ -35,6 +36,7 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly List<TiledTileset> _tilesets;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly List<TiledLayer> _layers;
+        private readonly List<TiledObjectGroup> _objectGroups;
         private readonly RenderTarget2D _renderTarget;
 
         public int Width { get; }
@@ -46,6 +48,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public TiledProperties Properties { get; private set; }
         public TiledMapOrientation Orientation { get; private set; }
 
+        public List<TiledObjectGroup> ObjectGroups => _objectGroups;
         public IEnumerable<TiledLayer> Layers => _layers;
         public IEnumerable<TiledImageLayer> ImageLayers => _layers.OfType<TiledImageLayer>();
         public IEnumerable<TiledTileLayer> TileLayers => _layers.OfType<TiledTileLayer>();
@@ -71,6 +74,13 @@ namespace MonoGame.Extended.Maps.Tiled
             var layer = new TiledImageLayer(_graphicsDevice, name, texture, position);
             _layers.Add(layer);
             return layer;
+        }
+
+        public TiledObjectGroup CreateObjectGroup(string name, TiledObject[] objects)
+        {
+            var objectGroup = new TiledObjectGroup(name, objects);
+            _objectGroups.Add(objectGroup);
+            return objectGroup;
         }
 
         public TiledLayer GetLayer(string name)
