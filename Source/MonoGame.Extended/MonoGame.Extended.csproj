@@ -75,6 +75,8 @@
     <Compile Include="IScalable.cs" />
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
+    <Compile Include="RenderTarget2DExtensions.cs" />
+    <Compile Include="Maps\Tiled\SpriteBatchExtensions.cs" />
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
     <Compile Include="Maps\Tiled\TiledObject.cs" />
     <Compile Include="Maps\Tiled\TiledObjectGroup.cs" />

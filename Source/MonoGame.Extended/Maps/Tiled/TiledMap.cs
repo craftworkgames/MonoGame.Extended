@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Maps.Tiled
@@ -14,7 +15,6 @@ namespace MonoGame.Extended.Maps.Tiled
         {
             _graphicsDevice = graphicsDevice;
             _renderTarget = new RenderTarget2D(graphicsDevice, width*tileWidth, height*tileHeight);
-            //_spriteBatch = new SpriteBatch(graphicsDevice);
             _layers = new List<TiledLayer>();
             _objectGroups = new List<TiledObjectGroup>();
             _tilesets = new List<TiledTileset>();
@@ -38,7 +38,6 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly List<TiledLayer> _layers;
         private readonly List<TiledObjectGroup> _objectGroups;
         private readonly RenderTarget2D _renderTarget;
-        //private readonly SpriteBatch _spriteBatch;
 
         public int Width { get; }
         public int Height { get; }
@@ -95,30 +94,23 @@ namespace MonoGame.Extended.Maps.Tiled
             return (T) GetLayer(name);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Camera2D camera, bool useMapBackgroundColor = false)
+        public void Draw(SpriteBatch spriteBatch, Rectangle visibleRectangle, bool useMapBackgroundColor = false)
         {
-            // it's important to get the camera state before setting the render target
-            // because the render target changes the size of the viewport
-            var boundingRectangle = camera.GetBoundingRectangle();
-            var viewport = _graphicsDevice.Viewport;
-            var previousRenderTargetUsage = _graphicsDevice.PresentationParameters.RenderTargetUsage;
+            var backgroundColor = useMapBackgroundColor && BackgroundColor.HasValue ? BackgroundColor.Value : Color.Transparent;
 
-            _graphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
-            _graphicsDevice.SetRenderTarget(_renderTarget); 
-
-            if (useMapBackgroundColor && BackgroundColor.HasValue)
-                _graphicsDevice.Clear(BackgroundColor.Value);
-            else
-                _graphicsDevice.Clear(Color.Transparent);
-
-            foreach (var layer in _layers)
-                layer.Draw(boundingRectangle);
-
-            _graphicsDevice.SetRenderTarget(null);
-            _graphicsDevice.PresentationParameters.RenderTargetUsage = previousRenderTargetUsage;
-            _graphicsDevice.Viewport = viewport;
+            using (_renderTarget.BeginDraw(_graphicsDevice, backgroundColor))
+            {
+                foreach (var layer in _layers)
+                    layer.Draw(visibleRectangle);
+            }
 
             spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Camera2D camera, bool useMapBackgroundColor = false)
+        {
+            var visibleRectangle = camera.GetBoundingRectangle().ToRectangle();
+            Draw(spriteBatch, visibleRectangle, useMapBackgroundColor);
         }
 
         public TextureRegion2D GetTileRegion(int id)

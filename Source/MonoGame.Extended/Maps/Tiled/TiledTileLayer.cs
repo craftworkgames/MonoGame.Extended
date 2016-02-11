@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Maps.Tiled
@@ -25,27 +24,17 @@ namespace MonoGame.Extended.Maps.Tiled
             _spriteBatch.Dispose();
         }
 
-        public int Width { get; private set; }
-        public int Height { get; private set; }
+        public int Width { get; }
+        public int Height { get; }
 
         private readonly TiledMap _map;
         private readonly TiledTile[] _tiles;
         private readonly SpriteBatch _spriteBatch;
+        private RenderTarget2D _renderTarget;
 
-        public IEnumerable<TiledTile> Tiles
-        {
-            get { return _tiles; }
-        }
-
-        public int TileWidth
-        {
-            get { return _map.TileWidth; }
-        }
-
-        public int TileHeight
-        {
-            get { return _map.TileHeight; }
-        }
+        public IEnumerable<TiledTile> Tiles => _tiles;
+        public int TileWidth => _map.TileWidth;
+        public int TileHeight => _map.TileHeight;
 
         private TiledTile[] CreateTiles(int[] data)
         {
@@ -64,16 +53,16 @@ namespace MonoGame.Extended.Maps.Tiled
             return tiles;
         }
 
-        public override void Draw(RectangleF visibleRectangle)
+        public override void Draw(Rectangle visibleRectangle)
         {
             var renderOrderFunction = GetRenderOrderFunction();
             var tileLocationFunction = GetTileLocationFunction();
-            var firstCol = (int)Math.Floor(visibleRectangle.Left / _map.TileWidth);
-            var firstRow = (int)Math.Floor(visibleRectangle.Top / _map.TileHeight);
+            var firstCol = (int)Math.Floor(visibleRectangle.Left / (float)_map.TileWidth);
+            var firstRow = (int)Math.Floor(visibleRectangle.Top / (float)_map.TileHeight);
 
             // +3 to cover any gaps
-            var columns = Math.Min(_map.Width, (int)visibleRectangle.Width / _map.TileWidth) + 3;
-            var rows = Math.Min(_map.Height, (int)visibleRectangle.Height / _map.TileHeight) + 3;
+            var columns = Math.Min(_map.Width, visibleRectangle.Width / _map.TileWidth) + 3;
+            var rows = Math.Min(_map.Height, visibleRectangle.Height / _map.TileHeight) + 3;
 
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
 
@@ -92,6 +81,17 @@ namespace MonoGame.Extended.Maps.Tiled
             _spriteBatch.End();
         }
 
+        public void Draw(SpriteBatch spriteBatch, Rectangle visibleRectangle)
+        {
+            if(_renderTarget == null)
+                _renderTarget = new RenderTarget2D(_spriteBatch.GraphicsDevice, Width * TileWidth, Height * TileHeight);
+
+            using (_renderTarget.BeginDraw(_spriteBatch.GraphicsDevice, Color.Transparent))
+            {
+                Draw(visibleRectangle);
+            }
+        }
+
         private Func<TiledTile, Point> GetTileLocationFunction()
         {
             switch (_map.Orientation)
@@ -103,7 +103,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 case TiledMapOrientation.Staggered:
                     throw new NotImplementedException("Staggered maps are not yet implemented");
                 default:
-                    throw new NotSupportedException(string.Format("{0} is not supported", _map.Orientation));
+                    throw new NotSupportedException($"{_map.Orientation} is not supported");
             }
         }
 
@@ -142,7 +142,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 case TiledRenderOrder.RightUp:
                     return GetTilesRightUp;
                 default:
-                    throw new NotSupportedException(string.Format("{0} is not supported", _map.RenderOrder));
+                    throw new NotSupportedException($"{_map.RenderOrder} is not supported");
             }
         }
 
