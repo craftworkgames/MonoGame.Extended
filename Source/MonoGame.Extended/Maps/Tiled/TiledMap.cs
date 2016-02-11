@@ -95,6 +95,11 @@ namespace MonoGame.Extended.Maps.Tiled
             return (T) GetLayer(name);
         }
 
+        public TiledObjectGroup GetObjectGroup(string name)
+        {
+            return _objectGroups.FirstOrDefault(i => i.Name == name);
+        }
+
         public void Draw(SpriteBatch spriteBatch, Camera2D camera, bool useMapBackgroundColor = false)
         {
             // it's important to get the camera state before setting the render target

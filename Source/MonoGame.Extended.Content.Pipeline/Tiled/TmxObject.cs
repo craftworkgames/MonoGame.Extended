@@ -14,11 +14,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlAttribute(DataType = "string", AttributeName = "type")]
         public string Type { get; set; }
 
-        [XmlAttribute(DataType = "int", AttributeName = "x")]
-        public int X { get; set; }
+        [XmlAttribute(DataType = "float", AttributeName = "x")]
+        public float X { get; set; }
 
-        [XmlAttribute(DataType = "int", AttributeName = "y")]
-        public int Y { get; set; }
+        [XmlAttribute(DataType = "float", AttributeName = "y")]
+        public float Y { get; set; }
 
         [XmlAttribute(DataType = "int", AttributeName = "width")]
         public int Width { get; set; }
