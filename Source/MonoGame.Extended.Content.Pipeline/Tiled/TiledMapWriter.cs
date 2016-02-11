@@ -90,7 +90,10 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     writer.Write(objectG.Y);
                     writer.Write(objectG.Width);
                     writer.Write(objectG.Height);
+                    WriteCustomProperties(writer, objectG.Properties);
                 }
+
+                WriteCustomProperties(writer, objectGroup.Properties);
             }
         }
 

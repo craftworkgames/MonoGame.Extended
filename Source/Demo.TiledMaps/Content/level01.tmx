@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="128" tileheight="128" backgroundcolor="#7d7d7d" nextobjectid="7">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="128" tileheight="128" backgroundcolor="#7d7d7d" nextobjectid="11">
  <properties>
   <property name="awesome" value="42"/>
  </properties>
@@ -232,7 +232,7 @@
    <property name="customlayerprop2" value="2"/>
   </properties>
   <data>
-   <tile gid="27"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -435,7 +435,16 @@
   </data>
  </layer>
  <objectgroup name="Objects Layer 1">
-  <object id="5" gid="26" x="117" y="751" width="128" height="128"/>
-  <object id="6" gid="1" x="232" y="630." width="128" height="128"/>
+  <properties>
+   <property name="objLayerProp" value="true"/>
+  </properties>
+  <object id="5" gid="26" x="128" y="896" width="297" height="342">
+   <properties>
+    <property name="othe" value="nope"/>
+    <property name="test" value="true"/>
+   </properties>
+  </object>
+  <object id="9" gid="2" x="0" y="512" width="128" height="128"/>
+  <object id="10" gid="2" x="256" y="640" width="128" height="128"/>
  </objectgroup>
 </map>

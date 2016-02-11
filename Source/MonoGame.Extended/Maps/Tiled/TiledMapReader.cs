@@ -54,6 +54,7 @@ namespace MonoGame.Extended.Maps.Tiled
             for (var i = 0; i < objectGroupsCount; i++)
             {
                 var objectGroup = ReadObjectGroup(reader, tiledMap);
+                ReadCustomProperties(reader, objectGroup.Properties);
             }
 
             return tiledMap;
@@ -74,6 +75,7 @@ namespace MonoGame.Extended.Maps.Tiled
                                                 reader.ReadInt32(),
                                                 reader.ReadInt32(),
                                                 reader.ReadInt32());
+                ReadCustomProperties(reader, objects[i].Properties);
             }
 
             return tiledMap.CreateObjectGroup(groupName, objects);

@@ -128,9 +128,9 @@ namespace Sandbox
             //_zombie.Draw(_spriteBatch);
             //_spriteBatch.End();
 
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", _fpsCounter.AverageFramesPerSecond, _camera.Zoom), new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));
-            _spriteBatch.End();
+            //_spriteBatch.Begin();
+            //_spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", _fpsCounter.AverageFramesPerSecond, _camera.Zoom), new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));
+            //_spriteBatch.End();
 
             base.Draw(gameTime);
         }

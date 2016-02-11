@@ -14,6 +14,7 @@ namespace MonoGame.Extended.Maps.Tiled
             Y = y;
             Width = width;
             Height = height;
+            Properties = new TiledProperties();
         }
 
         public int Id { get; private set; }
@@ -21,6 +22,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public int Y { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
+        public TiledProperties Properties { get; private set; }
 
         public override string ToString()
         {
