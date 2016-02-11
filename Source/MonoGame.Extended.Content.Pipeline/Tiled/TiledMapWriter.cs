@@ -72,6 +72,26 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
                 WriteCustomProperties(writer, layer.Properties);
             }
+
+            writer.Write(map.ObjectGroups.Count);
+
+            foreach (var objectGroup in map.ObjectGroups)
+            {
+                writer.Write(objectGroup.Name);
+                writer.Write(objectGroup.Visible);
+                writer.Write(objectGroup.Opacity);
+
+                writer.Write(objectGroup.Objects.Count);
+
+                foreach (var objectG in objectGroup.Objects)
+                {
+                    writer.Write(objectG.Gid);
+                    writer.Write(objectG.X);
+                    writer.Write(objectG.Y);
+                    writer.Write(objectG.Width);
+                    writer.Write(objectG.Height);
+                }
+            }
         }
 
         private static void WriteCustomProperties(ContentWriter writer, List<TmxProperty> properties)

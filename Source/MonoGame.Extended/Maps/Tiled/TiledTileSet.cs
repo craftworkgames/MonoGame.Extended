@@ -8,9 +8,6 @@ namespace MonoGame.Extended.Maps.Tiled
     {
         public TiledTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
         {
-            if (texture.Width % tileWidth != 0 || texture.Height % tileHeight != 0)
-                throw new System.InvalidOperationException("The tileset file size is not multiple of the tile size. Make sure the tile grid is correct.");
-
             Texture = texture;
             FirstId = firstId;
             TileWidth = tileWidth;
