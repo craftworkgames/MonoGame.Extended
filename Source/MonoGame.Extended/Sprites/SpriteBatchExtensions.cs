@@ -21,7 +21,7 @@ namespace MonoGame.Extended.Sprites
                 var texture = sprite.TextureRegion.Texture;
                 var sourceRectangle = sprite.TextureRegion.Bounds;
 
-                spriteBatch.Draw(texture, sprite.Position, sourceRectangle, sprite.Color, sprite.Rotation, sprite.Origin,
+                spriteBatch.Draw(texture, sprite.Position, sourceRectangle, sprite.Color * sprite.Alpha, sprite.Rotation, sprite.Origin,
                     sprite.Scale, sprite.Effect, 0);
             }
         }

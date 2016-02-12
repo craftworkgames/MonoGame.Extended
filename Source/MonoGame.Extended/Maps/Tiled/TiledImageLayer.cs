@@ -26,7 +26,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public Vector2 Position { get; set; }
 
-        public override void Draw(RectangleF visibleRectangle)
+        public override void Draw(Rectangle visibleRectangle)
         {
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
             _spriteBatch.Draw(_texture, Position, Color.White);

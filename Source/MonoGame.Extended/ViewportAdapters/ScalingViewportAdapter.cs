@@ -7,35 +7,16 @@ namespace MonoGame.Extended.ViewportAdapters
     public class ScalingViewportAdapter : ViewportAdapter
     {
         public ScalingViewportAdapter(GraphicsDevice graphicsDevice, int virtualWidth, int virtualHeight) 
+            : base(graphicsDevice)
         {
-            GraphicsDevice = graphicsDevice;
-            _virtualWidth = virtualWidth;
-            _virtualHeight = virtualHeight;
+            VirtualWidth = virtualWidth;
+            VirtualHeight = virtualHeight;
         }
 
-        protected GraphicsDevice GraphicsDevice { get; private set; }
-
-        private readonly int _virtualWidth;
-        public override int VirtualWidth
-        {
-            get { return _virtualWidth; }
-        }
-
-        private readonly int _virtualHeight;
-        public override int VirtualHeight
-        {
-            get { return _virtualHeight; }
-        }
-
-        public override int ViewportWidth
-        {
-            get { return GraphicsDevice.Viewport.Width; }
-        }
-
-        public override int ViewportHeight
-        {
-            get { return GraphicsDevice.Viewport.Height; }
-        }
+        public override int VirtualWidth { get; }
+        public override int VirtualHeight { get; }
+        public override int ViewportWidth => GraphicsDevice.Viewport.Width;
+        public override int ViewportHeight => GraphicsDevice.Viewport.Height;
 
         public override Matrix GetScaleMatrix()
         {

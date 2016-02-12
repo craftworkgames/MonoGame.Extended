@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Maps.Tiled
@@ -14,7 +15,6 @@ namespace MonoGame.Extended.Maps.Tiled
         {
             _graphicsDevice = graphicsDevice;
             _renderTarget = new RenderTarget2D(graphicsDevice, width*tileWidth, height*tileHeight);
-            _spriteBatch = new SpriteBatch(graphicsDevice);
             _layers = new List<TiledLayer>();
             _tilesets = new List<TiledTileset>();
 
@@ -36,42 +36,21 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly GraphicsDevice _graphicsDevice;
         private readonly List<TiledLayer> _layers;
         private readonly RenderTarget2D _renderTarget;
-        private readonly SpriteBatch _spriteBatch;
 
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-        public int TileWidth { get; private set; }
-        public int TileHeight { get; private set; }
+        public int Width { get; }
+        public int Height { get; }
+        public int TileWidth { get; }
+        public int TileHeight { get; }
         public Color? BackgroundColor { get; set; }
         public TiledRenderOrder RenderOrder { get; set; }
         public TiledProperties Properties { get; private set; }
         public TiledMapOrientation Orientation { get; private set; }
 
-        public IEnumerable<TiledLayer> Layers
-        {
-            get { return _layers; }
-        }
-
-        public IEnumerable<TiledImageLayer> ImageLayers
-        {
-            get { return _layers.OfType<TiledImageLayer>(); }
-        }
-
-        public IEnumerable<TiledTileLayer> TileLayers
-        {
-            get { return _layers.OfType<TiledTileLayer>(); }
-        }
-
-        public int WidthInPixels
-        {
-            // annoyingly we have to compensate 1 pixel per tile, seems to be a bug in MonoGame?
-            get { return Width * TileWidth - Width; }       
-        }
-
-        public int HeightInPixels
-        {
-            get { return Height * TileHeight - Height; }
-        }
+        public IEnumerable<TiledLayer> Layers => _layers;
+        public IEnumerable<TiledImageLayer> ImageLayers => _layers.OfType<TiledImageLayer>();
+        public IEnumerable<TiledTileLayer> TileLayers => _layers.OfType<TiledTileLayer>();
+        public int WidthInPixels => Width * TileWidth;
+        public int HeightInPixels => Height * TileHeight;
 
         public TiledTileset CreateTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
         {
@@ -105,26 +84,23 @@ namespace MonoGame.Extended.Maps.Tiled
             return (T) GetLayer(name);
         }
 
-        public void Draw(Camera2D camera, bool useMapBackgroundColor = false)
+        public void Draw(SpriteBatch spriteBatch, Rectangle visibleRectangle, bool useMapBackgroundColor = false)
         {
-            // it's important to get the camera state before setting the render target
-            // because the render target changes the size of the viewport
-            var boundingRectangle = camera.GetBoundingRectangle();
-            var viewMatrix = camera.GetViewMatrix();
+            var backgroundColor = useMapBackgroundColor && BackgroundColor.HasValue ? BackgroundColor.Value : Color.Transparent;
 
-            _graphicsDevice.SetRenderTarget(_renderTarget); 
+            using (_renderTarget.BeginDraw(_graphicsDevice, backgroundColor))
+            {
+                foreach (var layer in _layers)
+                    layer.Draw(visibleRectangle);
+            }
 
-            if(useMapBackgroundColor && BackgroundColor.HasValue)
-                _graphicsDevice.Clear(BackgroundColor.Value);
+            spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
+        }
 
-            foreach (var layer in _layers)
-                layer.Draw(boundingRectangle);
-
-            _graphicsDevice.SetRenderTarget(null);
-            
-            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, transformMatrix: viewMatrix);
-            _spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
-            _spriteBatch.End();
+        public void Draw(SpriteBatch spriteBatch, Camera2D camera, bool useMapBackgroundColor = false)
+        {
+            var visibleRectangle = camera.GetBoundingRectangle().ToRectangle();
+            Draw(spriteBatch, visibleRectangle, useMapBackgroundColor);
         }
 
         public TextureRegion2D GetTileRegion(int id)
@@ -135,7 +111,7 @@ namespace MonoGame.Extended.Maps.Tiled
             var tileset = _tilesets.LastOrDefault(i => i.FirstId <= id);
 
             if (tileset == null)
-                throw new InvalidOperationException(string.Format("No tileset found for id {0}", id));
+                throw new InvalidOperationException($"No tileset found for id {id}");
 
             return tileset.GetTileRegion(id);
         }

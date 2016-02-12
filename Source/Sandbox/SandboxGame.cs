@@ -2,12 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Animations;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Maps.Tiled;
-using MonoGame.Extended.Sprites;
-using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Sandbox
@@ -20,10 +17,9 @@ namespace Sandbox
         private SpriteBatch _spriteBatch;
         private Camera2D _camera;
         private ViewportAdapter _viewportAdapter;
-        private BitmapFont _bitmapFont;
         private TiledMap _tiledMap;
         private FramesPerSecondCounter _fpsCounter;
-        private Zombie _zombie;
+        //private Zombie _zombie;
         private CollisionWorld _world;
 
         public SandboxGame()
@@ -32,21 +28,21 @@ namespace Sandbox
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.Position = new Point(50, 50);
-            Window.Title = string.Format("MonoGame.Extended - {0}", GetType().Name);
+            Window.Title = $"MonoGame.Extended - {GetType().Name}";
         }
 
         protected override void Initialize()
         {
             _fpsCounter = new FramesPerSecondCounter();
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(_viewportAdapter);
-            //{
-            //    MinimumZoom = 0.1f,
-            //    MaximumZoom = 2.0f,
-            //    Zoom = 0.7833337f,
-            //    Origin = new Vector2(400, 240),
-            //    Position = new Vector2(408, 270)
-            //};
+            _camera = new Camera2D(_viewportAdapter)
+            {
+                MinimumZoom = 0.1f,
+                MaximumZoom = 2.0f,
+                Zoom = 0.7833337f,
+                Origin = new Vector2(400, 240),
+                Position = new Vector2(408, 270)
+            };
 
             Window.AllowUserResizing = true;
 
@@ -56,16 +52,16 @@ namespace Sandbox
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _bitmapFont = Content.Load<BitmapFont>("Fonts/courier-new-32");
-            _tiledMap = Content.Load<TiledMap>("Tilesets/test-tileset-left-up");
+            Content.Load<BitmapFont>("Fonts/courier-new-32");
+            _tiledMap = Content.Load<TiledMap>("Tilesets/level01");
 
             _world = new CollisionWorld(new Vector2(0, 900));
             _world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
 
-            var zombieAnimator = Content.Load<SpriteSheetAnimator>("Sprites/zombie-animations");
-            _zombie = new Zombie(zombieAnimator);
-            var zombieActor = _world.CreateActor(_zombie);
-            zombieActor.Position = new Vector2(462.5f, 896f);
+            //var zombieAnimator = Content.Load<SpriteSheetAnimationGroup>("Sprites/zombie-animations");
+            //_zombie = new Zombie(zombieAnimator);
+            //var zombieActor = _world.CreateActor(_zombie);
+            //zombieActor.Position = new Vector2(462.5f, 896f);
         }
 
         protected override void UnloadContent()
@@ -89,24 +85,24 @@ namespace Sandbox
             if (keyboardState.IsKeyDown(Keys.F))
                 _camera.ZoomOut(deltaSeconds);
 
-            // zombie
-            if (keyboardState.IsKeyDown(Keys.Left))
-                _zombie.Walk(-1.0f);
+            //// zombie
+            //if (keyboardState.IsKeyDown(Keys.Left))
+            //    _zombie.Walk(-1.0f);
 
-            if (keyboardState.IsKeyDown(Keys.Right))
-                _zombie.Walk(1.0f);
+            //if (keyboardState.IsKeyDown(Keys.Right))
+            //    _zombie.Walk(1.0f);
 
-            if (keyboardState.IsKeyDown(Keys.Space))
-                _zombie.Attack();
+            //if (keyboardState.IsKeyDown(Keys.Space))
+            //    _zombie.Attack();
 
-            if (keyboardState.IsKeyDown(Keys.Up))
-                _zombie.Jump();
+            //if (keyboardState.IsKeyDown(Keys.Up))
+            //    _zombie.Jump();
             
-            if (keyboardState.IsKeyDown(Keys.Enter))
-                _zombie.Die();
+            //if (keyboardState.IsKeyDown(Keys.Enter))
+            //    _zombie.Die();
 
-            // update must be called before collision detection
-            _zombie.Update(gameTime);
+            //// update must be called before collision detection
+            //_zombie.Update(gameTime);
             _world.Update(gameTime);
             //_camera.LookAt(_zombie.Position);
             
@@ -119,7 +115,9 @@ namespace Sandbox
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _tiledMap.Draw(_camera);
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            _tiledMap.Draw(_spriteBatch, _camera);
+            _spriteBatch.End();
 
             //_spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             //_zombie.Draw(_spriteBatch);

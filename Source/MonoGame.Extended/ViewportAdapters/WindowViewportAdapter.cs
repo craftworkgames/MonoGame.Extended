@@ -7,33 +7,18 @@ namespace MonoGame.Extended.ViewportAdapters
     public class WindowViewportAdapter : ViewportAdapter
     {
         public WindowViewportAdapter(GameWindow window, GraphicsDevice graphicsDevice)
+            : base(graphicsDevice)
         {
-            GraphicsDevice = graphicsDevice;
             Window = window;
             window.ClientSizeChanged += OnClientSizeChanged;
         }
 
         protected readonly GameWindow Window;
-        protected GraphicsDevice GraphicsDevice;
 
-        public override int ViewportWidth
-        {
-            get { return Window.ClientBounds.Width; }
-        }
-        public override int ViewportHeight
-        {
-            get { return Window.ClientBounds.Height; }
-        }
-
-        public override int VirtualWidth
-        {
-            get { return Window.ClientBounds.Width; }
-        }
-
-        public override int VirtualHeight
-        {
-            get { return Window.ClientBounds.Height; }
-        }
+        public override int ViewportWidth => Window.ClientBounds.Width;
+        public override int ViewportHeight => Window.ClientBounds.Height;
+        public override int VirtualWidth => Window.ClientBounds.Width;
+        public override int VirtualHeight => Window.ClientBounds.Height;
 
         public override Matrix GetScaleMatrix()
         {
