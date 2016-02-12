@@ -2,12 +2,13 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.SceneGraphs;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
 {
-    public class Sprite : IMovable, IRotatable, IScalable
+    public class Sprite : IMovable, IRotatable, IScalable, ISceneEntity
     {
         public Sprite(TextureRegion2D textureRegion)
         {
