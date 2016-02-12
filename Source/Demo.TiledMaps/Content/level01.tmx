@@ -438,7 +438,7 @@
   <properties>
    <property name="objLayerProp" value="true"/>
   </properties>
-  <object id="5" gid="26" x="88.6061" y="880.848" width="297" height="342">
+  <object id="5" gid="26" x="88" y="880" width="297" height="342">
    <properties>
     <property name="othe" value="nope"/>
     <property name="test" value="true"/>
