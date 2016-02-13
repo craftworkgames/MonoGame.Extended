@@ -1,14 +1,10 @@
-﻿using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Animations;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Maps.Tiled;
-using MonoGame.Extended.Sprites;
-using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Sandbox
@@ -21,7 +17,6 @@ namespace Sandbox
         private SpriteBatch _spriteBatch;
         private Camera2D _camera;
         private ViewportAdapter _viewportAdapter;
-        private BitmapFont _bitmapFont;
         private TiledMap _tiledMap;
         private FramesPerSecondCounter _fpsCounter;
         //private Zombie _zombie;
@@ -57,7 +52,7 @@ namespace Sandbox
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _bitmapFont = Content.Load<BitmapFont>("Fonts/courier-new-32");
+            Content.Load<BitmapFont>("Fonts/courier-new-32");
             _tiledMap = Content.Load<TiledMap>("Tilesets/level01");
 
             _world = new CollisionWorld(new Vector2(0, 900));

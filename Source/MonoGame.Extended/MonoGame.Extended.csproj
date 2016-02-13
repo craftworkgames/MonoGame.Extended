@@ -80,6 +80,10 @@
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
     <Compile Include="Maps\Tiled\TiledObject.cs" />
     <Compile Include="Maps\Tiled\TiledObjectGroup.cs" />
+    <Compile Include="MatrixExtensions.cs" />
+    <Compile Include="SceneGraphs\ISceneEntity.cs" />
+    <Compile Include="SceneGraphs\SceneGraph.cs" />
+    <Compile Include="SceneGraphs\SceneNode.cs" />
     <Compile Include="Shapes\SpriteBatchExtensions.cs" />
     <Compile Include="Shapes\CircleF.cs" />
     <Compile Include="Shapes\PolygonF.cs" />
