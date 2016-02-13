@@ -11,9 +11,8 @@ namespace MonoGame.Extended.Tests
         [Test]
         public void Camera2D_LookAt_Test()
         {
-            var viewportAdapter = Substitute.For<ViewportAdapter>();
-            viewportAdapter.VirtualWidth.Returns(800);
-            viewportAdapter.VirtualHeight.Returns(480);
+            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var viewportAdapter = new DefaultViewportAdapter(graphicsDevice);
             var camera = new Camera2D(viewportAdapter);
             
             camera.LookAt(new Vector2(100, 200));
