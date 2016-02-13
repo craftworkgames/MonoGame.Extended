@@ -94,6 +94,12 @@ namespace MonoGame.Extended.Maps.Tiled
             return (T) GetLayer(name);
         }
 
+        public TiledObjectGroup GetObjectGroup(string name)
+        {
+            return _objectGroups.FirstOrDefault(i => i.Name == name);
+        }
+
+        
         public void Draw(SpriteBatch spriteBatch, Rectangle visibleRectangle, bool useMapBackgroundColor = false)
         {
             var backgroundColor = useMapBackgroundColor && BackgroundColor.HasValue ? BackgroundColor.Value : Color.Transparent;
