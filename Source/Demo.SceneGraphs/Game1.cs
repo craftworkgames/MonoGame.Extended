@@ -117,7 +117,7 @@ namespace Demo.SceneGraphs
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _camera.GetViewMatrix());
 
-            _sceneGraph.Draw(_spriteBatch);
+            _spriteBatch.Draw(_sceneGraph);
 
             _spriteBatch.FillRectangle(0, 266, 800, 240, Color.DarkOliveGreen);
             _spriteBatch.FillRectangle(200, 0, 5, 480, Color.DarkOliveGreen);

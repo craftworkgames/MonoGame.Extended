@@ -64,7 +64,7 @@ namespace Demo.TiledMaps
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.Draw(_sprite);
-            _tiledMap.Draw(_spriteBatch, _camera);
+            _spriteBatch.Draw(_tiledMap, _camera);
             _spriteBatch.End();
             
             base.Draw(gameTime);

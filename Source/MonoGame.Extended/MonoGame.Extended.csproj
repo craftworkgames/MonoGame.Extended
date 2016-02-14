@@ -82,6 +82,7 @@
     <Compile Include="SceneGraphs\ISceneEntity.cs" />
     <Compile Include="SceneGraphs\SceneGraph.cs" />
     <Compile Include="SceneGraphs\SceneNode.cs" />
+    <Compile Include="SceneGraphs\SpriteBatchExtensions.cs" />
     <Compile Include="Shapes\SpriteBatchExtensions.cs" />
     <Compile Include="Shapes\CircleF.cs" />
     <Compile Include="Shapes\PolygonF.cs" />
