@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.SceneGraphs
 {
@@ -29,7 +31,22 @@ namespace MonoGame.Extended.SceneGraphs
         public IEnumerable<SceneNode> Children => _children;
         public IEnumerable<ISceneEntity> Entities => _entities;
         public object Tag { get; set; }
-        
+
+        public RectangleF GetBoundingRectangle()
+        {
+            if(!_entities.Any())
+                return new RectangleF(Position.X, Position.Y, 0, 0);
+
+            var rectangles = _entities
+                .Select(e => e.GetBoundingRectangle())
+                .ToArray();
+            var x0 = rectangles.Min(r => r.Left);
+            var y0 = rectangles.Min(r => r.Top);
+            var x1 = rectangles.Max(r => r.Right);
+            var y1 = rectangles.Max(r => r.Bottom);
+            return new RectangleF(Position.X + x0, Position.Y + y0, x1 - x0, y1 - y0);
+        }
+
         internal static SceneNode CreateRootNode()
         {
             return new SceneNode(null, null, Vector2.Zero, 0, Vector2.One);

@@ -1,6 +1,9 @@
-﻿namespace MonoGame.Extended.SceneGraphs
+﻿using MonoGame.Extended.Shapes;
+
+namespace MonoGame.Extended.SceneGraphs
 {
     public interface ISceneEntity
     {
+        RectangleF GetBoundingRectangle();
     }
 }
