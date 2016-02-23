@@ -8,7 +8,7 @@ namespace Demo.SpriteSheetAnimations
         [STAThread]
         static void Main()
         {
-            using (var game = new SandboxGame())
+            using (var game = new GameMain())
                 game.Run();
         }
     }

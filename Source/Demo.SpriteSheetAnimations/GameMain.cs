@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Animations;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Maps.Tiled;
@@ -9,7 +10,7 @@ using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.SpriteSheetAnimations
 {
-    public class SandboxGame : Game
+    public class GameMain : Game
     {
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         // ReSharper disable once NotAccessedField.Local
@@ -19,10 +20,10 @@ namespace Demo.SpriteSheetAnimations
         private ViewportAdapter _viewportAdapter;
         private TiledMap _tiledMap;
         private FramesPerSecondCounter _fpsCounter;
-        //private Zombie _zombie;
+        private Zombie _zombie;
         private CollisionWorld _world;
 
-        public SandboxGame()
+        public GameMain()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -58,10 +59,10 @@ namespace Demo.SpriteSheetAnimations
             _world = new CollisionWorld(new Vector2(0, 900));
             _world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
 
-            //var zombieAnimator = Content.Load<SpriteSheetAnimationGroup>("Sprites/zombie-animations");
-            //_zombie = new Zombie(zombieAnimator);
-            //var zombieActor = _world.CreateActor(_zombie);
-            //zombieActor.Position = new Vector2(462.5f, 896f);
+            var animationGroup = Content.Load<SpriteSheetAnimationGroup>("Sprites/zombie-animations");
+            _zombie = new Zombie(animationGroup);
+            var zombieActor = _world.CreateActor(_zombie);
+            zombieActor.Position = new Vector2(462.5f, 896f);
         }
 
         protected override void UnloadContent()
@@ -74,7 +75,7 @@ namespace Demo.SpriteSheetAnimations
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
-            //var mouseState = Mouse.GetState();
+            var mouseState = Mouse.GetState();
 
             //_mousePoint = _camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y)).ToPoint();
 
@@ -85,26 +86,26 @@ namespace Demo.SpriteSheetAnimations
             if (keyboardState.IsKeyDown(Keys.F))
                 _camera.ZoomOut(deltaSeconds);
 
-            //// zombie
-            //if (keyboardState.IsKeyDown(Keys.Left))
-            //    _zombie.Walk(-1.0f);
+            // zombie
+            if (keyboardState.IsKeyDown(Keys.Left))
+                _zombie.Walk(-1.0f);
 
-            //if (keyboardState.IsKeyDown(Keys.Right))
-            //    _zombie.Walk(1.0f);
+            if (keyboardState.IsKeyDown(Keys.Right))
+                _zombie.Walk(1.0f);
 
-            //if (keyboardState.IsKeyDown(Keys.Space))
-            //    _zombie.Attack();
+            if (keyboardState.IsKeyDown(Keys.Space))
+                _zombie.Attack();
 
-            //if (keyboardState.IsKeyDown(Keys.Up))
-            //    _zombie.Jump();
+            if (keyboardState.IsKeyDown(Keys.Up))
+                _zombie.Jump();
             
-            //if (keyboardState.IsKeyDown(Keys.Enter))
-            //    _zombie.Die();
+            if (keyboardState.IsKeyDown(Keys.Enter))
+                _zombie.Die();
 
-            //// update must be called before collision detection
-            //_zombie.Update(gameTime);
+            // update must be called before collision detection
+            _zombie.Update(gameTime);
             _world.Update(gameTime);
-            //_camera.LookAt(_zombie.Position);
+            _camera.LookAt(_zombie.Position);
             
             base.Update(gameTime);
         }
@@ -119,9 +120,9 @@ namespace Demo.SpriteSheetAnimations
             _tiledMap.Draw(_spriteBatch, _camera);
             _spriteBatch.End();
 
-            //_spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            //_zombie.Draw(_spriteBatch);
-            //_spriteBatch.End();
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            _zombie.Draw(_spriteBatch);
+            _spriteBatch.End();
 
             //_spriteBatch.Begin();            
             //_spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", _fpsCounter.AverageFramesPerSecond, _camera.Zoom), new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));

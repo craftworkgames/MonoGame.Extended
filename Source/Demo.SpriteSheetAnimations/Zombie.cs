@@ -21,20 +21,9 @@ namespace Demo.SpriteSheetAnimations
 
     public class Zombie : IUpdate, IActorTarget
     {
-        public Zombie(SpriteSheetAnimator animator)
+        public Zombie(SpriteSheetAnimationGroup animationGroup)
         {
-            //_sprite = new Sprite(textureAtlas[0])
-            //{
-            //    OriginNormalized = new Vector2(0.5f, 1.0f)
-            //};
-
-            //_animator = new SpriteSheetAnimator(_sprite, textureAtlas);
-            //_animator.AddAnimation("appear", framesPerSecond: 8, firstFrameIndex: 0, lastFrameIndex: 10);
-            //_animator.AddAnimation("idle", framesPerSecond: 8, firstFrameIndex: 36, lastFrameIndex: 41);
-            //_animator.AddAnimation("walk", framesPerSecond: 12, firstFrameIndex: 19, lastFrameIndex: 28);
-            //_animator.AddAnimation("attack", framesPerSecond: 8, firstFrameIndex: 29, lastFrameIndex: 35);
-            //_animator.AddAnimation("die", framesPerSecond: 8, firstFrameIndex: 11, lastFrameIndex: 18);
-            _animator = animator;
+            _animator = new SpriteSheetAnimator(animationGroup);
             _sprite = _animator.Sprite;
 
             State = ZombieState.Appearing;
@@ -79,11 +68,8 @@ namespace Demo.SpriteSheetAnimations
             }
         }
 
-        public bool IsReady
-        {
-            get { return State != ZombieState.Appearing && State != ZombieState.Dying; }
-        }
-        
+        public bool IsReady => State != ZombieState.Appearing && State != ZombieState.Dying;
+
         public Vector2 Velocity { get; set; }
 
         public Vector2 Position
@@ -92,20 +78,13 @@ namespace Demo.SpriteSheetAnimations
             set { _sprite.Position = value; }
         }
 
-        public RectangleF BoundingBox
-        {
-            get { return _sprite.GetBoundingRectangle(); }
-        }
+        public RectangleF BoundingBox => _sprite.GetBoundingRectangle();
 
         public void Update(GameTime gameTime)
         {
-            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            
             _animator.Update(gameTime);
 
             IsOnGround = false;
-            //Position += Velocity * deltaSeconds;
-            //Velocity *= 0.9f;
 
             if(State == ZombieState.Walking && Math.Abs(Velocity.X) < 0.1f)
                 State = ZombieState.Idle;
