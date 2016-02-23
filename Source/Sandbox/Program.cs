@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sandbox
+namespace Demo.SpriteSheetAnimations
 {
 #if WINDOWS || LINUX
     public static class Program

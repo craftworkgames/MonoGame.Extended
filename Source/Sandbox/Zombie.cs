@@ -6,9 +6,8 @@ using MonoGame.Extended.Animations;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
-using MonoGame.Extended.TextureAtlases;
 
-namespace Sandbox
+namespace Demo.SpriteSheetAnimations
 {
     public enum ZombieState
     {

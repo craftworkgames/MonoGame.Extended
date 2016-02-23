@@ -6,8 +6,8 @@
     <ProjectGuid>{B7965D5F-83D2-4C04-B9FE-7D5FBF365F93}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sandbox</RootNamespace>
-    <AssemblyName>Sandbox</AssemblyName>
+    <RootNamespace>Demo.SpriteSheetAnimations</RootNamespace>
+    <AssemblyName>Demo.SpriteSheetAnimations</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <MonoGameContentBuilderExe>

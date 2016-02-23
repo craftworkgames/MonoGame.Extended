@@ -7,7 +7,7 @@ using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace Sandbox
+namespace Demo.SpriteSheetAnimations
 {
     public class SandboxGame : Game
     {
