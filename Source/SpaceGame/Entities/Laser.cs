@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
-namespace SpaceGame.Entities
+namespace Demo.SpaceGame.Entities
 {
     public class Laser : Entity
     {

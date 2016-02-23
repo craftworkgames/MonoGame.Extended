@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SpaceGame.Entities
+namespace Demo.SpaceGame.Entities
 {
     public abstract class Entity
     {

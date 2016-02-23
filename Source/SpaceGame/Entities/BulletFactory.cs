@@ -1,8 +1,7 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.TextureAtlases;
-using SpaceGame.Entities;
 
-namespace SpaceGame
+namespace Demo.SpaceGame.Entities
 {
     public interface IBulletFactory
     {

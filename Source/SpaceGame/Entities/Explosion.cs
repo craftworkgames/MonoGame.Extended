@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Animations;
 using MonoGame.Extended.Sprites;
 
-namespace SpaceGame.Entities
+namespace Demo.SpaceGame.Entities
 {
     public class Explosion : Entity
     {

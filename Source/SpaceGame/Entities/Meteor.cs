@@ -4,7 +4,7 @@ using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
-namespace SpaceGame.Entities
+namespace Demo.SpaceGame.Entities
 {
     public class Meteor : Entity
     {

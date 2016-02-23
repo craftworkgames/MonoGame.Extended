@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended", "MonoGame.Extended\MonoGame.Extended.csproj", "{41724C52-3D50-45BB-81EB-3C8A247EAFD1}"
 EndProject
@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Content.Pipeline.Tests", "MonoGame.Extended.Content.Pipeline.Tests\MonoGame.Extended.Content.Pipeline.Tests.csproj", "{75D76507-9CB0-4A60-BE46-696DF6E7AA6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceGame", "SpaceGame\SpaceGame.csproj", "{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.SpaceGame", "SpaceGame\Demo.SpaceGame.csproj", "{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
 	EndProjectSection
@@ -113,6 +113,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CEF2144F-7E98-45A5-BE08-E6DBC307A5C1} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
 		{75D76507-9CB0-4A60-BE46-696DF6E7AA6C} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
+		{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD} = {E6C0E44C-A49F-43AE-B258-3C8F16B8C400}
 		{1AA1A796-CFC6-4663-8D23-FBB9CE62744B} = {E6C0E44C-A49F-43AE-B258-3C8F16B8C400}
 		{274091CB-D74C-4DCB-849D-75D29622ADD2} = {E6C0E44C-A49F-43AE-B258-3C8F16B8C400}
 	EndGlobalSection

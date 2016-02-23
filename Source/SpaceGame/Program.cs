@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpaceGame
+namespace Demo.SpaceGame
 {
 #if WINDOWS || LINUX
     /// <summary>

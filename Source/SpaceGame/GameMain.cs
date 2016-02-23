@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Demo.SpaceGame.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,9 +9,8 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
-using SpaceGame.Entities;
 
-namespace SpaceGame
+namespace Demo.SpaceGame
 {
     public class GameMain : Game
     {

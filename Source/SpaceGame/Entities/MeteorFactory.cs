@@ -6,9 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
-using SpaceGame.Entities;
 
-namespace SpaceGame
+namespace Demo.SpaceGame.Entities
 {
     public class MeteorFactory
     {

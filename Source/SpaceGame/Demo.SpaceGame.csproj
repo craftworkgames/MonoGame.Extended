@@ -8,8 +8,8 @@
     <ProjectGuid>{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpaceGame</RootNamespace>
-    <AssemblyName>SpaceGame</AssemblyName>
+    <RootNamespace>Demo.SpaceGame</RootNamespace>
+    <AssemblyName>Demo.SpaceGame</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>WindowsGL</MonoGamePlatform>
     <MonoGameContentBuilderExe>
