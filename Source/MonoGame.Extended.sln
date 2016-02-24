@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.SpaceGame", "Demo.Spac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.SpriteSheetAnimatons", "Demo.SpriteSheetAnimations\Demo.SpriteSheetAnimatons.csproj", "{B7965D5F-83D2-4C04-B9FE-7D5FBF365F93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.BitmapFonts", "Demo.BitmapFonts\Demo.BitmapFonts.csproj", "{18CCC0B0-4FF9-4C23-BD46-483132E1D986}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,13 @@ Global
 		{B7965D5F-83D2-4C04-B9FE-7D5FBF365F93}.Release|Any CPU.ActiveCfg = Release|x86
 		{B7965D5F-83D2-4C04-B9FE-7D5FBF365F93}.Release|x86.ActiveCfg = Release|x86
 		{B7965D5F-83D2-4C04-B9FE-7D5FBF365F93}.Release|x86.Build.0 = Release|x86
+		{18CCC0B0-4FF9-4C23-BD46-483132E1D986}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{18CCC0B0-4FF9-4C23-BD46-483132E1D986}.Debug|Any CPU.Build.0 = Debug|x86
+		{18CCC0B0-4FF9-4C23-BD46-483132E1D986}.Debug|x86.ActiveCfg = Debug|x86
+		{18CCC0B0-4FF9-4C23-BD46-483132E1D986}.Debug|x86.Build.0 = Debug|x86
+		{18CCC0B0-4FF9-4C23-BD46-483132E1D986}.Release|Any CPU.ActiveCfg = Release|x86
+		{18CCC0B0-4FF9-4C23-BD46-483132E1D986}.Release|x86.ActiveCfg = Release|x86
+		{18CCC0B0-4FF9-4C23-BD46-483132E1D986}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,5 +121,6 @@ Global
 		{274091CB-D74C-4DCB-849D-75D29622ADD2} = {E6C0E44C-A49F-43AE-B258-3C8F16B8C400}
 		{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD} = {E6C0E44C-A49F-43AE-B258-3C8F16B8C400}
 		{B7965D5F-83D2-4C04-B9FE-7D5FBF365F93} = {E6C0E44C-A49F-43AE-B258-3C8F16B8C400}
+		{18CCC0B0-4FF9-4C23-BD46-483132E1D986} = {E6C0E44C-A49F-43AE-B258-3C8F16B8C400}
 	EndGlobalSection
 EndGlobal
