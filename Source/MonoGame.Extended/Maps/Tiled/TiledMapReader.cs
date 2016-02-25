@@ -49,7 +49,36 @@ namespace MonoGame.Extended.Maps.Tiled
                 ReadCustomProperties(reader, layer.Properties);
             }
 
+            var objectGroupsCount = reader.ReadInt32();
+
+            for (var i = 0; i < objectGroupsCount; i++)
+            {
+                var objectGroup = ReadObjectGroup(reader, tiledMap);
+                ReadCustomProperties(reader, objectGroup.Properties);
+            }
+
             return tiledMap;
+        }
+
+        private static TiledObjectGroup ReadObjectGroup(ContentReader reader, TiledMap tiledMap)
+        {
+            var groupName = reader.ReadString();
+            var visible = reader.ReadBoolean();
+            var opacity = reader.ReadSingle();
+
+            var objCount = reader.ReadInt32();
+            var objects = new TiledObject[objCount];
+            for (var i = 0; i < objCount; i++)
+            {
+                objects[i] = new TiledObject(   reader.ReadInt32(),
+                                                reader.ReadInt32(),
+                                                reader.ReadInt32(),
+                                                reader.ReadInt32(),
+                                                reader.ReadInt32());
+                ReadCustomProperties(reader, objects[i].Properties);
+            }
+
+            return tiledMap.CreateObjectGroup(groupName, objects);
         }
 
         private static void ReadCustomProperties(ContentReader reader, TiledProperties properties)

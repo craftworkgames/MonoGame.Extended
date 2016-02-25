@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="128" tileheight="128" backgroundcolor="#7d7d7d" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="128" tileheight="128" backgroundcolor="#7d7d7d" nextobjectid="11">
  <properties>
   <property name="awesome" value="42"/>
  </properties>
- <tileset firstgid="1" name="free-tileset" tilewidth="128" tileheight="128" spacing="2" margin="2" tilecount="30">
+ <tileset firstgid="1" name="free-tileset" tilewidth="128" tileheight="128" spacing="2" margin="2" tilecount="30" columns="5">
   <image source="free-tileset.png" width="652" height="782"/>
   <tile id="7">
    <properties>
@@ -437,4 +437,17 @@
    <tile gid="5"/>
   </data>
  </layer>
+ <objectgroup name="Objects Layer 1">
+  <properties>
+   <property name="objLayerProp" value="true"/>
+  </properties>
+  <object id="5" gid="26" x="88" y="880" width="297" height="342">
+   <properties>
+    <property name="othe" value="nope"/>
+    <property name="test" value="true"/>
+   </properties>
+  </object>
+  <object id="9" gid="2" x="0" y="512" width="128" height="128"/>
+  <object id="10" gid="2" x="256" y="640" width="128" height="128"/>
+ </objectgroup>
 </map>

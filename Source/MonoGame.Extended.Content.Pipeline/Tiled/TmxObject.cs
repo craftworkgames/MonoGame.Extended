@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
@@ -33,6 +34,10 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         [XmlElement(ElementName = "image")]
         public TmxImage Image { get; set; }
+        
+        [XmlArray("properties")]
+        [XmlArrayItem("property")]
+        public List<TmxProperty> Properties { get; set; }
 
         //[XmlElement(ElementName = "ellipse")]
         //public TmxEllipse Ellipse { get; set; }
