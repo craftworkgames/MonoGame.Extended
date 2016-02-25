@@ -2,7 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -18,6 +20,7 @@ namespace Demo.TiledMaps
         private ViewportAdapter _viewportAdapter;
         private Camera2D _camera;
         private TiledMap _tiledMap;
+        private BitmapFont _bitmapFont;
 
         public Game1()
         {
@@ -33,6 +36,7 @@ namespace Demo.TiledMaps
             _camera = new Camera2D(_viewportAdapter) {Zoom = 0.5f};
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _texture = Content.Load<Texture2D>("monogame-extended-logo");
+            _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
             _sprite = new Sprite(_texture) { Position = new Vector2(600, 240) };
 
             _tiledMap = Content.Load<TiledMap>("level01");
@@ -45,14 +49,35 @@ namespace Demo.TiledMaps
 
         protected override void Update(GameTime gameTime)
         {
-            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            var mouseState = Mouse.GetState();
+            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
+            var mouseState = Mouse.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _sprite.Rotation += MathHelper.ToRadians(5) * deltaTime;
+            const float cameraSpeed = 100f;
+            const float zoomSpeed = 0.2f;
+
+            if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
+                _camera.Move(new Vector2(0, -cameraSpeed) * deltaSeconds);
+
+            if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
+                _camera.Move(new Vector2(-cameraSpeed, 0) * deltaSeconds);
+
+            if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
+                _camera.Move(new Vector2(0, cameraSpeed) * deltaSeconds);
+
+            if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
+                _camera.Move(new Vector2(cameraSpeed, 0) * deltaSeconds);
+
+            if (keyboardState.IsKeyDown(Keys.R))
+                _camera.ZoomIn(zoomSpeed * deltaSeconds);
+
+            if (keyboardState.IsKeyDown(Keys.F))
+                _camera.ZoomOut(zoomSpeed * deltaSeconds);
+
+            _sprite.Rotation += MathHelper.ToRadians(5) * deltaSeconds;
             _sprite.Position = _camera.ScreenToWorld(mouseState.X, mouseState.Y);
 
             base.Update(gameTime);
@@ -66,7 +91,15 @@ namespace Demo.TiledMaps
             _spriteBatch.Draw(_sprite);
             _spriteBatch.Draw(_tiledMap, _camera);
             _spriteBatch.End();
-            
+
+            var textColor = Color.Black;
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
+            _spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: move", new Vector2(5, 5), textColor);
+            _spriteBatch.DrawString(_bitmapFont, "RF: zoom", new Vector2(5, 5 + _bitmapFont.LineHeight), textColor);
+            _spriteBatch.DrawRectangle(_camera.GetBoundingRectangle(), Color.Black);
+            _spriteBatch.End();
+
+
             base.Draw(gameTime);
         }
     }

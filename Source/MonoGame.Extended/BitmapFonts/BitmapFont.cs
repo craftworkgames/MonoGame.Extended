@@ -40,10 +40,6 @@ namespace MonoGame.Extended.BitmapFonts
                     if (fontRegion.Height + fontRegion.YOffset > height)
                         height = fontRegion.Height + fontRegion.YOffset;
                 }
-                else
-                {
-                    throw new ArgumentException($"Character '{c}' not found in this {nameof(BitmapFont)}");
-                }
             }
 
             return new Size(width, height);

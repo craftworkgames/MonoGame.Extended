@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1AA1A796-CFC6-4663-8D23-FBB9CE62744B}</ProjectGuid>
+    <ProjectGuid>{5B629714-40BF-4584-939F-B69A9689B360}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Demo.TiledMaps</RootNamespace>
-    <AssemblyName>Demo.TiledMaps</AssemblyName>
+    <RootNamespace>Demo.ViewportAdapters</RootNamespace>
+    <AssemblyName>Demo.ViewportAdapters</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>WindowsGL</MonoGamePlatform>
     <MonoGameContentBuilderExe>
@@ -55,18 +55,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\free-tileset.png" />
-    <Content Include="Content\hills.png" />
-    <Content Include="Content\monogame-extended-logo.png" />
+    <Content Include="Content\logo-square-128.png" />
     <Content Include="Content\montserrat-32_0.png" />
+    <Content Include="Content\vignette.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\free-tileset.json" />
-    <None Include="Content\level01.tmx" />
     <None Include="Content\montserrat-32.fnt" />
     <None Include="packages.config" />
   </ItemGroup>

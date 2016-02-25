@@ -14,7 +14,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin monogame-extended-logo.png
+#begin logo-square-128.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,14 +23,9 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:TextureFormat=Color
-/build:monogame-extended-logo.png
+/build:logo-square-128.png
 
-#begin free-tileset.json
-/importer:TexturePackerJsonImporter
-/processor:TexturePackerProcessor
-/build:free-tileset.json
-
-#begin free-tileset.png
+#begin axe.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -39,19 +34,9 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:TextureFormat=Color
-/build:free-tileset.png
+/build:axe.png
 
-#begin level01.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:level01.tmx
-
-#begin montserrat-32.fnt
-/importer:BitmapFontImporter
-/processor:BitmapFontProcessor
-/build:montserrat-32.fnt
-
-#begin montserrat-32_0.png
+#begin bg_sharbi.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -60,9 +45,9 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:TextureFormat=Color
-/build:montserrat-32_0.png
+/build:bg_sharbi.png
 
-#begin hills.png
+#begin particle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -71,5 +56,16 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:TextureFormat=Color
-/build:hills.png
+/build:particle.png
+
+#begin spike_ball.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:spike_ball.png
 
