@@ -28,6 +28,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{E6C0E44C-A49F-43AE-B258-3C8F16B8C400}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.SceneGraphs", "Demo.SceneGraphs\Demo.SceneGraphs.csproj", "{274091CB-D74C-4DCB-849D-75D29622ADD2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.SpaceGame", "Demo.SpaceGame\Demo.SpaceGame.csproj", "{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -35,8 +38,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.SpaceGame", "Demo.Spac
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.SpriteSheetAnimatons", "Demo.SpriteSheetAnimations\Demo.SpriteSheetAnimatons.csproj", "{B7965D5F-83D2-4C04-B9FE-7D5FBF365F93}"
+	ProjectSection(ProjectDependencies) = postProject
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.BitmapFonts", "Demo.BitmapFonts\Demo.BitmapFonts.csproj", "{18CCC0B0-4FF9-4C23-BD46-483132E1D986}"
+	ProjectSection(ProjectDependencies) = postProject
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
