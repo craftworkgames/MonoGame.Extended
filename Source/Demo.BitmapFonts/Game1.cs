@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.BitmapFonts
 {
@@ -14,6 +16,8 @@ namespace Demo.BitmapFonts
         private Texture2D _backgroundTexture;
         private string _labelText = "";
         private Vector2 _labelPosition = Vector2.Zero;
+        private Camera2D _camera;
+        private ViewportAdapter _viewportAdapter;
 
         public Game1()
         {
@@ -25,6 +29,8 @@ namespace Demo.BitmapFonts
 
         protected override void LoadContent()
         {
+            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            _camera = new Camera2D(_viewportAdapter);
             _backgroundTexture = Content.Load<Texture2D>("vignette");
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
 
@@ -52,11 +58,11 @@ namespace Demo.BitmapFonts
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.Draw(_backgroundTexture,
-                new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                _viewportAdapter.BoundingRectangle, Color.White);
             _spriteBatch.DrawString(_bitmapFont, "MonoGame.Extended BitmapFont Sample", new Vector2(50, 10), Color.White);
             _spriteBatch.DrawString(_bitmapFont,
                 "Contrary to popular belief, Lorem Ipsum is not simply random text.\n\n" +
