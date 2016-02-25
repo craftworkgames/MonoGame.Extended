@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -56,7 +57,7 @@ namespace Demo.Camera
         private float _cloudsOffset;
         private BitmapFont _bitmapFont;
         private const float _cloudsRepeatWidth = 800;
-        private Vector2 _screenToWorldPosition;
+        private Vector2 _worldPosition;
 
         protected override void Update(GameTime gameTime)
         {
@@ -102,7 +103,7 @@ namespace Demo.Camera
             if (keyboardState.IsKeyDown(Keys.F))
                 _camera.ZoomOut(zoomSpeed * deltaTime);
 
-            _screenToWorldPosition = _camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y));
+            _worldPosition = _camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y));
 
             base.Update(gameTime);
         }
@@ -137,13 +138,16 @@ namespace Demo.Camera
             }
 
             // not all sprite batches need to be affected by the camera
-            _spriteBatch.Begin();
-            var text = 
-                "WASD: move" + Environment.NewLine +
-                "EQ: rotate" + Environment.NewLine +
-               "RF: zoom in and out" + Environment.NewLine +
-                $"ScreenToWorld: {_screenToWorldPosition.X:0}, {_screenToWorldPosition.Y:0}";
-            _spriteBatch.DrawString(_bitmapFont, text, new Vector2(5, 5), Color.DarkBlue);
+            var rectangle = _camera.GetBoundingRectangle();
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"WASD: Move [{_camera.Position.X:0}, {_camera.Position.Y:0}]");
+            stringBuilder.AppendLine($"EQ: Rotate [{MathHelper.ToDegrees(_camera.Rotation):0.00}]");
+            stringBuilder.AppendLine($"RF: Zoom [{_camera.Zoom:0.00}]");
+            stringBuilder.AppendLine($"World Pos: [{_worldPosition.X:0}, {_worldPosition.Y:0}]");
+            stringBuilder.AppendLine($"Bounds: [{rectangle.X:0}, {rectangle.Y:0}, {rectangle.Width:0}, {rectangle.Height:0}]");
+
+            _spriteBatch.Begin(blendState: BlendState.AlphaBlend);
+            _spriteBatch.DrawString(_bitmapFont, stringBuilder.ToString(), new Vector2(5, 5), Color.DarkBlue);
             _spriteBatch.End();
 
             base.Draw(gameTime);

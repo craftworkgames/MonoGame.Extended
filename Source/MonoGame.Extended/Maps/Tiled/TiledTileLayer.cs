@@ -57,8 +57,8 @@ namespace MonoGame.Extended.Maps.Tiled
         {
             var renderOrderFunction = GetRenderOrderFunction();
             var tileLocationFunction = GetTileLocationFunction();
-            var firstCol = (int)Math.Floor(visibleRectangle.Left / (float)_map.TileWidth);
-            var firstRow = (int)Math.Floor(visibleRectangle.Top / (float)_map.TileHeight);
+            var firstCol = visibleRectangle.Left < 0 ? 0 : (int)Math.Floor(visibleRectangle.Left / (float)_map.TileWidth);
+            var firstRow = visibleRectangle.Top < 0 ? 0 : (int)Math.Floor(visibleRectangle.Top / (float)_map.TileHeight);
 
             // +3 to cover any gaps
             var columns = Math.Min(_map.Width, visibleRectangle.Width / _map.TileWidth) + 3;
@@ -101,7 +101,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 case TiledMapOrientation.Isometric:
                     return GetIsometricLocation;
                 case TiledMapOrientation.Staggered:
-                    throw new NotImplementedException("Staggered maps are not yet implemented");
+                    throw new NotImplementedException(@"Staggered maps are not yet implemented");
                 default:
                     throw new NotSupportedException($"{_map.Orientation} is not supported");
             }

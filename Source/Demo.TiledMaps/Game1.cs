@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -56,7 +57,7 @@ namespace Demo.TiledMaps
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            const float cameraSpeed = 100f;
+            const float cameraSpeed = 200f;
             const float zoomSpeed = 0.2f;
 
             if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
@@ -96,9 +97,7 @@ namespace Demo.TiledMaps
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
             _spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: move", new Vector2(5, 5), textColor);
             _spriteBatch.DrawString(_bitmapFont, "RF: zoom", new Vector2(5, 5 + _bitmapFont.LineHeight), textColor);
-            _spriteBatch.DrawRectangle(_camera.GetBoundingRectangle(), Color.Black);
             _spriteBatch.End();
-
 
             base.Draw(gameTime);
         }
