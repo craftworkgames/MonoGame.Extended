@@ -32,7 +32,8 @@ namespace Demo.Camera
         {
             base.Initialize();
 
-            _camera = new Camera2D(GraphicsDevice);
+            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            _camera = new Camera2D(viewportAdapter);
         }
 
         protected override void LoadContent()

@@ -2,8 +2,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.InputListeners
 {
@@ -20,6 +22,7 @@ namespace Demo.InputListeners
         private bool _isCursorVisible = true;
         private const float _cursorBlinkDelay = 0.5f;
         private float _cursorBlinkDelta = _cursorBlinkDelay;
+        private Camera2D _camera;
         
         public Game1()
         {
@@ -63,7 +66,7 @@ namespace Demo.InputListeners
                 }
                 else
                 {
-                    _typedString += args.Character != null ? args.Character.ToString() : "";
+                    _typedString += args.Character?.ToString() ?? "";
                 }
             };
 
@@ -86,6 +89,8 @@ namespace Demo.InputListeners
 
         protected override void LoadContent()
         {
+            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            _camera = new Camera2D(viewportAdapter);
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _backgroundTexture = Content.Load<Texture2D>("vignette");
@@ -113,7 +118,7 @@ namespace Demo.InputListeners
 
         protected override void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.DarkSlateGray);
 
             for (var i = 0; i < _logLines.Count; i++)
