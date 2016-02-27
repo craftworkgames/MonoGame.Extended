@@ -47,3 +47,19 @@
 /processorParam:TextureFormat=Color
 /build:car-wheel.png
 
+#begin montserrat-32.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:montserrat-32.fnt
+
+#begin montserrat-32_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:montserrat-32_0.png
+

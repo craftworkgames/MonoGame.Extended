@@ -58,12 +58,14 @@
     <Content Include="Content\car-hull.png" />
     <Content Include="Content\car-wheel.png" />
     <Content Include="Content\logo-square-512.png" />
+    <Content Include="Content\montserrat-32_0.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\montserrat-32.fnt" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

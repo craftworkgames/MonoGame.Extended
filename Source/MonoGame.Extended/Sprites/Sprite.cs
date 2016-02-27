@@ -8,11 +8,11 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
 {
-    public class Sprite : IMovable, IRotatable, IScalable, ISceneEntity
+    public class Sprite : IMovable, IRotatable, IScalable, ISceneEntity, ISpriteBatchDrawable
     {
         public Sprite(TextureRegion2D textureRegion)
         {
-            if (textureRegion == null) throw new ArgumentNullException("textureRegion");
+            if (textureRegion == null) throw new ArgumentNullException(nameof(textureRegion));
 
             _textureRegion = textureRegion;
 

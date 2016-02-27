@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.SceneGraphs;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
@@ -13,12 +14,14 @@ namespace Demo.SceneGraphs
     {
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private readonly bool _isFullScreen;
+        private BitmapFont _bitmapFont;
         private SpriteBatch _spriteBatch;
         private Camera2D _camera;
         private SceneGraph _sceneGraph;
         private SceneNode _leftWheelNode;
         private SceneNode _rightWheelNode;
         private SceneNode _carNode;
+        private SceneNode _hoveredNode;
 
         public Game1()
         {
@@ -48,6 +51,8 @@ namespace Demo.SceneGraphs
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
+
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter) {Zoom = 2.0f};
             _sceneGraph = new SceneGraph();
@@ -57,16 +62,14 @@ namespace Demo.SceneGraphs
             var carWheelTexture = Content.Load<Texture2D>("car-wheel");
             var carWheelSprite = new Sprite(carWheelTexture);
 
-            _carNode = _sceneGraph.RootNode.CreateChildSceneNode(viewportAdapter.Center.ToVector2());
+            _carNode = _sceneGraph.RootNode.CreateChildSceneNode("car-hull", viewportAdapter.Center.ToVector2());
             _carNode.Attach(carHullSprite);
 
-            _leftWheelNode = _carNode.CreateChildSceneNode(new Vector2(-29, 17));
+            _leftWheelNode = _carNode.CreateChildSceneNode("left-wheel", new Vector2(-29, 17));
             _leftWheelNode.Attach(carWheelSprite);
 
-            _rightWheelNode = _carNode.CreateChildSceneNode(new Vector2(40, 17));
+            _rightWheelNode = _carNode.CreateChildSceneNode("right-wheel", new Vector2(40, 17));
             _rightWheelNode.Attach(carWheelSprite);
-
-            
         }
 
         protected override void UnloadContent()
@@ -79,6 +82,7 @@ namespace Demo.SceneGraphs
         {
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
+            var mouseState = Mouse.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
@@ -108,6 +112,9 @@ namespace Demo.SceneGraphs
                 _carNode.Position = new Vector2(minX, _carNode.Position.Y);
             }
 
+            var worldPosition = _camera.ScreenToWorld(mouseState.X, mouseState.Y);
+            _hoveredNode = _sceneGraph.GetSceneNodeAt(worldPosition);
+
             base.Update(gameTime);
         }
 
@@ -116,12 +123,23 @@ namespace Demo.SceneGraphs
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _camera.GetViewMatrix());
-
             _spriteBatch.Draw(_sceneGraph);
-
             _spriteBatch.FillRectangle(0, 266, 800, 240, Color.DarkOliveGreen);
             _spriteBatch.FillRectangle(200, 0, 5, 480, Color.DarkOliveGreen);
             _spriteBatch.FillRectangle(595, 0, 5, 480, Color.DarkOliveGreen);
+
+            if (_hoveredNode != null)
+            {
+                var boundingRectangle = _hoveredNode.GetBoundingRectangle();
+                _spriteBatch.DrawRectangle(boundingRectangle, Color.Black);
+            }
+
+            _spriteBatch.End();
+
+            _spriteBatch.Begin();
+
+            if (_hoveredNode != null)
+                _spriteBatch.DrawString(_bitmapFont, _hoveredNode.Name, new Vector2(14, 2), Color.White);
 
             _spriteBatch.End();
 

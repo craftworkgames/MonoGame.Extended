@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.SceneGraphs
 {
@@ -16,38 +15,29 @@ namespace MonoGame.Extended.SceneGraphs
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (RootNode != null)
-                DrawNode(spriteBatch, RootNode, Matrix.Identity);
+            RootNode?.Draw(spriteBatch);
         }
 
-        private void DrawNode(SpriteBatch spriteBatch, SceneNode sceneNode, Matrix parentTransform)
+        public SceneNode GetSceneNodeAt(float x, float y)
         {
-            var localTransform = sceneNode.GetLocalTransform();
-            var globalTransform = Matrix.Multiply(localTransform, parentTransform);
+            var node = RootNode;
 
-            Vector2 position, scale;
-            float rotation;
-            globalTransform.Decompose(out position, out rotation, out scale);
-
-            foreach (var sprite in sceneNode.Entities.OfType<Sprite>())
-                DrawSprite(spriteBatch, sprite, position, rotation, scale);
-
-            foreach (var child in sceneNode.Children)
-                DrawNode(spriteBatch, child, globalTransform);
-        }
-        
-        private void DrawSprite(SpriteBatch spriteBatch, Sprite sprite, Vector2 offsetPosition, float offsetRotation, Vector2 offsetScale)
-        {
-            if (sprite.IsVisible)
+            while (node != null && node.GetBoundingRectangle().Contains(x, y))
             {
-                var texture = sprite.TextureRegion.Texture;
-                var sourceRectangle = sprite.TextureRegion.Bounds;
-                var position = offsetPosition + sprite.Position;
-                var rotation = offsetRotation + sprite.Rotation;
-                var scale = offsetScale * sprite.Scale;
+                var childNode = node.Children.FirstOrDefault(c => c.GetBoundingRectangle().Contains(x, y));
 
-                spriteBatch.Draw(texture, position, sourceRectangle, sprite.Color, rotation, sprite.Origin, scale, sprite.Effect, 0);
+                if(childNode != null)
+                    node = childNode;
+                else
+                    return node;
             }
+
+            return null;
+        }
+
+        public SceneNode GetSceneNodeAt(Vector2 position)
+        {
+            return GetSceneNodeAt(position.X, position.Y);
         }
     }
 }
