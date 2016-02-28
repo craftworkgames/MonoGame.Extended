@@ -8,7 +8,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
-    public class TiledMap : IDisposable
+    public class TiledMap
     {
         public TiledMap(GraphicsDevice graphicsDevice, int width, int height, int tileWidth, int tileHeight, 
             TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
@@ -25,12 +25,6 @@ namespace MonoGame.Extended.Maps.Tiled
             TileHeight = tileHeight;
             Properties = new TiledProperties();
             Orientation = orientation;
-        }
-        
-        public void Dispose()
-        {
-            foreach (var tiledLayer in _layers)
-                tiledLayer.Dispose();
         }
 
         private readonly List<TiledTileset> _tilesets;
@@ -64,14 +58,14 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public TiledTileLayer CreateTileLayer(string name, int width, int height, int[] data)
         {
-            var layer = new TiledTileLayer(this, _graphicsDevice, name, width, height, data);
+            var layer = new TiledTileLayer(this, name, width, height, data);
             _layers.Add(layer);
             return layer;
         }
 
         public TiledImageLayer CreateImageLayer(string name, Texture2D texture, Vector2 position)
         {
-            var layer = new TiledImageLayer(_graphicsDevice, name, texture, position);
+            var layer = new TiledImageLayer(name, texture, position);
             _layers.Add(layer);
             return layer;
         }
@@ -98,25 +92,25 @@ namespace MonoGame.Extended.Maps.Tiled
         {
             return _objectGroups.FirstOrDefault(i => i.Name == name);
         }
-
         
-        public void Draw(SpriteBatch spriteBatch, Rectangle visibleRectangle, bool useMapBackgroundColor = false)
+        public void Draw(SpriteBatch spriteBatch, Rectangle visibleRectangle)
         {
-            var backgroundColor = useMapBackgroundColor && BackgroundColor.HasValue ? BackgroundColor.Value : Color.Transparent;
-
-            using (_renderTarget.BeginDraw(_graphicsDevice, backgroundColor))
-            {
-                foreach (var layer in _layers)
-                    layer.Draw(visibleRectangle);
-            }
-
-            spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
+            foreach (var layer in _layers)
+                layer.Draw(spriteBatch, visibleRectangle);
         }
 
         public void Draw(SpriteBatch spriteBatch, Camera2D camera, bool useMapBackgroundColor = false)
         {
+            var backgroundColor = useMapBackgroundColor && BackgroundColor.HasValue ? BackgroundColor.Value : Color.Transparent;
             var visibleRectangle = camera.GetBoundingRectangle().ToRectangle();
-            Draw(spriteBatch, visibleRectangle, useMapBackgroundColor);
+
+            using (_renderTarget.BeginDraw (_graphicsDevice, backgroundColor)) {
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
+                Draw (spriteBatch, visibleRectangle);
+                spriteBatch.End ();
+            }
+
+            spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
         }
 
         public TextureRegion2D GetTileRegion(int id)
