@@ -10,13 +10,15 @@ namespace MonoGame.Extended.Maps.Tiled
         {
             Name = name;
             Properties = new TiledProperties();
+            IsVisible = true;
         }
 
         public abstract void Dispose();
 
-        public string Name { get; private set; }
-        public TiledProperties Properties { get; private set; }
+        public bool IsVisible { get; set; }
+        public string Name { get; }
+        public TiledProperties Properties { get; }
 
-        public abstract void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null);
+        public abstract void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null);
     }
 }

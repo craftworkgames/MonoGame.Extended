@@ -84,19 +84,22 @@ namespace Demo.TiledMaps
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(_tiledMap.BackgroundColor ?? Color.Black);
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
 
+            // you can draw the whole map all at once
+            //_spriteBatch.Draw(_tiledMap, _camera);
+
+            // or you can have more control over drawing each individual layer
             foreach (var layer in _tiledMap.Layers)
             {
                 _spriteBatch.Draw(_sprite);
-                layer.Draw(_spriteBatch);
+                _spriteBatch.Draw(layer, _camera);
             }
-                
-            //_spriteBatch.Draw(_tiledMap, _camera);
 
             _spriteBatch.End();
+
 
             var textColor = Color.Black;
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);

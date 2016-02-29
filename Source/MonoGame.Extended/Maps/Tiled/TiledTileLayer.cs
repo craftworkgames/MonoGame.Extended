@@ -18,9 +18,7 @@ namespace MonoGame.Extended.Maps.Tiled
             _map = map;
             _tiles = CreateTiles(data);
         }
-
-        private readonly SpriteBatch _renderTargetSpriteBatch;
-
+        
         public override void Dispose()
         {
             _renderTargetSpriteBatch.Dispose();
@@ -31,6 +29,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         private readonly TiledMap _map;
         private readonly TiledTile[] _tiles;
+        private readonly SpriteBatch _renderTargetSpriteBatch;
         private RenderTarget2D _renderTarget;
 
         public IEnumerable<TiledTile> Tiles => _tiles;
@@ -54,12 +53,15 @@ namespace MonoGame.Extended.Maps.Tiled
             return tiles;
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null)
+        public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null)
         {
+            if(!IsVisible)
+                return;
+
             if (_renderTarget == null)
                 _renderTarget = new RenderTarget2D(_renderTargetSpriteBatch.GraphicsDevice, Width * TileWidth, Height * TileHeight);
 
-            using (_renderTarget.BeginDraw(_renderTargetSpriteBatch.GraphicsDevice, Color.Transparent))
+            using (_renderTarget.BeginDraw(_renderTargetSpriteBatch.GraphicsDevice, backgroundColor ?? Color.Transparent))
             {
                 var vr = visibleRectangle ?? new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
                 var renderOrderFunction = GetRenderOrderFunction();
