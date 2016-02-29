@@ -14,6 +14,7 @@ namespace MonoGame.Extended.Maps.Tiled
             TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
         {
             _graphicsDevice = graphicsDevice;
+            _renderTargetSpriteBatch = new SpriteBatch(graphicsDevice);
             _renderTarget = new RenderTarget2D(graphicsDevice, width*tileWidth, height*tileHeight);
             _layers = new List<TiledLayer>();
             _objectGroups = new List<TiledObjectGroup>();
@@ -35,6 +36,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         private readonly List<TiledTileset> _tilesets;
         private readonly GraphicsDevice _graphicsDevice;
+        private readonly SpriteBatch _renderTargetSpriteBatch;
         private readonly List<TiledLayer> _layers;
         private readonly List<TiledObjectGroup> _objectGroups;
         private readonly RenderTarget2D _renderTarget;
@@ -71,7 +73,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public TiledImageLayer CreateImageLayer(string name, Texture2D texture, Vector2 position)
         {
-            var layer = new TiledImageLayer(_graphicsDevice, name, texture, position);
+            var layer = new TiledImageLayer(name, texture, position);
             _layers.Add(layer);
             return layer;
         }
@@ -100,17 +102,21 @@ namespace MonoGame.Extended.Maps.Tiled
         }
 
         
-        public void Draw(SpriteBatch spriteBatch, Rectangle visibleRectangle, bool useMapBackgroundColor = false)
+        public void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, bool useMapBackgroundColor = false)
         {
             var backgroundColor = useMapBackgroundColor && BackgroundColor.HasValue ? BackgroundColor.Value : Color.Transparent;
 
-            using (_renderTarget.BeginDraw(_graphicsDevice, backgroundColor))
-            {
-                foreach (var layer in _layers)
-                    layer.Draw(visibleRectangle);
-            }
+            //using (_renderTarget.BeginDraw(_graphicsDevice, backgroundColor))
+            //{
+                //_renderTargetSpriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
 
-            spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
+                foreach (var layer in _layers)
+                    layer.Draw(spriteBatch, visibleRectangle);
+
+                //_renderTargetSpriteBatch.End();
+            //}
+
+            //spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
         }
 
         public void Draw(SpriteBatch spriteBatch, Camera2D camera, bool useMapBackgroundColor = false)

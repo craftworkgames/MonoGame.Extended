@@ -10,9 +10,9 @@ namespace MonoGame.Extended.Maps.Tiled
             tiledMap.Draw(spriteBatch, camera, useMapBackgroundColor);
         }
 
-        public static void Draw(this SpriteBatch spriteBatch, TiledTileLayer tileLayer, Rectangle visibleRectangle)
+        public static void Draw(this SpriteBatch spriteBatch, TiledLayer layer, Rectangle visibleRectangle)
         {
-            tileLayer.Draw(spriteBatch, visibleRectangle);
+            layer.Draw(spriteBatch, visibleRectangle);
         }
     }
 }

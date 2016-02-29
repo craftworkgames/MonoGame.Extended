@@ -14,14 +14,16 @@ namespace MonoGame.Extended.Maps.Tiled
             Width = width;
             Height = height;
 
+            _renderTargetSpriteBatch = new SpriteBatch(graphicsDevice);
             _map = map;
-            _spriteBatch = new SpriteBatch(graphicsDevice);
             _tiles = CreateTiles(data);
         }
 
+        private readonly SpriteBatch _renderTargetSpriteBatch;
+
         public override void Dispose()
         {
-            _spriteBatch.Dispose();
+            _renderTargetSpriteBatch.Dispose();
         }
 
         public int Width { get; }
@@ -29,7 +31,6 @@ namespace MonoGame.Extended.Maps.Tiled
 
         private readonly TiledMap _map;
         private readonly TiledTile[] _tiles;
-        private readonly SpriteBatch _spriteBatch;
         private RenderTarget2D _renderTarget;
 
         public IEnumerable<TiledTile> Tiles => _tiles;
@@ -53,43 +54,41 @@ namespace MonoGame.Extended.Maps.Tiled
             return tiles;
         }
 
-        public override void Draw(Rectangle visibleRectangle)
+        public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null)
         {
-            var renderOrderFunction = GetRenderOrderFunction();
-            var tileLocationFunction = GetTileLocationFunction();
-            var firstCol = visibleRectangle.Left < 0 ? 0 : (int)Math.Floor(visibleRectangle.Left / (float)_map.TileWidth);
-            var firstRow = visibleRectangle.Top < 0 ? 0 : (int)Math.Floor(visibleRectangle.Top / (float)_map.TileHeight);
+            if (_renderTarget == null)
+                _renderTarget = new RenderTarget2D(_renderTargetSpriteBatch.GraphicsDevice, Width * TileWidth, Height * TileHeight);
 
-            // +3 to cover any gaps
-            var columns = Math.Min(_map.Width, visibleRectangle.Width / _map.TileWidth) + 3;
-            var rows = Math.Min(_map.Height, visibleRectangle.Height / _map.TileHeight) + 3;
-
-            _spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-
-            foreach (var tile in renderOrderFunction(firstCol, firstRow, firstCol + columns, firstRow + rows))
+            using (_renderTarget.BeginDraw(_renderTargetSpriteBatch.GraphicsDevice, Color.Transparent))
             {
-                var region = tile != null ? _map.GetTileRegion(tile.Id) : null;
+                var vr = visibleRectangle ?? new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
+                var renderOrderFunction = GetRenderOrderFunction();
+                var tileLocationFunction = GetTileLocationFunction();
+                var firstCol = vr.Left < 0 ? 0 : (int)Math.Floor(vr.Left / (float)_map.TileWidth);
+                var firstRow = vr.Top < 0 ? 0 : (int)Math.Floor(vr.Top / (float)_map.TileHeight);
 
-                if (region != null)
+                // +3 to cover any gaps
+                var columns = Math.Min(_map.Width, vr.Width / _map.TileWidth) + 3;
+                var rows = Math.Min(_map.Height, vr.Height / _map.TileHeight) + 3;
+
+                _renderTargetSpriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+
+                foreach (var tile in renderOrderFunction(firstCol, firstRow, firstCol + columns, firstRow + rows))
                 {
-                    var point = tileLocationFunction(tile);
-                    var destinationRectangle = new Rectangle(point.X, point.Y, region.Width, region.Height);
-                    _spriteBatch.Draw(region, destinationRectangle, Color.White);
+                    var region = tile != null ? _map.GetTileRegion(tile.Id) : null;
+
+                    if (region != null)
+                    {
+                        var point = tileLocationFunction(tile);
+                        var destinationRectangle = new Rectangle(point.X, point.Y, region.Width, region.Height);
+                        _renderTargetSpriteBatch.Draw(region, destinationRectangle, Color.White);
+                    }
                 }
+
+                _renderTargetSpriteBatch.End();
             }
 
-            _spriteBatch.End();
-        }
-
-        public void Draw(SpriteBatch spriteBatch, Rectangle visibleRectangle)
-        {
-            if(_renderTarget == null)
-                _renderTarget = new RenderTarget2D(_spriteBatch.GraphicsDevice, Width * TileWidth, Height * TileHeight);
-
-            using (_renderTarget.BeginDraw(_spriteBatch.GraphicsDevice, Color.Transparent))
-            {
-                Draw(visibleRectangle);
-            }
+            spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
         }
 
         private Func<TiledTile, Point> GetTileLocationFunction()

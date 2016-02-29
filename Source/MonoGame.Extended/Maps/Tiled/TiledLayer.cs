@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
@@ -16,6 +17,6 @@ namespace MonoGame.Extended.Maps.Tiled
         public string Name { get; private set; }
         public TiledProperties Properties { get; private set; }
 
-        public abstract void Draw(Rectangle visibleRectangle);
+        public abstract void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null);
     }
 }

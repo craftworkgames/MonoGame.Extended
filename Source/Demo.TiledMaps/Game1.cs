@@ -87,8 +87,15 @@ namespace Demo.TiledMaps
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _spriteBatch.Draw(_sprite);
-            _spriteBatch.Draw(_tiledMap, _camera);
+
+            foreach (var layer in _tiledMap.Layers)
+            {
+                _spriteBatch.Draw(_sprite);
+                layer.Draw(_spriteBatch);
+            }
+                
+            //_spriteBatch.Draw(_tiledMap, _camera);
+
             _spriteBatch.End();
 
             var textColor = Color.Black;
