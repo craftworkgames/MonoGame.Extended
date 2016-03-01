@@ -65,16 +65,18 @@ namespace MonoGame.Extended.Maps.Tiled
             var groupName = reader.ReadString();
             var visible = reader.ReadBoolean();
             var opacity = reader.ReadSingle();
+            var count = reader.ReadInt32();
+            var objects = new TiledObject[count];
 
-            var objCount = reader.ReadInt32();
-            var objects = new TiledObject[objCount];
-            for (var i = 0; i < objCount; i++)
+            for (var i = 0; i < count; i++)
             {
-                objects[i] = new TiledObject(   reader.ReadInt32(),
-                                                reader.ReadInt32(),
-                                                reader.ReadInt32(),
-                                                reader.ReadInt32(),
-                                                reader.ReadInt32());
+                var id = reader.ReadInt32();
+                var x = reader.ReadInt32();
+                var y = reader.ReadInt32();
+                var width = reader.ReadInt32();
+                var height = reader.ReadInt32();
+
+                objects[i] = new TiledObject(id, x, y, width, height) { IsVisible = visible, Opacity = opacity };
                 ReadCustomProperties(reader, objects[i].Properties);
             }
 
@@ -92,19 +94,24 @@ namespace MonoGame.Extended.Maps.Tiled
         private static TiledLayer ReadLayer(ContentReader reader, TiledMap tiledMap)
         {
             var layerName = reader.ReadString();
-            // ReSharper disable UnusedVariable
             var visible = reader.ReadBoolean();
             var opacity = reader.ReadSingle();
-            // ReSharper restore UnusedVariable
             var layerType = reader.ReadString();
+            var layer = ReadLayerTypeProperties(reader, tiledMap, layerName, layerType);
+            layer.IsVisible = visible;
+            layer.Opacity = opacity;
+            return layer;
+        }
 
+        private static TiledLayer ReadLayerTypeProperties(ContentReader reader, TiledMap tiledMap, string layerName, string layerType)
+        {
             if (layerType == "TileLayer")
                 return ReadTileLayer(reader, tiledMap, layerName);
 
             if (layerType == "ImageLayer")
                 return ReadImageLayer(reader, tiledMap, layerName);
 
-            throw new NotSupportedException(string.Format("Layer type {0} is not supported", layerType));
+            throw new NotSupportedException($"Layer type {layerType} is not supported");
         }
 
         private static TiledTileLayer ReadTileLayer(ContentReader reader, TiledMap tileMap, string layerName)
@@ -115,11 +122,7 @@ namespace MonoGame.Extended.Maps.Tiled
             for (var d = 0; d < tileDataCount; d++)
                 tileData[d] = reader.ReadInt32();
 
-            return tileMap.CreateTileLayer(
-                name: layerName,
-                width: reader.ReadInt32(),
-                height: reader.ReadInt32(),
-                data: tileData);
+            return tileMap.CreateTileLayer(name: layerName, width: reader.ReadInt32(), height: reader.ReadInt32(), data: tileData);
         }
 
         private static TiledImageLayer ReadImageLayer(ContentReader reader, TiledMap tileMap, string layerName)
@@ -127,6 +130,7 @@ namespace MonoGame.Extended.Maps.Tiled
             var assetName = reader.GetRelativeAssetPath(reader.ReadString());
             var texture = reader.ContentManager.Load<Texture2D>(assetName);
             var position = reader.ReadVector2();
+
             return tileMap.CreateImageLayer(layerName, texture, position);
         }
     }

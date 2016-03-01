@@ -1,7 +1,4 @@
-﻿using System;
-using MonoGame.Extended.Shapes;
-
-namespace MonoGame.Extended.Maps.Tiled
+﻿namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledObjectGroup
     {
@@ -12,8 +9,8 @@ namespace MonoGame.Extended.Maps.Tiled
             Properties = new TiledProperties();
         }
 
-        public string Name { get; private set; }
-        public TiledObject[] Objects { get; private set; }
-        public TiledProperties Properties { get; private set; }
+        public string Name { get; }
+        public TiledObject[] Objects { get; }
+        public TiledProperties Properties { get; }
     }
 }

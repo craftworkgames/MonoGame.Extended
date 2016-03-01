@@ -66,8 +66,8 @@ namespace MonoGame.Extended.Maps.Tiled
                 var vr = visibleRectangle ?? new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
                 var renderOrderFunction = GetRenderOrderFunction();
                 var tileLocationFunction = GetTileLocationFunction();
-                var firstCol = vr.Left < 0 ? 0 : (int)Math.Floor(vr.Left / (float)_map.TileWidth);
-                var firstRow = vr.Top < 0 ? 0 : (int)Math.Floor(vr.Top / (float)_map.TileHeight);
+                var firstCol = vr.Left < 0 ? 0 : (int) Math.Floor(vr.Left / (float)_map.TileWidth);
+                var firstRow = vr.Top < 0 ? 0 : (int) Math.Floor(vr.Top / (float)_map.TileHeight);
 
                 // +3 to cover any gaps
                 var columns = Math.Min(_map.Width, vr.Width / _map.TileWidth) + 3;
@@ -83,7 +83,7 @@ namespace MonoGame.Extended.Maps.Tiled
                     {
                         var point = tileLocationFunction(tile);
                         var destinationRectangle = new Rectangle(point.X, point.Y, region.Width, region.Height);
-                        _renderTargetSpriteBatch.Draw(region, destinationRectangle, Color.White);
+                        _renderTargetSpriteBatch.Draw(region, destinationRectangle, Color.White * Opacity);
                     }
                 }
 

@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Maps.Tiled
             if (!IsVisible)
                 return;
 
-            spriteBatch.Draw(_texture, Position, Color.White);
+            spriteBatch.Draw(_texture, Position, Color.White * Opacity);
         }
     }
 }
