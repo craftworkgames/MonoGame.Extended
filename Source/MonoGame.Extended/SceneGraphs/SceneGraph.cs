@@ -8,7 +8,7 @@ namespace MonoGame.Extended.SceneGraphs
     {
         public SceneGraph()
         {
-            RootNode = SceneNode.CreateRootNode();
+            RootNode = new SceneNode();
         }
 
         public SceneNode RootNode { get; }

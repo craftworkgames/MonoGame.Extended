@@ -82,8 +82,10 @@
     <Compile Include="Maps\Tiled\TiledObjectGroup.cs" />
     <Compile Include="MatrixExtensions.cs" />
     <Compile Include="SceneGraphs\ISceneEntity.cs" />
+    <Compile Include="SceneGraphs\SceneEntityCollection.cs" />
     <Compile Include="SceneGraphs\SceneGraph.cs" />
     <Compile Include="SceneGraphs\SceneNode.cs" />
+    <Compile Include="SceneGraphs\SceneNodeCollection.cs" />
     <Compile Include="SceneGraphs\SpriteBatchExtensions.cs" />
     <Compile Include="Shapes\SpriteBatchExtensions.cs" />
     <Compile Include="Shapes\CircleF.cs" />

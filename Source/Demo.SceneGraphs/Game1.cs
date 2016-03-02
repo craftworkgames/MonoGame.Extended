@@ -62,14 +62,18 @@ namespace Demo.SceneGraphs
             var carWheelTexture = Content.Load<Texture2D>("car-wheel");
             var carWheelSprite = new Sprite(carWheelTexture);
 
-            _carNode = _sceneGraph.RootNode.CreateChildSceneNode("car-hull", viewportAdapter.Center.ToVector2());
-            _carNode.Attach(carHullSprite);
+            _carNode = new SceneNode("car-hull", viewportAdapter.Center.ToVector2());
+            _carNode.Entities.Add(carHullSprite);
 
-            _leftWheelNode = _carNode.CreateChildSceneNode("left-wheel", new Vector2(-29, 17));
-            _leftWheelNode.Attach(carWheelSprite);
+            _leftWheelNode = new SceneNode("left-wheel", new Vector2(-29, 17));
+            _leftWheelNode.Entities.Add(carWheelSprite);
 
-            _rightWheelNode = _carNode.CreateChildSceneNode("right-wheel", new Vector2(40, 17));
-            _rightWheelNode.Attach(carWheelSprite);
+            _rightWheelNode = new SceneNode("right-wheel", new Vector2(40, 17));
+            _rightWheelNode.Entities.Add(carWheelSprite);
+
+            _carNode.Children.Add(_rightWheelNode);
+            _carNode.Children.Add(_leftWheelNode);
+            _sceneGraph.RootNode.Children.Add(_carNode);
         }
 
         protected override void UnloadContent()
