@@ -14,19 +14,13 @@ namespace MonoGame.Extended.BitmapFonts
         }
         
         public char Character { get; set; }
-        public TextureRegion2D TextureRegion { get; private set; }
+        public TextureRegion2D TextureRegion { get; }
         public int XOffset { get; set; }
         public int YOffset { get; set; }
         public int XAdvance { get; set; }
 
-        public int Width
-        {
-            get { return TextureRegion.Width; }
-        }
+        public int Width => TextureRegion.Width;
 
-        public int Height
-        {
-            get { return TextureRegion.Height; }
-        }
+        public int Height => TextureRegion.Height;
     }
 }

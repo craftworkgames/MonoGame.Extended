@@ -33,10 +33,10 @@ namespace MonoGame.Extended.Sprites
             set
             {
                 if (value < 0)
-                    throw new ArgumentOutOfRangeException("value", "FrameIndex has to be equal or higher than 0.");
+                    throw new ArgumentOutOfRangeException(nameof(value), "FrameIndex has to be equal or higher than 0.");
 
                 if (value >= _textureAtlas.RegionCount)
-                    throw new ArgumentOutOfRangeException("value", "FrameIndex cannot be higher than the ammount of frames that the sprite contains.");
+                    throw new ArgumentOutOfRangeException(nameof(value), "FrameIndex cannot be higher than the ammount of frames that the sprite contains.");
 
                 _frameIndex = value;
                 _sprite.TextureRegion = _textureAtlas[_frameIndex];
@@ -50,7 +50,7 @@ namespace MonoGame.Extended.Sprites
             set
             {
                 if (_framesPerSecond < 0)
-                    throw new ArgumentOutOfRangeException("value", "FramesPerSecond has to be equal or higher than 0.");
+                    throw new ArgumentOutOfRangeException(nameof(value), "FramesPerSecond has to be equal or higher than 0.");
 
                 _framesPerSecond = value;
             }

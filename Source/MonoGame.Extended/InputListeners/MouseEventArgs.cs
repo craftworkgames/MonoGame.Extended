@@ -24,16 +24,13 @@ namespace MonoGame.Extended.InputListeners
         // not sure if we want the time to be part of the public API?
         internal TimeSpan Time { get; private set; }
 
-        public MouseState PreviousState { get; private set; }
-        public MouseState CurrentState { get; private set; }
+        public MouseState PreviousState { get; }
+        public MouseState CurrentState { get; }
         public Point Position { get; private set; }
         public MouseButton Button { get; private set; }
         public int ScrollWheelValue { get; private set; }
         public int ScrollWheelDelta { get; private set; }
 
-        public Vector2 DistanceMoved
-        {
-            get { return CurrentState.Position.ToVector2() - PreviousState.Position.ToVector2(); }
-        }
+        public Vector2 DistanceMoved => CurrentState.Position.ToVector2() - PreviousState.Position.ToVector2();
     }
 }

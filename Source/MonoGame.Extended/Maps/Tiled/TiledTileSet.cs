@@ -35,12 +35,12 @@ namespace MonoGame.Extended.Maps.Tiled
 
         private readonly Dictionary<int, TextureRegion2D> _regions; 
 
-        public Texture2D Texture { get; private set; }
-        public int FirstId { get; private set; }
-        public int TileWidth { get; private set; }
-        public int TileHeight { get; private set; }
-        public int Spacing { get; private set; }
-        public int Margin { get; private set; }
+        public Texture2D Texture { get; }
+        public int FirstId { get; }
+        public int TileWidth { get; }
+        public int TileHeight { get; }
+        public int Spacing { get; }
+        public int Margin { get; }
         public TiledProperties Properties { get; private set; }
 
         public TextureRegion2D GetTileRegion(int id)

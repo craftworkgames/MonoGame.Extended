@@ -17,17 +17,14 @@ namespace MonoGame.Extended.InputListeners
             DragThreshold = settings.DragThreshold;
         }
 
-        public int DoubleClickMilliseconds { get; private set; }
-        public int DragThreshold { get; private set; }
+        public int DoubleClickMilliseconds { get; }
+        public int DragThreshold { get; }
 
         /// <summary>
         /// Returns true if the mouse has moved between the current and previous frames.
         /// </summary>
         /// <value><c>true</c> if the mouse has moved; otherwise, <c>false</c>.</value>
-        public bool HasMouseMoved
-        {
-            get { return _previousState.X != _currentState.X || _previousState.Y != _currentState.Y; }
-        }
+        public bool HasMouseMoved => _previousState.X != _currentState.X || _previousState.Y != _currentState.Y;
 
         private MouseState _currentState;
         private MouseState _previousState;

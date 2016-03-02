@@ -12,8 +12,6 @@ namespace MonoGame.Extended.Shapes
     [DebuggerDisplay("{DebugDisplayString,nq}")]
     public struct RectangleF : IShapeF, IEquatable<RectangleF>
     {
-        private static readonly RectangleF _emptyRectangle = new RectangleF();
-
         /// <summary>
         /// The x coordinate of the top-left corner of this <see cref="RectangleF"/>.
         /// </summary>
@@ -41,51 +39,33 @@ namespace MonoGame.Extended.Shapes
         /// <summary>
         /// Returns a <see cref="RectangleF"/> with X=0, Y=0, Width=0, Height=0.
         /// </summary>
-        public static RectangleF Empty
-        {
-            get { return _emptyRectangle; }
-        }
+        public static RectangleF Empty { get; } = new RectangleF();
 
         /// <summary>
         /// Returns the x coordinate of the left edge of this <see cref="RectangleF"/>.
         /// </summary>
-        public float Left
-        {
-            get { return X; }
-        }
+        public float Left => X;
 
         /// <summary>
         /// Returns the x coordinate of the right edge of this <see cref="RectangleF"/>.
         /// </summary>
-        public float Right
-        {
-            get { return X + Width; }
-        }
+        public float Right => X + Width;
 
         /// <summary>
         /// Returns the y coordinate of the top edge of this <see cref="RectangleF"/>.
         /// </summary>
-        public float Top
-        {
-            get { return Y; }
-        }
+        public float Top => Y;
 
         /// <summary>
         /// Returns the y coordinate of the bottom edge of this <see cref="RectangleF"/>.
         /// </summary>
-        public float Bottom
-        {
-            get { return Y + Height; }
-        }
+        public float Bottom => Y + Height;
 
         /// <summary>
         /// Whether or not this <see cref="RectangleF"/> has a <see cref="Width"/> and
         /// <see cref="Height"/> of 0, and a <see cref="Location"/> of (0, 0).
         /// </summary>
-        public bool IsEmpty
-        {
-            get { return Width.Equals(0) && Height.Equals(0) && X.Equals(0) && Y.Equals(0); }
-        }
+        public bool IsEmpty => Width.Equals(0) && Height.Equals(0) && X.Equals(0) && Y.Equals(0);
 
         /// <summary>
         /// The top-left coordinates of this <see cref="RectangleF"/>.
@@ -116,15 +96,9 @@ namespace MonoGame.Extended.Shapes
         /// <summary>
         /// A <see cref="Vector2"/> located in the center of this <see cref="RectangleF"/>.
         /// </summary>
-        public Vector2 Center
-        {
-            get { return new Vector2(X + Width / 2f, Y + Height / 2f); }
-        }
+        public Vector2 Center => new Vector2(X + Width / 2f, Y + Height / 2f);
 
-        internal string DebugDisplayString
-        {
-            get { return string.Concat(X, "  ", Y, "  ", Width, "  ", Height); }
-        }
+        internal string DebugDisplayString => string.Concat(X, "  ", Y, "  ", Width, "  ", Height);
 
         /// <summary>
         /// Creates a new instance of <see cref="RectangleF"/> struct, with the specified

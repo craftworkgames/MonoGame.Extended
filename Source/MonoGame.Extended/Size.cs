@@ -12,23 +12,14 @@ namespace MonoGame.Extended
             Height = height;
         }
 
-        public int Width { get; private set; }
-        public int Height { get; private set; }
+        public int Width { get; }
+        public int Height { get; }
 
-        public static Size Empty
-        {
-            get { return new Size(0, 0); }
-        }
+        public static Size Empty => new Size(0, 0);
 
-        public static Size MaxValue
-        {
-            get { return new Size(int.MaxValue, int.MaxValue); }
-        }
+        public static Size MaxValue => new Size(int.MaxValue, int.MaxValue);
 
-        public bool IsEmpty
-        {
-            get { return Width == 0 && Height == 0; }
-        }
+        public bool IsEmpty => Width == 0 && Height == 0;
 
         public override int GetHashCode()
         {
@@ -71,7 +62,7 @@ namespace MonoGame.Extended
 
         public override string ToString()
         {
-            return string.Format("Width: {0}, Height: {1}", Width, Height);
+            return $"Width: {Width}, Height: {Height}";
         }
     }
 }

@@ -23,10 +23,7 @@ namespace MonoGame.Extended.InputListeners
         private readonly ViewportAdapter _viewportAdapter;
         private readonly List<InputListener> _listeners;
 
-        public IEnumerable<InputListener> Listeners
-        {
-            get { return _listeners; }
-        }
+        public IEnumerable<InputListener> Listeners => _listeners;
 
         public T AddListener<T>(InputListenerSettings<T> settings)
             where T : InputListener
@@ -45,7 +42,7 @@ namespace MonoGame.Extended.InputListeners
                 .ToArray();
 
             if (!constructors.Any())
-                throw new InvalidOperationException(string.Format("No parameterless constructor defined for type {0}", typeof(T).Name));
+                throw new InvalidOperationException($"No parameterless constructor defined for type {typeof (T).Name}");
 
             var listener = (T)constructors[0].Invoke(new object[0]);
             listener.ViewportAdapter = _viewportAdapter;

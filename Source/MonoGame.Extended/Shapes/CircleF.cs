@@ -29,44 +29,29 @@ namespace MonoGame.Extended.Shapes
 	    /// <summary>
 		/// Returns a <see cref="CircleF"/> with Point = Vector2.Zero and Radius= 0.
 		/// </summary>
-		public static CircleF Empty
-		{
-			get { return _empty; }
-		}
+		public static CircleF Empty => _empty;
 
-		/// <summary>
+        /// <summary>
 		/// Returns the x coordinate of the far left point of this <see cref="CircleF"/>.
 		/// </summary>
-		public float Left
-		{
-			get { return Center.X - Radius; }
-		}
+		public float Left => Center.X - Radius;
 
-		/// <summary>
+        /// <summary>
 		/// Returns the x coordinate of the far right point of this <see cref="CircleF"/>.
 		/// </summary>
-		public float Right
-		{
-			get { return Center.X + Radius; }
-		}
+		public float Right => Center.X + Radius;
 
-		/// <summary>
+        /// <summary>
 		/// Returns the y coordinate of the far top point of this <see cref="CircleF"/>.
 		/// </summary>
-		public float Top
-		{
-			get { return Center.Y - Radius; }
-		}
+		public float Top => Center.Y - Radius;
 
-		/// <summary>
+        /// <summary>
 		/// Returns the y coordinate of the far bottom point of this <see cref="CircleF"/>.
 		/// </summary>
-		public float Bottom
-		{
-			get { return Center.Y + Radius; }
-		}
+		public float Bottom => Center.Y + Radius;
 
-		/// <summary>
+        /// <summary>
 		/// The center coordinates of this <see cref="CircleF"/>.
 		/// </summary>
 		public Point Location
@@ -78,34 +63,22 @@ namespace MonoGame.Extended.Shapes
 		/// <summary>
 		/// Returns the diameter of this <see cref="CircleF"/>
 		/// </summary>
-		public float Diameter
-		{
-			get { return Radius * 2.0f; }
-		}
+		public float Diameter => Radius * 2.0f;
 
-		/// <summary>
+        /// <summary>
 		/// Returns the Circumference of this <see cref="CircleF"/>
 		/// </summary>
-		public float Circumference
-		{
-			get { return 2.0f * MathHelper.Pi * Radius; }
-		}
+		public float Circumference => 2.0f * MathHelper.Pi * Radius;
 
-		/// <summary>
+        /// <summary>
 		/// Whether or not this <see cref="CircleF"/> has a <see cref="Center"/> and
 		/// <see cref="Radius"/> of 0.
 		/// </summary>
-		public bool IsEmpty
-		{
-			get { return Radius.Equals(0) && (Center == Vector2.Zero); }
-		}
+		public bool IsEmpty => Radius.Equals(0) && (Center == Vector2.Zero);
 
-	    internal string DebugDisplayString
-		{
-			get { return string.Format("{0} {1}", Center, Radius); }
-		}
+        internal string DebugDisplayString => $"{Center} {Radius}";
 
-	    /// <summary>
+        /// <summary>
 		/// Creates a new instance of <see cref="CircleF"/> struct, with the specified
 		/// position, and radius
 		/// </summary>
@@ -381,7 +354,7 @@ namespace MonoGame.Extended.Shapes
 		/// <returns><see cref="String"/> representation of this <see cref="CircleF"/>.</returns>
 		public override string ToString()
 		{
-			return string.Format("{{Center:{0} Radius:{1}}}", Center, Radius);
+			return $"{{Center:{Center} Radius:{Radius}}}";
 		}
 
 		/// <summary>

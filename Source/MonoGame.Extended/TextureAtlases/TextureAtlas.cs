@@ -16,18 +16,12 @@ namespace MonoGame.Extended.TextureAtlases
         
         private readonly Dictionary<string, int> _regionMap; 
 
-        public Texture2D Texture { get; private set; }
+        public Texture2D Texture { get; }
 
         private readonly List<TextureRegion2D> _regions;
-        public IEnumerable<TextureRegion2D> Regions
-        {
-            get { return _regions; }
-        }
+        public IEnumerable<TextureRegion2D> Regions => _regions;
 
-        public int RegionCount
-        {
-            get { return _regions.Count; }
-        }
+        public int RegionCount => _regions.Count;
 
         public TextureRegion2D CreateRegion(string name, int x, int y, int width, int height)
         {
@@ -75,15 +69,9 @@ namespace MonoGame.Extended.TextureAtlases
             throw new KeyNotFoundException(name);
         }
 
-        public TextureRegion2D this[string name]
-        {
-            get { return GetRegion(name); }
-        }
+        public TextureRegion2D this[string name] => GetRegion(name);
 
-        public TextureRegion2D this[int index]
-        {
-            get { return GetRegion(index); }
-        }
+        public TextureRegion2D this[int index] => GetRegion(index);
 
         public IEnumerator<TextureRegion2D> GetEnumerator()
         {
@@ -108,7 +96,7 @@ namespace MonoGame.Extended.TextureAtlases
             {
                 for (var x = margin; x < width; x += xIncrement)
                 {
-                    var regionName = string.Format("{0}{1}", texture.Name ?? "region", count);
+                    var regionName = $"{texture.Name ?? "region"}{count}";
                     textureAtlas.CreateRegion(regionName, x, y, regionWidth, regionHeight);
                     count++;
 

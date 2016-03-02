@@ -27,10 +27,10 @@ namespace MonoGame.Extended.Collisions
             CellHeight = cellHeight;
         }
 
-        public int Columns { get; private set; }
+        public int Columns { get; }
         public int Rows { get; private set; }
-        public int CellWidth { get; private set; }
-        public int CellHeight { get; private set; }
+        public int CellWidth { get; }
+        public int CellHeight { get; }
 
         private readonly CollisionGridCell[] _data;
 

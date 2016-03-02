@@ -27,8 +27,8 @@ namespace MonoGame.Extended.InputListeners
         public event EventHandler<KeyboardEventArgs> KeyPressed;
         public event EventHandler<KeyboardEventArgs> KeyReleased;
 
-        public int InitialDelay { get; private set; }
-        public int RepeatDelay { get; private set; }
+        public int InitialDelay { get; }
+        public int RepeatDelay { get; }
 
         internal override void Update(GameTime gameTime)
         {

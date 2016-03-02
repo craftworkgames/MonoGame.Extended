@@ -16,7 +16,7 @@ namespace MonoGame.Extended
         public long TotalFrames { get; private set; }
         public float AverageFramesPerSecond { get; private set; }
         public float CurrentFramesPerSecond { get; private set; } 
-        public int MaximumSamples { get; private set; }
+        public int MaximumSamples { get; }
 
         public void Reset()
         {
