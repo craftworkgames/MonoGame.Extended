@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
-using Ionic.Zlib;
 using Microsoft.Xna.Framework.Content.Pipeline;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
@@ -73,7 +73,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 return new GZipStream(memoryStream, CompressionMode.Decompress);
 
             if (compressionMode == "zlib")
-                return new ZlibStream(memoryStream, CompressionMode.Decompress);
+                return new DeflateStream(memoryStream, CompressionMode.Decompress);
 
             return memoryStream;
         }
