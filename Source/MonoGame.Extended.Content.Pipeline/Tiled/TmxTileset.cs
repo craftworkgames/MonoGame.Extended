@@ -17,7 +17,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}", Name, Image);
+            return $"{Name}: {Image}";
         }
 
         [XmlAttribute(AttributeName = "firstgid")]

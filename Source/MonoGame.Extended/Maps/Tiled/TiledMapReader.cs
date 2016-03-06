@@ -70,13 +70,14 @@ namespace MonoGame.Extended.Maps.Tiled
 
             for (var i = 0; i < count; i++)
             {
-                var id = reader.ReadInt32();
-                var x = reader.ReadInt32();
-                var y = reader.ReadInt32();
-                var width = reader.ReadInt32();
-                var height = reader.ReadInt32();
+                var gid = reader.ReadInt32();
+                var x = reader.ReadSingle();
+                var y = reader.ReadSingle();
+                var width = reader.ReadSingle();
+                var height = reader.ReadSingle();
+                var rotaton = reader.ReadSingle();
 
-                objects[i] = new TiledObject(id, x, y, width, height) { IsVisible = visible, Opacity = opacity };
+                objects[i] = new TiledObject(gid, x, y, width, height) { IsVisible = visible, Opacity = opacity };
                 ReadCustomProperties(reader, objects[i].Properties);
             }
 
