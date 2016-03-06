@@ -59,6 +59,7 @@
     <Content Include="Content\hills.png" />
     <Content Include="Content\monogame-extended-logo.png" />
     <Content Include="Content\montserrat-32_0.png" />
+    <Content Include="Content\rpg_maker_vx_rtp_tileset_by_telles0808.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +69,7 @@
     <None Include="Content\free-tileset.json" />
     <None Include="Content\level01.tmx" />
     <None Include="Content\montserrat-32.fnt" />
+    <None Include="Content\untitled.tmx" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
