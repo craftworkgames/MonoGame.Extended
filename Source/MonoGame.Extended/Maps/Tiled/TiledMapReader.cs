@@ -70,6 +70,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
             for (var i = 0; i < count; i++)
             {
+                var id = reader.ReadInt32();
                 var gid = reader.ReadInt32();
                 var x = reader.ReadSingle();
                 var y = reader.ReadSingle();

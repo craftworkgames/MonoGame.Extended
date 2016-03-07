@@ -84,6 +84,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
                 foreach (var tmxObject in objectGroup.Objects)
                 {
+                    writer.Write(tmxObject.Id);
                     writer.Write(tmxObject.Gid);
                     writer.Write(tmxObject.X);
                     writer.Write(tmxObject.Y);

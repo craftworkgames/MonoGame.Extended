@@ -1,10 +1,16 @@
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Xml;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     public class TmxObject
     {
+        [XmlAttribute(DataType = "int", AttributeName = "id")]
+        public int Id { get; set; }
+
         [XmlAttribute(DataType = "int", AttributeName = "gid")]
         public int Gid { get; set; }
 
@@ -39,13 +45,17 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlArrayItem("property")]
         public List<TmxProperty> Properties { get; set; }
 
-        //[XmlElement(ElementName = "ellipse")]
-        //public TmxEllipse Ellipse { get; set; }
+        [XmlElement(ElementName = "ellipse")]
+        public TmxEllipse Ellipse { get; set; }
 
         //[XmlElement(ElementName = "polygon")]
         //public TmxPolygon Polygon { get; set; }
 
         //[XmlElement(ElementName = "polyline")]
         //public TmxPolyline Polyline { get; set; }
+    }
+
+    public class TmxEllipse
+    {
     }
 }
