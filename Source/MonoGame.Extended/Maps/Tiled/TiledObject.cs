@@ -2,7 +2,7 @@
 {
     public class TiledObject
     {
-        public TiledObject(int id, int x, int y, int width, int height)
+        public TiledObject(int id, float x, float y, float width, float height)
         {
             Id = id;
             X = x;
@@ -13,10 +13,10 @@
         }
 
         public int Id { get; }
-        public int X { get; }
-        public int Y { get; }
-        public int Width { get; }
-        public int Height { get; }
+        public float X { get; }
+        public float Y { get; }
+        public float Width { get; }
+        public float Height { get; }
         public TiledProperties Properties { get; }
         public bool IsVisible { get; set; }
         public float Opacity { get; set; }

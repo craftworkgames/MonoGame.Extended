@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
@@ -83,21 +82,23 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
                 writer.Write(objectGroup.Objects.Count);
 
-                foreach (var objectG in objectGroup.Objects)
+                foreach (var tmxObject in objectGroup.Objects)
                 {
-                    writer.Write(objectG.Gid);
-                    writer.Write(objectG.X);
-                    writer.Write(objectG.Y);
-                    writer.Write(objectG.Width);
-                    writer.Write(objectG.Height);
-                    WriteCustomProperties(writer, objectG.Properties);
+                    writer.Write(tmxObject.Id);
+                    writer.Write(tmxObject.Gid);
+                    writer.Write(tmxObject.X);
+                    writer.Write(tmxObject.Y);
+                    writer.Write(tmxObject.Width);
+                    writer.Write(tmxObject.Height);
+                    writer.Write(tmxObject.Rotation);
+                    WriteCustomProperties(writer, tmxObject.Properties);
                 }
 
                 WriteCustomProperties(writer, objectGroup.Properties);
             }
         }
 
-        private static void WriteCustomProperties(ContentWriter writer, List<TmxProperty> properties)
+        private static void WriteCustomProperties(ContentWriter writer, IReadOnlyCollection<TmxProperty> properties)
         {
             writer.Write(properties.Count);
 
