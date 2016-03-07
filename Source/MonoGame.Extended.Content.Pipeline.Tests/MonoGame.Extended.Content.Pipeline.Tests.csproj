@@ -90,9 +90,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="TestData\isometric.tmx" />
-    <None Include="TestData\test-object-layer.tmx">
+    <Content Include="TestData\test-object-layer.tmx">
       <SubType>Designer</SubType>
-    </None>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj">

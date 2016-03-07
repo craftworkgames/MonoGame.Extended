@@ -12,5 +12,6 @@
         public string Name { get; }
         public TiledObject[] Objects { get; }
         public TiledProperties Properties { get; }
+        public bool IsVisible { get; set; }
     }
 }

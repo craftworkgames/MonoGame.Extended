@@ -146,6 +146,38 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             Assert.IsTrue(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(data));
         }
 
+        [Test]
+        public void TiledMapImporter_ObjectLayer_Test()
+        {
+            const string filename = @"TestData\test-object-layer.tmx";
+            var map = ImportAndProcessMap(filename);
+            var tmxObjectGroup = map.ObjectGroups[0];
+            var tmxObject = tmxObjectGroup.Objects[0];
+            var tmxPolygon = tmxObjectGroup.Objects[3].Polygon;
+            var tmxPolyline = tmxObjectGroup.Objects[4].Polyline;
+
+            Assert.AreEqual(1, map.ObjectGroups.Count);
+            Assert.AreEqual("Object Layer 1", tmxObjectGroup.Name);
+            Assert.AreEqual(1, tmxObject.Id);
+            Assert.AreEqual(131.345f, tmxObject.X);
+            Assert.AreEqual(65.234f, tmxObject.Y);
+            Assert.AreEqual(311.111f, tmxObject.Width);
+            Assert.AreEqual(311.232f, tmxObject.Height);
+            Assert.AreEqual(1, tmxObject.Properties.Count);
+            Assert.AreEqual("shape", tmxObject.Properties[0].Name);
+            Assert.AreEqual("circle", tmxObject.Properties[0].Value);
+            Assert.IsNotNull(tmxObject.Ellipse);
+            Assert.IsFalse(tmxObjectGroup.Objects[1].Visible);
+            Assert.AreEqual(-1, tmxObjectGroup.Objects[1].Gid);
+            Assert.AreEqual(23, tmxObjectGroup.Objects[5].Gid);
+            Assert.AreEqual("rectangle", tmxObjectGroup.Objects[2].Type);
+            Assert.IsNotNull(tmxPolygon);
+            Assert.AreEqual("0,0 180,90 -8,275 -45,81 38,77", tmxPolygon.Points);
+            Assert.IsNotNull(tmxPolyline);
+            Assert.AreEqual("0,0 28,299 326,413 461,308", tmxPolyline.Points);
+        }
+
+
         private static TmxMap ImportAndProcessMap(string filename)
         {
             var logger = Substitute.For<ContentBuildLogger>();

@@ -70,19 +70,39 @@ namespace MonoGame.Extended.Maps.Tiled
 
             for (var i = 0; i < count; i++)
             {
+                var objectType = (TiledObjectType) reader.ReadInt32();
                 var id = reader.ReadInt32();
                 var gid = reader.ReadInt32();
                 var x = reader.ReadSingle();
                 var y = reader.ReadSingle();
                 var width = reader.ReadSingle();
                 var height = reader.ReadSingle();
-                var rotaton = reader.ReadSingle();
+                var rotation = reader.ReadSingle();
+                var name = reader.ReadString();
+                var type = reader.ReadString();
+                var isVisible = reader.ReadBoolean();
 
-                objects[i] = new TiledObject(gid, x, y, width, height) { IsVisible = visible, Opacity = opacity };
+                objects[i] = new TiledObject(objectType, id, gid >= 0 ? gid : (int?) null, x, y, width, height)
+                {
+                    IsVisible = isVisible,
+                    Opacity = opacity,
+                    Rotation = rotation,
+                    Name = name,
+                    Type = type
+                };
+
+                if (objectType == TiledObjectType.Polyline || objectType == TiledObjectType.Polygon)
+                {
+                    var pointsCount = reader.ReadInt32();
+
+                    for (var j = 0; j < pointsCount; j++)
+                        objects[i].Points.Add(reader.ReadVector2());
+                }
+
                 ReadCustomProperties(reader, objects[i].Properties);
             }
 
-            return tiledMap.CreateObjectGroup(groupName, objects);
+            return tiledMap.CreateObjectGroup(groupName, objects, visible);
         }
 
         private static void ReadCustomProperties(ContentReader reader, TiledProperties properties)

@@ -1,13 +1,16 @@
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     public class TmxObject
     {
+        public TmxObject()
+        {
+            Gid = -1;
+            Visible = true;
+        }
+
         [XmlAttribute(DataType = "int", AttributeName = "id")]
         public int Id { get; set; }
 
@@ -37,9 +40,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         
         [XmlAttribute(DataType = "boolean", AttributeName = "visible")]
         public bool Visible { get; set; }
-
-        [XmlElement(ElementName = "image")]
-        public TmxImage Image { get; set; }
         
         [XmlArray("properties")]
         [XmlArrayItem("property")]
@@ -48,14 +48,10 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlElement(ElementName = "ellipse")]
         public TmxEllipse Ellipse { get; set; }
 
-        //[XmlElement(ElementName = "polygon")]
-        //public TmxPolygon Polygon { get; set; }
+        [XmlElement(ElementName = "polygon")]
+        public TmxPolygon Polygon { get; set; }
 
-        //[XmlElement(ElementName = "polyline")]
-        //public TmxPolyline Polyline { get; set; }
-    }
-
-    public class TmxEllipse
-    {
+        [XmlElement(ElementName = "polyline")]
+        public TmxPolyline Polyline { get; set; }
     }
 }

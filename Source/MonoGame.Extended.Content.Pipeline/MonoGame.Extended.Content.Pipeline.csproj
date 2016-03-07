@@ -92,9 +92,12 @@
     <Compile Include="Tiled\TiledMapProcessorResult.cs" />
     <Compile Include="Tiled\TiledMapWriter.cs" />
     <Compile Include="Tiled\TmxData.cs" />
+    <Compile Include="Tiled\TmxEllipse.cs" />
     <Compile Include="Tiled\TmxImage.cs" />
     <Compile Include="Tiled\TmxImageLayer.cs" />
     <Compile Include="Tiled\TmxLayer.cs" />
+    <Compile Include="Tiled\TmxPolygon.cs" />
+    <Compile Include="Tiled\TmxPolyline.cs" />
     <Compile Include="Tiled\TmxTileLayer.cs" />
     <Compile Include="Tiled\TmxMap.cs" />
     <Compile Include="Tiled\TmxObject.cs" />
