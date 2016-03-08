@@ -30,6 +30,7 @@ namespace Demo.SpriteSheetAnimations
             IsMouseVisible = true;
             Window.Position = new Point(50, 50);
             Window.Title = $"MonoGame.Extended - {GetType().Name}";
+            Window.Position = Point.Zero;
         }
 
         protected override void Initialize()

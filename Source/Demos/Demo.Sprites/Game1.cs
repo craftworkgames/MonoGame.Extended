@@ -24,6 +24,7 @@ namespace Demo.Sprites
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
+            Window.Position = Point.Zero;
         }
 
         protected override void LoadContent()

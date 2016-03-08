@@ -32,6 +32,7 @@ namespace Demo.InputListeners
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
+            Window.Position = Point.Zero;
         }
 
         protected override void Initialize()

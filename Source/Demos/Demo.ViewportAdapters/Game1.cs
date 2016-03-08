@@ -25,7 +25,7 @@ namespace Demo.ViewportAdapters
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
-            Window.Position = new Point(100, 100);
+            Window.Position = Point.Zero;
 
             _graphicsDeviceManager.PreferredBackBufferWidth = 900;
             _graphicsDeviceManager.PreferredBackBufferHeight = 700;

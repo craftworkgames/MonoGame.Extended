@@ -34,6 +34,7 @@ namespace Demo.SceneGraphs
             Window.Title = "MonoGame.Extended Game";
             Window.AllowUserResizing = true;
             IsMouseVisible = true;
+            Window.Position = Point.Zero;
         }
 
         protected override void Initialize()

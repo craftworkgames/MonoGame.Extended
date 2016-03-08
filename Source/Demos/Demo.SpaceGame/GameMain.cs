@@ -41,6 +41,7 @@ namespace Demo.SpaceGame
             Content.RootDirectory = "Content";
             Window.AllowUserResizing = true;
             IsMouseVisible = true;
+            Window.Position = Point.Zero;
         }
 
         //protected override void Initialize()
