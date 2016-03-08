@@ -16,14 +16,14 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
         [JsonProperty("trimmed")]
         public bool IsTrimmed { get; set; }
 
+        [JsonProperty("pivot")]
+        public TexturePackerPoint PivotPoint { get; set; }
+
         [JsonProperty("spriteSourceSize")]
         public TexturePackerRectangle SourceRectangle { get; set; }
 
         [JsonProperty("sourceSize")]
         public TexturePackerSize SourceSize { get; set; }
-
-        [JsonProperty("pivot")]
-        public TexturePackerPoint PivotPoint { get; set; }
 
         public override string ToString()
         {

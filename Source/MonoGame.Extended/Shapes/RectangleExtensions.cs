@@ -5,7 +5,7 @@ namespace MonoGame.Extended.Shapes
     public static class RectangleExtensions
     {
         /// <summary>
-        /// Gets the corners of the rectangle in a clockwise direction starting at the top left.
+        ///     Gets the corners of the rectangle in a clockwise direction starting at the top left.
         /// </summary>
         public static Point[] GetCorners(this Rectangle rectangle)
         {
@@ -18,7 +18,7 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// Gets the corners of the rectangle in a clockwise direction starting at the top left.
+        ///     Gets the corners of the rectangle in a clockwise direction starting at the top left.
         /// </summary>
         public static Vector2[] GetCorners(this RectangleF rectangle)
         {

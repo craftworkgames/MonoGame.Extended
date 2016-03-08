@@ -8,5 +8,5 @@ namespace MonoGame.Extended.InputListeners
         Right,
         XButton1,
         XButton2
-    };
+    }
 }

@@ -1,7 +1,7 @@
-using Microsoft.Xna.Framework.Content.Pipeline;
-using MonoGame.Extended.Content.Pipeline.TextureAtlases;
 using NSubstitute;
 using NUnit.Framework;
+using Microsoft.Xna.Framework.Content.Pipeline;
+using MonoGame.Extended.Content.Pipeline.TextureAtlases;
 
 namespace MonoGame.Extended.Content.Pipeline.Tests
 {

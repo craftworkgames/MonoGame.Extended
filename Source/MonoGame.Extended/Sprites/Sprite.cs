@@ -10,9 +10,48 @@ namespace MonoGame.Extended.Sprites
 {
     public class Sprite : IMovable, IRotatable, IScalable, ISceneEntity, ISpriteBatchDrawable
     {
+        private TextureRegion2D _textureRegion;
+
+        public float Alpha { get; set; }
+        public Color Color { get; set; }
+        public SpriteEffects Effect { get; set; }
+        public bool IsVisible { get; set; }
+        public Vector2 Origin { get; set; }
+
+        public Vector2 OriginNormalized
+        {
+            get { return new Vector2(Origin.X / TextureRegion.Width, Origin.Y / TextureRegion.Height); }
+            set { Origin = new Vector2(value.X * TextureRegion.Width, value.Y * TextureRegion.Height); }
+        }
+
+        public Vector2 Position { get; set; }
+        public float Rotation { get; set; }
+        public Vector2 Scale { get; set; }
+        public object Tag { get; set; }
+
+        public TextureRegion2D TextureRegion
+        {
+            get { return _textureRegion; }
+            set
+            {
+                if (value == null)
+                {
+                    throw new InvalidOperationException("TextureRegion cannot be null");
+                }
+
+                // preserve the origin if the texture size changes
+                var originNormalized = OriginNormalized;
+                _textureRegion = value;
+                OriginNormalized = originNormalized;
+            }
+        }
+
         public Sprite(TextureRegion2D textureRegion)
         {
-            if (textureRegion == null) throw new ArgumentNullException(nameof(textureRegion));
+            if (textureRegion == null)
+            {
+                throw new ArgumentNullException(nameof(textureRegion));
+            }
 
             _textureRegion = textureRegion;
 
@@ -29,44 +68,12 @@ namespace MonoGame.Extended.Sprites
         {
         }
 
-        public float Alpha { get; set; }
-        public Color Color { get; set; }
-        public bool IsVisible { get; set; }
-        public Vector2 Position { get; set; }
-        public Vector2 Scale { get; set; }
-        public float Rotation { get; set; }
-        public Vector2 Origin { get; set; }
-        public SpriteEffects Effect { get; set; }
-        public object Tag { get; set; }
-
-        private TextureRegion2D _textureRegion;
-        public TextureRegion2D TextureRegion
-        {
-            get { return _textureRegion; }
-            set
-            {
-                if (value == null)
-                    throw new InvalidOperationException("TextureRegion cannot be null");
-
-                // preserve the origin if the texture size changes
-                var originNormalized = OriginNormalized;
-                _textureRegion = value;
-                OriginNormalized = originNormalized;
-            }
-        }
-
-        public Vector2 OriginNormalized
-        {
-            get { return new Vector2(Origin.X / TextureRegion.Width, Origin.Y / TextureRegion.Height); }
-            set { Origin = new Vector2(value.X * TextureRegion.Width, value.Y * TextureRegion.Height); }
-        }
-
         public RectangleF GetBoundingRectangle()
         {
             var corners = GetCorners();
             var min = new Vector2(corners.Min(i => i.X), corners.Min(i => i.Y));
             var max = new Vector2(corners.Max(i => i.X), corners.Max(i => i.Y));
-            return new RectangleF(min.X, min.Y, (max.X - min.X), (max.Y - min.Y));
+            return new RectangleF(min.X, min.Y, max.X - min.X, max.Y - min.Y);
         }
 
         public Vector2[] GetCorners()
@@ -92,12 +99,16 @@ namespace MonoGame.Extended.Sprites
             {
                 var matrix = Matrix.CreateRotationZ(Rotation);
 
-                for(var i = 0; i < 4; i++)
+                for (var i = 0; i < 4; i++)
+                {
                     corners[i] = Vector2.Transform(corners[i], matrix);
+                }
             }
 
             for (var i = 0; i < 4; i++)
+            {
                 corners[i] += offset;
+            }
 
             return corners;
         }

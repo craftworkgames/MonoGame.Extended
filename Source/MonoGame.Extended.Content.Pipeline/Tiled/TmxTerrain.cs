@@ -5,6 +5,16 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     public class TmxTerrain
     {
+        [XmlAttribute(AttributeName = "name")]
+        public string Name { get; set; }
+
+        [XmlArray("properties")]
+        [XmlArrayItem("property")]
+        public List<TmxProperty> Properties { get; set; }
+
+        [XmlAttribute(AttributeName = "tile")]
+        public string TileId { get; set; }
+
         public TmxTerrain()
         {
             Properties = new List<TmxProperty>();
@@ -14,15 +24,5 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         {
             return Name;
         }
-
-        [XmlAttribute(AttributeName = "name")]
-        public string Name { get; set; }
-
-        [XmlAttribute(AttributeName = "tile")]
-        public string TileId { get; set; }
-
-        [XmlArray("properties")]
-        [XmlArrayItem("property")]
-        public List<TmxProperty> Properties { get; set; }
     }
 }

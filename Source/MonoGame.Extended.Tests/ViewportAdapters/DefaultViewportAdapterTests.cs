@@ -8,10 +8,24 @@ namespace MonoGame.Extended.Tests.ViewportAdapters
     [TestFixture]
     public class DefaultViewportAdapterTests
     {
+        private Game _game;
+
+        [SetUp]
+        public void RunBeforeAnyTests()
+        {
+            _game = TestHelper.CreateGame();
+        }
+
+        [TearDown]
+        public void RunAfterAnyTests()
+        {
+            _game.Dispose();
+        }
+
         [Test]
         public void DefaultViewportAdapter_Test()
         {
-            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var graphicsDevice = _game.GraphicsDevice;
             var viewportAdapter = new DefaultViewportAdapter(graphicsDevice);
 
             graphicsDevice.Viewport = new Viewport(0, 0, 1024, 768);

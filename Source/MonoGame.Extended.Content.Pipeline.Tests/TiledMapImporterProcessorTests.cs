@@ -9,6 +9,95 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
     [TestFixture]
     public class TiledMapImporterProcessorTests
     {
+        private static TmxMap ImportAndProcessMap(string filename)
+        {
+            var logger = Substitute.For<ContentBuildLogger>();
+            var importer = new TiledMapImporter();
+            var importerContext = Substitute.For<ContentImporterContext>();
+            importerContext.Logger.Returns(logger);
+
+            var processor = new TiledMapProcessor();
+            var processorContext = Substitute.For<ContentProcessorContext>();
+            processorContext.Logger.Returns(logger);
+
+            var import = importer.Import(filename, importerContext);
+            var result = processor.Process(import, processorContext);
+
+            return result.Map;
+        }
+
+        [Test]
+        public void TiledMapImporter_Base64_Test()
+        {
+            const string filename = @"TestData\test-tileset-base64.tmx";
+            var map = ImportAndProcessMap(filename);
+            var layer = map.Layers.OfType<TmxTileLayer>().First();
+            var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
+
+            Assert.AreEqual("base64", layer.Data.Encoding);
+            Assert.IsNull(layer.Data.Compression);
+            Assert.IsTrue(new[]
+            {
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+            }.SequenceEqual(data));
+        }
+
+        [Test]
+        public void TiledMapImporter_Csv_Test()
+        {
+            const string filename = @"TestData\test-tileset-csv.tmx";
+            var map = ImportAndProcessMap(filename);
+            var layer = map.Layers.OfType<TmxTileLayer>().First();
+            var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
+
+            Assert.AreEqual("csv", layer.Data.Encoding);
+            Assert.IsNull(layer.Data.Compression);
+            Assert.IsTrue(new[]
+            {
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+            }.SequenceEqual(data));
+        }
+
+        [Test]
+        public void TiledMapImporter_Gzip_Test()
+        {
+            const string filename = @"TestData\test-tileset-gzip.tmx";
+            var map = ImportAndProcessMap(filename);
+            var layer = map.Layers.OfType<TmxTileLayer>().First();
+            var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
+
+            Assert.AreEqual("base64", layer.Data.Encoding);
+            Assert.AreEqual("gzip", layer.Data.Compression);
+            Assert.IsTrue(new[]
+            {
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+            }.SequenceEqual(data));
+        }
+
         [Test]
         public void TiledMapImporter_Import_Test()
         {
@@ -33,7 +122,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             Assert.AreEqual("42", map.Properties[0].Value);
             Assert.AreEqual(1, map.Tilesets.Count);
             Assert.AreEqual(3, map.Layers.Count);
-            Assert.AreEqual(TmxOrientation.Orthogonal,map.Orientation);
+            Assert.AreEqual(TmxOrientation.Orthogonal, map.Orientation);
 
             var tileset = map.Tilesets.First();
             Assert.AreEqual(1, tileset.FirstGid);
@@ -51,7 +140,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             Assert.AreEqual(0, tileset.TileOffset.X);
             Assert.AreEqual(0, tileset.TileOffset.Y);
 
-            var tileLayer2 = (TmxTileLayer) map.Layers[0];
+            var tileLayer2 = (TmxTileLayer)map.Layers[0];
             Assert.AreEqual("Tile Layer 2", tileLayer2.Name);
             Assert.AreEqual(1, tileLayer2.Opacity);
             Assert.AreEqual(0, tileLayer2.Properties.Count);
@@ -78,72 +167,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
 
             Assert.AreEqual("customlayerprop2", tileLayer1.Properties[1].Name);
             Assert.AreEqual("2", tileLayer1.Properties[1].Value);
-        }
-
-        [Test]
-        public void TiledMapImporter_Xml_Test()
-        {
-            const string filename = @"TestData\test-tileset-xml.tmx";
-            var map = ImportAndProcessMap(filename);
-            var layer = map.Layers.OfType<TmxTileLayer>().First();
-            var actualData = layer.Data.Tiles.Select(i => i.Gid).ToArray();
-
-            Assert.IsNull(layer.Data.Encoding);
-            Assert.IsNull(layer.Data.Compression);
-            Assert.IsTrue(new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(actualData));
-        }
-        
-        [Test]
-        public void TiledMapImporter_Csv_Test()
-        {
-            const string filename = @"TestData\test-tileset-csv.tmx";
-            var map = ImportAndProcessMap(filename);
-            var layer = map.Layers.OfType<TmxTileLayer>().First();
-            var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
-
-            Assert.AreEqual("csv", layer.Data.Encoding);
-            Assert.IsNull(layer.Data.Compression);
-            Assert.IsTrue(new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(data));
-        }
-
-        [Test]
-        public void TiledMapImporter_Base64_Test()
-        {
-            const string filename = @"TestData\test-tileset-base64.tmx";
-            var map = ImportAndProcessMap(filename);
-            var layer = map.Layers.OfType<TmxTileLayer>().First();
-            var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
-
-            Assert.AreEqual("base64", layer.Data.Encoding);
-            Assert.IsNull(layer.Data.Compression);
-            Assert.IsTrue(new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(data));
-        }
-
-        [Test]
-        public void TiledMapImporter_Gzip_Test()
-        {
-            const string filename = @"TestData\test-tileset-gzip.tmx";
-            var map = ImportAndProcessMap(filename);
-            var layer = map.Layers.OfType<TmxTileLayer>().First();
-            var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
-
-            Assert.AreEqual("base64", layer.Data.Encoding);
-            Assert.AreEqual("gzip", layer.Data.Compression);
-            Assert.IsTrue(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(data));
-        }
-
-
-        [Test]
-        public void TiledMapImporter_Zlib_Test()
-        {
-            const string filename = @"TestData\test-tileset-zlib.tmx";
-            var map = ImportAndProcessMap(filename);
-            var layer = map.Layers.OfType<TmxTileLayer>().First();
-            var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
-
-            Assert.AreEqual("base64", layer.Data.Encoding);
-            Assert.AreEqual("zlib", layer.Data.Compression);
-            Assert.IsTrue(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(data));
         }
 
         [Test]
@@ -177,22 +200,52 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             Assert.AreEqual("0,0 28,299 326,413 461,308", tmxPolyline.Points);
         }
 
-
-        private static TmxMap ImportAndProcessMap(string filename)
+        [Test]
+        public void TiledMapImporter_Xml_Test()
         {
-            var logger = Substitute.For<ContentBuildLogger>();
-            var importer = new TiledMapImporter();
-            var importerContext = Substitute.For<ContentImporterContext>();
-            importerContext.Logger.Returns(logger);
+            const string filename = @"TestData\test-tileset-xml.tmx";
+            var map = ImportAndProcessMap(filename);
+            var layer = map.Layers.OfType<TmxTileLayer>().First();
+            var actualData = layer.Data.Tiles.Select(i => i.Gid).ToArray();
 
-            var processor = new TiledMapProcessor();
-            var processorContext = Substitute.For<ContentProcessorContext>();
-            processorContext.Logger.Returns(logger);
+            Assert.IsNull(layer.Data.Encoding);
+            Assert.IsNull(layer.Data.Compression);
+            Assert.IsTrue(new[]
+            {
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+            }.SequenceEqual(actualData));
+        }
 
-            var import = importer.Import(filename, importerContext);
-            var result = processor.Process(import, processorContext);
+        [Test]
+        public void TiledMapImporter_Zlib_Test()
+        {
+            const string filename = @"TestData\test-tileset-zlib.tmx";
+            var map = ImportAndProcessMap(filename);
+            var layer = map.Layers.OfType<TmxTileLayer>().First();
+            var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
 
-            return result.Map;
+            Assert.AreEqual("base64", layer.Data.Encoding);
+            Assert.AreEqual("zlib", layer.Data.Compression);
+            Assert.IsTrue(new[]
+            {
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+            }.SequenceEqual(data));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Shapes;
@@ -8,6 +7,13 @@ namespace MonoGame.Extended.Collisions
 {
     public class CollisionGrid
     {
+        private readonly CollisionGridCell[] _data;
+        public int CellHeight { get; }
+        public int CellWidth { get; }
+
+        public int Columns { get; }
+        public int Rows { get; private set; }
+
         public CollisionGrid(int[] data, int columns, int rows, int cellWidth, int cellHeight)
         {
             _data = new CollisionGridCell[data.Length];
@@ -27,19 +33,14 @@ namespace MonoGame.Extended.Collisions
             CellHeight = cellHeight;
         }
 
-        public int Columns { get; }
-        public int Rows { get; private set; }
-        public int CellWidth { get; }
-        public int CellHeight { get; }
-
-        private readonly CollisionGridCell[] _data;
-
         public CollisionGridCell GetCellAtIndex(int column, int row)
         {
             var index = column + row * Columns;
 
             if (index < 0 || index >= _data.Length)
+            {
                 return new CollisionGridCell(this, column, row, 0);
+            }
 
             return _data[index];
         }
@@ -54,22 +55,23 @@ namespace MonoGame.Extended.Collisions
 
         public IEnumerable<CollisionGridCell> GetCellsOverlappingRectangle(RectangleF rectangle)
         {
-            var sx = (int) (rectangle.Left/CellWidth);
-            var sy = (int) (rectangle.Top/CellHeight);
-            var ex = (int) ((rectangle.Right/CellWidth) + 1);
-            var ey = (int) ((rectangle.Bottom/CellHeight) + 1);
+            var sx = (int)(rectangle.Left / CellWidth);
+            var sy = (int)(rectangle.Top / CellHeight);
+            var ex = (int)(rectangle.Right / CellWidth + 1);
+            var ey = (int)(rectangle.Bottom / CellHeight + 1);
 
             for (var y = sy; y < ey; y++)
             {
                 for (var x = sx; x < ex; x++)
+                {
                     yield return GetCellAtIndex(x, y);
+                }
             }
         }
 
         public IEnumerable<ICollidable> GetCollidables(RectangleF overlappingRectangle)
         {
-            return GetCellsOverlappingRectangle(overlappingRectangle)
-                .Where(cell => cell.Flag != CollisionGridCellFlag.Empty);
+            return GetCellsOverlappingRectangle(overlappingRectangle).Where(cell => cell.Flag != CollisionGridCellFlag.Empty);
         }
 
         public Rectangle GetCellRectangle(int column, int row)

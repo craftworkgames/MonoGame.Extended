@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
@@ -7,6 +6,16 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledTileset
     {
+        private readonly Dictionary<int, TextureRegion2D> _regions;
+        public int FirstId { get; }
+        public int Margin { get; }
+        public TiledProperties Properties { get; private set; }
+        public int Spacing { get; }
+
+        public Texture2D Texture { get; }
+        public int TileHeight { get; }
+        public int TileWidth { get; }
+
         public TiledTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
         {
             //if (texture.Width % tileWidth != 0 || texture.Height % tileHeight != 0)
@@ -32,16 +41,6 @@ namespace MonoGame.Extended.Maps.Tiled
                 }
             }
         }
-
-        private readonly Dictionary<int, TextureRegion2D> _regions; 
-
-        public Texture2D Texture { get; }
-        public int FirstId { get; }
-        public int TileWidth { get; }
-        public int TileHeight { get; }
-        public int Spacing { get; }
-        public int Margin { get; }
-        public TiledProperties Properties { get; private set; }
 
         public TextureRegion2D GetTileRegion(int id)
         {

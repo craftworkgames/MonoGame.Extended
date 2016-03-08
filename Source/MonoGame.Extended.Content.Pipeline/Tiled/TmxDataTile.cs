@@ -4,6 +4,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     public class TmxDataTile
     {
+        [XmlAttribute(AttributeName = "gid")]
+        public int Gid { get; set; }
+
         public TmxDataTile()
         {
         }
@@ -17,8 +20,5 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         {
             return Gid.ToString();
         }
-
-        [XmlAttribute(AttributeName = "gid")]
-        public int Gid { get; set; }
     }
 }

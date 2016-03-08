@@ -5,6 +5,15 @@ namespace MonoGame.Extended.Timers
 {
     public abstract class GameTimer : IUpdate
     {
+        public event EventHandler Paused;
+
+        public event EventHandler Started;
+        public event EventHandler Stopped;
+        public TimeSpan CurrentTime { get; protected set; }
+
+        public TimeSpan Interval { get; set; }
+        public TimerState State { get; protected set; }
+
         protected GameTimer(double intervalSeconds)
             : this(TimeSpan.FromSeconds(intervalSeconds))
         {
@@ -16,13 +25,16 @@ namespace MonoGame.Extended.Timers
             Restart();
         }
 
-        public event EventHandler Started;
-        public event EventHandler Stopped;
-        public event EventHandler Paused;
+        public void Update(GameTime gameTime)
+        {
+            if (State != TimerState.Started)
+            {
+                return;
+            }
 
-        public TimeSpan Interval { get; set; }
-        public TimeSpan CurrentTime { get; protected set; }
-        public TimerState State { get; protected set; }
+            CurrentTime += gameTime.ElapsedGameTime;
+            OnUpdate(gameTime);
+        }
 
         public void Start()
         {
@@ -52,14 +64,5 @@ namespace MonoGame.Extended.Timers
 
         protected abstract void OnStopped();
         protected abstract void OnUpdate(GameTime gameTime);
-
-        public void Update(GameTime gameTime)
-        {
-            if (State != TimerState.Started)
-                return;
-
-            CurrentTime += gameTime.ElapsedGameTime;
-            OnUpdate(gameTime);
-        }
     }
 }

@@ -13,7 +13,7 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 
             using (var streamReader = new StreamReader(filename))
             {
-                var deserializer = new XmlSerializer(typeof(BitmapFontFile));
+                var deserializer = new XmlSerializer(typeof (BitmapFontFile));
                 return (BitmapFontFile)deserializer.Deserialize(streamReader);
             }
         }

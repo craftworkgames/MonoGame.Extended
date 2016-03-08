@@ -10,12 +10,33 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledMap : IDisposable
     {
-        public TiledMap(GraphicsDevice graphicsDevice, int width, int height, int tileWidth, int tileHeight, 
-            TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
+        private readonly GraphicsDevice _graphicsDevice;
+        private readonly List<TiledLayer> _layers;
+
+        private readonly List<TiledTileset> _tilesets;
+        public Color? BackgroundColor { get; set; }
+        public int Height { get; }
+        public int HeightInPixels => Height * TileHeight;
+        public IEnumerable<TiledImageLayer> ImageLayers => _layers.OfType<TiledImageLayer>();
+        public IEnumerable<TiledLayer> Layers => _layers;
+
+        public List<TiledObjectGroup> ObjectGroups { get; }
+
+        public TiledMapOrientation Orientation { get; private set; }
+        public TiledProperties Properties { get; private set; }
+        public TiledRenderOrder RenderOrder { get; set; }
+        public int TileHeight { get; }
+        public IEnumerable<TiledTileLayer> TileLayers => _layers.OfType<TiledTileLayer>();
+        public int TileWidth { get; }
+
+        public int Width { get; }
+        public int WidthInPixels => Width * TileWidth;
+
+        public TiledMap(GraphicsDevice graphicsDevice, int width, int height, int tileWidth, int tileHeight, TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
         {
             _graphicsDevice = graphicsDevice;
             _layers = new List<TiledLayer>();
-            _objectGroups = new List<TiledObjectGroup>();
+            ObjectGroups = new List<TiledObjectGroup>();
             _tilesets = new List<TiledTileset>();
 
             Width = width;
@@ -25,33 +46,14 @@ namespace MonoGame.Extended.Maps.Tiled
             Properties = new TiledProperties();
             Orientation = orientation;
         }
-        
+
         public void Dispose()
         {
             foreach (var tiledLayer in _layers)
+            {
                 tiledLayer.Dispose();
+            }
         }
-
-        private readonly List<TiledTileset> _tilesets;
-        private readonly GraphicsDevice _graphicsDevice;
-        private readonly List<TiledLayer> _layers;
-        private readonly List<TiledObjectGroup> _objectGroups;
-
-        public int Width { get; }
-        public int Height { get; }
-        public int TileWidth { get; }
-        public int TileHeight { get; }
-        public Color? BackgroundColor { get; set; }
-        public TiledRenderOrder RenderOrder { get; set; }
-        public TiledProperties Properties { get; private set; }
-        public TiledMapOrientation Orientation { get; private set; }
-
-        public List<TiledObjectGroup> ObjectGroups => _objectGroups;
-        public IEnumerable<TiledLayer> Layers => _layers;
-        public IEnumerable<TiledImageLayer> ImageLayers => _layers.OfType<TiledImageLayer>();
-        public IEnumerable<TiledTileLayer> TileLayers => _layers.OfType<TiledTileLayer>();
-        public int WidthInPixels => Width * TileWidth;
-        public int HeightInPixels => Height * TileHeight;
 
         public TiledTileset CreateTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
         {
@@ -76,8 +78,11 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public TiledObjectGroup CreateObjectGroup(string name, TiledObject[] objects, bool isVisible)
         {
-            var objectGroup = new TiledObjectGroup(name, objects) {IsVisible = isVisible};
-            _objectGroups.Add(objectGroup);
+            var objectGroup = new TiledObjectGroup(name, objects)
+            {
+                IsVisible = isVisible
+            };
+            ObjectGroups.Add(objectGroup);
             return objectGroup;
         }
 
@@ -86,22 +91,22 @@ namespace MonoGame.Extended.Maps.Tiled
             return _layers.FirstOrDefault(i => i.Name == name);
         }
 
-        public T GetLayer<T>(string name)
-            where T : TiledLayer
+        public T GetLayer<T>(string name) where T : TiledLayer
         {
-            return (T) GetLayer(name);
+            return (T)GetLayer(name);
         }
 
         public TiledObjectGroup GetObjectGroup(string name)
         {
-            return _objectGroups.FirstOrDefault(i => i.Name == name);
+            return ObjectGroups.FirstOrDefault(i => i.Name == name);
         }
 
-        
         public void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null)
         {
             foreach (var layer in _layers.Where(i => i.IsVisible))
+            {
                 layer.Draw(spriteBatch, visibleRectangle);
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch, Camera2D camera)
@@ -113,12 +118,16 @@ namespace MonoGame.Extended.Maps.Tiled
         public TextureRegion2D GetTileRegion(int id)
         {
             if (id == 0)
+            {
                 return null;
+            }
 
             var tileset = _tilesets.LastOrDefault(i => i.FirstId <= id);
 
             if (tileset == null)
+            {
                 throw new InvalidOperationException($"No tileset found for id {id}");
+            }
 
             return tileset.GetTileRegion(id);
         }

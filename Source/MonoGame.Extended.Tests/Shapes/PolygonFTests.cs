@@ -28,26 +28,6 @@ namespace MonoGame.Extended.Tests.Shapes
         }
 
         [Test]
-        public void Polygon_Transform_Translation_Test()
-        {
-            var vertices = new[] 
-            {
-                new Vector2(0, 0),
-                new Vector2(10, 0),
-                new Vector2(10, 10),
-                new Vector2(0, 10)
-            };
-
-            var polygon = new PolygonF(vertices);
-            polygon.Offset(new Vector2(2, 3));
-
-            Assert.AreEqual(new Vector2(2, 3), polygon.Vertices[0]);
-            Assert.AreEqual(new Vector2(12, 3), polygon.Vertices[1]);
-            Assert.AreEqual(new Vector2(12, 13), polygon.Vertices[2]);
-            Assert.AreEqual(new Vector2(2, 13), polygon.Vertices[3]);
-        }
-
-        [Test]
         public void Polygon_Transform_Rotation_Test()
         {
             var vertices = new[]
@@ -83,6 +63,26 @@ namespace MonoGame.Extended.Tests.Shapes
             Assert.IsTrue(new Vector2(0, -0.5f).EqualsWithTolerance(polygon.Vertices[0], tolerance), "0");
             Assert.IsTrue(new Vector2(2f, 0.5f).EqualsWithTolerance(polygon.Vertices[1], tolerance), "1");
             Assert.IsTrue(new Vector2(-2f, 0.5f).EqualsWithTolerance(polygon.Vertices[2], tolerance), "2");
+        }
+
+        [Test]
+        public void Polygon_Transform_Translation_Test()
+        {
+            var vertices = new[]
+            {
+                new Vector2(0, 0),
+                new Vector2(10, 0),
+                new Vector2(10, 10),
+                new Vector2(0, 10)
+            };
+
+            var polygon = new PolygonF(vertices);
+            polygon.Offset(new Vector2(2, 3));
+
+            Assert.AreEqual(new Vector2(2, 3), polygon.Vertices[0]);
+            Assert.AreEqual(new Vector2(12, 3), polygon.Vertices[1]);
+            Assert.AreEqual(new Vector2(12, 13), polygon.Vertices[2]);
+            Assert.AreEqual(new Vector2(2, 13), polygon.Vertices[3]);
         }
     }
 }

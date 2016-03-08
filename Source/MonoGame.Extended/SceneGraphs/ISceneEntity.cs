@@ -12,13 +12,13 @@ namespace MonoGame.Extended.SceneGraphs
 
     public interface ISpriteBatchDrawable
     {
+        Color Color { get; }
+        SpriteEffects Effect { get; }
         bool IsVisible { get; }
-        TextureRegion2D TextureRegion { get; }
+        Vector2 Origin { get; }
         Vector2 Position { get; }
         float Rotation { get; }
         Vector2 Scale { get; }
-        Color Color { get; }
-        Vector2 Origin { get; }
-        SpriteEffects Effect { get; }
+        TextureRegion2D TextureRegion { get; }
     }
 }

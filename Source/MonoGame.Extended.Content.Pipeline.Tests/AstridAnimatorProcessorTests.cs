@@ -17,7 +17,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             var processor = new AstridAnimatorProcessor();
             var result = processor.Process(importerResult, null);
 
-
             Assert.AreEqual("astrid-animator-atlas", result.TextureAtlasAssetName);
             Assert.AreEqual("TestData", result.Directory);
             Assert.AreEqual(3, result.Frames.Count);

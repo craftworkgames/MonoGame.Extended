@@ -6,12 +6,12 @@ namespace MonoGame.Extended.SceneGraphs
 {
     public class SceneGraph
     {
+        public SceneNode RootNode { get; }
+
         public SceneGraph()
         {
             RootNode = new SceneNode();
         }
-
-        public SceneNode RootNode { get; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -26,10 +26,14 @@ namespace MonoGame.Extended.SceneGraphs
             {
                 var childNode = node.Children.FirstOrDefault(c => c.GetBoundingRectangle().Contains(x, y));
 
-                if(childNode != null)
+                if (childNode != null)
+                {
                     node = childNode;
+                }
                 else
+                {
                     return node;
+                }
             }
 
             return null;

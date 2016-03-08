@@ -7,6 +7,16 @@ namespace MonoGame.Extended.SceneGraphs
 {
     public class SceneNode : IMovable, IRotatable, IScalable
     {
+        public SceneNodeCollection Children { get; }
+        public SceneEntityCollection Entities { get; }
+
+        public string Name { get; set; }
+        public SceneNode Parent { get; internal set; }
+        public Vector2 Position { get; set; }
+        public float Rotation { get; set; }
+        public Vector2 Scale { get; set; }
+        public object Tag { get; set; }
+
         public SceneNode(string name)
             : this(name, Vector2.Zero, 0, Vector2.One)
         {
@@ -33,35 +43,23 @@ namespace MonoGame.Extended.SceneGraphs
         {
         }
 
-        public string Name { get; set; }
-        public Vector2 Position { get; set; }
-        public float Rotation { get; set; }
-        public Vector2 Scale { get; set; }
-        public SceneNode Parent { get; internal set; }
-        public SceneNodeCollection Children { get; }
-        public SceneEntityCollection Entities { get; }
-        public object Tag { get; set; }
-
         public RectangleF GetBoundingRectangle()
         {
             Vector2 position, scale;
             float rotation;
             GetWorldTransform().Decompose(out position, out rotation, out scale);
 
-            var rectangles = Entities
-                .Select(e =>
-                {
-                    var r = e.GetBoundingRectangle();
-                    r.Offset(position);
-                    return r;
-                })
-                .Concat(Children.Select(i => i.GetBoundingRectangle()))
-                .ToArray();
+            var rectangles = Entities.Select(e =>
+            {
+                var r = e.GetBoundingRectangle();
+                r.Offset(position);
+                return r;
+            }).Concat(Children.Select(i => i.GetBoundingRectangle())).ToArray();
             var x0 = rectangles.Min(r => r.Left);
             var y0 = rectangles.Min(r => r.Top);
             var x1 = rectangles.Max(r => r.Right);
             var y1 = rectangles.Max(r => r.Bottom);
-            
+
             return new RectangleF(x0, y0, x1 - x0, y1 - y0);
         }
 
@@ -101,7 +99,9 @@ namespace MonoGame.Extended.SceneGraphs
             }
 
             foreach (var child in Children)
+            {
                 child.Draw(spriteBatch);
+            }
         }
 
         public override string ToString()

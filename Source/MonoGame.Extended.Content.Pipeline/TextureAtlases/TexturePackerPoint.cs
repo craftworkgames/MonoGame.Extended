@@ -14,6 +14,5 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
         {
             return string.Format("{0} {1}", X, Y);
         }
-
     }
 }

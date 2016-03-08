@@ -4,11 +4,11 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {
     public class TexturePackerSize
     {
-        [JsonProperty("w")]
-        public int Width { get; set; }
-
         [JsonProperty("h")]
         public int Height { get; set; }
+
+        [JsonProperty("w")]
+        public int Width { get; set; }
 
         public override string ToString()
         {

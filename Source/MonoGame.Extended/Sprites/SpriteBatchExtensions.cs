@@ -10,18 +10,20 @@ namespace MonoGame.Extended.Sprites
         {
             Draw(spriteBatch, sprite);
         }
-        
+
         public static void Draw(this SpriteBatch spriteBatch, Sprite sprite)
         {
-            if (sprite == null) throw new ArgumentNullException(nameof(sprite));
+            if (sprite == null)
+            {
+                throw new ArgumentNullException(nameof(sprite));
+            }
 
             if (sprite.IsVisible)
             {
                 var texture = sprite.TextureRegion.Texture;
                 var sourceRectangle = sprite.TextureRegion.Bounds;
 
-                spriteBatch.Draw(texture, sprite.Position, sourceRectangle, sprite.Color * sprite.Alpha, sprite.Rotation, sprite.Origin,
-                    sprite.Scale, sprite.Effect, 0);
+                spriteBatch.Draw(texture, sprite.Position, sourceRectangle, sprite.Color * sprite.Alpha, sprite.Rotation, sprite.Origin, sprite.Scale, sprite.Effect, 0);
             }
         }
 
@@ -32,10 +34,15 @@ namespace MonoGame.Extended.Sprites
 
         public static void Draw(this SpriteBatch spriteBatch, SpriteSheetAnimator animator)
         {
-            if (animator == null) throw new ArgumentNullException(nameof(animator));
-            
+            if (animator == null)
+            {
+                throw new ArgumentNullException(nameof(animator));
+            }
+
             if (animator.IsPlaying && animator.Sprite != null)
+            {
                 Draw(spriteBatch, animator.Sprite);
+            }
         }
 
         public static SpriteSheetAnimator CreateAnimator(this Sprite sprite, SpriteSheetAnimationGroup animationGroup)

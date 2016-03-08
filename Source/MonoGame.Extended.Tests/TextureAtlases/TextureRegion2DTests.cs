@@ -1,16 +1,31 @@
+using NUnit.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
-using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests.TextureAtlases
 {
     [TestFixture]
     public class TextureRegion2DTests
     {
+        private Game _game;
+
+        [SetUp]
+        public void RunBeforeAnyTests()
+        {
+            _game = TestHelper.CreateGame();
+        }
+
+        [TearDown]
+        public void RunAfterAnyTests()
+        {
+            _game.Dispose();
+        }
+
         [Test]
         public void TextureRegion2D_FromTexture_Test()
         {
-            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var graphicsDevice = _game.GraphicsDevice;
             var texture = new Texture2D(graphicsDevice, 100, 200);
             var textureRegion = new TextureRegion2D(texture);
 
@@ -25,7 +40,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         [Test]
         public void TextureRegion2D_Specified_Test()
         {
-            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var graphicsDevice = _game.GraphicsDevice;
             var texture = new Texture2D(graphicsDevice, 100, 200);
             var textureRegion = new TextureRegion2D(texture, 10, 20, 30, 40);
 

@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests
@@ -13,12 +12,17 @@ namespace MonoGame.Extended.Tests
             Assert.AreEqual(a.Z, b.Z, delta);
         }
 
-        public static GraphicsDevice CreateGraphicsDevice()
+        public static Game CreateGame()
         {
-            return new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile.HiDef, new PresentationParameters())
+            var game = new Game();
+
+            var graphicsDeviceManager = new GraphicsDeviceManager(game)
             {
-                Viewport = new Viewport(0, 0, 800, 480)
+                PreferredBackBufferWidth = 800,
+                PreferredBackBufferHeight = 400
             };
+            graphicsDeviceManager.ApplyChanges();
+            return game;
         }
     }
 }

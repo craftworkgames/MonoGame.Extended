@@ -6,12 +6,207 @@ using Microsoft.Xna.Framework.Input;
 namespace MonoGame.Extended.InputListeners
 {
     /// <summary>
-    /// This is a listener that exposes several events for easier handling of gamepads.
-    /// <para>In order to initialise it, call the <see cref="InputListenerManager.AddListener"/> method
-    /// with a <see cref="GamePadListenerSettings"/> object.</para>
+    ///     This is a listener that exposes several events for easier handling of gamepads.
+    ///     <para>
+    ///         In order to initialise it, call the <see cref="InputListenerManager.AddListener" /> method
+    ///         with a <see cref="GamePadListenerSettings" /> object.
+    ///     </para>
     /// </summary>
     public class GamePadListener : InputListener
     {
+        private static readonly bool[] _gamePadConnections = new bool[4];
+
+        /// <summary>
+        ///     This event fires whenever a button changes from the Up
+        ///     to the Down state.
+        /// </summary>
+        public event EventHandler<GamePadEventArgs> ButtonDown;
+
+        /// <summary>
+        ///     This event fires repeatedly whenever a button is held sufficiently
+        ///     long. Use this for things like menu navigation.
+        /// </summary>
+        public event EventHandler<GamePadEventArgs> ButtonRepeated;
+
+        /// <summary>
+        ///     This event fires whenever a button changes from the Down
+        ///     to the Up state.
+        /// </summary>
+        public event EventHandler<GamePadEventArgs> ButtonUp;
+
+        /// <summary>
+        ///     This event fires whenever a controller connects or disconnects.
+        ///     <para>
+        ///         In order
+        ///         for it to work, the <see cref="CheckControllerConnections" /> property must
+        ///         be set to true.
+        ///     </para>
+        /// </summary>
+        public static event EventHandler<GamePadEventArgs> ControllerConnectionChanged;
+
+        /// <summary>
+        ///     This event fires whenever a thumbstick changes position.
+        ///     <para>
+        ///         The parameter governing the sensitivity of this functionality
+        ///         is <see cref="GamePadListenerSettings.ThumbStickDeltaTreshold" />.
+        ///     </para>
+        /// </summary>
+        public event EventHandler<GamePadEventArgs> ThumbStickMoved;
+
+        /// <summary>
+        ///     This event fires whenever a trigger changes position.
+        ///     <para>
+        ///         The parameter governing the sensitivity of this functionality
+        ///         is <see cref="GamePadListenerSettings.TriggerDeltaTreshold" />.
+        ///     </para>
+        /// </summary>
+        public event EventHandler<GamePadEventArgs> TriggerMoved;
+
+        // These buttons are not to be evaluated normally, but with the debounce filter
+        // in their respective methods.
+        private readonly Buttons[] _excludedButtons = {
+            Buttons.LeftTrigger,
+            Buttons.RightTrigger,
+            Buttons.LeftThumbstickDown,
+            Buttons.LeftThumbstickUp,
+            Buttons.LeftThumbstickRight,
+            Buttons.LeftThumbstickLeft,
+            Buttons.RightThumbstickLeft,
+            Buttons.RightThumbstickRight,
+            Buttons.RightThumbstickUp,
+            Buttons.RightThumbstickDown
+        };
+
+        private GamePadState _currentState;
+        //private int _lastPacketNumber;
+        // Implementation doesn't work, see explanation in CheckAllButtons().
+        private GameTime _gameTime;
+        private Buttons _lastButton;
+        private Buttons _lastLeftStickDirection;
+        private Buttons _lastRightStickDirection;
+        private GamePadState _lastThumbStickState;
+
+        private GamePadState _lastTriggerState;
+
+        private float _leftCurVibrationStrength;
+        private bool _leftStickDown;
+        private bool _leftTriggerDown;
+        private bool _leftVibrating;
+        private GameTime _previousGameTime;
+        private GamePadState _previousState;
+        private int _repeatedButtonTimer;
+        private float _rightCurVibrationStrength;
+        private bool _rightStickDown;
+        private bool _rightTriggerDown;
+        private bool _rightVibrating;
+        private TimeSpan _vibrationDurationLeft;
+        private TimeSpan _vibrationDurationRight;
+        private TimeSpan _vibrationStart;
+
+        private float _vibrationStrengthLeft;
+        private float _vibrationStrengthRight;
+
+        /// <summary>
+        ///     If set to true, the static event <see cref="ControllerConnectionChanged" />
+        ///     will fire when any controller changes in connectivity status.
+        ///     <para>
+        ///         This functionality requires that you have one actively updating
+        ///         <see cref="InputListenerManager" />.
+        ///     </para>
+        /// </summary>
+        public static bool CheckControllerConnections { get; set; }
+
+        /// <summary>
+        ///     The index of the controller.
+        /// </summary>
+        public PlayerIndex PlayerIndex { get; }
+
+        /// <summary>
+        ///     When a button is held down, the interval in which
+        ///     ButtonRepeated fires. Value in milliseconds.
+        /// </summary>
+        public int RepeatDelay { get; }
+
+        /// <summary>
+        ///     The amount of time a button has to be held down
+        ///     in order to fire ButtonRepeated the first time.
+        ///     Value in milliseconds.
+        /// </summary>
+        public int RepeatInitialDelay { get; }
+
+        /// <summary>
+        ///     The treshold of movement that has to be met in order
+        ///     for the listener to fire an event with the thumbstick's
+        ///     updated position.
+        ///     <para>
+        ///         In essence this defines the event's
+        ///         resolution.
+        ///     </para>
+        ///     At a value of 0 this will fire every time
+        ///     the thumbstick's position is not {x:0, y:0}.
+        /// </summary>
+        public float ThumbStickDeltaTreshold { get; }
+
+        /// <summary>
+        ///     How deep the triggers have to be depressed in order to
+        ///     register as a ButtonDown event.
+        /// </summary>
+        public float ThumbstickDownTreshold { get; }
+
+        /// <summary>
+        ///     The treshold of movement that has to be met in order
+        ///     for the listener to fire an event with the trigger's
+        ///     updated position.
+        ///     <para>
+        ///         In essence this defines the event's
+        ///         resolution.
+        ///     </para>
+        ///     At a value of 0 this will fire every time
+        ///     the trigger's position is not 0f.
+        /// </summary>
+        public float TriggerDeltaTreshold { get; }
+
+        /// <summary>
+        ///     How deep the triggers have to be depressed in order to
+        ///     register as a ButtonDown event.
+        /// </summary>
+        public float TriggerDownTreshold { get; }
+
+        /// <summary>
+        ///     Whether vibration is enabled for this controller.
+        /// </summary>
+        public bool VibrationEnabled { get; set; }
+
+        /// <summary>
+        ///     General setting for the strength of the left motor.
+        ///     This motor has a slow, deep, powerful rumble.
+        ///     <para>
+        ///         This setting will modify all future vibrations
+        ///         through this listener.
+        ///     </para>
+        /// </summary>
+        public float VibrationStrengthLeft
+        {
+            get { return _vibrationStrengthLeft; }
+            // Clamp the value, just to be sure.
+            set { _vibrationStrengthLeft = MathHelper.Clamp(value, 0, 1); }
+        }
+
+        /// <summary>
+        ///     General setting for the strength of the right motor.
+        ///     This motor has a snappy, quick, high-pitched rumble.
+        ///     <para>
+        ///         This setting will modify all future vibrations
+        ///         through this listener.
+        ///     </para>
+        /// </summary>
+        public float VibrationStrengthRight
+        {
+            get { return _vibrationStrengthRight; }
+            // Clamp the value, just to be sure.
+            set { _vibrationStrengthRight = MathHelper.Clamp(value, 0, 1); }
+        }
+
         internal GamePadListener(GamePadListenerSettings settings)
         {
             PlayerIndex = settings.PlayerIndex;
@@ -24,230 +219,81 @@ namespace MonoGame.Extended.InputListeners
             TriggerDownTreshold = settings.TriggerDownTreshold;
             RepeatInitialDelay = settings.RepeatInitialDelay;
             RepeatDelay = settings.RepeatDelay;
-            
+
             _previousGameTime = new GameTime();
             _previousState = GamePadState.Default;
         }
 
         /// <summary>
-        /// This event fires whenever a controller connects or disconnects. <para>In order
-        /// for it to work, the <see cref="CheckControllerConnections"/> property must
-        /// be set to true.</para>
-        /// </summary>
-        public static event EventHandler<GamePadEventArgs> ControllerConnectionChanged;
-
-        /// <summary>
-        /// This event fires whenever a button changes from the Up
-        /// to the Down state.
-        /// </summary>
-        public event EventHandler<GamePadEventArgs> ButtonDown;
-
-        /// <summary>
-        /// This event fires whenever a button changes from the Down
-        /// to the Up state.
-        /// </summary>
-        public event EventHandler<GamePadEventArgs> ButtonUp;
-
-        /// <summary>
-        /// This event fires repeatedly whenever a button is held sufficiently
-        /// long. Use this for things like menu navigation.
-        /// </summary>
-        public event EventHandler<GamePadEventArgs> ButtonRepeated;
-
-        /// <summary>
-        /// This event fires whenever a thumbstick changes position.
-        /// <para>The parameter governing the sensitivity of this functionality
-        /// is <see cref="GamePadListenerSettings.ThumbStickDeltaTreshold"/>.</para>
-        /// </summary>
-        public event EventHandler<GamePadEventArgs> ThumbStickMoved;
-
-        /// <summary>
-        /// This event fires whenever a trigger changes position.
-        /// <para>The parameter governing the sensitivity of this functionality
-        /// is <see cref="GamePadListenerSettings.TriggerDeltaTreshold"/>.</para>
-        /// </summary>
-        public event EventHandler<GamePadEventArgs> TriggerMoved;
-
-        /// <summary>
-        /// If set to true, the static event <see cref="ControllerConnectionChanged"/>
-        /// will fire when any controller changes in connectivity status.
-        /// <para>This functionality requires that you have one actively updating
-        /// <see cref="InputListenerManager"/>.</para> 
-        /// </summary>
-        public static bool CheckControllerConnections { get; set; }
-
-        /// <summary>
-        /// The index of the controller.
-        /// </summary>
-        public PlayerIndex PlayerIndex { get; }
-
-        /// <summary>
-        /// When a button is held down, the interval in which
-        /// ButtonRepeated fires. Value in milliseconds.
-        /// </summary>
-        public int RepeatDelay { get; }
-
-        /// <summary>
-        /// The amount of time a button has to be held down
-        /// in order to fire ButtonRepeated the first time.
-        /// Value in milliseconds.
-        /// </summary>
-        public int RepeatInitialDelay { get; }
-
-        /// <summary>
-        /// Whether vibration is enabled for this controller.
-        /// </summary>
-        public bool VibrationEnabled { get; set; }
-
-        /// <summary>
-        /// General setting for the strength of the left motor.
-        /// This motor has a slow, deep, powerful rumble.
-        /// <para>This setting will modify all future vibrations
-        /// through this listener.</para>
-        /// </summary>
-        public float VibrationStrengthLeft
-        {
-            get { return _vibrationStrengthLeft; }
-            // Clamp the value, just to be sure.
-            set { _vibrationStrengthLeft = MathHelper.Clamp(value, 0, 1); }
-        }
-
-        /// <summary>
-        /// General setting for the strength of the right motor.
-        /// This motor has a snappy, quick, high-pitched rumble.
-        /// <para>This setting will modify all future vibrations
-        /// through this listener.</para>
-        /// </summary>
-        public float VibrationStrengthRight
-        {
-            get { return _vibrationStrengthRight; }
-            // Clamp the value, just to be sure.
-            set { _vibrationStrengthRight = MathHelper.Clamp(value, 0, 1); }
-        }
-
-        /// <summary>
-        /// The treshold of movement that has to be met in order
-        /// for the listener to fire an event with the trigger's
-        /// updated position.
-        /// <para>In essence this defines the event's
-        /// resolution.</para>
-        /// At a value of 0 this will fire every time
-        /// the trigger's position is not 0f.
-        /// </summary>
-        public float TriggerDeltaTreshold { get; }
-
-        /// <summary>
-        /// The treshold of movement that has to be met in order
-        /// for the listener to fire an event with the thumbstick's
-        /// updated position.
-        /// <para>In essence this defines the event's
-        /// resolution.</para>
-        /// At a value of 0 this will fire every time
-        /// the thumbstick's position is not {x:0, y:0}.
-        /// </summary>
-        public float ThumbStickDeltaTreshold { get; }
-
-        /// <summary>
-        /// How deep the triggers have to be depressed in order to
-        /// register as a ButtonDown event.
-        /// </summary>
-        public float TriggerDownTreshold { get; }
-
-        /// <summary>
-        /// How deep the triggers have to be depressed in order to
-        /// register as a ButtonDown event.
-        /// </summary>
-        public float ThumbstickDownTreshold { get; }
-
-        private static readonly bool[] _gamePadConnections = new bool[4];
-
-        private float _vibrationStrengthLeft;
-        private float _vibrationStrengthRight;
-
-        private GamePadState _currentState;
-        private GamePadState _previousState;
-        //private int _lastPacketNumber;
-        // Implementation doesn't work, see explanation in CheckAllButtons().
-        private GameTime _gameTime;
-        private GameTime _previousGameTime;
-        private Buttons _lastButton;
-        private int _repeatedButtonTimer;
-
-        private GamePadState _lastTriggerState;
-        private GamePadState _lastThumbStickState;
-        private bool _leftTriggerDown;
-        private bool _rightTriggerDown;
-        private bool _leftStickDown;
-        private bool _rightStickDown;
-        private Buttons _lastRightStickDirection;
-        private Buttons _lastLeftStickDirection;
-
-        private float _leftCurVibrationStrength;
-        private float _rightCurVibrationStrength;
-        private TimeSpan _vibrationStart;
-        private TimeSpan _vibrationDurationLeft;
-        private TimeSpan _vibrationDurationRight;
-        private bool _leftVibrating;
-        private bool _rightVibrating;
-
-        // These buttons are not to be evaluated normally, but with the debounce filter
-        // in their respective methods.
-        private readonly Buttons[] _excludedButtons =
-        {
-            Buttons.LeftTrigger, Buttons.RightTrigger,
-            Buttons.LeftThumbstickDown, Buttons.LeftThumbstickUp, Buttons.LeftThumbstickRight, Buttons.LeftThumbstickLeft,
-            Buttons.RightThumbstickLeft, Buttons.RightThumbstickRight, Buttons.RightThumbstickUp, Buttons.RightThumbstickDown
-        };
-
-
-        /// <summary>
-        /// Send a vibration command to the controller.
-        /// Returns true if the operation succeeded.
-        /// <para>Motor values that are unset preserve
-        /// their current vibration strength and duration.</para>
-        /// Note: Vibration currently only works on select platforms,
-        /// like Monogame.Windows.
+        ///     Send a vibration command to the controller.
+        ///     Returns true if the operation succeeded.
+        ///     <para>
+        ///         Motor values that are unset preserve
+        ///         their current vibration strength and duration.
+        ///     </para>
+        ///     Note: Vibration currently only works on select platforms,
+        ///     like Monogame.Windows.
         /// </summary>
         /// <param name="durationMs">Duration of the vibration in milliseconds.</param>
-        /// <param name="leftStrength">The strength of the left motor.
-        /// This motor has a slow, deep, powerful rumble.</param>
-        /// <param name="rightStrength">The strength of the right motor.
-        /// This motor has a snappy, quick, high-pitched rumble.</param>
+        /// <param name="leftStrength">
+        ///     The strength of the left motor.
+        ///     This motor has a slow, deep, powerful rumble.
+        /// </param>
+        /// <param name="rightStrength">
+        ///     The strength of the right motor.
+        ///     This motor has a snappy, quick, high-pitched rumble.
+        /// </param>
         /// <returns>Returns true if the operation succeeded.</returns>
-        public bool Vibrate(int durationMs, float leftStrength = float.NegativeInfinity,
-            float rightStrength = float.NegativeInfinity)
+        public bool Vibrate(int durationMs, float leftStrength = float.NegativeInfinity, float rightStrength = float.NegativeInfinity)
         {
             if (!VibrationEnabled)
+            {
                 return false;
+            }
 
             var lstrength = MathHelper.Clamp(leftStrength, 0, 1);
             var rstrength = MathHelper.Clamp(rightStrength, 0, 1);
 
             if (float.IsNegativeInfinity(leftStrength))
+            {
                 lstrength = _leftCurVibrationStrength;
+            }
             if (float.IsNegativeInfinity(rightStrength))
+            {
                 rstrength = _rightCurVibrationStrength;
+            }
 
-            var success = GamePad.SetVibration(PlayerIndex, lstrength * VibrationStrengthLeft,
-                rstrength * VibrationStrengthRight);
+            var success = GamePad.SetVibration(PlayerIndex, lstrength * VibrationStrengthLeft, rstrength * VibrationStrengthRight);
             if (success)
             {
                 _leftVibrating = true;
                 _rightVibrating = true;
 
                 if (leftStrength > 0)
+                {
                     _vibrationDurationLeft = new TimeSpan(0, 0, 0, 0, durationMs);
+                }
                 else if (lstrength > 0)
+                {
                     _vibrationDurationLeft -= _gameTime.TotalGameTime - _vibrationStart;
+                }
                 else
+                {
                     _leftVibrating = false;
+                }
 
                 if (rightStrength > 0)
+                {
                     _vibrationDurationRight = new TimeSpan(0, 0, 0, 0, durationMs);
+                }
                 else if (rstrength > 0)
+                {
                     _vibrationDurationRight -= _gameTime.TotalGameTime - _vibrationStart;
+                }
                 else
+                {
                     _rightVibrating = false;
+                }
 
                 _vibrationStart = _gameTime.TotalGameTime;
 
@@ -266,11 +312,17 @@ namespace MonoGame.Extended.InputListeners
             foreach (Buttons button in Enum.GetValues(typeof (Buttons)))
             {
                 if (_excludedButtons.Contains(button))
+                {
                     break;
+                }
                 if (_currentState.IsButtonDown(button) && _previousState.IsButtonUp(button))
+                {
                     RaiseButtonDown(button);
+                }
                 if (_currentState.IsButtonUp(button) && _previousState.IsButtonDown(button))
+                {
                     RaiseButtonUp(button);
+                }
             }
 
             // Checks triggers as buttons and floats
@@ -293,18 +345,25 @@ namespace MonoGame.Extended.InputListeners
             {
                 RaiseButtonDown(button);
                 if (button == Buttons.RightTrigger)
+                {
                     _rightTriggerDown = true;
+                }
                 else
+                {
                     _leftTriggerDown = true;
-
+                }
             }
             else if (prevdown && curstate < debounce)
             {
                 RaiseButtonUp(button);
                 if (button == Buttons.RightTrigger)
+                {
                     _rightTriggerDown = false;
+                }
                 else
+                {
                     _leftTriggerDown = false;
+                }
             }
 
             var prevstate = getButtonState(_lastTriggerState);
@@ -336,46 +395,70 @@ namespace MonoGame.Extended.InputListeners
             if (curVector.Y > curVector.X)
             {
                 if (curVector.Y > -curVector.X)
+                {
                     curdir = right ? Buttons.RightThumbstickUp : Buttons.LeftThumbstickUp;
+                }
                 else
+                {
                     curdir = right ? Buttons.RightThumbstickLeft : Buttons.LeftThumbstickLeft;
+                }
             }
             else
             {
                 if (curVector.Y < -curVector.X)
+                {
                     curdir = right ? Buttons.RightThumbstickDown : Buttons.LeftThumbstickDown;
+                }
                 else
+                {
                     curdir = right ? Buttons.RightThumbstickRight : Buttons.LeftThumbstickRight;
+                }
             }
 
             if (!prevdown && curdown)
             {
                 if (right)
+                {
                     _lastRightStickDirection = curdir;
+                }
                 else
+                {
                     _lastLeftStickDirection = curdir;
+                }
 
                 RaiseButtonDown(curdir);
                 if (button == Buttons.RightStick)
+                {
                     _rightStickDown = true;
+                }
                 else
+                {
                     _leftStickDown = true;
+                }
             }
             else if (prevdown && curVector.Length() < debounce)
             {
                 RaiseButtonUp(prevdir);
                 if (button == Buttons.RightStick)
+                {
                     _rightStickDown = false;
+                }
                 else
+                {
                     _leftStickDown = false;
+                }
             }
             else if (prevdown && curdown && curdir != prevdir)
             {
                 RaiseButtonUp(prevdir);
                 if (right)
+                {
                     _lastRightStickDirection = curdir;
+                }
                 else
+                {
                     _lastLeftStickDirection = curdir;
+                }
                 RaiseButtonDown(curdir);
             }
 
@@ -387,25 +470,27 @@ namespace MonoGame.Extended.InputListeners
                     ThumbStickMoved.Raise(this, MakeArgs(button, thumbStickState: curVector));
                     _lastThumbStickState = _currentState;
                 }
-            } else if (prevVector.Length() > ThumbStickDeltaTreshold)
+            }
+            else if (prevVector.Length() > ThumbStickDeltaTreshold)
             {
                 ThumbStickMoved.Raise(this, MakeArgs(button, thumbStickState: curVector));
                 _lastThumbStickState = _currentState;
             }
         }
-        
+
         internal static void CheckConnections()
         {
             if (!CheckControllerConnections)
-                return;
-
-            foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
             {
-                if (GamePad.GetState(index).IsConnected ^ _gamePadConnections[(int) index])  // We need more XORs in this world
+                return;
+            }
+
+            foreach (PlayerIndex index in Enum.GetValues(typeof (PlayerIndex)))
+            {
+                if (GamePad.GetState(index).IsConnected ^ _gamePadConnections[(int)index]) // We need more XORs in this world
                 {
-                    _gamePadConnections[(int) index] = !_gamePadConnections[(int) index];
-                    ControllerConnectionChanged.Raise(null, 
-                        new GamePadEventArgs(GamePadState.Default, GamePad.GetState(index), TimeSpan.Zero, index));
+                    _gamePadConnections[(int)index] = !_gamePadConnections[(int)index];
+                    ControllerConnectionChanged.Raise(null, new GamePadEventArgs(GamePadState.Default, GamePad.GetState(index), TimeSpan.Zero, index));
                 }
             }
         }
@@ -413,9 +498,13 @@ namespace MonoGame.Extended.InputListeners
         private void CheckVibrate()
         {
             if (_leftVibrating && _vibrationStart + _vibrationDurationLeft < _gameTime.TotalGameTime)
-                Vibrate(0, leftStrength: 0);
+            {
+                Vibrate(0, 0);
+            }
             if (_rightVibrating && _vibrationStart + _vibrationDurationRight < _gameTime.TotalGameTime)
+            {
                 Vibrate(0, rightStrength: 0);
+            }
         }
 
         internal override void Update(GameTime gameTime)
@@ -424,19 +513,20 @@ namespace MonoGame.Extended.InputListeners
             _currentState = GamePad.GetState(PlayerIndex);
             CheckVibrate();
             if (!_currentState.IsConnected)
+            {
                 return;
+            }
             CheckAllButtons();
             CheckRepeatButton();
             //_lastPacketNumber = _currentState.PacketNumber;
             _previousGameTime = gameTime;
             _previousState = _currentState;
         }
-        private GamePadEventArgs MakeArgs(Buttons? button, 
-            float triggerstate = 0, Vector2? thumbStickState = null)
+
+        private GamePadEventArgs MakeArgs(Buttons? button, float triggerstate = 0, Vector2? thumbStickState = null)
         {
             var elapsedTime = _gameTime.TotalGameTime - _previousGameTime.TotalGameTime;
-            return new GamePadEventArgs(_previousState, _currentState,
-                elapsedTime, PlayerIndex, button, triggerstate, thumbStickState);
+            return new GamePadEventArgs(_previousState, _currentState, elapsedTime, PlayerIndex, button, triggerstate, thumbStickState);
         }
 
         private void RaiseButtonDown(Buttons button)
@@ -457,15 +547,17 @@ namespace MonoGame.Extended.InputListeners
         {
             _repeatedButtonTimer += _gameTime.ElapsedGameTime.Milliseconds;
 
-            if(_repeatedButtonTimer < RepeatInitialDelay || _lastButton == 0)
+            if (_repeatedButtonTimer < RepeatInitialDelay || _lastButton == 0)
+            {
                 return;
+            }
 
             if (_repeatedButtonTimer < RepeatInitialDelay + RepeatDelay)
             {
                 ButtonRepeated.Raise(this, MakeArgs(_lastButton));
                 _repeatedButtonTimer = RepeatDelay + RepeatInitialDelay;
             }
-            else if (_repeatedButtonTimer > RepeatInitialDelay + RepeatDelay*2)
+            else if (_repeatedButtonTimer > RepeatInitialDelay + RepeatDelay * 2)
             {
                 ButtonRepeated.Raise(this, MakeArgs(_lastButton));
                 _repeatedButtonTimer = RepeatDelay + RepeatInitialDelay;

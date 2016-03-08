@@ -4,10 +4,10 @@ namespace MonoGame.Extended.Shapes
 {
     public interface IShapeF
     {
-        float Left { get; }
-        float Top { get; }
-        float Right { get; }
         float Bottom { get; }
+        float Left { get; }
+        float Right { get; }
+        float Top { get; }
 
         RectangleF GetBoundingRectangle();
 

@@ -36,11 +36,17 @@ namespace MonoGame.Extended.BitmapFonts
         {
             var dx = position.X;
             var dy = position.Y;
-            var sentences = text.Split(new[] {'\n'}, StringSplitOptions.None);
+            var sentences = text.Split(new[]
+            {
+                '\n'
+            }, StringSplitOptions.None);
 
             foreach (var sentence in sentences)
             {
-                var words = sentence.Split(new[] { ' ' }, StringSplitOptions.None);
+                var words = sentence.Split(new[]
+                {
+                    ' '
+                }, StringSplitOptions.None);
 
                 for (var i = 0; i < words.Length; i++)
                 {

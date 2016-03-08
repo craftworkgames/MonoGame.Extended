@@ -54,9 +54,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     writer.Write(tileLayer.Data.Tiles.Count);
 
                     foreach (var tile in tileLayer.Data.Tiles)
+                    {
                         writer.Write(tile.Gid);
+                    }
 
-                    writer.Write(tileLayer.Width); 
+                    writer.Write(tileLayer.Width);
                     writer.Write(tileLayer.Height);
                 }
 
@@ -101,10 +103,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     writer.Write(tmxObject.Visible);
 
                     if (objectType == TiledObjectType.Polygon)
+                    {
                         WritePolyPoints(writer, tmxObject.Polygon.Points);
+                    }
 
                     if (objectType == TiledObjectType.Polyline)
+                    {
                         WritePolyPoints(writer, tmxObject.Polyline.Points);
+                    }
 
                     WriteCustomProperties(writer, tmxObject.Properties);
                 }
@@ -115,30 +121,42 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         private static void WritePolyPoints(ContentWriter writer, string polyPointsString)
         {
-            var points = polyPointsString.Split(' ')
-                            .Select(p => { var xy = p.Split(','); return new Vector2(float.Parse(xy[0]), float.Parse(xy[1])); })
-                            .ToArray();
+            var points = polyPointsString.Split(' ').Select(p =>
+            {
+                var xy = p.Split(',');
+                return new Vector2(float.Parse(xy[0]), float.Parse(xy[1]));
+            }).ToArray();
 
             writer.Write(points.Length);
 
             foreach (var point in points)
+            {
                 writer.Write(point);
+            }
         }
 
         public TiledObjectType GetObjectType(TmxObject tmxObject)
         {
-            if(tmxObject.Gid >= 0)
+            if (tmxObject.Gid >= 0)
+            {
                 return TiledObjectType.Tile;
+            }
 
-            if(tmxObject.Ellipse != null)
+            if (tmxObject.Ellipse != null)
+            {
                 return TiledObjectType.Ellipse;
+            }
 
-            if(tmxObject.Polygon != null)
+            if (tmxObject.Polygon != null)
+            {
                 return TiledObjectType.Polygon;
+            }
 
-            if(tmxObject.Polyline != null)
+            if (tmxObject.Polyline != null)
+            {
                 return TiledObjectType.Polyline;
-            
+            }
+
             return TiledObjectType.Rectangle;
         }
 
@@ -156,7 +174,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         private static Color HexToColor(string hexValue)
         {
             if (string.IsNullOrEmpty(hexValue))
+            {
                 return new Color(128, 128, 128);
+            }
 
             hexValue = hexValue.TrimStart('#');
             var r = int.Parse(hexValue.Substring(0, 2), NumberStyles.HexNumber);
@@ -167,12 +187,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            return typeof(TiledMap).AssemblyQualifiedName;
+            return typeof (TiledMap).AssemblyQualifiedName;
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return typeof(TiledMapReader).AssemblyQualifiedName;
+            return typeof (TiledMapReader).AssemblyQualifiedName;
         }
 
         private static TiledRenderOrder ConvertRenderOrder(TmxRenderOrder renderOrder)

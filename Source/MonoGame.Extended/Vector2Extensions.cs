@@ -12,8 +12,8 @@ namespace MonoGame.Extended
 
         public static Vector2 Rotate(this Vector2 vector2, float radians)
         {
-            var cos = (float) Math.Cos(radians);
-            var sin = (float) Math.Sin(radians);
+            var cos = (float)Math.Cos(radians);
+            var sin = (float)Math.Sin(radians);
             return new Vector2(vector2.X * cos - vector2.Y * sin, vector2.X * sin + vector2.Y * cos);
         }
 
@@ -37,7 +37,9 @@ namespace MonoGame.Extended
         public static Vector2 Truncate(this Vector2 vector2, float maxLength)
         {
             if (vector2.LengthSquared() > maxLength * maxLength)
+            {
                 return vector2.NormalizedCopy() * maxLength;
+            }
 
             return vector2;
         }
@@ -49,7 +51,7 @@ namespace MonoGame.Extended
 
         public static float ToAngle(this Vector2 vector2)
         {
-            return (float) Math.Atan2(vector2.X, -vector2.Y);
+            return (float)Math.Atan2(vector2.X, -vector2.Y);
         }
     }
 }

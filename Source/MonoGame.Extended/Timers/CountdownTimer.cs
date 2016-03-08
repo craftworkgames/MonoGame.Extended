@@ -5,6 +5,12 @@ namespace MonoGame.Extended.Timers
 {
     public class CountdownTimer : GameTimer
     {
+        public event EventHandler Completed;
+
+        public event EventHandler TimeRemainingChanged;
+
+        public TimeSpan TimeRemaining { get; private set; }
+
         public CountdownTimer(double intervalSeconds)
             : base(intervalSeconds)
         {
@@ -14,11 +20,6 @@ namespace MonoGame.Extended.Timers
             : base(interval)
         {
         }
-
-        public event EventHandler TimeRemainingChanged;
-        public event EventHandler Completed;
-
-        public TimeSpan TimeRemaining { get; private set; }
 
         protected override void OnStopped()
         {

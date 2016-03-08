@@ -6,17 +6,17 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.BitmapFonts
 {
-    public class BitmapFont 
+    public class BitmapFont
     {
-        internal BitmapFont(IEnumerable<BitmapFontRegion> regions, int lineHeight)
-        {
-            _characterMap = regions.ToDictionary(r => r.Character);// BuildCharacterMap(textures, _fontFile);
-            LineHeight = lineHeight;
-        }
-
         private readonly Dictionary<char, BitmapFontRegion> _characterMap;
 
         public int LineHeight { get; private set; }
+
+        internal BitmapFont(IEnumerable<BitmapFontRegion> regions, int lineHeight)
+        {
+            _characterMap = regions.ToDictionary(r => r.Character); // BuildCharacterMap(textures, _fontFile);
+            LineHeight = lineHeight;
+        }
 
         public BitmapFontRegion GetCharacterRegion(char character)
         {
@@ -38,7 +38,9 @@ namespace MonoGame.Extended.BitmapFonts
                     width += fontRegion.XAdvance;
 
                     if (fontRegion.Height + fontRegion.YOffset > height)
+                    {
                         height = fontRegion.Height + fontRegion.YOffset;
+                    }
                 }
             }
 
@@ -47,7 +49,10 @@ namespace MonoGame.Extended.BitmapFonts
 
         public Vector2 MeasureString(string text)
         {
-            if (text == null) throw new ArgumentNullException(nameof(text));
+            if (text == null)
+            {
+                throw new ArgumentNullException(nameof(text));
+            }
 
             var size = GetSize(text);
             return new Vector2(size.Width, size.Height);
@@ -55,7 +60,10 @@ namespace MonoGame.Extended.BitmapFonts
 
         public Vector2 MeasureString(StringBuilder stringBuilder)
         {
-            if (stringBuilder == null) throw new ArgumentNullException(nameof(stringBuilder));
+            if (stringBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(stringBuilder));
+            }
 
             return MeasureString(stringBuilder.ToString());
         }

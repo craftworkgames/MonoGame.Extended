@@ -2,15 +2,16 @@
 {
     public class MouseListenerSettings : InputListenerSettings<MouseListener>
     {
+        public int DoubleClickMilliseconds { get; set; }
+
+        public int DragThreshold { get; set; }
+
         public MouseListenerSettings()
         {
             // initial values are windows defaults
             DoubleClickMilliseconds = 500;
             DragThreshold = 2;
         }
-
-        public int DragThreshold { get; set; }
-        public int DoubleClickMilliseconds { get; set; }
 
         internal override MouseListener CreateListener()
         {

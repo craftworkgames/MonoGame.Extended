@@ -5,6 +5,25 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     public class TmxTile
     {
+        [XmlAttribute(AttributeName = "id")]
+        public string Id { get; set; }
+
+        [XmlElement(ElementName = "terrain")]
+        public TmxTerrain Terrain { get; set; }
+
+        [XmlElement(ElementName = "image")]
+        public TmxImage Image { get; set; }
+
+        [XmlElement(ElementName = "objectgroup")]
+        public List<TmxObjectGroup> ObjectGroups { get; set; }
+
+        [XmlAttribute(AttributeName = "probability")]
+        public float Probability { get; set; }
+
+        [XmlArray("properties")]
+        [XmlArrayItem("property")]
+        public List<TmxProperty> Properties { get; set; }
+
         public TmxTile()
         {
             Probability = 1.0f;
@@ -15,24 +34,5 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         {
             return Id;
         }
-
-        [XmlAttribute(AttributeName = "id")]
-        public string Id { get; set; }
-
-        [XmlElement(ElementName = "terrain")]
-        public TmxTerrain Terrain { get; set; }
-
-        [XmlAttribute(AttributeName = "probability")]
-        public float Probability { get; set; }
-
-        [XmlElement(ElementName = "image")]
-        public TmxImage Image { get; set; }
-
-        [XmlElement(ElementName = "objectgroup")]
-        public List<TmxObjectGroup> ObjectGroups { get; set; }
-
-        [XmlArray("properties")]
-        [XmlArrayItem("property")]
-        public List<TmxProperty> Properties { get; set; }
     }
 }

@@ -11,12 +11,9 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
         {
             var data = input.Data;
             var directory = Path.GetDirectoryName(input.FilePath);
-            var frames = data.Animations
-                .SelectMany(i => i.Frames)
-                .OrderBy(f => f)
-                .Distinct();
+            var frames = data.Animations.SelectMany(i => i.Frames).OrderBy(f => f).Distinct();
 
-            return new AstridAnimatorProcessorResult(directory, data, frames); 
+            return new AstridAnimatorProcessorResult(directory, data, frames);
         }
     }
 }

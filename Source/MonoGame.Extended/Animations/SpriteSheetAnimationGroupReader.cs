@@ -33,7 +33,9 @@ namespace MonoGame.Extended.Animations
                 var frameIndices = new int[frameIndexCount];
 
                 for (var f = 0; f < frameIndexCount; f++)
+                {
                     frameIndices[f] = reader.ReadInt32();
+                }
 
                 animations.Add(new SpriteSheetAnimation(name, framesPerSecond, frameIndices));
             }

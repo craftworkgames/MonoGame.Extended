@@ -12,7 +12,9 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
             writer.Write(result.TextureAssets.Count);
 
             foreach (var textureAsset in result.TextureAssets)
+            {
                 writer.Write(textureAsset);
+            }
 
             var fontFile = result.FontFile;
             writer.Write(fontFile.Common.LineHeight);
@@ -34,12 +36,12 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            return typeof(BitmapFont).AssemblyQualifiedName;
+            return typeof (BitmapFont).AssemblyQualifiedName;
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return typeof(BitmapFontReader).AssemblyQualifiedName;
+            return typeof (BitmapFontReader).AssemblyQualifiedName;
         }
     }
 }

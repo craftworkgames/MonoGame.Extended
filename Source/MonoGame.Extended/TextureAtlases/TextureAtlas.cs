@@ -7,26 +7,42 @@ namespace MonoGame.Extended.TextureAtlases
 {
     public class TextureAtlas : IEnumerable<TextureRegion2D>
     {
+        private readonly Dictionary<string, int> _regionMap;
+
+        private readonly List<TextureRegion2D> _regions;
+
+        public TextureRegion2D this[string name] => GetRegion(name);
+
+        public TextureRegion2D this[int index] => GetRegion(index);
+
+        public int RegionCount => _regions.Count;
+        public IEnumerable<TextureRegion2D> Regions => _regions;
+
+        public Texture2D Texture { get; }
+
         public TextureAtlas(Texture2D texture)
         {
             Texture = texture;
             _regions = new List<TextureRegion2D>();
             _regionMap = new Dictionary<string, int>();
         }
-        
-        private readonly Dictionary<string, int> _regionMap; 
 
-        public Texture2D Texture { get; }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-        private readonly List<TextureRegion2D> _regions;
-        public IEnumerable<TextureRegion2D> Regions => _regions;
-
-        public int RegionCount => _regions.Count;
+        public IEnumerator<TextureRegion2D> GetEnumerator()
+        {
+            return _regions.GetEnumerator();
+        }
 
         public TextureRegion2D CreateRegion(string name, int x, int y, int width, int height)
         {
             if (_regionMap.ContainsKey(name))
+            {
                 throw new InvalidOperationException("Region {0} already exists in the texture atlas");
+            }
 
             var region = new TextureRegion2D(name, Texture, x, y, width, height);
             var index = _regions.Count;
@@ -54,7 +70,9 @@ namespace MonoGame.Extended.TextureAtlases
         public TextureRegion2D GetRegion(int index)
         {
             if (index < 0 || index >= _regions.Count)
+            {
                 throw new IndexOutOfRangeException();
+            }
 
             return _regions[index];
         }
@@ -64,23 +82,11 @@ namespace MonoGame.Extended.TextureAtlases
             int index;
 
             if (_regionMap.TryGetValue(name, out index))
+            {
                 return GetRegion(index);
+            }
 
             throw new KeyNotFoundException(name);
-        }
-
-        public TextureRegion2D this[string name] => GetRegion(name);
-
-        public TextureRegion2D this[int index] => GetRegion(index);
-
-        public IEnumerator<TextureRegion2D> GetEnumerator()
-        {
-            return _regions.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         public static TextureAtlas Create(Texture2D texture, int regionWidth, int regionHeight, int maxRegionCount = int.MaxValue, int margin = 0, int spacing = 0)
@@ -101,7 +107,9 @@ namespace MonoGame.Extended.TextureAtlases
                     count++;
 
                     if (count >= maxRegionCount)
+                    {
                         return textureAtlas;
+                    }
                 }
             }
 

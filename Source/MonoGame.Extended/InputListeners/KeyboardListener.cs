@@ -7,6 +7,19 @@ namespace MonoGame.Extended.InputListeners
 {
     public class KeyboardListener : InputListener
     {
+        public event EventHandler<KeyboardEventArgs> KeyPressed;
+        public event EventHandler<KeyboardEventArgs> KeyReleased;
+
+        public event EventHandler<KeyboardEventArgs> KeyTyped;
+        private bool _isInitial;
+        private TimeSpan _lastPressTime;
+
+        private Keys _previousKey;
+        private KeyboardState _previousState;
+
+        public int InitialDelay { get; }
+        public int RepeatDelay { get; }
+
         internal KeyboardListener()
             : this(new KeyboardListenerSettings())
         {
@@ -17,23 +30,11 @@ namespace MonoGame.Extended.InputListeners
             InitialDelay = settings.InitialDelayMilliseconds;
             RepeatDelay = settings.RepeatDelayMilliseconds;
         }
-        
-        private Keys _previousKey;
-        private TimeSpan _lastPressTime;
-        private bool _isInitial;
-        private KeyboardState _previousState;
-
-        public event EventHandler<KeyboardEventArgs> KeyTyped;
-        public event EventHandler<KeyboardEventArgs> KeyPressed;
-        public event EventHandler<KeyboardEventArgs> KeyReleased;
-
-        public int InitialDelay { get; }
-        public int RepeatDelay { get; }
 
         internal override void Update(GameTime gameTime)
         {
             var currentState = Keyboard.GetState();
-            
+
             RaisePressedEvents(gameTime, currentState);
             RaiseReleasedEvents(currentState);
             RaiseRepeatEvents(gameTime, currentState);
@@ -45,9 +46,7 @@ namespace MonoGame.Extended.InputListeners
         {
             if (!currentState.IsKeyDown(Keys.LeftAlt) && !currentState.IsKeyDown(Keys.RightAlt))
             {
-                var pressedKeys = Enum.GetValues(typeof (Keys))
-                    .Cast<Keys>()
-                    .Where(key => currentState.IsKeyDown(key) && _previousState.IsKeyUp(key));
+                var pressedKeys = Enum.GetValues(typeof (Keys)).Cast<Keys>().Where(key => currentState.IsKeyDown(key) && _previousState.IsKeyUp(key));
 
                 foreach (var key in pressedKeys)
                 {
@@ -56,7 +55,9 @@ namespace MonoGame.Extended.InputListeners
                     KeyPressed.Raise(this, args);
 
                     if (args.Character.HasValue)
+                    {
                         KeyTyped.Raise(this, args);
+                    }
 
                     _previousKey = key;
                     _lastPressTime = gameTime.TotalGameTime;
@@ -67,12 +68,12 @@ namespace MonoGame.Extended.InputListeners
 
         private void RaiseReleasedEvents(KeyboardState currentState)
         {
-            var releasedKeys = Enum.GetValues(typeof (Keys))
-                .Cast<Keys>()
-                .Where(key => currentState.IsKeyUp(key) && _previousState.IsKeyDown(key));
+            var releasedKeys = Enum.GetValues(typeof (Keys)).Cast<Keys>().Where(key => currentState.IsKeyUp(key) && _previousState.IsKeyDown(key));
 
             foreach (var key in releasedKeys)
+            {
                 KeyReleased.Raise(this, new KeyboardEventArgs(key, currentState));
+            }
         }
 
         private void RaiseRepeatEvents(GameTime gameTime, KeyboardState currentState)
@@ -84,7 +85,9 @@ namespace MonoGame.Extended.InputListeners
                 var args = new KeyboardEventArgs(_previousKey, currentState);
 
                 if (args.Character.HasValue)
+                {
                     KeyTyped.Raise(this, args);
+                }
 
                 _lastPressTime = gameTime.TotalGameTime;
                 _isInitial = false;

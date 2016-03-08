@@ -20,9 +20,7 @@ namespace MonoGame.Extended.BitmapFonts
                 assets.Add(assetName);
             }
 
-            var textures = assets
-                .Select(textureName => reader.ContentManager.Load<Texture2D>(reader.GetRelativeAssetPath(textureName)))
-                .ToArray();
+            var textures = assets.Select(textureName => reader.ContentManager.Load<Texture2D>(reader.GetRelativeAssetPath(textureName))).ToArray();
 
             var lineHeight = reader.ReadInt32();
             var regionCount = reader.ReadInt32();
@@ -42,7 +40,7 @@ namespace MonoGame.Extended.BitmapFonts
                 var textureRegion = new TextureRegion2D(textures[textureIndex], x, y, width, height);
                 regions[r] = new BitmapFontRegion(textureRegion, character, xOffset, yOffset, xAdvance);
             }
-            
+
             return new BitmapFont(regions, lineHeight);
         }
     }

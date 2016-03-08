@@ -2,26 +2,28 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 // ReSharper disable once CheckNamespace
+
 namespace MonoGame.Extended.ViewportAdapters
 {
     public abstract class ViewportAdapter
     {
+        public Rectangle BoundingRectangle => new Rectangle(0, 0, VirtualWidth, VirtualHeight);
+        public Point Center => BoundingRectangle.Center;
+
+        public GraphicsDevice GraphicsDevice { get; }
+        public Viewport Viewport => GraphicsDevice.Viewport;
+        public abstract int ViewportHeight { get; }
+        public abstract int ViewportWidth { get; }
+        public abstract int VirtualHeight { get; }
+
+        public abstract int VirtualWidth { get; }
+
         protected ViewportAdapter(GraphicsDevice graphicsDevice)
         {
             GraphicsDevice = graphicsDevice;
         }
 
-        public GraphicsDevice GraphicsDevice { get; }
-        public Viewport Viewport => GraphicsDevice.Viewport;
-
-        public abstract int VirtualWidth { get; }
-        public abstract int VirtualHeight { get; }
-        public abstract int ViewportWidth { get; }
-        public abstract int ViewportHeight { get; }
         public abstract Matrix GetScaleMatrix();
-
-        public Rectangle BoundingRectangle => new Rectangle(0, 0, VirtualWidth, VirtualHeight);
-        public Point Center => BoundingRectangle.Center;
 
         public Point PointToScreen(Point point)
         {
@@ -35,6 +37,8 @@ namespace MonoGame.Extended.ViewportAdapters
             return Vector2.Transform(new Vector2(x, y), invertedMatrix).ToPoint();
         }
 
-        public virtual void Reset() { }
+        public virtual void Reset()
+        {
+        }
     }
 }

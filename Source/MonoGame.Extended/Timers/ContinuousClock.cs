@@ -5,6 +5,10 @@ namespace MonoGame.Extended.Timers
 {
     public class ContinuousClock : GameTimer
     {
+        public event EventHandler Tick;
+
+        public TimeSpan NextTickTime { get; protected set; }
+
         public ContinuousClock(double intervalSeconds)
             : base(intervalSeconds)
         {
@@ -14,10 +18,6 @@ namespace MonoGame.Extended.Timers
             : base(interval)
         {
         }
-
-        public event EventHandler Tick;
-
-        public TimeSpan NextTickTime { get; protected set; }
 
         protected override void OnStopped()
         {

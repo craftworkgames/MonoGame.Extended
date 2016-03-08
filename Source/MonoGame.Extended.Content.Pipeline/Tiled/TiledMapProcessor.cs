@@ -21,10 +21,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 context.Logger.LogMessage($"layer: '{tileLayer.Name}', encoding: '{data.Encoding}', compression: '{data.Compression}'");
 
                 if (data.Encoding == "csv")
+                {
                     data.Tiles = DecodeCsvData(data);
+                }
 
                 if (data.Encoding == "base64")
+                {
                     data.Tiles = DecodeBase64Data(data, tileLayer.Width, tileLayer.Height);
+                }
 
                 context.Logger.LogMessage($"{data.Tiles.Count} tiles processed");
             }
@@ -39,16 +43,18 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             var decodedData = Convert.FromBase64String(encodedData);
 
             using (var stream = OpenStream(decodedData, data.Compression))
-            using (var reader = new BinaryReader(stream))
             {
-                data.Tiles = new List<TmxDataTile>();
-
-                for (var y = 0; y < width; y++)
+                using (var reader = new BinaryReader(stream))
                 {
-                    for (var x = 0; x < height; x++)
+                    data.Tiles = new List<TmxDataTile>();
+
+                    for (var y = 0; y < width; y++)
                     {
-                        var gid = reader.ReadUInt32();
-                        tileList.Add(new TmxDataTile((int) gid));
+                        for (var x = 0; x < height; x++)
+                        {
+                            var gid = reader.ReadUInt32();
+                            tileList.Add(new TmxDataTile((int)gid));
+                        }
                     }
                 }
             }
@@ -58,22 +64,25 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         private static List<TmxDataTile> DecodeCsvData(TmxData data)
         {
-            return data.Value
-                .Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
-                .Select(int.Parse)
-                .Select(gid => new TmxDataTile(gid))
-                .ToList();
+            return data.Value.Split(new[]
+            {
+                ','
+            }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).Select(gid => new TmxDataTile(gid)).ToList();
         }
 
         private static Stream OpenStream(byte[] decodedData, string compressionMode)
         {
-            var memoryStream = new MemoryStream(decodedData, writable: false);
-            
+            var memoryStream = new MemoryStream(decodedData, false);
+
             if (compressionMode == "gzip")
+            {
                 return new GZipStream(memoryStream, CompressionMode.Decompress);
+            }
 
             if (compressionMode == "zlib")
+            {
                 return new ZlibStream(memoryStream, CompressionMode.Decompress);
+            }
 
             return memoryStream;
         }

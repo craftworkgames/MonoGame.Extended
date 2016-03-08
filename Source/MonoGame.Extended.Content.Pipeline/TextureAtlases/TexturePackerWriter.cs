@@ -35,12 +35,12 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            return typeof(TextureAtlas).AssemblyQualifiedName;
+            return typeof (TextureAtlas).AssemblyQualifiedName;
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return typeof(TextureAtlasReader).AssemblyQualifiedName;
+            return typeof (TextureAtlasReader).AssemblyQualifiedName;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Shapes
 {
     public struct PolygonF : IShapeF, IEquatable<PolygonF>
     {
-        public PolygonF (IEnumerable<Vector2> vertices)
+        public PolygonF(IEnumerable<Vector2> vertices)
         {
             _localVertices = vertices.ToArray();
             _transformedVertices = _localVertices;
@@ -38,10 +38,25 @@ namespace MonoGame.Extended.Shapes
             }
         }
 
-        public float Left { get { return Vertices.Min(v => v.X); } }
-        public float Right { get { return Vertices.Max(v => v.X); } }
-        public float Top { get { return Vertices.Min(v => v.Y); } }
-        public float Bottom { get { return Vertices.Max(v => v.Y); } }
+        public float Left
+        {
+            get { return Vertices.Min(v => v.X); }
+        }
+
+        public float Right
+        {
+            get { return Vertices.Max(v => v.X); }
+        }
+
+        public float Top
+        {
+            get { return Vertices.Min(v => v.Y); }
+        }
+
+        public float Bottom
+        {
+            get { return Vertices.Max(v => v.Y); }
+        }
 
         public void Offset(Vector2 amount)
         {
@@ -69,15 +84,17 @@ namespace MonoGame.Extended.Shapes
             for (var i = 0; i < _localVertices.Length; i++)
             {
                 var p = _localVertices[i];
-                
+
                 if (isScaled)
+                {
                     p *= _scale;
+                }
 
                 // ReSharper disable once CompareOfFloatsByEqualityOperator
                 if (_rotation != 0)
                 {
-                    var cos = (float) Math.Cos(_rotation);
-                    var sin = (float) Math.Sin(_rotation);
+                    var cos = (float)Math.Cos(_rotation);
+                    var sin = (float)Math.Sin(_rotation);
                     p = new Vector2(cos * p.X - sin * p.Y, sin * p.X + cos * p.Y);
                 }
 
@@ -124,7 +141,9 @@ namespace MonoGame.Extended.Shapes
                 var y2 = vertices[(i + 1) % vertices.Length].Y;
 
                 if ((y1 <= y && y < y2 || y2 <= y && y < y1) && x < (x2 - x1) / (y2 - y1) * (y - y1) + x1)
+                {
                     intersects++;
+                }
             }
 
             return (intersects & 1) == 1;
@@ -142,7 +161,10 @@ namespace MonoGame.Extended.Shapes
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
             return obj is PolygonF && Equals((PolygonF)obj);
         }
 

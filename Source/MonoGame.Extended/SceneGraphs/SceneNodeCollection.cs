@@ -15,7 +15,9 @@ namespace MonoGame.Extended.SceneGraphs
         private void RemoveParent(SceneNode item)
         {
             if (item.Parent != _parent)
+            {
                 throw new InvalidOperationException($"{item} does not belong to parent {_parent}");
+            }
 
             item.Parent = null;
         }
@@ -23,7 +25,9 @@ namespace MonoGame.Extended.SceneGraphs
         protected override void ClearItems()
         {
             foreach (var sceneNode in Items)
+            {
                 RemoveParent(sceneNode);
+            }
 
             base.ClearItems();
         }

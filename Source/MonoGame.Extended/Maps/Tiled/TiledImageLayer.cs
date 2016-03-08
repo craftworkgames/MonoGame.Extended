@@ -7,6 +7,8 @@ namespace MonoGame.Extended.Maps.Tiled
     {
         private readonly Texture2D _texture;
 
+        public Vector2 Position { get; set; }
+
         public TiledImageLayer(string name, Texture2D texture, Vector2 position)
             : base(name)
         {
@@ -18,12 +20,12 @@ namespace MonoGame.Extended.Maps.Tiled
         {
         }
 
-        public Vector2 Position { get; set; }
-
         public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null)
         {
             if (!IsVisible)
+            {
                 return;
+            }
 
             spriteBatch.Draw(_texture, Position, Color.White * Opacity);
         }

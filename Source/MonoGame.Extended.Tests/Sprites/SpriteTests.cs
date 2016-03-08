@@ -1,33 +1,34 @@
-﻿using Microsoft.Xna.Framework;
+﻿using NSubstitute;
+using NUnit.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
-using NSubstitute;
-using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests.Sprites
 {
     [TestFixture]
     public class SpriteTests
     {
-        [Test]
-        public void Sprite_BoundingRectangleAfterPosition_Test()
-        {
-            var graphicsDevice = TestHelper.CreateGraphicsDevice();
-            var texture = Substitute.For<Texture2D>(graphicsDevice, 50, 200);
-            var sprite = new Sprite(texture)
-            {
-                Position = new Vector2(400, 240)
-            };
+        private Game _game;
 
-            Assert.AreEqual(new RectangleF(375, 140, 50, 200), sprite.GetBoundingRectangle());
+        [SetUp]
+        public void RunBeforeAnyTests()
+        {
+            _game = TestHelper.CreateGame();
+        }
+
+        [TearDown]
+        public void RunAfterAnyTests()
+        {
+            _game.Dispose();
         }
 
         [Test]
         public void Sprite_BoundingRectangleAfterOrigin_Test()
         {
-            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var graphicsDevice = _game.GraphicsDevice;
             var texture = Substitute.For<Texture2D>(graphicsDevice, 50, 200);
             var sprite = new Sprite(texture)
             {
@@ -38,22 +39,22 @@ namespace MonoGame.Extended.Tests.Sprites
         }
 
         [Test]
-        public void Sprite_BoundingRectangleAfterScale_Test()
+        public void Sprite_BoundingRectangleAfterPosition_Test()
         {
-            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var graphicsDevice = _game.GraphicsDevice;
             var texture = Substitute.For<Texture2D>(graphicsDevice, 50, 200);
             var sprite = new Sprite(texture)
             {
-                Scale = Vector2.One * 2.0f
+                Position = new Vector2(400, 240)
             };
 
-            Assert.AreEqual(new RectangleF(-50, -200, 100, 400), sprite.GetBoundingRectangle());
+            Assert.AreEqual(new RectangleF(375, 140, 50, 200), sprite.GetBoundingRectangle());
         }
 
         [Test]
         public void Sprite_BoundingRectangleAfterRotation_Test()
         {
-            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var graphicsDevice = _game.GraphicsDevice;
             var texture = Substitute.For<Texture2D>(graphicsDevice, 50, 200);
             var sprite = new Sprite(texture)
             {
@@ -64,22 +65,25 @@ namespace MonoGame.Extended.Tests.Sprites
         }
 
         [Test]
-        public void Sprite_TextureRegionIsFullTextureWhenTextureConstructorIsUsed_Test()
+        public void Sprite_BoundingRectangleAfterScale_Test()
         {
-            var graphicsDevice = TestHelper.CreateGraphicsDevice();
-            var texture = Substitute.For<Texture2D>(graphicsDevice, 100, 200);
-            var sprite = new Sprite(texture);
+            var graphicsDevice = _game.GraphicsDevice;
+            var texture = Substitute.For<Texture2D>(graphicsDevice, 50, 200);
+            var sprite = new Sprite(texture)
+            {
+                Scale = Vector2.One * 2.0f
+            };
 
-            Assert.AreEqual(new Rectangle(0, 0, 100, 200), sprite.TextureRegion.Bounds);
+            Assert.AreEqual(new RectangleF(-50, -200, 100, 400), sprite.GetBoundingRectangle());
         }
 
         [Test]
         public void Sprite_DefaultOriginIsCentre_Test()
         {
-            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var graphicsDevice = _game.GraphicsDevice;
             var texture = Substitute.For<Texture2D>(graphicsDevice, 100, 200);
             var sprite = new Sprite(texture);
-            
+
             Assert.AreEqual(new Vector2(0.5f, 0.5f), sprite.OriginNormalized);
             Assert.AreEqual(new Vector2(50, 100), sprite.Origin);
         }
@@ -87,7 +91,7 @@ namespace MonoGame.Extended.Tests.Sprites
         [Test]
         public void Sprite_PreserveNormalizedOriginWhenTextureRegionChanges_Test()
         {
-            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var graphicsDevice = _game.GraphicsDevice;
             var texture = Substitute.For<Texture2D>(graphicsDevice, 100, 100);
             var textureRegion = new TextureRegion2D(texture, 10, 20, 30, 40);
             var sprite = new Sprite(textureRegion);
@@ -99,6 +103,16 @@ namespace MonoGame.Extended.Tests.Sprites
 
             Assert.AreEqual(new Vector2(0.5f, 0.5f), sprite.OriginNormalized);
             Assert.AreEqual(new Vector2(25, 30), sprite.Origin);
+        }
+
+        [Test]
+        public void Sprite_TextureRegionIsFullTextureWhenTextureConstructorIsUsed_Test()
+        {
+            var graphicsDevice = _game.GraphicsDevice;
+            var texture = Substitute.For<Texture2D>(graphicsDevice, 100, 200);
+            var sprite = new Sprite(texture);
+
+            Assert.AreEqual(new Rectangle(0, 0, 100, 200), sprite.TextureRegion.Bounds);
         }
     }
 }

@@ -9,5 +9,5 @@ namespace MonoGame.Extended.InputListeners
         Shift = 2,
         Alt = 4,
         None = 0
-    };
+    }
 }

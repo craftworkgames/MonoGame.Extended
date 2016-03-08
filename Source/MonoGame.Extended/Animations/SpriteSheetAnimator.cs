@@ -1,14 +1,26 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Sprites;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Animations
 {
     public class SpriteSheetAnimator : IUpdate
     {
+        //public SpriteSheetAnimator()
+        //    : this(null, Enumerable.Empty<TextureRegion2D>())
+        //{
+        //}
+
+        private readonly SpriteSheetAnimationGroup _animationGroup;
+        private SpriteSheetAnimation _currentAnimation;
+        private int _frameIndex;
+        private float _nextFrameDelay;
+        private Action _onCompleteAction;
+        public bool IsLooping { get; set; }
+        public bool IsPlaying { get; private set; }
+
+        public Sprite Sprite { get; set; }
         //public SpriteSheetAnimator(Sprite sprite, TextureAtlas textureAtlas)
         //    : this(sprite, textureAtlas.Select(t => t))
         //{
@@ -41,23 +53,52 @@ namespace MonoGame.Extended.Animations
             IsLooping = true;
 
             if (Sprite != null && _animationGroup.Frames.Any())
+            {
                 Sprite.TextureRegion = _animationGroup.Frames.First();
+            }
         }
 
-        //public SpriteSheetAnimator()
-        //    : this(null, Enumerable.Empty<TextureRegion2D>())
-        //{
-        //}
+        public void Update(GameTime gameTime)
+        {
+            if (!IsPlaying || _currentAnimation == null || _currentAnimation.FrameIndicies.Length == 0)
+            {
+                return;
+            }
 
-        private SpriteSheetAnimationGroup _animationGroup;
-        private SpriteSheetAnimation _currentAnimation;
-        private float _nextFrameDelay;
-        private int _frameIndex;
-        private Action _onCompleteAction;
+            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        public Sprite Sprite { get; set; }
-        public bool IsPlaying { get; private set; }
-        public bool IsLooping { get; set; }
+            if (_nextFrameDelay <= 0)
+            {
+                _nextFrameDelay = 1.0f / _currentAnimation.FramesPerSecond;
+                _frameIndex++;
+
+                if (_frameIndex >= _currentAnimation.FrameIndicies.Length)
+                {
+                    _frameIndex = 0;
+
+                    if (!IsLooping)
+                    {
+                        IsPlaying = false;
+                    }
+
+                    var onCompleteAction = _onCompleteAction;
+
+                    if (onCompleteAction != null)
+                    {
+                        onCompleteAction();
+                    }
+                }
+
+                var atlasIndex = _currentAnimation.FrameIndicies[_frameIndex];
+
+                if (Sprite != null)
+                {
+                    Sprite.TextureRegion = _animationGroup.GetFrame(atlasIndex);
+                }
+            }
+
+            _nextFrameDelay -= deltaSeconds;
+        }
 
         //public IEnumerable<TextureRegion2D> Frames
         //{
@@ -143,54 +184,24 @@ namespace MonoGame.Extended.Animations
         public void PlayAnimation(SpriteSheetAnimation animation, Action onCompleteAction = null)
         {
             if (!_animationGroup.Contains(animation))
+            {
                 throw new InvalidOperationException("Animation does not belong to this animator");
+            }
 
             PlayAnimation(animation.Name);
         }
 
         public void PlayAnimation(string name, Action onCompleteAction = null)
         {
-            if(_currentAnimation != null && _currentAnimation.Name == name && IsPlaying)
+            if (_currentAnimation != null && _currentAnimation.Name == name && IsPlaying)
+            {
                 return;
-            
+            }
+
             _currentAnimation = _animationGroup.GetAnimation(name);
             _frameIndex = 0;
             _onCompleteAction = onCompleteAction;
             IsPlaying = true;
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            if(!IsPlaying || _currentAnimation == null || _currentAnimation.FrameIndicies.Length == 0)
-                return;
-
-            var deltaSeconds = (float) gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (_nextFrameDelay <= 0)
-            {
-                _nextFrameDelay = 1.0f / _currentAnimation.FramesPerSecond;
-                _frameIndex++;
-
-                if (_frameIndex >= _currentAnimation.FrameIndicies.Length)
-                {
-                    _frameIndex = 0;
-
-                    if (!IsLooping)
-                        IsPlaying = false;
-
-                    var onCompleteAction = _onCompleteAction;
-
-                    if (onCompleteAction != null)
-                        onCompleteAction();
-                }
-
-                var atlasIndex = _currentAnimation.FrameIndicies[_frameIndex];
-
-                if(Sprite != null)
-                    Sprite.TextureRegion = _animationGroup.GetFrame(atlasIndex);
-            }
-
-            _nextFrameDelay -= deltaSeconds;
         }
     }
 }

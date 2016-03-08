@@ -8,6 +8,18 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledTileLayer : TiledLayer
     {
+        private readonly TiledMap _map;
+        private readonly SpriteBatch _renderTargetSpriteBatch;
+        private readonly TiledTile[] _tiles;
+        private RenderTarget2D _renderTarget;
+        public int Height { get; }
+        public int TileHeight => _map.TileHeight;
+
+        public IEnumerable<TiledTile> Tiles => _tiles;
+        public int TileWidth => _map.TileWidth;
+
+        public int Width { get; }
+
         public TiledTileLayer(TiledMap map, GraphicsDevice graphicsDevice, string name, int width, int height, int[] data)
             : base(name)
         {
@@ -18,23 +30,11 @@ namespace MonoGame.Extended.Maps.Tiled
             _map = map;
             _tiles = CreateTiles(data);
         }
-        
+
         public override void Dispose()
         {
             _renderTargetSpriteBatch.Dispose();
         }
-
-        public int Width { get; }
-        public int Height { get; }
-
-        private readonly TiledMap _map;
-        private readonly TiledTile[] _tiles;
-        private readonly SpriteBatch _renderTargetSpriteBatch;
-        private RenderTarget2D _renderTarget;
-
-        public IEnumerable<TiledTile> Tiles => _tiles;
-        public int TileWidth => _map.TileWidth;
-        public int TileHeight => _map.TileHeight;
 
         private TiledTile[] CreateTiles(int[] data)
         {
@@ -55,19 +55,23 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null)
         {
-            if(!IsVisible)
+            if (!IsVisible)
+            {
                 return;
+            }
 
             if (_renderTarget == null)
+            {
                 _renderTarget = new RenderTarget2D(_renderTargetSpriteBatch.GraphicsDevice, Width * TileWidth, Height * TileHeight);
+            }
 
             using (_renderTarget.BeginDraw(_renderTargetSpriteBatch.GraphicsDevice, backgroundColor ?? Color.Transparent))
             {
                 var vr = visibleRectangle ?? new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
                 var renderOrderFunction = GetRenderOrderFunction();
                 var tileLocationFunction = GetTileLocationFunction();
-                var firstCol = vr.Left < 0 ? 0 : (int) Math.Floor(vr.Left / (float)_map.TileWidth);
-                var firstRow = vr.Top < 0 ? 0 : (int) Math.Floor(vr.Top / (float)_map.TileHeight);
+                var firstCol = vr.Left < 0 ? 0 : (int)Math.Floor(vr.Left / (float)_map.TileWidth);
+                var firstRow = vr.Top < 0 ? 0 : (int)Math.Floor(vr.Top / (float)_map.TileHeight);
 
                 // +3 to cover any gaps
                 var columns = Math.Min(_map.Width, vr.Width / _map.TileWidth) + 3;
@@ -152,7 +156,9 @@ namespace MonoGame.Extended.Maps.Tiled
             for (var y = top; y < bottom; y++)
             {
                 for (var x = left; x < right; x++)
+                {
                     yield return GetTile(x, y);
+                }
             }
         }
 
@@ -161,7 +167,9 @@ namespace MonoGame.Extended.Maps.Tiled
             for (var y = bottom - 1; y >= top; y--)
             {
                 for (var x = left; x < right; x++)
+                {
                     yield return GetTile(x, y);
+                }
             }
         }
 
@@ -170,7 +178,9 @@ namespace MonoGame.Extended.Maps.Tiled
             for (var y = top; y < bottom; y++)
             {
                 for (var x = right - 1; x >= left; x--)
+                {
                     yield return GetTile(x, y);
+                }
             }
         }
 
@@ -179,7 +189,9 @@ namespace MonoGame.Extended.Maps.Tiled
             for (var y = bottom - 1; y >= top; y--)
             {
                 for (var x = right - 1; x >= left; x--)
+                {
                     yield return GetTile(x, y);
+                }
             }
         }
     }

@@ -20,7 +20,9 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
             writer.Write(input.Frames.Count);
 
             foreach (var frame in input.Frames)
+            {
                 writer.Write(frame);
+            }
 
             writer.Write(data.Animations.Count);
 
@@ -31,7 +33,9 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
                 writer.Write(animation.Frames.Count);
 
                 foreach (var frame in animation.Frames)
+                {
                     writer.Write(input.Frames.IndexOf(frame));
+                }
             }
         }
     }

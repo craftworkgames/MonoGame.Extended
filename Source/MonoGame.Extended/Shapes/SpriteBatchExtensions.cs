@@ -1,33 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Shapes
 {
     /// <summary>
-    /// Sprite batch extensions for drawing primitive shapes
+    ///     Sprite batch extensions for drawing primitive shapes
     /// </summary>
     public static class SpriteBatchExtensions
     {
         private static Texture2D _texture;
+
         private static Texture2D GetTexture(SpriteBatch spriteBatch)
         {
             if (_texture == null)
             {
                 _texture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-                _texture.SetData(new[] {Color.White});
+                _texture.SetData(new[]
+                {
+                    Color.White
+                });
             }
 
             return _texture;
         }
 
         /// <summary>
-        /// Draws a closed polygon from a <see cref="PolygonF"/> shape
+        ///     Draws a closed polygon from a <see cref="PolygonF" /> shape
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
-        /// /// <param name="position">Where to position the polygon</param>
+        /// ///
+        /// <param name="position">Where to position the polygon</param>
         /// <param name="polygon">The polygon to draw</param>
         /// <param name="color">The color to use</param>
         /// <param name="thickness">The thickness of the lines</param>
@@ -37,17 +40,20 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// Draws a closed polygon from an array of points
+        ///     Draws a closed polygon from an array of points
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
-        /// /// <param name="offset">Where to offset the points</param>
+        /// ///
+        /// <param name="offset">Where to offset the points</param>
         /// <param name="points">The points to connect with lines</param>
         /// <param name="color">The color to use</param>
         /// <param name="thickness">The thickness of the lines</param>
         public static void DrawPolygon(this SpriteBatch spriteBatch, Vector2 offset, Vector2[] points, Color color, float thickness = 1f)
         {
             if (points.Length == 0)
+            {
                 return;
+            }
 
             if (points.Length == 1)
             {
@@ -58,7 +64,9 @@ namespace MonoGame.Extended.Shapes
             var texture = GetTexture(spriteBatch);
 
             for (var i = 0; i < points.Length - 1; i++)
+            {
                 DrawPolygonEdge(spriteBatch, texture, points[i] + offset, points[i + 1] + offset, color, thickness);
+            }
 
             DrawPolygonEdge(spriteBatch, texture, points[points.Length - 1] + offset, points[0] + offset, color, thickness);
         }
@@ -72,7 +80,7 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// Draws a filled rectangle
+        ///     Draws a filled rectangle
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="rectangle">The rectangle to draw</param>
@@ -82,9 +90,9 @@ namespace MonoGame.Extended.Shapes
         {
             FillRectangle(spriteBatch, rectangle.Location, rectangle.Size, color);
         }
-        
+
         /// <summary>
-        /// Draws a filled rectangle
+        ///     Draws a filled rectangle
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="location">Where to draw</param>
@@ -97,7 +105,7 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// Draws a filled rectangle
+        ///     Draws a filled rectangle
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="x">The X coord of the left side</param>
@@ -111,7 +119,7 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// Draws a rectangle with the thickness provided
+        ///     Draws a rectangle with the thickness provided
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="rectangle">The rectangle to draw</param>
@@ -133,7 +141,7 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// Draws a rectangle with the thickness provided
+        ///     Draws a rectangle with the thickness provided
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="location">Where to draw</param>
@@ -146,7 +154,7 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// Draws a line from point1 to point2 with an offset
+        ///     Draws a line from point1 to point2 with an offset
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="x1">The X coord of the first point</param>
@@ -159,9 +167,9 @@ namespace MonoGame.Extended.Shapes
         {
             DrawLine(spriteBatch, new Vector2(x1, y1), new Vector2(x2, y2), color, thickness);
         }
-        
+
         /// <summary>
-        /// Draws a line from point1 to point2 with an offset
+        ///     Draws a line from point1 to point2 with an offset
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="point1">The first point</param>
@@ -178,9 +186,9 @@ namespace MonoGame.Extended.Shapes
 
             DrawLine(spriteBatch, point1, distance, angle, color, thickness);
         }
-        
+
         /// <summary>
-        /// Draws a line from point1 to point2 with an offset
+        ///     Draws a line from point1 to point2 with an offset
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="point">The starting point</param>
@@ -196,7 +204,7 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// Draws a point at the specified x, y position. The center of the point will be at the position.
+        ///     Draws a point at the specified x, y position. The center of the point will be at the position.
         /// </summary>
         public static void DrawPoint(this SpriteBatch spriteBatch, float x, float y, Color color, float size = 1f)
         {
@@ -204,7 +212,7 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// Draws a point at the specified position. The center of the point will be at the position.
+        ///     Draws a point at the specified position. The center of the point will be at the position.
         /// </summary>
         public static void DrawPoint(this SpriteBatch spriteBatch, Vector2 position, Color color, float size = 1f)
         {
@@ -214,7 +222,7 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// Draw a circle from a <see cref="CircleF"/> shape
+        ///     Draw a circle from a <see cref="CircleF" /> shape
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="circle">The circle shape to draw</param>
@@ -227,7 +235,7 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// Draw a circle
+        ///     Draw a circle
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="center">The center of the circle</param>
@@ -241,7 +249,7 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        /// Draw a circle
+        ///     Draw a circle
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="x">The center X of the circle</param>
@@ -254,7 +262,7 @@ namespace MonoGame.Extended.Shapes
         {
             DrawPolygon(spriteBatch, new Vector2(x, y), CreateCircle(radius, sides), color, thickness);
         }
-        
+
         private static Vector2[] CreateCircle(double radius, int sides)
         {
             const double max = 2.0 * Math.PI;
@@ -264,7 +272,7 @@ namespace MonoGame.Extended.Shapes
 
             for (var i = 0; i < sides; i++)
             {
-                points[i] = new Vector2((float) (radius*Math.Cos(theta)), (float) (radius*Math.Sin(theta)));
+                points[i] = new Vector2((float)(radius * Math.Cos(theta)), (float)(radius * Math.Sin(theta)));
                 theta += step;
             }
 

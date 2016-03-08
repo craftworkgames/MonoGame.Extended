@@ -5,6 +5,12 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
 {
     public class AstridAnimatorProcessorResult
     {
+        public AstridAnimatorFile Data { get; private set; }
+        public string Directory { get; private set; }
+        public List<string> Frames { get; private set; }
+
+        public string TextureAtlasAssetName { get; private set; }
+
         public AstridAnimatorProcessorResult(string directory, AstridAnimatorFile data, IEnumerable<string> frames)
         {
             Directory = directory;
@@ -12,10 +18,5 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
             Frames = new List<string>(frames);
             TextureAtlasAssetName = Path.GetFileNameWithoutExtension(data.TextureAtlas);
         }
-
-        public string TextureAtlasAssetName { get; private set; }
-        public string Directory { get; private set; }
-        public AstridAnimatorFile Data { get; private set; }
-        public List<string> Frames { get; private set; } 
     }
 }

@@ -14,8 +14,8 @@ namespace MonoGame.Extended
         private class RenderTargetOperation : IDisposable
         {
             private readonly GraphicsDevice _graphicsDevice;
-            private readonly Viewport _viewport;
             private readonly RenderTargetUsage _previousRenderTargetUsage;
+            private readonly Viewport _viewport;
 
             public RenderTargetOperation(RenderTarget2D renderTarget, GraphicsDevice graphicsDevice, Color backgroundColor)
             {
