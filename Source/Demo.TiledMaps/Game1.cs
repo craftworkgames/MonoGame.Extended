@@ -33,14 +33,14 @@ namespace Demo.TiledMaps
         protected override void LoadContent()
         {
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(_viewportAdapter) {Zoom = 0.5f};
+            _camera = new Camera2D(_viewportAdapter);// {Zoom = 0.5f};
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _texture = Content.Load<Texture2D>("monogame-extended-logo");
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
             _sprite = new Sprite(_texture) { Position = new Vector2(600, 240) };
 
-            _tiledMap = Content.Load<TiledMap>("level01");
-            _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
+            _tiledMap = Content.Load<TiledMap>("untitled");
+            //_camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
         }
 
         protected override void UnloadContent()
