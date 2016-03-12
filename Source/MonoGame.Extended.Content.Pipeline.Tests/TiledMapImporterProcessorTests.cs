@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.Content.Pipeline.Tiled;
 using NSubstitute;
@@ -12,14 +14,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Import_Test()
         {
-            const string filename = @"TestData\level01.tmx";
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\level01.tmx");
 
             var logger = Substitute.For<ContentBuildLogger>();
             var importer = new TiledMapImporter();
             var importerContext = Substitute.For<ContentImporterContext>();
             importerContext.Logger.Returns(logger);
 
-            var map = importer.Import(filename, importerContext);
+            var map = importer.Import(filePath, importerContext);
 
             Assert.AreEqual("1.0", map.Version);
             Assert.AreEqual(TmxOrientation.Orthogonal, map.Orientation);
@@ -83,8 +85,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Xml_Test()
         {
-            const string filename = @"TestData\test-tileset-xml.tmx";
-            var map = ImportAndProcessMap(filename);
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\test-tileset-xml.tmx");
+            var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var actualData = layer.Data.Tiles.Select(i => i.Gid).ToArray();
 
@@ -96,8 +98,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Csv_Test()
         {
-            const string filename = @"TestData\test-tileset-csv.tmx";
-            var map = ImportAndProcessMap(filename);
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\test-tileset-csv.tmx");
+            var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
 
@@ -109,8 +111,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Base64_Test()
         {
-            const string filename = @"TestData\test-tileset-base64.tmx";
-            var map = ImportAndProcessMap(filename);
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\test-tileset-base64.tmx");
+            var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
 
@@ -122,8 +124,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Gzip_Test()
         {
-            const string filename = @"TestData\test-tileset-gzip.tmx";
-            var map = ImportAndProcessMap(filename);
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\test-tileset-gzip.tmx");
+            var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
 
@@ -136,8 +138,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Zlib_Test()
         {
-            const string filename = @"TestData\test-tileset-zlib.tmx";
-            var map = ImportAndProcessMap(filename);
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\test-tileset-zlib.tmx");
+            var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
 
@@ -149,8 +151,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_ObjectLayer_Test()
         {
-            const string filename = @"TestData\test-object-layer.tmx";
-            var map = ImportAndProcessMap(filename);
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\test-object-layer.tmx");
+            var map = ImportAndProcessMap(filePath);
             var tmxObjectGroup = map.ObjectGroups[0];
             var tmxObject = tmxObjectGroup.Objects[0];
             var tmxPolygon = tmxObjectGroup.Objects[3].Polygon;
