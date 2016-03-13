@@ -33,11 +33,9 @@
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
       <HintPath>..\..\Dependencies\MonoGame.Framework.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="MonoGame.Framework.Content.Pipeline">
       <HintPath>..\..\Dependencies\MonoGame.Framework.Content.Pipeline.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.8.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetZip.1.9.8\lib\net20\Ionic.Zip.dll</HintPath>
