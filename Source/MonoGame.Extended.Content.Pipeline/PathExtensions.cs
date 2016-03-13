@@ -5,7 +5,7 @@ namespace MonoGame.Extended.Content.Pipeline
 {
     public static class PathExtensions
     {
-        public static string GetApplicationPath(string path)
+        public static string GetApplicationFullPath(string path)
         {
             return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
         }
