@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.Content.Pipeline.Tiled;
 using NSubstitute;
@@ -14,7 +12,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Import_Test()
         {
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\level01.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\level01.tmx");
 
             var logger = Substitute.For<ContentBuildLogger>();
             var importer = new TiledMapImporter();
@@ -85,7 +83,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Xml_Test()
         {
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\test-tileset-xml.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset-xml.tmx");
             var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var actualData = layer.Data.Tiles.Select(i => i.Gid).ToArray();
@@ -98,7 +96,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Csv_Test()
         {
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\test-tileset-csv.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset-csv.tmx");
             var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
@@ -111,7 +109,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Base64_Test()
         {
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\test-tileset-base64.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset-base64.tmx");
             var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
@@ -124,7 +122,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Gzip_Test()
         {
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\test-tileset-gzip.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset-gzip.tmx");
             var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
@@ -138,7 +136,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Zlib_Test()
         {
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\test-tileset-zlib.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset-zlib.tmx");
             var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
@@ -151,7 +149,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_ObjectLayer_Test()
         {
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\test-object-layer.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-object-layer.tmx");
             var map = ImportAndProcessMap(filePath);
             var tmxObjectGroup = map.ObjectGroups[0];
             var tmxObject = tmxObjectGroup.Objects[0];
