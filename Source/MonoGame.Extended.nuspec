@@ -27,7 +27,6 @@
   <files>
     <file src="MonoGame.Extended\bin\Release\MonoGame.Extended.dll" target="lib" />
     <file src="MonoGame.Extended.Content.Pipeline\bin\MonoGame.Extended.Content.Pipeline.dll" target="lib" />
-    <file src="MonoGame.Extended.Content.Pipeline\bin\Ionic.Zip.dll" target="lib" />
     <file src="MonoGame.Extended.Content.Pipeline\bin\Newtonsoft.Json.dll" target="lib" />
     <file src="readme.txt" target="" />
   </files>
