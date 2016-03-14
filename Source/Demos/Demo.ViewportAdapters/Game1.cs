@@ -73,24 +73,16 @@ namespace Demo.ViewportAdapters
             var previousViewportAdapter = _currentViewportAdapter;
 
             if (keyboardState.IsKeyDown(Keys.Escape))
-            {
                 Exit();
-            }
 
             if (keyboardState.IsKeyDown(Keys.D))
-            {
                 _currentViewportAdapter = _defaultViewportAdapter;
-            }
 
             if (keyboardState.IsKeyDown(Keys.S))
-            {
                 _currentViewportAdapter = _scalingViewportAdapter;
-            }
 
             if (keyboardState.IsKeyDown(Keys.B))
-            {
                 _currentViewportAdapter = _boxingViewportAdapter;
-            }
 
             // if we've changed the viewport adapter mid game we need to reset the viewport back to the window size
             // this wouldn't normally be required if you're only ever using one viewport adapter

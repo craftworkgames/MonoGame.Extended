@@ -24,30 +24,26 @@ namespace Demo.TiledMaps
 
         public Game1()
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this);
+            _graphicsDeviceManager = new GraphicsDeviceManager(this) {SynchronizeWithVerticalRetrace = false};
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
             Window.Position = Point.Zero;
+            IsFixedTimeStep = false;
         }
 
         protected override void LoadContent()
         {
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(_viewportAdapter)
-            {
-                Zoom = 0.5f
-            };
+            _camera = new Camera2D(_viewportAdapter);
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _texture = Content.Load<Texture2D>("monogame-extended-logo");
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
-            _sprite = new Sprite(_texture)
-            {
-                Position = new Vector2(600, 240)
-            };
+            _sprite = new Sprite(_texture) { Position = new Vector2(600, 240) };
 
-            _tiledMap = Content.Load<TiledMap>("level01");
-            _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
+            _tiledMap = Content.Load<TiledMap>("untitled");
+            //_camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
         }
 
         protected override void UnloadContent()
@@ -61,42 +57,28 @@ namespace Demo.TiledMaps
             var mouseState = Mouse.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
-            {
                 Exit();
-            }
 
             const float cameraSpeed = 200f;
             const float zoomSpeed = 0.2f;
 
             if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
-            {
-                _camera.Move(new Vector2(0, -cameraSpeed) * deltaSeconds);
-            }
+                _camera.Move(new Vector2(0, -cameraSpeed)*deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
-            {
-                _camera.Move(new Vector2(-cameraSpeed, 0) * deltaSeconds);
-            }
+                _camera.Move(new Vector2(-cameraSpeed, 0)*deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
-            {
-                _camera.Move(new Vector2(0, cameraSpeed) * deltaSeconds);
-            }
+                _camera.Move(new Vector2(0, cameraSpeed)*deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
-            {
-                _camera.Move(new Vector2(cameraSpeed, 0) * deltaSeconds);
-            }
+                _camera.Move(new Vector2(cameraSpeed, 0)*deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.R))
-            {
-                _camera.ZoomIn(zoomSpeed * deltaSeconds);
-            }
+                _camera.ZoomIn(zoomSpeed*deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.F))
-            {
-                _camera.ZoomOut(zoomSpeed * deltaSeconds);
-            }
+                _camera.ZoomOut(zoomSpeed*deltaSeconds);
 
             _sprite.Rotation += MathHelper.ToRadians(5) * deltaSeconds;
             _sprite.Position = _camera.ScreenToWorld(mouseState.X, mouseState.Y);
@@ -126,9 +108,9 @@ namespace Demo.TiledMaps
 
             var textColor = Color.Black;
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
-            //_spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: move", new Vector2(5, 5), textColor);
-            //_spriteBatch.DrawString(_bitmapFont, "RF: zoom", new Vector2(5, 5 + _bitmapFont.LineHeight), textColor);
-            _spriteBatch.DrawString(_bitmapFont, _fpsCounter.AverageFramesPerSecond.ToString(), Vector2.One, Color.AliceBlue);
+            _spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: move", new Vector2(5, 32), textColor);
+            _spriteBatch.DrawString(_bitmapFont, "RF: zoom", new Vector2(5, 32 + _bitmapFont.LineHeight), textColor);
+            _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.AverageFramesPerSecond:0}", Vector2.One, Color.AliceBlue);
             _spriteBatch.End();
 
             base.Draw(gameTime);
