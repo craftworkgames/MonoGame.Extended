@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using MonoGame.Extended.Content.Pipeline.Animations;
 using NUnit.Framework;
 
@@ -9,7 +11,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void AstridAnimatorImporter_Import_Test()
         {
-            const string filePath = @"TestData\astrid-animator.aa";
+            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\astrid-animator.aa");
             var importer = new AstridAnimatorImporter();
             var result = importer.Import(filePath, null);
             var data = result.Data;
