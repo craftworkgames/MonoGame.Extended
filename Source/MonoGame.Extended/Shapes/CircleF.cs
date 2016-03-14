@@ -14,19 +14,19 @@ namespace MonoGame.Extended.Shapes
 	{
 	    private static readonly CircleF _empty = new CircleF();
 
-	    /// <summary>
-	    /// The point representing the center of this <see cref="CircleF"/>.
-	    /// </summary>
-	    [DataMember]
+        /// <summary>
+        /// The point representing the center of this <see cref="CircleF"/>.
+        /// </summary>
+        [DataMember]
         public Vector2 Center { get; set; }
 
-	    /// <summary>
-	    /// The radius from the center of this <see cref="CircleF"/>.
-	    /// </summary>
-	    [DataMember]
+        /// <summary>
+        /// The radius from the center of this <see cref="CircleF"/>.
+        /// </summary>
+        [DataMember]
         public float Radius { get; set; }
 
-	    /// <summary>
+        /// <summary>
 		/// Returns a <see cref="CircleF"/> with Point = Vector2.Zero and Radius= 0.
 		/// </summary>
 		public static CircleF Empty => _empty;
