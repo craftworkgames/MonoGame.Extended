@@ -24,10 +24,11 @@ namespace Demo.TiledMaps
 
         public Game1()
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this);
+            _graphicsDeviceManager = new GraphicsDeviceManager(this) {SynchronizeWithVerticalRetrace = false};
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
+            IsFixedTimeStep = false;
         }
 
         protected override void LoadContent()
