@@ -31,20 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zip, Version=1.9.6.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetZip.1.9.6\lib\net20\Ionic.Zip.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MonoGame.Framework">
+      <HintPath>$(MSBuildExtensionsPath)\MonoGame\v3.0\Tools\MonoGame.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Framework, Version=3.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Framework.Portable.3.2.99.1-Beta\lib\portable-net45+win+wpa81+Xamarin.iOS10+MonoAndroid10+MonoTouch10\MonoGame.Framework.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MonoGame.Framework.Content.Pipeline">
+      <HintPath>$(MSBuildExtensionsPath)\MonoGame\v3.0\Tools\MonoGame.Framework.Content.Pipeline.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Framework.Content.Pipeline, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Framework.Content.Pipeline.Portable.3.2.99.1-Beta\lib\portable-net45+win+wpa81+Xamarin.iOS10+MonoAndroid10+MonoTouch10\MonoGame.Framework.Content.Pipeline.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -71,6 +65,8 @@
     <Compile Include="BitmapFonts\BitmapFontKerning.cs" />
     <Compile Include="BitmapFonts\BitmapFontPage.cs" />
     <Compile Include="BitmapFonts\BitmapFontProcessorResult.cs" />
+    <Compile Include="ContentWriterExtensions.cs" />
+    <Compile Include="PathExtensions.cs" />
     <Compile Include="PathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BitmapFonts\BitmapFontImporter.cs" />
@@ -111,16 +107,17 @@
     <Compile Include="Tiled\TmxTileset.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
       <Name>MonoGame.Extended</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
