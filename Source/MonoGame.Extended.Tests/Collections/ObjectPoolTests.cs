@@ -7,9 +7,9 @@ namespace MonoGame.Extended.Tests.Collections
     [TestFixture]
     public class ObjectPoolTests
     {
-        private class TestPoolable : Poolable
+        private class TestPoolable : IPoolable
         {
-            public override bool ResetState()
+            public bool ResetState()
             {
                 return true;
             }
@@ -18,9 +18,9 @@ namespace MonoGame.Extended.Tests.Collections
         [Test]
         public void ObjectPool_UseTest()
         {
-            var pool = new ObjectPool<Poolable>(5, 10, () => new TestPoolable());
+            var pool = new ObjectPool<TestPoolable>(5, 10, () => new TestPoolable());
 
-            var objects = new Stack<Poolable>();
+            var objects = new Stack<TestPoolable>();
             for (var i = 0; i < 5; i++)
             {
                 var obj = pool.GetObject();
@@ -30,15 +30,15 @@ namespace MonoGame.Extended.Tests.Collections
                 }
 
                 Assert.AreEqual(5 - i - 1, pool.AvailableCount);
-                Assert.AreEqual(objects.Count, pool.Diagnostics.InstancesInUseCount);
-                Assert.AreEqual(5, pool.Diagnostics.InstancesCreatedCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesDestroyedCount);
-                Assert.AreEqual(i + 1, pool.Diagnostics.InstancesHitCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesMissedCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesReturnedCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesOverflowCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesResetFailedCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesRessurectedCount);
+                Assert.AreEqual(objects.Count, pool.InUseCount);
+                Assert.AreEqual(5, pool.CreatedCount);
+                Assert.AreEqual(0, pool.DestroyedCount);
+                Assert.AreEqual(i + 1, pool.HitCount);
+                Assert.AreEqual(0, pool.MissedCount);
+                Assert.AreEqual(0, pool.ReturnedCount);
+                Assert.AreEqual(0, pool.OverflowCount);
+                Assert.AreEqual(0, pool.ResetFailedCount);
+                Assert.AreEqual(0, pool.RessurectedCount);
             }
             // 5 objects
 
@@ -51,15 +51,15 @@ namespace MonoGame.Extended.Tests.Collections
                 }
 
                 Assert.AreEqual(0, pool.AvailableCount);
-                Assert.AreEqual(objects.Count, pool.Diagnostics.InstancesInUseCount);
-                Assert.AreEqual(5 + i + 1, pool.Diagnostics.InstancesCreatedCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesDestroyedCount);
-                Assert.AreEqual(5, pool.Diagnostics.InstancesHitCount);
-                Assert.AreEqual(i + 1, pool.Diagnostics.InstancesMissedCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesReturnedCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesOverflowCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesResetFailedCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesRessurectedCount);
+                Assert.AreEqual(objects.Count, pool.InUseCount);
+                Assert.AreEqual(5 + i + 1, pool.CreatedCount);
+                Assert.AreEqual(0, pool.DestroyedCount);
+                Assert.AreEqual(5, pool.HitCount);
+                Assert.AreEqual(i + 1, pool.MissedCount);
+                Assert.AreEqual(0, pool.ReturnedCount);
+                Assert.AreEqual(0, pool.OverflowCount);
+                Assert.AreEqual(0, pool.ResetFailedCount);
+                Assert.AreEqual(0, pool.RessurectedCount);
             }
             // 15 objects
 
@@ -69,15 +69,15 @@ namespace MonoGame.Extended.Tests.Collections
                 pool.ReturnObject(obj);
 
                 Assert.AreEqual(i + 1, pool.AvailableCount);
-                Assert.AreEqual(objects.Count, pool.Diagnostics.InstancesInUseCount);
-                Assert.AreEqual(15, pool.Diagnostics.InstancesCreatedCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesDestroyedCount);
-                Assert.AreEqual(5, pool.Diagnostics.InstancesHitCount);
-                Assert.AreEqual(10, pool.Diagnostics.InstancesMissedCount);
-                Assert.AreEqual(i + 1, pool.Diagnostics.InstancesReturnedCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesOverflowCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesResetFailedCount);
-                Assert.AreEqual(0, pool.Diagnostics.InstancesRessurectedCount);
+                Assert.AreEqual(objects.Count, pool.InUseCount);
+                Assert.AreEqual(15, pool.CreatedCount);
+                Assert.AreEqual(0, pool.DestroyedCount);
+                Assert.AreEqual(5, pool.HitCount);
+                Assert.AreEqual(10, pool.MissedCount);
+                Assert.AreEqual(i + 1, pool.ReturnedCount);
+                Assert.AreEqual(0, pool.OverflowCount);
+                Assert.AreEqual(0, pool.ResetFailedCount);
+                Assert.AreEqual(0, pool.RessurectedCount);
             }
         }
     }

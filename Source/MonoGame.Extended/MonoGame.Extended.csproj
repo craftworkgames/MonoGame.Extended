@@ -43,9 +43,7 @@
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />
     <Compile Include="BitmapFonts\BitmapFontRegion.cs" />
     <Compile Include="Collections\ObjectPool.cs" />
-    <Compile Include="Collections\ObjectPool.Diagnostics.cs" />
     <Compile Include="Collections\IPoolable.cs" />
-    <Compile Include="Collections\Poolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />
     <Compile Include="Collisions\CollisionGrid.cs" />
     <Compile Include="Collisions\CollisionGridCell.cs" />

@@ -11,6 +11,15 @@ namespace MonoGame.Extended.Collections
         private const int DefaultPoolMinimumSize = 0;
         private const int DefaultPoolMaximumSize = 50;
 
+        private int _inUseCount;
+        private int _resetFailedCount;
+        private int _ressurectedCount;
+        private int _hitCount;
+        private int _missedCount;
+        private int _createdCount;
+        private int _destroyedCount;
+        private int _overflowCount;
+        private int _returnedCount;
         private long _isDisposed;
         private int _minimumSize;
         private int _maximumSize;
@@ -24,7 +33,50 @@ namespace MonoGame.Extended.Collections
             get { return Interlocked.Read(ref _isDisposed) == 1; }
         }
 
-        public ObjectPool.Diagnostics Diagnostics { get; } = new ObjectPool.Diagnostics();
+        public int InUseCount
+        {
+            get { return _inUseCount; }
+        }
+
+        public int ResetFailedCount
+        {
+            get { return _resetFailedCount; }
+        }
+
+        public int RessurectedCount
+        {
+            get { return _ressurectedCount; }
+        }
+
+        public int HitCount
+        {
+            get { return _hitCount; }
+        }
+
+        public int MissedCount
+        {
+            get { return _missedCount; }
+        }
+
+        public int CreatedCount
+        {
+            get { return _createdCount; }
+        }
+
+        public int DestroyedCount
+        {
+            get { return _destroyedCount; }
+        }
+
+        public int OverflowCount
+        {
+            get { return _overflowCount; }
+        }
+
+        public int ReturnedCount
+        {
+            get { return _returnedCount; }
+        }
 
         public int AvailableCount
         {
@@ -110,7 +162,7 @@ namespace MonoGame.Extended.Collections
             foreach (var keyValuePair in _createdObjects)
             {
                 var poolable = keyValuePair.Key;
-                Diagnostics.DecrementInstancesInUse();
+                Interlocked.Decrement(ref _inUseCount);
                 DestroyObject(poolable);
             }
 
@@ -155,8 +207,9 @@ namespace MonoGame.Extended.Collections
                     continue;
                 }
 
-                Diagnostics.DecrementInstancesInUse();
-                Diagnostics.IncrementInstancesOverflow();
+                //TODO: Policy right now for this is if the object is in-use don't touch it. Will possibly change.
+
+                Interlocked.Increment(ref _overflowCount);
                 DestroyObject(poolable);
             }
 
@@ -186,7 +239,7 @@ namespace MonoGame.Extended.Collections
                 throw new Exception($"A pooled object of type '{typeof (T).Name}' has already been created with the hash code '{newObject.GetHashCode()}'. Hash codes for pooled objects must be unique.");
             }
 
-            Diagnostics.IncrementInstancesCreated();
+            Interlocked.Increment(ref _createdCount);
             return newObject;
         }
 
@@ -205,7 +258,7 @@ namespace MonoGame.Extended.Collections
 
             var disposable = poolable as IDisposable;
             disposable?.Dispose();
-            Diagnostics.IncrementInstancesDestroyed();
+            Interlocked.Increment(ref _destroyedCount);
         }
 
         public T GetObject()
@@ -218,17 +271,17 @@ namespace MonoGame.Extended.Collections
             T obj;
             if (_objects.TryDequeue(out obj))
             {
-                Diagnostics.IncrementInstancesHit();
+                Interlocked.Increment(ref _hitCount);
                 Task.Factory.StartNew(AdjustSize);
             }
             else
             {
                 //TODO: Add enumeration specifying how to handle a miss.
-                Diagnostics.IncrementInstancesMissed();
+                Interlocked.Increment(ref _missedCount);
                 obj = CreateObject();
             }
 
-            Diagnostics.IncrementInstancesInUse();
+            Interlocked.Increment(ref _inUseCount);
             return obj;
         }
 
@@ -241,23 +294,23 @@ namespace MonoGame.Extended.Collections
 
             if (AvailableCount >= MaximumSize)
             {
-                Diagnostics.IncrementInstancesOverflow();
+                Interlocked.Increment(ref _overflowCount);
                 DestroyObject(poolable);
             }
             else if (!poolable.ResetState())
             {
-                Diagnostics.IncrementInstancesResetStateFailed();
+                Interlocked.Increment(ref _resetFailedCount);
                 DestroyObject(poolable);
             }
 
             if (resurrectObject)
             {
-                Diagnostics.IncrementInstancesRessurected();
+                Interlocked.Increment(ref _ressurectedCount);
                 GC.ReRegisterForFinalize(poolable);
             }
 
-            Diagnostics.DecrementInstancesInUse();
-            Diagnostics.IncrementInstancesReturned();
+            Interlocked.Decrement(ref _inUseCount);
+            Interlocked.Increment(ref _returnedCount);
             _objects.Enqueue(poolable);
         }
     }
