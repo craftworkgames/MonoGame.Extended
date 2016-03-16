@@ -6,17 +6,23 @@ using System.Threading.Tasks;
 namespace MonoGame.Extended.Collections
 {
     // derived from: http://www.codeproject.com/Articles/535735/Implementing-a-Generic-Object-Pool-in-NET
-    public partial class ObjectPool<T> where T : class, IPoolable
+    public partial class ObjectPool<T> : IDisposable where T : class, IPoolable
     {
         private const int DefaultPoolMinimumSize = 0;
         private const int DefaultPoolMaximumSize = 50;
 
+        private long _isDisposed;
         private int _minimumSize;
         private int _maximumSize;
 
         private readonly ConcurrentQueue<T> _objects = new ConcurrentQueue<T>();
         private readonly ConcurrentDictionary<T, bool> _createdObjects = new ConcurrentDictionary<T, bool>(); 
         private int _adjustSizeInProgress;
+
+        public bool IsDisposed
+        {
+            get { return Interlocked.Read(ref _isDisposed) == 1; }
+        }
 
         public ObjectPool.Diagnostics Diagnostics { get; } = new ObjectPool.Diagnostics();
 
@@ -30,6 +36,11 @@ namespace MonoGame.Extended.Collections
             get { return _minimumSize; }
             set
             {
+                if (IsDisposed)
+                {
+                    throw new ObjectDisposedException(GetType().FullName);
+                }
+
                 CheckLimits(value, _maximumSize);
                 _minimumSize = value;
                 AdjustSize();
@@ -41,6 +52,11 @@ namespace MonoGame.Extended.Collections
             get { return _maximumSize; }
             set
             {
+                if (IsDisposed)
+                {
+                    throw new ObjectDisposedException(GetType().FullName);
+                }
+
                 CheckLimits(_minimumSize, value);
                 _maximumSize = value;
                 AdjustSize();
@@ -56,6 +72,49 @@ namespace MonoGame.Extended.Collections
             _maximumSize = maximumSize;
             _minimumSize = minimumSize;
             AdjustSize();
+        }
+
+        ~ObjectPool()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            var wasDisposed = Interlocked.CompareExchange(ref _isDisposed, 1, 0);
+            if (wasDisposed != 0 || _isDisposed != 1)
+            {
+                return;
+            }
+
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (!isDisposing)
+            {
+                return;
+            }
+
+            while (_objects.Count > 0)
+            {
+                T poolable;
+                if (_objects.TryDequeue(out poolable))
+                {
+                    DestroyObject(poolable);
+                }
+            }
+
+            foreach (var keyValuePair in _createdObjects)
+            {
+                var poolable = keyValuePair.Key;
+                Diagnostics.DecrementInstancesInUse();
+                DestroyObject(poolable);
+            }
+
+            _createdObjects.Clear();
         }
 
         private void CheckLimits(int minimumSize, int maximumSize)
@@ -151,6 +210,11 @@ namespace MonoGame.Extended.Collections
 
         public T GetObject()
         {
+            if (IsDisposed)
+            {
+                throw new ObjectDisposedException(GetType().FullName);
+            }
+
             T obj;
             if (_objects.TryDequeue(out obj))
             {
@@ -170,6 +234,11 @@ namespace MonoGame.Extended.Collections
 
         public void ReturnObject(T poolable, bool resurrectObject = false)
         {
+            if (IsDisposed)
+            {
+                throw new ObjectDisposedException(GetType().FullName);
+            }
+
             if (AvailableCount >= MaximumSize)
             {
                 Diagnostics.IncrementInstancesOverflow();
@@ -190,14 +259,6 @@ namespace MonoGame.Extended.Collections
             Diagnostics.DecrementInstancesInUse();
             Diagnostics.IncrementInstancesReturned();
             _objects.Enqueue(poolable);
-        }
-
-        ~ObjectPool()
-        {
-            foreach (var item in _objects)
-            {
-                DestroyObject(item);
-            }
         }
     }
 }
