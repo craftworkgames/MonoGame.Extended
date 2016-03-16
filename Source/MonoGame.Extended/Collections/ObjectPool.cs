@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace MonoGame.Extended.Collections
 {
     // derived from: http://www.codeproject.com/Articles/535735/Implementing-a-Generic-Object-Pool-in-NET
-    public partial class ObjectPool<T> : IDisposable where T : class, IPoolable
+    public class ObjectPool<T> : IDisposable where T : class, IPoolable
     {
         private const int DefaultPoolMinimumSize = 0;
         private const int DefaultPoolMaximumSize = 50;
