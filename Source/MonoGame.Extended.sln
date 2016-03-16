@@ -67,7 +67,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.ViewportAdapters", "De
 		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Particles", "Demos\MonoGame.Particles\Demo.Particles.csproj", "{5BD30E9B-D5BF-46CB-AA34-3E2ED0819952}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Particles", "Demos\Demo.Particles\Demo.Particles.csproj", "{5BD30E9B-D5BF-46CB-AA34-3E2ED0819952}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
