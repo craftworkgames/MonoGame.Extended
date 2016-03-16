@@ -2,9 +2,6 @@
 {
     public abstract class Poolable : IPoolable
     {
-        public virtual bool ResetState()
-        {
-            return true;
-        }
+        public abstract bool ResetState();
     }
 }

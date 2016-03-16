@@ -9,6 +9,10 @@ namespace MonoGame.Extended.Tests.Collections
     {
         private class TestPoolable : Poolable
         {
+            public override bool ResetState()
+            {
+                return true;
+            }
         }
 
         [Test]
