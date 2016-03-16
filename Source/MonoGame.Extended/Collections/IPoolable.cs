@@ -2,7 +2,7 @@
 
 namespace MonoGame.Extended.Collections
 {
-    public interface IPoolable
+    public interface IPoolable : IDisposable
     {
         bool ResetState();
     }

@@ -13,6 +13,10 @@ namespace MonoGame.Extended.Tests.Collections
             {
                 return true;
             }
+
+            public void Dispose()
+            {
+            }
         }
 
         [Test]

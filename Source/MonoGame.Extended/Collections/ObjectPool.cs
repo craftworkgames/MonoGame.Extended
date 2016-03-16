@@ -8,8 +8,8 @@ namespace MonoGame.Extended.Collections
     // derived from: http://www.codeproject.com/Articles/535735/Implementing-a-Generic-Object-Pool-in-NET
     public class ObjectPool<T> : IDisposable where T : IPoolable
     {
-        private const int DefaultPoolMinimumSize = 0;
-        private const int DefaultPoolMaximumSize = 50;
+        private const int _defaultPoolMinimumSize = 0;
+        private const int _defaultPoolMaximumSize = 50;
 
         private int _inUseCount;
         private int _resetFailedCount;
@@ -28,60 +28,17 @@ namespace MonoGame.Extended.Collections
         private readonly ConcurrentDictionary<T, bool> _createdObjects = new ConcurrentDictionary<T, bool>(); 
         private int _adjustSizeInProgress;
 
-        public bool IsDisposed
-        {
-            get { return Interlocked.Read(ref _isDisposed) == 1; }
-        }
-
-        public int InUseCount
-        {
-            get { return _inUseCount; }
-        }
-
-        public int ResetFailedCount
-        {
-            get { return _resetFailedCount; }
-        }
-
-        public int RessurectedCount
-        {
-            get { return _ressurectedCount; }
-        }
-
-        public int HitCount
-        {
-            get { return _hitCount; }
-        }
-
-        public int MissedCount
-        {
-            get { return _missedCount; }
-        }
-
-        public int CreatedCount
-        {
-            get { return _createdCount; }
-        }
-
-        public int DestroyedCount
-        {
-            get { return _destroyedCount; }
-        }
-
-        public int OverflowCount
-        {
-            get { return _overflowCount; }
-        }
-
-        public int ReturnedCount
-        {
-            get { return _returnedCount; }
-        }
-
-        public int AvailableCount
-        {
-            get { return _objects.Count; }
-        }
+        public bool IsDisposed => Interlocked.Read(ref _isDisposed) == 1;
+        public int InUseCount => _inUseCount;
+        public int ResetFailedCount => _resetFailedCount;
+        public int RessurectedCount => _ressurectedCount;
+        public int HitCount => _hitCount;
+        public int MissedCount => _missedCount;
+        public int CreatedCount => _createdCount;
+        public int DestroyedCount => _destroyedCount;
+        public int OverflowCount => _overflowCount;
+        public int ReturnedCount => _returnedCount;
+        public int AvailableCount => _objects.Count;
 
         public int MinimumSize
         {
@@ -89,9 +46,7 @@ namespace MonoGame.Extended.Collections
             set
             {
                 if (IsDisposed)
-                {
                     throw new ObjectDisposedException(GetType().FullName);
-                }
 
                 CheckLimits(value, _maximumSize);
                 _minimumSize = value;
@@ -105,9 +60,7 @@ namespace MonoGame.Extended.Collections
             set
             {
                 if (IsDisposed)
-                {
                     throw new ObjectDisposedException(GetType().FullName);
-                }
 
                 CheckLimits(_minimumSize, value);
                 _maximumSize = value;
@@ -115,12 +68,12 @@ namespace MonoGame.Extended.Collections
             }
         }
 
-        public Func<T> FactoryMethod { get; }
+        public Func<T> CreateNewFunction { get; }
 
-        public ObjectPool(int minimumSize = DefaultPoolMinimumSize, int maximumSize = DefaultPoolMaximumSize, Func<T> factoryMethod = null)
+        public ObjectPool(int minimumSize = _defaultPoolMinimumSize, int maximumSize = _defaultPoolMaximumSize, Func<T> createNewFunction = null)
         {
             CheckLimits(minimumSize, maximumSize);
-            FactoryMethod = factoryMethod;
+            CreateNewFunction = createNewFunction;
             _maximumSize = maximumSize;
             _minimumSize = minimumSize;
             AdjustSize();
@@ -202,10 +155,9 @@ namespace MonoGame.Extended.Collections
             while (_createdObjects.Count > MaximumSize)
             {
                 T poolable;
+
                 if (!_objects.TryDequeue(out poolable))
-                {
                     continue;
-                }
 
                 //TODO: Policy right now for this is if the object is in-use don't touch it. Will possibly change.
 
@@ -220,9 +172,9 @@ namespace MonoGame.Extended.Collections
         {
             T newObject;
 
-            if (FactoryMethod != null)
+            if (CreateNewFunction != null)
             {
-                newObject = FactoryMethod();
+                newObject = CreateNewFunction();
             }
             else
             {
@@ -246,6 +198,7 @@ namespace MonoGame.Extended.Collections
         private void DestroyObject(T poolable)
         {
             bool isDisposed;
+
             if (!_createdObjects.TryRemove(poolable, out isDisposed))
             {
                 return;
@@ -256,8 +209,7 @@ namespace MonoGame.Extended.Collections
                 throw new ObjectDisposedException(typeof (T).Name);
             }
 
-            var disposable = poolable as IDisposable;
-            disposable?.Dispose();
+            poolable.Dispose();
             Interlocked.Increment(ref _destroyedCount);
         }
 
