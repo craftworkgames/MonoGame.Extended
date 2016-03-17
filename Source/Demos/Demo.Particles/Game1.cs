@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Particles;
 using MonoGame.Extended.Particles.Modifiers;
-using MonoGame.Extended.Particles.Modifiers.Containers;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.ViewportAdapters;
@@ -57,6 +56,8 @@ namespace Demo.Particles
         {
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
+            var mouseState = Mouse.GetState();
+            var p = _camera.ScreenToWorld(mouseState.X, mouseState.Y);
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
@@ -64,6 +65,10 @@ namespace Demo.Particles
             _sprite.Rotation += deltaTime;
 
             _particleEffect.Update(deltaTime);
+
+            if(mouseState.LeftButton == ButtonState.Pressed)
+                _particleEffect.Trigger(new Vector(p.X, p.Y));
+
             _particleEffect.Trigger(new Vector(400, 240));
 
             base.Update(gameTime);
@@ -88,17 +93,17 @@ namespace Demo.Particles
             {
                 Emitters = new[]
                 {
-                    new Emitter(2000, TimeSpan.FromSeconds(4), Profile.Spray(Axis.Up, 1f))
+                    new Emitter(500, TimeSpan.FromSeconds(1.5), Profile.Ring(10f, Profile.CircleRadiation.Out))
                     {
                         Texture = texture,
                         BlendMode = BlendMode.Alpha,
-                        Parameters = new ReleaseParameters { Speed = new RangeF(120f, 150f), Quantity = 3 },
+                        Parameters = new ReleaseParameters { Speed = new RangeF(50, 0f), Quantity = 3, Rotation = new RangeF(-10f, 10f) },
                         Modifiers = new IModifier[]
                         {
-                            new ColourInterpolator2 { InitialColour = new Colour(0.33f, 0.5f, 0.5f), FinalColour = new Colour(0f, 0.5f, 0.5f) },
-                            new RotationModifier { RotationRate = 1f },
-                            new RectContainerModifier {  Width = 800, Height = 480 },
-                            new LinearGravityModifier { Direction = Axis.Down, Strength = 100f }
+                            new ColourInterpolator2 { InitialColour = new Colour(0.33f, 0.5f, 0.5f), FinalColour = new Colour(0.5f, 0.9f, 1.0f) },
+                            new RotationModifier { RotationRate = -2.1f },
+                            //new RectContainerModifier {  Width = 800, Height = 480 },
+                            new LinearGravityModifier { Direction = Axis.Up, Strength = 100f }
                         }
                     }
 
