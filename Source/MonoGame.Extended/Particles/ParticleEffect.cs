@@ -2,13 +2,13 @@
 
 namespace MonoGame.Extended.Particles
 {
-
     public class ParticleEffect
     {
         public string Name { get; set; }
         public Emitter[] Emitters { get; set; }
 
-        public ParticleEffect() {
+        public ParticleEffect()
+        {
             Emitters = new Emitter[0];
         }
 

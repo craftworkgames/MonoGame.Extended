@@ -1,11 +1,13 @@
 ﻿using System;
 
-namespace MonoGame.Extended.Particles {
+namespace MonoGame.Extended.Particles
+{
     /// <summary>
     /// Defines a data structure representing a Euclidean vector facing a particular direction,
     /// including a magnitude value.
     /// </summary>
-    public struct Vector {
+    public struct Vector
+    {
         public readonly float X;
         public readonly float Y;
 
@@ -14,7 +16,8 @@ namespace MonoGame.Extended.Particles {
         /// </summary>
         /// <param name="axis">The axis along which the vector points.</param>
         /// <param name="magnitude">The magnitude of the vector.</param>
-        public Vector(Axis axis, float magnitude) {
+        public Vector(Axis axis, float magnitude)
+        {
             X = axis.X * magnitude;
             Y = axis.Y * magnitude;
         }
@@ -24,7 +27,8 @@ namespace MonoGame.Extended.Particles {
         /// </summary>
         /// <param name="x">The X component of the vector.</param>
         /// <param name="y">The Y component of the vector.</param>
-        public Vector(float x, float y) {
+        public Vector(float x, float y)
+        {
             X = x;
             Y = y;
         }
@@ -42,7 +46,7 @@ namespace MonoGame.Extended.Particles {
         /// <returns>A <see cref="Axis"/> value representing the direction the vector is facing.</returns>
         public Axis Axis => new Axis(X, Y);
 
-        public Vector Add(Vector v) 
+        public Vector Add(Vector v)
             => new Vector(X + v.X, Y + v.Y);
 
         public Vector Subtract(Vector v)
@@ -51,17 +55,18 @@ namespace MonoGame.Extended.Particles {
         public Vector Negate()
             => new Vector(-X, -Y);
 
-        public Vector Multiply(float factor) 
+        public Vector Multiply(float factor)
             => new Vector(X * factor, Y * factor);
 
-        public Vector Divide(float factor) 
+        public Vector Divide(float factor)
             => new Vector(X / factor, Y / factor);
 
         /// <summary>
         /// Copies the X and Y components of the vector to the specified memory location.
         /// </summary>
         /// <param name="destination">The memory location to copy the coordinate to.</param>
-        public unsafe void CopyTo(float* destination) {
+        public unsafe void CopyTo(float* destination)
+        {
             destination[0] = X;
             destination[1] = Y;
         }
@@ -69,7 +74,8 @@ namespace MonoGame.Extended.Particles {
         /// <summary>
         /// Destructures the vector, exposing the individual X and Y components.
         /// </summary>
-        public void Destructure(out float x, out float y) {
+        public void Destructure(out float x, out float y)
+        {
             x = X;
             y = Y;
         }
@@ -81,7 +87,8 @@ namespace MonoGame.Extended.Particles {
         /// <exception cref="T:System.ArgumentNullException">
         /// Thrown if the value passed to the <paramref name="callback"/> parameter is <c>null</c>.
         /// </exception>
-        public void Match(Action<float, float> callback) {
+        public void Match(Action<float, float> callback)
+        {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback));
 
@@ -102,7 +109,8 @@ namespace MonoGame.Extended.Particles {
         /// <exception cref="T:System.ArgumentNullException">
         /// Thrown if the value passed to the <paramref name="map"/> parameter is <c>null</c>.
         /// </exception>
-        public T Map<T>(Func<float, float, T> map) {
+        public T Map<T>(Func<float, float, T> map)
+        {
             if (map == null)
                 throw new ArgumentNullException(nameof(map));
 
@@ -116,22 +124,22 @@ namespace MonoGame.Extended.Particles {
 
         public static implicit operator Axis(Vector v) => v.Axis;
 
-        public static Vector operator +(Vector v1, Vector v2) 
+        public static Vector operator +(Vector v1, Vector v2)
             => v1.Add(v2);
 
-        public static Vector operator -(Vector v1, Vector v2) 
+        public static Vector operator -(Vector v1, Vector v2)
             => v1.Subtract(v2);
 
-        public static Vector operator -(Vector v) 
+        public static Vector operator -(Vector v)
             => v.Negate();
 
-        public static Vector operator *(Vector value, float factor) 
+        public static Vector operator *(Vector value, float factor)
             => value.Multiply(factor);
 
-        public static Vector operator *(float factor, Vector value) 
+        public static Vector operator *(float factor, Vector value)
             => value.Multiply(factor);
 
-        public static Vector operator /(Vector value, float factor) 
+        public static Vector operator /(Vector value, float factor)
             => value.Divide(factor);
 
         public static Vector Zero => new Vector(0, 0);

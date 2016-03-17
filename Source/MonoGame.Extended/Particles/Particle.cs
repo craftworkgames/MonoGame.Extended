@@ -1,8 +1,10 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace MonoGame.Extended.Particles {
+namespace MonoGame.Extended.Particles
+{
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct Particle {
+    public struct Particle
+    {
         public float Inception;
         public float Age;
         public Vector Position;

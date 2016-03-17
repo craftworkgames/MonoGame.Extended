@@ -2,7 +2,8 @@
 using System.Globalization;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Particles {
+namespace MonoGame.Extended.Particles
+{
     /// <summary>
     /// An immutable data structure representing a 24bit colour composed of separate hue, saturation and lightness channels.
     /// </summary>
@@ -48,14 +49,16 @@ namespace MonoGame.Extended.Particles {
         /// Copies the individual channels of the colour to the specified memory location.
         /// </summary>
         /// <param name="destination">The memory location to copy the axis to.</param>
-        public void CopyTo(out Colour destination) {
+        public void CopyTo(out Colour destination)
+        {
             destination = new Colour(H, S, L);
         }
 
         /// <summary>
         /// Destructures the colour, exposing the individual channels.
         /// </summary>
-        public void Destructure(out float h, out float s, out float l) {
+        public void Destructure(out float h, out float s, out float l)
+        {
             h = H;
             s = S;
             l = L;
@@ -68,7 +71,8 @@ namespace MonoGame.Extended.Particles {
         /// <exception cref="T:System.ArgumentNullException">
         /// Thrown if the value passed to the <paramref name="callback"/> parameter is <c>null</c>.
         /// </exception>
-        public void Match(Action<float, float, float> callback) {
+        public void Match(Action<float, float, float> callback)
+        {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback));
 
@@ -104,7 +108,8 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         ///     <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             if (obj is Colour)
                 return Equals((Colour)obj);
 
@@ -131,7 +136,8 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return H.GetHashCode() ^
                    S.GetHashCode() ^
                    L.GetHashCode();
@@ -145,8 +151,8 @@ namespace MonoGame.Extended.Particles {
         /// </returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0}°,{1:P0},{2:P0}", 
-                H.ToString("F1"), (100*S).ToString("F1"), (100*L).ToString("F1"));
+            return string.Format(CultureInfo.InvariantCulture, "{0}°,{1:P0},{2:P0}",
+                H.ToString("F1"), (100 * S).ToString("F1"), (100 * L).ToString("F1"));
         }
 
         public static Colour Parse(string s)
@@ -157,7 +163,7 @@ namespace MonoGame.Extended.Particles {
             var lig = float.Parse(hsl[2]);
 
             return new Colour(hue, sat, lig);
-        } 
+        }
 
         /// <summary>
         /// Implements the operator ==.
@@ -167,7 +173,8 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         ///     <c>true</c> if the lvalue <see cref="Colour"/> is equal to the rvalue; otherwise, <c>false</c>.
         /// </returns>
-        public static bool operator ==(Colour x, Colour y) {
+        public static bool operator ==(Colour x, Colour y)
+        {
             return x.Equals(y);
         }
 
@@ -179,11 +186,13 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         ///     <c>true</c> if the lvalue <see cref="Colour"/> is not equal to the rvalue; otherwise, <c>false</c>.
         /// </returns>
-        public static bool operator !=(Colour x, Colour y) {
+        public static bool operator !=(Colour x, Colour y)
+        {
             return !x.Equals(y);
         }
 
-        public static Colour operator -(Colour a, Colour b) {
+        public static Colour operator -(Colour a, Colour b)
+        {
             return new Colour(a.H - b.H, a.S - b.S, a.L - b.L);
         }
 
@@ -192,9 +201,9 @@ namespace MonoGame.Extended.Particles {
             // loop around if c2.H < c1.H
             var h2 = c2.H >= c1.H ? c2.H : c2.H + 360;
             return new Colour(
-                c1.H + t*(h2 - c1.H),
-                c1.S + t*(c2.S - c1.S),
-                c1.L + t*(c2.L - c2.L));
+                c1.H + t * (h2 - c1.H),
+                c1.S + t * (c2.S - c1.S),
+                c1.L + t * (c2.L - c2.L));
         }
     }
 }

@@ -2,18 +2,20 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace MonoGame.Extended.Particles {
+namespace MonoGame.Extended.Particles
+{
     /// <summary>
     /// Represents a closed interval of floating point values.
     /// </summary>
     //[Serializable]
-    public struct RangeF : IEquatable<RangeF>, IFormattable {
+    public struct RangeF : IEquatable<RangeF>, IFormattable
+    {
         /// <summary>
         /// Defines a template for a regex which can be used to validate a string representation
         /// of an interval. The template contains tokens which should be replaced with culture
         /// specific symbols.
         /// </summary>
-        private const string RegexTemplate = @"\[([\$(PositiveSign)\$(NegativeSign)]?[0-9]+(?:\$(DecimalSeparator)[0-9]*)?)\$(GroupSeparator)" + 
+        private const string RegexTemplate = @"\[([\$(PositiveSign)\$(NegativeSign)]?[0-9]+(?:\$(DecimalSeparator)[0-9]*)?)\$(GroupSeparator)" +
                                                @"([\$(PositiveSign)\$(NegativeSign)]?[0-9]+(?:\$(DecimalSeparator)[0-9]*)?)\]";
 
         /// <summary>
@@ -25,16 +27,17 @@ namespace MonoGame.Extended.Particles {
         /// <exception cref="T:System.ArgumentNullException">
         /// Thrown if the value passed to the <paramref name="provider"/> parameter is <c>null</c>.
         /// </exception>
-        private static string GetFormatPattern(IFormatProvider provider) {
+        private static string GetFormatPattern(IFormatProvider provider)
+        {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
             var numberFormat = NumberFormatInfo.GetInstance(provider);
 
-            return RegexTemplate.Replace("$(PositiveSign)",     numberFormat.PositiveSign)
-                                .Replace("$(NegativeSign)",     numberFormat.NegativeSign)
+            return RegexTemplate.Replace("$(PositiveSign)", numberFormat.PositiveSign)
+                                .Replace("$(NegativeSign)", numberFormat.NegativeSign)
                                 .Replace("$(DecimalSeparator)", numberFormat.NumberDecimalSeparator)
-                                .Replace("$(GroupSeparator)",   numberFormat.NumberGroupSeparator);
+                                .Replace("$(GroupSeparator)", numberFormat.NumberGroupSeparator);
         }
 
         /// <summary>
@@ -46,7 +49,8 @@ namespace MonoGame.Extended.Particles {
         /// Thrown if either of the values passed to the <paramref name="min"/> or <paramref name="max"/>
         /// parameters are not finite. That is, positive infinity, negative infinity, or NaN.
         /// </exception>
-        public RangeF(float min, float max) {
+        public RangeF(float min, float max)
+        {
             Min = Math.Min(min, max);
             Max = Math.Max(min, max);
         }
@@ -71,7 +75,8 @@ namespace MonoGame.Extended.Particles {
         ///     ]]>
         ///     </code>
         /// </example>
-        public static RangeF Union(RangeF x, RangeF y) {
+        public static RangeF Union(RangeF x, RangeF y)
+        {
             return new RangeF(Math.Min(x.Min, y.Min), Math.Max(x.Max, y.Max));
         }
 
@@ -131,7 +136,8 @@ namespace MonoGame.Extended.Particles {
         /// <param name="value">The floating point value.</param>
         /// <returns><c>true</c> if the specified value is contained within the closed interval;
         /// else <c>false</c>.</returns>
-        public bool Contains(float value) {
+        public bool Contains(float value)
+        {
             if (float.IsInfinity(value))
                 throw new ArgumentException("value is not finite", nameof(value));
 
@@ -155,7 +161,8 @@ namespace MonoGame.Extended.Particles {
         /// correct format for an ISO 31-11 closed interval, or if the numbers represented within
         /// the closed interval could not be parsed.
         /// </exception>
-        public static RangeF Parse(string value) {
+        public static RangeF Parse(string value)
+        {
             return Parse(value, CultureInfo.InvariantCulture);
         }
 
@@ -172,7 +179,8 @@ namespace MonoGame.Extended.Particles {
         /// correct format for an ISO 31-11 interval, or if the numbers represented within the
         /// closed interval could not be parsed.
         /// </exception>
-        public static RangeF Parse(string value, IFormatProvider format) {
+        public static RangeF Parse(string value, IFormatProvider format)
+        {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
@@ -181,7 +189,8 @@ namespace MonoGame.Extended.Particles {
 
             var regex = new Regex(GetFormatPattern(format));
 
-            if (regex.IsMatch(value)) {
+            if (regex.IsMatch(value))
+            {
                 var match = regex.Match(value);
 
                 var group1 = match.Groups[1].Value;
@@ -205,7 +214,8 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         ///     <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             if (obj is RangeF)
                 return Equals((RangeF)obj);
 
@@ -219,7 +229,8 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         ///     <c>true</c> if the specified <see cref="RangeF"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(RangeF value) {
+        public bool Equals(RangeF value)
+        {
             return Min.Equals(value.Min) &&
                    Max.Equals(value.Max);
         }
@@ -230,7 +241,8 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return Min.GetHashCode() ^ Max.GetHashCode();
         }
 
@@ -240,7 +252,8 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         /// A <see cref="System.String"/> that represents this instance.
         /// </returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return ToString("G", CultureInfo.InvariantCulture);
         }
 
@@ -251,7 +264,8 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         /// A <see cref="System.String"/> that represents this instance.
         /// </returns>
-        public string ToString(IFormatProvider formatProvider) {
+        public string ToString(IFormatProvider formatProvider)
+        {
             return ToString("G", formatProvider);
         }
 
@@ -263,12 +277,13 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         /// A <see cref="System.String"/> that represents this instance.
         /// </returns>
-        public string ToString(string format, IFormatProvider formatProvider) {
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
             var numberFormat = NumberFormatInfo.GetInstance(formatProvider);
 
             var minimum = Min.ToString(format, numberFormat);
             var maximum = Max.ToString(format, numberFormat);
-            
+
             var seperator = numberFormat.NumberGroupSeparator;
 
             return string.Format(formatProvider, "[{0}{1}{2}]", minimum, seperator, maximum);
@@ -282,7 +297,8 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         ///     <c>true</c> if the lvalue <see cref="RangeF"/> is equal to the rvalue; otherwise, <c>false</c>.
         /// </returns>
-        public static bool operator ==(RangeF value1, RangeF value2) {
+        public static bool operator ==(RangeF value1, RangeF value2)
+        {
             return value1.Equals(value2);
         }
 
@@ -294,11 +310,13 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         ///     <c>true</c> if the lvalue <see cref="RangeF"/> is not equal to the rvalue; otherwise, <c>false</c>.
         /// </returns>
-        public static bool operator !=(RangeF value1, RangeF value2) {
+        public static bool operator !=(RangeF value1, RangeF value2)
+        {
             return !value1.Equals(value2);
         }
 
-        public static implicit operator RangeF(float value) {
+        public static implicit operator RangeF(float value)
+        {
             return new RangeF(value, value);
         }
     }

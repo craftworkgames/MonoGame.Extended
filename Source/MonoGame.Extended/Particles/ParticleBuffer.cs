@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace MonoGame.Extended.Particles {
-    public class ParticleBuffer : IDisposable {
+namespace MonoGame.Extended.Particles
+{
+    public class ParticleBuffer : IDisposable
+    {
         private readonly IntPtr _nativePointer;
         public readonly int Size;
 
-        public unsafe ParticleBuffer(int size) {
+        public unsafe ParticleBuffer(int size)
+        {
             Size = size;
             // add one extra spot in memory for margin between head and tail
             // so the iterator can see that it's at the end
             _nativePointer = Marshal.AllocHGlobal(SizeInBytes);
-            BufferEnd = (Particle*) (_nativePointer + SizeInBytes);
-            Head = (Particle*) _nativePointer;
-            Tail = (Particle*) _nativePointer;
+            BufferEnd = (Particle*)(_nativePointer + SizeInBytes);
+            Head = (Particle*)_nativePointer;
+            Tail = (Particle*)_nativePointer;
 
             _iterator = new ParticleIterator(this);
 
@@ -57,7 +60,8 @@ namespace MonoGame.Extended.Particles {
             return Iterator.Reset(prevCount);
         }
 
-        public unsafe void Reclaim(int number) {
+        public unsafe void Reclaim(int number)
+        {
             Count -= number;
 
             Head += number;
@@ -65,13 +69,16 @@ namespace MonoGame.Extended.Particles {
                 Head -= (Size + 1);
         }
 
-        public void CopyTo(IntPtr destination) {
+        public void CopyTo(IntPtr destination)
+        {
             memcpy(destination, _nativePointer, ActiveSizeInBytes);
         }
 
-        public void CopyToReverse(IntPtr destination) {
+        public void CopyToReverse(IntPtr destination)
+        {
             var offset = 0;
-            for (var i = ActiveSizeInBytes - Particle.SizeInBytes; i >= 0; i -= Particle.SizeInBytes) {
+            for (var i = ActiveSizeInBytes - Particle.SizeInBytes; i >= 0; i -= Particle.SizeInBytes)
+            {
                 memcpy(IntPtr.Add(destination, offset), IntPtr.Add(_nativePointer, i), Particle.SizeInBytes);
                 offset += Particle.SizeInBytes;
             }
@@ -82,18 +89,21 @@ namespace MonoGame.Extended.Particles {
 
         private bool _disposed;
 
-        public void Dispose() {
-            if (!_disposed) {
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
                 Marshal.FreeHGlobal(_nativePointer);
                 _disposed = true;
 
                 GC.RemoveMemoryPressure(Particle.SizeInBytes * Size);
             }
-            
+
             GC.SuppressFinalize(this);
         }
 
-        ~ParticleBuffer() {
+        ~ParticleBuffer()
+        {
             Dispose();
         }
 
@@ -110,7 +120,7 @@ namespace MonoGame.Extended.Particles {
             {
                 _buffer = buffer;
             }
-            
+
             public unsafe ParticleIterator Reset()
             {
                 _current = _buffer.Head;
@@ -128,7 +138,7 @@ namespace MonoGame.Extended.Particles {
 
                 return this;
             }
-            
+
             public unsafe Particle* Next()
             {
                 var p = _current;

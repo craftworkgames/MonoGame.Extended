@@ -1,12 +1,16 @@
-﻿namespace MonoGame.Extended.Particles.Modifiers {
-    public class HueInterpolator2 : IModifier {
+﻿namespace MonoGame.Extended.Particles.Modifiers
+{
+    public class HueInterpolator2 : IModifier
+    {
         public float InitialHue { get; set; }
         public float FinalHue { get; set; }
 
-        public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator) {
+        public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        {
             var delta = FinalHue - InitialHue;
 
-            while (iterator.HasNext) {
+            while (iterator.HasNext)
+            {
                 var particle = iterator.Next();
                 particle->Colour = new Colour(
                     delta * particle->Age + InitialHue,

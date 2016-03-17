@@ -1,6 +1,7 @@
 ﻿using System;
 
-namespace MonoGame.Extended.Particles {
+namespace MonoGame.Extended.Particles
+{
     /// <summary>
     /// An immutable data structure representing a directed fixed axis.
     /// </summary>
@@ -10,14 +11,15 @@ namespace MonoGame.Extended.Particles {
 
         public readonly float Y;
 
-        public float Angle => (float) Math.Atan2(Y, X);
+        public float Angle => (float)Math.Atan2(Y, X);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Axis"/> structure.
         /// </summary>
         /// <param name="x">The X component of the unit vector representing the axis.</param>
         /// <param name="y">The Y component of the unit vector representing the axis.</param>
-        public Axis(float x, float y) {
+        public Axis(float x, float y)
+        {
             var length = (float)Math.Sqrt(x * x + y * y);
 
             X = x / length;
@@ -73,7 +75,8 @@ namespace MonoGame.Extended.Particles {
         /// Copies the X and Y components of the axis to the specified memory location.
         /// </summary>
         /// <param name="destination">The memory location to copy the axis to.</param>
-        public unsafe void CopyTo(float* destination) {
+        public unsafe void CopyTo(float* destination)
+        {
             destination[0] = X;
             destination[1] = Y;
         }
@@ -81,7 +84,8 @@ namespace MonoGame.Extended.Particles {
         /// <summary>
         /// Destructures the axis, exposing the individual X and Y components.
         /// </summary>
-        public void Destructure(out float x, out float y) {
+        public void Destructure(out float x, out float y)
+        {
             x = X;
             y = Y;
         }
@@ -93,7 +97,8 @@ namespace MonoGame.Extended.Particles {
         /// <exception cref="T:System.ArgumentNullException">
         /// Thrown if the value passed to the <paramref name="callback"/> parameter is <c>null</c>.
         /// </exception>
-        public void Match(Action<float, float> callback) {
+        public void Match(Action<float, float> callback)
+        {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback));
 
@@ -114,7 +119,8 @@ namespace MonoGame.Extended.Particles {
         /// <exception cref="T:System.ArgumentNullException">
         /// Thrown if the value passed to the <paramref name="map"/> parameter is <c>null</c>.
         /// </exception>
-        public T Map<T>(Func<float, float, T> map) {
+        public T Map<T>(Func<float, float, T> map)
+        {
             if (map == null)
                 throw new ArgumentNullException(nameof(map));
 
@@ -128,7 +134,8 @@ namespace MonoGame.Extended.Particles {
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
         /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(Axis other) {
+        public bool Equals(Axis other)
+        {
             return X.Equals(other.X) &&
                    Y.Equals(other.Y);
         }
@@ -140,10 +147,11 @@ namespace MonoGame.Extended.Particles {
         /// true if <paramref name="obj"/> and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
         /// <param name="obj">Another object to compare to.</param>
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             if (ReferenceEquals(null, obj))
                 return false;
-            
+
             return obj is Axis && Equals((Axis)obj);
         }
 
@@ -153,12 +161,14 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         /// A 32-bit signed integer that is the hash code for this instance.
         /// </returns>
-        public override int GetHashCode() {
-            unchecked {
+        public override int GetHashCode()
+        {
+            unchecked
+            {
                 var hashCode = X.GetHashCode();
 
                 hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                
+
                 return hashCode;
             }
         }
@@ -169,7 +179,8 @@ namespace MonoGame.Extended.Particles {
         /// <returns>
         /// A <see cref="System.String"/> that represents this instance.
         /// </returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return $"({X.ToString("F4")}, {Y.ToString("F4")})";
         }
 
@@ -180,15 +191,18 @@ namespace MonoGame.Extended.Particles {
 
         public static implicit operator Vector(Axis a) => a.ToVector();
 
-        public static bool operator ==(Axis x, Axis y) {
+        public static bool operator ==(Axis x, Axis y)
+        {
             return x.Equals(y);
         }
 
-        public static bool operator !=(Axis x, Axis y) {
+        public static bool operator !=(Axis x, Axis y)
+        {
             return !x.Equals(y);
         }
 
-        public static Vector operator *(Axis axis, float magnitude) {
+        public static Vector operator *(Axis axis, float magnitude)
+        {
             return new Vector(axis, magnitude);
         }
     }

@@ -6,15 +6,16 @@
         public int Height { get; set; }
         public float RestitutionCoefficient { get; set; } = 1;
 
-        public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator) {
-            
+        public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        {
+
             while (iterator.HasNext)
             {
                 var particle = iterator.Next();
 
-                var left =   particle->TriggerPos.X + Width * -0.5f;
-                var right =  particle->TriggerPos.X + Width * 0.5f;
-                var top =    particle->TriggerPos.Y + Height * -0.5f;
+                var left = particle->TriggerPos.X + Width * -0.5f;
+                var right = particle->TriggerPos.X + Width * 0.5f;
+                var top = particle->TriggerPos.Y + Height * -0.5f;
                 var bottom = particle->TriggerPos.Y + Height * 0.5f;
 
                 float xPos = particle->Position.X;
@@ -22,20 +23,24 @@
                 float yPos = particle->Position.Y;
                 float yVel = particle->Velocity.Y;
 
-                if ((int)particle->Position.X < left) {
+                if ((int)particle->Position.X < left)
+                {
                     xPos = left + (left - xPos);
                     xVel = -xVel * RestitutionCoefficient;
                 }
-                else if (particle->Position.X > right) {
+                else if (particle->Position.X > right)
+                {
                     xPos = right - (xPos - right);
                     xVel = -xVel * RestitutionCoefficient;
                 }
 
-                if (particle->Position.Y < top) {
+                if (particle->Position.Y < top)
+                {
                     yPos = top + (top - yPos);
                     yVel = -yVel * RestitutionCoefficient;
                 }
-                else if ((int)particle->Position.Y > bottom) {
+                else if ((int)particle->Position.Y > bottom)
+                {
                     yPos = bottom - (yPos - bottom);
                     yVel = -yVel * RestitutionCoefficient;
                 }

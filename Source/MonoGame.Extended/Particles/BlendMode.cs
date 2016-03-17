@@ -1,5 +1,7 @@
-﻿namespace MonoGame.Extended.Particles {
-    public enum BlendMode {
+﻿namespace MonoGame.Extended.Particles
+{
+    public enum BlendMode
+    {
         Alpha,
         Add,
         Subtract

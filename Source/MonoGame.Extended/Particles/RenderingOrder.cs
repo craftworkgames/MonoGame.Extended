@@ -1,5 +1,7 @@
-﻿namespace MonoGame.Extended.Particles {
-    public enum RenderingOrder {
+﻿namespace MonoGame.Extended.Particles
+{
+    public enum RenderingOrder
+    {
         FrontToBack,
         BackToFront
     }

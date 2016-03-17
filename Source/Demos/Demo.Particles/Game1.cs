@@ -7,7 +7,9 @@ using MonoGame.Extended.Particles;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.Sprites;
+using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
+using SpriteBatchExtensions = MonoGame.Extended.Particles.SpriteBatchExtensions;
 
 namespace Demo.Particles
 {
@@ -19,7 +21,6 @@ namespace Demo.Particles
         private Sprite _sprite;
         private Camera2D _camera;
         private ParticleEffect _particleEffect;
-        private SpriteBatchRenderer _particleRenderer;
 
         public Game1()
         {
@@ -45,7 +46,7 @@ namespace Demo.Particles
             var particleTexture = new Texture2D(GraphicsDevice, 1, 1);
             particleTexture.SetData(new[] { Color.White });
 
-            ParticleInit(particleTexture);
+            ParticleInit(new TextureRegion2D(particleTexture));
         }
 
         protected override void UnloadContent()
@@ -79,24 +80,22 @@ namespace Demo.Particles
             GraphicsDevice.Clear(Color.Black);
             
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
-            _particleRenderer.Draw(_spriteBatch, _particleEffect);
-            //_spriteBatch.Draw(_sprite);
+            _spriteBatch.Draw(_particleEffect);
+            _spriteBatch.Draw(_sprite);
             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
-        private void ParticleInit(Texture2D texture)
+        private void ParticleInit(TextureRegion2D textureRegion)
         {
-            _particleRenderer = new SpriteBatchRenderer();
             _particleEffect = new ParticleEffect
             {
                 Emitters = new[]
                 {
                     new Emitter(500, TimeSpan.FromSeconds(1.5), Profile.Ring(10f, Profile.CircleRadiation.Out))
                     {
-                        Texture = texture,
-                        BlendMode = BlendMode.Alpha,
+                        TextureRegion = textureRegion,
                         Parameters = new ReleaseParameters { Speed = new RangeF(50, 0f), Quantity = 3, Rotation = new RangeF(-10f, 10f) },
                         Modifiers = new IModifier[]
                         {

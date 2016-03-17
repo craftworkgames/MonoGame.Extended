@@ -10,9 +10,9 @@
             while (iterator.HasNext)
             {
                 var particle = iterator.Next();
-                var left =   particle->TriggerPos.X + Width * -0.5f;
-                var right =  particle->TriggerPos.X + Width * 0.5f;
-                var top =    particle->TriggerPos.Y + Height * -0.5f;
+                var left = particle->TriggerPos.X + Width * -0.5f;
+                var right = particle->TriggerPos.X + Width * 0.5f;
+                var top = particle->TriggerPos.Y + Height * -0.5f;
                 var bottom = particle->TriggerPos.Y + Height * 0.5f;
 
                 float xPos = particle->Position.X;

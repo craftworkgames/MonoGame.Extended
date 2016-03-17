@@ -9,18 +9,22 @@ namespace MonoGame.Extended.Particles.Modifiers
         public float VelocityHue { get; set; }
         public float VelocityThreshold { get; set; }
 
-        public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator) {
+        public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        {
             var velocityThreshold2 = VelocityThreshold * VelocityThreshold;
 
-            while (iterator.HasNext) {
+            while (iterator.HasNext)
+            {
                 var particle = iterator.Next();
                 var velocity2 = particle->Velocity.LengthSq;
 
                 float h;
-                if (velocity2 >= velocityThreshold2) {
+                if (velocity2 >= velocityThreshold2)
+                {
                     h = VelocityHue;
                 }
-                else {
+                else
+                {
                     var t = (float)Math.Sqrt(velocity2) / VelocityThreshold;
                     h = MathHelper.Lerp(StationaryHue, VelocityHue, t);
                 }

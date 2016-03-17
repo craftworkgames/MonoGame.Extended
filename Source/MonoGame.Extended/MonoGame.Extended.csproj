@@ -117,7 +117,7 @@
     <Compile Include="Particles\RangeF.cs" />
     <Compile Include="Particles\ReleaseParameters.cs" />
     <Compile Include="Particles\RenderingOrder.cs" />
-    <Compile Include="Particles\SpritebatchRenderer.cs" />
+    <Compile Include="Particles\SpriteBatchExtensions.cs" />
     <Compile Include="Particles\Vector.cs" />
     <Compile Include="RenderTarget2DExtensions.cs" />
     <Compile Include="Maps\Tiled\SpriteBatchExtensions.cs" />
@@ -143,7 +143,7 @@
     <Compile Include="Animations\SpriteSheetAnimator.cs" />
     <Compile Include="TextureAtlases\TextureAtlas.cs" />
     <Compile Include="TextureAtlases\TextureAtlasReader.cs" />
-    <Compile Include="TextureAtlases\TextureRegion2DExtensions.cs" />
+    <Compile Include="TextureAtlases\SpriteBatchExtensions.cs" />
     <Compile Include="TextureAtlases\TextureRegion2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprites\Sprite.cs" />
