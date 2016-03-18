@@ -122,12 +122,12 @@ namespace MonoGame.Extended.Particles
             vector = new Vector((float)Math.Cos(angle), (float)Math.Sin(angle));
         }
 
-        public static void NextColour(out HslColor colour, ColourRange range)
+        public static void NextColor(out HslColor color, ColorRange range)
         {
             var maxH = range.Max.H >= range.Min.H
                 ? range.Max.H
                 : range.Max.H + 360;
-            colour = new HslColor(NextSingle(range.Min.H, maxH),
+            color = new HslColor(NextSingle(range.Min.H, maxH),
                                  NextSingle(range.Min.S, range.Max.S),
                                  NextSingle(range.Min.L, range.Max.L));
         }

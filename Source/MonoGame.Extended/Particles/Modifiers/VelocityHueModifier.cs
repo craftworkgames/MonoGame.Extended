@@ -28,7 +28,7 @@ namespace MonoGame.Extended.Particles.Modifiers
                     var t = (float)Math.Sqrt(velocity2) / VelocityThreshold;
                     h = MathHelper.Lerp(StationaryHue, VelocityHue, t);
                 }
-                particle->Colour = new HslColor(h, particle->Colour.S, particle->Colour.L);
+                particle->Color = new HslColor(h, particle->Color.S, particle->Color.L);
             }
         }
     }

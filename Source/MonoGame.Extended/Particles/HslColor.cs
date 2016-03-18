@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 namespace MonoGame.Extended.Particles
 {
     /// <summary>
-    /// An immutable data structure representing a 24bit colour composed of separate hue, saturation and lightness channels.
+    /// An immutable data structure representing a 24bit color composed of separate hue, saturation and lightness channels.
     /// </summary>
     //[Serializable]
     public struct HslColor : IEquatable<HslColor>
@@ -46,7 +46,7 @@ namespace MonoGame.Extended.Particles
         }
 
         /// <summary>
-        /// Copies the individual channels of the colour to the specified memory location.
+        /// Copies the individual channels of the color to the specified memory location.
         /// </summary>
         /// <param name="destination">The memory location to copy the axis to.</param>
         public void CopyTo(out HslColor destination)
@@ -55,7 +55,7 @@ namespace MonoGame.Extended.Particles
         }
 
         /// <summary>
-        /// Destructures the colour, exposing the individual channels.
+        /// Destructures the color, exposing the individual channels.
         /// </summary>
         public void Destructure(out float h, out float s, out float l)
         {
@@ -65,9 +65,9 @@ namespace MonoGame.Extended.Particles
         }
 
         /// <summary>
-        /// Exposes the individual channels of the colour to the specified matching function.
+        /// Exposes the individual channels of the color to the specified matching function.
         /// </summary>
-        /// <param name="callback">The function which matches the individual channels of the colour.</param>
+        /// <param name="callback">The function which matches the individual channels of the color.</param>
         /// <exception cref="T:System.ArgumentNullException">
         /// Thrown if the value passed to the <paramref name="callback"/> parameter is <c>null</c>.
         /// </exception>
@@ -80,12 +80,12 @@ namespace MonoGame.Extended.Particles
         }
 
         /// <summary>
-        /// Exposes the individual channels of the colour to the specified mapping function and returns the
+        /// Exposes the individual channels of the color to the specified mapping function and returns the
         /// result;
         /// </summary>
         /// <typeparam name="T">The type being mapped to.</typeparam>
         /// <param name="map">
-        /// A function which maps the colour channels to an instance of <typeparamref name="T"/>.
+        /// A function which maps the color channels to an instance of <typeparamref name="T"/>.
         /// </param>
         /// <returns>
         /// The result of the <paramref name="map"/> function when passed the individual X and Y components.

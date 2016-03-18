@@ -46,20 +46,11 @@ namespace MonoGame.Extended.Particles
         /// <returns>A <see cref="Axis"/> value representing the direction the vector is facing.</returns>
         public Axis Axis => new Axis(X, Y);
 
-        public Vector Add(Vector v)
-            => new Vector(X + v.X, Y + v.Y);
-
-        public Vector Subtract(Vector v)
-            => new Vector(X - v.X, Y - v.Y);
-
-        public Vector Negate()
-            => new Vector(-X, -Y);
-
-        public Vector Multiply(float factor)
-            => new Vector(X * factor, Y * factor);
-
-        public Vector Divide(float factor)
-            => new Vector(X / factor, Y / factor);
+        public Vector Add(Vector v) => new Vector(X + v.X, Y + v.Y);
+        public Vector Subtract(Vector v) => new Vector(X - v.X, Y - v.Y);
+        public Vector Negate() => new Vector(-X, -Y);
+        public Vector Multiply(float factor) => new Vector(X * factor, Y * factor);
+        public Vector Divide(float factor) => new Vector(X / factor, Y / factor);
 
         /// <summary>
         /// Copies the X and Y components of the vector to the specified memory location.
@@ -123,24 +114,12 @@ namespace MonoGame.Extended.Particles
         }
 
         public static implicit operator Axis(Vector v) => v.Axis;
-
-        public static Vector operator +(Vector v1, Vector v2)
-            => v1.Add(v2);
-
-        public static Vector operator -(Vector v1, Vector v2)
-            => v1.Subtract(v2);
-
-        public static Vector operator -(Vector v)
-            => v.Negate();
-
-        public static Vector operator *(Vector value, float factor)
-            => value.Multiply(factor);
-
-        public static Vector operator *(float factor, Vector value)
-            => value.Multiply(factor);
-
-        public static Vector operator /(Vector value, float factor)
-            => value.Divide(factor);
+        public static Vector operator +(Vector v1, Vector v2) => v1.Add(v2);
+        public static Vector operator -(Vector v1, Vector v2) => v1.Subtract(v2);
+        public static Vector operator -(Vector v) => v.Negate();
+        public static Vector operator *(Vector value, float factor) => value.Multiply(factor);
+        public static Vector operator *(float factor, Vector value) => value.Multiply(factor);
+        public static Vector operator /(Vector value, float factor) => value.Divide(factor);
 
         public static Vector Zero => new Vector(0, 0);
         public static Vector One => new Vector(1, 1);

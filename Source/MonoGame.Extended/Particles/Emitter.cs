@@ -118,7 +118,7 @@ namespace MonoGame.Extended.Particles
 
                 particle->Velocity = heading * speed;
 
-                FastRand.NextColour(out particle->Colour, Parameters.Colour);
+                FastRand.NextColor(out particle->Color, Parameters.Color);
 
                 particle->Opacity = FastRand.NextSingle(Parameters.Opacity);
                 var scale = FastRand.NextSingle(Parameters.Scale);

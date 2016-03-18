@@ -6,28 +6,28 @@
     public sealed class ColorInterpolator2 : IModifier
     {
         /// <summary>
-        /// Gets or sets the initial colour of particles when they are released.
+        /// Gets or sets the initial color of particles when they are released.
         /// </summary>
-        public HslColor InitialColour { get; set; }
+        public HslColor InitialColor { get; set; }
 
         /// <summary>
-        /// Gets or sets the final colour of particles when they are retired.
+        /// Gets or sets the final color of particles when they are retired.
         /// </summary>
-        public HslColor FinalColour { get; set; }
+        public HslColor FinalColor { get; set; }
 
         public unsafe void Update(float elapsedseconds, ParticleBuffer.ParticleIterator iterator)
         {
-            var delta = new HslColor(FinalColour.H - InitialColour.H,
-                                   FinalColour.S - InitialColour.S,
-                                   FinalColour.L - InitialColour.L);
+            var delta = new HslColor(FinalColor.H - InitialColor.H,
+                                   FinalColor.S - InitialColor.S,
+                                   FinalColor.L - InitialColor.L);
 
             while (iterator.HasNext)
             {
                 var particle = iterator.Next();
-                particle->Colour = new HslColor(
-                    InitialColour.H + delta.H * particle->Age,
-                    InitialColour.S + delta.S * particle->Age,
-                    InitialColour.L + delta.L * particle->Age);
+                particle->Color = new HslColor(
+                    InitialColor.H + delta.H * particle->Age,
+                    InitialColor.S + delta.S * particle->Age,
+                    InitialColor.L + delta.L * particle->Age);
             }
         }
     }

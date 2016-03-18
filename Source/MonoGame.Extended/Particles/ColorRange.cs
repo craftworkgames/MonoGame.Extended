@@ -2,9 +2,9 @@
 
 namespace MonoGame.Extended.Particles
 {
-    public struct ColourRange
+    public struct ColorRange
     {
-        public ColourRange(HslColor min, HslColor max)
+        public ColorRange(HslColor min, HslColor max)
         {
             Min = min;
             Max = max;
@@ -13,7 +13,7 @@ namespace MonoGame.Extended.Particles
         public readonly HslColor Min;
         public readonly HslColor Max;
 
-        public static ColourRange Parse(string value)
+        public static ColorRange Parse(string value)
         {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
@@ -24,7 +24,7 @@ namespace MonoGame.Extended.Particles
                 var colors = noBrackets.Split(';');
                 var c1 = HslColor.Parse(colors[0]);
                 var c2 = HslColor.Parse(colors[1]);
-                return new ColourRange(c1, c2);
+                return new ColorRange(c1, c2);
             }
             catch
             {
@@ -39,9 +39,9 @@ namespace MonoGame.Extended.Particles
             return "[" + Min + ';' + Max + ']';
         }
 
-        public static implicit operator ColourRange(HslColor value)
+        public static implicit operator ColorRange(HslColor value)
         {
-            return new ColourRange(value, value);
+            return new ColorRange(value, value);
         }
     }
 }

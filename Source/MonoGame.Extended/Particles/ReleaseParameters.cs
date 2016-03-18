@@ -6,20 +6,19 @@
         {
             Quantity = 1;
             Speed = RangeF.Parse("[-1.0,1.0]");
-            Colour = new ColourRange(new HslColor(0f, 0.5f, 0.5f), new HslColor(360f, 0.5f, 0.5f));
+            Color = new ColorRange(new HslColor(0f, 0.5f, 0.5f), new HslColor(360f, 0.5f, 0.5f));
             Opacity = RangeF.Parse("[0.0,1.0]");
             Scale = RangeF.Parse("[1.0,10.0]");
             Rotation = RangeF.Parse("[-3.14159,3.14159]");
             Mass = 1f;
         }
 
-        public Range Quantity;
-        public RangeF Speed;
-        public ColourRange Colour;
-        public RangeF Opacity;
-        public RangeF Scale;
-        public RangeF Rotation;
-        public RangeF Mass;
-
+        public Range Quantity { get; set; }
+        public RangeF Speed { get; set; }
+        public ColorRange Color { get; set; }
+        public RangeF Opacity { get; set; }
+        public RangeF Scale { get; set; }
+        public RangeF Rotation { get; set; }
+        public RangeF Mass { get; set; }
     }
 }

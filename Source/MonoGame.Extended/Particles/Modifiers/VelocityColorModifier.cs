@@ -4,8 +4,8 @@ namespace MonoGame.Extended.Particles.Modifiers
 {
     public class VelocityColorModifier : IModifier
     {
-        public HslColor StationaryColour { get; set; }
-        public HslColor VelocityColour { get; set; }
+        public HslColor StationaryColor { get; set; }
+        public HslColor VelocityColor { get; set; }
         public float VelocityThreshold { get; set; }
 
         public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
@@ -17,20 +17,20 @@ namespace MonoGame.Extended.Particles.Modifiers
                 var particle = iterator.Next();
                 var velocity2 = particle->Velocity.X * particle->Velocity.X +
                                 particle->Velocity.Y * particle->Velocity.Y;
-                var deltaColour = VelocityColour - StationaryColour;
+                var deltaColor = VelocityColor - StationaryColor;
 
                 if (velocity2 >= velocityThreshold2)
                 {
-                    VelocityColour.CopyTo(out particle->Colour);
+                    VelocityColor.CopyTo(out particle->Color);
                 }
                 else
                 {
                     var t = (float)Math.Sqrt(velocity2) / VelocityThreshold;
 
-                    particle->Colour = new HslColor(
-                        deltaColour.H * t + StationaryColour.H,
-                        deltaColour.S * t + StationaryColour.S,
-                        deltaColour.L * t + StationaryColour.L);
+                    particle->Color = new HslColor(
+                        deltaColor.H * t + StationaryColor.H,
+                        deltaColor.S * t + StationaryColor.S,
+                        deltaColor.L * t + StationaryColor.L);
                 }
             }
         }

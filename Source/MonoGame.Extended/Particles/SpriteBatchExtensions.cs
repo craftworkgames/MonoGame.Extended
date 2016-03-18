@@ -21,7 +21,7 @@ namespace MonoGame.Extended.Particles
             while (iterator.HasNext)
             {
                 var particle = iterator.Next();
-                var color = particle->Colour.ToRgb();
+                var color = particle->Color.ToRgb();
 
                 if (spriteBatch.GraphicsDevice.BlendState == BlendState.AlphaBlend)
                     color *= particle->Opacity;

@@ -3,16 +3,15 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Particles
 {
-    public static class ColorHelper
+    public static class ColorExtensions
     {
         public static Color ToRgb(this HslColor c)
         {
-            return ToRgb(c.H, c.S, c.L);
-        }
+            var h = c.H;
+            var s = c.S;
+            var l = c.L;
 
-        public static Color ToRgb(float h, float s, float l)
-        {
-            if (s == 0)
+            if (s == 0f)
                 return new Color(l, l, l);
 
             h = h / 360f;
@@ -39,14 +38,9 @@ namespace MonoGame.Extended.Particles
 
         public static HslColor ToHsl(this Color c)
         {
-            return ToHsl(c.R, c.B, c.G);
-        }
-
-        public static HslColor ToHsl(float r, float b, float g)
-        {
-            r = r / 255f;
-            b = b / 255f;
-            g = g / 255f;
+            var r = c.R / 255f;
+            var b = c.B / 255f;
+            var g = c.G / 255f;
 
             var max = Math.Max(Math.Max(r, g), b);
             var min = Math.Min(Math.Min(r, g), b);

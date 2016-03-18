@@ -99,7 +99,7 @@ namespace Demo.Particles
                         Parameters = new ReleaseParameters { Speed = new RangeF(50, 0f), Quantity = 3, Rotation = new RangeF(-10f, 10f) },
                         Modifiers = new IModifier[]
                         {
-                            new ColorInterpolator2 { InitialColour = new HslColor(0.33f, 0.5f, 0.5f), FinalColour = new HslColor(0.5f, 0.9f, 1.0f) },
+                            new ColorInterpolator2 { InitialColor = new HslColor(0.33f, 0.5f, 0.5f), FinalColor = new HslColor(0.5f, 0.9f, 1.0f) },
                             new RotationModifier { RotationRate = -2.1f },
                             //new RectangleContainerModifier {  Width = 800, Height = 480 },
                             new LinearGravityModifier { Direction = Axis.Up, Strength = 100f }
