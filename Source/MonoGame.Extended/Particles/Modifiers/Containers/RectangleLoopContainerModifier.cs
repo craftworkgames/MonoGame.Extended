@@ -1,6 +1,6 @@
 ﻿namespace MonoGame.Extended.Particles.Modifiers.Containers
 {
-    public class RectLoopContainerModifier : IModifier
+    public class RectangleLoopContainerModifier : IModifier
     {
         public int Width { get; set; }
         public int Height { get; set; }

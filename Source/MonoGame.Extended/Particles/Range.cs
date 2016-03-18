@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Particles
         /// of an interval. The template contains tokens which should be replaced with culture
         /// specific symbols.
         /// </summary>
-        private const string RegexTemplate = @"\[([\$(PositiveSign)\$(NegativeSign)]?[0-9]+)\$(GroupSeparator)([\$(PositiveSign)\$(NegativeSign)]?[0-9]+)\]";
+        private const string _regexTemplate = @"\[([\$(PositiveSign)\$(NegativeSign)]?[0-9]+)\$(GroupSeparator)([\$(PositiveSign)\$(NegativeSign)]?[0-9]+)\]";
 
         /// <summary>
         /// Gets a regex pattern which can be used to validate a string representation of an interval
@@ -33,7 +33,7 @@ namespace MonoGame.Extended.Particles
 
             var numberFormat = NumberFormatInfo.GetInstance(provider);
 
-            return RegexTemplate.Replace("$(PositiveSign)", numberFormat.PositiveSign)
+            return _regexTemplate.Replace("$(PositiveSign)", numberFormat.PositiveSign)
                                 .Replace("$(NegativeSign)", numberFormat.NegativeSign)
                                 .Replace("$(GroupSeparator)", numberFormat.NumberGroupSeparator);
         }

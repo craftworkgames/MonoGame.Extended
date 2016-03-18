@@ -9,8 +9,8 @@ namespace MonoGame.Extended.Particles
     [StructLayout(LayoutKind.Sequential)]
     public struct LineSegment : IEquatable<LineSegment>
     {
-        internal Vector _point1;
-        internal Vector _point2;
+        internal readonly Vector _point1;
+        internal readonly Vector _point2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LineSegment"/> structure.
@@ -40,10 +40,9 @@ namespace MonoGame.Extended.Particles
             }
         }
 
-        public void Translate(Vector t)
+        public LineSegment Translate(Vector t)
         {
-            _point1 += t;
-            _point2 += t;
+            return new LineSegment(_point1 + t, _point2 + t);
         }
 
         public Vector ToVector()
@@ -103,7 +102,7 @@ namespace MonoGame.Extended.Particles
 
         public override string ToString()
         {
-            return string.Format("({0:x}:{0:y},{1:x}:{1:y})", _point1, _point2);
+            return $"({_point1.X}:{_point1.Y},{_point2.X}:{_point2.Y})";
         }
     }
 }

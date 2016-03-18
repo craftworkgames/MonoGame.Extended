@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Particles
         public Vector Position;
         public Vector TriggerPos;
         public Vector Velocity;
-        public Colour Colour;
+        public HslColor Colour;
         public float Opacity;
         public Vector Scale;
         public float Rotation;

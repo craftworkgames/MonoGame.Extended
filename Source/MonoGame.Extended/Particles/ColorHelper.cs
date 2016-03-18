@@ -5,7 +5,7 @@ namespace MonoGame.Extended.Particles
 {
     public static class ColorHelper
     {
-        public static Color ToRgb(this Colour c)
+        public static Color ToRgb(this HslColor c)
         {
             return ToRgb(c.H, c.S, c.L);
         }
@@ -37,12 +37,12 @@ namespace MonoGame.Extended.Particles
             return m1;
         }
 
-        public static Colour ToHsl(this Color c)
+        public static HslColor ToHsl(this Color c)
         {
             return ToHsl(c.R, c.B, c.G);
         }
 
-        public static Colour ToHsl(float r, float b, float g)
+        public static HslColor ToHsl(float r, float b, float g)
         {
             r = r / 255f;
             b = b / 255f;
@@ -55,7 +55,7 @@ namespace MonoGame.Extended.Particles
 
             var l = sum * 0.5f;
 
-            if (chroma == 0) return new Colour(0f, 0f, l);
+            if (chroma == 0) return new HslColor(0f, 0f, l);
             float h;
             if (r == max)
                 h = (60 * (g - b) / chroma + 360) % 360;
@@ -66,7 +66,7 @@ namespace MonoGame.Extended.Particles
 
             var s = l <= 0.5f ? chroma / sum : chroma / (2f - sum);
 
-            return new Colour(h, s, l);
+            return new HslColor(h, s, l);
         }
     }
 }

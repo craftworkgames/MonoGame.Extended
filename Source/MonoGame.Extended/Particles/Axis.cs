@@ -7,9 +7,8 @@ namespace MonoGame.Extended.Particles
     /// </summary>
     public struct Axis : IEquatable<Axis>
     {
-        public readonly float X;
-
-        public readonly float Y;
+        public float X { get; }
+        public float Y { get; }
 
         public float Angle => (float)Math.Atan2(Y, X);
 
@@ -136,8 +135,7 @@ namespace MonoGame.Extended.Particles
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(Axis other)
         {
-            return X.Equals(other.X) &&
-                   Y.Equals(other.Y);
+            return X.Equals(other.X) && Y.Equals(other.Y);
         }
 
         /// <summary>

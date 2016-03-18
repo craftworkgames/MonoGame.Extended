@@ -6,7 +6,7 @@
         {
             Quantity = 1;
             Speed = RangeF.Parse("[-1.0,1.0]");
-            Colour = new ColourRange(new Colour(0f, 0.5f, 0.5f), new Colour(360f, 0.5f, 0.5f));
+            Colour = new ColourRange(new HslColor(0f, 0.5f, 0.5f), new HslColor(360f, 0.5f, 0.5f));
             Opacity = RangeF.Parse("[0.0,1.0]");
             Scale = RangeF.Parse("[1.0,10.0]");
             Rotation = RangeF.Parse("[-3.14159,3.14159]");
