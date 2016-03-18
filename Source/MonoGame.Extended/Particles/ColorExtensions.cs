@@ -49,8 +49,11 @@ namespace MonoGame.Extended.Particles
 
             var l = sum * 0.5f;
 
-            if (chroma == 0) return new HslColor(0f, 0f, l);
+            if (chroma == 0)
+                return new HslColor(0f, 0f, l);
+
             float h;
+
             if (r == max)
                 h = (60 * (g - b) / chroma + 360) % 360;
             else if (g == max)

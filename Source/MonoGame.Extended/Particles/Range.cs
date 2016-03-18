@@ -81,12 +81,12 @@ namespace MonoGame.Extended.Particles
         /// <summary>
         /// Gets or sets the inclusive minimum value in the interval.
         /// </summary>
-        public readonly int Min;
+        public int Min { get; }
 
         /// <summary>
         /// Gets or sets the inclusive maximum value in the interval.
         /// </summary>
-        public readonly int Max;
+        public int Max { get; }
 
         /// <summary>
         /// Gets the diameter (size) of the interval.

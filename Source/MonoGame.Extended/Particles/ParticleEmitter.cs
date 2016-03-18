@@ -1,13 +1,14 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Particles
 {
-    public unsafe class Emitter : IDisposable
+    public unsafe class ParticleEmitter : IDisposable
     {
-        public Emitter(int capacity, TimeSpan term, Profile profile)
+        public ParticleEmitter(int capacity, TimeSpan term, Profile profile)
         {
             if (profile == null)
                 throw new ArgumentNullException(nameof(profile));
@@ -15,7 +16,7 @@ namespace MonoGame.Extended.Particles
             _term = (float)term.TotalSeconds;
 
             Buffer = new ParticleBuffer(capacity);
-            Offset = new Vector();
+            Offset = new Vector2();
             Profile = profile;
             Modifiers = new IModifier[0];
             ModifierExecutionStrategy = ModifierExecutionStrategy.Serial;
@@ -28,7 +29,7 @@ namespace MonoGame.Extended.Particles
         internal readonly ParticleBuffer Buffer;
 
         public int ActiveParticles => Buffer.Count;
-        public Vector Offset { get; set; }
+        public Vector2 Offset { get; set; }
         public IModifier[] Modifiers { get; set; }
         public ModifierExecutionStrategy ModifierExecutionStrategy { get; set; }
 
@@ -77,7 +78,7 @@ namespace MonoGame.Extended.Particles
             ModifierExecutionStrategy.ExecuteModifiers(Modifiers, elapsedSeconds, iterator);
         }
 
-        public void Trigger(Vector position)
+        public void Trigger(Vector2 position)
         {
             var numToRelease = FastRand.NextInteger(Parameters.Quantity);
 
@@ -96,7 +97,7 @@ namespace MonoGame.Extended.Particles
             }
         }
 
-        private void Release(Vector position, int numToRelease)
+        private void Release(Vector2 position, int numToRelease)
         {
             var iterator = Buffer.Release(numToRelease);
 
@@ -122,7 +123,7 @@ namespace MonoGame.Extended.Particles
 
                 particle->Opacity = FastRand.NextSingle(Parameters.Opacity);
                 var scale = FastRand.NextSingle(Parameters.Scale);
-                particle->Scale = new Vector(scale, scale);
+                particle->Scale = new Vector2(scale, scale);
                 particle->Rotation = FastRand.NextSingle(Parameters.Rotation);
                 particle->Mass = FastRand.NextSingle(Parameters.Mass);
             }
@@ -134,7 +135,7 @@ namespace MonoGame.Extended.Particles
             GC.SuppressFinalize(this);
         }
 
-        ~Emitter()
+        ~ParticleEmitter()
         {
             Dispose();
         }

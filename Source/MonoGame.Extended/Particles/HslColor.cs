@@ -13,17 +13,17 @@ namespace MonoGame.Extended.Particles
         /// <summary>
         /// Gets the value of the hue channel in degrees.
         /// </summary>
-        public readonly float H;
+        public float H { get; }
         
         /// <summary>
         /// Gets the value of the saturation channel.
         /// </summary>
-        public readonly float S;
+        public float S { get; }
 
         /// <summary>
         /// Gets the value of the lightness channel.
         /// </summary>
-        public readonly float L;
+        public float L { get; }
 
         private static float NormalizeHue(float h)
         {

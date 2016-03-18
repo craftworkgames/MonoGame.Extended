@@ -1,8 +1,10 @@
-﻿namespace MonoGame.Extended.Particles.Profiles
+﻿using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Particles.Profiles
 {
     public abstract class Profile //: ICloneable
     {
-        public abstract void GetOffsetAndHeading(out Vector offset, out Axis heading);
+        public abstract void GetOffsetAndHeading(out Vector2 offset, out Axis heading);
 
         public object Clone()
         {

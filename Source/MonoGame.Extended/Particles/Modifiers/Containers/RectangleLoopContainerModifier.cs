@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended.Particles.Modifiers.Containers
+﻿using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Particles.Modifiers.Containers
 {
     public class RectangleLoopContainerModifier : IModifier
     {
@@ -35,7 +37,7 @@
                 {
                     yPos = particle->Position.Y - Height;
                 }
-                particle->Position = new Vector(xPos, yPos);
+                particle->Position = new Vector2(xPos, yPos);
             }
         }
     }

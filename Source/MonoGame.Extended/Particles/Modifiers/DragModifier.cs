@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended.Particles.Modifiers
+﻿using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Particles.Modifiers
 {
     public class DragModifier : IModifier
     {
@@ -12,7 +14,7 @@
                 var particle = iterator.Next();
                 var drag = -DragCoefficient * Density * particle->Mass * elapsedSeconds;
 
-                particle->Velocity = new Vector(
+                particle->Velocity = new Vector2(
                     particle->Velocity.X + particle->Velocity.X * drag,
                     particle->Velocity.Y + particle->Velocity.Y * drag);
             }

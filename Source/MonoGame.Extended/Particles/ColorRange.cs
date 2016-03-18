@@ -10,8 +10,8 @@ namespace MonoGame.Extended.Particles
             Max = max;
         }
 
-        public readonly HslColor Min;
-        public readonly HslColor Max;
+        public HslColor Min { get; }
+        public HslColor Max { get; }
 
         public static ColorRange Parse(string value)
         {

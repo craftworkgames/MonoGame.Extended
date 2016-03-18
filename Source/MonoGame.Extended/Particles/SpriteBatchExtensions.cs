@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Particles
                 Draw(spriteBatch, emitter);
         }
 
-        private static unsafe void Draw(SpriteBatch spriteBatch, Emitter emitter)
+        private static unsafe void Draw(SpriteBatch spriteBatch, ParticleEmitter emitter)
         {
             var textureRegion = emitter.TextureRegion;
             var origin = new Vector2(textureRegion.Width / 2f, textureRegion.Height / 2f);

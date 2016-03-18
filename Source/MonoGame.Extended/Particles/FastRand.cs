@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Particles
 {
@@ -12,7 +13,7 @@ namespace MonoGame.Extended.Particles
         public static void Seed(int seed)
         {
             if (seed < 1)
-                throw new ArgumentOutOfRangeException("seed", "seed must be greater than zero");
+                throw new ArgumentOutOfRangeException(nameof(seed), "seed must be greater than zero");
 
             _state = seed;
         }
@@ -115,11 +116,11 @@ namespace MonoGame.Extended.Particles
             axis = new Axis((float)Math.Cos(angle), (float)Math.Sin(angle));
         }
 
-        public static void NextUnitVector(out Vector vector)
+        public static void NextUnitVector(out Vector2 vector)
         {
             var angle = NextAngle();
 
-            vector = new Vector((float)Math.Cos(angle), (float)Math.Sin(angle));
+            vector = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
         }
 
         public static void NextColor(out HslColor color, ColorRange range)

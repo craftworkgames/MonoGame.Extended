@@ -68,9 +68,9 @@ namespace Demo.Particles
             _particleEffect.Update(deltaTime);
 
             if(mouseState.LeftButton == ButtonState.Pressed)
-                _particleEffect.Trigger(new Vector(p.X, p.Y));
+                _particleEffect.Trigger(new Vector2(p.X, p.Y));
 
-            _particleEffect.Trigger(new Vector(400, 240));
+            _particleEffect.Trigger(new Vector2(400, 240));
 
             base.Update(gameTime);
         }
@@ -93,7 +93,7 @@ namespace Demo.Particles
             {
                 Emitters = new[]
                 {
-                    new Emitter(500, TimeSpan.FromSeconds(1.5), Profile.Ring(10f, Profile.CircleRadiation.Out))
+                    new ParticleEmitter(500, TimeSpan.FromSeconds(1.5), Profile.Ring(10f, Profile.CircleRadiation.Out))
                     {
                         TextureRegion = textureRegion,
                         Parameters = new ReleaseParameters { Speed = new RangeF(50, 0f), Quantity = 3, Rotation = new RangeF(-10f, 10f) },

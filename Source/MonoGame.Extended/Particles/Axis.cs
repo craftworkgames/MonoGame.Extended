@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Particles
 {
@@ -65,9 +66,19 @@ namespace MonoGame.Extended.Particles
         /// </summary>
         /// <param name="magnitude">The magnitude of the vector.</param>
         /// <returns>A directed vector.</returns>
-        public Vector Multiply(float magnitude)
+        public Vector2 Multiply(float magnitude)
         {
-            return new Vector(this, magnitude);
+            return ToVector2(magnitude);
+        }
+
+        public Vector2 ToVector2(float magnitude)
+        {
+            return new Vector2(X * magnitude, Y * magnitude);
+        }
+
+        public Vector2 ToVector2()
+        {
+            return ToVector2(1.0f);
         }
 
         /// <summary>
@@ -182,12 +193,7 @@ namespace MonoGame.Extended.Particles
             return $"({X.ToString("F4")}, {Y.ToString("F4")})";
         }
 
-        public Vector ToVector()
-        {
-            return new Vector(this, 1.0f);
-        }
-
-        public static implicit operator Vector(Axis a) => a.ToVector();
+        public static implicit operator Vector2(Axis a) => a.ToVector2();
 
         public static bool operator ==(Axis x, Axis y)
         {
@@ -199,9 +205,9 @@ namespace MonoGame.Extended.Particles
             return !x.Equals(y);
         }
 
-        public static Vector operator *(Axis axis, float magnitude)
+        public static Vector2 operator *(Axis axis, float magnitude)
         {
-            return new Vector(axis, magnitude);
+            return axis.ToVector2(magnitude);
         }
     }
 }

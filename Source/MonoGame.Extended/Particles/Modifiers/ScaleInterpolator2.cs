@@ -1,9 +1,11 @@
-﻿namespace MonoGame.Extended.Particles.Modifiers
+﻿using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Particles.Modifiers
 {
     public class ScaleInterpolator2 : IModifier
     {
-        public Vector InitialScale { get; set; }
-        public Vector FinalScale { get; set; }
+        public Vector2 InitialScale { get; set; }
+        public Vector2 FinalScale { get; set; }
 
         public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Particles
 {
@@ -7,12 +8,12 @@ namespace MonoGame.Extended.Particles
     {
         public float Inception;
         public float Age;
-        public Vector Position;
-        public Vector TriggerPos;
-        public Vector Velocity;
+        public Vector2 Position;
+        public Vector2 TriggerPos;
+        public Vector2 Velocity;
         public HslColor Color;
         public float Opacity;
-        public Vector Scale;
+        public Vector2 Scale;
         public float Rotation;
         public float Mass;
 

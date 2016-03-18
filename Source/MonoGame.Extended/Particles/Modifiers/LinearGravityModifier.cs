@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended.Particles.Modifiers
+﻿using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Particles.Modifiers
 {
     public class LinearGravityModifier : IModifier
     {
@@ -12,7 +14,7 @@
             while (iterator.HasNext)
             {
                 var particle = iterator.Next();
-                particle->Velocity = new Vector(
+                particle->Velocity = new Vector2(
                     particle->Velocity.X + vector.X * particle->Mass,
                     particle->Velocity.Y + vector.Y * particle->Mass);
             }

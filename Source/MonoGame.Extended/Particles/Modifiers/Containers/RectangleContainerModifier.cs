@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended.Particles.Modifiers.Containers
+﻿using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Particles.Modifiers.Containers
 {
     public sealed class RectangleContainerModifier : IModifier
     {
@@ -44,8 +46,8 @@
                     yPos = bottom - (yPos - bottom);
                     yVel = -yVel * RestitutionCoefficient;
                 }
-                particle->Position = new Vector(xPos, yPos);
-                particle->Velocity = new Vector(xVel, yVel);
+                particle->Position = new Vector2(xPos, yPos);
+                particle->Velocity = new Vector2(xVel, yVel);
             }
         }
     }

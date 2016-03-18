@@ -6,7 +6,7 @@ namespace MonoGame.Extended.Particles
     public class ParticleBuffer : IDisposable
     {
         private readonly IntPtr _nativePointer;
-        public readonly int Size;
+        public int Size { get; }
 
         public unsafe ParticleBuffer(int size)
         {

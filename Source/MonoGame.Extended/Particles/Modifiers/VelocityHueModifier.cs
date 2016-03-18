@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Particles.Modifiers
             while (iterator.HasNext)
             {
                 var particle = iterator.Next();
-                var velocity2 = particle->Velocity.LengthSq;
+                var velocity2 = particle->Velocity.LengthSquared();
 
                 float h;
                 if (velocity2 >= velocityThreshold2)

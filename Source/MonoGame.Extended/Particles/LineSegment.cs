@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Particles
 {
@@ -9,27 +10,24 @@ namespace MonoGame.Extended.Particles
     [StructLayout(LayoutKind.Sequential)]
     public struct LineSegment : IEquatable<LineSegment>
     {
-        internal readonly Vector _point1;
-        internal readonly Vector _point2;
+        internal readonly Vector2 _point1;
+        internal readonly Vector2 _point2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LineSegment"/> structure.
         /// </summary>
         /// <param name="point1"></param>
         /// <param name="point2"></param>
-        public LineSegment(Vector point1, Vector point2)
+        public LineSegment(Vector2 point1, Vector2 point2)
         {
             _point1 = point1;
             _point2 = point2;
         }
 
-        public static LineSegment FromPoints(Vector p1, Vector p2)
-            => new LineSegment(p1, p2);
+        public static LineSegment FromPoints(Vector2 p1, Vector2 p2) => new LineSegment(p1, p2);
+        public static LineSegment FromOrigin(Vector2 origin, Vector2 vector) => new LineSegment(origin, origin + vector);
 
-        public static LineSegment FromOrigin(Vector origin, Vector vector)
-            => new LineSegment(origin, origin + vector);
-
-        public Vector Origin => _point1;
+        public Vector2 Origin => _point1;
 
         public Axis Direction
         {
@@ -40,36 +38,36 @@ namespace MonoGame.Extended.Particles
             }
         }
 
-        public LineSegment Translate(Vector t)
+        public LineSegment Translate(Vector2 t)
         {
             return new LineSegment(_point1 + t, _point2 + t);
         }
 
-        public Vector ToVector()
+        public Vector2 ToVector()
         {
             var t = _point2 - _point1;
-            return new Vector(t.X, t.Y);
+            return new Vector2(t.X, t.Y);
         }
 
         public unsafe void CopyTo(float* destination)
         {
             _point1.CopyTo(destination);
-            _point2.CopyTo(destination + sizeof(Vector));
+            _point2.CopyTo(destination + sizeof(Vector2));
         }
 
-        public void Destructure(out Vector point1, out Vector point2)
+        public void Destructure(out Vector2 point1, out Vector2 point2)
         {
             point1 = _point1;
             point2 = _point2;
         }
 
-        public void Match(Action<Vector, Vector> callback)
+        public void Match(Action<Vector2, Vector2> callback)
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback));
         }
 
-        public T Map<T>(Func<Vector, Vector, T> map)
+        public T Map<T>(Func<Vector2, Vector2, T> map)
         {
             if (map == null)
                 throw new ArgumentNullException(nameof(map));

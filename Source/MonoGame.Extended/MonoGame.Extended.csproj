@@ -81,7 +81,7 @@
     <Compile Include="Particles\ColorExtensions.cs" />
     <Compile Include="Particles\HslColor.cs" />
     <Compile Include="Particles\ColorRange.cs" />
-    <Compile Include="Particles\Emitter.cs" />
+    <Compile Include="Particles\ParticleEmitter.cs" />
     <Compile Include="Particles\FastRand.cs" />
     <Compile Include="Particles\LineSegment.cs" />
     <Compile Include="Particles\ModifierExecutionStrategy.cs" />
@@ -115,9 +115,8 @@
     <Compile Include="Particles\Range.cs" />
     <Compile Include="Particles\RangeF.cs" />
     <Compile Include="Particles\ReleaseParameters.cs" />
-    <Compile Include="Particles\RenderingOrder.cs" />
     <Compile Include="Particles\SpriteBatchExtensions.cs" />
-    <Compile Include="Particles\Vector.cs" />
+    <Compile Include="Particles\Vector2Extensions.cs" />
     <Compile Include="RenderTarget2DExtensions.cs" />
     <Compile Include="Maps\Tiled\SpriteBatchExtensions.cs" />
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />

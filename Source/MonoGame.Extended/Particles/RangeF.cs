@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Particles
         /// of an interval. The template contains tokens which should be replaced with culture
         /// specific symbols.
         /// </summary>
-        private const string RegexTemplate = @"\[([\$(PositiveSign)\$(NegativeSign)]?[0-9]+(?:\$(DecimalSeparator)[0-9]*)?)\$(GroupSeparator)" +
+        private const string _regexTemplate = @"\[([\$(PositiveSign)\$(NegativeSign)]?[0-9]+(?:\$(DecimalSeparator)[0-9]*)?)\$(GroupSeparator)" +
                                                @"([\$(PositiveSign)\$(NegativeSign)]?[0-9]+(?:\$(DecimalSeparator)[0-9]*)?)\]";
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace MonoGame.Extended.Particles
 
             var numberFormat = NumberFormatInfo.GetInstance(provider);
 
-            return RegexTemplate.Replace("$(PositiveSign)", numberFormat.PositiveSign)
+            return _regexTemplate.Replace("$(PositiveSign)", numberFormat.PositiveSign)
                                 .Replace("$(NegativeSign)", numberFormat.NegativeSign)
                                 .Replace("$(DecimalSeparator)", numberFormat.NumberDecimalSeparator)
                                 .Replace("$(GroupSeparator)", numberFormat.NumberGroupSeparator);
@@ -83,12 +83,12 @@ namespace MonoGame.Extended.Particles
         /// <summary>
         /// Gets or sets the inclusive minimum value in the interval.
         /// </summary>
-        public readonly float Min;
+        public float Min { get; }
 
         /// <summary>
         /// Gets or sets the inclusive maximum value in the interval.
         /// </summary>
-        public readonly float Max;
+        public float Max { get; }
 
         /// <summary>
         /// Gets the diameter (size) of the interval.
