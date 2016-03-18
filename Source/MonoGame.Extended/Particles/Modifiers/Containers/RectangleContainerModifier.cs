@@ -20,10 +20,10 @@ namespace MonoGame.Extended.Particles.Modifiers.Containers
                 var top = particle->TriggerPos.Y + Height * -0.5f;
                 var bottom = particle->TriggerPos.Y + Height * 0.5f;
 
-                float xPos = particle->Position.X;
-                float xVel = particle->Velocity.X;
-                float yPos = particle->Position.Y;
-                float yVel = particle->Velocity.Y;
+                var xPos = particle->Position.X;
+                var xVel = particle->Velocity.X;
+                var yPos = particle->Position.Y;
+                var yVel = particle->Velocity.Y;
 
                 if ((int)particle->Position.X < left)
                 {
