@@ -10,7 +10,6 @@ using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
-using SpriteBatchExtensions = MonoGame.Extended.Particles.SpriteBatchExtensions;
 
 namespace Demo.Particles
 {
@@ -97,7 +96,13 @@ namespace Demo.Particles
                     new ParticleEmitter(500, TimeSpan.FromSeconds(2.5), Profile.Ring(150f, Profile.CircleRadiation.In))
                     {
                         TextureRegion = textureRegion,
-                        Parameters = new ReleaseParameters { Speed = new RangeF(50, 0f), Quantity = 3, Rotation = new RangeF(-1f, 1f), Scale = new RangeF(3.0f, 4.0f) },
+                        Parameters = new ParticleReleaseParameters
+                        {
+                            Speed = new RangeF(50, 0f),
+                            Quantity = 3,
+                            Rotation = new RangeF(-1f, 1f),
+                            Scale = new RangeF(3.0f, 4.0f)
+                        },
                         Modifiers = new IModifier[]
                         {
                             new ColorInterpolator2 { InitialColor = new HslColor(0.33f, 0.5f, 0.5f), FinalColor = new HslColor(0.5f, 0.9f, 1.0f) },

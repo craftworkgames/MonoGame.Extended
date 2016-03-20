@@ -1,8 +1,8 @@
 ﻿namespace MonoGame.Extended.Particles
 {
-    public class ReleaseParameters
+    public class ParticleReleaseParameters
     {
-        public ReleaseParameters()
+        public ParticleReleaseParameters()
         {
             Quantity = 1;
             Speed = RangeF.Parse("[-1.0,1.0]");

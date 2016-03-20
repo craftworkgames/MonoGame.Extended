@@ -19,8 +19,8 @@ namespace MonoGame.Extended.Particles
             Offset = new Vector2();
             Profile = profile;
             Modifiers = new IModifier[0];
-            ModifierExecutionStrategy = ModifierExecutionStrategy.Serial;
-            Parameters = new ReleaseParameters();
+            ModifierExecutionStrategy = ParticleModifierExecutionStrategy.Serial;
+            Parameters = new ParticleReleaseParameters();
         }
 
         private readonly float _term;
@@ -31,10 +31,10 @@ namespace MonoGame.Extended.Particles
         public int ActiveParticles => Buffer.Count;
         public Vector2 Offset { get; set; }
         public IModifier[] Modifiers { get; set; }
-        public ModifierExecutionStrategy ModifierExecutionStrategy { get; set; }
+        public ParticleModifierExecutionStrategy ModifierExecutionStrategy { get; set; }
 
         public Profile Profile { get; }
-        public ReleaseParameters Parameters { get; set; }
+        public ParticleReleaseParameters Parameters { get; set; }
         public TextureRegion2D TextureRegion { get; set; }
 
         private void ReclaimExpiredParticles()

@@ -84,7 +84,7 @@
     <Compile Include="Particles\ParticleEmitter.cs" />
     <Compile Include="Particles\FastRand.cs" />
     <Compile Include="Particles\LineSegment.cs" />
-    <Compile Include="Particles\ModifierExecutionStrategy.cs" />
+    <Compile Include="Particles\ParticleModifierExecutionStrategy.cs" />
     <Compile Include="Particles\Modifiers\ColorInterpolator2.cs" />
     <Compile Include="Particles\Modifiers\Containers\CircleContainerModifier.cs" />
     <Compile Include="Particles\Modifiers\Containers\RectangleContainerModifier.cs" />
@@ -114,7 +114,7 @@
     <Compile Include="Particles\Profiles\SprayProfile.cs" />
     <Compile Include="Particles\Range.cs" />
     <Compile Include="Particles\RangeF.cs" />
-    <Compile Include="Particles\ReleaseParameters.cs" />
+    <Compile Include="Particles\ParticleReleaseParameters.cs" />
     <Compile Include="Particles\SpriteBatchExtensions.cs" />
     <Compile Include="Particles\Vector2Extensions.cs" />
     <Compile Include="RenderTarget2DExtensions.cs" />

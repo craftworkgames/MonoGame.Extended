@@ -5,14 +5,14 @@ namespace MonoGame.Extended.Particles
 {
     using TPL = System.Threading.Tasks;
 
-    public abstract class ModifierExecutionStrategy
+    public abstract class ParticleModifierExecutionStrategy
     {
         internal abstract void ExecuteModifiers(IEnumerable<IModifier> modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator);
 
-        public static ModifierExecutionStrategy Serial = new SerialModifierExecutionStrategy();
-        public static ModifierExecutionStrategy Parallel = new ParallelModifierExecutionStrategy();
+        public static ParticleModifierExecutionStrategy Serial = new SerialModifierExecutionStrategy();
+        public static ParticleModifierExecutionStrategy Parallel = new ParallelModifierExecutionStrategy();
 
-        internal class SerialModifierExecutionStrategy : ModifierExecutionStrategy
+        internal class SerialModifierExecutionStrategy : ParticleModifierExecutionStrategy
         {
             internal override void ExecuteModifiers(IEnumerable<IModifier> modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
             {
@@ -21,7 +21,7 @@ namespace MonoGame.Extended.Particles
             }
         }
 
-        internal class ParallelModifierExecutionStrategy : ModifierExecutionStrategy
+        internal class ParallelModifierExecutionStrategy : ParticleModifierExecutionStrategy
         {
             internal override void ExecuteModifiers(IEnumerable<IModifier> modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
             {
