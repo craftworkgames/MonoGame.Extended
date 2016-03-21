@@ -61,7 +61,7 @@ namespace MonoGame.Extended.Collections
 
                 if (_freeItems.RemoveFromFront(out poolable))
                 {
-                    poolable.InitializePoolable(Return);
+                    poolable.Initialize(Return);
                     _usedItems.AddToBack(poolable);
                     return poolable;
                 }
@@ -75,7 +75,7 @@ namespace MonoGame.Extended.Collections
                     return null;
                 }
 
-                poolable.ReturnToPool();
+                poolable.Return();
                 killIfEmpty = false;
             }
         }

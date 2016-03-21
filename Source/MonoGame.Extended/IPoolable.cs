@@ -4,14 +4,14 @@
 
     public interface IPoolable
     {
-        void InitializePoolable(ReturnToPoolDelegate returnFunction);
-        bool ReturnToPool();
+        void Initialize(ReturnToPoolDelegate returnFunction);
+        bool Return();
         void ResetState();
     }
 
 //    public abstract class Poolable : IDisposable
 //    {
-//        internal Action<Poolable, bool> ReturnToPool { get; set; }
+//        internal Action<Poolable, bool> Return { get; set; }
 //
 //        internal bool Disposed { get; set; }
 //
@@ -65,7 +65,7 @@
 //                try
 //                {
 //                    // Notifying the pool that this object is ready for re-adding to the pool.
-//                    ReturnToPool(this, reRegisterForFinalization);
+//                    Return(this, reRegisterForFinalization);
 //                }
 //                catch (Exception)
 //                {
