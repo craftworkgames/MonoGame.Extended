@@ -20,7 +20,7 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 
             foreach (var c in fontFile.Chars)
             {
-                writer.Write(c.ID);
+                writer.Write(c.Id);
                 writer.Write(c.Page);
                 writer.Write(c.X);
                 writer.Write(c.Y);
