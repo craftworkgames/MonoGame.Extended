@@ -25,7 +25,7 @@ namespace Demo.BitmapFonts
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
-            Window.Position = Point.Zero;
+            //Window.Position = Point.Zero;
         }
 
         protected override void LoadContent()
@@ -47,10 +47,10 @@ namespace Demo.BitmapFonts
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
 
-            if (keyboardState.IsKeyDown(Keys.Escape))
-            {
-                Exit();
-            }
+            //if (keyboardState.IsKeyDown(Keys.Escape))
+            //{
+            //    Exit();
+            //}
 
             _labelText = $"{mouseState.X}, {mouseState.Y}";
             var stringRectangle = _bitmapFont.GetStringRectangle(_labelText, Vector2.Zero);

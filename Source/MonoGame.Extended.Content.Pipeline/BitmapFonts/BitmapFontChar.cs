@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 	public class BitmapFontChar
 	{
 		[XmlAttribute ("id")]
-		public int ID { get; set; }
+		public int Id { get; set; }
 		
 		[XmlAttribute ("x")]
 		public int X { get; set; }
