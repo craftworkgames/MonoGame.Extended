@@ -53,7 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\ObjectPoolTests.cs" />
+    <Compile Include="Collections\DequeTests.cs" />
+    <Compile Include="Collections\PoolTests.cs" />
     <Compile Include="MockGameWindow.cs" />
     <Compile Include="Shapes\PolygonFTests.cs" />
     <Compile Include="Shapes\CircleTests.cs" />

@@ -1,10 +1,12 @@
-﻿using System;
-
-namespace MonoGame.Extended.Collections
+﻿namespace MonoGame.Extended
 {
-    public interface IPoolable : IDisposable
+    public delegate void ReturnObjectToPoolDelegate(IPoolable poolable);
+
+    public interface IPoolable
     {
-        bool ResetState();
+        void InitializePoolable(ReturnObjectToPoolDelegate returnFunction);
+        bool ReturnToPool();
+        void ResetState();
     }
 
 //    public abstract class Poolable : IDisposable
