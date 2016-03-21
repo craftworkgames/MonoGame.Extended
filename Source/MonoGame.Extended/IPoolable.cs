@@ -1,10 +1,10 @@
 ﻿namespace MonoGame.Extended
 {
-    public delegate void ReturnObjectToPoolDelegate(IPoolable poolable);
+    public delegate void ReturnToPoolDelegate(IPoolable poolable);
 
     public interface IPoolable
     {
-        void InitializePoolable(ReturnObjectToPoolDelegate returnFunction);
+        void InitializePoolable(ReturnToPoolDelegate returnFunction);
         bool ReturnToPool();
         void ResetState();
     }
