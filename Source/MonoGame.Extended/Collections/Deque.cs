@@ -238,7 +238,7 @@ namespace MonoGame.Extended.Collections
         ///     Initializes a new instance of the <see cref="Deque{T}" /> class that is empty and has the specified initial
         ///     capacity.
         /// </summary>
-        /// <param name="capacity">The number of elements that the new <see cref="Deque{T}"/> can initially store.</param>
+        /// <param name="capacity">The number of elements that the new <see cref="Deque{T}" /> can initially store.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="capacity" /> is less than 0.</exception>
         /// <remarks>
         ///     <para>
@@ -640,10 +640,24 @@ namespace MonoGame.Extended.Collections
         ///     <see cref="Deque{T}" />, if found; otherwise, <c>-1</c>.
         /// </returns>
         /// <remarks>
-        ///     <para>This method is an O(n) operation, where n is <see cref="Count" />.</para>
+        ///     <para>
+        ///         This method is an O(1) operation if <paramref name="item" /> is at the front or back of the
+        ///         <see cref="Deque{T}" />; otherwise, this method is an O(n) operation where n is <see cref="Count" />.
+        ///     </para>
         /// </remarks>
         public int IndexOf(T item)
         {
+            var comparer = EqualityComparer<T>.Default;
+            T checkFrontBackItem;
+            if (Get(0, out checkFrontBackItem) && comparer.Equals(checkFrontBackItem, item))
+            {
+                return _frontIndex;
+            }
+            var backIndex = Count - 1;
+            if (Get(backIndex, out checkFrontBackItem) && comparer.Equals(checkFrontBackItem, item))
+            {
+                return backIndex;
+            }
             if (Count <= _items.Length - _frontIndex)
             {
                 return Array.IndexOf(_items, item, _frontIndex, Count);
@@ -669,7 +683,10 @@ namespace MonoGame.Extended.Collections
         ///     if <paramref name="item" /> is not found in the <see cref="Deque{T}" />.
         /// </returns>
         /// <remarks>
-        ///     <para>This method is an O(n) operation, where n is <see cref="Count" />.</para>
+        ///     <para>
+        ///         This method is an O(1) operation if <paramref name="item" /> is at the front or back of the
+        ///         <see cref="Deque{T}" />; otherwise, this method is an O(n) operation where n is <see cref="Count" />.
+        ///     </para>
         /// </remarks>
         public bool Remove(T item)
         {
