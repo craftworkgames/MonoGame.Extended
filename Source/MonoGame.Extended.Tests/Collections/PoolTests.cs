@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Tests.Collections
     {
         private class TestPoolable : IPoolable
         {
-            private ReturnObjectToPoolDelegate _returnFunction;
+            private ReturnToPoolDelegate _returnFunction;
 
             public int Value { get; }
             public int ResetValue { get; private set; }
@@ -19,12 +19,12 @@ namespace MonoGame.Extended.Tests.Collections
                 ResetValue = -1;
             }
 
-            void IPoolable.InitializePoolable(ReturnObjectToPoolDelegate returnFunction)
+            void IPoolable.Initialize(ReturnToPoolDelegate returnFunction)
             {
                 _returnFunction = returnFunction;
             }
 
-            public bool ReturnToPool()
+            public bool Return()
             {
                 if (_returnFunction == null)
                 {
@@ -116,7 +116,7 @@ namespace MonoGame.Extended.Tests.Collections
             var counter = count;
             foreach (var poolable in pool)
             {
-                Assert.IsTrue(poolable.ReturnToPool());
+                Assert.IsTrue(poolable.Return());
                 Assert.IsTrue(poolable.ResetValue == 0);
                 counter--;
                 Assert.IsTrue(pool.Count == counter);
