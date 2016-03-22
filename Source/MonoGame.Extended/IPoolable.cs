@@ -1,15 +1,17 @@
-﻿using System;
-
-namespace MonoGame.Extended.Collections
+﻿namespace MonoGame.Extended
 {
-    public interface IPoolable : IDisposable
+    public delegate void ReturnToPoolDelegate(IPoolable poolable);
+
+    public interface IPoolable
     {
-        bool ResetState();
+        void Initialize(ReturnToPoolDelegate returnFunction);
+        bool Return();
+        void ResetState();
     }
 
 //    public abstract class Poolable : IDisposable
 //    {
-//        internal Action<Poolable, bool> ReturnToPool { get; set; }
+//        internal Action<Poolable, bool> Return { get; set; }
 //
 //        internal bool Disposed { get; set; }
 //
@@ -63,7 +65,7 @@ namespace MonoGame.Extended.Collections
 //                try
 //                {
 //                    // Notifying the pool that this object is ready for re-adding to the pool.
-//                    ReturnToPool(this, reRegisterForFinalization);
+//                    Return(this, reRegisterForFinalization);
 //                }
 //                catch (Exception)
 //                {
