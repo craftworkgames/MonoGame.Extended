@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Collections
     /// <remarks>
     ///     <para>
     ///         Requesting a free element from the <see cref="Pool{T}" /> is a O(1) operation. Returning a used element back to
-    ///         the <see cref="Pool{T}" /> is an O(1) operation for the oldest or newest elements or O(n) otherwise.
+    ///         the <see cref="Pool{T}" /> is an O(1) operation for the oldest or newest elements or O(n) otherwise, where n is the <see cref="Count"/>.
     ///     </para>
     /// </remarks>
     /// <example>
