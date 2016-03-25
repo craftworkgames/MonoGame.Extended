@@ -31,11 +31,12 @@ namespace MonoGame.Extended.Tests.Collections
                 {
                     return;
                 }
+                Reset();
                 _returnFunction.Invoke(this);
                 _returnFunction = null;
             }
 
-            void IPoolable.Reset()
+            private void Reset()
             {
                 ResetValue = 0;
             }

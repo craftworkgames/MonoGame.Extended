@@ -31,7 +31,7 @@ namespace MonoGame.Extended.Collections
     /// ...
     /// private class MyPoolable : IPoolable
     /// {
-    ///     // The return delegate responsible for invoking the internal method in the Pool class
+    ///     // The return delegate responsible for invoking the internal method in the pool class
     ///     private ReturnToPoolDelegate _returnFunction;
     ///   
     ///     // Called by the Pool when this object is requested for use
@@ -39,9 +39,12 @@ namespace MonoGame.Extended.Collections
     ///     {
     ///         // Copy the reference of the delegate instance so we can use it later
     ///         _returnFunction = returnFunction;
+    /// 
+    ///         // You could also reset the state of the object instance here instead of when returned
+    ///         // Reset()
     ///     }
     /// 
-    ///     // Called by the Pool when this object should reset it's state in preperation for the next time it is requested
+    ///     // Helper method for this instance that should reset the state in preperation for the next time it is requested
     ///     public void Reset()
     ///     {
     ///         // TODO: Reset the state of your object here
@@ -56,6 +59,9 @@ namespace MonoGame.Extended.Collections
     ///             // We already used the return delegate; exit this method early
     ///             return;
     ///         }
+    /// 
+    ///         // Call the reset helper method before we return this instance back to the pool
+    ///         Reset();
     /// 
     ///         // We didn't use the return delegate yet; use it now
     ///         _returnFunction.Invoke(this);
@@ -175,7 +181,6 @@ namespace MonoGame.Extended.Collections
 
         private void Return(IPoolable poolable)
         {
-            poolable.Reset();
             var poolable1 = (T)poolable;
             _freeItems.AddToBack(poolable1);
             _usedItems.Remove(poolable1);
