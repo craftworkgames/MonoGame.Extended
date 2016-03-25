@@ -410,9 +410,9 @@ namespace MonoGame.Extended.Tests.Collections
             }
             var deque = new Deque<TestDequeElement>(elements);
             var counter = count;
-            var indices = Enumerable.Range(0, count).ToArray().Shuffle(_random);
-            foreach (var index in indices)
+            while (deque.Count > 0)
             {
+                var index = _random.Next(0, deque.Count - 1);
                 deque.RemoveAt(index);
                 counter--;
                 Assert.IsTrue(deque.Count == counter);
