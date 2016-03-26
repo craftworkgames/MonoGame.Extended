@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Collections
         private const int DefaultCapacity = 4;
         private static readonly T[] _emptyArray = new T[0];
         private T[] _items;
-        private int _frontIndex;
+        private int _frontArrayIndex;
         private Func<int, int> _resizeFunction = Deque.DefaultResizeFunction;
 
         /// <summary>
@@ -81,38 +81,9 @@ namespace MonoGame.Extended.Collections
                 var newItems = new T[value];
                 CopyTo(newItems);
 
-                _frontIndex = 0;
+                _frontArrayIndex = 0;
                 _items = null;
                 _items = newItems;
-            }
-        }
-
-        public void RemoveAt(int index)
-        {
-            if (index == 0)
-            {
-                RemoveFromFront();
-            }
-            else if (index == Count - 1)
-            {
-                RemoveFromBack();
-            }
-            else if (index < Count / 2)
-            {
-                // shift the array right
-                Array.Copy(_items, 0, _items, 1, index - 1);
-                var circularFrontIndex = _frontIndex % _items.Length;
-                _items[circularFrontIndex] = default(T);
-                _frontIndex = (_frontIndex + 1) % _items.Length;
-                Count--;
-            }
-            else
-            {
-                // shift the array left
-                Array.Copy(_items, index + 1, _items, index, _items.Length - 1 - index);
-                var circularBackIndex = _frontIndex + (Count - 1) % _items.Length;
-                _items[circularBackIndex] = default(T);
-                Count--;
             }
         }
 
@@ -136,21 +107,21 @@ namespace MonoGame.Extended.Collections
         {
             get
             {
-                var circularIndex = GetCircularIndex(index);
-                if (circularIndex == -1)
+                var arrayIndex = GetArrayIndex(index);
+                if (arrayIndex == -1)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), "Index was out of range. Must be non-negative and less than the size of the collection.");
                 }
-                return _items[circularIndex];
+                return _items[arrayIndex];
             }
             set
             {
-                var circularIndex = GetCircularIndex(index);
-                if (circularIndex == -1)
+                var arrayIndex = GetArrayIndex(index);
+                if (arrayIndex == -1)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), "Index was out of range. Must be non-negative and less than the size of the collection.");
                 }
-                _items[circularIndex] = value;
+                _items[arrayIndex] = value;
             }
         }
 
@@ -160,13 +131,6 @@ namespace MonoGame.Extended.Collections
         /// <returns>The number of elements contained in the <see cref="Deque{T}" />.</returns>
         public int Count { get; private set; }
 
-        /// <summary>
-        ///     Gets a value indicating whether the <see cref="ICollection{T}" /> is read-only.
-        /// </summary>
-        /// <returns>
-        ///     <c>true</c> if the <see cref="ICollection{T}" /> is read-only; otherwise, <c>false</c>. In the default
-        ///     implementation of <see cref="Deque{T}" />, this property always returns false.
-        /// </returns>
         bool ICollection<T>.IsReadOnly
         {
             get { return false; }
@@ -299,13 +263,13 @@ namespace MonoGame.Extended.Collections
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int GetCircularIndex(int index)
+        private int GetArrayIndex(int index)
         {
             if (index < 0 || index >= Count)
             {
                 return -1;
             }
-            return _items.Length != 0 ? (_frontIndex + index) % _items.Length : 0;
+            return _items.Length != 0 ? (_frontArrayIndex + index) % _items.Length : 0;
         }
 
         private void EnsureCapacity(int minimumCapacity)
@@ -341,8 +305,8 @@ namespace MonoGame.Extended.Collections
         public void AddToFront(T item)
         {
             EnsureCapacity(Count + 1);
-            _frontIndex = (_frontIndex - 1 + _items.Length) % _items.Length;
-            _items[_frontIndex] = item;
+            _frontArrayIndex = (_frontArrayIndex - 1 + _items.Length) % _items.Length;
+            _items[_frontArrayIndex] = item;
             Count++;
         }
 
@@ -364,7 +328,7 @@ namespace MonoGame.Extended.Collections
         public void AddToBack(T item)
         {
             EnsureCapacity(Count + 1);
-            var index = (_frontIndex + Count++) % _items.Length;
+            var index = (_frontArrayIndex + Count++) % _items.Length;
             _items[index] = item;
         }
 
@@ -384,13 +348,13 @@ namespace MonoGame.Extended.Collections
         /// </returns>
         public bool Get(int index, out T item)
         {
-            var circularIndex = GetCircularIndex(index);
-            if (circularIndex == -1)
+            var arrayIndex = GetArrayIndex(index);
+            if (arrayIndex == -1)
             {
                 item = default(T);
                 return false;
             }
-            item = _items[circularIndex];
+            item = _items[arrayIndex];
             return true;
         }
 
@@ -404,7 +368,7 @@ namespace MonoGame.Extended.Collections
         /// </param>
         /// <returns>
         ///     <c>true</c> if <paramref name="item" /> was successfully from the beginning of the <see cref="Deque{T}" />;
-        ///     otherwise, <c>false</c> if the <see cref="Deque{T}" /> was empty.
+        ///     otherwise, <c>false</c> if the <see cref="Deque{T}" /> is empty.
         /// </returns>
         public bool GetFront(out T item)
         {
@@ -421,7 +385,7 @@ namespace MonoGame.Extended.Collections
         /// </param>
         /// <returns>
         ///     <c>true</c> if <paramref name="item" /> was successfully from the end of the <see cref="Deque{T}" />;
-        ///     otherwise, <c>false</c> if the <see cref="Deque{T}" /> was empty.
+        ///     otherwise, <c>false</c> if the <see cref="Deque{T}" /> is empty.
         /// </returns>
         public bool GetBack(out T item)
         {
@@ -464,10 +428,10 @@ namespace MonoGame.Extended.Collections
                 return false;
             }
 
-            var index = _frontIndex % _items.Length;
+            var index = _frontArrayIndex % _items.Length;
             item = _items[index];
             _items[index] = default(T);
-            _frontIndex = (_frontIndex + 1) % _items.Length;
+            _frontArrayIndex = (_frontArrayIndex + 1) % _items.Length;
             Count--;
             return true;
         }
@@ -501,9 +465,9 @@ namespace MonoGame.Extended.Collections
                 return false;
             }
 
-            var index = _frontIndex % _items.Length;
+            var index = _frontArrayIndex % _items.Length;
             _items[index] = default(T);
-            _frontIndex = (_frontIndex + 1) % _items.Length;
+            _frontArrayIndex = (_frontArrayIndex + 1) % _items.Length;
             Count--;
             return true;
         }
@@ -544,7 +508,7 @@ namespace MonoGame.Extended.Collections
                 return false;
             }
 
-            var circularBackIndex = (_frontIndex + (Count - 1)) % _items.Length;
+            var circularBackIndex = (_frontArrayIndex + (Count - 1)) % _items.Length;
             item = _items[circularBackIndex];
             _items[circularBackIndex] = default(T);
             Count--;
@@ -580,7 +544,7 @@ namespace MonoGame.Extended.Collections
                 return false;
             }
 
-            var circularBackIndex = (_frontIndex + (Count - 1)) % _items.Length;
+            var circularBackIndex = (_frontArrayIndex + (Count - 1)) % _items.Length;
             _items[circularBackIndex] = default(T);
             Count--;
             return true;
@@ -597,20 +561,20 @@ namespace MonoGame.Extended.Collections
                 yield break;
             }
 
-            if (Count <= _items.Length - _frontIndex)
+            if (Count <= _items.Length - _frontArrayIndex)
             {
-                for (var i = _frontIndex; i < _frontIndex + Count; i++)
+                for (var i = _frontArrayIndex; i < _frontArrayIndex + Count; i++)
                 {
                     yield return _items[i];
                 }
             }
             else
             {
-                for (var i = _frontIndex; i < Capacity; i++)
+                for (var i = _frontArrayIndex; i < Capacity; i++)
                 {
                     yield return _items[i];
                 }
-                for (var i = 0; i < (_frontIndex + Count) % Capacity; i++)
+                for (var i = 0; i < (_frontArrayIndex + Count) % Capacity; i++)
                 {
                     yield return _items[i];
                 }
@@ -651,19 +615,30 @@ namespace MonoGame.Extended.Collections
             T checkFrontBackItem;
             if (Get(0, out checkFrontBackItem) && comparer.Equals(checkFrontBackItem, item))
             {
-                return _frontIndex;
+                return 0;
             }
             var backIndex = Count - 1;
             if (Get(backIndex, out checkFrontBackItem) && comparer.Equals(checkFrontBackItem, item))
             {
                 return backIndex;
             }
-            if (Count <= _items.Length - _frontIndex)
+
+            int index;
+            if (Count <= _items.Length - _frontArrayIndex)
             {
-                return Array.IndexOf(_items, item, _frontIndex, Count);
+                index = Array.IndexOf(_items, item, _frontArrayIndex, Count);
             }
-            var index = Array.IndexOf(_items, item, _frontIndex, _items.Length - _frontIndex);
-            return index >= 0 ? index : Array.IndexOf(_items, item, 0, _frontIndex + Count - _items.Length);
+            else
+            {
+                index = Array.IndexOf(_items, item, _frontArrayIndex, _items.Length - _frontArrayIndex);
+                if (index < 0)
+                {
+                    index = Array.IndexOf(_items, item, 0, _frontArrayIndex + Count - _items.Length);
+                }
+            }
+
+            var circularIndex = (index - _frontArrayIndex + _items.Length) % _items.Length;
+            return circularIndex;
         }
 
         void IList<T>.Insert(int index, T item)
@@ -701,6 +676,72 @@ namespace MonoGame.Extended.Collections
         }
 
         /// <summary>
+        ///     Removes the element at the specified index of the <see cref="Deque{T}" />.
+        /// </summary>
+        /// <param name="index">The zero-based index of the element to remove.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <para><paramref name="index" /> is less than 0.</para>
+        ///     <para>-or-</para>
+        ///     <para><paramref name="index" /> is equal to or greater than <see cref="Count" />.</para>
+        /// </exception>
+        public void RemoveAt(int index)
+        {
+            if (index < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), index, "Index was less than zero.");
+            }
+
+            if (index >= Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), index, "Index was equal or greater than Count.");
+            }
+
+            if (index == 0)
+            {
+                RemoveFromFront();
+            }
+            else if (index == Count - 1)
+            {
+                RemoveFromBack();
+            }
+            else if (index < Count / 2)
+            {
+                var arrayIndex = GetArrayIndex(index);
+                // shift the array from 0 to before the index to remove by 1 to the right
+                // the element to remove is replaced by the copy
+                Array.Copy(_items, 0, _items, 1, arrayIndex);
+                // the first element in the arrya is now either a duplicate or it's default value
+                // to be safe set it to it's default value regardless of circumstance
+                _items[0] = default(T);
+                // if we shifted the front element, adjust the front index
+                if (_frontArrayIndex < arrayIndex)
+                {
+                    _frontArrayIndex = (_frontArrayIndex + 1) % _items.Length;
+                }
+                // decrement the count so the back index is calculated correctly
+                Count--;
+            }
+            else
+            {
+                var arrayIndex = GetArrayIndex(index);
+                // shift the array from the center of the array to before the index to remove by 1 to the right
+                // the element to remove is replaced by the copy
+                var arrayCenterIndex = _items.Length / 2;
+                Array.Copy(_items, arrayCenterIndex, _items, arrayCenterIndex + 1, _items.Length - 1 - arrayIndex);
+                // the last element in the array is now either a duplicate or it's default value
+                // to be safe set it to it's default value regardless of circumstance
+                _items[_items.Length - 1] = default(T);
+                // if we shifted the front element, adjust the front index
+                if (_frontArrayIndex < arrayIndex)
+                {
+                    _frontArrayIndex = (_frontArrayIndex + 1) % _items.Length;
+                }
+                // decrement the count so the back index is calculated correctly
+                Count--;
+            }
+        }
+
+        /// <summary>
         ///     Removes all elements from the <see cref="Deque{T}" />.
         /// </summary>
         /// <remarks>
@@ -725,17 +766,17 @@ namespace MonoGame.Extended.Collections
                 return;
             }
 
-            if (Count > _items.Length - _frontIndex)
+            if (Count > _items.Length - _frontArrayIndex)
             {
-                Array.Clear(_items, _frontIndex, _items.Length - _frontIndex);
-                Array.Clear(_items, 0, _frontIndex + Count - _items.Length);
+                Array.Clear(_items, _frontArrayIndex, _items.Length - _frontArrayIndex);
+                Array.Clear(_items, 0, _frontArrayIndex + Count - _items.Length);
             }
             else
             {
-                Array.Clear(_items, _frontIndex, Count);
+                Array.Clear(_items, _frontArrayIndex, Count);
             }
             Count = 0;
-            _frontIndex = 0;
+            _frontArrayIndex = 0;
         }
 
         /// <summary>
@@ -816,15 +857,15 @@ namespace MonoGame.Extended.Collections
 
             try
             {
-                var loopsAround = Count > _items.Length - _frontIndex;
+                var loopsAround = Count > _items.Length - _frontArrayIndex;
                 if (!loopsAround)
                 {
-                    Array.Copy(_items, _frontIndex, array, arrayIndex, Count);
+                    Array.Copy(_items, _frontArrayIndex, array, arrayIndex, Count);
                 }
                 else
                 {
-                    Array.Copy(_items, _frontIndex, array, arrayIndex, Capacity - _frontIndex);
-                    Array.Copy(_items, 0, array, arrayIndex + Capacity - _frontIndex, _frontIndex + (Count - Capacity));
+                    Array.Copy(_items, _frontArrayIndex, array, arrayIndex, Capacity - _frontArrayIndex);
+                    Array.Copy(_items, 0, array, arrayIndex + Capacity - _frontArrayIndex, _frontArrayIndex + (Count - Capacity));
                 }
             }
             catch (ArrayTypeMismatchException)

@@ -3,6 +3,7 @@ using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests.Collections
 {
+
     [TestFixture]
     public class PoolTests
     {
@@ -24,18 +25,18 @@ namespace MonoGame.Extended.Tests.Collections
                 _returnFunction = returnFunction;
             }
 
-            public bool Return()
+            public void Return()
             {
                 if (_returnFunction == null)
                 {
-                    return false;
+                    return;
                 }
+                Reset();
                 _returnFunction.Invoke(this);
                 _returnFunction = null;
-                return true;
             }
 
-            void IPoolable.ResetState()
+            private void Reset()
             {
                 ResetValue = 0;
             }
@@ -67,11 +68,11 @@ namespace MonoGame.Extended.Tests.Collections
 
             for (var i = 0; i < count; i++)
             {
-                var poolable = pool.Create();
+                var poolable = pool.Request();
                 Assert.IsTrue(poolable.Value == i);
             }
 
-            var nextPoolable = pool.Create();
+            var nextPoolable = pool.Request();
             Assert.IsNull(nextPoolable);
         }
 
@@ -86,7 +87,7 @@ namespace MonoGame.Extended.Tests.Collections
 
             for (var i = 0; i < count; i++)
             {
-                var poolable = pool.Create();
+                var poolable = pool.Request();
                 Assert.IsTrue(poolable.Value == i);
             }
 
@@ -109,14 +110,14 @@ namespace MonoGame.Extended.Tests.Collections
 
             for (var i = 0; i < count; i++)
             {
-                var poolable = pool.Create();
+                var poolable = pool.Request();
                 Assert.IsTrue(poolable.Value == i);
             }
 
             var counter = count;
             foreach (var poolable in pool)
             {
-                Assert.IsTrue(poolable.Return());
+                poolable.Return();
                 Assert.IsTrue(poolable.ResetValue == 0);
                 counter--;
                 Assert.IsTrue(pool.Count == counter);

@@ -1,125 +1,30 @@
-﻿namespace MonoGame.Extended
+﻿using MonoGame.Extended.Collections;
+
+namespace MonoGame.Extended
 {
     public delegate void ReturnToPoolDelegate(IPoolable poolable);
 
+    /// <summary>
+    ///     Defines a poolable object to be used by a <see cref="Pool{T}" />.
+    /// </summary>
+    /// <remarks>
+    ///     <para>See <see cref="Pool{T}" /> for code example.</para>
+    /// </remarks>
     public interface IPoolable
     {
+        /// <summary>
+        ///     Initializes <see cref="IPoolable" /> to a in-use state. This method is called by the <see cref="Pool{T}" />
+        ///     when a <see cref="IPoolable" /> is requested.
+        /// </summary>
+        /// <param name="returnFunction">
+        ///     The return delegate used to return this <see cref="IPoolable" /> to it's
+        ///     <see cref="Pool{T}" />.
+        /// </param>
         void Initialize(ReturnToPoolDelegate returnFunction);
-        bool Return();
-        void ResetState();
-    }
 
-//    public abstract class Poolable : IDisposable
-//    {
-//        internal Action<Poolable, bool> Return { get; set; }
-//
-//        internal bool Disposed { get; set; }
-//
-//        internal bool ReleaseResources()
-//        {
-//            var successFlag = true;
-//
-//            try
-//            {
-//                OnReleaseResources();
-//            }
-//            catch (Exception)
-//            {
-//                successFlag = false;
-//            }
-//
-//            return successFlag;
-//        }
-//
-//        internal bool ResetState()
-//        {
-//            bool successFlag = true;
-//
-//            try
-//            {
-//                OnResetState();
-//            }
-//            catch (Exception)
-//            {
-//                successFlag = false;
-//            }
-//
-//            return successFlag;
-//        }
-//
-//        protected virtual void OnResetState()
-//        {
-//
-//        }
-//
-//        protected virtual void OnReleaseResources()
-//        {
-//
-//        }
-//
-//        private void HandleReAddingToPool(bool reRegisterForFinalization)
-//        {
-//            if (!Disposed)
-//            {
-//                // If there is any case that the re-adding to the pool fails, release the resources and set the internal Disposed flag to true
-//                try
-//                {
-//                    // Notifying the pool that this object is ready for re-adding to the pool.
-//                    Return(this, reRegisterForFinalization);
-//                }
-//                catch (Exception)
-//                {
-//                    Disposed = true;
-//                    this.ReleaseResources();
-//                }
-//            }
-//        }
-//
-//        ~Poolable()
-//        {
-//            // Resurrecting the object
-//            HandleReAddingToPool(true);
-//        }
-//
-//        public void Dispose()
-//        {
-//            // Returning to pool
-//            //ThreadPool.QueueUserWorkItem(new WaitCallback((o) => HandleReAddingToPool(false)));
-//        }
-//    }
-//
-//    public class PoolableWrapper<T> : Poolable
-//    {
-//        public Action<T> WrapperReleaseResourcesAction { get; set; }
-//        public Action<T> WrapperResetStateAction { get; set; }
-//
-//        public T InternalResource { get; private set; }
-//
-//        public PoolableWrapper(T resource)
-//        {
-//            if (resource == null)
-//            {
-//                throw new ArgumentException("resource cannot be null");
-//            }
-//
-//            // Setting the internal resource
-//            InternalResource = resource;
-//        }
-//
-//        protected override void OnReleaseResources()
-//        {
-//            if (WrapperReleaseResourcesAction != null)
-//            {
-//                WrapperReleaseResourcesAction(InternalResource);
-//            }
-//        }
-//
-//        protected override void OnResetState()
-//        {
-//            if (WrapperResetStateAction != null)
-//            {
-//                WrapperResetStateAction(InternalResource);
-//            }
-//        }
-//    }
+        /// <summary>
+        ///     Returns the <see cref="IPoolable" /> to it's <see cref="Pool{T}" />.
+        /// </summary>
+        void Return();
+    }
 }
