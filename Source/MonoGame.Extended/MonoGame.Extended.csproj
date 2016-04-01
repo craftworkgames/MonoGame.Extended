@@ -45,6 +45,7 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
+    <Compile Include="Graphics\Batching\IBatcher.cs" />
     <Compile Include="Graphics\Batching\PrimitiveBatch.cs" />
     <Compile Include="Graphics\IDrawContext.cs" />
     <Compile Include="IPoolable.cs" />

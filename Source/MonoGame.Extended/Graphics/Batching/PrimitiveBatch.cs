@@ -6,8 +6,11 @@ namespace MonoGame.Extended.Graphics.Batching
     public class PrimitiveBatch<TVertexType> : IDisposable
         where TVertexType : struct, IVertexType
     {
-        public PrimitiveBatch()
+        private IBatcher<TVertexType> _batcher; 
+
+        public PrimitiveBatch(IBatcher<TVertexType> batcher)
         {
+
         }
 
         public void Dispose()
