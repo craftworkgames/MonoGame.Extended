@@ -8,10 +8,24 @@ namespace MonoGame.Extended.Graphics.Batching
     {
         public PrimitiveBatch()
         {
-        } 
+        }
 
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (isDisposing)
+            {
+                // free managed resources
+                // myObject.Dispose();
+                // myObject = null;
+            }
+
+            // free unmanaged resources
         }
 
         public void Begin()
