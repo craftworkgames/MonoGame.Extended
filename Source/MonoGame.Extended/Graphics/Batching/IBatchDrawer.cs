@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    public interface IBatcher<in TVertexType> : IDisposable
+    public interface IBatchDrawer<in TVertexType> : IDisposable
         where TVertexType : struct, IVertexType
     {
         int MaximumBatchSize { get; }

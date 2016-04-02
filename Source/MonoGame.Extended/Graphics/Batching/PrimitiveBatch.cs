@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Graphics.Batching
 
         public PrimitiveBatch(IBatcher<TVertexType> batcher)
         {
-
+            _batcher = batcher;
         }
 
         public void Dispose()
