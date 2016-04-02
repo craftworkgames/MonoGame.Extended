@@ -21,14 +21,13 @@ namespace MonoGame.Extended.Graphics.Batching
 
         protected virtual void Dispose(bool isDisposing)
         {
-            if (isDisposing)
+            if (!isDisposing)
             {
-                // free managed resources
-                // myObject.Dispose();
-                // myObject = null;
+                return;
             }
 
-            // free unmanaged resources
+            _batcher.Dispose();
+            _batcher = null;
         }
 
         public void Begin()

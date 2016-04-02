@@ -1,15 +1,16 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    public interface IBatcher<in TVertexType>
+    public interface IBatcher<in TVertexType> : IDisposable
         where TVertexType : struct, IVertexType
     {
         int MaximumBatchSize { get; }
 
-        void Select(TVertexType[] vertices, int vertexCount);
-        void Select(TVertexType[] vertices, int vertexCount, short[] indices, int indexCount);
-        void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, IDrawContext context);
-        void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext context);
+        void Select(TVertexType[] vertices);
+        void Select(TVertexType[] vertices, short[] indices);
+        void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, IDrawContext drawContext);
+        void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext);
     }
 }
