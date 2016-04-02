@@ -3,51 +3,29 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    public class UserPrimitivesBatcher<TVertexType> : IBatcher<TVertexType>
+    internal class UserPrimitivesBatchDrawer<TVertexType> : BatchDrawer<TVertexType>
         where TVertexType : struct, IVertexType
     {
-        private GraphicsDevice _graphicsDevice;
-        private IDrawContext _defaultDrawContext;
         private TVertexType[] _vertices;
         private short[] _indices;
 
-        public int MaximumBatchSize { get; } = 8192;
-
-        public UserPrimitivesBatcher(GraphicsDevice graphicsDevice, IDrawContext defaultDrawContext = null)
+        internal UserPrimitivesBatchDrawer(GraphicsDevice graphicsDevice, IDrawContext defaultDrawContext, int maximumBatchSize = PrimitiveBatch<TVertexType>.DefaultMaximumBatchSize)
+            : base(graphicsDevice, defaultDrawContext, maximumBatchSize)
         {
-            _graphicsDevice = graphicsDevice;
-
-            if (defaultDrawContext == null)
-            {
-                var basicEffect = new BasicEffect(graphicsDevice);
-                _defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
-            }
-            else
-            {
-                _defaultDrawContext = defaultDrawContext;
-            }
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool isDisposing)
+        protected override void Dispose(bool isDisposing)
         {
             if (!isDisposing)
             {
                 return;
             }
 
-            _graphicsDevice = null;
-            _defaultDrawContext = null;
             _vertices = null;
             _indices = null;
         }
 
-        public void Select(TVertexType[] vertices)
+        internal override void Select(TVertexType[] vertices)
         {
             if (vertices == null)
             {
@@ -57,7 +35,7 @@ namespace MonoGame.Extended.Graphics.Batching
             _vertices = vertices;
         }
 
-        public void Select(TVertexType[] vertices, short[] indices)
+        internal override void Select(TVertexType[] vertices, short[] indices)
         {
             if (vertices == null)
             {
@@ -73,11 +51,11 @@ namespace MonoGame.Extended.Graphics.Batching
             _indices = indices;
         }
 
-        public void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, IDrawContext drawContext)
+        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, IDrawContext drawContext)
         {
             if (drawContext == null)
             {
-                drawContext = _defaultDrawContext;
+                drawContext = DefaultDrawContext;
             }
 
             var primitiveCount = primitiveType.GetPrimitiveCount(vertexCount);
@@ -86,15 +64,15 @@ namespace MonoGame.Extended.Graphics.Batching
             for (var passIndex = 0; passIndex < passesCount; ++passIndex)
             {
                 drawContext.ApplyPass(passIndex);
-                _graphicsDevice.DrawUserPrimitives(primitiveType, _vertices, startVertex, primitiveCount);
+                GraphicsDevice.DrawUserPrimitives(primitiveType, _vertices, startVertex, primitiveCount);
             }
         }
 
-        public void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext)
+        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext)
         {
             if (drawContext == null)
             {
-                drawContext = _defaultDrawContext;
+                drawContext = DefaultDrawContext;
             }
 
             var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
@@ -104,7 +82,7 @@ namespace MonoGame.Extended.Graphics.Batching
             {
                 drawContext.ApplyPass(passIndex);
 
-                _graphicsDevice.DrawUserIndexedPrimitives(primitiveType, _vertices, startVertex, vertexCount, _indices, startIndex, primitiveCount);
+                GraphicsDevice.DrawUserIndexedPrimitives(primitiveType, _vertices, startVertex, vertexCount, _indices, startIndex, primitiveCount);
             }
         }
     }
