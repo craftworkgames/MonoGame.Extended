@@ -32,12 +32,13 @@ namespace Demo.TiledMaps
 
         protected override void Initialize()
         {
-            Components.Add(_fpsCounter = new FramesPerSecondCounterComponent(this));
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter);
 
             Window.AllowUserResizing = true;
             Window.Position = Point.Zero;
+
+            Components.Add(_fpsCounter = new FramesPerSecondCounterComponent(this));
 
             base.Initialize();
         }
