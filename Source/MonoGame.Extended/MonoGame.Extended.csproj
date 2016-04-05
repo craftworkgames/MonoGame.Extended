@@ -168,7 +168,8 @@
     <Compile Include="ViewportAdapters\WindowViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\ScalingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\ViewportAdapter.cs" />
-    <Compile Include="FramesPerSecondCounter.cs" />
+	<Compile Include="FramesPerSecondCounter.cs" />
+    <Compile Include="FramesPerSecondCounterComponent.cs" />
     <Compile Include="Sprites\SpriteAnimator.cs" />
   </ItemGroup>
   <ItemGroup>

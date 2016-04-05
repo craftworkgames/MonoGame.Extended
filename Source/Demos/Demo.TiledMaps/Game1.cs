@@ -11,7 +11,7 @@ namespace Demo.TiledMaps
 {
     public class Game1 : Game
     {
-        private FramesPerSecondCounter _fpsCounter;
+        private FramesPerSecondCounterComponent _fpsCounter;
         private BitmapFont _bitmapFont;
         private Camera2D _camera;
         // ReSharper disable once NotAccessedField.Local
@@ -32,7 +32,7 @@ namespace Demo.TiledMaps
 
         protected override void Initialize()
         {
-            Components.Add(_fpsCounter = new FramesPerSecondCounter(this));
+            Components.Add(_fpsCounter = new FramesPerSecondCounterComponent(this));
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter);
 

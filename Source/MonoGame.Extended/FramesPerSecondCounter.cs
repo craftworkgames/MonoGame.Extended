@@ -4,10 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
-    public class FramesPerSecondCounter : DrawableGameComponent
+    public class FramesPerSecondCounter : IUpdate
     {
-        public FramesPerSecondCounter(Game game, int maximumSamples = 100)
-            :base(game)
+        public FramesPerSecondCounter(int maximumSamples = 100)
         {
             MaximumSamples = maximumSamples;
         }
@@ -16,7 +15,7 @@ namespace MonoGame.Extended
 
         public long TotalFrames { get; private set; }
         public float AverageFramesPerSecond { get; private set; }
-        public float CurrentFramesPerSecond { get; private set; } 
+        public float CurrentFramesPerSecond { get; private set; }
         public int MaximumSamples { get; }
 
         public void Reset()
@@ -25,7 +24,7 @@ namespace MonoGame.Extended
             _sampleBuffer.Clear();
         }
 
-        public void UpdateFPS(float deltaTime)
+        public void Update(float deltaTime)
         {
             CurrentFramesPerSecond = 1.0f / deltaTime;
 
@@ -35,7 +34,7 @@ namespace MonoGame.Extended
             {
                 _sampleBuffer.Dequeue();
                 AverageFramesPerSecond = _sampleBuffer.Average(i => i);
-            } 
+            }
             else
             {
                 AverageFramesPerSecond = CurrentFramesPerSecond;
@@ -44,16 +43,9 @@ namespace MonoGame.Extended
             TotalFrames++;
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            UpdateFPS((float)gameTime.ElapsedGameTime.TotalSeconds);
-            base.Draw(gameTime);
+            Update((float)gameTime.ElapsedGameTime.TotalSeconds);
         }
     }
 }
-

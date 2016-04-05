@@ -16,7 +16,7 @@ namespace Demo.SpriteSheetAnimations
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private Camera2D _camera;
-        private FramesPerSecondCounter _fpsCounter;
+        private FramesPerSecondCounterComponent _fpsCounter;
         private SpriteBatch _spriteBatch;
         private TiledMap _tiledMap;
         private ViewportAdapter _viewportAdapter;
@@ -32,7 +32,7 @@ namespace Demo.SpriteSheetAnimations
 
         protected override void Initialize()
         {
-            Components.Add(_fpsCounter = new FramesPerSecondCounter(this));
+            Components.Add(_fpsCounter = new FramesPerSecondCounterComponent(this));
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter)
             {
