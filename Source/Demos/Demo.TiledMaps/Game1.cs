@@ -11,7 +11,7 @@ namespace Demo.TiledMaps
 {
     public class Game1 : Game
     {
-        private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
+        private FramesPerSecondCounter _fpsCounter;
         private BitmapFont _bitmapFont;
         private Camera2D _camera;
         // ReSharper disable once NotAccessedField.Local
@@ -27,16 +27,23 @@ namespace Demo.TiledMaps
             _graphicsDeviceManager = new GraphicsDeviceManager(this) {SynchronizeWithVerticalRetrace = false};
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            IsFixedTimeStep = false;
+        }
+
+        protected override void Initialize()
+        {
+            Components.Add(_fpsCounter = new FramesPerSecondCounter(this));
+            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            _camera = new Camera2D(_viewportAdapter);
+
             Window.AllowUserResizing = true;
             Window.Position = Point.Zero;
-            IsFixedTimeStep = false;
+
+            base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(_viewportAdapter);
-
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _texture = Content.Load<Texture2D>("monogame-extended-logo");
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
@@ -103,8 +110,6 @@ namespace Demo.TiledMaps
             //}
 
             _spriteBatch.End();
-
-            _fpsCounter.Update(gameTime);
 
             var textColor = Color.Black;
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
