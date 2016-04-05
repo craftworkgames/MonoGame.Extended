@@ -15,7 +15,7 @@ namespace MonoGame.Extended
 
         public long TotalFrames { get; private set; }
         public float AverageFramesPerSecond { get; private set; }
-        public float CurrentFramesPerSecond { get; private set; } 
+        public float CurrentFramesPerSecond { get; private set; }
         public int MaximumSamples { get; }
 
         public void Reset()
@@ -34,7 +34,7 @@ namespace MonoGame.Extended
             {
                 _sampleBuffer.Dequeue();
                 AverageFramesPerSecond = _sampleBuffer.Average(i => i);
-            } 
+            }
             else
             {
                 AverageFramesPerSecond = CurrentFramesPerSecond;
@@ -49,4 +49,3 @@ namespace MonoGame.Extended
         }
     }
 }
-
