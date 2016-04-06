@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
@@ -13,22 +12,22 @@ namespace MonoGame.Extended.Graphics.Batching
 
         internal override void Begin()
         {
-            throw new NotImplementedException();
         }
 
         internal override void End()
         {
-            throw new NotImplementedException();
         }
 
-        internal override void Queue(PrimitiveType type, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext)
+        internal override void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext)
         {
-            throw new NotImplementedException();
+            BatchDrawer.Select(vertices);
+            BatchDrawer.Draw(primitiveType, startVertex, startVertex + vertexCount, drawContext);
         }
 
-        internal override void Queue(PrimitiveType type, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, IDrawContext drawContext)
+        internal override void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, IDrawContext drawContext)
         {
-            throw new NotImplementedException();
+            BatchDrawer.Select(vertices, indices);
+            BatchDrawer.Draw(primitiveType, startVertex, startVertex + vertexCount, startIndex, indexCount, drawContext);
         }
     }
 }
