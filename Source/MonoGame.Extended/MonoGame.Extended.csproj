@@ -36,8 +36,24 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AngleHelper.cs" />
+    <Compile Include="Animations\AnimationEvent.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroup.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroupReader.cs" />
+    <Compile Include="Animations\Animation.cs" />
+    <Compile Include="Animations\Tracks\AnimationSettingTrack.cs" />
+    <Compile Include="Animations\Tracks\AnimationTrackGroup.cs" />
+    <Compile Include="Animations\Tracks\AnimationTweeningTrack.cs" />
+    <Compile Include="Animations\Animator.cs" />
+    <Compile Include="Animations\Tracks\IAnimationTrack.cs" />
+    <Compile Include="Animations\Transformation\Easing.cs" />
+    <Compile Include="Animations\Extensions.cs" />
+    <Compile Include="Animations\Transformation\ITransform.cs" />
+    <Compile Include="Animations\Transformation\MeshTransform.cs" />
+    <Compile Include="Animations\Transformation\PositionTransform.cs" />
+    <Compile Include="Animations\Transformation\QuadraticBezierEasing.cs" />
+    <Compile Include="Animations\Transformation\SetPropertyTransform.cs" />
+    <Compile Include="Animations\Transformation\Transform.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />
@@ -45,6 +61,9 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
+    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\TextureComponent.cs" />
+    <Compile Include="Entities\Transform2D.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />
     <Compile Include="Collisions\CollisionGrid.cs" />
@@ -133,6 +152,7 @@
     <Compile Include="SceneGraphs\SceneNode.cs" />
     <Compile Include="SceneGraphs\SceneNodeCollection.cs" />
     <Compile Include="SceneGraphs\SpriteBatchExtensions.cs" />
+    <Compile Include="Shapes\PieF.cs" />
     <Compile Include="Shapes\SpriteBatchExtensions.cs" />
     <Compile Include="Shapes\CircleF.cs" />
     <Compile Include="Shapes\PolygonF.cs" />
@@ -163,6 +183,7 @@
     <Compile Include="Timers\GameTimer.cs" />
     <Compile Include="Timers\TimerState.cs" />
     <Compile Include="Vector2Extensions.cs" />
+    <Compile Include="Vertex2D.cs" />
     <Compile Include="ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\WindowViewportAdapter.cs" />
