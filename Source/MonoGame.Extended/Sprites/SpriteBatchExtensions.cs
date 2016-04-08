@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Sprites
         {
             Draw(spriteBatch, sprite);
         }
-
+        
         public static void Draw(this SpriteBatch spriteBatch, Sprite sprite)
         {
             if (sprite == null) throw new ArgumentNullException(nameof(sprite));

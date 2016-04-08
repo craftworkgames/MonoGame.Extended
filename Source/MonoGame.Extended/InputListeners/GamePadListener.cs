@@ -79,20 +79,20 @@ namespace MonoGame.Extended.InputListeners
         /// <summary>
         /// The index of the controller.
         /// </summary>
-        public PlayerIndex PlayerIndex { get; private set; }
+        public PlayerIndex PlayerIndex { get; }
 
         /// <summary>
         /// When a button is held down, the interval in which
         /// ButtonRepeated fires. Value in milliseconds.
         /// </summary>
-        public int RepeatDelay { get; private set; }
+        public int RepeatDelay { get; }
 
         /// <summary>
         /// The amount of time a button has to be held down
         /// in order to fire ButtonRepeated the first time.
         /// Value in milliseconds.
         /// </summary>
-        public int RepeatInitialDelay { get; private set; }
+        public int RepeatInitialDelay { get; }
 
         /// <summary>
         /// Whether vibration is enabled for this controller.
@@ -134,7 +134,7 @@ namespace MonoGame.Extended.InputListeners
         /// At a value of 0 this will fire every time
         /// the trigger's position is not 0f.
         /// </summary>
-        public float TriggerDeltaTreshold { get; private set; }
+        public float TriggerDeltaTreshold { get; }
 
         /// <summary>
         /// The treshold of movement that has to be met in order
@@ -145,19 +145,19 @@ namespace MonoGame.Extended.InputListeners
         /// At a value of 0 this will fire every time
         /// the thumbstick's position is not {x:0, y:0}.
         /// </summary>
-        public float ThumbStickDeltaTreshold { get; private set; }
+        public float ThumbStickDeltaTreshold { get; }
 
         /// <summary>
         /// How deep the triggers have to be depressed in order to
         /// register as a ButtonDown event.
         /// </summary>
-        public float TriggerDownTreshold { get; private set; }
+        public float TriggerDownTreshold { get; }
 
         /// <summary>
         /// How deep the triggers have to be depressed in order to
         /// register as a ButtonDown event.
         /// </summary>
-        public float ThumbstickDownTreshold { get; private set; }
+        public float ThumbstickDownTreshold { get; }
 
         private static readonly bool[] _gamePadConnections = new bool[4];
 

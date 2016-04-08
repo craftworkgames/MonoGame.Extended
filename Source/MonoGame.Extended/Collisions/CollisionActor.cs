@@ -24,10 +24,7 @@ namespace MonoGame.Extended.Collisions
             set { _target.Position = value; }
         }
 
-        public RectangleF BoundingBox
-        {
-            get { return _target.BoundingBox; }
-        }
+        public RectangleF BoundingBox => _target.BoundingBox;
 
         public void OnCollision(CollisionInfo collisionInfo)
         {

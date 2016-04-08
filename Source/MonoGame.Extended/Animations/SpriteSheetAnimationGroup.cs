@@ -19,10 +19,7 @@ namespace MonoGame.Extended.Animations
         }
 
         private readonly TextureRegion2D[] _frames;
-        public IEnumerable<TextureRegion2D> Frames
-        {
-            get { return _frames; }
-        } 
+        public IEnumerable<TextureRegion2D> Frames => _frames;
 
         public SpriteSheetAnimation GetAnimation(string name)
         {
@@ -34,10 +31,7 @@ namespace MonoGame.Extended.Animations
             return _frames[index];
         }
 
-        public SpriteSheetAnimation this[string name]
-        {
-            get { return GetAnimation(name); }
-        }
+        public SpriteSheetAnimation this[string name] => GetAnimation(name);
 
         public bool Contains(SpriteSheetAnimation animation)
         {

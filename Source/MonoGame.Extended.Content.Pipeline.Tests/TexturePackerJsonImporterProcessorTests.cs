@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.Content.Pipeline.TextureAtlases;
 using NSubstitute;
@@ -11,9 +13,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TexturePackerJsonImporter_Import_Test()
         {
-            const string filename = @"TestData\test-tileset.json";
+            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset.json");
             var importer = new TexturePackerJsonImporter();
-            var data = importer.Import(filename, Substitute.For<ContentImporterContext>());
+            var data = importer.Import(filePath, Substitute.For<ContentImporterContext>());
 
             Assert.IsNotNull(data);
         }
@@ -21,9 +23,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TexturePackerJsonImporter_Processor_Test()
         {
-            const string filename = @"TestData\test-tileset.json";
+            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset.json");
             var importer = new TexturePackerJsonImporter();
-            var input = importer.Import(filename, Substitute.For<ContentImporterContext>());
+            var input = importer.Import(filePath, Substitute.For<ContentImporterContext>());
             var processor = new TexturePackerProcessor();
             var output = processor.Process(input, Substitute.For<ContentProcessorContext>());
 

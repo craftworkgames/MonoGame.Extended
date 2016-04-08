@@ -84,38 +84,33 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void TextureAtlas_CreateRegionThatAlreadyExistsThrowsException_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 100, 200);
             var atlas = new TextureAtlas(texture);
 
             atlas.CreateRegion("region0", 10, 20, 30, 40);
-            atlas.CreateRegion("region0", 50, 60, 35, 45);
+            Assert.Throws<InvalidOperationException>(() => atlas.CreateRegion("region0", 50, 60, 35, 45));
         }
         
         [Test]
-        [ExpectedException(typeof(IndexOutOfRangeException))]
         public void TextureAtlas_GetRegion_InvalidIndexThrowsException_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 100, 200);
             var atlas = new TextureAtlas(texture);
 
             atlas.CreateRegion("region0", 10, 20, 30, 40);
-
-            atlas.GetRegion(-1);
+            Assert.Throws<IndexOutOfRangeException>(() => atlas.GetRegion(-1));
         }
 
         [Test]
-        [ExpectedException(typeof(KeyNotFoundException))]
         public void TextureAtlas_GetRegion_InvalidNameThrowsException_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 100, 200);
             var atlas = new TextureAtlas(texture);
 
             atlas.CreateRegion("region0", 10, 20, 30, 40);
-
-            atlas.GetRegion("region1");
+            Assert.Throws<KeyNotFoundException>(() => atlas.GetRegion("region1"));
         }
 
         [Test]

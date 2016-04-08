@@ -14,9 +14,8 @@ namespace MonoGame.Extended.Maps.Tiled
             TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
         {
             _graphicsDevice = graphicsDevice;
-            _renderTarget = new RenderTarget2D(graphicsDevice, width*tileWidth, height*tileHeight);
-            _spriteBatch = new SpriteBatch(graphicsDevice);
             _layers = new List<TiledLayer>();
+            _objectGroups = new List<TiledObjectGroup>();
             _tilesets = new List<TiledTileset>();
 
             Width = width;
@@ -36,43 +35,23 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly List<TiledTileset> _tilesets;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly List<TiledLayer> _layers;
-        private readonly RenderTarget2D _renderTarget;
-        private readonly SpriteBatch _spriteBatch;
+        private readonly List<TiledObjectGroup> _objectGroups;
 
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-        public int TileWidth { get; private set; }
-        public int TileHeight { get; private set; }
+        public int Width { get; }
+        public int Height { get; }
+        public int TileWidth { get; }
+        public int TileHeight { get; }
         public Color? BackgroundColor { get; set; }
         public TiledRenderOrder RenderOrder { get; set; }
         public TiledProperties Properties { get; private set; }
         public TiledMapOrientation Orientation { get; private set; }
 
-        public IEnumerable<TiledLayer> Layers
-        {
-            get { return _layers; }
-        }
-
-        public IEnumerable<TiledImageLayer> ImageLayers
-        {
-            get { return _layers.OfType<TiledImageLayer>(); }
-        }
-
-        public IEnumerable<TiledTileLayer> TileLayers
-        {
-            get { return _layers.OfType<TiledTileLayer>(); }
-        }
-
-        public int WidthInPixels
-        {
-            // annoyingly we have to compensate 1 pixel per tile, seems to be a bug in MonoGame?
-            get { return Width * TileWidth - Width; }       
-        }
-
-        public int HeightInPixels
-        {
-            get { return Height * TileHeight - Height; }
-        }
+        public List<TiledObjectGroup> ObjectGroups => _objectGroups;
+        public IEnumerable<TiledLayer> Layers => _layers;
+        public IEnumerable<TiledImageLayer> ImageLayers => _layers.OfType<TiledImageLayer>();
+        public IEnumerable<TiledTileLayer> TileLayers => _layers.OfType<TiledTileLayer>();
+        public int WidthInPixels => Width * TileWidth;
+        public int HeightInPixels => Height * TileHeight;
 
         public TiledTileset CreateTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
         {
@@ -90,9 +69,16 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public TiledImageLayer CreateImageLayer(string name, Texture2D texture, Vector2 position)
         {
-            var layer = new TiledImageLayer(_graphicsDevice, name, texture, position);
+            var layer = new TiledImageLayer(name, texture, position);
             _layers.Add(layer);
             return layer;
+        }
+
+        public TiledObjectGroup CreateObjectGroup(string name, TiledObject[] objects, bool isVisible)
+        {
+            var objectGroup = new TiledObjectGroup(name, objects) {IsVisible = isVisible};
+            _objectGroups.Add(objectGroup);
+            return objectGroup;
         }
 
         public TiledLayer GetLayer(string name)
@@ -106,30 +92,22 @@ namespace MonoGame.Extended.Maps.Tiled
             return (T) GetLayer(name);
         }
 
-        public void Draw(Camera2D camera, bool useMapBackgroundColor = false)
+        public TiledObjectGroup GetObjectGroup(string name)
         {
-            // it's important to get the camera state before setting the render target
-            // because the render target changes the size of the viewport
-            var boundingRectangle = camera.GetBoundingRectangle();
-            var viewMatrix = camera.GetViewMatrix();
-            var viewport = _graphicsDevice.Viewport;
+            return _objectGroups.FirstOrDefault(i => i.Name == name);
+        }
 
-            _graphicsDevice.SetRenderTarget(_renderTarget); 
+        
+        public void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null)
+        {
+            foreach (var layer in _layers.Where(i => i.IsVisible))
+                layer.Draw(spriteBatch, visibleRectangle);
+        }
 
-            if (useMapBackgroundColor && BackgroundColor.HasValue)
-                _graphicsDevice.Clear(BackgroundColor.Value);
-            else
-                _graphicsDevice.Clear(Color.Transparent);
-
-            foreach (var layer in _layers)
-                layer.Draw(boundingRectangle);
-
-            _graphicsDevice.SetRenderTarget(null);
-
-            _graphicsDevice.Viewport = viewport;
-            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, transformMatrix: viewMatrix);
-            _spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
-            _spriteBatch.End();
+        public void Draw(SpriteBatch spriteBatch, Camera2D camera)
+        {
+            var visibleRectangle = camera.GetBoundingRectangle().ToRectangle();
+            Draw(spriteBatch, visibleRectangle);
         }
 
         public TextureRegion2D GetTileRegion(int id)
@@ -140,7 +118,7 @@ namespace MonoGame.Extended.Maps.Tiled
             var tileset = _tilesets.LastOrDefault(i => i.FirstId <= id);
 
             if (tileset == null)
-                throw new InvalidOperationException(string.Format("No tileset found for id {0}", id));
+                throw new InvalidOperationException($"No tileset found for id {id}");
 
             return tileset.GetTileRegion(id);
         }

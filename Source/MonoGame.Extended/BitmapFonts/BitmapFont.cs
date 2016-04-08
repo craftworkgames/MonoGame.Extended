@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.BitmapFonts
@@ -41,6 +43,21 @@ namespace MonoGame.Extended.BitmapFonts
             }
 
             return new Size(width, height);
+        }
+
+        public Vector2 MeasureString(string text)
+        {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+
+            var size = GetSize(text);
+            return new Vector2(size.Width, size.Height);
+        }
+
+        public Vector2 MeasureString(StringBuilder stringBuilder)
+        {
+            if (stringBuilder == null) throw new ArgumentNullException(nameof(stringBuilder));
+
+            return MeasureString(stringBuilder.ToString());
         }
 
         public Rectangle GetStringRectangle(string text, Vector2 position)

@@ -10,7 +10,7 @@ namespace MonoGame.Extended.InputListeners
             Location = location;
         }
 
-        public TouchLocation Location { get; private set; }
+        public TouchLocation Location { get; }
 
         public override bool Equals(object other)
         {

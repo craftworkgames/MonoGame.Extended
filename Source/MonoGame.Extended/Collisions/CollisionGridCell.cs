@@ -15,15 +15,12 @@ namespace MonoGame.Extended.Collisions
 
         private readonly CollisionGrid _parentGrid;
 
-        public int Column { get; private set; }
-        public int Row { get; private set; }
+        public int Column { get; }
+        public int Row { get; }
         public int Data { get; private set; }
         public object Tag { get; set; }
         public CollisionGridCellFlag Flag { get; set; }
 
-        public RectangleF BoundingBox
-        {
-            get { return _parentGrid.GetCellRectangle(Column, Row).ToRectangleF(); }
-        }
+        public RectangleF BoundingBox => _parentGrid.GetCellRectangle(Column, Row).ToRectangleF();
     }
 }

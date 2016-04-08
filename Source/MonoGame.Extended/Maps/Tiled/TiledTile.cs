@@ -9,13 +9,13 @@
             Y = y;
         }
 
-        public int Id { get; private set; }
+        public int Id { get; }
         public int X { get; private set; }
         public int Y { get; private set; }
 
         public override string ToString()
         {
-            return string.Format("{0}", Id);
+            return $"{Id}";
         }
     }
 }

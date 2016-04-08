@@ -116,7 +116,8 @@ namespace MonoGame.Extended
 
         public Vector2 WorldToScreen(Vector2 worldPosition)
         {
-            return Vector2.Transform(worldPosition, GetViewMatrix());
+            var viewport = _viewportAdapter.Viewport;
+            return Vector2.Transform(worldPosition + new Vector2(viewport.X, viewport.Y), GetViewMatrix());
         }
 
         public Vector2 ScreenToWorld(float x, float y)
@@ -126,18 +127,28 @@ namespace MonoGame.Extended
 
         public Vector2 ScreenToWorld(Vector2 screenPosition)
         {
-            return Vector2.Transform(screenPosition, Matrix.Invert(GetViewMatrix()));
+            var viewport = _viewportAdapter.Viewport;
+            return Vector2.Transform(screenPosition - new Vector2(viewport.X, viewport.Y), Matrix.Invert(GetViewMatrix())); 
         }
 
         public Matrix GetViewMatrix(Vector2 parallaxFactor)
         {
-            return 
+            return GetVirtualViewMatrix(parallaxFactor) * _viewportAdapter.GetScaleMatrix();
+        }
+
+        private Matrix GetVirtualViewMatrix(Vector2 parallaxFactor)
+        {
+            return
                 Matrix.CreateTranslation(new Vector3(-Position * parallaxFactor, 0.0f)) *
                 Matrix.CreateTranslation(new Vector3(-Origin, 0.0f)) *
                 Matrix.CreateRotationZ(Rotation) *
                 Matrix.CreateScale(Zoom, Zoom, 1) *
-                Matrix.CreateTranslation(new Vector3(Origin, 0.0f)) *
-                _viewportAdapter.GetScaleMatrix(); 
+                Matrix.CreateTranslation(new Vector3(Origin, 0.0f));
+        }
+
+        private Matrix GetVirtualViewMatrix()
+        {
+            return GetVirtualViewMatrix(Vector2.One);
         }
 
         public Matrix GetViewMatrix()
@@ -157,9 +168,9 @@ namespace MonoGame.Extended
             return projection;
         }
 
-        public BoundingFrustum GetBoundingFrustum() 
+        public BoundingFrustum GetBoundingFrustum()
         {
-            var viewMatrix = GetViewMatrix();
+            var viewMatrix = GetVirtualViewMatrix();
             var projectionMatrix = GetProjectionMatrix(viewMatrix);
             return new BoundingFrustum(projectionMatrix);
         }

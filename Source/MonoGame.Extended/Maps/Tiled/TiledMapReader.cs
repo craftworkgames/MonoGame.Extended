@@ -49,7 +49,60 @@ namespace MonoGame.Extended.Maps.Tiled
                 ReadCustomProperties(reader, layer.Properties);
             }
 
+            var objectGroupsCount = reader.ReadInt32();
+
+            for (var i = 0; i < objectGroupsCount; i++)
+            {
+                var objectGroup = ReadObjectGroup(reader, tiledMap);
+                ReadCustomProperties(reader, objectGroup.Properties);
+            }
+
             return tiledMap;
+        }
+
+        private static TiledObjectGroup ReadObjectGroup(ContentReader reader, TiledMap tiledMap)
+        {
+            var groupName = reader.ReadString();
+            var visible = reader.ReadBoolean();
+            var opacity = reader.ReadSingle();
+            var count = reader.ReadInt32();
+            var objects = new TiledObject[count];
+
+            for (var i = 0; i < count; i++)
+            {
+                var objectType = (TiledObjectType) reader.ReadInt32();
+                var id = reader.ReadInt32();
+                var gid = reader.ReadInt32();
+                var x = reader.ReadSingle();
+                var y = reader.ReadSingle();
+                var width = reader.ReadSingle();
+                var height = reader.ReadSingle();
+                var rotation = reader.ReadSingle();
+                var name = reader.ReadString();
+                var type = reader.ReadString();
+                var isVisible = reader.ReadBoolean();
+
+                objects[i] = new TiledObject(objectType, id, gid >= 0 ? gid : (int?) null, x, y, width, height)
+                {
+                    IsVisible = isVisible,
+                    Opacity = opacity,
+                    Rotation = rotation,
+                    Name = name,
+                    Type = type
+                };
+
+                if (objectType == TiledObjectType.Polyline || objectType == TiledObjectType.Polygon)
+                {
+                    var pointsCount = reader.ReadInt32();
+
+                    for (var j = 0; j < pointsCount; j++)
+                        objects[i].Points.Add(reader.ReadVector2());
+                }
+
+                ReadCustomProperties(reader, objects[i].Properties);
+            }
+
+            return tiledMap.CreateObjectGroup(groupName, objects, visible);
         }
 
         private static void ReadCustomProperties(ContentReader reader, TiledProperties properties)
@@ -63,19 +116,24 @@ namespace MonoGame.Extended.Maps.Tiled
         private static TiledLayer ReadLayer(ContentReader reader, TiledMap tiledMap)
         {
             var layerName = reader.ReadString();
-            // ReSharper disable UnusedVariable
             var visible = reader.ReadBoolean();
             var opacity = reader.ReadSingle();
-            // ReSharper restore UnusedVariable
             var layerType = reader.ReadString();
+            var layer = ReadLayerTypeProperties(reader, tiledMap, layerName, layerType);
+            layer.IsVisible = visible;
+            layer.Opacity = opacity;
+            return layer;
+        }
 
+        private static TiledLayer ReadLayerTypeProperties(ContentReader reader, TiledMap tiledMap, string layerName, string layerType)
+        {
             if (layerType == "TileLayer")
                 return ReadTileLayer(reader, tiledMap, layerName);
 
             if (layerType == "ImageLayer")
                 return ReadImageLayer(reader, tiledMap, layerName);
 
-            throw new NotSupportedException(string.Format("Layer type {0} is not supported", layerType));
+            throw new NotSupportedException($"Layer type {layerType} is not supported");
         }
 
         private static TiledTileLayer ReadTileLayer(ContentReader reader, TiledMap tileMap, string layerName)
@@ -86,11 +144,7 @@ namespace MonoGame.Extended.Maps.Tiled
             for (var d = 0; d < tileDataCount; d++)
                 tileData[d] = reader.ReadInt32();
 
-            return tileMap.CreateTileLayer(
-                name: layerName,
-                width: reader.ReadInt32(),
-                height: reader.ReadInt32(),
-                data: tileData);
+            return tileMap.CreateTileLayer(name: layerName, width: reader.ReadInt32(), height: reader.ReadInt32(), data: tileData);
         }
 
         private static TiledImageLayer ReadImageLayer(ContentReader reader, TiledMap tileMap, string layerName)
@@ -98,6 +152,7 @@ namespace MonoGame.Extended.Maps.Tiled
             var assetName = reader.GetRelativeAssetPath(reader.ReadString());
             var texture = reader.ContentManager.Load<Texture2D>(assetName);
             var position = reader.ReadVector2();
+
             return tileMap.CreateImageLayer(layerName, texture, position);
         }
     }

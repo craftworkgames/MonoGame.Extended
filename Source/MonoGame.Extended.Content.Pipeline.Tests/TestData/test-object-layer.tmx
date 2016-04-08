@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="15" tilewidth="64" tileheight="64" nextobjectid="12">
+ <objectgroup name="Object Layer 1">
+  <object id="1" x="131.345" y="65.234" width="311.111" height="311.232">
+   <properties>
+    <property name="shape" value="circle"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="7" x="240" y="440" width="322" height="186" visible="0"/>
+  <object id="8" type="rectangle" x="506" y="142" width="136" height="234">
+   <properties>
+    <property name="area" value="player-spawn"/>
+   </properties>
+  </object>
+  <object id="9" name="polygon" x="621" y="450">
+   <polygon points="0,0 180,90 -8,275 -45,81 38,77"/>
+  </object>
+  <object id="11" x="43" y="350">
+   <polyline points="0,0 28,299 326,413 461,308"/>
+  </object>
+   <object id="12" gid="23" x="169.333" y="490.909" width="345.818" height="364"/>
+ </objectgroup>
+</map>

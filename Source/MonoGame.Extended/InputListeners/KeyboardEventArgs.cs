@@ -21,13 +21,10 @@ namespace MonoGame.Extended.InputListeners
                 Modifiers |= KeyboardModifiers.Alt;
         }
 
-        public Keys Key { get; private set; }
-        public KeyboardModifiers Modifiers { get; private set; }
+        public Keys Key { get; }
+        public KeyboardModifiers Modifiers { get; }
 
-        public char? Character
-        {
-            get { return ToChar(Key, Modifiers); }
-        }
+        public char? Character => ToChar(Key, Modifiers);
 
         private static char? ToChar(Keys key, KeyboardModifiers modifiers = KeyboardModifiers.None)
         {
