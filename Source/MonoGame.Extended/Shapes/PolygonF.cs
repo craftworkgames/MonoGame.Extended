@@ -109,6 +109,7 @@ namespace MonoGame.Extended.Shapes
         public bool Contains(Vector2 point)
         {
             return Contains(point.X, point.Y);
+            
         }
 
         public bool Contains(float x, float y)
