@@ -86,10 +86,7 @@ namespace MonoGame.Extended.Collections
         ///     Gets the number of elements contained in the <see cref="Pool{T}" />.
         /// </summary>
         /// <returns>The number of elements contained in the <see cref="Pool{T}" />.</returns>
-        public int Count
-        {
-            get { return _usedItems.Count; }
-        }
+        public int Count => _usedItems.Count;
 
         /// <summary>
         ///     Gets or sets the total number of elements the internal data structure can hold.
@@ -98,15 +95,9 @@ namespace MonoGame.Extended.Collections
         /// <remarks>
         ///     Once set, <see cref="Capacity" /> can not be changed.
         /// </remarks>
-        public int Capacity
-        {
-            get { return _usedItems.Count; }
-        }
+        public int Capacity => _usedItems.Count;
 
-        bool ICollection<T>.IsReadOnly
-        {
-            get { return true; }
-        }
+        bool ICollection<T>.IsReadOnly => true;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Pool{T}" /> class that has a specified capacity and an element

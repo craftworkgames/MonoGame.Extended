@@ -1,29 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Sprites;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Animations
 {
     public class SpriteSheetAnimator : IUpdate
     {
-        //public SpriteSheetAnimator(Sprite sprite, TextureAtlas textureAtlas)
-        //    : this(sprite, textureAtlas.Select(t => t))
-        //{
-        //}
-
-        //public SpriteSheetAnimator(TextureAtlas textureAtlas)
-        //    : this(null, textureAtlas)
-        //{
-        //}
-
-        //public SpriteSheetAnimator(IEnumerable<TextureRegion2D> regions)
-        //    : this(null, regions)
-        //{
-        //}
-
         public SpriteSheetAnimator(SpriteSheetAnimationGroup animationGroup)
             : this(animationGroup, new Sprite(animationGroup.Frames.First()))
         {
@@ -32,8 +15,6 @@ namespace MonoGame.Extended.Animations
         public SpriteSheetAnimator(SpriteSheetAnimationGroup animationGroup, Sprite sprite)
         {
             _animationGroup = animationGroup;
-            //_frames = new List<TextureRegion2D>(regions);
-            //_animations = new Dictionary<string, SpriteSheetAnimation>();
             _frameIndex = 0;
 
             Sprite = sprite;
@@ -44,12 +25,7 @@ namespace MonoGame.Extended.Animations
                 Sprite.TextureRegion = _animationGroup.Frames.First();
         }
 
-        //public SpriteSheetAnimator()
-        //    : this(null, Enumerable.Empty<TextureRegion2D>())
-        //{
-        //}
-
-        private SpriteSheetAnimationGroup _animationGroup;
+        private readonly SpriteSheetAnimationGroup _animationGroup;
         private SpriteSheetAnimation _currentAnimation;
         private float _nextFrameDelay;
         private int _frameIndex;
@@ -179,9 +155,7 @@ namespace MonoGame.Extended.Animations
                         IsPlaying = false;
 
                     var onCompleteAction = _onCompleteAction;
-
-                    if (onCompleteAction != null)
-                        onCompleteAction();
+                    onCompleteAction?.Invoke();
                 }
 
                 var atlasIndex = _currentAnimation.FrameIndicies[_frameIndex];

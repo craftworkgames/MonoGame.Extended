@@ -13,16 +13,16 @@ namespace MonoGame.Extended.Collections
 
     /// <summary>
     ///     Represents a collection of objects which elements can added to or removed either from the front or back; a
-    ///     <see cref="https://en.wikipedia.org/wiki/Double-ended_queue">double ended queue</see> (deque).
+    ///     <a href="https://en.wikipedia.org/wiki/Double-ended_queue">double ended queue</a> (deque).
     /// </summary>
     /// <remarks>
-    ///     <see cref="https://en.wikipedia.org/wiki/Circular_buffer">circular array</see> is used as the internal data
+    ///     <a href="https://en.wikipedia.org/wiki/Circular_buffer">circular array</a> is used as the internal data
     ///     structure for the <see cref="Deque{T}" />.
     /// </remarks>
     /// <typeparam name="T">The type of the elements in the deque.</typeparam>
     public class Deque<T> : IList<T>
     {
-        private const int DefaultCapacity = 4;
+        private const int _defaultCapacity = 4;
         private static readonly T[] _emptyArray = new T[0];
         private T[] _items;
         private int _frontArrayIndex;
@@ -131,10 +131,7 @@ namespace MonoGame.Extended.Collections
         /// <returns>The number of elements contained in the <see cref="Deque{T}" />.</returns>
         public int Count { get; private set; }
 
-        bool ICollection<T>.IsReadOnly
-        {
-            get { return false; }
-        }
+        bool ICollection<T>.IsReadOnly => false;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Deque{T}" /> class that is empty and has the default initial capacity.
@@ -278,7 +275,7 @@ namespace MonoGame.Extended.Collections
             {
                 return;
             }
-            var newCapacity = DefaultCapacity;
+            var newCapacity = _defaultCapacity;
             if (_items.Length > 0)
             {
                 newCapacity = _resizeFunction(_items.Length);
