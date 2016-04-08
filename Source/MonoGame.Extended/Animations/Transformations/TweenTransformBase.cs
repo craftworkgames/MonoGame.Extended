@@ -1,12 +1,13 @@
 using System;
-using Microsoft.Xna.Framework;
+using System.Linq.Expressions;
+using System.Reflection;
 
-namespace MonoGame.Extended.Animations.Transformation
+namespace MonoGame.Extended.Animations.Transformations
 {
-    public abstract class Transform<TTransformable, TValue> : ITweenTransform<TTransformable>
+    public abstract class TweenTransformBase<TTransformable, TValue> : ITweenTransform<TTransformable>
         where TTransformable : class
     {
-        protected Transform(double time, TValue value, Easing easing) {
+        protected TweenTransformBase(double time, TValue value, Easing easing) {
             Time = time;
             Value = value;
             ValueType = typeof(TValue);
@@ -23,7 +24,7 @@ namespace MonoGame.Extended.Animations.Transformation
             if (time > Time) return false;
 
             var t = Easing.Ease(time, Time, previous.Time);
-            SetValue(t, transformable, ((Transform<TTransformable, TValue>)previous).Value);
+            SetValue(t, transformable, ((TweenTransformBase<TTransformable, TValue>)previous).Value);
             return true;
         }
 

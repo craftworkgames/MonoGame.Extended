@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Animations.Transformation
+namespace MonoGame.Extended.Animations.Transformations
 {
+    //uses reflection to set a property at a certain time of a transformable
     public class SetPropertyTransform<TTransformable, TValue> : ISetTransform<TTransformable> where TTransformable : class
     {
         private readonly PropertyInfo _propertyInfo;

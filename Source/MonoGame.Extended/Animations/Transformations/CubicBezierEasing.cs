@@ -1,31 +1,28 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Shapes;
 
-namespace MonoGame.Extended.Animations.Transformation
+namespace MonoGame.Extended.Animations.Transformations
 {
-    public sealed class QuadraticBezierEasing : Easing
+    public sealed class CubicBezierEasing : Easing
     {
         public double X1 { get; set; }
         public double Y1 { get; set; }
         public double X2 { get; set; }
         public double Y2 { get; set; }
-        public override string ToString() => $"Beziér easing[X1:{X1},Y1:{Y1},X2:{X2},Y2:{Y2}]";
 
         /// <summary>
-        /// Creates a quadratic bezier object used for easing.
+        /// Creates a cubic bezier object used for easing.
         /// First point = 0,0 and Fourth point = 1,1.
         /// </summary>
         /// <param name="pos2">Second bezier control point</param>
         /// <param name="pos3">Third bezier control point</param>
-        public QuadraticBezierEasing(Vector2 pos2, Vector2 pos3) {
+        public CubicBezierEasing(Vector2 pos2, Vector2 pos3) {
             X1 = pos2.X;
             X2 = pos3.X;
             Y1 = pos2.Y;
             Y2 = pos3.Y;
         }
-        public QuadraticBezierEasing(double x1, double y1, double x2, double y2) {
+        public CubicBezierEasing(double x1, double y1, double x2, double y2) {
             X1 = x1;
             X2 = x2;
             Y1 = y1;
@@ -49,12 +46,13 @@ namespace MonoGame.Extended.Animations.Transformation
         public static double BezierInterpolation(double t, double p1, double p2) {
             return ((A(p1, p2) * t + B(p1, p2)) * t + C(p1)) * t;
         }
-
+        //for code readability
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static double A(double a, double b) => 1.0 - 3.0 * a + 3.0 * b;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static double B(double a, double b) => 3.0 * a - 6.0 * b;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static double C(double a) => 3.0 * a;
+        public override string ToString() => $"Bézier easing[X1:{X1} Y1:{Y1} X2:{X2} Y2:{Y2}]";
     }
 }

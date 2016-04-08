@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonoGame.Extended.Animations.Transformation
+namespace MonoGame.Extended.Animations.Transformations
 {
     public abstract class Easing
     {

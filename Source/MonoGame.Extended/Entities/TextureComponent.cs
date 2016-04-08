@@ -13,14 +13,18 @@ namespace MonoGame.Extended.Entities
         public Vector2 Origin { get; set; }
         public SpriteEffects SpriteEffects { get; set; }
         public float LayerDepth { get; set; }
-        public override void Draw(Vector2 position, Vector2 scale, float rotation) {
+        public override void Draw(Matrix transform) {
+            Vector2 position;
+            Vector2 scale;
+            float rotation;
+            transform.Decompose(out position, out rotation, out scale);
             SpriteBatch.Draw(Texture, position, null, SourceRectangle, Origin, rotation, scale, Color, SpriteEffects, LayerDepth);
         }
     }
     public class MeshComponent : VisualComponent
     {
         public Vertex2D[] Vertices { get; set; }
-        public override void Draw(Vector2 position, Vector2 scale, float rotation) {
+        public override void Draw(Matrix transform) {
             throw new System.NotImplementedException();
         }
     }

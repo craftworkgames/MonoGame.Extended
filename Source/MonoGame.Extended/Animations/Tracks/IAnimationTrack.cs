@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics.Contracts;
-using MonoGame.Extended.Animations.Transformation;
+using MonoGame.Extended.Animations.Transformations;
 
 namespace MonoGame.Extended.Animations.Tracks
 {
@@ -10,5 +10,7 @@ namespace MonoGame.Extended.Animations.Tracks
         void Update(double time, T transformable);
         ITransform[] GetTransforms();
         double LastTime { get; }
+        void Clear();
+        
     }
 }
