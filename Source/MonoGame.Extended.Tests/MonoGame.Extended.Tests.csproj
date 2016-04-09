@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Collections\DequeTests.cs" />
     <Compile Include="Collections\PoolTests.cs" />
+    <Compile Include="Graphics\Batching\ImmediateBatchQueuerTests.cs" />
     <Compile Include="Graphics\Batching\UserPrimitivesBatcherTests.cs" />
     <Compile Include="Graphics\EffectDrawContextTests.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensionsTests.cs" />
