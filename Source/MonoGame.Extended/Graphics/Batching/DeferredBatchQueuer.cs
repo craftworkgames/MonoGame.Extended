@@ -103,15 +103,15 @@ namespace MonoGame.Extended.Graphics.Batching
             _usedVertexCount += vertexCount;
         }
 
-        private void QueueVerticesBufferSplit(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext, int spaceForVerticesLeft)
+        private void QueueVerticesBufferSplit(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext, int spaceLeft)
         {
             switch (primitiveType)
             {
                 case PrimitiveType.LineStrip:
                 {
-                    if (spaceForVerticesLeft < 2)
+                    if (spaceLeft < 2)
                     {
-                        spaceForVerticesLeft = 0;
+                        spaceLeft = 0;
                         // The single vertex will be added later in the code below
                         ++startVertex;
                         --vertexCount;
@@ -120,77 +120,77 @@ namespace MonoGame.Extended.Graphics.Batching
                 }
                 case PrimitiveType.LineList:
                 {
-                    spaceForVerticesLeft -= spaceForVerticesLeft % 2;
+                    spaceLeft -= spaceLeft % 2;
                     break;
                 }
                 case PrimitiveType.TriangleStrip:
                 {
-                    if (spaceForVerticesLeft < 4)
+                    if (spaceLeft < 4)
                     {
-                        spaceForVerticesLeft = 0;
+                        spaceLeft = 0;
                         // The two vertices will be added later in the code below
                         startVertex += 2;
                         vertexCount -= 2;
                     }
                     else
                     {
-                        spaceForVerticesLeft -= (spaceForVerticesLeft - 1) % 2;
+                        spaceLeft -= (spaceLeft - 1) % 2;
                     }
                     break;
                 }
                 case PrimitiveType.TriangleList:
                 {
-                    spaceForVerticesLeft -= spaceForVerticesLeft % 3;
+                    spaceLeft -= spaceLeft % 3;
                     break;
                 }
             }
 
-            if (spaceForVerticesLeft > 0)
+            if (spaceLeft > 0)
             {
-                Array.Copy(vertices, startVertex, _vertices, _usedVertexCount, spaceForVerticesLeft);
-                CreateNewOperationIfNecessary(primitiveType, spaceForVerticesLeft, 0, drawContext);
-                _usedVertexCount += spaceForVerticesLeft;
-                vertexCount -= spaceForVerticesLeft;
-                startVertex += spaceForVerticesLeft;
+                Array.Copy(vertices, startVertex, _vertices, _usedVertexCount, spaceLeft);
+                CreateNewOperationIfNecessary(primitiveType, spaceLeft, 0, drawContext);
+                _usedVertexCount += spaceLeft;
+                vertexCount -= spaceLeft;
+                startVertex += spaceLeft;
             }
 
             Flush();
 
             while (vertexCount >= 0)
             {
-                spaceForVerticesLeft = BatchDrawer.MaximumBatchSize;
+                spaceLeft = BatchDrawer.MaximumBatchSize;
 
                 switch (primitiveType)
                 {
                     case PrimitiveType.LineStrip:
                     {
                         _vertices[0] = vertices[startVertex - 1];
-                        --spaceForVerticesLeft;
+                        --spaceLeft;
                         ++_usedVertexCount;
                         break;
                     }
                     case PrimitiveType.LineList:
                     {
-                        spaceForVerticesLeft -= spaceForVerticesLeft % 2;
+                        spaceLeft -= spaceLeft % 2;
                         break;
                     }
                     case PrimitiveType.TriangleStrip:
                     {
                         _vertices[0] = vertices[startVertex - 2];
                         _vertices[1] = vertices[startVertex - 1];
-                        spaceForVerticesLeft -= (spaceForVerticesLeft - 1) % 2 + 2;
+                        spaceLeft -= (spaceLeft - 1) % 2 + 2;
                         _usedVertexCount += 2;
 
                         break;
                     }
                     case PrimitiveType.TriangleList:
                     {
-                        spaceForVerticesLeft -= spaceForVerticesLeft % 3;
+                        spaceLeft -= spaceLeft % 3;
                         break;
                     }
                 }
 
-                var verticesToProcess = Math.Min(spaceForVerticesLeft, vertexCount);
+                var verticesToProcess = Math.Min(spaceLeft, vertexCount);
                 Array.Copy(vertices, startVertex, _vertices, _usedVertexCount, verticesToProcess);
                 CreateNewOperationIfNecessary(primitiveType, verticesToProcess, 0, drawContext);
                 _usedVertexCount += verticesToProcess;
@@ -241,7 +241,123 @@ namespace MonoGame.Extended.Graphics.Batching
 
         private void QueueIndexedVerticesBufferSplit(PrimitiveType type, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, IDrawContext context, int spaceLeft)
         {
-            throw new NotImplementedException();
+            switch (type)
+            {
+                case PrimitiveType.LineStrip:
+                {
+                    if (spaceLeft < 2)
+                    {
+                        spaceLeft = 0;
+                        ++startIndex;
+                        --indexCount;
+                    }
+                    break;
+                }
+                case PrimitiveType.LineList:
+                {
+                    spaceLeft -= spaceLeft % 2;
+                    break;
+                }
+                case PrimitiveType.TriangleStrip:
+                {
+                    if (spaceLeft < 4)
+                    {
+                        spaceLeft = 0;
+                        startIndex += 2;
+                        indexCount -= 2;
+                    }
+                    else
+                    {
+                        spaceLeft -= (spaceLeft - 1) % 2;
+                    }
+                    break;
+                }
+                case PrimitiveType.TriangleList:
+                {
+                    spaceLeft -= spaceLeft % 3;
+                    break;
+                }
+            }
+
+            if (spaceLeft > 0)
+            {
+                // vertices and indices are bijective to fill in the remaining space for this batch
+                CreateNewOperationIfNecessary(type, spaceLeft, spaceLeft, context);
+                var maxVertexCount = _usedVertexCount + spaceLeft;
+                for (var vertexIndex = startVertex; vertexIndex < maxVertexCount; ++vertexIndex)
+                {
+                    _indices[_usedIndexCount++] = (short)vertexIndex;
+                    _vertices[_usedVertexCount++] = vertices[indices[startIndex] + startVertex];
+                    ++startIndex;
+                }
+                indexCount -= spaceLeft;
+            }
+
+            Flush();
+
+            while (indexCount >= 0 && vertexCount >= 0)
+            {
+                spaceLeft = BatchDrawer.MaximumBatchSize;
+
+                switch (type)
+                {
+                    case PrimitiveType.LineStrip:
+                    {
+                        _vertices[0] = vertices[indices[startIndex - 1] + startVertex];
+                        _indices[0] = 0;
+
+                        --spaceLeft;
+                        ++_usedVertexCount;
+                        ++_usedIndexCount;
+                        break;
+                    }
+                    case PrimitiveType.LineList:
+                    {
+                        spaceLeft -= spaceLeft % 2;
+                        break;
+                    }
+                    case PrimitiveType.TriangleStrip:
+                    {
+                        _vertices[0] = vertices[indices[startIndex - 2] + startVertex];
+                        _indices[0] = 0;
+                        _vertices[1] = vertices[indices[startIndex - 1] + startVertex];
+                        _indices[1] = 1;
+
+                        spaceLeft -= (spaceLeft - 1) % 2 + 2;
+                        _usedIndexCount += 2;
+                        _usedVertexCount += 2;
+                        break;
+                    }
+                    case PrimitiveType.TriangleList:
+                    {
+                        spaceLeft -= spaceLeft % 3;
+                        break;
+                    }
+                }
+
+                var verticesToProcess = 0;
+                var indicesToProcess = Math.Min(spaceLeft, indexCount);
+
+                var maxVertexCount = _usedVertexCount + indicesToProcess;
+                for (var vertexIndex = _usedVertexCount; vertexIndex < maxVertexCount; ++vertexIndex)
+                {
+                    // if vertex is already been seen, use that index
+                    // if vertex has not already been seem, create the index and copy the vertex
+                    _indices[_usedIndexCount++] = (short)vertexIndex;
+                    _vertices[_usedVertexCount++] = vertices[indices[startIndex] + startVertex];
+                    ++startIndex;
+                }
+
+                CreateNewOperationIfNecessary(type, verticesToProcess, indicesToProcess, context);
+
+                indexCount -= indicesToProcess;
+                if (indexCount == 0)
+                {
+                    break;
+                }
+
+                Flush();
+            }
         }
     }
 }
