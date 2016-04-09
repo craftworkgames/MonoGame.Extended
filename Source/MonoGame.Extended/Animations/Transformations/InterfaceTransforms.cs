@@ -6,14 +6,15 @@ using Microsoft.Xna.Framework.Graphics;
 namespace MonoGame.Extended.Animations.Transformations
 {
     //these use interfaces to transform, no reflection needed -> fastest
-    public class PositionTransform<T> : TweenTransformBase<T, Vector2> where T : class, IMovable
+    public class MoveableTransform<T> : TweenTransformBase<T, Vector2> where T : class, IMovable
     {
-        public PositionTransform(double time, Vector2 value, Easing easing = null)
+        public MoveableTransform(double time, Vector2 value, Easing easing = null)
             : base(time, value, easing) { }
 
         protected override void SetValue(double t, T transformable, Vector2 previous) {
             transformable.Position = (float)t * (Value - previous) + previous;
         }
+        
     }
     public class RotationTransform<T> : TweenTransformBase<T, float> where T : class, IRotatable
     {

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MonoGame.Extended.Animations.Fluent;
 using MonoGame.Extended.Animations.Transformations;
 
 namespace MonoGame.Extended.Animations.Tracks
 {
-    public class AnimationTweeningTrack<TTransformable> : IAnimationTrack<TTransformable>
+    public class AnimationTweeningTrack<TTransformable> : IFluentTweening<TTransformable>, IAnimationTrack<TTransformable>
        where TTransformable : class
     {
         public string Name { get; set; }
@@ -32,14 +33,14 @@ namespace MonoGame.Extended.Animations.Tracks
             LastTime = _transforms.Last().Time;
         }
 
-        public bool Remove(ITweenTransform<TTransformable> transform){
+        public bool Remove(ITweenTransform<TTransformable> transform) {
             _transforms.Remove(transform);
-            if(_transforms.Count<0)return false;
+            if (_transforms.Count < 0) return false;
             LastTime = _transforms.Last().Time;
             return true;
         }
 
-        public void Update(double time,TTransformable transformable) {
+        public void Update(double time, TTransformable transformable) {
             for (int i = 0, n = _transforms.Count; i < n; i++) {
                 var current = _transforms[i];
                 if (current.Time >= time) { //tween between current and next
@@ -50,6 +51,6 @@ namespace MonoGame.Extended.Animations.Tracks
                 if (i == n - 1) current.Update(time, transformable, current);
             }
         }
-        
+
     }
 }

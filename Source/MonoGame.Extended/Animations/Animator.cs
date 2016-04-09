@@ -55,13 +55,13 @@ namespace MonoGame.Extended.Animations
             public bool Keeprunning;
             public Animation Animation;
         }
-        private class BlendingAnimation
-        {
-            public RunningAnimation A;
-            public RunningAnimation B;
-            public double starttime;
-            public double duration;
-        }
+        //private class BlendingAnimation
+        //{
+        //    public RunningAnimation A;
+        //    public RunningAnimation B;
+        //    public double starttime;
+        //    public double duration;
+        //}
 
     }
 }

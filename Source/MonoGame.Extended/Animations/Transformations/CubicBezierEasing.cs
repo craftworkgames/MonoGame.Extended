@@ -53,6 +53,6 @@ namespace MonoGame.Extended.Animations.Transformations
         private static double B(double a, double b) => 3.0 * a - 6.0 * b;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static double C(double a) => 3.0 * a;
-        public override string ToString() => $"Bézier easing[X1:{X1} Y1:{Y1} X2:{X2} Y2:{Y2}]";
+        public override string ToString() => $"Bézier easing[{X1} {Y1} {X2} {Y2}]";
     }
 }

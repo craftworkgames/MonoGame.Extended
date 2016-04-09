@@ -11,19 +11,25 @@ namespace MonoGame.Extended.Animations.Transformations
             Time = time;
             Value = value;
             ValueType = typeof(TValue);
-            Easing = easing ?? Easing.None;
+            Easing = easing ?? Easing.Linear;
         }
 
         public object ValueObject => Value;
         public Type ValueType { get; }
         public double Time { get; set; }
+        /// <summary>
+        /// The duration of the the interpolation (if smaller than the time between previous and this).
+        /// </summary>
+        public double MaxTweenDuration { get; set; } = -1;
         public TValue Value { get; set; }
         public Easing Easing { get; set; }
         protected abstract void SetValue(double t, TTransformable transformable, TValue previous);
         public bool Update(double time, TTransformable transformable, ITweenTransform<TTransformable> previous) {
             if (time > Time) return false;
-
-            var t = Easing.Ease(time, Time, previous.Time);
+            var start = MaxTweenDuration >= 0 
+                ? Math.Max(previous.Time, Time - MaxTweenDuration) 
+                : previous.Time;
+            var t = Easing.Ease(time, start, Time);
             SetValue(t, transformable, ((TweenTransformBase<TTransformable, TValue>)previous).Value);
             return true;
         }

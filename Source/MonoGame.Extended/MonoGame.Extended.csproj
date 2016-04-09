@@ -37,7 +37,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AngleHelper.cs" />
+    <Compile Include="Animations\Animatable\IAnimatableProperty.cs" />
     <Compile Include="Animations\AnimationEvent.cs" />
+    <Compile Include="Animations\Animatable\IAnimatable.cs" />
+    <Compile Include="Animations\Fluent\FluentAnimation.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroup.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroupReader.cs" />
     <Compile Include="Animations\Animation.cs" />
@@ -45,7 +48,9 @@
     <Compile Include="Animations\Tracks\AnimationTrackGroup.cs" />
     <Compile Include="Animations\Tracks\AnimationTweeningTrack.cs" />
     <Compile Include="Animations\Animator.cs" />
+    <Compile Include="Animations\Fluent\FluentAnimationExtensions.cs" />
     <Compile Include="Animations\Tracks\IAnimationTrack.cs" />
+    <Compile Include="Animations\Tracks\IAnimationTrackGroup.cs" />
     <Compile Include="Animations\Transformations\DynamicTransform.cs" />
     <Compile Include="Animations\Transformations\Easing.cs" />
     <Compile Include="Animations\Extensions.cs" />
@@ -53,6 +58,7 @@
     <Compile Include="Animations\Transformations\ITransform.cs" />
     <Compile Include="Animations\Transformations\CubicBezierEasing.cs" />
     <Compile Include="Animations\Transformations\SetPropertyTransform.cs" />
+    <Compile Include="Animations\Transformations\StepEasing.cs" />
     <Compile Include="Animations\Transformations\TweenTransformBase.cs" />
     <Compile Include="Animations\Transformations\TypeTransforms.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
@@ -62,7 +68,9 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
+    <Compile Include="Entities\AnimatorComponent.cs" />
     <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\EntityComponent.cs" />
     <Compile Include="Entities\TextureComponent.cs" />
     <Compile Include="Entities\Transform2D.cs" />
     <Compile Include="IPoolable.cs" />

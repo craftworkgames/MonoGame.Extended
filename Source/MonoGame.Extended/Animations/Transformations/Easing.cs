@@ -13,7 +13,19 @@ namespace MonoGame.Extended.Animations.Transformations
             public override double Ease(double t) => t;
             public override string ToString() => "No easing";
         }
-
-        public static Easing None = new NoEasing();
+        /// <summary>
+        /// transition effect has the same speed from start to end.
+        /// </summary>
+        public static readonly Easing Linear = new NoEasing();
+        /// <summary>
+        /// Smoothly starts the transition.
+        /// </summary>
+        public static Easing EaseIn => new CubicBezierEasing(0.42,0,1,1);
+        /// <summary>
+        /// Smoothly ends the transition.
+        /// </summary>
+        public static Easing EaseOut => new CubicBezierEasing(0, 0, 0.58, 1);
+        //Smoothly starts and ends the transition.
+        public static Easing EaseInOut => new CubicBezierEasing(0.42, 0, 0.58, 1);
     }
 }

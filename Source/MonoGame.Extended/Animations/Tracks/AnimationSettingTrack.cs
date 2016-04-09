@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MonoGame.Extended.Animations.Fluent;
 using MonoGame.Extended.Animations.Transformations;
 
 namespace MonoGame.Extended.Animations.Tracks
 {
-    public class AnimationSettingTrack<TTransformable> : IAnimationTrack<TTransformable> where TTransformable : class
+    public class AnimationSettingTrack<TTransformable> : IFluentSetting<TTransformable>, IAnimationTrack<TTransformable> where TTransformable : class
     {
         private readonly List<ISetTransform<TTransformable>> _transforms = new List<ISetTransform<TTransformable>>();
         public AnimationSettingTrack(ISetTransform<TTransformable>[] transforms) {

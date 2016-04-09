@@ -7,17 +7,6 @@ using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Entities
 {
-    public abstract class EntityComponent : IUpdate
-    {
-        public string Name { get; set; }
-        internal Entity Entity;
-        internal void SetEntity(Entity entity) {
-            Entity = entity;
-        }
-        public virtual void Update(GameTime gameTime) { }
-
-    }
-
     public class Entity : DrawableGameComponent
     {
         private readonly List<EntityComponent> _components = new List<EntityComponent>();

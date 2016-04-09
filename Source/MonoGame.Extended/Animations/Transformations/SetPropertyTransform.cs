@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Animations.Transformations
     public class SetPropertyTransform<TTransformable, TValue> : ISetTransform<TTransformable> where TTransformable : class
     {
         private readonly PropertyInfo _propertyInfo;
-        public SetPropertyTransform(Expression<Func<TTransformable, TValue>> propertySelector, TValue value, double time) {
+        public SetPropertyTransform(Expression<Func<TTransformable, TValue>> propertySelector, double time, TValue value) {
             var member = propertySelector.Body as MemberExpression;
             _propertyInfo = member?.Member as PropertyInfo;
             Value = value;
