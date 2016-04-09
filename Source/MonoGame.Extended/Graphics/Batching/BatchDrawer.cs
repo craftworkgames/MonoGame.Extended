@@ -8,13 +8,13 @@ namespace MonoGame.Extended.Graphics.Batching
     {
         internal GraphicsDevice GraphicsDevice;
         internal IDrawContext DefaultDrawContext;
-        internal readonly int MaxiumumBatchSize;
+        internal readonly int MaximumBatchSize;
 
-        protected BatchDrawer(GraphicsDevice graphicsDevice, IDrawContext defaultDrawContext, int maxiumumBatchSize)
+        protected BatchDrawer(GraphicsDevice graphicsDevice, IDrawContext defaultDrawContext, int maximumBatchSize)
         {
             GraphicsDevice = graphicsDevice;
             DefaultDrawContext = defaultDrawContext;
-            MaxiumumBatchSize = maxiumumBatchSize;
+            MaximumBatchSize = maximumBatchSize;
         }
 
         public void Dispose()
