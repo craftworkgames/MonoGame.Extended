@@ -26,7 +26,7 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
             var basicEffect = new BasicEffect(graphicsDevice);
             var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice, defaultDrawContext);
-            Assert.Greater(userPrimitivesBatcher.MaxiumumBatchSize, 4);
+            Assert.Greater(userPrimitivesBatcher.MaximumBatchSize, 4);
         }
 
         [Test]
