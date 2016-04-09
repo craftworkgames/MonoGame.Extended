@@ -22,14 +22,6 @@ namespace MonoGame.Extended.Graphics
         }
 
         public PrimitiveType PrimitiveType { get; }
-        public int PrimitiveCount { get; }
-
-        public int StartIndex { get; set; }
-        public int VertexOffset { get; set; }
-
-        internal int VertexBufferIndex { get; set; }
-
-        internal int IndexBufferIndex { get; set; }
 
         public VertexMesh(PrimitiveType primitiveType, TVertexType[] vertices, short[] indices = null)
         {
@@ -40,25 +32,29 @@ namespace MonoGame.Extended.Graphics
 
             PrimitiveType = primitiveType;
             _vertices = vertices;
-            if (indices == null)
+            _indices = indices;
+        }
+
+        public void Draw(PrimitiveBatch<TVertexType> primitiveBatch, IDrawContext drawContext = null)
+        {
+            if (_indices != null)
             {
-                PrimitiveCount = primitiveType.GetPrimitiveCount(vertices.Length);
+                primitiveBatch.Draw(PrimitiveType, _vertices, _indices, drawContext);
             }
             else
             {
-                _indices = indices;
-                PrimitiveCount = primitiveType.GetPrimitiveCount(indices.Length);
+                primitiveBatch.Draw(PrimitiveType, _vertices, drawContext);
             }
         }
 
-        public void Draw(PrimitiveBatch<TVertexType> primitiveBatch, IDrawContext drawContext)
+        public void Draw(PrimitiveBatch<TVertexType> primitiveBatch, int startVertex, int vertexCount, IDrawContext drawContext = null)
         {
-            if (PrimitiveCount <= 0)
-            {
-                return;
-            }
+            primitiveBatch.Draw(PrimitiveType, _vertices, startVertex, vertexCount, drawContext);
+        }
 
-            primitiveBatch.Draw(PrimitiveType, _vertices, _indices, drawContext);
+        public void Draw(PrimitiveBatch<TVertexType> primitiveBatch, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext = null)
+        {
+            primitiveBatch.Draw(PrimitiveType, _vertices, startVertex, vertexCount, _indices, startIndex, indexCount, drawContext);
         }
     }
 }
