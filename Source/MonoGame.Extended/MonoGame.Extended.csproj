@@ -59,6 +59,9 @@
     <Compile Include="Graphics\EffectDrawContext.cs" />
     <Compile Include="Graphics\IDrawContext.cs" />
     <Compile Include="Graphics\IEffectDrawContext.cs" />
+    <Compile Include="Graphics\IMesh.cs" />
+    <Compile Include="Graphics\PrimitiveBatchExtensions.cs" />
+    <Compile Include="Graphics\VertexMesh.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />

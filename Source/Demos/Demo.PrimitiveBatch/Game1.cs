@@ -11,6 +11,7 @@ namespace Demo.PrimitiveBatch
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private PrimitiveBatch<VertexPositionColor> _primitiveBatch;
+        private VertexMesh<VertexPositionColor> _vertexMesh; 
 
         public Game1()
         {
@@ -33,6 +34,24 @@ namespace Demo.PrimitiveBatch
                 Matrix.CreateScale(new Vector3(100, -100, 1))
                     // move the origin from top left to center of the screen
                 * Matrix.CreateTranslation(new Vector3(viewport.Width * 0.5f, viewport.Height * 0.5f, 0));
+
+            var vertices = new[]
+{
+                new VertexPositionColor(new Vector3(0, 0, 0), Color.Red),
+                new VertexPositionColor(new Vector3(2, 0, 0), Color.Blue),
+                new VertexPositionColor(new Vector3(1, 2, 0), Color.Green),
+                new VertexPositionColor(new Vector3(3, 2, 0), Color.White)
+            };
+            var indices = new short[]
+            {
+                0,
+                1,
+                2,
+                2,
+                1,
+                3
+            };
+            _vertexMesh = new VertexMesh<VertexPositionColor>(PrimitiveType.TriangleList, vertices, indices);
         }
 
         protected override void Update(GameTime gameTime)
@@ -51,25 +70,7 @@ namespace Demo.PrimitiveBatch
             GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             _primitiveBatch.Begin(BatchSortMode.Immediate);
-
-            var vertices = new[]
-            {
-                new VertexPositionColor(new Vector3(0, 0, 0), Color.Red),
-                new VertexPositionColor(new Vector3(2, 0, 0), Color.Blue),
-                new VertexPositionColor(new Vector3(1, 2, 0), Color.Green),
-                new VertexPositionColor(new Vector3(3, 2, 0), Color.White)
-            };
-            var indices = new short[]
-            {
-                0,
-                1,
-                2,
-                2,
-                1,
-                3
-            };
-
-            _primitiveBatch.Draw(PrimitiveType.TriangleStrip, vertices, 0, vertices.Length, indices, 0, indices.Length);
+            _primitiveBatch.DrawVertexMesh(_vertexMesh);
             _primitiveBatch.End();
 
             base.Draw(gameTime);
