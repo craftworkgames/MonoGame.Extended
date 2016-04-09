@@ -11,7 +11,6 @@ namespace Demo.PrimitiveBatch
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private PrimitiveBatch<VertexPositionColor> _primitiveBatch;
-        private EffectDrawContext<BasicEffect> _basicEffectDrawContext;
 
         public Game1()
         {
@@ -27,18 +26,9 @@ namespace Demo.PrimitiveBatch
             var graphicsDevice = GraphicsDevice;
 
             _primitiveBatch = new PrimitiveBatch<VertexPositionColor>(graphicsDevice);
-            var basicEffect = new BasicEffect(graphicsDevice)
-            {
-                Alpha = 1,
-                VertexColorEnabled = true,
-                LightingEnabled = false
-            };
-            _basicEffectDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
 
             var viewport = graphicsDevice.Viewport;
-            basicEffect.Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, 1);
-            basicEffect.World = Matrix.Identity;
-            basicEffect.View =
+            _primitiveBatch.DefaultDrawContext.Effect.View =
                 // scale the x and y axis; flip the y-axis for cartesian coordinate system 
                 Matrix.CreateScale(new Vector3(100, -100, 1))
                     // move the origin from top left to center of the screen
@@ -79,8 +69,7 @@ namespace Demo.PrimitiveBatch
                 3
             };
 
-            _primitiveBatch.Draw(PrimitiveType.TriangleStrip, vertices, 0, vertices.Length, indices, 0, indices.Length, _basicEffectDrawContext);
-
+            _primitiveBatch.Draw(PrimitiveType.TriangleStrip, vertices, 0, vertices.Length, indices, 0, indices.Length);
             _primitiveBatch.End();
 
             base.Draw(gameTime);

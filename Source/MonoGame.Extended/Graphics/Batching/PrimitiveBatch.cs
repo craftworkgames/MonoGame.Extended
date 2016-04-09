@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
@@ -11,9 +12,9 @@ namespace MonoGame.Extended.Graphics.Batching
 
         private BatchDrawer<TVertexType> _batchDrawer;
         private BatchQueuer<TVertexType> _currentBatchQueuer;
-        private BatchQueuer<TVertexType>[] _batchQueuers; 
-        private readonly IDrawContext _defaultDrawContext;
+        private BatchQueuer<TVertexType>[] _batchQueuers;
 
+        public EffectDrawContext<BasicEffect> DefaultDrawContext { get; }
         public BatchDrawStrategy DrawStrategy { get; }
         public bool HasBegun { get; private set; }
 
@@ -21,8 +22,17 @@ namespace MonoGame.Extended.Graphics.Batching
         {
             if (defaultDrawContext == null)
             {
-                var basicEffect = new BasicEffect(graphicsDevice);
-                _defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+                var viewport = graphicsDevice.Viewport;
+                var basicEffect = new BasicEffect(graphicsDevice)
+                {
+                    Alpha = 1,
+                    VertexColorEnabled = true,
+                    LightingEnabled = false,
+                    Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, 1),
+                    World = Matrix.Identity,
+                    View = Matrix.Identity
+            };
+                DefaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
             }
 
             DrawStrategy = batchDrawStrategy;
@@ -30,12 +40,12 @@ namespace MonoGame.Extended.Graphics.Batching
             {
                 case BatchDrawStrategy.UserPrimitives:
                 {
-                    _batchDrawer = new UserPrimitivesBatchDrawer<TVertexType>(graphicsDevice, _defaultDrawContext, maximumBatchSize);
+                    _batchDrawer = new UserPrimitivesBatchDrawer<TVertexType>(graphicsDevice, DefaultDrawContext, maximumBatchSize);
                     break;
                 }
                 case BatchDrawStrategy.DynamicVertexBuffer:
                 {
-                    _batchDrawer = new DynamicVertexBufferBatchDrawer<TVertexType>(graphicsDevice, _defaultDrawContext, maximumBatchSize);
+                    _batchDrawer = new DynamicVertexBufferBatchDrawer<TVertexType>(graphicsDevice, DefaultDrawContext, maximumBatchSize);
                     break;
                 }
             }
@@ -127,25 +137,25 @@ namespace MonoGame.Extended.Graphics.Batching
             _currentBatchQueuer.End();
         }
 
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, IDrawContext drawContext)
+        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, IDrawContext drawContext = null)
         {
             EnsureHasBegun();
             _currentBatchQueuer.Queue(primitiveType, vertices, 0, vertices.Length, drawContext);
         }
 
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext)
+        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext = null)
         {
             EnsureHasBegun();
             _currentBatchQueuer.Queue(primitiveType, vertices, startVertex, vertexCount, drawContext);
         }
 
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, short[] indices, IDrawContext drawContext)
+        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, short[] indices, IDrawContext drawContext = null)
         {
             EnsureHasBegun();
             _currentBatchQueuer.Queue(primitiveType, vertices, 0, vertices.Length, indices, 0, indices.Length, drawContext);
         }
 
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, IDrawContext drawContext)
+        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, IDrawContext drawContext = null)
         {
             EnsureHasBegun();
             _currentBatchQueuer.Queue(primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, drawContext);
