@@ -88,17 +88,6 @@ namespace MonoGame.Extended.Graphics.Batching
                 Set(position.X, position.Y, -origin1.X, -origin1.Y, width, height, (float)Math.Sin(rotation), (float)Math.Cos(rotation), color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
             }
 
-            var sin = (float)Math.Sin(rotation);
-            var cos = (float)Math.Cos(rotation);
-            // top left
-            _spriteItemVertices[0] = new VertexPositionColorTexture(new Vector3(position.X + -origin1.X * cos - -origin1.Y * sin, position.Y + -origin1.X * sin + -origin1.Y * cos, position.Z), color1, textureCoordinateTopLeft);
-            // top right
-            _spriteItemVertices[1] = new VertexPositionColorTexture(new Vector3(position.X + (-origin1.X + width) * cos - -origin1.Y * sin, position.Y + (-origin1.X + width) * sin + -origin1.Y * cos, position.Z), color1, new Vector2(textureCoordinateBottomRight.X, textureCoordinateTopLeft.Y));
-            // bottom left
-            _spriteItemVertices[2] = new VertexPositionColorTexture(new Vector3(position.X + -origin1.X * cos - (-origin1.Y + height) * sin, position.Y + -origin1.X * sin + (-origin1.Y + height) * cos, position.Z), color1, new Vector2(textureCoordinateTopLeft.X, textureCoordinateBottomRight.Y));
-            // bottom right
-            _spriteItemVertices[3] = new VertexPositionColorTexture(new Vector3(position.X + (-origin1.X + width) * cos - (-origin1.Y + height) * sin, position.Y + (-origin1.X + width) * sin + (-origin1.Y + height) * cos, position.Z), color1, textureCoordinateBottomRight);
-
             _primitiveBatch.Draw(PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, drawContext);
         }
 
