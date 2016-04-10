@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Monogame.Extended.Animations.Transformations;
+using MonoGame.Extended;
 using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.Fluent;
 using MonoGame.Extended.Animations.Tracks;
@@ -63,6 +64,8 @@ namespace Demo.Animations
             //alternate way of adding single transformations (way shorter and more intuitive)
             _animator.AddAnimation(animation);
 
+            IScalable test = null;
+            animation.Transform(test).Set(t => t.Scale, 0, new Vector2(0, 0));
 
             animation.Transform(sprite)
                 .Set(s => s.Color, 0, Color.Black)

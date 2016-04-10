@@ -162,6 +162,7 @@
     <Compile Include="SceneGraphs\SceneNodeCollection.cs" />
     <Compile Include="SceneGraphs\SpriteBatchExtensions.cs" />
     <Compile Include="Shapes\PieF.cs" />
+    <Compile Include="Shapes\PolygonCreator.cs" />
     <Compile Include="Shapes\SpriteBatchExtensions.cs" />
     <Compile Include="Shapes\CircleF.cs" />
     <Compile Include="Shapes\PolygonF.cs" />
