@@ -28,7 +28,7 @@ namespace MonoGame.Extended.Graphics.Batching
                     Alpha = 1,
                     VertexColorEnabled = true,
                     LightingEnabled = false,
-                    Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, 1),
+                    Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1),
                     World = Matrix.Identity,
                     View = Matrix.Identity
             };
