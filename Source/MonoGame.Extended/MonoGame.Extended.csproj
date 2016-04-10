@@ -60,6 +60,7 @@
     <Compile Include="Graphics\IDrawContext.cs" />
     <Compile Include="Graphics\IEffectDrawContext.cs" />
     <Compile Include="Graphics\IMesh.cs" />
+    <Compile Include="Graphics\ITextureDrawContext.cs" />
     <Compile Include="Graphics\PrimitiveBatchExtensions.cs" />
     <Compile Include="Graphics\Batching\SpriteBatch.cs" />
     <Compile Include="Graphics\VertexMesh.cs" />

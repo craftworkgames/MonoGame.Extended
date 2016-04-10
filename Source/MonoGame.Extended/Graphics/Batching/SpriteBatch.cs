@@ -7,7 +7,8 @@ namespace MonoGame.Extended.Graphics.Batching
     public class SpriteBatch
     {
         private readonly PrimitiveBatch<VertexPositionColorTexture> _primitiveBatch;
-        private readonly VertexPositionColorTexture[] _spriteItemVertices = new VertexPositionColorTexture[3];
+        private readonly VertexPositionColorTexture[] _spriteItemVertices = new VertexPositionColorTexture[4];
+        private readonly ITextureDrawContext _defaultDrawContext;
 
         private readonly short[] _spriteItemIndices = {
             0,
@@ -18,9 +19,31 @@ namespace MonoGame.Extended.Graphics.Batching
             2
         };
 
-        public SpriteBatch(GraphicsDevice graphicsDevice, BatchDrawStrategy batchDrawStrategy = BatchDrawStrategy.UserPrimitives, IDrawContext drawContext = null, int maxmimumBatchSize = PrimitiveBatch<VertexPositionColor>.DefaultMaximumBatchSize)
+        public GraphicsDevice GraphicsDevice { get; }
+
+        public SpriteBatch(GraphicsDevice graphicsDevice, BatchDrawStrategy batchDrawStrategy = BatchDrawStrategy.UserPrimitives, IDrawContext defaultDrawContext = null, int maxmimumBatchSize = PrimitiveBatch<VertexPositionColor>.DefaultMaximumBatchSize)
         {
-            _primitiveBatch = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice, batchDrawStrategy, drawContext, maxmimumBatchSize);
+            if (graphicsDevice == null)
+            {
+                throw new ArgumentNullException(nameof(graphicsDevice));
+            }
+
+            GraphicsDevice = graphicsDevice;
+
+            if (defaultDrawContext == null)
+            {
+                var viewport = graphicsDevice.Viewport;
+                var basicEffect = new BasicEffect(graphicsDevice)
+                {
+                    VertexColorEnabled = true,
+                    TextureEnabled = true,
+                    Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1),
+                    World = Matrix.Identity,
+                    View = Matrix.Identity,
+                };
+                defaultDrawContext = _defaultDrawContext = new DefaultSpriteBatchDrawContext(basicEffect);
+            }
+            _primitiveBatch = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice, batchDrawStrategy, defaultDrawContext, maxmimumBatchSize);
         }
 
         public void Begin(BatchSortMode batchSortMode)
@@ -28,13 +51,12 @@ namespace MonoGame.Extended.Graphics.Batching
             _primitiveBatch.Begin(batchSortMode);
         }
 
-        public void Draw(Texture2D texture, Vector3 position, Rectangle? sourceRectangle = null, Color? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, IDrawContext drawContext = null)
+        public void Draw(Texture2D texture, Vector3 position, Rectangle? sourceRectangle = null, Color? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, ITextureDrawContext drawContext = null)
         {
             if (texture == null)
             {
                 throw new ArgumentNullException(nameof(texture));
             }
-
             var color1 = color ?? Color.White;
             var origin1 = origin ?? Vector2.Zero;
             var scale1 = scale ?? Vector2.One;
@@ -88,6 +110,12 @@ namespace MonoGame.Extended.Graphics.Batching
                 SetSpriteItemVertices(position.X, position.Y, -origin1.X, -origin1.Y, width, height, (float)Math.Sin(rotation), (float)Math.Cos(rotation), color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
             }
 
+            if (drawContext == null)
+            {
+                drawContext = _defaultDrawContext;
+            }
+
+            drawContext.Texture = texture;
             _primitiveBatch.Draw(PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, drawContext);
         }
 
@@ -136,6 +164,20 @@ namespace MonoGame.Extended.Graphics.Batching
         public void End()
         {
             _primitiveBatch.End();
+        }
+
+        private class DefaultSpriteBatchDrawContext : EffectDrawContext<BasicEffect>, ITextureDrawContext
+        {
+            public Texture Texture
+            {
+                get { return Effect.Texture; }
+                set { Effect.Texture = (Texture2D)value; }
+            }
+
+            public DefaultSpriteBatchDrawContext(BasicEffect effect)
+                : base(effect)
+            {
+            }
         }
     }
 }

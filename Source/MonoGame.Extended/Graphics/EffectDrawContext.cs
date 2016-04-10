@@ -20,6 +20,11 @@ namespace MonoGame.Extended.Graphics
 
         public EffectDrawContext(TEffect effect)
         {
+            if (effect == null)
+            {
+                throw new ArgumentNullException(nameof(effect));
+            }
+
             Effect = effect;
         }
 

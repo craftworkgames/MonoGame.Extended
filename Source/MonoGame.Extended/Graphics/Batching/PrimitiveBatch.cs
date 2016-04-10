@@ -14,12 +14,20 @@ namespace MonoGame.Extended.Graphics.Batching
         private BatchQueuer<TVertexType> _currentBatchQueuer;
         private BatchQueuer<TVertexType>[] _batchQueuers;
 
-        public EffectDrawContext<BasicEffect> DefaultDrawContext { get; }
+        public IDrawContext DefaultDrawContext { get; }
         public BatchDrawStrategy DrawStrategy { get; }
         public bool HasBegun { get; private set; }
+        public GraphicsDevice GraphicsDevice { get; }
 
         public PrimitiveBatch(GraphicsDevice graphicsDevice, BatchDrawStrategy batchDrawStrategy = BatchDrawStrategy.UserPrimitives, IDrawContext defaultDrawContext = null, int maximumBatchSize = DefaultMaximumBatchSize)
         {
+            if (graphicsDevice == null)
+            {
+                throw new ArgumentNullException(nameof(graphicsDevice));
+            }
+
+            GraphicsDevice = graphicsDevice;
+
             if (defaultDrawContext == null)
             {
                 var viewport = graphicsDevice.Viewport;
@@ -31,9 +39,10 @@ namespace MonoGame.Extended.Graphics.Batching
                     Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1),
                     World = Matrix.Identity,
                     View = Matrix.Identity
-            };
-                DefaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+                };
+                defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
             }
+            DefaultDrawContext = defaultDrawContext;
 
             DrawStrategy = batchDrawStrategy;
             switch (batchDrawStrategy)
