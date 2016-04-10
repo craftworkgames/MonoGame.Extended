@@ -61,6 +61,7 @@
     <Compile Include="Graphics\IEffectDrawContext.cs" />
     <Compile Include="Graphics\IMesh.cs" />
     <Compile Include="Graphics\PrimitiveBatchExtensions.cs" />
+    <Compile Include="Graphics\Batching\SpriteBatch.cs" />
     <Compile Include="Graphics\VertexMesh.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
     <Compile Include="IPoolable.cs" />
