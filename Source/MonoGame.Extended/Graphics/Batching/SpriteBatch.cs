@@ -7,8 +7,6 @@ namespace MonoGame.Extended.Graphics.Batching
     public class SpriteBatch
     {
         private readonly PrimitiveBatch<VertexPositionColorTexture> _primitiveBatch;
-        private Vector2 _spriteItemTextureCoordinateTopLeft = new Vector2(0, 0);
-        private Vector2 _spriteItemTextureCoordinateBottomRight = new Vector2(0, 0);
         private readonly VertexPositionColorTexture[] _spriteItemVertices = new VertexPositionColorTexture[3];
 
         private readonly short[] _spriteItemIndices = {
@@ -39,49 +37,51 @@ namespace MonoGame.Extended.Graphics.Batching
 
             int width;
             int height;
+            Vector2 textureCoordinateTopLeft;
+            Vector2 textureCoordinateBottomRight;
             if (sourceRectangle.HasValue)
             {
                 var rectangle = sourceRectangle.Value;
                 width = rectangle.Width;
                 height = rectangle.Height;
-                _spriteItemTextureCoordinateTopLeft.X = rectangle.X / (float)texture.Width;
-                _spriteItemTextureCoordinateTopLeft.Y = rectangle.Y / (float)texture.Height;
-                _spriteItemTextureCoordinateBottomRight.X = (rectangle.X + rectangle.Width) / (float)texture.Width;
-                _spriteItemTextureCoordinateBottomRight.Y = (rectangle.Y + rectangle.Height) / (float)texture.Height;
+                textureCoordinateTopLeft.X = rectangle.X / (float)texture.Width;
+                textureCoordinateTopLeft.Y = rectangle.Y / (float)texture.Height;
+                textureCoordinateBottomRight.X = (rectangle.X + rectangle.Width) / (float)texture.Width;
+                textureCoordinateBottomRight.Y = (rectangle.Y + rectangle.Height) / (float)texture.Height;
             }
             else
             {
-                _spriteItemTextureCoordinateTopLeft.X = 0;
-                _spriteItemTextureCoordinateTopLeft.Y = 0;
-                _spriteItemTextureCoordinateBottomRight.X = 1;
-                _spriteItemTextureCoordinateBottomRight.Y = 1;
+                textureCoordinateTopLeft.X = 0;
+                textureCoordinateTopLeft.Y = 0;
+                textureCoordinateBottomRight.X = 1;
+                textureCoordinateBottomRight.Y = 1;
                 width = texture.Width;
                 height = texture.Height;
             }
 
             if ((spriteEffects & SpriteEffects.FlipVertically) != 0)
             {
-                var temp = _spriteItemTextureCoordinateBottomRight.Y;
-                _spriteItemTextureCoordinateBottomRight.Y = _spriteItemTextureCoordinateTopLeft.Y;
-                _spriteItemTextureCoordinateTopLeft.Y = temp;
+                var temp = textureCoordinateBottomRight.Y;
+                textureCoordinateBottomRight.Y = textureCoordinateTopLeft.Y;
+                textureCoordinateTopLeft.Y = temp;
             }
             if ((spriteEffects & SpriteEffects.FlipHorizontally) != 0)
             {
-                var temp = _spriteItemTextureCoordinateBottomRight.X;
-                _spriteItemTextureCoordinateBottomRight.X = _spriteItemTextureCoordinateTopLeft.X;
-                _spriteItemTextureCoordinateTopLeft.X = temp;
+                var temp = textureCoordinateBottomRight.X;
+                textureCoordinateBottomRight.X = textureCoordinateTopLeft.X;
+                textureCoordinateTopLeft.X = temp;
             }
 
             var sin = (float)Math.Sin(rotation);
             var cos = (float)Math.Cos(rotation);
             // top left
-            _spriteItemVertices[0] = new VertexPositionColorTexture(new Vector3(position.X + -origin.X * cos - -origin.Y * sin, position.Y + -origin.X * sin + -origin.Y * cos, position.Z), color, _spriteItemTextureCoordinateTopLeft);
+            _spriteItemVertices[0] = new VertexPositionColorTexture(new Vector3(position.X + -origin.X * cos - -origin.Y * sin, position.Y + -origin.X * sin + -origin.Y * cos, position.Z), color, textureCoordinateTopLeft);
             // top right
-            _spriteItemVertices[1] = new VertexPositionColorTexture(new Vector3(position.X + (-origin.X + width) * cos - -origin.Y * sin, position.Y + (-origin.X + width) * sin + -origin.Y * cos, position.Z), color, new Vector2(_spriteItemTextureCoordinateBottomRight.X, _spriteItemTextureCoordinateTopLeft.Y));
+            _spriteItemVertices[1] = new VertexPositionColorTexture(new Vector3(position.X + (-origin.X + width) * cos - -origin.Y * sin, position.Y + (-origin.X + width) * sin + -origin.Y * cos, position.Z), color, new Vector2(textureCoordinateBottomRight.X, textureCoordinateTopLeft.Y));
             // bottom left
-            _spriteItemVertices[2] = new VertexPositionColorTexture(new Vector3(position.X + -origin.X * cos - (-origin.Y + height) * sin, position.Y + -origin.X * sin + (-origin.Y + height) * cos, position.Z), color, new Vector2(_spriteItemTextureCoordinateTopLeft.X, _spriteItemTextureCoordinateBottomRight.Y));
+            _spriteItemVertices[2] = new VertexPositionColorTexture(new Vector3(position.X + -origin.X * cos - (-origin.Y + height) * sin, position.Y + -origin.X * sin + (-origin.Y + height) * cos, position.Z), color, new Vector2(textureCoordinateTopLeft.X, textureCoordinateBottomRight.Y));
             // bottom right
-            _spriteItemVertices[3] = new VertexPositionColorTexture(new Vector3(position.X + (-origin.X + width) * cos - (-origin.Y + height) * sin, position.Y + (-origin.X + width) * sin + (-origin.Y + height) * cos, position.Z), color, _spriteItemTextureCoordinateBottomRight);
+            _spriteItemVertices[3] = new VertexPositionColorTexture(new Vector3(position.X + (-origin.X + width) * cos - (-origin.Y + height) * sin, position.Y + (-origin.X + width) * sin + (-origin.Y + height) * cos, position.Z), color, textureCoordinateBottomRight);
 
             _primitiveBatch.Draw(PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, drawContext);
         }
