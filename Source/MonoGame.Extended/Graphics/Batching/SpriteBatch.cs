@@ -86,18 +86,6 @@ namespace MonoGame.Extended.Graphics.Batching
             _primitiveBatch.Draw(PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, drawContext);
         }
 
-        private void SetSpriteItemVertices(float x, float y, float z, float dx, float dy, float w, float h, float sin, float cos, Color color, Vector2 texCoordTL, Vector2 texCoordBR)
-        {
-            // top left
-            _spriteItemVertices[0] = new VertexPositionColorTexture(new Vector3(x + dx * cos - dy * sin, y + dx * sin + dy * cos, z), color, texCoordTL);
-            // top right
-            _spriteItemVertices[1] = new VertexPositionColorTexture(new Vector3(x + (dx + w) * cos - dy * sin, y + (dx + w) * sin + dy * cos, z), color, new Vector2(texCoordBR.X, texCoordTL.Y));
-            // bottom left
-            _spriteItemVertices[2] = new VertexPositionColorTexture(new Vector3(x + dx * cos - (dy + h) * sin, y + dx * sin + (dy + h) * cos, z), color, new Vector2(texCoordTL.X, texCoordBR.Y));
-            // bottom right
-            _spriteItemVertices[3] = new VertexPositionColorTexture(new Vector3(x + (dx + w) * cos - (dy + h) * sin, y + (dx + w) * sin + (dy + h) * cos, z), color, texCoordBR);
-        }
-
         public void End()
         {
             _primitiveBatch.End();
