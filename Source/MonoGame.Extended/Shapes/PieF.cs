@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Particles;
 
 namespace MonoGame.Extended.Shapes
 {
@@ -96,7 +97,7 @@ namespace MonoGame.Extended.Shapes
             CaclulateBounds();
             return new RectangleF(Left, Top, Right - Left, Bottom - Top);
         }
-        
+
         public bool Contains(Vector2 point) {
             var diff = point - Center;
             return (diff.LengthSquared() <= Radius * Radius) &&
@@ -114,5 +115,23 @@ namespace MonoGame.Extended.Shapes
             result.Add(Center);
             return result;
         }
+
+
+        public Vector2 RandomPointInside() {
+            var dist = FastRand.NextSingle(0f, Radius);
+            var angle = FastRand.NextSingle(StartAngle, EndAngle);
+            return Center.SecondaryPoint(angle, dist);
+        }
+
+        public Vector2 PointOnOutline(float t) {
+            var curved = Radius * _curveAngle;
+            var d = curved / (curved + 2 * Radius);
+
+            //const float origin = MathHelper.TwoPi * 3 / 8f; //topleft angle
+            //var angle = origin - t * MathHelper.TwoPi; // rotate clockwise
+            return Center.SecondaryPoint(t * MathHelper.TwoPi, Radius);
+        }
+
+
     }
 }

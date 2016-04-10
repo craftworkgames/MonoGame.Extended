@@ -56,12 +56,14 @@ namespace MonoGame.Extended.Shapes
             polygon.Add(segment);
             return polygon;
         }
-        public static void Close(this FluentPolygon polygon) {
+        public static PolygonF Close(this FluentPolygon polygon) {
             polygon.Segments[0].Previous = polygon.Last;
+            return new PolygonF(polygon.Segments.Select(t=>t.EndPoint));
         }
-        public static void Close(this FluentPolygon polygon, PolygonSegment endSegment) {
+        public static PolygonF Close(this FluentPolygon polygon, PolygonSegment endSegment) {
             polygon.Segments[0] = endSegment;
             endSegment.Previous = polygon.Last;
+            return new PolygonF(polygon.Segments.Select(t => t.EndPoint));
         }
 
 

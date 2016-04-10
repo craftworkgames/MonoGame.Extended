@@ -12,6 +12,15 @@ namespace MonoGame.Extended.Shapes
         RectangleF GetBoundingRectangle();
         
         bool Contains(Vector2 point);
+        /// <summary>
+        /// Returns a point inside the shape, chosen randomly
+        /// </summary>
+        Vector2 RandomPointInside();
+        /// <summary>
+        /// Returns a point on the outline of the shape, origin at topleft going clockwise
+        /// </summary>
+        /// <param name="t">A value between 0 and 1</param>
+        Vector2 PointOnOutline(float t);
     }
 
     public static class ShapeFExtensions

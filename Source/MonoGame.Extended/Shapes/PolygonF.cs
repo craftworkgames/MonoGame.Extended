@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Particles;
 
 namespace MonoGame.Extended.Shapes
 {
     public struct PolygonF : IShapeF, IEquatable<PolygonF>
     {
-        public PolygonF (IEnumerable<Vector2> vertices)
-        {
+        public PolygonF(IEnumerable<Vector2> vertices) {
             _localVertices = vertices.ToArray();
             _transformedVertices = _localVertices;
             _offset = Vector2.Zero;
@@ -28,8 +28,7 @@ namespace MonoGame.Extended.Shapes
         {
             get
             {
-                if (_isDirty)
-                {
+                if (_isDirty) {
                     _transformedVertices = GetTransformedVertices();
                     _isDirty = false;
                 }
@@ -42,42 +41,35 @@ namespace MonoGame.Extended.Shapes
         public float Right { get { return Vertices.Max(v => v.X); } }
         public float Top { get { return Vertices.Min(v => v.Y); } }
         public float Bottom { get { return Vertices.Max(v => v.Y); } }
-
-        public void Offset(Vector2 amount)
-        {
+        public void Offset(Vector2 amount) {
             _offset += amount;
             _isDirty = true;
         }
 
-        public void Rotate(float amount)
-        {
+        public void Rotate(float amount) {
             _rotation += amount;
             _isDirty = true;
         }
 
-        public void Scale(Vector2 amount)
-        {
+        public void Scale(Vector2 amount) {
             _scale += amount;
             _isDirty = true;
         }
 
-        private Vector2[] GetTransformedVertices()
-        {
+        private Vector2[] GetTransformedVertices() {
             var newVertices = new Vector2[_localVertices.Length];
             var isScaled = _scale != Vector2.One;
 
-            for (var i = 0; i < _localVertices.Length; i++)
-            {
+            for (var i = 0; i < _localVertices.Length; i++) {
                 var p = _localVertices[i];
-                
+
                 if (isScaled)
                     p *= _scale;
 
                 // ReSharper disable once CompareOfFloatsByEqualityOperator
-                if (_rotation != 0)
-                {
-                    var cos = (float) Math.Cos(_rotation);
-                    var sin = (float) Math.Sin(_rotation);
+                if (_rotation != 0) {
+                    var cos = (float)Math.Cos(_rotation);
+                    var sin = (float)Math.Sin(_rotation);
                     p = new Vector2(cos * p.X - sin * p.Y, sin * p.X + cos * p.Y);
                 }
 
@@ -87,8 +79,7 @@ namespace MonoGame.Extended.Shapes
             return newVertices;
         }
 
-        public PolygonF TransformedCopy(Vector2 offset, float rotation, Vector2 scale)
-        {
+        public PolygonF TransformedCopy(Vector2 offset, float rotation, Vector2 scale) {
             var polygon = new PolygonF(_localVertices);
             polygon.Offset(offset);
             polygon.Rotate(rotation);
@@ -96,8 +87,7 @@ namespace MonoGame.Extended.Shapes
             return new PolygonF(polygon.Vertices);
         }
 
-        public RectangleF GetBoundingRectangle()
-        {
+        public RectangleF GetBoundingRectangle() {
             var minX = Left;
             var minY = Top;
             var maxX = Right;
@@ -106,18 +96,17 @@ namespace MonoGame.Extended.Shapes
             return new RectangleF(minX, minY, maxX - minX, maxY - minY);
         }
 
-        public bool Contains(Vector2 point)
-        {
+        public bool Contains(Vector2 point) {
             return Contains(point.X, point.Y);
         }
 
-        public bool Contains(float x, float y)
-        {
+
+
+        public bool Contains(float x, float y) {
             var intersects = 0;
             var vertices = Vertices;
 
-            for (var i = 0; i < vertices.Length; i++)
-            {
+            for (var i = 0; i < vertices.Length; i++) {
                 var x1 = vertices[i].X;
                 var y1 = vertices[i].Y;
                 var x2 = vertices[(i + 1) % vertices.Length].X;
@@ -130,33 +119,43 @@ namespace MonoGame.Extended.Shapes
             return (intersects & 1) == 1;
         }
 
-        public static bool operator ==(PolygonF a, PolygonF b)
-        {
+        public static bool operator ==(PolygonF a, PolygonF b) {
             return a.Equals(b);
         }
 
-        public static bool operator !=(PolygonF a, PolygonF b)
-        {
+        public static bool operator !=(PolygonF a, PolygonF b) {
             return !(a == b);
         }
 
-        public override bool Equals(object obj)
-        {
+        public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             return obj is PolygonF && Equals((PolygonF)obj);
         }
 
-        public bool Equals(PolygonF other)
-        {
+        public bool Equals(PolygonF other) {
             return Vertices.SequenceEqual(other.Vertices);
         }
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
+        public override int GetHashCode() {
+            unchecked {
                 return Vertices.Aggregate(27, (current, v) => current + 13 * current + v.GetHashCode());
             }
+        }
+        public Vector2 RandomPointInside() {
+            throw new NotImplementedException("Getting a random point from a polygon is not yet implemented");
+        }
+
+        public Vector2 PointOnOutline(float t) {
+            var total = Vertices.Sum(v => v.LengthSquared());
+            var current = 0f;
+            foreach (var vector2 in Vertices.Skip(1)) {
+                var d = vector2.LengthSquared();
+                current += d;
+                if (current / total < t) continue;
+                t -= current - d;
+                return vector2 * t / d;
+            }
+            return Vertices[0];
         }
     }
 }

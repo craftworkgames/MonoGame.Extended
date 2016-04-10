@@ -36,6 +36,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AngleHelper.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroup.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroupReader.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Particles\Profiles\PointProfile.cs" />
     <Compile Include="Particles\Profiles\Profile.cs" />
     <Compile Include="Particles\Profiles\RingProfile.cs" />
+    <Compile Include="Particles\Profiles\ShapeOutlineProfile.cs" />
     <Compile Include="Particles\Profiles\SprayProfile.cs" />
     <Compile Include="Particles\Range.cs" />
     <Compile Include="Particles\RangeF.cs" />
@@ -133,7 +135,9 @@
     <Compile Include="SceneGraphs\SceneNode.cs" />
     <Compile Include="SceneGraphs\SceneNodeCollection.cs" />
     <Compile Include="SceneGraphs\SpriteBatchExtensions.cs" />
+    <Compile Include="Shapes\LineF.cs" />
     <Compile Include="Shapes\PieF.cs" />
+    <Compile Include="Shapes\PointF.cs" />
     <Compile Include="Shapes\PolygonCreator.cs" />
     <Compile Include="Shapes\SpriteBatchExtensions.cs" />
     <Compile Include="Shapes\CircleF.cs" />
