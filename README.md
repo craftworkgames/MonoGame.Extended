@@ -7,21 +7,28 @@ It makes MonoGame more awesome.
 
 MonoGame.Extended is an open source extension library for [MonoGame](http://www.monogame.net/). A collection of classes and extensions to make it easier to make games with MonoGame. 
 
+## Version 0.5 is available on NuGet
+MonoGame.Extended v0.5 has been published as [a NuGet package](https://www.nuget.org/packages/MonoGame.Extended/) and can be installed now. Please read the [install guide](https://github.com/craftworkgames/MonoGame.Extended/wiki/How-to-install-MonoGame.Extended) to setup the Pipeline tool.
+
+    Install-Package MonoGame.Extended
+
+This release is compatible with MonoGame 3.5!
+
+**Note**: If you're still using MonoGame 3.4 you must upgrade to 3.5 for everything to work.
+
 ## Forums
-We now have forums! Our forum is part of the [MonoGame community](http://community.monogame.net/category/extended). Please ask any questions or post about problems or bugs that you have found there. Let us know if you're making a game with MonoGame.Extended!
+Our forum is part of the [MonoGame community](http://community.monogame.net/category/extended). Please ask any questions or post about problems or bugs that you have found there. Let us know if you're making a game with MonoGame.Extended!
 
 ## Development status
-MonoGame.Extended has a growing community of contributors adding to the project all the time. Our next release will be ready for the latest MonoGame 3.5. We also have [Nuget packages](https://www.nuget.org/packages/MonoGame.Extended/) of previous releases or of course you can [build from source] to get the latest and greatest.
+MonoGame.Extended has a growing community of contributors adding to the project all the time. We also have [Nuget packages](https://www.nuget.org/packages/MonoGame.Extended/) of published releases and of course you can [build from source](https://github.com/craftworkgames/MonoGame.Extended/wiki/Building-MonoGame.Extended-from-source) to get the latest and greatest.
 
-**Note:** If you're building from source please install the latest [MonoGame v3.5 **Development Build**](http://www.monogame.net/downloads/). If you don't, you'll get build errors due to incompatible content Pipelines between MonoGame 3.4 and 3.5.
-
-Please keep in mind that the project is still evolving. Some breaking API changes are liklely to occur as we progress towards version 1.0.
+Please keep in mind that the project is still evolving. Some breaking API changes are likely to occur as we progress.
 
 ## Usage
 MonoGame.Extended is a portable class library that sits on top of MonoGame. It's designed to work on all supported platforms using a single portable DLL. At runtime, the portable library will call into the platform specific MonoGame DLL referenced in your project. If you do use it on another platform please [let us know](http://community.monogame.net/category/extended)!
 
 ## Documentation
-We've got several feature demos in the repository and we're building up [the wiki](https://github.com/craftworkgames/MonoGame.Extended/wiki). You can also pop into [the forums](http://community.monogame.net/c/extended), check out [my blog](http://dylanwilson.net/), ask a question on [gamedev stack overflow](http://gamedev.stackexchange.com/questions/tagged/monogame-extended) or use our [live chat](https://gitter.im/craftworkgames/MonoGame.Extended).
+We've got several feature demos in this repository and we're building up [the wiki](https://github.com/craftworkgames/MonoGame.Extended/wiki). You can also pop into [the forums](http://community.monogame.net/c/extended), check out [my blog](http://dylanwilson.net/), ask a question on [gamedev stack overflow](http://gamedev.stackexchange.com/questions/tagged/monogame-extended) or use our [live chat](https://gitter.im/craftworkgames/MonoGame.Extended).
 
 ## How to install
 
@@ -43,6 +50,7 @@ The `MonoGame.Extended.Content.Pipeline.dll` needs to be referenced by the [Pipe
 - **Tile based maps** using [Tiled](http://www.mapeditor.org/)
 - **Bitmap fonts** using [BMFont](http://www.angelcode.com/products/bmfont/)
 - **[Sprites](http://dylanwilson.net/sprites-and-spritebatch-extensions-in-monogame-extended)** (with SpriteBatch extensions!)
+- **Particles** using the [Mercury Particle Engine](https://github.com/Matthew-Davey/mercury-particle-engine)
 - **Input listeners** for event driven input handling (Keyboard, Mouse, Touch, GamePad).
 - **Texture Atlases** using the JSON format in [TexturePacker](https://www.codeandweb.com/texturepacker).
 - **2D Camera** with pan, zoom, and rotation.
@@ -75,3 +83,9 @@ If you would like to contribute start with one of the following:
 
 MonoGame.Extended is released under the [The MIT License (MIT)](https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE).
  
+## Special Thanks
+
+ - Matthew-Davey for letting us use the [Mercury Particle Engine](https://github.com/Matthew-Davey/mercury-particle-engine).
+ - John McDonald for [2D XNA Primitives](https://bitbucket.org/C3/2d-xna-primitives/wiki/Home)
+ - [LibGDX](https://libgdx.badlogicgames.com) for a whole lot of inspiration.
+ - All of our contributors!
