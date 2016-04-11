@@ -86,6 +86,7 @@
     <Compile Include="Particles\ColorExtensions.cs" />
     <Compile Include="Particles\HslColor.cs" />
     <Compile Include="Particles\ColorRange.cs" />
+    <Compile Include="Particles\Modifiers\Containers\ShapeContainerModifier.cs" />
     <Compile Include="Particles\ParticleEmitter.cs" />
     <Compile Include="Particles\FastRand.cs" />
     <Compile Include="Particles\LineSegment.cs" />
@@ -135,6 +136,8 @@
     <Compile Include="SceneGraphs\SceneNode.cs" />
     <Compile Include="SceneGraphs\SceneNodeCollection.cs" />
     <Compile Include="SceneGraphs\SpriteBatchExtensions.cs" />
+    <Compile Include="Shapes\Curves\CurveF.cs" />
+    <Compile Include="Shapes\Curves\QuadraticBezier.cs" />
     <Compile Include="Shapes\LineF.cs" />
     <Compile Include="Shapes\PieF.cs" />
     <Compile Include="Shapes\PointF.cs" />

@@ -52,7 +52,7 @@ namespace MonoGame.Extended.Shapes
         public static FluentPolygon AddLine(this FluentPolygon polygon, Vector2 point) {
             return AddSegment(polygon, new PolygonSegment(point));
         }
-        public static FluentPolygon AddSegment(this FluentPolygon polygon, PolygonSegment segment) {
+        public static FluentPolygon AddSegment(this FluentPolygon polygon, IPathF segment) {
             polygon.Add(segment);
             return polygon;
         }

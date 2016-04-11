@@ -6,7 +6,7 @@ namespace MonoGame.Extended.Shapes
     /// <summary>
     /// Wrapper for Vector2 acting as shape
     /// </summary>
-    public struct PointF : IShapeF, IMovable
+    public struct PointF : IShape1D, IMovable
     {
         public PointF(Vector2 position) {
             Position = position;
@@ -14,10 +14,6 @@ namespace MonoGame.Extended.Shapes
         }
         public Vector2 Position { get; set; }
         public float Tolerance { get; set; }
-        public float Left => Position.X;
-        public float Top => Position.Y;
-        public float Right => Position.X;
-        public float Bottom => Position.Y;
         public RectangleF GetBoundingRectangle() => new RectangleF(Position,new Vector2(Tolerance));
 
         public bool Contains(Vector2 point) => point.EqualsWithTolerance(Position, Tolerance);

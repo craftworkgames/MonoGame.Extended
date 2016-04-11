@@ -4,51 +4,48 @@ using MonoGame.Extended.Particles;
 
 namespace MonoGame.Extended.Shapes
 {
-    public struct LineF : IShapeF
+    public interface IPathF : IShape1D
     {
-        private Vector2 _pointA;
-        private Vector2 _pointB;
+        Vector2 StartPoint { get; set; }
+        Vector2 EndPoint { get; set; }
+    }
+    public struct LineF : IPathF
+    {
+        public Vector2 StartPoint { get; set; }
 
-        public Vector2 PointA
-        {
-            get { return _pointA; }
-            set
-            {
-                _pointA = value;
-                Stuff();
-            }
+        private void Stuff(out float left, out float top, out float width, out float height) {
+            left = MathHelper.Min(StartPoint.X, EndPoint.X);
+            width = MathHelper.Max(StartPoint.X, EndPoint.X) - left;
+            top = MathHelper.Min(StartPoint.Y, EndPoint.Y);
+            height = MathHelper.Max(StartPoint.Y, EndPoint.Y) - top;
         }
 
-        private void Stuff() {
-            Left = MathHelper.Min(_pointA.X, _pointB.X);
-            Right = MathHelper.Max(_pointA.X, _pointB.X);
-            Top = MathHelper.Min(_pointA.Y, _pointB.Y);
-            Bottom = MathHelper.Max(_pointA.Y, _pointB.Y);
+        public Vector2 EndPoint { get; set; }
+
+        public RectangleF GetBoundingRectangle() {
+            var left = MathHelper.Min(StartPoint.X, StartPoint.X);
+            var top = MathHelper.Min(StartPoint.Y, StartPoint.Y);
+            return new RectangleF(left, top,
+                MathHelper.Max(StartPoint.X, StartPoint.X) - left,
+                MathHelper.Max(StartPoint.Y, StartPoint.Y) - top);
         }
 
-        public Vector2 PointB
-        {
-            get { return _pointB; }
-            set
-            {
-                _pointB = value;
-                Stuff();
-            }
+        public bool Contains(Vector2 point) {
+            var r = GetBoundingRectangle();
+            //simplified cross
+            return Math.Abs((point.X - r.Left) * r.Height - (point.Y - r.Top) * r.Width) < float.Epsilon;
         }
 
-        public float Left { get; private set; }
-        public float Top { get; private set; }
-        public float Right { get; private set; }
-        public float Bottom { get; private set; }
-        public RectangleF GetBoundingRectangle() => new RectangleF(Left, Top, Right - Left, Bottom - Top);
-
-        public bool Contains(Vector2 point) => ((point.X - Left) * (Bottom - Top) - (point.Y - Top) * (Right - Left)) < float.Epsilon;
-
-        public Vector2 RandomPointInside() {
-            var difference = PointB - PointA;
-            return PointA + difference * FastRand.NextSingle(0, difference.Length());
+        public bool Contains(Point point) {
+            var r = GetBoundingRectangle();
+            //simplified cross
+            return Math.Abs((point.X - r.Left) * r.Height - (point.Y - r.Top) * r.Width) < 1.414;//TODO check for value to be right
         }
 
-        public Vector2 PointOnOutline(float t) => PointA + (PointB - PointA) * t;
+        public Vector2 RandomPointInside() =>
+            PointOnOutline(FastRand.NextSingle(0, 1));
+
+        public Vector2 PointOnOutline(float t) =>
+            StartPoint + (EndPoint - StartPoint) * t;
     }
 }
