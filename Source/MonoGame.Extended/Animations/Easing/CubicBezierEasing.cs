@@ -1,9 +1,9 @@
-﻿using System.Runtime.CompilerServices;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Animations.Transformations
+namespace MonoGame.Extended.Animations.Easing
 {
-    public sealed class CubicBezierEasing : Easing
+    //TODO Doesn't work properly yet 
+    public sealed class CubicBezierEasing : EasingFunction
     {
         public double X1 { get; set; }
         public double Y1 { get; set; }
@@ -30,9 +30,9 @@ namespace MonoGame.Extended.Animations.Transformations
         }
         public override double Ease(double t) {
             if (X1 == Y1 && X2 == Y2) return t; //linear
-            return BezierInterpolation(GetTForX(t), Y1, Y2);
+            return BezierInterpolation(CorrectT(t), Y1, Y2);
         }
-        private double GetTForX(double x) {
+        private double CorrectT(double x) {
             // Newton raphson iteration
             var t = x;
             for (var i = 0; i < 4; ++i) {
@@ -46,12 +46,9 @@ namespace MonoGame.Extended.Animations.Transformations
         public static double BezierInterpolation(double t, double p1, double p2) {
             return ((A(p1, p2) * t + B(p1, p2)) * t + C(p1)) * t;
         }
-        //for code readability
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        
         private static double A(double a, double b) => 1.0 - 3.0 * a + 3.0 * b;
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static double B(double a, double b) => 3.0 * a - 6.0 * b;
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static double C(double a) => 3.0 * a;
         public override string ToString() => $"Bézier easing[{X1} {Y1} {X2} {Y2}]";
     }

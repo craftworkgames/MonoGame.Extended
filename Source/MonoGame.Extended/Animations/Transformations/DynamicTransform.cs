@@ -1,6 +1,7 @@
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using MonoGame.Extended.Animations.Easing;
 using MonoGame.Extended.Animations.Transformations;
 
 namespace Monogame.Extended.Animations.Transformations
@@ -9,7 +10,7 @@ namespace Monogame.Extended.Animations.Transformations
         where TTransformable:class
     {
         private readonly PropertyInfo _property;
-        public DynamicTransform(Expression<Func<TTransformable,TValue>> propertySelector, double time, TValue value, Easing easing = null)
+        public DynamicTransform(Expression<Func<TTransformable,TValue>> propertySelector, double time, TValue value, EasingFunction easing = null)
         : base(time,value,easing){
             _property = (propertySelector.Body as MemberExpression).Member as PropertyInfo;
         }

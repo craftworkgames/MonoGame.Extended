@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using Microsoft.Xna.Framework;
 using Monogame.Extended.Animations.Transformations;
+using MonoGame.Extended.Animations.Easing;
 using MonoGame.Extended.Animations.Tracks;
 using MonoGame.Extended.Animations.Transformations;
 
@@ -17,7 +18,7 @@ namespace MonoGame.Extended.Animations.Fluent
             };
         }
 
-        public static IFluentTweening<T> Tween<T, TValue>(this IFluentTweening<T> f, Expression<Func<T, TValue>> propertySelector, double time, TValue value, Easing easing = null)
+        public static IFluentTweening<T> Tween<T, TValue>(this IFluentTweening<T> f, Expression<Func<T, TValue>> propertySelector, double time, TValue value, EasingFunction easing = null)
             where T : class {
             var vType = typeof(TValue);
             dynamic ps = propertySelector;
@@ -43,17 +44,17 @@ namespace MonoGame.Extended.Animations.Fluent
             return f;
         }
 
-        public static IFluentTweening<T> Move<T>(this IFluentTweening<T> f, double time, Vector2 value, Easing easing = null)
+        public static IFluentTweening<T> Move<T>(this IFluentTweening<T> f, double time, Vector2 value, EasingFunction easing = null)
             where T : class, IMovable {
             f.Add(new MoveableTransform<T>(time, value, easing));
             return f;
         }
-        public static IFluentTweening<T> Scale<T>(this IFluentTweening<T> f, double time, Vector2 value, Easing easing = null)
+        public static IFluentTweening<T> Scale<T>(this IFluentTweening<T> f, double time, Vector2 value, EasingFunction easing = null)
             where T : class, IScalable {
             f.Add(new ScaleTransform<T>(time, value, easing));
             return f;
         }
-        public static IFluentTweening<T> Rotate<T>(this IFluentTweening<T> f, double time, float value, Easing easing = null)
+        public static IFluentTweening<T> Rotate<T>(this IFluentTweening<T> f, double time, float value, EasingFunction easing = null)
             where T : class, IRotatable {
             f.Add(new RotationTransform<T>(time, value, easing));
             return f;
@@ -65,22 +66,22 @@ namespace MonoGame.Extended.Animations.Fluent
             Set((IFluentSetting<T>)f, propertySelector, time, value);
             return f;
         }
-        public static IFluentBoth<T> Tween<T, TValue>(this IFluentBoth<T> f, Expression<Func<T, TValue>> propertySelector, double time, TValue value, Easing easing = null)
+        public static IFluentBoth<T> Tween<T, TValue>(this IFluentBoth<T> f, Expression<Func<T, TValue>> propertySelector, double time, TValue value, EasingFunction easing = null)
              where T : class {
             Tween((IFluentTweening<T>)f, propertySelector, time, value, easing);
             return f;
         }
-        public static IFluentBoth<T> Move<T>(this IFluentBoth<T> f, double time, Vector2 value, Easing easing = null)
+        public static IFluentBoth<T> Move<T>(this IFluentBoth<T> f, double time, Vector2 value, EasingFunction easing = null)
              where T : class, IMovable {
             Move((IFluentTweening<T>)f, time, value, easing);
             return f;
         }
-        public static IFluentBoth<T> Scale<T>(this IFluentBoth<T> f, double time, Vector2 value, Easing easing = null)
+        public static IFluentBoth<T> Scale<T>(this IFluentBoth<T> f, double time, Vector2 value, EasingFunction easing = null)
              where T : class, IScalable {
             Scale((IFluentTweening<T>)f, time, value, easing);
             return f;
         }
-        public static IFluentBoth<T> Rotate<T>(this IFluentBoth<T> f, double time, float value, Easing easing = null)
+        public static IFluentBoth<T> Rotate<T>(this IFluentBoth<T> f, double time, float value, EasingFunction easing = null)
              where T : class, IRotatable {
             Rotate((IFluentTweening<T>)f, time, value, easing);
             return f;

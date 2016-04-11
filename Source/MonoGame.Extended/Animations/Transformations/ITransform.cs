@@ -1,4 +1,5 @@
 ﻿using System;
+using MonoGame.Extended.Animations.Easing;
 
 namespace MonoGame.Extended.Animations.Transformations
 {
@@ -23,11 +24,11 @@ namespace MonoGame.Extended.Animations.Transformations
         /// <summary>
         /// Sets the value on the transformable based on the supplied time and previous transform (of the same kind).
         /// </summary>
-        bool Update(double time, TTransformable transformable, ITweenTransform<TTransformable> previous);
+        void Update(double time, TTransformable transformable, ITweenTransform<TTransformable> previous);
         /// <summary>
         /// The type of interpolation used.
         /// </summary>
-        Easing Easing { get; set; }
+        EasingFunction Easing { get; set; }
     }
     //sets value at certain time
     public interface ISetTransform<in TTransformable> : ITransform where TTransformable : class

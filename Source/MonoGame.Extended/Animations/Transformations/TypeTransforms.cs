@@ -2,6 +2,7 @@ using System;
 using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Animations.Easing;
 using MonoGame.Extended.Animations.Transformations;
 
 namespace Monogame.Extended.Animations.Transformations
@@ -12,7 +13,7 @@ namespace Monogame.Extended.Animations.Transformations
     public class Vector2Transform<T> : TweenTransformBase<T, Vector2> where T : class
     {
         private readonly PropertyInfo _property;
-        public Vector2Transform(Expression<Func<T, Vector2>> propertySelector, double time, Vector2 value, Easing easing = null)
+        public Vector2Transform(Expression<Func<T, Vector2>> propertySelector, double time, Vector2 value, EasingFunction easing = null)
             : base(time, value, easing) {
             _property = (propertySelector.Body as MemberExpression).Member as PropertyInfo;
         }
@@ -23,7 +24,7 @@ namespace Monogame.Extended.Animations.Transformations
     public class ColorTransform<T> : TweenTransformBase<T, Vector4> where T : class
     {
         private readonly PropertyInfo _property;
-        public ColorTransform(Expression<Func<T, Color>> propertySelector, double time, Color value, Easing easing = null)
+        public ColorTransform(Expression<Func<T, Color>> propertySelector, double time, Color value, EasingFunction easing = null)
             : base(time, value.ToVector4(), easing) {
             _property = (propertySelector.Body as MemberExpression).Member as PropertyInfo;
         }
@@ -34,7 +35,7 @@ namespace Monogame.Extended.Animations.Transformations
     public class FloatTransform<T> : TweenTransformBase<T, float> where T : class
     {
         private readonly PropertyInfo _property;
-        public FloatTransform(Expression<Func<T, float>> propertySelector, double time, float value, Easing easing = null)
+        public FloatTransform(Expression<Func<T, float>> propertySelector, double time, float value, EasingFunction easing = null)
             : base(time, value, easing) {
             _property = (propertySelector.Body as MemberExpression).Member as PropertyInfo;
         }
@@ -45,7 +46,7 @@ namespace Monogame.Extended.Animations.Transformations
     public class DoubleTransform<T> : TweenTransformBase<T, double> where T : class
     {
         private readonly PropertyInfo _property;
-        public DoubleTransform(Expression<Func<T, double>> propertySelector, double time, double value, Easing easing = null)
+        public DoubleTransform(Expression<Func<T, double>> propertySelector, double time, double value, EasingFunction easing = null)
             : base(time, value, easing) {
             _property = (propertySelector.Body as MemberExpression).Member as PropertyInfo;
         }

@@ -19,30 +19,39 @@ namespace MonoGame.Extended.Animations.Tracks
             return _animationTracks.Values.ToArray();
         }
 
-        public void Update(double time) {
-            if (_dirty) {
-                foreach (var setTransforms in _dirtySets.GroupBy(t => t.GetType())) { //make separate tracks for each type
-                    IAnimationTrack<TTransformable> result;
-                    if (_animationTracks.TryGetValue(setTransforms.Key, out result)) {
-                        (result as AnimationSettingTrack<TTransformable>).Add(setTransforms.ToArray());
+        internal Dictionary<Type,IAnimationTrack<TTransformable>> AnimationTracks
+        {
+            get
+            {
+                if (_dirty) {
+                    foreach (var setTransforms in _dirtySets.GroupBy(t => t.GetType())) { //make separate tracks for each type
+                        IAnimationTrack<TTransformable> result;
+                        if (_animationTracks.TryGetValue(setTransforms.Key, out result)) {
+                            (result as AnimationSettingTrack<TTransformable>).Add(setTransforms.ToArray());
+                        }
+                        else {
+                            _animationTracks.Add(setTransforms.Key, new AnimationSettingTrack<TTransformable>(setTransforms.ToArray()));
+                        }
                     }
-                    else {
-                        _animationTracks.Add(setTransforms.Key, new AnimationSettingTrack<TTransformable>(setTransforms.ToArray()));
+                    _dirtySets.Clear();
+                    foreach (var tweenTransforms in _dirtyTweens.GroupBy(t => t.GetType())) {
+                        IAnimationTrack<TTransformable> result;
+                        if (_animationTracks.TryGetValue(tweenTransforms.Key, out result)) {
+                            (result as AnimationTweeningTrack<TTransformable>).Add(tweenTransforms.ToArray());
+                        }
+                        else {
+                            _animationTracks.Add(tweenTransforms.Key, new AnimationTweeningTrack<TTransformable>(tweenTransforms.ToArray()));
+                        }
                     }
+                    _dirtyTweens.Clear();
                 }
-                _dirtySets.Clear();
-                foreach (var tweenTransforms in _dirtyTweens.GroupBy(t => t.GetType())) {
-                    IAnimationTrack<TTransformable> result;
-                    if (_animationTracks.TryGetValue(tweenTransforms.Key, out result)) {
-                        (result as AnimationTweeningTrack<TTransformable>).Add(tweenTransforms.ToArray());
-                    }
-                    else {
-                        _animationTracks.Add(tweenTransforms.Key, new AnimationTweeningTrack<TTransformable>(tweenTransforms.ToArray()));
-                    }
-                }
-                _dirtyTweens.Clear();
+                return _animationTracks;
             }
-            foreach (var track in _animationTracks.Values) {
+        } 
+
+        public void Update(double time) {
+            
+            foreach (var track in AnimationTracks.Values) {
                 track.Update(time, Transformable);
             }
         }
@@ -51,11 +60,12 @@ namespace MonoGame.Extended.Animations.Tracks
             Transformable = transformable;
         }
 
-        public double MaxEndtime => _animationTracks.Values.Max(t => t.LastTime);
+        public double MaxEndtime => AnimationTracks.Values.Max(t => t.LastTime);
         public void Clear() {
-            foreach (var animationTrack in _animationTracks.Values) {
+            foreach (var animationTrack in AnimationTracks.Values) {
                 animationTrack.Clear();
             }
+            
         }
 
         public void Add(params ISetTransform<TTransformable>[] transforms) {
@@ -69,21 +79,17 @@ namespace MonoGame.Extended.Animations.Tracks
         public void Remove(ISetTransform<TTransformable> transform) {
             IAnimationTrack<TTransformable> result;
             var key = transform.GetType();
-            if (!_animationTracks.TryGetValue(key, out result)) {
-                _dirtySets.Remove(transform);
-            }
-            else if (!(result as AnimationSettingTrack<TTransformable>).Remove(transform)) {
-                _animationTracks.Remove(key);
+            if (!AnimationTracks.TryGetValue(key, out result))  return;
+            if (!(result as AnimationSettingTrack<TTransformable>).Remove(transform)) {
+                AnimationTracks.Remove(key);
             }
         }
         public void Remove(ITweenTransform<TTransformable> transform) {
             IAnimationTrack<TTransformable> result;
             var key = transform.GetType();
-            if (!_animationTracks.TryGetValue(key, out result)) {
-                _dirtyTweens.Remove(transform);
-            }
-            else if (!(result as AnimationTweeningTrack<TTransformable>).Remove(transform)) {
-                _animationTracks.Remove(key);
+            if (!AnimationTracks.TryGetValue(key, out result))  return;
+            if (!(result as AnimationTweeningTrack<TTransformable>).Remove(transform)) {
+                AnimationTracks.Remove(key);
             }
         }
     }

@@ -15,8 +15,8 @@ namespace MonoGame.Extended.Animations.Tracks
 
         public string Name { get; set; }
         public void Update(double time, TTransformable transformable) {
-            var transform = _transforms.FirstOrDefault(t => t.Time < time) ?? _transforms[0];
-            transform.Set(transformable);
+            var transform = _transforms.LastOrDefault(t => t.Time < time);
+            transform?.Set(transformable);
         }
 
         public ITransform[] GetTransforms() {
@@ -37,9 +37,9 @@ namespace MonoGame.Extended.Animations.Tracks
             LastTime = _transforms.Last().Time;
         }
 
-        public bool Remove(ISetTransform<TTransformable> transform){
+        public bool Remove(ISetTransform<TTransformable> transform) {
             _transforms.Remove(transform);
-            if(_transforms.Count<0)return false;
+            if (_transforms.Count < 0) return false;
             LastTime = _transforms.Last().Time;
             return true;
         }

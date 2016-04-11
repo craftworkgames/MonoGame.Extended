@@ -39,6 +39,7 @@
     <Compile Include="Animations\Animatable\IAnimatableProperty.cs" />
     <Compile Include="Animations\AnimationEvent.cs" />
     <Compile Include="Animations\Animatable\IAnimatable.cs" />
+    <Compile Include="Animations\Easing\CurveEasing.cs" />
     <Compile Include="Animations\Fluent\FluentAnimation.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroup.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroupReader.cs" />
@@ -51,13 +52,13 @@
     <Compile Include="Animations\Tracks\IAnimationTrack.cs" />
     <Compile Include="Animations\Tracks\IAnimationTrackGroup.cs" />
     <Compile Include="Animations\Transformations\DynamicTransform.cs" />
-    <Compile Include="Animations\Transformations\Easing.cs" />
+    <Compile Include="Animations\Easing\EasingFunction.cs" />
     <Compile Include="Animations\Extensions.cs" />
     <Compile Include="Animations\Transformations\InterfaceTransforms.cs" />
     <Compile Include="Animations\Transformations\ITransform.cs" />
-    <Compile Include="Animations\Transformations\CubicBezierEasing.cs" />
+    <Compile Include="Animations\Easing\CubicBezierEasing.cs" />
     <Compile Include="Animations\Transformations\SetPropertyTransform.cs" />
-    <Compile Include="Animations\Transformations\StepEasing.cs" />
+    <Compile Include="Animations\Easing\StepEasing.cs" />
     <Compile Include="Animations\Transformations\TweenTransformBase.cs" />
     <Compile Include="Animations\Transformations\TypeTransforms.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
@@ -160,7 +161,6 @@
     <Compile Include="SceneGraphs\SceneNode.cs" />
     <Compile Include="SceneGraphs\SceneNodeCollection.cs" />
     <Compile Include="SceneGraphs\SpriteBatchExtensions.cs" />
-    <Compile Include="Shapes\PolygonCreator.cs" />
     <Compile Include="Shapes\SpriteBatchExtensions.cs" />
     <Compile Include="Shapes\CircleF.cs" />
     <Compile Include="Shapes\PolygonF.cs" />

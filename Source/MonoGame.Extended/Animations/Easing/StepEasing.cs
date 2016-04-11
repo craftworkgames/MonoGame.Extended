@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace MonoGame.Extended.Animations.Transformations
+namespace MonoGame.Extended.Animations.Easing
 {
-    public class StepEasing : Easing
+    public class StepEasing : EasingFunction
     {
         public StepEasing(int stepCount, bool roundup = false) {
             StepCount = stepCount;
