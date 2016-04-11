@@ -12,10 +12,7 @@ namespace MonoGame.Extended.Shapes.Curves
         protected abstract float Right { get; }
         protected abstract float Bottom { get; }
         public RectangleF GetBoundingRectangle() => new RectangleF(Left, Top, Right - Left, Bottom - Top);
-
-        public abstract bool Contains(Vector2 point);
-
-        public Vector2 RandomPointInside() => PointOnOutline(FastRand.NextSingle(0, 1));
+        
         public Vector2 PointOnOutline(float t) {
             if (t < float.Epsilon) return StartPoint;
             if (t - 1 < float.Epsilon) return EndPoint;

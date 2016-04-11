@@ -5,8 +5,8 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Particles;
 using MonoGame.Extended.Particles.Modifiers;
-using MonoGame.Extended.Particles.Modifiers.Containers;
 using MonoGame.Extended.Particles.Profiles;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
@@ -93,7 +93,7 @@ namespace Demo.Particles
             {
                 Emitters = new[]
                 {
-                    new ParticleEmitter(500, TimeSpan.FromSeconds(2.5), Profile.Ring(150f, Profile.CircleRadiation.In))
+                    new ParticleEmitter(500, TimeSpan.FromSeconds(2.5), Profile.Ring(new CircleF(Vector2.Zero, 150f), Profile.CircleRadiation.In))
                     {
                         TextureRegion = textureRegion,
                         Parameters = new ParticleReleaseParameters
@@ -107,8 +107,8 @@ namespace Demo.Particles
                         {
                             new ColorInterpolator2 { InitialColor = new HslColor(0.33f, 0.5f, 0.5f), FinalColor = new HslColor(0.5f, 0.9f, 1.0f) },
                             new RotationModifier { RotationRate = -2.1f },
-                            new RectangleContainerModifier {  Width = 800, Height = 480 },
-                            new LinearGravityModifier { Direction = Axis.Up, Strength = 30f }
+                            new ContainmentModifier(new RectangleF(-400,-240,800,480), true),
+                            new LinearGravityModifier { Direction = -Vector2.UnitY, Strength = 30f }
                         }
                     }
                 }

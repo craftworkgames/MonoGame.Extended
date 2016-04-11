@@ -15,9 +15,6 @@ namespace MonoGame.Extended.Shapes.Curves
         protected override float Top { get; }
         protected override float Right { get; }
         protected override float Bottom { get; }
-        public override bool Contains(Vector2 point) {
-            throw new System.NotImplementedException();
-        }
 
         protected override Vector2 GetPointOnCurve(float t) {
             var i = 1 - t;

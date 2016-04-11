@@ -4,22 +4,18 @@ using Microsoft.Xna.Framework;
 namespace MonoGame.Extended.Shapes
 {
     /// <summary>
-    /// Wrapper for Vector2 acting as shape
+    /// Shape wrapper for Vector2
     /// </summary>
-    public struct PointF : IShape1D, IMovable
+    public struct PointF : IShapeBase, IMovable
     {
         public PointF(Vector2 position) {
             Position = position;
-            Tolerance = 1E-05f;
         }
         public Vector2 Position { get; set; }
-        public float Tolerance { get; set; }
-        public RectangleF GetBoundingRectangle() => new RectangleF(Position,new Vector2(Tolerance));
+        public RectangleF GetBoundingRectangle() => new RectangleF(Position,Vector2.Zero);
 
-        public bool Contains(Vector2 point) => point.EqualsWithTolerance(Position, Tolerance);
-
-        public Vector2 RandomPointInside() => Position;
-
+        public bool Contains(Vector2 point) => point.EqualsWithTolerance(Position);
+        
         public Vector2 PointOnOutline(float t) => Position;
     }
 }

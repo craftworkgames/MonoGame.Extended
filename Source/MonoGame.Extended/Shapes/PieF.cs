@@ -119,14 +119,16 @@ namespace MonoGame.Extended.Shapes
 
         public Vector2 RandomPointInside() {
             var dist = FastRand.NextSingle(0f, Radius);
-            var angle = FastRand.NextSingle(StartAngle, EndAngle);
-            return Center.SecondaryPoint(angle, dist);
+            var angle = FastRand.NextSingle(0, _curveAngle);
+            return Center.SecondaryPoint(angle + StartAngle, dist);
         }
 
         public Vector2 PointOnOutline(float t) {
-            var curved = Radius * _curveAngle;
-            var d = curved / (curved + 2 * Radius);
+            if (StartAngle != EndAngle) {
+                var curved = Radius*_curveAngle;
+                var d = curved/(curved + 2*Radius);
 
+            }
             //const float origin = MathHelper.TwoPi * 3 / 8f; //topleft angle
             //var angle = origin - t * MathHelper.TwoPi; // rotate clockwise
             return Center.SecondaryPoint(t * MathHelper.TwoPi, Radius);

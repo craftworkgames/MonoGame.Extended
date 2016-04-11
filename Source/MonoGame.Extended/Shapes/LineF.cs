@@ -4,7 +4,7 @@ using MonoGame.Extended.Particles;
 
 namespace MonoGame.Extended.Shapes
 {
-    public interface IPathF : IShape1D
+    public interface IPathF : IShapeBase
     {
         Vector2 StartPoint { get; set; }
         Vector2 EndPoint { get; set; }
@@ -41,11 +41,12 @@ namespace MonoGame.Extended.Shapes
             //simplified cross
             return Math.Abs((point.X - r.Left) * r.Height - (point.Y - r.Top) * r.Width) < 1.414;//TODO check for value to be right
         }
-
-        public Vector2 RandomPointInside() =>
-            PointOnOutline(FastRand.NextSingle(0, 1));
-
+        
         public Vector2 PointOnOutline(float t) =>
             StartPoint + (EndPoint - StartPoint) * t;
+
+        public Vector2 ToVector() {
+            return EndPoint - StartPoint;
+        }
     }
 }
