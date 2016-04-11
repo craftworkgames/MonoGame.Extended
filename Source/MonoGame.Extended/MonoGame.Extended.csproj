@@ -36,8 +36,31 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Animations\Animatable\IAnimatableProperty.cs" />
+    <Compile Include="Animations\AnimationEvent.cs" />
+    <Compile Include="Animations\Animatable\IAnimatable.cs" />
+    <Compile Include="Animations\Easing\CurveEasing.cs" />
+    <Compile Include="Animations\Fluent\FluentAnimation.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroup.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroupReader.cs" />
+    <Compile Include="Animations\Animation.cs" />
+    <Compile Include="Animations\Tracks\AnimationSettingTrack.cs" />
+    <Compile Include="Animations\Tracks\AnimationTrackGroup.cs" />
+    <Compile Include="Animations\Tracks\AnimationTweeningTrack.cs" />
+    <Compile Include="Animations\Animator.cs" />
+    <Compile Include="Animations\Fluent\FluentAnimationExtensions.cs" />
+    <Compile Include="Animations\Tracks\IAnimationTrack.cs" />
+    <Compile Include="Animations\Tracks\IAnimationTrackGroup.cs" />
+    <Compile Include="Animations\Transformations\DynamicTransform.cs" />
+    <Compile Include="Animations\Easing\EasingFunction.cs" />
+    <Compile Include="Animations\Extensions.cs" />
+    <Compile Include="Animations\Transformations\InterfaceTransforms.cs" />
+    <Compile Include="Animations\Transformations\ITransform.cs" />
+    <Compile Include="Animations\Easing\CubicBezierEasing.cs" />
+    <Compile Include="Animations\Transformations\SetPropertyTransform.cs" />
+    <Compile Include="Animations\Easing\StepEasing.cs" />
+    <Compile Include="Animations\Transformations\TweenTransformBase.cs" />
+    <Compile Include="Animations\Transformations\TypeTransforms.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />
@@ -45,6 +68,11 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
+    <Compile Include="Entities\AnimatorComponent.cs" />
+    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\EntityComponent.cs" />
+    <Compile Include="Entities\TextureComponent.cs" />
+    <Compile Include="Entities\Transform2D.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />
     <Compile Include="Collisions\CollisionGrid.cs" />
@@ -163,6 +191,7 @@
     <Compile Include="Timers\GameTimer.cs" />
     <Compile Include="Timers\TimerState.cs" />
     <Compile Include="Vector2Extensions.cs" />
+    <Compile Include="Vertex2D.cs" />
     <Compile Include="ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\WindowViewportAdapter.cs" />

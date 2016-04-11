@@ -5,6 +5,11 @@ namespace MonoGame.Extended
 {
     public static class MatrixExtensions
     {
+        public static Matrix Create2DTransformation(Vector2 position, Vector2 scale, float rotation) {
+            return Matrix.CreateTranslation(position.X, position.Y, 0) *
+                Matrix.CreateScale(scale.X, scale.Y, 1) *
+                Matrix.CreateRotationZ(rotation);
+        }
         public static bool Decompose(this Matrix matrix, out Vector2 position, out float rotation, out Vector2 scale)
         {
             Vector3 position3, scale3;
