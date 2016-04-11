@@ -12,14 +12,7 @@ namespace MonoGame.Extended.Shapes
     public struct LineF : IPathF
     {
         public Vector2 StartPoint { get; set; }
-
-        private void Stuff(out float left, out float top, out float width, out float height) {
-            left = MathHelper.Min(StartPoint.X, EndPoint.X);
-            width = MathHelper.Max(StartPoint.X, EndPoint.X) - left;
-            top = MathHelper.Min(StartPoint.Y, EndPoint.Y);
-            height = MathHelper.Max(StartPoint.Y, EndPoint.Y) - top;
-        }
-
+        
         public Vector2 EndPoint { get; set; }
 
         public RectangleF GetBoundingRectangle() {
