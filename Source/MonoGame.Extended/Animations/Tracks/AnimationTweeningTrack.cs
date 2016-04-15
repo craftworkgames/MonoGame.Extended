@@ -12,13 +12,18 @@ namespace MonoGame.Extended.Animations.Tracks
         public string Name { get; set; }
         private readonly List<ITweenTransform<TTransformable>> _transforms = new List<ITweenTransform<TTransformable>>();
 
-        public ITransform[] GetTransforms() {
-            return _transforms.Cast<ITransform>().ToArray();
+        public IEnumerable<ITransform> GetTransforms() {
+            return _transforms;
         }
 
         public double LastTime { get; private set; }
         public void Clear() {
             throw new NotImplementedException();
+        }
+        public bool Equals(IAnimationTrack<TTransformable> other) {
+            var track = other as AnimationSettingTrack<TTransformable>;
+            if (track == null) return false;
+            return track.GetTransforms().First().GetType() == _transforms[0].GetType();
         }
 
         public AnimationTweeningTrack(params ITweenTransform<TTransformable>[] transforms) {

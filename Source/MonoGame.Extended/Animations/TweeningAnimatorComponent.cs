@@ -3,13 +3,13 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Animations
 {
-    public class Animator : GameComponent
+    public class TweeningAnimatorComponent : GameComponent
     {
         private readonly List<RunningAnimation> _runningAnimations = new List<RunningAnimation>();
         private double _currentTime;
         private readonly List<Animation> _animations = new List<Animation>();
 
-        public Animator(Game game) : base(game) { }
+        public TweeningAnimatorComponent(Game game) : base(game) { }
 
         public void AddAnimation(Animation animation) {
             _animations.Add(animation);

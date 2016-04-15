@@ -19,13 +19,19 @@ namespace MonoGame.Extended.Animations.Tracks
             transform?.Set(transformable);
         }
 
-        public ITransform[] GetTransforms() {
-            return _transforms.Cast<ITransform>().ToArray();
+        public IEnumerable<ITransform> GetTransforms() {
+            return _transforms;
         }
 
         public double LastTime { get; private set; }
         public void Clear() {
             throw new NotImplementedException();
+        }
+
+        public bool Equals(IAnimationTrack<TTransformable> other) {
+            var track = other as AnimationSettingTrack<TTransformable>;
+            if (track == null) return false;
+            return track.GetTransforms().First().GetType() == _transforms[0].GetType();
         }
 
         public void Add(ISetTransform<TTransformable>[] transforms) {

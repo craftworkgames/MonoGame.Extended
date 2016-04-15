@@ -37,9 +37,24 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Animations\Animatable\IAnimatableProperty.cs" />
+    <Compile Include="Animations\AnimationBlendTypes.cs" />
     <Compile Include="Animations\AnimationEvent.cs" />
     <Compile Include="Animations\Animatable\IAnimatable.cs" />
-    <Compile Include="Animations\Easing\CurveEasing.cs" />
+    <Compile Include="Interpolation\DynamicInterpolator.cs" />
+    <Compile Include="Interpolation\DoubleInterpolator.cs" />
+    <Compile Include="Interpolation\Easer.cs" />
+    <Compile Include="Interpolation\Easing\BounceEasing.cs" />
+    <Compile Include="Interpolation\Easing\BackEasing.cs" />
+    <Compile Include="Interpolation\Easing\CircularEasing.cs" />
+    <Compile Include="Interpolation\Easing\CurveEasing.cs" />
+    <Compile Include="Interpolation\Easing\EasingInOut.cs" />
+    <Compile Include="Interpolation\Easing\ElasticEasing.cs" />
+    <Compile Include="Interpolation\Easing\ExponentialEasing.cs" />
+    <Compile Include="Interpolation\Easing\HermiteEasing.cs" />
+    <Compile Include="Interpolation\Easing\LinearEasing.cs" />
+    <Compile Include="Interpolation\Easing\LogarithmicEasing.cs" />
+    <Compile Include="Interpolation\Easing\PowerEasing.cs" />
+    <Compile Include="Interpolation\Easing\SinusoidalEasing.cs" />
     <Compile Include="Animations\Fluent\FluentAnimation.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroup.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroupReader.cs" />
@@ -47,18 +62,17 @@
     <Compile Include="Animations\Tracks\AnimationSettingTrack.cs" />
     <Compile Include="Animations\Tracks\AnimationTrackGroup.cs" />
     <Compile Include="Animations\Tracks\AnimationTweeningTrack.cs" />
-    <Compile Include="Animations\Animator.cs" />
+    <Compile Include="Interpolation\Interpolator.cs" />
+    <Compile Include="Animations\TweeningAnimatorComponent.cs" />
     <Compile Include="Animations\Fluent\FluentAnimationExtensions.cs" />
     <Compile Include="Animations\Tracks\IAnimationTrack.cs" />
     <Compile Include="Animations\Tracks\IAnimationTrackGroup.cs" />
     <Compile Include="Animations\Transformations\DynamicTransform.cs" />
-    <Compile Include="Animations\Easing\EasingFunction.cs" />
-    <Compile Include="Animations\Extensions.cs" />
+    <Compile Include="Interpolation\Easing\EasingFunction.cs" />
     <Compile Include="Animations\Transformations\InterfaceTransforms.cs" />
     <Compile Include="Animations\Transformations\ITransform.cs" />
-    <Compile Include="Animations\Easing\CubicBezierEasing.cs" />
+    <Compile Include="Interpolation\Easing\CubicBezierEasing.cs" />
     <Compile Include="Animations\Transformations\SetPropertyTransform.cs" />
-    <Compile Include="Animations\Easing\StepEasing.cs" />
     <Compile Include="Animations\Transformations\TweenTransformBase.cs" />
     <Compile Include="Animations\Transformations\TypeTransforms.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
@@ -73,6 +87,8 @@
     <Compile Include="Entities\EntityComponent.cs" />
     <Compile Include="Entities\TextureComponent.cs" />
     <Compile Include="Entities\Transform2D.cs" />
+    <Compile Include="Interpolation\InterpolatorStore.cs" />
+    <Compile Include="Interpolation\Range.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />
     <Compile Include="Collisions\CollisionGrid.cs" />

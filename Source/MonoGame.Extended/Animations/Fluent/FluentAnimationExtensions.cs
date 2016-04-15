@@ -2,9 +2,9 @@
 using System.Linq.Expressions;
 using Microsoft.Xna.Framework;
 using Monogame.Extended.Animations.Transformations;
-using MonoGame.Extended.Animations.Easing;
 using MonoGame.Extended.Animations.Tracks;
 using MonoGame.Extended.Animations.Transformations;
+using MonoGame.Extended.Interpolation.Easing;
 
 namespace MonoGame.Extended.Animations.Fluent
 {

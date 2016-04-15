@@ -1,7 +1,17 @@
 ﻿using System;
 
-namespace MonoGame.Extended.Animations.Easing
+namespace MonoGame.Extended.Interpolation.Easing
 {
+    public struct EaseStepping
+    {
+        public EaseStepping(int stepcount = 1, bool roundup = false) {
+            StepCount = stepcount;
+            RoundUp = roundup;
+        }
+        public int StepCount { get; set; }
+        public bool RoundUp { get; set; }
+
+    }
     public class StepEasing : EasingFunction
     {
         public StepEasing(int stepCount, bool roundup = false) {
@@ -12,7 +22,7 @@ namespace MonoGame.Extended.Animations.Easing
         public bool RoundUp { get; set; }
         public int StepCount { get; set; }
 
-        public override double Ease(double t) {
+        protected override double Function(double t) {
             if (RoundUp) {
                 return Math.Ceiling(t * StepCount) / StepCount;
             }

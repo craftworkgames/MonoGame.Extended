@@ -2,8 +2,8 @@ using System;
 using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Animations.Easing;
 using MonoGame.Extended.Animations.Transformations;
+using MonoGame.Extended.Interpolation.Easing;
 
 namespace Monogame.Extended.Animations.Transformations
 {

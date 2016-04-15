@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using MonoGame.Extended.Animations.Easing;
+using MonoGame.Extended.Interpolation.Easing;
 
 namespace MonoGame.Extended.Animations.Transformations
 {
@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Animations.Transformations
             Time = time;
             Value = value;
             ValueType = typeof(TValue);
-            Easing = easing ?? EasingFunction.Linear;
+            Easing = easing ?? EasingFunction.None;
         }
 
         public object ValueObject => Value;

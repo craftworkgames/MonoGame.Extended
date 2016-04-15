@@ -1,5 +1,5 @@
 ﻿using System;
-using MonoGame.Extended.Animations.Easing;
+using MonoGame.Extended.Interpolation.Easing;
 
 namespace MonoGame.Extended.Animations.Transformations
 {
