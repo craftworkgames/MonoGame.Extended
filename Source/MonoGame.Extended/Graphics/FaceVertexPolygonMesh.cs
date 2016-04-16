@@ -5,7 +5,7 @@ using MonoGame.Extended.Graphics.Batching;
 
 namespace MonoGame.Extended.Graphics
 {
-    public class VertexMesh<TVertexType> : IMesh<TVertexType>
+    public class FaceVertexPolygonMesh<TVertexType> : IPolygonMesh<TVertexType>
         where TVertexType : struct, IVertexType
     {
         private readonly TVertexType[] _vertices;
@@ -23,7 +23,7 @@ namespace MonoGame.Extended.Graphics
 
         public PrimitiveType PrimitiveType { get; }
 
-        public VertexMesh(PrimitiveType primitiveType, TVertexType[] vertices, short[] indices = null)
+        public FaceVertexPolygonMesh(PrimitiveType primitiveType, TVertexType[] vertices, short[] indices = null)
         {
             if (vertices == null)
             {

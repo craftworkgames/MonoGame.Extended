@@ -59,11 +59,11 @@
     <Compile Include="Graphics\EffectDrawContext.cs" />
     <Compile Include="Graphics\IDrawContext.cs" />
     <Compile Include="Graphics\IEffectDrawContext.cs" />
-    <Compile Include="Graphics\IMesh.cs" />
-    <Compile Include="Graphics\ITextureDrawContext.cs" />
+    <Compile Include="Graphics\IPolygonMesh.cs" />
+    <Compile Include="Graphics\ISpriteDrawContext.cs" />
     <Compile Include="Graphics\PrimitiveBatchExtensions.cs" />
-    <Compile Include="Graphics\Batching\SpriteBatch.cs" />
-    <Compile Include="Graphics\VertexMesh.cs" />
+    <Compile Include="Graphics\Batching\PrimitiveBatchExtensions.cs" />
+    <Compile Include="Graphics\FaceVertexPolygonMesh.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />

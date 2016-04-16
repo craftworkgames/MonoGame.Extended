@@ -9,20 +9,25 @@ namespace MonoGame.Extended.Tests.Graphics
     {
         private class TestDrawContext : IDrawContext
         {
+            public uint SortKey
+            {
+                get { return 0; }
+            }
+
             public int PassesCount
             {
                 get { return 123; }
             }
 
-            public void ApplyPass(int passIndex)
+            public void Begin()
             {
             }
-        }
 
-        private class TestEffectDrawContext : EffectDrawContext<BasicEffect>
-        {
-            public TestEffectDrawContext(BasicEffect effect)
-                : base(effect)
+            public void End()
+            {
+            }
+
+            public void ApplyPass(int passIndex)
             {
             }
         }
@@ -32,7 +37,7 @@ namespace MonoGame.Extended.Tests.Graphics
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
-            var effectDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+            var effectDrawContext = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             Assert.GreaterOrEqual(effectDrawContext.PassesCount, 1);
         }
 
@@ -41,7 +46,7 @@ namespace MonoGame.Extended.Tests.Graphics
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
-            var effectDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+            var effectDrawContext = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             var passesCount = effectDrawContext.PassesCount;
             for (var passIndex = 0; passIndex < passesCount; ++passIndex)
             {
@@ -54,7 +59,7 @@ namespace MonoGame.Extended.Tests.Graphics
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
-            var effectDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+            var effectDrawContext = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             Assert.AreEqual(basicEffect, effectDrawContext.Effect);
         }
 
@@ -63,10 +68,10 @@ namespace MonoGame.Extended.Tests.Graphics
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
-            var effectDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+            var effectDrawContext = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             // ReSharper disable once EqualExpressionComparison
             Assert.IsTrue(effectDrawContext.Equals(effectDrawContext));
-            var effectDrawContext2 = new EffectDrawContext<BasicEffect>(basicEffect);
+            var effectDrawContext2 = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             Assert.IsTrue(effectDrawContext.Equals(effectDrawContext2));
             var drawContext = new TestDrawContext();
             // ReSharper disable once SuspiciousTypeConversion.Global

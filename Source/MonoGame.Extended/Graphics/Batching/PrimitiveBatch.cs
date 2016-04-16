@@ -33,9 +33,8 @@ namespace MonoGame.Extended.Graphics.Batching
                 var viewport = graphicsDevice.Viewport;
                 var basicEffect = new BasicEffect(graphicsDevice)
                 {
-                    Alpha = 1,
                     VertexColorEnabled = true,
-                    LightingEnabled = false,
+                    TextureEnabled = true,
                     Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1),
                     World = Matrix.Identity,
                     View = Matrix.Identity

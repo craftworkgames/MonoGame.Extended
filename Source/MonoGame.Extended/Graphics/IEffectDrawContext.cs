@@ -2,7 +2,7 @@
 
 namespace MonoGame.Extended.Graphics
 {
-    internal interface IEffectDrawContext : IDrawContext
+    public interface IEffectDrawContext : IDrawContext
     {
         Effect Effect { get; }
     }

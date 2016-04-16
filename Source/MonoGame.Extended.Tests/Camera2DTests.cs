@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.ViewportAdapters;
-using NSubstitute;
 using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests

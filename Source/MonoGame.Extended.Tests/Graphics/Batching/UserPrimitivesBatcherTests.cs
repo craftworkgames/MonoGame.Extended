@@ -14,7 +14,7 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
-            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice, defaultDrawContext);
             Assert.IsNotNull(userPrimitivesBatcher);
         }
@@ -24,7 +24,7 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
-            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice, defaultDrawContext);
             Assert.Greater(userPrimitivesBatcher.MaximumBatchSize, 4);
         }
@@ -34,7 +34,7 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
-            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice, defaultDrawContext);
             var vertices = new TestVertex[9];
             userPrimitivesBatcher.Select(vertices);
@@ -45,7 +45,7 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
-            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice, defaultDrawContext);
             var vertices = new TestVertex[9];
             var indices = new short[9];
@@ -57,7 +57,7 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
-            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice, defaultDrawContext);
             var vertices = new TestVertex[9];
             var indices = new short[9];
@@ -70,7 +70,7 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
-            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice, defaultDrawContext);
             var vertices = new TestVertex[9];
             var indices = new short[9];

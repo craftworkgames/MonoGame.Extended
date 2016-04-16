@@ -4,13 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    public class SpriteBatch
+    public static class PrimitiveBatchExtensions
     {
-        private readonly PrimitiveBatch<VertexPositionColorTexture> _primitiveBatch;
-        private readonly VertexPositionColorTexture[] _spriteItemVertices = new VertexPositionColorTexture[4];
-        private readonly ITextureDrawContext _defaultDrawContext;
-
-        private readonly short[] _spriteItemIndices = {
+        private static readonly VertexPositionColorTexture[] _spriteItemVertices = new VertexPositionColorTexture[4];
+        private static readonly short[] _spriteItemIndices = {
             0,
             1,
             2,
@@ -19,44 +16,13 @@ namespace MonoGame.Extended.Graphics.Batching
             2
         };
 
-        public GraphicsDevice GraphicsDevice { get; }
-
-        public SpriteBatch(GraphicsDevice graphicsDevice, BatchDrawStrategy batchDrawStrategy = BatchDrawStrategy.UserPrimitives, IDrawContext defaultDrawContext = null, int maxmimumBatchSize = PrimitiveBatch<VertexPositionColor>.DefaultMaximumBatchSize)
-        {
-            if (graphicsDevice == null)
-            {
-                throw new ArgumentNullException(nameof(graphicsDevice));
-            }
-
-            GraphicsDevice = graphicsDevice;
-
-            if (defaultDrawContext == null)
-            {
-                var viewport = graphicsDevice.Viewport;
-                var basicEffect = new BasicEffect(graphicsDevice)
-                {
-                    VertexColorEnabled = true,
-                    TextureEnabled = true,
-                    Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1),
-                    World = Matrix.Identity,
-                    View = Matrix.Identity,
-                };
-                defaultDrawContext = _defaultDrawContext = new DefaultSpriteBatchDrawContext(basicEffect);
-            }
-            _primitiveBatch = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice, batchDrawStrategy, defaultDrawContext, maxmimumBatchSize);
-        }
-
-        public void Begin(BatchSortMode batchSortMode)
-        {
-            _primitiveBatch.Begin(batchSortMode);
-        }
-
-        public void Draw(Texture2D texture, Vector3 position, Rectangle? sourceRectangle = null, Color? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, ITextureDrawContext drawContext = null)
+        public static void DrawSprite(this PrimitiveBatch<VertexPositionColorTexture> primitiveBatch, Texture2D texture, Vector3 position, Rectangle? sourceRectangle = null, Color? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, ISpriteDrawContext drawContext = null) 
         {
             if (texture == null)
             {
                 throw new ArgumentNullException(nameof(texture));
             }
+
             var color1 = color ?? Color.White;
             var origin1 = origin ?? Vector2.Zero;
             var scale1 = scale ?? Vector2.One;
@@ -110,16 +76,10 @@ namespace MonoGame.Extended.Graphics.Batching
                 SetSpriteItemVertices(position.X, position.Y, -origin1.X, -origin1.Y, width, height, (float)Math.Sin(rotation), (float)Math.Cos(rotation), color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
             }
 
-            if (drawContext == null)
-            {
-                drawContext = _defaultDrawContext;
-            }
-
-            drawContext.Texture = texture;
-            _primitiveBatch.Draw(PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, drawContext);
+            primitiveBatch.Draw(PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, drawContext);
         }
 
-        public void SetSpriteItemVertices(float x, float y, float dx, float dy, float w, float h, float sin, float cos, Color color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)
+        private static void SetSpriteItemVertices(float x, float y, float dx, float dy, float w, float h, float sin, float cos, Color color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)
         {
             var topLeftPosition = new Vector3(x + dx * cos - dy * sin, y + dx * sin + dy * cos, depth);
             var topLeftVertex = new VertexPositionColorTexture(topLeftPosition, color, topLeftTextureCoordinate);
@@ -140,7 +100,7 @@ namespace MonoGame.Extended.Graphics.Batching
             _spriteItemVertices[3] = bottomRightVertex;
         }
 
-        public void SetSpriteItemVertices(float x, float y, float w, float h, Color color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)
+        private static void SetSpriteItemVertices(float x, float y, float w, float h, Color color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)
         {
             var topLeftPosition = new Vector3(x, y, depth);
             var topLeftVertex = new VertexPositionColorTexture(topLeftPosition, color, topLeftTextureCoordinate);
@@ -159,25 +119,6 @@ namespace MonoGame.Extended.Graphics.Batching
             var bottomRightPosition = new Vector3(x + w, y + h, depth);
             var bottomRightVertex = new VertexPositionColorTexture(bottomRightPosition, color, bottomRightTextureCoordinate);
             _spriteItemVertices[3] = bottomRightVertex;
-        }
-
-        public void End()
-        {
-            _primitiveBatch.End();
-        }
-
-        private class DefaultSpriteBatchDrawContext : EffectDrawContext<BasicEffect>, ITextureDrawContext
-        {
-            public Texture Texture
-            {
-                get { return Effect.Texture; }
-                set { Effect.Texture = (Texture2D)value; }
-            }
-
-            public DefaultSpriteBatchDrawContext(BasicEffect effect)
-                : base(effect)
-            {
-            }
         }
     }
 }

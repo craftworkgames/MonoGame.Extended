@@ -2,8 +2,8 @@
 
 namespace MonoGame.Extended.Graphics
 {
-    public interface IMesh<TVertexType>
-        where TVertexType : struct, IVertexType
+    public interface ISpriteDrawContext : IDrawContext
     {
+        Texture2D Texture { get; }
     }
 }

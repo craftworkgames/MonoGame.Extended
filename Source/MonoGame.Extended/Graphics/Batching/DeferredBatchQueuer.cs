@@ -7,6 +7,7 @@ namespace MonoGame.Extended.Graphics.Batching
     internal class DeferredBatchQueuer<TVertexType> : BatchQueuer<TVertexType>
         where TVertexType : struct, IVertexType
     {
+        private readonly List<uint> _drawOperationKeys = new List<uint>();  
         private readonly List<BatchDrawOperation> _drawOperations = new List<BatchDrawOperation>();
         private readonly BatchDrawOperation _emptyDrawOperation = new BatchDrawOperation((PrimitiveType)(-1), 0, 0, 0, 0, null);
         private BatchDrawOperation _currentOperation;

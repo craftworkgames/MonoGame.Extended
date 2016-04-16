@@ -13,12 +13,14 @@ namespace MonoGame.Extended.Graphics
             get { return Effect; }
         }
 
+        public uint SortKey { get; }
+
         public int PassesCount
         {
             get { return Effect.CurrentTechnique.Passes.Count; }
         }
 
-        public EffectDrawContext(TEffect effect)
+        public EffectDrawContext(TEffect effect, uint sortKey = 0)
         {
             if (effect == null)
             {
@@ -26,6 +28,7 @@ namespace MonoGame.Extended.Graphics
             }
 
             Effect = effect;
+            SortKey = sortKey;
         }
 
         public void Dispose()
@@ -44,20 +47,17 @@ namespace MonoGame.Extended.Graphics
             Effect?.Dispose();
         }
 
+        public virtual void Begin()
+        {
+        }
+
+        public virtual void End()
+        {
+        }
+
         public void ApplyPass(int passIndex)
         {
             Effect.CurrentTechnique.Passes[passIndex].Apply();
-        }
-
-        public override bool Equals(object other)
-        {
-            var otherContext = other as IEffectDrawContext;
-            return otherContext != null && ReferenceEquals(Effect, otherContext.Effect);
-        }
-
-        public override int GetHashCode()
-        {
-            return Effect?.GetHashCode() ?? 0;
         }
     }
 }

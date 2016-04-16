@@ -14,7 +14,7 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
-            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+            var defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice, defaultDrawContext);
             var immediateBatchQueuer = new ImmediateBatchQueuer<TestVertex>(userPrimitivesBatcher);
             Assert.IsNotNull(immediateBatchQueuer);
