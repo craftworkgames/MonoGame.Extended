@@ -1,7 +1,6 @@
-using System;
 using MonoGame.Extended.Particles;
 
-namespace MonoGame.Extended.Interpolation
+namespace MonoGame.Extended.Tweening
 {
     public class Range<T>
     {

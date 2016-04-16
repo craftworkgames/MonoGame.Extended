@@ -1,7 +1,7 @@
+using System;
 using Microsoft.Xna.Framework;
-using static System.Math;
 
-namespace MonoGame.Extended.Interpolation.Easing
+namespace MonoGame.Extended.Tweening.Easing
 {
     public class ElasticEasing : EasingFunction
     {
@@ -9,8 +9,8 @@ namespace MonoGame.Extended.Interpolation.Easing
         public double Springiness { get; set; } = 3;
 
         protected override double Function(double t) {
-            var e = (Exp(Springiness * t) - 1) / (Exp(Springiness) - 1);
-            return e * Sin((MathHelper.PiOver2 + MathHelper.TwoPi * Oscillations) * t);
+            var e = (Math.Exp(Springiness * t) - 1) / (Math.Exp(Springiness) - 1);
+            return e * Math.Sin((MathHelper.PiOver2 + MathHelper.TwoPi * Oscillations) * t);
         }
     }
 }

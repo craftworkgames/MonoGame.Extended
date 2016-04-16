@@ -1,4 +1,4 @@
-﻿namespace MonoGame.Extended.Interpolation.Easing
+﻿namespace MonoGame.Extended.Tweening.Easing
 {
     public sealed class LinearEasing : EasingFunction
     {

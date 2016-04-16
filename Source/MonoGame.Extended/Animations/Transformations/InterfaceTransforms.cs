@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Interpolation.Easing;
+using MonoGame.Extended.Tweening.Easing;
 
 namespace MonoGame.Extended.Animations.Transformations
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using MonoGame.Extended.Interpolation.Easing;
+using MonoGame.Extended.Tweening.Easing;
 
 namespace MonoGame.Extended.Animations.Transformations
 {

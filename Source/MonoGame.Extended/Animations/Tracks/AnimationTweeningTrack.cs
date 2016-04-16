@@ -25,7 +25,6 @@ namespace MonoGame.Extended.Animations.Tracks
             if (track == null) return false;
             return track.GetTransforms().First().GetType() == _transforms[0].GetType();
         }
-
         public AnimationTweeningTrack(params ITweenTransform<TTransformable>[] transforms) {
             Add(transforms);
         }

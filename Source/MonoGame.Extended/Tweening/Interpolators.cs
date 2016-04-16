@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Particles;
 
-namespace MonoGame.Extended.Interpolation
+namespace MonoGame.Extended.Tweening
 {
     public class DoubleInterpolator : Interpolator<double>
     {

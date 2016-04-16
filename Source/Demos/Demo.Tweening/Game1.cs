@@ -6,8 +6,8 @@ using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.Fluent;
 using MonoGame.Extended.Animations.Tracks;
 using MonoGame.Extended.Animations.Transformations;
-using MonoGame.Extended.Interpolation.Easing;
 using MonoGame.Extended.Sprites;
+using MonoGame.Extended.Tweening.Easing;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Tweening
@@ -61,9 +61,7 @@ namespace Demo.Tweening
                 .Tween(s => s.Color, 1000, Color.White);
             _animatorComponent.AddAnimation(animation);
             _animatorComponent.RunAnimation("testanimation", true);
-
-            var group = new AnimationTrackGroup<Sprite>(_sprite);
-            group.
+            
         }
 
         protected override void UnloadContent() {

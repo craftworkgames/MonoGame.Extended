@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MonoGame.Extended.Interpolation
+namespace MonoGame.Extended.Tweening
 {
     public static class InterpolatorStore
     {
@@ -23,6 +23,6 @@ namespace MonoGame.Extended.Interpolation
             return null;
         }
 
-        public static Interpolator<object> DynamicInterpolator = Interpolation.DynamicInterpolator.Singleton;
+        public static Interpolator<object> DynamicInterpolator = Tweening.DynamicInterpolator.Singleton;
     }
 }

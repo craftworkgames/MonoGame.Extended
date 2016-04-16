@@ -1,6 +1,4 @@
-using System;
-
-namespace MonoGame.Extended.Interpolation
+namespace MonoGame.Extended.Tweening
 {
     /// <summary>
     /// Don't use this, make a custom interpolator and register it in the store.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonoGame.Extended.Interpolation.Easing
+namespace MonoGame.Extended.Tweening.Easing
 {
     public abstract class EasingFunction
     {

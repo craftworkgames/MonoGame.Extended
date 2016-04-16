@@ -2,12 +2,12 @@
 
 namespace MonoGame.Extended.Animations.Animatable
 {
-    public class DelegateProperty<T>
+    public class DelegateProperty<TTransformable,TValue>
     {
-        public Func<T> Getter { get; set; }
-        public Action<T> Setter { get; set; }
+        public Func<TTransformable, TValue> Getter { get; set; }
+        public Action<TTransformable, TValue> Setter { get; set; }
 
-        public DelegateProperty(Func<T> getter, Action<T> setter) {
+        public DelegateProperty(Func<TTransformable, TValue> getter, Action<TTransformable, TValue> setter) {
             Getter = getter;
             Setter = setter;
         }

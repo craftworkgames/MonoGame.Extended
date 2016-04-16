@@ -1,7 +1,6 @@
-﻿using System.Runtime.InteropServices.ComTypes;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Interpolation.Easing
+namespace MonoGame.Extended.Tweening.Easing
 {
     public sealed class CubicBezierEasing : EasingFunction
     {

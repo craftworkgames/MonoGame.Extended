@@ -1,6 +1,9 @@
-﻿namespace MonoGame.Extended.Interpolation
+﻿namespace MonoGame.Extended.Tweening
 {
-
+    /// <summary>
+    /// Holds functions for basic math operations for generic types
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class Interpolator<T> //where T : struct
     {
         public abstract T Add(T t1, T t2);

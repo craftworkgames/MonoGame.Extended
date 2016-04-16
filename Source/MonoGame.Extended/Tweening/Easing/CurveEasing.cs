@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Interpolation.Easing
+namespace MonoGame.Extended.Tweening.Easing
 {
     public class CurveEasing : EasingFunction
     {
