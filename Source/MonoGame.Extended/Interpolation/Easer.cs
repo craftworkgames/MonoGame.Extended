@@ -7,10 +7,11 @@ namespace MonoGame.Extended.Interpolation
 {
     public class Easer<T>
     {
-        private static Interpolator<T> _interpolator;
+        // One will be created for each Type instance of Easer
+        private static readonly Interpolator<T> INTERPOLATOR;
 
         static Easer() {
-            _interpolator = InterpolatorStore.GetRegistered<T>();
+            INTERPOLATOR = InterpolatorStore.GetRegistered<T>();
         }
 
         public Easer(T endval) {
@@ -21,24 +22,44 @@ namespace MonoGame.Extended.Interpolation
         }
 
         private T _startValue;
+        private T _difference;
         public Range<T> ValueRange { get; set; }
-        public T EndValue { get; set; }
+
+        public T EndValue
+        {
+            get
+            {
+                return INTERPOLATOR == null
+                    ? DynamicInterpolator.Singleton.Add(_startValue, _difference)
+                    : INTERPOLATOR.Add(_startValue, _difference);
+            }
+            set
+            {
+                _difference = INTERPOLATOR == null
+                  ? DynamicInterpolator.Singleton.Substract(value, _startValue)
+                  : INTERPOLATOR.Substract(value, _startValue);
+            }
+        }
+
         public EasingFunction Easing { get; set; } = EasingFunction.None;
 
-        public T Ease(double t) {
-            if (_startValue.Equals(EndValue)) return EndValue;
-            return Interpolate(_startValue, EndValue, Easing.Ease(t));
+        public T Ease(double t, EasingFunction easing = null) {
+            t = (easing ?? Easing).Ease(t);
+            return INTERPOLATOR == null
+                ? (T)DynamicInterpolator.Singleton.Add(_startValue, (T)DynamicInterpolator.Singleton.Mult(_difference,  t))
+                : INTERPOLATOR.Add(_startValue, INTERPOLATOR.Mult(_difference, Easing.Ease(t)));
         }
 
-        private T Interpolate(T start, T end, double t) {
-            return _interpolator == null
-                ? (T)DynamicInterpolator.Singleton.Interpolate(start, end, t)
-                : _interpolator.Interpolate(start, end, t);
-        }
+
 
         public void SetStartvalue(T startvalue) {
             _startValue = startvalue;
-            if (ValueRange != null) EndValue = Interpolate(ValueRange.Min, ValueRange.Max, FastRand.NextSingle());
+            if (ValueRange != null) {
+                double t = FastRand.NextSingle();
+                EndValue = INTERPOLATOR == null
+                    ? (T)DynamicInterpolator.Singleton.Interpolate(ValueRange.Min, ValueRange.Max, t)
+                    : INTERPOLATOR.Interpolate(ValueRange.Min, ValueRange.Max, t);
+            }
         }
     }
 }

@@ -2,6 +2,9 @@ using System;
 
 namespace MonoGame.Extended.Interpolation
 {
+    /// <summary>
+    /// Don't use this, make a custom interpolator and register it in the store.
+    /// </summary>
     public class DynamicInterpolator : Interpolator<object>
     {
         private DynamicInterpolator() {}

@@ -36,12 +36,13 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Animations\Animatable\DelegateProperty.cs" />
     <Compile Include="Animations\Animatable\IAnimatableProperty.cs" />
     <Compile Include="Animations\AnimationBlendTypes.cs" />
     <Compile Include="Animations\AnimationEvent.cs" />
     <Compile Include="Animations\Animatable\IAnimatable.cs" />
     <Compile Include="Interpolation\DynamicInterpolator.cs" />
-    <Compile Include="Interpolation\DoubleInterpolator.cs" />
+    <Compile Include="Interpolation\Interpolators.cs" />
     <Compile Include="Interpolation\Easer.cs" />
     <Compile Include="Interpolation\Easing\BounceEasing.cs" />
     <Compile Include="Interpolation\Easing\BackEasing.cs" />
