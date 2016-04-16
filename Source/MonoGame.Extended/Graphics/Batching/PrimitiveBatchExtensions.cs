@@ -69,17 +69,17 @@ namespace MonoGame.Extended.Graphics.Batching
             // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (rotation == 0f)
             {
-                SetSpriteItemVertices(position.X - origin1.X, position.Y - origin1.Y, width, height, color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
+                SetSpriteItemVertices(position.X - origin1.X, position.Y - origin1.Y, width, height, ref color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
             }
             else
             {
-                SetSpriteItemVertices(position.X, position.Y, -origin1.X, -origin1.Y, width, height, (float)Math.Sin(rotation), (float)Math.Cos(rotation), color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
+                SetSpriteItemVertices(position.X, position.Y, -origin1.X, -origin1.Y, width, height, (float)Math.Sin(rotation), (float)Math.Cos(rotation), ref color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
             }
 
             primitiveBatch.Draw(PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, drawContext);
         }
 
-        private static void SetSpriteItemVertices(float x, float y, float dx, float dy, float w, float h, float sin, float cos, SpriteColor color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)
+        private static void SetSpriteItemVertices(float x, float y, float dx, float dy, float w, float h, float sin, float cos, ref SpriteColor color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)
         {
             var topLeftPosition = new Vector3(x + dx * cos - dy * sin, y + dx * sin + dy * cos, depth);
             var topLeftVertex = new VertexPositionColorTexture(topLeftPosition, color.TopLeftColor, topLeftTextureCoordinate);
@@ -100,7 +100,7 @@ namespace MonoGame.Extended.Graphics.Batching
             _spriteItemVertices[3] = bottomRightVertex;
         }
 
-        private static void SetSpriteItemVertices(float x, float y, float w, float h, SpriteColor color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)
+        private static void SetSpriteItemVertices(float x, float y, float w, float h, ref SpriteColor color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)
         {
             var topLeftPosition = new Vector3(x, y, depth);
             var topLeftVertex = new VertexPositionColorTexture(topLeftPosition, color.TopLeftColor, topLeftTextureCoordinate);

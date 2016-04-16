@@ -82,7 +82,6 @@ namespace Demo.PrimitiveBatch
 
             // use a stock vertex and pixel shader
             var basicEffect = new BasicEffect(graphicsDevice);
-            //basicEffect.EnableDefaultLighting();
             // create a context for drawing with PrimitiveBatch
             _basicEffectDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
 
