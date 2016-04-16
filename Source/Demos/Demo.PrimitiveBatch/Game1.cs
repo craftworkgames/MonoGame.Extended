@@ -82,6 +82,7 @@ namespace Demo.PrimitiveBatch
 
             // use a stock vertex and pixel shader
             var basicEffect = new BasicEffect(graphicsDevice);
+            //basicEffect.EnableDefaultLighting();
             // create a context for drawing with PrimitiveBatch
             _basicEffectDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
 
@@ -143,7 +144,7 @@ namespace Demo.PrimitiveBatch
             _primitiveBatchPositionColor.End();
 
             // change the state the basic effect draw context for classic sprite drawing to screen universe just like SpriteBatch
-            basicEffect.VertexColorEnabled = false;
+            basicEffect.VertexColorEnabled = true;
             basicEffect.TextureEnabled = true;
             basicEffect.World = _spriteBatchWorld;
             basicEffect.View = _spriteBatchCamera;
@@ -152,7 +153,8 @@ namespace Demo.PrimitiveBatch
 
             // draw the sprite in the screen universe using the VertexPositionColorTexture PrimitiveBatch
             _primitiveBatchPositionColorTexture.Begin(BatchSortMode.Immediate);
-            _primitiveBatchPositionColorTexture.DrawSprite(_texture, Vector3.Zero);
+            var spriteColor = new SpriteColor(Color.White, Color.Black, Color.White, Color.White);
+            _primitiveBatchPositionColorTexture.DrawSprite(_texture, Vector3.Zero, color: spriteColor);
             _primitiveBatchPositionColorTexture.End();
 
             base.Draw(gameTime);
