@@ -79,40 +79,26 @@ namespace Demo.SpriteSheetAnimations
 
             // camera
             if (keyboardState.IsKeyDown(Keys.R))
-            {
                 _camera.ZoomIn(deltaSeconds);
-            }
 
             if (keyboardState.IsKeyDown(Keys.F))
-            {
                 _camera.ZoomOut(deltaSeconds);
-            }
 
             // zombie
             if (keyboardState.IsKeyDown(Keys.Left))
-            {
                 _zombie.Walk(-1.0f);
-            }
 
             if (keyboardState.IsKeyDown(Keys.Right))
-            {
                 _zombie.Walk(1.0f);
-            }
 
             if (keyboardState.IsKeyDown(Keys.Space))
-            {
                 _zombie.Attack();
-            }
 
             if (keyboardState.IsKeyDown(Keys.Up))
-            {
                 _zombie.Jump();
-            }
 
             if (keyboardState.IsKeyDown(Keys.Enter))
-            {
                 _zombie.Die();
-            }
 
             // update must be called before collision detection
             _zombie.Update(gameTime);

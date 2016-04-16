@@ -116,7 +116,13 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         private static void WritePolyPoints(ContentWriter writer, string polyPointsString)
         {
             var points = polyPointsString.Split(' ')
-                            .Select(p => { var xy = p.Split(','); return new Vector2(float.Parse(xy[0]), float.Parse(xy[1])); })
+                            .Select(p =>
+                            {
+                                var xy = p.Split(',');
+                                var x = float.Parse(xy[0], CultureInfo.InvariantCulture.NumberFormat);
+                                var y = float.Parse(xy[1], CultureInfo.InvariantCulture.NumberFormat);
+                                return new Vector2(x, y);
+                            })
                             .ToArray();
 
             writer.Write(points.Length);
