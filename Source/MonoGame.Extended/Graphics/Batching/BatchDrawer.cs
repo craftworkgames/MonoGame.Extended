@@ -31,8 +31,8 @@ namespace MonoGame.Extended.Graphics.Batching
             GraphicsDevice = null;
         }
 
-        internal abstract void Begin(IDrawContext drawContext, TVertexType[] vertices);
-        internal abstract void Begin(IDrawContext drawContext, TVertexType[] vertices, short[] indices);
+        internal abstract void Begin(Effect effect, TVertexType[] vertices);
+        internal abstract void Begin(Effect effect, TVertexType[] vertices, short[] indices);
         internal abstract void End();
         internal abstract void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount);
         internal abstract void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount);

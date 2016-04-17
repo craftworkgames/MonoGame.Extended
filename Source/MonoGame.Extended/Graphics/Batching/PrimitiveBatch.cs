@@ -93,11 +93,11 @@ namespace MonoGame.Extended.Graphics.Batching
             }
         }
 
-        public void Begin(BatchSortMode sortMode, IDrawContext drawContext)
+        public void Begin(BatchSortMode sortMode, Effect effect)
         {
-            if (drawContext == null)
+            if (effect == null)
             {
-                throw new ArgumentNullException(nameof(drawContext));
+                throw new ArgumentNullException(nameof(effect));
             }
 
             EnsureHasNotBegun();
@@ -113,7 +113,7 @@ namespace MonoGame.Extended.Graphics.Batching
                 default:
                     throw new ArgumentOutOfRangeException(nameof(sortMode));
             }
-            _currentBatchQueuer.Begin(drawContext);
+            _currentBatchQueuer.Begin(effect);
         }
 
         public void End()

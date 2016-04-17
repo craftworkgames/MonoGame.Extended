@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Graphics.Batching
     {
         private TVertexType[] _vertices;
         private short[] _indices;
-        private IDrawContext _drawContext;
+        private Effect _effect;
 
         internal UserPrimitivesBatchDrawer(GraphicsDevice graphicsDevice, int maximumBatchSize = PrimitiveBatch<TVertexType>.DefaultMaximumBatchSize)
             : base(graphicsDevice, maximumBatchSize)
@@ -27,41 +27,37 @@ namespace MonoGame.Extended.Graphics.Batching
             _indices = null;
         }
 
-        internal override void Begin(IDrawContext drawContext, TVertexType[] vertices)
+        internal override void Begin(Effect effect, TVertexType[] vertices)
         {
-            Debug.Assert(drawContext != null);
+            Debug.Assert(effect != null);
             Debug.Assert(vertices != null);
 
-            _drawContext = drawContext;
-            _drawContext.Begin();
+            _effect = effect;
             _vertices = vertices;
         }
 
-        internal override void Begin(IDrawContext drawContext, TVertexType[] vertices, short[] indices)
+        internal override void Begin(Effect effect, TVertexType[] vertices, short[] indices)
         {
-            Debug.Assert(drawContext != null);
+            Debug.Assert(effect != null);
             Debug.Assert(vertices != null);
             Debug.Assert(indices != null);
 
-            _drawContext = drawContext;
-            _drawContext.Begin();
+            _effect = effect;
             _vertices = vertices;
             _indices = indices;
         }
 
         internal override void End()
         {
-            _drawContext.End();
         }
 
         internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount)
         {
             var primitiveCount = primitiveType.GetPrimitiveCount(vertexCount);
 
-            var passesCount = _drawContext.PassesCount;
-            for (var passIndex = 0; passIndex < passesCount; ++passIndex)
+            foreach (var pass in _effect.CurrentTechnique.Passes)
             {
-                _drawContext.ApplyPass(passIndex);
+                pass.Apply();
                 GraphicsDevice.DrawUserPrimitives(primitiveType, _vertices, startVertex, primitiveCount);
             }
         }
@@ -70,10 +66,9 @@ namespace MonoGame.Extended.Graphics.Batching
         {
             var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
 
-            var passesCount = _drawContext.PassesCount;
-            for (var passIndex = 0; passIndex < passesCount; ++passIndex)
+            foreach (var pass in _effect.CurrentTechnique.Passes)
             {
-                _drawContext.ApplyPass(passIndex);
+                pass.Apply();
                 GraphicsDevice.DrawUserIndexedPrimitives(primitiveType, _vertices, startVertex, vertexCount, _indices, startIndex, primitiveCount);
             }
         }

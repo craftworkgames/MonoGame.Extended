@@ -23,7 +23,7 @@ namespace MonoGame.Extended.Graphics.Batching
         private int _usedVertexCount;
         private readonly short[] _indices;
         private int _usedIndexCount;
-        private IDrawContext _drawContext;
+        private Effect _effect;
 
         internal DeferredBatchQueuer(BatchDrawer<TVertexType> batchDrawer, Action<Array, Array> sortKeyValueArraysMethod)
             : base(batchDrawer)
@@ -55,10 +55,10 @@ namespace MonoGame.Extended.Graphics.Batching
             _drawOperationsCount++;
         }
 
-        internal override void Begin(IDrawContext drawContext)
+        internal override void Begin(Effect effect)
         {
-            Debug.Assert(drawContext != null);
-            _drawContext = drawContext;
+            Debug.Assert(effect != null);
+            _effect = effect;
         }
 
         internal override void End()
@@ -75,11 +75,11 @@ namespace MonoGame.Extended.Graphics.Batching
 
             if (_usedIndexCount == 0)
             {
-                BatchDrawer.Begin(_drawContext, _vertices);
+                BatchDrawer.Begin(_effect, _vertices);
             }
             else
             {
-                BatchDrawer.Begin(_drawContext, _vertices, _indices);
+                BatchDrawer.Begin(_effect, _vertices, _indices);
             }
 
             _sortKeyValueArraysMethod(_drawOperationKeys, _drawOperations);

@@ -10,12 +10,12 @@ namespace MonoGame.Extended.Graphics.Batching
         {
         }
 
-        internal override void Begin(IDrawContext drawContext, TVertexType[] vertices)
+        internal override void Begin(Effect effect, TVertexType[] vertices)
         {
             throw new NotImplementedException();
         }
 
-        internal override void Begin(IDrawContext drawContext, TVertexType[] vertices, short[] indices)
+        internal override void Begin(Effect effect, TVertexType[] vertices, short[] indices)
         {
             throw new NotImplementedException();
         }

@@ -11,7 +11,7 @@ namespace MonoGame.Extended.Graphics.Batching
         {
         }
 
-        internal override void Begin(IDrawContext drawContext)
+        internal override void Begin(Effect effect)
         {
             throw new NotImplementedException();
         }

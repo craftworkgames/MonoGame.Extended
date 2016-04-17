@@ -30,10 +30,9 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
-            var drawContext = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice);
             var vertices = new TestVertex[9];
-            userPrimitivesBatcher.Begin(drawContext, vertices);
+            userPrimitivesBatcher.Begin(basicEffect, vertices);
             userPrimitivesBatcher.Draw(PrimitiveType.TriangleList, 0, 9);
             userPrimitivesBatcher.End();
         }
@@ -43,11 +42,10 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
-            var drawContext = new EffectDrawContext<BasicEffect>(basicEffect, 0);
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice);
             var vertices = new TestVertex[9];
             var indices = new short[9];
-            userPrimitivesBatcher.Begin(drawContext, vertices, indices);
+            userPrimitivesBatcher.Begin(basicEffect, vertices, indices);
             userPrimitivesBatcher.Draw(PrimitiveType.TriangleList, 0, 9, 0, 9);
             userPrimitivesBatcher.End();
         }

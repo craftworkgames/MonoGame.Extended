@@ -12,7 +12,7 @@ namespace Demo.PrimitiveBatch
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
-        private EffectDrawContext<BasicEffect> _basicEffectDrawContext;
+        private BasicEffect _basicEffect;
         private PrimitiveBatch<VertexPositionColor> _primitiveBatchPositionColor;
         private PrimitiveBatch<VertexPositionColorTexture> _primitiveBatchPositionColorTexture;
         private Texture2D _texture;
@@ -82,9 +82,7 @@ namespace Demo.PrimitiveBatch
             _spriteBatchWorld = Matrix.Identity;
 
             // use a stock vertex and pixel shader
-            var basicEffect = new BasicEffect(graphicsDevice);
-            // create a context for drawing with PrimitiveBatch
-            _basicEffectDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+            _basicEffect = new BasicEffect(graphicsDevice);
 
             // create the VertexPositionColor PrimitiveBatch
             _primitiveBatchPositionColor = new PrimitiveBatch<VertexPositionColor>(graphicsDevice, Array.Sort);
@@ -127,34 +125,31 @@ namespace Demo.PrimitiveBatch
         {
             // clear the (pixel) buffers to a specific color
             GraphicsDevice.Clear(Color.CornflowerBlue);
- 
-            // get a reference to the basic effect
-            var basicEffect = _basicEffectDrawContext.Effect;
 
-            // change the state the basic effect draw context for cartesian universe drawing
-            basicEffect.VertexColorEnabled = true;
-            basicEffect.TextureEnabled = false;
-            basicEffect.World = _cartesianWorld;
-            basicEffect.View = _cartesianCamera2D;
-            basicEffect.Projection = _cartesianProjection2D;
+            // change the state the basic effect for cartesian universe drawing
+            _basicEffect.VertexColorEnabled = true;
+            _basicEffect.TextureEnabled = false;
+            _basicEffect.World = _cartesianWorld;
+            _basicEffect.View = _cartesianCamera2D;
+            _basicEffect.Projection = _cartesianProjection2D;
 
             // draw the polygon mesh in the cartesian universe using the VertexPositionColor PrimitiveBatch
-            _primitiveBatchPositionColor.Begin(BatchSortMode.Immediate, _basicEffectDrawContext);
+            _primitiveBatchPositionColor.Begin(BatchSortMode.Immediate, _basicEffect);
             _primitiveBatchPositionColor.DrawPolygonMesh(_polygonMesh);
             _primitiveBatchPositionColor.End();
 
             // change the state the basic effect draw context for classic sprite drawing to screen universe just like SpriteBatch
-            basicEffect.VertexColorEnabled = true;
-            basicEffect.TextureEnabled = true;
-            basicEffect.World = _spriteBatchWorld;
-            basicEffect.View = _spriteBatchCamera;
-            basicEffect.Projection = _spriteBatchProjection;
-            basicEffect.Texture = _texture;
+            _basicEffect.VertexColorEnabled = true;
+            _basicEffect.TextureEnabled = true;
+            _basicEffect.World = _spriteBatchWorld;
+            _basicEffect.View = _spriteBatchCamera;
+            _basicEffect.Projection = _spriteBatchProjection;
+            _basicEffect.Texture = _texture;
 
             // draw the sprite in the screen universe using the VertexPositionColorTexture PrimitiveBatch
-            _primitiveBatchPositionColorTexture.Begin(BatchSortMode.Immediate, _basicEffectDrawContext);
+            _primitiveBatchPositionColorTexture.Begin(BatchSortMode.Immediate, _basicEffect);
             var spriteColor = new SpriteColor(Color.White, Color.Black, Color.White, Color.White);
-            var textureRegion = new TextureRegion<Texture2D>(_texture);
+            var textureRegion = new TextureRegion<Texture2D>(_texture, null);
             _primitiveBatchPositionColorTexture.DrawSprite(textureRegion, Vector3.Zero, color: spriteColor);
             _primitiveBatchPositionColorTexture.End();
 
