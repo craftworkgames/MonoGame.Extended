@@ -41,7 +41,7 @@
     <Compile Include="Animations\AnimationBlendTypes.cs" />
     <Compile Include="Animations\AnimationEvent.cs" />
     <Compile Include="Animations\Animatable\IAnimatable.cs" />
-    <Compile Include="Animations\Fluent\FluentTrackExtensions.cs" />
+    <Compile Include="Tweening\Animation\IAnimation.cs" />
     <Compile Include="Tweening\Animation\Tracks\DelegateTrack.cs" />
     <Compile Include="Tweening\Animation\Tracks\ITrack.cs" />
     <Compile Include="Tweening\Animation\Tracks\MovableTrack.cs" />
@@ -50,6 +50,7 @@
     <Compile Include="Tweening\Animation\Tracks\ScalableTrack.cs" />
     <Compile Include="Tweening\Animation\Tracks\Track.cs" />
     <Compile Include="Tweening\Animation\Transformation.cs" />
+    <Compile Include="Tweening\Animation\TypeAnimation.cs" />
     <Compile Include="Tweening\DynamicInterpolator.cs" />
     <Compile Include="Tweening\Interpolators.cs" />
     <Compile Include="Tweening\Easer.cs" />
@@ -73,7 +74,7 @@
     <Compile Include="Animations\Tracks\AnimationTrackGroup.cs" />
     <Compile Include="Animations\Tracks\AnimationTweeningTrack.cs" />
     <Compile Include="Tweening\Interpolator.cs" />
-    <Compile Include="Animations\TweeningAnimatorComponent.cs" />
+    <Compile Include="Tweening\Animation\TweeningAnimatorComponent.cs" />
     <Compile Include="Animations\Fluent\FluentAnimationExtensions.cs" />
     <Compile Include="Animations\Tracks\IAnimationTrack.cs" />
     <Compile Include="Animations\Tracks\IAnimationTrackGroup.cs" />
@@ -92,11 +93,6 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
-    <Compile Include="Entities\AnimatorComponent.cs" />
-    <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Entities\EntityComponent.cs" />
-    <Compile Include="Entities\TextureComponent.cs" />
-    <Compile Include="Entities\Transform2D.cs" />
     <Compile Include="Tweening\InterpolatorStore.cs" />
     <Compile Include="Tweening\Range.cs" />
     <Compile Include="IPoolable.cs" />

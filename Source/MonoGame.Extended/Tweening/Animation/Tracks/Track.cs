@@ -20,7 +20,7 @@ namespace MonoGame.Extended.Tweening.Animation.Tracks
         //after running
         private Transformation<TValue> _previous;
         public void Update(double time) {
-            Transformation<TValue> previous = null, current = null;
+            Transformation<TValue> next = null, current = null;
             var count = Transforms.Count;
             if (time <= Transforms[0].Time) {
                 Set(Transforms[0].Value);
@@ -32,9 +32,9 @@ namespace MonoGame.Extended.Tweening.Animation.Tracks
             }
 
             for (int i = 0; i < count; i++) {
-                previous = Transforms[i];
-                if (previous.Time < time) continue;
-                current = Transforms[i + 1];
+                current = Transforms[i];
+                if (current.Time < time) continue;
+                next = Transforms[i + 1];
                 if (current.Tween) break;
                 Set(current.Value);
                 return;
@@ -42,11 +42,11 @@ namespace MonoGame.Extended.Tweening.Animation.Tracks
 
             if (current != _previous) {
                 _previous = current;
-                Easer.Startvalue = current.Value;
-                Easer.Endvalue = previous.Value;
+                Easer.SetValues(current.Value, next.Value);
+                Easer.Easing = current.Easing ?? DefaultEasing ?? EasingFunction.None;
             }
-            var start = previous.Time;
-            Easer.Ease((current.Time - start) / (time - start), current.Easing);
+            var start = current.Time;
+            Easer.Ease((next.Time - start) / (time - start));
         }
 
     }

@@ -4,20 +4,45 @@ namespace MonoGame.Extended.Tweening.Easing
 {
     public sealed class CubicBezierEasing : EasingFunction
     {
-        private object _curve;
+        private readonly Vector2 _controlPoint1;
+        private readonly Vector2 _controlPoint2;
+        private Vector2[] _points;
+
 
         /// <summary>
         /// Creates a cubic bezier object used for easing.
         /// First point = 0,0 and Fourth point = 1,1.
         /// </summary>
-        /// <param name="pos2">Second bezier control point</param>
-        /// <param name="pos3">Third bezier control point</param>
-        public CubicBezierEasing(Vector2 pos2, Vector2 pos3) {
-            _curve = null; //TODO make a C. bézier curve with startpoint (0,0) and endpoint (1,1)
+        /// <param name="controlPoint1">Second bezier control point</param>
+        /// <param name="controlPoint2">Third bezier control point</param>
+        public CubicBezierEasing(Vector2 controlPoint1, Vector2 controlPoint2, int resolution) {
+            _controlPoint1 = controlPoint1;
+            _controlPoint2 = controlPoint2;
+            _points = new Vector2[resolution];
+            for (int i = 1; i < resolution; i++) {
+                _points[i - 1] = PosAt(1f * i / resolution);
+            }
+            _points[resolution - 1] = Vector2.One;
         }
-        public CubicBezierEasing(float x1, float y1, float x2, float y2) : this(new Vector2(x1, y1), new Vector2(x2, y2)) { }
+
+        public CubicBezierEasing(float x1, float y1, float x2, float y2, int resolution = 19) : this(new Vector2(x1, y1), new Vector2(x2, y2), resolution) { }
         protected override double Function(double t) {
-            return 1; //TODO evaluate curve
+            for (int i = 0; i < _points.Length; i++) {
+                if (t > _points[i].X) continue;
+                var prev = i > 0 ? _points[i - 1] : Vector2.Zero;
+                var current = _points[i];
+                var d = (t - prev.X) / (current.X - prev.X);
+                return (current.Y - prev.Y) * d + prev.Y;
+            }
+            return 1;
+        }
+
+        private Vector2 PosAt(float t) {
+            var i = 1 - t;
+            return
+                3 * i * i * t * _controlPoint1 +
+                3 * i * t * t * _controlPoint2 +
+                t * t * t * Vector2.One;
         }
 
         /// <summary>

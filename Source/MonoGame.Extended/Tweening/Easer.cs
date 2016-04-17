@@ -37,18 +37,25 @@ namespace MonoGame.Extended.Tweening
             }
         }
 
+        public void SetValues(T startvalue, T endvalue) {
+            _startvalue = startvalue;
+            _endvalue = endvalue;
+            _difference = INTERPOLATOR == null
+                ? DynamicInterpolator.Singleton.Substract(Endvalue, Startvalue)
+                : INTERPOLATOR.Substract(Endvalue, Startvalue);
+        }
+
         private T _difference;
         private T _startvalue;
         private T _endvalue;
-        public Range<T> ValueRange { get; set; }
+       // public Range<T> ValueRange { get; set; }
 
 
         public EasingFunction Easing { get; set; } = EasingFunction.None;
 
-        public T Ease(double t, EasingFunction easing = null) {
-            t = (easing ?? Easing).Ease(t);
+        public T Ease(double t) {
             return INTERPOLATOR == null
-                ? (T)DynamicInterpolator.Singleton.Add(_startvalue, (T)DynamicInterpolator.Singleton.Mult(_difference, t))
+                ? (T)DynamicInterpolator.Singleton.Add(_startvalue, (T)DynamicInterpolator.Singleton.Mult(_difference, Easing.Ease(t)))
                 : INTERPOLATOR.Add(_startvalue, INTERPOLATOR.Mult(_difference, Easing.Ease(t)));
         }
 

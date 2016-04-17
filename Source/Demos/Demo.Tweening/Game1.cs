@@ -7,6 +7,7 @@ using MonoGame.Extended.Animations.Fluent;
 using MonoGame.Extended.Animations.Tracks;
 using MonoGame.Extended.Animations.Transformations;
 using MonoGame.Extended.Sprites;
+using MonoGame.Extended.Tweening.Animation;
 using MonoGame.Extended.Tweening.Easing;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -61,7 +62,7 @@ namespace Demo.Tweening
                 .Tween(s => s.Color, 1000, Color.White);
             _animatorComponent.AddAnimation(animation);
             _animatorComponent.RunAnimation("testanimation", true);
-            
+
         }
 
         protected override void UnloadContent() {
@@ -88,6 +89,11 @@ namespace Demo.Tweening
             if (keyboardState.IsKeyDown(Keys.I)) _testFunction = PowerEasing.CubicEasing;
             if (keyboardState.IsKeyDown(Keys.O)) _testFunction = PowerEasing.QuinticEasing;
             if (keyboardState.IsKeyDown(Keys.P)) _testFunction = new SinusoidalEasing();
+            if (keyboardState.IsKeyDown(Keys.Z)) _testFunction = CubicBezierEasing.EaseIn;
+            if (keyboardState.IsKeyDown(Keys.X)) _testFunction = CubicBezierEasing.EaseInOut;
+            if (keyboardState.IsKeyDown(Keys.C)) _testFunction = CubicBezierEasing.EaseOut;
+            if (keyboardState.IsKeyDown(Keys.V)) _testFunction = new CubicBezierEasing(1, 0, 1, 0);
+            if (keyboardState.IsKeyDown(Keys.B)) _testFunction = new CubicBezierEasing(0, 1, 0, 1);
 
             if (keyboardState.IsKeyDown(Keys.NumPad0)) _testFunction.StepCount = null;
             if (keyboardState.IsKeyDown(Keys.NumPad1)) _testFunction.StepCount = 1;
@@ -105,7 +111,7 @@ namespace Demo.Tweening
 
             base.Update(gameTime);
 
-            
+
         }
 
         private EasingFunction _testFunction = EasingFunction.None;
@@ -117,7 +123,7 @@ namespace Demo.Tweening
             _spriteBatch.Draw(_sprite);
             for (int i = 0; i < 460; i++) {
                 var t = i / 460f;
-                _spriteBatch.Draw(_logoTexture, new Vector2(330 + t * 460,10+ (1 - (float)_testFunction.Ease(t)) * 460), scale: new Vector2(0.05f, 0.05f));
+                _spriteBatch.Draw(_logoTexture, new Vector2(330 + t * 460, 10 + (1 - (float)_testFunction.Ease(t)) * 460), scale: new Vector2(0.05f, 0.05f));
             }
 
             _spriteBatch.End();

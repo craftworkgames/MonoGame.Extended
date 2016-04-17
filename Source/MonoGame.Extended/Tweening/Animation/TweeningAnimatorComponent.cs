@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Animations
+namespace MonoGame.Extended.Tweening.Animation
 {
     public class TweeningAnimatorComponent : GameComponent
     {
         private readonly List<RunningAnimation> _runningAnimations = new List<RunningAnimation>();
         private double _currentTime;
-        private readonly List<Animation> _animations = new List<Animation>();
+        private readonly List<Animations.Animation> _animations = new List<Animations.Animation>();
 
         public TweeningAnimatorComponent(Game game) : base(game) { }
 
-        public void AddAnimation(Animation animation) {
+        public void AddAnimation(Animations.Animation animation) {
             _animations.Add(animation);
         }
 
@@ -37,13 +37,13 @@ namespace MonoGame.Extended.Animations
             _runningAnimations.Clear();
         }
 
-        public void RunAnimation(Animation animation, bool keeprunning, bool overridelayer = true) {
+        public void RunAnimation(Animations.Animation animation, bool keeprunning, bool overridelayer = true) {
             _runningAnimations.RemoveAll(a => a.Animation == animation || overridelayer && (a.Animation.AnimationLayer == animation.AnimationLayer));
             _runningAnimations.Add(new RunningAnimation { StartTime = _currentTime, Keeprunning = keeprunning, Animation = animation });
             animation.StartRun();
         }
 
-        public Animation RunAnimation(string name, bool keeprunning, bool overridelayer = true) {
+        public Animations.Animation RunAnimation(string name, bool keeprunning, bool overridelayer = true) {
             var animation = _animations.Find(a => a.Name == name);
             if (animation == null) return null;
             RunAnimation(animation, keeprunning, overridelayer);
@@ -53,7 +53,7 @@ namespace MonoGame.Extended.Animations
         {
             public double StartTime;
             public bool Keeprunning;
-            public Animation Animation;
+            public Animations.Animation Animation;
         }
         //private class BlendingAnimation
         //{
