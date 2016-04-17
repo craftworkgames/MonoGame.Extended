@@ -7,13 +7,11 @@ namespace MonoGame.Extended.Graphics.Batching
         where TVertexType : struct, IVertexType
     {
         internal GraphicsDevice GraphicsDevice;
-        internal IDrawContext DefaultDrawContext;
         internal readonly int MaximumBatchSize;
 
-        protected BatchDrawer(GraphicsDevice graphicsDevice, IDrawContext defaultDrawContext, int maximumBatchSize)
+        protected BatchDrawer(GraphicsDevice graphicsDevice, int maximumBatchSize)
         {
             GraphicsDevice = graphicsDevice;
-            DefaultDrawContext = defaultDrawContext;
             MaximumBatchSize = maximumBatchSize;
         }
 
@@ -31,12 +29,12 @@ namespace MonoGame.Extended.Graphics.Batching
             }
 
             GraphicsDevice = null;
-            DefaultDrawContext = null;
         }
 
-        internal abstract void Select(TVertexType[] vertices);
-        internal abstract void Select(TVertexType[] vertices, short[] indices);
-        internal abstract void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, IDrawContext drawContext);
-        internal abstract void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext);
+        internal abstract void Begin(IDrawContext drawContext, TVertexType[] vertices);
+        internal abstract void Begin(IDrawContext drawContext, TVertexType[] vertices, short[] indices);
+        internal abstract void End();
+        internal abstract void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount);
+        internal abstract void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount);
     }
 }

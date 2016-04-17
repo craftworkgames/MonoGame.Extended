@@ -66,6 +66,7 @@
     <Compile Include="Graphics\FaceVertexPolygonMesh.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
     <Compile Include="Graphics\SpriteColor.cs" />
+    <Compile Include="Graphics\TextureRegion2D.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />
     <Compile Include="Collisions\CollisionGrid.cs" />

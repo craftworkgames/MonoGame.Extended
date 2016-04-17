@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
@@ -16,11 +17,11 @@ namespace MonoGame.Extended.Graphics.Batching
             2
         };
 
-        public static void DrawSprite(this PrimitiveBatch<VertexPositionColorTexture> primitiveBatch, Texture2D texture, Vector3 position, Rectangle? sourceRectangle = null, SpriteColor? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, ISpriteDrawContext drawContext = null) 
+        public static void DrawSprite(this PrimitiveBatch<VertexPositionColorTexture> primitiveBatch, TextureRegion<Texture2D> textureRegion, Vector3 position, SpriteColor? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, uint sortKey = 0)
         {
-            if (texture == null)
+            if (textureRegion.Texture == null)
             {
-                throw new ArgumentNullException(nameof(texture));
+                throw new ArgumentException("Texture is null.");
             }
 
             var color1 = color ?? Color.White;
@@ -33,15 +34,18 @@ namespace MonoGame.Extended.Graphics.Batching
             int height;
             Vector2 textureCoordinateTopLeft;
             Vector2 textureCoordinateBottomRight;
-            if (sourceRectangle.HasValue)
+
+            var textureWidth = textureRegion.Texture.Width;
+            var textureHeight = textureRegion.Texture.Height;
+            if (textureRegion.SourceRectangle.HasValue)
             {
-                var rectangle = sourceRectangle.Value;
+                var rectangle = textureRegion.SourceRectangle.Value;
                 width = rectangle.Width;
                 height = rectangle.Height;
-                textureCoordinateTopLeft.X = rectangle.X / (float)texture.Width;
-                textureCoordinateTopLeft.Y = rectangle.Y / (float)texture.Height;
-                textureCoordinateBottomRight.X = (rectangle.X + rectangle.Width) / (float)texture.Width;
-                textureCoordinateBottomRight.Y = (rectangle.Y + rectangle.Height) / (float)texture.Height;
+                textureCoordinateTopLeft.X = rectangle.X / (float)textureWidth;
+                textureCoordinateTopLeft.Y = rectangle.Y / (float)textureHeight;
+                textureCoordinateBottomRight.X = (rectangle.X + rectangle.Width) / (float)textureWidth;
+                textureCoordinateBottomRight.Y = (rectangle.Y + rectangle.Height) / (float)textureHeight;
             }
             else
             {
@@ -49,8 +53,8 @@ namespace MonoGame.Extended.Graphics.Batching
                 textureCoordinateTopLeft.Y = 0;
                 textureCoordinateBottomRight.X = 1;
                 textureCoordinateBottomRight.Y = 1;
-                width = texture.Width;
-                height = texture.Height;
+                width = textureWidth;
+                height = textureHeight;
             }
 
             if ((spriteEffects & SpriteEffects.FlipVertically) != 0)
@@ -69,17 +73,17 @@ namespace MonoGame.Extended.Graphics.Batching
             // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (rotation == 0f)
             {
-                SetSpriteItemVertices(position.X - origin1.X, position.Y - origin1.Y, width, height, ref color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
+                SetSpriteItemVerticesNoRotation(position.X - origin1.X, position.Y - origin1.Y, width, height, ref color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
             }
             else
             {
-                SetSpriteItemVertices(position.X, position.Y, -origin1.X, -origin1.Y, width, height, (float)Math.Sin(rotation), (float)Math.Cos(rotation), ref color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
+                SetSpriteItemVerticesWithRotation(position.X, position.Y, -origin1.X, -origin1.Y, width, height, (float)Math.Sin(rotation), (float)Math.Cos(rotation), ref color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
             }
 
-            primitiveBatch.Draw(PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, drawContext);
+            primitiveBatch.Draw(PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, sortKey);
         }
 
-        private static void SetSpriteItemVertices(float x, float y, float dx, float dy, float w, float h, float sin, float cos, ref SpriteColor color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)
+        private static void SetSpriteItemVerticesWithRotation(float x, float y, float dx, float dy, float w, float h, float sin, float cos, ref SpriteColor color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)
         {
             var topLeftPosition = new Vector3(x + dx * cos - dy * sin, y + dx * sin + dy * cos, depth);
             var topLeftVertex = new VertexPositionColorTexture(topLeftPosition, color.TopLeftColor, topLeftTextureCoordinate);
@@ -100,7 +104,7 @@ namespace MonoGame.Extended.Graphics.Batching
             _spriteItemVertices[3] = bottomRightVertex;
         }
 
-        private static void SetSpriteItemVertices(float x, float y, float w, float h, ref SpriteColor color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)
+        private static void SetSpriteItemVerticesNoRotation(float x, float y, float w, float h, ref SpriteColor color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)
         {
             var topLeftPosition = new Vector3(x, y, depth);
             var topLeftVertex = new VertexPositionColorTexture(topLeftPosition, color.TopLeftColor, topLeftTextureCoordinate);

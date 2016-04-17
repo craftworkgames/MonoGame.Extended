@@ -12,79 +12,44 @@ namespace MonoGame.Extended.Graphics.Batching
 
         private BatchDrawer<TVertexType> _batchDrawer;
         private BatchQueuer<TVertexType> _currentBatchQueuer;
-        private BatchQueuer<TVertexType>[] _batchQueuers;
+        private ImmediateBatchQueuer<TVertexType> _immediateBatchQueuer;
+        private DeferredBatchQueuer<TVertexType> _deferredBatchQueuer;  
 
-        public IDrawContext DefaultDrawContext { get; }
         public BatchDrawStrategy DrawStrategy { get; }
         public bool HasBegun { get; private set; }
         public GraphicsDevice GraphicsDevice { get; }
 
-        public PrimitiveBatch(GraphicsDevice graphicsDevice, BatchDrawStrategy batchDrawStrategy = BatchDrawStrategy.UserPrimitives, IDrawContext defaultDrawContext = null, int maximumBatchSize = DefaultMaximumBatchSize)
+        public PrimitiveBatch(GraphicsDevice graphicsDevice, Action<Array, Array> sortKeyValueArraysMethod, BatchDrawStrategy batchDrawStrategy = BatchDrawStrategy.UserPrimitives, int maximumBatchSize = DefaultMaximumBatchSize)
         {
             if (graphicsDevice == null)
             {
                 throw new ArgumentNullException(nameof(graphicsDevice));
             }
 
-            GraphicsDevice = graphicsDevice;
-
-            if (defaultDrawContext == null)
+            if (sortKeyValueArraysMethod == null)
             {
-                var viewport = graphicsDevice.Viewport;
-                var basicEffect = new BasicEffect(graphicsDevice)
-                {
-                    VertexColorEnabled = true,
-                    TextureEnabled = true,
-                    Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1),
-                    World = Matrix.Identity,
-                    View = Matrix.Identity
-                };
-                defaultDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
+                throw new ArgumentOutOfRangeException(nameof(sortKeyValueArraysMethod));
             }
-            DefaultDrawContext = defaultDrawContext;
+
+            GraphicsDevice = graphicsDevice;
 
             DrawStrategy = batchDrawStrategy;
             switch (batchDrawStrategy)
             {
                 case BatchDrawStrategy.UserPrimitives:
                 {
-                    _batchDrawer = new UserPrimitivesBatchDrawer<TVertexType>(graphicsDevice, DefaultDrawContext, maximumBatchSize);
+                    _batchDrawer = new UserPrimitivesBatchDrawer<TVertexType>(graphicsDevice, maximumBatchSize);
                     break;
                 }
                 case BatchDrawStrategy.DynamicVertexBuffer:
                 {
-                    _batchDrawer = new DynamicVertexBufferBatchDrawer<TVertexType>(graphicsDevice, DefaultDrawContext, maximumBatchSize);
+                    _batchDrawer = new DynamicVertexBufferBatchDrawer<TVertexType>(graphicsDevice, maximumBatchSize);
                     break;
                 }
             }
 
-            var batchSortModes = (BatchSortMode[])Enum.GetValues(typeof (BatchSortMode));
-            _batchQueuers = new BatchQueuer<TVertexType>[batchSortModes.Length];
-
-            for (var index = 0; index < batchSortModes.Length; index++)
-            {
-                var batchSortMode = (BatchSortMode)index;
-                BatchQueuer<TVertexType> batchQueuer = null;
-                switch (batchSortMode)
-                {
-                    case BatchSortMode.Immediate:
-                    {
-                        batchQueuer = new ImmediateBatchQueuer<TVertexType>(_batchDrawer);
-                        break;
-                    }
-                    case BatchSortMode.Deferred:
-                    {
-                        batchQueuer = new DeferredBatchQueuer<TVertexType>(_batchDrawer);
-                        break;
-                    }
-                    case BatchSortMode.DrawContext:
-                    {
-                        batchQueuer = new DrawContextBatchQueuer<TVertexType>(_batchDrawer);
-                        break;
-                    }
-                }
-                _batchQueuers[index] = batchQueuer;
-            }
+            _immediateBatchQueuer = new ImmediateBatchQueuer<TVertexType>(_batchDrawer);
+            _deferredBatchQueuer = new DeferredBatchQueuer<TVertexType>(_batchDrawer, sortKeyValueArraysMethod);
         }
 
         public void Dispose()
@@ -103,13 +68,11 @@ namespace MonoGame.Extended.Graphics.Batching
             _batchDrawer.Dispose();
             _batchDrawer = null;
 
-            foreach (var batchQueuer in _batchQueuers)
-            {
-                batchQueuer.Dispose();
-            }
-
-            Array.Clear(_batchQueuers, 0, _batchQueuers.Length);
-            _batchQueuers = null;
+            _currentBatchQueuer = null;
+            _immediateBatchQueuer.Dispose();
+            _immediateBatchQueuer = null;
+            _deferredBatchQueuer.Dispose();
+            _deferredBatchQueuer = null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -130,12 +93,27 @@ namespace MonoGame.Extended.Graphics.Batching
             }
         }
 
-        public void Begin(BatchSortMode sortMode)
+        public void Begin(BatchSortMode sortMode, IDrawContext drawContext)
         {
+            if (drawContext == null)
+            {
+                throw new ArgumentNullException(nameof(drawContext));
+            }
+
             EnsureHasNotBegun();
             HasBegun = true;
-            _currentBatchQueuer = _batchQueuers[(int)sortMode];
-            _currentBatchQueuer.Begin();
+            switch (sortMode)
+            {
+                case BatchSortMode.Immediate:
+                    _currentBatchQueuer = _immediateBatchQueuer;
+                    break;
+                case BatchSortMode.Deferred:
+                    _currentBatchQueuer = _deferredBatchQueuer;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(sortMode));
+            }
+            _currentBatchQueuer.Begin(drawContext);
         }
 
         public void End()
@@ -145,28 +123,28 @@ namespace MonoGame.Extended.Graphics.Batching
             _currentBatchQueuer.End();
         }
 
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, IDrawContext drawContext = null)
+        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, uint sortKey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.Queue(primitiveType, vertices, 0, vertices.Length, drawContext);
+            _currentBatchQueuer.Queue(primitiveType, vertices, 0, vertices.Length, sortKey);
         }
 
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext = null)
+        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.Queue(primitiveType, vertices, startVertex, vertexCount, drawContext);
+            _currentBatchQueuer.Queue(primitiveType, vertices, startVertex, vertexCount, sortKey);
         }
 
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, short[] indices, IDrawContext drawContext = null)
+        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, short[] indices, uint sortKey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.Queue(primitiveType, vertices, 0, vertices.Length, indices, 0, indices.Length, drawContext);
+            _currentBatchQueuer.Queue(primitiveType, vertices, 0, vertices.Length, indices, 0, indices.Length, sortKey);
         }
 
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, IDrawContext drawContext = null)
+        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.Queue(primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, drawContext);
+            _currentBatchQueuer.Queue(primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, sortKey);
         }
     }
 }

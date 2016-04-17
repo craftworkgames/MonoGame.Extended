@@ -35,26 +35,26 @@ namespace MonoGame.Extended.Graphics
             _indices = indices;
         }
 
-        public void Draw(PrimitiveBatch<TVertexType> primitiveBatch, IDrawContext drawContext = null)
+        public void Draw(PrimitiveBatch<TVertexType> primitiveBatch, uint sortKey)
         {
             if (_indices != null)
             {
-                primitiveBatch.Draw(PrimitiveType, _vertices, _indices, drawContext);
+                primitiveBatch.Draw(PrimitiveType, _vertices, _indices, sortKey);
             }
             else
             {
-                primitiveBatch.Draw(PrimitiveType, _vertices, drawContext);
+                primitiveBatch.Draw(PrimitiveType, _vertices, sortKey);
             }
         }
 
-        public void Draw(PrimitiveBatch<TVertexType> primitiveBatch, int startVertex, int vertexCount, IDrawContext drawContext = null)
+        public void Draw(PrimitiveBatch<TVertexType> primitiveBatch, int startVertex, int vertexCount, uint sortKey)
         {
-            primitiveBatch.Draw(PrimitiveType, _vertices, startVertex, vertexCount, drawContext);
+            primitiveBatch.Draw(PrimitiveType, _vertices, startVertex, vertexCount, sortKey);
         }
 
-        public void Draw(PrimitiveBatch<TVertexType> primitiveBatch, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext = null)
+        public void Draw(PrimitiveBatch<TVertexType> primitiveBatch, int startVertex, int vertexCount, int startIndex, int indexCount, uint sortKey)
         {
-            primitiveBatch.Draw(PrimitiveType, _vertices, startVertex, vertexCount, _indices, startIndex, indexCount, drawContext);
+            primitiveBatch.Draw(PrimitiveType, _vertices, startVertex, vertexCount, _indices, startIndex, indexCount, sortKey);
         }
     }
 }

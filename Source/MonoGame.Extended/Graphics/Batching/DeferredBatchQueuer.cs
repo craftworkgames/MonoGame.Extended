@@ -1,45 +1,64 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
+    internal class DeferredBatchQueuer
+    {
+        internal static readonly uint[] EmptyDrawOperationKeys = new uint[0];
+        internal static readonly BatchDrawOperation[] EmptyBatchDrawOperations = new BatchDrawOperation[0];
+    }
+
     internal class DeferredBatchQueuer<TVertexType> : BatchQueuer<TVertexType>
         where TVertexType : struct, IVertexType
     {
-        private readonly List<uint> _drawOperationKeys = new List<uint>();  
-        private readonly List<BatchDrawOperation> _drawOperations = new List<BatchDrawOperation>();
-        private readonly BatchDrawOperation _emptyDrawOperation = new BatchDrawOperation((PrimitiveType)(-1), 0, 0, 0, 0, null);
+        private readonly Action<Array, Array> _sortKeyValueArraysMethod; 
+        private uint _drawOperationsCount;
+        private readonly uint[] _drawOperationKeys = DeferredBatchQueuer.EmptyDrawOperationKeys;
+        private readonly BatchDrawOperation[] _drawOperations = DeferredBatchQueuer.EmptyBatchDrawOperations;
+        private readonly BatchDrawOperation _emptyDrawOperation = new BatchDrawOperation((PrimitiveType)(-1), 0, 0, 0, 0, 0);
         private BatchDrawOperation _currentOperation;
         private readonly TVertexType[] _vertices;
         private int _usedVertexCount;
         private readonly short[] _indices;
         private int _usedIndexCount;
+        private IDrawContext _drawContext;
 
-        public DeferredBatchQueuer(BatchDrawer<TVertexType> batchDrawer)
+        internal DeferredBatchQueuer(BatchDrawer<TVertexType> batchDrawer, Action<Array, Array> sortKeyValueArraysMethod)
             : base(batchDrawer)
         {
+            Debug.Assert(sortKeyValueArraysMethod != null);
+            _sortKeyValueArraysMethod = sortKeyValueArraysMethod;
             _vertices = new TVertexType[batchDrawer.MaximumBatchSize];
             _indices = new short[batchDrawer.MaximumBatchSize];
             _currentOperation = _emptyDrawOperation;
         }
 
-        private void CreateNewOperationIfNecessary(PrimitiveType primitiveType, int vertexCount, int indexCount, IDrawContext drawContext)
+        private void CreateNewOperationIfNecessary(PrimitiveType primitiveType, int vertexCount, int indexCount, uint sortkey)
         {
-            // line strip and triangle strip always need a new operation
-            if (indexCount > 0 == _currentOperation.IndexCount > 0 && drawContext.Equals(_currentOperation.DrawContext) && (primitiveType == _currentOperation.PrimitiveType) && (_currentOperation.PrimitiveType != PrimitiveType.LineStrip) && (_currentOperation.PrimitiveType != PrimitiveType.TriangleStrip))
+            var wasIndexed = _currentOperation.IndexCount > 0;
+            var isIndexed = indexCount > 0;
+
+            var currentOperationPrimitiveType = (PrimitiveType)_currentOperation.PrimitiveType;
+            // we do not support merging line strip or triangle strip primitives, i.e., a new draw call is needed for each list or triangle strip
+            if (wasIndexed == isIndexed && primitiveType == currentOperationPrimitiveType && (primitiveType != PrimitiveType.TriangleStrip || primitiveType != PrimitiveType.LineStrip))
             {
                 _currentOperation.VertexCount += vertexCount;
                 _currentOperation.IndexCount += indexCount;
                 return;
             }
 
-            _currentOperation = new BatchDrawOperation(primitiveType, _usedVertexCount, vertexCount, _usedIndexCount, indexCount, drawContext);
-            _drawOperations.Add(_currentOperation);
+            _currentOperation = new BatchDrawOperation(primitiveType, _usedVertexCount, vertexCount, _usedIndexCount, indexCount, sortkey);
+            _drawOperations[_drawOperationsCount] = _currentOperation;
+            _drawOperationKeys[_drawOperationsCount] = sortkey;
+            _drawOperationsCount++;
         }
 
-        internal override void Begin()
+        internal override void Begin(IDrawContext drawContext)
         {
+            Debug.Assert(drawContext != null);
+            _drawContext = drawContext;
         }
 
         internal override void End()
@@ -56,55 +75,61 @@ namespace MonoGame.Extended.Graphics.Batching
 
             if (_usedIndexCount == 0)
             {
-                BatchDrawer.Select(_vertices);
+                BatchDrawer.Begin(_drawContext, _vertices);
             }
             else
             {
-                BatchDrawer.Select(_vertices, _indices);
+                BatchDrawer.Begin(_drawContext, _vertices, _indices);
             }
 
+            _sortKeyValueArraysMethod(_drawOperationKeys, _drawOperations);
+
             // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < _drawOperations.Count; ++index)
+            for (var index = 0; index < _drawOperationsCount; ++index)
             {
                 var operation = _drawOperations[index];
+                var primitiveType = (PrimitiveType)operation.PrimitiveType;
                 if (operation.IndexCount == 0)
                 {
-                    BatchDrawer.Draw(operation.PrimitiveType, operation.StartVertex, operation.VertexCount, operation.DrawContext);
+                    BatchDrawer.Draw(primitiveType, operation.StartVertex, operation.VertexCount);
                 }
                 else
                 {
-                    BatchDrawer.Draw(operation.PrimitiveType, operation.StartVertex, operation.VertexCount, operation.StartIndex, operation.IndexCount, operation.DrawContext);
+                    BatchDrawer.Draw(primitiveType, operation.StartVertex, operation.VertexCount, operation.StartIndex, operation.IndexCount);
                 }
             }
 
-            _drawOperations.Clear();
+            BatchDrawer.End();
+
+            Array.Clear(_drawOperationKeys, 0, _drawOperationKeys.Length);
+            Array.Clear(_drawOperations, 0, _drawOperations.Length);
             _currentOperation = _emptyDrawOperation;
             _usedVertexCount = 0;
             _usedIndexCount = 0;
         }
 
-        internal override void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext)
+        internal override void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey)
         {
             var remainingSpace = BatchDrawer.MaximumBatchSize - Math.Max(_usedVertexCount, _usedIndexCount);
 
             if (vertexCount <= remainingSpace)
             {
-                QueueVerticesNoOverflow(primitiveType, vertices, startVertex, vertexCount, drawContext);
+                QueueVerticesNoOverflow(primitiveType, vertices, startVertex, vertexCount, sortKey);
             }
             else
             {
-                QueueVerticesBufferSplit(primitiveType, vertices, startVertex, vertexCount, drawContext, remainingSpace);
+                QueueVerticesBufferSplit(primitiveType, vertices, startVertex, vertexCount, sortKey, remainingSpace);
             }
         }
 
-        private void QueueVerticesNoOverflow(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext)
+        private void QueueVerticesNoOverflow(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortkey)
         {
             Array.Copy(vertices, startVertex, _vertices, _usedVertexCount, vertexCount);
-            CreateNewOperationIfNecessary(primitiveType, vertexCount, 0, drawContext);
+            CreateNewOperationIfNecessary(primitiveType, vertexCount, 0, sortkey);
             _usedVertexCount += vertexCount;
         }
 
-        private void QueueVerticesBufferSplit(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext, int spaceLeft)
+        private void QueueVerticesBufferSplit(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey, int spaceLeft)
         {
             switch (primitiveType)
             {
@@ -149,7 +174,7 @@ namespace MonoGame.Extended.Graphics.Batching
             if (spaceLeft > 0)
             {
                 Array.Copy(vertices, startVertex, _vertices, _usedVertexCount, spaceLeft);
-                CreateNewOperationIfNecessary(primitiveType, spaceLeft, 0, drawContext);
+                CreateNewOperationIfNecessary(primitiveType, spaceLeft, 0, sortKey);
                 _usedVertexCount += spaceLeft;
                 vertexCount -= spaceLeft;
                 startVertex += spaceLeft;
@@ -193,7 +218,7 @@ namespace MonoGame.Extended.Graphics.Batching
 
                 var verticesToProcess = Math.Min(spaceLeft, vertexCount);
                 Array.Copy(vertices, startVertex, _vertices, _usedVertexCount, verticesToProcess);
-                CreateNewOperationIfNecessary(primitiveType, verticesToProcess, 0, drawContext);
+                CreateNewOperationIfNecessary(primitiveType, verticesToProcess, 0, sortKey);
                 _usedVertexCount += verticesToProcess;
                 vertexCount -= verticesToProcess;
 
@@ -207,7 +232,7 @@ namespace MonoGame.Extended.Graphics.Batching
             }
         }
 
-        internal override void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, IDrawContext drawContext)
+        internal override void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey)
         {
             var remainingVertices = BatchDrawer.MaximumBatchSize - _usedVertexCount;
             var remainingIndices = BatchDrawer.MaximumBatchSize - _usedIndexCount;
@@ -216,20 +241,20 @@ namespace MonoGame.Extended.Graphics.Batching
 
             if (!exceedsBatchSpace)
             {
-                QueueIndexedVerticesNoOverflow(primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, drawContext);
+                QueueIndexedVerticesNoOverflow(primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, sortKey);
             }
             else
             {
                 var remainingSpace = Math.Min(remainingVertices, remainingIndices);
-                QueueIndexedVerticesBufferSplit(primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, drawContext, remainingSpace);
+                QueueIndexedVerticesBufferSplit(primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, sortKey, remainingSpace);
             }
         }
 
-        private void QueueIndexedVerticesNoOverflow(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, IDrawContext drawContext)
+        private void QueueIndexedVerticesNoOverflow(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey)
         {
             Array.Copy(vertices, startVertex, _vertices, _usedVertexCount, vertexCount);
             var indexOffset = _currentOperation.VertexCount;
-            CreateNewOperationIfNecessary(primitiveType, vertexCount, indexCount, drawContext);
+            CreateNewOperationIfNecessary(primitiveType, vertexCount, indexCount, sortKey);
             _usedVertexCount += vertexCount;
 
             // we can't use Array.Copy to copy the indices because we need to add the offset
@@ -240,7 +265,7 @@ namespace MonoGame.Extended.Graphics.Batching
             }
         }
 
-        private void QueueIndexedVerticesBufferSplit(PrimitiveType type, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, IDrawContext context, int spaceLeft)
+        private void QueueIndexedVerticesBufferSplit(PrimitiveType type, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey, int spaceLeft)
         {
             switch (type)
             {
@@ -283,7 +308,7 @@ namespace MonoGame.Extended.Graphics.Batching
             if (spaceLeft > 0)
             {
                 // vertices and indices are bijective to fill in the remaining space for this batch
-                CreateNewOperationIfNecessary(type, spaceLeft, spaceLeft, context);
+                CreateNewOperationIfNecessary(type, spaceLeft, spaceLeft, sortKey);
                 var maxVertexCount = _usedVertexCount + spaceLeft;
                 for (var vertexIndex = startVertex; vertexIndex < maxVertexCount; ++vertexIndex)
                 {
@@ -349,7 +374,7 @@ namespace MonoGame.Extended.Graphics.Batching
                     ++startIndex;
                 }
 
-                CreateNewOperationIfNecessary(type, verticesToProcess, indicesToProcess, context);
+                CreateNewOperationIfNecessary(type, verticesToProcess, indicesToProcess, sortKey);
 
                 indexCount -= indicesToProcess;
                 if (indexCount == 0)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Graphics;
@@ -85,10 +86,10 @@ namespace Demo.PrimitiveBatch
             // create a context for drawing with PrimitiveBatch
             _basicEffectDrawContext = new EffectDrawContext<BasicEffect>(basicEffect);
 
-            // create the VertexPositionColor PrimitiveBatch using our context we just created as the default
-            _primitiveBatchPositionColor = new PrimitiveBatch<VertexPositionColor>(graphicsDevice, defaultDrawContext: _basicEffectDrawContext);
-            // create the VertexPositionColorTexture PrimitiveBatch using our context we just created as the default
-            _primitiveBatchPositionColorTexture = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice, defaultDrawContext: _basicEffectDrawContext);
+            // create the VertexPositionColor PrimitiveBatch
+            _primitiveBatchPositionColor = new PrimitiveBatch<VertexPositionColor>(graphicsDevice, Array.Sort);
+            // create the VertexPositionColorTexture PrimitiveBatch
+            _primitiveBatchPositionColorTexture = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice, Array.Sort);
 
             // create our polygon mesh; vertices are in Local space; indices are index references to the vertices to draw 
             // indices have to multiple of 3 for PrimitiveType.TriangleList which says to draw a collection of triangles each with 3 vertices (triangles can share vertices)
@@ -138,7 +139,7 @@ namespace Demo.PrimitiveBatch
             basicEffect.Projection = _cartesianProjection2D;
 
             // draw the polygon mesh in the cartesian universe using the VertexPositionColor PrimitiveBatch
-            _primitiveBatchPositionColor.Begin(BatchSortMode.Immediate);
+            _primitiveBatchPositionColor.Begin(BatchSortMode.Immediate, _basicEffectDrawContext);
             _primitiveBatchPositionColor.DrawPolygonMesh(_polygonMesh);
             _primitiveBatchPositionColor.End();
 
@@ -151,9 +152,10 @@ namespace Demo.PrimitiveBatch
             basicEffect.Texture = _texture;
 
             // draw the sprite in the screen universe using the VertexPositionColorTexture PrimitiveBatch
-            _primitiveBatchPositionColorTexture.Begin(BatchSortMode.Immediate);
+            _primitiveBatchPositionColorTexture.Begin(BatchSortMode.Immediate, _basicEffectDrawContext);
             var spriteColor = new SpriteColor(Color.White, Color.Black, Color.White, Color.White);
-            _primitiveBatchPositionColorTexture.DrawSprite(_texture, Vector3.Zero, color: spriteColor);
+            var textureRegion = new TextureRegion<Texture2D>(_texture);
+            _primitiveBatchPositionColorTexture.DrawSprite(textureRegion, Vector3.Zero, color: spriteColor);
             _primitiveBatchPositionColorTexture.End();
 
             base.Draw(gameTime);

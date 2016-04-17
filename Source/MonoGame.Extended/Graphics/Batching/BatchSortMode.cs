@@ -3,7 +3,6 @@
     public enum BatchSortMode
     {
         Immediate,
-        Deferred,
-        DrawContext,
+        Deferred
     }
 }

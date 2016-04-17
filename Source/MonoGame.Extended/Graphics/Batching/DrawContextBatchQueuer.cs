@@ -11,7 +11,7 @@ namespace MonoGame.Extended.Graphics.Batching
         {
         }
 
-        internal override void Begin()
+        internal override void Begin(IDrawContext drawContext)
         {
             throw new NotImplementedException();
         }
@@ -21,12 +21,12 @@ namespace MonoGame.Extended.Graphics.Batching
             throw new NotImplementedException();
         }
 
-        internal override void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext)
+        internal override void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey)
         {
             throw new NotImplementedException();
         }
 
-        internal override void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, IDrawContext drawContext)
+        internal override void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey)
         {
             throw new NotImplementedException();
         }

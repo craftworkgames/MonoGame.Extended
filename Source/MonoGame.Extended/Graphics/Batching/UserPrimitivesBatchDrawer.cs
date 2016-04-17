@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
@@ -8,9 +9,10 @@ namespace MonoGame.Extended.Graphics.Batching
     {
         private TVertexType[] _vertices;
         private short[] _indices;
+        private IDrawContext _drawContext;
 
-        internal UserPrimitivesBatchDrawer(GraphicsDevice graphicsDevice, IDrawContext defaultDrawContext, int maximumBatchSize = PrimitiveBatch<TVertexType>.DefaultMaximumBatchSize)
-            : base(graphicsDevice, defaultDrawContext, maximumBatchSize)
+        internal UserPrimitivesBatchDrawer(GraphicsDevice graphicsDevice, int maximumBatchSize = PrimitiveBatch<TVertexType>.DefaultMaximumBatchSize)
+            : base(graphicsDevice, maximumBatchSize)
         {
         }
 
@@ -25,63 +27,53 @@ namespace MonoGame.Extended.Graphics.Batching
             _indices = null;
         }
 
-        internal override void Select(TVertexType[] vertices)
+        internal override void Begin(IDrawContext drawContext, TVertexType[] vertices)
         {
-            if (vertices == null)
-            {
-                throw new ArgumentNullException(nameof(vertices));
-            }
+            Debug.Assert(drawContext != null);
+            Debug.Assert(vertices != null);
 
+            _drawContext = drawContext;
+            _drawContext.Begin();
             _vertices = vertices;
         }
 
-        internal override void Select(TVertexType[] vertices, short[] indices)
+        internal override void Begin(IDrawContext drawContext, TVertexType[] vertices, short[] indices)
         {
-            if (vertices == null)
-            {
-                throw new ArgumentNullException(nameof(vertices));
-            }
+            Debug.Assert(drawContext != null);
+            Debug.Assert(vertices != null);
+            Debug.Assert(indices != null);
 
-            if (indices == null)
-            {
-                throw new ArgumentNullException(nameof(indices));
-            }
-
+            _drawContext = drawContext;
+            _drawContext.Begin();
             _vertices = vertices;
             _indices = indices;
         }
 
-        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, IDrawContext drawContext)
+        internal override void End()
         {
-            if (drawContext == null)
-            {
-                drawContext = DefaultDrawContext;
-            }
+            _drawContext.End();
+        }
 
+        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount)
+        {
             var primitiveCount = primitiveType.GetPrimitiveCount(vertexCount);
 
-            var passesCount = drawContext.PassesCount;
+            var passesCount = _drawContext.PassesCount;
             for (var passIndex = 0; passIndex < passesCount; ++passIndex)
             {
-                drawContext.ApplyPass(passIndex);
+                _drawContext.ApplyPass(passIndex);
                 GraphicsDevice.DrawUserPrimitives(primitiveType, _vertices, startVertex, primitiveCount);
             }
         }
 
-        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext)
+        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount)
         {
-            if (drawContext == null)
-            {
-                drawContext = DefaultDrawContext;
-            }
-
             var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
 
-            var passesCount = drawContext.PassesCount;
+            var passesCount = _drawContext.PassesCount;
             for (var passIndex = 0; passIndex < passesCount; ++passIndex)
             {
-                drawContext.ApplyPass(passIndex);
-
+                _drawContext.ApplyPass(passIndex);
                 GraphicsDevice.DrawUserIndexedPrimitives(primitiveType, _vertices, startVertex, vertexCount, _indices, startIndex, primitiveCount);
             }
         }
