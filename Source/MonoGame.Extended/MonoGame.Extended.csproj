@@ -45,7 +45,7 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
-    <Compile Include="ConvertUnits.cs" />
+    <Compile Include="ConvertSimUnits.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />
     <Compile Include="Collisions\CollisionGrid.cs" />
