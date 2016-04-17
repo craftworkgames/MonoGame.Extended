@@ -79,8 +79,6 @@
     <None Include="Content\Backgrounds\Hills_Couds.png" />
     <None Include="Content\Backgrounds\Hills_Sky.png" />
     <None Include="Content\Tilesets\isometric_tileset.png" />
-    <None Include="Content\Sprites\shadedDark42.png" />
-    <None Include="Content\Sprites\stump.png" />
     <None Include="Content\Tilesets\test-tileset.png" />
     <None Include="Content\Sprites\zombie.png" />
     <None Include="Content\Tilesets\test-tileset-atlas.json" />

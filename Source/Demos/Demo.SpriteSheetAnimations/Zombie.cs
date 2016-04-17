@@ -76,7 +76,7 @@ namespace Demo.SpriteSheetAnimations
         public Zombie(SpriteSheetAnimationGroup animationGroup)
         {
             _animator = new SpriteSheetAnimator(animationGroup);
-            _sprite = _animator.Sprite;
+            _sprite = new Sprite(animationGroup.GetFrame(0));
 
             State = ZombieState.Appearing;
             IsOnGround = false;
@@ -85,6 +85,7 @@ namespace Demo.SpriteSheetAnimations
         public void Update(GameTime gameTime)
         {
             _animator.Update(gameTime);
+            _sprite.TextureRegion = _animator.CurrentFrame;
 
             IsOnGround = false;
 

@@ -1,28 +1,18 @@
 using System;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Sprites;
+using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Animations
 {
     public class SpriteSheetAnimator : IUpdate
     {
         public SpriteSheetAnimator(SpriteSheetAnimationGroup animationGroup)
-            : this(animationGroup, new Sprite(animationGroup.Frames.First()))
-        {
-        }
-
-        public SpriteSheetAnimator(SpriteSheetAnimationGroup animationGroup, Sprite sprite)
         {
             _animationGroup = animationGroup;
             _frameIndex = 0;
 
-            Sprite = sprite;
             IsPlaying = true;
             IsLooping = true;
-
-            if (Sprite != null && _animationGroup.Frames.Any())
-                Sprite.TextureRegion = _animationGroup.Frames.First();
         }
 
         private readonly SpriteSheetAnimationGroup _animationGroup;
@@ -30,10 +20,11 @@ namespace MonoGame.Extended.Animations
         private float _nextFrameDelay;
         private int _frameIndex;
         private Action _onCompleteAction;
+        private int _atlasIndex;
 
-        public Sprite Sprite { get; set; }
         public bool IsPlaying { get; private set; }
         public bool IsLooping { get; set; }
+        public TextureRegion2D CurrentFrame => _animationGroup.GetFrame(_atlasIndex);
 
         //public IEnumerable<TextureRegion2D> Frames
         //{
@@ -158,10 +149,7 @@ namespace MonoGame.Extended.Animations
                     onCompleteAction?.Invoke();
                 }
 
-                var atlasIndex = _currentAnimation.FrameIndicies[_frameIndex];
-
-                if(Sprite != null)
-                    Sprite.TextureRegion = _animationGroup.GetFrame(atlasIndex);
+                _atlasIndex = _currentAnimation.FrameIndicies[_frameIndex];
             }
 
             _nextFrameDelay -= deltaSeconds;

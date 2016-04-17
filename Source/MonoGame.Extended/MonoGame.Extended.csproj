@@ -36,6 +36,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Animations\KeyFrameAnimation.cs" />
+    <Compile Include="Animations\KeyFrameAnimationDictionary.cs" />
+    <Compile Include="Animations\KeyFrameAnimationPlayer.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroup.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroupReader.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />

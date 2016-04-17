@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Diagnostics;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -6,6 +8,8 @@ using MonoGame.Extended.Animations;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Extended.Sprites;
+using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.SpriteSheetAnimations
@@ -21,6 +25,8 @@ namespace Demo.SpriteSheetAnimations
         private ViewportAdapter _viewportAdapter;
         private CollisionWorld _world;
         private Zombie _zombie;
+        private KeyFrameAnimation _animation;
+        private Sprite _fireballSprite;
 
         public Game1()
         {
@@ -61,6 +67,11 @@ namespace Demo.SpriteSheetAnimations
             _zombie = new Zombie(animationGroup);
             var zombieActor = _world.CreateActor(_zombie);
             zombieActor.Position = new Vector2(462.5f, 896f);
+
+            var fireballTexture = Content.Load<Texture2D>("Sprites/fireball");
+            var fireballAtlas = TextureAtlas.Create(fireballTexture, 130, 50);
+            _animation = new KeyFrameAnimation(0.1f, fireballAtlas.Regions.ToArray(), isReversed: true) { IsPingPong = true };
+            _fireballSprite = new Sprite(_animation.CurrentFrame) { Position = _zombie.Position, Scale = Vector2.One * 2.0f };
         }
 
         protected override void UnloadContent()
@@ -73,9 +84,6 @@ namespace Demo.SpriteSheetAnimations
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
-            var mouseState = Mouse.GetState();
-
-            //_mousePoint = _camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y)).ToPoint();
 
             // camera
             if (keyboardState.IsKeyDown(Keys.R))
@@ -105,6 +113,9 @@ namespace Demo.SpriteSheetAnimations
             _world.Update(gameTime);
             _camera.LookAt(_zombie.Position);
 
+            _animation.Update(deltaSeconds);
+            _fireballSprite.TextureRegion = _animation.CurrentFrame;
+
             base.Update(gameTime);
         }
 
@@ -118,7 +129,9 @@ namespace Demo.SpriteSheetAnimations
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             _zombie.Draw(_spriteBatch);
+            _spriteBatch.Draw(_fireballSprite);
             _spriteBatch.End();
+            
 
             //_spriteBatch.Begin();
             //_spriteBatch.DrawString(_bitmapFont, string.Format("FPS: {0} Zoom: {1}", _fpsCounter.AverageFramesPerSecond, _camera.Zoom), new Vector2(5, 5), new Color(0.5f, 0.5f, 0.5f));
