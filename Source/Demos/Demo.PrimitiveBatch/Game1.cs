@@ -23,6 +23,7 @@ namespace Demo.PrimitiveBatch
         private Matrix _spriteBatchProjection;
         private Matrix _spriteBatchCamera;
         private Matrix _spriteBatchWorld;
+        private float _spriteRotation;
 
         public Game1()
         {
@@ -52,15 +53,13 @@ namespace Demo.PrimitiveBatch
 
             // projection matrix: the mapping from View or Camera space to Projection space so the GPU knows what information from the scene is to be rendered 
             // here we create an orthographic projection; a 3D box in screen space (one side is the screen) where any primitives outside this box is not rendered
-            // we have the bottom of the box as 0, the top as the viewport height (so +Y is pointing up), left as 0 and right as the viewport width
-            // we also flip the Z axis by setting the near plane to 0 and the far plane to -1. (by default -Z is into the screen, +Z is popping out of the screen)
-            // this gives us an origin of (0,0,0) for the bottom left of the box, and thus the origin for drawing primitives on the screen is the bottom left aswell
-            _cartesianProjection2D = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, 0, viewport.Height, 0, -1);
+            // here the box is set so the origin (0,0,0) is the centre of the box's surface, thus the origin for drawing primitives on the screen is the centre aswell
+            _cartesianProjection2D = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(-viewport.Width * 0.5f, viewport.Width * 0.5f, -viewport.Height * 0.5f, viewport.Height * 0.5f, 0, 1);
 
             // view matrix: the camera; use to transform primitives from World space to View (or Camera) space
             // here we translate (move) the origin, the point (0,0,0), from the bottom left of our 3D projection box to (width/2, height/2, 0)
             // this allows to "plot" points onto the graph starting at the centre just like we learned in math class
-            _cartesianCamera2D = Matrix.CreateTranslation(new Vector3(viewport.Width * 0.5f, viewport.Height * 0.5f, 0));
+            _cartesianCamera2D = Matrix.Identity;
 
             // world matrix: the coordinate system of the world or universe used to transform primitives from their own Local space to the World space
             // here we scale the x, y and z axis by 100 units
@@ -68,9 +67,8 @@ namespace Demo.PrimitiveBatch
 
             // projection matrix: the mapping from View or Camera space to Projection space so the GPU knows what information from the scene is to be rendered 
             // here we create an orthographic projection; a 3D box in screen space (one side is the screen) where any primitives outside this box is not rendered
-            // have the bottom of the box as viewport height, the top as 0 (so +Y is pointing down), left as 0 and right as the viewport width
-            // we also flip the Z axis by setting the near plane to 0 and the far plane to -1. (by default -Z is into the screen, +Z is popping out of the screen)
-            // this gives us an origin of (0,0,0) for the top left of the box, and thus the origin for drawing primitives on the screen is the top left aswell
+            // here the box is set so the origin (0,0,0) is the top-left of the box's surface, thus the origin for drawing primitives on the screen is the top-left aswell
+            // the Z axis is also flipped by setting the near plane to 0 and the far plane to -1. (by default -Z is into the screen, +Z is popping out of the screen)
             _spriteBatchProjection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1);
 
             // view matrix: the camera; use to transform primitives from World space to View (or Camera) space
@@ -126,7 +124,7 @@ namespace Demo.PrimitiveBatch
             // clear the (pixel) buffers to a specific color
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // change the state the basic effect for cartesian universe drawing
+            // change the state of the basic effect for cartesian universe drawing
             _basicEffect.VertexColorEnabled = true;
             _basicEffect.TextureEnabled = false;
             _basicEffect.World = _cartesianWorld;
@@ -138,7 +136,7 @@ namespace Demo.PrimitiveBatch
             _primitiveBatchPositionColor.DrawPolygonMesh(_polygonMesh);
             _primitiveBatchPositionColor.End();
 
-            // change the state the basic effect draw context for classic sprite drawing to screen universe just like SpriteBatch
+            // change the state of the basic effect for classic sprite drawing to screen universe just like SpriteBatch
             _basicEffect.VertexColorEnabled = true;
             _basicEffect.TextureEnabled = true;
             _basicEffect.World = _spriteBatchWorld;
@@ -148,9 +146,14 @@ namespace Demo.PrimitiveBatch
 
             // draw the sprite in the screen universe using the VertexPositionColorTexture PrimitiveBatch
             _primitiveBatchPositionColorTexture.Begin(BatchSortMode.Immediate, _basicEffect);
-            var spriteColor = new SpriteColor(Color.White, Color.Black, Color.White, Color.White);
+            var viewport = GraphicsDevice.Viewport;
             var textureRegion = new TextureRegion<Texture2D>(_texture, null);
-            _primitiveBatchPositionColorTexture.DrawSprite(textureRegion, Vector3.Zero, color: spriteColor);
+            var spriteColor = new SpriteColor(Color.Black, Color.Black, Color.White, Color.White);
+            var spriteOrigin = new Vector2(_texture.Width * 0.5f, _texture.Height * 0.5f);
+            var spritePosition = new Vector2(viewport.Width * 0.25f, viewport.Height * 0.25f);
+            var spriteDepth = 0f;
+            _spriteRotation += MathHelper.ToRadians(1);
+            _primitiveBatchPositionColorTexture.DrawSprite(textureRegion, new Vector3(spritePosition, spriteDepth), color: spriteColor, rotation: _spriteRotation, origin: spriteOrigin);
             _primitiveBatchPositionColorTexture.End();
 
             base.Draw(gameTime);
