@@ -57,8 +57,7 @@ namespace Demo.PrimitiveBatch
             _cartesianProjection2D = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(-viewport.Width * 0.5f, viewport.Width * 0.5f, -viewport.Height * 0.5f, viewport.Height * 0.5f, 0, 1);
 
             // view matrix: the camera; use to transform primitives from World space to View (or Camera) space
-            // here we translate (move) the origin, the point (0,0,0), from the bottom left of our 3D projection box to (width/2, height/2, 0)
-            // this allows to "plot" points onto the graph starting at the centre just like we learned in math class
+            // here we don't do anything by using the identity matrix
             _cartesianCamera2D = Matrix.Identity;
 
             // world matrix: the coordinate system of the world or universe used to transform primitives from their own Local space to the World space
