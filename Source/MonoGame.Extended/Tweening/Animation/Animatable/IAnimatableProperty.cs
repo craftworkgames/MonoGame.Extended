@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace MonoGame.Extended.Animations.Animatable
+﻿namespace MonoGame.Extended.Tweening.Animation.Animatable
 {
     public interface IAnimatableProperty
     {

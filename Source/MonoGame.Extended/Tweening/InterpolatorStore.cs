@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using MonoGame.Extended.Particles;
 
 namespace MonoGame.Extended.Tweening
 {
@@ -10,6 +12,15 @@ namespace MonoGame.Extended.Tweening
         static InterpolatorStore() {
             INTERPOLATORS = new Dictionary<Type, object> {
                 { typeof(double), new DoubleInterpolator() },
+                { typeof(float), new FloatInterpolator() },
+                { typeof(int), new IntInterpolator() },
+                { typeof(Vector2), new Vector2Interpolator() },
+                { typeof(Vector3), new Vector3Interpolator() },
+                { typeof(Vector4), new Vector4Interpolator() },
+                { typeof(Quaternion), new QuaternionInterpolator() },
+                { typeof(Color), new ColorInterpolator() },
+                { typeof(HslColor), new HslColorInterpolator() },
+                { typeof(object), DynamicInterpolator },
             };
         }
 

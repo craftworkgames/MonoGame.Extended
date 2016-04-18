@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonoGame.Extended.Animations.Animatable
+namespace MonoGame.Extended.Tweening.Animation.Animatable
 {
     public class DelegateProperty<TTransformable,TValue>
     {

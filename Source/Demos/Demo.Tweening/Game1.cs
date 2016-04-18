@@ -2,12 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Animations;
-using MonoGame.Extended.Animations.Fluent;
-using MonoGame.Extended.Animations.Tracks;
-using MonoGame.Extended.Animations.Transformations;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tweening.Animation;
+using MonoGame.Extended.Tweening.Animation.Fluent;
 using MonoGame.Extended.Tweening.Easing;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -48,20 +45,27 @@ namespace Demo.Tweening
             curve.Keys.Add(new CurveKey(1, 1));
 
             var animation = new Animation("testanimation");
-            animation.Transform(_sprite)
-                .Tween(s => s.Alpha, 1000, 1) //interpolate
-                .Tween(s => s.Alpha, 3000, 0, new LinearEasing { StepCount = 5 })
-                .Tween(s => s.Alpha, 3500, 1)
-                .Move(0, new Vector2(100, 100)) //IMoveable
-                .Move(3300, new Vector2(600, 50), new CurveEasing(curve))
-                .Move(6600, new Vector2(50, 400))
-                .Move(8000, new Vector2(100, 100))
-                .Set(s => s.Rotation, 5000, 3.14f) //dont interpolate
-                .Set(s => s.Rotation, 5500, 0f)
-                .Tween(s => s.Color, 0, Color.Red) //colors too
-                .Tween(s => s.Color, 1000, Color.White);
+            animation.AddAnimation(_sprite)
+                .Property(s => s.Alpha)
+                    .Tween(1f, 1.0, new LinearEasing { StepCount = 5 })
+                    .Tween(0f, 3)
+                    .Tween(1f, 3.5)
+                .Move()
+                    .Tween(new Vector2(100, 100), 0, new CubicBezierEasing(0, 1, 1, 0))
+                    .Tween(new Vector2(600, 50), 3)
+                    .Tween(new Vector2(50, 400), 6, new PowerEasing(2) { EasingInOut = EasingInOut.Out })
+                    .Tween(new Vector2(100, 100), 8)
+                .Rotate()
+                    .Set(3.14f, 5)
+                    .Set(0f, 5.5)
+                .Scale()
+                    .Tween(Vector2.Zero, 0, new BounceEasing())
+                    .Tween(Vector2.One, 0.5)
+                    .Tween(Vector2.One, 7, new BackEasing())
+                    .Tween(Vector2.Zero, 8);
+
             _animatorComponent.AddAnimation(animation);
-            _animatorComponent.RunAnimation("testanimation", true);
+            _animatorComponent.RunAnimation("testanimation", 10);
 
         }
 
@@ -85,7 +89,7 @@ namespace Demo.Tweening
             if (keyboardState.IsKeyDown(Keys.R)) _testFunction = new ElasticEasing();
             if (keyboardState.IsKeyDown(Keys.T)) _testFunction = new ExponentialEasing();
             if (keyboardState.IsKeyDown(Keys.Y)) _testFunction = new HermiteEasing();
-            if (keyboardState.IsKeyDown(Keys.U)) _testFunction = new LogarithmicEasing();
+            if (keyboardState.IsKeyDown(Keys.U)) _testFunction = new PowerEasing(10);
             if (keyboardState.IsKeyDown(Keys.I)) _testFunction = PowerEasing.CubicEasing;
             if (keyboardState.IsKeyDown(Keys.O)) _testFunction = PowerEasing.QuinticEasing;
             if (keyboardState.IsKeyDown(Keys.P)) _testFunction = new SinusoidalEasing();

@@ -36,12 +36,17 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Animations\Animatable\DelegateProperty.cs" />
-    <Compile Include="Animations\Animatable\IAnimatableProperty.cs" />
-    <Compile Include="Animations\AnimationBlendTypes.cs" />
-    <Compile Include="Animations\AnimationEvent.cs" />
-    <Compile Include="Animations\Animatable\IAnimatable.cs" />
+    <Compile Include="Tweening\Animation\Animatable\DelegateProperty.cs" />
+    <Compile Include="Tweening\Animation\Animatable\IAnimatableProperty.cs" />
+    <Compile Include="Tweening\Animation\AnimationEvent.cs" />
+    <Compile Include="Tweening\Animation\Animatable\IAnimatable.cs" />
+    <Compile Include="Tweening\Animation\Animation.cs" />
+    <Compile Include="Tweening\Animation\Fluent\AnimationCreator.cs" />
+    <Compile Include="Tweening\Animation\Fluent\FluentAnimation.cs" />
+    <Compile Include="Tweening\Animation\Fluent\TrackCreator.cs" />
     <Compile Include="Tweening\Animation\IAnimation.cs" />
+    <Compile Include="Tweening\Animation\ITypeAnimation.cs" />
+    <Compile Include="Tweening\Animation\RangeTransformation.cs" />
     <Compile Include="Tweening\Animation\Tracks\DelegateTrack.cs" />
     <Compile Include="Tweening\Animation\Tracks\ITrack.cs" />
     <Compile Include="Tweening\Animation\Tracks\MovableTrack.cs" />
@@ -49,6 +54,7 @@
     <Compile Include="Tweening\Animation\Tracks\RotatableTrack.cs" />
     <Compile Include="Tweening\Animation\Tracks\ScalableTrack.cs" />
     <Compile Include="Tweening\Animation\Tracks\Track.cs" />
+    <Compile Include="Tweening\Animation\Tracks\Vector2Track.cs" />
     <Compile Include="Tweening\Animation\Transformation.cs" />
     <Compile Include="Tweening\Animation\TypeAnimation.cs" />
     <Compile Include="Tweening\DynamicInterpolator.cs" />
@@ -63,29 +69,14 @@
     <Compile Include="Tweening\Easing\ExponentialEasing.cs" />
     <Compile Include="Tweening\Easing\HermiteEasing.cs" />
     <Compile Include="Tweening\Easing\LinearEasing.cs" />
-    <Compile Include="Tweening\Easing\LogarithmicEasing.cs" />
     <Compile Include="Tweening\Easing\PowerEasing.cs" />
     <Compile Include="Tweening\Easing\SinusoidalEasing.cs" />
-    <Compile Include="Animations\Fluent\FluentAnimation.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroup.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroupReader.cs" />
-    <Compile Include="Animations\Animation.cs" />
-    <Compile Include="Animations\Tracks\AnimationSettingTrack.cs" />
-    <Compile Include="Animations\Tracks\AnimationTrackGroup.cs" />
-    <Compile Include="Animations\Tracks\AnimationTweeningTrack.cs" />
     <Compile Include="Tweening\Interpolator.cs" />
     <Compile Include="Tweening\Animation\TweeningAnimatorComponent.cs" />
-    <Compile Include="Animations\Fluent\FluentAnimationExtensions.cs" />
-    <Compile Include="Animations\Tracks\IAnimationTrack.cs" />
-    <Compile Include="Animations\Tracks\IAnimationTrackGroup.cs" />
-    <Compile Include="Animations\Transformations\DynamicTransform.cs" />
     <Compile Include="Tweening\Easing\EasingFunction.cs" />
-    <Compile Include="Animations\Transformations\InterfaceTransforms.cs" />
-    <Compile Include="Animations\Transformations\ITransform.cs" />
     <Compile Include="Tweening\Easing\CubicBezierEasing.cs" />
-    <Compile Include="Animations\Transformations\SetPropertyTransform.cs" />
-    <Compile Include="Animations\Transformations\TweenTransformBase.cs" />
-    <Compile Include="Animations\Transformations\TypeTransforms.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />
