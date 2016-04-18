@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Particles
 {
@@ -39,7 +38,7 @@ namespace MonoGame.Extended.Particles
                 e.Trigger(position);
         }
 
-        public void Trigger(LineF line)
+        public void Trigger(LineSegment line)
         {
             foreach (var e in Emitters)
                 e.Trigger(line);
