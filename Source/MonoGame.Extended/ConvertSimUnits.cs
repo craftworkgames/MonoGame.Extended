@@ -7,10 +7,32 @@ namespace MonoGame.Extended
         private static float _displayToSimRatio = 100f;
         private static float _simToDisplayRatio = 1 / _displayToSimRatio;
 
-        public static void SetDisplayToSimRatio(float ratio)
+        public static float DisplayToSimRatio
         {
-            _displayToSimRatio = ratio;
-            _simToDisplayRatio = 1 / ratio;
+            get
+            {
+                return _displayToSimRatio;
+            }
+
+            set
+            {
+                _displayToSimRatio = value;
+                _simToDisplayRatio = 1 / value;
+            }
+        }
+
+        public static float SimToDisplayRatio
+        {
+            get
+            {
+                return _simToDisplayRatio;
+            }
+
+            set
+            {
+                _displayToSimRatio = 1 / value;
+                _simToDisplayRatio = value;
+            }
         }
 
         public static float ToDisplayUnits(int simUnits)

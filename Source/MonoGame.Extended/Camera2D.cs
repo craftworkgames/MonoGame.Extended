@@ -146,6 +146,11 @@ namespace MonoGame.Extended
                 Matrix.CreateTranslation(new Vector3(Origin, 0.0f));
         }
 
+        public Matrix GetViewSimMatrix()
+        {
+            return GetViewSimMatrix(ConvertSimUnits.SimToDisplayRatio);
+        }
+
         public Matrix GetViewSimMatrix(float unitsRatio)
         {
             return GetVirtualViewSimMatrix(unitsRatio) * _viewportAdapter.GetScaleMatrix();

@@ -6,13 +6,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.ViewportAdapters;
 using System;
 
 namespace Demo.SimCamera
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
@@ -24,32 +22,29 @@ namespace Demo.SimCamera
         private Block _blockControlled;
         private Block _block;
 
+        private Camera2D _camera;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            IsMouseVisible = true;
+            Window.AllowUserResizing = true;
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
         protected override void Initialize()
         {
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
             Texture2D textureBlock = Content.Load<Texture2D>("block");
+
+            BoxingViewportAdapter boxingViewport = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            _camera = new Camera2D(boxingViewport);
 
             _world = new World(new Vector2(0, 0));
 
@@ -85,19 +80,10 @@ namespace Demo.SimCamera
 
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
         protected override void UnloadContent()
         {
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -105,14 +91,55 @@ namespace Demo.SimCamera
 
             _blockControlled.Update(gameTime);
 
+            // the camera properties of the camera can be conrolled to move, zoom and rotate
+            const float movementSpeed = 2;
+            const float rotationSpeed = 0.01f;
+            const float zoomSpeed = 0.01f;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+            {
+                _camera.Move(new Vector2(0, -movementSpeed));
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                _camera.Move(new Vector2(-movementSpeed, 0));
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                _camera.Move(new Vector2(0, movementSpeed));
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            {
+                _camera.Move(new Vector2(movementSpeed, 0));
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.E))
+            {
+                _camera.Rotation += rotationSpeed;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Q))
+            {
+                _camera.Rotation -= rotationSpeed;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.R))
+            {
+                _camera.ZoomIn(zoomSpeed);
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.F))
+            {
+                _camera.ZoomOut(zoomSpeed);
+            }
+
             _world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalSeconds, (1f / 60f)));
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -124,12 +151,12 @@ namespace Demo.SimCamera
                 0f, 
             1f);
 
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             _blockControlled.Draw(_spriteBatch);
             _block.Draw(_spriteBatch);
             _spriteBatch.End();
 
-            _debugView.RenderDebugData(ref projection);
+            _debugView.RenderDebugData(projection, _camera.GetViewSimMatrix());
 
             base.Draw(gameTime);
         }

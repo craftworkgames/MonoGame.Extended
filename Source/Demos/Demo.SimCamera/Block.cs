@@ -22,7 +22,7 @@ namespace Demo.SimCamera
 
         public Block(World world, Vector2 position, Texture2D texture)
         {
-            _body = BodyFactory.CreateRectangle(world, 2f, 1f, 1f);
+            _body = BodyFactory.CreateRectangle(world, 1f, 1f, 1f);
             _body.BodyType = BodyType.Dynamic;
             _body.Position = position;
 
@@ -77,21 +77,11 @@ namespace Demo.SimCamera
                 null,
                 Color.White,
                 _body.Rotation,
-                new Vector2(100, 50),
+                new Vector2(50, 50),
                 1f,
                 SpriteEffects.None,
                 0f
             );
-            //animatedSprite.Draw(
-            //    spriteBatch,
-            //    new Vector2(
-            //        ConvertUnits.ToDisplayUnits(Player.Position.X),
-            //        ConvertUnits.ToDisplayUnits(Player.Position.Y)
-            //        ),
-            //    Player.Rotation,
-            //    new Vector2(animatedSprite.TextureWidth / 2, animatedSprite.TextureHeight / 2),
-            //    Color.White
-            //    );
         }
     }
 }
