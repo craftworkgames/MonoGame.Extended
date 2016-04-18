@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Sprites;
 
@@ -40,8 +41,11 @@ namespace MonoGame.Extended.Animations
             return _animations[name];
         }
 
-        public void Play(string name)
+        public void Play(string name, Action onComplete = null)
         {
+            if (CurrentAnimation.IsComplete)
+                CurrentAnimation.Rewind();
+
             CurrentAnimation = _animations[name];
         }
 

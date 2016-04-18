@@ -22,7 +22,7 @@ namespace MonoGame.Extended.Animations
         public float AnimationDuration => KeyFrames.Length * FrameDuration;
         public TextureRegion2D CurrentFrame => KeyFrames[CurrentFrameIndex];
         public int CurrentFrameIndex { get; private set; }
-        public bool IsComplete => CurrentFrameIndex == KeyFrames.Length - 1;
+        public bool IsComplete => !IsLooping && _currentTime >= AnimationDuration;
         public bool IsLooping { get; set; }
         public bool IsReversed { get; set; }
         public bool IsPingPong { get; set; }
@@ -32,6 +32,11 @@ namespace MonoGame.Extended.Animations
         public void Update(GameTime gameTime)
         {
             Update(gameTime.GetElapsedSeconds());
+        }
+
+        public void Rewind()
+        {
+            _currentTime = 0;
         }
 
         public void Update(float deltaTime)

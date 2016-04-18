@@ -81,10 +81,11 @@ namespace Demo.SpriteSheetAnimations
             var motwTexture = Content.Load<Texture2D>("motw");
             var motwAtlas = TextureAtlas.Create(motwTexture, 52, 72);
             _motwPlayer = new KeyFrameAnimationPlayer();
-            _motwPlayer.Add("walkSouth", new KeyFrameAnimation(0.2f, new[] { motwAtlas[0], motwAtlas[1], motwAtlas[2], motwAtlas[1] }));
-            _motwPlayer.Add("walkWest", new KeyFrameAnimation(0.2f, new[] { motwAtlas[12], motwAtlas[13], motwAtlas[14], motwAtlas[13] }));
-            _motwPlayer.Add("walkEast", new KeyFrameAnimation(0.2f, new[] { motwAtlas[24], motwAtlas[25], motwAtlas[26], motwAtlas[25] }));
-            _motwPlayer.Add("walkNorth", new KeyFrameAnimation(0.2f, new[] { motwAtlas[36], motwAtlas[37], motwAtlas[38], motwAtlas[37] }));
+            _motwPlayer.Add("idle", new KeyFrameAnimation(0.2f, new[] { motwAtlas[1] }));
+            _motwPlayer.Add("walkSouth", new KeyFrameAnimation(0.2f, new[] { motwAtlas[0], motwAtlas[1], motwAtlas[2], motwAtlas[1] }, isLooping: false));
+            _motwPlayer.Add("walkWest", new KeyFrameAnimation(0.2f, new[] { motwAtlas[12], motwAtlas[13], motwAtlas[14], motwAtlas[13] }, isLooping: false));
+            _motwPlayer.Add("walkEast", new KeyFrameAnimation(0.2f, new[] { motwAtlas[24], motwAtlas[25], motwAtlas[26], motwAtlas[25] }, isLooping: false));
+            _motwPlayer.Add("walkNorth", new KeyFrameAnimation(0.2f, new[] { motwAtlas[36], motwAtlas[37], motwAtlas[38], motwAtlas[37] }, isLooping: false));
             _motwSprite = _motwPlayer.CreateSprite(_zombie.Position - new Vector2(0, 100));
         }
 
