@@ -20,11 +20,9 @@ namespace MonoGame.Extended.Particles
         /// Gets the axis in which the vector is facing.
         /// </summary>
         /// <returns>A <see cref="Axis"/> value representing the direction the vector is facing.</returns>
-        public static Vector2 ToAxis(this Vector2 vector2)
+        public static Axis ToAxis(this Vector2 vector2)
         {
-            var result = new Vector2(vector2.X,vector2.Y);
-            result.Normalize();
-            return result;
+            return new Axis(vector2.X, vector2.Y);
         }
     }
 }

@@ -1,48 +1,60 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Particles.Profiles
 {
     public abstract class Profile //: ICloneable
     {
-        public abstract void GetOffsetAndHeading(out Vector2 offset, out Vector2 heading);
+        public abstract void GetOffsetAndHeading(out Vector2 offset, out Axis heading);
 
-        public object Clone() {
+        public object Clone()
+        {
             return MemberwiseClone();
         }
 
         public enum CircleRadiation { None, In, Out }
 
-        public static Profile Point(PointF point) {
-            return new OutlineProfile(point);
+        public static Profile Point()
+        {
+            return new PointProfile();
         }
 
-        public static Profile Line(LineF line) {
-            return new OutlineProfile(line);
+        public static Profile Line(Axis axis, float length)
+        {
+            return new LineProfile { Axis = axis, Length = length };
         }
 
-        public static Profile Ring(CircleF circle, CircleRadiation radiate) {
-            return new OutlineProfile(circle, radiate, circle.Center);
+        public static Profile Ring(float radius, CircleRadiation radiate)
+        {
+            return new RingProfile { Radius = radius, Radiate = radiate };
         }
 
-        public static Profile Box(RectangleF rectangle) {
-            return new OutlineProfile(rectangle);
+        public static Profile Box(float width, float height)
+        {
+            return new BoxProfile { Width = width, Height = height };
         }
 
-        public static Profile BoxFill(RectangleF rectangle) {
-            return new FillProfile(rectangle);
+        public static Profile BoxFill(float width, float height)
+        {
+            return new BoxFillProfile { Width = width, Height = height };
         }
 
-
-        public static Profile Circle(CircleF circle, CircleRadiation radiate = CircleRadiation.None) {
-            return new FillProfile(circle);
+        public static Profile BoxUniform(float width, float height)
+        {
+            return new BoxUniformProfile { Width = width, Height = height };
         }
 
-        public static Profile Spray(IShapeF spawn, IShapeF target) {
-            return new FillTargetProfile(spawn, target);
+        public static Profile Circle(float radius, CircleRadiation radiate)
+        {
+            return new CircleProfile { Radius = radius, Radiate = radiate };
         }
 
-        public override string ToString() {
+        public static Profile Spray(Axis direction, float spread)
+        {
+            return new SprayProfile { Direction = direction, Spread = spread };
+        }
+
+        public override string ToString()
+        {
             return GetType().ToString();
         }
     }

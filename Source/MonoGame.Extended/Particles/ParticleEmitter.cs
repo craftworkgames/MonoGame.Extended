@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Particles
@@ -86,7 +85,7 @@ namespace MonoGame.Extended.Particles
             Release(position + Offset, numToRelease);
         }
 
-        public void Trigger(LineF line)
+        public void Trigger(LineSegment line)
         {
             var numToRelease = FastRand.NextInteger(Parameters.Quantity);
             var lineVector = line.ToVector();
@@ -94,7 +93,7 @@ namespace MonoGame.Extended.Particles
             for (var i = 0; i < numToRelease; i++)
             {
                 var offset = lineVector * FastRand.NextSingle();
-                Release(line.StartPoint + offset, 1);
+                Release(line.Origin + offset, 1);
             }
         }
 
@@ -106,7 +105,7 @@ namespace MonoGame.Extended.Particles
             {
                 var particle = iterator.Next();
 
-                Vector2 heading;
+                Axis heading;
                 Profile.GetOffsetAndHeading(out particle->Position, out heading);
 
                 particle->Age = 0f;

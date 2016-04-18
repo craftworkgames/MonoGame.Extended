@@ -108,7 +108,13 @@ namespace MonoGame.Extended.Particles
         {
             return NextSingle((float)Math.PI * -1f, (float)Math.PI);
         }
-        
+
+        public static void NextUnitVector(out Axis axis)
+        {
+            var angle = NextAngle();
+
+            axis = new Axis((float)Math.Cos(angle), (float)Math.Sin(angle));
+        }
 
         public static void NextUnitVector(out Vector2 vector)
         {
