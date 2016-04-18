@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.Animations
 {
@@ -13,16 +14,18 @@ namespace MonoGame.Extended.Animations
         public KeyFrameAnimationPlayer(KeyFrameAnimationDictionary animations)
         {
             _animations = animations;
-            _currentAnimation = _animations.Values.FirstOrDefault();
+            CurrentAnimation = _animations.Values.FirstOrDefault();
         }
 
         private readonly KeyFrameAnimationDictionary _animations;
-        private KeyFrameAnimation _currentAnimation;
+
+        public Sprite TargetSprite { get; set; }
+        public KeyFrameAnimation CurrentAnimation { get; private set; }
 
         public void Add(string name, KeyFrameAnimation animation)
         {
             if (!_animations.Values.Any())
-                _currentAnimation = animation;
+                CurrentAnimation = animation;
 
             _animations.Add(name, animation);
         }
@@ -39,17 +42,36 @@ namespace MonoGame.Extended.Animations
 
         public void Play(string name)
         {
-            _currentAnimation = _animations[name];
+            CurrentAnimation = _animations[name];
         }
 
         public void Update(float deltaTime)
         {
-            _currentAnimation?.Update(deltaTime);
+            if (CurrentAnimation != null)
+            {
+                CurrentAnimation.Update(deltaTime);
+
+                if (TargetSprite != null)
+                    TargetSprite.TextureRegion = CurrentAnimation.CurrentFrame;
+            }
         }
 
         public void Update(GameTime gameTime)
         {
             Update(gameTime.GetElapsedSeconds());
+        }
+
+        public Sprite CreateSprite(Vector2 position)
+        {
+            return TargetSprite = new Sprite(CurrentAnimation.CurrentFrame)
+            {
+                Position = position
+            };
+        }
+
+        public Sprite CreateSprite()
+        {
+            return CreateSprite(Vector2.Zero);
         }
     }
 }
