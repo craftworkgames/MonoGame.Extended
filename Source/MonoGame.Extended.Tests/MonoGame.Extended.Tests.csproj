@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\BitVector32Tests.cs" />
     <Compile Include="Collections\DequeTests.cs" />
     <Compile Include="Collections\PoolTests.cs" />
     <Compile Include="Graphics\Batching\ImmediateBatchQueuerTests.cs" />

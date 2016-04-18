@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
@@ -9,10 +8,9 @@ namespace MonoGame.Extended.Graphics.Batching
     {
         private TVertexType[] _vertices;
         private short[] _indices;
-        private Effect _effect;
 
-        internal UserPrimitivesBatchDrawer(GraphicsDevice graphicsDevice, int maximumBatchSize = PrimitiveBatch<TVertexType>.DefaultMaximumBatchSize)
-            : base(graphicsDevice, maximumBatchSize)
+        internal UserPrimitivesBatchDrawer(GraphicsDevice graphicsDevice, int maximumBatchVerticesSizeKiloBytes = PrimitiveBatch<TVertexType>.DefaultMaximumBatchVerticesSizeKiloBytes, int maximumBatchIndicesSizeKiloBytes = PrimitiveBatch<TVertexType>.DefaultMaximumBatchVerticesSizeKiloBytes)
+            : base(graphicsDevice, maximumBatchVerticesSizeKiloBytes, maximumBatchIndicesSizeKiloBytes)
         {
         }
 
@@ -27,46 +25,37 @@ namespace MonoGame.Extended.Graphics.Batching
             _indices = null;
         }
 
-        internal override void Begin(Effect effect, TVertexType[] vertices)
+        internal override void Select(TVertexType[] vertices)
         {
-            Debug.Assert(effect != null);
             Debug.Assert(vertices != null);
-
-            _effect = effect;
             _vertices = vertices;
         }
 
-        internal override void Begin(Effect effect, TVertexType[] vertices, short[] indices)
+        internal override void Select(TVertexType[] vertices, short[] indices)
         {
-            Debug.Assert(effect != null);
             Debug.Assert(vertices != null);
             Debug.Assert(indices != null);
 
-            _effect = effect;
             _vertices = vertices;
             _indices = indices;
         }
 
-        internal override void End()
-        {
-        }
-
-        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount)
+        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, IDrawContext drawContext)
         {
             var primitiveCount = primitiveType.GetPrimitiveCount(vertexCount);
 
-            foreach (var pass in _effect.CurrentTechnique.Passes)
+            foreach (var pass in drawContext.Effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 GraphicsDevice.DrawUserPrimitives(primitiveType, _vertices, startVertex, primitiveCount);
             }
         }
 
-        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount)
+        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext)
         {
             var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
 
-            foreach (var pass in _effect.CurrentTechnique.Passes)
+            foreach (var pass in drawContext.Effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 GraphicsDevice.DrawUserIndexedPrimitives(primitiveType, _vertices, startVertex, vertexCount, _indices, startIndex, primitiveCount);

@@ -5,32 +5,27 @@ namespace MonoGame.Extended.Graphics.Batching
 {
     internal class DynamicVertexBufferBatchDrawer<TVertexType> : BatchDrawer<TVertexType> where TVertexType : struct,IVertexType
     {
-        internal DynamicVertexBufferBatchDrawer(GraphicsDevice graphicsDevice, int maximumBatchSize)
-            : base(graphicsDevice, maximumBatchSize)
+        internal DynamicVertexBufferBatchDrawer(GraphicsDevice graphicsDevice, int maximumBatchVerticesSizeKiloBytes, int maximumBatchIndicesSizeKiloBytes)
+            : base(graphicsDevice, maximumBatchVerticesSizeKiloBytes, maximumBatchIndicesSizeKiloBytes)
         {
         }
 
-        internal override void Begin(Effect effect, TVertexType[] vertices)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Begin(Effect effect, TVertexType[] vertices, short[] indices)
+        internal override void Select(TVertexType[] vertices)
         {
             throw new NotImplementedException();
         }
 
-        internal override void End()
+        internal override void Select(TVertexType[] vertices, short[] indices)
         {
             throw new NotImplementedException();
         }
 
-        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount)
+        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, IDrawContext drawContext)
         {
             throw new NotImplementedException();
         }
 
-        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount)
+        internal override void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext)
         {
             throw new NotImplementedException();
         }

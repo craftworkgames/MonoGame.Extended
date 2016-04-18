@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Graphics.Batching;
 using NUnit.Framework;
 using TestVertex = Microsoft.Xna.Framework.Graphics.VertexPositionColor;
@@ -22,7 +21,7 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice);
-            Assert.Greater(userPrimitivesBatcher.MaximumBatchSize, 4);
+            Assert.Greater(userPrimitivesBatcher.MaximumBatchVerticesSizeKiloBytes, 4);
         }
 
         [Test]
@@ -30,11 +29,11 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
+            var drawContext = new DrawContext<BasicEffect>(basicEffect);
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice);
             var vertices = new TestVertex[9];
-            userPrimitivesBatcher.Begin(basicEffect, vertices);
-            userPrimitivesBatcher.Draw(PrimitiveType.TriangleList, 0, 9);
-            userPrimitivesBatcher.End();
+            userPrimitivesBatcher.Select(vertices);
+            userPrimitivesBatcher.Draw(PrimitiveType.TriangleList, 0, 9, drawContext);
         }
 
         [Test]
@@ -42,12 +41,12 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var basicEffect = new BasicEffect(graphicsDevice);
+            var drawContext = new DrawContext<BasicEffect>(basicEffect);
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice);
             var vertices = new TestVertex[9];
             var indices = new short[9];
-            userPrimitivesBatcher.Begin(basicEffect, vertices, indices);
-            userPrimitivesBatcher.Draw(PrimitiveType.TriangleList, 0, 9, 0, 9);
-            userPrimitivesBatcher.End();
+            userPrimitivesBatcher.Select(vertices, indices);
+            userPrimitivesBatcher.Draw(PrimitiveType.TriangleList, 0, 9, 0, 9, drawContext);
         }
     }
 }

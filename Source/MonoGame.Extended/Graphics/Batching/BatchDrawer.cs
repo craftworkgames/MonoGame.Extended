@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
@@ -7,12 +8,21 @@ namespace MonoGame.Extended.Graphics.Batching
         where TVertexType : struct, IVertexType
     {
         internal GraphicsDevice GraphicsDevice;
-        internal readonly int MaximumBatchSize;
+        internal readonly int MaximumBatchVerticesSizeKiloBytes;
+        internal readonly int MaximumBatchIndicesSizeKiloBytes;
+        internal readonly int MaximumVerticesCount;
+        internal readonly int MaximumIndicesCount;
 
-        protected BatchDrawer(GraphicsDevice graphicsDevice, int maximumBatchSize)
+        protected BatchDrawer(GraphicsDevice graphicsDevice, int maximumBatchVerticesSizeKiloBytes, int maximumBatchIndicesSizeKiloBytes)
         {
             GraphicsDevice = graphicsDevice;
-            MaximumBatchSize = maximumBatchSize;
+            MaximumBatchVerticesSizeKiloBytes = maximumBatchVerticesSizeKiloBytes;
+            MaximumBatchIndicesSizeKiloBytes = maximumBatchIndicesSizeKiloBytes;
+
+            var vertexSizeBytes = Marshal.SizeOf(default(TVertexType));
+            MaximumVerticesCount = MaximumBatchVerticesSizeKiloBytes * 1024 / vertexSizeBytes;
+            var indexSizeBytes = Marshal.SizeOf(default(uint));
+            MaximumIndicesCount = MaximumBatchIndicesSizeKiloBytes * 1024 / indexSizeBytes;
         }
 
         public void Dispose()
@@ -31,10 +41,9 @@ namespace MonoGame.Extended.Graphics.Batching
             GraphicsDevice = null;
         }
 
-        internal abstract void Begin(Effect effect, TVertexType[] vertices);
-        internal abstract void Begin(Effect effect, TVertexType[] vertices, short[] indices);
-        internal abstract void End();
-        internal abstract void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount);
-        internal abstract void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount);
+        internal abstract void Select(TVertexType[] vertices);
+        internal abstract void Select(TVertexType[] vertices, short[] indices);
+        internal abstract void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, IDrawContext drawContext = null);
+        internal abstract void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext = null);
     }
 }

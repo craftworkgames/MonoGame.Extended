@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Graphics.Batching
             2
         };
 
-        public static void DrawSprite(this PrimitiveBatch<VertexPositionColorTexture> primitiveBatch, TextureRegion<Texture2D> textureRegion, Vector3 position, SpriteColor? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, uint sortKey = 0)
+        public static void DrawSprite(this PrimitiveBatch<VertexPositionColorTexture> primitiveBatch, TextureRegion<Texture2D> textureRegion, Vector3 position, SpriteColor? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, IDrawContext drawContext = null)
         {
             if (textureRegion.Texture == null)
             {
@@ -79,7 +79,7 @@ namespace MonoGame.Extended.Graphics.Batching
                 SetSpriteItemVerticesWithRotation(position.X, position.Y, -origin1.X, -origin1.Y, width, height, (float)Math.Sin(rotation), (float)Math.Cos(rotation), ref color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
             }
 
-            primitiveBatch.Draw(PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, sortKey);
+            primitiveBatch.Draw(PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, drawContext);
         }
 
         private static void SetSpriteItemVerticesWithRotation(float x, float y, float dx, float dy, float w, float h, float sin, float cos, ref SpriteColor color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)

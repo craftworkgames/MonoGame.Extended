@@ -42,6 +42,7 @@
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />
     <Compile Include="BitmapFonts\BitmapFontRegion.cs" />
+    <Compile Include="Collections\BitVector32.cs" />
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
@@ -51,8 +52,9 @@
     <Compile Include="Graphics\Batching\BatchDrawOperation.cs" />
     <Compile Include="Graphics\Batching\BatchSortMode.cs" />
     <Compile Include="Graphics\Batching\DeferredBatchQueuer.cs" />
-    <Compile Include="Graphics\Batching\DrawContextBatchQueuer.cs" />
     <Compile Include="Graphics\Batching\DynamicVertexBufferBatchDrawer.cs" />
+    <Compile Include="Graphics\Batching\IDrawContext.cs" />
+    <Compile Include="Graphics\Batching\DrawContext.cs" />
     <Compile Include="Graphics\Batching\ImmediateBatchQueuer.cs" />
     <Compile Include="Graphics\Batching\PrimitiveBatch.cs" />
     <Compile Include="Graphics\Batching\UserPrimitivesBatchDrawer.cs" />

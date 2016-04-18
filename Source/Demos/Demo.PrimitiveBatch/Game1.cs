@@ -82,9 +82,9 @@ namespace Demo.PrimitiveBatch
             _basicEffect = new BasicEffect(graphicsDevice);
 
             // create the VertexPositionColor PrimitiveBatch
-            _primitiveBatchPositionColor = new PrimitiveBatch<VertexPositionColor>(graphicsDevice, Array.Sort);
+            _primitiveBatchPositionColor = new PrimitiveBatch<VertexPositionColor>(graphicsDevice);
             // create the VertexPositionColorTexture PrimitiveBatch
-            _primitiveBatchPositionColorTexture = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice, Array.Sort);
+            _primitiveBatchPositionColorTexture = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice);
 
             // create our polygon mesh; vertices are in Local space; indices are index references to the vertices to draw 
             // indices have to multiple of 3 for PrimitiveType.TriangleList which says to draw a collection of triangles each with 3 vertices (triangles can share vertices)

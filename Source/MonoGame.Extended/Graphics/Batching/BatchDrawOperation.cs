@@ -6,21 +6,21 @@ namespace MonoGame.Extended.Graphics.Batching
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal struct BatchDrawOperation
     {
-        internal readonly uint SortKey;
+        internal readonly IDrawContext DrawContext;
         internal readonly int StartVertex;
         internal int VertexCount;
         internal readonly int StartIndex;
         internal int IndexCount;
         internal readonly byte PrimitiveType;
 
-        internal BatchDrawOperation(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, uint sortKey)
+        internal BatchDrawOperation(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext)
         {
             PrimitiveType = (byte)primitiveType;
             StartVertex = startVertex;
             VertexCount = vertexCount;
             StartIndex = startIndex;
             IndexCount = indexCount;
-            SortKey = sortKey;
+            DrawContext = drawContext;
         }
     }
 }
