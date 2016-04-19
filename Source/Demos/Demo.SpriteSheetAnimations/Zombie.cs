@@ -21,7 +21,7 @@ namespace Demo.SpriteSheetAnimations
 
     public class Zombie : IUpdate, IActorTarget
     {
-        private readonly SpriteSheetAnimator _animator;
+        private readonly KeyFrameAnimationPlayer _animator;
         private readonly Sprite _sprite;
 
         private float _direction = -1.0f;
@@ -52,19 +52,19 @@ namespace Demo.SpriteSheetAnimations
                     switch (_state)
                     {
                         case ZombieState.Attacking:
-                            _animator.PlayAnimation("attack", () => State = ZombieState.Idle);
+                            _animator.Play("attack", () => State = ZombieState.Idle);
                             break;
                         case ZombieState.Dying:
-                            _animator.PlayAnimation("die", () => State = ZombieState.Appearing);
+                            _animator.Play("die", () => State = ZombieState.Appearing);
                             break;
                         case ZombieState.Idle:
-                            _animator.PlayAnimation("idle");
+                            _animator.Play("idle");
                             break;
                         case ZombieState.Appearing:
-                            _animator.PlayAnimation("appear", () => State = ZombieState.Idle);
+                            _animator.Play("appear", () => State = ZombieState.Idle);
                             break;
                         case ZombieState.Walking:
-                            _animator.PlayAnimation("walk", () => State = ZombieState.Idle);
+                            _animator.Play("walk", () => State = ZombieState.Idle);
                             break;
                     }
                 }
@@ -73,10 +73,10 @@ namespace Demo.SpriteSheetAnimations
 
         public Vector2 Velocity { get; set; }
 
-        public Zombie(SpriteSheetAnimationGroup animationGroup)
+        public Zombie(KeyFrameAnimationCollection animations)
         {
-            _animator = new SpriteSheetAnimator(animationGroup);
-            _sprite = new Sprite(animationGroup.GetFrame(0));
+            _animator = new KeyFrameAnimationPlayer(animations);
+            _sprite = _animator.CreateSprite();
 
             State = ZombieState.Appearing;
             IsOnGround = false;
@@ -85,7 +85,6 @@ namespace Demo.SpriteSheetAnimations
         public void Update(GameTime gameTime)
         {
             _animator.Update(gameTime);
-            _sprite.TextureRegion = _animator.CurrentFrame;
 
             IsOnGround = false;
 
@@ -108,17 +107,13 @@ namespace Demo.SpriteSheetAnimations
             Velocity = new Vector2(200f * _direction, Velocity.Y);
 
             if (IsReady)
-            {
                 State = ZombieState.Walking;
-            }
         }
 
         public void Attack()
         {
             if (IsReady)
-            {
                 State = ZombieState.Attacking;
-            }
         }
 
         public void Die()

@@ -158,7 +158,7 @@
 /processor:AstridAnimatorProcessor
 /build:Sprites/zombie-animations.aa
 
-#begin motw.png
+#begin Sprites/motw.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -168,5 +168,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:motw.png
+/build:Sprites/motw.png
 

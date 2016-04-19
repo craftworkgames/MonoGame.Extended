@@ -20,7 +20,7 @@ namespace Demo.SpaceGame
         private Texture2D _backgroundTexture;
         private BulletFactory _bulletFactory;
         private Camera2D _camera;
-        private SpriteSheetAnimationGroup _explosionAnimations;
+        private KeyFrameAnimationCollection _explosionAnimations;
         private BitmapFont _font;
         private MeteorFactory _meteorFactory;
         private Spaceship _player;
@@ -60,7 +60,7 @@ namespace Demo.SpaceGame
             _font = Content.Load<BitmapFont>("Fonts/courier-new-32");
 
             _camera = new Camera2D(_viewportAdapter);
-            _explosionAnimations = Content.Load<SpriteSheetAnimationGroup>("explosion-animations");
+            _explosionAnimations = Content.Load<KeyFrameAnimationCollection>("explosion-animations");
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 

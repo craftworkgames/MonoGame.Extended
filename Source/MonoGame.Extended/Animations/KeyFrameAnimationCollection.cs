@@ -2,7 +2,7 @@
 
 namespace MonoGame.Extended.Animations
 {
-    public class KeyFrameAnimationDictionary : Dictionary<string, KeyFrameAnimation>
+    public class KeyFrameAnimationCollection : List<KeyFrameAnimation>
     {
     }
 }

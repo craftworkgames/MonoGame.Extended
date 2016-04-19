@@ -64,6 +64,7 @@
     {
       "Name": "idle",
       "FramesPerSecond": 8,
+      "IsLooping": true,
       "Frames": [
         "idle_01",
         "idle_02",

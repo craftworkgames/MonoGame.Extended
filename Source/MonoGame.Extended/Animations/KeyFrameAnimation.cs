@@ -6,9 +6,10 @@ namespace MonoGame.Extended.Animations
 {
     public class KeyFrameAnimation : IUpdate
     {
-        public KeyFrameAnimation(float frameDuration, TextureRegion2D[] keyFrames, 
+        public KeyFrameAnimation(string name, float frameDuration, TextureRegion2D[] keyFrames, 
             bool isLooping = true, bool isReversed = false, bool isPingPong = false)
         {
+            Name = name;
             FrameDuration = frameDuration;
             KeyFrames = keyFrames;
             IsLooping = isLooping;
@@ -17,6 +18,7 @@ namespace MonoGame.Extended.Animations
             CurrentFrameIndex = isReversed ? KeyFrames.Length - 1 : 0;
         }
 
+        public string Name { get; }
         public TextureRegion2D[] KeyFrames { get; }
         public float FrameDuration { get; set; }
         public float AnimationDuration => KeyFrames.Length * FrameDuration;
