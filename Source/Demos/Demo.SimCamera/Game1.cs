@@ -6,8 +6,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.ViewportAdapters;
 using System;
+using System.Text;
 
 namespace Demo.SimCamera
 {
@@ -23,6 +25,15 @@ namespace Demo.SimCamera
         private Block _block;
 
         private Camera2D _camera;
+
+        private Texture2D _backgroundTexture;
+        private BitmapFont _bitmapFont;
+
+        private bool _drawScene = true;
+        private bool _drawDebug = true;
+
+        private KeyboardState _previousKBState;
+        private KeyboardState _currentKBState;
 
         public Game1()
         {
@@ -42,6 +53,8 @@ namespace Demo.SimCamera
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             Texture2D textureBlock = Content.Load<Texture2D>("block");
+            _backgroundTexture = Content.Load<Texture2D>("vignette");
+            _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
 
             BoxingViewportAdapter boxingViewport = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(boxingViewport);
@@ -65,7 +78,7 @@ namespace Demo.SimCamera
             _blockControlled = new Block(
                 _world, 
                 new Vector2(
-                    ConvertSimUnits.ToSimUnits(110), 
+                    ConvertSimUnits.ToSimUnits(410), 
                     ConvertSimUnits.ToSimUnits(110)
                     ),
                 textureBlock);
@@ -73,7 +86,7 @@ namespace Demo.SimCamera
             _block = new Block(
                 _world, 
                 new Vector2(
-                    ConvertSimUnits.ToSimUnits(410), 
+                    ConvertSimUnits.ToSimUnits(610), 
                     ConvertSimUnits.ToSimUnits(110)
                     ), 
                 textureBlock);
@@ -96,42 +109,55 @@ namespace Demo.SimCamera
             const float rotationSpeed = 0.01f;
             const float zoomSpeed = 0.01f;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.W))
+            _previousKBState = _currentKBState;
+            _currentKBState = Keyboard.GetState();
+
+            if (_currentKBState.IsKeyUp(Keys.D1) && _previousKBState.IsKeyDown(Keys.D1))
+            {
+                _drawScene = !_drawScene;
+            }
+
+            if (_currentKBState.IsKeyUp(Keys.D2) && _previousKBState.IsKeyDown(Keys.D2))
+            {
+                _drawDebug = !_drawDebug;
+            }
+
+            if (_currentKBState.IsKeyDown(Keys.W))
             {
                 _camera.Move(new Vector2(0, -movementSpeed));
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            if (_currentKBState.IsKeyDown(Keys.A))
             {
                 _camera.Move(new Vector2(-movementSpeed, 0));
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.S))
+            if (_currentKBState.IsKeyDown(Keys.S))
             {
                 _camera.Move(new Vector2(0, movementSpeed));
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            if (_currentKBState.IsKeyDown(Keys.D))
             {
                 _camera.Move(new Vector2(movementSpeed, 0));
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.E))
+            if (_currentKBState.IsKeyDown(Keys.E))
             {
                 _camera.Rotation += rotationSpeed;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Q))
+            if (_currentKBState.IsKeyDown(Keys.Q))
             {
                 _camera.Rotation -= rotationSpeed;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.R))
+            if (_currentKBState.IsKeyDown(Keys.R))
             {
                 _camera.ZoomIn(zoomSpeed);
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.F))
+            if (_currentKBState.IsKeyDown(Keys.F))
             {
                 _camera.ZoomOut(zoomSpeed);
             }
@@ -142,7 +168,10 @@ namespace Demo.SimCamera
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
+            var destinationRectangle = new Rectangle(0, 0, 800, 480);
+
+
             Matrix projection = Matrix.CreateOrthographicOffCenter(
                 0f, 
                 ConvertSimUnits.ToSimUnits(_graphics.GraphicsDevice.Viewport.Width),
@@ -151,12 +180,34 @@ namespace Demo.SimCamera
                 0f, 
             1f);
 
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _blockControlled.Draw(_spriteBatch);
-            _block.Draw(_spriteBatch);
-            _spriteBatch.End();
+            if (_drawScene)
+            {
+                _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+                _spriteBatch.Draw(_backgroundTexture, destinationRectangle, Color.White);
+                _blockControlled.Draw(_spriteBatch);
+                _block.Draw(_spriteBatch);
+                _spriteBatch.End();
+            }
 
-            _debugView.RenderDebugData(projection, _camera.GetViewSimMatrix());
+            if (_drawDebug)
+            {
+                _debugView.RenderDebugData(projection, _camera.GetViewSimMatrix());
+            }
+
+            // not all sprite batches need to be affected by the camera
+            var rectangle = _camera.GetBoundingRectangle();
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("WASD: Move camera");
+            stringBuilder.AppendLine("Arrows: Move box");
+            stringBuilder.AppendLine("EQ: Rotate camera");
+            stringBuilder.AppendLine("RF: Zoom camera");
+            stringBuilder.AppendLine("1: Draw scene");
+            stringBuilder.AppendLine("2: Draw debug");
+
+
+            _spriteBatch.Begin(blendState: BlendState.AlphaBlend);
+            _spriteBatch.DrawString(_bitmapFont, stringBuilder.ToString(), new Vector2(5, 5), Color.White);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
