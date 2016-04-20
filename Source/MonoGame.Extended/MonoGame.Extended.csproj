@@ -37,10 +37,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Animations\KeyFrameAnimation.cs" />
-    <Compile Include="Animations\KeyFrameAnimationCollection.cs" />
+    <Compile Include="Animations\KeyFrameAnimationData.cs" />
+    <Compile Include="Animations\KeyFrameAnimationFactory.cs" />
     <Compile Include="Animations\KeyFrameAnimationPlayer.cs" />
     <Compile Include="Animations\SpriteSheetAnimationGroup.cs" />
-    <Compile Include="Animations\KeyFrameAnimationCollectionReader.cs" />
+    <Compile Include="Animations\KeyFrameAnimationFactoryReader.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />

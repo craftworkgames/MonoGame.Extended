@@ -73,7 +73,7 @@ namespace Demo.SpriteSheetAnimations
 
         public Vector2 Velocity { get; set; }
 
-        public Zombie(KeyFrameAnimationCollection animations)
+        public Zombie(KeyFrameAnimationFactory animations)
         {
             _animator = new KeyFrameAnimationPlayer(animations);
             _sprite = _animator.CreateSprite();

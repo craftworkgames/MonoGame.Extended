@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Sprites;
@@ -8,65 +7,38 @@ namespace MonoGame.Extended.Animations
 {
     public class KeyFrameAnimationPlayer : IUpdate
     {
-        public KeyFrameAnimationPlayer()
+        public KeyFrameAnimationPlayer(KeyFrameAnimationFactory animationFactory)
         {
-            _animations = new Dictionary<string, KeyFrameAnimation>();
+            _animationFactory = animationFactory;
         }
 
-        public KeyFrameAnimationPlayer(KeyFrameAnimationCollection animations)
-        {
-            _animations = animations.ToDictionary(a => a.Name);
-            CurrentAnimation = _animations.Values.FirstOrDefault();
-        }
-
-        private readonly Dictionary<string, KeyFrameAnimation> _animations;
+        private readonly KeyFrameAnimationFactory _animationFactory;
         private Action _onComplete;
+        private KeyFrameAnimation _currentAnimation;
 
         public Sprite TargetSprite { get; set; }
-        public KeyFrameAnimation CurrentAnimation { get; private set; }
-
-        public void Add(KeyFrameAnimation animation)
+        
+        public KeyFrameAnimation Play(string name, Action onComplete = null)
         {
-            if (animation.Name == null)
-                throw new InvalidOperationException("Animations must be named.");
+            if (_currentAnimation == null || _currentAnimation.IsComplete || _currentAnimation.Name != name)
+            {
+                _currentAnimation = _animationFactory.Create(name);
+                _onComplete = onComplete;
+            }
 
-            if (!_animations.Values.Any())
-                CurrentAnimation = animation;
-            
-            _animations.Add(animation.Name, animation);
-        }
-
-        public bool Remove(string name)
-        {
-            return _animations.Remove(name);
-        }
-
-        public KeyFrameAnimation Get(string name)
-        {
-            return _animations[name];
-        }
-
-        public KeyFrameAnimation this[string name] => Get(name);
-
-        public void Play(string name, Action onComplete = null)
-        {
-            if (CurrentAnimation.IsComplete || CurrentAnimation.Name != name)
-                CurrentAnimation.Rewind();
-
-            CurrentAnimation = _animations[name];
-            _onComplete = onComplete;
+            return _currentAnimation;
         }
 
         public void Update(float deltaTime)
         {
-            if (CurrentAnimation != null && !CurrentAnimation.IsComplete)
+            if (_currentAnimation != null && !_currentAnimation.IsComplete)
             {
-                CurrentAnimation.Update(deltaTime);
+                _currentAnimation.Update(deltaTime);
 
                 if (TargetSprite != null)
-                    TargetSprite.TextureRegion = CurrentAnimation.CurrentFrame;
+                    TargetSprite.TextureRegion = _currentAnimation.CurrentFrame;
 
-                if (CurrentAnimation.IsComplete)
+                if (_currentAnimation.IsComplete)
                     _onComplete?.Invoke();
             }
         }
@@ -78,10 +50,8 @@ namespace MonoGame.Extended.Animations
 
         public Sprite CreateSprite(Vector2 position)
         {
-            return TargetSprite = new Sprite(CurrentAnimation.CurrentFrame)
-            {
-                Position = position
-            };
+            var textureRegion = _currentAnimation != null ? _currentAnimation.CurrentFrame : _animationFactory.Frames.FirstOrDefault();
+            return TargetSprite = new Sprite(textureRegion) { Position = position };
         }
 
         public Sprite CreateSprite()

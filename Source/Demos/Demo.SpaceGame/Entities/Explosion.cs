@@ -10,7 +10,7 @@ namespace Demo.SpaceGame.Entities
         private readonly KeyFrameAnimationPlayer _animator;
         private readonly Sprite _sprite;
 
-        public Explosion(KeyFrameAnimationCollection animations, Vector2 position, float radius)
+        public Explosion(KeyFrameAnimationFactory animations, Vector2 position, float radius)
         {
             _animator = new KeyFrameAnimationPlayer(animations);
             _sprite = _animator.CreateSprite();
