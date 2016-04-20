@@ -4,63 +4,63 @@ namespace MonoGame.Extended
 {
     public static class ConvertSimUnits
     {
-        public static float DisplayToSimRatio { get; private set; } = 100f;
-        public static float SimToDisplayRatio { get; private set; } = 1 / DisplayToSimRatio;
+        public static float SimToDisplayRatio { get; private set; } = 100f;
+        public static float DisplayToSimRatio { get; private set; } = 1 / SimToDisplayRatio;
 
-        public static void SetDisplayToSimRatio(float ratio)
+        public static void SetSimToDisplayRatio(float ratio)
         {
-            DisplayToSimRatio = ratio;
-            SimToDisplayRatio = 1 / ratio;
+            SimToDisplayRatio = ratio;
+            DisplayToSimRatio = 1 / ratio;
         }
 
         public static float ToDisplayUnits(int simUnits)
         {
-            return simUnits * DisplayToSimRatio;
+            return simUnits * SimToDisplayRatio;
         }
 
         public static float ToDisplayUnits(float simUnits)
         {
-            return simUnits * DisplayToSimRatio;
+            return simUnits * SimToDisplayRatio;
         }
 
         public static double ToDisplayUnits(double simUnits)
         {
-            return simUnits * DisplayToSimRatio;
+            return simUnits * SimToDisplayRatio;
         }
 
         public static Vector2 ToDisplayUnits(Vector2 simUnits)
         {
-            return simUnits * DisplayToSimRatio;
+            return simUnits * SimToDisplayRatio;
         }
 
         public static Vector3 ToDisplayUnits(Vector3 simUnits)
         {
-            return simUnits * DisplayToSimRatio;
+            return simUnits * SimToDisplayRatio;
         }
 
         public static float ToSimUnits(int displayUnits)
         {
-            return displayUnits * SimToDisplayRatio;
+            return displayUnits * DisplayToSimRatio;
         }
 
         public static float ToSimUnits(float displayUnits)
         {
-            return displayUnits * SimToDisplayRatio;
+            return displayUnits * DisplayToSimRatio;
         }
 
         public static double ToSimUnits(double displayUnits)
         {
-            return displayUnits * SimToDisplayRatio;
+            return displayUnits * DisplayToSimRatio;
         }
 
         public static Vector2 ToSimUnits(Vector2 displayUnits)
         {
-            return displayUnits * SimToDisplayRatio;
+            return displayUnits * DisplayToSimRatio;
         }
 
         public static Vector3 ToSimUnits(Vector3 displayUnits)
         {
-            return displayUnits * SimToDisplayRatio;
+            return displayUnits * DisplayToSimRatio;
         }
     }
 }

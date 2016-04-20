@@ -148,7 +148,7 @@ namespace MonoGame.Extended
 
         public Matrix GetViewSimMatrix()
         {
-            return GetViewSimMatrix(ConvertSimUnits.SimToDisplayRatio);
+            return GetViewSimMatrix(ConvertSimUnits.DisplayToSimRatio);
         }
 
         public Matrix GetViewSimMatrix(float unitsRatio)

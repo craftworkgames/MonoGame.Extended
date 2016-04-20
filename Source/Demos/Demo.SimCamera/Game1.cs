@@ -171,14 +171,18 @@ namespace Demo.SimCamera
             GraphicsDevice.Clear(Color.Black);
             var destinationRectangle = new Rectangle(0, 0, 800, 480);
 
+            SimpleSimProjection test = new SimpleSimProjection(_graphics, reverseHeight: true);
+            test.MoveProjection(_graphics.GraphicsDevice.Viewport.Width / 2, _graphics.GraphicsDevice.Viewport.Height / 2);
 
-            Matrix projection = Matrix.CreateOrthographicOffCenter(
-                0f, 
-                ConvertSimUnits.ToSimUnits(_graphics.GraphicsDevice.Viewport.Width),
-                ConvertSimUnits.ToSimUnits(_graphics.GraphicsDevice.Viewport.Height), 
-                0f, 
-                0f, 
-            1f);
+            Matrix projection = test.SimProjection;
+            
+            //Matrix.CreateOrthographicOffCenter(
+            //    0f,
+            //    ConvertSimUnits.ToSimUnits(_graphics.GraphicsDevice.Viewport.Width),
+            //    ConvertSimUnits.ToSimUnits(_graphics.GraphicsDevice.Viewport.Height),
+            //    0f,
+            //    0f,
+            //1f);
 
             if (_drawScene)
             {
