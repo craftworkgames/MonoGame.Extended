@@ -1,4 +1,5 @@
 using MonoGame.Extended.Particles;
+using MonoGame.Extended.Tweening.Interpolators;
 
 namespace MonoGame.Extended.Tweening
 {

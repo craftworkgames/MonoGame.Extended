@@ -10,8 +10,13 @@ namespace MonoGame.Extended.Tweening.Animation.Tracks
         private readonly PropertyInfo _propertyInfo;
 
         public ReflectionTrack(Expression<Func<TTransformable, TValue>> propertySelector) {
-            _propertyInfo = (propertySelector.Body as MemberExpression).Member as PropertyInfo;
+            _propertyInfo = (propertySelector.Body as MemberExpression)?.Member as PropertyInfo;
+            if (_propertyInfo == null) throw new ArgumentException("Supply a valid property selector");
         }
-        protected override void Set(TValue value) => _propertyInfo.SetValue(Transformable, value);
+        protected override void SetValue(TValue value) =>
+            _propertyInfo.SetValue(Transformable, value);
+
+        protected override TValue GetValue() =>
+            (TValue)_propertyInfo.GetValue(Transformable);
     }
 }

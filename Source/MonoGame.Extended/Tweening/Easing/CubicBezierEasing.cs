@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tweening.Easing
 {
@@ -6,7 +7,7 @@ namespace MonoGame.Extended.Tweening.Easing
     {
         private readonly Vector2 _controlPoint1;
         private readonly Vector2 _controlPoint2;
-        private Vector2[] _points;
+        private Vector3[] _points;
 
 
         /// <summary>
@@ -18,21 +19,29 @@ namespace MonoGame.Extended.Tweening.Easing
         public CubicBezierEasing(Vector2 controlPoint1, Vector2 controlPoint2, int resolution) {
             _controlPoint1 = controlPoint1;
             _controlPoint2 = controlPoint2;
-            _points = new Vector2[resolution];
+            _points = new Vector3[resolution + 1];
             for (int i = 1; i < resolution; i++) {
-                _points[i - 1] = PosAt(1f * i / resolution);
+                var t = 1f * i / resolution;
+                _points[i] = new Vector3(PosAt(t), t);
             }
-            _points[resolution - 1] = Vector2.One;
+            _points[resolution] = Vector3.One;
         }
 
-        public CubicBezierEasing(float x1, float y1, float x2, float y2, int resolution = 19) : this(new Vector2(x1, y1), new Vector2(x2, y2), resolution) { }
+        public CubicBezierEasing(float x1, float y1, float x2, float y2, int resolution = 5) : this(new Vector2(x1, y1), new Vector2(x2, y2), resolution) { }
         protected override double Function(double t) {
-            for (int i = 0; i < _points.Length; i++) {
-                if (t > _points[i].X) continue;
-                var prev = i > 0 ? _points[i - 1] : Vector2.Zero;
+            for (int i = 1, n = _points.Length; i < n; i++) {
                 var current = _points[i];
+                if (t > current.X) continue;
+                var prev = _points[i - 1];// : Vector3.Zero;
                 var d = (t - prev.X) / (current.X - prev.X);
-                return (current.Y - prev.Y) * d + prev.Y;
+                var t2 = (float)(d / (n - 1));
+                var pos = PosAt(t2 + prev.Z);
+                //var x = pos.X / t;
+                //if (x < 0.98 || x > 1.02) {
+                //    if (i == 1 || i == n - 2) return (current.Y - prev.Y) * d + prev.Y;
+                //    pos = PosAt(t2 / (float)x + prev.Z);
+                //}
+                return pos.Y;
             }
             return 1;
         }

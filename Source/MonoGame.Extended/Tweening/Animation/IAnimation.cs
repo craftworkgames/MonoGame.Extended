@@ -8,7 +8,24 @@ namespace MonoGame.Extended.Tweening.Animation
         double Duration { get; }
         void Update(double time);
         void End();
-        void AddChildAnimation(IAnimation sub);
         IAnimation Copy();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

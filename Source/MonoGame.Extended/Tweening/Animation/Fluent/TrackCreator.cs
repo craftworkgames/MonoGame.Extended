@@ -28,9 +28,9 @@ namespace MonoGame.Extended.Tweening.Animation.Fluent
             anim.Tracks.Add(result);
             return new FluentTrack<T, TValue> { Track = result, TypeAnimation = anim };
         }
-        public static FluentTrack<T, TValue> Property<T, TValue>(this ITypeAnimation<T> anim,
-            Action<T, TValue> setter) where T : class, IMovable {
-            var result = new DelegateTrack<T, TValue>(setter);
+        public static FluentTrack<T, TValue> Property<T, TValue>(this ITypeAnimation<T> anim, Action<T, TValue> setter, Func<T, TValue> getter) 
+            where T : class, IMovable {
+            var result = new DelegateTrack<T, TValue>(setter, getter);
             anim.Tracks.Add(result);
             return new FluentTrack<T, TValue> { Track = result, TypeAnimation = anim };
         }

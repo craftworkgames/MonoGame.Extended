@@ -7,8 +7,12 @@ namespace MonoGame.Extended.Tweening.Animation.Tracks
 {
     internal class FloatTrack<T> : Track<T, float> where T : class
     {
-        protected override void Set(float value) {
+        protected override void SetValue(float value) {
             Float = value;
+        }
+
+        protected override float GetValue() {
+            throw new System.NotImplementedException();
         }
 
         public float Float { get; set; }
@@ -25,14 +29,14 @@ namespace MonoGame.Extended.Tweening.Animation.Tracks
         }
 
         //TODO
-        public override void Update(double time) {
-            base.Update(time);
+        public override void Update(double time, double interpolation) {
+            base.Update(time, interpolation);
             XTrack.Float = float.NaN;
-            XTrack.Update(time);
+            XTrack.Update(time, 1);
             YTrack.Float = float.NaN;
-            YTrack.Update(time);
+            YTrack.Update(time, 1);
             if (float.IsNaN(XTrack.Float) && float.IsNaN(YTrack.Float)) return;
-            Set(new Vector2(XTrack.Float, YTrack.Float));
+            SetValue(new Vector2(XTrack.Float, YTrack.Float));
         }
     }
 }

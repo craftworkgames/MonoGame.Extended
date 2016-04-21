@@ -57,8 +57,11 @@
     <Compile Include="Tweening\Animation\Tracks\Vector2Track.cs" />
     <Compile Include="Tweening\Animation\Transformation.cs" />
     <Compile Include="Tweening\Animation\TypeAnimation.cs" />
-    <Compile Include="Tweening\DynamicInterpolator.cs" />
-    <Compile Include="Tweening\Interpolators.cs" />
+    <Compile Include="Tweening\Interpolators\DynamicInterpolator.cs" />
+    <Compile Include="Tweening\Interpolators\ColorInterpolator.cs" />
+    <Compile Include="Tweening\Interpolators\FloatInterpolator.cs" />
+    <Compile Include="Tweening\Interpolators\HslColorInterpolator.cs" />
+    <Compile Include="Tweening\Interpolators\DoubleInterpolator.cs" />
     <Compile Include="Tweening\Easer.cs" />
     <Compile Include="Tweening\Easing\BounceEasing.cs" />
     <Compile Include="Tweening\Easing\BackEasing.cs" />
@@ -85,6 +88,11 @@
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
     <Compile Include="Tweening\InterpolatorStore.cs" />
+    <Compile Include="Tweening\Interpolators\IntInterpolator.cs" />
+    <Compile Include="Tweening\Interpolators\QuaternionInterpolator.cs" />
+    <Compile Include="Tweening\Interpolators\Vector2Interpolator.cs" />
+    <Compile Include="Tweening\Interpolators\Vector3Interpolator.cs" />
+    <Compile Include="Tweening\Interpolators\Vector4Interpolator.cs" />
     <Compile Include="Tweening\Range.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />
@@ -226,6 +234,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -8,7 +8,8 @@ namespace MonoGame.Extended.Tweening.Animation.Tracks
     public abstract class Track<TTransformable, TValue> : ITrackValue<TValue>, ITrack<TTransformable> where TTransformable : class
     {
         public bool Interpolate { get; set; } = true;
-        protected abstract void Set(TValue value);
+        protected abstract void SetValue(TValue value);
+        protected abstract TValue GetValue();
         public TTransformable Transformable { get; set; }
         public double LastEndtime => Transforms.Max(t => t.Time);
         protected readonly Easer<TValue> Easer = new Easer<TValue>();
@@ -20,16 +21,16 @@ namespace MonoGame.Extended.Tweening.Animation.Tracks
 
         //after running
         private Transformation<TValue> _previous;
-        public virtual void Update(double time) {
+        public virtual void Update(double time, double interpolation) {
             Transformation<TValue> next = null, current = null;
             var count = Transforms.Count;
             if (count < 1) return;
             if (time <= Transforms[0].Time) {
-                Set(Transforms[0].Value);
+                SetValue(Transforms[0].Value);
                 return;
             }
             if (time >= Transforms[count - 1].Time) {
-                Set(Transforms[count - 1].Value);
+                SetValue(Transforms[count - 1].Value);
                 return;
             }
 
@@ -37,8 +38,8 @@ namespace MonoGame.Extended.Tweening.Animation.Tracks
                 next = Transforms[i];
                 if (next.Time < time) continue;
                 current = Transforms[i - 1];
-                if (current.Tween && Interpolate) break;
-                Set(current.Value);
+                if (current.Tween && Interpolate && interpolation > 0) break;
+                SetValue(current.Value);
                 return;
             }
 
@@ -49,7 +50,8 @@ namespace MonoGame.Extended.Tweening.Animation.Tracks
             }
             var start = current.Time;
             var value = Easer.Ease((time - start) / (next.Time - start));
-            Set(value);
+            if (interpolation >= 1) SetValue(value);
+            SetValue(Easer.Interpolate(interpolation, GetValue(), value));
         }
 
         public virtual ITrack<TTransformable> Copy() {

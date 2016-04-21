@@ -9,10 +9,10 @@ namespace MonoGame.Extended.Tweening.Animation.Fluent
 {
     public static class AnimationCreator
     {
-        public static TypeAnimation<TTransformable> AddAnimation<TTransformable>(this IAnimation animation, TTransformable transformable) where TTransformable : class {
+        public static TypeAnimation<TTransformable> AddAnimation<TTransformable>(this Animation animation, TTransformable transformable) where TTransformable : class {
             var result = new TypeAnimation<TTransformable> { ParentAnimation = animation };
             result.SetTransformable(transformable);
-            animation.AddChildAnimation(result);
+            animation.AddChildAnimations(result);
             return result;
         }
 

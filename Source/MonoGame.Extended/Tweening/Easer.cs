@@ -1,4 +1,5 @@
 using MonoGame.Extended.Tweening.Easing;
+using MonoGame.Extended.Tweening.Interpolators;
 
 namespace MonoGame.Extended.Tweening
 {
@@ -48,7 +49,7 @@ namespace MonoGame.Extended.Tweening
         private T _difference;
         private T _startvalue;
         private T _endvalue;
-       // public Range<T> ValueRange { get; set; }
+        // public Range<T> ValueRange { get; set; }
 
 
         public EasingFunction Easing { get; set; } = EasingFunction.None;
@@ -59,6 +60,16 @@ namespace MonoGame.Extended.Tweening
                 : INTERPOLATOR.Add(_startvalue, INTERPOLATOR.Mult(_difference, Easing.Ease(t)));
         }
 
+        public T Interpolate(double t) {
+            return INTERPOLATOR == null
+                            ? (T)DynamicInterpolator.Singleton.Add(_startvalue, (T)DynamicInterpolator.Singleton.Mult(_difference, t))
+                            : INTERPOLATOR.Add(_startvalue, INTERPOLATOR.Mult(_difference, t));
+        }
+        public T Interpolate(double t, T startValue, T endValue) {
+            return INTERPOLATOR == null
+                            ? (T)DynamicInterpolator.Singleton.Interpolate(startValue, endValue, t)
+                            : INTERPOLATOR.Interpolate(startValue, endValue, t);
+        }
 
     }
 }

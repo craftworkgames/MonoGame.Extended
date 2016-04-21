@@ -28,30 +28,48 @@ namespace MonoGame.Extended.Tweening.Animation
             _runningAnimations.Clear();
         }
 
-        public void RunAnimation(Animation animation, int repeat = 1, bool overridelayer = true) {
-            //_runningAnimations.RemoveAll(a => a == animation || overridelayer && (a.Animation.AnimationLayer == animation.AnimationLayer));
+        public void RunAnimation(Animation animation, AnimationRunParameters parameters, AnimationBlendParameters blend) {
+            if (parameters.OverrideLayer)
+                _runningAnimations.RemoveAll(a => a.Layer == animation.Layer);
+            if (parameters.RepeatCount <= 0) {
+                var a = (Animation)animation.Copy();
+                a.KeepRunning = true;
+                a.StartTime = _currentTime;
+                _runningAnimations.Add(a);
+                return;
+            }
             var duration = animation.Duration;
-            for (int i = 0; i < repeat; i++) {
+            for (int i = 0; i < parameters.RepeatCount; i++) {
                 var a = (Animation)animation.Copy();
                 a.StartTime = _currentTime + duration * i;
                 _runningAnimations.Add(a);
             }
         }
 
-        public Animation RunAnimation(string name, int repeat = 1, bool overridelayer = true) {
+        public Animation RunAnimation(string name, AnimationRunParameters parameters, AnimationBlendParameters blend) {
             var animation = _animations.Find(a => a.Name == name);
             if (animation == null) return null;
-            RunAnimation(animation, repeat, overridelayer);
+            RunAnimation(animation, parameters, blend);
             return animation;
         }
-
-        //private class BlendingAnimation
-        //{
-        //    public RunningAnimation A;
-        //    public RunningAnimation B;
-        //    public double starttime;
-        //    public double duration;
-        //}
-
     }
+    public struct AnimationRunParameters
+    {
+        public int RepeatCount { get; set; }
+        public bool KeepRunning
+        {
+            get { return RepeatCount < 1; }
+            set { RepeatCount = value ? -1 : 1; }
+        }
+        public bool OverrideLayer { get; set; }
+    }
+    public struct AnimationBlendParameters
+    {
+        public double InDuration { get; set; }
+        public double OutDuration { get; set; }
+        public double StartValue { get; set; }
+        public double Endvalue { get; set; }
+        public static AnimationBlendParameters None = new AnimationBlendParameters();
+    }
+
 }

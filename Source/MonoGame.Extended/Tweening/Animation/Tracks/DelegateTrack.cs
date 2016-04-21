@@ -6,9 +6,16 @@ namespace MonoGame.Extended.Tweening.Animation.Tracks
         where TTransformable : class
     {
         private readonly Action<TTransformable, TValue> _setter;
-        public DelegateTrack(Action<TTransformable, TValue> setter) {
+        private readonly Func<TTransformable, TValue> _getter;
+
+        public DelegateTrack(Action<TTransformable, TValue> setter, Func<TTransformable, TValue> getter) {
             _setter = setter;
+            _getter = getter;
         }
-        protected override void Set(TValue value) => _setter(Transformable, value);
+
+        protected override void SetValue(TValue value) => 
+            _setter(Transformable, value);
+        protected override TValue GetValue() => 
+            _getter(Transformable);
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles;
+using MonoGame.Extended.Tweening.Interpolators;
 
 namespace MonoGame.Extended.Tweening
 {
@@ -34,6 +35,6 @@ namespace MonoGame.Extended.Tweening
             return null;
         }
 
-        public static Interpolator<object> DynamicInterpolator = Tweening.DynamicInterpolator.Singleton;
+        public static Interpolator<object> DynamicInterpolator = Interpolators.DynamicInterpolator.Singleton;
     }
 }

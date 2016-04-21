@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Tweening.Animation.Tracks
         bool Interpolate { get; set; }
         TTransformable Transformable { get; set; }
         double LastEndtime { get; }
-        void Update(double time);
+        void Update(double time, double interpolation);
         ITrack<TTransformable> Copy();
     }
     public interface ITrackValue<T>

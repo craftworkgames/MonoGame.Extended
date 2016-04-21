@@ -1,4 +1,4 @@
-namespace MonoGame.Extended.Tweening
+namespace MonoGame.Extended.Tweening.Interpolators
 {
     /// <summary>
     /// Don't use this, make a custom interpolator and register it in the store.

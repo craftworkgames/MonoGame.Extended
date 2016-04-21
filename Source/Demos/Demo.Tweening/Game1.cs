@@ -65,7 +65,7 @@ namespace Demo.Tweening
                     .Tween(Vector2.Zero, 8);
 
             _animatorComponent.AddAnimation(animation);
-            _animatorComponent.RunAnimation("testanimation", 10);
+            _animatorComponent.RunAnimation("testanimation", new AnimationRunParameters { KeepRunning = true }, AnimationBlendParameters.None);
 
         }
 
