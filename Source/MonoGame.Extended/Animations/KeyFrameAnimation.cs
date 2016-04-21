@@ -39,6 +39,12 @@ namespace MonoGame.Extended.Animations
         public TextureRegion2D CurrentFrame => KeyFrames[CurrentFrameIndex];
         public int CurrentFrameIndex { get; private set; }
 
+        public float FramesPerSecond
+        {
+            get { return 1.0f/FrameDuration; }
+            set { FrameDuration = value/1.0f; }
+        }
+
         public Action OnCompleted { get; set; }
 
         private float _currentTime;

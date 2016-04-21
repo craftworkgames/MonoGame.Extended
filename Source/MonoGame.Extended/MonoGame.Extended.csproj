@@ -40,7 +40,6 @@
     <Compile Include="Animations\KeyFrameAnimationData.cs" />
     <Compile Include="Animations\KeyFrameAnimationFactory.cs" />
     <Compile Include="Animations\KeyFrameAnimationPlayer.cs" />
-    <Compile Include="Animations\SpriteSheetAnimationGroup.cs" />
     <Compile Include="Animations\KeyFrameAnimationFactoryReader.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
@@ -145,8 +144,6 @@
     <Compile Include="Shapes\ShapeF.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="Sprites\SpriteBatchExtensions.cs" />
-    <Compile Include="Animations\SpriteSheetAnimation.cs" />
-    <Compile Include="Animations\SpriteSheetAnimator.cs" />
     <Compile Include="TextureAtlases\TextureAtlas.cs" />
     <Compile Include="TextureAtlases\TextureAtlasReader.cs" />
     <Compile Include="TextureAtlases\SpriteBatchExtensions.cs" />
