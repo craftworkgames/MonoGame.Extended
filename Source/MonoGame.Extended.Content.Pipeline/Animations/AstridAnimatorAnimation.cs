@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
             Name = name;
             FramesPerSecond = framesPerSecond;
             Frames = new List<string>();
-            IsLooping = false;
+            IsLooping = true;
             IsReversed = false;
             IsPingPong = false;
         }

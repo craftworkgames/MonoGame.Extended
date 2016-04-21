@@ -89,9 +89,7 @@ namespace Demo.SpriteSheetAnimations
             IsOnGround = false;
 
             if (State == ZombieState.Walking && Math.Abs(Velocity.X) < 0.1f)
-            {
                 State = ZombieState.Idle;
-            }
         }
 
         public void Draw(SpriteBatch spriteBatch)

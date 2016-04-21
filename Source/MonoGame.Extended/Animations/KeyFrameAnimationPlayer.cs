@@ -13,17 +13,16 @@ namespace MonoGame.Extended.Animations
         }
 
         private readonly KeyFrameAnimationFactory _animationFactory;
-        private Action _onComplete;
         private KeyFrameAnimation _currentAnimation;
 
         public Sprite TargetSprite { get; set; }
         
-        public KeyFrameAnimation Play(string name, Action onComplete = null)
+        public KeyFrameAnimation Play(string name, Action onCompleted = null)
         {
             if (_currentAnimation == null || _currentAnimation.IsComplete || _currentAnimation.Name != name)
             {
                 _currentAnimation = _animationFactory.Create(name);
-                _onComplete = onComplete;
+                _currentAnimation.OnCompleted = onCompleted;
             }
 
             return _currentAnimation;
@@ -37,9 +36,6 @@ namespace MonoGame.Extended.Animations
 
                 if (TargetSprite != null)
                     TargetSprite.TextureRegion = _currentAnimation.CurrentFrame;
-
-                if (_currentAnimation.IsComplete)
-                    _onComplete?.Invoke();
             }
         }
 
