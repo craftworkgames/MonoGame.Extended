@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Particles;
 
-namespace MonoGame.Extended.Particles
+namespace MonoGame.Extended
 {
     /// <summary>
     /// Defines a random number generator which uses the FastRand algorithm to generate random values.
