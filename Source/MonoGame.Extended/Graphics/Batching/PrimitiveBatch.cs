@@ -7,8 +7,31 @@ namespace MonoGame.Extended.Graphics.Batching
     public class PrimitiveBatch<TVertexType> : IDisposable
         where TVertexType : struct, IVertexType
     {
-        public const int DefaultMaximumBatchVerticesSizeKiloBytes = 1 * 1024;
-        public const int DefaultMaximumBatchIndicesSizeKiloBytes = 3 * 1024;
+        // for 2D games I would suspect most people would use VertexPositionColorTexture for sprites like SpriteBatch
+        // SpriteBatch uses two triangles to create a rectangle using triangle list; 4 vertices and 6 indices
+        // the vertex size is Vector3 + Color + Vector2 = 24 bytes per vertex and the index size is 2 bytes per index
+        // XNA's SpriteBatch: 
+        //      uses 2048 sprites per batch, so 8192 vertices and 12288 indices per batch
+        //      uses DynamicVertexBuffer
+        // FNA's SpriteBatch:
+        //      uses 2048 sprites per batch, so 8192 vertices and 12288 indices per batch
+        //      uses DynamicVertexBuffer
+        // MonoGame's SpriteBatch:
+        //      uses 256 sprites per batch initially, so 1024 vertices and 1536 indices per batch, but
+        //      dynamically increases the size of the batch by x1.5 when the batch is full (it doesn't appear to have a max limit?!?)
+        //      uses UserPrimitives
+        //
+        // It appears that 2048 sprites ber batch is the expected default? 
+        //
+        // vertices: 
+        //      8192 VertexPositionColor vertices * 24/1 bytes per vertex = 196608 bytes
+        //      196608 bytes * 1/1024 kilobytes per byte = 192 kilobytes
+        // indices:
+        //      12288 indices * 2/1 bytes per index = 24576 bytes
+        //      24576 bytes * 1/1024 kilobytes per byte = 24 kilobytes
+
+        public const ushort DefaultMaximumVerticesCount = 8192;
+        public const ushort DefaultMaximumIndicesCount = 12288;
 
         private BatchDrawer<TVertexType> _batchDrawer;
         private BatchQueuer<TVertexType> _currentBatchQueuer;
@@ -19,11 +42,31 @@ namespace MonoGame.Extended.Graphics.Batching
         public bool HasBegun { get; private set; }
         public GraphicsDevice GraphicsDevice { get; }
 
-        public PrimitiveBatch(GraphicsDevice graphicsDevice, BatchDrawStrategy batchDrawStrategy = BatchDrawStrategy.UserPrimitives, int maximumBatchVerticesSizeKiloBytes = DefaultMaximumBatchVerticesSizeKiloBytes, int maximumBatchIndicesSizeKiloBytes = DefaultMaximumBatchIndicesSizeKiloBytes)
+        public PrimitiveBatch(GraphicsDevice graphicsDevice, Action<Array, Array> sortKeysValuesAction, BatchDrawStrategy batchDrawStrategy = BatchDrawStrategy.UserPrimitives, ushort maximumVerticesCount = DefaultMaximumVerticesCount, ushort maximumIndicesCount = DefaultMaximumIndicesCount)
         {
             if (graphicsDevice == null)
             {
                 throw new ArgumentNullException(nameof(graphicsDevice));
+            }
+
+            if (sortKeysValuesAction == null)
+            {
+                throw new ArgumentNullException(nameof(sortKeysValuesAction));
+            }
+
+            if (batchDrawStrategy > BatchDrawStrategy.DynamicVertexBuffer)
+            {
+                throw new ArgumentOutOfRangeException(nameof(batchDrawStrategy));
+            }
+
+            if (maximumVerticesCount == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(maximumVerticesCount));
+            }
+
+            if (maximumIndicesCount == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(maximumIndicesCount));
             }
 
             GraphicsDevice = graphicsDevice;
@@ -33,18 +76,18 @@ namespace MonoGame.Extended.Graphics.Batching
             {
                 case BatchDrawStrategy.UserPrimitives:
                 {
-                    _batchDrawer = new UserPrimitivesBatchDrawer<TVertexType>(graphicsDevice, maximumBatchVerticesSizeKiloBytes, maximumBatchIndicesSizeKiloBytes);
+                    _batchDrawer = new UserPrimitivesBatchDrawer<TVertexType>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
                     break;
                 }
                 case BatchDrawStrategy.DynamicVertexBuffer:
                 {
-                    _batchDrawer = new DynamicVertexBufferBatchDrawer<TVertexType>(graphicsDevice, maximumBatchVerticesSizeKiloBytes, maximumBatchIndicesSizeKiloBytes);
+                    _batchDrawer = new DynamicVertexBufferBatchDrawer<TVertexType>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
                     break;
                 }
             }
 
             _immediateBatchQueuer = new ImmediateBatchQueuer<TVertexType>(_batchDrawer);
-            _deferredBatchQueuer = new DeferredBatchQueuer<TVertexType>(_batchDrawer);
+            _deferredBatchQueuer = new DeferredBatchQueuer<TVertexType>(_batchDrawer, sortKeysValuesAction);
         }
 
         public void Dispose()
@@ -88,14 +131,16 @@ namespace MonoGame.Extended.Graphics.Batching
             }
         }
 
-        public void Begin(BatchSortMode sortMode, Effect effect)
+        public void Begin(BatchSortMode sortMode, PrimitiveType primitiveType)
         {
-            if (effect == null)
+            if ((byte)_batchDrawer.PrimitiveType > 3)
             {
-                throw new ArgumentNullException(nameof(effect));
+                throw new ArgumentOutOfRangeException(nameof(primitiveType));
             }
 
             EnsureHasNotBegun();
+
+            _batchDrawer.PrimitiveType = primitiveType;
             HasBegun = true;
             switch (sortMode)
             {
@@ -118,28 +163,28 @@ namespace MonoGame.Extended.Graphics.Batching
             _currentBatchQueuer.End();
         }
 
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, IDrawContext drawContext)
+        public void Draw(IDrawContext drawContext, TVertexType[] vertices, uint sortkey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.Queue(primitiveType, vertices, 0, vertices.Length, drawContext);
+            _currentBatchQueuer.EnqueueDraw(drawContext, vertices, 0, vertices.Length, sortkey);
         }
 
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext)
+        public void Draw(IDrawContext drawContext, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.Queue(primitiveType, vertices, startVertex, vertexCount, drawContext);
+            _currentBatchQueuer.EnqueueDraw(drawContext, vertices, startVertex, vertexCount, sortKey);
         }
 
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, short[] indices, IDrawContext drawContext)
+        public void Draw(IDrawContext drawContext, TVertexType[] vertices, short[] indices, uint sortKey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.Queue(primitiveType, vertices, 0, vertices.Length, indices, 0, indices.Length, drawContext);
+            _currentBatchQueuer.EnqueueDraw(drawContext, vertices, 0, vertices.Length, indices, 0, indices.Length, sortKey);
         }
 
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, IDrawContext drawContext)
+        public void Draw(IDrawContext drawContext, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.Queue(primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, drawContext);
+            _currentBatchQueuer.EnqueueDraw(drawContext, vertices, startVertex, vertexCount, indices, startIndex, indexCount, sortKey);
         }
     }
 }

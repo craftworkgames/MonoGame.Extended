@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace MonoGame.Extended.Collections
 {
     /// <summary>
-    ///     Defines a bit vector with easy integer or Boolean access to a 32 bit storage.
+    ///     Defines a bit vector with easy integer or boolean access to a 32 bit storage.
     /// </summary>
     /// <remarks>
     ///     <para>
@@ -16,7 +17,7 @@ namespace MonoGame.Extended.Collections
     ///         bits.
     ///     </para>
     ///     <para>
-    ///         A <see cref="BitVector32" />structure can be set up to contain either sections for small integers or bit
+    ///         A <see cref="BitVector32" /> structure can be set up to contain either sections for small integers or bit
     ///         flags for booleans, but not both. A <see cref="Section" /> is a window into the <see cref="BitVector32" /> and
     ///         is composed of the smallest number of consecutive bits that can contain the maximum value specified in
     ///         <see cref="CreateSection(short,Section)" />. For example, a section with a maximum value of 1 is composed of
@@ -148,10 +149,7 @@ namespace MonoGame.Extended.Collections
 
         private static short CountBitsSet(short mask)
         {
-            // yes, I know there are better algorithms, however, we know the
-            // bits are always right aligned, with no holes (i.e. always 00000111,
-            // never 000100011), so this is just fine...
-            //
+            // bits are always right aligned with no holes, e.g., always 00000111 never 000100011
             short value = 0;
             while ((mask & 0x1) != 0)
             {

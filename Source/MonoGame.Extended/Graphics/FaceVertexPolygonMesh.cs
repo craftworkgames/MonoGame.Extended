@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics.Batching;
 
 namespace MonoGame.Extended.Graphics
 {
     public class FaceVertexPolygonMesh<TVertexType> : IPolygonMesh<TVertexType>
         where TVertexType : struct, IVertexType
     {
-        private readonly TVertexType[] _vertices;
-        private readonly short[] _indices;
+        internal readonly TVertexType[] _vertices;
+        internal readonly short[] _indices;
 
         public IReadOnlyCollection<TVertexType> Vertices
         {
@@ -33,28 +32,6 @@ namespace MonoGame.Extended.Graphics
             PrimitiveType = primitiveType;
             _vertices = vertices;
             _indices = indices;
-        }
-
-        public void Draw(PrimitiveBatch<TVertexType> primitiveBatch, IDrawContext drawContext)
-        {
-            if (_indices != null)
-            {
-                primitiveBatch.Draw(PrimitiveType, _vertices, _indices, drawContext);
-            }
-            else
-            {
-                primitiveBatch.Draw(PrimitiveType, _vertices, drawContext);
-            }
-        }
-
-        public void Draw(PrimitiveBatch<TVertexType> primitiveBatch, int startVertex, int vertexCount, IDrawContext drawContext)
-        {
-            primitiveBatch.Draw(PrimitiveType, _vertices, startVertex, vertexCount, drawContext);
-        }
-
-        public void Draw(PrimitiveBatch<TVertexType> primitiveBatch, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext)
-        {
-            primitiveBatch.Draw(PrimitiveType, _vertices, startVertex, vertexCount, _indices, startIndex, indexCount, drawContext);
         }
     }
 }

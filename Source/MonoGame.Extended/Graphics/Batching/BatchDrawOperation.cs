@@ -1,21 +1,18 @@
 ﻿using System.Runtime.InteropServices;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
     internal struct BatchDrawOperation
     {
-        internal readonly IDrawContext DrawContext;
         internal readonly int StartVertex;
         internal int VertexCount;
         internal readonly int StartIndex;
         internal int IndexCount;
-        internal readonly byte PrimitiveType;
+        internal IDrawContext DrawContext;
 
-        internal BatchDrawOperation(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext)
+        internal BatchDrawOperation(int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext)
         {
-            PrimitiveType = (byte)primitiveType;
             StartVertex = startVertex;
             VertexCount = vertexCount;
             StartIndex = startIndex;

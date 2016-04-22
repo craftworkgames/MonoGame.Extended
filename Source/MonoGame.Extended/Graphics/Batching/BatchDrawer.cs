@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
@@ -8,21 +9,20 @@ namespace MonoGame.Extended.Graphics.Batching
         where TVertexType : struct, IVertexType
     {
         internal GraphicsDevice GraphicsDevice;
-        internal readonly int MaximumBatchVerticesSizeKiloBytes;
-        internal readonly int MaximumBatchIndicesSizeKiloBytes;
-        internal readonly int MaximumVerticesCount;
-        internal readonly int MaximumIndicesCount;
+        internal readonly ushort MaximumVerticesCount;
+        internal readonly ushort MaximumIndicesCount;
+        internal List<Action> CommandDelegates;
+        internal PrimitiveType PrimitiveType;
+        private IDrawContext _currentDrawContext;
+        protected Effect Effect;
 
-        protected BatchDrawer(GraphicsDevice graphicsDevice, int maximumBatchVerticesSizeKiloBytes, int maximumBatchIndicesSizeKiloBytes)
+        protected BatchDrawer(GraphicsDevice graphicsDevice, ushort maximumVerticesCount, ushort maximumIndiciesCount)
         {
             GraphicsDevice = graphicsDevice;
-            MaximumBatchVerticesSizeKiloBytes = maximumBatchVerticesSizeKiloBytes;
-            MaximumBatchIndicesSizeKiloBytes = maximumBatchIndicesSizeKiloBytes;
+            MaximumVerticesCount = maximumIndiciesCount;
+            MaximumIndicesCount = maximumVerticesCount;
 
-            var vertexSizeBytes = Marshal.SizeOf(default(TVertexType));
-            MaximumVerticesCount = MaximumBatchVerticesSizeKiloBytes * 1024 / vertexSizeBytes;
-            var indexSizeBytes = Marshal.SizeOf(default(uint));
-            MaximumIndicesCount = MaximumBatchIndicesSizeKiloBytes * 1024 / indexSizeBytes;
+            CommandDelegates = new List<Action>();
         }
 
         public void Dispose()
@@ -43,7 +43,19 @@ namespace MonoGame.Extended.Graphics.Batching
 
         internal abstract void Select(TVertexType[] vertices);
         internal abstract void Select(TVertexType[] vertices, short[] indices);
-        internal abstract void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, IDrawContext drawContext = null);
-        internal abstract void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext = null);
+        internal abstract void Draw(IDrawContext drawContext, int startVertex, int vertexCount);
+        internal abstract void Draw(IDrawContext drawContext, int startVertex, int vertexCount, int startIndex, int indexCount);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected void ChangeDrawContextIfNecessary(IDrawContext drawContext)
+        {
+            if (_currentDrawContext == drawContext && !drawContext.NeedsUpdate)
+            {
+                return;
+            }
+
+            drawContext.Apply(out Effect);
+            _currentDrawContext = drawContext;
+        }
     }
 }

@@ -7,11 +7,12 @@ namespace MonoGame.Extended.Graphics.Batching
         where TVertexType : struct, IVertexType
     {
         internal BatchDrawer<TVertexType> BatchDrawer;
+        internal PrimitiveType PrimitiveType;
 
         internal abstract void Begin();
         internal abstract void End();
-        internal abstract void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext = null);
-        internal abstract void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, IDrawContext drawContext = null);
+        internal abstract void EnqueueDraw(IDrawContext drawContext, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0);
+        internal abstract void EnqueueDraw(IDrawContext drawContext, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey = 0);
 
         protected BatchQueuer(BatchDrawer<TVertexType> batchDrawer)
         {

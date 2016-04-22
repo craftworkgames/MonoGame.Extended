@@ -18,16 +18,16 @@ namespace MonoGame.Extended.Graphics.Batching
         {
         }
 
-        internal override void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, IDrawContext drawContext = null)
+        internal override void EnqueueDraw(IDrawContext drawContext, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0)
         {
             BatchDrawer.Select(vertices);
-            BatchDrawer.Draw(primitiveType, startVertex, startVertex + vertexCount);
+            BatchDrawer.Draw(drawContext, startVertex, startVertex + vertexCount);
         }
 
-        internal override void Queue(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, IDrawContext drawContext = null)
+        internal override void EnqueueDraw(IDrawContext drawContext, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey = 0)
         {
             BatchDrawer.Select(vertices, indices);
-            BatchDrawer.Draw(primitiveType, startVertex, startVertex + vertexCount, startIndex, indexCount);
+            BatchDrawer.Draw(drawContext, startVertex, startVertex + vertexCount, startIndex, indexCount);
         }
     }
 }
