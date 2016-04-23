@@ -5,24 +5,24 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Animations
 {
-    public class KeyFrameAnimationFactory
+    public class SpriteSheetAnimationFactory
     {
-        public KeyFrameAnimationFactory(TextureAtlas textureAtlas)
+        public SpriteSheetAnimationFactory(TextureAtlas textureAtlas)
             : this(textureAtlas.Regions)
         {
         }
 
-        public KeyFrameAnimationFactory(IEnumerable<TextureRegion2D> frames)
+        public SpriteSheetAnimationFactory(IEnumerable<TextureRegion2D> frames)
         {
-            _animationDataDictionary = new Dictionary<string, KeyFrameAnimationData>();
+            _animationDataDictionary = new Dictionary<string, SpriteSheetAnimationData>();
             Frames = frames.ToArray();
         }
 
-        private readonly Dictionary<string, KeyFrameAnimationData> _animationDataDictionary;
+        private readonly Dictionary<string, SpriteSheetAnimationData> _animationDataDictionary;
 
         public IReadOnlyList<TextureRegion2D> Frames { get; }
         
-        public void Add(string name, KeyFrameAnimationData data)
+        public void Add(string name, SpriteSheetAnimationData data)
         {
             _animationDataDictionary.Add(name, data);
         }
@@ -32,9 +32,9 @@ namespace MonoGame.Extended.Animations
             _animationDataDictionary.Remove(name);
         }
 
-        public KeyFrameAnimation Create(string name)
+        public SpriteSheetAnimation Create(string name)
         {
-            KeyFrameAnimationData data;
+            SpriteSheetAnimationData data;
 
             if (_animationDataDictionary.TryGetValue(name, out data))
             {
@@ -42,7 +42,7 @@ namespace MonoGame.Extended.Animations
                     .Select(i => Frames[i])
                     .ToArray();
 
-                return new KeyFrameAnimation(name, keyFrames, data);
+                return new SpriteSheetAnimation(name, keyFrames, data);
             }
 
             return null;

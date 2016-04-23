@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -25,9 +24,9 @@ namespace Demo.SpriteSheetAnimations
         private ViewportAdapter _viewportAdapter;
         private CollisionWorld _world;
         private Zombie _zombie;
-        private KeyFrameAnimation _animation;
+        private SpriteSheetAnimation _animation;
         private Sprite _fireballSprite;
-        private KeyFrameAnimationPlayer _motwPlayer;
+        private SpriteSheetAnimationPlayer _motwPlayer;
         private Sprite _motwSprite;
 
         public Game1()
@@ -65,14 +64,14 @@ namespace Demo.SpriteSheetAnimations
             _world = new CollisionWorld(new Vector2(0, 900));
             _world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
 
-            var zombieAnimations = Content.Load<KeyFrameAnimationFactory>("Sprites/zombie-animations");
+            var zombieAnimations = Content.Load<SpriteSheetAnimationFactory>("Sprites/zombie-animations");
             _zombie = new Zombie(zombieAnimations);
             var zombieActor = _world.CreateActor(_zombie);
             zombieActor.Position = new Vector2(462.5f, 896f);
 
             var fireballTexture = Content.Load<Texture2D>("Sprites/fireball");
             var fireballAtlas = TextureAtlas.Create(fireballTexture, 130, 50);
-            _animation = new KeyFrameAnimation("fireballAnimation", fireballAtlas.Regions.ToArray())
+            _animation = new SpriteSheetAnimation("fireballAnimation", fireballAtlas.Regions.ToArray())
             {
                 FrameDuration = 0.2f
             };
@@ -80,13 +79,13 @@ namespace Demo.SpriteSheetAnimations
 
             var motwTexture = Content.Load<Texture2D>("Sprites/motw");
             var motwAtlas = TextureAtlas.Create(motwTexture, 52, 72);
-            var motwAnimationFactory = new KeyFrameAnimationFactory(motwAtlas);
-            motwAnimationFactory.Add("idle", new KeyFrameAnimationData(new[] { 0 }));
-            motwAnimationFactory.Add("walkSouth", new KeyFrameAnimationData(new[] { 0, 1, 2, 1 }, isLooping: false));
-            motwAnimationFactory.Add("walkWest", new KeyFrameAnimationData(new[] { 12, 13, 14, 13 }, isLooping: false));
-            motwAnimationFactory.Add("walkEast", new KeyFrameAnimationData(new[] { 24, 25, 26, 25 }, isLooping: false));
-            motwAnimationFactory.Add("walkNorth", new KeyFrameAnimationData(new[] { 36, 37, 38, 37 }, isLooping: false));
-            _motwPlayer = new KeyFrameAnimationPlayer(motwAnimationFactory);
+            var motwAnimationFactory = new SpriteSheetAnimationFactory(motwAtlas);
+            motwAnimationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 0 }));
+            motwAnimationFactory.Add("walkSouth", new SpriteSheetAnimationData(new[] { 0, 1, 2, 1 }, isLooping: false));
+            motwAnimationFactory.Add("walkWest", new SpriteSheetAnimationData(new[] { 12, 13, 14, 13 }, isLooping: false));
+            motwAnimationFactory.Add("walkEast", new SpriteSheetAnimationData(new[] { 24, 25, 26, 25 }, isLooping: false));
+            motwAnimationFactory.Add("walkNorth", new SpriteSheetAnimationData(new[] { 36, 37, 38, 37 }, isLooping: false));
+            _motwPlayer = new SpriteSheetAnimationPlayer(motwAnimationFactory);
             _motwSprite = _motwPlayer.CreateSprite(new Vector2(350, 800));
             _motwPlayer.Play("walkSouth").IsLooping = true;
         }

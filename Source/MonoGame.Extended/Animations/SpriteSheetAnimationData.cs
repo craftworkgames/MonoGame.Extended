@@ -1,8 +1,8 @@
 namespace MonoGame.Extended.Animations
 {
-    public class KeyFrameAnimationData
+    public class SpriteSheetAnimationData
     {
-        public KeyFrameAnimationData(int[] frameIndicies, float frameDuration = 0.2f, bool isLooping = true,
+        public SpriteSheetAnimationData(int[] frameIndicies, float frameDuration = 0.2f, bool isLooping = true,
             bool isReversed = false, bool isPingPong = false)
         {
             FrameIndicies = frameIndicies;

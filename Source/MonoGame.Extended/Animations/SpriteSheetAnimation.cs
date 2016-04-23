@@ -1,12 +1,19 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Animations
 {
-    public class KeyFrameAnimation : IUpdate
+    public class SpriteSheetAnimation : IUpdate
     {
-        public KeyFrameAnimation(string name, TextureRegion2D[] keyFrames, float frameDuration = 0.2f,
+        public SpriteSheetAnimation(string name, TextureAtlas textureAtlas, float frameDuration = DefaultFrameDuration,
+            bool isLooping = true, bool isReversed = false, bool isPingPong = false)
+            : this(name, textureAtlas.Regions.ToArray(), frameDuration, isLooping, isReversed, isPingPong)
+        {
+        }
+
+        public SpriteSheetAnimation(string name, TextureRegion2D[] keyFrames, float frameDuration = DefaultFrameDuration,
             bool isLooping = true, bool isReversed = false, bool isPingPong = false)
         {
             Name = name;
@@ -19,10 +26,12 @@ namespace MonoGame.Extended.Animations
             IsPaused = false;
         }
 
-        public KeyFrameAnimation(string name, TextureRegion2D[] keyFrames, KeyFrameAnimationData data)
+        public SpriteSheetAnimation(string name, TextureRegion2D[] keyFrames, SpriteSheetAnimationData data)
             : this(name, keyFrames, data.FrameDuration, data.IsLooping, data.IsReversed, data.IsPingPong)
         {
         }
+
+        public const float DefaultFrameDuration = 0.2f;
 
         public string Name { get; }
         public TextureRegion2D[] KeyFrames { get; }

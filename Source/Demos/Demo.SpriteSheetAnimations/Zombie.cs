@@ -21,7 +21,7 @@ namespace Demo.SpriteSheetAnimations
 
     public class Zombie : IUpdate, IActorTarget
     {
-        private readonly KeyFrameAnimationPlayer _animator;
+        private readonly SpriteSheetAnimationPlayer _animator;
         private readonly Sprite _sprite;
 
         private float _direction = -1.0f;
@@ -73,9 +73,9 @@ namespace Demo.SpriteSheetAnimations
 
         public Vector2 Velocity { get; set; }
 
-        public Zombie(KeyFrameAnimationFactory animations)
+        public Zombie(SpriteSheetAnimationFactory animations)
         {
-            _animator = new KeyFrameAnimationPlayer(animations);
+            _animator = new SpriteSheetAnimationPlayer(animations);
             _sprite = _animator.CreateSprite();
 
             State = ZombieState.Appearing;

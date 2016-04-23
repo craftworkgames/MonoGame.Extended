@@ -5,9 +5,9 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Animations
 {
-    public class KeyFrameAnimationFactoryReader : ContentTypeReader<KeyFrameAnimationFactory>
+    public class SpriteSheetAnimationFactoryReader : ContentTypeReader<SpriteSheetAnimationFactory>
     {
-        protected override KeyFrameAnimationFactory Read(ContentReader reader, KeyFrameAnimationFactory existingInstance)
+        protected override SpriteSheetAnimationFactory Read(ContentReader reader, SpriteSheetAnimationFactory existingInstance)
         {
             var textureAtlasAssetName = reader.GetRelativeAssetPath(reader.ReadString());
             var textureAtlas = reader.ContentManager.Load<TextureAtlas>(textureAtlasAssetName);
@@ -21,7 +21,7 @@ namespace MonoGame.Extended.Animations
                 regions.Add(textureRegion);
             }
 
-            var animationFactory = new KeyFrameAnimationFactory(regions);
+            var animationFactory = new SpriteSheetAnimationFactory(regions);
             var animationCount = reader.ReadInt32();
 
             for (var i = 0; i < animationCount; i++)
@@ -41,7 +41,7 @@ namespace MonoGame.Extended.Animations
                     frameIndicies[f] = frameIndex;
                 }
 
-                var animationData = new KeyFrameAnimationData(frameIndicies, frameDuration, isLooping, isReversed, isPingPong);
+                var animationData = new SpriteSheetAnimationData(frameIndicies, frameDuration, isLooping, isReversed, isPingPong);
                 animationFactory.Add(name, animationData);
             }
 

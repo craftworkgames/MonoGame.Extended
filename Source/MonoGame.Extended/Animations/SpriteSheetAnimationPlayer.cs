@@ -5,19 +5,19 @@ using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.Animations
 {
-    public class KeyFrameAnimationPlayer : IUpdate
+    public class SpriteSheetAnimationPlayer : IUpdate
     {
-        public KeyFrameAnimationPlayer(KeyFrameAnimationFactory animationFactory)
+        public SpriteSheetAnimationPlayer(SpriteSheetAnimationFactory animationFactory)
         {
             _animationFactory = animationFactory;
         }
 
-        private readonly KeyFrameAnimationFactory _animationFactory;
-        private KeyFrameAnimation _currentAnimation;
+        private readonly SpriteSheetAnimationFactory _animationFactory;
+        private SpriteSheetAnimation _currentAnimation;
 
         public Sprite TargetSprite { get; set; }
         
-        public KeyFrameAnimation Play(string name, Action onCompleted = null)
+        public SpriteSheetAnimation Play(string name, Action onCompleted = null)
         {
             if (_currentAnimation == null || _currentAnimation.IsComplete || _currentAnimation.Name != name)
             {
