@@ -52,9 +52,8 @@ namespace MonoGame.Extended
 
         public void MoveProjection(Vector2 direction, float ratio)
         {
-            direction = direction * ratio;
-            _simProjection.M41 = -1;//direction.X;
-            _simProjection.M42 = 1;// direction.Y;
+            direction *= ratio;
+            _simProjection = Matrix.CreateTranslation(direction.X, direction.Y, 0) * _simProjection;
         }
     }
 }

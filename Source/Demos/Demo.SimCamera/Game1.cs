@@ -171,19 +171,9 @@ namespace Demo.SimCamera
             GraphicsDevice.Clear(Color.Black);
             var destinationRectangle = new Rectangle(0, 0, 800, 480);
 
-            SimpleSimProjection test = new SimpleSimProjection(_graphics, reverseHeight: true);
-            test.MoveProjection(_graphics.GraphicsDevice.Viewport.Width / 2, _graphics.GraphicsDevice.Viewport.Height / 2);
-
-            Matrix projection = test.SimProjection;
+            SimpleSimProjection projection = new SimpleSimProjection(_graphics, reverseHeight: true);
+            projection.MoveProjection(-_graphics.GraphicsDevice.Viewport.Width / 2, -_graphics.GraphicsDevice.Viewport.Height / 2);
             
-            //Matrix.CreateOrthographicOffCenter(
-            //    0f,
-            //    ConvertSimUnits.ToSimUnits(_graphics.GraphicsDevice.Viewport.Width),
-            //    ConvertSimUnits.ToSimUnits(_graphics.GraphicsDevice.Viewport.Height),
-            //    0f,
-            //    0f,
-            //1f);
-
             if (_drawScene)
             {
                 _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
@@ -195,7 +185,7 @@ namespace Demo.SimCamera
 
             if (_drawDebug)
             {
-                _debugView.RenderDebugData(projection, _camera.GetViewSimMatrix());
+                _debugView.RenderDebugData(projection.SimProjection, _camera.GetViewSimMatrix());
             }
 
             // not all sprite batches need to be affected by the camera
