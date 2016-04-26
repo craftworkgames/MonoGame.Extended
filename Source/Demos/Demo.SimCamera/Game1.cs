@@ -198,7 +198,6 @@ namespace Demo.SimCamera
             stringBuilder.AppendLine("1: Draw scene");
             stringBuilder.AppendLine("2: Draw debug");
 
-
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend);
             _spriteBatch.DrawString(_bitmapFont, stringBuilder.ToString(), new Vector2(5, 5), Color.White);
             _spriteBatch.End();

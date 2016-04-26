@@ -151,19 +151,19 @@ namespace MonoGame.Extended
             return GetViewSimMatrix(ConvertSimUnits.DisplayToSimRatio);
         }
 
-        public Matrix GetViewSimMatrix(float unitsRatio)
+        public Matrix GetViewSimMatrix(float displayToSimRatio)
         {
-            return GetVirtualViewSimMatrix(unitsRatio) * _viewportAdapter.GetScaleMatrix();
+            return GetVirtualViewSimMatrix(displayToSimRatio) * _viewportAdapter.GetScaleMatrix();
         }
 
-        private Matrix GetVirtualViewSimMatrix(float unitsRatio)
+        private Matrix GetVirtualViewSimMatrix(float displayToSimRatio)
         {
             return
-                Matrix.CreateTranslation(new Vector3(-Position * unitsRatio, 0.0f)) *
-                Matrix.CreateTranslation(new Vector3(-Origin * unitsRatio, 0.0f)) *
+                Matrix.CreateTranslation(new Vector3(-Position * displayToSimRatio, 0.0f)) *
+                Matrix.CreateTranslation(new Vector3(-Origin * displayToSimRatio, 0.0f)) *
                 Matrix.CreateRotationZ(Rotation) *
                 Matrix.CreateScale(Zoom, Zoom, 1) *
-                Matrix.CreateTranslation(new Vector3(Origin * unitsRatio, 0.0f));
+                Matrix.CreateTranslation(new Vector3(Origin * displayToSimRatio, 0.0f));
         }
 
         private Matrix GetVirtualViewMatrix()

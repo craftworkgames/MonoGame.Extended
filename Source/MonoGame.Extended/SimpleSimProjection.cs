@@ -25,10 +25,10 @@ namespace MonoGame.Extended
         {
         }
         
-        public SimpleSimProjection(GraphicsDeviceManager graphics, float ratio, bool reverseWidth = false, bool reverseHeight = false)
+        public SimpleSimProjection(GraphicsDeviceManager graphics, float displayToSimRatio, bool reverseWidth = false, bool reverseHeight = false)
         {
-            float width = graphics.GraphicsDevice.Viewport.Width * ratio;
-            float height = graphics.GraphicsDevice.Viewport.Height * ratio;
+            float width = graphics.GraphicsDevice.Viewport.Width * displayToSimRatio;
+            float height = graphics.GraphicsDevice.Viewport.Height * displayToSimRatio;
             width = reverseWidth ? -width : width;
             height = reverseHeight ? -height : height;
 
@@ -40,9 +40,9 @@ namespace MonoGame.Extended
             MoveProjection(new Vector2(directionX, directionY), ConvertSimUnits.DisplayToSimRatio);
         }
 
-        public void MoveProjection(float directionX, float directionY, float ratio)
+        public void MoveProjection(float directionX, float directionY, float displayToSimRatio)
         {
-            MoveProjection(new Vector2(directionX, directionY), ratio);
+            MoveProjection(new Vector2(directionX, directionY), displayToSimRatio);
         }
 
         public void MoveProjection(Vector2 direction)
@@ -50,9 +50,9 @@ namespace MonoGame.Extended
             MoveProjection(direction, ConvertSimUnits.DisplayToSimRatio);
         }
 
-        public void MoveProjection(Vector2 direction, float ratio)
+        public void MoveProjection(Vector2 direction, float displayToSimRatio)
         {
-            direction *= ratio;
+            direction *= displayToSimRatio;
             _simProjection = Matrix.CreateTranslation(direction.X, direction.Y, 0) * _simProjection;
         }
     }
