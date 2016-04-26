@@ -1,6 +1,9 @@
-﻿namespace MonoGame.Extended.Tweening.Animation
+﻿
+using System;
+
+namespace MonoGame.Extended.Tweening.Animation
 {
-    public class RangeTransformation<T> : Transformation<T>
+    public class RangeTransformation<T> : Transformation<T> where T : IComparable<T>
     {
         public Range<T> Range { get; set; }
         public override Transformation<T> Copy() {
