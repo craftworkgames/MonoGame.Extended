@@ -8,17 +8,6 @@ namespace MonoGame.Extended
     /// </summary>
     public struct Range<T> : IEquatable<Range<T>> where T : IComparable<T>
     {
-        //private static readonly Interpolator<T> INTERPOLATOR;
-
-        //static Range() {
-        //    INTERPOLATOR = InterpolatorStore.GetRegistered<T>();
-        //}
-        //public T Random() {
-        //    return INTERPOLATOR == null
-        //        ? (T)DynamicInterpolator.Singleton.Interpolate(Min, Max, FastRand.NextSingle())
-        //        : INTERPOLATOR.Interpolate(Min, Max, FastRand.NextSingle());
-        //}
-
         public Range(T min, T max) {
             if (min.CompareTo(max) > 0 || max.CompareTo(min) < 0) {
                 throw new ArgumentException("Min has to be smaller than or equal to max.");
