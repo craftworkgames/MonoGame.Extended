@@ -4,15 +4,15 @@ using System;
 namespace MonoGame.Extended
 {
     /// <summary>
-    /// Represents a closed intervale defined by a minimum and a maximum value of a give type.
+    /// Represents a closed interval defined by a minimum and a maximum value of a give type.
     /// </summary>
     public struct Range<T> : IEquatable<Range<T>> where T : IComparable<T>
     {
-        ////private static readonly Interpolator<T> INTERPOLATOR;
+        //private static readonly Interpolator<T> INTERPOLATOR;
 
-        ////static Range() {
-        ////    INTERPOLATOR = InterpolatorStore.GetRegistered<T>();
-        ////}
+        //static Range() {
+        //    INTERPOLATOR = InterpolatorStore.GetRegistered<T>();
+        //}
         //public T Random() {
         //    return INTERPOLATOR == null
         //        ? (T)DynamicInterpolator.Singleton.Interpolate(Min, Max, FastRand.NextSingle())
