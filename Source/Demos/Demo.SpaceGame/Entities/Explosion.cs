@@ -7,12 +7,12 @@ namespace Demo.SpaceGame.Entities
 {
     public class Explosion : Entity
     {
-        private readonly SpriteSheetAnimationPlayer _animator;
+        private readonly SpriteSheetAnimator _animator;
         private readonly Sprite _sprite;
 
         public Explosion(SpriteSheetAnimationFactory animations, Vector2 position, float radius)
         {
-            _animator = new SpriteSheetAnimationPlayer(animations);
+            _animator = new SpriteSheetAnimator(animations);
             _sprite = _animator.CreateSprite();
             _sprite.Position = position;
             _sprite.Scale = Vector2.One*radius*0.2f;

@@ -26,7 +26,7 @@ namespace Demo.SpriteSheetAnimations
         private Zombie _zombie;
         private SpriteSheetAnimation _animation;
         private Sprite _fireballSprite;
-        private SpriteSheetAnimationPlayer _motwPlayer;
+        private SpriteSheetAnimator _motwAnimator;
         private Sprite _motwSprite;
 
         public Game1()
@@ -85,9 +85,9 @@ namespace Demo.SpriteSheetAnimations
             motwAnimationFactory.Add("walkWest", new SpriteSheetAnimationData(new[] { 12, 13, 14, 13 }, isLooping: false));
             motwAnimationFactory.Add("walkEast", new SpriteSheetAnimationData(new[] { 24, 25, 26, 25 }, isLooping: false));
             motwAnimationFactory.Add("walkNorth", new SpriteSheetAnimationData(new[] { 36, 37, 38, 37 }, isLooping: false));
-            _motwPlayer = new SpriteSheetAnimationPlayer(motwAnimationFactory);
-            _motwSprite = _motwPlayer.CreateSprite(new Vector2(350, 800));
-            _motwPlayer.Play("walkSouth").IsLooping = true;
+            _motwAnimator = new SpriteSheetAnimator(motwAnimationFactory);
+            _motwSprite = _motwAnimator.CreateSprite(new Vector2(350, 800));
+            _motwAnimator.Play("walkSouth").IsLooping = true;
         }
 
         protected override void UnloadContent()
@@ -103,16 +103,16 @@ namespace Demo.SpriteSheetAnimations
 
             // motw
             if (keyboardState.IsKeyDown(Keys.W))
-                _motwPlayer.Play("walkNorth");
+                _motwAnimator.Play("walkNorth");
 
             if (keyboardState.IsKeyDown(Keys.A))
-                _motwPlayer.Play("walkWest");
+                _motwAnimator.Play("walkWest");
 
             if (keyboardState.IsKeyDown(Keys.S))
-                _motwPlayer.Play("walkSouth");
+                _motwAnimator.Play("walkSouth");
 
             if (keyboardState.IsKeyDown(Keys.D))
-                _motwPlayer.Play("walkEast");
+                _motwAnimator.Play("walkEast");
 
             // camera
             if (keyboardState.IsKeyDown(Keys.R))
@@ -145,7 +145,7 @@ namespace Demo.SpriteSheetAnimations
             _animation.Update(deltaSeconds);
             _fireballSprite.TextureRegion = _animation.CurrentFrame;
 
-            _motwPlayer.Update(deltaSeconds);
+            _motwAnimator.Update(deltaSeconds);
 
             base.Update(gameTime);
         }

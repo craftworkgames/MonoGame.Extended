@@ -5,9 +5,9 @@ using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.Animations
 {
-    public class SpriteSheetAnimationPlayer : IUpdate
+    public class SpriteSheetAnimator : IUpdate
     {
-        public SpriteSheetAnimationPlayer(SpriteSheetAnimationFactory animationFactory)
+        public SpriteSheetAnimator(SpriteSheetAnimationFactory animationFactory)
         {
             _animationFactory = animationFactory;
         }

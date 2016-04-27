@@ -5,7 +5,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Animations
 {
-    public class SpriteSheetAnimation : IUpdate
+    public class SpriteSheetAnimation : Animation
     {
         public SpriteSheetAnimation(string name, TextureAtlas textureAtlas, float frameDuration = DefaultFrameDuration,
             bool isLooping = true, bool isReversed = false, bool isPingPong = false)
@@ -79,7 +79,7 @@ namespace MonoGame.Extended.Animations
             _currentTime = 0;
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             Update(gameTime.GetElapsedSeconds());
         }
