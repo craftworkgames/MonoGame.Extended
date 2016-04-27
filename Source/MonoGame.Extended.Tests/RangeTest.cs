@@ -16,6 +16,16 @@ namespace MonoGame.Extended.Tests
             //can pass min == max
             Assert.DoesNotThrow(() => new Range<int>(10, 10));
         }
+        [Test]
+        public void DegenerateTest() {
+            var proper = new Range<double>(0, 1);
+            Assert.IsTrue(proper.IsProper);
+            Assert.IsFalse(proper.IsDegenerate);
+
+            var degenerate = new Range<double>(1, 1);
+            Assert.IsFalse(degenerate.IsProper);
+            Assert.IsTrue(degenerate.IsDegenerate);
+        }
 
         [Test]
         public void IntegerTest() {
@@ -52,6 +62,36 @@ namespace MonoGame.Extended.Tests
             Assert.IsFalse(range.IsInBetween(0f, true));
             Assert.IsFalse(range.IsInBetween(1f, maxValueExclusive: true));
         }
+
+        [Test]
+        public void OperatorTest() {
+            var rangeA = new Range<int>(0, 1);
+            var rangeB = new Range<int>(0, 1);
+            var rangeC = new Range<int>(1, 2);
+            var rangeD = new Range<double>(0, 1);
+
+            Assert.IsTrue(rangeA == rangeB);
+            Assert.IsFalse(rangeA == rangeC);
+
+            Assert.IsFalse(rangeA != rangeB);
+            Assert.IsTrue(rangeA != rangeC);
+
+            Assert.IsTrue(rangeA.Equals(rangeB));
+            Assert.IsFalse(rangeA.Equals(rangeC));
+            Assert.IsFalse(rangeA.Equals(rangeD));
+
+            Range<int> implict = 1;
+            Assert.AreEqual(implict.Max, 1);
+            Assert.AreEqual(implict.Min, 1);
+        }
+
+        [Test]
+        public void ToStringTest() {
+            var range = new Range<float>(0, 1);
+
+            Assert.AreEqual(range.ToString(),"Range<Single> [0 1]");
+        }
+
 
     }
 }

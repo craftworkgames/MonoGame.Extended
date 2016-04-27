@@ -60,7 +60,7 @@ namespace MonoGame.Extended
             new Range<T>(value, value);
 
         public override string ToString() =>
-            $"Range<{nameof(T)}> {Min} {Max}";
+            $"Range<{typeof(T).Name}> [{Min} {Max}]";
 
         /// <summary>
         /// Returns wheter or not the value falls in this <see cref="Range{T}"/>.
