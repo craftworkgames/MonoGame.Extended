@@ -124,6 +124,7 @@
     <Compile Include="Particles\ParticleReleaseParameters.cs" />
     <Compile Include="Particles\SpriteBatchExtensions.cs" />
     <Compile Include="Particles\Vector2Extensions.cs" />
+    <Compile Include="Range.cs" />
     <Compile Include="RenderTarget2DExtensions.cs" />
     <Compile Include="Maps\Tiled\SpriteBatchExtensions.cs" />
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
