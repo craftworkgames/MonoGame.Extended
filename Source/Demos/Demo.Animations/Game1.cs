@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
+using MonoGame.Extended.Animations.Tweens;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
@@ -16,6 +17,7 @@ namespace Demo.Animations
         private SpriteBatch _spriteBatch;
         private Sprite _sprite;
         private Camera2D _camera;
+        private Vector2Tween _tween;
 
         public Game1()
         {
@@ -40,11 +42,11 @@ namespace Demo.Animations
             _camera = new Camera2D(viewportAdapter);
 
             var logoTexture = Content.Load<Texture2D>("logo-square-128");
-            var animationService = Services.GetService<IAnimationService>();
             
             _sprite = new Sprite(logoTexture) { Position = viewportAdapter.Center.ToVector2() };
-            _sprite.Move(new Vector2(100, 0), 1.0f);
+            //_sprite.Move(new Vector2(100, 0), duration: 1.0f);
 
+            _tween = new Vector2Tween(_sprite.Position, p => _sprite.Position = p, new Vector2(100, 100), 2.0f, EasingFunctions.QuadraticEaseInOut);
         }
 
         protected override void UnloadContent()
@@ -59,7 +61,9 @@ namespace Demo.Animations
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _sprite.Rotation += deltaTime;
+            //_sprite.Rotation += deltaTime;
+
+            _tween.Update(deltaTime);
 
             base.Update(gameTime);
         }

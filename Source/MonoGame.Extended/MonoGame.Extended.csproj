@@ -38,11 +38,14 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Animations\EasingFunctions.cs" />
     <Compile Include="Animations\SpriteSheetAnimation.cs" />
     <Compile Include="Animations\SpriteSheetAnimationData.cs" />
     <Compile Include="Animations\SpriteSheetAnimationFactory.cs" />
     <Compile Include="Animations\SpriteSheetAnimator.cs" />
     <Compile Include="Animations\SpriteSheetAnimationFactoryReader.cs" />
+    <Compile Include="Animations\Tweens\Tween.cs" />
+    <Compile Include="Animations\Tweens\Vector2Tween.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />

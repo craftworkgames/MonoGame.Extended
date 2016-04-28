@@ -50,9 +50,7 @@ namespace MonoGame.Extended.Animations
         public AnimationComponent(Game game)
             : base(game)
         {
-            game.Services.AddService(typeof (IAnimationService), this);
             FluentAnimations.AnimationService = this;
-
             Animations = new List<Animation>();
         }
 
