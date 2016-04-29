@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Animations
+namespace MonoGame.Extended.Animations.Tweens
 {
     public delegate float EasingFunction(float value);
 

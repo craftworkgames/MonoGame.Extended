@@ -1,11 +1,22 @@
 ﻿using System;
+using System.Linq.Expressions;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Animations.Tweens
 {
-    public abstract class Tween<T> : IUpdate
+    public class Tween<T> : Animation
     {
-        protected Tween(T initialValue, Action<T> setValue, T targetValue, float duration, EasingFunction easingFunction)
+        static Tween()
+        {
+            var a = Expression.Parameter(typeof(T));
+            var b = Expression.Parameter(typeof(T));
+            var c = Expression.Parameter(typeof(float));
+            Add = Expression.Lambda<Func<T, T, T>>(Expression.Add(a, b), a, b).Compile();
+            Subtract = Expression.Lambda<Func<T, T, T>>(Expression.Subtract(a, b), a, b).Compile();
+            Multiply = Expression.Lambda<Func<T, float, T>>(Expression.Multiply(a, c), a, c).Compile();
+        } 
+
+        public Tween(T initialValue, Action<T> setValue, T targetValue, float duration, EasingFunction easingFunction)
         {
             _setValue = setValue;
             InitialValue = initialValue;
@@ -24,9 +35,11 @@ namespace MonoGame.Extended.Animations.Tweens
         public EasingFunction EasingFunction { get; set; }
         public bool IsComplete { get; private set; }
 
-        protected abstract T CalculateNewValue(T initialValue, float multiplier);
+        protected static Func<T, T, T> Add;
+        protected static Func<T, T, T> Subtract;
+        protected static Func<T, float, T> Multiply;
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             Update(gameTime.GetElapsedSeconds());
         }
@@ -46,7 +59,7 @@ namespace MonoGame.Extended.Animations.Tweens
                 IsComplete = true;
             }
 
-            var newValue = CalculateNewValue(InitialValue, _currentMultiplier);
+            var newValue = Add(InitialValue, Multiply(Subtract(TargetValue, InitialValue), _currentMultiplier));
             _setValue(newValue);
         }
     }

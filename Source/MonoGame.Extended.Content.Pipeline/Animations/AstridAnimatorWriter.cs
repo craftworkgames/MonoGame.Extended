@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Animations;
+using MonoGame.Extended.Animations.SpriteSheets;
 
 namespace MonoGame.Extended.Content.Pipeline.Animations
 {

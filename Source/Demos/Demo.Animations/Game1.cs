@@ -17,7 +17,7 @@ namespace Demo.Animations
         private SpriteBatch _spriteBatch;
         private Sprite _sprite;
         private Camera2D _camera;
-        private Vector2Tween _tween;
+        //private Tween<float> _tween;
 
         public Game1()
         {
@@ -43,10 +43,11 @@ namespace Demo.Animations
 
             var logoTexture = Content.Load<Texture2D>("logo-square-128");
             
-            _sprite = new Sprite(logoTexture) { Position = viewportAdapter.Center.ToVector2() };
-            //_sprite.Move(new Vector2(100, 0), duration: 1.0f);
-
-            _tween = new Vector2Tween(_sprite.Position, p => _sprite.Position = p, new Vector2(100, 100), 2.0f, EasingFunctions.QuadraticEaseInOut);
+            _sprite = new Sprite(logoTexture) { Position = viewportAdapter.Center.ToVector2(), Scale = Vector2.One * 0.5f };
+            _sprite
+                .Move(new Vector2(0, 50), 5.0f, EasingFunctions.QuadraticEaseInOut)
+                .RotateTo(MathHelper.TwoPi * 3, 5.0f, EasingFunctions.CubicEaseInOut)
+                .ScaleTo(Vector2.One * 1.5f, 5.0f, EasingFunctions.QuadraticEaseInOut);
         }
 
         protected override void UnloadContent()
@@ -63,7 +64,7 @@ namespace Demo.Animations
 
             //_sprite.Rotation += deltaTime;
 
-            _tween.Update(deltaTime);
+            //_tween.Update(deltaTime);
 
             base.Update(gameTime);
         }

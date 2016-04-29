@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.Animations
+namespace MonoGame.Extended.Animations.SpriteSheets
 {
     public class SpriteSheetAnimation : Animation
     {

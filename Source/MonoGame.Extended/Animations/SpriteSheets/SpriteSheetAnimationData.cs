@@ -1,4 +1,4 @@
-namespace MonoGame.Extended.Animations
+namespace MonoGame.Extended.Animations.SpriteSheets
 {
     public class SpriteSheetAnimationData
     {

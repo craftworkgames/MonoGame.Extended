@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Sprites;
 
-namespace MonoGame.Extended.Animations
+namespace MonoGame.Extended.Animations.SpriteSheets
 {
     public class SpriteSheetAnimator : IUpdate
     {

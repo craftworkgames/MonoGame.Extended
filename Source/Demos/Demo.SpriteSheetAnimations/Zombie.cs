@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
+using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
