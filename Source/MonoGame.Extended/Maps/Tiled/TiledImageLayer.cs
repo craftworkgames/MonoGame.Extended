@@ -20,7 +20,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public Vector2 Position { get; set; }
 
-        public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null)
+        public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null)
         {
             if (!IsVisible)
                 return;

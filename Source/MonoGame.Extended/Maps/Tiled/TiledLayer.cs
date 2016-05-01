@@ -21,6 +21,6 @@ namespace MonoGame.Extended.Maps.Tiled
         public bool IsVisible { get; set; }
         public float Opacity { get; set; }
 
-        public abstract void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null);
+        public abstract void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null);
     }
 }

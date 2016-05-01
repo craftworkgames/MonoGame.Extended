@@ -89,6 +89,7 @@
     <Compile Include="Tiled\TiledMapWriter.cs" />
     <Compile Include="Tiled\TmxData.cs" />
     <Compile Include="Tiled\TmxEllipse.cs" />
+    <Compile Include="Tiled\TmxFrame.cs" />
     <Compile Include="Tiled\TmxImage.cs" />
     <Compile Include="Tiled\TmxImageLayer.cs" />
     <Compile Include="Tiled\TmxLayer.cs" />

@@ -35,6 +35,19 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 writer.Write(tileset.TileHeight);
                 writer.Write(tileset.Spacing);
                 writer.Write(tileset.Margin);
+
+                writer.Write(tileset.Tiles.Count);
+                foreach(var tile in tileset.Tiles)
+                {
+                    writer.Write(tile.Id);
+                    writer.Write(tile.Frames.Count);
+                    foreach(var frame in tile.Frames)
+                    {
+                        writer.Write(frame.TileId);
+                        writer.Write(frame.Duration);
+                    }
+                    WriteCustomProperties(writer, tile.Properties);
+                }
                 WriteCustomProperties(writer, tileset.Properties);
             }
 
