@@ -84,6 +84,8 @@
     <Compile Include="IScalable.cs" />
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
+    <Compile Include="Maps\Tiled\TiledTileSetTileFrame.cs" />
+    <Compile Include="Maps\Tiled\TiledTileSetTile.cs" />
     <Compile Include="Particles\Axis.cs" />
     <Compile Include="Particles\ColorExtensions.cs" />
     <Compile Include="Particles\HslColor.cs" />
