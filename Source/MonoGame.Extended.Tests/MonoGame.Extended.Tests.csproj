@@ -56,7 +56,7 @@
     <Compile Include="Collections\DequeTests.cs" />
     <Compile Include="Collections\PoolTests.cs" />
     <Compile Include="MockGameWindow.cs" />
-    <Compile Include="RangeTest.cs" />
+    <Compile Include="RangeTests.cs" />
     <Compile Include="Shapes\PolygonFTests.cs" />
     <Compile Include="Shapes\CircleTests.cs" />
     <Compile Include="Sprites\SpriteTests.cs" />

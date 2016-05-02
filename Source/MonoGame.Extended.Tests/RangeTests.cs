@@ -1,14 +1,14 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests
 {
     [TestFixture]
-    public class RangeTest
+    public class RangeTests
     {
         [Test]
-        public void ConstructorTest() {
+        public void ConstructorTest()
+        {
             //can pass min < max
             Assert.DoesNotThrow(() => new Range<int>(10, 100));
             //can't pass min > max
@@ -16,8 +16,10 @@ namespace MonoGame.Extended.Tests
             //can pass min == max
             Assert.DoesNotThrow(() => new Range<int>(10, 10));
         }
+
         [Test]
-        public void DegenerateTest() {
+        public void DegenerateTest()
+        {
             var proper = new Range<double>(0, 1);
             Assert.IsTrue(proper.IsProper);
             Assert.IsFalse(proper.IsDegenerate);
@@ -28,13 +30,15 @@ namespace MonoGame.Extended.Tests
         }
 
         [Test]
-        public void IntegerTest() {
+        public void IntegerTest()
+        {
             var range = new Range<int>(10, 100);
 
             Assert.AreEqual(range.Min, 10);
             Assert.AreEqual(range.Max, 100);
 
-            for (int i = 10; i <= 100; i++) {
+            for (int i = 10; i <= 100; i++)
+            {
                 Assert.IsTrue(range.IsInBetween(i));
             }
 
@@ -44,15 +48,16 @@ namespace MonoGame.Extended.Tests
             Assert.IsFalse(range.IsInBetween(100, maxValueExclusive: true));
         }
 
-
         [Test]
-        public void FloatTest() {
+        public void FloatTest()
+        {
             var range = new Range<float>(0f, 1f);
 
             Assert.AreEqual(range.Min, 0f);
             Assert.AreEqual(range.Max, 1f);
 
-            for (float i = 0; i <= 1f; i += 0.001f) {
+            for (float i = 0; i <= 1f; i += 0.001f)
+            {
                 Assert.IsTrue(range.IsInBetween(i));
             }
 
@@ -64,7 +69,8 @@ namespace MonoGame.Extended.Tests
         }
 
         [Test]
-        public void OperatorTest() {
+        public void OperatorTest()
+        {
             var rangeA = new Range<int>(0, 1);
             var rangeB = new Range<int>(0, 1);
             var rangeC = new Range<int>(1, 2);
@@ -86,12 +92,11 @@ namespace MonoGame.Extended.Tests
         }
 
         [Test]
-        public void ToStringTest() {
+        public void ToStringTest()
+        {
             var range = new Range<float>(0, 1);
 
-            Assert.AreEqual(range.ToString(),"Range<Single> [0 1]");
+            Assert.AreEqual(range.ToString(), "Range<Single> [0 1]");
         }
-
-
     }
 }
