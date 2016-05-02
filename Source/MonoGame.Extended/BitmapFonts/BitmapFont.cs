@@ -6,11 +6,11 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.BitmapFonts
 {
-    public class BitmapFont 
+    public class BitmapFont
     {
         internal BitmapFont(IEnumerable<BitmapFontRegion> regions, int lineHeight)
         {
-            _characterMap = regions.ToDictionary(r => r.Character);// BuildCharacterMap(textures, _fontFile);
+            _characterMap = regions.ToDictionary(r => r.Character);
             LineHeight = lineHeight;
         }
 
@@ -26,16 +26,14 @@ namespace MonoGame.Extended.BitmapFonts
 
         internal static IEnumerable<int> GetUnicodeCodePoints(string s)
         {
-            if (!String.IsNullOrEmpty(s))
+            if (!string.IsNullOrEmpty(s))
             {
                 for (int i = 0; i < s.Length; i += 1)
                 {
-                    if (Char.IsLowSurrogate(s, i))
-                    {
+                    if (char.IsLowSurrogate(s, i))
                         continue;
-                    }
 
-                    yield return Char.ConvertToUtf32(s, i);
+                    yield return char.ConvertToUtf32(s, i);
                 }
             }
         }
