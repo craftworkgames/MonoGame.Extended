@@ -105,7 +105,7 @@ namespace MonoGame.Extended.Particles
             {
                 var particle = iterator.Next();
 
-                Axis heading;
+                Vector2 heading;
                 Profile.GetOffsetAndHeading(out particle->Position, out heading);
 
                 particle->Age = 0f;

@@ -7,14 +7,12 @@ namespace MonoGame.Extended.Particles.Modifiers
         public Vector2 Position { get; set; }
         public float Mass { get; set; }
         public float MaxSpeed { get; set; }
-        
+
         // Note: not the real-life one
         private const float _gravConst = 100000f;
 
-        public void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
-        {
-            while (iterator.HasNext)
-            {
+        public void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator) {
+            while (iterator.HasNext) {
                 var particle = iterator.Next();
                 var diff = Position + particle->TriggerPos - particle->Position;
 
@@ -22,7 +20,8 @@ namespace MonoGame.Extended.Particles.Modifiers
 
                 var speedGain = _gravConst * Mass / distance2 * elapsedSeconds;
                 // normalize distances and multiply by speedGain
-                particle->Velocity += diff.ToAxis() * speedGain;
+                diff.Normalize();
+                particle->Velocity += diff * speedGain;
             }
         }
     }
