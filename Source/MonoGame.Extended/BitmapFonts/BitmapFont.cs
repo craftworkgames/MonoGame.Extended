@@ -14,14 +14,30 @@ namespace MonoGame.Extended.BitmapFonts
             LineHeight = lineHeight;
         }
 
-        private readonly Dictionary<char, BitmapFontRegion> _characterMap;
+        private readonly Dictionary<int, BitmapFontRegion> _characterMap;
 
         public int LineHeight { get; private set; }
 
-        public BitmapFontRegion GetCharacterRegion(char character)
+        public BitmapFontRegion GetCharacterRegion(int character)
         {
             BitmapFontRegion region;
             return _characterMap.TryGetValue(character, out region) ? region : null;
+        }
+
+        internal static IEnumerable<int> GetUnicodeCodePoints(string s)
+        {
+            if (!String.IsNullOrEmpty(s))
+            {
+                for (int i = 0; i < s.Length; i += 1)
+                {
+                    if (Char.IsLowSurrogate(s, i))
+                    {
+                        continue;
+                    }
+
+                    yield return Char.ConvertToUtf32(s, i);
+                }
+            }
         }
 
         public Size GetSize(string text)
@@ -29,7 +45,7 @@ namespace MonoGame.Extended.BitmapFonts
             var width = 0;
             var height = 0;
 
-            foreach (var c in text)
+            foreach (int c in GetUnicodeCodePoints(text))
             {
                 BitmapFontRegion fontRegion;
 

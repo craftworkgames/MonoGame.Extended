@@ -9,10 +9,15 @@ namespace MonoGame.Extended.BitmapFonts
     {
         public static void DrawString(this SpriteBatch spriteBatch, BitmapFont bitmapFont, string text, Vector2 position, Color color)
         {
+            DrawString(spriteBatch, bitmapFont, text, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
+        }
+
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont bitmapFont, string text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
+        {
             var dx = position.X;
             var dy = position.Y;
 
-            foreach (var character in text)
+            foreach (var character in BitmapFont.GetUnicodeCodePoints(text))
             {
                 var fontRegion = bitmapFont.GetCharacterRegion(character);
 
@@ -20,7 +25,7 @@ namespace MonoGame.Extended.BitmapFonts
                 {
                     var charPosition = new Vector2(dx + fontRegion.XOffset, dy + fontRegion.YOffset);
 
-                    spriteBatch.Draw(fontRegion.TextureRegion, charPosition, color);
+                    spriteBatch.Draw(fontRegion.TextureRegion, charPosition, color, rotation, origin, scale, effects, layerDepth);
                     dx += fontRegion.XAdvance;
                 }
 
