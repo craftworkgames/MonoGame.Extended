@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Particles.Profiles
         public float Width { get; set; }
         public float Height { get; set; }
 
-        public override void GetOffsetAndHeading(out Vector2 offset, out Axis heading)
+        public override void GetOffsetAndHeading(out Vector2 offset, out Vector2 heading)
         {
             switch (FastRand.NextInteger(3))
             {

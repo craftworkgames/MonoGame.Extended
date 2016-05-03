@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Sprites\motw.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -72,15 +73,7 @@
     <None Include="Content\Fonts\courier-new-32_0.png" />
     <None Include="Content\Tilesets\free-tileset.png" />
     <None Include="Content\Backgrounds\hills.png" />
-    <None Include="Content\Backgrounds\Hills_1.png" />
-    <None Include="Content\Backgrounds\Hills_2.png" />
-    <None Include="Content\Backgrounds\Hills_3.png" />
-    <None Include="Content\Backgrounds\Hills_4.png" />
-    <None Include="Content\Backgrounds\Hills_Couds.png" />
-    <None Include="Content\Backgrounds\Hills_Sky.png" />
     <None Include="Content\Tilesets\isometric_tileset.png" />
-    <None Include="Content\Sprites\shadedDark42.png" />
-    <None Include="Content\Sprites\stump.png" />
     <None Include="Content\Tilesets\test-tileset.png" />
     <None Include="Content\Sprites\zombie.png" />
     <None Include="Content\Tilesets\test-tileset-atlas.json" />

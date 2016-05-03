@@ -35,6 +35,19 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 writer.Write(tileset.TileHeight);
                 writer.Write(tileset.Spacing);
                 writer.Write(tileset.Margin);
+
+                writer.Write(tileset.Tiles.Count);
+                foreach(var tile in tileset.Tiles)
+                {
+                    writer.Write(tile.Id);
+                    writer.Write(tile.Frames.Count);
+                    foreach(var frame in tile.Frames)
+                    {
+                        writer.Write(frame.TileId);
+                        writer.Write(frame.Duration);
+                    }
+                    WriteCustomProperties(writer, tile.Properties);
+                }
                 WriteCustomProperties(writer, tileset.Properties);
             }
 
@@ -116,7 +129,13 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         private static void WritePolyPoints(ContentWriter writer, string polyPointsString)
         {
             var points = polyPointsString.Split(' ')
-                            .Select(p => { var xy = p.Split(','); return new Vector2(float.Parse(xy[0]), float.Parse(xy[1])); })
+                            .Select(p =>
+                            {
+                                var xy = p.Split(',');
+                                var x = float.Parse(xy[0], CultureInfo.InvariantCulture.NumberFormat);
+                                var y = float.Parse(xy[1], CultureInfo.InvariantCulture.NumberFormat);
+                                return new Vector2(x, y);
+                            })
                             .ToArray();
 
             writer.Write(points.Length);
