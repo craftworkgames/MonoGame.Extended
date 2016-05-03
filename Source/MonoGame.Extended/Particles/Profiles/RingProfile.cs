@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Particles.Profiles
         public float Radius { get; set; }
         public CircleRadiation Radiate { get; set; }
 
-        public override void GetOffsetAndHeading(out Vector2 offset, out Axis heading)
+        public override void GetOffsetAndHeading(out Vector2 offset, out Vector2 heading)
         {
             FastRand.NextUnitVector(out heading);
 
