@@ -101,7 +101,7 @@ namespace Demo.TiledMaps
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
 
             // you can draw the whole map all at once
-            _spriteBatch.Draw(_tiledMap);
+            _spriteBatch.Draw(_tiledMap, gameTime: gameTime);
 
             // or you can have more control over drawing each individual layer
             //foreach (var layer in _tiledMap.Layers)

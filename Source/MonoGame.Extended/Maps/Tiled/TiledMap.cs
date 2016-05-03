@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledMap : IDisposable
     {
-        public TiledMap(GraphicsDevice graphicsDevice, int width, int height, int tileWidth, int tileHeight, 
+        public TiledMap(GraphicsDevice graphicsDevice, int width, int height, int tileWidth, int tileHeight,
             TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
         {
             _graphicsDevice = graphicsDevice;
@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Maps.Tiled
             Properties = new TiledProperties();
             Orientation = orientation;
         }
-        
+
         public void Dispose()
         {
             foreach (var tiledLayer in _layers)
@@ -98,16 +98,16 @@ namespace MonoGame.Extended.Maps.Tiled
         }
 
         
-        public void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null)
+        public void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, GameTime gameTime = null)
         {
             foreach (var layer in _layers.Where(i => i.IsVisible))
-                layer.Draw(spriteBatch, visibleRectangle);
+                layer.Draw(spriteBatch, visibleRectangle, gameTime: gameTime);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Camera2D camera)
+        public void Draw(SpriteBatch spriteBatch, Camera2D camera, GameTime gameTime = null)
         {
             var visibleRectangle = camera.GetBoundingRectangle().ToRectangle();
-            Draw(spriteBatch, visibleRectangle);
+            Draw(spriteBatch, visibleRectangle, gameTime: gameTime);
         }
 
         public TextureRegion2D GetTileRegion(int id)
@@ -121,6 +121,12 @@ namespace MonoGame.Extended.Maps.Tiled
                 throw new InvalidOperationException($"No tileset found for id {id}");
 
             return tileset.GetTileRegion(id);
+        }
+
+        public TiledTileSetTile GetTileSetTileById(int tileSetTileId)
+        {
+            TiledTileSetTile tile = _tilesets.SelectMany(ts => ts.Tiles, (ts, t) => t).Where(t => t.Id == tileSetTileId-1).FirstOrDefault();
+            return tile;
         }
     }
 }

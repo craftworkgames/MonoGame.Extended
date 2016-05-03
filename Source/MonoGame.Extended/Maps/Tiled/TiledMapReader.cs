@@ -38,6 +38,17 @@ namespace MonoGame.Extended.Maps.Tiled
                     tileHeight: reader.ReadInt32(),
                     spacing: reader.ReadInt32(),
                     margin: reader.ReadInt32());
+                var tileSetTileCount = reader.ReadInt32();
+                for (var j = 0; j < tileSetTileCount; j++)
+                {
+                    var tileSetTile = tileset.CreateTileSetTile(id: reader.ReadInt32());
+                    var tileSetTileFrameCount = reader.ReadInt32();
+                    for (var k=0;k<tileSetTileFrameCount; k++)
+                    {
+                        tileSetTile.CreateTileSetTileFrame(order: k, tileId: reader.ReadInt32(), duration: reader.ReadInt32());
+                    }
+                    ReadCustomProperties(reader, tileSetTile.Properties);
+                }
                 ReadCustomProperties(reader, tileset.Properties);
             }
 

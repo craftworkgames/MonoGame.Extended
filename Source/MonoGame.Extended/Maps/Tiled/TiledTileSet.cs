@@ -19,6 +19,7 @@ namespace MonoGame.Extended.Maps.Tiled
             Spacing = spacing;
             Margin = margin;
             Properties = new TiledProperties();
+            Tiles = new List<TiledTileSetTile>();
 
             var id = FirstId;
             _regions = new Dictionary<int, TextureRegion2D>();
@@ -41,11 +42,19 @@ namespace MonoGame.Extended.Maps.Tiled
         public int TileHeight { get; }
         public int Spacing { get; }
         public int Margin { get; }
+        public List<TiledTileSetTile> Tiles { get; private set; }
         public TiledProperties Properties { get; private set; }
 
         public TextureRegion2D GetTileRegion(int id)
         {
             return id == 0 ? null : _regions[id];
+        }
+
+        public TiledTileSetTile CreateTileSetTile(int id)
+        {
+            var tileSetTile = new TiledTileSetTile(id);
+            Tiles.Add(tileSetTile);
+            return tileSetTile;
         }
     }
 }
