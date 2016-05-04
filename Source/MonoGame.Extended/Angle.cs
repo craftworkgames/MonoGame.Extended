@@ -17,40 +17,41 @@ namespace MonoGame.Extended
     [DebuggerDisplay("{ToString(),nq}")]
     public struct Angle : IComparable<Angle>, IEquatable<Angle>
     {
-        private const double TAU = Math.PI * 2.0;
-        private const double TAU_INV = 0.5 / Math.PI;
-        private const double DEGREE_RADIAN = Math.PI / 180.0;
-        private const double RADIAN_DEGREE = 180.0 / Math.PI;
-        private const double GRADIAN_RADIAN = Math.PI / 200.0;
-        private const double RADIAN_GRADIAN = 200.0 / Math.PI;
+
+        private const float TAU = (float) (Math.PI * 2.0);
+        private const float TAU_INV = (float) (0.5 / Math.PI);
+        private const float DEGREE_RADIAN = (float) (Math.PI / 180.0);
+        private const float RADIAN_DEGREE = (float) (180.0 / Math.PI);
+        private const float GRADIAN_RADIAN = (float) (Math.PI / 200.0);
+        private const float RADIAN_GRADIAN = (float) (200.0 / Math.PI);
 
         [DataMember]
-        public double Radians { get; set; }
+        public float Radians { get; set; }
 
-        public double Degrees
+        public float Degrees
         {
             get { return Radians * RADIAN_DEGREE; }
             set { Radians = value * DEGREE_RADIAN; }
         }
 
-        public double Gradians
+        public float Gradians
         {
             get { return Radians * RADIAN_GRADIAN; }
             set { Radians = value * GRADIAN_RADIAN; }
         }
 
-        public double Revolutions
+        public float Revolutions
         {
             get { return Radians * TAU_INV; }
             set { Radians = value * TAU; }
         }
 
-        public Angle(double value, AngleType angleType = AngleType.Radian)
+        public Angle(float value, AngleType angleType = AngleType.Radian)
         {
             switch (angleType)
             {
                 default:
-                    Radians = 0d;
+                    Radians = 0f;
                     break;
                 case AngleType.Radian:
                     Radians = value;
@@ -67,12 +68,12 @@ namespace MonoGame.Extended
             }
         }
 
-        public double GetValue(AngleType angleType)
+        public float GetValue(AngleType angleType)
         {
             switch (angleType)
             {
                 default:
-                    return 0;
+                    return 0f;
                 case AngleType.Radian:
                     return Radians;
                 case AngleType.Degree:
@@ -101,7 +102,7 @@ namespace MonoGame.Extended
 
         public static Angle FromVector(Vector2 vector)
         {
-            return new Angle(Math.Atan2(-vector.Y, vector.X));
+            return new Angle((float)Math.Atan2(-vector.Y, vector.X));
         }
 
         public Vector2 ToUnitVector() => ToVector(1);
@@ -131,24 +132,27 @@ namespace MonoGame.Extended
             other.WrapPositive();
             return Radians == other.Radians;
         }
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is Angle && Equals((Angle)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Radians.GetHashCode();
+        }
 
         #region operators
-        public static implicit operator double(Angle angle)
-        {
-            return angle.Radians;
-        }
         public static implicit operator float(Angle angle)
         {
-            return (float)angle.Radians;
-        }
-        public static explicit operator Angle(double angle)
-        {
-            return new Angle(angle);
+            return angle.Radians;
         }
         public static explicit operator Angle(float angle)
         {
             return new Angle(angle);
         }
+
         public static Angle operator -(Angle angle)
         {
             return new Angle(-angle.Radians);
@@ -167,11 +171,11 @@ namespace MonoGame.Extended
         {
             return new Angle(left.Radians - right.Radians);
         }
-        public static Angle operator *(Angle left, double right)
+        public static Angle operator *(Angle left, float right)
         {
             return new Angle(left.Radians * right);
         }
-        public static Angle operator *(double left, Angle right)
+        public static Angle operator *(float left, Angle right)
         {
             return new Angle(right.Radians * left);
         }
