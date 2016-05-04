@@ -13,7 +13,7 @@
 
         public unsafe void Update(float amount, Particle* particle) {
             particle->Color = new HslColor(
-                    particle->Age * _delta + StartValue,
+                    amount * _delta + StartValue,
                     particle->Color.S,
                     particle->Color.L);
         }

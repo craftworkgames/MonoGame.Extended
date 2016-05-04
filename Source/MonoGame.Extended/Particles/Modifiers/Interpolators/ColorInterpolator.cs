@@ -18,7 +18,7 @@ namespace MonoGame.Extended.Particles.Modifiers.Interpolators
         public HslColor FinalColor { get; set; }
         
         public unsafe void Update(float amount, Particle* particle) {
-            particle->Color = HslColor.Lerp(InitialColor, FinalColor, particle->Age);
+            particle->Color = HslColor.Lerp(InitialColor, FinalColor, amount);
         }
     }
 }

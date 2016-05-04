@@ -36,6 +36,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Angle.cs" />
     <Compile Include="Animations\SpriteSheetAnimation.cs" />
     <Compile Include="Animations\SpriteSheetAnimationData.cs" />
     <Compile Include="Animations\SpriteSheetAnimationFactory.cs" />
