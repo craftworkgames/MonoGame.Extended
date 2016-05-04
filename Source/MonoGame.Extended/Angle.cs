@@ -1,4 +1,9 @@
 ﻿/*
+* -----------------------------------------------------------------------------
+* Original code from SlimMath project. http://code.google.com/p/slimmath/
+* Greetings to SlimDX Group. Original code published with the following license:
+* -----------------------------------------------------------------------------
+* 
 * Copyright (c) 2007-2010 SlimDX Group
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,37 +38,37 @@ namespace MonoGame.Extended
         Revolution, //or Turn / cycle
         Gradian // or Gon
     }
+
     [DataContract]
     [DebuggerDisplay("{ToString(),nq}")]
     public struct Angle : IComparable<Angle>, IEquatable<Angle>
     {
-
-        private const float TAU = (float) (Math.PI * 2.0);
-        private const float TAU_INV = (float) (0.5 / Math.PI);
-        private const float DEGREE_RADIAN = (float) (Math.PI / 180.0);
-        private const float RADIAN_DEGREE = (float) (180.0 / Math.PI);
-        private const float GRADIAN_RADIAN = (float) (Math.PI / 200.0);
-        private const float RADIAN_GRADIAN = (float) (200.0 / Math.PI);
+        private const float _tau = (float)(Math.PI * 2.0);
+        private const float _tauInv = (float)(0.5 / Math.PI);
+        private const float _degreeRadian = (float)(Math.PI / 180.0);
+        private const float _radianDegree = (float)(180.0 / Math.PI);
+        private const float _gradianRadian = (float)(Math.PI / 200.0);
+        private const float _radianGradian = (float)(200.0 / Math.PI);
 
         [DataMember]
         public float Radians { get; set; }
 
         public float Degrees
         {
-            get { return Radians * RADIAN_DEGREE; }
-            set { Radians = value * DEGREE_RADIAN; }
+            get { return Radians * _radianDegree; }
+            set { Radians = value * _degreeRadian; }
         }
 
         public float Gradians
         {
-            get { return Radians * RADIAN_GRADIAN; }
-            set { Radians = value * GRADIAN_RADIAN; }
+            get { return Radians * _radianGradian; }
+            set { Radians = value * _gradianRadian; }
         }
 
         public float Revolutions
         {
-            get { return Radians * TAU_INV; }
-            set { Radians = value * TAU; }
+            get { return Radians * _tauInv; }
+            set { Radians = value * _tau; }
         }
 
         public Angle(float value, AngleType angleType = AngleType.Radian)
@@ -77,13 +82,13 @@ namespace MonoGame.Extended
                     Radians = value;
                     break;
                 case AngleType.Degree:
-                    Radians = value * DEGREE_RADIAN;
+                    Radians = value * _degreeRadian;
                     break;
                 case AngleType.Revolution:
-                    Radians = value * TAU;
+                    Radians = value * _tau;
                     break;
                 case AngleType.Gradian:
-                    Radians = value * GRADIAN_RADIAN;
+                    Radians = value * _gradianRadian;
                     break;
             }
         }
@@ -107,16 +112,16 @@ namespace MonoGame.Extended
 
         public void Wrap()
         {
-            var angle = Radians % TAU;
-            if (angle <= Math.PI) angle += TAU;
-            if (angle > Math.PI) angle -= TAU;
+            var angle = Radians % _tau;
+            if (angle <= Math.PI) angle += _tau;
+            if (angle > Math.PI) angle -= _tau;
             Radians = angle;
         }
 
         public void WrapPositive()
         {
-            Radians %= TAU;
-            if (Radians < 0d) Radians += TAU;
+            Radians %= _tau;
+            if (Radians < 0d) Radians += _tau;
             Radians = Radians;
         }
 
@@ -150,7 +155,7 @@ namespace MonoGame.Extended
         {
             WrapPositive();
             other.WrapPositive();
-            return Radians == other.Radians;
+            return Radians.Equals(other.Radians);
         }
         public override bool Equals(object obj)
         {
@@ -160,14 +165,15 @@ namespace MonoGame.Extended
 
         public override int GetHashCode()
         {
+            // ReSharper disable once NonReadonlyMemberInGetHashCode
             return Radians.GetHashCode();
         }
 
-        #region operators
         public static implicit operator float(Angle angle)
         {
             return angle.Radians;
         }
+
         public static explicit operator Angle(float angle)
         {
             return new Angle(angle);
@@ -177,6 +183,7 @@ namespace MonoGame.Extended
         {
             return new Angle(-angle.Radians);
         }
+
         public static bool operator ==(Angle a, Angle b)
         {
             return a.Equals(a);
@@ -191,20 +198,21 @@ namespace MonoGame.Extended
         {
             return new Angle(left.Radians - right.Radians);
         }
+
         public static Angle operator *(Angle left, float right)
         {
             return new Angle(left.Radians * right);
         }
+
         public static Angle operator *(float left, Angle right)
         {
             return new Angle(right.Radians * left);
         }
+
         public static Angle operator +(Angle left, Angle right)
         {
             return new Angle(left.Radians + right.Radians);
         }
-        #endregion
-
 
         public override string ToString()
         {
