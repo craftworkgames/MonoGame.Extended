@@ -92,7 +92,10 @@ namespace MonoGame.Extended.Maps.Tiled
                         {
                             _animatedTiles.Add(tile);
                         }
-                        UpdateRenderTarget(_renderTargetSpriteBatch, tileLocationFunction, tile, tileId);
+                        else
+                        {
+                            UpdateRenderTarget(_renderTargetSpriteBatch, tileLocationFunction, tile, tileId);
+                        }
                     }
 
                     _renderTargetSpriteBatch.End();
