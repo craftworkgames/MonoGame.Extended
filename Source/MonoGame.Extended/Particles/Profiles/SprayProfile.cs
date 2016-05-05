@@ -11,7 +11,7 @@ namespace MonoGame.Extended.Particles.Profiles
         public override void GetOffsetAndHeading(out Vector2 offset, out Vector2 heading) {
             var angle = (float)Math.Atan2(Direction.Y, Direction.Y);
 
-            angle = FastRand.NextSingle(angle - Spread / 2f, angle + Spread / 2f);
+            angle = Random.NextSingle(angle - Spread / 2f, angle + Spread / 2f);
 
             offset = Vector2.Zero;
             heading = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));

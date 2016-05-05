@@ -9,9 +9,9 @@ namespace MonoGame.Extended.Particles.Profiles
 
         public override void GetOffsetAndHeading(out Vector2 offset, out Vector2 heading)
         {
-            var vect = Axis * FastRand.NextSingle(Length * -0.5f, Length * 0.5f);
+            var vect = Axis * Random.NextSingle(Length * -0.5f, Length * 0.5f);
             offset = new Vector2(vect.X, vect.Y);
-            FastRand.NextUnitVector(out heading);
+            Random.NextUnitVector(out heading);
         }
     }
 }
