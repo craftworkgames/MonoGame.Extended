@@ -37,6 +37,7 @@ namespace MonoGame.Extended.InputListeners
         public event EventHandler<MouseEventArgs> MouseDown;
         public event EventHandler<MouseEventArgs> MouseUp;
         public event EventHandler<MouseEventArgs> MouseClicked;
+        public event EventHandler<MouseEventArgs> MouseIsDown;
         public event EventHandler<MouseEventArgs> MouseDoubleClicked;
         public event EventHandler<MouseEventArgs> MouseMoved;
         public event EventHandler<MouseEventArgs> MouseWheelMoved;
@@ -46,6 +47,13 @@ namespace MonoGame.Extended.InputListeners
 
         private void CheckButtonPressed(Func<MouseState, ButtonState> getButtonState, MouseButton button)
         {
+
+            if (getButtonState(_currentState) == ButtonState.Pressed)
+            {
+                var args = new MouseEventArgs(ViewportAdapter, _gameTime.TotalGameTime, _previousState, _currentState, button);
+                MouseIsDown.Raise(this, args);
+            }
+
             if (getButtonState(_currentState) == ButtonState.Pressed &&
                 getButtonState(_previousState) == ButtonState.Released)
             {
