@@ -81,14 +81,14 @@ namespace MonoGame.Extended.Particles
 
         public void Trigger(Vector2 position)
         {
-            var numToRelease = _random.NextInteger(Parameters.Quantity);
+            var numToRelease = _random.Next(Parameters.Quantity);
 
             Release(position + Offset, numToRelease);
         }
 
         public void Trigger(LineSegment line)
         {
-            var numToRelease = _random.NextInteger(Parameters.Quantity);
+            var numToRelease = _random.Next(Parameters.Quantity);
             var lineVector = line.ToVector();
 
             for (var i = 0; i < numToRelease; i++)

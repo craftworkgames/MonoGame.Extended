@@ -126,6 +126,7 @@
     <Compile Include="Particles\Profiles\SprayProfile.cs" />
     <Compile Include="Particles\ParticleReleaseParameters.cs" />
     <Compile Include="Particles\SpriteBatchExtensions.cs" />
+    <Compile Include="RandomExtensions.cs" />
     <Compile Include="Range.cs" />
     <Compile Include="RenderTarget2DExtensions.cs" />
     <Compile Include="Maps\Tiled\SpriteBatchExtensions.cs" />

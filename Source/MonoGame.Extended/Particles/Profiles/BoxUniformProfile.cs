@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Particles.Profiles
 
         public override void GetOffsetAndHeading(out Vector2 offset, out Vector2 heading)
         {
-            var value = Random.NextInteger((int)(2 * Width + 2 * Height));
+            var value = Random.Next((int)(2 * Width + 2 * Height));
 
             if (value < Width) // Top
                 offset = new Vector2(Random.NextSingle(Width * -0.5f, Width * 0.5f), Height * -0.5f);

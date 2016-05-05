@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Particles.Profiles
 
         public override void GetOffsetAndHeading(out Vector2 offset, out Vector2 heading)
         {
-            switch (Random.NextInteger(3))
+            switch (Random.Next(3))
             {
                 case 0: // Left
                     offset = new Vector2(Width*-0.5f, Random.NextSingle(Height*-0.5f, Height*0.5f));
