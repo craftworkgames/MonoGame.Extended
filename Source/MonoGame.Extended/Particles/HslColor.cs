@@ -163,8 +163,8 @@ namespace MonoGame.Extended.Particles
         /// </returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0}°,{1:P0},{2:P0}",
-                H.ToString("F1"), (100 * S).ToString("F1"), (100 * L).ToString("F1"));
+            return string.Format(CultureInfo.InvariantCulture, "H:{0:N1}° S:{1:N1} L:{2:N1}",
+                H, 100 * S, 100 * L);
         }
 
         public static HslColor Parse(string s)
