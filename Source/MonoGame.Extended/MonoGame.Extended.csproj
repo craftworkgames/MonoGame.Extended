@@ -36,6 +36,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Angle.cs" />
     <Compile Include="Animations\SpriteSheetAnimation.cs" />
     <Compile Include="Animations\SpriteSheetAnimationData.cs" />
     <Compile Include="Animations\SpriteSheetAnimationFactory.cs" />
@@ -87,13 +88,14 @@
     <Compile Include="Maps\Tiled\TiledTileSetTileFrame.cs" />
     <Compile Include="Maps\Tiled\TiledTileSetTile.cs" />
     <Compile Include="Particles\ColorExtensions.cs" />
+    <Compile Include="Particles\FastRandomExtensions.cs" />
     <Compile Include="Particles\HslColor.cs" />
     <Compile Include="Particles\LineSegment.cs" />
     <Compile Include="Particles\Modifiers\AgeModifier.cs" />
     <Compile Include="Particles\Modifiers\Interpolators\IInterpolator.cs" />
     <Compile Include="Particles\Modifiers\Interpolators\RotationInterpolator.cs" />
     <Compile Include="Particles\ParticleEmitter.cs" />
-    <Compile Include="Particles\FastRand.cs" />
+    <Compile Include="FastRandom.cs" />
     <Compile Include="Particles\ParticleModifierExecutionStrategy.cs" />
     <Compile Include="Particles\Modifiers\Interpolators\ColorInterpolator.cs" />
     <Compile Include="Particles\Modifiers\Containers\CircleContainerModifier.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="Particles\Profiles\SprayProfile.cs" />
     <Compile Include="Particles\ParticleReleaseParameters.cs" />
     <Compile Include="Particles\SpriteBatchExtensions.cs" />
+    <Compile Include="RandomExtensions.cs" />
     <Compile Include="Range.cs" />
     <Compile Include="RenderTarget2DExtensions.cs" />
     <Compile Include="Maps\Tiled\SpriteBatchExtensions.cs" />

@@ -51,8 +51,9 @@ namespace MonoGame.Extended.Particles
         
         public bool Equals(LineSegment other)
         {
-            return _point1.Equals(other._point1) &&
-                   _point2.Equals(other._point2);
+            // ReSharper disable ImpureMethodCallOnReadonlyValueField
+            return _point1.Equals(other._point1) && _point2.Equals(other._point2);
+            // ReSharper restore ImpureMethodCallOnReadonlyValueField
         }
 
         public override bool Equals(object obj)
@@ -65,11 +66,7 @@ namespace MonoGame.Extended.Particles
 
         public override int GetHashCode()
         {
-            var hashCode = _point1.GetHashCode();
-
-            hashCode = (hashCode * 397) ^ _point2.GetHashCode();
-
-            return hashCode;
+            return (_point1.GetHashCode() * 397) ^ _point2.GetHashCode();
         }
 
         public override string ToString()
