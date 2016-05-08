@@ -36,8 +36,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Animations\Animation.cs" />
+    <Compile Include="Animations\IAnimation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Animations\Tweens\DelayTween.cs" />
     <Compile Include="Animations\Tweens\FluentAnimations.cs" />
     <Compile Include="Animations\Tweens\EasingFunctions.cs" />
     <Compile Include="Animations\SpriteSheets\SpriteSheetAnimation.cs" />
@@ -45,7 +46,8 @@
     <Compile Include="Animations\SpriteSheets\SpriteSheetAnimationFactory.cs" />
     <Compile Include="Animations\SpriteSheets\SpriteSheetAnimator.cs" />
     <Compile Include="Animations\SpriteSheets\SpriteSheetAnimationFactoryReader.cs" />
-    <Compile Include="Animations\Tweens\Tween.cs" />
+    <Compile Include="Animations\Tweens\PropertyTween.cs" />
+    <Compile Include="Animations\Tweens\TweenAnimation.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />
@@ -53,6 +55,7 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
+    <Compile Include="IColorable.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />
     <Compile Include="Collisions\CollisionGrid.cs" />

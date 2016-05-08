@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Animations.Tweens
 {
-    public class Tween<T> : Animation
+    public class PropertyTween<T> : IAnimation
     {
-        static Tween()
+        static PropertyTween()
         {
             var a = Expression.Parameter(typeof(T));
             var b = Expression.Parameter(typeof(T));
@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Animations.Tweens
             Multiply = Expression.Lambda<Func<T, float, T>>(Expression.Multiply(a, c), a, c).Compile();
         } 
 
-        public Tween(T initialValue, Action<T> setValue, T targetValue, float duration, EasingFunction easingFunction)
+        public PropertyTween(T initialValue, Action<T> setValue, T targetValue, float duration, EasingFunction easingFunction)
         {
             _setValue = setValue;
             InitialValue = initialValue;
@@ -39,7 +39,7 @@ namespace MonoGame.Extended.Animations.Tweens
         protected static Func<T, T, T> Subtract;
         protected static Func<T, float, T> Multiply;
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             Update(gameTime.GetElapsedSeconds());
         }

@@ -4,21 +4,16 @@ using MonoGame.Extended.Animations.Tweens;
 
 namespace MonoGame.Extended.Animations
 {
-    public interface IAnimationService
-    {
-        IList<Animation> Animations { get; }
-    }
-
-    public class AnimationComponent : GameComponent, IAnimationService
+    public class AnimationComponent : GameComponent
     {
         public AnimationComponent(Game game)
             : base(game)
         {
-            FluentAnimations.AnimationService = this;
-            Animations = new List<Animation>();
+            FluentAnimations.AnimationComponent = this;
+            Animations = new List<IAnimation>();
         }
 
-        public IList<Animation> Animations { get; } 
+        public IList<IAnimation> Animations { get; } 
 
         public override void Update(GameTime gameTime)
         {

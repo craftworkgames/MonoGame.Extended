@@ -8,7 +8,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
 {
-    public class Sprite : IMovable, IRotatable, IScalable, ISceneEntity, ISpriteBatchDrawable
+    public class Sprite : IMovable, IRotatable, IScalable, IColorable, ISceneEntity, ISpriteBatchDrawable
     {
         public Sprite(TextureRegion2D textureRegion)
         {

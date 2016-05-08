@@ -5,7 +5,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.Tweens;
 using MonoGame.Extended.Sprites;
-using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Animations
@@ -45,9 +44,14 @@ namespace Demo.Animations
             
             _sprite = new Sprite(logoTexture) { Position = viewportAdapter.Center.ToVector2(), Scale = Vector2.One * 0.5f };
             _sprite
-                .Move(new Vector2(0, 50), 5.0f, EasingFunctions.QuadraticEaseInOut)
-                .RotateTo(MathHelper.TwoPi * 3, 5.0f, EasingFunctions.CubicEaseInOut)
-                .ScaleTo(Vector2.One * 1.5f, 5.0f, EasingFunctions.QuadraticEaseInOut);
+                .TweenSequence()
+                .Move(new Vector2(100, 100), 1.0f, EasingFunctions.SineEaseOut)
+                .Delay(1.0f)
+                .RotateTo(MathHelper.Pi, 1.0f, EasingFunctions.CubicEaseInOut)
+                .Delay(1.0f)
+                .ScaleTo(Vector2.One*1.5f, 3.0f, EasingFunctions.QuadraticEaseInOut)
+                .Delay(1.0f)
+                .FadeTo(0.5f, 10.0f, EasingFunctions.SineEaseOut);
         }
 
         protected override void UnloadContent()
@@ -56,7 +60,7 @@ namespace Demo.Animations
 
         protected override void Update(GameTime gameTime)
         {
-            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
