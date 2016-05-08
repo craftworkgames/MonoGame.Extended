@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Particles.Profiles
         {
             offset = Vector2.Zero;
 
-            FastRand.NextUnitVector(out heading);
+            Random.NextUnitVector(out heading);
         }
     }
 }

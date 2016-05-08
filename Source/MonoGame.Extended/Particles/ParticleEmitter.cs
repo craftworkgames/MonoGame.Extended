@@ -23,6 +23,7 @@ namespace MonoGame.Extended.Particles
             Parameters = new ParticleReleaseParameters();
         }
 
+        private readonly FastRandom _random = new FastRandom();
         private readonly float _term;
 
         private float _totalSeconds;
@@ -80,19 +81,19 @@ namespace MonoGame.Extended.Particles
 
         public void Trigger(Vector2 position)
         {
-            var numToRelease = FastRand.NextInteger(Parameters.Quantity);
+            var numToRelease = _random.Next(Parameters.Quantity);
 
             Release(position + Offset, numToRelease);
         }
 
         public void Trigger(LineSegment line)
         {
-            var numToRelease = FastRand.NextInteger(Parameters.Quantity);
+            var numToRelease = _random.Next(Parameters.Quantity);
             var lineVector = line.ToVector();
 
             for (var i = 0; i < numToRelease; i++)
             {
-                var offset = lineVector * FastRand.NextSingle();
+                var offset = lineVector * _random.NextSingle();
                 Release(line.Origin + offset, 1);
             }
         }
@@ -115,17 +116,17 @@ namespace MonoGame.Extended.Particles
 
                 particle->TriggerPos = position;
 
-                var speed = FastRand.NextSingle(Parameters.Speed);
+                var speed = _random.NextSingle(Parameters.Speed);
 
                 particle->Velocity = heading * speed;
 
-                FastRand.NextColor(out particle->Color, Parameters.Color);
+                _random.NextColor(out particle->Color, Parameters.Color);
 
-                particle->Opacity = FastRand.NextSingle(Parameters.Opacity);
-                var scale = FastRand.NextSingle(Parameters.Scale);
+                particle->Opacity = _random.NextSingle(Parameters.Opacity);
+                var scale = _random.NextSingle(Parameters.Scale);
                 particle->Scale = new Vector2(scale, scale);
-                particle->Rotation = FastRand.NextSingle(Parameters.Rotation);
-                particle->Mass = FastRand.NextSingle(Parameters.Mass);
+                particle->Rotation = _random.NextSingle(Parameters.Rotation);
+                particle->Mass = _random.NextSingle(Parameters.Mass);
             }
         }
 

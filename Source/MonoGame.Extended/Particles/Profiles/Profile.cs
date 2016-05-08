@@ -4,6 +4,8 @@ namespace MonoGame.Extended.Particles.Profiles
 {
     public abstract class Profile //: ICloneable
     {
+        protected FastRandom Random { get; } = new FastRandom();
+
         public abstract void GetOffsetAndHeading(out Vector2 offset, out Vector2 heading);
 
         public object Clone()

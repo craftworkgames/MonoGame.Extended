@@ -1,16 +1,26 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Particles
+namespace MonoGame.Extended
 {
     /// <summary>
-    /// Defines a random number generator which uses the FastRand algorithm to generate random values.
+    /// A random number generator that uses a fast algorithm to generate random values.
+    /// The speed comes at the price of true 'randomness' though, there are noticeable 
+    /// patterns & it compares quite unfavourably to other algorithms in that respect. 
+    /// It's a good choice in situations where speed is more desirable than a 
+    /// good random distribution, and a poor choice when random distribution is important. 
     /// </summary>
-    internal static class FastRand
+    public class FastRandom
     {
-        static int _state = 1;
+        private int _state;
 
-        public static void Seed(int seed) {
+        public FastRandom()
+            : this(1)
+        {
+        }
+
+        public FastRandom(int seed)
+        {
             if (seed < 1)
                 throw new ArgumentOutOfRangeException(nameof(seed), "seed must be greater than zero");
 
@@ -21,7 +31,8 @@ namespace MonoGame.Extended.Particles
         /// Gets the next random integer value.
         /// </summary>
         /// <returns>A random positive integer.</returns>
-        public static int NextInteger() {
+        public int Next()
+        {
             _state = 214013 * _state + 2531011;
             return (_state >> 16) & 0x7FFF;
         }
@@ -32,7 +43,8 @@ namespace MonoGame.Extended.Particles
         /// </summary>
         /// <param name="max">The maximum random integer value to return.</param>
         /// <returns>A random integer value between zero and the specified maximum value.</returns>
-        public static int NextInteger(int max) {
+        public int Next(int max)
+        {
             return (int)(max * NextSingle() + 0.5f);
         }
 
@@ -41,7 +53,8 @@ namespace MonoGame.Extended.Particles
         /// </summary>
         /// <param name="min">The inclusive minimum value.</param>
         /// <param name="max">The inclusive maximum value.</param>
-        public static int NextInteger(int min, int max) {
+        public int Next(int min, int max)
+        {
             return (int)((max - min) * NextSingle() + 0.5f) + min;
         }
 
@@ -50,16 +63,18 @@ namespace MonoGame.Extended.Particles
         /// </summary>
         /// <param name="range">A range representing the inclusive minimum and maximum values.</param>
         /// <returns>A random integer between the specified minumum and maximum values.</returns>
-        public static int NextInteger(Range<int> range) {
-            return NextInteger(range.Min, range.Max);
+        public int Next(Range<int> range)
+        {
+            return Next(range.Min, range.Max);
         }
 
         /// <summary>
         /// Gets the next random single value.
         /// </summary>
         /// <returns>A random single value between 0 and 1.</returns>
-        public static float NextSingle() {
-            return NextInteger() / (float)short.MaxValue;
+        public float NextSingle()
+        {
+            return Next() / (float)short.MaxValue;
         }
 
         /// <summary>
@@ -68,7 +83,8 @@ namespace MonoGame.Extended.Particles
         /// </summary>
         /// <param name="max">The maximum random single value to return.</param>
         /// <returns>A random single value between zero and the specified maximum value.</returns>
-        public static float NextSingle(float max) {
+        public float NextSingle(float max)
+        {
             return max * NextSingle();
         }
 
@@ -78,7 +94,8 @@ namespace MonoGame.Extended.Particles
         /// <param name="min">The inclusive minimum value.</param>
         /// <param name="max">The inclusive maximum value.</param>
         /// <returns>A random single value between the specified minimum and maximum values.</returns>
-        public static float NextSingle(float min, float max) {
+        public float NextSingle(float min, float max)
+        {
             return (max - min) * NextSingle() + min;
         }
 
@@ -87,7 +104,8 @@ namespace MonoGame.Extended.Particles
         /// </summary>
         /// <param name="range">A range representing the inclusive minimum and maximum values.</param>
         /// <returns>A random single value between the specified minimum and maximum values.</returns>
-        public static float NextSingle(Range<float> range) {
+        public float NextSingle(Range<float> range)
+        {
             return NextSingle(range.Min, range.Max);
         }
 
@@ -95,23 +113,15 @@ namespace MonoGame.Extended.Particles
         /// Gets the next random angle value.
         /// </summary>
         /// <returns>A random angle value.</returns>
-        public static float NextAngle() {
+        public float NextAngle()
+        {
             return NextSingle(-MathHelper.Pi, MathHelper.Pi);
         }
 
-        public static void NextUnitVector(out Vector2 vector) {
+        public void NextUnitVector(out Vector2 vector)
+        {
             var angle = NextAngle();
-
             vector = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
-        }
-
-        public static void NextColor(out HslColor color, Range<HslColor> range) {
-            var maxH = range.Max.H >= range.Min.H
-                ? range.Max.H
-                : range.Max.H + 360;
-            color = new HslColor(NextSingle(range.Min.H, maxH),
-                                 NextSingle(range.Min.S, range.Max.S),
-                                 NextSingle(range.Min.L, range.Max.L));
         }
     }
 }
