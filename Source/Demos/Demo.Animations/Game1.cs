@@ -42,16 +42,25 @@ namespace Demo.Animations
 
             var logoTexture = Content.Load<Texture2D>("logo-square-128");
             
-            _sprite = new Sprite(logoTexture) { Position = viewportAdapter.Center.ToVector2(), Scale = Vector2.One * 0.5f };
+            _sprite = new Sprite(logoTexture)
+            {
+                Position = viewportAdapter.Center.ToVector2(),
+                Scale = Vector2.One * 0.5f,
+                Color = new Color(Color.White, 0.0f)
+            };
+
+            CreateTweenThing();
+
+        }
+
+        private void CreateTweenThing()
+        {
             _sprite
-                .TweenSequence()
-                .Move(new Vector2(100, 100), 1.0f, EasingFunctions.SineEaseOut)
-                .Delay(1.0f)
-                .RotateTo(MathHelper.Pi, 1.0f, EasingFunctions.CubicEaseInOut)
-                .Delay(1.0f)
-                .ScaleTo(Vector2.One*1.5f, 3.0f, EasingFunctions.QuadraticEaseInOut)
-                .Delay(1.0f)
-                .FadeTo(0.5f, 10.0f, EasingFunctions.SineEaseOut);
+                .CreateTween()
+                .MoveBy(new Vector2(10, 10), 1.0f, EasingFunctions.SineEaseOut)
+                .RotateBy(MathHelper.Pi, 1.0f, EasingFunctions.CubicEaseInOut)
+                .ScaleTo(Vector2.One*1.5f, 1.0f, EasingFunctions.QuadraticEaseInOut)
+                .OnComplete(CreateTweenThing);
         }
 
         protected override void UnloadContent()

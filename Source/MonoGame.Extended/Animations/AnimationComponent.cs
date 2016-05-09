@@ -13,14 +13,19 @@ namespace MonoGame.Extended.Animations
             Animations = new List<IAnimation>();
         }
 
-        public IList<IAnimation> Animations { get; } 
+        public List<IAnimation> Animations { get; } 
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            foreach (var animation in Animations)
+            for (var i = Animations.Count - 1; i >= 0; i--)
+            {
+                var animation = Animations[i];
                 animation.Update(gameTime);
+            }
+
+            Animations.RemoveAll(a => a.IsComplete);
         }
     }
 }

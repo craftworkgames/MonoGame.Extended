@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 namespace MonoGame.Extended.Animations.Tweens
 {
     public class PropertyTween<T> : IAnimation
+        where T : struct 
     {
         static PropertyTween()
         {
@@ -16,20 +17,21 @@ namespace MonoGame.Extended.Animations.Tweens
             Multiply = Expression.Lambda<Func<T, float, T>>(Expression.Multiply(a, c), a, c).Compile();
         } 
 
-        public PropertyTween(T initialValue, Action<T> setValue, T targetValue, float duration, EasingFunction easingFunction)
+        public PropertyTween(Func<T> getValue, Action<T> setValue, T targetValue, float duration, EasingFunction easingFunction)
         {
+            _getValue = getValue;
             _setValue = setValue;
-            InitialValue = initialValue;
             TargetValue = targetValue;
             Duration = duration;
             EasingFunction = easingFunction;
         }
 
+        private readonly Func<T> _getValue;
         private readonly Action<T> _setValue;
         private float _currentTime;
         private float _currentMultiplier;
+        private T? _initialValue;
 
-        public T InitialValue { get; }
         public T TargetValue { get; }
         public float Duration { get; }
         public EasingFunction EasingFunction { get; set; }
@@ -49,6 +51,9 @@ namespace MonoGame.Extended.Animations.Tweens
             if(IsComplete)
                 return;
 
+            if (!_initialValue.HasValue)
+                _initialValue = _getValue();
+
             _currentTime += deltaTime;
             _currentMultiplier = EasingFunction(_currentTime/Duration);
 
@@ -59,7 +64,9 @@ namespace MonoGame.Extended.Animations.Tweens
                 IsComplete = true;
             }
 
-            var newValue = Add(InitialValue, Multiply(Subtract(TargetValue, InitialValue), _currentMultiplier));
+            var difference = Subtract(TargetValue, _initialValue.Value);
+            var multiply = Multiply(difference, _currentMultiplier);
+            var newValue = Add(_initialValue.Value, multiply);
             _setValue(newValue);
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Animations.Tweens
@@ -6,87 +7,94 @@ namespace MonoGame.Extended.Animations.Tweens
     {
         internal static AnimationComponent AnimationComponent { get; set; }
 
-        public static ITweenAnimation<T> TweenSequence<T>(this T target)
+        public static TweenAnimation<T> CreateTweenChain<T>(this T target)
             where T : class
         {
-            var tween = new TweenSequence<T>(target);
+            var tween = new TweenChain<T>(target);
             AnimationComponent.Animations.Add(tween);
             return tween;
         }
 
-        public static ITweenAnimation<T> Tween<T>(this T target)
+        public static TweenAnimation<T> CreateTween<T>(this T target)
             where T : class 
         {
-            var tween = new TweenAnimation<T>(target);
+            var tween = new TweenGroup<T>(target);
             AnimationComponent.Animations.Add(tween);
             return tween;
         }
 
-        public static ITweenAnimation<T> Tween<T>(this ITweenAnimation<T> tweenSequence)
+        public static TweenAnimation<T> CreateTween<T>(this TweenAnimation<T> tweenChain)
             where T : class
         {
-            var tween = new TweenAnimation<T>(tweenSequence.Target);
-            tweenSequence.Tweens.Add(tween);
+            var tween = new TweenGroup<T>(tweenChain.Target);
+            tweenChain.Tweens.Add(tween);
             return tween;
         }
 
-        public static ITweenAnimation<T> MoveTo<T>(this ITweenAnimation<T> tween, Vector2 position, float duration, EasingFunction easingFunction)
+        public static TweenAnimation<T> MoveTo<T>(this TweenAnimation<T> tween, Vector2 position, float duration, EasingFunction easingFunction)
             where T : IMovable
         {
             var movable = tween.Target;
-            tween.Tweens.Add(new PropertyTween<Vector2>(movable.Position, v => movable.Position = v, position, duration, easingFunction));
+            tween.Tweens.Add(new PropertyTween<Vector2>(() => movable.Position, v => movable.Position = v, position, duration, easingFunction));
             return tween;
         }
 
-        public static ITweenAnimation<T> Move<T>(this ITweenAnimation<T> tween, Vector2 direction, float duration, EasingFunction easingFunction)
+        public static TweenAnimation<T> MoveBy<T>(this TweenAnimation<T> tween, Vector2 direction, float duration, EasingFunction easingFunction)
             where T : IMovable
         {
             var movable = tween.Target;
             return MoveTo(tween, movable.Position + direction, duration, easingFunction);
         }
         
-        public static ITweenAnimation<T> RotateTo<T>(this ITweenAnimation<T> tween, float radians, float duration, EasingFunction easingFunction)
+        public static TweenAnimation<T> RotateTo<T>(this TweenAnimation<T> tween, float radians, float duration, EasingFunction easingFunction)
             where T : IRotatable
         {
             var rotatable = tween.Target;
-            tween.Tweens.Add(new PropertyTween<float>(rotatable.Rotation, v => rotatable.Rotation = v, radians, duration, easingFunction));
+            tween.Tweens.Add(new PropertyTween<float>(() => rotatable.Rotation, v => rotatable.Rotation = v, radians, duration, easingFunction));
             return tween;
         }
 
-        public static ITweenAnimation<T> Rotate<T>(this ITweenAnimation<T> tween, float radians, float duration, EasingFunction easingFunction)
+        public static TweenAnimation<T> RotateBy<T>(this TweenAnimation<T> tween, float radians, float duration, EasingFunction easingFunction)
             where T : IRotatable
         {
             var rotatable = tween.Target;
             return RotateTo(tween, rotatable.Rotation + radians, duration, easingFunction);
         }
 
-        public static ITweenAnimation<T> ScaleTo<T>(this ITweenAnimation<T> tween, Vector2 scale, float duration, EasingFunction easingFunction)
+        public static TweenAnimation<T> ScaleTo<T>(this TweenAnimation<T> tween, Vector2 scale, float duration, EasingFunction easingFunction)
             where T : IScalable
         {
             var scalable = tween.Target;
-            tween.Tweens.Add(new PropertyTween<Vector2>(scalable.Scale, v => scalable.Scale = v, scale, duration, easingFunction));
+            tween.Tweens.Add(new PropertyTween<Vector2>(() => scalable.Scale, v => scalable.Scale = v, scale, duration, easingFunction));
             return tween;
         }
 
-        public static ITweenAnimation<T> Scale<T>(this ITweenAnimation<T> tween, Vector2 scale, float duration, EasingFunction easingFunction)
+        public static TweenAnimation<T> ScaleBy<T>(this TweenAnimation<T> tween, Vector2 scale, float duration, EasingFunction easingFunction)
             where T : IScalable
         {
             var scalable = tween.Target;
             return ScaleTo(tween, scalable.Scale * scale, duration, easingFunction);
         }
 
-        public static ITweenAnimation<T> Delay<T>(this ITweenAnimation<T> tween, float duration)
+        public static TweenAnimation<T> Delay<T>(this TweenAnimation<T> tween, float duration)
         {
             tween.Tweens.Add(new DelayTween(duration));
             return tween;
         }
 
-        public static ITweenAnimation<T> FadeTo<T>(this ITweenAnimation<T> tween, float alpha, float duration, EasingFunction easingFunction)
+        public static TweenAnimation<T> FadeTo<T>(this TweenAnimation<T> tween, float alpha, float duration, EasingFunction easingFunction)
             where T : IColorable
         {
             var colorable = tween.Target;
-            tween.Tweens.Add(new PropertyTween<float>(colorable.Color.A / 255f, a => colorable.Color = colorable.Color * a, alpha, duration, easingFunction));
+            var initialColor = colorable.Color;
+            tween.Tweens.Add(new PropertyTween<float>(() => initialColor.A / 255f, a => colorable.Color = initialColor * a, alpha, duration, easingFunction));
             return tween;
         }
+
+        public static TweenAnimation<T> OnComplete<T>(this TweenAnimation<T> tween, Action action)
+        {
+            tween.OnCompleteAction = action;
+            return tween;
+        } 
     }
 }
