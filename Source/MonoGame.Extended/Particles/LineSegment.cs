@@ -71,7 +71,7 @@ namespace MonoGame.Extended.Particles
 
         public override string ToString()
         {
-            return $"({_point1.X}:{_point1.Y},{_point2.X}:{_point2.Y})";
+            return $"({_point1.X}:{_point1.Y} {_point2.X}:{_point2.Y})";
         }
     }
 }
