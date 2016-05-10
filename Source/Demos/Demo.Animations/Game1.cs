@@ -59,8 +59,8 @@ namespace Demo.Animations
                 .CreateTween()
                 .MoveBy(new Vector2(10, 10), 1.0f, EasingFunctions.SineEaseOut)
                 .RotateBy(MathHelper.Pi, 1.0f, EasingFunctions.CubicEaseInOut)
-                .ScaleTo(Vector2.One*1.5f, 1.0f, EasingFunctions.QuadraticEaseInOut)
-                .OnComplete(CreateTweenThing);
+                .ScaleTo(Vector2.One*1.5f, 1.0f, EasingFunctions.QuadraticEaseInOut);
+
         }
 
         protected override void UnloadContent()

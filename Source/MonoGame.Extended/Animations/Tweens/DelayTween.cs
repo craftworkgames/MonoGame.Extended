@@ -26,5 +26,9 @@ namespace MonoGame.Extended.Animations.Tweens
             if (_currentDuration >= Duration)
                 IsComplete = true;
         }
+
+        public void Dispose()
+        {
+        }
     }
 }

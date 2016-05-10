@@ -1,6 +1,8 @@
-﻿namespace MonoGame.Extended.Animations
+﻿using System;
+
+namespace MonoGame.Extended.Animations
 {
-    public interface IAnimation : IUpdate
+    public interface IAnimation : IUpdate, IDisposable
     {
         bool IsComplete { get; }
     }

@@ -25,6 +25,10 @@ namespace MonoGame.Extended.Animations.Tweens
             Duration = duration;
             EasingFunction = easingFunction;
         }
+        
+        public void Dispose()
+        {
+        }
 
         private readonly Func<T> _getValue;
         private readonly Action<T> _setValue;

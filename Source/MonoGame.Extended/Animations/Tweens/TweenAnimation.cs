@@ -1,19 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Animations.Tweens
 {
-    public abstract class TweenAnimation<T> : IAnimation
+    public class TweenAnimation<T> : IAnimation
     {
-        protected TweenAnimation(T target)
+        private readonly Action _onComplete;
+
+        public TweenAnimation(T target, Action onComplete)
         {
+            _onComplete = onComplete;
             Target = target;
             Tweens = new List<IAnimation>();
-        } 
+            //Chains = new List<IAnimation>();
+        }
+
+        public void Dispose()
+        {
+        }
 
         public T Target { get; }
         public IList<IAnimation> Tweens { get; }
+        //public IList<IAnimation> Chains { get; } 
 
         private bool _isComplete;
         public bool IsComplete
@@ -26,13 +36,20 @@ namespace MonoGame.Extended.Animations.Tweens
                     _isComplete = value;
 
                     if (_isComplete)
-                        OnCompleteAction?.Invoke();
+                        _onComplete?.Invoke();
                 }
             }
         }
 
-        public Action OnCompleteAction { get; set; }
+        public void Update(GameTime gameTime)
+        {
+            if (IsComplete)
+                return;
 
-        public abstract void Update(GameTime gameTime);
+            foreach (var animation in Tweens)
+                animation.Update(gameTime);
+
+            IsComplete = Tweens.All(t => t.IsComplete);
+        }
     }
 }

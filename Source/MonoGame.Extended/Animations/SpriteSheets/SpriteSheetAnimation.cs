@@ -30,6 +30,10 @@ namespace MonoGame.Extended.Animations.SpriteSheets
             : this(name, keyFrames, data.FrameDuration, data.IsLooping, data.IsReversed, data.IsPingPong)
         {
         }
+        
+        public void Dispose()
+        {
+        }
 
         public const float DefaultFrameDuration = 0.2f;
 
