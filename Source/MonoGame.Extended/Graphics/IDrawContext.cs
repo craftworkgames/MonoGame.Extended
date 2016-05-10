@@ -4,7 +4,7 @@ namespace MonoGame.Extended.Graphics
 {
     public interface IDrawContext
     {
-        bool NeedsUpdate { get; }
+        bool NeedsToApplyChanges { get; }
         void Apply(out Effect effect);
     }
 }

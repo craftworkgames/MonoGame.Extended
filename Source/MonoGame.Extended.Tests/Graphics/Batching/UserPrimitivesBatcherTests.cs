@@ -6,6 +6,19 @@ using TestVertex = Microsoft.Xna.Framework.Graphics.VertexPositionColor;
 
 namespace MonoGame.Extended.Tests.Graphics.Batching
 {
+    internal class BasicEffectMaterial : EffectMaterial<BasicEffect>
+    {
+        public BasicEffectMaterial(BasicEffect effect)
+            : base(effect)
+        {
+        }
+
+        public override void Apply(out Effect effect)
+        {
+            effect = Effect;
+        }
+    }
+
     [TestFixture]
     public class UserPrimitivesBatcherTests
     {
@@ -33,7 +46,7 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
             var vertices = new TestVertex[9];
             userPrimitivesBatcher.Select(vertices);
             userPrimitivesBatcher.PrimitiveType = PrimitiveType.TriangleList;
-            var material = new Material<BasicEffect>(new BasicEffect(graphicsDevice));
+            var material = new BasicEffectMaterial(new BasicEffect(graphicsDevice));
             userPrimitivesBatcher.Draw(material, 0, 9);
         }
 
@@ -45,7 +58,7 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
             var vertices = new TestVertex[9];
             var indices = new short[9];
             userPrimitivesBatcher.Select(vertices, indices);
-            var material = new Material<BasicEffect>(new BasicEffect(graphicsDevice));
+            var material = new BasicEffectMaterial(new BasicEffect(graphicsDevice));
             userPrimitivesBatcher.Draw(material, 0, 9, 0, 9);
         }
     }

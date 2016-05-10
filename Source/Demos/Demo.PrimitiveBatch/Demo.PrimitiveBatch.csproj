@@ -40,8 +40,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="PolygonEffect.cs" />
+    <Compile Include="PolygonEffectMaterial.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpriteEffect.cs" />
+    <Compile Include="SpriteEffectMaterial.cs" />
+    <Compile Include="SpriteEffectWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
@@ -60,7 +65,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\SpriteEffect.fx" />
     <None Include="Content\logo-square-128.png" />
+    <None Include="Content\PolygonEffect.fx" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

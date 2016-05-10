@@ -51,6 +51,18 @@ namespace MonoGame.Extended.Collections
         }
 
         /// <summary>
+        ///     Initializes a new instance of the <see cref="BitVector32" /> structure with the specified internal data.
+        /// </summary>
+        /// <param name="data">An integer representing the data of the new <see cref="BitVector32" />.</param>
+        /// <remarks>
+        ///     <para>This constructor is an O(1) operation.</para>
+        /// </remarks>
+        public BitVector32(int data)
+        {
+            _data = (uint)data;
+        }
+
+        /// <summary>
         ///     Initializes a new instance of the <see cref="BitVector32" /> structure containing the data represented in an
         ///     existing <see cref="BitVector32" /> structure.
         /// </summary>
@@ -62,6 +74,7 @@ namespace MonoGame.Extended.Collections
         {
             _data = value._data;
         }
+
 
         /// <summary>
         ///     Gets or sets the state of the bit flag indicated by the specified mask.
@@ -147,6 +160,24 @@ namespace MonoGame.Extended.Collections
             return new BitVector32(data);
         }
 
+        /// <summary>
+        ///     Converts a <see cref="BitVector32" /> to an <see cref="uint" />.
+        /// </summary>
+        /// <param name="bitVector">The <see cref="BitVector32" /> to convert into a <see cref="uint" />.</param>
+        public static implicit operator int(BitVector32 bitVector)
+        {
+            return (int)bitVector._data;
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="int" /> to a <see cref="BitVector32" />.
+        /// </summary>
+        /// <param name="data">The <see cref="int" /> to convert into a <see cref="BitVector32" />.</param>
+        public static implicit operator BitVector32(int data)
+        {
+            return new BitVector32(data);
+        }
+
         private static short CountBitsSet(short mask)
         {
             // bits are always right aligned with no holes, e.g., always 00000111 never 000100011
@@ -177,7 +208,7 @@ namespace MonoGame.Extended.Collections
         ///     <para>Using a mask on a <see cref="BitVector32" /> that is set up as sections might cause unexpected results.</para>
         ///     <para>This method is an O(1) operation.</para>
         /// </remarks>
-        public static int CreateMask()
+        public static uint CreateMask()
         {
             return CreateMask(0);
         }
@@ -208,14 +239,14 @@ namespace MonoGame.Extended.Collections
         ///     <para>Using a mask on a <see cref="BitVector32" /> that is set up as sections might cause unexpected results.</para>
         ///     <para>This method is an O(1) operation.</para>
         /// </remarks>
-        public static int CreateMask(int previous)
+        public static uint CreateMask(uint previous)
         {
             if (previous == 0)
             {
                 return 1;
             }
 
-            if (previous == unchecked((int)0x80000000))
+            if (previous == 0x80000000)
             {
                 throw new InvalidOperationException("Can't create a new mask; the bit vector is full.");
             }

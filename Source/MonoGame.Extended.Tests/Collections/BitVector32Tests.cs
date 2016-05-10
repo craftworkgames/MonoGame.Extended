@@ -79,16 +79,23 @@ namespace MonoGame.Extended.Tests.Collections
                 Assert.AreEqual(1, BitVector32.CreateMask(0));
                 Assert.AreEqual(2, BitVector32.CreateMask(1));
                 Assert.AreEqual(32, BitVector32.CreateMask(16));
-                Assert.AreEqual(-2, BitVector32.CreateMask(int.MaxValue));
-                Assert.AreEqual(-4, BitVector32.CreateMask(-2));
-                Assert.AreEqual(2, BitVector32.CreateMask(int.MinValue + 1));
+                var overflow = -2;
+                Assert.AreEqual((uint)overflow, BitVector32.CreateMask(int.MaxValue));
+                // ReSharper disable once ConvertToConstant.Local
+                var overflow2 = -4;
+                Assert.AreEqual((uint)overflow2, BitVector32.CreateMask((uint)overflow));
+                // ReSharper disable once ConvertToConstant.Local
+                overflow = int.MinValue + 1;
+                Assert.AreEqual(2, BitVector32.CreateMask((uint)overflow));
             }
 
             [Test]
             [ExpectedException(typeof (InvalidOperationException))]
             public void CreateMask_MinValue()
             {
-                BitVector32.CreateMask(int.MinValue);
+                // ReSharper disable once ConvertToConstant.Local
+                var overflow = int.MinValue;
+                BitVector32.CreateMask((uint)overflow);
             }
 
             [Test]

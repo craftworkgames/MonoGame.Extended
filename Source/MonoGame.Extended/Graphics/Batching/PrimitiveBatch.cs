@@ -9,26 +9,26 @@ namespace MonoGame.Extended.Graphics.Batching
     {
         // for 2D games I would suspect most people would use VertexPositionColorTexture for sprites like SpriteBatch
         // SpriteBatch uses two triangles to create a rectangle using triangle list; 4 vertices and 6 indices
-        // the vertex size is Vector3 + Color + Vector2 = 24 bytes per vertex and the index size is 2 bytes per index
+        // the size is 24 bytes per vertex and 2 bytes per index
         // XNA's SpriteBatch: 
-        //      uses 2048 sprites per batch, so 8192 vertices and 12288 indices per batch
-        //      uses DynamicVertexBuffer
+        //      -uses up to 2048 sprites per batch, so up to 8192 vertices and 12288 indices per batch
+        //      -uses DynamicVertexBuffer
         // FNA's SpriteBatch:
-        //      uses 2048 sprites per batch, so 8192 vertices and 12288 indices per batch
-        //      uses DynamicVertexBuffer
+        //      -uses up to 2048 sprites per batch, so up to 8192 vertices and 12288 indices per batch
+        //      -uses DynamicVertexBuffer
         // MonoGame's SpriteBatch:
-        //      uses 256 sprites per batch initially, so 1024 vertices and 1536 indices per batch, but
+        //      -uses 256 sprites per batch initially, so 1024 vertices and 1536 indices per batch, but
         //      dynamically increases the size of the batch by x1.5 when the batch is full (it doesn't appear to have a max limit?!?)
-        //      uses UserPrimitives
+        //      -uses UserPrimitives
         //
-        // It appears that 2048 sprites ber batch is the expected default? 
+        // It appears that 2048 sprites ber batch is the expected default.
         //
         // vertices: 
         //      8192 VertexPositionColor vertices * 24/1 bytes per vertex = 196608 bytes
-        //      196608 bytes * 1/1024 kilobytes per byte = 192 kilobytes
+        //      196608 bytes * 1/1024 kibibytes per byte = 192 kibibytes
         // indices:
         //      12288 indices * 2/1 bytes per index = 24576 bytes
-        //      24576 bytes * 1/1024 kilobytes per byte = 24 kilobytes
+        //      24576 bytes * 1/1024 kibibytes per byte = 24 kibibytes
 
         public const ushort DefaultMaximumVerticesCount = 8192;
         public const ushort DefaultMaximumIndicesCount = 12288;

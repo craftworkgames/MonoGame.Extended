@@ -49,7 +49,7 @@ namespace MonoGame.Extended.Graphics.Batching
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void ChangeDrawContextIfNecessary(IDrawContext drawContext)
         {
-            if (_currentDrawContext == drawContext && !drawContext.NeedsUpdate)
+            if (_currentDrawContext == drawContext && !drawContext.NeedsToApplyChanges)
             {
                 return;
             }
