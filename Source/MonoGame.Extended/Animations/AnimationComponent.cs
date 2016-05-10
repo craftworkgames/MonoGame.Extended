@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Animations
         public AnimationComponent(Game game)
             : base(game)
         {
-            FluentAnimations.AnimationComponent = this;
+            FluentTweening.AnimationComponent = this;
             Animations = new List<IAnimation>();
         }
 
@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Animations
                 animation.Update(gameTime);
             }
 
-            Animations.RemoveAll(a => a.IsComplete);
+            Animations.RemoveAll(a => a.IsDisposed);
         }
     }
 }

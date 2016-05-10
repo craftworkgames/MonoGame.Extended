@@ -39,7 +39,7 @@
     <Compile Include="Animations\IAnimation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
     <Compile Include="Animations\Tweens\DelayTween.cs" />
-    <Compile Include="Animations\Tweens\FluentAnimations.cs" />
+    <Compile Include="Animations\Tweens\FluentTweening.cs" />
     <Compile Include="Animations\Tweens\EasingFunctions.cs" />
     <Compile Include="Animations\SpriteSheets\SpriteSheetAnimation.cs" />
     <Compile Include="Animations\SpriteSheets\SpriteSheetAnimationData.cs" />
@@ -48,9 +48,7 @@
     <Compile Include="Animations\SpriteSheets\SpriteSheetAnimationFactoryReader.cs" />
     <Compile Include="Animations\Tweens\TweenAnimation.cs" />
     <Compile Include="Animations\Tweens\PropertyTween.cs" />
-    <Compile Include="Animations\Tweens\TweenGroup.cs" />
     <Compile Include="Angle.cs" />
-    <Compile Include="Animations\Tweens\TweenChain.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />

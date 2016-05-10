@@ -28,6 +28,7 @@ namespace MonoGame.Extended.Animations.Tweens
         
         public void Dispose()
         {
+            IsDisposed = true;
         }
 
         private readonly Func<T> _getValue;
@@ -40,6 +41,7 @@ namespace MonoGame.Extended.Animations.Tweens
         public float Duration { get; }
         public EasingFunction EasingFunction { get; set; }
         public bool IsComplete { get; private set; }
+        public bool IsDisposed { get; private set; }
 
         protected static Func<T, T, T> Add;
         protected static Func<T, T, T> Subtract;

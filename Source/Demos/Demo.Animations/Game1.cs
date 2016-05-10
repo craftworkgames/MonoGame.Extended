@@ -16,7 +16,6 @@ namespace Demo.Animations
         private SpriteBatch _spriteBatch;
         private Sprite _sprite;
         private Camera2D _camera;
-        //private Tween<float> _tween;
 
         public Game1()
         {
@@ -55,12 +54,10 @@ namespace Demo.Animations
 
         private void CreateTweenThing()
         {
-            _sprite
-                .CreateTween()
-                .MoveBy(new Vector2(10, 10), 1.0f, EasingFunctions.SineEaseOut)
-                .RotateBy(MathHelper.Pi, 1.0f, EasingFunctions.CubicEaseInOut)
+            _sprite.CreateTween(CreateTweenThing)
+                .Move(new Vector2(10, 10), 1.0f, EasingFunctions.SineEaseOut)
+                .Rotate(MathHelper.Pi, 1.0f, EasingFunctions.CubicEaseInOut)
                 .ScaleTo(Vector2.One*1.5f, 1.0f, EasingFunctions.QuadraticEaseInOut);
-
         }
 
         protected override void UnloadContent()

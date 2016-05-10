@@ -3,37 +3,17 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Animations.Tweens
 {
-    public static class FluentAnimations
+    public static class FluentTweening
     {
         internal static AnimationComponent AnimationComponent { get; set; }
 
-        //public static TweenAnimation<T> CreateTweenChain<T>(this T target)
-        //    where T : class
-        //{
-        //    var tween = new TweenChain<T>(target);
-        //    AnimationComponent.Animations.Add(tween);
-        //    return tween;
-        //}
-
-        public static TweenAnimation<T> CreateTween<T>(this T target, Action onComplete = null)
+        public static TweenAnimation<T> CreateTween<T>(this T target, Action onCompleteAction = null, bool disposeOnComplete = true)
             where T : class 
         {
-            var tween = new TweenAnimation<T>(target, onComplete);
+            var tween = new TweenAnimation<T>(target, onCompleteAction, disposeOnComplete);
             AnimationComponent.Animations.Add(tween);
             return tween;
         }
-
-        public static TweenAnimation<T> Chain<T>(this TweenAnimation<T> tweenAnimation)
-        {
-            return tweenAnimation;
-        }
-        //public static TweenAnimation<T> CreateTween<T>(this TweenAnimation<T> tweenChain)
-        //    where T : class
-        //{
-        //    var tween = new TweenGroup<T>(tweenChain.Target, onComplete);
-        //    tweenChain.Tweens.Add(tween);
-        //    return tween;
-        //}
 
         public static TweenAnimation<T> MoveTo<T>(this TweenAnimation<T> tweenAnimation, Vector2 position, float duration, EasingFunction easingFunction)
             where T : IMovable
@@ -43,7 +23,7 @@ namespace MonoGame.Extended.Animations.Tweens
             return tweenAnimation;
         }
 
-        public static TweenAnimation<T> MoveBy<T>(this TweenAnimation<T> tweenAnimation, Vector2 direction, float duration, EasingFunction easingFunction)
+        public static TweenAnimation<T> Move<T>(this TweenAnimation<T> tweenAnimation, Vector2 direction, float duration, EasingFunction easingFunction)
             where T : IMovable
         {
             var movable = tweenAnimation.Target;
@@ -58,7 +38,7 @@ namespace MonoGame.Extended.Animations.Tweens
             return tweenAnimation;
         }
 
-        public static TweenAnimation<T> RotateBy<T>(this TweenAnimation<T> tweenAnimation, float radians, float duration, EasingFunction easingFunction)
+        public static TweenAnimation<T> Rotate<T>(this TweenAnimation<T> tweenAnimation, float radians, float duration, EasingFunction easingFunction)
             where T : IRotatable
         {
             var rotatable = tweenAnimation.Target;
@@ -73,7 +53,7 @@ namespace MonoGame.Extended.Animations.Tweens
             return tweenAnimation;
         }
 
-        public static TweenAnimation<T> ScaleBy<T>(this TweenAnimation<T> tweenAnimation, Vector2 scale, float duration, EasingFunction easingFunction)
+        public static TweenAnimation<T> Scale<T>(this TweenAnimation<T> tweenAnimation, Vector2 scale, float duration, EasingFunction easingFunction)
             where T : IScalable
         {
             var scalable = tweenAnimation.Target;

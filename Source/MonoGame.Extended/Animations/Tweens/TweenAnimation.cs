@@ -7,23 +7,26 @@ namespace MonoGame.Extended.Animations.Tweens
 {
     public class TweenAnimation<T> : IAnimation
     {
-        private readonly Action _onComplete;
+        private readonly Action _onCompleteAction;
+        private readonly bool _disposeOnComplete;
 
-        public TweenAnimation(T target, Action onComplete)
+        public TweenAnimation(T target, Action onCompleteAction = null, bool disposeOnComplete = true)
         {
-            _onComplete = onComplete;
+            _onCompleteAction = onCompleteAction;
+            _disposeOnComplete = disposeOnComplete;
             Target = target;
             Tweens = new List<IAnimation>();
-            //Chains = new List<IAnimation>();
         }
 
         public void Dispose()
         {
+            IsDisposed = true;
         }
+
+        public bool IsDisposed { get; private set; }
 
         public T Target { get; }
         public IList<IAnimation> Tweens { get; }
-        //public IList<IAnimation> Chains { get; } 
 
         private bool _isComplete;
         public bool IsComplete
@@ -36,7 +39,12 @@ namespace MonoGame.Extended.Animations.Tweens
                     _isComplete = value;
 
                     if (_isComplete)
-                        _onComplete?.Invoke();
+                    {
+                        _onCompleteAction?.Invoke();
+
+                        if (_disposeOnComplete)
+                            Dispose();
+                    }
                 }
             }
         }

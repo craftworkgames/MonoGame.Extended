@@ -33,6 +33,7 @@ namespace MonoGame.Extended.Animations.SpriteSheets
         
         public void Dispose()
         {
+            IsDisposed = true;
         }
 
         public const float DefaultFrameDuration = 0.2f;
@@ -44,6 +45,7 @@ namespace MonoGame.Extended.Animations.SpriteSheets
         public bool IsReversed { get; set; }
         public bool IsPingPong { get; set; }
         public bool IsComplete => _currentTime >= AnimationDuration;
+        public bool IsDisposed { get; private set; }
         public bool IsPlaying => !IsPaused && !IsComplete;
         public bool IsPaused { get; private set; }
         public float AnimationDuration => IsPingPong
@@ -122,7 +124,6 @@ namespace MonoGame.Extended.Animations.SpriteSheets
 
             if (IsLooping)
             {
-
                 if (IsReversed)
                 {
                     frameIndex = frameIndex % length;

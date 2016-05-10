@@ -11,6 +11,7 @@ namespace MonoGame.Extended.Animations.Tweens
 
         public float Duration { get; set; }
         public bool IsComplete { get; private set; }
+        public bool IsDisposed { get; private set; }
 
         private float _currentDuration;
 
@@ -29,6 +30,7 @@ namespace MonoGame.Extended.Animations.Tweens
 
         public void Dispose()
         {
+            IsDisposed = true;
         }
     }
 }
