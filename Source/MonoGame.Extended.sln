@@ -1,12 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended", "MonoGame.Extended\MonoGame.Extended.csproj", "{41724C52-3D50-45BB-81EB-3C8A247EAFD1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{068B9F42-8B49-4FAF-9D8C-701862FAC799}"
 	ProjectSection(SolutionItems) = preProject
+		..\mkdocs.yml = ..\mkdocs.yml
 		MonoGame.Extended.nuspec = MonoGame.Extended.nuspec
 		..\README.md = ..\README.md
 		readme.txt = readme.txt
