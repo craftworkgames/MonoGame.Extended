@@ -10,10 +10,10 @@ namespace MonoGame.Extended.Animations
             : base(game)
         {
             FluentTweening.AnimationComponent = this;
-            Animations = new List<IAnimation>();
+            Animations = new List<Animation>();
         }
 
-        public List<IAnimation> Animations { get; } 
+        public List<Animation> Animations { get; } 
 
         public override void Update(GameTime gameTime)
         {

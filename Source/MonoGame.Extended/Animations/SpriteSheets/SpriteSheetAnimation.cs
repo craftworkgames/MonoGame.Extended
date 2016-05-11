@@ -5,7 +5,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Animations.SpriteSheets
 {
-    public class SpriteSheetAnimation : IAnimation
+    public class SpriteSheetAnimation : Animation
     {
         public SpriteSheetAnimation(string name, TextureAtlas textureAtlas, float frameDuration = DefaultFrameDuration,
             bool isLooping = true, bool isReversed = false, bool isPingPong = false)
@@ -15,6 +15,7 @@ namespace MonoGame.Extended.Animations.SpriteSheets
 
         public SpriteSheetAnimation(string name, TextureRegion2D[] keyFrames, float frameDuration = DefaultFrameDuration,
             bool isLooping = true, bool isReversed = false, bool isPingPong = false)
+            : base(null, false)
         {
             Name = name;
             KeyFrames = keyFrames;
@@ -23,17 +24,11 @@ namespace MonoGame.Extended.Animations.SpriteSheets
             IsReversed = isReversed;
             IsPingPong = isPingPong;
             CurrentFrameIndex = IsReversed ? KeyFrames.Length - 1 : 0;
-            IsPaused = false;
         }
 
         public SpriteSheetAnimation(string name, TextureRegion2D[] keyFrames, SpriteSheetAnimationData data)
             : this(name, keyFrames, data.FrameDuration, data.IsLooping, data.IsReversed, data.IsPingPong)
         {
-        }
-        
-        public void Dispose()
-        {
-            IsDisposed = true;
         }
 
         public const float DefaultFrameDuration = 0.2f;
@@ -44,10 +39,8 @@ namespace MonoGame.Extended.Animations.SpriteSheets
         public bool IsLooping { get; set; }
         public bool IsReversed { get; set; }
         public bool IsPingPong { get; set; }
-        public bool IsComplete => _currentTime >= AnimationDuration;
-        public bool IsDisposed { get; private set; }
-        public bool IsPlaying => !IsPaused && !IsComplete;
-        public bool IsPaused { get; private set; }
+        public new bool IsComplete => CurrentTime >= AnimationDuration;
+
         public float AnimationDuration => IsPingPong
             ? (KeyFrames.Length * 2 - 2) * FrameDuration
             : KeyFrames.Length * FrameDuration;
@@ -62,56 +55,23 @@ namespace MonoGame.Extended.Animations.SpriteSheets
 
         public Action OnCompleted { get; set; }
 
-        private float _currentTime;
-
-        public void Play()
+        protected override bool OnUpdate(float deltaTime)
         {
-            IsPaused = false;
-        }
-
-        public void Pause()
-        {
-            IsPaused = true;
-        }
-
-        public void Stop()
-        {
-            Pause();
-            Rewind();
-        }
-
-        public void Rewind()
-        {
-            _currentTime = 0;
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            Update(gameTime.GetElapsedSeconds());
-        }
-
-        public void Update(float deltaTime)
-        {
-            if (!IsPlaying)
-                return;
-
-            _currentTime += deltaTime;
-
             if (IsComplete)
             {
                 OnCompleted?.Invoke();
 
                 if (IsLooping)
-                    _currentTime -= AnimationDuration;
+                    CurrentTime -= AnimationDuration;
             }
 
             if (KeyFrames.Length == 1)
             {
                 CurrentFrameIndex = 0;
-                return;
+                return IsComplete;
             }
 
-            var frameIndex = (int)(_currentTime / FrameDuration);
+            var frameIndex = (int)(CurrentTime / FrameDuration);
             var length = KeyFrames.Length;
 
             if (IsPingPong)
@@ -140,6 +100,7 @@ namespace MonoGame.Extended.Animations.SpriteSheets
             }
 
             CurrentFrameIndex = frameIndex;
+            return IsComplete;
         }
     }
 }

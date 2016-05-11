@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Animations.Tweens
 {
-    public class PropertyTween<T> : IAnimation
+    public class PropertyTween<T> : Animation
         where T : struct 
     {
         static PropertyTween()
@@ -17,7 +17,8 @@ namespace MonoGame.Extended.Animations.Tweens
             Multiply = Expression.Lambda<Func<T, float, T>>(Expression.Multiply(a, c), a, c).Compile();
         } 
 
-        public PropertyTween(Func<T> getValue, Action<T> setValue, T targetValue, float duration, EasingFunction easingFunction)
+        public PropertyTween(Func<T> getValue, Action<T> setValue, T targetValue, float duration, EasingFunction easingFunction) 
+            : base(null, true)
         {
             _getValue = getValue;
             _setValue = setValue;
@@ -25,55 +26,39 @@ namespace MonoGame.Extended.Animations.Tweens
             Duration = duration;
             EasingFunction = easingFunction;
         }
-        
-        public void Dispose()
-        {
-            IsDisposed = true;
-        }
 
         private readonly Func<T> _getValue;
         private readonly Action<T> _setValue;
-        private float _currentTime;
         private float _currentMultiplier;
         private T? _initialValue;
 
         public T TargetValue { get; }
         public float Duration { get; }
         public EasingFunction EasingFunction { get; set; }
-        public bool IsComplete { get; private set; }
-        public bool IsDisposed { get; private set; }
 
         protected static Func<T, T, T> Add;
         protected static Func<T, T, T> Subtract;
         protected static Func<T, float, T> Multiply;
 
-        public void Update(GameTime gameTime)
+        protected override bool OnUpdate(float deltaTime)
         {
-            Update(gameTime.GetElapsedSeconds());
-        }
-
-        public void Update(float deltaTime)
-        {
-            if(IsComplete)
-                return;
-
             if (!_initialValue.HasValue)
                 _initialValue = _getValue();
 
-            _currentTime += deltaTime;
-            _currentMultiplier = EasingFunction(_currentTime/Duration);
+            _currentMultiplier = EasingFunction(CurrentTime / Duration);
 
-            if (_currentTime >= Duration)
+            if (CurrentTime >= Duration)
             {
-                _currentTime = Duration;
+                CurrentTime = Duration;
                 _currentMultiplier = 1.0f;
-                IsComplete = true;
+                return true;
             }
 
             var difference = Subtract(TargetValue, _initialValue.Value);
             var multiply = Multiply(difference, _currentMultiplier);
             var newValue = Add(_initialValue.Value, multiply);
             _setValue(newValue);
+            return false;
         }
     }
 }

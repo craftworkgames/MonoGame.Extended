@@ -7,12 +7,19 @@ namespace MonoGame.Extended.Animations.Tweens
     {
         internal static AnimationComponent AnimationComponent { get; set; }
 
-        public static TweenAnimation<T> CreateTween<T>(this T target, Action onCompleteAction = null, bool disposeOnComplete = true)
+        public static TweenGroup<T> CreateTweenGroup<T>(this T target, Action onCompleteAction = null, bool disposeOnComplete = true)
             where T : class 
         {
-            var tween = new TweenAnimation<T>(target, onCompleteAction, disposeOnComplete);
-            AnimationComponent.Animations.Add(tween);
-            return tween;
+            var tweenGroup = new TweenGroup<T>(target, onCompleteAction, disposeOnComplete);
+            AnimationComponent.Animations.Add(tweenGroup);
+            return tweenGroup;
+        }
+
+        public static TweenChain<T> CreateTweenChain<T>(this T target, Action onCompleteAction = null, bool disposeOnComplete = true)
+        {
+            var tweenGroup = new TweenChain<T>(target, onCompleteAction, disposeOnComplete);
+            AnimationComponent.Animations.Add(tweenGroup);
+            return tweenGroup;
         }
 
         public static TweenAnimation<T> MoveTo<T>(this TweenAnimation<T> tweenAnimation, Vector2 position, float duration, EasingFunction easingFunction)

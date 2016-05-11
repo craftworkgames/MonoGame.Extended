@@ -54,10 +54,10 @@ namespace Demo.Animations
 
         private void CreateTweenThing()
         {
-            _sprite.CreateTween(CreateTweenThing)
+            _sprite.CreateTweenChain(CreateTweenThing)
                 .Move(new Vector2(10, 10), 1.0f, EasingFunctions.SineEaseOut)
                 .Rotate(MathHelper.Pi, 1.0f, EasingFunctions.CubicEaseInOut)
-                .ScaleTo(Vector2.One*1.5f, 1.0f, EasingFunctions.QuadraticEaseInOut);
+                .Scale(new Vector2(0.9f), 1.0f, EasingFunctions.QuadraticEaseInOut);
         }
 
         protected override void UnloadContent()

@@ -36,7 +36,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Animations\IAnimation.cs" />
+    <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
     <Compile Include="Animations\Tweens\DelayTween.cs" />
     <Compile Include="Animations\Tweens\FluentTweening.cs" />
@@ -49,6 +49,8 @@
     <Compile Include="Animations\Tweens\TweenAnimation.cs" />
     <Compile Include="Animations\Tweens\PropertyTween.cs" />
     <Compile Include="Angle.cs" />
+    <Compile Include="Animations\Tweens\TweenChain.cs" />
+    <Compile Include="Animations\Tweens\TweenGroup.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />

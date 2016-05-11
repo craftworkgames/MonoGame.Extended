@@ -1,36 +1,18 @@
-using Microsoft.Xna.Framework;
-
 namespace MonoGame.Extended.Animations.Tweens
 {
-    public class DelayTween : IAnimation
+    public class DelayTween : Animation
     {
         public DelayTween(float duration)
+            : base(null, true)
         {
             Duration = duration;
         }
 
         public float Duration { get; set; }
-        public bool IsComplete { get; private set; }
-        public bool IsDisposed { get; private set; }
 
-        private float _currentDuration;
-
-        public void Update(GameTime gameTime)
+        protected override bool OnUpdate(float deltaTime)
         {
-            if(IsComplete)
-                return;
-
-            var deltaTime = gameTime.GetElapsedSeconds();
-
-            _currentDuration += deltaTime;
-
-            if (_currentDuration >= Duration)
-                IsComplete = true;
-        }
-
-        public void Dispose()
-        {
-            IsDisposed = true;
+            return CurrentTime >= Duration;
         }
     }
 }

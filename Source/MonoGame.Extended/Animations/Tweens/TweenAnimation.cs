@@ -1,63 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Animations.Tweens
 {
-    public class TweenAnimation<T> : IAnimation
+    public abstract class TweenAnimation<T> : Animation
     {
-        private readonly Action _onCompleteAction;
-        private readonly bool _disposeOnComplete;
-
-        public TweenAnimation(T target, Action onCompleteAction = null, bool disposeOnComplete = true)
+        protected TweenAnimation(T target, Action onCompleteAction = null, bool disposeOnComplete = true)
+            : base(onCompleteAction, disposeOnComplete)
         {
-            _onCompleteAction = onCompleteAction;
-            _disposeOnComplete = disposeOnComplete;
             Target = target;
-            Tweens = new List<IAnimation>();
+            Tweens = new List<Animation>();
         }
-
-        public void Dispose()
-        {
-            IsDisposed = true;
-        }
-
-        public bool IsDisposed { get; private set; }
 
         public T Target { get; }
-        public IList<IAnimation> Tweens { get; }
+        public IList<Animation> Tweens { get; }
 
-        private bool _isComplete;
-        public bool IsComplete
-        {
-            get {  return _isComplete; }
-            protected set
-            {
-                if (_isComplete != value)
-                {
-                    _isComplete = value;
 
-                    if (_isComplete)
-                    {
-                        _onCompleteAction?.Invoke();
-
-                        if (_disposeOnComplete)
-                            Dispose();
-                    }
-                }
-            }
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            if (IsComplete)
-                return;
-
-            foreach (var animation in Tweens)
-                animation.Update(gameTime);
-
-            IsComplete = Tweens.All(t => t.IsComplete);
-        }
     }
 }
