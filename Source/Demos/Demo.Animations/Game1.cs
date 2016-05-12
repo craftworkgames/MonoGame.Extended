@@ -54,10 +54,10 @@ namespace Demo.Animations
 
         private void CreateTweenThing()
         {
-            _sprite.CreateTweenChain(CreateTweenThing)
-                .Move(new Vector2(10, 10), 1.0f, EasingFunctions.SineEaseOut)
-                .Rotate(MathHelper.Pi, 1.0f, EasingFunctions.CubicEaseInOut)
-                .Scale(new Vector2(0.9f), 1.0f, EasingFunctions.QuadraticEaseInOut);
+            //_sprite.CreateTweenChain()
+            //    .Move(new Vector2(10, 10), 1.0f, EasingFunctions.SineEaseOut)
+            //    .Rotate(MathHelper.Pi, 1.0f, EasingFunctions.CubicEaseInOut)
+            //    .Scale(new Vector2(0.9f), 1.0f, EasingFunctions.QuadraticEaseInOut);
         }
 
         protected override void UnloadContent()
@@ -68,13 +68,17 @@ namespace Demo.Animations
         {
             //var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
+            var mouseState = Mouse.GetState();
+
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                _sprite
+                    .CreateTweenGroup()
+                    .MoveTo(new Vector2(mouseState.X, mouseState.Y), 1.0f, EasingFunctions.BounceOut);
+            }
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
-
-            //_sprite.Rotation += deltaTime;
-
-            //_tween.Update(deltaTime);
 
             base.Update(gameTime);
         }
