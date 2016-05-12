@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.Animations
+namespace MonoGame.Extended.Animations.SpriteSheets
 {
     public class SpriteSheetAnimationFactoryReader : ContentTypeReader<SpriteSheetAnimationFactory>
     {

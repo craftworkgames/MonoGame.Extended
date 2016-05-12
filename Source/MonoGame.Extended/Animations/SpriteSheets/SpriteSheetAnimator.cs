@@ -3,11 +3,11 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Sprites;
 
-namespace MonoGame.Extended.Animations
+namespace MonoGame.Extended.Animations.SpriteSheets
 {
-    public class SpriteSheetAnimationPlayer : IUpdate
+    public class SpriteSheetAnimator : IUpdate
     {
-        public SpriteSheetAnimationPlayer(SpriteSheetAnimationFactory animationFactory)
+        public SpriteSheetAnimator(SpriteSheetAnimationFactory animationFactory)
         {
             _animationFactory = animationFactory;
         }

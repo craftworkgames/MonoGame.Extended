@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
+using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
@@ -21,7 +22,7 @@ namespace Demo.SpriteSheetAnimations
 
     public class Zombie : IUpdate, IActorTarget
     {
-        private readonly SpriteSheetAnimationPlayer _animator;
+        private readonly SpriteSheetAnimator _animator;
         private readonly Sprite _sprite;
 
         private float _direction = -1.0f;
@@ -75,7 +76,7 @@ namespace Demo.SpriteSheetAnimations
 
         public Zombie(SpriteSheetAnimationFactory animations)
         {
-            _animator = new SpriteSheetAnimationPlayer(animations);
+            _animator = new SpriteSheetAnimator(animations);
             _sprite = _animator.CreateSprite();
 
             State = ZombieState.Appearing;
