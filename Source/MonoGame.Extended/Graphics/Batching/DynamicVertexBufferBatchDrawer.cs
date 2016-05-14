@@ -33,7 +33,6 @@ namespace MonoGame.Extended.Graphics.Batching
     
         internal override void Select(TVertexType[] vertices)
         {
-            GraphicsDevice.Indices = null;
             VertexBuffer.SetData(vertices);
             GraphicsDevice.SetVertexBuffer(VertexBuffer);
         }
@@ -61,7 +60,7 @@ namespace MonoGame.Extended.Graphics.Batching
 
         internal override void Draw(IDrawContext drawContext, PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount)
         {
-            var primitiveCount = primitiveType.GetPrimitiveCount(vertexCount);
+            var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
 
             ChangeDrawContextIfNecessary(drawContext);
 
