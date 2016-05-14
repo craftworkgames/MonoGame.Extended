@@ -15,11 +15,11 @@ namespace MonoGame.Extended.Graphics.Batching
         private IDrawContext _currentDrawContext;
         protected Effect Effect;
 
-        protected BatchDrawer(GraphicsDevice graphicsDevice, ushort maximumVerticesCount, ushort maximumIndiciesCount)
+        protected BatchDrawer(GraphicsDevice graphicsDevice, ushort maximumVerticesCount = PrimitiveBatch<TVertexType>.DefaultMaximumVerticesCount, ushort maximumIndicesCount = PrimitiveBatch<TVertexType>.DefaultMaximumIndicesCount)
         {
             GraphicsDevice = graphicsDevice;
-            MaximumVerticesCount = maximumIndiciesCount;
-            MaximumIndicesCount = maximumVerticesCount;
+            MaximumVerticesCount = maximumVerticesCount;
+            MaximumIndicesCount = maximumIndicesCount;
 
             CommandDelegates = new List<Action>();
         }

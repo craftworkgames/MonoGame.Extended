@@ -90,9 +90,9 @@ namespace Demo.PrimitiveBatch
             _spriteMaterial = new SpriteEffectMaterial(spriteEffect, spriteTexture);
 
             // create the VertexPositionColor PrimitiveBatch for rendering the primitives
-            _primitiveBatchPositionColor = new PrimitiveBatch<VertexPositionColor>(graphicsDevice, Array.Sort);
+            _primitiveBatchPositionColor = new PrimitiveBatch<VertexPositionColor>(graphicsDevice, Array.Sort, BatchDrawStrategy.DynamicVertexBuffer);
             // create the VertexPositionColorTexture PrimitiveBatch for rendering the sprites
-            _primitiveBatchPositionColorTexture = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice, Array.Sort);
+            _primitiveBatchPositionColorTexture = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice, Array.Sort, BatchDrawStrategy.DynamicVertexBuffer);
 
             // create our polygon mesh; vertices are in Local space; indices are index references to the vertices to draw 
             // indices have to multiple of 3 for PrimitiveType.TriangleList which says to draw a collection of triangles each with 3 vertices (different triangles can share vertices)
@@ -151,6 +151,7 @@ namespace Demo.PrimitiveBatch
             // however, it's left here indicating it's possible and common to change the state between frames
             // use alphablend so the transparent part of the texture is blended with the color behind it
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             // draw the polygon mesh and line mesh in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
             _primitiveBatchPositionColor.Begin(BatchSortMode.Deferred);
