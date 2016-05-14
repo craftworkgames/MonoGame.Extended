@@ -28,13 +28,6 @@ namespace Demo.PrimitiveBatch
         private PrimitiveMesh<VertexPositionColor> _polygonMesh;
         // the curve (continous line segements)
         private PrimitiveMesh<VertexPositionColor> _lineMesh;
-        // world view projection matrices;
-        private Matrix _cartesianProjection2D;
-        private Matrix _cartesianCamera2D;
-        private Matrix _cartesianWorld;
-        private Matrix _spriteBatchProjection;
-        private Matrix _spriteBatchCamera;
-        private Matrix _spriteBatchWorld;
 
         // the rotation angle of the sprite
         private float _spriteRotation;
@@ -56,41 +49,40 @@ namespace Demo.PrimitiveBatch
             // viewport: the dimensions and properties of the drawable surface
             var viewport = graphicsDevice.Viewport;
 
-            // world matrix: the coordinate system of the world or universe used to transform primitives from their own Local space to the World space
-            // here we scale the x, y and z axes by 100 units
-            _cartesianWorld = Matrix.CreateScale(new Vector3(100, 100, 100));
-
-            // view matrix: the camera; use to transform primitives from World space to View (or Camera) space
-            // here we don't do anything by using the identity matrix
-            _cartesianCamera2D = Matrix.Identity;
-
-            // projection matrix: the mapping from View or Camera space to Projection space so the GPU knows what information from the scene is to be rendered 
-            // here we create an orthographic projection; a 3D box in screen space (one side is the screen) where any primitives outside this box is not rendered
-            // here the box is setup so the origin (0,0,0) is the centre of the screen's surface
-            _cartesianProjection2D = Matrix.CreateOrthographicOffCenter(viewport.Width * -0.5f, viewport.Width * 0.5f, viewport.Height * -0.5f, viewport.Height * 0.5f, 0, 1);
-
-            // world matrix: the coordinate system of the world or universe used to transform primitives from their own Local space to the World space
-            // here we don't do anything by using the identity matrix leaving screen pixel units as world units
-            _spriteBatchWorld = Matrix.Identity;
-
-            // view matrix: the camera; use to transform primitives from World space to View (or Camera) space
-            // here we don't do anything by using the identity matrix
-            _spriteBatchCamera = Matrix.Identity;
-
-            // projection matrix: the mapping from View or Camera space to Projection space so the GPU knows what information from the scene is to be rendered 
-            // here we create an orthographic projection; a 3D box in screen space (one side is the screen) where any primitives outside this box is not rendered
-            // here the box is set so the origin (0,0,0) is the top-left of the screen's surface
-            // the Z axis is also flipped by setting the near plane to 0 and the far plane to -1. (by default -Z is into the screen, +Z is popping out of the screen)
-            // here an adjustment by half a pixel is also added because there’s a discrepancy between how the centers of pixels and the centers of texels are computed
-            _spriteBatchProjection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1);
-
             // load the custom effect for the polygons
-            var polygonEffect = new PrimitiveEffect(Content.Load<Effect>("PolygonEffect"));
+            var primitiveEffect = new PrimitiveEffect(Content.Load<Effect>("PolygonEffect"))
+            {
+                // world matrix: the coordinate system of the world or universe used to transform primitives from their own Local space to the World space
+                // here we scale the x, y and z axes by 100 units
+                World = Matrix.CreateScale(new Vector3(100, 100, 100)),
+                // view matrix: the camera; use to transform primitives from World space to View (or Camera) space
+                // here we don't do anything by using the identity matrix
+                View = Matrix.Identity,
+                // projection matrix: the mapping from View or Camera space to Projection space so the GPU knows what information from the scene is to be rendered 
+                // here we create an orthographic projection; a 3D box in screen space (one side is the screen) where any primitives outside this box is not rendered
+                // here the box is setup so the origin (0,0,0) is the centre of the screen's surface
+                Projection = Matrix.CreateOrthographicOffCenter(viewport.Width * -0.5f, viewport.Width * 0.5f, viewport.Height * -0.5f, viewport.Height * 0.5f, 0, 1)
+            };
+
             // create a material for rendering polygons
-            _primitiveMaterial = new PrimitiveEffectMaterial(polygonEffect);
+            _primitiveMaterial = new PrimitiveEffectMaterial(primitiveEffect);
 
             // load the custom effect for the sprites
-            var spriteEffect = new SpriteEffect(Content.Load<Effect>("SpriteEffect"));
+            var spriteEffect = new SpriteEffect(Content.Load<Effect>("SpriteEffect"))
+            {
+                // world matrix: the coordinate system of the world or universe used to transform primitives from their own Local space to the World space
+                // here we don't do anything by using the identity matrix leaving screen pixel units as world units
+                World = Matrix.Identity,
+                // view matrix: the camera; use to transform primitives from World space to View (or Camera) space
+                // here we don't do anything by using the identity matrix
+                View = Matrix.Identity,
+                // projection matrix: the mapping from View or Camera space to Projection space so the GPU knows what information from the scene is to be rendered 
+                // here we create an orthographic projection; a 3D box in screen space (one side is the screen) where any primitives outside this box is not rendered
+                // here the box is set so the origin (0,0,0) is the top-left of the screen's surface
+                // the Z axis is also flipped by setting the near plane to 0 and the far plane to -1. (by default -Z is into the screen, +Z is popping out of the screen)
+                // here an adjustment by half a pixel is also added because there’s a discrepancy between how the centers of pixels and the centers of texels are computed
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1)
+            };
             // load the texture for the sprites
             var spriteTexture = Content.Load<Texture2D>("logo-square-128");
             // create a material for rendering sprites
@@ -157,15 +149,8 @@ namespace Demo.PrimitiveBatch
             // set the states for rendering
             // this could be moved outside the render loop if it doesn't change frame per frame 
             // however, it's left here indicating it's possible and common to change the state between frames
-
             // use alphablend so the transparent part of the texture is blended with the color behind it
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
-
-            var polygonEffect = _primitiveMaterial.Effect;
-            // apply the world view projection matrices for cartesian drawing
-            polygonEffect.World = _cartesianWorld;
-            polygonEffect.View = _cartesianCamera2D;
-            polygonEffect.Projection = _cartesianProjection2D;
 
             // draw the polygon mesh and line mesh in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
             _primitiveBatchPositionColor.Begin(BatchSortMode.Immediate);
@@ -173,18 +158,11 @@ namespace Demo.PrimitiveBatch
             _primitiveBatchPositionColor.DrawPrimitiveMesh(_primitiveMaterial, _lineMesh);
             _primitiveBatchPositionColor.End();
 
-            // apply the world view projection matrices for sprite drawing
-            var spriteEffect = _spriteMaterial.Effect;
-            spriteEffect.World = _spriteBatchWorld;
-            spriteEffect.View = _spriteBatchCamera;
-            spriteEffect.Projection = _spriteBatchProjection;
-
             // draw the sprite in the screen coordinate system using the VertexPositionColorTexture PrimitiveBatch
             _primitiveBatchPositionColorTexture.Begin(BatchSortMode.Immediate);
-            var viewport = GraphicsDevice.Viewport;
             var spriteColor = Color.White;
             var spriteOrigin = new Vector2(_spriteMaterial.Texture.Width * 0.5f, _spriteMaterial.Texture.Height * 0.5f);
-            var spritePosition = new Vector2(viewport.Width * 0.25f, viewport.Height * 0.25f);
+            var spritePosition = new Vector2(150, 150);
             var spriteDepth = 0f;
             _spriteRotation += MathHelper.ToRadians(1);
             _primitiveBatchPositionColorTexture.DrawSprite(_spriteMaterial, _spriteMaterial.Texture, null, new Vector3(spritePosition, spriteDepth), color: spriteColor, rotation: _spriteRotation, origin: spriteOrigin);
