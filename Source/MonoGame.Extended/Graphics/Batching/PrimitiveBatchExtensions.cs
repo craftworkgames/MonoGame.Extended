@@ -16,8 +16,14 @@ namespace MonoGame.Extended.Graphics.Batching
             2
         };
 
-        public static void DrawSprite(this PrimitiveBatch<VertexPositionColorTexture> primitiveBatch, IDrawContext drawContext, Texture2D texture, Rectangle? sourceRectangle, Vector3 position, Color? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, uint sortKey = 0)
+        public static void DrawSprite(this PrimitiveBatch<VertexPositionColorTexture> primitiveBatch, IDrawContextTexture2D drawContext, Rectangle? sourceRectangle, Vector3 position, Color? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, uint sortKey = 0)
         {
+            if (drawContext == null)
+            {
+                throw new ArgumentNullException(nameof(drawContext));
+            }
+
+            var texture = drawContext.Texture;
             if (texture == null)
             {
                 throw new ArgumentException("Texture is null.");

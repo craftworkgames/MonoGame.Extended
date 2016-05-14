@@ -3,7 +3,7 @@ using MonoGame.Extended.Graphics;
 
 namespace Demo.PrimitiveBatch
 {
-    public class SpriteEffectMaterial : EffectMaterial<SpriteEffect>
+    public class SpriteEffectMaterial : EffectMaterial<SpriteEffect>, IDrawContextTexture2D
     {
         public Texture2D Texture { get; }
 
