@@ -111,7 +111,10 @@ namespace Demo.PrimitiveBatch
                 0,
                 3,
                 1,
-                2
+                2,
+                1,
+                2,
+                3
             };
             _polygonMesh = new PrimitiveMesh<VertexPositionColor>(PrimitiveType.TriangleList, vertices, indices);
 

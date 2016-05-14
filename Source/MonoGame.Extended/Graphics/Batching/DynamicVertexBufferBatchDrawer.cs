@@ -5,19 +5,14 @@ namespace MonoGame.Extended.Graphics.Batching
     internal class DynamicVertexBufferBatchDrawer<TVertexType> : BatchDrawer<TVertexType>
         where TVertexType : struct, IVertexType
     {
-        internal const int BufferRegionsCount = 4;
-
         internal DynamicVertexBuffer VertexBuffer;
         internal DynamicIndexBuffer IndexBuffer;
-        internal int CurrentBufferRegionIndex;
-        internal int Stride;
 
         internal DynamicVertexBufferBatchDrawer(GraphicsDevice graphicsDevice, ushort maximumVerticesCount = PrimitiveBatch<TVertexType>.DefaultMaximumVerticesCount, ushort maximumIndicesCount = PrimitiveBatch<TVertexType>.DefaultMaximumIndicesCount)
             : base(graphicsDevice, maximumVerticesCount, maximumIndicesCount)
         {
-            VertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof (TVertexType), maximumVerticesCount * BufferRegionsCount, BufferUsage.WriteOnly);
-            Stride = VertexBuffer.VertexDeclaration.VertexStride;
-            IndexBuffer = new DynamicIndexBuffer(graphicsDevice, typeof (short), maximumIndicesCount * BufferRegionsCount, BufferUsage.WriteOnly);
+            VertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof (TVertexType), maximumVerticesCount, BufferUsage.WriteOnly);
+            IndexBuffer = new DynamicIndexBuffer(graphicsDevice, typeof (short), maximumIndicesCount, BufferUsage.WriteOnly);
         }
 
         protected override void Dispose(bool isDisposing)
@@ -35,40 +30,20 @@ namespace MonoGame.Extended.Graphics.Batching
             IndexBuffer?.Dispose();
             IndexBuffer = null;
         }
-
+    
         internal override void Select(TVertexType[] vertices)
         {
-            UnselectBuffers();
-
-            CurrentBufferRegionIndex = (CurrentBufferRegionIndex + 1) % BufferRegionsCount;
-            var offset = CurrentBufferRegionIndex * MaximumVerticesCount;
-            VertexBuffer.SetData(offset * Stride, vertices, 0, vertices.Length, Stride, SetDataOptions.NoOverwrite);
-
-            SelectBuffers(CurrentBufferRegionIndex);
+            GraphicsDevice.Indices = null;
+            VertexBuffer.SetData(vertices);
+            GraphicsDevice.SetVertexBuffer(VertexBuffer);
         }
 
         internal override void Select(TVertexType[] vertices, short[] indices)
         {
-            UnselectBuffers();
-
-            CurrentBufferRegionIndex = (CurrentBufferRegionIndex + 1) % BufferRegionsCount;
-            var offset = CurrentBufferRegionIndex * MaximumVerticesCount;
-            VertexBuffer.SetData(offset * Stride, vertices, 0, vertices.Length, Stride, SetDataOptions.NoOverwrite);
-            IndexBuffer.SetData(offset * 2, indices, 0, indices.Length, SetDataOptions.NoOverwrite);
-
-            SelectBuffers(CurrentBufferRegionIndex);
-        }
-
-        private void SelectBuffers(int bufferRegionIndex)
-        {
+            VertexBuffer.SetData(vertices);
+            IndexBuffer.SetData(indices);
+            GraphicsDevice.SetVertexBuffer(VertexBuffer);
             GraphicsDevice.Indices = IndexBuffer;
-            GraphicsDevice.SetVertexBuffer(VertexBuffer, bufferRegionIndex * MaximumVerticesCount);
-        }
-
-        private void UnselectBuffers()
-        {
-            GraphicsDevice.Indices = null;
-            GraphicsDevice.SetVertexBuffer(null);
         }
 
         internal override void Draw(IDrawContext drawContext, PrimitiveType primitiveType, int startVertex, int vertexCount)
