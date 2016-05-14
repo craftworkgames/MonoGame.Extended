@@ -89,7 +89,7 @@ namespace Demo.PrimitiveBatch
             // each texture will need a seperate material
             _spriteMaterial = new SpriteEffectMaterial(spriteEffect, spriteTexture);
 
-            // create the VertexPositionColor PrimitiveBatch for rendering the polygons
+            // create the VertexPositionColor PrimitiveBatch for rendering the primitives
             _primitiveBatchPositionColor = new PrimitiveBatch<VertexPositionColor>(graphicsDevice, Array.Sort);
             // create the VertexPositionColorTexture PrimitiveBatch for rendering the sprites
             _primitiveBatchPositionColorTexture = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice, Array.Sort);
@@ -165,7 +165,7 @@ namespace Demo.PrimitiveBatch
             var spritePosition = new Vector2(150, 150);
             var spriteDepth = 0f;
             _spriteRotation += MathHelper.ToRadians(1);
-            _primitiveBatchPositionColorTexture.DrawSprite(_spriteMaterial, _spriteMaterial.Texture, null, new Vector3(spritePosition, spriteDepth), color: spriteColor, rotation: _spriteRotation, origin: spriteOrigin);
+            _primitiveBatchPositionColorTexture.DrawSprite(_spriteMaterial, null, new Vector3(spritePosition, spriteDepth), color: spriteColor, rotation: _spriteRotation, origin: spriteOrigin);
             _primitiveBatchPositionColorTexture.End();
 
             base.Draw(gameTime);
