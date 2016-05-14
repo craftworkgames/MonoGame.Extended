@@ -153,7 +153,7 @@ namespace Demo.PrimitiveBatch
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
             // draw the polygon mesh and line mesh in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
-            _primitiveBatchPositionColor.Begin(BatchSortMode.Immediate);
+            _primitiveBatchPositionColor.Begin(BatchSortMode.Deferred);
             _primitiveBatchPositionColor.DrawPrimitiveMesh(_primitiveMaterial, _polygonMesh);
             _primitiveBatchPositionColor.DrawPrimitiveMesh(_primitiveMaterial, _lineMesh);
             _primitiveBatchPositionColor.End();

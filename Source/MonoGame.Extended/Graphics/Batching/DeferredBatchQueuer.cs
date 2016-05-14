@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Graphics.Batching
 
         private uint[] _operationKeys; 
         private BatchDrawOperation[] _operations;
-        private int _nextFreeOperationIndex;
+        private int _operationsCount;
         private uint _currentSortKey;
         private BatchDrawOperation _currentOperation;
         private readonly BatchDrawOperation _emptyDrawOperation = new BatchDrawOperation((PrimitiveType)(-1), 0, 0, 0, 0, null);
@@ -18,9 +18,9 @@ namespace MonoGame.Extended.Graphics.Batching
         private int _usedVertexCount;
         private readonly short[] _indices;
         private int _usedIndexCount;
-        private readonly Action<Array, Array> _sortKeysValuesAction;
+        private readonly Action<Array, Array, int, int> _sortKeysValuesAction;
 
-        internal DeferredBatchQueuer(BatchDrawer<TVertexType> batchDrawer, Action<Array, Array> sortKeysValuesAction)
+        internal DeferredBatchQueuer(BatchDrawer<TVertexType> batchDrawer, Action<Array, Array, int, int> sortKeysValuesAction)
             : base(batchDrawer)
         {
             _currentOperation = _emptyDrawOperation;
@@ -34,29 +34,30 @@ namespace MonoGame.Extended.Graphics.Batching
         private void CreateNewDrawOperationIfNecessary(IDrawContext drawContext, PrimitiveType primitiveType, int vertexCount, int indexCount, uint sortKey)
         {
             // we do not support merging line strip or triangle strip primitives, i.e., a new draw call is needed for each line strip or triangle strip
-            if (_currentSortKey == sortKey && _currentOperation.DrawContext.Equals(drawContext) && _currentOperation.PrimitiveType == (byte)primitiveType && (primitiveType != PrimitiveType.TriangleStrip || PrimitiveType != PrimitiveType.LineStrip) && _currentOperation.IndexCount > 0 == indexCount > 0)
+            if (_currentSortKey == sortKey && (_currentOperation.DrawContext?.Equals(drawContext) ?? false) && _currentOperation.PrimitiveType == (byte)primitiveType && (primitiveType != PrimitiveType.TriangleStrip || PrimitiveType != PrimitiveType.LineStrip) && _currentOperation.IndexCount > 0 == indexCount > 0)
             {
                 _currentOperation.VertexCount += vertexCount;
                 _currentOperation.IndexCount += indexCount;
                 return;
             }
 
+            _currentOperation.DrawContext = drawContext;
             _currentOperation = new BatchDrawOperation(primitiveType, _usedVertexCount, vertexCount, _usedIndexCount, indexCount, _currentOperation.DrawContext);
-            AddOperation(ref _currentOperation, sortKey);
+            AddOperation(_currentOperation, sortKey);
         }
 
-        private void AddOperation(ref BatchDrawOperation batchOperation, uint sortKey)
+        private void AddOperation(BatchDrawOperation batchOperation, uint sortKey)
         {
-            if (_nextFreeOperationIndex >= _operations.Length)
+            if (_operationsCount >= _operations.Length)
             {
                 // increase array buffer sizes by the golden ratio
                 var newCapacity = (int)(_operations.Length * 1.61803398875f);
                 Array.Resize(ref _operationKeys, newCapacity);
                 Array.Resize(ref _operations, newCapacity);
             }
-            _operationKeys[_nextFreeOperationIndex] = sortKey;
-            _operations[_nextFreeOperationIndex] = batchOperation;
-            ++_nextFreeOperationIndex;
+            _operationKeys[_operationsCount] = sortKey;
+            _operations[_operationsCount] = batchOperation;
+            ++_operationsCount;
             _currentSortKey = sortKey;
         }
 
@@ -69,7 +70,7 @@ namespace MonoGame.Extended.Graphics.Batching
             Flush();
         }
 
-        private void Flush()
+        private unsafe void Flush()
         {
             if (_usedVertexCount == 0)
             {
@@ -85,13 +86,11 @@ namespace MonoGame.Extended.Graphics.Batching
                 BatchDrawer.Select(_vertices, _indices);
             }
 
-            _sortKeysValuesAction(_operationKeys, _operations);
+            _sortKeysValuesAction(_operationKeys, _operations, 0, _operationsCount);
 
-            // iterating an ARRAY using "foreach" is just as \fast\ as using "for"; the compiler will produce identical machine code; however, this is not true for LIST!
-            // using unsafe code to iterate the array to avoid bound checks is unnecessary with "foreach"; the compiler understands accessing beyond the array is impossible
-            // "foreach" is a lot simpler for us humans to read as well, yay!
-            foreach (var operation in _operations)
+            for (var index = 0; index < _operationsCount; index++)
             {
+                var operation = _operations[index];
                 var primitiveType = (PrimitiveType)operation.PrimitiveType;
                 if (operation.IndexCount != 0)
                 {
@@ -103,7 +102,8 @@ namespace MonoGame.Extended.Graphics.Batching
                 }
             }
 
-            Array.Clear(_operations, 0, _operations.Length);
+            Array.Clear(_operations, 0, _operationsCount);
+            _operationsCount = 0;
             _currentOperation = _emptyDrawOperation;
             _usedVertexCount = 0;
             _usedIndexCount = 0;

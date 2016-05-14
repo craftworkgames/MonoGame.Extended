@@ -42,7 +42,7 @@ namespace MonoGame.Extended.Graphics.Batching
         public bool HasBegun { get; private set; }
         public GraphicsDevice GraphicsDevice { get; }
 
-        public PrimitiveBatch(GraphicsDevice graphicsDevice, Action<Array, Array> sortKeysValuesAction, BatchDrawStrategy batchDrawStrategy = BatchDrawStrategy.UserPrimitives, ushort maximumVerticesCount = DefaultMaximumVerticesCount, ushort maximumIndicesCount = DefaultMaximumIndicesCount)
+        public PrimitiveBatch(GraphicsDevice graphicsDevice, Action<Array, Array, int, int> sortKeysValuesAction, BatchDrawStrategy batchDrawStrategy = BatchDrawStrategy.UserPrimitives, ushort maximumVerticesCount = DefaultMaximumVerticesCount, ushort maximumIndicesCount = DefaultMaximumIndicesCount)
         {
             if (graphicsDevice == null)
             {
