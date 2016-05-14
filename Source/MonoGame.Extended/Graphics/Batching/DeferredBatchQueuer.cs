@@ -70,7 +70,7 @@ namespace MonoGame.Extended.Graphics.Batching
             Flush();
         }
 
-        private unsafe void Flush()
+        private void Flush()
         {
             if (_usedVertexCount == 0)
             {
