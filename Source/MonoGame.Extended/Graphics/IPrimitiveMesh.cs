@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics
 {
-    public interface IPolygonMesh<TVertexType>
+    public interface IPrimitiveMesh<out TVertexType>
         where TVertexType : struct, IVertexType
     {
         IReadOnlyCollection<TVertexType> Vertices { get; }

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
@@ -10,9 +11,11 @@ namespace MonoGame.Extended.Graphics.Batching
         internal readonly int StartIndex;
         internal int IndexCount;
         internal IDrawContext DrawContext;
+        internal byte PrimitiveType;
 
-        internal BatchDrawOperation(int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext)
+        internal BatchDrawOperation(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext)
         {
+            PrimitiveType = (byte)primitiveType;
             StartVertex = startVertex;
             VertexCount = vertexCount;
             StartIndex = startIndex;

@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Content;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Graphics.Batching;
 
@@ -13,19 +13,21 @@ namespace Demo.PrimitiveBatch
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
-        // primitive batch for convex polygons
+        // primitive batch for geometric primitives such as convex polygons and lines
         private PrimitiveBatch<VertexPositionColor> _primitiveBatchPositionColor;
         // primitive batch for sprites (quads with texture)
         private PrimitiveBatch<VertexPositionColorTexture> _primitiveBatchPositionColorTexture;
 
-        // a material for the polygons
-        private PolygonEffectMaterial _polygonMaterial;
+        // a material for the geometric primitives
+        private PrimitiveEffectMaterial _primitiveMaterial;
         // a material for the sprites 
         // a new material will be required for each texture
         private SpriteEffectMaterial _spriteMaterial; 
 
         // the polygon
-        private FaceVertexPolygonMesh<VertexPositionColor> _polygonMesh;
+        private PrimitiveMesh<VertexPositionColor> _polygonMesh;
+        // the curve (continous line segements)
+        private PrimitiveMesh<VertexPositionColor> _lineMesh;
         // world view projection matrices;
         private Matrix _cartesianProjection2D;
         private Matrix _cartesianCamera2D;
@@ -65,8 +67,7 @@ namespace Demo.PrimitiveBatch
             // projection matrix: the mapping from View or Camera space to Projection space so the GPU knows what information from the scene is to be rendered 
             // here we create an orthographic projection; a 3D box in screen space (one side is the screen) where any primitives outside this box is not rendered
             // here the box is setup so the origin (0,0,0) is the centre of the screen's surface
-            // here an adjustment by half a pixel is also added because there’s a discrepancy between how the centers of pixels and the centers of texels are computed
-            _cartesianProjection2D = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(viewport.Width * -0.5f, viewport.Width * 0.5f, viewport.Height * -0.5f, viewport.Height * 0.5f, 0, 1);
+            _cartesianProjection2D = Matrix.CreateOrthographicOffCenter(viewport.Width * -0.5f, viewport.Width * 0.5f, viewport.Height * -0.5f, viewport.Height * 0.5f, 0, 1);
 
             // world matrix: the coordinate system of the world or universe used to transform primitives from their own Local space to the World space
             // here we don't do anything by using the identity matrix leaving screen pixel units as world units
@@ -84,9 +85,9 @@ namespace Demo.PrimitiveBatch
             _spriteBatchProjection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1);
 
             // load the custom effect for the polygons
-            var polygonEffect = new PolygonEffect(Content.Load<Effect>("PolygonEffect"));
+            var polygonEffect = new PrimitiveEffect(Content.Load<Effect>("PolygonEffect"));
             // create a material for rendering polygons
-            _polygonMaterial = new PolygonEffectMaterial(polygonEffect);
+            _primitiveMaterial = new PrimitiveEffectMaterial(polygonEffect);
 
             // load the custom effect for the sprites
             var spriteEffect = new SpriteEffect(Content.Load<Effect>("SpriteEffect"));
@@ -103,7 +104,7 @@ namespace Demo.PrimitiveBatch
 
             // create our polygon mesh; vertices are in Local space; indices are index references to the vertices to draw 
             // indices have to multiple of 3 for PrimitiveType.TriangleList which says to draw a collection of triangles each with 3 vertices (different triangles can share vertices)
-            // TriangleList is the most common way to have vertices layed out in memory for uploading to the GPU for most common scnearios
+            // TriangleList is the most common way to have polygon vertices layed out in memory for uploading to the GPU for most common scnearios
             var vertices = new[]
             {
                 new VertexPositionColor(new Vector3(0, 0, 0), Color.Red),
@@ -120,7 +121,22 @@ namespace Demo.PrimitiveBatch
                 1,
                 2
             };
-            _polygonMesh = new FaceVertexPolygonMesh<VertexPositionColor>(PrimitiveType.TriangleList, vertices, indices);
+            _polygonMesh = new PrimitiveMesh<VertexPositionColor>(PrimitiveType.TriangleList, vertices, indices);
+
+            // create our curve as a line mesh; vertices are in Local space; no indices
+            // the curve is approximated by a series of line segments
+            // LineStrip joins the vertices given in order into a continuous series of line segments
+            var curveVertices = new List<VertexPositionColor>();
+            var angleStep = MathHelper.ToRadians(1);
+            const int circlesCount = 3;
+            for (var angle = 0.0f; angle <= MathHelper.TwoPi * circlesCount; angle += angleStep)
+            {
+                var vertexPosition = new Vector3((float)Math.Sin(angle) - angle / 10, (float)Math.Cos(angle) - angle / 15, 0);
+                var vertex = new VertexPositionColor(vertexPosition, Color.White);
+                curveVertices.Add(vertex);
+            }
+
+            _lineMesh = new PrimitiveMesh<VertexPositionColor>(PrimitiveType.LineStrip, curveVertices.ToArray());
         }
 
         protected override void Update(GameTime gameTime)
@@ -145,15 +161,16 @@ namespace Demo.PrimitiveBatch
             // use alphablend so the transparent part of the texture is blended with the color behind it
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
-            var polygonEffect = _polygonMaterial.Effect;
+            var polygonEffect = _primitiveMaterial.Effect;
             // apply the world view projection matrices for cartesian drawing
             polygonEffect.World = _cartesianWorld;
             polygonEffect.View = _cartesianCamera2D;
             polygonEffect.Projection = _cartesianProjection2D;
 
-            // draw the polygon mesh in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
-            _primitiveBatchPositionColor.Begin(BatchSortMode.Immediate, PrimitiveType.TriangleList);
-            _primitiveBatchPositionColor.DrawPolygonMesh(_polygonMaterial, _polygonMesh);
+            // draw the polygon mesh and line mesh in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
+            _primitiveBatchPositionColor.Begin(BatchSortMode.Immediate);
+            _primitiveBatchPositionColor.DrawPrimitiveMesh(_primitiveMaterial, _polygonMesh);
+            _primitiveBatchPositionColor.DrawPrimitiveMesh(_primitiveMaterial, _lineMesh);
             _primitiveBatchPositionColor.End();
 
             // apply the world view projection matrices for sprite drawing
@@ -163,7 +180,7 @@ namespace Demo.PrimitiveBatch
             spriteEffect.Projection = _spriteBatchProjection;
 
             // draw the sprite in the screen coordinate system using the VertexPositionColorTexture PrimitiveBatch
-            _primitiveBatchPositionColorTexture.Begin(BatchSortMode.Immediate, PrimitiveType.TriangleList);
+            _primitiveBatchPositionColorTexture.Begin(BatchSortMode.Immediate);
             var viewport = GraphicsDevice.Viewport;
             var spriteColor = Color.White;
             var spriteOrigin = new Vector2(_spriteMaterial.Texture.Width * 0.5f, _spriteMaterial.Texture.Height * 0.5f);

@@ -12,7 +12,6 @@ namespace MonoGame.Extended.Graphics.Batching
         internal readonly ushort MaximumVerticesCount;
         internal readonly ushort MaximumIndicesCount;
         internal List<Action> CommandDelegates;
-        internal PrimitiveType PrimitiveType;
         private IDrawContext _currentDrawContext;
         protected Effect Effect;
 
@@ -43,8 +42,8 @@ namespace MonoGame.Extended.Graphics.Batching
 
         internal abstract void Select(TVertexType[] vertices);
         internal abstract void Select(TVertexType[] vertices, short[] indices);
-        internal abstract void Draw(IDrawContext drawContext, int startVertex, int vertexCount);
-        internal abstract void Draw(IDrawContext drawContext, int startVertex, int vertexCount, int startIndex, int indexCount);
+        internal abstract void Draw(IDrawContext drawContext, PrimitiveType primitiveType, int startVertex, int vertexCount);
+        internal abstract void Draw(IDrawContext drawContext, PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void ChangeDrawContextIfNecessary(IDrawContext drawContext)

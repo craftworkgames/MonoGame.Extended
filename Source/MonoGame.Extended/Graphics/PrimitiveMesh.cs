@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics
 {
-    public class FaceVertexPolygonMesh<TVertexType> : IPolygonMesh<TVertexType>
+    public class PrimitiveMesh<TVertexType> : IPrimitiveMesh<TVertexType>
         where TVertexType : struct, IVertexType
     {
         internal readonly TVertexType[] _vertices;
@@ -22,7 +22,7 @@ namespace MonoGame.Extended.Graphics
 
         public PrimitiveType PrimitiveType { get; }
 
-        public FaceVertexPolygonMesh(PrimitiveType primitiveType, TVertexType[] vertices, short[] indices = null)
+        public PrimitiveMesh(PrimitiveType primitiveType, TVertexType[] vertices, short[] indices = null)
         {
             if (vertices == null)
             {

@@ -79,7 +79,7 @@ namespace MonoGame.Extended.Graphics.Batching
                 SetSpriteItemVerticesWithRotation(position.X, position.Y, -origin1.X, -origin1.Y, width, height, (float)Math.Sin(rotation), (float)Math.Cos(rotation), color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
             }
 
-            primitiveBatch.Draw(drawContext, _spriteItemVertices, _spriteItemIndices, sortKey);
+            primitiveBatch.Draw(drawContext, PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, sortKey);
         }
 
         private static void SetSpriteItemVerticesWithRotation(float x, float y, float dx, float dy, float w, float h, float sin, float cos, Color color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)
@@ -124,15 +124,15 @@ namespace MonoGame.Extended.Graphics.Batching
             _spriteItemVertices[3] = bottomRightVertex;
         }
 
-        public static void DrawPolygonMesh<TVertexType>(this PrimitiveBatch<TVertexType> primitiveBatch, IDrawContext drawContext, FaceVertexPolygonMesh<TVertexType> polygonMesh, uint sortKey = 0) where TVertexType : struct, IVertexType
+        public static void DrawPrimitiveMesh<TVertexType>(this PrimitiveBatch<TVertexType> primitiveBatch, IDrawContext drawContext, PrimitiveMesh<TVertexType> primitiveMesh, uint sortKey = 0) where TVertexType : struct, IVertexType
         {
-            if (polygonMesh._indices != null)
+            if (primitiveMesh._indices != null)
             {
-                primitiveBatch.Draw(drawContext, polygonMesh._vertices, polygonMesh._indices, sortKey);
+                primitiveBatch.Draw(drawContext, primitiveMesh.PrimitiveType, primitiveMesh._vertices, primitiveMesh._indices, sortKey);
             }
             else
             {
-                primitiveBatch.Draw(drawContext, polygonMesh._vertices);
+                primitiveBatch.Draw(drawContext, primitiveMesh.PrimitiveType, primitiveMesh._vertices);
             }
         }
     }

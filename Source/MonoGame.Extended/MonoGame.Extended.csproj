@@ -58,9 +58,9 @@
     <Compile Include="Graphics\Batching\ImmediateBatchQueuer.cs" />
     <Compile Include="Graphics\Batching\PrimitiveBatch.cs" />
     <Compile Include="Graphics\Batching\UserPrimitivesBatchDrawer.cs" />
-    <Compile Include="Graphics\IPolygonMesh.cs" />
+    <Compile Include="Graphics\IPrimitiveMesh.cs" />
     <Compile Include="Graphics\Batching\PrimitiveBatchExtensions.cs" />
-    <Compile Include="Graphics\FaceVertexPolygonMesh.cs" />
+    <Compile Include="Graphics\PrimitiveMesh.cs" />
     <Compile Include="Graphics\EffectMaterial.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
     <Compile Include="IPoolable.cs" />

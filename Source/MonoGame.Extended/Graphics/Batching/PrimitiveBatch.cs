@@ -131,16 +131,10 @@ namespace MonoGame.Extended.Graphics.Batching
             }
         }
 
-        public void Begin(BatchSortMode sortMode, PrimitiveType primitiveType)
+        public void Begin(BatchSortMode sortMode)
         {
-            if ((byte)_batchDrawer.PrimitiveType > 3)
-            {
-                throw new ArgumentOutOfRangeException(nameof(primitiveType));
-            }
-
             EnsureHasNotBegun();
 
-            _batchDrawer.PrimitiveType = primitiveType;
             HasBegun = true;
             switch (sortMode)
             {
@@ -163,28 +157,28 @@ namespace MonoGame.Extended.Graphics.Batching
             _currentBatchQueuer.End();
         }
 
-        public void Draw(IDrawContext drawContext, TVertexType[] vertices, uint sortkey = 0)
+        public void Draw(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, uint sortkey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.EnqueueDraw(drawContext, vertices, 0, vertices.Length, sortkey);
+            _currentBatchQueuer.EnqueueDraw(drawContext, primitiveType, vertices, 0, vertices.Length, sortkey);
         }
 
-        public void Draw(IDrawContext drawContext, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0)
+        public void Draw(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.EnqueueDraw(drawContext, vertices, startVertex, vertexCount, sortKey);
+            _currentBatchQueuer.EnqueueDraw(drawContext, primitiveType, vertices, startVertex, vertexCount, sortKey);
         }
 
-        public void Draw(IDrawContext drawContext, TVertexType[] vertices, short[] indices, uint sortKey = 0)
+        public void Draw(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, short[] indices, uint sortKey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.EnqueueDraw(drawContext, vertices, 0, vertices.Length, indices, 0, indices.Length, sortKey);
+            _currentBatchQueuer.EnqueueDraw(drawContext, primitiveType, vertices, 0, vertices.Length, indices, 0, indices.Length, sortKey);
         }
 
-        public void Draw(IDrawContext drawContext, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey = 0)
+        public void Draw(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.EnqueueDraw(drawContext, vertices, startVertex, vertexCount, indices, startIndex, indexCount, sortKey);
+            _currentBatchQueuer.EnqueueDraw(drawContext, primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, sortKey);
         }
     }
 }

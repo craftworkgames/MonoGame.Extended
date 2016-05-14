@@ -39,7 +39,7 @@ PixelShaderOutput PixelShaderFunction(VertexShaderOutput input)
 }
 
 // The technique; a collection of passes to be applied to the CPU information, with each pass specifying the vertex and shader used.
-technique PolygonTechnique
+technique PrimitiveTechnique
 {
 	pass Pass1
 	{

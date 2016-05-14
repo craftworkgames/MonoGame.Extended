@@ -5,11 +5,11 @@ using MonoGame.Extended.Collections;
 
 namespace Demo.PrimitiveBatch
 {
-    public class PolygonEffect : Effect
+    public class PrimitiveEffect : Effect
     {
         private static readonly uint _worldProjectionViewDirtyBitMask;
 
-        static PolygonEffect()
+        static PrimitiveEffect()
         {
             _worldProjectionViewDirtyBitMask = BitVector32.CreateMask();
         }
@@ -39,7 +39,7 @@ namespace Demo.PrimitiveBatch
             set { SetProjection(ref value); }
         }
 
-        public PolygonEffect(Effect effect)
+        public PrimitiveEffect(Effect effect)
             : base(effect)
         {
             CacheEffectParameters();

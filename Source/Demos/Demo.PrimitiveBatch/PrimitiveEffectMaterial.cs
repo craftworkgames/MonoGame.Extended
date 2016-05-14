@@ -4,9 +4,9 @@ using MonoGame.Extended.Graphics;
 namespace Demo.PrimitiveBatch
 {
     // just a simple effect material for the polygon effect
-    public class PolygonEffectMaterial : EffectMaterial<PolygonEffect>
+    public class PrimitiveEffectMaterial : EffectMaterial<PrimitiveEffect>
     {
-        public PolygonEffectMaterial(PolygonEffect effect)
+        public PrimitiveEffectMaterial(PrimitiveEffect effect)
             : base(effect)
         {
         }

@@ -45,9 +45,8 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice);
             var vertices = new TestVertex[9];
             userPrimitivesBatcher.Select(vertices);
-            userPrimitivesBatcher.PrimitiveType = PrimitiveType.TriangleList;
             var material = new BasicEffectMaterial(new BasicEffect(graphicsDevice));
-            userPrimitivesBatcher.Draw(material, 0, 9);
+            userPrimitivesBatcher.Draw(material, PrimitiveType.TriangleList, 0, 9);
         }
 
         [Test]
@@ -59,7 +58,7 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
             var indices = new short[9];
             userPrimitivesBatcher.Select(vertices, indices);
             var material = new BasicEffectMaterial(new BasicEffect(graphicsDevice));
-            userPrimitivesBatcher.Draw(material, 0, 9, 0, 9);
+            userPrimitivesBatcher.Draw(material, PrimitiveType.TriangleList, 0, 9, 0, 9);
         }
     }
 }

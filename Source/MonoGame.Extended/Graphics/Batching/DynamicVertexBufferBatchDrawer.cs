@@ -20,12 +20,12 @@ namespace MonoGame.Extended.Graphics.Batching
             throw new NotImplementedException();
         }
 
-        internal override void Draw(IDrawContext drawContext, int startVertex, int vertexCount)
+        internal override void Draw(IDrawContext drawContext, PrimitiveType primitiveType, int startVertex, int vertexCount)
         {
             throw new NotImplementedException();
         }
 
-        internal override void Draw(IDrawContext drawContext, int startVertex, int vertexCount, int startIndex, int indexCount)
+        internal override void Draw(IDrawContext drawContext, PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount)
         {
             throw new NotImplementedException();
         }
