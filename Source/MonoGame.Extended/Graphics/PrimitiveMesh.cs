@@ -4,11 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics
 {
-    public class PrimitiveMesh<TVertexType> : IPrimitiveMesh<TVertexType>
+    public class PrimitiveMesh<TVertexType>
         where TVertexType : struct, IVertexType
     {
+        // ReSharper disable InconsistentNaming
         internal readonly TVertexType[] _vertices;
         internal readonly short[] _indices;
+        // ReSharper restore InconsistentNaming
 
         public IReadOnlyCollection<TVertexType> Vertices
         {
