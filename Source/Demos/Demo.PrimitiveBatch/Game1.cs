@@ -95,8 +95,9 @@ namespace Demo.PrimitiveBatch
             _primitiveBatchPositionColorTexture = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice, Array.Sort, BatchDrawStrategy.DynamicVertexBuffer);
 
             // create our polygon mesh; vertices are in Local space; indices are index references to the vertices to draw 
-            // indices have to multiple of 3 for PrimitiveType.TriangleList which says to draw a collection of triangles each with 3 vertices (different triangles can share vertices)
-            // TriangleList is the most common way to have polygon vertices layed out in memory for uploading to the GPU for most common scnearios
+            // indices have to multiple of 3 for PrimitiveType.TriangleList which says to draw a collection of triangles each with 3 vertices (different triangles can share vertices) 
+            // here we have 2 triangles in the list to form a quad or rectangle: http://wiki.lwjgl.org/images/a/a8/QuadVertices.png
+            // TriangleList is the most common way to have polygon vertices layed out in memory for uploading to the GPU for most common scenarios
             var vertices = new[]
             {
                 new VertexPositionColor(new Vector3(0, 0, 0), Color.Red),
@@ -107,14 +108,11 @@ namespace Demo.PrimitiveBatch
             var indices = new short[]
             {
                 2,
-                1,
                 0,
+                1,
+                1,
+                2,
                 3,
-                1,
-                2,
-                1,
-                2,
-                3
             };
             _polygonMesh = new PrimitiveMesh<VertexPositionColor>(PrimitiveType.TriangleList, vertices, indices);
 
