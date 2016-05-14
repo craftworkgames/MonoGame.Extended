@@ -107,9 +107,9 @@ namespace Demo.PrimitiveBatch
             };
             var indices = new short[]
             {
-                2,
-                0,
                 1,
+                0,
+                2,
                 1,
                 2,
                 3,
@@ -152,7 +152,6 @@ namespace Demo.PrimitiveBatch
             // however, it's left here indicating it's possible and common to change the state between frames
             // use alphablend so the transparent part of the texture is blended with the color behind it
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
-            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             // draw the polygon mesh and line mesh in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
             _primitiveBatchPositionColor.Begin(BatchSortMode.Deferred);
