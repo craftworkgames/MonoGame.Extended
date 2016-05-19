@@ -19,8 +19,6 @@ namespace MonoGame.Extended.Graphics
             Effect = effect;
         }
 
-        // ReSharper disable once RedundantAssignment
-
         public abstract void Apply(out Effect effect);
     }
 }

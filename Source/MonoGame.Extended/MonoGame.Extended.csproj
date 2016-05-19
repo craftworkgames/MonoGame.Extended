@@ -46,12 +46,11 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
-    <Compile Include="Graphics\Batching\BatchChangeStateDelegate.cs" />
     <Compile Include="Graphics\Batching\BatchDrawer.cs" />
     <Compile Include="Graphics\Batching\BatchDrawOperation.cs" />
     <Compile Include="Graphics\Batching\BatchDrawStrategy.cs" />
     <Compile Include="Graphics\Batching\BatchQueuer.cs" />
-    <Compile Include="Graphics\Batching\BatchSortMode.cs" />
+    <Compile Include="Graphics\Batching\BatchMode.cs" />
     <Compile Include="Graphics\Batching\DeferredBatchQueuer.cs" />
     <Compile Include="Graphics\Batching\DynamicVertexBufferBatchDrawer.cs" />
     <Compile Include="Graphics\IDrawContext.cs" />
