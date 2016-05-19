@@ -50,8 +50,8 @@ namespace Demo.PrimitiveBatch
             // viewport: the dimensions and properties of the drawable surface
             var viewport = graphicsDevice.Viewport;
 
-            // load the custom effect for the polygons
-            var primitiveEffect = new PrimitiveEffect(Content.Load<Effect>("PolygonEffect"))
+            // load the custom effect for the primitives
+            var primitiveEffect = new PrimitiveEffect(Content.Load<Effect>("PrimitiveEffect"))
             {
                 // world matrix: the coordinate system of the world or universe used to transform primitives from their own Local space to the World space
                 // here we scale the x, y and z axes by 100 units
