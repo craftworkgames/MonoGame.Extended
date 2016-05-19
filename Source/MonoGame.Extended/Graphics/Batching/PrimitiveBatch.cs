@@ -90,6 +90,23 @@ namespace MonoGame.Extended.Graphics.Batching
         ///     The maximum number of indices that can be buffered into a single batch before the
         ///     geometry needs to be flushed to the graphics processing unit (GPU). The default is 12288.
         /// </param>
+        /// <exception cref="ArgumentNullException"><paramref name="graphicsDevice" /> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <list type="bullet">
+        ///         <listheader>
+        ///             <term>One or more of the following is true:</term>
+        ///         </listheader>
+        ///         <item>
+        ///             <description><paramref name="batchDrawStrategy"/> is not one <see cref="BatchDrawStrategy"/>'s discrete values.</description>
+        ///         </item>
+        ///         <item>
+        ///             <description><paramref name="maximumVerticesCount"/> is 0.</description>
+        ///         </item>
+        ///         <item>
+        ///             <description><paramref name="maximumIndicesCount"/> is 0.</description>
+        ///         </item>
+        ///     </list>
+        /// </exception>
         /// <remarks>
         ///     <para>
         ///         Memory will be allocated for the vertex and index buffers in proportion to
