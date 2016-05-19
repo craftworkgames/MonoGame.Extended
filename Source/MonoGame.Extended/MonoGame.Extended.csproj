@@ -59,7 +59,6 @@
     <Compile Include="Graphics\Batching\UserPrimitivesBatchDrawer.cs" />
     <Compile Include="Graphics\IDrawContextTexture2D.cs" />
     <Compile Include="Graphics\Batching\PrimitiveBatchExtensions.cs" />
-    <Compile Include="Graphics\PrimitiveMesh.cs" />
     <Compile Include="Graphics\EffectMaterial.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
     <Compile Include="IPoolable.cs" />

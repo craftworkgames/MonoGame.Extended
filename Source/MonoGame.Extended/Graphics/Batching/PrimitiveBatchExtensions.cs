@@ -129,17 +129,5 @@ namespace MonoGame.Extended.Graphics.Batching
             var bottomRightVertex = new VertexPositionColorTexture(bottomRightPosition, color, bottomRightTextureCoordinate);
             _spriteItemVertices[3] = bottomRightVertex;
         }
-
-        public static void DrawPrimitiveMesh<TVertexType>(this PrimitiveBatch<TVertexType> primitiveBatch, IDrawContext drawContext, PrimitiveMesh<TVertexType> primitiveMesh, uint sortKey = 0) where TVertexType : struct, IVertexType
-        {
-            if (primitiveMesh._indices != null)
-            {
-                primitiveBatch.Draw(drawContext, primitiveMesh.PrimitiveType, primitiveMesh._vertices, primitiveMesh._indices, sortKey);
-            }
-            else
-            {
-                primitiveBatch.Draw(drawContext, primitiveMesh.PrimitiveType, primitiveMesh._vertices);
-            }
-        }
     }
 }

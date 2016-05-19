@@ -25,9 +25,10 @@ namespace Demo.PrimitiveBatch
         private SpriteEffectMaterial _spriteMaterial; 
 
         // the polygon
-        private PrimitiveMesh<VertexPositionColor> _polygonMesh;
+        private VertexPositionColor[] _polygonVertices;
+        private short[] _polygonIndices;
         // the curve (continous line segements)
-        private PrimitiveMesh<VertexPositionColor> _lineMesh;
+        private VertexPositionColor[] _curveVertices;
 
         // the rotation angle of the sprite
         private float _spriteRotation;
@@ -97,15 +98,15 @@ namespace Demo.PrimitiveBatch
             // create our polygon mesh; vertices are in Local space; indices are index references to the vertices to draw 
             // indices have to multiple of 3 for PrimitiveType.TriangleList which says to draw a collection of triangles each with 3 vertices (different triangles can share vertices) 
             // here we have 2 triangles in the list to form a quad or rectangle: http://wiki.lwjgl.org/images/a/a8/QuadVertices.png
-            // TriangleList is the most common way to have polygon vertices layed out in memory for uploading to the GPU for most common scenarios
-            var vertices = new[]
+            // TriangleList is the most common scenario to have polygon vertices layed out in memory for uploading to the GPU
+            _polygonVertices = new[]
             {
                 new VertexPositionColor(new Vector3(0, 0, 0), Color.Red),
                 new VertexPositionColor(new Vector3(2, 0, 0), Color.Blue),
                 new VertexPositionColor(new Vector3(1, 2, 0), Color.Green),
                 new VertexPositionColor(new Vector3(3, 2, 0), Color.White)
             };
-            var indices = new short[]
+            _polygonIndices = new short[]
             {
                 1,
                 0,
@@ -114,10 +115,8 @@ namespace Demo.PrimitiveBatch
                 2,
                 3,
             };
-            _polygonMesh = new PrimitiveMesh<VertexPositionColor>(PrimitiveType.TriangleList, vertices, indices);
 
-            // create our curve as a line mesh; vertices are in Local space; no indices
-            // the curve is approximated by a series of line segments
+            // create our curve as an approximation by a series of line segments; vertices are in Local space; no indices
             // LineStrip joins the vertices given in order into a continuous series of line segments
             var curveVertices = new List<VertexPositionColor>();
             var angleStep = MathHelper.ToRadians(1);
@@ -128,8 +127,7 @@ namespace Demo.PrimitiveBatch
                 var vertex = new VertexPositionColor(vertexPosition, Color.White);
                 curveVertices.Add(vertex);
             }
-
-            _lineMesh = new PrimitiveMesh<VertexPositionColor>(PrimitiveType.LineStrip, curveVertices.ToArray());
+            _curveVertices = curveVertices.ToArray();
         }
 
         protected override void Update(GameTime gameTime)
@@ -153,10 +151,10 @@ namespace Demo.PrimitiveBatch
             // use alphablend so the transparent part of the texture is blended with the color behind it
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
-            // draw the polygon mesh and line mesh in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
-            _primitiveBatchPositionColor.Begin(BatchMode.Deferred);
-            _primitiveBatchPositionColor.DrawPrimitiveMesh(_primitiveMaterial, _polygonMesh);
-            _primitiveBatchPositionColor.DrawPrimitiveMesh(_primitiveMaterial, _lineMesh);
+            // draw the polygon and curve in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
+            _primitiveBatchPositionColor.Begin();
+            _primitiveBatchPositionColor.Draw(_primitiveMaterial, PrimitiveType.TriangleList, _polygonVertices, _polygonIndices);
+            _primitiveBatchPositionColor.Draw(_primitiveMaterial, PrimitiveType.LineStrip, _curveVertices);
             _primitiveBatchPositionColor.End();
 
             // draw the sprite in the screen coordinate system using the VertexPositionColorTexture PrimitiveBatch
