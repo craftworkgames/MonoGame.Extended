@@ -10,25 +10,15 @@ namespace MonoGame.Extended.Graphics
             switch (primitiveType)
             {
                 case PrimitiveType.LineStrip:
-                {
                     return verticesOrIndicesCount - 1;
-                }
                 case PrimitiveType.LineList:
-                {
                     return verticesOrIndicesCount / 2;
-                }
                 case PrimitiveType.TriangleStrip:
-                {
                     return verticesOrIndicesCount - 2;
-                }
                 case PrimitiveType.TriangleList:
-                {
                     return verticesOrIndicesCount / 3;
-                }
                 default:
-                {
                     throw new ArgumentException("Invalid primitive type.");
-                }
             }
         }
     }
