@@ -4,7 +4,7 @@ namespace MonoGame.Extended.Particles.Modifiers
 {
     public class LinearGravityModifier : IModifier
     {
-        public Axis Direction { get; set; }
+        public Vector2 Direction { get; set; }
         public float Strength { get; set; }
 
         public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)

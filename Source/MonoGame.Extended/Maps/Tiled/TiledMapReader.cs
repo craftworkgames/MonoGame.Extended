@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Maps.Tiled
         protected override TiledMap Read(ContentReader reader, TiledMap existingInstance)
         {
             var backgroundColor = reader.ReadColor();
-            var renderOrder = (TiledRenderOrder) Enum.Parse(typeof (TiledRenderOrder), reader.ReadString(), true);
+            var renderOrder = (TiledRenderOrder)Enum.Parse(typeof(TiledRenderOrder), reader.ReadString(), true);
             var tiledMap = new TiledMap(
                 graphicsDevice: reader.ContentManager.GetGraphicsDevice(),
                 width: reader.ReadInt32(),
@@ -38,6 +38,21 @@ namespace MonoGame.Extended.Maps.Tiled
                     tileHeight: reader.ReadInt32(),
                     spacing: reader.ReadInt32(),
                     margin: reader.ReadInt32());
+                var tileSetTileCount = reader.ReadInt32();
+                for (var j = 0; j < tileSetTileCount; j++)
+                {
+                    var tileId = reader.ReadInt32();
+                    tileId = tileset.FirstId + tileId - 1;
+                    var tileSetTile = tileset.CreateTileSetTile(tileId);
+                    var tileSetTileFrameCount = reader.ReadInt32();
+                    for (var k = 0; k < tileSetTileFrameCount; k++)
+                    {
+                        var frameId = reader.ReadInt32();
+                        frameId = tileset.FirstId + frameId - 1;
+                        tileSetTile.CreateTileSetTileFrame(order: k, tileId: frameId, duration: reader.ReadInt32());
+                    }
+                    ReadCustomProperties(reader, tileSetTile.Properties);
+                }
                 ReadCustomProperties(reader, tileset.Properties);
             }
 
@@ -70,7 +85,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
             for (var i = 0; i < count; i++)
             {
-                var objectType = (TiledObjectType) reader.ReadInt32();
+                var objectType = (TiledObjectType)reader.ReadInt32();
                 var id = reader.ReadInt32();
                 var gid = reader.ReadInt32();
                 var x = reader.ReadSingle();
@@ -82,7 +97,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 var type = reader.ReadString();
                 var isVisible = reader.ReadBoolean();
 
-                objects[i] = new TiledObject(objectType, id, gid >= 0 ? gid : (int?) null, x, y, width, height)
+                objects[i] = new TiledObject(objectType, id, gid >= 0 ? gid : (int?)null, x, y, width, height)
                 {
                     IsVisible = isVisible,
                     Opacity = opacity,

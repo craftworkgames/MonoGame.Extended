@@ -7,18 +7,18 @@ namespace MonoGame.Extended.Particles.Profiles
         public float Radius { get; set; }
         public CircleRadiation Radiate { get; set; }
 
-        public override void GetOffsetAndHeading(out Vector2 offset, out Axis heading)
+        public override void GetOffsetAndHeading(out Vector2 offset, out Vector2 heading)
         {
-            var dist = FastRand.NextSingle(0f, Radius);
+            var dist = Random.NextSingle(0f, Radius);
 
-            FastRand.NextUnitVector(out heading);
+            Random.NextUnitVector(out heading);
 
             offset = Radiate == CircleRadiation.In
                 ? new Vector2(-heading.X * dist, -heading.Y * dist)
                 : new Vector2(heading.X * dist, heading.Y * dist);
 
             if (Radiate == CircleRadiation.None)
-                FastRand.NextUnitVector(out heading);
+                Random.NextUnitVector(out heading);
         }
     }
 }

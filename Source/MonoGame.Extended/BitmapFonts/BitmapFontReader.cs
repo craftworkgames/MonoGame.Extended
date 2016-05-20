@@ -30,7 +30,7 @@ namespace MonoGame.Extended.BitmapFonts
 
             for (var r = 0; r < regionCount; r++)
             {
-                var character = (char)reader.ReadInt32();
+                var character = reader.ReadInt32();
                 var textureIndex = reader.ReadInt32();
                 var x = reader.ReadInt32();
                 var y = reader.ReadInt32();

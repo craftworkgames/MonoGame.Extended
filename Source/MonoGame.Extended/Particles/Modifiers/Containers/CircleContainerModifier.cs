@@ -18,7 +18,8 @@ namespace MonoGame.Extended.Particles.Modifiers.Containers
                 var localPos = particle->Position - particle->TriggerPos;
 
                 var distSq = localPos.LengthSquared();
-                var normal = localPos.ToAxis().ToVector2();
+                var normal = localPos;
+                normal.Normalize();
 
                 if (Inside)
                 {

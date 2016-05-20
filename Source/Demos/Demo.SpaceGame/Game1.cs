@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
+using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
@@ -20,7 +21,7 @@ namespace Demo.SpaceGame
         private Texture2D _backgroundTexture;
         private BulletFactory _bulletFactory;
         private Camera2D _camera;
-        private SpriteSheetAnimationGroup _explosionAnimations;
+        private SpriteSheetAnimationFactory _explosionAnimations;
         private BitmapFont _font;
         private MeteorFactory _meteorFactory;
         private Spaceship _player;
@@ -60,7 +61,7 @@ namespace Demo.SpaceGame
             _font = Content.Load<BitmapFont>("Fonts/courier-new-32");
 
             _camera = new Camera2D(_viewportAdapter);
-            _explosionAnimations = Content.Load<SpriteSheetAnimationGroup>("explosion-animations");
+            _explosionAnimations = Content.Load<SpriteSheetAnimationFactory>("explosion-animations");
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -107,34 +108,22 @@ namespace Demo.SpaceGame
                 const float acceleration = 5f;
 
                 if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
-                {
                     _player.Accelerate(acceleration);
-                }
 
                 if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
-                {
                     _player.Accelerate(-acceleration);
-                }
 
                 if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
-                {
-                    _player.Rotation -= deltaTime * 3f;
-                }
+                    _player.Rotation -= deltaTime*3f;
 
                 if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
-                {
-                    _player.Rotation += deltaTime * 3f;
-                }
+                    _player.Rotation += deltaTime*3f;
 
                 if (keyboardState.IsKeyDown(Keys.Space) || mouseState.LeftButton == ButtonState.Pressed)
-                {
                     _player.Fire();
-                }
 
                 if (_previousMouseState.X != mouseState.X || _previousMouseState.Y != mouseState.Y)
-                {
                     _player.LookAt(_camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y)));
-                }
 
                 _camera.LookAt(_player.Position + _player.Velocity * 0.2f);
                 _camera.Zoom = 1.0f - _player.Velocity.Length() / 500f;

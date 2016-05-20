@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
+using System.Linq;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
@@ -17,6 +18,7 @@ namespace MonoGame.Extended.Maps.Tiled
             _renderTargetSpriteBatch = new SpriteBatch(graphicsDevice);
             _map = map;
             _tiles = CreateTiles(data);
+            _animatedTiles = new List<TiledTile>();
         }
         
         public override void Dispose()
@@ -31,6 +33,8 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly TiledTile[] _tiles;
         private readonly SpriteBatch _renderTargetSpriteBatch;
         private RenderTarget2D _renderTarget;
+        private readonly List<TiledTile> _animatedTiles;
+        private List<TiledTileSetTile> _uniqueTileSetTiles = new List<TiledTileSetTile>();
 
         public IEnumerable<TiledTile> Tiles => _tiles;
         public int TileWidth => _map.TileWidth;
@@ -45,7 +49,7 @@ namespace MonoGame.Extended.Maps.Tiled
             {
                 for (var x = 0; x < Width; x++)
                 {
-                    tiles[x + y * Width] = new TiledTile(data[index], x, y);
+                    tiles[x + y * Width] = new TiledTile(data[index], x, y, _map.GetTileSetTileById(data[index]));
                     index++;
                 }
             }
@@ -53,10 +57,12 @@ namespace MonoGame.Extended.Maps.Tiled
             return tiles;
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null)
+        public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null)
         {
             if(!IsVisible)
                 return;
+
+            var tileLocationFunction = GetTileLocationFunction();
 
             if (_renderTarget == null)
             {
@@ -70,7 +76,6 @@ namespace MonoGame.Extended.Maps.Tiled
                     //var vr = visibleRectangle ?? new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
                     var vr = new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
                     var renderOrderFunction = GetRenderOrderFunction();
-                    var tileLocationFunction = GetTileLocationFunction();
                     var firstCol = vr.Left < 0 ? 0 : (int) Math.Floor(vr.Left/(float) _map.TileWidth);
                     var firstRow = vr.Top < 0 ? 0 : (int) Math.Floor(vr.Top/(float) _map.TileHeight);
 
@@ -82,21 +87,49 @@ namespace MonoGame.Extended.Maps.Tiled
 
                     foreach (var tile in renderOrderFunction(firstCol, firstRow, firstCol + columns, firstRow + rows))
                     {
-                        var region = tile != null ? _map.GetTileRegion(tile.Id) : null;
-
-                        if (region != null)
+                        int? tileId = (tile != null) ? (int?)tile.CurrentTileId : null;
+                        if (tile != null && tile.HasAnimation)
                         {
-                            var point = tileLocationFunction(tile);
-                            var destinationRectangle = new Rectangle(point.X, point.Y, region.Width, region.Height);
-                            _renderTargetSpriteBatch.Draw(region, destinationRectangle, Color.White*Opacity);
+                            _animatedTiles.Add(tile);
+                        }
+                        else
+                        {
+                            UpdateRenderTarget(_renderTargetSpriteBatch, tileLocationFunction, tile, tileId);
                         }
                     }
 
                     _renderTargetSpriteBatch.End();
                 }
+                _uniqueTileSetTiles = _animatedTiles.Select(t => t.TileSetTile).Distinct().ToList();
+               spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
+            }
+            else
+            {
+                spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
+                if (gameTime == null || _animatedTiles.Count == 0) return;
+                double deltaTime = gameTime.ElapsedGameTime.TotalMilliseconds;
+                foreach(var tileSetTile in _uniqueTileSetTiles)
+                {
+                    tileSetTile.Update(deltaTime);
+                }
+                foreach (var animatedTile in _animatedTiles)
+                {
+                    UpdateRenderTarget(spriteBatch, tileLocationFunction, animatedTile, animatedTile.CurrentTileId);
+                }
             }
 
-            spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
+        }
+
+        private void UpdateRenderTarget(SpriteBatch spriteBatch, Func<TiledTile, Point> tileLocationFunction, TiledTile tile, int? tileId)
+        {
+            var region = tileId.HasValue ? _map.GetTileRegion(tileId.Value) : null;
+
+            if (region != null)
+            {
+                var point = tileLocationFunction(tile);
+                var destinationRectangle = new Rectangle(point.X, point.Y, region.Width, region.Height);
+                spriteBatch.Draw(region, destinationRectangle, Color.White * Opacity);
+            }
         }
 
         private Func<TiledTile, Point> GetTileLocationFunction()

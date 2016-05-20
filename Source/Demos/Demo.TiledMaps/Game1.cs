@@ -11,7 +11,7 @@ namespace Demo.TiledMaps
 {
     public class Game1 : Game
     {
-        private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
+        private FramesPerSecondCounterComponent _fpsCounter;
         private BitmapFont _bitmapFont;
         private Camera2D _camera;
         // ReSharper disable once NotAccessedField.Local
@@ -27,16 +27,24 @@ namespace Demo.TiledMaps
             _graphicsDeviceManager = new GraphicsDeviceManager(this) {SynchronizeWithVerticalRetrace = false};
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            Window.AllowUserResizing = true;
-            Window.Position = Point.Zero;
             IsFixedTimeStep = false;
         }
 
-        protected override void LoadContent()
+        protected override void Initialize()
         {
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter);
 
+            Window.AllowUserResizing = true;
+            Window.Position = Point.Zero;
+
+            Components.Add(_fpsCounter = new FramesPerSecondCounterComponent(this));
+
+            base.Initialize();
+        }
+
+        protected override void LoadContent()
+        {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _texture = Content.Load<Texture2D>("monogame-extended-logo");
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
@@ -93,7 +101,7 @@ namespace Demo.TiledMaps
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
 
             // you can draw the whole map all at once
-            _spriteBatch.Draw(_tiledMap);
+            _spriteBatch.Draw(_tiledMap, gameTime: gameTime);
 
             // or you can have more control over drawing each individual layer
             //foreach (var layer in _tiledMap.Layers)
@@ -103,8 +111,6 @@ namespace Demo.TiledMaps
             //}
 
             _spriteBatch.End();
-
-            _fpsCounter.Update(gameTime);
 
             var textColor = Color.Black;
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
