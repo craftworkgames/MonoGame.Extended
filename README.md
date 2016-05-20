@@ -45,22 +45,82 @@ The package comes with 2 DLLs:
  
 The `MonoGame.Extended.Content.Pipeline.dll` needs to be referenced by the [Pipeline tool](http://www.monogame.net/documentation/?page=Pipeline). To reference the DLL in the Pipeline tool you'll  need to edit your `Content.mgcb` file.
 
-## Features
+## Roadmap / Features
 
-- **Tile based maps** using [Tiled](http://www.mapeditor.org/)
-- **Bitmap fonts** using [BMFont](http://www.angelcode.com/products/bmfont/)
-- **[Sprites](http://dylanwilson.net/sprites-and-spritebatch-extensions-in-monogame-extended)** (with SpriteBatch extensions!)
-- **Particles** using the [Mercury Particle Engine](https://github.com/Matthew-Davey/mercury-particle-engine)
-- **Input listeners** for event driven input handling (Keyboard, Mouse, Touch, GamePad).
-- **Texture Atlases** using the JSON format in [TexturePacker](https://www.codeandweb.com/texturepacker).
-- **2D Camera** with pan, zoom, and rotation.
-- **Viewport Adapters** for resolution independent rendering.
-- **Sprite Animators** using texture atlases.
-- **Timers** including a continuous clock and a countdown timer w/ event integration
-- **FPS Counter** that is handy for debugging.
-- **Primitive Shapes** and sprite batch extensions to draw them.
-- **Sprite Sheet Animations** - created with the [Astrid Animator](http://dylanwilson.net/introducing-astrid-animator) prototype.
-- **Simple Collision Detection** - experimental.
+#### Animations
+ - [ ] Tweening**
+ - [x] Sprite Sheets
+ - [ ] Game Component**
+
+#### Content
+ - [x] Texture Atlases
+ - [x] Bitmap Fonts
+ - [x] Tiled Maps
+
+#### Collision Detection
+ - [x] Bounding Shapes
+ - [x] Intersection and overlap testing
+
+#### Input Management
+ - [x] Event based input (input listeners)
+ - [ ] Gesture detection (taps, panning, flinging and pinch zooming)
+ - [ ] Button Mapping (W=Up, A=Left, Space=Jump, etc)
+ - [ ] Game components**
+
+#### Graphics and Scenes
+ - [x] Sprites
+ - [x] Scene Graphs
+ - [x] Camera
+ - [x] Simple shape rendering
+ - [ ] Screen Management 
+
+#### GUI System
+ - [ ] Controls
+	 - [ ] Label
+	 - [ ] Button (Text or Image)
+	 - [ ] Toggle Button (Checkbox)
+	 - [ ] Progress Bar
+	 - [ ] Text Box
+	 - [ ] Image
+	 - [ ] Slider
+ - [ ] Layout
+	 - [ ] Canvas
+	 - [ ] Stack Panel
+	 - [ ] Wrap Panel
+	 - [ ] Dock Panel
+	 - [ ] Grid
+ - [ ] Dialog
+ - [ ] Window
+ - [ ] Skinning
+ - [ ] Events
+ - [ ] Drag and Drop
+
+#### Particle System
+ - [x] Emitters
+ - [x] Modifiers (age, drag, gravity, rotation, velocity, vortex)
+ - [x] Profiles (box, circle, line, point, ring, spray)
+ - [x] Sprite Batch Renderer
+ - [ ] Game Component**
+
+#### Math and Utilities
+ - [x] Timers
+ - [x] Virtual Screens (viewport adapters)
+ - [x] Bounding Shapes
+ - [x] Collections
+ - [x] FPS Counter
+ - [x] Random Numbers
+
+#### Platforms
+ - [x] Windows
+ - [x] Linux
+ - [x] Mac
+ - [ ] Android^^
+ - [ ] iOS^^
+
+\** Work in progress
+   
+^^ Not officially tested but should work
+
 
 ## Contributing
 If you would like to contribute start with one of the following:
