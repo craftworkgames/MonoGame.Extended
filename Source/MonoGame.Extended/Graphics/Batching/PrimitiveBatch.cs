@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -97,13 +98,16 @@ namespace MonoGame.Extended.Graphics.Batching
         ///             <term>One or more of the following is true:</term>
         ///         </listheader>
         ///         <item>
-        ///             <description><paramref name="batchDrawStrategy"/> is not one <see cref="BatchDrawStrategy"/>'s discrete values.</description>
+        ///             <description>
+        ///                 <paramref name="batchDrawStrategy" /> is not one <see cref="BatchDrawStrategy" />'s discrete
+        ///                 values.
+        ///             </description>
         ///         </item>
         ///         <item>
-        ///             <description><paramref name="maximumVerticesCount"/> is 0.</description>
+        ///             <description><paramref name="maximumVerticesCount" /> is 0.</description>
         ///         </item>
         ///         <item>
-        ///             <description><paramref name="maximumIndicesCount"/> is 0.</description>
+        ///             <description><paramref name="maximumIndicesCount" /> is 0.</description>
         ///         </item>
         ///     </list>
         /// </exception>
@@ -126,11 +130,6 @@ namespace MonoGame.Extended.Graphics.Batching
                 throw new ArgumentNullException(nameof(graphicsDevice));
             }
 
-            if (batchDrawStrategy > BatchDrawStrategy.DynamicBuffer)
-            {
-                throw new ArgumentOutOfRangeException(nameof(batchDrawStrategy));
-            }
-
             if (maximumVerticesCount == 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(maximumVerticesCount));
@@ -149,15 +148,13 @@ namespace MonoGame.Extended.Graphics.Batching
             switch (batchDrawStrategy)
             {
                 case BatchDrawStrategy.UserPrimitives:
-                {
                     _batchDrawer = new UserPrimitivesBatchDrawer<TVertexType>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
                     break;
-                }
                 case BatchDrawStrategy.DynamicBuffer:
-                {
                     _batchDrawer = new DynamicVertexBufferBatchDrawer<TVertexType>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
                     break;
-                }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(batchDrawStrategy), batchDrawStrategy, null);
             }
 
             _immediateBatchQueuer = new ImmediateBatchQueuer<TVertexType>(_batchDrawer);
