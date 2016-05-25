@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -842,15 +843,16 @@ namespace MonoGame.Extended.Collections
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex), "Index was greater than the array's upper bound.");
             }
 
+            if (array.Length - arrayIndex < Count)
+            {
+                throw new ArgumentException("Destination array was not long enough.");
+            }
+
             if (Count == 0)
             {
                 return;
             }
 
-            if (array.Length - arrayIndex < Count)
-            {
-                throw new ArgumentException("Destination array was not long enough.");
-            }
 
             try
             {
