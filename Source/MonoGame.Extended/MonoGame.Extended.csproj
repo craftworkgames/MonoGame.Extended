@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -55,9 +55,25 @@
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />
     <Compile Include="BitmapFonts\BitmapFontRegion.cs" />
+    <Compile Include="Collections\BitVector32.cs" />
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
+    <Compile Include="Graphics\Batching\BatchDrawer.cs" />
+    <Compile Include="Graphics\Batching\BatchDrawOperation.cs" />
+    <Compile Include="Graphics\Batching\BatchDrawStrategy.cs" />
+    <Compile Include="Graphics\Batching\BatchQueuer.cs" />
+    <Compile Include="Graphics\Batching\BatchMode.cs" />
+    <Compile Include="Graphics\Batching\DeferredBatchQueuer.cs" />
+    <Compile Include="Graphics\Batching\DynamicVertexBufferBatchDrawer.cs" />
+    <Compile Include="Graphics\IDrawContext.cs" />
+    <Compile Include="Graphics\Batching\ImmediateBatchQueuer.cs" />
+    <Compile Include="Graphics\Batching\PrimitiveBatch.cs" />
+    <Compile Include="Graphics\Batching\UserPrimitivesBatchDrawer.cs" />
+    <Compile Include="Graphics\IDrawContextTexture2D.cs" />
+    <Compile Include="Graphics\Batching\PrimitiveBatchExtensions.cs" />
+    <Compile Include="Graphics\EffectMaterial.cs" />
+    <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
     <Compile Include="IColorable.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />
