@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
@@ -12,8 +11,6 @@ namespace MonoGame.Extended.Graphics.Batching
         internal readonly ushort MaximumVerticesCount;
         internal readonly ushort MaximumIndicesCount;
         internal List<Action> CommandDelegates;
-        private IDrawContext _currentDrawContext;
-        protected Effect Effect;
 
         protected BatchDrawer(GraphicsDevice graphicsDevice, ushort maximumVerticesCount = PrimitiveBatch<TVertexType>.DefaultMaximumVerticesCount, ushort maximumIndicesCount = PrimitiveBatch<TVertexType>.DefaultMaximumIndicesCount)
         {
@@ -42,19 +39,7 @@ namespace MonoGame.Extended.Graphics.Batching
 
         internal abstract void Select(TVertexType[] vertices);
         internal abstract void Select(TVertexType[] vertices, short[] indices);
-        internal abstract void Draw(IDrawContext drawContext, PrimitiveType primitiveType, int startVertex, int vertexCount);
-        internal abstract void Draw(IDrawContext drawContext, PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected void ChangeDrawContextIfNecessary(IDrawContext drawContext)
-        {
-            if (_currentDrawContext == drawContext && !drawContext.NeedsToApplyChanges)
-            {
-                return;
-            }
-
-            drawContext.Apply(out Effect);
-            _currentDrawContext = drawContext;
-        }
+        internal abstract void Draw(Effect effect, PrimitiveType primitiveType, int startVertex, int vertexCount);
+        internal abstract void Draw(Effect effect, PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount);
     }
 }

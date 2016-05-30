@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Graphics.Batching;
 
 namespace Demo.PrimitiveBatch
@@ -18,8 +17,8 @@ namespace Demo.PrimitiveBatch
         // primitive batch for sprites (quads with texture)
         private PrimitiveBatch<VertexPositionColorTexture> _primitiveBatchPositionColorTexture;
 
-        // a material for the geometric primitives
-        private PrimitiveEffectMaterial _primitiveMaterial;
+        private PrimitiveEffect _primitiveEffect;
+
         // a material for the sprites 
         // a new material will be required for each texture
         private SpriteEffectMaterial _spriteMaterial; 
@@ -51,7 +50,7 @@ namespace Demo.PrimitiveBatch
             var viewport = graphicsDevice.Viewport;
 
             // load the custom effect for the primitives
-            var primitiveEffect = new PrimitiveEffect(Content.Load<Effect>("PrimitiveEffect"))
+            _primitiveEffect = new PrimitiveEffect(Content.Load<Effect>("PrimitiveEffect"))
             {
                 // world matrix: the coordinate system of the world or universe used to transform primitives from their own Local space to the World space
                 // here we scale the x, y and z axes by 100 units
@@ -65,11 +64,8 @@ namespace Demo.PrimitiveBatch
                 Projection = Matrix.CreateOrthographicOffCenter(viewport.Width * -0.5f, viewport.Width * 0.5f, viewport.Height * -0.5f, viewport.Height * 0.5f, 0, 1)
             };
 
-            // create a material for rendering polygons
-            _primitiveMaterial = new PrimitiveEffectMaterial(primitiveEffect);
-
             // load the custom effect for the sprites
-            var spriteEffect = new SpriteEffect(Content.Load<Effect>("SpriteEffect"))
+            _spriteMaterial = new SpriteEffectMaterial(Content.Load<Effect>("SpriteEffect"))
             {
                 // world matrix: the coordinate system of the world or universe used to transform primitives from their own Local space to the World space
                 // here we don't do anything by using the identity matrix leaving screen pixel units as world units
@@ -82,13 +78,10 @@ namespace Demo.PrimitiveBatch
                 // here the box is set so the origin (0,0,0) is the top-left of the screen's surface
                 // the Z axis is also flipped by setting the near plane to 0 and the far plane to -1. (by default -Z is into the screen, +Z is popping out of the screen)
                 // here an adjustment by half a pixel is also added because there’s a discrepancy between how the centers of pixels and the centers of texels are computed
-                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1)
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1),
+                // load the texture for the sprite
+                Texture = Content.Load<Texture2D>("logo-square-128")
             };
-            // load the texture for the sprites
-            var spriteTexture = Content.Load<Texture2D>("logo-square-128");
-            // create a material for rendering sprites
-            // each texture will need a seperate material
-            _spriteMaterial = new SpriteEffectMaterial(spriteEffect, spriteTexture);
 
             // create the VertexPositionColor PrimitiveBatch for rendering the primitives
             _primitiveBatchPositionColor = new PrimitiveBatch<VertexPositionColor>(graphicsDevice, Array.Sort);
@@ -153,8 +146,8 @@ namespace Demo.PrimitiveBatch
 
             // draw the polygon and curve in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
             _primitiveBatchPositionColor.Begin();
-            _primitiveBatchPositionColor.Draw(_primitiveMaterial, PrimitiveType.TriangleList, _polygonVertices, _polygonIndices);
-            _primitiveBatchPositionColor.Draw(_primitiveMaterial, PrimitiveType.LineStrip, _curveVertices);
+            _primitiveBatchPositionColor.Draw(_primitiveEffect, PrimitiveType.TriangleList, _polygonVertices, _polygonIndices);
+            _primitiveBatchPositionColor.Draw(_primitiveEffect, PrimitiveType.LineStrip, _curveVertices);
             _primitiveBatchPositionColor.End();
 
             // draw the sprite in the screen coordinate system using the VertexPositionColorTexture PrimitiveBatch
@@ -164,7 +157,7 @@ namespace Demo.PrimitiveBatch
             var spritePosition = new Vector2(150, 150);
             var spriteDepth = 0f;
             _spriteRotation += MathHelper.ToRadians(1);
-            _primitiveBatchPositionColorTexture.DrawSprite(_spriteMaterial, null, new Vector3(spritePosition, spriteDepth), color: spriteColor, rotation: _spriteRotation, origin: spriteOrigin);
+            _primitiveBatchPositionColorTexture.DrawSprite(_spriteMaterial, _spriteMaterial.Texture, null, new Vector3(spritePosition, spriteDepth), spriteColor, _spriteRotation, spriteOrigin);
             _primitiveBatchPositionColorTexture.End();
 
             base.Draw(gameTime);

@@ -3,26 +3,23 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
 
-namespace Demo.PrimitiveBatch
+namespace Demo.Collisions
 {
-    public class SpriteEffect : Effect
+    public class CollisionDebugEffect : Effect
     {
         private static readonly uint _worldProjectionViewDirtyBitMask;
-        private static readonly uint _textureDirtyBitMask;
 
-        static SpriteEffect()
+        static CollisionDebugEffect()
         {
             _worldProjectionViewDirtyBitMask = BitVector32.CreateMask();
-            _textureDirtyBitMask = BitVector32.CreateMask(_worldProjectionViewDirtyBitMask);
         }
 
-        private BitVector32 _dirtyFlags = _worldProjectionViewDirtyBitMask | _textureDirtyBitMask;
+        private BitVector32 _dirtyFlags = _worldProjectionViewDirtyBitMask;
         private EffectParameter _worldViewProjectionParameter;
-        private EffectParameter _textureParameter;
+
         private Matrix _world;
         private Matrix _view;
         private Matrix _projection;
-        private Texture2D _texture;
 
         public Matrix World
         {
@@ -42,13 +39,7 @@ namespace Demo.PrimitiveBatch
             set { SetProjection(ref value); }
         }
 
-        public Texture2D Texture
-        {
-            get { return _texture; }
-            set { SetTexture(ref value); }
-        }
-
-        public SpriteEffect(Effect effect)
+        public CollisionDebugEffect(Effect effect)
             : base(effect)
         {
             CacheEffectParameters();
@@ -75,17 +66,9 @@ namespace Demo.PrimitiveBatch
             _dirtyFlags[_worldProjectionViewDirtyBitMask] = true;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetTexture(ref Texture2D texture)
-        {
-            _texture = texture;
-            _dirtyFlags[_textureDirtyBitMask] = true;
-        }
-
         private void CacheEffectParameters()
         {
             _worldViewProjectionParameter = Parameters["WorldViewProjection"];
-            _textureParameter = Parameters["Texture"];
         }
 
         protected override bool OnApply()
@@ -100,12 +83,6 @@ namespace Demo.PrimitiveBatch
                 Matrix.Multiply(ref _world, ref _view, out worldViewProjection);
                 Matrix.Multiply(ref worldViewProjection, ref _projection, out worldViewProjection);
                 _worldViewProjectionParameter.SetValue(worldViewProjection);
-            }
-
-            if (_dirtyFlags[_textureDirtyBitMask])
-            {
-                _dirtyFlags[_textureDirtyBitMask] = false;
-                _textureParameter.SetValue(_texture);
             }
 
             return false;

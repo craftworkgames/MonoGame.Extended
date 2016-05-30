@@ -16,14 +16,13 @@ namespace MonoGame.Extended.Graphics.Batching
             2
         };
 
-        public static void DrawSprite(this PrimitiveBatch<VertexPositionColorTexture> primitiveBatch, IDrawContextTexture2D drawContext, Rectangle? sourceRectangle, Vector3 position, Color? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, uint sortKey = 0)
+        public static void DrawSprite(this PrimitiveBatch<VertexPositionColorTexture> primitiveBatch, Effect effect, Texture2D texture, Rectangle? sourceRectangle, Vector3 position, Color? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, uint sortKey = 0)
         {
-            if (drawContext == null)
+            if (effect == null)
             {
-                throw new ArgumentNullException(nameof(drawContext));
+                throw new ArgumentNullException(nameof(effect));
             }
 
-            var texture = drawContext.Texture;
             if (texture == null)
             {
                 throw new ArgumentException("Texture is null.");
@@ -85,7 +84,7 @@ namespace MonoGame.Extended.Graphics.Batching
                 SetSpriteItemVerticesWithRotation(position.X, position.Y, -origin1.X, -origin1.Y, width, height, (float)Math.Sin(rotation), (float)Math.Cos(rotation), color1, textureCoordinateTopLeft, textureCoordinateBottomRight, position.Z);
             }
 
-            primitiveBatch.Draw(drawContext, PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, sortKey);
+            primitiveBatch.Draw(effect, PrimitiveType.TriangleList, _spriteItemVertices, _spriteItemIndices, sortKey);
         }
 
         private static void SetSpriteItemVerticesWithRotation(float x, float y, float dx, float dy, float w, float h, float sin, float cos, Color color, Vector2 topLeftTextureCoordinate, Vector2 bottomRightTextureCoordinate, float depth)

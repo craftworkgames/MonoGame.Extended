@@ -15,63 +15,6 @@ namespace MonoGame.Extended.Collections
     ///         the <see cref="Pool{T}" /> is an O(1) operation for the oldest or newest elements or O(n) otherwise, where n is the <see cref="Count"/>.
     ///     </para>
     /// </remarks>
-    /// <example>
-    ///     The following example demonstrates how to request and return a simple object from and to a
-    ///     <see cref="Pool{T}" />.
-    ///     <code>
-    /// <![CDATA[ 
-    /// // Create the pool
-    /// var pool = new Pool<MyPoolable>();
-    /// ...
-    /// // Get an object from the pool
-    /// var myPoolableInstance = pool.Request();
-    /// ...
-    /// // Return the object back to the pool
-    /// myPoolableInstance.Return();
-    /// ...
-    /// private class MyPoolable : IPoolable
-    /// {
-    ///     // The return delegate responsible for invoking the internal method in the pool class
-    ///     private ReturnToPoolDelegate _returnFunction;
-    ///   
-    ///     // Called by the Pool when this object is requested for use
-    ///     public void Initialize(ReturnToPoolDelegate returnFunction)
-    ///     {
-    ///         // Copy the reference of the delegate instance so we can use it later
-    ///         _returnFunction = returnFunction;
-    /// 
-    ///         // You could also reset the state of the object instance here instead of when returned
-    ///         // Reset()
-    ///     }
-    /// 
-    ///     // Helper method for this instance that should reset the state in preperation for the next time it is requested
-    ///     public void Reset()
-    ///     {
-    ///         // TODO: Reset the state of your object here
-    ///     }
-    /// 
-    ///     // Called by you or the Pool when this object is to be returned
-    ///     public void Return()
-    ///     {
-    ///         // Check if we already used the return delegate
-    ///         if (_returnFunction == null)
-    ///         {
-    ///             // We already used the return delegate; exit this method early
-    ///             return;
-    ///         }
-    /// 
-    ///         // Call the reset helper method before we return this instance back to the pool
-    ///         Reset();
-    /// 
-    ///         // We didn't use the return delegate yet; use it now
-    ///         _returnFunction.Invoke(this);
-    ///         // Set the delegate instance reference to null so we know we can't use it again
-    ///         _returnFunction = null;
-    ///     }
-    /// }
-    /// ]]>
-    /// </code>
-    /// </example>
     public class Pool<T> : ICollection<T>
         where T : class, IPoolable
     {
@@ -143,7 +86,7 @@ namespace MonoGame.Extended.Collections
         /// <remarks>
         ///     <para>This method is an O(1) operation.</para>
         /// </remarks>
-        public T Request(bool killExistingObjectIfFull = false)
+        public T Acquire(bool killExistingObjectIfFull = false)
         {
             while (true)
             {
@@ -151,7 +94,7 @@ namespace MonoGame.Extended.Collections
 
                 if (_freeItems.RemoveFromFront(out poolable))
                 {
-                    poolable.Initialize(Return);
+                    poolable.Initialize(Release);
                     _usedItems.AddToBack(poolable);
                     return poolable;
                 }
@@ -165,12 +108,12 @@ namespace MonoGame.Extended.Collections
                     return null;
                 }
 
-                poolable.Return();
+                poolable.Release();
                 killExistingObjectIfFull = false;
             }
         }
 
-        private void Return(IPoolable poolable)
+        private void Release(IPoolable poolable)
         {
             var poolable1 = (T)poolable;
             _freeItems.AddToBack(poolable1);
@@ -205,7 +148,7 @@ namespace MonoGame.Extended.Collections
         ///     <para><see cref="Capacity" /> remains unchanged.</para>
         ///     <para>
         ///         The order which elements are returned is the same as the order they were requested using
-        ///         <see cref="Request" />.
+        ///         <see cref="Acquire" />.
         ///     </para>
         ///     <para>This method is an O(n) operation where n is <see cref="Count" />.</para>
         /// </remarks>
@@ -215,7 +158,7 @@ namespace MonoGame.Extended.Collections
             {
                 T item;
                 _usedItems.GetFront(out item);
-                item.Return();
+                item.Release();
             }
         }
 

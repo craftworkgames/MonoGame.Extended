@@ -1,23 +1,10 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Graphics.Batching;
 using NUnit.Framework;
 using TestVertex = Microsoft.Xna.Framework.Graphics.VertexPositionColor;
 
 namespace MonoGame.Extended.Tests.Graphics.Batching
 {
-    internal class BasicEffectMaterial : EffectMaterial<BasicEffect>
-    {
-        public BasicEffectMaterial(BasicEffect effect)
-            : base(effect)
-        {
-        }
-
-        public override void Apply(out Effect effect)
-        {
-            effect = Effect;
-        }
-    }
 
     [TestFixture]
     public class UserPrimitivesBatcherTests
@@ -45,8 +32,8 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
             var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice);
             var vertices = new TestVertex[9];
             userPrimitivesBatcher.Select(vertices);
-            var material = new BasicEffectMaterial(new BasicEffect(graphicsDevice));
-            userPrimitivesBatcher.Draw(material, PrimitiveType.TriangleList, 0, 9);
+            var effect = new BasicEffect(graphicsDevice);
+            userPrimitivesBatcher.Draw(effect, PrimitiveType.TriangleList, 0, 9);
         }
 
         [Test]
@@ -57,8 +44,8 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
             var vertices = new TestVertex[9];
             var indices = new short[9];
             userPrimitivesBatcher.Select(vertices, indices);
-            var material = new BasicEffectMaterial(new BasicEffect(graphicsDevice));
-            userPrimitivesBatcher.Draw(material, PrimitiveType.TriangleList, 0, 9, 0, 9);
+            var effect = new BasicEffect(graphicsDevice);
+            userPrimitivesBatcher.Draw(effect, PrimitiveType.TriangleList, 0, 9, 0, 9);
         }
     }
 }

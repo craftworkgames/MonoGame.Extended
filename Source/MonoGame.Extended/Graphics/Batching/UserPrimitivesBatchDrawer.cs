@@ -41,26 +41,22 @@ namespace MonoGame.Extended.Graphics.Batching
         }
 
 
-        internal override void Draw(IDrawContext drawContext, PrimitiveType primitiveType, int startVertex, int vertexCount)
+        internal override void Draw(Effect effect, PrimitiveType primitiveType, int startVertex, int vertexCount)
         {
             var primitiveCount = primitiveType.GetPrimitiveCount(vertexCount);
 
-            ChangeDrawContextIfNecessary(drawContext);
-
-            foreach (var pass in Effect.CurrentTechnique.Passes)
+            foreach (var pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 GraphicsDevice.DrawUserPrimitives(primitiveType, _vertices, startVertex, primitiveCount);
             }
         }
 
-        internal override void Draw(IDrawContext drawContext, PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount)
+        internal override void Draw(Effect effect, PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount)
         {
             var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
 
-            ChangeDrawContextIfNecessary(drawContext);
-
-            foreach (var pass in Effect.CurrentTechnique.Passes)
+            foreach (var pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 GraphicsDevice.DrawUserIndexedPrimitives(primitiveType, _vertices, startVertex, vertexCount, _indices, startIndex, primitiveCount);
