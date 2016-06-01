@@ -22,7 +22,7 @@ namespace MonoGame.Extended.Collisions
         internal CollisionShape2D[] Shapes;
         internal Deque<CollisionShape2D> FreeShapes;
 
-        internal HashSet<BroadphaseCollisionPair> BroadphaseContractsLookup;
+        internal HashSet<BroadphaseCollisionPair> BroadphaseCollisionPairsLookup;
         internal List<BroadphaseCollisionPair> BroadphaseCollisionPairs;
         internal List<NarrowphaseCollisionPair> NarrowphaseCollisionPairs;
 
@@ -51,7 +51,7 @@ namespace MonoGame.Extended.Collisions
             Shapes = new CollisionShape2D[5];
             FreeShapes = new Deque<CollisionShape2D>();
 
-            BroadphaseContractsLookup = new HashSet<BroadphaseCollisionPair>();
+            BroadphaseCollisionPairsLookup = new HashSet<BroadphaseCollisionPair>();
             BroadphaseCollisionPairs = new List<BroadphaseCollisionPair>();
             NarrowphaseCollisionPairs = new List<NarrowphaseCollisionPair>();
         }
@@ -109,20 +109,21 @@ namespace MonoGame.Extended.Collisions
 
         public void Update(GameTime gameTime)
         {
-            ProcessAddedBodies();
-            ProcessRemovedBodies();
-            ProcessAddedFixtures();
-            ProcessRemovedFixtures();
+            ProcessBodiesToAdd();
+            ProcessBodiesToRemove();
+            ProcessFixturesToAdd();
+            ProcessFixturesToRemove();
 
             BroadphaseCollisionPairs.Clear();
-            NarrowphaseCollisionPairs.Clear();
-
             Broadphase.Update(gameTime, FixtureProxies);
+
+            NarrowphaseCollisionPairs.Clear();
             Narrowphase.Update(gameTime, BroadphaseCollisionPairs);
+
             Responder.Update(gameTime, NarrowphaseCollisionPairs);
         }
 
-        private void ProcessAddedBodies()
+        private void ProcessBodiesToAdd()
         {
             foreach (var body in BodiesToAdd)
             {
@@ -132,7 +133,7 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
-        private void ProcessRemovedBodies()
+        private void ProcessBodiesToRemove()
         {
             foreach (var body in BodiesToRemove)
             {
@@ -144,7 +145,7 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
-        private void ProcessAddedFixtures()
+        private void ProcessFixturesToAdd()
         {
             foreach (var fixture in FixturesToAdd)
             {
@@ -155,7 +156,7 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
-        private void ProcessRemovedFixtures()
+        private void ProcessFixturesToRemove()
         {
             foreach (var fixture in FixturesToRemove)
             {
@@ -169,12 +170,12 @@ namespace MonoGame.Extended.Collisions
 
         private void ProcessBroadphaseCollisionPair(ref BroadphaseCollisionPair broadphaseCollisionPair)
         {
-            if (BroadphaseContractsLookup.Contains(broadphaseCollisionPair))
+            if (BroadphaseCollisionPairsLookup.Contains(broadphaseCollisionPair))
             {
                 return;
             }
 
-            BroadphaseContractsLookup.Add(broadphaseCollisionPair);
+            BroadphaseCollisionPairsLookup.Add(broadphaseCollisionPair);
             BroadphaseCollisionPairs.Add(broadphaseCollisionPair);
         }
 
