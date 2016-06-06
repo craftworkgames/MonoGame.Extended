@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
@@ -61,24 +63,30 @@ namespace MonoGame.Extended.Graphics.Batching
                 return;
             }
 
-            _currentOperation.Effect = effect;
-            _currentOperation = new BatchDrawOperation(primitiveType, _vertexCount, vertexCount, _indexCount, indexCount, _currentOperation.Effect);
-            AddOperation(_currentOperation, sortKey);
-        }
+            if (_operationsCount > 0)
+            {
+                ApplyCurrentOperation();
+            }
 
-        private void AddOperation(BatchDrawOperation batchOperation, uint sortKey)
-        {
-            if (_operationsCount >= _operations.Length)
+            _currentOperation = new BatchDrawOperation(primitiveType, _vertexCount, vertexCount, _indexCount, indexCount, effect);
+
+            if (_operationsCount == _operations.Length)
             {
                 // increase draw operation buffers by the golden ratio
                 var newCapacity = (int)(_operations.Length * 1.61803398875f);
                 Array.Resize(ref _operationSortKeys, newCapacity);
                 Array.Resize(ref _operations, newCapacity);
             }
+
             _operationSortKeys[_operationsCount] = sortKey;
-            _operations[_operationsCount] = batchOperation;
-            ++_operationsCount;
+            _operations[_operationsCount++] = _currentOperation;
             _currentSortKey = sortKey;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void ApplyCurrentOperation()
+        {
+            _operations[_operationsCount - 1] = _currentOperation;
         }
 
         internal override void Begin()
@@ -99,12 +107,14 @@ namespace MonoGame.Extended.Graphics.Batching
 
             if (_indexCount == 0)
             {
-                BatchDrawer.Select(_vertices);
+                BatchDrawer.Select(_vertices, 0, _vertexCount);
             }
             else
             {
-                BatchDrawer.Select(_vertices, _indices);
+                BatchDrawer.Select(_vertices, 0, _vertexCount, _indices, 0, _indexCount);
             }
+
+            ApplyCurrentOperation();
 
             // sort only the operations which are used
             _sortKeysValuesAction(_operationSortKeys, _operations, 0, _operationsCount);
@@ -123,7 +133,11 @@ namespace MonoGame.Extended.Graphics.Batching
                 }
             }
 
+            // don't need to clear the array because we keep track of how many operations we have
+#if DEBUG
             Array.Clear(_operations, 0, _operationsCount);
+#endif
+
             _operationsCount = 0;
             _vertexCount = 0;
             _indexCount = 0;
@@ -258,6 +272,7 @@ namespace MonoGame.Extended.Graphics.Batching
         private void QueueIndexedVerticesNoOverflow(Effect effect, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey)
         {
             Array.Copy(vertices, startVertex, _vertices, _vertexCount, vertexCount);
+            //TODO: problem with vertex count as index offset; not all geometry is indexed
             var indexOffset = _currentOperation.VertexCount;
             CreateNewDrawOperationIfNecessary(effect, primitiveType, vertexCount, indexCount, sortKey);
             _vertexCount += vertexCount;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.Graphics.Batching;
 
 namespace Demo.PrimitiveBatch
@@ -13,15 +14,15 @@ namespace Demo.PrimitiveBatch
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
         // primitive batch for geometric primitives such as convex polygons and lines
-        private PrimitiveBatch<VertexPositionColor> _primitiveBatchPositionColor;
+        private PrimitiveBatch<VertexPositionColor> _polygonPrimitiveBatch;
         // primitive batch for sprites (quads with texture)
-        private PrimitiveBatch<VertexPositionColorTexture> _primitiveBatchPositionColorTexture;
+        private PrimitiveBatch<VertexPositionColorTexture> _spritePrimitiveBatch;
 
         private PrimitiveEffect _primitiveEffect;
 
         // a material for the sprites 
         // a new material will be required for each texture
-        private SpriteEffectMaterial _spriteMaterial; 
+        private SpriteEffectMaterial _spriteMaterial;
 
         // the polygon
         private VertexPositionColor[] _polygonVertices;
@@ -31,6 +32,9 @@ namespace Demo.PrimitiveBatch
 
         // the rotation angle of the sprite
         private float _spriteRotation;
+
+        // the rotation angle of the rectangle
+        private float _rectangleRotation;
 
         public Game1()
         {
@@ -84,9 +88,9 @@ namespace Demo.PrimitiveBatch
             };
 
             // create the VertexPositionColor PrimitiveBatch for rendering the primitives
-            _primitiveBatchPositionColor = new PrimitiveBatch<VertexPositionColor>(graphicsDevice, Array.Sort);
+            _polygonPrimitiveBatch = new PrimitiveBatch<VertexPositionColor>(graphicsDevice, Array.Sort);
             // create the VertexPositionColorTexture PrimitiveBatch for rendering the sprites
-            _primitiveBatchPositionColorTexture = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice, Array.Sort);
+            _spritePrimitiveBatch = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice, Array.Sort);
 
             // create our polygon mesh; vertices are in Local space; indices are index references to the vertices to draw 
             // indices have to multiple of 3 for PrimitiveType.TriangleList which says to draw a collection of triangles each with 3 vertices (different triangles can share vertices) 
@@ -99,14 +103,15 @@ namespace Demo.PrimitiveBatch
                 new VertexPositionColor(new Vector3(1, 2, 0), Color.Green),
                 new VertexPositionColor(new Vector3(3, 2, 0), Color.White)
             };
+
             _polygonIndices = new short[]
             {
-                1,
-                0,
-                2,
-                1,
                 2,
                 3,
+                1,
+                1,
+                0,
+                2
             };
 
             // create our curve as an approximation by a series of line segments; vertices are in Local space; no indices
@@ -138,27 +143,39 @@ namespace Demo.PrimitiveBatch
             // clear the (pixel) buffers to a specific color
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // set the states for rendering
-            // this could be moved outside the render loop if it doesn't change frame per frame 
-            // however, it's left here indicating it's possible and common to change the state between frames
+            // for 2D, back facing triangles and polygons are not really a thing since all 2D geometry is always facing the camera
+            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+
+            // use opaque for simple shapes since we don't care about alpha blending
+            GraphicsDevice.BlendState = BlendState.Opaque;
+
+            // draw in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
+            _polygonPrimitiveBatch.Begin();
+
+            _polygonPrimitiveBatch.Draw(_primitiveEffect, PrimitiveType.TriangleList, _polygonVertices, _polygonIndices);
+            //_polygonPrimitiveBatch.Draw(_primitiveEffect, PrimitiveType.LineStrip, _curveVertices);
+
+            var rectanglePosition = new Vector2(-1.5f, -1.5f);
+            var rectangleSize = new SizeF(1, 1);
+            var rectangleOrigin = rectangleSize * 1;
+            _rectangleRotation += MathHelper.ToRadians(2);
+            _polygonPrimitiveBatch.DrawRectangle(_primitiveEffect, rectanglePosition, rectangleSize, Color.Gold, _rectangleRotation, rectangleOrigin);
+
+            _polygonPrimitiveBatch.End();
+
             // use alphablend so the transparent part of the texture is blended with the color behind it
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
-            // draw the polygon and curve in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
-            _primitiveBatchPositionColor.Begin();
-            _primitiveBatchPositionColor.Draw(_primitiveEffect, PrimitiveType.TriangleList, _polygonVertices, _polygonIndices);
-            _primitiveBatchPositionColor.Draw(_primitiveEffect, PrimitiveType.LineStrip, _curveVertices);
-            _primitiveBatchPositionColor.End();
+            // draw in the screen coordinate system using the VertexPositionColorTexture PrimitiveBatch
+            _spritePrimitiveBatch.Begin();
 
-            // draw the sprite in the screen coordinate system using the VertexPositionColorTexture PrimitiveBatch
-            _primitiveBatchPositionColorTexture.Begin(BatchMode.Immediate);
-            var spriteColor = Color.White;
-            var spriteOrigin = new Vector2(_spriteMaterial.Texture.Width * 0.5f, _spriteMaterial.Texture.Height * 0.5f);
+            var textureSize = (SizeF)_spriteMaterial.Texture.Bounds;
+            var spriteOrigin = textureSize * 0.5f;
             var spritePosition = new Vector2(150, 150);
-            var spriteDepth = 0f;
             _spriteRotation += MathHelper.ToRadians(1);
-            _primitiveBatchPositionColorTexture.DrawSprite(_spriteMaterial, _spriteMaterial.Texture, null, new Vector3(spritePosition, spriteDepth), spriteColor, _spriteRotation, spriteOrigin);
-            _primitiveBatchPositionColorTexture.End();
+            _spritePrimitiveBatch.DrawSprite(_spriteMaterial, textureSize, null, spritePosition, Color.White, _spriteRotation, spriteOrigin);
+
+            _spritePrimitiveBatch.End();
 
             base.Draw(gameTime);
         }

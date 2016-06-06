@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -23,9 +22,8 @@ namespace MonoGame.Extended.Graphics.Batching
     ///         To use a <see cref="PrimitiveBatch{TVertexType}" /> as a <see cref="SpriteBatch" /> use a vertex type of
     ///         <see cref="VertexPositionColorTexture" /> and use the extension
     ///         <see cref="PrimitiveBatchExtensions.DrawSprite" /> to draw a textured quad with sprite parameters. XNA's
-    ///         SpriteBatch uses the equivalent of <see cref="BatchDrawStrategy.DynamicBuffer" /> with a maximum of 2048
-    ///         sprites per batch. Since each sprite is two triangles of 4 vertices and 6 indices, XNA's SpriteBatch uses a
-    ///         maximum of 8192 vertices and 12288 indices per batch.
+    ///         SpriteBatch uses a maximum of 2048 sprites per batch. Since each sprite is two triangles of 4 vertices and 6
+    ///         indices, XNA's SpriteBatch uses a maximum of 8192 vertices and 12288 indices per batch.
     ///     </para>
     /// </remarks>
     public class PrimitiveBatch<TVertexType> : IDisposable
@@ -43,12 +41,6 @@ namespace MonoGame.Extended.Graphics.Batching
         ///     Gets the <see cref="GraphicsDevice" /> used by this <see cref="PrimitiveBatch{TVertexType}" />.
         /// </summary>
         public GraphicsDevice GraphicsDevice { get; }
-
-        /// <summary>
-        ///     Get the <see cref="BatchDrawStrategy" /> used for sending vertices, and possibly indices, to the graphics
-        ///     processing unit (GPU).
-        /// </summary>
-        public BatchDrawStrategy DrawStrategy { get; }
 
         /// <summary>
         ///     Gets a value indicating whether batching is currently in progress by being within
@@ -116,14 +108,8 @@ namespace MonoGame.Extended.Graphics.Batching
         ///         Memory will be allocated for the vertex and index buffers in proportion to
         ///         <paramref name="maximumVerticesCount" /> and <paramref name="maximumIndicesCount" /> respectively.
         ///     </para>
-        ///     <para>
-        ///         On desktop platforms the <see cref="BatchDrawStrategy" /> used does not matter significantly. On other
-        ///         platforms, such as consoles and mobiles, one <see cref="BatchDrawStrategy" /> may be superior, or even
-        ///         required, in comparision to another <see cref="BatchDrawStrategy" /> due to the limited hardware and the
-        ///         drivers controlling the hardware.
-        ///     </para>
         /// </remarks>
-        public PrimitiveBatch(GraphicsDevice graphicsDevice, Action<Array, Array, int, int> sortAction, BatchDrawStrategy batchDrawStrategy = BatchDrawStrategy.DynamicBuffer, ushort maximumVerticesCount = DefaultMaximumVerticesCount, ushort maximumIndicesCount = DefaultMaximumIndicesCount)
+        public PrimitiveBatch(GraphicsDevice graphicsDevice, Action<Array, Array, int, int> sortAction, ushort maximumVerticesCount = DefaultMaximumVerticesCount, ushort maximumIndicesCount = DefaultMaximumIndicesCount)
         {
             if (graphicsDevice == null)
             {
@@ -144,19 +130,7 @@ namespace MonoGame.Extended.Graphics.Batching
             MaximumVerticesCount = maximumVerticesCount;
             MaximumIndicesCount = maximumIndicesCount;
 
-            DrawStrategy = batchDrawStrategy;
-            switch (batchDrawStrategy)
-            {
-                case BatchDrawStrategy.UserPrimitives:
-                    _batchDrawer = new UserPrimitivesBatchDrawer<TVertexType>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
-                    break;
-                case BatchDrawStrategy.DynamicBuffer:
-                    _batchDrawer = new DynamicVertexBufferBatchDrawer<TVertexType>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(batchDrawStrategy), batchDrawStrategy, null);
-            }
-
+           _batchDrawer = new BatchDrawer<TVertexType>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
             _immediateBatchQueuer = new ImmediateBatchQueuer<TVertexType>(_batchDrawer);
             _deferredBatchQueuer = new DeferredBatchQueuer<TVertexType>(_batchDrawer, sortAction);
         }

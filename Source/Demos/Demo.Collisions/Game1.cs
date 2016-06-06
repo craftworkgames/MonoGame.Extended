@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Graphics.Batching;
+using MonoGame.Extended.Shapes;
 
 namespace Demo.Collisions
 {
@@ -67,7 +68,31 @@ namespace Demo.Collisions
             GraphicsDevice.Clear(Color.Black);
 
             _primitiveBatch.Begin();
-            //_primitiveBatch.Draw();
+
+            var rectangle = new RectangleF(0, 0, 1, 1);
+
+            for (var x = 0; x < 3; x++)
+            {
+                for (var y = 0; y < 3; y++)
+                {
+                    rectangle.X = x - 3;
+                    rectangle.Y = y - 3;
+
+                    var color = Color.White;
+
+                    if (y % 2 == x % 2)
+                    {
+                        color = Color.Red;
+                    }
+                    else
+                    {
+                        color = Color.Lime;
+                    }
+
+                    _primitiveBatch.DrawRectangle(_collisionDebugEffect, ref rectangle, color, 0, 0);
+                }
+            }
+
             _primitiveBatch.End();
 
             base.Draw(gameTime);
