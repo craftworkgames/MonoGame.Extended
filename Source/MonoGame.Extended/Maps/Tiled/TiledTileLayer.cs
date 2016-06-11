@@ -127,6 +127,10 @@ namespace MonoGame.Extended.Maps.Tiled
             if (region != null)
             {
                 var point = tileLocationFunction(tile);
+
+                // Tiled draws tiles from the lower left of the block instead of the upper left. Adjust the Y position to account for this.
+                point.Y -= region.Height - TileHeight;
+
                 var destinationRectangle = new Rectangle(point.X, point.Y, region.Width, region.Height);
                 spriteBatch.Draw(region, destinationRectangle, Color.White * Opacity);
             }
