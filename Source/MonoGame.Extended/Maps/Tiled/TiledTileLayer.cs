@@ -69,7 +69,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 // create and render the entire map to a single render target.
                 // this gives the best frame rate performance at the cost of memory.
                 // ideally, we'd like to have a couple of different draw strategies for different situations.
-                _renderTarget = new RenderTarget2D(_renderTargetSpriteBatch.GraphicsDevice, _map.WidthInPixels, _map.WidthInPixels);
+                _renderTarget = new RenderTarget2D(_renderTargetSpriteBatch.GraphicsDevice, _map.WidthInPixels, _map.HeightInPixels);
 
                 using (_renderTarget.BeginDraw(_renderTargetSpriteBatch.GraphicsDevice, backgroundColor ?? Color.Transparent))
                 {
