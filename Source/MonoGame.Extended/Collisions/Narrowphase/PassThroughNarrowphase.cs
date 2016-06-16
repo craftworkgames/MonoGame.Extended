@@ -4,7 +4,7 @@ using MonoGame.Extended.Collisions.Broadphase;
 
 namespace MonoGame.Extended.Collisions.Narrowphase
 {
-    public class PassThroughNarrowphase : INarrowphaseCollisionDetector
+    public class PassThroughNarrowphase : ICollisionNarrowphase
     {
         private NarrowphaseCollisionDelegate _narrowphaseCollisionDelegate;
 

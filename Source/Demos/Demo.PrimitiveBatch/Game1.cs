@@ -18,7 +18,7 @@ namespace Demo.PrimitiveBatch
         // primitive batch for sprites (quads with texture)
         private PrimitiveBatch<VertexPositionColorTexture> _spritePrimitiveBatch;
 
-        private PrimitiveEffect _primitiveEffect;
+        private Effect _primitiveEffect;
 
         // a material for the sprites 
         // a new material will be required for each texture
@@ -54,7 +54,7 @@ namespace Demo.PrimitiveBatch
             var viewport = graphicsDevice.Viewport;
 
             // load the custom effect for the primitives
-            _primitiveEffect = new PrimitiveEffect(Content.Load<Effect>("PrimitiveEffect"))
+            _primitiveEffect = new Effect(Content.Load<Microsoft.Xna.Framework.Graphics.Effect>("PrimitiveEffect"))
             {
                 // world matrix: the coordinate system of the world or universe used to transform primitives from their own Local space to the World space
                 // here we scale the x, y and z axes by 100 units
@@ -69,7 +69,7 @@ namespace Demo.PrimitiveBatch
             };
 
             // load the custom effect for the sprites
-            _spriteMaterial = new SpriteEffectMaterial(Content.Load<Effect>("SpriteEffect"))
+            _spriteMaterial = new SpriteEffectMaterial(Content.Load<Microsoft.Xna.Framework.Graphics.Effect>("SpriteEffect"))
             {
                 // world matrix: the coordinate system of the world or universe used to transform primitives from their own Local space to the World space
                 // here we don't do anything by using the identity matrix leaving screen pixel units as world units
@@ -87,10 +87,14 @@ namespace Demo.PrimitiveBatch
                 Texture = Content.Load<Texture2D>("logo-square-128")
             };
 
+            // this is a workaround for portable class libraries (PCLs): pass the sorting method which is not directly accessible
+            // if this is not set or is forgetton then no sorting will occur for any deferred primitive batches
+            PrimitiveBatchHelper.SortAction = Array.Sort;
+
             // create the VertexPositionColor PrimitiveBatch for rendering the primitives
-            _polygonPrimitiveBatch = new PrimitiveBatch<VertexPositionColor>(graphicsDevice, Array.Sort);
+            _polygonPrimitiveBatch = new PrimitiveBatch<VertexPositionColor>(graphicsDevice);
             // create the VertexPositionColorTexture PrimitiveBatch for rendering the sprites
-            _spritePrimitiveBatch = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice, Array.Sort);
+            _spritePrimitiveBatch = new PrimitiveBatch<VertexPositionColorTexture>(graphicsDevice);
 
             // create our polygon mesh; vertices are in Local space; indices are index references to the vertices to draw 
             // indices have to multiple of 3 for PrimitiveType.TriangleList which says to draw a collection of triangles each with 3 vertices (different triangles can share vertices) 
@@ -146,35 +150,34 @@ namespace Demo.PrimitiveBatch
             // for 2D, back facing triangles and polygons are not really a thing since all 2D geometry is always facing the camera
             GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-            // use opaque for simple shapes since we don't care about alpha blending
-            GraphicsDevice.BlendState = BlendState.Opaque;
+            // use alphablend so the transparent or translucent parts of the geometry is blended with the color behind it
+            GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
-            // draw in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
+            // begin drawing in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
             _polygonPrimitiveBatch.Begin();
 
+            // draw geometry using standard Graphics.DrawIndexedPrimitives or Graphics.DrawPrimitives method
             _polygonPrimitiveBatch.Draw(_primitiveEffect, PrimitiveType.TriangleList, _polygonVertices, _polygonIndices);
-            //_polygonPrimitiveBatch.Draw(_primitiveEffect, PrimitiveType.LineStrip, _curveVertices);
+            _polygonPrimitiveBatch.Draw(_primitiveEffect, PrimitiveType.LineStrip, _curveVertices);
 
-            var rectanglePosition = new Vector2(-1.5f, -1.5f);
-            var rectangleSize = new SizeF(1, 1);
-            var rectangleOrigin = rectangleSize * 1;
-            _rectangleRotation += MathHelper.ToRadians(2);
-            _polygonPrimitiveBatch.DrawRectangle(_primitiveEffect, rectanglePosition, rectangleSize, Color.Gold, _rectangleRotation, rectangleOrigin);
+            // draw geometry using helper methods
+            _polygonPrimitiveBatch.DrawCircle(_primitiveEffect, new Vector2(0, 1), 1f, Color.Black * 0.5f);
+            _polygonPrimitiveBatch.DrawCircleOutline(_primitiveEffect, new Vector2(0, 1), 1f, color: Color.Black, axis: new Vector2(0, 1));
 
+            // end drawing in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
             _polygonPrimitiveBatch.End();
-
-            // use alphablend so the transparent part of the texture is blended with the color behind it
-            GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
             // draw in the screen coordinate system using the VertexPositionColorTexture PrimitiveBatch
             _spritePrimitiveBatch.Begin();
 
+            // draw the sprite
             var textureSize = (SizeF)_spriteMaterial.Texture.Bounds;
             var spriteOrigin = textureSize * 0.5f;
             var spritePosition = new Vector2(150, 150);
             _spriteRotation += MathHelper.ToRadians(1);
-            _spritePrimitiveBatch.DrawSprite(_spriteMaterial, textureSize, null, spritePosition, Color.White, _spriteRotation, spriteOrigin);
+            _spritePrimitiveBatch.DrawSprite(_spriteMaterial, textureSize, spritePosition, rotation: _spriteRotation, origin: spriteOrigin);
 
+            // end drawing in the screen coordinate system using the VertexPositionColorTexture PrimitiveBatch
             _spritePrimitiveBatch.End();
 
             base.Draw(gameTime);

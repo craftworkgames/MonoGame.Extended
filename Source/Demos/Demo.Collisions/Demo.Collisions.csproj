@@ -33,6 +33,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CollisionDebugDrawer.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="CollisionDebugEffect.cs" />
     <Compile Include="Program.cs" />

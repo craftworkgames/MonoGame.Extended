@@ -39,16 +39,13 @@ namespace MonoGame.Extended.Graphics.Batching
         private readonly short[] _indices;
         // the number of indices in the buffer
         private int _indexCount;
-        // the sort method (inlined) to sort the keys for the draw operations; when sorted the corresponding draw operations are also sorted
-        private readonly Action<Array, Array, int, int> _sortKeysValuesAction;
 
-        internal DeferredBatchQueuer(BatchDrawer<TVertexType> batchDrawer, Action<Array, Array, int, int> sortKeysValuesAction)
+        internal DeferredBatchQueuer(BatchDrawer<TVertexType> batchDrawer)
             : base(batchDrawer)
         {
             _currentOperation = DeferredBatchQueuer.EmptyDrawOperation;
             _vertices = new TVertexType[BatchDrawer.MaximumVerticesCount];
             _indices = new short[BatchDrawer.MaximumIndicesCount];
-            _sortKeysValuesAction = sortKeysValuesAction;
             _operationSortKeys = new uint[InitialOperationsCapacity];
             _operations = new BatchDrawOperation[InitialOperationsCapacity];
         }
@@ -117,7 +114,7 @@ namespace MonoGame.Extended.Graphics.Batching
             ApplyCurrentOperation();
 
             // sort only the operations which are used
-            _sortKeysValuesAction(_operationSortKeys, _operations, 0, _operationsCount);
+            PrimitiveBatchHelper.SortAction?.Invoke(_operationSortKeys, _operations, 0, _operationsCount);
 
             for (var index = 0; index < _operationsCount; index++)
             {

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Collisions.Broadphase
 {
-    public interface IBroadphaseCollisionDetector
+    public interface ICollisionBroadphase
     {
         void Initialize(BroadphaseCollisionDelegate broadphaseCollisionDelegate);
         void Update(GameTime gameTime, IReadOnlyList<CollisionFixtureProxy> fixtureProxies);

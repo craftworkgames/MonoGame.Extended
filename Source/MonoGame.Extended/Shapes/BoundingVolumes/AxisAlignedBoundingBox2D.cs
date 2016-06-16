@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
@@ -9,34 +10,51 @@ namespace MonoGame.Extended.Shapes.BoundingVolumes
     ///     coordinate system axes.
     /// </summary>
     /// <remarks>
-    ///     <para>The name, Axis Aligned Bounding Box, is abbreviated as <i>AABB</i>.</para>
+    ///     <para>The name, 'Axis Aligned Bounding Box', is abbreviated as <i>AABB</i>.</para>
     ///     <para>
     ///         Axis-aligned bounding boxes are one of the most common bounding volumes due to its fast overlap check by direct
     ///         comparison of individual coordinate values.
     ///     </para>
     /// </remarks>
     [DebuggerDisplay("{DebugDisplayString,nq}")]
-    public struct AxisAlignedBoundingBox2D : IEquatable<AxisAlignedBoundingBox2D>, IBoundingVolume<AxisAlignedBoundingBox2D>
+    public struct AxisAlignedBoundingBox2D : IEquatable<AxisAlignedBoundingBox2D>, IBoundingVolume2D<AxisAlignedBoundingBox2D>
     {
         public Vector2 Center;
-        public Vector2 HalfExtents;
+        public SizeF HalfSize;
 
-        public AxisAlignedBoundingBox2D(Vector2 center, Vector2 halfExtents)
+        public AxisAlignedBoundingBox2D(Vector2 center, SizeF halfSize)
         {
             Center = center;
-            HalfExtents = halfExtents;
+            HalfSize = halfSize;
         }
 
         public bool Intersects(ref AxisAlignedBoundingBox2D other)
         {
             var positionVector = Center - other.Center;
-            var totalHalfExtents = HalfExtents + other.HalfExtents;
-            return Math.Abs(positionVector.X) > totalHalfExtents.X || Math.Abs(positionVector.Y) > totalHalfExtents.Y;
+            var totalHalfExtents = HalfSize + other.HalfSize;
+            return Math.Abs(positionVector.X) > totalHalfExtents.Width || Math.Abs(positionVector.Y) > totalHalfExtents.Height;
+        }
+
+        public void Compute(IReadOnlyList<Vector2> vertices)
+        {
+            var minimum = new Vector2(float.MaxValue, float.MaxValue);
+            var maximum = new Vector2(float.MinValue, float.MinValue);
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < vertices.Count; ++index)
+            {
+                var vertex = vertices[index];
+                Vector2.Min(ref minimum, ref vertex, out minimum);
+                Vector2.Max(ref maximum, ref vertex, out maximum);
+            }
+
+            Center = (maximum + minimum) * 0.5f;
+            HalfSize = (maximum - minimum) * 0.5f;
         }
 
         public static bool operator ==(AxisAlignedBoundingBox2D first, AxisAlignedBoundingBox2D second)
         {
-            return first.Center == second.Center && first.HalfExtents == second.HalfExtents;
+            return first.Center == second.Center && first.HalfSize == second.HalfSize;
         }
 
         public static bool operator !=(AxisAlignedBoundingBox2D first, AxisAlignedBoundingBox2D second)
@@ -46,7 +64,7 @@ namespace MonoGame.Extended.Shapes.BoundingVolumes
 
         public bool Equals(AxisAlignedBoundingBox2D other)
         {
-            return Center == other.Center && HalfExtents == other.HalfExtents;
+            return Center == other.Center && HalfSize == other.HalfSize;
         }
 
         public override bool Equals(object obj)
@@ -61,12 +79,12 @@ namespace MonoGame.Extended.Shapes.BoundingVolumes
 
         internal string DebugDisplayString
         {
-            get { return $"Center = {Center}, Extents = {HalfExtents}"; }
+            get { return $"Center = {Center}, Extents = {HalfSize}"; }
         }
 
         public override string ToString()
         {
-            return $"{{Center = {Center}, Extents = {HalfExtents}}}";
+            return $"{{Center = {Center}, Extents = {HalfSize}}}";
         }
     }
 }

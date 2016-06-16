@@ -48,7 +48,7 @@ namespace Demo.PrimitiveBatch
             set { SetTexture(ref value); }
         }
 
-        public SpriteEffectMaterial(Effect effect)
+        public SpriteEffectMaterial(Microsoft.Xna.Framework.Graphics.Effect effect)
             : base(effect)
         {
             CacheEffectParameters();

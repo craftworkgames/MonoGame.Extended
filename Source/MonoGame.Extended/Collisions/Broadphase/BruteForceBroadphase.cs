@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Collisions.Broadphase
 {
-    public class BruteForceBroadphase : IBroadphaseCollisionDetector
+    public class BruteForceBroadphase : ICollisionBroadphase
     {
         private BroadphaseCollisionDelegate _contactCollisionDelegate;
 

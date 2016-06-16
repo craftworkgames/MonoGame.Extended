@@ -36,6 +36,7 @@ namespace MonoGame.Extended.Graphics.Batching
         private BatchQueuer<TVertexType> _currentBatchQueuer;
         private ImmediateBatchQueuer<TVertexType> _immediateBatchQueuer;
         private DeferredBatchQueuer<TVertexType> _deferredBatchQueuer;
+        private static readonly TVertexType[] _verticesArrayBuffer;
 
         /// <summary>
         ///     Gets the <see cref="GraphicsDevice" /> used by this <see cref="PrimitiveBatch{TVertexType}" />.
@@ -61,20 +62,15 @@ namespace MonoGame.Extended.Graphics.Batching
         /// </summary>
         public ushort MaximumIndicesCount { get; }
 
+        static PrimitiveBatch()
+        {
+            _verticesArrayBuffer = new TVertexType[4];
+        }
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="PrimitiveBatch{TVertexType}" /> class.
         /// </summary>
         /// <param name="graphicsDevice">The graphics device.</param>
-        /// <param name="sortAction">
-        ///     The delegate to sort an array of values by an array of keys. Used to sort the draw
-        ///     operations by sorting their sort keys. Use <code>Array.Sort(Array, Array, int, int)</code> as the default;
-        ///     unfortunately this method is not available in portable class libraries and thus the intended default value must be
-        ///     specified manually.
-        /// </param>
-        /// <param name="batchDrawStrategy">
-        ///     The <see cref="BatchDrawStrategy" /> to use for sending vertices, and possibly indices, to the graphics processing
-        ///     unit (GPU). The default is <see cref="BatchDrawStrategy.DynamicBuffer" />.
-        /// </param>
         /// <param name="maximumVerticesCount">
         ///     The maximum number of vertices that can be buffered into a single batch before the
         ///     geometry needs to be flushed to the graphics processing unit (GPU). The default is 8192.
@@ -90,12 +86,6 @@ namespace MonoGame.Extended.Graphics.Batching
         ///             <term>One or more of the following is true:</term>
         ///         </listheader>
         ///         <item>
-        ///             <description>
-        ///                 <paramref name="batchDrawStrategy" /> is not one <see cref="BatchDrawStrategy" />'s discrete
-        ///                 values.
-        ///             </description>
-        ///         </item>
-        ///         <item>
         ///             <description><paramref name="maximumVerticesCount" /> is 0.</description>
         ///         </item>
         ///         <item>
@@ -109,7 +99,7 @@ namespace MonoGame.Extended.Graphics.Batching
         ///         <paramref name="maximumVerticesCount" /> and <paramref name="maximumIndicesCount" /> respectively.
         ///     </para>
         /// </remarks>
-        public PrimitiveBatch(GraphicsDevice graphicsDevice, Action<Array, Array, int, int> sortAction, ushort maximumVerticesCount = DefaultMaximumVerticesCount, ushort maximumIndicesCount = DefaultMaximumIndicesCount)
+        public PrimitiveBatch(GraphicsDevice graphicsDevice, ushort maximumVerticesCount = DefaultMaximumVerticesCount, ushort maximumIndicesCount = DefaultMaximumIndicesCount)
         {
             if (graphicsDevice == null)
             {
@@ -130,9 +120,9 @@ namespace MonoGame.Extended.Graphics.Batching
             MaximumVerticesCount = maximumVerticesCount;
             MaximumIndicesCount = maximumIndicesCount;
 
-           _batchDrawer = new BatchDrawer<TVertexType>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
+            _batchDrawer = new BatchDrawer<TVertexType>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
             _immediateBatchQueuer = new ImmediateBatchQueuer<TVertexType>(_batchDrawer);
-            _deferredBatchQueuer = new DeferredBatchQueuer<TVertexType>(_batchDrawer, sortAction);
+            _deferredBatchQueuer = new DeferredBatchQueuer<TVertexType>(_batchDrawer);
         }
 
         /// <summary>
@@ -244,10 +234,10 @@ namespace MonoGame.Extended.Graphics.Batching
         }
 
         /// <summary>
-        ///     Adds geometry to a batch of geometry for rendering using the specified context, primitive type, vertices, and
+        ///     Adds geometry to a batch of geometry for rendering using the specified effect, primitive type, vertices, and
         ///     optional sort key.
         /// </summary>
-        /// <param name="effect">The <see cref="Effect" />.</param>
+        /// <param name="effect">The <see cref="Effect" /> to use.</param>
         /// <param name="primitiveType">The <see cref="PrimitiveType" />.</param>
         /// <param name="vertices">The vertices which explictly define the geometry to render.</param>
         /// <param name="sortKey">
@@ -262,14 +252,13 @@ namespace MonoGame.Extended.Graphics.Batching
         /// <remarks>
         ///     <para>
         ///         <paramref name="effect" /> is reponsible for the settings used when drawing the geometry, including any
-        ///         render states, shaders, or transformation matrix. To minimize switching of contexts between draw
-        ///         calls, consider using <paramref name="sortKey" /> to sort by draw context in conjunction with
+        ///         render states, shaders, or transformation matrix. To minimize switching of effects between draw
+        ///         calls, consider using <paramref name="sortKey" /> to sort by draw effect in conjunction with
         ///         <see cref="BatchMode.Deferred" />.
         ///     </para>
         ///     <para>
         ///         Before making any calls to <see cref="Draw(Effect,PrimitiveType,TVertexType[],uint)" />, you must call
-        ///         <see cref="Begin" />. Once all calls to <see cref="Draw(Effect,PrimitiveType,TVertexType[],uint)" /> are
-        ///         complete, call <see cref="End" />.
+        ///         <see cref="Begin" />. Once all draw calls are complete call <see cref="End" />.
         ///     </para>
         /// </remarks>
         public void Draw(Effect effect, PrimitiveType primitiveType, TVertexType[] vertices, uint sortKey = 0)
@@ -279,10 +268,10 @@ namespace MonoGame.Extended.Graphics.Batching
         }
 
         /// <summary>
-        ///     Adds geometry to a batch of geometry for rendering using the specified context, primitive type, vertices, start
+        ///     Adds geometry to a batch of geometry for rendering using the specified effect, primitive type, vertices, start
         ///     vertex, vertex count, and optional sort key.
         /// </summary>
-        /// <param name="effect">The <see cref="Effect" />.</param>
+        /// <param name="effect">The <see cref="Effect" /> to use.</param>
         /// <param name="primitiveType">The <see cref="PrimitiveType" />.</param>
         /// <param name="vertices">The vertices which explictly define the geometry to render.</param>
         /// <param name="startVertex">The starting vertex index to use from <paramref name="vertices" />.</param>
@@ -302,15 +291,13 @@ namespace MonoGame.Extended.Graphics.Batching
         /// <remarks>
         ///     <para>
         ///         <paramref name="effect" /> is reponsible for the settings used when drawing the geometry, including any
-        ///         render states, shaders, or transformation matrix. To minimize switching of contexts between draw
-        ///         calls, consider using <paramref name="sortKey" /> to sort by draw context in conjunction with
+        ///         render states, shaders, or transformation matrix. To minimize switching of effects between draw
+        ///         calls, consider using <paramref name="sortKey" /> to sort by draw effect in conjunction with
         ///         <see cref="BatchMode.Deferred" />.
         ///     </para>
         ///     <para>
         ///         Before making any calls to <see cref="Draw(Effect,PrimitiveType,TVertexType[],int,int,uint)" />, you must
-        ///         call <see cref="Begin" />. Once all calls to
-        ///         <see cref="Draw(Effect,PrimitiveType,TVertexType[],int,int,uint)" /> are
-        ///         complete, call <see cref="End" />.
+        ///         call <see cref="Begin" />. Once all draw calls are complete, call <see cref="End" />.
         ///     </para>
         /// </remarks>
         public void Draw(Effect effect, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0)
@@ -320,10 +307,10 @@ namespace MonoGame.Extended.Graphics.Batching
         }
 
         /// <summary>
-        ///     Adds geometry to a batch of geometry for rendering using the specified context, primitive type, vertices, indices,
+        ///     Adds geometry to a batch of geometry for rendering using the specified effect, primitive type, vertices, indices,
         ///     and optional sort key.
         /// </summary>
-        /// <param name="effect">The <see cref="Effect" />.</param>
+        /// <param name="effect">The <see cref="Effect" /> to use.</param>
         /// <param name="primitiveType">The <see cref="PrimitiveType" />.</param>
         /// <param name="vertices">The vertices which explictly define the geometry to render.</param>
         /// <param name="indices">The indices of the <paramref name="vertices" /> to render.</param>
@@ -339,15 +326,13 @@ namespace MonoGame.Extended.Graphics.Batching
         /// <remarks>
         ///     <para>
         ///         <paramref name="effect" /> is reponsible for the settings used when drawing the geometry, including any
-        ///         render states, shaders, or transformation matrix. To minimize switching of contexts between draw
-        ///         calls, consider using <paramref name="sortKey" /> to sort by draw context in conjunction with
+        ///         render states, shaders, or transformation matrix. To minimize switching of effects between draw
+        ///         calls, consider using <paramref name="sortKey" /> to sort by draw effect in conjunction with
         ///         <see cref="BatchMode.Deferred" />.
         ///     </para>
         ///     <para>
         ///         Before making any calls to <see cref="Draw(Effect,PrimitiveType,TVertexType[],short[],uint)" />, you must
-        ///         call <see cref="Begin" />. Once all calls to
-        ///         <see cref="Draw(Effect,PrimitiveType,TVertexType[],short[],uint)" /> are
-        ///         complete, call <see cref="End" />.
+        ///         call <see cref="Begin" />. Once all draw calls are complete, call <see cref="End" />.
         ///     </para>
         /// </remarks>
         public void Draw(Effect effect, PrimitiveType primitiveType, TVertexType[] vertices, short[] indices, uint sortKey = 0)
@@ -357,10 +342,10 @@ namespace MonoGame.Extended.Graphics.Batching
         }
 
         /// <summary>
-        ///     Adds geometry to a batch of geometry for rendering using the specified context, primitive type, vertices, indices,
+        ///     Adds geometry to a batch of geometry for rendering using the specified effect, primitive type, vertices, indices,
         ///     and optional sort key.
         /// </summary>
-        /// <param name="effect">The <see cref="Effect" />.</param>
+        /// <param name="effect">The <see cref="Effect" /> to use.</param>
         /// <param name="primitiveType">The <see cref="PrimitiveType" />.</param>
         /// <param name="vertices">The vertices which explictly define the geometry to render.</param>
         /// <param name="startVertex">The starting vertex index to use from <paramref name="vertices" />.</param>
@@ -388,22 +373,124 @@ namespace MonoGame.Extended.Graphics.Batching
         /// <remarks>
         ///     <para>
         ///         <paramref name="effect" /> is reponsible for the settings used when drawing the geometry, including any
-        ///         render states, shaders, or transformation matrix. To minimize switching of contexts between draw
-        ///         calls, consider using <paramref name="sortKey" /> to sort by draw context in conjunction with
+        ///         render states, shaders, or transformation matrix. To minimize switching of effects between draw
+        ///         calls, consider using <paramref name="sortKey" /> to sort by draw effect in conjunction with
         ///         <see cref="BatchMode.Deferred" />.
         ///     </para>
         ///     <para>
         ///         Before making any calls to
         ///         <see cref="Draw(Effect,PrimitiveType,TVertexType[],int,int,short[],int,int,uint)" />, you must
-        ///         call <see cref="Begin" />. Once all calls to
-        ///         <see cref="Draw(Effect,PrimitiveType,TVertexType[],int,int,short[],int,int,uint)" /> are
-        ///         complete, call <see cref="End" />.
+        ///         call <see cref="Begin" />. Once all draw calls are complete, call <see cref="End" />.
         ///     </para>
         /// </remarks>
         public void Draw(Effect effect, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey = 0)
         {
             EnsureHasBegun();
             _currentBatchQueuer.EnqueueDraw(effect, primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, sortKey);
+        }
+
+        /// <summary>
+        ///     Adds a single-pixel line to a batch of geometry for rendering using the specified effect, two vertices, and
+        ///     optional sort key.
+        /// </summary>
+        /// <param name="effect">The <see cref="Effect" /> to use.</param>
+        /// <param name="firstVertex">The first vertex.</param>
+        /// <param name="secondVertex">The second vertex.</param>
+        /// <param name="sortKey">
+        ///     The sort key used to sort the triangle when rendering with <see cref="BatchMode.Deferred" />. This
+        ///     value is ignored if <see cref="BatchMode.Deferred" /> is not used.
+        /// </param>
+        /// <remarks>
+        ///     <para>
+        ///         <paramref name="effect" /> is reponsible for the settings used when drawing the geometry, including any
+        ///         render states, shaders, or transformation matrix. To minimize switching of effects between draw
+        ///         calls, consider using <paramref name="sortKey" /> to sort by draw effect in conjunction with
+        ///         <see cref="BatchMode.Deferred" />.
+        ///     </para>
+        ///     <para>
+        ///         Before making any calls to
+        ///         <see cref="DrawLine(Effect,ref TVertexType, ref TVertexType, uint)" />, you must
+        ///         call <see cref="Begin" />. Once all draw calls are complete, call <see cref="End" />.
+        ///     </para>
+        /// </remarks>
+        public void DrawLine(Effect effect, ref TVertexType firstVertex, ref TVertexType secondVertex, uint sortKey = 0)
+        {
+            EnsureHasBegun();
+            _verticesArrayBuffer[0] = firstVertex;
+            _verticesArrayBuffer[1] = secondVertex;
+            _currentBatchQueuer.EnqueueDraw(effect, PrimitiveType.LineList, _verticesArrayBuffer, 0, 2, sortKey);
+        }
+
+        /// <summary>
+        ///     Adds a triangle to a batch of geometry for rendering using the specified effect, three corner vertices, and
+        ///     optional sort
+        ///     key.
+        /// </summary>
+        /// <param name="effect">The <see cref="Effect" /> to use.</param>
+        /// <param name="firstVertex">The first corner verex.</param>
+        /// <param name="secondVertex">The second corner vertex.</param>
+        /// <param name="thirdVertex">The third corner vertex.</param>
+        /// <param name="sortKey">
+        ///     The sort key used to sort the triangle when rendering with <see cref="BatchMode.Deferred" />. This
+        ///     value is ignored if <see cref="BatchMode.Deferred" /> is not used.
+        /// </param>
+        /// <remarks>
+        ///     <para>
+        ///         <paramref name="effect" /> is reponsible for the settings used when drawing the geometry, including any
+        ///         render states, shaders, or transformation matrix. To minimize switching of effects between draw
+        ///         calls, consider using <paramref name="sortKey" /> to sort by draw effect in conjunction with
+        ///         <see cref="BatchMode.Deferred" />.
+        ///     </para>
+        ///     <para>
+        ///         Before making any calls to
+        ///         <see cref="DrawTriangle(Effect,ref TVertexType, ref TVertexType, ref TVertexType, uint)" />, you must
+        ///         call <see cref="Begin" />. Once all draw calls are complete, call <see cref="End" />.
+        ///     </para>
+        /// </remarks>
+        public void DrawTriangle(Effect effect, ref TVertexType firstVertex, ref TVertexType secondVertex, ref TVertexType thirdVertex, uint sortKey = 0)
+        {
+            EnsureHasBegun();
+            _verticesArrayBuffer[0] = firstVertex;
+            _verticesArrayBuffer[1] = secondVertex;
+            _verticesArrayBuffer[2] = thirdVertex;
+            _currentBatchQueuer.EnqueueDraw(effect, PrimitiveType.TriangleList, _verticesArrayBuffer, 0, 3, sortKey);
+        }
+
+        /// <summary>
+        ///     Adds a quadrilateral (a convex polygon with four sides) to a batch of geometry for rendering using the specified
+        ///     effect, four corner vertices, and optional sort
+        ///     key.
+        /// </summary>
+        /// <param name="effect">The <see cref="Effect" /> to use.</param>
+        /// <param name="firstVertex">The first corner vertex.</param>
+        /// <param name="secondVertex">The second corner vertex.</param>
+        /// <param name="thirdVertex">The third corcner vertex.</param>
+        /// <param name="fourthVertex">The fourth corner vertex.</param>
+        /// <param name="sortKey">
+        ///     The sort key used to sort the quadrilateral when rendering with <see cref="BatchMode.Deferred" />. This
+        ///     value is ignored if <see cref="BatchMode.Deferred" /> is not used.
+        /// </param>
+        /// <remarks>
+        ///     <para>
+        ///         <paramref name="effect" /> is reponsible for the settings used when drawing the geometry, including any
+        ///         render states, shaders, or transformation matrix. To minimize switching of effects between draw
+        ///         calls, consider using <paramref name="sortKey" /> to sort by draw effect in conjunction with
+        ///         <see cref="BatchMode.Deferred" />.
+        ///     </para>
+        ///     <para>
+        ///         Before making any calls to
+        ///         <see cref="DrawQuadrilateral(Effect,ref TVertexType, ref TVertexType, ref TVertexType, ref TVertexType, uint)" />
+        ///         , you must call <see cref="Begin" />. Once all draw calls are complete, call <see cref="End" />.
+        ///     </para>
+        /// </remarks>
+        public void DrawQuadrilateral(Effect effect, ref TVertexType firstVertex, ref TVertexType secondVertex, ref TVertexType thirdVertex, ref TVertexType fourthVertex, uint sortKey = 0)
+        {
+            EnsureHasBegun();
+            _verticesArrayBuffer[0] = firstVertex;
+            _verticesArrayBuffer[1] = secondVertex;
+            _verticesArrayBuffer[2] = thirdVertex;
+            _verticesArrayBuffer[3] = fourthVertex;
+            _currentBatchQueuer.EnqueueDraw(effect, PrimitiveType.TriangleList, _verticesArrayBuffer, 0, 4, PrimitiveBatchHelper.QuadIndices, 0, 6, sortKey);
         }
     }
 }
