@@ -54,7 +54,7 @@ namespace Demo.PrimitiveBatch
             var viewport = graphicsDevice.Viewport;
 
             // load the custom effect for the primitives
-            _primitiveEffect = new Effect(Content.Load<Microsoft.Xna.Framework.Graphics.Effect>("PrimitiveEffect"))
+            _primitiveEffect = new PrimitiveEffect(Content.Load<Effect>("PrimitiveEffect"))
             {
                 // world matrix: the coordinate system of the world or universe used to transform primitives from their own Local space to the World space
                 // here we scale the x, y and z axes by 100 units
