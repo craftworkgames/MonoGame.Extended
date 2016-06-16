@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
 using MonoGame.Extended.Collisions.Broadphase;
-using MonoGame.Extended.Collisions.Debug;
+using MonoGame.Extended.Collisions.Drawing;
 using MonoGame.Extended.Collisions.Narrowphase;
 using MonoGame.Extended.Collisions.Response;
 
@@ -30,9 +30,9 @@ namespace MonoGame.Extended.Collisions
         public ICollisionBroadphase Broadphase { get; }
         public ICollisionNarrowphase Narrowphase { get; }
         public ICollisionResponder Responder { get; }
-        public ICollisionDebugDrawer DebugDrawer { get; set; }
+        public ICollisionDrawer Drawer { get; set; }
 
-        public CollisionSimulation(ICollisionBroadphase broadphase = null, ICollisionNarrowphase narrowphase = null, ICollisionResponder responder = null, ICollisionDebugDrawer debugDrawer = null)
+        public CollisionSimulation(ICollisionBroadphase broadphase = null, ICollisionNarrowphase narrowphase = null, ICollisionResponder responder = null, ICollisionDrawer drawer = null)
         {
             if (Instance != null)
             {
@@ -43,7 +43,7 @@ namespace MonoGame.Extended.Collisions
             Broadphase = broadphase ?? new BruteForceBroadphase();
             Narrowphase = narrowphase ?? new PassThroughNarrowphase();
             Responder = responder ?? new EmptyResponder();
-            DebugDrawer = debugDrawer;
+            Drawer = drawer;
 
             Broadphase.Initialize(ProcessBroadphaseCollisionPair);
             Narrowphase.Initialize(ProcessNarrowphaseCollisionPair);
@@ -198,21 +198,21 @@ namespace MonoGame.Extended.Collisions
 
         public override void Draw(GameTime gameTime)
         {
-            if (DebugDrawer == null)
+            if (Drawer == null)
             {
                 return;
             }
 
-            DebugDrawer.Begin();
+            Drawer.Begin();
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < FixtureProxies.Count; index++)
             {
                 var fixtureProxy = FixtureProxies[index];
-                DebugDrawer.DrawBoundingVolume(ref fixtureProxy.BoundingVolume);
+                Drawer.DrawBoundingVolume(ref fixtureProxy.BoundingVolume);
             }
 
-            DebugDrawer.End();
+            Drawer.End();
         }
     }
 }

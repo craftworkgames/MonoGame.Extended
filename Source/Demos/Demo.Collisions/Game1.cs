@@ -49,7 +49,7 @@ namespace Demo.Collisions
                 Projection = Matrix.CreateOrthographicOffCenter(viewport.Width * -0.5f, viewport.Width * 0.5f, viewport.Height * -0.5f, viewport.Height * 0.5f, 0, 1)
             };
 
-            _collisionSimulation.DebugDrawer = new CollisionDebugDrawer(graphicsDevice, collisionDebugEffect);
+            _collisionSimulation.Drawer = new CollisionDrawer(graphicsDevice, collisionDebugEffect);
         }
 
         protected override void UnloadContent()

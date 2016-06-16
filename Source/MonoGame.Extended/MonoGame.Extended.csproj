@@ -67,7 +67,7 @@
     <Compile Include="Collisions\CollisionFixtureFlags.cs" />
     <Compile Include="Collisions\CollisionFixtureProxy.cs" />
     <Compile Include="Collisions\CollisionShape2D.Factory.cs" />
-    <Compile Include="Collisions\Debug\ICollisionDebugDrawer.cs" />
+    <Compile Include="Collisions\Drawing\ICollisionDrawer.cs" />
     <Compile Include="Collisions\ICollisionSimulation.cs" />
     <Compile Include="Collisions\Narrowphase\NarrowphaseCollisionPair.cs" />
     <Compile Include="Collisions\Narrowphase\NarrowphaseCollisionDelegate.cs" />

@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collisions.Debug;
+using MonoGame.Extended.Collisions.Drawing;
 using MonoGame.Extended.Graphics.Batching;
 using MonoGame.Extended.Shapes.BoundingVolumes;
 
 namespace Demo.Collisions
 {
-    public class CollisionDebugDrawer : ICollisionDebugDrawer
+    public class CollisionDrawer : ICollisionDrawer
     {
         private readonly PrimitiveBatch<VertexPositionColor> _primitiveBatch;
         private readonly Effect _effect;
 
-        public CollisionDebugDrawer(GraphicsDevice graphicsDevice, Effect effect)
+        public CollisionDrawer(GraphicsDevice graphicsDevice, Effect effect)
         {
             _primitiveBatch = new PrimitiveBatch<VertexPositionColor>(graphicsDevice);
             _effect = effect;
