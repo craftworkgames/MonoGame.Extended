@@ -11,8 +11,8 @@ namespace MonoGame.Extended.Tests.Graphics.Batching
         public void ImmediateBatchQueuer_Constructor()
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
-            var userPrimitivesBatcher = new UserPrimitivesBatchDrawer<TestVertex>(graphicsDevice);
-            var immediateBatchQueuer = new ImmediateBatchQueuer<TestVertex>(userPrimitivesBatcher);
+            var batchDrawer = new BatchDrawer<TestVertex>(graphicsDevice);
+            var immediateBatchQueuer = new ImmediateBatchQueuer<TestVertex>(batchDrawer);
             Assert.IsNotNull(immediateBatchQueuer);
         }
     }

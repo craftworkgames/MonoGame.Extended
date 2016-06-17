@@ -2,9 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
-using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 
@@ -20,7 +18,7 @@ namespace Demo.SpriteSheetAnimations
         Dying
     }
 
-    public class Zombie : IUpdate, IActorTarget
+    public class Zombie : IUpdate
     {
         private readonly SpriteSheetAnimator _animator;
         private readonly Sprite _sprite;
@@ -129,26 +127,26 @@ namespace Demo.SpriteSheetAnimations
             }
         }
 
-        public void OnCollision(CollisionInfo c)
-        {
-            Position -= c.PenetrationVector;
-            Velocity = Vector2.Zero;
-            //if (c.PenetrationVector.X != 0)
-            //{
-            //    Position -= c.PenetrationVector;
-            //    Velocity = new Vector2(0, Velocity.Y);
-            //}
-            //else
-            //{
-            //    if (Velocity.Y > 0)
-            //        IsOnGround = true;
-
-            //    var d = Position.Y < c.Other.BoundingBox.Center.Y
-            //        ? c.IntersectingRectangle.Height
-            //        : -c.IntersectingRectangle.Height;
-            //    Position = new Vector2(Position.X, Position.Y - d);
-            //    Velocity = new Vector2(Velocity.X, 0);
-            //}
-        }
+//        public void OnCollision(CollisionInfo c)
+//        {
+//            Position -= c.PenetrationVector;
+//            Velocity = Vector2.Zero;
+//            //if (c.PenetrationVector.X != 0)
+//            //{
+//            //    Position -= c.PenetrationVector;
+//            //    Velocity = new Vector2(0, Velocity.Y);
+//            //}
+//            //else
+//            //{
+//            //    if (Velocity.Y > 0)
+//            //        IsOnGround = true;
+//
+//            //    var d = Position.Y < c.Other.BoundingBox.Center.Y
+//            //        ? c.IntersectingRectangle.Height
+//            //        : -c.IntersectingRectangle.Height;
+//            //    Position = new Vector2(Position.X, Position.Y - d);
+//            //    Velocity = new Vector2(Velocity.X, 0);
+//            //}
+//        }
     }
 }
