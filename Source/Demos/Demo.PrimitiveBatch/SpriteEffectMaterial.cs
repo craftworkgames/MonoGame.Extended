@@ -1,114 +1,22 @@
-﻿using System.Runtime.CompilerServices;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collections;
+﻿using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics;
 
 namespace Demo.PrimitiveBatch
 {
-    public class SpriteEffectMaterial : EffectMaterial
+    public class SpriteEffectMaterial : EffectMaterial<SpriteEffect>, IDrawContextTexture2D
     {
-        private static readonly uint _worldProjectionViewDirtyBitMask;
-        private static readonly uint _textureDirtyBitMask;
+        public Texture2D Texture { get; }
 
-        static SpriteEffectMaterial()
-        {
-            _worldProjectionViewDirtyBitMask = BitVector32.CreateMask();
-            _textureDirtyBitMask = BitVector32.CreateMask(_worldProjectionViewDirtyBitMask);
-        }
-
-        private BitVector32 _dirtyFlags = _worldProjectionViewDirtyBitMask | _textureDirtyBitMask;
-        private EffectParameter _worldViewProjectionParameter;
-        private EffectParameter _textureParameter;
-        private Matrix _world;
-        private Matrix _view;
-        private Matrix _projection;
-        private Texture2D _texture;
-
-        public Matrix World
-        {
-            get { return _world; }
-            set { SetWorld(ref value); }
-        }
-
-        public Matrix View
-        {
-            get { return _view; }
-            set { SetView(ref value); }
-        }
-
-        public Matrix Projection
-        {
-            get { return _projection; }
-            set { SetProjection(ref value); }
-        }
-
-        public Texture2D Texture
-        {
-            get { return _texture; }
-            set { SetTexture(ref value); }
-        }
-
-        public SpriteEffectMaterial(Microsoft.Xna.Framework.Graphics.Effect effect)
+        public SpriteEffectMaterial(SpriteEffect effect, Texture2D texture)
             : base(effect)
         {
-            CacheEffectParameters();
+            Texture = texture;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetWorld(ref Matrix world)
+        public override void Apply(out Effect effect)
         {
-            _world = world;
-            _dirtyFlags[_worldProjectionViewDirtyBitMask] = true;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetView(ref Matrix view)
-        {
-            _view = view;
-            _dirtyFlags[_worldProjectionViewDirtyBitMask] = true;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetProjection(ref Matrix projection)
-        {
-            _projection = projection;
-            _dirtyFlags[_worldProjectionViewDirtyBitMask] = true;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetTexture(ref Texture2D texture)
-        {
-            _texture = texture;
-            _dirtyFlags[_textureDirtyBitMask] = true;
-        }
-
-        private void CacheEffectParameters()
-        {
-            _worldViewProjectionParameter = Parameters["WorldViewProjection"];
-            _textureParameter = Parameters["Texture"];
-        }
-
-        protected override bool OnApply()
-        {
-            base.OnApply();
-
-            if (_dirtyFlags[_worldProjectionViewDirtyBitMask])
-            {
-                _dirtyFlags[_worldProjectionViewDirtyBitMask] = false;
-
-                Matrix worldViewProjection;
-                Matrix.Multiply(ref _world, ref _view, out worldViewProjection);
-                Matrix.Multiply(ref worldViewProjection, ref _projection, out worldViewProjection);
-                _worldViewProjectionParameter.SetValue(worldViewProjection);
-            }
-
-            if (_dirtyFlags[_textureDirtyBitMask])
-            {
-                _dirtyFlags[_textureDirtyBitMask] = false;
-                _textureParameter.SetValue(_texture);
-            }
-
-            return false;
+            effect = Effect;
+            Effect.Texture = Texture;
         }
     }
 }

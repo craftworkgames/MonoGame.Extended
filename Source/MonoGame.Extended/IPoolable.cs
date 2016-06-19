@@ -25,6 +25,6 @@ namespace MonoGame.Extended
         /// <summary>
         ///     Returns the <see cref="IPoolable" /> to it's <see cref="Pool{T}" />.
         /// </summary>
-        void Release();
+        void Return();
     }
 }

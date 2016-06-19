@@ -10,17 +10,17 @@ namespace MonoGame.Extended.Graphics.Batching
         internal int VertexCount;
         internal readonly int StartIndex;
         internal int IndexCount;
-        internal Effect Effect;
+        internal IDrawContext DrawContext;
         internal byte PrimitiveType;
 
-        internal BatchDrawOperation(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, Effect effect)
+        internal BatchDrawOperation(PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount, IDrawContext drawContext)
         {
             PrimitiveType = (byte)primitiveType;
             StartVertex = startVertex;
             VertexCount = vertexCount;
             StartIndex = startIndex;
             IndexCount = indexCount;
-            Effect = effect;
+            DrawContext = drawContext;
         }
     }
 }
