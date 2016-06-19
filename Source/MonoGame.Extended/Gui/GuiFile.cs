@@ -45,9 +45,8 @@ namespace MonoGame.Extended.Gui
             return list;
         }
 
-        public static IEnumerable<GuiControlData> Load(Stream stream)
+        public static IEnumerable<GuiControlData> Load(StreamReader streamReader)
         {
-            using (var streamReader = new StreamReader(stream))
             using (var jsonReader = new JsonTextReader(streamReader))
             {
                 var serializer = new JsonSerializer();
@@ -57,9 +56,8 @@ namespace MonoGame.Extended.Gui
             }
         }
 
-        public void Save(Stream stream)
+        public void Save(StreamWriter streamWriter)
         {
-            using (var streamWriter = new StreamWriter(stream))
             using (var jsonWriter = new JsonTextWriter(streamWriter) { Formatting = Formatting.Indented })
             {
                 var serializer = new JsonSerializer();
