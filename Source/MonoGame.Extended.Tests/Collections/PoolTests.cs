@@ -1,4 +1,5 @@
-﻿using MonoGame.Extended.Collections;
+﻿using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Collections;
 using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests.Collections
@@ -25,7 +26,7 @@ namespace MonoGame.Extended.Tests.Collections
                 _returnFunction = returnFunction;
             }
 
-            public void Release()
+            public void Return()
             {
                 if (_returnFunction == null)
                 {
@@ -68,11 +69,11 @@ namespace MonoGame.Extended.Tests.Collections
 
             for (var i = 0; i < count; i++)
             {
-                var poolable = pool.Acquire();
+                var poolable = pool.Request();
                 Assert.IsTrue(poolable.Value == i);
             }
 
-            var nextPoolable = pool.Acquire();
+            var nextPoolable = pool.Request();
             Assert.IsNull(nextPoolable);
         }
 
@@ -87,7 +88,7 @@ namespace MonoGame.Extended.Tests.Collections
 
             for (var i = 0; i < count; i++)
             {
-                var poolable = pool.Acquire();
+                var poolable = pool.Request();
                 Assert.IsTrue(poolable.Value == i);
             }
 
@@ -110,14 +111,14 @@ namespace MonoGame.Extended.Tests.Collections
 
             for (var i = 0; i < count; i++)
             {
-                var poolable = pool.Acquire();
+                var poolable = pool.Request();
                 Assert.IsTrue(poolable.Value == i);
             }
 
             var counter = count;
             foreach (var poolable in pool)
             {
-                poolable.Release();
+                poolable.Return();
                 Assert.IsTrue(poolable.ResetValue == 0);
                 counter--;
                 Assert.IsTrue(pool.Count == counter);
