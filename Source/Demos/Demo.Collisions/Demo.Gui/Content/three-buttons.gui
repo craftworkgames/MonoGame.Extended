@@ -1,0 +1,26 @@
+[
+  {
+    "Name": null,
+    "Style": "demo-button",
+    "X": 279.0,
+    "Y": 261.08,
+    "Width": 250.0,
+    "Height": 94.0
+  },
+  {
+    "Name": null,
+    "Style": "demo-button",
+    "X": 217.0,
+    "Y": 177.08,
+    "Width": 171.0,
+    "Height": 54.0
+  },
+  {
+    "Name": null,
+    "Style": "demo-button",
+    "X": 462.0,
+    "Y": 74.08,
+    "Width": 316.0,
+    "Height": 147.999985
+  }
+]

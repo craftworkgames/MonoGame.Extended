@@ -81,6 +81,7 @@
     <Compile Include="Gui\Controls\GuiSpriteStyle.cs" />
     <Compile Include="Gui\GuiContentService.cs" />
     <Compile Include="Gui\GuiFile.cs" />
+    <Compile Include="Gui\MonoGameColorJsonConverter.cs" />
     <Compile Include="IColorable.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />
