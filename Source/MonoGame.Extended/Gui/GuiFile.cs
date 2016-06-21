@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using MonoGame.Extended.Gui.Controls;
 using Newtonsoft.Json;
 
@@ -17,20 +18,20 @@ namespace MonoGame.Extended.Gui
 
     public class GuiFile
     {
-        private readonly List<GuiControlData> _controls;
-
-        public GuiFile(IEnumerable<GuiControl> controls)
+        public GuiFile()
         {
-            _controls = BuildControlDataList(controls);
+            Controls = new List<GuiControlData>();
         }
 
-        private static List<GuiControlData> BuildControlDataList(IEnumerable<GuiControl> controls)
-        {
-            var list = new List<GuiControlData>();
+        public string Styles { get; set; }
+        public List<GuiControlData> Controls { get; private set; }
 
-            foreach (var control in controls)
+        public static GuiFile Build(string styles, IEnumerable<GuiControl> controls)
+        {
+            return new GuiFile
             {
-                var data = new GuiControlData
+                Styles = styles,
+                Controls = controls.Select(control => new GuiControlData
                 {
                     Name = control.Name,
                     Style = control.Style.Name,
@@ -38,21 +39,16 @@ namespace MonoGame.Extended.Gui
                     Y = control.Position.Y,
                     Width = control.Size.X,
                     Height = control.Size.Y
-                };
-                list.Add(data);
-            }
-
-            return list;
+                }).ToList()
+            };
         }
 
-        public static IEnumerable<GuiControlData> Load(StreamReader streamReader)
+        public static GuiFile Load(StreamReader streamReader)
         {
             using (var jsonReader = new JsonTextReader(streamReader))
             {
                 var serializer = new JsonSerializer();
-                var data = serializer.Deserialize<List<GuiControlData>>(jsonReader);
-
-                return data;
+                return serializer.Deserialize<GuiFile>(jsonReader);
             }
         }
 
@@ -61,7 +57,7 @@ namespace MonoGame.Extended.Gui
             using (var jsonWriter = new JsonTextWriter(streamWriter) { Formatting = Formatting.Indented })
             {
                 var serializer = new JsonSerializer();
-                serializer.Serialize(jsonWriter, _controls);
+                serializer.Serialize(jsonWriter, this);
             }
         }
     }

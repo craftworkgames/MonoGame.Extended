@@ -1,50 +1,46 @@
-﻿using System.Collections.Generic;
+﻿using MonoGame.Extended.InputListeners;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public enum GuiButtonState
-    {
-        Normal,
-        Pressed,
-        Disabled,
-        Hovered
-    }
-
     public class GuiButton : GuiControl
     {
         private readonly GuiButtonStyle _style;
-        private readonly Dictionary<GuiButtonState, GuiSpriteStyle> _stateStyleMap;
 
         public GuiButton(GuiContentService contentService, GuiButtonStyle style)
             : base(contentService, style)
         {
             _style = style;
-            _stateStyleMap = new Dictionary<GuiButtonState, GuiSpriteStyle>
-            {
-                {GuiButtonState.Normal, _style.Normal},
-                {GuiButtonState.Hovered, _style.Hovered},
-                {GuiButtonState.Pressed, _style.Pressed},
-                {GuiButtonState.Disabled, _style.Disabled},
-            };
         }
 
-        public override void OnMouseMove()
+        public bool IsPressed { get; private set; }
+
+        public override void OnMouseDown(object sender, MouseEventArgs args)
         {
-            ApplySpriteStyle(_style.Hovered);
+            if(IsEnabled)
+                IsPressed = true;
+
+            base.OnMouseDown(sender, args);
         }
 
-        private GuiButtonState _state;
-        public GuiButtonState State
+        public override void OnMouseUp(object sender, MouseEventArgs args)
         {
-            get { return _state; }
-            set
-            {
-                if (_state != value)
-                {
-                    _state = value;
-                    ApplySpriteStyle(_stateStyleMap[_state]);
-                }
-            }
+            IsPressed = false;
+
+            base.OnMouseUp(sender, args);
+        }
+
+        protected override GuiSpriteStyle GetCurrentStyle()
+        {
+            if (!IsEnabled)
+                return _style.Disabled;
+
+            if (IsPressed)
+                return _style.Pressed;
+            
+            if (IsHovered)
+                return _style.Hovered;
+
+            return _style.Normal;
         }
     }
 }

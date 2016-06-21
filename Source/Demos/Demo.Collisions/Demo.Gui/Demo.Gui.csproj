@@ -63,7 +63,6 @@
     <Content Include="Content\demo.styles">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Content\logo-square-128.png" />
     <Content Include="Content\three-buttons.gui">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
