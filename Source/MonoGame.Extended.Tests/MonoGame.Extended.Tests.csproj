@@ -71,6 +71,7 @@
     <Compile Include="Shapes\PolygonFTests.cs" />
     <Compile Include="Shapes\CircleTests.cs" />
     <Compile Include="Shapes\RectangleFTests.cs" />
+    <Compile Include="SizeFTests.cs" />
     <Compile Include="Sprites\SpriteTests.cs" />
     <Compile Include="TextureAtlases\TextureAtlasTests.cs" />
     <Compile Include="Vector2ExtensionsTests.cs" />
