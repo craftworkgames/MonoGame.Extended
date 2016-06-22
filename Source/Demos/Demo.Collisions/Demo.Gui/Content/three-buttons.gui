@@ -1,45 +1,13 @@
 {
-	"Styles": "demo.styles",
-	"Controls": [
-	  {
-	    "Name": null,
-	    "Style": "demo-button",
-	    "X": 24.0,
-	    "Y": 177.08,
-	    "Width": 137.0,
-	    "Height": 65.00003
-	  },
-	  {
-	    "Name": null,
-	    "Style": "demo-button",
-	    "X": 23.0,
-	    "Y": 77.08,
-	    "Width": 171.0,
-	    "Height": 54.0
-	  },
-	  {
-	    "Name": null,
-	    "Style": "demo-button",
-	    "X": 247.0,
-	    "Y": 117.08,
-	    "Width": 316.0,
-	    "Height": 147.999985
-	  },
-	  {
-	    "Name": null,
-	    "Style": "demo-button",
-	    "X": 54.0,
-	    "Y": 307.08,
-	    "Width": 250.0,
-	    "Height": 94.0
-	  },
-	  {
-	    "Name": null,
-	    "Style": "demo-button",
-	    "X": 394.0,
-	    "Y": 315.08,
-	    "Width": 250.0,
-	    "Height": 94.0
-	  }
-	]
+  "Styles": "demo.styles",
+  "Controls": [
+    {
+      "Name": null,
+      "Style": "demo-button",
+      "X": 306.0,
+      "Y": 175.08,
+      "Width": 250.0,
+      "Height": 94.0
+    }
+  ]
 }

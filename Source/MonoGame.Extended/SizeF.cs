@@ -46,6 +46,15 @@ namespace MonoGame.Extended
             return new SizeF(size.X, size.Y);
         }
 
+        public static implicit operator Vector2(SizeF size)
+        {
+            return new Vector2(size.Width, size.Height);
+        }
+
+        public static explicit operator Size(SizeF size)
+        {
+            return new Size((int) size.Width, (int) size.Height);
+        }
 
         public override bool Equals(object obj)
         {

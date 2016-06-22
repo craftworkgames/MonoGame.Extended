@@ -7,7 +7,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public abstract class GuiControl : IMovable
+    public abstract class GuiControl : IMovable, ISizable
     {
         private readonly GuiContentService _contentService;
 
@@ -27,15 +27,15 @@ namespace MonoGame.Extended.Gui.Controls
         public TextureRegion2D TextureRegion { get; set; }
         public Color Color { get; set; }
         public Vector2 Position { get; set; }
-        public Vector2 Size { get; set; }
+        public SizeF Size { get; set; }
         public float Left => Position.X;
         public float Top => Position.Y;
         public float Right => Position.X + Width;
         public float Bottom => Position.Y + Height;
-        public float Width => Size.X;
-        public float Height => Size.Y;
+        public float Width => Size.Width;
+        public float Height => Size.Height;
         public Vector2 Center => new Vector2(Position.X + Width * 0.5f, Position.Y + Height * 0.5f);
-        public RectangleF BoundingRectangle => new RectangleF(Position, Size);
+        public RectangleF BoundingRectangle => new RectangleF(Left, Top, Width, Height);
         public bool IsFocused { get; internal set; }
         public bool IsHovered { get; private set; }
         public bool IsEnabled { get; set; }
@@ -56,9 +56,9 @@ namespace MonoGame.Extended.Gui.Controls
 
         private Rectangle GetDestinationRectangle()
         {
-            var size = ResizeToFit(TextureRegion.Size, new SizeF(Size.X, Size.Y));
-            var x = Position.X + Size.X * 0.5f - size.X * 0.5f;
-            var y = Position.Y + Size.Y * 0.5f - size.Y * 0.5f;
+            var size = ResizeToFit(TextureRegion.Size, new SizeF(Size.Width, Size.Height));
+            var x = Position.X + Size.Width * 0.5f - size.X * 0.5f;
+            var y = Position.Y + Size.Height * 0.5f - size.Y * 0.5f;
             var controlRectangle = new Rectangle((int)x, (int)y, size.X, size.Y);
             return controlRectangle;
         }

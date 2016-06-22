@@ -144,7 +144,7 @@ namespace MonoGame.Extended.Gui
                     {
                         control.Name = controlData.Name;
                         control.Position = new Vector2(controlData.X, controlData.Y);
-                        control.Size = new Vector2(controlData.Width, controlData.Height);
+                        control.Size = new SizeF(controlData.Width, controlData.Height);
                         _controls.Add(control);
                     }
                 }

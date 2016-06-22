@@ -118,6 +118,7 @@
     <Compile Include="InputListeners\TouchListenerSettings.cs" />
     <Compile Include="IRotatable.cs" />
     <Compile Include="IScalable.cs" />
+    <Compile Include="ISizable.cs" />
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
     <Compile Include="Maps\Tiled\TiledTileSetTileFrame.cs" />

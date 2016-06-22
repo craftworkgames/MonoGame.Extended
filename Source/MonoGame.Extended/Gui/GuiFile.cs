@@ -37,8 +37,8 @@ namespace MonoGame.Extended.Gui
                     Style = control.Style.Name,
                     X = control.Position.X,
                     Y = control.Position.Y,
-                    Width = control.Size.X,
-                    Height = control.Size.Y
+                    Width = control.Size.Width,
+                    Height = control.Size.Height
                 }).ToList()
             };
         }
