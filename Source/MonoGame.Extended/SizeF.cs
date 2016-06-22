@@ -36,6 +36,16 @@ namespace MonoGame.Extended
             return !(a == b);
         }
 
+        public static SizeF operator /(SizeF size, float value)
+        {
+            return new SizeF(size.Width/value, size.Height/value);
+        }
+
+        public static SizeF operator *(SizeF size, float value)
+        {
+            return new SizeF(size.Width * value, size.Height * value);
+        }
+
         public bool Equals(SizeF other)
         {
             return Width.Equals(other.Width) && Height.Equals(other.Height);
