@@ -9,9 +9,9 @@ namespace MonoGame.Extended.Gui.Controls
 {
     public abstract class GuiControl : IMovable, ISizable
     {
-        private readonly GuiContentService _contentService;
+        private readonly IGuiContentService _contentService;
 
-        protected GuiControl(GuiContentService contentService, GuiControlStyle style)
+        protected GuiControl(IGuiContentService contentService, GuiControlStyle style)
         {
             _contentService = contentService;
 

@@ -6,7 +6,7 @@ namespace MonoGame.Extended.Gui.Controls
     {
         private readonly GuiButtonStyle _style;
 
-        public GuiButton(GuiContentService contentService, GuiButtonStyle style)
+        public GuiButton(IGuiContentService contentService, GuiButtonStyle style)
             : base(contentService, style)
         {
             _style = style;
