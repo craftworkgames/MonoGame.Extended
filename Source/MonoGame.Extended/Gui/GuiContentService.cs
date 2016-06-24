@@ -4,7 +4,12 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui
 {
-    public class GuiContentService
+    public interface IGuiContentService
+    {
+        TextureRegion2D GetTextureRegion(string name);
+    }
+
+    public class GuiContentService : IGuiContentService
     {
         private readonly ContentManager _contentManager;
 

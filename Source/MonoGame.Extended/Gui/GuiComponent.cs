@@ -21,7 +21,7 @@ namespace MonoGame.Extended.Gui
 
         private readonly string _guiFile;
         private ContentManager _contentManager;
-        private GuiContentService _contentService;
+        private IGuiContentService _contentService;
         private SpriteBatch _spriteBatch;
         private List<GuiControl> _controls;
         private Dictionary<string, GuiControlStyle> _controlStyles;

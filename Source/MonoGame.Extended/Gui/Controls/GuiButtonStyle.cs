@@ -6,7 +6,7 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiSpriteStyle Disabled { get; set; }
         public GuiSpriteStyle Pressed { get; set; }
 
-        public override GuiControl CreateControl(GuiContentService contentService)
+        public override GuiControl CreateControl(IGuiContentService contentService)
         {
             return new GuiButton(contentService, this);
         }
