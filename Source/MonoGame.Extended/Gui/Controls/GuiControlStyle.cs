@@ -2,6 +2,12 @@
 {
     public abstract class GuiControlStyle
     {
+        protected GuiControlStyle()
+        {
+            Name = string.Empty;
+            Normal = new GuiSpriteStyle();
+        }
+
         public string Name { get; set; }
         public GuiSpriteStyle Normal { get; set; }
 
