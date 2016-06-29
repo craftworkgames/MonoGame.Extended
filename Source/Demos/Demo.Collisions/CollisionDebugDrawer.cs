@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collisions.Drawing;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Graphics.Batching;
 using MonoGame.Extended.Shapes.BoundingVolumes;
 
@@ -9,28 +8,26 @@ namespace Demo.Collisions
 {
     public class CollisionDrawer : ICollisionDrawer
     {
-        private readonly PrimitiveBatch<VertexPositionColor> _primitiveBatch;
-        private readonly Effect _effect;
+        private readonly ShapeBatch _shapeBatch;
 
-        public CollisionDrawer(GraphicsDevice graphicsDevice, Effect effect)
+        public CollisionDrawer(GraphicsDevice graphicsDevice)
         {
-            _primitiveBatch = new PrimitiveBatch<VertexPositionColor>(graphicsDevice);
-            _effect = effect;
+            _shapeBatch = new ShapeBatch(graphicsDevice);
         }
 
         public void Begin()
         {
-            _primitiveBatch.Begin();
+            _shapeBatch.Begin(BatchMode.Deferred);
         }
 
         public void DrawBoundingVolume(ref AxisAlignedBoundingBox2D boundingVolume)
         {
-            _primitiveBatch.DrawAxisAlignedBoundingBox(_effect, ref boundingVolume);
+            //_shapeBatch.DrawAxisAlignedBoundingBox(_effect, ref boundingVolume);
         }
 
         public void End()
         {
-            _primitiveBatch.End();
+            _shapeBatch.End();
         }
     }
 }

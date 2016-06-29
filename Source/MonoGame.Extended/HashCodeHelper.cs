@@ -8,6 +8,23 @@ namespace MonoGame.Extended
         private const uint Offset = 2166136261;
         private const int Prime = 16777619;
 
+        public static unsafe int GetHashCode<T1>(T1 arg1)
+        {
+            unchecked
+            {
+                var hash = Offset;
+                byte* bytes = stackalloc byte[4];
+
+                *(int*)bytes = arg1.GetHashCode();
+                hash = (hash * Prime) ^ bytes[0];
+                hash = (hash * Prime) ^ bytes[1];
+                hash = (hash * Prime) ^ bytes[2];
+                hash = (hash * Prime) ^ bytes[3];
+
+                return (int)hash;
+            }
+        }
+
         public static unsafe int GetHashCode<T1, T2>(T1 arg1, T2 arg2)
         {
             unchecked

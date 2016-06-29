@@ -3,18 +3,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal abstract class BatchQueuer<TVertexType> : IDisposable
-        where TVertexType : struct, IVertexType
+    internal abstract class BatchQueuer<TVertexType, TBatchItemData, TEffect> : IDisposable
+        where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData, TEffect> where TEffect : Effect
     {
-        internal BatchDrawer<TVertexType> BatchDrawer;
+        internal BatchDrawer<TVertexType, TBatchItemData, TEffect> BatchDrawer;
         internal PrimitiveType PrimitiveType;
 
-        internal abstract void Begin();
+        internal abstract void Begin(TEffect effect);
         internal abstract void End();
-        internal abstract void EnqueueDraw(Effect effect, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0);
-        internal abstract void EnqueueDraw(Effect effect, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey = 0);
+        internal abstract void EnqueueDraw(ref TBatchItemData data, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0);
+        internal abstract void EnqueueDraw(ref TBatchItemData data, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, int[] indices, int startIndex, int indexCount, uint sortKey = 0);
 
-        protected BatchQueuer(BatchDrawer<TVertexType> batchDrawer)
+        protected BatchQueuer(BatchDrawer<TVertexType, TBatchItemData, TEffect> batchDrawer)
         {
             BatchDrawer = batchDrawer;
         }

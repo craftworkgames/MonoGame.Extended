@@ -1,34 +1,27 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal class DeferredBatchQueuer
-    {
-        // prevent static fields for every generic type of the class
-
-        // an empty draw operation; it's purpose is to prevent a null check for what would be a nullable draw operation
-        // e.g. the first time the queuer is used the draw operation would be invalid, but afterwards the operation will always be valid,
-        //      so having a check for null to test for invalidness is a waste 99% of the time
-        internal static readonly BatchDrawOperation EmptyDrawOperation = new BatchDrawOperation((PrimitiveType)(-1), 0, 0, 0, 0, null);
-    }
-
-    internal class DeferredBatchQueuer<TVertexType> : BatchQueuer<TVertexType>
+    internal class DeferredBatchQueuer<TVertexType, TBatchItemData, TEffect> : BatchQueuer<TVertexType, TBatchItemData, TEffect>
         where TVertexType : struct, IVertexType
+        where TBatchItemData : struct, IBatchItemData<TBatchItemData, TEffect>
+        where TEffect : Effect
     {
+        internal static readonly BatchDrawOperation<TBatchItemData, TEffect> EmptyDrawOperation = new BatchDrawOperation<TBatchItemData, TEffect>((PrimitiveType)(-1), 0, 0, 0, 0, default(TBatchItemData));
+
         private const int InitialOperationsCapacity = 25;
 
         // the draw operations buffer
-        private BatchDrawOperation[] _operations;
+        private BatchDrawOperation<TBatchItemData, TEffect>[] _operations;
         // the sort keys buffer for the draw operations
-        // the keys are seperated from the draw operations to have the smallest memory footprint possible which is important for iteration
+        // the keys are seperated from the draw operations to have the smallest memory footprint possible for each draw operation
         private uint[] _operationSortKeys; 
         // the number of operations in the buffers
         private int _operationsCount;
         // the current draw operation
-        private BatchDrawOperation _currentOperation;
+        private BatchDrawOperation<TBatchItemData, TEffect> _currentOperation;
         // the sort key for the current draw operation
         private uint _currentSortKey;
         // the vertices buffer
@@ -36,24 +29,26 @@ namespace MonoGame.Extended.Graphics.Batching
         // the number of vertices in the buffer
         private int _vertexCount;
         // the index buffer
-        private readonly short[] _indices;
+        private readonly int[] _indices;
         // the number of indices in the buffer
         private int _indexCount;
 
-        internal DeferredBatchQueuer(BatchDrawer<TVertexType> batchDrawer)
+        internal DeferredBatchQueuer(BatchDrawer<TVertexType, TBatchItemData, TEffect> batchDrawer)
             : base(batchDrawer)
         {
-            _currentOperation = DeferredBatchQueuer.EmptyDrawOperation;
+            _currentOperation = EmptyDrawOperation;
             _vertices = new TVertexType[BatchDrawer.MaximumVerticesCount];
-            _indices = new short[BatchDrawer.MaximumIndicesCount];
+            _indices = new int[BatchDrawer.MaximumIndicesCount];
             _operationSortKeys = new uint[InitialOperationsCapacity];
-            _operations = new BatchDrawOperation[InitialOperationsCapacity];
+            _operations = new BatchDrawOperation<TBatchItemData, TEffect>[InitialOperationsCapacity];
         }
 
-        private void CreateNewDrawOperationIfNecessary(Effect effect, PrimitiveType primitiveType, int vertexCount, int indexCount, uint sortKey)
+        private void CreateNewDrawOperationIfNecessary(ref TBatchItemData data, PrimitiveType primitiveType, int vertexCount, int indexCount, uint sortKey)
         {
+            // "merge" multiple draw calls into one draw operation if possible
             // we do not support merging line strip or triangle strip primitives, i.e., a new draw call is needed for each line strip or triangle strip
-            if (_currentSortKey == sortKey && (_currentOperation.Effect?.Equals(effect) ?? false) && _currentOperation.IndexCount > 0 == indexCount > 0 && _currentOperation.PrimitiveType == (byte)primitiveType && (primitiveType != PrimitiveType.TriangleStrip || PrimitiveType != PrimitiveType.LineStrip))
+
+            if (_currentSortKey == sortKey && _currentOperation.CanMergeIntoOperationOf(ref data, (byte)primitiveType, indexCount))
             {
                 _currentOperation.VertexCount += vertexCount;
                 _currentOperation.IndexCount += indexCount;
@@ -65,7 +60,7 @@ namespace MonoGame.Extended.Graphics.Batching
                 ApplyCurrentOperation();
             }
 
-            _currentOperation = new BatchDrawOperation(primitiveType, _vertexCount, vertexCount, _indexCount, indexCount, effect);
+            _currentOperation = new BatchDrawOperation<TBatchItemData, TEffect>(primitiveType, _vertexCount, vertexCount, _indexCount, indexCount, data);
 
             if (_operationsCount == _operations.Length)
             {
@@ -86,13 +81,15 @@ namespace MonoGame.Extended.Graphics.Batching
             _operations[_operationsCount - 1] = _currentOperation;
         }
 
-        internal override void Begin()
+        internal override void Begin(TEffect effect)
         {
+            BatchDrawer.Effect = effect;
         }
 
         internal override void End()
         {
             Flush();
+            BatchDrawer.Effect = null;
         }
 
         private void Flush()
@@ -122,11 +119,11 @@ namespace MonoGame.Extended.Graphics.Batching
                 var primitiveType = (PrimitiveType)operation.PrimitiveType;
                 if (operation.IndexCount != 0)
                 {
-                    BatchDrawer.Draw(operation.Effect, primitiveType, operation.StartVertex, operation.VertexCount, operation.StartIndex, operation.IndexCount);
+                    BatchDrawer.Draw(ref operation.Data, primitiveType, operation.StartVertex, operation.VertexCount, operation.StartIndex, operation.IndexCount);
                 }
                 else
                 {
-                    BatchDrawer.Draw(operation.Effect, primitiveType, operation.StartVertex, operation.VertexCount);
+                    BatchDrawer.Draw(ref operation.Data, primitiveType, operation.StartVertex, operation.VertexCount);
                 }
             }
 
@@ -138,259 +135,49 @@ namespace MonoGame.Extended.Graphics.Batching
             _operationsCount = 0;
             _vertexCount = 0;
             _indexCount = 0;
-            _currentOperation = DeferredBatchQueuer.EmptyDrawOperation;
+            _currentOperation = EmptyDrawOperation;
             _currentSortKey = 0;
         }
 
-        internal override void EnqueueDraw(Effect effect, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0)
+        internal override void EnqueueDraw(ref TBatchItemData data, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0)
         {
             var remainingVertices = BatchDrawer.MaximumVerticesCount - _vertexCount;
 
-            if (remainingVertices >= vertexCount)
-            {
-                QueueVerticesNoOverflow(effect, primitiveType, vertices, startVertex, vertexCount, sortKey);
-            }
-            else
-            {
-                QueueVerticesBufferSplit(effect, primitiveType, vertices, startVertex, vertexCount, sortKey, remainingVertices);
-            }
-        }
+            var exceedsBatchSpace = vertexCount > remainingVertices;
 
-        private void QueueVerticesNoOverflow(Effect effect, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey)
-        {
+            if (exceedsBatchSpace)
+            {
+                throw new Exception(message: "Deferred batch overflow. Deferred batching currently doesn't support fragmentation. Either decrease the number of vertices and or number of indices being drawn or increase the maximum number of vertices and or maximum number of indices.");
+            }
+
+            CreateNewDrawOperationIfNecessary(ref data, primitiveType, vertexCount, 0, sortKey);
             Array.Copy(vertices, startVertex, _vertices, _vertexCount, vertexCount);
-            CreateNewDrawOperationIfNecessary(effect, primitiveType, vertexCount, 0, sortKey);
             _vertexCount += vertexCount;
         }
 
-        private void QueueVerticesBufferSplit(Effect effect, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey, int verticesSpaceLeft)
-        {
-            switch (PrimitiveType)
-            {
-                case PrimitiveType.LineStrip:
-                    if (verticesSpaceLeft < 2)
-                    {
-                        verticesSpaceLeft = 0;
-                        // The vertex will be added later in the code below
-                        ++startVertex;
-                        --vertexCount;
-                    }
-                    break;
-                case PrimitiveType.LineList:
-                    verticesSpaceLeft -= verticesSpaceLeft % 2;
-                    break;
-                case PrimitiveType.TriangleStrip:
-                    if (verticesSpaceLeft < 4)
-                    {
-                        verticesSpaceLeft = 0;
-                        // The two vertices will be added later in the code below
-                        startVertex += 2;
-                        vertexCount -= 2;
-                    }
-                    else
-                    {
-                        verticesSpaceLeft -= (verticesSpaceLeft - 1) % 2;
-                    }
-                    break;
-                case PrimitiveType.TriangleList:
-                    verticesSpaceLeft -= verticesSpaceLeft % 3;
-                    break;
-            }
-
-            if (verticesSpaceLeft > 0)
-            {
-                Array.Copy(vertices, startVertex, _vertices, _vertexCount, verticesSpaceLeft);
-                CreateNewDrawOperationIfNecessary(effect, primitiveType, verticesSpaceLeft, 0, sortKey);
-                _vertexCount += verticesSpaceLeft;
-                vertexCount -= verticesSpaceLeft;
-                startVertex += verticesSpaceLeft;
-            }
-
-            Flush();
-
-            while (vertexCount >= 0)
-            {
-                verticesSpaceLeft = BatchDrawer.MaximumVerticesCount;
-
-                switch (PrimitiveType)
-                {
-                    case PrimitiveType.LineStrip:
-                        _vertices[0] = vertices[startVertex - 1];
-                        --verticesSpaceLeft;
-                        ++_vertexCount;
-                        break;
-                    case PrimitiveType.LineList:
-                        verticesSpaceLeft -= verticesSpaceLeft % 2;
-                        break;
-                    case PrimitiveType.TriangleStrip:
-                        _vertices[0] = vertices[startVertex - 2];
-                        _vertices[1] = vertices[startVertex - 1];
-                        verticesSpaceLeft -= (verticesSpaceLeft - 1) % 2 + 2;
-                        _vertexCount += 2;
-                        break;
-                    case PrimitiveType.TriangleList:
-                        verticesSpaceLeft -= verticesSpaceLeft % 3;
-                        break;
-                }
-
-                var verticesToProcess = Math.Min(verticesSpaceLeft, vertexCount);
-                Array.Copy(vertices, startVertex, _vertices, _vertexCount, verticesToProcess);
-                CreateNewDrawOperationIfNecessary(effect, primitiveType, verticesToProcess, 0, sortKey);
-                _vertexCount += verticesToProcess;
-                vertexCount -= verticesToProcess;
-
-                if (vertexCount == 0)
-                {
-                    break;
-                }
-
-                Flush();
-                startVertex += verticesToProcess;
-            }
-        }
-
-        internal override void EnqueueDraw(Effect effect, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey = 0)
+        internal override void EnqueueDraw(ref TBatchItemData data, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, int[] indices, int startIndex, int indexCount, uint sortKey = 0)
         {
             var remainingVertices = BatchDrawer.MaximumVerticesCount - _vertexCount;
             var remainingIndices = BatchDrawer.MaximumIndicesCount - _indexCount;
 
             var exceedsBatchSpace = (vertexCount > remainingVertices) || (indexCount > remainingIndices);
 
-            if (!exceedsBatchSpace)
+            if (exceedsBatchSpace)
             {
-                QueueIndexedVerticesNoOverflow(effect, primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, sortKey);
+                throw new Exception(message: "Deferred batch overflow. Deferred batching currently doesn't support fragmentation. Either decrease the number of vertices and or number of indices being drawn or increase the maximum number of vertices and or maximum number of indices.");
             }
-            else
-            {
-                QueueIndexedVerticesBufferSplit(effect, primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, sortKey, remainingVertices, remainingIndices);
-            }
-        }
 
-        private void QueueIndexedVerticesNoOverflow(Effect effect, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey)
-        {
+            CreateNewDrawOperationIfNecessary(ref data, primitiveType, vertexCount, indexCount, sortKey);
+
             Array.Copy(vertices, startVertex, _vertices, _vertexCount, vertexCount);
-            //TODO: problem with vertex count as index offset; not all geometry is indexed
-            var indexOffset = _currentOperation.VertexCount;
-            CreateNewDrawOperationIfNecessary(effect, primitiveType, vertexCount, indexCount, sortKey);
             _vertexCount += vertexCount;
 
-            // we can't use Array.Copy to copy the indices because we need to add the offset
-            var maxIndexCount = startIndex + indexCount;
-            for (var index = startIndex; index < maxIndexCount; ++index)
+            Array.Copy(indices, startIndex, _indices, _indexCount, indexCount);
+            var maxIndexCount = _indexCount + indexCount;
+            var indexOffset = _currentOperation.VertexCount;
+            while (_indexCount < maxIndexCount)
             {
-                _indices[_indexCount++] = (short)(indices[index] + indexOffset);
-            }
-        }
-
-        private void QueueIndexedVerticesBufferSplit(Effect effect, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey, int verticesSpaceLeft, int indicesSpaceLeft)
-        {
-            switch (PrimitiveType)
-            {
-                case PrimitiveType.LineStrip:
-                    if (verticesSpaceLeft < 2)
-                    {
-                        verticesSpaceLeft = 0;
-                        ++startIndex;
-                        --indexCount;
-                    }
-                    break;
-                case PrimitiveType.LineList:
-                    verticesSpaceLeft -= verticesSpaceLeft % 2;
-                    break;
-                case PrimitiveType.TriangleStrip:
-                    if (verticesSpaceLeft < 4)
-                    {
-                        verticesSpaceLeft = 0;
-                        startIndex += 2;
-                        indexCount -= 2;
-                    }
-                    else
-                    {
-                        verticesSpaceLeft -= (verticesSpaceLeft - 1) % 2;
-                    }
-                    break;
-                case PrimitiveType.TriangleList:
-                    verticesSpaceLeft -= verticesSpaceLeft % 3;
-                    break;
-            }
-
-            if (verticesSpaceLeft > 0 && indicesSpaceLeft > 0)
-            {
-                CreateNewDrawOperationIfNecessary(effect, primitiveType, verticesSpaceLeft, indicesSpaceLeft, sortKey);
-                var maxVertexCount = _vertexCount + verticesSpaceLeft;
-                var maxIndexCount = _indexCount + indicesSpaceLeft;
-
-                while (startVertex < maxVertexCount && startIndex < maxIndexCount)
-                {
-                    _indices[_indexCount++] = (short)startVertex;
-                    _vertices[_vertexCount++] = vertices[indices[startIndex] + startVertex];
-                    ++startIndex;
-                    ++startVertex;
-                }
-                vertexCount -= verticesSpaceLeft;
-                indexCount -= indicesSpaceLeft;
-            }
-
-            Flush();
-
-            while (vertexCount >= 0 && indexCount >= 0)
-            {
-                verticesSpaceLeft = BatchDrawer.MaximumVerticesCount;
-                indicesSpaceLeft = BatchDrawer.MaximumIndicesCount;
-
-                switch (PrimitiveType)
-                {
-                    case PrimitiveType.LineStrip:
-                        _vertices[0] = vertices[indices[startIndex - 1] + startVertex];
-                        _indices[0] = 0;
-
-                        --verticesSpaceLeft;
-                        ++_vertexCount;
-                        ++_indexCount;
-                        break;
-                    case PrimitiveType.LineList:
-                        verticesSpaceLeft -= verticesSpaceLeft % 2;
-                        break;
-                    case PrimitiveType.TriangleStrip:
-                        _vertices[0] = vertices[indices[startIndex - 2] + startVertex];
-                        _indices[0] = 0;
-                        _vertices[1] = vertices[indices[startIndex - 1] + startVertex];
-                        _indices[1] = 1;
-
-                        verticesSpaceLeft -= (verticesSpaceLeft - 1) % 2 + 2;
-                        _indexCount += 2;
-                        _vertexCount += 2;
-                        break;
-                    case PrimitiveType.TriangleList:
-                        verticesSpaceLeft -= verticesSpaceLeft % 3;
-                        break;
-                }
-
-                var verticesToProcess = Math.Min(verticesSpaceLeft, vertexCount);
-                var indicesToProcess = Math.Min(indicesSpaceLeft, indexCount);
-
-                var maxVertexCount = _vertexCount + verticesToProcess;
-                var maxIndexCount = _indexCount + indicesToProcess;
-            
-
-                while (startVertex < maxVertexCount && startIndex < maxIndexCount)
-                {
-                    _indices[_indexCount++] = (short)startVertex;
-                    _vertices[_vertexCount++] = vertices[indices[startIndex] + startVertex];
-                    ++startVertex;
-                    ++startIndex;
-                }
-
-                CreateNewDrawOperationIfNecessary(effect, primitiveType, verticesToProcess, indicesToProcess, sortKey);
-
-                vertexCount -= verticesToProcess;
-                indexCount -= indicesToProcess;
-                if (vertexCount == 0 && indexCount == 0)
-                {
-                    break;
-                }
-
-                Flush();
+                _indices[_indexCount++] += indexOffset;
             }
         }
     }

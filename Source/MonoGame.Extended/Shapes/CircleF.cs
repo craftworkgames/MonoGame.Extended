@@ -246,7 +246,7 @@ namespace MonoGame.Extended.Shapes
         /// <summary>
         /// Adjusts the size of this <see cref="CircleF"/> by specified radius amount. 
         /// </summary>
-        /// <param name="radiusAmount">Value to adjust the radius by.</param>
+        /// <param name="radiusAmount">Position to adjust the radius by.</param>
         public void Inflate(float radiusAmount)
 		{
 			Center -= new Vector2(radiusAmount);

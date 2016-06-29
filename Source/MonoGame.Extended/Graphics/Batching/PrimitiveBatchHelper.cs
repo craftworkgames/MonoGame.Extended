@@ -5,11 +5,11 @@ namespace MonoGame.Extended.Graphics.Batching
 {
     public static class PrimitiveBatchHelper
     {
-        internal static readonly short[] QuadIndices;
+        internal static readonly int[] QuadIndices;
 
         static PrimitiveBatchHelper()
         {
-            QuadIndices = new short[]
+            QuadIndices = new[]
             {
                 0,
                 2,

@@ -25,16 +25,3 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:logo-square-128.png
-
-#begin SpriteEffect.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:SpriteEffect.fx
-
-#begin PrimitiveEffect.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:PrimitiveEffect.fx
-

@@ -42,14 +42,14 @@ namespace MonoGame.Extended.InputListeners
 
         /// <summary>
         /// When a button is held down, the interval in which
-        /// ButtonRepeated fires. Value in milliseconds.
+        /// ButtonRepeated fires. Position in milliseconds.
         /// </summary>
         public int RepeatDelay { get; set; }
 
         /// <summary>
         /// The amount of time a button has to be held down
         /// in order to fire ButtonRepeated the first time.
-        /// Value in milliseconds.
+        /// Position in milliseconds.
         /// </summary>
         public int RepeatInitialDelay { get; set; }
 

@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collisions;
+using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Graphics.Batching;
+using MonoGame.Extended.Graphics.Effects;
 
 namespace Demo.Collisions
 {
@@ -9,7 +12,7 @@ namespace Demo.Collisions
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
-        private CollisionSimulation _collisionSimulation;
+        //private CollisionSimulation _collisionSimulation;
 
         public Game1()
         {
@@ -22,17 +25,17 @@ namespace Demo.Collisions
 
         protected override void Initialize()
         {
-            _collisionSimulation = new CollisionSimulation();
-
-            var body = _collisionSimulation.CreateBody(null);
-            var fixture = _collisionSimulation.CreateFixture(body, CollisionShape2D.Create(new[]
-            {
-                new Vector2(0, 0),
-                new Vector2(50, 0),
-                new Vector2(0, 100)
-            }));
-
-            fixture.ToString();
+//            _collisionSimulation = new CollisionSimulation();
+//
+//            var body = _collisionSimulation.CreateBody(null);
+//            var fixture1 = _collisionSimulation.CreateFixture(body, CollisionShape2D.Create(new[]
+//            {
+//                new Vector2(-1, 2),
+//                new Vector2(-1, 0),
+//                new Vector2(0, -3),
+//                new Vector2(1, 0),
+//                new Vector2(1, 1)
+//            }));
 
             base.Initialize();
         }
@@ -42,14 +45,9 @@ namespace Demo.Collisions
             var graphicsDevice = GraphicsDevice;
             var viewport = graphicsDevice.Viewport;
 
-            var collisionDebugEffect = new CollisionDebugEffect(Content.Load<Effect>("CollisionDebugEffect"))
-            {
-                World = Matrix.CreateScale(new Vector3(1, 1, 1)),
-                View = Matrix.Identity,
-                Projection = Matrix.CreateOrthographicOffCenter(viewport.Width * -0.5f, viewport.Width * 0.5f, viewport.Height * -0.5f, viewport.Height * 0.5f, 0, 1)
-            };
+            PrimitiveBatchHelper.SortAction = Array.Sort;
 
-            _collisionSimulation.Drawer = new CollisionDrawer(graphicsDevice, collisionDebugEffect);
+            //_collisionSimulation.Drawer = new CollisionDrawer(graphicsDevice, collisionDebugEffect);
         }
 
         protected override void UnloadContent()
@@ -58,7 +56,7 @@ namespace Demo.Collisions
 
         protected override void Update(GameTime gameTime)
         {
-            _collisionSimulation.Update(gameTime);
+            //_collisionSimulation.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -67,7 +65,7 @@ namespace Demo.Collisions
         {
             GraphicsDevice.Clear(Color.Black);
 
-            _collisionSimulation.Draw(gameTime);
+            //_collisionSimulation.Draw(gameTime);
 
             base.Draw(gameTime);
         }

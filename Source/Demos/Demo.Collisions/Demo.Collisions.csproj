@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -32,6 +32,9 @@
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Demo.Collisions.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="CollisionDebugDrawer.cs" />
     <Compile Include="Game1.cs" />
@@ -40,8 +43,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Framework, Version=3.5.0.1678, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MonoGame.Framework.DesktopGL.3.5.0.1678\lib\net40\MonoGame.Framework.dll</HintPath>
+    <Reference Include="MonoGame.Framework, Version=3.4.0.459, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\MonoGame.Framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NVorbis, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
@@ -49,7 +52,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MonoGame.Framework.DesktopGL.3.5.0.1678\lib\net40\OpenTK.dll</HintPath>
+      <HintPath>..\..\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\OpenTK.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -58,7 +61,6 @@
   <ItemGroup>
     <Content Include="Content\logo-square-128.png" />
     <Content Include="Content\montserrat-32_0.png" />
-    <None Include="Content\CollisionDebugEffect.fx" />
     <Content Include="Content\vignette.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
@@ -66,6 +68,7 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Content\montserrat-32.fnt" />
     <None Include="packages.config" />
   </ItemGroup>

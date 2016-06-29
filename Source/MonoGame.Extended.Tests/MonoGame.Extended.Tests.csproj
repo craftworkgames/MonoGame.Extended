@@ -57,7 +57,6 @@
     <Compile Include="AngleTest.cs" />
     <Compile Include="Collections\DequeTests.cs" />
     <Compile Include="Collections\PoolTests.cs" />
-    <Compile Include="Graphics\Batching\ImmediateBatchQueuerTests.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensionsTests.cs" />
     <Compile Include="MockGameWindow.cs" />
     <Compile Include="Particles\AssertionModifier.cs" />
@@ -86,10 +85,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="Particles\Modifiers\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Particles\Modifiers\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

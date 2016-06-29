@@ -52,9 +52,3 @@
 /processorParam:TextureFormat=Color
 /build:vignette.png
 
-#begin CollisionDebugEffect.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:CollisionDebugEffect.fx
-

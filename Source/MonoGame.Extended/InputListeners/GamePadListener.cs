@@ -83,14 +83,14 @@ namespace MonoGame.Extended.InputListeners
 
         /// <summary>
         /// When a button is held down, the interval in which
-        /// ButtonRepeated fires. Value in milliseconds.
+        /// ButtonRepeated fires. Position in milliseconds.
         /// </summary>
         public int RepeatDelay { get; }
 
         /// <summary>
         /// The amount of time a button has to be held down
         /// in order to fire ButtonRepeated the first time.
-        /// Value in milliseconds.
+        /// Position in milliseconds.
         /// </summary>
         public int RepeatInitialDelay { get; }
 
@@ -284,7 +284,7 @@ namespace MonoGame.Extended.InputListeners
 
         private void CheckTriggers(Func<GamePadState, float> getButtonState, Buttons button)
         {
-            var debounce = 0.05f; // Value used to qualify a trigger as coming Up from a Down state
+            var debounce = 0.05f; // Position used to qualify a trigger as coming Up from a Down state
             var curstate = getButtonState(_currentState);
             var curdown = curstate > TriggerDownTreshold;
             var prevdown = button == Buttons.RightTrigger ? _rightTriggerDown : _leftTriggerDown;

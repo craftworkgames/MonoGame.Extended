@@ -1,31 +1,26 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-
-namespace MonoGame.Extended.Collisions
-{
-    public sealed class CollisionBody
-    {
-        //TODO: Expose this hard coded value as a parameter for the simulation.
-        internal const int DefaultFixtureCapacity = 5;
-
-        internal int Index;
-        public Vector3 Position;
-        public List<int> FixtureIndices;
-
-        public CollisionBodyFlags Flags { get; internal set; }
-
-        internal CollisionBody()
-        {
-            FixtureIndices = new List<int>(DefaultFixtureCapacity);
-            ResetState();
-        }
-
-        internal void ResetState()
-        {
-            FixtureIndices.Clear();
-            FixtureIndices.Capacity = DefaultFixtureCapacity;
-            Flags = CollisionBodyFlags.None;
-            Index = -1;
-        }
-    }
-}
+﻿//using MonoGame.Extended.Shapes.Explicit;
+//
+//namespace MonoGame.Extended.Collisions
+//{
+//    public abstract class CollisionBody<TTransform> where TTransform : struct, ITransform
+//    {
+//        internal CollisionSimulation CollisionSimulation;
+//        internal int Index;
+//
+//        // NOT a property because structs members can't be set directory via a property, e.g. for 2D: Transform.Position = new Vector2(x, y);
+//        public TTransform Transform;
+//
+//        public CollisionBodyFlags Flags { get; internal set; }
+//
+//        protected CollisionBody()
+//        {
+//            ResetState();
+//        }
+//
+//        internal void ResetState()
+//        {
+//            CollisionSimulation = null;
+//            Flags = CollisionBodyFlags.None;
+//        }
+//    }
+//}

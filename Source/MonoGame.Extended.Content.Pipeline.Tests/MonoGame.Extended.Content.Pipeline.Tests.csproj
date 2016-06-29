@@ -61,9 +61,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="TestData\isometric_tileset.png" />
     <Content Include="TestData\level01.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -92,6 +89,7 @@
     <Content Include="TestData\astrid-animator-atlas.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="packages.config" />
     <None Include="TestData\isometric.tmx" />
     <Content Include="TestData\test-object-layer.tmx">
       <SubType>Designer</SubType>

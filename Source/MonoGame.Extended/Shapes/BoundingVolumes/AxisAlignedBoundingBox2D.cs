@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
+using TShapeVertexType = MonoGame.Extended.Shapes.Explicit.ShapeVertex2D;
 
 namespace MonoGame.Extended.Shapes.BoundingVolumes
 {
@@ -16,8 +17,8 @@ namespace MonoGame.Extended.Shapes.BoundingVolumes
     ///         comparison of individual coordinate values.
     ///     </para>
     /// </remarks>
-    [DebuggerDisplay("{DebugDisplayString,nq}")]
-    public struct AxisAlignedBoundingBox2D : IEquatable<AxisAlignedBoundingBox2D>, IBoundingVolume2D<AxisAlignedBoundingBox2D>
+    [DebuggerDisplay(value: "{DebugDisplayString,nq}")]
+    public struct AxisAlignedBoundingBox2D : IEquatable<AxisAlignedBoundingBox2D>, IBoundingVolume<TShapeVertexType, AxisAlignedBoundingBox2D>
     {
         public Vector2 Center;
         public SizeF HalfSize;
@@ -35,7 +36,7 @@ namespace MonoGame.Extended.Shapes.BoundingVolumes
             return Math.Abs(positionVector.X) > totalHalfExtents.Width || Math.Abs(positionVector.Y) > totalHalfExtents.Height;
         }
 
-        public void Compute(IReadOnlyList<Vector2> vertices)
+        public void UpdateFrom(IReadOnlyList<TShapeVertexType> vertices)
         {
             var minimum = new Vector2(float.MaxValue, float.MaxValue);
             var maximum = new Vector2(float.MinValue, float.MinValue);
@@ -44,8 +45,8 @@ namespace MonoGame.Extended.Shapes.BoundingVolumes
             for (var index = 0; index < vertices.Count; ++index)
             {
                 var vertex = vertices[index];
-                Vector2.Min(ref minimum, ref vertex, out minimum);
-                Vector2.Max(ref maximum, ref vertex, out maximum);
+                Vector2.Min(ref minimum, ref vertex.Position, out minimum);
+                Vector2.Max(ref maximum, ref vertex.Position, out maximum);
             }
 
             Center = (maximum + minimum) * 0.5f;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Demo.PrimitiveBatch
+namespace Demo.Shapes
 {
     internal static class Program
     {

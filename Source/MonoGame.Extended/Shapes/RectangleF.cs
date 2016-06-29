@@ -322,8 +322,8 @@ namespace MonoGame.Extended.Shapes
         /// <summary>
         /// Adjusts the edges of this <see cref="RectangleF"/> by specified horizontal and vertical amounts. 
         /// </summary>
-        /// <param name="horizontalAmount">Value to adjust the left and right edges.</param>
-        /// <param name="verticalAmount">Value to adjust the top and bottom edges.</param>
+        /// <param name="horizontalAmount">Position to adjust the left and right edges.</param>
+        /// <param name="verticalAmount">Position to adjust the top and bottom edges.</param>
         public void Inflate(int horizontalAmount, int verticalAmount)
         {
             X -= horizontalAmount;
@@ -335,8 +335,8 @@ namespace MonoGame.Extended.Shapes
         /// <summary>
         /// Adjusts the edges of this <see cref="RectangleF"/> by specified horizontal and vertical amounts. 
         /// </summary>
-        /// <param name="horizontalAmount">Value to adjust the left and right edges.</param>
-        /// <param name="verticalAmount">Value to adjust the top and bottom edges.</param>
+        /// <param name="horizontalAmount">Position to adjust the left and right edges.</param>
+        /// <param name="verticalAmount">Position to adjust the top and bottom edges.</param>
         public void Inflate(float horizontalAmount, float verticalAmount)
         {
             X -= horizontalAmount;
