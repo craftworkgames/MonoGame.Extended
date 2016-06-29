@@ -11,15 +11,13 @@ namespace MonoGame.Extended.Graphics
 {
     public class ShapeBatch
     {
-        private readonly PrimitiveBatch<VertexPositionColorTexture, BatchItemData, BatchEffect> _primitiveBatch;
+        private readonly PrimitiveBatch<VertexPositionColorTexture, BatchItemData, Effect> _primitiveBatch;
         private BatchItemData _emptyBatchItemData;
         private Matrix _defaultWorld;
         private Matrix _defaultView;
         private Matrix _defaultProjection;
-
         private readonly ShapeBuilder _shapeBuilder;
-
-        public BatchEffect Effect { get; }
+        private readonly ShapeBatchEffect _effect;
 
         public ShapeBatch(GraphicsDevice graphicsDevice)
         {
@@ -28,16 +26,15 @@ namespace MonoGame.Extended.Graphics
                 throw new ArgumentNullException(nameof(graphicsDevice));
             }
 
-            _primitiveBatch = new PrimitiveBatch<VertexPositionColorTexture, BatchItemData, BatchEffect>(graphicsDevice);
-            Effect = new BatchEffect(graphicsDevice);
-
+            _primitiveBatch = new PrimitiveBatch<VertexPositionColorTexture, BatchItemData, Effect>(graphicsDevice);
+            _effect = new ShapeBatchEffect(graphicsDevice);
             _shapeBuilder = new ShapeBuilder();
 
             var viewport = graphicsDevice.Viewport;
 
             _defaultWorld = Matrix.Identity;
             _defaultView = Matrix.Identity;
-            Matrix.CreateOrthographicOffCenter(left: 0, right: viewport.Width, bottom: viewport.Height, top: 0, zNearPlane: 0, zFarPlane: 1, result: out _defaultProjection);
+            _defaultProjection = Matrix.CreateTranslation(xPosition: -0.5f, yPosition: -0.5f, zPosition: 0) * Matrix.CreateOrthographicOffCenter(left: 0, right: viewport.Width, bottom: viewport.Height, top: 0, zNearPlane: 0, zFarPlane: -1);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -47,36 +44,30 @@ namespace MonoGame.Extended.Graphics
             return (int)Math.Ceiling(10 * Math.Sqrt(radius));
         }
 
+        public void Begin()
+        {
+            Begin(BatchMode.Deferred);
+        }
+
         public void Begin(BatchMode batchMode)
         {
-            Effect.SetWorld(ref _defaultWorld);
-            Effect.SetView(ref _defaultView);
-            Effect.SetProjection(ref _defaultProjection);
-            _primitiveBatch.Begin(Effect, batchMode);
+            _effect.SetWorld(ref _defaultWorld);
+            _effect.SetView(ref _defaultView);
+            _effect.SetProjection(ref _defaultProjection);
+            _primitiveBatch.Begin(_effect, batchMode);
+        }
+
+        public void Begin(BatchMode batchMode, Effect effect)
+        {
+            _primitiveBatch.Begin(effect, batchMode);
         }
 
         public void Begin(BatchMode batchMode, ref Matrix view)
         {
-            Effect.SetWorld(ref _defaultWorld);
-            Effect.SetView(ref view);
-            Effect.SetProjection(ref _defaultProjection);
-            _primitiveBatch.Begin(Effect, batchMode);
-        }
-
-        public void Begin(BatchMode batchMode, ref Matrix world, ref Matrix view)
-        {
-            Effect.SetWorld(ref world);
-            Effect.SetView(ref view);
-            Effect.SetProjection(ref _defaultProjection);
-            _primitiveBatch.Begin(Effect, batchMode);
-        }
-
-        public void Begin(BatchMode batchMode, ref Matrix world, ref Matrix view, ref Matrix projection)
-        {
-            Effect.SetWorld(ref world);
-            Effect.SetView(ref view);
-            Effect.SetProjection(ref projection);
-            _primitiveBatch.Begin(Effect, batchMode);
+            _effect.SetWorld(ref _defaultWorld);
+            _effect.SetView(ref view);
+            _effect.SetProjection(ref _defaultProjection);
+            _primitiveBatch.Begin(_effect, batchMode);
         }
 
         public void End()
@@ -242,7 +233,7 @@ namespace MonoGame.Extended.Graphics
         //            }
         //        }
 
-        internal struct BatchItemData : IBatchItemData<BatchItemData, BatchEffect>
+        internal struct BatchItemData : IBatchItemData<BatchItemData, Effect>
         {
             internal Texture2D Texture;
 
@@ -251,7 +242,7 @@ namespace MonoGame.Extended.Graphics
                 return true;
             }
 
-            public void ApplyTo(BatchEffect effect)
+            public void ApplyTo(Effect effect)
             {
             }
         }

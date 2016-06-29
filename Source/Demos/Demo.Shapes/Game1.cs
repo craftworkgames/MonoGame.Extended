@@ -12,7 +12,7 @@ namespace Demo.Shapes
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
-        private ShapeBatch _batch;
+        private ShapeBatch _shapeBatch;
 
         private float _rotationTheta;
 
@@ -33,9 +33,7 @@ namespace Demo.Shapes
 
             PrimitiveBatchHelper.SortAction = Array.Sort;
 
-            _batch = new ShapeBatch(graphicsDevice);
-
-            _batch.Effect.Projection = Matrix.CreateTranslation(xPosition: -0.5f, yPosition: -0.5f, zPosition: 0) * Matrix.CreateOrthographicOffCenter(left: 0, right: viewport.Width, bottom: viewport.Height, top: 0, zNearPlane: 0, zFarPlane: -1);
+            _shapeBatch = new ShapeBatch(graphicsDevice);
         }
 
         protected override void Update(GameTime gameTime)
@@ -58,8 +56,9 @@ namespace Demo.Shapes
 
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
-            var m = Matrix.CreateScale(1);
-            _batch.Begin(BatchMode.Deferred, ref m);
+            var viewport = GraphicsDevice.Viewport;
+            var projection = Matrix.CreateTranslation(xPosition: -0.5f, yPosition: -0.5f, zPosition: 0) * Matrix.CreateOrthographicOffCenter(left: 0, right: viewport.Width, bottom: viewport.Height, top: 0, zNearPlane: 0, zFarPlane: -1);
+            _shapeBatch.Begin();
 
 //            var v1 = new VertexPositionColor(new Vector3(new Vector2(0, 0), 0), Color.AliceBlue);
 //            var v2 = new VertexPositionColor(new Vector3(new Vector2(0, 100), 0), Color.AntiqueWhite);
@@ -71,13 +70,13 @@ namespace Demo.Shapes
 //
 //            _primitiveBatch.DrawLine(_simpleEffect, ref v3, ref v4);
 
-            //_batch.DrawCircle(_simpleEffect, new Vector2(0, 1), 1f, Color.Black * 0.5f);
+            //_shapeBatch.DrawCircle(_simpleEffect, new Vector2(0, 1), 1f, Color.Black * 0.5f);
 
             //var axis = new Vector2(x: (float)Math.Cos(_rotationTheta), y: (float)Math.Sin(_rotationTheta));
 
-            _batch.DrawCircleOutline(new Vector2(250, 250), radius: 50f, color: Color.Black, circleSegments: 64);
+            _shapeBatch.DrawCircleOutline(new Vector2(250, 250), radius: 50f, color: Color.Black, circleSegments: 64);
 
-            _batch.End();
+            _shapeBatch.End();
 
             base.Draw(gameTime);
         }

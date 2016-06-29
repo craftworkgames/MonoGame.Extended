@@ -73,7 +73,7 @@
     <Compile Include="Graphics\Batching\IBatchItemData.cs" />
     <Compile Include="Shapes\Explicit\ShapeBuilder.cs" />
     <Compile Include="Graphics\Effects\EffectResource.cs" />
-    <Compile Include="Graphics\Effects\BatchEffect.cs" />
+    <Compile Include="Graphics\Effects\ShapeBatchEffect.cs" />
     <Compile Include="Graphics\ShapeBatch.cs" />
     <Compile Include="IEquatableByReference.cs" />
     <Compile Include="Shapes\Explicit\IShapeVertexType.cs" />
@@ -243,7 +243,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\Effects\Resources\BatchEffect.mgfxo" />
+    <EmbeddedResource Include="Graphics\Effects\Resources\ShapeEffect.mgfxo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Graphics\Effects\Resources\ShapeEffect.fx" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,11 +4,11 @@ using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Graphics.Effects
 {
-    public class BatchEffect : Effect
+    public class ShapeBatchEffect : Effect
     {
         public static readonly uint WorldProjectionViewDirtyBitMask;
 
-        static BatchEffect()
+        static ShapeBatchEffect()
         {
             WorldProjectionViewDirtyBitMask = BitVector32.CreateMask();
         }
@@ -39,14 +39,14 @@ namespace MonoGame.Extended.Graphics.Effects
             set { SetProjection(ref value); }
         }
 
-        public BatchEffect(GraphicsDevice graphicsDevice)
+        public ShapeBatchEffect(GraphicsDevice graphicsDevice)
             : base(graphicsDevice, EffectResource.BatchEffect.Bytecode)
         {
             // ReSharper disable once VirtualMemberCallInConstructor
             CacheEffectParameters();
         }
 
-        public BatchEffect(Effect cloneSource)
+        public ShapeBatchEffect(Effect cloneSource)
             : base(cloneSource)
         {
             // ReSharper disable once VirtualMemberCallInConstructor
