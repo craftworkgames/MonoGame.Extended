@@ -70,9 +70,28 @@ namespace MonoGame.Extended.Graphics
         public void DrawLine(Vector2 firstPoint, Vector2 secondPoint, Color? color = null, float depth = 0f, uint sortKey = 0)
         {
             var color1 = color ?? Color.White;
-            var firstVertex = new VertexPositionColorTexture(new Vector3(x: 0, y: 0, z: depth), color1, Vector2.Zero);
-            var secondVertex = new VertexPositionColorTexture(new Vector3(x: 0, y: 0, z: depth), color1, Vector2.Zero);
+            var firstVertex = new VertexPositionColorTexture(new Vector3(firstPoint.X, firstPoint.Y, depth), color1, Vector2.Zero);
+            var secondVertex = new VertexPositionColorTexture(new Vector3(secondPoint.X, secondPoint.Y, depth), color1, Vector2.Zero);
             _primitiveBatch.DrawLine(ref firstVertex, ref secondVertex, ref _emptyBatchItemData, sortKey);
+        }
+
+        public void DrawTriangle(Vector2 firstPoint, Vector2 secondPoint, Vector2 thirdPoint, Color? color = null, float depth = 0f, uint sortKey = 0)
+        {
+            var color1 = color ?? Color.White;
+            var firstVertex = new VertexPositionColorTexture(new Vector3(firstPoint.X, firstPoint.Y, depth), color1, Vector2.Zero);
+            var secondVertex = new VertexPositionColorTexture(new Vector3(secondPoint.X, secondPoint.Y, depth), color1, Vector2.Zero);
+            var thirdVertex = new VertexPositionColorTexture(new Vector3(thirdPoint.X, thirdPoint.Y, depth), color1, Vector2.Zero);
+            _primitiveBatch.DrawTriangle(ref firstVertex, ref secondVertex, ref thirdVertex, ref _emptyBatchItemData, sortKey);
+        }
+
+        public void DrawQuadrilateral(Vector2 firstPoint, Vector2 secondPoint, Vector2 thirdPoint, Vector2 fourthPoint, Color? color = null, float depth = 0f, uint sortKey = 0)
+        {
+            var color1 = color ?? Color.White;
+            var firstVertex = new VertexPositionColorTexture(new Vector3(firstPoint.X, firstPoint.Y, depth), color1, Vector2.Zero);
+            var secondVertex = new VertexPositionColorTexture(new Vector3(secondPoint.X, secondPoint.Y, depth), color1, Vector2.Zero);
+            var thirdVertex = new VertexPositionColorTexture(new Vector3(thirdPoint.X, thirdPoint.Y, depth), color1, Vector2.Zero);
+            var forthVertex = new VertexPositionColorTexture(new Vector3(fourthPoint.X, fourthPoint.Y, depth), color1, Vector2.Zero);
+            _primitiveBatch.DrawQuadrilateral(ref firstVertex, ref secondVertex, ref thirdVertex, ref forthVertex, ref _emptyBatchItemData, sortKey);
         }
 
         public void DrawPolygonOutline(IReadOnlyList<Vector2> points, Color? color = null, float depth = 0f, uint sortKey = 0)
