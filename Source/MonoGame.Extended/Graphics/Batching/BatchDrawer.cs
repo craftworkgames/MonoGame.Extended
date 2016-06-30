@@ -21,7 +21,7 @@ namespace MonoGame.Extended.Graphics.Batching
             MaximumIndicesCount = maximumIndicesCount;
 
             VertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof(TVertexType), maximumVerticesCount, BufferUsage.WriteOnly);
-            IndexBuffer = new DynamicIndexBuffer(graphicsDevice, typeof(short), maximumIndicesCount, BufferUsage.WriteOnly);
+            IndexBuffer = new DynamicIndexBuffer(graphicsDevice, typeof(int), maximumIndicesCount, BufferUsage.WriteOnly);
         }
 
         public void Dispose()

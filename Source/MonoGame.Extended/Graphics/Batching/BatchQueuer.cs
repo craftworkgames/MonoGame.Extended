@@ -11,7 +11,6 @@ namespace MonoGame.Extended.Graphics.Batching
 
         internal abstract void Begin(Effect effect);
         internal abstract void End();
-        internal abstract void EnqueueDraw(ref TBatchItemData data, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0);
         internal abstract void EnqueueDraw(ref TBatchItemData data, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, int[] indices, int startIndex, int indexCount, uint sortKey = 0);
 
         protected BatchQueuer(BatchDrawer<TVertexType, TBatchItemData> batchDrawer)

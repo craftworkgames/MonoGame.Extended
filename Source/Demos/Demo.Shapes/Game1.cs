@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Graphics.Batching;
 
@@ -14,13 +15,16 @@ namespace Demo.Shapes
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
         private ShapeBatch _shapeBatch;
-        private MouseState _mouseState;
-        private MouseState _previousMouseState;
+
         private Vector2 _circlePosition;
         private float _circleRadius;
         private float _circleTheta;
 
-        private readonly List<Vector2> _points = new List<Vector2>();
+        private Vector2 _rectanglePosition;
+        private float _rectangleTheta;
+        private float _rectangleSize;
+
+        private Texture2D _spriteTexture;
 
         public Game1()
         {
@@ -38,6 +42,8 @@ namespace Demo.Shapes
             PrimitiveBatchHelper.SortAction = Array.Sort;
 
             _shapeBatch = new ShapeBatch(graphicsDevice);
+
+            _spriteTexture = Content.Load<Texture2D>("logo-square-128");
         }
 
         protected override void Update(GameTime gameTime)
@@ -47,22 +53,16 @@ namespace Demo.Shapes
                 Exit();
             }
 
-            _previousMouseState = _mouseState;
-            _mouseState = Mouse.GetState();
+            var viewport = GraphicsDevice.Viewport;
+            var mouseState = Mouse.GetState();
 
-            _circlePosition = _mouseState.Position.ToVector2();
             _circleTheta += MathHelper.ToRadians(1.5f);
-            _circleRadius = 70f + 12.5f * (float)Math.Cos(_circleTheta);
+            _circleRadius = 70f + 15f * (float)Math.Cos(_circleTheta);
+            _circlePosition = mouseState.Position.ToVector2();
 
-            if (_mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
-            {
-                _points.Add(_mouseState.Position.ToVector2());
-            }
-
-            if (_mouseState.RightButton == ButtonState.Pressed && _previousMouseState.RightButton == ButtonState.Released)
-            {
-                _points.Clear();
-            }
+            _rectangleTheta -= MathHelper.ToRadians(-1f);
+            _rectangleSize = 100f + 95f * (float)Math.Sin(_rectangleTheta);
+            _rectanglePosition = new Vector2(viewport.Width * 0.5f, viewport.Height * 0.5f);
 
             base.Update(gameTime);
         }
@@ -76,16 +76,19 @@ namespace Demo.Shapes
             GraphicsDevice.DepthStencilState = DepthStencilState.None;
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
-            _shapeBatch.Begin();
+            _shapeBatch.Begin(BatchMode.Immediate);
 
             //TODO: DrawRectangle, DrawSprite, DrawString
 
-            _shapeBatch.DrawPolygonLine(_points, color: Color.White);
+            _shapeBatch.DrawCircle(_circlePosition, _circleRadius, Color.Black * 0.25f);
+            _shapeBatch.DrawCircleOutline(_circlePosition, _circleRadius, Color.Black);
+            _shapeBatch.DrawArc(_circlePosition, _circleRadius, 0, _circleTheta, Color.FromNonPremultiplied(39, 139, 39, 255));
+            _shapeBatch.DrawArcOutline(_circlePosition, _circleRadius, 0, _circleTheta, Color.Red);
 
-            _shapeBatch.DrawCircle(_circlePosition, _circleRadius, Color.Black * 0.5f);
-            _shapeBatch.DrawCircleOutline(_circlePosition, _circleRadius, color: Color.Black);
-            _shapeBatch.DrawArc(_circlePosition, _circleRadius, 0, _circleTheta, Color.Red * 0.5f);
-            _shapeBatch.DrawArcOutline(_circlePosition, _circleRadius, 0, _circleTheta, color: Color.Red);
+            _shapeBatch.DrawRectangleFromCenter(_rectanglePosition, _rectangleSize, Color.Red, _rectangleTheta);
+            _shapeBatch.DrawRectangleOutlineFromCenter(_rectanglePosition, _rectangleSize, Color.Black, _rectangleTheta);
+
+            _shapeBatch.DrawSpriteFromCenter(_spriteTexture, new Vector2(200, 200), rotation: _rectangleTheta);
 
             _shapeBatch.End();
 

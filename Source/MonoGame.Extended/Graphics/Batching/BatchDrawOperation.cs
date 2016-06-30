@@ -26,7 +26,7 @@ namespace MonoGame.Extended.Graphics.Batching
 
         internal bool CanMergeIntoOperationOf(ref TBatchItemData otherData, byte primitiveType, int indexCount)
         {
-            return Data.Equals(ref otherData) && IndexCount > 0 == indexCount > 0 && PrimitiveType == primitiveType && (PrimitiveType != (byte)Microsoft.Xna.Framework.Graphics.PrimitiveType.TriangleStrip || PrimitiveType != (byte)Microsoft.Xna.Framework.Graphics.PrimitiveType.LineStrip);
+            return Data.Equals(ref otherData) && PrimitiveType == primitiveType && (PrimitiveType != (byte)Microsoft.Xna.Framework.Graphics.PrimitiveType.TriangleStrip || PrimitiveType != (byte)Microsoft.Xna.Framework.Graphics.PrimitiveType.LineStrip);
         }
     }
 }

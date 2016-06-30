@@ -14,6 +14,13 @@ namespace MonoGame.Extended
         public bool IsEmpty => Width == 0 && Height == 0;
         // ReSharper restore CompareOfFloatsByEqualityOperator
 
+        public SizeF(float value)
+            : this()
+        {
+            Width = value;
+            Height = value;
+        }
+
         public SizeF(float width, float height)
             : this()
         {
@@ -73,6 +80,11 @@ namespace MonoGame.Extended
         public static bool operator !=(SizeF size1, SizeF size2)
         {
             return !(size1 == size2);
+        }
+
+        public static implicit operator SizeF(float value)
+        {
+            return new SizeF(value);
         }
 
         public static implicit operator Point(SizeF size)

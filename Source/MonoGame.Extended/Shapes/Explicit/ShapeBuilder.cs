@@ -147,6 +147,72 @@ namespace MonoGame.Extended.Shapes.Explicit
             }
         }
 
+        public void AppendRectangleFromTopLeft(Vector2 position, SizeF size, float rotation, Vector2? origin = null, float depth = 0f)
+        {
+            var origin1 = origin ?? Vector2.Zero;
+            var sin = (float)Math.Sin(rotation);
+            var cos = (float)Math.Cos(rotation);
+            // ReSharper disable once UseObjectOrCollectionInitializer
+            var point = new Vector3(0, 0, depth);
+
+            var rx = -origin1.X;
+            var ry = -origin1.Y;
+            point.X = position.X + rx * cos - ry * sin;
+            point.Y = position.Y + rx * sin + ry * cos;
+            Append(point);
+
+            rx = -origin1.X + size.Width;
+            ry = -origin1.Y;
+            point.X = position.X + rx * cos - ry * sin;
+            point.Y = position.Y + rx * sin + ry * cos;
+            Append(point);
+
+            rx = -origin1.X;
+            ry = -origin1.Y + size.Height;
+            point.X = position.X + rx * cos - ry * sin;
+            point.Y = position.Y + rx * sin + ry * cos;
+            Append(point);
+
+            rx = -origin1.X + size.Width;
+            ry = -origin1.Y + size.Height;
+            point.X = position.X + rx * cos - ry * sin;
+            point.Y = position.Y + rx * sin + ry * cos;
+            Append(point);
+        }
+
+        public void AppendRectangleFromCenter(Vector2 position, SizeF size, float rotation, float depth = 0f)
+        {
+            var sin = (float)Math.Sin(rotation);
+            var cos = (float)Math.Cos(rotation);
+            // ReSharper disable once UseObjectOrCollectionInitializer
+            var point = new Vector3(0, 0, depth);
+            var halfSize = size * 0.5f;
+
+            var rx = -halfSize.Width;
+            var ry = -halfSize.Height;
+            point.X = position.X + rx * cos - ry * sin;
+            point.Y = position.Y + rx * sin + ry * cos;
+            Append(point);
+
+            rx = halfSize.Width;
+            ry = -halfSize.Height;
+            point.X = position.X + rx * cos - ry * sin;
+            point.Y = position.Y + rx * sin + ry * cos;
+            Append(point);
+
+            rx = -halfSize.Width;
+            ry = halfSize.Height;
+            point.X = position.X + rx * cos - ry * sin;
+            point.Y = position.Y + rx * sin + ry * cos;
+            Append(point);
+
+            rx = halfSize.Width;
+            ry = halfSize.Height;
+            point.X = position.X + rx * cos - ry * sin;
+            point.Y = position.Y + rx * sin + ry * cos;
+            Append(point);
+        }
+
         public void Dispose()
         {
             Dispose(true);

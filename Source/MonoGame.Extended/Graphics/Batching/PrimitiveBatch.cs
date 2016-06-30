@@ -114,8 +114,6 @@ namespace MonoGame.Extended.Graphics.Batching
             MaximumIndicesCount = maximumIndicesCount;
 
             _batchDrawer = new BatchDrawer<TVertexType, TBatchItemData>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
-            _immediateBatchQueuer = new ImmediateBatchQueuer<TVertexType, TBatchItemData>(_batchDrawer);
-            _deferredBatchQueuer = new DeferredBatchQueuer<TVertexType, TBatchItemData>(_batchDrawer);
         }
 
         /// <summary>
@@ -207,9 +205,17 @@ namespace MonoGame.Extended.Graphics.Batching
             switch (mode)
             {
                 case BatchMode.Immediate:
+                    if (_immediateBatchQueuer == null)
+                    {
+                        _immediateBatchQueuer = new ImmediateBatchQueuer<TVertexType, TBatchItemData>(_batchDrawer);
+                    }
                     _currentBatchQueuer = _immediateBatchQueuer;
                     break;
                 case BatchMode.Deferred:
+                    if (_deferredBatchQueuer == null)
+                    {
+                        _deferredBatchQueuer = new DeferredBatchQueuer<TVertexType, TBatchItemData>(_batchDrawer);
+                    }
                     _currentBatchQueuer = _deferredBatchQueuer;
                     break;
                 default:
@@ -250,32 +256,7 @@ namespace MonoGame.Extended.Graphics.Batching
         public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, ref TBatchItemData data, uint sortKey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.EnqueueDraw(ref data, primitiveType, vertices, 0, vertices.Length, sortKey);
-        }
-
-        /// <summary>
-        ///     Adds geometry to a batch of geometry for rendering.
-        /// </summary>
-        /// <param name="primitiveType">The <see cref="PrimitiveType" />.</param>
-        /// <param name="vertices">The vertices which explictly define the geometry to render.</param>
-        /// <param name="startVertex">The starting vertex index to use from <paramref name="vertices" />.</param>
-        /// <param name="vertexCount">
-        ///     The number of vertices to use from <paramref name="vertices" /> starting from
-        ///     <paramref name="startVertex" />.
-        /// </param>
-        /// <param name="data">The user data associated with the geometry.</param>
-        /// <param name="sortKey">
-        ///     The sort key used to sort the geometry when rendering with <see cref="BatchMode.Deferred" />. This
-        ///     value is ignored if <see cref="BatchMode.Deferred" /> is not used.
-        /// </param>
-        /// <exception cref="InvalidOperationException">
-        ///     This method was called before <see cref="Begin" />. <see cref="Begin" /> must be called before you can call
-        ///     <see cref="Draw(PrimitiveType,TVertexType[],int, int,ref TBatchItemData,uint)" />.
-        /// </exception>
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, ref TBatchItemData data, uint sortKey = 0)
-        {
-            EnsureHasBegun();
-            _currentBatchQueuer.EnqueueDraw(ref data, primitiveType, vertices, startVertex, vertexCount, sortKey);
+            _currentBatchQueuer.EnqueueDraw(ref data, primitiveType, vertices, 0, vertices.Length, null, 0, 0, sortKey);
         }
 
         /// <summary>
@@ -352,7 +333,7 @@ namespace MonoGame.Extended.Graphics.Batching
             EnsureHasBegun();
             _verticesArrayBuffer[0] = firstVertex;
             _verticesArrayBuffer[1] = secondVertex;
-            _currentBatchQueuer.EnqueueDraw(ref data, PrimitiveType.LineList, _verticesArrayBuffer, 0, 2, sortKey);
+            _currentBatchQueuer.EnqueueDraw(ref data, PrimitiveType.LineList, _verticesArrayBuffer, 0, 2, PrimitiveBatchHelper.QuadrilateralClockwiseIndices, 0, 2, sortKey);
         }
 
         /// <summary>
@@ -377,7 +358,7 @@ namespace MonoGame.Extended.Graphics.Batching
             _verticesArrayBuffer[0] = firstVertex;
             _verticesArrayBuffer[1] = secondVertex;
             _verticesArrayBuffer[2] = thirdVertex;
-            _currentBatchQueuer.EnqueueDraw(ref data, PrimitiveType.TriangleList, _verticesArrayBuffer, 0, 3, sortKey);
+            _currentBatchQueuer.EnqueueDraw(ref data, PrimitiveType.TriangleList, _verticesArrayBuffer, 0, 3, PrimitiveBatchHelper.QuadrilateralClockwiseIndices, 0, 3, sortKey);
         }
 
         /// <summary>
@@ -405,7 +386,7 @@ namespace MonoGame.Extended.Graphics.Batching
             _verticesArrayBuffer[1] = secondVertex;
             _verticesArrayBuffer[2] = thirdVertex;
             _verticesArrayBuffer[3] = fourthVertex;
-            _currentBatchQueuer.EnqueueDraw(ref data, PrimitiveType.TriangleList, _verticesArrayBuffer, 0, 4, PrimitiveBatchHelper.QuadIndices, 0, 6, sortKey);
+            _currentBatchQueuer.EnqueueDraw(ref data, PrimitiveType.TriangleList, _verticesArrayBuffer, 0, 4, PrimitiveBatchHelper.QuadrilateralClockwiseIndices, 0, 6, sortKey);
         }
     }
 }

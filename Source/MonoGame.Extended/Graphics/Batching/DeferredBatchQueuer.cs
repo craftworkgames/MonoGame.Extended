@@ -138,22 +138,6 @@ namespace MonoGame.Extended.Graphics.Batching
             _currentSortKey = 0;
         }
 
-        internal override void EnqueueDraw(ref TBatchItemData data, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0)
-        {
-            var remainingVertices = BatchDrawer.MaximumVerticesCount - _vertexCount;
-
-            var exceedsBatchSpace = vertexCount > remainingVertices;
-
-            if (exceedsBatchSpace)
-            {
-                throw new Exception(message: "Deferred batch overflow. Deferred batching currently doesn't support fragmentation. Either decrease the number of vertices and or number of indices being drawn or increase the maximum number of vertices and or maximum number of indices.");
-            }
-
-            CreateNewDrawOperationIfNecessary(ref data, primitiveType, vertexCount, 0, sortKey);
-            Array.Copy(vertices, startVertex, _vertices, _vertexCount, vertexCount);
-            _vertexCount += vertexCount;
-        }
-
         internal override void EnqueueDraw(ref TBatchItemData data, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, int[] indices, int startIndex, int indexCount, uint sortKey = 0)
         {
             var remainingVertices = BatchDrawer.MaximumVerticesCount - _vertexCount;
@@ -168,12 +152,13 @@ namespace MonoGame.Extended.Graphics.Batching
 
             CreateNewDrawOperationIfNecessary(ref data, primitiveType, vertexCount, indexCount, sortKey);
 
+            var indexOffset = _vertexCount;
+
             Array.Copy(vertices, startVertex, _vertices, _vertexCount, vertexCount);
             _vertexCount += vertexCount;
 
             Array.Copy(indices, startIndex, _indices, _indexCount, indexCount);
             var maxIndexCount = _indexCount + indexCount;
-            var indexOffset = _currentOperation.VertexCount;
             while (_indexCount < maxIndexCount)
             {
                 _indices[_indexCount++] += indexOffset;
