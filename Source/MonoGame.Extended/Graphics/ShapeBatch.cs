@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics.Batching;
@@ -35,13 +34,6 @@ namespace MonoGame.Extended.Graphics
             _defaultWorld = Matrix.Identity;
             _defaultView = Matrix.Identity;
             _defaultProjection = Matrix.CreateTranslation(xPosition: -0.5f, yPosition: -0.5f, zPosition: 0) * Matrix.CreateOrthographicOffCenter(left: 0, right: viewport.Width, bottom: viewport.Height, top: 0, zNearPlane: 0, zFarPlane: -1);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static int GetNumberOfCircleSegments(float radius)
-        {
-            //TODO multiply by world scale
-            return (int)Math.Ceiling(10 * Math.Sqrt(radius));
         }
 
         public void Begin()
@@ -148,90 +140,141 @@ namespace MonoGame.Extended.Graphics
             }
         }
 
-        public void DrawArcOutline(Vector2 centerPoint, float radius, float startAngle, float endAngle, Color? color = null, float depth = 0, int? circleSegments = null, uint sortKey = 0)
+        public void DrawArcOutline(Vector2 position, float radius, float startAngle, float endAngle, Color? color = null, float depth = 0, int circleSegmentsCount = ShapeBuilder.DefaultCircleSegmentsCount, uint sortKey = 0)
         {
-            //http://slabode.exofire.net/circle_draw.shtml
-
-            var segments1 = circleSegments ?? GetNumberOfCircleSegments(radius);
-            var theta = endAngle / (segments1 - 1);
-            var cos = (float)Math.Cos(theta);
-            var sin = (float)Math.Sin(theta);
             var color1 = color ?? Color.White;
-            var firstVertex = new VertexPositionColor(new Vector3(centerPoint.X + radius * (float)Math.Cos(startAngle), centerPoint.Y + radius * (float)Math.Sin(startAngle), depth), color1);
-            var secondVertex = new VertexPositionColor(new Vector3(0, 0, depth), color1);
 
-            for (var i = 0; i < segments1; i++)
+            var firstVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color1, Vector2.Zero);
+            var secondVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color1, Vector2.Zero);
+
+            _shapeBuilder.Clear();
+            _shapeBuilder.AppendArc(position, radius, startAngle, endAngle, circleSegmentsCount);
+
+            var firstPoint = _shapeBuilder.Buffer[0];
+            firstVertex.Position.X = firstPoint.X;
+            firstVertex.Position.Y = firstPoint.Y;
+
+            for (var i = 1; i < _shapeBuilder.Count; i++)
             {
-                secondVertex.Position.X = cos * firstVertex.Position.X - sin * firstVertex.Position.Y;
-                secondVertex.Position.Y = sin * firstVertex.Position.X + cos * firstVertex.Position.Y;
+                var point = _shapeBuilder.Buffer[i];
 
-                //_primitiveBatch.DrawLine(ref firstVertex, ref secondVertex, ref _emptyBatchItemData, sortKey);
+                secondVertex.Position.X = point.X;
+                secondVertex.Position.Y = point.Y;
+
+                _primitiveBatch.DrawLine(ref firstVertex, ref secondVertex, ref _emptyBatchItemData, sortKey);
 
                 firstVertex.Position.X = secondVertex.Position.X;
                 firstVertex.Position.Y = secondVertex.Position.Y;
             }
         }
 
-        public void DrawCircleOutline(Vector2 centerPoint, float radius, Vector2? axis = null, Color? color = null, float depth = 0, int? circleSegments = null, uint sortKey = 0)
+        public void DrawArc(Vector2 position, float radius, float startAngle, float endAngle, Color? color = null, float depth = 0, int circleSegmentsCount = ShapeBuilder.DefaultCircleSegmentsCount, uint sortKey = 0)
         {
-            var segments1 = circleSegments ?? GetNumberOfCircleSegments(radius);
             var color1 = color ?? Color.White;
 
-            var firstLineVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color1, Vector2.Zero);
-            var secondLineVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color1, Vector2.Zero);
+            var firstVertex = new VertexPositionColorTexture(new Vector3(position.X, position.Y, depth), color1, Vector2.Zero);
+            var secondVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color1, Vector2.Zero);
+            var thirdVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color1, Vector2.Zero);
 
-            _shapeBuilder.CreateCircle(centerPoint, radius, segments1);
+            _shapeBuilder.Clear();
+            _shapeBuilder.AppendArc(position, radius, startAngle, endAngle, circleSegmentsCount);
 
             var firstPoint = _shapeBuilder.Buffer[0];
-            firstLineVertex.Position.X = firstPoint.X;
-            firstLineVertex.Position.Y = firstPoint.Y;
+
+            secondVertex.Position.X = firstPoint.X;
+            secondVertex.Position.Y = firstPoint.Y;
 
             for (var i = 1; i < _shapeBuilder.Count; i++)
             {
                 var point = _shapeBuilder.Buffer[i];
 
-                secondLineVertex.Position.X = point.X;
-                secondLineVertex.Position.Y = point.Y;
+                thirdVertex.Position.X = point.X;
+                thirdVertex.Position.Y = point.Y;
 
-                _primitiveBatch.DrawLine(ref firstLineVertex, ref secondLineVertex, ref _emptyBatchItemData, sortKey);
+                _primitiveBatch.DrawTriangle(ref firstVertex, ref secondVertex, ref thirdVertex, ref _emptyBatchItemData, sortKey);
 
-                firstLineVertex.Position.X = secondLineVertex.Position.X;
-                firstLineVertex.Position.Y = secondLineVertex.Position.Y;
+                secondVertex.Position.X = thirdVertex.Position.X;
+                secondVertex.Position.Y = thirdVertex.Position.Y;
             }
-
-            firstLineVertex.Position.X = firstPoint.X;
-            firstLineVertex.Position.Y = firstPoint.Y;
-
-            _primitiveBatch.DrawLine(ref firstLineVertex, ref secondLineVertex, ref _emptyBatchItemData, sortKey);
         }
 
-        //        public static void DrawCircle(this PrimitiveBatch<VertexPositionColor> primitiveBatch, Effect effect, Vector2 centerPoint, float radius, Color? color = null, float depth = 0, float? segments = null, uint sortKey = 0)
-        //        {
-        //            var theta = 0.0;
-        //            var thetaStep = Math.PI * 2.0 / segments;
-        //            var color1 = color ?? Color.White;
-        //
-        //            var radiusCos = radius * (float)Math.Cos(theta);
-        //            var radiusSin = radius * (float)Math.Sin(theta);
-        //            var firstVertex = new VertexPositionColor(new Vector3(centerPoint.X + radiusCos, centerPoint.Y + radiusSin, depth), color1);
-        //            var secondVertex = new VertexPositionColor(new Vector3(centerPoint.X + radiusCos, centerPoint.Y + radiusSin, depth), color1);
-        //            var thirdVertex = new VertexPositionColor(new Vector3(0, 0, depth), color1);
-        //
-        //            for (var i = 0; i < segments; i++)
-        //            {
-        //                theta += thetaStep;
-        //                radiusCos = radius * (float)Math.Cos(theta);
-        //                radiusSin = radius * (float)Math.Sin(theta);
-        //
-        //                thirdVertex.Position.X = centerPoint.X + radiusCos;
-        //                thirdVertex.Position.Y = centerPoint.Y + radiusSin;
-        //
-        //                primitiveBatch.DrawTriangle(effect, ref firstVertex, ref secondVertex, ref thirdVertex, sortKey);
-        //
-        //                secondVertex.Position.X = thirdVertex.Position.X;
-        //                secondVertex.Position.Y = thirdVertex.Position.Y;
-        //            }
-        //        }
+        public void DrawCircleOutline(Vector2 position, float radius, Vector2? axis = null, Color? color = null, float depth = 0, int circleSegmentsCount = ShapeBuilder.DefaultCircleSegmentsCount, uint sortKey = 0)
+        {
+            var color1 = color ?? Color.White;
+
+            var firstVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color1, Vector2.Zero);
+            var secondVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color1, Vector2.Zero);
+
+            _shapeBuilder.Clear();
+            _shapeBuilder.AppendCircle(position, radius, circleSegmentsCount);
+
+            var firstPoint = _shapeBuilder.Buffer[0];
+            firstVertex.Position.X = firstPoint.X;
+            firstVertex.Position.Y = firstPoint.Y;
+
+            for (var i = 1; i < _shapeBuilder.Count; i++)
+            {
+                var point = _shapeBuilder.Buffer[i];
+
+                secondVertex.Position.X = point.X;
+                secondVertex.Position.Y = point.Y;
+
+                _primitiveBatch.DrawLine(ref firstVertex, ref secondVertex, ref _emptyBatchItemData, sortKey);
+
+                firstVertex.Position.X = secondVertex.Position.X;
+                firstVertex.Position.Y = secondVertex.Position.Y;
+            }
+
+            secondVertex.Position.X = firstPoint.X;
+            secondVertex.Position.Y = firstPoint.Y;
+
+            _primitiveBatch.DrawLine(ref firstVertex, ref secondVertex, ref _emptyBatchItemData, sortKey);
+
+            if (!axis.HasValue)
+            {
+                return;
+            }
+
+            firstVertex.Position.X = position.X;
+            firstVertex.Position.Y = position.Y;
+            secondVertex.Position.X = position.X + axis.Value.X * radius;
+            secondVertex.Position.Y = position.Y + axis.Value.Y * radius;
+
+            _primitiveBatch.DrawLine(ref firstVertex, ref secondVertex, ref _emptyBatchItemData, sortKey);
+        }
+
+        public void DrawCircle(Vector2 position, float radius, Color? color = null, float depth = 0, int circleSegmentsCount = ShapeBuilder.DefaultCircleSegmentsCount, uint sortKey = 0)
+        {
+            var color1 = color ?? Color.White;
+
+            var firstVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color1, Vector2.Zero);
+            var secondVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color1, Vector2.Zero);
+            var thirdVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color1, Vector2.Zero);
+
+            _shapeBuilder.Clear();
+            _shapeBuilder.AppendCircle(position, radius, circleSegmentsCount);
+
+            var firstPoint = _shapeBuilder.Buffer[0];
+            var secondPoint = _shapeBuilder.Buffer[1];
+
+            firstVertex.Position.X = firstPoint.X;
+            firstVertex.Position.Y = firstPoint.Y;
+            secondVertex.Position.X = secondPoint.X;
+            secondVertex.Position.Y = secondPoint.Y;
+
+            for (var i = 2; i < _shapeBuilder.Count; i++)
+            {
+                var point = _shapeBuilder.Buffer[i];
+
+                thirdVertex.Position.X = point.X;
+                thirdVertex.Position.Y = point.Y;
+
+                _primitiveBatch.DrawTriangle(ref firstVertex, ref secondVertex, ref thirdVertex, ref _emptyBatchItemData, sortKey);
+
+                secondVertex.Position.X = thirdVertex.Position.X;
+                secondVertex.Position.Y = thirdVertex.Position.Y;
+            }
+        }
 
         internal struct BatchItemData : IBatchItemData<BatchItemData, Effect>
         {

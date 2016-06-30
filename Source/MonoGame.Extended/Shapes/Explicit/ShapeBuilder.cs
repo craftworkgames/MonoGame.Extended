@@ -6,19 +6,17 @@ namespace MonoGame.Extended.Shapes.Explicit
 {
     public class ShapeBuilder : IDisposable
     {
+        internal const int DefaultCircleSegmentsCount = 32;
+
         private Vector3[] _buffer;
         private int _capacity;
-        private int _count;
 
         public IReadOnlyList<Vector3> Buffer
         {
             get { return _buffer; }
         }
 
-        public int Count
-        {
-            get { return _count; }
-        }
+        public int Count { get; private set; }
 
         public int Capacity
         {
@@ -71,13 +69,13 @@ namespace MonoGame.Extended.Shapes.Explicit
 
         public void Clear()
         {
-            _count = 0;
+            Count = 0;
         }
 
         public void Append(Vector3 point)
         {
-            EnsureCapacity(_count + 1);
-            _buffer[_count++] = point;
+            EnsureCapacity(Count + 1);
+            _buffer[Count++] = point;
         }
 
         public int EnsureCapacity(int capacity)
@@ -95,16 +93,34 @@ namespace MonoGame.Extended.Shapes.Explicit
             return Capacity;
         }
 
-        public void CreateCircle(Vector2 position, float radius, int circleSegmentsCount)
+        public void AppendArc(Vector2 position, float radius, float startAngle, float endAngle, int circleSegmentsCount = DefaultCircleSegmentsCount)
         {
-            if (circleSegmentsCount < 1)
+            endAngle = endAngle % MathHelper.TwoPi;
+            startAngle = startAngle % MathHelper.TwoPi;
+
+            // www.slabode.exofire.net/circle_draw.shtml
+
+            var theta = endAngle / (circleSegmentsCount - 1); // The - 1 bit comes from the fact that the arc is open
+            var cos = (float)Math.Cos(theta); // Pre-calculate the sine and cosine
+            var sin = (float)Math.Sin(theta);
+            var x = radius * (float)Math.Cos(startAngle);
+            var y = 0f;
+
+            for (var i = 0; i < circleSegmentsCount; i++)
             {
-                throw new ArgumentOutOfRangeException(nameof(circleSegmentsCount), circleSegmentsCount, "The circle segments count has to be greater or equal to one.");
+                var point = new Vector3(x + position.X, y + position.Y, 0);
+                Append(point);
+
+                // Apply the rotation matrix
+                var t = x;
+                x = cos * x - sin * y;
+                y = sin * t + cos * y;
             }
+        }
 
-            Clear();
-
-            // slabode.exofire.net/circle_draw.shtml
+        public void AppendCircle(Vector2 position, float radius, int circleSegmentsCount = DefaultCircleSegmentsCount)
+        {
+            // www.slabode.exofire.net/circle_draw.shtml
 
             var theta = MathHelper.TwoPi / circleSegmentsCount;
             var cos = (float)Math.Cos(theta); // Pre-calculate the sine and cosine
@@ -114,7 +130,8 @@ namespace MonoGame.Extended.Shapes.Explicit
 
             for (var i = 0; i < circleSegmentsCount; i++)
             {
-                Append(new Vector3(x + position.X, y + position.Y, 0));
+                var point = new Vector3(x + position.X, y + position.Y, 0);
+                Append(point);
 
                 // Apply the rotation matrix
                 var t = x;

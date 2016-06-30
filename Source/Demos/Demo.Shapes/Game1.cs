@@ -14,22 +14,25 @@ namespace Demo.Shapes
 
         private ShapeBatch _shapeBatch;
 
-        private float _rotationTheta;
+        private Random _random;
+        private Vector2 _circlePosition;
+        private float _circleRadius;
+        private float _circleTheta;
 
         public Game1()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(game: this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
             Window.AllowUserResizing = true;
             Window.Position = Point.Zero;
+
+            _random = new Random();
         }
 
         protected override void LoadContent()
         {
             var graphicsDevice = GraphicsDevice;
-
-            var viewport = graphicsDevice.Viewport;
 
             PrimitiveBatchHelper.SortAction = Array.Sort;
 
@@ -43,7 +46,11 @@ namespace Demo.Shapes
                 Exit();
             }
 
-            _rotationTheta += MathHelper.ToRadians(degrees: 1);
+            var mouseState = Mouse.GetState();
+
+            _circlePosition = mouseState.Position.ToVector2();
+            _circleTheta += MathHelper.ToRadians(1.5f);
+            _circleRadius = 80f + 40f * (float)Math.Cos(_circleTheta);
 
             base.Update(gameTime);
         }
@@ -56,8 +63,6 @@ namespace Demo.Shapes
 
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
-            var viewport = GraphicsDevice.Viewport;
-            var projection = Matrix.CreateTranslation(xPosition: -0.5f, yPosition: -0.5f, zPosition: 0) * Matrix.CreateOrthographicOffCenter(left: 0, right: viewport.Width, bottom: viewport.Height, top: 0, zNearPlane: 0, zFarPlane: -1);
             _shapeBatch.Begin();
 
 //            var v1 = new VertexPositionColor(new Vector3(new Vector2(0, 0), 0), Color.AliceBlue);
@@ -70,11 +75,15 @@ namespace Demo.Shapes
 //
 //            _primitiveBatch.DrawLine(_simpleEffect, ref v3, ref v4);
 
-            //_shapeBatch.DrawCircle(_simpleEffect, new Vector2(0, 1), 1f, Color.Black * 0.5f);
+            _shapeBatch.DrawCircle(_circlePosition, _circleRadius, Color.Black * 0.5f);
 
             //var axis = new Vector2(x: (float)Math.Cos(_rotationTheta), y: (float)Math.Sin(_rotationTheta));
 
-            _shapeBatch.DrawCircleOutline(new Vector2(250, 250), radius: 50f, color: Color.Black, circleSegments: 64);
+            _shapeBatch.DrawCircleOutline(_circlePosition, _circleRadius, color: Color.Black);
+
+            _shapeBatch.DrawArcOutline(_circlePosition, _circleRadius, 0, _circleTheta, color: Color.Red);
+
+            _shapeBatch.DrawArc(_circlePosition, _circleRadius, 0, _circleTheta, Color.Red * 0.5f);
 
             _shapeBatch.End();
 
