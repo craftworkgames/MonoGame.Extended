@@ -71,9 +71,10 @@
     <Compile Include="Collisions\Drawing\ICollisionDrawer.cs" />
     <Compile Include="Collisions\ICollisionSimulation.cs" />
     <Compile Include="Graphics\Batching\IBatchItemData.cs" />
+    <Compile Include="Graphics\Effects\ITextureEffect2D.cs" />
     <Compile Include="Shapes\Explicit\ShapeBuilder.cs" />
     <Compile Include="Graphics\Effects\EffectResource.cs" />
-    <Compile Include="Graphics\Effects\ShapeBatchEffect.cs" />
+    <Compile Include="Graphics\Effects\ShapeEffect.cs" />
     <Compile Include="Graphics\ShapeBatch.cs" />
     <Compile Include="IEquatableByReference.cs" />
     <Compile Include="Shapes\Explicit\IShapeVertexType.cs" />

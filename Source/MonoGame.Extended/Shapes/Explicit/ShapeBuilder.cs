@@ -93,12 +93,19 @@ namespace MonoGame.Extended.Shapes.Explicit
             return Capacity;
         }
 
-        public void AppendArc(Vector2 position, float radius, float startAngle, float endAngle, int circleSegmentsCount = DefaultCircleSegmentsCount)
+        public void AppendArc(Vector2 position, float radius, float startAngle, float endAngle, float depth = 0f, int circleSegmentsCount = DefaultCircleSegmentsCount)
         {
-            endAngle = endAngle % MathHelper.TwoPi;
-            startAngle = startAngle % MathHelper.TwoPi;
-
             // www.slabode.exofire.net/circle_draw.shtml
+
+            if (startAngle > MathHelper.TwoPi)
+            {
+                startAngle = startAngle % MathHelper.TwoPi;
+            }
+
+            if (endAngle > MathHelper.TwoPi)
+            {
+                endAngle = endAngle % MathHelper.TwoPi;
+            }
 
             var theta = endAngle / (circleSegmentsCount - 1); // The - 1 bit comes from the fact that the arc is open
             var cos = (float)Math.Cos(theta); // Pre-calculate the sine and cosine
@@ -108,7 +115,7 @@ namespace MonoGame.Extended.Shapes.Explicit
 
             for (var i = 0; i < circleSegmentsCount; i++)
             {
-                var point = new Vector3(x + position.X, y + position.Y, 0);
+                var point = new Vector3(x + position.X, y + position.Y, depth);
                 Append(point);
 
                 // Apply the rotation matrix
@@ -118,7 +125,7 @@ namespace MonoGame.Extended.Shapes.Explicit
             }
         }
 
-        public void AppendCircle(Vector2 position, float radius, int circleSegmentsCount = DefaultCircleSegmentsCount)
+        public void AppendCircle(Vector2 position, float radius, float depth = 0f, int circleSegmentsCount = DefaultCircleSegmentsCount)
         {
             // www.slabode.exofire.net/circle_draw.shtml
 
@@ -130,7 +137,7 @@ namespace MonoGame.Extended.Shapes.Explicit
 
             for (var i = 0; i < circleSegmentsCount; i++)
             {
-                var point = new Vector3(x + position.X, y + position.Y, 0);
+                var point = new Vector3(x + position.X, y + position.Y, depth);
                 Append(point);
 
                 // Apply the rotation matrix

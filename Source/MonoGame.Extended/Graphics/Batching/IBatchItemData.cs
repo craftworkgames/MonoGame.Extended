@@ -2,9 +2,9 @@
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    public interface IBatchItemData<TBatchItemData, in TEffect> : IEquatableByReference<TBatchItemData>
-        where TBatchItemData : IBatchItemData<TBatchItemData, TEffect> where TEffect : Effect
+    public interface IBatchItemData<TBatchItemData> : IEquatableByReference<TBatchItemData>
+        where TBatchItemData : IBatchItemData<TBatchItemData>
     {
-        void ApplyTo(TEffect effect);
+        void ApplyTo(Effect effect);
     }
 }

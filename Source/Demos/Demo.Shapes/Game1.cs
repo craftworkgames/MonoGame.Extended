@@ -47,13 +47,12 @@ namespace Demo.Shapes
                 Exit();
             }
 
-
             _previousMouseState = _mouseState;
             _mouseState = Mouse.GetState();
 
             _circlePosition = _mouseState.Position.ToVector2();
             _circleTheta += MathHelper.ToRadians(1.5f);
-            _circleRadius = 30f + 12.5f * (float)Math.Cos(_circleTheta);
+            _circleRadius = 70f + 12.5f * (float)Math.Cos(_circleTheta);
 
             if (_mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
             {
@@ -73,16 +72,20 @@ namespace Demo.Shapes
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-
+            GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            GraphicsDevice.DepthStencilState = DepthStencilState.None;
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
             _shapeBatch.Begin();
 
+            //TODO: DrawRectangle, DrawSprite, DrawString
+
             _shapeBatch.DrawPolygonLine(_points, color: Color.White);
+
             _shapeBatch.DrawCircle(_circlePosition, _circleRadius, Color.Black * 0.5f);
             _shapeBatch.DrawCircleOutline(_circlePosition, _circleRadius, color: Color.Black);
-            _shapeBatch.DrawArcOutline(_circlePosition, _circleRadius, 0, _circleTheta, color: Color.Red);
             _shapeBatch.DrawArc(_circlePosition, _circleRadius, 0, _circleTheta, Color.Red * 0.5f);
+            _shapeBatch.DrawArcOutline(_circlePosition, _circleRadius, 0, _circleTheta, color: Color.Red);
 
             _shapeBatch.End();
 

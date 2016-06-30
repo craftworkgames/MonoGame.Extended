@@ -10,31 +10,30 @@ namespace MonoGame.Extended.Graphics.Batching
     /// </summary>
     /// <typeparam name="TVertexType">The type of the primitives to be batched.</typeparam>
     /// <typeparam name="TBatchItemData">The type of user data associated with each draw call.</typeparam>
-    /// <typeparam name="TEffect">The type of effect to use.</typeparam>
     /// <remarks>
     ///     <para>
-    ///         <see cref="PrimitiveBatch{TVertexType, TBatchItemData, TEffect}" /> is a helper for easily and efficiently drawing
+    ///         <see cref="PrimitiveBatch{TVertexType, TBatchItemData}" /> is a helper for easily and efficiently drawing
     ///         dynamically generated geometry such as lines and triangles which change frame-to-frame. Dynamic submission is a
     ///         highly effective pattern for drawing procedural geometry and convenient for debug rendering. It is however not
     ///         as efficient at drawing geometry which does not change every frame. Such geometry should use a static
     ///         <see cref="VertexBuffer" /> and possibly a <see cref="IndexBuffer" /> for rendering instead of
-    ///         <see cref="PrimitiveBatch{TVertexType, TBatchItemData, TEffect}" />.
+    ///         <see cref="PrimitiveBatch{TVertexType, TBatchItemData}" />.
     ///     </para>
     /// </remarks>
-    public class PrimitiveBatch<TVertexType, TBatchItemData, TEffect> : IDisposable
-        where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData, TEffect> where TEffect : Effect
+    public class PrimitiveBatch<TVertexType, TBatchItemData> : IDisposable
+        where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
     {
         public const ushort DefaultMaximumVerticesCount = 8192;
         public const ushort DefaultMaximumIndicesCount = 12288;
 
-        private BatchDrawer<TVertexType, TBatchItemData, TEffect> _batchDrawer;
-        private BatchQueuer<TVertexType, TBatchItemData, TEffect> _currentBatchQueuer;
-        private ImmediateBatchQueuer<TVertexType, TBatchItemData, TEffect> _immediateBatchQueuer;
-        private DeferredBatchQueuer<TVertexType, TBatchItemData, TEffect> _deferredBatchQueuer;
+        private BatchDrawer<TVertexType, TBatchItemData> _batchDrawer;
+        private BatchQueuer<TVertexType, TBatchItemData> _currentBatchQueuer;
+        private ImmediateBatchQueuer<TVertexType, TBatchItemData> _immediateBatchQueuer;
+        private DeferredBatchQueuer<TVertexType, TBatchItemData> _deferredBatchQueuer;
         private static readonly TVertexType[] _verticesArrayBuffer;
 
         /// <summary>
-        ///     Gets the <see cref="GraphicsDevice" /> used by this <see cref="PrimitiveBatch{TVertexType, TBatchItemData, TEffect}" />.
+        ///     Gets the <see cref="GraphicsDevice" /> used by this <see cref="PrimitiveBatch{TVertexType, TBatchItemData}" />.
         /// </summary>
         public GraphicsDevice GraphicsDevice { get; }
 
@@ -114,9 +113,9 @@ namespace MonoGame.Extended.Graphics.Batching
             MaximumVerticesCount = maximumVerticesCount;
             MaximumIndicesCount = maximumIndicesCount;
 
-            _batchDrawer = new BatchDrawer<TVertexType, TBatchItemData, TEffect>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
-            _immediateBatchQueuer = new ImmediateBatchQueuer<TVertexType, TBatchItemData, TEffect>(_batchDrawer);
-            _deferredBatchQueuer = new DeferredBatchQueuer<TVertexType, TBatchItemData, TEffect>(_batchDrawer);
+            _batchDrawer = new BatchDrawer<TVertexType, TBatchItemData>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
+            _immediateBatchQueuer = new ImmediateBatchQueuer<TVertexType, TBatchItemData>(_batchDrawer);
+            _deferredBatchQueuer = new DeferredBatchQueuer<TVertexType, TBatchItemData>(_batchDrawer);
         }
 
         /// <summary>
@@ -195,7 +194,7 @@ namespace MonoGame.Extended.Graphics.Batching
         ///         <see cref="End" />.
         ///     </para>
         /// </remarks>
-        public void Begin(TEffect effect, BatchMode mode = BatchMode.Deferred)
+        public void Begin(Effect effect, BatchMode mode = BatchMode.Deferred)
         {
             if (effect == null)
             {

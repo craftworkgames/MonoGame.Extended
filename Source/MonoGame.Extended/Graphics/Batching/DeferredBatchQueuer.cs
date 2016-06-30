@@ -4,24 +4,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal class DeferredBatchQueuer<TVertexType, TBatchItemData, TEffect> : BatchQueuer<TVertexType, TBatchItemData, TEffect>
+    internal class DeferredBatchQueuer<TVertexType, TBatchItemData> : BatchQueuer<TVertexType, TBatchItemData>
         where TVertexType : struct, IVertexType
-        where TBatchItemData : struct, IBatchItemData<TBatchItemData, TEffect>
-        where TEffect : Effect
+        where TBatchItemData : struct, IBatchItemData<TBatchItemData>
     {
-        internal static readonly BatchDrawOperation<TBatchItemData, TEffect> EmptyDrawOperation = new BatchDrawOperation<TBatchItemData, TEffect>((PrimitiveType)(-1), 0, 0, 0, 0, default(TBatchItemData));
+        internal static readonly BatchDrawOperation<TBatchItemData> EmptyDrawOperation = new BatchDrawOperation<TBatchItemData>((PrimitiveType)(-1), 0, 0, 0, 0, default(TBatchItemData));
 
         private const int InitialOperationsCapacity = 25;
 
         // the draw operations buffer
-        private BatchDrawOperation<TBatchItemData, TEffect>[] _operations;
+        private BatchDrawOperation<TBatchItemData>[] _operations;
         // the sort keys buffer for the draw operations
         // the keys are seperated from the draw operations to have the smallest memory footprint possible for each draw operation
         private uint[] _operationSortKeys; 
         // the number of operations in the buffers
         private int _operationsCount;
         // the current draw operation
-        private BatchDrawOperation<TBatchItemData, TEffect> _currentOperation;
+        private BatchDrawOperation<TBatchItemData> _currentOperation;
         // the sort key for the current draw operation
         private uint _currentSortKey;
         // the vertices buffer
@@ -33,14 +32,14 @@ namespace MonoGame.Extended.Graphics.Batching
         // the number of indices in the buffer
         private int _indexCount;
 
-        internal DeferredBatchQueuer(BatchDrawer<TVertexType, TBatchItemData, TEffect> batchDrawer)
+        internal DeferredBatchQueuer(BatchDrawer<TVertexType, TBatchItemData> batchDrawer)
             : base(batchDrawer)
         {
             _currentOperation = EmptyDrawOperation;
             _vertices = new TVertexType[BatchDrawer.MaximumVerticesCount];
             _indices = new int[BatchDrawer.MaximumIndicesCount];
             _operationSortKeys = new uint[InitialOperationsCapacity];
-            _operations = new BatchDrawOperation<TBatchItemData, TEffect>[InitialOperationsCapacity];
+            _operations = new BatchDrawOperation<TBatchItemData>[InitialOperationsCapacity];
         }
 
         private void CreateNewDrawOperationIfNecessary(ref TBatchItemData data, PrimitiveType primitiveType, int vertexCount, int indexCount, uint sortKey)
@@ -60,7 +59,7 @@ namespace MonoGame.Extended.Graphics.Batching
                 ApplyCurrentOperation();
             }
 
-            _currentOperation = new BatchDrawOperation<TBatchItemData, TEffect>(primitiveType, _vertexCount, vertexCount, _indexCount, indexCount, data);
+            _currentOperation = new BatchDrawOperation<TBatchItemData>(primitiveType, _vertexCount, vertexCount, _indexCount, indexCount, data);
 
             if (_operationsCount == _operations.Length)
             {
@@ -81,7 +80,7 @@ namespace MonoGame.Extended.Graphics.Batching
             _operations[_operationsCount - 1] = _currentOperation;
         }
 
-        internal override void Begin(TEffect effect)
+        internal override void Begin(Effect effect)
         {
             BatchDrawer.Effect = effect;
         }

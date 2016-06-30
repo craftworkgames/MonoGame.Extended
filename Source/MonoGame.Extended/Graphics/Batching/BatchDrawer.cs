@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal sealed class BatchDrawer<TVertexType, TBatchItemData, TEffect> : IDisposable
-        where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData, TEffect> where TEffect : Effect
+    internal sealed class BatchDrawer<TVertexType, TBatchItemData> : IDisposable
+        where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
     {
         internal GraphicsDevice GraphicsDevice;
         internal readonly ushort MaximumVerticesCount;
@@ -12,9 +12,9 @@ namespace MonoGame.Extended.Graphics.Batching
 
         internal DynamicVertexBuffer VertexBuffer;
         internal DynamicIndexBuffer IndexBuffer;
-        internal TEffect Effect;
+        internal Effect Effect;
 
-        internal BatchDrawer(GraphicsDevice graphicsDevice, ushort maximumVerticesCount = PrimitiveBatch<TVertexType, TBatchItemData, TEffect>.DefaultMaximumVerticesCount, ushort maximumIndicesCount = PrimitiveBatch<TVertexType, TBatchItemData, TEffect>.DefaultMaximumIndicesCount)
+        internal BatchDrawer(GraphicsDevice graphicsDevice, ushort maximumVerticesCount = PrimitiveBatch<TVertexType, TBatchItemData>.DefaultMaximumVerticesCount, ushort maximumIndicesCount = PrimitiveBatch<TVertexType, TBatchItemData>.DefaultMaximumIndicesCount)
         {
             GraphicsDevice = graphicsDevice;
             MaximumVerticesCount = maximumVerticesCount;

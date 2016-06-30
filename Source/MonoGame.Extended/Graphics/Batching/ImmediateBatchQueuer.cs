@@ -2,17 +2,16 @@
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal class ImmediateBatchQueuer<TVertexType, TBatchItemData, TEffect> : BatchQueuer<TVertexType, TBatchItemData, TEffect>
+    internal class ImmediateBatchQueuer<TVertexType, TBatchItemData> : BatchQueuer<TVertexType, TBatchItemData>
         where TVertexType : struct, IVertexType
-        where TBatchItemData : struct, IBatchItemData<TBatchItemData, TEffect>
-        where TEffect : Effect
+        where TBatchItemData : struct, IBatchItemData<TBatchItemData>
     {
-        public ImmediateBatchQueuer(BatchDrawer<TVertexType, TBatchItemData, TEffect> batchDrawer)
+        public ImmediateBatchQueuer(BatchDrawer<TVertexType, TBatchItemData> batchDrawer)
             : base(batchDrawer)
         {
         }
 
-        internal override void Begin(TEffect effect)
+        internal override void Begin(Effect effect)
         {
             BatchDrawer.Effect = effect;
         }
