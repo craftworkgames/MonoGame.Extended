@@ -94,6 +94,32 @@ namespace MonoGame.Extended.Graphics
             _primitiveBatch.DrawQuadrilateral(ref firstVertex, ref secondVertex, ref thirdVertex, ref forthVertex, ref _emptyBatchItemData, sortKey);
         }
 
+        public void DrawPolygonLine(IReadOnlyList<Vector2> points, Color? color = null, float depth = 0f, uint sortKey = 0)
+        {
+            if (points.Count == 0)
+            {
+                return;
+            }
+
+            var color1 = color ?? Color.White;
+
+            var firstVertex = new VertexPositionColorTexture(new Vector3(x: 0, y: 0, z: depth), color1, Vector2.Zero);
+            var secondVertex = new VertexPositionColorTexture(new Vector3(x: 0, y: 0, z: depth), color1, Vector2.Zero);
+
+            for (var i = 0; i < points.Count - 1; i++)
+            {
+                var firstPoint = points[i];
+                var secondPoint = points[i + 1];
+
+                firstVertex.Position.X = firstPoint.X;
+                firstVertex.Position.Y = firstPoint.Y;
+                secondVertex.Position.X = secondPoint.X;
+                secondVertex.Position.Y = secondPoint.Y;
+
+                _primitiveBatch.DrawLine(ref firstVertex, ref secondVertex, ref _emptyBatchItemData, sortKey);
+            }
+        }
+
         public void DrawPolygonOutline(IReadOnlyList<Vector2> points, Color? color = null, float depth = 0f, uint sortKey = 0)
         {
             if (points.Count == 0)
@@ -129,7 +155,7 @@ namespace MonoGame.Extended.Graphics
             secondVertex.Position.X = secondPoint.X;
             secondVertex.Position.Y = secondPoint.Y;
 
-            //_primitiveBatch.DrawLine(ref firstVertex, ref secondVertex, ref _emptyBatchItemData, sortKey);
+            _primitiveBatch.DrawLine(ref firstVertex, ref secondVertex, ref _emptyBatchItemData, sortKey);
         }
 
         public void DrawPolygon(IReadOnlyList<Vector2> points, Color? color = null, float depth = 0f, uint sortKey = 0)

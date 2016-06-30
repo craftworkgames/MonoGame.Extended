@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Graphics.Batching;
-using MonoGame.Extended.Shapes.Explicit;
 
 namespace Demo.Shapes
 {
@@ -17,12 +16,11 @@ namespace Demo.Shapes
         private ShapeBatch _shapeBatch;
         private MouseState _mouseState;
         private MouseState _previousMouseState;
-        private Random _random;
         private Vector2 _circlePosition;
         private float _circleRadius;
         private float _circleTheta;
 
-        private List<Vector2> _points = new List<Vector2>();
+        private readonly List<Vector2> _points = new List<Vector2>();
 
         public Game1()
         {
@@ -31,8 +29,6 @@ namespace Demo.Shapes
             IsMouseVisible = false;
             Window.AllowUserResizing = true;
             Window.Position = Point.Zero;
-
-            _random = new Random();
         }
 
         protected override void LoadContent()
@@ -57,7 +53,7 @@ namespace Demo.Shapes
 
             _circlePosition = _mouseState.Position.ToVector2();
             _circleTheta += MathHelper.ToRadians(1.5f);
-            _circleRadius = 20f + 12.5f * (float)Math.Cos(_circleTheta);
+            _circleRadius = 30f + 12.5f * (float)Math.Cos(_circleTheta);
 
             if (_mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
             {
@@ -82,7 +78,7 @@ namespace Demo.Shapes
 
             _shapeBatch.Begin();
 
-            _shapeBatch.DrawPolygonOutline(_points, color: Color.White);
+            _shapeBatch.DrawPolygonLine(_points, color: Color.White);
             _shapeBatch.DrawCircle(_circlePosition, _circleRadius, Color.Black * 0.5f);
             _shapeBatch.DrawCircleOutline(_circlePosition, _circleRadius, color: Color.Black);
             _shapeBatch.DrawArcOutline(_circlePosition, _circleRadius, 0, _circleTheta, color: Color.Red);
