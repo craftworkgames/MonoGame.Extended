@@ -86,8 +86,8 @@ namespace MonoGame.Extended.Graphics
 
             Vector2 firstPoint;
             Vector2 secondPoint;
-            var firstVertex = new VertexPositionColor(new Vector3(x: 0, y: 0, z: depth), color1);
-            var secondVertex = new VertexPositionColor(new Vector3(x: 0, y: 0, z: depth), color1);
+            var firstVertex = new VertexPositionColorTexture(new Vector3(x: 0, y: 0, z: depth), color1, Vector2.Zero);
+            var secondVertex = new VertexPositionColorTexture(new Vector3(x: 0, y: 0, z: depth), color1, Vector2.Zero);
 
             for (var i = 0; i < points.Count - 1; i++)
             {
@@ -99,7 +99,7 @@ namespace MonoGame.Extended.Graphics
                 secondVertex.Position.X = secondPoint.X;
                 secondVertex.Position.Y = secondPoint.Y;
 
-                //_primitiveBatch.DrawLine(ref firstVertex, ref secondVertex, ref _emptyBatchItemData, sortKey);
+                _primitiveBatch.DrawLine(ref firstVertex, ref secondVertex, ref _emptyBatchItemData, sortKey);
             }
 
             firstPoint = points[points.Count - 1];
