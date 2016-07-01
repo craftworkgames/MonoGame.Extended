@@ -65,9 +65,9 @@ namespace MonoGame.Extended
             return Divide(size1, size2);
         }
 
-        public static SizeF operator /(SizeF size1, float divider)
+        public static SizeF operator /(SizeF size, float value)
         {
-            return Divide(size1, divider);
+            return Divide(size, value);
         }
 
         public static bool operator ==(SizeF size1, SizeF size2)
@@ -127,24 +127,24 @@ namespace MonoGame.Extended
             return new SizeF(size1.Width - size2.Width, size1.Height - size2.Height);
         }
 
-        public static SizeF Multiply(SizeF size1, SizeF size2)
+        public static SizeF Multiply(SizeF size, SizeF size2)
         {
-            return new SizeF(size1.Width * size2.Width, size1.Height * size2.Height);
+            return new SizeF(size.Width * size2.Width, size.Height * size2.Height);
         }
 
-        public static SizeF Multiply(SizeF size1, float scaleFactor)
+        public static SizeF Multiply(SizeF size, float scaleFactor)
         {
-            return new SizeF((int)(size1.Width * scaleFactor), (int)(size1.Height * scaleFactor));
+            return new SizeF(size.Width * scaleFactor, size.Height * scaleFactor);
         }
 
-        public static SizeF Divide(SizeF size1, SizeF size2)
+        public static SizeF Divide(SizeF size, SizeF size2)
         {
-            return new SizeF(size1.Width / size2.Width, size1.Height / size2.Height);
+            return new SizeF(size.Width / size2.Width, size.Height / size2.Height);
         }
 
-        public static SizeF Divide(SizeF size1, float scaleFactor)
+        public static SizeF Divide(SizeF size, float scaleFactor)
         {
-            return new SizeF((int)(size1.Width / scaleFactor), (int)(size1.Height / scaleFactor));
+            return new SizeF(size.Width / scaleFactor, size.Height / scaleFactor);
         }
 
         public override bool Equals(object obj)
