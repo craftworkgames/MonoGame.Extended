@@ -8,7 +8,7 @@ namespace MonoGame.Extended
         public int Width;
         public int Height;
 
-        public static SizeF Empty => new SizeF(0, 0);
+        public static Size Empty => new SizeF(0, 0);
 
         public bool IsEmpty => Width == 0 && Height == 0;
 

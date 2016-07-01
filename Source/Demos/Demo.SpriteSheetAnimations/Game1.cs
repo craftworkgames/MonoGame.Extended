@@ -3,12 +3,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Maps.Tiled;
-using MonoGame.Extended.Shapes.BoundingVolumes;
-using MonoGame.Extended.Shapes.Explicit;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
@@ -25,6 +24,7 @@ namespace Demo.SpriteSheetAnimations
         private TiledMap _tiledMap;
         private ViewportAdapter _viewportAdapter;
         //private CollisionSimulation _simulation;
+        private CollisionWorld _world;
         private Zombie _zombie;
         private SpriteSheetAnimation _animation;
         private Sprite _fireballSprite;
@@ -62,14 +62,13 @@ namespace Demo.SpriteSheetAnimations
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Content.Load<BitmapFont>("Fonts/courier-new-32");
             _tiledMap = Content.Load<TiledMap>("Tilesets/level01");
-
-            //_simulation = new CollisionSimulation();
-//            _simulation.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
+            _world = new CollisionWorld(new Vector2(0, 900));
+            _world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
 
             var zombieAnimations = Content.Load<SpriteSheetAnimationFactory>("Sprites/zombie-animations");
             _zombie = new Zombie(zombieAnimations);
-            //var zombieBody = _simulation.CreateBody(_zombie);
-            //zombieBody.Position = new Vector3(462.5f, 896f, 0);
+            var zombieActor = _world.CreateActor(_zombie);
+            zombieActor.Position = new Vector2(462.5f, 896f);
 
             var fireballTexture = Content.Load<Texture2D>("Sprites/fireball");
             var fireballAtlas = TextureAtlas.Create(fireballTexture, 130, 50);
@@ -95,6 +94,7 @@ namespace Demo.SpriteSheetAnimations
         protected override void UnloadContent()
         {
             _tiledMap.Dispose();
+            _world.Dispose();
         }
 
         protected override void Update(GameTime gameTime)
@@ -140,7 +140,9 @@ namespace Demo.SpriteSheetAnimations
 
             // update must be called before collision detection
             _zombie.Update(gameTime);
-            //_simulation.Update(gameTime);
+
+            _world.Update(gameTime);
+
             _camera.LookAt(_zombie.Position);
 
             _animation.Update(deltaSeconds);

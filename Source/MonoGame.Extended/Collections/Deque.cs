@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Collections
     ///     <a href="https://en.wikipedia.org/wiki/Double-ended_queue">double ended queue</a> (deque).
     /// </summary>
     /// <remarks>
-    ///     A <a href="https://en.wikipedia.org/wiki/Circular_buffer">circular array</a> is used as the internal data
+    ///     <a href="https://en.wikipedia.org/wiki/Circular_buffer">circular array</a> is used as the internal data
     ///     structure for the <see cref="Deque{T}" />.
     /// </remarks>
     /// <typeparam name="T">The type of the elements in the deque.</typeparam>

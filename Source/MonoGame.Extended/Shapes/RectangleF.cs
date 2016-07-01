@@ -83,13 +83,13 @@ namespace MonoGame.Extended.Shapes
         /// <summary>
         /// The width-height coordinates of this <see cref="RectangleF"/>.
         /// </summary>
-        public Vector2 Size
+        public SizeF Size
         {
-            get { return new Vector2(Width, Height); }
+            get { return new SizeF(Width, Height); }
             set
             {
-                Width = value.X;
-                Height = value.Y;
+                Width = value.Width;
+                Height = value.Height;
             }
         }
 
@@ -122,12 +122,12 @@ namespace MonoGame.Extended.Shapes
         /// </summary>
         /// <param name="location">The x and y coordinates of the top-left corner of the created <see cref="RectangleF"/>.</param>
         /// <param name="size">The width and height of the created <see cref="RectangleF"/>.</param>
-        public RectangleF(Vector2 location, Vector2 size)
+        public RectangleF(Vector2 location, SizeF size)
         {
             X = location.X;
             Y = location.Y;
-            Width = size.X;
-            Height = size.Y;
+            Width = size.Width;
+            Height = size.Height;
         }
 
         /// <summary>
@@ -352,8 +352,8 @@ namespace MonoGame.Extended.Shapes
         /// <returns><c>true</c> if other <see cref="RectangleF"/> intersects with this rectangle; <c>false</c> otherwise.</returns>
         public bool Intersects(RectangleF value)
         {
-            return value.Left <= Right && Left <= value.Right &&
-                   value.Top <= Bottom && Top <= value.Bottom;
+            return value.Left < Right && Left < value.Right &&
+                   value.Top < Bottom && Top < value.Bottom;
         }
 
 
@@ -482,6 +482,22 @@ namespace MonoGame.Extended.Shapes
             result.Y = Math.Min(value1.Y, value2.Y);
             result.Width = Math.Max(value1.Right, value2.Right) - result.X;
             result.Height = Math.Max(value1.Bottom, value2.Bottom) - result.Y;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="RectangleF"/> from two points.
+        /// </summary>
+        /// <param name="point0">The top left or bottom right corner</param>
+        /// <param name="point1">The bottom left or top right corner</param>
+        /// <returns></returns>
+        public static RectangleF FromPoints(Vector2 point0, Vector2 point1)
+        {
+            var x = Math.Min(point0.X, point1.X);
+            var y = Math.Min(point0.Y, point1.Y);
+            var width = Math.Abs(point0.X - point1.X);
+            var height = Math.Abs(point0.Y - point1.Y);
+            var rectangle = new RectangleF(x, y, width, height);
+            return rectangle;
         }
     }
 }

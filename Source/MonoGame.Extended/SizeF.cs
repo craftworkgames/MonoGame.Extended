@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
@@ -32,7 +32,7 @@ namespace MonoGame.Extended
         {
             return Add(size1, size2);
         }
-     
+
         public static SizeF operator -(SizeF size1, SizeF size2)
         {
             return Subtract(size1, size2);
@@ -110,6 +110,11 @@ namespace MonoGame.Extended
         public static implicit operator SizeF(Vector2 size)
         {
             return new SizeF(size.X, size.Y);
+        }
+
+        public static implicit operator SizeF(Point point)
+        {
+            return new SizeF(point.X, point.Y);
         }
 
         public static SizeF Add(SizeF size1, SizeF size2)

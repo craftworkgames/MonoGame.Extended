@@ -51,7 +51,6 @@
     <Compile Include="Angle.cs" />
     <Compile Include="Animations\Tweens\TweenChain.cs" />
     <Compile Include="Animations\Tweens\TweenGroup.cs" />
-    <Compile Include="ArrayHelper.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />
@@ -60,16 +59,6 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
-    <Compile Include="Collisions\Broadphase\BroadphaseCollisionDelegate.cs" />
-    <Compile Include="Collisions\CollisionBody2D.cs" />
-    <Compile Include="Collisions\CollisionBodyFlags.cs" />
-    <Compile Include="Collisions\CollisionBodyProxy.cs" />
-    <Compile Include="Collisions\CollisionFixture.cs" />
-    <Compile Include="Collisions\CollisionFixtureFlags.cs" />
-    <Compile Include="Collisions\CollisionFixtureProxy.cs" />
-    <Compile Include="Collisions\CollisionSimulation2D.cs" />
-    <Compile Include="Collisions\Drawing\ICollisionDrawer.cs" />
-    <Compile Include="Collisions\ICollisionSimulation.cs" />
     <Compile Include="Graphics\Batching\IBatchItemData.cs" />
     <Compile Include="Graphics\Effects\ITextureEffect2D.cs" />
     <Compile Include="Shapes\Explicit\ShapeBuilder.cs" />
@@ -85,11 +74,8 @@
     <Compile Include="Shapes\Explicit\ShapeVertex2D.cs" />
     <Compile Include="Shapes\Explicit\Transform2D.cs" />
     <Compile Include="Shapes\Explicit\Shape.cs" />
-    <Compile Include="SimpleDrawableGameComponent.cs" />
-    <Compile Include="SimpleGameComponent.cs" />
     <Compile Include="Graphics\Batching\PrimitiveBatchHelper.cs" />
     <Compile Include="HashCodeHelper.cs" />
-    <Compile Include="ListExtensions.cs" />
     <Compile Include="Shapes\BoundingVolumes\IBoundingVolume.cs" />
     <Compile Include="Collisions\Broadphase\BroadphaseCollisionPair.cs" />
     <Compile Include="Collisions\Broadphase\BruteForceBroadphase.cs" />
@@ -102,17 +88,35 @@
     <Compile Include="Collisions\Response\EmptyResponder.cs" />
     <Compile Include="ICollisionShape.cs" />
     <Compile Include="Shapes\BoundingVolumes\PrimitiveBatchExtensions.BoundingVolumes.cs" />
+    <Compile Include="Graphics\Batching\BatchDrawer.cs" />
     <Compile Include="Graphics\Batching\BatchDrawOperation.cs" />
     <Compile Include="Graphics\Batching\BatchQueuer.cs" />
     <Compile Include="Graphics\Batching\BatchMode.cs" />
     <Compile Include="Graphics\Batching\DeferredBatchQueuer.cs" />
-    <Compile Include="Graphics\Batching\BatchDrawer.cs" />
+    <Compile Include="Graphics\IDrawContext.cs" />
     <Compile Include="Graphics\Batching\ImmediateBatchQueuer.cs" />
     <Compile Include="Graphics\Batching\PrimitiveBatch.cs" />
-    <Compile Include="Graphics\Batching\PrimitiveBatchExtensions.VertexPositionColorTexture.cs" />
+    <Compile Include="Graphics\IDrawContextTexture2D.cs" />
+    <Compile Include="Graphics\EffectMaterial.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
+    <Compile Include="Gui\Controls\GuiButton.cs" />
+    <Compile Include="Gui\Controls\GuiButtonStyle.cs" />
+    <Compile Include="Gui\Controls\GuiControl.cs" />
+    <Compile Include="Gui\Controls\GuiControlStyle.cs" />
+    <Compile Include="Gui\Controls\GuiSpriteStyle.cs" />
+    <Compile Include="Gui\GuiComponent.cs" />
+    <Compile Include="Gui\GuiContentService.cs" />
+    <Compile Include="Gui\GuiFile.cs" />
+    <Compile Include="Gui\MonoGameColorJsonConverter.cs" />
     <Compile Include="IColorable.cs" />
     <Compile Include="IPoolable.cs" />
+    <Compile Include="Collisions\CollisionActor.cs" />
+    <Compile Include="Collisions\CollisionGrid.cs" />
+    <Compile Include="Collisions\CollisionGridCell.cs" />
+    <Compile Include="Collisions\CollisionGridCellFlag.cs" />
+    <Compile Include="Collisions\CollisionInfo.cs" />
+    <Compile Include="Collisions\CollisionWorld.cs" />
+    <Compile Include="Collisions\IActorTarget.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Camera2D.cs" />
     <Compile Include="Content\ContentReaderExtensions.cs" />
@@ -139,6 +143,7 @@
     <Compile Include="InputListeners\TouchListenerSettings.cs" />
     <Compile Include="IRotatable.cs" />
     <Compile Include="IScalable.cs" />
+    <Compile Include="ISizable.cs" />
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
     <Compile Include="Maps\Tiled\TiledTileSetTileFrame.cs" />
@@ -196,15 +201,14 @@
     <Compile Include="SceneGraphs\SceneNode.cs" />
     <Compile Include="SceneGraphs\SceneNodeCollection.cs" />
     <Compile Include="SceneGraphs\SpriteBatchExtensions.cs" />
-    <Compile Include="Shapes\BoundingVolumes\AxisAlignedBoundingBox2D.cs" />
     <Compile Include="Shapes\SpriteBatchExtensions.cs" />
     <Compile Include="Shapes\CircleF.cs" />
     <Compile Include="Shapes\PolygonF.cs" />
     <Compile Include="Shapes\RectangleF.cs" />
     <Compile Include="Shapes\RectangleExtensions.cs" />
     <Compile Include="Shapes\ShapeF.cs" />
-    <Compile Include="SizeF.cs" />
     <Compile Include="Size.cs" />
+    <Compile Include="SizeF.cs" />
     <Compile Include="Sprites\SpriteBatchExtensions.cs" />
     <Compile Include="TextureAtlases\TextureAtlas.cs" />
     <Compile Include="TextureAtlases\TextureAtlasReader.cs" />
@@ -238,6 +242,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="MonoGame.Framework">
       <HintPath>..\..\Dependencies\MonoGame.Framework.dll</HintPath>

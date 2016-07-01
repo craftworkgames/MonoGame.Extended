@@ -1,0 +1,10 @@
+[
+  {
+    "$type": "MonoGame.Extended.Gui.Controls.GuiButtonStyle, MonoGame.Extended",
+    "Name": "demo-button",
+    "Normal": { "$type": "MonoGame.Extended.Gui.Controls.GuiSpriteStyle, MonoGame.Extended", "TextureRegion": "button-normal", "Color": "#FFFFFFFF" },
+    "Hovered": { "$type": "MonoGame.Extended.Gui.Controls.GuiSpriteStyle, MonoGame.Extended", "TextureRegion": "button-hover", "Color": "#FFFFFFFF" },
+    "Disabled": { "$type": "MonoGame.Extended.Gui.Controls.GuiSpriteStyle, MonoGame.Extended", "TextureRegion": "button-disabled", "Color": "#FFFFFFFF" }, 
+    "Pressed": { "$type": "MonoGame.Extended.Gui.Controls.GuiSpriteStyle, MonoGame.Extended", "TextureRegion": "button-clicked", "Color": "#FFFFFFFF" }
+  }
+]

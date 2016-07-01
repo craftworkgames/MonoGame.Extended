@@ -69,7 +69,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 // create and render the entire map to a single render target.
                 // this gives the best frame rate performance at the cost of memory.
                 // ideally, we'd like to have a couple of different draw strategies for different situations.
-                _renderTarget = new RenderTarget2D(_renderTargetSpriteBatch.GraphicsDevice, _map.WidthInPixels, _map.WidthInPixels);
+                _renderTarget = new RenderTarget2D(_renderTargetSpriteBatch.GraphicsDevice, _map.WidthInPixels, _map.HeightInPixels);
 
                 using (_renderTarget.BeginDraw(_renderTargetSpriteBatch.GraphicsDevice, backgroundColor ?? Color.Transparent))
                 {
@@ -127,6 +127,10 @@ namespace MonoGame.Extended.Maps.Tiled
             if (region != null)
             {
                 var point = tileLocationFunction(tile);
+
+                // Tiled draws tiles from the lower left of the block instead of the upper left. Adjust the Y position to account for this.
+                point.Y -= region.Height - TileHeight;
+
                 var destinationRectangle = new Rectangle(point.X, point.Y, region.Width, region.Height);
                 spriteBatch.Draw(region, destinationRectangle, Color.White * Opacity);
             }
