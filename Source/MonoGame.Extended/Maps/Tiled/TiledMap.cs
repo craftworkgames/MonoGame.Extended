@@ -16,13 +16,13 @@ namespace MonoGame.Extended.Maps.Tiled
             _graphicsDevice = graphicsDevice;
             _layers = new List<TiledLayer>();
             _objectGroups = new List<TiledObjectGroup>();
-            _tilesets = new List<TiledTileset>();
 
             Width = width;
             Height = height;
             TileWidth = tileWidth;
             TileHeight = tileHeight;
             Properties = new TiledProperties();
+            Tilesets = new List<TiledTileset>();
             Orientation = orientation;
         }
 
@@ -32,7 +32,6 @@ namespace MonoGame.Extended.Maps.Tiled
                 tiledLayer.Dispose();
         }
 
-        private readonly List<TiledTileset> _tilesets;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly List<TiledLayer> _layers;
         private readonly List<TiledObjectGroup> _objectGroups;
@@ -41,6 +40,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public int Height { get; }
         public int TileWidth { get; }
         public int TileHeight { get; }
+        public List<TiledTileset> Tilesets { get; }
         public Color? BackgroundColor { get; set; }
         public TiledRenderOrder RenderOrder { get; set; }
         public TiledProperties Properties { get; private set; }
@@ -56,7 +56,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public TiledTileset CreateTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
         {
             var tileset = new TiledTileset(texture, firstId, tileWidth, tileHeight, spacing, margin);
-            _tilesets.Add(tileset);
+            Tilesets.Add(tileset);
             return tileset;
         }
 
@@ -115,7 +115,7 @@ namespace MonoGame.Extended.Maps.Tiled
             if (id == 0)
                 return null;
 
-            var tileset = _tilesets.LastOrDefault(i => i.FirstId <= id);
+            var tileset = Tilesets.LastOrDefault(i => i.FirstId <= id);
 
             if (tileset == null)
                 throw new InvalidOperationException($"No tileset found for id {id}");
@@ -125,7 +125,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public TiledTileSetTile GetTileSetTileById(int tileSetTileId)
         {
-            TiledTileSetTile tile = _tilesets.SelectMany(ts => ts.Tiles, (ts, t) => t).Where(t => t.Id == tileSetTileId-1).FirstOrDefault();
+            TiledTileSetTile tile = Tilesets.SelectMany(ts => ts.Tiles, (ts, t) => t).Where(t => t.Id == tileSetTileId-1).FirstOrDefault();
             return tile;
         }
     }
