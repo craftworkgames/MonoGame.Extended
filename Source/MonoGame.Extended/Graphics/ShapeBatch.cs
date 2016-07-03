@@ -180,17 +180,6 @@ namespace MonoGame.Extended.Graphics
             EnqueueDraw(PrimitiveType.TriangleList, 4, startIndex, 6, ref _shapeItemData, sortKey);
         }
 
-        public void DrawRectangleOutlineOffTopLeft(Vector2 position, SizeF size, Color color, float rotation = 0f, Vector2? origin = null, float depth = 0f, uint sortKey = 0)
-        {
-            var geometryBuffer = GeometryBuffer;
-            var startVertex = geometryBuffer.VerticesCount;
-            var startIndex = geometryBuffer.IndicesCount;
-
-            RenderGeometryBuilder.CreateRectangleOffTopLeft(geometryBuffer.EnqueueVertexDelegate, geometryBuffer.EnqueueVertexIndexDelegate, startVertex, position, size, color, rotation, origin, depth);
-
-            EnqueueDraw(PrimitiveType.LineList, 4, startIndex, 6, ref _shapeItemData, sortKey);
-        }
-
         public void DrawRectangleOffCenter(Vector2 position, SizeF size, Color color, float rotation = 0f, float depth = 0f, uint sortKey = 0)
         {
             var geometryBuffer = GeometryBuffer;
@@ -200,18 +189,6 @@ namespace MonoGame.Extended.Graphics
             RenderGeometryBuilder.CreateRectangleOffCenter(geometryBuffer.EnqueueVertexDelegate, geometryBuffer.EnqueueVertexIndexDelegate, startVertex, position, size, color, rotation, depth);
 
             EnqueueDraw(PrimitiveType.TriangleList, 4, startIndex, 6, ref _shapeItemData, sortKey);
-        }
-
-        public void DrawRectangleOutlineOffCenter(Vector2 position, SizeF size, Color color, float rotation = 0f, float depth = 0f, uint sortKey = 0)
-        {
-            var geometryBuffer = GeometryBuffer;
-
-            var startVertex = geometryBuffer.VerticesCount;
-            var startIndex = geometryBuffer.IndicesCount;
-
-            RenderGeometryBuilder.CreateRectangleOffCenter(geometryBuffer.EnqueueVertexDelegate, geometryBuffer.EnqueueVertexIndexDelegate, startVertex, position, size, color, rotation, depth);
-
-            EnqueueDraw(PrimitiveType.LineList, 4, startIndex, 6, ref _shapeItemData, sortKey);
         }
 
         public void DrawSprite(Texture2D texture, Vector2 position, Rectangle? sourceRectangle = null, Color? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, float depth = 0, uint sortKey = 0)
