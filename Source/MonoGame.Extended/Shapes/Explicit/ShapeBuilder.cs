@@ -29,9 +29,12 @@ namespace MonoGame.Extended.Shapes.Explicit
             var x = radius * (float)Math.Cos(startAngle);
             var y = 0f;
 
+            var point = new Vector3(0, 0, depth);
+
             for (var i = 0; i < circleSegmentsCount; i++)
             {
-                var point = new Vector3(x + position.X, y + position.Y, depth);
+                point.X = x + position.X;
+                point.Y = y + position.Y;
                 result(ref point);
 
                 // Apply the rotation matrix

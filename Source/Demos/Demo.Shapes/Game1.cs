@@ -82,7 +82,7 @@ namespace Demo.Shapes
 
             //_shapeBatch.DrawCircle(_circlePosition, _circleRadius, Color.Black * 0.25f);
             //            _shapeBatch.DrawCircleOutline(_circlePosition, _circleRadius, Color.Black);
-            //            _shapeBatch.DrawArc(_circlePosition, _circleRadius, 0, _circleTheta, Color.FromNonPremultiplied(39, 139, 39, 255));
+            _shapeBatch.DrawArc(_circlePosition, _circleRadius, 0, _circleTheta, Color.FromNonPremultiplied(39, 139, 39, 255));
             //            _shapeBatch.DrawArcOutline(_circlePosition, _circleRadius, 0, _circleTheta, Color.Red);
             //
             _shapeBatch.DrawRectangleOffCenter(_rectanglePosition, _rectangleSize, Color.Red, _rectangleTheta);

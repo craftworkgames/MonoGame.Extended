@@ -11,21 +11,30 @@ namespace MonoGame.Extended.Graphics
         private static VertexPositionColorTexture _vertexPositionColorTexture;
 
         // to use delegates without creating unecessary memory garbage, we need to "cache" the delegates
-        private static VertexDelegate<VertexPositionColorTexture> _vertexPositionColorTextureDelegate;
-        private static readonly ShapeBuilder.PointDelegate _spritePointToPositionColorTextureDelegate = SpritePointToVertexPositionColorTexture;
+        private static VertexDelegate<VertexPositionColorTexture> _outputVertexPositionColorTexture;
         private static readonly ShapeBuilder.PointDelegate _pointToVertexPositionColorTextureDelegate = PointToVertexPositionColorTexture;
+        private static readonly ShapeBuilder.PointDelegate _spritePointToPositionColorTextureDelegate = SpritePointToVertexPositionColorTexture;
+        private static readonly ShapeBuilder.PointDelegate _arcPointToPositionColorTextureDelegate = ArcPointToVertexPositionColorTexture;
 
         // these variables are for used in one of the delegate methods
         // they are here because we want to prevent delegate closures which would create a new object on the heap every invocation!
+        private static int _vertexIndexCount;
+        private static int _vertexIndexOffset;
         private static Vector2 _spriteTextureCoordinateTopLeft;
         private static Vector2 _spriteTextureCoordinateBottomRight;
-        private static int _spriteVertexIndex;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void PointToVertexPositionColorTexture(ref Vector3 point)
+        {
+            _vertexPositionColorTexture.Position = point;
+            _outputVertexPositionColorTexture(ref _vertexPositionColorTexture);
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void SpritePointToVertexPositionColorTexture(ref Vector3 point)
         {
             // ReSharper disable once SwitchStatementMissingSomeCases
-            switch (_spriteVertexIndex)
+            switch (_vertexIndexCount)
             {
                 case 0:
                     _vertexPositionColorTexture.TextureCoordinate = _spriteTextureCoordinateTopLeft;
@@ -44,15 +53,26 @@ namespace MonoGame.Extended.Graphics
             }
 
             _vertexPositionColorTexture.Position = point;
-            _vertexPositionColorTextureDelegate(ref _vertexPositionColorTexture);
-            _spriteVertexIndex++;
+            _outputVertexPositionColorTexture(ref _vertexPositionColorTexture);
+            _vertexIndexCount++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void PointToVertexPositionColorTexture(ref Vector3 point)
+        private static void ArcPointToVertexPositionColorTexture(ref Vector3 point)
         {
             _vertexPositionColorTexture.Position = point;
-            _vertexPositionColorTextureDelegate(ref _vertexPositionColorTexture);
+            _outputVertexPositionColorTexture(ref _vertexPositionColorTexture);
+            _vertexIndexCount++;
+
+            // need at least 3 points (the first point is the center of the arc)
+            if (!(_vertexIndexCount >= 3))
+            {
+                return;
+            }
+
+            _outputVertexIndex(_vertexIndexOffset + 0); // center of arc
+            _outputVertexIndex(_vertexIndexOffset + _vertexIndexCount - 2); // point i-1
+            _outputVertexIndex(_vertexIndexOffset + _vertexIndexCount - 1); // point i
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -159,22 +179,27 @@ namespace MonoGame.Extended.Graphics
             AddClockwiseQuadrilateralIndices(outputIndex, indexOffset);
         }
 
-//        public static void CreateArc(VertexDelegate<VertexPositionColorTexture> outputVertex, VertexIndexDelegate outputIndex, Vector2 position, float radius, float startAngle, float endAngle, Color color, float depth = 0f, int circleSegmentsCount = ShapeBuilder.DefaultCircleSegmentsCount)
-//        {
-//            _vertexPositionColorTextureDelegate = outputVertex;
-//            _vertexIndexDelegate = outputIndex;
-//            _vertexPositionColorTexture.Color = color;
-//            _vertexPositionColorTexture.TextureCoordinate = Vector2.Zero;
-//
-//            var vertexDelegate = _shapePointToVertexPositionColorTextureDelegate;
-//
-//            ShapeBuilder.CreateArc(vertexDelegate, position, radius, depth, circleSegmentsCount);
-//        }
+        public static void CreateArc(VertexDelegate<VertexPositionColorTexture> outputVertex, VertexIndexDelegate outputIndex, int indexOffset, Vector2 position, float radius, float startAngle, float endAngle, Color color, float depth = 0f, int circleSegmentsCount = ShapeBuilder.DefaultCircleSegmentsCount)
+        {
+            EnsureOutputVertexDelegate(outputVertex);
+            EnsureOutputIndexDelegate(outputIndex);
+
+            _outputVertexPositionColorTexture = outputVertex;
+            _outputVertexIndex = outputIndex;
+            _vertexIndexCount = 0;
+            _vertexIndexOffset = indexOffset;
+            _vertexPositionColorTexture = new VertexPositionColorTexture(new Vector3(position, depth), color, Vector2.Zero);
+
+            outputVertex(ref _vertexPositionColorTexture);
+            _vertexIndexCount++;
+
+            ShapeBuilder.CreateArc(_arcPointToPositionColorTextureDelegate, position, radius, startAngle, endAngle, depth, circleSegmentsCount);
+        }
 //
 //        public static void CreateCircle(VertexDelegate<VertexPositionColorTexture> outputVertex, VertexIndexDelegate outputIndex, Vector2 position, float radius, Color color, float depth = 0f, int circleSegmentsCount = ShapeBuilder.DefaultCircleSegmentsCount)
 //        {
-//            _vertexPositionColorTextureDelegate = outputVertex;
-//            _vertexIndexDelegate = outputIndex;
+//            _outputVertexPositionColorTexture = outputVertex;
+//            _outputVertexIndex = outputIndex;
 //            _vertexPositionColorTexture.Color = color;
 //            _vertexPositionColorTexture.TextureCoordinate = Vector2.Zero;
 //
@@ -188,8 +213,8 @@ namespace MonoGame.Extended.Graphics
             EnsureOutputVertexDelegate(outputVertex);
             EnsureOutputIndexDelegate(outputIndex);
 
-            _vertexPositionColorTextureDelegate = outputVertex;
-            _vertexIndexDelegate = outputIndex;
+            _outputVertexPositionColorTexture = outputVertex;
+            _outputVertexIndex = outputIndex;
             _vertexPositionColorTexture.Color = color;
             _vertexPositionColorTexture.TextureCoordinate = Vector2.Zero;
 
@@ -203,8 +228,8 @@ namespace MonoGame.Extended.Graphics
             EnsureOutputVertexDelegate(outputVertex);
             EnsureOutputIndexDelegate(outputIndex);
 
-            _vertexPositionColorTextureDelegate = outputVertex;
-            _vertexIndexDelegate = outputIndex;
+            _outputVertexPositionColorTexture = outputVertex;
+            _outputVertexIndex = outputIndex;
             _vertexPositionColorTexture.Color = color;
             _vertexPositionColorTexture.TextureCoordinate = Vector2.Zero;
 
@@ -225,8 +250,8 @@ namespace MonoGame.Extended.Graphics
             EnsureOutputVertexDelegate(outputVertex);
             EnsureOutputIndexDelegate(outputIndex);
 
-            _vertexPositionColorTextureDelegate = outputVertex;
-            _vertexIndexDelegate = outputIndex;
+            _outputVertexPositionColorTexture = outputVertex;
+            _outputVertexIndex = outputIndex;
             _vertexPositionColorTexture.Color = color;
             _vertexPositionColorTexture.TextureCoordinate = Vector2.Zero;
 
@@ -240,8 +265,8 @@ namespace MonoGame.Extended.Graphics
             EnsureOutputVertexDelegate(outputVertex);
             EnsureOutputIndexDelegate(outputIndex);
 
-            _vertexPositionColorTextureDelegate = outputVertex;
-            _vertexIndexDelegate = outputIndex;
+            _outputVertexPositionColorTexture = outputVertex;
+            _outputVertexIndex = outputIndex;
             _vertexPositionColorTexture.Color = color;
             _vertexPositionColorTexture.TextureCoordinate = Vector2.Zero;
 
@@ -285,11 +310,11 @@ namespace MonoGame.Extended.Graphics
             origin1 = origin1 * scale1;
             size = size * scale1;
 
-            _vertexPositionColorTextureDelegate = outputVertex;
-            _vertexIndexDelegate = outputIndex;
+            _outputVertexPositionColorTexture = outputVertex;
+            _outputVertexIndex = outputIndex;
             _vertexPositionColorTexture.Color = color ?? Color.White;
             _vertexPositionColorTexture.TextureCoordinate = Vector2.Zero;
-            _spriteVertexIndex = 0;
+            _vertexIndexCount = 0;
 
             ShapeBuilder.CreateRectangleFromTopLeft(_spritePointToPositionColorTextureDelegate, position, size, rotation, origin1, depth);
 

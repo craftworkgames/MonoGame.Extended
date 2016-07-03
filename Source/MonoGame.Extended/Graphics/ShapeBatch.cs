@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics.Batching;
 using MonoGame.Extended.Graphics.Effects;
+using MonoGame.Extended.Shapes.Explicit;
 
 namespace MonoGame.Extended.Graphics
 {
@@ -87,44 +88,19 @@ namespace MonoGame.Extended.Graphics
             EnqueueDraw(PrimitiveType.TriangleList, 4, startIndex, 6, ref _shapeItemData, sortKey);
         }
 
-//        public void DrawArcOutline(Vector2 position, float radius, float startAngle, float endAngle, Color color, float depth = 0f, int circleSegmentsCount = ShapeBuilder.DefaultCircleSegmentsCount, uint sortKey = 0)
-//        {
-//            var startVertex = GeometryBuffer.VerticesCount;
-//            var startIndex = GeometryBuffer.IndicesCount;
-//
-//            RenderGeometryBuilder.CreateArc(GeometryBuffer.EnqueueVertexDelegate, GeometryBuffer.EnqueueVertexIndexDelegate, position, radius, startAngle, endAngle, color, depth, circleSegmentsCount);
-//
-//            var vertexCount = GeometryBuffer.VerticesCount;
-//            var indexCount = GeometryBuffer.IndicesCount;
-//
-//            EnqueueDraw(PrimitiveType.TriangleList, startVertex, startIndex, vertexCount, indexCount, ref _shapeItemData);
-//
-//            _structBuffer.Clear();
-//            _structBuffer.AppendArc(position, radius, startAngle, endAngle, depth, circleSegmentsCount);
-//
-//            var points = _structBuffer.Items;
-//            var pointsCount = _structBuffer.Length;
-//
-//            for (var i = 0; i < pointsCount - 1; i++)
-//            {
-//                DrawLine3D(points[i], points[i + 1], color, sortKey);
-//            }
-//        }
-//
-//        public void DrawArc(Vector2 position, float radius, float startAngle, float endAngle, Color color, float depth = 0f, int circleSegmentsCount = StructBuffer<>.DefaultCircleSegmentsCount, uint sortKey = 0)
-//        {
-//            _structBuffer.Clear();
-//            _structBuffer.AppendArc(position, radius, startAngle, endAngle, depth, circleSegmentsCount);
-//
-//            var points = _structBuffer.Items;
-//            var pointsCount = _structBuffer.Length;
-//            var position3D = new Vector3(position, depth);
-//
-//            for (var i = 0; i < pointsCount - 1; i++)
-//            {
-//                DrawTriangle3D(position3D, points[i], points[i + 1], color, sortKey);
-//            } 
-//        }
+        public void DrawArc(Vector2 position, float radius, float startAngle, float endAngle, Color color, float depth = 0f, int circleSegmentsCount = ShapeBuilder.DefaultCircleSegmentsCount, uint sortKey = 0)
+        {
+            var geometryBuffer = GeometryBuffer;
+            var startVertex = geometryBuffer.VerticesCount;
+            var startIndex = geometryBuffer.IndicesCount;
+
+            RenderGeometryBuilder.CreateArc(geometryBuffer.EnqueueVertexDelegate, geometryBuffer.EnqueueVertexIndexDelegate, startVertex, position, radius, startAngle, endAngle, color, depth, circleSegmentsCount);
+
+            var vertexCount = geometryBuffer.VerticesCount - startVertex;
+            var indexCount = geometryBuffer.IndicesCount - startIndex;
+
+            EnqueueDraw(PrimitiveType.TriangleList, vertexCount, startIndex, indexCount, ref _shapeItemData, sortKey);
+        }
 //
 //        public void DrawCircleOutline(Vector2 position, float radius, Color color, Vector2? axis = null, float depth = 0f, int circleSegmentsCount = StructBuffer<>.DefaultCircleSegmentsCount, uint sortKey = 0)
 //        {

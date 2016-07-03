@@ -9,6 +9,6 @@ namespace MonoGame.Extended.Graphics
         public delegate void VertexIndexDelegate(int index);
 
         // to use delegates without creating unecessary memory garbage, we need to "cache" the delegates
-        private static VertexIndexDelegate _vertexIndexDelegate;
+        private static VertexIndexDelegate _outputVertexIndex;
     }
 }
