@@ -64,7 +64,6 @@
     <Compile Include="Graphics\RenderGeometryBuffer.cs" />
     <Compile Include="Graphics\RenderGeometryBuilder.cs" />
     <Compile Include="Graphics\RenderGeometryBuilder.VertexPositionColorTexture.cs" />
-    <Compile Include="Collections\StructBuffer.cs" />
     <Compile Include="Shapes\Explicit\ShapeBuilder.cs" />
     <Compile Include="Graphics\Effects\EffectResource.cs" />
     <Compile Include="Graphics\Effects\ShapeEffect.cs" />
