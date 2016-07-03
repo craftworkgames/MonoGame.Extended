@@ -21,10 +21,12 @@ namespace MonoGame.Extended.Graphics.Batching
             BatchDrawer.Effect = null;
         }
 
-        internal override void EnqueueDraw(ref TBatchItemData data, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, int[] indices, int startIndex, int indexCount, uint sortKey = 0)
+        internal override void EnqueueDraw(PrimitiveType primitiveType, int vertexCount, int startIndex, int indexCount, ref TBatchItemData data, uint sortKey = 0)
         {
-            BatchDrawer.Select(vertices, startVertex, vertexCount, indices, startIndex, indexCount);
-            BatchDrawer.Draw(ref data, primitiveType, startVertex, startVertex + vertexCount, startIndex, indexCount);
+            BatchDrawer.Select(vertexCount, indexCount);
+            var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
+            BatchDrawer.Draw(primitiveType, startIndex, primitiveCount, ref data);
+            BatchDrawer.GeometryBuffer.Clear();
         }
     }
 }

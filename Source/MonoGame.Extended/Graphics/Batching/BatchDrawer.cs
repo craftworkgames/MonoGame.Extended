@@ -7,21 +7,17 @@ namespace MonoGame.Extended.Graphics.Batching
         where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
     {
         internal GraphicsDevice GraphicsDevice;
-        internal readonly ushort MaximumVerticesCount;
-        internal readonly ushort MaximumIndicesCount;
-
+        internal RenderGeometryBuffer<TVertexType> GeometryBuffer;
         internal DynamicVertexBuffer VertexBuffer;
         internal DynamicIndexBuffer IndexBuffer;
         internal Effect Effect;
 
-        internal BatchDrawer(GraphicsDevice graphicsDevice, ushort maximumVerticesCount = PrimitiveBatch<TVertexType, TBatchItemData>.DefaultMaximumVerticesCount, ushort maximumIndicesCount = PrimitiveBatch<TVertexType, TBatchItemData>.DefaultMaximumIndicesCount)
+        internal BatchDrawer(GraphicsDevice graphicsDevice, RenderGeometryBuffer<TVertexType> geometryBuffer)
         {
             GraphicsDevice = graphicsDevice;
-            MaximumVerticesCount = maximumVerticesCount;
-            MaximumIndicesCount = maximumIndicesCount;
-
-            VertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof(TVertexType), maximumVerticesCount, BufferUsage.WriteOnly);
-            IndexBuffer = new DynamicIndexBuffer(graphicsDevice, typeof(int), maximumIndicesCount, BufferUsage.WriteOnly);
+            GeometryBuffer = geometryBuffer;
+            VertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof(TVertexType), geometryBuffer.Vertices.Length, BufferUsage.WriteOnly);
+            IndexBuffer = new DynamicIndexBuffer(graphicsDevice, typeof(int), geometryBuffer.Indices.Length, BufferUsage.WriteOnly);
         }
 
         public void Dispose()
@@ -45,43 +41,22 @@ namespace MonoGame.Extended.Graphics.Batching
             IndexBuffer = null;
         }
 
-        internal void Select(TVertexType[] vertices, int startVertex, int vertexCount)
+        internal void Select(int vertexCount, int indexCount)
         {
-            VertexBuffer.SetData(vertices, startVertex, vertexCount);
-            GraphicsDevice.SetVertexBuffer(VertexBuffer);
-        }
-
-        internal void Select(TVertexType[] vertices, int startVertex, int vertexCount, int[] indices, int startIndex, int indexCount)
-        {
-            VertexBuffer.SetData(vertices, startVertex, vertexCount);
-            IndexBuffer.SetData(indices, startIndex, indexCount);
+            VertexBuffer.SetData(GeometryBuffer.Vertices, 0, vertexCount);
+            IndexBuffer.SetData(GeometryBuffer.Indices, 0, indexCount);
             GraphicsDevice.SetVertexBuffer(VertexBuffer);
             GraphicsDevice.Indices = IndexBuffer;
         }
 
-        internal void Draw(ref TBatchItemData batchItemData, PrimitiveType primitiveType, int startVertex, int vertexCount)
+        internal void Draw(PrimitiveType primitiveType, int startIndex, int primitiveCount, ref TBatchItemData batchItemData)
         {
-            var primitiveCount = primitiveType.GetPrimitiveCount(vertexCount);
-
             batchItemData.ApplyTo(Effect);
 
             foreach (var pass in Effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                GraphicsDevice.DrawPrimitives(primitiveType, startVertex, primitiveCount);
-            }
-        }
-
-        internal void Draw(ref TBatchItemData batchItemData, PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount)
-        {
-            var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
-
-            batchItemData.ApplyTo(Effect);
-
-            foreach (var pass in Effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                GraphicsDevice.DrawIndexedPrimitives(primitiveType, startVertex, startIndex, primitiveCount);
+                GraphicsDevice.DrawIndexedPrimitives(primitiveType, 0, startIndex, primitiveCount);
             }
         }
     }

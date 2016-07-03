@@ -14,7 +14,7 @@
 //            var min = axis.Dot(Vertices[0]);
 //            var max = min;
 //
-//            for (var i = 1; i < Vertices.Count; i++)
+//            for (var i = 1; i < Vertices.Length; i++)
 //            {
 //                var vertex = Vertices[i];
 //

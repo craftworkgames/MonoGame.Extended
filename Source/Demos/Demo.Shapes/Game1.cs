@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Graphics.Batching;
 
@@ -71,24 +69,27 @@ namespace Demo.Shapes
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            //TODO: Reduce overhead by using a similiar technique to ShapeBuilder but for PrimitiveBatch; fill a buffer of vertices and then enqueue them in one call. RenderGeometryBuilder
+
             GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             GraphicsDevice.DepthStencilState = DepthStencilState.None;
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
-            _shapeBatch.Begin(BatchMode.Immediate);
+            _shapeBatch.Begin(BatchMode.Deferred);
 
-            //TODO: DrawRectangle, DrawSprite, DrawString
+            _shapeBatch.DrawLine(Vector2.Zero, new Vector2(100, 100), Color.Red, 7);
 
-            _shapeBatch.DrawCircle(_circlePosition, _circleRadius, Color.Black * 0.25f);
-            _shapeBatch.DrawCircleOutline(_circlePosition, _circleRadius, Color.Black);
-            _shapeBatch.DrawArc(_circlePosition, _circleRadius, 0, _circleTheta, Color.FromNonPremultiplied(39, 139, 39, 255));
-            _shapeBatch.DrawArcOutline(_circlePosition, _circleRadius, 0, _circleTheta, Color.Red);
+            //_shapeBatch.DrawCircle(_circlePosition, _circleRadius, Color.Black * 0.25f);
+            //            _shapeBatch.DrawCircleOutline(_circlePosition, _circleRadius, Color.Black);
+            //            _shapeBatch.DrawArc(_circlePosition, _circleRadius, 0, _circleTheta, Color.FromNonPremultiplied(39, 139, 39, 255));
+            //            _shapeBatch.DrawArcOutline(_circlePosition, _circleRadius, 0, _circleTheta, Color.Red);
+            //
+            _shapeBatch.DrawRectangleOffCenter(_rectanglePosition, _rectangleSize, Color.Red, _rectangleTheta);
+            //_shapeBatch.DrawRectangleOutlineOffCenter(_rectanglePosition, _rectangleSize, Color.Black, _rectangleTheta);
+            //
 
-            _shapeBatch.DrawRectangleFromCenter(_rectanglePosition, _rectangleSize, Color.Red, _rectangleTheta);
-            _shapeBatch.DrawRectangleOutlineFromCenter(_rectanglePosition, _rectangleSize, Color.Black, _rectangleTheta);
-
-            _shapeBatch.DrawSpriteFromCenter(_spriteTexture, new Vector2(200, 200), rotation: _rectangleTheta);
+            _shapeBatch.DrawSprite(_spriteTexture, new Vector2(200, 200), rotation: _rectangleTheta);
 
             _shapeBatch.End();
 

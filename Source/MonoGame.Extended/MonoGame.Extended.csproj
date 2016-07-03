@@ -61,6 +61,10 @@
     <Compile Include="Collections\Pool.cs" />
     <Compile Include="Graphics\Batching\IBatchItemData.cs" />
     <Compile Include="Graphics\Effects\ITextureEffect2D.cs" />
+    <Compile Include="Graphics\RenderGeometryBuffer.cs" />
+    <Compile Include="Graphics\RenderGeometryBuilder.cs" />
+    <Compile Include="Graphics\RenderGeometryBuilder.VertexPositionColorTexture.cs" />
+    <Compile Include="Collections\StructBuffer.cs" />
     <Compile Include="Shapes\Explicit\ShapeBuilder.cs" />
     <Compile Include="Graphics\Effects\EffectResource.cs" />
     <Compile Include="Graphics\Effects\ShapeEffect.cs" />
@@ -89,7 +93,7 @@
     <Compile Include="ICollisionShape.cs" />
     <Compile Include="Shapes\BoundingVolumes\PrimitiveBatchExtensions.BoundingVolumes.cs" />
     <Compile Include="Graphics\Batching\BatchDrawer.cs" />
-    <Compile Include="Graphics\Batching\BatchDrawOperation.cs" />
+    <Compile Include="Graphics\Batching\BatchDrawItem.cs" />
     <Compile Include="Graphics\Batching\BatchQueuer.cs" />
     <Compile Include="Graphics\Batching\BatchMode.cs" />
     <Compile Include="Graphics\Batching\DeferredBatchQueuer.cs" />
