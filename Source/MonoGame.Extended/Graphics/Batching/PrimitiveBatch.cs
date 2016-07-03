@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    public class PrimitiveBatch<TVertexType, TBatchItemData> : IDisposable
+    public abstract class PrimitiveBatch<TVertexType, TBatchItemData> : IDisposable
         where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
     {
         public const int DefaultMaximumVerticesCount = 8192;
@@ -22,7 +22,7 @@ namespace MonoGame.Extended.Graphics.Batching
         public int MaximumVerticesCount { get; }
         public int MaximumIndicesCount { get; }
 
-        public PrimitiveBatch(GraphicsDevice graphicsDevice, int maximumVerticesCount = DefaultMaximumVerticesCount, int maximumIndicesCount = DefaultMaximumIndicesCount)
+        protected PrimitiveBatch(GraphicsDevice graphicsDevice, int maximumVerticesCount = DefaultMaximumVerticesCount, int maximumIndicesCount = DefaultMaximumIndicesCount)
         {
             if (graphicsDevice == null)
             {
@@ -123,50 +123,6 @@ namespace MonoGame.Extended.Graphics.Batching
             EnsureHasBegun();
             HasBegun = false;
             _currentBatchQueuer.End();
-        }
-
-//        private void X()
-//        {
-//            var remainingVertices = MaximumVerticesCount - _vertexCount;
-//            var remainingIndices = MaximumIndicesCount - _indexCount;
-//
-//            var exceedsBatchSpace = (vertexCount > remainingVertices) || (indexCount > remainingIndices);
-//
-//            if (exceedsBatchSpace)
-//            {
-//                throw new Exception(message: "Deferred batch overflow. Deferred batching currently doesn't support fragmentation. Either decrease the number of vertices and or number of indices being drawn or increase the maximum number of vertices and or maximum number of indices.");
-//            }
-//        }
-
-        public void Draw(PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, int[] indices, int startIndex, int indexCount, ref TBatchItemData data, uint sortKey = 0)
-        {
-            EnsureHasBegun();
-
-            var geoemtryStartIndex = GeometryBuffer.IndicesCount;
-
-            GeometryBuffer.Enqueue(vertices, startVertex, vertexCount, indices, startIndex, indexCount);
-
-            _currentBatchQueuer.EnqueueDraw(primitiveType, vertexCount, geoemtryStartIndex, indexCount, ref data, sortKey);
-        }
-
-        public void Draw(PrimitiveType primitiveType, Action<RenderGeometryBuffer<TVertexType>> geometryAction, ref TBatchItemData data, uint sortKey = 0)
-        {
-            EnsureHasBegun();
-
-            if (geometryAction == null)
-            {
-                return;
-            }
-
-            var geometryStartVertex = GeometryBuffer.VerticesCount;
-            var geometryStartIndex = GeometryBuffer.IndicesCount;
-
-            geometryAction(GeometryBuffer);
-
-            var vertexCount = GeometryBuffer.VerticesCount - geometryStartVertex;
-            var indexCount = GeometryBuffer.IndicesCount - geometryStartIndex;
-
-            _currentBatchQueuer.EnqueueDraw(primitiveType, vertexCount, geometryStartIndex, indexCount, ref data, sortKey);
         }
 
         protected void EnqueueDraw(PrimitiveType primitiveType, int vertexCount, int startIndex, int indexCount, ref TBatchItemData data, uint sortKey = 0)
