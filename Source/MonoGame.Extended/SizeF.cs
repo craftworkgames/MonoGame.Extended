@@ -50,6 +50,11 @@ namespace MonoGame.Extended
             return Multiply(size1, size2);
         }
 
+        public static SizeF operator *(SizeF size, Vector2 vector)
+        {
+            return Multiply(size, vector);
+        }
+
         public static SizeF operator *(SizeF size, float scaleFactor)
         {
             return Multiply(size, scaleFactor);
