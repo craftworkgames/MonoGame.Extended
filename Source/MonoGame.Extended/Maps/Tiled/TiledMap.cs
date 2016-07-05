@@ -16,13 +16,13 @@ namespace MonoGame.Extended.Maps.Tiled
             _graphicsDevice = graphicsDevice;
             _layers = new List<TiledLayer>();
             _objectGroups = new List<TiledObjectGroup>();
-            _tilesets = new List<TiledTileset>();
 
             Width = width;
             Height = height;
             TileWidth = tileWidth;
             TileHeight = tileHeight;
             Properties = new TiledProperties();
+            _tilesets = new List<TiledTileset>();
             Orientation = orientation;
         }
 
@@ -32,15 +32,16 @@ namespace MonoGame.Extended.Maps.Tiled
                 tiledLayer.Dispose();
         }
 
-        private readonly List<TiledTileset> _tilesets;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly List<TiledLayer> _layers;
+        private readonly List<TiledTileset> _tilesets;
         private readonly List<TiledObjectGroup> _objectGroups;
 
         public int Width { get; }
         public int Height { get; }
         public int TileWidth { get; }
         public int TileHeight { get; }
+        public IReadOnlyList<TiledTileset> Tilesets { get { return  _tilesets; } }
         public Color? BackgroundColor { get; set; }
         public TiledRenderOrder RenderOrder { get; set; }
         public TiledProperties Properties { get; private set; }
