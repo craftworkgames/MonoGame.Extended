@@ -82,6 +82,7 @@
     <Compile Include="Gui\GuiComponent.cs" />
     <Compile Include="Gui\GuiContentService.cs" />
     <Compile Include="Gui\GuiFile.cs" />
+    <Compile Include="Gui\GuiStyleFile.cs" />
     <Compile Include="Gui\MonoGameColorJsonConverter.cs" />
     <Compile Include="IColorable.cs" />
     <Compile Include="IPoolable.cs" />

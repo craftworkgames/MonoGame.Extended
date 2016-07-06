@@ -23,7 +23,7 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public string Name { get; set; }
-        public GuiControlStyle Style { get; set; }
+        public GuiControlStyle Style { get; }
         public TextureRegion2D TextureRegion { get; set; }
         public Color Color { get; set; }
         public Vector2 Position { get; set; }

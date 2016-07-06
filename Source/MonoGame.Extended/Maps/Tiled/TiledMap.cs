@@ -41,14 +41,15 @@ namespace MonoGame.Extended.Maps.Tiled
         public int Height { get; }
         public int TileWidth { get; }
         public int TileHeight { get; }
-        public IReadOnlyList<TiledTileset> Tilesets { get { return  _tilesets; } }
+        
         public Color? BackgroundColor { get; set; }
         public TiledRenderOrder RenderOrder { get; set; }
         public TiledProperties Properties { get; private set; }
         public TiledMapOrientation Orientation { get; private set; }
 
-        public List<TiledObjectGroup> ObjectGroups => _objectGroups;
-        public IEnumerable<TiledLayer> Layers => _layers;
+        public IReadOnlyList<TiledTileset> Tilesets => _tilesets;
+        public IReadOnlyList<TiledObjectGroup> ObjectGroups => _objectGroups;
+        public IReadOnlyList<TiledLayer> Layers => _layers;
         public IEnumerable<TiledImageLayer> ImageLayers => _layers.OfType<TiledImageLayer>();
         public IEnumerable<TiledTileLayer> TileLayers => _layers.OfType<TiledTileLayer>();
         public int WidthInPixels => Width * TileWidth;
@@ -97,7 +98,6 @@ namespace MonoGame.Extended.Maps.Tiled
         {
             return _objectGroups.FirstOrDefault(i => i.Name == name);
         }
-
         
         public void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, GameTime gameTime = null)
         {
