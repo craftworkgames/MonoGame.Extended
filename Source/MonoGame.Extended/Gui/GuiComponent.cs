@@ -24,7 +24,6 @@ namespace MonoGame.Extended.Gui
         private IGuiContentService _contentService;
         private SpriteBatch _spriteBatch;
         private List<GuiControl> _controls;
-        private Dictionary<string, GuiControlStyle> _controlStyles;
         private InputListenerManager _inputManager;
         private GuiControl _hoveredControl;
         private GuiControl _focusedControl;
@@ -132,12 +131,11 @@ namespace MonoGame.Extended.Gui
             {
                 var guiFile = GuiFile.Load(streamReader);
                 var stylesPath = Path.Combine(_contentManager.RootDirectory, guiFile.Styles);
-
-                _controlStyles = LoadStyles(stylesPath);
+                var controlStyles = LoadStyles(stylesPath);
                 
                 foreach (var controlData in guiFile.Controls)
                 {
-                    var controlStyle = _controlStyles[controlData.Style];
+                    var controlStyle = controlStyles[controlData.Style];
                     var control = controlStyle.CreateControl(_contentService);
 
                     if (control != null)
@@ -160,18 +158,10 @@ namespace MonoGame.Extended.Gui
         private static Dictionary<string, GuiControlStyle> LoadStyles(string stylesPath)
         {
             using (var stream = TitleContainer.OpenStream(stylesPath))
-            using (var textReader = new StreamReader(stream))
-            using (var reader = new JsonTextReader(textReader))
+            using (var streamReader = new StreamReader(stream))
             {
-                var serializer = new JsonSerializer()
-                {
-                    Formatting = Formatting.Indented,
-                    TypeNameHandling = TypeNameHandling.Objects,
-                    Converters = { new MonoGameColorJsonConverter() }
-                };
-
-                return serializer.Deserialize<GuiControlStyle[]>(reader)
-                    .ToDictionary(s => s.Name);
+                var stylesFile = GuiStyleFile.Load(streamReader);
+                return stylesFile.Styles.ToDictionary(s => s.Name);
             }
         }
 

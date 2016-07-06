@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using MonoGame.Extended.Gui;
-using MonoGame.Extended.Gui.Controls;
-using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests.Gui
@@ -17,26 +15,11 @@ namespace MonoGame.Extended.Tests.Gui
 
             using (var streamReader = new StreamReader(dataPath))
             {
-                var guiFile = GuiStyleFile.Load(streamReader);
+                var styleFile = GuiStyleFile.Load(streamReader);
 
+                Assert.IsNotNull(styleFile);
+                Assert.AreEqual(1, styleFile.Styles.Count());
             }
-        }
-
-        [Test]
-        public void GuiStyleFile_Dictionary_Test()
-        {
-            var styles = new Dictionary<string, GuiControlStyle>
-            {
-                {"my-button", new GuiButtonStyle()}
-            };
-
-            var settings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Auto,
-                Formatting = Formatting.Indented,
-                Converters = { new MonoGameColorJsonConverter() }
-            }; 
-            var json = JsonConvert.SerializeObject(styles, settings);
         }
     }
 }

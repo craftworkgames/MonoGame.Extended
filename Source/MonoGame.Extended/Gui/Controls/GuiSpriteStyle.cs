@@ -11,5 +11,10 @@ namespace MonoGame.Extended.Gui.Controls
 
         public string TextureRegion { get; set; }
         public Color Color { get; set; }
+
+        public override string ToString()
+        {
+            return $"{TextureRegion} {Color}";
+        }
     }
 }
