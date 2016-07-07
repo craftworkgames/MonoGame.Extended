@@ -1,36 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal abstract class BatchDrawer<TVertexType> : IDisposable
-        where TVertexType : struct, IVertexType
+    internal sealed class BatchDrawer<TVertexType, TBatchItemData> : IDisposable
+        where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
     {
         internal GraphicsDevice GraphicsDevice;
-        internal readonly ushort MaximumVerticesCount;
-        internal readonly ushort MaximumIndicesCount;
-        internal List<Action> CommandDelegates;
-        private IDrawContext _currentDrawContext;
-        protected Effect Effect;
+        internal RenderGeometryBuffer<TVertexType> GeometryBuffer;
+        internal DynamicVertexBuffer VertexBuffer;
+        internal DynamicIndexBuffer IndexBuffer;
+        internal Effect Effect;
 
-        protected BatchDrawer(GraphicsDevice graphicsDevice, ushort maximumVerticesCount = PrimitiveBatch<TVertexType>.DefaultMaximumVerticesCount, ushort maximumIndicesCount = PrimitiveBatch<TVertexType>.DefaultMaximumIndicesCount)
+        internal BatchDrawer(GraphicsDevice graphicsDevice, RenderGeometryBuffer<TVertexType> geometryBuffer)
         {
             GraphicsDevice = graphicsDevice;
-            MaximumVerticesCount = maximumVerticesCount;
-            MaximumIndicesCount = maximumIndicesCount;
-
-            CommandDelegates = new List<Action>();
+            GeometryBuffer = geometryBuffer;
+            VertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof(TVertexType), geometryBuffer.Vertices.Length, BufferUsage.WriteOnly);
+            IndexBuffer = new DynamicIndexBuffer(graphicsDevice, typeof(int), geometryBuffer.Indices.Length, BufferUsage.WriteOnly);
         }
 
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool isDisposing)
+        private void Dispose(bool isDisposing)
         {
             if (!isDisposing)
             {
@@ -38,23 +33,31 @@ namespace MonoGame.Extended.Graphics.Batching
             }
 
             GraphicsDevice = null;
+
+            VertexBuffer?.Dispose();
+            VertexBuffer = null;
+
+            IndexBuffer?.Dispose();
+            IndexBuffer = null;
         }
 
-        internal abstract void Select(TVertexType[] vertices);
-        internal abstract void Select(TVertexType[] vertices, short[] indices);
-        internal abstract void Draw(IDrawContext drawContext, PrimitiveType primitiveType, int startVertex, int vertexCount);
-        internal abstract void Draw(IDrawContext drawContext, PrimitiveType primitiveType, int startVertex, int vertexCount, int startIndex, int indexCount);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected void ChangeDrawContextIfNecessary(IDrawContext drawContext)
+        internal void Select(int vertexCount, int indexCount)
         {
-            if (_currentDrawContext == drawContext && !drawContext.NeedsToApplyChanges)
-            {
-                return;
-            }
+            VertexBuffer.SetData(GeometryBuffer.Vertices, 0, vertexCount);
+            IndexBuffer.SetData(GeometryBuffer.Indices, 0, indexCount);
+            GraphicsDevice.SetVertexBuffer(VertexBuffer);
+            GraphicsDevice.Indices = IndexBuffer;
+        }
 
-            drawContext.Apply(out Effect);
-            _currentDrawContext = drawContext;
+        internal void Draw(PrimitiveType primitiveType, int startIndex, int primitiveCount, ref TBatchItemData batchItemData)
+        {
+            batchItemData.ApplyTo(Effect);
+
+            foreach (var pass in Effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                GraphicsDevice.DrawIndexedPrimitives(primitiveType, 0, startIndex, primitiveCount);
+            }
         }
     }
 }
