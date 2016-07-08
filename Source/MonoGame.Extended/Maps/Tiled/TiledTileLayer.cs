@@ -9,8 +9,8 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledTileLayer : TiledLayer
     {
-        public TiledTileLayer(TiledMap map, GraphicsDevice graphicsDevice, string name, int width, int height, int[] data)
-            : base(name)
+        public TiledTileLayer(TiledMap map, GraphicsDevice graphicsDevice, string name, int width, int height, int[] data, int z)
+            : base(name, z)
         {
             Width = width;
             Height = height;
@@ -57,6 +57,46 @@ namespace MonoGame.Extended.Maps.Tiled
             return tiles;
         }
 
+        public List<VertexPositionTexture> RenderVertices()
+        {
+            var verticesList = new List<VertexPositionTexture>();
+            foreach (var tile in Tiles)
+            {
+                if (tile.Id == 0)
+                    continue;
+
+                var region = _map.GetTileRegion(tile.Id);
+                var textureCoordinateTopLeft = Vector2.Zero;
+                var textureCoordinateBottomRight = Vector2.One;
+                if (region != null)
+                {
+                    textureCoordinateTopLeft.X = (float)region.X / region.Texture.Width;
+                    textureCoordinateTopLeft.Y = (float)region.Y / region.Texture.Height;
+                    textureCoordinateBottomRight.X = (float)(region.X + region.Width) / region.Texture.Width;
+                    textureCoordinateBottomRight.Y = (float)(region.Y + region.Height) / region.Texture.Height;
+                }
+                var vertices = new VertexPositionTexture[4];
+                vertices[0] = new VertexPositionTexture(
+                    new Vector3(tile.X * TileWidth, tile.Y * TileHeight, 0),
+                    textureCoordinateTopLeft
+                );
+                vertices[1] = new VertexPositionTexture(
+                    new Vector3(tile.X * TileWidth + TileWidth, tile.Y * TileHeight, 0),
+                    new Vector2(textureCoordinateBottomRight.X, textureCoordinateTopLeft.Y)
+                );
+                vertices[2] = new VertexPositionTexture(
+                    new Vector3(tile.X * TileWidth, tile.Y * TileHeight + TileHeight, 0),
+                    new Vector2(textureCoordinateTopLeft.X, textureCoordinateBottomRight.Y)
+                );
+                vertices[3] = new VertexPositionTexture(
+                    new Vector3(tile.X * TileWidth + TileWidth, tile.Y * TileHeight + TileHeight, 0),
+                    textureCoordinateBottomRight
+                );
+                verticesList.AddRange(vertices);
+            }
+            return verticesList;
+        }
+
         public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null)
         {
             if(!IsVisible)
@@ -80,8 +120,8 @@ namespace MonoGame.Extended.Maps.Tiled
                     var firstRow = vr.Top < 0 ? 0 : (int) Math.Floor(vr.Top/(float) _map.TileHeight);
 
                     // +3 to cover any gaps
-                    var columns = Math.Min(_map.Width, vr.Width/_map.TileWidth) + 3;
-                    var rows = Math.Min(_map.Height, vr.Height/_map.TileHeight) + 3;
+                    var columns = Math.Min(_map.Width, vr.Width/_map.TileWidth);
+                    var rows = Math.Min(_map.Height, vr.Height/_map.TileHeight);
 
                     _renderTargetSpriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
 
@@ -117,7 +157,6 @@ namespace MonoGame.Extended.Maps.Tiled
                     UpdateRenderTarget(spriteBatch, tileLocationFunction, animatedTile, animatedTile.CurrentTileId);
                 }
             }
-
         }
 
         private void UpdateRenderTarget(SpriteBatch spriteBatch, Func<TiledTile, Point> tileLocationFunction, TiledTile tile, int? tileId)

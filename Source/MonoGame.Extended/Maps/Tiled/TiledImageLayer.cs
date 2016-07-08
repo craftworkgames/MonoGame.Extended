@@ -7,8 +7,8 @@ namespace MonoGame.Extended.Maps.Tiled
     {
         private readonly Texture2D _texture;
 
-        public TiledImageLayer(string name, Texture2D texture, Vector2 position)
-            : base(name)
+        public TiledImageLayer(string name, Texture2D texture, Vector2 position, int z)
+            : base(name, z)
         {
             Position = position;
             _texture = texture;
