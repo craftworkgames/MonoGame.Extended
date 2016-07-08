@@ -176,6 +176,8 @@ namespace MonoGame.Extended.Maps.Tiled
                 layer.Draw(spriteBatch, visibleRectangle, gameTime: gameTime);
             */
 
+            _graphicsDevice.BlendState = BlendState.AlphaBlend;
+            _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             _graphicsDevice.SetVertexBuffer(_vertexBuffer);
             _graphicsDevice.Indices = _indexBuffer;
 
