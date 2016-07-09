@@ -17,6 +17,9 @@ namespace MonoGame.Extended.Maps.Tiled
             _layers = new List<TiledLayer>();
             _objectGroups = new List<TiledObjectGroup>();
 
+            _depthBufferState = new DepthStencilState();
+            _depthBufferState.DepthBufferEnable = true;
+
             Width = width;
             Height = height;
             TileWidth = tileWidth;
@@ -47,6 +50,7 @@ namespace MonoGame.Extended.Maps.Tiled
         private Matrix _viewMatrix;
         private Matrix _projectionMatrix;
         private BasicEffect _basicEffect;
+        private readonly DepthStencilState _depthBufferState;
 
         public int Width { get; }
         public int Height { get; }
@@ -99,6 +103,7 @@ namespace MonoGame.Extended.Maps.Tiled
             var tileVertices = new List<VertexPositionTexture>();
             var tileIndexes = new List<short>();
             var tileLayers = _layers.Where(layer => layer is TiledTileLayer).ToList();
+            var index = 0;
             foreach (var tileLayer in tileLayers)
             {
                 var layer = (TiledTileLayer)tileLayer;
@@ -107,14 +112,15 @@ namespace MonoGame.Extended.Maps.Tiled
                 for (var i = 0; i < tilesCount; i++)
                 {
                     var thisTileIndexes = new short[6];
-                    thisTileIndexes[0] = (short)(4 * i);
-                    thisTileIndexes[1] = (short)(4 * i + 1);
-                    thisTileIndexes[2] = (short)(4 * i + 2);
-                    thisTileIndexes[3] = (short)(4 * i + 1);
-                    thisTileIndexes[4] = (short)(4 * i + 3);
-                    thisTileIndexes[5] = (short)(4 * i + 2);
+                    thisTileIndexes[0] = (short)(4 * index);
+                    thisTileIndexes[1] = (short)(4 * index + 1);
+                    thisTileIndexes[2] = (short)(4 * index + 2);
+                    thisTileIndexes[3] = (short)(4 * index + 1);
+                    thisTileIndexes[4] = (short)(4 * index + 3);
+                    thisTileIndexes[5] = (short)(4 * index + 2);
                     tileIndexes.AddRange(thisTileIndexes);
                     _tilesPrimitivesCount += 2;
+                    index++;
                 }
             }
 
@@ -181,6 +187,7 @@ namespace MonoGame.Extended.Maps.Tiled
             _worldMatrix.Scale = new Vector3(zoom.HasValue ? new Vector2(zoom.Value, zoom.Value) : Vector2.One, 1f);
             _basicEffect.World = _worldMatrix;
 
+            _graphicsDevice.DepthStencilState = _depthBufferState;
             _graphicsDevice.BlendState = BlendState.AlphaBlend;
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
@@ -191,9 +198,11 @@ namespace MonoGame.Extended.Maps.Tiled
                 foreach (var layer in imageLayers)
                 {
                     var imageLayer = (TiledImageLayer)layer;
+                    if (!imageLayer.IsVisible)
+                        continue;
                     _basicEffect.Texture = imageLayer.Texture;
                     pass.Apply();
-                    _graphicsDevice.DrawUserIndexedPrimitives<VertexPositionTexture>(
+                    _graphicsDevice.DrawUserIndexedPrimitives(
                         PrimitiveType.TriangleList,
                         imageLayer.ImageVertices,
                         0,

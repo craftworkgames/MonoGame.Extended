@@ -67,6 +67,8 @@ namespace Demo.TiledMaps
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
+            _camera.Position = Vector2.Zero;
+
             const float cameraSpeed = 200f;
             const float zoomSpeed = 0.2f;
 
