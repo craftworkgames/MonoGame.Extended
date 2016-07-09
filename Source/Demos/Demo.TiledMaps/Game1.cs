@@ -33,7 +33,7 @@ namespace Demo.TiledMaps
         protected override void Initialize()
         {
             _viewportAdapter = new ScalingViewportAdapter(GraphicsDevice, 800, 480);
-            _camera = new Camera2D(_viewportAdapter) {Zoom = 0.5f};
+            _camera = new Camera2D(_viewportAdapter);
 
             Window.AllowUserResizing = true;
             Window.Position = Point.Zero;

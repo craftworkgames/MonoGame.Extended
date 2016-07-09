@@ -146,7 +146,7 @@ namespace MonoGame.Extended.Maps.Tiled
                     (float)_graphicsDevice.Viewport.Width,
                     (float)_graphicsDevice.Viewport.Height,
                     0,
-                    1.0f, 1000.0f
+                    1.0f, highestZ + 100f
                 );
 
             _basicEffect = new BasicEffect(_graphicsDevice);
@@ -185,8 +185,9 @@ namespace MonoGame.Extended.Maps.Tiled
             var rect = visibleRectangle.HasValue ? visibleRectangle.Value : Rectangle.Empty;
 
             _worldMatrix.Translation = new Vector3(-rect.X, -rect.Y, 0);
-            _worldMatrix.Scale = new Vector3(zoom, zoom, 1.0f);
+            _viewMatrix.Scale = new Vector3(zoom, zoom, 1.0f);
             _basicEffect.World = _worldMatrix;
+            _basicEffect.View = _viewMatrix;
 
             _graphicsDevice.DepthStencilState = _depthBufferState;
             _graphicsDevice.BlendState = BlendState.AlphaBlend;
