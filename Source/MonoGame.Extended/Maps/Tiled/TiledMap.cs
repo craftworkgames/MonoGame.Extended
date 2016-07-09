@@ -37,6 +37,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         private readonly GraphicsDevice _graphicsDevice;
         private readonly List<TiledLayer> _layers;
+        private List<TiledImageLayer> _imageLayers;
         private readonly List<TiledTileset> _tilesets;
         private readonly List<TiledObjectGroup> _objectGroups;
 
@@ -46,11 +47,11 @@ namespace MonoGame.Extended.Maps.Tiled
         private short[] _tilesIndexes;
         private int _tilesPrimitivesCount;
 
+        private readonly DepthStencilState _depthBufferState;
         private Matrix _worldMatrix;
         private Matrix _viewMatrix;
         private Matrix _projectionMatrix;
         private BasicEffect _basicEffect;
-        private readonly DepthStencilState _depthBufferState;
 
         public int Width { get; }
         public int Height { get; }
@@ -102,11 +103,10 @@ namespace MonoGame.Extended.Maps.Tiled
         {
             var tileVertices = new List<VertexPositionTexture>();
             var tileIndexes = new List<short>();
-            var tileLayers = _layers.Where(layer => layer is TiledTileLayer).ToList();
+            var tileLayers = _layers.OfType<TiledTileLayer>();
             var index = 0;
-            foreach (var tileLayer in tileLayers)
+            foreach (var layer in tileLayers)
             {
-                var layer = (TiledTileLayer)tileLayer;
                 tileVertices.AddRange(layer.RenderVertices());
                 var tilesCount = layer.Tiles.Where(x => x.Id != 0).ToList().Count;
                 for (var i = 0; i < tilesCount; i++)
@@ -135,7 +135,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
             var highestZ = _layers.Max(layer => layer.Z);
             _viewMatrix = Matrix.CreateLookAt(
-                new Vector3(0f, 0f, highestZ + 1),
+                new Vector3(0f, 0f, highestZ + 1.0f),
                 Vector3.Zero,
                 Vector3.Up
             );
@@ -155,6 +155,8 @@ namespace MonoGame.Extended.Maps.Tiled
             _basicEffect.Projection = _projectionMatrix;
             _basicEffect.TextureEnabled = true;
             _basicEffect.Texture = _tilesets[0].Texture;
+
+            _imageLayers = _layers.OfType<TiledImageLayer>().ToList();
 
             return this;
         }
@@ -177,11 +179,6 @@ namespace MonoGame.Extended.Maps.Tiled
         
         public void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, float zoom = 1.0f, GameTime gameTime = null)
         {
-            /*
-            foreach (var layer in _layers.Where(i => i.IsVisible))
-                layer.Draw(spriteBatch, visibleRectangle, gameTime: gameTime);
-            */
-
             var rect = visibleRectangle.HasValue ? visibleRectangle.Value : Rectangle.Empty;
 
             _worldMatrix.Translation = new Vector3(-rect.X, -rect.Y, 0);
@@ -196,20 +193,18 @@ namespace MonoGame.Extended.Maps.Tiled
             // Images draw
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
             {
-                var imageLayers = _layers.Where(layer => layer is TiledImageLayer);
-                foreach (var layer in imageLayers)
+                foreach (var layer in _imageLayers)
                 {
-                    var imageLayer = (TiledImageLayer)layer;
-                    if (!imageLayer.IsVisible)
+                    if (!layer.IsVisible)
                         continue;
-                    _basicEffect.Texture = imageLayer.Texture;
+                    _basicEffect.Texture = layer.Texture;
                     pass.Apply();
                     _graphicsDevice.DrawUserIndexedPrimitives(
                         PrimitiveType.TriangleList,
-                        imageLayer.ImageVertices,
+                        layer.ImageVertices,
                         0,
-                        imageLayer.ImageVertices.Length,
-                        imageLayer.ImageVerticesIndex,
+                        layer.ImageVertices.Length,
+                        layer.ImageVerticesIndex,
                         0,
                         2
                     );
