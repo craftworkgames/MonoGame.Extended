@@ -177,14 +177,9 @@ namespace MonoGame.Extended.Maps.Tiled
             return _objectGroups.FirstOrDefault(i => i.Name == name);
         }
         
-        public void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, float zoom = 1.0f, GameTime gameTime = null)
+        public void Draw(SpriteBatch spriteBatch, Camera2D camera, GameTime gameTime = null)
         {
-            var rect = visibleRectangle.HasValue ? visibleRectangle.Value : Rectangle.Empty;
-
-            _worldMatrix.Translation = new Vector3(-rect.X, -rect.Y, 0);
-            _viewMatrix.Scale = new Vector3(zoom, zoom, 1.0f);
-            _basicEffect.World = _worldMatrix;
-            _basicEffect.View = _viewMatrix;
+            _basicEffect.World = camera.GetViewMatrix();
 
             _graphicsDevice.DepthStencilState = _depthBufferState;
             _graphicsDevice.BlendState = BlendState.AlphaBlend;
@@ -225,12 +220,6 @@ namespace MonoGame.Extended.Maps.Tiled
                     _tilesPrimitivesCount
                 );
             }
-        }
-
-        public void Draw(SpriteBatch spriteBatch, Camera2D camera, GameTime gameTime = null)
-        {
-            var visibleRectangle = camera.GetBoundingRectangle().ToRectangle();
-            Draw(spriteBatch, visibleRectangle, camera.Zoom, gameTime: gameTime);
         }
 
         public TextureRegion2D GetTileRegion(int id)
