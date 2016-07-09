@@ -60,7 +60,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
             for (var i = 0; i < layerCount; i++)
             {
-                var layer = ReadLayer(reader, tiledMap, i);
+                var layer = ReadLayer(reader, tiledMap, (i + 1) * 100);
                 ReadCustomProperties(reader, layer.Properties);
             }
 

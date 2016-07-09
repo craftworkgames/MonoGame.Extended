@@ -174,7 +174,7 @@ namespace MonoGame.Extended.Maps.Tiled
             return _objectGroups.FirstOrDefault(i => i.Name == name);
         }
         
-        public void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, float? zoom = null, GameTime gameTime = null)
+        public void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, float zoom = 1.0f, GameTime gameTime = null)
         {
             /*
             foreach (var layer in _layers.Where(i => i.IsVisible))
@@ -184,12 +184,27 @@ namespace MonoGame.Extended.Maps.Tiled
             var rect = visibleRectangle.HasValue ? visibleRectangle.Value : Rectangle.Empty;
 
             _worldMatrix.Translation = new Vector3(-rect.X, -rect.Y, 0);
-            _worldMatrix.Scale = new Vector3(zoom.HasValue ? new Vector2(zoom.Value, zoom.Value) : Vector2.One, 1f);
+            _worldMatrix.Scale = new Vector3(zoom, zoom, 1.0f);
             _basicEffect.World = _worldMatrix;
 
             _graphicsDevice.DepthStencilState = _depthBufferState;
             _graphicsDevice.BlendState = BlendState.AlphaBlend;
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+
+            // Tiles draw
+            _graphicsDevice.SetVertexBuffer(_tilesVertexBuffer);
+            _graphicsDevice.Indices = _tilesIndexBuffer;
+
+            foreach (var pass in _basicEffect.CurrentTechnique.Passes)
+            {
+                _basicEffect.Texture = _tilesets[0].Texture;
+                pass.Apply();
+                _graphicsDevice.DrawIndexedPrimitives(
+                    PrimitiveType.TriangleList,
+                    0, 0,
+                    _tilesPrimitivesCount
+                );
+            }
 
             // Images draw
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
@@ -212,21 +227,6 @@ namespace MonoGame.Extended.Maps.Tiled
                         2
                     );
                 }
-            }
-
-            // Tiles draw
-            _graphicsDevice.SetVertexBuffer(_tilesVertexBuffer);
-            _graphicsDevice.Indices = _tilesIndexBuffer;
-
-            foreach (var pass in _basicEffect.CurrentTechnique.Passes)
-            {
-                _basicEffect.Texture = _tilesets[0].Texture;
-                pass.Apply();
-                _graphicsDevice.DrawIndexedPrimitives(
-                    PrimitiveType.TriangleList,
-                    0, 0,
-                    _tilesPrimitivesCount
-                );
             }
         }
 
