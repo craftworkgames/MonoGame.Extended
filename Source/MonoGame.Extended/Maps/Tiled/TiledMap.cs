@@ -133,8 +133,9 @@ namespace MonoGame.Extended.Maps.Tiled
 
             _worldMatrix = Matrix.CreateTranslation(Vector3.Zero);
 
+            var highestZ = _layers.Max(layer => layer.Z);
             _viewMatrix = Matrix.CreateLookAt(
-                new Vector3(0f, 0f, _layers.Count),
+                new Vector3(0f, 0f, highestZ + 1),
                 Vector3.Zero,
                 Vector3.Up
             );
@@ -191,21 +192,6 @@ namespace MonoGame.Extended.Maps.Tiled
             _graphicsDevice.BlendState = BlendState.AlphaBlend;
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
-            // Tiles draw
-            _graphicsDevice.SetVertexBuffer(_tilesVertexBuffer);
-            _graphicsDevice.Indices = _tilesIndexBuffer;
-
-            foreach (var pass in _basicEffect.CurrentTechnique.Passes)
-            {
-                _basicEffect.Texture = _tilesets[0].Texture;
-                pass.Apply();
-                _graphicsDevice.DrawIndexedPrimitives(
-                    PrimitiveType.TriangleList,
-                    0, 0,
-                    _tilesPrimitivesCount
-                );
-            }
-
             // Images draw
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
             {
@@ -227,6 +213,21 @@ namespace MonoGame.Extended.Maps.Tiled
                         2
                     );
                 }
+            }
+
+            // Tiles draw
+            _graphicsDevice.SetVertexBuffer(_tilesVertexBuffer);
+            _graphicsDevice.Indices = _tilesIndexBuffer;
+
+            foreach (var pass in _basicEffect.CurrentTechnique.Passes)
+            {
+                _basicEffect.Texture = _tilesets[0].Texture;
+                pass.Apply();
+                _graphicsDevice.DrawIndexedPrimitives(
+                    PrimitiveType.TriangleList,
+                    0, 0,
+                    _tilesPrimitivesCount
+                );
             }
         }
 
