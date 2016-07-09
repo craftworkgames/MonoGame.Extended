@@ -46,6 +46,7 @@ namespace MonoGame.Extended.Maps.Tiled
         private VertexPositionTexture[] _tilesVertices;
         private short[] _tilesIndexes;
         private int _tilesPrimitivesCount;
+        private int _tilesVerticesSoFar;
 
         private readonly DepthStencilState _depthBufferState;
         private Matrix _worldMatrix;
@@ -181,6 +182,8 @@ namespace MonoGame.Extended.Maps.Tiled
         {
             _basicEffect.World = camera.GetViewMatrix();
 
+            _graphicsDevice.SetVertexBuffer(_tilesVertexBuffer);
+            _graphicsDevice.Indices = _tilesIndexBuffer;
             _graphicsDevice.DepthStencilState = _depthBufferState;
             _graphicsDevice.BlendState = BlendState.AlphaBlend;
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
@@ -188,37 +191,36 @@ namespace MonoGame.Extended.Maps.Tiled
             // Images draw
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
             {
-                foreach (var layer in _imageLayers)
+                foreach (var layer in _layers)
                 {
-                    if (!layer.IsVisible)
-                        continue;
-                    _basicEffect.Texture = layer.Texture;
-                    pass.Apply();
-                    _graphicsDevice.DrawUserIndexedPrimitives(
-                        PrimitiveType.TriangleList,
-                        layer.ImageVertices,
-                        0,
-                        layer.ImageVertices.Length,
-                        layer.ImageVerticesIndex,
-                        0,
-                        2
-                    );
+                    if (layer is TiledTileLayer)
+                    {
+                        _basicEffect.Texture = _tilesets[0].Texture;
+                        pass.Apply();
+
+                        _graphicsDevice.DrawIndexedPrimitives(
+                            PrimitiveType.TriangleList,
+                            0,
+                            0,
+                            _tilesPrimitivesCount
+                        );
+                    }
+                    else
+                    {
+                        var imageLayer = (TiledImageLayer)layer;
+                        _basicEffect.Texture = imageLayer.Texture;
+                        pass.Apply();
+                        _graphicsDevice.DrawUserIndexedPrimitives(
+                            PrimitiveType.TriangleList,
+                            imageLayer.ImageVertices,
+                            0,
+                            imageLayer.ImageVertices.Length,
+                            imageLayer.ImageVerticesIndex,
+                            0,
+                            2
+                        );
+                    }
                 }
-            }
-
-            // Tiles draw
-            _graphicsDevice.SetVertexBuffer(_tilesVertexBuffer);
-            _graphicsDevice.Indices = _tilesIndexBuffer;
-
-            foreach (var pass in _basicEffect.CurrentTechnique.Passes)
-            {
-                _basicEffect.Texture = _tilesets[0].Texture;
-                pass.Apply();
-                _graphicsDevice.DrawIndexedPrimitives(
-                    PrimitiveType.TriangleList,
-                    0, 0,
-                    _tilesPrimitivesCount
-                );
             }
         }
 

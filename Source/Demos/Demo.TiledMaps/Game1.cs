@@ -67,7 +67,7 @@ namespace Demo.TiledMaps
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            const float cameraSpeed = 200f;
+            const float cameraSpeed = 500f;
             const float zoomSpeed = 0.2f;
 
             if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
