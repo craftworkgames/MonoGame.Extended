@@ -22,8 +22,11 @@
    </properties>
   </tile>
  </tileset>
+ <imagelayer name="Camada de Imagem 2">
+  <image source="rpg_maker_vx_rtp_tileset_by_telles0808.png"/>
+ </imagelayer>
  <imagelayer name="Image Layer 1">
-  <image source="hills.png"/>
+  <image source="hills.png" trans="000000"/>
  </imagelayer>
  <layer name="Tile Layer 2" width="20" height="10">
   <data>

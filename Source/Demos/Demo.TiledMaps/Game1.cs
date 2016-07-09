@@ -32,7 +32,7 @@ namespace Demo.TiledMaps
 
         protected override void Initialize()
         {
-            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            _viewportAdapter = new ScalingViewportAdapter(GraphicsDevice, 800, 480);
             _camera = new Camera2D(_viewportAdapter) {Zoom = 0.5f};
 
             Window.AllowUserResizing = true;
