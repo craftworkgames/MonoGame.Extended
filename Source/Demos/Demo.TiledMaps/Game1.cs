@@ -101,7 +101,7 @@ namespace Demo.TiledMaps
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
 
             // you can draw the whole map all at once
-            _spriteBatch.Draw(_tiledMap, gameTime: gameTime);
+            _spriteBatch.Draw(_tiledMap, _camera, gameTime: gameTime);
 
             // or you can have more control over drawing each individual layer
             //foreach (var layer in _tiledMap.Layers)
@@ -117,6 +117,7 @@ namespace Demo.TiledMaps
             _spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: move", new Vector2(5, 32), textColor);
             _spriteBatch.DrawString(_bitmapFont, "RF: zoom", new Vector2(5, 32 + _bitmapFont.LineHeight), textColor);
             _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.AverageFramesPerSecond:0}", Vector2.One, Color.Black);
+            _spriteBatch.DrawString(_bitmapFont, $"Camera: {_camera.Position:0}", new Vector2(5, 32 + _bitmapFont.LineHeight * 2), Color.Black);
             _spriteBatch.End();
 
             base.Draw(gameTime);

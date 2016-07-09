@@ -77,19 +77,19 @@ namespace MonoGame.Extended.Maps.Tiled
                 }
                 var vertices = new VertexPositionTexture[4];
                 vertices[0] = new VertexPositionTexture(
-                    new Vector3(tile.X * TileWidth, tile.Y * TileHeight, 0),
+                    new Vector3(tile.X * TileWidth - 0.5f, tile.Y * TileHeight, Z),
                     textureCoordinateTopLeft
                 );
                 vertices[1] = new VertexPositionTexture(
-                    new Vector3(tile.X * TileWidth + TileWidth, tile.Y * TileHeight, 0),
+                    new Vector3(tile.X * TileWidth + TileWidth + 0.5f, tile.Y * TileHeight, Z),
                     new Vector2(textureCoordinateBottomRight.X, textureCoordinateTopLeft.Y)
                 );
                 vertices[2] = new VertexPositionTexture(
-                    new Vector3(tile.X * TileWidth, tile.Y * TileHeight + TileHeight, 0),
+                    new Vector3(tile.X * TileWidth - 0.5f, tile.Y * TileHeight + TileHeight + 0.5f, Z),
                     new Vector2(textureCoordinateTopLeft.X, textureCoordinateBottomRight.Y)
                 );
                 vertices[3] = new VertexPositionTexture(
-                    new Vector3(tile.X * TileWidth + TileWidth, tile.Y * TileHeight + TileHeight, 0),
+                    new Vector3(tile.X * TileWidth + TileWidth + 0.5f, tile.Y * TileHeight + TileHeight + 0.5f, Z),
                     textureCoordinateBottomRight
                 );
                 verticesList.AddRange(vertices);

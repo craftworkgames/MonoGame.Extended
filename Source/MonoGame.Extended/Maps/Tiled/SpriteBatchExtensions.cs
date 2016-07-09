@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Maps.Tiled
     {
         public static void Draw(this SpriteBatch spriteBatch, TiledMap tiledMap, Rectangle? visibleRectangle = null, GameTime gameTime = null)
         {
-            tiledMap.Draw(spriteBatch, visibleRectangle, gameTime);
+            tiledMap.Draw(spriteBatch, visibleRectangle, gameTime: gameTime);
         }
 
         public static void Draw(this SpriteBatch spriteBatch, TiledMap tiledMap, Camera2D camera, GameTime gameTime = null)

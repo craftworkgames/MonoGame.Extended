@@ -127,10 +127,10 @@ namespace MonoGame.Extended.Maps.Tiled
             _vertexBuffer.SetData<VertexPositionTexture>(_tileVertices);
             _indexBuffer.SetData<short>(_tileIndexes);
 
-            _worldMatrix = Matrix.CreateTranslation(0, 0, 0);
+            _worldMatrix = Matrix.CreateTranslation(Vector3.Zero);
 
             _viewMatrix = Matrix.CreateLookAt(
-                new Vector3(0.0f, 0.0f, 1.0f),
+                new Vector3(0f, 0f, _layers.Count),
                 Vector3.Zero,
                 Vector3.Up
             );
@@ -169,12 +169,18 @@ namespace MonoGame.Extended.Maps.Tiled
             return _objectGroups.FirstOrDefault(i => i.Name == name);
         }
         
-        public void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, GameTime gameTime = null)
+        public void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, float? zoom = null, GameTime gameTime = null)
         {
             /*
             foreach (var layer in _layers.Where(i => i.IsVisible))
                 layer.Draw(spriteBatch, visibleRectangle, gameTime: gameTime);
             */
+
+            var rect = visibleRectangle ?? Rectangle.Empty;
+
+            _worldMatrix.Translation = new Vector3(-rect.X, -rect.Y, 0);
+            _worldMatrix.Scale = new Vector3(zoom.HasValue ? new Vector2(zoom.Value, zoom.Value) : Vector2.One, 0f);
+            _basicEffect.World = _worldMatrix;
 
             _graphicsDevice.BlendState = BlendState.AlphaBlend;
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
@@ -196,7 +202,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public void Draw(SpriteBatch spriteBatch, Camera2D camera, GameTime gameTime = null)
         {
             var visibleRectangle = camera.GetBoundingRectangle().ToRectangle();
-            Draw(spriteBatch, visibleRectangle, gameTime: gameTime);
+            Draw(spriteBatch, visibleRectangle, camera.Zoom, gameTime: gameTime);
         }
 
         public TextureRegion2D GetTileRegion(int id)
