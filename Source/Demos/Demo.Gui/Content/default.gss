@@ -1,7 +1,7 @@
 [
   {
     "$type": "MonoGame.Extended.Gui.Controls.GuiButtonStyle, MonoGame.Extended",
-    "Name": "demo-button",
+    "Name": "button0",
     "Normal": {
       "$type": "MonoGame.Extended.Gui.Controls.GuiSpriteStyle, MonoGame.Extended",
       "TextureRegion": "button-normal",

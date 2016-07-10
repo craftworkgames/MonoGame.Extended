@@ -1,0 +1,13 @@
+{
+  "Styles": "default.gss",
+  "Controls": [
+    {
+      "Name": null,
+      "Style": "button0",
+      "X": 218.0,
+      "Y": 163.08,
+      "Width": 250.0,
+      "Height": 94.0
+    }
+  ]
+}

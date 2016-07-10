@@ -56,14 +56,18 @@
     <Content Include="Content\button-disabled.png" />
     <Content Include="Content\button-hover.png" />
     <Content Include="Content\button-normal.png" />
+    <Content Include="Content\kenney-gui-blue-atlas.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\kenney-gui-blue.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="Content\demo.styles">
+    <Content Include="Content\default.gss">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\three-buttons.gui">
+    <Content Include="Content\title-screen.gui">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
