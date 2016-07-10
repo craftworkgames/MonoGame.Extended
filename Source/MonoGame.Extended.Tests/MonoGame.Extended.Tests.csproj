@@ -79,7 +79,6 @@
     <Compile Include="Shapes\RectangleFTests.cs" />
     <Compile Include="SizeFTests.cs" />
     <Compile Include="Sprites\SpriteTests.cs" />
-    <Compile Include="TextureAtlases\TextureAtlasKenneyXmlTests.cs" />
     <Compile Include="TextureAtlases\TextureAtlasTests.cs" />
     <Compile Include="Vector2ExtensionsTests.cs" />
     <Compile Include="ViewportAdapters\BoxingViewportAdapterTests.cs" />
