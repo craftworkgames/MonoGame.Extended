@@ -98,10 +98,8 @@ namespace Demo.TiledMaps
         {
             GraphicsDevice.Clear(_tiledMap.BackgroundColor ?? Color.Black);
 
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-
             // you can draw the whole map all at once
-            _spriteBatch.Draw(_tiledMap, _camera, gameTime: gameTime);
+            _tiledMap.Draw(_camera, gameTime: gameTime);
 
             // or you can have more control over drawing each individual layer
             //foreach (var layer in _tiledMap.Layers)
@@ -109,8 +107,6 @@ namespace Demo.TiledMaps
             //    _spriteBatch.Draw(_sprite);
             //    _spriteBatch.Draw(layer, _camera);
             //}
-
-            _spriteBatch.End();
 
             var textColor = Color.Black;
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);

@@ -1648,7 +1648,7 @@
  <imagelayer name="Camada de Imagem 2">
   <image source="montserrat-32_0.png"/>
  </imagelayer>
- <objectgroup name="Objects Layer 1" visible="0">
+ <objectgroup name="Objects Layer 1">
   <properties>
    <property name="objLayerProp" value="true"/>
   </properties>

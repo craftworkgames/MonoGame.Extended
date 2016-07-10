@@ -38,6 +38,8 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public VertexPositionTexture[] VerticesList => _verticesList;
         private VertexPositionTexture[] _verticesList;
+        public int NotBlankTilesCount => _notBlankTilesCount;
+        private int _notBlankTilesCount;
 
         public IEnumerable<TiledTile> Tiles => _tiles;
         public int TileWidth => _map.TileWidth;
@@ -57,6 +59,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 }
             }
 
+            _notBlankTilesCount = tiles.Where(x => x.Id != 0).Count();
             return tiles;
         }
 
@@ -80,19 +83,19 @@ namespace MonoGame.Extended.Maps.Tiled
                 }
                 var vertices = new VertexPositionTexture[4];
                 vertices[0] = new VertexPositionTexture(
-                    new Vector3(tile.X * TileWidth - 1, tile.Y * TileHeight, Z),
+                    new Vector3(tile.X * TileWidth - 0.9f, tile.Y * TileHeight, Z),
                     textureCoordinateTopLeft
                 );
                 vertices[1] = new VertexPositionTexture(
-                    new Vector3(tile.X * TileWidth + TileWidth + 1, tile.Y * TileHeight, Z),
+                    new Vector3(tile.X * TileWidth + TileWidth + 0.9f, tile.Y * TileHeight, Z),
                     new Vector2(textureCoordinateBottomRight.X, textureCoordinateTopLeft.Y)
                 );
                 vertices[2] = new VertexPositionTexture(
-                    new Vector3(tile.X * TileWidth - 1, tile.Y * TileHeight + TileHeight + 1, Z),
+                    new Vector3(tile.X * TileWidth - 0.9f, tile.Y * TileHeight + TileHeight + 0.9f, Z),
                     new Vector2(textureCoordinateTopLeft.X, textureCoordinateBottomRight.Y)
                 );
                 vertices[3] = new VertexPositionTexture(
-                    new Vector3(tile.X * TileWidth + TileWidth + 1, tile.Y * TileHeight + TileHeight + 1, Z),
+                    new Vector3(tile.X * TileWidth + TileWidth + 0.9f, tile.Y * TileHeight + TileHeight + 0.9f, Z),
                     textureCoordinateBottomRight
                 );
                 verticesList.AddRange(vertices);

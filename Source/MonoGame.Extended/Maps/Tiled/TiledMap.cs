@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
@@ -45,8 +46,6 @@ namespace MonoGame.Extended.Maps.Tiled
         private IndexBuffer _tilesIndexBuffer;
         private VertexPositionTexture[] _tilesVertices;
         private short[] _tilesIndexes;
-        private int _tilesPrimitivesCount;
-        private int _tilesVerticesSoFar;
 
         private readonly DepthStencilState _depthBufferState;
         private Matrix _worldMatrix;
@@ -105,7 +104,7 @@ namespace MonoGame.Extended.Maps.Tiled
             var tileVertices = new List<VertexPositionTexture>();
             var tileIndexes = new List<short>();
             var tileLayers = _layers.OfType<TiledTileLayer>();
-            var index = 0;
+            var indexOffset = 0;
             foreach (var layer in tileLayers)
             {
                 tileVertices.AddRange(layer.RenderVertices());
@@ -113,22 +112,21 @@ namespace MonoGame.Extended.Maps.Tiled
                 for (var i = 0; i < tilesCount; i++)
                 {
                     var thisTileIndexes = new short[6];
-                    thisTileIndexes[0] = (short)(4 * index);
-                    thisTileIndexes[1] = (short)(4 * index + 1);
-                    thisTileIndexes[2] = (short)(4 * index + 2);
-                    thisTileIndexes[3] = (short)(4 * index + 1);
-                    thisTileIndexes[4] = (short)(4 * index + 3);
-                    thisTileIndexes[5] = (short)(4 * index + 2);
+                    thisTileIndexes[0] = (short)(4 * indexOffset);
+                    thisTileIndexes[1] = (short)(4 * indexOffset + 1);
+                    thisTileIndexes[2] = (short)(4 * indexOffset + 2);
+                    thisTileIndexes[3] = (short)(4 * indexOffset + 1);
+                    thisTileIndexes[4] = (short)(4 * indexOffset + 3);
+                    thisTileIndexes[5] = (short)(4 * indexOffset + 2);
                     tileIndexes.AddRange(thisTileIndexes);
-                    _tilesPrimitivesCount += 2;
-                    index++;
+                    indexOffset++;
                 }
             }
 
             _tilesVertices = tileVertices.ToArray();
             _tilesIndexes = tileIndexes.ToArray();
-            _tilesVertexBuffer = new VertexBuffer(_graphicsDevice, typeof(VertexPositionTexture), tileVertices.Count, BufferUsage.WriteOnly);
-            _tilesIndexBuffer = new IndexBuffer(_graphicsDevice, typeof(short), tileIndexes.Count, BufferUsage.WriteOnly);
+            _tilesVertexBuffer = new VertexBuffer(_graphicsDevice, typeof(VertexPositionTexture), _tilesVertices.Length, BufferUsage.WriteOnly);
+            _tilesIndexBuffer = new IndexBuffer(_graphicsDevice, typeof(short), _tilesIndexes.Length, BufferUsage.WriteOnly);
             _tilesVertexBuffer.SetData(_tilesVertices);
             _tilesIndexBuffer.SetData(_tilesIndexes);
 
@@ -178,7 +176,7 @@ namespace MonoGame.Extended.Maps.Tiled
             return _objectGroups.FirstOrDefault(i => i.Name == name);
         }
         
-        public void Draw(SpriteBatch spriteBatch, Camera2D camera, GameTime gameTime = null)
+        public void Draw(Camera2D camera, GameTime gameTime = null)
         {
             _basicEffect.World = camera.GetViewMatrix();
 
@@ -187,26 +185,35 @@ namespace MonoGame.Extended.Maps.Tiled
             _graphicsDevice.DepthStencilState = _depthBufferState;
             _graphicsDevice.BlendState = BlendState.AlphaBlend;
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-
-            // Images draw
+            
+            var tilesIndexesSoFar = 0;
+            
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
             {
                 foreach (var layer in _layers)
                 {
                     if (layer is TiledTileLayer)
                     {
-                        _basicEffect.Texture = _tilesets[0].Texture;
-                        pass.Apply();
-
-                        _graphicsDevice.DrawIndexedPrimitives(
-                            PrimitiveType.TriangleList,
-                            0,
-                            0,
-                            _tilesPrimitivesCount
-                        );
+                        var tileLayer = (TiledTileLayer)layer;
+                        var indexCount = tileLayer.NotBlankTilesCount * 6;
+                        var primitivesCount = tileLayer.NotBlankTilesCount * 2;
+                        if (tileLayer.IsVisible)
+                        {
+                            _basicEffect.Texture = _tilesets[0].Texture;
+                            pass.Apply();
+                            _graphicsDevice.DrawIndexedPrimitives(
+                                PrimitiveType.TriangleList,
+                                0,
+                                tilesIndexesSoFar,
+                                primitivesCount
+                            );
+                        }
+                        tilesIndexesSoFar += indexCount;
                     }
                     else
                     {
+                        if (!layer.IsVisible)
+                            continue;
                         var imageLayer = (TiledImageLayer)layer;
                         _basicEffect.Texture = imageLayer.Texture;
                         pass.Apply();
