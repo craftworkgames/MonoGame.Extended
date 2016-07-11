@@ -5,6 +5,11 @@
  </properties>
  <tileset firstgid="1" name="free-tileset" tilewidth="128" tileheight="128" spacing="2" margin="2" tilecount="30" columns="5">
   <image source="free-tileset.png" width="652" height="782"/>
+  <tile id="0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="128" height="128"/>
+   </objectgroup>
+  </tile>
   <tile id="7">
    <properties>
     <property name="frog" value="dog"/>
@@ -435,9 +440,9 @@
    <property name="customlayerprop2" value="2"/>
   </properties>
   <data>
-   <tile gid="5"/>
-   <tile gid="5"/>
-   <tile gid="5"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -475,9 +480,9 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="1"/>
-   <tile gid="5"/>
-   <tile gid="5"/>
-   <tile gid="5"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1645,9 +1650,6 @@
    <tile gid="0"/>
   </data>
  </layer>
- <imagelayer name="Camada de Imagem 2">
-  <image source="montserrat-32_0.png"/>
- </imagelayer>
  <objectgroup name="Objects Layer 1">
   <properties>
    <property name="objLayerProp" value="true"/>

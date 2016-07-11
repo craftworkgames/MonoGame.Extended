@@ -140,7 +140,7 @@ namespace MonoGame.Extended.Maps.Tiled
             );
 
             _projectionMatrix = 
-                Matrix.CreateTranslation(-0.5f, -0.5f, 0f) * Matrix.CreateOrthographicOffCenter(
+                Matrix.CreateTranslation(-0.9f, -0.9f, 0f) * Matrix.CreateOrthographicOffCenter(
                     0,
                     (float)_graphicsDevice.Viewport.Width,
                     (float)_graphicsDevice.Viewport.Height,
@@ -186,10 +186,9 @@ namespace MonoGame.Extended.Maps.Tiled
             _graphicsDevice.BlendState = BlendState.AlphaBlend;
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             
-            var tilesIndexesSoFar = 0;
-            
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
             {
+                var tilesIndexesSoFar = 0;
                 foreach (var layer in _layers)
                 {
                     if (layer is TiledTileLayer)
@@ -222,7 +221,7 @@ namespace MonoGame.Extended.Maps.Tiled
                             imageLayer.ImageVertices,
                             0,
                             imageLayer.ImageVertices.Length,
-                            imageLayer.ImageVerticesIndex,
+                            imageLayer.ImageVerticesIndexes,
                             0,
                             2
                         );

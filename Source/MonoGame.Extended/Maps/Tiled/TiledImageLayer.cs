@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Maps.Tiled
     {
         private readonly Texture2D _texture;
         private VertexPositionTexture[] _imageVertices;
-        private short[] _verticesIndex;
+        private short[] _verticesIndexes;
 
         public TiledImageLayer(string name, Texture2D texture, Vector2 position, int z)
             : base(name, z)
@@ -21,9 +21,9 @@ namespace MonoGame.Extended.Maps.Tiled
             _imageVertices[2] = new VertexPositionTexture(new Vector3(position.X, position.Y + texture.Height, z), new Vector2(0f, 1f));
             _imageVertices[3] = new VertexPositionTexture(new Vector3(position.X + texture.Width, position.Y + texture.Height, z), new Vector2(1f, 1f));
 
-            _verticesIndex = new short[6];
-            _verticesIndex[0] = 0; _verticesIndex[1] = 1; _verticesIndex[2] = 2;
-            _verticesIndex[3] = 1; _verticesIndex[4] = 3; _verticesIndex[5] = 2;
+            _verticesIndexes = new short[6];
+            _verticesIndexes[0] = 0; _verticesIndexes[1] = 1; _verticesIndexes[2] = 2;
+            _verticesIndexes[3] = 1; _verticesIndexes[4] = 3; _verticesIndexes[5] = 2;
         }
 
         public override void Dispose()
@@ -33,7 +33,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public Vector2 Position { get; set; }
         public Texture2D Texture => _texture;
         public VertexPositionTexture[] ImageVertices => _imageVertices;
-        public short[] ImageVerticesIndex => _verticesIndex;
+        public short[] ImageVerticesIndexes => _verticesIndexes;
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null)
         {

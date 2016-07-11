@@ -96,7 +96,7 @@ namespace Demo.TiledMaps
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(_tiledMap.BackgroundColor ?? Color.Black);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // you can draw the whole map all at once
             _tiledMap.Draw(_camera, gameTime: gameTime);
