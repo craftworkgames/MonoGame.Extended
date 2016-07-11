@@ -196,7 +196,7 @@ namespace MonoGame.Extended.Maps.Tiled
                         var tileLayer = (TiledTileLayer)layer;
                         var indexCount = tileLayer.NotBlankTilesCount * 6;
                         var primitivesCount = tileLayer.NotBlankTilesCount * 2;
-                        if (tileLayer.IsVisible)
+                        if (tileLayer.IsVisible && tileLayer.NotBlankTilesCount > 0)
                         {
                             if (_basicEffect.Texture != _tilesets[0].Texture)
                             {
