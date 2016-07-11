@@ -1,19 +1,69 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Gui;
-using MonoGame.Extended.Sprites;
+using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
+using Newtonsoft.Json;
 
 namespace Demo.Gui
 {
+    public interface IGuiDrawable
+    {
+        void Draw(SpriteBatch spriteBatch, RectangleF rectangle);
+    }
+
+    public class GuiSprite : IGuiDrawable
+    {
+        public TextureRegion2D TextureRegion { get; set; }
+
+        public void Draw(SpriteBatch spriteBatch, RectangleF rectangle)
+        {
+            spriteBatch.Draw(TextureRegion, rectangle.Location, Color.White);
+        }
+    }
+
+    public class GuiText : IGuiDrawable
+    {
+        public BitmapFont Font { get; set; }
+        public string Text { get; set; }
+        
+        public void Draw(SpriteBatch spriteBatch, RectangleF rectangle)
+        {
+            spriteBatch.DrawString(Font, Text, rectangle.Location, Color.White);
+        }
+    }
+
+    public class GuiTemplate
+    {
+        public GuiTemplate()
+        {
+            Drawables = new List<IGuiDrawable>();
+        }
+
+        public List<IGuiDrawable> Drawables { get; }
+
+        public void Draw(SpriteBatch spriteBatch, RectangleF rectangle)
+        {
+            foreach (var drawable in Drawables)
+                drawable.Draw(spriteBatch, rectangle);
+        }
+    }
+
+    public class GuiDefinition
+    {
+        public string TextureAtlas { get; set; }
+        public string[] Fonts { get; set; }
+    }
+
     public class Game1 : Game
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private TextureAtlas _textureAtlas;
-        private Sprite _sprite;
         private SpriteBatch _spriteBatch;
+        private GuiTemplate _template;
 
         public Game1()
         {
@@ -22,17 +72,36 @@ namespace Demo.Gui
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
 
-            Components.Add(new GuiComponent(this, @"title-screen.gui"));
+            //Components.Add(new GuiComponent(this, @"title-screen.gui"));
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            const string json =
+@"{ 
+    'TextureAtlas': 'Content/kenney-gui-blue-atlas.xml',
+    'Fonts': [ 'montserrat-32' ],
+    
+  }";
 
-            using (var stream = TitleContainer.OpenStream(@"Content\kenney-gui-blue-atlas.xml"))
+            var guiDefinition = JsonConvert.DeserializeObject<GuiDefinition>(json);
+
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            var bitmapFont = Content.Load<BitmapFont>(guiDefinition.Fonts[0]);
+
+            using (var stream = TitleContainer.OpenStream(guiDefinition.TextureAtlas))
             {
                 _textureAtlas = TextureAtlasReader.FromRawXml(Content, stream);
-                _sprite = new Sprite(_textureAtlas["blue_boxCheckmark"]) {Position = new Vector2(400, 240)};
+
+                var textureRegion = _textureAtlas["blue_button00"];
+                _template = new GuiTemplate
+                {
+                    Drawables =
+                    {
+                        new GuiSprite { TextureRegion = textureRegion },
+                        new GuiText { Font = bitmapFont, Text = "Monkey" }
+                    }
+                };
             }
         }
 
@@ -58,7 +127,9 @@ namespace Demo.Gui
             base.Draw(gameTime);
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(_sprite);
+            var rectangleF = new RectangleF(100, 100, 200, 100);
+            _template.Draw(_spriteBatch, rectangleF);
+            _spriteBatch.DrawRectangle(rectangleF, Color.Red);
             _spriteBatch.End();
         }
     }

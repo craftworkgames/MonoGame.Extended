@@ -8,14 +8,17 @@ namespace MonoGame.Extended.BitmapFonts
 {
     public class BitmapFont
     {
-        internal BitmapFont(IEnumerable<BitmapFontRegion> regions, int lineHeight)
+        internal BitmapFont(string name, IEnumerable<BitmapFontRegion> regions, int lineHeight)
         {
             _characterMap = regions.ToDictionary(r => r.Character);
+
+            Name = name;
             LineHeight = lineHeight;
         }
 
         private readonly Dictionary<int, BitmapFontRegion> _characterMap;
 
+        public string Name { get; }
         public int LineHeight { get; private set; }
 
         public BitmapFontRegion GetCharacterRegion(int character)
@@ -79,6 +82,11 @@ namespace MonoGame.Extended.BitmapFonts
             var size = GetSize(text);
             var p = position.ToPoint();
             return new Rectangle(p.X, p.Y, size.Width, size.Height);
+        }
+
+        public override string ToString()
+        {
+            return $"{Name}";
         }
     }
 }
