@@ -51,7 +51,7 @@ namespace Demo.TiledMaps
             _sprite = new Sprite(_texture) { Position = new Vector2(600, 240) };
 
             _tiledMap = Content.Load<TiledMap>("level01");
-            //_camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
+            _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
         }
 
         protected override void UnloadContent()

@@ -199,10 +199,8 @@ namespace MonoGame.Extended.Maps.Tiled
                         if (tileLayer.IsVisible && tileLayer.NotBlankTilesCount > 0)
                         {
                             if (_basicEffect.Texture != _tilesets[0].Texture)
-                            {
                                 _basicEffect.Texture = _tilesets[0].Texture;
-                                pass.Apply();
-                            }
+                            pass.Apply();
                             _graphicsDevice.DrawIndexedPrimitives(
                                 PrimitiveType.TriangleList,
                                 0,

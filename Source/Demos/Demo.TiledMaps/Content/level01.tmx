@@ -440,8 +440,8 @@
    <property name="customlayerprop2" value="2"/>
   </properties>
   <data>
-   <tile gid="5"/>
-   <tile gid="5"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -480,8 +480,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="1"/>
-   <tile gid="5"/>
-   <tile gid="5"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
