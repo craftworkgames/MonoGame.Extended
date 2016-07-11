@@ -6,8 +6,8 @@ namespace MonoGame.Extended.Maps.Tiled
     public class TiledImageLayer : TiledLayer, IMovable
     {
         private readonly Texture2D _texture;
-        private VertexPositionTexture[] _imageVertices;
-        private short[] _verticesIndexes;
+        private readonly VertexPositionTexture[] _imageVertices;
+        private readonly short[] _verticesIndexes;
 
         public TiledImageLayer(string name, Texture2D texture, Vector2 position, int z)
             : base(name, z)

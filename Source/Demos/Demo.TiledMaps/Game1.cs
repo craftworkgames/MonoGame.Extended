@@ -33,7 +33,7 @@ namespace Demo.TiledMaps
         protected override void Initialize()
         {
             _viewportAdapter = new ScalingViewportAdapter(GraphicsDevice, 800, 480);
-            _camera = new Camera2D(_viewportAdapter);
+            _camera = new Camera2D(_viewportAdapter) { Zoom = 0.5f };
 
             Window.AllowUserResizing = true;
             Window.Position = Point.Zero;
@@ -96,7 +96,7 @@ namespace Demo.TiledMaps
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(_tiledMap.BackgroundColor ?? Color.CornflowerBlue);
 
             // you can draw the whole map all at once
             _tiledMap.Draw(_camera, gameTime: gameTime);

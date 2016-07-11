@@ -185,7 +185,7 @@ namespace MonoGame.Extended.Maps.Tiled
             _graphicsDevice.DepthStencilState = _depthBufferState;
             _graphicsDevice.BlendState = BlendState.AlphaBlend;
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-            
+
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
             {
                 var tilesIndexesSoFar = 0;
@@ -198,8 +198,11 @@ namespace MonoGame.Extended.Maps.Tiled
                         var primitivesCount = tileLayer.NotBlankTilesCount * 2;
                         if (tileLayer.IsVisible)
                         {
-                            _basicEffect.Texture = _tilesets[0].Texture;
-                            pass.Apply();
+                            if (_basicEffect.Texture != _tilesets[0].Texture)
+                            {
+                                _basicEffect.Texture = _tilesets[0].Texture;
+                                pass.Apply();
+                            }
                             _graphicsDevice.DrawIndexedPrimitives(
                                 PrimitiveType.TriangleList,
                                 0,
@@ -209,7 +212,7 @@ namespace MonoGame.Extended.Maps.Tiled
                         }
                         tilesIndexesSoFar += indexCount;
                     }
-                    else
+                    else if (layer is TiledImageLayer)
                     {
                         if (!layer.IsVisible)
                             continue;
