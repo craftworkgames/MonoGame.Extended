@@ -62,15 +62,15 @@ namespace MonoGame.Extended.BitmapFonts
             return new Size(width, height);
         }
 
-        public Vector2 MeasureString(string text)
+        public Size MeasureString(string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
 
             var size = GetSize(text);
-            return new Vector2(size.Width, size.Height);
+            return size;
         }
 
-        public Vector2 MeasureString(StringBuilder stringBuilder)
+        public Size MeasureString(StringBuilder stringBuilder)
         {
             if (stringBuilder == null) throw new ArgumentNullException(nameof(stringBuilder));
 

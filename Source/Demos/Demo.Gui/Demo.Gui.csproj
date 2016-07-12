@@ -37,6 +37,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="Wip\GuiAlignmentHelper.cs" />
+    <Compile Include="Wip\GuiJsonConverterService.cs" />
+    <Compile Include="Wip\GuiDrawableJsonConverter.cs" />
+    <Compile Include="Wip\GuiDefinition.cs" />
+    <Compile Include="Wip\GuiTemplate.cs" />
+    <Compile Include="Wip\GuiText.cs" />
+    <Compile Include="Wip\GuiSprite.cs" />
+    <Compile Include="Wip\GuiThickness.cs" />
+    <Compile Include="Wip\IGuiDrawable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
