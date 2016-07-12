@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -6,6 +8,7 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Demo.Gui
 {
@@ -28,7 +31,7 @@ namespace Demo.Gui
     {
         public BitmapFont Font { get; set; }
         public string Text { get; set; }
-        
+
         public void Draw(SpriteBatch spriteBatch, RectangleF rectangle)
         {
             spriteBatch.DrawString(Font, Text, rectangle.Location, Color.White);
@@ -42,6 +45,7 @@ namespace Demo.Gui
             Drawables = new List<IGuiDrawable>();
         }
 
+        public string Name { get; set; }
         public List<IGuiDrawable> Drawables { get; }
 
         public void Draw(SpriteBatch spriteBatch, RectangleF rectangle)
@@ -55,6 +59,72 @@ namespace Demo.Gui
     {
         public string TextureAtlas { get; set; }
         public string[] Fonts { get; set; }
+        public JObject[] Templates { get; set; }
+    }
+
+    public class GuiDrawableJsonConverter : JsonConverter
+    {
+        private readonly GuiJsonConverterService _converterService;
+
+        public GuiDrawableJsonConverter(GuiJsonConverterService converterService)
+        {
+            _converterService = converterService;
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            if (objectType == typeof(IGuiDrawable))
+                return true;
+
+            return false;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var jObject = JObject.Load(reader);
+            var type = (string)jObject.Property("Type");
+
+            if (type == "Sprite")
+            {
+                var textureRegion = (string)jObject.Property("TextureRegion");
+                return new GuiSprite { TextureRegion = _converterService.GetTextureRegion(textureRegion) };
+            }
+
+            if (type == "Text")
+            {
+                var font = (string)jObject.Property("Font");
+                var text = (string)jObject.Property("Text");
+                return new GuiText { Font = _converterService.GetFont(font), Text = text };
+            }
+
+            return null;
+        }
+    }
+
+    public class GuiJsonConverterService
+    {
+        private readonly TextureAtlas _textureAtlas;
+        private readonly Dictionary<string, BitmapFont> _bitmapFonts;
+
+        public GuiJsonConverterService(TextureAtlas textureAtlas, IEnumerable<BitmapFont> bitmapFonts)
+        {
+            _textureAtlas = textureAtlas;
+            _bitmapFonts = bitmapFonts.ToDictionary(f => f.Name);
+        }
+
+        public TextureRegion2D GetTextureRegion(string name)
+        {
+            return _textureAtlas[name];
+        }
+
+        public BitmapFont GetFont(string name)
+        {
+            return _bitmapFonts[name];
+        }
     }
 
     public class Game1 : Game
@@ -81,28 +151,36 @@ namespace Demo.Gui
 @"{ 
     'TextureAtlas': 'Content/kenney-gui-blue-atlas.xml',
     'Fonts': [ 'montserrat-32' ],
-    
+    'Templates': [
+        { 
+            'Name': 'BlueButton',
+            'Drawables': [
+                { 'Type': 'Sprite', 'TextureRegion': 'blue_button00' },
+                { 'Type': 'Text', 'Font': 'montserrat-32', 'Text': 'Hello' }
+            ]
+        }
+    ]
   }";
-
             var guiDefinition = JsonConvert.DeserializeObject<GuiDefinition>(json);
-
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-            var bitmapFont = Content.Load<BitmapFont>(guiDefinition.Fonts[0]);
+            var bitmapFonts = guiDefinition.Fonts
+                .Select(f => Content.Load<BitmapFont>(f))
+                .ToArray();
 
             using (var stream = TitleContainer.OpenStream(guiDefinition.TextureAtlas))
             {
                 _textureAtlas = TextureAtlasReader.FromRawXml(Content, stream);
 
-                var textureRegion = _textureAtlas["blue_button00"];
-                _template = new GuiTemplate
+                var converterService = new GuiJsonConverterService(_textureAtlas, bitmapFonts);
+                var jsonSerializer = new JsonSerializer();
+                jsonSerializer.Converters.Add(new GuiDrawableJsonConverter(converterService));
+
+                foreach (var templateDefinition in guiDefinition.Templates)
                 {
-                    Drawables =
-                    {
-                        new GuiSprite { TextureRegion = textureRegion },
-                        new GuiText { Font = bitmapFont, Text = "Monkey" }
-                    }
-                };
+                    _template = templateDefinition.ToObject<GuiTemplate>(jsonSerializer);
+                }
             }
+
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
         protected override void UnloadContent()
