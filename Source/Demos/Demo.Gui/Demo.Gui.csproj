@@ -39,7 +39,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Wip\GuiAlignmentHelper.cs" />
     <Compile Include="Wip\GuiJsonConverterService.cs" />
-    <Compile Include="Wip\GuiDrawableJsonConverter.cs" />
+    <Compile Include="Wip\GuiJsonConverter.cs" />
     <Compile Include="Wip\GuiDefinition.cs" />
     <Compile Include="Wip\GuiTemplate.cs" />
     <Compile Include="Wip\GuiText.cs" />

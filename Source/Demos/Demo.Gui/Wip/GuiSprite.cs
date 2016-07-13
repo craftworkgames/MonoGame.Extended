@@ -34,7 +34,17 @@ namespace Demo.Gui.Wip
 
         public GuiHorizontalAlignment HorizontalAlignment { get; set; } = GuiHorizontalAlignment.Stretch;
         public GuiVerticalAlignment VerticalAlignment { get; set; } = GuiVerticalAlignment.Stretch;
-        public GuiThickness Padding { get; set; } = new GuiThickness(16);
+
+        private GuiThickness _padding;
+        public GuiThickness Padding
+        {
+            get { return _padding; }
+            set
+            {
+                _padding = value;
+                UpdateNinePatch();
+            }
+        }
 
         private void UpdateNinePatch()
         {

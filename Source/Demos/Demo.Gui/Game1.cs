@@ -42,9 +42,15 @@ namespace Demo.Gui
                 { 
                     'Type': 'Sprite', 
                     'TextureRegion': 'blue_button00', 
-                    'Color': '#aaffaa'
+                    'Color': '#aaffaa',
+                    'Padding': '10'
                 },
-                { 'Type': 'Text', 'Font': 'montserrat-32', 'Text': 'Hello World', 'Color': '#ffffff55' }
+                { 
+                    'Type': 'Text', 
+                    'Font': 'montserrat-32', 
+                    'Text': 'Hello World', 
+                    'Color': '#ffffff55' 
+                }
             ]
         }
     }
@@ -61,7 +67,7 @@ namespace Demo.Gui
                 var converterService = new GuiJsonConverterService(_textureAtlas, bitmapFonts);
                 var jsonSerializer = new JsonSerializer();
 
-                jsonSerializer.Converters.Add(new GuiDrawableJsonConverter(converterService));
+                jsonSerializer.Converters.Add(new GuiJsonConverter(converterService));
                 jsonSerializer.Converters.Add(new MonoGameColorJsonConverter());
 
                 _template = guiDefinition.Templates["BlueButton"].ToObject<GuiTemplate>(jsonSerializer);
@@ -92,7 +98,7 @@ namespace Demo.Gui
             base.Draw(gameTime);
 
             _spriteBatch.Begin(samplerState: SamplerState.PointWrap, blendState: BlendState.AlphaBlend);
-            var rectangleF = new RectangleF(100, 100, 300, 100);
+            var rectangleF = new RectangleF(100, 100, 300, 300);
             _template.Draw(_spriteBatch, rectangleF);
             _spriteBatch.DrawRectangle(rectangleF, Color.Red);
             _spriteBatch.End();

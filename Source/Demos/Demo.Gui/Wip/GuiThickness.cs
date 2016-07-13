@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Demo.Gui.Wip
 {
@@ -59,8 +60,30 @@ namespace Demo.Gui.Wip
             return Left == other.Left && Right == other.Right && Top == other.Top && Bottom == other.Bottom;
         }
 
+        public static GuiThickness Parse(string value)
+        {
+            var ints = value.Split(',')
+                .Select(int.Parse)
+                .ToArray();
+
+            switch (ints.Length)
+            {
+                case 1:
+                    return new GuiThickness(ints[0]);
+                case 2:
+                    return new GuiThickness(ints[0], ints[1]);
+                case 4:
+                    return new GuiThickness(ints[0], ints[1], ints[2], ints[3]);
+                default:
+                    throw new FormatException($"Invalid thickness {value}");
+            }
+        }
+
         public override string ToString()
         {
+            if (Left == Right && Top == Bottom)
+                return Left == Top ? $"{Left}" : $"{Left} {Top}";
+
             return $"{Left}, {Right}, {Top}, {Bottom}";
         }
     }
