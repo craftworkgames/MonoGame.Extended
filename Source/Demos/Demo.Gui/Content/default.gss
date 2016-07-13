@@ -1,26 +1,57 @@
-[
-  {
-    "$type": "MonoGame.Extended.Gui.Controls.GuiButtonStyle, MonoGame.Extended",
-    "Name": "button0",
-    "Normal": {
-      "$type": "MonoGame.Extended.Gui.Controls.GuiSpriteStyle, MonoGame.Extended",
-      "TextureRegion": "button-normal",
-      "Color": "#FFFFFFFF"
+{
+  "TextureAtlas": "Content/kenney-gui-blue-atlas.xml",
+  "Fonts": [ "montserrat-32" ],
+  "Styles": {
+
+    "BlueButton": {
+      "Type": "Button",
+      "Drawables": [
+        {
+          "Type": "Sprite",
+          "TextureRegion": "blue_button00",
+          "Color": "#aaffaa",
+          "Padding": "10"
+        },
+        {
+          "Type": "Text",
+          "Font": "montserrat-32",
+          "Text": "Button",
+          "Color": "#ffffff55"
+        }
+      ]
     },
-    "Hovered": {
-      "$type": "MonoGame.Extended.Gui.Controls.GuiSpriteStyle, MonoGame.Extended",
-      "TextureRegion": "button-hover",
-      "Color": "#FFFFFFFF"
+
+    "BlueTextBox": {
+      "Type": "TextBox",
+      "Drawables": [
+        {
+          "Type": "Sprite",
+          "TextureRegion": "blue_button13",
+          "Color": "#ffffff",
+          "Padding": "10"
+        },
+        {
+          "Type": "Text",
+          "Font": "montserrat-32",
+          "Text": "Text Box",
+          "HorizontalAlignment": "Left",
+          "VerticalAlignment": "Top",
+          "Margin": "8",
+          "Color": "#333333"
+        }
+      ]
     },
-    "Disabled": {
-      "$type": "MonoGame.Extended.Gui.Controls.GuiSpriteStyle, MonoGame.Extended",
-      "TextureRegion": "button-disabled",
-      "Color": "#FFFFFFFF"
-    },
-    "Pressed": {
-      "$type": "MonoGame.Extended.Gui.Controls.GuiSpriteStyle, MonoGame.Extended",
-      "TextureRegion": "button-clicked",
-      "Color": "#FFFFFFFF"
+
+    "BlueLabel": {
+      "Type": "Label",
+      "Drawables": [
+        {
+          "Type": "Text",
+          "Font": "montserrat-32",
+          "Text": "Label",
+          "Color": "#333333"
+        }
+      ]
     }
   }
-]
+}

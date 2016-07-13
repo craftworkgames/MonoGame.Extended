@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using Demo.Gui.Wip;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,7 +18,9 @@ namespace Demo.Gui
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private TextureAtlas _textureAtlas;
         private SpriteBatch _spriteBatch;
-        private GuiTemplate _template;
+        private GuiTemplate _buttonTemplate;
+        private GuiTemplate _labelTemplate;
+        private GuiTemplate _textBoxTemplate;
 
         public Game1()
         {
@@ -31,30 +34,7 @@ namespace Demo.Gui
 
         protected override void LoadContent()
         {
-            const string json =
-@"{ 
-    'TextureAtlas': 'Content/kenney-gui-blue-atlas.xml',
-    'Fonts': [ 'montserrat-32' ],
-    'Templates': {
-        'BlueButton': { 
-            'Type': 'Button',
-            'Drawables': [
-                { 
-                    'Type': 'Sprite', 
-                    'TextureRegion': 'blue_button00', 
-                    'Color': '#aaffaa',
-                    'Padding': '10'
-                },
-                { 
-                    'Type': 'Text', 
-                    'Font': 'montserrat-32', 
-                    'Text': 'Hello World', 
-                    'Color': '#ffffff55' 
-                }
-            ]
-        }
-    }
-  }";
+            var json = File.ReadAllText(@"Content/default.gss");
             var guiDefinition = JsonConvert.DeserializeObject<GuiDefinition>(json);
             var bitmapFonts = guiDefinition.Fonts
                 .Select(f => Content.Load<BitmapFont>(f))
@@ -70,8 +50,12 @@ namespace Demo.Gui
                 jsonSerializer.Converters.Add(new GuiJsonConverter(converterService));
                 jsonSerializer.Converters.Add(new MonoGameColorJsonConverter());
 
-                _template = guiDefinition.Templates["BlueButton"].ToObject<GuiTemplate>(jsonSerializer);
+                _buttonTemplate = guiDefinition.Styles["BlueButton"].ToObject<GuiTemplate>(jsonSerializer);
+                _labelTemplate = guiDefinition.Styles["BlueLabel"].ToObject<GuiTemplate>(jsonSerializer);
+                _textBoxTemplate = guiDefinition.Styles["BlueTextBox"].ToObject<GuiTemplate>(jsonSerializer);
             }
+
+
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
@@ -98,9 +82,10 @@ namespace Demo.Gui
             base.Draw(gameTime);
 
             _spriteBatch.Begin(samplerState: SamplerState.PointWrap, blendState: BlendState.AlphaBlend);
-            var rectangleF = new RectangleF(100, 100, 300, 300);
-            _template.Draw(_spriteBatch, rectangleF);
-            _spriteBatch.DrawRectangle(rectangleF, Color.Red);
+            _buttonTemplate.Draw(_spriteBatch, new RectangleF(100, 100, 300, 100));
+            _labelTemplate.Draw(_spriteBatch, new RectangleF(200, 200, 300, 100));
+            _textBoxTemplate.Draw(_spriteBatch, new RectangleF(200, 300, 300, 50));
+            //_spriteBatch.DrawRectangle(rectangleF, Color.Red);
             _spriteBatch.End();
         }
     }

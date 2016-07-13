@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
@@ -33,6 +31,7 @@ namespace Demo.Gui.Wip
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -47,16 +46,16 @@ namespace Demo.Gui.Wip
                 return GuiThickness.Parse((string) reader.Value);
 
             var jObject = JObject.Load(reader);
-            var type = (string)jObject.Property("Type");
+            var drawbaleType = (string)jObject.Property("Type");
 
-            switch (type)
+            switch (drawbaleType)
             {
                 case "Sprite":
                     return jObject.ToObject<GuiSprite>(serializer);
                 case "Text":
                     return jObject.ToObject<GuiText>(serializer);
                 default:
-                    throw new InvalidOperationException($"Unexpected type {type}");
+                    throw new InvalidOperationException($"Unexpected type {drawbaleType}");
             }
         }
     }

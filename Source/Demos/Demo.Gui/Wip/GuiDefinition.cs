@@ -7,6 +7,6 @@ namespace Demo.Gui.Wip
     {
         public string TextureAtlas { get; set; }
         public string[] Fonts { get; set; }
-        public Dictionary<string, JObject> Templates { get; set; }
+        public Dictionary<string, JObject> Styles { get; set; }
     }
 }
