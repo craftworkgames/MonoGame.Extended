@@ -4,7 +4,7 @@ using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Demo.Gui.Wip
+namespace MonoGame.Extended.Gui.Wip
 {
     public class GuiJsonConverter : JsonConverter
     {

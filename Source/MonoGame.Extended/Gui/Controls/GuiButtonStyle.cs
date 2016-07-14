@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         public override GuiControl CreateControl(IGuiContentService contentService)
         {
-            return new GuiButton(contentService, this);
+            return new GuiButton(null);
         }
     }
 }

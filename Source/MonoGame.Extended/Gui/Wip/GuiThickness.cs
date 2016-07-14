@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace Demo.Gui.Wip
+namespace MonoGame.Extended.Gui.Wip
 {
     public struct GuiThickness : IEquatable<GuiThickness>
     {

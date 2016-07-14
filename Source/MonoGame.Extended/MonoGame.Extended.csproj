@@ -84,6 +84,15 @@
     <Compile Include="Gui\GuiFile.cs" />
     <Compile Include="Gui\GuiStyleFile.cs" />
     <Compile Include="Gui\MonoGameColorJsonConverter.cs" />
+    <Compile Include="Gui\Wip\GuiAlignmentHelper.cs" />
+    <Compile Include="Gui\Wip\GuiDefinition.cs" />
+    <Compile Include="Gui\Wip\GuiJsonConverter.cs" />
+    <Compile Include="Gui\Wip\GuiJsonConverterService.cs" />
+    <Compile Include="Gui\Wip\GuiSprite.cs" />
+    <Compile Include="Gui\Wip\GuiTemplate.cs" />
+    <Compile Include="Gui\Wip\GuiText.cs" />
+    <Compile Include="Gui\Wip\GuiThickness.cs" />
+    <Compile Include="Gui\Wip\IGuiDrawable.cs" />
     <Compile Include="IColorable.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />

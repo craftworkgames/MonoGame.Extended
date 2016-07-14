@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Shapes;
 
-namespace Demo.Gui.Wip
+namespace MonoGame.Extended.Gui.Wip
 {
     public interface IGuiDrawable
     {

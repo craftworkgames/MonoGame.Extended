@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
-namespace Demo.Gui.Wip
+namespace MonoGame.Extended.Gui.Wip
 {
     public class GuiDefinition
     {

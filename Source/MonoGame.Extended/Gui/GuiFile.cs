@@ -34,7 +34,7 @@ namespace MonoGame.Extended.Gui
                 Controls = controls.Select(control => new GuiControlData
                 {
                     Name = control.Name,
-                    Style = control.Style.Name,
+                    //Style = control.Style.Name,
                     X = control.Position.X,
                     Y = control.Position.Y,
                     Width = control.Size.Width,

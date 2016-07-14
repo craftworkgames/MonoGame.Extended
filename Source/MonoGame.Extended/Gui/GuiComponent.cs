@@ -4,8 +4,12 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
+using MonoGame.Extended.Gui.Wip;
 using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.Shapes;
+using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
 
@@ -13,13 +17,11 @@ namespace MonoGame.Extended.Gui
 {
     public class GuiComponent : DrawableGameComponent
     {
-        public GuiComponent(Game game, string guiFile) 
+        public GuiComponent(Game game) 
             : base(game)
         {
-            _guiFile = guiFile;
         }
 
-        private readonly string _guiFile;
         private ContentManager _contentManager;
         private IGuiContentService _contentService;
         private SpriteBatch _spriteBatch;
@@ -114,29 +116,48 @@ namespace MonoGame.Extended.Gui
                 control.Update(gameTime);
         }
 
-        protected override void LoadContent()
+        private static string ReadAllText(string assetName)
         {
-            base.LoadContent();
+            using (var stream = TitleContainer.OpenStream(assetName))
+            using(var reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
 
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            _contentManager = new ContentManager(Game.Services, "Content");
-            _contentService = new GuiContentService(_contentManager);
-            _controls = new List<GuiControl>();
-
-            var guiPath = Path.Combine(_contentManager.RootDirectory, _guiFile);
+        public void LoadGui(string assetName)
+        {
+            var guiPath = Path.Combine(_contentManager.RootDirectory, assetName);
 
             using (var stream = TitleContainer.OpenStream(guiPath))
             using (var streamReader = new StreamReader(stream))
             {
                 var guiFile = GuiFile.Load(streamReader);
                 var stylesPath = Path.Combine(_contentManager.RootDirectory, guiFile.Styles);
-                var controlStyles = LoadStyles(stylesPath);
-                
+                //var guiDefinition = LoadGuiDefinition(stylesPath);
+
+                var json = ReadAllText(stylesPath);
+                var guiDefinition = JsonConvert.DeserializeObject<GuiDefinition>(json);
+                var bitmapFonts = guiDefinition.Fonts
+                    .Select(f => _contentManager.Load<BitmapFont>(f))
+                    .ToArray();
+                var textureAtlas = LoadTextureAtlas(guiDefinition.TextureAtlas);
+                var converterService = new GuiJsonConverterService(textureAtlas, bitmapFonts);
+                var jsonSerializer = new JsonSerializer();
+
+                jsonSerializer.Converters.Add(new GuiJsonConverter(converterService));
+                jsonSerializer.Converters.Add(new MonoGameColorJsonConverter());
+
                 foreach (var controlData in guiFile.Controls)
                 {
-                    var controlStyle = controlStyles[controlData.Style];
-                    var control = controlStyle.CreateControl(_contentService);
+                    //_buttonTemplate = guiDefinition.Styles["BlueButton"].ToObject<GuiTemplate>(jsonSerializer);
+                    //_labelTemplate = guiDefinition.Styles["BlueLabel"].ToObject<GuiTemplate>(jsonSerializer);
+                    //_textBoxTemplate = guiDefinition.Styles["BlueTextBox"].ToObject<GuiTemplate>(jsonSerializer);
+
+                    //var controlStyle = controlStyles[controlData.Style];
+                    //var control = controlStyle.CreateControl(_contentService);
+
+                    var control = new GuiButton(guiDefinition.Styles[controlData.Style].ToObject<GuiTemplate>(jsonSerializer));
 
                     if (control != null)
                     {
@@ -149,21 +170,40 @@ namespace MonoGame.Extended.Gui
             }
         }
 
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            _contentManager = new ContentManager(Game.Services, "Content");
+            _contentService = new GuiContentService(_contentManager);
+            _controls = new List<GuiControl>();
+        }
+
         protected override void UnloadContent()
         {
             _contentManager.Unload();
             base.UnloadContent();
         }
 
-        private static Dictionary<string, GuiControlStyle> LoadStyles(string stylesPath)
+        public TextureAtlas LoadTextureAtlas(string assetName)
         {
-            using (var stream = TitleContainer.OpenStream(stylesPath))
-            using (var streamReader = new StreamReader(stream))
+            using (var stream = TitleContainer.OpenStream(assetName))
             {
-                var stylesFile = GuiStyleFile.Load(streamReader);
-                return stylesFile.Styles.ToDictionary(s => s.Name);
+                return TextureAtlasReader.FromRawXml(_contentManager, stream);
             }
         }
+
+        //private static Dictionary<string, GuiControlStyle> LoadStyles(string stylesPath)
+        //{
+        //    using (var stream = TitleContainer.OpenStream(stylesPath))
+        //    using (var streamReader = new StreamReader(stream))
+        //    {
+        //        var stylesFile = GuiStyleFile.Load(streamReader);
+        //        return stylesFile.Styles.ToDictionary(s => s.Name);
+        //    }
+        //}
 
         public override void Draw(GameTime gameTime)
         {
@@ -173,6 +213,10 @@ namespace MonoGame.Extended.Gui
 
             foreach (var control in _controls)
                 control.Draw(_spriteBatch);
+
+            //_buttonTemplate.Draw(_spriteBatch, new RectangleF(100, 100, 300, 100));
+            //_labelTemplate.Draw(_spriteBatch, new RectangleF(200, 200, 300, 100));
+            //_textBoxTemplate.Draw(_spriteBatch, new RectangleF(200, 300, 300, 50));
 
             _spriteBatch.End();
         }
