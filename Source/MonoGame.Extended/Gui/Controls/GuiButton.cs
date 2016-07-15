@@ -5,13 +5,9 @@ namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiButton : GuiControl
     {
-        //private readonly GuiButtonStyle _style;
-
-        public GuiButton(GuiTemplate template)
-            : base(template)
+        public GuiButton(GuiTemplate style)
+            : base(style)
         {
-            //_template = template;
-            //_style = style;
         }
 
         public bool IsPressed { get; private set; }
@@ -31,19 +27,19 @@ namespace MonoGame.Extended.Gui.Controls
             base.OnMouseUp(sender, args);
         }
 
-        protected override GuiSpriteStyle GetCurrentStyle()
-        {
-            //if (!IsEnabled)
-            //    return _style.Disabled;
+        //protected override GuiSpriteStyle GetCurrentStyle()
+        //{
+        //    //if (!IsEnabled)
+        //    //    return _style.Disabled;
 
-            //if (IsPressed)
-            //    return _style.Pressed;
+        //    //if (IsPressed)
+        //    //    return _style.Pressed;
             
-            //if (IsHovered)
-            //    return _style.Hovered;
+        //    //if (IsHovered)
+        //    //    return _style.Hovered;
 
-            //return _style.Normal;
-            return null;
-        }
+        //    //return _style.Normal;
+        //    return null;
+        //}
     }
 }

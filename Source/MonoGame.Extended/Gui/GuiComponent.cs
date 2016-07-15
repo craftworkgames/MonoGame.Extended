@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Wip;
 using MonoGame.Extended.InputListeners;
-using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace MonoGame.Extended.Gui
 {
@@ -131,41 +127,46 @@ namespace MonoGame.Extended.Gui
             using (var stream = TitleContainer.OpenStream(guiPath))
             using (var streamReader = new StreamReader(stream))
             {
-                var guiFile = GuiFile.Load(streamReader);
-                var stylesPath = Path.Combine(_contentManager.RootDirectory, guiFile.StyleSheet);
-                var json = ReadAllText(stylesPath);
-                var styleSheet = JsonConvert.DeserializeObject<GuiStyleSheet>(json);
-                var bitmapFonts = styleSheet.Fonts
-                    .Select(f => _contentManager.Load<BitmapFont>(f))
-                    .ToArray();
-                var textureAtlas = LoadTextureAtlas(styleSheet.TextureAtlas);
-                var converterService = new GuiJsonConverterService(textureAtlas, bitmapFonts);
-                var jsonSerializer = new JsonSerializer();
+                var json = streamReader.ReadToEnd();
+                var guiLayout = JsonConvert.DeserializeObject<GuiLayout>(json, new GuiLayoutJsonConverter(_contentManager));
 
-                jsonSerializer.Converters.Add(new GuiJsonConverter(converterService));
-                jsonSerializer.Converters.Add(new ColorJsonConverter());
-                jsonSerializer.Converters.Add(new Vector2JsonConverter());
-                jsonSerializer.Converters.Add(new SizeFJsonConverter());
+                _controls.AddRange(guiLayout.Controls);
 
-                var layoutJson = ReadAllText(guiPath);
-                var settings = new JsonSerializerSettings
-                {
-                    Converters = jsonSerializer.Converters
-                };
-                var jObject = JsonConvert.DeserializeObject<GuiLayout>(layoutJson, settings);
+                //var guiFile = GuiFile.Load(streamReader);
+                //var stylesPath = Path.Combine(_contentManager.RootDirectory, guiFile.StyleSheet);
+                //var json = ReadAllText(stylesPath);
+                //var styleSheet = JsonConvert.DeserializeObject<GuiStyleSheet>(json, new GuiLayoutJsonConverter(_contentManager));
+                //var bitmapFonts = styleSheet.Fonts
+                //    .Select(f => _contentManager.Load<BitmapFont>(f))
+                //    .ToArray();
+                //var textureAtlas = LoadTextureAtlas(styleSheet.TextureAtlas);
+                //var converterService = new GuiJsonConverterService(textureAtlas, bitmapFonts, styleSheet);
+                //var jsonSerializer = new JsonSerializer();
 
-                foreach (var controlData in guiFile.Controls)
-                {
-                    var guiTemplate = styleSheet.Styles[controlData.Style].ToObject<GuiTemplate>(jsonSerializer);
-                    var control = new GuiButton(guiTemplate)
-                    {
-                        Name = controlData.Name,
-                        Position = new Vector2(controlData.X, controlData.Y),
-                        Size = new SizeF(controlData.Width, controlData.Height)
-                    };
+                //jsonSerializer.Converters.Add(new GuiJsonConverter(converterService));
+                //jsonSerializer.Converters.Add(new ColorJsonConverter());
+                //jsonSerializer.Converters.Add(new Vector2JsonConverter());
+                //jsonSerializer.Converters.Add(new SizeFJsonConverter());
 
-                    _controls.Add(control);
-                }
+                //var layoutJson = ReadAllText(guiPath);
+                //var settings = new JsonSerializerSettings
+                //{
+                //    Converters = jsonSerializer.Converters
+                //};
+                //var jObject = JsonConvert.DeserializeObject<GuiLayout>(layoutJson, settings);
+
+                //foreach (var controlData in guiFile.Controls)
+                //{
+                //    var guiTemplate = styleSheet.Styles[controlData.Style];
+                //    var control = new GuiButton(guiTemplate)
+                //    {
+                //        Name = controlData.Name,
+                //        Position = new Vector2(controlData.X, controlData.Y),
+                //        Size = new SizeF(controlData.Width, controlData.Height)
+                //    };
+
+                //    _controls.Add(control);
+                //}
             }
         }
 
@@ -174,25 +175,18 @@ namespace MonoGame.Extended.Gui
             base.LoadContent();
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             _contentManager = new ContentManager(Game.Services, "Content");
-            //_contentService = new GuiContentService(_contentManager);
             _controls = new List<GuiControl>();
         }
 
         protected override void UnloadContent()
         {
             _contentManager.Unload();
+
             base.UnloadContent();
         }
 
-        public TextureAtlas LoadTextureAtlas(string assetName)
-        {
-            using (var stream = TitleContainer.OpenStream(assetName))
-            {
-                return TextureAtlasReader.FromRawXml(_contentManager, stream);
-            }
-        }
+
 
         //private static Dictionary<string, GuiControlStyle> LoadStyles(string stylesPath)
         //{

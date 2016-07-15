@@ -3,7 +3,7 @@ using System.Globalization;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 
-namespace MonoGame.Extended.Gui
+namespace MonoGame.Extended.Serialization
 {
     public class ColorJsonConverter : JsonConverter
     {

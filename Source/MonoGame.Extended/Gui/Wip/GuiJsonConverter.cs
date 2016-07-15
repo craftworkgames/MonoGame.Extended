@@ -30,6 +30,9 @@ namespace MonoGame.Extended.Gui.Wip
             if (objectType == typeof(GuiControl))
                 return true;
 
+            //if (objectType == typeof(GuiTemplate))
+            //    return true;
+
             return objectType == typeof(IGuiDrawable);
         }
 

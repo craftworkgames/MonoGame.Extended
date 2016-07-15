@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace MonoGame.Extended.Gui
+namespace MonoGame.Extended.Serialization
 {
     public class SizeFJsonConverter : JsonConverter
     {

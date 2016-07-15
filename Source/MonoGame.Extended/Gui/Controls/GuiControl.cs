@@ -4,31 +4,18 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Gui.Wip;
 using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.Shapes;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
     public abstract class GuiControl : IMovable, ISizable
     {
-        private readonly GuiTemplate _template;
-        //private readonly IGuiContentService _contentService;
-
-        protected GuiControl(GuiTemplate template)
+        protected GuiControl(GuiTemplate style)
         {
-            _template = template;
-            //_contentService = contentService;
-
-            //Style = style;
+            Style = style;
             IsEnabled = true;
-
-            //ApplySpriteStyle(style.Normal);
-            //Size = TextureRegion.Size;
         }
 
         public string Name { get; set; }
-        //public GuiControlStyle Style { get; }
-        public TextureRegion2D TextureRegion { get; set; }
-        public Color Color { get; set; }
         public Vector2 Position { get; set; }
         public SizeF Size { get; set; }
         public float Left => Position.X;
@@ -43,19 +30,12 @@ namespace MonoGame.Extended.Gui.Controls
         public bool IsHovered { get; private set; }
         public bool IsEnabled { get; set; }
 
-        protected abstract GuiSpriteStyle GetCurrentStyle();
-
-        private void ApplySpriteStyle(GuiSpriteStyle spriteStyle)
-        {
-            //TextureRegion = _contentService.GetTextureRegion(spriteStyle.TextureRegion);
-            //Color = spriteStyle.Color;
-        }
+        public GuiTemplate Style { get; set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             var destinationRectangle = GetDestinationRectangle();
-            _template.Draw(spriteBatch, destinationRectangle.ToRectangleF());
-            //spriteBatch.Draw(TextureRegion, destinationRectangle, Color * (Color.A / 255f));
+            Style.Draw(spriteBatch, destinationRectangle.ToRectangleF());
         }
 
         private Rectangle GetDestinationRectangle()
@@ -81,7 +61,6 @@ namespace MonoGame.Extended.Gui.Controls
 
         public virtual void Update(GameTime gameTime)
         {
-            //ApplySpriteStyle(GetCurrentStyle());
         }
 
         public virtual void OnMouseDown(object sender, MouseEventArgs args)

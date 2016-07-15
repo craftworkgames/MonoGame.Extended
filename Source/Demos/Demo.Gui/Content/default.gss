@@ -4,7 +4,7 @@
   "Styles": {
 
     "BlueButton": {
-      "Type": "Button",
+      "TargetType": "Button",
       "Drawables": [
         {
           "Type": "Sprite",
@@ -22,7 +22,7 @@
     },
 
     "BlueTextBox": {
-      "Type": "TextBox",
+      "TargetType": "TextBox",
       "Drawables": [
         {
           "Type": "Sprite",
@@ -43,7 +43,7 @@
     },
 
     "BlueLabel": {
-      "Type": "Label",
+      "TargetType": "Label",
       "Drawables": [
         {
           "Type": "Text",

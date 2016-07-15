@@ -64,8 +64,6 @@
     <Compile Include="Graphics\Batching\ImmediateBatchQueuerTests.cs" />
     <Compile Include="Graphics\Batching\UserPrimitivesBatcherTests.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensionsTests.cs" />
-    <Compile Include="Gui\GuiFileTests.cs" />
-    <Compile Include="Gui\GuiStyleFileTests.cs" />
     <Compile Include="MockGameWindow.cs" />
     <Compile Include="Particles\AssertionModifier.cs" />
     <Compile Include="Particles\ColourTests.cs" />
@@ -95,15 +93,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Gui\" />
     <Folder Include="Particles\Modifiers\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Gui\Data\demo.styles">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Gui\Data\three-buttons.gui">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

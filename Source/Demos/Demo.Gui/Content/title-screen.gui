@@ -6,20 +6,14 @@
       "Name": "PlayButton",
       "Style": "BlueButton",
       "Position": "218.0 163.0",
-      "Size": "250.0 94.0",  
-      "X": 218.0,
-      "Y": 163.08,
-      "Width": 250.0,
-      "Height": 94.0
+      "Size": "250.0 94.0"
     },
     {
-      "Type": "Button", 
+      "Type": "Button",
       "Name": "PlayButton1",
       "Style": "BlueButton",
-      "X": 50,
-      "Y": 50,
-      "Width": 200,
-      "Height": 52
+      "Position": "50.0 50.0",
+      "Size": "200.0 52.0"
     }
   ]
 }
