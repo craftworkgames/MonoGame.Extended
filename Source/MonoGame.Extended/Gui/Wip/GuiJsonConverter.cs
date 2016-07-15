@@ -1,5 +1,6 @@
 using System;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -26,6 +27,9 @@ namespace MonoGame.Extended.Gui.Wip
             if (objectType == typeof(GuiThickness))
                 return true;
 
+            if (objectType == typeof(GuiControl))
+                return true;
+
             return objectType == typeof(IGuiDrawable);
         }
 
@@ -46,16 +50,18 @@ namespace MonoGame.Extended.Gui.Wip
                 return GuiThickness.Parse((string) reader.Value);
 
             var jObject = JObject.Load(reader);
-            var drawbaleType = (string)jObject.Property("Type");
+            var type = (string)jObject.Property("Type");
 
-            switch (drawbaleType)
+            switch (type)
             {
                 case "Sprite":
                     return jObject.ToObject<GuiSprite>(serializer);
                 case "Text":
                     return jObject.ToObject<GuiText>(serializer);
+                case "Button":
+                    return jObject.ToObject<GuiButton>(serializer);
                 default:
-                    throw new InvalidOperationException($"Unexpected type {drawbaleType}");
+                    throw new InvalidOperationException($"Unexpected type {type}");
             }
         }
     }

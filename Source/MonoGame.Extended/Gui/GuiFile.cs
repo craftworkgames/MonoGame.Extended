@@ -23,14 +23,14 @@ namespace MonoGame.Extended.Gui
             Controls = new List<GuiControlData>();
         }
 
-        public string Styles { get; set; }
+        public string StyleSheet { get; set; }
         public List<GuiControlData> Controls { get; private set; }
 
         public static GuiFile Build(string styles, IEnumerable<GuiControl> controls)
         {
             return new GuiFile
             {
-                Styles = styles,
+                StyleSheet = styles,
                 Controls = controls.Select(control => new GuiControlData
                 {
                     Name = control.Name,

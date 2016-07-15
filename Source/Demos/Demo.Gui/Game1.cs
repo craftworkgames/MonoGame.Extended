@@ -1,14 +1,7 @@
-﻿using System.IO;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
-using MonoGame.Extended.Gui.Wip;
-using MonoGame.Extended.Shapes;
-using MonoGame.Extended.TextureAtlases;
-using Newtonsoft.Json;
 
 namespace Demo.Gui
 {

@@ -8,10 +8,10 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Wip;
 using MonoGame.Extended.InputListeners;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MonoGame.Extended.Gui
 {
@@ -23,7 +23,6 @@ namespace MonoGame.Extended.Gui
         }
 
         private ContentManager _contentManager;
-        private IGuiContentService _contentService;
         private SpriteBatch _spriteBatch;
         private List<GuiControl> _controls;
         private InputListenerManager _inputManager;
@@ -133,39 +132,39 @@ namespace MonoGame.Extended.Gui
             using (var streamReader = new StreamReader(stream))
             {
                 var guiFile = GuiFile.Load(streamReader);
-                var stylesPath = Path.Combine(_contentManager.RootDirectory, guiFile.Styles);
-                //var guiDefinition = LoadGuiDefinition(stylesPath);
-
+                var stylesPath = Path.Combine(_contentManager.RootDirectory, guiFile.StyleSheet);
                 var json = ReadAllText(stylesPath);
-                var guiDefinition = JsonConvert.DeserializeObject<GuiDefinition>(json);
-                var bitmapFonts = guiDefinition.Fonts
+                var styleSheet = JsonConvert.DeserializeObject<GuiStyleSheet>(json);
+                var bitmapFonts = styleSheet.Fonts
                     .Select(f => _contentManager.Load<BitmapFont>(f))
                     .ToArray();
-                var textureAtlas = LoadTextureAtlas(guiDefinition.TextureAtlas);
+                var textureAtlas = LoadTextureAtlas(styleSheet.TextureAtlas);
                 var converterService = new GuiJsonConverterService(textureAtlas, bitmapFonts);
                 var jsonSerializer = new JsonSerializer();
 
                 jsonSerializer.Converters.Add(new GuiJsonConverter(converterService));
-                jsonSerializer.Converters.Add(new MonoGameColorJsonConverter());
+                jsonSerializer.Converters.Add(new ColorJsonConverter());
+                jsonSerializer.Converters.Add(new Vector2JsonConverter());
+                jsonSerializer.Converters.Add(new SizeFJsonConverter());
+
+                var layoutJson = ReadAllText(guiPath);
+                var settings = new JsonSerializerSettings
+                {
+                    Converters = jsonSerializer.Converters
+                };
+                var jObject = JsonConvert.DeserializeObject<GuiLayout>(layoutJson, settings);
 
                 foreach (var controlData in guiFile.Controls)
                 {
-                    //_buttonTemplate = guiDefinition.Styles["BlueButton"].ToObject<GuiTemplate>(jsonSerializer);
-                    //_labelTemplate = guiDefinition.Styles["BlueLabel"].ToObject<GuiTemplate>(jsonSerializer);
-                    //_textBoxTemplate = guiDefinition.Styles["BlueTextBox"].ToObject<GuiTemplate>(jsonSerializer);
-
-                    //var controlStyle = controlStyles[controlData.Style];
-                    //var control = controlStyle.CreateControl(_contentService);
-
-                    var control = new GuiButton(guiDefinition.Styles[controlData.Style].ToObject<GuiTemplate>(jsonSerializer));
-
-                    if (control != null)
+                    var guiTemplate = styleSheet.Styles[controlData.Style].ToObject<GuiTemplate>(jsonSerializer);
+                    var control = new GuiButton(guiTemplate)
                     {
-                        control.Name = controlData.Name;
-                        control.Position = new Vector2(controlData.X, controlData.Y);
-                        control.Size = new SizeF(controlData.Width, controlData.Height);
-                        _controls.Add(control);
-                    }
+                        Name = controlData.Name,
+                        Position = new Vector2(controlData.X, controlData.Y),
+                        Size = new SizeF(controlData.Width, controlData.Height)
+                    };
+
+                    _controls.Add(control);
                 }
             }
         }
@@ -177,7 +176,7 @@ namespace MonoGame.Extended.Gui
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _contentManager = new ContentManager(Game.Services, "Content");
-            _contentService = new GuiContentService(_contentManager);
+            //_contentService = new GuiContentService(_contentManager);
             _controls = new List<GuiControl>();
         }
 

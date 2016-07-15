@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui
 {
-    public class MonoGameColorJsonConverter : JsonConverter
+    public class ColorJsonConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {

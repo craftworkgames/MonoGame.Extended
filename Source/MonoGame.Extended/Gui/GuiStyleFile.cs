@@ -24,7 +24,7 @@ namespace MonoGame.Extended.Gui
                 {
                     Formatting = Formatting.Indented,
                     TypeNameHandling = TypeNameHandling.Objects,
-                    Converters = { new MonoGameColorJsonConverter() }
+                    Converters = { new ColorJsonConverter() }
                 };
 
                 var styles = serializer.Deserialize<GuiControlStyle[]>(reader);

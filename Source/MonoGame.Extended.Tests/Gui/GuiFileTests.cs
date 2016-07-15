@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Tests.Gui
             {
                 var guiFile = GuiFile.Load(streamReader);
 
-                Assert.AreEqual("demo.styles", guiFile.Styles);
+                Assert.AreEqual("demo.styles", guiFile.StyleSheet);
                 Assert.AreEqual(3, guiFile.Controls.Count);
             }
         }

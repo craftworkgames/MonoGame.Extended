@@ -1,15 +1,19 @@
 {
-  "Styles": "default.gss",
+  "StyleSheet": "default.gss",
   "Controls": [
     {
+      "Type": "Button", 
       "Name": "PlayButton",
       "Style": "BlueButton",
+      "Position": "218.0 163.0",
+      "Size": "250.0 94.0",  
       "X": 218.0,
       "Y": 163.08,
       "Width": 250.0,
       "Height": 94.0
     },
     {
+      "Type": "Button", 
       "Name": "PlayButton1",
       "Style": "BlueButton",
       "X": 50,
