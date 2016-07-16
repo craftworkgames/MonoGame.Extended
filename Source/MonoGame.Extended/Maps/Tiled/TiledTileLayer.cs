@@ -72,8 +72,12 @@ namespace MonoGame.Extended.Maps.Tiled
                     continue;
 
                 var region = _map.GetTileRegion(tile.Id);
+                var point = (GetTileLocationFunction())(tile);
+                var tileWidth = region.Width;
+                var tileHeight = region.Height;
                 var textureCoordinateTopLeft = Vector2.Zero;
                 var textureCoordinateBottomRight = Vector2.One;
+
                 if (region != null)
                 {
                     textureCoordinateTopLeft.X = (float)region.X / region.Texture.Width;
@@ -83,19 +87,19 @@ namespace MonoGame.Extended.Maps.Tiled
                 }
                 var vertices = new VertexPositionTexture[4];
                 vertices[0] = new VertexPositionTexture(
-                    new Vector3(tile.X * TileWidth - 0.9f, tile.Y * TileHeight, Z),
+                    new Vector3(point.X - 0.9f, point.Y, Z),
                     textureCoordinateTopLeft
                 );
                 vertices[1] = new VertexPositionTexture(
-                    new Vector3(tile.X * TileWidth + TileWidth + 0.9f, tile.Y * TileHeight, Z),
+                    new Vector3(point.X + tileWidth + 0.9f, point.Y, Z),
                     new Vector2(textureCoordinateBottomRight.X, textureCoordinateTopLeft.Y)
                 );
                 vertices[2] = new VertexPositionTexture(
-                    new Vector3(tile.X * TileWidth - 0.9f, tile.Y * TileHeight + TileHeight + 0.9f, Z),
+                    new Vector3(point.X - 0.9f, point.Y + tileHeight + 0.9f, Z),
                     new Vector2(textureCoordinateTopLeft.X, textureCoordinateBottomRight.Y)
                 );
                 vertices[3] = new VertexPositionTexture(
-                    new Vector3(tile.X * TileWidth + TileWidth + 0.9f, tile.Y * TileHeight + TileHeight + 0.9f, Z),
+                    new Vector3(point.X + tileWidth + 0.9f, point.Y + tileHeight + 0.9f, Z),
                     textureCoordinateBottomRight
                 );
                 verticesList.AddRange(vertices);

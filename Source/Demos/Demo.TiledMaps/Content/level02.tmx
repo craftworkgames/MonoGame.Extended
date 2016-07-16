@@ -1,20 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="isometric" renderorder="right-down" width="10" height="10" tilewidth="111" tileheight="64" nextobjectid="1">
- <tileset firstgid="1" name="isometric-tiles" tilewidth="111" tileheight="128" spacing="1" tilecount="63" columns="9">
-  <image source="isometric-tiles.png" width="1024" height="1024"/>
+ <tileset firstgid="1" name="isometric-tiles" tilewidth="111" tileheight="128" spacing="1" tilecount="63" columns="7">
+  <image source="isometric-tiles.png" width="783" height="902"/>
+ </tileset>
+ <tileset firstgid="64" name="isometric-tiles" tilewidth="111" tileheight="128" spacing="1" tilecount="63" columns="7">
+  <image source="isometric-tiles.png" width="783" height="902"/>
  </tileset>
  <layer name="Camada de Tiles 1" width="10" height="10">
   <data encoding="csv">
-1,1,1,1,1,1,1,1,1,1,
-1,0,0,0,0,0,0,0,0,1,
-1,0,0,0,0,0,0,0,0,1,
-1,0,0,0,0,0,0,0,0,1,
-1,0,0,0,0,0,0,0,0,1,
-1,0,0,0,0,0,0,0,0,1,
-1,0,0,0,0,0,0,0,0,1,
-1,0,0,0,0,0,0,0,0,1,
-1,0,0,0,0,0,0,0,0,1,
-1,1,1,1,1,1,1,1,1,1
+0,0,0,0,0,0,0,0,0,0,
+0,1,1,1,1,1,1,1,1,1,
+0,1,1,1,1,1,1,1,1,1,
+0,24,24,24,24,1,1,1,1,1,
+0,24,24,24,24,1,1,1,1,1,
+0,24,24,24,24,1,1,1,1,1,
+0,24,24,24,24,1,1,1,1,1,
+0,24,24,24,24,1,1,1,1,1,
+0,24,24,24,24,1,1,1,1,1,
+0,24,24,24,24,1,1,1,1,1
+</data>
+ </layer>
+ <layer name="Camada de Tiles 2" width="10" height="10">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,0,
+0,17,17,32,32,32,1,1,1,0,
+17,0,0,17,32,0,0,0,0,0,
+17,0,0,0,0,0,0,0,0,0,
+17,0,0,0,0,0,0,0,0,0,
+17,0,0,17,0,0,0,0,0,0,
+17,0,0,0,0,0,0,0,0,0,
+17,0,0,0,0,0,0,0,32,0,
+17,17,17,17,0,0,0,32,32,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Camada de Tiles 3" width="10" height="10">
+  <data encoding="csv">
+17,17,0,0,0,0,0,0,0,0,
+17,17,17,0,0,0,0,0,0,0,
+17,17,0,0,0,0,0,0,0,0,
+17,17,0,0,0,0,0,0,0,0,
+17,17,17,0,0,0,0,0,0,0,
+17,17,0,0,0,0,0,0,0,0,
+17,17,0,0,0,0,0,0,0,0,
+17,17,17,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Camada de Tiles 4" width="10" height="10">
+  <data encoding="csv">
+33,33,0,0,0,0,0,0,0,0,
+33,33,0,0,0,0,0,0,0,0,
+33,33,0,0,0,0,0,43,43,0,
+33,33,0,0,0,0,0,0,0,0,
+33,33,0,0,0,0,0,0,0,0,
+33,33,0,0,0,0,0,0,0,0,
+33,33,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Camada de Tiles 5" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
 </map>

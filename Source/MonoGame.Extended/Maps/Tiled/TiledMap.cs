@@ -57,8 +57,6 @@ namespace MonoGame.Extended.Maps.Tiled
         public int Height { get; }
         public int TileWidth { get; }
         public int TileHeight { get; }
-
-        public bool FixCameraFloatingPosition { get; set; }
         
         public Color? BackgroundColor { get; set; }
         public TiledRenderOrder RenderOrder { get; set; }
@@ -179,7 +177,7 @@ namespace MonoGame.Extended.Maps.Tiled
             return _objectGroups.FirstOrDefault(i => i.Name == name);
         }
         
-        public void Draw(Camera2D camera, GameTime gameTime = null)
+        public void Draw(SpriteBatch spriteBatch, Camera2D camera, GameTime gameTime = null)
         {
             _basicEffect.World = camera.GetViewMatrix();
 
