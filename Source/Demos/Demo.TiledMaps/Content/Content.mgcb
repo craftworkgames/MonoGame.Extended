@@ -94,3 +94,20 @@
 /processor:TiledMapProcessor
 /build:untitled.tmx
 
+#begin level02.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:level02.tmx
+
+#begin isometric-tiles.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:isometric-tiles.png
+

@@ -57,6 +57,8 @@ namespace MonoGame.Extended.Maps.Tiled
         public int Height { get; }
         public int TileWidth { get; }
         public int TileHeight { get; }
+
+        public bool FixCameraFloatingPosition { get; set; }
         
         public Color? BackgroundColor { get; set; }
         public TiledRenderOrder RenderOrder { get; set; }
@@ -107,7 +109,8 @@ namespace MonoGame.Extended.Maps.Tiled
             var indexOffset = 0;
             foreach (var layer in tileLayers)
             {
-                tileVertices.AddRange(layer.RenderVertices());
+                var vertices = layer.RenderVertices();
+                tileVertices.AddRange(vertices);
                 var tilesCount = layer.Tiles.Where(x => x.Id != 0).ToList().Count;
                 for (var i = 0; i < tilesCount; i++)
                 {
@@ -134,7 +137,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
             var highestZ = _layers.Max(layer => layer.Z);
             _viewMatrix = Matrix.CreateLookAt(
-                new Vector3(0f, 0f, highestZ + 1.0f),
+                new Vector3(0f, 0f, highestZ + 100.0f),
                 Vector3.Zero,
                 Vector3.Up
             );
@@ -183,7 +186,6 @@ namespace MonoGame.Extended.Maps.Tiled
             _graphicsDevice.SetVertexBuffer(_tilesVertexBuffer);
             _graphicsDevice.Indices = _tilesIndexBuffer;
             _graphicsDevice.DepthStencilState = _depthBufferState;
-            _graphicsDevice.BlendState = BlendState.AlphaBlend;
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)

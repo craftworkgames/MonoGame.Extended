@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" renderorder="right-down" width="10" height="10" tilewidth="111" tileheight="64" nextobjectid="1">
+ <tileset firstgid="1" name="isometric-tiles" tilewidth="111" tileheight="128" spacing="1" tilecount="63" columns="9">
+  <image source="isometric-tiles.png" width="1024" height="1024"/>
+ </tileset>
+ <layer name="Camada de Tiles 1" width="10" height="10">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,
+1,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,1,
+1,1,1,1,1,1,1,1,1,1
+</data>
+ </layer>
+</map>
