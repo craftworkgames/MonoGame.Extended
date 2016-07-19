@@ -4,7 +4,7 @@ using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.Gui.Wip
+namespace MonoGame.Extended.Gui.Drawables
 {
     public class GuiSprite : IGuiDrawable
     {

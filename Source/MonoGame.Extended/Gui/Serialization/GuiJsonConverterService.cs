@@ -3,7 +3,7 @@ using System.Linq;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.Gui.Wip
+namespace MonoGame.Extended.Gui.Serialization
 {
     public class GuiJsonConverterService
     {

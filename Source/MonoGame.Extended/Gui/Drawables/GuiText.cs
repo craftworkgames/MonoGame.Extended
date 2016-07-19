@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Shapes;
 
-namespace MonoGame.Extended.Gui.Wip
+namespace MonoGame.Extended.Gui.Drawables
 {
     public class GuiText : IGuiDrawable
     {

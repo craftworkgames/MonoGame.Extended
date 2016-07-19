@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MonoGame.Extended.Gui.Controls;
 
-namespace MonoGame.Extended.Gui.Wip
+namespace MonoGame.Extended.Gui
 {
     public class GuiLayout
     {

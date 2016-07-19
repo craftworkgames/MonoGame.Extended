@@ -1,10 +1,9 @@
 using System;
 using MonoGame.Extended.Gui.Controls;
-using MonoGame.Extended.Gui.Wip;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MonoGame.Extended.Gui
+namespace MonoGame.Extended.Gui.Serialization
 {
     public class GuiControlJsonConverter : JsonConverter
     {

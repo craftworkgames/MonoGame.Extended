@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Gui.Wip
+namespace MonoGame.Extended.Gui
 {
     public enum GuiHorizontalAlignment
     {

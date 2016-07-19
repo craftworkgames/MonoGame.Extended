@@ -4,12 +4,11 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Gui.Controls;
-using MonoGame.Extended.Gui.Wip;
 using MonoGame.Extended.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MonoGame.Extended.Gui
+namespace MonoGame.Extended.Gui.Serialization
 {
     public class GuiLayoutJsonConverter : JsonConverter
     {

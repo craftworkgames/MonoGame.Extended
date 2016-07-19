@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Gui.Drawables;
 using MonoGame.Extended.Shapes;
 
-namespace MonoGame.Extended.Gui.Wip
+namespace MonoGame.Extended.Gui
 {
     public class GuiTemplate
     {

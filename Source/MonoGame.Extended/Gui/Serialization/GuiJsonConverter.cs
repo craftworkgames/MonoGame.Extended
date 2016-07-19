@@ -1,11 +1,12 @@
 using System;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
+using MonoGame.Extended.Gui.Drawables;
 using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MonoGame.Extended.Gui.Wip
+namespace MonoGame.Extended.Gui.Serialization
 {
     public class GuiJsonConverter : JsonConverter
     {

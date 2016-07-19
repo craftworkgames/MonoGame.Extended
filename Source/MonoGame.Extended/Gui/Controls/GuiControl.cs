@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Gui.Wip;
 using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.Shapes;
 

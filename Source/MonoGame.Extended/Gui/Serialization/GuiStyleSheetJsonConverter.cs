@@ -4,12 +4,11 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Gui.Wip;
 using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MonoGame.Extended.Gui
+namespace MonoGame.Extended.Gui.Serialization
 {
     public class GuiStyleSheetJsonConverter : JsonConverter
     {
