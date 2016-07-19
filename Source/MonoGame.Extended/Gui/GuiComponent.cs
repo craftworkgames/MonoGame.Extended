@@ -20,10 +20,10 @@ namespace MonoGame.Extended.Gui
 
         private ContentManager _contentManager;
         private SpriteBatch _spriteBatch;
-        private List<GuiControl> _controls;
         private InputListenerManager _inputManager;
         private GuiControl _hoveredControl;
         private GuiControl _focusedControl;
+        private GuiLayout _layout;
 
         protected override void Dispose(bool disposing)
         {
@@ -50,7 +50,10 @@ namespace MonoGame.Extended.Gui
 
         private void OnMouseMoved(object sender, MouseEventArgs args)
         {
-            var hoveredControl = FindControlAtPoint(_controls, args.Position);
+            if(_layout == null)
+                return;
+
+            var hoveredControl = FindControlAtPoint(_layout.Controls, args.Position);
 
             if (_hoveredControl != hoveredControl)
             {
@@ -64,7 +67,10 @@ namespace MonoGame.Extended.Gui
 
         private void OnMouseClicked(object sender, MouseEventArgs mouseEventArgs)
         {
-            var focusedControl = FindControlAtPoint(_controls, mouseEventArgs.Position);
+            if (_layout == null)
+                return;
+
+            var focusedControl = FindControlAtPoint(_layout.Controls, mouseEventArgs.Position);
 
             if (_focusedControl != focusedControl)
             {
@@ -105,22 +111,16 @@ namespace MonoGame.Extended.Gui
 
         public override void Update(GameTime gameTime)
         {
+            if(_layout == null)
+                return;
+
             _inputManager.Update(gameTime);
 
-            foreach (var control in _controls)
+            foreach (var control in _layout.Controls)
                 control.Update(gameTime);
         }
 
-        private static string ReadAllText(string assetName)
-        {
-            using (var stream = TitleContainer.OpenStream(assetName))
-            using(var reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
-        }
-
-        public void LoadGui(string assetName)
+        public GuiLayout LoadGui(string assetName)
         {
             var guiPath = Path.Combine(_contentManager.RootDirectory, assetName);
 
@@ -128,45 +128,8 @@ namespace MonoGame.Extended.Gui
             using (var streamReader = new StreamReader(stream))
             {
                 var json = streamReader.ReadToEnd();
-                var guiLayout = JsonConvert.DeserializeObject<GuiLayout>(json, new GuiLayoutJsonConverter(_contentManager));
-
-                _controls.AddRange(guiLayout.Controls);
-
-                //var guiFile = GuiFile.Load(streamReader);
-                //var stylesPath = Path.Combine(_contentManager.RootDirectory, guiFile.StyleSheet);
-                //var json = ReadAllText(stylesPath);
-                //var styleSheet = JsonConvert.DeserializeObject<GuiStyleSheet>(json, new GuiLayoutJsonConverter(_contentManager));
-                //var bitmapFonts = styleSheet.Fonts
-                //    .Select(f => _contentManager.Load<BitmapFont>(f))
-                //    .ToArray();
-                //var textureAtlas = LoadTextureAtlas(styleSheet.TextureAtlas);
-                //var converterService = new GuiJsonConverterService(textureAtlas, bitmapFonts, styleSheet);
-                //var jsonSerializer = new JsonSerializer();
-
-                //jsonSerializer.Converters.Add(new GuiJsonConverter(converterService));
-                //jsonSerializer.Converters.Add(new ColorJsonConverter());
-                //jsonSerializer.Converters.Add(new Vector2JsonConverter());
-                //jsonSerializer.Converters.Add(new SizeFJsonConverter());
-
-                //var layoutJson = ReadAllText(guiPath);
-                //var settings = new JsonSerializerSettings
-                //{
-                //    Converters = jsonSerializer.Converters
-                //};
-                //var jObject = JsonConvert.DeserializeObject<GuiLayout>(layoutJson, settings);
-
-                //foreach (var controlData in guiFile.Controls)
-                //{
-                //    var guiTemplate = styleSheet.Styles[controlData.Style];
-                //    var control = new GuiButton(guiTemplate)
-                //    {
-                //        Name = controlData.Name,
-                //        Position = new Vector2(controlData.X, controlData.Y),
-                //        Size = new SizeF(controlData.Width, controlData.Height)
-                //    };
-
-                //    _controls.Add(control);
-                //}
+                _layout = JsonConvert.DeserializeObject<GuiLayout>(json, new GuiLayoutJsonConverter(_contentManager));
+                return _layout;
             }
         }
 
@@ -176,7 +139,6 @@ namespace MonoGame.Extended.Gui
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _contentManager = new ContentManager(Game.Services, "Content");
-            _controls = new List<GuiControl>();
         }
 
         protected override void UnloadContent()
@@ -186,30 +148,17 @@ namespace MonoGame.Extended.Gui
             base.UnloadContent();
         }
 
-
-
-        //private static Dictionary<string, GuiControlStyle> LoadStyles(string stylesPath)
-        //{
-        //    using (var stream = TitleContainer.OpenStream(stylesPath))
-        //    using (var streamReader = new StreamReader(stream))
-        //    {
-        //        var stylesFile = GuiStyleFile.Load(streamReader);
-        //        return stylesFile.Styles.ToDictionary(s => s.Name);
-        //    }
-        //}
-
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 
+            if(_layout == null)
+                return;
+
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend);
 
-            foreach (var control in _controls)
+            foreach (var control in _layout.Controls)
                 control.Draw(_spriteBatch);
-
-            //_buttonTemplate.Draw(_spriteBatch, new RectangleF(100, 100, 300, 100));
-            //_labelTemplate.Draw(_spriteBatch, new RectangleF(200, 200, 300, 100));
-            //_textBoxTemplate.Draw(_spriteBatch, new RectangleF(200, 300, 300, 50));
 
             _spriteBatch.End();
         }

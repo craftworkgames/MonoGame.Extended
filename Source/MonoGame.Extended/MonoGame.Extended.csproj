@@ -79,7 +79,6 @@
     <Compile Include="Gui\GuiComponent.cs" />
     <Compile Include="Gui\GuiContentService.cs" />
     <Compile Include="Gui\GuiControlJsonConverter.cs" />
-    <Compile Include="Gui\GuiFile.cs" />
     <Compile Include="Gui\GuiLayoutJsonConverter.cs" />
     <Compile Include="Gui\GuiStyleSheetJsonConverter.cs" />
     <Compile Include="Serialization\ColorJsonConverter.cs" />

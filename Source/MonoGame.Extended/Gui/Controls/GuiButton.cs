@@ -1,4 +1,5 @@
-﻿using MonoGame.Extended.Gui.Wip;
+﻿using System;
+using MonoGame.Extended.Gui.Wip;
 using MonoGame.Extended.InputListeners;
 
 namespace MonoGame.Extended.Gui.Controls
@@ -12,6 +13,8 @@ namespace MonoGame.Extended.Gui.Controls
 
         public bool IsPressed { get; private set; }
 
+        public event EventHandler<MouseEventArgs> Click;
+
         public override void OnMouseDown(object sender, MouseEventArgs args)
         {
             if(IsEnabled)
@@ -22,8 +25,10 @@ namespace MonoGame.Extended.Gui.Controls
 
         public override void OnMouseUp(object sender, MouseEventArgs args)
         {
-            IsPressed = false;
+            if (IsPressed && Contains(args.Position))
+                Click.Raise(this, args);
 
+            IsPressed = false;
             base.OnMouseUp(sender, args);
         }
 

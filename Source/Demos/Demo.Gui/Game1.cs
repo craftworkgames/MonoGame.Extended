@@ -1,7 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Gui;
+using MonoGame.Extended.Gui.Controls;
 
 namespace Demo.Gui
 {
@@ -10,7 +12,7 @@ namespace Demo.Gui
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
-        private GuiComponent _guiComponent;
+        private readonly GuiComponent _guiComponent;
 
         public Game1()
         {
@@ -24,7 +26,10 @@ namespace Demo.Gui
 
         protected override void LoadContent()
         {
-            _guiComponent.LoadGui("title-screen.gui");
+            var layout = _guiComponent.LoadGui("title-screen.gui");
+            var button = layout.FindControl<GuiButton>("PlayButton");
+            button.Click += (sender, args) => button.Position += new Vector2(100, 0);
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
