@@ -66,7 +66,16 @@ namespace MonoGame.Extended.Maps.Tiled
         public List<VertexPositionTexture> RenderVertices()
         {
             var verticesList = new List<VertexPositionTexture>();
-            foreach (var tile in Tiles)
+
+            var vr = new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
+            var firstCol = vr.Left < 0 ? 0 : (int)Math.Floor(vr.Left / (float)_map.TileWidth);
+            var firstRow = vr.Top < 0 ? 0 : (int)Math.Floor(vr.Top / (float)_map.TileHeight);
+            var columns = Math.Min(_map.Width, vr.Width / _map.TileWidth);
+            var rows = Math.Min(_map.Height, vr.Height / _map.TileHeight);
+            var renderOrderFunc = GetRenderOrderFunction();
+            var tiles = renderOrderFunc(firstCol, firstRow, firstCol + columns, firstRow + rows);
+
+            foreach (var tile in tiles)
             {
                 if (tile.Id == 0)
                     continue;
@@ -110,7 +119,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null)
         {
-            if(!IsVisible)
+            if (!IsVisible)
                 return;
 
             var tileLocationFunction = GetTileLocationFunction();

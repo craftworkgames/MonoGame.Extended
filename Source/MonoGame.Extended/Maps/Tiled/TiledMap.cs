@@ -143,8 +143,8 @@ namespace MonoGame.Extended.Maps.Tiled
             _projectionMatrix = 
                 Matrix.CreateTranslation(-0.9f, -0.9f, 0f) * Matrix.CreateOrthographicOffCenter(
                     0,
-                    (float)_graphicsDevice.Viewport.Width,
-                    (float)_graphicsDevice.Viewport.Height,
+                    _graphicsDevice.Viewport.Width,
+                    _graphicsDevice.Viewport.Height,
                     0,
                     1.0f, highestZ + 100f
                 );
@@ -177,7 +177,7 @@ namespace MonoGame.Extended.Maps.Tiled
             return _objectGroups.FirstOrDefault(i => i.Name == name);
         }
         
-        public void Draw(SpriteBatch spriteBatch, Camera2D camera, GameTime gameTime = null)
+        public void Draw(Camera2D camera, GameTime gameTime = null)
         {
             _basicEffect.World = camera.GetViewMatrix();
 
