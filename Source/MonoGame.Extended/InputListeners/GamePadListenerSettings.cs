@@ -8,6 +8,11 @@ namespace MonoGame.Extended.InputListeners
     /// <seealso cref="InputListenerManager"/>
     public class GamePadListenerSettings : InputListenerSettings<GamePadListener>
     {
+        public GamePadListenerSettings()
+            : this(PlayerIndex.One)
+        {
+        }
+        
         /// <summary>
         /// This is a class that contains settings to be used to initialise a <see cref="GamePadListener"/>.
         /// <para>Note: There are a number of extra settings that are settable properties.</para>
@@ -109,13 +114,9 @@ namespace MonoGame.Extended.InputListeners
         /// </summary>
         public float ThumbstickDownTreshold { get; private set; }
 
-        internal override GamePadListener CreateListener()
+        public override GamePadListener CreateListener()
         {
             return new GamePadListener(this);
         }
-
-        // For internal use only. This limits the user to only having
-        // one controller.
-        internal GamePadListenerSettings() : this(PlayerIndex.One) { }
     }
 }

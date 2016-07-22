@@ -6,13 +6,13 @@ namespace MonoGame.Extended.InputListeners
 {
     public class TouchListener : InputListener
     {
-        internal TouchListener()
+        public TouchListener()
             : this(new TouchListenerSettings())
         {
         }
 
         // ReSharper disable once UnusedParameter.Local
-        internal TouchListener(TouchListenerSettings settings)
+        public TouchListener(TouchListenerSettings settings)
         {
         }
 
@@ -21,7 +21,7 @@ namespace MonoGame.Extended.InputListeners
         public event EventHandler<TouchEventArgs> TouchMoved;
         public event EventHandler<TouchEventArgs> TouchCancelled;
 
-        internal override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
 		{
 			var touchCollection = TouchPanel.GetState();
 

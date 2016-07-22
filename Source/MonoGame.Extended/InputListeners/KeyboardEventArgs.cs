@@ -5,7 +5,7 @@ namespace MonoGame.Extended.InputListeners
 {
     public class KeyboardEventArgs : EventArgs
     {
-        internal KeyboardEventArgs(Keys key, KeyboardState keyboardState)
+        public KeyboardEventArgs(Keys key, KeyboardState keyboardState)
         {
             Key = key;
 

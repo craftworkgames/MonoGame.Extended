@@ -7,12 +7,12 @@ namespace MonoGame.Extended.InputListeners
 {
     public class KeyboardListener : InputListener
     {
-        internal KeyboardListener()
+        public KeyboardListener()
             : this(new KeyboardListenerSettings())
         {
         }
 
-        internal KeyboardListener(KeyboardListenerSettings settings)
+        public KeyboardListener(KeyboardListenerSettings settings)
         {
             InitialDelay = settings.InitialDelayMilliseconds;
             RepeatDelay = settings.RepeatDelayMilliseconds;
@@ -30,7 +30,7 @@ namespace MonoGame.Extended.InputListeners
         public int InitialDelay { get; }
         public int RepeatDelay { get; }
 
-        internal override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             var currentState = Keyboard.GetState();
             

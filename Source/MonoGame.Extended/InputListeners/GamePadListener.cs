@@ -7,12 +7,10 @@ namespace MonoGame.Extended.InputListeners
 {
     /// <summary>
     /// This is a listener that exposes several events for easier handling of gamepads.
-    /// <para>In order to initialise it, call the <see cref="InputListenerManager.AddListener"/> method
-    /// with a <see cref="GamePadListenerSettings"/> object.</para>
     /// </summary>
     public class GamePadListener : InputListener
     {
-        internal GamePadListener(GamePadListenerSettings settings)
+        public GamePadListener(GamePadListenerSettings settings)
         {
             PlayerIndex = settings.PlayerIndex;
             VibrationEnabled = settings.VibrationEnabled;
@@ -418,7 +416,7 @@ namespace MonoGame.Extended.InputListeners
                 Vibrate(0, rightStrength: 0);
         }
 
-        internal override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             _gameTime = gameTime;
             _currentState = GamePad.GetState(PlayerIndex);
@@ -431,6 +429,7 @@ namespace MonoGame.Extended.InputListeners
             _previousGameTime = gameTime;
             _previousState = _currentState;
         }
+
         private GamePadEventArgs MakeArgs(Buttons? button, 
             float triggerstate = 0, Vector2? thumbStickState = null)
         {

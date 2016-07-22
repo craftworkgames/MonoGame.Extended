@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended.InputListeners
+﻿using MonoGame.Extended.ViewportAdapters;
+
+namespace MonoGame.Extended.InputListeners
 {
     public class MouseListenerSettings : InputListenerSettings<MouseListener>
     {
@@ -11,8 +13,9 @@
 
         public int DragThreshold { get; set; }
         public int DoubleClickMilliseconds { get; set; }
+        public ViewportAdapter ViewportAdapter { get; set; }
 
-        internal override MouseListener CreateListener()
+        public override MouseListener CreateListener()
         {
             return new MouseListener(this);
         }

@@ -10,7 +10,7 @@ namespace MonoGame.Extended.InputListeners
     /// </summary>
     public class GamePadEventArgs : EventArgs
     {
-        internal GamePadEventArgs(GamePadState previousState, GamePadState currentState,
+        public GamePadEventArgs(GamePadState previousState, GamePadState currentState,
             TimeSpan elapsedTime, PlayerIndex playerIndex, Buttons? button = null,
             float triggerState = 0, Vector2? thumbStickState = null)
         {

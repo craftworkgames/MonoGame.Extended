@@ -9,8 +9,8 @@ namespace MonoGame.Extended.InputListeners
         {
         }
 
-        internal ViewportAdapter ViewportAdapter { get; set; }
+        //public ViewportAdapter ViewportAdapter { get; set; }
 
-        internal abstract void Update(GameTime gameTime);
+        public abstract void Update(GameTime gameTime);
     }
 }

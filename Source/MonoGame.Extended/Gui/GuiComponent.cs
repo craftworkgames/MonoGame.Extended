@@ -20,7 +20,6 @@ namespace MonoGame.Extended.Gui
 
         private ContentManager _contentManager;
         private SpriteBatch _spriteBatch;
-        private InputListenerManager _inputManager;
         private GuiControl _hoveredControl;
         private GuiControl _focusedControl;
         private GuiLayout _layout;
@@ -36,16 +35,17 @@ namespace MonoGame.Extended.Gui
             base.Initialize();
 
             var viewportAdapter = new BoxingViewportAdapter(Game.Window, GraphicsDevice, 800, 480);
-            _inputManager = new InputListenerManager(viewportAdapter);
 
-            var mouseListener = _inputManager.AddListener<MouseListener>();
+            var mouseListener = new MouseListener(viewportAdapter);
             mouseListener.MouseClicked += OnMouseClicked;
             mouseListener.MouseMoved += OnMouseMoved;
             mouseListener.MouseDown += (sender, args) => _hoveredControl?.OnMouseDown(sender, args);
             mouseListener.MouseUp += (sender, args) => _hoveredControl?.OnMouseUp(sender, args);
 
-            var keyboardListener = _inputManager.AddListener<KeyboardListener>();
+            var keyboardListener = new KeyboardListener();
             keyboardListener.KeyTyped += (sender, args) => _focusedControl?.OnKeyTyped(sender, args);
+
+            Game.Components.Add(new InputListenerComponent(Game, mouseListener, keyboardListener));
         }
 
         private void OnMouseMoved(object sender, MouseEventArgs args)
@@ -113,8 +113,6 @@ namespace MonoGame.Extended.Gui
         {
             if(_layout == null)
                 return;
-
-            _inputManager.Update(gameTime);
 
             foreach (var control in _layout.Controls)
                 control.Update(gameTime);
