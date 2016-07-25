@@ -20,7 +20,7 @@ namespace MonoGame.Extended.Gui.Serialization
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(GuiTemplate))
+            if (objectType == typeof(GuiStyle))
                 return _styleSheet.Styles[(string) reader.Value];
 
             var jObject = JObject.Load(reader);
@@ -37,7 +37,7 @@ namespace MonoGame.Extended.Gui.Serialization
 
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(GuiControl) || objectType == typeof(GuiTemplate);
+            return objectType == typeof(GuiControl) || objectType == typeof(GuiStyle);
         }
     }
 }

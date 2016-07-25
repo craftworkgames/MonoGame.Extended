@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Serialization;
 using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MonoGame.Extended.Gui
 {
@@ -126,7 +130,14 @@ namespace MonoGame.Extended.Gui
             using (var streamReader = new StreamReader(stream))
             {
                 var json = streamReader.ReadToEnd();
-                _layout = JsonConvert.DeserializeObject<GuiLayout>(json, new GuiLayoutJsonConverter(_contentManager));
+                var converters = new  JsonConverter[]
+                {
+                    new GuiLayoutJsonConverter(_contentManager),
+                    new ContentConverter<BitmapFont>(_contentManager), 
+                    //new ContentConverter<TextureRegion2D>(_contentManager), 
+                };
+
+                _layout = JsonConvert.DeserializeObject<GuiLayout>(json, converters);
                 return _layout;
             }
         }
@@ -159,6 +170,32 @@ namespace MonoGame.Extended.Gui
                 control.Draw(_spriteBatch);
 
             _spriteBatch.End();
+        }
+    }
+
+    public class ContentConverter<T> : JsonConverter
+    {
+        private readonly ContentManager _contentManager;
+
+        public ContentConverter(ContentManager contentManager)
+        {
+            _contentManager = contentManager;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(T);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var assetName = serializer.Deserialize<JToken>(reader).Value<string>();
+            return _contentManager.Load<T>(assetName);
         }
     }
 }

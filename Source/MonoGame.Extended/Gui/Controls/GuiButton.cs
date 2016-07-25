@@ -5,7 +5,7 @@ namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiButton : GuiControl
     {
-        public GuiButton(GuiTemplate style)
+        public GuiButton(GuiStyle style)
             : base(style)
         {
         }

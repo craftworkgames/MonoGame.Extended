@@ -31,7 +31,7 @@ namespace MonoGame.Extended.Gui.Serialization
             if (objectType == typeof(GuiControl))
                 return true;
 
-            //if (objectType == typeof(GuiTemplate))
+            //if (objectType == typeof(GuiStyle))
             //    return true;
 
             return objectType == typeof(IGuiDrawable);

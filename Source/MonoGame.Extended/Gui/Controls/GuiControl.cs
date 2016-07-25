@@ -1,14 +1,17 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.Shapes;
+using MonoGame.Extended.Sprites;
+using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
     public abstract class GuiControl : IMovable, ISizable
     {
-        protected GuiControl(GuiTemplate style)
+        protected GuiControl(GuiStyle style)
         {
             Style = style;
             IsEnabled = true;
@@ -29,12 +32,64 @@ namespace MonoGame.Extended.Gui.Controls
         public bool IsHovered { get; private set; }
         public bool IsEnabled { get; set; }
 
-        public GuiTemplate Style { get; set; }
+        public TextureRegion2D BackgroundRegion { get; set; }
+        public Color BackgroundColor { get; set; } = Color.White;
+        public GuiHorizontalAlignment HorizontalAlignment { get; set; } = GuiHorizontalAlignment.Stretch;
+        public GuiVerticalAlignment VerticalAlignment { get; set; } = GuiVerticalAlignment.Stretch;
+        public GuiThickness Margin { get; set; }
+        public GuiThickness Padding { get; set; }
+
+        public BitmapFont Font { get; set; }
+        public string Text { get; set; } = string.Empty;
+        public Color TextColor { get; set; } = Color.White;
+        public GuiHorizontalAlignment HorizontalTextAlignment { get; set; } = GuiHorizontalAlignment.Centre;
+        public GuiVerticalAlignment VerticalTextAlignment { get; set; } = GuiVerticalAlignment.Centre;
+
+        public GuiStyle Style { get; set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             var destinationRectangle = GetDestinationRectangle();
-            Style.Draw(spriteBatch, destinationRectangle.ToRectangleF());
+            //Style.Draw(spriteBatch, destinationRectangle.ToRectangleF());
+
+            DrawBackground(spriteBatch, destinationRectangle);
+            DrawText(spriteBatch, destinationRectangle);
+        }
+
+        private void DrawText(SpriteBatch spriteBatch, Rectangle rectangle)
+        {
+            if(Font == null)
+                return;
+
+            var size = Font.MeasureString(Text);
+            var sourceRectangle = new Rectangle(0, 0, size.Width, size.Height);
+            var targetRectangle = rectangle;
+            targetRectangle = new Rectangle(
+                targetRectangle.X + Margin.Left,
+                targetRectangle.Y + Margin.Top,
+                targetRectangle.Width - Margin.Right - Margin.Left,
+                targetRectangle.Height - Margin.Bottom - Margin.Top);
+            var destinationRectangle = GuiAlignmentHelper.GetDestinationRectangle(
+                HorizontalTextAlignment, VerticalTextAlignment, sourceRectangle, targetRectangle);
+
+            spriteBatch.DrawString(Font, Text, destinationRectangle.Location.ToVector2(), TextColor * (TextColor.A / 255f));
+        }
+
+        private void DrawBackground(SpriteBatch spriteBatch, Rectangle rectangle)
+        {
+            if(BackgroundRegion == null)
+                return;
+
+            var sourceRectangle = BackgroundRegion.Bounds;
+            var targetRectangle = rectangle;
+            var destinationRectangle = GuiAlignmentHelper.GetDestinationRectangle(
+                HorizontalAlignment, VerticalAlignment, sourceRectangle, targetRectangle);
+
+            var _ninePatch = new NinePatch(BackgroundRegion, Padding.Left, Padding.Top, Padding.Right, Padding.Bottom)
+            {
+                Color = BackgroundColor * (BackgroundColor.A / 255f)
+            };
+            _ninePatch.Draw(spriteBatch, destinationRectangle);
         }
 
         private Rectangle GetDestinationRectangle()

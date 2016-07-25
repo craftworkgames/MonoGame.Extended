@@ -5,9 +5,9 @@ using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Gui
 {
-    public class GuiTemplate
+    public class GuiStyle
     {
-        public GuiTemplate()
+        public GuiStyle()
         {
             Drawables = new List<IGuiDrawable>();
         }

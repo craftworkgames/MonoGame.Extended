@@ -41,7 +41,7 @@ namespace MonoGame.Extended.Gui.Serialization
             serializer.Converters.Add(new GuiJsonConverter(converterService));
 
             styleSheet.Styles = jObject.Property(nameof(GuiStyleSheet.Styles)).Value
-                .ToObject<Dictionary<string, GuiTemplate>>(serializer);
+                .ToObject<Dictionary<string, GuiStyle>>(serializer);
 
             return styleSheet;
         }

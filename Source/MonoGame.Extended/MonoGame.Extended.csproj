@@ -77,6 +77,7 @@
     <Compile Include="Gui\Controls\GuiButton.cs" />
     <Compile Include="Gui\Controls\GuiControl.cs" />
     <Compile Include="Gui\GuiComponent.cs" />
+    <Compile Include="Gui\GuiLayout.cs" />
     <Compile Include="Gui\Serialization\GuiControlJsonConverter.cs" />
     <Compile Include="Gui\Serialization\GuiLayoutJsonConverter.cs" />
     <Compile Include="Gui\Serialization\GuiStyleSheetJsonConverter.cs" />
@@ -89,7 +90,7 @@
     <Compile Include="Gui\Serialization\GuiJsonConverter.cs" />
     <Compile Include="Gui\Serialization\GuiJsonConverterService.cs" />
     <Compile Include="Gui\Drawables\GuiSprite.cs" />
-    <Compile Include="Gui\GuiTemplate.cs" />
+    <Compile Include="Gui\GuiStyle.cs" />
     <Compile Include="Gui\Drawables\GuiText.cs" />
     <Compile Include="Gui\GuiThickness.cs" />
     <Compile Include="Gui\Drawables\IGuiDrawable.cs" />
