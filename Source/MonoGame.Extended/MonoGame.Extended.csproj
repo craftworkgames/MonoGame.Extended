@@ -78,9 +78,10 @@
     <Compile Include="Gui\Controls\GuiControl.cs" />
     <Compile Include="Gui\GuiComponent.cs" />
     <Compile Include="Gui\GuiLayout.cs" />
-    <Compile Include="Gui\Serialization\GuiControlJsonConverter.cs" />
-    <Compile Include="Gui\Serialization\GuiLayoutJsonConverter.cs" />
+    <Compile Include="Gui\Serialization\GuiControlConverter.cs" />
+    <Compile Include="Gui\Serialization\GuiLayoutConverter.cs" />
     <Compile Include="Gui\Serialization\GuiStyleSheetJsonConverter.cs" />
+    <Compile Include="Gui\Serialization\TextureRegion2DConveter.cs" />
     <Compile Include="InputListeners\InputListenerComponent.cs" />
     <Compile Include="Serialization\ColorJsonConverter.cs" />
     <Compile Include="Serialization\Vector2JsonConverter.cs" />

@@ -1,23 +1,29 @@
 {
-  "StyleSheet": "default.gss",
+  //"StyleSheet": "default.gss",
   "TextureAtlas": "Content/kenney-gui-blue-atlas.xml",
   "Controls": [
     {
-      "Type": "Button", 
+      "Type": "Button",
       "Name": "PlayButton",
-      "Style": "BlueButton",
+      //"Style": "BlueButton",
       "Position": "218.0 163.0",
       "Size": "250.0 94.0",
       "Font": "montserrat-32",
       "Text": "Hello World",
-      "Background": "blue_button00" 
+      "BackgroundRegion": "blue_button00",
+      "HoverStyle": {
+        "Text": "What?"
+      }
     },
     {
       "Type": "Button",
       "Name": "PlayButton1",
-      "Style": "BlueButton",
+      //"Style": "BlueButton",
       "Position": "50.0 50.0",
-      "Size": "200.0 52.0"
+      "Size": "200.0 52.0",
+      "Font": "montserrat-32",
+      "Text": "Hello World",
+      "BackgroundRegion": "blue_button00"
     }
   ]
 }

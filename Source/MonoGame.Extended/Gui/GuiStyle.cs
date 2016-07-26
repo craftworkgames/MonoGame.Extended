@@ -5,19 +5,19 @@ using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Gui
 {
-    public class GuiStyle
-    {
-        public GuiStyle()
-        {
-            Drawables = new List<IGuiDrawable>();
-        }
+    //public class GuiStyle
+    //{
+    //    public GuiStyle()
+    //    {
+    //        Drawables = new List<IGuiDrawable>();
+    //    }
 
-        public List<IGuiDrawable> Drawables { get; }
+    //    public List<IGuiDrawable> Drawables { get; }
 
-        public void Draw(SpriteBatch spriteBatch, RectangleF rectangle)
-        {
-            foreach (var drawable in Drawables)
-                drawable.Draw(spriteBatch, rectangle);
-        }
-    }
+    //    public void Draw(SpriteBatch spriteBatch, RectangleF rectangle)
+    //    {
+    //        foreach (var drawable in Drawables)
+    //            drawable.Draw(spriteBatch, rectangle);
+    //    }
+    //}
 }

@@ -8,6 +8,7 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Serialization;
 using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.Serialization;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
@@ -129,12 +130,17 @@ namespace MonoGame.Extended.Gui
             using (var stream = TitleContainer.OpenStream(guiPath))
             using (var streamReader = new StreamReader(stream))
             {
+
                 var json = streamReader.ReadToEnd();
                 var converters = new  JsonConverter[]
                 {
-                    new GuiLayoutJsonConverter(_contentManager),
+                    new ColorJsonConverter(),
+                    new Vector2JsonConverter(),
+                    new SizeFJsonConverter(),
+                    //new GuiStyleSheetJsonConverter(_contentManager),
+                    new GuiLayoutConverter(_contentManager),
                     new ContentConverter<BitmapFont>(_contentManager), 
-                    //new ContentConverter<TextureRegion2D>(_contentManager), 
+                    new GuiTextureAtlasConverter(_contentManager), 
                 };
 
                 _layout = JsonConvert.DeserializeObject<GuiLayout>(json, converters);
@@ -170,6 +176,35 @@ namespace MonoGame.Extended.Gui
                 control.Draw(_spriteBatch);
 
             _spriteBatch.End();
+        }
+    }
+
+    public class GuiTextureAtlasConverter : JsonConverter
+    {
+        private readonly ContentManager _contentManager;
+
+        public GuiTextureAtlasConverter(ContentManager contentManager)
+        {
+            _contentManager = contentManager;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var assetName = reader.Value.ToString();
+
+            using (var stream = TitleContainer.OpenStream(assetName))
+            {
+                return TextureAtlasReader.FromRawXml(_contentManager, stream);
+            }
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(TextureAtlas);
         }
     }
 
