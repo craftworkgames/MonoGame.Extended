@@ -12,7 +12,8 @@
       "Text": "Hello World",
       "BackgroundRegion": "blue_button00",
       "HoverStyle": {
-        "Text": "What?"
+        "Text": "What?",
+        "BackgroundColor": "#aaffaa"
       }
     },
     {

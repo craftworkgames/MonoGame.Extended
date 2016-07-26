@@ -1,10 +1,6 @@
 using System;
-using System.IO;
-using System.Linq;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Gui.Controls;
-using MonoGame.Extended.Serialization;
 using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -37,7 +33,7 @@ namespace MonoGame.Extended.Gui.Serialization
 
             serializer.Converters.Add(new TextureRegion2DConveter(textureAtlas));
             serializer.Converters.Add(new GuiControlConverter());
-            
+            serializer.Converters.Add(new GuiControlStyleConveter());
             
             return new GuiLayout
             {

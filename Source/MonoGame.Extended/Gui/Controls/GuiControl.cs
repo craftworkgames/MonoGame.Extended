@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
@@ -47,6 +45,7 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiHorizontalAlignment HorizontalTextAlignment { get; set; } = GuiHorizontalAlignment.Centre;
         public GuiVerticalAlignment VerticalTextAlignment { get; set; } = GuiVerticalAlignment.Centre;
 
+        public GuiControlStyle HoverStyle { get; set; }
         //public GuiStyle Style { get; set; }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -133,17 +132,10 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public Dictionary<string, object> HoverStyle { get; set; }
-
         public virtual void OnMouseEnter(object sender, MouseEventArgs args)
         {
             IsHovered = true;
-
-            foreach (var property in HoverStyle.Keys)
-            {
-                var t = GetType().GetRuntimeProperty(property);
-                t.SetValue(this, HoverStyle[property]);
-            }
+            HoverStyle?.Apply(this);
         }
 
         public virtual void OnMouseLeave(object sender, MouseEventArgs args)
