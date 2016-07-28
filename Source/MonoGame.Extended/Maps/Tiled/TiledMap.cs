@@ -140,13 +140,17 @@ namespace MonoGame.Extended.Maps.Tiled
                 Vector3.Up
             );
 
+            var halfPixel = new Vector2();
+            halfPixel.X = -0.5f;
+            halfPixel.Y = -0.5f;
+
             _projectionMatrix = 
-                Matrix.CreateTranslation(-0.9f, -0.9f, 0f) * Matrix.CreateOrthographicOffCenter(
+                Matrix.CreateTranslation(halfPixel.X, halfPixel.Y, 0f) * Matrix.CreateOrthographicOffCenter(
                     0,
                     _graphicsDevice.Viewport.Width,
                     _graphicsDevice.Viewport.Height,
                     0,
-                    1.0f, highestZ + 100f
+                    1.0f, highestZ + 100.0f
                 );
 
             _basicEffect = new BasicEffect(_graphicsDevice);
@@ -179,11 +183,13 @@ namespace MonoGame.Extended.Maps.Tiled
         
         public void Draw(Camera2D camera, GameTime gameTime = null)
         {
+            camera.Position = new Vector2((int)camera.Position.X, (int)camera.Position.Y);
             _basicEffect.World = camera.GetViewMatrix();
 
             _graphicsDevice.SetVertexBuffer(_tilesVertexBuffer);
             _graphicsDevice.Indices = _tilesIndexBuffer;
             _graphicsDevice.DepthStencilState = _depthBufferState;
+            _graphicsDevice.BlendState = BlendState.AlphaBlend;
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)

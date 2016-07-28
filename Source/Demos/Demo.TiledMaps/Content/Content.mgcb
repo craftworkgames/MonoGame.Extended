@@ -111,3 +111,8 @@
 /processorParam:TextureFormat=Color
 /build:isometric-tiles.png
 
+#begin level03.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:level03.tmx
+
