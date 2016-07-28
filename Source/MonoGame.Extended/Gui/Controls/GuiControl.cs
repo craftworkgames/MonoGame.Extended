@@ -13,7 +13,6 @@ namespace MonoGame.Extended.Gui.Controls
     {
         protected GuiControl()
         {
-            //Style = style;
             IsEnabled = true;
         }
 

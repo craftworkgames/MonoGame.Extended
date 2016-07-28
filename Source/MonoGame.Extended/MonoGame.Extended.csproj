@@ -74,6 +74,8 @@
     <Compile Include="Graphics\Batching\PrimitiveBatchExtensions.cs" />
     <Compile Include="Graphics\EffectMaterial.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
+    <Compile Include="Gui\Controls\GuiLabel.cs" />
+    <Compile Include="Gui\Controls\GuiToggleButton.cs" />
     <Compile Include="Gui\Serialization\ContentConverter.cs" />
     <Compile Include="Gui\Controls\GuiButton.cs" />
     <Compile Include="Gui\Controls\GuiControl.cs" />

@@ -20,6 +20,10 @@ namespace MonoGame.Extended.Gui.Serialization
             {
                 case "Button":
                     return jObject.ToObject<GuiButton>(serializer);
+                case "Label":
+                    return jObject.ToObject<GuiLabel>(serializer);
+                case "ToggleButton":
+                    return jObject.ToObject<GuiToggleButton>(serializer);
                 default:
                     throw new InvalidOperationException($"Unexpected control type {type}");
             }
