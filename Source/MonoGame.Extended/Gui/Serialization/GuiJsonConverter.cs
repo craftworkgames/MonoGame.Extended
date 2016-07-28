@@ -1,7 +1,6 @@
 using System;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
-using MonoGame.Extended.Gui.Drawables;
 using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -25,16 +24,10 @@ namespace MonoGame.Extended.Gui.Serialization
             if (objectType == typeof(BitmapFont))
                 return true;
 
-            if (objectType == typeof(GuiThickness))
-                return true;
-
             if (objectType == typeof(GuiControl))
                 return true;
 
-            //if (objectType == typeof(GuiStyle))
-            //    return true;
-
-            return objectType == typeof(IGuiDrawable);
+            return false;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -50,23 +43,33 @@ namespace MonoGame.Extended.Gui.Serialization
             if (objectType == typeof(BitmapFont))
                 return _converterService.GetFont((string) reader.Value);
 
-            if (objectType == typeof(GuiThickness))
-                return GuiThickness.Parse((string) reader.Value);
-
             var jObject = JObject.Load(reader);
             var type = (string)jObject.Property("Type");
 
             switch (type)
             {
-                case "Sprite":
-                    return jObject.ToObject<GuiSprite>(serializer);
-                case "Text":
-                    return jObject.ToObject<GuiText>(serializer);
                 case "Button":
                     return jObject.ToObject<GuiButton>(serializer);
                 default:
                     throw new InvalidOperationException($"Unexpected type {type}");
             }
+        }
+    }
+
+    public class GuiThicknessConveter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            return GuiThickness.Parse((string)reader.Value); ;
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(GuiThickness);
         }
     }
 }

@@ -61,9 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="Content\default.gss">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\title-screen.gui">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace MonoGame.Extended.Gui.Controls
@@ -15,12 +16,32 @@ namespace MonoGame.Extended.Gui.Controls
         public Type TargetType { get; }
         public Dictionary<string, object> Setters { get; set; }
 
+        private Dictionary<string, object> _previousState;
+
         public void Apply(GuiControl control)
         {
-            foreach (var propertyName in Setters.Keys)
+            _previousState = Setters
+                .ToDictionary(i => i.Key, i => TargetType.GetRuntimeProperty(i.Key).GetValue(control));
+
+            ChangePropertyValues(control, Setters);
+        }
+
+        public void Revert(GuiControl control)
+        {
+            if (_previousState != null)
+                ChangePropertyValues(control, _previousState);
+
+            _previousState = null;
+        }
+
+        private static void ChangePropertyValues(GuiControl control, Dictionary<string, object> setters)
+        {
+            var targetType = control.GetType();
+
+            foreach (var propertyName in setters.Keys)
             {
-                var propertyInfo = TargetType.GetRuntimeProperty(propertyName);
-                var value = Setters[propertyName];
+                var propertyInfo = targetType.GetRuntimeProperty(propertyName);
+                var value = setters[propertyName];
                 propertyInfo.SetValue(control, value);
             }
         }

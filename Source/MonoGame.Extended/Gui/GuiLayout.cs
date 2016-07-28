@@ -6,7 +6,6 @@ namespace MonoGame.Extended.Gui
 {
     public class GuiLayout
     {
-        //public GuiStyleSheet StyleSheet { get; set; }
         public TextureAtlas TextureAtlas { get; set; }
         public GuiControl[] Controls { get; set; }
 

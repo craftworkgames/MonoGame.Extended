@@ -28,7 +28,10 @@ namespace Demo.Gui
         {
             var layout = _guiComponent.LoadGui("title-screen.gui");
             var button = layout.FindControl<GuiButton>("PlayButton");
-            button.Click += (sender, args) => button.Position += new Vector2(100, 0);
+            button.IsEnabled = false;
+
+            var button2 = layout.FindControl<GuiButton>("PlayButton1");
+            button2.Click += (sender, args) => button.IsEnabled = !button.IsEnabled;
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
         }

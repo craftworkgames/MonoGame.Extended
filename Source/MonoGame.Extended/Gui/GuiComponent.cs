@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -9,10 +8,8 @@ using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Serialization;
 using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.Serialization;
-using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace MonoGame.Extended.Gui
 {
@@ -137,7 +134,7 @@ namespace MonoGame.Extended.Gui
                     new ColorJsonConverter(),
                     new Vector2JsonConverter(),
                     new SizeFJsonConverter(),
-                    //new GuiStyleSheetJsonConverter(_contentManager),
+                    new GuiThicknessConveter(),
                     new GuiLayoutConverter(_contentManager),
                     new ContentConverter<BitmapFont>(_contentManager), 
                     new GuiTextureAtlasConverter(_contentManager), 
@@ -176,61 +173,6 @@ namespace MonoGame.Extended.Gui
                 control.Draw(_spriteBatch);
 
             _spriteBatch.End();
-        }
-    }
-
-    public class GuiTextureAtlasConverter : JsonConverter
-    {
-        private readonly ContentManager _contentManager;
-
-        public GuiTextureAtlasConverter(ContentManager contentManager)
-        {
-            _contentManager = contentManager;
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var assetName = reader.Value.ToString();
-
-            using (var stream = TitleContainer.OpenStream(assetName))
-            {
-                return TextureAtlasReader.FromRawXml(_contentManager, stream);
-            }
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(TextureAtlas);
-        }
-    }
-
-    public class ContentConverter<T> : JsonConverter
-    {
-        private readonly ContentManager _contentManager;
-
-        public ContentConverter(ContentManager contentManager)
-        {
-            _contentManager = contentManager;
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(T);
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var assetName = serializer.Deserialize<JToken>(reader).Value<string>();
-            return _contentManager.Load<T>(assetName);
         }
     }
 }

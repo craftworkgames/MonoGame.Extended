@@ -9,7 +9,24 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public bool IsPressed { get; private set; }
+        private bool _isPressed;
+        public bool IsPressed
+        {
+            get { return _isPressed; }
+            private set
+            {
+                if (_isPressed != value)
+                {
+                    _isPressed = value;
+
+                    if (_isPressed)
+                        PressedStyle?.Apply(this);
+                    else
+                        PressedStyle?.Revert(this);
+                }
+            }
+        }
+        public GuiControlStyle PressedStyle { get; set; }
 
         public event EventHandler<MouseEventArgs> Click;
 
@@ -30,19 +47,12 @@ namespace MonoGame.Extended.Gui.Controls
             base.OnMouseUp(sender, args);
         }
 
-        //protected override GuiSpriteStyle GetCurrentStyle()
-        //{
-        //    //if (!IsEnabled)
-        //    //    return _style.Disabled;
-
-        //    //if (IsPressed)
-        //    //    return _style.Pressed;
+        public override void OnMouseLeave(object sender, MouseEventArgs args)
+        {
+            base.OnMouseLeave(sender, args);
             
-        //    //if (IsHovered)
-        //    //    return _style.Hovered;
-
-        //    //return _style.Normal;
-        //    return null;
-        //}
+            if(IsEnabled)
+                IsPressed = false;
+        }
     }
 }

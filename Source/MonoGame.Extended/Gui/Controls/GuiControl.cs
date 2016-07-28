@@ -29,8 +29,6 @@ namespace MonoGame.Extended.Gui.Controls
         public Vector2 Center => new Vector2(Position.X + Width * 0.5f, Position.Y + Height * 0.5f);
         public RectangleF BoundingRectangle => new RectangleF(Left, Top, Width, Height);
         public bool IsFocused { get; internal set; }
-        public bool IsHovered { get; private set; }
-        public bool IsEnabled { get; set; }
 
         public TextureRegion2D BackgroundRegion { get; set; }
         public Color BackgroundColor { get; set; } = Color.White;
@@ -45,13 +43,49 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiHorizontalAlignment HorizontalTextAlignment { get; set; } = GuiHorizontalAlignment.Centre;
         public GuiVerticalAlignment VerticalTextAlignment { get; set; } = GuiVerticalAlignment.Centre;
 
+        private bool _isHovered;
+        public bool IsHovered
+        {
+            get { return _isHovered; }
+            private set
+            {
+                if (_isHovered != value)
+                {
+                    _isHovered = value;
+
+                    if (_isHovered)
+                        HoverStyle?.Apply(this);
+                    else
+                        HoverStyle?.Revert(this);
+                }
+            }
+        }
+
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                if (_isEnabled != value)
+                {
+                    _isEnabled = value;
+
+                    if (!_isEnabled)
+                        DisabledStyle?.Apply(this);
+                    else
+                        DisabledStyle?.Revert(this);
+                }
+            }
+        }
+
+
+        public GuiControlStyle DisabledStyle { get; set; }
         public GuiControlStyle HoverStyle { get; set; }
-        //public GuiStyle Style { get; set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             var destinationRectangle = GetDestinationRectangle();
-            //Style.Draw(spriteBatch, destinationRectangle.ToRectangleF());
 
             DrawBackground(spriteBatch, destinationRectangle);
             DrawText(spriteBatch, destinationRectangle);
@@ -86,11 +120,11 @@ namespace MonoGame.Extended.Gui.Controls
             var destinationRectangle = GuiAlignmentHelper.GetDestinationRectangle(
                 HorizontalAlignment, VerticalAlignment, sourceRectangle, targetRectangle);
 
-            var _ninePatch = new NinePatch(BackgroundRegion, Padding.Left, Padding.Top, Padding.Right, Padding.Bottom)
+            var ninePatch = new NinePatch(BackgroundRegion, Padding.Left, Padding.Top, Padding.Right, Padding.Bottom)
             {
                 Color = BackgroundColor * (BackgroundColor.A / 255f)
             };
-            _ninePatch.Draw(spriteBatch, destinationRectangle);
+            ninePatch.Draw(spriteBatch, destinationRectangle);
         }
 
         private Rectangle GetDestinationRectangle()
@@ -103,13 +137,13 @@ namespace MonoGame.Extended.Gui.Controls
             return new Rectangle((int)Position.X, (int)Position.Y, (int)Size.Width, (int)Size.Height);
         }
 
-        private static Point ResizeToFit(Size imageSize, SizeF boxSize)
-        {
-            var widthScale = boxSize.Width / imageSize.Width;
-            var heightScale = boxSize.Height / imageSize.Height;
-            var scale = Math.Min(widthScale, heightScale);
-            return new Point((int)Math.Round(imageSize.Width * scale), (int)Math.Round(imageSize.Height * scale));
-        }
+        //private static Point ResizeToFit(Size imageSize, SizeF boxSize)
+        //{
+        //    var widthScale = boxSize.Width / imageSize.Width;
+        //    var heightScale = boxSize.Height / imageSize.Height;
+        //    var scale = Math.Min(widthScale, heightScale);
+        //    return new Point((int)Math.Round(imageSize.Width * scale), (int)Math.Round(imageSize.Height * scale));
+        //}
 
         public event EventHandler<MouseEventArgs> MouseDown;
         public event EventHandler<MouseEventArgs> MouseUp;
@@ -134,13 +168,14 @@ namespace MonoGame.Extended.Gui.Controls
 
         public virtual void OnMouseEnter(object sender, MouseEventArgs args)
         {
-            IsHovered = true;
-            HoverStyle?.Apply(this);
+            if(IsEnabled)
+                IsHovered = true;
         }
 
         public virtual void OnMouseLeave(object sender, MouseEventArgs args)
         {
-            IsHovered = false;
+            if(IsEnabled)
+                IsHovered = false;
         }
 
         public bool Contains(Vector2 point)

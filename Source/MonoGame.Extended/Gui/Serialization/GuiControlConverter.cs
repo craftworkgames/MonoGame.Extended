@@ -7,22 +7,12 @@ namespace MonoGame.Extended.Gui.Serialization
 {
     public class GuiControlConverter : JsonConverter
     {
-        //private readonly GuiStyleSheet _styleSheet;
-
-        //public GuiControlConverter(GuiStyleSheet styleSheet)
-        //{
-        //    _styleSheet = styleSheet;
-        //}
-
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            //if (objectType == typeof(GuiStyle))
-            //    return _styleSheet.Styles[(string) reader.Value];
-
             var jObject = JObject.Load(reader);
             var type = (string)jObject.Property("Type");
 
@@ -31,13 +21,13 @@ namespace MonoGame.Extended.Gui.Serialization
                 case "Button":
                     return jObject.ToObject<GuiButton>(serializer);
                 default:
-                    throw new InvalidOperationException($"Unexpected type {type}");
+                    throw new InvalidOperationException($"Unexpected control type {type}");
             }
         }
 
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(GuiControl);// || objectType == typeof(GuiStyle);
+            return objectType == typeof(GuiControl);
         }
     }
 }
