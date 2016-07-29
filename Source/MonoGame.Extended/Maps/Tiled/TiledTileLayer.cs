@@ -89,8 +89,8 @@ namespace MonoGame.Extended.Maps.Tiled
 
                 if (region != null)
                 {
-                    textureCoordinateTopLeft.X = (float)region.X / region.Texture.Width;
-                    textureCoordinateTopLeft.Y = (float)region.Y / region.Texture.Height;
+                    textureCoordinateTopLeft.X = (region.X + 0.5f) / region.Texture.Width;
+                    textureCoordinateTopLeft.Y = (region.Y + 0.5f) / region.Texture.Height;
                     textureCoordinateBottomRight.X = (float)(region.X + region.Width) / region.Texture.Width;
                     textureCoordinateBottomRight.Y = (float)(region.Y + region.Height) / region.Texture.Height;
                 }

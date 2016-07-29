@@ -50,7 +50,7 @@ namespace Demo.TiledMaps
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
             _sprite = new Sprite(_texture) { Position = new Vector2(600, 240) };
 
-            _tiledMap = Content.Load<TiledMap>("level01");
+            _tiledMap = Content.Load<TiledMap>("level03");
             _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
         }
 
@@ -68,7 +68,7 @@ namespace Demo.TiledMaps
                 Exit();
 
             const float cameraSpeed = 500f;
-            const float zoomSpeed = 0.1f;
+            const float zoomSpeed = 0.3f;
 
             if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
                 _camera.Move(new Vector2(0, -cameraSpeed)*deltaSeconds);
@@ -82,11 +82,11 @@ namespace Demo.TiledMaps
             if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
                 _camera.Move(new Vector2(cameraSpeed, 0)*deltaSeconds);
 
-            if (!keyboardState.IsKeyDown(Keys.R) && keyboardState.IsKeyUp(Keys.R))
-                _camera.ZoomIn(zoomSpeed);
+            if (keyboardState.IsKeyDown(Keys.R))
+                _camera.ZoomIn(zoomSpeed * deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.F))
-                _camera.ZoomOut(zoomSpeed);
+                _camera.ZoomOut(zoomSpeed * deltaSeconds);
 
             _sprite.Rotation += MathHelper.ToRadians(5) * deltaSeconds;
             _sprite.Position = _camera.ScreenToWorld(mouseState.X, mouseState.Y);
