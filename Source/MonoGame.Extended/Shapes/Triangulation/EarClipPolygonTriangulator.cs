@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Shapes.Triangulation
 {
     public class EarClipPolygonTriangulator : IPolygonTriangulator
     {
-        private IReadOnlyList<Point2F> _points;
+        private IReadOnlyList<Vector2> _points;
         private readonly List<int> _previousPointIndices;
         private readonly List<int> _nextPointIndices;
 
@@ -14,7 +15,7 @@ namespace MonoGame.Extended.Shapes.Triangulation
             _nextPointIndices = new List<int>();
         }
 
-        public void Triangulate(IReadOnlyList<Point2F> points, PlanarTriangleOutputDelegate planarTriangleOutputDelegate)
+        public void Triangulate(IReadOnlyList<Vector2> points, PlanarTriangleOutputDelegate planarTriangleOutputDelegate)
         {
             // implementation derived from pseudocode taken from:
             // Real Time Collision Detection by Christer Ericson (Morgan Kaufmann, 2005)

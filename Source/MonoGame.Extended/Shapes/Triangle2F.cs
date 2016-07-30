@@ -8,16 +8,16 @@ namespace MonoGame.Extended.Shapes
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Triangle2F : IEquatable<Triangle2F>
     {
-        public Point2F FirstPoint;
-        public Point2F SecondPoint;
-        public Point2F ThirdPoint;
+        public Vector2 FirstPoint;
+        public Vector2 SecondPoint;
+        public Vector2 ThirdPoint;
 
         public float Area
         {
             get { return GetArea(); }
         }
 
-        public Triangle2F(Point2F firstPoint, Point2F secondPoint, Point2F thirdPoint)
+        public Triangle2F(Vector2 firstPoint, Vector2 secondPoint, Vector2 thirdPoint)
         {
             FirstPoint = firstPoint;
             SecondPoint = secondPoint;
@@ -42,7 +42,7 @@ namespace MonoGame.Extended.Shapes
             return Math.Abs(GetSignedArea());
         }
 
-        public Vector2 GetBarycentricCoordinates(Point2F point)
+        public Vector2 GetBarycentricCoordinates(Vector2 point)
         {
             var v0 = ThirdPoint - FirstPoint;
             var v1 = SecondPoint - FirstPoint;
@@ -60,7 +60,7 @@ namespace MonoGame.Extended.Shapes
             return new Vector2(u, v);
         }
 
-        public bool Contains(Point2F point)
+        public bool Contains(Vector2 point)
         {
             var b = GetBarycentricCoordinates(point);
             return b.X >= 0 && b.Y >= 0 && b.X + b.Y < 1;

@@ -7,15 +7,15 @@ namespace MonoGame.Extended.Shapes
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Line3F : IEquatable<Line3F>
     {
-        public Point3F FirstPoint;
-        public Point3F SecondPoint;
+        public Vector3 FirstPoint;
+        public Vector3 SecondPoint;
 
         public Vector3 Vector
         {
             get { return SecondPoint - FirstPoint; }
         }
 
-        public Line3F(Point3F firstPoint, Point3F secondPoint)
+        public Line3F(Vector3 firstPoint, Vector3 secondPoint)
         {
             FirstPoint = firstPoint;
             SecondPoint = secondPoint;

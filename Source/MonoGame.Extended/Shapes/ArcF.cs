@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Shapes
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct ArcF : IEquatable<ArcF>
     {
-        public Point2F Centre;
+        public Vector2 Centre;
         public SizeF Radius;
         public float StartAngle;
         public float EndAngle;
 
-        public ArcF(Point2F centre, SizeF radius, float startAngle, float endAngle)
+        public ArcF(Vector2 centre, SizeF radius, float startAngle, float endAngle)
         {
             Centre = centre;
             Radius = radius;
