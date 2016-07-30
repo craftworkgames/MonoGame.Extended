@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
+using System.Linq;
 
 namespace MonoGame.Extended.BitmapFonts
 {
@@ -35,7 +36,13 @@ namespace MonoGame.Extended.BitmapFonts
                     }
 
                     DrawString(spriteBatch, bitmapFont, word, new Vector2(dx, dy), color, layerDepth);
-                    dx += size.Width + bitmapFont.GetCharacterRegion(' ').XAdvance;
+                    dx += size.Width;
+
+                    var spaceCharRegion = bitmapFont.GetCharacterRegion(' ');
+                    if (i != words.Length - 1)
+                        dx += spaceCharRegion.XAdvance;
+                    else
+                        dx += spaceCharRegion.XOffset + spaceCharRegion.Width;
                 }
 
                 dx = position.X;
@@ -49,9 +56,11 @@ namespace MonoGame.Extended.BitmapFonts
         {
             var dx = position.X;
             var dy = position.Y;
+            var codePoints = BitmapFont.GetUnicodeCodePoints(text).ToArray();
 
-            foreach (var character in BitmapFont.GetUnicodeCodePoints(text))
+            for (int i = 0, l = codePoints.Length; i < l; i++)
             {
+                var character = codePoints[i];
                 var fontRegion = bitmapFont.GetCharacterRegion(character);
 
                 if (fontRegion != null)
@@ -59,7 +68,11 @@ namespace MonoGame.Extended.BitmapFonts
                     var charPosition = new Vector2(dx + fontRegion.XOffset, dy + fontRegion.YOffset);
 
                     spriteBatch.Draw(fontRegion.TextureRegion, charPosition, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, layerDepth);
-                    dx += fontRegion.XAdvance;
+
+                    if (i != text.Length - 1)
+                        dx += fontRegion.XAdvance;
+                    else
+                        dx += fontRegion.XOffset + fontRegion.Width;
                 }
 
                 if (character == '\n')
