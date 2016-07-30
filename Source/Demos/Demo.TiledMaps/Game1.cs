@@ -21,7 +21,6 @@ namespace Demo.TiledMaps
         private Texture2D _texture;
         private TiledMap _tiledMap;
         private ViewportAdapter _viewportAdapter;
-        Texture2D aa;
 
         public Game1()
         {
@@ -53,8 +52,6 @@ namespace Demo.TiledMaps
 
             _tiledMap = Content.Load<TiledMap>("level03");
             _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
-            aa = new Texture2D(_graphicsDeviceManager.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-            aa.SetData(new Color[] { Color.Red });
         }
 
         protected override void UnloadContent()
@@ -100,10 +97,6 @@ namespace Demo.TiledMaps
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(_tiledMap.BackgroundColor ?? Color.CornflowerBlue);
-
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _spriteBatch.Draw(aa, new Rectangle(0, 0, 500, 500), Color.White);
-            _spriteBatch.End();
 
             // you can draw the whole map all at once
             _tiledMap.Draw(_camera, gameTime);
