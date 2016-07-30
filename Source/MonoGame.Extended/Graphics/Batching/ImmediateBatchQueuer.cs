@@ -2,32 +2,31 @@
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal class ImmediateBatchQueuer<TVertexType> : BatchQueuer<TVertexType>
+    internal class ImmediateBatchQueuer<TVertexType, TBatchItemData> : BatchQueuer<TVertexType, TBatchItemData>
         where TVertexType : struct, IVertexType
+        where TBatchItemData : struct, IBatchItemData<TBatchItemData>
     {
-        public ImmediateBatchQueuer(BatchDrawer<TVertexType> batchDrawer)
+        public ImmediateBatchQueuer(BatchDrawer<TVertexType, TBatchItemData> batchDrawer)
             : base(batchDrawer)
         {
         }
 
-        internal override void Begin()
+        internal override void Begin(Effect effect)
         {
+            BatchDrawer.Effect = effect;
         }
 
         internal override void End()
         {
+            BatchDrawer.Effect = null;
         }
 
-        internal override void EnqueueDraw(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0)
+        internal override void EnqueueDraw(PrimitiveType primitiveType, int vertexCount, int startIndex, int indexCount, ref TBatchItemData data, uint sortKey = 0)
         {
-            BatchDrawer.Select(vertices);
-            BatchDrawer.Draw(drawContext, primitiveType, startVertex, startVertex + vertexCount);
-        }
-
-        internal override void EnqueueDraw(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey = 0)
-        {
-            BatchDrawer.Select(vertices, indices);
-            BatchDrawer.Draw(drawContext, primitiveType, startVertex, startVertex + vertexCount, startIndex, indexCount);
+            BatchDrawer.Select(vertexCount, indexCount);
+            var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
+            BatchDrawer.Draw(primitiveType, startIndex, primitiveCount, ref data);
+            BatchDrawer.MeshBuffer.Clear();
         }
     }
 }

@@ -27,12 +27,12 @@ namespace MonoGame.Extended
 
         public static Vector2 PerpendicularClockwise(this Vector2 vector2)
         {
-            return new Vector2(-vector2.Y, vector2.X);
+            return new Vector2(vector2.Y, -vector2.X);
         }
 
         public static Vector2 PerpendicularCounterClockwise(this Vector2 vector2)
         {
-            return new Vector2(vector2.Y, -vector2.X);
+            return new Vector2(-vector2.Y, vector2.X);
         }
 
         public static Vector2 Truncate(this Vector2 vector2, float maxLength)

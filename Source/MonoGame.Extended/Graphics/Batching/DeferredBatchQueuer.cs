@@ -1,378 +1,126 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal class DeferredBatchQueuer
+    internal class DeferredBatchQueuer<TVertexType, TBatchItemData> : BatchQueuer<TVertexType, TBatchItemData>
+        where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
     {
-        // prevent static fields for every generic type of the class
+        internal static readonly BatchDrawItem<TBatchItemData> EmptyDrawItem = new BatchDrawItem<TBatchItemData>((PrimitiveType)(-1), 0, 0, default(TBatchItemData));
 
-        // an empty draw operation; it's purpose is to prevent a null check for what would be a nullable draw operation
-        // e.g. the first time the queuer is used the draw operation would be invalid, but afterwards the operation will always be valid,
-        //      so having a check for null to test for invalidness is a waste 99% of the time
-        internal static readonly BatchDrawOperation EmptyDrawOperation = new BatchDrawOperation((PrimitiveType)(-1), 0, 0, 0, 0, null);
-    }
-
-    internal class DeferredBatchQueuer<TVertexType> : BatchQueuer<TVertexType>
-        where TVertexType : struct, IVertexType
-    {
         private const int InitialOperationsCapacity = 25;
 
         // the draw operations buffer
-        private BatchDrawOperation[] _operations;
+        private BatchDrawItem<TBatchItemData>[] _items;
         // the sort keys buffer for the draw operations
-        // the keys are seperated from the draw operations to have the smallest memory footprint possible which is important for iteration
-        private uint[] _operationSortKeys; 
+        // the keys are seperated from the draw operations to have the smallest memory footprint possible for each draw item
+        private uint[] _itemSortKeys;
         // the number of operations in the buffers
-        private int _operationsCount;
-        // the current draw operation
-        private BatchDrawOperation _currentOperation;
-        // the sort key for the current draw operation
+        private int _itemsCount;
+        // the current draw item
+        private BatchDrawItem<TBatchItemData> _currentItem;
+        // the sort key for the current draw item
         private uint _currentSortKey;
-        // the vertices buffer
-        private readonly TVertexType[] _vertices;
-        // the number of vertices in the buffer
-        private int _vertexCount;
-        // the index buffer
-        private readonly short[] _indices;
-        // the number of indices in the buffer
-        private int _indexCount;
-        // the sort method (inlined) to sort the keys for the draw operations; when sorted the corresponding draw operations are also sorted
-        private readonly Action<Array, Array, int, int> _sortKeysValuesAction;
 
-        internal DeferredBatchQueuer(BatchDrawer<TVertexType> batchDrawer, Action<Array, Array, int, int> sortKeysValuesAction)
+        private readonly MeshBuffer<TVertexType> _meshBuffer;
+
+        internal DeferredBatchQueuer(BatchDrawer<TVertexType, TBatchItemData> batchDrawer)
             : base(batchDrawer)
         {
-            _currentOperation = DeferredBatchQueuer.EmptyDrawOperation;
-            _vertices = new TVertexType[BatchDrawer.MaximumVerticesCount];
-            _indices = new short[BatchDrawer.MaximumIndicesCount];
-            _sortKeysValuesAction = sortKeysValuesAction;
-            _operationSortKeys = new uint[InitialOperationsCapacity];
-            _operations = new BatchDrawOperation[InitialOperationsCapacity];
+            _currentItem = EmptyDrawItem;
+            _itemSortKeys = new uint[InitialOperationsCapacity];
+            _items = new BatchDrawItem<TBatchItemData>[InitialOperationsCapacity];
+            _meshBuffer = batchDrawer.MeshBuffer;
         }
 
-        private void CreateNewDrawOperationIfNecessary(IDrawContext drawContext, PrimitiveType primitiveType, int vertexCount, int indexCount, uint sortKey)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void ApplyCurrentItem()
         {
-            // we do not support merging line strip or triangle strip primitives, i.e., a new draw call is needed for each line strip or triangle strip
-            if (_currentSortKey == sortKey && (_currentOperation.DrawContext?.Equals(drawContext) ?? false) && _currentOperation.IndexCount > 0 == indexCount > 0 && _currentOperation.PrimitiveType == (byte)primitiveType && (primitiveType != PrimitiveType.TriangleStrip || PrimitiveType != PrimitiveType.LineStrip))
-            {
-                _currentOperation.VertexCount += vertexCount;
-                _currentOperation.IndexCount += indexCount;
-                return;
-            }
-
-            _currentOperation.DrawContext = drawContext;
-            _currentOperation = new BatchDrawOperation(primitiveType, _vertexCount, vertexCount, _indexCount, indexCount, _currentOperation.DrawContext);
-            AddOperation(_currentOperation, sortKey);
+            _items[_itemsCount - 1] = _currentItem;
         }
 
-        private void AddOperation(BatchDrawOperation batchOperation, uint sortKey)
+        internal override void Begin(Effect effect)
         {
-            if (_operationsCount >= _operations.Length)
-            {
-                // increase draw operation buffers by the golden ratio
-                var newCapacity = (int)(_operations.Length * 1.61803398875f);
-                Array.Resize(ref _operationSortKeys, newCapacity);
-                Array.Resize(ref _operations, newCapacity);
-            }
-            _operationSortKeys[_operationsCount] = sortKey;
-            _operations[_operationsCount] = batchOperation;
-            ++_operationsCount;
-            _currentSortKey = sortKey;
-        }
-
-        internal override void Begin()
-        {
+            BatchDrawer.Effect = effect;
         }
 
         internal override void End()
         {
             Flush();
+            BatchDrawer.Effect = null;
         }
 
         private void Flush()
         {
-            if (_vertexCount == 0)
+            if (_meshBuffer.VertexCount == 0 || _meshBuffer.IndexCount == 0)
             {
                 return;
             }
 
-            if (_indexCount == 0)
-            {
-                BatchDrawer.Select(_vertices);
-            }
-            else
-            {
-                BatchDrawer.Select(_vertices, _indices);
-            }
+            BatchDrawer.Select(_meshBuffer.VertexCount, _meshBuffer.IndexCount);
 
-            // sort only the operations which are used
-            _sortKeysValuesAction(_operationSortKeys, _operations, 0, _operationsCount);
+            ApplyCurrentItem();
 
-            for (var index = 0; index < _operationsCount; index++)
+            // sort only the items which are used
+            PrimitiveBatchHelper.SortAction?.Invoke(_itemSortKeys, _items, 0, _itemsCount);
+
+            for (var index = 0; index < _itemsCount; index++)
             {
-                var operation = _operations[index];
-                var primitiveType = (PrimitiveType)operation.PrimitiveType;
-                if (operation.IndexCount != 0)
-                {
-                    BatchDrawer.Draw(operation.DrawContext, primitiveType, operation.StartVertex, operation.VertexCount, operation.StartIndex, operation.IndexCount);
-                }
-                else
-                {
-                    BatchDrawer.Draw(operation.DrawContext, primitiveType, operation.StartVertex, operation.VertexCount);
-                }
+                var item = _items[index];
+                var primitiveType = (PrimitiveType)item.PrimitiveType;
+
+                BatchDrawer.Draw(primitiveType, item.StartIndex, item.PrimitiveCount, ref item.Data);
+
+                // clear the data for the item because it may contain references to objects like a Texture 
+                // values like startVertex, vertexCount, etc will be overwritten and don't need to be cleared 
+                _items[index].Data = default(TBatchItemData);
             }
 
-            Array.Clear(_operations, 0, _operationsCount);
-            _operationsCount = 0;
-            _vertexCount = 0;
-            _indexCount = 0;
-            _currentOperation = DeferredBatchQueuer.EmptyDrawOperation;
+            // don't need to clear the array because we keep track of how many operations we have
+            // i.e. by changing itemsCount to zero, we will overwrite items which have already been processed
+#if DEBUG
+            Array.Clear(_items, 0, _itemsCount);
+#endif
+
+            _meshBuffer.Clear();
+
+            _itemsCount = 0;
+            _currentItem = EmptyDrawItem;
             _currentSortKey = 0;
         }
 
-        internal override void EnqueueDraw(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0)
+        internal override void EnqueueDraw(PrimitiveType primitiveType, int vertexCount, int startIndex, int indexCount, ref TBatchItemData data, uint sortKey = 0)
         {
-            var remainingVertices = BatchDrawer.MaximumVerticesCount - _vertexCount;
+            // "merge" multiple draw calls into one draw item if possible
+            // we do not support merging line strip or triangle strip primitives, i.e., a new draw call is needed for each line strip or triangle strip
 
-            if (remainingVertices >= vertexCount)
+            if (_currentSortKey == sortKey && _currentItem.CanMergeIntoItem(ref data, (byte)primitiveType))
             {
-                QueueVerticesNoOverflow(drawContext, primitiveType, vertices, startVertex, vertexCount, sortKey);
-            }
-            else
-            {
-                QueueVerticesBufferSplit(drawContext, primitiveType, vertices, startVertex, vertexCount, sortKey, remainingVertices);
-            }
-        }
-
-        private void QueueVerticesNoOverflow(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey)
-        {
-            Array.Copy(vertices, startVertex, _vertices, _vertexCount, vertexCount);
-            CreateNewDrawOperationIfNecessary(drawContext, primitiveType, vertexCount, 0, sortKey);
-            _vertexCount += vertexCount;
-        }
-
-        private void QueueVerticesBufferSplit(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey, int verticesSpaceLeft)
-        {
-            switch (PrimitiveType)
-            {
-                case PrimitiveType.LineStrip:
-                    if (verticesSpaceLeft < 2)
-                    {
-                        verticesSpaceLeft = 0;
-                        // The vertex will be added later in the code below
-                        ++startVertex;
-                        --vertexCount;
-                    }
-                    break;
-                case PrimitiveType.LineList:
-                    verticesSpaceLeft -= verticesSpaceLeft % 2;
-                    break;
-                case PrimitiveType.TriangleStrip:
-                    if (verticesSpaceLeft < 4)
-                    {
-                        verticesSpaceLeft = 0;
-                        // The two vertices will be added later in the code below
-                        startVertex += 2;
-                        vertexCount -= 2;
-                    }
-                    else
-                    {
-                        verticesSpaceLeft -= (verticesSpaceLeft - 1) % 2;
-                    }
-                    break;
-                case PrimitiveType.TriangleList:
-                    verticesSpaceLeft -= verticesSpaceLeft % 3;
-                    break;
+                _currentItem.PrimitiveCount += primitiveType.GetPrimitiveCount(indexCount);
+                return;
             }
 
-            if (verticesSpaceLeft > 0)
+            if (_itemsCount > 0)
             {
-                Array.Copy(vertices, startVertex, _vertices, _vertexCount, verticesSpaceLeft);
-                CreateNewDrawOperationIfNecessary(drawContext, primitiveType, verticesSpaceLeft, 0, sortKey);
-                _vertexCount += verticesSpaceLeft;
-                vertexCount -= verticesSpaceLeft;
-                startVertex += verticesSpaceLeft;
+                ApplyCurrentItem();
             }
 
-            Flush();
+            var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
 
-            while (vertexCount >= 0)
+            _currentItem = new BatchDrawItem<TBatchItemData>(primitiveType, startIndex, primitiveCount, data);
+
+            if (_itemsCount >= _items.Length)
             {
-                verticesSpaceLeft = BatchDrawer.MaximumVerticesCount;
-
-                switch (PrimitiveType)
-                {
-                    case PrimitiveType.LineStrip:
-                        _vertices[0] = vertices[startVertex - 1];
-                        --verticesSpaceLeft;
-                        ++_vertexCount;
-                        break;
-                    case PrimitiveType.LineList:
-                        verticesSpaceLeft -= verticesSpaceLeft % 2;
-                        break;
-                    case PrimitiveType.TriangleStrip:
-                        _vertices[0] = vertices[startVertex - 2];
-                        _vertices[1] = vertices[startVertex - 1];
-                        verticesSpaceLeft -= (verticesSpaceLeft - 1) % 2 + 2;
-                        _vertexCount += 2;
-                        break;
-                    case PrimitiveType.TriangleList:
-                        verticesSpaceLeft -= verticesSpaceLeft % 3;
-                        break;
-                }
-
-                var verticesToProcess = Math.Min(verticesSpaceLeft, vertexCount);
-                Array.Copy(vertices, startVertex, _vertices, _vertexCount, verticesToProcess);
-                CreateNewDrawOperationIfNecessary(drawContext, primitiveType, verticesToProcess, 0, sortKey);
-                _vertexCount += verticesToProcess;
-                vertexCount -= verticesToProcess;
-
-                if (vertexCount == 0)
-                {
-                    break;
-                }
-
-                Flush();
-                startVertex += verticesToProcess;
-            }
-        }
-
-        internal override void EnqueueDraw(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey = 0)
-        {
-            var remainingVertices = BatchDrawer.MaximumVerticesCount - _vertexCount;
-            var remainingIndices = BatchDrawer.MaximumIndicesCount - _indexCount;
-
-            var exceedsBatchSpace = (vertexCount > remainingVertices) || (indexCount > remainingIndices);
-
-            if (!exceedsBatchSpace)
-            {
-                QueueIndexedVerticesNoOverflow(drawContext, primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, sortKey);
-            }
-            else
-            {
-                QueueIndexedVerticesBufferSplit(drawContext, primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, sortKey, remainingVertices, remainingIndices);
-            }
-        }
-
-        private void QueueIndexedVerticesNoOverflow(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey)
-        {
-            Array.Copy(vertices, startVertex, _vertices, _vertexCount, vertexCount);
-            var indexOffset = _currentOperation.VertexCount;
-            CreateNewDrawOperationIfNecessary(drawContext, primitiveType, vertexCount, indexCount, sortKey);
-            _vertexCount += vertexCount;
-
-            // we can't use Array.Copy to copy the indices because we need to add the offset
-            var maxIndexCount = startIndex + indexCount;
-            for (var index = startIndex; index < maxIndexCount; ++index)
-            {
-                _indices[_indexCount++] = (short)(indices[index] + indexOffset);
-            }
-        }
-
-        private void QueueIndexedVerticesBufferSplit(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey, int verticesSpaceLeft, int indicesSpaceLeft)
-        {
-            switch (PrimitiveType)
-            {
-                case PrimitiveType.LineStrip:
-                    if (verticesSpaceLeft < 2)
-                    {
-                        verticesSpaceLeft = 0;
-                        ++startIndex;
-                        --indexCount;
-                    }
-                    break;
-                case PrimitiveType.LineList:
-                    verticesSpaceLeft -= verticesSpaceLeft % 2;
-                    break;
-                case PrimitiveType.TriangleStrip:
-                    if (verticesSpaceLeft < 4)
-                    {
-                        verticesSpaceLeft = 0;
-                        startIndex += 2;
-                        indexCount -= 2;
-                    }
-                    else
-                    {
-                        verticesSpaceLeft -= (verticesSpaceLeft - 1) % 2;
-                    }
-                    break;
-                case PrimitiveType.TriangleList:
-                    verticesSpaceLeft -= verticesSpaceLeft % 3;
-                    break;
+                // increase draw item buffers by the golden ratio
+                var newCapacity = (int)(_items.Length * 1.61803398875f);
+                Array.Resize(ref _itemSortKeys, newCapacity);
+                Array.Resize(ref _items, newCapacity);
             }
 
-            if (verticesSpaceLeft > 0)
-            {
-                CreateNewDrawOperationIfNecessary(drawContext, primitiveType, verticesSpaceLeft, verticesSpaceLeft, sortKey);
-                var maxVertexCount = _vertexCount + verticesSpaceLeft;
-                for (var vertexIndex = startVertex; vertexIndex < maxVertexCount; ++vertexIndex)
-                {
-                    _indices[_indexCount++] = (short)vertexIndex;
-                    _vertices[_vertexCount++] = vertices[indices[startIndex] + startVertex];
-                    ++startIndex;
-                }
-                indexCount -= verticesSpaceLeft;
-            }
-
-            Flush();
-
-            while (indexCount >= 0 && vertexCount >= 0)
-            {
-                verticesSpaceLeft = BatchDrawer.MaximumVerticesCount;
-                indicesSpaceLeft = BatchDrawer.MaximumIndicesCount;
-
-                switch (PrimitiveType)
-                {
-                    case PrimitiveType.LineStrip:
-                        _vertices[0] = vertices[indices[startIndex - 1] + startVertex];
-                        _indices[0] = 0;
-
-                        --verticesSpaceLeft;
-                        ++_vertexCount;
-                        ++_indexCount;
-                        break;
-                    case PrimitiveType.LineList:
-                        verticesSpaceLeft -= verticesSpaceLeft % 2;
-                        break;
-                    case PrimitiveType.TriangleStrip:
-                        _vertices[0] = vertices[indices[startIndex - 2] + startVertex];
-                        _indices[0] = 0;
-                        _vertices[1] = vertices[indices[startIndex - 1] + startVertex];
-                        _indices[1] = 1;
-
-                        verticesSpaceLeft -= (verticesSpaceLeft - 1) % 2 + 2;
-                        _indexCount += 2;
-                        _vertexCount += 2;
-                        break;
-                    case PrimitiveType.TriangleList:
-                        verticesSpaceLeft -= verticesSpaceLeft % 3;
-                        break;
-                }
-
-                var verticesToProcess = 0;
-                var indicesToProcess = Math.Min(verticesSpaceLeft, indexCount);
-
-                var maxVertexCount = _vertexCount + indicesToProcess;
-                for (var vertexIndex = _vertexCount; vertexIndex < maxVertexCount; ++vertexIndex)
-                {
-                    // if vertex is already been seen, use that index
-                    // if vertex has not already been seem, create the index and copy the vertex
-                    _indices[_indexCount++] = (short)vertexIndex;
-                    _vertices[_vertexCount++] = vertices[indices[startIndex] + startVertex];
-                    ++startIndex;
-                }
-
-                CreateNewDrawOperationIfNecessary(drawContext, primitiveType, verticesToProcess, indicesToProcess, sortKey);
-
-                indexCount -= indicesToProcess;
-                if (indexCount == 0)
-                {
-                    break;
-                }
-
-                Flush();
-            }
+            _itemSortKeys[_itemsCount] = sortKey;
+            _items[_itemsCount++] = _currentItem;
+            _currentSortKey = sortKey;
         }
     }
 }

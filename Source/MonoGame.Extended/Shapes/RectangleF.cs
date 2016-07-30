@@ -130,6 +130,14 @@ namespace MonoGame.Extended.Shapes
             Height = size.Height;
         }
 
+        public RectangleF(Point2F location, SizeF size)
+        {
+            X = location.X;
+            Y = location.Y;
+            Width = size.Width;
+            Height = size.Height;
+        }
+
         /// <summary>
         /// Creates a new instance of <see cref="RectangleF"/> struct, based on a <see cref="Rectangle"/>
         /// </summary>
@@ -322,8 +330,8 @@ namespace MonoGame.Extended.Shapes
         /// <summary>
         /// Adjusts the edges of this <see cref="RectangleF"/> by specified horizontal and vertical amounts. 
         /// </summary>
-        /// <param name="horizontalAmount">Value to adjust the left and right edges.</param>
-        /// <param name="verticalAmount">Value to adjust the top and bottom edges.</param>
+        /// <param name="horizontalAmount">Position to adjust the left and right edges.</param>
+        /// <param name="verticalAmount">Position to adjust the top and bottom edges.</param>
         public void Inflate(int horizontalAmount, int verticalAmount)
         {
             X -= horizontalAmount;
@@ -335,8 +343,8 @@ namespace MonoGame.Extended.Shapes
         /// <summary>
         /// Adjusts the edges of this <see cref="RectangleF"/> by specified horizontal and vertical amounts. 
         /// </summary>
-        /// <param name="horizontalAmount">Value to adjust the left and right edges.</param>
-        /// <param name="verticalAmount">Value to adjust the top and bottom edges.</param>
+        /// <param name="horizontalAmount">Position to adjust the left and right edges.</param>
+        /// <param name="verticalAmount">Position to adjust the top and bottom edges.</param>
         public void Inflate(float horizontalAmount, float verticalAmount)
         {
             X -= horizontalAmount;
