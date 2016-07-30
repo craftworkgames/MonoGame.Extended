@@ -135,13 +135,19 @@ namespace MonoGame.Extended.Maps.Tiled
 
             var highestZ = _layers.Max(layer => layer.Z);
             _viewMatrix = Matrix.CreateLookAt(
-                new Vector3(-0.5f, -0.5f, highestZ + 100.0f),
+                new Vector3(0f, 0f, highestZ + 100.0f),
                 Vector3.Zero,
                 Vector3.Up
             );
 
+            var projectionHalfPixel = Vector3.Zero;
+
+#if (OPENGL || DESKTOPGL)
+            projectionHalfPixel = new Vector3(-0.5f, -0.5f, 0.0f);
+#endif
+
             _projectionMatrix = 
-                Matrix.CreateTranslation(0f, 0f, 0f) * Matrix.CreateOrthographicOffCenter(
+                Matrix.CreateTranslation(projectionHalfPixel) * Matrix.CreateOrthographicOffCenter(
                     0,
                     _graphicsDevice.Viewport.Width,
                     _graphicsDevice.Viewport.Height,
