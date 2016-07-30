@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MonoGame.Extended.Graphics
 {
-    public enum MeshBufferType
+    public enum GeometryBufferType
     {
         Static,
         Dynamic
