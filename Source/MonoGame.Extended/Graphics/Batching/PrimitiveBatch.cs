@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Graphics.Batching
         private ImmediateBatchQueuer<TVertexType, TBatchItemData> _immediateBatchQueuer;
         private DeferredBatchQueuer<TVertexType, TBatchItemData> _deferredBatchQueuer;
 
-        protected RenderGeometryBuffer<TVertexType> GeometryBuffer { get; }
+        protected MeshBuffer<TVertexType> MeshBuffer { get; }
 
         public GraphicsDevice GraphicsDevice { get; }
         public bool HasBegun { get; private set; }
@@ -42,8 +42,8 @@ namespace MonoGame.Extended.Graphics.Batching
             GraphicsDevice = graphicsDevice;
             MaximumVerticesCount = maximumVerticesCount;
             MaximumIndicesCount = maximumIndicesCount;
-            GeometryBuffer = new RenderGeometryBuffer<TVertexType>(maximumVerticesCount, maximumIndicesCount);
-            _batchDrawer = new BatchDrawer<TVertexType, TBatchItemData>(graphicsDevice, GeometryBuffer);
+            MeshBuffer = new MeshBuffer<TVertexType>(graphicsDevice, MeshBufferType.Dynamic, maximumVerticesCount, maximumIndicesCount);
+            _batchDrawer = new BatchDrawer<TVertexType, TBatchItemData>(graphicsDevice, MeshBuffer);
         }
 
         public void Dispose()

@@ -23,7 +23,7 @@ namespace MonoGame.Extended.Graphics.Batching
         // the sort key for the current draw item
         private uint _currentSortKey;
 
-        private readonly RenderGeometryBuffer<TVertexType> _geometryBuffer;
+        private readonly MeshBuffer<TVertexType> _meshBuffer;
 
         internal DeferredBatchQueuer(BatchDrawer<TVertexType, TBatchItemData> batchDrawer)
             : base(batchDrawer)
@@ -31,7 +31,7 @@ namespace MonoGame.Extended.Graphics.Batching
             _currentItem = EmptyDrawItem;
             _itemSortKeys = new uint[InitialOperationsCapacity];
             _items = new BatchDrawItem<TBatchItemData>[InitialOperationsCapacity];
-            _geometryBuffer = batchDrawer.GeometryBuffer;
+            _meshBuffer = batchDrawer.MeshBuffer;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -53,12 +53,12 @@ namespace MonoGame.Extended.Graphics.Batching
 
         private void Flush()
         {
-            if (_geometryBuffer.VerticesCount == 0 || _geometryBuffer.IndicesCount == 0)
+            if (_meshBuffer.VertexCount == 0 || _meshBuffer.IndexCount == 0)
             {
                 return;
             }
 
-            BatchDrawer.Select(_geometryBuffer.VerticesCount, _geometryBuffer.IndicesCount);
+            BatchDrawer.Select(_meshBuffer.VertexCount, _meshBuffer.IndexCount);
 
             ApplyCurrentItem();
 
@@ -83,7 +83,7 @@ namespace MonoGame.Extended.Graphics.Batching
             Array.Clear(_items, 0, _itemsCount);
 #endif
 
-            _geometryBuffer.Clear();
+            _meshBuffer.Clear();
 
             _itemsCount = 0;
             _currentItem = EmptyDrawItem;

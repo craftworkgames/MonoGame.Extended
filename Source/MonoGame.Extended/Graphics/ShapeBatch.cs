@@ -3,12 +3,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics.Batching;
 using MonoGame.Extended.Graphics.Effects;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Shapes.Explicit;
+using MonoGame.Extended.Shapes.Triangulation;
 
 namespace MonoGame.Extended.Graphics
 {
     public class ShapeBatch : PrimitiveBatch<VertexPositionColorTexture, ShapeBatch.BatchItemData>
     {
+        private readonly MeshBuilder<VertexPositionColorTexture> _meshBuilder;
         private BatchItemData _shapeItemData;
         private Matrix _defaultWorld;
         private Matrix _defaultView;
@@ -16,9 +19,15 @@ namespace MonoGame.Extended.Graphics
         private readonly ShapeEffect _effect;
         private readonly Texture2D _pixelTexture;
 
-        public ShapeBatch(GraphicsDevice graphicsDevice, int maximumVerticesCount = DefaultMaximumVerticesCount, int maximumIndicesCount = DefaultMaximumIndicesCount)
+        private IPolygonTriangulator _polygonTriangulator;
+
+        public int CircleSegmentsCount { get; set; } = ShapeBuilder.DefaultSegmentsCount;
+
+        public ShapeBatch(GraphicsDevice graphicsDevice, int maximumVerticesCount = DefaultMaximumVerticesCount, int maximumIndicesCount = DefaultMaximumIndicesCount, IPolygonTriangulator polygonTriangulator = null)
             : base(graphicsDevice, maximumVerticesCount, maximumIndicesCount)
         {
+            _meshBuilder = new MeshBuilder<VertexPositionColorTexture>(MeshBuffer.EnqueueVertexDelegate, MeshBuffer.EnqueueIndexDelegate);
+
             _effect = new ShapeEffect(graphicsDevice);
 
             var viewport = graphicsDevice.Viewport;
@@ -37,6 +46,8 @@ namespace MonoGame.Extended.Graphics
             {
                 Texture = _pixelTexture
             };
+
+            _polygonTriangulator = polygonTriangulator ?? new EarClipPolygonTriangulator();
         }
 
         protected override void Dispose(bool disposing)
@@ -66,120 +77,112 @@ namespace MonoGame.Extended.Graphics
             Begin(batchMode, _effect);
         }
 
-        public void DrawLine(Vector2 firstPoint, Vector2 secondPoint, Color color, float width = 1f, float depth = 0f, uint sortKey = 0)
+        public void DrawLine(ref Line2F line, float width, Color color, float depth = 0f, uint sortKey = 0)
         {
-            var geometryBuffer = GeometryBuffer;
-            var startVertex = geometryBuffer.VerticesCount;
-            var startIndex = geometryBuffer.IndicesCount;
+            var geometryBuffer = MeshBuffer;
+            var startVertex = geometryBuffer.VertexCount;
+            var startIndex = geometryBuffer.IndexCount;
 
-            RenderGeometryBuilder.CreateLine(geometryBuffer.EnqueueVertexDelegate, geometryBuffer.EnqueueVertexIndexDelegate, startVertex, firstPoint, secondPoint, color, width, depth);
+            _meshBuilder.Line(ref line, width, color, depth, startVertex);
 
             EnqueueDraw(PrimitiveType.TriangleList, 4, startIndex, 6, ref _shapeItemData, sortKey);
         }
 
-        public void DrawLine(Vector3 firstPoint, Vector3 secondPoint, Color color, float width = 1f, uint sortKey = 0)
+        public void DrawLine(ref Line3F line, float width, Color color, uint sortKey = 0)
         {
-            var geometryBuffer = GeometryBuffer;
-            var startVertex = geometryBuffer.VerticesCount;
-            var startIndex = geometryBuffer.IndicesCount;
+            var geometryBuffer = MeshBuffer;
+            var startVertex = geometryBuffer.VertexCount;
+            var startIndex = geometryBuffer.IndexCount;
 
-            RenderGeometryBuilder.CreateLine(geometryBuffer.EnqueueVertexDelegate, geometryBuffer.EnqueueVertexIndexDelegate, startVertex, firstPoint, secondPoint, color, width);
+            _meshBuilder.Line(ref line, width, color, startVertex);
 
             EnqueueDraw(PrimitiveType.TriangleList, 4, startIndex, 6, ref _shapeItemData, sortKey);
         }
 
-        public void DrawArc(Vector2 position, float radius, float startAngle, float endAngle, Color color, float depth = 0f, int circleSegmentsCount = ShapeBuilder.DefaultCircleSegmentsCount, uint sortKey = 0)
+        public void DrawArc(ref ArcF arc, Color color, float depth = 0f, uint sortKey = 0)
         {
-            var geometryBuffer = GeometryBuffer;
-            var startVertex = geometryBuffer.VerticesCount;
-            var startIndex = geometryBuffer.IndicesCount;
+            var geometryBuffer = MeshBuffer;
+            var startVertex = geometryBuffer.VertexCount;
+            var startIndex = geometryBuffer.IndexCount;
 
-            RenderGeometryBuilder.CreateArc(geometryBuffer.EnqueueVertexDelegate, geometryBuffer.EnqueueVertexIndexDelegate, startVertex, position, radius, startAngle, endAngle, color, depth, circleSegmentsCount);
+            _meshBuilder.Arc(ref arc, color, depth, CircleSegmentsCount, startVertex);
 
-            var vertexCount = geometryBuffer.VerticesCount - startVertex;
-            var indexCount = geometryBuffer.IndicesCount - startIndex;
+            var vertexCount = geometryBuffer.VertexCount - startVertex;
+            var indexCount = geometryBuffer.IndexCount - startIndex;
 
             EnqueueDraw(PrimitiveType.TriangleList, vertexCount, startIndex, indexCount, ref _shapeItemData, sortKey);
         }
-//
-//        public void DrawCircleOutline(Vector2 position, float radius, Color color, Vector2? axis = null, float depth = 0f, int circleSegmentsCount = StructBuffer<>.DefaultCircleSegmentsCount, uint sortKey = 0)
-//        {
-//            _structBuffer.Clear();
-//            _structBuffer.AppendCircle(position, radius, depth, circleSegmentsCount);
-//
-//            var points = _structBuffer.Items;
-//            var pointsCount = _structBuffer.Length;
-//            var firstPoint = points[0];
-//
-//            for (var i = 0; i < pointsCount - 1; i++)
-//            {
-//                DrawLine3D(points[i], points[i + 1], color, sortKey);
-//            }
-//
-//            DrawLine3D(points[pointsCount - 1], firstPoint, color, sortKey);
-//
-//            if (!axis.HasValue)
-//            {
-//                return;
-//            }
-//
-//            var axisCirclePosition = new Vector2(position.X + axis.Value.X * radius, position.Y + axis.Value.Y * radius);
-//            DrawLine2D(position, axisCirclePosition, color, depth, sortKey);
-//        }
-//
-//        public void DrawCircle(Vector2 position, float radius, Color color, float depth = 0f, int circleSegmentsCount = StructBuffer<>.DefaultCircleSegmentsCount, uint sortKey = 0)
-//        {
-//            _structBuffer.Clear();
-//            _structBuffer.AppendCircle(position, radius, depth, circleSegmentsCount);
-//
-//            var points = _structBuffer.Items;
-//            var pointsCount = _structBuffer.Length;
-//            var position3D = new Vector3(position, depth);
-//            var firstPoint = points[0];
-//
-//            for (var i = 0; i < pointsCount - 1; i++)
-//            {
-//                DrawTriangle3D(position3D, points[i], points[i + 1], color, sortKey);
-//            }
-//
-//            DrawTriangle3D(position3D, points[pointsCount - 1], firstPoint, color, sortKey);
-//        }
 
-        public void DrawRectangleOffTopLeft(Vector2 position, SizeF size, Color color, float rotation = 0f, Vector2? origin = null, float depth = 0f, uint sortKey = 0)
+        //
+        //        public void DrawCircleOutline(Vector2 position, float radius, Color color, Vector2? axis = null, float depth = 0f, int circleSegmentsCount = StructBuffer<>.DefaultChordCount, uint sortKey = 0)
+        //        {
+        //            _structBuffer.Clear();
+        //            _structBuffer.AppendCircle(position, radius, depth, circleSegmentsCount);
+        //
+        //            var points = _structBuffer.Items;
+        //            var pointsCount = _structBuffer.Length;
+        //            var firstPoint = points[0];
+        //
+        //            for (var i = 0; i < pointsCount - 1; i++)
+        //            {
+        //                DrawLine3D(points[i], points[i + 1], color, sortKey);
+        //            }
+        //
+        //            DrawLine3D(points[pointsCount - 1], firstPoint, color, sortKey);
+        //
+        //            if (!axis.HasValue)
+        //            {
+        //                return;
+        //            }
+        //
+        //            var axisCirclePosition = new Vector2(position.X + axis.Value.X * radius, position.Y + axis.Value.Y * radius);
+        //            DrawLine2D(position, axisCirclePosition, color, depth, sortKey);
+        //        }
+        //
+        //        public void DrawCircle(Vector2 position, float radius, Color color, float depth = 0f, int circleSegmentsCount = StructBuffer<>.DefaultChordCount, uint sortKey = 0)
+        //        {
+        //            _structBuffer.Clear();
+        //            _structBuffer.AppendCircle(position, radius, depth, circleSegmentsCount);
+        //
+        //            var points = _structBuffer.Items;
+        //            var pointsCount = _structBuffer.Length;
+        //            var position3D = new Vector3(position, depth);
+        //            var firstPoint = points[0];
+        //
+        //            for (var i = 0; i < pointsCount - 1; i++)
+        //            {
+        //                DrawTriangle3D(position3D, points[i], points[i + 1], color, sortKey);
+        //            }
+        //
+        //            DrawTriangle3D(position3D, points[pointsCount - 1], firstPoint, color, sortKey);
+        //        }
+
+            //TODO: Idea: Apply transformation when filling vertex buffer
+
+        public void DrawRectangle(ref RectangleF rectangle, Color color, float depth = 0f, uint sortKey = 0)
         {
-            var geometryBuffer = GeometryBuffer;
-            var startVertex = geometryBuffer.VerticesCount;
-            var startIndex = geometryBuffer.IndicesCount;
+            var geometryBuffer = MeshBuffer;
+            var startVertex = geometryBuffer.VertexCount;
+            var startIndex = geometryBuffer.IndexCount;
 
-            RenderGeometryBuilder.CreateRectangleOffTopLeft(geometryBuffer.EnqueueVertexDelegate, geometryBuffer.EnqueueVertexIndexDelegate, startVertex, position, size, color, rotation, origin, depth);
+            _meshBuilder.Rectangle(ref rectangle, color, depth, startVertex);
 
             EnqueueDraw(PrimitiveType.TriangleList, 4, startIndex, 6, ref _shapeItemData, sortKey);
         }
 
-        public void DrawRectangleOffCenter(Vector2 position, SizeF size, Color color, float rotation = 0f, float depth = 0f, uint sortKey = 0)
-        {
-            var geometryBuffer = GeometryBuffer;
-            var startVertex = geometryBuffer.VerticesCount;
-            var startIndex = geometryBuffer.IndicesCount;
-
-            RenderGeometryBuilder.CreateRectangleOffCenter(geometryBuffer.EnqueueVertexDelegate, geometryBuffer.EnqueueVertexIndexDelegate, startVertex, position, size, color, rotation, depth);
-
-            EnqueueDraw(PrimitiveType.TriangleList, 4, startIndex, 6, ref _shapeItemData, sortKey);
-        }
-
-        public void DrawSprite(Texture2D texture, Vector2 position, Rectangle? sourceRectangle = null, Color? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null, SpriteEffects spriteEffects = SpriteEffects.None, float depth = 0, uint sortKey = 0)
+        public void DrawSprite(ref Sprite sprite, Texture2D texture, SpriteEffects spriteEffects = SpriteEffects.None, float depth = 0, uint sortKey = 0)
         {
             if (texture == null)
             {
                 return;
             }
 
-            var geometryBuffer = GeometryBuffer;
+            var geometryBuffer = MeshBuffer;
 
-            var startVertex = geometryBuffer.VerticesCount;
-            var startIndex = geometryBuffer.IndicesCount;
+            var startVertex = geometryBuffer.VertexCount;
+            var startIndex = geometryBuffer.IndexCount;
 
-            RenderGeometryBuilder.CreateSprite(geometryBuffer.EnqueueVertexDelegate, geometryBuffer.EnqueueVertexIndexDelegate, startVertex, texture, position, sourceRectangle, color, rotation, origin, scale, spriteEffects, depth);
+            _meshBuilder.Sprite(ref sprite, texture, spriteEffects, depth, startVertex);
 
             var itemData = new BatchItemData(texture);
             EnqueueDraw(PrimitiveType.TriangleList, 4, startIndex, 6, ref itemData, sortKey);

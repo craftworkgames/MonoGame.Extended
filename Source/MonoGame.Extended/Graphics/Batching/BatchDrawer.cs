@@ -7,17 +7,13 @@ namespace MonoGame.Extended.Graphics.Batching
         where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
     {
         internal GraphicsDevice GraphicsDevice;
-        internal RenderGeometryBuffer<TVertexType> GeometryBuffer;
-        internal DynamicVertexBuffer VertexBuffer;
-        internal DynamicIndexBuffer IndexBuffer;
+        internal MeshBuffer<TVertexType> MeshBuffer;
         internal Effect Effect;
 
-        internal BatchDrawer(GraphicsDevice graphicsDevice, RenderGeometryBuffer<TVertexType> geometryBuffer)
+        internal BatchDrawer(GraphicsDevice graphicsDevice, MeshBuffer<TVertexType> meshBuffer)
         {
             GraphicsDevice = graphicsDevice;
-            GeometryBuffer = geometryBuffer;
-            VertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof(TVertexType), geometryBuffer.Vertices.Length, BufferUsage.WriteOnly);
-            IndexBuffer = new DynamicIndexBuffer(graphicsDevice, typeof(int), geometryBuffer.Indices.Length, BufferUsage.WriteOnly);
+            MeshBuffer = meshBuffer;
         }
 
         public void Dispose()
@@ -32,21 +28,14 @@ namespace MonoGame.Extended.Graphics.Batching
                 return;
             }
 
-            GraphicsDevice = null;
-
-            VertexBuffer?.Dispose();
-            VertexBuffer = null;
-
-            IndexBuffer?.Dispose();
-            IndexBuffer = null;
+            MeshBuffer.Dispose();
         }
 
         internal void Select(int vertexCount, int indexCount)
         {
-            VertexBuffer.SetData(GeometryBuffer.Vertices, 0, vertexCount);
-            IndexBuffer.SetData(GeometryBuffer.Indices, 0, indexCount);
-            GraphicsDevice.SetVertexBuffer(VertexBuffer);
-            GraphicsDevice.Indices = IndexBuffer;
+            MeshBuffer.Flush();
+            GraphicsDevice.SetVertexBuffer(MeshBuffer.VertexBuffer);
+            GraphicsDevice.Indices = MeshBuffer.IndexBuffer;
         }
 
         internal void Draw(PrimitiveType primitiveType, int startIndex, int primitiveCount, ref TBatchItemData batchItemData)

@@ -26,7 +26,7 @@ namespace MonoGame.Extended.Graphics.Batching
             BatchDrawer.Select(vertexCount, indexCount);
             var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
             BatchDrawer.Draw(primitiveType, startIndex, primitiveCount, ref data);
-            BatchDrawer.GeometryBuffer.Clear();
+            BatchDrawer.MeshBuffer.Clear();
         }
     }
 }

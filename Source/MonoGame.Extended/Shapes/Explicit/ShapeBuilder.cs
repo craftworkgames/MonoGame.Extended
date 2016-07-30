@@ -7,11 +7,14 @@ namespace MonoGame.Extended.Shapes.Explicit
     {
         public delegate void PointDelegate(ref Vector3 point);
 
-        internal const int DefaultCircleSegmentsCount = 32;
+        internal const int DefaultSegmentsCount = 32;
 
-        public static void CreateArc(PointDelegate result, Vector2 position, float radius, float startAngle, float endAngle, float depth = 0f, int circleSegmentsCount = DefaultCircleSegmentsCount)
+        public static void Arc(PointDelegate result, ref ArcF arc, float depth = 0f, int segmentsCount = DefaultSegmentsCount)
         {
             // www.slabode.exofire.net/circle_draw.shtml
+
+            var startAngle = arc.StartAngle;
+            var endAngle = arc.EndAngle;
 
             if (startAngle > MathHelper.TwoPi)
             {
@@ -23,18 +26,21 @@ namespace MonoGame.Extended.Shapes.Explicit
                 endAngle = endAngle % MathHelper.TwoPi;
             }
 
-            var theta = endAngle / (circleSegmentsCount - 1); // The - 1 bit comes from the fact that the arc is open
+            var theta = endAngle / (segmentsCount - 1); // The - 1 bit comes from the fact that the arc is open
             var cos = (float)Math.Cos(theta); // Pre-calculate the sine and cosine
             var sin = (float)Math.Sin(theta);
-            var x = radius * (float)Math.Cos(startAngle);
+            var x = arc.Radius.Width * (float)Math.Cos(startAngle);
             var y = 0f;
+            var sx = arc.Radius.Width / arc.Radius.Height;
+            var sy = arc.Radius.Height / arc.Radius.Width;
 
             var point = new Vector3(0, 0, depth);
+            var centre = arc.Centre;
 
-            for (var i = 0; i < circleSegmentsCount; i++)
+            for (var i = 0; i < segmentsCount; i++)
             {
-                point.X = x + position.X;
-                point.Y = y + position.Y;
+                point.X = sx * x + centre.X;
+                point.Y = sy * y + centre.Y;
                 result(ref point);
 
                 // Apply the rotation matrix
@@ -44,7 +50,7 @@ namespace MonoGame.Extended.Shapes.Explicit
             }
         }
 
-        public static void CreateCircle(PointDelegate result, Vector2 position, float radius, float depth = 0f, int circleSegmentsCount = DefaultCircleSegmentsCount)
+        public static void CreateCircle(PointDelegate result, Vector2 position, float radius, float depth = 0f, int circleSegmentsCount = DefaultSegmentsCount)
         {
             // www.slabode.exofire.net/circle_draw.shtml
 
@@ -66,69 +72,49 @@ namespace MonoGame.Extended.Shapes.Explicit
             }
         }
 
-        public static void CreateRectangleFromCenter(PointDelegate result, Vector2 position, SizeF size, float rotation, float depth = 0f)
+        public static void CreateEllipse(PointDelegate result, Vector2 position, Vector2 radius, float depth = 0f, int circleSegmentsCount = DefaultSegmentsCount)
         {
-            var sin = (float)Math.Sin(rotation);
-            var cos = (float)Math.Cos(rotation);
-            // ReSharper disable once UseObjectOrCollectionInitializer
+            // www.slabode.exofire.net/circle_draw.shtml
+
+            var theta = MathHelper.TwoPi / circleSegmentsCount;
+            var cos = (float)Math.Cos(theta); // Pre-calculate the sine and cosine
+            var sin = (float)Math.Sin(theta);
+            var x = radius.X; // Start at angle = 0 
+            var y = 0f;
+            var sx = radius.X / radius.Y;
+            var sy = radius.Y / radius.X;
+
+            for (var i = 0; i < circleSegmentsCount; i++)
+            {
+                var point = new Vector3(x + position.X, y + position.Y, depth);
+                result(ref point);
+
+                // Apply the rotation matrix
+                var t = x;
+                x = cos * x * sx - sin * y * sy;
+                y = sin * t * sy + cos * y * sx;
+            }
+        }
+
+        public static void Rectangle(PointDelegate result, Point2F position, SizeF size, float depth = 0f)
+        {
             var point = new Vector3(0, 0, depth);
             var halfSize = size * 0.5f;
 
-            var rx = -halfSize.Width;
-            var ry = -halfSize.Height;
-            point.X = position.X + rx * cos - ry * sin;
-            point.Y = position.Y + rx * sin + ry * cos;
+            point.X = position.X - halfSize.Width;
+            point.Y = position.Y - halfSize.Height;
             result(ref point);
 
-            rx = halfSize.Width;
-            ry = -halfSize.Height;
-            point.X = position.X + rx * cos - ry * sin;
-            point.Y = position.Y + rx * sin + ry * cos;
+            point.X = position.X + halfSize.Width;
+            point.Y = position.Y - halfSize.Height;
             result(ref point);
 
-            rx = -halfSize.Width;
-            ry = halfSize.Height;
-            point.X = position.X + rx * cos - ry * sin;
-            point.Y = position.Y + rx * sin + ry * cos;
+            point.X = position.X - halfSize.Width;
+            point.Y = position.Y + halfSize.Height;
             result(ref point);
 
-            rx = halfSize.Width;
-            ry = halfSize.Height;
-            point.X = position.X + rx * cos - ry * sin;
-            point.Y = position.Y + rx * sin + ry * cos;
-            result(ref point);
-        }
-
-        public static void CreateRectangleFromTopLeft(PointDelegate result, Vector2 position, SizeF size, float rotation, Vector2? origin = null, float depth = 0f)
-        {
-            var origin1 = origin ?? Vector2.Zero;
-            var sin = (float)Math.Sin(rotation);
-            var cos = (float)Math.Cos(rotation);
-            // ReSharper disable once UseObjectOrCollectionInitializer
-            var point = new Vector3(0, 0, depth);
-
-            var rx = -origin1.X;
-            var ry = -origin1.Y;
-            point.X = position.X + rx * cos - ry * sin;
-            point.Y = position.Y + rx * sin + ry * cos;
-            result(ref point);
-
-            rx = -origin1.X + size.Width;
-            ry = -origin1.Y;
-            point.X = position.X + rx * cos - ry * sin;
-            point.Y = position.Y + rx * sin + ry * cos;
-            result(ref point);
-
-            rx = -origin1.X;
-            ry = -origin1.Y + size.Height;
-            point.X = position.X + rx * cos - ry * sin;
-            point.Y = position.Y + rx * sin + ry * cos;
-            result(ref point);
-
-            rx = -origin1.X + size.Width;
-            ry = -origin1.Y + size.Height;
-            point.X = position.X + rx * cos - ry * sin;
-            point.Y = position.Y + rx * sin + ry * cos;
+            point.X = position.X + halfSize.Width;
+            point.Y = position.Y + halfSize.Height;
             result(ref point);
         }
     }
