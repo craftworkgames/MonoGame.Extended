@@ -13,18 +13,6 @@ namespace MonoGame.Extended.Graphics.Batching
     public abstract class PrimitiveBatch<TVertexType, TBatchItemData> : IDisposable
         where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
     {
-        /// <summary>
-        ///     The default maximum number of vertices that can be buffered into a single batch before the geometry needs to be
-        ///     flushed to a <see cref="Microsoft.Xna.Framework.Graphics.GraphicsDevice" />.
-        /// </summary>
-        public const int DefaultMaximumVerticesCount = 8192;
-
-        /// <summary>
-        ///     The default maximum number of indices that can be buffered into a single batch before the geometry needs to be
-        ///     flushed to a <see cref="Microsoft.Xna.Framework.Graphics.GraphicsDevice" />.
-        /// </summary>
-        public const int DefaultMaximumIndicesCount = 12288;
-
         private BatchDrawer<TVertexType, TBatchItemData> _batchDrawer;
         private BatchQueuer<TVertexType, TBatchItemData> _currentBatchQueuer;
         private Lazy<ImmediateBatchQueuer<TVertexType, TBatchItemData>> _lazyImmediateBatchQueuer;
@@ -59,69 +47,22 @@ namespace MonoGame.Extended.Graphics.Batching
         /// </value>
         public bool HasBegun { get; private set; }
 
-        /// <summary>
-        ///     Gets the maximum number of vertices that can be buffered into a single batch before the
-        ///     geometry needs to be flushed to the <see cref="GraphicsDevice" />.
-        /// </summary>
-        /// <value>
-        ///     The maximum number of vertices that can be buffered into a single batch before the
-        ///     geometry needs to be flushed to the <see cref="GraphicsDevice" />.
-        /// </value>
-        public int MaximumVerticesCount { get; }
-
-        /// <summary>
-        ///     Gets the maximum number of indices that can be buffered into a single batch before the
-        ///     geometry needs to be flushed to the <see cref="GraphicsDevice" />.
-        /// </summary>
-        /// <value>
-        ///     The maximum number of indices that can be buffered into a single batch before the
-        ///     geometry needs to be flushed to the <see cref="GraphicsDevice" />.
-        /// </value>
-        public int MaximumIndicesCount { get; }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="PrimitiveBatch{TVertexType, TBatchItemData}" /> class.
         /// </summary>
-        /// <param name="graphicsDevice">The graphics device.</param>
-        /// <param name="geometryBufferType">The type of geometry buffer.</param>
-        /// <param name="maximumVerticesCount">The maximum vertices count.</param>
-        /// <param name="maximumIndicesCount">The maximum indices count.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="graphicsDevice" /> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="maximumVerticesCount" /> is 0, or, <paramref name="maximumVerticesCount" /> is 0.
-        /// </exception>
-        /// <remarks>
-        ///     <para>
-        ///         For best performance, use <see cref="GeometryBufferType.Dynamic" /> for geometry which changes frame-to-frame
-        ///         and <see cref="GeometryBufferType.Static" /> for geoemtry which does not change frame-to-frame. It is not uncommon to have multiple <see cref="PrimitiveBatch{TVertexType,TBatchItemData}"/> instances for dynamic and static geoemtry.
-        ///     </para>
-        ///     <para>
-        ///         Memory will be allocated for the vertex and index array buffers in proportion to
-        ///         <paramref name="maximumVerticesCount" /> and <paramref name="maximumIndicesCount" /> respectively.
-        ///     </para>
-        /// </remarks>
-        protected PrimitiveBatch(GraphicsDevice graphicsDevice, GeometryBufferType geometryBufferType = GeometryBufferType.Dynamic, int maximumVerticesCount = DefaultMaximumVerticesCount, int maximumIndicesCount = DefaultMaximumIndicesCount)
+        /// <param name="geometryBuffer">The geometry buffer.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="geometryBuffer" /> is null.</exception>
+        protected PrimitiveBatch(GeometryBuffer<TVertexType> geometryBuffer)
         {
-            if (graphicsDevice == null)
+            if (geometryBuffer == null)
             {
-                throw new ArgumentNullException(nameof(graphicsDevice));
+                throw new ArgumentNullException(nameof(geometryBuffer));
             }
 
-            if (maximumVerticesCount <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(maximumVerticesCount));
-            }
-
-            if (maximumIndicesCount <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(maximumIndicesCount));
-            }
-
-            GraphicsDevice = graphicsDevice;
-            MaximumVerticesCount = maximumVerticesCount;
-            MaximumIndicesCount = maximumIndicesCount;
-            GeometryBuffer = new GeometryBuffer<TVertexType>(graphicsDevice, geometryBufferType, maximumVerticesCount, maximumIndicesCount);
-            _batchDrawer = new BatchDrawer<TVertexType, TBatchItemData>(graphicsDevice, GeometryBuffer);
+            GeometryBuffer = geometryBuffer;
+            GraphicsDevice = geometryBuffer.GraphicsDevice;
+            _batchDrawer = new BatchDrawer<TVertexType, TBatchItemData>(GraphicsDevice, GeometryBuffer);
 
             _lazyImmediateBatchQueuer = new Lazy<ImmediateBatchQueuer<TVertexType, TBatchItemData>>(() => new ImmediateBatchQueuer<TVertexType, TBatchItemData>(_batchDrawer));
             _lazyDeferredBatchQueuer = new Lazy<DeferredBatchQueuer<TVertexType, TBatchItemData>>(() => new DeferredBatchQueuer<TVertexType, TBatchItemData>(_batchDrawer));
@@ -197,8 +138,7 @@ namespace MonoGame.Extended.Graphics.Batching
         /// <remarks>
         ///     <para>
         ///         This method must be called before any enqueuing of draw calls. When all the geometry have been enqueued for
-        ///         drawing, call
-        ///         <see cref="End" />.
+        ///         drawing, call <see cref="End" />.
         ///     </para>
         /// </remarks>
         public void Begin(BatchMode mode, Effect effect)
