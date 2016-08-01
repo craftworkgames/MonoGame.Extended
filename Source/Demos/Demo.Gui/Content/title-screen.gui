@@ -46,12 +46,13 @@
       "Position": "350 5",
       "Size": "200 60",
       "Font": "montserrat-32",
+      "Padding": "10",
       "BackgroundRegion": "blue_button00",
       "Text": "Toggle Button",
       "CheckedStyle": {
-        "TextColor": "#444444", 
+        "TextColor": "#444444",
         "BackgroundRegion": "blue_button01"
-      }   
+      }
     }
   ]
 }

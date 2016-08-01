@@ -27,7 +27,7 @@ namespace Demo.TiledMaps
             _graphicsDeviceManager = new GraphicsDeviceManager(this) {SynchronizeWithVerticalRetrace = false};
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            IsFixedTimeStep = false;
+            IsFixedTimeStep = true;
         }
 
         protected override void Initialize()
@@ -50,7 +50,7 @@ namespace Demo.TiledMaps
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
             _sprite = new Sprite(_texture) { Position = new Vector2(600, 240) };
 
-            _tiledMap = Content.Load<TiledMap>("level03");
+            _tiledMap = Content.Load<TiledMap>("level02");
             _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
         }
 
@@ -113,7 +113,7 @@ namespace Demo.TiledMaps
             _spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: move", new Vector2(5, 32), textColor);
             _spriteBatch.DrawString(_bitmapFont, "RF: zoom", new Vector2(5, 32 + _bitmapFont.LineHeight), textColor);
             _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.AverageFramesPerSecond:0}", Vector2.One, Color.Black);
-            _spriteBatch.DrawString(_bitmapFont, $"Camera: {_camera.Position:0}", new Vector2(5, 32 + _bitmapFont.LineHeight * 2), Color.Black);
+            _spriteBatch.DrawString(_bitmapFont, $"Camera: {_camera.Position}", new Vector2(5, 32 + _bitmapFont.LineHeight * 2), Color.Black);
             _spriteBatch.End();
 
             base.Draw(gameTime);

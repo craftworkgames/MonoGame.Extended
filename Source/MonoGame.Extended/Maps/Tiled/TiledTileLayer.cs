@@ -59,7 +59,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 }
             }
 
-            _notBlankTilesCount = tiles.Where(x => x.Id != 0).Count();
+            _notBlankTilesCount = tiles.Count(x => x.Id != 0);
             return tiles;
         }
 
@@ -81,19 +81,16 @@ namespace MonoGame.Extended.Maps.Tiled
                     continue;
 
                 var region = _map.GetTileRegion(tile.Id);
-                var point = (GetTileLocationFunction())(tile);
+                var point = GetTileLocationFunction()(tile);
                 var tileWidth = region.Width;
                 var tileHeight = region.Height;
                 var textureCoordinateTopLeft = Vector2.Zero;
                 var textureCoordinateBottomRight = Vector2.One;
 
-                if (region != null)
-                {
-                    textureCoordinateTopLeft.X = (region.X + 0.5f) / region.Texture.Width;
-                    textureCoordinateTopLeft.Y = (region.Y + 0.5f) / region.Texture.Height;
-                    textureCoordinateBottomRight.X = (float)(region.X + region.Width) / region.Texture.Width;
-                    textureCoordinateBottomRight.Y = (float)(region.Y + region.Height) / region.Texture.Height;
-                }
+                textureCoordinateTopLeft.X = (region.X + 0.5f) / region.Texture.Width;
+                textureCoordinateTopLeft.Y = (region.Y + 0.5f) / region.Texture.Height;
+                textureCoordinateBottomRight.X = (float)(region.X + region.Width) / region.Texture.Width;
+                textureCoordinateBottomRight.Y = (float)(region.Y + region.Height) / region.Texture.Height;
                 var vertices = new VertexPositionTexture[4];
                 vertices[0] = new VertexPositionTexture(
                     new Vector3(point.X, point.Y, Z),
@@ -147,7 +144,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
                     foreach (var tile in renderOrderFunction(firstCol, firstRow, firstCol + columns, firstRow + rows))
                     {
-                        int? tileId = (tile != null) ? (int?)tile.CurrentTileId : null;
+                        var tileId = tile?.CurrentTileId;
                         if (tile != null && tile.HasAnimation)
                         {
                             _animatedTiles.Add(tile);

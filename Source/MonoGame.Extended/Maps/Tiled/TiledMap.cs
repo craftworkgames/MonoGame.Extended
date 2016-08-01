@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
-using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
@@ -18,8 +16,7 @@ namespace MonoGame.Extended.Maps.Tiled
             _layers = new List<TiledLayer>();
             _objectGroups = new List<TiledObjectGroup>();
 
-            _depthBufferState = new DepthStencilState();
-            _depthBufferState.DepthBufferEnable = true;
+            _depthBufferState = new DepthStencilState {DepthBufferEnable = true};
 
             Width = width;
             Height = height;
@@ -155,12 +152,14 @@ namespace MonoGame.Extended.Maps.Tiled
                     1.0f, highestZ + 100.0f
                 );
 
-            _basicEffect = new BasicEffect(_graphicsDevice);
-            _basicEffect.World = _worldMatrix;
-            _basicEffect.View = _viewMatrix;
-            _basicEffect.Projection = _projectionMatrix;
-            _basicEffect.TextureEnabled = true;
-            _basicEffect.Texture = _tilesets[0].Texture;
+            _basicEffect = new BasicEffect(_graphicsDevice)
+            {
+                World = _worldMatrix,
+                View = _viewMatrix,
+                Projection = _projectionMatrix,
+                TextureEnabled = true,
+                Texture = _tilesets[0].Texture
+            };
 
             _imageLayers = _layers.OfType<TiledImageLayer>().ToList();
 
@@ -254,7 +253,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public TiledTileSetTile GetTileSetTileById(int tileSetTileId)
         {
-            TiledTileSetTile tile = _tilesets.SelectMany(ts => ts.Tiles, (ts, t) => t).Where(t => t.Id == tileSetTileId-1).FirstOrDefault();
+            var tile = _tilesets.SelectMany(ts => ts.Tiles, (ts, t) => t).FirstOrDefault(t => t.Id == tileSetTileId-1);
             return tile;
         }
     }
