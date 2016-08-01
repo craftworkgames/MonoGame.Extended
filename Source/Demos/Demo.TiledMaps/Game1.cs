@@ -33,7 +33,7 @@ namespace Demo.TiledMaps
         protected override void Initialize()
         {
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(_viewportAdapter) {Zoom = 0.5f};
+            _camera = new Camera2D(_viewportAdapter);
 
             Window.AllowUserResizing = true;
             Window.Position = Point.Zero;
@@ -50,7 +50,7 @@ namespace Demo.TiledMaps
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
             _sprite = new Sprite(_texture) { Position = new Vector2(600, 240) };
 
-            _tiledMap = Content.Load<TiledMap>("level01");
+            _tiledMap = Content.Load<TiledMap>("level03");
             _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
         }
 
@@ -67,8 +67,8 @@ namespace Demo.TiledMaps
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            const float cameraSpeed = 200f;
-            const float zoomSpeed = 0.2f;
+            const float cameraSpeed = 500f;
+            const float zoomSpeed = 0.3f;
 
             if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
                 _camera.Move(new Vector2(0, -cameraSpeed)*deltaSeconds);
@@ -83,10 +83,10 @@ namespace Demo.TiledMaps
                 _camera.Move(new Vector2(cameraSpeed, 0)*deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.R))
-                _camera.ZoomIn(zoomSpeed*deltaSeconds);
+                _camera.ZoomIn(zoomSpeed * deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.F))
-                _camera.ZoomOut(zoomSpeed*deltaSeconds);
+                _camera.ZoomOut(zoomSpeed * deltaSeconds);
 
             _sprite.Rotation += MathHelper.ToRadians(5) * deltaSeconds;
             _sprite.Position = _camera.ScreenToWorld(mouseState.X, mouseState.Y);
@@ -96,12 +96,10 @@ namespace Demo.TiledMaps
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(_tiledMap.BackgroundColor ?? Color.Black);
-
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            GraphicsDevice.Clear(_tiledMap.BackgroundColor ?? Color.CornflowerBlue);
 
             // you can draw the whole map all at once
-            _spriteBatch.Draw(_tiledMap, gameTime: gameTime);
+            _tiledMap.Draw(_camera, gameTime);
 
             // or you can have more control over drawing each individual layer
             //foreach (var layer in _tiledMap.Layers)
@@ -110,13 +108,12 @@ namespace Demo.TiledMaps
             //    _spriteBatch.Draw(layer, _camera);
             //}
 
-            _spriteBatch.End();
-
             var textColor = Color.Black;
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
             _spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: move", new Vector2(5, 32), textColor);
             _spriteBatch.DrawString(_bitmapFont, "RF: zoom", new Vector2(5, 32 + _bitmapFont.LineHeight), textColor);
             _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.AverageFramesPerSecond:0}", Vector2.One, Color.Black);
+            _spriteBatch.DrawString(_bitmapFont, $"Camera: {_camera.Position:0}", new Vector2(5, 32 + _bitmapFont.LineHeight * 2), Color.Black);
             _spriteBatch.End();
 
             base.Draw(gameTime);

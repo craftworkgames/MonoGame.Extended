@@ -9,8 +9,8 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledTileLayer : TiledLayer
     {
-        public TiledTileLayer(TiledMap map, GraphicsDevice graphicsDevice, string name, int width, int height, int[] data)
-            : base(name)
+        public TiledTileLayer(TiledMap map, GraphicsDevice graphicsDevice, string name, int width, int height, int[] data, int z)
+            : base(name, z)
         {
             Width = width;
             Height = height;
@@ -36,6 +36,11 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly List<TiledTile> _animatedTiles;
         private List<TiledTileSetTile> _uniqueTileSetTiles = new List<TiledTileSetTile>();
 
+        public VertexPositionTexture[] VerticesList => _verticesList;
+        private VertexPositionTexture[] _verticesList;
+        public int NotBlankTilesCount => _notBlankTilesCount;
+        private int _notBlankTilesCount;
+
         public IEnumerable<TiledTile> Tiles => _tiles;
         public int TileWidth => _map.TileWidth;
         public int TileHeight => _map.TileHeight;
@@ -54,12 +59,67 @@ namespace MonoGame.Extended.Maps.Tiled
                 }
             }
 
+            _notBlankTilesCount = tiles.Where(x => x.Id != 0).Count();
             return tiles;
+        }
+
+        public List<VertexPositionTexture> RenderVertices()
+        {
+            var verticesList = new List<VertexPositionTexture>();
+
+            var vr = new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
+            var firstCol = vr.Left < 0 ? 0 : (int)Math.Floor(vr.Left / (float)_map.TileWidth);
+            var firstRow = vr.Top < 0 ? 0 : (int)Math.Floor(vr.Top / (float)_map.TileHeight);
+            var columns = Math.Min(_map.Width, vr.Width / _map.TileWidth);
+            var rows = Math.Min(_map.Height, vr.Height / _map.TileHeight);
+            var renderOrderFunc = GetRenderOrderFunction();
+            var tiles = renderOrderFunc(firstCol, firstRow, firstCol + columns, firstRow + rows);
+
+            foreach (var tile in tiles)
+            {
+                if (tile.Id == 0)
+                    continue;
+
+                var region = _map.GetTileRegion(tile.Id);
+                var point = (GetTileLocationFunction())(tile);
+                var tileWidth = region.Width;
+                var tileHeight = region.Height;
+                var textureCoordinateTopLeft = Vector2.Zero;
+                var textureCoordinateBottomRight = Vector2.One;
+
+                if (region != null)
+                {
+                    textureCoordinateTopLeft.X = (region.X + 0.5f) / region.Texture.Width;
+                    textureCoordinateTopLeft.Y = (region.Y + 0.5f) / region.Texture.Height;
+                    textureCoordinateBottomRight.X = (float)(region.X + region.Width) / region.Texture.Width;
+                    textureCoordinateBottomRight.Y = (float)(region.Y + region.Height) / region.Texture.Height;
+                }
+                var vertices = new VertexPositionTexture[4];
+                vertices[0] = new VertexPositionTexture(
+                    new Vector3(point.X, point.Y, Z),
+                    textureCoordinateTopLeft
+                );
+                vertices[1] = new VertexPositionTexture(
+                    new Vector3(point.X + tileWidth, point.Y, Z),
+                    new Vector2(textureCoordinateBottomRight.X, textureCoordinateTopLeft.Y)
+                );
+                vertices[2] = new VertexPositionTexture(
+                    new Vector3(point.X, point.Y + tileHeight, Z),
+                    new Vector2(textureCoordinateTopLeft.X, textureCoordinateBottomRight.Y)
+                );
+                vertices[3] = new VertexPositionTexture(
+                    new Vector3(point.X + tileWidth, point.Y + tileHeight, Z),
+                    textureCoordinateBottomRight
+                );
+                verticesList.AddRange(vertices);
+            }
+            _verticesList = verticesList.ToArray();
+            return verticesList;
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null)
         {
-            if(!IsVisible)
+            if (!IsVisible)
                 return;
 
             var tileLocationFunction = GetTileLocationFunction();
@@ -80,8 +140,8 @@ namespace MonoGame.Extended.Maps.Tiled
                     var firstRow = vr.Top < 0 ? 0 : (int) Math.Floor(vr.Top/(float) _map.TileHeight);
 
                     // +3 to cover any gaps
-                    var columns = Math.Min(_map.Width, vr.Width/_map.TileWidth) + 3;
-                    var rows = Math.Min(_map.Height, vr.Height/_map.TileHeight) + 3;
+                    var columns = Math.Min(_map.Width, vr.Width/_map.TileWidth);
+                    var rows = Math.Min(_map.Height, vr.Height/_map.TileHeight);
 
                     _renderTargetSpriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
 
@@ -117,7 +177,6 @@ namespace MonoGame.Extended.Maps.Tiled
                     UpdateRenderTarget(spriteBatch, tileLocationFunction, animatedTile, animatedTile.CurrentTileId);
                 }
             }
-
         }
 
         private void UpdateRenderTarget(SpriteBatch spriteBatch, Func<TiledTile, Point> tileLocationFunction, TiledTile tile, int? tileId)

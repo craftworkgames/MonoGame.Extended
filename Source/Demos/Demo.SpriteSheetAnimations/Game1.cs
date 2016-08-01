@@ -156,7 +156,7 @@ namespace Demo.SpriteSheetAnimations
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _tiledMap.Draw(_spriteBatch, _camera);
+            _tiledMap.Draw(_camera);
             _zombie.Draw(_spriteBatch);
             _spriteBatch.Draw(_fireballSprite);
             _spriteBatch.End();

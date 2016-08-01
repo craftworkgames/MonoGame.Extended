@@ -6,12 +6,13 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public abstract class TiledLayer : IDisposable
     {
-        protected TiledLayer(string name)
+        protected TiledLayer(string name, int z)
         {
             Name = name;
             Properties = new TiledProperties();
             IsVisible = true;
             Opacity = 1.0f;
+            Z = z;
         }
 
         public abstract void Dispose();
@@ -20,6 +21,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public TiledProperties Properties { get; }
         public bool IsVisible { get; set; }
         public float Opacity { get; set; }
+        public float Z { get; private set; }
 
         public abstract void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null);
     }
