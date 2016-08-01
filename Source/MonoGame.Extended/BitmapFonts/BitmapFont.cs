@@ -45,14 +45,19 @@ namespace MonoGame.Extended.BitmapFonts
         {
             var width = 0;
             var height = 0;
+            var codePoints = GetUnicodeCodePoints(text).ToArray();
 
-            foreach (int c in GetUnicodeCodePoints(text))
+            for (int i = 0, l = codePoints.Length; i < l; i++)
             {
                 BitmapFontRegion fontRegion;
+                var c = codePoints[i];
 
                 if (_characterMap.TryGetValue(c, out fontRegion))
                 {
-                    width += fontRegion.XAdvance;
+                    if (i != text.Length - 1)
+                        width += fontRegion.XAdvance;
+                    else
+                        width += fontRegion.XOffset + fontRegion.Width;
 
                     if (fontRegion.Height + fontRegion.YOffset > height)
                         height = fontRegion.Height + fontRegion.YOffset;
