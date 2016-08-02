@@ -11,7 +11,7 @@
         Immediate,
 
         /// <summary>
-        ///     Geometry is not drawn until <see cref="PrimitiveBatch{TVertexType}.End" /> is called or the maximum vertices or
+        ///     Geometry is not drawn until <see cref="PrimitiveBatch{TVertexType,TBatchItemData}.End" /> is called or the maximum vertices or
         ///     indices count has been reached for the current batch.
         /// </summary>
         Deferred

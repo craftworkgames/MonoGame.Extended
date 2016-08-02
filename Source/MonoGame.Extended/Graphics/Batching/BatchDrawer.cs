@@ -7,13 +7,13 @@ namespace MonoGame.Extended.Graphics.Batching
         where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
     {
         internal GraphicsDevice GraphicsDevice;
-        internal MeshBuffer<TVertexType> MeshBuffer;
+        internal GeometryBuffer<TVertexType> GeometryBuffer;
         internal Effect Effect;
 
-        internal BatchDrawer(GraphicsDevice graphicsDevice, MeshBuffer<TVertexType> meshBuffer)
+        internal BatchDrawer(GraphicsDevice graphicsDevice, GeometryBuffer<TVertexType> geometryBuffer)
         {
             GraphicsDevice = graphicsDevice;
-            MeshBuffer = meshBuffer;
+            GeometryBuffer = geometryBuffer;
         }
 
         public void Dispose()
@@ -28,14 +28,14 @@ namespace MonoGame.Extended.Graphics.Batching
                 return;
             }
 
-            MeshBuffer.Dispose();
+            GeometryBuffer.Dispose();
         }
 
         internal void Select(int vertexCount, int indexCount)
         {
-            MeshBuffer.Flush();
-            GraphicsDevice.SetVertexBuffer(MeshBuffer.VertexBuffer);
-            GraphicsDevice.Indices = MeshBuffer.IndexBuffer;
+            GeometryBuffer.Flush();
+            GraphicsDevice.SetVertexBuffer(GeometryBuffer.VertexBuffer);
+            GraphicsDevice.Indices = GeometryBuffer.IndexBuffer;
         }
 
         internal void Draw(PrimitiveType primitiveType, int startIndex, int primitiveCount, ref TBatchItemData batchItemData)

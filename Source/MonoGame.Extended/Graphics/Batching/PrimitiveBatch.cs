@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics.Batching.Queuers;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
@@ -19,11 +20,11 @@ namespace MonoGame.Extended.Graphics.Batching
         private Lazy<DeferredBatchQueuer<TVertexType, TBatchItemData>> _lazyDeferredBatchQueuer;
 
         /// <summary>
-        ///     Gets the <see cref="MeshBuilder{TVertexType}" /> associated with this
+        ///     Gets the <see cref="GeometryBuilder{TVertexType}" /> associated with this
         ///     <see cref="PrimitiveBatch{TVertexType,TBatchItemData}" />.
         /// </summary>
         /// <value>
-        ///     The <see cref="MeshBuilder{TVertexType}" /> associated with this
+        ///     The <see cref="GeometryBuilder{TVertexType}" /> associated with this
         ///     <see cref="PrimitiveBatch{TVertexType,TBatchItemData}" />.
         /// </value>
         protected GeometryBuffer<TVertexType> GeometryBuffer { get; }
