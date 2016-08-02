@@ -5,7 +5,7 @@ namespace MonoGame.Extended.Graphics.Effects
 {
     public class EffectResource
     {
-        public static readonly EffectResource BatchEffect = new EffectResource(name: "MonoGame.Extended.Graphics.Effects.Resources.ShapeEffect.mgfxo");
+        public static readonly EffectResource ShapeEffect = new EffectResource(name: "MonoGame.Extended.Graphics.Effects.Resources.ShapeEffect.mgfxo");
 
         private readonly string _name;
         private volatile byte[] _bytecode;
