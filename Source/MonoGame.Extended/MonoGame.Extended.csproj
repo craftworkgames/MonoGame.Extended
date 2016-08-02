@@ -59,38 +59,26 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
+    <Compile Include="ColorHelper.cs" />
     <Compile Include="Graphics\GeometryBufferType.cs" />
-    <Compile Include="Shapes\AffineMatrix.cs" />
+    <Compile Include="Graphics\GeometryBuilderExtensions.VertexPositionColorTexture.cs" />
     <Compile Include="Shapes\ArcF.cs" />
+    <Compile Include="Shapes\Explicit\ExplicitShapeBuilder.cs" />
     <Compile Include="Shapes\Line2F.cs" />
     <Compile Include="Shapes\Line3F.cs" />
-    <Compile Include="Shapes\Triangulation\CircleTriangulator.cs" />
-    <Compile Include="Shapes\Triangulation\EarClipPolygonTriangulator.cs" />
     <Compile Include="Shapes\Triangle2F.cs" />
-    <Compile Include="Shapes\Triangulation\IPlanarTriangulator.cs" />
-    <Compile Include="Shapes\Triangulation\IPolygonTriangulator.cs" />
-    <Compile Include="Shapes\Triangulation\PlanarTriangleOutputDelegate.cs" />
     <Compile Include="Graphics\Batching\IBatchItemData.cs" />
     <Compile Include="Graphics\Effects\ITextureEffect2D.cs" />
     <Compile Include="Graphics\GeometryBuffer.cs" />
-    <Compile Include="Graphics\MeshBuilder.cs" />
-    <Compile Include="Graphics\MeshBuilderColorTextureExtensions.cs" />
-    <Compile Include="Shapes\Explicit\ShapeBuilder.cs" />
+    <Compile Include="Graphics\GeometryBuilder.cs" />
     <Compile Include="Graphics\Effects\EffectResource.cs" />
     <Compile Include="Graphics\Effects\ShapeEffect.cs" />
     <Compile Include="Graphics\ShapeBatch.cs" />
     <Compile Include="IEquatableByReference.cs" />
-    <Compile Include="Shapes\Explicit\IShapeVertexType.cs" />
-    <Compile Include="Shapes\Explicit\ITransform.cs" />
     <Compile Include="Collisions\Narrowphase\NarrowphaseCollisionPair.cs" />
     <Compile Include="Collisions\Narrowphase\NarrowphaseCollisionDelegate.cs" />
-    <Compile Include="Shapes\Explicit\Shape2D.cs" />
-    <Compile Include="Shapes\Explicit\ShapeVertex2D.cs" />
-    <Compile Include="Shapes\Explicit\Transform2D.cs" />
-    <Compile Include="Shapes\Explicit\Shape.cs" />
     <Compile Include="Graphics\Batching\PrimitiveBatchHelper.cs" />
     <Compile Include="HashCodeHelper.cs" />
-    <Compile Include="Shapes\BoundingVolumes\IBoundingVolume.cs" />
     <Compile Include="Collisions\Broadphase\BroadphaseCollisionPair.cs" />
     <Compile Include="Collisions\Broadphase\BruteForceBroadphase.cs" />
     <Compile Include="Collisions\Broadphase\ICollisionBroadphase.cs" />
@@ -101,13 +89,12 @@
     <Compile Include="Collisions\Response\ICollisionResponder.cs" />
     <Compile Include="Collisions\Response\EmptyResponder.cs" />
     <Compile Include="ICollisionShape.cs" />
-    <Compile Include="Shapes\BoundingVolumes\PrimitiveBatchExtensions.BoundingVolumes.cs" />
     <Compile Include="Graphics\Batching\BatchDrawer.cs" />
     <Compile Include="Graphics\Batching\BatchDrawItem.cs" />
-    <Compile Include="Graphics\Batching\BatchQueuer.cs" />
+    <Compile Include="Graphics\Batching\Queuers\BatchQueuer.cs" />
     <Compile Include="Graphics\Batching\BatchMode.cs" />
-    <Compile Include="Graphics\Batching\DeferredBatchQueuer.cs" />
-    <Compile Include="Graphics\Batching\ImmediateBatchQueuer.cs" />
+    <Compile Include="Graphics\Batching\Queuers\DeferredBatchQueuer.cs" />
+    <Compile Include="Graphics\Batching\Queuers\ImmediateBatchQueuer.cs" />
     <Compile Include="Graphics\Batching\PrimitiveBatch.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
     <Compile Include="Gui\Controls\GuiButton.cs" />
@@ -251,7 +238,6 @@
     <Compile Include="Timers\CountdownTimer.cs" />
     <Compile Include="Timers\GameTimer.cs" />
     <Compile Include="Timers\TimerState.cs" />
-    <Compile Include="TransformDelegate.cs" />
     <Compile Include="Vector2Extensions.cs" />
     <Compile Include="ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />
@@ -279,6 +265,7 @@
   <ItemGroup>
     <None Include="Graphics\Effects\Resources\ShapeEffect.fx" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

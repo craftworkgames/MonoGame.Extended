@@ -6,6 +6,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Graphics.Batching;
 using MonoGame.Extended.Shapes;
+using MonoGame.Extended.Sprites;
 
 namespace Demo.Shapes
 {
@@ -16,15 +17,13 @@ namespace Demo.Shapes
 
         private ShapeBatch _shapeBatch;
 
-        private Point2F _circlePosition;
-        private float _circleRadius;
-        private float _circleTheta;
+        private CircleF _circle;
+        private float _circleGrowTheta;
+        private ArcF _arc;
+        private RectangleF _rectangle;
+        private float _rectangleGrowTheta;
 
-        private Point2F _rectanglePosition;
-        private float _rectangleTheta;
-        private float _rectangleSize;
-
-        private Texture2D _spriteTexture;
+        private Sprite _sprite;
 
         public Game1()
         {
@@ -43,13 +42,7 @@ namespace Demo.Shapes
 
             _shapeBatch = new ShapeBatch(graphicsDevice);
 
-            _spriteTexture = Content.Load<Texture2D>("logo-square-128");
-
-            GraphicsDevice.RasterizerState = new RasterizerState
-            {
-                CullMode = CullMode.None,
-                FillMode = FillMode.WireFrame
-            };
+            _sprite = new Sprite(Content.Load<Texture2D>("logo-square-128"));
         }
 
         protected override void Update(GameTime gameTime)
@@ -60,15 +53,22 @@ namespace Demo.Shapes
             }
 
             var viewport = GraphicsDevice.Viewport;
-            var mouseState = Mouse.GetState();
 
-            _circleTheta += MathHelper.ToRadians(1.5f);
-            _circleRadius = 70f + 15f * (float)Math.Cos(_circleTheta);
-            _circlePosition = new Point2F(mouseState.X, mouseState.Y);
+            _arc.Centre = new Vector2(200, 300);
+            _arc.Radius = new SizeF(100, 100);
+            _arc.StartAngle = 0;
+            _arc.EndAngle += MathHelper.ToRadians(1.5f);
 
-            _rectangleTheta -= MathHelper.ToRadians(-1f);
-            _rectangleSize = 100f + 95f * (float)Math.Sin(_rectangleTheta);
-            _rectanglePosition = new Point2F(viewport.Width * 0.5f, viewport.Height * 0.5f);
+            _circleGrowTheta += MathHelper.ToRadians(2f);
+            _circle.Radius = 70f + 15f * (float)Math.Cos(_circleGrowTheta);
+            _circle.Centre = new Vector2(400, 100);
+
+            _rectangleGrowTheta -= MathHelper.ToRadians(-1f);
+            _rectangle.Size = 100f + 95f * (float)Math.Sin(_rectangleGrowTheta);
+            _rectangle.Position = new Vector2(viewport.Width * 0.5f, viewport.Height * 0.5f);
+
+            _sprite.Position = new Vector2(200, 200);
+            _sprite.Rotation += MathHelper.ToRadians(1);
 
             base.Update(gameTime);
         }
@@ -83,24 +83,16 @@ namespace Demo.Shapes
 
             _shapeBatch.Begin(BatchMode.Deferred);
 
-            var line = new Line2F(Point2F.Zero, new Point2F(100f, 100f));
-            _shapeBatch.DrawLine(ref line, 7, Color.Red);
+            _shapeBatch.Draw(ref _circle, Color.Black * 0.25f);
+            _shapeBatch.DrawOutline(ref _circle, Color.Black);
 
-            //_shapeBatch.DrawCircle(_circlePosition, _circleRadius, Color.Black * 0.25f);
-            //            _shapeBatch.DrawCircleOutline(_circlePosition, _circleRadius, Color.Black);
+            _shapeBatch.Draw(ref _arc, 0xFF57A64A.ToColor());
+            _shapeBatch.DrawOutline(ref _arc, 0xFF265E4D.ToColor());
 
-            var arc = new ArcF(_circlePosition, new SizeF(100, 150), 0, _circleTheta);
-            _shapeBatch.DrawArc(ref arc, Color.FromNonPremultiplied(39, 139, 39, 255));
-            //            _shapeBatch.DrawArcOutline(_circlePosition, _circleRadius, 0, _circleTheta, Color.Red);
-            //
+            _shapeBatch.Draw(ref _rectangle, 0xFFD85050.ToColor());
+            _shapeBatch.DrawOutline(ref _rectangle, 0xFF3C0000.ToColor());
 
-            var rectangle = new RectangleF(_rectanglePosition, _rectangleSize);
-            _shapeBatch.DrawRectangle(ref rectangle, Color.Red);
-            //_shapeBatch.DrawRectangleOutlineOffCenter(_rectanglePosition, _rectangleSize, Color.Black, _rectangleTheta);
-            //
-
-            var sprite = new Sprite(new Point2F(200, 200));
-            _shapeBatch.DrawSprite(ref sprite, _spriteTexture);
+            _shapeBatch.Draw(_sprite);
 
             _shapeBatch.End();
 
