@@ -130,14 +130,6 @@ namespace MonoGame.Extended.Shapes
             Height = size.Height;
         }
 
-        public RectangleF(Point2F location, SizeF size)
-        {
-            X = location.X;
-            Y = location.Y;
-            Width = size.Width;
-            Height = size.Height;
-        }
-
         /// <summary>
         /// Creates a new instance of <see cref="RectangleF"/> struct, based on a <see cref="Rectangle"/>
         /// </summary>
