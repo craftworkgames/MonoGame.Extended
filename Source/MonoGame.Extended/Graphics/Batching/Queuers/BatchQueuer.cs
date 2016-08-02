@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Extended.Graphics.Batching
+namespace MonoGame.Extended.Graphics.Batching.Queuers
 {
     internal abstract class BatchQueuer<TVertexType, TBatchItemData> : IDisposable
         where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>

@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Extended.Graphics.Batching
+namespace MonoGame.Extended.Graphics.Batching.Queuers
 {
     internal class DeferredBatchQueuer<TVertexType, TBatchItemData> : BatchQueuer<TVertexType, TBatchItemData>
         where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
@@ -23,7 +23,7 @@ namespace MonoGame.Extended.Graphics.Batching
         // the sort key for the current draw item
         private uint _currentSortKey;
 
-        private readonly MeshBuffer<TVertexType> _meshBuffer;
+        private readonly GeometryBuffer<TVertexType> _geometryBuffer;
 
         internal DeferredBatchQueuer(BatchDrawer<TVertexType, TBatchItemData> batchDrawer)
             : base(batchDrawer)
@@ -31,7 +31,7 @@ namespace MonoGame.Extended.Graphics.Batching
             _currentItem = EmptyDrawItem;
             _itemSortKeys = new uint[InitialOperationsCapacity];
             _items = new BatchDrawItem<TBatchItemData>[InitialOperationsCapacity];
-            _meshBuffer = batchDrawer.MeshBuffer;
+            _geometryBuffer = batchDrawer.GeometryBuffer;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -53,12 +53,12 @@ namespace MonoGame.Extended.Graphics.Batching
 
         private void Flush()
         {
-            if (_meshBuffer.VertexCount == 0 || _meshBuffer.IndexCount == 0)
+            if (_geometryBuffer.VertexCount == 0 || _geometryBuffer.IndexCount == 0)
             {
                 return;
             }
 
-            BatchDrawer.Select(_meshBuffer.VertexCount, _meshBuffer.IndexCount);
+            BatchDrawer.Select(_geometryBuffer.VertexCount, _geometryBuffer.IndexCount);
 
             ApplyCurrentItem();
 
@@ -77,13 +77,16 @@ namespace MonoGame.Extended.Graphics.Batching
                 _items[index].Data = default(TBatchItemData);
             }
 
+            if (_geometryBuffer.BufferType == GeometryBufferType.Dynamic)
+            {
+                _geometryBuffer.Clear();
+            }
+
             // don't need to clear the array because we keep track of how many operations we have
             // i.e. by changing itemsCount to zero, we will overwrite items which have already been processed
 #if DEBUG
             Array.Clear(_items, 0, _itemsCount);
 #endif
-
-            _meshBuffer.Clear();
 
             _itemsCount = 0;
             _currentItem = EmptyDrawItem;

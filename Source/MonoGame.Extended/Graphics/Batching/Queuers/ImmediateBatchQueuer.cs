@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Extended.Graphics.Batching
+namespace MonoGame.Extended.Graphics.Batching.Queuers
 {
     internal class ImmediateBatchQueuer<TVertexType, TBatchItemData> : BatchQueuer<TVertexType, TBatchItemData>
         where TVertexType : struct, IVertexType
@@ -26,7 +26,7 @@ namespace MonoGame.Extended.Graphics.Batching
             BatchDrawer.Select(vertexCount, indexCount);
             var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
             BatchDrawer.Draw(primitiveType, startIndex, primitiveCount, ref data);
-            BatchDrawer.MeshBuffer.Clear();
+            BatchDrawer.GeometryBuffer.Clear();
         }
     }
 }
