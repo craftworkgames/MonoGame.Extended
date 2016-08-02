@@ -61,11 +61,11 @@ namespace Demo.Shapes
 
             _circleGrowTheta += MathHelper.ToRadians(2f);
             _circle.Radius = 70f + 15f * (float)Math.Cos(_circleGrowTheta);
-            _circle.Centre = new Vector2(400, 100);
+            _circle.Center = new Vector2(400, 100);
 
             _rectangleGrowTheta -= MathHelper.ToRadians(-1f);
             _rectangle.Size = 100f + 95f * (float)Math.Sin(_rectangleGrowTheta);
-            _rectangle.Position = new Vector2(viewport.Width * 0.5f, viewport.Height * 0.5f);
+            _rectangle.Location = new Vector2(viewport.Width * 0.5f, viewport.Height * 0.5f);
 
             _sprite.Position = new Vector2(200, 200);
             _sprite.Rotation += MathHelper.ToRadians(1);

@@ -184,7 +184,7 @@ namespace MonoGame.Extended.Graphics
             primitiveType = PrimitiveType.TriangleList;
             _vertexIndexCount = 0;
             _vertexIndexOffset = indexOffset;
-            _vertex = new VertexPositionColorTexture(new Vector3(circle.Centre, depth), color, Vector2.Zero);
+            _vertex = new VertexPositionColorTexture(new Vector3(circle.Center, depth), color, Vector2.Zero);
 
             _outputVertex = geometryBuilder.OutputVertex;
             _outputIndex = geometryBuilder.OutputIndex;
@@ -197,7 +197,7 @@ namespace MonoGame.Extended.Graphics
             primitiveType = PrimitiveType.LineList;
             _vertexIndexCount = 0;
             _vertexIndexOffset = indexOffset;
-            _vertex = new VertexPositionColorTexture(new Vector3(circle.Centre, depth), color, Vector2.Zero);
+            _vertex = new VertexPositionColorTexture(new Vector3(circle.Center, depth), color, Vector2.Zero);
 
             _outputVertex = geometryBuilder.OutputVertex;
             _outputIndex = geometryBuilder.OutputIndex;

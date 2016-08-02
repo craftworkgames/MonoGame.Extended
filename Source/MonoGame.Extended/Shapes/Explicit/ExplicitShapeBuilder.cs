@@ -74,7 +74,7 @@ namespace MonoGame.Extended.Shapes.Explicit
             var x = circle.Radius; // Start at angle = 0 
             var y = 0f;
 
-            var position = circle.Centre;
+            var position = circle.Center;
 
             for (var i = 0; i < circleSegmentsCount; i++)
             {
