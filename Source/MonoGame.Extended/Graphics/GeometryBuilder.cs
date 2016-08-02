@@ -3,15 +3,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics
 {
-    public delegate void OutputVertexDelegate<TVertexType>(ref TVertexType vertex) where TVertexType : struct, IVertexType;
-    public delegate void OutputVertexIndexDelegate(int index);
-
-    public class MeshBuilder<TVertexType> where TVertexType : struct, IVertexType
+    public class GeometryBuilder<TVertexType> where TVertexType : struct, IVertexType
     {
-        public OutputVertexDelegate<TVertexType> OutputVertex { get; }
+        public delegate void OutputVertexDelegate(ref TVertexType vertex);
+        public delegate void OutputVertexIndexDelegate(int index);
+
+        public OutputVertexDelegate OutputVertex { get; }
         public OutputVertexIndexDelegate OutputIndex { get; }
 
-        public MeshBuilder(OutputVertexDelegate<TVertexType> outputVertex, OutputVertexIndexDelegate outputIndex)
+        public GeometryBuilder(OutputVertexDelegate outputVertex, OutputVertexIndexDelegate outputIndex)
         {
             if (outputVertex == null)
             {
