@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Shapes.Explicit
     {
         public delegate void OutputPointDelegate(ref Vector3 point);
 
-        public const int DefaultCircleSegmentsCount = 32;
+        public const int DefaultCircleSegmentsCount = 64;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void EnsureOutputPoint(OutputPointDelegate outputPoint)
