@@ -20,9 +20,9 @@ namespace MonoGame.Extended.Graphics.Batching
             Context = context;
         }
 
-        internal bool CanMergeIntoItem(ref TDrawContext otherData, byte primitiveType)
+        internal bool CanMergeIntoItem(ref TDrawContext otherContext, byte primitiveType)
         {
-            return Context.Equals(ref otherData) && PrimitiveType == primitiveType && (PrimitiveType != (byte)Microsoft.Xna.Framework.Graphics.PrimitiveType.TriangleStrip || PrimitiveType != (byte)Microsoft.Xna.Framework.Graphics.PrimitiveType.LineStrip);
+            return Context.Equals(ref otherContext) && PrimitiveType == primitiveType && (PrimitiveType != (byte)Microsoft.Xna.Framework.Graphics.PrimitiveType.TriangleStrip || PrimitiveType != (byte)Microsoft.Xna.Framework.Graphics.PrimitiveType.LineStrip);
         }
     }
 }

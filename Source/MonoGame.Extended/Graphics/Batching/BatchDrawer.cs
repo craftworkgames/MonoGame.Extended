@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal sealed class BatchDrawer<TVertexType, TBatchItemData> : IDisposable
-        where TVertexType : struct, IVertexType where TBatchItemData : struct, IDrawContext<TBatchItemData>
+    internal sealed class BatchDrawer<TVertexType, TDrawContext> : IDisposable
+        where TVertexType : struct, IVertexType where TDrawContext : struct, IDrawContext<TDrawContext>
     {
         internal GraphicsDevice GraphicsDevice;
         internal GeometryBuffer<TVertexType> GeometryBuffer;
@@ -38,9 +38,9 @@ namespace MonoGame.Extended.Graphics.Batching
             GraphicsDevice.Indices = GeometryBuffer.IndexBuffer;
         }
 
-        internal void Draw(PrimitiveType primitiveType, int startIndex, int primitiveCount, ref TBatchItemData batchItemData)
+        internal void Draw(PrimitiveType primitiveType, int startIndex, int primitiveCount, ref TDrawContext data)
         {
-            batchItemData.ApplyTo(Effect);
+            data.ApplyTo(Effect);
 
             foreach (var pass in Effect.CurrentTechnique.Passes)
             {

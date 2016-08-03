@@ -2,11 +2,11 @@
 
 namespace MonoGame.Extended.Graphics.Batching.Queuers
 {
-    internal class ImmediateBatchQueuer<TVertexType, TBatchItemData> : BatchQueuer<TVertexType, TBatchItemData>
+    internal class ImmediateBatchQueuer<TVertexType, TDrawContext> : BatchQueuer<TVertexType, TDrawContext>
         where TVertexType : struct, IVertexType
-        where TBatchItemData : struct, IDrawContext<TBatchItemData>
+        where TDrawContext : struct, IDrawContext<TDrawContext>
     {
-        public ImmediateBatchQueuer(BatchDrawer<TVertexType, TBatchItemData> batchDrawer)
+        public ImmediateBatchQueuer(BatchDrawer<TVertexType, TDrawContext> batchDrawer)
             : base(batchDrawer)
         {
         }
@@ -21,11 +21,11 @@ namespace MonoGame.Extended.Graphics.Batching.Queuers
             BatchDrawer.Effect = null;
         }
 
-        internal override void EnqueueDraw(PrimitiveType primitiveType, int vertexCount, int startIndex, int indexCount, ref TBatchItemData data, uint sortKey = 0)
+        internal override void EnqueueDraw(PrimitiveType primitiveType, int vertexCount, int startIndex, int indexCount, ref TDrawContext context, uint sortKey = 0)
         {
             BatchDrawer.Select(vertexCount, indexCount);
             var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
-            BatchDrawer.Draw(primitiveType, startIndex, primitiveCount, ref data);
+            BatchDrawer.Draw(primitiveType, startIndex, primitiveCount, ref context);
             BatchDrawer.GeometryBuffer.Clear();
         }
     }

@@ -3,17 +3,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching.Queuers
 {
-    internal abstract class BatchQueuer<TVertexType, TBatchItemData> : IDisposable
-        where TVertexType : struct, IVertexType where TBatchItemData : struct, IDrawContext<TBatchItemData>
+    internal abstract class BatchQueuer<TVertexType, TDrawContext> : IDisposable
+        where TVertexType : struct, IVertexType where TDrawContext : struct, IDrawContext<TDrawContext>
     {
-        internal BatchDrawer<TVertexType, TBatchItemData> BatchDrawer;
+        internal BatchDrawer<TVertexType, TDrawContext> BatchDrawer;
         internal PrimitiveType PrimitiveType;
 
         internal abstract void Begin(Effect effect);
         internal abstract void End();
-        internal abstract void EnqueueDraw(PrimitiveType primitiveType, int vertexCount, int startIndex, int indexCount, ref TBatchItemData data, uint sortKey = 0);
+        internal abstract void EnqueueDraw(PrimitiveType primitiveType, int vertexCount, int startIndex, int indexCount, ref TDrawContext context, uint sortKey = 0);
 
-        protected BatchQueuer(BatchDrawer<TVertexType, TBatchItemData> batchDrawer)
+        protected BatchQueuer(BatchDrawer<TVertexType, TDrawContext> batchDrawer)
         {
             BatchDrawer = batchDrawer;
         }

@@ -93,12 +93,12 @@ namespace MonoGame.Extended.Graphics.Batching.Queuers
             _currentSortKey = 0;
         }
 
-        internal override void EnqueueDraw(PrimitiveType primitiveType, int vertexCount, int startIndex, int indexCount, ref TDrawContext data, uint sortKey = 0)
+        internal override void EnqueueDraw(PrimitiveType primitiveType, int vertexCount, int startIndex, int indexCount, ref TDrawContext context, uint sortKey = 0)
         {
             // "merge" multiple draw calls into one draw item if possible
             // we do not support merging line strip or triangle strip primitives, i.e., a new draw call is needed for each line strip or triangle strip
 
-            if (_currentSortKey == sortKey && _currentContext.CanMergeIntoItem(ref data, (byte)primitiveType))
+            if (_currentSortKey == sortKey && _currentContext.CanMergeIntoItem(ref context, (byte)primitiveType))
             {
                 _currentContext.PrimitiveCount += primitiveType.GetPrimitiveCount(indexCount);
                 return;
@@ -111,7 +111,7 @@ namespace MonoGame.Extended.Graphics.Batching.Queuers
 
             var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
 
-            _currentContext = new BatchItem<TDrawContext>(primitiveType, startIndex, primitiveCount, data);
+            _currentContext = new BatchItem<TDrawContext>(primitiveType, startIndex, primitiveCount, context);
 
             if (_itemsCount >= _drawItems.Length)
             {

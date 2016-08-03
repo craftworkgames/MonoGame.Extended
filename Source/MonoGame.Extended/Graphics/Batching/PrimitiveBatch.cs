@@ -9,15 +9,15 @@ namespace MonoGame.Extended.Graphics.Batching
     ///     Enables a group of geometry to drawn using the same settings.
     /// </summary>
     /// <typeparam name="TVertexType">The type of vertex.</typeparam>
-    /// <typeparam name="TBatchItemData">The type of item data.</typeparam>
+    /// <typeparam name="TDrawContext">The type of item data.</typeparam>
     /// <seealso cref="IDisposable" />
-    public abstract class PrimitiveBatch<TVertexType, TBatchItemData> : IDisposable
-        where TVertexType : struct, IVertexType where TBatchItemData : struct, IDrawContext<TBatchItemData>
+    public abstract class PrimitiveBatch<TVertexType, TDrawContext> : IDisposable
+        where TVertexType : struct, IVertexType where TDrawContext : struct, IDrawContext<TDrawContext>
     {
-        private BatchDrawer<TVertexType, TBatchItemData> _batchDrawer;
-        private BatchQueuer<TVertexType, TBatchItemData> _currentBatchQueuer;
-        private Lazy<ImmediateBatchQueuer<TVertexType, TBatchItemData>> _lazyImmediateBatchQueuer;
-        private Lazy<DeferredBatchQueuer<TVertexType, TBatchItemData>> _lazyDeferredBatchQueuer;
+        private BatchDrawer<TVertexType, TDrawContext> _batchDrawer;
+        private BatchQueuer<TVertexType, TDrawContext> _currentBatchQueuer;
+        private Lazy<ImmediateBatchQueuer<TVertexType, TDrawContext>> _lazyImmediateBatchQueuer;
+        private Lazy<DeferredBatchQueuer<TVertexType, TDrawContext>> _lazyDeferredBatchQueuer;
 
         /// <summary>
         ///     Gets the <see cref="GeometryBuilder{TVertexType}" /> associated with this
@@ -48,7 +48,6 @@ namespace MonoGame.Extended.Graphics.Batching
         /// </value>
         public bool HasBegun { get; private set; }
 
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="PrimitiveBatch{TVertexType, TBatchItemData}" /> class.
         /// </summary>
@@ -63,10 +62,10 @@ namespace MonoGame.Extended.Graphics.Batching
 
             GeometryBuffer = geometryBuffer;
             GraphicsDevice = geometryBuffer.GraphicsDevice;
-            _batchDrawer = new BatchDrawer<TVertexType, TBatchItemData>(GraphicsDevice, GeometryBuffer);
+            _batchDrawer = new BatchDrawer<TVertexType, TDrawContext>(GraphicsDevice, GeometryBuffer);
 
-            _lazyImmediateBatchQueuer = new Lazy<ImmediateBatchQueuer<TVertexType, TBatchItemData>>(() => new ImmediateBatchQueuer<TVertexType, TBatchItemData>(_batchDrawer));
-            _lazyDeferredBatchQueuer = new Lazy<DeferredBatchQueuer<TVertexType, TBatchItemData>>(() => new DeferredBatchQueuer<TVertexType, TBatchItemData>(_batchDrawer));
+            _lazyImmediateBatchQueuer = new Lazy<ImmediateBatchQueuer<TVertexType, TDrawContext>>(() => new ImmediateBatchQueuer<TVertexType, TDrawContext>(_batchDrawer));
+            _lazyDeferredBatchQueuer = new Lazy<DeferredBatchQueuer<TVertexType, TDrawContext>>(() => new DeferredBatchQueuer<TVertexType, TDrawContext>(_batchDrawer));
         }
 
         /// <summary>
@@ -202,7 +201,7 @@ namespace MonoGame.Extended.Graphics.Batching
         ///         for drawing, call <see cref="End" />.
         ///     </para>
         /// </remarks>
-        protected void EnqueueDraw(PrimitiveType primitiveType, int vertexCount, int startIndex, int indexCount, ref TBatchItemData itemData, uint sortKey = 0)
+        protected void EnqueueDraw(PrimitiveType primitiveType, int vertexCount, int startIndex, int indexCount, ref TDrawContext itemData, uint sortKey = 0)
         {
             _currentBatchQueuer.EnqueueDraw(primitiveType, vertexCount, startIndex, indexCount, ref itemData, sortKey);
         }
