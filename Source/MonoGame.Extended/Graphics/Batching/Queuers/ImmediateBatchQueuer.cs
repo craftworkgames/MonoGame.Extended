@@ -4,7 +4,7 @@ namespace MonoGame.Extended.Graphics.Batching.Queuers
 {
     internal class ImmediateBatchQueuer<TVertexType, TBatchItemData> : BatchQueuer<TVertexType, TBatchItemData>
         where TVertexType : struct, IVertexType
-        where TBatchItemData : struct, IBatchItemData<TBatchItemData>
+        where TBatchItemData : struct, IDrawContext<TBatchItemData>
     {
         public ImmediateBatchQueuer(BatchDrawer<TVertexType, TBatchItemData> batchDrawer)
             : base(batchDrawer)

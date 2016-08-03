@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace MonoGame.Extended.Graphics.Batching.Queuers
 {
     internal abstract class BatchQueuer<TVertexType, TBatchItemData> : IDisposable
-        where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
+        where TVertexType : struct, IVertexType where TBatchItemData : struct, IDrawContext<TBatchItemData>
     {
         internal BatchDrawer<TVertexType, TBatchItemData> BatchDrawer;
         internal PrimitiveType PrimitiveType;
