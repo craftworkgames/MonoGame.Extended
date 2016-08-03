@@ -60,6 +60,7 @@
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
     <Compile Include="ColorHelper.cs" />
+    <Compile Include="Graphics\Effects\IEffectWorldViewProjectionMatrix.cs" />
     <Compile Include="Graphics\GeometryBufferType.cs" />
     <Compile Include="Graphics\GeometryBuilderExtensions.VertexPositionColorTexture.cs" />
     <Compile Include="Shapes\ArcF.cs" />
@@ -67,7 +68,7 @@
     <Compile Include="Shapes\Line2F.cs" />
     <Compile Include="Shapes\Line3F.cs" />
     <Compile Include="Graphics\Batching\IBatchItemData.cs" />
-    <Compile Include="Graphics\Effects\ITextureEffect2D.cs" />
+    <Compile Include="Graphics\Effects\IEffectTexture2D.cs" />
     <Compile Include="Graphics\GeometryBuffer.cs" />
     <Compile Include="Graphics\GeometryBuilder.cs" />
     <Compile Include="Graphics\Effects\EffectResource.cs" />

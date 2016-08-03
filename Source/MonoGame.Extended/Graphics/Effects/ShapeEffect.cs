@@ -4,7 +4,7 @@ using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Graphics.Effects
 {
-    public class ShapeEffect : Effect, ITextureEffect2D
+    public class ShapeEffect : Effect, IEffectTexture2D, IEffectWorldViewProjectionMatrix
     {
         public static readonly uint WorldProjectionViewDirtyBitMask;
         public static readonly uint TextureDirtyBitMask;
@@ -54,7 +54,7 @@ namespace MonoGame.Extended.Graphics.Effects
         }
 
         public ShapeEffect(GraphicsDevice graphicsDevice)
-            : base(graphicsDevice, EffectResource.BatchEffect.Bytecode)
+            : base(graphicsDevice, EffectResource.ShapeEffect.Bytecode)
         {
             // ReSharper disable once VirtualMemberCallInConstructor
             CacheEffectParameters();
