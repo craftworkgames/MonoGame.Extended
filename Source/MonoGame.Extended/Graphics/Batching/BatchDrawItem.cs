@@ -4,25 +4,25 @@ using Microsoft.Xna.Framework.Graphics;
 namespace MonoGame.Extended.Graphics.Batching
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct BatchDrawItem<TBatchItemData>
-        where TBatchItemData : struct, IBatchItemData<TBatchItemData>
+    internal struct BatchDrawItem<TDrawContext>
+        where TDrawContext : struct, IDrawContext<TDrawContext>
     {
-        internal TBatchItemData Data;
+        internal TDrawContext Context;
         internal readonly int StartIndex;
         internal int PrimitiveCount;
         internal byte PrimitiveType;
 
-        internal BatchDrawItem(PrimitiveType primitiveType, int startIndex, int primitiveCount, TBatchItemData data)
+        internal BatchDrawItem(PrimitiveType primitiveType, int startIndex, int primitiveCount, TDrawContext context)
         {
             PrimitiveType = (byte)primitiveType;
             StartIndex = startIndex;
             PrimitiveCount = primitiveCount;
-            Data = data;
+            Context = context;
         }
 
-        internal bool CanMergeIntoItem(ref TBatchItemData otherData, byte primitiveType)
+        internal bool CanMergeIntoItem(ref TDrawContext otherData, byte primitiveType)
         {
-            return Data.Equals(ref otherData) && PrimitiveType == primitiveType && (PrimitiveType != (byte)Microsoft.Xna.Framework.Graphics.PrimitiveType.TriangleStrip || PrimitiveType != (byte)Microsoft.Xna.Framework.Graphics.PrimitiveType.LineStrip);
+            return Context.Equals(ref otherData) && PrimitiveType == primitiveType && (PrimitiveType != (byte)Microsoft.Xna.Framework.Graphics.PrimitiveType.TriangleStrip || PrimitiveType != (byte)Microsoft.Xna.Framework.Graphics.PrimitiveType.LineStrip);
         }
     }
 }

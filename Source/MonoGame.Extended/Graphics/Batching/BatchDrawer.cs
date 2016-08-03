@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace MonoGame.Extended.Graphics.Batching
 {
     internal sealed class BatchDrawer<TVertexType, TBatchItemData> : IDisposable
-        where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
+        where TVertexType : struct, IVertexType where TBatchItemData : struct, IDrawContext<TBatchItemData>
     {
         internal GraphicsDevice GraphicsDevice;
         internal GeometryBuffer<TVertexType> GeometryBuffer;

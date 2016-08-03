@@ -5,21 +5,21 @@ using Microsoft.Xna.Framework.Graphics;
 namespace MonoGame.Extended.Graphics.Batching.Queuers
 {
     internal class DeferredBatchQueuer<TVertexType, TBatchItemData> : BatchQueuer<TVertexType, TBatchItemData>
-        where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
+        where TVertexType : struct, IVertexType where TBatchItemData : struct, IDrawContext<TBatchItemData>
     {
-        internal static readonly BatchDrawItem<TBatchItemData> EmptyDrawItem = new BatchDrawItem<TBatchItemData>((PrimitiveType)(-1), 0, 0, default(TBatchItemData));
+        internal static readonly DrawContext<TBatchItemData> EmptyDrawContext = new DrawContext<TBatchItemData>((PrimitiveType)(-1), 0, 0, default(TBatchItemData));
 
         private const int InitialOperationsCapacity = 25;
 
         // the draw operations buffer
-        private BatchDrawItem<TBatchItemData>[] _items;
+        private DrawContext<TBatchItemData>[] _contexts;
         // the sort keys buffer for the draw operations
         // the keys are seperated from the draw operations to have the smallest memory footprint possible for each draw item
         private uint[] _itemSortKeys;
         // the number of operations in the buffers
         private int _itemsCount;
         // the current draw item
-        private BatchDrawItem<TBatchItemData> _currentItem;
+        private DrawContext<TBatchItemData> _currentContext;
         // the sort key for the current draw item
         private uint _currentSortKey;
 
@@ -28,16 +28,16 @@ namespace MonoGame.Extended.Graphics.Batching.Queuers
         internal DeferredBatchQueuer(BatchDrawer<TVertexType, TBatchItemData> batchDrawer)
             : base(batchDrawer)
         {
-            _currentItem = EmptyDrawItem;
+            _currentContext = EmptyDrawContext;
             _itemSortKeys = new uint[InitialOperationsCapacity];
-            _items = new BatchDrawItem<TBatchItemData>[InitialOperationsCapacity];
+            _contexts = new DrawContext<TBatchItemData>[InitialOperationsCapacity];
             _geometryBuffer = batchDrawer.GeometryBuffer;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void ApplyCurrentItem()
         {
-            _items[_itemsCount - 1] = _currentItem;
+            _contexts[_itemsCount - 1] = _currentContext;
         }
 
         internal override void Begin(Effect effect)
@@ -63,18 +63,18 @@ namespace MonoGame.Extended.Graphics.Batching.Queuers
             ApplyCurrentItem();
 
             // sort only the items which are used
-            PrimitiveBatchHelper.SortAction?.Invoke(_itemSortKeys, _items, 0, _itemsCount);
+            PrimitiveBatchHelper.SortAction?.Invoke(_itemSortKeys, _contexts, 0, _itemsCount);
 
             for (var index = 0; index < _itemsCount; index++)
             {
-                var item = _items[index];
+                var item = _contexts[index];
                 var primitiveType = (PrimitiveType)item.PrimitiveType;
 
                 BatchDrawer.Draw(primitiveType, item.StartIndex, item.PrimitiveCount, ref item.Data);
 
                 // clear the data for the item because it may contain references to objects like a Texture 
                 // values like startVertex, vertexCount, etc will be overwritten and don't need to be cleared 
-                _items[index].Data = default(TBatchItemData);
+                _contexts[index].Data = default(TBatchItemData);
             }
 
             if (_geometryBuffer.BufferType == GeometryBufferType.Dynamic)
@@ -85,11 +85,11 @@ namespace MonoGame.Extended.Graphics.Batching.Queuers
             // don't need to clear the array because we keep track of how many operations we have
             // i.e. by changing itemsCount to zero, we will overwrite items which have already been processed
 #if DEBUG
-            Array.Clear(_items, 0, _itemsCount);
+            Array.Clear(_contexts, 0, _itemsCount);
 #endif
 
             _itemsCount = 0;
-            _currentItem = EmptyDrawItem;
+            _currentContext = EmptyDrawContext;
             _currentSortKey = 0;
         }
 
@@ -98,9 +98,9 @@ namespace MonoGame.Extended.Graphics.Batching.Queuers
             // "merge" multiple draw calls into one draw item if possible
             // we do not support merging line strip or triangle strip primitives, i.e., a new draw call is needed for each line strip or triangle strip
 
-            if (_currentSortKey == sortKey && _currentItem.CanMergeIntoItem(ref data, (byte)primitiveType))
+            if (_currentSortKey == sortKey && _currentContext.CanMergeIntoItem(ref data, (byte)primitiveType))
             {
-                _currentItem.PrimitiveCount += primitiveType.GetPrimitiveCount(indexCount);
+                _currentContext.PrimitiveCount += primitiveType.GetPrimitiveCount(indexCount);
                 return;
             }
 
@@ -111,18 +111,18 @@ namespace MonoGame.Extended.Graphics.Batching.Queuers
 
             var primitiveCount = primitiveType.GetPrimitiveCount(indexCount);
 
-            _currentItem = new BatchDrawItem<TBatchItemData>(primitiveType, startIndex, primitiveCount, data);
+            _currentContext = new DrawContext<TBatchItemData>(primitiveType, startIndex, primitiveCount, data);
 
-            if (_itemsCount >= _items.Length)
+            if (_itemsCount >= _contexts.Length)
             {
                 // increase draw item buffers by the golden ratio
-                var newCapacity = (int)(_items.Length * 1.61803398875f);
+                var newCapacity = (int)(_contexts.Length * 1.61803398875f);
                 Array.Resize(ref _itemSortKeys, newCapacity);
-                Array.Resize(ref _items, newCapacity);
+                Array.Resize(ref _contexts, newCapacity);
             }
 
             _itemSortKeys[_itemsCount] = sortKey;
-            _items[_itemsCount++] = _currentItem;
+            _contexts[_itemsCount++] = _currentContext;
             _currentSortKey = sortKey;
         }
     }
