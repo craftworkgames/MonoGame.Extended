@@ -2,7 +2,7 @@
 
 namespace MonoGame.Extended.Graphics.Effects
 {
-    public interface ITextureEffect2D
+    public interface IEffectTexture2D
     {
         Texture2D Texture { get; set; }
     }
