@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace MonoGame.Extended.Graphics.Batching
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct BatchDrawItem<TDrawContext>
+    internal struct BatchItem<TDrawContext>
         where TDrawContext : struct, IDrawContext<TDrawContext>
     {
         internal TDrawContext Context;
@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Graphics.Batching
         internal int PrimitiveCount;
         internal byte PrimitiveType;
 
-        internal BatchDrawItem(PrimitiveType primitiveType, int startIndex, int primitiveCount, TDrawContext context)
+        internal BatchItem(PrimitiveType primitiveType, int startIndex, int primitiveCount, TDrawContext context)
         {
             PrimitiveType = (byte)primitiveType;
             StartIndex = startIndex;

@@ -90,13 +90,24 @@ namespace MonoGame.Extended.Graphics
         }
 
         /// <summary>
-        /// Starts a group of shapes and sprites for rendering with the specified <see cref="BatchMode"/>, <see cref="Effect" /> and the <see cref="Matrix"/> for transforming world, view and projection spaces.
+        ///     Starts a group of shapes and sprites for rendering with the specified <see cref="BatchMode" />,
+        ///     <see cref="Effect" /> and the <see cref="Matrix" /> for transforming world, view and projection spaces.
         /// </summary>
-        /// <param name="batchMode">The batch mode. Default value is <see cref="BatchMode.Deferred"/>.</param>
-        /// <param name="effect">The <see cref="Effect"/>. Use <code>null</code> to use the default <see cref="ShapeEffect"/>.</param>
-        /// <param name="transformWorld">The <see cref="Matrix"/> to transform vertices from the model space to the world space. Use <code>null</code> to use <see cref="Matrix.Identity"/>.</param>
-        /// <param name="transformView">The <see cref="Matrix"/> to transform vertices from the world space to the view (a.k.a. camera) space. Use <code>null</code> to use <see cref="Matrix.Identity"/>.</param>
-        /// <param name="transformProjection">The <see cref="Matrix"/> to transform vertices from the view space to the screen space. Use <code>null</code> to use an orthographic projection (a 2D projection) with <code>(0,0)</code> as the top-left and <code>(x,y)</code> as the bottom-right of the screen or window.</param>
+        /// <param name="batchMode">The batch mode. Default value is <see cref="BatchMode.Deferred" />.</param>
+        /// <param name="effect">The <see cref="Effect" />. Use <code>null</code> to use the default <see cref="ShapeEffect" />.</param>
+        /// <param name="transformWorld">
+        ///     The <see cref="Matrix" /> to transform vertices from the model space to the world space.
+        ///     Use <code>null</code> to use <see cref="Matrix.Identity" />.
+        /// </param>
+        /// <param name="transformView">
+        ///     The <see cref="Matrix" /> to transform vertices from the world space to the view (a.k.a.
+        ///     camera) space. Use <code>null</code> to use <see cref="Matrix.Identity" />.
+        /// </param>
+        /// <param name="transformProjection">
+        ///     The <see cref="Matrix" /> to transform vertices from the view space to the screen
+        ///     space. Use <code>null</code> to use an orthographic projection (a 2D projection) with <code>(0,0)</code> as the
+        ///     top-left and <code>(x,y)</code> as the bottom-right of the screen or window.
+        /// </param>
         public void Begin(BatchMode batchMode = BatchMode.Deferred, Effect effect = null, Matrix? transformWorld = null, Matrix? transformView = null, Matrix? transformProjection = null)
         {
             if (effect == null)
@@ -139,7 +150,7 @@ namespace MonoGame.Extended.Graphics
         }
 
         /// <summary>
-        /// Draws the specified line.
+        ///     Draws the specified line.
         /// </summary>
         /// <param name="line">The line.</param>
         /// <param name="color">The color.</param>
@@ -161,7 +172,7 @@ namespace MonoGame.Extended.Graphics
         }
 
         /// <summary>
-        /// Draws the specified line.
+        ///     Draws the specified line.
         /// </summary>
         /// <param name="line">The line.</param>
         /// <param name="color">The color.</param>
@@ -182,7 +193,7 @@ namespace MonoGame.Extended.Graphics
         }
 
         /// <summary>
-        /// Draws the specified arc with fill mode.
+        ///     Draws the specified arc with fill mode.
         /// </summary>
         /// <param name="arc">The arc.</param>
         /// <param name="color">The color.</param>
@@ -204,7 +215,7 @@ namespace MonoGame.Extended.Graphics
         }
 
         /// <summary>
-        /// Draws the specified arc with stroke mode.
+        ///     Draws the specified arc with stroke mode.
         /// </summary>
         /// <param name="arc">The arc.</param>
         /// <param name="color">The color.</param>
@@ -226,7 +237,7 @@ namespace MonoGame.Extended.Graphics
         }
 
         /// <summary>
-        /// Draws the specified circle with fill mode.
+        ///     Draws the specified circle with fill mode.
         /// </summary>
         /// <param name="circle">The circle.</param>
         /// <param name="color">The color.</param>
@@ -248,7 +259,7 @@ namespace MonoGame.Extended.Graphics
         }
 
         /// <summary>
-        /// Draws the specified circle with stroke mode.
+        ///     Draws the specified circle with stroke mode.
         /// </summary>
         /// <param name="circle">The circle.</param>
         /// <param name="color">The color.</param>
@@ -270,7 +281,7 @@ namespace MonoGame.Extended.Graphics
         }
 
         /// <summary>
-        /// Draws the specified rectangle with fill mode.
+        ///     Draws the specified rectangle with fill mode.
         /// </summary>
         /// <param name="rectangle">The rectangle.</param>
         /// <param name="color">The color.</param>
@@ -292,7 +303,7 @@ namespace MonoGame.Extended.Graphics
         }
 
         /// <summary>
-        /// Draws the specified rectangle with stroke mode.
+        ///     Draws the specified rectangle with stroke mode.
         /// </summary>
         /// <param name="rectangle">The rectangle.</param>
         /// <param name="color">The color.</param>
@@ -314,7 +325,7 @@ namespace MonoGame.Extended.Graphics
         }
 
         /// <summary>
-        /// Draws the specified sprite.
+        ///     Draws the specified sprite.
         /// </summary>
         /// <param name="sprite">The sprite.</param>
         /// <param name="depth">The depth.</param>
@@ -337,7 +348,7 @@ namespace MonoGame.Extended.Graphics
         }
 
         /// <summary>
-        /// Defines a drawing context for shapes and sprites.
+        ///     Defines a drawing context for shapes and sprites.
         /// </summary>
         /// <seealso cref="IDrawContext{TData}" />
         [StructLayout(LayoutKind.Sequential, Pack = 1)]

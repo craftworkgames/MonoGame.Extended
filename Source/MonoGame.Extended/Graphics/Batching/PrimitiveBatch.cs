@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Graphics.Batching
     /// <typeparam name="TBatchItemData">The type of item data.</typeparam>
     /// <seealso cref="IDisposable" />
     public abstract class PrimitiveBatch<TVertexType, TBatchItemData> : IDisposable
-        where TVertexType : struct, IVertexType where TBatchItemData : struct, IBatchItemData<TBatchItemData>
+        where TVertexType : struct, IVertexType where TBatchItemData : struct, IDrawContext<TBatchItemData>
     {
         private BatchDrawer<TVertexType, TBatchItemData> _batchDrawer;
         private BatchQueuer<TVertexType, TBatchItemData> _currentBatchQueuer;
