@@ -21,21 +21,21 @@ namespace MonoGame.Extended.Graphics.Batching
 
         /// <summary>
         ///     Gets the <see cref="GeometryBuilder{TVertexType}" /> associated with this
-        ///     <see cref="PrimitiveBatch{TVertexType,TBatchItemData}" />.
+        ///     <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
         /// </summary>
         /// <value>
         ///     The <see cref="GeometryBuilder{TVertexType}" /> associated with this
-        ///     <see cref="PrimitiveBatch{TVertexType,TBatchItemData}" />.
+        ///     <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
         /// </value>
         protected GeometryBuffer<TVertexType> GeometryBuffer { get; }
 
         /// <summary>
         ///     Gets the <see cref="GraphicsDevice" /> associated with this
-        ///     <see cref="PrimitiveBatch{TVertexType,TBatchItemData}" />.
+        ///     <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
         /// </summary>
         /// <value>
         ///     The <see cref="GraphicsDevice" /> associated with this
-        ///     <see cref="PrimitiveBatch{TVertexType,TBatchItemData}" />.
+        ///     <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
         /// </value>
         public GraphicsDevice GraphicsDevice { get; }
 
@@ -49,7 +49,7 @@ namespace MonoGame.Extended.Graphics.Batching
         public bool HasBegun { get; private set; }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="PrimitiveBatch{TVertexType, TBatchItemData}" /> class.
+        ///     Initializes a new instance of the <see cref="PrimitiveBatch{TVertexType, TDrawContext}" /> class.
         /// </summary>
         /// <param name="geometryBuffer">The geometry buffer.</param>
         /// <exception cref="ArgumentNullException"><paramref name="geometryBuffer" /> is null.</exception>

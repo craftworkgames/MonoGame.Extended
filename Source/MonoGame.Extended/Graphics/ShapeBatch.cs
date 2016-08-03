@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Graphics
     /// <summary>
     ///     Enables a group of shapes and sprites to drawn using the same settings.
     /// </summary>
-    /// <seealso cref="PrimitiveBatch{TVertexType,TBatchItemData}" />
+    /// <seealso cref="PrimitiveBatch{TVertexType,TDrawContext}" />
     public class ShapeBatch : PrimitiveBatch<VertexPositionColorTexture, ShapeBatch.DrawContext>
     {
         internal const ushort DefaultMaximumVerticesCount = 8192;
