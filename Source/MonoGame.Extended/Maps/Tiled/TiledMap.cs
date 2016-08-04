@@ -184,7 +184,6 @@ namespace MonoGame.Extended.Maps.Tiled
         
         public void Draw(Camera2D camera, GameTime gameTime = null)
         {
-            camera.Position = new Vector2((int)camera.Position.X, (int)camera.Position.Y);
             _basicEffect.World = camera.GetViewMatrix();
 
             _graphicsDevice.SetVertexBuffer(_tilesVertexBuffer);
