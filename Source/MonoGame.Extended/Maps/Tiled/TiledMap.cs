@@ -44,7 +44,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         private readonly DepthStencilState _depthBufferState;
         //private Matrix _worldMatrix;
-        private Matrix _viewMatrix;
+        //private Matrix _viewMatrix;
         //private Matrix _projectionMatrix;
         private BasicEffect _basicEffect;
         private float _highestZ;
@@ -74,9 +74,9 @@ namespace MonoGame.Extended.Maps.Tiled
             return tileset;
         }
 
-        public TiledTileLayer CreateTileLayer(string name, int width, int height, int[] data, int z)
+        public TiledTileLayer CreateTileLayer(string name, int width, int height, int[] data, int depth)
         {
-            var layer = new TiledTileLayer(this, _graphicsDevice, name, width, height, data, z);
+            var layer = new TiledTileLayer(this, _graphicsDevice, name, width, height, data, depth);
             _layers.Add(layer);
             return layer;
         }
@@ -128,17 +128,17 @@ namespace MonoGame.Extended.Maps.Tiled
             _tilesIndexBuffer = new IndexBuffer(_graphicsDevice, typeof(short), _tilesIndexes.Length, BufferUsage.WriteOnly);
             _tilesVertexBuffer.SetData(_tilesVertices);
             _tilesIndexBuffer.SetData(_tilesIndexes);
-            
-            _highestZ = _layers.Max(layer => layer.Z);
-            _viewMatrix = Matrix.CreateLookAt(
-                cameraPosition: new Vector3(0f, 0f, _highestZ),
-                cameraTarget: Vector3.Zero,
-                cameraUpVector: Vector3.Up
-            );
-            
+
+            _highestZ = _layers.Max(layer => layer.Depth) + 1;
+
+            // Projection vs View vs World http://gamedev.stackexchange.com/a/56203/22277
+
             _basicEffect = new BasicEffect(_graphicsDevice)
             {
-                View = _viewMatrix,
+                World = Matrix.CreateLookAt(
+                    cameraPosition: new Vector3(0f, 0f, _highestZ),
+                    cameraTarget: Vector3.Zero,
+                    cameraUpVector: Vector3.Up),
                 TextureEnabled = true,
                 Texture = _tilesets[0].Texture
             };
@@ -166,10 +166,11 @@ namespace MonoGame.Extended.Maps.Tiled
         {
             var projectionHalfPixel = Vector3.Zero;
 
+            // I'm pretty certain this isn't doing anything because these constants will never be defined.
 #if (OPENGL || DESKTOPGL)
             projectionHalfPixel = new Vector3(-0.5f, -0.5f, 0.0f);
 #endif
-            _basicEffect.World = camera.GetViewMatrix();
+            _basicEffect.View = camera.GetViewMatrix();
             _basicEffect.Projection = Matrix.CreateTranslation(projectionHalfPixel) * Matrix.CreateOrthographicOffCenter(
                     left: 0,
                     right: _graphicsDevice.Viewport.Width,
@@ -187,6 +188,7 @@ namespace MonoGame.Extended.Maps.Tiled
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
             {
                 var tilesIndexesSoFar = 0;
+
                 foreach (var layer in _layers)
                 {
                     var tiledTileLayer = layer as TiledTileLayer;
@@ -204,10 +206,10 @@ namespace MonoGame.Extended.Maps.Tiled
 
                             pass.Apply();
                             _graphicsDevice.DrawIndexedPrimitives(
-                                PrimitiveType.TriangleList,
-                                0,
-                                tilesIndexesSoFar,
-                                primitivesCount
+                                primitiveType: PrimitiveType.TriangleList,
+                                baseVertex: 0,
+                                startIndex: tilesIndexesSoFar,
+                                primitiveCount: primitivesCount
                             );
                         }
 
@@ -250,8 +252,9 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public TiledTileSetTile GetTileSetTileById(int tileSetTileId)
         {
-            var tile = _tilesets.SelectMany(ts => ts.Tiles, (ts, t) => t).FirstOrDefault(t => t.Id == tileSetTileId - 1);
-            return tile;
+            return _tilesets
+                .SelectMany(ts => ts.Tiles, (ts, t) => t)
+                .FirstOrDefault(t => t.Id == tileSetTileId - 1);
         }
     }
 }

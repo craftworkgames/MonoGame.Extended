@@ -60,7 +60,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
             for (var i = 0; i < layerCount; i++)
             {
-                var layer = ReadLayer(reader, tiledMap, (i + 1) * 100);
+                var layer = ReadLayer(reader, tiledMap, i);
                 ReadCustomProperties(reader, layer.Properties);
             }
 
@@ -140,13 +140,13 @@ namespace MonoGame.Extended.Maps.Tiled
             return layer;
         }
 
-        private static TiledLayer ReadLayerTypeProperties(ContentReader reader, TiledMap tiledMap, string layerName, string layerType, int layerZ)
+        private static TiledLayer ReadLayerTypeProperties(ContentReader reader, TiledMap tiledMap, string layerName, string layerType, int depth)
         {
             if (layerType == "TileLayer")
-                return ReadTileLayer(reader, tiledMap, layerName, layerZ);
+                return ReadTileLayer(reader, tiledMap, layerName, depth);
 
             if (layerType == "ImageLayer")
-                return ReadImageLayer(reader, tiledMap, layerName, layerZ);
+                return ReadImageLayer(reader, tiledMap, layerName, depth);
 
             throw new NotSupportedException($"Layer type {layerType} is not supported");
         }
@@ -159,7 +159,7 @@ namespace MonoGame.Extended.Maps.Tiled
             for (var d = 0; d < tileDataCount; d++)
                 tileData[d] = reader.ReadInt32();
 
-            return tileMap.CreateTileLayer(name: layerName, width: reader.ReadInt32(), height: reader.ReadInt32(), data: tileData, z: layerZ);
+            return tileMap.CreateTileLayer(name: layerName, width: reader.ReadInt32(), height: reader.ReadInt32(), data: tileData, depth: layerZ);
         }
 
         private static TiledImageLayer ReadImageLayer(ContentReader reader, TiledMap tileMap, string layerName, int layerZ)

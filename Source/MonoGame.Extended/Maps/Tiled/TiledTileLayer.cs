@@ -9,8 +9,8 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledTileLayer : TiledLayer
     {
-        public TiledTileLayer(TiledMap map, GraphicsDevice graphicsDevice, string name, int width, int height, int[] data, int z)
-            : base(name, z)
+        public TiledTileLayer(TiledMap map, GraphicsDevice graphicsDevice, string name, int width, int height, int[] data, int depth)
+            : base(name, depth)
         {
             Width = width;
             Height = height;
@@ -93,19 +93,19 @@ namespace MonoGame.Extended.Maps.Tiled
                 textureCoordinateBottomRight.Y = (float)(region.Y + region.Height) / region.Texture.Height;
                 var vertices = new VertexPositionTexture[4];
                 vertices[0] = new VertexPositionTexture(
-                    new Vector3(point.X, point.Y, Z),
+                    new Vector3(point.X, point.Y, Depth),
                     textureCoordinateTopLeft
                 );
                 vertices[1] = new VertexPositionTexture(
-                    new Vector3(point.X + tileWidth, point.Y, Z),
+                    new Vector3(point.X + tileWidth, point.Y, Depth),
                     new Vector2(textureCoordinateBottomRight.X, textureCoordinateTopLeft.Y)
                 );
                 vertices[2] = new VertexPositionTexture(
-                    new Vector3(point.X, point.Y + tileHeight, Z),
+                    new Vector3(point.X, point.Y + tileHeight, Depth),
                     new Vector2(textureCoordinateTopLeft.X, textureCoordinateBottomRight.Y)
                 );
                 vertices[3] = new VertexPositionTexture(
-                    new Vector3(point.X + tileWidth, point.Y + tileHeight, Z),
+                    new Vector3(point.X + tileWidth, point.Y + tileHeight, Depth),
                     textureCoordinateBottomRight
                 );
                 verticesList.AddRange(vertices);
