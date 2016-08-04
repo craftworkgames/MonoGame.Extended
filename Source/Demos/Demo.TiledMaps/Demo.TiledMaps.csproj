@@ -57,12 +57,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\isometric-tiles.png" />
     <Content Include="Icon.ico" />
+    <Content Include="Content\placeholder-tileset.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Content\free-tileset.json" />
     <None Include="Content\level01.tmx" />
+    <None Include="Content\level02.tmx" />
+    <None Include="Content\level03.tmx" />
     <None Include="Content\montserrat-32.fnt" />
     <None Include="Content\untitled.tmx" />
     <None Include="Content\free-tileset.png" />
@@ -71,6 +75,7 @@
     <None Include="Content\montserrat-32_0.png" />
     <None Include="Content\rpg_maker_vx_rtp_tileset_by_telles0808.png" />
     <None Include="packages.config" />
+    <None Include="Content\placeholder-level-0.tmx" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />

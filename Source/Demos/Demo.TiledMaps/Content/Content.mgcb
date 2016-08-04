@@ -116,3 +116,20 @@
 /processor:TiledMapProcessor
 /build:level03.tmx
 
+#begin placeholder-level-0.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:placeholder-level-0.tmx
+
+#begin placeholder-tileset.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:placeholder-tileset.png
+

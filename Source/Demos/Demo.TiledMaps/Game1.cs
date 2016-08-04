@@ -27,7 +27,7 @@ namespace Demo.TiledMaps
             _graphicsDeviceManager = new GraphicsDeviceManager(this) {SynchronizeWithVerticalRetrace = false};
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            IsFixedTimeStep = true;
+            IsFixedTimeStep = false;
         }
 
         protected override void Initialize()
@@ -50,7 +50,7 @@ namespace Demo.TiledMaps
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
             _sprite = new Sprite(_texture) { Position = new Vector2(600, 240) };
 
-            _tiledMap = Content.Load<TiledMap>("level02");
+            _tiledMap = Content.Load<TiledMap>("level01");
             _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
         }
 
@@ -96,10 +96,10 @@ namespace Demo.TiledMaps
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(_tiledMap.BackgroundColor ?? Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // you can draw the whole map all at once
-            _tiledMap.Draw(_camera, gameTime);
+            _tiledMap.Draw(_camera);
 
             // or you can have more control over drawing each individual layer
             //foreach (var layer in _tiledMap.Layers)

@@ -14,8 +14,6 @@ namespace MonoGame.Extended.Tests.Collections
             {
                 var bitVector = new BitVector32((uint)31);
                 Assert.AreEqual(31, bitVector);
-                // ReSharper disable once EqualExpressionComparison
-                Assert.IsTrue(bitVector == bitVector);
                 Assert.IsTrue(bitVector[31]);
                 Assert.IsFalse(bitVector[32]);
                 Assert.AreEqual(bitVector.ToString(), "BitVector32{00000000000000000000000000011111}");

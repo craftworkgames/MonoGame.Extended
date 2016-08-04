@@ -15,15 +15,14 @@ namespace MonoGame.Extended.Maps.Tiled
             _graphicsDevice = graphicsDevice;
             _layers = new List<TiledLayer>();
             _objectGroups = new List<TiledObjectGroup>();
-
-            _depthBufferState = new DepthStencilState {DepthBufferEnable = true};
+            _tilesets = new List<TiledTileset>();
+            _depthBufferState = new DepthStencilState { DepthBufferEnable = true };
 
             Width = width;
             Height = height;
             TileWidth = tileWidth;
             TileHeight = tileHeight;
             Properties = new TiledProperties();
-            _tilesets = new List<TiledTileset>();
             Orientation = orientation;
         }
 
@@ -35,7 +34,6 @@ namespace MonoGame.Extended.Maps.Tiled
 
         private readonly GraphicsDevice _graphicsDevice;
         private readonly List<TiledLayer> _layers;
-        private List<TiledImageLayer> _imageLayers;
         private readonly List<TiledTileset> _tilesets;
         private readonly List<TiledObjectGroup> _objectGroups;
 
@@ -45,16 +43,17 @@ namespace MonoGame.Extended.Maps.Tiled
         private short[] _tilesIndexes;
 
         private readonly DepthStencilState _depthBufferState;
-        private Matrix _worldMatrix;
+        //private Matrix _worldMatrix;
         private Matrix _viewMatrix;
-        private Matrix _projectionMatrix;
+        //private Matrix _projectionMatrix;
         private BasicEffect _basicEffect;
+        private float _highestZ;
 
         public int Width { get; }
         public int Height { get; }
         public int TileWidth { get; }
         public int TileHeight { get; }
-        
+
         public Color? BackgroundColor { get; set; }
         public TiledRenderOrder RenderOrder { get; set; }
         public TiledProperties Properties { get; private set; }
@@ -91,7 +90,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public TiledObjectGroup CreateObjectGroup(string name, TiledObject[] objects, bool isVisible)
         {
-            var objectGroup = new TiledObjectGroup(name, objects) {IsVisible = isVisible};
+            var objectGroup = new TiledObjectGroup(name, objects) { IsVisible = isVisible };
             _objectGroups.Add(objectGroup);
             return objectGroup;
         }
@@ -102,11 +101,13 @@ namespace MonoGame.Extended.Maps.Tiled
             var tileIndexes = new List<short>();
             var tileLayers = _layers.OfType<TiledTileLayer>();
             var indexOffset = 0;
+
             foreach (var layer in tileLayers)
             {
                 var vertices = layer.RenderVertices();
                 tileVertices.AddRange(vertices);
                 var tilesCount = layer.Tiles.Where(x => x.Id != 0).ToList().Count;
+
                 for (var i = 0; i < tilesCount; i++)
                 {
                     var thisTileIndexes = new short[6];
@@ -127,41 +128,20 @@ namespace MonoGame.Extended.Maps.Tiled
             _tilesIndexBuffer = new IndexBuffer(_graphicsDevice, typeof(short), _tilesIndexes.Length, BufferUsage.WriteOnly);
             _tilesVertexBuffer.SetData(_tilesVertices);
             _tilesIndexBuffer.SetData(_tilesIndexes);
-
-            _worldMatrix = Matrix.CreateTranslation(Vector3.Zero);
-
-            var highestZ = _layers.Max(layer => layer.Z);
+            
+            _highestZ = _layers.Max(layer => layer.Z);
             _viewMatrix = Matrix.CreateLookAt(
-                new Vector3(0f, 0f, highestZ + 100.0f),
-                Vector3.Zero,
-                Vector3.Up
+                cameraPosition: new Vector3(0f, 0f, _highestZ),
+                cameraTarget: Vector3.Zero,
+                cameraUpVector: Vector3.Up
             );
-
-            var projectionHalfPixel = Vector3.Zero;
-
-#if (OPENGL || DESKTOPGL)
-            projectionHalfPixel = new Vector3(-0.5f, -0.5f, 0.0f);
-#endif
-
-            _projectionMatrix = 
-                Matrix.CreateTranslation(projectionHalfPixel) * Matrix.CreateOrthographicOffCenter(
-                    0,
-                    _graphicsDevice.Viewport.Width,
-                    _graphicsDevice.Viewport.Height,
-                    0,
-                    1.0f, highestZ + 100.0f
-                );
-
+            
             _basicEffect = new BasicEffect(_graphicsDevice)
             {
-                World = _worldMatrix,
                 View = _viewMatrix,
-                Projection = _projectionMatrix,
                 TextureEnabled = true,
                 Texture = _tilesets[0].Texture
             };
-
-            _imageLayers = _layers.OfType<TiledImageLayer>().ToList();
 
             return this;
         }
@@ -174,18 +154,29 @@ namespace MonoGame.Extended.Maps.Tiled
         public T GetLayer<T>(string name)
             where T : TiledLayer
         {
-            return (T) GetLayer(name);
+            return (T)GetLayer(name);
         }
 
         public TiledObjectGroup GetObjectGroup(string name)
         {
             return _objectGroups.FirstOrDefault(i => i.Name == name);
         }
-        
-        public void Draw(Camera2D camera, GameTime gameTime = null)
+
+        public void Draw(Camera2D camera)
         {
-            camera.Position = new Vector2((int)camera.Position.X, (int)camera.Position.Y);
+            var projectionHalfPixel = Vector3.Zero;
+
+#if (OPENGL || DESKTOPGL)
+            projectionHalfPixel = new Vector3(-0.5f, -0.5f, 0.0f);
+#endif
             _basicEffect.World = camera.GetViewMatrix();
+            _basicEffect.Projection = Matrix.CreateTranslation(projectionHalfPixel) * Matrix.CreateOrthographicOffCenter(
+                    left: 0,
+                    right: _graphicsDevice.Viewport.Width,
+                    bottom: _graphicsDevice.Viewport.Height,
+                    top: 0,
+                    zNearPlane: 1.0f,
+                    zFarPlane: _highestZ);
 
             _graphicsDevice.SetVertexBuffer(_tilesVertexBuffer);
             _graphicsDevice.Indices = _tilesIndexBuffer;
@@ -198,15 +189,19 @@ namespace MonoGame.Extended.Maps.Tiled
                 var tilesIndexesSoFar = 0;
                 foreach (var layer in _layers)
                 {
-                    if (layer is TiledTileLayer)
+                    var tiledTileLayer = layer as TiledTileLayer;
+
+                    if (tiledTileLayer != null)
                     {
-                        var tileLayer = (TiledTileLayer)layer;
+                        var tileLayer = tiledTileLayer;
                         var indexCount = tileLayer.NotBlankTilesCount * 6;
                         var primitivesCount = tileLayer.NotBlankTilesCount * 2;
+
                         if (tileLayer.IsVisible && tileLayer.NotBlankTilesCount > 0)
                         {
                             if (_basicEffect.Texture != _tilesets[0].Texture)
                                 _basicEffect.Texture = _tilesets[0].Texture;
+
                             pass.Apply();
                             _graphicsDevice.DrawIndexedPrimitives(
                                 PrimitiveType.TriangleList,
@@ -215,23 +210,25 @@ namespace MonoGame.Extended.Maps.Tiled
                                 primitivesCount
                             );
                         }
+
                         tilesIndexesSoFar += indexCount;
                     }
                     else if (layer is TiledImageLayer)
                     {
                         if (!layer.IsVisible)
                             continue;
+
                         var imageLayer = (TiledImageLayer)layer;
                         _basicEffect.Texture = imageLayer.Texture;
                         pass.Apply();
                         _graphicsDevice.DrawUserIndexedPrimitives(
-                            PrimitiveType.TriangleList,
-                            imageLayer.ImageVertices,
-                            0,
-                            imageLayer.ImageVertices.Length,
-                            imageLayer.ImageVerticesIndexes,
-                            0,
-                            2
+                            primitiveType: PrimitiveType.TriangleList,
+                            vertexData: imageLayer.ImageVertices,
+                            vertexOffset: 0,
+                            numVertices: imageLayer.ImageVertices.Length,
+                            indexData: imageLayer.ImageVerticesIndexes,
+                            indexOffset: 0,
+                            primitiveCount: 2
                         );
                     }
                 }
@@ -253,7 +250,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public TiledTileSetTile GetTileSetTileById(int tileSetTileId)
         {
-            var tile = _tilesets.SelectMany(ts => ts.Tiles, (ts, t) => t).FirstOrDefault(t => t.Id == tileSetTileId-1);
+            var tile = _tilesets.SelectMany(ts => ts.Tiles, (ts, t) => t).FirstOrDefault(t => t.Id == tileSetTileId - 1);
             return tile;
         }
     }
