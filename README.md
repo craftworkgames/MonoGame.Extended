@@ -7,6 +7,14 @@ It makes MonoGame more awesome.
 
 MonoGame.Extended is an open source extension library for [MonoGame](http://www.monogame.net/). A collection of classes and extensions to make it easier to make games with MonoGame. 
 
+## Patreon Supporters
+
+We need your support! For the past 3 years we've had support from the [Microsoft BizSpark](https://www.microsoft.com/bizspark/) program to fund our web and build servers. On the 9th October 2016 that's going to come to an end and we'll be forced to shutdown the build server without funding. We don't need a lot, just a few supporters would really help.
+
+**What happens to MonoGame.Extended if we don't get the funding?** Never fear. The project won't die. The code will always be safely open sourced on github. However, the build server we run in the cloud is used to build and host the pre-release NuGet packages that some people rely on. If we can't run the build server in the cloud, it will make a few things like that a little more difficult.
+
+[![https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/support-on-patreon.png]](https://www.patreon.com/craftworkgames)
+
 ## Version 0.5 is available on NuGet
 MonoGame.Extended v0.5 has been published as [a NuGet package](https://www.nuget.org/packages/MonoGame.Extended/) and can be installed now. Please read the [install guide](https://github.com/craftworkgames/MonoGame.Extended/wiki/How-to-install-MonoGame.Extended) to setup the Pipeline tool.
 
@@ -76,11 +84,11 @@ The `MonoGame.Extended.Content.Pipeline.dll` needs to be referenced by the [Pipe
 
 #### GUI System
  - [ ] Controls
-	 - [ ] Label
-	 - [ ] Button (Text or Image)
-	 - [ ] Toggle Button (Checkbox)
+	 - [ ] Label**
+	 - [ ] Button (Text or Image)**
+	 - [ ] Toggle Button (Checkbox)**
 	 - [ ] Progress Bar
-	 - [ ] Text Box
+	 - [ ] Text Box**
 	 - [ ] Image
 	 - [ ] Slider
  - [ ] Layout
@@ -91,8 +99,8 @@ The `MonoGame.Extended.Content.Pipeline.dll` needs to be referenced by the [Pipe
 	 - [ ] Grid
  - [ ] Dialog
  - [ ] Window
- - [ ] Skinning
- - [ ] Events
+ - [ ] Skinning**
+ - [ ] Events**
  - [ ] Drag and Drop
 
 #### Particle System
