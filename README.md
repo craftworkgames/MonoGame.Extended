@@ -13,7 +13,7 @@ We need your support! For the past 3 years we've had support from the [Microsoft
 
 **What happens to MonoGame.Extended if we don't get the funding?** Never fear. The project won't die. The code will always be safely open sourced on github. However, the build server we run in the cloud is used to build and host the pre-release NuGet packages that some people rely on. If we can't run the build server in the cloud, it will make a few things like that a little more difficult.
 
-[![https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/support-on-patreon.png]](https://www.patreon.com/craftworkgames)
+[![image](https://cloud.githubusercontent.com/assets/3201643/17462536/f5608898-5cf3-11e6-8e81-47d6594a8d9c.png)](https://www.patreon.com/craftworkgames)
 
 ## Version 0.5 is available on NuGet
 MonoGame.Extended v0.5 has been published as [a NuGet package](https://www.nuget.org/packages/MonoGame.Extended/) and can be installed now. Please read the [install guide](https://github.com/craftworkgames/MonoGame.Extended/wiki/How-to-install-MonoGame.Extended) to setup the Pipeline tool.
