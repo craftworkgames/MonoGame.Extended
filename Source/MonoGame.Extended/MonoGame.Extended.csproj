@@ -88,6 +88,8 @@
     <Compile Include="Gui\Serialization\GuiLayoutConverter.cs" />
     <Compile Include="Gui\Serialization\TextureRegion2DConveter.cs" />
     <Compile Include="InputListeners\InputListenerComponent.cs" />
+    <Compile Include="Screens\Screen.cs" />
+    <Compile Include="Screens\ScreenComponent.cs" />
     <Compile Include="Serialization\ColorJsonConverter.cs" />
     <Compile Include="Serialization\Vector2JsonConverter.cs" />
     <Compile Include="Serialization\SizeFJsonConverter.cs" />
