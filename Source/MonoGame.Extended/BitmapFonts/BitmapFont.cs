@@ -20,6 +20,7 @@ namespace MonoGame.Extended.BitmapFonts
 
         public string Name { get; }
         public int LineHeight { get; private set; }
+        public int LetterSpacing { get; set; } = 0;
 
         public BitmapFontRegion GetCharacterRegion(int character)
         {
@@ -55,7 +56,7 @@ namespace MonoGame.Extended.BitmapFonts
                 if (_characterMap.TryGetValue(c, out fontRegion))
                 {
                     if (i != text.Length - 1)
-                        width += fontRegion.XAdvance;
+                        width += fontRegion.XAdvance + LetterSpacing;
                     else
                         width += fontRegion.XOffset + fontRegion.Width;
 
