@@ -40,7 +40,7 @@ namespace MonoGame.Extended.BitmapFonts
 
                     var spaceCharRegion = bitmapFont.GetCharacterRegion(' ');
                     if (i != words.Length - 1)
-                        dx += spaceCharRegion.XAdvance;
+                        dx += spaceCharRegion.XAdvance + bitmapFont.LetterSpacing;
                     else
                         dx += spaceCharRegion.XOffset + spaceCharRegion.Width;
                 }
@@ -70,7 +70,7 @@ namespace MonoGame.Extended.BitmapFonts
                     spriteBatch.Draw(fontRegion.TextureRegion, charPosition, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, layerDepth);
 
                     if (i != text.Length - 1)
-                        dx += fontRegion.XAdvance;
+                        dx += fontRegion.XAdvance + bitmapFont.LetterSpacing;
                     else
                         dx += fontRegion.XOffset + fontRegion.Width;
                 }
