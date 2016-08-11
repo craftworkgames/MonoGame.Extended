@@ -43,6 +43,8 @@
     <Compile Include="Screens\KeyboardOptionsScreen.cs" />
     <Compile Include="Screens\LoadGameScreen.cs" />
     <Compile Include="Screens\MainMenuScreen.cs" />
+    <Compile Include="Screens\MenuItem.cs" />
+    <Compile Include="Screens\MenuScreen.cs" />
     <Compile Include="Screens\MouseOptionsScreen.cs" />
     <Compile Include="Screens\OptionsScreen.cs" />
     <Compile Include="Screens\VideoOptionsScreen.cs" />
@@ -55,11 +57,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\montserrat-32_0.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Content\logo-square-128.png" />
+    <None Include="Content\montserrat-32.fnt" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />

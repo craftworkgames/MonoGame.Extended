@@ -5,8 +5,32 @@ namespace MonoGame.Extended.Screens
 {
     public abstract class Screen : IDraw, IDisposable
     {
+        protected Screen()
+        {
+        }
+
+        public IScreenManager ScreenManager { get; internal set; }
         public bool IsInitialized { get; private set; }
         public bool IsVisible { get; set; }
+
+        public T FindScreen<T>() where T : Screen
+        {
+            return ScreenManager?.FindScreen<T>();
+        }
+
+        public void Show<T>(bool hideThis) where T : Screen
+        {
+            var screen = FindScreen<T>();
+            screen.Show();
+
+            if (hideThis)
+                Hide();
+        }
+
+        public void Show<T>() where T : Screen
+        {
+            Show<T>(true);
+        }
 
         public void Show()
         {
