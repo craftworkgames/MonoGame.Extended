@@ -65,11 +65,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Fonts\montserrat-32_0.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\black.png" />
-    <None Include="Content\Fonts\courier-new-32_0.png" />
+    <None Include="Content\Fonts\montserrat-32.fnt" />
     <None Include="Content\Gui\9patch-1.png" />
     <None Include="Content\Gui\9patch-2.png" />
     <None Include="Content\Gui\button-clicked.png" />
@@ -99,7 +100,6 @@
     <Content Include="Content\explosion-animations.aa" />
     <Content Include="Content\regular-explosion-sheet.json" />
     <None Include="app.config" />
-    <None Include="Content\Fonts\courier-new-32.fnt" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="OpenTK.dll.config">

@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Shapes;
@@ -58,7 +57,7 @@ namespace Demo.SpaceGame
         protected override void LoadContent()
         {
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _font = Content.Load<BitmapFont>("Fonts/courier-new-32");
+            _font = Content.Load<BitmapFont>("Fonts/montserrat-32");
 
             _camera = new Camera2D(_viewportAdapter);
             _explosionAnimations = Content.Load<SpriteSheetAnimationFactory>("explosion-animations");
@@ -76,12 +75,10 @@ namespace Demo.SpaceGame
             _meteorFactory = new MeteorFactory(_entityManager, Content);
 
             for (var i = 0; i < 13; i++)
-            {
                 _meteorFactory.SpawnNewMeteor(_player.Position);
-            }
         }
 
-        private void SpawnPlayer(BulletFactory bulletFactory)
+        private void SpawnPlayer(IBulletFactory bulletFactory)
         {
             var spaceshipTexture = Content.Load<Texture2D>("playerShip1_blue");
             var spaceshipRegion = new TextureRegion2D(spaceshipTexture);
@@ -99,9 +96,7 @@ namespace Demo.SpaceGame
             var mouseState = Mouse.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
-            {
                 Exit();
-            }
 
             if (_player != null && !_player.IsDestroyed)
             {
@@ -164,9 +159,7 @@ namespace Demo.SpaceGame
                     Explode(laser.Position, meteor.Size);
 
                     if (meteor.Size >= 2)
-                    {
                         _meteorFactory.SplitMeteor(meteor);
-                    }
                 }
 
                 if (_player != null && _shieldHealth > 0 && meteor.BoundingCircle.Intersects(new CircleF(_player.Position, _shieldRadius)))
@@ -193,13 +186,13 @@ namespace Demo.SpaceGame
             var sourceRectangle = new Rectangle(0, 0, _viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight);
             sourceRectangle.Offset(_camera.Position * new Vector2(0.1f));
 
-            _spriteBatch.Begin(samplerState: SamplerState.LinearWrap, transformMatrix: _viewportAdapter.GetScaleMatrix());
+            _spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: _viewportAdapter.GetScaleMatrix());
             _spriteBatch.Draw(_backgroundTexture, Vector2.Zero, sourceRectangle, Color.White);
             _spriteBatch.DrawString(_font, $"{_score}", Vector2.One, Color.White);
             _spriteBatch.End();
 
             // entities
-            _spriteBatch.Begin(samplerState: SamplerState.LinearClamp, blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
             _entityManager.Draw(_spriteBatch);
             _spriteBatch.End();
 
