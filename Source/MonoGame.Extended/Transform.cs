@@ -13,17 +13,17 @@ namespace MonoGame.Extended
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public abstract class BaseTransform<TMatrix, TTransform> where TMatrix : struct where TTransform : BaseTransform<TMatrix, TTransform>
+    public abstract class BaseTransform<TTransform> where TTransform : BaseTransform<TTransform>
     {
         private TransformFlags _flags = TransformFlags.All;
-        private TMatrix _worldMatrix;
-        private TMatrix _localMatrix;
+        private Matrix _worldMatrix;
+        private Matrix _localMatrix;
         private TTransform _parentTransform;
 
         private event Action WorldMatrixIsDirty;
         public event Action WorldMatrixUpdated;
 
-        public TMatrix LocalMatrix
+        public Matrix LocalMatrix
         {
             get
             {
@@ -32,7 +32,7 @@ namespace MonoGame.Extended
             }
         }
 
-        public TMatrix WorldMatrix
+        public Matrix WorldMatrix
         {
             get
             {
@@ -61,13 +61,13 @@ namespace MonoGame.Extended
         {
         }
 
-        public void GetLocalMatrix(out TMatrix matrix)
+        public void GetLocalMatrix(out Matrix matrix)
         {
             RecalculateLocalMatrixIfNecessary();
             matrix = _localMatrix;
         }
 
-        public void GetWorldMatrix(out TMatrix matrix)
+        public void GetWorldMatrix(out Matrix matrix)
         {
             RecalculateWorldMatrixIfNecessary();
             matrix = _worldMatrix;
@@ -118,7 +118,7 @@ namespace MonoGame.Extended
             WorldMatrixUpdated?.Invoke();
         }
 
-        protected abstract void RecalculateWorldMatrix(out TMatrix matrix);
+        protected abstract void RecalculateWorldMatrix(out Matrix matrix);
 
         private void RecalculateLocalMatrixIfNecessary()
         {
@@ -133,10 +133,10 @@ namespace MonoGame.Extended
             WorldMatrixBecameDirty();
         }
 
-        protected abstract void RecalculateLocalMatrix(out TMatrix matrix);
+        protected abstract void RecalculateLocalMatrix(out Matrix matrix);
     }
 
-    public class Transform2D : BaseTransform<Matrix, Transform2D>
+    public class Transform2D : BaseTransform<Transform2D>
     {
         private Vector2 _position;
         private Vector2 _scale = Vector2.One;
@@ -197,7 +197,7 @@ namespace MonoGame.Extended
         }
     }
 
-    public class Transform3D : BaseTransform<Matrix, Transform3D>
+    public class Transform3D : BaseTransform<Transform3D>
     {
         private Vector3 _position;
         private Vector3 _scale = Vector3.One;
