@@ -23,6 +23,7 @@ namespace Demo.SpriteSheetAnimations
         private SpriteBatch _spriteBatch;
         private TiledMap _tiledMap;
         private ViewportAdapter _viewportAdapter;
+        //private CollisionSimulation _simulation;
         private CollisionWorld _world;
         private Zombie _zombie;
         private SpriteSheetAnimation _animation;
@@ -61,7 +62,6 @@ namespace Demo.SpriteSheetAnimations
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Content.Load<BitmapFont>("Fonts/courier-new-32");
             _tiledMap = Content.Load<TiledMap>("Tilesets/level01");
-
             _world = new CollisionWorld(new Vector2(0, 900));
             _world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
 
@@ -140,7 +140,9 @@ namespace Demo.SpriteSheetAnimations
 
             // update must be called before collision detection
             _zombie.Update(gameTime);
+
             _world.Update(gameTime);
+
             _camera.LookAt(_zombie.Position);
 
             _animation.Update(deltaSeconds);

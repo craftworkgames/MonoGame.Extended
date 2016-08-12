@@ -5,6 +5,22 @@ namespace MonoGame.Extended
 {
     public struct SizeF : IEquatable<SizeF>
     {
+        public float Width;
+        public float Height;
+
+        public static SizeF Empty => new SizeF(0, 0);
+
+        // ReSharper disable CompareOfFloatsByEqualityOperator
+        public bool IsEmpty => Width == 0 && Height == 0;
+        // ReSharper restore CompareOfFloatsByEqualityOperator
+
+        public SizeF(float value)
+            : this()
+        {
+            Width = value;
+            Height = value;
+        }
+
         public SizeF(float width, float height)
             : this()
         {
@@ -12,48 +28,83 @@ namespace MonoGame.Extended
             Height = height;
         }
 
-        public float Width { get; }
-        public float Height { get; }
-        public static Size Empty => new Size(0, 0);
-        public static Size MaxValue => new Size(int.MaxValue, int.MaxValue);
-        public bool IsEmpty => Width.Equals(0) && Height.Equals(0);
-
-        public override int GetHashCode()
+        public static SizeF operator +(SizeF size1, SizeF size2)
         {
-            unchecked
-            {
-                return Width.GetHashCode() + Height.GetHashCode();
-            }
+            return Add(size1, size2);
         }
 
-        public static bool operator ==(SizeF a, SizeF b)
+        public static SizeF operator -(SizeF size1, SizeF size2)
         {
-            return a.Width.Equals(b.Width) && a.Height.Equals(b.Height);
+            return Subtract(size1, size2);
         }
 
-        public static bool operator !=(SizeF a, SizeF b)
+        public static SizeF operator -(SizeF value)
         {
-            return !(a == b);
+            value.Width = -value.Width;
+            value.Height = -value.Height;
+            return value;
+        }
+
+        public static SizeF operator *(SizeF size1, SizeF size2)
+        {
+            return Multiply(size1, size2);
+        }
+
+        public static SizeF operator *(SizeF size, Vector2 vector)
+        {
+            return Multiply(size, vector);
+        }
+
+        public static SizeF operator *(SizeF size, float scaleFactor)
+        {
+            return Multiply(size, scaleFactor);
+        }
+
+        public static SizeF operator *(float scaleFactor, SizeF size)
+        {
+            return Multiply(size, scaleFactor);
+        }
+
+        public static SizeF operator /(SizeF size1, SizeF size2)
+        {
+            return Divide(size1, size2);
         }
 
         public static SizeF operator /(SizeF size, float value)
         {
-            return new SizeF(size.Width/value, size.Height/value);
+            return Divide(size, value);
         }
 
-        public static SizeF operator *(SizeF size, float value)
+        public static bool operator ==(SizeF size1, SizeF size2)
         {
-            return new SizeF(size.Width * value, size.Height * value);
+            // ReSharper disable CompareOfFloatsByEqualityOperator
+            return size1.Width == size2.Width && size1.Height == size2.Height;
+            // ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
-        public bool Equals(SizeF other)
+        public static bool operator !=(SizeF size1, SizeF size2)
         {
-            return Width.Equals(other.Width) && Height.Equals(other.Height);
+            return !(size1 == size2);
         }
 
-        public static implicit operator SizeF(Point size)
+        public static implicit operator SizeF(float value)
         {
-            return new SizeF(size.X, size.Y);
+            return new SizeF(value);
+        }
+
+        public static implicit operator Point(SizeF size)
+        {
+            return new Point((int)size.Width, (int)size.Height);
+        }
+
+        public static implicit operator SizeF(Size size)
+        {
+            return new SizeF(size.Width, size.Height);
+        }
+
+        public static implicit operator SizeF(Rectangle rectangle)
+        {
+            return new Size(rectangle.Width, rectangle.Height);
         }
 
         public static implicit operator Vector2(SizeF size)
@@ -61,20 +112,73 @@ namespace MonoGame.Extended
             return new Vector2(size.Width, size.Height);
         }
 
-        public static explicit operator Size(SizeF size)
+        public static implicit operator SizeF(Vector2 size)
         {
-            return new Size((int) size.Width, (int) size.Height);
+            return new SizeF(size.X, size.Y);
+        }
+
+        public static implicit operator SizeF(Point point)
+        {
+            return new SizeF(point.X, point.Y);
+        }
+
+        public static SizeF Add(SizeF size1, SizeF size2)
+        {
+            return new SizeF(size1.Width + size2.Width, size1.Height + size2.Height);
+        }
+
+        public static SizeF Subtract(SizeF size1, SizeF size2)
+        {
+            return new SizeF(size1.Width - size2.Width, size1.Height - size2.Height);
+        }
+
+        public static SizeF Multiply(SizeF size, SizeF size2)
+        {
+            return new SizeF(size.Width * size2.Width, size.Height * size2.Height);
+        }
+
+        public static SizeF Multiply(SizeF size, float scaleFactor)
+        {
+            return new SizeF(size.Width * scaleFactor, size.Height * scaleFactor);
+        }
+
+        public static SizeF Divide(SizeF size, SizeF size2)
+        {
+            return new SizeF(size.Width / size2.Width, size.Height / size2.Height);
+        }
+
+        public static SizeF Divide(SizeF size, float scaleFactor)
+        {
+            return new SizeF(size.Width / scaleFactor, size.Height / scaleFactor);
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            return obj is Size && Equals((Size)obj);
+            if (!(obj is SizeF))
+            {
+                return false;
+            }
+
+            return Equals((SizeF)obj);
+        }
+
+        public bool Equals(SizeF other)
+        {
+            // ReSharper disable CompareOfFloatsByEqualityOperator
+            return Width == other.Width && Height == other.Height;
+            // ReSharper restore CompareOfFloatsByEqualityOperator
+        }
+
+        public override int GetHashCode()
+        {
+            // ReSharper disable NonReadonlyMemberInGetHashCode
+            return HashCodeHelper.GetHashCode(Width, Height);
+            // ReSharper restore NonReadonlyMemberInGetHashCode
         }
 
         public override string ToString()
         {
-            return $"Width: {Width}, Height: {Height}";
+            return $"Width={Width}, Height={Height}";
         }
     }
 }

@@ -31,7 +31,7 @@ namespace MonoGame.Extended.Tests
         public void SizeF_ExplicitCastToSize()
         {
             var sizeF = new SizeF(12.34f, 56.78f);
-            var size = (Size) sizeF;
+            Size size = sizeF;
 
             Assert.AreEqual(size.Width, (int)sizeF.Width);
             Assert.AreEqual(size.Height, (int)sizeF.Height);
