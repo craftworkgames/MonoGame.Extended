@@ -23,7 +23,10 @@ namespace MonoGame.Extended.SceneGraphs
         protected override void ClearItems()
         {
             foreach (var sceneNode in Items)
+            {
                 RemoveParent(sceneNode);
+                sceneNode.Transform.ParentTransform = null;
+            }
 
             base.ClearItems();
         }
@@ -31,18 +34,22 @@ namespace MonoGame.Extended.SceneGraphs
         protected override void InsertItem(int index, SceneNode item)
         {
             item.Parent = _parent;
+            item.Transform.ParentTransform = _parent.Transform;
             base.InsertItem(index, item);
         }
 
         protected override void RemoveItem(int index)
         {
-            RemoveParent(Items[index]);
+            var sceneNode = Items[index];
+            RemoveParent(sceneNode);
+            sceneNode.Transform.ParentTransform = null;
             base.RemoveItem(index);
         }
 
         protected override void SetItem(int index, SceneNode item)
         {
             item.Parent = _parent;
+            item.Transform.ParentTransform = _parent.Transform;
             base.SetItem(index, item);
         }
     }

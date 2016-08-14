@@ -1,4 +1,3 @@
-
 #----------------------------- Global Properties ----------------------------#
 
 /outputDir:bin/$(Platform)
@@ -42,4 +41,3 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:montserrat-32_0.png
-

@@ -59,20 +59,32 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
+    <Compile Include="ColorHelper.cs" />
+    <Compile Include="Graphics\Effects\IEffectWorldViewProjectionMatrix.cs" />
+    <Compile Include="Graphics\GeometryBufferType.cs" />
+    <Compile Include="Graphics\GeometryBuilderExtensions.VertexPositionColorTexture.cs" />
+    <Compile Include="Shapes\ArcF.cs" />
+    <Compile Include="Shapes\Explicit\ExplicitShapeBuilder.cs" />
+    <Compile Include="Shapes\Line2F.cs" />
+    <Compile Include="Shapes\Line3F.cs" />
+    <Compile Include="Graphics\Batching\IDrawContext.cs" />
+    <Compile Include="Graphics\Effects\IEffectTexture2D.cs" />
+    <Compile Include="Graphics\GeometryBuffer.cs" />
+    <Compile Include="Graphics\GeometryBuilder.cs" />
+    <Compile Include="Graphics\Effects\EffectResource.cs" />
+    <Compile Include="Graphics\Effects\ShapeEffect.cs" />
+    <Compile Include="Graphics\ShapeBatch.cs" />
+    <Compile Include="IEquatableByReference.cs" />
+    <Compile Include="Graphics\Batching\PrimitiveBatchHelper.cs" />
+    <Compile Include="HashCodeHelper.cs" />
+    <Compile Include="ICollisionShape.cs" />
     <Compile Include="Graphics\Batching\BatchDrawer.cs" />
-    <Compile Include="Graphics\Batching\BatchDrawOperation.cs" />
-    <Compile Include="Graphics\Batching\BatchDrawStrategy.cs" />
-    <Compile Include="Graphics\Batching\BatchQueuer.cs" />
+    <Compile Include="Graphics\Batching\BatchItem.cs" />
+    <Compile Include="Graphics\Batching\Queuers\BatchQueuer.cs" />
     <Compile Include="Graphics\Batching\BatchMode.cs" />
-    <Compile Include="Graphics\Batching\DeferredBatchQueuer.cs" />
-    <Compile Include="Graphics\Batching\DynamicVertexBufferBatchDrawer.cs" />
-    <Compile Include="Graphics\IDrawContext.cs" />
-    <Compile Include="Graphics\Batching\ImmediateBatchQueuer.cs" />
+    <Compile Include="Graphics\Batching\Queuers\DeferredBatchQueuer.cs" />
+    <Compile Include="Graphics\Batching\Queuers\ImmediateBatchQueuer.cs" />
     <Compile Include="Graphics\Batching\PrimitiveBatch.cs" />
-    <Compile Include="Graphics\Batching\UserPrimitivesBatchDrawer.cs" />
-    <Compile Include="Graphics\IDrawContextTexture2D.cs" />
-    <Compile Include="Graphics\Batching\PrimitiveBatchExtensions.cs" />
-    <Compile Include="Graphics\EffectMaterial.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
     <Compile Include="Gui\Controls\GuiLabel.cs" />
     <Compile Include="Gui\Controls\GuiToggleButton.cs" />
@@ -218,6 +230,7 @@
     <Compile Include="Timers\CountdownTimer.cs" />
     <Compile Include="Timers\GameTimer.cs" />
     <Compile Include="Timers\TimerState.cs" />
+    <Compile Include="Transform.cs" />
     <Compile Include="Vector2Extensions.cs" />
     <Compile Include="ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />
@@ -240,7 +253,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <EmbeddedResource Include="Graphics\Effects\Resources\ShapeEffect.mgfxo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Graphics\Effects\Resources\ShapeEffect.fx" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

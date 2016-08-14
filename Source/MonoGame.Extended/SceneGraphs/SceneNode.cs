@@ -7,6 +7,31 @@ namespace MonoGame.Extended.SceneGraphs
 {
     public class SceneNode : IMovable, IRotatable, IScalable
     {
+        public string Name { get; set; }
+        public Transform2D Transform { get; }
+        public SceneNode Parent { get; internal set; }
+        public SceneNodeCollection Children { get; }
+        public SceneEntityCollection Entities { get; }
+        public object Tag { get; set; }
+
+        public Vector2 Position
+        {
+            get { return Transform.Position; }
+            set { Transform.Position = value; }
+        }
+
+        public float Rotation
+        {
+            get { return Transform.RotationAngle; }
+            set { Transform.RotationAngle = value; }
+        }
+
+        public Vector2 Scale
+        {
+            get { return Transform.Scale; }
+            set { Transform.Scale = value; }
+        }
+
         public SceneNode(string name)
             : this(name, Vector2.Zero, 0, Vector2.One)
         {
@@ -19,6 +44,8 @@ namespace MonoGame.Extended.SceneGraphs
 
         public SceneNode(string name, Vector2 position, float rotation, Vector2 scale)
         {
+            Transform = new Transform2D();
+
             Name = name;
             Position = position;
             Rotation = rotation;
@@ -33,20 +60,13 @@ namespace MonoGame.Extended.SceneGraphs
         {
         }
 
-        public string Name { get; set; }
-        public Vector2 Position { get; set; }
-        public float Rotation { get; set; }
-        public Vector2 Scale { get; set; }
-        public SceneNode Parent { get; internal set; }
-        public SceneNodeCollection Children { get; }
-        public SceneEntityCollection Entities { get; }
-        public object Tag { get; set; }
-
         public RectangleF GetBoundingRectangle()
         {
             Vector2 position, scale;
             float rotation;
-            GetWorldTransform().Decompose(out position, out rotation, out scale);
+            Matrix worldMatrix;
+            Transform.GetWorldMatrix(out worldMatrix);
+            worldMatrix.Decompose(out position, out rotation, out scale);
 
             var rectangles = Entities
                 .Select(e =>
@@ -65,26 +85,13 @@ namespace MonoGame.Extended.SceneGraphs
             return new RectangleF(x0, y0, x1 - x0, y1 - y0);
         }
 
-        public Matrix GetWorldTransform()
-        {
-            return Parent == null ? Matrix.Identity : Matrix.Multiply(GetLocalTransform(), Parent.GetWorldTransform());
-        }
-
-        public Matrix GetLocalTransform()
-        {
-            var rotationMatrix = Matrix.CreateRotationZ(Rotation);
-            var scaleMatrix = Matrix.CreateScale(new Vector3(Scale.X, Scale.Y, 1));
-            var translationMatrix = Matrix.CreateTranslation(new Vector3(Position.X, Position.Y, 0));
-            var tempMatrix = Matrix.Multiply(scaleMatrix, rotationMatrix);
-            return Matrix.Multiply(tempMatrix, translationMatrix);
-        }
-
         public void Draw(SpriteBatch spriteBatch)
         {
             Vector2 offsetPosition, offsetScale;
             float offsetRotation;
-            var worldTransform = GetWorldTransform();
-            worldTransform.Decompose(out offsetPosition, out offsetRotation, out offsetScale);
+            Matrix worldMatrix;
+            Transform.GetWorldMatrix(out worldMatrix);
+            worldMatrix.Decompose(out offsetPosition, out offsetRotation, out offsetScale);
 
             foreach (var drawable in Entities.OfType<ISpriteBatchDrawable>())
             {

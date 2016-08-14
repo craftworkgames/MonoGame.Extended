@@ -33,7 +33,6 @@ namespace Demo.SceneGraphs
             Content.RootDirectory = "Content";
             Window.Title = "MonoGame.Extended Game";
             Window.AllowUserResizing = true;
-            Window.Position = Point.Zero;
             IsMouseVisible = true;
         }
 

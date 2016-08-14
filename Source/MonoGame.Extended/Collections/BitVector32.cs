@@ -135,7 +135,7 @@ namespace MonoGame.Extended.Collections
             get { return (int)((_data & (uint)(section.Mask << section.Offset)) >> section.Offset); }
             set
             {
-                Debug.Assert((value & section.Mask) == value, "Value out of bounds on BitVector32 Section set.");
+                Debug.Assert((value & section.Mask) == value, "Position out of bounds on BitVector32 Section set.");
                 value <<= section.Offset;
                 var offsetMask = (0xFFFF & section.Mask) << section.Offset;
                 _data = (_data & ~(uint)offsetMask) | ((uint)value & (uint)offsetMask);
