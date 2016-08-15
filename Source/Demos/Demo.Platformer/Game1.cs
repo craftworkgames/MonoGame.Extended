@@ -49,6 +49,16 @@ namespace Demo.Platformer
             _sprite0 = _animator.CreateSprite(position: new Vector2(116, 273));
             _sprite1 = _animator.CreateSprite(position: new Vector2(132, 273));
             _tiledMap = Content.Load<TiledMap>("level-1");
+
+            var viewport = GraphicsDevice.Viewport;
+            _alphaTestEffect = new AlphaTestEffect(GraphicsDevice)
+            {
+                Projection =
+                    Matrix.CreateTranslation(-0.5f, -0.5f, 0)*
+                    Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1),
+                VertexColorEnabled = true,
+                ReferenceAlpha = 128
+            };
         }
 
         protected override void UnloadContent()
@@ -74,18 +84,28 @@ namespace Demo.Platformer
             base.Update(gameTime);
         }
 
+        private AlphaTestEffect _alphaTestEffect;
+
         protected override void Draw(GameTime gameTime)
         {
+            var viewMatrix = _camera.GetViewMatrix();
+
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            _tiledMap.Draw(_camera.GetViewMatrix());
             
-            _spriteBatch.Begin(sortMode: SpriteSortMode.FrontToBack, samplerState: SamplerState.PointClamp, transformMatrix: _camera.GetViewMatrix());
+            _spriteBatch.Begin(
+                sortMode: SpriteSortMode.FrontToBack, 
+                samplerState: SamplerState.PointClamp, 
+                depthStencilState: DepthStencilState.Default,
+                blendState: BlendState.AlphaBlend,
+                effect: _alphaTestEffect,
+                transformMatrix: viewMatrix);
 
-            _spriteBatch.Draw(_logo, position: new Vector2(250, 250), color: Color.White, layerDepth: 0.5f);
-            _spriteBatch.Draw(_logo, position: new Vector2(300, 300), color: Color.Green, layerDepth: 0.25f);
+            _spriteBatch.Draw(_logo, position: new Vector2(305, 160), color: Color.White, layerDepth: 0.5f);
+            _spriteBatch.Draw(_logo, position: new Vector2(375, 210), color: Color.Green, layerDepth: 0.25f);
 
             _spriteBatch.End();
+
+            _tiledMap.Draw(viewMatrix);
 
 
             base.Draw(gameTime);
