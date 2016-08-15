@@ -47,7 +47,7 @@ namespace MonoGame.Extended.Maps.Tiled
         //private Matrix _viewMatrix;
         //private Matrix _projectionMatrix;
         private BasicEffect _basicEffect;
-        private float _highestZ;
+        //private float _highestZ;
 
         public int Width { get; }
         public int Height { get; }
@@ -74,16 +74,16 @@ namespace MonoGame.Extended.Maps.Tiled
             return tileset;
         }
 
-        public TiledTileLayer CreateTileLayer(string name, int width, int height, int[] data, int depth)
+        public TiledTileLayer CreateTileLayer(string name, int width, int height, int[] data)
         {
-            var layer = new TiledTileLayer(this, _graphicsDevice, name, width, height, data, depth);
+            var layer = new TiledTileLayer(this, _graphicsDevice, name, width, height, data);
             _layers.Add(layer);
             return layer;
         }
 
-        public TiledImageLayer CreateImageLayer(string name, Texture2D texture, Vector2 position, int depth)
+        public TiledImageLayer CreateImageLayer(string name, Texture2D texture, Vector2 position)
         {
-            var layer = new TiledImageLayer(name, texture, position, depth);
+            var layer = new TiledImageLayer(name, texture, position);
             _layers.Add(layer);
             return layer;
         }
@@ -99,27 +99,31 @@ namespace MonoGame.Extended.Maps.Tiled
         {
             var tileVertices = new List<VertexPositionTexture>();
             var tileIndexes = new List<short>();
-            var tileLayers = _layers.OfType<TiledTileLayer>();
+            var tileLayers = _layers.OfType<TiledTileLayer>().ToArray();
+            var depth = 0f;
+            var depthInc = 1.0f / (_layers.Count - 1);
             var indexOffset = 0;
 
             foreach (var layer in tileLayers)
             {
-                var vertices = layer.RenderVertices();
+                var vertices = layer.BuildVertices(depth);
                 tileVertices.AddRange(vertices);
                 var tilesCount = layer.Tiles.Where(x => x.Id != 0).ToList().Count;
 
                 for (var i = 0; i < tilesCount; i++)
                 {
                     var thisTileIndexes = new short[6];
-                    thisTileIndexes[0] = (short)(4 * indexOffset);
-                    thisTileIndexes[1] = (short)(4 * indexOffset + 1);
-                    thisTileIndexes[2] = (short)(4 * indexOffset + 2);
-                    thisTileIndexes[3] = (short)(4 * indexOffset + 1);
-                    thisTileIndexes[4] = (short)(4 * indexOffset + 3);
-                    thisTileIndexes[5] = (short)(4 * indexOffset + 2);
+                    thisTileIndexes[0] = (short) (4*indexOffset);
+                    thisTileIndexes[1] = (short) (4*indexOffset + 1);
+                    thisTileIndexes[2] = (short) (4*indexOffset + 2);
+                    thisTileIndexes[3] = (short) (4*indexOffset + 1);
+                    thisTileIndexes[4] = (short) (4*indexOffset + 3);
+                    thisTileIndexes[5] = (short) (4*indexOffset + 2);
                     tileIndexes.AddRange(thisTileIndexes);
                     indexOffset++;
                 }
+
+                depth -= depthInc;
             }
 
             _tilesVertices = tileVertices.ToArray();
@@ -129,16 +133,13 @@ namespace MonoGame.Extended.Maps.Tiled
             _tilesVertexBuffer.SetData(_tilesVertices);
             _tilesIndexBuffer.SetData(_tilesIndexes);
 
-            _highestZ = _layers.Max(layer => layer.Depth) + 1;
+            //_highestZ = _layers.Max(layer => layer.Depth) + 1;
 
             // Projection vs View vs World http://gamedev.stackexchange.com/a/56203/22277
 
             _basicEffect = new BasicEffect(_graphicsDevice)
             {
-                World = Matrix.CreateLookAt(
-                    cameraPosition: new Vector3(0f, 0f, _highestZ),
-                    cameraTarget: Vector3.Zero,
-                    cameraUpVector: Vector3.Up),
+                World = Matrix.CreateLookAt(cameraPosition: new Vector3(0f, 0f, -1f), cameraTarget: new Vector3(0f, 0f, -2f), cameraUpVector: Vector3.Up),
                 TextureEnabled = true,
                 Texture = _tilesets[0].Texture
             };
@@ -162,22 +163,17 @@ namespace MonoGame.Extended.Maps.Tiled
             return _objectGroups.FirstOrDefault(i => i.Name == name);
         }
 
+        [Obsolete]
         public void Draw(Camera2D camera)
         {
-            var projectionHalfPixel = Vector3.Zero;
+            Draw(camera.GetViewMatrix());
+        }
 
-            // I'm pretty certain this isn't doing anything because these constants will never be defined.
-#if (OPENGL || DESKTOPGL)
-            projectionHalfPixel = new Vector3(-0.5f, -0.5f, 0.0f);
-#endif
-            _basicEffect.View = camera.GetViewMatrix();
-            _basicEffect.Projection = Matrix.CreateTranslation(projectionHalfPixel) * Matrix.CreateOrthographicOffCenter(
-                    left: 0,
-                    right: _graphicsDevice.Viewport.Width,
-                    bottom: _graphicsDevice.Viewport.Height,
-                    top: 0,
-                    zNearPlane: 1.0f,
-                    zFarPlane: _highestZ);
+        public void Draw(Matrix viewMatrix)
+        {
+            _basicEffect.View = viewMatrix;
+            _basicEffect.Projection = Matrix.CreateOrthographicOffCenter(left: 0, right: _graphicsDevice.Viewport.Width,
+                bottom: _graphicsDevice.Viewport.Height, top: 0, zNearPlane: 0f, zFarPlane: -1f);
 
             _graphicsDevice.SetVertexBuffer(_tilesVertexBuffer);
             _graphicsDevice.Indices = _tilesIndexBuffer;

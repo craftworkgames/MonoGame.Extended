@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Animations;
 
 namespace MonoGame.Extended.Sprites
 {
@@ -21,7 +20,7 @@ namespace MonoGame.Extended.Sprites
                 var sourceRectangle = sprite.TextureRegion.Bounds;
 
                 spriteBatch.Draw(texture, sprite.Position, sourceRectangle, sprite.Color * sprite.Alpha, sprite.Rotation, sprite.Origin,
-                    sprite.Scale, sprite.Effect, 0);
+                    sprite.Scale, sprite.Effect, sprite.Depth);
             }
         }
     }

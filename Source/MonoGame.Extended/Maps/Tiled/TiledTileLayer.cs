@@ -9,8 +9,8 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledTileLayer : TiledLayer
     {
-        public TiledTileLayer(TiledMap map, GraphicsDevice graphicsDevice, string name, int width, int height, int[] data, int depth)
-            : base(name, depth)
+        public TiledTileLayer(TiledMap map, GraphicsDevice graphicsDevice, string name, int width, int height, int[] data)
+            : base(name)
         {
             Width = width;
             Height = height;
@@ -36,10 +36,8 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly List<TiledTile> _animatedTiles;
         private List<TiledTileSetTile> _uniqueTileSetTiles = new List<TiledTileSetTile>();
 
-        public VertexPositionTexture[] VerticesList => _verticesList;
-        private VertexPositionTexture[] _verticesList;
-        public int NotBlankTilesCount => _notBlankTilesCount;
-        private int _notBlankTilesCount;
+        public VertexPositionTexture[] Vertices { get; private set; }
+        public int NotBlankTilesCount { get; private set; }
 
         public IEnumerable<TiledTile> Tiles => _tiles;
         public int TileWidth => _map.TileWidth;
@@ -59,11 +57,11 @@ namespace MonoGame.Extended.Maps.Tiled
                 }
             }
 
-            _notBlankTilesCount = tiles.Count(x => x.Id != 0);
+            NotBlankTilesCount = tiles.Count(x => x.Id != 0);
             return tiles;
         }
 
-        public List<VertexPositionTexture> RenderVertices()
+        internal VertexPositionTexture[] BuildVertices(float depth)
         {
             var verticesList = new List<VertexPositionTexture>();
 
@@ -84,34 +82,22 @@ namespace MonoGame.Extended.Maps.Tiled
                 var point = GetTileLocationFunction()(tile);
                 var tileWidth = region.Width;
                 var tileHeight = region.Height;
-                var textureCoordinateTopLeft = Vector2.Zero;
-                var textureCoordinateBottomRight = Vector2.One;
+                var tc0 = Vector2.Zero;
+                var tc1 = Vector2.One;
 
-                textureCoordinateTopLeft.X = (region.X + 0.5f) / region.Texture.Width;
-                textureCoordinateTopLeft.Y = (region.Y + 0.5f) / region.Texture.Height;
-                textureCoordinateBottomRight.X = (float)(region.X + region.Width) / region.Texture.Width;
-                textureCoordinateBottomRight.Y = (float)(region.Y + region.Height) / region.Texture.Height;
+                tc0.X = (region.X + 0.5f) / region.Texture.Width;
+                tc0.Y = (region.Y + 0.5f) / region.Texture.Height;
+                tc1.X = (float)(region.X + region.Width) / region.Texture.Width;
+                tc1.Y = (float)(region.Y + region.Height) / region.Texture.Height;
                 var vertices = new VertexPositionTexture[4];
-                vertices[0] = new VertexPositionTexture(
-                    new Vector3(point.X, point.Y, Depth),
-                    textureCoordinateTopLeft
-                );
-                vertices[1] = new VertexPositionTexture(
-                    new Vector3(point.X + tileWidth, point.Y, Depth),
-                    new Vector2(textureCoordinateBottomRight.X, textureCoordinateTopLeft.Y)
-                );
-                vertices[2] = new VertexPositionTexture(
-                    new Vector3(point.X, point.Y + tileHeight, Depth),
-                    new Vector2(textureCoordinateTopLeft.X, textureCoordinateBottomRight.Y)
-                );
-                vertices[3] = new VertexPositionTexture(
-                    new Vector3(point.X + tileWidth, point.Y + tileHeight, Depth),
-                    textureCoordinateBottomRight
-                );
+                vertices[0] = new VertexPositionTexture(new Vector3(point.X, point.Y, depth), tc0);
+                vertices[1] = new VertexPositionTexture(new Vector3(point.X + tileWidth, point.Y, depth), new Vector2(tc1.X, tc0.Y));
+                vertices[2] = new VertexPositionTexture(new Vector3(point.X, point.Y + tileHeight, depth), new Vector2(tc0.X, tc1.Y));
+                vertices[3] = new VertexPositionTexture(new Vector3(point.X + tileWidth, point.Y + tileHeight, depth), tc1);
                 verticesList.AddRange(vertices);
             }
-            _verticesList = verticesList.ToArray();
-            return verticesList;
+            Vertices = verticesList.ToArray();
+            return Vertices;
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null)

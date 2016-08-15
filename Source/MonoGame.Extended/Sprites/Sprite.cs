@@ -22,6 +22,7 @@ namespace MonoGame.Extended.Sprites
             Scale = Vector2.One;
             Effect = SpriteEffects.None;
             OriginNormalized = new Vector2(0.5f, 0.5f);
+            Depth = 0.0f;
         }
 
         public Sprite(Texture2D texture)
@@ -37,6 +38,7 @@ namespace MonoGame.Extended.Sprites
         public float Rotation { get; set; }
         public Vector2 Origin { get; set; }
         public SpriteEffects Effect { get; set; }
+        public float Depth { get; set; }
         public object Tag { get; set; }
 
         private TextureRegion2D _textureRegion;
