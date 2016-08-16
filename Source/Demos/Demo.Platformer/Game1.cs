@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Demo.Platformer.Entities;
+using Demo.Platformer.Entities.Components;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -17,10 +19,13 @@ namespace Demo.Platformer
         private SpriteBatch _spriteBatch;
         private Camera2D _camera;
         private TiledMap _tiledMap;
-        private Sprite _sprite0;
-        private Sprite _sprite1;
+        private Sprite _sprite;
         private SpriteSheetAnimator _animator;
-        private Texture2D _logo;
+        private EntityGameComponent _entityManager;
+
+        //private Sprite _sprite0;
+        //private Sprite _sprite1;
+        //private Texture2D _logo;
 
         public Game1()
         {
@@ -30,11 +35,18 @@ namespace Demo.Platformer
             Window.AllowUserResizing = true;
         }
 
+        protected override void Initialize()
+        {
+            Components.Add(_entityManager = new EntityGameComponent(this));
+
+            base.Initialize();
+        }
+
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _logo = Content.Load<Texture2D>("logo-square-128");
+            //_logo = Content.Load<Texture2D>("logo-square-128");
 
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
@@ -43,22 +55,26 @@ namespace Demo.Platformer
             var atlas = TextureAtlas.Create(texture, 32, 32, 15);
             var animationFactory = new SpriteSheetAnimationFactory(atlas);
 
+            var entity = _entityManager.CreateEntity();
+            entity.AttachComponent(new SpriteComponent(atlas[0]));
+            entity.Position = new Vector2(300, 300);
+
             animationFactory.Add("idle", new SpriteSheetAnimationData(new[] {0, 1, 2, 3}, isReversed: true));
             _animator = new SpriteSheetAnimator(animationFactory);
             _animator.Play("idle");
-            _sprite0 = _animator.CreateSprite(position: new Vector2(116, 273));
-            _sprite1 = _animator.CreateSprite(position: new Vector2(132, 273));
+            _sprite = _animator.CreateSprite(position: new Vector2(116, 273));
+            //_sprite1 = _animator.CreateSprite(position: new Vector2(132, 273));
             _tiledMap = Content.Load<TiledMap>("level-1");
 
             var viewport = GraphicsDevice.Viewport;
-            _alphaTestEffect = new AlphaTestEffect(GraphicsDevice)
-            {
-                Projection =
-                    Matrix.CreateTranslation(-0.5f, -0.5f, 0)*
-                    Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1),
-                VertexColorEnabled = true,
-                ReferenceAlpha = 128
-            };
+            //_alphaTestEffect = new AlphaTestEffect(GraphicsDevice)
+            //{
+            //    Projection =
+            //        Matrix.CreateTranslation(-0.5f, -0.5f, 0)*
+            //        Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1),
+            //    VertexColorEnabled = true,
+            //    ReferenceAlpha = 128
+            //};
         }
 
         protected override void UnloadContent()
@@ -74,12 +90,12 @@ namespace Demo.Platformer
                 Exit();
 
             if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
-                _sprite0.Position += new Vector2(150, 0) * deltaTime;
+                _sprite.Position += new Vector2(150, 0) * deltaTime;
 
             if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
-                _sprite0.Position -= new Vector2(150, 0) * deltaTime;
+                _sprite.Position -= new Vector2(150, 0) * deltaTime;
 
-            //_animator.Update(deltaTime);
+            _animator.Update(deltaTime);
 
             base.Update(gameTime);
         }
@@ -92,21 +108,24 @@ namespace Demo.Platformer
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
             
-            _spriteBatch.Begin(
-                sortMode: SpriteSortMode.FrontToBack, 
-                samplerState: SamplerState.PointClamp, 
-                depthStencilState: DepthStencilState.Default,
-                blendState: BlendState.AlphaBlend,
-                effect: _alphaTestEffect,
-                transformMatrix: viewMatrix);
+            //_spriteBatch.Begin(
+            //    sortMode: SpriteSortMode.FrontToBack, 
+            //    samplerState: SamplerState.PointClamp, 
+            //    depthStencilState: DepthStencilState.Default,
+            //    blendState: BlendState.AlphaBlend,
+            //    effect: _alphaTestEffect,
+            //    transformMatrix: viewMatrix);
 
-            _spriteBatch.Draw(_logo, position: new Vector2(305, 160), color: Color.White, layerDepth: 0.5f);
-            _spriteBatch.Draw(_logo, position: new Vector2(375, 210), color: Color.Green, layerDepth: 0.25f);
+            //_spriteBatch.Draw(_logo, position: new Vector2(305, 160), color: Color.White, layerDepth: 0.5f);
+            //_spriteBatch.Draw(_logo, position: new Vector2(375, 210), color: Color.Green, layerDepth: 0.25f);
 
-            _spriteBatch.End();
-
+            //_spriteBatch.End();
+            
             _tiledMap.Draw(viewMatrix);
 
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: viewMatrix);
+            _spriteBatch.Draw(_sprite);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
