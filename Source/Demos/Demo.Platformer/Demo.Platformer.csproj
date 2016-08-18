@@ -36,9 +36,16 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Entities\Components\EntityComponent.cs" />
+    <Compile Include="Entities\Components\SpriteAnimatorComponent.cs" />
     <Compile Include="Entities\Components\SpriteComponent.cs" />
     <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Entities\EntityGameComponent.cs" />
+    <Compile Include="Entities\EntityComponentSystem.cs" />
+    <Compile Include="Entities\Systems\SpriteAnimatorComponentSystem.cs" />
+    <Compile Include="Entities\Systems\UpdatableComponentSystem.cs" />
+    <Compile Include="Entities\Systems\ComponentSystem.cs" />
+    <Compile Include="Entities\Systems\DrawableComponentSystem.cs" />
+    <Compile Include="Entities\Systems\SpriteBatchComponentSystem.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,6 +81,7 @@
       <Name>MonoGame.Extended</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

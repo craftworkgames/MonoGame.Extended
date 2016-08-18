@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Screens
 {
-    public abstract class Screen : IDraw, IDisposable
+    public abstract class Screen : IDisposable
     {
         protected Screen()
         {
