@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Demo.Platformer.Entities.Systems
+namespace MonoGame.Extended.Entities.Systems
 {
     public abstract class DrawableComponentSystem : ComponentSystem
     {

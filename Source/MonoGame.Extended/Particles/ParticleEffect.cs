@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Particles.Profiles;
 
 namespace MonoGame.Extended.Particles
 {

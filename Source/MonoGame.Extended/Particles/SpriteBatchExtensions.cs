@@ -9,10 +9,15 @@ namespace MonoGame.Extended.Particles
         public static void Draw(this SpriteBatch spriteBatch, ParticleEffect effect)
         {
             foreach (var emitter in effect.Emitters)
-                Draw(spriteBatch, emitter);
+                UnsafeDraw(spriteBatch, emitter);
         }
 
-        private static unsafe void Draw(SpriteBatch spriteBatch, ParticleEmitter emitter)
+        public static void Draw(this SpriteBatch spriteBatch, ParticleEmitter emitter)
+        {
+            UnsafeDraw(spriteBatch, emitter);
+        }
+
+        private static unsafe void UnsafeDraw(SpriteBatch spriteBatch, ParticleEmitter emitter)
         {
             var textureRegion = emitter.TextureRegion;
             var origin = new Vector2(textureRegion.Width / 2f, textureRegion.Height / 2f);

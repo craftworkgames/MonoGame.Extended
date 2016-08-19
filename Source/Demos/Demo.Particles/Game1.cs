@@ -95,9 +95,8 @@ namespace Demo.Particles
             {
                 Emitters = new[]
                 {
-                    new ParticleEmitter(500, TimeSpan.FromSeconds(2.5), Profile.Ring(150f, Profile.CircleRadiation.In))
+                    new ParticleEmitter(textureRegion, 500, TimeSpan.FromSeconds(2.5), Profile.Ring(150f, Profile.CircleRadiation.In))
                     {
-                        TextureRegion = textureRegion,
                         Parameters = new ParticleReleaseParameters
                         {
                             Speed = new Range<float>(0f, 50f),

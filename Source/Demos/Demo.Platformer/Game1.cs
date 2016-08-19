@@ -1,11 +1,11 @@
-﻿using Demo.Platformer.Entities;
-using Demo.Platformer.Entities.Components;
-using Demo.Platformer.Entities.Systems;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations.SpriteSheets;
+using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Components;
+using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;

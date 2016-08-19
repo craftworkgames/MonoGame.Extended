@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Animations\SpriteSheets\AnimatedSprite.cs" />
     <Compile Include="Animations\Tweens\DelayTween.cs" />
     <Compile Include="Animations\Tweens\FluentTweening.cs" />
     <Compile Include="Animations\Tweens\EasingFunctions.cs" />
@@ -59,6 +60,15 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
+    <Compile Include="Entities\Components\EntityComponent.cs" />
+    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\EntityComponentSystem.cs" />
+    <Compile Include="Entities\Systems\AnimatedSpriteComponentSystem.cs" />
+    <Compile Include="Entities\Systems\ComponentSystem.cs" />
+    <Compile Include="Entities\Systems\DrawableComponentSystem.cs" />
+    <Compile Include="Entities\Systems\ParticleEmitterComponentSystem.cs" />
+    <Compile Include="Entities\Systems\SpriteBatchComponentSystem.cs" />
+    <Compile Include="Entities\Systems\UpdatableComponentSystem.cs" />
     <Compile Include="Graphics\Batching\BatchDrawer.cs" />
     <Compile Include="Graphics\Batching\BatchDrawOperation.cs" />
     <Compile Include="Graphics\Batching\BatchDrawStrategy.cs" />
@@ -225,7 +235,6 @@
     <Compile Include="ViewportAdapters\ViewportAdapter.cs" />
     <Compile Include="FramesPerSecondCounter.cs" />
     <Compile Include="FramesPerSecondCounterComponent.cs" />
-    <Compile Include="Sprites\SpriteAnimator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

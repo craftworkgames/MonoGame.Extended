@@ -1,9 +1,9 @@
 ﻿using System;
-using Demo.Platformer.Entities.Components;
+using System.Linq;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended;
+using MonoGame.Extended.Entities.Components;
 
-namespace Demo.Platformer.Entities
+namespace MonoGame.Extended.Entities
 {
     public class Entity : IMovable, IRotatable, IScalable
     {
@@ -33,25 +33,22 @@ namespace Demo.Platformer.Entities
 
         public void AttachComponent(EntityComponent component)
         {
-            if (component.Entity != null)
-                throw new InvalidOperationException("Component already attached to another entity");
-
-            component.Entity = this;
-            _entityComponentSystem.AttachComponent(component);
+            _entityComponentSystem.AttachComponent(this, component);
         }
 
         public void DetachComponent(EntityComponent component)
         {
-            if (component.Entity != this)
-                throw new InvalidOperationException("Component not attached to entity");
-
-            component.Entity = null;
-            _entityComponentSystem.DetachComponent(component);
+            _entityComponentSystem.DetachComponent(this, component);
         }
 
         public void Destroy()
         {
             _entityComponentSystem.DestroyEntity(this);
+        }
+
+        public T GetComponent<T>() where T : EntityComponent
+        {
+            return _entityComponentSystem.GetComponent<T>(this);
         }
     }
 }

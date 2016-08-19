@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A7A5E924-A49D-4052-ACA2-894161007B00}</ProjectGuid>
+    <ProjectGuid>{A2B9E42A-B2D1-476D-9F4B-E64824DA57EE}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Demo.Platformer</RootNamespace>
-    <AssemblyName>Demo.Platformer</AssemblyName>
+    <RootNamespace>Demo.EntityComponentSystem</RootNamespace>
+    <AssemblyName>Demo.EntityComponentSystem</AssemblyName>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
@@ -48,13 +48,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\tiny-characters.png" />
-    <Content Include="Content\tiny-tiles.png" />
+    <Content Include="Content\motw.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Content\level-1.tmx" />
     <None Include="Content\logo-square-128.png" />
   </ItemGroup>
   <ItemGroup>
@@ -71,7 +69,6 @@
       <Name>MonoGame.Extended</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

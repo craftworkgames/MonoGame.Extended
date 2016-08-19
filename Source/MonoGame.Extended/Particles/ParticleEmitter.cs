@@ -1,22 +1,24 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Particles
 {
-    public unsafe class ParticleEmitter : IDisposable
+    public unsafe class ParticleEmitter : EntityComponent, IDisposable
     {
-        public ParticleEmitter(int capacity, TimeSpan term, Profile profile)
+        public ParticleEmitter(TextureRegion2D textureRegion, int capacity, TimeSpan term, Profile profile)
         {
             if (profile == null)
                 throw new ArgumentNullException(nameof(profile));
 
             _term = (float)term.TotalSeconds;
 
+            TextureRegion = textureRegion;
             Buffer = new ParticleBuffer(capacity);
-            Offset = new Vector2();
+            Offset = Vector2.Zero;
             Profile = profile;
             Modifiers = new IModifier[0];
             ModifierExecutionStrategy = ParticleModifierExecutionStrategy.Serial;
@@ -77,6 +79,11 @@ namespace MonoGame.Extended.Particles
             }
 
             ModifierExecutionStrategy.ExecuteModifiers(Modifiers, elapsedSeconds, iterator);
+        }
+
+        public void Trigger()
+        {
+            Trigger(Position);
         }
 
         public void Trigger(Vector2 position)

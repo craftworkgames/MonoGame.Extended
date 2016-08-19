@@ -2,13 +2,14 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.SceneGraphs;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
 {
-    public class Sprite : IMovable, IRotatable, IScalable, IColorable, ISceneEntity, ISpriteBatchDrawable
+    public class Sprite : EntityComponent, IColorable, ISceneEntity, ISpriteBatchDrawable
     {
         public Sprite(TextureRegion2D textureRegion)
         {
@@ -33,9 +34,6 @@ namespace MonoGame.Extended.Sprites
         public float Alpha { get; set; }
         public Color Color { get; set; }
         public bool IsVisible { get; set; }
-        public Vector2 Position { get; set; }
-        public Vector2 Scale { get; set; }
-        public float Rotation { get; set; }
         public Vector2 Origin { get; set; }
         public SpriteEffects Effect { get; set; }
         public float Depth { get; set; }

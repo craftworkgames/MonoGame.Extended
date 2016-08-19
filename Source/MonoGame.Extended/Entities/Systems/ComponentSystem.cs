@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Demo.Platformer.Entities.Systems
+namespace MonoGame.Extended.Entities.Systems
 {
     public abstract class ComponentSystem
     {
