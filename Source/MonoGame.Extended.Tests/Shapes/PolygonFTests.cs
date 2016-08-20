@@ -61,9 +61,9 @@ namespace MonoGame.Extended.Tests.Shapes
             polygon.Rotate(MathHelper.ToRadians(90));
 
             const float tolerance = 0.01f;
-            Assert.IsTrue(new Vector2(5, -5).EqualsWithTolerance(polygon.Vertices[0], tolerance));
-            Assert.IsTrue(new Vector2(-10, 5).EqualsWithTolerance(polygon.Vertices[1], tolerance));
-            Assert.IsTrue(new Vector2(-10, -5).EqualsWithTolerance(polygon.Vertices[2], tolerance));
+            Assert.IsTrue(new Vector2(5, -5).ApproximatelyEqualTo(polygon.Vertices[0], tolerance));
+            Assert.IsTrue(new Vector2(-10, 5).ApproximatelyEqualTo(polygon.Vertices[1], tolerance));
+            Assert.IsTrue(new Vector2(-10, -5).ApproximatelyEqualTo(polygon.Vertices[2], tolerance));
         }
 
         [Test]
@@ -80,9 +80,9 @@ namespace MonoGame.Extended.Tests.Shapes
             polygon.Scale(new Vector2(1, -0.5f));
 
             const float tolerance = 0.01f;
-            Assert.IsTrue(new Vector2(0, -0.5f).EqualsWithTolerance(polygon.Vertices[0], tolerance), "0");
-            Assert.IsTrue(new Vector2(2f, 0.5f).EqualsWithTolerance(polygon.Vertices[1], tolerance), "1");
-            Assert.IsTrue(new Vector2(-2f, 0.5f).EqualsWithTolerance(polygon.Vertices[2], tolerance), "2");
+            Assert.IsTrue(new Vector2(0, -0.5f).ApproximatelyEqualTo(polygon.Vertices[0], tolerance), "0");
+            Assert.IsTrue(new Vector2(2f, 0.5f).ApproximatelyEqualTo(polygon.Vertices[1], tolerance), "1");
+            Assert.IsTrue(new Vector2(-2f, 0.5f).ApproximatelyEqualTo(polygon.Vertices[2], tolerance), "2");
         }
     }
 }

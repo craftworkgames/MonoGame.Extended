@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Tests
             var b = new Vector2(1.0000001f, 1.0000001f);
 
             Assert.IsFalse(a.Equals(b));
-            Assert.IsTrue(a.EqualsWithTolerance(b));
+            Assert.IsTrue(a.ApproximatelyEqualTo(b));
         }
 
         [Test]
@@ -24,7 +24,7 @@ namespace MonoGame.Extended.Tests
             var a = new Vector2(5, -10);
             var b = a.NormalizedCopy();
 
-            Assert.IsTrue(new Vector2(0.4472136f, -0.8944272f).EqualsWithTolerance(b));
+            Assert.IsTrue(new Vector2(0.4472136f, -0.8944272f).ApproximatelyEqualTo(b));
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace MonoGame.Extended.Tests
             var a = new Vector2(0, -10);
             var b = a.Rotate(MathHelper.ToRadians(90));
 
-            Assert.IsTrue(new Vector2(10, 0).EqualsWithTolerance(b));
+            Assert.IsTrue(new Vector2(10, 0).ApproximatelyEqualTo(b));
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace MonoGame.Extended.Tests
             var a = new Vector2(0, 10);
             var b = a.Rotate(MathHelper.ToRadians(360));
 
-            Assert.IsTrue(new Vector2(0, 10).EqualsWithTolerance(b));
+            Assert.IsTrue(new Vector2(0, 10).ApproximatelyEqualTo(b));
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace MonoGame.Extended.Tests
             var a = new Vector2(0, -10);
             var b = a.Rotate(MathHelper.ToRadians(45));
 
-            Assert.IsTrue(new Vector2(7.071068f, -7.071068f).EqualsWithTolerance(b));
+            Assert.IsTrue(new Vector2(7.071068f, -7.071068f).ApproximatelyEqualTo(b));
         }
 
         [Test]
