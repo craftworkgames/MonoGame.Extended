@@ -97,7 +97,11 @@
     <Compile Include="Gui\Serialization\GuiControlStyleConveter.cs" />
     <Compile Include="Gui\Serialization\GuiLayoutConverter.cs" />
     <Compile Include="Gui\Serialization\TextureRegion2DConveter.cs" />
+    <Compile Include="IEquatableByRef.cs" />
     <Compile Include="InputListeners\InputListenerComponent.cs" />
+    <Compile Include="Math\FloatHelper.cs" />
+    <Compile Include="Math\Matrix2D.cs" />
+    <Compile Include="Math\Vector2Helper.cs" />
     <Compile Include="Screens\Screen.cs" />
     <Compile Include="Screens\ScreenComponent.cs" />
     <Compile Include="Serialization\ColorJsonConverter.cs" />
@@ -153,7 +157,7 @@
     <Compile Include="Particles\Modifiers\Interpolators\IInterpolator.cs" />
     <Compile Include="Particles\Modifiers\Interpolators\RotationInterpolator.cs" />
     <Compile Include="Particles\ParticleEmitter.cs" />
-    <Compile Include="FastRandom.cs" />
+    <Compile Include="Math\FastRandom.cs" />
     <Compile Include="Particles\ParticleModifierExecutionStrategy.cs" />
     <Compile Include="Particles\Modifiers\Interpolators\ColorInterpolator.cs" />
     <Compile Include="Particles\Modifiers\Containers\CircleContainerModifier.cs" />
@@ -227,7 +231,7 @@
     <Compile Include="Timers\CountdownTimer.cs" />
     <Compile Include="Timers\GameTimer.cs" />
     <Compile Include="Timers\TimerState.cs" />
-    <Compile Include="Vector2Extensions.cs" />
+    <Compile Include="Transform.cs" />
     <Compile Include="ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\WindowViewportAdapter.cs" />
