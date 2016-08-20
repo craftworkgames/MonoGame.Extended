@@ -31,8 +31,8 @@ namespace Demo.Platformer
         protected override void Initialize()
         {
             _entityComponentSystem = new EntityComponentSystem();
-            _entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice));
-            _entityComponentSystem.RegisterSystem(new SpriteAnimatorComponentSystem());
+            //_entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice));
+            //_entityComponentSystem.RegisterSystem(new SpriteAnimatorComponentSystem());
 
             base.Initialize();
         }
@@ -50,8 +50,8 @@ namespace Demo.Platformer
 
             // let's build our dude entity
             var entity = _entityComponentSystem.CreateEntity("dude");
-            entity.AttachComponent(new SpriteComponent(atlas[0]));
-            entity.AttachComponent(new SpriteAnimatorComponent(animationFactory, "idle"));
+            //entity.AttachComponent(new SpriteComponent(atlas[0]));
+            //entity.AttachComponent(new SpriteAnimatorComponent(animationFactory, "idle"));
             entity.Position = new Vector2(300, 300);
 
             _tiledMap = Content.Load<TiledMap>("level-1");
