@@ -7,7 +7,7 @@ namespace MonoGame.Extended
     public static class Vector2Extensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ApproximatelyEqualTo(this Vector2 value, Vector2 otherValue, float tolerance = 0.00001f)
+        public static bool EqualsWithTolerence(this Vector2 value, Vector2 otherValue, float tolerance = 0.00001f)
         {
             return Math.Abs(value.X - otherValue.X) <= tolerance && Math.Abs(value.Y - otherValue.Y) <= tolerance;
         }
