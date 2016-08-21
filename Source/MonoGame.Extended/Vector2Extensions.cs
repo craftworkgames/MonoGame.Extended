@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
-    public static class Vector2Helper
+    public static class Vector2Extensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ApproximatelyEqualTo(this Vector2 value, Vector2 otherValue, float tolerance = 0.00001f)

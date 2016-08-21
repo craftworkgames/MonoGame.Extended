@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace MonoGame.Extended
 {
-    public static class FloatHelper
+    public static class FloatExtensions
     {
         public const float Epsilon = 0.00001f;
 
@@ -57,50 +57,6 @@ namespace MonoGame.Extended
         public static bool ApproximatelyEqualTo(this float value, float otherValue, float tolerance = Epsilon)
         {
             return Math.Abs(value - otherValue) <= tolerance;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Swap(ref float firstValue, ref float secondValue)
-        {
-            var temp = firstValue;
-            firstValue = secondValue;
-            secondValue = temp;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Maximum(this float value, float otherValue)
-        {
-            return otherValue > value ? otherValue : value;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Minimum(this float value, float otherValue)
-        {
-            return otherValue < value ? otherValue : value;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Sqrt(this float value)
-        {
-            return (float)Math.Sqrt(value);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Sin(this float value)
-        {
-            return (float)Math.Sin(value);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Cos(this float value)
-        {
-            return (float)Math.Cos(value);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Exp(this float power)
-        {
-            return (float)Math.Exp(power);
         }
     }
 }
