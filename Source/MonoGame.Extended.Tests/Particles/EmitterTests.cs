@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Tests.Particles
             [Test]
             public void WhenThereAreParticlesToExpire_DecreasesActiveParticleCount()
             {
-                var subject = new ParticleEmitter(100, TimeSpan.FromSeconds(1), Profile.Point())
+                var subject = new ParticleEmitter(null, 100, TimeSpan.FromSeconds(1), Profile.Point())
                 {
                     Parameters = new ParticleReleaseParameters
                     {
@@ -33,7 +33,7 @@ namespace MonoGame.Extended.Tests.Particles
             [Test]
             public void WhenThereAreParticlesToExpire_DoesNotPassExpiredParticlesToModifiers()
             {
-                var subject = new ParticleEmitter(100, TimeSpan.FromSeconds(1), Profile.Point())
+                var subject = new ParticleEmitter(null, 100, TimeSpan.FromSeconds(1), Profile.Point())
                 {
                     Parameters = new ParticleReleaseParameters()
                     {
@@ -55,7 +55,7 @@ namespace MonoGame.Extended.Tests.Particles
             [Test]
             public void WhenThereAreNoActiveParticles_GracefullyDoesNothing()
             {
-                var subject = new ParticleEmitter(100, TimeSpan.FromSeconds(1), Profile.Point());
+                var subject = new ParticleEmitter(null, 100, TimeSpan.FromSeconds(1), Profile.Point());
 
                 subject.Update(0.5f);
                 Assert.AreEqual(subject.ActiveParticles, 0);
@@ -67,7 +67,7 @@ namespace MonoGame.Extended.Tests.Particles
             [Test]
             public void WhenEnoughHeadroom_IncreasesActiveParticlesCountByReleaseQuantity()
             {
-                var subject = new ParticleEmitter(100, TimeSpan.FromSeconds(1), Profile.Point())
+                var subject = new ParticleEmitter(null, 100, TimeSpan.FromSeconds(1), Profile.Point())
                 {
                     Parameters = new ParticleReleaseParameters
                     {
@@ -82,7 +82,7 @@ namespace MonoGame.Extended.Tests.Particles
             [Test]
             public void WhenNotEnoughHeadroom_IncreasesActiveParticlesCountByRemainingParticles()
             {
-                var subject = new ParticleEmitter(15, TimeSpan.FromSeconds(1), Profile.Point())
+                var subject = new ParticleEmitter(null, 15, TimeSpan.FromSeconds(1), Profile.Point())
                 {
                     Parameters = new ParticleReleaseParameters
                     {
@@ -99,7 +99,7 @@ namespace MonoGame.Extended.Tests.Particles
             [Test]
             public void WhenNoRemainingParticles_DoesNotIncreaseActiveParticlesCount()
             {
-                var subject = new ParticleEmitter(10, TimeSpan.FromSeconds(1), Profile.Point())
+                var subject = new ParticleEmitter(null, 10, TimeSpan.FromSeconds(1), Profile.Point())
                 {
                     Parameters = new ParticleReleaseParameters
                     {
@@ -119,7 +119,7 @@ namespace MonoGame.Extended.Tests.Particles
             [Test]
             public void IsIdempotent()
             {
-                var subject = new ParticleEmitter(10, TimeSpan.FromSeconds(1), Profile.Point());
+                var subject = new ParticleEmitter(null, 10, TimeSpan.FromSeconds(1), Profile.Point());
 
                 subject.Dispose();
                 subject.Dispose();
