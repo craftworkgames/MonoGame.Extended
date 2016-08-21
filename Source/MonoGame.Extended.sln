@@ -92,6 +92,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Screens", "Demos\Demo.
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Platformer", "Demos\Demo.Platformer\Demo.Platformer.csproj", "{A7A5E924-A49D-4052-ACA2-894161007B00}"
+	ProjectSection(ProjectDependencies) = postProject
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.EntityComponentSystem", "Demos\Demo.EntityComponentSystem\Demo.EntityComponentSystem.csproj", "{A2B9E42A-B2D1-476D-9F4B-E64824DA57EE}"
 EndProject

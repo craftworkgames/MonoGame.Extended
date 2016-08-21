@@ -30,9 +30,6 @@ namespace Demo.Platformer
 
         protected override void Initialize()
         {
-            _entityComponentSystem = new EntityComponentSystem();
-            //_entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice));
-            //_entityComponentSystem.RegisterSystem(new SpriteAnimatorComponentSystem());
 
             base.Initialize();
         }
@@ -41,6 +38,8 @@ namespace Demo.Platformer
         {
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
+            _entityComponentSystem = new EntityComponentSystem();
+            _entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice, _camera));
 
             // first load our resources
             var texture = Content.Load<Texture2D>("tiny-characters");
@@ -51,7 +50,6 @@ namespace Demo.Platformer
             // let's build our dude entity
             var entity = _entityComponentSystem.CreateEntity("dude");
             //entity.AttachComponent(new SpriteComponent(atlas[0]));
-            //entity.AttachComponent(new SpriteAnimatorComponent(animationFactory, "idle"));
             entity.Position = new Vector2(300, 300);
 
             _tiledMap = Content.Load<TiledMap>("level-1");
