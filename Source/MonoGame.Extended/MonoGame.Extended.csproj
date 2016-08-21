@@ -99,8 +99,6 @@
     <Compile Include="Gui\Serialization\TextureRegion2DConveter.cs" />
     <Compile Include="IEquatableByRef.cs" />
     <Compile Include="InputListeners\InputListenerComponent.cs" />
-    <Compile Include="FloatExtensions.cs" />
-    <Compile Include="MathF.cs" />
     <Compile Include="Matrix2D.cs" />
     <Compile Include="Vector2Extensions.cs" />
     <Compile Include="Screens\Screen.cs" />
