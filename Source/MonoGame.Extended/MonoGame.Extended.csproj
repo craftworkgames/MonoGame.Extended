@@ -97,7 +97,10 @@
     <Compile Include="Gui\Serialization\GuiControlStyleConveter.cs" />
     <Compile Include="Gui\Serialization\GuiLayoutConverter.cs" />
     <Compile Include="Gui\Serialization\TextureRegion2DConveter.cs" />
+    <Compile Include="IEquatableByRef.cs" />
     <Compile Include="InputListeners\InputListenerComponent.cs" />
+    <Compile Include="Matrix2D.cs" />
+    <Compile Include="Vector2Extensions.cs" />
     <Compile Include="Screens\Screen.cs" />
     <Compile Include="Screens\ScreenComponent.cs" />
     <Compile Include="Serialization\ColorJsonConverter.cs" />
@@ -227,7 +230,7 @@
     <Compile Include="Timers\CountdownTimer.cs" />
     <Compile Include="Timers\GameTimer.cs" />
     <Compile Include="Timers\TimerState.cs" />
-    <Compile Include="Vector2Extensions.cs" />
+    <Compile Include="Transform.cs" />
     <Compile Include="ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\WindowViewportAdapter.cs" />

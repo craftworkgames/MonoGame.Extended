@@ -67,11 +67,11 @@ namespace MonoGame.Extended.Tests
 
             angle = Angle.FromVector(Vector2.UnitX);
             Assert.AreEqual(0, angle.Radians, DELTA);
-            Assert.IsTrue(Vector2.UnitX.EqualsWithTolerance(angle.ToUnitVector()));
+            Assert.IsTrue(Vector2.UnitX.EqualsWithTolerence(angle.ToUnitVector()));
 
             angle = Angle.FromVector(-Vector2.UnitY);
             Assert.AreEqual(MathHelper.Pi / 2d, angle.Radians, DELTA);
-            Assert.IsTrue((-Vector2.UnitY).EqualsWithTolerance(angle.ToUnitVector()));
+            Assert.IsTrue((-Vector2.UnitY).EqualsWithTolerence(angle.ToUnitVector()));
         }
 
         [Test]
