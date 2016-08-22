@@ -38,7 +38,7 @@ namespace MonoGame.Extended
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created
         private TMatrix _localMatrix; // model space to local space
         private TMatrix _worldMatrix; // local space to world space
-        private TParentTransform _parentTransform; // parent
+        private TParentTransform _parent; // parent
 
         public event Action TransformBecameDirty; // observer pattern for when the world (or local) matrix became dirty
         public event Action TranformUpdated; // observer pattern for after the world (or local) matrix was re-calculated
@@ -81,21 +81,21 @@ namespace MonoGame.Extended
         /// </value>
         /// <remarks>
         ///     <para>
-        ///         Setting <see cref="ParentTransform" /> to a non-null instance enables this instance to
-        ///         inherit the position, rotation, and scale of the parent instance. Setting <see cref="ParentTransform" /> to
+        ///         Setting <see cref="Parent" /> to a non-null instance enables this instance to
+        ///         inherit the position, rotation, and scale of the parent instance. Setting <see cref="Parent" /> to
         ///         <code>null</code> disables the inheritance altogether for this instance.
         ///     </para>
         /// </remarks>
-        public TParentTransform ParentTransform
+        public TParentTransform Parent
         {
-            get { return _parentTransform; }
+            get { return _parent; }
             set
             {
-                if (_parentTransform == value)
+                if (_parent == value)
                     return;
 
-                var oldParentTransform = ParentTransform;
-                _parentTransform = value;
+                var oldParentTransform = Parent;
+                _parent = value;
                 OnParentChanged(oldParentTransform, value);
             }
         }
@@ -142,14 +142,14 @@ namespace MonoGame.Extended
             while (parent != null)
             {
                 parent.TransformBecameDirty -= ParentTransformOnTransformBecameDirty;
-                parent = parent.ParentTransform;
+                parent = parent.Parent;
             }
 
             parent = newParent;
             while (parent != null)
             {
                 parent.TransformBecameDirty += ParentTransformOnTransformBecameDirty;
-                parent = parent.ParentTransform;
+                parent = parent.Parent;
             }
         }
 
@@ -196,11 +196,22 @@ namespace MonoGame.Extended
     ///         objects hierarchically.
     ///     </para>
     /// </remarks>
-    public class Transform2D : BaseTransform<Matrix2D, Transform2D>
+    public class Transform2D : BaseTransform<Matrix2D, Transform2D>, IMovable, IRotatable, IScalable
     {
         private Vector2 _position;
         private Vector2 _scale = Vector2.One;
         private float _rotation;
+
+        /// <summary>
+        ///     Gets the world position.
+        /// </summary>
+        /// <value>
+        ///     The world position.
+        /// </value>
+        public Vector2 WorldPosition
+        {
+            get { return WorldMatrix.Translation; }
+        }
 
         /// <summary>
         ///     Gets or sets the local position.
@@ -255,9 +266,9 @@ namespace MonoGame.Extended
 
         protected override void RecalculateWorldMatrix(ref Matrix2D localMatrix, out Matrix2D matrix)
         {
-            if (ParentTransform != null)
+            if (Parent != null)
             {
-                ParentTransform.GetWorldMatrix(out matrix);
+                Parent.GetWorldMatrix(out matrix);
                 Matrix2D.Multiply(ref matrix, ref localMatrix, out matrix);
             }
             else
@@ -268,9 +279,9 @@ namespace MonoGame.Extended
 
         protected override void RecalculateLocalMatrix(out Matrix2D matrix)
         {
-            if (ParentTransform != null)
+            if (Parent != null)
             {
-                var parentPosition = ParentTransform.Position;
+                var parentPosition = Parent.Position;
                 matrix = Matrix2D.CreateTranslation(-parentPosition) * Matrix2D.CreateScale(_scale) * Matrix2D.CreateRotationZ(_rotation) * Matrix2D.CreateTranslation(parentPosition) * Matrix2D.CreateTranslation(_position);
             }
             else
