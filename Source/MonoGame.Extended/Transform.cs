@@ -203,10 +203,10 @@ namespace MonoGame.Extended
         private float _rotation;
 
         /// <summary>
-        ///     Gets or sets the position.
+        ///     Gets or sets the local position.
         /// </summary>
         /// <value>
-        ///     The position.
+        ///     The local position.
         /// </value>
         public Vector2 Position
         {
@@ -220,10 +220,10 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets or sets the scale.
+        ///     Gets or sets the local scale.
         /// </summary>
         /// <value>
-        ///     The scale.
+        ///     The local scale.
         /// </value>
         public Vector2 Scale
         {
@@ -237,10 +237,10 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets or sets the rotation angle in radians.
+        ///     Gets or sets the local rotation angle in radians.
         /// </summary>
         /// <value>
-        ///     The rotation angle in radians.
+        ///     The local rotation angle in radians.
         /// </value>
         public float Rotation
         {
