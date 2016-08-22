@@ -71,11 +71,11 @@ namespace MonoGame.Extended
         /// </value>
         /// <remarks>
         ///     The <see cref="Rotation" /> corresponds to the inverse tangent function (atan2) of the fields
-        ///     <see cref="M21" /> and <see cref="M22" />.
+        ///     <see cref="M21" /> and <see cref="M11" />.
         /// </remarks>
         public float Rotation
         {
-            get { return new Vector2(M21, M22).ToAngle(); }
+            get { return (float)Math.Atan2(M21, M11); }
         }
 
         /// <summary>
