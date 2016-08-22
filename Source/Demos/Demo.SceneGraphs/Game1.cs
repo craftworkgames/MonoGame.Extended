@@ -33,7 +33,6 @@ namespace Demo.SceneGraphs
             Content.RootDirectory = "Content";
             Window.Title = "MonoGame.Extended Game";
             Window.AllowUserResizing = true;
-            Window.Position = Point.Zero;
             IsMouseVisible = true;
         }
 
@@ -92,11 +91,6 @@ namespace Demo.SceneGraphs
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
 
-            if (keyboardState.IsKeyDown(Keys.Escape))
-            {
-                Exit();
-            }
-
             if (keyboardState.IsKeyDown(Keys.W))
             {
                 _speed += deltaTime * 0.5f;
@@ -154,7 +148,12 @@ namespace Demo.SceneGraphs
 
             if (_hoveredNode != null)
             {
-                _spriteBatch.DrawString(_bitmapFont, _hoveredNode.Name, new Vector2(14, 2), Color.White);
+                var textPosition = new Vector2(14, 2);
+                var textLineHeight = new Vector2(0, _bitmapFont.LineHeight);
+                _spriteBatch.DrawString(_bitmapFont, $"Name: {_hoveredNode.Name}", textPosition, Color.White);
+                _spriteBatch.DrawString(_bitmapFont, $"Position: {_hoveredNode.WorldPosition}", textPosition + textLineHeight, Color.White);
+                _spriteBatch.DrawString(_bitmapFont, $"Rotation: {MathHelper.ToDegrees(_hoveredNode.WorldRotation)} degrees", textPosition + 2 * textLineHeight, Color.White);
+                _spriteBatch.DrawString(_bitmapFont, $"Scale: {_hoveredNode.WorldScale}", textPosition + 3 * textLineHeight, Color.White);
             }
 
             _spriteBatch.End();
