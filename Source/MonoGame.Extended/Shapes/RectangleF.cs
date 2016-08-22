@@ -499,5 +499,43 @@ namespace MonoGame.Extended.Shapes
             var rectangle = new RectangleF(x, y, width, height);
             return rectangle;
         }
+
+        /// <summary>
+        /// Calculates the signed depth of intersection between two rectangles.
+        /// </summary>
+        /// <returns>
+        /// The amount of overlap between two intersecting rectangles. These
+        /// depth values can be negative depending on which wides the rectangles
+        /// intersect. This allows callers to determine the correct direction
+        /// to push objects in order to resolve collisions.
+        /// If the rectangles are not intersecting, Vector2.Zero is returned.
+        /// </returns>
+        public Vector2 IntersectionDepth(RectangleF other)
+        {
+            // Calculate half sizes.
+            var thisHalfWidth = Width / 2.0f;
+            var thisHalfHeight = Height / 2.0f;
+            var otherHalfWidth = other.Width / 2.0f;
+            var otherHalfHeight = other.Height / 2.0f;
+
+            // Calculate centers.
+            var centerA = new Vector2(Left + thisHalfWidth, Top + thisHalfHeight);
+            var centerB = new Vector2(other.Left + otherHalfWidth, other.Top + otherHalfHeight);
+
+            // Calculate current and minimum-non-intersecting distances between centers.
+            var distanceX = centerA.X - centerB.X;
+            var distanceY = centerA.Y - centerB.Y;
+            var minDistanceX = thisHalfWidth + otherHalfWidth;
+            var minDistanceY = thisHalfHeight + otherHalfHeight;
+
+            // If we are not intersecting at all, return (0, 0).
+            if (Math.Abs(distanceX) >= minDistanceX || Math.Abs(distanceY) >= minDistanceY)
+                return Vector2.Zero;
+
+            // Calculate and return intersection depths.
+            var depthX = distanceX > 0 ? minDistanceX - distanceX : -minDistanceX - distanceX;
+            var depthY = distanceY > 0 ? minDistanceY - distanceY : -minDistanceY - distanceY;
+            return new Vector2(depthX, depthY);
+        }
     }
 }

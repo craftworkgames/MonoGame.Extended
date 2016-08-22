@@ -7,7 +7,7 @@ namespace Demo.Platformer
         [STAThread]
         private static void Main(string[] args)
         {
-            using (var game = new Game1())
+            using (var game = new GameMain())
             {
                 game.Run();
             }

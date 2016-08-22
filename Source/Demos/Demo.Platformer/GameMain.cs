@@ -1,26 +1,26 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System.Linq;
+using Demo.Platformer.Entities;
+using Demo.Platformer.Entities.Systems;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Maps.Tiled;
-using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Platformer
 {
-    public class Game1 : Game
+    public class GameMain : Game
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private Camera2D _camera;
         private TiledMap _tiledMap;
         private EntityComponentSystem _entityComponentSystem;
+        private EntityFactory _entityFactory;
 
-        public Game1()
+        public GameMain()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -28,31 +28,26 @@ namespace Demo.Platformer
             Window.AllowUserResizing = true;
         }
 
-        protected override void Initialize()
-        {
-
-            base.Initialize();
-        }
-
         protected override void LoadContent()
         {
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
+
             _entityComponentSystem = new EntityComponentSystem();
             _entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice, _camera));
+            _entityComponentSystem.RegisterSystem(new VelocitySystem(gravity: new Vector2(0, 450)));
+            _entityComponentSystem.RegisterSystem(new BasicCollisionSystem());
+            _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
 
-            // first load our resources
-            var texture = Content.Load<Texture2D>("tiny-characters");
-            var atlas = TextureAtlas.Create(texture, 32, 32, 15);
-            var animationFactory = new SpriteSheetAnimationFactory(atlas);
-            animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 0, 1, 2, 3 }, isReversed: true));
-
-            // let's build our dude entity
-            var entity = _entityComponentSystem.CreateEntity("dude");
-            //entity.AttachComponent(new SpriteComponent(atlas[0]));
-            entity.Position = new Vector2(300, 300);
+            _entityFactory = new EntityFactory(_entityComponentSystem, Content);
 
             _tiledMap = Content.Load<TiledMap>("level-1");
+
+            var entitiesLayer = _tiledMap.GetObjectGroup("entities");
+            var spawn = entitiesLayer.Objects.FirstOrDefault(i => i.Name == "Player Spawn");
+
+            if (spawn != null)
+                _entityFactory.CreatePlayer(new Vector2(spawn.X, spawn.Y));
 
             //var viewport = GraphicsDevice.Viewport;
             //_alphaTestEffect = new AlphaTestEffect(GraphicsDevice)
@@ -90,13 +85,13 @@ namespace Demo.Platformer
             base.Update(gameTime);
         }
 
-        private AlphaTestEffect _alphaTestEffect;
+        //private AlphaTestEffect _alphaTestEffect;
 
         protected override void Draw(GameTime gameTime)
         {
             var viewMatrix = _camera.GetViewMatrix();
 
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             //_spriteBatch.Begin(
             //    sortMode: SpriteSortMode.FrontToBack, 
@@ -112,11 +107,6 @@ namespace Demo.Platformer
             //_spriteBatch.End();
             
             _tiledMap.Draw(viewMatrix);
-
-            //_spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: viewMatrix);
-            //_spriteBatch.Draw(_sprite);
-            //_spriteBatch.End();
-
             _entityComponentSystem.Draw(gameTime);
 
             base.Draw(gameTime);

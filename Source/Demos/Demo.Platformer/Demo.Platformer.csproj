@@ -36,9 +36,15 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game1.cs" />
+    <Compile Include="Entities\Components\BasicCollisionComponent.cs" />
+    <Compile Include="Entities\Components\PlayerMovementComponent.cs" />
+    <Compile Include="Entities\Systems\BasicCollisionSystem.cs" />
+    <Compile Include="Entities\Systems\PlayerMovementSystem.cs" />
+    <Compile Include="Entities\EntityFactory.cs" />
+    <Compile Include="GameMain.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Entities\Systems\VelocitySystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
