@@ -106,7 +106,7 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets model-to-local space <see cref="Matrix2D" />.
+        ///     Gets the model-to-local space <see cref="Matrix2D" />.
         /// </summary>
         /// <param name="matrix">The model-to-local space <see cref="Matrix2D" />.</param>
         public void GetLocalMatrix(out TMatrix matrix)
@@ -116,7 +116,7 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets local-to-world space <see cref="Matrix2D" />.
+        ///     Gets the local-to-world space <see cref="Matrix2D" />.
         /// </summary>
         /// <param name="matrix">The local-to-world space <see cref="Matrix2D" />.</param>
         public void GetWorldMatrix(out TMatrix matrix)
@@ -125,12 +125,12 @@ namespace MonoGame.Extended
             matrix = _worldMatrix;
         }
 
-        protected void LocalMatrixBecameDirty()
+        protected internal void LocalMatrixBecameDirty()
         {
             _flags |= TransformFlags.LocalMatrixIsDirty;
         }
 
-        protected void WorldMatrixBecameDirty()
+        protected internal void WorldMatrixBecameDirty()
         {
             _flags |= TransformFlags.WorldMatrixIsDirty;
             TransformBecameDirty?.Invoke();
@@ -169,7 +169,7 @@ namespace MonoGame.Extended
             TranformUpdated?.Invoke();
         }
 
-        protected abstract void RecalculateWorldMatrix(ref TMatrix localMatrix, out TMatrix matrix);
+        protected internal abstract void RecalculateWorldMatrix(ref TMatrix localMatrix, out TMatrix matrix);
 
         private void RecalculateLocalMatrixIfNecessary()
         {
@@ -182,7 +182,7 @@ namespace MonoGame.Extended
             WorldMatrixBecameDirty();
         }
 
-        protected abstract void RecalculateLocalMatrix(out TMatrix matrix);
+        protected internal abstract void RecalculateLocalMatrix(out TMatrix matrix);
     }
 
     /// <summary>
