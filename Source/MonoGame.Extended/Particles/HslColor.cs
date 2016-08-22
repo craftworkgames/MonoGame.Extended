@@ -170,9 +170,9 @@ namespace MonoGame.Extended.Particles
         public static HslColor Parse(string s)
         {
             var hsl = s.Split(',');
-            var hue = float.Parse(hsl[0].TrimEnd('°'));
-            var sat = float.Parse(hsl[1]);
-            var lig = float.Parse(hsl[2]);
+            var hue = float.Parse(hsl[0].TrimEnd('°'), CultureInfo.InvariantCulture.NumberFormat);
+            var sat = float.Parse(hsl[1], CultureInfo.InvariantCulture.NumberFormat);
+            var lig = float.Parse(hsl[2], CultureInfo.InvariantCulture.NumberFormat);
 
             return new HslColor(hue, sat, lig);
         }
