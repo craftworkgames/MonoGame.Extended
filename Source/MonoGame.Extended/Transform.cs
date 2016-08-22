@@ -141,21 +141,21 @@ namespace MonoGame.Extended
             var parent = oldParent;
             while (parent != null)
             {
-                parent.TransformBecameDirty -= ParentTransformOnTransformBecameDirty;
+                parent.TransformBecameDirty -= ParentOnTransformBecameDirty;
                 parent = parent.Parent;
             }
 
             parent = newParent;
             while (parent != null)
             {
-                parent.TransformBecameDirty += ParentTransformOnTransformBecameDirty;
+                parent.TransformBecameDirty += ParentOnTransformBecameDirty;
                 parent = parent.Parent;
             }
         }
 
-        private void ParentTransformOnTransformBecameDirty()
+        private void ParentOnTransformBecameDirty()
         {
-            _flags |= TransformFlags.WorldMatrixIsDirty;
+            _flags |= TransformFlags.All;
         }
 
         private void RecalculateWorldMatrixIfNecessary()
@@ -231,6 +231,17 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        ///     Gets the world scale.
+        /// </summary>
+        /// <value>
+        ///     The world scale.
+        /// </value>
+        public Vector2 WorldScale
+        {
+            get { return WorldMatrix.Scale; }
+        }
+
+        /// <summary>
         ///     Gets or sets the local scale.
         /// </summary>
         /// <value>
@@ -245,6 +256,17 @@ namespace MonoGame.Extended
                 LocalMatrixBecameDirty();
                 WorldMatrixBecameDirty();
             }
+        }
+
+        /// <summary>
+        ///     Gets the world rotation angle in radians.
+        /// </summary>
+        /// <value>
+        ///     The world rotation angle in radians.
+        /// </value>
+        public float WorldRotation
+        {
+            get { return WorldMatrix.Rotation; }
         }
 
         /// <summary>
@@ -264,7 +286,7 @@ namespace MonoGame.Extended
             }
         }
 
-        protected override void RecalculateWorldMatrix(ref Matrix2D localMatrix, out Matrix2D matrix)
+        protected internal override void RecalculateWorldMatrix(ref Matrix2D localMatrix, out Matrix2D matrix)
         {
             if (Parent != null)
             {
@@ -277,7 +299,7 @@ namespace MonoGame.Extended
             }
         }
 
-        protected override void RecalculateLocalMatrix(out Matrix2D matrix)
+        protected internal override void RecalculateLocalMatrix(out Matrix2D matrix)
         {
             if (Parent != null)
             {
