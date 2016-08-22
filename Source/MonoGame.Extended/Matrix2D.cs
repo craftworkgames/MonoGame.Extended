@@ -57,7 +57,7 @@ namespace MonoGame.Extended
         /// <value>
         ///     The translation.
         /// </value>
-        /// <remarks>The <see cref="Translation" /> corresponds to the fields <see cref="M31" /> and <see cref="M32" />.</remarks>
+        /// <remarks>The <see cref="Translation" /> is equal to the vector <code>(M31, M32)</code>.</remarks>
         public Vector2 Translation
         {
             get { return new Vector2(M31, M32); }
@@ -70,8 +70,7 @@ namespace MonoGame.Extended
         ///     The rotation angle in radians.
         /// </value>
         /// <remarks>
-        ///     The <see cref="Rotation" /> corresponds to the inverse tangent function (atan2) of the fields
-        ///     <see cref="M21" /> and <see cref="M11" />.
+        ///     The <see cref="Rotation" /> is equal to <code>Atan2(M21, M11)</code>.
         /// </remarks>
         public float Rotation
         {
@@ -84,10 +83,15 @@ namespace MonoGame.Extended
         /// <value>
         ///     The scale.
         /// </value>
-        /// <remarks>The <see cref="Scale" /> corresponds to the fields <see cref="M11" /> and <see cref="M22" />.</remarks>
+        /// <remarks>The <see cref="Scale" /> is equal to the vector <code>(Sqrt(M11 * M11 + M21 * M21), Sqrt(M12 * M12 + M22 * M22))</code>.</remarks>
         public Vector2 Scale
         {
-            get { return new Vector2(M11, M22); }
+            get
+            {
+                var scaleX = (float)Math.Sqrt(M11 * M11 + M21 * M21);
+                var scaleY = (float)Math.Sqrt(M12 * M12 + M22 * M22);
+                return new Vector2(scaleX, scaleY);
+            }
         }
 
         /// <summary>
@@ -845,7 +849,7 @@ namespace MonoGame.Extended
         /// </value>
         internal string DebugDisplayString
         {
-            get { return this == Identity ? "Identity" : $"T:({Translation.X:0.##},{Translation.Y:0.##}), R:{Rotation:0.##}, S:({Scale.X:0.##},{Scale.Y:0.##})"; }
+            get { return this == Identity ? "Identity" : $"T:({Translation.X:0.##},{Translation.Y:0.##}), R:{MathHelper.ToDegrees(Rotation):0.##}°, S:({Scale.X:0.##},{Scale.Y:0.##})"; }
         }
 
         /// <summary>
