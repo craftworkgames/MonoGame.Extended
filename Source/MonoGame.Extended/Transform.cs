@@ -200,7 +200,7 @@ namespace MonoGame.Extended
     {
         private Vector2 _position;
         private Vector2 _scale = Vector2.One;
-        private float _rotationAngle;
+        private float _rotation;
 
         /// <summary>
         ///     Gets or sets the position.
@@ -242,12 +242,12 @@ namespace MonoGame.Extended
         /// <value>
         ///     The rotation angle in radians.
         /// </value>
-        public float RotationAngle
+        public float Rotation
         {
-            get { return _rotationAngle; }
+            get { return _rotation; }
             set
             {
-                _rotationAngle = value;
+                _rotation = value;
                 LocalMatrixBecameDirty();
                 WorldMatrixBecameDirty();
             }
@@ -271,11 +271,11 @@ namespace MonoGame.Extended
             if (ParentTransform != null)
             {
                 var parentPosition = ParentTransform.Position;
-                matrix = Matrix2D.CreateTranslation(-parentPosition) * Matrix2D.CreateScale(_scale) * Matrix2D.CreateRotationZ(_rotationAngle) * Matrix2D.CreateTranslation(parentPosition) * Matrix2D.CreateTranslation(_position);
+                matrix = Matrix2D.CreateTranslation(-parentPosition) * Matrix2D.CreateScale(_scale) * Matrix2D.CreateRotationZ(_rotation) * Matrix2D.CreateTranslation(parentPosition) * Matrix2D.CreateTranslation(_position);
             }
             else
             {
-                matrix = Matrix2D.CreateScale(_scale) * Matrix2D.CreateRotationZ(_rotationAngle) * Matrix2D.CreateTranslation(_position);
+                matrix = Matrix2D.CreateScale(_scale) * Matrix2D.CreateRotationZ(_rotation) * Matrix2D.CreateTranslation(_position);
             }
         }
     }

@@ -70,10 +70,10 @@ namespace MonoGame.Extended
         ///     The rotation angle in radians.
         /// </value>
         /// <remarks>
-        ///     The <see cref="RotationAngle" /> corresponds to the inverse tangent function (atan2) of the fields
+        ///     The <see cref="Rotation" /> corresponds to the inverse tangent function (atan2) of the fields
         ///     <see cref="M21" /> and <see cref="M22" />.
         /// </remarks>
-        public float RotationAngle
+        public float Rotation
         {
             get { return new Vector2(M21, M22).ToAngle(); }
         }
@@ -845,7 +845,7 @@ namespace MonoGame.Extended
         /// </value>
         internal string DebugDisplayString
         {
-            get { return this == Identity ? "Identity" : $"T:({Translation.X:0.##},{Translation.Y:0.##}), R:{RotationAngle:0.##}, S:({Scale.X:0.##},{Scale.Y:0.##})"; }
+            get { return this == Identity ? "Identity" : $"T:({Translation.X:0.##},{Translation.Y:0.##}), R:{Rotation:0.##}, S:({Scale.X:0.##},{Scale.Y:0.##})"; }
         }
 
         /// <summary>
