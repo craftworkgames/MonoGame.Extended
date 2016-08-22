@@ -18,7 +18,8 @@ namespace MonoGame.Extended
     ///     Represents the base class for the position, rotation, and scale of a game object in two-dimensions or
     ///     three-dimensions.
     /// </summary>
-    /// <seealso cref="Extended.BaseTransform{Matrix2D, Transform2D}" />
+    /// <typeparam name="TMatrix">The type of the matrix.</typeparam>
+    /// <typeparam name="TParentTransform">The type of the parent transform.</typeparam>
     /// <remarks>
     ///     <para>
     ///         Every game object has a transform which is used to store and manipulate the position, rotation and scale
@@ -31,13 +32,13 @@ namespace MonoGame.Extended
     ///     </para>
     /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public abstract class BaseTransform<TMatrix, TTransform>
-        where TMatrix : struct where TTransform : BaseTransform<TMatrix, TTransform>
+    public abstract class BaseTransform<TMatrix, TParentTransform>
+        where TMatrix : struct where TParentTransform : BaseTransform<TMatrix, TParentTransform>
     {
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created
         private TMatrix _localMatrix; // model space to local space
         private TMatrix _worldMatrix; // local space to world space
-        private TTransform _parentTransform; // parent
+        private TParentTransform _parentTransform; // parent
 
         public event Action TransformBecameDirty; // observer pattern for when the world (or local) matrix became dirty
         public event Action TranformUpdated; // observer pattern for after the world (or local) matrix was re-calculated
@@ -85,7 +86,7 @@ namespace MonoGame.Extended
         ///         <code>null</code> disables the inheritance altogether for this instance.
         ///     </para>
         /// </remarks>
-        public TTransform ParentTransform
+        public TParentTransform ParentTransform
         {
             get { return _parentTransform; }
             set
@@ -135,7 +136,7 @@ namespace MonoGame.Extended
             TransformBecameDirty?.Invoke();
         }
 
-        private void OnParentChanged(TTransform oldParent, TTransform newParent)
+        private void OnParentChanged(TParentTransform oldParent, TParentTransform newParent)
         {
             var parent = oldParent;
             while (parent != null)
@@ -236,10 +237,10 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets or sets the rotation angle.
+        ///     Gets or sets the rotation angle in radians.
         /// </summary>
         /// <value>
-        ///     The rotation angle.
+        ///     The rotation angle in radians.
         /// </value>
         public float RotationAngle
         {
