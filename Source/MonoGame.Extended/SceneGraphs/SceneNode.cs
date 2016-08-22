@@ -5,7 +5,7 @@ using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.SceneGraphs
 {
-    public class SceneNode : Transform2D
+    public class SceneNode : Transform2D<SceneNode>
     {
         public SceneNode(string name)
             : this(name, Vector2.Zero, 0, Vector2.One)
@@ -31,12 +31,6 @@ namespace MonoGame.Extended.SceneGraphs
         public SceneNode()
             : this(null, Vector2.Zero, 0, Vector2.One)
         {
-        }
-
-        public new SceneNode Parent
-        {
-            get { return (SceneNode)base.Parent; }
-            set { base.Parent = value; }
         }
 
         public string Name { get; set; }

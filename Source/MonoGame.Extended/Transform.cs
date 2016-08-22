@@ -19,7 +19,7 @@ namespace MonoGame.Extended
     ///     three-dimensions.
     /// </summary>
     /// <typeparam name="TMatrix">The type of the matrix.</typeparam>
-    /// <typeparam name="TParentTransform">The type of the parent transform.</typeparam>
+    /// <typeparam name="TParent">The type of the parent transform.</typeparam>
     /// <remarks>
     ///     <para>
     ///         Every game object has a transform which is used to store and manipulate the position, rotation and scale
@@ -32,13 +32,13 @@ namespace MonoGame.Extended
     ///     </para>
     /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public abstract class BaseTransform<TMatrix, TParentTransform>
-        where TMatrix : struct where TParentTransform : BaseTransform<TMatrix, TParentTransform>
+    public abstract class BaseTransform<TMatrix, TParent>
+        where TMatrix : struct where TParent : BaseTransform<TMatrix, TParent>
     {
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created
         private TMatrix _localMatrix; // model space to local space
         private TMatrix _worldMatrix; // local space to world space
-        private TParentTransform _parent; // parent
+        private TParent _parent; // parent
 
         public event Action TransformBecameDirty; // observer pattern for when the world (or local) matrix became dirty
         public event Action TranformUpdated; // observer pattern for after the world (or local) matrix was re-calculated
@@ -74,10 +74,10 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets or sets the parent transform.
+        ///     Gets or sets the parent instance.
         /// </summary>
         /// <value>
-        ///     The parent transform.
+        ///     The parent instance.
         /// </value>
         /// <remarks>
         ///     <para>
@@ -86,7 +86,7 @@ namespace MonoGame.Extended
         ///         <code>null</code> disables the inheritance altogether for this instance.
         ///     </para>
         /// </remarks>
-        public TParentTransform Parent
+        public TParent Parent
         {
             get { return _parent; }
             set
@@ -136,7 +136,7 @@ namespace MonoGame.Extended
             TransformBecameDirty?.Invoke();
         }
 
-        private void OnParentChanged(TParentTransform oldParent, TParentTransform newParent)
+        private void OnParentChanged(TParent oldParent, TParent newParent)
         {
             var parent = oldParent;
             while (parent != null)
@@ -188,7 +188,11 @@ namespace MonoGame.Extended
     /// <summary>
     ///     Represents the position, rotation, and scale of a two-dimensional game object.
     /// </summary>
-    /// <seealso cref="Extended.BaseTransform{Matrix2D, Transform2D}" />
+    /// <typeparam name="TParent">The type of the parent.</typeparam>
+    /// <seealso cref="BaseTransform{Matrix2D, TParent}" />
+    /// <seealso cref="IMovable" />
+    /// <seealso cref="IRotatable" />
+    /// <seealso cref="IScalable" />
     /// <remarks>
     ///     <para>
     ///         Every game object has a transform which is used to store and manipulate the position, rotation and scale
@@ -196,7 +200,8 @@ namespace MonoGame.Extended
     ///         objects hierarchically.
     ///     </para>
     /// </remarks>
-    public class Transform2D : BaseTransform<Matrix2D, Transform2D>, IMovable, IRotatable, IScalable
+    public class Transform2D<TParent> : BaseTransform<Matrix2D, TParent>, IMovable, IRotatable, IScalable
+        where TParent : Transform2D<TParent>
     {
         private Vector2 _position;
         private Vector2 _scale = Vector2.One;
