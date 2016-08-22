@@ -19,7 +19,7 @@ namespace MonoGame.Extended
     ///     three-dimensions.
     /// </summary>
     /// <typeparam name="TMatrix">The type of the matrix.</typeparam>
-    /// <typeparam name="TParent">The type of the parent transform.</typeparam>
+    /// <typeparam name="TParentTransform">The type of the parent transform.</typeparam>
     /// <remarks>
     ///     <para>
     ///         Every game object has a transform which is used to store and manipulate the position, rotation and scale
@@ -32,13 +32,13 @@ namespace MonoGame.Extended
     ///     </para>
     /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public abstract class BaseTransform<TMatrix, TParent>
-        where TMatrix : struct where TParent : BaseTransform<TMatrix, TParent>
+    public abstract class BaseTransform<TMatrix, TParentTransform>
+        where TMatrix : struct where TParentTransform : BaseTransform<TMatrix, TParentTransform>
     {
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created
         private TMatrix _localMatrix; // model space to local space
         private TMatrix _worldMatrix; // local space to world space
-        private TParent _parent; // parent
+        private TParentTransform _parentTransform; // parent
 
         public event Action TransformBecameDirty; // observer pattern for when the world (or local) matrix became dirty
         public event Action TranformUpdated; // observer pattern for after the world (or local) matrix was re-calculated
@@ -74,28 +74,28 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets or sets the parent instance.
+        ///     Gets or sets the parent transform.
         /// </summary>
         /// <value>
-        ///     The parent instance.
+        ///     The parent transform.
         /// </value>
         /// <remarks>
         ///     <para>
-        ///         Setting <see cref="Parent" /> to a non-null instance enables this instance to
-        ///         inherit the position, rotation, and scale of the parent instance. Setting <see cref="Parent" /> to
+        ///         Setting <see cref="ParentTransform" /> to a non-null instance enables this instance to
+        ///         inherit the position, rotation, and scale of the parent instance. Setting <see cref="ParentTransform" /> to
         ///         <code>null</code> disables the inheritance altogether for this instance.
         ///     </para>
         /// </remarks>
-        public TParent Parent
+        public TParentTransform ParentTransform
         {
-            get { return _parent; }
+            get { return _parentTransform; }
             set
             {
-                if (_parent == value)
+                if (_parentTransform == value)
                     return;
 
-                var oldParentTransform = Parent;
-                _parent = value;
+                var oldParentTransform = ParentTransform;
+                _parentTransform = value;
                 OnParentChanged(oldParentTransform, value);
             }
         }
@@ -106,7 +106,7 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets the model-to-local space <see cref="Matrix2D" />.
+        ///     Gets model-to-local space <see cref="Matrix2D" />.
         /// </summary>
         /// <param name="matrix">The model-to-local space <see cref="Matrix2D" />.</param>
         public void GetLocalMatrix(out TMatrix matrix)
@@ -116,7 +116,7 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets the local-to-world space <see cref="Matrix2D" />.
+        ///     Gets local-to-world space <see cref="Matrix2D" />.
         /// </summary>
         /// <param name="matrix">The local-to-world space <see cref="Matrix2D" />.</param>
         public void GetWorldMatrix(out TMatrix matrix)
@@ -125,37 +125,37 @@ namespace MonoGame.Extended
             matrix = _worldMatrix;
         }
 
-        protected internal void LocalMatrixBecameDirty()
+        protected void LocalMatrixBecameDirty()
         {
             _flags |= TransformFlags.LocalMatrixIsDirty;
         }
 
-        protected internal void WorldMatrixBecameDirty()
+        protected void WorldMatrixBecameDirty()
         {
             _flags |= TransformFlags.WorldMatrixIsDirty;
             TransformBecameDirty?.Invoke();
         }
 
-        private void OnParentChanged(TParent oldParent, TParent newParent)
+        private void OnParentChanged(TParentTransform oldParent, TParentTransform newParent)
         {
             var parent = oldParent;
             while (parent != null)
             {
-                parent.TransformBecameDirty -= ParentOnTransformBecameDirty;
-                parent = parent.Parent;
+                parent.TransformBecameDirty -= ParentTransformOnTransformBecameDirty;
+                parent = parent.ParentTransform;
             }
 
             parent = newParent;
             while (parent != null)
             {
-                parent.TransformBecameDirty += ParentOnTransformBecameDirty;
-                parent = parent.Parent;
+                parent.TransformBecameDirty += ParentTransformOnTransformBecameDirty;
+                parent = parent.ParentTransform;
             }
         }
 
-        private void ParentOnTransformBecameDirty()
+        private void ParentTransformOnTransformBecameDirty()
         {
-            _flags |= TransformFlags.All;
+            _flags |= TransformFlags.WorldMatrixIsDirty;
         }
 
         private void RecalculateWorldMatrixIfNecessary()
@@ -169,7 +169,7 @@ namespace MonoGame.Extended
             TranformUpdated?.Invoke();
         }
 
-        protected internal abstract void RecalculateWorldMatrix(ref TMatrix localMatrix, out TMatrix matrix);
+        protected abstract void RecalculateWorldMatrix(ref TMatrix localMatrix, out TMatrix matrix);
 
         private void RecalculateLocalMatrixIfNecessary()
         {
@@ -182,17 +182,13 @@ namespace MonoGame.Extended
             WorldMatrixBecameDirty();
         }
 
-        protected internal abstract void RecalculateLocalMatrix(out TMatrix matrix);
+        protected abstract void RecalculateLocalMatrix(out TMatrix matrix);
     }
 
     /// <summary>
     ///     Represents the position, rotation, and scale of a two-dimensional game object.
     /// </summary>
-    /// <typeparam name="TParent">The type of the parent.</typeparam>
-    /// <seealso cref="BaseTransform{Matrix2D, TParent}" />
-    /// <seealso cref="IMovable" />
-    /// <seealso cref="IRotatable" />
-    /// <seealso cref="IScalable" />
+    /// <seealso cref="Extended.BaseTransform{Matrix2D, Transform2D}" />
     /// <remarks>
     ///     <para>
     ///         Every game object has a transform which is used to store and manipulate the position, rotation and scale
@@ -200,23 +196,11 @@ namespace MonoGame.Extended
     ///         objects hierarchically.
     ///     </para>
     /// </remarks>
-    public class Transform2D<TParent> : BaseTransform<Matrix2D, TParent>, IMovable, IRotatable, IScalable
-        where TParent : Transform2D<TParent>
+    public class Transform2D : BaseTransform<Matrix2D, Transform2D>
     {
         private Vector2 _position;
         private Vector2 _scale = Vector2.One;
         private float _rotation;
-
-        /// <summary>
-        ///     Gets the world position.
-        /// </summary>
-        /// <value>
-        ///     The world position.
-        /// </value>
-        public Vector2 WorldPosition
-        {
-            get { return WorldMatrix.Translation; }
-        }
 
         /// <summary>
         ///     Gets or sets the local position.
@@ -233,17 +217,6 @@ namespace MonoGame.Extended
                 LocalMatrixBecameDirty();
                 WorldMatrixBecameDirty();
             }
-        }
-
-        /// <summary>
-        ///     Gets the world scale.
-        /// </summary>
-        /// <value>
-        ///     The world scale.
-        /// </value>
-        public Vector2 WorldScale
-        {
-            get { return WorldMatrix.Scale; }
         }
 
         /// <summary>
@@ -264,17 +237,6 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets the world rotation angle in radians.
-        /// </summary>
-        /// <value>
-        ///     The world rotation angle in radians.
-        /// </value>
-        public float WorldRotation
-        {
-            get { return WorldMatrix.Rotation; }
-        }
-
-        /// <summary>
         ///     Gets or sets the local rotation angle in radians.
         /// </summary>
         /// <value>
@@ -291,11 +253,11 @@ namespace MonoGame.Extended
             }
         }
 
-        protected internal override void RecalculateWorldMatrix(ref Matrix2D localMatrix, out Matrix2D matrix)
+        protected override void RecalculateWorldMatrix(ref Matrix2D localMatrix, out Matrix2D matrix)
         {
-            if (Parent != null)
+            if (ParentTransform != null)
             {
-                Parent.GetWorldMatrix(out matrix);
+                ParentTransform.GetWorldMatrix(out matrix);
                 Matrix2D.Multiply(ref matrix, ref localMatrix, out matrix);
             }
             else
@@ -304,11 +266,11 @@ namespace MonoGame.Extended
             }
         }
 
-        protected internal override void RecalculateLocalMatrix(out Matrix2D matrix)
+        protected override void RecalculateLocalMatrix(out Matrix2D matrix)
         {
-            if (Parent != null)
+            if (ParentTransform != null)
             {
-                var parentPosition = Parent.Position;
+                var parentPosition = ParentTransform.Position;
                 matrix = Matrix2D.CreateTranslation(-parentPosition) * Matrix2D.CreateScale(_scale) * Matrix2D.CreateRotationZ(_rotation) * Matrix2D.CreateTranslation(parentPosition) * Matrix2D.CreateTranslation(_position);
             }
             else
