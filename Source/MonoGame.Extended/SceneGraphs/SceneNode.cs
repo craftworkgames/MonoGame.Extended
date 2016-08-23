@@ -68,7 +68,7 @@ namespace MonoGame.Extended.SceneGraphs
                     var sourceRectangle = drawable.TextureRegion.Bounds;
                     var position = WorldPosition + drawable.Position;
                     var rotation = WorldRotation + drawable.Rotation;
-                    var scale = WorldScale + drawable.Scale;
+                    var scale = WorldScale * drawable.Scale;
 
                     spriteBatch.Draw(texture, position, sourceRectangle, drawable.Color, rotation, drawable.Origin, scale, drawable.Effect, 0);
                 }
