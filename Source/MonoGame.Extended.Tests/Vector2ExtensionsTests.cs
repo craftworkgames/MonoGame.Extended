@@ -30,12 +30,13 @@ namespace MonoGame.Extended.Tests
         [Test]
         public void Vector2_Perpendicular_Test()
         {
+            // http://mathworld.wolfram.com/PerpendicularVector.html
             var a = new Vector2(5, -10);
             var b = a.PerpendicularClockwise();
             var c = a.PerpendicularCounterClockwise();
 
-            Assert.AreEqual(new Vector2(10, 5), b);
-            Assert.AreEqual(new Vector2(-10, -5), c);
+            Assert.AreEqual(new Vector2(-10, -5), b);
+            Assert.AreEqual(new Vector2(10, 5), c);
         }
 
         [Test]
