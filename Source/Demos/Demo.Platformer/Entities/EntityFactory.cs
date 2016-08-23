@@ -9,6 +9,11 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace Demo.Platformer.Entities
 {
+    public static class Entities
+    {
+        public const string Player = "Player";
+    }
+
     public class EntityFactory
     {
         private readonly ContentManager _contentManager;
@@ -34,7 +39,7 @@ namespace Demo.Platformer.Entities
 
         public Entity CreatePlayer(Vector2 position)
         {
-            var entity = _entityComponentSystem.CreateEntity("Player", position);
+            var entity = _entityComponentSystem.CreateEntity(Entities.Player, position);
             var textureRegion = _characterTextureAtlas[0];
 
             entity.AttachComponent(new Sprite(textureRegion));

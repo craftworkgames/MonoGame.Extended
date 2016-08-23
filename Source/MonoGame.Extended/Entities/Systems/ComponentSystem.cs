@@ -14,5 +14,10 @@ namespace MonoGame.Extended.Entities.Systems
         {
             return EntityComponentSystem.GetComponents<T>();
         }
+
+        protected Entity GetEntity(string name)
+        {
+            return EntityComponentSystem.GetEntity(name);
+        }
     }
 }
