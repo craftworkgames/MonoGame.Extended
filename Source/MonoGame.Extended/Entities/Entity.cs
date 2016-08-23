@@ -5,7 +5,7 @@ using MonoGame.Extended.Entities.Components;
 
 namespace MonoGame.Extended.Entities
 {
-    public class Entity : IMovable, IRotatable, IScalable
+    public class Entity : Transform2D<Entity>
     {
         private readonly EntityComponentSystem _entityComponentSystem;
 
@@ -22,9 +22,6 @@ namespace MonoGame.Extended.Entities
 
         public long Id { get; }
         public string Name { get; }
-        public Vector2 Position { get; set; }
-        public float Rotation { get; set; }
-        public Vector2 Scale { get; set; }
 
         public override string ToString()
         {
