@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Serialization
@@ -15,8 +16,8 @@ namespace MonoGame.Extended.Serialization
         {
             var value = (string)reader.Value;
             var fields = value.Split(' ');
-            var width = float.Parse(fields[0]);
-            var height = float.Parse(fields[1]);
+            var width = float.Parse(fields[0], CultureInfo.InvariantCulture.NumberFormat);
+            var height = float.Parse(fields[1], CultureInfo.InvariantCulture.NumberFormat);
             return new SizeF(width, height);
         }
 
