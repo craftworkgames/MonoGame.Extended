@@ -69,8 +69,7 @@ namespace MonoGame.Extended.Graphics
 
         /// <summary>
         ///     Starts a group of two-dimensional geometry for rendering with the specified <see cref="BatchMode" />,
-        ///     <see cref="Effect" /> and two camera <see cref="Matrix" />es for transforming view and projection spaces
-        ///     respectively.
+        ///     <see cref="Effect" /> and the optional chain of <see cref="Matrix" />es for transforming between world, view, and projection spaces.
         /// </summary>
         /// <param name="batchMode">The batch mode. Default value is <see cref="BatchMode.Deferred" />.</param>
         /// <param name="effect">
