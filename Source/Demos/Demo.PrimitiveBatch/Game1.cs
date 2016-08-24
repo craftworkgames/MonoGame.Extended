@@ -5,7 +5,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.TextureAtlases;
 
-namespace Demo.PrimitiveBatch
+namespace Demo.Batching
 {
     public class Game1 : Game
     {

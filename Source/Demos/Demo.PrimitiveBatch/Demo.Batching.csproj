@@ -7,8 +7,8 @@
     <ProjectGuid>{5A251894-0462-47B6-9A63-BE26AA8CABDD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Demo.PrimitiveBatch</RootNamespace>
-    <AssemblyName>Demo.PrimitiveBatch</AssemblyName>
+    <RootNamespace>Demo.Batching</RootNamespace>
+    <AssemblyName>Demo.Batching</AssemblyName>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
@@ -36,7 +36,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Demo.PrimitiveBatch.Program</StartupObject>
+    <StartupObject>Demo.Batching.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
