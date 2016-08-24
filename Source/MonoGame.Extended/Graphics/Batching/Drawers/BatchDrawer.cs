@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Extended.Graphics.Batching
+namespace MonoGame.Extended.Graphics.Batching.Drawers
 {
-    internal sealed class BatchDrawer<TVertexType, TDrawContext> : IDisposable
-        where TVertexType : struct, IVertexType where TDrawContext : struct, IDrawContext
+    internal sealed class BatchDrawer<TVertexType, TBatchDrawContext> : IDisposable
+        where TVertexType : struct, IVertexType where TBatchDrawContext : struct, IBatchCommandContext
     {
         internal readonly GraphicsDevice GraphicsDevice;
         internal readonly GeometryBuffer<TVertexType> GeometryBuffer;
@@ -39,18 +39,14 @@ namespace MonoGame.Extended.Graphics.Batching
             GraphicsDevice.Indices = GeometryBuffer.IndexBuffer;
         }
 
-        internal void Draw(int startIndex, int primitiveCount, ref TDrawContext data)
+        internal void Draw(ref BatchCommand<TBatchDrawContext> command)
         {
             var graphicsDevice = GraphicsDevice;
-            var effect = Effect;
-            data.Apply(effect);
-            var passes = effect.CurrentTechnique.Passes;
-            for (var passIndex = 0; passIndex < passes.Count; passIndex++)
+            command.Context.ApplyParameters(Effect);
+            foreach (var pass in Effect.CurrentTechnique.Passes)
             {
-                var pass = passes[passIndex];
                 pass.Apply();
-                data.AfterApplyPass(passIndex, effect);
-                graphicsDevice.DrawIndexedPrimitives(PrimitiveType, 0, startIndex, primitiveCount);
+                graphicsDevice.DrawIndexedPrimitives(PrimitiveType, 0, command.StartIndex, command.PrimitiveCount);
             }
         }
     }

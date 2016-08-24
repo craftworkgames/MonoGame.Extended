@@ -14,7 +14,8 @@ namespace MonoGame.Extended.Graphics
         /// <param name="maximumIndicesCount">The maximum number of indices.</param>
         /// <exception cref="ArgumentNullException"><paramref name="graphicsDevice" /> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="maximumVerticesCount" /> is 0, or, <paramref name="maximumVerticesCount" /> is 0.
+        ///     <paramref name="maximumVerticesCount" /> is <code>0</code>, or, <paramref name="maximumVerticesCount" /> is
+        ///     <code>0</code>.
         /// </exception>
         /// <remarks>
         ///     <para>
@@ -27,7 +28,7 @@ namespace MonoGame.Extended.Graphics
         ///         <paramref name="maximumVerticesCount" /> and <paramref name="maximumIndicesCount" /> respectively.
         ///     </para>
         /// </remarks>
-        public StaticGeometryBuffer(GraphicsDevice graphicsDevice, int maximumVerticesCount, int maximumIndicesCount)
+        public StaticGeometryBuffer(GraphicsDevice graphicsDevice, ushort maximumVerticesCount, ushort maximumIndicesCount)
             : base(graphicsDevice, GeometryBufferType.Static, maximumVerticesCount, maximumIndicesCount)
         {
         }

@@ -1,7 +1,9 @@
-﻿// The matrix to use in the vertex shader to transform render geometry
-float4x4 WorldViewProjection : register(c0);
-// The texure sampler to use
-sampler2D TextureSampler : register(s0);
+﻿// The matrix that transforms geometry in the vertex shader
+float4x4 WorldViewProjection;
+// The texture used for texture sampling in the pixel shader
+Texture2D<float4> Texture;
+// The sampler used for texture sampling in the pixel shader
+SamplerState TextureSampler;
 
 // The information layout used as input to the vertex shader. The actual information is passed to the GPU from the CPU
 struct VertexShaderInput
@@ -39,7 +41,7 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 PixelShaderOutput PixelShaderFunction(VertexShaderOutput input) : SV_Target0
 {
 	PixelShaderOutput output;
-	output.Color = tex2D(TextureSampler, input.TexureCoordinate) * input.Color;
+	output.Color = Texture.Sample(TextureSampler, input.TexureCoordinate) * input.Color;
 	return output;
 }
 

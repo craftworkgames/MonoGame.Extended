@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics
@@ -81,6 +82,9 @@ namespace MonoGame.Extended.Graphics
             get { return _indexCount; }
         }
 
+        public ushort MaximumVerticesCount { get; }
+        public ushort MaximumIndicesCount { get; }
+
         /// <summary>
         ///     Gets the vertex buffer.
         /// </summary>
@@ -107,7 +111,7 @@ namespace MonoGame.Extended.Graphics
         /// </value>
         public GraphicsDevice GraphicsDevice { get; }
 
-        internal GeometryBuffer(GraphicsDevice graphicsDevice, GeometryBufferType bufferType, int maximumVerticesCount, int maximumIndicesCount)
+        internal GeometryBuffer(GraphicsDevice graphicsDevice, GeometryBufferType bufferType, ushort maximumVerticesCount, ushort maximumIndicesCount)
         {
             if (graphicsDevice == null)
                 throw new ArgumentNullException(paramName: nameof(graphicsDevice));
@@ -123,9 +127,11 @@ namespace MonoGame.Extended.Graphics
 
             GraphicsDevice = graphicsDevice;
 
-            _vertices = new TVertexType[maximumIndicesCount];
+            _vertices = new TVertexType[maximumVerticesCount];
             _indices = new ushort[maximumIndicesCount];
             _vertexCount = 0;
+            MaximumVerticesCount = maximumVerticesCount;
+            MaximumIndicesCount = maximumIndicesCount;
 
             BufferType = bufferType;
 
@@ -149,30 +155,36 @@ namespace MonoGame.Extended.Graphics
         /// </summary>
         public void Flush()
         {
-            VertexBuffer.SetData(_vertices, startIndex: 0, elementCount: VertexCount);
-            IndexBuffer.SetData(_indices, startIndex: 0, elementCount: IndexCount);
+            VertexBuffer.SetData(_vertices, startIndex: 0, elementCount: _vertexCount);
+            IndexBuffer.SetData(_indices, startIndex: 0, elementCount: _indexCount);
         }
 
         /// <summary>
         ///     Adds the specified vertex to the buffer of geometry.
         /// </summary>
         /// <param name="vertex">The vertex.</param>
-        public void Enqueue(ref TVertexType vertex)
+        public bool Enqueue(ref TVertexType vertex)
         {
+            ThrowIfWouldOverflowVertices(verticesCountToAdd: 1);
+
             _vertices[_vertexCount++] = vertex;
+
+            return true;
         }
 
         /// <summary>
         ///     Adds the specified vertex index to the buffer of geometry.
         /// </summary>
         /// <param name="index">The vertex index.</param>
+        /// <exception cref="GeometryBufferOverflowException{TVertexType}">The <see cref="GeometryBuffer{TVertexType}"/> is full.</exception>
         public void Enqueue(ushort index)
         {
+            ThrowIfWouldOverflowIndices(indicesCountToAdd: 1);
             _indices[_indexCount++] = index;
         }
 
         /// <summary>
-        ///     Adds the specified vertices to the buffer of geometry.
+        ///     Attempts to add the specified vertices to the buffer of geometry.
         /// </summary>
         /// <param name="vertices">The vertices.</param>
         /// <param name="sourceIndex">
@@ -180,21 +192,30 @@ namespace MonoGame.Extended.Graphics
         ///     begins.
         /// </param>
         /// <param name="length">The number of vertices to add.</param>
+        /// <exception cref="GeometryBufferOverflowException{TVertexType}">The <see cref="GeometryBuffer{TVertexType}"/> is full.</exception>
         public void Enqueue(TVertexType[] vertices, int sourceIndex, ushort length)
         {
+            ThrowIfWouldOverflowVertices(length);
+
             Array.Copy(vertices, sourceIndex, _vertices, VertexCount, length);
             _vertexCount += length;
         }
 
         /// <summary>
-        ///     Adds the specified vertices and vertex indices to the buffer of geometry.
+        ///     Adds vertex indices to the buffer of geometry.
         /// </summary>
         /// <param name="indices">The indices.</param>
-        /// <param name="sourceIndex">The value that represents the index in the <paramref name="indices" /> at which adding begins.</param>
+        /// <param name="sourceIndex">
+        ///     The value that represents the index in the <paramref name="indices" /> at which adding
+        ///     begins.
+        /// </param>
         /// <param name="length">The number of indices to add.</param>
         /// <param name="indexOffset">The index offset.</param>
+        /// <exception cref="GeometryBufferOverflowException{TVertexType}">The <see cref="GeometryBuffer{TVertexType}"/> is full.</exception>
         public unsafe void Enqueue(ushort[] indices, int sourceIndex, ushort length, ushort indexOffset)
         {
+            ThrowIfWouldOverflowIndices(length);
+
             var start = _indexCount;
             var end = _indexCount + length;
 
@@ -208,7 +229,7 @@ namespace MonoGame.Extended.Graphics
                 while (pointer < endPointer)
                 {
                     *pointer += indexOffset;
-                     ++pointer;
+                    ++pointer;
                 }
             }
 
@@ -219,8 +240,11 @@ namespace MonoGame.Extended.Graphics
         ///     Adds clockwise quadrilateral indices to the buffer of geometry.
         /// </summary>
         /// <param name="indexOffset">The index offset.</param>
+        /// <exception cref="GeometryBufferOverflowException{TVertexType}">The <see cref="GeometryBuffer{TVertexType}"/> is full.</exception>
         public unsafe void EnqueueClockwiseQuadrilateralIndices(ushort indexOffset)
         {
+            ThrowIfWouldOverflowIndices(indicesCountToAdd: 6);
+
             fixed (ushort* fixedPointer = _indices)
             {
                 var pointer = fixedPointer + _indexCount;
@@ -266,6 +290,27 @@ namespace MonoGame.Extended.Graphics
 
             VertexBuffer.Dispose();
             IndexBuffer.Dispose();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void ThrowIfWouldOverflowVertices(ushort verticesCountToAdd)
+        {
+            if (_vertexCount + verticesCountToAdd > MaximumVerticesCount)
+                throw new GeometryBufferOverflowException<TVertexType>(geometryBuffer: this, verticesCountToAdd: verticesCountToAdd, indicesCountToAdd: 0);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void ThrowIfWouldOverflowIndices(ushort indicesCountToAdd)
+        {
+            if (_indexCount + indicesCountToAdd > MaximumIndicesCount)
+                throw new GeometryBufferOverflowException<TVertexType>(geometryBuffer: this, verticesCountToAdd: 0, indicesCountToAdd: indicesCountToAdd);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void ThrowIfWouldOverflow(ushort verticesCountToAdd, ushort indicesCountToAdd)
+        {
+            if ((_vertexCount + verticesCountToAdd > MaximumVerticesCount) || (_indexCount + indicesCountToAdd > MaximumIndicesCount))
+                throw new GeometryBufferOverflowException<TVertexType>(geometryBuffer: this, verticesCountToAdd: verticesCountToAdd, indicesCountToAdd: indicesCountToAdd);
         }
     }
 }

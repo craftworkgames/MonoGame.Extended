@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics.Batching.Drawers;
 using MonoGame.Extended.Graphics.Batching.Queuers;
 
 namespace MonoGame.Extended.Graphics.Batching
@@ -9,7 +10,7 @@ namespace MonoGame.Extended.Graphics.Batching
     ///     Enables a group of geometry to be drawn using the same settings.
     /// </summary>
     /// <typeparam name="TVertexType">The type of vertex.</typeparam>
-    /// <typeparam name="TDrawContext">The type of item data.</typeparam>
+    /// <typeparam name="TCommandContext">The type of batch draw command data.</typeparam>
     /// <seealso cref="IDisposable" />
     /// <remarks>
     ///     <para>
@@ -20,13 +21,15 @@ namespace MonoGame.Extended.Graphics.Batching
     ///         <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
     ///     </para>
     /// </remarks>
-    public abstract class PrimitiveBatch<TVertexType, TDrawContext> : IDisposable
-        where TVertexType : struct, IVertexType where TDrawContext : struct, IDrawContext
+    public abstract class PrimitiveBatch<TVertexType, TCommandContext> : IDisposable
+        where TVertexType : struct, IVertexType where TCommandContext : struct, IBatchCommandContext
     {
-        private BatchDrawer<TVertexType, TDrawContext> _batchDrawer;
-        private BatchQueuer<TVertexType, TDrawContext> _currentBatchQueuer;
-        private Lazy<ImmediateBatchQueuer<TVertexType, TDrawContext>> _lazyImmediateBatchQueuer;
-        private Lazy<DeferredBatchQueuer<TVertexType, TDrawContext>> _lazyDeferredBatchQueuer;
+        internal const int DefaultMaximumBatchCommandsCount = 2048;
+
+        private BatchDrawer<TVertexType, TCommandContext> _batchDrawer;
+        private BatchCommandQueuer<TVertexType, TCommandContext> _currentBatchCommandQueuer;
+        private Lazy<ImmediateBatchCommandQueuer<TVertexType, TCommandContext>> _lazyImmediateBatchQueuer;
+        private Lazy<DeferredBatchCommandQueuer<TVertexType, TCommandContext>> _lazyDeferredBatchQueuer;
 
         /// <summary>
         ///     Gets the <see cref="GeometryBuffer{TVertexType}" /> associated with this
@@ -61,7 +64,11 @@ namespace MonoGame.Extended.Graphics.Batching
         ///     Initializes a new instance of the <see cref="PrimitiveBatch{TVertexType, TDrawContext}" /> class.
         /// </summary>
         /// <param name="geometryBuffer">The geometry buffer.</param>
+        /// <param name="maximumBatchCommandsCount">
+        ///     The maximum number of batch draw commands that can be deferred. The default value is <code>2048</code>.
+        /// </param>
         /// <exception cref="ArgumentNullException"><paramref name="geometryBuffer" /> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="maximumBatchCommandsCount" /> is less than or equal <code>0</code>.</exception>
         /// <remarks>
         ///     <para>
         ///         For best performance, use <see cref="DynamicGeometryBuffer{TVertexType}" /> for geometry which changes
@@ -69,17 +76,20 @@ namespace MonoGame.Extended.Graphics.Batching
         ///         frame-to-frame, or changes infrequently between frames.
         ///     </para>
         /// </remarks>
-        protected PrimitiveBatch(GeometryBuffer<TVertexType> geometryBuffer)
+        protected PrimitiveBatch(GeometryBuffer<TVertexType> geometryBuffer, int maximumBatchCommandsCount = DefaultMaximumBatchCommandsCount)
         {
             if (geometryBuffer == null)
                 throw new ArgumentNullException(paramName: nameof(geometryBuffer));
 
+            if (maximumBatchCommandsCount <= 0)
+                throw new ArgumentOutOfRangeException(paramName: nameof(maximumBatchCommandsCount));
+
             GeometryBuffer = geometryBuffer;
             GraphicsDevice = geometryBuffer.GraphicsDevice;
-            _batchDrawer = new BatchDrawer<TVertexType, TDrawContext>(GraphicsDevice, GeometryBuffer);
+            _batchDrawer = new BatchDrawer<TVertexType, TCommandContext>(GraphicsDevice, GeometryBuffer);
 
-            _lazyImmediateBatchQueuer = new Lazy<ImmediateBatchQueuer<TVertexType, TDrawContext>>(() => new ImmediateBatchQueuer<TVertexType, TDrawContext>(_batchDrawer));
-            _lazyDeferredBatchQueuer = new Lazy<DeferredBatchQueuer<TVertexType, TDrawContext>>(() => new DeferredBatchQueuer<TVertexType, TDrawContext>(_batchDrawer));
+            _lazyImmediateBatchQueuer = new Lazy<ImmediateBatchCommandQueuer<TVertexType, TCommandContext>>(() => new ImmediateBatchCommandQueuer<TVertexType, TCommandContext>(_batchDrawer));
+            _lazyDeferredBatchQueuer = new Lazy<DeferredBatchCommandQueuer<TVertexType, TCommandContext>>(() => new DeferredBatchCommandQueuer<TVertexType, TCommandContext>(_batchDrawer, maximumBatchCommandsCount));
         }
 
         /// <summary>
@@ -139,14 +149,14 @@ namespace MonoGame.Extended.Graphics.Batching
 
         /// <summary>
         ///     Starts a group of geometry for rendering with the specified <see cref="Effect" />, <see cref="PrimitiveType" />,
-        ///     and <see cref="BatchMode" />.
+        ///     and <see cref="BatchSortMode" />.
         /// </summary>
         /// <param name="effect">The <see cref="Effect" />.</param>
         /// <param name="primitiveType">The <see cref="PrimitiveType" />.</param>
-        /// <param name="mode">The <see cref="BatchMode" />.</param>
+        /// <param name="sortMode">The <see cref="BatchSortMode" />.</param>
         /// <exception cref="ArgumentNullException"><paramref name="effect" /> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="mode" /> is not a valid <see cref="BatchMode" /> value or
+        ///     <paramref name="sortMode" /> is not a valid <see cref="BatchSortMode" /> value or
         ///     <paramref name="primitiveType" /> is not a valid <see cref="PrimitiveType" /> value.
         /// </exception>
         /// <exception cref="InvalidOperationException">
@@ -158,7 +168,7 @@ namespace MonoGame.Extended.Graphics.Batching
         ///         drawing, call <see cref="End" />.
         ///     </para>
         /// </remarks>
-        protected void Begin(Effect effect, PrimitiveType primitiveType, BatchMode mode = BatchMode.Deferred)
+        protected void Begin(Effect effect, PrimitiveType primitiveType, BatchSortMode sortMode = BatchSortMode.Deferred)
         {
             if (effect == null)
                 throw new ArgumentNullException(paramName: nameof(effect));
@@ -169,23 +179,22 @@ namespace MonoGame.Extended.Graphics.Batching
             EnsureHasNotBegun();
             HasBegun = true;
 
-            switch (mode)
+            if (sortMode != BatchSortMode.Immediate)
             {
-                case BatchMode.Immediate:
-                    _currentBatchQueuer = _lazyImmediateBatchQueuer.Value;
-                    break;
-                case BatchMode.Deferred:
-                    _currentBatchQueuer = _lazyDeferredBatchQueuer.Value;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(paramName: nameof(mode));
+                var deferredQueuer = _lazyDeferredBatchQueuer.Value;
+                deferredQueuer.SortMode = sortMode;
+                _currentBatchCommandQueuer = deferredQueuer;
+            }
+            else
+            {
+                _currentBatchCommandQueuer = _lazyImmediateBatchQueuer.Value;
             }
 
-            _currentBatchQueuer.Begin(effect, primitiveType);
+            _currentBatchCommandQueuer.Begin(effect, primitiveType);
         }
 
         /// <summary>
-        ///     Submits the group of geometry to the <see cref="GraphicsDevice" /> for rendering.
+        ///     Ends and submits the group of geometry to the <see cref="GraphicsDevice" /> for rendering.
         /// </summary>
         /// <exception cref="InvalidOperationException">
         ///     <see cref="End" /> cannot be invoked until <see cref="Begin" /> has been invoked.
@@ -200,7 +209,16 @@ namespace MonoGame.Extended.Graphics.Batching
             EnsureHasBegun();
             HasBegun = false;
 
-            _currentBatchQueuer.End();
+            _currentBatchCommandQueuer.End();
+        }
+
+        /// <summary>
+        ///     Submits the group of geometry to the <see cref="GraphicsDevice" /> for rendering without ending the group of
+        ///     geometry.
+        /// </summary>
+        protected void Flush()
+        {
+            _currentBatchCommandQueuer.Flush();
         }
 
         /// <summary>
@@ -217,10 +235,10 @@ namespace MonoGame.Extended.Graphics.Batching
         ///         for drawing, call <see cref="End" />.
         ///     </para>
         /// </remarks>
-        protected void EnqueueDraw(int startIndex, int indexCount, ref TDrawContext itemData, uint sortKey = 0)
+        protected void EnqueueDraw(ushort startIndex, ushort indexCount, ref TCommandContext itemData, uint sortKey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.EnqueueDraw(startIndex, indexCount, ref itemData, sortKey);
+            _currentBatchCommandQueuer.EnqueueDraw(startIndex, indexCount, ref itemData, sortKey);
         }
     }
 }
