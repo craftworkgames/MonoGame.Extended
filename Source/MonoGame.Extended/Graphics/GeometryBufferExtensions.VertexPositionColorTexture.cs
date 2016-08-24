@@ -7,7 +7,22 @@ namespace MonoGame.Extended.Graphics
 {
     public static class GeometryBuilderExtensionsVertexPositionColorTexture
     {
-        public static void EnqueueSprite(this GeometryBuffer<VertexPositionColorTexture> geometryBuffer, int vertexIndexOffset, TextureRegion2D textureRegion, ref Matrix2D transformMatrix, Color? color = null, Vector2? origin = null, SpriteOptions options = SpriteOptions.None, float depth = 0)
+        /// <summary>
+        ///     Enqueues a sprite into the specified <see cref="GeometryBuffer{VertexPositionColorTexture}" />.
+        /// </summary>
+        /// <param name="geometryBuffer">The <see cref="GeometryBuffer{VertexPositionColorTexture}" />.</param>
+        /// <param name="vertexIndexOffset">The vertex index offset applied to the generated indices.</param>
+        /// <param name="textureRegion">The <see cref="TextureRegion2D" />.</param>
+        /// <param name="transformMatrix">The transform <see cref="Matrix2D" />.</param>
+        /// <param name="color">The <see cref="Color" />. Use <code>null</code> to use the default <see cref="Color.White" />.</param>
+        /// <param name="origin">
+        ///     The origin <see cref="Vector2" />. Use <code>null</code> to use the default
+        ///     <see cref="Vector2.Zero" />.
+        /// </param>
+        /// <param name="options">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
+        /// <param name="depth">The depth. The default value is <code>0</code>.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void EnqueueSprite(this GeometryBuffer<VertexPositionColorTexture> geometryBuffer, int vertexIndexOffset, TextureRegion2D textureRegion, ref Matrix2D transformMatrix, Color? color = null, Vector2? origin = null, SpriteEffects options = SpriteEffects.None, float depth = 0)
         {
             if (textureRegion == null)
                 throw new ArgumentNullException(paramName: nameof(textureRegion));
@@ -24,14 +39,14 @@ namespace MonoGame.Extended.Graphics
             textureCoordinateBottomRight.Y = (textureRegion.Y + textureRegionBounds.Height + 0.5f) / textureSize.Height;
 
             var spriteEffect = options;
-            if ((spriteEffect & SpriteOptions.FlipVertically) != 0)
+            if ((spriteEffect & SpriteEffects.FlipVertically) != 0)
             {
                 var temp = textureCoordinateBottomRight.Y;
                 textureCoordinateBottomRight.Y = textureCoordinateTopLeft.Y;
                 textureCoordinateTopLeft.Y = temp;
             }
 
-            if ((spriteEffect & SpriteOptions.FlipHorizontally) != 0)
+            if ((spriteEffect & SpriteEffects.FlipHorizontally) != 0)
             {
                 var temp = textureCoordinateBottomRight.X;
                 textureCoordinateBottomRight.X = textureCoordinateTopLeft.X;
@@ -60,7 +75,7 @@ namespace MonoGame.Extended.Graphics
             geometryBuffer.Enqueue(ref vertex);
 
             // bottom-left
-            position = new Vector2(x: -origin1.X, y: -origin1.Y + textureRegionBounds.Height);
+            position = new Vector2(-origin1.X, y: -origin1.Y + textureRegionBounds.Height);
             transformMatrix.Transform(position, out position);
             vertex.Position.X = position.X;
             vertex.Position.Y = position.Y;
