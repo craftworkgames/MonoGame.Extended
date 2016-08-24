@@ -13,25 +13,25 @@ namespace Demo.PrimitiveBatch
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
         // dynamic batcher
-        private Batch2D _batch;
+        private GeometryBatch2D _batch;
 
         // texture used by the sprite
         private Texture2D _spriteTexture;
         private TextureRegion2D _spriteTextureRegion;
 
-        // the polygon
-        private VertexPositionColor[] _polygonVertices;
-        private short[] _polygonIndices;
-        // the curve (continous line segements)
-        private VertexPositionColor[] _curveVertices;
+//        // the polygon
+//        private VertexPositionColor[] _polygonVertices;
+//        private short[] _polygonIndices;
+//        // the curve (continous line segements)
+//        private VertexPositionColor[] _curveVertices;
 
         // the rotation angle of the sprite
         private float _spriteRotation;
-
-        // primitives matrix transformation chain
-        private Matrix _primitivesModelToWorld;
-        private Matrix _primitivesWorldToView;
-        private Matrix _primitivesViewToProjetion;
+//
+//        // primitives matrix transformation chain
+//        private Matrix _primitivesModelToWorld;
+//        private Matrix _primitivesWorldToView;
+//        private Matrix _primitivesViewToProjetion;
 
         public Game1()
         {
@@ -45,21 +45,22 @@ namespace Demo.PrimitiveBatch
         {
             var graphicsDevice = GraphicsDevice;
 
-            _batch = new Batch2D(graphicsDevice);
-            var viewport = graphicsDevice.Viewport;
+            _batch = new GeometryBatch2D(graphicsDevice);
 
-            // the transformation used to transform primitives from their model space to the world space
-            // here we scale the x, y and z axes by 100 units
-            _primitivesModelToWorld = Matrix.CreateScale(scales: new Vector3(x: 100, y: 100, z: 100));
+//            var viewport = graphicsDevice.Viewport;
 
-            // the camera transformation used to transform primitives from world space to a view space
-            // here we don't do anything by using the identity matrix
-            _primitivesWorldToView = Matrix.Identity;
-
-            // the transformation used to transform primitives from view space to projection space
-            // here we create an orthographic projection; a 3D box where any primitives outside this box are not rendered
-            // here the box is created off an origin point (0,0,0) which is the centre of the screen's surface
-            _primitivesViewToProjetion = Matrix.CreateOrthographicOffCenter(left: viewport.Width * -0.5f, right: viewport.Width * 0.5f, bottom: viewport.Height * -0.5f, top: viewport.Height * 0.5f, zNearPlane: 0, zFarPlane: 1);
+//            // the transformation used to transform primitives from their model space to the world space
+//            // here we scale the x, y and z axes by 100 units
+//            _primitivesModelToWorld = Matrix.CreateScale(scales: new Vector3(x: 100, y: 100, z: 100));
+//
+//            // the camera transformation used to transform primitives from world space to a view space
+//            // here we don't do anything by using the identity matrix
+//            _primitivesWorldToView = Matrix.Identity;
+//
+//            // the transformation used to transform primitives from view space to projection space
+//            // here we create an orthographic projection; a 3D box where any primitives outside this box are not rendered
+//            // here the box is created off an origin point (0,0,0) which is the centre of the screen's surface
+//            _primitivesViewToProjetion = Matrix.CreateOrthographicOffCenter(left: viewport.Width * -0.5f, right: viewport.Width * 0.5f, bottom: viewport.Height * -0.5f, top: viewport.Height * 0.5f, zNearPlane: 0, zFarPlane: 1);
 
             // load the texture for the sprites
             _spriteTexture = Content.Load<Texture2D>(assetName: "logo-square-128");
