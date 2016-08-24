@@ -11,7 +11,9 @@ namespace MonoGame.Extended.Graphics
     ///     Enables a group of dynamic two-dimensional geometry to drawn using the same settings.
     /// </summary>
     /// <seealso cref="PrimitiveBatch{TVertexType,TDrawContext}" />
-    /// <remarks><para>For geometry that doesn't <see cref="GeometryBatch2D"/> is</para></remarks>
+    /// <remarks>
+    ///     <para>For geometry that doesn't <see cref="GeometryBatch2D" /> is</para>
+    /// </remarks>
     public class GeometryBatch2D : PrimitiveBatch<VertexPositionColorTexture, GeometryBatch2D.DrawContext2D>
     {
         internal const ushort DefaultMaximumVerticesCount = 8192;
@@ -69,7 +71,8 @@ namespace MonoGame.Extended.Graphics
 
         /// <summary>
         ///     Starts a group of two-dimensional geometry for rendering with the specified <see cref="BatchMode" />,
-        ///     <see cref="Effect" /> and the optional chain of <see cref="Matrix" />es for transforming between world, view, and projection spaces.
+        ///     <see cref="Effect" /> and the optional chain of <see cref="Matrix" />es for transforming between world, view, and
+        ///     projection spaces.
         /// </summary>
         /// <param name="batchMode">The batch mode. Default value is <see cref="BatchMode.Deferred" />.</param>
         /// <param name="effect">
@@ -119,13 +122,16 @@ namespace MonoGame.Extended.Graphics
         ///     Draws a sprite using a specified <see cref="TextureRegion2D" />, transform <see cref="Matrix2D" /> and an optional
         ///     <see cref="Color" />, origin <see cref="Vector2" />, <see cref="SpriteEffects" />, depth, and sort key.
         /// </summary>
-        /// <param name="textureRegion">The texture region.</param>
-        /// <param name="transformMatrix">The transform matrix.</param>
-        /// <param name="color">The color.</param>
-        /// <param name="origin">The origin.</param>
-        /// <param name="spriteOptions">The sprite options.</param>
-        /// <param name="depth">The depth.</param>
-        /// <param name="sortKey">The sort key.</param>
+        /// <param name="textureRegion">The <see cref="TextureRegion2D" />.</param>
+        /// <param name="transformMatrix">The transform <see cref="Matrix2D" />.</param>
+        /// <param name="color">The <see cref="Color" />. Use <code>null</code> to use the default <see cref="Color.White" />.</param>
+        /// <param name="origin">
+        ///     The origin <see cref="Vector2" />. Use <code>null</code> to use the default
+        ///     <see cref="Vector2.Zero" />.
+        /// </param>
+        /// <param name="spriteOptions">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
+        /// <param name="depth">The depth. The default value is <code>0</code>.</param>
+        /// <param name="sortKey">The sort key. The default value is <code>0</code>.</param>
         public void DrawSprite(TextureRegion2D textureRegion, ref Matrix2D transformMatrix, Color? color = null, Vector2? origin = null, SpriteEffects spriteOptions = SpriteEffects.None, float depth = 0, uint sortKey = 0)
         {
             var geometryBuffer = GeometryBuffer;
