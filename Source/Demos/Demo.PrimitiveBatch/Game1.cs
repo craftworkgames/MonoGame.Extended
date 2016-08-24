@@ -162,34 +162,14 @@ namespace Demo.Batching
             //            _primitiveBatchPositionColor.Draw(_primitiveMaterial, PrimitiveType.LineStrip, _curveVertices);
             //            _primitiveBatchPositionColor.End();
 
-//            _geometryBatch.Begin();
-//    
-//            for (var index = 0; index < _sprites.Length; index++)
-//            {
-//                var sprite = _sprites[index];
-//                sprite.Rotation += MathHelper.ToRadians(degrees: 1);
-//                _sprites[index] = sprite;
-//
-//
-//                var matrix = Matrix2D.Identity;
-//                var scaleMatrix = Matrix2D.CreateScale(Vector2.One);
-//                Matrix2D.Multiply(ref matrix, ref scaleMatrix, out matrix);
-//                var rotationMatrix = Matrix2D.CreateRotationZ(-sprite.Rotation);
-//                Matrix2D.Multiply(ref matrix, ref rotationMatrix, out matrix);
-//                var translationMatrix = Matrix2D.CreateTranslation(sprite.Position);
-//                Matrix2D.Multiply(ref matrix, ref translationMatrix, out matrix);
-//                _geometryBatch.DrawSprite(_spriteTexture, ref matrix, origin: _spriteOrigin, color: sprite.Color);
-//            }
-//
-//            _geometryBatch.End();
-
-            _spriteBatch.Begin(blendState: graphicsDevice.BlendState, samplerState: graphicsDevice.SamplerStates[0], depthStencilState: graphicsDevice.DepthStencilState, rasterizerState: graphicsDevice.RasterizerState, effect: _effect);
-
+            _geometryBatch.Begin();
+    
             for (var index = 0; index < _sprites.Length; index++)
             {
                 var sprite = _sprites[index];
                 sprite.Rotation += MathHelper.ToRadians(degrees: 1);
                 _sprites[index] = sprite;
+
 
                 var matrix = Matrix2D.Identity;
                 var scaleMatrix = Matrix2D.CreateScale(Vector2.One);
@@ -198,11 +178,31 @@ namespace Demo.Batching
                 Matrix2D.Multiply(ref matrix, ref rotationMatrix, out matrix);
                 var translationMatrix = Matrix2D.CreateTranslation(sprite.Position);
                 Matrix2D.Multiply(ref matrix, ref translationMatrix, out matrix);
-
-                _spriteBatch.Draw(_spriteTexture, sprite.Position, null, rotation: sprite.Rotation, origin: _spriteOrigin, color: sprite.Color);
+                _geometryBatch.DrawSprite(_spriteTexture, ref matrix, origin: _spriteOrigin, color: sprite.Color);
             }
 
-            _spriteBatch.End();
+            _geometryBatch.End();
+
+//            _spriteBatch.Begin(blendState: graphicsDevice.BlendState, samplerState: graphicsDevice.SamplerStates[0], depthStencilState: graphicsDevice.DepthStencilState, rasterizerState: graphicsDevice.RasterizerState, effect: _effect);
+//
+//            for (var index = 0; index < _sprites.Length; index++)
+//            {
+//                var sprite = _sprites[index];
+//                sprite.Rotation += MathHelper.ToRadians(degrees: 1);
+//                _sprites[index] = sprite;
+//
+//                var matrix = Matrix2D.Identity;
+//                var scaleMatrix = Matrix2D.CreateScale(Vector2.One);
+//                Matrix2D.Multiply(ref matrix, ref scaleMatrix, out matrix);
+//                var rotationMatrix = Matrix2D.CreateRotationZ(-sprite.Rotation);
+//                Matrix2D.Multiply(ref matrix, ref rotationMatrix, out matrix);
+//                var translationMatrix = Matrix2D.CreateTranslation(sprite.Position);
+//                Matrix2D.Multiply(ref matrix, ref translationMatrix, out matrix);
+//
+//                _spriteBatch.Draw(_spriteTexture, matrix.Translation, null, rotation: matrix.Rotation, origin: _spriteOrigin, scale: matrix.Scale, color: sprite.Color);
+//            }
+
+            //_spriteBatch.End();
 
             base.Draw(gameTime);
 

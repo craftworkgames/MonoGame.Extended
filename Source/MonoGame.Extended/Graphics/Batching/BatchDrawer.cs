@@ -41,13 +41,16 @@ namespace MonoGame.Extended.Graphics.Batching
 
         internal void Draw(int startIndex, int primitiveCount, ref TDrawContext data)
         {
+            var graphicsDevice = GraphicsDevice;
             var effect = Effect;
+            data.Apply(effect);
             var passes = effect.CurrentTechnique.Passes;
             for (var passIndex = 0; passIndex < passes.Count; passIndex++)
             {
                 var pass = passes[passIndex];
-                data.ApplyPass(effect, passIndex, pass);
-                GraphicsDevice.DrawIndexedPrimitives(PrimitiveType, 0, startIndex, primitiveCount);
+                pass.Apply();
+                data.AfterApplyPass(passIndex, effect);
+                graphicsDevice.DrawIndexedPrimitives(PrimitiveType, 0, startIndex, primitiveCount);
             }
         }
     }

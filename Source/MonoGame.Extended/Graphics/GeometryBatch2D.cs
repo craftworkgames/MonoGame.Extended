@@ -154,9 +154,17 @@ namespace MonoGame.Extended.Graphics
                 Texture = texture;
             }
 
-            public void ApplyPass(Effect effect, int passIndex, EffectPass pass)
+            public void ApplyPass(int passIndex, Effect effect)
             {
-                pass.Apply();
+                effect.GraphicsDevice.Textures[index: 0] = Texture;
+            }
+
+            public void Apply(Effect effect)
+            {
+            }
+
+            public void AfterApplyPass(int passIndex, Effect effect)
+            {
                 effect.GraphicsDevice.Textures[index: 0] = Texture;
             }
         }
