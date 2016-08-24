@@ -11,7 +11,7 @@ namespace MonoGame.Extended.Graphics
     ///     Enables a group of two-dimensional geometry to drawn using the same settings.
     /// </summary>
     /// <seealso cref="PrimitiveBatch{TVertexType,TDrawContext}" />
-    public class Batch2D : PrimitiveBatch<VertexPositionColorTexture, Batch2D.DrawContext2D>
+    public class GeometryBatch2D : PrimitiveBatch<VertexPositionColorTexture, GeometryBatch2D.DrawContext2D>
     {
         internal const ushort DefaultMaximumVerticesCount = 8192;
         internal const ushort DefaultMaximumIndicesCount = 12288;
@@ -24,12 +24,12 @@ namespace MonoGame.Extended.Graphics
         private readonly Texture2D _pixelTexture;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Batch2D" /> class.
+        ///     Initializes a new instance of the <see cref="GeometryBatch2D" /> class.
         /// </summary>
         /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="maximumVerticesCount">The maximum number of vertices. The default value is <code>8192</code>.</param>
         /// <param name="maximumIndicesCount">The maximum number of indices. The default value is <code>12288</code>.</param>
-        public Batch2D(GraphicsDevice graphicsDevice, int maximumVerticesCount = DefaultMaximumVerticesCount, int maximumIndicesCount = DefaultMaximumIndicesCount)
+        public GeometryBatch2D(GraphicsDevice graphicsDevice, int maximumVerticesCount = DefaultMaximumVerticesCount, int maximumIndicesCount = DefaultMaximumIndicesCount)
             : base(geometryBuffer: new DynamicGeometryBuffer<VertexPositionColorTexture>(graphicsDevice, maximumVerticesCount, maximumIndicesCount))
         {
             _effect = new DefaultEffect2D(graphicsDevice);
