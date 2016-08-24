@@ -8,9 +8,10 @@ using MonoGame.Extended.TextureAtlases;
 namespace MonoGame.Extended.Graphics
 {
     /// <summary>
-    ///     Enables a group of two-dimensional geometry to drawn using the same settings.
+    ///     Enables a group of dynamic two-dimensional geometry to drawn using the same settings.
     /// </summary>
     /// <seealso cref="PrimitiveBatch{TVertexType,TDrawContext}" />
+    /// <remarks><para>For geometry that doesn't <see cref="GeometryBatch2D"/> is</para></remarks>
     public class GeometryBatch2D : PrimitiveBatch<VertexPositionColorTexture, GeometryBatch2D.DrawContext2D>
     {
         internal const ushort DefaultMaximumVerticesCount = 8192;
@@ -117,7 +118,7 @@ namespace MonoGame.Extended.Graphics
 
         /// <summary>
         ///     Draws a sprite using a specified <see cref="TextureRegion2D" />, transform <see cref="Matrix2D" /> and an optional
-        ///     <see cref="Color" />, origin <see cref="Vector2" />, <see cref="SpriteOptions" />, depth, and sort key.
+        ///     <see cref="Color" />, origin <see cref="Vector2" />, <see cref="SpriteEffects" />, depth, and sort key.
         /// </summary>
         /// <param name="textureRegion">The texture region.</param>
         /// <param name="transformMatrix">The transform matrix.</param>
@@ -126,7 +127,7 @@ namespace MonoGame.Extended.Graphics
         /// <param name="spriteOptions">The sprite options.</param>
         /// <param name="depth">The depth.</param>
         /// <param name="sortKey">The sort key.</param>
-        public void DrawSprite(TextureRegion2D textureRegion, ref Matrix2D transformMatrix, Color? color = null, Vector2? origin = null, SpriteOptions spriteOptions = SpriteOptions.None, float depth = 0, uint sortKey = 0)
+        public void DrawSprite(TextureRegion2D textureRegion, ref Matrix2D transformMatrix, Color? color = null, Vector2? origin = null, SpriteEffects spriteOptions = SpriteEffects.None, float depth = 0, uint sortKey = 0)
         {
             var geometryBuffer = GeometryBuffer;
             var startVertex = geometryBuffer.VertexCount;
