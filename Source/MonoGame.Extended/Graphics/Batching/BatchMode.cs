@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended.Graphics.Batching
+﻿using Microsoft.Xna.Framework.Graphics;
+
+namespace MonoGame.Extended.Graphics.Batching
 {
     /// <summary>
     ///     Defines batch rendering options.
@@ -6,13 +8,14 @@
     public enum BatchMode
     {
         /// <summary>
-        ///     Geometry will be drawn within each draw call.
+        ///     Geometry is submitted to <see cref="GraphicsDevice" /> for rendering with each draw call..
         /// </summary>
         Immediate,
 
         /// <summary>
-        ///     Geometry is not drawn until <see cref="PrimitiveBatch{TVertexType}.End" /> is called or the maximum vertices or
-        ///     indices count has been reached for the current batch.
+        ///     Geometry is not submitted to <see cref="GraphicsDevice" /> for rendering until
+        ///     <see cref="PrimitiveBatch{TVertexType,TDrawContext}.End" /> is called, or the maximum vertices or indices count has
+        ///     been reached for the current batch.
         /// </summary>
         Deferred
     }
