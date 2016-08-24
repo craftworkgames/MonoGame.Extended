@@ -44,7 +44,7 @@ PixelShaderOutput PixelShaderFunction(VertexShaderOutput input) : SV_Target0
 }
 
 // The technique; a collection of passes to be applied, each specifying the vertex and shader to use
-technique PrimitiveTechnique
+technique
 {
 	pass
 	{
