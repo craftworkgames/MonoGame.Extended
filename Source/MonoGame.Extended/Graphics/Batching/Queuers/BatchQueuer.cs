@@ -4,14 +4,16 @@ using Microsoft.Xna.Framework.Graphics;
 namespace MonoGame.Extended.Graphics.Batching.Queuers
 {
     internal abstract class BatchQueuer<TVertexType, TDrawContext> : IDisposable
-        where TVertexType : struct, IVertexType where TDrawContext : struct, IDrawContext<TDrawContext>
+        where TVertexType : struct, IVertexType where TDrawContext : struct, IDrawContext
     {
         internal BatchDrawer<TVertexType, TDrawContext> BatchDrawer;
+        internal PrimitiveType PrimitiveType;
 
         internal virtual void Begin(Effect effect, PrimitiveType primitiveType)
         {
             BatchDrawer.Effect = effect;
             BatchDrawer.PrimitiveType = primitiveType;
+            PrimitiveType = primitiveType;
         }
 
         internal virtual void End()

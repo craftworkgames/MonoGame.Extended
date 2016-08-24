@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Graphics.Effects;
 using MonoGame.Extended.TextureAtlases;
 
 namespace Demo.Batching
@@ -19,12 +20,11 @@ namespace Demo.Batching
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
-        // dynamic batcher
-        private GeometryBatch2D _batch;
-
-        // texture used by the sprite
+        private GeometryBatch2D _geometryBatch;
+        private SpriteBatch _spriteBatch;
         private Texture2D _spriteTexture;
-        private TextureRegion2D _spriteTextureRegion;
+        private Vector2 _spriteOrigin;
+        private DefaultEffect2D _effect;
 
 //        // the polygon
 //        private VertexPositionColor[] _polygonVertices;
@@ -38,7 +38,7 @@ namespace Demo.Batching
 //        private Matrix _primitivesViewToProjetion;
 
         private readonly FastRandom _random = new FastRandom();
-
+        private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
         private readonly SpriteInfo[] _sprites = new SpriteInfo[2048];
 
         public Game1()
@@ -46,7 +46,8 @@ namespace Demo.Batching
             _graphicsDeviceManager = new GraphicsDeviceManager(game: this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            Window.AllowUserResizing = true;
+            Window.AllowUserResizing = false;
+            IsFixedTimeStep = false;
 
             _graphicsDeviceManager.PreferredBackBufferWidth = 1920;
             _graphicsDeviceManager.PreferredBackBufferHeight = 1080;
@@ -56,7 +57,9 @@ namespace Demo.Batching
         {
             var graphicsDevice = GraphicsDevice;
 
-            _batch = new GeometryBatch2D(graphicsDevice);
+            _geometryBatch = new GeometryBatch2D(graphicsDevice);
+            _spriteBatch = new SpriteBatch(graphicsDevice);
+            _effect = new DefaultEffect2D(graphicsDevice);
 
 //            var viewport = graphicsDevice.Viewport;
 
@@ -75,7 +78,8 @@ namespace Demo.Batching
 
             // load the texture for the sprites
             _spriteTexture = Content.Load<Texture2D>(assetName: "logo-square-128");
-            _spriteTextureRegion = new TextureRegion2D(_spriteTexture);
+            _spriteOrigin = new Vector2(x: _spriteTexture.Width * 0.5f, y: _spriteTexture.Height * 0.5f);
+
 
             //            // create our polygon mesh; vertices are in Local space; indices are index references to the vertices to draw 
             //            // indices have to multiple of 3 for PrimitiveType.TriangleList which says to draw a collection of triangles each with 3 vertices (different triangles can share vertices) 
@@ -113,6 +117,10 @@ namespace Demo.Batching
 
             var viewport = GraphicsDevice.Viewport;
 
+            _effect.World = Matrix.Identity;
+            _effect.View = Matrix.Identity;
+            _effect.Projection = Matrix.CreateTranslation(xPosition: -0.5f, yPosition: -0.5f, zPosition: 0) * Matrix.CreateOrthographicOffCenter(left: 0, right: viewport.Width, bottom: viewport.Height, top: 0, zNearPlane: 0, zFarPlane: -1);
+
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _sprites.Length; index++)
             {
@@ -134,15 +142,19 @@ namespace Demo.Batching
 
         protected override void Draw(GameTime gameTime)
         {
+            var graphicsDevice = GraphicsDevice;
+
             // clear the (pixel) buffer to a specific color
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            graphicsDevice.Clear(Color.CornflowerBlue);
 
             // set the states for rendering
             // this could be moved outside the render loop if it doesn't change frame per frame 
             // however, it's left here indicating it's possible and common to change the state between frames
             // use alphablend so the transparent part of the texture is blended with the color behind it
-            GraphicsDevice.BlendState = BlendState.AlphaBlend;
-            GraphicsDevice.SamplerStates[index: 0] = SamplerState.PointClamp;
+            graphicsDevice.BlendState = BlendState.AlphaBlend;
+            graphicsDevice.SamplerStates[index: 0] = SamplerState.PointClamp;
+            graphicsDevice.DepthStencilState = DepthStencilState.None;
+            graphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             // draw the polygon and curve in the cartesian coordinate system using the VertexPositionColor PrimitiveBatch
             //            _primitiveBatchPositionColor.Begin();
@@ -150,9 +162,28 @@ namespace Demo.Batching
             //            _primitiveBatchPositionColor.Draw(_primitiveMaterial, PrimitiveType.LineStrip, _curveVertices);
             //            _primitiveBatchPositionColor.End();
 
-            // draw the sprite
-            _batch.Begin();
-            var spriteOrigin = new Vector2(x: _spriteTextureRegion.Texture.Width * 0.5f, y: _spriteTextureRegion.Texture.Height * 0.5f);
+//            _geometryBatch.Begin();
+//    
+//            for (var index = 0; index < _sprites.Length; index++)
+//            {
+//                var sprite = _sprites[index];
+//                sprite.Rotation += MathHelper.ToRadians(degrees: 1);
+//                _sprites[index] = sprite;
+//
+//
+//                var matrix = Matrix2D.Identity;
+//                var scaleMatrix = Matrix2D.CreateScale(Vector2.One);
+//                Matrix2D.Multiply(ref matrix, ref scaleMatrix, out matrix);
+//                var rotationMatrix = Matrix2D.CreateRotationZ(-sprite.Rotation);
+//                Matrix2D.Multiply(ref matrix, ref rotationMatrix, out matrix);
+//                var translationMatrix = Matrix2D.CreateTranslation(sprite.Position);
+//                Matrix2D.Multiply(ref matrix, ref translationMatrix, out matrix);
+//                _geometryBatch.DrawSprite(_spriteTexture, ref matrix, origin: _spriteOrigin, color: sprite.Color);
+//            }
+//
+//            _geometryBatch.End();
+
+            _spriteBatch.Begin(blendState: graphicsDevice.BlendState, samplerState: graphicsDevice.SamplerStates[0], depthStencilState: graphicsDevice.DepthStencilState, rasterizerState: graphicsDevice.RasterizerState, effect: _effect);
 
             for (var index = 0; index < _sprites.Length; index++)
             {
@@ -160,13 +191,23 @@ namespace Demo.Batching
                 sprite.Rotation += MathHelper.ToRadians(degrees: 1);
                 _sprites[index] = sprite;
 
-                var matrix = Matrix2D.CreateScale(Vector2.One) * Matrix2D.CreateRotationZ(-sprite.Rotation) * Matrix2D.CreateTranslation(sprite.Position);
-                _batch.DrawSprite(_spriteTextureRegion, ref matrix, origin: spriteOrigin, color: sprite.Color);
+                var matrix = Matrix2D.Identity;
+                var scaleMatrix = Matrix2D.CreateScale(Vector2.One);
+                Matrix2D.Multiply(ref matrix, ref scaleMatrix, out matrix);
+                var rotationMatrix = Matrix2D.CreateRotationZ(-sprite.Rotation);
+                Matrix2D.Multiply(ref matrix, ref rotationMatrix, out matrix);
+                var translationMatrix = Matrix2D.CreateTranslation(sprite.Position);
+                Matrix2D.Multiply(ref matrix, ref translationMatrix, out matrix);
+
+                _spriteBatch.Draw(_spriteTexture, sprite.Position, null, rotation: sprite.Rotation, origin: _spriteOrigin, color: sprite.Color);
             }
 
-            _batch.End();
+            _spriteBatch.End();
 
             base.Draw(gameTime);
+
+            _fpsCounter.Update(gameTime);
+            Window.Title = $"Demo.Batching - Average FPS: {_fpsCounter.AverageFramesPerSecond}";
         }
     }
 }

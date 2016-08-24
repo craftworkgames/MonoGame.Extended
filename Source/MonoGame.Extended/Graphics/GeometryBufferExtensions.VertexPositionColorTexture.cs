@@ -1,42 +1,56 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Graphics
 {
     public static class GeometryBuilderExtensionsVertexPositionColorTexture
     {
         /// <summary>
-        ///     Enqueues a sprite into the specified <see cref="GeometryBuffer{VertexPositionColorTexture}" />.
+        /// Enqueues a sprite into the specified <see cref="GeometryBuffer{VertexPositionColorTexture}"/>.
         /// </summary>
-        /// <param name="geometryBuffer">The <see cref="GeometryBuffer{VertexPositionColorTexture}" />.</param>
-        /// <param name="vertexIndexOffset">The vertex index offset applied to the generated indices.</param>
-        /// <param name="textureRegion">The <see cref="TextureRegion2D" />.</param>
-        /// <param name="transformMatrix">The transform <see cref="Matrix2D" />.</param>
-        /// <param name="color">The <see cref="Color" />. Use <code>null</code> to use the default <see cref="Color.White" />.</param>
-        /// <param name="origin">
-        ///     The origin <see cref="Vector2" />. Use <code>null</code> to use the default
-        ///     <see cref="Vector2.Zero" />.
-        /// </param>
-        /// <param name="options">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
+        /// <param name="geometryBuffer">The <see cref="GeometryBuffer{VertexPositionColorTexture}"/>.</param>
+        /// <param name="vertexIndexOffset">The vertex index offset applied to generated indices.</param>
+        /// <param name="texture">The <see cref="Texture"/>.</param>
+        /// <param name="transformMatrix">The transform <see cref="Matrix2D"/>.</param>
+        /// <param name="sourceRectangle">The texture region <see cref="Rectangle"/> of the <paramref name="texture"/>. Use <code>null</code> to use the entire <see cref="Texture2D"/>.</param>
+        /// <param name="color">The <see cref="Color"/>. Use <code>null</code> to use the default <see cref="Color.White"/>.</param>
+        /// <param name="origin">The origin <see cref="Vector2"/>. Use <code>null</code> to use the default <see cref="Vector2.Zero"/>.</param>
+        /// <param name="options">The <see cref="SpriteEffects"/>. The default value is <see cref="SpriteEffects.None"/>.</param>
         /// <param name="depth">The depth. The default value is <code>0</code>.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void EnqueueSprite(this GeometryBuffer<VertexPositionColorTexture> geometryBuffer, int vertexIndexOffset, TextureRegion2D textureRegion, ref Matrix2D transformMatrix, Color? color = null, Vector2? origin = null, SpriteEffects options = SpriteEffects.None, float depth = 0)
+        public static unsafe void EnqueueSprite(this GeometryBuffer<VertexPositionColorTexture> geometryBuffer, ushort vertexIndexOffset, Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null, Color? color = null, Vector2? origin = null, SpriteEffects options = SpriteEffects.None, float depth = 0)
         {
-            if (textureRegion == null)
-                throw new ArgumentNullException(paramName: nameof(textureRegion));
+            if (texture == null)
+                throw new ArgumentNullException(paramName: nameof(texture));
 
-            var textureRegionBounds = textureRegion.Bounds;
-            var textureSize = new Size(textureRegion.Texture.Width, textureRegion.Texture.Height);
+            var origin1 = origin ?? Vector2.Zero;
+            Vector2 positionTopLeft, positionBottomRight, textureCoordinateTopLeft, textureCoordinateBottomRight;
+            var textureWidth = texture.Width;
+            var textureHeight = texture.Height;
 
-            Vector2 textureCoordinateTopLeft, textureCoordinateBottomRight;
+            positionTopLeft.X = -origin1.X;
+            positionTopLeft.Y = -origin1.Y;
 
-            textureCoordinateTopLeft.X = (textureRegionBounds.X + 0.5f) / textureSize.Width;
-            textureCoordinateTopLeft.Y = (textureRegionBounds.Y + 0.5f) / textureSize.Height;
-
-            textureCoordinateBottomRight.X = (textureRegion.X + textureRegionBounds.Width + 0.5f) / textureSize.Width;
-            textureCoordinateBottomRight.Y = (textureRegion.Y + textureRegionBounds.Height + 0.5f) / textureSize.Height;
+            if (sourceRectangle == null)
+            {
+                positionBottomRight.X = -origin1.X + textureWidth;
+                positionBottomRight.Y = -origin1.Y + textureHeight;
+                textureCoordinateTopLeft.X = 0;
+                textureCoordinateTopLeft.Y = 0;
+                textureCoordinateBottomRight.X = 1;
+                textureCoordinateBottomRight.Y = 1;
+            }
+            else
+            {
+                var textureRegion = sourceRectangle.Value;
+                positionBottomRight.X = -origin1.X + textureRegion.Width;
+                positionBottomRight.Y = -origin1.Y + textureRegion.Height;
+                textureCoordinateTopLeft.X = (textureRegion.X + 0.5f) / texture.Width;
+                textureCoordinateTopLeft.Y = (textureRegion.Y + 0.5f) / texture.Height;
+                textureCoordinateBottomRight.X = (textureRegion.X + textureRegion.Width + 0.5f) / textureWidth;
+                textureCoordinateBottomRight.Y = (textureRegion.Y + textureRegion.Height + 0.5f) / textureHeight;
+            }
 
             var spriteEffect = options;
             if ((spriteEffect & SpriteEffects.FlipVertically) != 0)
@@ -53,44 +67,50 @@ namespace MonoGame.Extended.Graphics
                 textureCoordinateTopLeft.X = temp;
             }
 
-            var vertex = new VertexPositionColorTexture(position: new Vector3(Vector2.Zero, depth), color: color ?? Color.White, textureCoordinate: Vector2.Zero);
-            var origin1 = origin ?? Vector2.Zero;
-            Vector2 position;
+            var vertex = new VertexPositionColorTexture(position: new Vector3(Vector2.Zero, depth), color: color ?? Color.White, textureCoordinate: Vector2.Zero);;
 
-            // top-left
-            position = new Vector2(-origin1.X, -origin1.Y);
-            transformMatrix.Transform(position, out position);
-            vertex.Position.X = position.X;
-            vertex.Position.Y = position.Y;
-            vertex.TextureCoordinate = textureCoordinateTopLeft;
-            geometryBuffer.Enqueue(ref vertex);
+            fixed (VertexPositionColorTexture* fixedPointer = geometryBuffer._vertices)
+            {
+                var pointer = fixedPointer + geometryBuffer._vertexCount;
 
-            // top-right
-            position = new Vector2(x: -origin1.X + textureRegionBounds.Width, y: -origin1.Y);
-            transformMatrix.Transform(position, out position);
-            vertex.Position.X = position.X;
-            vertex.Position.Y = position.Y;
-            vertex.TextureCoordinate.X = textureCoordinateBottomRight.X;
-            vertex.TextureCoordinate.Y = textureCoordinateTopLeft.Y;
-            geometryBuffer.Enqueue(ref vertex);
+                // top-left
+                var position = positionTopLeft;
+                transformMatrix.Transform(position, out position);
+                vertex.Position.X = position.X;
+                vertex.Position.Y = position.Y;
+                vertex.TextureCoordinate = textureCoordinateTopLeft;
+                *(pointer + 0) = vertex;
 
-            // bottom-left
-            position = new Vector2(-origin1.X, y: -origin1.Y + textureRegionBounds.Height);
-            transformMatrix.Transform(position, out position);
-            vertex.Position.X = position.X;
-            vertex.Position.Y = position.Y;
-            vertex.TextureCoordinate.X = textureCoordinateTopLeft.X;
-            vertex.TextureCoordinate.Y = textureCoordinateBottomRight.Y;
-            geometryBuffer.Enqueue(ref vertex);
+                // top-right
+                position.X = positionBottomRight.X;
+                position.Y = positionTopLeft.Y;
+                transformMatrix.Transform(position, out position);
+                vertex.Position.X = position.X;
+                vertex.Position.Y = position.Y;
+                vertex.TextureCoordinate.X = textureCoordinateBottomRight.X;
+                vertex.TextureCoordinate.Y = textureCoordinateTopLeft.Y;
+                *(pointer + 1) = vertex;
 
-            // bottom-right
-            position = new Vector2(x: -origin1.X + textureRegionBounds.Width, y: -origin1.Y + textureRegionBounds.Height);
-            transformMatrix.Transform(position, out position);
-            vertex.Position.X = position.X;
-            vertex.Position.Y = position.Y;
-            vertex.TextureCoordinate = textureCoordinateBottomRight;
-            geometryBuffer.Enqueue(ref vertex);
+                // bottom-left
+                position.X = positionTopLeft.X;
+                position.Y = positionBottomRight.Y;
+                transformMatrix.Transform(position, out position);
+                vertex.Position.X = position.X;
+                vertex.Position.Y = position.Y;
+                vertex.TextureCoordinate.X = textureCoordinateTopLeft.X;
+                vertex.TextureCoordinate.Y = textureCoordinateBottomRight.Y;
+                *(pointer + 2) = vertex;
 
+                // bottom-right
+                position = positionBottomRight;
+                transformMatrix.Transform(position, out position);
+                vertex.Position.X = position.X;
+                vertex.Position.Y = position.Y;
+                vertex.TextureCoordinate = textureCoordinateBottomRight;
+                *(pointer + 3) = vertex;
+            }
+
+            geometryBuffer._vertexCount += 4;
             geometryBuffer.EnqueueClockwiseQuadrilateralIndices(vertexIndexOffset);
         }
     }

@@ -29,7 +29,7 @@ namespace MonoGame.Extended.Graphics
         /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="maximumVerticesCount">The maximum number of vertices. The default value is <code>8192</code>.</param>
         /// <param name="maximumIndicesCount">The maximum number of indices. The default value is <code>12288</code>.</param>
-        public GeometryBatch2D(GraphicsDevice graphicsDevice, int maximumVerticesCount = DefaultMaximumVerticesCount, int maximumIndicesCount = DefaultMaximumIndicesCount)
+        public GeometryBatch2D(GraphicsDevice graphicsDevice, int maximumVerticesCount = DefaultMaximumVerticesCount, ushort maximumIndicesCount = DefaultMaximumIndicesCount)
             : base(geometryBuffer: new DynamicGeometryBuffer<VertexPositionColorTexture>(graphicsDevice, maximumVerticesCount, maximumIndicesCount))
         {
             _effect = new DefaultEffect2D(graphicsDevice);
@@ -119,8 +119,9 @@ namespace MonoGame.Extended.Graphics
         ///     Draws a sprite using a specified <see cref="TextureRegion2D" />, transform <see cref="Matrix2D" /> and an optional
         ///     <see cref="Color" />, origin <see cref="Vector2" />, <see cref="SpriteEffects" />, depth, and sort key.
         /// </summary>
-        /// <param name="textureRegion">The <see cref="TextureRegion2D" />.</param>
-        /// <param name="transformMatrix">The transform <see cref="Matrix2D" />.</param>
+        /// <param name="texture">The <see cref="Texture"/>.</param>
+        /// <param name="transformMatrix">The transform <see cref="Matrix2D"/>.</param>
+        /// <param name="sourceRectangle">The texture region <see cref="Rectangle"/> of the <paramref name="texture"/>. Use <code>null</code> to use the entire <see cref="Texture2D"/>.</param>
         /// <param name="color">The <see cref="Color" />. Use <code>null</code> to use the default <see cref="Color.White" />.</param>
         /// <param name="origin">
         ///     The origin <see cref="Vector2" />. Use <code>null</code> to use the default
@@ -129,34 +130,28 @@ namespace MonoGame.Extended.Graphics
         /// <param name="spriteOptions">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
         /// <param name="depth">The depth. The default value is <code>0</code>.</param>
         /// <param name="sortKey">The sort key. The default value is <code>0</code>.</param>
-        public void DrawSprite(TextureRegion2D textureRegion, ref Matrix2D transformMatrix, Color? color = null, Vector2? origin = null, SpriteEffects spriteOptions = SpriteEffects.None, float depth = 0, uint sortKey = 0)
+        public void DrawSprite(Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null, Color? color = null, Vector2? origin = null, SpriteEffects spriteOptions = SpriteEffects.None, float depth = 0, uint sortKey = 0)
         {
             var geometryBuffer = GeometryBuffer;
             var startVertex = geometryBuffer.VertexCount;
             var startIndex = geometryBuffer.IndexCount;
-            geometryBuffer.EnqueueSprite(startVertex, textureRegion, ref transformMatrix, color, origin, spriteOptions, depth);
+            geometryBuffer.EnqueueSprite(startVertex, texture, ref transformMatrix, sourceRectangle, color, origin, spriteOptions, depth);
             var indexCount = geometryBuffer.IndexCount - startIndex;
-            var drawContext = new DrawContext2D(textureRegion.Texture);
+            var drawContext = new DrawContext2D(texture);
             EnqueueDraw(startIndex, indexCount, ref drawContext, sortKey);
         }
 
         /// <summary>
         ///     Defines a drawing context for two-dimensional geometry.
         /// </summary>
-        /// <seealso cref="IDrawContext{TData}" />
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct DrawContext2D : IDrawContext<DrawContext2D>
+        public struct DrawContext2D : IDrawContext
         {
             public Texture2D Texture;
 
             internal DrawContext2D(Texture2D texture)
             {
                 Texture = texture;
-            }
-
-            public bool Equals(ref DrawContext2D other)
-            {
-                return other.Texture == Texture;
             }
 
             public void ApplyPass(Effect effect, int passIndex, EffectPass pass)

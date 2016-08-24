@@ -30,9 +30,9 @@ namespace MonoGame.Extended.Graphics
 
         // ReSharper disable InconsistentNaming
         internal readonly TVertexType[] _vertices;
-        internal readonly int[] _indices;
-        internal int _vertexCount;
-        internal int _indexCount;
+        internal readonly ushort[] _indices;
+        internal ushort _vertexCount;
+        internal ushort _indexCount;
         // ReSharper restore InconsistentNaming
 
         internal readonly GeometryBufferType BufferType;
@@ -54,7 +54,7 @@ namespace MonoGame.Extended.Graphics
         /// <value>
         ///     The indices as read-only.
         /// </value>
-        public IReadOnlyList<int> Indices
+        public IReadOnlyList<ushort> Indices
         {
             get { return _indices; }
         }
@@ -65,7 +65,7 @@ namespace MonoGame.Extended.Graphics
         /// <value>
         ///     The number of buffered vertices.
         /// </value>
-        public int VertexCount
+        public ushort VertexCount
         {
             get { return _vertexCount; }
         }
@@ -76,7 +76,7 @@ namespace MonoGame.Extended.Graphics
         /// <value>
         ///     The number of buffered indices.
         /// </value>
-        public int IndexCount
+        public ushort IndexCount
         {
             get { return _indexCount; }
         }
@@ -124,7 +124,7 @@ namespace MonoGame.Extended.Graphics
             GraphicsDevice = graphicsDevice;
 
             _vertices = new TVertexType[maximumIndicesCount];
-            _indices = new int[maximumIndicesCount];
+            _indices = new ushort[maximumIndicesCount];
             _vertexCount = 0;
 
             BufferType = bufferType;
@@ -133,11 +133,11 @@ namespace MonoGame.Extended.Graphics
             {
                 case GeometryBufferType.Static:
                     VertexBuffer = new VertexBuffer(graphicsDevice, type: typeof(TVertexType), vertexCount: maximumVerticesCount, bufferUsage: BufferUsage.WriteOnly);
-                    IndexBuffer = new IndexBuffer(graphicsDevice, indexType: typeof(uint), indexCount: maximumIndicesCount, usage: BufferUsage.WriteOnly);
+                    IndexBuffer = new IndexBuffer(graphicsDevice, indexType: typeof(ushort), indexCount: maximumIndicesCount, usage: BufferUsage.WriteOnly);
                     break;
                 case GeometryBufferType.Dynamic:
                     VertexBuffer = new DynamicVertexBuffer(graphicsDevice, type: typeof(TVertexType), vertexCount: maximumVerticesCount, bufferUsage: BufferUsage.WriteOnly);
-                    IndexBuffer = new DynamicIndexBuffer(graphicsDevice, indexType: typeof(uint), indexCount: maximumIndicesCount, usage: BufferUsage.WriteOnly);
+                    IndexBuffer = new DynamicIndexBuffer(graphicsDevice, indexType: typeof(ushort), indexCount: maximumIndicesCount, usage: BufferUsage.WriteOnly);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(paramName: nameof(bufferType));
@@ -166,7 +166,7 @@ namespace MonoGame.Extended.Graphics
         ///     Adds the specified vertex index to the buffer of geometry.
         /// </summary>
         /// <param name="index">The vertex index.</param>
-        public void Enqueue(int index)
+        public void Enqueue(ushort index)
         {
             _indices[_indexCount++] = index;
         }
@@ -175,50 +175,63 @@ namespace MonoGame.Extended.Graphics
         ///     Adds the specified vertices to the buffer of geometry.
         /// </summary>
         /// <param name="vertices">The vertices.</param>
-        /// <param name="startVertex">
+        /// <param name="sourceIndex">
         ///     The value that represents the index in the <paramref name="vertices" /> at which adding
         ///     begins.
         /// </param>
-        /// <param name="vertexCount">The number of vertices to add.</param>
-        public void Enqueue(TVertexType[] vertices, int startVertex, int vertexCount)
+        /// <param name="length">The number of vertices to add.</param>
+        public void Enqueue(TVertexType[] vertices, int sourceIndex, ushort length)
         {
-            Array.Copy(vertices, startVertex, _vertices, VertexCount, vertexCount);
-            _vertexCount += vertexCount;
+            Array.Copy(vertices, sourceIndex, _vertices, VertexCount, length);
+            _vertexCount += length;
         }
 
         /// <summary>
         ///     Adds the specified vertices and vertex indices to the buffer of geometry.
         /// </summary>
-        /// <param name="vertices">The vertices.</param>
-        /// <param name="startVertex">
-        ///     The value that represents the index in the <paramref name="vertices" /> at which adding
-        ///     begins.
-        /// </param>
-        /// <param name="vertexCount">The number of vertices to add.</param>
         /// <param name="indices">The indices.</param>
-        /// <param name="startIndex">The value that represents the index in the <paramref name="indices" /> at which adding begins.</param>
-        /// <param name="indexCount">The number of indices to add.</param>
-        public void Enqueue(TVertexType[] vertices, int startVertex, int vertexCount, uint[] indices, int startIndex, int indexCount)
+        /// <param name="sourceIndex">The value that represents the index in the <paramref name="indices" /> at which adding begins.</param>
+        /// <param name="length">The number of indices to add.</param>
+        /// <param name="indexOffset">The index offset.</param>
+        public unsafe void Enqueue(ushort[] indices, int sourceIndex, ushort length, ushort indexOffset)
         {
-            var indexOffset = VertexCount;
+            var start = _indexCount;
+            var end = _indexCount + length;
 
-            Enqueue(vertices, startVertex, vertexCount);
+            Array.Copy(indices, sourceIndex, _indices, IndexCount, length);
 
-            Array.Copy(indices, startIndex, _indices, IndexCount, indexCount);
+            fixed (ushort* fixedPointer = _indices)
+            {
+                var pointer = fixedPointer + start;
+                var endPointer = fixedPointer + end;
 
-            var maxIndexCount = IndexCount + indexCount;
-            while (IndexCount < maxIndexCount)
-                _indices[_indexCount++] += indexOffset;
+                while (pointer < endPointer)
+                {
+                    *pointer += indexOffset;
+                     ++pointer;
+                }
+            }
+
+            _indexCount += length;
         }
 
-        public void EnqueueClockwiseQuadrilateralIndices(int indexOffset)
+        /// <summary>
+        ///     Adds clockwise quadrilateral indices to the buffer of geometry.
+        /// </summary>
+        /// <param name="indexOffset">The index offset.</param>
+        public unsafe void EnqueueClockwiseQuadrilateralIndices(ushort indexOffset)
         {
-            Enqueue(index: 0 + indexOffset);
-            Enqueue(index: 1 + indexOffset);
-            Enqueue(index: 2 + indexOffset);
-            Enqueue(index: 1 + indexOffset);
-            Enqueue(index: 3 + indexOffset);
-            Enqueue(index: 2 + indexOffset);
+            fixed (ushort* fixedPointer = _indices)
+            {
+                var pointer = fixedPointer + _indexCount;
+                *(pointer + 0) = (ushort)(0 + indexOffset);
+                *(pointer + 1) = (ushort)(1 + indexOffset);
+                *(pointer + 2) = (ushort)(2 + indexOffset);
+                *(pointer + 3) = (ushort)(1 + indexOffset);
+                *(pointer + 4) = (ushort)(3 + indexOffset);
+                *(pointer + 5) = (ushort)(2 + indexOffset);
+            }
+            _indexCount += 6;
         }
 
         /// <summary>

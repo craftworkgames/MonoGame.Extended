@@ -21,7 +21,7 @@ namespace MonoGame.Extended.Graphics.Batching
     ///     </para>
     /// </remarks>
     public abstract class PrimitiveBatch<TVertexType, TDrawContext> : IDisposable
-        where TVertexType : struct, IVertexType where TDrawContext : struct, IDrawContext<TDrawContext>
+        where TVertexType : struct, IVertexType where TDrawContext : struct, IDrawContext
     {
         private BatchDrawer<TVertexType, TDrawContext> _batchDrawer;
         private BatchQueuer<TVertexType, TDrawContext> _currentBatchQueuer;
