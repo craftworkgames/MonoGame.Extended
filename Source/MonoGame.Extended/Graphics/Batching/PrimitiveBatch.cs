@@ -6,11 +6,20 @@ using MonoGame.Extended.Graphics.Batching.Queuers;
 namespace MonoGame.Extended.Graphics.Batching
 {
     /// <summary>
-    ///     Enables a group of geometry to drawn using the same settings.
+    ///     Enables a group of geometry to be drawn using the same settings.
     /// </summary>
     /// <typeparam name="TVertexType">The type of vertex.</typeparam>
     /// <typeparam name="TDrawContext">The type of item data.</typeparam>
     /// <seealso cref="IDisposable" />
+    /// <remarks>
+    ///     <para>
+    ///         For best performance, use <see cref="DynamicGeometryBuffer{TVertexType}" /> when instantiating
+    ///         <see cref="PrimitiveBatch{TVertexType,TDrawContext}" /> for geometry which changes frame-to-frame. For geometry
+    ///         which does not change frame-to-frame, or changes infrequently between frames, use
+    ///         <see cref="StaticGeometryBuffer{TVertexType}" /> when instantiating
+    ///         <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
+    ///     </para>
+    /// </remarks>
     public abstract class PrimitiveBatch<TVertexType, TDrawContext> : IDisposable
         where TVertexType : struct, IVertexType where TDrawContext : struct, IDrawContext<TDrawContext>
     {
@@ -53,6 +62,13 @@ namespace MonoGame.Extended.Graphics.Batching
         /// </summary>
         /// <param name="geometryBuffer">The geometry buffer.</param>
         /// <exception cref="ArgumentNullException"><paramref name="geometryBuffer" /> is null.</exception>
+        /// <remarks>
+        ///     <para>
+        ///         For best performance, use <see cref="DynamicGeometryBuffer{TVertexType}" /> for geometry which changes
+        ///         frame-to-frame and <see cref="StaticGeometryBuffer{TVertexType}" /> for geoemtry which does not change
+        ///         frame-to-frame, or changes infrequently between frames.
+        ///     </para>
+        /// </remarks>
         protected PrimitiveBatch(GeometryBuffer<TVertexType> geometryBuffer)
         {
             if (geometryBuffer == null)
@@ -87,6 +103,8 @@ namespace MonoGame.Extended.Graphics.Batching
             // ReSharper disable once InvertIf
             if (diposing)
             {
+                GeometryBuffer?.Dispose();
+
                 _batchDrawer?.Dispose();
                 _batchDrawer = null;
 
@@ -147,7 +165,6 @@ namespace MonoGame.Extended.Graphics.Batching
 
             if ((primitiveType < PrimitiveType.TriangleList) || (primitiveType > PrimitiveType.LineStrip))
                 throw new ArgumentOutOfRangeException(paramName: nameof(primitiveType));
-
 
             EnsureHasNotBegun();
             HasBegun = true;
