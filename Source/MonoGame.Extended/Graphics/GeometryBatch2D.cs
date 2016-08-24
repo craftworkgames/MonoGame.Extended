@@ -8,12 +8,9 @@ using MonoGame.Extended.TextureAtlases;
 namespace MonoGame.Extended.Graphics
 {
     /// <summary>
-    ///     Enables a group of dynamic two-dimensional geometry to drawn using the same settings.
+    ///     Enables a group of dynamic two-dimensional geometry to be drawn using the same settings.
     /// </summary>
     /// <seealso cref="PrimitiveBatch{TVertexType,TDrawContext}" />
-    /// <remarks>
-    ///     <para>For geometry that doesn't <see cref="GeometryBatch2D" /> is</para>
-    /// </remarks>
     public class GeometryBatch2D : PrimitiveBatch<VertexPositionColorTexture, GeometryBatch2D.DrawContext2D>
     {
         internal const ushort DefaultMaximumVerticesCount = 8192;
