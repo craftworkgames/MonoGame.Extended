@@ -14,7 +14,7 @@ namespace Demo.Platformer.Entities.Components
         }
 
         public SizeF Size { get; }
-        public RectangleF BoundingRectangle => new RectangleF(Position - Size * 0.5f, Size);
+        public RectangleF BoundingRectangle => new RectangleF(Position, Size);
         public Vector2 Velocity { get; set; }
         public bool IsOnGround { get; set; }
     }

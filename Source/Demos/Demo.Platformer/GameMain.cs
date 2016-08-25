@@ -2,6 +2,7 @@
 using Demo.Platformer.Entities;
 using Demo.Platformer.Entities.Systems;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
@@ -44,10 +45,10 @@ namespace Demo.Platformer
                 .ToArray();
 
             _entityComponentSystem = new EntityComponentSystem();
-            _entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice, _camera));
-            _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(collisionRectangles));
-            _entityComponentSystem.RegisterSystem(new VelocitySystem(gravity: new Vector2(0, 1450)));
             _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
+            _entityComponentSystem.RegisterSystem(new VelocitySystem(gravity: new Vector2(0, 1450)));
+            _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(collisionRectangles));
+            _entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
 
             _entityFactory = new EntityFactory(_entityComponentSystem, Content);
             

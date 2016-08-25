@@ -1,7 +1,6 @@
 using System;
 using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Shapes;
 
@@ -35,13 +34,16 @@ namespace Demo.Platformer.Entities.Systems
 
                         if (absDepthY < absDepthX)
                         {
-                            c.Position += new Vector2(0, depth.Y);
-                            c.Velocity = new Vector2(c.Velocity.X, c.Velocity.Y > 0 ? 0 : c.Velocity.Y);
-                            c.IsOnGround = true;
+                            c.Position += new Vector2(0, depth.Y); // move the player out of the ground or roof
+                            c.IsOnGround = c.Velocity.Y > 0;
+
+                            if (c.IsOnGround)
+                                c.Velocity = new Vector2(c.Velocity.X, 0); // set y velocity to zero only if this is a ground collision
                         }
                         else
                         {
-                            c.Position += new Vector2(depth.X, 0);
+                            c.Position += new Vector2(depth.X, 0);  // move the player out of the wall
+                            c.Velocity = new Vector2(c.Velocity.X, c.Velocity.Y < 0 ? 0 : c.Velocity.Y); // drop the player down if they hit a wall
                         }
                     }
                 }
