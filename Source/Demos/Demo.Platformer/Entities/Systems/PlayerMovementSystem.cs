@@ -9,12 +9,13 @@ namespace Demo.Platformer.Entities.Systems
     public class PlayerMovementSystem : UpdatableComponentSystem
     {
         private const float _walkSpeed = 250f;
-        private const float _jumpSpeed = 650f;
+        private const float _jumpSpeed = 425f;
         private KeyboardState _previousKeyboardState;
         private float _jumpDelay = 1.0f;
 
         public override void Update(GameTime gameTime)
         {
+            var deltaTime = gameTime.GetElapsedSeconds();
             var keyboardState = Keyboard.GetState();
             var entity = GetEntity(Entities.Player);
             var component = entity.GetComponent<BasicCollisionComponent>();
@@ -26,18 +27,18 @@ namespace Demo.Platformer.Entities.Systems
             if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
                 velocity += new Vector2(_walkSpeed, 0);
 
-                if (!component.IsOnGround)
-                    _jumpDelay -= gameTime.GetElapsedSeconds() * 3;
-                else
-                    _jumpDelay = 1.0f;
+            if (!component.IsOnGround)
+                _jumpDelay -= deltaTime * 3;
+            else
+                _jumpDelay = 1.0f;
 
-                if (keyboardState.IsKeyDown(Keys.W))
-                    velocity = new Vector2(velocity.X, -_jumpSpeed * _jumpDelay);
-                else if (_previousKeyboardState.IsKeyDown(Keys.W))
-                    velocity = new Vector2(velocity.X, velocity.Y * 0.2f);
+            if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
+                velocity = new Vector2(velocity.X, -_jumpSpeed * _jumpDelay);
+            else if (_previousKeyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
+                velocity = new Vector2(velocity.X, velocity.Y * 0.2f);
 
-                component.Velocity = velocity;
-            }
+            component.Velocity = velocity;
+
 
             _previousKeyboardState = keyboardState;
         }
