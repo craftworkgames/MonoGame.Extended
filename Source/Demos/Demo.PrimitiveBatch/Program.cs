@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Demo.PrimitiveBatch
+namespace Demo.Batching
 {
     internal static class Program
     {

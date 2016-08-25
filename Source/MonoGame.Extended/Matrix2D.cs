@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -83,13 +84,16 @@ namespace MonoGame.Extended
         /// <value>
         ///     The scale.
         /// </value>
-        /// <remarks>The <see cref="Scale" /> is equal to the vector <code>(Sqrt(M11 * M11 + M21 * M21), Sqrt(M12 * M12 + M22 * M22))</code>.</remarks>
+        /// <remarks>
+        ///     The <see cref="Scale" /> is equal to the vector
+        ///     <code>(Sqrt(M11 * M11 + M21 * M21), Sqrt(M12 * M12 + M22 * M22))</code>.
+        /// </remarks>
         public Vector2 Scale
         {
             get
             {
-                var scaleX = (float)Math.Sqrt(M11 * M11 + M21 * M21);
-                var scaleY = (float)Math.Sqrt(M12 * M12 + M22 * M22);
+                var scaleX = (float)Math.Sqrt(d: M11 * M11 + M21 * M21);
+                var scaleY = (float)Math.Sqrt(d: M12 * M12 + M22 * M22);
                 return new Vector2(scaleX, scaleY);
             }
         }
@@ -120,6 +124,31 @@ namespace MonoGame.Extended
 
             M31 = m31;
             M32 = m32;
+        }
+
+        /// <summary>
+        ///     Transforms the specified <see cref="Vector2" /> by this <see cref="Matrix2D" />.
+        /// </summary>
+        /// <param name="vector">The <see cref="Vector2" />.</param>
+        /// <returns>The resulting <see cref="Vector2" />.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector2 Transform(Vector2 vector)
+        {
+            Vector2 result;
+            Transform(vector, out result);
+            return result;
+        }
+
+        /// <summary>
+        ///     Transforms the specified <see cref="Vector2" /> by this <see cref="Matrix2D" />.
+        /// </summary>
+        /// <param name="vector">The <see cref="Vector2" />.</param>
+        /// <param name="result">The resulting <see cref="Vector2" />.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Transform(Vector2 vector, out Vector2 result)
+        {
+            result.X = vector.X * M11 + vector.Y * M21 + M31;
+            result.Y = vector.X * M12 + vector.Y * M22 + M32;
         }
 
         /// <summary>
@@ -834,7 +863,7 @@ namespace MonoGame.Extended
         /// </summary>
         /// <param name="matrix">The <see cref="Matrix2D" />.</param>
         /// <returns>
-        ///     The resulting <see cref="Matrix"/>.
+        ///     The resulting <see cref="Matrix" />.
         /// </returns>
         public static implicit operator Matrix(Matrix2D matrix)
         {
