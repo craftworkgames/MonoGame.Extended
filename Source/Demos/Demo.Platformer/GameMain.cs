@@ -7,6 +7,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Platformer
@@ -33,19 +34,23 @@ namespace Demo.Platformer
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
 
-            _entityComponentSystem = new EntityComponentSystem();
-            _entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice, _camera));
-            _entityComponentSystem.RegisterSystem(new VelocitySystem(gravity: new Vector2(0, 450)));
-            _entityComponentSystem.RegisterSystem(new BasicCollisionSystem());
-            _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
-
-            _entityFactory = new EntityFactory(_entityComponentSystem, Content);
-
             _tiledMap = Content.Load<TiledMap>("level-1");
 
             var entitiesLayer = _tiledMap.GetObjectGroup("entities");
-            var spawn = entitiesLayer.Objects.FirstOrDefault(i => i.Name == "Player Spawn");
+            var spawn = entitiesLayer.Objects.FirstOrDefault(i => i.Type == "Spawn");
+            var collisionRectangles = entitiesLayer.Objects
+                .Where(i => i.Type == "Solid")
+                .Select(i => new RectangleF(i.X, i.Y, i.Width, i.Height))
+                .ToArray();
 
+            _entityComponentSystem = new EntityComponentSystem();
+            _entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice, _camera));
+            _entityComponentSystem.RegisterSystem(new VelocitySystem(gravity: new Vector2(0, 450)));
+            _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(collisionRectangles));
+            _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
+
+            _entityFactory = new EntityFactory(_entityComponentSystem, Content);
+            
             if (spawn != null)
                 _entityFactory.CreatePlayer(new Vector2(spawn.X, spawn.Y));
 
