@@ -1,177 +1,108 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics.Batching.Drawers;
+using MonoGame.Extended.Graphics.Batching.Queuers;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
     /// <summary>
-    ///     Enables a group of dynamic geometry to be batched together using the same settings to be sent to the graphics
-    ///     processing unit (GPU) for rendering.
+    ///     Enables a group of geometry to be drawn using the same settings.
     /// </summary>
-    /// <typeparam name="TVertexType">The type of the primitives to be batched.</typeparam>
+    /// <typeparam name="TVertexType">The type of vertex.</typeparam>
+    /// <typeparam name="TCommandContext">The type of batch draw command data.</typeparam>
+    /// <seealso cref="IDisposable" />
     /// <remarks>
     ///     <para>
-    ///         <see cref="PrimitiveBatch{TVertexType}" /> is a helper for easily and efficiently drawing dynamically generated
-    ///         geometry such as lines and triangles which change frame-to-frame. Dynamic submission is a highly effective
-    ///         pattern for drawing procedural geometry and convenient for debug rendering. It is however not as efficient at
-    ///         drawing geometry which does not change every frame. Such geometry should use a static
-    ///         <see cref="VertexBuffer" /> and possibly a <see cref="IndexBuffer" /> for rendering instead of
-    ///         <see cref="PrimitiveBatch{TVertexType}" />.
-    ///     </para>
-    ///     <para>
-    ///         To use a <see cref="PrimitiveBatch{TVertexType}" /> as a <see cref="SpriteBatch" /> use a vertex type of
-    ///         <see cref="VertexPositionColorTexture" /> and use the extension
-    ///         <see cref="PrimitiveBatchExtensions.DrawSprite" /> to draw a textured quad with sprite parameters. XNA's
-    ///         SpriteBatch uses the equivalent of <see cref="BatchDrawStrategy.DynamicBuffer" /> with a maximum of 2048
-    ///         sprites per batch. Since each sprite is two triangles of 4 vertices and 6 indices, XNA's SpriteBatch uses a
-    ///         maximum of 8192 vertices and 12288 indices per batch.
+    ///         For best performance, use <see cref="DynamicGeometryBuffer{TVertexType}" /> when instantiating
+    ///         <see cref="PrimitiveBatch{TVertexType,TDrawContext}" /> for geometry which changes frame-to-frame. For geometry
+    ///         which does not change frame-to-frame, or changes infrequently between frames, use
+    ///         <see cref="StaticGeometryBuffer{TVertexType}" /> when instantiating
+    ///         <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
     ///     </para>
     /// </remarks>
-    public class PrimitiveBatch<TVertexType> : IDisposable
-        where TVertexType : struct, IVertexType
+    public abstract class PrimitiveBatch<TVertexType, TCommandContext> : IDisposable
+        where TVertexType : struct, IVertexType where TCommandContext : struct, IBatchCommandContext
     {
-        public const ushort DefaultMaximumVerticesCount = 8192;
-        public const ushort DefaultMaximumIndicesCount = 12288;
+        internal const int DefaultMaximumBatchCommandsCount = 2048;
 
-        private BatchDrawer<TVertexType> _batchDrawer;
-        private BatchQueuer<TVertexType> _currentBatchQueuer;
-        private ImmediateBatchQueuer<TVertexType> _immediateBatchQueuer;
-        private DeferredBatchQueuer<TVertexType> _deferredBatchQueuer;
+        private BatchDrawer<TVertexType, TCommandContext> _batchDrawer;
+        private BatchCommandQueuer<TVertexType, TCommandContext> _currentBatchCommandQueuer;
+        private Lazy<ImmediateBatchCommandQueuer<TVertexType, TCommandContext>> _lazyImmediateBatchQueuer;
+        private Lazy<DeferredBatchCommandQueuer<TVertexType, TCommandContext>> _lazyDeferredBatchQueuer;
 
         /// <summary>
-        ///     Gets the <see cref="GraphicsDevice" /> used by this <see cref="PrimitiveBatch{TVertexType}" />.
+        ///     Gets the <see cref="GeometryBuffer{TVertexType}" /> associated with this
+        ///     <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
         /// </summary>
+        /// <value>
+        ///     The <see cref="GeometryBuffer{TVertexType}" /> associated with this
+        ///     <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
+        /// </value>
+        protected GeometryBuffer<TVertexType> GeometryBuffer { get; }
+
+        /// <summary>
+        ///     Gets the <see cref="GraphicsDevice" /> associated with this
+        ///     <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
+        /// </summary>
+        /// <value>
+        ///     The <see cref="GraphicsDevice" /> associated with this
+        ///     <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
+        /// </value>
         public GraphicsDevice GraphicsDevice { get; }
 
         /// <summary>
-        ///     Get the <see cref="BatchDrawStrategy" /> used for sending vertices, and possibly indices, to the graphics
-        ///     processing unit (GPU).
+        ///     Gets a value indicating whether batching is currently in progress by being within a <see cref="Begin" /> and
+        ///     <see cref="End" /> pair block of code.
         /// </summary>
-        public BatchDrawStrategy DrawStrategy { get; }
-
-        /// <summary>
-        ///     Gets a value indicating whether batching is currently in progress by being within
-        ///     a <see cref="Begin" />-
-        ///     <see cref="End" /> pair block.
-        /// </summary>
+        /// <value>
+        ///     <c>true</c> if batching has begun; otherwise, <c>false</c>.
+        /// </value>
         public bool HasBegun { get; private set; }
 
         /// <summary>
-        ///     Gets the maximum number of vertices that can be buffered into a single batch before the
-        ///     geometry needs to be flushed to the graphics processing unit (GPU).
+        ///     Initializes a new instance of the <see cref="PrimitiveBatch{TVertexType, TDrawContext}" /> class.
         /// </summary>
-        public ushort MaximumVerticesCount { get; }
-
-        /// <summary>
-        ///     Gets the maximum number of indices that can be buffered into a single batch before the
-        ///     geometry needs to be flushed to the graphics processing unit (GPU).
-        /// </summary>
-        public ushort MaximumIndicesCount { get; }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="PrimitiveBatch{TVertexType}" /> class.
-        /// </summary>
-        /// <param name="graphicsDevice">The graphics device.</param>
-        /// <param name="sortAction">
-        ///     The delegate to sort an array of values by an array of keys. Used to sort the draw
-        ///     operations by sorting their sort keys. Use <code>Array.Sort(Array, Array, int, int)</code> as the default;
-        ///     unfortunately this method is not available in portable class libraries and thus the intended default value must be
-        ///     specified manually.
+        /// <param name="geometryBuffer">The geometry buffer.</param>
+        /// <param name="maximumBatchCommandsCount">
+        ///     The maximum number of batch draw commands that can be deferred. The default value is <code>2048</code>.
         /// </param>
-        /// <param name="batchDrawStrategy">
-        ///     The <see cref="BatchDrawStrategy" /> to use for sending vertices, and possibly indices, to the graphics processing
-        ///     unit (GPU). The default is <see cref="BatchDrawStrategy.DynamicBuffer" />.
-        /// </param>
-        /// <param name="maximumVerticesCount">
-        ///     The maximum number of vertices that can be buffered into a single batch before the
-        ///     geometry needs to be flushed to the graphics processing unit (GPU). The default is 8192.
-        /// </param>
-        /// <param name="maximumIndicesCount">
-        ///     The maximum number of indices that can be buffered into a single batch before the
-        ///     geometry needs to be flushed to the graphics processing unit (GPU). The default is 12288.
-        /// </param>
-        /// <exception cref="ArgumentNullException"><paramref name="graphicsDevice" /> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///     <list type="bullet">
-        ///         <listheader>
-        ///             <term>One or more of the following is true:</term>
-        ///         </listheader>
-        ///         <item>
-        ///             <description>
-        ///                 <paramref name="batchDrawStrategy" /> is not one <see cref="BatchDrawStrategy" />'s discrete
-        ///                 values.
-        ///             </description>
-        ///         </item>
-        ///         <item>
-        ///             <description><paramref name="maximumVerticesCount" /> is 0.</description>
-        ///         </item>
-        ///         <item>
-        ///             <description><paramref name="maximumIndicesCount" /> is 0.</description>
-        ///         </item>
-        ///     </list>
-        /// </exception>
+        /// <exception cref="ArgumentNullException"><paramref name="geometryBuffer" /> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="maximumBatchCommandsCount" /> is less than or equal <code>0</code>.</exception>
         /// <remarks>
         ///     <para>
-        ///         Memory will be allocated for the vertex and index buffers in proportion to
-        ///         <paramref name="maximumVerticesCount" /> and <paramref name="maximumIndicesCount" /> respectively.
-        ///     </para>
-        ///     <para>
-        ///         On desktop platforms the <see cref="BatchDrawStrategy" /> used does not matter significantly. On other
-        ///         platforms, such as consoles and mobiles, one <see cref="BatchDrawStrategy" /> may be superior, or even
-        ///         required, in comparision to another <see cref="BatchDrawStrategy" /> due to the limited hardware and the
-        ///         drivers controlling the hardware.
+        ///         For best performance, use <see cref="DynamicGeometryBuffer{TVertexType}" /> for geometry which changes
+        ///         frame-to-frame and <see cref="StaticGeometryBuffer{TVertexType}" /> for geoemtry which does not change
+        ///         frame-to-frame, or changes infrequently between frames.
         ///     </para>
         /// </remarks>
-        public PrimitiveBatch(GraphicsDevice graphicsDevice, Action<Array, Array, int, int> sortAction, BatchDrawStrategy batchDrawStrategy = BatchDrawStrategy.DynamicBuffer, ushort maximumVerticesCount = DefaultMaximumVerticesCount, ushort maximumIndicesCount = DefaultMaximumIndicesCount)
+        protected PrimitiveBatch(GeometryBuffer<TVertexType> geometryBuffer, int maximumBatchCommandsCount = DefaultMaximumBatchCommandsCount)
         {
-            if (graphicsDevice == null)
-            {
-                throw new ArgumentNullException(nameof(graphicsDevice));
-            }
+            if (geometryBuffer == null)
+                throw new ArgumentNullException(paramName: nameof(geometryBuffer));
 
-            if (maximumVerticesCount == 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(maximumVerticesCount));
-            }
+            if (maximumBatchCommandsCount <= 0)
+                throw new ArgumentOutOfRangeException(paramName: nameof(maximumBatchCommandsCount));
 
-            if (maximumIndicesCount == 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(maximumIndicesCount));
-            }
+            GeometryBuffer = geometryBuffer;
+            GraphicsDevice = geometryBuffer.GraphicsDevice;
+            _batchDrawer = new BatchDrawer<TVertexType, TCommandContext>(GraphicsDevice, GeometryBuffer);
 
-            GraphicsDevice = graphicsDevice;
-            MaximumVerticesCount = maximumVerticesCount;
-            MaximumIndicesCount = maximumIndicesCount;
-
-            DrawStrategy = batchDrawStrategy;
-            switch (batchDrawStrategy)
-            {
-                case BatchDrawStrategy.UserPrimitives:
-                    _batchDrawer = new UserPrimitivesBatchDrawer<TVertexType>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
-                    break;
-                case BatchDrawStrategy.DynamicBuffer:
-                    _batchDrawer = new DynamicVertexBufferBatchDrawer<TVertexType>(graphicsDevice, maximumVerticesCount, maximumIndicesCount);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(batchDrawStrategy), batchDrawStrategy, null);
-            }
-
-            _immediateBatchQueuer = new ImmediateBatchQueuer<TVertexType>(_batchDrawer);
-            _deferredBatchQueuer = new DeferredBatchQueuer<TVertexType>(_batchDrawer, sortAction);
+            _lazyImmediateBatchQueuer = new Lazy<ImmediateBatchCommandQueuer<TVertexType, TCommandContext>>(() => new ImmediateBatchCommandQueuer<TVertexType, TCommandContext>(_batchDrawer));
+            _lazyDeferredBatchQueuer = new Lazy<DeferredBatchCommandQueuer<TVertexType, TCommandContext>>(() => new DeferredBatchCommandQueuer<TVertexType, TCommandContext>(_batchDrawer, maximumBatchCommandsCount));
         }
 
         /// <summary>
-        ///     Releases used unmanaged resources.
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            Dispose(diposing: true);
+            GC.SuppressFinalize(obj: this);
         }
 
         /// <summary>
-        ///     Immediately releases the used unmanaged resources.
+        ///     Releases unmanaged and - optionally - managed resources.
         /// </summary>
         /// <param name="diposing">
         ///     <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
@@ -179,257 +110,135 @@ namespace MonoGame.Extended.Graphics.Batching
         /// </param>
         protected virtual void Dispose(bool diposing)
         {
-            if (!diposing)
+            // ReSharper disable once InvertIf
+            if (diposing)
             {
-                return;
-            }
+                GeometryBuffer?.Dispose();
 
-            _batchDrawer.Dispose();
-            _batchDrawer = null;
-            _currentBatchQueuer = null;
-            _immediateBatchQueuer.Dispose();
-            _immediateBatchQueuer = null;
-            _deferredBatchQueuer.Dispose();
-            _deferredBatchQueuer = null;
+                _batchDrawer?.Dispose();
+                _batchDrawer = null;
+
+                if (_lazyImmediateBatchQueuer?.IsValueCreated ?? false)
+                {
+                    _lazyImmediateBatchQueuer.Value.Dispose();
+                    _lazyImmediateBatchQueuer = null;
+                }
+
+                // ReSharper disable once InvertIf
+                if (_lazyDeferredBatchQueuer?.IsValueCreated ?? false)
+                {
+                    _lazyDeferredBatchQueuer.Value.Dispose();
+                    _lazyDeferredBatchQueuer = null;
+                }
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EnsureHasBegun([CallerMemberName] string callerMemberName = null)
+        protected void EnsureHasBegun([CallerMemberName] string callerMemberName = null)
         {
             if (!HasBegun)
-            {
-                throw new InvalidOperationException($"The {nameof(Begin)} method must be called before the {callerMemberName} method can be called.");
-            }
+                throw new InvalidOperationException(message: $"The {nameof(Begin)} method must be called before the {callerMemberName} method can be called.");
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EnsureHasNotBegun([CallerMemberName] string callerMemberName = null)
+        protected void EnsureHasNotBegun([CallerMemberName] string callerMemberName = null)
         {
             if (HasBegun)
-            {
-                throw new InvalidOperationException($"The {nameof(End)} method must be called before the {callerMemberName} method can be called.");
-            }
+                throw new InvalidOperationException(message: $"The {nameof(End)} method must be called before the {callerMemberName} method can be called.");
         }
 
         /// <summary>
-        ///     Begins a new batch of geometry using the specified mode.
+        ///     Starts a group of geometry for rendering with the specified <see cref="Effect" />, <see cref="PrimitiveType" />,
+        ///     and <see cref="BatchSortMode" />.
         /// </summary>
-        /// <param name="mode">The <see cref="BatchMode" />.</param>
-        /// <remarks>
-        ///     <para>
-        ///         When the batch becomes full, the geometry is sent to the graphics processing unit (GPU) and a new batch will
-        ///         begin automatically.
-        ///     </para>
-        /// </remarks>
+        /// <param name="effect">The <see cref="Effect" />.</param>
+        /// <param name="primitiveType">The <see cref="PrimitiveType" />.</param>
+        /// <param name="sortMode">The <see cref="BatchSortMode" />.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="effect" /> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="mode" /> is not one of <see cref="BatchMode" />'s
-        ///     discrete values.
+        ///     <paramref name="sortMode" /> is not a valid <see cref="BatchSortMode" /> value or
+        ///     <paramref name="primitiveType" /> is not a valid <see cref="PrimitiveType" /> value.
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        ///     <see cref="Begin" /> has been called before calling <see cref="End" />
-        ///     after the last call to <see cref="Begin" />. <see cref="Begin" /> cannot be called again until <see cref="End" />
-        ///     has been successfully called.
+        ///     <see cref="Begin" /> cannot be invoked again until <see cref="End" /> has been invoked.
         /// </exception>
         /// <remarks>
         ///     <para>
-        ///         This method must be called before any draw calls. When all the geometry have been drawn, call
-        ///         <see cref="End" />.
+        ///         This method must be called before any enqueuing of draw calls. When all the geometry have been enqueued for
+        ///         drawing, call <see cref="End" />.
         ///     </para>
         /// </remarks>
-        public void Begin(BatchMode mode = BatchMode.Deferred)
+        protected void Begin(Effect effect, PrimitiveType primitiveType, BatchSortMode sortMode = BatchSortMode.Deferred)
         {
-            EnsureHasNotBegun();
+            if (effect == null)
+                throw new ArgumentNullException(paramName: nameof(effect));
 
+            if ((primitiveType < PrimitiveType.TriangleList) || (primitiveType > PrimitiveType.LineStrip))
+                throw new ArgumentOutOfRangeException(paramName: nameof(primitiveType));
+
+            EnsureHasNotBegun();
             HasBegun = true;
-            switch (mode)
+
+            if (sortMode != BatchSortMode.Immediate)
             {
-                case BatchMode.Immediate:
-                    _currentBatchQueuer = _immediateBatchQueuer;
-                    break;
-                case BatchMode.Deferred:
-                    _currentBatchQueuer = _deferredBatchQueuer;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(mode));
+                var deferredQueuer = _lazyDeferredBatchQueuer.Value;
+                deferredQueuer.SortMode = sortMode;
+                _currentBatchCommandQueuer = deferredQueuer;
             }
-            _currentBatchQueuer.Begin();
+            else
+            {
+                _currentBatchCommandQueuer = _lazyImmediateBatchQueuer.Value;
+            }
+
+            _currentBatchCommandQueuer.Begin(effect, primitiveType);
         }
 
         /// <summary>
-        ///     Ends the current batch by sending any geometry in the current batch to the graphics processing unit (GPU).
+        ///     Ends and submits the group of geometry to the <see cref="GraphicsDevice" /> for rendering.
         /// </summary>
         /// <exception cref="InvalidOperationException">
-        ///     <see cref="End" /> was called, but <see cref="Begin" /> has not yet been
-        ///     called. You must call <see cref="Begin" /> successfully before you can call <see cref="End" />.
+        ///     <see cref="End" /> cannot be invoked until <see cref="Begin" /> has been invoked.
         /// </exception>
+        /// <remarks>
+        ///     <para>
+        ///         This method must be called after all enqueuing of draw calls.
+        ///     </para>
+        /// </remarks>
         public void End()
         {
             EnsureHasBegun();
             HasBegun = false;
-            _currentBatchQueuer.End();
+
+            _currentBatchCommandQueuer.End();
         }
 
         /// <summary>
-        ///     Adds geometry to a batch of geometry for rendering using the specified context, primitive type, vertices, and
-        ///     optional sort key.
+        ///     Submits the group of geometry to the <see cref="GraphicsDevice" /> for rendering without ending the group of
+        ///     geometry.
         /// </summary>
-        /// <param name="drawContext">The <see cref="IDrawContext" />.</param>
-        /// <param name="primitiveType">The <see cref="PrimitiveType" />.</param>
-        /// <param name="vertices">The vertices which explictly define the geometry to render.</param>
-        /// <param name="sortKey">
-        ///     The sort key used to sort the geometry when rendering with <see cref="BatchMode.Deferred" />. This
-        ///     value is ignored if <see cref="BatchMode.Deferred" /> is not used.
-        /// </param>
-        /// <exception cref="InvalidOperationException">
-        ///     <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],uint)" /> was
-        ///     called, but <see cref="Begin" /> has not yet been called. <see cref="Begin" /> must be called successfully before
-        ///     you can call <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],uint)" />.
-        /// </exception>
-        /// <remarks>
-        ///     <para>
-        ///         <paramref name="drawContext" /> is reponsible for the settings used when drawing the geometry, including any
-        ///         render states, shaders, or transformation matrix. To minimize switching of contexts between draw
-        ///         calls, consider using <paramref name="sortKey" /> to sort by draw context in conjunction with
-        ///         <see cref="BatchMode.Deferred" />.
-        ///     </para>
-        ///     <para>
-        ///         Before making any calls to <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],uint)" />, you must call
-        ///         <see cref="Begin" />. Once all calls to <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],uint)" /> are
-        ///         complete, call <see cref="End" />.
-        ///     </para>
-        /// </remarks>
-        public void Draw(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, uint sortKey = 0)
+        protected void Flush()
         {
-            EnsureHasBegun();
-            _currentBatchQueuer.EnqueueDraw(drawContext, primitiveType, vertices, 0, vertices.Length, sortKey);
+            _currentBatchCommandQueuer.Flush();
         }
 
         /// <summary>
-        ///     Adds geometry to a batch of geometry for rendering using the specified context, primitive type, vertices, start
-        ///     vertex, vertex count, and optional sort key.
-        /// </summary>
-        /// <param name="drawContext">The <see cref="IDrawContext" />.</param>
-        /// <param name="primitiveType">The <see cref="PrimitiveType" />.</param>
-        /// <param name="vertices">The vertices which explictly define the geometry to render.</param>
-        /// <param name="startVertex">The starting vertex index to use from <paramref name="vertices" />.</param>
-        /// <param name="vertexCount">
-        ///     The number of vertices to use from <paramref name="vertices" /> starting from
-        ///     <paramref name="startVertex" />.
-        /// </param>
-        /// <param name="sortKey">
-        ///     The sort key used to sort the geometry when rendering with <see cref="BatchMode.Deferred" />. This
-        ///     value is ignored if <see cref="BatchMode.Deferred" /> is not used.
-        /// </param>
-        /// <exception cref="InvalidOperationException">
-        ///     <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],int,int,uint)" /> was called, but <see cref="Begin" /> has
-        ///     not yet been called. <see cref="Begin" /> must be called successfully before you can call
-        ///     <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],int,int,uint)" />.
-        /// </exception>
-        /// <remarks>
-        ///     <para>
-        ///         <paramref name="drawContext" /> is reponsible for the settings used when drawing the geometry, including any
-        ///         render states, shaders, or transformation matrix. To minimize switching of contexts between draw
-        ///         calls, consider using <paramref name="sortKey" /> to sort by draw context in conjunction with
-        ///         <see cref="BatchMode.Deferred" />.
-        ///     </para>
-        ///     <para>
-        ///         Before making any calls to <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],int,int,uint)" />, you must
-        ///         call <see cref="Begin" />. Once all calls to
-        ///         <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],int,int,uint)" /> are
-        ///         complete, call <see cref="End" />.
-        ///     </para>
-        /// </remarks>
-        public void Draw(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, uint sortKey = 0)
-        {
-            EnsureHasBegun();
-            _currentBatchQueuer.EnqueueDraw(drawContext, primitiveType, vertices, startVertex, vertexCount, sortKey);
-        }
-
-        /// <summary>
-        ///     Adds geometry to a batch of geometry for rendering using the specified context, primitive type, vertices, indices,
+        ///     Adds geometry to the group of geometry for rendering using the specified primitive type, vertices, indices, data,
         ///     and optional sort key.
         /// </summary>
-        /// <param name="drawContext">The <see cref="IDrawContext" />.</param>
-        /// <param name="primitiveType">The <see cref="PrimitiveType" />.</param>
-        /// <param name="vertices">The vertices which explictly define the geometry to render.</param>
-        /// <param name="indices">The indices of the <paramref name="vertices" /> to render.</param>
-        /// <param name="sortKey">
-        ///     The sort key used to sort the geometry when rendering with <see cref="BatchMode.Deferred" />. This
-        ///     value is ignored if <see cref="BatchMode.Deferred" /> is not used.
-        /// </param>
-        /// <exception cref="InvalidOperationException">
-        ///     <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],short[],uint)" /> was called, but <see cref="Begin" /> has
-        ///     not yet been called. <see cref="Begin" /> must be called successfully before you can call
-        ///     <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],short[],uint)" />.
-        /// </exception>
+        /// <param name="startIndex">The starting index from the <see cref="GeometryBuffer" /> to use.</param>
+        /// <param name="indexCount">The number of indices from the <see cref="GeometryBuffer" /> to use.</param>
+        /// <param name="itemData">The custom data for the draw operation.</param>
+        /// <param name="sortKey">The sort key.</param>
         /// <remarks>
         ///     <para>
-        ///         <paramref name="drawContext" /> is reponsible for the settings used when drawing the geometry, including any
-        ///         render states, shaders, or transformation matrix. To minimize switching of contexts between draw
-        ///         calls, consider using <paramref name="sortKey" /> to sort by draw context in conjunction with
-        ///         <see cref="BatchMode.Deferred" />.
-        ///     </para>
-        ///     <para>
-        ///         Before making any calls to <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],short[],uint)" />, you must
-        ///         call <see cref="Begin" />. Once all calls to
-        ///         <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],short[],uint)" /> are
-        ///         complete, call <see cref="End" />.
+        ///         <see cref="Begin" /> must be called before enqueuing any draw calls. When all the geometry have been enqueued
+        ///         for drawing, call <see cref="End" />.
         ///     </para>
         /// </remarks>
-        public void Draw(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, short[] indices, uint sortKey = 0)
+        protected void EnqueueDraw(ushort startIndex, ushort indexCount, ref TCommandContext itemData, uint sortKey = 0)
         {
             EnsureHasBegun();
-            _currentBatchQueuer.EnqueueDraw(drawContext, primitiveType, vertices, 0, vertices.Length, indices, 0, indices.Length, sortKey);
-        }
-
-        /// <summary>
-        ///     Adds geometry to a batch of geometry for rendering using the specified context, primitive type, vertices, indices,
-        ///     and optional sort key.
-        /// </summary>
-        /// <param name="drawContext">The <see cref="IDrawContext" />.</param>
-        /// <param name="primitiveType">The <see cref="PrimitiveType" />.</param>
-        /// <param name="vertices">The vertices which explictly define the geometry to render.</param>
-        /// <param name="startVertex">The starting vertex index to use from <paramref name="vertices" />.</param>
-        /// <param name="vertexCount">
-        ///     The number of vertices to use from <paramref name="vertices" /> starting from
-        ///     <paramref name="startVertex" />.
-        /// </param>
-        /// <param name="indices">
-        ///     The indices of the <paramref name="vertices" /> to render.
-        /// </param>
-        /// <param name="startIndex">The starting index to use from <paramref name="indices" />.</param>
-        /// <param name="indexCount">
-        ///     The number of indices to use from <paramref name="indices" /> starting from
-        ///     <paramref name="startIndex" />.
-        /// </param>
-        /// <param name="sortKey">
-        ///     The sort key used to sort the geometry when rendering with <see cref="BatchMode.Deferred" />. This
-        ///     value is ignored if <see cref="BatchMode.Deferred" /> is not used.
-        /// </param>
-        /// <exception cref="InvalidOperationException">
-        ///     <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],int,int,short[],int,int,uint)" /> was called, but
-        ///     <see cref="Begin" /> has not yet been called. <see cref="Begin" /> must be called successfully before you can call
-        ///     <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],int,int,short[],int,int,uint)" />.
-        /// </exception>
-        /// <remarks>
-        ///     <para>
-        ///         <paramref name="drawContext" /> is reponsible for the settings used when drawing the geometry, including any
-        ///         render states, shaders, or transformation matrix. To minimize switching of contexts between draw
-        ///         calls, consider using <paramref name="sortKey" /> to sort by draw context in conjunction with
-        ///         <see cref="BatchMode.Deferred" />.
-        ///     </para>
-        ///     <para>
-        ///         Before making any calls to
-        ///         <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],int,int,short[],int,int,uint)" />, you must
-        ///         call <see cref="Begin" />. Once all calls to
-        ///         <see cref="Draw(IDrawContext,PrimitiveType,TVertexType[],int,int,short[],int,int,uint)" /> are
-        ///         complete, call <see cref="End" />.
-        ///     </para>
-        /// </remarks>
-        public void Draw(IDrawContext drawContext, PrimitiveType primitiveType, TVertexType[] vertices, int startVertex, int vertexCount, short[] indices, int startIndex, int indexCount, uint sortKey = 0)
-        {
-            EnsureHasBegun();
-            _currentBatchQueuer.EnqueueDraw(drawContext, primitiveType, vertices, startVertex, vertexCount, indices, startIndex, indexCount, sortKey);
+            _currentBatchCommandQueuer.EnqueueDraw(startIndex, indexCount, ref itemData, sortKey);
         }
     }
 }
