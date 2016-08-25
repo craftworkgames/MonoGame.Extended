@@ -47,5 +47,15 @@ namespace MonoGame.Extended.Tests
             Assert.AreEqual(halfSize, new SizeF(5f, 2.5f));
             Assert.AreEqual(doubleSize, new SizeF(20f, 10f));
         }
+
+        [Test]
+        public void SizeF_ImplicitCastFromVector2()
+        {
+            var vector2 = new Vector2(12.34f, 56.78f);
+            SizeF sizeF = vector2;
+
+            Assert.AreEqual(vector2.X, sizeF.Width);
+            Assert.AreEqual(vector2.Y, sizeF.Height);
+        }
     }
 }

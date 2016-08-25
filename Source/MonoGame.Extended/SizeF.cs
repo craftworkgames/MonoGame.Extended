@@ -12,6 +12,13 @@ namespace MonoGame.Extended
             Height = height;
         }
 
+        public SizeF(Vector2 vector)
+            : this()
+        {
+            Width = vector.X;
+            Height = vector.Y;
+        }
+
         public float Width { get; }
         public float Height { get; }
         public static Size Empty => new Size(0, 0);
@@ -59,6 +66,11 @@ namespace MonoGame.Extended
         public static implicit operator Vector2(SizeF size)
         {
             return new Vector2(size.Width, size.Height);
+        }
+
+        public static implicit operator SizeF(Vector2 size)
+        {
+            return new SizeF(size.X, size.Y);
         }
 
         public static explicit operator Size(SizeF size)
