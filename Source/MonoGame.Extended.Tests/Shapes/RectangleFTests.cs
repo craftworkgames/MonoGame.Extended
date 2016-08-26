@@ -24,5 +24,14 @@ namespace MonoGame.Extended.Tests.Shapes
 
             Assert.IsFalse(rect1.Intersects(rect2));
         }
+
+        [Test]
+        public void PassVector2AsConstructorParameter_Test()
+        {
+            var rect1 = new RectangleF(new Vector2(0, 0), new SizeF(12.34f, 56.78f));
+            var rect2 = new RectangleF(new Vector2(0, 0), new Vector2(12.34f, 56.78f));
+
+            Assert.AreEqual(rect1, rect2);
+        }
     }
 }
