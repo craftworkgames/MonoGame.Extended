@@ -91,7 +91,12 @@ namespace MonoGame.Extended.Entities
 
         public T GetComponent<T>() where T : EntityComponent
         {
-            return _components.OfType<T>().FirstOrDefault();
+            return GetComponents<T>().FirstOrDefault();
+        }
+
+        public IEnumerable<T> GetComponents<T>()
+        {
+            return _components.OfType<T>();
         }
     }
 }

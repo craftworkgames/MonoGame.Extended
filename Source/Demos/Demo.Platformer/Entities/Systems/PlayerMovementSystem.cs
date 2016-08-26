@@ -20,7 +20,7 @@ namespace Demo.Platformer.Entities.Systems
             var deltaTime = gameTime.GetElapsedSeconds();
             var keyboardState = Keyboard.GetState();
             var entity = GetEntity(Entities.Player);
-            var collisionComponent = entity.GetComponent<BasicCollisionComponent>();
+            var collisionComponent = entity.GetComponent<BasicCollisionBody>();
             var sprite = entity.GetComponent<Sprite>();
             var velocity = new Vector2(0, collisionComponent.Velocity.Y);
 

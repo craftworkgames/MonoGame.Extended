@@ -5,16 +5,18 @@ using MonoGame.Extended.Shapes;
 
 namespace Demo.Platformer.Entities.Components
 {
-    public class BasicCollisionComponent : EntityComponent
+    public class BasicCollisionBody : EntityComponent
     {
-        public BasicCollisionComponent(SizeF size)
+        public BasicCollisionBody(SizeF size, Vector2 origin)
         {
             Size = size;
+            Origin = origin;
             IsOnGround = false;
         }
 
-        public SizeF Size { get; }
-        public RectangleF BoundingRectangle => new RectangleF(Position, Size);
+        public SizeF Size { get; set; }
+        public Vector2 Origin { get; set; }
+        public RectangleF BoundingRectangle => new RectangleF(Position - Size * Origin, Size);
         public Vector2 Velocity { get; set; }
         public bool IsOnGround { get; set; }
     }

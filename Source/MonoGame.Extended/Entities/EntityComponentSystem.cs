@@ -24,12 +24,17 @@ namespace MonoGame.Extended.Entities
         private readonly Dictionary<string, Entity> _entitiesByName;
         private long _nextEntityId;
 
+        internal event EventHandler<EntityComponent> ComponentAttached;
+        internal event EventHandler<EntityComponent> ComponentDetached;
+        internal event EventHandler<Entity> EntityCreated;
+        internal event EventHandler<Entity> EntityDestroyed;
+
         public void RegisterSystem(ComponentSystem system)
         {
-            if (system.EntityComponentSystem != null)
+            if (system.Parent != null)
                 throw new InvalidOperationException("Component system already registered");
 
-            system.EntityComponentSystem = this;
+            system.Parent = this;
             _systems.Add(system);
         }
 
@@ -50,6 +55,7 @@ namespace MonoGame.Extended.Entities
             if (name != null)
                 _entitiesByName.Add(name, entity);
 
+            EntityCreated?.Invoke(this, entity);
             _nextEntityId++;
             return entity;
         }
@@ -62,6 +68,7 @@ namespace MonoGame.Extended.Entities
                 _entitiesByName.Remove(entity.Name);
 
             _entities.Remove(entity);
+            EntityDestroyed?.Invoke(this, entity);
         }
 
         public Entity GetEntity(string name)
@@ -73,11 +80,13 @@ namespace MonoGame.Extended.Entities
         internal void AttachComponent(EntityComponent component)
         {
             _components.Add(component);
+            ComponentAttached?.Invoke(this, component);
         }
 
         internal void DetachComponent(EntityComponent component)
         {
             _components.Remove(component);
+            ComponentDetached?.Invoke(this, component);
         }
 
         internal IEnumerable<T> GetComponents<T>()

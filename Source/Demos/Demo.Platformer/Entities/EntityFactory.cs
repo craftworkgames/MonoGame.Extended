@@ -42,9 +42,9 @@ namespace Demo.Platformer.Entities
             var entity = _entityComponentSystem.CreateEntity(Entities.Player, position);
             var textureRegion = _characterTextureAtlas[0];
 
-            entity.AttachComponent(new Sprite(textureRegion) { Origin = Vector2.Zero });
-            entity.AttachComponent(new BasicCollisionComponent(textureRegion.Size));
-            entity.AttachComponent(new PlayerMovementComponent());
+            entity.AttachComponent(new Sprite(textureRegion));
+            entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
+            entity.AttachComponent(new PlayerCollisionHandler());
 
             return entity;
         }

@@ -1,4 +1,3 @@
-using System;
 using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
@@ -21,14 +20,14 @@ namespace Demo.Platformer.Entities.Systems
         public override void Update(GameTime gameTime)
         {
             var deltaTime = gameTime.GetElapsedSeconds();
-            var components = GetComponents<BasicCollisionComponent>();
+            var components = GetComponents<BasicCollisionBody>();
 
             foreach (var c in components)
             {
                 c.Velocity += _gravity * deltaTime;
                 c.Position += c.Velocity * deltaTime;
 
-                c.IsOnGround = false;
+                c.IsOnGround = false; // TODO: Not sure what to do about this yet
 
                 foreach (var collisionRectangle in _collisionRectangles)
                 {
@@ -36,22 +35,10 @@ namespace Demo.Platformer.Entities.Systems
 
                     if (depth != Vector2.Zero)
                     {
-                        var absDepthX = Math.Abs(depth.X);
-                        var absDepthY = Math.Abs(depth.Y);
+                        var collisionHandlers = c.Entity.GetComponents<BasicCollisionHandler>();
 
-                        if (absDepthY < absDepthX)
-                        {
-                            c.Position += new Vector2(0, depth.Y); // move the player out of the ground or roof
-                            c.IsOnGround = c.Velocity.Y > 0;
-
-                            if (c.IsOnGround)
-                                c.Velocity = new Vector2(c.Velocity.X, 0); // set y velocity to zero only if this is a ground collision
-                        }
-                        else
-                        {
-                            c.Position += new Vector2(depth.X, 0);  // move the player out of the wall
-                            c.Velocity = new Vector2(c.Velocity.X, c.Velocity.Y < 0 ? 0 : c.Velocity.Y); // drop the player down if they hit a wall
-                        }
+                        foreach (var collisionHandler in collisionHandlers)
+                            collisionHandler.OnCollision(c, null, depth);
                     }
                 }
             }
