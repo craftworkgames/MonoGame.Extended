@@ -38,6 +38,16 @@ namespace MonoGame.Extended.Entities
             _systems.Add(system);
         }
 
+        public Entity CreateEntity()
+        {
+            return CreateEntity(null);
+        }
+
+        public Entity CreateEntity(Vector2 position, float rotation = 0)
+        {
+            return CreateEntity(null, position, rotation);
+        }
+
         public Entity CreateEntity(string name, Vector2 position, float rotation = 0)
         {
             var entity = CreateEntity(name);

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Demo.Platformer.Entities;
+using Demo.Platformer.Entities.Components;
 using Demo.Platformer.Entities.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,7 +9,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Maps.Tiled;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Platformer
@@ -35,19 +35,21 @@ namespace Demo.Platformer
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
 
+            _entityComponentSystem = new EntityComponentSystem();
+            _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
+            _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(gravity: new Vector2(0, 1150)));
+            _entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
+
             _tiledMap = Content.Load<TiledMap>("level-1");
 
             var entitiesLayer = _tiledMap.GetObjectGroup("entities");
             var spawn = entitiesLayer.Objects.FirstOrDefault(i => i.Type == "Spawn");
-            var collisionRectangles = entitiesLayer.Objects
-                .Where(i => i.Type == "Solid")
-                .Select(i => new RectangleF(i.X, i.Y, i.Width, i.Height))
-                .ToArray();
 
-            _entityComponentSystem = new EntityComponentSystem();
-            _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
-            _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(gravity: new Vector2(0, 1150), collisionRectangles: collisionRectangles));
-            _entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
+            foreach (var solidObject in entitiesLayer.Objects.Where(i => i.Type == "Solid"))
+            {
+                var entity = _entityComponentSystem.CreateEntity(position: new Vector2(solidObject.X, solidObject.Y));
+                entity.AttachComponent(new BasicCollisionBody(new SizeF(solidObject.Width, solidObject.Height), Vector2.Zero) { IsStatic = true });
+            }
 
             _entityFactory = new EntityFactory(_entityComponentSystem, Content);
             
@@ -71,19 +73,10 @@ namespace Demo.Platformer
 
         protected override void Update(GameTime gameTime)
         {
-            //var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
-
-            //if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
-            //    _sprite.Position += new Vector2(150, 0) * deltaTime;
-
-            //if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
-            //    _sprite.Position -= new Vector2(150, 0) * deltaTime;
-
-            //_animator.Update(deltaTime);
 
             _entityComponentSystem.Update(gameTime);
 

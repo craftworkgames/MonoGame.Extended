@@ -1,44 +1,73 @@
+using System.Collections.Generic;
+using System.Linq;
 using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Shapes;
 
 namespace Demo.Platformer.Entities.Systems
 {
     public class BasicCollisionSystem : ComponentSystem
     {
         private readonly Vector2 _gravity;
-        private readonly RectangleF[] _collisionRectangles;
+        private List<BasicCollisionBody> _staticBodies = new List<BasicCollisionBody>();
+        private List<BasicCollisionBody> _movingBodies = new List<BasicCollisionBody>();
 
-        public BasicCollisionSystem(Vector2 gravity, RectangleF[] collisionRectangles)
+        public BasicCollisionSystem(Vector2 gravity)
         {
             _gravity = gravity;
-            _collisionRectangles = collisionRectangles;
+        }
+
+        protected override void OnComponentAttached(EntityComponent component)
+        {
+            var body = component as BasicCollisionBody;
+
+            if (body != null)
+            {
+                if (body.IsStatic)
+                    _staticBodies.Add(body);
+                else
+                    _movingBodies.Add(body);
+            }
+
+            base.OnComponentAttached(component);
+        }
+
+        protected override void OnComponentDetached(EntityComponent component)
+        {
+            var body = component as BasicCollisionBody;
+
+            if (body != null)
+            {
+                if (body.IsStatic)
+                    _staticBodies.Remove(body);
+                else
+                    _movingBodies.Remove(body);
+            }
+
+            base.OnComponentDetached(component);
         }
 
         public override void Update(GameTime gameTime)
         {
             var deltaTime = gameTime.GetElapsedSeconds();
-            var components = GetComponents<BasicCollisionBody>();
 
-            foreach (var c in components)
+            foreach (var bodyA in _movingBodies)
             {
-                c.Velocity += _gravity * deltaTime;
-                c.Position += c.Velocity * deltaTime;
+                bodyA.Velocity += _gravity * deltaTime;
+                bodyA.Position += bodyA.Velocity * deltaTime;
 
-                c.IsOnGround = false; // TODO: Not sure what to do about this yet
-
-                foreach (var collisionRectangle in _collisionRectangles)
+                foreach (var bodyB in _staticBodies)
                 {
-                    var depth = c.BoundingRectangle.IntersectionDepth(collisionRectangle);
+                    var depth = bodyA.BoundingRectangle.IntersectionDepth(bodyB.BoundingRectangle);
 
                     if (depth != Vector2.Zero)
                     {
-                        var collisionHandlers = c.Entity.GetComponents<BasicCollisionHandler>();
+                        var collisionHandlers = bodyA.Entity.GetComponents<BasicCollisionHandler>();
 
                         foreach (var collisionHandler in collisionHandlers)
-                            collisionHandler.OnCollision(c, null, depth);
+                            collisionHandler.OnCollision(bodyA, bodyB, depth);
                     }
                 }
             }

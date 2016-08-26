@@ -45,6 +45,7 @@ namespace Demo.Platformer.Entities
             entity.AttachComponent(new Sprite(textureRegion));
             entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
             entity.AttachComponent(new PlayerCollisionHandler());
+            entity.AttachComponent(new PlayerState());
 
             return entity;
         }

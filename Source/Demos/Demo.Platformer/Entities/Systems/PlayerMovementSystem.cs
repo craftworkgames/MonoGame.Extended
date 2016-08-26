@@ -20,9 +20,10 @@ namespace Demo.Platformer.Entities.Systems
             var deltaTime = gameTime.GetElapsedSeconds();
             var keyboardState = Keyboard.GetState();
             var entity = GetEntity(Entities.Player);
-            var collisionComponent = entity.GetComponent<BasicCollisionBody>();
+            var body = entity.GetComponent<BasicCollisionBody>();
+            var state = entity.GetComponent<PlayerState>();
             var sprite = entity.GetComponent<Sprite>();
-            var velocity = new Vector2(0, collisionComponent.Velocity.Y);
+            var velocity = new Vector2(0, body.Velocity.Y);
 
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
             {
@@ -36,7 +37,7 @@ namespace Demo.Platformer.Entities.Systems
                 velocity += new Vector2(_walkSpeed, 0);
             }
 
-            if (!collisionComponent.IsOnGround)
+            if (!state.IsOnGround)
                 _jumpDelay -= deltaTime * 3f;
             else
                 _jumpDelay = 1.0f;
@@ -46,7 +47,9 @@ namespace Demo.Platformer.Entities.Systems
             else if (_previousKeyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
                 velocity = new Vector2(velocity.X, velocity.Y * 0.2f);
 
-            collisionComponent.Velocity = velocity;
+            body.Velocity = velocity;
+            state.IsOnGround = false;
+
             _previousKeyboardState = keyboardState;
         }
     }

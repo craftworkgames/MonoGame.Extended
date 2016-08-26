@@ -11,13 +11,13 @@ namespace Demo.Platformer.Entities.Components
         {
             Size = size;
             Origin = origin;
-            IsOnGround = false;
+            IsStatic = false;
         }
 
+        public Vector2 Velocity { get; set; }
         public SizeF Size { get; set; }
         public Vector2 Origin { get; set; }
         public RectangleF BoundingRectangle => new RectangleF(Position - Size * Origin, Size);
-        public Vector2 Velocity { get; set; }
-        public bool IsOnGround { get; set; }
+        public bool IsStatic { get; set; }
     }
 }
