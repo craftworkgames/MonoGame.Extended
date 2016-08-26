@@ -3,7 +3,7 @@ using MonoGame.Extended.Animations.SpriteSheets;
 
 namespace MonoGame.Extended.Entities.Systems
 {
-    public class AnimatedSpriteComponentSystem : UpdatableComponentSystem
+    public class AnimatedSpriteComponentSystem : ComponentSystem
     {
         public override void Update(GameTime gameTime)
         {

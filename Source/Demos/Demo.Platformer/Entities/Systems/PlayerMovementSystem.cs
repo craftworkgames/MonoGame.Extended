@@ -8,7 +8,7 @@ using MonoGame.Extended.Sprites;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    public class PlayerMovementSystem : UpdatableComponentSystem
+    public class PlayerMovementSystem : ComponentSystem
     {
         private const float _walkSpeed = 220f;
         private const float _jumpSpeed = 425f;

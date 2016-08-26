@@ -46,8 +46,7 @@ namespace Demo.Platformer
 
             _entityComponentSystem = new EntityComponentSystem();
             _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
-            _entityComponentSystem.RegisterSystem(new VelocitySystem(gravity: new Vector2(0, 1450)));
-            _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(collisionRectangles));
+            _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(gravity: new Vector2(0, 1450), collisionRectangles: collisionRectangles));
             _entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
 
             _entityFactory = new EntityFactory(_entityComponentSystem, Content);

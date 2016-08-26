@@ -1,26 +1,33 @@
 using System;
 using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Shapes;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    public class BasicCollisionSystem : UpdatableComponentSystem
+    public class BasicCollisionSystem : ComponentSystem
     {
+        private readonly Vector2 _gravity;
         private readonly RectangleF[] _collisionRectangles;
 
-        public BasicCollisionSystem(RectangleF[] collisionRectangles)
+        public BasicCollisionSystem(Vector2 gravity, RectangleF[] collisionRectangles)
         {
+            _gravity = gravity;
             _collisionRectangles = collisionRectangles;
         }
 
         public override void Update(GameTime gameTime)
         {
+            var deltaTime = gameTime.GetElapsedSeconds();
             var components = GetComponents<BasicCollisionComponent>();
 
             foreach (var c in components)
             {
+                c.Velocity += _gravity * deltaTime;
+                c.Position += c.Velocity * deltaTime;
+
                 c.IsOnGround = false;
 
                 foreach (var collisionRectangle in _collisionRectangles)

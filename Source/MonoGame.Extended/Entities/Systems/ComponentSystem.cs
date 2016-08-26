@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Entities.Systems
 {
@@ -18,6 +19,14 @@ namespace MonoGame.Extended.Entities.Systems
         protected Entity GetEntity(string name)
         {
             return EntityComponentSystem.GetEntity(name);
+        }
+
+        public virtual void Update(GameTime gameTime)
+        {
+        }
+
+        public virtual void Draw(GameTime gameTime)
+        {
         }
     }
 }

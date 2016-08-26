@@ -5,7 +5,7 @@ using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.Entities.Systems
 {
-    public class SpriteBatchComponentSystem : DrawableComponentSystem
+    public class SpriteBatchComponentSystem : ComponentSystem
     {
         public SpriteBatchComponentSystem(GraphicsDevice graphicsDevice, Camera2D camera)
         {

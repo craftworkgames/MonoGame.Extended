@@ -87,13 +87,13 @@ namespace MonoGame.Extended.Entities
 
         public void Update(GameTime gameTime)
         {
-            foreach (var componentSystem in _systems.OfType<UpdatableComponentSystem>())
+            foreach (var componentSystem in _systems)
                 componentSystem.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime)
         {
-            foreach (var componentSystem in _systems.OfType<DrawableComponentSystem>())
+            foreach (var componentSystem in _systems)
                 componentSystem.Draw(gameTime);
         }
     }
