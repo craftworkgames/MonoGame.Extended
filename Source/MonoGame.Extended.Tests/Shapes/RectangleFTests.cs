@@ -33,5 +33,14 @@ namespace MonoGame.Extended.Tests.Shapes
 
             Assert.AreEqual(rect1, rect2);
         }
+
+        [Test]
+        public void PassPointAsConstructorParameter_Test()
+        {
+            var rect1 = new RectangleF(new Vector2(0, 0), new SizeF(12, 56));
+            var rect2 = new RectangleF(new Vector2(0, 0), new Point(12, 56));
+
+            Assert.AreEqual(rect1, rect2);
+        }
     }
 }
