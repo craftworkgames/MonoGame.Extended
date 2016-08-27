@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Demo.Platformer.Entities;
 using Demo.Platformer.Entities.Components;
 using Demo.Platformer.Entities.Systems;
+using Demo.Platformer.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -36,25 +39,18 @@ namespace Demo.Platformer
             _camera = new Camera2D(viewportAdapter);
 
             _entityComponentSystem = new EntityComponentSystem();
+            _entityFactory = new EntityFactory(_entityComponentSystem, Content);
+
             _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
+            _entityComponentSystem.RegisterSystem(new PlayerStateSystem(_entityFactory));
             _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(gravity: new Vector2(0, 1150)));
-            _entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
+            _entityComponentSystem.RegisterSystem(new ParticleEmitterSystem());
+            _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
 
             _tiledMap = Content.Load<TiledMap>("level-1");
 
-            var entitiesLayer = _tiledMap.GetObjectGroup("entities");
-            var spawn = entitiesLayer.Objects.FirstOrDefault(i => i.Type == "Spawn");
-
-            foreach (var solidObject in entitiesLayer.Objects.Where(i => i.Type == "Solid"))
-            {
-                var entity = _entityComponentSystem.CreateEntity(position: new Vector2(solidObject.X, solidObject.Y));
-                entity.AttachComponent(new BasicCollisionBody(new SizeF(solidObject.Width, solidObject.Height), Vector2.Zero) { IsStatic = true });
-            }
-
-            _entityFactory = new EntityFactory(_entityComponentSystem, Content);
-            
-            if (spawn != null)
-                _entityFactory.CreatePlayer(new Vector2(spawn.X, spawn.Y));
+            var service = new TiledObjectToEntityService(_entityFactory);
+            service.CreateEntities(_tiledMap.GetObjectGroup("entities").Objects);
 
             //var viewport = GraphicsDevice.Viewport;
             //_alphaTestEffect = new AlphaTestEffect(GraphicsDevice)

@@ -11,8 +11,8 @@ namespace Demo.Platformer.Entities.Systems
     public class BasicCollisionSystem : ComponentSystem
     {
         private readonly Vector2 _gravity;
-        private List<BasicCollisionBody> _staticBodies = new List<BasicCollisionBody>();
-        private List<BasicCollisionBody> _movingBodies = new List<BasicCollisionBody>();
+        private readonly List<BasicCollisionBody> _staticBodies = new List<BasicCollisionBody>();
+        private readonly List<BasicCollisionBody> _movingBodies = new List<BasicCollisionBody>();
 
         public BasicCollisionSystem(Vector2 gravity)
         {

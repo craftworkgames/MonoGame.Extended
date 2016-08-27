@@ -5,9 +5,9 @@ using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.Entities.Systems
 {
-    public class SpriteBatchComponentSystem : ComponentSystem
+    public class SpriteBatchSystem : ComponentSystem
     {
-        public SpriteBatchComponentSystem(GraphicsDevice graphicsDevice, Camera2D camera)
+        public SpriteBatchSystem(GraphicsDevice graphicsDevice, Camera2D camera)
         {
             _camera = camera;
             _spriteBatch = new SpriteBatch(graphicsDevice);

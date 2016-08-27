@@ -9,12 +9,13 @@ namespace MonoGame.Extended.Particles
 {
     public unsafe class ParticleEmitter : EntityComponent, IDisposable
     {
-        public ParticleEmitter(TextureRegion2D textureRegion, int capacity, TimeSpan term, Profile profile)
+        public ParticleEmitter(TextureRegion2D textureRegion, int capacity, TimeSpan term, Profile profile, bool autoTrigger = true)
         {
             if (profile == null)
                 throw new ArgumentNullException(nameof(profile));
 
             _term = (float)term.TotalSeconds;
+            _autoTrigger = autoTrigger;
 
             TextureRegion = textureRegion;
             Buffer = new ParticleBuffer(capacity);
@@ -27,6 +28,7 @@ namespace MonoGame.Extended.Particles
 
         private readonly FastRandom _random = new FastRandom();
         private readonly float _term;
+        private bool _autoTrigger;
 
         private float _totalSeconds;
         internal readonly ParticleBuffer Buffer;
@@ -59,12 +61,18 @@ namespace MonoGame.Extended.Particles
                 Buffer.Reclaim(expired);
         }
 
-        public void Update(float elapsedSeconds)
+        public bool Update(float elapsedSeconds)
         {
+            if (_autoTrigger)
+            {
+                Trigger();
+                _autoTrigger = false;
+            }
+
             _totalSeconds += elapsedSeconds;
 
             if (Buffer.Count == 0)
-                return;
+                return false;
 
             ReclaimExpiredParticles();
 
@@ -74,11 +82,11 @@ namespace MonoGame.Extended.Particles
             {
                 var particle = iterator.Next();
                 particle->Age = (_totalSeconds - particle->Inception) / _term;
-
                 particle->Position = particle->Position + particle->Velocity * elapsedSeconds;
             }
 
             ModifierExecutionStrategy.ExecuteModifiers(Modifiers, elapsedSeconds, iterator);
+            return true;
         }
 
         public void Trigger()
@@ -89,7 +97,6 @@ namespace MonoGame.Extended.Particles
         public void Trigger(Vector2 position)
         {
             var numToRelease = _random.Next(Parameters.Quantity);
-
             Release(position + Offset, numToRelease);
         }
 
@@ -118,9 +125,7 @@ namespace MonoGame.Extended.Particles
 
                 particle->Age = 0f;
                 particle->Inception = _totalSeconds;
-
                 particle->Position += position;
-
                 particle->TriggerPos = position;
 
                 var speed = _random.NextSingle(Parameters.Speed);

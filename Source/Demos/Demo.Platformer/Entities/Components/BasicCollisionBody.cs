@@ -19,5 +19,6 @@ namespace Demo.Platformer.Entities.Components
         public Vector2 Origin { get; set; }
         public RectangleF BoundingRectangle => new RectangleF(Position - Size * Origin, Size);
         public bool IsStatic { get; set; }
+        public object Tag { get; set; }
     }
 }

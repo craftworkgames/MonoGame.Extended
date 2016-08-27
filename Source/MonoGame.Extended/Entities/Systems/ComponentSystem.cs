@@ -24,8 +24,10 @@ namespace MonoGame.Extended.Entities.Systems
 
                 if (_parent != null)
                 {
-                    _parent.ComponentAttached += (s, c) => OnComponentAttached(c);
-                    _parent.ComponentDetached += (s, c) => OnComponentDetached(c);
+                    _parent.EntityCreated += (sender, entity) => OnEntityCreated(entity);
+                    _parent.EntityDestroyed += (sender, entity) => OnEntityDestroyed(entity);
+                    _parent.ComponentAttached += (sender, component) => OnComponentAttached(component);
+                    _parent.ComponentDetached += (sender, component) => OnComponentDetached(component);
                 }
             }
         }
@@ -40,6 +42,8 @@ namespace MonoGame.Extended.Entities.Systems
             return Parent.GetEntity(name);
         }
 
+        protected virtual void OnEntityCreated(Entity entity) { }
+        protected virtual void OnEntityDestroyed(Entity entity) { }
         protected virtual void OnComponentAttached(EntityComponent component) { }
         protected virtual void OnComponentDetached(EntityComponent component) { }
 

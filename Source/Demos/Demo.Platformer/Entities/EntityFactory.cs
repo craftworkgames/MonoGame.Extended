@@ -1,9 +1,14 @@
+using System;
 using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Particles;
+using MonoGame.Extended.Particles.Modifiers;
+using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
@@ -16,14 +21,12 @@ namespace Demo.Platformer.Entities
 
     public class EntityFactory
     {
-        private readonly ContentManager _contentManager;
         private readonly EntityComponentSystem _entityComponentSystem;
         private TextureAtlas _characterTextureAtlas;
 
         public EntityFactory(EntityComponentSystem entityComponentSystem, ContentManager contentManager)
         {
             _entityComponentSystem = entityComponentSystem;
-            _contentManager = contentManager;
 
             LoadContent(contentManager);
         }
@@ -41,12 +44,56 @@ namespace Demo.Platformer.Entities
         {
             var entity = _entityComponentSystem.CreateEntity(Entities.Player, position);
             var textureRegion = _characterTextureAtlas[0];
-
             entity.AttachComponent(new Sprite(textureRegion));
             entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
             entity.AttachComponent(new PlayerCollisionHandler());
             entity.AttachComponent(new PlayerState());
+            return entity;
+        }
 
+        public Entity CreateSolid(Vector2 position, SizeF size)
+        {
+            var entity = _entityComponentSystem.CreateEntity(position);
+            entity.AttachComponent(new BasicCollisionBody(size, Vector2.Zero)
+            {
+                IsStatic = true
+            });
+            return entity;
+        }
+
+        public Entity CreateDeadly(Vector2 position, SizeF size)
+        {
+            var entity = _entityComponentSystem.CreateEntity(position);
+            entity.AttachComponent(new BasicCollisionBody(size, Vector2.Zero)
+            {
+                IsStatic = true,
+                Tag = "Deadly"
+            });
+            return entity;
+        }
+
+        public Entity CreateBloodExplosion(Vector2 position)
+        {
+            var textureRegion = _characterTextureAtlas[0];
+            var entity = _entityComponentSystem.CreateEntity(position);
+            var profile = Profile.Point();
+            var term = TimeSpan.FromSeconds(0.8f);
+            var particleEmitter = new ParticleEmitter(textureRegion, 32, term, profile)
+            {
+                Parameters = new ParticleReleaseParameters
+                {
+                    Speed = new Range<float>(40, 100),
+                    Quantity = new Range<int>(50, 60)
+                },
+                Modifiers = new IModifier[]
+                {
+                    new LinearGravityModifier { Direction = Vector2.UnitY, Strength = 350 },
+                    new OpacityFastFadeModifier()
+                }
+            };
+            entity.AttachComponent(particleEmitter);
+
+            // TODO: When the particle emitter stops, the entity should be destroyed otherwise we have a memory leak.
             return entity;
         }
     }
