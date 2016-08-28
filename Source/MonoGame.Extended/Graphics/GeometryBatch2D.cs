@@ -11,12 +11,12 @@ namespace MonoGame.Extended.Graphics
     ///     Enables a group of dynamic two-dimensional geometry to be drawn using the same settings.
     /// </summary>
     /// <seealso cref="PrimitiveBatch{TVertexType,TDrawContext}" />
-    public class GeometryBatch2D : PrimitiveBatch<VertexPositionColorTexture, GeometryBatch2D.DrawContext2D>
+    public class GeometryBatch2D : PrimitiveBatch<VertexPositionColorTexture, GeometryBatch2D.DrawCommandData2D>
     {
         internal const int DefaultMaximumVerticesCount = 8192;
         internal const int DefaultMaximumIndicesCount = 12288;
 
-        private DrawContext2D _pixelTextureDrawContext;
+        private DrawCommandData2D _pixelTextureDrawContext;
         private Matrix _defaultWorld = Matrix.Identity;
         private Matrix _defaultView = Matrix.Identity;
         private Matrix _defaultProjection;
@@ -54,7 +54,7 @@ namespace MonoGame.Extended.Graphics
                 Color.White
             });
 
-            _pixelTextureDrawContext = new DrawContext2D
+            _pixelTextureDrawContext = new DrawCommandData2D
             {
                 Texture = _pixelTexture
             };
@@ -145,40 +145,48 @@ namespace MonoGame.Extended.Graphics
         /// <param name="depth">The depth. The default value is <code>0</code>.</param>
         /// <param name="sortKey">The sort key. The default value is <code>0</code>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
-        /// <exception cref="GeometryBufferOverflowException{TVertexType}">
+        /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
         ///     The underlying
-        ///     <see cref="GeometryBuffer{TVertexType}" /> is full.
+        ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
         /// </exception>
-        public bool DrawSprite(Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null, Color? color = null, Vector2? origin = null, SpriteEffects spriteOptions = SpriteEffects.None, float depth = 0, uint sortKey = 0)
+        public void DrawSprite(Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null, Color? color = null, Vector2? origin = null, SpriteEffects spriteOptions = SpriteEffects.None, float depth = 0, uint sortKey = 0)
         {
             var geometryBuffer = GeometryBuffer;
             var startVertex = geometryBuffer.VertexCount;
             var startIndex = geometryBuffer.IndexCount;
             geometryBuffer.EnqueueSprite(startVertex, texture, ref transformMatrix, sourceRectangle, color, origin, spriteOptions, depth);
-            var indexCount = (ushort)(geometryBuffer.IndexCount - startIndex);
-            var drawContext = new DrawContext2D(texture);
-            EnqueueDraw(startIndex, indexCount, ref drawContext, sortKey);
-            return true;
+            var commandData = new DrawCommandData2D(texture);
+            EnqueueDrawCommand(startIndex, 2, sortKey, ref commandData);
         }
 
         /// <summary>
         ///     Defines a drawing context for two-dimensional geometry.
         /// </summary>
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct DrawContext2D : IBatchCommandContext
+        public struct DrawCommandData2D : IBatchDrawCommandData<DrawCommandData2D>
         {
             public Texture2D Texture;
 
-            internal DrawContext2D(Texture2D texture)
+            internal DrawCommandData2D(Texture2D texture)
             {
                 Texture = texture;
             }
 
-            public void ApplyParameters(Effect effect)
+            public void ApplyTo(Effect effect)
             {
                 var textureEffect = effect as ITexture2DEffect;
                 if (textureEffect != null)
                     textureEffect.Texture = Texture;
+            }
+
+            public void SetReferencesToNull()
+            {
+                Texture = null;
+            }
+
+            public bool Equals(ref DrawCommandData2D other)
+            {
+                return Texture == other.Texture;
             }
         }
     }

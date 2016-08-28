@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Graphics.Batching
     ///     Enables a group of geometry to be drawn using the same settings.
     /// </summary>
     /// <typeparam name="TVertexType">The type of vertex.</typeparam>
-    /// <typeparam name="TCommandContext">The type of batch draw command data.</typeparam>
+    /// <typeparam name="TBatchDrawCommandData">The type of data stored with each draw command.</typeparam>
     /// <seealso cref="IDisposable" />
     /// <remarks>
     ///     <para>
@@ -21,15 +21,15 @@ namespace MonoGame.Extended.Graphics.Batching
     ///         <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
     ///     </para>
     /// </remarks>
-    public abstract class PrimitiveBatch<TVertexType, TCommandContext> : IDisposable
-        where TVertexType : struct, IVertexType where TCommandContext : struct, IBatchCommandContext
+    public abstract class PrimitiveBatch<TVertexType, TBatchDrawCommandData> : IDisposable
+        where TVertexType : struct, IVertexType where TBatchDrawCommandData : struct, IBatchDrawCommandData<TBatchDrawCommandData>
     {
         internal const int DefaultMaximumBatchCommandsCount = 2048;
 
-        private BatchDrawer<TVertexType, TCommandContext> _batchDrawer;
-        private BatchCommandQueuer<TVertexType, TCommandContext> _currentBatchCommandQueuer;
-        private Lazy<ImmediateBatchCommandQueuer<TVertexType, TCommandContext>> _lazyImmediateBatchQueuer;
-        private Lazy<DeferredBatchCommandQueuer<TVertexType, TCommandContext>> _lazyDeferredBatchQueuer;
+        private BatchDrawer<TVertexType, TBatchDrawCommandData> _batchDrawer;
+        private BatchCommandQueuer<TVertexType, TBatchDrawCommandData> _currentBatchCommandQueuer;
+        private Lazy<ImmediateBatchCommandQueuer<TVertexType, TBatchDrawCommandData>> _lazyImmediateBatchQueuer;
+        private Lazy<DeferredBatchCommandQueuer<TVertexType, TBatchDrawCommandData>> _lazyDeferredBatchQueuer;
 
         /// <summary>
         ///     Gets the <see cref="GeometryBuffer{TVertexType}" /> associated with this
@@ -86,10 +86,10 @@ namespace MonoGame.Extended.Graphics.Batching
 
             GeometryBuffer = geometryBuffer;
             GraphicsDevice = geometryBuffer.GraphicsDevice;
-            _batchDrawer = new BatchDrawer<TVertexType, TCommandContext>(GraphicsDevice, GeometryBuffer);
+            _batchDrawer = new BatchDrawer<TVertexType, TBatchDrawCommandData>(GraphicsDevice, GeometryBuffer);
 
-            _lazyImmediateBatchQueuer = new Lazy<ImmediateBatchCommandQueuer<TVertexType, TCommandContext>>(() => new ImmediateBatchCommandQueuer<TVertexType, TCommandContext>(_batchDrawer));
-            _lazyDeferredBatchQueuer = new Lazy<DeferredBatchCommandQueuer<TVertexType, TCommandContext>>(() => new DeferredBatchCommandQueuer<TVertexType, TCommandContext>(_batchDrawer, maximumBatchCommandsCount));
+            _lazyImmediateBatchQueuer = new Lazy<ImmediateBatchCommandQueuer<TVertexType, TBatchDrawCommandData>>(() => new ImmediateBatchCommandQueuer<TVertexType, TBatchDrawCommandData>(_batchDrawer));
+            _lazyDeferredBatchQueuer = new Lazy<DeferredBatchCommandQueuer<TVertexType, TBatchDrawCommandData>>(() => new DeferredBatchCommandQueuer<TVertexType, TBatchDrawCommandData>(_batchDrawer, maximumBatchCommandsCount));
         }
 
         /// <summary>
@@ -226,8 +226,8 @@ namespace MonoGame.Extended.Graphics.Batching
         ///     and optional sort key.
         /// </summary>
         /// <param name="startIndex">The starting index from the <see cref="GeometryBuffer" /> to use.</param>
-        /// <param name="indexCount">The number of indices from the <see cref="GeometryBuffer" /> to use.</param>
-        /// <param name="itemData">The custom data for the draw operation.</param>
+        /// <param name="primitiveCount">The number of primitives from the <see cref="GeometryBuffer" /> to use.</param>
+        /// <param name="itemData">The <see cref="TBatchDrawCommandData"/>.</param>
         /// <param name="sortKey">The sort key.</param>
         /// <remarks>
         ///     <para>
@@ -235,10 +235,10 @@ namespace MonoGame.Extended.Graphics.Batching
         ///         for drawing, call <see cref="End" />.
         ///     </para>
         /// </remarks>
-        protected void EnqueueDraw(ushort startIndex, ushort indexCount, ref TCommandContext itemData, uint sortKey = 0)
+        protected void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, uint sortKey, ref TBatchDrawCommandData itemData)
         {
             EnsureHasBegun();
-            _currentBatchCommandQueuer.EnqueueDraw(startIndex, indexCount, ref itemData, sortKey);
+            _currentBatchCommandQueuer.EnqueueDrawCommand(startIndex, primitiveCount, sortKey, ref itemData);
         }
     }
 }

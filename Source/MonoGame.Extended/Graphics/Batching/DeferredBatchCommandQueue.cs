@@ -1,23 +1,22 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics.Batching.Drawers;
 
-namespace MonoGame.Extended.Graphics.Batching.Queuers
+namespace MonoGame.Extended.Graphics.Batching
 {
-    internal class DeferredBatchCommandQueuer<TVertexType, TCommandContext> : BatchCommandQueuer<TVertexType, TCommandContext>
-        where TVertexType : struct, IVertexType where TCommandContext : struct, IBatchCommandContext
+    internal sealed class DeferredBatchCommandQueuer<TVertexType, TCommandData> : BatchCommandQueue<TVertexType, TCommandData>
+        where TVertexType : struct, IVertexType where TCommandData : struct, IBatchDrawCommandData<TCommandData>
     {
-        private readonly BatchCommand<TCommandContext>[] _commands;
+        private readonly BatchDrawCommand<TCommandData>[] _commands;
         private int _commandsCount;
-        private BatchCommand<TCommandContext> _currentCommand;
         private readonly int _maximumCommandsCount;
         private readonly GeometryBuffer<TVertexType> _geometryBuffer;
         internal BatchSortMode SortMode;
+        private BatchDrawCommand<TCommandData> _currentCommand;
 
-        internal DeferredBatchCommandQueuer(BatchDrawer<TVertexType, TCommandContext> batchDrawer, int maximumCommandsCount)
+        internal DeferredBatchCommandQueuer(BatchDrawer<TVertexType, TCommandData> batchDrawer, int maximumCommandsCount)
             : base(batchDrawer)
         {
-            _commands = new BatchCommand<TCommandContext>[maximumCommandsCount];
+            _commands = new BatchDrawCommand<TCommandData>[maximumCommandsCount];
             _geometryBuffer = batchDrawer.GeometryBuffer;
             _maximumCommandsCount = maximumCommandsCount;
         }
@@ -33,13 +32,14 @@ namespace MonoGame.Extended.Graphics.Batching.Queuers
             {
                 Array.Sort(_commands, 0, _commandsCount);
             }
- 
-            // ReSharper restore ImpureMethodCallOnReadonlyValueField
 
+            _currentCommand = new BatchDrawCommand<TCommandData>();
+
+            // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _commandsCount; index++)
             {
                 BatchDrawer.Draw(ref _commands[index]);
-                _commands[index].Context = default(TCommandContext);
+                _commands[index].Data.SetReferencesToNull();
             }
 
             if (_geometryBuffer.BufferType == GeometryBufferType.Dynamic)
@@ -50,10 +50,15 @@ namespace MonoGame.Extended.Graphics.Batching.Queuers
             _commandsCount = 0;
         }
 
-        internal override void EnqueueDraw(ushort startIndex, ushort indexCount, ref TCommandContext context, uint sortKey = 0)
+        internal override void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, uint sortKey, ref TCommandData data)
         {
-            var primitiveCount = (ushort)PrimitiveType.GetPrimitiveCount(indexCount);
-            _currentCommand = new BatchCommand<TCommandContext>(sortKey, context, startIndex, primitiveCount);
+            if (_currentCommand.CanMergeWith(sortKey, ref data))
+            {
+                _commands[_commandsCount - 1].PrimitiveCount = _currentCommand.PrimitiveCount += primitiveCount;
+                return;
+            }
+
+            _currentCommand = new BatchDrawCommand<TCommandData>(startIndex, primitiveCount, sortKey, data);
 
             if (_commandsCount >= _maximumCommandsCount)
             {

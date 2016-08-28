@@ -1,13 +1,12 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics.Batching.Drawers;
 
-namespace MonoGame.Extended.Graphics.Batching.Queuers
+namespace MonoGame.Extended.Graphics.Batching
 {
-    internal abstract class BatchCommandQueuer<TVertexType, TCommandContext> : IDisposable
-        where TVertexType : struct, IVertexType where TCommandContext : struct, IBatchCommandContext
+    internal abstract class BatchCommandQueue<TVertexType, TCommandData> : IDisposable
+        where TVertexType : struct, IVertexType where TCommandData : struct, IBatchDrawCommandData<TCommandData>
     {
-        internal BatchDrawer<TVertexType, TCommandContext> BatchDrawer;
+        internal BatchDrawer<TVertexType, TCommandData> BatchDrawer;
         internal PrimitiveType PrimitiveType;
 
         internal virtual void Begin(Effect effect, PrimitiveType primitiveType)
@@ -25,9 +24,9 @@ namespace MonoGame.Extended.Graphics.Batching.Queuers
             BatchDrawer.Effect = null;
         }
 
-        internal abstract void EnqueueDraw(ushort startIndex, ushort indexCount, ref TCommandContext context, uint sortKey = 0);
+        internal abstract void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, uint sortKey, ref TCommandData data);
 
-        protected BatchCommandQueuer(BatchDrawer<TVertexType, TCommandContext> batchDrawer)
+        protected BatchCommandQueue(BatchDrawer<TVertexType, TCommandData> batchDrawer)
         {
             BatchDrawer = batchDrawer;
         }

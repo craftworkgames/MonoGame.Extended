@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
-using MonoGame.Extended.Graphics.Batching;
 using MonoGame.Extended.Graphics.Effects;
 
 namespace Demo.Batching
@@ -44,7 +43,7 @@ namespace Demo.Batching
 
         public Game1()
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(game: this);
+            _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = false;
@@ -78,8 +77,8 @@ namespace Demo.Batching
 //            _primitivesViewToProjetion = Matrix.CreateOrthographicOffCenter(left: viewport.Width * -0.5f, right: viewport.Width * 0.5f, bottom: viewport.Height * -0.5f, top: viewport.Height * 0.5f, zNearPlane: 0, zFarPlane: 1);
 
             // load the texture for the sprites
-            _spriteTexture = Content.Load<Texture2D>(assetName: "logo-square-128");
-            _spriteOrigin = new Vector2(x: _spriteTexture.Width * 0.5f, y: _spriteTexture.Height * 0.5f);
+            _spriteTexture = Content.Load<Texture2D>("logo-square-128");
+            _spriteOrigin = new Vector2(_spriteTexture.Width*0.5f, _spriteTexture.Height*0.5f);
 
 
             //            // create our polygon mesh; vertices are in Local space; indices are index references to the vertices to draw 
@@ -120,29 +119,34 @@ namespace Demo.Batching
 
             _effect.World = Matrix.Identity;
             _effect.View = Matrix.Identity;
-            _effect.Projection = Matrix.CreateTranslation(xPosition: -0.5f, yPosition: -0.5f, zPosition: 0) * Matrix.CreateOrthographicOffCenter(left: 0, right: viewport.Width, bottom: viewport.Height, top: 0, zNearPlane: 0, zFarPlane: -1);
+            _effect.Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0)*
+                                 Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1);
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _sprites.Length; index++)
             {
                 var sprite = _sprites[index];
-                sprite.Position = new Vector2(x: _random.Next(viewport.X, viewport.Width), y: _random.Next(viewport.Y, viewport.Height));
-                sprite.Rotation = MathHelper.ToRadians(degrees: _random.Next(min: 0, max: 360));
-                sprite.Color = Color.FromNonPremultiplied(r: _random.Next(min: 0, max: 255), g: _random.Next(min: 0, max: 255), b: _random.Next(min: 0, max: 255), a: 255);
+                sprite.Position = new Vector2(_random.Next(viewport.X, viewport.Width),
+                    _random.Next(viewport.Y, viewport.Height));
+                sprite.Rotation = MathHelper.ToRadians(_random.Next(0, 360));
+                sprite.Color = Color.FromNonPremultiplied(_random.Next(0, 255), _random.Next(0, 255),
+                    _random.Next(0, 255), 255);
                 _sprites[index] = sprite;
             }
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if ((GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed) || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if ((GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed) ||
+                Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _sprites.Length; index++)
             {
-                var sprite = _sprites[index];;
-                sprite.Rotation += MathHelper.ToRadians(degrees: 1);
+                var sprite = _sprites[index];
+                ;
+                sprite.Rotation += MathHelper.ToRadians(1);
 
                 var matrix = Matrix2D.Identity;
                 var scaleMatrix = Matrix2D.CreateScale(Vector2.One);
@@ -171,7 +175,7 @@ namespace Demo.Batching
             // however, it's left here indicating it's possible and common to change the state between frames
             // use alphablend so the transparent part of the texture is blended with the color behind it
             graphicsDevice.BlendState = BlendState.AlphaBlend;
-            graphicsDevice.SamplerStates[index: 0] = SamplerState.PointClamp;
+            graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             graphicsDevice.DepthStencilState = DepthStencilState.None;
             graphicsDevice.RasterizerState = RasterizerState.CullNone;
 
@@ -182,7 +186,7 @@ namespace Demo.Batching
             //            _primitiveBatchPositionColor.End();
 
             _geometryBatch.Begin(effect: _effect);
-    
+
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _sprites.Length; index++)
             {
@@ -192,16 +196,16 @@ namespace Demo.Batching
 
             _geometryBatch.End();
 
-//            _spriteBatch.Begin(blendState: graphicsDevice.BlendState, samplerState: graphicsDevice.SamplerStates[0], depthStencilState: graphicsDevice.DepthStencilState, rasterizerState: graphicsDevice.RasterizerState, effect: _effect);
-//
-//            // ReSharper disable once ForCanBeConvertedToForeach
-//            for (var index = 0; index < _sprites.Length; index++)
-//            {
-//                var sprite = _sprites[index];
-//				_spriteBatch.Draw(_spriteTexture, sprite.Position, rotation: sprite.Rotation, origin: _spriteOrigin, color: sprite.Color);
-//            }
-//
-//            _spriteBatch.End();
+            //_spriteBatch.Begin(blendState: graphicsDevice.BlendState, samplerState: graphicsDevice.SamplerStates[0], depthStencilState: graphicsDevice.DepthStencilState, rasterizerState: graphicsDevice.RasterizerState, effect: _effect);
+
+            //// ReSharper disable once ForCanBeConvertedToForeach
+            //for (var index = 0; index < _sprites.Length; index++)
+            //{
+            //    var sprite = _sprites[index];
+            //    _spriteBatch.Draw(_spriteTexture, sprite.Position, rotation: sprite.Rotation, origin: _spriteOrigin, color: sprite.Color);
+            //}
+
+            //_spriteBatch.End();
 
             base.Draw(gameTime);
 
