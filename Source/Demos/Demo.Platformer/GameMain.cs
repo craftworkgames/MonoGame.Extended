@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Demo.Platformer.Entities;
-using Demo.Platformer.Entities.Components;
+﻿using Demo.Platformer.Entities;
 using Demo.Platformer.Entities.Systems;
 using Demo.Platformer.Services;
 using Microsoft.Xna.Framework;
@@ -45,6 +41,7 @@ namespace Demo.Platformer
             _entityComponentSystem.RegisterSystem(new PlayerStateSystem(_entityFactory));
             _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(gravity: new Vector2(0, 1150)));
             _entityComponentSystem.RegisterSystem(new ParticleEmitterSystem());
+            _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
             _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
 
             _tiledMap = Content.Load<TiledMap>("level-1");
