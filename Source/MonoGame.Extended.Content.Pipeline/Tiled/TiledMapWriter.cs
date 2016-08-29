@@ -138,7 +138,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         private void WriteObjectGroup(ContentWriter writer, TmxObjectGroup group)
         {
-            writer.Write(group.Name);
+            writer.Write(group.Name ?? string.Empty);
             writer.Write(group.Visible);
             writer.Write(group.Opacity);
 

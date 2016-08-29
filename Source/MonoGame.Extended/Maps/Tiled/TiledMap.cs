@@ -88,10 +88,9 @@ namespace MonoGame.Extended.Maps.Tiled
             return layer;
         }
 
-        public TiledObjectGroup AddObjectGroup(TiledObjectGroup objectGroup)
+        public void AddObjectGroup(List<TiledObjectGroup> objectGroups)
         {
-            _objectGroups.Add(objectGroup);
-            return objectGroup;
+            _objectGroups.AddRange(objectGroups);
         }
 
         public TiledMap Build()

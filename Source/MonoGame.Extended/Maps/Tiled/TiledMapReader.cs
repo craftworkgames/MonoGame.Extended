@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
@@ -52,9 +53,8 @@ namespace MonoGame.Extended.Maps.Tiled
                         tileSetTile.CreateTileSetTileFrame(order: k, tileId: frameId, duration: reader.ReadInt32());
                     }
                     ReadCustomProperties(reader, tileSetTile.Properties);
-
-                    var group = ReadObjectGroup(reader);
-                    tileSetTile.ObjectGroups.Add(group);
+                    
+                    tileSetTile.ObjectGroups.AddRange(ReadObjectGroups(reader));
                 }
                 ReadCustomProperties(reader, tileset.Properties);
             }
@@ -67,16 +67,23 @@ namespace MonoGame.Extended.Maps.Tiled
                 ReadCustomProperties(reader, layer.Properties);
             }
 
+            tiledMap.AddObjectGroup(ReadObjectGroups(reader));
+
+            return tiledMap.Build();
+        }
+
+        private static List<TiledObjectGroup> ReadObjectGroups(ContentReader reader) 
+        {
+            var list = new List<TiledObjectGroup>();
             var objectGroupsCount = reader.ReadInt32();
 
             for (var i = 0; i < objectGroupsCount; i++)
             {
                 var objectGroup = ReadObjectGroup(reader);
-                tiledMap.AddObjectGroup(objectGroup);
                 ReadCustomProperties(reader, objectGroup.Properties);
+                list.Add(objectGroup);
             }
-
-            return tiledMap.Build();
+            return list;
         }
 
         private static TiledObjectGroup ReadObjectGroup(ContentReader reader)
