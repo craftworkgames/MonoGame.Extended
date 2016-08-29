@@ -231,6 +231,7 @@ namespace MonoGame.Extended.Graphics.Batching
         /// <param name="primitiveCount">The number of primitives from the <see cref="GeometryBuffer" /> to use.</param>
         /// <param name="sortKey">The sort key.</param>
         /// <param name="itemData">The <see cref="TBatchDrawCommandData" />.</param>
+        /// <exception cref="InvalidOperationException">The <see cref="Begin"/> method has not been called.</exception>
         /// <remarks>
         ///     <para>
         ///         <see cref="Begin" /> must be called before enqueuing any draw calls. When all the geometry have been enqueued
