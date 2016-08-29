@@ -8,13 +8,11 @@ namespace MonoGame.Extended.Maps.Tiled
         {
             Id = id;
             Animation = new List<TiledTileSetTileFrame>();
-            ObjectGroups = new List<TiledObjectGroup>();
             Properties = new TiledProperties();
             _currentTimeInMilliseconds = 0.0;
         }
         public int Id { get; set; }
         public List<TiledTileSetTileFrame> Animation { get; private set; }
-        public List<TiledObjectGroup> ObjectGroups { get; private set; }
         public TiledProperties Properties { get; private set; }
         public int? CurrentTileId
         {
