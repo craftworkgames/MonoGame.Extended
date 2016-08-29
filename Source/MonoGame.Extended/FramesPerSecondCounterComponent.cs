@@ -6,17 +6,13 @@ namespace MonoGame.Extended
     {
         private readonly FramesPerSecondCounter _fpsCounter;
 
-        public FramesPerSecondCounterComponent(Game game, int maximumSamples = 1)
+        public FramesPerSecondCounterComponent(Game game)
             : base(game)
         {
-            _fpsCounter = new FramesPerSecondCounter(maximumSamples);
+            _fpsCounter = new FramesPerSecondCounter();
         }
 
-        public float AverageFramesPerSecond => _fpsCounter.AverageFramesPerSecond;
-
-        public float CurrentFramesPerSecond => _fpsCounter.CurrentFramesPerSecond;
-
-        public int MaximumSamples => _fpsCounter.MaximumSamples;
+        public float FramesPerSecond => _fpsCounter.FramesPerSecond;
 
         public override void Update(GameTime gameTime)
         {
