@@ -10,7 +10,6 @@ namespace MonoGame.Extended
         private int _framesCounter;
 
         public float FramesPerSecond { get; private set; }
-        public int MaximumSamples { get; }
 
         public FramesPerSecondCounter()
         {
