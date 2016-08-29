@@ -23,7 +23,7 @@ namespace MonoGame.Extended
 
             FramesPerSecond = _framesCounter;
             _framesCounter = 0;
-            _timer = TimeSpan.Zero;
+            _timer -= OneSecondTimeSpan;
         }
 
         public void Draw(GameTime gameTime)
