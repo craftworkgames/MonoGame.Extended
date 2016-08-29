@@ -9,7 +9,7 @@ namespace MonoGame.Extended
         private TimeSpan _timer = OneSecondTimeSpan;
         private int _framesCounter;
 
-        public float FramesPerSecond { get; private set; }
+        public int FramesPerSecond { get; private set; }
 
         public FramesPerSecondCounter()
         {

@@ -12,7 +12,7 @@ namespace MonoGame.Extended
             _fpsCounter = new FramesPerSecondCounter();
         }
 
-        public float FramesPerSecond => _fpsCounter.FramesPerSecond;
+        public int FramesPerSecond => _fpsCounter.FramesPerSecond;
 
         public override void Update(GameTime gameTime)
         {
