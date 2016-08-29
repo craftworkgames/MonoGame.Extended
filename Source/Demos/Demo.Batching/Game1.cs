@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics;
-using MonoGame.Extended.Graphics.Batching;
 using MonoGame.Extended.Graphics.Effects;
 
 namespace Demo.Batching
@@ -15,7 +14,6 @@ namespace Demo.Batching
         public Vector2 Position;
         public float Rotation;
         public Color Color;
-        public Matrix2D Matrix;
         public Texture2D Texture;
     }
 
@@ -168,15 +166,6 @@ namespace Demo.Batching
 
                 sprite.Color = ColorHelper.FromHSL(sprite.Rotation / MathHelper.TwoPi, 0.5f, 0.3f);
 
-                var matrix = Matrix2D.Identity;
-                var scaleMatrix = Matrix2D.CreateScale(Vector2.One);
-                Matrix2D.Multiply(ref matrix, ref scaleMatrix, out matrix);
-                var rotationMatrix = Matrix2D.CreateRotationZ(-sprite.Rotation);
-                Matrix2D.Multiply(ref matrix, ref rotationMatrix, out matrix);
-                var translationMatrix = Matrix2D.CreateTranslation(sprite.Position);
-                Matrix2D.Multiply(ref matrix, ref translationMatrix, out matrix);
-                sprite.Matrix = matrix;
-
                 _sprites[index] = sprite;
             }
 
@@ -213,7 +202,7 @@ namespace Demo.Batching
             for (var index = 0; index < _sprites.Length; index++)
             {
                 var sprite = _sprites[index];
-                _batch.DrawSprite(sprite.Texture, ref sprite.Matrix, origin: _spriteOrigin, color: sprite.Color);
+                _batch.DrawSprite(sprite.Texture, sprite.Position, rotation: sprite.Rotation, origin: _spriteOrigin, color: sprite.Color);
             }
 
             _batch.End();
@@ -224,8 +213,7 @@ namespace Demo.Batching
             //for (var index = 0; index < _sprites.Length; index++)
             //{
             //    var sprite = _sprites[index];
-            //    var matrix = sprite.Matrix;
-            //    _spriteBatch.Draw(sprite.Texture, matrix.Translation, rotation: matrix.Rotation, scale: matrix.Scale, origin: _spriteOrigin, color: sprite.Color);
+            //    _spriteBatch.Draw(sprite.Texture, sprite.Position, rotation: sprite.Rotation, origin: _spriteOrigin, color: sprite.Color);
             //}
 
             //_spriteBatch.End();
