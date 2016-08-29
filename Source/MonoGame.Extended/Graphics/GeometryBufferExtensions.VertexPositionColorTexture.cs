@@ -22,16 +22,21 @@ namespace MonoGame.Extended.Graphics
         ///     The origin <see cref="Vector2" />. Use <code>null</code> to use the default
         ///     <see cref="Vector2.Zero" />.
         /// </param>
-        /// <param name="options">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
+        /// <param name="effects">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
         /// <param name="depth">The depth. The default value is <code>0</code>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="texture"/> is null.</exception>
-        /// <exception cref="GeometryBufferOverflowException{TVertexType}">The underlying <see cref="GeometryBuffer{TVertexType}"/> is full.</exception>
-        public static unsafe bool EnqueueSprite(this GeometryBuffer<VertexPositionColorTexture> geometryBuffer, ushort indexOffset, Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null, Color? color = null, Vector2? origin = null, SpriteEffects options = SpriteEffects.None, float depth = 0)
+        /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
+        /// <exception cref="GeometryBufferOverflowException{TVertexType}">
+        ///     The underlying
+        ///     <see cref="GeometryBuffer{TVertexType}" /> is full.
+        /// </exception>
+        public static unsafe void EnqueueSprite(this GeometryBuffer<VertexPositionColorTexture> geometryBuffer,
+            ushort indexOffset, Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null,
+            Color? color = null, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None, float depth = 0)
         {
             if (texture == null)
-                throw new ArgumentNullException(paramName: nameof(texture));
+                throw new ArgumentNullException(nameof(texture));
 
-            geometryBuffer.ThrowIfWouldOverflow(verticesCountToAdd: 4, indicesCountToAdd: 6);
+            geometryBuffer.ThrowIfWouldOverflow(4, 6);
 
             var origin1 = origin ?? Vector2.Zero;
             Vector2 positionTopLeft, positionBottomRight, textureCoordinateTopLeft, textureCoordinateBottomRight;
@@ -61,7 +66,7 @@ namespace MonoGame.Extended.Graphics
                 textureCoordinateBottomRight.Y = (textureRegion.Y + textureRegion.Height + 0.5f) / textureHeight;
             }
 
-            var spriteEffect = options;
+            var spriteEffect = effects;
             if ((spriteEffect & SpriteEffects.FlipVertically) != 0)
             {
                 var temp = textureCoordinateBottomRight.Y;
@@ -76,7 +81,8 @@ namespace MonoGame.Extended.Graphics
                 textureCoordinateTopLeft.X = temp;
             }
 
-            var vertex = new VertexPositionColorTexture(position: new Vector3(Vector2.Zero, depth), color: color ?? Color.White, textureCoordinate: Vector2.Zero);
+            var vertex = new VertexPositionColorTexture(new Vector3(Vector2.Zero, depth), color ?? Color.White,
+                Vector2.Zero);
 
             fixed (VertexPositionColorTexture* fixedPointer = geometryBuffer._vertices)
             {
@@ -133,8 +139,6 @@ namespace MonoGame.Extended.Graphics
             }
 
             geometryBuffer._indexCount += 6;
-
-            return true;
         }
     }
 }
