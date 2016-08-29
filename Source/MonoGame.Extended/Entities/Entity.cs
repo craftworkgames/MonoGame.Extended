@@ -84,9 +84,9 @@ namespace MonoGame.Extended.Entities
             _entityComponentSystem.DetachComponent(component);
         }
 
-        public void Destroy()
+        public void Destroy(float delaySeconds = 0f)
         {
-            _entityComponentSystem.DestroyEntity(this);
+            _entityComponentSystem.DestroyEntity(this, delaySeconds);
         }
 
         public T GetComponent<T>() where T : EntityComponent

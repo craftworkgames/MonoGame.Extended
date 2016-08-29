@@ -88,8 +88,9 @@ namespace MonoGame.Extended.Maps.Tiled
             return layer;
         }
 
-        public TiledObjectGroup AddObjectGroup(TiledObjectGroup objectGroup)
+        public TiledObjectGroup CreateObjectGroup(string name, TiledObject[] objects, bool isVisible)
         {
+            var objectGroup = new TiledObjectGroup(name, objects) { IsVisible = isVisible };
             _objectGroups.Add(objectGroup);
             return objectGroup;
         }

@@ -52,9 +52,6 @@ namespace MonoGame.Extended.Maps.Tiled
                         tileSetTile.CreateTileSetTileFrame(order: k, tileId: frameId, duration: reader.ReadInt32());
                     }
                     ReadCustomProperties(reader, tileSetTile.Properties);
-
-                    var group = ReadObjectGroup(reader);
-                    tileSetTile.ObjectGroups.Add(group);
                 }
                 ReadCustomProperties(reader, tileset.Properties);
             }
@@ -71,15 +68,14 @@ namespace MonoGame.Extended.Maps.Tiled
 
             for (var i = 0; i < objectGroupsCount; i++)
             {
-                var objectGroup = ReadObjectGroup(reader);
-                tiledMap.AddObjectGroup(objectGroup);
+                var objectGroup = ReadObjectGroup(reader, tiledMap);
                 ReadCustomProperties(reader, objectGroup.Properties);
             }
 
             return tiledMap.Build();
         }
 
-        private static TiledObjectGroup ReadObjectGroup(ContentReader reader)
+        private static TiledObjectGroup ReadObjectGroup(ContentReader reader, TiledMap tiledMap)
         {
             var groupName = reader.ReadString();
             var visible = reader.ReadBoolean();
@@ -120,8 +116,8 @@ namespace MonoGame.Extended.Maps.Tiled
 
                 ReadCustomProperties(reader, objects[i].Properties);
             }
-            
-            return new TiledObjectGroup(groupName, objects) { IsVisible = visible };
+
+            return tiledMap.CreateObjectGroup(groupName, objects, visible);
         }
 
         private static void ReadCustomProperties(ContentReader reader, TiledProperties properties)

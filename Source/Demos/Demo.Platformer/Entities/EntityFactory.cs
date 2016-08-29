@@ -44,7 +44,9 @@ namespace Demo.Platformer.Entities
         {
             var entity = _entityComponentSystem.CreateEntity(Entities.Player, position);
             var textureRegion = _characterTextureAtlas[0];
-            entity.AttachComponent(new Sprite(textureRegion));
+            var animationFactory = new SpriteSheetAnimationFactory(_characterTextureAtlas);
+            animationFactory.Add("idle", new SpriteSheetAnimationData(new[] {0, 1, 2}));
+            entity.AttachComponent(new AnimatedSprite(animationFactory, "idle"));
             entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
             entity.AttachComponent(new PlayerCollisionHandler());
             entity.AttachComponent(new PlayerState());
@@ -72,12 +74,12 @@ namespace Demo.Platformer.Entities
             return entity;
         }
 
-        public Entity CreateBloodExplosion(Vector2 position)
+        public Entity CreateBloodExplosion(Vector2 position, float totalSeconds = 0.5f)
         {
             var textureRegion = _characterTextureAtlas[0];
             var entity = _entityComponentSystem.CreateEntity(position);
             var profile = Profile.Point();
-            var term = TimeSpan.FromSeconds(0.8f);
+            var term = TimeSpan.FromSeconds(totalSeconds);
             var particleEmitter = new ParticleEmitter(textureRegion, 32, term, profile)
             {
                 Parameters = new ParticleReleaseParameters
@@ -92,8 +94,7 @@ namespace Demo.Platformer.Entities
                 }
             };
             entity.AttachComponent(particleEmitter);
-
-            // TODO: When the particle emitter stops, the entity should be destroyed otherwise we have a memory leak.
+            entity.Destroy(delaySeconds: totalSeconds);
             return entity;
         }
     }
