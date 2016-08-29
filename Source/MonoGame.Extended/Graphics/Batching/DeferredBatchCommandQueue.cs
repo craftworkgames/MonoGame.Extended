@@ -99,7 +99,16 @@ namespace MonoGame.Extended.Graphics.Batching
             {
                 var command = _commands[index];
 
-                if (!_currentCommand.CanMergeWith(command.SortKey, ref command.Data))
+                // get the number of vertices used for the command, each index represents a vertex
+                commandIndicesCount = PrimitiveType.GetVerticesCount(command.PrimitiveCount);
+
+                if (_currentCommand.CanMergeWith(command.SortKey, ref command.Data))
+                {
+                    // increase the number of primitives for the current command by the amount of the merged command
+                    _commands[newCommandsCount - 1].PrimitiveCount =
+                        _currentCommand.PrimitiveCount += command.PrimitiveCount;
+                }
+                else
                 {
                     // could not merge command
                     newCommandsCount++;
@@ -107,13 +116,8 @@ namespace MonoGame.Extended.Graphics.Batching
                     _commands[newCommandsCount - 1].StartIndex = sortedIndiesCount;
                     // set the current command to this command so we can check if the next command can be merged
                     _currentCommand = command;
-                    continue;
                 }
 
-                // get the number of vertices used for the command, each index represents a vertex
-                commandIndicesCount = PrimitiveType.GetVerticesCount(command.PrimitiveCount);
-                // increase the number of primitives for the current command by the amount of the merged command
-                _commands[newCommandsCount - 1].PrimitiveCount = _currentCommand.PrimitiveCount += command.PrimitiveCount;
                 // copy the indices of the command into our sorted indices array so the merged indices are sequential for the graphics API
                 Array.Copy(_geometryBuffer._indices, command.StartIndex, _sortedIndices, sortedIndiesCount,
                     commandIndicesCount);
@@ -133,8 +137,7 @@ namespace MonoGame.Extended.Graphics.Batching
             }
         }
 
-        internal override void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, uint sortKey,
-            ref TCommandData data)
+        internal override void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, float sortKey, ref TCommandData data)
         {
             // merge draw commands if possible to reduce expensive draw calls to the graphics API
             // this might need to be changed for next-gen graphics API (Vulkan, Metal, DirectX 11) where the draw calls are not so expensive
@@ -145,12 +148,12 @@ namespace MonoGame.Extended.Graphics.Batching
                 return;
             }
 
-            // could not merge draw command, initialize a new one
-            _currentCommand = new BatchDrawCommand<TCommandData>(startIndex, primitiveCount, sortKey, data);
-
             // overflow check
             if (_commandsCount >= _maximumCommandsCount)
                 throw new BatchCommandQueueOverflowException(_maximumCommandsCount);
+
+            // could not merge draw command, initialize a new one
+            _currentCommand = new BatchDrawCommand<TCommandData>(startIndex, primitiveCount, sortKey, data);
 
             // append the command to the array
             _commands[_commandsCount++] = _currentCommand;

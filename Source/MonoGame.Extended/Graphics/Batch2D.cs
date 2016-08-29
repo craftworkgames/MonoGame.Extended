@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -22,6 +23,7 @@ namespace MonoGame.Extended.Graphics
         private Matrix _defaultProjection;
         private readonly DefaultEffect2D _effect;
         private readonly Texture2D _pixelTexture;
+        private Batch2DSortMode _sortMode;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Batch2D" /> class.
@@ -50,7 +52,7 @@ namespace MonoGame.Extended.Graphics
 
             var viewport = graphicsDevice.Viewport;
 
-            _defaultProjection = Matrix.CreateTranslation(-0.5f, -0.5f, 0)*
+            _defaultProjection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) *
                                  Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1);
 
             _pixelTexture = new Texture2D(graphicsDevice, 1, 1);
@@ -86,7 +88,7 @@ namespace MonoGame.Extended.Graphics
         ///     <see cref="Effect" /> and the optional chain of <see cref="Matrix" />es for transforming between world, view, and
         ///     projection spaces.
         /// </summary>
-        /// <param name="sortMode">The <see cref="BatchSortMode" />. Default value is <see cref="BatchSortMode.Deferred" />.</param>
+        /// <param name="sortMode">The <see cref="Batch2DSortMode" />. Default value is <see cref="Batch2DSortMode.Deferred" />.</param>
         /// <param name="effect">
         ///     The <see cref="Effect" />. Use <code>null</code> to use the default <see cref="DefaultEffect2D" />.
         /// </param>
@@ -103,11 +105,32 @@ namespace MonoGame.Extended.Graphics
         ///     use an orthographic projection (a 2D projection) with <code>(0,0)</code> as the top-left and <code>(x,y)</code> as
         ///     the bottom-right of the viewport.
         /// </param>
-        public void Begin(BatchSortMode sortMode = BatchSortMode.Deferred, Effect effect = null, Matrix? worldMatrix = null,
+        public void Begin(Batch2DSortMode sortMode = Batch2DSortMode.Deferred, Effect effect = null,
+            Matrix? worldMatrix = null,
             Matrix? viewMatrix = null, Matrix? projectionMatrix = null)
         {
             if (effect == null)
                 effect = _effect;
+
+            BatchSortMode batchSortMode;
+            switch (sortMode)
+            {
+                case Batch2DSortMode.Texture:
+                case Batch2DSortMode.FrontToBack:
+                case Batch2DSortMode.BackToFront:
+                    batchSortMode = BatchSortMode.DeferredSorted;
+                    break;
+                case Batch2DSortMode.Deferred:
+                    batchSortMode = BatchSortMode.Deferred;
+                    break;
+                case Batch2DSortMode.Immediate:
+                    batchSortMode = BatchSortMode.Immediate;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(sortMode), sortMode, null);
+            }
+
+            _sortMode = sortMode;
 
             var effectWorldViewProjectionMatrix = effect as IMatrixChainEffect;
             if (effectWorldViewProjectionMatrix != null)
@@ -128,13 +151,13 @@ namespace MonoGame.Extended.Graphics
                     effectWorldViewProjectionMatrix.SetProjection(ref _defaultProjection);
             }
 
-            Begin(effect, PrimitiveType.TriangleList, sortMode);
+            Begin(effect, PrimitiveType.TriangleList, batchSortMode);
         }
 
         /// <summary>
         ///     Draws a sprite using a specified <see cref="Texture" />, transform <see cref="Matrix2D" /> and an optional
         ///     source <see cref="Rectangle" />, <see cref="Color" />, origin <see cref="Vector2" />,
-        ///     <see cref="SpriteEffects" />, depth, and sort key.
+        ///     <see cref="SpriteEffects" />, and depth.
         /// </summary>
         /// <param name="texture">The <see cref="Texture" />.</param>
         /// <param name="transformMatrix">The transform <see cref="Matrix2D" />.</param>
@@ -149,7 +172,6 @@ namespace MonoGame.Extended.Graphics
         /// </param>
         /// <param name="spriteOptions">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
         /// <param name="depth">The depth. The default value is <code>0</code>.</param>
-        /// <param name="sortKey">The sort key. The default value is <code>0</code>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
         /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
         ///     The underlying
@@ -157,7 +179,7 @@ namespace MonoGame.Extended.Graphics
         /// </exception>
         public void DrawSprite(Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null,
             Color? color = null, Vector2? origin = null, SpriteEffects spriteOptions = SpriteEffects.None,
-            float depth = 0, uint sortKey = 0)
+            float depth = 0)
         {
             var geometryBuffer = GeometryBuffer;
             var startVertex = geometryBuffer._vertexCount;
@@ -165,7 +187,26 @@ namespace MonoGame.Extended.Graphics
             geometryBuffer.EnqueueSprite(startVertex, texture, ref transformMatrix, sourceRectangle, color, origin,
                 spriteOptions, depth);
             var commandData = new DrawCommandData(texture);
-            EnqueueDrawCommand(startIndex, 2, sortKey, ref commandData);
+            var sortKey = GetSortKey(depth);
+            Draw(startIndex, 2, sortKey, ref commandData);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private float GetSortKey(float depth)
+        {
+            // the sort key acts as the primary sort key
+            // the secondary sort key is always the texture
+
+            // ReSharper disable once SwitchStatementMissingSomeCases
+            switch (_sortMode)
+            {
+                case Batch2DSortMode.FrontToBack:
+                    return depth;
+                case Batch2DSortMode.BackToFront:
+                    return -depth;
+                default:
+                    return 0;
+            }
         }
 
         /// <summary>
@@ -175,10 +216,12 @@ namespace MonoGame.Extended.Graphics
         public struct DrawCommandData : IBatchDrawCommandData<DrawCommandData>
         {
             public Texture2D Texture;
+            public int TextureKey;
 
             internal DrawCommandData(Texture2D texture)
             {
                 Texture = texture;
+                TextureKey = RuntimeHelpers.GetHashCode(texture);
             }
 
             public void ApplyTo(Effect effect)
@@ -196,6 +239,11 @@ namespace MonoGame.Extended.Graphics
             public bool Equals(ref DrawCommandData other)
             {
                 return Texture == other.Texture;
+            }
+
+            public int CompareTo(DrawCommandData other)
+            {
+                return TextureKey.CompareTo(other.TextureKey);
             }
         }
     }

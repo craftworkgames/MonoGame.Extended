@@ -37,8 +37,7 @@ namespace MonoGame.Extended.Graphics.Batching
             CommandDrawer.Effect = null;
         }
 
-        internal abstract void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, uint sortKey,
-            ref TCommandData data);
+        internal abstract void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, float sortKey, ref TCommandData data);
 
         protected virtual void Dispose(bool isDisposing)
         {

@@ -70,6 +70,7 @@
     <Compile Include="Entities\Systems\ParticleEmitterComponentSystem.cs" />
     <Compile Include="Entities\Systems\SpriteBatchComponentSystem.cs" />
     <Compile Include="Entities\Systems\UpdatableComponentSystem.cs" />
+    <Compile Include="Graphics\Batch2DSortMode.cs" />
     <Compile Include="Graphics\Batching\BatchCommandDrawer.cs" />
     <Compile Include="Graphics\Batching\BatchDrawCommand.cs" />
     <Compile Include="Graphics\Batching\BatchSortMode.cs" />

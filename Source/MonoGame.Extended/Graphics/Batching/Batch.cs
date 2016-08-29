@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -26,10 +27,10 @@ namespace MonoGame.Extended.Graphics.Batching
     {
         internal const int DefaultMaximumBatchCommandsCount = 2048;
 
-        private BatchCommandDrawer<TVertexType, TBatchDrawCommandData> _batchCommandDrawer;
-        private BatchCommandQueue<TVertexType, TBatchDrawCommandData> _currentBatchCommandQueue;
-        private DeferredBatchCommandQueue<TVertexType, TBatchDrawCommandData> _deferredBatchQueue;
-        private ImmediateBatchCommandQueue<TVertexType, TBatchDrawCommandData> _immediateBatchQueue;
+        private BatchCommandDrawer<TVertexType, TBatchDrawCommandData> _commandDrawer;
+        private BatchCommandQueue<TVertexType, TBatchDrawCommandData> _currentCommandQueue;
+        private DeferredBatchCommandQueue<TVertexType, TBatchDrawCommandData> _deferredCommandQueue;
+        private ImmediateBatchCommandQueue<TVertexType, TBatchDrawCommandData> _immediateCommandQueue;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Batch{TVertexType,TBatchDrawCommandData}" /> class.
@@ -61,10 +62,10 @@ namespace MonoGame.Extended.Graphics.Batching
 
             GeometryBuffer = geometryBuffer;
             GraphicsDevice = geometryBuffer.GraphicsDevice;
-            _batchCommandDrawer = new BatchCommandDrawer<TVertexType, TBatchDrawCommandData>(GraphicsDevice, GeometryBuffer);
+            _commandDrawer = new BatchCommandDrawer<TVertexType, TBatchDrawCommandData>(GraphicsDevice, GeometryBuffer);
 
-            _immediateBatchQueue = new ImmediateBatchCommandQueue<TVertexType, TBatchDrawCommandData>(GraphicsDevice, _batchCommandDrawer);
-            _deferredBatchQueue = new DeferredBatchCommandQueue<TVertexType, TBatchDrawCommandData>(GraphicsDevice, _batchCommandDrawer,
+            _immediateCommandQueue = new ImmediateBatchCommandQueue<TVertexType, TBatchDrawCommandData>(GraphicsDevice, _commandDrawer);
+            _deferredCommandQueue = new DeferredBatchCommandQueue<TVertexType, TBatchDrawCommandData>(GraphicsDevice, _commandDrawer,
                 maximumBatchCommandsCount);
         }
 
@@ -120,15 +121,15 @@ namespace MonoGame.Extended.Graphics.Batching
             {
                 GeometryBuffer?.Dispose();
 
-                _batchCommandDrawer?.Dispose();
-                _batchCommandDrawer = null;
+                _commandDrawer?.Dispose();
+                _commandDrawer = null;
 
 
-                _immediateBatchQueue.Dispose();
-                _immediateBatchQueue = null;
+                _immediateCommandQueue.Dispose();
+                _immediateCommandQueue = null;
 
-                _deferredBatchQueue.Dispose();
-                _deferredBatchQueue = null;
+                _deferredCommandQueue.Dispose();
+                _deferredCommandQueue = null;
             }
         }
 
@@ -182,16 +183,16 @@ namespace MonoGame.Extended.Graphics.Batching
 
             if (sortMode != BatchSortMode.Immediate)
             {
-                var deferredQueuer = _deferredBatchQueue;
+                var deferredQueuer = _deferredCommandQueue;
                 deferredQueuer.SortMode = sortMode;
-                _currentBatchCommandQueue = deferredQueuer;
+                _currentCommandQueue = deferredQueuer;
             }
             else
             {
-                _currentBatchCommandQueue = _immediateBatchQueue;
+                _currentCommandQueue = _immediateCommandQueue;
             }
 
-            _currentBatchCommandQueue.Begin(effect, primitiveType);
+            _currentCommandQueue.Begin(effect, primitiveType);
         }
 
         /// <summary>
@@ -210,7 +211,7 @@ namespace MonoGame.Extended.Graphics.Batching
             EnsureHasBegun();
             HasBegun = false;
 
-            _currentBatchCommandQueue.End();
+            _currentCommandQueue.End();
         }
 
         /// <summary>
@@ -219,7 +220,7 @@ namespace MonoGame.Extended.Graphics.Batching
         /// </summary>
         protected void Flush()
         {
-            _currentBatchCommandQueue.Flush();
+            _currentCommandQueue.Flush();
         }
 
         /// <summary>
@@ -228,19 +229,18 @@ namespace MonoGame.Extended.Graphics.Batching
         /// </summary>
         /// <param name="startIndex">The starting index from the <see cref="GeometryBuffer" /> to use.</param>
         /// <param name="primitiveCount">The number of primitives from the <see cref="GeometryBuffer" /> to use.</param>
-        /// <param name="itemData">The <see cref="TBatchDrawCommandData" />.</param>
         /// <param name="sortKey">The sort key.</param>
+        /// <param name="itemData">The <see cref="TBatchDrawCommandData" />.</param>
         /// <remarks>
         ///     <para>
         ///         <see cref="Begin" /> must be called before enqueuing any draw calls. When all the geometry have been enqueued
         ///         for drawing, call <see cref="End" />.
         ///     </para>
         /// </remarks>
-        protected void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, uint sortKey,
-            ref TBatchDrawCommandData itemData)
+        protected void Draw(ushort startIndex, ushort primitiveCount, float sortKey, ref TBatchDrawCommandData itemData)
         {
             EnsureHasBegun();
-            _currentBatchCommandQueue.EnqueueDrawCommand(startIndex, primitiveCount, sortKey, ref itemData);
+            _currentCommandQueue.EnqueueDrawCommand(startIndex, primitiveCount, sortKey, ref itemData);
         }
     }
 }

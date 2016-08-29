@@ -26,6 +26,18 @@
 /processorParam:TextureFormat=Color
 /build:logo-square-128.png
 
+#begin logo-square-128-copy.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:logo-square-128-copy.png
+
 #begin montserrat-32.fnt
 /importer:BitmapFontImporter
 /processor:BitmapFontProcessor

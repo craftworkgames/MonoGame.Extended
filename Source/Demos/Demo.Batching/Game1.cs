@@ -16,6 +16,7 @@ namespace Demo.Batching
         public float Rotation;
         public Color Color;
         public Matrix2D Matrix;
+        public Texture2D Texture;
     }
 
     public class Game1 : Game
@@ -26,7 +27,8 @@ namespace Demo.Batching
         private Batch2D _batch;
         private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFont;
-        private Texture2D _spriteTexture;
+        private Texture2D _spriteTexture1;
+        private Texture2D _spriteTexture2;
         private Vector2 _spriteOrigin;
         private DefaultEffect2D _effect;
 
@@ -47,14 +49,19 @@ namespace Demo.Batching
 
         public Game1()
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = false;
+            // disable fixed time step so max frames can be measured otherwise the update & draw frames would be capped to the default 60 fps timestep
             IsFixedTimeStep = false;
 
-            _graphicsDeviceManager.PreferredBackBufferWidth = 1920;
-            _graphicsDeviceManager.PreferredBackBufferHeight = 1080;
+            _graphicsDeviceManager = new GraphicsDeviceManager(this)
+            {
+                // also disable v-sync so max frames can be measured otherwise draw frames would be capped to the screen's refresh rate 
+                SynchronizeWithVerticalRetrace = false,
+                PreferredBackBufferWidth = 1920,
+                PreferredBackBufferHeight = 1080
+            };
         }
 
         protected override void LoadContent()
@@ -82,8 +89,9 @@ namespace Demo.Batching
 //            _primitivesViewToProjetion = Matrix.CreateOrthographicOffCenter(left: viewport.Width * -0.5f, right: viewport.Width * 0.5f, bottom: viewport.Height * -0.5f, top: viewport.Height * 0.5f, zNearPlane: 0, zFarPlane: 1);
 
             // load the texture for the sprites
-            _spriteTexture = Content.Load<Texture2D>("logo-square-128");
-            _spriteOrigin = new Vector2(_spriteTexture.Width * 0.5f, _spriteTexture.Height * 0.5f);
+            _spriteTexture1 = Content.Load<Texture2D>("logo-square-128");
+            _spriteTexture2 = Content.Load<Texture2D>("logo-square-128-copy");
+            _spriteOrigin = new Vector2(_spriteTexture1.Width * 0.5f, _spriteTexture1.Height * 0.5f);
 
 
             //            // create our polygon mesh; vertices are in Local space; indices are index references to the vertices to draw 
@@ -134,6 +142,7 @@ namespace Demo.Batching
                 sprite.Position = new Vector2(_random.Next(viewport.X, viewport.Width),
                     _random.Next(viewport.Y, viewport.Height));
                 sprite.Rotation = MathHelper.ToRadians(_random.Next(0, 360));
+                sprite.Texture = index % 2 == 0 ? _spriteTexture1 : _spriteTexture2;
                 _sprites[index] = sprite;
             }
         }
@@ -198,25 +207,25 @@ namespace Demo.Batching
             //            _primitiveBatchPositionColor.Draw(_primitiveMaterial, PrimitiveType.LineStrip, _curveVertices);
             //            _primitiveBatchPositionColor.End();
 
-            _batch.Begin(sortMode: BatchSortMode.DeferredSorted, effect: _effect);
+            _batch.Begin(sortMode: Batch2DSortMode.Texture, effect: _effect);
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _sprites.Length; index++)
             {
                 var sprite = _sprites[index];
-                _batch.DrawSprite(_spriteTexture, ref sprite.Matrix, origin: _spriteOrigin, color: sprite.Color);
+                _batch.DrawSprite(sprite.Texture, ref sprite.Matrix, origin: _spriteOrigin, color: sprite.Color);
             }
 
             _batch.End();
 
-            //_spriteBatch.Begin(effect: _effect);
+            //_spriteBatch.Begin(sortMode: SpriteSortMode.Texture, effect: _effect);
 
             //// ReSharper disable once ForCanBeConvertedToForeach
             //for (var index = 0; index < _sprites.Length; index++)
             //{
             //    var sprite = _sprites[index];
             //    var matrix = sprite.Matrix;
-            //    _spriteBatch.Draw(_spriteTexture, matrix.Translation, rotation: matrix.Rotation, scale: matrix.Scale, origin: _spriteOrigin, color: sprite.Color);
+            //    _spriteBatch.Draw(sprite.Texture, matrix.Translation, rotation: matrix.Rotation, scale: matrix.Scale, origin: _spriteOrigin, color: sprite.Color);
             //}
 
             //_spriteBatch.End();
@@ -224,7 +233,7 @@ namespace Demo.Batching
             base.Draw(gameTime);
 
             _fpsCounter.Draw(gameTime);
-            Window.Title = $"Demo.Batching - FPS: {_fpsCounter.CurrentFramesPerSecond}";
+            Window.Title = $"Demo.Batching - FPS: {_fpsCounter.FramesPerSecond}";
         }
     }
 }

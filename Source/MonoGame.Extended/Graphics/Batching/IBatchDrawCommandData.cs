@@ -1,13 +1,14 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
     /// <summary>
     ///     Defines the data for batch draw commands.
     /// </summary>
-    /// <typeparam name="TBatchDrawCommandData">The type of the batch draw command data.</typeparam>
+    /// <typeparam name="TCommandData">The type of the batch draw command data.</typeparam>
     /// <seealso cref="Extended.IEquatableByRef{TBatchDrawCommandData}" />
-    public interface IBatchDrawCommandData<TBatchDrawCommandData> : IEquatableByRef<TBatchDrawCommandData>
+    public interface IBatchDrawCommandData<TCommandData> : IEquatableByRef<TCommandData>, IComparable<TCommandData>
     {
         /// <summary>
         ///     Applies the parameters for the <see cref="IBatchDrawCommandData{TBatchDrawCommandData}" /> to the specified

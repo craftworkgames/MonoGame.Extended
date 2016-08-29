@@ -7,28 +7,34 @@ namespace MonoGame.Extended.Graphics.Batching
     internal struct BatchDrawCommand<TCommandData> : IComparable<BatchDrawCommand<TCommandData>>
         where TCommandData : struct, IBatchDrawCommandData<TCommandData>
     {
-        internal readonly uint SortKey;
+        internal float SortKey;
         internal ushort StartIndex;
         internal ushort PrimitiveCount;
         internal TCommandData Data;
 
-        internal BatchDrawCommand(ushort startIndex, ushort primitiveCount, uint sortKey, TCommandData data)
+        internal BatchDrawCommand(ushort startIndex, ushort primitiveCount, float sortKey, TCommandData data)
         {
+            SortKey = sortKey;
             StartIndex = startIndex;
             PrimitiveCount = primitiveCount;
-            SortKey = sortKey;
             Data = data;
         }
 
-        internal bool CanMergeWith(uint sortKey, ref TCommandData commandData)
+        internal bool CanMergeWith(float sortKey, ref TCommandData commandData)
         {
-            return (SortKey == sortKey) && Data.Equals(ref commandData);
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
+            return SortKey == sortKey && Data.Equals(ref commandData);
         }
 
         public int CompareTo(BatchDrawCommand<TCommandData> other)
         {
             // ReSharper disable once ImpureMethodCallOnReadonlyValueField
-            return SortKey.CompareTo(other.SortKey);
+           var result = SortKey.CompareTo(other.SortKey);
+            if (result == 0)
+                result = Data.CompareTo(other.Data);
+           if (result == 0)
+                result = StartIndex.CompareTo(other.StartIndex);
+            return result;
         }
     }
 }

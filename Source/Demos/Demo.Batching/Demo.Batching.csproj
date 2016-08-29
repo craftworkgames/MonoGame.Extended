@@ -62,6 +62,7 @@
   <ItemGroup>
     <None Include="Content\logo-square-128.png" />
     <None Include="Content\montserrat-32_0.png" />
+    <None Include="Content\logo-square-128-copy.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

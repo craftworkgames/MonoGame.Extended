@@ -114,7 +114,7 @@ namespace Demo.TiledMaps
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
             _spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: move", new Vector2(5, 32), textColor);
             _spriteBatch.DrawString(_bitmapFont, "RF: zoom", new Vector2(5, 32 + _bitmapFont.LineHeight), textColor);
-            _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.AverageFramesPerSecond:0}", Vector2.One, Color.Black);
+            _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.FramesPerSecond:0}", Vector2.One, Color.Black);
             _spriteBatch.DrawString(_bitmapFont, $"Camera: {_camera.Position}", new Vector2(5, 32 + _bitmapFont.LineHeight * 2), Color.Black);
             _spriteBatch.End();
 
