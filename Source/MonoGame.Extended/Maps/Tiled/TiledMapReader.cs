@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
@@ -52,6 +53,8 @@ namespace MonoGame.Extended.Maps.Tiled
                         tileSetTile.CreateTileSetTileFrame(order: k, tileId: frameId, duration: reader.ReadInt32());
                     }
                     ReadCustomProperties(reader, tileSetTile.Properties);
+                    
+                    tileSetTile.ObjectGroups.AddRange(ReadObjectGroups(reader));
                 }
                 ReadCustomProperties(reader, tileset.Properties);
             }
@@ -64,18 +67,26 @@ namespace MonoGame.Extended.Maps.Tiled
                 ReadCustomProperties(reader, layer.Properties);
             }
 
-            var objectGroupsCount = reader.ReadInt32();
-
-            for (var i = 0; i < objectGroupsCount; i++)
-            {
-                var objectGroup = ReadObjectGroup(reader, tiledMap);
-                ReadCustomProperties(reader, objectGroup.Properties);
-            }
+            tiledMap.AddObjectGroup(ReadObjectGroups(reader));
 
             return tiledMap.Build();
         }
 
-        private static TiledObjectGroup ReadObjectGroup(ContentReader reader, TiledMap tiledMap)
+        private static List<TiledObjectGroup> ReadObjectGroups(ContentReader reader) 
+        {
+            var list = new List<TiledObjectGroup>();
+            var objectGroupsCount = reader.ReadInt32();
+
+            for (var i = 0; i < objectGroupsCount; i++)
+            {
+                var objectGroup = ReadObjectGroup(reader);
+                ReadCustomProperties(reader, objectGroup.Properties);
+                list.Add(objectGroup);
+            }
+            return list;
+        }
+
+        private static TiledObjectGroup ReadObjectGroup(ContentReader reader)
         {
             var groupName = reader.ReadString();
             var visible = reader.ReadBoolean();
@@ -116,8 +127,8 @@ namespace MonoGame.Extended.Maps.Tiled
 
                 ReadCustomProperties(reader, objects[i].Properties);
             }
-
-            return tiledMap.CreateObjectGroup(groupName, objects, visible);
+            
+            return new TiledObjectGroup(groupName, objects) { IsVisible = visible };
         }
 
         private static void ReadCustomProperties(ContentReader reader, TiledProperties properties)
