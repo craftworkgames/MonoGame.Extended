@@ -60,6 +60,7 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
+    <Compile Include="ColorHelper.cs" />
     <Compile Include="Entities\Components\EntityComponent.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityComponentSystem.cs" />
@@ -69,11 +70,11 @@
     <Compile Include="Entities\Systems\ParticleEmitterComponentSystem.cs" />
     <Compile Include="Entities\Systems\SpriteBatchComponentSystem.cs" />
     <Compile Include="Entities\Systems\UpdatableComponentSystem.cs" />
-    <Compile Include="Graphics\Batching\BatchDrawer.cs" />
+    <Compile Include="Graphics\Batching\BatchCommandDrawer.cs" />
     <Compile Include="Graphics\Batching\BatchDrawCommand.cs" />
     <Compile Include="Graphics\Batching\BatchSortMode.cs" />
     <Compile Include="Graphics\Batching\IBatchDrawCommandData.cs" />
-    <Compile Include="Graphics\Batching\PrimitiveBatch.cs" />
+    <Compile Include="Graphics\Batching\Batch.cs" />
     <Compile Include="Graphics\Batching\BatchCommandQueueOverflowException.cs" />
     <Compile Include="Graphics\Batching\BatchCommandQueue.cs" />
     <Compile Include="Graphics\Batching\DeferredBatchCommandQueue.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="Graphics\GeometryBufferExtensions.VertexPositionColorTexture.cs" />
     <Compile Include="Graphics\GeometryBufferOverflowException.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
-    <Compile Include="Graphics\GeometryBatch2D.cs" />
+    <Compile Include="Graphics\Batch2D.cs" />
     <Compile Include="Graphics\GeometryBuffer.Static.cs" />
     <Compile Include="Gui\Controls\GuiLabel.cs" />
     <Compile Include="Gui\Controls\GuiToggleButton.cs" />
@@ -106,6 +107,8 @@
     <Compile Include="IEquatableByRef.cs" />
     <Compile Include="InputListeners\InputListenerComponent.cs" />
     <Compile Include="Matrix2D.cs" />
+    <Compile Include="SimpleDrawableGameComponent.cs" />
+    <Compile Include="SimpleGameComponent.cs" />
     <Compile Include="Vector2Extensions.cs" />
     <Compile Include="Screens\Screen.cs" />
     <Compile Include="Screens\ScreenComponent.cs" />

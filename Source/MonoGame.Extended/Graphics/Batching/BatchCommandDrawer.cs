@@ -3,15 +3,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal sealed class BatchDrawer<TVertexType, TCommandData> : IDisposable
+    internal sealed class BatchCommandDrawer<TVertexType, TCommandData> : IDisposable
         where TVertexType : struct, IVertexType where TCommandData : struct, IBatchDrawCommandData<TCommandData>
     {
-        internal readonly GraphicsDevice GraphicsDevice;
         internal readonly GeometryBuffer<TVertexType> GeometryBuffer;
+        internal readonly GraphicsDevice GraphicsDevice;
         internal Effect Effect;
         internal PrimitiveType PrimitiveType;
 
-        internal BatchDrawer(GraphicsDevice graphicsDevice, GeometryBuffer<TVertexType> geometryBuffer)
+        internal BatchCommandDrawer(GraphicsDevice graphicsDevice, GeometryBuffer<TVertexType> geometryBuffer)
         {
             GraphicsDevice = graphicsDevice;
             GeometryBuffer = geometryBuffer;
@@ -25,9 +25,7 @@ namespace MonoGame.Extended.Graphics.Batching
         private void Dispose(bool isDisposing)
         {
             if (!isDisposing)
-            {
                 return;
-            }
 
             GeometryBuffer.Dispose();
         }
@@ -39,15 +37,17 @@ namespace MonoGame.Extended.Graphics.Batching
             GraphicsDevice.Indices = GeometryBuffer.IndexBuffer;
         }
 
-        internal void Draw(ref BatchDrawCommand<TCommandData> drawCommand)
+        internal void Draw(ref BatchDrawCommand<TCommandData> command)
         {
             var graphicsDevice = GraphicsDevice;
-            drawCommand.Data.ApplyTo(Effect);
+            command.Data.ApplyTo(Effect);
             foreach (var pass in Effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                graphicsDevice.DrawIndexedPrimitives(PrimitiveType, 0, drawCommand.StartIndex, drawCommand.PrimitiveCount);
+                graphicsDevice.DrawIndexedPrimitives(PrimitiveType, 0, command.StartIndex,
+                    command.PrimitiveCount);
             }
+            command.Data.SetReferencesToNull();
         }
     }
 }

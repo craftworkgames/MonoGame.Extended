@@ -1,8 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Graphics.Batching;
 using MonoGame.Extended.Graphics.Effects;
 
 namespace Demo.Batching
@@ -20,8 +23,9 @@ namespace Demo.Batching
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
-        private GeometryBatch2D _geometryBatch;
+        private Batch2D _batch;
         private SpriteBatch _spriteBatch;
+        private BitmapFont _bitmapFont;
         private Texture2D _spriteTexture;
         private Vector2 _spriteOrigin;
         private DefaultEffect2D _effect;
@@ -37,7 +41,7 @@ namespace Demo.Batching
 //        private Matrix _primitivesWorldToView;
 //        private Matrix _primitivesViewToProjetion;
 
-        private readonly FastRandom _random = new FastRandom();
+        private readonly Random _random = new Random();
         private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
         private readonly SpriteInfo[] _sprites = new SpriteInfo[2048];
 
@@ -57,8 +61,9 @@ namespace Demo.Batching
         {
             var graphicsDevice = GraphicsDevice;
 
-            _geometryBatch = new GeometryBatch2D(graphicsDevice);
+            _batch = new Batch2D(graphicsDevice);
             _spriteBatch = new SpriteBatch(graphicsDevice);
+            _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
             _effect = new DefaultEffect2D(graphicsDevice);
 
 //            var viewport = graphicsDevice.Viewport;
@@ -78,7 +83,7 @@ namespace Demo.Batching
 
             // load the texture for the sprites
             _spriteTexture = Content.Load<Texture2D>("logo-square-128");
-            _spriteOrigin = new Vector2(_spriteTexture.Width*0.5f, _spriteTexture.Height*0.5f);
+            _spriteOrigin = new Vector2(_spriteTexture.Width * 0.5f, _spriteTexture.Height * 0.5f);
 
 
             //            // create our polygon mesh; vertices are in Local space; indices are index references to the vertices to draw 
@@ -119,7 +124,7 @@ namespace Demo.Batching
 
             _effect.World = Matrix.Identity;
             _effect.View = Matrix.Identity;
-            _effect.Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0)*
+            _effect.Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) *
                                  Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1);
 
             // ReSharper disable once ForCanBeConvertedToForeach
@@ -129,24 +134,30 @@ namespace Demo.Batching
                 sprite.Position = new Vector2(_random.Next(viewport.X, viewport.Width),
                     _random.Next(viewport.Y, viewport.Height));
                 sprite.Rotation = MathHelper.ToRadians(_random.Next(0, 360));
-                sprite.Color = Color.FromNonPremultiplied(_random.Next(0, 255), _random.Next(0, 255),
-                    _random.Next(0, 255), 255);
                 _sprites[index] = sprite;
             }
         }
 
         protected override void Update(GameTime gameTime)
         {
+            var keyboard = Keyboard.GetState();
+
+
             if ((GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed) ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
+                keyboard.IsKeyDown(Keys.Escape))
                 Exit();
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _sprites.Length; index++)
             {
                 var sprite = _sprites[index];
-                ;
-                sprite.Rotation += MathHelper.ToRadians(1);
+
+                if (index % 2 == 0)
+                    sprite.Rotation = (sprite.Rotation + MathHelper.ToRadians(1)) % MathHelper.TwoPi;
+                else
+                    sprite.Rotation = (sprite.Rotation - MathHelper.ToRadians(1) + MathHelper.TwoPi) % MathHelper.TwoPi;
+
+                sprite.Color = ColorHelper.FromHSL(sprite.Rotation / MathHelper.TwoPi, 0.5f, 0.3f);
 
                 var matrix = Matrix2D.Identity;
                 var scaleMatrix = Matrix2D.CreateScale(Vector2.One);
@@ -159,6 +170,8 @@ namespace Demo.Batching
 
                 _sprites[index] = sprite;
             }
+
+            _fpsCounter.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -185,32 +198,33 @@ namespace Demo.Batching
             //            _primitiveBatchPositionColor.Draw(_primitiveMaterial, PrimitiveType.LineStrip, _curveVertices);
             //            _primitiveBatchPositionColor.End();
 
-            _geometryBatch.Begin(effect: _effect);
+            _batch.Begin(sortMode: BatchSortMode.DeferredSorted, effect: _effect);
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _sprites.Length; index++)
             {
                 var sprite = _sprites[index];
-                _geometryBatch.DrawSprite(_spriteTexture, ref sprite.Matrix, origin: _spriteOrigin, color: sprite.Color);
+                _batch.DrawSprite(_spriteTexture, ref sprite.Matrix, origin: _spriteOrigin, color: sprite.Color);
             }
 
-            _geometryBatch.End();
+            _batch.End();
 
-            //_spriteBatch.Begin(blendState: graphicsDevice.BlendState, samplerState: graphicsDevice.SamplerStates[0], depthStencilState: graphicsDevice.DepthStencilState, rasterizerState: graphicsDevice.RasterizerState, effect: _effect);
+            //_spriteBatch.Begin(effect: _effect);
 
             //// ReSharper disable once ForCanBeConvertedToForeach
             //for (var index = 0; index < _sprites.Length; index++)
             //{
             //    var sprite = _sprites[index];
-            //    _spriteBatch.Draw(_spriteTexture, sprite.Position, rotation: sprite.Rotation, origin: _spriteOrigin, color: sprite.Color);
+            //    var matrix = sprite.Matrix;
+            //    _spriteBatch.Draw(_spriteTexture, matrix.Translation, rotation: matrix.Rotation, scale: matrix.Scale, origin: _spriteOrigin, color: sprite.Color);
             //}
 
             //_spriteBatch.End();
 
             base.Draw(gameTime);
 
-            _fpsCounter.Update(gameTime);
-            Window.Title = $"Demo.Batching - Average FPS: {_fpsCounter.AverageFramesPerSecond}";
+            _fpsCounter.Draw(gameTime);
+            Window.Title = $"Demo.Batching - FPS: {_fpsCounter.CurrentFramesPerSecond}";
         }
     }
 }

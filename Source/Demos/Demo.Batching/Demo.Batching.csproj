@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\logo-square-128.png" />
+    <None Include="Content\montserrat-32_0.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +74,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\montserrat-32.fnt" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

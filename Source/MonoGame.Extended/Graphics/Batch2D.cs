@@ -8,15 +8,15 @@ using MonoGame.Extended.Graphics.Effects;
 namespace MonoGame.Extended.Graphics
 {
     /// <summary>
-    ///     Enables a group of dynamic two-dimensional geometry to be drawn using the same settings.
+    ///     Enables a group of dynamic two-dimensional geometric objects be drawn using the same settings.
     /// </summary>
-    /// <seealso cref="PrimitiveBatch{TVertexType,TDrawContext}" />
-    public class GeometryBatch2D : PrimitiveBatch<VertexPositionColorTexture, GeometryBatch2D.DrawCommandData2D>
+    /// <seealso cref="Batch{TVertexType,TBatchDrawCommandData}" />
+    public class Batch2D : Batch<VertexPositionColorTexture, Batch2D.DrawCommandData>
     {
         internal const int DefaultMaximumVerticesCount = 8192;
         internal const int DefaultMaximumIndicesCount = 12288;
 
-        private DrawCommandData2D _pixelTextureDrawContext;
+        private DrawCommandData _pixelTextureDrawContext;
         private Matrix _defaultWorld = Matrix.Identity;
         private Matrix _defaultView = Matrix.Identity;
         private Matrix _defaultProjection;
@@ -24,7 +24,7 @@ namespace MonoGame.Extended.Graphics
         private readonly Texture2D _pixelTexture;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="GeometryBatch2D" /> class.
+        ///     Initializes a new instance of the <see cref="Batch2D" /> class.
         /// </summary>
         /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="maximumVerticesCount">The maximum number of vertices. The default value is <code>8192</code>.</param>
@@ -39,22 +39,27 @@ namespace MonoGame.Extended.Graphics
         ///     <code>0</code>, or <paramref name="maximumVerticesCount" /> is less than or equal to <code>0</code>, or,
         ///     <paramref name="maximumVerticesCount" /> is less than or equal to <code>0</code>.
         /// </exception>
-        public GeometryBatch2D(GraphicsDevice graphicsDevice, ushort maximumVerticesCount = DefaultMaximumVerticesCount, ushort maximumIndicesCount = DefaultMaximumIndicesCount, int maximumBatchCommandsCount = DefaultMaximumBatchCommandsCount)
-            : base(geometryBuffer: new DynamicGeometryBuffer<VertexPositionColorTexture>(graphicsDevice, maximumVerticesCount, maximumIndicesCount), maximumBatchCommandsCount: maximumBatchCommandsCount)
+        public Batch2D(GraphicsDevice graphicsDevice, ushort maximumVerticesCount = DefaultMaximumVerticesCount,
+            ushort maximumIndicesCount = DefaultMaximumIndicesCount,
+            int maximumBatchCommandsCount = DefaultMaximumBatchCommandsCount)
+            : base(
+                new DynamicGeometryBuffer<VertexPositionColorTexture>(graphicsDevice, maximumVerticesCount,
+                    maximumIndicesCount), maximumBatchCommandsCount)
         {
             _effect = new DefaultEffect2D(graphicsDevice);
 
             var viewport = graphicsDevice.Viewport;
 
-            _defaultProjection = Matrix.CreateTranslation(xPosition: -0.5f, yPosition: -0.5f, zPosition: 0) * Matrix.CreateOrthographicOffCenter(left: 0, right: viewport.Width, bottom: viewport.Height, top: 0, zNearPlane: 0, zFarPlane: -1);
+            _defaultProjection = Matrix.CreateTranslation(-0.5f, -0.5f, 0)*
+                                 Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1);
 
-            _pixelTexture = new Texture2D(graphicsDevice, width: 1, height: 1);
-            _pixelTexture.SetData(data: new[]
+            _pixelTexture = new Texture2D(graphicsDevice, 1, 1);
+            _pixelTexture.SetData(new[]
             {
                 Color.White
             });
 
-            _pixelTextureDrawContext = new DrawCommandData2D
+            _pixelTextureDrawContext = new DrawCommandData
             {
                 Texture = _pixelTexture
             };
@@ -81,7 +86,7 @@ namespace MonoGame.Extended.Graphics
         ///     <see cref="Effect" /> and the optional chain of <see cref="Matrix" />es for transforming between world, view, and
         ///     projection spaces.
         /// </summary>
-        /// <param name="sortMode">The <see cref="BatchSortMode"/>. Default value is <see cref="BatchSortMode.Deferred" />.</param>
+        /// <param name="sortMode">The <see cref="BatchSortMode" />. Default value is <see cref="BatchSortMode.Deferred" />.</param>
         /// <param name="effect">
         ///     The <see cref="Effect" />. Use <code>null</code> to use the default <see cref="DefaultEffect2D" />.
         /// </param>
@@ -98,7 +103,8 @@ namespace MonoGame.Extended.Graphics
         ///     use an orthographic projection (a 2D projection) with <code>(0,0)</code> as the top-left and <code>(x,y)</code> as
         ///     the bottom-right of the viewport.
         /// </param>
-        public void Begin(BatchSortMode sortMode = BatchSortMode.Deferred, Effect effect = null, Matrix? worldMatrix = null, Matrix? viewMatrix = null, Matrix? projectionMatrix = null)
+        public void Begin(BatchSortMode sortMode = BatchSortMode.Deferred, Effect effect = null, Matrix? worldMatrix = null,
+            Matrix? viewMatrix = null, Matrix? projectionMatrix = null)
         {
             if (effect == null)
                 effect = _effect;
@@ -149,25 +155,28 @@ namespace MonoGame.Extended.Graphics
         ///     The underlying
         ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
         /// </exception>
-        public void DrawSprite(Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null, Color? color = null, Vector2? origin = null, SpriteEffects spriteOptions = SpriteEffects.None, float depth = 0, uint sortKey = 0)
+        public void DrawSprite(Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null,
+            Color? color = null, Vector2? origin = null, SpriteEffects spriteOptions = SpriteEffects.None,
+            float depth = 0, uint sortKey = 0)
         {
             var geometryBuffer = GeometryBuffer;
-            var startVertex = geometryBuffer.VertexCount;
-            var startIndex = geometryBuffer.IndexCount;
-            geometryBuffer.EnqueueSprite(startVertex, texture, ref transformMatrix, sourceRectangle, color, origin, spriteOptions, depth);
-            var commandData = new DrawCommandData2D(texture);
+            var startVertex = geometryBuffer._vertexCount;
+            var startIndex = geometryBuffer._indexCount;
+            geometryBuffer.EnqueueSprite(startVertex, texture, ref transformMatrix, sourceRectangle, color, origin,
+                spriteOptions, depth);
+            var commandData = new DrawCommandData(texture);
             EnqueueDrawCommand(startIndex, 2, sortKey, ref commandData);
         }
 
         /// <summary>
-        ///     Defines a drawing context for two-dimensional geometry.
+        ///     Defines a drawing context for two-dimensional geometric objects.
         /// </summary>
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct DrawCommandData2D : IBatchDrawCommandData<DrawCommandData2D>
+        public struct DrawCommandData : IBatchDrawCommandData<DrawCommandData>
         {
             public Texture2D Texture;
 
-            internal DrawCommandData2D(Texture2D texture)
+            internal DrawCommandData(Texture2D texture)
             {
                 Texture = texture;
             }
@@ -184,7 +193,7 @@ namespace MonoGame.Extended.Graphics
                 Texture = null;
             }
 
-            public bool Equals(ref DrawCommandData2D other)
+            public bool Equals(ref DrawCommandData other)
             {
                 return Texture == other.Texture;
             }

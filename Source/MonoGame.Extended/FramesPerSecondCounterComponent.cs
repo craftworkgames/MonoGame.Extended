@@ -1,53 +1,31 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
     public class FramesPerSecondCounterComponent : DrawableGameComponent
     {
-        FramesPerSecondCounter fpsCounter;
+        private readonly FramesPerSecondCounter _fpsCounter;
 
-        public FramesPerSecondCounterComponent(Game game, int maximumSamples = 100)
+        public FramesPerSecondCounterComponent(Game game, int maximumSamples = 1)
             : base(game)
         {
-            fpsCounter = new FramesPerSecondCounter(maximumSamples);
+            _fpsCounter = new FramesPerSecondCounter(maximumSamples);
         }
 
-        public long TotalFrames
-        {
-            get { return fpsCounter.TotalFrames; }
-        }
+        public float AverageFramesPerSecond => _fpsCounter.AverageFramesPerSecond;
 
-        public float AverageFramesPerSecond
-        {
-            get { return fpsCounter.AverageFramesPerSecond; }
-        }
+        public float CurrentFramesPerSecond => _fpsCounter.CurrentFramesPerSecond;
 
-        public float CurrentFramesPerSecond
-        {
-            get { return fpsCounter.CurrentFramesPerSecond; }
-        }
-
-        public int MaximumSamples
-        {
-            get { return fpsCounter.MaximumSamples; }
-        }
-
-        public void Reset()
-        {
-            fpsCounter.Reset();
-        }
+        public int MaximumSamples => _fpsCounter.MaximumSamples;
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
+            _fpsCounter.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            fpsCounter.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-            base.Draw(gameTime);
+            _fpsCounter.Draw(gameTime);
         }
     }
 }

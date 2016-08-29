@@ -6,29 +6,14 @@ namespace MonoGame.Extended.Graphics.Batching
     internal abstract class BatchCommandQueue<TVertexType, TCommandData> : IDisposable
         where TVertexType : struct, IVertexType where TCommandData : struct, IBatchDrawCommandData<TCommandData>
     {
-        internal BatchDrawer<TVertexType, TCommandData> BatchDrawer;
+        internal BatchCommandDrawer<TVertexType, TCommandData> CommandDrawer;
         internal PrimitiveType PrimitiveType;
+        internal GraphicsDevice GraphicsDevice;
 
-        internal virtual void Begin(Effect effect, PrimitiveType primitiveType)
+        protected BatchCommandQueue(GraphicsDevice graphicsDevice, BatchCommandDrawer<TVertexType, TCommandData> commandDrawer)
         {
-            BatchDrawer.Effect = effect;
-            BatchDrawer.PrimitiveType = primitiveType;
-            PrimitiveType = primitiveType;
-        }
-
-        protected internal abstract void Flush();
-
-        internal void End()
-        {
-            Flush();
-            BatchDrawer.Effect = null;
-        }
-
-        internal abstract void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, uint sortKey, ref TCommandData data);
-
-        protected BatchCommandQueue(BatchDrawer<TVertexType, TCommandData> batchDrawer)
-        {
-            BatchDrawer = batchDrawer;
+            GraphicsDevice = graphicsDevice;
+            CommandDrawer = commandDrawer;
         }
 
         public void Dispose()
@@ -37,15 +22,31 @@ namespace MonoGame.Extended.Graphics.Batching
             GC.SuppressFinalize(this);
         }
 
+        internal virtual void Begin(Effect effect, PrimitiveType primitiveType)
+        {
+            CommandDrawer.Effect = effect;
+            CommandDrawer.PrimitiveType = primitiveType;
+            PrimitiveType = primitiveType;
+        }
+
+        protected internal abstract void Flush();
+
+        internal void End()
+        {
+            Flush();
+            CommandDrawer.Effect = null;
+        }
+
+        internal abstract void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, uint sortKey,
+            ref TCommandData data);
+
         protected virtual void Dispose(bool isDisposing)
         {
             if (!isDisposing)
-            {
                 return;
-            }
 
             // don't dispose the batch drawer here; it is a shared reference
-            BatchDrawer = null;
+            CommandDrawer = null;
         }
     }
 }

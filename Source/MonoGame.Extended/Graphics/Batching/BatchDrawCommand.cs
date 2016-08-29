@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Graphics.Batching
         where TCommandData : struct, IBatchDrawCommandData<TCommandData>
     {
         internal readonly uint SortKey;
-        internal readonly ushort StartIndex;
+        internal ushort StartIndex;
         internal ushort PrimitiveCount;
         internal TCommandData Data;
 
@@ -28,7 +28,7 @@ namespace MonoGame.Extended.Graphics.Batching
         public int CompareTo(BatchDrawCommand<TCommandData> other)
         {
             // ReSharper disable once ImpureMethodCallOnReadonlyValueField
-            return -SortKey.CompareTo(other.SortKey);
+            return SortKey.CompareTo(other.SortKey);
         }
     }
 }
