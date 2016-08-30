@@ -206,7 +206,7 @@ namespace MonoGame.Extended.Graphics.Batching
         ///         This method must be called after all enqueuing of draw calls.
         ///     </para>
         /// </remarks>
-        public void End()
+        protected void End()
         {
             EnsureHasBegun();
             HasBegun = false;
