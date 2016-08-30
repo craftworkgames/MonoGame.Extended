@@ -12,7 +12,8 @@ using MonoGame.Extended.Graphics.Effects;
 namespace MonoGame.Extended.Graphics
 {
     /// <summary>
-    ///     Enables a group of dynamic two-dimensional geometric objects be batched together for rendering, if possible, using the same settings.
+    ///     Enables a group of dynamic two-dimensional geometric objects be batched together for rendering, if possible, using
+    ///     the same settings.
     /// </summary>
     /// <seealso cref="Batch{TVertexType,TBatchDrawCommandData}" />
     public class DynamicBatch2D : Batch<VertexPositionColorTexture, DynamicBatch2D.DrawCommandData>
@@ -21,12 +22,17 @@ namespace MonoGame.Extended.Graphics
         internal const int DefaultMaximumIndicesCount = 12288;
 
         private DrawCommandData _pixelTextureDrawContext;
-        private Matrix _defaultWorld = Matrix.Identity;
-        private Matrix _defaultView = Matrix.Identity;
-        private Matrix _defaultProjection;
-        private readonly DefaultEffect2D _effect;
+        private readonly DefaultEffect2D _defaultEffect;
+        private Effect _effect;
         private readonly Texture2D _pixelTexture;
         private Batch2DSortMode _sortMode;
+        private BlendState _blendState;
+        private SamplerState _samplerState;
+        private DepthStencilState _depthStencilState;
+        private RasterizerState _rasterizerState;
+        private Matrix _worldMatrix;
+        private Matrix _viewMatrix;
+        private Matrix? _projectionMatrix;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="DynamicBatch2D" /> class.
@@ -51,12 +57,7 @@ namespace MonoGame.Extended.Graphics
                 new DynamicGeometryBuffer<VertexPositionColorTexture>(graphicsDevice, maximumVerticesCount,
                     maximumIndicesCount), maximumBatchCommandsCount)
         {
-            _effect = new DefaultEffect2D(graphicsDevice);
-
-            var viewport = graphicsDevice.Viewport;
-
-            _defaultProjection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) *
-                                 Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1);
+            _defaultEffect = new DefaultEffect2D(graphicsDevice);
 
             _pixelTexture = new Texture2D(graphicsDevice, 1, 1);
             _pixelTexture.SetData(new[]
@@ -92,6 +93,22 @@ namespace MonoGame.Extended.Graphics
         ///     projection spaces.
         /// </summary>
         /// <param name="sortMode">The <see cref="Batch2DSortMode" />. Default value is <see cref="Batch2DSortMode.Deferred" />.</param>
+        /// <param name="blendState">
+        ///     The <see cref="BlendState" />. Use <code>null</code> to use the default
+        ///     <see cref="BlendState.AlphaBlend" />.
+        /// </param>
+        /// <param name="samplerState">
+        ///     The <see cref="SamplerState" />. Use <code>null</code> to use the default
+        ///     <see cref="SamplerState.LinearClamp" />.
+        /// </param>
+        /// <param name="depthStencilState">
+        ///     The <see cref="DepthStencilState" />. Use <code>null</code> to use the default
+        ///     <see cref="DepthStencilState.None" />.
+        /// </param>
+        /// <param name="rasterizerState">
+        ///     The <see cref="RasterizerState" />. Use <code>null</code> to use the default
+        ///     <see cref="RasterizerState.CullCounterClockwise" />.
+        /// </param>
         /// <param name="effect">
         ///     The <see cref="Effect" />. Use <code>null</code> to use the default <see cref="DefaultEffect2D" />.
         /// </param>
@@ -108,12 +125,20 @@ namespace MonoGame.Extended.Graphics
         ///     use an orthographic projection (a 2D projection) with <code>(0,0)</code> as the top-left and <code>(x,y)</code> as
         ///     the bottom-right of the viewport.
         /// </param>
-        public void Begin(Batch2DSortMode sortMode = Batch2DSortMode.Deferred, Effect effect = null,
+        public void Begin(Batch2DSortMode sortMode = Batch2DSortMode.Deferred, BlendState blendState = null,
+            SamplerState samplerState = null, DepthStencilState depthStencilState = null,
+            RasterizerState rasterizerState = null, Effect effect = null,
             Matrix? worldMatrix = null,
             Matrix? viewMatrix = null, Matrix? projectionMatrix = null)
         {
-            if (effect == null)
-                effect = _effect;
+            _blendState = blendState ?? BlendState.AlphaBlend;
+            _samplerState = samplerState ?? SamplerState.LinearClamp;
+            _depthStencilState = depthStencilState ?? DepthStencilState.None;
+            _rasterizerState = rasterizerState ?? RasterizerState.CullCounterClockwise;
+            _effect = effect ?? _defaultEffect;
+            _worldMatrix = worldMatrix ?? Matrix.Identity;
+            _viewMatrix = viewMatrix ?? Matrix.Identity;
+            _projectionMatrix = projectionMatrix; 
 
             BatchSortMode batchSortMode;
             switch (sortMode)
@@ -128,6 +153,7 @@ namespace MonoGame.Extended.Graphics
                     break;
                 case Batch2DSortMode.Immediate:
                     batchSortMode = BatchSortMode.Immediate;
+                    ApplyStates();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(sortMode), sortMode, null);
@@ -135,26 +161,53 @@ namespace MonoGame.Extended.Graphics
 
             _sortMode = sortMode;
 
-            var effectWorldViewProjectionMatrix = effect as IMatrixChainEffect;
-            if (effectWorldViewProjectionMatrix != null)
+            Begin(effect, PrimitiveType.TriangleList, batchSortMode);
+        }
+
+        /// <summary>
+        ///     Ends and submits the group of geometry to the
+        ///     <see cref="P:MonoGame.Extended.Graphics.Batching.Batch`2.GraphicsDevice" /> for rendering.
+        /// </summary>
+        /// <remarks>
+        ///     This method must be called after all enqueuing of draw calls.
+        /// </remarks>
+        public new void End()
+        {
+            if (_sortMode != Batch2DSortMode.Immediate)
             {
-                if (worldMatrix.HasValue)
-                    effectWorldViewProjectionMatrix.World = worldMatrix.Value;
-                else
-                    effectWorldViewProjectionMatrix.SetWorld(ref _defaultWorld);
-
-                if (viewMatrix.HasValue)
-                    effectWorldViewProjectionMatrix.View = viewMatrix.Value;
-                else
-                    effectWorldViewProjectionMatrix.SetView(ref _defaultView);
-
-                if (projectionMatrix.HasValue)
-                    effectWorldViewProjectionMatrix.Projection = projectionMatrix.Value;
-                else
-                    effectWorldViewProjectionMatrix.SetProjection(ref _defaultProjection);
+                ApplyStates();
             }
 
-            Begin(effect, PrimitiveType.TriangleList, batchSortMode);
+            base.End();
+        }
+
+        private void ApplyStates()
+        {
+            var graphicsDevice = GraphicsDevice;
+            graphicsDevice.BlendState = _blendState;
+            graphicsDevice.SamplerStates[0] = _samplerState;
+            graphicsDevice.DepthStencilState = _depthStencilState;
+            graphicsDevice.RasterizerState = _rasterizerState;
+
+            var matrixChainEffect = _effect as IMatrixChainEffect;
+            if (matrixChainEffect == null)
+                return;
+
+            matrixChainEffect.SetWorld(ref _worldMatrix);
+            matrixChainEffect.SetView(ref _viewMatrix);
+
+            if (_projectionMatrix.HasValue)
+            {
+                matrixChainEffect.Projection = _projectionMatrix.Value;
+            }
+            else
+            {
+                var viewport = GraphicsDevice.Viewport;
+                var projectionOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+                var projection = Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1);
+                Matrix.Multiply(ref projectionOffset, ref projection, out projection);
+                matrixChainEffect.SetProjection(ref projection);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -227,7 +280,7 @@ namespace MonoGame.Extended.Graphics
         /// </param>
         /// <param name="color">The <see cref="Color" />. Use <code>null</code> to use the default <see cref="Color.White" />.</param>
         /// <param name="rotation">
-        ///     The angle <see cref="float"/> (in radians) to rotate the sprite about its <paramref name="origin" />. The default
+        ///     The angle <see cref="float" /> (in radians) to rotate the sprite about its <paramref name="origin" />. The default
         ///     value is <code>0f</code>.
         /// </param>
         /// <param name="origin">
@@ -387,7 +440,7 @@ namespace MonoGame.Extended.Graphics
         ///     <see cref="Vector2.One" />.
         /// </param>
         /// <param name="effects">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
-        /// <param name="depth">The depth <see cref="float"/>. The default value is <code>0f</code></param>
+        /// <param name="depth">The depth <see cref="float" />. The default value is <code>0f</code></param>
         /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="bitmapFont" /> is null or <paramref name="text" /> is null.</exception>
         /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
