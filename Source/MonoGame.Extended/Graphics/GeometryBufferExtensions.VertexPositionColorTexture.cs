@@ -60,10 +60,10 @@ namespace MonoGame.Extended.Graphics
                 var textureRegion = sourceRectangle.Value;
                 positionBottomRight.X = -origin1.X + textureRegion.Width;
                 positionBottomRight.Y = -origin1.Y + textureRegion.Height;
-                textureCoordinateTopLeft.X = (textureRegion.X + 0.5f) / texture.Width;
-                textureCoordinateTopLeft.Y = (textureRegion.Y + 0.5f) / texture.Height;
-                textureCoordinateBottomRight.X = (textureRegion.X + textureRegion.Width + 0.5f) / textureWidth;
-                textureCoordinateBottomRight.Y = (textureRegion.Y + textureRegion.Height + 0.5f) / textureHeight;
+                textureCoordinateTopLeft.X = (textureRegion.X + 0f) / texture.Width;
+                textureCoordinateTopLeft.Y = (textureRegion.Y + 0f) / texture.Height;
+                textureCoordinateBottomRight.X = (textureRegion.X + textureRegion.Width + 0f) / textureWidth;
+                textureCoordinateBottomRight.Y = (textureRegion.Y + textureRegion.Height + 0f) / textureHeight;
             }
 
             var spriteEffect = effects;

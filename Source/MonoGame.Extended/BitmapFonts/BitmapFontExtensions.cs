@@ -52,7 +52,7 @@ namespace MonoGame.Extended.BitmapFonts
 
         // this overload is no longer public because the method signature conflicts with the other one,
         // instead the other one calls this one.
-        private static void DrawString(this SpriteBatch spriteBatch, BitmapFont bitmapFont, string text, Vector2 position, Color color, float layerDepth)
+        internal static void DrawString(this SpriteBatch spriteBatch, BitmapFont bitmapFont, string text, Vector2 position, Color color, float layerDepth)
         {
             var dx = position.X;
             var dy = position.Y;
