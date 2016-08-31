@@ -24,7 +24,7 @@ namespace Demo.Batching
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
         private DynamicBatch2D _batch;
-        private StringBuilder _stringBuilder = new StringBuilder();
+        private readonly StringBuilder _stringBuilder = new StringBuilder();
         private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFont;
         private Texture2D _spriteTexture1;
@@ -121,24 +121,16 @@ namespace Demo.Batching
 
             graphicsDevice.Clear(Color.Black);
 
-            // set the states for rendering
-            // this could be moved outside the render loop if it doesn't change frame per frame 
-            // however, it's left here indicating it's possible and common to change the state between frames
-            // use alphablend so the transparent part of the texture is blended with the color behind it
-            graphicsDevice.BlendState = BlendState.AlphaBlend;
-            graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-            graphicsDevice.DepthStencilState = DepthStencilState.None;
-            graphicsDevice.RasterizerState = RasterizerState.CullNone;
-
             // comment and uncomment either of the two below lines to compare
             DrawSpritesWithBatch2D();
             //DrawSpritesWithSpriteBatch();
 
-            _batch.Begin(sortMode: Batch2DSortMode.Texture, effect: _effect);
+            _batch.Begin();
 
+            // use StringBuilder to prevent garbage
             _stringBuilder.Clear();
             _stringBuilder.Append("FPS: ");
-            _stringBuilder.Append(_fpsCounter.FramesPerSecond);
+            _stringBuilder.Append(_fpsCounter.FramesPerSecond); // but, this StringBulder method causes a small amount of garbage...
             _batch.DrawString(_bitmapFont, _stringBuilder, Vector2.Zero);
 
             _batch.End();
@@ -150,7 +142,7 @@ namespace Demo.Batching
 
         private void DrawSpritesWithBatch2D()
         {
-            _batch.Begin(sortMode: Batch2DSortMode.Texture, effect: _effect);
+            _batch.Begin(Batch2DSortMode.Texture, effect: _effect);
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _sprites.Length; index++)
@@ -164,7 +156,7 @@ namespace Demo.Batching
 
         private void DrawSpritesWithSpriteBatch()
         {
-            _spriteBatch.Begin(sortMode: SpriteSortMode.Texture, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp, effect: _effect);
+            _spriteBatch.Begin(SpriteSortMode.Texture, effect: _effect);
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _sprites.Length; index++)

@@ -161,7 +161,7 @@ namespace MonoGame.Extended.Graphics
 
             _sortMode = sortMode;
 
-            Begin(effect, PrimitiveType.TriangleList, batchSortMode);
+            Begin(_effect, PrimitiveType.TriangleList, batchSortMode);
         }
 
         /// <summary>
@@ -234,6 +234,92 @@ namespace MonoGame.Extended.Graphics
         ///     <see cref="SpriteEffects" />, and depth <see cref="float" />.
         /// </summary>
         /// <param name="texture">The <see cref="Texture" />.</param>
+        /// <param name="destinationRectangle">The destination <see cref="Rectangle"/> that specifies the world destination for drawing the sprite. If this rectangle is not the same size as the <paramref name="sourceRectangle"/>, the sprite will be scaled to fit.</param>
+        /// <param name="sourceRectangle">
+        ///     The texture region <see cref="Rectangle" /> of the <paramref name="texture" />. Use
+        ///     <code>null</code> to use the entire <see cref="Texture2D" />.
+        /// </param>
+        /// <param name="color">The <see cref="Color" />. Use <code>null</code> to use the default <see cref="Color.White" />.</param>
+        /// <param name="rotation">
+        ///     The angle <see cref="float" /> (in radians) to rotate the sprite about its <paramref name="origin" />. The default
+        ///     value is <code>0f</code>.
+        /// </param>
+        /// <param name="origin">
+        ///     The origin <see cref="Vector2" />. Use <code>null</code> to use the default
+        ///     <see cref="Vector2.Zero" />.
+        /// </param>
+        /// <param name="effects">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
+        /// <param name="depth">The depth <see cref="float" />. The default value is <code>0</code>.</param>
+        /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
+        /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
+        ///     The underlying
+        ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
+        /// </exception>
+        /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
+        [Obsolete("The Draw method is deprecated, please use the DrawSprite method instead.")]
+        public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle = null,
+            Color? color = null, float rotation = 0f, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None,
+            float depth = 0)
+        {
+            DrawSprite(texture, destinationRectangle, sourceRectangle, color, rotation, origin, effects, depth);
+        }
+
+        /// <summary>
+        ///     Draws a sprite using a specified <see cref="Texture" />, transform <see cref="Matrix2D" /> and an optional
+        ///     source <see cref="Rectangle" />, <see cref="Color" />, origin <see cref="Vector2" />,
+        ///     <see cref="SpriteEffects" />, and depth <see cref="float" />.
+        /// </summary>
+        /// <param name="texture">The <see cref="Texture" />.</param>
+        /// <param name="destinationRectangle">The destination <see cref="Rectangle"/> that specifies the world destination for drawing the sprite. If this rectangle is not the same size as the <paramref name="sourceRectangle"/>, the sprite will be scaled to fit.</param>
+        /// <param name="sourceRectangle">
+        ///     The texture region <see cref="Rectangle" /> of the <paramref name="texture" />. Use
+        ///     <code>null</code> to use the entire <see cref="Texture2D" />.
+        /// </param>
+        /// <param name="color">The <see cref="Color" />. Use <code>null</code> to use the default <see cref="Color.White" />.</param>
+        /// <param name="rotation">
+        ///     The angle <see cref="float" /> (in radians) to rotate the sprite about its <paramref name="origin" />. The default
+        ///     value is <code>0f</code>.
+        /// </param>
+        /// <param name="origin">
+        ///     The origin <see cref="Vector2" />. Use <code>null</code> to use the default
+        ///     <see cref="Vector2.Zero" />.
+        /// </param>
+        /// <param name="effects">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
+        /// <param name="depth">The depth <see cref="float" />. The default value is <code>0</code>.</param>
+        /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
+        /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
+        ///     The underlying
+        ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
+        /// </exception>
+        /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
+        public void DrawSprite(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle = null,
+            Color? color = null, float rotation = 0f, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None,
+            float depth = 0)
+        {
+            var position = new Vector2(destinationRectangle.X, destinationRectangle.Y);
+            var size = new Size(destinationRectangle.Width, destinationRectangle.Height);
+
+            Matrix2D transformMatrix;
+            CalculateTransformMatrix(position, rotation, null, out transformMatrix);
+
+            var geometryBuffer = GeometryBuffer;
+            var startVertex = geometryBuffer._vertexCount;
+            var startIndex = geometryBuffer._indexCount;
+            geometryBuffer.EnqueueSprite(startVertex, texture, ref transformMatrix, sourceRectangle, size, color, origin,
+                effects, depth);
+            var commandData = new DrawCommandData(texture);
+            var sortKey = GetSortKey(depth);
+            Draw(startIndex, 2, sortKey, ref commandData);
+        }
+
+        /// <summary>
+        ///     Draws a sprite using a specified <see cref="Texture" />, transform <see cref="Matrix2D" /> and an optional
+        ///     source <see cref="Rectangle" />, <see cref="Color" />, origin <see cref="Vector2" />,
+        ///     <see cref="SpriteEffects" />, and depth <see cref="float" />.
+        /// </summary>
+        /// <param name="texture">The <see cref="Texture" />.</param>
         /// <param name="transformMatrix">The transform <see cref="Matrix2D" />.</param>
         /// <param name="sourceRectangle">
         ///     The texture region <see cref="Rectangle" /> of the <paramref name="texture" />. Use
@@ -253,14 +339,13 @@ namespace MonoGame.Extended.Graphics
         ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
         /// </exception>
         /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
-        public void DrawSprite(Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null,
-            Color? color = null, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None,
+        public void DrawSprite(Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null, Color? color = null, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None,
             float depth = 0)
         {
             var geometryBuffer = GeometryBuffer;
             var startVertex = geometryBuffer._vertexCount;
             var startIndex = geometryBuffer._indexCount;
-            geometryBuffer.EnqueueSprite(startVertex, texture, ref transformMatrix, sourceRectangle, color, origin,
+            geometryBuffer.EnqueueSprite(startVertex, texture, ref transformMatrix, sourceRectangle, null, color, origin,
                 effects, depth);
             var commandData = new DrawCommandData(texture);
             var sortKey = GetSortKey(depth);
@@ -305,25 +390,51 @@ namespace MonoGame.Extended.Graphics
             SpriteEffects effects = SpriteEffects.None,
             float depth = 0)
         {
-            var matrix = Matrix2D.Identity;
+            Matrix2D transformMatrix;
+            CalculateTransformMatrix(position, rotation, scale, out transformMatrix);
+            DrawSprite(texture, ref transformMatrix, sourceRectangle, color, origin, effects, depth);
+        }
 
-            if (scale.HasValue)
-            {
-                var scaleMatrix = Matrix2D.CreateScale(scale.Value);
-                Matrix2D.Multiply(ref matrix, ref scaleMatrix, out matrix);
-            }
-
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (rotation != 0f)
-            {
-                var rotationMatrix = Matrix2D.CreateRotationZ(-rotation);
-                Matrix2D.Multiply(ref matrix, ref rotationMatrix, out matrix);
-            }
-
-            var translationMatrix = Matrix2D.CreateTranslation(position);
-            Matrix2D.Multiply(ref matrix, ref translationMatrix, out matrix);
-
-            DrawSprite(texture, ref matrix, sourceRectangle, color, origin, effects, depth);
+        /// <summary>
+        ///     Draws a sprite using a specified <see cref="Texture" />, position <see cref="Vector2" /> and an optional source
+        ///     <see cref="Rectangle" />, <see cref="Color" />, rotation <see cref="float" />, origin <see cref="Vector2" />, scale
+        ///     <see cref="Vector2" />, <see cref="SpriteEffects" />, and depth <see cref="float" />.
+        /// </summary>
+        /// <param name="texture">The <see cref="Texture" />.</param>
+        /// <param name="position">The world position <see cref="Vector2" />.</param>
+        /// <param name="sourceRectangle">
+        ///     The texture region <see cref="Rectangle" /> of the <paramref name="texture" />. Use
+        ///     <code>null</code> to use the entire <see cref="Texture2D" />.
+        /// </param>
+        /// <param name="color">The <see cref="Color" />. Use <code>null</code> to use the default <see cref="Color.White" />.</param>
+        /// <param name="rotation">
+        ///     The angle <see cref="float" /> (in radians) to rotate the sprite about its <paramref name="origin" />. The default
+        ///     value is <code>0f</code>.
+        /// </param>
+        /// <param name="origin">
+        ///     The origin <see cref="Vector2" />. Use <code>null</code> to use the default
+        ///     <see cref="Vector2.Zero" />.
+        /// </param>
+        /// <param name="scale">
+        ///     The scale <see cref="Vector2" />. Use <code>null</code> to use the default
+        ///     <see cref="Vector2.One" />.
+        /// </param>
+        /// <param name="effects">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
+        /// <param name="depth">The depth <see cref="float" />. The default value is <code>0f</code>.</param>
+        /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
+        /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
+        ///     The underlying
+        ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
+        /// </exception>
+        /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
+        [Obsolete("The Draw method is deprecated, please use the DrawSprite method instead.")]
+        public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle = null,
+            Color? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null,
+            SpriteEffects effects = SpriteEffects.None,
+            float depth = 0)
+        {
+            DrawSprite(texture, position, sourceRectangle, color, rotation, origin, scale, effects, depth);
         }
 
         /// <summary>
@@ -452,25 +563,9 @@ namespace MonoGame.Extended.Graphics
             float rotation = 0f, Vector2? origin = null, Vector2? scale = null,
             SpriteEffects effects = SpriteEffects.None, float depth = 0f)
         {
-            var matrix = Matrix2D.Identity;
-
-            if (scale.HasValue)
-            {
-                var scaleMatrix = Matrix2D.CreateScale(scale.Value);
-                Matrix2D.Multiply(ref matrix, ref scaleMatrix, out matrix);
-            }
-
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (rotation != 0f)
-            {
-                var rotationMatrix = Matrix2D.CreateRotationZ(-rotation);
-                Matrix2D.Multiply(ref matrix, ref rotationMatrix, out matrix);
-            }
-
-            var translationMatrix = Matrix2D.CreateTranslation(position);
-            Matrix2D.Multiply(ref matrix, ref translationMatrix, out matrix);
-
-            DrawString(bitmapFont, text, ref matrix, color, origin, effects, depth);
+            Matrix2D transformMatrix;
+            CalculateTransformMatrix(position, rotation, scale, out transformMatrix);
+            DrawString(bitmapFont, text, ref transformMatrix, color, origin, effects, depth);
         }
 
         /// <summary>
@@ -617,6 +712,27 @@ namespace MonoGame.Extended.Graphics
             Matrix2D.Multiply(ref matrix, ref translationMatrix, out matrix);
 
             DrawString(bitmapFont, text, ref matrix, color, origin, effects, depth);
+        }
+
+        private static void CalculateTransformMatrix(Vector2 position, float rotation, Vector2? scale, out Matrix2D transformMatrix)
+        {
+            transformMatrix = Matrix2D.Identity;
+
+            if (scale.HasValue)
+            {
+                var scaleMatrix = Matrix2D.CreateScale(scale.Value);
+                Matrix2D.Multiply(ref transformMatrix, ref scaleMatrix, out transformMatrix);
+            }
+
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
+            if (rotation != 0f)
+            {
+                var rotationMatrix = Matrix2D.CreateRotationZ(-rotation);
+                Matrix2D.Multiply(ref transformMatrix, ref rotationMatrix, out transformMatrix);
+            }
+
+            var translationMatrix = Matrix2D.CreateTranslation(position);
+            Matrix2D.Multiply(ref transformMatrix, ref translationMatrix, out transformMatrix);
         }
 
         /// <summary>

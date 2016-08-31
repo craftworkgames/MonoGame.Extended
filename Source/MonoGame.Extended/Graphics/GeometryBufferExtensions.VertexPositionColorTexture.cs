@@ -17,6 +17,11 @@ namespace MonoGame.Extended.Graphics
         ///     The texture region <see cref="Rectangle" /> of the <paramref name="texture" />. Use
         ///     <code>null</code> to use the entire <see cref="Texture2D" />.
         /// </param>
+        /// <param name="size">
+        ///     The <see cref="Size" /> of the sprite. Use <code>null</code> to use the default size which is either
+        ///     the size of the <paramref name="sourceRectangle" /> if it is not <code>null</code>, or the texture size if
+        ///     <paramref name="sourceRectangle" /> is <code>null</code>.
+        /// </param>
         /// <param name="color">The <see cref="Color" />. Use <code>null</code> to use the default <see cref="Color.White" />.</param>
         /// <param name="origin">
         ///     The origin <see cref="Vector2" />. Use <code>null</code> to use the default
@@ -30,7 +35,7 @@ namespace MonoGame.Extended.Graphics
         ///     <see cref="GeometryBuffer{TVertexType}" /> is full.
         /// </exception>
         public static unsafe void EnqueueSprite(this GeometryBuffer<VertexPositionColorTexture> geometryBuffer,
-            ushort indexOffset, Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null,
+            ushort indexOffset, Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null, Size? size = null,
             Color? color = null, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None, float depth = 0)
         {
             if (texture == null)
@@ -40,16 +45,11 @@ namespace MonoGame.Extended.Graphics
 
             var origin1 = origin ?? Vector2.Zero;
             Vector2 positionTopLeft, positionBottomRight, textureCoordinateTopLeft, textureCoordinateBottomRight;
-            var textureWidth = texture.Width;
-            var textureHeight = texture.Height;
-
-            positionTopLeft.X = -origin1.X;
-            positionTopLeft.Y = -origin1.Y;
+            Size size1;
 
             if (sourceRectangle == null)
             {
-                positionBottomRight.X = -origin1.X + textureWidth;
-                positionBottomRight.Y = -origin1.Y + textureHeight;
+                size1 = size ?? new Size(texture.Width, texture.Height);
                 textureCoordinateTopLeft.X = 0;
                 textureCoordinateTopLeft.Y = 0;
                 textureCoordinateBottomRight.X = 1;
@@ -58,13 +58,17 @@ namespace MonoGame.Extended.Graphics
             else
             {
                 var textureRegion = sourceRectangle.Value;
-                positionBottomRight.X = -origin1.X + textureRegion.Width;
-                positionBottomRight.Y = -origin1.Y + textureRegion.Height;
-                textureCoordinateTopLeft.X = (textureRegion.X + 0f) / texture.Width;
-                textureCoordinateTopLeft.Y = (textureRegion.Y + 0f) / texture.Height;
-                textureCoordinateBottomRight.X = (textureRegion.X + textureRegion.Width + 0f) / textureWidth;
-                textureCoordinateBottomRight.Y = (textureRegion.Y + textureRegion.Height + 0f) / textureHeight;
+                size1 = size ?? new Size(textureRegion.Width, textureRegion.Height);
+                textureCoordinateTopLeft.X = textureRegion.X / (float)texture.Width;
+                textureCoordinateTopLeft.Y = textureRegion.Y / (float)texture.Height;
+                textureCoordinateBottomRight.X = (textureRegion.X + textureRegion.Width) / (float)texture.Width;
+                textureCoordinateBottomRight.Y = (textureRegion.Y + textureRegion.Height) / (float)texture.Height;
             }
+
+            positionTopLeft.X = -origin1.X;
+            positionTopLeft.Y = -origin1.Y;
+            positionBottomRight.X = -origin1.X + size1.Width;
+            positionBottomRight.Y = -origin1.Y + size1.Height;
 
             var spriteEffect = effects;
             if ((spriteEffect & SpriteEffects.FlipVertically) != 0)
