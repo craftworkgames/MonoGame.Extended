@@ -1,50 +1,73 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Shapes;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    public class BasicCollisionSystem : UpdatableComponentSystem
+    public class BasicCollisionSystem : ComponentSystem
     {
-        private readonly RectangleF[] _collisionRectangles;
+        private readonly Vector2 _gravity;
+        private readonly List<BasicCollisionBody> _staticBodies = new List<BasicCollisionBody>();
+        private readonly List<BasicCollisionBody> _movingBodies = new List<BasicCollisionBody>();
 
-        public BasicCollisionSystem(RectangleF[] collisionRectangles)
+        public BasicCollisionSystem(Vector2 gravity)
         {
-            _collisionRectangles = collisionRectangles;
+            _gravity = gravity;
+        }
+
+        protected override void OnComponentAttached(EntityComponent component)
+        {
+            var body = component as BasicCollisionBody;
+
+            if (body != null)
+            {
+                if (body.IsStatic)
+                    _staticBodies.Add(body);
+                else
+                    _movingBodies.Add(body);
+            }
+
+            base.OnComponentAttached(component);
+        }
+
+        protected override void OnComponentDetached(EntityComponent component)
+        {
+            var body = component as BasicCollisionBody;
+
+            if (body != null)
+            {
+                if (body.IsStatic)
+                    _staticBodies.Remove(body);
+                else
+                    _movingBodies.Remove(body);
+            }
+
+            base.OnComponentDetached(component);
         }
 
         public override void Update(GameTime gameTime)
         {
-            var components = GetComponents<BasicCollisionComponent>();
+            var deltaTime = gameTime.GetElapsedSeconds();
 
-            foreach (var c in components)
+            foreach (var bodyA in _movingBodies)
             {
-                c.IsOnGround = false;
+                bodyA.Velocity += _gravity * deltaTime;
+                bodyA.Position += bodyA.Velocity * deltaTime;
 
-                foreach (var collisionRectangle in _collisionRectangles)
+                foreach (var bodyB in _staticBodies)
                 {
-                    var depth = c.BoundingRectangle.IntersectionDepth(collisionRectangle);
+                    var depth = bodyA.BoundingRectangle.IntersectionDepth(bodyB.BoundingRectangle);
 
                     if (depth != Vector2.Zero)
                     {
-                        var absDepthX = Math.Abs(depth.X);
-                        var absDepthY = Math.Abs(depth.Y);
+                        var collisionHandlers = bodyA.Entity.GetComponents<BasicCollisionHandler>();
 
-                        if (absDepthY < absDepthX)
-                        {
-                            c.Position += new Vector2(0, depth.Y); // move the player out of the ground or roof
-                            c.IsOnGround = c.Velocity.Y > 0;
-
-                            if (c.IsOnGround)
-                                c.Velocity = new Vector2(c.Velocity.X, 0); // set y velocity to zero only if this is a ground collision
-                        }
-                        else
-                        {
-                            c.Position += new Vector2(depth.X, 0);  // move the player out of the wall
-                            c.Velocity = new Vector2(c.Velocity.X, c.Velocity.Y < 0 ? 0 : c.Velocity.Y); // drop the player down if they hit a wall
-                        }
+                        foreach (var collisionHandler in collisionHandlers)
+                            collisionHandler.OnCollision(bodyA, bodyB, depth);
                     }
                 }
             }

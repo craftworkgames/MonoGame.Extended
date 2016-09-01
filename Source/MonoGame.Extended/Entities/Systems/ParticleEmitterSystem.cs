@@ -3,7 +3,7 @@ using MonoGame.Extended.Particles;
 
 namespace MonoGame.Extended.Entities.Systems
 {
-    public class ParticleEmitterComponentSystem : UpdatableComponentSystem
+    public class ParticleEmitterSystem : ComponentSystem
     {
         public override void Update(GameTime gameTime)
         {
@@ -11,10 +11,7 @@ namespace MonoGame.Extended.Entities.Systems
             var emitters = GetComponents<ParticleEmitter>();
 
             foreach (var particleEmitter in emitters)
-            {
                 particleEmitter.Update(deltaTime);
-                particleEmitter.Trigger();
-            }
         }
     }
 }
