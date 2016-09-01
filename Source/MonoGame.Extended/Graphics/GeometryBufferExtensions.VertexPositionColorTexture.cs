@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Graphics
     public static class GeometryBuilderExtensionsVertexPositionColorTexture
     {
         /// <summary>
-        ///     Adds a sprite to the specified <see cref="GeometryBuffer{VertexPositionColorTexture}" />.
+        ///     Adds a sprite to the back of specified <see cref="GeometryBuffer{VertexPositionColorTexture}" />.
         /// </summary>
         /// <param name="geometryBuffer">The <see cref="GeometryBuffer{VertexPositionColorTexture}" />.</param>
         /// <param name="indexOffset">The vertex index offset applied to generated indices.</param>
