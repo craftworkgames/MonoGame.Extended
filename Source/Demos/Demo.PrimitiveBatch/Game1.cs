@@ -50,8 +50,8 @@ namespace Demo.Batching
             Window.AllowUserResizing = false;
             IsFixedTimeStep = false;
 
-            _graphicsDeviceManager.PreferredBackBufferWidth = 1920;
-            _graphicsDeviceManager.PreferredBackBufferHeight = 1080;
+            _graphicsDeviceManager.PreferredBackBufferWidth = 1024;
+            _graphicsDeviceManager.PreferredBackBufferHeight = 768;
         }
 
         protected override void LoadContent()
@@ -156,6 +156,7 @@ namespace Demo.Batching
                 _sprites[index] = sprite;
             }
 
+            _fpsCounter.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -205,8 +206,8 @@ namespace Demo.Batching
 
             base.Draw(gameTime);
 
-            _fpsCounter.Update(gameTime);
-            Window.Title = $"Demo.Batching - Average FPS: {_fpsCounter.AverageFramesPerSecond}";
+            _fpsCounter.Draw(gameTime);
+            Window.Title = $"Demo.Batching - FPS: {_fpsCounter.FramesPerSecond}";
         }
     }
 }
