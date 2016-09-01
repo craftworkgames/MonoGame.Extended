@@ -1,7 +1,8 @@
-﻿using System.Linq;
-using Demo.Platformer.Entities;
+﻿using Demo.Platformer.Entities;
 using Demo.Platformer.Entities.Systems;
+using Demo.Platformer.Services;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
@@ -34,20 +35,19 @@ namespace Demo.Platformer
             _camera = new Camera2D(viewportAdapter);
 
             _entityComponentSystem = new EntityComponentSystem();
-            _entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice, _camera));
-            _entityComponentSystem.RegisterSystem(new VelocitySystem(gravity: new Vector2(0, 450)));
-            _entityComponentSystem.RegisterSystem(new BasicCollisionSystem());
-            _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
-
             _entityFactory = new EntityFactory(_entityComponentSystem, Content);
+
+            _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
+            _entityComponentSystem.RegisterSystem(new PlayerStateSystem(_entityFactory));
+            _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(gravity: new Vector2(0, 1150)));
+            _entityComponentSystem.RegisterSystem(new ParticleEmitterSystem());
+            _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
+            _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
 
             _tiledMap = Content.Load<TiledMap>("level-1");
 
-            var entitiesLayer = _tiledMap.GetObjectGroup("entities");
-            var spawn = entitiesLayer.Objects.FirstOrDefault(i => i.Name == "Player Spawn");
-
-            if (spawn != null)
-                _entityFactory.CreatePlayer(new Vector2(spawn.X, spawn.Y));
+            var service = new TiledObjectToEntityService(_entityFactory);
+            service.CreateEntities(_tiledMap.GetObjectGroup("entities").Objects);
 
             //var viewport = GraphicsDevice.Viewport;
             //_alphaTestEffect = new AlphaTestEffect(GraphicsDevice)
@@ -66,19 +66,10 @@ namespace Demo.Platformer
 
         protected override void Update(GameTime gameTime)
         {
-            //var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
-
-            //if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
-            //    _sprite.Position += new Vector2(150, 0) * deltaTime;
-
-            //if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
-            //    _sprite.Position -= new Vector2(150, 0) * deltaTime;
-
-            //_animator.Update(deltaTime);
 
             _entityComponentSystem.Update(gameTime);
 

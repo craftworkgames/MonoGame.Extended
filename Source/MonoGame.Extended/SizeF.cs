@@ -61,6 +61,11 @@ namespace MonoGame.Extended
             return new Vector2(size.Width, size.Height);
         }
 
+        public static implicit operator SizeF(Vector2 size)
+        {
+            return new SizeF(size.X, size.Y);
+        }
+
         public static explicit operator Size(SizeF size)
         {
             return new Size((int) size.Width, (int) size.Height);

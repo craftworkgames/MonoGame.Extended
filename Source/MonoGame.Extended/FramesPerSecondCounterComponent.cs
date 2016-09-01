@@ -4,14 +4,15 @@ namespace MonoGame.Extended
 {
     public class FramesPerSecondCounterComponent : DrawableGameComponent
     {
-        private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
+        private readonly FramesPerSecondCounter _fpsCounter;
 
         public FramesPerSecondCounterComponent(Game game)
             : base(game)
         {
+            _fpsCounter = new FramesPerSecondCounter();
         }
 
-        public float FramesPerSecond => _fpsCounter.FramesPerSecond;
+        public int FramesPerSecond => _fpsCounter.FramesPerSecond;
 
         public override void Update(GameTime gameTime)
         {

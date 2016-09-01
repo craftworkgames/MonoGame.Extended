@@ -40,9 +40,9 @@ namespace Demo.EntityComponentSystem
             _camera = new Camera2D(viewportAdapter);
 
             _entityComponentSystem = new MonoGame.Extended.Entities.EntityComponentSystem();
-            _entityComponentSystem.RegisterSystem(new SpriteBatchComponentSystem(GraphicsDevice, _camera));
-            _entityComponentSystem.RegisterSystem(new AnimatedSpriteComponentSystem());
-            _entityComponentSystem.RegisterSystem(new ParticleEmitterComponentSystem());
+            _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera));
+            _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
+            _entityComponentSystem.RegisterSystem(new ParticleEmitterSystem());
 
             var logoTexture = Content.Load<Texture2D>("logo-square-128");
             _entity = _entityComponentSystem.CreateEntity("logo", new Vector2(400, 240));

@@ -1,44 +1,73 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Shapes;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    public class BasicCollisionSystem : UpdatableComponentSystem
+    public class BasicCollisionSystem : ComponentSystem
     {
-        public BasicCollisionSystem()
+        private readonly Vector2 _gravity;
+        private readonly List<BasicCollisionBody> _staticBodies = new List<BasicCollisionBody>();
+        private readonly List<BasicCollisionBody> _movingBodies = new List<BasicCollisionBody>();
+
+        public BasicCollisionSystem(Vector2 gravity)
         {
-            _groundRectangle = new RectangleF(0, 305, 800, 200);
+            _gravity = gravity;
         }
 
-        private readonly RectangleF _groundRectangle;
+        protected override void OnComponentAttached(EntityComponent component)
+        {
+            var body = component as BasicCollisionBody;
+
+            if (body != null)
+            {
+                if (body.IsStatic)
+                    _staticBodies.Add(body);
+                else
+                    _movingBodies.Add(body);
+            }
+
+            base.OnComponentAttached(component);
+        }
+
+        protected override void OnComponentDetached(EntityComponent component)
+        {
+            var body = component as BasicCollisionBody;
+
+            if (body != null)
+            {
+                if (body.IsStatic)
+                    _staticBodies.Remove(body);
+                else
+                    _movingBodies.Remove(body);
+            }
+
+            base.OnComponentDetached(component);
+        }
 
         public override void Update(GameTime gameTime)
         {
-            var components = GetComponents<BasicCollisionComponent>();
+            var deltaTime = gameTime.GetElapsedSeconds();
 
-            foreach (var component in components)
+            foreach (var bodyA in _movingBodies)
             {
-                var depth = component.BoundingRectangle.IntersectionDepth(_groundRectangle);
+                bodyA.Velocity += _gravity * deltaTime;
+                bodyA.Position += bodyA.Velocity * deltaTime;
 
-                component.IsOnGround = false;
-
-                if (depth != Vector2.Zero)
+                foreach (var bodyB in _staticBodies)
                 {
-                    var absDepthX = Math.Abs(depth.X);
-                    var absDepthY = Math.Abs(depth.Y);
+                    var depth = bodyA.BoundingRectangle.IntersectionDepth(bodyB.BoundingRectangle);
 
-                    if (absDepthY < absDepthX)
+                    if (depth != Vector2.Zero)
                     {
-                        component.Position += new Vector2(0, depth.Y);
-                        component.Velocity = new Vector2(component.Velocity.X, 0);
-                        component.IsOnGround = true;
-                    }
-                    else
-                    {
-                        component.Position += new Vector2(depth.X, 0);
+                        var collisionHandlers = bodyA.Entity.GetComponents<BasicCollisionHandler>();
+
+                        foreach (var collisionHandler in collisionHandlers)
+                            collisionHandler.OnCollision(bodyA, bodyB, depth);
                     }
                 }
             }
