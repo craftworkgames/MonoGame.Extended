@@ -67,8 +67,9 @@ namespace Demo.Platformer.Entities.Systems
                 velocity = new Vector2(velocity.X, -_jumpSpeed * _jumpDelay);
                 playerState.IsJumping = true;
             }
-            else if (_previousKeyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
+            else if (_previousKeyboardState.IsKeyDown(Keys.W) || _previousKeyboardState.IsKeyDown(Keys.Up))
             {
+                // when the jump button is released we kill most of the upward velocity
                 velocity = new Vector2(velocity.X, velocity.Y * 0.2f);
             }
 
