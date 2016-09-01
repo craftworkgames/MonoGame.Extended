@@ -5,7 +5,7 @@ namespace MonoGame.Extended.Graphics
 {
     public static class PrimitiveTypeExtensions
     {
-        internal static int GetPrimitiveCount(this PrimitiveType primitiveType, int verticesCount)
+        internal static int GetPrimitivesCount(this PrimitiveType primitiveType, int verticesCount)
         {
             switch (primitiveType)
             {
