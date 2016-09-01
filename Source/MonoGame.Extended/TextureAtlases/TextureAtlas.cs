@@ -37,11 +37,9 @@ namespace MonoGame.Extended.TextureAtlases
         /// <param name="texture">Source <see cref="Texture2D "/> image used to draw on screen.</param>
         /// <param name="regions">A collection of regions to populate the atlas with.</param>
         public TextureAtlas(Texture2D texture, Dictionary<string, Rectangle> regions)
+            : this(texture)
         {
-            Texture = texture;
-            _regions = new List<TextureRegion2D>();
-            _regionMap = new Dictionary<string, int>();
-            foreach (KeyValuePair<string, Rectangle> region in regions)
+            foreach (var region in regions)
                 CreateRegion(region.Key, region.Value.X, region.Value.Y, region.Value.Width, region.Value.Height);
         }
 
