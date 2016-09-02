@@ -55,7 +55,7 @@ namespace MonoGame.Extended.Tests.Particles
             [Test]
             public void WhenThereAreNoActiveParticles_GracefullyDoesNothing()
             {
-                var subject = new ParticleEmitter(null, 100, TimeSpan.FromSeconds(1), Profile.Point());
+                var subject = new ParticleEmitter(null, 100, TimeSpan.FromSeconds(1), Profile.Point(), autoTrigger: false);
 
                 subject.Update(0.5f);
                 Assert.AreEqual(subject.ActiveParticles, 0);

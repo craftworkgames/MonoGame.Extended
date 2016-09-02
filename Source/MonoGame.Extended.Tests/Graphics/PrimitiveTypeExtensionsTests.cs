@@ -11,19 +11,19 @@ namespace MonoGame.Extended.Tests.Graphics
         [Test]
         public void PrimitiveTypeExtensions_GetPrimitiveCount_LineStrip()
         {
-            Assert.AreEqual(122, PrimitiveType.LineStrip.GetPrimitiveCount(123));
+            Assert.AreEqual(122, PrimitiveType.LineStrip.GetPrimitivesCount(123));
         }
 
         [Test]
         public void PrimitiveTypeExtensions_GetPrimitiveCount_LineList()
         {
-            Assert.AreEqual(62, PrimitiveType.LineList.GetPrimitiveCount(124));
+            Assert.AreEqual(62, PrimitiveType.LineList.GetPrimitivesCount(124));
         }
 
         [Test]
         public void PrimitiveTypeExtensions_GetPrimitiveCount_TriangleStrip()
         {
-            Assert.AreEqual(121, PrimitiveType.TriangleStrip.GetPrimitiveCount(123));
+            Assert.AreEqual(121, PrimitiveType.TriangleStrip.GetPrimitivesCount(123));
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace MonoGame.Extended.Tests.Graphics
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                ((PrimitiveType)7).GetPrimitiveCount(123);
+                ((PrimitiveType)7).GetPrimitivesCount(123);
             });
         }
     }
