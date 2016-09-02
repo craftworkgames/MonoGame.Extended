@@ -66,10 +66,8 @@
     <Compile Include="Entities\EntityComponentSystem.cs" />
     <Compile Include="Entities\Systems\AnimatedSpriteSystem.cs" />
     <Compile Include="Entities\Systems\ComponentSystem.cs" />
-    <Compile Include="Entities\Systems\DrawableComponentSystem.cs" />
-    <Compile Include="Entities\Systems\ParticleEmitterComponentSystem.cs" />
-    <Compile Include="Entities\Systems\SpriteBatchComponentSystem.cs" />
-    <Compile Include="Entities\Systems\UpdatableComponentSystem.cs" />
+    <Compile Include="Entities\Systems\ParticleEmitterSystem.cs" />
+    <Compile Include="Entities\Systems\SpriteBatchSystem.cs" />
     <Compile Include="Graphics\Batch2DSortMode.cs" />
     <Compile Include="Graphics\Batching\BatchCommandDrawer.cs" />
     <Compile Include="Graphics\Batching\BatchDrawCommand.cs" />

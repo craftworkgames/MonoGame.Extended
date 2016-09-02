@@ -48,8 +48,8 @@ namespace Demo.Batching
             {
                 // also disable v-sync so max frames can be measured otherwise draw frames would be capped to the screen's refresh rate 
                 SynchronizeWithVerticalRetrace = false,
-                PreferredBackBufferWidth = 1920,
-                PreferredBackBufferHeight = 1080
+                PreferredBackBufferWidth = 1024,
+                PreferredBackBufferHeight = 768
             };
         }
 
@@ -89,10 +89,9 @@ namespace Demo.Batching
         protected override void Update(GameTime gameTime)
         {
             var keyboard = Keyboard.GetState();
+            var gamePadState = GamePad.GetState(PlayerIndex.One);
 
-
-            if ((GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed) ||
-                keyboard.IsKeyDown(Keys.Escape))
+            if (gamePadState.Buttons.Back == ButtonState.Pressed || keyboard.IsKeyDown(Keys.Escape))
                 Exit();
 
             // ReSharper disable once ForCanBeConvertedToForeach
