@@ -1,4 +1,5 @@
-﻿using Demo.Platformer.Entities;
+﻿using System.Linq;
+using Demo.Platformer.Entities;
 using Demo.Platformer.Entities.Systems;
 using Demo.Platformer.Services;
 using Microsoft.Xna.Framework;
@@ -34,20 +35,23 @@ namespace Demo.Platformer
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
 
+            _tiledMap = Content.Load<TiledMap>("level-1");
+
             _entityComponentSystem = new EntityComponentSystem();
             _entityFactory = new EntityFactory(_entityComponentSystem, Content);
 
+            var service = new TiledObjectToEntityService(_entityFactory);
+            var spawnPoint = _tiledMap.GetObjectGroup("entities").Objects.Single(i => i.Type == "Spawn").Position;
+
             _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
-            _entityComponentSystem.RegisterSystem(new PlayerStateSystem(_entityFactory));
+            _entityComponentSystem.RegisterSystem(new PlayerStateSystem(_entityFactory, spawnPoint));
             _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(gravity: new Vector2(0, 1150)));
             _entityComponentSystem.RegisterSystem(new ParticleEmitterSystem());
             _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
             _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
-
-            _tiledMap = Content.Load<TiledMap>("level-1");
-
-            var service = new TiledObjectToEntityService(_entityFactory);
+            
             service.CreateEntities(_tiledMap.GetObjectGroup("entities").Objects);
+
 
             //var viewport = GraphicsDevice.Viewport;
             //_alphaTestEffect = new AlphaTestEffect(GraphicsDevice)

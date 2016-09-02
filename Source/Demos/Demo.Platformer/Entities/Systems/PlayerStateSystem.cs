@@ -7,10 +7,12 @@ namespace Demo.Platformer.Entities.Systems
     public class PlayerStateSystem : ComponentSystem
     {
         private readonly EntityFactory _entityFactory;
+        private readonly Vector2 _spawnPoint;
 
-        public PlayerStateSystem(EntityFactory entityFactory)
+        public PlayerStateSystem(EntityFactory entityFactory, Vector2 spawnPoint)
         {
             _entityFactory = entityFactory;
+            _spawnPoint = spawnPoint;
         }
 
         public override void Update(GameTime gameTime)
@@ -25,6 +27,7 @@ namespace Demo.Platformer.Entities.Systems
                 {
                     _entityFactory.CreateBloodExplosion(playerEntity.Position);
                     playerEntity.Destroy();
+                    _entityFactory.CreatePlayer(_spawnPoint);
                 }
             }
         }
