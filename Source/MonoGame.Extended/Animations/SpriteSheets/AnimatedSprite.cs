@@ -6,12 +6,13 @@ namespace MonoGame.Extended.Animations.SpriteSheets
 {
     public class AnimatedSprite : Sprite
     {
-        public AnimatedSprite(SpriteSheetAnimationFactory animationFactory, string playAnimation)
+        public AnimatedSprite(SpriteSheetAnimationFactory animationFactory, string playAnimation = null)
             : base(animationFactory.Frames[0])
         {
             _animationFactory = animationFactory;
 
-            Play(playAnimation).IsLooping = true;
+            if(playAnimation != null)
+                Play(playAnimation);
         }
 
         private readonly SpriteSheetAnimationFactory _animationFactory;

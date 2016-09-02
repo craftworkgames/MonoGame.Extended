@@ -34,9 +34,6 @@ namespace Demo.Platformer.Entities
         {
             var texture = content.Load<Texture2D>("tiny-characters");
             _characterTextureAtlas = TextureAtlas.Create(texture, 32, 32, 15);
-
-            var animationFactory = new SpriteSheetAnimationFactory(_characterTextureAtlas);
-            animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 0, 1, 2, 3 }, isReversed: true));
         }
 
         public Entity CreatePlayer(Vector2 position)
@@ -48,7 +45,7 @@ namespace Demo.Platformer.Entities
             animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 0, 1, 2, 3 }));
             animationFactory.Add("jump", new SpriteSheetAnimationData(new[] { 8, 9 }, isLooping: false));
 
-            entity.AttachComponent(new AnimatedSprite(animationFactory, "idle"));
+            entity.AttachComponent(new AnimatedSprite(animationFactory));
             entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
             entity.AttachComponent(new PlayerCollisionHandler());
             entity.AttachComponent(new PlayerState());
