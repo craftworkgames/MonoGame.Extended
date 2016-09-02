@@ -9,7 +9,6 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.Particles;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
-using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
 namespace Demo.Platformer.Entities
@@ -45,7 +44,10 @@ namespace Demo.Platformer.Entities
             var entity = _entityComponentSystem.CreateEntity(Entities.Player, position);
             var textureRegion = _characterTextureAtlas[0];
             var animationFactory = new SpriteSheetAnimationFactory(_characterTextureAtlas);
-            animationFactory.Add("idle", new SpriteSheetAnimationData(new[] {0, 1, 2}));
+            animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 12, 13 }, 1.0f));
+            animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 0, 1, 2, 3 }));
+            animationFactory.Add("jump", new SpriteSheetAnimationData(new[] { 8, 9 }, isLooping: false));
+
             entity.AttachComponent(new AnimatedSprite(animationFactory, "idle"));
             entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
             entity.AttachComponent(new PlayerCollisionHandler());

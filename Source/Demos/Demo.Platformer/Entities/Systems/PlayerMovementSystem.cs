@@ -1,8 +1,10 @@
+using System;
 using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Sprites;
@@ -42,21 +44,23 @@ namespace Demo.Platformer.Entities.Systems
             var keyboardState = Keyboard.GetState();
             var body = _playerEntity.GetComponent<BasicCollisionBody>();
             var playerState = _playerEntity.GetComponent<PlayerState>();
-            var sprite = _playerEntity.GetComponent<Sprite>();
+            var sprite = _playerEntity.GetComponent<AnimatedSprite>();
             var velocity = new Vector2(0, body.Velocity.Y);
 
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
             {
                 sprite.Effect = SpriteEffects.FlipHorizontally;
+                sprite.Play("walk");
                 velocity += new Vector2(-_walkSpeed, 0);
             }
 
             if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
             {
                 sprite.Effect = SpriteEffects.None;
+                sprite.Play("walk");
                 velocity += new Vector2(_walkSpeed, 0);
             }
-
+            
             if (playerState.IsJumping)
                 _jumpDelay -= deltaTime * 2.8f;
             else
@@ -64,6 +68,9 @@ namespace Demo.Platformer.Entities.Systems
 
             if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
             {
+                if(!playerState.IsJumping)
+                    sprite.Play("jump");
+
                 velocity = new Vector2(velocity.X, -_jumpSpeed * _jumpDelay);
                 playerState.IsJumping = true;
             }
@@ -72,6 +79,9 @@ namespace Demo.Platformer.Entities.Systems
                 // when the jump button is released we kill most of the upward velocity
                 velocity = new Vector2(velocity.X, velocity.Y * 0.2f);
             }
+
+            if (!playerState.IsJumping && Math.Abs(body.Velocity.X) < float.Epsilon)
+                sprite.Play("idle");
 
             body.Velocity = velocity;
 
