@@ -11,7 +11,7 @@ namespace Demo.TiledMaps
 {
     public class Game1 : Game
     {
-        private FramesPerSecondCounterComponent _fpsCounter;
+        private FramesPerSecondCounter _fpsCounter;
         private BitmapFont _bitmapFont;
         private Camera2D _camera;
         // ReSharper disable once NotAccessedField.Local
@@ -38,7 +38,7 @@ namespace Demo.TiledMaps
             Window.AllowUserResizing = true;
             Window.Position = Point.Zero;
 
-            Components.Add(_fpsCounter = new FramesPerSecondCounterComponent(this));
+            _fpsCounter = new FramesPerSecondCounter();
 
             base.Initialize();
         }
@@ -91,6 +91,8 @@ namespace Demo.TiledMaps
             _sprite.Rotation += MathHelper.ToRadians(5) * deltaSeconds;
             _sprite.Position = _camera.ScreenToWorld(mouseState.X, mouseState.Y);
 
+            _fpsCounter.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -115,6 +117,8 @@ namespace Demo.TiledMaps
             _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.FramesPerSecond:0}", Vector2.One, Color.Black);
             _spriteBatch.DrawString(_bitmapFont, $"Camera: {_camera.Position}", new Vector2(5, 32 + _bitmapFont.LineHeight * 2), Color.Black);
             _spriteBatch.End();
+
+            _fpsCounter.Draw(gameTime);
 
             base.Draw(gameTime);
         }

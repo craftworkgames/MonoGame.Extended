@@ -1,53 +1,91 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics.Batching.Drawers;
-using MonoGame.Extended.Graphics.Batching.Queuers;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
+    // why batching? see top answer: http://answers.unity3d.com/questions/14578/whats-the-best-way-to-reduce-draw-calls.html
+
     /// <summary>
-    ///     Enables a group of geometry to be drawn using the same settings.
+    ///     Enables a group of geometric objects to be drawn using the same settings.
     /// </summary>
     /// <typeparam name="TVertexType">The type of vertex.</typeparam>
-    /// <typeparam name="TCommandContext">The type of batch draw command data.</typeparam>
+    /// <typeparam name="TBatchDrawCommandData">The type of data stored with each draw command.</typeparam>
     /// <seealso cref="IDisposable" />
     /// <remarks>
     ///     <para>
     ///         For best performance, use <see cref="DynamicGeometryBuffer{TVertexType}" /> when instantiating
-    ///         <see cref="PrimitiveBatch{TVertexType,TDrawContext}" /> for geometry which changes frame-to-frame. For geometry
+    ///         <see cref="Batch{TVertexType,TBatchDrawCommandData}" /> for geometry which changes frame-to-frame. For geometry
     ///         which does not change frame-to-frame, or changes infrequently between frames, use
-    ///         <see cref="StaticGeometryBuffer{TVertexType}" /> when instantiating
-    ///         <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
+    ///         <see cref="StaticGeometryBuffer{TVertexType}" /> instead.
     ///     </para>
     /// </remarks>
-    public abstract class PrimitiveBatch<TVertexType, TCommandContext> : IDisposable
-        where TVertexType : struct, IVertexType where TCommandContext : struct, IBatchCommandContext
+    public abstract class Batch<TVertexType, TBatchDrawCommandData> : IDisposable
+        where TVertexType : struct, IVertexType
+        where TBatchDrawCommandData : struct, IBatchDrawCommandData<TBatchDrawCommandData>
     {
         internal const int DefaultMaximumBatchCommandsCount = 2048;
 
-        private BatchDrawer<TVertexType, TCommandContext> _batchDrawer;
-        private BatchCommandQueuer<TVertexType, TCommandContext> _currentBatchCommandQueuer;
-        private Lazy<ImmediateBatchCommandQueuer<TVertexType, TCommandContext>> _lazyImmediateBatchQueuer;
-        private Lazy<DeferredBatchCommandQueuer<TVertexType, TCommandContext>> _lazyDeferredBatchQueuer;
+        private BatchCommandDrawer<TVertexType, TBatchDrawCommandData> _commandDrawer;
+        private BatchCommandQueue<TVertexType, TBatchDrawCommandData> _currentCommandQueue;
+        private DeferredBatchCommandQueue<TVertexType, TBatchDrawCommandData> _deferredCommandQueue;
+        private ImmediateBatchCommandQueue<TVertexType, TBatchDrawCommandData> _immediateCommandQueue;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Batch{TVertexType,TBatchDrawCommandData}" /> class.
+        /// </summary>
+        /// <param name="geometryBuffer">The geometry buffer.</param>
+        /// <param name="maximumBatchCommandsCount">
+        ///     The maximum number of batch draw commands that can be deferred. The default value is <code>2048</code>.
+        /// </param>
+        /// <exception cref="ArgumentNullException"><paramref name="geometryBuffer" /> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <paramref name="maximumBatchCommandsCount" /> is less than or equal
+        ///     <code>0</code>.
+        /// </exception>
+        /// <remarks>
+        ///     <para>
+        ///         For best performance, use <see cref="DynamicGeometryBuffer{TVertexType}" /> for geometry which changes
+        ///         frame-to-frame and <see cref="StaticGeometryBuffer{TVertexType}" /> for geoemtry which does not change
+        ///         frame-to-frame, or changes infrequently between frames.
+        ///     </para>
+        /// </remarks>
+        protected Batch(GeometryBuffer<TVertexType> geometryBuffer,
+            int maximumBatchCommandsCount = DefaultMaximumBatchCommandsCount)
+        {
+            if (geometryBuffer == null)
+                throw new ArgumentNullException(nameof(geometryBuffer));
+
+            if (maximumBatchCommandsCount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(maximumBatchCommandsCount));
+
+            GeometryBuffer = geometryBuffer;
+            GraphicsDevice = geometryBuffer.GraphicsDevice;
+            _commandDrawer = new BatchCommandDrawer<TVertexType, TBatchDrawCommandData>(GraphicsDevice, GeometryBuffer);
+
+            _immediateCommandQueue = new ImmediateBatchCommandQueue<TVertexType, TBatchDrawCommandData>(GraphicsDevice, _commandDrawer);
+            _deferredCommandQueue = new DeferredBatchCommandQueue<TVertexType, TBatchDrawCommandData>(GraphicsDevice, _commandDrawer,
+                maximumBatchCommandsCount);
+        }
 
         /// <summary>
         ///     Gets the <see cref="GeometryBuffer{TVertexType}" /> associated with this
-        ///     <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
+        ///     <see cref="Batch{TVertexType,TBatchDrawCommandData}" />.
         /// </summary>
         /// <value>
         ///     The <see cref="GeometryBuffer{TVertexType}" /> associated with this
-        ///     <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
+        ///     <see cref="Batch{TVertexType,TBatchDrawCommandData}" />.
         /// </value>
         protected GeometryBuffer<TVertexType> GeometryBuffer { get; }
 
         /// <summary>
         ///     Gets the <see cref="GraphicsDevice" /> associated with this
-        ///     <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
+        ///     <see cref="Batch{TVertexType,TBatchDrawCommandData}" />.
         /// </summary>
         /// <value>
         ///     The <see cref="GraphicsDevice" /> associated with this
-        ///     <see cref="PrimitiveBatch{TVertexType,TDrawContext}" />.
+        ///     <see cref="Batch{TVertexType,TBatchDrawCommandData}" />.
         /// </value>
         public GraphicsDevice GraphicsDevice { get; }
 
@@ -61,44 +99,12 @@ namespace MonoGame.Extended.Graphics.Batching
         public bool HasBegun { get; private set; }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="PrimitiveBatch{TVertexType, TDrawContext}" /> class.
-        /// </summary>
-        /// <param name="geometryBuffer">The geometry buffer.</param>
-        /// <param name="maximumBatchCommandsCount">
-        ///     The maximum number of batch draw commands that can be deferred. The default value is <code>2048</code>.
-        /// </param>
-        /// <exception cref="ArgumentNullException"><paramref name="geometryBuffer" /> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="maximumBatchCommandsCount" /> is less than or equal <code>0</code>.</exception>
-        /// <remarks>
-        ///     <para>
-        ///         For best performance, use <see cref="DynamicGeometryBuffer{TVertexType}" /> for geometry which changes
-        ///         frame-to-frame and <see cref="StaticGeometryBuffer{TVertexType}" /> for geoemtry which does not change
-        ///         frame-to-frame, or changes infrequently between frames.
-        ///     </para>
-        /// </remarks>
-        protected PrimitiveBatch(GeometryBuffer<TVertexType> geometryBuffer, int maximumBatchCommandsCount = DefaultMaximumBatchCommandsCount)
-        {
-            if (geometryBuffer == null)
-                throw new ArgumentNullException(paramName: nameof(geometryBuffer));
-
-            if (maximumBatchCommandsCount <= 0)
-                throw new ArgumentOutOfRangeException(paramName: nameof(maximumBatchCommandsCount));
-
-            GeometryBuffer = geometryBuffer;
-            GraphicsDevice = geometryBuffer.GraphicsDevice;
-            _batchDrawer = new BatchDrawer<TVertexType, TCommandContext>(GraphicsDevice, GeometryBuffer);
-
-            _lazyImmediateBatchQueuer = new Lazy<ImmediateBatchCommandQueuer<TVertexType, TCommandContext>>(() => new ImmediateBatchCommandQueuer<TVertexType, TCommandContext>(_batchDrawer));
-            _lazyDeferredBatchQueuer = new Lazy<DeferredBatchCommandQueuer<TVertexType, TCommandContext>>(() => new DeferredBatchCommandQueuer<TVertexType, TCommandContext>(_batchDrawer, maximumBatchCommandsCount));
-        }
-
-        /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
         {
-            Dispose(diposing: true);
-            GC.SuppressFinalize(obj: this);
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -115,21 +121,15 @@ namespace MonoGame.Extended.Graphics.Batching
             {
                 GeometryBuffer?.Dispose();
 
-                _batchDrawer?.Dispose();
-                _batchDrawer = null;
+                _commandDrawer?.Dispose();
+                _commandDrawer = null;
 
-                if (_lazyImmediateBatchQueuer?.IsValueCreated ?? false)
-                {
-                    _lazyImmediateBatchQueuer.Value.Dispose();
-                    _lazyImmediateBatchQueuer = null;
-                }
 
-                // ReSharper disable once InvertIf
-                if (_lazyDeferredBatchQueuer?.IsValueCreated ?? false)
-                {
-                    _lazyDeferredBatchQueuer.Value.Dispose();
-                    _lazyDeferredBatchQueuer = null;
-                }
+                _immediateCommandQueue.Dispose();
+                _immediateCommandQueue = null;
+
+                _deferredCommandQueue.Dispose();
+                _deferredCommandQueue = null;
             }
         }
 
@@ -137,14 +137,16 @@ namespace MonoGame.Extended.Graphics.Batching
         protected void EnsureHasBegun([CallerMemberName] string callerMemberName = null)
         {
             if (!HasBegun)
-                throw new InvalidOperationException(message: $"The {nameof(Begin)} method must be called before the {callerMemberName} method can be called.");
+                throw new InvalidOperationException(
+                    $"The {nameof(Begin)} method must be called before the {callerMemberName} method can be called.");
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void EnsureHasNotBegun([CallerMemberName] string callerMemberName = null)
         {
             if (HasBegun)
-                throw new InvalidOperationException(message: $"The {nameof(End)} method must be called before the {callerMemberName} method can be called.");
+                throw new InvalidOperationException(
+                    $"The {nameof(End)} method must be called before the {callerMemberName} method can be called.");
         }
 
         /// <summary>
@@ -171,26 +173,26 @@ namespace MonoGame.Extended.Graphics.Batching
         protected void Begin(Effect effect, PrimitiveType primitiveType, BatchSortMode sortMode = BatchSortMode.Deferred)
         {
             if (effect == null)
-                throw new ArgumentNullException(paramName: nameof(effect));
+                throw new ArgumentNullException(nameof(effect));
 
             if ((primitiveType < PrimitiveType.TriangleList) || (primitiveType > PrimitiveType.LineStrip))
-                throw new ArgumentOutOfRangeException(paramName: nameof(primitiveType));
+                throw new ArgumentOutOfRangeException(nameof(primitiveType));
 
             EnsureHasNotBegun();
             HasBegun = true;
 
             if (sortMode != BatchSortMode.Immediate)
             {
-                var deferredQueuer = _lazyDeferredBatchQueuer.Value;
+                var deferredQueuer = _deferredCommandQueue;
                 deferredQueuer.SortMode = sortMode;
-                _currentBatchCommandQueuer = deferredQueuer;
+                _currentCommandQueue = deferredQueuer;
             }
             else
             {
-                _currentBatchCommandQueuer = _lazyImmediateBatchQueuer.Value;
+                _currentCommandQueue = _immediateCommandQueue;
             }
 
-            _currentBatchCommandQueuer.Begin(effect, primitiveType);
+            _currentCommandQueue.Begin(effect, primitiveType);
         }
 
         /// <summary>
@@ -204,12 +206,12 @@ namespace MonoGame.Extended.Graphics.Batching
         ///         This method must be called after all enqueuing of draw calls.
         ///     </para>
         /// </remarks>
-        public void End()
+        protected void End()
         {
             EnsureHasBegun();
             HasBegun = false;
 
-            _currentBatchCommandQueuer.End();
+            _currentCommandQueue.End();
         }
 
         /// <summary>
@@ -218,7 +220,7 @@ namespace MonoGame.Extended.Graphics.Batching
         /// </summary>
         protected void Flush()
         {
-            _currentBatchCommandQueuer.Flush();
+            _currentCommandQueue.Flush();
         }
 
         /// <summary>
@@ -226,19 +228,20 @@ namespace MonoGame.Extended.Graphics.Batching
         ///     and optional sort key.
         /// </summary>
         /// <param name="startIndex">The starting index from the <see cref="GeometryBuffer" /> to use.</param>
-        /// <param name="indexCount">The number of indices from the <see cref="GeometryBuffer" /> to use.</param>
-        /// <param name="itemData">The custom data for the draw operation.</param>
+        /// <param name="primitiveCount">The number of primitives from the <see cref="GeometryBuffer" /> to use.</param>
         /// <param name="sortKey">The sort key.</param>
+        /// <param name="itemData">The <see cref="TBatchDrawCommandData" />.</param>
+        /// <exception cref="InvalidOperationException">The <see cref="Begin"/> method has not been called.</exception>
         /// <remarks>
         ///     <para>
         ///         <see cref="Begin" /> must be called before enqueuing any draw calls. When all the geometry have been enqueued
         ///         for drawing, call <see cref="End" />.
         ///     </para>
         /// </remarks>
-        protected void EnqueueDraw(ushort startIndex, ushort indexCount, ref TCommandContext itemData, uint sortKey = 0)
+        protected void Draw(ushort startIndex, ushort primitiveCount, float sortKey, ref TBatchDrawCommandData itemData)
         {
             EnsureHasBegun();
-            _currentBatchCommandQueuer.EnqueueDraw(startIndex, indexCount, ref itemData, sortKey);
+            _currentCommandQueue.EnqueueDrawCommand(startIndex, primitiveCount, sortKey, ref itemData);
         }
     }
 }
