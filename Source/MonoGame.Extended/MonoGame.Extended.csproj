@@ -106,6 +106,8 @@
     <Compile Include="IEquatableByRef.cs" />
     <Compile Include="InputListeners\InputListenerComponent.cs" />
     <Compile Include="Matrix2D.cs" />
+    <Compile Include="Shapes\Explicit\ExplicitConvexPolygon.cs" />
+    <Compile Include="Shapes\Explicit\ExplicitPolygon.cs" />
     <Compile Include="SimpleDrawableGameComponent.cs" />
     <Compile Include="SimpleGameComponent.cs" />
     <Compile Include="Vector2Extensions.cs" />
