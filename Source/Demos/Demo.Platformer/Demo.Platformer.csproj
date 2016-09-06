@@ -41,6 +41,7 @@
     <Compile Include="Entities\Components\PlayerCollisionHandler.cs" />
     <Compile Include="Entities\Components\PlayerState.cs" />
     <Compile Include="Entities\Systems\BasicCollisionSystem.cs" />
+    <Compile Include="Entities\Systems\EnemyMovementSystem.cs" />
     <Compile Include="Entities\Systems\PlayerMovementSystem.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
     <Compile Include="Entities\Systems\PlayerStateSystem.cs" />
