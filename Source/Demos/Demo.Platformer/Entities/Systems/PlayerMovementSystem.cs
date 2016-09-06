@@ -42,7 +42,7 @@ namespace Demo.Platformer.Entities.Systems
             var deltaTime = gameTime.GetElapsedSeconds();
             var keyboardState = Keyboard.GetState();
             var body = _playerEntity.GetComponent<BasicCollisionBody>();
-            var playerState = _playerEntity.GetComponent<PlayerState>();
+            var playerState = _playerEntity.GetComponent<CharacterState>();
             var sprite = _playerEntity.GetComponent<AnimatedSprite>();
             var velocity = new Vector2(0, body.Velocity.Y);
 

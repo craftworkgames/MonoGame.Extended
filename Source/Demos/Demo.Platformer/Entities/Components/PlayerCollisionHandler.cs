@@ -7,7 +7,7 @@ namespace Demo.Platformer.Entities.Components
     {
         public override void OnCollision(BasicCollisionBody bodyA, BasicCollisionBody bodyB, Vector2 depth)
         {
-            var playerState = bodyA.Entity.GetComponent<PlayerState>();
+            var playerState = bodyA.Entity.GetComponent<CharacterState>();
 
             if ((string) bodyB.Tag == "Deadly")
             {

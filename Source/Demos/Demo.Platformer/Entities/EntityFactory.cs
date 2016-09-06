@@ -50,7 +50,7 @@ namespace Demo.Platformer.Entities
             entity.AttachComponent(new AnimatedSprite(animationFactory));
             entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
             entity.AttachComponent(new PlayerCollisionHandler());
-            entity.AttachComponent(new PlayerState());
+            entity.AttachComponent(new CharacterState());
 
             return entity;
         }
@@ -112,7 +112,8 @@ namespace Demo.Platformer.Entities
             entity.AttachComponent(new AnimatedSprite(animationFactory, "walk"));
             entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
             entity.AttachComponent(new PlayerCollisionHandler());
-            entity.AttachComponent(new PlayerState());
+            entity.AttachComponent(new CharacterState());
+            entity.AttachComponent(new EnemyAi());
 
             return entity;
         }

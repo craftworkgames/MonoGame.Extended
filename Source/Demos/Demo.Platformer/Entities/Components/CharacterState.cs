@@ -2,9 +2,9 @@ using MonoGame.Extended.Entities.Components;
 
 namespace Demo.Platformer.Entities.Components
 {
-    public class PlayerState : EntityComponent
+    public class CharacterState : EntityComponent
     {
-        public PlayerState()
+        public CharacterState()
         {
             HealthPoints = 3;
             IsJumping = false;

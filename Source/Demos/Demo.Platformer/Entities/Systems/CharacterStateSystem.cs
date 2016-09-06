@@ -4,12 +4,12 @@ using MonoGame.Extended.Entities.Systems;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    public class PlayerStateSystem : ComponentSystem
+    public class CharacterStateSystem : ComponentSystem
     {
         private readonly EntityFactory _entityFactory;
         private readonly Vector2 _spawnPoint;
 
-        public PlayerStateSystem(EntityFactory entityFactory, Vector2 spawnPoint)
+        public CharacterStateSystem(EntityFactory entityFactory, Vector2 spawnPoint)
         {
             _entityFactory = entityFactory;
             _spawnPoint = spawnPoint;
@@ -21,7 +21,7 @@ namespace Demo.Platformer.Entities.Systems
 
             if (playerEntity != null)
             {
-                var playerState = playerEntity.GetComponent<PlayerState>();
+                var playerState = playerEntity.GetComponent<CharacterState>();
 
                 if (!playerState.IsAlive)
                 {
