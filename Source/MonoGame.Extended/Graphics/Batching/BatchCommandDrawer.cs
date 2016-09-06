@@ -42,12 +42,11 @@ namespace MonoGame.Extended.Graphics.Batching
 
         internal void Draw(ref BatchDrawCommand<TCommandData> command)
         {
-            var graphicsDevice = GraphicsDevice;
             command.Data.ApplyTo(Effect);
             foreach (var pass in Effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                graphicsDevice.DrawIndexedPrimitives(PrimitiveType, 0, command.StartIndex,
+                GraphicsDevice.DrawIndexedPrimitives(PrimitiveType, 0, command.StartIndex,
                     command.PrimitiveCount);
             }
             command.Data.SetReferencesToNull();
