@@ -47,7 +47,7 @@ namespace MonoGame.Extended.Graphics.Batching
             {
                 pass.Apply();
                 GraphicsDevice.DrawIndexedPrimitives(PrimitiveType, 0, command.StartIndex,
-                    command.PrimitiveCount);
+                    command.PrimitivesCount);
             }
             command.Data.SetReferencesToNull();
         }

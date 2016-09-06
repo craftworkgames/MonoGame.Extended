@@ -228,7 +228,7 @@ namespace MonoGame.Extended.Graphics.Batching
         ///     and optional sort key.
         /// </summary>
         /// <param name="startIndex">The starting index from the <see cref="GeometryBuffer" /> to use.</param>
-        /// <param name="primitiveCount">The number of primitives from the <see cref="GeometryBuffer" /> to use.</param>
+        /// <param name="primitivesCount">The number of primitives from the <see cref="GeometryBuffer" /> to use.</param>
         /// <param name="sortKey">The sort key.</param>
         /// <param name="itemData">The <see cref="TBatchDrawCommandData" />.</param>
         /// <exception cref="InvalidOperationException">The <see cref="Begin"/> method has not been called.</exception>
@@ -238,10 +238,30 @@ namespace MonoGame.Extended.Graphics.Batching
         ///         for drawing, call <see cref="End" />.
         ///     </para>
         /// </remarks>
-        protected void Draw(int startIndex, int primitiveCount, float sortKey, ref TBatchDrawCommandData itemData)
+        protected void Draw(int startIndex, int primitivesCount, float sortKey, ref TBatchDrawCommandData itemData)
         {
             EnsureHasBegun();
-            _currentCommandQueue.EnqueueDrawCommand(startIndex, primitiveCount, sortKey, ref itemData);
+            _currentCommandQueue.EnqueueDrawCommand(startIndex, primitivesCount, sortKey, ref itemData);
+        }
+
+        /// <summary>
+        ///     Adds geometry to the group of geometry for rendering using the specified primitive type, vertices, indices, data,
+        ///     and optional sort key.
+        /// </summary>
+        /// <param name="geometryItem">The <see cref="Graphics.GeometryBuffer.GeometryItem"/> to use.</param>
+        /// <param name="sortKey">The sort key.</param>
+        /// <param name="itemData">The <see cref="TBatchDrawCommandData" />.</param>
+        /// <exception cref="InvalidOperationException">The <see cref="Begin"/> method has not been called.</exception>
+        /// <remarks>
+        ///     <para>
+        ///         <see cref="Begin" /> must be called before enqueuing any draw calls. When all the geometry have been enqueued
+        ///         for drawing, call <see cref="End" />.
+        ///     </para>
+        /// </remarks>
+        protected void Draw(GeometryBuffer.GeometryItem geometryItem, float sortKey, ref TBatchDrawCommandData itemData)
+        {
+            EnsureHasBegun();
+            _currentCommandQueue.EnqueueDrawCommand(geometryItem.StartIndex, geometryItem.PrimitivesCount, sortKey, ref itemData);
         }
     }
 }

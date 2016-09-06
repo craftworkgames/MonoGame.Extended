@@ -45,9 +45,9 @@ namespace Demo.Collisions
                 },
                 BoundingVolumeType2D.BoundingBox);
             _colliderB = _simulation.CreateCollider(_entityB, new Box2D
-                {
-                    Size = new SizeF(100, 100)
-                },
+            {
+                Size = new SizeF(100, 100)
+            },
                 BoundingVolumeType2D.BoundingBox);
 
             base.Initialize();

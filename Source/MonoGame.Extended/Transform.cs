@@ -14,6 +14,14 @@ namespace MonoGame.Extended
         All = WorldMatrixIsDirty | LocalMatrixIsDirty
     }
 
+    public interface ITransform2D
+    {
+        event Action TransformBecameDirty;
+
+        void GetLocalMatrix(out Matrix2D matrix);
+        void GetWorldMatrix(out Matrix2D matrix);
+    }
+
     /// <summary>
     ///     Represents the base class for the position, rotation, and scale of a game object in two-dimensions or
     ///     three-dimensions.
@@ -200,7 +208,7 @@ namespace MonoGame.Extended
     ///         objects hierarchically.
     ///     </para>
     /// </remarks>
-    public class Transform2D<TParent> : BaseTransform<Matrix2D, TParent>, IMovable, IRotatable, IScalable
+    public class Transform2D<TParent> : BaseTransform<Matrix2D, TParent>, IMovable, IRotatable, IScalable, ITransform2D
         where TParent : Transform2D<TParent>
     {
         private Vector2 _position;
@@ -213,10 +221,7 @@ namespace MonoGame.Extended
         /// <value>
         ///     The world position.
         /// </value>
-        public Vector2 WorldPosition
-        {
-            get { return WorldMatrix.Translation; }
-        }
+        public Vector2 WorldPosition => WorldMatrix.Translation;
 
         /// <summary>
         ///     Gets or sets the local position.
@@ -241,10 +246,7 @@ namespace MonoGame.Extended
         /// <value>
         ///     The world scale.
         /// </value>
-        public Vector2 WorldScale
-        {
-            get { return WorldMatrix.Scale; }
-        }
+        public Vector2 WorldScale => WorldMatrix.Scale;
 
         /// <summary>
         ///     Gets or sets the local scale.
@@ -269,10 +271,7 @@ namespace MonoGame.Extended
         /// <value>
         ///     The world rotation angle in radians.
         /// </value>
-        public float WorldRotation
-        {
-            get { return WorldMatrix.Rotation; }
-        }
+        public float WorldRotation => WorldMatrix.Rotation;
 
         /// <summary>
         ///     Gets or sets the local rotation angle in radians.

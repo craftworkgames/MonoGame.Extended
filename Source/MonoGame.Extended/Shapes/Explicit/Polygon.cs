@@ -4,24 +4,28 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Shapes.Explicit
 {
-    public abstract class ExplicitPolygon
+    public abstract class Polygon
     {
-        private Vector2[] _vertices;
+        private Vector2[] _points;
 
-        public IReadOnlyList<Vector2> Vertices => _vertices;
+        public IReadOnlyList<Vector2> Points => _points;
 
         public Vector2 Centroid { get; private set; }
 
         public event Action ShapeChanged;
 
-        protected ExplicitPolygon(Vector2[] vertices)
-        {
-            SetVertices(vertices);
+        protected Polygon()
+        {   
         }
 
-        public void SetVertices(Vector2[] vertices)
+        protected Polygon(Vector2[] vertices)
         {
-            _vertices = vertices;
+            SetPoints(vertices);
+        }
+
+        protected void SetPoints(Vector2[] vertices)
+        {
+            _points = vertices;
             OnShapeChanged();
             ShapeChanged?.Invoke();
         }
@@ -34,5 +38,12 @@ namespace MonoGame.Extended.Shapes.Explicit
         }
 
         protected abstract void CalculateCentroid(out Vector2 centroid);
+
+        protected abstract void UpdateVertices(Vector2[] vertices);
+
+        public void Invalidate()
+        {
+            UpdateVertices(_points);
+        }
     }
 }

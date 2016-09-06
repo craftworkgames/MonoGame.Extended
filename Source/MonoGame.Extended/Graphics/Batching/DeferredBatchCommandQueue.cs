@@ -88,7 +88,7 @@ namespace MonoGame.Extended.Graphics.Batching
             // change the indices used by the command to use the sorted indices array so the indices are sequential for the graphics API
             _commands[0].StartIndex = 0;
             // get the number of vertices used for the current command, each index represents a vertex
-            var commandIndicesCount = PrimitiveType.GetVerticesCount(_currentCommand.PrimitiveCount);
+            var commandIndicesCount = PrimitiveType.GetVerticesCount(_currentCommand.PrimitivesCount);
             // copy the indices of the current command into our sorted indices array so the indices are sequential for the graphics API
             Array.Copy(_geometryBuffer.Indices, _currentCommand.StartIndex, _sortedIndices, sortedIndiesCount,
                 commandIndicesCount);
@@ -101,13 +101,13 @@ namespace MonoGame.Extended.Graphics.Batching
                 var command = _commands[index];
 
                 // get the number of vertices used for the command, each index represents a vertex
-                commandIndicesCount = PrimitiveType.GetVerticesCount(command.PrimitiveCount);
+                commandIndicesCount = PrimitiveType.GetVerticesCount(command.PrimitivesCount);
 
                 if (_currentCommand.CanMergeWith(command.SortKey, ref command.Data))
                 {
                     // increase the number of primitives for the current command by the amount of the merged command
-                    _commands[newCommandsCount - 1].PrimitiveCount =
-                        _currentCommand.PrimitiveCount += command.PrimitiveCount;
+                    _commands[newCommandsCount - 1].PrimitivesCount =
+                        _currentCommand.PrimitivesCount += command.PrimitivesCount;
                 }
                 else
                 {
@@ -136,7 +136,7 @@ namespace MonoGame.Extended.Graphics.Batching
                 CommandDrawer.Draw(ref _commands[index]);
         }
 
-        internal override void EnqueueDrawCommand(int startIndex, int primitiveCount, float sortKey,
+        internal override void EnqueueDrawCommand(int startIndex, int primitivesCount, float sortKey,
             ref TCommandData data)
         {
             // merge draw commands if possible to reduce expensive draw calls to the graphics API
@@ -144,7 +144,7 @@ namespace MonoGame.Extended.Graphics.Batching
             if (_currentCommand.CanMergeWith(sortKey, ref data))
             {
                 // since indices are added in sequential fasion we can just increase the primitive count of the current command
-                _commands[_commandsCount - 1].PrimitiveCount = _currentCommand.PrimitiveCount += primitiveCount;
+                _commands[_commandsCount - 1].PrimitivesCount = _currentCommand.PrimitivesCount += primitivesCount;
                 return;
             }
 
@@ -153,7 +153,7 @@ namespace MonoGame.Extended.Graphics.Batching
                 throw new BatchCommandQueueOverflowException(_maximumCommandsCount);
 
             // could not merge draw command, initialize a new one
-            _currentCommand = new BatchDrawCommand<TCommandData>(startIndex, primitiveCount, sortKey, data);
+            _currentCommand = new BatchDrawCommand<TCommandData>(startIndex, primitivesCount, sortKey, data);
 
             // append the command to the array
             _commands[_commandsCount++] = _currentCommand;

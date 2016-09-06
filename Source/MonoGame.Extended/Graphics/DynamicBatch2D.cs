@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.Xna.Framework;
@@ -310,11 +311,11 @@ namespace MonoGame.Extended.Graphics
             Matrix2D transformMatrix;
             CalculateTransformMatrix(position, rotation, null, out transformMatrix);
 
-            var startIndex = _triangleBuffer.EnqueueSprite(texture, ref transformMatrix, sourceRectangle, size, color, origin,
+            var geometryItem = _triangleBuffer.EnqueueSprite(texture, ref transformMatrix, sourceRectangle, size, color, origin,
                 effects, depth);
             var commandData = new DrawCommandData(texture);
             var sortKey = GetSortKey(depth);
-            Draw(startIndex, 2, sortKey, ref commandData);
+            Draw(geometryItem, sortKey, ref commandData);
         }
 
         /// <summary>
@@ -346,11 +347,11 @@ namespace MonoGame.Extended.Graphics
             Color? color = null, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None,
             float depth = 0)
         {
-            var startIndex = _triangleBuffer.EnqueueSprite(texture, ref transformMatrix, sourceRectangle, null, color, origin,
+            var geometryItem = _triangleBuffer.EnqueueSprite(texture, ref transformMatrix, sourceRectangle, null, color, origin,
                 effects, depth);
             var commandData = new DrawCommandData(texture);
             var sortKey = GetSortKey(depth);
-            Draw(startIndex, 2, sortKey, ref commandData);
+            Draw(geometryItem, sortKey, ref commandData);
         }
 
         /// <summary>
@@ -709,9 +710,9 @@ namespace MonoGame.Extended.Graphics
         /// <param name="depth">The depth <see cref="float" />.</param>
         public void DrawRectangle(ref Matrix2D transformMatrix, SizeF size, Color? color = null, float depth = 0)
         {
-            var startIndex = _triangleBuffer.EnqueueRectangle(ref transformMatrix, size, color, depth);
+            var geometryItem = _triangleBuffer.EnqueueRectangle(ref transformMatrix, size, color, depth);
             var sortKey = GetSortKey(depth);
-            Draw(startIndex, 2, sortKey, ref _pixelTextureDrawCommand);
+            Draw(geometryItem, sortKey, ref _pixelTextureDrawCommand);
         }
 
         /// <summary>
@@ -720,7 +721,10 @@ namespace MonoGame.Extended.Graphics
         /// </summary>
         /// <param name="position">The position <see cref="Vector2" />.</param>
         /// <param name="size">The <see cref="SizeF" />.</param>
-        /// <param name="color">The <see cref="Color" />.</param>
+        /// <param name="color">
+        ///     The <see cref="Color" />. Use <code>null</code> to use the default
+        ///     <see cref="Color.White" />.
+        /// </param>
         /// <param name="rotation">
         ///     The angle <see cref="float" /> (in radians) to rotate the rectangle about its center. The default
         ///     value is <code>0f</code>.
@@ -738,24 +742,53 @@ namespace MonoGame.Extended.Graphics
             DrawRectangle(ref transformMatrix, size, color, depth);
         }
 
-        //public void DrawConvexPolygon(Vector2[] vertices, ref Matrix2D transformMatrix, Color? color = null,
-        //    float depth = 0)
-        //{
-        //    var geometryBuffer = GeometryBuffer;
-        //    var startVertex = geometryBuffer.VertexCount;
-        //    var startIndex = geometryBuffer.IndexCount;
-        //    geometryBuffer.EnqueueConvexPolygon(startVertex, ref transformMatrix, color, depth);
-        //    var sortKey = GetSortKey(depth);
-        //    Draw(startIndex, 2, sortKey, ref _pixelTextureDrawCommand);
-        //}
+        /// <summary>
+        ///     Draws a convex polygon using the specified points, transform <see cref="Matrix2D" /> and an optional
+        ///     <see cref="Color" /> and depth <see cref="float" />.
+        /// </summary>
+        /// <param name="points">The <see cref="IReadOnlyList{Vector2}" /> points in sequential clockwise order.</param>
+        /// <param name="transformMatrix">The transform <see cref="Matrix2D" />.</param>
+        /// <param name="color">
+        ///     The <see cref="Color" />. Use <code>null</code> to use the default
+        ///     <see cref="Color.White" />.
+        /// </param>
+        /// <param name="depth">The depth <see cref="float" />. The default value is <code>0</code>.</param>
+        public void DrawConvexPolygon(IReadOnlyList<Vector2> points, ref Matrix2D transformMatrix, Color? color = null,
+            float depth = 0)
+        {
+            var geometryItem = _triangleBuffer.EnqueueConvexPolygon(points, ref transformMatrix, color, depth);
+            if (geometryItem.PrimitivesCount == 0)
+                return;
+            var sortKey = GetSortKey(depth);
+            Draw(geometryItem, sortKey, ref _pixelTextureDrawCommand);
+        }
 
-        //public void DrawConvexPolygon(Vector2[] vertices, Vector2 position, Color? color = null, float rotation = 0,
-        //    Vector2? scale = null, float depth = 0)
-        //{
-        //    Matrix2D transformMatrix;
-        //    CalculateTransformMatrix(position, rotation, scale, out transformMatrix);
-        //    DrawConvexPolygon(vertices, ref transformMatrix, color, depth);
-        //}
+        /// <summary>
+        ///     Draws a convex polygon using the specified points, transform <see cref="Matrix2D" /> and an optional
+        ///     <see cref="Color" /> and depth <see cref="float" />.
+        /// </summary>
+        /// <param name="points">The <see cref="IReadOnlyList{Vector2}" /> points in sequential clockwise order.</param>
+        /// <param name="position">The position <see cref="Vector2" />.</param>
+        /// <param name="color">
+        ///     The <see cref="Color" />. Use <code>null</code> to use the default
+        ///     <see cref="Color.White" />.
+        /// </param>
+        /// <param name="rotation">
+        ///     The angle <see cref="float" /> (in radians) to rotate the rectangle about its center. The default
+        ///     value is <code>0f</code>.
+        /// </param>
+        /// <param name="scale">
+        ///     The scale <see cref="Vector2" />. Use <code>null</code> to use the default
+        ///     <see cref="Vector2.One" />.
+        /// </param>
+        /// <param name="depth">The depth <see cref="float" />. The default value is <code>0</code>.</param>
+        public void DrawConvexPolygon(IReadOnlyList<Vector2> points, Vector2 position, Color? color = null, float rotation = 0,
+            Vector2? scale = null, float depth = 0)
+        {
+            Matrix2D transformMatrix;
+            CalculateTransformMatrix(position, rotation, scale, out transformMatrix);
+            DrawConvexPolygon(points, ref transformMatrix, color, depth);
+        }
 
         private static void CalculateTransformMatrix(Vector2 position, float rotation, Vector2? scale,
             out Matrix2D transformMatrix)

@@ -9,14 +9,14 @@ namespace MonoGame.Extended.Graphics.Batching
     {
         internal float SortKey;
         internal int StartIndex;
-        internal int PrimitiveCount;
+        internal int PrimitivesCount;
         internal TCommandData Data;
 
-        internal BatchDrawCommand(int startIndex, int primitiveCount, float sortKey, TCommandData data)
+        internal BatchDrawCommand(int startIndex, int primitivesCount, float sortKey, TCommandData data)
         {
             SortKey = sortKey;
             StartIndex = startIndex;
-            PrimitiveCount = primitiveCount;
+            PrimitivesCount = primitivesCount;
             Data = data;
         }
 

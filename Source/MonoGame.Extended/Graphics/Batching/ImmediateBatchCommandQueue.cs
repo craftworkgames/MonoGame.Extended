@@ -18,11 +18,11 @@ namespace MonoGame.Extended.Graphics.Batching
         {
         }
 
-        internal override void EnqueueDrawCommand(int startIndex, int primitiveCount, float sortKey,
+        internal override void EnqueueDrawCommand(int startIndex, int primitivesCount, float sortKey,
             ref TCommandData data)
         {
             CommandDrawer.SelectBuffers();
-            var command = new BatchDrawCommand<TCommandData>(startIndex, primitiveCount, sortKey, data);
+            var command = new BatchDrawCommand<TCommandData>(startIndex, primitivesCount, sortKey, data);
             CommandDrawer.Draw(ref command);
             CommandDrawer.GeometryBuffer.Clear();
         }

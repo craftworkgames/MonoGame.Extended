@@ -2,9 +2,15 @@
 
 namespace MonoGame.Extended.Shapes.Explicit
 {
-    public class ExplicitConvexPolygon : ExplicitPolygon
+    public abstract class ConvexPolygon : Polygon
     {
-        public ExplicitConvexPolygon(Vector2[] vertices)
+        protected ConvexPolygon()
+            : base()
+        {
+            
+        }
+
+        protected ConvexPolygon(Vector2[] vertices)
             : base(vertices)
         {
         }
@@ -13,7 +19,7 @@ namespace MonoGame.Extended.Shapes.Explicit
         {
             centroid.X = 0;
             centroid.Y = 0;
-            var vertices = Vertices;
+            var vertices = Points;
             var verticesCount = vertices.Count;
 
             for (var i = 0; i < verticesCount; i++)

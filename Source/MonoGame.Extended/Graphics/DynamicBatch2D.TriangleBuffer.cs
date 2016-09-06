@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -28,7 +29,7 @@ namespace MonoGame.Extended.Graphics
                 IndexCount += 6;
             }
 
-            public unsafe int EnqueueSprite(
+            public unsafe GeometryBuffer.GeometryItem EnqueueSprite(
                 Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null,
                 Size? size = null,
                 Color? color = null, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None, float depth = 0)
@@ -80,7 +81,7 @@ namespace MonoGame.Extended.Graphics
                     textureCoordinateTopLeft.X = temp;
                 }
 
-                var vertex = new VertexPositionColorTexture(new Vector3(Vector2.Zero, depth), color ?? Color.White,
+                var vertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color ?? Color.White,
                     Vector2.Zero);
 
                 fixed (VertexPositionColorTexture* fixedPointer = Vertices)
@@ -130,10 +131,10 @@ namespace MonoGame.Extended.Graphics
                 var startIndex = IndexCount;
                 EnqueueClockwiseQuadrilateralIndices(startVertex);
 
-                return startIndex;
+                return new GeometryBuffer.GeometryItem(startIndex, 2);
             }
 
-            public unsafe int EnqueueRectangle(ref Matrix2D transformMatrix, SizeF size, Color? color = null, float depth = 0)
+            public unsafe GeometryBuffer.GeometryItem EnqueueRectangle(ref Matrix2D transformMatrix, SizeF size, Color? color = null, float depth = 0)
             {
                 ThrowIfWouldOverflow(4, 6);
 
@@ -146,7 +147,7 @@ namespace MonoGame.Extended.Graphics
                 positionBottomRight.X = halfSize.Width;
                 positionBottomRight.Y = halfSize.Height;
 
-                var vertex = new VertexPositionColorTexture(new Vector3(Vector2.Zero, depth), color ?? Color.White,
+                var vertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color ?? Color.White,
                     Vector2.Zero);
 
                 fixed (VertexPositionColorTexture* fixedPointer = Vertices)
@@ -190,7 +191,66 @@ namespace MonoGame.Extended.Graphics
                 var startIndex = IndexCount;
                 EnqueueClockwiseQuadrilateralIndices(startVertex);
 
-                return startIndex;
+                return new GeometryBuffer.GeometryItem(startIndex, 2);
+            }
+
+            internal unsafe GeometryBuffer.GeometryItem EnqueueConvexPolygon(IReadOnlyList<Vector2> points, ref Matrix2D transformMatrix, Color? color, float depth)
+            {
+                if (points.Count <= 2)
+                    return new GeometryBuffer.GeometryItem(0, 0);
+
+                // https://www.siggraph.org/education/materials/HyperGraph/scanline/outprims/polygon1.htm
+
+                var startIndex = IndexCount;
+                var startVertex = VertexCount;
+                var trianglesCount = points.Count - 2;
+
+                var point = points[0];
+                transformMatrix.Transform(point, out point);
+                var firstVertex = new VertexPositionColorTexture(new Vector3(point.X, point.Y, depth), color ?? Color.White,
+Vector2.Zero);
+
+                point = points[1];
+                transformMatrix.Transform(point, out point);
+                var secondVertex = new VertexPositionColorTexture(new Vector3(point.X, point.Y, depth), color ?? Color.White,
+                Vector2.Zero);
+
+                var thirdVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color ?? Color.White,
+                Vector2.Zero);
+
+                fixed (VertexPositionColorTexture* fixedVertexPointer = Vertices)
+                {
+                    var vertexPointer = fixedVertexPointer + VertexCount;
+
+                    *(vertexPointer++) = firstVertex;
+                    *(vertexPointer++) = secondVertex;
+
+                    fixed (ushort* fixedIndexPointer = Indices)
+                    {
+                        var indexPointer = fixedIndexPointer + IndexCount;
+
+                        for (var index = 2; index < points.Count; ++index)
+                        {
+                            point = points[index];
+
+                            transformMatrix.Transform(point, out point);
+                            thirdVertex.Position.X = point.X;
+                            thirdVertex.Position.Y = point.Y;
+                            *(vertexPointer++) = thirdVertex;
+                            *(indexPointer++) = (ushort)startVertex;
+                            *(indexPointer++) = (ushort)(index - 1 + startVertex);
+                            *(indexPointer++) = (ushort)(index - 0 + startVertex);
+                            
+                            secondVertex.Position.X = thirdVertex.Position.X;
+                            secondVertex.Position.Y = thirdVertex.Position.Y;
+                        }
+                    }
+                }
+
+                VertexCount += points.Count;
+                IndexCount += 3 * trianglesCount;
+
+                return new GeometryBuffer.GeometryItem(startIndex, trianglesCount);
             }
         }
     }
