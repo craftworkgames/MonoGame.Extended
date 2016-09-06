@@ -38,12 +38,14 @@
   <ItemGroup>
     <Compile Include="Entities\Components\BasicCollisionBody.cs" />
     <Compile Include="Entities\Components\BasicCollisionHandler.cs" />
+    <Compile Include="Entities\Components\EnemyAi.cs" />
     <Compile Include="Entities\Components\PlayerCollisionHandler.cs" />
-    <Compile Include="Entities\Components\PlayerState.cs" />
+    <Compile Include="Entities\Components\CharacterState.cs" />
     <Compile Include="Entities\Systems\BasicCollisionSystem.cs" />
+    <Compile Include="Entities\Systems\EnemyMovementSystem.cs" />
     <Compile Include="Entities\Systems\PlayerMovementSystem.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
-    <Compile Include="Entities\Systems\PlayerStateSystem.cs" />
+    <Compile Include="Entities\Systems\CharacterStateSystem.cs" />
     <Compile Include="GameMain.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

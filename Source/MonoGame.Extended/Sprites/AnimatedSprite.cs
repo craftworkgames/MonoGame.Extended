@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Sprites;
+using MonoGame.Extended.Animations.SpriteSheets;
 
-namespace MonoGame.Extended.Animations.SpriteSheets
+namespace MonoGame.Extended.Sprites
 {
     public class AnimatedSprite : Sprite
     {

@@ -9,6 +9,7 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.Particles;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
+using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
 namespace Demo.Platformer.Entities
@@ -33,7 +34,7 @@ namespace Demo.Platformer.Entities
         private void LoadContent(ContentManager content)
         {
             var texture = content.Load<Texture2D>("tiny-characters");
-            _characterTextureAtlas = TextureAtlas.Create(texture, 32, 32, 15);
+            _characterTextureAtlas = TextureAtlas.Create(texture, 32, 32, 112);
         }
 
         public Entity CreatePlayer(Vector2 position)
@@ -41,6 +42,7 @@ namespace Demo.Platformer.Entities
             var entity = _entityComponentSystem.CreateEntity(Entities.Player, position);
             var textureRegion = _characterTextureAtlas[0];
             var animationFactory = new SpriteSheetAnimationFactory(_characterTextureAtlas);
+
             animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 12, 13 }, 1.0f));
             animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 0, 1, 2, 3 }));
             animationFactory.Add("jump", new SpriteSheetAnimationData(new[] { 8, 9 }, isLooping: false));
@@ -48,7 +50,8 @@ namespace Demo.Platformer.Entities
             entity.AttachComponent(new AnimatedSprite(animationFactory));
             entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
             entity.AttachComponent(new PlayerCollisionHandler());
-            entity.AttachComponent(new PlayerState());
+            entity.AttachComponent(new CharacterState());
+
             return entity;
         }
 
@@ -94,6 +97,24 @@ namespace Demo.Platformer.Entities
             };
             entity.AttachComponent(particleEmitter);
             entity.Destroy(delaySeconds: totalSeconds);
+            return entity;
+        }
+
+        public Entity CreateBadGuy(Vector2 position, SizeF size)
+        {
+            var entity = _entityComponentSystem.CreateEntity(position);
+            var textureRegion = _characterTextureAtlas[90];
+            var animationFactory = new SpriteSheetAnimationFactory(_characterTextureAtlas);
+
+            animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 100 }, 1.0f));
+            animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 96, 97, 98, 99 }, isPingPong: true));
+
+            entity.AttachComponent(new AnimatedSprite(animationFactory, "walk"));
+            entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
+            entity.AttachComponent(new PlayerCollisionHandler());
+            entity.AttachComponent(new CharacterState());
+            entity.AttachComponent(new EnemyAi());
+
             return entity;
         }
     }

@@ -38,7 +38,7 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
-    <Compile Include="Animations\SpriteSheets\AnimatedSprite.cs" />
+    <Compile Include="Sprites\AnimatedSprite.cs" />
     <Compile Include="Animations\Tweens\DelayTween.cs" />
     <Compile Include="Animations\Tweens\FluentTweening.cs" />
     <Compile Include="Animations\Tweens\EasingFunctions.cs" />

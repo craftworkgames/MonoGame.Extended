@@ -44,7 +44,8 @@ namespace Demo.Platformer
             var spawnPoint = _tiledMap.GetObjectGroup("entities").Objects.Single(i => i.Type == "Spawn").Position;
 
             _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
-            _entityComponentSystem.RegisterSystem(new PlayerStateSystem(_entityFactory, spawnPoint));
+            _entityComponentSystem.RegisterSystem(new EnemyMovementSystem());
+            _entityComponentSystem.RegisterSystem(new CharacterStateSystem(_entityFactory, spawnPoint));
             _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(gravity: new Vector2(0, 1150)));
             _entityComponentSystem.RegisterSystem(new ParticleEmitterSystem());
             _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
