@@ -8,11 +8,11 @@ namespace MonoGame.Extended.Graphics.Batching
         where TCommandData : struct, IBatchDrawCommandData<TCommandData>
     {
         internal float SortKey;
-        internal ushort StartIndex;
-        internal ushort PrimitiveCount;
+        internal int StartIndex;
+        internal int PrimitiveCount;
         internal TCommandData Data;
 
-        internal BatchDrawCommand(ushort startIndex, ushort primitiveCount, float sortKey, TCommandData data)
+        internal BatchDrawCommand(int startIndex, int primitiveCount, float sortKey, TCommandData data)
         {
             SortKey = sortKey;
             StartIndex = startIndex;

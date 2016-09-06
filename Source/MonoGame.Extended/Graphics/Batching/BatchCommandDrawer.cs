@@ -3,15 +3,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal sealed class BatchCommandDrawer<TVertexType, TCommandData> : IDisposable
-        where TVertexType : struct, IVertexType where TCommandData : struct, IBatchDrawCommandData<TCommandData>
+    internal sealed class BatchCommandDrawer<TVertexType, TIndexType, TCommandData> : IDisposable
+        where TVertexType : struct, IVertexType
+        where TCommandData : struct, IBatchDrawCommandData<TCommandData>
+        where TIndexType : struct
     {
-        internal readonly GeometryBuffer<TVertexType> GeometryBuffer;
+        internal readonly GeometryBuffer<TVertexType, TIndexType> GeometryBuffer;
         internal readonly GraphicsDevice GraphicsDevice;
         internal Effect Effect;
         internal PrimitiveType PrimitiveType;
 
-        internal BatchCommandDrawer(GraphicsDevice graphicsDevice, GeometryBuffer<TVertexType> geometryBuffer)
+        internal BatchCommandDrawer(GraphicsDevice graphicsDevice,
+            GeometryBuffer<TVertexType, TIndexType> geometryBuffer)
         {
             GraphicsDevice = graphicsDevice;
             GeometryBuffer = geometryBuffer;
