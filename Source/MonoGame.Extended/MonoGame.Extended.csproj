@@ -38,6 +38,8 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="CollisionSimulation2DExtensions.cs" />
+    <Compile Include="Collision\Response\DefaultCollisionResponder2D.cs" />
     <Compile Include="Sprites\AnimatedSprite.cs" />
     <Compile Include="Animations\Tweens\DelayTween.cs" />
     <Compile Include="Animations\Tweens\FluentTweening.cs" />
@@ -78,7 +80,6 @@
     <Compile Include="Collision\Narrowphase\PassThroughNarrowphase2D.cs" />
     <Compile Include="Collision\Narrowphase\Shapes\Box2D.cs" />
     <Compile Include="Collision\Narrowphase\Shapes\CollisionShape2D.cs" />
-    <Compile Include="Collision\Response\EmptyCollisionResponder2D.cs" />
     <Compile Include="Collision\Response\ICollisionResponder2D.cs" />
     <Compile Include="ColorHelper.cs" />
     <Compile Include="Entities\Components\EntityComponent.cs" />

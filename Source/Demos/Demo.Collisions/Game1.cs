@@ -39,16 +39,8 @@ namespace Demo.Collisions
             _entityA = _entityComponentSystem.CreateEntity(new Vector2(50, 50));
             _entityB = _entityComponentSystem.CreateEntity(new Vector2(150, 150));
 
-            _colliderA = _simulation.CreateCollider(_entityA, new Box2D
-                {
-                    Size = new SizeF(50, 50)
-                },
-                BoundingVolumeType2D.BoundingBox);
-            _colliderB = _simulation.CreateCollider(_entityB, new Box2D
-            {
-                Size = new SizeF(100, 100)
-            },
-                BoundingVolumeType2D.BoundingBox);
+            _colliderA = _simulation.CreateBoxCollider(_entityA, new SizeF(50, 50));
+            _colliderB = _simulation.CreateBoxCollider(_entityB, new SizeF(100, 100));
 
             base.Initialize();
         }

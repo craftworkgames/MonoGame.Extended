@@ -62,6 +62,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <MonoGameContentReference Include="Content\Content.mgcb" />
+    <None Include="Content\montserrat-32.fnt" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +75,7 @@
     <None Include="Content\logo-square-128.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\montserrat-32_0.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
