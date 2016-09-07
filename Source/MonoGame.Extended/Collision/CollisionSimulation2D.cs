@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collision.Broadphase;
-using MonoGame.Extended.Collision.Broadphase.BoundingVolumes;
-using MonoGame.Extended.Collision.Narrowphase;
-using MonoGame.Extended.Collision.Narrowphase.Shapes;
+using MonoGame.Extended.Collision.Detection.Broadphase;
+using MonoGame.Extended.Collision.Detection.Broadphase.BoundingVolumes;
+using MonoGame.Extended.Collision.Detection.Narrowphase;
+using MonoGame.Extended.Collision.Detection.Narrowphase.Shapes;
 using MonoGame.Extended.Collision.Response;
 
 namespace MonoGame.Extended.Collision
@@ -23,9 +23,36 @@ namespace MonoGame.Extended.Collision
         internal readonly List<BroadphaseCollisionPair2D> BroadphaseCollisionPairs = new List<BroadphaseCollisionPair2D>();
         internal readonly List<NarrowphaseCollisionPair2D> NarrowphaseCollisionPairs = new List<NarrowphaseCollisionPair2D>();
 
+        private readonly List<BroadphaseCollisionDelegate> _broadphaseCollisionSubscribersList = new List<BroadphaseCollisionDelegate>();
+        private readonly List<NarrowphaseCollisionDelegate> _narrowphaseCollisionSubscribersList = new List<NarrowphaseCollisionDelegate>();
+
         public ICollisionBroadphase2D Broadphase { get; }
         public ICollisionNarrowphase2D Narrowphase { get; }
         public ICollisionResponder2D Responder { get; }
+
+        public event BroadphaseCollisionDelegate BroadphaseCollision
+        {
+            add
+            {
+                _broadphaseCollisionSubscribersList.Add(value);
+            }
+            remove
+            {
+                _broadphaseCollisionSubscribersList.Remove(value);
+            }
+        }
+
+        public event NarrowphaseCollisionDelegate NarrowphaseCollision
+        {
+            add
+            {
+                _narrowphaseCollisionSubscribersList.Add(value);
+            }
+            remove
+            {
+                _narrowphaseCollisionSubscribersList.Remove(value);
+            }
+        }
 
         public CollisionSimulation2D(ICollisionBroadphase2D broadphase = null, ICollisionNarrowphase2D narrowphase = null, ICollisionResponder2D responder = null)
         {
@@ -131,8 +158,33 @@ namespace MonoGame.Extended.Collision
                 return;
             }
 
+            bool cancelled;
+            OnBroadphaseCollision(ref broadphaseCollisionPair, out cancelled);
+            if (cancelled)
+                return;
+
             BroadphaseCollisionPairsLookup.Add(broadphaseCollisionPair);
             BroadphaseCollisionPairs.Add(broadphaseCollisionPair);
+        }
+
+        internal void OnBroadphaseCollision(ref BroadphaseCollisionPair2D collisionPair, out bool cancelled)
+        {
+            var firstCollider = collisionPair.FirstCollider;
+            var secondCollider = collisionPair.SecondCollider;
+
+            foreach (var @delegate in _broadphaseCollisionSubscribersList)
+            {
+                @delegate(firstCollider, secondCollider, out cancelled);
+                if (cancelled)
+                {
+                    return;
+                }
+            }
+
+            firstCollider.OnBroadphaseCollision(collisionPair.SecondCollider, out cancelled);
+            if (cancelled)
+                return;
+            secondCollider.OnBroadphaseCollision(collisionPair.FirstCollider, out cancelled);
         }
 
         private void FindNarrowphaseCollisionPairs(GameTime gameTime)
@@ -149,7 +201,32 @@ namespace MonoGame.Extended.Collision
 
         private void ProcessNarrowphaseCollisionPair(ref NarrowphaseCollisionPair2D narrowphaseCollisionPair)
         {
+            bool cancelled;
+            OnNarrowphaseCollision(ref narrowphaseCollisionPair, out cancelled);
+            if (cancelled)
+                return;
+
             NarrowphaseCollisionPairs.Add(narrowphaseCollisionPair);
+        }
+
+        internal void OnNarrowphaseCollision(ref NarrowphaseCollisionPair2D collisionPair, out bool cancelled)
+        {
+            var firstCollider = collisionPair.FirstCollider;
+            var secondCollider = collisionPair.SecondCollider;
+
+            foreach (var @delegate in _broadphaseCollisionSubscribersList)
+            {
+                @delegate(firstCollider, secondCollider, out cancelled);
+                if (cancelled)
+                {
+                    return;
+                }
+            }
+
+            firstCollider.OnNarrowphaseCollision(collisionPair.SecondCollider, out cancelled);
+            if (cancelled)
+                return;
+            secondCollider.OnNarrowphaseCollision(collisionPair.FirstCollider, out cancelled);
         }
 
         private void RespondToNarrowphaseCollisionPairs(GameTime gameTime)

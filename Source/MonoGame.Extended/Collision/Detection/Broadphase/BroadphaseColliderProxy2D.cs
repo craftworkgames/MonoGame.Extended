@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
-using MonoGame.Extended.Collision.Broadphase.BoundingVolumes;
+using MonoGame.Extended.Collision.Detection.Broadphase.BoundingVolumes;
 
-namespace MonoGame.Extended.Collision.Broadphase
+namespace MonoGame.Extended.Collision.Detection.Broadphase
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct BroadphaseColliderProxy2D

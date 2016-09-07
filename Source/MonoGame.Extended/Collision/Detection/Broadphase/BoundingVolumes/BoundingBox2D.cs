@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Collision.Broadphase.BoundingVolumes
+namespace MonoGame.Extended.Collision.Detection.Broadphase.BoundingVolumes
 {
     // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.1; Bounding Volumes - Axis-aligned Bounding Boxes (AABBs). pg 77-87
     public sealed class BoundingBox2D : BoundingVolume2D

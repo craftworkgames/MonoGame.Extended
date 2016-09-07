@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Collision.Broadphase
+namespace MonoGame.Extended.Collision.Detection.Broadphase
 {
     public interface ICollisionBroadphase2D
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.Collision.Narrowphase;
+using MonoGame.Extended.Collision.Detection.Narrowphase;
 
 namespace MonoGame.Extended.Collision.Response
 {

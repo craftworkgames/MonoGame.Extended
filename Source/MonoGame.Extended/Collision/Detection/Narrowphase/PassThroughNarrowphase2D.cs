@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Collision.Broadphase;
+using MonoGame.Extended.Collision.Detection.Broadphase;
 
-namespace MonoGame.Extended.Collision.Narrowphase
+namespace MonoGame.Extended.Collision.Detection.Narrowphase
 {
     public class PassThroughNarrowphase2D : ICollisionNarrowphase2D
     {

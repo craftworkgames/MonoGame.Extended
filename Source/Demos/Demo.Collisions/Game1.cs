@@ -1,9 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Collision;
-using MonoGame.Extended.Collision.Broadphase.BoundingVolumes;
-using MonoGame.Extended.Collision.Narrowphase.Shapes;
 using MonoGame.Extended.Entities;
 
 namespace Demo.Collisions
@@ -40,9 +39,23 @@ namespace Demo.Collisions
             _entityB = _entityComponentSystem.CreateEntity(new Vector2(150, 150));
 
             _colliderA = _simulation.CreateBoxCollider(_entityA, new SizeF(50, 50));
+            _colliderA.BroadphaseCollision += ColliderOnBroadphaseCollision;
+            _colliderA.NarrowphaseCollision += ColliderOnNarrowphaseCollision;
             _colliderB = _simulation.CreateBoxCollider(_entityB, new SizeF(100, 100));
 
             base.Initialize();
+        }
+
+        private void ColliderOnNarrowphaseCollision(Collider2D firstCollider, Collider2D secondCollider, out bool cancel)
+        {
+            cancel = false;
+            Console.WriteLine("Contact narrowphase!");
+        }
+
+        private void ColliderOnBroadphaseCollision(Collider2D firstCollider, Collider2D secondCollider, out bool cancel)
+        {
+            cancel = false;
+            Console.WriteLine("Contact broadphase!");
         }
 
         protected override void LoadContent()

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace MonoGame.Extended.Collision.Broadphase.BoundingVolumes
+namespace MonoGame.Extended.Collision.Detection.Broadphase.BoundingVolumes
 {
     public static class RayHelper
     {

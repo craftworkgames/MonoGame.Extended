@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.Shapes.Explicit;
 
-namespace MonoGame.Extended.Collision.Narrowphase.Shapes
+namespace MonoGame.Extended.Collision.Detection.Narrowphase.Shapes
 { 
     public abstract class CollisionShape2D : ConvexPolygon
     {

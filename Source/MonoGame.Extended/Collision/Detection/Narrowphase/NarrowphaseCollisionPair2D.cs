@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace MonoGame.Extended.Collision.Narrowphase
+namespace MonoGame.Extended.Collision.Detection.Narrowphase
 {
     [DebuggerDisplay("{DebugDisplayString,nq}")]
     public struct NarrowphaseCollisionPair2D : IEquatable<NarrowphaseCollisionPair2D>
