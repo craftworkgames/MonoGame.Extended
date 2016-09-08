@@ -110,8 +110,8 @@ namespace Demo.Platformer.Entities
             animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 96, 97, 98, 99 }, isPingPong: true));
 
             entity.AttachComponent(new AnimatedSprite(animationFactory, "walk"));
-            entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
-            entity.AttachComponent(new PlayerCollisionHandler());
+            entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f) {Tag = "Deadly"});
+            entity.AttachComponent(new BasicCollisionHandler());
             entity.AttachComponent(new CharacterState());
             entity.AttachComponent(new EnemyAi());
 

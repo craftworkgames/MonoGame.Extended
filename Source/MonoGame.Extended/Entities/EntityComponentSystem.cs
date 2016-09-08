@@ -88,10 +88,8 @@ namespace MonoGame.Extended.Entities
 
         public void DestroyEntity(Entity entity)
         {
-            foreach (var component in _components.Where(c => c.Entity == entity).OfType<IDisposable>())
-                component.Dispose();
-
-            _components.RemoveAll(c => c.Entity == entity);
+            foreach (var component in _components.Where(c => c.Entity == entity).ToArray())
+                DetachComponent(component);
 
             if (entity.Name != null)
                 _entitiesByName.Remove(entity.Name);
@@ -115,6 +113,7 @@ namespace MonoGame.Extended.Entities
         internal void DetachComponent(EntityComponent component)
         {
             _components.Remove(component);
+            (component as IDisposable)?.Dispose();
             ComponentDetached?.Invoke(this, component);
         }
 
