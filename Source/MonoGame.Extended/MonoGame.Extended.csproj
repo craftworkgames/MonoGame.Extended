@@ -42,6 +42,7 @@
     <Compile Include="Collision\Delegates\NarrowphaseCollisionDelegate.cs" />
     <Compile Include="Collision\Delegates\BroadphaseCollisionDelegate.cs" />
     <Compile Include="Collision\Response\DefaultCollisionResponder2D.cs" />
+    <Compile Include="ListExtensions.cs" />
     <Compile Include="Sprites\AnimatedSprite.cs" />
     <Compile Include="Animations\Tweens\DelayTween.cs" />
     <Compile Include="Animations\Tweens\FluentTweening.cs" />

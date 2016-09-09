@@ -38,7 +38,7 @@ namespace MonoGame.Extended.Collision
             }
             remove
             {
-                _broadphaseCollisionSubscribersList.Remove(value);
+                _broadphaseCollisionSubscribersList.FastRemove(value);
             }
         }
 
@@ -50,7 +50,7 @@ namespace MonoGame.Extended.Collision
             }
             remove
             {
-                _narrowphaseCollisionSubscribersList.Remove(value);
+                _narrowphaseCollisionSubscribersList.FastRemove(value);
             }
         }
 
@@ -212,6 +212,7 @@ namespace MonoGame.Extended.Collision
         internal void OnNarrowphaseCollision(ref NarrowphaseCollisionPair2D collisionPair, out bool cancelled)
         {
             var firstCollider = collisionPair.FirstCollider;
+
             var secondCollider = collisionPair.SecondCollider;
 
             foreach (var @delegate in _broadphaseCollisionSubscribersList)
@@ -219,7 +220,7 @@ namespace MonoGame.Extended.Collision
                 @delegate(firstCollider, secondCollider, out cancelled);
                 if (cancelled)
                 {
-                    return;
+                    return; 
                 }
             }
 

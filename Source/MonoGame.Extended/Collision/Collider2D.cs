@@ -33,7 +33,7 @@ namespace MonoGame.Extended.Collision
             }
             remove
             {
-                _broadphaseCollisionSubscribersList.Remove(value);
+                _broadphaseCollisionSubscribersList.FastRemove(value);
             }
         }
 
@@ -45,7 +45,7 @@ namespace MonoGame.Extended.Collision
             }
             remove
             {
-                _narrowphaseCollisionSubscribersList.Remove(value);
+                _narrowphaseCollisionSubscribersList.FastRemove(value);
             }
         }
 
