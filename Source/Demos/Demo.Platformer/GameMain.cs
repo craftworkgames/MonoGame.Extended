@@ -52,8 +52,7 @@ namespace Demo.Platformer
             _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
             
             service.CreateEntities(_tiledMap.GetObjectGroup("entities").Objects);
-
-
+            
             //var viewport = GraphicsDevice.Viewport;
             //_alphaTestEffect = new AlphaTestEffect(GraphicsDevice)
             //{

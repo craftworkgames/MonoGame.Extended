@@ -83,7 +83,7 @@ namespace Demo.Platformer.Entities.Systems
                 sprite.Play("idle");
 
             body.Velocity = velocity;
-
+            
             _previousKeyboardState = keyboardState;
         }
     }

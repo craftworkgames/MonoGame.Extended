@@ -51,6 +51,7 @@ namespace Demo.Platformer.Entities
             entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
             entity.AttachComponent(new PlayerCollisionHandler());
             entity.AttachComponent(new CharacterState());
+            entity.Tag = Entities.Player;
 
             return entity;
         }
@@ -58,41 +59,37 @@ namespace Demo.Platformer.Entities
         public Entity CreateSolid(Vector2 position, SizeF size)
         {
             var entity = _entityComponentSystem.CreateEntity(position);
-            entity.AttachComponent(new BasicCollisionBody(size, Vector2.Zero)
-            {
-                IsStatic = true
-            });
+            entity.AttachComponent(new BasicCollisionBody(size, Vector2.Zero) { IsStatic = true });
             return entity;
         }
 
         public Entity CreateDeadly(Vector2 position, SizeF size)
         {
             var entity = _entityComponentSystem.CreateEntity(position);
-            entity.AttachComponent(new BasicCollisionBody(size, Vector2.Zero)
-            {
-                IsStatic = true,
-                Tag = "Deadly"
-            });
+            entity.AttachComponent(new BasicCollisionBody(size, Vector2.Zero) { IsStatic = true, Tag = "Deadly" });
             return entity;
         }
 
-        public Entity CreateBloodExplosion(Vector2 position, float totalSeconds = 0.5f)
+        public Entity CreateBloodExplosion(Vector2 position, float totalSeconds = 1.0f)
         {
+            var random = new FastRandom((int)DateTimeOffset.Now.Ticks);
             var textureRegion = _characterTextureAtlas[0];
             var entity = _entityComponentSystem.CreateEntity(position);
-            var profile = Profile.Point();
+            var profile = Profile.Spray(new Vector2(0, -1), MathHelper.Pi);
             var term = TimeSpan.FromSeconds(totalSeconds);
             var particleEmitter = new ParticleEmitter(textureRegion, 32, term, profile)
             {
                 Parameters = new ParticleReleaseParameters
                 {
-                    Speed = new Range<float>(40, 100),
-                    Quantity = new Range<int>(50, 60)
+                    Speed = new Range<float>(140, 200),
+                    Quantity = new Range<int>(32, 64),
+                    Rotation = new Range<float>(-MathHelper.TwoPi, MathHelper.TwoPi)
                 },
                 Modifiers = new IModifier[]
                 {
                     new LinearGravityModifier { Direction = Vector2.UnitY, Strength = 350 },
-                    new OpacityFastFadeModifier()
+                    new OpacityFastFadeModifier(),
+                    new RotationModifier { RotationRate = random.NextSingle(-MathHelper.TwoPi, MathHelper.TwoPi) }
                 }
             };
             entity.AttachComponent(particleEmitter);
@@ -111,9 +108,10 @@ namespace Demo.Platformer.Entities
 
             entity.AttachComponent(new AnimatedSprite(animationFactory, "walk"));
             entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f) {Tag = "Deadly"});
-            entity.AttachComponent(new BasicCollisionHandler());
+            entity.AttachComponent(new EnemyCollisionHandler());
             entity.AttachComponent(new CharacterState());
             entity.AttachComponent(new EnemyAi());
+            entity.Tag = "BadGuy";
 
             return entity;
         }

@@ -39,6 +39,7 @@
     <Compile Include="Entities\Components\BasicCollisionBody.cs" />
     <Compile Include="Entities\Components\BasicCollisionHandler.cs" />
     <Compile Include="Entities\Components\EnemyAi.cs" />
+    <Compile Include="Entities\Components\EnemyCollisionHandler.cs" />
     <Compile Include="Entities\Components\PlayerCollisionHandler.cs" />
     <Compile Include="Entities\Components\CharacterState.cs" />
     <Compile Include="Entities\Systems\BasicCollisionSystem.cs" />

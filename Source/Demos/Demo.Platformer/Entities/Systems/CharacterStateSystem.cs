@@ -1,3 +1,4 @@
+using System.Linq;
 using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities.Systems;
@@ -17,18 +18,17 @@ namespace Demo.Platformer.Entities.Systems
 
         public override void Update(GameTime gameTime)
         {
-            var playerEntity = GetEntity(Entities.Player);
-
-            if (playerEntity != null)
+            foreach (var component in GetComponents<CharacterState>().ToArray())
             {
-                var playerState = playerEntity.GetComponent<CharacterState>();
-
-                if (!playerState.IsAlive)
+                if (!component.IsAlive)
                 {
-                    _entityFactory.CreateBloodExplosion(playerEntity.Position);
-                    playerEntity.Destroy();
-                    _entityFactory.CreatePlayer(_spawnPoint);
+                    _entityFactory.CreateBloodExplosion(component.Entity.Position);
+                    component.Entity.Destroy();
+
+                    if(component.Entity.Name == Entities.Player)
+                        _entityFactory.CreatePlayer(_spawnPoint);
                 }
+
             }
         }
     }
