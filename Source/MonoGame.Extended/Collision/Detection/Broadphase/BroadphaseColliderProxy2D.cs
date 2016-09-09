@@ -1,5 +1,5 @@
 ﻿using System.Runtime.InteropServices;
-using MonoGame.Extended.Collision.Detection.Broadphase.BoundingVolumes;
+using MonoGame.Extended.Collision.BoundingVolumes;
 
 namespace MonoGame.Extended.Collision.Detection.Broadphase
 {

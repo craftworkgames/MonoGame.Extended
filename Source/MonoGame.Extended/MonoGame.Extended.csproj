@@ -65,10 +65,10 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
-    <Compile Include="Collision\Detection\Broadphase\BoundingVolumes\BoundingBox2D.cs" />
-    <Compile Include="Collision\Detection\Broadphase\BoundingVolumes\BoundingVolume2D.cs" />
-    <Compile Include="Collision\Detection\Broadphase\BoundingVolumes\BoundingVolumeType2D.cs" />
-    <Compile Include="Collision\Detection\Broadphase\BoundingVolumes\RayHelper.cs" />
+    <Compile Include="Collision\BoundingVolumes\BoundingBox2D.cs" />
+    <Compile Include="Collision\BoundingVolumes\BoundingVolume2D.cs" />
+    <Compile Include="Collision\BoundingVolumes\BoundingVolumeType2D.cs" />
+    <Compile Include="Collision\BoundingVolumes\RayHelper.cs" />
     <Compile Include="Collision\Detection\Broadphase\BroadphaseColliderProxy2D.cs" />
     <Compile Include="Collision\Detection\Broadphase\BroadphaseCollisionDelegate2D.cs" />
     <Compile Include="Collision\Detection\Broadphase\BroadphaseCollisionPair2D.cs" />
@@ -81,8 +81,8 @@
     <Compile Include="Collision\Detection\Narrowphase\NarrowphaseCollisionDelegate2D.cs" />
     <Compile Include="Collision\Detection\Narrowphase\NarrowphaseCollisionPair2D.cs" />
     <Compile Include="Collision\Detection\Narrowphase\PassThroughNarrowphase2D.cs" />
-    <Compile Include="Collision\Detection\Narrowphase\Shapes\Box2D.cs" />
-    <Compile Include="Collision\Detection\Narrowphase\Shapes\CollisionShape2D.cs" />
+    <Compile Include="Collision\Shapes\Box2D.cs" />
+    <Compile Include="Collision\Shapes\CollisionShape2D.cs" />
     <Compile Include="Collision\Response\ICollisionResponder2D.cs" />
     <Compile Include="ColorHelper.cs" />
     <Compile Include="Entities\Components\EntityComponent.cs" />

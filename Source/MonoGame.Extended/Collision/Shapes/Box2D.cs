@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Collision.Detection.Narrowphase.Shapes
+namespace MonoGame.Extended.Collision.Shapes
 {
     public sealed class Box2D : CollisionShape2D
     {

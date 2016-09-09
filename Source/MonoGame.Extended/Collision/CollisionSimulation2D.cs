@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Collision.BoundingVolumes;
 using MonoGame.Extended.Collision.Detection.Broadphase;
-using MonoGame.Extended.Collision.Detection.Broadphase.BoundingVolumes;
 using MonoGame.Extended.Collision.Detection.Narrowphase;
-using MonoGame.Extended.Collision.Detection.Narrowphase.Shapes;
 using MonoGame.Extended.Collision.Response;
+using MonoGame.Extended.Collision.Shapes;
 
 namespace MonoGame.Extended.Collision
 {

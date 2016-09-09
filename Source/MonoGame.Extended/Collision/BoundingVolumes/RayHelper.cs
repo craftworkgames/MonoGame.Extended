@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace MonoGame.Extended.Collision.Detection.Broadphase.BoundingVolumes
+namespace MonoGame.Extended.Collision.BoundingVolumes
 {
-    public static class RayHelper
+    internal static class RayHelper
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool RayIntersectsSlab(float positionCoordinate, float directionCoordinate, float slabMinimum, float slabMaximum, ref float rayMinimumDistance, ref float rayMaximumDistance)

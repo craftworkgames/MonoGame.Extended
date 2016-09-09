@@ -1,6 +1,6 @@
 ﻿using MonoGame.Extended.Collision;
-using MonoGame.Extended.Collision.Detection.Broadphase.BoundingVolumes;
-using MonoGame.Extended.Collision.Detection.Narrowphase.Shapes;
+using MonoGame.Extended.Collision.BoundingVolumes;
+using MonoGame.Extended.Collision.Shapes;
 
 namespace MonoGame.Extended
 {

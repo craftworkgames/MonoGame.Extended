@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collision.Detection.Broadphase.BoundingVolumes;
-using MonoGame.Extended.Collision.Detection.Narrowphase.Shapes;
+using MonoGame.Extended.Collision.BoundingVolumes;
+using MonoGame.Extended.Collision.Shapes;
 using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Collision

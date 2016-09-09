@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Collision.Detection.Broadphase.BoundingVolumes
+namespace MonoGame.Extended.Collision.BoundingVolumes
 {
     public abstract class BoundingVolume2D
     {
