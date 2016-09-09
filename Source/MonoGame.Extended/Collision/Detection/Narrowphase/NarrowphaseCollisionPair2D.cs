@@ -55,14 +55,11 @@ namespace MonoGame.Extended.Collision.Detection.Narrowphase
             throw new NotSupportedException();
         }
 
-        internal string DebugDisplayString
-        {
-            get { return $"FirstBody = {FirstCollider}, SecondBody = {SecondCollider}"; }
-        }
+        internal string DebugDisplayString => $"FirstCollider = {FirstCollider}, SecondCollider = {SecondCollider}";
 
         public override string ToString()
         {
-            return $"{{FirstBody = {FirstCollider}, SecondBody = {SecondCollider}}}";
+            return $"{{FirstCollider = {FirstCollider}, SecondCollider = {SecondCollider}}}";
         }
     }
 }
