@@ -60,7 +60,7 @@ namespace MonoGame.Extended.Collision
 
         public void DrawShape(CollisionShape2D shape, ref Matrix2D worldMatrix)
         {
-            _batch.DrawConvexPolygon(shape.Points, ref worldMatrix, ShapeFillColor);
+            _batch.DrawConvexPolygon(shape.Vertices, ref worldMatrix, ShapeFillColor);
         }
     }
 }

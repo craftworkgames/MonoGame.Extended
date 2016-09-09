@@ -75,7 +75,7 @@ namespace MonoGame.Extended.Collision
             // ReSharper disable once InvertIf
             if ((Flags & ColliderFlags.ShapeIsDirty) != 0)
             {
-                BoundingVolume.UpdateFrom(Shape.Points);
+                BoundingVolume.UpdateFrom(Shape.Vertices);
                 Flags &= ~ColliderFlags.ShapeIsDirty;
             }
 

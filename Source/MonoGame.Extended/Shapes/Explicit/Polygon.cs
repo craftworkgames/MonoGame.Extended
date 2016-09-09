@@ -6,9 +6,9 @@ namespace MonoGame.Extended.Shapes.Explicit
 {
     public abstract class Polygon
     {
-        private Vector2[] _points;
+        private Vector2[] _vertices;
 
-        public IReadOnlyList<Vector2> Points => _points;
+        public IReadOnlyList<Vector2> Vertices => _vertices;
 
         public Vector2 Centroid { get; private set; }
 
@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Shapes.Explicit
 
         protected void SetPoints(Vector2[] vertices)
         {
-            _points = vertices;
+            _vertices = vertices;
             OnShapeChanged();
             ShapeChanged?.Invoke();
         }
@@ -43,7 +43,7 @@ namespace MonoGame.Extended.Shapes.Explicit
 
         public void Invalidate()
         {
-            UpdateVertices(_points);
+            UpdateVertices(_vertices);
         }
     }
 }

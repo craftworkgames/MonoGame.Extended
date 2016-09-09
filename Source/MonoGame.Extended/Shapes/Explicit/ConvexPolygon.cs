@@ -19,7 +19,7 @@ namespace MonoGame.Extended.Shapes.Explicit
         {
             centroid.X = 0;
             centroid.Y = 0;
-            var vertices = Points;
+            var vertices = Vertices;
             var verticesCount = vertices.Count;
 
             for (var i = 0; i < verticesCount; i++)
