@@ -8,6 +8,7 @@ namespace MonoGame.Extended.Maps.Tiled
     {
         protected TiledLayer(string name)
         {
+            Id = 0;
             Name = name;
             Properties = new TiledProperties();
             IsVisible = true;
@@ -16,6 +17,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public abstract void Dispose();
 
+        public int Id { get; set; }
         public string Name { get; }
         public TiledProperties Properties { get; }
         public bool IsVisible { get; set; }

@@ -11,6 +11,7 @@ using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Maps.Tiled.Components;
 
 namespace Demo.Platformer.Entities
 {
@@ -51,6 +52,7 @@ namespace Demo.Platformer.Entities
             entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
             entity.AttachComponent(new PlayerCollisionHandler());
             entity.AttachComponent(new CharacterState());
+            entity.AttachComponent(new DepthComponent());
             entity.Tag = Entities.Player;
 
             return entity;

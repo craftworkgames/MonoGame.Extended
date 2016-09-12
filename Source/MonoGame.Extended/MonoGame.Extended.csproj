@@ -38,6 +38,9 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Maps\Tiled\Components\DepthComponent.cs" />
+    <Compile Include="Maps\Tiled\Services\TiledTileLayerToEntityService.cs" />
+    <Compile Include="Maps\Tiled\Systems\LayerDepthSystem.cs" />
     <Compile Include="Sprites\AnimatedSprite.cs" />
     <Compile Include="Animations\Tweens\DelayTween.cs" />
     <Compile Include="Animations\Tweens\FluentTweening.cs" />

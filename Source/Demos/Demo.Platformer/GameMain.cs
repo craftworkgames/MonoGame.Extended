@@ -10,6 +10,11 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.ViewportAdapters;
+using MonoGame.Extended.Maps.Tiled.Services;
+using MonoGame.Extended.Maps.Tiled.Systems;
+using MonoGame.Extended.Maps.Tiled.Components;
+using System.Text;
+using MonoGame.Extended.BitmapFonts;
 
 namespace Demo.Platformer
 {
@@ -17,6 +22,8 @@ namespace Demo.Platformer
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
+        private SpriteBatch _spriteBatch;
+        private BitmapFont _bitmapFont;
         private Camera2D _camera;
         private TiledMap _tiledMap;
         private EntityComponentSystem _entityComponentSystem;
@@ -32,6 +39,9 @@ namespace Demo.Platformer
 
         protected override void LoadContent()
         {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
+
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
 
@@ -43,25 +53,20 @@ namespace Demo.Platformer
             var service = new TiledObjectToEntityService(_entityFactory);
             var spawnPoint = _tiledMap.GetObjectGroup("entities").Objects.Single(i => i.Type == "Spawn").Position;
 
+            _entityComponentSystem.RegisterSystem(new LayerDepthSystem());
             _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
             _entityComponentSystem.RegisterSystem(new EnemyMovementSystem());
             _entityComponentSystem.RegisterSystem(new CharacterStateSystem(_entityFactory, spawnPoint));
             _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(gravity: new Vector2(0, 1150)));
             _entityComponentSystem.RegisterSystem(new ParticleEmitterSystem());
             _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
-            _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
+            _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp, UseAlphaTest = true });
             
             service.CreateEntities(_tiledMap.GetObjectGroup("entities").Objects);
-            
-            //var viewport = GraphicsDevice.Viewport;
-            //_alphaTestEffect = new AlphaTestEffect(GraphicsDevice)
-            //{
-            //    Projection =
-            //        Matrix.CreateTranslation(-0.5f, -0.5f, 0)*
-            //        Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1),
-            //    VertexColorEnabled = true,
-            //    ReferenceAlpha = 128
-            //};
+
+            var tileService = new TiledTileLayerToEntityService(_entityComponentSystem, _tiledMap);
+            tileService.ConvertLayer("decorations");
+            tileService.ConvertLayer("decorations2");
         }
 
         protected override void UnloadContent()
@@ -77,32 +82,46 @@ namespace Demo.Platformer
 
             _entityComponentSystem.Update(gameTime);
 
+            if (keyboardState.IsKeyDown(Keys.T))
+            {
+                var player = _entityComponentSystem.GetEntity(Entities.Entities.Player);
+                if (player.GetComponent<DepthComponent>().Level != 10)
+                    player.GetComponent<DepthComponent>().Level++;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.R))
+            {
+                var player = _entityComponentSystem.GetEntity(Entities.Entities.Player);
+                if (player.GetComponent<DepthComponent>().Level != 0)
+                    player.GetComponent<DepthComponent>().Level--;
+            }
+
+
             base.Update(gameTime);
         }
-
-        //private AlphaTestEffect _alphaTestEffect;
 
         protected override void Draw(GameTime gameTime)
         {
             var viewMatrix = _camera.GetViewMatrix();
 
             GraphicsDevice.Clear(Color.Black);
-
-            //_spriteBatch.Begin(
-            //    sortMode: SpriteSortMode.FrontToBack, 
-            //    samplerState: SamplerState.PointClamp, 
-            //    depthStencilState: DepthStencilState.Default,
-            //    blendState: BlendState.AlphaBlend,
-            //    effect: _alphaTestEffect,
-            //    transformMatrix: viewMatrix);
-
-            //_spriteBatch.Draw(_logo, position: new Vector2(305, 160), color: Color.White, layerDepth: 0.5f);
-            //_spriteBatch.Draw(_logo, position: new Vector2(375, 210), color: Color.Green, layerDepth: 0.25f);
-
-            //_spriteBatch.End();
             
             _tiledMap.Draw(viewMatrix);
             _entityComponentSystem.Draw(gameTime);
+
+            #region Draw Player Depth Level
+
+            var player = _entityComponentSystem.GetEntity(Entities.Entities.Player);
+            var depthLevel = player.GetComponent<DepthComponent>().Level;
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"Player Depth Level: {depthLevel:0}");
+
+            _spriteBatch.Begin(blendState: BlendState.AlphaBlend);
+            _spriteBatch.DrawString(_bitmapFont, stringBuilder.ToString(), new Vector2(5, 5), Color.DarkBlue);
+            _spriteBatch.End();
+
+            #endregion
 
             base.Draw(gameTime);
         }
