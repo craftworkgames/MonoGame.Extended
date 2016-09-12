@@ -102,6 +102,12 @@ namespace MonoGame.Extended.Maps.Tiled
             var depthInc = 1.0f / (_layers.Count - 1);
             var indexOffset = 0;
 
+            for (var i = 1; i <= _layers.Count; i++)
+            {
+                // Assigns IDs to each layer
+                _layers[i - 1].Id = i;
+            }
+
             foreach (var layer in tileLayers)
             {
                 var vertices = layer.BuildVertices(depth);

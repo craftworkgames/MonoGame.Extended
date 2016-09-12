@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Maps.Tiled.Components;
 using MonoGame.Extended.Particles;
 using MonoGame.Extended.Sprites;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MonoGame.Extended.Entities.Systems
 {
@@ -21,11 +24,12 @@ namespace MonoGame.Extended.Entities.Systems
         public DepthStencilState DepthStencilState { get; set; }
         public SamplerState SamplerState { get; set; }
         public BlendState BlendState { get; set; }
-        public SpriteSortMode SortMode { get; set; } = SpriteSortMode.Deferred;
+        public SpriteSortMode SortMode { get; set; } = SpriteSortMode.BackToFront;
 
         public override void Draw(GameTime gameTime)
         {
             var sprites = GetComponents<Sprite>();
+            sprites.OrderBy(x => x.Depth);
             var emitters = GetComponents<ParticleEmitter>();
             var transformMatrix = _camera.GetViewMatrix();
 
