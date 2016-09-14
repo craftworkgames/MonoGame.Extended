@@ -11,11 +11,9 @@ namespace Demo.Screens
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
-        private Camera2D _camera;
 
         public Game1()
         {
-            
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -35,8 +33,7 @@ namespace Demo.Screens
 
         protected override void LoadContent()
         {
-            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            //var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
         }
 
         protected override void UnloadContent()
