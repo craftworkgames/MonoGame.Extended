@@ -72,7 +72,7 @@ namespace Demo.Platformer.Entities
 
         public Entity CreateBloodExplosion(Vector2 position, float totalSeconds = 1.0f)
         {
-            var random = new FastRandom((int)DateTimeOffset.Now.Ticks);
+            var random = new FastRandom();
             var textureRegion = _characterTextureAtlas[0];
             var entity = _entityComponentSystem.CreateEntity(position);
             var profile = Profile.Spray(new Vector2(0, -1), MathHelper.Pi);
