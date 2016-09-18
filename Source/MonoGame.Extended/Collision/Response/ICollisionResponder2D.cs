@@ -7,6 +7,6 @@ namespace MonoGame.Extended.Collision.Response
     {
         CollisionSimulation2D CollisionSimulation { get; }
 
-        void RespondTo(GameTime gameTime, ref NarrowphaseCollisionPair2D collisionPair);
+        void RespondTo(ref NarrowphaseCollisionResult2D collisionPair, GameTime gameTime);
     }
 }

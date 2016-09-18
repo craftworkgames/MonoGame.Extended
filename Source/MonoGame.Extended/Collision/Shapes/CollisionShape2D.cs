@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Shapes.Explicit;
 
 namespace MonoGame.Extended.Collision.Shapes
@@ -7,8 +8,9 @@ namespace MonoGame.Extended.Collision.Shapes
     {
         private Vector2[] _normals;
 
+        public IReadOnlyList<Vector2> Normals => _normals;
+
         protected internal CollisionShape2D() 
-            : base()
         {
         }
 

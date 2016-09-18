@@ -2,7 +2,7 @@
 
 namespace MonoGame.Extended.Collision.Detection.Broadphase
 {
-    public class BruteForceBroadphase2D : ICollisionBroadphase2D
+    public class BruteForceBroadphase2D : IBroadphase2D
     {
         public CollisionSimulation2D CollisionSimulation { get; }
 

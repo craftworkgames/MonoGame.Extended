@@ -5,7 +5,6 @@ namespace MonoGame.Extended.Shapes.Explicit
     public abstract class ConvexPolygon : Polygon
     {
         protected ConvexPolygon()
-            : base()
         {
             
         }

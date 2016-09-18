@@ -21,13 +21,13 @@ namespace MonoGame.Extended.Collision
 
         internal readonly HashSet<BroadphaseCollisionPair2D> BroadphaseCollisionPairsLookup = new HashSet<BroadphaseCollisionPair2D>();
         internal readonly List<BroadphaseCollisionPair2D> BroadphaseCollisionPairs = new List<BroadphaseCollisionPair2D>();
-        internal readonly List<NarrowphaseCollisionPair2D> NarrowphaseCollisionPairs = new List<NarrowphaseCollisionPair2D>();
+        internal readonly List<NarrowphaseCollisionResult2D> NarrowphaseCollisionPairs = new List<NarrowphaseCollisionResult2D>();
 
         private readonly List<BroadphaseCollisionDelegate> _broadphaseCollisionSubscribersList = new List<BroadphaseCollisionDelegate>();
         private readonly List<NarrowphaseCollisionDelegate> _narrowphaseCollisionSubscribersList = new List<NarrowphaseCollisionDelegate>();
 
-        public ICollisionBroadphase2D Broadphase { get; }
-        public ICollisionNarrowphase2D Narrowphase { get; }
+        public IBroadphase2D Broadphase { get; }
+        public INarrowphase2D Narrowphase { get; }
         public ICollisionResponder2D Responder { get; }
 
         public event BroadphaseCollisionDelegate BroadphaseCollision
@@ -54,11 +54,11 @@ namespace MonoGame.Extended.Collision
             }
         }
 
-        public CollisionSimulation2D(ICollisionBroadphase2D broadphase = null, ICollisionNarrowphase2D narrowphase = null, ICollisionResponder2D responder = null)
+        public CollisionSimulation2D(IBroadphase2D broadphase = null, INarrowphase2D narrowphase = null, ICollisionResponder2D responder = null)
         {
             Broadphase = broadphase ?? new BruteForceBroadphase2D(this);
-            Narrowphase = narrowphase ?? new PassThroughNarrowphase2D(this);
-            Responder = responder ?? new DefaultCollisionResponder2D(this);
+            Narrowphase = narrowphase ?? new SeperatingAxisNarrowphase2D(this);
+            Responder = responder;
         }
 
         public void Initialize(GraphicsDevice graphicsDevice)
@@ -195,11 +195,11 @@ namespace MonoGame.Extended.Collision
             for (var index = 0; index < BroadphaseCollisionPairs.Count; index++)
             {
                 var collisionPair = BroadphaseCollisionPairs[index];
-                Narrowphase.Resolve(gameTime, ref collisionPair, ProcessNarrowphaseCollisionPair);
+                Narrowphase.Resolve(ref collisionPair, gameTime, ProcessNarrowphaseCollisionPair);
             }
         }
 
-        private void ProcessNarrowphaseCollisionPair(ref NarrowphaseCollisionPair2D narrowphaseCollisionPair)
+        private void ProcessNarrowphaseCollisionPair(ref NarrowphaseCollisionResult2D narrowphaseCollisionPair)
         {
             bool cancelled;
             OnNarrowphaseCollision(ref narrowphaseCollisionPair, out cancelled);
@@ -209,7 +209,7 @@ namespace MonoGame.Extended.Collision
             NarrowphaseCollisionPairs.Add(narrowphaseCollisionPair);
         }
 
-        internal void OnNarrowphaseCollision(ref NarrowphaseCollisionPair2D collisionPair, out bool cancelled)
+        internal void OnNarrowphaseCollision(ref NarrowphaseCollisionResult2D collisionPair, out bool cancelled)
         {
             var firstCollider = collisionPair.FirstCollider;
 
@@ -233,12 +233,14 @@ namespace MonoGame.Extended.Collision
         private void RespondToNarrowphaseCollisionPairs(GameTime gameTime)
         {
             var responder = Responder;
+            if (responder == null)
+                return;
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < NarrowphaseCollisionPairs.Count; index++)
             {
                 var collisionPair = NarrowphaseCollisionPairs[index];
-                responder.RespondTo(gameTime, ref collisionPair);
+                responder.RespondTo(ref collisionPair, gameTime);
             }
         }
 
