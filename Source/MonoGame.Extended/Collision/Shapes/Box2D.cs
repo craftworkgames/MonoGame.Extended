@@ -8,40 +8,36 @@ namespace MonoGame.Extended.Collision.Shapes
 
         public SizeF Size
         {
-            get { return _size; }
+            get
+            {
+                return _size;
+            }
             set
             {
-                _size = value * 0.5f;
+                _size = value;
                 Invalidate();
             }
         }
 
-        public Box2D()
+        public Box2D(Transform2D transform = null)
+            : base(new Vector2[4], transform)
         {
-            SetPoints(new Vector2[4]);
-
-            var normals = new Vector2[4];
-            // counter clockwise
-            normals[0] = new Vector2(0, 1); // top
-            normals[3] = new Vector2(1, 0); // right
-            normals[2] = new Vector2(0, -1); // bottom
-            normals[1] = new Vector2(-1, 0); // left
-            SetNormals(normals);
         }
 
-        protected override void CalculateCentroid(out Vector2 centroid)
+        protected override void CalculateLocalCentroid(out Vector2 centroid)
         {
-            centroid.X = _size.Width * 0.5f;
-            centroid.Y = _size.Height * 0.5f;
+            centroid = default(Vector2);
         }
 
-        protected override void UpdateVertices(Vector2[] vertices)
+        protected override void UpdateLocalVertices(Vector2[] localVertices)
         {
             // counter clockwise
-            vertices[0] = new Vector2(-_size.Width, _size.Height); // top-left
-            vertices[3] = new Vector2(_size.Width, _size.Height); // top-right
-            vertices[2] = new Vector2(_size.Width, -_size.Height); // bottom-right
-            vertices[1] = new Vector2(-_size.Width, -_size.Height); // bottom-left
+
+            var halfSize = _size * 0.5f;
+            localVertices[0] = new Vector2(-halfSize.Width, halfSize.Height); // top-left
+            localVertices[3] = new Vector2(halfSize.Width, halfSize.Height); // top-right
+            localVertices[2] = new Vector2(halfSize.Width, -halfSize.Height); // bottom-right
+            localVertices[1] = new Vector2(-halfSize.Width, -halfSize.Height); // bottom-left
         }
     }
 }

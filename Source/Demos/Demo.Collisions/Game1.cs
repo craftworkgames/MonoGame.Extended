@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Collision;
+using MonoGame.Extended.Collision.Detection.Broadphase;
+using MonoGame.Extended.Collision.Detection.Narrowphase;
 using MonoGame.Extended.Entities;
 
 namespace Demo.Collisions
@@ -12,12 +14,7 @@ namespace Demo.Collisions
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
-        private readonly EntityComponentSystem _entityComponentSystem = new EntityComponentSystem();
-
         private CollisionSimulation2D _simulation;
-
-        private Entity _entityA;
-        private Entity _entityB;
 
         private Collider2D _colliderA;
         private Collider2D _colliderB;
@@ -35,27 +32,38 @@ namespace Demo.Collisions
         {
             _simulation = new CollisionSimulation2D();
 
-            _entityA = _entityComponentSystem.CreateEntity(new Vector2(50, 50));
-            _entityB = _entityComponentSystem.CreateEntity(new Vector2(150, 150));
+            _colliderA = _simulation.CreateBoxCollider(null, new SizeF(50, 50));
+            _colliderA.Transform.Position = new Vector2(50, 50);
 
-            _colliderA = _simulation.CreateBoxCollider(_entityA, new SizeF(50, 50));
-            _colliderA.BroadphaseCollision += ColliderOnBroadphaseCollision;
-            _colliderA.NarrowphaseCollision += ColliderOnNarrowphaseCollision;
-            _colliderB = _simulation.CreateBoxCollider(_entityB, new SizeF(100, 100));
+            _colliderB = _simulation.CreateBoxCollider(null, new SizeF(100, 100));
+            _colliderB.Transform.Position = new Vector2(150, 150);
+
+            _simulation.BroadphaseCollision += OnBroadphaseCollision;
+            _simulation.NarrowphaseCollision += OnNarrowphaseCollision;
 
             base.Initialize();
         }
 
-        private void ColliderOnNarrowphaseCollision(Collider2D firstCollider, Collider2D secondCollider, out bool cancel)
+
+        private void OnBroadphaseCollision(ref BroadphaseCollisionResult2D result, out bool cancel)
         {
+            // broadphase collision detected between two colliders
+            // this means the bounding volume of the two colliders are intersecting
+            // you can cancel the collision here to prevent it from being considered for the narrow phase
+
             cancel = false;
-            Console.WriteLine("Contact narrowphase!");
         }
 
-        private void ColliderOnBroadphaseCollision(Collider2D firstCollider, Collider2D secondCollider, out bool cancel)
+        private void OnNarrowphaseCollision(ref NarrowphaseCollisionResult2D result, out bool cancel)
         {
+            // narrowphase collision detected between two colliders
+            // this means the geometry of the two colliders are intersecting
+            // you can cancel the collision here to prevent it from being processed by the responder
+
+            var minimumTranslationVector = result.MinimumPenetration * result.MinimumPenetrationAxis;
+            result.FirstCollider.Transform.Position += minimumTranslationVector;
+
             cancel = false;
-            Console.WriteLine("Contact broadphase!");
         }
 
         protected override void LoadContent()
@@ -73,8 +81,15 @@ namespace Demo.Collisions
         {
             _simulation.Update(gameTime);
 
-            _entityA.Rotation += MathHelper.ToRadians(1);
+            _colliderA.Transform.Rotation += MathHelper.ToRadians(1);
 
+            ProcessColliderMovementInput(gameTime);
+
+            base.Update(gameTime);
+        }
+
+        private void ProcessColliderMovementInput(GameTime gameTime)
+        {
             var keyboardState = Keyboard.GetState();
 
             var direction = Vector2.Zero;
@@ -90,13 +105,12 @@ namespace Demo.Collisions
 
             if (direction != Vector2.Zero)
             {
+                // ensure the direction is a unit vector
                 direction.Normalize();
 
                 var speed = 50;
-                _entityA.Position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                _colliderA.Transform.Position += speed * direction * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-
-            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)

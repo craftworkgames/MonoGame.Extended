@@ -29,19 +29,19 @@ namespace MonoGame.Extended.Collision.Detection.Broadphase
 
         public void Query(BroadphaseColliderProxy2D colliderProxy, GameTime gameTime, BroadphaseCollisionDelegate2D broadphaseCollisionDelegate)
         {   
-            foreach (var secondColliderProxy in CollisionSimulation.ColliderProxies)
+            foreach (var otherColliderProxy in CollisionSimulation.ColliderProxies)
             {
-                if (colliderProxy.Collider == secondColliderProxy.Collider)
+                if (colliderProxy.Collider == otherColliderProxy.Collider)
                 {
                     continue;
                 }
 
-                if (!colliderProxy.WorldBoundingVolume.Intersects(secondColliderProxy.WorldBoundingVolume))
+                if (!colliderProxy.WorldBoundingVolume.Intersects(otherColliderProxy.WorldBoundingVolume))
                 {
                     continue;
                 }
 
-                var broadphaseCollisionPair = new BroadphaseCollisionPair2D(colliderProxy.Collider, secondColliderProxy.Collider);
+                var broadphaseCollisionPair = new BroadphaseCollisionResult2D(colliderProxy.Collider, otherColliderProxy.Collider);
                 broadphaseCollisionDelegate(ref broadphaseCollisionPair);
             }
         }

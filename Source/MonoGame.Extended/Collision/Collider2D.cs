@@ -1,66 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using MonoGame.Extended.Collision.BoundingVolumes;
+﻿using MonoGame.Extended.Collision.BoundingVolumes;
 using MonoGame.Extended.Collision.Shapes;
 
 namespace MonoGame.Extended.Collision
 {
-    [Flags]
-    internal enum ColliderFlags : byte
-    {
-        ShapeIsDirty = 1 << 0,
-        WorldBoundingVolumeIsDirty = 1 << 1,
-        All = ShapeIsDirty | WorldBoundingVolumeIsDirty
-    }
-
     public sealed class Collider2D
     {
         internal int Index;
         internal ColliderFlags Flags = ColliderFlags.All;
 
-        private readonly List<BroadphaseCollisionDelegate> _broadphaseCollisionSubscribersList = new List<BroadphaseCollisionDelegate>();
-        private readonly List<NarrowphaseCollisionDelegate> _narrowphaseCollisionSubscribersList = new List<NarrowphaseCollisionDelegate>();
-
         public BoundingVolume2D BoundingVolume { get; }
         public CollisionShape2D Shape { get; }
-        public ITransform2D Transform { get; }
+        public Transform2D Transform { get; }
+        public object Owner { get; }
 
-        public event BroadphaseCollisionDelegate BroadphaseCollision
+        internal Collider2D(object owner, Transform2D transform, CollisionShape2D shape, BoundingVolumeType2D boundingVolumeType)
         {
-            add
-            {
-                _broadphaseCollisionSubscribersList.Add(value);
-            }
-            remove
-            {
-                _broadphaseCollisionSubscribersList.FastRemove(value);
-            }
-        }
-
-        public event NarrowphaseCollisionDelegate NarrowphaseCollision
-        {
-            add
-            {
-                _narrowphaseCollisionSubscribersList.Add(value);
-            }
-            remove
-            {
-                _narrowphaseCollisionSubscribersList.FastRemove(value);
-            }
-        }
-
-        internal Collider2D(ITransform2D transform, CollisionShape2D shape, BoundingVolumeType2D boundingVolumeType)
-        {
+            Owner = owner;
             Transform = transform;
-            Transform.TransformBecameDirty += TransformBecameDirty;
+            Transform.BecameDirty += BecameDirty;
             BoundingVolume = BoundingVolume2D.Create(boundingVolumeType);
             Shape = shape;
             ShapeChanged();
             shape.ShapeChanged += ShapeChanged;
-            Transform = transform;
         }
 
-        private void TransformBecameDirty()
+        private void BecameDirty()
         {
             Flags |= ColliderFlags.WorldBoundingVolumeIsDirty;
         }
@@ -75,7 +39,8 @@ namespace MonoGame.Extended.Collision
             // ReSharper disable once InvertIf
             if ((Flags & ColliderFlags.ShapeIsDirty) != 0)
             {
-                BoundingVolume.UpdateFrom(Shape.Vertices);
+
+                BoundingVolume.UpdateFrom(Shape.LocalVertices);
                 Flags &= ~ColliderFlags.ShapeIsDirty;
             }
 
@@ -86,34 +51,6 @@ namespace MonoGame.Extended.Collision
                 worldBoundingVolume.UpdateFrom(BoundingVolume, ref matrix);
                 Flags &= ~ColliderFlags.WorldBoundingVolumeIsDirty;
             }
-        }
-
-        internal void OnBroadphaseCollision(Collider2D otherCollider, out bool cancelled)
-        {
-            foreach (var @delegate in _broadphaseCollisionSubscribersList)
-            {
-                @delegate(this, otherCollider, out cancelled);
-                if (cancelled)
-                {
-                    break;
-                }
-            }
-
-            cancelled = false;
-        }
-
-        internal void OnNarrowphaseCollision(Collider2D otherCollider, out bool cancelled)
-        {
-            foreach (var @delegate in _narrowphaseCollisionSubscribersList)
-            {
-                @delegate(this, otherCollider, out cancelled);
-                if (cancelled)
-                {
-                    break;
-                }
-            }
-
-            cancelled = false;
         }
     }
 }

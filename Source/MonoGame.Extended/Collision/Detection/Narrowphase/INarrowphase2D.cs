@@ -7,6 +7,6 @@ namespace MonoGame.Extended.Collision.Detection.Narrowphase
     {
         CollisionSimulation2D CollisionSimulation { get; }
 
-        void Resolve(ref BroadphaseCollisionPair2D collisionPair, GameTime gameTime, NarrowphaseCollisionDelegate2D narrowphaseCollisionDelegate);
+        void Query(ref BroadphaseCollisionResult2D broadphaseResult, GameTime gameTime, out NarrowphaseCollisionResult2D? narrowphaseResult);
     }
 }

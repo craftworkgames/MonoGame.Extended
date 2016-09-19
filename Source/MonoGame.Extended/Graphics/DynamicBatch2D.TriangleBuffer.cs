@@ -81,8 +81,7 @@ namespace MonoGame.Extended.Graphics
                     textureCoordinateTopLeft.X = temp;
                 }
 
-                var vertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color ?? Color.White,
-                    Vector2.Zero);
+                var vertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color ?? Color.White, default(Vector2));
 
                 fixed (VertexPositionColorTexture* fixedPointer = Vertices)
                 {
@@ -147,8 +146,7 @@ namespace MonoGame.Extended.Graphics
                 positionBottomRight.X = halfSize.Width;
                 positionBottomRight.Y = halfSize.Height;
 
-                var vertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color ?? Color.White,
-                    Vector2.Zero);
+                var vertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color ?? Color.White, default(Vector2));
 
                 fixed (VertexPositionColorTexture* fixedPointer = Vertices)
                 {
@@ -194,6 +192,58 @@ namespace MonoGame.Extended.Graphics
                 return new GeometryBuffer.GeometryItem(startIndex, 2);
             }
 
+            internal unsafe GeometryBuffer.GeometryItem EnqueueConvexPolygon(IReadOnlyList<Vector2> points, Color? color, float depth)
+            {
+                if (points.Count <= 2)
+                    return new GeometryBuffer.GeometryItem(0, 0);
+
+                // https://www.siggraph.org/education/materials/HyperGraph/scanline/outprims/polygon1.htm
+
+                var startIndex = IndexCount;
+                var startVertex = VertexCount;
+                var trianglesCount = points.Count - 2;
+
+                var point = points[0];
+                var firstVertex = new VertexPositionColorTexture(new Vector3(point.X, point.Y, depth), color ?? Color.White, default(Vector2));
+
+                point = points[1];
+                var secondVertex = new VertexPositionColorTexture(new Vector3(point.X, point.Y, depth), color ?? Color.White, default(Vector2));
+
+                var thirdVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color ?? Color.White, default(Vector2));
+
+                fixed (VertexPositionColorTexture* fixedVertexPointer = Vertices)
+                {
+                    var vertexPointer = fixedVertexPointer + VertexCount;
+
+                    *(vertexPointer++) = firstVertex;
+                    *(vertexPointer++) = secondVertex;
+
+                    fixed (ushort* fixedIndexPointer = Indices)
+                    {
+                        var indexPointer = fixedIndexPointer + IndexCount;
+
+                        for (var index = 2; index < points.Count; ++index)
+                        {
+                            point = points[index];
+                            thirdVertex.Position.X = point.X;
+                            thirdVertex.Position.Y = point.Y;
+                            *(vertexPointer++) = thirdVertex;
+                            *(indexPointer++) = (ushort)startVertex;
+                            *(indexPointer++) = (ushort)(index - 1 + startVertex);
+                            *(indexPointer++) = (ushort)(index - 0 + startVertex);
+
+                            secondVertex.Position.X = thirdVertex.Position.X;
+                            secondVertex.Position.Y = thirdVertex.Position.Y;
+                        }
+                    }
+                }
+
+                VertexCount += points.Count;
+                IndexCount += 3 * trianglesCount;
+
+                return new GeometryBuffer.GeometryItem(startIndex, trianglesCount);
+            }
+
             internal unsafe GeometryBuffer.GeometryItem EnqueueConvexPolygon(IReadOnlyList<Vector2> points, ref Matrix2D transformMatrix, Color? color, float depth)
             {
                 if (points.Count <= 2)
@@ -207,16 +257,13 @@ namespace MonoGame.Extended.Graphics
 
                 var point = points[0];
                 transformMatrix.Transform(point, out point);
-                var firstVertex = new VertexPositionColorTexture(new Vector3(point.X, point.Y, depth), color ?? Color.White,
-Vector2.Zero);
+                var firstVertex = new VertexPositionColorTexture(new Vector3(point.X, point.Y, depth), color ?? Color.White, default(Vector2));
 
                 point = points[1];
                 transformMatrix.Transform(point, out point);
-                var secondVertex = new VertexPositionColorTexture(new Vector3(point.X, point.Y, depth), color ?? Color.White,
-                Vector2.Zero);
+                var secondVertex = new VertexPositionColorTexture(new Vector3(point.X, point.Y, depth), color ?? Color.White, default(Vector2));
 
-                var thirdVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color ?? Color.White,
-                Vector2.Zero);
+                var thirdVertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color ?? Color.White, default(Vector2));
 
                 fixed (VertexPositionColorTexture* fixedVertexPointer = Vertices)
                 {
@@ -251,6 +298,53 @@ Vector2.Zero);
                 IndexCount += 3 * trianglesCount;
 
                 return new GeometryBuffer.GeometryItem(startIndex, trianglesCount);
+            }
+
+            internal unsafe GeometryBuffer.GeometryItem EnqueueLine(Vector2 firstPoint, Vector2 secondPoint, float width, Color? color, float depth)
+            {
+                var vector = secondPoint - firstPoint;
+                var normal = vector.PerpendicularCounterClockwise();
+                normal.Normalize();
+                var halfWidth = width * 0.5f;
+                var widthVector = normal * halfWidth;
+                var vertex = new VertexPositionColorTexture(new Vector3(0, 0, depth), color ?? Color.White, default(Vector2));
+
+                fixed (VertexPositionColorTexture* fixedPointer = Vertices)
+                {
+                    var pointer = fixedPointer + VertexCount;
+
+                    // top-left
+                    var position = firstPoint + widthVector;
+                    vertex.Position.X = position.X;
+                    vertex.Position.Y = position.Y;
+                    *(pointer + 0) = vertex;
+
+                    // top-right
+                    position = secondPoint + widthVector;
+                    vertex.Position.X = position.X;
+                    vertex.Position.Y = position.Y;
+                    *(pointer + 1) = vertex;
+
+                    // bottom-left
+                    position = firstPoint - widthVector;
+                    vertex.Position.X = position.X;
+                    vertex.Position.Y = position.Y;
+                    *(pointer + 2) = vertex;
+
+                    // bottom-right
+                    position = secondPoint - widthVector;
+                    vertex.Position.X = position.X;
+                    vertex.Position.Y = position.Y;
+                    *(pointer + 3) = vertex;
+                }
+
+                var startVertex = VertexCount;
+                VertexCount += 4;
+
+                var startIndex = IndexCount;
+                EnqueueClockwiseQuadrilateralIndices(startVertex);
+
+                return new GeometryBuffer.GeometryItem(startIndex, 2);
             }
         }
     }

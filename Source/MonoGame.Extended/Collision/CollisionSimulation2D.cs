@@ -19,12 +19,12 @@ namespace MonoGame.Extended.Collision
 
         internal readonly List<BroadphaseColliderProxy2D> ColliderProxies = new List<BroadphaseColliderProxy2D>();
 
-        internal readonly HashSet<BroadphaseCollisionPair2D> BroadphaseCollisionPairsLookup = new HashSet<BroadphaseCollisionPair2D>();
-        internal readonly List<BroadphaseCollisionPair2D> BroadphaseCollisionPairs = new List<BroadphaseCollisionPair2D>();
-        internal readonly List<NarrowphaseCollisionResult2D> NarrowphaseCollisionPairs = new List<NarrowphaseCollisionResult2D>();
+        internal readonly HashSet<BroadphaseCollisionResult2D> BroadphaseCollisionPairsLookup = new HashSet<BroadphaseCollisionResult2D>();
+        internal readonly List<BroadphaseCollisionResult2D> BroadphaseResults = new List<BroadphaseCollisionResult2D>();
+        internal readonly List<NarrowphaseCollisionResult2D> NarrowphaseResults = new List<NarrowphaseCollisionResult2D>();
 
         private readonly List<BroadphaseCollisionDelegate> _broadphaseCollisionSubscribersList = new List<BroadphaseCollisionDelegate>();
-        private readonly List<NarrowphaseCollisionDelegate> _narrowphaseCollisionSubscribersList = new List<NarrowphaseCollisionDelegate>();
+        private readonly List<CollisionDelegate> _narrowphaseCollisionSubscribersList = new List<CollisionDelegate>();
 
         public IBroadphase2D Broadphase { get; }
         public INarrowphase2D Narrowphase { get; }
@@ -42,7 +42,7 @@ namespace MonoGame.Extended.Collision
             }
         }
 
-        public event NarrowphaseCollisionDelegate NarrowphaseCollision
+        public event CollisionDelegate NarrowphaseCollision
         {
             add
             {
@@ -66,10 +66,10 @@ namespace MonoGame.Extended.Collision
             _renderer = new CollisionRenderer2D(this, graphicsDevice);
         }
 
-        public Collider2D CreateCollider(ITransform2D transform, CollisionShape2D shape, BoundingVolumeType2D boundingVolumeType)
+        public Collider2D CreateCollider(object owner, Transform2D transform, CollisionShape2D shape, BoundingVolumeType2D boundingVolumeType)
         {
             // TODO: Use a pool.
-            var collider = new Collider2D(transform, shape, boundingVolumeType);
+            var collider = new Collider2D(owner, transform, shape, boundingVolumeType);
 
             CollidersToAdd.Add(collider);
 
@@ -86,9 +86,9 @@ namespace MonoGame.Extended.Collision
             ProcessCollidersToAdd();
             ProcessCollidersToRemove();
             UpdateColliders();
-            FindBroadphaseCollisionPairs(gameTime);
-            FindNarrowphaseCollisionPairs(gameTime);
-            RespondToNarrowphaseCollisionPairs(gameTime);
+            QueryForBroadphaseResults(gameTime);
+            QueryForNarrowphaseResults(gameTime);
+            RespondToNarrowphaseResults(gameTime);
         }
 
         private void ProcessCollidersToAdd()
@@ -138,109 +138,99 @@ namespace MonoGame.Extended.Collision
             }
         }
 
-        private void FindBroadphaseCollisionPairs(GameTime gameTime)
+        private void QueryForBroadphaseResults(GameTime gameTime)
         {
-            BroadphaseCollisionPairs.Clear();
+            BroadphaseResults.Clear();
             BroadphaseCollisionPairsLookup.Clear();
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < ColliderProxies.Count; ++index)
             {
                 var colliderProxy = ColliderProxies[index];
-                Broadphase.Query(colliderProxy, gameTime, ProcessBroadphaseCollisionPair);
+                Broadphase.Query(colliderProxy, gameTime, ProcessBroadphaseResult);
             }
         }
 
-        private void ProcessBroadphaseCollisionPair(ref BroadphaseCollisionPair2D broadphaseCollisionPair)
+        private void ProcessBroadphaseResult(ref BroadphaseCollisionResult2D result)
         {
-            if (BroadphaseCollisionPairsLookup.Contains(broadphaseCollisionPair))
+            if (BroadphaseCollisionPairsLookup.Contains(result))
             {
                 return;
             }
 
-            bool cancelled;
-            OnBroadphaseCollision(ref broadphaseCollisionPair, out cancelled);
-            if (cancelled)
+            if (!OnBroadphaseCollision(ref result))
                 return;
 
-            BroadphaseCollisionPairsLookup.Add(broadphaseCollisionPair);
-            BroadphaseCollisionPairs.Add(broadphaseCollisionPair);
+            BroadphaseCollisionPairsLookup.Add(result);
+            BroadphaseResults.Add(result);
         }
 
-        internal void OnBroadphaseCollision(ref BroadphaseCollisionPair2D collisionPair, out bool cancelled)
+        internal bool OnBroadphaseCollision(ref BroadphaseCollisionResult2D result)
         {
-            var firstCollider = collisionPair.FirstCollider;
-            var secondCollider = collisionPair.SecondCollider;
-
             foreach (var @delegate in _broadphaseCollisionSubscribersList)
             {
-                @delegate(firstCollider, secondCollider, out cancelled);
+                bool cancelled;
+                @delegate(ref result, out cancelled);
                 if (cancelled)
                 {
-                    return;
+                    return false;
                 }
             }
 
-            firstCollider.OnBroadphaseCollision(collisionPair.SecondCollider, out cancelled);
-            if (cancelled)
-                return;
-            secondCollider.OnBroadphaseCollision(collisionPair.FirstCollider, out cancelled);
+            return true;
         }
 
-        private void FindNarrowphaseCollisionPairs(GameTime gameTime)
+        private void QueryForNarrowphaseResults(GameTime gameTime)
         {
-            NarrowphaseCollisionPairs.Clear();
+            NarrowphaseResults.Clear();
 
             // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < BroadphaseCollisionPairs.Count; index++)
+            for (var index = 0; index < BroadphaseResults.Count; index++)
             {
-                var collisionPair = BroadphaseCollisionPairs[index];
-                Narrowphase.Resolve(ref collisionPair, gameTime, ProcessNarrowphaseCollisionPair);
+                var broadphaseResult = BroadphaseResults[index];
+
+                NarrowphaseCollisionResult2D? narrowphaseResult;
+                Narrowphase.Query(ref broadphaseResult, gameTime, out narrowphaseResult);
+
+                if (narrowphaseResult == null)
+                {
+                    continue;
+                }
+
+                var result = narrowphaseResult.Value;
+                if (OnNarrowphaseCollision(ref result))
+                {
+                    NarrowphaseResults.Add(narrowphaseResult.Value);
+                }
             }
         }
 
-        private void ProcessNarrowphaseCollisionPair(ref NarrowphaseCollisionResult2D narrowphaseCollisionPair)
+        internal bool OnNarrowphaseCollision(ref NarrowphaseCollisionResult2D result)
         {
-            bool cancelled;
-            OnNarrowphaseCollision(ref narrowphaseCollisionPair, out cancelled);
-            if (cancelled)
-                return;
-
-            NarrowphaseCollisionPairs.Add(narrowphaseCollisionPair);
-        }
-
-        internal void OnNarrowphaseCollision(ref NarrowphaseCollisionResult2D collisionPair, out bool cancelled)
-        {
-            var firstCollider = collisionPair.FirstCollider;
-
-            var secondCollider = collisionPair.SecondCollider;
-
-            foreach (var @delegate in _broadphaseCollisionSubscribersList)
+            foreach (var @delegate in _narrowphaseCollisionSubscribersList)
             {
-                @delegate(firstCollider, secondCollider, out cancelled);
+                bool cancelled;
+                @delegate(ref result, out cancelled);
                 if (cancelled)
                 {
-                    return; 
+                    return false; 
                 }
             }
 
-            firstCollider.OnNarrowphaseCollision(collisionPair.SecondCollider, out cancelled);
-            if (cancelled)
-                return;
-            secondCollider.OnNarrowphaseCollision(collisionPair.FirstCollider, out cancelled);
+            return true;
         }
 
-        private void RespondToNarrowphaseCollisionPairs(GameTime gameTime)
+        private void RespondToNarrowphaseResults(GameTime gameTime)
         {
             var responder = Responder;
             if (responder == null)
                 return;
 
             // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < NarrowphaseCollisionPairs.Count; index++)
+            for (var index = 0; index < NarrowphaseResults.Count; index++)
             {
-                var collisionPair = NarrowphaseCollisionPairs[index];
-                responder.RespondTo(ref collisionPair, gameTime);
+                var result = NarrowphaseResults[index];
+                responder.RespondTo(ref result, gameTime);
             }
         }
 
@@ -255,8 +245,23 @@ namespace MonoGame.Extended.Collision
                 var collider = colliderProxy.Collider;
                 Matrix2D worldMatrix;
                 collider.Transform.GetWorldMatrix(out worldMatrix);
-                _renderer.DrawShape(collider.Shape, ref worldMatrix);
+                _renderer.DrawShape(collider.Shape);
                 _renderer.DrawBoundingVolume(colliderProxy.WorldBoundingVolume);
+            }
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var i = 0; i < NarrowphaseResults.Count; i++)
+            {
+                var narrowphaseResult = NarrowphaseResults[i];
+
+                _renderer.DrawCollision(narrowphaseResult);
+
+                //// ReSharper disable once ForCanBeConvertedToForeach
+                //for (var j = 0; j < narrowphaseResult.ContactPoints.Count; j++)
+                //{
+                //    var contact = narrowphaseResult.ContactPoints[j];
+                //    _renderer.DrawContact();
+                //}
             }
             
             _renderer.End();

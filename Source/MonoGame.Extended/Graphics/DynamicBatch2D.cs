@@ -701,6 +701,22 @@ namespace MonoGame.Extended.Graphics
         }
 
         /// <summary>
+        ///     Draws a line using the specified start point, end point, line width and an optional
+        ///     <see cref="Color" /> and depth <see cref="float" />.
+        /// </summary>
+        /// <param name="firstPoint">The start point.</param>
+        /// <param name="secondPoint">The end point.</param>
+        /// <param name="width">The width of the line.</param>
+        /// <param name="color">The <see cref="Color" />.</param>
+        /// <param name="depth">The depth <see cref="float" />.</param>
+        public void DrawAliasedLine(Vector2 firstPoint, Vector2 secondPoint, float width, Color? color = null, float depth = 0)
+        {
+            var geometryItem = _triangleBuffer.EnqueueLine(firstPoint, secondPoint, width, color, depth);
+            var sortKey = GetSortKey(depth);
+            Draw(geometryItem, sortKey, ref _pixelTextureDrawCommand);
+        }
+
+        /// <summary>
         ///     Draws a rectangle using the specified transform <see cref="Matrix2D" />, <see cref="SizeF" /> and an optional
         ///     <see cref="Color" /> and depth <see cref="float" />.
         /// </summary>
@@ -757,6 +773,35 @@ namespace MonoGame.Extended.Graphics
             float depth = 0)
         {
             var geometryItem = _triangleBuffer.EnqueueConvexPolygon(points, ref transformMatrix, color, depth);
+            if (geometryItem.PrimitivesCount == 0)
+                return;
+            var sortKey = GetSortKey(depth);
+            Draw(geometryItem, sortKey, ref _pixelTextureDrawCommand);
+        }
+
+        /// <summary>
+        ///     Draws a convex polygon using the specified points, transform <see cref="Matrix2D" /> and an optional
+        ///     <see cref="Color" /> and depth <see cref="float" />.
+        /// </summary>
+        /// <param name="points">The <see cref="IReadOnlyList{Vector2}" /> points in sequential clockwise order.</param>
+        /// <param name="position">The position <see cref="Vector2" />.</param>
+        /// <param name="color">
+        ///     The <see cref="Color" />. Use <code>null</code> to use the default
+        ///     <see cref="Color.White" />.
+        /// </param>
+        /// <param name="rotation">
+        ///     The angle <see cref="float" /> (in radians) to rotate the rectangle about its center. The default
+        ///     value is <code>0f</code>.
+        /// </param>
+        /// <param name="scale">
+        ///     The scale <see cref="Vector2" />. Use <code>null</code> to use the default
+        ///     <see cref="Vector2.One" />.
+        /// </param>
+        /// <param name="depth">The depth <see cref="float" />. The default value is <code>0</code>.</param>
+        public void DrawConvexPolygon(IReadOnlyList<Vector2> points, Color? color = null, float rotation = 0,
+            Vector2? scale = null, float depth = 0)
+        {
+            var geometryItem = _triangleBuffer.EnqueueConvexPolygon(points, color, depth);
             if (geometryItem.PrimitivesCount == 0)
                 return;
             var sortKey = GetSortKey(depth);

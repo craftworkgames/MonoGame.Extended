@@ -4,21 +4,22 @@ namespace MonoGame.Extended.Shapes.Explicit
 {
     public abstract class ConvexPolygon : Polygon
     {
-        protected ConvexPolygon()
+        protected ConvexPolygon(Transform2D transform = null)
+            : base(transform)
         {
             
         }
 
-        protected ConvexPolygon(Vector2[] vertices)
-            : base(vertices)
+        protected ConvexPolygon(Vector2[] vertices, Transform2D transform = null)
+            : base(vertices, transform)
         {
         }
 
-        protected override void CalculateCentroid(out Vector2 centroid)
+        protected override void CalculateLocalCentroid(out Vector2 centroid)
         {
             centroid.X = 0;
             centroid.Y = 0;
-            var vertices = Vertices;
+            var vertices = LocalVertices;
             var verticesCount = vertices.Count;
 
             for (var i = 0; i < verticesCount; i++)
@@ -29,6 +30,5 @@ namespace MonoGame.Extended.Shapes.Explicit
 
             centroid /= verticesCount;
         }
-
     }
 }

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collision.BoundingVolumes;
+using MonoGame.Extended.Collision.Detection.Narrowphase;
 using MonoGame.Extended.Collision.Shapes;
 using MonoGame.Extended.Graphics;
 
@@ -58,9 +61,53 @@ namespace MonoGame.Extended.Collision
             _batch.DrawRectangle(boundingBox.Centre, size, BoundingVolumeFillColor);
         }
 
-        public void DrawShape(CollisionShape2D shape, ref Matrix2D worldMatrix)
+        public void DrawShape(CollisionShape2D shape)
         {
-            _batch.DrawConvexPolygon(shape.Vertices, ref worldMatrix, ShapeFillColor);
+            var transformedVertices = shape.WorldVertices;
+
+            _batch.DrawConvexPolygon(transformedVertices, ShapeFillColor);
+            
+            var verticesCount = transformedVertices.Count;
+            var previousVertex = transformedVertices[verticesCount - 1];
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var i = 0; i < verticesCount; i++)
+            {
+                var vertex = transformedVertices[i];;
+                var edge = previousVertex - vertex;
+                var normal = -edge.PerpendicularCounterClockwise(); // negate because working in coordinate system with a flipped y-axis
+                normal.Normalize();
+                var startPoint = vertex + edge * 0.5f;
+                var endPoint = startPoint + normal * 5;
+
+                _batch.DrawAliasedLine(startPoint, endPoint, 2, Color.Cyan);
+
+                previousVertex = vertex;
+            }
+        }
+
+        public void DrawCollision(NarrowphaseCollisionResult2D result)
+        {
+            var minimumTranslationVector = result.MinimumPenetration * result.MinimumPenetrationAxis;
+
+            var colliderA = result.FirstCollider;
+            var centroidA = colliderA.Shape.WorldCentroid;
+
+            _batch.DrawAliasedLine(centroidA, centroidA + minimumTranslationVector, 2, Color.DarkCyan);
+
+            var colliderB = result.SecondCollider;
+            var centroidB = colliderB.Shape.WorldCentroid;
+
+            _batch.DrawAliasedLine(centroidB, centroidB - minimumTranslationVector, 2, Color.DarkCyan);
+
+            if (result.ContactPointsCount >= 1)
+            {
+                _batch.DrawRectangle(result.FirstContactPoint, new SizeF(5, 5), Color.Orange);
+            }
+            if (result.ContactPointsCount == 2)
+            {
+                _batch.DrawRectangle(result.SecondContactPoint, new SizeF(5, 5), Color.Orange);
+            }
         }
     }
 }

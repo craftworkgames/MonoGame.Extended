@@ -1,27 +1,41 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.Shapes.Explicit;
 
 namespace MonoGame.Extended.Collision.Shapes
 { 
     public abstract class CollisionShape2D : ConvexPolygon
     {
-        private Vector2[] _normals;
-
-        public IReadOnlyList<Vector2> Normals => _normals;
-
-        protected internal CollisionShape2D() 
+        protected internal CollisionShape2D(Transform2D transform = null) 
+            : base(transform)
         {
         }
 
-        protected internal CollisionShape2D(Vector2[] vertices)
-            : base(vertices)
+        protected internal CollisionShape2D(Vector2[] vertices, Transform2D transform = null)
+            : base(vertices, transform)
         {
         }
 
-        protected void SetNormals(Vector2[] normals)
+        public Vector2 GetSupportPoint(Vector2 normal)
         {
-            _normals = normals;
+            var vertices = WorldVertices;
+
+            var bestProjection = float.MinValue;
+            var supportPoint = default(Vector2);
+
+            var verticesCount = vertices.Count;
+            for (var i = 0; i < verticesCount; i++)
+            {
+                var vertex = vertices[i];
+                var vectorProjection = vertex.Dot(normal);
+                // ReSharper disable once InvertIf
+                if (vectorProjection > bestProjection)
+                {
+                    bestProjection = vectorProjection;
+                    supportPoint = vertex;
+                }
+            }
+
+            return supportPoint;
         }
     }
 }

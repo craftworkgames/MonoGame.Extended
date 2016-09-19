@@ -1,26 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
     // Code derived from top answer: http://gamedev.stackexchange.com/questions/113977/should-i-store-local-forward-right-up-vector-or-calculate-when-necessary
-
-    [Flags]
-    internal enum TransformFlags : byte
-    {
-        WorldMatrixIsDirty = 1 << 0,
-        LocalMatrixIsDirty = 1 << 1,
-        All = WorldMatrixIsDirty | LocalMatrixIsDirty
-    }
-
-    public interface ITransform2D
-    {
-        event Action TransformBecameDirty;
-
-        void GetLocalMatrix(out Matrix2D matrix);
-        void GetWorldMatrix(out Matrix2D matrix);
-    }
 
     /// <summary>
     ///     Represents the base class for the position, rotation, and scale of a game object in two-dimensions or
@@ -40,16 +23,16 @@ namespace MonoGame.Extended
     ///     </para>
     /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public abstract class BaseTransform<TMatrix, TParent>
-        where TMatrix : struct where TParent : BaseTransform<TMatrix, TParent>
+    public abstract class Transform<TMatrix, TParent>
+        where TMatrix : struct where TParent : Transform<TMatrix, TParent>
     {
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created
         private TMatrix _localMatrix; // model space to local space
         private TMatrix _worldMatrix; // local space to world space
         private TParent _parent; // parent
 
-        public event Action TransformBecameDirty; // observer pattern for when the world (or local) matrix became dirty
-        public event Action TranformUpdated; // observer pattern for after the world (or local) matrix was re-calculated
+        public event Action BecameDirty; // observer pattern for when the world (or local) matrix became dirty
+        public event Action Updated; // observer pattern for after the world (or local) matrix was re-calculated
 
         /// <summary>
         ///     Gets the model-to-local space <see cref="Matrix2D" />.
@@ -109,7 +92,7 @@ namespace MonoGame.Extended
         }
 
         // internal contructor because people should not be using this class directly; they should use Transform2D or Transform3D
-        internal BaseTransform()
+        internal Transform()
         {
         }
 
@@ -141,7 +124,7 @@ namespace MonoGame.Extended
         protected internal void WorldMatrixBecameDirty()
         {
             _flags |= TransformFlags.WorldMatrixIsDirty;
-            TransformBecameDirty?.Invoke();
+            BecameDirty?.Invoke();
         }
 
         private void OnParentChanged(TParent oldParent, TParent newParent)
@@ -149,19 +132,19 @@ namespace MonoGame.Extended
             var parent = oldParent;
             while (parent != null)
             {
-                parent.TransformBecameDirty -= ParentOnTransformBecameDirty;
+                parent.BecameDirty -= ParentOnBecameDirty;
                 parent = parent.Parent;
             }
 
             parent = newParent;
             while (parent != null)
             {
-                parent.TransformBecameDirty += ParentOnTransformBecameDirty;
+                parent.BecameDirty += ParentOnBecameDirty;
                 parent = parent.Parent;
             }
         }
 
-        private void ParentOnTransformBecameDirty()
+        private void ParentOnBecameDirty()
         {
             _flags |= TransformFlags.All;
         }
@@ -174,7 +157,7 @@ namespace MonoGame.Extended
             RecalculateLocalMatrixIfNecessary();
             RecalculateWorldMatrix(ref _localMatrix, out _worldMatrix);
             _flags &= ~TransformFlags.WorldMatrixIsDirty;
-            TranformUpdated?.Invoke();
+            Updated?.Invoke();
         }
 
         protected internal abstract void RecalculateWorldMatrix(ref TMatrix localMatrix, out TMatrix matrix);
@@ -191,129 +174,5 @@ namespace MonoGame.Extended
         }
 
         protected internal abstract void RecalculateLocalMatrix(out TMatrix matrix);
-    }
-
-    /// <summary>
-    ///     Represents the position, rotation, and scale of a two-dimensional game object.
-    /// </summary>
-    /// <typeparam name="TParent">The type of the parent.</typeparam>
-    /// <seealso cref="BaseTransform{Matrix2D, TParent}" />
-    /// <seealso cref="IMovable" />
-    /// <seealso cref="IRotatable" />
-    /// <seealso cref="IScalable" />
-    /// <remarks>
-    ///     <para>
-    ///         Every game object has a transform which is used to store and manipulate the position, rotation and scale
-    ///         of the object. Every transform can have a parent, which allows to apply position, rotation and scale to game
-    ///         objects hierarchically.
-    ///     </para>
-    /// </remarks>
-    public class Transform2D<TParent> : BaseTransform<Matrix2D, TParent>, IMovable, IRotatable, IScalable, ITransform2D
-        where TParent : Transform2D<TParent>
-    {
-        private Vector2 _position;
-        private Vector2 _scale = Vector2.One;
-        private float _rotation;
-
-        /// <summary>
-        ///     Gets the world position.
-        /// </summary>
-        /// <value>
-        ///     The world position.
-        /// </value>
-        public Vector2 WorldPosition => WorldMatrix.Translation;
-
-        /// <summary>
-        ///     Gets or sets the local position.
-        /// </summary>
-        /// <value>
-        ///     The local position.
-        /// </value>
-        public Vector2 Position
-        {
-            get { return _position; }
-            set
-            {
-                _position = value;
-                LocalMatrixBecameDirty();
-                WorldMatrixBecameDirty();
-            }
-        }
-
-        /// <summary>
-        ///     Gets the world scale.
-        /// </summary>
-        /// <value>
-        ///     The world scale.
-        /// </value>
-        public Vector2 WorldScale => WorldMatrix.Scale;
-
-        /// <summary>
-        ///     Gets or sets the local scale.
-        /// </summary>
-        /// <value>
-        ///     The local scale.
-        /// </value>
-        public Vector2 Scale
-        {
-            get { return _scale; }
-            set
-            {
-                _scale = value;
-                LocalMatrixBecameDirty();
-                WorldMatrixBecameDirty();
-            }
-        }
-
-        /// <summary>
-        ///     Gets the world rotation angle in radians.
-        /// </summary>
-        /// <value>
-        ///     The world rotation angle in radians.
-        /// </value>
-        public float WorldRotation => WorldMatrix.Rotation;
-
-        /// <summary>
-        ///     Gets or sets the local rotation angle in radians.
-        /// </summary>
-        /// <value>
-        ///     The local rotation angle in radians.
-        /// </value>
-        public float Rotation
-        {
-            get { return _rotation; }
-            set
-            {
-                _rotation = value;
-                LocalMatrixBecameDirty();
-                WorldMatrixBecameDirty();
-            }
-        }
-
-        protected internal override void RecalculateWorldMatrix(ref Matrix2D localMatrix, out Matrix2D matrix)
-        {
-            if (Parent != null)
-            {
-                Parent.GetWorldMatrix(out matrix);
-                Matrix2D.Multiply(ref matrix, ref localMatrix, out matrix);
-            }
-            else
-            {
-                matrix = localMatrix;
-            }
-        }
-
-        protected internal override void RecalculateLocalMatrix(out Matrix2D matrix)
-        {
-            if (Parent != null)
-            {
-                var parentPosition = Parent.Position;
-                matrix = Matrix2D.CreateTranslation(-parentPosition) * Matrix2D.CreateScale(_scale) * Matrix2D.CreateRotationZ(-_rotation) * Matrix2D.CreateTranslation(parentPosition) * Matrix2D.CreateTranslation(_position);
-            }
-            else
-            {
-                matrix = Matrix2D.CreateScale(_scale) * Matrix2D.CreateRotationZ(-_rotation) * Matrix2D.CreateTranslation(_position);
-            }
-        }
     }
 }
