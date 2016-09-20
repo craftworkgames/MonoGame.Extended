@@ -17,14 +17,14 @@ namespace MonoGame.Extended.Collision
         {
             Owner = owner;
             Transform = transform;
-            Transform.BecameDirty += BecameDirty;
+            Transform.BecameDirty += TransformBecameDirty;
             BoundingVolume = BoundingVolume2D.Create(boundingVolumeType);
             Shape = shape;
             ShapeChanged();
             shape.ShapeChanged += ShapeChanged;
         }
 
-        private void BecameDirty()
+        private void TransformBecameDirty()
         {
             Flags |= ColliderFlags.WorldBoundingVolumeIsDirty;
         }
