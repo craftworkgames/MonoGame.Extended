@@ -1,11 +1,9 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Collision;
 using MonoGame.Extended.Collision.Detection.Broadphase;
 using MonoGame.Extended.Collision.Detection.Narrowphase;
-using MonoGame.Extended.Entities;
 
 namespace Demo.Collisions
 {
@@ -60,6 +58,7 @@ namespace Demo.Collisions
             // this means the geometry of the two colliders are intersecting
             // you can cancel the collision here to prevent it from being processed by the responder
 
+            // here we are just moving the first collider to a safe position
             var minimumTranslationVector = result.MinimumPenetration * result.MinimumPenetrationAxis;
             result.FirstCollider.Transform.Position += minimumTranslationVector;
 
@@ -79,11 +78,12 @@ namespace Demo.Collisions
 
         protected override void Update(GameTime gameTime)
         {
-            _simulation.Update(gameTime);
-
             _colliderA.Transform.Rotation += MathHelper.ToRadians(1);
 
             ProcessColliderMovementInput(gameTime);
+
+            // update simulation after moving things, otherwise simulating previous frame
+            _simulation.Update(gameTime);
 
             base.Update(gameTime);
         }
