@@ -177,5 +177,20 @@ namespace MonoGame.Extended.NuclexGui
               Size.ToString()
             );
         }
+
+        /// <summary>
+        ///    Moves unified rectangle by the absolute values
+        /// </summary>
+        public void AbsoluteOffset(float x, float y)
+        {
+            Location.X.Offset += x;
+            Location.Y.Offset += y;
+        }
+
+        public void FractionalOffset(float x, float y)
+        {
+            Location.X.Fraction += x;
+            Location.Y.Fraction += y;
+        }
     }
 }

@@ -3,10 +3,12 @@ using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Resources;
+using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.NuclexGui.Controls;
 using MonoGame.Extended.Support.Plugins;
+using PCLStorage;
 
 namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 {
@@ -152,7 +154,7 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
                 // If the type doesn't implement the IFlatcontrolRenderer interface, there's
                 // no chance that it will implement one of the generic control drawers
-                if (!typeof(IFlatControlRenderer).IsAssignableFrom(type))
+                if (!typeof(IFlatControlRenderer).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
                 {
                     return false;
                 }
@@ -166,20 +168,15 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
                 // Look for the IFlatControlRenderer<> interface in all interfaces implemented
                 // by this type
-                Type[] implementedInterfaces = type.GetInterfaces();
-                for (int index = 0; index < implementedInterfaces.Length; ++index)
+                foreach (var implementedInterface in type.GetTypeInfo().ImplementedInterfaces)
                 {
-
-                    // Only perform further checks if this interface is actually generic
-                    if (implementedInterfaces[index].IsGenericType)
+                    // Only perform further check if this interface is actually generic
+                    if (implementedInterface.IsConstructedGenericType)
                     {
-                        Type genericType = implementedInterfaces[index].GetGenericTypeDefinition();
+                        Type genericType = implementedInterface.GetGenericTypeDefinition();
                         if (genericType == typeof(IFlatControlRenderer<>))
-                        {
                             return true;
-                        }
                     }
-
                 }
 
                 // The interface we were looking for was not found, therefore, this is
@@ -196,22 +193,21 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
                 // Obtain all the interfaces of the employed type and search them one by one.
                 // We need to take this route because there's no method that would allow us to
                 // look up the generic interface in its unspecialized form with a simple call.
-                Type[] implementedInterfaces = type.GetInterfaces();
-                for (int index = 0; index < implementedInterfaces.Length; ++index)
+                foreach (var implementedInterface in type.GetTypeInfo().ImplementedInterfaces)
                 {
 
                     // Only perform further checks if this interface is actually a generic one
-                    if (implementedInterfaces[index].IsGenericType)
+                    if (implementedInterface.IsConstructedGenericType)
                     {
 
                         // Get the (unspecialized) generic form of this interface and see if it's
                         // the interface we're looking for
-                        Type genericType = implementedInterfaces[index].GetGenericTypeDefinition();
+                        Type genericType = implementedInterface.GetGenericTypeDefinition();
                         if (genericType == typeof(IFlatControlRenderer<>))
                         {
 
                             // Find out which control type the renderer is specialized for
-                            Type[] controlType = implementedInterfaces[index].GetGenericArguments();
+                            Type[] controlType = implementedInterface.GenericTypeArguments;
 
                             // Do we already have a renderer for this control type?
                             if (_renderers.ContainsKey(controlType[0]))
@@ -226,19 +222,15 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
                                   _renderers[controlType[0]].AdaptedType.FullName.ToString(),
                                   type.FullName.ToString()
                                 );
-                                System.Diagnostics.Trace.WriteLine(message);
+                                //System.Diagnostics.Trace.WriteLine(message);
 #endif
                             }
                             else { // No, this is the first renderer we found for this control type
 
                                 // Type of the downcast adapter we need to bring to life
-                                Type adapterType = typeof(ControlRendererAdapter<>).MakeGenericType(
-                                  controlType[0]
-                                );
+                                Type adapterType = typeof(ControlRendererAdapter<>).MakeGenericType(controlType[0]);
                                 // Look up the constructor of the downcast adapter
-                                ConstructorInfo adapterConstructor = adapterType.GetConstructor(
-                                  new Type[] { implementedInterfaces[index] }
-                                );
+                                ConstructorInfo adapterConstructor = adapterType.GetTypeInfo().DeclaredConstructors.First(c => c.GetGenericArguments() == implementedInterface.GenericTypeArguments );
 
                                 // Now use that constructor to create an instance
                                 object adapterInstance = adapterConstructor.Invoke(
@@ -292,6 +284,21 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
         #endregion
 
+        /// <summary>Initializes a new gui painter for traditional GUIs</summary>
+        /// <param name="contentManager">Content manager that will be used to load the skin resources</param>
+        /// <param name="skinStream">Stream from which the GUI Visualizer will read the skin description</param>
+        protected FlatGuiVisualizer(ContentManager contentManager, Stream skinStream)
+        {
+            _employer = new ControlRendererEmployer();
+            _pluginHost = new PluginHost(_employer);
+
+            // Employ our own assembly in order to obtain the default GUI renderers
+            _pluginHost.Repository.AddAssembly(Self);
+
+            _flatGuiGraphics = new FlatGuiGraphics(contentManager, skinStream);
+            _controlStack = new Stack<ControlWithBounds>();
+        }
+
         /// <summary>Initializes a new gui visualizer from a skin stored in a file</summary>
         /// <param name="serviceProvider">
         ///   Game service provider containing the graphics device service
@@ -299,11 +306,14 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         /// <param name="skinPath">
         ///   Path to the skin description this GUI visualizer will load
         /// </param>
-        public static FlatGuiVisualizer FromFile(IServiceProvider serviceProvider, string skinPath)
+        public FlatGuiVisualizer FromFile(IServiceProvider serviceProvider, string skinPath)
         {
-            using (FileStream skinStream = new FileStream(skinPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            IFolder folder = FileSystem.Current.GetFolderFromPathAsync(skinPath).Result;
+            IFile file = FileSystem.Current.GetFileFromPathAsync(skinPath).Result;
+
+            using (Stream skinStream = file.OpenAsync(FileAccess.Read).Result)
             {
-                ContentManager contentManager = new ContentManager(serviceProvider, Path.GetDirectoryName(skinPath));
+                ContentManager contentManager = new ContentManager(serviceProvider, folder.Path);
 
                 try
                 {
@@ -323,15 +333,12 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         /// <param name="skinResource">Name of the resource containing the skin description</param>
         public static FlatGuiVisualizer FromResource(IServiceProvider serviceProvider, ResourceManager resourceManager, string skinResource)
         {
-            byte[] resourceData = (byte[])resourceManager.GetObject(skinResource);
-            if (resourceData == null)
-            {
+            var assembly = typeof(ResourceManager).GetTypeInfo().Assembly;
+            string[] resources = assembly.GetManifestResourceNames();
+            if (!resources.Contains(skinResource))
                 throw new ArgumentException("Resource '" + skinResource + "' not found", "skinResource");
-            }
 
-            // This sucks! I cannot use ResourceManager.GetStream() on a resource that's
-            // stored as a byte array!
-            using (MemoryStream skinStream = new MemoryStream(resourceData, false))
+            using (Stream skinStream = assembly.GetManifestResourceStream(skinResource))
             {
                 ResourceContentManager contentManager = new ResourceContentManager(serviceProvider, resourceManager);
 
@@ -345,21 +352,6 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
                     throw;
                 }
             }
-        }
-
-        /// <summary>Initializes a new gui painter for traditional GUIs</summary>
-        /// <param name="contentManager">Content manager that will be used to load the skin resources</param>
-        /// <param name="skinStream">Stream from which the GUI Visualizer will read the skin description</param>
-        protected FlatGuiVisualizer(ContentManager contentManager, Stream skinStream)
-        {
-            _employer = new ControlRendererEmployer();
-            _pluginHost = new PluginHost(_employer);
-
-            // Employ our own assembly in order to obtain the default GUI renderers
-            _pluginHost.Repository.AddAssembly(Self);
-
-            _flatGuiGraphics = new FlatGuiGraphics(contentManager, skinStream);
-            _controlStack = new Stack<ControlWithBounds>();
         }
 
         /// <summary>Immediately releases all resources owned by the instance</summary>

@@ -401,7 +401,7 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         /// <returns>A stream for the specified embedded resource</returns>
         private static Stream getResourceStream(string resourceName)
         {
-            Assembly self = Assembly.GetCallingAssembly();
+            Assembly self = typeof(FlatGuiGraphics).GetTypeInfo().Assembly;
             string[] resources = self.GetManifestResourceNames();
             return self.GetManifestResourceStream(resourceName);
         }

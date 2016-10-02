@@ -12,9 +12,7 @@ namespace MonoGame.Extended.Support.Plugins
         /// <returns>True if the type has a default constructor</returns>
         public static bool HasDefaultConstructor(Type type)
         {
-            ConstructorInfo[] constructors = type.GetConstructors();
-
-            foreach (ConstructorInfo constructor in constructors)
+            foreach (ConstructorInfo constructor in type.GetTypeInfo().DeclaredConstructors)
                 if (constructor.IsPublic && (constructor.GetParameters().Length == 0))
                     return true;
 
