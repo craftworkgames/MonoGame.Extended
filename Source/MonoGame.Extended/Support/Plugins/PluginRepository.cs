@@ -184,4 +184,3 @@ namespace MonoGame.Extended.Support.Plugins
 
     }
 }
-}

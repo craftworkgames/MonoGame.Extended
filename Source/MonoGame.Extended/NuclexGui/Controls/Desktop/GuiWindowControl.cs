@@ -39,4 +39,3 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
 
     }
 }
-}
