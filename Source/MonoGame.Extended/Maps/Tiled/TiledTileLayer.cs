@@ -79,7 +79,7 @@ namespace MonoGame.Extended.Maps.Tiled
                     continue;
 
                 var region = _map.GetTileRegion(tile.Id);
-                var point = GetTileLocationFunction()(tile);
+                var point = GetTileLocationFunction()(tile).ToVector2() + new Vector2(OffsetX, OffsetY);
                 var tileWidth = region.Width;
                 var tileHeight = region.Height;
                 var tc0 = Vector2.Zero;
