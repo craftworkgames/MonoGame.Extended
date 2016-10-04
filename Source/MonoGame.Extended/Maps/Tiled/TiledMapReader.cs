@@ -144,10 +144,14 @@ namespace MonoGame.Extended.Maps.Tiled
             var layerName = reader.ReadString();
             var visible = reader.ReadBoolean();
             var opacity = reader.ReadSingle();
+            var offsetx = reader.ReadSingle();
+            var offsety = reader.ReadSingle();
             var layerType = reader.ReadString();
             var layer = ReadLayerTypeProperties(reader, tiledMap, layerName, layerType);
             layer.IsVisible = visible;
             layer.Opacity = opacity;
+            layer.OffsetX = offsetx;
+            layer.OffsetY = offsety;
             return layer;
         }
 
