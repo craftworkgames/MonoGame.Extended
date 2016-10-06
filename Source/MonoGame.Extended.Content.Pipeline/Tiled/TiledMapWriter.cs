@@ -60,6 +60,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 writer.Write(layer.Name);
                 writer.Write(layer.Visible);
                 writer.Write(layer.Opacity);
+                writer.Write(layer.OffsetX);
+                writer.Write(layer.OffsetY);
 
                 var tileLayer = layer as TmxTileLayer;
 
