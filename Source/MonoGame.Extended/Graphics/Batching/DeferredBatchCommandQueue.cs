@@ -3,24 +3,27 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal sealed class DeferredBatchCommandQueue<TVertexType, TCommandData> :
-            BatchCommandQueue<TVertexType, TCommandData>
-        where TVertexType : struct, IVertexType where TCommandData : struct, IBatchDrawCommandData<TCommandData>
+    internal sealed class DeferredBatchCommandQueue<TVertexType, TIndexType, TCommandData> :
+            BatchCommandQueue<TVertexType, TIndexType, TCommandData>
+        where TVertexType : struct, IVertexType
+        where TCommandData : struct, IBatchDrawCommandData<TCommandData>
+        where TIndexType : struct
     {
         private readonly BatchDrawCommand<TCommandData>[] _commands;
-        private readonly GeometryBuffer<TVertexType> _geometryBuffer;
-        private readonly ushort[] _sortedIndices; 
+        private readonly GeometryBuffer<TVertexType, TIndexType> _geometryBuffer;
+        private readonly ushort[] _sortedIndices;
         private readonly int _maximumCommandsCount;
         private int _commandsCount;
         private BatchDrawCommand<TCommandData> _currentCommand;
         internal BatchSortMode SortMode;
 
-        internal DeferredBatchCommandQueue(GraphicsDevice graphicsDevice, BatchCommandDrawer<TVertexType, TCommandData> commandDrawer, int maximumCommandsCount)
+        internal DeferredBatchCommandQueue(GraphicsDevice graphicsDevice,
+            BatchCommandDrawer<TVertexType, TIndexType, TCommandData> commandDrawer, int maximumCommandsCount)
             : base(graphicsDevice, commandDrawer)
         {
             _commands = new BatchDrawCommand<TCommandData>[maximumCommandsCount];
             _geometryBuffer = commandDrawer.GeometryBuffer;
-            _sortedIndices = new ushort[_geometryBuffer._indices.Length];
+            _sortedIndices = new ushort[_geometryBuffer.Indices.Length];
             _maximumCommandsCount = maximumCommandsCount;
         }
 
@@ -32,7 +35,7 @@ namespace MonoGame.Extended.Graphics.Batching
 
             var vertexBuffer = _geometryBuffer.VertexBuffer;
             // upload the vertices to the GPU's memory from CPU's memory
-            vertexBuffer.SetData(_geometryBuffer._vertices, 0, _geometryBuffer._vertexCount);
+            vertexBuffer.SetData(_geometryBuffer.Vertices, 0, _geometryBuffer.VertexCount);
             // tell the graphics API we want to use that buffer of vertices for rendering
             GraphicsDevice.SetVertexBuffer(vertexBuffer);
 
@@ -64,15 +67,13 @@ namespace MonoGame.Extended.Graphics.Batching
         {
             var indexBuffer = _geometryBuffer.IndexBuffer;
             // upload the indices to the GPU's memory from CPU's memory
-            indexBuffer.SetData(_geometryBuffer._indices, 0, _geometryBuffer._indexCount);
+            indexBuffer.SetData(_geometryBuffer.Indices, 0, _geometryBuffer.IndexCount);
             // tell the graphics API we want to use that buffer of indices for rendering
             GraphicsDevice.Indices = indexBuffer;
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _commandsCount; index++)
-            {
                 CommandDrawer.Draw(ref _commands[index]);
-            }
         }
 
         private void FlushDeferredSorted()
@@ -87,9 +88,9 @@ namespace MonoGame.Extended.Graphics.Batching
             // change the indices used by the command to use the sorted indices array so the indices are sequential for the graphics API
             _commands[0].StartIndex = 0;
             // get the number of vertices used for the current command, each index represents a vertex
-            var commandIndicesCount = PrimitiveType.GetVerticesCount(_currentCommand.PrimitiveCount);
+            var commandIndicesCount = PrimitiveType.GetVerticesCount(_currentCommand.PrimitivesCount);
             // copy the indices of the current command into our sorted indices array so the indices are sequential for the graphics API
-            Array.Copy(_geometryBuffer._indices, _currentCommand.StartIndex, _sortedIndices, sortedIndiesCount,
+            Array.Copy(_geometryBuffer.Indices, _currentCommand.StartIndex, _sortedIndices, sortedIndiesCount,
                 commandIndicesCount);
             sortedIndiesCount += (ushort)commandIndicesCount;
 
@@ -100,13 +101,13 @@ namespace MonoGame.Extended.Graphics.Batching
                 var command = _commands[index];
 
                 // get the number of vertices used for the command, each index represents a vertex
-                commandIndicesCount = PrimitiveType.GetVerticesCount(command.PrimitiveCount);
+                commandIndicesCount = PrimitiveType.GetVerticesCount(command.PrimitivesCount);
 
                 if (_currentCommand.CanMergeWith(command.SortKey, ref command.Data))
                 {
                     // increase the number of primitives for the current command by the amount of the merged command
-                    _commands[newCommandsCount - 1].PrimitiveCount =
-                        _currentCommand.PrimitiveCount += command.PrimitiveCount;
+                    _commands[newCommandsCount - 1].PrimitivesCount =
+                        _currentCommand.PrimitivesCount += command.PrimitivesCount;
                 }
                 else
                 {
@@ -119,7 +120,7 @@ namespace MonoGame.Extended.Graphics.Batching
                 }
 
                 // copy the indices of the command into our sorted indices array so the merged indices are sequential for the graphics API
-                Array.Copy(_geometryBuffer._indices, command.StartIndex, _sortedIndices, sortedIndiesCount,
+                Array.Copy(_geometryBuffer.Indices, command.StartIndex, _sortedIndices, sortedIndiesCount,
                     commandIndicesCount);
                 sortedIndiesCount += (ushort)commandIndicesCount;
             }
@@ -132,19 +133,18 @@ namespace MonoGame.Extended.Graphics.Batching
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < newCommandsCount; index++)
-            {
                 CommandDrawer.Draw(ref _commands[index]);
-            }
         }
 
-        internal override void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, float sortKey, ref TCommandData data)
+        internal override void EnqueueDrawCommand(int startIndex, int primitivesCount, float sortKey,
+            ref TCommandData data)
         {
             // merge draw commands if possible to reduce expensive draw calls to the graphics API
             // this might need to be changed for next-gen graphics API (Vulkan, Metal, DirectX 11) where the draw calls are not so expensive
             if (_currentCommand.CanMergeWith(sortKey, ref data))
             {
                 // since indices are added in sequential fasion we can just increase the primitive count of the current command
-                _commands[_commandsCount - 1].PrimitiveCount = _currentCommand.PrimitiveCount += primitiveCount;
+                _commands[_commandsCount - 1].PrimitivesCount = _currentCommand.PrimitivesCount += primitivesCount;
                 return;
             }
 
@@ -153,7 +153,7 @@ namespace MonoGame.Extended.Graphics.Batching
                 throw new BatchCommandQueueOverflowException(_maximumCommandsCount);
 
             // could not merge draw command, initialize a new one
-            _currentCommand = new BatchDrawCommand<TCommandData>(startIndex, primitiveCount, sortKey, data);
+            _currentCommand = new BatchDrawCommand<TCommandData>(startIndex, primitivesCount, sortKey, data);
 
             // append the command to the array
             _commands[_commandsCount++] = _currentCommand;

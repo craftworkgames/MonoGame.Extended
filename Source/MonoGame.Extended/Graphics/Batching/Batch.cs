@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,29 +10,30 @@ namespace MonoGame.Extended.Graphics.Batching
     ///     Enables a group of geometric objects to be drawn using the same settings.
     /// </summary>
     /// <typeparam name="TVertexType">The type of vertex.</typeparam>
+    /// <typeparam name="TIndexType">The type of vertex index.</typeparam>
     /// <typeparam name="TBatchDrawCommandData">The type of data stored with each draw command.</typeparam>
     /// <seealso cref="IDisposable" />
     /// <remarks>
     ///     <para>
-    ///         For best performance, use <see cref="DynamicGeometryBuffer{TVertexType}" /> when instantiating
-    ///         <see cref="Batch{TVertexType,TBatchDrawCommandData}" /> for geometry which changes frame-to-frame. For geometry
+    ///         For best performance, use <see cref="GeometryBufferType.Dynamic"/> when instantiating
+    ///         <see cref="Batch{TVertexType, TIndexType, TBatchDrawCommandData}" /> for geometry which changes frame-to-frame. For geometry
     ///         which does not change frame-to-frame, or changes infrequently between frames, use
-    ///         <see cref="StaticGeometryBuffer{TVertexType}" /> instead.
+    ///         <see cref="GeometryBufferType.Static" /> instead.
     ///     </para>
     /// </remarks>
-    public abstract class Batch<TVertexType, TBatchDrawCommandData> : IDisposable
+    public abstract class Batch<TVertexType, TIndexType, TBatchDrawCommandData> : IDisposable
         where TVertexType : struct, IVertexType
-        where TBatchDrawCommandData : struct, IBatchDrawCommandData<TBatchDrawCommandData>
+        where TBatchDrawCommandData : struct, IBatchDrawCommandData<TBatchDrawCommandData> where TIndexType : struct
     {
         internal const int DefaultMaximumBatchCommandsCount = 2048;
 
-        private BatchCommandDrawer<TVertexType, TBatchDrawCommandData> _commandDrawer;
-        private BatchCommandQueue<TVertexType, TBatchDrawCommandData> _currentCommandQueue;
-        private DeferredBatchCommandQueue<TVertexType, TBatchDrawCommandData> _deferredCommandQueue;
-        private ImmediateBatchCommandQueue<TVertexType, TBatchDrawCommandData> _immediateCommandQueue;
+        private BatchCommandDrawer<TVertexType, TIndexType, TBatchDrawCommandData> _commandDrawer;
+        private BatchCommandQueue<TVertexType, TIndexType, TBatchDrawCommandData> _currentCommandQueue;
+        private DeferredBatchCommandQueue<TVertexType, TIndexType, TBatchDrawCommandData> _deferredCommandQueue;
+        private ImmediateBatchCommandQueue<TVertexType, TIndexType, TBatchDrawCommandData> _immediateCommandQueue;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Batch{TVertexType,TBatchDrawCommandData}" /> class.
+        ///     Initializes a new instance of the <see cref="Batch{TVertexType, TIndexType, TBatchDrawCommandData}" /> class.
         /// </summary>
         /// <param name="geometryBuffer">The geometry buffer.</param>
         /// <param name="maximumBatchCommandsCount">
@@ -46,12 +46,12 @@ namespace MonoGame.Extended.Graphics.Batching
         /// </exception>
         /// <remarks>
         ///     <para>
-        ///         For best performance, use <see cref="DynamicGeometryBuffer{TVertexType}" /> for geometry which changes
-        ///         frame-to-frame and <see cref="StaticGeometryBuffer{TVertexType}" /> for geoemtry which does not change
+        ///         For best performance, use <see cref="GeometryBufferType.Dynamic" /> for geometry which changes
+        ///         frame-to-frame and <see cref="GeometryBufferType.Static" /> for geoemtry which does not change
         ///         frame-to-frame, or changes infrequently between frames.
         ///     </para>
         /// </remarks>
-        protected Batch(GeometryBuffer<TVertexType> geometryBuffer,
+        protected Batch(GeometryBuffer<TVertexType, TIndexType> geometryBuffer,
             int maximumBatchCommandsCount = DefaultMaximumBatchCommandsCount)
         {
             if (geometryBuffer == null)
@@ -62,30 +62,30 @@ namespace MonoGame.Extended.Graphics.Batching
 
             GeometryBuffer = geometryBuffer;
             GraphicsDevice = geometryBuffer.GraphicsDevice;
-            _commandDrawer = new BatchCommandDrawer<TVertexType, TBatchDrawCommandData>(GraphicsDevice, GeometryBuffer);
+            _commandDrawer = new BatchCommandDrawer<TVertexType, TIndexType, TBatchDrawCommandData>(GraphicsDevice, GeometryBuffer);
 
-            _immediateCommandQueue = new ImmediateBatchCommandQueue<TVertexType, TBatchDrawCommandData>(GraphicsDevice, _commandDrawer);
-            _deferredCommandQueue = new DeferredBatchCommandQueue<TVertexType, TBatchDrawCommandData>(GraphicsDevice, _commandDrawer,
+            _immediateCommandQueue = new ImmediateBatchCommandQueue<TVertexType, TIndexType, TBatchDrawCommandData>(GraphicsDevice, _commandDrawer);
+            _deferredCommandQueue = new DeferredBatchCommandQueue<TVertexType, TIndexType, TBatchDrawCommandData>(GraphicsDevice, _commandDrawer,
                 maximumBatchCommandsCount);
         }
 
         /// <summary>
-        ///     Gets the <see cref="GeometryBuffer{TVertexType}" /> associated with this
-        ///     <see cref="Batch{TVertexType,TBatchDrawCommandData}" />.
+        ///     Gets the <see cref="GeometryBuffer{TVertexType, TIndexType}" /> associated with this
+        ///     <see cref="Batch{TVertexType, TIndexType, TBatchDrawCommandData}" />.
         /// </summary>
         /// <value>
-        ///     The <see cref="GeometryBuffer{TVertexType}" /> associated with this
-        ///     <see cref="Batch{TVertexType,TBatchDrawCommandData}" />.
+        ///     The <see cref="GeometryBuffer{TVertexType, TIndexType}" /> associated with this
+        ///     <see cref="Batch{TVertexType, TIndexType, TBatchDrawCommandData}" />.
         /// </value>
-        protected GeometryBuffer<TVertexType> GeometryBuffer { get; }
+        protected GeometryBuffer<TVertexType, TIndexType> GeometryBuffer { get; }
 
         /// <summary>
         ///     Gets the <see cref="GraphicsDevice" /> associated with this
-        ///     <see cref="Batch{TVertexType,TBatchDrawCommandData}" />.
+        ///     <see cref="Batch{TVertexType, TIndexType, TBatchDrawCommandData}" />.
         /// </summary>
         /// <value>
         ///     The <see cref="GraphicsDevice" /> associated with this
-        ///     <see cref="Batch{TVertexType,TBatchDrawCommandData}" />.
+        ///     <see cref="Batch{TVertexType, TIndexType, TBatchDrawCommandData}" />.
         /// </value>
         public GraphicsDevice GraphicsDevice { get; }
 
@@ -228,7 +228,7 @@ namespace MonoGame.Extended.Graphics.Batching
         ///     and optional sort key.
         /// </summary>
         /// <param name="startIndex">The starting index from the <see cref="GeometryBuffer" /> to use.</param>
-        /// <param name="primitiveCount">The number of primitives from the <see cref="GeometryBuffer" /> to use.</param>
+        /// <param name="primitivesCount">The number of primitives from the <see cref="GeometryBuffer" /> to use.</param>
         /// <param name="sortKey">The sort key.</param>
         /// <param name="itemData">The <see cref="TBatchDrawCommandData" />.</param>
         /// <exception cref="InvalidOperationException">The <see cref="Begin"/> method has not been called.</exception>
@@ -238,10 +238,30 @@ namespace MonoGame.Extended.Graphics.Batching
         ///         for drawing, call <see cref="End" />.
         ///     </para>
         /// </remarks>
-        protected void Draw(ushort startIndex, ushort primitiveCount, float sortKey, ref TBatchDrawCommandData itemData)
+        protected void Draw(int startIndex, int primitivesCount, float sortKey, ref TBatchDrawCommandData itemData)
         {
             EnsureHasBegun();
-            _currentCommandQueue.EnqueueDrawCommand(startIndex, primitiveCount, sortKey, ref itemData);
+            _currentCommandQueue.EnqueueDrawCommand(startIndex, primitivesCount, sortKey, ref itemData);
+        }
+
+        /// <summary>
+        ///     Adds geometry to the group of geometry for rendering using the specified primitive type, vertices, indices, data,
+        ///     and optional sort key.
+        /// </summary>
+        /// <param name="geometryItem">The <see cref="Graphics.GeometryBuffer.GeometryItem"/> to use.</param>
+        /// <param name="sortKey">The sort key.</param>
+        /// <param name="itemData">The <see cref="TBatchDrawCommandData" />.</param>
+        /// <exception cref="InvalidOperationException">The <see cref="Begin"/> method has not been called.</exception>
+        /// <remarks>
+        ///     <para>
+        ///         <see cref="Begin" /> must be called before enqueuing any draw calls. When all the geometry have been enqueued
+        ///         for drawing, call <see cref="End" />.
+        ///     </para>
+        /// </remarks>
+        protected void Draw(GeometryBuffer.GeometryItem geometryItem, float sortKey, ref TBatchDrawCommandData itemData)
+        {
+            EnsureHasBegun();
+            _currentCommandQueue.EnqueueDrawCommand(geometryItem.StartIndex, geometryItem.PrimitivesCount, sortKey, ref itemData);
         }
     }
 }
