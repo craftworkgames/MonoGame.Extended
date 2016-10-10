@@ -170,8 +170,7 @@ namespace MonoGame.Extended.Tests.Primitives
                         "Two empty bounding boxes intersect.");
                 yield return
                     new TestCaseData(new BoundingBox2D(new Point2(-10, -10), new Size2(15, 15)),
-                        new BoundingBox2D(20, 20, 40, 40),
-                        new BoundingBox2D(new Point2(-7.5f, -7.5f), new Size2(12.5f, 12.5f)), true).SetName(
+                        new BoundingBox2D(20, 20, 40, 40), true).SetName(
                         "Two overlapping non-empty bounding boxes intersect.");
                 yield return
                     new TestCaseData(new BoundingBox2D(new Point2(-40, -50), new Size2(15, 15)),

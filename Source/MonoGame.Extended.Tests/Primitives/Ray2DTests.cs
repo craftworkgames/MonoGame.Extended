@@ -116,11 +116,13 @@ namespace MonoGame.Extended.Tests.Primitives
                     new TestCaseData(new Ray2D(), new Ray2D(), true).SetName("Two degenerate rays are equal.");
                 yield return
                     new TestCaseData(new Ray2D(new Point2(float.MinValue, float.MaxValue),
+                        new Vector2(float.MaxValue, float.MinValue)), new Ray2D(new Point2(float.MaxValue, float.MinValue),
                         new Vector2(float.MaxValue, float.MinValue)), false).SetName(
                         "Two different non-degenerate rays are not equal.");
                 yield return
                     new TestCaseData(
                             new Ray2D(new Point2(float.MinValue, float.MaxValue),
+                                new Vector2(float.MinValue, float.MaxValue)), new Ray2D(new Point2(float.MinValue, float.MaxValue),
                                 new Vector2(float.MinValue, float.MaxValue)), true)
                         .SetName(
                             "Two identical non-degenerate rays are equal.");
