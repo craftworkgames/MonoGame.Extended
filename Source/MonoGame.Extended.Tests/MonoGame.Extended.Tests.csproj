@@ -69,6 +69,11 @@
     <Compile Include="Particles\ParticleBufferTests.cs" />
     <Compile Include="Particles\Profiles\PointProfileTests.cs" />
     <Compile Include="Particles\Profiles\RingProfileTests.cs" />
+    <Compile Include="Primitives\BoundingBox2DTests.cs" />
+    <Compile Include="Primitives\Point2Tests.cs" />
+    <Compile Include="Primitives\Ray2DTests.cs" />
+    <Compile Include="Primitives\Segment2DTests.cs" />
+    <Compile Include="Primitives\Size2Tests.cs" />
     <Compile Include="RangeTests.cs" />
     <Compile Include="Shapes\PolygonFTests.cs" />
     <Compile Include="Shapes\CircleTests.cs" />
