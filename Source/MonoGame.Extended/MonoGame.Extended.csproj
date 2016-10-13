@@ -38,6 +38,12 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Primitives\BoundingBox2D.cs" />
+    <Compile Include="Primitives\Point2.cs" />
+    <Compile Include="Primitives\Ray2D.cs" />
+    <Compile Include="Primitives\RayHelper.cs" />
+    <Compile Include="Primitives\Segment2D.cs" />
+    <Compile Include="Primitives\Size2.cs" />
     <Compile Include="Sprites\AnimatedSprite.cs" />
     <Compile Include="Animations\Tweens\DelayTween.cs" />
     <Compile Include="Animations\Tweens\FluentTweening.cs" />
