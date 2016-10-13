@@ -158,7 +158,7 @@ namespace Demo.Camera
             }
 
             // not all sprite batches need to be affected by the camera
-            var rectangle = _camera.GetBoundingRectangle();
+            var rectangle = _camera.BoundingRectangle;
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine($"WASD: Move [{_camera.Position.X:0}, {_camera.Position.Y:0}]");
             stringBuilder.AppendLine($"EQ: Rotate [{MathHelper.ToDegrees(_camera.Rotation):0.00}]");

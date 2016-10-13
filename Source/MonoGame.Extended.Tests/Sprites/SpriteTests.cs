@@ -21,7 +21,7 @@ namespace MonoGame.Extended.Tests.Sprites
                 Position = new Vector2(400, 240)
             };
 
-            Assert.AreEqual(new RectangleF(375, 140, 50, 200), sprite.GetBoundingRectangle());
+            Assert.AreEqual(new RectangleF(375, 140, 50, 200), sprite.BoundingRectangle);
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace MonoGame.Extended.Tests.Sprites
                 OriginNormalized = new Vector2(1.0f, 1.0f)
             };
 
-            Assert.AreEqual(new RectangleF(-50, -200, 50, 200), sprite.GetBoundingRectangle());
+            Assert.AreEqual(new RectangleF(-50, -200, 50, 200), sprite.BoundingRectangle);
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace MonoGame.Extended.Tests.Sprites
                 Scale = Vector2.One * 2.0f
             };
 
-            Assert.AreEqual(new RectangleF(-50, -200, 100, 400), sprite.GetBoundingRectangle());
+            Assert.AreEqual(new RectangleF(-50, -200, 100, 400), sprite.BoundingRectangle);
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace MonoGame.Extended.Tests.Sprites
                 Rotation = MathHelper.ToRadians(90)
             };
 
-            Assert.AreEqual(new RectangleF(-100, -25, 200, 50), sprite.GetBoundingRectangle());
+            Assert.AreEqual(new RectangleF(-100, -25, 200, 50), sprite.BoundingRectangle);
         }
 
         [Test]

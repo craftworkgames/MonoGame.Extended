@@ -39,7 +39,7 @@ namespace MonoGame.Extended.Tests
         }
 
         [Test]
-        public void Camera2D_GetBoundingRectangle_Test()
+        public void Camera2D_BoundingRectangle_Test()
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var viewport = new DefaultViewportAdapter(graphicsDevice);
@@ -47,7 +47,7 @@ namespace MonoGame.Extended.Tests
             camera.Move(new Vector2(2, 0));
             camera.Move(new Vector2(0, 3));
 
-            var boundingRectangle = camera.GetBoundingRectangle();
+            var boundingRectangle = camera.BoundingRectangle;
 
             Assert.AreEqual(2, boundingRectangle.Left, 0.01);
             Assert.AreEqual(3, boundingRectangle.Top, 0.01);
