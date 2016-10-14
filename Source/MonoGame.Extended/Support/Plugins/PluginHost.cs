@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace MonoGame.Extended.Support.Plugins
@@ -16,8 +17,7 @@ namespace MonoGame.Extended.Support.Plugins
     {
         /// <summary>Initializes a plugin host using a new repository</summary>
         /// <param name="employer">Employer used assess and employ the plugin types</param>
-        public PluginHost(Employer employer) :
-          this(employer, new PluginRepository())
+        public PluginHost(Employer employer) : this(employer, new PluginRepository())
         { }
 
         /// <summary>Initializes the plugin using an existing repository</summary>
@@ -25,27 +25,27 @@ namespace MonoGame.Extended.Support.Plugins
         /// <param name="repository">Repository in which plugins will be stored</param>
         public PluginHost(Employer employer, PluginRepository repository)
         {
-            this.employer = employer;
-            this.repository = repository;
+            _employer = employer;
+            _repository = repository;
 
-            foreach (Assembly assembly in this.repository.LoadedAssemblies)
+            foreach (Assembly assembly in _repository.LoadedAssemblies)
             {
                 employAssemblyTypes(assembly);
             }
 
-            this.repository.AssemblyLoaded += new AssemblyLoadEventHandler(assemblyLoadHandler);
+            _repository.AssemblyLoaded += new AssemblyLoadEventHandler(assemblyLoadHandler); 
         }
 
         /// <summary>The repository containing all loaded plugins</summary>
         public PluginRepository Repository
         {
-            get { return this.repository; }
+            get { return _repository; }
         }
 
         /// <summary>The employer that is used by this plugin integration host</summary>
         public Employer Employer
         {
-            get { return this.employer; }
+            get { return _employer; }
         }
 
         /// <summary>Responds to a new plugin being loaded into the repository</summary>
@@ -59,23 +59,20 @@ namespace MonoGame.Extended.Support.Plugins
         /// <summary>Employs all employable types in an assembly</summary>
         /// <param name="assembly">Assembly whose types to assess and to employ</param>
         private void employAssemblyTypes(Assembly assembly)
-        {
-
-            // Iterate all types contained in the assembly
-            Type[] types = assembly.GetTypes();
-            for (int index = 0; index < types.Length; ++index)
+        {            
+            foreach (var typeinfo in assembly.DefinedTypes)
             {
-                Type type = types[index];
+                Type type = typeinfo.GetType();
 
                 // We'll ignore abstract and non-public types
-                if (!type.IsPublic || type.IsAbstract)
+                if (!typeinfo.IsPublic || typeinfo.IsAbstract)
                 {
                     continue;
                 }
 
                 // Types that have been tagged with the [NoPlugin] attribute will be ignored
-                object[] attributes = type.GetCustomAttributes(true);
-                if (containsNoPluginAttribute(attributes))
+                var attributes = typeinfo.GetCustomAttributes(true);
+                if (containsNoPluginAttribute(new List<object>(attributes).ToArray()))
                 {
                     continue;
                 }
@@ -83,9 +80,9 @@ namespace MonoGame.Extended.Support.Plugins
                 // Type seems to be acceptable, assess and possibly employ it
                 try
                 {
-                    if (this.employer.CanEmploy(type))
+                    if (_employer.CanEmploy(type))
                     {
-                        this.employer.Employ(type);
+                        _employer.Employ(type);
                     }
                 }
                 catch (Exception exception)
@@ -123,8 +120,8 @@ namespace MonoGame.Extended.Support.Plugins
         }
 
         /// <summary>Employs and manages types in the loaded plugin assemblies</summary>
-        private Employer employer;
+        private Employer _employer;
         /// <summary>Repository containing all plugins loaded, shared with other hosts</summary>
-        private PluginRepository repository;
+        private PluginRepository _repository;
     }
 }

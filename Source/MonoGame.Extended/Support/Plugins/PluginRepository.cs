@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.IO;
+using PCLStorage;
 
 namespace MonoGame.Extended.Support.Plugins
 {
@@ -28,9 +30,9 @@ namespace MonoGame.Extended.Support.Plugins
             /// <summary>Loads an assembly from a file system path</summary>
             /// <param name="path">Path the assembly will be loaded from</param>
             /// <returns>The loaded assembly</returns>
-            protected virtual Assembly LoadAssemblyFromFile(string path)
+            protected virtual Assembly LoadAssemblyFromFile(AssemblyName name)
             {
-                return Assembly.LoadFrom(path);
+                return Assembly.Load(name);
             }
 
             /// <summary>Tries to loads an assembly from a file</summary>
@@ -39,13 +41,13 @@ namespace MonoGame.Extended.Support.Plugins
             ///   Output parameter that receives the loaded assembly or null
             /// </param>
             /// <returns>True if the assembly was loaded successfully, otherwise false</returns>
-            public bool TryLoadFile(string path, out Assembly loadedAssembly)
+            public bool TryLoadFile(AssemblyName name, out Assembly loadedAssembly)
             {
 
                 // A lot of errors can occur when attempting to load an assembly...
                 try
                 {
-                    loadedAssembly = LoadAssemblyFromFile(path);
+                    loadedAssembly = LoadAssemblyFromFile(name);
                     return true;
                 }
 #if WINDOWS
@@ -62,7 +64,7 @@ namespace MonoGame.Extended.Support.Plugins
                 catch (UnauthorizedAccessException)
                 {
                     reportError(
-                      "Not authorized to load assembly '" + path + "', " +
+                      "Not authorized to load assembly '" + name.Name + "', " +
                       "possible rights problem"
                     );
                 }
@@ -71,7 +73,7 @@ namespace MonoGame.Extended.Support.Plugins
                 catch (BadImageFormatException)
                 {
                     reportError(
-                      "'" + path + "' is not a .NET assembly, requires a different version " +
+                      "'" + name.Name + "' is not a .NET assembly, requires a different version " +
                       "of the .NET Runtime or does not support the current instruction set (x86/x64)"
                     );
                 }
@@ -79,7 +81,7 @@ namespace MonoGame.Extended.Support.Plugins
                 catch (Exception exception)
                 {
                     reportError(
-                      "Failed to load plugin assembly '" + path + "': " + exception.Message
+                      "Failed to load plugin assembly '" + name.Name + "': " + exception.Message
                     );
                 }
 
@@ -108,8 +110,8 @@ namespace MonoGame.Extended.Support.Plugins
         /// </param>
         public PluginRepository(IAssemblyLoader loader)
         {
-            this.assemblies = new List<Assembly>();
-            this.assemblyLoader = loader;
+            _assemblies = new List<Assembly>();
+            _assemblyLoader = loader;
         }
 
         /// <summary>Loads all plugins matching a wildcard specification</summary>
@@ -133,12 +135,13 @@ namespace MonoGame.Extended.Support.Plugins
             // We'll scan the specified directory for all files matching the specified
             // wildcard. If only a single file is specified, only that file will match
             // the supposed wildcard and everything works as expected
-            string[] assemblyFiles = Directory.GetFiles(directory, search);
-            foreach (string assemblyFile in assemblyFiles)
+            var assemblyFiles = FileSystem.Current.LocalStorage.GetFilesAsync().Result;
+            foreach (var assemblyFile in assemblyFiles)
             {
-
+                AssemblyName name = new AssemblyName(assemblyFile.Path);
+                
                 Assembly loadedAssembly;
-                if (this.assemblyLoader.TryLoadFile(assemblyFile, out loadedAssembly))
+                if (_assemblyLoader.TryLoadFile(name, out loadedAssembly))
                 {
                     AddAssembly(loadedAssembly);
                 }
@@ -153,7 +156,7 @@ namespace MonoGame.Extended.Support.Plugins
         /// </remarks>
         public void AddAssembly(Assembly assembly)
         {
-            this.assemblies.Add(assembly);
+            _assemblies.Add(assembly);
 
             // Trigger event in case any subscribers have been registered
             if (AssemblyLoaded != null)
@@ -165,7 +168,7 @@ namespace MonoGame.Extended.Support.Plugins
         /// <summary>List of all loaded plugin assemblies in the repository</summary>
         public List<Assembly> LoadedAssemblies
         {
-            get { return this.assemblies; }
+            get { return _assemblies; }
         }
 
         /// <summary>Reports an error to the debugging console</summary>
@@ -178,9 +181,9 @@ namespace MonoGame.Extended.Support.Plugins
         }
 
         /// <summary>Loaded plugin assemblies</summary>
-        private List<Assembly> assemblies;
+        private List<Assembly> _assemblies;
         /// <summary>Takes care of loading assemblies for the repositories</summary>
-        private IAssemblyLoader assemblyLoader;
+        private IAssemblyLoader _assemblyLoader;
 
     }
 }

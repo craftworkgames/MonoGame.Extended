@@ -11,6 +11,6 @@ namespace MonoGame.Extended.Support.Plugins
         ///   Output parameter that receives the loaded assembly or null
         /// </param>
         /// <returns>True if the assembly was loaded successfully, otherwise false</returns>
-        bool TryLoadFile(string path, out Assembly loadedAssembly);
+        bool TryLoadFile(AssemblyName name, out Assembly loadedAssembly);
     }
 }

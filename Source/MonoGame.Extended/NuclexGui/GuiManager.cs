@@ -318,7 +318,8 @@ namespace MonoGame.Extended.NuclexGui
                 var services = new GameServiceContainer();
                 services.AddService(typeof(IGraphicsDeviceService), _graphicsDeviceService);
 
-                Visualizer = Visuals.Flat.FlatGuiVisualizer.FromResource(services, Resources.SuaveSkinResources.ResourceManager, "SuaveSkin");
+                // Original loading by Nuclex
+                // Visualizer = Visuals.Flat.FlatGuiVisualizer.FromResource(services, Resources.SuaveSkinResources.ResourceManager, "SuaveSkin");
             }
 
         }

@@ -60,6 +60,7 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
+    <Compile Include="ColorExtensions.cs" />
     <Compile Include="Entities\Components\EntityComponent.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityComponentSystem.cs" />
@@ -87,6 +88,8 @@
     <Compile Include="NuclexGui\Visuals\Flat\FlatGuiGraphics.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\FlatGuiGraphicsDrawing.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\FlatGuiGraphicsSkinParsing.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\GuiSkin.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\GuiSkinConverters.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\OpeningLocator.cs" />
     <Compile Include="Collections\IObservableCollection.cs" />
     <Compile Include="Collections\ItemEventArgs.cs" />
@@ -172,13 +175,13 @@
     <Compile Include="NuclexGui\Visuals\Flat\IFlatGuiGraphics.cs" />
     <Compile Include="NuclexGui\Visuals\IGuiVisualizer.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
+    <Compile Include="Support\Plugins\AssemblyLoadEventArgs.cs" />
     <Compile Include="Support\Plugins\Employer.cs" />
     <Compile Include="Support\Plugins\IAssemblyLoader.cs" />
     <Compile Include="Support\Plugins\NoPluginAttribute.cs" />
     <Compile Include="Support\Plugins\PluginHelper.cs" />
     <Compile Include="Support\Plugins\PluginHost.cs" />
     <Compile Include="Support\Plugins\PluginRepository.cs" />
-    <Compile Include="Support\XmlHelper.cs" />
     <Compile Include="Vector2Extensions.cs" />
     <Compile Include="Screens\Screen.cs" />
     <Compile Include="Screens\ScreenComponent.cs" />
