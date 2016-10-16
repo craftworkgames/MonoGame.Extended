@@ -87,7 +87,6 @@
     <Compile Include="NuclexGui\Controls\GuiProgressControl.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\FlatGuiGraphics.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\FlatGuiGraphicsDrawing.cs" />
-    <Compile Include="NuclexGui\Visuals\Flat\FlatGuiGraphicsSkinParsing.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\GuiSkin.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\GuiSkinConverters.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\OpeningLocator.cs" />

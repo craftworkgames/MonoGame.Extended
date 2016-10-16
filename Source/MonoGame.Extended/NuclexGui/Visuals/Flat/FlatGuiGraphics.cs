@@ -118,7 +118,26 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
             _bitmaps = new Dictionary<string, Texture2D>();
             _frames = new Dictionary<string, Frame>();
 
-            loadSkin(skinStream);
+            LoadSkin(skinStream);
+        }
+
+        private void LoadSkin(Stream skinStream)
+        {
+            GuiSkin skin = GuiSkin.FromStream(skinStream);
+
+            foreach (var font in skin.resources.font)
+                _fonts.Add(font.name, _contentManager.Load<SpriteFont>(font.contentPath));
+
+            foreach (var texture in skin.resources.bitmap)
+                _bitmaps.Add(texture.name, _contentManager.Load<Texture2D>(texture.contentPath));
+
+            foreach (var frame in skin.frames)
+            {
+                for (int i = 0; i < frame.Regions.Length; i++)
+                    frame.Regions[i].Texture = _bitmaps[frame.Regions[i].Source];
+
+                _frames.Add(frame.Name, frame);
+            }
         }
 
         /// <summary>Immediately releases all resources owned by the instance</summary>

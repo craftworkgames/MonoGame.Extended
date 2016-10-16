@@ -125,23 +125,29 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
         public GuiSkin()
         {
-            
+            frames = new List<Frame>();
+            resources.bitmap = new List<Resources.Bitmap>();
+            resources.font = new List<Resources.Font>();
         }
 
         public static GuiSkin FromFile(string path)
         {
             using (var stream = TitleContainer.OpenStream(path))
+                return FromStream(stream);
+        }
+
+        public static GuiSkin FromStream(Stream stream)
+        {
             using (var streamReader = new StreamReader(stream))
             {
                 var json = streamReader.ReadToEnd();
 
                 var converters = new JsonConverter[]
                 {
-                    new ColorJsonConverter(),
                     new GuiFrameJsonConverter()
                 };
 
-                return JsonConvert.DeserializeObject<GuiSkin>(path, converters);
+                return JsonConvert.DeserializeObject<GuiSkin>(json, converters);
             }
         }
     }
