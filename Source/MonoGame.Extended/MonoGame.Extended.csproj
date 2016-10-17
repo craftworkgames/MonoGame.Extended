@@ -85,6 +85,11 @@
     <Compile Include="NuclexGui\Controls\GuiLabelControl.cs" />
     <Compile Include="NuclexGui\Controls\GuiPressableControl.cs" />
     <Compile Include="NuclexGui\Controls\GuiProgressControl.cs" />
+    <Compile Include="NuclexGui\Resources\SuaveSkinResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SuaveSkinResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="NuclexGui\Visuals\Flat\FlatGuiGraphics.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\FlatGuiGraphicsDrawing.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\GuiSkin.cs" />
@@ -342,7 +347,23 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect2D.mgfxo" />
+    <EmbeddedResource Include="NuclexGui\Resources\SuaveSkinResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SuaveSkinResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include="Graphics\Effects\Resources\compile.bat" />
+    <EmbeddedResource Include="NuclexGui\Resources\Skins\SuaveSkin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NuclexGui\Resources\Skins\DefaultFont.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NuclexGui\Resources\Skins\SuaveSheet.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NuclexGui\Resources\Skins\TitleFont.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

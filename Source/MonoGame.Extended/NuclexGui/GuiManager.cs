@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using System.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.InputListeners;
@@ -317,9 +319,8 @@ namespace MonoGame.Extended.NuclexGui
                 // be different from the one registered in the game service container.
                 var services = new GameServiceContainer();
                 services.AddService(typeof(IGraphicsDeviceService), _graphicsDeviceService);
-
-                // Original loading by Nuclex
-                // Visualizer = Visuals.Flat.FlatGuiVisualizer.FromResource(services, Resources.SuaveSkinResources.ResourceManager, "SuaveSkin");
+                
+                Visualizer = Visuals.Flat.FlatGuiVisualizer.FromResource(services, "SuaveSkin");
             }
 
         }

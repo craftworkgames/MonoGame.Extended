@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended", "MonoGame.Extended\MonoGame.Extended.csproj", "{41724C52-3D50-45BB-81EB-3C8A247EAFD1}"
 EndProject
@@ -97,6 +97,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Platformer", "Demos\De
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.EntityComponentSystem", "Demos\Demo.EntityComponentSystem\Demo.EntityComponentSystem.csproj", "{A2B9E42A-B2D1-476D-9F4B-E64824DA57EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.NuclexGui", "Demo.NuclexGui\Demo.NuclexGui.csproj", "{8003BA78-CB44-46B5-85A2-2A6440C3EFDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -266,6 +268,14 @@ Global
 		{A2B9E42A-B2D1-476D-9F4B-E64824DA57EE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2B9E42A-B2D1-476D-9F4B-E64824DA57EE}.Release|x86.ActiveCfg = Release|Any CPU
 		{A2B9E42A-B2D1-476D-9F4B-E64824DA57EE}.Release|x86.Build.0 = Release|Any CPU
+		{8003BA78-CB44-46B5-85A2-2A6440C3EFDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8003BA78-CB44-46B5-85A2-2A6440C3EFDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8003BA78-CB44-46B5-85A2-2A6440C3EFDC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8003BA78-CB44-46B5-85A2-2A6440C3EFDC}.Debug|x86.Build.0 = Debug|Any CPU
+		{8003BA78-CB44-46B5-85A2-2A6440C3EFDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8003BA78-CB44-46B5-85A2-2A6440C3EFDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8003BA78-CB44-46B5-85A2-2A6440C3EFDC}.Release|x86.ActiveCfg = Release|Any CPU
+		{8003BA78-CB44-46B5-85A2-2A6440C3EFDC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -289,5 +299,6 @@ Global
 		{50C281D9-1D55-4E5C-836B-94110EC09605} = {932F8931-4A8D-4205-BFCF-98E794207786}
 		{A7A5E924-A49D-4052-ACA2-894161007B00} = {932F8931-4A8D-4205-BFCF-98E794207786}
 		{A2B9E42A-B2D1-476D-9F4B-E64824DA57EE} = {932F8931-4A8D-4205-BFCF-98E794207786}
+		{8003BA78-CB44-46B5-85A2-2A6440C3EFDC} = {932F8931-4A8D-4205-BFCF-98E794207786}
 	EndGlobalSection
 EndGlobal

@@ -306,7 +306,7 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         /// <param name="skinPath">
         ///   Path to the skin description this GUI visualizer will load
         /// </param>
-        public FlatGuiVisualizer FromFile(IServiceProvider serviceProvider, string skinPath)
+        public static FlatGuiVisualizer FromFile(IServiceProvider serviceProvider, string skinPath)
         {
             IFolder folder = FileSystem.Current.GetFolderFromPathAsync(skinPath).Result;
             IFile file = FileSystem.Current.GetFileFromPathAsync(skinPath).Result;
@@ -329,18 +329,17 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
         /// <summary>Initializes a new gui visualizer from a skin stored as a resource</summary>
         /// <param name="serviceProvider">Game service provider containing the graphics device service</param>
-        /// <param name="resourceManager">Resource manager containing the resources used in the skin</param>
-        /// <param name="skinResource">Name of the resource containing the skin description</param>
-        public static FlatGuiVisualizer FromResource(IServiceProvider serviceProvider, ResourceManager resourceManager, string skinResource)
+        /// <param name="skinJsonFile">Name of the Json file containing the skin description</param>
+        public static FlatGuiVisualizer FromResource(IServiceProvider serviceProvider, string skinJsonFile)
         {
-            var assembly = typeof(ResourceManager).GetTypeInfo().Assembly;
+            var assembly = typeof(FlatGuiVisualizer).GetTypeInfo().Assembly;
             string[] resources = assembly.GetManifestResourceNames();
-            if (!resources.Contains(skinResource))
-                throw new ArgumentException("Resource '" + skinResource + "' not found", "skinResource");
+            if (!resources.Contains(skinJsonFile))
+                throw new ArgumentException("Resource '" + skinJsonFile + "' not found", "skinJsonFile");
 
-            using (Stream skinStream = assembly.GetManifestResourceStream(skinResource))
+            using (Stream skinStream = assembly.GetManifestResourceStream(skinJsonFile))
             {
-                ResourceContentManager contentManager = new ResourceContentManager(serviceProvider, resourceManager);
+                ContentManager contentManager = new ContentManager(serviceProvider, Path.GetDirectoryName(resources.First(s => s == skinJsonFile)));
 
                 try
                 {
