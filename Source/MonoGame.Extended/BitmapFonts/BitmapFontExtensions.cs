@@ -305,6 +305,7 @@ namespace MonoGame.Extended.BitmapFonts
             var dx = position.X;
             var dy = position.Y;
             var codePoints = BitmapFont.GetUnicodeCodePoints(text).ToArray();
+            Vector2 positionOffset = Vector2.Zero;
 
             for (int i = 0, l = codePoints.Length; i < l; i++)
             {
@@ -314,8 +315,14 @@ namespace MonoGame.Extended.BitmapFonts
                 if (fontRegion != null)
                 {
                     var charPosition = new Vector2(dx + fontRegion.XOffset, dy + fontRegion.YOffset);
+                    var scaledCharPosition = charPosition * new Vector2(scale.X, scale.Y);
 
-                    spriteBatch.Draw(fontRegion.TextureRegion, charPosition, color, rotation, origin, scale, effects,
+                    if (i==0)
+                        positionOffset = scaledCharPosition - charPosition;
+
+                    scaledCharPosition -= positionOffset;
+
+                    spriteBatch.Draw(fontRegion.TextureRegion, scaledCharPosition, color, rotation, origin, scale, effects,
                         layerDepth);
 
                     if (i != text.Length - 1)
