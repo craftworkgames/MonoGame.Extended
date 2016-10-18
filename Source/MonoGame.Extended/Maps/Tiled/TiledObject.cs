@@ -6,12 +6,12 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledObject
     {
-        public TiledObject(TiledObjectType objectType,int id,int? gid,float x,float y,float width,float height) : this(objectType,id,gid,width,height)
+        public TiledObject(TiledObjectType objectType, int id, int? gid, float x, float y, float width, float height) : this(objectType,id,gid,width,height)
         {
             Position = new Vector2(x,y);
         }
         
-        public TiledObject(TiledObjectType objectType,int id,int? gid,Vector2 position,float width,float height) : this(objectType,id,gid,width,height)
+        public TiledObject(TiledObjectType objectType, int id, int? gid, Vector2 position, float width, float height) : this(objectType,id,gid,width,height)
         {
             Position = position;
         }
