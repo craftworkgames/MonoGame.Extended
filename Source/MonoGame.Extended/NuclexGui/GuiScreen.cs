@@ -491,7 +491,7 @@ namespace MonoGame.Extended.NuclexGui
             if (_activatedControl != null)
                 _activatedControl.ProcessMouseWheel(ticks);
             else
-                this._desktopControl.ProcessMouseWheel(ticks);
+                _desktopControl.ProcessMouseWheel(ticks);
         }
 
         /// <summary>Triggers the FocusChanged event</summary>

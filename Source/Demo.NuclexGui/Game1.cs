@@ -19,7 +19,6 @@ namespace Demo.NuclexGui
         private Camera2D _camera;
 
         GuiManager _gui;
-        MouseListener _mouseListener;
 
         public Game1()
         {
@@ -29,8 +28,6 @@ namespace Demo.NuclexGui
             Window.AllowUserResizing = true;
 
             _gui = new GuiManager(Services);
-            _mouseListener = new MouseListener();
-            Services.AddService(typeof(InputListener), _mouseListener);
         }
 
         protected override void Initialize()
