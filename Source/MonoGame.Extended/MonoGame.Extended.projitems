@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>a357791f-ec00-4749-96b1-1b8ccba77587</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>MonoGame.Extended</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Angle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Camera2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ColorHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventHandlerExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FastRandom.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FramesPerSecondCounter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FramesPerSecondCounterComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameTimeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IColorable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IEquatableByRef.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IMovable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IPoolable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IRotatable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IScalable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ISizable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IUpdate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Matrix2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MatrixExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RandomExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Range.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderTarget2DExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SimpleDrawableGameComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SimpleGameComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Size.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SizeF.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Transform.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Vector2Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shapes\CircleF.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shapes\PolygonF.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shapes\RectangleExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shapes\RectangleF.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shapes\ShapeF.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shapes\SpriteBatchExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewportAdapters\BoxingViewportAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewportAdapters\DefaultViewportAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewportAdapters\ScalingViewportAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewportAdapters\ViewportAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewportAdapters\WindowViewportAdapter.cs" />
+  </ItemGroup>
+</Project>

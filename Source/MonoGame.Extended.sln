@@ -7,6 +7,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{068B9F42-8B49-4FAF-9D8C-701862FAC799}"
 	ProjectSection(SolutionItems) = preProject
 		MonoGame.Extended.nuspec = MonoGame.Extended.nuspec
+		Namespace_Dependencies.txt = Namespace_Dependencies.txt
 		..\README.md = ..\README.md
 		readme.txt = readme.txt
 	EndProjectSection
@@ -98,7 +99,90 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Batching", "Demos\Demo
 		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{67C76CB3-8561-4138-BBB2-5318E0480143}"
+	ProjectSection(SolutionItems) = preProject
+		Namespace_Dependencies.txt = Namespace_Dependencies.txt
+	EndProjectSection
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended", "MonoGame.Extended\MonoGame.Extended.shProj", "{634F28E7-3103-489C-A606-CA810F704826}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Monogame.Extended.Animations", "MonoGame.Extended\Animations\Monogame.Extended.Animations.shProj", "{CA79A050-E768-4BBF-B818-C9BD943FC068}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.BitmapFonts", "MonoGame.Extended\BitmapFonts\MonoGame.Extended.BitmapFonts.shProj", "{C05BE669-F67D-4A8D-92C2-8042B25B6137}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.Collections", "MonoGame.Extended\Collections\MonoGame.Extended.Collections.shProj", "{89F3C2C1-A9D4-4B7B-9820-395E530FC110}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.Collisions", "MonoGame.Extended\Collisions\MonoGame.Extended.Collisions.shProj", "{D49D0DE4-0626-4795-B40A-74271BBF5BEB}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.Entities", "MonoGame.Extended\Entities\MonoGame.Extended.Entities.shProj", "{9C108346-DEB7-4DF8-BC30-E8171CD9F05F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.Graphics", "MonoGame.Extended\Graphics\MonoGame.Extended.Graphics.shProj", "{A7112A66-B299-4F8E-A228-88F6DA2D3B73}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.Gui", "MonoGame.Extended\Gui\MonoGame.Extended.Gui.shProj", "{A0AF1AD2-7607-4EE4-87E0-D3F9B10E38B4}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.InputListeners", "MonoGame.Extended\InputListeners\MonoGame.Extended.InputListeners.shProj", "{6362BE67-F31C-4C57-A8F3-F86F9F7F11EE}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.Maps", "MonoGame.Extended\Maps\MonoGame.Extended.Maps.shProj", "{FD228482-B935-4175-83FD-979333AADC0E}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.Particles", "MonoGame.Extended\Particles\MonoGame.Extended.Particles.shProj", "{0740EDFC-9205-4925-984D-3EFB2137D869}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.Primitives", "MonoGame.Extended\Primitives\MonoGame.Extended.Primitives.shProj", "{350EB7A1-D0C9-419D-9F7B-D2EB4D172693}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.SceneGraphs", "MonoGame.Extended\SceneGraphs\MonoGame.Extended.SceneGraphs.shProj", "{C1532185-2DA8-45E7-8022-99B8BA63BE4F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.Screens", "MonoGame.Extended\Screens\MonoGame.Extended.Screens.shProj", "{B3FCADDD-FF4C-4457-A40A-01F52E5DC08F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.Serialization", "MonoGame.Extended\Serialization\MonoGame.Extended.Serialization.shProj", "{9D767A47-23D7-4F30-82A5-D028FD1D8CBF}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.Sprites", "MonoGame.Extended\Sprites\MonoGame.Extended.Sprites.shProj", "{2EDB2B84-F554-4CD2-8757-C81BA9C6EE61}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.TextureAtlases", "MonoGame.Extended\TextureAtlases\MonoGame.Extended.TextureAtlases.shProj", "{B8D19EED-DF42-4EEC-8D8C-74B714EC8A40}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.Timers", "MonoGame.Extended\Timers\MonoGame.Extended.Timers.shProj", "{2E4BEE23-02FF-48B7-8CBE-F734D5B9E59B}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoGame.Extended.Content", "MonoGame.Extended\Content\MonoGame.Extended.Content.shProj", "{9D03B2CB-59B9-47D5-8352-507F93F2B4BA}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		MonoGame.Extended\Particles\MonoGame.Extended.Particles.projitems*{0740edfc-9205-4925-984d-3efb2137d869}*SharedItemsImports = 13
+		MonoGame.Extended\Timers\MonoGame.Extended.Timers.projitems*{2e4bee23-02ff-48b7-8cbe-f734d5b9e59b}*SharedItemsImports = 13
+		MonoGame.Extended\Sprites\MonoGame.Extended.Sprites.projitems*{2edb2b84-f554-4cd2-8757-c81ba9c6ee61}*SharedItemsImports = 13
+		MonoGame.Extended\Primitives\MonoGame.Extended.Primitives.projitems*{350eb7a1-d0c9-419d-9f7b-d2eb4d172693}*SharedItemsImports = 13
+		MonoGame.Extended\Animations\Monogame.Extended.Animations.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\BitmapFonts\MonoGame.Extended.BitmapFonts.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\Collections\MonoGame.Extended.Collections.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\Collisions\MonoGame.Extended.Collisions.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\Content\MonoGame.Extended.Content.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\Entities\MonoGame.Extended.Entities.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\Graphics\MonoGame.Extended.Graphics.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\Gui\MonoGame.Extended.Gui.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\InputListeners\MonoGame.Extended.InputListeners.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\Maps\MonoGame.Extended.Maps.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\MonoGame.Extended.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\Particles\MonoGame.Extended.Particles.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\Primitives\MonoGame.Extended.Primitives.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\SceneGraphs\MonoGame.Extended.SceneGraphs.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\Screens\MonoGame.Extended.Screens.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\Serialization\MonoGame.Extended.Serialization.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\Sprites\MonoGame.Extended.Sprites.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\TextureAtlases\MonoGame.Extended.TextureAtlases.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\Timers\MonoGame.Extended.Timers.projitems*{41724c52-3d50-45bb-81eb-3c8a247eafd1}*SharedItemsImports = 4
+		MonoGame.Extended\MonoGame.Extended.projitems*{634f28e7-3103-489c-a606-ca810f704826}*SharedItemsImports = 13
+		MonoGame.Extended\InputListeners\MonoGame.Extended.InputListeners.projitems*{6362be67-f31c-4c57-a8f3-f86f9f7f11ee}*SharedItemsImports = 13
+		MonoGame.Extended\Collections\MonoGame.Extended.Collections.projitems*{89f3c2c1-a9d4-4b7b-9820-395e530fc110}*SharedItemsImports = 13
+		MonoGame.Extended\Entities\MonoGame.Extended.Entities.projitems*{9c108346-deb7-4df8-bc30-e8171cd9f05f}*SharedItemsImports = 13
+		MonoGame.Extended\Content\MonoGame.Extended.Content.projitems*{9d03b2cb-59b9-47d5-8352-507f93f2b4ba}*SharedItemsImports = 13
+		MonoGame.Extended\Serialization\MonoGame.Extended.Serialization.projitems*{9d767a47-23d7-4f30-82a5-d028fd1d8cbf}*SharedItemsImports = 13
+		MonoGame.Extended\Gui\MonoGame.Extended.Gui.projitems*{a0af1ad2-7607-4ee4-87e0-d3f9b10e38b4}*SharedItemsImports = 13
+		MonoGame.Extended\Graphics\MonoGame.Extended.Graphics.projitems*{a7112a66-b299-4f8e-a228-88f6da2d3b73}*SharedItemsImports = 13
+		MonoGame.Extended\Screens\MonoGame.Extended.Screens.projitems*{b3fcaddd-ff4c-4457-a40a-01f52e5dc08f}*SharedItemsImports = 13
+		MonoGame.Extended\TextureAtlases\MonoGame.Extended.TextureAtlases.projitems*{b8d19eed-df42-4eec-8d8c-74b714ec8a40}*SharedItemsImports = 13
+		MonoGame.Extended\BitmapFonts\MonoGame.Extended.BitmapFonts.projitems*{c05be669-f67d-4a8d-92c2-8042b25b6137}*SharedItemsImports = 13
+		MonoGame.Extended\SceneGraphs\MonoGame.Extended.SceneGraphs.projitems*{c1532185-2da8-45e7-8022-99b8ba63be4f}*SharedItemsImports = 13
+		MonoGame.Extended\Animations\Monogame.Extended.Animations.projitems*{ca79a050-e768-4bbf-b818-c9bd943fc068}*SharedItemsImports = 13
+		MonoGame.Extended\Collisions\MonoGame.Extended.Collisions.projitems*{d49d0de4-0626-4795-b40a-74271bbf5beb}*SharedItemsImports = 13
+		MonoGame.Extended\Maps\MonoGame.Extended.Maps.projitems*{fd228482-b935-4175-83fd-979333aadc0e}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
@@ -289,5 +373,24 @@ Global
 		{A7A5E924-A49D-4052-ACA2-894161007B00} = {932F8931-4A8D-4205-BFCF-98E794207786}
 		{A2B9E42A-B2D1-476D-9F4B-E64824DA57EE} = {932F8931-4A8D-4205-BFCF-98E794207786}
 		{5A251894-0462-47B6-9A63-BE26AA8CABDD} = {932F8931-4A8D-4205-BFCF-98E794207786}
+		{634F28E7-3103-489C-A606-CA810F704826} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{CA79A050-E768-4BBF-B818-C9BD943FC068} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{C05BE669-F67D-4A8D-92C2-8042B25B6137} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{89F3C2C1-A9D4-4B7B-9820-395E530FC110} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{D49D0DE4-0626-4795-B40A-74271BBF5BEB} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{9C108346-DEB7-4DF8-BC30-E8171CD9F05F} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{A7112A66-B299-4F8E-A228-88F6DA2D3B73} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{A0AF1AD2-7607-4EE4-87E0-D3F9B10E38B4} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{6362BE67-F31C-4C57-A8F3-F86F9F7F11EE} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{FD228482-B935-4175-83FD-979333AADC0E} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{0740EDFC-9205-4925-984D-3EFB2137D869} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{350EB7A1-D0C9-419D-9F7B-D2EB4D172693} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{C1532185-2DA8-45E7-8022-99B8BA63BE4F} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{B3FCADDD-FF4C-4457-A40A-01F52E5DC08F} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{9D767A47-23D7-4F30-82A5-D028FD1D8CBF} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{2EDB2B84-F554-4CD2-8757-C81BA9C6EE61} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{B8D19EED-DF42-4EEC-8D8C-74B714EC8A40} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{2E4BEE23-02FF-48B7-8CBE-F734D5B9E59B} = {67C76CB3-8561-4138-BBB2-5318E0480143}
+		{9D03B2CB-59B9-47D5-8352-507F93F2B4BA} = {67C76CB3-8561-4138-BBB2-5318E0480143}
 	EndGlobalSection
 EndGlobal

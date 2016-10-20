@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><Project xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"><PropertyGroup>    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects><HasSharedItems>true</HasSharedItems><SharedGUID>a357791f-ec00-4749-96b1-1b8ccba77587</SharedGUID></PropertyGroup><PropertyGroup Label = "Configuration"><Import_RootNamespace>MonoGame.Extended.Gui</Import_RootNamespace> </PropertyGroup> <ItemGroup><Compile Include="$(MSBuildThisFileDirectory)GuiAlignmentHelper.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)GuiComponent.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)GuiLayout.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)GuiThickness.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Controls\GuiButton.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Controls\GuiControl.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Controls\GuiControlStyle.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Controls\GuiLabel.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Controls\GuiToggleButton.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Serialization\ContentConverter.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Serialization\GuiControlConverter.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Serialization\GuiControlStyleConveter.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Serialization\GuiJsonConverter.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Serialization\GuiJsonConverterService.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Serialization\GuiLayoutConverter.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Serialization\GuiTextureAtlasConverter.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Serialization\TextureRegion2DConveter.cs"/>
+</ItemGroup></Project> 

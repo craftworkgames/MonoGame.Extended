@@ -1,4 +1,4 @@
-﻿using MonoGame.Extended.Collections;
+﻿
 
 namespace MonoGame.Extended
 {
