@@ -52,6 +52,16 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+
+  <ItemGroup>
+     <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect2D.mgfxo" />
+      <None Include="Graphics\Effects\Resources\compile.bat" />
+    <None Include="packages.config" />
+  </ItemGroup>
+   <ItemGroup>
+     <Content Include="Graphics\Effects\Resources\DefaultEffect2D.fx" />
+  </ItemGroup>
+  
   <Import Project="MonoGame.Extended.projitems" Label="Shared" />
   <Import Project="Sprites\MonoGame.Extended.Sprites.projitems" Label="Shared" />
   <Import Project="Serialization\MonoGame.Extended.Serialization.projitems" Label="Shared" />
