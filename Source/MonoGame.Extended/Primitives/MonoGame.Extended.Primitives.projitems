@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><Project xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"><PropertyGroup>    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects><HasSharedItems>true</HasSharedItems><SharedGUID>a357791f-ec00-4749-96b1-1b8ccba77587</SharedGUID></PropertyGroup><PropertyGroup Label = "Configuration"><Import_RootNamespace>MonoGame.Extended.Primitives</Import_RootNamespace> </PropertyGroup> <ItemGroup><Compile Include="$(MSBuildThisFileDirectory)BoundingBox2D.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Point2.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Ray2D.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)RayHelper.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Segment2D.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Size2.cs"/>
+</ItemGroup></Project> 

@@ -1,0 +1,14 @@
+The following list describes which namespace depends on which
+
+
+Animation : TextureAtlases
+BitmapFont : TextureAtlases
+Entities : Animation, Sprites
+Graphics : BitmapFont
+Gui : BitmapFont, InputListeners, Sprites, TextureAtlases
+Maps : Collisions, TextureAtlases
+Particles : Entities, TextureAtlases
+SceneGraphs : TextureAtlases
+Serialization : NewtonSoft
+Sprites : SceneGraphs, TextureAtlases, Entities, Animations
+TextureAtlases : Content

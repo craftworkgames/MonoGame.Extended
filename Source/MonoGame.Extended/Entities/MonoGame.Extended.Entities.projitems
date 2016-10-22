@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><Project xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"><PropertyGroup>    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects><HasSharedItems>true</HasSharedItems><SharedGUID>a357791f-ec00-4749-96b1-1b8ccba77587</SharedGUID></PropertyGroup><PropertyGroup Label = "Configuration"><Import_RootNamespace>MonoGame.Extended.Entities</Import_RootNamespace> </PropertyGroup> <ItemGroup><Compile Include="$(MSBuildThisFileDirectory)Entity.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)EntityComponentSystem.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Components\EntityComponent.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Systems\AnimatedSpriteSystem.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Systems\ComponentSystem.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Systems\ParticleEmitterSystem.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Systems\SpriteBatchSystem.cs"/>
+</ItemGroup></Project> 

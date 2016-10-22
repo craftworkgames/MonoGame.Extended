@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><Project xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"><PropertyGroup>    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects><HasSharedItems>true</HasSharedItems><SharedGUID>a357791f-ec00-4749-96b1-1b8ccba77587</SharedGUID></PropertyGroup><PropertyGroup Label = "Configuration"><Import_RootNamespace>MonoGame.Extended.Graphics</Import_RootNamespace> </PropertyGroup> <ItemGroup><Compile Include="$(MSBuildThisFileDirectory)Batch2DSortMode.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)DynamicBatch2D.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)GeometryBuffer.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)GeometryBuffer.Dynamic.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)GeometryBuffer.Static.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)GeometryBufferExtensions.VertexPositionColorTexture.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)GeometryBufferOverflowException.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)PrimitiveTypeExtensions.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Batching\Batch.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Batching\BatchCommandDrawer.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Batching\BatchCommandQueue.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Batching\BatchCommandQueueOverflowException.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Batching\BatchDrawCommand.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Batching\BatchSortMode.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Batching\DeferredBatchCommandQueue.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Batching\IBatchDrawCommandData.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Batching\ImmediateBatchCommandQueue.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Effects\DefaultEffect2D.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Effects\EffectResource.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Effects\IMatrixChainEffect.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Effects\ITexture2DEffect.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Effects\MatrixChainEffect.cs"/>
+</ItemGroup></Project> 

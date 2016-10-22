@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><Project xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"><PropertyGroup>    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects><HasSharedItems>true</HasSharedItems><SharedGUID>a357791f-ec00-4749-96b1-1b8ccba77587</SharedGUID></PropertyGroup><PropertyGroup Label = "Configuration"><Import_RootNamespace>MonoGame.Extended.Collections</Import_RootNamespace> </PropertyGroup> <ItemGroup><Compile Include="$(MSBuildThisFileDirectory)BitVector32.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Deque.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)ListExtensions.cs"/>
+<Compile Include="$(MSBuildThisFileDirectory)Pool.cs"/>
+</ItemGroup></Project> 
