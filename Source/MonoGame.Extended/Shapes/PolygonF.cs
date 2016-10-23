@@ -7,7 +7,11 @@ namespace MonoGame.Extended.Shapes
 {
     public struct PolygonF : IShapeF, IEquatable<PolygonF>
     {
-        public PolygonF (IEnumerable<Vector2> vertices)
+        public PolygonF (float x, float y,IEnumerable<Vector2> vertices) : this(new Vector2(x,y), vertices)
+        {
+        }
+
+        public PolygonF (Vector2 location, IEnumerable<Vector2> vertices)
         {
             _localVertices = vertices.ToArray();
             _transformedVertices = _localVertices;
@@ -15,6 +19,7 @@ namespace MonoGame.Extended.Shapes
             _rotation = 0;
             _scale = Vector2.One;
             _isDirty = false;
+            Location = location;
         }
 
         private readonly Vector2[] _localVertices;
@@ -23,6 +28,8 @@ namespace MonoGame.Extended.Shapes
         private float _rotation;
         private Vector2 _scale;
         private bool _isDirty;
+
+        public Vector2 Location { get; set; }
 
         public Vector2[] Vertices
         {
@@ -89,11 +96,11 @@ namespace MonoGame.Extended.Shapes
 
         public PolygonF TransformedCopy(Vector2 offset, float rotation, Vector2 scale)
         {
-            var polygon = new PolygonF(_localVertices);
+            var polygon = new PolygonF(Location,_localVertices);
             polygon.Offset(offset);
             polygon.Rotate(rotation);
             polygon.Scale(scale - Vector2.One);
-            return new PolygonF(polygon.Vertices);
+            return new PolygonF(Location,polygon.Vertices);
         }
 
         public RectangleF BoundingRectangle
