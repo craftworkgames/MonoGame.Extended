@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -31,9 +31,9 @@ namespace MonoGame.Extended.Shapes
         /// <param name="polygon">The polygon to draw</param>
         /// <param name="color">The color to use</param>
         /// <param name="thickness">The thickness of the lines</param>
-        public static void DrawPolygon(this SpriteBatch spriteBatch, Vector2 position, PolygonF polygon, Color color, float thickness = 1f)
+        public static void DrawPolygon(this SpriteBatch spriteBatch, PolygonF polygon, Color color, float thickness = 1f)
         {
-            DrawPolygon(spriteBatch, position, polygon.Vertices, color, thickness);
+            DrawPolygon(spriteBatch, polygon.Location, polygon.Vertices, color, thickness);
         }
 
         /// <summary>
