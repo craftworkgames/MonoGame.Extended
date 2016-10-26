@@ -35,29 +35,29 @@ namespace MonoGame.Extended.Primitives
         }
 
         /// <summary>
-        ///     Determines whether this <see cref="Ray2D" /> intersects with a specified <see cref="BoundingBox2D" />.
+        ///     Determines whether this <see cref="Ray2D" /> intersects with a specified <see cref="BoundingRectangle" />.
         /// </summary>
-        /// <param name="axisAlignedBoundingBox">The bounding box.</param>
+        /// <param name="boundingRectangle">The bounding rectangle.</param>
         /// <param name="rayNearDistance">
         ///     When this method returns, contains the distance along the ray to the first intersection
-        ///     point with the <paramref name="axisAlignedBoundingBox" />, if an intersection was found; otherwise, <see cref="float.NaN" />.
+        ///     point with the <paramref name="boundingRectangle" />, if an intersection was found; otherwise, <see cref="float.NaN" />.
         ///     This parameter is passed uninitialized.
         /// </param>
         /// <param name="rayFarDistance">
         ///     When this method returns, contains the distance along the ray to the second intersection
-        ///     point with the <paramref name="axisAlignedBoundingBox" />, if an intersection was found; otherwise, <see cref="float.NaN" />.
+        ///     point with the <paramref name="boundingRectangle" />, if an intersection was found; otherwise, <see cref="float.NaN" />.
         ///     This parameter is passed uninitialized.
         /// </param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="Ray2D" /> intersects with <paramref name="axisAlignedBoundingBox" />; otherwise,
+        ///     <c>true</c> if this <see cref="Ray2D" /> intersects with <paramref name="boundingRectangle" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
-        public bool Intersects(BoundingBox2D axisAlignedBoundingBox, out float rayNearDistance, out float rayFarDistance)
+        public bool Intersects(BoundingRectangle boundingRectangle, out float rayNearDistance, out float rayFarDistance)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.3; Basic Primitive Tests - Intersecting Lines, Rays, and (Directed Segments). pg 179-181
 
-            var boundingBoxMinimumPoint = axisAlignedBoundingBox.Centre - axisAlignedBoundingBox.Radius;
-            var boundingBoxMaximumPoint = axisAlignedBoundingBox.Centre + axisAlignedBoundingBox.Radius;
+            var minimum = boundingRectangle.Centre - boundingRectangle.Radius;
+            var maximum = boundingRectangle.Centre + boundingRectangle.Radius;
 
             // Set to the smallest possible value so the algorithm can find the first hit along the ray
             var minimumDistanceAlongRay = float.MinValue;
@@ -67,7 +67,7 @@ namespace MonoGame.Extended.Primitives
             // For all relevant slabs which in this case is two.
 
             // The first, horizontal, slab.
-            if (!RayHelper.IntersectsSlab(Position.X, Direction.X, boundingBoxMinimumPoint.X, boundingBoxMaximumPoint.X,
+            if (!RayHelper.IntersectsSlab(Position.X, Direction.X, minimum.X, maximum.X,
                 ref minimumDistanceAlongRay,
                 ref maximumDistanceAlongRay))
             {
@@ -76,7 +76,7 @@ namespace MonoGame.Extended.Primitives
             }
 
             // The second, vertical, slab.
-            if (!RayHelper.IntersectsSlab(Position.Y, Direction.Y, boundingBoxMinimumPoint.Y, boundingBoxMaximumPoint.Y,
+            if (!RayHelper.IntersectsSlab(Position.Y, Direction.Y, minimum.Y, maximum.Y,
                 ref minimumDistanceAlongRay,
                 ref maximumDistanceAlongRay))
             {

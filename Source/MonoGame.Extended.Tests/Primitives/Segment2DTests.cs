@@ -98,36 +98,36 @@ namespace MonoGame.Extended.Tests.Primitives
             Assert.AreEqual(expectedDistance, actualDistance);
         }
 
-        public IEnumerable<TestCaseData> IntersectsBoundingBoxTestCases
+        public IEnumerable<TestCaseData> IntersectsBoundingRectangleTestCases
         {
             get
             {
                 yield return
-                    new TestCaseData(new Segment2D(), new BoundingBox2D(), true, Point2.Zero).SetName(
+                    new TestCaseData(new Segment2D(), new BoundingRectangle(), true, Point2.Zero).SetName(
                         "The empty segment intersects the empty bounding box.");
                 yield return
                     new TestCaseData(new Segment2D(new Point2(-75, -75), new Point2(75, -75)),
-                        new BoundingBox2D(0, 0, 50, 50), false, Point2.NaN).SetName(
+                        new BoundingRectangle(new Point2(), new Size2(50, 50)), false, Point2.NaN).SetName(
                         "A non-empty segment outside a non-empty bounding box does not intersect the bounding box.");
                 yield return
-                    new TestCaseData(new Segment2D(new Point2(0, 0), new Point2(25, 0)), new BoundingBox2D(0, 0, 50, 50),
+                    new TestCaseData(new Segment2D(new Point2(0, 0), new Point2(25, 0)), new BoundingRectangle(new Point2(), new Size2(50, 50)),
                         true, new Point2(0, 0)).SetName(
                         "A non-empty segment inside a non-empty bounding box intersects the bounding box.");
                 yield return
                     new TestCaseData(new Segment2D(new Point2(-100, 0), new Point2(100, 0)),
-                        new BoundingBox2D(0, 0, 50, 50),
+                        new BoundingRectangle(new Point2(), new Size2(50, 50)),
                         true, new Point2(-50, 0)).SetName(
                         "A non-empty segment crossing a non-empty bounding box intersects the bounding box.");
             }
         }
 
         [Test]
-        [TestCaseSource(nameof(IntersectsBoundingBoxTestCases))]
-        public void IntersectsBoundingBox(Segment2D segment, BoundingBox2D axisAlignedBoundingBox, bool expectedResult,
+        [TestCaseSource(nameof(IntersectsBoundingRectangleTestCases))]
+        public void IntersectsBoundingRectangle(Segment2D segment, BoundingRectangle boundingRectangle, bool expectedResult,
             Point2 expectedIntersectionPoint)
         {
             Point2 actualIntersectionPoint;
-            var actualResult = segment.Intersects(axisAlignedBoundingBox, out actualIntersectionPoint);
+            var actualResult = segment.Intersects(boundingRectangle, out actualIntersectionPoint);
             Assert.AreEqual(expectedResult, actualResult);
 
             if (actualResult)
