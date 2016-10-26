@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
@@ -10,7 +11,13 @@ namespace MonoGame.Extended.Serialization
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var color = (Color)value;
-            writer.WriteValue($"#{color.R:x}{color.G:x}{color.B:x}{color.A:x}");
+            var rx = $"{color.R:x2}";
+            var gx = $"{color.G:x2}";
+            var bx = $"{color.B:x2}";
+            var ax = $"{color.A:x2}";
+            var colorHex = $"#{rx}{gx}{bx}{ax}";
+            Debug.Assert(colorHex.Length == 9);
+            writer.WriteValue(colorHex);
         }
 
         public override bool CanConvert(Type objectType)
