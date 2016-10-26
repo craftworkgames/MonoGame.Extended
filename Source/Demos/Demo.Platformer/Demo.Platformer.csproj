@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\tiny-characters.png" />
+    <Content Include="Content\tiny-grey-cloud.png" />
     <Content Include="Content\tiny-tiles.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
