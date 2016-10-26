@@ -59,7 +59,7 @@ namespace MonoGame.Extended.Gui
 
         public static GuiThickness Parse(string value)
         {
-            var ints = value.Split(',')
+            var ints = value.Split(new []{',', ' '}, StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
                 .ToArray();
 

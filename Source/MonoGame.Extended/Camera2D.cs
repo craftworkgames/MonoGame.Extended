@@ -175,15 +175,18 @@ namespace MonoGame.Extended
             return new BoundingFrustum(projectionMatrix);
         }
 
-        public RectangleF GetBoundingRectangle()
+        public RectangleF BoundingRectangle
         {
-            var frustum = GetBoundingFrustum();
-            var corners = frustum.GetCorners();
-            var topLeft = corners[0];
-            var bottomRight = corners[2];
-            var width = bottomRight.X - topLeft.X;
-            var height = bottomRight.Y - topLeft.Y;
-            return new RectangleF(topLeft.X, topLeft.Y, width, height);
+            get
+            {
+                var frustum = GetBoundingFrustum();
+                var corners = frustum.GetCorners();
+                var topLeft = corners[0];
+                var bottomRight = corners[2];
+                var width = bottomRight.X - topLeft.X;
+                var height = bottomRight.Y - topLeft.Y;
+                return new RectangleF(topLeft.X, topLeft.Y, width, height);
+            }
         }
 
         public ContainmentType Contains(Point point)

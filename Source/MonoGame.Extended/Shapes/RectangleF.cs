@@ -212,10 +212,7 @@ namespace MonoGame.Extended.Shapes
             return X <= x && x < X + Width && Y <= y && y < Y + Height;
         }
 
-        public RectangleF GetBoundingRectangle()
-        {
-            return this;
-        }
+        public RectangleF BoundingRectangle => this;
 
         /// <summary>
         /// Gets whether or not the provided coordinates lie within the bounds of this <see cref="RectangleF"/>.

@@ -144,7 +144,7 @@ namespace Demo.SceneGraphs
 
             if (_hoveredNode != null)
             {
-                var boundingRectangle = _hoveredNode.GetBoundingRectangle();
+                var boundingRectangle = _hoveredNode.BoundingRectangle;
                 _spriteBatch.DrawRectangle(boundingRectangle, Color.Black);
             }
 

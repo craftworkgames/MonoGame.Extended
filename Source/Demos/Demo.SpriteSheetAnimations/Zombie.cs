@@ -29,7 +29,7 @@ namespace Demo.SpriteSheetAnimations
 
         private ZombieState _state;
 
-        public RectangleF BoundingBox => _sprite.GetBoundingRectangle();
+        public RectangleF BoundingBox => _sprite.BoundingRectangle;
 
         public bool IsOnGround { get; private set; }
 
