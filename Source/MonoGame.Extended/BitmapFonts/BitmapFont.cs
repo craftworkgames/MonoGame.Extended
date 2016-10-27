@@ -61,13 +61,11 @@ namespace MonoGame.Extended.BitmapFonts
                 {
                     if (i != text.Length - 1)
                         width += fontRegion.XAdvance + LetterSpacing;
-
                     else
                         width += fontRegion.XOffset + fontRegion.Width;
 
                     if (fontRegion.Height + fontRegion.YOffset > height)
                         height = fontRegion.Height + fontRegion.YOffset;
-
                 }
 
                 if (c == newlineCodePoint)
@@ -77,7 +75,6 @@ namespace MonoGame.Extended.BitmapFonts
 
                     width = 0;
                 }
-                
             }
 
             if (totalWidth == 0)
