@@ -62,36 +62,36 @@ namespace MonoGame.Extended.Tests.Primitives
             Assert.AreEqual(new Vector2(-10.123f, 10.123f), ray.Direction);
         }
 
-        public IEnumerable<TestCaseData> IntersectsBoundingBoxTestCases
+        public IEnumerable<TestCaseData> IntersectsBoundingRectangleTestCases
         {
             get
             {
                 yield return
-                    new TestCaseData(new Ray2D(), new BoundingBox2D(), true, Point2.Zero, Point2.Zero).SetName(
+                    new TestCaseData(new Ray2D(), new BoundingRectangle(), true, Point2.Zero, Point2.Zero).SetName(
                         "The degenerate ray intersects the empty bounding box.");
                 yield return
                     new TestCaseData(new Ray2D(new Point2(-75, -75), new Vector2(75, -75)),
-                        new BoundingBox2D(0, 0, 50, 50), false, Point2.NaN, Point2.NaN).SetName(
+                        new BoundingRectangle(new Point2(), new Size2(50, 50)), false, Point2.NaN, Point2.NaN).SetName(
                         "A non-degenerate ray that does not cross a non-empty bounding box does not intersect the bounding box.");
                 yield return
-                    new TestCaseData(new Ray2D(new Point2(0, 0), new Vector2(25, 0)), new BoundingBox2D(0, 0, 50, 50),
+                    new TestCaseData(new Ray2D(new Point2(0, 0), new Vector2(25, 0)), new BoundingRectangle(new Point2(), new Size2(50, 50)),
                         true, new Point2(0, 0), new Point2(50, 0)).SetName(
                         "A non-degenerate ray starting from inside a non-empty bounding box intersects the bounding box.");
                 yield return
                     new TestCaseData(new Ray2D(new Point2(-100, 0), new Vector2(100, 0)),
-                        new BoundingBox2D(0, 0, 50, 50),
+                        new BoundingRectangle(new Point2(), new Size2(50, 50)),
                         true, new Point2(-50, 0), new Point2(50, 0)).SetName(
                         "A non-degenerate ray crossing a non-empty bounding box intersects the bounding box.");
             }
         }
 
         [Test]
-        [TestCaseSource(nameof(IntersectsBoundingBoxTestCases))]
-        public void IntersectsBoundingBox(Ray2D ray, BoundingBox2D axisAlignedBoundingBox, bool expectedResult,
+        [TestCaseSource(nameof(IntersectsBoundingRectangleTestCases))]
+        public void IntersectsBoundingRectangle(Ray2D ray, BoundingRectangle boundingRectangle, bool expectedResult,
             Point2 firstExpectedIntersectionPoint, Point2 secondExpectedIntersectionPoint)
         {
             float rayNearDistance, rayFarDistance;
-            var actualResult = ray.Intersects(axisAlignedBoundingBox, out rayNearDistance, out rayFarDistance);
+            var actualResult = ray.Intersects(boundingRectangle, out rayNearDistance, out rayFarDistance);
             Assert.AreEqual(expectedResult, actualResult);
 
             if (actualResult)

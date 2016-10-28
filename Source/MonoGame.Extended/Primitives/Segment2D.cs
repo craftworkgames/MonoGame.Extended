@@ -106,23 +106,23 @@ namespace MonoGame.Extended.Primitives
         }
 
         /// <summary>
-        ///     Determines whether this <see cref="Segment2D" /> intersects with the specified <see cref="BoundingBox2D" />.
+        ///     Determines whether this <see cref="Segment2D" /> intersects with the specified <see cref="BoundingRectangle" />.
         /// </summary>
-        /// <param name="axisAlignedBoundingBox">The bounding box.</param>
+        /// <param name="boundingRectangle">The bounding box.</param>
         /// <param name="intersectionPoint">
         ///     When this method returns, contains the <see cref="Point2" /> of intersection, if an
         ///     intersection was found; otherwise, the <see cref="Point2.NaN" />. This parameter is passed uninitialized.
         /// </param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="Segment2D" /> intersects with <paramref name="axisAlignedBoundingBox" />; otherwise,
+        ///     <c>true</c> if this <see cref="Segment2D" /> intersects with <paramref name="boundingRectangle" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
-        public bool Intersects(BoundingBox2D axisAlignedBoundingBox, out Point2 intersectionPoint)
+        public bool Intersects(BoundingRectangle boundingRectangle, out Point2 intersectionPoint)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.3; Basic Primitive Tests - Intersecting Lines, Rays, and (Directed Segments). pg 179-181
 
-            var minimumPoint = axisAlignedBoundingBox.Centre - axisAlignedBoundingBox.Radius;
-            var maximumPoint = axisAlignedBoundingBox.Centre + axisAlignedBoundingBox.Radius;
+            var minimumPoint = boundingRectangle.Centre - boundingRectangle.Radius;
+            var maximumPoint = boundingRectangle.Centre + boundingRectangle.Radius;
             var minimumDistance = float.MinValue;
             var maximumDistance = float.MaxValue;
 
