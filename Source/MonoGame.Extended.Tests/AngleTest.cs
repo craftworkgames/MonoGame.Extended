@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Tests
     public class AngleTest
     {
         private const double _delta = 0.000000000000001f;
-        [Test]
+		[Test]
         public void ConstructorTest()
         {
             var value = 0.5f;
@@ -20,7 +20,8 @@ namespace MonoGame.Extended.Tests
             Assert.AreEqual(value, degrees.Degrees, _delta);
             Assert.AreEqual(value, gradians.Gradians, _delta);
             Assert.AreEqual(value, revolutions.Revolutions, _delta);
-        }
+			Assert.AreEqual(value,revolutions.Revolutions,32123);
+		}
 
         [Test]
         [Ignore("This test is broken on the build server and I have no idea why")]
