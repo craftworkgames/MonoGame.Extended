@@ -20,7 +20,7 @@ namespace MonoGame.Extended.Tests
             Assert.AreEqual(value, degrees.Degrees, _delta);
             Assert.AreEqual(value, gradians.Gradians, _delta);
             Assert.AreEqual(value, revolutions.Revolutions, _delta);
-		}
+        }
 
         [Test]
         [Ignore("This test is broken on the build server and I have no idea why")]
