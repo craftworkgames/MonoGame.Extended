@@ -44,46 +44,50 @@ namespace MonoGame.Extended.BitmapFonts
 
         public Size GetSize(string text)
         {
-            var totalWidth = 0;
-            var width = 0;
-            var totalHeight = 0;
-            var height = 0;
+            if (text == null) throw new ArgumentNullException(nameof(text));
 
-            const int newlineCodePoint = 10;
+            var totalWidth = 0;
+            var lineWidth = 0;
+            var totalHeight = 0;
+            var lineHeight = 0;
+
+            const int newlineCodePoint = '\n';
+
             var codePoints = GetUnicodeCodePoints(text).ToArray();
 
             for (int i = 0, l = codePoints.Length; i < l; i++)
             {
                 BitmapFontRegion fontRegion;
-                var c = codePoints[i];
-                var d = c;
+                var character = codePoints[i];
+                var nextCharacter = character;
 
-                if (i < l - 1) d = codePoints[i + 1];
+                if (i < l - 1) nextCharacter = codePoints[i + 1];
 
-                if (_characterMap.TryGetValue(c, out fontRegion))
+                if (_characterMap.TryGetValue(character, out fontRegion))
                 {
-                    if (i != text.Length - 1 && _characterMap.ContainsKey(d))
-                        width += fontRegion.XAdvance + LetterSpacing;
+                    // Add LetterSpacing unless end of string or next character is not in _characterMap
+                    if (i != text.Length - 1 && _characterMap.ContainsKey(nextCharacter))
+                        lineWidth += fontRegion.XAdvance + LetterSpacing;
                     else
-                        width += fontRegion.XOffset + fontRegion.Width;
+                        lineWidth += fontRegion.XOffset + fontRegion.Width;
 
-                    if (fontRegion.Height + fontRegion.YOffset > height)
-                        height = fontRegion.Height + fontRegion.YOffset;
+                    if (fontRegion.Height + fontRegion.YOffset > lineHeight)
+                        lineHeight = fontRegion.Height + fontRegion.YOffset;
                 }
 
-                if (c == newlineCodePoint)
+                if (character == newlineCodePoint)
                 {
-                    totalHeight += height;
-                    if (totalWidth < width) totalWidth = width;
+                    totalHeight += lineHeight;
+                    if (totalWidth < lineWidth) totalWidth = lineWidth;
 
-                    height = 0;
-                    width = 0;
+                    lineHeight = 0;
+                    lineWidth = 0;
                 }
             }
 
             if (totalWidth == 0)
-                totalWidth = width;
-            totalHeight += height;
+                totalWidth = lineWidth;
+            totalHeight += lineHeight;
 
             return new Size(totalWidth, totalHeight);
         }
