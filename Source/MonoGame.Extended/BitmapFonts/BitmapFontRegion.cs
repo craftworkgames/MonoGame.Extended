@@ -1,3 +1,4 @@
+using System;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.BitmapFonts
@@ -18,9 +19,12 @@ namespace MonoGame.Extended.BitmapFonts
         public int XOffset { get; set; }
         public int YOffset { get; set; }
         public int XAdvance { get; set; }
-
         public int Width => TextureRegion.Width;
-
         public int Height => TextureRegion.Height;
+
+        public override string ToString()
+        {
+            return $"{Convert.ToChar(Character)} {TextureRegion}";
+        }
     }
 }
