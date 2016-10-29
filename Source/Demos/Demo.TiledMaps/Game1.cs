@@ -101,7 +101,7 @@ namespace Demo.TiledMaps
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // you can draw the whole map all at once
-            _tiledMap.Draw(_camera);
+            _tiledMap.Draw(_camera.GetViewMatrix());
 
             // or you can have more control over drawing each individual layer
             //foreach (var layer in _tiledMap.Layers)
