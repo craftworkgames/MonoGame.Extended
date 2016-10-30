@@ -24,11 +24,11 @@ namespace MonoGame.Extended.Tests.Primitives
 
         [Test]
         [TestCaseSource(nameof(ConstructorTestCases))]
-        public void Constructor(Point2 centre, Size2 radius)
+        public void Constructor(Point2 centre, Vector2 radii)
         {
-            var boundingRectangle = new BoundingRectangle(centre, radius);
+            var boundingRectangle = new BoundingRectangle(centre, radii);
             Assert.AreEqual(centre, boundingRectangle.Centre);
-            Assert.AreEqual(radius, boundingRectangle.Radius);
+            Assert.AreEqual(radii, boundingRectangle.Radii);
         }
 
         public IEnumerable<TestCaseData> CreateFromMinimumMaximumTestCases
@@ -376,11 +376,11 @@ namespace MonoGame.Extended.Tests.Primitives
             {
                 yield return
                     new TestCaseData(new BoundingRectangle(),
-                        string.Format(CultureInfo.CurrentCulture, "Centre: {0}, Radius: {1}", new Point2(),
+                        string.Format(CultureInfo.CurrentCulture, "Centre: {0}, Radii: {1}", new Point2(),
                             new Size2())).SetName(
                         "The empty bounding rectangle has the expected string representation using the current culture.");
                 yield return new TestCaseData(new BoundingRectangle(new Point2(5.1f, -5.123f), new Size2(5.4f, -5.4123f)),
-                    string.Format(CultureInfo.CurrentCulture, "Centre: {0}, Radius: {1}", new Point2(5.1f, -5.123f),
+                    string.Format(CultureInfo.CurrentCulture, "Centre: {0}, Radii: {1}", new Point2(5.1f, -5.123f),
                         new Size2(5.4f, -5.4123f))).SetName(
                     "A non-empty bounding rectangle has the expected string representation using the current culture.");
             }
