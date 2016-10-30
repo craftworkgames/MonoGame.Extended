@@ -111,12 +111,12 @@ namespace MonoGame.Extended.Maps.Tiled
                 for (var i = 0; i < tilesCount; i++)
                 {
                     var thisTileIndexes = new short[6];
-                    thisTileIndexes[0] = (short) (4*indexOffset);
-                    thisTileIndexes[1] = (short) (4*indexOffset + 1);
-                    thisTileIndexes[2] = (short) (4*indexOffset + 2);
-                    thisTileIndexes[3] = (short) (4*indexOffset + 1);
-                    thisTileIndexes[4] = (short) (4*indexOffset + 3);
-                    thisTileIndexes[5] = (short) (4*indexOffset + 2);
+                    thisTileIndexes[0] = (short)(4 * indexOffset);
+                    thisTileIndexes[1] = (short)(4 * indexOffset + 1);
+                    thisTileIndexes[2] = (short)(4 * indexOffset + 2);
+                    thisTileIndexes[3] = (short)(4 * indexOffset + 1);
+                    thisTileIndexes[4] = (short)(4 * indexOffset + 3);
+                    thisTileIndexes[5] = (short)(4 * indexOffset + 2);
                     tileIndexes.AddRange(thisTileIndexes);
                     indexOffset++;
                 }
@@ -185,29 +185,42 @@ namespace MonoGame.Extended.Maps.Tiled
 
                 foreach (var layer in _layers)
                 {
-                    var tiledTileLayer = layer as TiledTileLayer;
-
-                    if (tiledTileLayer != null)
+                    if (layer is TiledTileLayer)
                     {
-                        var tileLayer = tiledTileLayer;
-                        var indexCount = tileLayer.NotBlankTilesCount * 6;
-                        var primitivesCount = tileLayer.NotBlankTilesCount * 2;
+                        var tileLayer = layer as TiledTileLayer;
+                        var indexCount = 6;
+                        var primitivesCount = 2;
 
-                        if (tileLayer.IsVisible && tileLayer.NotBlankTilesCount > 0)
+                        if (tileLayer.IsVisible)
                         {
-                            if (_basicEffect.Texture != _tilesets[0].Texture)
-                                _basicEffect.Texture = _tilesets[0].Texture;
+                            foreach (var tileset in _tilesets)
+                            {
+                                var tilesToDraw = tileLayer.Tiles.Count(x => tileset.Equals(GetTileSetByTileId(x.Id)));
 
-                            pass.Apply();
-                            _graphicsDevice.DrawIndexedPrimitives(
-                                primitiveType: PrimitiveType.TriangleList,
-                                baseVertex: 0,
-                                startIndex: tilesIndexesSoFar,
-                                primitiveCount: primitivesCount
-                            );
+                                if (tilesToDraw > 0)
+                                {
+                                    if (_basicEffect.Texture != tileset.Texture)
+                                        _basicEffect.Texture = tileset.Texture;
+
+                                    pass.Apply();
+
+                                    int baseVert = 0;
+
+                                    do
+                                    {
+                                        _graphicsDevice.DrawIndexedPrimitives(
+                                            primitiveType: PrimitiveType.TriangleList,
+                                            baseVertex: baseVert,
+                                            startIndex: tilesIndexesSoFar,
+                                            primitiveCount: primitivesCount * tilesToDraw
+                                        );
+                                        baseVert += ushort.MaxValue + 1;
+                                    } while (baseVert < _tilesVertices.Length);
+
+                                    tilesIndexesSoFar += indexCount * tilesToDraw;
+                                }
+                            }
                         }
-
-                        tilesIndexesSoFar += indexCount;
                     }
                     else if (layer is TiledImageLayer)
                     {
@@ -229,6 +242,22 @@ namespace MonoGame.Extended.Maps.Tiled
                     }
                 }
             }
+        }
+        TiledTileset GetTileSetByTileId(int id)
+        {
+            //if it's a blank tile there is no tileset
+            if (id == 0) return null;
+
+            int tilesetIndex;
+
+            //Loop backwards because they are in order of First Tile ID
+            for (tilesetIndex = _tilesets.Count - 1; tilesetIndex > 0; tilesetIndex--)
+            {
+                if (_tilesets[tilesetIndex].FirstId <= id)
+                    break;
+            }
+
+            return _tilesets[tilesetIndex];
         }
 
         public TextureRegion2D GetTileRegion(int id)
