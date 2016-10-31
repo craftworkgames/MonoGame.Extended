@@ -35,7 +35,7 @@ namespace MonoGame.Extended.Maps.Tiled
         private RenderTarget2D _renderTarget;
         private readonly List<TiledTile> _animatedTiles;
         private List<TiledTileSetTile> _uniqueTileSetTiles = new List<TiledTileSetTile>();
-        private readonly Dictionary<TiledTileset, int> tileCountByTileset = new Dictionary<TiledTileset, int>();
+        private readonly Dictionary<TiledTileset, int> _tileCountByTileset = new Dictionary<TiledTileset, int>();
 
         public VertexPositionTexture[] Vertices { get; private set; }
         public int NotBlankTilesCount { get; private set; }
@@ -62,12 +62,12 @@ namespace MonoGame.Extended.Maps.Tiled
                             break;
 
                     TiledTileset ts = tilesets[tilesetIndex];
-                    if (!this.tileCountByTileset.ContainsKey(ts))
+                    if (!_tileCountByTileset.ContainsKey(ts))
                     {
-                        this.tileCountByTileset[ts] = 0;
+                        _tileCountByTileset[ts] = 0;
                     }
 
-                    this.tileCountByTileset[ts]++;
+                    _tileCountByTileset[ts]++;
 
                     tiles.ElementAt(tilesetIndex).Add(new TiledTile(data[tileDataIndex], x, y, _map.GetTileSetTileById(data[tileDataIndex])));
                     tileDataIndex++;
@@ -128,12 +128,12 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public int GetTileCountForTileset(TiledTileset tileset)
         {
-            if(!this.tileCountByTileset.ContainsKey(tileset))
+            if(!_tileCountByTileset.ContainsKey(tileset))
             {
                 return 0;
             }
 
-            return this.tileCountByTileset[tileset];
+            return _tileCountByTileset[tileset];
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null)
