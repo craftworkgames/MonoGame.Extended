@@ -185,22 +185,17 @@ namespace MonoGame.Extended.Maps.Tiled
 
                 foreach (var layer in _layers)
                 {
-
-
-                    var tiledTileLayer = layer as TiledTileLayer;
-
-                    if (tiledTileLayer != null)
+                    if (layer is TiledTileLayer)
                     {
-                        var tileLayer = tiledTileLayer;
+                        var tileLayer = layer as TiledTileLayer;
                         var indexCount = 6;
                         var primitivesCount = 2;
 
                         if (tileLayer.IsVisible)
                         {
-
                             foreach (var tileset in _tilesets)
                             {
-                                var tilesToDraw = tiledTileLayer.Tiles.Count(x => tileset.Equals(GetTileSetByTileId(x.Id)));
+                                var tilesToDraw = tileLayer.Tiles.Count(x => tileset.Equals(GetTileSetByTileId(x.Id)));
 
                                 if (tilesToDraw > 0)
                                 {
@@ -208,12 +203,20 @@ namespace MonoGame.Extended.Maps.Tiled
                                         _basicEffect.Texture = tileset.Texture;
 
                                     pass.Apply();
-                                    _graphicsDevice.DrawIndexedPrimitives(
-                                        primitiveType: PrimitiveType.TriangleList,
-                                        baseVertex: 0,
-                                        startIndex: tilesIndexesSoFar,
-                                        primitiveCount: primitivesCount * tilesToDraw
-                                    );
+
+                                    int baseVert = 0;
+
+                                    do
+                                    {
+                                        _graphicsDevice.DrawIndexedPrimitives(
+                                            primitiveType: PrimitiveType.TriangleList,
+                                            baseVertex: baseVert,
+                                            startIndex: tilesIndexesSoFar,
+                                            primitiveCount: primitivesCount * tilesToDraw
+                                        );
+                                        baseVert += ushort.MaxValue + 1;
+                                    } while (baseVert < _tilesVertices.Length);
+
                                     tilesIndexesSoFar += indexCount * tilesToDraw;
                                 }
                             }
