@@ -34,7 +34,7 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly SpriteBatch _renderTargetSpriteBatch;
         private RenderTarget2D _renderTarget;
         private readonly List<TiledTile> _animatedTiles;
-        private List<TiledTileSetTile> _uniqueTileSetTiles = new List<TiledTileSetTile>();
+        private List<TiledTilesetTile> _uniqueTilesetTiles = new List<TiledTilesetTile>();
         private readonly Dictionary<TiledTileset, int> _tileCountByTileset = new Dictionary<TiledTileset, int>();
 
         public VertexPositionTexture[] Vertices { get; private set; }
@@ -69,7 +69,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
                     _tileCountByTileset[ts]++;
 
-                    tiles.ElementAt(tilesetIndex).Add(new TiledTile(data[tileDataIndex], x, y, _map.GetTileSetTileById(data[tileDataIndex])));
+                    tiles.ElementAt(tilesetIndex).Add(new TiledTile(data[tileDataIndex], x, y, _map.GetTilesetTileById(data[tileDataIndex])));
                     tileDataIndex++;
                 }
             }
