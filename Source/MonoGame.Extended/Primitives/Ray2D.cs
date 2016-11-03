@@ -56,8 +56,8 @@ namespace MonoGame.Extended.Primitives
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.3; Basic Primitive Tests - Intersecting Lines, Rays, and (Directed Segments). pg 179-181
 
-            var minimum = boundingRectangle.Centre - boundingRectangle.Radius;
-            var maximum = boundingRectangle.Centre + boundingRectangle.Radius;
+            var minimum = boundingRectangle.Centre - boundingRectangle.Radii;
+            var maximum = boundingRectangle.Centre + boundingRectangle.Radii;
 
             // Set to the smallest possible value so the algorithm can find the first hit along the ray
             var minimumDistanceAlongRay = float.MinValue;

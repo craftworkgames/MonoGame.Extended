@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Primitives
     // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.2; Bounding Volumes - Axis-aligned Bounding Boxes (AABBs). pg 77 
 
     /// <summary>
-    ///     An axis-aligned, four sided, two dimensional box defined by a centre <see cref="Point2" /> and a radius <see cref="Size2" />.
+    ///     An axis-aligned, four sided, two dimensional box defined by a centre <see cref="Point2" /> and a radii <see cref="Vector2" />.
     /// </summary>
     /// <remarks>
     ///     <para>
@@ -32,20 +32,20 @@ namespace MonoGame.Extended.Primitives
         public Point2 Centre;
 
         /// <summary>
-        ///     The dimensions of this <see cref="BoundingRectangle" />.
+        ///     The distance from the <see cref="Centre"/> point along both axes to any point on the boundary of this <see cref="BoundingRectangle" />.
         /// </summary>
-        public Size2 Radius;
+        public Vector2 Radii;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="BoundingRectangle" /> structure from the specified centre
-        ///     <see cref="Point2" /> and the radius <see cref="Size2" />.
+        ///     <see cref="Point2" /> and the radii <see cref="Size2" />.
         /// </summary>
         /// <param name="centre">The centre <see cref="Point2" />.</param>
-        /// <param name="radius">The radius <see cref="Size2" />.</param>
-        public BoundingRectangle(Point2 centre, Size2 radius)
+        /// <param name="radii">The radii <see cref="Vector2" />.</param>
+        public BoundingRectangle(Point2 centre, Vector2 radii)
         {
             Centre = centre;
-            Radius = radius;
+            Radii = radii;
         }
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace MonoGame.Extended.Primitives
         public static BoundingRectangle CreateFrom(Point2 minimum, Point2 maximum)
         {
             var centre = new Point2((maximum.X + minimum.X) * 0.5f, (maximum.Y + minimum.Y) * 0.5f);
-            var radius = new Size2((maximum.X - minimum.X) * 0.5f, (maximum.Y - minimum.Y) * 0.5f);
-            return new BoundingRectangle(centre, radius);
+            var radii = new Vector2((maximum.X - minimum.X) * 0.5f, (maximum.Y - minimum.Y) * 0.5f);
+            return new BoundingRectangle(centre, radii);
         }
 
         /// <summary>
@@ -111,12 +111,12 @@ namespace MonoGame.Extended.Primitives
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.2; Bounding Volumes - Axis-aligned Bounding Boxes (AABBs). pg 86-87
 
             var centre = transformMatrix.Transform(boundingRectangle.Centre);
-            var radius = boundingRectangle.Radius;
-            radius.Width = radius.Width * Math.Abs(transformMatrix.M11) + radius.Width * Math.Abs(transformMatrix.M12) +
-                    radius.Width * Math.Abs(transformMatrix.M31);
-            radius.Height = radius.Height * Math.Abs(transformMatrix.M21) + radius.Height * Math.Abs(transformMatrix.M22) +
-                     radius.Height * Math.Abs(transformMatrix.M32);
-            return new BoundingRectangle(centre, radius);
+            var radii = boundingRectangle.Radii;
+            radii.X = radii.X * Math.Abs(transformMatrix.M11) + radii.X * Math.Abs(transformMatrix.M12) +
+                    radii.X * Math.Abs(transformMatrix.M31);
+            radii.Y = radii.Y * Math.Abs(transformMatrix.M21) + radii.Y * Math.Abs(transformMatrix.M22) +
+                     radii.Y * Math.Abs(transformMatrix.M32);
+            return new BoundingRectangle(centre, radii);
         }
 
         /// <summary>
@@ -133,10 +133,10 @@ namespace MonoGame.Extended.Primitives
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 6.5; Bounding Volume Hierarchies - Merging Bounding Volumes. pg 267
 
-            var firstMinimum = first.Centre - first.Radius;
-            var firstMaximum = first.Centre + first.Radius;
-            var secondMinimum = second.Centre - second.Radius;
-            var secondMaximum = second.Centre + second.Radius;
+            var firstMinimum = first.Centre - first.Radii;
+            var firstMaximum = first.Centre + first.Radii;
+            var secondMinimum = second.Centre - second.Radii;
+            var secondMaximum = second.Centre + second.Radii;
 
             var minimum = Point2.Minimum(firstMinimum, secondMinimum);
             var maximum = Point2.Maximum(firstMaximum, secondMaximum);
@@ -172,10 +172,10 @@ namespace MonoGame.Extended.Primitives
         public static BoundingRectangle? Intersection(BoundingRectangle first,
             BoundingRectangle second)
         {
-            var firstMinimum = first.Centre - first.Radius;
-            var firstMaximum = first.Centre + first.Radius;
-            var secondMinimum = second.Centre - second.Radius;
-            var secondMaximum = second.Centre + second.Radius;
+            var firstMinimum = first.Centre - first.Radii;
+            var firstMaximum = first.Centre + first.Radii;
+            var secondMinimum = second.Centre - second.Radii;
+            var secondMaximum = second.Centre + second.Radii;
 
             var minimum = Point2.Maximum(firstMinimum, secondMinimum);
             var maximum = Point2.Minimum(firstMaximum, secondMaximum);
@@ -194,7 +194,7 @@ namespace MonoGame.Extended.Primitives
         {
             var boundingRectangle = CreateFrom(points);
             Centre = boundingRectangle.Centre;
-            Radius = boundingRectangle.Radius;
+            Radii = boundingRectangle.Radii;
         }
 
         /// <summary>
@@ -224,8 +224,8 @@ namespace MonoGame.Extended.Primitives
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.2; Bounding Volumes - Axis-aligned Bounding Boxes (AABBs). pg 80
 
             var distance = first.Centre - second.Centre;
-            var radius = first.Radius + second.Radius;
-            return (Math.Abs(distance.X) <= radius.Width) && (Math.Abs(distance.Y) <= radius.Height);
+            var radii = first.Radii + second.Radii;
+            return (Math.Abs(distance.X) <= radii.X) && (Math.Abs(distance.Y) <= radii.Y);
         }
 
         /// <summary>
@@ -258,9 +258,9 @@ namespace MonoGame.Extended.Primitives
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.2; Bounding Volumes - Axis-aligned Bounding Boxes (AABBs). pg 78
 
             var distance = boundingRectangle.Centre - point;
-            var radius = boundingRectangle.Radius;
+            var radii = boundingRectangle.Radii;
 
-            return (Math.Abs(distance.X) <= radius.Width) && (Math.Abs(distance.Y) <= radius.Height);
+            return (Math.Abs(distance.X) <= radii.X) && (Math.Abs(distance.Y) <= radii.Y);
         }
 
         /// <summary>
@@ -286,8 +286,8 @@ namespace MonoGame.Extended.Primitives
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.1.2; Basic Primitive Tests - Closest-point Computations. pg 130-131
 
-            var minimum = Centre - Radius;
-            var maximum = Centre + Radius;
+            var minimum = Centre - Radii;
+            var maximum = Centre + Radii;
             var result = point;
 
             // For each coordinate axis, if the point coordinate value is outside box, clamp it to the box, else keep it as is
@@ -306,13 +306,13 @@ namespace MonoGame.Extended.Primitives
 
         /// <summary>
         ///     Compares two <see cref="BoundingRectangle" /> structures. The result specifies whether the values of the
-        ///     <see cref="Centre" /> and <see cref="Radius" /> fields of the two <see cref="BoundingRectangle" /> structures
+        ///     <see cref="Centre" /> and <see cref="Radii" /> fields of the two <see cref="BoundingRectangle" /> structures
         ///     are equal.
         /// </summary>
         /// <param name="first">The first bounding rectangle.</param>
         /// <param name="second">The second bounding rectangle.</param>
         /// <returns>
-        ///     <c>true</c> if the <see cref="Centre" /> and <see cref="Radius" /> fields of the two
+        ///     <c>true</c> if the <see cref="Centre" /> and <see cref="Radii" /> fields of the two
         ///     <see cref="BoundingRectangle" /> structures are equal; otherwise, <c>false</c>.
         /// </returns>
         public static bool operator ==(BoundingRectangle first, BoundingRectangle second)
@@ -344,7 +344,7 @@ namespace MonoGame.Extended.Primitives
         /// </returns>
         public bool Equals(ref BoundingRectangle boundingRectangle)
         {
-            return (boundingRectangle.Centre == Centre) && (boundingRectangle.Radius == Radius);
+            return (boundingRectangle.Centre == Centre) && (boundingRectangle.Radii == Radii);
         }
 
         /// <summary>
@@ -363,13 +363,13 @@ namespace MonoGame.Extended.Primitives
 
         /// <summary>
         ///     Compares two <see cref="BoundingRectangle" /> structures. The result specifies whether the values of the
-        ///     <see cref="Centre" /> and <see cref="Radius" /> fields of the two <see cref="BoundingRectangle" /> structures
+        ///     <see cref="Centre" /> and <see cref="Radii" /> fields of the two <see cref="BoundingRectangle" /> structures
         ///     are unequal.
         /// </summary>
         /// <param name="first">The first bounding box.</param>
         /// <param name="second">The second bounding box.</param>
         /// <returns>
-        ///     <c>true</c> if the <see cref="Centre" /> and <see cref="Radius" /> fields of the two
+        ///     <c>true</c> if the <see cref="Centre" /> and <see cref="Radii" /> fields of the two
         ///     <see cref="BoundingRectangle" /> structures are unequal; otherwise, <c>false</c>.
         /// </returns>
         public static bool operator !=(BoundingRectangle first, BoundingRectangle second)
@@ -388,7 +388,7 @@ namespace MonoGame.Extended.Primitives
         {
             unchecked
             {
-                return (Centre.GetHashCode() * 397) ^ Radius.GetHashCode();
+                return (Centre.GetHashCode() * 397) ^ Radii.GetHashCode();
             }
         }
 
@@ -401,9 +401,9 @@ namespace MonoGame.Extended.Primitives
         /// </returns>
         public static implicit operator BoundingRectangle(Rectangle rectangle)
         {
-            var radius = new Size2(rectangle.Width / 2f, rectangle.Height / 2f);
-            var centre = new Point2(rectangle.X + radius.Width, rectangle.Y + radius.Height);
-            return new BoundingRectangle(centre, radius);
+            var radii = new Size2(rectangle.Width / 2f, rectangle.Height / 2f);
+            var centre = new Point2(rectangle.X + radii.Width, rectangle.Y + radii.Height);
+            return new BoundingRectangle(centre, radii);
         }
 
         /// <summary>
@@ -415,8 +415,8 @@ namespace MonoGame.Extended.Primitives
         /// </returns>
         public static implicit operator Rectangle(BoundingRectangle boundingRectangle)
         {
-            var minimum = boundingRectangle.Centre - boundingRectangle.Radius;
-            return new Rectangle((int)minimum.X, (int)minimum.Y, (int)boundingRectangle.Radius.Width * 2, (int)boundingRectangle.Radius.Height * 2);
+            var minimum = boundingRectangle.Centre - boundingRectangle.Radii;
+            return new Rectangle((int)minimum.X, (int)minimum.Y, (int)boundingRectangle.Radii.X * 2, (int)boundingRectangle.Radii.Y * 2);
         }
 
         /// <summary>
@@ -427,7 +427,7 @@ namespace MonoGame.Extended.Primitives
         /// </returns>
         public override string ToString()
         {
-            return $"Centre: {Centre}, Radius: {Radius}";
+            return $"Centre: {Centre}, Radii: {Radii}";
         }
 
         internal string DebugDisplayString => ToString();
