@@ -195,7 +195,7 @@ namespace MonoGame.Extended.Maps.Tiled
                         {
                             foreach (var tileset in _tilesets)
                             {
-                                var tilesToDraw = tileLayer.Tiles.Count(x => tileset.Equals(GetTilesetByTileId(x.Id)));
+                                var tilesToDraw = tileLayer.GetTileCountForTileset(tileset);
 
                                 if (tilesToDraw > 0)
                                 {

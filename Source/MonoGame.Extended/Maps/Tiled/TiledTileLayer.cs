@@ -34,7 +34,8 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly SpriteBatch _renderTargetSpriteBatch;
         private RenderTarget2D _renderTarget;
         private readonly List<TiledTile> _animatedTiles;
-        private List<TiledTilesetTile> _uniqueTilesetTiles = new List<TiledTilesetTile>();
+        private List<TiledTileSetTile> _uniqueTileSetTiles = new List<TiledTileSetTile>();
+        private readonly Dictionary<TiledTileset, int> _tileCountByTileset = new Dictionary<TiledTileset, int>();
 
         public VertexPositionTexture[] Vertices { get; private set; }
         public int NotBlankTilesCount { get; private set; }
@@ -60,7 +61,15 @@ namespace MonoGame.Extended.Maps.Tiled
                         if (tilesets[tilesetIndex].FirstId <= data[tileDataIndex])
                             break;
 
-                    tiles.ElementAt(tilesetIndex).Add(new TiledTile(data[tileDataIndex], x, y, _map.GetTilesetTileById(data[tileDataIndex])));
+                    TiledTileset ts = tilesets[tilesetIndex];
+                    if (!_tileCountByTileset.ContainsKey(ts))
+                    {
+                        _tileCountByTileset[ts] = 0;
+                    }
+
+                    _tileCountByTileset[ts]++;
+
+                    tiles.ElementAt(tilesetIndex).Add(new TiledTile(data[tileDataIndex], x, y, _map.GetTileSetTileById(data[tileDataIndex])));
                     tileDataIndex++;
                 }
             }
@@ -115,6 +124,16 @@ namespace MonoGame.Extended.Maps.Tiled
             }
             Vertices = verticesList.ToArray();
             return Vertices;
+        }
+
+        public int GetTileCountForTileset(TiledTileset tileset)
+        {
+            if(!_tileCountByTileset.ContainsKey(tileset))
+            {
+                return 0;
+            }
+
+            return _tileCountByTileset[tileset];
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null)
