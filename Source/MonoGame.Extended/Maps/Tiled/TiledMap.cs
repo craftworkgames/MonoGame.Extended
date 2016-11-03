@@ -195,7 +195,7 @@ namespace MonoGame.Extended.Maps.Tiled
                         {
                             foreach (var tileset in _tilesets)
                             {
-                                var tilesToDraw = tileLayer.Tiles.Count(x => tileset.Equals(GetTileSetByTileId(x.Id)));
+                                var tilesToDraw = tileLayer.Tiles.Count(x => tileset.Equals(GetTilesetByTileId(x.Id)));
 
                                 if (tilesToDraw > 0)
                                 {
@@ -243,7 +243,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 }
             }
         }
-        TiledTileset GetTileSetByTileId(int id)
+        TiledTileset GetTilesetByTileId(int id)
         {
             //if it's a blank tile there is no tileset
             if (id == 0) return null;
@@ -273,11 +273,11 @@ namespace MonoGame.Extended.Maps.Tiled
             return tileset.GetTileRegion(id);
         }
 
-        public TiledTilesetTile GetTileSetTileById(int tileSetTileId)
+        public TiledTilesetTile GetTilesetTileById(int tilesetTileId)
         {
             return _tilesets
                 .SelectMany(ts => ts.Tiles, (ts, t) => t)
-                .FirstOrDefault(t => t.Id == tileSetTileId - 1);
+                .FirstOrDefault(t => t.Id == tilesetTileId - 1);
         }
     }
 }
