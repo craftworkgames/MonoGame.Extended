@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
-    public class TiledTileSetTileFrame
+    public class TiledTilesetTileFrame
     {
-        public TiledTileSetTileFrame(int order, int tileId, int duration)
+        public TiledTilesetTileFrame(int order, int tileId, int duration)
         {
             Order = order;
             TileId = tileId;

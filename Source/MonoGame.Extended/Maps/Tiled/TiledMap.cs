@@ -273,7 +273,7 @@ namespace MonoGame.Extended.Maps.Tiled
             return tileset.GetTileRegion(id);
         }
 
-        public TiledTileSetTile GetTileSetTileById(int tileSetTileId)
+        public TiledTilesetTile GetTileSetTileById(int tileSetTileId)
         {
             return _tilesets
                 .SelectMany(ts => ts.Tiles, (ts, t) => t)

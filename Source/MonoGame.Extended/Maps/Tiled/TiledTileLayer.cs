@@ -34,7 +34,7 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly SpriteBatch _renderTargetSpriteBatch;
         private RenderTarget2D _renderTarget;
         private readonly List<TiledTile> _animatedTiles;
-        private List<TiledTileSetTile> _uniqueTileSetTiles = new List<TiledTileSetTile>();
+        private List<TiledTilesetTile> _uniqueTileSetTiles = new List<TiledTilesetTile>();
 
         public VertexPositionTexture[] Vertices { get; private set; }
         public int NotBlankTilesCount { get; private set; }

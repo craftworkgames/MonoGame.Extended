@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledTile
     {
-        public TiledTile(int id, int x, int y, TiledTileSetTile tileSetTile = null)
+        public TiledTile(int id, int x, int y, TiledTilesetTile tileSetTile = null)
         {
             Id = id;
             X = x;
@@ -18,7 +18,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public int Id { get; }
         public int X { get; private set; }
         public int Y { get; private set; }
-        public TiledTileSetTile TileSetTile { get; set; }
+        public TiledTilesetTile TileSetTile { get; set; }
         public int CurrentTileId
         {
             // Need to do the +1 here because of the way Tiled indexes TileSet Tiles in the TileLayer data
