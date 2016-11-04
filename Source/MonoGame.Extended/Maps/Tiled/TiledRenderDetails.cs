@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledRenderDetails
     {
-        public TiledRenderDetails(GraphicsDevice gd, int tileCount, List<VertexPositionTexture> vertices, List<short> indexes)
+        public TiledRenderDetails(GraphicsDevice gd, int tileCount, List<VertexPositionTexture> vertices, List<ushort> indexes)
         {
             TileCount = tileCount;
 

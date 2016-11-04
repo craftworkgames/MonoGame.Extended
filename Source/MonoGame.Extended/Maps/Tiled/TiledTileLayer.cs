@@ -141,17 +141,17 @@ namespace MonoGame.Extended.Maps.Tiled
                 }
 
                 int indexOffset = 0;
-                List<short> tileIndexes = new List<short>();
+                List<ushort> tileIndexes = new List<ushort>();
 
                 for (var i = 0; i < tilesCount; i++)
                 {
-                    var thisTileIndexes = new short[6];
-                    thisTileIndexes[0] = (short) (4 * indexOffset);
-                    thisTileIndexes[1] = (short) (4 * indexOffset + 1);
-                    thisTileIndexes[2] = (short) (4 * indexOffset + 2);
-                    thisTileIndexes[3] = (short) (4 * indexOffset + 1);
-                    thisTileIndexes[4] = (short) (4 * indexOffset + 3);
-                    thisTileIndexes[5] = (short) (4 * indexOffset + 2);
+                    var thisTileIndexes = new ushort[6];
+                    thisTileIndexes[0] = (ushort) (4 * indexOffset);
+                    thisTileIndexes[1] = (ushort) (4 * indexOffset + 1);
+                    thisTileIndexes[2] = (ushort) (4 * indexOffset + 2);
+                    thisTileIndexes[3] = (ushort) (4 * indexOffset + 1);
+                    thisTileIndexes[4] = (ushort) (4 * indexOffset + 3);
+                    thisTileIndexes[5] = (ushort) (4 * indexOffset + 2);
                     tileIndexes.AddRange(thisTileIndexes);
                     indexOffset++;
                 }

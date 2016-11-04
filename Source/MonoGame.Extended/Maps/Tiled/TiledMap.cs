@@ -148,15 +148,14 @@ namespace MonoGame.Extended.Maps.Tiled
 
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
             {
-                var tilesIndexesSoFar = 0;
-
                 foreach (var layer in _layers)
                 {
                     if (layer is TiledTileLayer)
                     {
                         var tileLayer = layer as TiledTileLayer;
-                        var indexCount = 6;
-                        var primitivesCount = 2;
+                        var indexesPerTile = 6;
+                        var verticiesPerTile = 4;
+                        var primitivesPerTile = 2;
 
                         if (tileLayer.IsVisible)
                         {
@@ -168,31 +167,32 @@ namespace MonoGame.Extended.Maps.Tiled
                                     continue;
                                 }
 
-                                var tilesToDraw = renderDetails.TileCount;
                                 _graphicsDevice.SetVertexBuffer(renderDetails.VertexBuffer);
                                 _graphicsDevice.Indices = renderDetails.IndexBuffer;
 
-                                if (tilesToDraw > 0)
+                                if (renderDetails.TileCount > 0)
                                 {
                                     if (_basicEffect.Texture != tileset.Texture)
                                         _basicEffect.Texture = tileset.Texture;
 
                                     pass.Apply();
 
-                                    int baseVert = 0;
+                                    int maxTilesPerDraw = ushort.MaxValue / verticiesPerTile;
+                                    int drawCalls = renderDetails.TileCount / maxTilesPerDraw + 1;
 
-                                    do
+                                    for (int i = 0; i < drawCalls; i++)
                                     {
+                                        int currentIterTiles = i == drawCalls - 1
+                                            ? (renderDetails.TileCount - i * maxTilesPerDraw)
+                                            : maxTilesPerDraw;
+
                                         _graphicsDevice.DrawIndexedPrimitives(
                                             primitiveType: PrimitiveType.TriangleList,
-                                            baseVertex: baseVert,
-                                            startIndex: 0,
-                                            primitiveCount: primitivesCount * tilesToDraw
+                                            baseVertex: i * maxTilesPerDraw * verticiesPerTile,
+                                            startIndex: i * maxTilesPerDraw * indexesPerTile,
+                                            primitiveCount: currentIterTiles * primitivesPerTile
                                         );
-                                        baseVert += ushort.MaxValue + 1;
-                                    } while (baseVert < renderDetails.VertexBuffer.VertexCount);
-
-                                    tilesIndexesSoFar += indexCount * tilesToDraw;
+                                    }
                                 }
                             }
                         }
