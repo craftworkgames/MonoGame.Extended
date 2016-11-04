@@ -243,7 +243,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 }
             }
         }
-        TiledTileset GetTileSetByTileId(int id)
+        TiledTileset GetTilesetByTileId(int id)
         {
             //if it's a blank tile there is no tileset
             if (id == 0) return null;
@@ -273,11 +273,11 @@ namespace MonoGame.Extended.Maps.Tiled
             return tileset.GetTileRegion(id);
         }
 
-        public TiledTileSetTile GetTileSetTileById(int tileSetTileId)
+        public TiledTilesetTile GetTilesetTileById(int tilesetTileId)
         {
             return _tilesets
                 .SelectMany(ts => ts.Tiles, (ts, t) => t)
-                .FirstOrDefault(t => t.Id == tileSetTileId - 1);
+                .FirstOrDefault(t => t.Id == tilesetTileId - 1);
         }
     }
 }

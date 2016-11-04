@@ -34,7 +34,7 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly SpriteBatch _renderTargetSpriteBatch;
         private RenderTarget2D _renderTarget;
         private readonly List<TiledTile> _animatedTiles;
-        private List<TiledTileSetTile> _uniqueTileSetTiles = new List<TiledTileSetTile>();
+        private List<TiledTilesetTile> _uniqueTilesetTiles = new List<TiledTilesetTile>();
         private readonly Dictionary<TiledTileset, int> _tileCountByTileset = new Dictionary<TiledTileset, int>();
 
         public VertexPositionTexture[] Vertices { get; private set; }
@@ -69,7 +69,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
                     _tileCountByTileset[ts]++;
 
-                    tiles.ElementAt(tilesetIndex).Add(new TiledTile(data[tileDataIndex], x, y, _map.GetTileSetTileById(data[tileDataIndex])));
+                    tiles.ElementAt(tilesetIndex).Add(new TiledTile(data[tileDataIndex], x, y, _map.GetTilesetTileById(data[tileDataIndex])));
                     tileDataIndex++;
                 }
             }
@@ -179,7 +179,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
                     _renderTargetSpriteBatch.End();
                 }
-                _uniqueTileSetTiles = _animatedTiles.Select(t => t.TileSetTile).Distinct().ToList();
+                _uniqueTilesetTiles = _animatedTiles.Select(t => t.TilesetTile).Distinct().ToList();
                 spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
             }
             else
@@ -187,7 +187,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
                 if (gameTime == null || _animatedTiles.Count == 0) return;
                 double deltaTime = gameTime.ElapsedGameTime.TotalMilliseconds;
-                foreach (var tileSetTile in _uniqueTileSetTiles)
+                foreach (var tileSetTile in _uniqueTilesetTiles)
                 {
                     tileSetTile.Update(deltaTime);
                 }

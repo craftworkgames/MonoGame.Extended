@@ -2,18 +2,18 @@
 
 namespace MonoGame.Extended.Maps.Tiled
 {
-    public class TiledTileSetTile
+    public class TiledTilesetTile
     {
-        public TiledTileSetTile(int id)
+        public TiledTilesetTile(int id)
         {
             Id = id;
-            Animation = new List<TiledTileSetTileFrame>();
+            Animation = new List<TiledTilesetTileFrame>();
             ObjectGroups = new List<TiledObjectGroup>();
             Properties = new TiledProperties();
             _currentTimeInMilliseconds = 0.0;
         }
         public int Id { get; set; }
-        public List<TiledTileSetTileFrame> Animation { get; private set; }
+        public List<TiledTilesetTileFrame> Animation { get; private set; }
         public List<TiledObjectGroup> ObjectGroups { get; private set; }
         public TiledProperties Properties { get; private set; }
         public int? CurrentTileId
@@ -22,11 +22,11 @@ namespace MonoGame.Extended.Maps.Tiled
         }
 
         private double _currentTimeInMilliseconds;
-        private TiledTileSetTileFrame _currentFrame;
+        private TiledTilesetTileFrame _currentFrame;
 
-        public TiledTileSetTileFrame CreateTileSetTileFrame(int order, int tileId, int duration)
+        public TiledTilesetTileFrame CreateTileSetTileFrame(int order, int tileId, int duration)
         {
-            var tileSetTileFrame = new TiledTileSetTileFrame(order, tileId, duration);
+            var tileSetTileFrame = new TiledTilesetTileFrame(order, tileId, duration);
             Animation.Add(tileSetTileFrame);
             _currentFrame = Animation[0];
             return tileSetTileFrame;
