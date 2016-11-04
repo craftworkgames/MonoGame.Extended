@@ -14,11 +14,11 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Point2(), new Size2()).SetName(
-                        "The empty bounding rectangle has the expected position and direction.");
+                    new TestCaseData(new Point2(), new Vector2()).SetName(
+                        "The empty bounding rectangle has the expected position and radii.");
                 yield return
-                    new TestCaseData(new Point2(5, 5), new Size2(15, 15)).SetName(
-                        "A non-empty bounding rectangle has the expected position and direction.");
+                    new TestCaseData(new Point2(5, 5), new Vector2(15, 15)).SetName(
+                        "A non-empty bounding rectangle has the expected position and radii.");
             }
         }
 
@@ -377,11 +377,11 @@ namespace MonoGame.Extended.Tests.Primitives
                 yield return
                     new TestCaseData(new BoundingRectangle(),
                         string.Format(CultureInfo.CurrentCulture, "Centre: {0}, Radii: {1}", new Point2(),
-                            new Size2())).SetName(
+                            new Vector2())).SetName(
                         "The empty bounding rectangle has the expected string representation using the current culture.");
                 yield return new TestCaseData(new BoundingRectangle(new Point2(5.1f, -5.123f), new Size2(5.4f, -5.4123f)),
                     string.Format(CultureInfo.CurrentCulture, "Centre: {0}, Radii: {1}", new Point2(5.1f, -5.123f),
-                        new Size2(5.4f, -5.4123f))).SetName(
+                        new Vector2(5.4f, -5.4123f))).SetName(
                     "A non-empty bounding rectangle has the expected string representation using the current culture.");
             }
         }
