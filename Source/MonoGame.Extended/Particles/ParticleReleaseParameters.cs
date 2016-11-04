@@ -1,24 +1,26 @@
-﻿namespace MonoGame.Extended.Particles
+﻿using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Particles
 {
     public class ParticleReleaseParameters
     {
         public ParticleReleaseParameters()
         {
             Quantity = 1;
-            Speed = RangeF.Parse("[-1.0,1.0]");
-            Color = new ColorRange(new HslColor(0f, 0.5f, 0.5f), new HslColor(360f, 0.5f, 0.5f));
-            Opacity = RangeF.Parse("[0.0,1.0]");
-            Scale = RangeF.Parse("[1.0,10.0]");
-            Rotation = RangeF.Parse("[-3.14159,3.14159]");
+            Speed = new Range<float>(-1f,1f);
+            Color = new Range<HslColor>(new HslColor(0f, 0.5f, 0.5f), new HslColor(360f, 0.5f, 0.5f));
+            Opacity = new Range<float>(0f,1f); 
+            Scale = new Range<float>(1f,10f);
+            Rotation = new Range<float>(-MathHelper.Pi, MathHelper.Pi);
             Mass = 1f;
         }
 
-        public Range Quantity { get; set; }
-        public RangeF Speed { get; set; }
-        public ColorRange Color { get; set; }
-        public RangeF Opacity { get; set; }
-        public RangeF Scale { get; set; }
-        public RangeF Rotation { get; set; }
-        public RangeF Mass { get; set; }
+        public Range<int> Quantity { get; set; }
+        public Range<float> Speed { get; set; }
+        public Range<HslColor> Color { get; set; }
+        public Range<float> Opacity { get; set; }
+        public Range<float> Scale { get; set; }
+        public Range<float> Rotation { get; set; }
+        public Range<float> Mass { get; set; }
     }
 }

@@ -1,21 +1,31 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.InputListeners
 {
     public class MouseListener : InputListener
     {
-        internal MouseListener()
+        public MouseListener()
             : this(new MouseListenerSettings())
         {
         }
 
-        internal MouseListener(MouseListenerSettings settings)
+        public MouseListener(ViewportAdapter viewportAdapter)
+            : this(new MouseListenerSettings())
         {
+            ViewportAdapter = viewportAdapter;
+        }
+
+        public MouseListener(MouseListenerSettings settings)
+        {
+            ViewportAdapter = settings.ViewportAdapter;
             DoubleClickMilliseconds = settings.DoubleClickMilliseconds;
             DragThreshold = settings.DragThreshold;
         }
+
+        public ViewportAdapter ViewportAdapter { get; }
 
         public int DoubleClickMilliseconds { get; }
         public int DragThreshold { get; }
@@ -129,7 +139,7 @@ namespace MonoGame.Extended.InputListeners
             }
         }
 
-        internal override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             _gameTime = gameTime;
             _currentState = Mouse.GetState();

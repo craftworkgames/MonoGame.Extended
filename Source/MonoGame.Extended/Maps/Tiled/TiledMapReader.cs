@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
@@ -10,7 +11,7 @@ namespace MonoGame.Extended.Maps.Tiled
         protected override TiledMap Read(ContentReader reader, TiledMap existingInstance)
         {
             var backgroundColor = reader.ReadColor();
-            var renderOrder = (TiledRenderOrder) Enum.Parse(typeof (TiledRenderOrder), reader.ReadString(), true);
+            var renderOrder = (TiledRenderOrder)Enum.Parse(typeof(TiledRenderOrder), reader.ReadString(), true);
             var tiledMap = new TiledMap(
                 graphicsDevice: reader.ContentManager.GetGraphicsDevice(),
                 width: reader.ReadInt32(),
@@ -38,6 +39,23 @@ namespace MonoGame.Extended.Maps.Tiled
                     tileHeight: reader.ReadInt32(),
                     spacing: reader.ReadInt32(),
                     margin: reader.ReadInt32());
+                var tileSetTileCount = reader.ReadInt32();
+                for (var j = 0; j < tileSetTileCount; j++)
+                {
+                    var tileId = reader.ReadInt32();
+                    tileId = tileset.FirstId + tileId - 1;
+                    var tileSetTile = tileset.CreateTileSetTile(tileId);
+                    var tileSetTileFrameCount = reader.ReadInt32();
+                    for (var k = 0; k < tileSetTileFrameCount; k++)
+                    {
+                        var frameId = reader.ReadInt32();
+                        frameId = tileset.FirstId + frameId - 1;
+                        tileSetTile.CreateTileSetTileFrame(order: k, tileId: frameId, duration: reader.ReadInt32());
+                    }
+                    ReadCustomProperties(reader, tileSetTile.Properties);
+                    
+                    tileSetTile.ObjectGroups.AddRange(ReadObjectGroups(reader));
+                }
                 ReadCustomProperties(reader, tileset.Properties);
             }
 
@@ -49,18 +67,26 @@ namespace MonoGame.Extended.Maps.Tiled
                 ReadCustomProperties(reader, layer.Properties);
             }
 
+            tiledMap.AddObjectGroup(ReadObjectGroups(reader));
+
+            return tiledMap.Build();
+        }
+
+        private static List<TiledObjectGroup> ReadObjectGroups(ContentReader reader) 
+        {
+            var list = new List<TiledObjectGroup>();
             var objectGroupsCount = reader.ReadInt32();
 
             for (var i = 0; i < objectGroupsCount; i++)
             {
-                var objectGroup = ReadObjectGroup(reader, tiledMap);
+                var objectGroup = ReadObjectGroup(reader);
                 ReadCustomProperties(reader, objectGroup.Properties);
+                list.Add(objectGroup);
             }
-
-            return tiledMap;
+            return list;
         }
 
-        private static TiledObjectGroup ReadObjectGroup(ContentReader reader, TiledMap tiledMap)
+        private static TiledObjectGroup ReadObjectGroup(ContentReader reader)
         {
             var groupName = reader.ReadString();
             var visible = reader.ReadBoolean();
@@ -70,7 +96,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
             for (var i = 0; i < count; i++)
             {
-                var objectType = (TiledObjectType) reader.ReadInt32();
+                var objectType = (TiledObjectType)reader.ReadInt32();
                 var id = reader.ReadInt32();
                 var gid = reader.ReadInt32();
                 var x = reader.ReadSingle();
@@ -82,7 +108,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 var type = reader.ReadString();
                 var isVisible = reader.ReadBoolean();
 
-                objects[i] = new TiledObject(objectType, id, gid >= 0 ? gid : (int?) null, x, y, width, height)
+                objects[i] = new TiledObject(objectType, id, gid >= 0 ? gid : (int?)null, x, y, width, height)
                 {
                     IsVisible = isVisible,
                     Opacity = opacity,
@@ -101,8 +127,8 @@ namespace MonoGame.Extended.Maps.Tiled
 
                 ReadCustomProperties(reader, objects[i].Properties);
             }
-
-            return tiledMap.CreateObjectGroup(groupName, objects, visible);
+            
+            return new TiledObjectGroup(groupName, objects) { IsVisible = visible };
         }
 
         private static void ReadCustomProperties(ContentReader reader, TiledProperties properties)
@@ -118,10 +144,14 @@ namespace MonoGame.Extended.Maps.Tiled
             var layerName = reader.ReadString();
             var visible = reader.ReadBoolean();
             var opacity = reader.ReadSingle();
+            var offsetx = reader.ReadSingle();
+            var offsety = reader.ReadSingle();
             var layerType = reader.ReadString();
             var layer = ReadLayerTypeProperties(reader, tiledMap, layerName, layerType);
             layer.IsVisible = visible;
             layer.Opacity = opacity;
+            layer.OffsetX = offsetx;
+            layer.OffsetY = offsety;
             return layer;
         }
 

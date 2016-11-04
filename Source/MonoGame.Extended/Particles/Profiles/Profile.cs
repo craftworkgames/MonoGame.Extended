@@ -4,7 +4,9 @@ namespace MonoGame.Extended.Particles.Profiles
 {
     public abstract class Profile //: ICloneable
     {
-        public abstract void GetOffsetAndHeading(out Vector2 offset, out Axis heading);
+        protected FastRandom Random { get; } = new FastRandom();
+
+        public abstract void GetOffsetAndHeading(out Vector2 offset, out Vector2 heading);
 
         public object Clone()
         {
@@ -18,7 +20,7 @@ namespace MonoGame.Extended.Particles.Profiles
             return new PointProfile();
         }
 
-        public static Profile Line(Axis axis, float length)
+        public static Profile Line(Vector2 axis, float length)
         {
             return new LineProfile { Axis = axis, Length = length };
         }
@@ -48,7 +50,7 @@ namespace MonoGame.Extended.Particles.Profiles
             return new CircleProfile { Radius = radius, Radiate = radiate };
         }
 
-        public static Profile Spray(Axis direction, float spread)
+        public static Profile Spray(Vector2 direction, float spread)
         {
             return new SprayProfile { Direction = direction, Spread = spread };
         }

@@ -1,31 +1,36 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledObject
     {
-        public TiledObject(TiledObjectType objectType, int id, int? gid, float x, float y, float width, float height)
+        public TiledObject(TiledObjectType objectType, int id, int? gid, float x, float y, float width, float height) : this(objectType,id,gid,new Vector2(x,y),width,height)
+        {
+        }
+
+        public TiledObject(TiledObjectType objectType, int id, int? gid, Vector2 position, float width, float height)
         {
             ObjectType = objectType;
             Id = id;
             Gid = gid;
-            X = x;
-            Y = y;
             Width = width;
             Height = height;
             Points = new List<Vector2>();
             Properties = new TiledProperties();
+            Position = position;
         }
 
         public int Id { get; }
         public int? Gid { get; }
         public TiledObjectType ObjectType { get; }
         public string Name { get; set; }
-        public float X { get; }
-        public float Y { get; }
         public float Width { get; }
         public float Height { get; }
+        public Vector2 Position { get; }
+        public SizeF Size => new SizeF(Width, Height);
+        public RectangleF BoundingRectangle => new RectangleF(Position, Size);
         public TiledProperties Properties { get; }
         public List<Vector2> Points { get; } 
         public bool IsVisible { get; set; }

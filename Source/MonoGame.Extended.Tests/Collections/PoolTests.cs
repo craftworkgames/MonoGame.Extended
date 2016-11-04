@@ -1,4 +1,5 @@
-﻿using MonoGame.Extended.Collections;
+﻿using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Collections;
 using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests.Collections

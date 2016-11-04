@@ -36,15 +36,96 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Animations\SpriteSheetAnimationGroup.cs" />
-    <Compile Include="Animations\SpriteSheetAnimationGroupReader.cs" />
+    <Compile Include="Animations\Animation.cs" />
+    <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Maps\Tiled\TiledRenderDetails.cs" />
+    <Compile Include="Primitives\BoundingRectangle.cs" />
+    <Compile Include="Primitives\Point2.cs" />
+    <Compile Include="Primitives\Ray2D.cs" />
+    <Compile Include="Primitives\RayHelper.cs" />
+    <Compile Include="Primitives\Segment2D.cs" />
+    <Compile Include="Primitives\Size2.cs" />
+    <Compile Include="Sprites\AnimatedSprite.cs" />
+    <Compile Include="Animations\Tweens\DelayTween.cs" />
+    <Compile Include="Animations\Tweens\FluentTweening.cs" />
+    <Compile Include="Animations\Tweens\EasingFunctions.cs" />
+    <Compile Include="Animations\SpriteSheets\SpriteSheetAnimation.cs" />
+    <Compile Include="Animations\SpriteSheets\SpriteSheetAnimationData.cs" />
+    <Compile Include="Animations\SpriteSheets\SpriteSheetAnimationFactory.cs" />
+    <Compile Include="Animations\SpriteSheets\SpriteSheetAnimator.cs" />
+    <Compile Include="Animations\SpriteSheets\SpriteSheetAnimationFactoryReader.cs" />
+    <Compile Include="Animations\Tweens\TweenAnimation.cs" />
+    <Compile Include="Animations\Tweens\PropertyTween.cs" />
+    <Compile Include="Angle.cs" />
+    <Compile Include="Animations\Tweens\TweenChain.cs" />
+    <Compile Include="Animations\Tweens\TweenGroup.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />
     <Compile Include="BitmapFonts\BitmapFontRegion.cs" />
+    <Compile Include="Collections\BitVector32.cs" />
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
+    <Compile Include="ColorHelper.cs" />
+    <Compile Include="Entities\Components\EntityComponent.cs" />
+    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\EntityComponentSystem.cs" />
+    <Compile Include="Entities\Systems\AnimatedSpriteSystem.cs" />
+    <Compile Include="Entities\Systems\ComponentSystem.cs" />
+    <Compile Include="Entities\Systems\ParticleEmitterSystem.cs" />
+    <Compile Include="Entities\Systems\SpriteBatchSystem.cs" />
+    <Compile Include="Graphics\Batch2DSortMode.cs" />
+    <Compile Include="Graphics\Batching\BatchCommandDrawer.cs" />
+    <Compile Include="Graphics\Batching\BatchDrawCommand.cs" />
+    <Compile Include="Graphics\Batching\BatchSortMode.cs" />
+    <Compile Include="Graphics\Batching\IBatchDrawCommandData.cs" />
+    <Compile Include="Graphics\Batching\Batch.cs" />
+    <Compile Include="Graphics\Batching\BatchCommandQueueOverflowException.cs" />
+    <Compile Include="Graphics\Batching\BatchCommandQueue.cs" />
+    <Compile Include="Graphics\Batching\DeferredBatchCommandQueue.cs" />
+    <Compile Include="Graphics\Batching\ImmediateBatchCommandQueue.cs" />
+    <Compile Include="Graphics\Effects\ITexture2DEffect.cs" />
+    <Compile Include="Graphics\GeometryBuffer.Dynamic.cs" />
+    <Compile Include="Graphics\Effects\MatrixChainEffect.cs" />
+    <Compile Include="Graphics\Effects\EffectResource.cs" />
+    <Compile Include="Graphics\Effects\IMatrixChainEffect.cs" />
+    <Compile Include="Graphics\Effects\DefaultEffect2D.cs" />
+    <Compile Include="Graphics\GeometryBuffer.cs" />
+    <Compile Include="Graphics\GeometryBufferExtensions.VertexPositionColorTexture.cs" />
+    <Compile Include="Graphics\GeometryBufferOverflowException.cs" />
+    <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
+    <Compile Include="Graphics\DynamicBatch2D.cs" />
+    <Compile Include="Graphics\GeometryBuffer.Static.cs" />
+    <Compile Include="Gui\Controls\GuiLabel.cs" />
+    <Compile Include="Gui\Controls\GuiToggleButton.cs" />
+    <Compile Include="Gui\Serialization\ContentConverter.cs" />
+    <Compile Include="Gui\Controls\GuiButton.cs" />
+    <Compile Include="Gui\Controls\GuiControl.cs" />
+    <Compile Include="Gui\Controls\GuiControlStyle.cs" />
+    <Compile Include="Gui\GuiComponent.cs" />
+    <Compile Include="Gui\GuiLayout.cs" />
+    <Compile Include="Gui\Serialization\GuiTextureAtlasConverter.cs" />
+    <Compile Include="Gui\Serialization\GuiControlConverter.cs" />
+    <Compile Include="Gui\Serialization\GuiControlStyleConveter.cs" />
+    <Compile Include="Gui\Serialization\GuiLayoutConverter.cs" />
+    <Compile Include="Gui\Serialization\TextureRegion2DConveter.cs" />
+    <Compile Include="IEquatableByRef.cs" />
+    <Compile Include="InputListeners\InputListenerComponent.cs" />
+    <Compile Include="Matrix2D.cs" />
+    <Compile Include="SimpleDrawableGameComponent.cs" />
+    <Compile Include="SimpleGameComponent.cs" />
+    <Compile Include="Vector2Extensions.cs" />
+    <Compile Include="Screens\Screen.cs" />
+    <Compile Include="Screens\ScreenComponent.cs" />
+    <Compile Include="Serialization\ColorJsonConverter.cs" />
+    <Compile Include="Serialization\Vector2JsonConverter.cs" />
+    <Compile Include="Serialization\SizeFJsonConverter.cs" />
+    <Compile Include="Gui\GuiAlignmentHelper.cs" />
+    <Compile Include="Gui\Serialization\GuiJsonConverter.cs" />
+    <Compile Include="Gui\Serialization\GuiJsonConverterService.cs" />
+    <Compile Include="Gui\GuiThickness.cs" />
+    <Compile Include="IColorable.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Collisions\CollisionActor.cs" />
     <Compile Include="Collisions\CollisionGrid.cs" />
@@ -58,7 +139,6 @@
     <Compile Include="Content\ContentReaderExtensions.cs" />
     <Compile Include="EventHandlerExtensions.cs" />
     <Compile Include="GameTimeExtensions.cs" />
-    <Compile Include="IDraw.cs" />
     <Compile Include="IMovable.cs" />
     <Compile Include="InputListeners\GamePadEventArgs.cs" />
     <Compile Include="InputListeners\GamePadListener.cs" />
@@ -75,34 +155,38 @@
     <Compile Include="InputListeners\MouseListenerSettings.cs" />
     <Compile Include="InputListeners\TouchEventArgs.cs" />
     <Compile Include="InputListeners\TouchListener.cs" />
-    <Compile Include="InputListeners\InputListenerManager.cs" />
     <Compile Include="InputListeners\TouchListenerSettings.cs" />
     <Compile Include="IRotatable.cs" />
     <Compile Include="IScalable.cs" />
+    <Compile Include="ISizable.cs" />
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
-    <Compile Include="Particles\Axis.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTileFrame.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTile.cs" />
     <Compile Include="Particles\ColorExtensions.cs" />
+    <Compile Include="Particles\FastRandomExtensions.cs" />
     <Compile Include="Particles\HslColor.cs" />
-    <Compile Include="Particles\ColorRange.cs" />
-    <Compile Include="Particles\ParticleEmitter.cs" />
-    <Compile Include="Particles\FastRand.cs" />
     <Compile Include="Particles\LineSegment.cs" />
+    <Compile Include="Particles\Modifiers\AgeModifier.cs" />
+    <Compile Include="Particles\Modifiers\Interpolators\IInterpolator.cs" />
+    <Compile Include="Particles\Modifiers\Interpolators\RotationInterpolator.cs" />
+    <Compile Include="Particles\ParticleEmitter.cs" />
+    <Compile Include="FastRandom.cs" />
     <Compile Include="Particles\ParticleModifierExecutionStrategy.cs" />
-    <Compile Include="Particles\Modifiers\ColorInterpolator2.cs" />
+    <Compile Include="Particles\Modifiers\Interpolators\ColorInterpolator.cs" />
     <Compile Include="Particles\Modifiers\Containers\CircleContainerModifier.cs" />
     <Compile Include="Particles\Modifiers\Containers\RectangleContainerModifier.cs" />
     <Compile Include="Particles\Modifiers\Containers\RectangleLoopContainerModifier.cs" />
     <Compile Include="Particles\Modifiers\DragModifier.cs" />
-    <Compile Include="Particles\Modifiers\HueInterpolator2.cs" />
+    <Compile Include="Particles\Modifiers\Interpolators\HueInterpolator.cs" />
     <Compile Include="Particles\Modifiers\IModifier.cs" />
     <Compile Include="Particles\Modifiers\LinearGravityModifier.cs" />
     <Compile Include="Particles\Modifiers\OpacityFastFadeModifier.cs" />
-    <Compile Include="Particles\Modifiers\OpacityInterpolator2.cs" />
+    <Compile Include="Particles\Modifiers\Interpolators\OpacityInterpolator.cs" />
     <Compile Include="Particles\Modifiers\RotationModifier.cs" />
-    <Compile Include="Particles\Modifiers\ScaleInterpolator2.cs" />
+    <Compile Include="Particles\Modifiers\Interpolators\ScaleInterpolator.cs" />
     <Compile Include="Particles\Modifiers\VelocityColorModifier.cs" />
-    <Compile Include="Particles\Modifiers\VelocityHueModifier.cs" />
+    <Compile Include="Particles\Modifiers\VelocityModifier.cs" />
     <Compile Include="Particles\Modifiers\VortexModifier.cs" />
     <Compile Include="Particles\Particle.cs" />
     <Compile Include="Particles\ParticleBuffer.cs" />
@@ -116,11 +200,10 @@
     <Compile Include="Particles\Profiles\Profile.cs" />
     <Compile Include="Particles\Profiles\RingProfile.cs" />
     <Compile Include="Particles\Profiles\SprayProfile.cs" />
-    <Compile Include="Particles\Range.cs" />
-    <Compile Include="Particles\RangeF.cs" />
     <Compile Include="Particles\ParticleReleaseParameters.cs" />
     <Compile Include="Particles\SpriteBatchExtensions.cs" />
-    <Compile Include="Particles\Vector2Extensions.cs" />
+    <Compile Include="RandomExtensions.cs" />
+    <Compile Include="Range.cs" />
     <Compile Include="RenderTarget2DExtensions.cs" />
     <Compile Include="Maps\Tiled\SpriteBatchExtensions.cs" />
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
@@ -140,9 +223,9 @@
     <Compile Include="Shapes\RectangleExtensions.cs" />
     <Compile Include="Shapes\ShapeF.cs" />
     <Compile Include="Size.cs" />
+    <Compile Include="SizeF.cs" />
+    <Compile Include="Sprites\NinePatch.cs" />
     <Compile Include="Sprites\SpriteBatchExtensions.cs" />
-    <Compile Include="Animations\SpriteSheetAnimation.cs" />
-    <Compile Include="Animations\SpriteSheetAnimator.cs" />
     <Compile Include="TextureAtlases\TextureAtlas.cs" />
     <Compile Include="TextureAtlases\TextureAtlasReader.cs" />
     <Compile Include="TextureAtlases\SpriteBatchExtensions.cs" />
@@ -157,12 +240,12 @@
     <Compile Include="Maps\Tiled\TiledRenderOrder.cs" />
     <Compile Include="Maps\Tiled\TiledProperties.cs" />
     <Compile Include="Maps\Tiled\TiledTile.cs" />
-    <Compile Include="Maps\Tiled\TiledTileSet.cs" />
+    <Compile Include="Maps\Tiled\TiledTileset.cs" />
     <Compile Include="Timers\ContinuousClock.cs" />
     <Compile Include="Timers\CountdownTimer.cs" />
     <Compile Include="Timers\GameTimer.cs" />
     <Compile Include="Timers\TimerState.cs" />
-    <Compile Include="Vector2Extensions.cs" />
+    <Compile Include="Transform.cs" />
     <Compile Include="ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />
     <Compile Include="ViewportAdapters\WindowViewportAdapter.cs" />
@@ -170,19 +253,25 @@
     <Compile Include="ViewportAdapters\ViewportAdapter.cs" />
     <Compile Include="FramesPerSecondCounter.cs" />
     <Compile Include="FramesPerSecondCounterComponent.cs" />
-    <Compile Include="Sprites\SpriteAnimator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>..\..\Dependencies\MonoGame.Framework.dll</HintPath>
-    </Reference>
+    <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="MonoGame.Framework">
+      <HintPath>..\..\Dependencies\MonoGame.Framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect2D.mgfxo" />
+    <None Include="Graphics\Effects\Resources\compile.bat" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Graphics\Effects\Resources\DefaultEffect2D.fx" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

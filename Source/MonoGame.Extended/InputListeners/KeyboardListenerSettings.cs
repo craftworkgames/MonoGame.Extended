@@ -11,7 +11,7 @@ namespace MonoGame.Extended.InputListeners
         public int InitialDelayMilliseconds { get; set; }
         public int RepeatDelayMilliseconds { get; set; }
 
-        internal override KeyboardListener CreateListener()
+        public override KeyboardListener CreateListener()
         {
             return new KeyboardListener(this);
         }

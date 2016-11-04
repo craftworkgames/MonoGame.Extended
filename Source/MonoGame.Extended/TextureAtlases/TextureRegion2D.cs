@@ -34,6 +34,7 @@ namespace MonoGame.Extended.TextureAtlases
         public int Y { get; }
         public int Width { get; }
         public int Height { get; }
+        public Size Size => new Size(Width, Height);
         public object Tag { get; set; }
 
         public Rectangle Bounds => new Rectangle(X, Y, Width, Height);

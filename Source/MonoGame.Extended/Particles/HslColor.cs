@@ -8,22 +8,22 @@ namespace MonoGame.Extended.Particles
     /// An immutable data structure representing a 24bit color composed of separate hue, saturation and lightness channels.
     /// </summary>
     //[Serializable]
-    public struct HslColor : IEquatable<HslColor>
+    public struct HslColor : IEquatable<HslColor>, IComparable<HslColor>
     {
         /// <summary>
         /// Gets the value of the hue channel in degrees.
         /// </summary>
-        public float H { get; }
-        
+        public readonly float H;
+
         /// <summary>
         /// Gets the value of the saturation channel.
         /// </summary>
-        public float S { get; }
+        public readonly float S;
 
         /// <summary>
         /// Gets the value of the lightness channel.
         /// </summary>
-        public float L { get; }
+        public readonly float L;
 
         private static float NormalizeHue(float h)
         {
@@ -101,6 +101,18 @@ namespace MonoGame.Extended.Particles
             return map(H, S, L);
         }
 
+        public static HslColor operator +(HslColor a, HslColor b)
+        {
+            return new HslColor(a.H + b.H, a.S + b.S, a.L + b.L);
+        }
+
+        public int CompareTo(HslColor other)
+        {
+            // ReSharper disable ImpureMethodCallOnReadonlyValueField
+            return H.CompareTo(other.H) * 100 + S.CompareTo(other.S) * 10 + L.CompareTo(L);
+            // ReSharper restore ImpureMethodCallOnReadonlyValueField
+        }
+
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
         /// </summary>
@@ -125,9 +137,9 @@ namespace MonoGame.Extended.Particles
         /// </returns>
         public bool Equals(HslColor value)
         {
-            return H.Equals(value.H) &&
-                   S.Equals(value.S) &&
-                   L.Equals(value.L);
+            // ReSharper disable ImpureMethodCallOnReadonlyValueField
+            return H.Equals(value.H) && S.Equals(value.S) && L.Equals(value.L);
+            // ReSharper restore ImpureMethodCallOnReadonlyValueField
         }
 
         /// <summary>
@@ -151,16 +163,16 @@ namespace MonoGame.Extended.Particles
         /// </returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0}°,{1:P0},{2:P0}",
-                H.ToString("F1"), (100 * S).ToString("F1"), (100 * L).ToString("F1"));
+            return string.Format(CultureInfo.InvariantCulture, "H:{0:N1}° S:{1:N1} L:{2:N1}",
+                H, 100 * S, 100 * L);
         }
 
         public static HslColor Parse(string s)
         {
             var hsl = s.Split(',');
-            var hue = float.Parse(hsl[0].TrimEnd('°'));
-            var sat = float.Parse(hsl[1]);
-            var lig = float.Parse(hsl[2]);
+            var hue = float.Parse(hsl[0].TrimEnd('°'), CultureInfo.InvariantCulture.NumberFormat);
+            var sat = float.Parse(hsl[1], CultureInfo.InvariantCulture.NumberFormat);
+            var lig = float.Parse(hsl[2], CultureInfo.InvariantCulture.NumberFormat);
 
             return new HslColor(hue, sat, lig);
         }

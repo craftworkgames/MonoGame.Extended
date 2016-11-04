@@ -63,7 +63,7 @@
     },
     {
       "Name": "idle",
-      "FramesPerSecond": 8,
+      "FramesPerSecond": 8,      
       "Frames": [
         "idle_01",
         "idle_02",

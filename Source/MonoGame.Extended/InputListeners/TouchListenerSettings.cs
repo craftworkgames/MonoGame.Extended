@@ -6,7 +6,7 @@
         {
         }
 
-        internal override TouchListener CreateListener()
+        public override TouchListener CreateListener()
         {
             return new TouchListener();
         }

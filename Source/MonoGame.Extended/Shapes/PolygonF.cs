@@ -96,14 +96,16 @@ namespace MonoGame.Extended.Shapes
             return new PolygonF(polygon.Vertices);
         }
 
-        public RectangleF GetBoundingRectangle()
+        public RectangleF BoundingRectangle
         {
-            var minX = Left;
-            var minY = Top;
-            var maxX = Right;
-            var maxY = Bottom;
-
-            return new RectangleF(minX, minY, maxX - minX, maxY - minY);
+            get
+            {
+                var minX = Left;
+                var minY = Top;
+                var maxX = Right;
+                var maxY = Bottom;
+                return new RectangleF(minX, minY, maxX - minX, maxY - minY);
+            }
         }
 
         public bool Contains(Vector2 point)

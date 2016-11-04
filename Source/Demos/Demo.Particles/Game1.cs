@@ -6,6 +6,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Particles;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Modifiers.Containers;
+using MonoGame.Extended.Particles.Modifiers.Interpolators;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
@@ -28,6 +29,7 @@ namespace Demo.Particles
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
+            Window.Position = Point.Zero;
         }
 
         protected override void LoadContent()
@@ -67,7 +69,7 @@ namespace Demo.Particles
 
             _particleEffect.Update(deltaTime);
 
-            if(mouseState.LeftButton == ButtonState.Pressed)
+            if (mouseState.LeftButton == ButtonState.Pressed)
                 _particleEffect.Trigger(new Vector2(p.X, p.Y));
 
             _particleEffect.Trigger(new Vector2(400, 240));
@@ -78,7 +80,7 @@ namespace Demo.Particles
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            
+
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.Draw(_particleEffect);
             _spriteBatch.Draw(_sprite);
@@ -93,22 +95,27 @@ namespace Demo.Particles
             {
                 Emitters = new[]
                 {
-                    new ParticleEmitter(500, TimeSpan.FromSeconds(2.5), Profile.Ring(150f, Profile.CircleRadiation.In))
+                    new ParticleEmitter(textureRegion, 500, TimeSpan.FromSeconds(2.5), Profile.Ring(150f, Profile.CircleRadiation.In))
                     {
-                        TextureRegion = textureRegion,
                         Parameters = new ParticleReleaseParameters
                         {
-                            Speed = new RangeF(50, 0f),
+                            Speed = new Range<float>(0f, 50f),
                             Quantity = 3,
-                            Rotation = new RangeF(-1f, 1f),
-                            Scale = new RangeF(3.0f, 4.0f)
+                            Rotation = new Range<float>(-1f, 1f),
+                            Scale = new Range<float>(3.0f, 4.0f)
                         },
                         Modifiers = new IModifier[]
                         {
-                            new ColorInterpolator2 { InitialColor = new HslColor(0.33f, 0.5f, 0.5f), FinalColor = new HslColor(0.5f, 0.9f, 1.0f) },
+                            new AgeModifier
+                            {
+                                Interpolators = new IInterpolator[]
+                                {
+                                    new ColorInterpolator { InitialColor = new HslColor(0.33f, 0.5f, 0.5f), FinalColor = new HslColor(0.5f, 0.9f, 1.0f) }
+                                }
+                            },
                             new RotationModifier { RotationRate = -2.1f },
                             new RectangleContainerModifier {  Width = 800, Height = 480 },
-                            new LinearGravityModifier { Direction = Axis.Up, Strength = 30f }
+                            new LinearGravityModifier { Direction = -Vector2.UnitY, Strength = 30f }
                         }
                     }
                 }

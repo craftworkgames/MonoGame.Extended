@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
+using System.Linq;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
@@ -16,9 +17,10 @@ namespace MonoGame.Extended.Maps.Tiled
 
             _renderTargetSpriteBatch = new SpriteBatch(graphicsDevice);
             _map = map;
-            _tiles = CreateTiles(data);
+            _tiles = CreateTiles(data, map.Tilesets);
+            _animatedTiles = new List<TiledTile>();
         }
-        
+
         public override void Dispose()
         {
             _renderTargetSpriteBatch.Dispose();
@@ -31,72 +33,219 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly TiledTile[] _tiles;
         private readonly SpriteBatch _renderTargetSpriteBatch;
         private RenderTarget2D _renderTarget;
+        private readonly List<TiledTile> _animatedTiles;
+        private List<TiledTilesetTile> _uniqueTilesetTiles = new List<TiledTilesetTile>();
+        private readonly Dictionary<TiledTileset, int> _tileCountByTileset = new Dictionary<TiledTileset, int>();
+        private readonly Dictionary<TiledTileset, TiledRenderDetails> _detailsByTileset = new Dictionary<TiledTileset, TiledRenderDetails>();
+
+        public int NotBlankTilesCount { get; private set; }
 
         public IEnumerable<TiledTile> Tiles => _tiles;
         public int TileWidth => _map.TileWidth;
         public int TileHeight => _map.TileHeight;
 
-        private TiledTile[] CreateTiles(int[] data)
+        private TiledTile[] CreateTiles(int[] data, IReadOnlyList<TiledTileset> tilesets)
         {
-            var tiles = new TiledTile[data.Length];
-            var index = 0;
+            var tileData = new TiledTile[data.Length];
+            var tiles = tilesets.Select(tileset => new List<TiledTile>()).ToList();
+            var tileDataIndex = 0;
 
             for (var y = 0; y < Height; y++)
             {
                 for (var x = 0; x < Width; x++)
                 {
-                    tiles[x + y * Width] = new TiledTile(data[index], x, y);
-                    index++;
+                    int tilesetIndex;
+
+                    //find which list to add it to
+                    for (tilesetIndex = tilesets.Count - 1; tilesetIndex > 0; tilesetIndex--)
+                        if (tilesets[tilesetIndex].FirstId <= data[tileDataIndex])
+                            break;
+
+                    TiledTileset ts = tilesets[tilesetIndex];
+                    if (!_tileCountByTileset.ContainsKey(ts))
+                    {
+                        _tileCountByTileset[ts] = 0;
+                    }
+
+                    if (data[tileDataIndex] != 0)
+                    {
+                        _tileCountByTileset[ts]++;
+                    }
+
+                    tiles.ElementAt(tilesetIndex).Add(new TiledTile(data[tileDataIndex], x, y, _map.GetTilesetTileById(data[tileDataIndex])));
+                    tileDataIndex++;
                 }
             }
 
-            return tiles;
+            //Place each Tile in order of their respective Tileset for optimal drawing
+            var tiledDataIndex = 0;
+            foreach (var tileChunk in tiles)
+                foreach (var tile in tileChunk)
+                {
+                    tileData[tiledDataIndex] = tile;
+                    tiledDataIndex++;
+                }
+
+            NotBlankTilesCount = tileData.Count(x => x.Id != 0);
+            return tileData;
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null)
+        internal void BuildVertices(GraphicsDevice gd, float depth)
         {
-            if(!IsVisible)
+            var vr = new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
+            var firstCol = vr.Left < 0 ? 0 : (int)Math.Floor(vr.Left / (float)_map.TileWidth);
+            var firstRow = vr.Top < 0 ? 0 : (int)Math.Floor(vr.Top / (float)_map.TileHeight);
+            var columns = Math.Min(_map.Width, vr.Width / _map.TileWidth);
+            var rows = Math.Min(_map.Height, vr.Height / _map.TileHeight);
+            var renderOrderFunc = GetRenderOrderFunction();
+            var tiles = renderOrderFunc(firstCol, firstRow, firstCol + columns, firstRow + rows);
+
+            Dictionary<TiledTileset, List<VertexPositionTexture>> verticesByTileset =
+                _map.Tilesets.ToDictionary(ts => ts, ts => new List<VertexPositionTexture>());
+
+            foreach (var tile in tiles)
+            {
+                if (tile.Id == 0)
+                    continue;
+
+                var region = _map.GetTileRegion(tile.Id);
+                var point = GetTileLocationFunction()(tile);
+                var tileWidth = region.Width;
+                var tileHeight = region.Height;
+                var tc0 = Vector2.Zero;
+                var tc1 = Vector2.One;
+
+                tc0.X = (region.X + 0.5f) / region.Texture.Width;
+                tc0.Y = (region.Y + 0.5f) / region.Texture.Height;
+                tc1.X = (float)(region.X + region.Width) / region.Texture.Width;
+                tc1.Y = (float)(region.Y + region.Height) / region.Texture.Height;
+                var vertices = new VertexPositionTexture[4];
+                vertices[0] = new VertexPositionTexture(new Vector3(point.X, point.Y, depth), tc0);
+                vertices[1] = new VertexPositionTexture(new Vector3(point.X + tileWidth, point.Y, depth), new Vector2(tc1.X, tc0.Y));
+                vertices[2] = new VertexPositionTexture(new Vector3(point.X, point.Y + tileHeight, depth), new Vector2(tc0.X, tc1.Y));
+                vertices[3] = new VertexPositionTexture(new Vector3(point.X + tileWidth, point.Y + tileHeight, depth), tc1);
+
+                TiledTileset tileSet = _map.Tilesets.FirstOrDefault(ts=>ts.Texture == region.Texture);
+                if (tileSet != null)
+                {
+                    verticesByTileset[tileSet].AddRange(vertices);
+                }
+            }
+
+            foreach (TiledTileset ts in _map.Tilesets)
+            {
+                int tilesCount;
+                if (!_tileCountByTileset.TryGetValue(ts, out tilesCount) || tilesCount == 0)
+                {
+                    continue;
+                }
+
+                int indexOffset = 0;
+                List<ushort> tileIndexes = new List<ushort>();
+
+                for (var i = 0; i < tilesCount; i++)
+                {
+                    var thisTileIndexes = new ushort[6];
+                    thisTileIndexes[0] = (ushort) (4 * indexOffset);
+                    thisTileIndexes[1] = (ushort) (4 * indexOffset + 1);
+                    thisTileIndexes[2] = (ushort) (4 * indexOffset + 2);
+                    thisTileIndexes[3] = (ushort) (4 * indexOffset + 1);
+                    thisTileIndexes[4] = (ushort) (4 * indexOffset + 3);
+                    thisTileIndexes[5] = (ushort) (4 * indexOffset + 2);
+                    tileIndexes.AddRange(thisTileIndexes);
+                    indexOffset++;
+                }
+
+                _detailsByTileset[ts] = new TiledRenderDetails(gd, tilesCount, verticesByTileset[ts], tileIndexes);
+            }
+        }
+
+        public TiledRenderDetails GetRenderDetailsForTileset(TiledTileset tileset)
+        {
+            if (!_detailsByTileset.ContainsKey(tileset))
+            {
+                return null;
+            }
+
+            return _detailsByTileset[tileset];
+        }
+
+        public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null)
+        {
+            if (!IsVisible)
                 return;
+
+            var tileLocationFunction = GetTileLocationFunction();
 
             if (_renderTarget == null)
             {
                 // create and render the entire map to a single render target.
                 // this gives the best frame rate performance at the cost of memory.
                 // ideally, we'd like to have a couple of different draw strategies for different situations.
-                _renderTarget = new RenderTarget2D(_renderTargetSpriteBatch.GraphicsDevice, _map.WidthInPixels, _map.WidthInPixels);
+                _renderTarget = new RenderTarget2D(_renderTargetSpriteBatch.GraphicsDevice, _map.WidthInPixels, _map.HeightInPixels);
 
                 using (_renderTarget.BeginDraw(_renderTargetSpriteBatch.GraphicsDevice, backgroundColor ?? Color.Transparent))
                 {
                     //var vr = visibleRectangle ?? new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
                     var vr = new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
                     var renderOrderFunction = GetRenderOrderFunction();
-                    var tileLocationFunction = GetTileLocationFunction();
-                    var firstCol = vr.Left < 0 ? 0 : (int) Math.Floor(vr.Left/(float) _map.TileWidth);
-                    var firstRow = vr.Top < 0 ? 0 : (int) Math.Floor(vr.Top/(float) _map.TileHeight);
+                    var firstCol = vr.Left < 0 ? 0 : (int)Math.Floor(vr.Left / (float)_map.TileWidth);
+                    var firstRow = vr.Top < 0 ? 0 : (int)Math.Floor(vr.Top / (float)_map.TileHeight);
 
                     // +3 to cover any gaps
-                    var columns = Math.Min(_map.Width, vr.Width/_map.TileWidth) + 3;
-                    var rows = Math.Min(_map.Height, vr.Height/_map.TileHeight) + 3;
+                    var columns = Math.Min(_map.Width, vr.Width / _map.TileWidth);
+                    var rows = Math.Min(_map.Height, vr.Height / _map.TileHeight);
 
                     _renderTargetSpriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
 
                     foreach (var tile in renderOrderFunction(firstCol, firstRow, firstCol + columns, firstRow + rows))
                     {
-                        var region = tile != null ? _map.GetTileRegion(tile.Id) : null;
-
-                        if (region != null)
+                        var tileId = tile?.CurrentTileId;
+                        if (tile != null && tile.HasAnimation)
                         {
-                            var point = tileLocationFunction(tile);
-                            var destinationRectangle = new Rectangle(point.X, point.Y, region.Width, region.Height);
-                            _renderTargetSpriteBatch.Draw(region, destinationRectangle, Color.White*Opacity);
+                            _animatedTiles.Add(tile);
+                        }
+                        else
+                        {
+                            UpdateRenderTarget(_renderTargetSpriteBatch, tileLocationFunction, tile, tileId);
                         }
                     }
 
                     _renderTargetSpriteBatch.End();
                 }
+                _uniqueTilesetTiles = _animatedTiles.Select(t => t.TilesetTile).Distinct().ToList();
+                spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
             }
+            else
+            {
+                spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
+                if (gameTime == null || _animatedTiles.Count == 0) return;
+                double deltaTime = gameTime.ElapsedGameTime.TotalMilliseconds;
+                foreach (var tileSetTile in _uniqueTilesetTiles)
+                {
+                    tileSetTile.Update(deltaTime);
+                }
+                foreach (var animatedTile in _animatedTiles)
+                {
+                    UpdateRenderTarget(spriteBatch, tileLocationFunction, animatedTile, animatedTile.CurrentTileId);
+                }
+            }
+        }
 
-            spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
+        private void UpdateRenderTarget(SpriteBatch spriteBatch, Func<TiledTile, Point> tileLocationFunction, TiledTile tile, int? tileId)
+        {
+            var region = tileId.HasValue ? _map.GetTileRegion(tileId.Value) : null;
+
+            if (region != null)
+            {
+                var point = tileLocationFunction(tile);
+
+                // Tiled draws tiles from the lower left of the block instead of the upper left. Adjust the Y position to account for this.
+                point.Y -= region.Height - TileHeight;
+
+                var destinationRectangle = new Rectangle(point.X, point.Y, region.Width, region.Height);
+                spriteBatch.Draw(region, destinationRectangle, Color.White * Opacity);
+            }
         }
 
         private Func<TiledTile, Point> GetTileLocationFunction()

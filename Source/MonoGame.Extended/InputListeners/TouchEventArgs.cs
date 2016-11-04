@@ -5,7 +5,7 @@ namespace MonoGame.Extended.InputListeners
 {
     public class TouchEventArgs : EventArgs
     {
-        internal TouchEventArgs(TouchLocation location)
+        public TouchEventArgs(TouchLocation location)
         {
             Location = location;
         }

@@ -20,7 +20,9 @@ namespace MonoGame.Extended.Maps.Tiled
         public TiledProperties Properties { get; }
         public bool IsVisible { get; set; }
         public float Opacity { get; set; }
+        public float OffsetX { get; set; }
+        public float OffsetY { get; set; }
 
-        public abstract void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null);
+        public abstract void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null);
     }
 }

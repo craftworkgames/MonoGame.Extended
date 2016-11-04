@@ -35,6 +35,21 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 writer.Write(tileset.TileHeight);
                 writer.Write(tileset.Spacing);
                 writer.Write(tileset.Margin);
+
+                writer.Write(tileset.Tiles.Count);
+                foreach(var tile in tileset.Tiles)
+                {
+                    writer.Write(tile.Id);
+                    writer.Write(tile.Frames.Count);
+                    foreach(var frame in tile.Frames)
+                    {
+                        writer.Write(frame.TileId);
+                        writer.Write(frame.Duration);
+                    }
+                    WriteCustomProperties(writer, tile.Properties);
+
+                    WriteObjectGroups(writer, tile.ObjectGroups);
+                }
                 WriteCustomProperties(writer, tileset.Properties);
             }
 
@@ -45,6 +60,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 writer.Write(layer.Name);
                 writer.Write(layer.Visible);
                 writer.Write(layer.Opacity);
+                writer.Write(layer.OffsetX);
+                writer.Write(layer.OffsetY);
 
                 var tileLayer = layer as TmxTileLayer;
 
@@ -73,50 +90,20 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 WriteCustomProperties(writer, layer.Properties);
             }
 
-            writer.Write(map.ObjectGroups.Count);
+            WriteObjectGroups(writer, map.ObjectGroups);
 
-            foreach (var objectGroup in map.ObjectGroups)
-            {
-                writer.Write(objectGroup.Name);
-                writer.Write(objectGroup.Visible);
-                writer.Write(objectGroup.Opacity);
-
-                writer.Write(objectGroup.Objects.Count);
-
-                foreach (var tmxObject in objectGroup.Objects)
-                {
-                    var objectType = GetObjectType(tmxObject);
-
-                    writer.Write((int)objectType);
-                    writer.Write(tmxObject.Id);
-                    writer.Write(tmxObject.Gid);
-                    writer.Write(tmxObject.X);
-                    writer.Write(tmxObject.Y);
-                    writer.Write(tmxObject.Width);
-                    writer.Write(tmxObject.Height);
-                    writer.Write(tmxObject.Rotation);
-
-                    writer.Write(tmxObject.Name ?? string.Empty);
-                    writer.Write(tmxObject.Type ?? string.Empty);
-                    writer.Write(tmxObject.Visible);
-
-                    if (objectType == TiledObjectType.Polygon)
-                        WritePolyPoints(writer, tmxObject.Polygon.Points);
-
-                    if (objectType == TiledObjectType.Polyline)
-                        WritePolyPoints(writer, tmxObject.Polyline.Points);
-
-                    WriteCustomProperties(writer, tmxObject.Properties);
-                }
-
-                WriteCustomProperties(writer, objectGroup.Properties);
-            }
         }
 
         private static void WritePolyPoints(ContentWriter writer, string polyPointsString)
         {
             var points = polyPointsString.Split(' ')
-                            .Select(p => { var xy = p.Split(','); return new Vector2(float.Parse(xy[0]), float.Parse(xy[1])); })
+                            .Select(p =>
+                            {
+                                var xy = p.Split(',');
+                                var x = float.Parse(xy[0], CultureInfo.InvariantCulture.NumberFormat);
+                                var y = float.Parse(xy[1], CultureInfo.InvariantCulture.NumberFormat);
+                                return new Vector2(x, y);
+                            })
                             .ToArray();
 
             writer.Write(points.Length);
@@ -140,6 +127,52 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 return TiledObjectType.Polyline;
             
             return TiledObjectType.Rectangle;
+        }
+
+        private void WriteObjectGroups(ContentWriter writer, IReadOnlyCollection<TmxObjectGroup> groups)
+        {
+            writer.Write(groups.Count);
+
+            foreach (var objectGroup in groups) {
+                WriteObjectGroup(writer, objectGroup);
+            }
+        }
+
+        private void WriteObjectGroup(ContentWriter writer, TmxObjectGroup group)
+        {
+            writer.Write(group.Name ?? string.Empty);
+            writer.Write(group.Visible);
+            writer.Write(group.Opacity);
+
+            writer.Write(group.Objects.Count);
+
+            foreach (var tmxObject in group.Objects)
+            {
+                var objectType = GetObjectType(tmxObject);
+
+                writer.Write((int)objectType);
+                writer.Write(tmxObject.Id);
+                writer.Write(tmxObject.Gid);
+                writer.Write(tmxObject.X);
+                writer.Write(tmxObject.Y);
+                writer.Write(tmxObject.Width);
+                writer.Write(tmxObject.Height);
+                writer.Write(tmxObject.Rotation);
+
+                writer.Write(tmxObject.Name ?? string.Empty);
+                writer.Write(tmxObject.Type ?? string.Empty);
+                writer.Write(tmxObject.Visible);
+
+                if (objectType == TiledObjectType.Polygon)
+                    WritePolyPoints(writer, tmxObject.Polygon.Points);
+
+                if (objectType == TiledObjectType.Polyline)
+                    WritePolyPoints(writer, tmxObject.Polyline.Points);
+
+                WriteCustomProperties(writer, tmxObject.Properties);
+            }
+
+            WriteCustomProperties(writer, group.Properties);
         }
 
         private static void WriteCustomProperties(ContentWriter writer, IReadOnlyCollection<TmxProperty> properties)

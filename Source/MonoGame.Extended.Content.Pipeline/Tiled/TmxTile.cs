@@ -13,11 +13,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         public override string ToString()
         {
-            return Id;
+            return Id.ToString();
         }
 
         [XmlAttribute(AttributeName = "id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [XmlElement(ElementName = "terrain")]
         public TmxTerrain Terrain { get; set; }
@@ -30,6 +30,10 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         [XmlElement(ElementName = "objectgroup")]
         public List<TmxObjectGroup> ObjectGroups { get; set; }
+
+        [XmlArray("animation")]
+        [XmlArrayItem("frame")]
+        public List<TmxFrame> Frames { get; set; }
 
         [XmlArray("properties")]
         [XmlArrayItem("property")]

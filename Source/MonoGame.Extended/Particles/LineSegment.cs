@@ -29,12 +29,12 @@ namespace MonoGame.Extended.Particles
 
         public Vector2 Origin => _point1;
 
-        public Axis Direction
+        public Vector2 Direction
         {
             get
             {
                 var coord = _point2 - _point1;
-                return new Axis(coord.X, coord.Y);
+                return new Vector2(coord.X, coord.Y);
             }
         }
 
@@ -48,37 +48,12 @@ namespace MonoGame.Extended.Particles
             var t = _point2 - _point1;
             return new Vector2(t.X, t.Y);
         }
-
-        public unsafe void CopyTo(float* destination)
-        {
-            _point1.CopyTo(destination);
-            _point2.CopyTo(destination + sizeof(Vector2));
-        }
-
-        public void Destructure(out Vector2 point1, out Vector2 point2)
-        {
-            point1 = _point1;
-            point2 = _point2;
-        }
-
-        public void Match(Action<Vector2, Vector2> callback)
-        {
-            if (callback == null)
-                throw new ArgumentNullException(nameof(callback));
-        }
-
-        public T Map<T>(Func<Vector2, Vector2, T> map)
-        {
-            if (map == null)
-                throw new ArgumentNullException(nameof(map));
-
-            return map(_point1, _point2);
-        }
-
+        
         public bool Equals(LineSegment other)
         {
-            return _point1.Equals(other._point1) &&
-                   _point2.Equals(other._point2);
+            // ReSharper disable ImpureMethodCallOnReadonlyValueField
+            return _point1.Equals(other._point1) && _point2.Equals(other._point2);
+            // ReSharper restore ImpureMethodCallOnReadonlyValueField
         }
 
         public override bool Equals(object obj)
@@ -91,16 +66,12 @@ namespace MonoGame.Extended.Particles
 
         public override int GetHashCode()
         {
-            var hashCode = _point1.GetHashCode();
-
-            hashCode = (hashCode * 397) ^ _point2.GetHashCode();
-
-            return hashCode;
+            return (_point1.GetHashCode() * 397) ^ _point2.GetHashCode();
         }
 
         public override string ToString()
         {
-            return $"({_point1.X}:{_point1.Y},{_point2.X}:{_point2.Y})";
+            return $"({_point1.X}:{_point1.Y} {_point2.X}:{_point2.Y})";
         }
     }
 }

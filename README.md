@@ -3,25 +3,41 @@
 # MonoGame.Extended
 It makes MonoGame more awesome.
 
-[![Join the chat at https://gitter.im/craftworkgames/MonoGame.Extended](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/craftworkgames/MonoGame.Extended?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://build.craftworkgames.com/app/rest/builds/buildType:(id:MonoGameExtended_CI)/statusIcon)](http://build.craftworkgames.com/viewType.html?buildTypeId=MonoGameExtended_CI&guest=1)
+[![Join the chat at https://gitter.im/craftworkgames/MonoGame.Extended](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/craftworkgames/MonoGame.Extended?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) 
+
 
 MonoGame.Extended is an open source extension library for [MonoGame](http://www.monogame.net/). A collection of classes and extensions to make it easier to make games with MonoGame. 
 
+## Patreon Supporters
+
+We need your support! For the past 3 years we've had support from the [Microsoft BizSpark](https://www.microsoft.com/bizspark/) program to fund our web and build servers. On the 9th October 2016 that's going to come to an end and we'll be forced to shutdown the build server without funding. We don't need a lot, just a few supporters would really help.
+
+**What happens to MonoGame.Extended if we don't get the funding?** Never fear. The project won't die. The code will always be safely open sourced on github. However, the build server we run in the cloud is used to build and host the pre-release NuGet packages that some people rely on. If we can't run the build server in the cloud, it will make a few things like that a little more difficult.
+
+[![image](https://cloud.githubusercontent.com/assets/3201643/17462536/f5608898-5cf3-11e6-8e81-47d6594a8d9c.png)](https://www.patreon.com/craftworkgames)
+
+## Version 0.5 is available on NuGet
+MonoGame.Extended v0.5 has been published as [a NuGet package](https://www.nuget.org/packages/MonoGame.Extended/) and can be installed now. Please read the [install guide](https://github.com/craftworkgames/MonoGame.Extended/wiki/How-to-install-MonoGame.Extended) to setup the Pipeline tool.
+
+    Install-Package MonoGame.Extended
+
+This release is compatible with MonoGame 3.5!
+
+**Note**: If you're still using MonoGame 3.4 you must upgrade to 3.5 for everything to work.
+
 ## Forums
-We now have forums! Our forum is part of the [MonoGame community](http://community.monogame.net/category/extended). Please ask any questions or post about problems or bugs that you have found there. Let us know if you're making a game with MonoGame.Extended!
+Our forum is part of the [MonoGame community](http://community.monogame.net/category/extended). Please ask any questions or post about problems or bugs that you have found there. Let us know if you're making a game with MonoGame.Extended!
 
 ## Development status
-MonoGame.Extended has a growing community of contributors adding to the project all the time. Our next release will be ready for the latest MonoGame 3.5. We also have [Nuget packages](https://www.nuget.org/packages/MonoGame.Extended/) of previous releases or of course you can [build from source] to get the latest and greatest.
+MonoGame.Extended has a growing community of contributors adding to the project all the time. We also have [Nuget packages](https://www.nuget.org/packages/MonoGame.Extended/) of published releases and of course you can [build from source](https://github.com/craftworkgames/MonoGame.Extended/wiki/Building-MonoGame.Extended-from-source) to get the latest and greatest.
 
-**Note:** If you're building from source please install the latest [MonoGame v3.5 **Development Build**](http://www.monogame.net/downloads/). If you don't, you'll get build errors due to incompatible content Pipelines between MonoGame 3.4 and 3.5.
-
-Please keep in mind that the project is still evolving. Some breaking API changes are liklely to occur as we progress towards version 1.0.
+Please keep in mind that the project is still evolving. Some breaking API changes are likely to occur as we progress.
 
 ## Usage
 MonoGame.Extended is a portable class library that sits on top of MonoGame. It's designed to work on all supported platforms using a single portable DLL. At runtime, the portable library will call into the platform specific MonoGame DLL referenced in your project. If you do use it on another platform please [let us know](http://community.monogame.net/category/extended)!
 
 ## Documentation
-We've got several feature demos in the repository and we're building up [the wiki](https://github.com/craftworkgames/MonoGame.Extended/wiki). You can also pop into [the forums](http://community.monogame.net/c/extended), check out [my blog](http://dylanwilson.net/), ask a question on [gamedev stack overflow](http://gamedev.stackexchange.com/questions/tagged/monogame-extended) or use our [live chat](https://gitter.im/craftworkgames/MonoGame.Extended).
+We've got several feature demos in this repository and we're building up [the wiki](https://github.com/craftworkgames/MonoGame.Extended/wiki). You can also pop into [the forums](http://community.monogame.net/c/extended), check out [my blog](http://dylanwilson.net/), ask a question on [gamedev stack overflow](http://gamedev.stackexchange.com/questions/tagged/monogame-extended) or use our [live chat](https://gitter.im/craftworkgames/MonoGame.Extended).
 
 ## How to install
 
@@ -38,21 +54,82 @@ The package comes with 2 DLLs:
  
 The `MonoGame.Extended.Content.Pipeline.dll` needs to be referenced by the [Pipeline tool](http://www.monogame.net/documentation/?page=Pipeline). To reference the DLL in the Pipeline tool you'll  need to edit your `Content.mgcb` file.
 
-## Features
+## Roadmap / Features
 
-- **Tile based maps** using [Tiled](http://www.mapeditor.org/)
-- **Bitmap fonts** using [BMFont](http://www.angelcode.com/products/bmfont/)
-- **[Sprites](http://dylanwilson.net/sprites-and-spritebatch-extensions-in-monogame-extended)** (with SpriteBatch extensions!)
-- **Input listeners** for event driven input handling (Keyboard, Mouse, Touch, GamePad).
-- **Texture Atlases** using the JSON format in [TexturePacker](https://www.codeandweb.com/texturepacker).
-- **2D Camera** with pan, zoom, and rotation.
-- **Viewport Adapters** for resolution independent rendering.
-- **Sprite Animators** using texture atlases.
-- **Timers** including a continuous clock and a countdown timer w/ event integration
-- **FPS Counter** that is handy for debugging.
-- **Primitive Shapes** and sprite batch extensions to draw them.
-- **Sprite Sheet Animations** - created with the [Astrid Animator](http://dylanwilson.net/introducing-astrid-animator) prototype.
-- **Simple Collision Detection** - experimental.
+#### Animations
+ - [ ] Tweening**
+ - [x] Sprite Sheets
+ - [ ] Game Component**
+
+#### Content
+ - [x] Texture Atlases
+ - [x] Bitmap Fonts
+ - [x] Tiled Maps
+
+#### Collision Detection
+ - [x] Bounding Shapes
+ - [x] Intersection and overlap testing
+
+#### Input Management
+ - [x] Event based input (input listeners)
+ - [ ] Gesture detection (taps, panning, flinging and pinch zooming)
+ - [ ] Button Mapping (W=Up, A=Left, Space=Jump, etc)
+ - [ ] Game components**
+
+#### Graphics and Scenes
+ - [x] Sprites
+ - [x] Scene Graphs
+ - [x] Camera
+ - [x] Simple shape rendering
+ - [ ] Screen Management 
+
+#### GUI System
+ - [ ] Controls
+	 - [ ] Label**
+	 - [ ] Button (Text or Image)**
+	 - [ ] Toggle Button (Checkbox)**
+	 - [ ] Progress Bar
+	 - [ ] Text Box**
+	 - [ ] Image
+	 - [ ] Slider
+ - [ ] Layout
+	 - [ ] Canvas
+	 - [ ] Stack Panel
+	 - [ ] Wrap Panel
+	 - [ ] Dock Panel
+	 - [ ] Grid
+ - [ ] Dialog
+ - [ ] Window
+ - [ ] Skinning**
+ - [ ] Events**
+ - [ ] Drag and Drop
+
+#### Particle System
+ - [x] Emitters
+ - [x] Modifiers (age, drag, gravity, rotation, velocity, vortex)
+ - [x] Profiles (box, circle, line, point, ring, spray)
+ - [x] Sprite Batch Renderer
+ - [ ] Game Component**
+
+#### Math and Utilities
+ - [x] Timers
+ - [x] Virtual Screens (viewport adapters)
+ - [x] Bounding Shapes
+ - [x] Collections
+ - [x] FPS Counter
+ - [x] Random Numbers
+
+#### Platforms
+ - [x] Windows
+ - [x] Linux
+ - [x] Mac
+ - [ ] Android^^
+ - [ ] iOS^^
+
+\** Work in progress
+   
+^^ Not officially tested but should work
+
 
 ## Contributing
 If you would like to contribute start with one of the following:
@@ -75,3 +152,10 @@ If you would like to contribute start with one of the following:
 
 MonoGame.Extended is released under the [The MIT License (MIT)](https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE).
  
+## Special Thanks
+
+ - Matthew-Davey for letting us use the [Mercury Particle Engine](https://github.com/Matthew-Davey/mercury-particle-engine).
+ - John McDonald for [2D XNA Primitives](https://bitbucket.org/C3/2d-xna-primitives/wiki/Home)
+ - [LibGDX](https://libgdx.badlogicgames.com) for a whole lot of inspiration.
+ - @prime31 for [Nez](https://github.com/prime31/Nez), which ideas and code bounce back and forth.
+ - All of our contributors!

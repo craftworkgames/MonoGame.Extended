@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Animations;
+using MonoGame.Extended.Animations.SpriteSheets;
 
 namespace MonoGame.Extended.Content.Pipeline.Animations
 {
@@ -9,7 +10,7 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
     {
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return typeof (SpriteSheetAnimationGroupReader).AssemblyQualifiedName;
+            return typeof (SpriteSheetAnimationFactoryReader).AssemblyQualifiedName;
         }
 
         protected override void Write(ContentWriter writer, AstridAnimatorProcessorResult input)
@@ -28,6 +29,9 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
             {
                 writer.Write(animation.Name);
                 writer.Write(animation.FramesPerSecond);
+                writer.Write(animation.IsLooping);
+                writer.Write(animation.IsReversed);
+                writer.Write(animation.IsPingPong);
                 writer.Write(animation.Frames.Count);
 
                 foreach (var frame in animation.Frames)

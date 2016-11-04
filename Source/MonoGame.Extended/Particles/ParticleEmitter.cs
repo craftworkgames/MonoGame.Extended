@@ -1,29 +1,34 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Particles
 {
-    public unsafe class ParticleEmitter : IDisposable
+    public unsafe class ParticleEmitter : EntityComponent, IDisposable
     {
-        public ParticleEmitter(int capacity, TimeSpan term, Profile profile)
+        public ParticleEmitter(TextureRegion2D textureRegion, int capacity, TimeSpan term, Profile profile, bool autoTrigger = true)
         {
             if (profile == null)
                 throw new ArgumentNullException(nameof(profile));
 
             _term = (float)term.TotalSeconds;
+            _autoTrigger = autoTrigger;
 
+            TextureRegion = textureRegion;
             Buffer = new ParticleBuffer(capacity);
-            Offset = new Vector2();
+            Offset = Vector2.Zero;
             Profile = profile;
             Modifiers = new IModifier[0];
             ModifierExecutionStrategy = ParticleModifierExecutionStrategy.Serial;
             Parameters = new ParticleReleaseParameters();
         }
 
+        private readonly FastRandom _random = new FastRandom();
         private readonly float _term;
+        private bool _autoTrigger;
 
         private float _totalSeconds;
         internal readonly ParticleBuffer Buffer;
@@ -56,12 +61,18 @@ namespace MonoGame.Extended.Particles
                 Buffer.Reclaim(expired);
         }
 
-        public void Update(float elapsedSeconds)
+        public bool Update(float elapsedSeconds)
         {
+            if (_autoTrigger)
+            {
+                Trigger();
+                _autoTrigger = false;
+            }
+
             _totalSeconds += elapsedSeconds;
 
             if (Buffer.Count == 0)
-                return;
+                return false;
 
             ReclaimExpiredParticles();
 
@@ -71,28 +82,32 @@ namespace MonoGame.Extended.Particles
             {
                 var particle = iterator.Next();
                 particle->Age = (_totalSeconds - particle->Inception) / _term;
-
                 particle->Position = particle->Position + particle->Velocity * elapsedSeconds;
             }
 
             ModifierExecutionStrategy.ExecuteModifiers(Modifiers, elapsedSeconds, iterator);
+            return true;
+        }
+
+        public void Trigger()
+        {
+            Trigger(Position);
         }
 
         public void Trigger(Vector2 position)
         {
-            var numToRelease = FastRand.NextInteger(Parameters.Quantity);
-
+            var numToRelease = _random.Next(Parameters.Quantity);
             Release(position + Offset, numToRelease);
         }
 
         public void Trigger(LineSegment line)
         {
-            var numToRelease = FastRand.NextInteger(Parameters.Quantity);
+            var numToRelease = _random.Next(Parameters.Quantity);
             var lineVector = line.ToVector();
 
             for (var i = 0; i < numToRelease; i++)
             {
-                var offset = lineVector * FastRand.NextSingle();
+                var offset = lineVector * _random.NextSingle();
                 Release(line.Origin + offset, 1);
             }
         }
@@ -105,27 +120,25 @@ namespace MonoGame.Extended.Particles
             {
                 var particle = iterator.Next();
 
-                Axis heading;
+                Vector2 heading;
                 Profile.GetOffsetAndHeading(out particle->Position, out heading);
 
                 particle->Age = 0f;
                 particle->Inception = _totalSeconds;
-
                 particle->Position += position;
-
                 particle->TriggerPos = position;
 
-                var speed = FastRand.NextSingle(Parameters.Speed);
+                var speed = _random.NextSingle(Parameters.Speed);
 
                 particle->Velocity = heading * speed;
 
-                FastRand.NextColor(out particle->Color, Parameters.Color);
+                _random.NextColor(out particle->Color, Parameters.Color);
 
-                particle->Opacity = FastRand.NextSingle(Parameters.Opacity);
-                var scale = FastRand.NextSingle(Parameters.Scale);
+                particle->Opacity = _random.NextSingle(Parameters.Opacity);
+                var scale = _random.NextSingle(Parameters.Scale);
                 particle->Scale = new Vector2(scale, scale);
-                particle->Rotation = FastRand.NextSingle(Parameters.Rotation);
-                particle->Mass = FastRand.NextSingle(Parameters.Mass);
+                particle->Rotation = _random.NextSingle(Parameters.Rotation);
+                particle->Mass = _random.NextSingle(Parameters.Mass);
             }
         }
 

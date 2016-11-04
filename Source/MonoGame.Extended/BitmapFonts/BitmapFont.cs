@@ -6,54 +6,101 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.BitmapFonts
 {
-    public class BitmapFont 
+    public class BitmapFont
     {
-        internal BitmapFont(IEnumerable<BitmapFontRegion> regions, int lineHeight)
+        internal BitmapFont(string name, IEnumerable<BitmapFontRegion> regions, int lineHeight)
         {
-            _characterMap = regions.ToDictionary(r => r.Character);// BuildCharacterMap(textures, _fontFile);
+            _characterMap = regions.ToDictionary(r => r.Character);
+
+            Name = name;
             LineHeight = lineHeight;
         }
 
-        private readonly Dictionary<char, BitmapFontRegion> _characterMap;
+        private readonly Dictionary<int, BitmapFontRegion> _characterMap;
 
+        public string Name { get; }
         public int LineHeight { get; private set; }
+        public int LetterSpacing { get; set; } = 0;
 
-        public BitmapFontRegion GetCharacterRegion(char character)
+        public BitmapFontRegion GetCharacterRegion(int character)
         {
             BitmapFontRegion region;
             return _characterMap.TryGetValue(character, out region) ? region : null;
         }
 
+        internal static IEnumerable<int> GetUnicodeCodePoints(string s)
+        {
+            if (!string.IsNullOrEmpty(s))
+            {
+                for (int i = 0; i < s.Length; i += 1)
+                {
+                    if (char.IsLowSurrogate(s, i))
+                        continue;
+
+                    yield return char.ConvertToUtf32(s, i);
+                }
+            }
+        }
+
         public Size GetSize(string text)
         {
-            var width = 0;
-            var height = 0;
+            if (text == null) throw new ArgumentNullException(nameof(text));
 
-            foreach (var c in text)
+            var totalWidth = 0;
+            var lineWidth = 0;
+            var totalHeight = 0;
+            var lineHeight = 0;
+
+            const int newlineCodePoint = '\n';
+
+            var codePoints = GetUnicodeCodePoints(text).ToArray();
+
+            for (int i = 0, l = codePoints.Length; i < l; i++)
             {
                 BitmapFontRegion fontRegion;
+                var character = codePoints[i];
+                var nextCharacter = character;
 
-                if (_characterMap.TryGetValue(c, out fontRegion))
+                if (i < l - 1) nextCharacter = codePoints[i + 1];
+
+                if (_characterMap.TryGetValue(character, out fontRegion))
                 {
-                    width += fontRegion.XAdvance;
+                    // Add LetterSpacing unless end of string or next character is not in _characterMap
+                    if (i != text.Length - 1 && _characterMap.ContainsKey(nextCharacter))
+                        lineWidth += fontRegion.XAdvance + LetterSpacing;
+                    else
+                        lineWidth += fontRegion.XOffset + fontRegion.Width;
 
-                    if (fontRegion.Height + fontRegion.YOffset > height)
-                        height = fontRegion.Height + fontRegion.YOffset;
+                    if (fontRegion.Height + fontRegion.YOffset > lineHeight)
+                        lineHeight = fontRegion.Height + fontRegion.YOffset;
+                }
+
+                if (character == newlineCodePoint)
+                {
+                    totalHeight += lineHeight;
+                    if (totalWidth < lineWidth) totalWidth = lineWidth;
+
+                    lineHeight = 0;
+                    lineWidth = 0;
                 }
             }
 
-            return new Size(width, height);
+            if (totalWidth == 0)
+                totalWidth = lineWidth;
+            totalHeight += lineHeight;
+
+            return new Size(totalWidth, totalHeight);
         }
 
-        public Vector2 MeasureString(string text)
+        public Size MeasureString(string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
 
             var size = GetSize(text);
-            return new Vector2(size.Width, size.Height);
+            return size;
         }
 
-        public Vector2 MeasureString(StringBuilder stringBuilder)
+        public Size MeasureString(StringBuilder stringBuilder)
         {
             if (stringBuilder == null) throw new ArgumentNullException(nameof(stringBuilder));
 
@@ -65,6 +112,11 @@ namespace MonoGame.Extended.BitmapFonts
             var size = GetSize(text);
             var p = position.ToPoint();
             return new Rectangle(p.X, p.Y, size.Width, size.Height);
+        }
+
+        public override string ToString()
+        {
+            return $"{Name}";
         }
     }
 }
