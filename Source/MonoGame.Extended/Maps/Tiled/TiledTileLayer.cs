@@ -36,8 +36,8 @@ namespace MonoGame.Extended.Maps.Tiled
         private readonly List<TiledTile> _animatedTiles;
         private List<TiledTilesetTile> _uniqueTilesetTiles = new List<TiledTilesetTile>();
         private readonly Dictionary<TiledTileset, int> _tileCountByTileset = new Dictionary<TiledTileset, int>();
+        private readonly Dictionary<TiledTileset, TiledRenderDetails> _detailsByTileset = new Dictionary<TiledTileset, TiledRenderDetails>();
 
-        public VertexPositionTexture[] Vertices { get; private set; }
         public int NotBlankTilesCount { get; private set; }
 
         public IEnumerable<TiledTile> Tiles => _tiles;
@@ -67,7 +67,10 @@ namespace MonoGame.Extended.Maps.Tiled
                         _tileCountByTileset[ts] = 0;
                     }
 
-                    _tileCountByTileset[ts]++;
+                    if (data[tileDataIndex] != 0)
+                    {
+                        _tileCountByTileset[ts]++;
+                    }
 
                     tiles.ElementAt(tilesetIndex).Add(new TiledTile(data[tileDataIndex], x, y, _map.GetTilesetTileById(data[tileDataIndex])));
                     tileDataIndex++;
@@ -87,10 +90,8 @@ namespace MonoGame.Extended.Maps.Tiled
             return tileData;
         }
 
-        internal VertexPositionTexture[] BuildVertices(float depth)
+        internal void BuildVertices(GraphicsDevice gd, float depth)
         {
-            var verticesList = new List<VertexPositionTexture>();
-
             var vr = new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
             var firstCol = vr.Left < 0 ? 0 : (int)Math.Floor(vr.Left / (float)_map.TileWidth);
             var firstRow = vr.Top < 0 ? 0 : (int)Math.Floor(vr.Top / (float)_map.TileHeight);
@@ -98,6 +99,9 @@ namespace MonoGame.Extended.Maps.Tiled
             var rows = Math.Min(_map.Height, vr.Height / _map.TileHeight);
             var renderOrderFunc = GetRenderOrderFunction();
             var tiles = renderOrderFunc(firstCol, firstRow, firstCol + columns, firstRow + rows);
+
+            Dictionary<TiledTileset, List<VertexPositionTexture>> verticesByTileset =
+                _map.Tilesets.ToDictionary(ts => ts, ts => new List<VertexPositionTexture>());
 
             foreach (var tile in tiles)
             {
@@ -120,20 +124,50 @@ namespace MonoGame.Extended.Maps.Tiled
                 vertices[1] = new VertexPositionTexture(new Vector3(point.X + tileWidth, point.Y, depth), new Vector2(tc1.X, tc0.Y));
                 vertices[2] = new VertexPositionTexture(new Vector3(point.X, point.Y + tileHeight, depth), new Vector2(tc0.X, tc1.Y));
                 vertices[3] = new VertexPositionTexture(new Vector3(point.X + tileWidth, point.Y + tileHeight, depth), tc1);
-                verticesList.AddRange(vertices);
+
+                TiledTileset tileSet = _map.Tilesets.FirstOrDefault(ts=>ts.Texture == region.Texture);
+                if (tileSet != null)
+                {
+                    verticesByTileset[tileSet].AddRange(vertices);
+                }
             }
-            Vertices = verticesList.ToArray();
-            return Vertices;
+
+            foreach (TiledTileset ts in _map.Tilesets)
+            {
+                int tilesCount;
+                if (!_tileCountByTileset.TryGetValue(ts, out tilesCount) || tilesCount == 0)
+                {
+                    continue;
+                }
+
+                int indexOffset = 0;
+                List<ushort> tileIndexes = new List<ushort>();
+
+                for (var i = 0; i < tilesCount; i++)
+                {
+                    var thisTileIndexes = new ushort[6];
+                    thisTileIndexes[0] = (ushort) (4 * indexOffset);
+                    thisTileIndexes[1] = (ushort) (4 * indexOffset + 1);
+                    thisTileIndexes[2] = (ushort) (4 * indexOffset + 2);
+                    thisTileIndexes[3] = (ushort) (4 * indexOffset + 1);
+                    thisTileIndexes[4] = (ushort) (4 * indexOffset + 3);
+                    thisTileIndexes[5] = (ushort) (4 * indexOffset + 2);
+                    tileIndexes.AddRange(thisTileIndexes);
+                    indexOffset++;
+                }
+
+                _detailsByTileset[ts] = new TiledRenderDetails(gd, tilesCount, verticesByTileset[ts], tileIndexes);
+            }
         }
 
-        public int GetTileCountForTileset(TiledTileset tileset)
+        public TiledRenderDetails GetRenderDetailsForTileset(TiledTileset tileset)
         {
-            if(!_tileCountByTileset.ContainsKey(tileset))
+            if (!_detailsByTileset.ContainsKey(tileset))
             {
-                return 0;
+                return null;
             }
 
-            return _tileCountByTileset[tileset];
+            return _detailsByTileset[tileset];
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null)
