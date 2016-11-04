@@ -160,8 +160,8 @@
     <Compile Include="ISizable.cs" />
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
-    <Compile Include="Maps\Tiled\TiledTileSetTileFrame.cs" />
-    <Compile Include="Maps\Tiled\TiledTileSetTile.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTileFrame.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTile.cs" />
     <Compile Include="Particles\ColorExtensions.cs" />
     <Compile Include="Particles\FastRandomExtensions.cs" />
     <Compile Include="Particles\HslColor.cs" />
@@ -239,7 +239,7 @@
     <Compile Include="Maps\Tiled\TiledRenderOrder.cs" />
     <Compile Include="Maps\Tiled\TiledProperties.cs" />
     <Compile Include="Maps\Tiled\TiledTile.cs" />
-    <Compile Include="Maps\Tiled\TiledTileSet.cs" />
+    <Compile Include="Maps\Tiled\TiledTileset.cs" />
     <Compile Include="Timers\ContinuousClock.cs" />
     <Compile Include="Timers\CountdownTimer.cs" />
     <Compile Include="Timers\GameTimer.cs" />
