@@ -33,6 +33,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 writer.Write(tileset.FirstGid);
                 writer.Write(tileset.TileWidth);
                 writer.Write(tileset.TileHeight);
+                writer.Write(tileset.TileCount);
                 writer.Write(tileset.Spacing);
                 writer.Write(tileset.Margin);
 

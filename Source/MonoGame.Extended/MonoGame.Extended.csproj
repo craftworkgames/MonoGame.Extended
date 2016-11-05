@@ -38,7 +38,10 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
-    <Compile Include="Maps\Tiled\TiledRenderDetails.cs" />
+    <Compile Include="Maps\Renderers\FullMapRenderer.cs" />
+    <Compile Include="Maps\Renderers\GroupRenderDetails.cs" />
+    <Compile Include="Maps\Renderers\IMapRenderer.cs" />
+    <Compile Include="Maps\Renderers\MapRenderDetails.cs" />
     <Compile Include="Primitives\BoundingRectangle.cs" />
     <Compile Include="Primitives\Point2.cs" />
     <Compile Include="Primitives\Ray2D.cs" />
@@ -272,6 +275,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Graphics\Effects\Resources\DefaultEffect2D.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Maps\Renderers" />
+    <Folder Include="Maps\Tiled" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

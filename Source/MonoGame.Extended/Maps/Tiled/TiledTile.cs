@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using System.Diagnostics;
-
-namespace MonoGame.Extended.Maps.Tiled
+﻿namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledTile
     {
