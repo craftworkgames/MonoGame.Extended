@@ -7,7 +7,8 @@ namespace MonoGame.Extended.Tests
     [TestFixture]
     public class AngleTest
     {
-        private const double _delta = 0.000000000000001f;
+        private const double _delta = 0.00000001f;
+
         [Test]
         public void ConstructorTest()
         {
