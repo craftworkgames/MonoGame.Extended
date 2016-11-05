@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using System.Diagnostics;
-
-namespace MonoGame.Extended.Maps.Tiled
+﻿namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledTile
     {
@@ -18,6 +13,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public int Id { get; }
         public int X { get; private set; }
         public int Y { get; private set; }
+        public bool IsBlank => Id == 0;
         public TiledTilesetTile TilesetTile { get; set; }
         public int CurrentTileId
         {
