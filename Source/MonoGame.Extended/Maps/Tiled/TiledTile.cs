@@ -13,6 +13,7 @@
         public int Id { get; }
         public int X { get; private set; }
         public int Y { get; private set; }
+        public bool IsBlank => Id == 0;
         public TiledTilesetTile TilesetTile { get; set; }
         public int CurrentTileId
         {
