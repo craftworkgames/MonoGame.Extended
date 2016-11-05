@@ -83,6 +83,8 @@ namespace MonoGame.Extended.Maps.Renderers
 
                     if (renderDetails.TileCount > 0)
                     {
+                        _basicEffect.Alpha = renderDetails.Opacity;
+
                         if (_basicEffect.Texture != renderDetails.Texture)
                             _basicEffect.Texture = renderDetails.Texture;
 
@@ -130,6 +132,7 @@ namespace MonoGame.Extended.Maps.Renderers
                     GroupRenderDetails group = new GroupRenderDetails(region.Texture, 1);
                     group.SetVertices(vertices, _graphicsDevice);
                     group.SetIndexes(indexes, _graphicsDevice);
+                    group.Opacity = layer.Opacity;
 
                     mapDetails.AddGroup(group);
                 }
@@ -171,6 +174,7 @@ namespace MonoGame.Extended.Maps.Renderers
                         GroupRenderDetails group = new GroupRenderDetails(tileset.Texture, tileCountByTileset[tileset]);
                         group.SetVertices(verticesByTileset[tileset], _graphicsDevice);
                         group.SetIndexes(indexesByTileset[tileset], _graphicsDevice);
+                        group.Opacity = layer.Opacity;
 
                         mapDetails.AddGroup(group);
                     }

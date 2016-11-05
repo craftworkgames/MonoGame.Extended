@@ -21,6 +21,7 @@ namespace MonoGame.Extended.Maps.Renderers
         public int TileCount { get; set; }
         public VertexBuffer VertexBuffer { get; private set; }
         public IndexBuffer IndexBuffer { get; private set; }
+        public float Opacity { get; set; }
 
         public void SetVertices(IEnumerable<VertexPositionTexture> vertices, GraphicsDevice gd)
         {

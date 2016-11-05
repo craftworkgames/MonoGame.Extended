@@ -133,3 +133,8 @@
 /processorParam:TextureFormat=Color
 /build:placeholder-tileset.png
 
+#begin level04.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:level04.tmx
+
