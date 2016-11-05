@@ -5,8 +5,8 @@ using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.ViewportAdapters;
 using MonoGame.Extended.NuclexGui;
-using MonoGame.Extended.NuclexGui.Controls.Desktop;
 using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.NuclexGui.Controls.Desktop;
 
 namespace Demo.NuclexGui
 {
@@ -18,6 +18,7 @@ namespace Demo.NuclexGui
         private Sprite _sprite;
         private Camera2D _camera;
 
+        InputManager _inputManager;
         GuiManager _gui;
 
         public Game1()
@@ -27,6 +28,7 @@ namespace Demo.NuclexGui
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
 
+            _inputManager = new InputManager(Services);
             _gui = new GuiManager(Services);
         }
 

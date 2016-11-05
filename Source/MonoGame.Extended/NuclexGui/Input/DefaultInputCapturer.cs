@@ -98,7 +98,7 @@ namespace MonoGame.Extended.NuclexGui.Input
         private IInputReceiver _inputReceiver;
 
         /// <summary>Input service the capturer is currently subscribed to</summary>
-        private IInputService _inputService;
+        private InputListeners.IInputService _inputService;
 
         /// <summary>Keyboard the input capturer is subscribed to</summary>
         private IKeyboard _subscribedKeyboard;
@@ -139,7 +139,7 @@ namespace MonoGame.Extended.NuclexGui.Input
 
         /// <summary>Initializes a new input capturer using the specified input service</summary>
         /// <param name="inputService">Input service the capturer will subscribe to</param>
-        public DefaultInputCapturer(IInputService inputService)
+        public DefaultInputCapturer(InputListeners.IInputService inputService)
         {
             _inputService = inputService;
             _inputReceiver = new DummyInputReceiver();
@@ -345,9 +345,9 @@ namespace MonoGame.Extended.NuclexGui.Input
         ///   Service provider the service is taken from
         /// </param>
         /// <returns>The input service stored in the service provider</returns>
-        private static IInputService getInputService(IServiceProvider serviceProvider)
+        private static InputListeners.IInputService getInputService(IServiceProvider serviceProvider)
         {
-            var inputService = (IInputService)serviceProvider.GetService(typeof(IInputService));
+            var inputService = (InputListeners.IInputService)serviceProvider.GetService(typeof(InputListeners.IInputService));
 
             if (inputService == null)
                 throw new InvalidOperationException(

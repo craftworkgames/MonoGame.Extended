@@ -86,6 +86,8 @@
     <Compile Include="NuclexGui\Controls\GuiLabelControl.cs" />
     <Compile Include="NuclexGui\Controls\GuiPressableControl.cs" />
     <Compile Include="NuclexGui\Controls\GuiProgressControl.cs" />
+    <Compile Include="NuclexGui\Input\IInputService.cs" />
+    <Compile Include="NuclexGui\Input\MainInputCapturer.cs" />
     <Compile Include="NuclexGui\Resources\SuaveSkinResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -173,7 +173,7 @@ namespace MonoGame.Extended.NuclexGui
         /// <summary>Graphics device servide the GUI uses</summary>
         private IGraphicsDeviceService _graphicsDeviceService;
         /// <summary>Input service the GUI uses</summary>
-        private IInputService _inputService;
+        private Input.IInputService _inputService;
 
         /// <summary>Update order rank relative to other game components</summary>
         private int _updateOrder;
@@ -219,7 +219,7 @@ namespace MonoGame.Extended.NuclexGui
         /// <param name="graphicsDeviceService">Graphics device service the GUI will be rendered with</param>
         /// <param name="inputService">Input service used to read data from the input devices</param>
         /// <remarks>This constructor is provided for users of dependency injection frameworks.</remarks>
-        public GuiManager(IGraphicsDeviceService graphicsDeviceService, IInputService inputService)
+        public GuiManager(IGraphicsDeviceService graphicsDeviceService, Input.IInputService inputService)
         {
             _graphicsDeviceService = graphicsDeviceService;
             _inputService = inputService;
@@ -234,7 +234,7 @@ namespace MonoGame.Extended.NuclexGui
         ///   or if you just want to be more explicit in stating which manager consumes
         ///   what services.
         /// </remarks>
-        public GuiManager(GameServiceContainer gameServices, IGraphicsDeviceService graphicsDeviceService, IInputService inputService) : this(gameServices)
+        public GuiManager(GameServiceContainer gameServices, IGraphicsDeviceService graphicsDeviceService, Input.IInputService inputService) : this(gameServices)
         {
 
             _graphicsDeviceService = graphicsDeviceService;
@@ -296,7 +296,8 @@ namespace MonoGame.Extended.NuclexGui
                 if (_inputService == null)
                     _inputService = getInputService(_gameServices);
 
-                _inputCapturer = new Input.DefaultInputCapturer(_inputService);
+                //_inputCapturer = new Input.DefaultInputCapturer(_inputService);
+                _inputCapturer = new Input.MainInputCapturer(_inputService);
 
                 // If a screen was assigned to the GUI before the input capturer was
                 // created, then the input capturer hasn't been given the screen as its
@@ -349,9 +350,9 @@ namespace MonoGame.Extended.NuclexGui
         /// <summary>Retrieves the input service from a service provider</summary>
         /// <param name="serviceProvider">Service provider the input service is retrieved from</param>
         /// <returns>The retrieved input service</returns>
-        private static IInputService getInputService(IServiceProvider serviceProvider)
+        private static Input.IInputService getInputService(IServiceProvider serviceProvider)
         {
-            var inputService = (IInputService)serviceProvider.GetService(typeof(IInputService));
+            var inputService = (Input.IInputService)serviceProvider.GetService(typeof(Input.IInputService));
 
             if (inputService == null)
                 throw new InvalidOperationException(
