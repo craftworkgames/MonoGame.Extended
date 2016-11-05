@@ -32,9 +32,12 @@ namespace MonoGame.Extended.Tests
         public override bool AllowUserResizing { get; set; }
         public override Rectangle ClientBounds { get; }
         public override Point Position { get; set; }
-        public override Icon Icon { get; set; }
         public override DisplayOrientation CurrentOrientation { get; }
         public override IntPtr Handle { get; }
         public override string ScreenDeviceName { get; }
+
+#if __MonoCS__
+        public override Icon Icon { get; set; }
+#endif
     }
 }
