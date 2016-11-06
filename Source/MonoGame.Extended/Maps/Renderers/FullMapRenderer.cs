@@ -190,9 +190,6 @@ namespace MonoGame.Extended.Maps.Renderers
 
         protected virtual List<TiledTile> GetTilesGroupedByTileset(TiledTileLayer layer)
         {
-            // ToDo: Is this really needed?  Also, won't reording the tiles mess up render order
-            //  for isometric maps if adjacent tiles are from separate tilesets?
-
             Dictionary<TiledTileset, List<TiledTile>> tilesByTileset =
                 _map.Tilesets.ToDictionary(ts => ts, ts => new List<TiledTile>());
 

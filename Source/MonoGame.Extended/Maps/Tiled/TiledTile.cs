@@ -27,7 +27,7 @@
         }
         public override string ToString()
         {
-            return $"{Id}";
+            return $"({X}, {Y}) - {Id}";
         }
     }
 }

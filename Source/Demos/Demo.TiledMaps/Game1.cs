@@ -57,7 +57,7 @@ namespace Demo.TiledMaps
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
             _sprite = new Sprite(_texture) { Position = new Vector2(600, 240) };
 
-            _availableMaps = new Queue<string>(new[] {"level02", "level03", "level04", "untitled", "level01"});
+            _availableMaps = new Queue<string>(new[] {"level02", "level03", "level04", "level05", "untitled", "level01"});
 
             TiledMap tiledMap = Content.Load<TiledMap>("level01");
             _mapRenderer.SwapMap(tiledMap);
