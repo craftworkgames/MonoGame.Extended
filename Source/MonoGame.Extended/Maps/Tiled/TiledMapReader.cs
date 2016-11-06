@@ -67,7 +67,12 @@ namespace MonoGame.Extended.Maps.Tiled
 
             for (var i = 0; i < layerCount; i++)
             {
-                float depth = 0.0f - (i * depthInc);
+                float depth = 0.0f;
+                if (layerCount > 1)
+                {
+                    depth = 0.0f - (i * depthInc);
+                }
+
                 var layer = ReadLayer(reader, tiledMap, depth);
                 ReadCustomProperties(reader, layer.Properties);
             }
