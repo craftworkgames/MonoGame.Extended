@@ -22,7 +22,7 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 
             foreach (var region in data.Regions)
             {
-                var regionName = Path.GetFileNameWithoutExtension(region.Filename);
+                var regionName = Path.ChangeExtension(region.Filename, null);
                 Debug.Assert(regionName != null, "regionName != null");
 
                 writer.Write(regionName);

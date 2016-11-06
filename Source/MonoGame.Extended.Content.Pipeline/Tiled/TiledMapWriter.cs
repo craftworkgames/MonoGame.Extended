@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Framework.Content.Pipeline.Builder;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
@@ -29,7 +31,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             foreach (var tileset in map.Tilesets)
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
-                writer.Write(PathHelper.RemoveExtension(tileset.Image.Source));
+                writer.Write(Path.ChangeExtension(tileset.Image.Source, null));
                 writer.Write(tileset.FirstGid);
                 writer.Write(tileset.TileWidth);
                 writer.Write(tileset.TileHeight);
@@ -84,7 +86,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 {
                     writer.Write("ImageLayer");
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    writer.Write(PathHelper.RemoveExtension(imageLayer.Image.Source));
+                    writer.Write(Path.ChangeExtension(imageLayer.Image.Source, null));
                     writer.Write(new Vector2(imageLayer.X, imageLayer.Y));
                 }
 

@@ -74,7 +74,7 @@ namespace MonoGame.Extended.TextureAtlases
         public TextureRegion2D CreateRegion(string name, int x, int y, int width, int height)
         {
             if (_regionMap.ContainsKey(name))
-                throw new InvalidOperationException("Region {0} already exists in the texture atlas");
+                throw new InvalidOperationException($"Region {name} already exists in the texture atlas");
 
             var region = new TextureRegion2D(name, Texture, x, y, width, height);
             var index = _regions.Count;
