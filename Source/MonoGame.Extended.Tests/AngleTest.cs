@@ -7,38 +7,40 @@ namespace MonoGame.Extended.Tests
     [TestFixture]
     public class AngleTest
     {
-        private const double _delta = 0.00000001f;
+        private const float _delta = 0.00001f;
 
         [Test]
         public void ConstructorTest()
         {
-            var value = 0.5f;
-            var radians = new Angle(value);
+            const float value = 0.5f;
+            // ReSharper disable once RedundantArgumentDefaultValue
+            var radians = new Angle(value, AngleType.Radian);
             var degrees = new Angle(value, AngleType.Degree);
             var gradians = new Angle(value, AngleType.Gradian);
             var revolutions = new Angle(value, AngleType.Revolution);
-            Assert.AreEqual(value, radians.Radians, _delta);
-            Assert.AreEqual(value, degrees.Degrees, _delta);
-            Assert.AreEqual(value, gradians.Gradians, _delta);
-            Assert.AreEqual(value, revolutions.Revolutions, _delta);
+
+            Assert.That(0.5f, Is.EqualTo(radians.Radians).Within(_delta));
+            Assert.That(0.5f, Is.EqualTo(degrees.Degrees).Within(_delta));
+            Assert.That(0.5f, Is.EqualTo(gradians.Gradians).Within(_delta));
+            Assert.That(0.5f, Is.EqualTo(revolutions.Revolutions).Within(_delta));
         }
 
         [Test]
-        [Ignore("This test is broken on the build server and I have no idea why")]
         public void ConversionTest()
         {
             //from radians
             var radians = new Angle(MathHelper.Pi);
-            Assert.AreEqual(180d, radians.Degrees, _delta);
-            Assert.AreEqual(200d, radians.Gradians, _delta);
-            Assert.AreEqual(0.5, radians.Revolutions, _delta);
+            Assert.AreEqual(180f, radians.Degrees, _delta);
+            Assert.AreEqual(200f, radians.Gradians, _delta);
+            Assert.AreEqual(0.5f, radians.Revolutions, _delta);
             //to radians
             var degrees = new Angle(180f, AngleType.Degree);
             var gradians = new Angle(200f, AngleType.Gradian);
             var revolutions = new Angle(0.5f, AngleType.Revolution);
-            Assert.AreEqual(MathHelper.Pi, degrees.Radians, _delta);
-            Assert.AreEqual(MathHelper.Pi, gradians.Radians, _delta);
-            Assert.AreEqual(MathHelper.Pi, revolutions.Radians, _delta);
+
+            Assert.That(MathHelper.Pi, Is.EqualTo(degrees.Radians).Within(_delta));
+            Assert.That(MathHelper.Pi, Is.EqualTo(gradians.Radians).Within(_delta));
+            Assert.That(MathHelper.Pi, Is.EqualTo(revolutions.Radians).Within(_delta));
         }
 
         [Test]
