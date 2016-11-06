@@ -2,13 +2,10 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Resources;
 using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.NuclexGui.Controls;
-using MonoGame.Extended.Support.Plugins;
-using PCLStorage;
 
 namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 {
@@ -127,149 +124,7 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
         #endregion // class ControlRendererAdapter<>
 
-        #region class ControlRendererEmployer
-
-        /// <summary>
-        ///   Employs concrete types implementing IFlatGuiControlRenderer
-        /// </summary>
-        /// <remarks>
-        ///   This employer actually looks for concrete implementations using a variant
-        ///   of the IFlatGuiControlRenderer interface, regardless of the
-        ///   type it has been realized for.
-        /// </remarks>
-        internal class ControlRendererEmployer : Employer
-        {
-
-            /// <summary>Initializes a new control renderer employer</summary>
-            public ControlRendererEmployer()
-            {
-                _renderers = new Dictionary<Type, IControlRendererAdapter>();
-            }
-
-            /// <summary>Determines whether the type suites the employer's requirements</summary>
-            /// <param name="type">Type that is checked for employability</param>
-            /// <returns>True if the type can be employed</returns>
-            public override bool CanEmploy(Type type)
-            {
-
-                // If the type doesn't implement the IFlatcontrolRenderer interface, there's
-                // no chance that it will implement one of the generic control drawers
-                if (!typeof(IFlatControlRenderer).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
-                {
-                    return false;
-                }
-
-                // We also need a default constructor in order to be able to create an
-                // instance of this renderer
-                if (!PluginHelper.HasDefaultConstructor(type))
-                {
-                    return false;
-                }
-
-                // Look for the IFlatControlRenderer<> interface in all interfaces implemented
-                // by this type
-                foreach (var implementedInterface in type.GetTypeInfo().ImplementedInterfaces)
-                {
-                    // Only perform further check if this interface is actually generic
-                    if (implementedInterface.IsConstructedGenericType)
-                    {
-                        Type genericType = implementedInterface.GetGenericTypeDefinition();
-                        if (genericType == typeof(IFlatControlRenderer<>))
-                            return true;
-                    }
-                }
-
-                // The interface we were looking for was not found, therefore, this is
-                // not an employable type
-                return false;
-
-            }
-
-            /// <summary>Employs the specified plugin type</summary>
-            /// <param name="type">Type to be employed</param>
-            public override void Employ(Type type)
-            {
-
-                // Obtain all the interfaces of the employed type and search them one by one.
-                // We need to take this route because there's no method that would allow us to
-                // look up the generic interface in its unspecialized form with a simple call.
-                foreach (var implementedInterface in type.GetTypeInfo().ImplementedInterfaces)
-                {
-
-                    // Only perform further checks if this interface is actually a generic one
-                    if (implementedInterface.IsConstructedGenericType)
-                    {
-
-                        // Get the (unspecialized) generic form of this interface and see if it's
-                        // the interface we're looking for
-                        Type genericType = implementedInterface.GetGenericTypeDefinition();
-                        if (genericType == typeof(IFlatControlRenderer<>))
-                        {
-
-                            // Find out which control type the renderer is specialized for
-                            Type[] controlType = implementedInterface.GenericTypeArguments;
-
-                            // Do we already have a renderer for this control type?
-                            if (_renderers.ContainsKey(controlType[0]))
-                            {
-#if !(XBOX360 || WINDOWS_PHONE)
-                                // We found another renderer for a control type that already has
-                                // a renderer. At least print out a warning to the debug log about this.
-                                string message = string.Format(
-                                  "Warning: Control type '{0}' already using renderer '{1}'.\n" +
-                                  "         Second renderer '{2}' will be ignored!",
-                                  controlType[0].FullName.ToString(),
-                                  _renderers[controlType[0]].AdaptedType.FullName.ToString(),
-                                  type.FullName.ToString()
-                                );
-                                //System.Diagnostics.Trace.WriteLine(message);
-#endif
-                            }
-                            else { // No, this is the first renderer we found for this control type
-
-                                // Type of the downcast adapter we need to bring to life
-                                var adapterType = typeof(ControlRendererAdapter<>).MakeGenericType(controlType[0]);
-                                // Look up the constructor of the downcast adapter
-                                //ConstructorInfo adapterConstructor = adapterType.GetTypeInfo().DeclaredConstructors.First(c => c.GetGenericArguments() == implementedInterface.GenericTypeArguments );
-                                var adapterConstructor = adapterType.GetTypeInfo().DeclaredConstructors.FirstOrDefault();
-
-                                // Now use that constructor to create an instance
-                                object adapterInstance = adapterConstructor.Invoke(
-                                  new object[] { Activator.CreateInstance(type) }
-                                );
-
-                                // Employ the new adapter and thereby the control renderer it adapts
-                                _renderers.Add(controlType[0], (IControlRendererAdapter)adapterInstance);
-
-                            }
-
-                        }
-                    }
-
-                }
-
-            }
-
-            /// <summary>Renderers that were employed to the plugin host</summary>
-            public Dictionary<Type, IControlRendererAdapter> Renderers
-            {
-                get { return _renderers; }
-            }
-
-            /// <summary>Employed renderers</summary>
-            private Dictionary<Type, IControlRendererAdapter> _renderers;
-
-        }
-
-        #endregion // class ControlRendererEmployer
-
         #region Fields
-
-        /// <summary>Holds the assemblies we have employed for our cause</summary>
-        private PluginHost _pluginHost;
-
-        /// <summary>Carries the employed control renderers</summary>
-        private ControlRendererEmployer _employer;
 
         /// <summary>Used to draw the individual building elements of the GUI</summary>
         private FlatGuiGraphics _flatGuiGraphics;
@@ -283,6 +138,9 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         /// </remarks>
         private Stack<ControlWithBounds> _controlStack;
 
+        /// <summary>Avaiable renderers</summary>
+        private Dictionary<Type, IControlRendererAdapter> _renderers;
+
         #endregion
 
         /// <summary>Initializes a new gui painter for traditional GUIs</summary>
@@ -290,70 +148,13 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         /// <param name="skinStream">Stream from which the GUI Visualizer will read the skin description</param>
         protected FlatGuiVisualizer(ContentManager contentManager, Stream skinStream)
         {
-            _employer = new ControlRendererEmployer();
-            _pluginHost = new PluginHost(_employer);
+            _renderers = new Dictionary<Type, IControlRendererAdapter>();
 
-            // Employ our own assembly in order to obtain the default GUI renderers
-            _pluginHost.Repository.AddAssembly(Self);
+            // Obtain default GUI renderers
+            FetchRenderers();
 
             _flatGuiGraphics = new FlatGuiGraphics(contentManager, skinStream);
             _controlStack = new Stack<ControlWithBounds>();
-        }
-
-        /// <summary>Initializes a new gui visualizer from a skin stored in a file</summary>
-        /// <param name="serviceProvider">
-        ///   Game service provider containing the graphics device service
-        /// </param>
-        /// <param name="skinPath">
-        ///   Path to the skin description this GUI visualizer will load
-        /// </param>
-        public static FlatGuiVisualizer FromFile(IServiceProvider serviceProvider, string skinPath)
-        {
-            IFolder folder = FileSystem.Current.GetFolderFromPathAsync(skinPath).Result;
-            IFile file = FileSystem.Current.GetFileFromPathAsync(skinPath).Result;
-
-            using (Stream skinStream = file.OpenAsync(FileAccess.Read).Result)
-            {
-                ContentManager contentManager = new ContentManager(serviceProvider, folder.Path);
-
-                try
-                {
-                    return new FlatGuiVisualizer(contentManager, skinStream);
-                }
-                catch (Exception)
-                {
-                    contentManager.Dispose();
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>Initializes a new gui visualizer from a skin stored as a resource</summary>
-        /// <param name="serviceProvider">Game service provider containing the graphics device service</param>
-        /// <param name="skinJsonFile">Name of the Json file containing the skin description</param>
-        public static FlatGuiVisualizer FromResource(IServiceProvider serviceProvider, string skinJsonFile)
-        {
-            var assembly = typeof(FlatGuiVisualizer).GetTypeInfo().Assembly;
-            string[] resources = assembly.GetManifestResourceNames();
-
-            if (!resources.Contains(skinJsonFile))
-                throw new ArgumentException("Resource '" + skinJsonFile + "' not found", "skinJsonFile");
-
-            using (Stream skinStream = assembly.GetManifestResourceStream(skinJsonFile))
-            {
-                var rootDirectory = Path.GetDirectoryName(resources.First(s => s == skinJsonFile));
-                ContentManager contentManager = new ContentManager(serviceProvider, "Content");
-
-                try
-                {
-                    return new FlatGuiVisualizer(contentManager, skinStream);
-                }
-                catch (Exception)
-                {
-                    contentManager.Dispose();
-                    throw;
-                }
-            }
         }
 
         /// <summary>Immediately releases all resources owned by the instance</summary>
@@ -396,14 +197,6 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
             }
         }
 
-        /// <summary>
-        ///   Plugin repository from which renderers for GUI controls are taken
-        /// </summary>
-        public PluginRepository RendererRepository
-        {
-            get { return _pluginHost.Repository; }
-        }
-
         /// <summary>Renders a single control</summary>
         /// <param name="controlToRender">Control that will be rendered</param>
         private void renderControl(GuiControl controlToRender)
@@ -415,13 +208,8 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
             // If this is an actual instance of the 'Control' class, don't render it.
             // Such instances can be used to construct invisible containers, and are most
             // prominently embodied in the 'desktop' control that hosts the whole GUI.
-            if (
-              (controlType == typeof(GuiControl)) ||
-              (controlType == typeof(GuiDesktopControl))
-            )
-            {
+            if ((controlType == typeof(GuiControl)) || (controlType == typeof(GuiDesktopControl)))
                 return;
-            }
 
             // Find a renderer for this control. If no renderer for the control itself can
             // be found, look for a renderer then can render its base class. This allows
@@ -430,11 +218,8 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
             // control class!). Normally, this loop will finish without any repetitions.
             while (controlType != typeof(object))
             {
-                bool found = _employer.Renderers.TryGetValue(controlType, out renderer);
-                if (found)
-                {
-                    break;
-                }
+                bool found = _renderers.TryGetValue(controlType, out renderer);
+                if (found) break;
 
                 // Next, try the base class of this type
                 controlType = controlType.GetTypeInfo().BaseType;
@@ -445,23 +230,70 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
             {
                 renderer.Render(controlToRender, _flatGuiGraphics);
             }
-            else { // No renderer found, output a warning
-#if WINDOWS
-        Trace.WriteLine(
-          string.Format(
-            "Warning: No renderer found for control '{0}' or any of its base classes.\n" +
-            "         Control will not be rendered.",
-            controlToRender.GetType().FullName.ToString()
-          )
-        );
-#endif
+        }
+
+        private void FetchRenderers()
+        {
+            foreach (var typeinfo in typeof(FlatGuiVisualizer).GetTypeInfo().Assembly.DefinedTypes.Where(e => e.IsPublic && !e.IsAbstract))
+            {
+                // If the type doesn't implement the IFlatcontrolRenderer interface, there's
+                // no chance that it will implement one of the generic control drawers
+                if (!typeof(IFlatControlRenderer).GetTypeInfo().IsAssignableFrom(typeinfo))
+                    continue;
+
+                // We also need a default constructor in order to be able to create an instance of this renderer
+                if (typeinfo.DeclaredConstructors.Count(e => e.IsPublic && e.GetParameters().Length == 0) == 0)
+                    continue;
+
+                // Look for the IFlatControlRenderer<> interface in all interfaces implemented this type
+                var genericType = typeinfo.ImplementedInterfaces.Where(e => e.IsConstructedGenericType && e.GetGenericTypeDefinition() == typeof(IFlatControlRenderer<>)).FirstOrDefault();
+                if (genericType == default(Type)) continue;
+
+                // Find out which control type the renderer is specialized for
+                var controlType = genericType.GenericTypeArguments;
+
+                // Do we already have a renderer for this control type?
+                if (!_renderers.ContainsKey(controlType[0]))
+                {
+                    // Type of the downcast adapter we need to bring to life
+                    var adapterType = typeof(ControlRendererAdapter<>).MakeGenericType(controlType[0]);
+                    var adapterConstructor = adapterType.GetTypeInfo().DeclaredConstructors.FirstOrDefault();
+
+                    // Now use that constructor to create an instance
+                    var adapterInstance = adapterConstructor.Invoke(new[] { Activator.CreateInstance(typeinfo.AsType()) });
+
+                    // Employ the new adapter and thereby the control renderer it adapts
+                    _renderers.Add(controlType[0], (IControlRendererAdapter)adapterInstance);
+                }
             }
         }
 
-        /// <summary>Returns the assembly containing the GUI visualizer</summary>
-        private static Assembly Self
+        /// <summary>Initializes a new gui visualizer from a skin stored as a resource</summary>
+        /// <param name="serviceProvider">Game service provider containing the graphics device service</param>
+        /// <param name="skinJsonFile">Name of the Json file containing the skin description</param>
+        public static FlatGuiVisualizer FromResource(IServiceProvider serviceProvider, string skinJsonFile)
         {
-            get { return typeof(FlatGuiVisualizer).GetTypeInfo().Assembly; }
+            var assembly = typeof(FlatGuiVisualizer).GetTypeInfo().Assembly;
+            string[] resources = assembly.GetManifestResourceNames();
+
+            if (!resources.Contains(skinJsonFile))
+                throw new ArgumentException("Resource '" + skinJsonFile + "' not found", "skinJsonFile");
+
+            using (Stream skinStream = assembly.GetManifestResourceStream(skinJsonFile))
+            {
+                var rootDirectory = Path.GetDirectoryName(resources.First(s => s == skinJsonFile));
+                ContentManager contentManager = new ContentManager(serviceProvider, "Content");
+
+                try
+                {
+                    return new FlatGuiVisualizer(contentManager, skinStream);
+                }
+                catch (Exception)
+                {
+                    contentManager.Dispose();
+                    throw;
+                }
+            }
         }
     }
 }

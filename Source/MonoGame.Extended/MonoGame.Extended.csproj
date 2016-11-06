@@ -171,13 +171,6 @@
     <Compile Include="NuclexGui\Visuals\Flat\IFlatGuiGraphics.cs" />
     <Compile Include="NuclexGui\Visuals\IGuiVisualizer.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
-    <Compile Include="Support\Plugins\AssemblyLoadEventArgs.cs" />
-    <Compile Include="Support\Plugins\Employer.cs" />
-    <Compile Include="Support\Plugins\IAssemblyLoader.cs" />
-    <Compile Include="Support\Plugins\NoPluginAttribute.cs" />
-    <Compile Include="Support\Plugins\PluginHelper.cs" />
-    <Compile Include="Support\Plugins\PluginHost.cs" />
-    <Compile Include="Support\Plugins\PluginRepository.cs" />
     <Compile Include="Vector2Extensions.cs" />
     <Compile Include="Screens\Screen.cs" />
     <Compile Include="Screens\ScreenComponent.cs" />
