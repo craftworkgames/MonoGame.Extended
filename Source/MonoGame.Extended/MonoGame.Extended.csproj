@@ -86,8 +86,8 @@
     <Compile Include="NuclexGui\Controls\GuiLabelControl.cs" />
     <Compile Include="NuclexGui\Controls\GuiPressableControl.cs" />
     <Compile Include="NuclexGui\Controls\GuiProgressControl.cs" />
-    <Compile Include="NuclexGui\Input\IInputService.cs" />
-    <Compile Include="NuclexGui\Input\MainInputCapturer.cs" />
+    <Compile Include="InputListeners\IInputService.cs" />
+    <Compile Include="NuclexGui\Input\DefaultInputCapturer.cs" />
     <Compile Include="NuclexGui\Resources\SuaveSkinResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -132,17 +132,7 @@
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
     <Compile Include="Graphics\GeometryBatch2D.cs" />
     <Compile Include="Graphics\GeometryBuffer.Static.cs" />
-    <Compile Include="InputListeners\Devices\ExtendedAxes.cs" />
-    <Compile Include="InputListeners\Devices\ExtendedGamePadState.cs" />
-    <Compile Include="InputListeners\Devices\ExtendedSliders.cs" />
-    <Compile Include="InputListeners\Devices\IGamePad.cs" />
-    <Compile Include="InputListeners\Devices\IInputDevice.cs" />
-    <Compile Include="InputListeners\Devices\IKeyboard.cs" />
-    <Compile Include="InputListeners\Devices\IMouse.cs" />
-    <Compile Include="InputListeners\Devices\ITouchPanel.cs" />
-    <Compile Include="InputListeners\Devices\TouchState.cs" />
     <Compile Include="InputListeners\ExtendedPlayerIndex.cs" />
-    <Compile Include="InputListeners\IInputService.cs" />
     <Compile Include="NuclexGui\Controls\GuiControl.cs" />
     <Compile Include="NuclexGui\Controls\GuiControlEventArgs.cs" />
     <Compile Include="NuclexGui\Controls\GuiControlInput.cs" />
@@ -154,7 +144,6 @@
     <Compile Include="NuclexGui\GuiScreen.cs" />
     <Compile Include="NuclexGui\IGuiService.cs" />
     <Compile Include="NuclexGui\Input\Command.cs" />
-    <Compile Include="NuclexGui\Input\DefaultInputCapturer.cs" />
     <Compile Include="NuclexGui\Input\IInputCapturer.cs" />
     <Compile Include="NuclexGui\Input\IInputReceiver.cs" />
     <Compile Include="NuclexGui\UniRectangle.cs" />

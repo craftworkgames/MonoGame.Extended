@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.NuclexGui.Input;
 
 using XnaEventHandler = System.EventHandler<System.EventArgs>;
 
 namespace MonoGame.Extended.InputListeners
 {
-    public class InputManager : NuclexGui.Input.IInputService, IGameComponent, IUpdateable, IDisposable
+    public class InputManager : IInputService, IGameComponent, IUpdateable, IDisposable
     {
         #region Events
 
-        /// <summary>Fired when the UpdateOrder property changes its  value</summary>
+        /// <summary>Fired when the UpdateOrder property changes its value</summary>
         public event XnaEventHandler UpdateOrderChanged;
 
         /// <summary>Fired when the Enabled property changes its value</summary>
@@ -85,7 +81,7 @@ namespace MonoGame.Extended.InputListeners
             if (services != null)
             {
                 _gameServices = services;
-                _gameServices.AddService(typeof(NuclexGui.Input.IInputService), this);
+                _gameServices.AddService(typeof(IInputService), this);
             }
         }
 

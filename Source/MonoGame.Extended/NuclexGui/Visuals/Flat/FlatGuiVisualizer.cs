@@ -130,11 +130,11 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         #region class ControlRendererEmployer
 
         /// <summary>
-        ///   Employs concrete types implementing IFlatGuiControlRenderer&lt;&gt;
+        ///   Employs concrete types implementing IFlatGuiControlRenderer
         /// </summary>
         /// <remarks>
         ///   This employer actually looks for concrete implementations using a variant
-        ///   of the IFlatGuiControlRenderer&lt;&gt; interface, regardless of the
+        ///   of the IFlatGuiControlRenderer interface, regardless of the
         ///   type it has been realized for.
         /// </remarks>
         internal class ControlRendererEmployer : Employer
