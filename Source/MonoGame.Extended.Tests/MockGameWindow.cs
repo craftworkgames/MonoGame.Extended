@@ -1,5 +1,8 @@
 using System;
+using System.Drawing;
 using Microsoft.Xna.Framework;
+using Point = Microsoft.Xna.Framework.Point;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace MonoGame.Extended.Tests
 {
@@ -32,5 +35,9 @@ namespace MonoGame.Extended.Tests
         public override DisplayOrientation CurrentOrientation { get; }
         public override IntPtr Handle { get; }
         public override string ScreenDeviceName { get; }
+
+#if __MonoCS__
+        public override Icon Icon { get; set; }
+#endif
     }
 }

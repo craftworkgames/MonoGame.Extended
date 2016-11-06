@@ -7,6 +7,7 @@ using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions;
+using MonoGame.Extended.Maps.Renderers;
 using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
@@ -22,6 +23,7 @@ namespace Demo.SpriteSheetAnimations
         private Camera2D _camera;
         private SpriteBatch _spriteBatch;
         private TiledMap _tiledMap;
+        private IMapRenderer _mapRenderer;
         private ViewportAdapter _viewportAdapter;
         private CollisionWorld _world;
         private Zombie _zombie;
@@ -47,6 +49,7 @@ namespace Demo.SpriteSheetAnimations
                 Origin = new Vector2(400, 240),
                 Position = new Vector2(408, 270)
             };
+            _mapRenderer = new FullMapRenderer(GraphicsDevice);
 
             Window.Title = $"MonoGame.Extended - {GetType().Name}";
             Window.Position = Point.Zero;
@@ -60,6 +63,7 @@ namespace Demo.SpriteSheetAnimations
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Content.Load<BitmapFont>("Fonts/courier-new-32");
             _tiledMap = Content.Load<TiledMap>("Tilesets/level01");
+            _mapRenderer.SwapMap(_tiledMap);
 
             _world = new CollisionWorld(new Vector2(0, 900));
             _world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
@@ -155,7 +159,7 @@ namespace Demo.SpriteSheetAnimations
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _tiledMap.Draw(_camera.GetViewMatrix());
+            _mapRenderer.Draw(_camera.GetViewMatrix());
             _zombie.Draw(_spriteBatch);
             _spriteBatch.Draw(_fireballSprite);
             _spriteBatch.End();

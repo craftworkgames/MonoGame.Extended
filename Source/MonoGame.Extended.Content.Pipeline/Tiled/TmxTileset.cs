@@ -41,6 +41,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlAttribute(AttributeName = "margin")]
         public int Margin { get; set; }
 
+        [XmlAttribute(AttributeName = "tilecount")]
+        public int TileCount { get; set; }
+
         [XmlElement(ElementName = "tileoffset")]
         public TmxTileOffset TileOffset { get; set; }
 

@@ -50,6 +50,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,6 +63,8 @@
     <Compile Include="Collections\DequeTests.cs" />
     <Compile Include="Collections\PoolTests.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensionsTests.cs" />
+    <Compile Include="Maps\Renderers\FullMapRendererTest.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTest.cs" />
     <Compile Include="MockGameWindow.cs" />
     <Compile Include="Particles\AssertionModifier.cs" />
     <Compile Include="Particles\ColourTests.cs" />
