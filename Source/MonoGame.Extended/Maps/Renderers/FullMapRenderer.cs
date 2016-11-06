@@ -90,14 +90,16 @@ namespace MonoGame.Extended.Maps.Renderers
 
                         pass.Apply();
 
-                        int maxTilesPerDraw = ushort.MaxValue / VerticiesPerTile;
+                        int maxTilesPerDraw = ushort.MaxValue / VerticiesPerTile + 1;
                         int drawCalls = renderDetails.TileCount / maxTilesPerDraw + 1;
 
                         for (int i = 0; i < drawCalls; i++)
                         {
-                            int currentIterTiles = i == drawCalls - 1
-                                ? (renderDetails.TileCount - i * maxTilesPerDraw)
-                                : maxTilesPerDraw;
+                            int currentIterTiles = maxTilesPerDraw;
+                            if (i == drawCalls - 1)
+                            {
+                                currentIterTiles = renderDetails.TileCount - i * maxTilesPerDraw;
+                            }
 
                             _graphicsDevice.DrawIndexedPrimitives(
                                 primitiveType: PrimitiveType.TriangleList,
