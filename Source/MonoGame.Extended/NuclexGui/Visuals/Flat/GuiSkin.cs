@@ -85,6 +85,7 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         public string Name;
 
         /// <summary>Regions that need to be drawn to render the frame</summary>
+        [JsonProperty("region")]
         public Region[] Regions;
 
         /// <summary>Locations where text can be drawn into the frame</summary>
@@ -97,6 +98,12 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         {
             Regions = regions;
             Texts = texts;
+
+            if (regions == null)
+                Regions = new Region[0];
+
+            if (texts == null)
+                Texts = new Text[0];
         }
     }
 
@@ -126,8 +133,12 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         public GuiSkin()
         {
             frames = new List<Frame>();
+            resources = new Resources();
+
             resources.bitmap = new List<Resources.Bitmap>();
             resources.font = new List<Resources.Font>();
+
+            
         }
 
         public static GuiSkin FromFile(string path)

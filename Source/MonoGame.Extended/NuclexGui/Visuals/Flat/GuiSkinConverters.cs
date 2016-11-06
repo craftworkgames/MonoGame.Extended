@@ -17,6 +17,9 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
         public override bool CanConvert(Type objectType)
         {
+            if (objectType == typeof(Frame.Region))
+                return true;
+
             if (objectType.Name == "name")
                 return true;
 
@@ -31,6 +34,9 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
+            if (objectType == typeof(Frame.Region))
+                return ParseRegion(JToken.Load(reader));
+
             if (objectType.Name == "region")
                 return ParseRegions(JArray.Load(reader));
 

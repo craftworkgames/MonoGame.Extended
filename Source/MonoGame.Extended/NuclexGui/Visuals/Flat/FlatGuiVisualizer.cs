@@ -228,9 +228,10 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
                             else { // No, this is the first renderer we found for this control type
 
                                 // Type of the downcast adapter we need to bring to life
-                                Type adapterType = typeof(ControlRendererAdapter<>).MakeGenericType(controlType[0]);
+                                var adapterType = typeof(ControlRendererAdapter<>).MakeGenericType(controlType[0]);
                                 // Look up the constructor of the downcast adapter
-                                ConstructorInfo adapterConstructor = adapterType.GetTypeInfo().DeclaredConstructors.First(c => c.GetGenericArguments() == implementedInterface.GenericTypeArguments );
+                                //ConstructorInfo adapterConstructor = adapterType.GetTypeInfo().DeclaredConstructors.First(c => c.GetGenericArguments() == implementedInterface.GenericTypeArguments );
+                                var adapterConstructor = adapterType.GetTypeInfo().DeclaredConstructors.FirstOrDefault();
 
                                 // Now use that constructor to create an instance
                                 object adapterInstance = adapterConstructor.Invoke(
@@ -334,12 +335,14 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         {
             var assembly = typeof(FlatGuiVisualizer).GetTypeInfo().Assembly;
             string[] resources = assembly.GetManifestResourceNames();
+
             if (!resources.Contains(skinJsonFile))
                 throw new ArgumentException("Resource '" + skinJsonFile + "' not found", "skinJsonFile");
 
             using (Stream skinStream = assembly.GetManifestResourceStream(skinJsonFile))
             {
-                ContentManager contentManager = new ContentManager(serviceProvider, Path.GetDirectoryName(resources.First(s => s == skinJsonFile)));
+                var rootDirectory = Path.GetDirectoryName(resources.First(s => s == skinJsonFile));
+                ContentManager contentManager = new ContentManager(serviceProvider, "Content");
 
                 try
                 {

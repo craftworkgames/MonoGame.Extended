@@ -321,7 +321,7 @@ namespace MonoGame.Extended.NuclexGui
                 var services = new GameServiceContainer();
                 services.AddService(typeof(IGraphicsDeviceService), _graphicsDeviceService);
                 
-                Visualizer = Visuals.Flat.FlatGuiVisualizer.FromResource(services, "SuaveSkin");
+                Visualizer = Visuals.Flat.FlatGuiVisualizer.FromResource(services, "MonoGame.Extended.NuclexGui.Resources.Skins.SuaveSkin.json");
             }
 
         }

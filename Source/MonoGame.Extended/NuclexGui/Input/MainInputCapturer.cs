@@ -105,7 +105,7 @@ namespace MonoGame.Extended.NuclexGui.Input
         private GamePadListener _gamePadListener;
         private TouchListener _touchListener;
 
-
+        
 
         #endregion
 
@@ -122,6 +122,11 @@ namespace MonoGame.Extended.NuclexGui.Input
         {
             _inputService = inputService;
             _inputReceiver = new DummyInputReceiver();
+
+            _keyboardListener = inputService.KeyboardListener;
+            _mouseListener = inputService.MouseListener;
+            _gamePadListener = inputService.GamePadListener;
+            _touchListener = inputService.TouchListener;
 
             SubscribeInputDevices();
         }
@@ -175,13 +180,81 @@ namespace MonoGame.Extended.NuclexGui.Input
 
         private void SubscribeInputDevices()
         {
+            _keyboardListener.KeyPressed += _keyboardListener_KeyPressed;
+            _keyboardListener.KeyReleased += _keyboardListener_KeyReleased;
+            _keyboardListener.KeyTyped += _keyboardListener_KeyTyped;
 
+            _mouseListener.MouseDown += _mouseListener_MouseDown;
+            _mouseListener.MouseUp += _mouseListener_MouseUp;
+            _mouseListener.MouseMoved += _mouseListener_MouseMoved;
+            _mouseListener.MouseWheelMoved += _mouseListener_MouseWheelMoved;
+
+            _gamePadListener.ButtonDown += _gamePadListener_ButtonDown;
+            _gamePadListener.ButtonUp += _gamePadListener_ButtonUp;
         }
 
         private void UnsubscribeInputDevices()
         {
 
         }
+
+        #region Inject methods
+
+        private void _keyboardListener_KeyPressed(object sender, KeyboardEventArgs e)
+        {
+            _inputReceiver.InjectKeyPress(e.Key);
+        }
+
+        private void _keyboardListener_KeyReleased(object sender, KeyboardEventArgs e)
+        {
+            _inputReceiver.InjectKeyRelease(e.Key);
+        }
+
+        private void _keyboardListener_KeyTyped(object sender, KeyboardEventArgs e)
+        {
+            _inputReceiver.InjectCharacter(e.Character.GetValueOrDefault());
+        }
+
+        private void _mouseListener_MouseDown(object sender, MouseEventArgs e)
+        {
+            _inputReceiver.InjectMousePress(e.Button);
+        }
+
+        private void _mouseListener_MouseUp(object sender, MouseEventArgs e)
+        {
+            _inputReceiver.InjectMouseRelease(e.Button);
+        }
+
+        private void _mouseListener_MouseMoved(object sender, MouseEventArgs e)
+        {
+            _inputReceiver.InjectMouseMove(e.DistanceMoved.X, e.DistanceMoved.Y);
+        }
+
+        private void _mouseListener_MouseWheelMoved(object sender, MouseEventArgs e)
+        {
+            _inputReceiver.InjectMouseWheel(e.ScrollWheelDelta);
+        }
+
+        private void _gamePadListener_ButtonDown(object sender, GamePadEventArgs e)
+        {
+            if ((e.Button & Buttons.DPadUp) != 0)
+                _inputReceiver.InjectCommand(Command.Up);
+            else if ((e.Button & Buttons.DPadDown) != 0)
+                _inputReceiver.InjectCommand(Command.Down);
+            else if ((e.Button & Buttons.DPadLeft) != 0)
+                _inputReceiver.InjectCommand(Command.Left);
+            else if ((e.Button & Buttons.DPadRight) != 0)
+                _inputReceiver.InjectCommand(Command.Right);
+            else
+                _inputReceiver.InjectButtonPress(e.Button);
+        }
+
+        private void _gamePadListener_ButtonUp(object sender, GamePadEventArgs e)
+        {
+            _inputReceiver.InjectButtonRelease(e.Button);
+        }
+
+        #endregion
 
         /// <summary>Retrieves the input service from a service provider</summary>
         /// <param name="serviceProvider">

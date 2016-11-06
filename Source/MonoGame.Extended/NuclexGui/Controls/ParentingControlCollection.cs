@@ -115,14 +115,14 @@ namespace MonoGame.Extended.NuclexGui.Controls
         /// <param name="item">Item to be unparented.</param>
         private void AssignParent(GuiControl item)
         {
-            item.SetParent(null);
+            item.SetParent(_parent);
         }
 
         /// <summary>Sets up the parentage on the specified item.</summary>
         /// <param name="item">Item to be parented.</param>
         private void unassignParent(GuiControl item)
         {
-            item.SetParent(_parent);
+            item.SetParent(null);
         }
 
         /// <summary>Determines whether the provided control is a parent of this control.</summary>

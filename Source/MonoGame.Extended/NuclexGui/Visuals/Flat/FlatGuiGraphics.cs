@@ -133,10 +133,13 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
             foreach (var frame in skin.frames)
             {
-                for (int i = 0; i < frame.Regions.Length; i++)
-                    frame.Regions[i].Texture = _bitmaps[frame.Regions[i].Source];
+                if (frame.Regions != null)
+                {
+                    for (int i = 0; i < frame.Regions.Length; i++)
+                        frame.Regions[i].Texture = _bitmaps[frame.Regions[i].Source];
 
-                _frames.Add(frame.Name, frame);
+                    _frames.Add(frame.Name, frame);
+                }
             }
         }
 

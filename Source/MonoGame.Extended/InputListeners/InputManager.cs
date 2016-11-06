@@ -85,7 +85,7 @@ namespace MonoGame.Extended.InputListeners
             if (services != null)
             {
                 _gameServices = services;
-                _gameServices.AddService(typeof(IInputService), this);
+                _gameServices.AddService(typeof(NuclexGui.Input.IInputService), this);
             }
         }
 

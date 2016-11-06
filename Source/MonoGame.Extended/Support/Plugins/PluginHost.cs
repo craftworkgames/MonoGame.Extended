@@ -62,7 +62,7 @@ namespace MonoGame.Extended.Support.Plugins
         {            
             foreach (var typeinfo in assembly.DefinedTypes)
             {
-                Type type = typeinfo.GetType();
+                Type type = typeinfo.AsType();
 
                 // We'll ignore abstract and non-public types
                 if (!typeinfo.IsPublic || typeinfo.IsAbstract)

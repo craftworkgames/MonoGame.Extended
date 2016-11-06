@@ -41,9 +41,13 @@ namespace Demo.NuclexGui
 
             _gui.Initialize();
 
-            GuiButtonControl button = new GuiButtonControl();
-            button.Name = "button";
-            button.Bounds = new UniRectangle(new UniScalar(0f, 0), new UniScalar(0f, 0), new UniScalar(0f, 50), new UniScalar(0f, 50));
+            GuiButtonControl button = new GuiButtonControl
+            {
+                Name = "button",
+                Bounds =
+                    new UniRectangle(new UniScalar(0.5f, -100), new UniScalar(0.5f, -50), new UniScalar(0f, 200), new UniScalar(0f, 100)),
+                Text = "Hello"
+            };
             _gui.Screen.Desktop.Children.Add(button);
         }
 
@@ -86,10 +90,10 @@ namespace Demo.NuclexGui
 
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
 
-            _gui.Draw(gameTime);
-
             _spriteBatch.Draw(_sprite);
             _spriteBatch.End();
+
+            _gui.Draw(gameTime);
 
             base.Draw(gameTime);
         }
