@@ -194,7 +194,17 @@ namespace MonoGame.Extended.NuclexGui.Input
 
         private void UnsubscribeInputDevices()
         {
+            _keyboardListener.KeyPressed -= _keyboardListener_KeyPressed;
+            _keyboardListener.KeyReleased -= _keyboardListener_KeyReleased;
+            _keyboardListener.KeyTyped -= _keyboardListener_KeyTyped;
 
+            _mouseListener.MouseDown -= _mouseListener_MouseDown;
+            _mouseListener.MouseUp -= _mouseListener_MouseUp;
+            _mouseListener.MouseMoved -= _mouseListener_MouseMoved;
+            _mouseListener.MouseWheelMoved -= _mouseListener_MouseWheelMoved;
+
+            _gamePadListener.ButtonDown -= _gamePadListener_ButtonDown;
+            _gamePadListener.ButtonUp -= _gamePadListener_ButtonUp;
         }
 
         #region Inject methods
@@ -226,7 +236,7 @@ namespace MonoGame.Extended.NuclexGui.Input
 
         private void _mouseListener_MouseMoved(object sender, MouseEventArgs e)
         {
-            _inputReceiver.InjectMouseMove(e.DistanceMoved.X, e.DistanceMoved.Y);
+            _inputReceiver.InjectMouseMove(e.Position.X, e.Position.Y);
         }
 
         private void _mouseListener_MouseWheelMoved(object sender, MouseEventArgs e)

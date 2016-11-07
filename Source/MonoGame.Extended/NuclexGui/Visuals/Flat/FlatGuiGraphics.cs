@@ -140,6 +140,9 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
                     _frames.Add(frame.Name, frame);
                 }
+
+                for (int i = 0; i < frame.Texts.Length; i++)
+                    _fonts.TryGetValue(frame.Texts[i].Source, out frame.Texts[i].Font);
             }
         }
 
@@ -200,13 +203,13 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
                     }
                 case Frame.VerticalTextAlignment.Bottom:
                     {
-                        y = bounds.Bottom - anchor.Font.LineSpacing;
+                        y = bounds.Bottom - textSize.Y;
                         break;
                     }
                 case Frame.VerticalTextAlignment.Center:
                 default:
                     {
-                        y = (bounds.Height - anchor.Font.LineSpacing) / 2.0f + bounds.Top;
+                        y = (bounds.Height - textSize.Y) / 2.0f + bounds.Top;
                         break;
                     }
             }

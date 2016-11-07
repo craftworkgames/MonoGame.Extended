@@ -17,16 +17,10 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
         public override bool CanConvert(Type objectType)
         {
-            if (objectType == typeof(Frame.Region))
+            if (objectType == typeof(Frame.Region[]))
                 return true;
 
-            if (objectType.Name == "name")
-                return true;
-
-            if (objectType.Name == "region")
-                return true;
-
-            if (objectType.Name == "text")
+            if (objectType == typeof(Frame.Text))
                 return true;
 
             return false;
@@ -34,14 +28,11 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(Frame.Region))
-                return ParseRegion(JToken.Load(reader));
-
-            if (objectType.Name == "region")
+            if (objectType == typeof(Frame.Region[]))
                 return ParseRegions(JArray.Load(reader));
 
-            if (objectType.Name == "text")
-                return ParseTexts(JArray.Load(reader));
+            if (objectType == typeof(Frame.Text))
+                return ParseText(JToken.Load(reader));
 
             return (string)reader.Value;
         }
@@ -54,6 +45,11 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         private Frame.Region[] ParseRegions(JArray jArray)
         {
             Frame.Region[] regions = new Frame.Region[jArray.Count];
+
+            leftBorderWidth = 0;
+            rightBorderWidth = 0;
+            topBorderWidth = 0;
+            bottomBorderWidth = 0;
 
             // Detect borders
             foreach (var token in jArray)
@@ -155,7 +151,7 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
                         location.Fraction = 0.0f;
                         location.Offset = lowBorderWidth;
                         size.Fraction = 1.0f;
-                        size.Offset = (highBorderWidth + lowBorderWidth);
+                        size.Offset = -(highBorderWidth + lowBorderWidth);
                         break;
                     }
             }
@@ -189,25 +185,14 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
             }
         }
 
-        private Frame.Text[] ParseTexts(JArray jArray)
-        {
-            Frame.Text[] texts = new Frame.Text[jArray.Count];
-
-            // Parse each text
-            for (int i = 0; i < texts.Length; i++)
-                texts[i] = ParseText(jArray[i]);
-
-            return texts;
-        }
-
         private Frame.Text ParseText(JToken token)
         {
             Frame.Text text = new Frame.Text();
 
             text.Offset = new Microsoft.Xna.Framework.Point(token.Value<int>("xoffset"), token.Value<int>("yoffset"));
             text.Color = ColorExtensions.FromHex(token.Value<string>("color"));
-            Enum.TryParse(token.Value<string>("hplacement"), out text.HorizontalPlacement);
-            Enum.TryParse(token.Value<string>("vplacement"), out text.VerticalPlacement);
+            Enum.TryParse(token.Value<string>("hplacement"), true, out text.HorizontalPlacement);
+            Enum.TryParse(token.Value<string>("vplacement"), true, out text.VerticalPlacement);
             text.Source = token.Value<string>("font");
 
             return text;
