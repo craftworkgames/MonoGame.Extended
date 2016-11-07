@@ -31,7 +31,10 @@ namespace Demo.NuclexGui
             Window.AllowUserResizing = true;
             background = Color.Black;
 
+            // First, we create an input manager and add it to list Services. It is necessary to add InputManager first, then GuiManager, not vice-versa.
             _inputManager = new InputManager(Services);
+
+            // Then, we create GUI and add it to list of services. Gui will search for the InputManager and attach it to itself.
             _gui = new GuiManager(Services);
         }
 
@@ -39,11 +42,15 @@ namespace Demo.NuclexGui
         {
             base.Initialize();
 
+            // Create a GUI screen and attach it as a default to GuiManager.
+            // That screen will also act as a root parent for every other control that we create.
             _gui.Screen = new GuiScreen(800, 480);
             _gui.Screen.Desktop.Bounds = new UniRectangle(new UniScalar(0f, 0), new UniScalar(0f, 0), new UniScalar(1f, 0), new UniScalar(1f, 0));
 
+            // Perform second-stage initialization
             _gui.Initialize();
 
+            // Create few controls.
             GuiButtonControl button = new GuiButtonControl
             {
                 Name = "button",
@@ -57,10 +64,11 @@ namespace Demo.NuclexGui
                 Text = "Open Window"
             };
 
-
+            // Attach relevant events
             button.Pressed += Button_Pressed;
             button2.Pressed += Button2_Pressed;
 
+            // And finally, attach controls to the parent control. In this case, desktop screen.
             _gui.Screen.Desktop.Children.Add(button);
             _gui.Screen.Desktop.Children.Add(button2);
         }
@@ -186,6 +194,7 @@ namespace Demo.NuclexGui
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
+            // Update both InputManager (which updates states of each device) and GUI
             _inputManager.Update(gameTime);
             _gui.Update(gameTime);
 
@@ -203,6 +212,7 @@ namespace Demo.NuclexGui
             _spriteBatch.Draw(_sprite);
             _spriteBatch.End();
 
+            // Draw GUI on top of everything
             _gui.Draw(gameTime);
 
             base.Draw(gameTime);
