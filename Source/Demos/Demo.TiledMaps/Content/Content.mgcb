@@ -89,11 +89,6 @@
 /processorParam:TextureFormat=Color
 /build:rpg_maker_vx_rtp_tileset_by_telles0808.png
 
-#begin untitled.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:untitled.tmx
-
 #begin level02.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -178,4 +173,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:L05TS3.png
+
+#begin very-large.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:very-large.tmx
 

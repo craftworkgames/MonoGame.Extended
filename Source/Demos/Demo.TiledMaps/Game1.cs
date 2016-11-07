@@ -24,13 +24,14 @@ namespace Demo.TiledMaps
         private IMapRenderer _mapRenderer;
         private ViewportAdapter _viewportAdapter;
         private KeyboardState _oldKeyboardState = Keyboard.GetState();
-        private bool _showHelp = false;
+        private bool _showHelp;
+        private TiledMap _tiledMap;
 
         private Queue<string> _availableMaps;
 
         public Game1()
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this) {SynchronizeWithVerticalRetrace = false};
+            _graphicsDeviceManager = new GraphicsDeviceManager(this) { SynchronizeWithVerticalRetrace = false };
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             IsFixedTimeStep = false;
@@ -57,11 +58,11 @@ namespace Demo.TiledMaps
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
             _sprite = new Sprite(_texture) { Position = new Vector2(600, 240) };
 
-            _availableMaps = new Queue<string>(new[] {"level02", "level03", "level04", "level05", "untitled", "level01"});
+            _availableMaps = new Queue<string>(new[] { "level01", "level02", "level03", "level04", "level05", "very-large" });
 
-            TiledMap tiledMap = Content.Load<TiledMap>("level01");
-            _mapRenderer.SwapMap(tiledMap);
-            _camera.LookAt(new Vector2(tiledMap.WidthInPixels, tiledMap.HeightInPixels) * 0.5f);
+            _tiledMap = Content.Load<TiledMap>("level01");
+            _mapRenderer.SwapMap(_tiledMap);
+            _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
         }
 
         protected override void UnloadContent()
@@ -81,16 +82,16 @@ namespace Demo.TiledMaps
             const float zoomSpeed = 0.3f;
 
             if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
-                _camera.Move(new Vector2(0, -cameraSpeed)*deltaSeconds);
+                _camera.Move(new Vector2(0, -cameraSpeed) * deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
-                _camera.Move(new Vector2(-cameraSpeed, 0)*deltaSeconds);
+                _camera.Move(new Vector2(-cameraSpeed, 0) * deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
-                _camera.Move(new Vector2(0, cameraSpeed)*deltaSeconds);
+                _camera.Move(new Vector2(0, cameraSpeed) * deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
-                _camera.Move(new Vector2(cameraSpeed, 0)*deltaSeconds);
+                _camera.Move(new Vector2(cameraSpeed, 0) * deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.R))
                 _camera.ZoomIn(zoomSpeed * deltaSeconds);
@@ -100,17 +101,15 @@ namespace Demo.TiledMaps
 
             if (_oldKeyboardState.IsKeyDown(Keys.Tab) && keyboardState.IsKeyUp(Keys.Tab))
             {
-                string name = _availableMaps.Dequeue();
-                TiledMap tiledMap = Content.Load<TiledMap>(name);
-                _mapRenderer.SwapMap(tiledMap);
+                var name = _availableMaps.Dequeue();
+                _tiledMap = Content.Load<TiledMap>(name);
+                _mapRenderer.SwapMap(_tiledMap);
                 _availableMaps.Enqueue(name);
-                _camera.LookAt(new Vector2(tiledMap.WidthInPixels, tiledMap.HeightInPixels) * 0.5f);
+                _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
             }
 
             if (_oldKeyboardState.IsKeyDown(Keys.H) && keyboardState.IsKeyUp(Keys.H))
-            {
                 _showHelp = !_showHelp;
-            }
 
             _sprite.Rotation += MathHelper.ToRadians(5) * deltaSeconds;
             _sprite.Position = _camera.ScreenToWorld(mouseState.X, mouseState.Y);
@@ -126,32 +125,24 @@ namespace Demo.TiledMaps
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // you can draw the whole map all at once
-            //_tiledMap.Draw(_camera.GetViewMatrix());
             _mapRenderer.Draw(_camera.GetViewMatrix());
-
-            // or you can have more control over drawing each individual layer
-            //foreach (var layer in _tiledMap.Layers)
-            //{
-            //    _spriteBatch.Draw(_sprite);
-            //    _spriteBatch.Draw(layer, _camera);
-            //}
 
             var textColor = Color.Black;
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
-            _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.FramesPerSecond:0}", Vector2.One, Color.Black);
-            _spriteBatch.DrawString(_bitmapFont, $"Camera: {_camera.Position}", new Vector2(5, _bitmapFont.LineHeight * 1), Color.Black);
+            _spriteBatch.DrawString(_bitmapFont, $"Map: {_tiledMap.Name}", new Vector2(5, _bitmapFont.LineHeight * 0), Color.Black);
+            _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.FramesPerSecond:0}", new Vector2(5, _bitmapFont.LineHeight * 1), Color.Black);
+            _spriteBatch.DrawString(_bitmapFont, $"Camera: {_camera.Position}", new Vector2(5, _bitmapFont.LineHeight * 2), Color.Black);
 
             if (_showHelp)
             {
-                _spriteBatch.DrawString(_bitmapFont, "H: Hide help", new Vector2(5, _bitmapFont.LineHeight * 2), textColor);
-                _spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: move", new Vector2(5, _bitmapFont.LineHeight * 3), textColor);
-                _spriteBatch.DrawString(_bitmapFont, "RF: zoom", new Vector2(5, _bitmapFont.LineHeight * 4), textColor);
-                _spriteBatch.DrawString(_bitmapFont, "Tab: Switch map", new Vector2(5, _bitmapFont.LineHeight * 5), textColor);
+                _spriteBatch.DrawString(_bitmapFont, "H: Hide help", new Vector2(5, _bitmapFont.LineHeight * 3), textColor);
+                _spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: move", new Vector2(5, _bitmapFont.LineHeight * 4), textColor);
+                _spriteBatch.DrawString(_bitmapFont, "RF: zoom", new Vector2(5, _bitmapFont.LineHeight * 5), textColor);
+                _spriteBatch.DrawString(_bitmapFont, "Tab: Switch map", new Vector2(5, _bitmapFont.LineHeight * 6), textColor);
             }
             else
             {
-                _spriteBatch.DrawString(_bitmapFont, "H: Show help", new Vector2(5, _bitmapFont.LineHeight * 2), textColor);
+                _spriteBatch.DrawString(_bitmapFont, "H: Show help", new Vector2(5, _bitmapFont.LineHeight * 3), textColor);
             }
 
             _spriteBatch.End();
