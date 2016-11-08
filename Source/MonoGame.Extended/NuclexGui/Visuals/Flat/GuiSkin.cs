@@ -155,7 +155,7 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
                 var converters = new JsonConverter[]
                 {
-                    new GuiFrameJsonConverter()
+                    new GuiSkinJsonConverter()
                 };
 
                 return JsonConvert.DeserializeObject<GuiSkin>(json, converters);

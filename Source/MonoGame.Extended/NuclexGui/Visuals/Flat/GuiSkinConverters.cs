@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 {
-    public class GuiFrameJsonConverter : JsonConverter
+    public class GuiSkinJsonConverter : JsonConverter
     {
         /// <summary>Width of the frame's left border regions</summary>
         private int leftBorderWidth;
