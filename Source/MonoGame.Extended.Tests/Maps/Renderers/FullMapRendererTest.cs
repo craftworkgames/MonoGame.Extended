@@ -23,7 +23,7 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
 
             TiledObject[] objs =
             {
-                new TiledObject(TiledObjectType.Tile, 1, null, 1, 1, 1, 1),
+                new TiledObject(TiledObjectType.Tile, 1, null, 1, 1, 1, 1) { IsVisible = true },
             };
 
             TiledObjectGroup layer = new TiledObjectGroup("object", objs);
@@ -48,7 +48,7 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
 
             TiledObject[] objs =
             {
-                new TiledObject(TiledObjectType.Rectangle, 1, 1, 1, 1, 1, 1),
+                new TiledObject(TiledObjectType.Rectangle, 1, 1, 1, 1, 1, 1) { IsVisible = true },
             };
 
             TiledObjectGroup layer = new TiledObjectGroup("object", objs);
@@ -73,7 +73,7 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
 
             TiledObject[] objs =
             {
-                new TiledObject(TiledObjectType.Tile, 1, 1, 1, 1, 1, 1),
+                new TiledObject(TiledObjectType.Tile, 1, 1, 1, 1, 1, 1) { IsVisible = true },
             };
 
             TiledObjectGroup layer = new TiledObjectGroup("object", objs);
@@ -85,6 +85,31 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
 
             Assert.IsNotNull(gd.Indices);
             Assert.AreEqual(6, gd.Indices.IndexCount);
+        }
+
+        [Test]
+        public void Draw_MapObjectLayer_NotVisible_NoGroups()
+        {
+            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
+            MockRenderer r = new MockRenderer(gd, true);
+            Texture2D texture = Substitute.For<Texture2D>(gd, 64, 64);
+
+            TiledMap m = new TiledMap("test", 2, 2, 32, 32);
+            m.CreateTileset(texture, 0, 32, 32, 4);
+
+            TiledObject[] objs =
+            {
+                new TiledObject(TiledObjectType.Tile, 1, 1, 1, 1, 1, 1) { IsVisible = false },
+            };
+
+            TiledObjectGroup layer = new TiledObjectGroup("object", objs);
+            m.AddLayer(layer);
+
+            r.SwapMap(m);
+
+            r.Draw(new Matrix());
+
+            Assert.IsNull(gd.Indices);
         }
 
         [Test]
