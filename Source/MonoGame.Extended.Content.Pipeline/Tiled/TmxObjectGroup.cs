@@ -3,13 +3,10 @@ using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
-    public class TmxObjectGroup
+    public class TmxObjectGroup : TmxLayer
     {
         public TmxObjectGroup()
         {
-            Opacity = 1.0f;
-            Visible = true;
-            Properties = new List<TmxProperty>();
             Objects = new List<TmxObject>();
         }
 
@@ -18,21 +15,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             return Name;
         }
 
-        [XmlAttribute(AttributeName = "name")]
-        public string Name { get; set; }
-
         [XmlAttribute(AttributeName = "color")]
         public string Color { get; set; }
-
-        [XmlAttribute(AttributeName = "opacity")]
-        public float Opacity { get; set; }
-
-        [XmlAttribute(AttributeName = "visible")]
-        public bool Visible { get; set; }
-
-        [XmlArray("properties")]
-        [XmlArrayItem("property")]
-        public List<TmxProperty> Properties { get; set; }
 
         [XmlElement(ElementName = "object")]
         public List<TmxObject> Objects { get; set; }
