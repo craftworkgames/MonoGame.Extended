@@ -2,14 +2,12 @@
 {
     public interface IInputService
     {
-        KeyboardListener KeyboardListener { get; }
+        KeyboardListener GuiKeyboardListener { get; }
 
-        MouseListener MouseListener { get; }
+        MouseListener GuiMouseListener { get; }
 
-        GamePadListener GamePadListener { get; }
+        GamePadListener GuiGamePadListener { get; }
 
-        TouchListener TouchListener { get; }
-
-        void Update();
+        TouchListener GuiTouchListener { get; }
     }
 }

@@ -122,10 +122,10 @@ namespace MonoGame.Extended.NuclexGui.Input
             _inputService = inputService;
             _inputReceiver = new DummyInputReceiver();
 
-            _keyboardListener = inputService.KeyboardListener;
-            _mouseListener = inputService.MouseListener;
-            _gamePadListener = inputService.GamePadListener;
-            _touchListener = inputService.TouchListener;
+            _keyboardListener = inputService.GuiKeyboardListener;
+            _mouseListener = inputService.GuiMouseListener;
+            _gamePadListener = inputService.GuiGamePadListener;
+            _touchListener = inputService.GuiTouchListener;
 
             SubscribeInputDevices();
         }

@@ -18,7 +18,7 @@ namespace Demo.NuclexGui
         private Sprite _sprite;
         private Camera2D _camera;
 
-        InputManager _inputManager;
+        InputListenerComponent _inputManager;
         GuiManager _gui;
         int rotation = 1;
         Color background;
@@ -32,7 +32,7 @@ namespace Demo.NuclexGui
             background = Color.Black;
 
             // First, we create an input manager and add it to list Services. It is necessary to add InputManager first, then GuiManager, not vice-versa.
-            _inputManager = new InputManager(Services);
+            _inputManager = new InputListenerComponent(this);
 
             // Then, we create GUI and add it to list of services. Gui will search for the InputManager and attach it to itself.
             _gui = new GuiManager(Services);

@@ -81,7 +81,6 @@
     <Compile Include="Graphics\Batch2DSortMode.cs" />
     <Compile Include="Graphics\Batching\BatchCommandDrawer.cs" />
     <Compile Include="Graphics\Batching\BatchDrawCommand.cs" />
-    <Compile Include="InputListeners\InputManager.cs" />
     <Compile Include="NuclexGui\Controls\Desktop\GuiButtonControl.cs" />
     <Compile Include="NuclexGui\Controls\Desktop\GuiChoiceControl.cs" />
     <Compile Include="NuclexGui\Controls\Desktop\GuiCloseWindowButtonControl.cs" />
@@ -359,8 +358,6 @@
     <Content Include="Graphics\Effects\Resources\DefaultEffect2D.fx" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Maps\Renderers" />
-    <Folder Include="Maps\Tiled" />
     <Folder Include="NuclexGui\Controls\Arcade\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
