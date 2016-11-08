@@ -5,6 +5,15 @@ using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.InputListeners
 {
+    /// <summary>
+    /// Handles mouse input.
+    /// </summary>
+    /// <remarks>
+    /// Due to nature of the listener, even when game is not in focus, listener will continue to be updated.
+    /// To avoid that, manual pause of Update() method is required whenever game loses focus.
+    /// 
+    /// To avoid having to do it manually, register listener to <see cref="InputListenerComponent"/>
+    /// </remarks>
     public class MouseListener : InputListener
     {
         public MouseListener()
