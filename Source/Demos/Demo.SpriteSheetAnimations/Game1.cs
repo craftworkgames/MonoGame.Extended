@@ -7,6 +7,7 @@ using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions;
+using MonoGame.Extended.Maps.Renderers;
 using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
@@ -22,13 +23,13 @@ namespace Demo.SpriteSheetAnimations
         private Camera2D _camera;
         private SpriteBatch _spriteBatch;
         private TiledMap _tiledMap;
+        private IMapRenderer _mapRenderer;
         private ViewportAdapter _viewportAdapter;
         private CollisionWorld _world;
         private Zombie _zombie;
         private SpriteSheetAnimation _animation;
         private Sprite _fireballSprite;
-        private SpriteSheetAnimator _motwAnimator;
-        private Sprite _motwSprite;
+        private AnimatedSprite _motwSprite;
 
         public Game1()
         {
@@ -48,6 +49,7 @@ namespace Demo.SpriteSheetAnimations
                 Origin = new Vector2(400, 240),
                 Position = new Vector2(408, 270)
             };
+            _mapRenderer = new FullMapRenderer(GraphicsDevice);
 
             Window.Title = $"MonoGame.Extended - {GetType().Name}";
             Window.Position = Point.Zero;
@@ -61,6 +63,7 @@ namespace Demo.SpriteSheetAnimations
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Content.Load<BitmapFont>("Fonts/courier-new-32");
             _tiledMap = Content.Load<TiledMap>("Tilesets/level01");
+            _mapRenderer.SwapMap(_tiledMap);
 
             _world = new CollisionWorld(new Vector2(0, 900));
             _world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
@@ -86,9 +89,9 @@ namespace Demo.SpriteSheetAnimations
             motwAnimationFactory.Add("walkWest", new SpriteSheetAnimationData(new[] { 12, 13, 14, 13 }, isLooping: false));
             motwAnimationFactory.Add("walkEast", new SpriteSheetAnimationData(new[] { 24, 25, 26, 25 }, isLooping: false));
             motwAnimationFactory.Add("walkNorth", new SpriteSheetAnimationData(new[] { 36, 37, 38, 37 }, isLooping: false));
-            _motwAnimator = new SpriteSheetAnimator(motwAnimationFactory);
-            _motwSprite = _motwAnimator.CreateSprite(new Vector2(350, 800));
-            _motwAnimator.Play("walkSouth").IsLooping = true;
+            _motwSprite = new AnimatedSprite(motwAnimationFactory);
+            _motwSprite.Position = new Vector2(350, 800);
+            _motwSprite.Play("walkSouth").IsLooping = true;
         }
 
         protected override void UnloadContent()
@@ -104,16 +107,16 @@ namespace Demo.SpriteSheetAnimations
 
             // motw
             if (keyboardState.IsKeyDown(Keys.W))
-                _motwAnimator.Play("walkNorth");
+                _motwSprite.Play("walkNorth");
 
             if (keyboardState.IsKeyDown(Keys.A))
-                _motwAnimator.Play("walkWest");
+                _motwSprite.Play("walkWest");
 
             if (keyboardState.IsKeyDown(Keys.S))
-                _motwAnimator.Play("walkSouth");
+                _motwSprite.Play("walkSouth");
 
             if (keyboardState.IsKeyDown(Keys.D))
-                _motwAnimator.Play("walkEast");
+                _motwSprite.Play("walkEast");
 
             // camera
             if (keyboardState.IsKeyDown(Keys.R))
@@ -146,7 +149,7 @@ namespace Demo.SpriteSheetAnimations
             _animation.Update(deltaSeconds);
             _fireballSprite.TextureRegion = _animation.CurrentFrame;
 
-            _motwAnimator.Update(deltaSeconds);
+            _motwSprite.Update(deltaSeconds);
 
             base.Update(gameTime);
         }
@@ -156,7 +159,7 @@ namespace Demo.SpriteSheetAnimations
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _tiledMap.Draw(_camera);
+            _mapRenderer.Draw(_camera.GetViewMatrix());
             _zombie.Draw(_spriteBatch);
             _spriteBatch.Draw(_fireballSprite);
             _spriteBatch.End();

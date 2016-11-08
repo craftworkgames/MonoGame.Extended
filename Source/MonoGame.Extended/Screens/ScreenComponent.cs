@@ -12,6 +12,13 @@ namespace MonoGame.Extended.Screens
 
     public class ScreenComponent : DrawableGameComponent, IScreenManager
     {
+        public ScreenComponent(Game game, IEnumerable<Screen> screens)
+            : this(game)
+        {
+            foreach (var screen in screens)
+                Register(screen);
+        }
+
         public ScreenComponent(Game game) 
             : base(game)
         {

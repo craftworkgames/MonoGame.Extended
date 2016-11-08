@@ -44,28 +44,52 @@ namespace MonoGame.Extended.BitmapFonts
 
         public Size GetSize(string text)
         {
-            var width = 0;
-            var height = 0;
+            if (text == null) throw new ArgumentNullException(nameof(text));
+
+            var totalWidth = 0;
+            var lineWidth = 0;
+            var totalHeight = 0;
+            var lineHeight = 0;
+
+            const int newlineCodePoint = '\n';
+
             var codePoints = GetUnicodeCodePoints(text).ToArray();
 
             for (int i = 0, l = codePoints.Length; i < l; i++)
             {
                 BitmapFontRegion fontRegion;
-                var c = codePoints[i];
+                var character = codePoints[i];
+                var nextCharacter = character;
 
-                if (_characterMap.TryGetValue(c, out fontRegion))
+                if (i < l - 1) nextCharacter = codePoints[i + 1];
+
+                if (_characterMap.TryGetValue(character, out fontRegion))
                 {
-                    if (i != text.Length - 1)
-                        width += fontRegion.XAdvance + LetterSpacing;
+                    // Add LetterSpacing unless end of string or next character is not in _characterMap
+                    if (i != text.Length - 1 && _characterMap.ContainsKey(nextCharacter))
+                        lineWidth += fontRegion.XAdvance + LetterSpacing;
                     else
-                        width += fontRegion.XOffset + fontRegion.Width;
+                        lineWidth += fontRegion.XOffset + fontRegion.Width;
 
-                    if (fontRegion.Height + fontRegion.YOffset > height)
-                        height = fontRegion.Height + fontRegion.YOffset;
+                    if (fontRegion.Height + fontRegion.YOffset > lineHeight)
+                        lineHeight = fontRegion.Height + fontRegion.YOffset;
+                }
+
+                if (character == newlineCodePoint)
+                {
+                    totalHeight += lineHeight;
+                    if (totalWidth < lineWidth) totalWidth = lineWidth;
+
+                    lineHeight = 0;
+                    lineWidth = 0;
                 }
             }
 
-            return new Size(width, height);
+            if (totalWidth == 0)
+                totalWidth = lineWidth;
+            totalHeight += lineHeight;
+
+            return new Size(totalWidth, totalHeight);
         }
 
         public Size MeasureString(string text)

@@ -7,7 +7,7 @@ namespace MonoGame.Extended.SceneGraphs
 {
     public interface ISceneEntity
     {
-        RectangleF GetBoundingRectangle();
+        RectangleF BoundingRectangle { get; }
     }
 
     public interface ISpriteBatchDrawable

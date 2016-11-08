@@ -61,12 +61,15 @@ namespace MonoGame.Extended.Sprites
             set { Origin = new Vector2(value.X * TextureRegion.Width, value.Y * TextureRegion.Height); }
         }
 
-        public RectangleF GetBoundingRectangle()
+        public RectangleF BoundingRectangle
         {
-            var corners = GetCorners();
-            var min = new Vector2(corners.Min(i => i.X), corners.Min(i => i.Y));
-            var max = new Vector2(corners.Max(i => i.X), corners.Max(i => i.Y));
-            return new RectangleF(min.X, min.Y, (max.X - min.X), (max.Y - min.Y));
+            get
+            {
+                var corners = GetCorners();
+                var min = new Vector2(corners.Min(i => i.X), corners.Min(i => i.Y));
+                var max = new Vector2(corners.Max(i => i.X), corners.Max(i => i.Y));
+                return new RectangleF(min.X, min.Y, (max.X - min.X), (max.Y - min.Y));
+            }
         }
 
         public Vector2[] GetCorners()

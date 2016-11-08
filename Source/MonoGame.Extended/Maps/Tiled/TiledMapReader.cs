@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
@@ -13,7 +14,7 @@ namespace MonoGame.Extended.Maps.Tiled
             var backgroundColor = reader.ReadColor();
             var renderOrder = (TiledRenderOrder)Enum.Parse(typeof(TiledRenderOrder), reader.ReadString(), true);
             var tiledMap = new TiledMap(
-                graphicsDevice: reader.ContentManager.GetGraphicsDevice(),
+                name: reader.AssetName,
                 width: reader.ReadInt32(),
                 height: reader.ReadInt32(),
                 tileWidth: reader.ReadInt32(),
@@ -37,6 +38,7 @@ namespace MonoGame.Extended.Maps.Tiled
                     firstId: reader.ReadInt32(),
                     tileWidth: reader.ReadInt32(),
                     tileHeight: reader.ReadInt32(),
+                    tileCount: reader.ReadInt32(),
                     spacing: reader.ReadInt32(),
                     margin: reader.ReadInt32());
                 var tileSetTileCount = reader.ReadInt32();
@@ -61,15 +63,23 @@ namespace MonoGame.Extended.Maps.Tiled
 
             var layerCount = reader.ReadInt32();
 
+            float depthInc = 1.0f / (layerCount - 1);
+
             for (var i = 0; i < layerCount; i++)
             {
-                var layer = ReadLayer(reader, tiledMap);
+                float depth = 0.0f;
+                if (layerCount > 1)
+                {
+                    depth = 0.0f - (i * depthInc);
+                }
+
+                var layer = ReadLayer(reader, tiledMap, depth);
                 ReadCustomProperties(reader, layer.Properties);
             }
 
             tiledMap.AddObjectGroup(ReadObjectGroups(reader));
 
-            return tiledMap.Build();
+            return tiledMap;
         }
 
         private static List<TiledObjectGroup> ReadObjectGroups(ContentReader reader) 
@@ -139,15 +149,20 @@ namespace MonoGame.Extended.Maps.Tiled
                 properties.Add(reader.ReadString(), reader.ReadString());
         }
 
-        private static TiledLayer ReadLayer(ContentReader reader, TiledMap tiledMap)
+        private static TiledLayer ReadLayer(ContentReader reader, TiledMap tiledMap, float depth)
         {
             var layerName = reader.ReadString();
             var visible = reader.ReadBoolean();
             var opacity = reader.ReadSingle();
+            var offsetx = reader.ReadSingle();
+            var offsety = reader.ReadSingle();
             var layerType = reader.ReadString();
             var layer = ReadLayerTypeProperties(reader, tiledMap, layerName, layerType);
             layer.IsVisible = visible;
             layer.Opacity = opacity;
+            layer.OffsetX = offsetx;
+            layer.OffsetY = offsety;
+            layer.Depth = depth;
             return layer;
         }
 

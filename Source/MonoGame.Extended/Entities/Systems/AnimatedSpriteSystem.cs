@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.Animations.SpriteSheets;
+using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.Entities.Systems
 {

@@ -22,14 +22,13 @@ namespace Demo.SpriteSheetAnimations
 
     public class Zombie : IUpdate, IActorTarget
     {
-        private readonly SpriteSheetAnimator _animator;
-        private readonly Sprite _sprite;
+        private readonly AnimatedSprite _sprite;
 
         private float _direction = -1.0f;
 
         private ZombieState _state;
 
-        public RectangleF BoundingBox => _sprite.GetBoundingRectangle();
+        public RectangleF BoundingBox => _sprite.BoundingRectangle;
 
         public bool IsOnGround { get; private set; }
 
@@ -53,19 +52,19 @@ namespace Demo.SpriteSheetAnimations
                     switch (_state)
                     {
                         case ZombieState.Attacking:
-                            _animator.Play("attack", () => State = ZombieState.Idle);
+                            _sprite.Play("attack", () => State = ZombieState.Idle);
                             break;
                         case ZombieState.Dying:
-                            _animator.Play("die", () => State = ZombieState.Appearing);
+                            _sprite.Play("die", () => State = ZombieState.Appearing);
                             break;
                         case ZombieState.Idle:
-                            _animator.Play("idle");
+                            _sprite.Play("idle");
                             break;
                         case ZombieState.Appearing:
-                            _animator.Play("appear", () => State = ZombieState.Idle);
+                            _sprite.Play("appear", () => State = ZombieState.Idle);
                             break;
                         case ZombieState.Walking:
-                            _animator.Play("walk", () => State = ZombieState.Idle);
+                            _sprite.Play("walk", () => State = ZombieState.Idle);
                             break;
                     }
                 }
@@ -76,8 +75,7 @@ namespace Demo.SpriteSheetAnimations
 
         public Zombie(SpriteSheetAnimationFactory animations)
         {
-            _animator = new SpriteSheetAnimator(animations);
-            _sprite = _animator.CreateSprite();
+            _sprite = new AnimatedSprite(animations);
 
             State = ZombieState.Appearing;
             IsOnGround = false;
@@ -85,7 +83,7 @@ namespace Demo.SpriteSheetAnimations
 
         public void Update(GameTime gameTime)
         {
-            _animator.Update(gameTime);
+            _sprite.Update(gameTime);
 
             IsOnGround = false;
 

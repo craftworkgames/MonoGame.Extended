@@ -41,6 +41,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             Assert.AreEqual(652, tileset.Image.Width);
             Assert.AreEqual(783, tileset.Image.Height);
             Assert.AreEqual(2, tileset.Margin);
+            Assert.AreEqual(30, tileset.TileCount);
             Assert.AreEqual("free-tileset", tileset.Name);
             Assert.AreEqual(null, tileset.Source);
             Assert.AreEqual(2, tileset.Spacing);

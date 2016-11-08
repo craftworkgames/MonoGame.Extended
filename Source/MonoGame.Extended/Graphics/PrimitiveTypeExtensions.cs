@@ -5,14 +5,7 @@ namespace MonoGame.Extended.Graphics
 {
     public static class PrimitiveTypeExtensions
     {
-        /// <summary>
-        /// Gets the primitive count for a specified number of vertices.
-        /// </summary>
-        /// <param name="primitiveType">Type of the primitive.</param>
-        /// <param name="verticesCount">The number of vertices.</param>
-        /// <returns>The primitive count.</returns>
-        /// <exception cref="ArgumentException">Invalid primitive type.</exception>
-        internal static int GetPrimitiveCount(this PrimitiveType primitiveType, int verticesCount)
+        internal static int GetPrimitivesCount(this PrimitiveType primitiveType, int verticesCount)
         {
             switch (primitiveType)
             {
@@ -24,6 +17,23 @@ namespace MonoGame.Extended.Graphics
                     return verticesCount - 2;
                 case PrimitiveType.TriangleList:
                     return verticesCount / 3;
+                default:
+                    throw new ArgumentException("Invalid primitive type.");
+            }
+        }
+
+        internal static int GetVerticesCount(this PrimitiveType primitiveType, int primitivesCount)
+        {
+            switch (primitiveType)
+            {
+                case PrimitiveType.LineStrip:
+                    return primitivesCount + 1;
+                case PrimitiveType.LineList:
+                    return primitivesCount * 2;
+                case PrimitiveType.TriangleStrip:
+                    return primitivesCount + 2;
+                case PrimitiveType.TriangleList:
+                    return primitivesCount * 3;
                 default:
                     throw new ArgumentException("Invalid primitive type.");
             }

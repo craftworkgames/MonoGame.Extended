@@ -190,7 +190,7 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
             Frame.Text text = new Frame.Text();
 
             text.Offset = new Microsoft.Xna.Framework.Point(token.Value<int>("xoffset"), token.Value<int>("yoffset"));
-            text.Color = ColorExtensions.FromHex(token.Value<string>("color"));
+            text.Color = ColorHelper.FromHex(token.Value<string>("color"));
             Enum.TryParse(token.Value<string>("hplacement"), true, out text.HorizontalPlacement);
             Enum.TryParse(token.Value<string>("vplacement"), true, out text.VerticalPlacement);
             text.Source = token.Value<string>("font");

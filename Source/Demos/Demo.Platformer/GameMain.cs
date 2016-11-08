@@ -1,14 +1,8 @@
-﻿using Demo.Platformer.Entities;
-using Demo.Platformer.Entities.Systems;
-using Demo.Platformer.Services;
+﻿using Demo.Platformer.Screens;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Maps.Tiled;
-using MonoGame.Extended.ViewportAdapters;
+using MonoGame.Extended.Screens;
 
 namespace Demo.Platformer
 {
@@ -16,11 +10,7 @@ namespace Demo.Platformer
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
-        private Camera2D _camera;
-        private TiledMap _tiledMap;
-        private EntityComponentSystem _entityComponentSystem;
-        private EntityFactory _entityFactory;
-
+        
         public GameMain()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
@@ -29,39 +19,13 @@ namespace Demo.Platformer
             Window.AllowUserResizing = true;
         }
 
-        protected override void LoadContent()
+        protected override void Initialize()
         {
-            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            var screens = new [] { new GameScreen(Services, GraphicsDevice, Window) };
 
-            _entityComponentSystem = new EntityComponentSystem();
-            _entityFactory = new EntityFactory(_entityComponentSystem, Content);
+            Components.Add(new ScreenComponent(this, screens));
 
-            _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
-            _entityComponentSystem.RegisterSystem(new PlayerStateSystem(_entityFactory));
-            _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(gravity: new Vector2(0, 1150)));
-            _entityComponentSystem.RegisterSystem(new ParticleEmitterSystem());
-            _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
-            _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
-
-            _tiledMap = Content.Load<TiledMap>("level-1");
-
-            var service = new TiledObjectToEntityService(_entityFactory);
-            service.CreateEntities(_tiledMap.GetObjectGroup("entities").Objects);
-
-            //var viewport = GraphicsDevice.Viewport;
-            //_alphaTestEffect = new AlphaTestEffect(GraphicsDevice)
-            //{
-            //    Projection =
-            //        Matrix.CreateTranslation(-0.5f, -0.5f, 0)*
-            //        Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1),
-            //    VertexColorEnabled = true,
-            //    ReferenceAlpha = 128
-            //};
-        }
-
-        protected override void UnloadContent()
-        {
+            base.Initialize();
         }
 
         protected override void Update(GameTime gameTime)
@@ -71,36 +35,14 @@ namespace Demo.Platformer
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _entityComponentSystem.Update(gameTime);
-
             base.Update(gameTime);
         }
 
-        //private AlphaTestEffect _alphaTestEffect;
+        //protected override void Draw(GameTime gameTime)
+        //{
+        //    GraphicsDevice.Clear(Color.Black);
 
-        protected override void Draw(GameTime gameTime)
-        {
-            var viewMatrix = _camera.GetViewMatrix();
-
-            GraphicsDevice.Clear(Color.Black);
-
-            //_spriteBatch.Begin(
-            //    sortMode: SpriteSortMode.FrontToBack, 
-            //    samplerState: SamplerState.PointClamp, 
-            //    depthStencilState: DepthStencilState.Default,
-            //    blendState: BlendState.AlphaBlend,
-            //    effect: _alphaTestEffect,
-            //    transformMatrix: viewMatrix);
-
-            //_spriteBatch.Draw(_logo, position: new Vector2(305, 160), color: Color.White, layerDepth: 0.5f);
-            //_spriteBatch.Draw(_logo, position: new Vector2(375, 210), color: Color.Green, layerDepth: 0.25f);
-
-            //_spriteBatch.End();
-            
-            _tiledMap.Draw(viewMatrix);
-            _entityComponentSystem.Draw(gameTime);
-
-            base.Draw(gameTime);
-        }
+        //    base.Draw(gameTime);
+        //}
     }
 }

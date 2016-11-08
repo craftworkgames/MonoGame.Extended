@@ -8,9 +8,7 @@ namespace MonoGame.Extended.Shapes
         float Top { get; }
         float Right { get; }
         float Bottom { get; }
-
-        RectangleF GetBoundingRectangle();
-
+        RectangleF BoundingRectangle { get; }
         bool Contains(float x, float y);
         bool Contains(Vector2 point);
     }

@@ -50,6 +50,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,6 +63,8 @@
     <Compile Include="Collections\DequeTests.cs" />
     <Compile Include="Collections\PoolTests.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensionsTests.cs" />
+    <Compile Include="Maps\Renderers\FullMapRendererTest.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTest.cs" />
     <Compile Include="MockGameWindow.cs" />
     <Compile Include="Particles\AssertionModifier.cs" />
     <Compile Include="Particles\ColourTests.cs" />
@@ -69,6 +72,11 @@
     <Compile Include="Particles\ParticleBufferTests.cs" />
     <Compile Include="Particles\Profiles\PointProfileTests.cs" />
     <Compile Include="Particles\Profiles\RingProfileTests.cs" />
+    <Compile Include="Primitives\BoundingRectangleTests.cs" />
+    <Compile Include="Primitives\Point2Tests.cs" />
+    <Compile Include="Primitives\Ray2DTests.cs" />
+    <Compile Include="Primitives\Segment2DTests.cs" />
+    <Compile Include="Primitives\Size2Tests.cs" />
     <Compile Include="RangeTests.cs" />
     <Compile Include="Shapes\PolygonFTests.cs" />
     <Compile Include="Shapes\CircleTests.cs" />

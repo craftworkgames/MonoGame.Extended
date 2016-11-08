@@ -3,7 +3,7 @@
   <properties>
     <property name="awesome" value="42"/>
   </properties>
-  <tileset firstgid="1" name="free-tileset" tilewidth="128" tileheight="128" spacing="2" margin="2">
+  <tileset firstgid="1" name="free-tileset" tilewidth="128" tileheight="128" tilecount="30" spacing="2" margin="2">
     <image source="free-tileset.png" width="652" height="783"/>
     <tile id="7">
       <properties>

@@ -7,19 +7,22 @@ namespace MonoGame.Extended.Tests
     [TestFixture]
     public class AngleTest
     {
-        private const float DELTA = 0.0000001f;
+        private const float _delta = 0.00001f;
+
         [Test]
         public void ConstructorTest()
         {
-            var value = 0.5f;
-            var radians = new Angle(value);
+            const float value = 0.5f;
+            // ReSharper disable once RedundantArgumentDefaultValue
+            var radians = new Angle(value, AngleType.Radian);
             var degrees = new Angle(value, AngleType.Degree);
             var gradians = new Angle(value, AngleType.Gradian);
             var revolutions = new Angle(value, AngleType.Revolution);
-            Assert.AreEqual(value, radians.Radians, DELTA);
-            Assert.AreEqual(value, degrees.Degrees, DELTA);
-            Assert.AreEqual(value, gradians.Gradians, DELTA);
-            Assert.AreEqual(value, revolutions.Revolutions, DELTA);
+
+            Assert.That(0.5f, Is.EqualTo(radians.Radians).Within(_delta));
+            Assert.That(0.5f, Is.EqualTo(degrees.Degrees).Within(_delta));
+            Assert.That(0.5f, Is.EqualTo(gradians.Gradians).Within(_delta));
+            Assert.That(0.5f, Is.EqualTo(revolutions.Revolutions).Within(_delta));
         }
 
         [Test]
@@ -27,16 +30,17 @@ namespace MonoGame.Extended.Tests
         {
             //from radians
             var radians = new Angle(MathHelper.Pi);
-            Assert.AreEqual(180d, radians.Degrees, DELTA);
-            Assert.AreEqual(200d, radians.Gradians, DELTA);
-            Assert.AreEqual(0.5, radians.Revolutions, DELTA);
+            Assert.AreEqual(180f, radians.Degrees, _delta);
+            Assert.AreEqual(200f, radians.Gradians, _delta);
+            Assert.AreEqual(0.5f, radians.Revolutions, _delta);
             //to radians
             var degrees = new Angle(180f, AngleType.Degree);
             var gradians = new Angle(200f, AngleType.Gradian);
             var revolutions = new Angle(0.5f, AngleType.Revolution);
-            Assert.AreEqual(MathHelper.Pi, degrees.Radians, DELTA);
-            Assert.AreEqual(MathHelper.Pi, gradians.Radians, DELTA);
-            Assert.AreEqual(MathHelper.Pi, revolutions.Radians, DELTA);
+
+            Assert.That(MathHelper.Pi, Is.EqualTo(degrees.Radians).Within(_delta));
+            Assert.That(MathHelper.Pi, Is.EqualTo(gradians.Radians).Within(_delta));
+            Assert.That(MathHelper.Pi, Is.EqualTo(revolutions.Radians).Within(_delta));
         }
 
         [Test]
@@ -62,15 +66,15 @@ namespace MonoGame.Extended.Tests
         public void VectorTest()
         {
             var angle = Angle.FromVector(Vector2.One);
-            Assert.AreEqual(-MathHelper.Pi / 4d, angle.Radians, DELTA);
+            Assert.AreEqual(-MathHelper.Pi / 4d, angle.Radians, _delta);
             Assert.AreEqual(10f, angle.ToVector(10f).Length());
 
             angle = Angle.FromVector(Vector2.UnitX);
-            Assert.AreEqual(0, angle.Radians, DELTA);
+            Assert.AreEqual(0, angle.Radians, _delta);
             Assert.IsTrue(Vector2.UnitX.EqualsWithTolerence(angle.ToUnitVector()));
 
             angle = Angle.FromVector(-Vector2.UnitY);
-            Assert.AreEqual(MathHelper.Pi / 2d, angle.Radians, DELTA);
+            Assert.AreEqual(MathHelper.Pi / 2d, angle.Radians, _delta);
             Assert.IsTrue((-Vector2.UnitY).EqualsWithTolerence(angle.ToUnitVector()));
         }
 

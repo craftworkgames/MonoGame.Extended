@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Graphics
     public static class GeometryBuilderExtensionsVertexPositionColorTexture
     {
         /// <summary>
-        ///     Adds a sprite to the specified <see cref="GeometryBuffer{VertexPositionColorTexture}" />.
+        ///     Adds a sprite to the back of specified <see cref="GeometryBuffer{VertexPositionColorTexture}" />.
         /// </summary>
         /// <param name="geometryBuffer">The <see cref="GeometryBuffer{VertexPositionColorTexture}" />.</param>
         /// <param name="indexOffset">The vertex index offset applied to generated indices.</param>
@@ -17,34 +17,39 @@ namespace MonoGame.Extended.Graphics
         ///     The texture region <see cref="Rectangle" /> of the <paramref name="texture" />. Use
         ///     <code>null</code> to use the entire <see cref="Texture2D" />.
         /// </param>
+        /// <param name="size">
+        ///     The <see cref="Size" /> of the sprite. Use <code>null</code> to use the default size which is either
+        ///     the size of the <paramref name="sourceRectangle" /> if it is not <code>null</code>, or the texture size if
+        ///     <paramref name="sourceRectangle" /> is <code>null</code>.
+        /// </param>
         /// <param name="color">The <see cref="Color" />. Use <code>null</code> to use the default <see cref="Color.White" />.</param>
         /// <param name="origin">
         ///     The origin <see cref="Vector2" />. Use <code>null</code> to use the default
         ///     <see cref="Vector2.Zero" />.
         /// </param>
-        /// <param name="options">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
+        /// <param name="effects">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
         /// <param name="depth">The depth. The default value is <code>0</code>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="texture"/> is null.</exception>
-        /// <exception cref="GeometryBufferOverflowException{TVertexType}">The underlying <see cref="GeometryBuffer{TVertexType}"/> is full.</exception>
-        public static unsafe bool EnqueueSprite(this GeometryBuffer<VertexPositionColorTexture> geometryBuffer, ushort indexOffset, Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null, Color? color = null, Vector2? origin = null, SpriteEffects options = SpriteEffects.None, float depth = 0)
+        /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
+        /// <exception cref="GeometryBufferOverflowException{TVertexType}">
+        ///     The underlying
+        ///     <see cref="GeometryBuffer{TVertexType}" /> is full.
+        /// </exception>
+        public static unsafe void EnqueueSprite(this GeometryBuffer<VertexPositionColorTexture> geometryBuffer,
+            ushort indexOffset, Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null, Size? size = null,
+            Color? color = null, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None, float depth = 0)
         {
             if (texture == null)
-                throw new ArgumentNullException(paramName: nameof(texture));
+                throw new ArgumentNullException(nameof(texture));
 
-            geometryBuffer.ThrowIfWouldOverflow(verticesCountToAdd: 4, indicesCountToAdd: 6);
+            geometryBuffer.ThrowIfWouldOverflow(4, 6);
 
             var origin1 = origin ?? Vector2.Zero;
             Vector2 positionTopLeft, positionBottomRight, textureCoordinateTopLeft, textureCoordinateBottomRight;
-            var textureWidth = texture.Width;
-            var textureHeight = texture.Height;
-
-            positionTopLeft.X = -origin1.X;
-            positionTopLeft.Y = -origin1.Y;
+            Size size1;
 
             if (sourceRectangle == null)
             {
-                positionBottomRight.X = -origin1.X + textureWidth;
-                positionBottomRight.Y = -origin1.Y + textureHeight;
+                size1 = size ?? new Size(texture.Width, texture.Height);
                 textureCoordinateTopLeft.X = 0;
                 textureCoordinateTopLeft.Y = 0;
                 textureCoordinateBottomRight.X = 1;
@@ -53,15 +58,19 @@ namespace MonoGame.Extended.Graphics
             else
             {
                 var textureRegion = sourceRectangle.Value;
-                positionBottomRight.X = -origin1.X + textureRegion.Width;
-                positionBottomRight.Y = -origin1.Y + textureRegion.Height;
-                textureCoordinateTopLeft.X = (textureRegion.X + 0.5f) / texture.Width;
-                textureCoordinateTopLeft.Y = (textureRegion.Y + 0.5f) / texture.Height;
-                textureCoordinateBottomRight.X = (textureRegion.X + textureRegion.Width + 0.5f) / textureWidth;
-                textureCoordinateBottomRight.Y = (textureRegion.Y + textureRegion.Height + 0.5f) / textureHeight;
+                size1 = size ?? new Size(textureRegion.Width, textureRegion.Height);
+                textureCoordinateTopLeft.X = textureRegion.X / (float)texture.Width;
+                textureCoordinateTopLeft.Y = textureRegion.Y / (float)texture.Height;
+                textureCoordinateBottomRight.X = (textureRegion.X + textureRegion.Width) / (float)texture.Width;
+                textureCoordinateBottomRight.Y = (textureRegion.Y + textureRegion.Height) / (float)texture.Height;
             }
 
-            var spriteEffect = options;
+            positionTopLeft.X = -origin1.X;
+            positionTopLeft.Y = -origin1.Y;
+            positionBottomRight.X = -origin1.X + size1.Width;
+            positionBottomRight.Y = -origin1.Y + size1.Height;
+
+            var spriteEffect = effects;
             if ((spriteEffect & SpriteEffects.FlipVertically) != 0)
             {
                 var temp = textureCoordinateBottomRight.Y;
@@ -76,7 +85,8 @@ namespace MonoGame.Extended.Graphics
                 textureCoordinateTopLeft.X = temp;
             }
 
-            var vertex = new VertexPositionColorTexture(position: new Vector3(Vector2.Zero, depth), color: color ?? Color.White, textureCoordinate: Vector2.Zero);
+            var vertex = new VertexPositionColorTexture(new Vector3(Vector2.Zero, depth), color ?? Color.White,
+                Vector2.Zero);
 
             fixed (VertexPositionColorTexture* fixedPointer = geometryBuffer._vertices)
             {
@@ -133,8 +143,6 @@ namespace MonoGame.Extended.Graphics
             }
 
             geometryBuffer._indexCount += 6;
-
-            return true;
         }
     }
 }

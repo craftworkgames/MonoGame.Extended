@@ -58,19 +58,24 @@ namespace Demo.Platformer.Entities.Systems
                 bodyA.Velocity += _gravity * deltaTime;
                 bodyA.Position += bodyA.Velocity * deltaTime;
 
-                foreach (var bodyB in _staticBodies)
+                foreach (var bodyB in _staticBodies.Concat(_movingBodies))
                 {
-                    var depth = bodyA.BoundingRectangle.IntersectionDepth(bodyB.BoundingRectangle);
-
-                    if (depth != Vector2.Zero)
+                    if (bodyA != bodyB)
                     {
-                        var collisionHandlers = bodyA.Entity.GetComponents<BasicCollisionHandler>();
+                        var depth = bodyA.BoundingRectangle.IntersectionDepth(bodyB.BoundingRectangle);
 
-                        foreach (var collisionHandler in collisionHandlers)
-                            collisionHandler.OnCollision(bodyA, bodyB, depth);
+                        if (depth != Vector2.Zero)
+                        {
+                            var collisionHandlers = bodyA.Entity.GetComponents<BasicCollisionHandler>();
+
+                            foreach (var collisionHandler in collisionHandlers)
+                                collisionHandler.OnCollision(bodyA, bodyB, depth);
+                        }
                     }
                 }
             }
+
+
         }
     }
 }

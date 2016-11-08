@@ -156,4 +156,5 @@ MonoGame.Extended is released under the [The MIT License (MIT)](https://github.c
  - Matthew-Davey for letting us use the [Mercury Particle Engine](https://github.com/Matthew-Davey/mercury-particle-engine).
  - John McDonald for [2D XNA Primitives](https://bitbucket.org/C3/2d-xna-primitives/wiki/Home)
  - [LibGDX](https://libgdx.badlogicgames.com) for a whole lot of inspiration.
+ - @prime31 for [Nez](https://github.com/prime31/Nez), which ideas and code bounce back and forth.
  - All of our contributors!

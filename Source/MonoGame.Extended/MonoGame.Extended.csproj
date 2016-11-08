@@ -38,7 +38,17 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
-    <Compile Include="Animations\SpriteSheets\AnimatedSprite.cs" />
+    <Compile Include="Maps\Renderers\FullMapRenderer.cs" />
+    <Compile Include="Maps\Renderers\GroupRenderDetails.cs" />
+    <Compile Include="Maps\Renderers\IMapRenderer.cs" />
+    <Compile Include="Maps\Renderers\MapRenderDetails.cs" />
+    <Compile Include="Primitives\BoundingRectangle.cs" />
+    <Compile Include="Primitives\Point2.cs" />
+    <Compile Include="Primitives\Ray2D.cs" />
+    <Compile Include="Primitives\RayHelper.cs" />
+    <Compile Include="Primitives\Segment2D.cs" />
+    <Compile Include="Primitives\Size2.cs" />
+    <Compile Include="Sprites\AnimatedSprite.cs" />
     <Compile Include="Animations\Tweens\DelayTween.cs" />
     <Compile Include="Animations\Tweens\FluentTweening.cs" />
     <Compile Include="Animations\Tweens\EasingFunctions.cs" />
@@ -60,7 +70,7 @@
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
-    <Compile Include="ColorExtensions.cs" />
+    <Compile Include="ColorHelper.cs" />
     <Compile Include="Entities\Components\EntityComponent.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityComponentSystem.cs" />
@@ -68,6 +78,9 @@
     <Compile Include="Entities\Systems\ComponentSystem.cs" />
     <Compile Include="Entities\Systems\ParticleEmitterSystem.cs" />
     <Compile Include="Entities\Systems\SpriteBatchSystem.cs" />
+    <Compile Include="Graphics\Batch2DSortMode.cs" />
+    <Compile Include="Graphics\Batching\BatchCommandDrawer.cs" />
+    <Compile Include="Graphics\Batching\BatchDrawCommand.cs" />
     <Compile Include="InputListeners\InputManager.cs" />
     <Compile Include="NuclexGui\Controls\Desktop\GuiButtonControl.cs" />
     <Compile Include="NuclexGui\Controls\Desktop\GuiChoiceControl.cs" />
@@ -106,15 +119,13 @@
     <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatVerticalSliderControlRenderer.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatWindowControlRenderer.cs" />
     <Compile Include="Support\EnumHelper.cs" />
-    <Compile Include="Graphics\Batching\Drawers\BatchDrawer.cs" />
-    <Compile Include="Graphics\Batching\BatchCommand.cs" />
     <Compile Include="Graphics\Batching\BatchSortMode.cs" />
-    <Compile Include="Graphics\Batching\IBatchCommandContext.cs" />
-    <Compile Include="Graphics\Batching\PrimitiveBatch.cs" />
+    <Compile Include="Graphics\Batching\IBatchDrawCommandData.cs" />
+    <Compile Include="Graphics\Batching\Batch.cs" />
     <Compile Include="Graphics\Batching\BatchCommandQueueOverflowException.cs" />
-    <Compile Include="Graphics\Batching\Queuers\BatchCommandQueuer.cs" />
-    <Compile Include="Graphics\Batching\Queuers\DeferredBatchCommandQueuer.cs" />
-    <Compile Include="Graphics\Batching\Queuers\ImmediateBatchCommandQueuer.cs" />
+    <Compile Include="Graphics\Batching\BatchCommandQueue.cs" />
+    <Compile Include="Graphics\Batching\DeferredBatchCommandQueue.cs" />
+    <Compile Include="Graphics\Batching\ImmediateBatchCommandQueue.cs" />
     <Compile Include="Graphics\Effects\ITexture2DEffect.cs" />
     <Compile Include="Graphics\GeometryBuffer.Dynamic.cs" />
     <Compile Include="Graphics\Effects\MatrixChainEffect.cs" />
@@ -125,7 +136,7 @@
     <Compile Include="Graphics\GeometryBufferExtensions.VertexPositionColorTexture.cs" />
     <Compile Include="Graphics\GeometryBufferOverflowException.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
-    <Compile Include="Graphics\GeometryBatch2D.cs" />
+    <Compile Include="Graphics\DynamicBatch2D.cs" />
     <Compile Include="Graphics\GeometryBuffer.Static.cs" />
     <Compile Include="InputListeners\ExtendedPlayerIndex.cs" />
     <Compile Include="NuclexGui\Controls\GuiControl.cs" />
@@ -161,6 +172,8 @@
     <Compile Include="IEquatableByRef.cs" />
     <Compile Include="InputListeners\InputListenerComponent.cs" />
     <Compile Include="Matrix2D.cs" />
+    <Compile Include="SimpleDrawableGameComponent.cs" />
+    <Compile Include="SimpleGameComponent.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\FlatGuiVisualizer.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\IFlatControlRenderer.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\IFlatGuiGraphics.cs" />
@@ -212,8 +225,8 @@
     <Compile Include="ISizable.cs" />
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
-    <Compile Include="Maps\Tiled\TiledTileSetTileFrame.cs" />
-    <Compile Include="Maps\Tiled\TiledTileSetTile.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTileFrame.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTile.cs" />
     <Compile Include="Particles\ColorExtensions.cs" />
     <Compile Include="Particles\FastRandomExtensions.cs" />
     <Compile Include="Particles\HslColor.cs" />
@@ -291,7 +304,7 @@
     <Compile Include="Maps\Tiled\TiledRenderOrder.cs" />
     <Compile Include="Maps\Tiled\TiledProperties.cs" />
     <Compile Include="Maps\Tiled\TiledTile.cs" />
-    <Compile Include="Maps\Tiled\TiledTileSet.cs" />
+    <Compile Include="Maps\Tiled\TiledTileset.cs" />
     <Compile Include="Timers\ContinuousClock.cs" />
     <Compile Include="Timers\CountdownTimer.cs" />
     <Compile Include="Timers\GameTimer.cs" />
@@ -346,6 +359,8 @@
     <Content Include="Graphics\Effects\Resources\DefaultEffect2D.fx" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Maps\Renderers" />
+    <Folder Include="Maps\Tiled" />
     <Folder Include="NuclexGui\Controls\Arcade\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

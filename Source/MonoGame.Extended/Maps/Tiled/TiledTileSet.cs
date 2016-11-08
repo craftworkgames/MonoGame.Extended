@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
@@ -7,19 +6,17 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledTileset
     {
-        public TiledTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2)
+        public TiledTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int tileCount, int spacing = 2, int margin = 2)
         {
-            //if (texture.Width % tileWidth != 0 || texture.Height % tileHeight != 0)
-            //    throw new InvalidOperationException("The tileset texture must be an exact multiple of the tile size");
-
             Texture = texture;
             FirstId = firstId;
             TileWidth = tileWidth;
             TileHeight = tileHeight;
             Spacing = spacing;
             Margin = margin;
+            TileCount = tileCount;
             Properties = new TiledProperties();
-            Tiles = new List<TiledTileSetTile>();
+            _tiles = new List<TiledTilesetTile>();
 
             var id = FirstId;
             _regions = new Dictionary<int, TextureRegion2D>();
@@ -34,15 +31,18 @@ namespace MonoGame.Extended.Maps.Tiled
             }
         }
 
-        private readonly Dictionary<int, TextureRegion2D> _regions; 
+        private readonly Dictionary<int, TextureRegion2D> _regions;
+        private readonly List<TiledTilesetTile> _tiles;
 
+        public string Name => Texture.Name;
         public Texture2D Texture { get; }
         public int FirstId { get; }
         public int TileWidth { get; }
         public int TileHeight { get; }
         public int Spacing { get; }
         public int Margin { get; }
-        public List<TiledTileSetTile> Tiles { get; private set; }
+        public int TileCount { get; }
+        public IReadOnlyList<TiledTilesetTile> Tiles => _tiles;
         public TiledProperties Properties { get; private set; }
 
         public TextureRegion2D GetTileRegion(int id)
@@ -50,11 +50,16 @@ namespace MonoGame.Extended.Maps.Tiled
             return id == 0 ? null : _regions[id];
         }
 
-        public TiledTileSetTile CreateTileSetTile(int id)
+        public TiledTilesetTile CreateTileSetTile(int id)
         {
-            var tileSetTile = new TiledTileSetTile(id);
-            Tiles.Add(tileSetTile);
+            var tileSetTile = new TiledTilesetTile(id);
+            _tiles.Add(tileSetTile);
             return tileSetTile;
+        }
+
+        public bool ContainsTileId(int tileId)
+        {
+            return tileId >= FirstId && tileId < FirstId + TileCount;
         }
     }
 }
