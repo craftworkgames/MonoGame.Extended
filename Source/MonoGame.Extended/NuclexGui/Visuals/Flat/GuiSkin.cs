@@ -121,10 +121,12 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         public GuiSkin()
         {
             frames = new List<Frame>();
-            resources = new Resources();
+            resources = new Resources
+            {
+                bitmap = new List<Resources.Bitmap>(),
+                font = new List<Resources.Font>()
+            };
 
-            resources.bitmap = new List<Resources.Bitmap>();
-            resources.font = new List<Resources.Font>();
         }
 
         public Resources resources { get; set; }

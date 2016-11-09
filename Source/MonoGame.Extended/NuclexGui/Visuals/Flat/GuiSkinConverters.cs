@@ -214,10 +214,12 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
         private Frame.Text ParseText(JToken token)
         {
-            var text = new Frame.Text();
+            var text = new Frame.Text
+            {
+                Offset = new Point(token.Value<int>("xoffset"), token.Value<int>("yoffset")),
+                Color = ColorHelper.FromHex(token.Value<string>("color"))
+            };
 
-            text.Offset = new Point(token.Value<int>("xoffset"), token.Value<int>("yoffset"));
-            text.Color = ColorHelper.FromHex(token.Value<string>("color"));
             Enum.TryParse(token.Value<string>("hplacement"), true, out text.HorizontalPlacement);
             Enum.TryParse(token.Value<string>("vplacement"), true, out text.VerticalPlacement);
             text.Source = token.Value<string>("font");
