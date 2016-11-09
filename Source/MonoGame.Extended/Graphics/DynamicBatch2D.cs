@@ -20,19 +20,19 @@ namespace MonoGame.Extended.Graphics
     {
         internal const int DefaultMaximumVerticesCount = 8192;
         internal const int DefaultMaximumIndicesCount = 12288;
+        private readonly DefaultEffect2D _defaultEffect;
+        private readonly Texture2D _pixelTexture;
+        private BlendState _blendState;
+        private DepthStencilState _depthStencilState;
+        private Effect _effect;
 
         private DrawCommandData _pixelTextureDrawContext;
-        private readonly DefaultEffect2D _defaultEffect;
-        private Effect _effect;
-        private readonly Texture2D _pixelTexture;
-        private Batch2DSortMode _sortMode;
-        private BlendState _blendState;
-        private SamplerState _samplerState;
-        private DepthStencilState _depthStencilState;
-        private RasterizerState _rasterizerState;
-        private Matrix _worldMatrix;
-        private Matrix _viewMatrix;
         private Matrix? _projectionMatrix;
+        private RasterizerState _rasterizerState;
+        private SamplerState _samplerState;
+        private Batch2DSortMode _sortMode;
+        private Matrix _viewMatrix;
+        private Matrix _worldMatrix;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="DynamicBatch2D" /> class.
@@ -138,7 +138,7 @@ namespace MonoGame.Extended.Graphics
             _effect = effect ?? _defaultEffect;
             _worldMatrix = worldMatrix ?? Matrix.Identity;
             _viewMatrix = viewMatrix ?? Matrix.Identity;
-            _projectionMatrix = projectionMatrix; 
+            _projectionMatrix = projectionMatrix;
 
             BatchSortMode batchSortMode;
             switch (sortMode)
@@ -174,9 +174,7 @@ namespace MonoGame.Extended.Graphics
         public new void End()
         {
             if (_sortMode != Batch2DSortMode.Immediate)
-            {
                 ApplyStates();
-            }
 
             base.End();
         }
@@ -234,7 +232,11 @@ namespace MonoGame.Extended.Graphics
         ///     <see cref="SpriteEffects" />, and depth <see cref="float" />.
         /// </summary>
         /// <param name="texture">The <see cref="Texture" />.</param>
-        /// <param name="destinationRectangle">The destination <see cref="Rectangle"/> that specifies the world destination for drawing the sprite. If this rectangle is not the same size as the <paramref name="sourceRectangle"/>, the sprite will be scaled to fit.</param>
+        /// <param name="destinationRectangle">
+        ///     The destination <see cref="Rectangle" /> that specifies the world destination for
+        ///     drawing the sprite. If this rectangle is not the same size as the <paramref name="sourceRectangle" />, the sprite
+        ///     will be scaled to fit.
+        /// </param>
         /// <param name="sourceRectangle">
         ///     The texture region <see cref="Rectangle" /> of the <paramref name="texture" />. Use
         ///     <code>null</code> to use the entire <see cref="Texture2D" />.
@@ -271,7 +273,11 @@ namespace MonoGame.Extended.Graphics
         ///     <see cref="SpriteEffects" />, and depth <see cref="float" />.
         /// </summary>
         /// <param name="texture">The <see cref="Texture" />.</param>
-        /// <param name="destinationRectangle">The destination <see cref="Rectangle"/> that specifies the world destination for drawing the sprite. If this rectangle is not the same size as the <paramref name="sourceRectangle"/>, the sprite will be scaled to fit.</param>
+        /// <param name="destinationRectangle">
+        ///     The destination <see cref="Rectangle" /> that specifies the world destination for
+        ///     drawing the sprite. If this rectangle is not the same size as the <paramref name="sourceRectangle" />, the sprite
+        ///     will be scaled to fit.
+        /// </param>
         /// <param name="sourceRectangle">
         ///     The texture region <see cref="Rectangle" /> of the <paramref name="texture" />. Use
         ///     <code>null</code> to use the entire <see cref="Texture2D" />.
@@ -339,7 +345,8 @@ namespace MonoGame.Extended.Graphics
         ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
         /// </exception>
         /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
-        public void DrawSprite(Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null, Color? color = null, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None,
+        public void DrawSprite(Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null,
+            Color? color = null, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None,
             float depth = 0)
         {
             var geometryBuffer = GeometryBuffer;
@@ -714,7 +721,8 @@ namespace MonoGame.Extended.Graphics
             DrawString(bitmapFont, text, ref matrix, color, origin, effects, depth);
         }
 
-        private static void CalculateTransformMatrix(Vector2 position, float rotation, Vector2? scale, out Matrix2D transformMatrix)
+        private static void CalculateTransformMatrix(Vector2 position, float rotation, Vector2? scale,
+            out Matrix2D transformMatrix)
         {
             transformMatrix = Matrix2D.Identity;
 

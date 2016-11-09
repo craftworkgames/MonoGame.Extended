@@ -12,17 +12,17 @@ namespace MonoGame.Extended
 
         public static float NextSingle(this Random random, float min, float max)
         {
-            return (max - min) * NextSingle(random) + min;
+            return (max - min)*NextSingle(random) + min;
         }
 
         public static float NextSingle(this Random random, float max)
         {
-            return max * NextSingle(random);
+            return max*NextSingle(random);
         }
 
         public static float NextSingle(this Random random)
         {
-            return (float)random.NextDouble();
+            return (float) random.NextDouble();
         }
 
         public static float NextSingle(this Random random, Range<float> range)
@@ -38,7 +38,7 @@ namespace MonoGame.Extended
         public static void NextUnitVector(this Random random, out Vector2 vector)
         {
             var angle = NextAngle(random);
-            vector = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+            vector = new Vector2((float) Math.Cos(angle), (float) Math.Sin(angle));
         }
     }
 }

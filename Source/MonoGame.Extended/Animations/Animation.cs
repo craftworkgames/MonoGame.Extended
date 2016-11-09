@@ -5,6 +5,12 @@ namespace MonoGame.Extended.Animations
 {
     public abstract class Animation : IUpdate, IDisposable
     {
+        private readonly bool _disposeOnComplete;
+
+        private readonly Action _onCompleteAction;
+
+        private bool _isComplete;
+
         protected Animation(Action onCompleteAction, bool disposeOnComplete)
         {
             _onCompleteAction = onCompleteAction;
@@ -12,10 +18,6 @@ namespace MonoGame.Extended.Animations
             IsPaused = false;
         }
 
-        private readonly Action _onCompleteAction;
-        private readonly bool _disposeOnComplete;
-
-        private bool _isComplete;
         public bool IsComplete
         {
             get { return _isComplete; }
@@ -40,6 +42,16 @@ namespace MonoGame.Extended.Animations
         public bool IsPlaying => !IsPaused && !IsComplete;
         public bool IsPaused { get; private set; }
         public float CurrentTime { get; protected set; }
+
+        public virtual void Dispose()
+        {
+            IsDisposed = true;
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            Update(gameTime.GetElapsedSeconds());
+        }
 
         public void Play()
         {
@@ -71,16 +83,6 @@ namespace MonoGame.Extended.Animations
 
             CurrentTime += deltaTime;
             IsComplete = OnUpdate(deltaTime);
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            Update(gameTime.GetElapsedSeconds());
-        }
-
-        public virtual void Dispose()
-        {
-            IsDisposed = true;
         }
     }
 }

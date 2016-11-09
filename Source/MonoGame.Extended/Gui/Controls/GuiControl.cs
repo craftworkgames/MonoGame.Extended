@@ -11,21 +11,23 @@ namespace MonoGame.Extended.Gui.Controls
 {
     public abstract class GuiControl : IMovable, ISizable
     {
+        private bool _isEnabled;
+
+        private bool _isHovered;
+
         protected GuiControl()
         {
             IsEnabled = true;
         }
 
         public string Name { get; set; }
-        public Vector2 Position { get; set; }
-        public SizeF Size { get; set; }
         public float Left => Position.X;
         public float Top => Position.Y;
         public float Right => Position.X + Width;
         public float Bottom => Position.Y + Height;
         public float Width => Size.Width;
         public float Height => Size.Height;
-        public Vector2 Center => new Vector2(Position.X + Width * 0.5f, Position.Y + Height * 0.5f);
+        public Vector2 Center => new Vector2(Position.X + Width*0.5f, Position.Y + Height*0.5f);
         public RectangleF BoundingRectangle => new RectangleF(Left, Top, Width, Height);
         public bool IsFocused { get; internal set; }
 
@@ -42,7 +44,6 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiHorizontalAlignment HorizontalTextAlignment { get; set; } = GuiHorizontalAlignment.Centre;
         public GuiVerticalAlignment VerticalTextAlignment { get; set; } = GuiVerticalAlignment.Centre;
 
-        private bool _isHovered;
         public bool IsHovered
         {
             get { return _isHovered; }
@@ -60,7 +61,6 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        private bool _isEnabled;
         public bool IsEnabled
         {
             get { return _isEnabled; }
@@ -81,6 +81,8 @@ namespace MonoGame.Extended.Gui.Controls
 
         public GuiControlStyle DisabledStyle { get; set; }
         public GuiControlStyle HoverStyle { get; set; }
+        public Vector2 Position { get; set; }
+        public SizeF Size { get; set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -92,7 +94,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         private void DrawText(SpriteBatch spriteBatch, Rectangle rectangle)
         {
-            if(Font == null)
+            if (Font == null)
                 return;
 
             var size = Font.MeasureString(Text);
@@ -106,12 +108,12 @@ namespace MonoGame.Extended.Gui.Controls
             var destinationRectangle = GuiAlignmentHelper.GetDestinationRectangle(
                 HorizontalTextAlignment, VerticalTextAlignment, sourceRectangle, targetRectangle);
 
-            spriteBatch.DrawString(Font, Text, destinationRectangle.Location.ToVector2(), TextColor * (TextColor.A / 255f));
+            spriteBatch.DrawString(Font, Text, destinationRectangle.Location.ToVector2(), TextColor*(TextColor.A/255f));
         }
 
         private void DrawBackground(SpriteBatch spriteBatch, Rectangle rectangle)
         {
-            if(BackgroundRegion == null)
+            if (BackgroundRegion == null)
                 return;
 
             var sourceRectangle = BackgroundRegion.Bounds;
@@ -121,7 +123,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             var ninePatch = new NinePatch(BackgroundRegion, Padding.Left, Padding.Top, Padding.Right, Padding.Bottom)
             {
-                Color = BackgroundColor * (BackgroundColor.A / 255f)
+                Color = BackgroundColor*(BackgroundColor.A/255f)
             };
             ninePatch.Draw(spriteBatch, destinationRectangle);
         }
@@ -133,7 +135,7 @@ namespace MonoGame.Extended.Gui.Controls
             //var y = Position.Y + Size.Height * 0.5f - size.Y * 0.5f;
             //var controlRectangle = new Rectangle((int)x, (int)y, size.X, size.Y);
             //return controlRectangle;
-            return new Rectangle((int)Position.X, (int)Position.Y, (int)Size.Width, (int)Size.Height);
+            return new Rectangle((int) Position.X, (int) Position.Y, (int) Size.Width, (int) Size.Height);
         }
 
         //private static Point ResizeToFit(Size imageSize, SizeF boxSize)
@@ -167,13 +169,13 @@ namespace MonoGame.Extended.Gui.Controls
 
         public virtual void OnMouseEnter(object sender, MouseEventArgs args)
         {
-            if(IsEnabled)
+            if (IsEnabled)
                 IsHovered = true;
         }
 
         public virtual void OnMouseLeave(object sender, MouseEventArgs args)
         {
-            if(IsEnabled)
+            if (IsEnabled)
                 IsHovered = false;
         }
 

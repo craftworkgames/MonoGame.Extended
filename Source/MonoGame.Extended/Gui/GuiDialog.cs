@@ -1,29 +1,23 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Gui
 {
     public class GuiDialog : IMovable, ISizable
     {
-        GuiLayout _layout;
-        
-        public SizeF Size { get; set; }
-        public Vector2 Position { get; set; }
+        private GuiLayout _layout;
 
         public GuiDialog()
         {
-
         }
 
-        #region Delegates
+        public Vector2 Position { get; set; }
 
-
-
-        #endregion
+        public SizeF Size { get; set; }
 
         public void Update(GameTime gameTime)
         {
-
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -37,12 +31,12 @@ namespace MonoGame.Extended.Gui
 
         public bool Contains(Point point)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public bool Contains(Vector2 point)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

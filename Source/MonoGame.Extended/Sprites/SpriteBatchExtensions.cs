@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Sprites
         {
             Draw(spriteBatch, sprite);
         }
-        
+
         public static void Draw(this SpriteBatch spriteBatch, Sprite sprite)
         {
             if (sprite == null) throw new ArgumentNullException(nameof(sprite));
@@ -19,7 +19,8 @@ namespace MonoGame.Extended.Sprites
                 var texture = sprite.TextureRegion.Texture;
                 var sourceRectangle = sprite.TextureRegion.Bounds;
 
-                spriteBatch.Draw(texture, sprite.Position, sourceRectangle, sprite.Color * sprite.Alpha, sprite.Rotation, sprite.Origin,
+                spriteBatch.Draw(texture, sprite.Position, sourceRectangle, sprite.Color*sprite.Alpha, sprite.Rotation,
+                    sprite.Origin,
                     sprite.Scale, sprite.Effect, sprite.Depth);
             }
         }

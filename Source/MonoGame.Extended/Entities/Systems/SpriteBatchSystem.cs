@@ -7,14 +7,14 @@ namespace MonoGame.Extended.Entities.Systems
 {
     public class SpriteBatchSystem : ComponentSystem
     {
+        private readonly Camera2D _camera;
+        private readonly SpriteBatch _spriteBatch;
+
         public SpriteBatchSystem(GraphicsDevice graphicsDevice, Camera2D camera)
         {
             _camera = camera;
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
-
-        private readonly Camera2D _camera;
-        private readonly SpriteBatch _spriteBatch;
 
         public Effect Effect { get; set; }
         public RasterizerState RasterizerState { get; set; }
@@ -29,7 +29,8 @@ namespace MonoGame.Extended.Entities.Systems
             var emitters = GetComponents<ParticleEmitter>();
             var transformMatrix = _camera.GetViewMatrix();
 
-            _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect, transformMatrix);
+            _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect,
+                transformMatrix);
 
             foreach (var sprite in sprites)
                 _spriteBatch.Draw(sprite);

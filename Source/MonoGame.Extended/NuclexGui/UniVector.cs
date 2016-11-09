@@ -10,6 +10,7 @@ namespace MonoGame.Extended.NuclexGui
 
         /// <summary>The vector's X coordinate</summary>
         public UniScalar X;
+
         /// <summary>The vector's Y coordinate</summary>
         public UniScalar Y;
 
@@ -24,7 +25,7 @@ namespace MonoGame.Extended.NuclexGui
 
         /// <summary>Converts the vector into pure offset coordinates</summary>
         /// <param name="containerSize">
-        ///   Dimensions of the container the relative part of the vector counts for
+        ///     Dimensions of the container the relative part of the vector counts for
         /// </param>
         /// <returns>An XNA vector with the pure offset coordinates of the vector</returns>
         public Vector2 ToOffset(Vector2 containerSize)
@@ -34,17 +35,17 @@ namespace MonoGame.Extended.NuclexGui
 
         /// <summary>Converts the vector into pure offset coordinates</summary>
         /// <param name="containerWidth">
-        ///   Width of the container the fractional part of the vector counts for
+        ///     Width of the container the fractional part of the vector counts for
         /// </param>
         /// <param name="containerHeight">
-        ///   Height of the container the fractional part of the vector counts for
+        ///     Height of the container the fractional part of the vector counts for
         /// </param>
         /// <returns>An XNA vector with the pure offset coordinates of the vector</returns>
         public Vector2 ToOffset(float containerWidth, float containerHeight)
         {
             return new Vector2(
-              X.Fraction * containerWidth + X.Offset,
-              Y.Fraction * containerHeight + Y.Offset
+                X.Fraction*containerWidth + X.Offset,
+                Y.Fraction*containerHeight + Y.Offset
             );
         }
 
@@ -72,7 +73,7 @@ namespace MonoGame.Extended.NuclexGui
         /// <returns>The result of the division</returns>
         public static UniVector operator /(UniVector vector, UniVector divisor)
         {
-            return new UniVector(vector.X / divisor.X, vector.Y / divisor.Y);
+            return new UniVector(vector.X/divisor.X, vector.Y/divisor.Y);
         }
 
         /// <summary>Multiplies one vector with another</summary>
@@ -81,7 +82,7 @@ namespace MonoGame.Extended.NuclexGui
         /// <returns>The result of the multiplication</returns>
         public static UniVector operator *(UniVector vector, UniVector factor)
         {
-            return new UniVector(vector.X * factor.X, vector.Y * factor.Y);
+            return new UniVector(vector.X*factor.X, vector.Y*factor.Y);
         }
 
         /// <summary>Scales a vector by a scalar factor</summary>
@@ -90,7 +91,7 @@ namespace MonoGame.Extended.NuclexGui
         /// <returns>The result of the multiplication</returns>
         public static UniVector operator *(UniScalar factor, UniVector vector)
         {
-            return new UniVector(factor * vector.X, factor * vector.Y);
+            return new UniVector(factor*vector.X, factor*vector.Y);
         }
 
         /// <summary>Scales a vector by a scalar factor</summary>
@@ -99,7 +100,7 @@ namespace MonoGame.Extended.NuclexGui
         /// <returns>The result of the multiplication</returns>
         public static UniVector operator *(UniVector vector, UniScalar factor)
         {
-            return new UniVector(vector.X * factor, vector.Y * factor);
+            return new UniVector(vector.X*factor, vector.Y*factor);
         }
 
         /// <summary>Checks two vectors for inequality</summary>
@@ -129,7 +130,7 @@ namespace MonoGame.Extended.NuclexGui
             if (!(other is UniVector))
                 return false;
 
-            return Equals((UniVector)other);
+            return Equals((UniVector) other);
         }
 
         /// <summary>Checks whether another instance is equal to this instance</summary>
@@ -149,15 +150,15 @@ namespace MonoGame.Extended.NuclexGui
         }
 
         /// <summary>
-        ///   Returns a human-readable string representation for the unified vector
+        ///     Returns a human-readable string representation for the unified vector
         /// </summary>
         /// <returns>The human-readable string representation of the unified vector</returns>
         public override string ToString()
         {
             return string.Format(
-              "{{X:{0}, Y:{1}}}",
-              X.ToString(),
-              Y.ToString()
+                "{{X:{0}, Y:{1}}}",
+                X,
+                Y
             );
         }
     }

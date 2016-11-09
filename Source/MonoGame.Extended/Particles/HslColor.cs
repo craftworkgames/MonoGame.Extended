@@ -5,34 +5,34 @@ using Microsoft.Xna.Framework;
 namespace MonoGame.Extended.Particles
 {
     /// <summary>
-    /// An immutable data structure representing a 24bit color composed of separate hue, saturation and lightness channels.
+    ///     An immutable data structure representing a 24bit color composed of separate hue, saturation and lightness channels.
     /// </summary>
     //[Serializable]
     public struct HslColor : IEquatable<HslColor>, IComparable<HslColor>
     {
         /// <summary>
-        /// Gets the value of the hue channel in degrees.
+        ///     Gets the value of the hue channel in degrees.
         /// </summary>
         public readonly float H;
 
         /// <summary>
-        /// Gets the value of the saturation channel.
+        ///     Gets the value of the saturation channel.
         /// </summary>
         public readonly float S;
 
         /// <summary>
-        /// Gets the value of the lightness channel.
+        ///     Gets the value of the lightness channel.
         /// </summary>
         public readonly float L;
 
         private static float NormalizeHue(float h)
         {
-            if (h < 0) return h + 360 * ((int)(h / 360) + 1);
-            return h % 360;
+            if (h < 0) return h + 360*((int) (h/360) + 1);
+            return h%360;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HslColor"/> structure.
+        ///     Initializes a new instance of the <see cref="HslColor" /> structure.
         /// </summary>
         /// <param name="h">The value of the hue channel.</param>
         /// <param name="s">The value of the saturation channel.</param>
@@ -46,7 +46,7 @@ namespace MonoGame.Extended.Particles
         }
 
         /// <summary>
-        /// Copies the individual channels of the color to the specified memory location.
+        ///     Copies the individual channels of the color to the specified memory location.
         /// </summary>
         /// <param name="destination">The memory location to copy the axis to.</param>
         public void CopyTo(out HslColor destination)
@@ -55,7 +55,7 @@ namespace MonoGame.Extended.Particles
         }
 
         /// <summary>
-        /// Destructures the color, exposing the individual channels.
+        ///     Destructures the color, exposing the individual channels.
         /// </summary>
         public void Destructure(out float h, out float s, out float l)
         {
@@ -65,11 +65,11 @@ namespace MonoGame.Extended.Particles
         }
 
         /// <summary>
-        /// Exposes the individual channels of the color to the specified matching function.
+        ///     Exposes the individual channels of the color to the specified matching function.
         /// </summary>
         /// <param name="callback">The function which matches the individual channels of the color.</param>
         /// <exception cref="T:System.ArgumentNullException">
-        /// Thrown if the value passed to the <paramref name="callback"/> parameter is <c>null</c>.
+        ///     Thrown if the value passed to the <paramref name="callback" /> parameter is <c>null</c>.
         /// </exception>
         public void Match(Action<float, float, float> callback)
         {
@@ -80,18 +80,18 @@ namespace MonoGame.Extended.Particles
         }
 
         /// <summary>
-        /// Exposes the individual channels of the color to the specified mapping function and returns the
-        /// result;
+        ///     Exposes the individual channels of the color to the specified mapping function and returns the
+        ///     result;
         /// </summary>
         /// <typeparam name="T">The type being mapped to.</typeparam>
         /// <param name="map">
-        /// A function which maps the color channels to an instance of <typeparamref name="T"/>.
+        ///     A function which maps the color channels to an instance of <typeparamref name="T" />.
         /// </param>
         /// <returns>
-        /// The result of the <paramref name="map"/> function when passed the individual X and Y components.
+        ///     The result of the <paramref name="map" /> function when passed the individual X and Y components.
         /// </returns>
         /// <exception cref="T:System.ArgumentNullException">
-        /// Thrown if the value passed to the <paramref name="map"/> parameter is <c>null</c>.
+        ///     Thrown if the value passed to the <paramref name="map" /> parameter is <c>null</c>.
         /// </exception>
         public T Map<T>(Func<float, float, float, T> map)
         {
@@ -109,31 +109,31 @@ namespace MonoGame.Extended.Particles
         public int CompareTo(HslColor other)
         {
             // ReSharper disable ImpureMethodCallOnReadonlyValueField
-            return H.CompareTo(other.H) * 100 + S.CompareTo(other.S) * 10 + L.CompareTo(L);
+            return H.CompareTo(other.H)*100 + S.CompareTo(other.S)*10 + L.CompareTo(L);
             // ReSharper restore ImpureMethodCallOnReadonlyValueField
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+        ///     Determines whether the specified <see cref="System.Object" /> is equal to this instance.
         /// </summary>
-        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
         /// <returns>
-        ///     <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
             if (obj is HslColor)
-                return Equals((HslColor)obj);
+                return Equals((HslColor) obj);
 
             return base.Equals(obj);
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="HslColor"/> is equal to this instance.
+        ///     Determines whether the specified <see cref="HslColor" /> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="HslColor"/> to compare with this instance.</param>
+        /// <param name="value">The <see cref="HslColor" /> to compare with this instance.</param>
         /// <returns>
-        ///     <c>true</c> if the specified <see cref="HslColor"/> is equal to this instance; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified <see cref="HslColor" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(HslColor value)
         {
@@ -143,10 +143,10 @@ namespace MonoGame.Extended.Particles
         }
 
         /// <summary>
-        /// Returns a hash code for this instance.
+        ///     Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        ///     A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public override int GetHashCode()
         {
@@ -156,15 +156,15 @@ namespace MonoGame.Extended.Particles
         }
 
         /// <summary>
-        /// Returns a <see cref="System.String"/> that represents this instance.
+        ///     Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="System.String"/> that represents this instance.
+        ///     A <see cref="System.String" /> that represents this instance.
         /// </returns>
         public override string ToString()
         {
             return string.Format(CultureInfo.InvariantCulture, "H:{0:N1}° S:{1:N1} L:{2:N1}",
-                H, 100 * S, 100 * L);
+                H, 100*S, 100*L);
         }
 
         public static HslColor Parse(string s)
@@ -178,12 +178,12 @@ namespace MonoGame.Extended.Particles
         }
 
         /// <summary>
-        /// Implements the operator ==.
+        ///     Implements the operator ==.
         /// </summary>
         /// <param name="x">The lvalue.</param>
         /// <param name="y">The rvalue.</param>
         /// <returns>
-        ///     <c>true</c> if the lvalue <see cref="HslColor"/> is equal to the rvalue; otherwise, <c>false</c>.
+        ///     <c>true</c> if the lvalue <see cref="HslColor" /> is equal to the rvalue; otherwise, <c>false</c>.
         /// </returns>
         public static bool operator ==(HslColor x, HslColor y)
         {
@@ -191,12 +191,12 @@ namespace MonoGame.Extended.Particles
         }
 
         /// <summary>
-        /// Implements the operator !=.
+        ///     Implements the operator !=.
         /// </summary>
         /// <param name="x">The lvalue.</param>
         /// <param name="y">The rvalue.</param>
         /// <returns>
-        ///     <c>true</c> if the lvalue <see cref="HslColor"/> is not equal to the rvalue; otherwise, <c>false</c>.
+        ///     <c>true</c> if the lvalue <see cref="HslColor" /> is not equal to the rvalue; otherwise, <c>false</c>.
         /// </returns>
         public static bool operator !=(HslColor x, HslColor y)
         {
@@ -213,9 +213,9 @@ namespace MonoGame.Extended.Particles
             // loop around if c2.H < c1.H
             var h2 = c2.H >= c1.H ? c2.H : c2.H + 360;
             return new HslColor(
-                c1.H + t * (h2 - c1.H),
-                c1.S + t * (c2.S - c1.S),
-                c1.L + t * (c2.L - c2.L));
+                c1.H + t*(h2 - c1.H),
+                c1.S + t*(c2.S - c1.S),
+                c1.L + t*(c2.L - c2.L));
         }
     }
 }

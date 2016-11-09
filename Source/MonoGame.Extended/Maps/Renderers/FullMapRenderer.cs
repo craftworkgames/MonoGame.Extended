@@ -10,18 +10,18 @@ namespace MonoGame.Extended.Maps.Renderers
 {
     public class FullMapRenderer : IMapRenderer
     {
-        private const int IndexesPerTile = 6;
-        private const int VerticiesPerTile = 4;
-        private const int PrimitivesPerTile = 2;
-
-        private readonly GraphicsDevice _graphicsDevice;
+        private const int _indexesPerTile = 6;
+        private const int _verticiesPerTile = 4;
+        private const int _primitivesPerTile = 2;
         private readonly bool _cacheRenderDetails;
 
-        private TiledMap _map;
-        private BasicEffect _basicEffect;
-        private DepthStencilState _depthBufferState;
+        private readonly GraphicsDevice _graphicsDevice;
         private readonly Dictionary<string, MapRenderDetails> _renderDetailsCache;
+        private BasicEffect _basicEffect;
         private MapRenderDetails _currentRenderDetails;
+        private readonly DepthStencilState _depthBufferState;
+
+        private TiledMap _map;
 
         public FullMapRenderer(GraphicsDevice graphicsDevice, bool cacheRenderDetails = true)
         {
@@ -41,14 +41,12 @@ namespace MonoGame.Extended.Maps.Renderers
                 _currentRenderDetails = BuildRenderDetails();
 
                 if (_cacheRenderDetails)
-                {
                     _renderDetailsCache[_map.Name] = _currentRenderDetails;
-                }
             }
 
             _basicEffect = new BasicEffect(_graphicsDevice)
             {
-                World = Matrix.CreateLookAt(cameraPosition: new Vector3(0f, 0f, -1f), cameraTarget: new Vector3(0f, 0f, -2f), cameraUpVector: Vector3.Up),
+                World = Matrix.CreateLookAt(new Vector3(0f, 0f, -1f), new Vector3(0f, 0f, -2f), Vector3.Up),
                 TextureEnabled = true
             };
         }
@@ -62,21 +60,18 @@ namespace MonoGame.Extended.Maps.Renderers
         public virtual void Draw(Matrix viewMatrix)
         {
             if (_map == null)
-            {
                 return;
-            }
 
             _basicEffect.View = viewMatrix;
-            _basicEffect.Projection = Matrix.CreateOrthographicOffCenter(left: 0, right: _graphicsDevice.Viewport.Width,
-                bottom: _graphicsDevice.Viewport.Height, top: 0, zNearPlane: 0f, zFarPlane: -1f);
+            _basicEffect.Projection = Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width,
+                _graphicsDevice.Viewport.Height, 0, 0f, -1f);
 
             _graphicsDevice.DepthStencilState = _depthBufferState;
             _graphicsDevice.BlendState = BlendState.AlphaBlend;
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
-            {
-                foreach (GroupRenderDetails renderDetails in _currentRenderDetails)
+                foreach (var renderDetails in _currentRenderDetails)
                 {
                     _graphicsDevice.SetVertexBuffer(renderDetails.VertexBuffer);
                     _graphicsDevice.Indices = renderDetails.IndexBuffer;
@@ -90,48 +85,45 @@ namespace MonoGame.Extended.Maps.Renderers
 
                         pass.Apply();
 
-                        int maxTilesPerDraw = ushort.MaxValue / VerticiesPerTile + 1;
-                        int drawCalls = renderDetails.TileCount / maxTilesPerDraw + 1;
+                        var maxTilesPerDraw = ushort.MaxValue/_verticiesPerTile + 1;
+                        var drawCalls = renderDetails.TileCount/maxTilesPerDraw + 1;
 
-                        for (int i = 0; i < drawCalls; i++)
+                        for (var i = 0; i < drawCalls; i++)
                         {
-                            int currentIterTiles = maxTilesPerDraw;
+                            var currentIterTiles = maxTilesPerDraw;
                             if (i == drawCalls - 1)
-                            {
-                                currentIterTiles = renderDetails.TileCount - i * maxTilesPerDraw;
-                            }
+                                currentIterTiles = renderDetails.TileCount - i*maxTilesPerDraw;
 
                             _graphicsDevice.DrawIndexedPrimitives(
-                                primitiveType: PrimitiveType.TriangleList,
-                                baseVertex: i * maxTilesPerDraw * VerticiesPerTile,
-                                startIndex: i * maxTilesPerDraw * IndexesPerTile,
-                                primitiveCount: currentIterTiles * PrimitivesPerTile
+                                PrimitiveType.TriangleList,
+                                i*maxTilesPerDraw*_verticiesPerTile,
+                                i*maxTilesPerDraw*_indexesPerTile,
+                                currentIterTiles*_primitivesPerTile
                             );
                         }
                     }
                 }
-            }
         }
 
         protected virtual MapRenderDetails BuildRenderDetails()
         {
-            MapRenderDetails mapDetails = new MapRenderDetails();
+            var mapDetails = new MapRenderDetails();
 
-            foreach (TiledLayer layer in _map.Layers.OrderByDescending(l => l.Depth))
+            foreach (var layer in _map.Layers.OrderByDescending(l => l.Depth))
             {
-                TiledTileLayer tileLayer = layer as TiledTileLayer;
-                TiledImageLayer imageLayer = layer as TiledImageLayer;
+                var tileLayer = layer as TiledTileLayer;
+                var imageLayer = layer as TiledImageLayer;
 
                 if (imageLayer != null)
                 {
-                    TextureRegion2D region = new TextureRegion2D(imageLayer.Texture);
-                    Point point = imageLayer.Position.ToPoint();
+                    var region = new TextureRegion2D(imageLayer.Texture);
+                    var point = imageLayer.Position.ToPoint();
 
                     VertexPositionTexture[] vertices;
                     ushort[] indexes;
                     CreatePrimitives(point, region, 0, layer.Depth, out vertices, out indexes);
 
-                    GroupRenderDetails group = new GroupRenderDetails(region.Texture, 1);
+                    var group = new GroupRenderDetails(region.Texture, 1);
                     group.SetVertices(vertices, _graphicsDevice);
                     group.SetIndexes(indexes, _graphicsDevice);
                     group.Opacity = layer.Opacity;
@@ -140,42 +132,39 @@ namespace MonoGame.Extended.Maps.Renderers
                 }
                 else if (tileLayer != null)
                 {
-                    Dictionary<TiledTileset, List<VertexPositionTexture>> verticesByTileset =
+                    var verticesByTileset =
                         _map.Tilesets.ToDictionary(ts => ts, ts => new List<VertexPositionTexture>());
-                    Dictionary<TiledTileset, List<ushort>> indexesByTileset =
+                    var indexesByTileset =
                         _map.Tilesets.ToDictionary(ts => ts, ts => new List<ushort>());
-                    Dictionary<TiledTileset, int> tileCountByTileset =
+                    var tileCountByTileset =
                         _map.Tilesets.ToDictionary(ts => ts, ts => 0);
 
-                    foreach (TiledTile tile in GetTilesGroupedByTileset(tileLayer))
+                    foreach (var tile in GetTilesGroupedByTileset(tileLayer))
                     {
                         if (tile.IsBlank)
-                        {
                             continue;
-                        }
 
-                        TiledTileset tileset = _map.GetTilesetByTileId(tile.Id);
+                        var tileset = _map.GetTilesetByTileId(tile.Id);
 
                         var region = tileset.GetTileRegion(tile.Id);
                         var point = tileLayer.GetTileLocation(tile);
 
                         VertexPositionTexture[] vertices;
                         ushort[] indexes;
-                        CreatePrimitives(point, region, tileCountByTileset[tileset], layer.Depth, out vertices, out indexes);
+                        CreatePrimitives(point, region, tileCountByTileset[tileset], layer.Depth, out vertices,
+                            out indexes);
 
                         verticesByTileset[tileset].AddRange(vertices);
                         indexesByTileset[tileset].AddRange(indexes);
                         tileCountByTileset[tileset]++;
                     }
 
-                    foreach (TiledTileset tileset in _map.Tilesets)
+                    foreach (var tileset in _map.Tilesets)
                     {
                         if (tileCountByTileset[tileset] == 0)
-                        {
                             continue;
-                        }
 
-                        GroupRenderDetails group = new GroupRenderDetails(tileset.Texture, tileCountByTileset[tileset]);
+                        var group = new GroupRenderDetails(tileset.Texture, tileCountByTileset[tileset]);
                         group.SetVertices(verticesByTileset[tileset], _graphicsDevice);
                         group.SetIndexes(indexesByTileset[tileset], _graphicsDevice);
                         group.Opacity = layer.Opacity;
@@ -190,25 +179,21 @@ namespace MonoGame.Extended.Maps.Renderers
 
         protected virtual List<TiledTile> GetTilesGroupedByTileset(TiledTileLayer layer)
         {
-            Dictionary<TiledTileset, List<TiledTile>> tilesByTileset =
+            var tilesByTileset =
                 _map.Tilesets.ToDictionary(ts => ts, ts => new List<TiledTile>());
 
-            foreach (TiledTile tile in layer.GetTilesInRenderOrder())
+            foreach (var tile in layer.GetTilesInRenderOrder())
             {
-                TiledTileset ts = _map.GetTilesetByTileId(tile.Id);
+                var ts = _map.GetTilesetByTileId(tile.Id);
 
                 if (ts != null)
-                {
                     tilesByTileset[ts].Add(tile);
-                }
             }
 
-            List<TiledTile> tiles = new List<TiledTile>();
+            var tiles = new List<TiledTile>();
 
-            foreach (List<TiledTile> chunk in tilesByTileset.Values)
-            {
+            foreach (var chunk in tilesByTileset.Values)
                 tiles.AddRange(chunk);
-            }
 
             return tiles;
         }
@@ -221,23 +206,25 @@ namespace MonoGame.Extended.Maps.Renderers
             var tc0 = Vector2.Zero;
             var tc1 = Vector2.One;
 
-            tc0.X = (region.X + 0.5f) / region.Texture.Width;
-            tc0.Y = (region.Y + 0.5f) / region.Texture.Height;
-            tc1.X = (float)(region.X + region.Width) / region.Texture.Width;
-            tc1.Y = (float)(region.Y + region.Height) / region.Texture.Height;
+            tc0.X = (region.X + 0.5f)/region.Texture.Width;
+            tc0.Y = (region.Y + 0.5f)/region.Texture.Height;
+            tc1.X = (float) (region.X + region.Width)/region.Texture.Width;
+            tc1.Y = (float) (region.Y + region.Height)/region.Texture.Height;
             vertices = new VertexPositionTexture[4];
             vertices[0] = new VertexPositionTexture(new Vector3(point.X, point.Y, depth), tc0);
-            vertices[1] = new VertexPositionTexture(new Vector3(point.X + tileWidth, point.Y, depth), new Vector2(tc1.X, tc0.Y));
-            vertices[2] = new VertexPositionTexture(new Vector3(point.X, point.Y + tileHeight, depth), new Vector2(tc0.X, tc1.Y));
+            vertices[1] = new VertexPositionTexture(new Vector3(point.X + tileWidth, point.Y, depth),
+                new Vector2(tc1.X, tc0.Y));
+            vertices[2] = new VertexPositionTexture(new Vector3(point.X, point.Y + tileHeight, depth),
+                new Vector2(tc0.X, tc1.Y));
             vertices[3] = new VertexPositionTexture(new Vector3(point.X + tileWidth, point.Y + tileHeight, depth), tc1);
 
             indexes = new ushort[6];
-            indexes[0] = (ushort) (4 * offset);
-            indexes[1] = (ushort) (4 * offset + 1);
-            indexes[2] = (ushort) (4 * offset + 2);
-            indexes[3] = (ushort) (4 * offset + 1);
-            indexes[4] = (ushort) (4 * offset + 3);
-            indexes[5] = (ushort) (4 * offset + 2);
+            indexes[0] = (ushort) (4*offset);
+            indexes[1] = (ushort) (4*offset + 1);
+            indexes[2] = (ushort) (4*offset + 2);
+            indexes[3] = (ushort) (4*offset + 1);
+            indexes[4] = (ushort) (4*offset + 3);
+            indexes[5] = (ushort) (4*offset + 2);
         }
     }
 }

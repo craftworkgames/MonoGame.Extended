@@ -5,8 +5,15 @@ namespace MonoGame.Extended.Particles
 {
     public class ParticleBuffer : IDisposable
     {
+        private readonly ParticleIterator _iterator;
         private readonly IntPtr _nativePointer;
-        public int Size { get; }
+
+        // points to the first memory pos after the buffer
+        protected readonly unsafe Particle* BufferEnd;
+
+        private bool _disposed;
+        // points to the particle after the last active particle.
+        protected unsafe Particle* Tail;
 
         public unsafe ParticleBuffer(int size)
         {
@@ -14,38 +21,46 @@ namespace MonoGame.Extended.Particles
             // add one extra spot in memory for margin between head and tail
             // so the iterator can see that it's at the end
             _nativePointer = Marshal.AllocHGlobal(SizeInBytes);
-            BufferEnd = (Particle*)(_nativePointer + SizeInBytes);
-            Head = (Particle*)_nativePointer;
-            Tail = (Particle*)_nativePointer;
+            BufferEnd = (Particle*) (_nativePointer + SizeInBytes);
+            Head = (Particle*) _nativePointer;
+            Tail = (Particle*) _nativePointer;
 
             _iterator = new ParticleIterator(this);
 
             GC.AddMemoryPressure(SizeInBytes);
         }
 
-        private readonly ParticleIterator _iterator;
+        public int Size { get; }
 
         public ParticleIterator Iterator => _iterator.Reset();
-
-        // points to the first memory pos after the buffer
-        protected readonly unsafe Particle* BufferEnd;
         // pointer to the first particle
         public unsafe Particle* Head { get; private set; }
-        // points to the particle after the last active particle.
-        protected unsafe Particle* Tail;
 
         // Number of available particle spots in the buffer
         public int Available => Size - Count;
         // current number of particles
         public int Count { get; private set; }
         // total size of the buffer
-        public int SizeInBytes => Particle.SizeInBytes * (Size + 1);
+        public int SizeInBytes => Particle.SizeInBytes*(Size + 1);
         // total size of active particles
-        public int ActiveSizeInBytes => Particle.SizeInBytes * Count;
+        public int ActiveSizeInBytes => Particle.SizeInBytes*Count;
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                Marshal.FreeHGlobal(_nativePointer);
+                _disposed = true;
+
+                GC.RemoveMemoryPressure(Particle.SizeInBytes*Size);
+            }
+
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
-        /// Release the given number of particles or the most available.
-        /// Returns a started iterator to iterate over the new particles.
+        ///     Release the given number of particles or the most available.
+        ///     Returns a started iterator to iterate over the new particles.
         /// </summary>
         public unsafe ParticleIterator Release(int releaseQuantity)
         {
@@ -66,7 +81,7 @@ namespace MonoGame.Extended.Particles
 
             Head += number;
             if (Head >= BufferEnd)
-                Head -= (Size + 1);
+                Head -= Size + 1;
         }
 
         public void CopyTo(IntPtr destination)
@@ -84,23 +99,9 @@ namespace MonoGame.Extended.Particles
             }
         }
 
-        [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl, SetLastError = false)]
+        [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl,
+             SetLastError = false)]
         public static extern void memcpy(IntPtr dest, IntPtr src, int count);
-
-        private bool _disposed;
-
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                Marshal.FreeHGlobal(_nativePointer);
-                _disposed = true;
-
-                GC.RemoveMemoryPressure(Particle.SizeInBytes * Size);
-            }
-
-            GC.SuppressFinalize(this);
-        }
 
         ~ParticleBuffer()
         {
@@ -112,7 +113,6 @@ namespace MonoGame.Extended.Particles
             private readonly ParticleBuffer _buffer;
 
             private unsafe Particle* _current;
-            public unsafe bool HasNext => _current != _buffer.Tail;
 
             public int Total;
 
@@ -120,6 +120,8 @@ namespace MonoGame.Extended.Particles
             {
                 _buffer = buffer;
             }
+
+            public unsafe bool HasNext => _current != _buffer.Tail;
 
             public unsafe ParticleIterator Reset()
             {
@@ -144,11 +146,10 @@ namespace MonoGame.Extended.Particles
                 var p = _current;
                 _current++;
                 if (_current == _buffer.BufferEnd)
-                    _current = (Particle*)_buffer._nativePointer;
+                    _current = (Particle*) _buffer._nativePointer;
 
                 return p;
             }
         }
-
     }
 }

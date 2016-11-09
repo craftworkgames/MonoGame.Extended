@@ -17,7 +17,8 @@ namespace MonoGame.Extended.Gui.Serialization
         {
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
         {
             var regionName = reader.Value.ToString();
             return _textureAtlas[regionName];

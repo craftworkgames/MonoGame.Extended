@@ -12,8 +12,11 @@ namespace MonoGame.Extended.Graphics
     public class GeometryBufferOverflowException<TVertexType> : Exception
         where TVertexType : struct, IVertexType
     {
-        internal GeometryBufferOverflowException(GeometryBuffer<TVertexType> geometryBuffer, int verticesCountToAdd, int indicesCountToAdd)
-            : base(message: $"The GeometryBuffer could not enqueue the requested {verticesCountToAdd} vertices or {indicesCountToAdd} indices since it is full full with {geometryBuffer._vertexCount} (out of {geometryBuffer.MaximumVerticesCount}) vertices and {geometryBuffer._indexCount} (out of {geometryBuffer.MaximumIndicesCount}) indices. Consider increasing the maximum number of vertices or indices when instantiating the GeometryBuffer, flushing the GeometryBuffer if it's dynamic, or using multiple GeometryBuffers to accommodate the requested enqueue.")
+        internal GeometryBufferOverflowException(GeometryBuffer<TVertexType> geometryBuffer, int verticesCountToAdd,
+            int indicesCountToAdd)
+            : base(
+                $"The GeometryBuffer could not enqueue the requested {verticesCountToAdd} vertices or {indicesCountToAdd} indices since it is full full with {geometryBuffer._vertexCount} (out of {geometryBuffer.MaximumVerticesCount}) vertices and {geometryBuffer._indexCount} (out of {geometryBuffer.MaximumIndicesCount}) indices. Consider increasing the maximum number of vertices or indices when instantiating the GeometryBuffer, flushing the GeometryBuffer if it's dynamic, or using multiple GeometryBuffers to accommodate the requested enqueue."
+            )
         {
         }
     }

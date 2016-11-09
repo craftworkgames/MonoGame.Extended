@@ -15,10 +15,10 @@ namespace MonoGame.Extended.Timers
         {
         }
 
+        public TimeSpan TimeRemaining { get; private set; }
+
         public event EventHandler TimeRemainingChanged;
         public event EventHandler Completed;
-
-        public TimeSpan TimeRemaining { get; private set; }
 
         protected override void OnStopped()
         {

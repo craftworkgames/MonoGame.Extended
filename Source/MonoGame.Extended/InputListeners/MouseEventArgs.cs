@@ -7,13 +7,14 @@ namespace MonoGame.Extended.InputListeners
 {
     public class MouseEventArgs : EventArgs
     {
-        public MouseEventArgs(ViewportAdapter viewportAdapter, TimeSpan time, MouseState previousState, MouseState currentState, 
+        public MouseEventArgs(ViewportAdapter viewportAdapter, TimeSpan time, MouseState previousState,
+            MouseState currentState,
             MouseButton button = MouseButton.None)
         {
             PreviousState = previousState;
             CurrentState = currentState;
-            Position = viewportAdapter?.PointToScreen(currentState.X, currentState.Y) 
-                ?? new Point(currentState.X, currentState.Y); 
+            Position = viewportAdapter?.PointToScreen(currentState.X, currentState.Y)
+                       ?? new Point(currentState.X, currentState.Y);
             Button = button;
             ScrollWheelValue = currentState.ScrollWheelValue;
             ScrollWheelDelta = currentState.ScrollWheelValue - previousState.ScrollWheelValue;

@@ -5,13 +5,13 @@ namespace MonoGame.Extended.Particles
 {
     public class ParticleEffect
     {
-        public string Name { get; set; }
-        public ParticleEmitter[] Emitters { get; set; }
-
         public ParticleEffect()
         {
             Emitters = new ParticleEmitter[0];
         }
+
+        public string Name { get; set; }
+        public ParticleEmitter[] Emitters { get; set; }
 
         public int ActiveParticles => Emitters.Sum(t => t.ActiveParticles);
 

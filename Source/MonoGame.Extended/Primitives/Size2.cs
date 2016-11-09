@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Primitives
     ///         coordinate system, given by a reference point and two coordinate axes.
     ///     </para>
     /// </remarks>
-    /// <seealso cref="IEquatable{Size2}" />
+    /// <seealso cref="IEquatable{T}" />
     /// <seealso cref="IEquatableByRef{Size2}" />
     public struct Size2 : IEquatable<Size2>, IEquatableByRef<Size2>
     {
@@ -104,7 +104,7 @@ namespace MonoGame.Extended.Primitives
         public override bool Equals(object obj)
         {
             if (obj is Size2)
-                return Equals((Size2)obj);
+                return Equals((Size2) obj);
             return false;
         }
 
@@ -196,7 +196,7 @@ namespace MonoGame.Extended.Primitives
         {
             unchecked
             {
-                return (Width.GetHashCode() * 397) ^ Height.GetHashCode();
+                return (Width.GetHashCode()*397) ^ Height.GetHashCode();
             }
         }
 

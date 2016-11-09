@@ -28,7 +28,8 @@ namespace MonoGame.Extended.Graphics
         ///         <paramref name="maximumVerticesCount" /> and <paramref name="maximumIndicesCount" /> respectively.
         ///     </para>
         /// </remarks>
-        public StaticGeometryBuffer(GraphicsDevice graphicsDevice, ushort maximumVerticesCount, ushort maximumIndicesCount)
+        public StaticGeometryBuffer(GraphicsDevice graphicsDevice, ushort maximumVerticesCount,
+            ushort maximumIndicesCount)
             : base(graphicsDevice, GeometryBufferType.Static, maximumVerticesCount, maximumIndicesCount)
         {
         }

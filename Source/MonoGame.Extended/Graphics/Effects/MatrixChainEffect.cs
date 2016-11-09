@@ -4,17 +4,39 @@ using Microsoft.Xna.Framework.Graphics;
 namespace MonoGame.Extended.Graphics.Effects
 {
     /// <summary>
-    ///     An <see cref="Effect" /> that uses the standard chain of matrix transformations to represent a 3D object on a 2D monitor.
+    ///     An <see cref="Effect" /> that uses the standard chain of matrix transformations to represent a 3D object on a 2D
+    ///     monitor.
     /// </summary>
     /// <seealso cref="Effect" />
     /// <seealso cref="IMatrixChainEffect" />
     public abstract class MatrixChainEffect : Effect, IMatrixChainEffect
     {
+        private Matrix _projection = Matrix.Identity;
+        private Matrix _view = Matrix.Identity;
+        private Matrix _world = Matrix.Identity;
         private bool _worldViewProjectionIsDirty;
         private EffectParameter _worldViewProjectionParameter;
-        private Matrix _world = Matrix.Identity;
-        private Matrix _view = Matrix.Identity;
-        private Matrix _projection = Matrix.Identity;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MatrixChainEffect" /> class.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device.</param>
+        /// <param name="effectCode">The effect code.</param>
+        protected MatrixChainEffect(GraphicsDevice graphicsDevice, byte[] effectCode)
+            : base(graphicsDevice, effectCode)
+        {
+            CacheEffectParameters();
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MatrixChainEffect" /> class.
+        /// </summary>
+        /// <param name="cloneSource">The clone source.</param>
+        protected MatrixChainEffect(Effect cloneSource)
+            : base(cloneSource)
+        {
+            CacheEffectParameters();
+        }
 
         /// <summary>
         ///     Gets or sets the model-to-world <see cref="Matrix" />.
@@ -82,30 +104,9 @@ namespace MonoGame.Extended.Graphics.Effects
             _worldViewProjectionIsDirty = true;
         }
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="MatrixChainEffect" /> class.
-        /// </summary>
-        /// <param name="graphicsDevice">The graphics device.</param>
-        /// <param name="effectCode">The effect code.</param>
-        protected MatrixChainEffect(GraphicsDevice graphicsDevice, byte[] effectCode)
-            : base(graphicsDevice, effectCode)
-        {
-            CacheEffectParameters();
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="MatrixChainEffect" /> class.
-        /// </summary>
-        /// <param name="cloneSource">The clone source.</param>
-        protected MatrixChainEffect(Effect cloneSource)
-            : base(cloneSource)
-        {
-            CacheEffectParameters();
-        }
-
         private void CacheEffectParameters()
         {
-            _worldViewProjectionParameter = Parameters[name: "WorldViewProjection"];
+            _worldViewProjectionParameter = Parameters["WorldViewProjection"];
         }
 
         /// <summary>

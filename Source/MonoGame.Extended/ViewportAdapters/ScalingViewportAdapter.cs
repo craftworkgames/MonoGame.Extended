@@ -2,11 +2,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 // ReSharper disable once CheckNamespace
+
 namespace MonoGame.Extended.ViewportAdapters
 {
     public class ScalingViewportAdapter : ViewportAdapter
     {
-        public ScalingViewportAdapter(GraphicsDevice graphicsDevice, int virtualWidth, int virtualHeight) 
+        public ScalingViewportAdapter(GraphicsDevice graphicsDevice, int virtualWidth, int virtualHeight)
             : base(graphicsDevice)
         {
             VirtualWidth = virtualWidth;
@@ -20,8 +21,8 @@ namespace MonoGame.Extended.ViewportAdapters
 
         public override Matrix GetScaleMatrix()
         {
-            var scaleX = (float)ViewportWidth / VirtualWidth;
-            var scaleY = (float)ViewportHeight / VirtualHeight;
+            var scaleX = (float) ViewportWidth/VirtualWidth;
+            var scaleY = (float) ViewportHeight/VirtualHeight;
             return Matrix.CreateScale(scaleX, scaleY, 1.0f);
         }
     }

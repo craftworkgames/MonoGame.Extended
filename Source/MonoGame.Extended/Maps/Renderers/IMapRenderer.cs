@@ -10,6 +10,7 @@ namespace MonoGame.Extended.Maps.Renderers
 
         [Obsolete]
         void Draw(Camera2D camera);
+
         void Draw(Matrix viewMatrix);
     }
 }

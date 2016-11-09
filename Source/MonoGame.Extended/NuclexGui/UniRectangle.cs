@@ -71,6 +71,7 @@ namespace MonoGame.Extended.NuclexGui
 
         /// <summary>The location of the rectangle's upper left corner</summary>
         public UniVector Location;
+
         /// <summary>The size of the rectangle</summary>
         public UniVector Size;
 
@@ -108,14 +109,14 @@ namespace MonoGame.Extended.NuclexGui
         /// <returns>A rectangle with the pure offset coordinates of the rectangle</returns>
         public RectangleF ToOffset(float containerWidth, float containerHeight)
         {
-            float leftOffset = Left.Fraction * containerWidth + Left.Offset;
-            float topOffset = Top.Fraction * containerHeight + Top.Offset;
+            var leftOffset = Left.Fraction*containerWidth + Left.Offset;
+            var topOffset = Top.Fraction*containerHeight + Top.Offset;
 
             return new RectangleF(
-              leftOffset,
-              topOffset,
-              (Right.Fraction * containerWidth + Right.Offset) - leftOffset,
-              (Bottom.Fraction * containerHeight + Bottom.Offset) - topOffset
+                leftOffset,
+                topOffset,
+                Right.Fraction*containerWidth + Right.Offset - leftOffset,
+                Bottom.Fraction*containerHeight + Bottom.Offset - topOffset
             );
         }
 
@@ -146,7 +147,7 @@ namespace MonoGame.Extended.NuclexGui
             if (!(other is UniRectangle))
                 return false;
 
-            return Equals((UniRectangle)other);
+            return Equals((UniRectangle) other);
         }
 
         /// <summary>Checks whether another instance is equal to this instance</summary>
@@ -166,20 +167,20 @@ namespace MonoGame.Extended.NuclexGui
         }
 
         /// <summary>
-        ///   Returns a human-readable string representation for the unified rectangle
+        ///     Returns a human-readable string representation for the unified rectangle
         /// </summary>
         /// <returns>The human-readable string representation of the unified rectangle</returns>
         public override string ToString()
         {
             return string.Format(
-              "{{Location:{0}, Size:{1}}}",
-              Location.ToString(),
-              Size.ToString()
+                "{{Location:{0}, Size:{1}}}",
+                Location,
+                Size
             );
         }
 
         /// <summary>
-        ///    Moves unified rectangle by the absolute values
+        ///     Moves unified rectangle by the absolute values
         /// </summary>
         public void AbsoluteOffset(float x, float y)
         {

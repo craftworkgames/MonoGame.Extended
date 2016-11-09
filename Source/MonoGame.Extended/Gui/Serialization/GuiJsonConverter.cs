@@ -32,10 +32,10 @@ namespace MonoGame.Extended.Gui.Serialization
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
         {
             if (objectType == typeof(TextureRegion2D))
                 return _converterService.GetTextureRegion((string) reader.Value);
@@ -44,7 +44,7 @@ namespace MonoGame.Extended.Gui.Serialization
                 return _converterService.GetFont((string) reader.Value);
 
             var jObject = JObject.Load(reader);
-            var type = (string)jObject.Property("Type");
+            var type = (string) jObject.Property("Type");
 
             switch (type)
             {
@@ -62,9 +62,11 @@ namespace MonoGame.Extended.Gui.Serialization
         {
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
         {
-            return GuiThickness.Parse((string)reader.Value); ;
+            return GuiThickness.Parse((string) reader.Value);
+            ;
         }
 
         public override bool CanConvert(Type objectType)

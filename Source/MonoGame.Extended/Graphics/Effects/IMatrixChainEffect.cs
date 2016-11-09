@@ -4,7 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 namespace MonoGame.Extended.Graphics.Effects
 {
     /// <summary>
-    ///     Defines an <see cref="Effect" /> that uses the standard chain of matrix transformations to represent a 3D object on a 2D monitor.
+    ///     Defines an <see cref="Effect" /> that uses the standard chain of matrix transformations to represent a 3D object on
+    ///     a 2D monitor.
     /// </summary>
     public interface IMatrixChainEffect
     {

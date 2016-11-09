@@ -5,8 +5,8 @@ using Microsoft.Xna.Framework.Input;
 namespace MonoGame.Extended.InputListeners
 {
     /// <summary>
-    /// This class contains all information resulting from events fired by
-    /// <see cref="GamePadListener"/>.
+    ///     This class contains all information resulting from events fired by
+    ///     <see cref="GamePadListener" />.
     /// </summary>
     public class GamePadEventArgs : EventArgs
     {
@@ -25,37 +25,37 @@ namespace MonoGame.Extended.InputListeners
         }
 
         /// <summary>
-        /// The index of the controller.
+        ///     The index of the controller.
         /// </summary>
         public PlayerIndex PlayerIndex { get; private set; }
 
         /// <summary>
-        /// The state of the controller in the previous update.
+        ///     The state of the controller in the previous update.
         /// </summary>
         public GamePadState PreviousState { get; private set; }
 
         /// <summary>
-        /// The state of the controller in this update.
+        ///     The state of the controller in this update.
         /// </summary>
         public GamePadState CurrentState { get; private set; }
 
         /// <summary>
-        /// The button that triggered this event, if appliable.
+        ///     The button that triggered this event, if appliable.
         /// </summary>
         public Buttons Button { get; private set; }
 
         /// <summary>
-        /// The time elapsed since last event.
+        ///     The time elapsed since last event.
         /// </summary>
         public TimeSpan ElapsedTime { get; private set; }
 
         /// <summary>
-        /// If a TriggerMoved event, displays the responsible trigger's position.
+        ///     If a TriggerMoved event, displays the responsible trigger's position.
         /// </summary>
         public float TriggerState { get; private set; }
 
         /// <summary>
-        /// If a ThumbStickMoved event, displays the responsible stick's position.
+        ///     If a ThumbStickMoved event, displays the responsible stick's position.
         /// </summary>
         public Vector2 ThumbStickState { get; private set; }
     }

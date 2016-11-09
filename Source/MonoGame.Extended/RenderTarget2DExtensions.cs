@@ -6,7 +6,8 @@ namespace MonoGame.Extended
 {
     public static class RenderTarget2DExtensions
     {
-        public static IDisposable BeginDraw(this RenderTarget2D renderTarget, GraphicsDevice graphicsDevice, Color backgroundColor)
+        public static IDisposable BeginDraw(this RenderTarget2D renderTarget, GraphicsDevice graphicsDevice,
+            Color backgroundColor)
         {
             return new RenderTargetOperation(renderTarget, graphicsDevice, backgroundColor);
         }
@@ -14,10 +15,11 @@ namespace MonoGame.Extended
         private class RenderTargetOperation : IDisposable
         {
             private readonly GraphicsDevice _graphicsDevice;
-            private readonly Viewport _viewport;
             private readonly RenderTargetUsage _previousRenderTargetUsage;
+            private readonly Viewport _viewport;
 
-            public RenderTargetOperation(RenderTarget2D renderTarget, GraphicsDevice graphicsDevice, Color backgroundColor)
+            public RenderTargetOperation(RenderTarget2D renderTarget, GraphicsDevice graphicsDevice,
+                Color backgroundColor)
             {
                 _graphicsDevice = graphicsDevice;
                 _viewport = _graphicsDevice.Viewport;

@@ -15,19 +15,20 @@ namespace MonoGame.Extended.Gui
 {
     public class GuiComponent : DrawableGameComponent
     {
-        public GuiComponent(Game game) 
+        private GuiDialog _activeDialog;
+
+        private ContentManager _contentManager;
+
+        private GuiDialog[] _dialogues;
+        private GuiControl _focusedControl;
+        private GuiControl _hoveredControl;
+        private GuiLayout _layout;
+        private SpriteBatch _spriteBatch;
+
+        public GuiComponent(Game game)
             : base(game)
         {
         }
-
-        private ContentManager _contentManager;
-        private SpriteBatch _spriteBatch;
-        private GuiControl _hoveredControl;
-        private GuiControl _focusedControl;
-        private GuiLayout _layout;
-
-        private GuiDialog[] _dialogues;
-        private GuiDialog _activeDialog;
 
         protected override void Dispose(bool disposing)
         {
@@ -55,7 +56,7 @@ namespace MonoGame.Extended.Gui
 
         private void OnMouseMoved(object sender, MouseEventArgs args)
         {
-            if(_layout == null)
+            if (_layout == null)
                 return;
 
             var hoveredControl = FindControlAtPoint(_layout.Controls, args.Position);
@@ -96,19 +97,7 @@ namespace MonoGame.Extended.Gui
                 var child = controls[i];
 
                 if (child.Contains(point))
-                {
-                    //var layoutControl = child as GuiLayoutControl;
-
-                    //if (layoutControl != null)
-                    //{
-                    //    var c = FindControlAtPoint(layoutControl.Controls, point);
-
-                    //    if (c != null)
-                    //        return c;
-                    //}
-
                     return child;
-                }
             }
 
             return null;
@@ -116,7 +105,7 @@ namespace MonoGame.Extended.Gui
 
         public override void Update(GameTime gameTime)
         {
-            if(_layout == null)
+            if (_layout == null)
                 return;
 
             foreach (var control in _layout.Controls)
@@ -128,23 +117,24 @@ namespace MonoGame.Extended.Gui
             var guiPath = Path.Combine(_contentManager.RootDirectory, assetName);
 
             using (var stream = TitleContainer.OpenStream(guiPath))
-            using (var streamReader = new StreamReader(stream))
             {
-
-                var json = streamReader.ReadToEnd();
-                var converters = new  JsonConverter[]
+                using (var streamReader = new StreamReader(stream))
                 {
-                    new ColorJsonConverter(),
-                    new Vector2JsonConverter(),
-                    new SizeFJsonConverter(),
-                    new GuiThicknessConveter(),
-                    new GuiLayoutConverter(_contentManager),
-                    new ContentConverter<BitmapFont>(_contentManager), 
-                    new GuiTextureAtlasConverter(_contentManager), 
-                };
+                    var json = streamReader.ReadToEnd();
+                    var converters = new JsonConverter[]
+                    {
+                        new ColorJsonConverter(),
+                        new Vector2JsonConverter(),
+                        new SizeFJsonConverter(),
+                        new GuiThicknessConveter(),
+                        new GuiLayoutConverter(_contentManager),
+                        new ContentConverter<BitmapFont>(_contentManager),
+                        new GuiTextureAtlasConverter(_contentManager)
+                    };
 
-                _layout = JsonConvert.DeserializeObject<GuiLayout>(json, converters);
-                return _layout;
+                    _layout = JsonConvert.DeserializeObject<GuiLayout>(json, converters);
+                    return _layout;
+                }
             }
         }
 
@@ -167,7 +157,7 @@ namespace MonoGame.Extended.Gui
         {
             base.Draw(gameTime);
 
-            if(_layout == null)
+            if (_layout == null)
                 return;
 
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend);

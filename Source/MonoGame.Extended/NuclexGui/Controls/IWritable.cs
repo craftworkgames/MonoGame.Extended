@@ -1,7 +1,7 @@
 ﻿namespace MonoGame.Extended.NuclexGui.Controls
 {
     /// <summary>
-    ///   Interface for controls that can be written into using the keyboard
+    ///     Interface for controls that can be written into using the keyboard
     /// </summary>
     public interface IWritable : IFocusable
     {
@@ -13,9 +13,9 @@
 
         /// <summary>Text currently contained in the control</summary>
         /// <remarks>
-        ///   Called before the on-screen keyboard is displayed to get the text currently
-        ///   contained in the control and after the on-screen keyboard has been
-        ///   acknowledged to assign the edited text to the control
+        ///     Called before the on-screen keyboard is displayed to get the text currently
+        ///     contained in the control and after the on-screen keyboard has been
+        ///     acknowledged to assign the edited text to the control
         /// </remarks>
         string Text { get; set; }
 

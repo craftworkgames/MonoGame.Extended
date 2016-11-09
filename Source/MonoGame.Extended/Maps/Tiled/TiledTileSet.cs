@@ -6,7 +6,11 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledTileset
     {
-        public TiledTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int tileCount, int spacing = 2, int margin = 2)
+        private readonly Dictionary<int, TextureRegion2D> _regions;
+        private readonly List<TiledTilesetTile> _tiles;
+
+        public TiledTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int tileCount,
+            int spacing = 2, int margin = 2)
         {
             Texture = texture;
             FirstId = firstId;
@@ -22,17 +26,12 @@ namespace MonoGame.Extended.Maps.Tiled
             _regions = new Dictionary<int, TextureRegion2D>();
 
             for (var y = Margin; y < texture.Height - Margin; y += TileHeight + Spacing)
-            {
                 for (var x = Margin; x < texture.Width - Margin; x += TileWidth + Spacing)
                 {
                     _regions.Add(id, new TextureRegion2D(Texture, x, y, TileWidth, TileHeight));
                     id++;
                 }
-            }
         }
-
-        private readonly Dictionary<int, TextureRegion2D> _regions;
-        private readonly List<TiledTilesetTile> _tiles;
 
         public string Name => Texture.Name;
         public Texture2D Texture { get; }
@@ -59,7 +58,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public bool ContainsTileId(int tileId)
         {
-            return tileId >= FirstId && tileId < FirstId + TileCount;
+            return (tileId >= FirstId) && (tileId < FirstId + TileCount);
         }
     }
 }

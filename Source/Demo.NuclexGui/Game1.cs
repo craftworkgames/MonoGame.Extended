@@ -18,10 +18,10 @@ namespace Demo.NuclexGui
         private Sprite _sprite;
         private Camera2D _camera;
 
-        InputListenerComponent _inputManager;
-        GuiManager _gui;
-        int rotation = 1;
-        Color background;
+        private readonly InputListenerComponent _inputManager;
+        private readonly GuiManager _gui;
+        private int _rotateDirection = 1;
+        private Color _backgroundColor;
 
         public Game1()
         {
@@ -29,13 +29,14 @@ namespace Demo.NuclexGui
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
-            background = Color.Black;
+            _backgroundColor = Color.Black;
 
-            // First, we create an input manager and add it to list Services. It is necessary to add InputManager first, then GuiManager, not vice-versa.
+            // First, we create an input manager.
             _inputManager = new InputListenerComponent(this);
 
-            // Then, we create GUI and add it to list of services. Gui will search for the InputManager and attach it to itself.
-            _gui = new GuiManager(Services);
+            // Then, we create GUI.
+            var guiInputService = new GuiInputService(_inputManager);
+            _gui = new GuiManager(Services, guiInputService);
         }
 
         protected override void Initialize()
@@ -146,15 +147,15 @@ namespace Demo.NuclexGui
                         switch (radiobutton.Name)
                         {
                             case "choiceGray":
-                                background = Color.Gray;
+                                _backgroundColor = Color.Gray;
                                 break;
 
                             case "choiceWhite":
-                                background = Color.White;
+                                _backgroundColor = Color.White;
                                 break;
 
                             default:
-                                background = Color.Black;
+                                _backgroundColor = Color.Black;
                                 break;
                         }
                 }
@@ -165,7 +166,7 @@ namespace Demo.NuclexGui
 
         private void Button_Pressed(object sender, System.EventArgs e)
         {
-            rotation *= -1;
+            _rotateDirection *= -1;
         }
 
         protected override void LoadContent()
@@ -198,14 +199,14 @@ namespace Demo.NuclexGui
             _inputManager.Update(gameTime);
             _gui.Update(gameTime);
 
-            _sprite.Rotation += deltaTime * rotation;
+            _sprite.Rotation += deltaTime * _rotateDirection;
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(background);
+            GraphicsDevice.Clear(_backgroundColor);
 
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
 

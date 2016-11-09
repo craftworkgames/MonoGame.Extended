@@ -10,13 +10,13 @@ namespace MonoGame.Extended.Particles.Modifiers
 
         public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
-            var velocityThreshold2 = VelocityThreshold * VelocityThreshold;
+            var velocityThreshold2 = VelocityThreshold*VelocityThreshold;
 
             while (iterator.HasNext)
             {
                 var particle = iterator.Next();
-                var velocity2 = particle->Velocity.X * particle->Velocity.X +
-                                particle->Velocity.Y * particle->Velocity.Y;
+                var velocity2 = particle->Velocity.X*particle->Velocity.X +
+                                particle->Velocity.Y*particle->Velocity.Y;
                 var deltaColor = VelocityColor - StationaryColor;
 
                 if (velocity2 >= velocityThreshold2)
@@ -25,12 +25,12 @@ namespace MonoGame.Extended.Particles.Modifiers
                 }
                 else
                 {
-                    var t = (float)Math.Sqrt(velocity2) / VelocityThreshold;
+                    var t = (float) Math.Sqrt(velocity2)/VelocityThreshold;
 
                     particle->Color = new HslColor(
-                        deltaColor.H * t + StationaryColor.H,
-                        deltaColor.S * t + StationaryColor.S,
-                        deltaColor.L * t + StationaryColor.L);
+                        deltaColor.H*t + StationaryColor.H,
+                        deltaColor.S*t + StationaryColor.S,
+                        deltaColor.L*t + StationaryColor.L);
                 }
             }
         }

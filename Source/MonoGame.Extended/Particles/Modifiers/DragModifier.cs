@@ -12,11 +12,11 @@ namespace MonoGame.Extended.Particles.Modifiers
             while (iterator.HasNext)
             {
                 var particle = iterator.Next();
-                var drag = -DragCoefficient * Density * particle->Mass * elapsedSeconds;
+                var drag = -DragCoefficient*Density*particle->Mass*elapsedSeconds;
 
                 particle->Velocity = new Vector2(
-                    particle->Velocity.X + particle->Velocity.X * drag,
-                    particle->Velocity.Y + particle->Velocity.Y * drag);
+                    particle->Velocity.X + particle->Velocity.X*drag,
+                    particle->Velocity.Y + particle->Velocity.Y*drag);
             }
         }
     }

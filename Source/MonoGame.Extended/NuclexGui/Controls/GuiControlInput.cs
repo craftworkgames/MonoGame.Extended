@@ -1,39 +1,34 @@
 ﻿using System.Diagnostics;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.InputListeners;
 
 namespace MonoGame.Extended.NuclexGui.Controls
 {
-    partial class GuiControl
+    public partial class GuiControl
     {
-        /// <summary>Whether any keys, mouse buttons or game pad buttons are beind held pressed</summary>
-        private bool anyKeysOrButtonsPressed
-        {
-            get { return (_heldMouseButtons != 0) || (_heldKeyCount > 0) || (_heldButtonCount > 0); }
-        }
-
-        /// <summary>Mouse buttons the user is holding down over the control</summary>
-        private MouseButton _heldMouseButtons;
-
-        /// <summary>Number of keyboard keys being held down</summary>
-        private int _heldKeyCount;
+        /// <summary>Control the mouse was pressed down on</summary>
+        private GuiControl _activatedControl;
 
         /// <summary>Number of game pad buttons being held down</summary>
         private int _heldButtonCount;
 
+        /// <summary>Number of keyboard keys being held down</summary>
+        private int _heldKeyCount;
+
+        /// <summary>Mouse buttons the user is holding down over the control</summary>
+        private MouseButton _heldMouseButtons;
+
         /// <summary>Control the mouse is currently hovering over</summary>
         private GuiControl _mouseOverControl;
 
-        /// <summary>Control the mouse was pressed down on</summary>
-        private GuiControl _activatedControl;
+        /// <summary>Whether any keys, mouse buttons or game pad buttons are beind held pressed</summary>
+        private bool AnyKeysOrButtonsPressed => (_heldMouseButtons != 0) || (_heldKeyCount > 0) || (_heldButtonCount > 0);
 
         /// <summary>Called when a button on the game pad has been pressed</summary>
         /// <param name="button">Button that has been pressed</param>
         /// <returns>
-        ///   True if the button press was processed by the control and future game pad
-        ///   input belongs to the control until all buttons are released again
+        ///     True if the button press was processed by the control and future game pad
+        ///     input belongs to the control until all buttons are released again
         /// </returns>
         internal bool ProcessButtonPress(Buttons button)
         {
@@ -48,10 +43,7 @@ namespace MonoGame.Extended.NuclexGui.Controls
                 if (_activatedControl != this)
                     _activatedControl.ProcessButtonPress(button);
                 else
-                { 
-                    // We're the activated control
                     OnButtonPressed(button);
-                }
 
                 // We're already activated, so this button press is accepted in any case
                 return true;
@@ -71,11 +63,9 @@ namespace MonoGame.Extended.NuclexGui.Controls
             }
 
             // Nope, we have to ask our children to find a control that feels responsible.
-            bool encounteredOrderingControl = false;
-            for (int index = 0; index < _children.Count; ++index)
+            var encounteredOrderingControl = false;
+            foreach (var child in _children)
             {
-                GuiControl child = _children[index];
-
                 // We only process one child that has the affectsOrdering field set. This
                 // ensures that key presses will not be delivered to windows sitting behind
                 // another window. Other siblings that are not windows are asked still, so
@@ -84,8 +74,8 @@ namespace MonoGame.Extended.NuclexGui.Controls
                 {
                     if (encounteredOrderingControl)
                         continue;
-                    else
-                        encounteredOrderingControl = true;
+
+                    encounteredOrderingControl = true;
                 }
 
                 // Does this child feel responsible for the button press?
@@ -114,10 +104,10 @@ namespace MonoGame.Extended.NuclexGui.Controls
             // If we receive a release, we must have a control on which the mouse
             // was pressed (possibly even ourselves)
             Debug.Assert(
-              _activatedControl != null,
-              "ProcessButtonRelease() had no control a button was pressed on; " +
-              "ProcessButtonRelease() was called on a control instance, but the control " +
-              "did not register a prior button press for itself or any of its child controls"
+                _activatedControl != null,
+                "ProcessButtonRelease() had no control a button was pressed on; " +
+                "ProcessButtonRelease() was called on a control instance, but the control " +
+                "did not register a prior button press for itself or any of its child controls"
             );
 
             --_heldButtonCount;
@@ -127,12 +117,12 @@ namespace MonoGame.Extended.NuclexGui.Controls
                 OnButtonReleased(button);
 
             // If no more keys buttons are being held down, clear the activated control
-            if (!anyKeysOrButtonsPressed)
+            if (!AnyKeysOrButtonsPressed)
                 _activatedControl = null;
         }
 
         /// <summary>
-        ///   Called when the mouse has left the control and is no longer hovering over it
+        ///     Called when the mouse has left the control and is no longer hovering over it
         /// </summary>
         internal void ProcessMouseLeave()
         {
@@ -188,22 +178,19 @@ namespace MonoGame.Extended.NuclexGui.Controls
             // If the mouse is over another control, pass on the mouse press.
             if (_activatedControl != this)
                 return _activatedControl.ProcessMousePress(button);
-            else
-            { 
-                // Otherwise, the mouse press applies to us
+            // Otherwise, the mouse press applies to us
 
-                // If this control can take the input focus, make it the focused control
-                if (_screen != null)
-                {
-                    IFocusable focusable = this as IFocusable;
-                    if ((focusable != null) && (focusable.CanGetFocus))
-                        _screen.FocusedControl = this;
-                }
-
-                // Deliver the notification to the control deriving from us
-                OnMousePressed(button);
-                return true;
+            // If this control can take the input focus, make it the focused control
+            if (_screen != null)
+            {
+                var focusable = this as IFocusable;
+                if ((focusable != null) && focusable.CanGetFocus)
+                    _screen.FocusedControl = this;
             }
+
+            // Deliver the notification to the control deriving from us
+            OnMousePressed(button);
+            return true;
         }
 
         /// <summary>Called when a mouse button has been released again</summary>
@@ -219,10 +206,10 @@ namespace MonoGame.Extended.NuclexGui.Controls
             // If we receive a release, we must have a control on which the mouse
             // was pressed (possibly even ourselves)
             Debug.Assert(
-              _activatedControl != null,
-              "ProcessMouseRelease() had no control the mouse was pressed on; " +
-              "ProcessMouseRelease() was called on a control instance, but the control " +
-              "did not register a prior mouse press over itself or any of its child controls"
+                _activatedControl != null,
+                "ProcessMouseRelease() had no control the mouse was pressed on; " +
+                "ProcessMouseRelease() was called on a control instance, but the control " +
+                "did not register a prior mouse press over itself or any of its child controls"
             );
 
             // Remove the button from the list of mouse buttons being held down. This
@@ -236,7 +223,7 @@ namespace MonoGame.Extended.NuclexGui.Controls
                 OnMouseReleased(button);
 
             // If no more mouse buttons are being held down, clear the mouse-press control
-            if (!anyKeysOrButtonsPressed)
+            if (!AnyKeysOrButtonsPressed)
                 _activatedControl = null;
         }
 
@@ -248,7 +235,7 @@ namespace MonoGame.Extended.NuclexGui.Controls
         internal void ProcessMouseMove(float containerWidth, float containerHeight, float x, float y)
         {
             // Calculate the absolute pixel position and size of this control
-            Vector2 size = Bounds.Size.ToOffset(containerWidth, containerHeight);
+            var size = Bounds.Size.ToOffset(containerWidth, containerHeight);
 
             // If a mouse button is being held down, the mouse movement notification is
             // delivered to the control the mouse was pressed on first. This guarantees that
@@ -256,8 +243,8 @@ namespace MonoGame.Extended.NuclexGui.Controls
             // leaves the window during dragging.
             if (_activatedControl != null)
             {
-                float mouseX = x - Bounds.Location.X.ToOffset(containerWidth);
-                float mouseY = y - Bounds.Location.Y.ToOffset(containerHeight);
+                var mouseX = x - Bounds.Location.X.ToOffset(containerWidth);
+                var mouseY = y - Bounds.Location.Y.ToOffset(containerHeight);
 
                 // Deliver the mouse move notifcation (either to our own user code or
                 // to the control the mouse of hovering over)
@@ -275,14 +262,14 @@ namespace MonoGame.Extended.NuclexGui.Controls
 
             // Check whether the mouse is hovering over one of our children and if so,
             // pass on the mouse movement notification to the child.
-            for (int index = 0; index < _children.Count; ++index)
+            foreach (var control in _children)
             {
-                RectangleF childBounds = _children[index].Bounds.ToOffset(size.X, size.Y);
+                var childBounds = control.Bounds.ToOffset(size.X, size.Y);
 
                 // Is the mouse over this child?
                 if (childBounds.Contains(x, y))
                 {
-                    switchMouseOverControl(_children[index]);
+                    SwitchMouseOverControl(control);
 
                     // Hand over the mouse movement data to the child control the mouse is
                     // hovering over. If this is the mouse-press control, do nothing because
@@ -300,18 +287,20 @@ namespace MonoGame.Extended.NuclexGui.Controls
             // getting mouse movement data outside of our boundaries. In this case, we
             // only should become the mouse-over control is actually over us.
             if (
-              (x >= 0.0f) && (x < size.X) &&
-              (y >= 0.0f) && (y < size.Y)
+                (x >= 0.0f) && (x < size.X) &&
+                (y >= 0.0f) && (y < size.Y)
             )
             {
-                switchMouseOverControl(this);
+                SwitchMouseOverControl(this);
 
                 // If we weren't pressed, we didn't deliver the out-of-order update to
                 // our implementation. Send our implementation a normal ordered update.
                 if (_activatedControl == null)
                     OnMouseMoved(x, y);
             }
-            else { // redundant - our parent handles this - but convenient for unit tests
+            else
+            {
+                // redundant - our parent handles this - but convenient for unit tests
                 ProcessMouseLeave();
             }
         }
@@ -324,24 +313,20 @@ namespace MonoGame.Extended.NuclexGui.Controls
             // messages. This enables some exotic uses for the mouse wheel, such as holding
             // an object with the mouse button and scaling it with the wheel at the same time.
             if (_activatedControl != null)
-            {
                 if (_activatedControl != this)
                 {
                     _activatedControl.ProcessMouseWheel(ticks);
                     return;
                 }
-            }
 
             // If the mouse wheel has been used normally, send the wheel notifications to
             // the control the mouse is over.
             if (_mouseOverControl != null)
-            {
                 if (_mouseOverControl != this)
                 {
                     _mouseOverControl.ProcessMouseWheel(ticks);
                     return;
                 }
-            }
 
             // We're the control the mouse is over, let the user code handle
             // the mouse wheel rotation
@@ -386,21 +371,19 @@ namespace MonoGame.Extended.NuclexGui.Controls
 
             // Nope, we have to ask our children (and they, potentially recursively, theirs)
             // to find a control that feels responsible.
-            bool encounteredOrderingControl = false;
-            for (int index = 0; index < _children.Count; ++index)
+            var encounteredOrderingControl = false;
+            for (var index = 0; index < _children.Count; ++index)
             {
-                GuiControl child = _children[index];
+                var child = _children[index];
 
                 // We only process one child that has the affectsOrdering field set. This
                 // ensures that key presses will not be delivered to windows sitting behind
                 // another window. Other siblings that are not windows are asked still.
                 if (child._affectsOrdering)
-                {
                     if (encounteredOrderingControl)
                         continue;
                     else
                         encounteredOrderingControl = true;
-                }
 
                 // Does this child feel responsible for the key press?
                 if (child.ProcessKeyPress(keyCode, repetition))
@@ -422,19 +405,19 @@ namespace MonoGame.Extended.NuclexGui.Controls
             // Any key release should have an associated key press, otherwise, someone
             // delivered notifications to us we should not have received.
             Debug.Assert(
-              _heldKeyCount > 0,
-              "ProcessKeyRelease() called more often then ProcessKeyPress(); " +
-              "ProcessKeyRelease() was called more often the ProcessKeyPress() has been " +
-              "called with the repetition parameter set to false"
+                _heldKeyCount > 0,
+                "ProcessKeyRelease() called more often then ProcessKeyPress(); " +
+                "ProcessKeyRelease() was called more often the ProcessKeyPress() has been " +
+                "called with the repetition parameter set to false"
             );
 
             // If we receive a release, we must have a control on which the mouse
             // was pressed (possibly even ourselves)
             Debug.Assert(
-              _activatedControl != null,
-              "ProcessKeyRelease() had no control a key was pressed on; " +
-              "ProcessKeyRelease() was called on a control instance, but the control " +
-              "did not register a prior key press for itself or any of its child controls"
+                _activatedControl != null,
+                "ProcessKeyRelease() had no control a key was pressed on; " +
+                "ProcessKeyRelease() was called on a control instance, but the control " +
+                "did not register a prior key press for itself or any of its child controls"
             );
 
             --_heldKeyCount;
@@ -444,16 +427,13 @@ namespace MonoGame.Extended.NuclexGui.Controls
                 OnKeyReleased(keyCode);
 
             // If no more keys buttons are being held down, clear the activated control
-            if (!anyKeysOrButtonsPressed)
-            {
+            if (!AnyKeysOrButtonsPressed)
                 _activatedControl = null;
-            }
-
         }
 
         /// <summary>Switches the mouse over control to a different control</summary>
         /// <param name="newMouseOverControl">New control the mouse is hovering over</param>
-        private void switchMouseOverControl(GuiControl newMouseOverControl)
+        private void SwitchMouseOverControl(GuiControl newMouseOverControl)
         {
             if (_mouseOverControl != newMouseOverControl)
             {

@@ -11,11 +11,12 @@
             set { _delta = value - StartValue; }
         }
 
-        public unsafe void Update(float amount, Particle* particle) {
+        public unsafe void Update(float amount, Particle* particle)
+        {
             particle->Color = new HslColor(
-                    amount * _delta + StartValue,
-                    particle->Color.S,
-                    particle->Color.L);
+                amount*_delta + StartValue,
+                particle->Color.S,
+                particle->Color.L);
         }
     }
 }

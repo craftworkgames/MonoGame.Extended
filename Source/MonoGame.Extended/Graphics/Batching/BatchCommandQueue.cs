@@ -7,10 +7,11 @@ namespace MonoGame.Extended.Graphics.Batching
         where TVertexType : struct, IVertexType where TCommandData : struct, IBatchDrawCommandData<TCommandData>
     {
         internal BatchCommandDrawer<TVertexType, TCommandData> CommandDrawer;
-        internal PrimitiveType PrimitiveType;
         internal GraphicsDevice GraphicsDevice;
+        internal PrimitiveType PrimitiveType;
 
-        protected BatchCommandQueue(GraphicsDevice graphicsDevice, BatchCommandDrawer<TVertexType, TCommandData> commandDrawer)
+        protected BatchCommandQueue(GraphicsDevice graphicsDevice,
+            BatchCommandDrawer<TVertexType, TCommandData> commandDrawer)
         {
             GraphicsDevice = graphicsDevice;
             CommandDrawer = commandDrawer;
@@ -37,7 +38,8 @@ namespace MonoGame.Extended.Graphics.Batching
             CommandDrawer.Effect = null;
         }
 
-        internal abstract void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, float sortKey, ref TCommandData data);
+        internal abstract void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, float sortKey,
+            ref TCommandData data);
 
         protected virtual void Dispose(bool isDisposing)
         {

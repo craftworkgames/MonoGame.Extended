@@ -7,11 +7,12 @@ namespace MonoGame.Extended.Entities.Systems
 {
     public abstract class ComponentSystem
     {
+        private EntityComponentSystem _parent;
+
         protected ComponentSystem()
         {
         }
 
-        private EntityComponentSystem _parent;
         internal EntityComponentSystem Parent
         {
             get { return _parent; }
@@ -42,12 +43,28 @@ namespace MonoGame.Extended.Entities.Systems
             return Parent.GetEntity(name);
         }
 
-        protected virtual void OnEntityCreated(Entity entity) { }
-        protected virtual void OnEntityDestroyed(Entity entity) { }
-        protected virtual void OnComponentAttached(EntityComponent component) { }
-        protected virtual void OnComponentDetached(EntityComponent component) { }
+        protected virtual void OnEntityCreated(Entity entity)
+        {
+        }
 
-        public virtual void Update(GameTime gameTime) { }
-        public virtual void Draw(GameTime gameTime) { }
+        protected virtual void OnEntityDestroyed(Entity entity)
+        {
+        }
+
+        protected virtual void OnComponentAttached(EntityComponent component)
+        {
+        }
+
+        protected virtual void OnComponentDetached(EntityComponent component)
+        {
+        }
+
+        public virtual void Update(GameTime gameTime)
+        {
+        }
+
+        public virtual void Draw(GameTime gameTime)
+        {
+        }
     }
 }

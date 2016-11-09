@@ -43,7 +43,7 @@ namespace MonoGame.Extended
 
         public static SizeF operator *(SizeF size, float value)
         {
-            return new SizeF(size.Width * value, size.Height * value);
+            return new SizeF(size.Width*value, size.Height*value);
         }
 
         public bool Equals(SizeF other)
@@ -74,7 +74,7 @@ namespace MonoGame.Extended
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            return obj is Size && Equals((Size)obj);
+            return obj is Size && Equals((Size) obj);
         }
 
         public override string ToString()

@@ -5,7 +5,7 @@ namespace MonoGame.Extended.Animations.Tweens
 {
     public class TweenGroup<T> : TweenAnimation<T>
     {
-        public TweenGroup(T target, Action onCompleteAction = null, bool disposeOnComplete = true) 
+        public TweenGroup(T target, Action onCompleteAction = null, bool disposeOnComplete = true)
             : base(target, onCompleteAction, disposeOnComplete)
         {
         }

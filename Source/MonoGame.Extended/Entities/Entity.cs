@@ -8,6 +8,7 @@ namespace MonoGame.Extended.Entities
 {
     public class Entity : Transform2D<Entity>
     {
+        private readonly List<EntityComponent> _components;
         private readonly EntityComponentSystem _entityComponentSystem;
 
         public Entity(EntityComponentSystem entityComponentSystem, long id, string name)
@@ -25,8 +26,6 @@ namespace MonoGame.Extended.Entities
         public long Id { get; }
         public string Name { get; }
         public object Tag { get; set; }
-
-        private readonly List<EntityComponent> _components;
 
         public override string ToString()
         {

@@ -42,7 +42,7 @@ namespace MonoGame.Extended.BitmapFonts
                 var textureRegion = new TextureRegion2D(textures[textureIndex], x, y, width, height);
                 regions[r] = new BitmapFontRegion(textureRegion, character, xOffset, yOffset, xAdvance);
             }
-            
+
             return new BitmapFont(reader.AssetName, regions, lineHeight);
         }
     }

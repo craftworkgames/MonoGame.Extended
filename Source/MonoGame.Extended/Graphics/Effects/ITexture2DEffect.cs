@@ -8,10 +8,10 @@ namespace MonoGame.Extended.Graphics.Effects
     public interface ITexture2DEffect
     {
         /// <summary>
-        ///     Gets or sets the <see cref="Texture2D"/>.
+        ///     Gets or sets the <see cref="Texture2D" />.
         /// </summary>
         /// <value>
-        ///     The <see cref="Texture2D"/>.
+        ///     The <see cref="Texture2D" />.
         /// </value>
         Texture2D Texture { get; set; }
     }

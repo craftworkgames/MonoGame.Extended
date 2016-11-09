@@ -142,7 +142,8 @@ namespace MonoGame.Extended.BitmapFonts
             Color color, float rotation, Vector2 origin, float scalef, SpriteEffects effects, float layerDepth)
         {
             var scale = new Vector2(scalef, scalef);
-            DrawInternal(spriteBatch, font, text.ToString(), position, color, rotation, origin, scale, effects, layerDepth);
+            DrawInternal(spriteBatch, font, text.ToString(), position, color, rotation, origin, scale, effects,
+                layerDepth);
         }
 
         /// <summary>
@@ -169,7 +170,8 @@ namespace MonoGame.Extended.BitmapFonts
             Vector2 position,
             Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
         {
-            DrawInternal(spriteBatch, font, text.ToString(), position, color, rotation, origin, scale, effects, layerDepth);
+            DrawInternal(spriteBatch, font, text.ToString(), position, color, rotation, origin, scale, effects,
+                layerDepth);
         }
 
         /// <summary>
@@ -305,7 +307,7 @@ namespace MonoGame.Extended.BitmapFonts
             var dx = position.X;
             var dy = position.Y;
             var codePoints = BitmapFont.GetUnicodeCodePoints(text).ToArray();
-            Vector2 positionOffset = Vector2.Zero;
+            var positionOffset = Vector2.Zero;
 
             for (int i = 0, l = codePoints.Length; i < l; i++)
             {
@@ -315,14 +317,15 @@ namespace MonoGame.Extended.BitmapFonts
                 if (fontRegion != null)
                 {
                     var charPosition = new Vector2(dx + fontRegion.XOffset, dy + fontRegion.YOffset);
-                    var scaledCharPosition = charPosition * new Vector2(scale.X, scale.Y);
+                    var scaledCharPosition = charPosition*new Vector2(scale.X, scale.Y);
 
-                    if (i==0)
+                    if (i == 0)
                         positionOffset = scaledCharPosition - charPosition;
 
                     scaledCharPosition -= positionOffset;
 
-                    spriteBatch.Draw(fontRegion.TextureRegion, scaledCharPosition, color, rotation, origin, scale, effects,
+                    spriteBatch.Draw(fontRegion.TextureRegion, scaledCharPosition, color, rotation, origin, scale,
+                        effects,
                         layerDepth);
 
                     if (i != text.Length - 1)

@@ -37,11 +37,13 @@ namespace MonoGame.Extended
     {
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created
         private TMatrix _localMatrix; // model space to local space
-        private TMatrix _worldMatrix; // local space to world space
         private TParent _parent; // parent
+        private TMatrix _worldMatrix; // local space to world space
 
-        public event Action TransformBecameDirty; // observer pattern for when the world (or local) matrix became dirty
-        public event Action TranformUpdated; // observer pattern for after the world (or local) matrix was re-calculated
+        // internal contructor because people should not be using this class directly; they should use Transform2D or Transform3D
+        internal BaseTransform()
+        {
+        }
 
         /// <summary>
         ///     Gets the model-to-local space <see cref="Matrix2D" />.
@@ -100,10 +102,8 @@ namespace MonoGame.Extended
             }
         }
 
-        // internal contructor because people should not be using this class directly; they should use Transform2D or Transform3D
-        internal BaseTransform()
-        {
-        }
+        public event Action TransformBecameDirty; // observer pattern for when the world (or local) matrix became dirty
+        public event Action TranformUpdated; // observer pattern for after the world (or local) matrix was re-calculated
 
         /// <summary>
         ///     Gets the model-to-local space <see cref="Matrix2D" />.
@@ -204,8 +204,8 @@ namespace MonoGame.Extended
         where TParent : Transform2D<TParent>
     {
         private Vector2 _position;
-        private Vector2 _scale = Vector2.One;
         private float _rotation;
+        private Vector2 _scale = Vector2.One;
 
         /// <summary>
         ///     Gets the world position.
@@ -213,10 +213,23 @@ namespace MonoGame.Extended
         /// <value>
         ///     The world position.
         /// </value>
-        public Vector2 WorldPosition
-        {
-            get { return WorldMatrix.Translation; }
-        }
+        public Vector2 WorldPosition => WorldMatrix.Translation;
+
+        /// <summary>
+        ///     Gets the world scale.
+        /// </summary>
+        /// <value>
+        ///     The world scale.
+        /// </value>
+        public Vector2 WorldScale => WorldMatrix.Scale;
+
+        /// <summary>
+        ///     Gets the world rotation angle in radians.
+        /// </summary>
+        /// <value>
+        ///     The world rotation angle in radians.
+        /// </value>
+        public float WorldRotation => WorldMatrix.Rotation;
 
         /// <summary>
         ///     Gets or sets the local position.
@@ -236,14 +249,20 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets the world scale.
+        ///     Gets or sets the local rotation angle in radians.
         /// </summary>
         /// <value>
-        ///     The world scale.
+        ///     The local rotation angle in radians.
         /// </value>
-        public Vector2 WorldScale
+        public float Rotation
         {
-            get { return WorldMatrix.Scale; }
+            get { return _rotation; }
+            set
+            {
+                _rotation = value;
+                LocalMatrixBecameDirty();
+                WorldMatrixBecameDirty();
+            }
         }
 
         /// <summary>
@@ -258,34 +277,6 @@ namespace MonoGame.Extended
             set
             {
                 _scale = value;
-                LocalMatrixBecameDirty();
-                WorldMatrixBecameDirty();
-            }
-        }
-
-        /// <summary>
-        ///     Gets the world rotation angle in radians.
-        /// </summary>
-        /// <value>
-        ///     The world rotation angle in radians.
-        /// </value>
-        public float WorldRotation
-        {
-            get { return WorldMatrix.Rotation; }
-        }
-
-        /// <summary>
-        ///     Gets or sets the local rotation angle in radians.
-        /// </summary>
-        /// <value>
-        ///     The local rotation angle in radians.
-        /// </value>
-        public float Rotation
-        {
-            get { return _rotation; }
-            set
-            {
-                _rotation = value;
                 LocalMatrixBecameDirty();
                 WorldMatrixBecameDirty();
             }
@@ -309,11 +300,14 @@ namespace MonoGame.Extended
             if (Parent != null)
             {
                 var parentPosition = Parent.Position;
-                matrix = Matrix2D.CreateTranslation(-parentPosition) * Matrix2D.CreateScale(_scale) * Matrix2D.CreateRotationZ(-_rotation) * Matrix2D.CreateTranslation(parentPosition) * Matrix2D.CreateTranslation(_position);
+                matrix = Matrix2D.CreateTranslation(-parentPosition)*Matrix2D.CreateScale(_scale)*
+                         Matrix2D.CreateRotationZ(-_rotation)*Matrix2D.CreateTranslation(parentPosition)*
+                         Matrix2D.CreateTranslation(_position);
             }
             else
             {
-                matrix = Matrix2D.CreateScale(_scale) * Matrix2D.CreateRotationZ(-_rotation) * Matrix2D.CreateTranslation(_position);
+                matrix = Matrix2D.CreateScale(_scale)*Matrix2D.CreateRotationZ(-_rotation)*
+                         Matrix2D.CreateTranslation(_position);
             }
         }
     }

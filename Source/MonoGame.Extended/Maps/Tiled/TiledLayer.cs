@@ -12,8 +12,6 @@ namespace MonoGame.Extended.Maps.Tiled
             Opacity = 1.0f;
         }
 
-        public abstract void Dispose();
-
         public string Name { get; }
         public float Depth { get; set; }
         public TiledProperties Properties { get; }
@@ -21,5 +19,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public float Opacity { get; set; }
         public float OffsetX { get; set; }
         public float OffsetY { get; set; }
+
+        public abstract void Dispose();
     }
 }

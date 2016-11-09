@@ -10,18 +10,14 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         /// <returns>The region covered by the slider's thumb</returns>
         protected override RectangleF GetThumbRegion()
         {
-            RectangleF bounds = GetAbsoluteBounds();
+            var bounds = GetAbsoluteBounds();
 
             if (ThumbLocator != null)
-            {
                 return ThumbLocator.GetThumbPosition(bounds, ThumbPosition, ThumbSize);
-            }
-            else {
-                float thumbHeight = bounds.Height * ThumbSize;
-                float thumbY = (bounds.Height - thumbHeight) * ThumbPosition;
+            var thumbHeight = bounds.Height*ThumbSize;
+            var thumbY = (bounds.Height - thumbHeight)*ThumbPosition;
 
-                return new RectangleF(0, thumbY, bounds.Width, thumbHeight);
-            }
+            return new RectangleF(0, thumbY, bounds.Width, thumbHeight);
         }
 
         /// <summary>Moves the thumb to the specified location</summary>
@@ -29,22 +25,17 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         /// <param name="y">Y coordinate for the new upper border of the thumb</param>
         protected override void MoveThumb(float x, float y)
         {
-            RectangleF bounds = GetAbsoluteBounds();
+            var bounds = GetAbsoluteBounds();
 
-            float thumbHeight = bounds.Height * ThumbSize;
-            float maxY = bounds.Height - thumbHeight;
+            var thumbHeight = bounds.Height*ThumbSize;
+            var maxY = bounds.Height - thumbHeight;
 
             // Prevent divide-by-zero if the thumb fills out the whole rail
             if (maxY > 0.0f)
-            {
-                ThumbPosition = MathHelper.Clamp(y / maxY, 0.0f, 1.0f);
-            }
-            else {
-                ThumbPosition = 0.0f;
-            }
+                ThumbPosition = MathHelper.Clamp(y/maxY, 0.0f, 1.0f);
+            else ThumbPosition = 0.0f;
 
             OnMoved();
         }
-
     }
 }

@@ -13,7 +13,7 @@ namespace MonoGame.Extended.BitmapFonts
             YOffset = yOffset;
             XAdvance = xAdvance;
         }
-        
+
         public int Character { get; set; }
         public TextureRegion2D TextureRegion { get; }
         public int XOffset { get; set; }

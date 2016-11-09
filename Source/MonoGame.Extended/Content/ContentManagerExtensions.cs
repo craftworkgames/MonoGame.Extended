@@ -18,7 +18,8 @@ namespace MonoGame.Extended.Content
         {
             // http://konaju.com/?p=21
             var serviceProvider = contentManager.ServiceProvider;
-            var graphicsDeviceService = (IGraphicsDeviceService)serviceProvider.GetService(typeof (IGraphicsDeviceService));
+            var graphicsDeviceService =
+                (IGraphicsDeviceService) serviceProvider.GetService(typeof(IGraphicsDeviceService));
             return graphicsDeviceService.GraphicsDevice;
         }
     }

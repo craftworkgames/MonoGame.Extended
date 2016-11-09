@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 namespace MonoGame.Extended.Particles
 {
     /// <summary>
-    /// Defines a part of a line that is bounded by two distinct end points.
+    ///     Defines a part of a line that is bounded by two distinct end points.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct LineSegment : IEquatable<LineSegment>
@@ -14,7 +14,7 @@ namespace MonoGame.Extended.Particles
         internal readonly Vector2 _point2;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LineSegment"/> structure.
+        ///     Initializes a new instance of the <see cref="LineSegment" /> structure.
         /// </summary>
         /// <param name="point1"></param>
         /// <param name="point2"></param>
@@ -48,7 +48,7 @@ namespace MonoGame.Extended.Particles
             var t = _point2 - _point1;
             return new Vector2(t.X, t.Y);
         }
-        
+
         public bool Equals(LineSegment other)
         {
             // ReSharper disable ImpureMethodCallOnReadonlyValueField
@@ -61,12 +61,12 @@ namespace MonoGame.Extended.Particles
             if (ReferenceEquals(null, obj))
                 return false;
 
-            return obj is LineSegment & Equals((LineSegment)obj);
+            return obj is LineSegment & Equals((LineSegment) obj);
         }
 
         public override int GetHashCode()
         {
-            return (_point1.GetHashCode() * 397) ^ _point2.GetHashCode();
+            return (_point1.GetHashCode()*397) ^ _point2.GetHashCode();
         }
 
         public override string ToString()
