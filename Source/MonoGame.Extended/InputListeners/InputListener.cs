@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.ViewportAdapters;
+using MonoGame.Extended.NuclexGui.Input;
 
 namespace MonoGame.Extended.InputListeners
 {

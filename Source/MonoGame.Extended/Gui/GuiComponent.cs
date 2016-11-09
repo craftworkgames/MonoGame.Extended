@@ -26,6 +26,9 @@ namespace MonoGame.Extended.Gui
         private GuiControl _focusedControl;
         private GuiLayout _layout;
 
+        private GuiDialog[] _dialogues;
+        private GuiDialog _activeDialog;
+
         protected override void Dispose(bool disposing)
         {
             _contentManager.Dispose();
