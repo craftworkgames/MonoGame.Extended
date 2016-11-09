@@ -13,7 +13,7 @@ namespace MonoGame.Extended.Animations
             Animations = new List<Animation>();
         }
 
-        public List<Animation> Animations { get; } 
+        public List<Animation> Animations { get; }
 
         public override void Update(GameTime gameTime)
         {

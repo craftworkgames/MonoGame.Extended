@@ -9,12 +9,20 @@ namespace MonoGame.Extended.Particles
 {
     public unsafe class ParticleEmitter : EntityComponent, IDisposable
     {
-        public ParticleEmitter(TextureRegion2D textureRegion, int capacity, TimeSpan term, Profile profile, bool autoTrigger = true)
+        private readonly FastRandom _random = new FastRandom();
+        private readonly float _term;
+        internal readonly ParticleBuffer Buffer;
+        private bool _autoTrigger;
+
+        private float _totalSeconds;
+
+        public ParticleEmitter(TextureRegion2D textureRegion, int capacity, TimeSpan term, Profile profile,
+            bool autoTrigger = true)
         {
             if (profile == null)
                 throw new ArgumentNullException(nameof(profile));
 
-            _term = (float)term.TotalSeconds;
+            _term = (float) term.TotalSeconds;
             _autoTrigger = autoTrigger;
 
             TextureRegion = textureRegion;
@@ -26,13 +34,6 @@ namespace MonoGame.Extended.Particles
             Parameters = new ParticleReleaseParameters();
         }
 
-        private readonly FastRandom _random = new FastRandom();
-        private readonly float _term;
-        private bool _autoTrigger;
-
-        private float _totalSeconds;
-        internal readonly ParticleBuffer Buffer;
-
         public int ActiveParticles => Buffer.Count;
         public Vector2 Offset { get; set; }
         public IModifier[] Modifiers { get; set; }
@@ -41,6 +42,12 @@ namespace MonoGame.Extended.Particles
         public Profile Profile { get; }
         public ParticleReleaseParameters Parameters { get; set; }
         public TextureRegion2D TextureRegion { get; set; }
+
+        public void Dispose()
+        {
+            Buffer.Dispose();
+            GC.SuppressFinalize(this);
+        }
 
         private void ReclaimExpiredParticles()
         {
@@ -81,8 +88,8 @@ namespace MonoGame.Extended.Particles
             while (iterator.HasNext)
             {
                 var particle = iterator.Next();
-                particle->Age = (_totalSeconds - particle->Inception) / _term;
-                particle->Position = particle->Position + particle->Velocity * elapsedSeconds;
+                particle->Age = (_totalSeconds - particle->Inception)/_term;
+                particle->Position = particle->Position + particle->Velocity*elapsedSeconds;
             }
 
             ModifierExecutionStrategy.ExecuteModifiers(Modifiers, elapsedSeconds, iterator);
@@ -107,7 +114,7 @@ namespace MonoGame.Extended.Particles
 
             for (var i = 0; i < numToRelease; i++)
             {
-                var offset = lineVector * _random.NextSingle();
+                var offset = lineVector*_random.NextSingle();
                 Release(line.Origin + offset, 1);
             }
         }
@@ -130,7 +137,7 @@ namespace MonoGame.Extended.Particles
 
                 var speed = _random.NextSingle(Parameters.Speed);
 
-                particle->Velocity = heading * speed;
+                particle->Velocity = heading*speed;
 
                 _random.NextColor(out particle->Color, Parameters.Color);
 
@@ -140,12 +147,6 @@ namespace MonoGame.Extended.Particles
                 particle->Rotation = _random.NextSingle(Parameters.Rotation);
                 particle->Mass = _random.NextSingle(Parameters.Mass);
             }
-        }
-
-        public void Dispose()
-        {
-            Buffer.Dispose();
-            GC.SuppressFinalize(this);
         }
 
         ~ParticleEmitter()

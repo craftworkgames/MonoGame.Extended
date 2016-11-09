@@ -23,16 +23,16 @@ namespace MonoGame.Extended.Graphics.Batching
         internal bool CanMergeWith(float sortKey, ref TCommandData commandData)
         {
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return SortKey == sortKey && Data.Equals(ref commandData);
+            return (SortKey == sortKey) && Data.Equals(ref commandData);
         }
 
         public int CompareTo(BatchDrawCommand<TCommandData> other)
         {
             // ReSharper disable once ImpureMethodCallOnReadonlyValueField
-           var result = SortKey.CompareTo(other.SortKey);
+            var result = SortKey.CompareTo(other.SortKey);
             if (result == 0)
                 result = Data.CompareTo(other.Data);
-           if (result == 0)
+            if (result == 0)
                 result = StartIndex.CompareTo(other.StartIndex);
             return result;
         }

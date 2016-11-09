@@ -7,7 +7,8 @@ namespace MonoGame.Extended.Animations.SpriteSheets
 {
     public class SpriteSheetAnimationFactoryReader : ContentTypeReader<SpriteSheetAnimationFactory>
     {
-        protected override SpriteSheetAnimationFactory Read(ContentReader reader, SpriteSheetAnimationFactory existingInstance)
+        protected override SpriteSheetAnimationFactory Read(ContentReader reader,
+            SpriteSheetAnimationFactory existingInstance)
         {
             var textureAtlasAssetName = reader.GetRelativeAssetPath(reader.ReadString());
             var textureAtlas = reader.ContentManager.Load<TextureAtlas>(textureAtlasAssetName);
@@ -41,7 +42,8 @@ namespace MonoGame.Extended.Animations.SpriteSheets
                     frameIndicies[f] = frameIndex;
                 }
 
-                var animationData = new SpriteSheetAnimationData(frameIndicies, frameDuration, isLooping, isReversed, isPingPong);
+                var animationData = new SpriteSheetAnimationData(frameIndicies, frameDuration, isLooping, isReversed,
+                    isPingPong);
                 animationFactory.Add(name, animationData);
             }
 

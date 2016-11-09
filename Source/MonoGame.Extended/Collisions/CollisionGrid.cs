@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Shapes;
@@ -8,18 +7,18 @@ namespace MonoGame.Extended.Collisions
 {
     public class CollisionGrid
     {
+        private readonly CollisionGridCell[] _data;
+
         public CollisionGrid(int[] data, int columns, int rows, int cellWidth, int cellHeight)
         {
             _data = new CollisionGridCell[data.Length];
 
             for (var y = 0; y < rows; y++)
-            {
                 for (var x = 0; x < columns; x++)
                 {
-                    var index = x + y * columns;
+                    var index = x + y*columns;
                     _data[index] = new CollisionGridCell(this, x, y, data[index]);
                 }
-            }
 
             Columns = columns;
             Rows = rows;
@@ -32,13 +31,11 @@ namespace MonoGame.Extended.Collisions
         public int CellWidth { get; }
         public int CellHeight { get; }
 
-        private readonly CollisionGridCell[] _data;
-
         public CollisionGridCell GetCellAtIndex(int column, int row)
         {
-            var index = column + row * Columns;
+            var index = column + row*Columns;
 
-            if (index < 0 || index >= _data.Length)
+            if ((index < 0) || (index >= _data.Length))
                 return new CollisionGridCell(this, column, row, 0);
 
             return _data[index];
@@ -46,8 +43,8 @@ namespace MonoGame.Extended.Collisions
 
         public CollisionGridCell GetCellAtPosition(Vector3 position)
         {
-            var column = (int)(position.X / CellWidth);
-            var row = (int)(position.Y / CellHeight);
+            var column = (int) (position.X/CellWidth);
+            var row = (int) (position.Y/CellHeight);
 
             return GetCellAtIndex(column, row);
         }
@@ -56,14 +53,12 @@ namespace MonoGame.Extended.Collisions
         {
             var sx = (int) (rectangle.Left/CellWidth);
             var sy = (int) (rectangle.Top/CellHeight);
-            var ex = (int) ((rectangle.Right/CellWidth) + 1);
-            var ey = (int) ((rectangle.Bottom/CellHeight) + 1);
+            var ex = (int) (rectangle.Right/CellWidth + 1);
+            var ey = (int) (rectangle.Bottom/CellHeight + 1);
 
             for (var y = sy; y < ey; y++)
-            {
                 for (var x = sx; x < ex; x++)
                     yield return GetCellAtIndex(x, y);
-            }
         }
 
         public IEnumerable<ICollidable> GetCollidables(RectangleF overlappingRectangle)
@@ -74,7 +69,7 @@ namespace MonoGame.Extended.Collisions
 
         public Rectangle GetCellRectangle(int column, int row)
         {
-            return new Rectangle(column * CellWidth, row * CellHeight, CellWidth, CellHeight);
+            return new Rectangle(column*CellWidth, row*CellHeight, CellWidth, CellHeight);
         }
     }
 }

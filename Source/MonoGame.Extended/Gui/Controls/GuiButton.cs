@@ -5,11 +5,12 @@ namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiButton : GuiControl
     {
+        private bool _isPressed;
+
         public GuiButton()
         {
         }
 
-        private bool _isPressed;
         public bool IsPressed
         {
             get { return _isPressed; }
@@ -26,13 +27,14 @@ namespace MonoGame.Extended.Gui.Controls
                 }
             }
         }
+
         public GuiControlStyle PressedStyle { get; set; }
 
         public event EventHandler<MouseEventArgs> Click;
 
         public override void OnMouseDown(object sender, MouseEventArgs args)
         {
-            if(IsEnabled)
+            if (IsEnabled)
                 IsPressed = true;
 
             base.OnMouseDown(sender, args);
@@ -50,8 +52,8 @@ namespace MonoGame.Extended.Gui.Controls
         public override void OnMouseLeave(object sender, MouseEventArgs args)
         {
             base.OnMouseLeave(sender, args);
-            
-            if(IsEnabled)
+
+            if (IsEnabled)
                 IsPressed = false;
         }
     }

@@ -8,19 +8,24 @@ namespace MonoGame.Extended.Animations.SpriteSheets
     [Obsolete("Please use AnimatedSprite instead")]
     public class SpriteSheetAnimator : IUpdate
     {
+        private readonly SpriteSheetAnimationFactory _animationFactory;
+        private SpriteSheetAnimation _currentAnimation;
+
         public SpriteSheetAnimator(SpriteSheetAnimationFactory animationFactory)
         {
             _animationFactory = animationFactory;
         }
 
-        private readonly SpriteSheetAnimationFactory _animationFactory;
-        private SpriteSheetAnimation _currentAnimation;
-
         public Sprite TargetSprite { get; set; }
-        
+
+        public void Update(GameTime gameTime)
+        {
+            Update(gameTime.GetElapsedSeconds());
+        }
+
         public SpriteSheetAnimation Play(string name, Action onCompleted = null)
         {
-            if (_currentAnimation == null || _currentAnimation.IsComplete || _currentAnimation.Name != name)
+            if ((_currentAnimation == null) || _currentAnimation.IsComplete || (_currentAnimation.Name != name))
             {
                 _currentAnimation = _animationFactory.Create(name);
                 _currentAnimation.OnCompleted = onCompleted;
@@ -31,7 +36,7 @@ namespace MonoGame.Extended.Animations.SpriteSheets
 
         public void Update(float deltaTime)
         {
-            if (_currentAnimation != null && !_currentAnimation.IsComplete)
+            if ((_currentAnimation != null) && !_currentAnimation.IsComplete)
             {
                 _currentAnimation.Update(deltaTime);
 
@@ -40,15 +45,12 @@ namespace MonoGame.Extended.Animations.SpriteSheets
             }
         }
 
-        public void Update(GameTime gameTime)
-        {
-            Update(gameTime.GetElapsedSeconds());
-        }
-
         public Sprite CreateSprite(Vector2 position)
         {
-            var textureRegion = _currentAnimation != null ? _currentAnimation.CurrentFrame : _animationFactory.Frames.FirstOrDefault();
-            return TargetSprite = new Sprite(textureRegion) { Position = position };
+            var textureRegion = _currentAnimation != null
+                ? _currentAnimation.CurrentFrame
+                : _animationFactory.Frames.FirstOrDefault();
+            return TargetSprite = new Sprite(textureRegion) {Position = position};
         }
 
         public Sprite CreateSprite()

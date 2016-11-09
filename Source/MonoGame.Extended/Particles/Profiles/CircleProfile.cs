@@ -14,8 +14,8 @@ namespace MonoGame.Extended.Particles.Profiles
             Random.NextUnitVector(out heading);
 
             offset = Radiate == CircleRadiation.In
-                ? new Vector2(-heading.X * dist, -heading.Y * dist)
-                : new Vector2(heading.X * dist, heading.Y * dist);
+                ? new Vector2(-heading.X*dist, -heading.Y*dist)
+                : new Vector2(heading.X*dist, heading.Y*dist);
 
             if (Radiate == CircleRadiation.None)
                 Random.NextUnitVector(out heading);

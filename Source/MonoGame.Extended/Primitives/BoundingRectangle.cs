@@ -8,7 +8,8 @@ namespace MonoGame.Extended.Primitives
     // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.2; Bounding Volumes - Axis-aligned Bounding Boxes (AABBs). pg 77 
 
     /// <summary>
-    ///     An axis-aligned, four sided, two dimensional box defined by a centre <see cref="Point2" /> and a radii <see cref="Vector2" />.
+    ///     An axis-aligned, four sided, two dimensional box defined by a centre <see cref="Point2" /> and a radii
+    ///     <see cref="Vector2" />.
     /// </summary>
     /// <remarks>
     ///     <para>
@@ -16,7 +17,8 @@ namespace MonoGame.Extended.Primitives
     ///         face normals are at all times parallel with the axes of the given coordinate system.
     ///     </para>
     ///     <para>
-    ///         The <see cref="BoundingRectangle" /> of a rotated <see cref="BoundingRectangle" /> will be equivalent or larger in size
+    ///         The <see cref="BoundingRectangle" /> of a rotated <see cref="BoundingRectangle" /> will be equivalent or larger
+    ///         in size
     ///         than the original depending on the angle of rotation.
     ///     </para>
     /// </remarks>
@@ -32,7 +34,8 @@ namespace MonoGame.Extended.Primitives
         public Point2 Centre;
 
         /// <summary>
-        ///     The distance from the <see cref="Centre"/> point along both axes to any point on the boundary of this <see cref="BoundingRectangle" />.
+        ///     The distance from the <see cref="Centre" /> point along both axes to any point on the boundary of this
+        ///     <see cref="BoundingRectangle" />.
         /// </summary>
         public Vector2 Radii;
 
@@ -57,8 +60,8 @@ namespace MonoGame.Extended.Primitives
         /// <returns>An <see cref="BoundingRectangle" />.</returns>
         public static BoundingRectangle CreateFrom(Point2 minimum, Point2 maximum)
         {
-            var centre = new Point2((maximum.X + minimum.X) * 0.5f, (maximum.Y + minimum.Y) * 0.5f);
-            var radii = new Vector2((maximum.X - minimum.X) * 0.5f, (maximum.Y - minimum.Y) * 0.5f);
+            var centre = new Point2((maximum.X + minimum.X)*0.5f, (maximum.Y + minimum.Y)*0.5f);
+            var radii = new Vector2((maximum.X - minimum.X)*0.5f, (maximum.Y - minimum.Y)*0.5f);
             return new BoundingRectangle(centre, radii);
         }
 
@@ -89,7 +92,8 @@ namespace MonoGame.Extended.Primitives
         }
 
         /// <summary>
-        ///     Computes the <see cref="BoundingRectangle" /> from the specified <see cref="BoundingRectangle" /> transformed by the
+        ///     Computes the <see cref="BoundingRectangle" /> from the specified <see cref="BoundingRectangle" /> transformed by
+        ///     the
         ///     specified <see cref="Matrix2D" />.
         /// </summary>
         /// <param name="boundingRectangle">The bounding rectangle.</param>
@@ -112,10 +116,10 @@ namespace MonoGame.Extended.Primitives
 
             var centre = transformMatrix.Transform(boundingRectangle.Centre);
             var radii = boundingRectangle.Radii;
-            radii.X = radii.X * Math.Abs(transformMatrix.M11) + radii.X * Math.Abs(transformMatrix.M12) +
-                    radii.X * Math.Abs(transformMatrix.M31);
-            radii.Y = radii.Y * Math.Abs(transformMatrix.M21) + radii.Y * Math.Abs(transformMatrix.M22) +
-                     radii.Y * Math.Abs(transformMatrix.M32);
+            radii.X = radii.X*Math.Abs(transformMatrix.M11) + radii.X*Math.Abs(transformMatrix.M12) +
+                      radii.X*Math.Abs(transformMatrix.M31);
+            radii.Y = radii.Y*Math.Abs(transformMatrix.M21) + radii.Y*Math.Abs(transformMatrix.M22) +
+                      radii.Y*Math.Abs(transformMatrix.M32);
             return new BoundingRectangle(centre, radii);
         }
 
@@ -278,7 +282,8 @@ namespace MonoGame.Extended.Primitives
 
 
         /// <summary>
-        ///     Computes the closest <see cref="Point2" /> on this <see cref="BoundingRectangle" /> to a specified <see cref="Point2" />.
+        ///     Computes the closest <see cref="Point2" /> on this <see cref="BoundingRectangle" /> to a specified
+        ///     <see cref="Point2" />.
         /// </summary>
         /// <param name="point">The point.</param>
         /// <returns>The closest <see cref="Point2" /> on this <see cref="BoundingRectangle" /> to the <paramref name="point" />.</returns>
@@ -339,7 +344,8 @@ namespace MonoGame.Extended.Primitives
         /// </summary>
         /// <param name="boundingRectangle">The bounding rectangle.</param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="BoundingRectangle" /> is equal to the <paramref name="boundingRectangle" />; otherwise,
+        ///     <c>true</c> if this <see cref="BoundingRectangle" /> is equal to the <paramref name="boundingRectangle" />;
+        ///     otherwise,
         ///     <c>false</c>.
         /// </returns>
         public bool Equals(ref BoundingRectangle boundingRectangle)
@@ -357,7 +363,7 @@ namespace MonoGame.Extended.Primitives
         public override bool Equals(object obj)
         {
             if (obj is BoundingRectangle)
-                return Equals((BoundingRectangle)obj);
+                return Equals((BoundingRectangle) obj);
             return false;
         }
 
@@ -388,7 +394,7 @@ namespace MonoGame.Extended.Primitives
         {
             unchecked
             {
-                return (Centre.GetHashCode() * 397) ^ Radii.GetHashCode();
+                return (Centre.GetHashCode()*397) ^ Radii.GetHashCode();
             }
         }
 
@@ -401,7 +407,7 @@ namespace MonoGame.Extended.Primitives
         /// </returns>
         public static implicit operator BoundingRectangle(Rectangle rectangle)
         {
-            var radii = new Size2(rectangle.Width / 2f, rectangle.Height / 2f);
+            var radii = new Size2(rectangle.Width/2f, rectangle.Height/2f);
             var centre = new Point2(rectangle.X + radii.Width, rectangle.Y + radii.Height);
             return new BoundingRectangle(centre, radii);
         }
@@ -416,7 +422,8 @@ namespace MonoGame.Extended.Primitives
         public static implicit operator Rectangle(BoundingRectangle boundingRectangle)
         {
             var minimum = boundingRectangle.Centre - boundingRectangle.Radii;
-            return new Rectangle((int)minimum.X, (int)minimum.Y, (int)boundingRectangle.Radii.X * 2, (int)boundingRectangle.Radii.Y * 2);
+            return new Rectangle((int) minimum.X, (int) minimum.Y, (int) boundingRectangle.Radii.X*2,
+                (int) boundingRectangle.Radii.Y*2);
         }
 
         /// <summary>

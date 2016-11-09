@@ -12,11 +12,12 @@ namespace MonoGame.Extended.Maps.Tiled
             Texture = texture;
         }
 
+        public Texture2D Texture { get; }
+
+        public Vector2 Position { get; set; }
+
         public override void Dispose()
         {
         }
-
-        public Vector2 Position { get; set; }
-        public Texture2D Texture { get; }
     }
 }

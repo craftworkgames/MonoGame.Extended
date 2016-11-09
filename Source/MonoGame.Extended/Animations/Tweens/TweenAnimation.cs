@@ -14,7 +14,5 @@ namespace MonoGame.Extended.Animations.Tweens
 
         public T Target { get; }
         public IList<Animation> Tweens { get; }
-
-
     }
 }

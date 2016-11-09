@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -9,6 +9,10 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledMap : IDisposable
     {
+        private readonly List<TiledLayer> _layers;
+        private readonly List<TiledObjectGroup> _objectGroups;
+        private readonly List<TiledTileset> _tilesets;
+
         public TiledMap(string name, int width, int height, int tileWidth, int tileHeight,
             TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
         {
@@ -24,16 +28,6 @@ namespace MonoGame.Extended.Maps.Tiled
             Properties = new TiledProperties();
             Orientation = orientation;
         }
-
-        public void Dispose()
-        {
-            foreach (var tiledLayer in _layers)
-                tiledLayer.Dispose();
-        }
-
-        private readonly List<TiledLayer> _layers;
-        private readonly List<TiledTileset> _tilesets;
-        private readonly List<TiledObjectGroup> _objectGroups;
 
         public string Name { get; }
         public int Width { get; }
@@ -51,10 +45,17 @@ namespace MonoGame.Extended.Maps.Tiled
         public IReadOnlyList<TiledLayer> Layers => _layers;
         public IReadOnlyList<TiledImageLayer> ImageLayers => _layers.OfType<TiledImageLayer>().ToList();
         public IReadOnlyList<TiledTileLayer> TileLayers => _layers.OfType<TiledTileLayer>().ToList();
-        public int WidthInPixels => Width * TileWidth;
-        public int HeightInPixels => Height * TileHeight;
+        public int WidthInPixels => Width*TileWidth;
+        public int HeightInPixels => Height*TileHeight;
 
-        public TiledTileset CreateTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int tileCount, int spacing = 2, int margin = 2)
+        public void Dispose()
+        {
+            foreach (var tiledLayer in _layers)
+                tiledLayer.Dispose();
+        }
+
+        public TiledTileset CreateTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int tileCount,
+            int spacing = 2, int margin = 2)
         {
             var tileset = new TiledTileset(texture, firstId, tileWidth, tileHeight, tileCount, spacing, margin);
             _tilesets.Add(tileset);
@@ -88,7 +89,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public T GetLayer<T>(string name)
             where T : TiledLayer
         {
-            return (T)GetLayer(name);
+            return (T) GetLayer(name);
         }
 
         public TiledObjectGroup GetObjectGroup(string name)

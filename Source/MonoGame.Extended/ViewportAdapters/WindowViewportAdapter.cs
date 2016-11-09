@@ -1,19 +1,19 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace MonoGame.Extended.ViewportAdapters
 {
     public class WindowViewportAdapter : ViewportAdapter
     {
+        protected readonly GameWindow Window;
+
         public WindowViewportAdapter(GameWindow window, GraphicsDevice graphicsDevice)
             : base(graphicsDevice)
         {
             Window = window;
             window.ClientSizeChanged += OnClientSizeChanged;
         }
-
-        protected readonly GameWindow Window;
 
         public override int ViewportWidth => Window.ClientBounds.Width;
         public override int ViewportHeight => Window.ClientBounds.Height;
@@ -32,6 +32,5 @@ namespace MonoGame.Extended.ViewportAdapters
 
             GraphicsDevice.Viewport = new Viewport(0, 0, x, y);
         }
-
     }
 }

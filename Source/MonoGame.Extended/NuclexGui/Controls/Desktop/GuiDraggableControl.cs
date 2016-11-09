@@ -19,35 +19,17 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
     /// <summary>Control the user can drag around with the mouse</summary>
     public abstract class GuiDraggableControl : GuiControl
     {
-        #region Properties
-
-        /// <summary>Whether the control can be dragged with the mouse</summary>
-        protected bool EnableDragging
-        {
-            get { return _enableDragging; }
-            set
-            {
-                _enableDragging = value;
-                _beingDragged &= value;
-            }
-        }
-
-        #endregion
-
-        #region Fields
+        /// <summary>Whether the control is currently being dragged</summary>
+        private bool _beingDragged;
 
         /// <summary>Whether the control can be dragged</summary>
         private bool _enableDragging;
-        /// <summary>Whether the control is currently being dragged</summary>
-        private bool _beingDragged;
+
         /// <summary>X coordinate at which the control was picked up</summary>
         private float _pickupX;
+
         /// <summary>Y coordinate at which the control was picked up</summary>
         private float _pickupY;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>Initializes a new draggable control</summary>
         public GuiDraggableControl()
@@ -62,9 +44,16 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
             EnableDragging = true;
         }
 
-        #endregion
-
-        #region Methods
+        /// <summary>Whether the control can be dragged with the mouse</summary>
+        protected bool EnableDragging
+        {
+            get { return _enableDragging; }
+            set
+            {
+                _enableDragging = value;
+                _beingDragged &= value;
+            }
+        }
 
         /// <summary>Called when the mouse position is updated</summary>
         /// <param name="x">X coordinate of the mouse cursor on the GUI</param>
@@ -90,9 +79,7 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         protected override void OnMousePressed(MouseButton button)
         {
             if (button == MouseButton.Left)
-            {
                 _beingDragged = _enableDragging;
-            }
         }
 
         /// <summary>Called when a mouse button has been released again</summary>
@@ -100,11 +87,7 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         protected override void OnMouseReleased(MouseButton button)
         {
             if (button == MouseButton.Left)
-            {
                 _beingDragged = false;
-            }
         }
-
-        #endregion
     }
 }

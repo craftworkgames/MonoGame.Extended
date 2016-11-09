@@ -25,16 +25,16 @@ namespace MonoGame.Extended.Maps.Renderers
 
         public void SetVertices(IEnumerable<VertexPositionTexture> vertices, GraphicsDevice gd)
         {
-            VertexPositionTexture[] vertArray = vertices.ToArray();
-            VertexBuffer vb = new VertexBuffer(gd, typeof(VertexPositionTexture), vertArray.Length, BufferUsage.WriteOnly);
+            var vertArray = vertices.ToArray();
+            var vb = new VertexBuffer(gd, typeof(VertexPositionTexture), vertArray.Length, BufferUsage.WriteOnly);
             vb.SetData(vertArray);
             VertexBuffer = vb;
         }
 
         public void SetIndexes(IEnumerable<ushort> indexes, GraphicsDevice gd)
         {
-            ushort[] indexArray = indexes.ToArray();
-            IndexBuffer ib = new IndexBuffer(gd, typeof(ushort), indexArray.Length, BufferUsage.WriteOnly);
+            var indexArray = indexes.ToArray();
+            var ib = new IndexBuffer(gd, typeof(ushort), indexArray.Length, BufferUsage.WriteOnly);
             ib.SetData(indexArray);
             IndexBuffer = ib;
         }

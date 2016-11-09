@@ -6,7 +6,7 @@
 
         public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
-            var rotationRateDelta = RotationRate * elapsedSeconds;
+            var rotationRateDelta = RotationRate*elapsedSeconds;
 
             while (iterator.HasNext)
             {

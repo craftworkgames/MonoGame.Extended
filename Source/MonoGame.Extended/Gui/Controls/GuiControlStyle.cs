@@ -7,6 +7,8 @@ namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiControlStyle
     {
+        private Dictionary<string, object> _previousState;
+
         public GuiControlStyle(Type targetType)
         {
             TargetType = targetType;
@@ -15,8 +17,6 @@ namespace MonoGame.Extended.Gui.Controls
 
         public Type TargetType { get; }
         public Dictionary<string, object> Setters { get; set; }
-
-        private Dictionary<string, object> _previousState;
 
         public void Apply(GuiControl control)
         {

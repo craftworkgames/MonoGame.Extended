@@ -11,20 +11,17 @@
         }
 
         public int Id { get; }
-        public int X { get; private set; }
-        public int Y { get; private set; }
+        public int X { get; }
+        public int Y { get; }
         public bool IsBlank => Id == 0;
         public TiledTilesetTile TilesetTile { get; set; }
-        public int CurrentTileId
-        {
-            // Need to do the +1 here because of the way Tiled indexes TileSet Tiles in the TileLayer data
-            get { return (TilesetTile == null || !TilesetTile.CurrentTileId.HasValue ? Id : TilesetTile.CurrentTileId.Value + 1); }
-        }
 
-        public bool HasAnimation
-        {
-            get { return (TilesetTile == null || TilesetTile.Animation.Count == 0) ? false : true; }
-        }
+        public int CurrentTileId => (TilesetTile == null) || !TilesetTile.CurrentTileId.HasValue
+            ? Id
+            : TilesetTile.CurrentTileId.Value + 1;
+
+        public bool HasAnimation => (TilesetTile == null) || (TilesetTile.Animation.Count == 0) ? false : true;
+
         public override string ToString()
         {
             return $"({X}, {Y}) - {Id}";

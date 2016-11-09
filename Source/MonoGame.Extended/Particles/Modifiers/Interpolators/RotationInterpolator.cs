@@ -11,8 +11,9 @@
             set { _delta = value - StartValue; }
         }
 
-        public unsafe void Update(float amount, Particle* particle) {
-            particle->Rotation = amount * _delta + StartValue;
+        public unsafe void Update(float amount, Particle* particle)
+        {
+            particle->Rotation = amount*_delta + StartValue;
         }
     }
 }

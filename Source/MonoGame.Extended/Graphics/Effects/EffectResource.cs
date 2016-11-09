@@ -26,7 +26,8 @@ namespace MonoGame.Extended.Graphics.Effects
         /// <summary>
         ///     The <see cref="Effects.DefaultEffect2D" /> embedded into the MonoGame.Extended library.
         /// </summary>
-        public static readonly EffectResource DefaultEffect2D = new EffectResource(resourceName: "MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect2D.mgfxo");
+        public static readonly EffectResource DefaultEffect2D =
+            new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect2D.mgfxo");
 
         private readonly string _resourceName;
         private volatile byte[] _bytecode;

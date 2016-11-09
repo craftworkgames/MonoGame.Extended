@@ -13,6 +13,10 @@ namespace MonoGame.Extended.Screens
         public bool IsInitialized { get; private set; }
         public bool IsVisible { get; set; }
 
+        public virtual void Dispose()
+        {
+        }
+
         public T FindScreen<T>() where T : Screen
         {
             return ScreenManager?.FindScreen<T>();
@@ -50,12 +54,19 @@ namespace MonoGame.Extended.Screens
             IsInitialized = true;
         }
 
-        public virtual void LoadContent() { }
-        public virtual void UnloadContent() { }
-        public virtual void Update(GameTime gameTime) { }
-        public virtual void Draw(GameTime gameTime) { }
+        public virtual void LoadContent()
+        {
+        }
 
-        public virtual void Dispose()
+        public virtual void UnloadContent()
+        {
+        }
+
+        public virtual void Update(GameTime gameTime)
+        {
+        }
+
+        public virtual void Draw(GameTime gameTime)
         {
         }
     }

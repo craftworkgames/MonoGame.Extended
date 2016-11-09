@@ -5,8 +5,12 @@ namespace MonoGame.Extended
 {
     public abstract class SimpleDrawableGameComponent : SimpleGameComponent, IDrawable
     {
-        private bool _isVisible;
         private int _drawOrder;
+        private bool _isVisible;
+
+        protected SimpleDrawableGameComponent()
+        {
+        }
 
         public bool Visible
         {
@@ -14,9 +18,7 @@ namespace MonoGame.Extended
             set
             {
                 if (_isVisible == value)
-                {
                     return;
-                }
 
                 _isVisible = value;
                 DrawOrderChanged?.Invoke(this, EventArgs.Empty);
@@ -31,9 +33,7 @@ namespace MonoGame.Extended
             set
             {
                 if (_drawOrder == value)
-                {
                     return;
-                }
 
                 _drawOrder = value;
                 DrawOrderChanged?.Invoke(this, EventArgs.Empty);
@@ -42,10 +42,6 @@ namespace MonoGame.Extended
 
         public event EventHandler<EventArgs> DrawOrderChanged;
         public event EventHandler<EventArgs> VisibleChanged;
-
-        protected SimpleDrawableGameComponent()
-        {
-        }
 
         public abstract void Draw(GameTime gameTime);
     }

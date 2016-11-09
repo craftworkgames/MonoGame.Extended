@@ -1,5 +1,8 @@
+using System;
+
 namespace MonoGame.Extended.InputListeners
 {
+    [Flags]
     public enum MouseButton
     {
         None,
@@ -8,5 +11,5 @@ namespace MonoGame.Extended.InputListeners
         Right,
         XButton1,
         XButton2
-    };
+    }
 }

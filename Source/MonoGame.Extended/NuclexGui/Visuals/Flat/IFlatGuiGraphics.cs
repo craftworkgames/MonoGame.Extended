@@ -6,23 +6,23 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 {
     /// <summary>Provides drawing methods for GUI controls</summary>
     /// <remarks>
-    ///   Analogous to System.Drawing.Graphics, but provides specialized methods for
-    ///   drawing a GUI with a dynamic, switchable theme.
+    ///     Analogous to System.Drawing.Graphics, but provides specialized methods for
+    ///     drawing a GUI with a dynamic, switchable theme.
     /// </remarks>
     public interface IFlatGuiGraphics
     {
         /// <summary>Sets the clipping region for any future drawing commands</summary>
         /// <param name="clipRegion">Clipping region that will be set</param>
         /// <returns>
-        ///   An object that will unset the clipping region upon its destruction.
+        ///     An object that will unset the clipping region upon its destruction.
         /// </returns>
         /// <remarks>
-        ///   Clipping regions can be stacked, though this is not very typical for
-        ///   a game GUI and also not recommended practice due to performance constraints.
-        ///   Unless clipping is implemented in software, setting up a clip region
-        ///   on current hardware requires the drawing queue to be flushed, negatively
-        ///   impacting rendering performance (in technical terms, a clipping region
-        ///   change likely causes 2 more DrawPrimitive() calls from the painter).
+        ///     Clipping regions can be stacked, though this is not very typical for
+        ///     a game GUI and also not recommended practice due to performance constraints.
+        ///     Unless clipping is implemented in software, setting up a clip region
+        ///     on current hardware requires the drawing queue to be flushed, negatively
+        ///     impacting rendering performance (in technical terms, a clipping region
+        ///     change likely causes 2 more DrawPrimitive() calls from the painter).
         /// </remarks>
         IDisposable SetClipRegion(RectangleF clipRegion);
 
@@ -30,9 +30,9 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         /// <param name="frameName">Class of the element to draw</param>
         /// <param name="bounds">Region that will be covered by the drawn element</param>
         /// <remarks>
-        ///   <para>
-        ///     GUI elements are the basic building blocks of a GUI: 
-        ///   </para>
+        ///     <para>
+        ///         GUI elements are the basic building blocks of a GUI:
+        ///     </para>
         /// </remarks>
         void DrawElement(string frameName, RectangleF bounds);
 
@@ -54,12 +54,12 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         /// <param name="bounds">Region that will be covered by the drawn element</param>
         /// <param name="text">Text that will be measured</param>
         /// <returns>
-        ///   The size and extents of the specified string within the frame
+        ///     The size and extents of the specified string within the frame
         /// </returns>
         RectangleF MeasureString(string frameName, RectangleF bounds, string text);
 
         /// <summary>
-        ///   Locates the closest gap between two letters to the provided position
+        ///     Locates the closest gap between two letters to the provided position
         /// </summary>
         /// <param name="frameName">Class of the element in which to find the gap</param>
         /// <param name="bounds">Region that will be covered by the drawn element</param>

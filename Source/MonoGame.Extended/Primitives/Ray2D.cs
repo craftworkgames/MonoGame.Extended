@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Primitives
     /// <summary>
     ///     A two dimensional ray defined by a starting <see cref="Point2" /> and a direction <see cref="Vector2" />.
     /// </summary>
-    /// <seealso cref="IEquatable{Ray2}" />
+    /// <seealso cref="IEquatable{T}" />
     /// <seealso cref="IEquatableByRef{Ray2}" />
     [DebuggerDisplay("{DebugDisplayString,nq}")]
     public struct Ray2D : IEquatable<Ray2D>, IEquatableByRef<Ray2D>
@@ -40,12 +40,14 @@ namespace MonoGame.Extended.Primitives
         /// <param name="boundingRectangle">The bounding rectangle.</param>
         /// <param name="rayNearDistance">
         ///     When this method returns, contains the distance along the ray to the first intersection
-        ///     point with the <paramref name="boundingRectangle" />, if an intersection was found; otherwise, <see cref="float.NaN" />.
+        ///     point with the <paramref name="boundingRectangle" />, if an intersection was found; otherwise,
+        ///     <see cref="float.NaN" />.
         ///     This parameter is passed uninitialized.
         /// </param>
         /// <param name="rayFarDistance">
         ///     When this method returns, contains the distance along the ray to the second intersection
-        ///     point with the <paramref name="boundingRectangle" />, if an intersection was found; otherwise, <see cref="float.NaN" />.
+        ///     point with the <paramref name="boundingRectangle" />, if an intersection was found; otherwise,
+        ///     <see cref="float.NaN" />.
         ///     This parameter is passed uninitialized.
         /// </param>
         /// <returns>
@@ -91,7 +93,8 @@ namespace MonoGame.Extended.Primitives
         }
 
         /// <summary>
-        ///     Compares two <see cref="Ray2D" /> structures. The result specifies whether the values of the <see cref="Position" />
+        ///     Compares two <see cref="Ray2D" /> structures. The result specifies whether the values of the
+        ///     <see cref="Position" />
         ///     and <see cref="Direction" /> fields of the two <see cref="Ray2D" /> structures are equal.
         /// </summary>
         /// <param name="first">The first ray.</param>
@@ -144,12 +147,13 @@ namespace MonoGame.Extended.Primitives
         public override bool Equals(object obj)
         {
             if (obj is Ray2D)
-                return Equals((Ray2D)obj);
+                return Equals((Ray2D) obj);
             return false;
         }
 
         /// <summary>
-        ///     Compares two <see cref="Ray2D" /> structures. The result specifies whether the values of the <see cref='Position' />
+        ///     Compares two <see cref="Ray2D" /> structures. The result specifies whether the values of the
+        ///     <see cref='Position' />
         ///     and <see cref="Direction" /> fields of the two <see cref="Ray2D" /> structures are unequal.
         /// </summary>
         /// <param name="first">The first ray.</param>
@@ -175,7 +179,7 @@ namespace MonoGame.Extended.Primitives
         {
             unchecked
             {
-                return (Position.GetHashCode() * 397) ^ Direction.GetHashCode();
+                return (Position.GetHashCode()*397) ^ Direction.GetHashCode();
             }
         }
 

@@ -15,9 +15,9 @@ namespace MonoGame.Extended.Timers
         {
         }
 
-        public event EventHandler Tick;
-
         public TimeSpan NextTickTime { get; protected set; }
+
+        public event EventHandler Tick;
 
         protected override void OnStopped()
         {

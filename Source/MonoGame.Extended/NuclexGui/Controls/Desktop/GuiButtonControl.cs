@@ -4,6 +4,9 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
 {
     public class GuiButtonControl : GuiPressableControl
     {
+        /// <summary>Text that will be shown on the button</summary>
+        public string Text;
+
         /// <summary>Will be triggered when the button is pressed</summary>
         public event EventHandler Pressed;
 
@@ -11,12 +14,7 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         protected override void OnPressed()
         {
             if (Pressed != null)
-            {
                 Pressed(this, EventArgs.Empty);
-            }
         }
-
-        /// <summary>Text that will be shown on the button</summary>
-        public string Text;
     }
 }

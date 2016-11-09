@@ -64,18 +64,17 @@ namespace MonoGame.Extended.SceneGraphs
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (var drawable in Entities.OfType<ISpriteBatchDrawable>())
-            {
                 if (drawable.IsVisible)
                 {
                     var texture = drawable.TextureRegion.Texture;
                     var sourceRectangle = drawable.TextureRegion.Bounds;
                     var position = WorldPosition + drawable.Position;
                     var rotation = WorldRotation + drawable.Rotation;
-                    var scale = WorldScale * drawable.Scale;
+                    var scale = WorldScale*drawable.Scale;
 
-                    spriteBatch.Draw(texture, position, sourceRectangle, drawable.Color, rotation, drawable.Origin, scale, drawable.Effect, 0);
+                    spriteBatch.Draw(texture, position, sourceRectangle, drawable.Color, rotation, drawable.Origin,
+                        scale, drawable.Effect, 0);
                 }
-            }
 
             foreach (var child in Children)
                 child.Draw(spriteBatch);

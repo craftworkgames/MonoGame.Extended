@@ -98,7 +98,7 @@
     <Compile Include="NuclexGui\Controls\GuiLabelControl.cs" />
     <Compile Include="NuclexGui\Controls\GuiPressableControl.cs" />
     <Compile Include="NuclexGui\Controls\GuiProgressControl.cs" />
-    <Compile Include="InputListeners\IInputService.cs" />
+    <Compile Include="NuclexGui\IGuiInputService.cs" />
     <Compile Include="NuclexGui\Input\DefaultInputCapturer.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\FlatGuiGraphics.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\FlatGuiGraphicsDrawing.cs" />
@@ -117,7 +117,7 @@
     <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatProgressControlRenderer.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatVerticalSliderControlRenderer.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatWindowControlRenderer.cs" />
-    <Compile Include="Support\EnumHelper.cs" />
+    <Compile Include="NuclexGui\Support\EnumHelper.cs" />
     <Compile Include="Graphics\Batching\BatchSortMode.cs" />
     <Compile Include="Graphics\Batching\IBatchDrawCommandData.cs" />
     <Compile Include="Graphics\Batching\Batch.cs" />
@@ -316,7 +316,7 @@
     <Compile Include="ViewportAdapters\ViewportAdapter.cs" />
     <Compile Include="FramesPerSecondCounter.cs" />
     <Compile Include="FramesPerSecondCounterComponent.cs" />
-    <Compile Include="Support\WeakReference.cs" />
+    <Compile Include="NuclexGui\Support\WeakReference.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -357,9 +357,7 @@
   <ItemGroup>
     <Content Include="Graphics\Effects\Resources\DefaultEffect2D.fx" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NuclexGui\Controls\Arcade\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

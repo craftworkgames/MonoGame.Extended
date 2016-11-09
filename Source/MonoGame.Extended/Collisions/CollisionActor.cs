@@ -5,12 +5,12 @@ namespace MonoGame.Extended.Collisions
 {
     public class CollisionActor : IActorTarget
     {
+        private readonly IActorTarget _target;
+
         public CollisionActor(IActorTarget target)
         {
             _target = target;
         }
-
-        private readonly IActorTarget _target;
 
         public Vector2 Velocity
         {

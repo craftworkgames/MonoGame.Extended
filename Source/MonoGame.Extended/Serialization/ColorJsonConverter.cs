@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Serialization
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var color = (Color)value;
+            var color = (Color) value;
             var rx = $"{color.R:x2}";
             var gx = $"{color.G:x2}";
             var bx = $"{color.B:x2}";
@@ -24,9 +24,10 @@ namespace MonoGame.Extended.Serialization
             return objectType == typeof(Color);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
         {
-            return ColorHelper.FromHex((string)reader.Value);
+            return ColorHelper.FromHex((string) reader.Value);
         }
     }
 }

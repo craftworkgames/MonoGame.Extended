@@ -8,15 +8,15 @@ namespace MonoGame.Extended.BitmapFonts
 {
     public class BitmapFont
     {
-        internal BitmapFont(string name, IEnumerable<BitmapFontRegion> regions, int lineHeight)
+        private readonly Dictionary<int, BitmapFontRegion> _characterMap;
+
+        public BitmapFont(string name, IEnumerable<BitmapFontRegion> regions, int lineHeight)
         {
             _characterMap = regions.ToDictionary(r => r.Character);
 
             Name = name;
             LineHeight = lineHeight;
         }
-
-        private readonly Dictionary<int, BitmapFontRegion> _characterMap;
 
         public string Name { get; }
         public int LineHeight { get; private set; }
@@ -31,15 +31,13 @@ namespace MonoGame.Extended.BitmapFonts
         internal static IEnumerable<int> GetUnicodeCodePoints(string s)
         {
             if (!string.IsNullOrEmpty(s))
-            {
-                for (int i = 0; i < s.Length; i += 1)
+                for (var i = 0; i < s.Length; i += 1)
                 {
                     if (char.IsLowSurrogate(s, i))
                         continue;
 
                     yield return char.ConvertToUtf32(s, i);
                 }
-            }
         }
 
         public Size GetSize(string text)
@@ -66,7 +64,7 @@ namespace MonoGame.Extended.BitmapFonts
                 if (_characterMap.TryGetValue(character, out fontRegion))
                 {
                     // Add LetterSpacing unless end of string or next character is not in _characterMap
-                    if (i != text.Length - 1 && _characterMap.ContainsKey(nextCharacter))
+                    if ((i != text.Length - 1) && _characterMap.ContainsKey(nextCharacter))
                         lineWidth += fontRegion.XAdvance + LetterSpacing;
                     else
                         lineWidth += fontRegion.XOffset + fontRegion.Width;

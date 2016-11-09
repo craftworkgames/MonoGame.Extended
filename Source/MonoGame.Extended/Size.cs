@@ -19,7 +19,7 @@ namespace MonoGame.Extended
 
         public static Size MaxValue => new Size(int.MaxValue, int.MaxValue);
 
-        public bool IsEmpty => Width == 0 && Height == 0;
+        public bool IsEmpty => (Width == 0) && (Height == 0);
 
         public override int GetHashCode()
         {
@@ -31,7 +31,7 @@ namespace MonoGame.Extended
 
         public static bool operator ==(Size a, Size b)
         {
-            return a.Width == b.Width && a.Height == b.Height;
+            return (a.Width == b.Width) && (a.Height == b.Height);
         }
 
         public static bool operator !=(Size a, Size b)
@@ -41,7 +41,7 @@ namespace MonoGame.Extended
 
         public bool Equals(Size other)
         {
-            return Width == other.Width && Height == other.Height;
+            return (Width == other.Width) && (Height == other.Height);
         }
 
         public static implicit operator Point(Size size)
@@ -62,7 +62,7 @@ namespace MonoGame.Extended
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            return obj is Size && Equals((Size)obj);
+            return obj is Size && Equals((Size) obj);
         }
 
         public override string ToString()

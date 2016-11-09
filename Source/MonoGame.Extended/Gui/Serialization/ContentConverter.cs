@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Gui.Serialization
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override bool CanConvert(Type objectType)
@@ -24,7 +24,8 @@ namespace MonoGame.Extended.Gui.Serialization
             return objectType == typeof(T);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
         {
             var assetName = serializer.Deserialize<JToken>(reader).Value<string>();
             return _contentManager.Load<T>(assetName);

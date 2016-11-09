@@ -4,6 +4,10 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledTilesetTile
     {
+        private TiledTilesetTileFrame _currentFrame;
+
+        private double _currentTimeInMilliseconds;
+
         public TiledTilesetTile(int id)
         {
             Id = id;
@@ -12,17 +16,13 @@ namespace MonoGame.Extended.Maps.Tiled
             Properties = new TiledProperties();
             _currentTimeInMilliseconds = 0.0;
         }
+
         public int Id { get; set; }
-        public List<TiledTilesetTileFrame> Animation { get; private set; }
+        public List<TiledTilesetTileFrame> Animation { get; }
         public List<TiledObjectGroup> ObjectGroups { get; private set; }
         public TiledProperties Properties { get; private set; }
-        public int? CurrentTileId
-        {
-            get { return (_currentFrame == null) ? null :(int?)_currentFrame.TileId; }
-        }
 
-        private double _currentTimeInMilliseconds;
-        private TiledTilesetTileFrame _currentFrame;
+        public int? CurrentTileId => _currentFrame == null ? null : (int?) _currentFrame.TileId;
 
         public TiledTilesetTileFrame CreateTileSetTileFrame(int order, int tileId, int duration)
         {
@@ -40,7 +40,7 @@ namespace MonoGame.Extended.Maps.Tiled
             {
                 _currentTimeInMilliseconds = 0.0;
 
-                int nextFrame = (_currentFrame.Order + 1) % Animation.Count;
+                var nextFrame = (_currentFrame.Order + 1)%Animation.Count;
                 _currentFrame = Animation[nextFrame];
             }
         }

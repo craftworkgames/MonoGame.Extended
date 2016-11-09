@@ -6,7 +6,8 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledObject
     {
-        public TiledObject(TiledObjectType objectType, int id, int? gid, float x, float y, float width, float height) : this(objectType,id,gid,new Vector2(x,y),width,height)
+        public TiledObject(TiledObjectType objectType, int id, int? gid, float x, float y, float width, float height)
+            : this(objectType, id, gid, new Vector2(x, y), width, height)
         {
         }
 
@@ -32,7 +33,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public SizeF Size => new SizeF(Width, Height);
         public RectangleF BoundingRectangle => new RectangleF(Position, Size);
         public TiledProperties Properties { get; }
-        public List<Vector2> Points { get; } 
+        public List<Vector2> Points { get; }
         public bool IsVisible { get; set; }
         public float Opacity { get; set; }
         public float Rotation { get; set; }

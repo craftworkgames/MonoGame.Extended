@@ -1,10 +1,12 @@
 ﻿namespace MonoGame.Extended.NuclexGui.Controls
 {
     /// <summary>Control used to represent the desktop</summary>
-    internal class GuiDesktopControl : GuiControl
+    public class GuiDesktopControl : GuiControl
     {
         /// <summary>Initializes a new control</summary>
-        public GuiDesktopControl() { }
+        public GuiDesktopControl()
+        {
+        }
 
         /// <summary>True if the mouse is currently hovering over a GUI element</summary>
         public bool IsMouseOverGui
@@ -13,8 +15,7 @@
             {
                 if (MouseOverControl == null)
                     return false;
-                else
-                    return !ReferenceEquals(MouseOverControl, this);
+                return !ReferenceEquals(MouseOverControl, this);
             }
         }
 
@@ -25,10 +26,8 @@
             {
                 if (ActivatedControl == null)
                     return false;
-                else
-                    return !ReferenceEquals(ActivatedControl, this);
+                return !ReferenceEquals(ActivatedControl, this);
             }
         }
-
     }
 }

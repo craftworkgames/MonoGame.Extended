@@ -11,10 +11,11 @@ namespace MonoGame.Extended.Gui.Serialization
         {
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
         {
             var jObject = JObject.Load(reader);
-            var type = (string)jObject.Property("Type");
+            var type = (string) jObject.Property("Type");
 
             switch (type)
             {

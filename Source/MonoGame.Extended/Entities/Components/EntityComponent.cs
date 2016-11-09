@@ -4,13 +4,18 @@ namespace MonoGame.Extended.Entities.Components
 {
     public abstract class EntityComponent : IMovable, IRotatable, IScalable
     {
+        private Vector2 _position;
+
+        private float _rotation;
+
+        private Vector2 _scale;
+
         protected EntityComponent()
         {
         }
 
         public Entity Entity { get; internal set; }
-        
-        private Vector2 _position;
+
         public Vector2 Position
         {
             get { return Entity?.Position ?? _position; }
@@ -23,7 +28,6 @@ namespace MonoGame.Extended.Entities.Components
             }
         }
 
-        private float _rotation;
         public float Rotation
         {
             get { return Entity?.Rotation ?? _rotation; }
@@ -36,7 +40,6 @@ namespace MonoGame.Extended.Entities.Components
             }
         }
 
-        private Vector2 _scale;
         public Vector2 Scale
         {
             get { return Entity?.Scale ?? _scale; }

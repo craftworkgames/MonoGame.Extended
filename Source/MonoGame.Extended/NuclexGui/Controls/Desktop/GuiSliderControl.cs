@@ -1,31 +1,37 @@
 ﻿using System;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.NuclexGui.Controls.Desktop
 {
     /// <summary>Base class for a slider that can be moved using the mouse</summary>
     /// <remarks>
-    ///   Implements the common functionality for a slider moving either the direction
-    ///   of the X or the Y axis (but not both). Derive any scroll bar-like controls
-    ///   from this class to simplify their implementation.
+    ///     Implements the common functionality for a slider moving either the direction
+    ///     of the X or the Y axis (but not both). Derive any scroll bar-like controls
+    ///     from this class to simplify their implementation.
     /// </remarks>
     public abstract class GuiSliderControl : GuiControl
     {
-        /// <summary>whether the mouse is currently hovering over the thumb</summary>
-        public bool MouseOverThumb
-        {
-            get { return _mouseOverThumb; }
-        }
+        /// <summary>Whether the mouse cursor is hovering over the thumb</summary>
+        private bool _mouseOverThumb;
 
-        /// <summary>Whether the pressable control is in the depressed state</summary>
-        public virtual bool ThumbDepressed
-        {
-            get { return _pressedDown && _mouseOverThumb; }
-        }
+        /// <summary>X coordinate at which the thumb was picked up</summary>
+        private float _pickupX;
 
-        /// <summary>Triggered when the slider has been moved</summary>
-        public event EventHandler Moved;
+        /// <summary>Y coordinate at which the thumb was picked up</summary>
+        private float _pickupY;
+
+        /// <summary>Whether the slider's thumb is currently in the depressed state</summary>
+        private bool _pressedDown;
+
+        /// <summary>Can be set by renderers to allow the control to locate its thumb</summary>
+        public IThumbLocator ThumbLocator;
+
+        /// <summary>Position of the thumb within the slider (0.0 .. 1.0)</summary>
+        public float ThumbPosition;
+
+        /// <summary>Fraction of the slider filled by the thumb (0.0 .. 1.0)</summary>
+        public float ThumbSize;
 
         /// <summary>Initializes a new slider control</summary>
         public GuiSliderControl()
@@ -34,27 +40,14 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
             ThumbSize = 1.0f;
         }
 
-        #region Fields
+        /// <summary>whether the mouse is currently hovering over the thumb</summary>
+        public bool MouseOverThumb => _mouseOverThumb;
 
-        /// <summary>Can be set by renderers to allow the control to locate its thumb</summary>
-        public IThumbLocator ThumbLocator;
-        /// <summary>Fraction of the slider filled by the thumb (0.0 .. 1.0)</summary>
-        public float ThumbSize;
-        /// <summary>Position of the thumb within the slider (0.0 .. 1.0)</summary>
-        public float ThumbPosition;
+        /// <summary>Whether the pressable control is in the depressed state</summary>
+        public virtual bool ThumbDepressed => _pressedDown && _mouseOverThumb;
 
-        /// <summary>Whether the mouse cursor is hovering over the thumb</summary>
-        private bool _mouseOverThumb;
-        /// <summary>Whether the slider's thumb is currently in the depressed state</summary>
-        private bool _pressedDown;
-        /// <summary>X coordinate at which the thumb was picked up</summary>
-        private float _pickupX;
-        /// <summary>Y coordinate at which the thumb was picked up</summary>
-        private float _pickupY;
-
-        #endregion
-
-        #region Methods
+        /// <summary>Triggered when the slider has been moved</summary>
+        public event EventHandler Moved;
 
         /// <summary>Moves the thumb to the specified location</summary>
         /// <returns>Location the thumb will be moved to</returns>
@@ -70,7 +63,7 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         {
             if (button == MouseButton.Left)
             {
-                RectangleF thumbRegion = GetThumbRegion();
+                var thumbRegion = GetThumbRegion();
                 if (thumbRegion.Contains(_pickupX, _pickupY))
                 {
                     _pressedDown = true;
@@ -86,9 +79,7 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         protected override void OnMouseReleased(MouseButton button)
         {
             if (button == MouseButton.Left)
-            {
                 _pressedDown = false;
-            }
         }
 
         /// <summary>Called when the mouse position is updated</summary>
@@ -96,14 +87,13 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         /// <param name="y">Y coordinate of the mouse cursor on the control</param>
         protected override void OnMouseMoved(float x, float y)
         {
-            if (this._pressedDown)
+            if (_pressedDown)
             {
-
                 //RectangleF bounds = GetAbsoluteBounds();
                 MoveThumb(x - _pickupX, y - _pickupY);
-
             }
-            else {
+            else
+            {
                 _pickupX = x;
                 _pickupY = y;
             }
@@ -112,7 +102,7 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         }
 
         /// <summary>
-        ///   Called when the mouse has left the control and is no longer hovering over it
+        ///     Called when the mouse has left the control and is no longer hovering over it
         /// </summary>
         protected override void OnMouseLeft()
         {
@@ -123,11 +113,7 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         protected virtual void OnMoved()
         {
             if (Moved != null)
-            {
                 Moved(this, EventArgs.Empty);
-            }
         }
-
-        #endregion
     }
 }
