@@ -13,7 +13,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TexturePackerJsonImporter_Import_Test()
         {
-            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset.json");
+            var filePath = PathExtensions.GetApplicationFullPath(@"TestData/test-tileset.json");
             var importer = new TexturePackerJsonImporter();
             var data = importer.Import(filePath, Substitute.For<ContentImporterContext>());
 
@@ -23,7 +23,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TexturePackerJsonImporter_Processor_Test()
         {
-            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset.json");
+            var filePath = PathExtensions.GetApplicationFullPath(@"TestData/test-tileset.json");
             var importer = new TexturePackerJsonImporter();
             var input = importer.Import(filePath, Substitute.For<ContentImporterContext>());
             var processor = new TexturePackerProcessor();

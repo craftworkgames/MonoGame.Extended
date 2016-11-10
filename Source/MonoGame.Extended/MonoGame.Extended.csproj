@@ -42,6 +42,9 @@
     <Compile Include="Maps\Renderers\GroupRenderDetails.cs" />
     <Compile Include="Maps\Renderers\IMapRenderer.cs" />
     <Compile Include="Maps\Renderers\MapRenderDetails.cs" />
+    <Compile Include="Maps\Renderers\MapRendererConfig.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTile.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTileFrame.cs" />
     <Compile Include="Primitives\BoundingRectangle.cs" />
     <Compile Include="Primitives\Point2.cs" />
     <Compile Include="Primitives\Ray2D.cs" />
@@ -224,8 +227,6 @@
     <Compile Include="ISizable.cs" />
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
-    <Compile Include="Maps\Tiled\TiledTilesetTileFrame.cs" />
-    <Compile Include="Maps\Tiled\TiledTilesetTile.cs" />
     <Compile Include="Particles\ColorExtensions.cs" />
     <Compile Include="Particles\FastRandomExtensions.cs" />
     <Compile Include="Particles\HslColor.cs" />
@@ -357,7 +358,6 @@
   <ItemGroup>
     <Content Include="Graphics\Effects\Resources\DefaultEffect2D.fx" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

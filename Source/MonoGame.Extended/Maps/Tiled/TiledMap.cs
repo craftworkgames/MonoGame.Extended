@@ -17,7 +17,6 @@ namespace MonoGame.Extended.Maps.Tiled
             TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
         {
             _layers = new List<TiledLayer>();
-            _objectGroups = new List<TiledObjectGroup>();
             _tilesets = new List<TiledTileset>();
 
             Name = name;
@@ -41,10 +40,10 @@ namespace MonoGame.Extended.Maps.Tiled
         public TiledMapOrientation Orientation { get; private set; }
 
         public IReadOnlyList<TiledTileset> Tilesets => _tilesets;
-        public IReadOnlyList<TiledObjectGroup> ObjectGroups => _objectGroups;
         public IReadOnlyList<TiledLayer> Layers => _layers;
         public IReadOnlyList<TiledImageLayer> ImageLayers => _layers.OfType<TiledImageLayer>().ToList();
         public IReadOnlyList<TiledTileLayer> TileLayers => _layers.OfType<TiledTileLayer>().ToList();
+        public IReadOnlyList<TiledObjectGroup> ObjectLayers => _layers.OfType<TiledObjectGroup>().ToList();
         public int WidthInPixels => Width*TileWidth;
         public int HeightInPixels => Height*TileHeight;
 
@@ -76,9 +75,9 @@ namespace MonoGame.Extended.Maps.Tiled
             return layer;
         }
 
-        public void AddObjectGroup(List<TiledObjectGroup> objectGroups)
+        public void AddLayer(TiledLayer layer)
         {
-            _objectGroups.AddRange(objectGroups);
+            _layers.Add(layer);
         }
 
         public TiledLayer GetLayer(string name)
@@ -94,7 +93,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public TiledObjectGroup GetObjectGroup(string name)
         {
-            return _objectGroups.FirstOrDefault(i => i.Name == name);
+            return ObjectLayers.FirstOrDefault(i => i.Name == name);
         }
 
         public TextureRegion2D GetTileRegion(int id)

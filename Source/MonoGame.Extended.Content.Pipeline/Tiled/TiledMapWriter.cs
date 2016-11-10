@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
+using Microsoft.Xna.Framework.Content.Pipeline.Builder.Convertors;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Maps.Tiled;
-using MonoGame.Framework.Content.Pipeline.Builder;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
@@ -16,6 +18,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         protected override void Write(ContentWriter writer, TiledMapProcessorResult value)
         {
+            value.Logger.LogMessage("Writing Tiled map...");
+
             var map = value.Map;
             writer.Write(HexToColor(map.BackgroundColor));
             writer.Write(ConvertRenderOrder(map.RenderOrder).ToString());
@@ -26,12 +30,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             writer.Write(Convert.ToInt32(map.Orientation));
             WriteCustomProperties(writer, map.Properties);
 
+            value.Logger.LogMessage("Writing tilesets...");
             writer.Write(map.Tilesets.Count);
 
             foreach (var tileset in map.Tilesets)
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
                 writer.Write(Path.ChangeExtension(tileset.Image.Source, null));
+                writer.Write(HexToColor(tileset.Image.Trans));
                 writer.Write(tileset.FirstGid);
                 writer.Write(tileset.TileWidth);
                 writer.Write(tileset.TileHeight);
@@ -56,10 +62,13 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 WriteCustomProperties(writer, tileset.Properties);
             }
 
+            value.Logger.LogMessage("Writing layers...");
             writer.Write(map.Layers.Count);
 
             foreach (var layer in map.Layers)
             {
+                value.Logger.LogMessage($"Writing {layer.GetType().Name} layer: {layer.Name}");
+
                 writer.Write(layer.Name);
                 writer.Write(layer.Visible);
                 writer.Write(layer.Opacity);
@@ -76,8 +85,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     foreach (var tile in tileLayer.Data.Tiles)
                         writer.Write(tile.Gid);
 
-                    writer.Write(tileLayer.Width); 
+                    writer.Write(tileLayer.Width);
                     writer.Write(tileLayer.Height);
+                    WriteCustomProperties(writer, layer.Properties);
                 }
 
                 var imageLayer = layer as TmxImageLayer;
@@ -88,13 +98,17 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     // ReSharper disable once AssignNullToNotNullAttribute
                     writer.Write(Path.ChangeExtension(imageLayer.Image.Source, null));
                     writer.Write(new Vector2(imageLayer.X, imageLayer.Y));
+                    WriteCustomProperties(writer, layer.Properties);
                 }
 
-                WriteCustomProperties(writer, layer.Properties);
+                var objectLayer = layer as TmxObjectGroup;
+
+                if (objectLayer != null)
+                {
+                    writer.Write("ObjectLayer");
+                    WriteObjectGroup(writer, objectLayer, value.Logger);
+                }
             }
-
-            WriteObjectGroups(writer, map.ObjectGroups);
-
         }
 
         private static void WritePolyPoints(ContentWriter writer, string polyPointsString)
@@ -141,7 +155,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             }
         }
 
-        private void WriteObjectGroup(ContentWriter writer, TmxObjectGroup group)
+        private void WriteObjectGroup(ContentWriter writer, TmxObjectGroup group, ContentBuildLogger logger = null)
         {
             writer.Write(group.Name ?? string.Empty);
             writer.Write(group.Visible);
@@ -151,6 +165,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
             foreach (var tmxObject in group.Objects)
             {
+                logger?.LogMessage($"Writing object: {tmxObject.Name ?? tmxObject.Id.ToString()}");
                 var objectType = GetObjectType(tmxObject);
 
                 writer.Write((int)objectType);

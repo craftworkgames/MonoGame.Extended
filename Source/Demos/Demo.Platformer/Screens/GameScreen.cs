@@ -51,7 +51,7 @@ namespace Demo.Platformer.Screens
             _camera = new Camera2D(viewportAdapter);
 
             _tiledMap = Content.Load<TiledMap>("level-1");
-            _mapRenderer = new FullMapRenderer(GraphicsDevice);
+            _mapRenderer = new FullMapRenderer(GraphicsDevice, new MapRendererConfig {DrawObjectLayers = false});
             _mapRenderer.SwapMap(_tiledMap);
 
             _entityComponentSystem = new EntityComponentSystem();

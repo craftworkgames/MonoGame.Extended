@@ -1,17 +1,16 @@
 ﻿namespace MonoGame.Extended.Maps.Tiled
 {
-    public class TiledObjectGroup
+    public class TiledObjectGroup : TiledLayer
     {
-        public TiledObjectGroup(string name, TiledObject[] objects)
+        public TiledObjectGroup(string name, TiledObject[] objects) : base(name)
         {
-            Name = name;
             Objects = objects;
-            Properties = new TiledProperties();
         }
 
-        public string Name { get; }
+        public override void Dispose()
+        {
+        }
+
         public TiledObject[] Objects { get; }
-        public TiledProperties Properties { get; }
-        public bool IsVisible { get; set; }
     }
 }

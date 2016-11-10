@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
@@ -32,6 +33,9 @@ namespace MonoGame.Extended.Maps.Tiled
             {
                 var textureAssetName = reader.GetRelativeAssetPath(reader.ReadString());
                 var texture = reader.ContentManager.Load<Texture2D>(textureAssetName);
+                var trans = reader.ReadColor();
+                texture = MakeColorTransparent(texture.GraphicsDevice, texture, trans);
+
                 var tileset = tiledMap.CreateTileset(
                     texture,
                     reader.ReadInt32(),
@@ -71,10 +75,12 @@ namespace MonoGame.Extended.Maps.Tiled
                     depth = 0.0f - i*depthInc;
 
                 var layer = ReadLayer(reader, tiledMap, depth);
-                ReadCustomProperties(reader, layer.Properties);
-            }
 
-            tiledMap.AddObjectGroup(ReadObjectGroups(reader));
+                if (!(layer is TiledObjectGroup))
+                {
+                    ReadCustomProperties(reader, layer.Properties);
+                }
+            }
 
             return tiledMap;
         }
@@ -172,6 +178,13 @@ namespace MonoGame.Extended.Maps.Tiled
             if (layerType == "ImageLayer")
                 return ReadImageLayer(reader, tiledMap, layerName);
 
+            if (layerType == "ObjectLayer")
+            {
+                TiledLayer layer = ReadObjectLayer(reader, tiledMap, layerName);
+                ReadCustomProperties(reader, layer.Properties);
+                return layer;
+            }
+
             throw new NotSupportedException($"Layer type {layerType} is not supported");
         }
 
@@ -193,6 +206,36 @@ namespace MonoGame.Extended.Maps.Tiled
             var position = reader.ReadVector2();
 
             return tileMap.CreateImageLayer(layerName, texture, position);
+        }
+
+        private static TiledObjectGroup ReadObjectLayer(ContentReader reader, TiledMap tileMap, string layerName)
+        {
+            var objectLayer = ReadObjectGroup(reader);
+            tileMap.AddLayer(objectLayer);
+
+            return objectLayer;
+        }
+
+        public Texture2D MakeColorTransparent(GraphicsDevice gd, Texture2D input, Color c)
+        {
+            Color[] data = new Color[input.Width * input.Height];
+            input.GetData(data);
+
+            for (int i = 0; i < input.Width * input.Height; i++)
+            {
+                if (data[i].R == c.R && data[i].G == c.G && data[i].B == c.B)
+                {
+                    data[i].R = 0;
+                    data[i].G = 0;
+                    data[i].B = 0;
+                    data[i].A = 0;
+                }
+            }
+
+            Texture2D output = new Texture2D(gd, input.Width, input.Height);
+            output.SetData(data);
+
+            return output;
         }
     }
 }
