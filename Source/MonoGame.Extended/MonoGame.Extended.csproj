@@ -43,7 +43,6 @@
     <Compile Include="Maps\Renderers\IMapRenderer.cs" />
     <Compile Include="Maps\Renderers\MapRenderDetails.cs" />
     <Compile Include="Maps\Renderers\MapRendererConfig.cs" />
-    <Compile Include="Maps\Tiled\TiledTileset.cs" />
     <Compile Include="Maps\Tiled\TiledTilesetTile.cs" />
     <Compile Include="Maps\Tiled\TiledTilesetTileFrame.cs" />
     <Compile Include="Primitives\BoundingRectangle.cs" />
@@ -228,8 +227,6 @@
     <Compile Include="ISizable.cs" />
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
-    <Compile Include="Maps\Tiled\TiledTilesetTileFrame.cs" />
-    <Compile Include="Maps\Tiled\TiledTilesetTile.cs" />
     <Compile Include="Particles\ColorExtensions.cs" />
     <Compile Include="Particles\FastRandomExtensions.cs" />
     <Compile Include="Particles\HslColor.cs" />
