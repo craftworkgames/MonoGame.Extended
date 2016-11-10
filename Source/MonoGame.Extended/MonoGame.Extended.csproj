@@ -42,6 +42,7 @@
     <Compile Include="Maps\Renderers\GroupRenderDetails.cs" />
     <Compile Include="Maps\Renderers\IMapRenderer.cs" />
     <Compile Include="Maps\Renderers\MapRenderDetails.cs" />
+    <Compile Include="Maps\Renderers\MapRendererConfig.cs" />
     <Compile Include="Primitives\BoundingRectangle.cs" />
     <Compile Include="Primitives\Point2.cs" />
     <Compile Include="Primitives\Ray2D.cs" />

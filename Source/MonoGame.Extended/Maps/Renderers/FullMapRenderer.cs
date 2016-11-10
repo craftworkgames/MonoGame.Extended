@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Maps.Renderers
         private const int PrimitivesPerTile = 2;
 
         private readonly GraphicsDevice _graphicsDevice;
-        private readonly bool _cacheRenderDetails;
+        private readonly MapRendererConfig _config;
 
         private TiledMap _map;
         private BasicEffect _basicEffect;
@@ -23,13 +23,18 @@ namespace MonoGame.Extended.Maps.Renderers
         private readonly Dictionary<string, MapRenderDetails> _renderDetailsCache;
         private MapRenderDetails _currentRenderDetails;
 
-        public FullMapRenderer(GraphicsDevice graphicsDevice, bool cacheRenderDetails = true)
+        public FullMapRenderer(GraphicsDevice graphicsDevice, MapRendererConfig config)
         {
             _graphicsDevice = graphicsDevice;
-            _cacheRenderDetails = cacheRenderDetails;
+            _config = config;
 
             _renderDetailsCache = new Dictionary<string, MapRenderDetails>();
             _depthBufferState = new DepthStencilState {DepthBufferEnable = true};
+        }
+
+        public FullMapRenderer(GraphicsDevice graphicsDevice)
+            : this(graphicsDevice, new MapRendererConfig())
+        {
         }
 
         public virtual void SwapMap(TiledMap newMap)
@@ -40,7 +45,7 @@ namespace MonoGame.Extended.Maps.Renderers
             {
                 _currentRenderDetails = BuildRenderDetails();
 
-                if (_cacheRenderDetails)
+                if (_config.CacheRenderDetails)
                 {
                     _renderDetailsCache[_map.Name] = _currentRenderDetails;
                 }
@@ -141,6 +146,11 @@ namespace MonoGame.Extended.Maps.Renderers
                 }
                 else if (objectGroup != null)
                 {
+                    if (!_config.DrawObjectLayers)
+                    {
+                        continue;
+                    }
+
                     Func<TiledObject, bool> f =
                         o => o.ObjectType != TiledObjectType.Tile || !o.IsVisible || !o.Gid.HasValue;
 
