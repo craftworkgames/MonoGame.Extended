@@ -60,9 +60,17 @@ namespace Demo.TiledMaps
 
             _availableMaps = new Queue<string>(new[] { "level01", "level02", "level03", "level04", "level05", "very-large" });
 
-            _tiledMap = Content.Load<TiledMap>("level01");
+            _tiledMap = LoadNextMap();
             _mapRenderer.SwapMap(_tiledMap);
             _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
+        }
+
+        private TiledMap LoadNextMap()
+        {
+            var name = _availableMaps.Dequeue();
+            _tiledMap = Content.Load<TiledMap>(name);
+            _availableMaps.Enqueue(name);
+            return _tiledMap;
         }
 
         protected override void UnloadContent()
@@ -101,10 +109,8 @@ namespace Demo.TiledMaps
 
             if (_oldKeyboardState.IsKeyDown(Keys.Tab) && keyboardState.IsKeyUp(Keys.Tab))
             {
-                var name = _availableMaps.Dequeue();
-                _tiledMap = Content.Load<TiledMap>(name);
+                _tiledMap = LoadNextMap();
                 _mapRenderer.SwapMap(_tiledMap);
-                _availableMaps.Enqueue(name);
                 _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
             }
 
