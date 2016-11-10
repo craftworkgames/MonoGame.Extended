@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Maps\Renderers\DynamicGroupRenderDetails.cs" />
     <Compile Include="Maps\Renderers\FullMapRenderer.cs" />
     <Compile Include="Maps\Renderers\GroupRenderDetails.cs" />
     <Compile Include="Maps\Renderers\IMapRenderer.cs" />

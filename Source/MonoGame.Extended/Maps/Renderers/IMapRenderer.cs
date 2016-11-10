@@ -8,6 +8,8 @@ namespace MonoGame.Extended.Maps.Renderers
     {
         void SwapMap(TiledMap newMap);
 
+        void Update(GameTime gameTime);
+
         [Obsolete]
         void Draw(Camera2D camera);
 
