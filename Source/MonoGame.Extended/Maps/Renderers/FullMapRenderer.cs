@@ -81,7 +81,7 @@ namespace MonoGame.Extended.Maps.Renderers
 
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
             {
-                foreach (GroupRenderDetails renderDetails in _currentRenderDetails)
+                foreach (var renderDetails in _currentRenderDetails)
                 {
                     _graphicsDevice.SetVertexBuffer(renderDetails.VertexBuffer);
                     _graphicsDevice.Indices = renderDetails.IndexBuffer;
@@ -120,24 +120,24 @@ namespace MonoGame.Extended.Maps.Renderers
 
         protected virtual MapRenderDetails BuildRenderDetails()
         {
-            MapRenderDetails mapDetails = new MapRenderDetails();
+            var mapDetails = new MapRenderDetails();
 
-            foreach (TiledLayer layer in _map.Layers.OrderByDescending(l => l.Depth))
+            foreach (var layer in _map.Layers.OrderByDescending(l => l.Depth))
             {
-                TiledTileLayer tileLayer = layer as TiledTileLayer;
-                TiledImageLayer imageLayer = layer as TiledImageLayer;
-                TiledObjectGroup objectGroup = layer as TiledObjectGroup;
+                var tileLayer = layer as TiledTileLayer;
+                var imageLayer = layer as TiledImageLayer;
+                var objectGroup = layer as TiledObjectGroup;
 
                 if (imageLayer != null)
                 {
-                    TextureRegion2D region = new TextureRegion2D(imageLayer.Texture);
-                    Point point = imageLayer.Position.ToPoint();
+                    var region = new TextureRegion2D(imageLayer.Texture);
+                    var point = imageLayer.Position.ToPoint();
 
                     VertexPositionTexture[] vertices;
                     ushort[] indexes;
                     CreatePrimitives(point, region, 0, layer.Depth, out vertices, out indexes);
 
-                    GroupRenderDetails group = new GroupRenderDetails(region.Texture, 1);
+                    var group = new GroupRenderDetails(region.Texture, 1);
                     group.SetVertices(vertices, _graphicsDevice);
                     group.SetIndexes(indexes, _graphicsDevice);
                     group.Opacity = layer.Opacity;
@@ -154,22 +154,22 @@ namespace MonoGame.Extended.Maps.Renderers
                     Func<TiledObject, bool> f =
                         o => o.ObjectType != TiledObjectType.Tile || !o.IsVisible || !o.Gid.HasValue;
 
-                    IEnumerable<GroupRenderDetails> groups =
+                    var groups =
                         CreateGroupsByTileset(objectGroup.Objects.Reverse(), objectGroup, f, o => o.Gid.Value,
                             o => (o.Position - new Vector2(0, o.Height)).ToPoint(), o => new SizeF(o.Width, o.Height));
 
-                    foreach (GroupRenderDetails g in groups)
+                    foreach (var g in groups)
                     {
                         mapDetails.AddGroup(g);
                     }
                 }
                 else if (tileLayer != null)
                 {
-                    IEnumerable<GroupRenderDetails> groups =
+                    var groups =
                         CreateGroupsByTileset(GetTilesGroupedByTileset(tileLayer), tileLayer, t => t.IsBlank, t => t.Id,
                             t => tileLayer.GetTileLocation(t));
 
-                    foreach (GroupRenderDetails g in groups)
+                    foreach (var g in groups)
                     {
                         mapDetails.AddGroup(g);
                     }
@@ -181,12 +181,12 @@ namespace MonoGame.Extended.Maps.Renderers
 
         protected virtual List<TiledTile> GetTilesGroupedByTileset(TiledTileLayer layer)
         {
-            Dictionary<TiledTileset, List<TiledTile>> tilesByTileset =
+            var tilesByTileset =
                 _map.Tilesets.ToDictionary(ts => ts, ts => new List<TiledTile>());
 
-            foreach (TiledTile tile in layer.GetTilesInRenderOrder())
+            foreach (var tile in layer.GetTilesInRenderOrder())
             {
-                TiledTileset ts = _map.GetTilesetByTileId(tile.Id);
+                var ts = _map.GetTilesetByTileId(tile.Id);
 
                 if (ts != null)
                 {
@@ -194,9 +194,9 @@ namespace MonoGame.Extended.Maps.Renderers
                 }
             }
 
-            List<TiledTile> tiles = new List<TiledTile>();
+            var tiles = new List<TiledTile>();
 
-            foreach (List<TiledTile> chunk in tilesByTileset.Values)
+            foreach (var chunk in tilesByTileset.Values)
             {
                 tiles.AddRange(chunk);
             }
@@ -207,11 +207,11 @@ namespace MonoGame.Extended.Maps.Renderers
         protected virtual IEnumerable<GroupRenderDetails> CreateGroupsByTileset<T>(IEnumerable<T> objs, TiledLayer layer,
             Func<T, bool> filterOut, Func<T, int> getTileId, Func<T, Point> getPosition, Func<T, SizeF> getSize = null)
         {
-            Dictionary<TiledTileset, List<VertexPositionTexture>> verticesByTileset =
+            var verticesByTileset =
                 _map.Tilesets.ToDictionary(ts => ts, ts => new List<VertexPositionTexture>());
-            Dictionary<TiledTileset, List<ushort>> indexesByTileset =
+            var indexesByTileset =
                 _map.Tilesets.ToDictionary(ts => ts, ts => new List<ushort>());
-            Dictionary<TiledTileset, int> tileCountByTileset =
+            var tileCountByTileset =
                 _map.Tilesets.ToDictionary(ts => ts, ts => 0);
 
             foreach (T obj in objs)
@@ -222,7 +222,7 @@ namespace MonoGame.Extended.Maps.Renderers
                 }
 
                 int tileId = getTileId(obj);
-                TiledTileset tileset = _map.GetTilesetByTileId(tileId);
+                var tileset = _map.GetTilesetByTileId(tileId);
 
                 var region = tileset.GetTileRegion(tileId);
                 var point = getPosition(obj);
@@ -237,16 +237,16 @@ namespace MonoGame.Extended.Maps.Renderers
                 tileCountByTileset[tileset]++;
             }
 
-            List<GroupRenderDetails> groups = new List<GroupRenderDetails>();
+            var groups = new List<GroupRenderDetails>();
 
-            foreach (TiledTileset tileset in _map.Tilesets)
+            foreach (var tileset in _map.Tilesets)
             {
                 if (tileCountByTileset[tileset] == 0)
                 {
                     continue;
                 }
 
-                GroupRenderDetails group = new GroupRenderDetails(tileset.Texture, tileCountByTileset[tileset]);
+                var group = new GroupRenderDetails(tileset.Texture, tileCountByTileset[tileset]);
                 group.SetVertices(verticesByTileset[tileset], _graphicsDevice);
                 group.SetIndexes(indexesByTileset[tileset], _graphicsDevice);
                 group.Opacity = layer.Opacity;
