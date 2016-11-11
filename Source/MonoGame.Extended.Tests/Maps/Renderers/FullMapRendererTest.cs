@@ -14,11 +14,11 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
         [Test]
         public void Draw_MapObjectLayer_MissingGID_NoGroups()
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            MockRenderer r = new MockRenderer(gd);
-            Texture2D texture = Substitute.For<Texture2D>(gd, 64, 64);
+            var gd = TestHelper.CreateGraphicsDevice();
+            var r = new MockRenderer(gd);
+            var texture = Substitute.For<Texture2D>(gd, 64, 64);
 
-            TiledMap m = new TiledMap("test", 2, 2, 32, 32);
+            var m = new TiledMap("test", 2, 2, 32, 32);
             m.CreateTileset(texture, 0, 32, 32, 4);
 
             TiledObject[] objs =
@@ -26,7 +26,7 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
                 new TiledObject(TiledObjectType.Tile, 1, null, 1, 1, 1, 1) { IsVisible = true },
             };
 
-            TiledObjectGroup layer = new TiledObjectGroup("object", objs);
+            var layer = new TiledObjectLayer("object", objs);
             m.AddLayer(layer);
 
             r.SwapMap(m);
@@ -39,11 +39,11 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
         [Test]
         public void Draw_MapObjectLayer_ShapeObject_NoGroups()
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            MockRenderer r = new MockRenderer(gd);
-            Texture2D texture = Substitute.For<Texture2D>(gd, 64, 64);
+            var gd = TestHelper.CreateGraphicsDevice();
+            var r = new MockRenderer(gd);
+            var texture = Substitute.For<Texture2D>(gd, 64, 64);
 
-            TiledMap m = new TiledMap("test", 2, 2, 32, 32);
+            var m = new TiledMap("test", 2, 2, 32, 32);
             m.CreateTileset(texture, 0, 32, 32, 4);
 
             TiledObject[] objs =
@@ -51,7 +51,7 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
                 new TiledObject(TiledObjectType.Rectangle, 1, 1, 1, 1, 1, 1) { IsVisible = true },
             };
 
-            TiledObjectGroup layer = new TiledObjectGroup("object", objs);
+            var layer = new TiledObjectLayer("object", objs);
             m.AddLayer(layer);
 
             r.SwapMap(m);
@@ -64,11 +64,11 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
         [Test]
         public void Draw_MapObjectLayer_TileObject_OneGroup()
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            MockRenderer r = new MockRenderer(gd);
-            Texture2D texture = Substitute.For<Texture2D>(gd, 64, 64);
+            var gd = TestHelper.CreateGraphicsDevice();
+            var r = new MockRenderer(gd);
+            var texture = Substitute.For<Texture2D>(gd, 64, 64);
 
-            TiledMap m = new TiledMap("test", 2, 2, 32, 32);
+            var m = new TiledMap("test", 2, 2, 32, 32);
             m.CreateTileset(texture, 0, 32, 32, 4);
 
             TiledObject[] objs =
@@ -76,7 +76,7 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
                 new TiledObject(TiledObjectType.Tile, 1, 1, 1, 1, 1, 1) { IsVisible = true },
             };
 
-            TiledObjectGroup layer = new TiledObjectGroup("object", objs);
+            var layer = new TiledObjectLayer("object", objs);
             m.AddLayer(layer);
 
             r.SwapMap(m);
@@ -90,11 +90,11 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
         [Test]
         public void Draw_MapObjectLayer_NotVisible_NoGroups()
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            MockRenderer r = new MockRenderer(gd);
-            Texture2D texture = Substitute.For<Texture2D>(gd, 64, 64);
+            var gd = TestHelper.CreateGraphicsDevice();
+            var r = new MockRenderer(gd);
+            var texture = Substitute.For<Texture2D>(gd, 64, 64);
 
-            TiledMap m = new TiledMap("test", 2, 2, 32, 32);
+            var m = new TiledMap("test", 2, 2, 32, 32);
             m.CreateTileset(texture, 0, 32, 32, 4);
 
             TiledObject[] objs =
@@ -102,7 +102,7 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
                 new TiledObject(TiledObjectType.Tile, 1, 1, 1, 1, 1, 1) { IsVisible = false },
             };
 
-            TiledObjectGroup layer = new TiledObjectGroup("object", objs);
+            var layer = new TiledObjectLayer("object", objs);
             m.AddLayer(layer);
 
             r.SwapMap(m);
@@ -115,16 +115,16 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
         [Test]
         public void Draw_MapObjectLayer_NoObjects_NoGroups()
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            MockRenderer r = new MockRenderer(gd);
-            Texture2D texture = Substitute.For<Texture2D>(gd, 64, 64);
+            var gd = TestHelper.CreateGraphicsDevice();
+            var r = new MockRenderer(gd);
+            var texture = Substitute.For<Texture2D>(gd, 64, 64);
 
-            TiledMap m = new TiledMap("test", 2, 2, 32, 32);
+            var m = new TiledMap("test", 2, 2, 32, 32);
             m.CreateTileset(texture, 0, 32, 32, 4);
 
             TiledObject[] objs = {};
 
-            TiledObjectGroup layer = new TiledObjectGroup("object", objs);
+            var layer = new TiledObjectLayer("object", objs);
             m.AddLayer(layer);
 
             r.SwapMap(m);
@@ -137,11 +137,11 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
         [Test]
         public void Draw_MapTileLayer_TwoVisible_OneGroup()
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            MockRenderer r = new MockRenderer(gd);
-            Texture2D texture = Substitute.For<Texture2D>(gd, 64, 64);
+            var gd = TestHelper.CreateGraphicsDevice();
+            var r = new MockRenderer(gd);
+            var texture = Substitute.For<Texture2D>(gd, 64, 64);
 
-            TiledMap m = new TiledMap("test", 2, 2, 32, 32);
+            var m = new TiledMap("test", 2, 2, 32, 32);
             m.CreateTileset(texture, 0, 32, 32, 4);
             m.CreateTileLayer("tile", 2, 2, new int[] { 1, 0, 1, 0 });
 
@@ -156,11 +156,11 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
         [Test]
         public void Draw_MapTileLayer_AllBlank_NoGroups()
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            MockRenderer r = new MockRenderer(gd);
-            Texture2D texture = Substitute.For<Texture2D>(gd, 64, 64);
+            var gd = TestHelper.CreateGraphicsDevice();
+            var r = new MockRenderer(gd);
+            var texture = Substitute.For<Texture2D>(gd, 64, 64);
 
-            TiledMap m = new TiledMap("test", 2, 2, 32, 32);
+            var m = new TiledMap("test", 2, 2, 32, 32);
             m.CreateTileset(texture, 0, 32, 32, 4);
             m.CreateTileLayer("tile", 2, 2, new int[] { 0, 0, 0, 0 });
 
@@ -174,11 +174,11 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
         [Test]
         public void Draw_MapImageLayer_OneGroup()
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            MockRenderer r = new MockRenderer(gd);
-            Texture2D texture = Substitute.For<Texture2D>(gd, 64, 64);
+            var gd = TestHelper.CreateGraphicsDevice();
+            var r = new MockRenderer(gd);
+            var texture = Substitute.For<Texture2D>(gd, 64, 64);
 
-            TiledMap m = new TiledMap("test", 10, 10, 32, 32);
+            var m = new TiledMap("test", 10, 10, 32, 32);
             m.CreateImageLayer("img", texture, new Vector2(100, 100));
 
             r.SwapMap(m);
@@ -192,8 +192,8 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
         [Test]
         public void Draw_MapNoGroups()
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            MockRenderer r = new MockRenderer(gd);
+            var gd = TestHelper.CreateGraphicsDevice();
+            var r = new MockRenderer(gd);
             r.SwapMap(new TiledMap("test", 10, 10, 32, 32));
 
             r.Draw(new Matrix());
@@ -204,8 +204,8 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
         [Test]
         public void Draw_NoMap()
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            MockRenderer r = new MockRenderer(gd);
+            var gd = TestHelper.CreateGraphicsDevice();
+            var r = new MockRenderer(gd);
 
             r.Draw(new Matrix());
 
@@ -215,14 +215,14 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
         [Test]
         public void CreatePrimatives()
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            Texture2D texture = Substitute.For<Texture2D>(gd, 64, 64);
-            TextureRegion2D region = Substitute.For<TextureRegion2D>(texture, 1, 1, 32, 32);
+            var gd = TestHelper.CreateGraphicsDevice();
+            var texture = Substitute.For<Texture2D>(gd, 64, 64);
+            var region = Substitute.For<TextureRegion2D>(texture, 1, 1, 32, 32);
 
             VertexPositionTexture[] vertices;
             ushort[] indexes;
 
-            MockRenderer r = new MockRenderer(gd);
+            var r = new MockRenderer(gd);
             r.CreatePrimitives(new Point(0, 0), region, 0, 0.5f, out vertices, out indexes);
 
             Assert.AreEqual(4, vertices.Length);
@@ -241,14 +241,14 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
         [Test]
         public void CreatePrimatives_Offset10()
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            Texture2D texture = Substitute.For<Texture2D>(gd, 64, 64);
-            TextureRegion2D region = Substitute.For<TextureRegion2D>(texture, 1, 1, 32, 32);
+            var gd = TestHelper.CreateGraphicsDevice();
+            var texture = Substitute.For<Texture2D>(gd, 64, 64);
+            var region = Substitute.For<TextureRegion2D>(texture, 1, 1, 32, 32);
 
             VertexPositionTexture[] vertices;
             ushort[] indexes;
 
-            MockRenderer r = new MockRenderer(gd);
+            var r = new MockRenderer(gd);
             r.CreatePrimitives(new Point(0, 0), region, 10, 0.5f, out vertices, out indexes);
 
             Assert.AreEqual(4, vertices.Length);
@@ -265,7 +265,7 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
         }
     }
 
-    class MockRenderer : FullMapRenderer
+    internal class MockRenderer : FullMapRenderer
     {
         public MockRenderer(GraphicsDevice graphicsDevice)
             : base(graphicsDevice)

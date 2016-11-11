@@ -52,13 +52,13 @@ namespace Demo.NuclexGui
             _gui.Initialize();
 
             // Create few controls.
-            GuiButtonControl button = new GuiButtonControl
+            var button = new GuiButtonControl
             {
                 Name = "button",
                 Bounds = new UniRectangle(new UniScalar(0.0f, 20), new UniScalar(0.0f, 20), new UniScalar(0f, 120), new UniScalar(0f, 50)),
                 Text = "Rotate logo"
             };
-            GuiButtonControl button2 = new GuiButtonControl
+            var button2 = new GuiButtonControl
             {
                 Name = "button2",
                 Bounds = new UniRectangle(new UniScalar(20), new UniScalar(80), new UniScalar(120), new UniScalar(50)),
@@ -76,7 +76,7 @@ namespace Demo.NuclexGui
 
         private void Button2_Pressed(object sender, System.EventArgs e)
         {
-            GuiWindowControl window = new GuiWindowControl
+            var window = new GuiWindowControl
             {
                 Name = "window",
                 Bounds = new UniRectangle(new UniVector(new UniScalar(0.5f, -100), new UniScalar(0.5f, -60)), new UniVector(new UniScalar(200), new UniScalar(120))),
@@ -84,34 +84,34 @@ namespace Demo.NuclexGui
                 EnableDragging = true
             };
 
-            GuiChoiceControl choice1 = new GuiChoiceControl
+            var choice1 = new GuiChoiceControl
             {
                 Name = "choiceBlack",
                 Bounds = new UniRectangle(new UniScalar(0.0f, 10), new UniScalar(0.0f, 30), new UniScalar(10), new UniScalar(10)),
                 Text = "Black",
                 Selected = true
             };
-            GuiChoiceControl choice2 = new GuiChoiceControl
+            var choice2 = new GuiChoiceControl
             {
                 Name = "choiceGray",
                 Bounds = new UniRectangle(new UniScalar(0.0f, 10), new UniScalar(0.0f, 45), new UniScalar(10), new UniScalar(10)),
                 Text = "Gray",
                 Selected = false
             };
-            GuiChoiceControl choice3 = new GuiChoiceControl
+            var choice3 = new GuiChoiceControl
             {
                 Name = "choiceWhite",
                 Bounds = new UniRectangle(new UniScalar(0.0f, 10), new UniScalar(0.0f, 60), new UniScalar(10), new UniScalar(10)),
                 Text = "White",
                 Selected = false
             };
-            GuiButtonControl button1 = new GuiButtonControl
+            var button1 = new GuiButtonControl
             {
                 Name = "confirm",
                 Bounds = new UniRectangle(new UniScalar(0.0f, 10), new UniScalar(1.0f, -40), new UniScalar(0f, 80), new UniScalar(0f, 30)),
                 Text = "Confirm"
             };
-            GuiButtonControl button2 = new GuiButtonControl
+            var button2 = new GuiButtonControl
             {
                 Name = "cancel",
                 Bounds = new UniRectangle(new UniScalar(1.0f, -90), new UniScalar(1.0f, -40), new UniScalar(0f, 80), new UniScalar(0f, 30)),

@@ -5,7 +5,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     [XmlInclude(typeof(TmxTileLayer))]
     [XmlInclude(typeof(TmxImageLayer))]
-    [XmlInclude(typeof(TmxObjectGroup))]
+    [XmlInclude(typeof(TmxObjectLayer))]
     public abstract class TmxLayer
     {
         protected TmxLayer()

@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Maps.Tiled;
 
-namespace MonoGame.Extended.Maps.Renderers {
-    class DynamicGroupRenderDetails : GroupRenderDetails
+namespace MonoGame.Extended.Maps.Renderers
+{
+    internal class DynamicGroupRenderDetails : GroupRenderDetails
     {
-        public List<TiledTile> Tiles;
+        public List<ITiledAnimated> AnimatedTiles;
 
-        public DynamicGroupRenderDetails(GraphicsDevice gd, IEnumerable<VertexPositionTexture> vertices, IEnumerable<ushort> indexes, Texture2D texture, List<TiledTile> tiles) : base(gd, vertices, indexes, texture)
+        public DynamicGroupRenderDetails(GraphicsDevice graphicsDevice, IEnumerable<VertexPositionTexture> vertices,
+            IEnumerable<ushort> indexes, Texture2D texture, List<ITiledAnimated> animatedTiles)
+            : base(graphicsDevice, vertices, indexes, texture)
         {
-            Tiles = tiles;
-            TileCount = tiles.Count;
+            AnimatedTiles = animatedTiles;
+            TileCount = animatedTiles.Count;
         }
     }
 }

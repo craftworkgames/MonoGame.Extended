@@ -154,8 +154,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             var map = ImportAndProcessMap(filePath);
 
             Assert.AreEqual(1, map.Layers.Count);
-            Assert.IsInstanceOf<TmxObjectGroup>(map.Layers[0]);
-            var tmxObjectGroup = map.Layers[0] as TmxObjectGroup;
+            Assert.IsInstanceOf<TmxObjectLayer>(map.Layers[0]);
+            var tmxObjectGroup = map.Layers[0] as TmxObjectLayer;
             var tmxObject = tmxObjectGroup.Objects[0];
             var tmxPolygon = tmxObjectGroup.Objects[3].Polygon;
             var tmxPolyline = tmxObjectGroup.Objects[4].Polyline;

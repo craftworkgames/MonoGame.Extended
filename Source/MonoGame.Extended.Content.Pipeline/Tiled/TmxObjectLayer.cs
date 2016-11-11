@@ -3,9 +3,9 @@ using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
-    public class TmxObjectGroup : TmxLayer
+    public class TmxObjectLayer : TmxLayer
     {
-        public TmxObjectGroup()
+        public TmxObjectLayer()
         {
             Objects = new List<TmxObject>();
         }

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
-using Microsoft.Xna.Framework.Content.Pipeline.Builder.Convertors;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Maps.Tiled;
 using Color = Microsoft.Xna.Framework.Color;
@@ -46,19 +44,21 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 writer.Write(tileset.Margin);
 
                 writer.Write(tileset.Tiles.Count);
+
                 foreach(var tile in tileset.Tiles)
                 {
                     writer.Write(tile.Id);
                     writer.Write(tile.Frames.Count);
+
                     foreach(var frame in tile.Frames)
                     {
                         writer.Write(frame.TileId);
                         writer.Write(frame.Duration);
                     }
-                    WriteCustomProperties(writer, tile.Properties);
 
-                    WriteObjectGroups(writer, tile.ObjectGroups);
+                    WriteCustomProperties(writer, tile.Properties);
                 }
+
                 WriteCustomProperties(writer, tileset.Properties);
             }
 
@@ -101,12 +101,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     WriteCustomProperties(writer, layer.Properties);
                 }
 
-                var objectLayer = layer as TmxObjectGroup;
+                var objectLayer = layer as TmxObjectLayer;
 
                 if (objectLayer != null)
                 {
                     writer.Write("ObjectLayer");
-                    WriteObjectGroup(writer, objectLayer, value.Logger);
+                    WriteObjectLayer(writer, objectLayer, value.Logger);
                 }
             }
         }
@@ -146,24 +146,23 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             return TiledObjectType.Rectangle;
         }
 
-        private void WriteObjectGroups(ContentWriter writer, IReadOnlyCollection<TmxObjectGroup> groups)
+        private void WriteObjectLayers(ContentWriter writer, IReadOnlyCollection<TmxObjectLayer> groups)
         {
             writer.Write(groups.Count);
 
-            foreach (var objectGroup in groups) {
-                WriteObjectGroup(writer, objectGroup);
-            }
+            foreach (var objectLayer in groups)
+                WriteObjectLayer(writer, objectLayer);
         }
 
-        private void WriteObjectGroup(ContentWriter writer, TmxObjectGroup group, ContentBuildLogger logger = null)
+        private void WriteObjectLayer(ContentWriter writer, TmxObjectLayer layer, ContentBuildLogger logger = null)
         {
-            writer.Write(group.Name ?? string.Empty);
-            writer.Write(group.Visible);
-            writer.Write(group.Opacity);
+            writer.Write(layer.Name ?? string.Empty);
+            writer.Write(layer.Visible);
+            writer.Write(layer.Opacity);
 
-            writer.Write(group.Objects.Count);
+            writer.Write(layer.Objects.Count);
 
-            foreach (var tmxObject in group.Objects)
+            foreach (var tmxObject in layer.Objects)
             {
                 logger?.LogMessage($"Writing object: {tmxObject.Name ?? tmxObject.Id.ToString()}");
                 var objectType = GetObjectType(tmxObject);
@@ -190,7 +189,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 WriteCustomProperties(writer, tmxObject.Properties);
             }
 
-            WriteCustomProperties(writer, group.Properties);
+            WriteCustomProperties(writer, layer.Properties);
         }
 
         private static void WriteCustomProperties(ContentWriter writer, IReadOnlyCollection<TmxProperty> properties)

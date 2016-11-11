@@ -1,8 +1,9 @@
 ﻿namespace MonoGame.Extended.Maps.Tiled
 {
-    public class TiledObjectGroup : TiledLayer
+    public class TiledObjectLayer : TiledLayer
     {
-        public TiledObjectGroup(string name, TiledObject[] objects) : base(name)
+        public TiledObjectLayer(string name, TiledObject[] objects) 
+            : base(name)
         {
             Objects = objects;
         }

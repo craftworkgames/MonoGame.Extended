@@ -10,7 +10,6 @@ namespace MonoGame.Extended.Maps.Tiled
     public class TiledMap : IDisposable
     {
         private readonly List<TiledLayer> _layers;
-        private readonly List<TiledObjectGroup> _objectGroups;
         private readonly List<TiledTileset> _tilesets;
 
         public TiledMap(string name, int width, int height, int tileWidth, int tileHeight,
@@ -43,7 +42,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public IReadOnlyList<TiledLayer> Layers => _layers;
         public IReadOnlyList<TiledImageLayer> ImageLayers => _layers.OfType<TiledImageLayer>().ToList();
         public IReadOnlyList<TiledTileLayer> TileLayers => _layers.OfType<TiledTileLayer>().ToList();
-        public IReadOnlyList<TiledObjectGroup> ObjectLayers => _layers.OfType<TiledObjectGroup>().ToList();
+        public IReadOnlyList<TiledObjectLayer> ObjectLayers => _layers.OfType<TiledObjectLayer>().ToList();
         public int WidthInPixels => Width*TileWidth;
         public int HeightInPixels => Height*TileHeight;
 
@@ -91,7 +90,7 @@ namespace MonoGame.Extended.Maps.Tiled
             return (T) GetLayer(name);
         }
 
-        public TiledObjectGroup GetObjectGroup(string name)
+        public TiledObjectLayer GetObjectGroup(string name)
         {
             return ObjectLayers.FirstOrDefault(i => i.Name == name);
         }

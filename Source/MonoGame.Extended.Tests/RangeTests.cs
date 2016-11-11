@@ -37,7 +37,7 @@ namespace MonoGame.Extended.Tests
             Assert.AreEqual(range.Min, 10);
             Assert.AreEqual(range.Max, 100);
 
-            for (int i = 10; i <= 100; i++)
+            for (var i = 10; i <= 100; i++)
             {
                 Assert.IsTrue(range.IsInBetween(i));
             }

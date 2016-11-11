@@ -4,14 +4,14 @@ using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
-    public class TiledObject
+    public class TiledObject : ITiledAnimated
     {
-        public TiledObject(TiledObjectType objectType, int id, int? gid, float x, float y, float width, float height)
-            : this(objectType, id, gid, new Vector2(x, y), width, height)
+        public TiledObject(TiledObjectType objectType, int id, int? gid, float x, float y, float width, float height, TiledTilesetTile tilesetTile = null)
+            : this(objectType, id, gid, new Vector2(x, y), width, height, tilesetTile)
         {
         }
 
-        public TiledObject(TiledObjectType objectType, int id, int? gid, Vector2 position, float width, float height)
+        public TiledObject(TiledObjectType objectType, int id, int? gid, Vector2 position, float width, float height, TiledTilesetTile tilesetTile = null)
         {
             ObjectType = objectType;
             Id = id;
@@ -21,6 +21,7 @@ namespace MonoGame.Extended.Maps.Tiled
             Points = new List<Vector2>();
             Properties = new TiledProperties();
             Position = position;
+            TilesetTile = tilesetTile;
         }
 
         public int Id { get; }
@@ -39,6 +40,9 @@ namespace MonoGame.Extended.Maps.Tiled
         public float Rotation { get; set; }
         public string Type { get; set; }
 
+        public TiledTilesetTile TilesetTile { get; }
+        public bool HasAnimation => TilesetTile != null && TilesetTile.Frames.Count != 0;
+        public int? CurrentTileId => TilesetTile?.CurrentTileId + 1 ?? Gid;
 
         public override string ToString()
         {

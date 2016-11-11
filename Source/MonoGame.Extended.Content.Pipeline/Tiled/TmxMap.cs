@@ -42,7 +42,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         [XmlElement(ElementName = "layer", Type = typeof(TmxTileLayer))]
         [XmlElement(ElementName = "imagelayer", Type = typeof(TmxImageLayer))]
-        [XmlElement(ElementName = "objectgroup", Type = typeof(TmxObjectGroup))]
+        [XmlElement(ElementName = "objectgroup", Type = typeof(TmxObjectLayer))]
         public List<TmxLayer> Layers { get; set; }
 
         [XmlArray("properties")]

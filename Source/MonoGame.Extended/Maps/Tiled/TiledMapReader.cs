@@ -12,14 +12,14 @@ namespace MonoGame.Extended.Maps.Tiled
         protected override TiledMap Read(ContentReader reader, TiledMap existingInstance)
         {
             var backgroundColor = reader.ReadColor();
-            var renderOrder = (TiledRenderOrder) Enum.Parse(typeof(TiledRenderOrder), reader.ReadString(), true);
+            var renderOrder = (TiledRenderOrder)Enum.Parse(typeof(TiledRenderOrder), reader.ReadString(), true);
             var tiledMap = new TiledMap(
-                reader.AssetName,
-                reader.ReadInt32(),
-                reader.ReadInt32(),
-                reader.ReadInt32(),
-                reader.ReadInt32(),
-                (TiledMapOrientation) reader.ReadInt32())
+                name: reader.AssetName,
+                width: reader.ReadInt32(),
+                height: reader.ReadInt32(),
+                tileWidth: reader.ReadInt32(),
+                tileHeight: reader.ReadInt32(),
+                orientation: (TiledMapOrientation)reader.ReadInt32())
             {
                 BackgroundColor = backgroundColor,
                 RenderOrder = renderOrder
@@ -37,71 +37,57 @@ namespace MonoGame.Extended.Maps.Tiled
                 texture = MakeColorTransparent(texture.GraphicsDevice, texture, trans);
 
                 var tileset = tiledMap.CreateTileset(
-                    texture,
-                    reader.ReadInt32(),
-                    reader.ReadInt32(),
-                    reader.ReadInt32(),
-                    reader.ReadInt32(),
-                    reader.ReadInt32(),
-                    reader.ReadInt32());
+                    texture: texture,
+                    firstId: reader.ReadInt32(),
+                    tileWidth: reader.ReadInt32(),
+                    tileHeight: reader.ReadInt32(),
+                    tileCount: reader.ReadInt32(),
+                    spacing: reader.ReadInt32(),
+                    margin: reader.ReadInt32());
                 var tileSetTileCount = reader.ReadInt32();
+
                 for (var j = 0; j < tileSetTileCount; j++)
                 {
                     var tileId = reader.ReadInt32();
                     tileId = tileset.FirstId + tileId - 1;
                     var tileSetTile = tileset.CreateTileSetTile(tileId);
                     var tileSetTileFrameCount = reader.ReadInt32();
+
                     for (var k = 0; k < tileSetTileFrameCount; k++)
                     {
                         var frameId = reader.ReadInt32();
                         frameId = tileset.FirstId + frameId - 1;
                         tileSetTile.CreateTileSetTileFrame(k, frameId, reader.ReadInt32());
                     }
-                    ReadCustomProperties(reader, tileSetTile.Properties);
 
-                    tileSetTile.ObjectGroups.AddRange(ReadObjectGroups(reader));
+                    ReadCustomProperties(reader, tileSetTile.Properties);
                 }
+
                 ReadCustomProperties(reader, tileset.Properties);
             }
 
             var layerCount = reader.ReadInt32();
-
-            var depthInc = 1.0f/(layerCount - 1);
+            var depthInc = 1.0f / (layerCount - 1);
 
             for (var i = 0; i < layerCount; i++)
             {
                 var depth = 0.0f;
+
                 if (layerCount > 1)
-                    depth = 0.0f - i*depthInc;
+                    depth = 0.0f - i * depthInc;
 
                 var layer = ReadLayer(reader, tiledMap, depth);
 
-                if (!(layer is TiledObjectGroup))
-                {
+                if (!(layer is TiledObjectLayer))
                     ReadCustomProperties(reader, layer.Properties);
-                }
             }
 
             return tiledMap;
         }
 
-        private static List<TiledObjectGroup> ReadObjectGroups(ContentReader reader)
+        private static TiledObjectLayer ReadObjectLayer(ContentReader reader, TiledMap tiledMap)
         {
-            var list = new List<TiledObjectGroup>();
-            var objectGroupsCount = reader.ReadInt32();
-
-            for (var i = 0; i < objectGroupsCount; i++)
-            {
-                var objectGroup = ReadObjectGroup(reader);
-                ReadCustomProperties(reader, objectGroup.Properties);
-                list.Add(objectGroup);
-            }
-            return list;
-        }
-
-        private static TiledObjectGroup ReadObjectGroup(ContentReader reader)
-        {
-            var groupName = reader.ReadString();
+            var layerName = reader.ReadString();
             var visible = reader.ReadBoolean();
             var opacity = reader.ReadSingle();
             var count = reader.ReadInt32();
@@ -109,7 +95,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
             for (var i = 0; i < count; i++)
             {
-                var objectType = (TiledObjectType) reader.ReadInt32();
+                var objectType = (TiledObjectType)reader.ReadInt32();
                 var id = reader.ReadInt32();
                 var gid = reader.ReadInt32();
                 var x = reader.ReadSingle();
@@ -120,8 +106,9 @@ namespace MonoGame.Extended.Maps.Tiled
                 var name = reader.ReadString();
                 var type = reader.ReadString();
                 var isVisible = reader.ReadBoolean();
+                var tilesetTile = tiledMap.GetTilesetTileById(gid);
 
-                objects[i] = new TiledObject(objectType, id, gid >= 0 ? gid : (int?) null, x, y, width, height)
+                objects[i] = new TiledObject(objectType, id, gid >= 0 ? gid : (int?)null, x, y, width, height, tilesetTile)
                 {
                     IsVisible = isVisible,
                     Opacity = opacity,
@@ -141,7 +128,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 ReadCustomProperties(reader, objects[i].Properties);
             }
 
-            return new TiledObjectGroup(groupName, objects) {IsVisible = visible};
+            return new TiledObjectLayer(layerName, objects) { IsVisible = visible };
         }
 
         private static void ReadCustomProperties(ContentReader reader, TiledProperties properties)
@@ -180,7 +167,7 @@ namespace MonoGame.Extended.Maps.Tiled
 
             if (layerType == "ObjectLayer")
             {
-                TiledLayer layer = ReadObjectLayer(reader, tiledMap, layerName);
+                var layer = ReadObjectLayer(reader, tiledMap, layerName);
                 ReadCustomProperties(reader, layer.Properties);
                 return layer;
             }
@@ -208,22 +195,21 @@ namespace MonoGame.Extended.Maps.Tiled
             return tileMap.CreateImageLayer(layerName, texture, position);
         }
 
-        private static TiledObjectGroup ReadObjectLayer(ContentReader reader, TiledMap tileMap, string layerName)
+        private static TiledObjectLayer ReadObjectLayer(ContentReader reader, TiledMap tileMap, string layerName)
         {
-            var objectLayer = ReadObjectGroup(reader);
+            var objectLayer = ReadObjectLayer(reader, tileMap);
             tileMap.AddLayer(objectLayer);
-
             return objectLayer;
         }
 
-        public Texture2D MakeColorTransparent(GraphicsDevice gd, Texture2D input, Color c)
+        public Texture2D MakeColorTransparent(GraphicsDevice graphicsDevice, Texture2D input, Color color)
         {
-            Color[] data = new Color[input.Width * input.Height];
+            var data = new Color[input.Width * input.Height];
             input.GetData(data);
 
-            for (int i = 0; i < input.Width * input.Height; i++)
+            for (var i = 0; i < input.Width * input.Height; i++)
             {
-                if (data[i].R == c.R && data[i].G == c.G && data[i].B == c.B)
+                if (data[i].R == color.R && data[i].G == color.G && data[i].B == color.B)
                 {
                     data[i].R = 0;
                     data[i].G = 0;
@@ -232,7 +218,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 }
             }
 
-            Texture2D output = new Texture2D(gd, input.Width, input.Height);
+            var output = new Texture2D(graphicsDevice, input.Width, input.Height);
             output.SetData(data);
 
             return output;

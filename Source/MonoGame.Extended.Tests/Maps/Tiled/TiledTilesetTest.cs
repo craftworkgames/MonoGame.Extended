@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Maps.Tiled;
-using MonoGame.Extended.TextureAtlases;
 using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests.Maps.Tiled
@@ -11,12 +10,12 @@ namespace MonoGame.Extended.Tests.Maps.Tiled
         [Test]
         public void GetTileRegion_BlankTile()
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            Texture2D texture = new Texture2D(gd, 64, 64);
+            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var texture = new Texture2D(graphicsDevice, 64, 64);
 
-            TiledTileset ts = new TiledTileset(texture, 10, 32, 32, 4, 0, 0);
+            var tiledTileset = new TiledTileset(texture, 10, 32, 32, 4, 0, 0);
 
-            Assert.IsNull(ts.GetTileRegion(0));
+            Assert.IsNull(tiledTileset.GetTileRegion(0));
         }
 
         [Test]
@@ -27,86 +26,86 @@ namespace MonoGame.Extended.Tests.Maps.Tiled
         [TestCase(14, Result = false, Description = "Too high")]
         public bool ContainsTileId(int id)
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            Texture2D texture = new Texture2D(gd, 64, 64);
+            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var texture = new Texture2D(graphicsDevice, 64, 64);
 
-            TiledTileset ts = new TiledTileset(texture, 10, 32, 32, 4, 0, 0);
+            var tiledTileset = new TiledTileset(texture, 10, 32, 32, 4, 0, 0);
 
-            return ts.ContainsTileId(id);
+            return tiledTileset.ContainsTileId(id);
         }
 
         [Test]
         public void Constructor_NoMargin([Values(0, 2)]int spacing)
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            Texture2D texture = new Texture2D(gd, 64, 64);
+            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var texture = new Texture2D(graphicsDevice, 64, 64);
 
-            TiledTileset ts = new TiledTileset(texture, 1, 32, 32, 4, spacing, 0);
+            var tiledTileset = new TiledTileset(texture, 1, 32, 32, 4, spacing, 0);
 
-            TextureRegion2D r = ts.GetTileRegion(1);
-            Assert.AreEqual(texture, r.Texture);
-            Assert.AreEqual(0, r.X);
-            Assert.AreEqual(0, r.Y);
-            Assert.AreEqual(32, r.Width);
-            Assert.AreEqual(32, r.Height);
+            var region = tiledTileset.GetTileRegion(1);
+            Assert.AreEqual(texture, region.Texture);
+            Assert.AreEqual(0, region.X);
+            Assert.AreEqual(0, region.Y);
+            Assert.AreEqual(32, region.Width);
+            Assert.AreEqual(32, region.Height);
 
-            r = ts.GetTileRegion(2);
-            Assert.AreEqual(texture, r.Texture);
-            Assert.AreEqual(spacing + 32, r.X);
-            Assert.AreEqual(0, r.Y);
-            Assert.AreEqual(32, r.Width);
-            Assert.AreEqual(32, r.Height);
+            region = tiledTileset.GetTileRegion(2);
+            Assert.AreEqual(texture, region.Texture);
+            Assert.AreEqual(spacing + 32, region.X);
+            Assert.AreEqual(0, region.Y);
+            Assert.AreEqual(32, region.Width);
+            Assert.AreEqual(32, region.Height);
 
-            r = ts.GetTileRegion(3);
-            Assert.AreEqual(texture, r.Texture);
-            Assert.AreEqual(0, r.X);
-            Assert.AreEqual(spacing + 32, r.Y);
-            Assert.AreEqual(32, r.Width);
-            Assert.AreEqual(32, r.Height);
+            region = tiledTileset.GetTileRegion(3);
+            Assert.AreEqual(texture, region.Texture);
+            Assert.AreEqual(0, region.X);
+            Assert.AreEqual(spacing + 32, region.Y);
+            Assert.AreEqual(32, region.Width);
+            Assert.AreEqual(32, region.Height);
 
-            r = ts.GetTileRegion(4);
-            Assert.AreEqual(texture, r.Texture);
-            Assert.AreEqual(spacing + 32, r.X);
-            Assert.AreEqual(spacing + 32, r.Y);
-            Assert.AreEqual(32, r.Width);
-            Assert.AreEqual(32, r.Height);
+            region = tiledTileset.GetTileRegion(4);
+            Assert.AreEqual(texture, region.Texture);
+            Assert.AreEqual(spacing + 32, region.X);
+            Assert.AreEqual(spacing + 32, region.Y);
+            Assert.AreEqual(32, region.Width);
+            Assert.AreEqual(32, region.Height);
         }
 
         [Test]
         public void Constructor_NoSpacing([Values(0, 2)]int margin)
         {
-            GraphicsDevice gd = TestHelper.CreateGraphicsDevice();
-            Texture2D texture = new Texture2D(gd, 64, 64);
+            var graphicsDevice = TestHelper.CreateGraphicsDevice();
+            var texture = new Texture2D(graphicsDevice, 64, 64);
 
-            TiledTileset ts = new TiledTileset(texture, 1, 32, 32, 4, 0, margin);
+            var tileset = new TiledTileset(texture, 1, 32, 32, 4, 0, margin);
 
-            TextureRegion2D r = ts.GetTileRegion(1);
-            Assert.AreEqual(texture, r.Texture);
-            Assert.AreEqual(margin, r.X);
-            Assert.AreEqual(margin, r.Y);
-            Assert.AreEqual(32, r.Width);
-            Assert.AreEqual(32, r.Height);
+            var region = tileset.GetTileRegion(1);
+            Assert.AreEqual(texture, region.Texture);
+            Assert.AreEqual(margin, region.X);
+            Assert.AreEqual(margin, region.Y);
+            Assert.AreEqual(32, region.Width);
+            Assert.AreEqual(32, region.Height);
 
-            r = ts.GetTileRegion(2);
-            Assert.AreEqual(texture, r.Texture);
-            Assert.AreEqual(margin + 32, r.X);
-            Assert.AreEqual(margin, r.Y);
-            Assert.AreEqual(32, r.Width);
-            Assert.AreEqual(32, r.Height);
+            region = tileset.GetTileRegion(2);
+            Assert.AreEqual(texture, region.Texture);
+            Assert.AreEqual(margin + 32, region.X);
+            Assert.AreEqual(margin, region.Y);
+            Assert.AreEqual(32, region.Width);
+            Assert.AreEqual(32, region.Height);
 
-            r = ts.GetTileRegion(3);
-            Assert.AreEqual(texture, r.Texture);
-            Assert.AreEqual(margin, r.X);
-            Assert.AreEqual(margin + 32, r.Y);
-            Assert.AreEqual(32, r.Width);
-            Assert.AreEqual(32, r.Height);
+            region = tileset.GetTileRegion(3);
+            Assert.AreEqual(texture, region.Texture);
+            Assert.AreEqual(margin, region.X);
+            Assert.AreEqual(margin + 32, region.Y);
+            Assert.AreEqual(32, region.Width);
+            Assert.AreEqual(32, region.Height);
 
-            r = ts.GetTileRegion(4);
-            Assert.AreEqual(texture, r.Texture);
-            Assert.AreEqual(margin + 32, r.X);
-            Assert.AreEqual(margin + 32, r.Y);
-            Assert.AreEqual(32, r.Width);
-            Assert.AreEqual(32, r.Height);
+            region = tileset.GetTileRegion(4);
+            Assert.AreEqual(texture, region.Texture);
+            Assert.AreEqual(margin + 32, region.X);
+            Assert.AreEqual(margin + 32, region.Y);
+            Assert.AreEqual(32, region.Width);
+            Assert.AreEqual(32, region.Height);
         }
     }
 }
