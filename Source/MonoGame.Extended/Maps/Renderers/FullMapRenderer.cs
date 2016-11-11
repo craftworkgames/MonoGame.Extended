@@ -23,6 +23,10 @@ namespace MonoGame.Extended.Maps.Renderers
         private readonly Dictionary<string, MapRenderDetails> _renderDetailsCache;
         private MapRenderDetails _currentRenderDetails;
 
+        private readonly List<TiledTilesetTile> _animatedTilesetTiles;
+        private readonly VertexPositionTexture[] _dynamicVertices = new VertexPositionTexture[4];
+        private readonly List<VertexPositionTexture> _updatedDynamicVertices = new List<VertexPositionTexture>();
+
         public FullMapRenderer(GraphicsDevice graphicsDevice, MapRendererConfig config)
         {
             _graphicsDevice = graphicsDevice;
@@ -30,6 +34,8 @@ namespace MonoGame.Extended.Maps.Renderers
 
             _renderDetailsCache = new Dictionary<string, MapRenderDetails>();
             _depthBufferState = new DepthStencilState {DepthBufferEnable = true};
+
+            _animatedTilesetTiles = new List<TiledTilesetTile>();
         }
 
         public FullMapRenderer(GraphicsDevice graphicsDevice)
@@ -58,14 +64,10 @@ namespace MonoGame.Extended.Maps.Renderers
             };
         }
 
-        public void Update(GameTime gameTime)
-        {
-            foreach(var tileset in _map.Tilesets)
+        public void Update(GameTime gameTime) {
+            foreach (var animatedTile in _animatedTilesetTiles)
             {
-                foreach(var tile in tileset.Tiles)
-                {
-                    tile.Update(gameTime.ElapsedGameTime.Milliseconds);
-                }
+                animatedTile.Update(gameTime.ElapsedGameTime.Milliseconds);
             }
 
             RebuildDynamicRenderDetails();
@@ -134,6 +136,7 @@ namespace MonoGame.Extended.Maps.Renderers
         protected virtual MapRenderDetails BuildRenderDetails()
         {
             var mapDetails = new MapRenderDetails();
+            _animatedTilesetTiles.Clear();
 
             foreach (var layer in _map.Layers.OrderByDescending(l => l.Depth))
             {
@@ -192,7 +195,6 @@ namespace MonoGame.Extended.Maps.Renderers
 
         public void RebuildDynamicRenderDetails()
         {
-            VertexPositionTexture[] vertices = new VertexPositionTexture[4];
 
             Vector2 camPosition = Vector2.Negate(Vector2.Transform(Vector2.Zero, _basicEffect.View)); 
             Rectangle camViewport = new Rectangle((int) camPosition.X, (int) camPosition.Y, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
@@ -203,15 +205,17 @@ namespace MonoGame.Extended.Maps.Renderers
                 if (dynamicRenderDetails == null || dynamicRenderDetails.TileCount == 0)
                     continue;
 
-                List<VertexPositionTexture> updatedVertices = new List<VertexPositionTexture>(dynamicRenderDetails.TileCount * 4);
+                _updatedDynamicVertices.Clear();
+                _updatedDynamicVertices.Capacity = dynamicRenderDetails.TileCount * 4;
+
                 for (int i = 0; i < dynamicRenderDetails.TileCount; i++)
                 {
                     TiledTile tile = dynamicRenderDetails.Tiles[i];
 
-                    vertices[0] = dynamicRenderDetails.Vertices[i * 4];
-                    vertices[1] = dynamicRenderDetails.Vertices[i * 4 + 1];
-                    vertices[2] = dynamicRenderDetails.Vertices[i * 4 + 2];
-                    vertices[3] = dynamicRenderDetails.Vertices[i * 4 + 3];
+                    _dynamicVertices[0] = dynamicRenderDetails.Vertices[i * 4];
+                    _dynamicVertices[1] = dynamicRenderDetails.Vertices[i * 4 + 1];
+                    _dynamicVertices[2] = dynamicRenderDetails.Vertices[i * 4 + 2];
+                    _dynamicVertices[3] = dynamicRenderDetails.Vertices[i * 4 + 3];
 
                     if (
                         camViewport.Contains(new Rectangle(tile.X*_map.TileWidth, tile.Y*_map.TileHeight, _map.TileWidth,
@@ -230,15 +234,15 @@ namespace MonoGame.Extended.Maps.Renderers
                         tc1.Y = (float)(region.Y + region.Height) / region.Texture.Height;
 
 
-                        vertices[0].TextureCoordinate = tc0;
-                        vertices[1].TextureCoordinate = new Vector2(tc1.X, tc0.Y);
-                        vertices[2].TextureCoordinate = new Vector2(tc0.X, tc1.Y);
-                        vertices[3].TextureCoordinate = tc1;
+                        _dynamicVertices[0].TextureCoordinate = tc0;
+                        _dynamicVertices[1].TextureCoordinate = new Vector2(tc1.X, tc0.Y);
+                        _dynamicVertices[2].TextureCoordinate = new Vector2(tc0.X, tc1.Y);
+                        _dynamicVertices[3].TextureCoordinate = tc1;
                     }
 
-                    updatedVertices.AddRange(vertices);
+                    _updatedDynamicVertices.AddRange(_dynamicVertices);
                 }
-                dynamicRenderDetails.SetVertices(updatedVertices);
+                dynamicRenderDetails.SetVertices(_updatedDynamicVertices);
             }
         }
 
@@ -309,7 +313,11 @@ namespace MonoGame.Extended.Maps.Renderers
                     dynamicVerticesByTileset[tileset].AddRange(vertices);
                     dynamicIndexesByTileset[tileset].AddRange(indexes);
                     dynamicTileCountByTileset[tileset]++;
-                    animatedTiles.Add(obj as TiledTile);
+                    TiledTile tile = obj as TiledTile;
+                    if (!_animatedTilesetTiles.Contains(tile.TilesetTile))
+                        _animatedTilesetTiles.Add(tile.TilesetTile);
+                    animatedTiles.Add(tile);
+                    
                 }
                 else
                 {
