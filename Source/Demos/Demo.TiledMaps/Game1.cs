@@ -83,6 +83,7 @@ namespace Demo.TiledMaps
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
 
+            _mapRenderer.Update(gameTime);
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
