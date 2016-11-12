@@ -194,13 +194,6 @@
     <Compile Include="Gui\GuiThickness.cs" />
     <Compile Include="IColorable.cs" />
     <Compile Include="IPoolable.cs" />
-    <Compile Include="Collisions\CollisionActor.cs" />
-    <Compile Include="Collisions\CollisionGrid.cs" />
-    <Compile Include="Collisions\CollisionGridCell.cs" />
-    <Compile Include="Collisions\CollisionGridCellFlag.cs" />
-    <Compile Include="Collisions\CollisionInfo.cs" />
-    <Compile Include="Collisions\CollisionWorld.cs" />
-    <Compile Include="Collisions\IActorTarget.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Camera2D.cs" />
     <Compile Include="Content\ContentReaderExtensions.cs" />
@@ -227,7 +220,6 @@
     <Compile Include="IScalable.cs" />
     <Compile Include="ISizable.cs" />
     <Compile Include="IUpdate.cs" />
-    <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
     <Compile Include="Particles\ColorExtensions.cs" />
     <Compile Include="Particles\FastRandomExtensions.cs" />
     <Compile Include="Particles\HslColor.cs" />
@@ -351,6 +343,7 @@
   <ItemGroup>
     <Content Include="Graphics\Effects\Resources\DefaultEffect2D.fx" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

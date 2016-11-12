@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using MonoGame.Extended.Collisions;
+using MonoGame.Extended.Maps.Tiled;
 
-namespace MonoGame.Extended.Maps.Tiled
+namespace MonoGame.Extended.Collisions
 {
     public static class CollisionWorldExtensions
     {
