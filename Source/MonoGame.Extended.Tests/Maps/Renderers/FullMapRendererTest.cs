@@ -5,6 +5,7 @@ using NSubstitute;
 using MonoGame.Extended.TextureAtlases;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Tests.Maps.Renderers
 {
@@ -21,9 +22,10 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
             var m = new TiledMap("test", 2, 2, 32, 32);
             m.CreateTileset(texture, 0, 32, 32, 4);
 
+            IShapeF shape = new RectangleF(1, 1, 1, 1);
             TiledObject[] objs =
             {
-                new TiledObject(TiledObjectType.Tile, 1, null, 1, 1, 1, 1) { IsVisible = true },
+                new TiledObject(TiledObjectType.Tile, 1, null, shape, 1, 1) { IsVisible = true },
             };
 
             var layer = new TiledObjectLayer("object", objs);
@@ -46,9 +48,10 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
             var m = new TiledMap("test", 2, 2, 32, 32);
             m.CreateTileset(texture, 0, 32, 32, 4);
 
+            IShapeF shape = new RectangleF(1, 1, 1, 1);
             TiledObject[] objs =
             {
-                new TiledObject(TiledObjectType.Rectangle, 1, 1, 1, 1, 1, 1) { IsVisible = true },
+                new TiledObject(TiledObjectType.Rectangle, 1, 1, shape, 1, 1) { IsVisible = true },
             };
 
             var layer = new TiledObjectLayer("object", objs);
@@ -71,9 +74,10 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
             var m = new TiledMap("test", 2, 2, 32, 32);
             m.CreateTileset(texture, 0, 32, 32, 4);
 
+            IShapeF shape = new RectangleF(1, 1, 1, 1);
             TiledObject[] objs =
             {
-                new TiledObject(TiledObjectType.Tile, 1, 1, 1, 1, 1, 1) { IsVisible = true },
+                new TiledObject(TiledObjectType.Tile, 1, 1, shape, 1, 1) { IsVisible = true },
             };
 
             var layer = new TiledObjectLayer("object", objs);
@@ -97,9 +101,10 @@ namespace MonoGame.Extended.Tests.Maps.Renderers
             var m = new TiledMap("test", 2, 2, 32, 32);
             m.CreateTileset(texture, 0, 32, 32, 4);
 
+            IShapeF shape = new RectangleF(1, 1, 1, 1);
             TiledObject[] objs =
             {
-                new TiledObject(TiledObjectType.Tile, 1, 1, 1, 1, 1, 1) { IsVisible = false },
+                new TiledObject(TiledObjectType.Tile, 1, 1, shape, 1, 1) { IsVisible = false },
             };
 
             var layer = new TiledObjectLayer("object", objs);
