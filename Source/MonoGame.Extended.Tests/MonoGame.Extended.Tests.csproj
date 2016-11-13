@@ -78,6 +78,7 @@
     <Compile Include="Primitives\Segment2DTests.cs" />
     <Compile Include="Primitives\Size2Tests.cs" />
     <Compile Include="RangeTests.cs" />
+    <Compile Include="Shapes\EllipseFTest.cs" />
     <Compile Include="Shapes\PolygonFTests.cs" />
     <Compile Include="Shapes\CircleTests.cs" />
     <Compile Include="Shapes\RectangleFTests.cs" />
@@ -101,6 +102,7 @@
   <ItemGroup>
     <Folder Include="Gui\" />
     <Folder Include="Particles\Modifiers\" />
+    <Folder Include="Shapes" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

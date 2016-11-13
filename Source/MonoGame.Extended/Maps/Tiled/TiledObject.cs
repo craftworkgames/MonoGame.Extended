@@ -6,18 +6,17 @@ namespace MonoGame.Extended.Maps.Tiled
 {
     public class TiledObject : ITiledAnimated
     {
-        public TiledObject(TiledObjectType objectType, int id, int? gid, float x, float y, float width, float height, TiledTilesetTile tilesetTile = null)
-            : this(objectType, id, gid, new Vector2(x, y), width, height, tilesetTile)
+        public TiledObject(TiledObjectType objectType, int id, int? gid, IShapeF shape, float x, float y, TiledTilesetTile tilesetTile = null)
+            : this(objectType, id, gid, shape, new Vector2(x, y), tilesetTile)
         {
         }
 
-        public TiledObject(TiledObjectType objectType, int id, int? gid, Vector2 position, float width, float height, TiledTilesetTile tilesetTile = null)
+        public TiledObject(TiledObjectType objectType, int id, int? gid, IShapeF shape, Vector2 position, TiledTilesetTile tilesetTile = null)
         {
             ObjectType = objectType;
             Id = id;
             Gid = gid;
-            Width = width;
-            Height = height;
+            Shape = shape;
             Points = new List<Vector2>();
             Properties = new TiledProperties();
             Position = position;
@@ -28,17 +27,20 @@ namespace MonoGame.Extended.Maps.Tiled
         public int? Gid { get; }
         public TiledObjectType ObjectType { get; }
         public string Name { get; set; }
-        public float Width { get; }
-        public float Height { get; }
+
         public Vector2 Position { get; }
-        public SizeF Size => new SizeF(Width, Height);
-        public RectangleF BoundingRectangle => new RectangleF(Position, Size);
         public TiledProperties Properties { get; }
         public List<Vector2> Points { get; }
         public bool IsVisible { get; set; }
         public float Opacity { get; set; }
         public float Rotation { get; set; }
         public string Type { get; set; }
+
+        public IShapeF Shape { get; private set; }
+        public float Width => Shape.BoundingRectangle.Width;
+        public float Height => Shape.BoundingRectangle.Height;
+        public SizeF Size => Shape.BoundingRectangle.Size;
+        public RectangleF BoundingRectangle => Shape.BoundingRectangle;
 
         public TiledTilesetTile TilesetTile { get; }
         public bool HasAnimation => TilesetTile != null && TilesetTile.Frames.Count != 0;

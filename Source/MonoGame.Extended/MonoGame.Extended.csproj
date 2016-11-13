@@ -52,6 +52,8 @@
     <Compile Include="Primitives\RayHelper.cs" />
     <Compile Include="Primitives\Segment2D.cs" />
     <Compile Include="Primitives\Size2.cs" />
+    <Compile Include="Shapes\EllipseF.cs" />
+    <Compile Include="Shapes\PolylineF.cs" />
     <Compile Include="Sprites\AnimatedSprite.cs" />
     <Compile Include="Animations\Tweens\DelayTween.cs" />
     <Compile Include="Animations\Tweens\FluentTweening.cs" />

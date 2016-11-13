@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
+using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
@@ -108,7 +109,35 @@ namespace MonoGame.Extended.Maps.Tiled
                 var isVisible = reader.ReadBoolean();
                 var tilesetTile = tiledMap.GetTilesetTileById(gid);
 
-                objects[i] = new TiledObject(objectType, id, gid >= 0 ? gid : (int?)null, x, y, width, height, tilesetTile)
+                IShapeF shape = null;
+                if ((objectType == TiledObjectType.Polyline) || (objectType == TiledObjectType.Polygon))
+                {
+                    var pointsCount = reader.ReadInt32();
+                    var points = new List<Vector2>();
+
+                    for (var j = 0; j < pointsCount; j++)
+                        points.Add(reader.ReadVector2());
+
+                    if (objectType == TiledObjectType.Polygon)
+                    {
+                        shape = new PolygonF(points);
+                    }
+                    else
+                    {
+                        shape = new PolylineF(points);
+                    }
+                }
+                else if (objectType == TiledObjectType.Ellipse)
+                {
+                    Vector2 center = new Vector2(x + width / 2.0f, y + height / 2.0f);
+                    shape = new EllipseF(center, x / 2.0f, y / 2.0f);
+                }
+                else if (objectType == TiledObjectType.Rectangle || objectType == TiledObjectType.Tile)
+                {
+                    shape = new RectangleF(x, y, width, height);
+                }
+
+                objects[i] = new TiledObject(objectType, id, gid >= 0 ? gid : (int?) null, shape, x, y, tilesetTile)
                 {
                     IsVisible = isVisible,
                     Opacity = opacity,
@@ -116,14 +145,6 @@ namespace MonoGame.Extended.Maps.Tiled
                     Name = name,
                     Type = type
                 };
-
-                if ((objectType == TiledObjectType.Polyline) || (objectType == TiledObjectType.Polygon))
-                {
-                    var pointsCount = reader.ReadInt32();
-
-                    for (var j = 0; j < pointsCount; j++)
-                        objects[i].Points.Add(reader.ReadVector2());
-                }
 
                 ReadCustomProperties(reader, objects[i].Properties);
             }
