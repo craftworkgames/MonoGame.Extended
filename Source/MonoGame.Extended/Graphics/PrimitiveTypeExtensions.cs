@@ -12,11 +12,11 @@ namespace MonoGame.Extended.Graphics
                 case PrimitiveType.LineStrip:
                     return verticesCount - 1;
                 case PrimitiveType.LineList:
-                    return verticesCount / 2;
+                    return verticesCount/2;
                 case PrimitiveType.TriangleStrip:
                     return verticesCount - 2;
                 case PrimitiveType.TriangleList:
-                    return verticesCount / 3;
+                    return verticesCount/3;
                 default:
                     throw new ArgumentException("Invalid primitive type.");
             }
@@ -29,11 +29,11 @@ namespace MonoGame.Extended.Graphics
                 case PrimitiveType.LineStrip:
                     return primitivesCount + 1;
                 case PrimitiveType.LineList:
-                    return primitivesCount * 2;
+                    return primitivesCount*2;
                 case PrimitiveType.TriangleStrip:
                     return primitivesCount + 2;
                 case PrimitiveType.TriangleList:
-                    return primitivesCount * 3;
+                    return primitivesCount*3;
                 default:
                     throw new ArgumentException("Invalid primitive type.");
             }

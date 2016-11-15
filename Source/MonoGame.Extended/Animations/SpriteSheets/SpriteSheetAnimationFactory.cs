@@ -6,6 +6,8 @@ namespace MonoGame.Extended.Animations.SpriteSheets
 {
     public class SpriteSheetAnimationFactory
     {
+        private readonly Dictionary<string, SpriteSheetAnimationData> _animationDataDictionary;
+
         public SpriteSheetAnimationFactory(TextureAtlas textureAtlas)
             : this(textureAtlas.Regions)
         {
@@ -17,10 +19,8 @@ namespace MonoGame.Extended.Animations.SpriteSheets
             Frames = frames.ToArray();
         }
 
-        private readonly Dictionary<string, SpriteSheetAnimationData> _animationDataDictionary;
-
         public IReadOnlyList<TextureRegion2D> Frames { get; }
-        
+
         public void Add(string name, SpriteSheetAnimationData data)
         {
             _animationDataDictionary.Add(name, data);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace MonoGame.Extended.Collections
@@ -59,7 +58,7 @@ namespace MonoGame.Extended.Collections
         /// </remarks>
         public BitVector32(int data)
         {
-            _data = (uint)data;
+            _data = (uint) data;
         }
 
         /// <summary>
@@ -99,13 +98,9 @@ namespace MonoGame.Extended.Collections
             set
             {
                 if (value)
-                {
                     _data |= bitMask;
-                }
                 else
-                {
                     _data &= ~bitMask;
-                }
             }
         }
 
@@ -132,13 +127,13 @@ namespace MonoGame.Extended.Collections
         /// </remarks>
         public int this[Section section]
         {
-            get { return (int)((_data & (uint)(section.Mask << section.Offset)) >> section.Offset); }
+            get { return (int) ((_data & (uint) (section.Mask << section.Offset)) >> section.Offset); }
             set
             {
                 Debug.Assert((value & section.Mask) == value, "Value out of bounds on BitVector32 Section set.");
                 value <<= section.Offset;
                 var offsetMask = (0xFFFF & section.Mask) << section.Offset;
-                _data = (_data & ~(uint)offsetMask) | ((uint)value & (uint)offsetMask);
+                _data = (_data & ~(uint) offsetMask) | ((uint) value & (uint) offsetMask);
             }
         }
 
@@ -166,7 +161,7 @@ namespace MonoGame.Extended.Collections
         /// <param name="bitVector">The <see cref="BitVector32" /> to convert into a <see cref="uint" />.</param>
         public static implicit operator int(BitVector32 bitVector)
         {
-            return (int)bitVector._data;
+            return (int) bitVector._data;
         }
 
         /// <summary>
@@ -242,14 +237,10 @@ namespace MonoGame.Extended.Collections
         public static uint CreateMask(uint previous)
         {
             if (previous == 0)
-            {
                 return 1;
-            }
 
             if (previous == 0x80000000)
-            {
                 throw new InvalidOperationException("Can't create a new mask; the bit vector is full.");
-            }
 
             return previous << 1;
         }
@@ -271,7 +262,7 @@ namespace MonoGame.Extended.Collections
                 value |= 0x1;
             }
 
-            return unchecked((short)value);
+            return unchecked((short) value);
         }
 
         /// <summary>
@@ -342,19 +333,15 @@ namespace MonoGame.Extended.Collections
         private static Section CreateSectionHelper(short maxValue, short priorMask, short priorOffset)
         {
             if (maxValue < 1)
-            {
                 throw new ArgumentException("The max value was less than 0.");
-            }
 #if DEBUG
             int maskCheck = CreateMaskFromHighValue(maxValue);
             var offsetCheck = priorOffset + CountBitsSet(priorMask);
-            Debug.Assert(maskCheck <= short.MaxValue && offsetCheck < 32, "Overflow on BitVector32");
+            Debug.Assert((maskCheck <= short.MaxValue) && (offsetCheck < 32), "Overflow on BitVector32");
 #endif
-            var offset = (short)(priorOffset + CountBitsSet(priorMask));
+            var offset = (short) (priorOffset + CountBitsSet(priorMask));
             if (offset >= 32)
-            {
                 throw new InvalidOperationException("Can't create a new mask; the bit vector is full.");
-            }
             return new Section(CreateMaskFromHighValue(maxValue), offset);
         }
 
@@ -373,14 +360,17 @@ namespace MonoGame.Extended.Collections
         /// </remarks>
         public override bool Equals(object obj)
         {
-            return obj is BitVector32 && Equals((BitVector32)obj);
+            return obj is BitVector32 && Equals((BitVector32) obj);
         }
 
         /// <summary>
         ///     Determines whether the specified <see cref="BitVector32" /> is equal to the <see cref="BitVector32" />.
         /// </summary>
         /// <param name="other">The <see cref="BitVector32" /> to compare with the <see cref="BitVector32" />.</param>
-        /// <returns><c>true</c> if <paramref name="other" /> is the same as the <see cref="BitVector32" />; otherwise, <c>false</c>.</returns>
+        /// <returns>
+        ///     <c>true</c> if <paramref name="other" /> is the same as the <see cref="BitVector32" />; otherwise,
+        ///     <c>false</c>.
+        /// </returns>
         /// <remarks>
         ///     <para>This method is an O(1) operation.</para>
         /// </remarks>
@@ -412,7 +402,8 @@ namespace MonoGame.Extended.Collections
         /// <param name="a">The first <see cref="BitVector32" />.</param>
         /// <param name="b">The second <see cref="BitVector32" /></param>
         /// <returns>
-        ///     <c>true</c> if <paramref name="a" /> and <paramref name="b" /> do not represent the same <see cref="BitVector32" />,
+        ///     <c>true</c> if <paramref name="a" /> and <paramref name="b" /> do not represent the same <see cref="BitVector32" />
+        ///     ,
         ///     otherwise, <c>false</c>.
         /// </returns>
         /// <remarks>
@@ -452,7 +443,7 @@ namespace MonoGame.Extended.Collections
         {
             var stringBuilder = new StringBuilder(12 + 32 + 1);
             stringBuilder.Append("BitVector32{");
-            var data = (int)value._data;
+            var data = (int) value._data;
             for (var i = 0; i < 32; i++)
             {
                 stringBuilder.Append((data & 0x80000000) != 0 ? "1" : "0");
@@ -522,9 +513,7 @@ namespace MonoGame.Extended.Collections
             public override bool Equals(object obj)
             {
                 if (obj is Section)
-                {
-                    return Equals((Section)obj);
-                }
+                    return Equals((Section) obj);
                 return false;
             }
 
@@ -542,7 +531,7 @@ namespace MonoGame.Extended.Collections
             /// </remarks>
             public bool Equals(Section other)
             {
-                return other.Mask == Mask && other.Offset == Offset;
+                return (other.Mask == Mask) && (other.Offset == Offset);
             }
 
             /// <summary>
@@ -563,7 +552,7 @@ namespace MonoGame.Extended.Collections
             /// </remarks>
             public static bool operator ==(Section a, Section b)
             {
-                return a.Mask == b.Mask && a.Offset == b.Offset;
+                return (a.Mask == b.Mask) && (a.Offset == b.Offset);
             }
 
             /// <summary>
@@ -615,7 +604,8 @@ namespace MonoGame.Extended.Collections
             /// </remarks>
             public static string ToString(Section value)
             {
-                return "Section{0x" + Convert.ToString(value.Mask, 16) + ", 0x" + Convert.ToString(value.Offset, 16) + "}";
+                return "Section{0x" + Convert.ToString(value.Mask, 16) + ", 0x" + Convert.ToString(value.Offset, 16) +
+                       "}";
             }
 
             /// <summary>

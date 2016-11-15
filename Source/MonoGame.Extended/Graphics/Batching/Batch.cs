@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -64,8 +63,10 @@ namespace MonoGame.Extended.Graphics.Batching
             GraphicsDevice = geometryBuffer.GraphicsDevice;
             _commandDrawer = new BatchCommandDrawer<TVertexType, TBatchDrawCommandData>(GraphicsDevice, GeometryBuffer);
 
-            _immediateCommandQueue = new ImmediateBatchCommandQueue<TVertexType, TBatchDrawCommandData>(GraphicsDevice, _commandDrawer);
-            _deferredCommandQueue = new DeferredBatchCommandQueue<TVertexType, TBatchDrawCommandData>(GraphicsDevice, _commandDrawer,
+            _immediateCommandQueue = new ImmediateBatchCommandQueue<TVertexType, TBatchDrawCommandData>(GraphicsDevice,
+                _commandDrawer);
+            _deferredCommandQueue = new DeferredBatchCommandQueue<TVertexType, TBatchDrawCommandData>(GraphicsDevice,
+                _commandDrawer,
                 maximumBatchCommandsCount);
         }
 
@@ -231,7 +232,7 @@ namespace MonoGame.Extended.Graphics.Batching
         /// <param name="primitiveCount">The number of primitives from the <see cref="GeometryBuffer" /> to use.</param>
         /// <param name="sortKey">The sort key.</param>
         /// <param name="itemData">The <see cref="TBatchDrawCommandData" />.</param>
-        /// <exception cref="InvalidOperationException">The <see cref="Begin"/> method has not been called.</exception>
+        /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
         /// <remarks>
         ///     <para>
         ///         <see cref="Begin" /> must be called before enqueuing any draw calls. When all the geometry have been enqueued

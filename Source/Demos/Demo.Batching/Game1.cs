@@ -104,7 +104,7 @@ namespace Demo.Batching
                 else
                     sprite.Rotation = (sprite.Rotation - MathHelper.ToRadians(1) + MathHelper.TwoPi) % MathHelper.TwoPi;
 
-                sprite.Color = ColorHelper.FromHSL(sprite.Rotation / MathHelper.TwoPi, 0.5f, 0.3f);
+                sprite.Color = ColorHelper.FromHsl(sprite.Rotation / MathHelper.TwoPi, 0.5f, 0.3f);
 
                 _sprites[index] = sprite;
             }

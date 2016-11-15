@@ -1,6 +1,4 @@
 using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
@@ -14,15 +12,14 @@ namespace MonoGame.Extended.Maps.Tiled
             Opacity = 1.0f;
         }
 
-        public abstract void Dispose();
-
         public string Name { get; }
+        public float Depth { get; set; }
         public TiledProperties Properties { get; }
         public bool IsVisible { get; set; }
         public float Opacity { get; set; }
         public float OffsetX { get; set; }
         public float OffsetY { get; set; }
 
-        public abstract void Draw(SpriteBatch spriteBatch, Rectangle? visibleRectangle = null, Color? backgroundColor = null, GameTime gameTime = null);
+        public abstract void Dispose();
     }
 }

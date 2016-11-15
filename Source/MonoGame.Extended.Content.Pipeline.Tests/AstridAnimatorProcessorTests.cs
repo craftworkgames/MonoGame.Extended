@@ -11,7 +11,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void AstridAnimatorProcessor_Process_Test()
         {
-            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\astrid-animator.aa");
+            var filePath = PathExtensions.GetApplicationFullPath("TestData", "astrid-animator.aa");
 
             var importer = new AstridAnimatorImporter();
             var importerResult = importer.Import(filePath, null);

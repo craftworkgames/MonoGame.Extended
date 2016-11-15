@@ -89,11 +89,6 @@
 /processorParam:TextureFormat=Color
 /build:rpg_maker_vx_rtp_tileset_by_telles0808.png
 
-#begin untitled.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:untitled.tmx
-
 #begin level02.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -132,4 +127,67 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:placeholder-tileset.png
+
+#begin level04.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:level04.tmx
+
+#begin level05.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:level05.tmx
+
+#begin L05TS1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:L05TS1.png
+
+#begin L05TS2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:L05TS2.png
+
+#begin L05TS3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:L05TS3.png
+
+#begin very-large.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:very-large.tmx
+
+#begin alphacolortile.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:alphacolortile.png
 

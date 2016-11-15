@@ -18,14 +18,12 @@ namespace MonoGame.Extended.TextureAtlases
             var regionCount = reader.ReadInt32();
 
             for (var i = 0; i < regionCount; i++)
-            {
                 atlas.CreateRegion(
-                    name: reader.ReadString(),
-                    x: reader.ReadInt32(),
-                    y: reader.ReadInt32(),
-                    width: reader.ReadInt32(),
-                    height: reader.ReadInt32());
-            }
+                    reader.ReadString(),
+                    reader.ReadInt32(),
+                    reader.ReadInt32(),
+                    reader.ReadInt32(),
+                    reader.ReadInt32());
 
             return atlas;
         }
@@ -51,7 +49,7 @@ namespace MonoGame.Extended.TextureAtlases
                             textureAtlas = new TextureAtlas(texture);
                         }
 
-                        if (name == "SubTexture" && textureAtlas != null)
+                        if ((name == "SubTexture") && (textureAtlas != null))
                         {
                             var regionName = Path.GetFileNameWithoutExtension(xmlReader.GetAttribute("name"));
                             var x = int.Parse(xmlReader.GetAttribute("x"));

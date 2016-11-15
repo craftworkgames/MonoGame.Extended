@@ -57,7 +57,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\alphacolortile.png" />
     <Content Include="Content\isometric-tiles.png" />
+    <Content Include="Content\L05TS1.png" />
+    <Content Include="Content\L05TS2.png" />
+    <Content Include="Content\L05TS3.png" />
     <Content Include="Icon.ico" />
     <Content Include="Content\placeholder-tileset.png" />
   </ItemGroup>
@@ -67,8 +71,10 @@
     <None Include="Content\level01.tmx" />
     <None Include="Content\level02.tmx" />
     <None Include="Content\level03.tmx" />
+    <None Include="Content\level04.tmx" />
+    <None Include="Content\level05.tmx" />
     <None Include="Content\montserrat-32.fnt" />
-    <None Include="Content\untitled.tmx" />
+    <None Include="Content\very-large.tmx" />
     <None Include="Content\free-tileset.png" />
     <None Include="Content\hills.png" />
     <None Include="Content\monogame-extended-logo.png" />

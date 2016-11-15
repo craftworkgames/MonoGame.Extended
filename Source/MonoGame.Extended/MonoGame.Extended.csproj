@@ -38,12 +38,22 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Maps\Renderers\DynamicGroupRenderDetails.cs" />
+    <Compile Include="Maps\Renderers\FullMapRenderer.cs" />
+    <Compile Include="Maps\Renderers\GroupRenderDetails.cs" />
+    <Compile Include="Maps\Renderers\IMapRenderer.cs" />
+    <Compile Include="Maps\Renderers\MapRenderDetails.cs" />
+    <Compile Include="Maps\Renderers\MapRendererConfig.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTile.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTileFrame.cs" />
     <Compile Include="Primitives\BoundingRectangle.cs" />
     <Compile Include="Primitives\Point2.cs" />
     <Compile Include="Primitives\Ray2D.cs" />
     <Compile Include="Primitives\RayHelper.cs" />
     <Compile Include="Primitives\Segment2D.cs" />
     <Compile Include="Primitives\Size2.cs" />
+    <Compile Include="Shapes\EllipseF.cs" />
+    <Compile Include="Shapes\PolylineF.cs" />
     <Compile Include="Sprites\AnimatedSprite.cs" />
     <Compile Include="Animations\Tweens\DelayTween.cs" />
     <Compile Include="Animations\Tweens\FluentTweening.cs" />
@@ -77,6 +87,43 @@
     <Compile Include="Graphics\Batch2DSortMode.cs" />
     <Compile Include="Graphics\Batching\BatchCommandDrawer.cs" />
     <Compile Include="Graphics\Batching\BatchDrawCommand.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\GuiButtonControl.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\GuiChoiceControl.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\GuiCloseWindowButtonControl.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\GuiDraggableControl.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\GuiHorizontalSliderControl.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\GuiInputControl.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\GuiListControl.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\GuiOptionControl.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\GuiSliderControl.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\GuiVerticalSliderControl.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\GuiWindowControl.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\IListRowLocator.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\IOpeningLocator.cs" />
+    <Compile Include="NuclexGui\Controls\Desktop\IThumbLocator.cs" />
+    <Compile Include="NuclexGui\Controls\GuiLabelControl.cs" />
+    <Compile Include="NuclexGui\Controls\GuiPressableControl.cs" />
+    <Compile Include="NuclexGui\Controls\GuiProgressControl.cs" />
+    <Compile Include="NuclexGui\IGuiInputService.cs" />
+    <Compile Include="NuclexGui\Input\DefaultInputCapturer.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\FlatGuiGraphics.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\FlatGuiGraphicsDrawing.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\GuiSkin.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\GuiSkinConverters.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\OpeningLocator.cs" />
+    <Compile Include="Collections\IObservableCollection.cs" />
+    <Compile Include="Collections\ItemEventArgs.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatButtonControlRenderer.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatChoiceControlRenderer.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatHorizontalSliderControlRenderer.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatInputControlRenderer.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatLabelControlRenderer.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatListControlRenderer.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatOptionControlRenderer.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatProgressControlRenderer.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatVerticalSliderControlRenderer.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatWindowControlRenderer.cs" />
+    <Compile Include="NuclexGui\Support\EnumHelper.cs" />
     <Compile Include="Graphics\Batching\BatchSortMode.cs" />
     <Compile Include="Graphics\Batching\IBatchDrawCommandData.cs" />
     <Compile Include="Graphics\Batching\Batch.cs" />
@@ -96,6 +143,24 @@
     <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
     <Compile Include="Graphics\DynamicBatch2D.cs" />
     <Compile Include="Graphics\GeometryBuffer.Static.cs" />
+    <Compile Include="InputListeners\ExtendedPlayerIndex.cs" />
+    <Compile Include="NuclexGui\Controls\GuiControl.cs" />
+    <Compile Include="NuclexGui\Controls\GuiControlEventArgs.cs" />
+    <Compile Include="NuclexGui\Controls\GuiControlInput.cs" />
+    <Compile Include="NuclexGui\Controls\GuiDesktopControl.cs" />
+    <Compile Include="NuclexGui\Controls\IFocusable.cs" />
+    <Compile Include="NuclexGui\Controls\IWritable.cs" />
+    <Compile Include="NuclexGui\Controls\ParentingControlCollection.cs" />
+    <Compile Include="NuclexGui\GuiManager.cs" />
+    <Compile Include="NuclexGui\GuiScreen.cs" />
+    <Compile Include="NuclexGui\IGuiService.cs" />
+    <Compile Include="NuclexGui\Input\Command.cs" />
+    <Compile Include="NuclexGui\Input\IInputCapturer.cs" />
+    <Compile Include="NuclexGui\Input\IInputReceiver.cs" />
+    <Compile Include="NuclexGui\UniRectangle.cs" />
+    <Compile Include="NuclexGui\UniScalar.cs" />
+    <Compile Include="NuclexGui\UniVector.cs" />
+    <Compile Include="Gui\GuiDialog.cs" />
     <Compile Include="Gui\Controls\GuiLabel.cs" />
     <Compile Include="Gui\Controls\GuiToggleButton.cs" />
     <Compile Include="Gui\Serialization\ContentConverter.cs" />
@@ -114,6 +179,11 @@
     <Compile Include="Matrix2D.cs" />
     <Compile Include="SimpleDrawableGameComponent.cs" />
     <Compile Include="SimpleGameComponent.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\FlatGuiVisualizer.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\IFlatControlRenderer.cs" />
+    <Compile Include="NuclexGui\Visuals\Flat\IFlatGuiGraphics.cs" />
+    <Compile Include="NuclexGui\Visuals\IGuiVisualizer.cs" />
+    <Compile Include="Collections\ObservableCollection.cs" />
     <Compile Include="Vector2Extensions.cs" />
     <Compile Include="Screens\Screen.cs" />
     <Compile Include="Screens\ScreenComponent.cs" />
@@ -160,8 +230,6 @@
     <Compile Include="ISizable.cs" />
     <Compile Include="IUpdate.cs" />
     <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
-    <Compile Include="Maps\Tiled\TiledTilesetTileFrame.cs" />
-    <Compile Include="Maps\Tiled\TiledTilesetTile.cs" />
     <Compile Include="Particles\ColorExtensions.cs" />
     <Compile Include="Particles\FastRandomExtensions.cs" />
     <Compile Include="Particles\HslColor.cs" />
@@ -207,7 +275,7 @@
     <Compile Include="Maps\Tiled\SpriteBatchExtensions.cs" />
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
     <Compile Include="Maps\Tiled\TiledObject.cs" />
-    <Compile Include="Maps\Tiled\TiledObjectGroup.cs" />
+    <Compile Include="Maps\Tiled\TiledObjectLayer.cs" />
     <Compile Include="MatrixExtensions.cs" />
     <Compile Include="SceneGraphs\ISceneEntity.cs" />
     <Compile Include="SceneGraphs\SceneEntityCollection.cs" />
@@ -252,6 +320,7 @@
     <Compile Include="ViewportAdapters\ViewportAdapter.cs" />
     <Compile Include="FramesPerSecondCounter.cs" />
     <Compile Include="FramesPerSecondCounterComponent.cs" />
+    <Compile Include="NuclexGui\Support\WeakReference.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -267,6 +336,18 @@
   <ItemGroup>
     <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect2D.mgfxo" />
     <None Include="Graphics\Effects\Resources\compile.bat" />
+    <EmbeddedResource Include="NuclexGui\Resources\Skins\SuaveSkin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NuclexGui\Resources\Skins\DefaultFont.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NuclexGui\Resources\Skins\SuaveSheet.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NuclexGui\Resources\Skins\TitleFont.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

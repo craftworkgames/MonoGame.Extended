@@ -4,24 +4,26 @@ namespace MonoGame.Extended.Primitives
 {
     // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 3.5; A Math and Geometry Primer - Lines, Rays, and Segments. pg 53-54    
     /// <summary>
-    ///     A two dimensional line segment defined by two <see cref="Point2" /> structures, a starting point and an ending point.
+    ///     A two dimensional line segment defined by two <see cref="Point2" /> structures, a starting point and an ending
+    ///     point.
     /// </summary>
-    /// <seealso cref="IEquatable{Segment2}" />
+    /// <seealso cref="IEquatable{T}" />
     /// <seealso cref="IEquatableByRef{Segment2}" />
     public struct Segment2D : IEquatable<Segment2D>, IEquatableByRef<Segment2D>
     {
         /// <summary>
-        ///     The starting <see cref="Point2" /> of this <see cref="Segment2D"/>.
+        ///     The starting <see cref="Point2" /> of this <see cref="Segment2D" />.
         /// </summary>
         public Point2 Start;
 
         /// <summary>
-        ///     The ending <see cref="Point2" /> of this <see cref="Segment2D"/>.
+        ///     The ending <see cref="Point2" /> of this <see cref="Segment2D" />.
         /// </summary>
         public Point2 End;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Segment2D" /> structure from the specified starting and ending <see cref="Point2"/> structures.
+        ///     Initializes a new instance of the <see cref="Segment2D" /> structure from the specified starting and ending
+        ///     <see cref="Point2" /> structures.
         /// </summary>
         /// <param name="start">The starting point.</param>
         /// <param name="end">The ending point.</param>
@@ -92,7 +94,7 @@ namespace MonoGame.Extended.Primitives
             if (dot >= startToEndDistanceSquared)
                 endToPoint.Dot(endToPoint);
             // Handle the case where the point projects onto the line segment
-            return startToPointDistanceSquared - dot * dot / startToEndDistanceSquared;
+            return startToPointDistanceSquared - dot*dot/startToEndDistanceSquared;
         }
 
         /// <summary>
@@ -102,7 +104,7 @@ namespace MonoGame.Extended.Primitives
         /// <returns>The distance from this <see cref="Segment2D" /> to a specified <see cref="Point2" />.</returns>
         public float DistanceTo(Point2 point)
         {
-            return (float)Math.Sqrt(SquaredDistanceTo(point));
+            return (float) Math.Sqrt(SquaredDistanceTo(point));
         }
 
         /// <summary>
@@ -127,13 +129,17 @@ namespace MonoGame.Extended.Primitives
             var maximumDistance = float.MaxValue;
 
             var direction = End - Start;
-            if (!RayHelper.IntersectsSlab(Start.X, direction.X, minimumPoint.X, maximumPoint.X, ref minimumDistance, ref maximumDistance))
+            if (
+                !RayHelper.IntersectsSlab(Start.X, direction.X, minimumPoint.X, maximumPoint.X, ref minimumDistance,
+                    ref maximumDistance))
             {
-                intersectionPoint  = Point2.NaN;
+                intersectionPoint = Point2.NaN;
                 return false;
             }
 
-            if (!RayHelper.IntersectsSlab(Start.Y, direction.Y, minimumPoint.Y, maximumPoint.Y, ref minimumDistance, ref maximumDistance))
+            if (
+                !RayHelper.IntersectsSlab(Start.Y, direction.Y, minimumPoint.Y, maximumPoint.Y, ref minimumDistance,
+                    ref maximumDistance))
             {
                 intersectionPoint = Point2.NaN;
                 return false;
@@ -147,7 +153,7 @@ namespace MonoGame.Extended.Primitives
             }
             else
             {
-                intersectionPoint = minimumDistance * direction;
+                intersectionPoint = minimumDistance*direction;
                 intersectionPoint.X += Start.X;
                 intersectionPoint.Y += Start.Y;
             }
@@ -175,11 +181,11 @@ namespace MonoGame.Extended.Primitives
         }
 
         /// <summary>
-        ///     Indicates whether this <see cref="Segment2D"/> is equal to another <see cref="Segment2D"/>.
+        ///     Indicates whether this <see cref="Segment2D" /> is equal to another <see cref="Segment2D" />.
         /// </summary>
         /// <param name="segment">The segment.</param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="Segment2D"/> is equal to the <paramref name="segment" />; otherwise, <c>false</c>.
+        ///     <c>true</c> if this <see cref="Segment2D" /> is equal to the <paramref name="segment" />; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(Segment2D segment)
         {
@@ -187,15 +193,16 @@ namespace MonoGame.Extended.Primitives
         }
 
         /// <summary>
-        ///     Indicates whether this <see cref="Segment2D"/> is equal to another <see cref="Segment2D"/>.
+        ///     Indicates whether this <see cref="Segment2D" /> is equal to another <see cref="Segment2D" />.
         /// </summary>
         /// <param name="segment">The segment.</param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="Segment2D"/> is equal to the <paramref name="segment" /> parameter; otherwise, <c>false</c>.
+        ///     <c>true</c> if this <see cref="Segment2D" /> is equal to the <paramref name="segment" /> parameter; otherwise,
+        ///     <c>false</c>.
         /// </returns>
         public bool Equals(ref Segment2D segment)
         {
-            return Start == segment.Start && End == segment.End;
+            return (Start == segment.Start) && (End == segment.End);
         }
 
         /// <summary>
@@ -203,12 +210,12 @@ namespace MonoGame.Extended.Primitives
         /// </summary>
         /// <param name="obj">The object to make the comparison with.</param>
         /// <returns>
-        ///     <c>true</c> if this  <see cref="Segment2D" /> is equal to <paramref name="obj"/>; otherwise, <c>false</c>.
+        ///     <c>true</c> if this  <see cref="Segment2D" /> is equal to <paramref name="obj" />; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
             if (obj is Segment2D)
-                return Equals((Segment2D)obj);
+                return Equals((Segment2D) obj);
             return false;
         }
 
@@ -241,7 +248,7 @@ namespace MonoGame.Extended.Primitives
         {
             unchecked
             {
-                return (Start.GetHashCode() * 397) ^ End.GetHashCode();
+                return (Start.GetHashCode()*397) ^ End.GetHashCode();
             }
         }
 

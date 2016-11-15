@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="10" tilewidth="128" tileheight="128" backgroundcolor="#7d7d7d" nextobjectid="17">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="10" tilewidth="128" tileheight="128" backgroundcolor="#7d7d7d" nextobjectid="22">
  <properties>
   <property name="awesome" value="42"/>
  </properties>
@@ -28,7 +28,7 @@
   </tile>
  </tileset>
  <imagelayer name="Background 1">
-  <image source="hills.png"/>
+  <image source="hills.png" width="2048" height="1536"/>
  </imagelayer>
  <layer name="Water" width="40" height="10">
   <data>
@@ -1654,7 +1654,7 @@
   <properties>
    <property name="objLayerProp" value="true"/>
   </properties>
-  <object id="11" gid="23" x="169.333" y="490.909" width="345.818" height="364"/>
+  <object id="11" name="Crate1" gid="23" x="109.333" y="506.909" width="345.818" height="364"/>
   <object id="12" x="603.03" y="112.121" width="248.485" height="139.394"/>
   <object id="13" x="639.394" y="315.152" width="175.758" height="163.636">
    <ellipse/>
@@ -1665,5 +1665,10 @@
   <object id="15" x="539.394" y="657.576">
    <polyline points="0,0 -90.9091,-96.9697 36.3636,-118.182 -27.2727,-263.636"/>
   </object>
+  <object id="20" name="Crate2" gid="23" x="60" y="345" width="226" height="226"/>
+  <object id="21" name="Crate3" gid="23" x="170" y="246" width="171" height="171"/>
+ </objectgroup>
+ <objectgroup name="TransparentObjects" opacity="0.5">
+  <object id="18" name="TP1" gid="21" x="133" y="432" width="280" height="280"/>
  </objectgroup>
 </map>

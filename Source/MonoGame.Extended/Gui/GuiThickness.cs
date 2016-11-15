@@ -54,12 +54,12 @@ namespace MonoGame.Extended.Gui
 
         public bool Equals(GuiThickness other)
         {
-            return Left == other.Left && Right == other.Right && Top == other.Top && Bottom == other.Bottom;
+            return (Left == other.Left) && (Right == other.Right) && (Top == other.Top) && (Bottom == other.Bottom);
         }
 
         public static GuiThickness Parse(string value)
         {
-            var ints = value.Split(new []{',', ' '}, StringSplitOptions.RemoveEmptyEntries)
+            var ints = value.Split(new[] {',', ' '}, StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
                 .ToArray();
 
@@ -78,7 +78,7 @@ namespace MonoGame.Extended.Gui
 
         public override string ToString()
         {
-            if (Left == Right && Top == Bottom)
+            if ((Left == Right) && (Top == Bottom))
                 return Left == Top ? $"{Left}" : $"{Left} {Top}";
 
             return $"{Left}, {Right}, {Top}, {Bottom}";

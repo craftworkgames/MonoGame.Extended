@@ -13,9 +13,10 @@ namespace MonoGame.Extended.Serialization
             writer.WriteValue($"{vector2.X} {vector2.Y}");
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
         {
-            var value = (string)reader.Value;
+            var value = (string) reader.Value;
             var fields = value.Split(' ');
             var x = float.Parse(fields[0], CultureInfo.InvariantCulture.NumberFormat);
             var y = float.Parse(fields[1], CultureInfo.InvariantCulture.NumberFormat);

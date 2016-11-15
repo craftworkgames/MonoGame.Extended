@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Import_Test()
         {
-            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\level01.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath("TestData", "level01.tmx");
 
             var logger = Substitute.For<ContentBuildLogger>();
             var importer = new TiledMapImporter();
@@ -41,6 +41,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             Assert.AreEqual(652, tileset.Image.Width);
             Assert.AreEqual(783, tileset.Image.Height);
             Assert.AreEqual(2, tileset.Margin);
+            Assert.AreEqual(30, tileset.TileCount);
             Assert.AreEqual("free-tileset", tileset.Name);
             Assert.AreEqual(null, tileset.Source);
             Assert.AreEqual(2, tileset.Spacing);
@@ -83,7 +84,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Xml_Test()
         {
-            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset-xml.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath("TestData", "test-tileset-xml.tmx");
             var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var actualData = layer.Data.Tiles.Select(i => i.Gid).ToArray();
@@ -96,7 +97,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Csv_Test()
         {
-            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset-csv.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath("TestData", "test-tileset-csv.tmx");
             var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
@@ -109,7 +110,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Base64_Test()
         {
-            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset-base64.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath("TestData", "test-tileset-base64.tmx");
             var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
@@ -122,7 +123,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Gzip_Test()
         {
-            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset-gzip.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath("TestData", "test-tileset-gzip.tmx");
             var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
@@ -136,7 +137,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_Zlib_Test()
         {
-            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-tileset-zlib.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath("TestData", "test-tileset-zlib.tmx");
             var map = ImportAndProcessMap(filePath);
             var layer = map.Layers.OfType<TmxTileLayer>().First();
             var data = layer.Data.Tiles.Select(i => i.Gid).ToArray();
@@ -149,14 +150,16 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         [Test]
         public void TiledMapImporter_ObjectLayer_Test()
         {
-            var filePath = PathExtensions.GetApplicationFullPath(@"TestData\test-object-layer.tmx");
+            var filePath = PathExtensions.GetApplicationFullPath("TestData", "test-object-layer.tmx");
             var map = ImportAndProcessMap(filePath);
-            var tmxObjectGroup = map.ObjectGroups[0];
+
+            Assert.AreEqual(1, map.Layers.Count);
+            Assert.IsInstanceOf<TmxObjectLayer>(map.Layers[0]);
+            var tmxObjectGroup = map.Layers[0] as TmxObjectLayer;
             var tmxObject = tmxObjectGroup.Objects[0];
             var tmxPolygon = tmxObjectGroup.Objects[3].Polygon;
             var tmxPolyline = tmxObjectGroup.Objects[4].Polyline;
 
-            Assert.AreEqual(1, map.ObjectGroups.Count);
             Assert.AreEqual("Object Layer 1", tmxObjectGroup.Name);
             Assert.AreEqual(1, tmxObject.Id);
             Assert.AreEqual(131.345f, tmxObject.X);

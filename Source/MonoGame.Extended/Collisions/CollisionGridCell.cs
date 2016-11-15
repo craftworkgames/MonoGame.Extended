@@ -4,6 +4,8 @@ namespace MonoGame.Extended.Collisions
 {
     public class CollisionGridCell : ICollidable
     {
+        private readonly CollisionGrid _parentGrid;
+
         public CollisionGridCell(CollisionGrid parentGrid, int column, int row, int data)
         {
             _parentGrid = parentGrid;
@@ -12,8 +14,6 @@ namespace MonoGame.Extended.Collisions
             Data = data;
             Flag = data == 0 ? CollisionGridCellFlag.Empty : CollisionGridCellFlag.Solid;
         }
-
-        private readonly CollisionGrid _parentGrid;
 
         public int Column { get; }
         public int Row { get; }

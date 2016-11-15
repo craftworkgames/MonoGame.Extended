@@ -30,7 +30,7 @@ namespace MonoGame.Extended.Primitives
     ///         may correspond to any point in the parent coordinate system.
     ///     </para>
     /// </remarks>
-    /// <seealso cref="IEquatable{Point2}" />
+    /// <seealso cref="IEquatable{T}" />
     /// <seealso cref="IEquatableByRef{Point2}" />
     [DebuggerDisplay("{DebugDisplayString,nq}")]
     public struct Point2 : IEquatable<Point2>, IEquatableByRef<Point2>
@@ -122,7 +122,7 @@ namespace MonoGame.Extended.Primitives
         public override bool Equals(object obj)
         {
             if (obj is Point2)
-                return Equals((Point2)obj);
+                return Equals((Point2) obj);
             return false;
         }
 
@@ -145,12 +145,13 @@ namespace MonoGame.Extended.Primitives
         }
 
         /// <summary>
-        ///     Calculates the <see cref="Point2" /> representing the addition of a <see cref="Point2" /> and a <see cref="Vector2"/>.
+        ///     Calculates the <see cref="Point2" /> representing the addition of a <see cref="Point2" /> and a
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="vector">The vector.</param>
         /// <returns>
-        ///     The <see cref="Point2" /> representing the addition of a <see cref="Point2" /> and a <see cref="Vector2"/>.
+        ///     The <see cref="Point2" /> representing the addition of a <see cref="Point2" /> and a <see cref="Vector2" />.
         /// </returns>
         public static Point2 operator +(Point2 point, Vector2 vector)
         {
@@ -158,12 +159,13 @@ namespace MonoGame.Extended.Primitives
         }
 
         /// <summary>
-        ///     Calculates the <see cref="Point2" /> representing the addition of a <see cref="Point2" /> and a <see cref="Vector2"/>.
+        ///     Calculates the <see cref="Point2" /> representing the addition of a <see cref="Point2" /> and a
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="vector">The vector.</param>
         /// <returns>
-        ///     The <see cref="Point2" /> representing the addition of a <see cref="Point2" /> and a <see cref="Vector2"/>.
+        ///     The <see cref="Point2" /> representing the addition of a <see cref="Point2" /> and a <see cref="Vector2" />.
         /// </returns>
         public static Point2 Add(Point2 point, Vector2 vector)
         {
@@ -174,12 +176,13 @@ namespace MonoGame.Extended.Primitives
         }
 
         /// <summary>
-        ///     Calculates the <see cref="Point2" /> representing the subtraction of a <see cref="Point2" /> and a <see cref="Vector2"/>.
+        ///     Calculates the <see cref="Point2" /> representing the subtraction of a <see cref="Point2" /> and a
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="vector">The vector.</param>
         /// <returns>
-        ///     The <see cref="Point2" /> representing the substraction of a <see cref="Point2" /> and a <see cref="Vector2"/>.
+        ///     The <see cref="Point2" /> representing the substraction of a <see cref="Point2" /> and a <see cref="Vector2" />.
         /// </returns>
         public static Point2 operator -(Point2 point, Vector2 vector)
         {
@@ -187,12 +190,13 @@ namespace MonoGame.Extended.Primitives
         }
 
         /// <summary>
-        ///     Calculates the <see cref="Point2" /> representing the addition of a <see cref="Point2" /> and a <see cref="Vector2"/>.
+        ///     Calculates the <see cref="Point2" /> representing the addition of a <see cref="Point2" /> and a
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="vector">The vector.</param>
         /// <returns>
-        ///     The <see cref="Point2" /> representing the substraction of a <see cref="Point2" /> and a <see cref="Vector2"/>.
+        ///     The <see cref="Point2" /> representing the substraction of a <see cref="Point2" /> and a <see cref="Vector2" />.
         /// </returns>
         public static Point2 Subtract(Point2 point, Vector2 vector)
         {
@@ -294,7 +298,7 @@ namespace MonoGame.Extended.Primitives
         {
             unchecked
             {
-                return (X.GetHashCode() * 397) ^ Y.GetHashCode();
+                return (X.GetHashCode()*397) ^ Y.GetHashCode();
             }
         }
 

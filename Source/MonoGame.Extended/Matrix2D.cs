@@ -59,10 +59,7 @@ namespace MonoGame.Extended
         ///     The translation.
         /// </value>
         /// <remarks>The <see cref="Translation" /> is equal to the vector <code>(M31, M32)</code>.</remarks>
-        public Vector2 Translation
-        {
-            get { return new Vector2(M31, M32); }
-        }
+        public Vector2 Translation => new Vector2(M31, M32);
 
         /// <summary>
         ///     Gets the rotation angle in radians.
@@ -73,10 +70,7 @@ namespace MonoGame.Extended
         /// <remarks>
         ///     The <see cref="Rotation" /> is equal to <code>Atan2(M21, M11)</code>.
         /// </remarks>
-        public float Rotation
-        {
-            get { return (float) Math.Atan2(M21, M11); }
-        }
+        public float Rotation => (float) Math.Atan2(M21, M11);
 
         /// <summary>
         ///     Gets the scale.

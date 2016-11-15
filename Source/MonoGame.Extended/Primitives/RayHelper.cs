@@ -5,19 +5,17 @@ namespace MonoGame.Extended.Primitives
     internal class RayHelper
     {
         // Used by Ray2 and Segment2
-        internal static bool IntersectsSlab(float positionCoordinate, float directionCoordinate, float slabMinimum, float slabMaximum, ref float rayMinimumDistance, ref float rayMaximumDistance)
+        internal static bool IntersectsSlab(float positionCoordinate, float directionCoordinate, float slabMinimum,
+            float slabMaximum, ref float rayMinimumDistance, ref float rayMaximumDistance)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.3; Basic Primitive Tests - Intersecting Lines, Rays, and (Directed Segments). pg 179-181
 
             if (Math.Abs(directionCoordinate) < float.Epsilon)
-            {
-                // Ray is parallel to slab. No hit if origin is not with in the slab
-                return positionCoordinate >= slabMinimum && positionCoordinate <= slabMaximum;
-            }
+                return (positionCoordinate >= slabMinimum) && (positionCoordinate <= slabMaximum);
 
             // Compute intersection values of ray with near and far plane of slab
-            var rayNearDistance = (slabMinimum - positionCoordinate) / directionCoordinate;
-            var rayFarDistance = (slabMaximum - positionCoordinate) / directionCoordinate;
+            var rayNearDistance = (slabMinimum - positionCoordinate)/directionCoordinate;
+            var rayFarDistance = (slabMaximum - positionCoordinate)/directionCoordinate;
 
             if (rayNearDistance > rayFarDistance)
             {

@@ -8,19 +8,25 @@ namespace MonoGame.Extended
         private bool _isEnabled = true;
         private int _updateOrder;
 
+        protected SimpleGameComponent()
+        {
+        }
+
         public bool IsEnabled
         {
             get { return _isEnabled; }
             set
             {
                 if (_isEnabled == value)
-                {
                     return;
-                }
 
                 _isEnabled = value;
                 EnabledChanged?.Invoke(this, EventArgs.Empty);
             }
+        }
+
+        public virtual void Initialize()
+        {
         }
 
         bool IUpdateable.Enabled => _isEnabled;
@@ -31,9 +37,7 @@ namespace MonoGame.Extended
             set
             {
                 if (_updateOrder == value)
-                {
                     return;
-                }
 
                 _updateOrder = value;
                 UpdateOrderChanged?.Invoke(this, EventArgs.Empty);
@@ -42,14 +46,6 @@ namespace MonoGame.Extended
 
         public event EventHandler<EventArgs> EnabledChanged;
         public event EventHandler<EventArgs> UpdateOrderChanged;
-
-        protected SimpleGameComponent()
-        {
-        }
-
-        public virtual void Initialize()
-        {
-        }
 
         public abstract void Update(GameTime gameTime);
     }

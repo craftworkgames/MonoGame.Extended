@@ -9,25 +9,9 @@ namespace MonoGame.Extended.Graphics.Effects
     /// <seealso cref="IMatrixChainEffect" />
     public class DefaultEffect2D : MatrixChainEffect, ITexture2DEffect
     {
+        private Texture2D _texture;
         private bool _textureIsDirty;
         private EffectParameter _textureParameter;
-        private Texture2D _texture;
-
-        /// <summary>
-        ///     Gets or sets the <see cref="Texture2D"/>.
-        /// </summary>
-        /// <value>
-        ///     The <see cref="Texture2D"/>.
-        /// </value>
-        public Texture2D Texture
-        {
-            get { return _texture; }
-            set
-            {
-                _texture = value;
-                _textureIsDirty = true;
-            }
-        }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="DefaultEffect2D" /> class.
@@ -49,9 +33,25 @@ namespace MonoGame.Extended.Graphics.Effects
             CacheEffectParameters();
         }
 
+        /// <summary>
+        ///     Gets or sets the <see cref="Texture2D" />.
+        /// </summary>
+        /// <value>
+        ///     The <see cref="Texture2D" />.
+        /// </value>
+        public Texture2D Texture
+        {
+            get { return _texture; }
+            set
+            {
+                _texture = value;
+                _textureIsDirty = true;
+            }
+        }
+
         private void CacheEffectParameters()
         {
-            _textureParameter = Parameters[name: "TextureSampler+Texture"];
+            _textureParameter = Parameters["TextureSampler+Texture"];
         }
 
         /// <summary>

@@ -15,13 +15,13 @@ namespace MonoGame.Extended.Particles.Profiles
             switch (Radiate)
             {
                 case CircleRadiation.In:
-                    offset = new Vector2(-heading.X * Radius, -heading.Y * Radius);
+                    offset = new Vector2(-heading.X*Radius, -heading.Y*Radius);
                     break;
                 case CircleRadiation.Out:
-                    offset = new Vector2(heading.X * Radius, heading.Y * Radius);
+                    offset = new Vector2(heading.X*Radius, heading.Y*Radius);
                     break;
                 case CircleRadiation.None:
-                    offset = new Vector2(heading.X * Radius, heading.Y * Radius);
+                    offset = new Vector2(heading.X*Radius, heading.Y*Radius);
                     Random.NextUnitVector(out heading);
                     break;
                 default:

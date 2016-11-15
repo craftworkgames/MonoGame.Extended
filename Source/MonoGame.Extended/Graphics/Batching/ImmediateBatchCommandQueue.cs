@@ -7,7 +7,8 @@ namespace MonoGame.Extended.Graphics.Batching
         where TVertexType : struct, IVertexType
         where TCommandData : struct, IBatchDrawCommandData<TCommandData>
     {
-        public ImmediateBatchCommandQueue(GraphicsDevice graphicsDevice, BatchCommandDrawer<TVertexType, TCommandData> batchCommandDrawer)
+        public ImmediateBatchCommandQueue(GraphicsDevice graphicsDevice,
+            BatchCommandDrawer<TVertexType, TCommandData> batchCommandDrawer)
             : base(graphicsDevice, batchCommandDrawer)
         {
         }
@@ -16,7 +17,8 @@ namespace MonoGame.Extended.Graphics.Batching
         {
         }
 
-        internal override void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, float sortKey, ref TCommandData data)
+        internal override void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, float sortKey,
+            ref TCommandData data)
         {
             CommandDrawer.SelectBuffers();
             var command = new BatchDrawCommand<TCommandData>(startIndex, primitiveCount, sortKey, data);

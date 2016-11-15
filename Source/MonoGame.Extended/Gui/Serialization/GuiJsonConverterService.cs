@@ -7,8 +7,8 @@ namespace MonoGame.Extended.Gui.Serialization
 {
     public class GuiJsonConverterService
     {
-        private readonly TextureAtlas _textureAtlas;
         private readonly Dictionary<string, BitmapFont> _bitmapFonts;
+        private readonly TextureAtlas _textureAtlas;
 
         public GuiJsonConverterService(TextureAtlas textureAtlas, IEnumerable<BitmapFont> bitmapFonts)
         {

@@ -9,15 +9,15 @@ namespace MonoGame.Extended
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EqualsWithTolerence(this Vector2 value, Vector2 otherValue, float tolerance = 0.00001f)
         {
-            return Math.Abs(value.X - otherValue.X) <= tolerance && Math.Abs(value.Y - otherValue.Y) <= tolerance;
+            return (Math.Abs(value.X - otherValue.X) <= tolerance) && (Math.Abs(value.Y - otherValue.Y) <= tolerance);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 Rotate(this Vector2 value, float radians)
         {
-            var cos = (float)Math.Cos(radians);
-            var sin = (float)Math.Sin(radians);
-            return new Vector2(value.X * cos - value.Y * sin, value.X * sin + value.Y * cos);
+            var cos = (float) Math.Cos(radians);
+            var sin = (float) Math.Sin(radians);
+            return new Vector2(value.X*cos - value.Y*sin, value.X*sin + value.Y*cos);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -43,8 +43,8 @@ namespace MonoGame.Extended
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 Truncate(this Vector2 value, float maxLength)
         {
-            if (value.LengthSquared() > maxLength * maxLength)
-                return value.NormalizedCopy() * maxLength;
+            if (value.LengthSquared() > maxLength*maxLength)
+                return value.NormalizedCopy()*maxLength;
 
             return value;
         }
@@ -58,7 +58,7 @@ namespace MonoGame.Extended
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float ToAngle(this Vector2 value)
         {
-            return (float)Math.Atan2(value.X, -value.Y);
+            return (float) Math.Atan2(value.X, -value.Y);
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace MonoGame.Extended
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Dot(this Vector2 vector1, Vector2 vector2)
         {
-            return vector1.X * vector2.X + vector1.Y * vector2.Y;
+            return vector1.X*vector2.X + vector1.Y*vector2.Y;
         }
 
         /// <summary>
@@ -175,9 +175,9 @@ namespace MonoGame.Extended
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float ScalarProjectOnto(this Vector2 vector1, Vector2 vector2)
         {
-            var dotNumerator = vector1.X * vector2.X + vector1.Y * vector2.Y;
-            var lengthSquaredDenominator = vector2.X * vector2.X + vector2.Y * vector2.Y;
-            return dotNumerator / (float)Math.Sqrt(lengthSquaredDenominator);
+            var dotNumerator = vector1.X*vector2.X + vector1.Y*vector2.Y;
+            var lengthSquaredDenominator = vector2.X*vector2.X + vector2.Y*vector2.Y;
+            return dotNumerator/(float) Math.Sqrt(lengthSquaredDenominator);
         }
 
         /// <summary>
@@ -209,9 +209,9 @@ namespace MonoGame.Extended
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 ProjectOnto(this Vector2 vector1, Vector2 vector2)
         {
-            var dotNumerator = vector1.X * vector2.X + vector1.Y * vector2.Y;
-            var lengthSquaredDenominator = vector2.X * vector2.X + vector2.Y * vector2.Y;
-            return dotNumerator / lengthSquaredDenominator * vector2;
+            var dotNumerator = vector1.X*vector2.X + vector1.Y*vector2.Y;
+            var lengthSquaredDenominator = vector2.X*vector2.X + vector2.Y*vector2.Y;
+            return dotNumerator/lengthSquaredDenominator*vector2;
         }
     }
 }

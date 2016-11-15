@@ -13,8 +13,9 @@ namespace MonoGame.Extended.Particles.Modifiers.Interpolators
             set { _delta = value - StartValue; }
         }
 
-        public unsafe void Update(float amount, Particle* particle) {
-            particle->Scale = _delta * amount + StartValue;
+        public unsafe void Update(float amount, Particle* particle)
+        {
+            particle->Scale = _delta*amount + StartValue;
         }
     }
 }

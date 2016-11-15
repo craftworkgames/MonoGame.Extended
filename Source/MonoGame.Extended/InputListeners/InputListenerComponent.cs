@@ -7,9 +7,7 @@ namespace MonoGame.Extended.InputListeners
     {
         private readonly List<InputListener> _listeners;
 
-        public IList<InputListener> Listeners => _listeners;
-
-        public InputListenerComponent(Game game) 
+        public InputListenerComponent(Game game)
             : base(game)
         {
             _listeners = new List<InputListener>();
@@ -20,13 +18,18 @@ namespace MonoGame.Extended.InputListeners
         {
             _listeners = new List<InputListener>(listeners);
         }
-        
+
+        public IList<InputListener> Listeners => _listeners;
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            foreach (var listener in _listeners)
-                listener.Update(gameTime);
+            if (Game.IsActive)
+            {
+                foreach (var listener in _listeners)
+                    listener.Update(gameTime);
+            }
 
             GamePadListener.CheckConnections();
         }

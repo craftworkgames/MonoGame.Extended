@@ -5,25 +5,25 @@ namespace MonoGame.Extended
 {
     public class FramesPerSecondCounter : IUpdate
     {
-        private static readonly TimeSpan OneSecondTimeSpan = new TimeSpan(0, 0, 1);
-        private TimeSpan _timer = OneSecondTimeSpan;
+        private static readonly TimeSpan _oneSecondTimeSpan = new TimeSpan(0, 0, 1);
         private int _framesCounter;
-
-        public int FramesPerSecond { get; private set; }
+        private TimeSpan _timer = _oneSecondTimeSpan;
 
         public FramesPerSecondCounter()
         {
         }
 
+        public int FramesPerSecond { get; private set; }
+
         public void Update(GameTime gameTime)
         {
             _timer += gameTime.ElapsedGameTime;
-            if (_timer <= OneSecondTimeSpan)
+            if (_timer <= _oneSecondTimeSpan)
                 return;
 
             FramesPerSecond = _framesCounter;
             _framesCounter = 0;
-            _timer -= OneSecondTimeSpan;
+            _timer -= _oneSecondTimeSpan;
         }
 
         public void Draw(GameTime gameTime)

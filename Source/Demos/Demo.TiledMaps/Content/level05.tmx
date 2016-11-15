@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" renderorder="left-up" width="10" height="10" tilewidth="101" tileheight="38" nextobjectid="1">
+ <tileset firstgid="1" name="L05TS1" tilewidth="101" tileheight="171" tilecount="1" columns="1">
+  <image source="L05TS1.png" width="101" height="171"/>
+ </tileset>
+ <tileset firstgid="2" name="L05TS2" tilewidth="101" tileheight="171" tilecount="1" columns="1">
+  <image source="L05TS2.png" width="101" height="171"/>
+ </tileset>
+ <tileset firstgid="3" name="L05TS3" tilewidth="101" tileheight="171" tilecount="1" columns="1">
+  <image source="L05TS3.png" width="101" height="171"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1,0,0,0,0,
+0,0,0,0,2,0,2,0,0,0,
+0,0,0,1,0,1,0,3,0,0,
+0,0,3,0,3,0,3,0,0,0,
+0,2,0,1,0,2,0,0,0,0,
+3,0,3,0,2,0,0,0,0,0,
+0,2,0,1,0,0,0,0,0,0,
+0,0,1,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

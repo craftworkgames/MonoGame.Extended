@@ -9,13 +9,14 @@ namespace MonoGame.Extended.Graphics.Batching
     {
         private readonly BatchDrawCommand<TCommandData>[] _commands;
         private readonly GeometryBuffer<TVertexType> _geometryBuffer;
-        private readonly ushort[] _sortedIndices; 
         private readonly int _maximumCommandsCount;
+        private readonly ushort[] _sortedIndices;
         private int _commandsCount;
         private BatchDrawCommand<TCommandData> _currentCommand;
         internal BatchSortMode SortMode;
 
-        internal DeferredBatchCommandQueue(GraphicsDevice graphicsDevice, BatchCommandDrawer<TVertexType, TCommandData> commandDrawer, int maximumCommandsCount)
+        internal DeferredBatchCommandQueue(GraphicsDevice graphicsDevice,
+            BatchCommandDrawer<TVertexType, TCommandData> commandDrawer, int maximumCommandsCount)
             : base(graphicsDevice, commandDrawer)
         {
             _commands = new BatchDrawCommand<TCommandData>[maximumCommandsCount];
@@ -70,9 +71,7 @@ namespace MonoGame.Extended.Graphics.Batching
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _commandsCount; index++)
-            {
                 CommandDrawer.Draw(ref _commands[index]);
-            }
         }
 
         private void FlushDeferredSorted()
@@ -91,7 +90,7 @@ namespace MonoGame.Extended.Graphics.Batching
             // copy the indices of the current command into our sorted indices array so the indices are sequential for the graphics API
             Array.Copy(_geometryBuffer._indices, _currentCommand.StartIndex, _sortedIndices, sortedIndiesCount,
                 commandIndicesCount);
-            sortedIndiesCount += (ushort)commandIndicesCount;
+            sortedIndiesCount += (ushort) commandIndicesCount;
 
             // iterate through sorted commands checking if any can now be merged to reduce expensive draw calls to the graphics API
             // this might need to be changed for next-gen graphics API (Vulkan, Metal, DirectX 11) where the draw calls are not so expensive
@@ -121,7 +120,7 @@ namespace MonoGame.Extended.Graphics.Batching
                 // copy the indices of the command into our sorted indices array so the merged indices are sequential for the graphics API
                 Array.Copy(_geometryBuffer._indices, command.StartIndex, _sortedIndices, sortedIndiesCount,
                     commandIndicesCount);
-                sortedIndiesCount += (ushort)commandIndicesCount;
+                sortedIndiesCount += (ushort) commandIndicesCount;
             }
 
             var indexBuffer = _geometryBuffer.IndexBuffer;
@@ -132,12 +131,11 @@ namespace MonoGame.Extended.Graphics.Batching
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < newCommandsCount; index++)
-            {
                 CommandDrawer.Draw(ref _commands[index]);
-            }
         }
 
-        internal override void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, float sortKey, ref TCommandData data)
+        internal override void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, float sortKey,
+            ref TCommandData data)
         {
             // merge draw commands if possible to reduce expensive draw calls to the graphics API
             // this might need to be changed for next-gen graphics API (Vulkan, Metal, DirectX 11) where the draw calls are not so expensive

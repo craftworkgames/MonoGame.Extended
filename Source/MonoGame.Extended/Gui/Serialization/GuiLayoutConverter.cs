@@ -25,7 +25,8 @@ namespace MonoGame.Extended.Gui.Serialization
             return objectType == typeof(GuiLayout);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
         {
             var jObject = JObject.Load(reader);
             //var styleSheet = LoadStyleSheet(serializer, jObject);
@@ -34,7 +35,7 @@ namespace MonoGame.Extended.Gui.Serialization
             serializer.Converters.Add(new TextureRegion2DConveter(textureAtlas));
             serializer.Converters.Add(new GuiControlConverter());
             serializer.Converters.Add(new GuiControlStyleConveter());
-            
+
             return new GuiLayout
             {
                 //StyleSheet = styleSheet,
@@ -43,12 +44,12 @@ namespace MonoGame.Extended.Gui.Serialization
             };
         }
 
-        //private GuiStyleSheet LoadStyleSheet(JsonSerializer serializer, JObject jObject)
-        //{
-        //    var styleSheetName = jObject.Property(nameof(GuiLayout.StyleSheet)).Value.ToObject<string>();
-        //    var styleSheetPath = Path.Combine(_contentManager.RootDirectory, styleSheetName);
-
         //    using (var stream = TitleContainer.OpenStream(styleSheetPath))
+        //    var styleSheetPath = Path.Combine(_contentManager.RootDirectory, styleSheetName);
+        //    var styleSheetName = jObject.Property(nameof(GuiLayout.StyleSheet)).Value.ToObject<string>();
+        //{
+
+        //private GuiStyleSheet LoadStyleSheet(JsonSerializer serializer, JObject jObject)
         //    using (var streamReader = new StreamReader(stream))
         //    {
         //        var json = streamReader.ReadToEnd();

@@ -5,11 +5,12 @@ namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiToggleButton : GuiControl
     {
+        private bool _isChecked;
+
         public GuiToggleButton()
         {
         }
 
-        private bool _isChecked;
         public bool IsChecked
         {
             get { return _isChecked; }

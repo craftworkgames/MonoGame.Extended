@@ -27,89 +27,7 @@ namespace MonoGame.Extended.Graphics
     public abstract class GeometryBuffer<TVertexType> : IDisposable
         where TVertexType : struct, IVertexType
     {
-        //TODO: Add TIndexType to allow for different type of indices: int, short, etc
-
-        // ReSharper disable InconsistentNaming
-        internal readonly TVertexType[] _vertices;
-        internal readonly ushort[] _indices;
-        internal ushort _vertexCount;
-        internal ushort _indexCount;
-        // ReSharper restore InconsistentNaming
-
         internal readonly GeometryBufferType BufferType;
-
-        /// <summary>
-        ///     Gets the vertices as read-only.
-        /// </summary>
-        /// <value>
-        ///     The vertices as read-only.
-        /// </value>
-        public IReadOnlyList<TVertexType> Vertices
-        {
-            get { return _vertices; }
-        }
-
-        /// <summary>
-        ///     Gets the indices as read-only.
-        /// </summary>
-        /// <value>
-        ///     The indices as read-only.
-        /// </value>
-        public IReadOnlyList<ushort> Indices
-        {
-            get { return _indices; }
-        }
-
-        /// <summary>
-        ///     Gets the number of buffered vertices.
-        /// </summary>
-        /// <value>
-        ///     The number of buffered vertices.
-        /// </value>
-        public ushort VertexCount
-        {
-            get { return _vertexCount; }
-        }
-
-        /// <summary>
-        ///     Gets the number of buffered indices.
-        /// </summary>
-        /// <value>
-        ///     The number of buffered indices.
-        /// </value>
-        public ushort IndexCount
-        {
-            get { return _indexCount; }
-        }
-
-        public ushort MaximumVerticesCount { get; }
-        public ushort MaximumIndicesCount { get; }
-
-        /// <summary>
-        ///     Gets the vertex buffer.
-        /// </summary>
-        /// <value>
-        ///     The vertex buffer.
-        /// </value>
-        public VertexBuffer VertexBuffer { get; }
-
-        /// <summary>
-        ///     Gets the index buffer.
-        /// </summary>
-        /// <value>
-        ///     The index buffer.
-        /// </value>
-        public IndexBuffer IndexBuffer { get; }
-
-        /// <summary>
-        ///     Gets the <see cref="GraphicsDevice" /> associated with this
-        ///     <see cref="GeometryBuffer{TVertexType}" />.
-        /// </summary>
-        /// <value>
-        ///     The <see cref="GraphicsDevice" /> associated with this
-        ///     <see cref="GeometryBuffer{TVertexType}" />.
-        /// </value>
-        public GraphicsDevice GraphicsDevice { get; }
 
         internal GeometryBuffer(GraphicsDevice graphicsDevice, GeometryBufferType bufferType,
             ushort maximumVerticesCount, ushort maximumIndicesCount)
@@ -153,6 +71,76 @@ namespace MonoGame.Extended.Graphics
                 default:
                     throw new ArgumentOutOfRangeException(nameof(bufferType));
             }
+        }
+
+        /// <summary>
+        ///     Gets the vertices as read-only.
+        /// </summary>
+        /// <value>
+        ///     The vertices as read-only.
+        /// </value>
+        public IReadOnlyList<TVertexType> Vertices => _vertices;
+
+        /// <summary>
+        ///     Gets the indices as read-only.
+        /// </summary>
+        /// <value>
+        ///     The indices as read-only.
+        /// </value>
+        public IReadOnlyList<ushort> Indices => _indices;
+
+        /// <summary>
+        ///     Gets the number of buffered vertices.
+        /// </summary>
+        /// <value>
+        ///     The number of buffered vertices.
+        /// </value>
+        public ushort VertexCount => _vertexCount;
+
+        /// <summary>
+        ///     Gets the number of buffered indices.
+        /// </summary>
+        /// <value>
+        ///     The number of buffered indices.
+        /// </value>
+        public ushort IndexCount => _indexCount;
+
+        public ushort MaximumVerticesCount { get; }
+        public ushort MaximumIndicesCount { get; }
+
+        /// <summary>
+        ///     Gets the vertex buffer.
+        /// </summary>
+        /// <value>
+        ///     The vertex buffer.
+        /// </value>
+        public VertexBuffer VertexBuffer { get; }
+
+        /// <summary>
+        ///     Gets the index buffer.
+        /// </summary>
+        /// <value>
+        ///     The index buffer.
+        /// </value>
+        public IndexBuffer IndexBuffer { get; }
+
+        /// <summary>
+        ///     Gets the <see cref="GraphicsDevice" /> associated with this
+        ///     <see cref="GeometryBuffer{TVertexType}" />.
+        /// </summary>
+        /// <value>
+        ///     The <see cref="GraphicsDevice" /> associated with this
+        ///     <see cref="GeometryBuffer{TVertexType}" />.
+        /// </value>
+        public GraphicsDevice GraphicsDevice { get; }
+
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -273,15 +261,6 @@ namespace MonoGame.Extended.Graphics
         }
 
         /// <summary>
-        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
         ///     Releases unmanaged and - optionally - managed resources.
         /// </summary>
         /// <param name="disposing">
@@ -318,5 +297,14 @@ namespace MonoGame.Extended.Graphics
                 (_indexCount + indicesCountToAdd > MaximumIndicesCount))
                 throw new GeometryBufferOverflowException<TVertexType>(this, verticesCountToAdd, indicesCountToAdd);
         }
+
+        //TODO: Add TIndexType to allow for different type of indices: int, short, etc
+
+        // ReSharper disable InconsistentNaming
+        internal readonly TVertexType[] _vertices;
+        internal readonly ushort[] _indices;
+        internal ushort _vertexCount;
+        internal ushort _indexCount;
+        // ReSharper restore InconsistentNaming
     }
 }

@@ -11,8 +11,9 @@
             set { _delta = value - StartValue; }
         }
 
-        public unsafe void Update(float amount, Particle* particle) {
-            particle->Opacity = _delta * amount + StartValue;
+        public unsafe void Update(float amount, Particle* particle)
+        {
+            particle->Opacity = _delta*amount + StartValue;
         }
     }
 }

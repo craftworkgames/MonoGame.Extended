@@ -1,11 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using System.Diagnostics;
+﻿using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Maps.Tiled
 {
-    public class TiledTile
+    public interface ITiledAnimated
+    {
+        TiledTilesetTile TilesetTile { get; }
+        bool HasAnimation { get; }
+        Vector2 Position { get; }
+        int? CurrentTileId { get; }
+        int? Gid { get; }
+    }
+
+    public class TiledTile : ITiledAnimated
     {
         public TiledTile(int id, int x, int y, TiledTilesetTile tilesetTile = null)
         {
@@ -16,22 +22,19 @@ namespace MonoGame.Extended.Maps.Tiled
         }
 
         public int Id { get; }
-        public int X { get; private set; }
-        public int Y { get; private set; }
-        public TiledTilesetTile TilesetTile { get; set; }
-        public int CurrentTileId
-        {
-            // Need to do the +1 here because of the way Tiled indexes TileSet Tiles in the TileLayer data
-            get { return (TilesetTile == null || !TilesetTile.CurrentTileId.HasValue ? Id : TilesetTile.CurrentTileId.Value + 1); }
-        }
+        public int X { get; }
+        public int Y { get; }
+        public Vector2 Position => new Vector2(X, Y);
+        public bool IsBlank => Id == 0;
+        public TiledTilesetTile TilesetTile { get; }
 
-        public bool HasAnimation
-        {
-            get { return (TilesetTile == null || TilesetTile.Animation.Count == 0) ? false : true; }
-        }
+        public int? Gid => Id;
+        public int? CurrentTileId => TilesetTile?.CurrentTileId + 1 ?? Id;
+        public bool HasAnimation => TilesetTile != null && TilesetTile.Frames.Count != 0;
+
         public override string ToString()
         {
-            return $"{Id}";
+            return $"({X}, {Y}) - {Id}";
         }
     }
 }

@@ -35,7 +35,8 @@ namespace MonoGame.Extended.Graphics
         ///     <see cref="GeometryBuffer{TVertexType}" /> is full.
         /// </exception>
         public static unsafe void EnqueueSprite(this GeometryBuffer<VertexPositionColorTexture> geometryBuffer,
-            ushort indexOffset, Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null, Size? size = null,
+            ushort indexOffset, Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null,
+            Size? size = null,
             Color? color = null, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None, float depth = 0)
         {
             if (texture == null)
@@ -59,10 +60,10 @@ namespace MonoGame.Extended.Graphics
             {
                 var textureRegion = sourceRectangle.Value;
                 size1 = size ?? new Size(textureRegion.Width, textureRegion.Height);
-                textureCoordinateTopLeft.X = textureRegion.X / (float)texture.Width;
-                textureCoordinateTopLeft.Y = textureRegion.Y / (float)texture.Height;
-                textureCoordinateBottomRight.X = (textureRegion.X + textureRegion.Width) / (float)texture.Width;
-                textureCoordinateBottomRight.Y = (textureRegion.Y + textureRegion.Height) / (float)texture.Height;
+                textureCoordinateTopLeft.X = textureRegion.X/(float) texture.Width;
+                textureCoordinateTopLeft.Y = textureRegion.Y/(float) texture.Height;
+                textureCoordinateBottomRight.X = (textureRegion.X + textureRegion.Width)/(float) texture.Width;
+                textureCoordinateBottomRight.Y = (textureRegion.Y + textureRegion.Height)/(float) texture.Height;
             }
 
             positionTopLeft.X = -origin1.X;
@@ -134,12 +135,12 @@ namespace MonoGame.Extended.Graphics
             fixed (ushort* fixedPointer = geometryBuffer._indices)
             {
                 var pointer = fixedPointer + geometryBuffer._indexCount;
-                *(pointer + 0) = (ushort)(0 + indexOffset);
-                *(pointer + 1) = (ushort)(1 + indexOffset);
-                *(pointer + 2) = (ushort)(2 + indexOffset);
-                *(pointer + 3) = (ushort)(1 + indexOffset);
-                *(pointer + 4) = (ushort)(3 + indexOffset);
-                *(pointer + 5) = (ushort)(2 + indexOffset);
+                *(pointer + 0) = (ushort) (0 + indexOffset);
+                *(pointer + 1) = (ushort) (1 + indexOffset);
+                *(pointer + 2) = (ushort) (2 + indexOffset);
+                *(pointer + 3) = (ushort) (1 + indexOffset);
+                *(pointer + 4) = (ushort) (3 + indexOffset);
+                *(pointer + 5) = (ushort) (2 + indexOffset);
             }
 
             geometryBuffer._indexCount += 6;

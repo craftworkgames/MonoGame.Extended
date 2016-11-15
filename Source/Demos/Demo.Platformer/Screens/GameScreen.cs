@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
+using MonoGame.Extended.Maps.Renderers;
 using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.ViewportAdapters;
@@ -26,6 +27,7 @@ namespace Demo.Platformer.Screens
 
         private Camera2D _camera;
         private TiledMap _tiledMap;
+        private IMapRenderer _mapRenderer;
         private EntityComponentSystem _entityComponentSystem;
         private EntityFactory _entityFactory;
 
@@ -49,6 +51,8 @@ namespace Demo.Platformer.Screens
             _camera = new Camera2D(viewportAdapter);
 
             _tiledMap = Content.Load<TiledMap>("level-1");
+            _mapRenderer = new FullMapRenderer(GraphicsDevice, new MapRendererConfig {DrawObjectLayers = false});
+            _mapRenderer.SwapMap(_tiledMap);
 
             _entityComponentSystem = new EntityComponentSystem();
             _entityFactory = new EntityFactory(_entityComponentSystem, Content);
@@ -82,7 +86,7 @@ namespace Demo.Platformer.Screens
 
             GraphicsDevice.Clear(Color.Black);
 
-            _tiledMap.Draw(viewMatrix);
+            _mapRenderer.Draw(viewMatrix);
             _entityComponentSystem.Draw(gameTime);
         }
     }
