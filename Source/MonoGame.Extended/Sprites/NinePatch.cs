@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Sprites
             TopPadding = topPadding;
             RightPadding = rightPadding;
             BottomPadding = bottomPadding;
-            Color = Color.White;
+            //Color = Color.White;
 
             _sourcePatches = CreatePatches(textureRegion.Bounds);
         }
@@ -26,7 +26,7 @@ namespace MonoGame.Extended.Sprites
         public int TopPadding { get; }
         public int RightPadding { get; }
         public int BottomPadding { get; }
-        public Color Color { get; set; }
+        //public Color Color { get; set; }
 
         private Rectangle[] CreatePatches(Rectangle rectangle)
         {
@@ -55,13 +55,13 @@ namespace MonoGame.Extended.Sprites
             return patches;
         }
 
-        public void Draw(SpriteBatch spriteBatch, Rectangle rectangle)
+        public void Draw(SpriteBatch spriteBatch, Rectangle rectangle, Color color)
         {
             var destinationPatches = CreatePatches(rectangle);
 
             for (var i = 0; i < _sourcePatches.Length; i++)
                 spriteBatch.Draw(TextureRegion.Texture, sourceRectangle: _sourcePatches[i],
-                    destinationRectangle: destinationPatches[i], color: Color);
+                    destinationRectangle: destinationPatches[i], color: color);
         }
     }
 }

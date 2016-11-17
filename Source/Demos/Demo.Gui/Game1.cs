@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Gui
 {
@@ -12,7 +14,8 @@ namespace Demo.Gui
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
-        private readonly GuiComponent _guiComponent;
+        //private readonly GuiComponent _guiComponent;
+        private GuiSpriteBatchRenderer _guiRenderer;
 
         public Game1()
         {
@@ -21,17 +24,37 @@ namespace Demo.Gui
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
 
-            Components.Add(_guiComponent = new GuiComponent(this));
+            //Components.Add(_guiComponent = new GuiComponent(this));
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            var screen = new GuiScreen()
+            {
+                Controls =
+                {
+                    new GuiPanel
+                    {
+                        Name = "HelloPanel",
+                        Position = new Vector2(100, 100),
+                        Size = new SizeF(400, 240)
+                    }
+                }
+            };
+
+            _guiRenderer = new GuiSpriteBatchRenderer(screen);
         }
 
         protected override void LoadContent()
         {
-            var layout = _guiComponent.LoadGui("title-screen.gui");
-            var button = layout.FindControl<GuiButton>("PlayButton");
-            button.IsEnabled = false;
+            //var layout = _guiComponent.LoadGui("title-screen.gui");
+            //var button = layout.FindControl<GuiButton>("PlayButton");
+            //button.IsEnabled = false;
 
-            var button2 = layout.FindControl<GuiButton>("PlayButton1");
-            button2.Click += (sender, args) => button.IsEnabled = !button.IsEnabled;
+            //var button2 = layout.FindControl<GuiButton>("PlayButton1");
+            //button2.Click += (sender, args) => button.IsEnabled = !button.IsEnabled;
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
@@ -58,8 +81,7 @@ namespace Demo.Gui
             base.Draw(gameTime);
 
             _spriteBatch.Begin(samplerState: SamplerState.PointWrap, blendState: BlendState.AlphaBlend);
-
-            //_spriteBatch.DrawRectangle(rectangleF, Color.Red);
+            _guiRenderer.Draw(_spriteBatch);
             _spriteBatch.End();
         }
     }
