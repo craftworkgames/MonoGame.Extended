@@ -38,7 +38,6 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
-    <Compile Include="Gui\Controls\GuiControlCollection.cs" />
     <Compile Include="Maps\Renderers\DynamicGroupRenderDetails.cs" />
     <Compile Include="Maps\Renderers\FullMapRenderer.cs" />
     <Compile Include="Maps\Renderers\GroupRenderDetails.cs" />
@@ -161,20 +160,6 @@
     <Compile Include="NuclexGui\UniRectangle.cs" />
     <Compile Include="NuclexGui\UniScalar.cs" />
     <Compile Include="NuclexGui\UniVector.cs" />
-    <Compile Include="Gui\GuiDialog.cs" />
-    <Compile Include="Gui\Controls\GuiLabel.cs" />
-    <Compile Include="Gui\Controls\GuiToggleButton.cs" />
-    <Compile Include="Gui\Serialization\ContentConverter.cs" />
-    <Compile Include="Gui\Controls\GuiButton.cs" />
-    <Compile Include="Gui\Controls\GuiControl.cs" />
-    <Compile Include="Gui\Controls\GuiControlStyle.cs" />
-    <Compile Include="Gui\GuiComponent.cs" />
-    <Compile Include="Gui\GuiLayout.cs" />
-    <Compile Include="Gui\Serialization\GuiTextureAtlasConverter.cs" />
-    <Compile Include="Gui\Serialization\GuiControlConverter.cs" />
-    <Compile Include="Gui\Serialization\GuiControlStyleConveter.cs" />
-    <Compile Include="Gui\Serialization\GuiLayoutConverter.cs" />
-    <Compile Include="Gui\Serialization\TextureRegion2DConveter.cs" />
     <Compile Include="IEquatableByRef.cs" />
     <Compile Include="InputListeners\InputListenerComponent.cs" />
     <Compile Include="Matrix2D.cs" />
@@ -191,16 +176,11 @@
     <Compile Include="Serialization\ColorJsonConverter.cs" />
     <Compile Include="Serialization\Vector2JsonConverter.cs" />
     <Compile Include="Serialization\SizeFJsonConverter.cs" />
-    <Compile Include="Gui\GuiAlignmentHelper.cs" />
-    <Compile Include="Gui\Serialization\GuiJsonConverter.cs" />
-    <Compile Include="Gui\Serialization\GuiJsonConverterService.cs" />
-    <Compile Include="Gui\GuiThickness.cs" />
     <Compile Include="IColorable.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Camera2D.cs" />
     <Compile Include="Content\ContentReaderExtensions.cs" />
-    <Compile Include="EventHandlerExtensions.cs" />
     <Compile Include="GameTimeExtensions.cs" />
     <Compile Include="IMovable.cs" />
     <Compile Include="InputListeners\GamePadEventArgs.cs" />

@@ -156,12 +156,12 @@ namespace MonoGame.Extended.Gui.Controls
 
         public virtual void OnMouseDown(object sender, MouseEventArgs args)
         {
-            MouseDown.Raise(this, args);
+            MouseDown?.Invoke(this, args);
         }
 
         public virtual void OnMouseUp(object sender, MouseEventArgs args)
         {
-            MouseUp.Raise(this, args);
+            MouseUp?.Invoke(this, args);
         }
 
         public virtual void OnKeyTyped(object sender, KeyboardEventArgs args)

@@ -339,13 +339,13 @@ namespace MonoGame.Extended.InputListeners
             {
                 if (Math.Abs(prevstate - curstate) >= TriggerDeltaTreshold)
                 {
-                    TriggerMoved.Raise(this, MakeArgs(button, curstate));
+                    TriggerMoved?.Invoke(this, MakeArgs(button, curstate));
                     _lastTriggerState = _currentState;
                 }
             }
             else if (prevstate > TriggerDeltaTreshold)
             {
-                TriggerMoved.Raise(this, MakeArgs(button, curstate));
+                TriggerMoved?.Invoke(this, MakeArgs(button, curstate));
                 _lastTriggerState = _currentState;
             }
         }
@@ -411,13 +411,13 @@ namespace MonoGame.Extended.InputListeners
             {
                 if (Vector2.Distance(curVector, prevVector) >= ThumbStickDeltaTreshold)
                 {
-                    ThumbStickMoved.Raise(this, MakeArgs(button, thumbStickState: curVector));
+                    ThumbStickMoved?.Invoke(this, MakeArgs(button, thumbStickState: curVector));
                     _lastThumbStickState = _currentState;
                 }
             }
             else if (prevVector.Length() > ThumbStickDeltaTreshold)
             {
-                ThumbStickMoved.Raise(this, MakeArgs(button, thumbStickState: curVector));
+                ThumbStickMoved?.Invoke(this, MakeArgs(button, thumbStickState: curVector));
                 _lastThumbStickState = _currentState;
             }
         }
@@ -432,7 +432,7 @@ namespace MonoGame.Extended.InputListeners
                     // We need more XORs in this world
                 {
                     _gamePadConnections[(int) index] = !_gamePadConnections[(int) index];
-                    ControllerConnectionChanged.Raise(null,
+                    ControllerConnectionChanged?.Invoke(null,
                         new GamePadEventArgs(GamePadState.Default, GamePad.GetState(index), TimeSpan.Zero, index));
                 }
         }
@@ -469,15 +469,15 @@ namespace MonoGame.Extended.InputListeners
 
         private void RaiseButtonDown(Buttons button)
         {
-            ButtonDown.Raise(this, MakeArgs(button));
-            ButtonRepeated.Raise(this, MakeArgs(button));
+            ButtonDown?.Invoke(this, MakeArgs(button));
+            ButtonRepeated?.Invoke(this, MakeArgs(button));
             _lastButton = button;
             _repeatedButtonTimer = 0;
         }
 
         private void RaiseButtonUp(Buttons button)
         {
-            ButtonUp.Raise(this, MakeArgs(button));
+            ButtonUp?.Invoke(this, MakeArgs(button));
             _lastButton = 0;
         }
 
@@ -490,12 +490,12 @@ namespace MonoGame.Extended.InputListeners
 
             if (_repeatedButtonTimer < RepeatInitialDelay + RepeatDelay)
             {
-                ButtonRepeated.Raise(this, MakeArgs(_lastButton));
+                ButtonRepeated?.Invoke(this, MakeArgs(_lastButton));
                 _repeatedButtonTimer = RepeatDelay + RepeatInitialDelay;
             }
             else if (_repeatedButtonTimer > RepeatInitialDelay + RepeatDelay*2)
             {
-                ButtonRepeated.Raise(this, MakeArgs(_lastButton));
+                ButtonRepeated?.Invoke(this, MakeArgs(_lastButton));
                 _repeatedButtonTimer = RepeatDelay + RepeatInitialDelay;
             }
         }

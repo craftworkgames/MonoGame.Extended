@@ -2,7 +2,7 @@
 using NSubstitute;
 using NUnit.Framework;
 
-namespace MonoGame.Extended.Tests.Gui
+namespace MonoGame.Extended.Gui.Tests
 {
     [TestFixture]
     public class GuiControlCollectionTests

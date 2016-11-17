@@ -29,7 +29,7 @@ namespace MonoGame.Extended.Timers
             if (CurrentTime >= NextTickTime)
             {
                 NextTickTime = CurrentTime + Interval;
-                Tick.Raise(this, EventArgs.Empty);
+                Tick?.Invoke(this, EventArgs.Empty);
             }
         }
     }

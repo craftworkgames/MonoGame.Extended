@@ -28,14 +28,14 @@ namespace MonoGame.Extended.Timers
         protected override void OnUpdate(GameTime gameTime)
         {
             TimeRemaining = Interval - CurrentTime;
-            TimeRemainingChanged.Raise(this, EventArgs.Empty);
+            TimeRemainingChanged?.Invoke(this, EventArgs.Empty);
 
             if (CurrentTime >= Interval)
             {
                 State = TimerState.Completed;
                 CurrentTime = Interval;
                 TimeRemaining = TimeSpan.Zero;
-                Completed.Raise(this, EventArgs.Empty);
+                Completed?.Invoke(this, EventArgs.Empty);
             }
         }
     }
