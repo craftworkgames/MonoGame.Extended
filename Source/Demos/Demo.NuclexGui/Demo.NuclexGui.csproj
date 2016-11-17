@@ -48,11 +48,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\SuaveSheet.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Content\DefaultFont.spritefont" />
     <None Include="Content\logo-square-128.png" />
+    <None Include="Content\TitleFont.spritefont" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />

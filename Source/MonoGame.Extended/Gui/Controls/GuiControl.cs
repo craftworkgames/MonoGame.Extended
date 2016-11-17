@@ -83,6 +83,7 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiControlStyle HoverStyle { get; set; }
         public Vector2 Position { get; set; }
         public SizeF Size { get; set; }
+        public GuiControl Parent { get; set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {

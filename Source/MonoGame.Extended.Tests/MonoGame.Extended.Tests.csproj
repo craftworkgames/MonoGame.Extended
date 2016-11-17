@@ -63,6 +63,7 @@
     <Compile Include="Collections\DequeTests.cs" />
     <Compile Include="Collections\PoolTests.cs" />
     <Compile Include="Graphics\PrimitiveTypeExtensionsTests.cs" />
+    <Compile Include="Gui\GuiControlCollectionTests.cs" />
     <Compile Include="Maps\Renderers\FullMapRendererTest.cs" />
     <Compile Include="Maps\Tiled\TiledTilesetTest.cs" />
     <Compile Include="MockGameWindow.cs" />
@@ -100,9 +101,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Gui\" />
     <Folder Include="Particles\Modifiers\" />
-    <Folder Include="Shapes" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
