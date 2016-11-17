@@ -100,6 +100,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Batching", "Demos\Demo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.NuclexGui", "Demos\Demo.NuclexGui\Demo.NuclexGui.csproj", "{8003BA78-CB44-46B5-85A2-2A6440C3EFDC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Collisions", "MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj", "{02562C6F-5BFB-467E-8A95-68B6CE2D635A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -276,6 +278,14 @@ Global
 		{8003BA78-CB44-46B5-85A2-2A6440C3EFDC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8003BA78-CB44-46B5-85A2-2A6440C3EFDC}.Release|x86.ActiveCfg = Release|Any CPU
 		{8003BA78-CB44-46B5-85A2-2A6440C3EFDC}.Release|x86.Build.0 = Release|Any CPU
+		{02562C6F-5BFB-467E-8A95-68B6CE2D635A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02562C6F-5BFB-467E-8A95-68B6CE2D635A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02562C6F-5BFB-467E-8A95-68B6CE2D635A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{02562C6F-5BFB-467E-8A95-68B6CE2D635A}.Debug|x86.Build.0 = Debug|Any CPU
+		{02562C6F-5BFB-467E-8A95-68B6CE2D635A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02562C6F-5BFB-467E-8A95-68B6CE2D635A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02562C6F-5BFB-467E-8A95-68B6CE2D635A}.Release|x86.ActiveCfg = Release|Any CPU
+		{02562C6F-5BFB-467E-8A95-68B6CE2D635A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
