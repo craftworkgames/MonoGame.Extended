@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Shapes;
-using MonoGame.Extended.Sprites;
+using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui
 {
@@ -66,9 +66,11 @@ namespace MonoGame.Extended.Gui
                 var destinationRectangle = GuiAlignmentHelper.GetDestinationRectangle(
                     control.HorizontalAlignment, control.VerticalAlignment, sourceRectangle, targetRectangle);
                 var color = control.BackgroundColor * (control.BackgroundColor.A / 255f);
-                var ninePatch = new NinePatch(control.BackgroundRegion, control.Padding.Left, control.Padding.Top,
-                    control.Padding.Right, control.Padding.Bottom);
-                ninePatch.Draw(spriteBatch, destinationRectangle, color);
+                //var ninePatch = new NinePatchRegion2D(control.BackgroundRegion, control.Padding.Left, control.Padding.Top,
+                //    control.Padding.Right, control.Padding.Bottom);
+
+                spriteBatch.Draw(control.BackgroundRegion, destinationRectangle, color);
+                //ninePatch.Draw(spriteBatch, destinationRectangle, color);
             }
         }
 

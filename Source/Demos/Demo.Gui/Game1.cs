@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
+using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Gui
@@ -31,20 +32,6 @@ namespace Demo.Gui
         {
             base.Initialize();
 
-            var screen = new GuiScreen()
-            {
-                Controls =
-                {
-                    new GuiPanel
-                    {
-                        Name = "HelloPanel",
-                        Position = new Vector2(100, 100),
-                        Size = new SizeF(400, 240)
-                    }
-                }
-            };
-
-            _guiRenderer = new GuiSpriteBatchRenderer(screen);
         }
 
         protected override void LoadContent()
@@ -55,6 +42,25 @@ namespace Demo.Gui
 
             //var button2 = layout.FindControl<GuiButton>("PlayButton1");
             //button2.Click += (sender, args) => button.IsEnabled = !button.IsEnabled;
+            var texture = Content.Load<Texture2D>("kenney-gui-blue");
+            var textureRegion = new TextureRegion2D(texture, 190, 94, 100, 100);
+            var bluePanel = new NinePatchRegion2D(textureRegion, 10, 10, 10, 10);
+
+            var screen = new GuiScreen
+            {
+                Controls =
+                {
+                    new GuiPanel
+                    {
+                        Name = "HelloPanel",
+                        Position = new Vector2(100, 100),
+                        Size = new SizeF(400, 240),
+                        BackgroundRegion = bluePanel
+                    }
+                }
+            };
+
+            _guiRenderer = new GuiSpriteBatchRenderer(screen);
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
         }

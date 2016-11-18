@@ -264,7 +264,7 @@
     <Compile Include="Shapes\ShapeF.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="SizeF.cs" />
-    <Compile Include="Sprites\NinePatch.cs" />
+    <Compile Include="TextureAtlases\NinePatchRegion2D.cs" />
     <Compile Include="Sprites\SpriteBatchExtensions.cs" />
     <Compile Include="TextureAtlases\TextureAtlas.cs" />
     <Compile Include="TextureAtlases\TextureAtlasReader.cs" />
