@@ -183,6 +183,11 @@ namespace MonoGame.Extended.Maps.Renderers
 
         public void RebuildDynamicRenderDetails()
         {
+            if (_currentRenderDetails == null)
+            {
+                return;
+            }
+
             var camPosition = Vector2.Negate(Vector2.Transform(Vector2.Zero, _basicEffect.View));
             var camViewport = new Rectangle((int)camPosition.X, (int)camPosition.Y, _graphicsDevice.Viewport.Width,
                 _graphicsDevice.Viewport.Height);
