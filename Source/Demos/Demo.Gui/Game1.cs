@@ -29,7 +29,7 @@ namespace Demo.Gui
             var texture = Content.Load<Texture2D>("kenney-gui-blue");
             var textureRegion = new TextureRegion2D(texture, 190, 94, 100, 100);
             var bluePanel = new NinePatchRegion2D(textureRegion, 10, 10, 10, 10);
-            var font = Content.Load<BitmapFont>("montserrat-32");
+            var font = Content.Load<BitmapFont>("small-font");
 
             var screen = new GuiScreen
             {
@@ -46,16 +46,18 @@ namespace Demo.Gui
                             new GuiLabel
                             {
                               Position = new Vector2(10, 10),
-                              Size = new SizeF(120, 50),
-                              Text = "label:"
+                              Size = new SizeF(80, 25),
+                              Text = "Label:",
+                              HorizontalTextAlignment = GuiHorizontalAlignment.Right,
+                              VerticalTextAlignment = GuiVerticalAlignment.Centre
                             },
                             new GuiButton
                             {
-                                Position = new Vector2(120, 10),
-                                Size = new SizeF(120, 50),
+                                Position = new Vector2(100, 10),
+                                Size = new SizeF(80, 25),
                                 BackgroundRegion = bluePanel,
                                 BackgroundColor = Color.DarkBlue,
-                                Text = "button",
+                                Text = "Button",
                                 HoverStyle = new GuiControlStyle(typeof(GuiButton))
                                 {
                                     Setters =
