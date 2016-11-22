@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.TextureAtlases;
@@ -28,6 +29,7 @@ namespace Demo.Gui
             var texture = Content.Load<Texture2D>("kenney-gui-blue");
             var textureRegion = new TextureRegion2D(texture, 190, 94, 100, 100);
             var bluePanel = new NinePatchRegion2D(textureRegion, 10, 10, 10, 10);
+            var font = Content.Load<BitmapFont>("montserrat-32");
 
             var screen = new GuiScreen
             {
@@ -38,12 +40,36 @@ namespace Demo.Gui
                         Name = "HelloPanel",
                         Position = new Vector2(100, 100),
                         Size = new SizeF(400, 240),
-                        BackgroundRegion = bluePanel
+                        BackgroundRegion = bluePanel,
+                        Controls =
+                        {
+                            new GuiLabel
+                            {
+                              Position = new Vector2(10, 10),
+                              Size = new SizeF(120, 50),
+                              Text = "label:"
+                            },
+                            new GuiButton
+                            {
+                                Position = new Vector2(120, 10),
+                                Size = new SizeF(120, 50),
+                                BackgroundRegion = bluePanel,
+                                BackgroundColor = Color.DarkBlue,
+                                Text = "button",
+                                HoverStyle = new GuiControlStyle(typeof(GuiButton))
+                                {
+                                    Setters =
+                                    {
+                                        { "BackgroundColor", Color.White }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             };
 
-            _guiRenderer = new GuiSpriteBatchRenderer(screen);
+            _guiRenderer = new GuiSpriteBatchRenderer(screen, font);
             _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
@@ -63,7 +89,7 @@ namespace Demo.Gui
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             base.Draw(gameTime);
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
@@ -21,9 +22,12 @@ namespace MonoGame.Extended.Gui
 
     public class GuiSpriteBatchRenderer : GuiRenderer<SpriteBatch>
     {
-        public GuiSpriteBatchRenderer(GuiScreen targetScreen)
+        private readonly BitmapFont _defaultFont;
+
+        public GuiSpriteBatchRenderer(GuiScreen targetScreen, BitmapFont defaultFont = null)
             : base(targetScreen)
         {
+            _defaultFont = defaultFont;
         }
 
         protected override void DrawControl(SpriteBatch spriteBatch, GuiControl control)
@@ -34,12 +38,14 @@ namespace MonoGame.Extended.Gui
             DrawText(spriteBatch, control, destinationRectangle);
         }
 
-        private static void DrawText(SpriteBatch spriteBatch, GuiControl control, Rectangle rectangle)
+        private void DrawText(SpriteBatch spriteBatch, GuiControl control, Rectangle rectangle)
         {
-            if (control.Font == null)
+            var font = control.Font ?? _defaultFont;
+
+            if (font == null)
                 return;
 
-            var size = control.Font.MeasureString(control.Text);
+            var size = font.MeasureString(control.Text);
             var sourceRectangle = new Rectangle(0, 0, size.Width, size.Height);
             var targetRectangle = rectangle;
             targetRectangle = new Rectangle(
@@ -50,14 +56,14 @@ namespace MonoGame.Extended.Gui
             var destinationRectangle = GuiAlignmentHelper.GetDestinationRectangle(
                 control.HorizontalTextAlignment, control.VerticalTextAlignment, sourceRectangle, targetRectangle);
 
-            spriteBatch.DrawString(control.Font, control.Text, destinationRectangle.Location.ToVector2(), control.TextColor * (control.TextColor.A / 255f));
+            spriteBatch.DrawString(font, control.Text, destinationRectangle.Location.ToVector2(), control.TextColor * (control.TextColor.A / 255f));
         }
 
         private static void DrawBackground(SpriteBatch spriteBatch, GuiControl control, Rectangle rectangle)
         {
             if (control.BackgroundRegion == null)
             {
-                spriteBatch.FillRectangle(control.Position, control.Size, control.BackgroundColor);
+                spriteBatch.FillRectangle(rectangle, control.BackgroundColor);
             }
             else
             {
@@ -66,18 +72,27 @@ namespace MonoGame.Extended.Gui
                 var destinationRectangle = GuiAlignmentHelper.GetDestinationRectangle(
                     control.HorizontalAlignment, control.VerticalAlignment, sourceRectangle, targetRectangle);
                 var color = control.BackgroundColor * (control.BackgroundColor.A / 255f);
-                //var ninePatch = new NinePatchRegion2D(control.BackgroundRegion, control.Padding.Left, control.Padding.Top,
-                //    control.Padding.Right, control.Padding.Bottom);
 
                 spriteBatch.Draw(control.BackgroundRegion, destinationRectangle, color);
-                //ninePatch.Draw(spriteBatch, destinationRectangle, color);
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var control in TargetScreen.Controls)
+            DrawControls(spriteBatch, TargetScreen.Controls);
+        }
+
+        private void DrawControls(SpriteBatch spriteBatch, IEnumerable<GuiControl> controls)
+        {
+            foreach (var control in controls)
+            {
                 DrawControl(spriteBatch, control);
+
+                var panel = control as GuiPanel;
+
+                if (panel != null)
+                    DrawControls(spriteBatch, panel.Controls);
+            }
         }
     }
 }
