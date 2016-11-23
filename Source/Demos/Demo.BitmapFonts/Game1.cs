@@ -193,7 +193,7 @@ namespace Demo.BitmapFonts
         private void DrawInstructions()
         {
             const string instructions = "W = Wrap, R = Rotate, +/- = Scale, F = Flip, Up/Down = Layer";
-            var textSize = _bitmapFont.GetSize(instructions);
+            var textSize = _bitmapFont.MeasureString(instructions);
             var screenWidth = _viewportAdapter.VirtualWidth;
             var x = screenWidth/2 - textSize.Width/2;
             _spriteBatch.DrawString(_bitmapFont, instructions, new Vector2(x, 410), Color.Black);

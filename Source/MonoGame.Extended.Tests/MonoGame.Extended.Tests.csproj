@@ -58,6 +58,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitmapFonts\BitmapFontTests.cs" />
+    <Compile Include="TestGraphicsDevice.cs" />
     <Compile Include="Collections\BitVector32Tests.cs" />
     <Compile Include="AngleTest.cs" />
     <Compile Include="Collections\DequeTests.cs" />

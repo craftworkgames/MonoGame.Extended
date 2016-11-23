@@ -31,6 +31,7 @@ namespace MonoGame.Extended.BitmapFonts
         internal static IEnumerable<int> GetUnicodeCodePoints(string s)
         {
             if (!string.IsNullOrEmpty(s))
+            {
                 for (var i = 0; i < s.Length; i += 1)
                 {
                     if (char.IsLowSurrogate(s, i))
@@ -38,9 +39,10 @@ namespace MonoGame.Extended.BitmapFonts
 
                     yield return char.ConvertToUtf32(s, i);
                 }
+            }
         }
 
-        public Size GetSize(string text)
+        public Size MeasureString(string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
 
@@ -76,7 +78,9 @@ namespace MonoGame.Extended.BitmapFonts
                 if (character == newlineCodePoint)
                 {
                     totalHeight += lineHeight;
-                    if (totalWidth < lineWidth) totalWidth = lineWidth;
+
+                    if (totalWidth < lineWidth)
+                        totalWidth = lineWidth;
 
                     lineHeight = 0;
                     lineWidth = 0;
@@ -85,19 +89,12 @@ namespace MonoGame.Extended.BitmapFonts
 
             if (totalWidth == 0)
                 totalWidth = lineWidth;
+
             totalHeight += lineHeight;
 
             return new Size(totalWidth, totalHeight);
         }
-
-        public Size MeasureString(string text)
-        {
-            if (text == null) throw new ArgumentNullException(nameof(text));
-
-            var size = GetSize(text);
-            return size;
-        }
-
+        
         public Size MeasureString(StringBuilder stringBuilder)
         {
             if (stringBuilder == null) throw new ArgumentNullException(nameof(stringBuilder));
@@ -107,9 +104,9 @@ namespace MonoGame.Extended.BitmapFonts
 
         public Rectangle GetStringRectangle(string text, Vector2 position)
         {
-            var size = GetSize(text);
-            var p = position.ToPoint();
-            return new Rectangle(p.X, p.Y, size.Width, size.Height);
+            var size = MeasureString(text);
+            var point = position.ToPoint();
+            return new Rectangle(point.X, point.Y, size.Width, size.Height);
         }
 
         public override string ToString()
