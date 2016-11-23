@@ -66,6 +66,7 @@
     </Content>
     <Content Include="Content\kenney-gui-blue.png" />
     <Content Include="Content\montserrat-32_0.png" />
+    <Content Include="Content\small-font_0.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +75,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Content\montserrat-32.fnt" />
+    <None Include="Content\small-font.fnt" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -22,7 +22,7 @@ namespace MonoGame.Extended.Gui.Controls
         public float Bottom => Position.Y + Height;
         public float Width => Size.Width;
         public float Height => Size.Height;
-        public Vector2 Center => new Vector2(Position.X + Width*0.5f, Position.Y + Height*0.5f);
+        public Vector2 Center => new Vector2(Position.X + Width * 0.5f, Position.Y + Height * 0.5f);
         public RectangleF BoundingRectangle => new RectangleF(Left, Top, Width, Height);
         public bool IsFocused { get; internal set; }
         public TextureRegion2D BackgroundRegion { get; set; }
@@ -41,7 +41,24 @@ namespace MonoGame.Extended.Gui.Controls
         public Color TextColor { get; set; } = Color.White;
         public GuiHorizontalAlignment HorizontalTextAlignment { get; set; } = GuiHorizontalAlignment.Centre;
         public GuiVerticalAlignment VerticalTextAlignment { get; set; } = GuiVerticalAlignment.Centre;
-        public Rectangle DestinationRectangle => new Rectangle((int)Position.X, (int)Position.Y, (int)Size.Width, (int)Size.Height);
+
+        public Rectangle DestinationRectangle
+        {
+            get
+            {
+                var x = (int) Position.X;
+                var y = (int) Position.Y;
+
+                if (Parent != null)
+                {
+                    var parentRectangle = Parent.DestinationRectangle;
+                    x += parentRectangle.X;
+                    y += parentRectangle.Y;
+                }
+
+                return new Rectangle(x, y, (int)Size.Width, (int)Size.Height);
+            }
+        }
 
         private bool _isHovered;
         public bool IsHovered
