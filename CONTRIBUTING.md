@@ -49,14 +49,14 @@ It is **NEVER ACCEPTABLE** to decompile copyrighted assemblies and submit that c
 * It **DOES NOT** matter how small the bit of code you have stolen is.  
 * It **DOES NOT** matter what your opinion is of stealing code.
 
-If you did not write the code, you do not have ownership of the code, and you shouldn't submit it to MonoGame.
+If you did not write the code, you do not have ownership of the code, and you shouldn't submit it to MonoGame.Extended.
 
-If we find a contribution in violation of copyright it will be immediately removed.  We will bar that contributor from the MonoGame project.
+If we find a contribution in violation of copyright it will be immediately removed.  We will bar that contributor from the MonoGame.Extended project.
 
 
 ## Licensing
 
-The MonoGame.Extended project is under the [MIT License](https://opensource.org/licenses/MIT) unless a portion of code is explicitly stated elsewhere. See the [LICENSE.txt](LICENSE.txt) for more details. Third-party libraries used by MonoGame.Extended are under their own licenses.  Please refer to those libraries for details on the license they use.
+The MonoGame.Extended project is under the [MIT License](https://opensource.org/licenses/MIT) unless a portion of code is explicitly stated elsewhere. See the [LICENSE](LICENSE) for more details. Third-party libraries used by MonoGame.Extended are under their own licenses.  Please refer to those libraries for details on the license they use.
 
 We accept contributions in "good faith" that it isn't bound to a conflicting license.  By submitting a PR you agree to distribute your work under the MonoGame.Extended license and copyright.
 
