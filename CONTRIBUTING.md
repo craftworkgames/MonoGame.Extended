@@ -1,23 +1,23 @@
 # Contributing to MonoGame.Extended
 
-We're happy that you have chosen to contribute to the MonoGame project.
+We're happy that you have chosen to contribute to the MonoGame Extended project.
 
-You are joining a group of hundreds of volunteers that have helped build MonoGame since 2009.  To organize these efforts the MonoGame Team has written this simple guide to help you.
+You are joining a team of dedicated volunteers that are building an extension library to the game framework [MonoGame](http://www.monogame.net/).
 
 Please read this document completely before contributing.
 
 
 ## How To Contribute
 
-MonoGame has a `master` branch for stable releases and a `develop` branch for daily development.  New features and fixes are always submitted to the `develop` branch.
+MonoGame.Extended has a `master` branch for stable releases and a `develop` branch for daily development.  New features and fixes are always submitted to the `develop` branch.
 
-If you are looking for ways to help you should start by looking at the [Help Wanted tasks](https://github.com/mono/MonoGame/issues?q=is%3Aissue+is%3Aopen+label%3A%22Help+Wanted%22).  Please let us know if you plan to work on an issue so that others are not duplicating work.
+If you are looking for ways to help you should start by looking at the [Open Issues](https://github.com/craftworkgames/MonoGame.Extended/issues).  Please let us know if you plan to work on an issue so that others are not duplicating work.
 
-The MonoGame project follows standard [GitHub flow](https://guides.github.com/introduction/flow/index.html).  You should learn and be familiar with how to [use Git](https://help.github.com/articles/set-up-git/), how to [create a fork of MonoGame](https://help.github.com/articles/fork-a-repo/), and how to [submit a Pull Request](https://help.github.com/articles/using-pull-requests/).
+The MonoGame.Extended project follows standard [GitHub flow](https://guides.github.com/introduction/flow/index.html).  You should learn and be familiar with how to [use Git](https://help.github.com/articles/set-up-git/), how to [create a fork of MonoGame.Extended](https://help.github.com/articles/fork-a-repo/), and how to [submit a Pull Request](https://help.github.com/articles/using-pull-requests/).
 
 After you submit a PR the [MonoGame build server](http://teamcity.monogame.net/?guest=1) will build your changes and verify all tests pass.  Project maintainers and contributors will review your changes and provide constructive feedback to improve your submission.
 
-Once satisfied that your changes are good for MonoGame we will merge it.
+Once satisfied that your changes are good for MonoGame.Extended we will merge it.
 
 
 ## Quick Guidelines
@@ -31,7 +31,7 @@ Here are a few simple rules and suggestions to remember when contributing to Mon
 * **PLEASE** be sure to write simple and descriptive commit messages.
 * **DO NOT** surprise us with new APIs or big new features. Open an issue to discuss your ideas first.
 * **DO NOT** reorder type members as it makes it difficult to compare code changes in a PR.
-* **DO** try to follow our [coding style](https://github.com/mono/MonoGame/wiki/Coding-Guidelines) for new code.
+[//]: # * **DO** try to follow our [coding style](https://github.com/mono/MonoGame/wiki/Coding-Guidelines) for new code.
 * **DO** give priority to the existing style of the file you're changing.
 * **DO** try to add to our [unit tests](Test) when adding new features or fixing bugs.
 * **DO NOT** send PRs for code style changes or make code changes just for the sake of style.
