@@ -15,6 +15,8 @@ If you are looking for ways to help you should start by looking at the [Open Iss
 
 The MonoGame.Extended project follows standard [GitHub flow](https://guides.github.com/introduction/flow/index.html).  You should learn and be familiar with how to [use Git](https://help.github.com/articles/set-up-git/), how to [create a fork of MonoGame.Extended](https://help.github.com/articles/fork-a-repo/), and how to [submit a Pull Request](https://help.github.com/articles/using-pull-requests/).
 
+After you submit a PR the MonoGame.Extended [build server](http://build.craftworkgames.com/) will build your changes and verify all tests pass. Project maintainers and contributors will review your changes and provide constructive feedback to improve your submission.
+
 Once satisfied that your changes are good for MonoGame.Extended we will merge it.
 
 
@@ -29,7 +31,6 @@ Here are a few simple rules and suggestions to remember when contributing to Mon
 * **PLEASE** be sure to write simple and descriptive commit messages.
 * **DO NOT** surprise us with new APIs or big new features. Open an issue to discuss your ideas first.
 * **DO NOT** reorder type members as it makes it difficult to compare code changes in a PR.
-* **DO** try to follow our [coding style]() for new code.
 * **DO** give priority to the existing style of the file you're changing.
 * **DO** try to add to our [unit tests](Source/MonoGame.Extended.Tests) when adding new features or fixing bugs.
 * **DO NOT** send PRs for code style changes or make code changes just for the sake of style.
@@ -56,16 +57,10 @@ If we find a contribution in violation of copyright it will be immediately remov
 
 ## Licensing
 
-The MonoGame.Extended project is under the [MIT License](https://opensource.org/licenses/MIT) unless a portion of code is explicitly stated elsewhere. See the [LICENSE](LICENSE) for more details. Third-party libraries used by MonoGame.Extended are under their own licenses.  Please refer to those libraries for details on the license they use.
+The MonoGame.Extended project is under the [MIT License](https://opensource.org/licenses/MIT) unless a portion of code is explicitly stated elsewhere. See the [LICENSE](LICENSE) for more details. Third-party libraries used by MonoGame.Extended are under their own licenses, we always seek permission from the original author of those libraries.. Please refer to those libraries for details on the license they use.
 
 We accept contributions in "good faith" that it isn't bound to a conflicting license.  By submitting a PR you agree to distribute your work under the MonoGame.Extended license and copyright.
 
-To this end when submitting new files include the following in the header if appropriate:
-```csharp
-// MonoGame.Extended - Copyright (C) Dylan Wilson
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
-```
 
 ## Need More Help?
 
