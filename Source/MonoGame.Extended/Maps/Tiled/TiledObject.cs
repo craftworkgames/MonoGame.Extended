@@ -17,7 +17,6 @@ namespace MonoGame.Extended.Maps.Tiled
             Id = id;
             Gid = gid;
             Shape = shape;
-            Points = new List<Vector2>();
             Properties = new TiledProperties();
             Position = position;
             TilesetTile = tilesetTile;
@@ -30,7 +29,6 @@ namespace MonoGame.Extended.Maps.Tiled
 
         public Vector2 Position { get; }
         public TiledProperties Properties { get; }
-        public List<Vector2> Points { get; }
         public bool IsVisible { get; set; }
         public float Opacity { get; set; }
         public float Rotation { get; set; }

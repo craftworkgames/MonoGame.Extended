@@ -164,8 +164,10 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
             foreach (var tmxObject in layer.Objects)
             {
-                logger?.LogMessage($"Writing object: {tmxObject.Name ?? tmxObject.Id.ToString()}");
                 var objectType = GetObjectType(tmxObject);
+
+                logger?.LogMessage(
+                    $"Writing {objectType} object: {tmxObject.Name ?? tmxObject.Id.ToString()} [({tmxObject.X}, {tmxObject.Y}) {tmxObject.Width}x{tmxObject.Height}]");
 
                 writer.Write((int)objectType);
                 writer.Write(tmxObject.Id);

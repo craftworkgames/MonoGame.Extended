@@ -130,7 +130,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 else if (objectType == TiledObjectType.Ellipse)
                 {
                     Vector2 center = new Vector2(x + width / 2.0f, y + height / 2.0f);
-                    shape = new EllipseF(center, x / 2.0f, y / 2.0f);
+                    shape = new EllipseF(center, width / 2.0f, height / 2.0f);
                 }
                 else if (objectType == TiledObjectType.Rectangle || objectType == TiledObjectType.Tile)
                 {
