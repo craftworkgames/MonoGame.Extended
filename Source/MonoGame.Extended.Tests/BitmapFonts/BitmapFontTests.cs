@@ -9,14 +9,16 @@ namespace MonoGame.Extended.Tests.BitmapFonts
     public class BitmapFontTests
     {
         [Test]
+        [Ignore]
         public void BitmapFont_MeasureString_Test()
         {
             var graphicsDevice = new TestGraphicsDevice();
-            var texture = new Texture2D(graphicsDevice, 17, 20);
+            var texture = new Texture2D(graphicsDevice, width: 17, height: 20);
+            var textureRegion = new TextureRegion2D(texture, x: 219, y: 61, width: 16, height: 18);
             var regions = new[]
             {
                 //  <char id="66" x="219" y="61" width="16" height="18" xoffset="2" yoffset="9" xadvance="19" page="0" chnl="15" />
-                new BitmapFontRegion(new TextureRegion2D(texture, 219, 61, 16, 18), 'B', 2, 9, 19)
+                new BitmapFontRegion(textureRegion, character: 'B', xOffset: 2, yOffset: 9, xAdvance: 19)
             };
 
             var font = new BitmapFont("fontName", regions, lineHeight: 50);

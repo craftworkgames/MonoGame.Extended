@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
@@ -118,80 +116,6 @@ namespace MonoGame.Extended.BitmapFonts
         }
 
         /// <summary>
-        ///     Adds a string to a batch of sprites for rendering using the specified font, text, position, color, rotation,
-        ///     origin, scale, effects and layer.
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        /// <param name="font">A font for displaying text.</param>
-        /// <param name="text">The text message to display.</param>
-        /// <param name="position">The location (in screen coordinates) to draw the text.</param>
-        /// <param name="color">
-        ///     The <see cref="Color" /> to tint a sprite. Use <see cref="Color.White" /> for full color with no
-        ///     tinting.
-        /// </param>
-        /// <param name="rotation">Specifies the angle (in radians) to rotate the text about its origin.</param>
-        /// <param name="origin">The origin for each letter; the default is (0,0) which represents the upper-left corner.</param>
-        /// <param name="scalef">Scale factor.</param>
-        /// <param name="effects">Effects to apply.</param>
-        /// <param name="layerDepth">
-        ///     The depth of a layer. By default, 0 represents the front layer and 1 represents a back layer.
-        ///     Use SpriteSortMode if you want sprites to be sorted during drawing.
-        /// </param>
-        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, StringBuilder text,
-            Vector2 position,
-            Color color, float rotation, Vector2 origin, float scalef, SpriteEffects effects, float layerDepth)
-        {
-            var scale = new Vector2(scalef, scalef);
-            DrawInternal(spriteBatch, font, text.ToString(), position, color, rotation, origin, scale, effects,
-                layerDepth);
-        }
-
-        /// <summary>
-        ///     Adds a string to a batch of sprites for rendering using the specified font, text, position, color, rotation,
-        ///     origin, scale, effects and layer.
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        /// <param name="font">A font for displaying text.</param>
-        /// <param name="text">The text message to display.</param>
-        /// <param name="position">The location (in screen coordinates) to draw the text.</param>
-        /// <param name="color">
-        ///     The <see cref="Color" /> to tint a sprite. Use <see cref="Color.White" /> for full color with no
-        ///     tinting.
-        /// </param>
-        /// <param name="rotation">Specifies the angle (in radians) to rotate the text about its origin.</param>
-        /// <param name="origin">The origin for each letter; the default is (0,0) which represents the upper-left corner.</param>
-        /// <param name="scale">Scale factor.</param>
-        /// <param name="effects">Effects to apply.</param>
-        /// <param name="layerDepth">
-        ///     The depth of a layer. By default, 0 represents the front layer and 1 represents a back layer.
-        ///     Use SpriteSortMode if you want sprites to be sorted during drawing.
-        /// </param>
-        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, StringBuilder text,
-            Vector2 position,
-            Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
-        {
-            DrawInternal(spriteBatch, font, text.ToString(), position, color, rotation, origin, scale, effects,
-                layerDepth);
-        }
-
-        /// <summary>
-        ///     Adds a string to a batch of sprites for rendering using the specified font, text, position, and color.
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        /// <param name="font">A font for displaying text.</param>
-        /// <param name="text">The text message to display.</param>
-        /// <param name="position">The location (in screen coordinates) to draw the text.</param>
-        /// <param name="color">
-        ///     The <see cref="Color" /> to tint a sprite. Use <see cref="Color.White" /> for full color with no
-        ///     tinting.
-        /// </param>
-        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, StringBuilder text,
-            Vector2 position, Color color)
-        {
-            DrawInternal(spriteBatch, font, text.ToString(), position, color, 0f);
-        }
-
-        /// <summary>
         ///     Method to handle wrapping text at a specified width. Passes onto the <see cref="DrawInto" /> method
         ///     if the user passes in int.MaxValue as the width.
         /// </summary>
@@ -211,7 +135,8 @@ namespace MonoGame.Extended.BitmapFonts
         private static void DrawWrapped(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position,
             Color color, int wrapWidth, float layerDepth)
         {
-            HandleNullParameters(font, text);
+            if (font == null) throw new ArgumentNullException(nameof(font));
+            if (text == null) throw new ArgumentNullException(nameof(text));
 
             if (wrapWidth == int.MaxValue)
             {
@@ -302,57 +227,11 @@ namespace MonoGame.Extended.BitmapFonts
         private static void DrawInternal(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position,
             Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
         {
-            HandleNullParameters(font, text);
+            if (font == null) throw new ArgumentNullException(nameof(font));
+            if (text == null) throw new ArgumentNullException(nameof(text));
 
-            var dx = position.X;
-            var dy = position.Y;
-            var codePoints = BitmapFont.GetUnicodeCodePoints(text).ToArray();
-            var positionOffset = Vector2.Zero;
-
-            for (int i = 0, l = codePoints.Length; i < l; i++)
-            {
-                var character = codePoints[i];
-                var fontRegion = font.GetCharacterRegion(character);
-
-                if (fontRegion != null)
-                {
-                    var charPosition = new Vector2(dx + fontRegion.XOffset, dy + fontRegion.YOffset);
-                    var scaledCharPosition = charPosition*new Vector2(scale.X, scale.Y);
-
-                    if (i == 0)
-                        positionOffset = scaledCharPosition - charPosition;
-
-                    scaledCharPosition -= positionOffset;
-
-                    spriteBatch.Draw(fontRegion.TextureRegion, scaledCharPosition, color, rotation, origin, scale,
-                        effects,
-                        layerDepth);
-
-                    if (i != text.Length - 1)
-                        dx += fontRegion.XAdvance + font.LetterSpacing;
-                    else
-                        dx += fontRegion.XOffset + fontRegion.Width;
-                }
-
-                if (character != '\n') continue;
-
-                dy += font.LineHeight;
-                dx = position.X;
-            }
-        }
-
-        /// <summary>
-        ///     Handles dealing with null properties that are essential to rendering the <see cref="BitmapFont" />.
-        /// </summary>
-        /// <param name="bitmapFont">All draw functions must have a <see cref="BitmapFont" /> to use.</param>
-        /// <param name="text">All draw functions must have text to use.</param>
-        private static void HandleNullParameters(BitmapFont bitmapFont, string text)
-        {
-            if (bitmapFont == null)
-                throw new ArgumentNullException(nameof(bitmapFont), "No BitmapFont specified.");
-
-            if (text == null)
-                throw new ArgumentNullException(nameof(text), "No text string specified.");
+            foreach (var characterPosition in font.GetCharacterPositions(text, position, scale))
+                spriteBatch.Draw(characterPosition.Region.TextureRegion, characterPosition.Position, color, rotation, origin, scale, effects, layerDepth);
         }
     }
 }
