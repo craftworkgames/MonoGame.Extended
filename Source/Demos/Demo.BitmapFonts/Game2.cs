@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.BitmapFonts
@@ -48,7 +47,7 @@ namespace Demo.BitmapFonts
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _rotation += deltaTime;
+            _rotation += deltaTime * 0.01f;
 
             base.Update(gameTime);
         }
@@ -63,27 +62,25 @@ namespace Demo.BitmapFonts
                 transformMatrix: _viewportAdapter.GetScaleMatrix());
             //_spriteBatch.Draw(_backgroundTexture, _viewportAdapter.BoundingRectangle, Color.White);
 
-            const string helloWorld = "The quick brown fox jumps over the lazy dog\r\nLorem ipsum dolor sit amet, consectetuer.";
-
-            //DrawText(helloWorld, new Vector2(20, 30), Color.White);
-            //DrawText("New\r\nLine", new Vector2(220, 30), Color.White);
-            //DrawText("This is a very long line that should be wrapped", new Vector2(20, 230), Color.White);
-
+            const string helloWorld = "The quick brown fox jumps over the lazy dog\r\nThe lazy dog jumps back over the quick brown fox";
+            
             var position = new Vector2(400, 240);
             var offset = new Vector2(0, 100);
+            var scale = Vector2.One * 1.2f;
+            var color = Color.White;
             //_rotation = MathHelper.Pi/16f;
 
             // sprite font
             var spriteFontSize = _spriteFont.MeasureString(helloWorld);
-
+            
             _spriteBatch.DrawString(
                 spriteFont: _spriteFont,
                 text: helloWorld,
                 position: position - offset,
-                color: Color.White,
+                color: color,
                 rotation: _rotation,
                 origin: new Vector2(spriteFontSize.X / 2f, spriteFontSize.Y / 2f),
-                scale: Vector2.One,
+                scale: scale,
                 effects: SpriteEffects.None,
                 layerDepth: 0);
             
@@ -96,11 +93,11 @@ namespace Demo.BitmapFonts
                 bitmapFont: _bitmapFont,
                 text: helloWorld,
                 position: position + offset,
-                color: Color.White,
+                color: color,
                 rotation: _rotation,
                 origin: new Vector2(bitmapFontSize.Width / 2f, bitmapFontSize.Height / 2f),
-                scale: Vector2.One,
-                effects: SpriteEffects.None,
+                scale: scale,
+                effect: SpriteEffects.None,
                 layerDepth: 0);
             
             //_spriteBatch.DrawRectangle(position - origin + offset, bitmapFontSize, Color.Red);
@@ -108,13 +105,6 @@ namespace Demo.BitmapFonts
             _spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        private void DrawText(string text, Vector2 position, Color color)
-        {
-            var stringRectangle = _bitmapFont.GetStringRectangle(text, position);
-            _spriteBatch.DrawRectangle(stringRectangle, Color.Red);
-            _spriteBatch.DrawString(_bitmapFont, text, position, color, wrapWidth: 400);
         }
     }
 }
