@@ -1,4 +1,6 @@
-﻿using MonoGame.Extended.NuclexGui.Controls.Desktop;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.NuclexGui.Controls.Desktop;
 
 namespace MonoGame.Extended.NuclexGui.Visuals.Flat.Renderers
 {
@@ -40,6 +42,10 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat.Renderers
 
             // Draw the button's frame
             graphics.DrawElement(_states[stateIndex], controlBounds);
+
+            // If there's image assigned to the button, draw it into the button
+            if (control.Texture != null)
+                graphics.DrawImage(controlBounds, control.Texture, control.SourceRectangle);
 
             // If there's text assigned to the button, draw it into the button
             if (!string.IsNullOrEmpty(control.Text))

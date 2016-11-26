@@ -94,14 +94,34 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
                     PositionText(ref frame.Texts[index], bounds, text), frame.Texts[index].Color);
         }
 
+        public void DrawImage(RectangleF bounds, Texture2D texture, Rectangle sourceRectangle)
+        {
+            var destinationRectangle = new Rectangle();
+
+            if (bounds.Width > bounds.Height)
+            {
+                destinationRectangle.Height = Convert.ToInt32(Math.Round(bounds.Height * 0.8));
+                destinationRectangle.Width = Convert.ToInt32(Math.Round(bounds.Width * 0.8 * (bounds.Height / sourceRectangle.Height)));
+                destinationRectangle.X = Convert.ToInt32(Math.Round(bounds.Center.X)) - destinationRectangle.Width / 2;
+                destinationRectangle.Y = Convert.ToInt32(Math.Round(bounds.Center.Y)) - destinationRectangle.Height / 2;
+            }
+            else
+            {
+                destinationRectangle.Width = Convert.ToInt32(Math.Round(bounds.Width * 0.8));
+                destinationRectangle.Height = Convert.ToInt32(Math.Round(bounds.Height * 0.8 * (bounds.Width / sourceRectangle.Width)));
+                destinationRectangle.X = Convert.ToInt32(Math.Round(bounds.Center.X)) - destinationRectangle.Width / 2;
+                destinationRectangle.Y = Convert.ToInt32(Math.Round(bounds.Center.Y)) - destinationRectangle.Height / 2;
+            }
+
+            _spriteBatch.Draw(texture, destinationRectangle, sourceRectangle, Color.White);
+        }
+
         /// <summary>Draws a caret for text input at the specified index</summary>
         /// <param name="frameName">Class of the element for which to draw a caret</param>
         /// <param name="bounds">Region that will be covered by the drawn element</param>
         /// <param name="text">Text for which a caret will be drawn</param>
         /// <param name="caretIndex">Index the caret will be drawn at</param>
-        public void DrawCaret(
-            string frameName, RectangleF bounds, string text, int caretIndex
-        )
+        public void DrawCaret(string frameName, RectangleF bounds, string text, int caretIndex)
         {
             var frame = LookupFrame(frameName);
 

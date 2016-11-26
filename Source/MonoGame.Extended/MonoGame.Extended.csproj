@@ -312,15 +312,15 @@
     <EmbeddedResource Include="NuclexGui\Resources\Skins\SuaveSkin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="NuclexGui\Resources\Skins\DefaultFont.xnb">
+    <Content Include="NuclexGui\Resources\Skins\DefaultFont.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NuclexGui\Resources\Skins\SuaveSheet.xnb">
+    </Content>
+    <Content Include="NuclexGui\Resources\Skins\SuaveSheet.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NuclexGui\Resources\Skins\TitleFont.xnb">
+    </Content>
+    <Content Include="NuclexGui\Resources\Skins\TitleFont.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
