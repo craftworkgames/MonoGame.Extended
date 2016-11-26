@@ -11,7 +11,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             Properties = new List<TmxProperty>();
             Tilesets = new List<TmxTileset>();
             Layers = new List<TmxLayer>();
-            ObjectGroups = new List<TmxObjectGroup>();
         }
 
         [XmlAttribute(AttributeName = "version")]
@@ -41,11 +40,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlElement(ElementName = "tileset")]
         public List<TmxTileset> Tilesets { get; set; }
 
-        [XmlElement(ElementName = "objectgroup")]
-        public List<TmxObjectGroup> ObjectGroups { get; set; }
-
         [XmlElement(ElementName = "layer", Type = typeof(TmxTileLayer))]
         [XmlElement(ElementName = "imagelayer", Type = typeof(TmxImageLayer))]
+        [XmlElement(ElementName = "objectgroup", Type = typeof(TmxObjectLayer))]
         public List<TmxLayer> Layers { get; set; }
 
         [XmlArray("properties")]

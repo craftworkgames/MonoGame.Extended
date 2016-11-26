@@ -1,6 +1,17 @@
-﻿namespace MonoGame.Extended.Maps.Tiled
+﻿using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Maps.Tiled
 {
-    public class TiledTile
+    public interface ITiledAnimated
+    {
+        TiledTilesetTile TilesetTile { get; }
+        bool HasAnimation { get; }
+        Vector2 Position { get; }
+        int? CurrentTileId { get; }
+        int? Gid { get; }
+    }
+
+    public class TiledTile : ITiledAnimated
     {
         public TiledTile(int id, int x, int y, TiledTilesetTile tilesetTile = null)
         {
@@ -13,14 +24,13 @@
         public int Id { get; }
         public int X { get; }
         public int Y { get; }
+        public Vector2 Position => new Vector2(X, Y);
         public bool IsBlank => Id == 0;
-        public TiledTilesetTile TilesetTile { get; set; }
+        public TiledTilesetTile TilesetTile { get; }
 
-        public int CurrentTileId => (TilesetTile == null) || !TilesetTile.CurrentTileId.HasValue
-            ? Id
-            : TilesetTile.CurrentTileId.Value + 1;
-
-        public bool HasAnimation => (TilesetTile == null) || (TilesetTile.Animation.Count == 0) ? false : true;
+        public int? Gid => Id;
+        public int? CurrentTileId => TilesetTile?.CurrentTileId + 1 ?? Id;
+        public bool HasAnimation => TilesetTile != null && TilesetTile.Frames.Count != 0;
 
         public override string ToString()
         {

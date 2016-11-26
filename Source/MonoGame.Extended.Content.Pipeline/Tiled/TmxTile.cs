@@ -28,9 +28,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlElement(ElementName = "image")]
         public TmxImage Image { get; set; }
 
-        [XmlElement(ElementName = "objectgroup")]
-        public List<TmxObjectGroup> ObjectGroups { get; set; }
-
         [XmlArray("animation")]
         [XmlArrayItem("frame")]
         public List<TmxFrame> Frames { get; set; }

@@ -70,7 +70,7 @@ namespace MonoGame.Extended.InputListeners
                 var args = new MouseEventArgs(ViewportAdapter, _gameTime.TotalGameTime, _previousState, _currentState,
                     button);
 
-                MouseDown.Raise(this, args);
+                MouseDown?.Invoke(this, args);
                 _mouseDownArgs = args;
 
                 if (_previousClickArgs != null)
@@ -80,7 +80,7 @@ namespace MonoGame.Extended.InputListeners
 
                     if (clickMilliseconds <= DoubleClickMilliseconds)
                     {
-                        MouseDoubleClicked.Raise(this, args);
+                        MouseDoubleClicked?.Invoke(this, args);
                         _hasDoubleClicked = true;
                     }
 
@@ -105,16 +105,16 @@ namespace MonoGame.Extended.InputListeners
                     if (clickMovement < DragThreshold)
                     {
                         if (!_hasDoubleClicked)
-                            MouseClicked.Raise(this, args);
+                            MouseClicked?.Invoke(this, args);
                     }
                     else // If the mouse has moved between mouse down and mouse up
                     {
-                        MouseDragEnd.Raise(this, args);
+                        MouseDragEnd?.Invoke(this, args);
                         _dragging = false;
                     }
                 }
 
-                MouseUp.Raise(this, args);
+                MouseUp?.Invoke(this, args);
 
                 _hasDoubleClicked = false;
                 _previousClickArgs = args;
@@ -132,7 +132,7 @@ namespace MonoGame.Extended.InputListeners
                 if (_mouseDownArgs.Button == args.Button)
                     if (_dragging)
                     {
-                        MouseDrag.Raise(this, args);
+                        MouseDrag?.Invoke(this, args);
                     }
                     else
                     {
@@ -142,7 +142,7 @@ namespace MonoGame.Extended.InputListeners
                         if (clickMovement > DragThreshold)
                         {
                             _dragging = true;
-                            MouseDragStart.Raise(this, args);
+                            MouseDragStart?.Invoke(this, args);
                         }
                     }
             }
@@ -168,7 +168,7 @@ namespace MonoGame.Extended.InputListeners
             // Check for any sort of mouse movement.
             if (HasMouseMoved)
             {
-                MouseMoved.Raise(this,
+                MouseMoved?.Invoke(this,
                     new MouseEventArgs(ViewportAdapter, gameTime.TotalGameTime, _previousState, _currentState));
 
                 CheckMouseDragged(s => s.LeftButton, MouseButton.Left);
@@ -180,7 +180,7 @@ namespace MonoGame.Extended.InputListeners
 
             // Handle mouse wheel events.
             if (_previousState.ScrollWheelValue != _currentState.ScrollWheelValue)
-                MouseWheelMoved.Raise(this,
+                MouseWheelMoved?.Invoke(this,
                     new MouseEventArgs(ViewportAdapter, gameTime.TotalGameTime, _previousState, _currentState));
 
             _previousState = _currentState;

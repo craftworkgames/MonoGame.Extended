@@ -9,14 +9,37 @@ MonoGame.Extended is an open source extension library for [MonoGame](http://www.
 
 ## Patreon Supporters
 
-We need your support! For the past 3 years we've had support from the [Microsoft BizSpark](https://www.microsoft.com/bizspark/) program to fund our web and build servers. On the 9th October 2016 that's going to come to an end and we'll be forced to shutdown the build server without funding. We don't need a lot, just a few supporters would really help.
+Thanks to all those that support the project on Patreon!  Running an open source project can be done on a shoe string budget, but it's certainly not free. A little funding goes a long way. It keeps the build server up and running and let's me devote more of my time to the project. Even just a few supporters really helps.
 
-**What happens to MonoGame.Extended if we don't get the funding?** Never fear. The project won't die. The code will always be safely open sourced on github. However, the build server we run in the cloud is used to build and host the pre-release NuGet packages that some people rely on. If we can't run the build server in the cloud, it will make a few things like that a little more difficult.
+**What happens to MonoGame.Extended if we don't get the funding?** Never fear. The project won't die. The code will always be safely open sourced on github.
 
 [![image](https://cloud.githubusercontent.com/assets/3201643/17462536/f5608898-5cf3-11e6-8e81-47d6594a8d9c.png)](https://www.patreon.com/craftworkgames)
 
+### Special thanks to the supporters
+
+ - Austin
+ - Ben
+ - Chris
+ - Conor
+ - Iliyan
+ - James
+ - Laurence
+ - Marcel
+ - Mario
+ - Max
+ - [Nathanial](http://www.optimuspi.com/)
+ - Nox
+
+## We're working towards the v0.6 release
+
+There's a lot going on in the `develop` branch right now. We're working towards the next official release (v0.6.xxx). If you want to keep up with the latest and greatest it's recommended that you:
+
+ - [Install a pre-release NuGet package](https://github.com/craftworkgames/MonoGame.Extended/wiki/How-to-use-the-pre-release-NuGet-packages) or;
+ - [Build from source](https://github.com/craftworkgames/MonoGame.Extended/wiki/Building-MonoGame.Extended-from-source)
+
 ## Version 0.5 is available on NuGet
-MonoGame.Extended v0.5 has been published as [a NuGet package](https://www.nuget.org/packages/MonoGame.Extended/) and can be installed now. Please read the [install guide](https://github.com/craftworkgames/MonoGame.Extended/wiki/How-to-install-MonoGame.Extended) to setup the Pipeline tool.
+
+MonoGame.Extended v0.5 was published on 8th April 2016 as [a NuGet package](https://www.nuget.org/packages/MonoGame.Extended/). Please read the [install guide](https://github.com/craftworkgames/MonoGame.Extended/wiki/How-to-install-MonoGame.Extended) to setup the Pipeline tool.
 
     Install-Package MonoGame.Extended
 

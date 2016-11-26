@@ -43,3 +43,20 @@
 /processorParam:TextureFormat=Color
 /build:montserrat-32_0.png
 
+#begin small-font.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:small-font.fnt
+
+#begin small-font_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:small-font_0.png
+

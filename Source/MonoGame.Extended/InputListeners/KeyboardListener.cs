@@ -54,10 +54,10 @@ namespace MonoGame.Extended.InputListeners
                 {
                     var args = new KeyboardEventArgs(key, currentState);
 
-                    KeyPressed.Raise(this, args);
+                    KeyPressed?.Invoke(this, args);
 
                     if (args.Character.HasValue)
-                        KeyTyped.Raise(this, args);
+                        KeyTyped?.Invoke(this, args);
 
                     _previousKey = key;
                     _lastPressTime = gameTime.TotalGameTime;
@@ -73,7 +73,7 @@ namespace MonoGame.Extended.InputListeners
                 .Where(key => currentState.IsKeyUp(key) && _previousState.IsKeyDown(key));
 
             foreach (var key in releasedKeys)
-                KeyReleased.Raise(this, new KeyboardEventArgs(key, currentState));
+                KeyReleased?.Invoke(this, new KeyboardEventArgs(key, currentState));
         }
 
         private void RaiseRepeatEvents(GameTime gameTime, KeyboardState currentState)
@@ -86,7 +86,7 @@ namespace MonoGame.Extended.InputListeners
                 var args = new KeyboardEventArgs(_previousKey, currentState);
 
                 if (args.Character.HasValue)
-                    KeyTyped.Raise(this, args);
+                    KeyTyped?.Invoke(this, args);
 
                 _lastPressTime = gameTime.TotalGameTime;
                 _isInitial = false;

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Maps.Tiled;
-using MonoGame.Framework.Content.Pipeline.Builder;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
@@ -16,6 +16,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         protected override void Write(ContentWriter writer, TiledMapProcessorResult value)
         {
+            value.Logger.LogMessage("Writing Tiled map...");
+
             var map = value.Map;
             writer.Write(HexToColor(map.BackgroundColor));
             writer.Write(ConvertRenderOrder(map.RenderOrder).ToString());
@@ -26,12 +28,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             writer.Write(Convert.ToInt32(map.Orientation));
             WriteCustomProperties(writer, map.Properties);
 
+            value.Logger.LogMessage("Writing tilesets...");
             writer.Write(map.Tilesets.Count);
 
             foreach (var tileset in map.Tilesets)
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
                 writer.Write(Path.ChangeExtension(tileset.Image.Source, null));
+                writer.Write(HexToColor(tileset.Image.Trans));
                 writer.Write(tileset.FirstGid);
                 writer.Write(tileset.TileWidth);
                 writer.Write(tileset.TileHeight);
@@ -40,26 +44,31 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 writer.Write(tileset.Margin);
 
                 writer.Write(tileset.Tiles.Count);
+
                 foreach(var tile in tileset.Tiles)
                 {
                     writer.Write(tile.Id);
                     writer.Write(tile.Frames.Count);
+
                     foreach(var frame in tile.Frames)
                     {
                         writer.Write(frame.TileId);
                         writer.Write(frame.Duration);
                     }
-                    WriteCustomProperties(writer, tile.Properties);
 
-                    WriteObjectGroups(writer, tile.ObjectGroups);
+                    WriteCustomProperties(writer, tile.Properties);
                 }
+
                 WriteCustomProperties(writer, tileset.Properties);
             }
 
+            value.Logger.LogMessage("Writing layers...");
             writer.Write(map.Layers.Count);
 
             foreach (var layer in map.Layers)
             {
+                value.Logger.LogMessage($"Writing {layer.GetType().Name} layer: {layer.Name}");
+
                 writer.Write(layer.Name);
                 writer.Write(layer.Visible);
                 writer.Write(layer.Opacity);
@@ -76,8 +85,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     foreach (var tile in tileLayer.Data.Tiles)
                         writer.Write(tile.Gid);
 
-                    writer.Write(tileLayer.Width); 
+                    writer.Write(tileLayer.Width);
                     writer.Write(tileLayer.Height);
+                    WriteCustomProperties(writer, layer.Properties);
                 }
 
                 var imageLayer = layer as TmxImageLayer;
@@ -88,13 +98,17 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     // ReSharper disable once AssignNullToNotNullAttribute
                     writer.Write(Path.ChangeExtension(imageLayer.Image.Source, null));
                     writer.Write(new Vector2(imageLayer.X, imageLayer.Y));
+                    WriteCustomProperties(writer, layer.Properties);
                 }
 
-                WriteCustomProperties(writer, layer.Properties);
+                var objectLayer = layer as TmxObjectLayer;
+
+                if (objectLayer != null)
+                {
+                    writer.Write("ObjectLayer");
+                    WriteObjectLayer(writer, objectLayer, value.Logger);
+                }
             }
-
-            WriteObjectGroups(writer, map.ObjectGroups);
-
         }
 
         private static void WritePolyPoints(ContentWriter writer, string polyPointsString)
@@ -132,26 +146,28 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             return TiledObjectType.Rectangle;
         }
 
-        private void WriteObjectGroups(ContentWriter writer, IReadOnlyCollection<TmxObjectGroup> groups)
+        private void WriteObjectLayers(ContentWriter writer, IReadOnlyCollection<TmxObjectLayer> groups)
         {
             writer.Write(groups.Count);
 
-            foreach (var objectGroup in groups) {
-                WriteObjectGroup(writer, objectGroup);
-            }
+            foreach (var objectLayer in groups)
+                WriteObjectLayer(writer, objectLayer);
         }
 
-        private void WriteObjectGroup(ContentWriter writer, TmxObjectGroup group)
+        private void WriteObjectLayer(ContentWriter writer, TmxObjectLayer layer, ContentBuildLogger logger = null)
         {
-            writer.Write(group.Name ?? string.Empty);
-            writer.Write(group.Visible);
-            writer.Write(group.Opacity);
+            writer.Write(layer.Name ?? string.Empty);
+            writer.Write(layer.Visible);
+            writer.Write(layer.Opacity);
 
-            writer.Write(group.Objects.Count);
+            writer.Write(layer.Objects.Count);
 
-            foreach (var tmxObject in group.Objects)
+            foreach (var tmxObject in layer.Objects)
             {
                 var objectType = GetObjectType(tmxObject);
+
+                logger?.LogMessage(
+                    $"Writing {objectType} object: {tmxObject.Name ?? tmxObject.Id.ToString()} [({tmxObject.X}, {tmxObject.Y}) {tmxObject.Width}x{tmxObject.Height}]");
 
                 writer.Write((int)objectType);
                 writer.Write(tmxObject.Id);
@@ -175,7 +191,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 WriteCustomProperties(writer, tmxObject.Properties);
             }
 
-            WriteCustomProperties(writer, group.Properties);
+            WriteCustomProperties(writer, layer.Properties);
         }
 
         private static void WriteCustomProperties(ContentWriter writer, IReadOnlyCollection<TmxProperty> properties)

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.BitmapFonts
@@ -28,7 +29,7 @@ namespace Demo.BitmapFonts
         private Vector2 _scale;
         private bool _wrappedText;
         private readonly Vector2 _bodyTextPosition = new Vector2(50, 60);
-        private Color _bodyTextColor = new Color(Color.Black, 0.5f);
+        private readonly Color _bodyTextColor = new Color(Color.Black, 0.5f);
 
         public Game1()
         {
@@ -136,7 +137,7 @@ namespace Demo.BitmapFonts
 
             _labelText = $"Layer={_layer:F} Angle={_rotation} Scale={_scale.X} Effect={_effect}";
             var stringRectangle = _bitmapFont.GetStringRectangle(_labelText, Vector2.Zero);
-            _labelPosition = new Vector2(800/2 - stringRectangle.Width/2, 440);
+            _labelPosition = new Vector2(800 / 2 - stringRectangle.Width / 2, 440);
 
             base.Update(gameTime);
         }
@@ -145,7 +146,7 @@ namespace Demo.BitmapFonts
         {
             GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            _spriteBatch.Begin(samplerState: SamplerState.LinearClamp, transformMatrix: _camera.GetViewMatrix());
             DrawBackground();
             DrawTitle();
             DrawBodyText();
@@ -174,28 +175,32 @@ namespace Demo.BitmapFonts
             if (_wrappedText)
             {
                 // pass it one long line of text and wrap it at the specified width
-                _spriteBatch.DrawString(_bitmapFont,
+                const string text =
                     "This text is continuous and wrapped at 750 pixels. " +
                     "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of " +
                     "classical Latin literature from 45 BC, making it over 2000 years old. Richard " +
                     "McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more " +
                     "obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of " +
-                    "the word in classical literature, discovered the undoubtable source.",
-                    _bodyTextPosition, _bodyTextColor, 750);
+                    "the word in classical literature, discovered the undoubtable source.";
+
+                _spriteBatch.DrawString(_bitmapFont, text, _bodyTextPosition, _bodyTextColor, 750);
+
+                var size = _bitmapFont.MeasureString(text);
+                _spriteBatch.DrawRectangle(new RectangleF(_bodyTextPosition, size), Color.Red);
             }
             else
             {
                 // pass it a StringBuilder object to draw
-                _spriteBatch.DrawString(_bitmapFont, _stringBuilderText, _bodyTextPosition, _bodyTextColor);
+                _spriteBatch.DrawString(_bitmapFont, _stringBuilderText.ToString(), _bodyTextPosition, _bodyTextColor);
             }
         }
 
         private void DrawInstructions()
         {
             const string instructions = "W = Wrap, R = Rotate, +/- = Scale, F = Flip, Up/Down = Layer";
-            var textSize = _bitmapFont.GetSize(instructions);
+            var textSize = _bitmapFont.MeasureString(instructions);
             var screenWidth = _viewportAdapter.VirtualWidth;
-            var x = screenWidth/2 - textSize.Width/2;
+            var x = screenWidth / 2 - textSize.Width / 2;
             _spriteBatch.DrawString(_bitmapFont, instructions, new Vector2(x, 410), Color.Black);
         }
 

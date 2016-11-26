@@ -1,34 +1,33 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.Sprites
+namespace MonoGame.Extended.TextureAtlases
 {
-    public class NinePatch
+    public class NinePatchRegion2D : TextureRegion2D
     {
-        private readonly Rectangle[] _sourcePatches;
-
-        public NinePatch(TextureRegion2D textureRegion, int leftPadding, int topPadding, int rightPadding,
-            int bottomPadding)
+        public NinePatchRegion2D(Texture2D texture, Rectangle outterRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
+            : this(new TextureRegion2D(texture, outterRegion), leftPadding, topPadding, rightPadding, bottomPadding)
         {
-            TextureRegion = textureRegion;
+        }
+
+        public NinePatchRegion2D(TextureRegion2D textureRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
+            : base(textureRegion.Texture, textureRegion.X, textureRegion.Y, textureRegion.Width, textureRegion.Height)
+        {
             LeftPadding = leftPadding;
             TopPadding = topPadding;
             RightPadding = rightPadding;
             BottomPadding = bottomPadding;
-            Color = Color.White;
 
-            _sourcePatches = CreatePatches(textureRegion.Bounds);
+            SourcePatches = CreatePatches(textureRegion.Bounds);
         }
 
-        public TextureRegion2D TextureRegion { get; }
+        public Rectangle[] SourcePatches { get; }
         public int LeftPadding { get; }
         public int TopPadding { get; }
         public int RightPadding { get; }
         public int BottomPadding { get; }
-        public Color Color { get; set; }
 
-        private Rectangle[] CreatePatches(Rectangle rectangle)
+        public Rectangle[] CreatePatches(Rectangle rectangle)
         {
             var x = rectangle.X;
             var y = rectangle.Y;
@@ -53,15 +52,6 @@ namespace MonoGame.Extended.Sprites
                 new Rectangle(rightX, bottomY, RightPadding, BottomPadding) // bottom right
             };
             return patches;
-        }
-
-        public void Draw(SpriteBatch spriteBatch, Rectangle rectangle)
-        {
-            var destinationPatches = CreatePatches(rectangle);
-
-            for (var i = 0; i < _sourcePatches.Length; i++)
-                spriteBatch.Draw(TextureRegion.Texture, sourceRectangle: _sourcePatches[i],
-                    destinationRectangle: destinationPatches[i], color: Color);
         }
     }
 }

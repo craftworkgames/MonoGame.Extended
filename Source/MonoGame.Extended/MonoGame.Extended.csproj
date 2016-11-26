@@ -38,16 +38,22 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Maps\Renderers\DynamicGroupRenderDetails.cs" />
     <Compile Include="Maps\Renderers\FullMapRenderer.cs" />
     <Compile Include="Maps\Renderers\GroupRenderDetails.cs" />
     <Compile Include="Maps\Renderers\IMapRenderer.cs" />
     <Compile Include="Maps\Renderers\MapRenderDetails.cs" />
+    <Compile Include="Maps\Renderers\MapRendererConfig.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTile.cs" />
+    <Compile Include="Maps\Tiled\TiledTilesetTileFrame.cs" />
     <Compile Include="Primitives\BoundingRectangle.cs" />
     <Compile Include="Primitives\Point2.cs" />
     <Compile Include="Primitives\Ray2D.cs" />
     <Compile Include="Primitives\RayHelper.cs" />
     <Compile Include="Primitives\Segment2D.cs" />
     <Compile Include="Primitives\Size2.cs" />
+    <Compile Include="Shapes\EllipseF.cs" />
+    <Compile Include="Shapes\PolylineF.cs" />
     <Compile Include="Sprites\AnimatedSprite.cs" />
     <Compile Include="Animations\Tweens\DelayTween.cs" />
     <Compile Include="Animations\Tweens\FluentTweening.cs" />
@@ -154,20 +160,6 @@
     <Compile Include="NuclexGui\UniRectangle.cs" />
     <Compile Include="NuclexGui\UniScalar.cs" />
     <Compile Include="NuclexGui\UniVector.cs" />
-    <Compile Include="Gui\GuiDialog.cs" />
-    <Compile Include="Gui\Controls\GuiLabel.cs" />
-    <Compile Include="Gui\Controls\GuiToggleButton.cs" />
-    <Compile Include="Gui\Serialization\ContentConverter.cs" />
-    <Compile Include="Gui\Controls\GuiButton.cs" />
-    <Compile Include="Gui\Controls\GuiControl.cs" />
-    <Compile Include="Gui\Controls\GuiControlStyle.cs" />
-    <Compile Include="Gui\GuiComponent.cs" />
-    <Compile Include="Gui\GuiLayout.cs" />
-    <Compile Include="Gui\Serialization\GuiTextureAtlasConverter.cs" />
-    <Compile Include="Gui\Serialization\GuiControlConverter.cs" />
-    <Compile Include="Gui\Serialization\GuiControlStyleConveter.cs" />
-    <Compile Include="Gui\Serialization\GuiLayoutConverter.cs" />
-    <Compile Include="Gui\Serialization\TextureRegion2DConveter.cs" />
     <Compile Include="IEquatableByRef.cs" />
     <Compile Include="InputListeners\InputListenerComponent.cs" />
     <Compile Include="Matrix2D.cs" />
@@ -184,23 +176,11 @@
     <Compile Include="Serialization\ColorJsonConverter.cs" />
     <Compile Include="Serialization\Vector2JsonConverter.cs" />
     <Compile Include="Serialization\SizeFJsonConverter.cs" />
-    <Compile Include="Gui\GuiAlignmentHelper.cs" />
-    <Compile Include="Gui\Serialization\GuiJsonConverter.cs" />
-    <Compile Include="Gui\Serialization\GuiJsonConverterService.cs" />
-    <Compile Include="Gui\GuiThickness.cs" />
     <Compile Include="IColorable.cs" />
     <Compile Include="IPoolable.cs" />
-    <Compile Include="Collisions\CollisionActor.cs" />
-    <Compile Include="Collisions\CollisionGrid.cs" />
-    <Compile Include="Collisions\CollisionGridCell.cs" />
-    <Compile Include="Collisions\CollisionGridCellFlag.cs" />
-    <Compile Include="Collisions\CollisionInfo.cs" />
-    <Compile Include="Collisions\CollisionWorld.cs" />
-    <Compile Include="Collisions\IActorTarget.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Camera2D.cs" />
     <Compile Include="Content\ContentReaderExtensions.cs" />
-    <Compile Include="EventHandlerExtensions.cs" />
     <Compile Include="GameTimeExtensions.cs" />
     <Compile Include="IMovable.cs" />
     <Compile Include="InputListeners\GamePadEventArgs.cs" />
@@ -223,9 +203,6 @@
     <Compile Include="IScalable.cs" />
     <Compile Include="ISizable.cs" />
     <Compile Include="IUpdate.cs" />
-    <Compile Include="Maps\Tiled\CollisionWorldExtensions.cs" />
-    <Compile Include="Maps\Tiled\TiledTilesetTileFrame.cs" />
-    <Compile Include="Maps\Tiled\TiledTilesetTile.cs" />
     <Compile Include="Particles\ColorExtensions.cs" />
     <Compile Include="Particles\FastRandomExtensions.cs" />
     <Compile Include="Particles\HslColor.cs" />
@@ -271,7 +248,7 @@
     <Compile Include="Maps\Tiled\SpriteBatchExtensions.cs" />
     <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
     <Compile Include="Maps\Tiled\TiledObject.cs" />
-    <Compile Include="Maps\Tiled\TiledObjectGroup.cs" />
+    <Compile Include="Maps\Tiled\TiledObjectLayer.cs" />
     <Compile Include="MatrixExtensions.cs" />
     <Compile Include="SceneGraphs\ISceneEntity.cs" />
     <Compile Include="SceneGraphs\SceneEntityCollection.cs" />
@@ -287,7 +264,7 @@
     <Compile Include="Shapes\ShapeF.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="SizeF.cs" />
-    <Compile Include="Sprites\NinePatch.cs" />
+    <Compile Include="TextureAtlases\NinePatchRegion2D.cs" />
     <Compile Include="Sprites\SpriteBatchExtensions.cs" />
     <Compile Include="TextureAtlases\TextureAtlas.cs" />
     <Compile Include="TextureAtlases\TextureAtlasReader.cs" />
@@ -322,14 +299,6 @@
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PCLStorage, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
-      <HintPath>..\packages\PCLStorage.1.0.2\lib\portable-net45+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PCLStorage.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
-      <HintPath>..\packages\PCLStorage.1.0.2\lib\portable-net45+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />

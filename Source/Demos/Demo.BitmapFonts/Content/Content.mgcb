@@ -55,3 +55,26 @@
 /processorParam:TextureFormat=Color
 /build:vignette.png
 
+#begin test.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:test.spritefont
+
+#begin impact-32.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:impact-32.fnt
+
+#begin impact-32_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:impact-32_0.png
+

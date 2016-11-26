@@ -37,11 +37,15 @@ namespace MonoGame.Extended.Maps.Tiled
             var index = 0;
 
             for (var y = 0; y < Height; y++)
+            {
                 for (var x = 0; x < Width; x++)
                 {
-                    tiles[x + y*Width] = new TiledTile(data[index], x, y, _map.GetTilesetTileById(data[index]));
+                    var id = data[index];
+                    var tilesetTile = _map.GetTilesetTileById(id);
+                    tiles[x + y*Width] = new TiledTile(id, x, y, tilesetTile);
                     index++;
                 }
+            }
 
             return tiles;
         }
