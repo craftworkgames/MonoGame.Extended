@@ -43,8 +43,9 @@ namespace MonoGame.Extended.BitmapFonts
                 if (fontRegion != null)
                 {
                     var characterPosition = new Vector2(dx + fontRegion.XOffset, dy + fontRegion.YOffset);
+                    var characterOrigin = position - characterPosition + origin;
 
-                    spriteBatch.Draw(fontRegion.TextureRegion, characterPosition, color, rotation, origin, scale, effects, layerDepth);
+                    spriteBatch.Draw(fontRegion.TextureRegion, position, color, rotation, characterOrigin, scale, effects, layerDepth);
 
                     dx += fontRegion.XAdvance + bitmapFont.LetterSpacing;
                 }

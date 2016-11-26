@@ -48,7 +48,7 @@ namespace Demo.BitmapFonts
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            //_rotation += deltaTime * 0.01f;
+            _rotation += deltaTime;
 
             base.Update(gameTime);
         }
@@ -69,9 +69,9 @@ namespace Demo.BitmapFonts
             //DrawText("New\r\nLine", new Vector2(220, 30), Color.White);
             //DrawText("This is a very long line that should be wrapped", new Vector2(20, 230), Color.White);
 
-            var position = new Vector2(20, 240);
-            var offset = new Vector2(0, 50);
-            var origin = Vector2.Zero;
+            var position = new Vector2(400, 240);
+            var offset = new Vector2(0, 100);
+            //_rotation = MathHelper.Pi/16f;
 
             // sprite font
             var spriteFontSize = _spriteFont.MeasureString(helloWorld);
@@ -82,12 +82,12 @@ namespace Demo.BitmapFonts
                 position: position - offset,
                 color: Color.White,
                 rotation: _rotation,
-                origin: origin,
+                origin: new Vector2(spriteFontSize.X / 2f, spriteFontSize.Y / 2f),
                 scale: Vector2.One,
                 effects: SpriteEffects.None,
                 layerDepth: 0);
             
-            _spriteBatch.DrawRectangle(position - origin - offset, spriteFontSize, Color.Magenta);
+            //_spriteBatch.DrawRectangle(position - origin - offset, spriteFontSize, Color.Magenta);
 
             // bitmap font
             var bitmapFontSize = _bitmapFont.MeasureString(helloWorld);
@@ -98,12 +98,12 @@ namespace Demo.BitmapFonts
                 position: position + offset,
                 color: Color.White,
                 rotation: _rotation,
-                origin: origin,
+                origin: new Vector2(bitmapFontSize.Width / 2f, bitmapFontSize.Height / 2f),
                 scale: Vector2.One,
                 effects: SpriteEffects.None,
                 layerDepth: 0);
             
-            _spriteBatch.DrawRectangle(position - origin + offset, bitmapFontSize, Color.Red);
+            //_spriteBatch.DrawRectangle(position - origin + offset, bitmapFontSize, Color.Red);
 
             _spriteBatch.End();
 
