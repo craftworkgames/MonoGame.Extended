@@ -24,7 +24,7 @@ namespace MonoGame.Extended.BitmapFonts
         }
 
         public string Name { get; }
-        public int LineHeight { get; private set; }
+        public int LineHeight { get; }
         public int LetterSpacing { get; set; } = 0;
 
         public BitmapFontRegion GetCharacterRegion(int character)
@@ -33,7 +33,7 @@ namespace MonoGame.Extended.BitmapFonts
             return _characterMap.TryGetValue(character, out region) ? region : null;
         }
 
-        internal static IEnumerable<int> GetUnicodeCodePoints(string s)
+        private static IEnumerable<int> GetUnicodeCodePoints(string s)
         {
             if (!string.IsNullOrEmpty(s))
             {
@@ -56,7 +56,7 @@ namespace MonoGame.Extended.BitmapFonts
             var codePoints = GetUnicodeCodePoints(text).ToArray();
             var positionOffset = Vector2.Zero;
 
-            for (int i = 0, l = codePoints.Length; i < l; i++)
+            for (var i = 0; i < codePoints.Length; i++)
             {
                 var character = codePoints[i];
                 var fontRegion = GetCharacterRegion(character);
@@ -91,54 +91,6 @@ namespace MonoGame.Extended.BitmapFonts
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
 
-            //var totalWidth = 0;
-            //var lineWidth = 0;
-            //var totalHeight = 0;
-            //var lineHeight = 0;
-
-            //const int newlineCodePoint = '\n';
-
-            //var codePoints = GetUnicodeCodePoints(text).ToArray();
-
-            //for (int i = 0, l = codePoints.Length; i < l; i++)
-            //{
-            //    BitmapFontRegion fontRegion;
-            //    var character = codePoints[i];
-            //    var nextCharacter = character;
-
-            //    if (i < l - 1) nextCharacter = codePoints[i + 1];
-
-            //    if (_characterMap.TryGetValue(character, out fontRegion))
-            //    {
-            //        // Add LetterSpacing unless end of string or next character is not in _characterMap
-            //        if ((i != text.Length - 1) && _characterMap.ContainsKey(nextCharacter))
-            //            lineWidth += fontRegion.XAdvance + LetterSpacing;
-            //        else
-            //            lineWidth += fontRegion.XOffset + fontRegion.Width;
-
-            //        if (fontRegion.Height + fontRegion.YOffset > lineHeight)
-            //            lineHeight = fontRegion.Height + fontRegion.YOffset;
-            //    }
-
-            //    if (character == newlineCodePoint)
-            //    {
-            //        totalHeight += lineHeight;
-
-            //        if (totalWidth < lineWidth)
-            //            totalWidth = lineWidth;
-
-            //        lineHeight = 0;
-            //        lineWidth = 0;
-            //    }
-            //}
-
-            //if (totalWidth == 0)
-            //    totalWidth = lineWidth;
-
-            //totalHeight += lineHeight;
-
-            //return new Size(totalWidth, totalHeight);
-
             var stringRectangle = GetStringRectangle(text, Vector2.Zero);
             return new Size(stringRectangle.Width, stringRectangle.Height);
         }
@@ -157,7 +109,7 @@ namespace MonoGame.Extended.BitmapFonts
 
                 if (newRight > right)
                     right = newRight;
-                
+
                 if (newBottom > bottom)
                     bottom = newBottom;
             }

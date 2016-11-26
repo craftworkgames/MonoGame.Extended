@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.ViewportAdapters;
@@ -13,7 +14,9 @@ namespace Demo.BitmapFonts
         private BoxingViewportAdapter _viewportAdapter;
         private Texture2D _backgroundTexture;
         private BitmapFont _bitmapFont;
+        private SpriteFont _spriteFont;
         private SpriteBatch _spriteBatch;
+        private float _rotation = 0;
 
         public Game2()
         {
@@ -28,7 +31,8 @@ namespace Demo.BitmapFonts
         {
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _backgroundTexture = Content.Load<Texture2D>("vignette");
-            _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
+            _bitmapFont = Content.Load<BitmapFont>("impact-32");
+            _spriteFont = Content.Load<SpriteFont>("test");
             _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
@@ -38,10 +42,13 @@ namespace Demo.BitmapFonts
 
         protected override void Update(GameTime gameTime)
         {
+            var deltaTime = gameTime.GetElapsedSeconds();
             var keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
+
+            //_rotation += deltaTime;
 
             base.Update(gameTime);
         }
@@ -50,23 +57,58 @@ namespace Demo.BitmapFonts
         {
             GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch.Begin(samplerState: SamplerState.LinearClamp, transformMatrix: _viewportAdapter.GetScaleMatrix());
+            _spriteBatch.Begin(
+                samplerState: SamplerState.LinearClamp, 
+                blendState: BlendState.AlphaBlend, 
+                transformMatrix: _viewportAdapter.GetScaleMatrix());
+            //_spriteBatch.Draw(_backgroundTexture, _viewportAdapter.BoundingRectangle, Color.White);
 
-            DrawText("Hello World!", new Vector2(20, 30), Color.White);
-            DrawText("New\r\nLine", new Vector2(220, 30), Color.White);
-            DrawText("New\r\nLine", new Vector2(220, 30), Color.White);
-            DrawText("This is a very long line that should be wrapped", new Vector2(20, 230), Color.White);
+            const string helloWorld = "Hello\r\nWorld!";
+
+            //DrawText(helloWorld, new Vector2(20, 30), Color.White);
+            //DrawText("New\r\nLine", new Vector2(220, 30), Color.White);
+            //DrawText("This is a very long line that should be wrapped", new Vector2(20, 230), Color.White);
+
+            var size = _spriteFont.MeasureString(helloWorld);
+            var position = new Vector2(400, 240);
+            var offset = new Vector2(50, 0);
+            var origin = size / 2f;
+
+            // sprite font
+            _spriteBatch.DrawString(
+                spriteFont: _spriteFont,
+                text: helloWorld,
+                position: position - offset,
+                color: Color.White,
+                rotation: _rotation,
+                origin: origin,
+                scale: Vector2.One,
+                effects: SpriteEffects.None,
+                layerDepth: 0);
+            //_spriteBatch.DrawRectangle(position - origin - offset, size, Color.Magenta);
+
+            // bitmap font
+            _spriteBatch.DrawString(
+                font: _bitmapFont,
+                text: helloWorld,
+                position: position + offset,
+                color: Color.White,
+                rotation: _rotation,
+                origin: origin,
+                scale: Vector2.One,
+                effects: SpriteEffects.None,
+                layerDepth: 0);
+            //_spriteBatch.DrawRectangle(position - origin + offset, _bitmapFont.MeasureString(helloWorld), Color.Red);
 
             _spriteBatch.End();
-
-
 
             base.Draw(gameTime);
         }
 
         private void DrawText(string text, Vector2 position, Color color)
         {
-            _spriteBatch.DrawRectangle(_bitmapFont.GetStringRectangle(text, position), Color.Red);
+            var stringRectangle = _bitmapFont.GetStringRectangle(text, position);
+            _spriteBatch.DrawRectangle(stringRectangle, Color.Red);
             _spriteBatch.DrawString(_bitmapFont, text, position, color, wrapWidth: 400);
         }
     }
