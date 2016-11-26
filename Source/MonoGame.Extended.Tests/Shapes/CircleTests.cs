@@ -134,34 +134,50 @@ namespace MonoGame.Extended.Tests.Shapes
             Assert.AreEqual(false, circle.Contains(circle4));
         }
 
+
         [Test]
-        public void Circle_IntersectionTest()
+        public void CircleF_Intersects_Rectangle_Test()
         {
-            var circle = new CircleF(new Vector2(200.0f, 300.0f), 100.0f);
+            var circle = new CircleF(new Vector2(200, 200), 32);
 
-            var circ1 = new CircleF(new Vector2(350.0f, 300.0f), 100.0f);
-            var circ2 = new CircleF(new Vector2(400.0f, 300.0f), 100.0f);
-
-            var rect1 = new Rectangle(250, 300, 100, 100);
-            var rect2 = new Rectangle(400, 300, 100, 100);
+            var rectangle1 = new Rectangle(210, 210, 64, 64);
+            var rectangle2 = new Rectangle(130, 130, 64, 64);
+            var rectangle3 = new Rectangle(230, 110, 64, 64);
 
             bool result;
 
-            circle.Intersects(ref circ1, out result);
-            Assert.AreEqual(true, result);
-            circle.Intersects(ref circ2, out result);
-            Assert.AreEqual(false, result);
+            circle.Intersects(ref rectangle1, out result);
+            Assert.IsTrue(result);
 
-            circle.Intersects(ref rect1, out result);
-            Assert.AreEqual(true, result);
-            circle.Intersects(ref rect2, out result);
-            Assert.AreEqual(false, result);
+            circle.Intersects(ref rectangle2, out result);
+            Assert.IsTrue(result);
 
-            Assert.AreEqual(true, circle.Intersects(circ1));
-            Assert.AreEqual(false, circle.Intersects(circ2));
+            circle.Intersects(ref rectangle3, out result);
+            Assert.IsFalse(result);
 
-            Assert.AreEqual(true, circle.Intersects(rect1));
-            Assert.AreEqual(false, circle.Intersects(rect2));
+            Assert.IsTrue(circle.Intersects(rectangle1));
+            Assert.IsTrue(circle.Intersects(rectangle2));
+            Assert.IsFalse(circle.Intersects(rectangle3));
+        }
+
+        [Test]
+        public void CircleF_Intersects_CircleF_Test()
+        {
+            var circle = new CircleF(new Vector2(200.0f, 300.0f), 100.0f);
+
+            var circle1 = new CircleF(new Vector2(350.0f, 300.0f), 100.0f);
+            var circle2 = new CircleF(new Vector2(400.0f, 300.0f), 100.0f);
+
+            bool result;
+
+            circle.Intersects(ref circle1, out result);
+            Assert.IsTrue(result);
+
+            circle.Intersects(ref circle2, out result);
+            Assert.IsFalse(result);
+
+            Assert.IsTrue(circle.Intersects(circle1));
+            Assert.IsFalse(circle.Intersects(circle2));
         }
 
         [Test]

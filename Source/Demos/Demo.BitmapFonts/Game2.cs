@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.BitmapFonts
@@ -47,7 +48,7 @@ namespace Demo.BitmapFonts
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _rotation += deltaTime * 0.01f;
+            //_rotation += deltaTime * 0.01f;
 
             base.Update(gameTime);
         }
@@ -62,32 +63,34 @@ namespace Demo.BitmapFonts
                 transformMatrix: _viewportAdapter.GetScaleMatrix());
             //_spriteBatch.Draw(_backgroundTexture, _viewportAdapter.BoundingRectangle, Color.White);
 
-            const string helloWorld = "The quick brown fox jumps over the lazy dog\r\nThe lazy dog jumps back over the quick brown fox";
+            const string helloWorld = "The quick brown fox jumps over the lazy dog\nThe lazy dog jumps back over the quick brown fox";
             
-            var position = new Vector2(400, 240);
+            var position = new Vector2(40, 240);
             var offset = new Vector2(0, 100);
-            var scale = Vector2.One * 1.2f;
+            var scale = Vector2.One;
             var color = Color.White;
             //_rotation = MathHelper.Pi/16f;
 
             // sprite font
             var spriteFontSize = _spriteFont.MeasureString(helloWorld);
-            
+            var spriteFontOrigin = Vector2.Zero;
+
             _spriteBatch.DrawString(
                 spriteFont: _spriteFont,
                 text: helloWorld,
                 position: position - offset,
                 color: color,
                 rotation: _rotation,
-                origin: new Vector2(spriteFontSize.X / 2f, spriteFontSize.Y / 2f),
+                origin: spriteFontOrigin,
                 scale: scale,
                 effects: SpriteEffects.None,
                 layerDepth: 0);
             
-            //_spriteBatch.DrawRectangle(position - origin - offset, spriteFontSize, Color.Magenta);
+            _spriteBatch.DrawRectangle(position - spriteFontOrigin - offset, spriteFontSize, Color.Magenta);
 
             // bitmap font
             var bitmapFontSize = _bitmapFont.MeasureString(helloWorld);
+            var bitmapFontOrigin = Vector2.Zero;
 
             _spriteBatch.DrawString(
                 bitmapFont: _bitmapFont,
@@ -95,12 +98,12 @@ namespace Demo.BitmapFonts
                 position: position + offset,
                 color: color,
                 rotation: _rotation,
-                origin: new Vector2(bitmapFontSize.Width / 2f, bitmapFontSize.Height / 2f),
+                origin: bitmapFontOrigin,
                 scale: scale,
                 effect: SpriteEffects.None,
                 layerDepth: 0);
             
-            //_spriteBatch.DrawRectangle(position - origin + offset, bitmapFontSize, Color.Red);
+            _spriteBatch.DrawRectangle(position - bitmapFontOrigin + offset, bitmapFontSize, Color.Red);
 
             _spriteBatch.End();
 
