@@ -333,7 +333,7 @@ namespace MonoGame.Extended.NuclexGui.Controls
             {
                 // If this ownership change transferred us to a different gui, we will
                 // have to migrate our visual and also the visuals of all our children.
-                if (!ReferenceEquals(_screen, _screen))
+                if (!ReferenceEquals(_screen, parent._screen))
                     SetScreen(parent._screen);
             }
             else

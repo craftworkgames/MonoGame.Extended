@@ -174,7 +174,6 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
             using (var skinStream = assembly.GetManifestResourceStream(skinJsonFile))
             {
-                var rootDirectory = Path.GetDirectoryName(resources.First(s => s == skinJsonFile));
                 var contentManager = new ContentManager(serviceProvider, "Content");
 
                 try

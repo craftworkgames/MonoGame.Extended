@@ -4,8 +4,8 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.ViewportAdapters;
-using MonoGame.Extended.NuclexGui;
 using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.NuclexGui;
 using MonoGame.Extended.NuclexGui.Controls.Desktop;
 
 namespace Demo.NuclexGui
@@ -22,6 +22,7 @@ namespace Demo.NuclexGui
         private readonly GuiManager _gui;
         private int _rotateDirection = 1;
         private Color _backgroundColor;
+        private GuiButtonControl button;
 
         public Game1()
         {
@@ -52,17 +53,22 @@ namespace Demo.NuclexGui
             _gui.Initialize();
 
             // Create few controls.
-            GuiButtonControl button = new GuiButtonControl
+            button = new GuiButtonControl
             {
                 Name = "button",
                 Bounds = new UniRectangle(new UniScalar(0.0f, 20), new UniScalar(0.0f, 20), new UniScalar(0f, 120), new UniScalar(0f, 50)),
-                Text = "Rotate logo"
+                Texture = _sprite.TextureRegion.Texture,
+                SourceRectangle = _sprite.TextureRegion.Bounds
             };
             GuiButtonControl button2 = new GuiButtonControl
             {
                 Name = "button2",
                 Bounds = new UniRectangle(new UniScalar(20), new UniScalar(80), new UniScalar(120), new UniScalar(50)),
                 Text = "Open Window"
+            };
+            var input = new GuiInputControl
+            {
+                Bounds = new UniRectangle(new UniScalar(200), new UniScalar(200), new UniScalar(50), new UniScalar(20))
             };
 
             // Attach relevant events
@@ -72,6 +78,7 @@ namespace Demo.NuclexGui
             // And finally, attach controls to the parent control. In this case, desktop screen.
             _gui.Screen.Desktop.Children.Add(button);
             _gui.Screen.Desktop.Children.Add(button2);
+            _gui.Screen.Desktop.Children.Add(input);
         }
 
         private void Button2_Pressed(object sender, System.EventArgs e)
@@ -197,7 +204,6 @@ namespace Demo.NuclexGui
 
             // Update both InputManager (which updates states of each device) and GUI
             _inputManager.Update(gameTime);
-            _gui.Update(gameTime);
 
             _sprite.Rotation += deltaTime * _rotateDirection;
 

@@ -16,6 +16,9 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         /// <summary>Text that will be shown on the button</summary>
         public string Text;
 
+        /// <summary>Determines where text or image will be shown relative to control</summary>
+        public GuiPressableDescriptionPosition DescriptionPosition;
+
         /// <summary>Will be triggered when the choice is changed</summary>
         public event EventHandler Changed;
 
