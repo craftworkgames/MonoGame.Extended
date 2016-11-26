@@ -63,16 +63,15 @@ namespace Demo.BitmapFonts
                 transformMatrix: _viewportAdapter.GetScaleMatrix());
             //_spriteBatch.Draw(_backgroundTexture, _viewportAdapter.BoundingRectangle, Color.White);
 
-            const string helloWorld = "Hello\r\nWorld!";
+            const string helloWorld = "The quick brown fox jumps over the lazy dog\r\nLorem ipsum dolor sit amet, consectetuer.";
 
             //DrawText(helloWorld, new Vector2(20, 30), Color.White);
             //DrawText("New\r\nLine", new Vector2(220, 30), Color.White);
             //DrawText("This is a very long line that should be wrapped", new Vector2(20, 230), Color.White);
 
-            var size = _spriteFont.MeasureString(helloWorld);
-            var position = new Vector2(400, 240);
-            var offset = new Vector2(50, 0);
-            var origin = size / 2f;
+            var position = new Vector2(20, 240);
+            var offset = new Vector2(0, 50);
+            var origin = Vector2.Zero;
 
             // sprite font
             _spriteBatch.DrawString(
@@ -85,11 +84,11 @@ namespace Demo.BitmapFonts
                 scale: Vector2.One,
                 effects: SpriteEffects.None,
                 layerDepth: 0);
-            //_spriteBatch.DrawRectangle(position - origin - offset, size, Color.Magenta);
+            _spriteBatch.DrawRectangle(position - origin - offset, _spriteFont.MeasureString(helloWorld), Color.Magenta);
 
             // bitmap font
             _spriteBatch.DrawString(
-                font: _bitmapFont,
+                bitmapFont: _bitmapFont,
                 text: helloWorld,
                 position: position + offset,
                 color: Color.White,
@@ -98,7 +97,7 @@ namespace Demo.BitmapFonts
                 scale: Vector2.One,
                 effects: SpriteEffects.None,
                 layerDepth: 0);
-            //_spriteBatch.DrawRectangle(position - origin + offset, _bitmapFont.MeasureString(helloWorld), Color.Red);
+            _spriteBatch.DrawRectangle(position - origin + offset, _bitmapFont.MeasureString(helloWorld), Color.Red);
 
             _spriteBatch.End();
 

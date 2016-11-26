@@ -39,12 +39,19 @@ namespace MonoGame.Extended.BitmapFonts
             {
                 for (var i = 0; i < s.Length; i += 1)
                 {
-                    if (char.IsLowSurrogate(s, i))
+                    var codePoint = GetUnicodeCodePoint(s, i);
+
+                    if(codePoint == 0)
                         continue;
 
-                    yield return char.ConvertToUtf32(s, i);
+                    yield return codePoint;
                 }
             }
+        }
+
+        public static int GetUnicodeCodePoint(string s, int index)
+        {
+            return char.IsLowSurrogate(s, index) ? 0 : char.ConvertToUtf32(s, index);
         }
 
         internal IEnumerable<BitmapFontCharacter> GetCharacterPositions(string text, Vector2 position, Vector2 scale)
