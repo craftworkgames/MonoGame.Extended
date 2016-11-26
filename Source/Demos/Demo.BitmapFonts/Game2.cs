@@ -48,7 +48,7 @@ namespace Demo.BitmapFonts
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            //_rotation += deltaTime;
+            //_rotation += deltaTime * 0.01f;
 
             base.Update(gameTime);
         }
@@ -74,6 +74,8 @@ namespace Demo.BitmapFonts
             var origin = Vector2.Zero;
 
             // sprite font
+            var spriteFontSize = _spriteFont.MeasureString(helloWorld);
+
             _spriteBatch.DrawString(
                 spriteFont: _spriteFont,
                 text: helloWorld,
@@ -84,9 +86,12 @@ namespace Demo.BitmapFonts
                 scale: Vector2.One,
                 effects: SpriteEffects.None,
                 layerDepth: 0);
-            _spriteBatch.DrawRectangle(position - origin - offset, _spriteFont.MeasureString(helloWorld), Color.Magenta);
+            
+            _spriteBatch.DrawRectangle(position - origin - offset, spriteFontSize, Color.Magenta);
 
             // bitmap font
+            var bitmapFontSize = _bitmapFont.MeasureString(helloWorld);
+
             _spriteBatch.DrawString(
                 bitmapFont: _bitmapFont,
                 text: helloWorld,
@@ -97,7 +102,8 @@ namespace Demo.BitmapFonts
                 scale: Vector2.One,
                 effects: SpriteEffects.None,
                 layerDepth: 0);
-            _spriteBatch.DrawRectangle(position - origin + offset, _bitmapFont.MeasureString(helloWorld), Color.Red);
+            
+            _spriteBatch.DrawRectangle(position - origin + offset, bitmapFontSize, Color.Red);
 
             _spriteBatch.End();
 

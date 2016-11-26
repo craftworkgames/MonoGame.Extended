@@ -96,10 +96,39 @@ namespace MonoGame.Extended.BitmapFonts
 
         public Size MeasureString(string text)
         {
-            if (text == null) throw new ArgumentNullException(nameof(text));
+            if(string.IsNullOrEmpty(text))
+                return Size.Empty;
 
-            var stringRectangle = GetStringRectangle(text, Vector2.Zero);
-            return new Size(stringRectangle.Width, stringRectangle.Height);
+            var totalWidth = 0;
+            var totalHeight = LineHeight;
+            var currentLineWidth = 0;
+
+            for (var i = 0; i < text.Length; i++)
+            {
+                var character = GetUnicodeCodePoint(text, i);
+                var fontRegion = GetCharacterRegion(character);
+
+                if (fontRegion != null)
+                    currentLineWidth += fontRegion.XOffset + fontRegion.XAdvance + LetterSpacing;
+
+                if (character == '\n')
+                {
+                    totalWidth = CalculateWidth(currentLineWidth, totalWidth);
+                    totalHeight += LineHeight;
+                    currentLineWidth = 0;
+                }
+            }
+
+            totalWidth = CalculateWidth(currentLineWidth, totalWidth);
+            return new Size(totalWidth, totalHeight);
+        }
+
+        private int CalculateWidth(int currentLineWidth, int totalWidth)
+        {
+            if (currentLineWidth > 0)
+                currentLineWidth -= LetterSpacing;
+
+            return totalWidth < currentLineWidth ? currentLineWidth : totalWidth;
         }
         
         public Rectangle GetStringRectangle(string text, Vector2 position)
