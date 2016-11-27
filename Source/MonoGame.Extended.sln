@@ -96,6 +96,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.EntityComponentSystem"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Batching", "Demos\Demo.Batching\Demo.Batching.csproj", "{5A251894-0462-47B6-9A63-BE26AA8CABDD}"
 	ProjectSection(ProjectDependencies) = postProject
+		{9B3AB8A1-78AA-471A-AFD0-B10B932115BC} = {9B3AB8A1-78AA-471A-AFD0-B10B932115BC}
 		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
 	EndProjectSection
 EndProject
