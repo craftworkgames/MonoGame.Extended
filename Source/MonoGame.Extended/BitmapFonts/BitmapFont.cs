@@ -41,6 +41,11 @@ namespace MonoGame.Extended.BitmapFonts
             return new Size(stringRectangle.Width, stringRectangle.Height);
         }
 
+        public Rectangle GetStringRectangle(string text, Vector2 position)
+        {
+            return GetStringRectangle(text, position.ToPoint());
+        }
+
         public Rectangle GetStringRectangle(string text, Point position)
         {
             var dx = position.X;
