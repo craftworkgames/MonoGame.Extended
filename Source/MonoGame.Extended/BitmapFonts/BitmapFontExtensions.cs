@@ -109,10 +109,9 @@ namespace MonoGame.Extended.BitmapFonts
         ///     Use SpriteSortMode if you want sprites to be sorted during drawing.
         /// </param>
         /// <param name="wrapWidth">The width (in pixels) where to wrap the text at.</param>
-        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position,
-            Color color, float layerDepth, int wrapWidth = int.MaxValue)
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position, Color color, float layerDepth)
         {
-            DrawWrapped(spriteBatch, font, text, position, color, wrapWidth, layerDepth);
+            DrawString(spriteBatch, font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: Vector2.One, effect: SpriteEffects.None, layerDepth: layerDepth);
         }
 
         /// <summary>
@@ -128,74 +127,9 @@ namespace MonoGame.Extended.BitmapFonts
         ///     tinting.
         /// </param>
         /// <param name="wrapWidth">The width (in pixels) where to wrap the text at.</param>
-        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position,
-            Color color, int wrapWidth = int.MaxValue)
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position, Color color)
         {
-            DrawWrapped(spriteBatch, font, text, position, color, wrapWidth, 0f);
-        }
-
-        /// <summary>
-        ///     Method to handle wrapping text at a specified width. Passes onto the <see cref="DrawInto" /> method
-        ///     if the user passes in int.MaxValue as the width.
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        /// <param name="font">A font for displaying text.</param>
-        /// <param name="text">The text message to display.</param>
-        /// <param name="position">The location (in screen coordinates) to draw the text.</param>
-        /// <param name="color">
-        ///     The <see cref="Color" /> to tint a sprite. Use <see cref="Color.White" /> for full color with no
-        ///     tinting.
-        /// </param>
-        /// <param name="wrapWidth">The width (in pixels) where to wrap the text at.</param>
-        /// <param name="layerDepth">
-        ///     The depth of a layer. By default, 0 represents the front layer and 1 represents a back layer.
-        ///     Use SpriteSortMode if you want sprites to be sorted during drawing.
-        /// </param>
-        private static void DrawWrapped(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position,
-            Color color, int wrapWidth, float layerDepth)
-        {
-            if (font == null) throw new ArgumentNullException(nameof(font));
-            if (text == null) throw new ArgumentNullException(nameof(text));
-
-            if (wrapWidth == int.MaxValue)
-            {
-                DrawString(spriteBatch, font, text, position, color, layerDepth);
-                return;
-            }
-
-            // parse the text and wrap it at the specified width
-            var dx = position.X;
-            var dy = position.Y;
-            var sentences = text.Split(new[] {'\n'}, StringSplitOptions.None);
-
-            foreach (var sentence in sentences)
-            {
-                var words = sentence.Split(new[] {' '}, StringSplitOptions.None);
-
-                for (var i = 0; i < words.Length; i++)
-                {
-                    var word = words[i];
-                    var size = font.GetStringRectangle(word, Vector2.Zero);
-
-                    if ((i != 0) && (dx + size.Width >= wrapWidth))
-                    {
-                        dy += font.LineHeight;
-                        dx = position.X;
-                    }
-
-                    DrawString(spriteBatch, font, word, new Vector2(dx, dy), color, layerDepth);
-                    dx += size.Width;
-
-                    var spaceCharRegion = font.GetCharacterRegion(' ');
-                    if (i != words.Length - 1)
-                        dx += spaceCharRegion.XAdvance + font.LetterSpacing;
-                    else
-                        dx += spaceCharRegion.XOffset + spaceCharRegion.Width;
-                }
-
-                dx = position.X;
-                dy += font.LineHeight;
-            }
+            DrawString(spriteBatch, font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: Vector2.One, effect: SpriteEffects.None, layerDepth: 0);
         }
     }
 }

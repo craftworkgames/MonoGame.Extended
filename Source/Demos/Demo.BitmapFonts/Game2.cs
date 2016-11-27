@@ -10,13 +10,13 @@ namespace Demo.BitmapFonts
 {
     public class Game2 : Game
     {
+        // ReSharper disable once NotAccessedField.Local
         private GraphicsDeviceManager _graphicsDeviceManager;
         private BoxingViewportAdapter _viewportAdapter;
         private Texture2D _backgroundTexture;
         private BitmapFont _bitmapFont;
         private SpriteFont _spriteFont;
         private SpriteBatch _spriteBatch;
-        private float _rotation = 0;
 
         public Game2()
         {
@@ -42,13 +42,10 @@ namespace Demo.BitmapFonts
 
         protected override void Update(GameTime gameTime)
         {
-            var deltaTime = gameTime.GetElapsedSeconds();
             var keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
-
-            //_rotation += deltaTime * 0.01f;
 
             base.Update(gameTime);
         }
@@ -61,43 +58,43 @@ namespace Demo.BitmapFonts
                 samplerState: SamplerState.LinearClamp, 
                 blendState: BlendState.AlphaBlend, 
                 transformMatrix: _viewportAdapter.GetScaleMatrix());
-            //_spriteBatch.Draw(_backgroundTexture, _viewportAdapter.BoundingRectangle, Color.White);
+            _spriteBatch.Draw(_backgroundTexture, _viewportAdapter.BoundingRectangle, Color.DarkBlue);
 
             const string helloWorld = "The quick brown fox jumps over the lazy dog\nThe lazy dog jumps back over the quick brown fox";
             
-            var position = new Vector2(40, 240);
-            var offset = new Vector2(0, 100);
+            var position = new Vector2(340, 240);
+            var offset = new Vector2(0, 50);
             var scale = Vector2.One;
             var color = Color.White;
-            //_rotation = MathHelper.Pi/16f;
+            var rotation = 0;//MathHelper.Pi/64f;
 
             // sprite font
             var spriteFontSize = _spriteFont.MeasureString(helloWorld);
-            var spriteFontOrigin = Vector2.Zero;
+            var spriteFontOrigin = spriteFontSize / 2f;
 
             _spriteBatch.DrawString(
                 spriteFont: _spriteFont,
                 text: helloWorld,
                 position: position - offset,
                 color: color,
-                rotation: _rotation,
+                rotation: rotation,
                 origin: spriteFontOrigin,
                 scale: scale,
                 effects: SpriteEffects.None,
                 layerDepth: 0);
-            
+
             _spriteBatch.DrawRectangle(position - spriteFontOrigin - offset, spriteFontSize, Color.Magenta);
 
             // bitmap font
             var bitmapFontSize = _bitmapFont.MeasureString(helloWorld);
-            var bitmapFontOrigin = Vector2.Zero;
+            var bitmapFontOrigin = bitmapFontSize / 2f;
 
             _spriteBatch.DrawString(
                 bitmapFont: _bitmapFont,
                 text: helloWorld,
                 position: position + offset,
                 color: color,
-                rotation: _rotation,
+                rotation: rotation,
                 origin: bitmapFontOrigin,
                 scale: scale,
                 effect: SpriteEffects.None,
