@@ -2,14 +2,14 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{02562C6F-5BFB-467E-8A95-68B6CE2D635A}</ProjectGuid>
+    <ProjectGuid>{9B3AB8A1-78AA-471A-AFD0-B10B932115BC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MonoGame.Extended.Collisions</RootNamespace>
-    <AssemblyName>MonoGame.Extended.Collisions</AssemblyName>
+    <RootNamespace>MonoGame.Extended.Graphics</RootNamespace>
+    <AssemblyName>MonoGame.Extended.Graphics</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,17 +33,40 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CollisionActor.cs" />
-    <Compile Include="CollisionGrid.cs" />
-    <Compile Include="CollisionGridCell.cs" />
-    <Compile Include="CollisionGridCellFlag.cs" />
-    <Compile Include="CollisionInfo.cs" />
-    <Compile Include="CollisionWorld.cs" />
-    <Compile Include="CollisionWorldExtensions.cs" />
-    <Compile Include="IActorTarget.cs" />
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="Effects\Resources\compile.bat" />
+    <EmbeddedResource Include="Effects\Resources\DefaultEffect2D.mgfxo" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Batch2DSortMode.cs" />
+    <Compile Include="Batching\Batch.cs" />
+    <Compile Include="Batching\BatchCommandDrawer.cs" />
+    <Compile Include="Batching\BatchCommandQueue.cs" />
+    <Compile Include="Batching\BatchCommandQueueOverflowException.cs" />
+    <Compile Include="Batching\BatchDrawCommand.cs" />
+    <Compile Include="Batching\BatchSortMode.cs" />
+    <Compile Include="Batching\DeferredBatchCommandQueue.cs" />
+    <Compile Include="Batching\IBatchDrawCommandData.cs" />
+    <Compile Include="Batching\ImmediateBatchCommandQueue.cs" />
+    <Compile Include="DynamicBatch2D.cs" />
+    <Compile Include="Effects\DefaultEffect2D.cs" />
+    <Compile Include="Effects\EffectResource.cs" />
+    <Compile Include="Effects\IMatrixChainEffect.cs" />
+    <Compile Include="Effects\ITexture2DEffect.cs" />
+    <Compile Include="Effects\MatrixChainEffect.cs" />
+    <Compile Include="GeometryBuffer.cs" />
+    <Compile Include="GeometryBuffer.Dynamic.cs" />
+    <Compile Include="GeometryBuffer.Static.cs" />
+    <Compile Include="GeometryBufferExtensions.VertexPositionColorTexture.cs" />
+    <Compile Include="GeometryBufferOverflowException.cs" />
+    <Compile Include="PrimitiveTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Effects\Resources\DefaultEffect2D.fx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
