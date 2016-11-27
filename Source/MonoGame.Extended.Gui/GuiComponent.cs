@@ -15,11 +15,7 @@ namespace MonoGame.Extended.Gui
 {
     public class GuiComponent : DrawableGameComponent
     {
-        private GuiDialog _activeDialog;
-
         private ContentManager _contentManager;
-
-        private GuiDialog[] _dialogues;
         private GuiControl _focusedControl;
         private GuiControl _hoveredControl;
         private GuiLayout _layout;

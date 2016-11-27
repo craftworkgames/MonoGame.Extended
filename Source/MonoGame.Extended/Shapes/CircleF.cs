@@ -315,7 +315,7 @@ namespace MonoGame.Extended.Shapes
         /// </returns>
         public bool Intersects(Rectangle value)
         {
-            var distance = new Vector2(Math.Abs(Center.X - value.X), Math.Abs(Center.Y - value.Y));
+            var distance = new Vector2(Math.Abs(Center.X - value.Center.X), Math.Abs(Center.Y - value.Center.Y));
 
             if (distance.X > value.Width/2.0f + Radius)
                 return false;

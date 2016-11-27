@@ -3,6 +3,18 @@ using MonoGame.Extended.InputListeners;
 
 namespace MonoGame.Extended.NuclexGui.Controls
 {
+    /// <summary>
+    /// Determines where the text or image describing control will be located.
+    /// Used primarily for radio button and checkbox.
+    /// </summary>
+    public enum GuiPressableDescriptionPosition
+    {
+        North,
+        South,
+        West,
+        East
+    }
+
     /// <summary>User interface element the user can push down</summary>
     public abstract class GuiPressableControl : GuiControl, IFocusable
     {

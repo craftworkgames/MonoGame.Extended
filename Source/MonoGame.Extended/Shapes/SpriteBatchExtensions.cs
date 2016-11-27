@@ -82,7 +82,6 @@ namespace MonoGame.Extended.Shapes
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="rectangle">The rectangle to draw</param>
         /// <param name="color">The color to draw the rectangle in</param>
-        /// <param name="angle">The angle in radians to draw the rectangle at</param>
         public static void FillRectangle(this SpriteBatch spriteBatch, RectangleF rectangle, Color color)
         {
             FillRectangle(spriteBatch, rectangle.Location, rectangle.Size, color);
@@ -94,12 +93,10 @@ namespace MonoGame.Extended.Shapes
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="location">Where to draw</param>
         /// <param name="size">The size of the rectangle</param>
-        /// <param name="angle">The angle in radians to draw the rectangle at</param>
         /// <param name="color">The color to draw the rectangle in</param>
         public static void FillRectangle(this SpriteBatch spriteBatch, Vector2 location, SizeF size, Color color)
         {
-            spriteBatch.Draw(GetTexture(spriteBatch), location, null, color, 0, Vector2.Zero, size, SpriteEffects.None,
-                0);
+            spriteBatch.Draw(GetTexture(spriteBatch), location, null, color, 0, Vector2.Zero, size, SpriteEffects.None, 0);
         }
 
         /// <summary>

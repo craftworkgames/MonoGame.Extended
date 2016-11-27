@@ -35,7 +35,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game1.cs" />
+    <Compile Include="Game2.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -56,12 +56,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\impact-32_0.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Content\impact-32.fnt" />
     <None Include="Content\logo-square-512.png" />
     <None Include="Content\montserrat-32_0.png" />
+    <None Include="Content\test.spritefont" />
     <None Include="Content\vignette.png" />
     <None Include="Content\montserrat-32.fnt" />
     <None Include="packages.config" />

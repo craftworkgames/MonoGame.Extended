@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.NuclexGui.Visuals.Flat
@@ -41,6 +42,8 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         /// <param name="bounds">Region that will be covered by the drawn element</param>
         /// <param name="text">Text that will be drawn</param>
         void DrawString(string frameName, RectangleF bounds, string text);
+
+        void DrawImage(RectangleF bounds, Texture2D texture, Rectangle sourceRectangle);
 
         /// <summary>Draws a caret for text input at the specified index</summary>
         /// <param name="frameName">Class of the element for which to draw a caret</param>

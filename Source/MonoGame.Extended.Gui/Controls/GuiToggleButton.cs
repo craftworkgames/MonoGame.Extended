@@ -1,36 +1,36 @@
-﻿using System;
+using System;
 using MonoGame.Extended.InputListeners;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public class GuiButton : GuiControl
+    public class GuiToggleButton : GuiControl
     {
-        private bool _isPressed;
+        private bool _isChecked;
 
-        public GuiButton()
+        public GuiToggleButton()
         {
         }
 
-        public bool IsPressed
+        public bool IsChecked
         {
-            get { return _isPressed; }
-            private set
+            get { return _isChecked; }
+            set
             {
-                if (_isPressed != value)
+                if (_isChecked != value)
                 {
-                    _isPressed = value;
+                    _isChecked = value;
 
-                    if (_isPressed)
-                        PressedStyle?.Apply(this);
+                    if (_isChecked)
+                        CheckedStyle?.Apply(this);
                     else
-                        PressedStyle?.Revert(this);
+                        CheckedStyle?.Revert(this);
                 }
             }
         }
 
-        public GuiControlStyle PressedStyle { get; set; }
-
-        public event EventHandler<MouseEventArgs> Click;
+        public bool IsPressed { get; private set; }
+        public GuiControlStyle CheckedStyle { get; set; }
+        public event EventHandler<EventArgs> CheckStateChanged;
 
         public override void OnMouseDown(object sender, MouseEventArgs args)
         {
@@ -43,7 +43,10 @@ namespace MonoGame.Extended.Gui.Controls
         public override void OnMouseUp(object sender, MouseEventArgs args)
         {
             if (IsPressed && Contains(args.Position))
-                Click.Raise(this, args);
+            {
+                IsChecked = !IsChecked;
+                CheckStateChanged?.Invoke(this, args);
+            }
 
             IsPressed = false;
             base.OnMouseUp(sender, args);

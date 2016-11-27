@@ -94,6 +94,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj">
+      <Project>{02562c6f-5bfb-467e-8a95-68b6ce2d635a}</Project>
+      <Name>MonoGame.Extended.Collisions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
       <Name>MonoGame.Extended</Name>

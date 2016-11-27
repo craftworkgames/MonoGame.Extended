@@ -36,7 +36,7 @@ namespace MonoGame.Extended.Timers
         public void Start()
         {
             State = TimerState.Started;
-            Started.Raise(this, EventArgs.Empty);
+            Started?.Invoke(this, EventArgs.Empty);
         }
 
         public void Stop()
@@ -44,7 +44,7 @@ namespace MonoGame.Extended.Timers
             State = TimerState.Stopped;
             CurrentTime = TimeSpan.Zero;
             OnStopped();
-            Stopped.Raise(this, EventArgs.Empty);
+            Stopped?.Invoke(this, EventArgs.Empty);
         }
 
         public void Restart()
@@ -56,7 +56,7 @@ namespace MonoGame.Extended.Timers
         public void Pause()
         {
             State = TimerState.Paused;
-            Paused.Raise(this, EventArgs.Empty);
+            Paused?.Invoke(this, EventArgs.Empty);
         }
 
         protected abstract void OnStopped();
