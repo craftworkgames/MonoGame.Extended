@@ -9,7 +9,6 @@ namespace MonoGame.Extended.Tests.BitmapFonts
     public class BitmapFontTests
     {
         [Test]
-        [Ignore]
         public void BitmapFont_MeasureString_Test()
         {
             var graphicsDevice = new TestGraphicsDevice();
@@ -21,11 +20,13 @@ namespace MonoGame.Extended.Tests.BitmapFonts
                 new BitmapFontRegion(textureRegion, character: 'B', xOffset: 2, yOffset: 9, xAdvance: 19)
             };
 
-            var font = new BitmapFont("fontName", regions, lineHeight: 50);
+            var font = new BitmapFont("fontName", regions, lineHeight: 22);
             var size = font.MeasureString("B");
 
-            Assert.That(size.Width, Is.EqualTo(regions[0].Width));
-            Assert.That(size.Height, Is.EqualTo(regions[0].Height));
+            var region = regions[0];
+
+            Assert.That(size.Width, Is.EqualTo(region.Width + region.XOffset));
+            Assert.That(size.Height, Is.EqualTo(font.LineHeight));
         }
     }
 }
