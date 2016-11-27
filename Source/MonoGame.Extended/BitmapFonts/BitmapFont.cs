@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.BitmapFonts
 {
@@ -33,12 +34,18 @@ namespace MonoGame.Extended.BitmapFonts
 
         public Size MeasureString(string text)
         {
-            if(string.IsNullOrEmpty(text))
+            if (string.IsNullOrEmpty(text))
                 return Size.Empty;
 
-            var totalWidth = 0;
-            var totalHeight = LineHeight;
-            var currentLineWidth = 0;
+            var stringRectangle = GetStringRectangle(text, Point.Zero);
+            return new Size(stringRectangle.Width, stringRectangle.Height);
+        }
+
+        public Rectangle GetStringRectangle(string text, Point position)
+        {
+            var dx = position.X;
+            var dy = position.Y;
+            var rectangle = new Rectangle(dx, dy, 0, LineHeight);
 
             for (var i = 0; i < text.Length; i++)
             {
@@ -46,33 +53,24 @@ namespace MonoGame.Extended.BitmapFonts
                 var fontRegion = GetCharacterRegion(character);
 
                 if (fontRegion != null)
-                    currentLineWidth += fontRegion.XOffset + fontRegion.XAdvance + LetterSpacing;
+                {
+                    var characterPosition = new Point(dx + fontRegion.XOffset, dy + fontRegion.YOffset);
+                    var right = characterPosition.X + fontRegion.Width;
+
+                    if (right > rectangle.Right)
+                        rectangle.Width = right - rectangle.Left;
+
+                    dx += fontRegion.XAdvance + LetterSpacing;
+                }
 
                 if (character == '\n')
                 {
-                    totalWidth = CalculateWidth(currentLineWidth, totalWidth);
-                    totalHeight += LineHeight;
-                    currentLineWidth = 0;
+                    rectangle.Height += LineHeight;
+                    dx = position.X;
                 }
             }
 
-            totalWidth = CalculateWidth(currentLineWidth, totalWidth);
-            return new Size(totalWidth, totalHeight);
-        }
-
-        private int CalculateWidth(int currentLineWidth, int totalWidth)
-        {
-            if (currentLineWidth > 0)
-                currentLineWidth -= LetterSpacing;
-
-            return totalWidth < currentLineWidth ? currentLineWidth : totalWidth;
-        }
-        
-        public Rectangle GetStringRectangle(string text, Vector2 position)
-        {
-            var size = MeasureString(text);
-            var point = position.ToPoint();
-            return new Rectangle(point.X, point.Y, size.Width, size.Height);
+            return rectangle;
         }
 
         public override string ToString()
