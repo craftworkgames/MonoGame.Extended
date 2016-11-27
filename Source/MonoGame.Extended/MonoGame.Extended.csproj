@@ -84,9 +84,6 @@
     <Compile Include="Entities\Systems\ComponentSystem.cs" />
     <Compile Include="Entities\Systems\ParticleEmitterSystem.cs" />
     <Compile Include="Entities\Systems\SpriteBatchSystem.cs" />
-    <Compile Include="Graphics\Batch2DSortMode.cs" />
-    <Compile Include="Graphics\Batching\BatchCommandDrawer.cs" />
-    <Compile Include="Graphics\Batching\BatchDrawCommand.cs" />
     <Compile Include="NuclexGui\Controls\Desktop\GuiButtonControl.cs" />
     <Compile Include="NuclexGui\Controls\Desktop\GuiChoiceControl.cs" />
     <Compile Include="NuclexGui\Controls\Desktop\GuiCloseWindowButtonControl.cs" />
@@ -124,25 +121,6 @@
     <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatVerticalSliderControlRenderer.cs" />
     <Compile Include="NuclexGui\Visuals\Flat\Renderers\FlatWindowControlRenderer.cs" />
     <Compile Include="NuclexGui\Support\EnumHelper.cs" />
-    <Compile Include="Graphics\Batching\BatchSortMode.cs" />
-    <Compile Include="Graphics\Batching\IBatchDrawCommandData.cs" />
-    <Compile Include="Graphics\Batching\Batch.cs" />
-    <Compile Include="Graphics\Batching\BatchCommandQueueOverflowException.cs" />
-    <Compile Include="Graphics\Batching\BatchCommandQueue.cs" />
-    <Compile Include="Graphics\Batching\DeferredBatchCommandQueue.cs" />
-    <Compile Include="Graphics\Batching\ImmediateBatchCommandQueue.cs" />
-    <Compile Include="Graphics\Effects\ITexture2DEffect.cs" />
-    <Compile Include="Graphics\GeometryBuffer.Dynamic.cs" />
-    <Compile Include="Graphics\Effects\MatrixChainEffect.cs" />
-    <Compile Include="Graphics\Effects\EffectResource.cs" />
-    <Compile Include="Graphics\Effects\IMatrixChainEffect.cs" />
-    <Compile Include="Graphics\Effects\DefaultEffect2D.cs" />
-    <Compile Include="Graphics\GeometryBuffer.cs" />
-    <Compile Include="Graphics\GeometryBufferExtensions.VertexPositionColorTexture.cs" />
-    <Compile Include="Graphics\GeometryBufferOverflowException.cs" />
-    <Compile Include="Graphics\PrimitiveTypeExtensions.cs" />
-    <Compile Include="Graphics\DynamicBatch2D.cs" />
-    <Compile Include="Graphics\GeometryBuffer.Static.cs" />
     <Compile Include="InputListeners\ExtendedPlayerIndex.cs" />
     <Compile Include="NuclexGui\Controls\GuiControl.cs" />
     <Compile Include="NuclexGui\Controls\GuiControlEventArgs.cs" />
@@ -307,8 +285,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect2D.mgfxo" />
-    <None Include="Graphics\Effects\Resources\compile.bat" />
     <EmbeddedResource Include="NuclexGui\Resources\Skins\SuaveSkin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -322,9 +298,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Graphics\Effects\Resources\DefaultEffect2D.fx" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

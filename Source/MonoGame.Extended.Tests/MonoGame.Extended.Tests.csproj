@@ -64,7 +64,6 @@
     <Compile Include="AngleTest.cs" />
     <Compile Include="Collections\DequeTests.cs" />
     <Compile Include="Collections\PoolTests.cs" />
-    <Compile Include="Graphics\PrimitiveTypeExtensionsTests.cs" />
     <Compile Include="Maps\Renderers\FullMapRendererTest.cs" />
     <Compile Include="Maps\Tiled\TiledTilesetTest.cs" />
     <Compile Include="MockGameWindow.cs" />
