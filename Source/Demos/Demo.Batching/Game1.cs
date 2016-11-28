@@ -23,7 +23,7 @@ namespace Demo.Batching
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
-        private DynamicBatch2D _batch;
+        private DynamicBatchRenderer2D _batch;
         private readonly StringBuilder _stringBuilder = new StringBuilder();
         private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFont;
@@ -42,7 +42,7 @@ namespace Demo.Batching
             IsMouseVisible = true;
             Window.AllowUserResizing = false;
             // disable fixed time step so max frames can be measured otherwise the update & draw frames would be capped to the default 60 fps timestep
-            IsFixedTimeStep = false;
+            //IsFixedTimeStep = false;
 
             _graphicsDeviceManager = new GraphicsDeviceManager(this)
             {
@@ -57,7 +57,7 @@ namespace Demo.Batching
         {
             var graphicsDevice = GraphicsDevice;
 
-            _batch = new DynamicBatch2D(graphicsDevice);
+            _batch = new DynamicBatchRenderer2D(graphicsDevice);
             _spriteBatch = new SpriteBatch(graphicsDevice);
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
             _effect = new DefaultEffect2D(graphicsDevice);

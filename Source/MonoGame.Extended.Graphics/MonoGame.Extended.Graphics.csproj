@@ -42,28 +42,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Batch2DSortMode.cs" />
-    <Compile Include="Batching\Batch.cs" />
+    <Compile Include="Batching\BatchRenderer.cs" />
     <Compile Include="Batching\BatchCommandDrawer.cs" />
     <Compile Include="Batching\BatchCommandQueue.cs" />
-    <Compile Include="Batching\BatchCommandQueueOverflowException.cs" />
     <Compile Include="Batching\BatchDrawCommand.cs" />
     <Compile Include="Batching\BatchSortMode.cs" />
     <Compile Include="Batching\DeferredBatchCommandQueue.cs" />
     <Compile Include="Batching\IBatchDrawCommandData.cs" />
     <Compile Include="Batching\ImmediateBatchCommandQueue.cs" />
-    <Compile Include="DynamicBatch2D.cs" />
+    <Compile Include="DynamicBatchRenderer2D.cs" />
     <Compile Include="Effects\DefaultEffect2D.cs" />
     <Compile Include="Effects\EffectResource.cs" />
     <Compile Include="Effects\IMatrixChainEffect.cs" />
     <Compile Include="Effects\ITexture2DEffect.cs" />
     <Compile Include="Effects\MatrixChainEffect.cs" />
-    <Compile Include="GeometryBuffer.cs" />
-    <Compile Include="GeometryBuffer.Dynamic.cs" />
-    <Compile Include="GeometryBuffer.Static.cs" />
-    <Compile Include="GeometryBufferExtensions.VertexPositionColorTexture.cs" />
-    <Compile Include="GeometryBufferOverflowException.cs" />
+    <Compile Include="Geometry\GraphicsShapeBuilder.cs" />
+    <Compile Include="Geometry\GraphicsGeometryBuilder.cs" />
+    <Compile Include="Geometry\GraphicsGeometryData.cs" />
+    <Compile Include="Geometry\SpriteBuilderPositionColorTextureU16.cs" />
     <Compile Include="PrimitiveTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sprite.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Effects\Resources\DefaultEffect2D.fx" />
