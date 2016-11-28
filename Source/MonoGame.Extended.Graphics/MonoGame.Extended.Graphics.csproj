@@ -56,7 +56,6 @@
     <Compile Include="Effects\IMatrixChainEffect.cs" />
     <Compile Include="Effects\ITexture2DEffect.cs" />
     <Compile Include="Effects\MatrixChainEffect.cs" />
-    <Compile Include="Geometry\GraphicsShapeBuilder.cs" />
     <Compile Include="Geometry\GraphicsGeometryBuilder.cs" />
     <Compile Include="Geometry\GraphicsGeometryData.cs" />
     <Compile Include="Geometry\SpriteBuilderPositionColorTextureU16.cs" />
