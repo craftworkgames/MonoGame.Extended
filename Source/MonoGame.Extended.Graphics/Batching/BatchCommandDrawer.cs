@@ -1,50 +1,50 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal sealed class BatchCommandDrawer<TVertexType, TCommandData> : IDisposable
-        where TVertexType : struct, IVertexType where TCommandData : struct, IBatchDrawCommandData<TCommandData>
+    internal sealed class BatchCommandDrawer<TVertexType, TIndexType, TCommandData>
+        where TVertexType : struct where TIndexType : struct where TCommandData : struct, IBatchDrawCommandData<TCommandData>
     {
-        internal readonly GeometryBuffer<TVertexType> GeometryBuffer;
-        internal readonly GraphicsDevice GraphicsDevice;
+        private readonly GraphicsDevice _graphicsDevice;
+        private readonly VertexBuffer _vertexBuffer;
+        private readonly IndexBuffer _indexBuffer;
+
         internal Effect Effect;
-        internal PrimitiveType PrimitiveType;
 
-        internal BatchCommandDrawer(GraphicsDevice graphicsDevice, GeometryBuffer<TVertexType> geometryBuffer)
+        internal BatchCommandDrawer(GraphicsDevice graphicsDevice, VertexBuffer vertexBuffer, IndexBuffer indexBuffer)
         {
-            GraphicsDevice = graphicsDevice;
-            GeometryBuffer = geometryBuffer;
+            _graphicsDevice = graphicsDevice;
+            _vertexBuffer = vertexBuffer;
+            _indexBuffer = indexBuffer;
         }
 
-        public void Dispose()
+        internal void UploadVertices(TVertexType[] vertices, int startVertex, int vertexCount)
         {
-            Dispose(true);
+            _vertexBuffer.SetData(vertices, startVertex, vertexCount);
         }
 
-        private void Dispose(bool isDisposing)
+        internal void UploadIndices(TIndexType[] indices, int startIndex, int indexCount)
         {
-            if (!isDisposing)
-                return;
-
-            GeometryBuffer.Dispose();
+            _indexBuffer.SetData(indices, startIndex, indexCount);
         }
 
-        internal void SelectBuffers()
+        internal void SelectVertices()
         {
-            GeometryBuffer.Flush();
-            GraphicsDevice.SetVertexBuffer(GeometryBuffer.VertexBuffer);
-            GraphicsDevice.Indices = GeometryBuffer.IndexBuffer;
+            _graphicsDevice.SetVertexBuffer(_vertexBuffer);
+        }
+
+        internal void SelectIndices()
+        {
+            _graphicsDevice.Indices = _indexBuffer;
         }
 
         internal void Draw(ref BatchDrawCommand<TCommandData> command)
         {
-            var graphicsDevice = GraphicsDevice;
             command.Data.ApplyTo(Effect);
             foreach (var pass in Effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                graphicsDevice.DrawIndexedPrimitives(PrimitiveType, 0, command.StartIndex,
+                _graphicsDevice.DrawIndexedPrimitives(command.PrimitiveType, 0, command.StartIndex,
                     command.PrimitiveCount);
             }
             command.Data.SetReferencesToNull();

@@ -1,15 +1,17 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics.Geometry;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
-    internal sealed class ImmediateBatchCommandQueue<TVertexType, TCommandData> :
-            BatchCommandQueue<TVertexType, TCommandData>
+    internal sealed class ImmediateBatchCommandQueue<TVertexType, TIndexType, TCommandData> :
+            BatchCommandQueue<TVertexType, TIndexType, TCommandData>
         where TVertexType : struct, IVertexType
+        where TIndexType : struct
         where TCommandData : struct, IBatchDrawCommandData<TCommandData>
     {
         public ImmediateBatchCommandQueue(GraphicsDevice graphicsDevice,
-            BatchCommandDrawer<TVertexType, TCommandData> batchCommandDrawer)
-            : base(graphicsDevice, batchCommandDrawer)
+            BatchCommandDrawer<TVertexType, TIndexType, TCommandData> batchCommandDrawer, GraphicsGeometryData<TVertexType, TIndexType> geometryData)
+            : base(graphicsDevice, batchCommandDrawer, geometryData)
         {
         }
 
@@ -17,13 +19,10 @@ namespace MonoGame.Extended.Graphics.Batching
         {
         }
 
-        internal override void EnqueueDrawCommand(ushort startIndex, ushort primitiveCount, float sortKey,
+        internal override void EnqueueDrawCommand(PrimitiveType primitiveType, int primitiveCount, int startIndex, float sortKey,
             ref TCommandData data)
         {
-            CommandDrawer.SelectBuffers();
-            var command = new BatchDrawCommand<TCommandData>(startIndex, primitiveCount, sortKey, data);
-            CommandDrawer.Draw(ref command);
-            CommandDrawer.GeometryBuffer.Clear();
+
         }
     }
 }

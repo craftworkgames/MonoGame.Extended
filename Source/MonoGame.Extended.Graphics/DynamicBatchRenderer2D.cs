@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics.Batching;
 using MonoGame.Extended.Graphics.Effects;
+using MonoGame.Extended.Graphics.Geometry;
 
 namespace MonoGame.Extended.Graphics
 {
@@ -15,8 +16,8 @@ namespace MonoGame.Extended.Graphics
     ///     Enables a group of dynamic two-dimensional geometric objects be batched together for rendering, if possible, using
     ///     the same settings.
     /// </summary>
-    /// <seealso cref="Batch{TVertexType,TBatchDrawCommandData}" />
-    public class DynamicBatch2D : Batch<VertexPositionColorTexture, DynamicBatch2D.DrawCommandData>
+    /// <seealso cref="BatchRenderer{TVertexType,TIndexType,TBatchDrawCommandData}" />
+    public class DynamicBatchRenderer2D : BatchRenderer<VertexPositionColorTexture, ushort, DynamicBatchRenderer2D.DrawCommandData>
     {
         internal const int DefaultMaximumVerticesCount = 8192;
         internal const int DefaultMaximumIndicesCount = 12288;
@@ -26,7 +27,7 @@ namespace MonoGame.Extended.Graphics
         private DepthStencilState _depthStencilState;
         private Effect _effect;
 
-        private DrawCommandData _pixelTextureDrawContext;
+        private DrawCommandData _pixelTextureDrawCommandData;
         private Matrix? _projectionMatrix;
         private RasterizerState _rasterizerState;
         private SamplerState _samplerState;
@@ -34,8 +35,10 @@ namespace MonoGame.Extended.Graphics
         private Matrix _viewMatrix;
         private Matrix _worldMatrix;
 
+        private readonly SpriteBuilderPositionColorTextureU16 _spriteBuilder;
+
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DynamicBatch2D" /> class.
+        ///     Initializes a new instance of the <see cref="DynamicBatchRenderer2D" /> class.
         /// </summary>
         /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="maximumVerticesCount">The maximum number of vertices. The default value is <code>8192</code>.</param>
@@ -50,12 +53,17 @@ namespace MonoGame.Extended.Graphics
         ///     <code>0</code>, or <paramref name="maximumVerticesCount" /> is less than or equal to <code>0</code>, or,
         ///     <paramref name="maximumVerticesCount" /> is less than or equal to <code>0</code>.
         /// </exception>
-        public DynamicBatch2D(GraphicsDevice graphicsDevice, ushort maximumVerticesCount = DefaultMaximumVerticesCount,
+        public DynamicBatchRenderer2D(GraphicsDevice graphicsDevice, ushort maximumVerticesCount = DefaultMaximumVerticesCount,
             ushort maximumIndicesCount = DefaultMaximumIndicesCount,
             int maximumBatchCommandsCount = DefaultMaximumBatchCommandsCount)
             : base(
-                new DynamicGeometryBuffer<VertexPositionColorTexture>(graphicsDevice, maximumVerticesCount,
-                    maximumIndicesCount), maximumBatchCommandsCount)
+                graphicsDevice,
+                new DynamicVertexBuffer(graphicsDevice, VertexPositionColorTexture.VertexDeclaration,
+                    maximumVerticesCount, BufferUsage.WriteOnly),
+                new DynamicIndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, maximumIndicesCount,
+                    BufferUsage.WriteOnly),
+                new GraphicsGeometryData<VertexPositionColorTexture, ushort>(maximumVerticesCount, maximumIndicesCount),
+                maximumBatchCommandsCount)
         {
             _defaultEffect = new DefaultEffect2D(graphicsDevice);
 
@@ -65,10 +73,12 @@ namespace MonoGame.Extended.Graphics
                 Color.White
             });
 
-            _pixelTextureDrawContext = new DrawCommandData
+            _pixelTextureDrawCommandData = new DrawCommandData
             {
                 Texture = _pixelTexture
             };
+
+            _spriteBuilder = new SpriteBuilderPositionColorTextureU16();
         }
 
         /// <summary>
@@ -83,7 +93,7 @@ namespace MonoGame.Extended.Graphics
             if (!disposing)
                 return;
 
-            _pixelTextureDrawContext.Texture = null;
+            _pixelTextureDrawCommandData.Texture = null;
             _pixelTexture?.Dispose();
         }
 
@@ -161,22 +171,31 @@ namespace MonoGame.Extended.Graphics
 
             _sortMode = sortMode;
 
-            Begin(_effect, PrimitiveType.TriangleList, batchSortMode);
+            Begin(_effect, batchSortMode);
         }
 
         /// <summary>
         ///     Ends and submits the group of geometry to the
-        ///     <see cref="P:MonoGame.Extended.Graphics.Batching.Batch`2.GraphicsDevice" /> for rendering.
+        ///     <see cref="P:MonoGame.Extended.Graphics.Batching.BatchRenderer`2.GraphicsDevice" /> for rendering.
         /// </summary>
         /// <remarks>
         ///     This method must be called after all enqueuing of draw calls.
         /// </remarks>
-        public new void End()
+        public override void End()
         {
             if (_sortMode != Batch2DSortMode.Immediate)
                 ApplyStates();
 
             base.End();
+            GeometryData.VerticesCount = 0;
+            GeometryData.IndicesCount = 0;
+        }
+
+        protected override void Flush()
+        {
+            base.Flush();
+            GeometryData.VerticesCount = 0;
+            GeometryData.IndicesCount = 0;
         }
 
         private void ApplyStates()
@@ -254,11 +273,6 @@ namespace MonoGame.Extended.Graphics
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0</code>.</param>
         /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
-        /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
-        ///     The underlying
-        ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
-        /// </exception>
-        /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
         [Obsolete("The Draw method is deprecated, please use the DrawSprite method instead.")]
         public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle = null,
             Color? color = null, float rotation = 0f, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None,
@@ -295,11 +309,6 @@ namespace MonoGame.Extended.Graphics
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0</code>.</param>
         /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
-        /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
-        ///     The underlying
-        ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
-        /// </exception>
-        /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
         public void DrawSprite(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle = null,
             Color? color = null, float rotation = 0f, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None,
             float depth = 0)
@@ -308,16 +317,12 @@ namespace MonoGame.Extended.Graphics
             var size = new Size(destinationRectangle.Width, destinationRectangle.Height);
 
             Matrix2D transformMatrix;
-            CalculateTransformMatrix(position, rotation, null, out transformMatrix);
+            Matrix2D.CreateFrom(position, rotation, null, origin, out transformMatrix);
 
-            var geometryBuffer = GeometryBuffer;
-            var startVertex = geometryBuffer._vertexCount;
-            var startIndex = geometryBuffer._indexCount;
-            geometryBuffer.EnqueueSprite(startVertex, texture, ref transformMatrix, sourceRectangle, size, color, origin,
-                effects, depth);
+            _spriteBuilder.BuildSprite(ref transformMatrix, texture, sourceRectangle, color, size, effects, depth);
+
             var commandData = new DrawCommandData(texture);
-            var sortKey = GetSortKey(depth);
-            Draw(startIndex, 2, sortKey, ref commandData);
+            DrawGeometry(_spriteBuilder, ref commandData, depth);
         }
 
         /// <summary>
@@ -332,31 +337,49 @@ namespace MonoGame.Extended.Graphics
         ///     <code>null</code> to use the entire <see cref="Texture2D" />.
         /// </param>
         /// <param name="color">The <see cref="Color" />. Use <code>null</code> to use the default <see cref="Color.White" />.</param>
-        /// <param name="origin">
-        ///     The origin <see cref="Vector2" />. Use <code>null</code> to use the default
-        ///     <see cref="Vector2.Zero" />.
-        /// </param>
         /// <param name="effects">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0</code>.</param>
         /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
-        /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
-        ///     The underlying
-        ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
-        /// </exception>
-        /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
         public void DrawSprite(Texture2D texture, ref Matrix2D transformMatrix, Rectangle? sourceRectangle = null,
-            Color? color = null, Vector2? origin = null, SpriteEffects effects = SpriteEffects.None,
-            float depth = 0)
+            Color? color = null, SpriteEffects effects = SpriteEffects.None, float depth = 0)
         {
-            var geometryBuffer = GeometryBuffer;
-            var startVertex = geometryBuffer._vertexCount;
-            var startIndex = geometryBuffer._indexCount;
-            geometryBuffer.EnqueueSprite(startVertex, texture, ref transformMatrix, sourceRectangle, null, color, origin,
-                effects, depth);
+            _spriteBuilder.BuildSprite(ref transformMatrix, texture, sourceRectangle, color, null, effects, depth);
             var commandData = new DrawCommandData(texture);
+            DrawGeometry(_spriteBuilder, ref commandData, depth);
+        }
+
+        private unsafe void DrawGeometry(GraphicsGeometryBuilder<VertexPositionColorTexture, ushort> geometryBuilder, ref DrawCommandData drawCommandData, float depth)
+        {
+            if (GeometryData.VerticesCount + geometryBuilder.Vertices.Length > GeometryData.Vertices.Length || GeometryData.IndicesCount + geometryBuilder.Indices.Length > GeometryData.Indices.Length)
+            {
+                Flush();
+            }
+
+            var startVertex = GeometryData.VerticesCount;
+            var startIndex = GeometryData.IndicesCount;
+            var indexOffset = (ushort)startVertex;
+
+            Array.Copy(geometryBuilder.Vertices, 0, GeometryData.Vertices, startVertex, geometryBuilder.Vertices.Length);
+
+            fixed (ushort* fixedDestinationPointer = GeometryData.Indices)
+            fixed (ushort* fixedSourcePointer = geometryBuilder.Indices)
+            {
+                var pointerDestination = fixedDestinationPointer + startIndex;
+                var pointerDestinationEnd = pointerDestination + geometryBuilder.Indices.Length;
+                var pointerSource = fixedSourcePointer;
+
+                while (pointerDestination < pointerDestinationEnd)
+                {
+                    *pointerDestination++ = (ushort)(*pointerSource++ + indexOffset);
+                }
+            }
+
+            GeometryData.VerticesCount += geometryBuilder.Vertices.Length;
+            GeometryData.IndicesCount += geometryBuilder.Indices.Length;
+
             var sortKey = GetSortKey(depth);
-            Draw(startIndex, 2, sortKey, ref commandData);
+            Draw(geometryBuilder.PrimitiveType, startIndex, geometryBuilder.PrimitivesCount, sortKey, ref drawCommandData);
         }
 
         /// <summary>
@@ -387,19 +410,14 @@ namespace MonoGame.Extended.Graphics
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0f</code>.</param>
         /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
-        /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
-        ///     The underlying
-        ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
-        /// </exception>
-        /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
         public void DrawSprite(Texture2D texture, Vector2 position, Rectangle? sourceRectangle = null,
             Color? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null,
             SpriteEffects effects = SpriteEffects.None,
             float depth = 0)
         {
             Matrix2D transformMatrix;
-            CalculateTransformMatrix(position, rotation, scale, out transformMatrix);
-            DrawSprite(texture, ref transformMatrix, sourceRectangle, color, origin, effects, depth);
+            Matrix2D.CreateFrom(position, rotation, scale, origin, out transformMatrix);
+            DrawSprite(texture, ref transformMatrix, sourceRectangle, color, effects, depth);
         }
 
         /// <summary>
@@ -430,11 +448,6 @@ namespace MonoGame.Extended.Graphics
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0f</code>.</param>
         /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
-        /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
-        ///     The underlying
-        ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
-        /// </exception>
-        /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
         [Obsolete("The Draw method is deprecated, please use the DrawSprite method instead.")]
         public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle = null,
             Color? color = null, float rotation = 0f, Vector2? origin = null, Vector2? scale = null,
@@ -456,22 +469,12 @@ namespace MonoGame.Extended.Graphics
         ///     The <see cref="Color" />. Use <code>null</code> to use the default
         ///     <see cref="Color.White" />.
         /// </param>
-        /// <param name="origin">
-        ///     The origin <see cref="Vector2" />. Use <code>null</code> to use the default
-        ///     <see cref="Vector2.Zero" />.
-        /// </param>
         /// <param name="effects">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0f</code>.</param>
         /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="bitmapFont" /> is null or <paramref name="text" /> is null.</exception>
-        /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
-        ///     The underlying
-        ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
-        /// </exception>
-        /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
         public void DrawString(BitmapFont bitmapFont, StringBuilder text, ref Matrix2D transformMatrix,
-            Color? color = null,
-            Vector2? origin = null, SpriteEffects effects = SpriteEffects.None, float depth = 0f)
+            Color? color = null, SpriteEffects effects = SpriteEffects.None, float depth = 0f)
         {
             EnsureHasBegun();
 
@@ -524,7 +527,7 @@ namespace MonoGame.Extended.Graphics
 
                 var textureRegion = fontRegion.TextureRegion;
                 var bounds = textureRegion.Bounds;
-                DrawSprite(textureRegion.Texture, ref transform1Matrix, bounds, color, origin, effects, depth);
+                DrawSprite(textureRegion.Texture, ref transform1Matrix, bounds, color, effects, depth);
 
                 offset.X += i != text.Length - 1
                     ? fontRegion.XAdvance + bitmapFont.LetterSpacing
@@ -561,18 +564,13 @@ namespace MonoGame.Extended.Graphics
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0f</code></param>
         /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="bitmapFont" /> is null or <paramref name="text" /> is null.</exception>
-        /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
-        ///     The underlying
-        ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
-        /// </exception>
-        /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
         public void DrawString(BitmapFont bitmapFont, StringBuilder text, Vector2 position, Color? color = null,
             float rotation = 0f, Vector2? origin = null, Vector2? scale = null,
             SpriteEffects effects = SpriteEffects.None, float depth = 0f)
         {
             Matrix2D transformMatrix;
-            CalculateTransformMatrix(position, rotation, scale, out transformMatrix);
-            DrawString(bitmapFont, text, ref transformMatrix, color, origin, effects, depth);
+            Matrix2D.CreateFrom(position, rotation, scale, origin, out transformMatrix);
+            DrawString(bitmapFont, text, ref transformMatrix, color, effects, depth);
         }
 
         /// <summary>
@@ -587,21 +585,11 @@ namespace MonoGame.Extended.Graphics
         ///     The <see cref="Color" />. Use <code>null</code> to use the default
         ///     <see cref="Color.White" />.
         /// </param>
-        /// <param name="origin">
-        ///     The origin <see cref="Vector2" />. Use <code>null</code> to use the default
-        ///     <see cref="Vector2.Zero" />.
-        /// </param>
         /// <param name="effects">The <see cref="SpriteEffects" />. The default value is <see cref="SpriteEffects.None" />.</param>
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0f</code></param>
         /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="bitmapFont" /> is null or <paramref name="text" /> is null.</exception>
-        /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
-        ///     The underlying
-        ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
-        /// </exception>
-        /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
-        public void DrawString(BitmapFont bitmapFont, string text, ref Matrix2D transformMatrix, Color? color = null,
-            Vector2? origin = null, SpriteEffects effects = SpriteEffects.None, float depth = 0f)
+        public void DrawString(BitmapFont bitmapFont, string text, ref Matrix2D transformMatrix, Color? color = null, SpriteEffects effects = SpriteEffects.None, float depth = 0f)
         {
             EnsureHasBegun();
 
@@ -654,7 +642,7 @@ namespace MonoGame.Extended.Graphics
 
                 var textureRegion = fontRegion.TextureRegion;
                 var bounds = textureRegion.Bounds;
-                DrawSprite(textureRegion.Texture, ref transform1Matrix, bounds, color, origin, effects, depth);
+                DrawSprite(textureRegion.Texture, ref transform1Matrix, bounds, color, effects, depth);
 
                 offset.X += i != text.Length - 1
                     ? fontRegion.XAdvance + bitmapFont.LetterSpacing
@@ -691,56 +679,13 @@ namespace MonoGame.Extended.Graphics
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0f</code></param>
         /// <exception cref="InvalidOperationException">The <see cref="Begin" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="bitmapFont" /> is null or <paramref name="text" /> is null.</exception>
-        /// <exception cref="GeometryBufferOverflowException{VertexPositionColorTexture}">
-        ///     The underlying
-        ///     <see cref="GeometryBuffer{VertexPositionColorTexture}" /> is full.
-        /// </exception>
-        /// <exception cref="BatchCommandQueueOverflowException">The batch command queue is full.</exception>
         public void DrawString(BitmapFont bitmapFont, string text, Vector2 position, Color? color = null,
             float rotation = 0f, Vector2? origin = null, Vector2? scale = null,
             SpriteEffects effects = SpriteEffects.None, float depth = 0f)
         {
-            var matrix = Matrix2D.Identity;
-
-            if (scale.HasValue)
-            {
-                var scaleMatrix = Matrix2D.CreateScale(scale.Value);
-                Matrix2D.Multiply(ref matrix, ref scaleMatrix, out matrix);
-            }
-
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (rotation != 0f)
-            {
-                var rotationMatrix = Matrix2D.CreateRotationZ(-rotation);
-                Matrix2D.Multiply(ref matrix, ref rotationMatrix, out matrix);
-            }
-
-            var translationMatrix = Matrix2D.CreateTranslation(position);
-            Matrix2D.Multiply(ref matrix, ref translationMatrix, out matrix);
-
-            DrawString(bitmapFont, text, ref matrix, color, origin, effects, depth);
-        }
-
-        private static void CalculateTransformMatrix(Vector2 position, float rotation, Vector2? scale,
-            out Matrix2D transformMatrix)
-        {
-            transformMatrix = Matrix2D.Identity;
-
-            if (scale.HasValue)
-            {
-                var scaleMatrix = Matrix2D.CreateScale(scale.Value);
-                Matrix2D.Multiply(ref transformMatrix, ref scaleMatrix, out transformMatrix);
-            }
-
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (rotation != 0f)
-            {
-                var rotationMatrix = Matrix2D.CreateRotationZ(-rotation);
-                Matrix2D.Multiply(ref transformMatrix, ref rotationMatrix, out transformMatrix);
-            }
-
-            var translationMatrix = Matrix2D.CreateTranslation(position);
-            Matrix2D.Multiply(ref transformMatrix, ref translationMatrix, out transformMatrix);
+            Matrix2D matrix;
+            Matrix2D.CreateFrom(position, rotation, scale, origin, out matrix);
+            DrawString(bitmapFont, text, ref matrix, color, effects, depth);
         }
 
         /// <summary>

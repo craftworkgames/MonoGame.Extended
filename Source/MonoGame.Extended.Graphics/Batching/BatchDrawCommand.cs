@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Batching
 {
@@ -8,22 +9,24 @@ namespace MonoGame.Extended.Graphics.Batching
         where TCommandData : struct, IBatchDrawCommandData<TCommandData>
     {
         internal float SortKey;
-        internal ushort StartIndex;
-        internal ushort PrimitiveCount;
+        internal int StartIndex;
+        internal int PrimitiveCount;
+        internal PrimitiveType PrimitiveType;
         internal TCommandData Data;
 
-        internal BatchDrawCommand(ushort startIndex, ushort primitiveCount, float sortKey, TCommandData data)
+        internal BatchDrawCommand(PrimitiveType primitiveType, int startIndex, int primitiveCount, float sortKey, TCommandData data)
         {
+            PrimitiveType = primitiveType;
             SortKey = sortKey;
             StartIndex = startIndex;
             PrimitiveCount = primitiveCount;
             Data = data;
         }
 
-        internal bool CanMergeWith(float sortKey, ref TCommandData commandData)
+        internal bool CanMergeWith(PrimitiveType primitiveType, float sortKey, ref TCommandData commandData)
         {
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return (SortKey == sortKey) && Data.Equals(ref commandData);
+            return PrimitiveType == primitiveType && SortKey == sortKey && Data.Equals(ref commandData);
         }
 
         public int CompareTo(BatchDrawCommand<TCommandData> other)
