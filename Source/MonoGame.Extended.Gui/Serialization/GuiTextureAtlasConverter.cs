@@ -22,12 +22,13 @@ namespace MonoGame.Extended.Gui.Serialization
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
             JsonSerializer serializer)
         {
-            var assetName = reader.Value.ToString();
+            //var assetName = reader.Value.ToString();
 
-            using (var stream = TitleContainer.OpenStream(assetName))
-            {
-                return TextureAtlasReader.FromRawXml(_contentManager, stream);
-            }
+            //using (var stream = TitleContainer.OpenStream(assetName))
+            //{
+            //    return TextureAtlasReader.FromRawXml(_contentManager, stream);
+            //}
+            throw new NotImplementedException();
         }
 
         public override bool CanConvert(Type objectType)

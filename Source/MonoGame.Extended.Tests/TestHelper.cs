@@ -15,7 +15,10 @@ namespace MonoGame.Extended.Tests
 
         public static GraphicsDevice CreateGraphicsDevice()
         {
-            return new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile.HiDef, new PresentationParameters())
+            return new GraphicsDevice(
+                adapter: GraphicsAdapter.DefaultAdapter, 
+                graphicsProfile: GraphicsProfile.HiDef, 
+                presentationParameters: new PresentationParameters())
             {
                 Viewport = new Viewport(0, 0, 800, 480)
             };
