@@ -1,5 +1,4 @@
 using System;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
