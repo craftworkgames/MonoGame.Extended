@@ -110,6 +110,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Gui.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Graphics", "MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj", "{9B3AB8A1-78AA-471A-AFD0-B10B932115BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Tiled", "MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj", "{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -318,6 +320,14 @@ Global
 		{9B3AB8A1-78AA-471A-AFD0-B10B932115BC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9B3AB8A1-78AA-471A-AFD0-B10B932115BC}.Release|x86.ActiveCfg = Release|Any CPU
 		{9B3AB8A1-78AA-471A-AFD0-B10B932115BC}.Release|x86.Build.0 = Release|Any CPU
+		{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}.Debug|x86.Build.0 = Debug|Any CPU
+		{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}.Release|x86.ActiveCfg = Release|Any CPU
+		{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

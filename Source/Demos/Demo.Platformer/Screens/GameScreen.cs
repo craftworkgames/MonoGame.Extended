@@ -9,9 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Maps.Renderers;
-using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Tiled.Renderers;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Platformer.Screens

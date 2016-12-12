@@ -6,7 +6,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
-using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Extended.Tiled;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled

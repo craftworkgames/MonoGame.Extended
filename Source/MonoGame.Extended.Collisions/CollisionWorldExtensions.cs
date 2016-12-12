@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Extended.Tiled;
 
 namespace MonoGame.Extended.Collisions
 {

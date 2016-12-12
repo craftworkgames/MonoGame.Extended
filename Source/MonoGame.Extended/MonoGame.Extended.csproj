@@ -38,14 +38,6 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
-    <Compile Include="Maps\Renderers\DynamicGroupRenderDetails.cs" />
-    <Compile Include="Maps\Renderers\FullMapRenderer.cs" />
-    <Compile Include="Maps\Renderers\GroupRenderDetails.cs" />
-    <Compile Include="Maps\Renderers\IMapRenderer.cs" />
-    <Compile Include="Maps\Renderers\MapRenderDetails.cs" />
-    <Compile Include="Maps\Renderers\MapRendererConfig.cs" />
-    <Compile Include="Maps\Tiled\TiledTilesetTile.cs" />
-    <Compile Include="Maps\Tiled\TiledTilesetTileFrame.cs" />
     <Compile Include="Primitives\BoundingRectangle.cs" />
     <Compile Include="Primitives\Point2.cs" />
     <Compile Include="Primitives\Ray2D.cs" />
@@ -223,10 +215,6 @@
     <Compile Include="RandomExtensions.cs" />
     <Compile Include="Range.cs" />
     <Compile Include="RenderTarget2DExtensions.cs" />
-    <Compile Include="Maps\Tiled\SpriteBatchExtensions.cs" />
-    <Compile Include="Maps\Tiled\TiledMapOrientation.cs" />
-    <Compile Include="Maps\Tiled\TiledObject.cs" />
-    <Compile Include="Maps\Tiled\TiledObjectLayer.cs" />
     <Compile Include="MatrixExtensions.cs" />
     <Compile Include="SceneGraphs\ISceneEntity.cs" />
     <Compile Include="SceneGraphs\SceneEntityCollection.cs" />
@@ -250,15 +238,6 @@
     <Compile Include="TextureAtlases\TextureRegion2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprites\Sprite.cs" />
-    <Compile Include="Maps\Tiled\TiledImageLayer.cs" />
-    <Compile Include="Maps\Tiled\TiledLayer.cs" />
-    <Compile Include="Maps\Tiled\TiledTileLayer.cs" />
-    <Compile Include="Maps\Tiled\TiledMap.cs" />
-    <Compile Include="Maps\Tiled\TiledMapReader.cs" />
-    <Compile Include="Maps\Tiled\TiledRenderOrder.cs" />
-    <Compile Include="Maps\Tiled\TiledProperties.cs" />
-    <Compile Include="Maps\Tiled\TiledTile.cs" />
-    <Compile Include="Maps\Tiled\TiledTileset.cs" />
     <Compile Include="Timers\ContinuousClock.cs" />
     <Compile Include="Timers\CountdownTimer.cs" />
     <Compile Include="Timers\GameTimer.cs" />
