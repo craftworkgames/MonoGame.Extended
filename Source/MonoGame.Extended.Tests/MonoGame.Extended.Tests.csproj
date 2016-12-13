@@ -64,8 +64,6 @@
     <Compile Include="AngleTest.cs" />
     <Compile Include="Collections\DequeTests.cs" />
     <Compile Include="Collections\PoolTests.cs" />
-    <Compile Include="Maps\Renderers\FullMapRendererTest.cs" />
-    <Compile Include="Maps\Tiled\TiledTilesetTest.cs" />
     <Compile Include="MockGameWindow.cs" />
     <Compile Include="Particles\AssertionModifier.cs" />
     <Compile Include="Particles\ColourTests.cs" />
@@ -86,6 +84,8 @@
     <Compile Include="SizeFTests.cs" />
     <Compile Include="Sprites\SpriteTests.cs" />
     <Compile Include="TextureAtlases\TextureAtlasTests.cs" />
+    <Compile Include="Tiled\Renderers\FullMapRendererTest.cs" />
+    <Compile Include="Tiled\TiledTilesetTest.cs" />
     <Compile Include="Vector2ExtensionsTests.cs" />
     <Compile Include="ViewportAdapters\BoxingViewportAdapterTests.cs" />
     <Compile Include="Camera2DTests.cs" />
@@ -95,6 +95,10 @@
     <Compile Include="TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj">
+      <Project>{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}</Project>
+      <Name>MonoGame.Extended.Tiled</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724C52-3D50-45BB-81EB-3C8A247EAFD1}</Project>
       <Name>MonoGame.Extended</Name>

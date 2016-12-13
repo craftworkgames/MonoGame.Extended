@@ -1,4 +1,4 @@
-﻿namespace MonoGame.Extended.Maps.Tiled
+﻿namespace MonoGame.Extended.Tiled
 {
     public enum TiledMapOrientation
     {

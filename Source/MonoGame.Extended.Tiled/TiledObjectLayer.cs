@@ -1,8 +1,10 @@
-﻿namespace MonoGame.Extended.Maps.Tiled
+﻿namespace MonoGame.Extended.Tiled
 {
     public class TiledObjectLayer : TiledLayer
     {
-        public TiledObjectLayer(string name, TiledObject[] objects) 
+        public TiledObject[] Objects { get; }
+
+        public TiledObjectLayer(string name, TiledObject[] objects)
             : base(name)
         {
             Objects = objects;
@@ -11,7 +13,5 @@
         public override void Dispose()
         {
         }
-
-        public TiledObject[] Objects { get; }
     }
 }

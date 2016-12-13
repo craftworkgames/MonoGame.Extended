@@ -1,4 +1,4 @@
-﻿namespace MonoGame.Extended.Maps.Renderers
+﻿namespace MonoGame.Extended.Tiled.Renderers
 {
     public class MapRendererConfig
     {

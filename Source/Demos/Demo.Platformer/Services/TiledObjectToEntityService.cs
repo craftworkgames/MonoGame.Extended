@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Demo.Platformer.Entities;
 using MonoGame.Extended.Entities;
-using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Extended.Tiled;
 
 namespace Demo.Platformer.Services
 {

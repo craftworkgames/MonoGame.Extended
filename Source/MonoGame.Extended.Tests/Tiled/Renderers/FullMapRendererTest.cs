@@ -1,13 +1,13 @@
-﻿using MonoGame.Extended.Maps.Renderers;
-using NUnit.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using NSubstitute;
-using MonoGame.Extended.TextureAtlases;
-using Microsoft.Xna.Framework;
-using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Shapes;
+using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Tiled.Renderers;
+using NSubstitute;
+using NUnit.Framework;
 
-namespace MonoGame.Extended.Tests.Maps.Renderers
+namespace MonoGame.Extended.Tests.Tiled.Renderers
 {
     [TestFixture]
     public class FullMapRendererTest

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace MonoGame.Extended.Content
 {
-    internal static class ContentReaderExtensions
+    public static class ContentReaderExtensions
     {
         public static string GetRelativeAssetPath(this ContentReader contentReader, string relativePath)
         {

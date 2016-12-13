@@ -1,8 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Maps.Tiled;
 
-namespace MonoGame.Extended.Maps.Renderers
+namespace MonoGame.Extended.Tiled.Renderers
 {
     public interface IMapRenderer
     {

@@ -5,27 +5,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.Maps.Tiled
+namespace MonoGame.Extended.Tiled
 {
     public class TiledMap : IDisposable
     {
         private readonly List<TiledLayer> _layers;
         private readonly List<TiledTileset> _tilesets;
-
-        public TiledMap(string name, int width, int height, int tileWidth, int tileHeight,
-            TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
-        {
-            _layers = new List<TiledLayer>();
-            _tilesets = new List<TiledTileset>();
-
-            Name = name;
-            Width = width;
-            Height = height;
-            TileWidth = tileWidth;
-            TileHeight = tileHeight;
-            Properties = new TiledProperties();
-            Orientation = orientation;
-        }
 
         public string Name { get; }
         public int Width { get; }
@@ -43,8 +28,23 @@ namespace MonoGame.Extended.Maps.Tiled
         public IReadOnlyList<TiledImageLayer> ImageLayers => _layers.OfType<TiledImageLayer>().ToList();
         public IReadOnlyList<TiledTileLayer> TileLayers => _layers.OfType<TiledTileLayer>().ToList();
         public IReadOnlyList<TiledObjectLayer> ObjectLayers => _layers.OfType<TiledObjectLayer>().ToList();
-        public int WidthInPixels => Width*TileWidth;
-        public int HeightInPixels => Height*TileHeight;
+        public int WidthInPixels => Width * TileWidth;
+        public int HeightInPixels => Height * TileHeight;
+
+        public TiledMap(string name, int width, int height, int tileWidth, int tileHeight,
+            TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
+        {
+            _layers = new List<TiledLayer>();
+            _tilesets = new List<TiledTileset>();
+
+            Name = name;
+            Width = width;
+            Height = height;
+            TileWidth = tileWidth;
+            TileHeight = tileHeight;
+            Properties = new TiledProperties();
+            Orientation = orientation;
+        }
 
         public void Dispose()
         {
@@ -87,7 +87,7 @@ namespace MonoGame.Extended.Maps.Tiled
         public T GetLayer<T>(string name)
             where T : TiledLayer
         {
-            return (T) GetLayer(name);
+            return (T)GetLayer(name);
         }
 
         public TiledObjectLayer GetObjectGroup(string name)

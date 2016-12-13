@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Extended.Tiled;
 using NUnit.Framework;
 
-namespace MonoGame.Extended.Tests.Maps.Tiled
+namespace MonoGame.Extended.Tests.Tiled
 {
     [TestFixture]
     public class TiledTilesetTest

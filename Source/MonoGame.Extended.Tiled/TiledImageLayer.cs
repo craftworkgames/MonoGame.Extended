@@ -1,18 +1,18 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Extended.Maps.Tiled
+namespace MonoGame.Extended.Tiled
 {
     public class TiledImageLayer : TiledLayer, IMovable
     {
+        public Texture2D Texture { get; }
+
         public TiledImageLayer(string name, Texture2D texture, Vector2 position)
             : base(name)
         {
             Position = position;
             Texture = texture;
         }
-
-        public Texture2D Texture { get; }
 
         public Vector2 Position { get; set; }
 

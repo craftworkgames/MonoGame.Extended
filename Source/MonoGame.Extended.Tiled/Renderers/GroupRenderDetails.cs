@@ -2,10 +2,17 @@
 using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Extended.Maps.Renderers
+namespace MonoGame.Extended.Tiled.Renderers
 {
     public class GroupRenderDetails
     {
+        public Texture2D Texture { get; set; }
+        public int TileCount { get; set; }
+        public List<VertexPositionTexture> Vertices { get; private set; }
+        public VertexBuffer VertexBuffer { get; }
+        public IndexBuffer IndexBuffer { get; }
+        public float Opacity { get; set; }
+
         public GroupRenderDetails(GraphicsDevice gd, IEnumerable<VertexPositionTexture> vertices,
             IEnumerable<ushort> indexes, Texture2D texture)
         {
@@ -21,13 +28,6 @@ namespace MonoGame.Extended.Maps.Renderers
         {
             TileCount = tileCount;
         }
-
-        public Texture2D Texture { get; set; }
-        public int TileCount { get; set; }
-        public List<VertexPositionTexture> Vertices { get; private set; }
-        public VertexBuffer VertexBuffer { get; }
-        public IndexBuffer IndexBuffer { get; }
-        public float Opacity { get; set; }
 
         public void SetVertices(IEnumerable<VertexPositionTexture> vertices)
         {

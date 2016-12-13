@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Shapes;
 
-namespace MonoGame.Extended.Maps.Tiled
+namespace MonoGame.Extended.Tiled
 {
     public class TiledMapReader : ContentTypeReader<TiledMap>
     {
@@ -15,12 +15,12 @@ namespace MonoGame.Extended.Maps.Tiled
             var backgroundColor = reader.ReadColor();
             var renderOrder = (TiledRenderOrder)Enum.Parse(typeof(TiledRenderOrder), reader.ReadString(), true);
             var tiledMap = new TiledMap(
-                name: reader.AssetName,
-                width: reader.ReadInt32(),
-                height: reader.ReadInt32(),
-                tileWidth: reader.ReadInt32(),
-                tileHeight: reader.ReadInt32(),
-                orientation: (TiledMapOrientation)reader.ReadInt32())
+                reader.AssetName,
+                reader.ReadInt32(),
+                reader.ReadInt32(),
+                reader.ReadInt32(),
+                reader.ReadInt32(),
+                (TiledMapOrientation)reader.ReadInt32())
             {
                 BackgroundColor = backgroundColor,
                 RenderOrder = renderOrder
@@ -38,13 +38,13 @@ namespace MonoGame.Extended.Maps.Tiled
                 texture = MakeColorTransparent(texture.GraphicsDevice, texture, trans);
 
                 var tileset = tiledMap.CreateTileset(
-                    texture: texture,
-                    firstId: reader.ReadInt32(),
-                    tileWidth: reader.ReadInt32(),
-                    tileHeight: reader.ReadInt32(),
-                    tileCount: reader.ReadInt32(),
-                    spacing: reader.ReadInt32(),
-                    margin: reader.ReadInt32());
+                    texture,
+                    reader.ReadInt32(),
+                    reader.ReadInt32(),
+                    reader.ReadInt32(),
+                    reader.ReadInt32(),
+                    reader.ReadInt32(),
+                    reader.ReadInt32());
                 var tileSetTileCount = reader.ReadInt32();
 
                 for (var j = 0; j < tileSetTileCount; j++)
@@ -119,25 +119,21 @@ namespace MonoGame.Extended.Maps.Tiled
                         points.Add(reader.ReadVector2());
 
                     if (objectType == TiledObjectType.Polygon)
-                    {
                         shape = new PolygonF(points);
-                    }
                     else
-                    {
                         shape = new PolylineF(points);
-                    }
                 }
                 else if (objectType == TiledObjectType.Ellipse)
                 {
-                    Vector2 center = new Vector2(x + width / 2.0f, y + height / 2.0f);
+                    var center = new Vector2(x + width / 2.0f, y + height / 2.0f);
                     shape = new EllipseF(center, width / 2.0f, height / 2.0f);
                 }
-                else if (objectType == TiledObjectType.Rectangle || objectType == TiledObjectType.Tile)
+                else if ((objectType == TiledObjectType.Rectangle) || (objectType == TiledObjectType.Tile))
                 {
                     shape = new RectangleF(x, y, width, height);
                 }
 
-                objects[i] = new TiledObject(objectType, id, gid >= 0 ? gid : (int?) null, shape, x, y, tilesetTile)
+                objects[i] = new TiledObject(objectType, id, gid >= 0 ? gid : (int?)null, shape, x, y, tilesetTile)
                 {
                     IsVisible = isVisible,
                     Opacity = opacity,
@@ -149,7 +145,7 @@ namespace MonoGame.Extended.Maps.Tiled
                 ReadCustomProperties(reader, objects[i].Properties);
             }
 
-            return new TiledObjectLayer(layerName, objects) { IsVisible = visible };
+            return new TiledObjectLayer(layerName, objects) {IsVisible = visible};
         }
 
         private static void ReadCustomProperties(ContentReader reader, TiledProperties properties)
@@ -229,15 +225,13 @@ namespace MonoGame.Extended.Maps.Tiled
             input.GetData(data);
 
             for (var i = 0; i < input.Width * input.Height; i++)
-            {
-                if (data[i].R == color.R && data[i].G == color.G && data[i].B == color.B)
+                if ((data[i].R == color.R) && (data[i].G == color.G) && (data[i].B == color.B))
                 {
                     data[i].R = 0;
                     data[i].G = 0;
                     data[i].B = 0;
                     data[i].A = 0;
                 }
-            }
 
             var output = new Texture2D(graphicsDevice, input.Width, input.Height);
             output.SetData(data);

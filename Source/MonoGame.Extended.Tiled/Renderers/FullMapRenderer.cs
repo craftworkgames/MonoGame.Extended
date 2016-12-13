@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.Maps.Renderers
+namespace MonoGame.Extended.Tiled.Renderers
 {
     public class FullMapRenderer : IMapRenderer
     {
@@ -16,6 +15,7 @@ namespace MonoGame.Extended.Maps.Renderers
 
         private readonly List<TiledTilesetTile> _animatedTilesetTiles;
         private readonly MapRendererConfig _config;
+        private readonly DepthStencilState _depthBufferState;
         private readonly VertexPositionTexture[] _dynamicVertices = new VertexPositionTexture[4];
 
         private readonly GraphicsDevice _graphicsDevice;
@@ -23,7 +23,6 @@ namespace MonoGame.Extended.Maps.Renderers
         private readonly List<VertexPositionTexture> _updatedDynamicVertices = new List<VertexPositionTexture>();
         private BasicEffect _basicEffect;
         private MapRenderDetails _currentRenderDetails;
-        private readonly DepthStencilState _depthBufferState;
 
         private TiledMap _map;
 
@@ -33,7 +32,7 @@ namespace MonoGame.Extended.Maps.Renderers
             _config = config;
 
             _renderDetailsCache = new Dictionary<string, MapRenderDetails>();
-            _depthBufferState = new DepthStencilState { DepthBufferEnable = true };
+            _depthBufferState = new DepthStencilState {DepthBufferEnable = true};
 
             _animatedTilesetTiles = new List<TiledTilesetTile>();
         }
@@ -154,13 +153,13 @@ namespace MonoGame.Extended.Maps.Renderers
                 {
                     if (!_config.DrawObjectLayers)
                         continue;
-                    
+
                     var groups = CreateGroupsByTileset(
-                        animatedObjects: objectLayer.Objects.Reverse(),
-                        layer: objectLayer, 
-                        filterOut: o => (o.ObjectType != TiledObjectType.Tile) || !o.IsVisible,
-                        getPosition: o => (o.Position - new Vector2(0, o.Height)).ToPoint(),
-                        getSize: o => new SizeF(o.Width, o.Height));
+                        objectLayer.Objects.Reverse(),
+                        objectLayer,
+                        o => (o.ObjectType != TiledObjectType.Tile) || !o.IsVisible,
+                        o => (o.Position - new Vector2(0, o.Height)).ToPoint(),
+                        o => new SizeF(o.Width, o.Height));
 
                     foreach (var groupRenderDetails in groups)
                         mapDetails.AddGroup(groupRenderDetails);
@@ -168,10 +167,10 @@ namespace MonoGame.Extended.Maps.Renderers
                 else if (tileLayer != null)
                 {
                     var groups = CreateGroupsByTileset(
-                        animatedObjects: GetTilesGroupedByTileset(tileLayer),
-                        layer: tileLayer,
-                        filterOut: t => t.IsBlank,
-                        getPosition: t => tileLayer.GetTileLocation(t));
+                        GetTilesGroupedByTileset(tileLayer),
+                        tileLayer,
+                        t => t.IsBlank,
+                        t => tileLayer.GetTileLocation(t));
 
                     foreach (var groupRenderDetails in groups)
                         mapDetails.AddGroup(groupRenderDetails);
@@ -184,9 +183,7 @@ namespace MonoGame.Extended.Maps.Renderers
         public void RebuildDynamicRenderDetails()
         {
             if (_currentRenderDetails == null)
-            {
                 return;
-            }
 
             var camPosition = Vector2.Negate(Vector2.Transform(Vector2.Zero, _basicEffect.View));
             var camViewport = new Rectangle((int)camPosition.X, (int)camPosition.Y, _graphicsDevice.Viewport.Width,
@@ -210,7 +207,8 @@ namespace MonoGame.Extended.Maps.Renderers
                     _dynamicVertices[2] = dynamicRenderDetails.Vertices[i * 4 + 2];
                     _dynamicVertices[3] = dynamicRenderDetails.Vertices[i * 4 + 3];
 
-                    var rectangle = new Rectangle((int)tile.Position.X * _map.TileWidth, (int)tile.Position.Y * _map.TileHeight, _map.TileWidth, _map.TileHeight);
+                    var rectangle = new Rectangle((int)tile.Position.X * _map.TileWidth,
+                        (int)tile.Position.Y * _map.TileHeight, _map.TileWidth, _map.TileHeight);
 
                     if (camViewport.Contains(rectangle))
                     {
@@ -256,7 +254,8 @@ namespace MonoGame.Extended.Maps.Renderers
             return tiles;
         }
 
-        protected virtual IEnumerable<GroupRenderDetails> CreateGroupsByTileset<T>(IEnumerable<T> animatedObjects, TiledLayer layer,
+        protected virtual IEnumerable<GroupRenderDetails> CreateGroupsByTileset<T>(IEnumerable<T> animatedObjects,
+            TiledLayer layer,
             Func<T, bool> filterOut, Func<T, Point> getPosition,
             Func<T, SizeF> getSize = null)
             where T : ITiledAnimated
@@ -287,7 +286,8 @@ namespace MonoGame.Extended.Maps.Renderers
 
                 if (animatedObject.HasAnimation)
                 {
-                    CreatePrimitives(point, region, dynamicTileCountByTileset[tileset], layer.Depth, out vertices, out indexes, getSize?.Invoke(animatedObject));
+                    CreatePrimitives(point, region, dynamicTileCountByTileset[tileset], layer.Depth, out vertices,
+                        out indexes, getSize?.Invoke(animatedObject));
 
                     dynamicVerticesByTileset[tileset].AddRange(vertices);
                     dynamicIndexesByTileset[tileset].AddRange(indexes);
@@ -302,7 +302,8 @@ namespace MonoGame.Extended.Maps.Renderers
                 }
                 else
                 {
-                    CreatePrimitives(point, region, staticTileCountByTileset[tileset], layer.Depth, out vertices, out indexes, getSize?.Invoke(animatedObject));
+                    CreatePrimitives(point, region, staticTileCountByTileset[tileset], layer.Depth, out vertices,
+                        out indexes, getSize?.Invoke(animatedObject));
 
                     staticVerticesByTileset[tileset].AddRange(vertices);
                     staticIndexesByTileset[tileset].AddRange(indexes);
@@ -329,7 +330,8 @@ namespace MonoGame.Extended.Maps.Renderers
                 if (dynamicTileCountByTileset[tileset] == 0)
                     continue;
 
-                var dynamicGroup = new DynamicGroupRenderDetails(_graphicsDevice, dynamicVerticesByTileset[tileset], dynamicIndexesByTileset[tileset], tileset.Texture, animatedTiles)
+                var dynamicGroup = new DynamicGroupRenderDetails(_graphicsDevice, dynamicVerticesByTileset[tileset],
+                    dynamicIndexesByTileset[tileset], tileset.Texture, animatedTiles)
                 {
                     Opacity = layer.Opacity
                 };
@@ -354,8 +356,10 @@ namespace MonoGame.Extended.Maps.Renderers
             tc1.Y = (float)(region.Y + region.Height) / region.Texture.Height;
             vertices = new VertexPositionTexture[4];
             vertices[0] = new VertexPositionTexture(new Vector3(point.X, point.Y, depth), tc0);
-            vertices[1] = new VertexPositionTexture(new Vector3(point.X + tileWidth, point.Y, depth), new Vector2(tc1.X, tc0.Y));
-            vertices[2] = new VertexPositionTexture(new Vector3(point.X, point.Y + tileHeight, depth), new Vector2(tc0.X, tc1.Y));
+            vertices[1] = new VertexPositionTexture(new Vector3(point.X + tileWidth, point.Y, depth),
+                new Vector2(tc1.X, tc0.Y));
+            vertices[2] = new VertexPositionTexture(new Vector3(point.X, point.Y + tileHeight, depth),
+                new Vector2(tc0.X, tc1.Y));
             vertices[3] = new VertexPositionTexture(new Vector3(point.X + tileWidth, point.Y + tileHeight, depth), tc1);
 
             indexes = new ushort[6];

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Maps.Tiled;
 
-namespace MonoGame.Extended.Maps.Renderers
+namespace MonoGame.Extended.Tiled.Renderers
 {
     internal class DynamicGroupRenderDetails : GroupRenderDetails
     {

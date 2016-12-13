@@ -1,11 +1,17 @@
 ﻿using System.Collections.Generic;
 
-namespace MonoGame.Extended.Maps.Tiled
+namespace MonoGame.Extended.Tiled
 {
     public class TiledTilesetTile
     {
         private TiledTilesetTileFrame _currentFrame;
         private double _currentTimeInMilliseconds;
+
+        public int Id { get; set; }
+        public List<TiledTilesetTileFrame> Frames { get; }
+        public TiledProperties Properties { get; private set; }
+
+        public int? CurrentTileId => _currentFrame?.TileId;
 
         public TiledTilesetTile(int id)
         {
@@ -15,12 +21,6 @@ namespace MonoGame.Extended.Maps.Tiled
 
             _currentTimeInMilliseconds = 0.0;
         }
-
-        public int Id { get; set; }
-        public List<TiledTilesetTileFrame> Frames { get; }
-        public TiledProperties Properties { get; private set; }
-
-        public int? CurrentTileId => _currentFrame?.TileId;
 
         public TiledTilesetTileFrame CreateTileSetTileFrame(int order, int tileId, int duration)
         {
@@ -41,7 +41,7 @@ namespace MonoGame.Extended.Maps.Tiled
             {
                 _currentTimeInMilliseconds = 0.0;
 
-                var nextFrame = (_currentFrame.Order + 1)%Frames.Count;
+                var nextFrame = (_currentFrame.Order + 1) % Frames.Count;
                 _currentFrame = Frames[nextFrame];
             }
         }

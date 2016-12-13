@@ -7,10 +7,10 @@ using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions;
-using MonoGame.Extended.Maps.Renderers;
-using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Extended.Tiled.Renderers;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Tiled;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.SpriteSheetAnimations

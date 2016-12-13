@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace MonoGame.Extended.Maps.Renderers
+namespace MonoGame.Extended.Tiled.Renderers
 {
     public class MapRenderDetails : IEnumerable<GroupRenderDetails>
     {

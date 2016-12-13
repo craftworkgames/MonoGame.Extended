@@ -1,17 +1,17 @@
-﻿namespace MonoGame.Extended.Maps.Tiled
+﻿namespace MonoGame.Extended.Tiled
 {
     public class TiledTilesetTileFrame
     {
+        public int Order { get; set; }
+        public int TileId { get; set; }
+        public int Duration { get; set; }
+
         public TiledTilesetTileFrame(int order, int tileId, int duration)
         {
             Order = order;
             TileId = tileId;
             Duration = duration;
         }
-
-        public int Order { get; set; }
-        public int TileId { get; set; }
-        public int Duration { get; set; }
 
         public override string ToString()
         {
