@@ -37,24 +37,22 @@
     <Compile Include="Controls\GuiButton.cs" />
     <Compile Include="Controls\GuiControl.cs" />
     <Compile Include="Controls\GuiControlCollection.cs" />
-    <Compile Include="Controls\GuiControlStyle.cs" />
-    <Compile Include="Controls\GuiLabel.cs" />
     <Compile Include="Controls\GuiPanel.cs" />
-    <Compile Include="Controls\GuiToggleButton.cs" />
-    <Compile Include="GuiAlignmentHelper.cs" />
-    <Compile Include="GuiComponent.cs" />
-    <Compile Include="GuiLayout.cs" />
-    <Compile Include="GuiRenderer.cs" />
-    <Compile Include="GuiScreen.cs" />
+    <Compile Include="GuiSkin.cs" />
+    <Compile Include="GuiSpriteBatchRenderer.cs" />
+    <Compile Include="Keepers\GuiControlStyle.cs" />
+    <Compile Include="Keepers\GuiToggleButton.cs" />
+    <Compile Include="Keepers\GuiAlignmentHelper.cs" />
+    <Compile Include="Keepers\GuiComponent.cs" />
+    <Compile Include="Keepers\GuiRenderer.cs" />
     <Compile Include="GuiThickness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialization\ContentConverter.cs" />
+    <Compile Include="Keepers\GuiControlStyleConveter.cs" />
     <Compile Include="Serialization\GuiControlConverter.cs" />
-    <Compile Include="Serialization\GuiControlStyleConveter.cs" />
-    <Compile Include="Serialization\GuiJsonConverter.cs" />
-    <Compile Include="Serialization\GuiJsonConverterService.cs" />
-    <Compile Include="Serialization\GuiLayoutConverter.cs" />
-    <Compile Include="Serialization\GuiTextureAtlasConverter.cs" />
+    <Compile Include="Serialization\GuiJsonContractResolver.cs" />
+    <Compile Include="Serialization\GuiSkinSerializer.cs" />
+    <Compile Include="Serialization\GuiThicknessConveter.cs" />
+    <Compile Include="Serialization\JsonShortTypeNameProvider.cs" />
     <Compile Include="Serialization\TextureRegion2DConveter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +73,7 @@
       <Name>MonoGame.Extended</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

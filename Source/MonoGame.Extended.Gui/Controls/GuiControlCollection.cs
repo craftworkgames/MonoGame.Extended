@@ -1,18 +1,22 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiControlCollection : IList<GuiControl>
     {
-        private readonly GuiControl _parent;
-        private readonly List<GuiControl> _list = new List<GuiControl>();
+        public GuiControlCollection()
+        {
+        }
 
         public GuiControlCollection(GuiControl parent)
         {
             _parent = parent;
         }
 
+        private readonly GuiControl _parent;
+        private readonly List<GuiControl> _list = new List<GuiControl>();
+        
         public IEnumerator<GuiControl> GetEnumerator()
         {
             return _list.GetEnumerator();
@@ -20,7 +24,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable)_list).GetEnumerator();
+            return ((IEnumerable) _list).GetEnumerator();
         }
 
         public void Add(GuiControl item)
@@ -54,7 +58,8 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public int Count => _list.Count;
-        public bool IsReadOnly { get; } = false;
+
+        public bool IsReadOnly => ((ICollection<GuiControl>) _list).IsReadOnly;
 
         public int IndexOf(GuiControl item)
         {
@@ -69,6 +74,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         public void RemoveAt(int index)
         {
+            _list[index].Parent = null;
             _list.RemoveAt(index);
         }
 
