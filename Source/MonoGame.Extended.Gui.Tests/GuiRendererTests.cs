@@ -3,32 +3,32 @@ using NUnit.Framework;
 
 namespace MonoGame.Extended.Gui.Tests
 {
-    [TestFixture]
-    public class GuiRendererTests
-    {
-        [Test]
-        public void GuiRenderer_TargetScreen_Test()
-        {
-            var screen = new GuiScreen();
-            var renderer = new GuiTestRenderer(screen);
+    //[TestFixture]
+    //public class GuiRendererTests
+    //{
+    //    [Test]
+    //    public void GuiRenderer_TargetScreen_Test()
+    //    {
+    //        var screen = new GuiScreen();
+    //        var renderer = new GuiTestRenderer(screen);
 
-            Assert.That(renderer.TargetScreen, Is.SameAs(screen));
-        }
-    }
+    //        Assert.That(renderer.TargetScreen, Is.SameAs(screen));
+    //    }
+    //}
 
-    public class GuiTestRenderer : GuiRenderer<TestDrawer>
-    {
-        public GuiTestRenderer(GuiScreen targetScreen) 
-            : base(targetScreen)
-        {
-        }
+    //public class GuiTestRenderer : GuiRenderer<TestDrawer>
+    //{
+    //    public GuiTestRenderer(GuiScreen targetScreen) 
+    //        : base(targetScreen)
+    //    {
+    //    }
 
-        protected override void DrawControl(TestDrawer drawer, GuiControl control)
-        {
-        }
-    }
+    //    protected override void DrawControl(TestDrawer drawer, GuiControl control)
+    //    {
+    //    }
+    //}
 
-    public class TestDrawer
-    {
-    }
+    //public class TestDrawer
+    //{
+    //}
 }

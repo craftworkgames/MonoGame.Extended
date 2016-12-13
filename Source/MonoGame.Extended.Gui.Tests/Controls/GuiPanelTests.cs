@@ -4,18 +4,18 @@ using NUnit.Framework;
 
 namespace MonoGame.Extended.Gui.Tests.Controls
 {
-    [TestFixture]
-    public class GuiPanelTests
-    {
-        [Test]
-        public void GuiPanel_CanHaveChildren_Test()
-        {
-            var panel = new GuiPanel();
-            var child = Substitute.For<GuiControl>();
+    //[TestFixture]
+    //public class GuiPanelTests
+    //{
+    //    [Test]
+    //    public void GuiPanel_CanHaveChildren_Test()
+    //    {
+    //        var panel = new GuiPanel();
+    //        var child = Substitute.For<GuiControl>();
 
-            panel.Controls.Add(child);
+    //        panel.Controls.Add(child);
 
-            Assert.That(child.Parent, Is.SameAs(panel));
-        }
-    }
+    //        Assert.That(child.Parent, Is.SameAs(panel));
+    //    }
+    //}
 }
