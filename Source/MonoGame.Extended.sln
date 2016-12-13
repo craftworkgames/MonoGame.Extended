@@ -59,6 +59,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.TiledMaps", "Demos\Demo.TiledMaps\Demo.TiledMaps.csproj", "{1AA1A796-CFC6-4663-8D23-FBB9CE62744B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
+		{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902} = {07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.ViewportAdapters", "Demos\Demo.ViewportAdapters\Demo.ViewportAdapters.csproj", "{5B629714-40BF-4584-939F-B69A9689B360}"
