@@ -15,6 +15,7 @@ namespace MonoGame.Extended.Gui
 
     public class GuiControlTemplate
     {
+        public string Name { get; set; }
         public string Type { get; set; }
     }
 }
