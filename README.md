@@ -72,7 +72,7 @@ The library is distributed as a NuGet package. Add a reference to your project u
 The package comes with 2 DLLs:
 
  - MonoGame.Extended.dll
- - MonoGame.Extedded.Content.Pipeline.dll
+ - MonoGame.Extended.Content.Pipeline.dll
  
 The `MonoGame.Extended.Content.Pipeline.dll` needs to be referenced by the [Pipeline tool](http://www.monogame.net/documentation/?page=Pipeline). To reference the DLL in the Pipeline tool you'll  need to edit your `Content.mgcb` file.
 
