@@ -57,6 +57,7 @@
     <Compile Include="Camera2D.cs" />
     <Compile Include="Content\ContentReaderExtensions.cs" />
     <Compile Include="EventHandlerExtensions.cs" />
+    <Compile Include="FloatMath.cs" />
     <Compile Include="GameTimeExtensions.cs" />
     <Compile Include="IDraw.cs" />
     <Compile Include="IMovable.cs" />
