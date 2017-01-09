@@ -28,6 +28,8 @@
     </references>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="9.0" />
+      <dependency id="MonoGame.Extended" version="0.2.0.0" />
+      <dependency id="MonoGame.Extended.Graphics" version="0.2.0.0" />
     </dependencies>
   </metadata>
   <files>
