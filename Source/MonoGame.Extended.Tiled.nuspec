@@ -4,8 +4,8 @@
   <metadata>
     <!-- Required elements -->
     <!-- The identifier that must be unique within the hosting gallery -->
-    <id>MonoGame.Extended</id>
-        <!-- The package version number that is used when resolving dependencies -->
+    <id>MonoGame.Extended.Tiled</id>
+    <!-- The package version number that is used when resolving dependencies -->
     <version>0.2.0.0</version>
     <!-- The description can be used in package manager UI. Note that the
          nuget.org gallery uses information you add in the portal. -->
@@ -16,8 +16,8 @@
     </description>
     <!-- Authors contain text that appears directly on the gallery -->
     <authors>Dylan Wilson</authors>
-    <!-- Optional elements --> 
-    <title>MonoGame.Extended</title>
+    <!--Optional elements-->
+    <title>MonoGame.Extended.Tiled</title>
     <!-- Owners are typically nuget.org identities that allow gallery
          users to earily find other packages by the same owners.  -->
     <owners>Craftwork Games</owners>
@@ -37,18 +37,17 @@
     <tags>monogame extended pipeline bmfont tiled texture atlas input event sprite</tags>
     <references>
       <group>
-        <reference file="MonoGame.Extended.dll" />
+        <reference file="MonoGame.Extended.Tiled.dll" />
       </group>
     </references>
     <!-- Dependencies are automatically installed when the package is installed -->
     <dependencies>
       <dependency id="Newtonsoft.Json" version="9.0" />
+      <dependency id="MonoGame.Extended" version="0.2.0.0" />
+      <dependency id="MonoGame.Extended.Graphics" version="0.2.0.0" />
     </dependencies>
   </metadata>
   <files>
-    <file src="MonoGame.Extended\bin\Release\MonoGame.Extended.dll" target="lib" />
-    <file src="MonoGame.Extended.Content.Pipeline\bin\MonoGame.Extended.Content.Pipeline.dll" target="lib" />
-    <!-- A readme.txt will be displayed when the package is installed -->
-    <file src="readme.txt" target="" />
+    <file src="MonoGame.Extended.Tiled\bin\Release\MonoGame.Extended.Tiled.dll" target="lib" />
   </files>
 </package>
