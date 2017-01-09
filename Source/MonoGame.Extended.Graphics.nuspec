@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <!--Required elements-->
-    <id>MonoGame.Extended</id>
+    <id>MonoGame.Extended.Graphics</id>
     <version>0.2.0.0</version>
     <description>
       Makes MonoGame more awesome.
@@ -11,8 +11,8 @@
       Input Listeners, Texture Atlases, 2D Camera, Viewport Adapters.
     </description>
     <authors>Dylan Wilson</authors>
-    <!--Optional elements--> 
-    <title>MonoGame.Extended</title>
+    <!--Optional elements-->
+    <title>MonoGame.Extended.Graphics</title>
     <owners>Craftwork Games</owners>
     <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>
     <licenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</licenseUrl>
@@ -23,16 +23,15 @@
     <tags>monogame extended pipeline bmfont tiled texture atlas input event sprite</tags>
     <references>
       <group>
-        <reference file="MonoGame.Extended.dll" />
+        <reference file="MonoGame.Extended.Graphics.dll" />
       </group>
     </references>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="9.0" />
+      <dependency id="MonoGame.Extended" version="0.2.0.0" />
     </dependencies>
   </metadata>
   <files>
-    <file src="MonoGame.Extended\bin\Release\MonoGame.Extended.dll" target="lib" />
-    <file src="MonoGame.Extended.Content.Pipeline\bin\MonoGame.Extended.Content.Pipeline.dll" target="lib" />
-    <file src="readme.txt" target="" />
+    <file src="MonoGame.Extended.Graphics\bin\Release\MonoGame.Extended.Graphics.dll" target="lib" />
   </files>
 </package>
