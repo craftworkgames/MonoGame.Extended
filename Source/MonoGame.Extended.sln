@@ -6,7 +6,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended", "MonoGa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{068B9F42-8B49-4FAF-9D8C-701862FAC799}"
 	ProjectSection(SolutionItems) = preProject
+		MonoGame.Extended.Graphics.nuspec = MonoGame.Extended.Graphics.nuspec
 		MonoGame.Extended.nuspec = MonoGame.Extended.nuspec
+		MonoGame.Extended.Tiled.nuspec = MonoGame.Extended.Tiled.nuspec
 		..\README.md = ..\README.md
 		readme.txt = readme.txt
 	EndProjectSection
