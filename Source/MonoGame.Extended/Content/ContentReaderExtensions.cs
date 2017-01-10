@@ -16,10 +16,12 @@ namespace MonoGame.Extended.Content
             var newPathNodes = new List<string>();
 
             foreach (var relativeNode in relativeNodes)
+            {
                 if (relativeNode == "..")
                     relativeIndex--;
                 else
                     newPathNodes.Add(relativeNode);
+            }
 
             var values = assetNodes
                 .Take(relativeIndex)

@@ -63,13 +63,19 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
                 if (hPlacement == "left")
                     _leftBorderWidth = Math.Max(_leftBorderWidth, token.Value<int>("w"));
-                else if (hPlacement == "right")
-                    _rightBorderWidth = Math.Max(_rightBorderWidth, token.Value<int>("w"));
+                else
+                {
+                    if (hPlacement == "right")
+                        _rightBorderWidth = Math.Max(_rightBorderWidth, token.Value<int>("w"));
+                }
 
                 if (vPlacement == "top")
                     _topBorderWidth = Math.Max(_topBorderWidth, token.Value<int>("h"));
-                else if (vPlacement == "bottom")
-                    _bottomBorderWidth = Math.Max(_bottomBorderWidth, token.Value<int>("h"));
+                else
+                {
+                    if (vPlacement == "bottom")
+                        _bottomBorderWidth = Math.Max(_bottomBorderWidth, token.Value<int>("h"));
+                }
             }
 
             // Parse each region

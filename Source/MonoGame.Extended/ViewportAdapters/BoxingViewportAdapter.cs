@@ -102,10 +102,13 @@ namespace MonoGame.Extended.ViewportAdapters
 
             if ((height >= viewport.Height) && (width < viewport.Width))
                 BoxingMode = BoxingMode.Pillarbox;
-            else if ((width >= viewport.Height) && (height < viewport.Height))
-                BoxingMode = BoxingMode.Letterbox;
             else
-                BoxingMode = BoxingMode.None;
+            {
+                if ((width >= viewport.Height) && (height < viewport.Height))
+                    BoxingMode = BoxingMode.Letterbox;
+                else
+                    BoxingMode = BoxingMode.None;
+            }
 
             var x = viewport.Width/2 - width/2;
             var y = viewport.Height/2 - height/2;

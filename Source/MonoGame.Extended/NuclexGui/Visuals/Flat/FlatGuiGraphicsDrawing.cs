@@ -90,8 +90,10 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
             // Draw the text in all anchor locations defined by the skin
             for (var index = 0; index < frame.Texts.Length; ++index)
+            {
                 _spriteBatch.DrawString(frame.Texts[index].Font, text,
                     PositionText(ref frame.Texts[index], bounds, text), frame.Texts[index].Color);
+            }
         }
 
         public void DrawImage(RectangleF bounds, Texture2D texture, Rectangle sourceRectangle)

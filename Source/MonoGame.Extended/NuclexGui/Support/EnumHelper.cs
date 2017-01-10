@@ -23,8 +23,10 @@ namespace MonoGame.Extended.NuclexGui.Support
             // value which might actually appear in the enumeration.
             var highestValue = values[0];
             for (var index = 1; index < values.Length; ++index)
+            {
                 if (values[index].CompareTo(highestValue) > 0)
                     highestValue = values[index];
+            }
 
             return highestValue;
         }
@@ -47,8 +49,10 @@ namespace MonoGame.Extended.NuclexGui.Support
             // value which might actually appear in the enumeration.
             var lowestValue = values[0];
             for (var index = 1; index < values.Length; ++index)
+            {
                 if (values[index].CompareTo(lowestValue) < 0)
                     lowestValue = values[index];
+            }
 
             return lowestValue;
         }

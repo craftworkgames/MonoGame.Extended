@@ -416,9 +416,7 @@ namespace MonoGame.Extended.Shapes
                 result = new RectangleF(leftSide, topSide, rightSide - leftSide, bottomSide - topSide);
             }
             else
-            {
                 result = new RectangleF(0, 0, 0, 0);
-            }
         }
 
         /// <summary>

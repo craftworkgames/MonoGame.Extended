@@ -65,10 +65,14 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat.Renderers
                 // If the input box is in focus, also draw the caret so the user knows
                 // where characters will be inserted into the text.
                 if (control.HasFocus)
+                {
                     if (control.MillisecondsSinceLastCaretMovement%500 < 250)
+                    {
                         graphics.DrawCaret(
                             "input.normal", controlBounds, control.Text, control.CaretPosition
                         );
+                    }
+                }
             }
 
             // Let the control know that we can provide it with additional informations

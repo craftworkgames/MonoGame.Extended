@@ -37,6 +37,7 @@ namespace MonoGame.Extended.Tiled
             var index = 0;
 
             for (var y = 0; y < Height; y++)
+            {
                 for (var x = 0; x < Width; x++)
                 {
                     var id = data[index];
@@ -44,6 +45,7 @@ namespace MonoGame.Extended.Tiled
                     tiles[x + y * Width] = new TiledTile(id, x, y, tilesetTile);
                     index++;
                 }
+            }
 
             return tiles;
         }
@@ -124,29 +126,37 @@ namespace MonoGame.Extended.Tiled
         private IEnumerable<TiledTile> GetTilesRightDown(int left, int top, int right, int bottom)
         {
             for (var y = top; y < bottom; y++)
+            {
                 for (var x = left; x < right; x++)
                     yield return GetTile(x, y);
+            }
         }
 
         private IEnumerable<TiledTile> GetTilesRightUp(int left, int top, int right, int bottom)
         {
             for (var y = bottom - 1; y >= top; y--)
+            {
                 for (var x = left; x < right; x++)
                     yield return GetTile(x, y);
+            }
         }
 
         private IEnumerable<TiledTile> GetTilesLeftDown(int left, int top, int right, int bottom)
         {
             for (var y = top; y < bottom; y++)
+            {
                 for (var x = right - 1; x >= left; x--)
                     yield return GetTile(x, y);
+            }
         }
 
         private IEnumerable<TiledTile> GetTilesLeftUp(int left, int top, int right, int bottom)
         {
             for (var y = bottom - 1; y >= top; y--)
+            {
                 for (var x = right - 1; x >= left; x--)
                     yield return GetTile(x, y);
+            }
         }
     }
 }

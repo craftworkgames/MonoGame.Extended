@@ -56,10 +56,13 @@ namespace MonoGame.Extended.Particles
 
             if (r == max)
                 h = (60*(g - b)/chroma + 360)%360;
-            else if (g == max)
-                h = 60*(b - r)/chroma + 120f;
             else
-                h = 60*(r - g)/chroma + 240f;
+            {
+                if (g == max)
+                    h = 60*(b - r)/chroma + 120f;
+                else
+                    h = 60*(r - g)/chroma + 240f;
+            }
 
             var s = l <= 0.5f ? chroma/sum : chroma/(2f - sum);
 

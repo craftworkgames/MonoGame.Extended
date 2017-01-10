@@ -34,11 +34,16 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat.Renderers
             // Determine the index of the state we're going to display
             var stateIndex = control.Selected ? 4 : 0;
             if (control.Enabled)
+            {
                 if (control.Depressed)
                     stateIndex += 3;
-                else if (control.MouseHovering)
-                    stateIndex += 2;
-                else stateIndex += 1;
+                else
+                {
+                    if (control.MouseHovering)
+                        stateIndex += 2;
+                    else stateIndex += 1;
+                }
+            }
 
             // Get the pixel coordinates of the region covered by the control on
             // the screen

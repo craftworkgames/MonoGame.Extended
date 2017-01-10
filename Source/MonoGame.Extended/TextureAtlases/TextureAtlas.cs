@@ -183,6 +183,7 @@ namespace MonoGame.Extended.TextureAtlases
             var yIncrement = regionHeight + spacing;
 
             for (var y = margin; y < height; y += yIncrement)
+            {
                 for (var x = margin; x < width; x += xIncrement)
                 {
                     var regionName = $"{texture.Name ?? "region"}{count}";
@@ -192,6 +193,7 @@ namespace MonoGame.Extended.TextureAtlases
                     if (count >= maxRegionCount)
                         return textureAtlas;
                 }
+            }
 
             return textureAtlas;
         }

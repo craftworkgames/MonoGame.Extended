@@ -10,11 +10,13 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
         public override ContentImporterResult<AstridAnimatorFile> Import(string filename, ContentImporterContext context)
         {
             using (var streamReader = new StreamReader(filename))
-            using (var jsonReader = new JsonTextReader(streamReader))
             {
-                var serializer = new JsonSerializer();
-                var data = serializer.Deserialize<AstridAnimatorFile>(jsonReader);
-                return new ContentImporterResult<AstridAnimatorFile>(filename, data);
+                using (var jsonReader = new JsonTextReader(streamReader))
+                {
+                    var serializer = new JsonSerializer();
+                    var data = serializer.Deserialize<AstridAnimatorFile>(jsonReader);
+                    return new ContentImporterResult<AstridAnimatorFile>(filename, data);
+                }
             }
         }
     }

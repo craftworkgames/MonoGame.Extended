@@ -22,13 +22,19 @@ namespace MonoGame.Extended.Particles.Modifiers.Containers
 
                 if ((int) particle->Position.X < left)
                     xPos = particle->Position.X + Width;
-                else if ((int) particle->Position.X > right)
-                    xPos = particle->Position.X - Width;
+                else
+                {
+                    if ((int) particle->Position.X > right)
+                        xPos = particle->Position.X - Width;
+                }
 
                 if ((int) particle->Position.Y < top)
                     yPos = particle->Position.Y + Height;
-                else if ((int) particle->Position.Y > bottom)
-                    yPos = particle->Position.Y - Height;
+                else
+                {
+                    if ((int) particle->Position.Y > bottom)
+                        yPos = particle->Position.Y - Height;
+                }
                 particle->Position = new Vector2(xPos, yPos);
             }
         }

@@ -167,8 +167,10 @@ namespace MonoGame.Extended.NuclexGui.Controls
                 // If we're a control that can appear on top of or below our siblings in
                 // the z order, bring us into foreground since the user just clicked on us.
                 if (_activatedControl != this)
+                {
                     if (_activatedControl._affectsOrdering)
                         _children.MoveToStart(_children.IndexOf(_activatedControl));
+                }
             }
 
             // Add the buttons to the list of mouse buttons being held down. This is used
@@ -313,20 +315,24 @@ namespace MonoGame.Extended.NuclexGui.Controls
             // messages. This enables some exotic uses for the mouse wheel, such as holding
             // an object with the mouse button and scaling it with the wheel at the same time.
             if (_activatedControl != null)
+            {
                 if (_activatedControl != this)
                 {
                     _activatedControl.ProcessMouseWheel(ticks);
                     return;
                 }
+            }
 
             // If the mouse wheel has been used normally, send the wheel notifications to
             // the control the mouse is over.
             if (_mouseOverControl != null)
+            {
                 if (_mouseOverControl != this)
                 {
                     _mouseOverControl.ProcessMouseWheel(ticks);
                     return;
                 }
+            }
 
             // We're the control the mouse is over, let the user code handle
             // the mouse wheel rotation
@@ -380,10 +386,12 @@ namespace MonoGame.Extended.NuclexGui.Controls
                 // ensures that key presses will not be delivered to windows sitting behind
                 // another window. Other siblings that are not windows are asked still.
                 if (child._affectsOrdering)
+                {
                     if (encounteredOrderingControl)
                         continue;
                     else
                         encounteredOrderingControl = true;
+                }
 
                 // Does this child feel responsible for the key press?
                 if (child.ProcessKeyPress(keyCode, repetition))

@@ -278,6 +278,7 @@ namespace MonoGame.Extended.NuclexGui
             // the entire tree for a responder.
             var focusedControl = _focusedControl.Target;
             if (focusedControl != null)
+            {
                 if (focusedControl.ProcessKeyPress(keyCode, false))
                 {
                     _activatedControl = focusedControl;
@@ -288,6 +289,7 @@ namespace MonoGame.Extended.NuclexGui
                     }
                     return;
                 }
+            }
 
             // Focused control didn't process the notification, now let the desktop
             // control traverse the entire control tree is earch for a handler.
@@ -387,11 +389,13 @@ namespace MonoGame.Extended.NuclexGui
             // the entire tree for a responder.
             var focusedControl = _focusedControl.Target;
             if (focusedControl != null)
+            {
                 if (focusedControl.ProcessButtonPress(button))
                 {
                     _activatedControl = focusedControl;
                     return;
                 }
+            }
 
             // Focused control didn't process the notification, now let the desktop
             // control traverse the entire control tree is earch for a handler.
@@ -539,11 +543,14 @@ namespace MonoGame.Extended.NuclexGui
                     if (distanceX > distanceY)
                         return float.NaN;
                 }
-                else if (leavesRight)
+                else
                 {
-                    var distanceX = Math.Abs(closestPointX - ownBounds.Right);
-                    if (distanceX > distanceY)
-                        return float.NaN;
+                    if (leavesRight)
+                    {
+                        var distanceX = Math.Abs(closestPointX - ownBounds.Right);
+                        if (distanceX > distanceY)
+                            return float.NaN;
+                    }
                 }
             }
             else
@@ -583,11 +590,14 @@ namespace MonoGame.Extended.NuclexGui
                     if (distanceY > distanceX)
                         return float.NaN;
                 }
-                else if (leavesBottom)
+                else
                 {
-                    var distanceY = Math.Abs(closestPointY - ownBounds.Bottom);
-                    if (distanceY > distanceX)
-                        return float.NaN;
+                    if (leavesBottom)
+                    {
+                        var distanceY = Math.Abs(closestPointY - ownBounds.Bottom);
+                        if (distanceY > distanceX)
+                            return float.NaN;
+                    }
                 }
             }
 

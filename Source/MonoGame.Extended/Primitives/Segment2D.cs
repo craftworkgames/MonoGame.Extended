@@ -148,9 +148,7 @@ namespace MonoGame.Extended.Primitives
             // Segment intersects the 2 slabs.
 
             if (minimumDistance <= 0)
-            {
                 intersectionPoint = Start;
-            }
             else
             {
                 intersectionPoint = minimumDistance*direction;

@@ -103,8 +103,10 @@ namespace MonoGame.Extended.NuclexGui.Controls
             // that this operation usually only happens once, there's no point in adding
             // the overhead of managing a synchronized look-up dictionary here.
             for (var index = 0; index < Count; ++index)
+            {
                 if (base[index].Name == name)
                     return true;
+            }
 
             // If we reach this point, no control is using the specified name.
             return false;
@@ -167,8 +169,10 @@ namespace MonoGame.Extended.NuclexGui.Controls
             // We also do not allow a child control to have the same id as an existing
             // control (with the exception of an empty name)
             if (IsNameTaken(proposedChild.Name))
+            {
                 throw new InvalidOperationException(
                     "The name of the added control has already been taken by another child");
+            }
         }
     }
 }

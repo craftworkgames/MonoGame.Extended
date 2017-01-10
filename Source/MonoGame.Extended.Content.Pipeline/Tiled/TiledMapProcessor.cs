@@ -41,16 +41,18 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             var decodedData = Convert.FromBase64String(encodedData);
 
             using (var stream = OpenStream(decodedData, data.Compression))
-            using (var reader = new BinaryReader(stream))
             {
-                data.Tiles = new List<TmxDataTile>();
-
-                for (var y = 0; y < width; y++)
+                using (var reader = new BinaryReader(stream))
                 {
-                    for (var x = 0; x < height; x++)
+                    data.Tiles = new List<TmxDataTile>();
+
+                    for (var y = 0; y < width; y++)
                     {
-                        var gid = reader.ReadUInt32();
-                        tileList.Add(new TmxDataTile((int) gid));
+                        for (var x = 0; x < height; x++)
+                        {
+                            var gid = reader.ReadUInt32();
+                            tileList.Add(new TmxDataTile((int) gid));
+                        }
                     }
                 }
             }

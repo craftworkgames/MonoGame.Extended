@@ -290,9 +290,7 @@ namespace MonoGame.Extended
                 Matrix2D.Multiply(ref matrix, ref localMatrix, out matrix);
             }
             else
-            {
                 matrix = localMatrix;
-            }
         }
 
         protected internal override void RecalculateLocalMatrix(out Matrix2D matrix)

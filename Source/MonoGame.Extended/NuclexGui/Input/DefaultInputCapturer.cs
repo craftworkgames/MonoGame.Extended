@@ -82,11 +82,13 @@ namespace MonoGame.Extended.NuclexGui.Input
             if (!_disposedValue)
             {
                 if (disposing)
+                {
                     if (_inputService != null)
                     {
                         UnsubscribeInputDevices();
                         _inputService = null;
                     }
+                }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
@@ -164,14 +166,23 @@ namespace MonoGame.Extended.NuclexGui.Input
         {
             if ((e.Button & Buttons.DPadUp) != 0)
                 _inputReceiver.InjectCommand(Command.Up);
-            else if ((e.Button & Buttons.DPadDown) != 0)
-                _inputReceiver.InjectCommand(Command.Down);
-            else if ((e.Button & Buttons.DPadLeft) != 0)
-                _inputReceiver.InjectCommand(Command.Left);
-            else if ((e.Button & Buttons.DPadRight) != 0)
-                _inputReceiver.InjectCommand(Command.Right);
             else
-                _inputReceiver.InjectButtonPress(e.Button);
+            {
+                if ((e.Button & Buttons.DPadDown) != 0)
+                    _inputReceiver.InjectCommand(Command.Down);
+                else
+                {
+                    if ((e.Button & Buttons.DPadLeft) != 0)
+                        _inputReceiver.InjectCommand(Command.Left);
+                    else
+                    {
+                        if ((e.Button & Buttons.DPadRight) != 0)
+                            _inputReceiver.InjectCommand(Command.Right);
+                        else
+                            _inputReceiver.InjectButtonPress(e.Button);
+                    }
+                }
+            }
         }
 
         private void _gamePadListener_ButtonUp(object sender, GamePadEventArgs e)
@@ -189,6 +200,7 @@ namespace MonoGame.Extended.NuclexGui.Input
             var inputService = (IGuiInputService) serviceProvider.GetService(typeof(IGuiInputService));
 
             if (inputService == null)
+            {
                 throw new InvalidOperationException(
                     "Using the GUI with the DefaultInputCapturer requires the IInputService. " +
                     "Please either add the IInputService to Game.Services by using the " +
@@ -196,6 +208,7 @@ namespace MonoGame.Extended.NuclexGui.Input
                     "implementation for the GUI and assign it before GuiManager.Initialize() " +
                     "is called."
                 );
+            }
 
             return inputService;
         }

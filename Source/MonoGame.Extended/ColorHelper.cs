@@ -13,9 +13,7 @@ namespace MonoGame.Extended
 
             // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (hsl.Y == 0.0f)
-            {
                 color.X = color.Y = color.Z = hsl.Z;
-            }
             else
             {
                 var q = hsl.Z < 0.5f ? hsl.Z*(1.0f + hsl.Y) : hsl.Z + hsl.Y - hsl.Z*hsl.Y;

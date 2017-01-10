@@ -15,12 +15,14 @@ namespace MonoGame.Extended.TextureAtlases
             var regionCount = reader.ReadInt32();
 
             for (var i = 0; i < regionCount; i++)
+            {
                 atlas.CreateRegion(
                     reader.ReadString(),
                     reader.ReadInt32(),
                     reader.ReadInt32(),
                     reader.ReadInt32(),
                     reader.ReadInt32());
+            }
 
             return atlas;
         }

@@ -116,10 +116,13 @@ namespace MonoGame.Extended
         {
             if (value < MinimumZoom)
                 Zoom = MinimumZoom;
-            else if (value > MaximumZoom)
-                Zoom = MaximumZoom;
             else
-                Zoom = value;
+            {
+                if (value > MaximumZoom)
+                    Zoom = MaximumZoom;
+                else
+                    Zoom = value;
+            }
         }
 
         public void LookAt(Vector2 position)

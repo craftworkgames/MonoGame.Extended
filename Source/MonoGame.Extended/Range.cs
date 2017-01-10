@@ -59,15 +59,19 @@ namespace MonoGame.Extended
         public bool IsInBetween(T value, bool minValueExclusive = false, bool maxValueExclusive = false)
         {
             if (minValueExclusive)
+            {
                 if (value.CompareTo(Min) <= 0)
                     return false;
+            }
 
             if (value.CompareTo(Min) < 0)
                 return false;
 
             if (maxValueExclusive)
+            {
                 if (value.CompareTo(Max) >= 0)
                     return false;
+            }
 
             return value.CompareTo(Max) <= 0;
         }

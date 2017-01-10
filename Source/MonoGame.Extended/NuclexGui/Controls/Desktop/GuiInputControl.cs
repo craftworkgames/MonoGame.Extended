@@ -250,6 +250,7 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         protected override void OnMousePressed(MouseButton button)
         {
             if (button == MouseButton.Left)
+            {
                 if (OpeningLocator != null)
                 {
                     var absoluteBounds = GetAbsoluteBounds();
@@ -261,6 +262,7 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
                     // Nope, our renderer is being secretive
                     MoveCaretToEnd();
                 }
+            }
         }
 
         /// <summary>Handles user text input by a physical keyboard</summary>

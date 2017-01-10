@@ -32,11 +32,16 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat.Renderers
             // Determine the style to use for the button
             var stateIndex = 0;
             if (control.Enabled)
+            {
                 if (control.Depressed)
                     stateIndex = 3;
-                else if (control.MouseHovering || control.HasFocus)
-                    stateIndex = 2;
-                else stateIndex = 1;
+                else
+                {
+                    if (control.MouseHovering || control.HasFocus)
+                        stateIndex = 2;
+                    else stateIndex = 1;
+                }
+            }
 
             // Draw the button's frame
             graphics.DrawElement(_states[stateIndex], controlBounds);

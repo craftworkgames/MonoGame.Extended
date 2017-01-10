@@ -265,17 +265,23 @@ namespace MonoGame.Extended.InputListeners
 
                 if (leftStrength > 0)
                     _vibrationDurationLeft = new TimeSpan(0, 0, 0, 0, durationMs);
-                else if (lstrength > 0)
-                    _vibrationDurationLeft -= _gameTime.TotalGameTime - _vibrationStart;
                 else
-                    _leftVibrating = false;
+                {
+                    if (lstrength > 0)
+                        _vibrationDurationLeft -= _gameTime.TotalGameTime - _vibrationStart;
+                    else
+                        _leftVibrating = false;
+                }
 
                 if (rightStrength > 0)
                     _vibrationDurationRight = new TimeSpan(0, 0, 0, 0, durationMs);
-                else if (rstrength > 0)
-                    _vibrationDurationRight -= _gameTime.TotalGameTime - _vibrationStart;
                 else
-                    _rightVibrating = false;
+                {
+                    if (rstrength > 0)
+                        _vibrationDurationRight -= _gameTime.TotalGameTime - _vibrationStart;
+                    else
+                        _rightVibrating = false;
+                }
 
                 _vibrationStart = _gameTime.TotalGameTime;
 
@@ -325,13 +331,16 @@ namespace MonoGame.Extended.InputListeners
                 else
                     _leftTriggerDown = true;
             }
-            else if (prevdown && (curstate < debounce))
+            else
             {
-                RaiseButtonUp(button);
-                if (button == Buttons.RightTrigger)
-                    _rightTriggerDown = false;
-                else
-                    _leftTriggerDown = false;
+                if (prevdown && (curstate < debounce))
+                {
+                    RaiseButtonUp(button);
+                    if (button == Buttons.RightTrigger)
+                        _rightTriggerDown = false;
+                    else
+                        _leftTriggerDown = false;
+                }
             }
 
             var prevstate = getButtonState(_lastTriggerState);
@@ -343,10 +352,13 @@ namespace MonoGame.Extended.InputListeners
                     _lastTriggerState = _currentState;
                 }
             }
-            else if (prevstate > TriggerDeltaTreshold)
+            else
             {
-                TriggerMoved?.Invoke(this, MakeArgs(button, curstate));
-                _lastTriggerState = _currentState;
+                if (prevstate > TriggerDeltaTreshold)
+                {
+                    TriggerMoved?.Invoke(this, MakeArgs(button, curstate));
+                    _lastTriggerState = _currentState;
+                }
             }
         }
 
@@ -388,22 +400,28 @@ namespace MonoGame.Extended.InputListeners
                 else
                     _leftStickDown = true;
             }
-            else if (prevdown && (curVector.Length() < debounce))
+            else
             {
-                RaiseButtonUp(prevdir);
-                if (button == Buttons.RightStick)
-                    _rightStickDown = false;
+                if (prevdown && (curVector.Length() < debounce))
+                {
+                    RaiseButtonUp(prevdir);
+                    if (button == Buttons.RightStick)
+                        _rightStickDown = false;
+                    else
+                        _leftStickDown = false;
+                }
                 else
-                    _leftStickDown = false;
-            }
-            else if (prevdown && curdown && (curdir != prevdir))
-            {
-                RaiseButtonUp(prevdir);
-                if (right)
-                    _lastRightStickDirection = curdir;
-                else
-                    _lastLeftStickDirection = curdir;
-                RaiseButtonDown(curdir);
+                {
+                    if (prevdown && curdown && (curdir != prevdir))
+                    {
+                        RaiseButtonUp(prevdir);
+                        if (right)
+                            _lastRightStickDirection = curdir;
+                        else
+                            _lastLeftStickDirection = curdir;
+                        RaiseButtonDown(curdir);
+                    }
+                }
             }
 
             var prevVector = getButtonState(_lastThumbStickState);
@@ -415,10 +433,13 @@ namespace MonoGame.Extended.InputListeners
                     _lastThumbStickState = _currentState;
                 }
             }
-            else if (prevVector.Length() > ThumbStickDeltaTreshold)
+            else
             {
-                ThumbStickMoved?.Invoke(this, MakeArgs(button, thumbStickState: curVector));
-                _lastThumbStickState = _currentState;
+                if (prevVector.Length() > ThumbStickDeltaTreshold)
+                {
+                    ThumbStickMoved?.Invoke(this, MakeArgs(button, thumbStickState: curVector));
+                    _lastThumbStickState = _currentState;
+                }
             }
         }
 
@@ -428,6 +449,7 @@ namespace MonoGame.Extended.InputListeners
                 return;
 
             foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
+            {
                 if (GamePad.GetState(index).IsConnected ^ _gamePadConnections[(int) index])
                     // We need more XORs in this world
                 {
@@ -435,6 +457,7 @@ namespace MonoGame.Extended.InputListeners
                     ControllerConnectionChanged?.Invoke(null,
                         new GamePadEventArgs(GamePadState.Default, GamePad.GetState(index), TimeSpan.Zero, index));
                 }
+            }
         }
 
         private void CheckVibrate()
@@ -493,10 +516,13 @@ namespace MonoGame.Extended.InputListeners
                 ButtonRepeated?.Invoke(this, MakeArgs(_lastButton));
                 _repeatedButtonTimer = RepeatDelay + RepeatInitialDelay;
             }
-            else if (_repeatedButtonTimer > RepeatInitialDelay + RepeatDelay*2)
+            else
             {
-                ButtonRepeated?.Invoke(this, MakeArgs(_lastButton));
-                _repeatedButtonTimer = RepeatDelay + RepeatInitialDelay;
+                if (_repeatedButtonTimer > RepeatInitialDelay + RepeatDelay*2)
+                {
+                    ButtonRepeated?.Invoke(this, MakeArgs(_lastButton));
+                    _repeatedButtonTimer = RepeatDelay + RepeatInitialDelay;
+                }
             }
         }
     }

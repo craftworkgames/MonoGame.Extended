@@ -77,9 +77,7 @@ namespace MonoGame.Extended.Collections
             var count = array.Length;
 
             if (count == 0)
-            {
                 _items = _emptyArray;
-            }
             else
             {
                 _items = new T[count];
@@ -196,16 +194,20 @@ namespace MonoGame.Extended.Collections
             {
                 var arrayIndex = GetArrayIndex(index);
                 if (arrayIndex == -1)
+                {
                     throw new ArgumentOutOfRangeException(nameof(index),
                         "Index was out of range. Must be non-negative and less than the size of the collection.");
+                }
                 return _items[arrayIndex];
             }
             set
             {
                 var arrayIndex = GetArrayIndex(index);
                 if (arrayIndex == -1)
+                {
                     throw new ArgumentOutOfRangeException(nameof(index),
                         "Index was out of range. Must be non-negative and less than the size of the collection.");
+                }
                 _items[arrayIndex] = value;
             }
         }
@@ -281,9 +283,7 @@ namespace MonoGame.Extended.Collections
 
             int index;
             if (Count <= _items.Length - _frontArrayIndex)
-            {
                 index = Array.IndexOf(_items, item, _frontArrayIndex, Count);
-            }
             else
             {
                 index = Array.IndexOf(_items, item, _frontArrayIndex, _items.Length - _frontArrayIndex);
@@ -348,40 +348,46 @@ namespace MonoGame.Extended.Collections
             {
                 RemoveFromFront();
             }
-            else if (index == Count - 1)
-            {
-                RemoveFromBack();
-            }
-            else if (index < Count/2)
-            {
-                var arrayIndex = GetArrayIndex(index);
-                // shift the array from 0 to before the index to remove by 1 to the right
-                // the element to remove is replaced by the copy
-                Array.Copy(_items, 0, _items, 1, arrayIndex);
-                // the first element in the arrya is now either a duplicate or it's default value
-                // to be safe set it to it's default value regardless of circumstance
-                _items[0] = default(T);
-                // if we shifted the front element, adjust the front index
-                if (_frontArrayIndex < arrayIndex)
-                    _frontArrayIndex = (_frontArrayIndex + 1)%_items.Length;
-                // decrement the count so the back index is calculated correctly
-                Count--;
-            }
             else
             {
-                var arrayIndex = GetArrayIndex(index);
-                // shift the array from the center of the array to before the index to remove by 1 to the right
-                // the element to remove is replaced by the copy
-                var arrayCenterIndex = _items.Length/2;
-                Array.Copy(_items, arrayCenterIndex, _items, arrayCenterIndex + 1, _items.Length - 1 - arrayIndex);
-                // the last element in the array is now either a duplicate or it's default value
-                // to be safe set it to it's default value regardless of circumstance
-                _items[_items.Length - 1] = default(T);
-                // if we shifted the front element, adjust the front index
-                if (_frontArrayIndex < arrayIndex)
-                    _frontArrayIndex = (_frontArrayIndex + 1)%_items.Length;
-                // decrement the count so the back index is calculated correctly
-                Count--;
+                if (index == Count - 1)
+                {
+                    RemoveFromBack();
+                }
+                else
+                {
+                    if (index < Count/2)
+                    {
+                        var arrayIndex = GetArrayIndex(index);
+                        // shift the array from 0 to before the index to remove by 1 to the right
+                        // the element to remove is replaced by the copy
+                        Array.Copy(_items, 0, _items, 1, arrayIndex);
+                        // the first element in the arrya is now either a duplicate or it's default value
+                        // to be safe set it to it's default value regardless of circumstance
+                        _items[0] = default(T);
+                        // if we shifted the front element, adjust the front index
+                        if (_frontArrayIndex < arrayIndex)
+                            _frontArrayIndex = (_frontArrayIndex + 1)%_items.Length;
+                        // decrement the count so the back index is calculated correctly
+                        Count--;
+                    }
+                    else
+                    {
+                        var arrayIndex = GetArrayIndex(index);
+                        // shift the array from the center of the array to before the index to remove by 1 to the right
+                        // the element to remove is replaced by the copy
+                        var arrayCenterIndex = _items.Length/2;
+                        Array.Copy(_items, arrayCenterIndex, _items, arrayCenterIndex + 1, _items.Length - 1 - arrayIndex);
+                        // the last element in the array is now either a duplicate or it's default value
+                        // to be safe set it to it's default value regardless of circumstance
+                        _items[_items.Length - 1] = default(T);
+                        // if we shifted the front element, adjust the front index
+                        if (_frontArrayIndex < arrayIndex)
+                            _frontArrayIndex = (_frontArrayIndex + 1)%_items.Length;
+                        // decrement the count so the back index is calculated correctly
+                        Count--;
+                    }
+                }
             }
         }
 
@@ -414,9 +420,7 @@ namespace MonoGame.Extended.Collections
                 Array.Clear(_items, 0, _frontArrayIndex + Count - _items.Length);
             }
             else
-            {
                 Array.Clear(_items, _frontArrayIndex, Count);
-            }
             Count = 0;
             _frontArrayIndex = 0;
         }
@@ -477,8 +481,10 @@ namespace MonoGame.Extended.Collections
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex), "Index was less than the array's lower bound.");
 
             if (arrayIndex >= array.Length)
+            {
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex),
                     "Index was greater than the array's upper bound.");
+            }
 
             if (array.Length - arrayIndex < Count)
                 throw new ArgumentException("Destination array was not long enough.");
@@ -491,9 +497,7 @@ namespace MonoGame.Extended.Collections
             {
                 var loopsAround = Count > _items.Length - _frontArrayIndex;
                 if (!loopsAround)
-                {
                     Array.Copy(_items, _frontArrayIndex, array, arrayIndex, Count);
-                }
                 else
                 {
                     Array.Copy(_items, _frontArrayIndex, array, arrayIndex, Capacity - _frontArrayIndex);

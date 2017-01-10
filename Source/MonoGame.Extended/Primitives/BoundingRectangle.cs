@@ -298,13 +298,19 @@ namespace MonoGame.Extended.Primitives
             // For each coordinate axis, if the point coordinate value is outside box, clamp it to the box, else keep it as is
             if (result.X < minimum.X)
                 result.X = minimum.X;
-            else if (result.X > maximum.X)
-                result.X = maximum.X;
+            else
+            {
+                if (result.X > maximum.X)
+                    result.X = maximum.X;
+            }
 
             if (result.Y < minimum.Y)
                 result.Y = minimum.Y;
-            else if (result.Y > maximum.Y)
-                result.Y = maximum.Y;
+            else
+            {
+                if (result.Y > maximum.Y)
+                    result.Y = maximum.Y;
+            }
 
             return result;
         }

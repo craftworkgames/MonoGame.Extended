@@ -27,9 +27,12 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat.Renderers
 
             if (control.ThumbDepressed)
                 graphics.DrawElement("slider.horizontal.depressed", thumbBounds);
-            else if (control.MouseOverThumb)
-                graphics.DrawElement("slider.horizontal.highlighted", thumbBounds);
-            else graphics.DrawElement("slider.horizontal.normal", thumbBounds);
+            else
+            {
+                if (control.MouseOverThumb)
+                    graphics.DrawElement("slider.horizontal.highlighted", thumbBounds);
+                else graphics.DrawElement("slider.horizontal.normal", thumbBounds);
+            }
         }
     }
 }

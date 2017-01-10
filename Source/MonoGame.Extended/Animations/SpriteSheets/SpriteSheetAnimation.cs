@@ -83,15 +83,15 @@ namespace MonoGame.Extended.Animations.SpriteSheets
             }
 
             if (IsLooping)
+            {
                 if (IsReversed)
                 {
                     frameIndex = frameIndex%length;
                     frameIndex = length - frameIndex - 1;
                 }
                 else
-                {
                     frameIndex = frameIndex%length;
-                }
+            }
             else
                 frameIndex = IsReversed ? Math.Max(length - frameIndex - 1, 0) : Math.Min(length - 1, frameIndex);
 

@@ -89,6 +89,7 @@ namespace MonoGame.Extended.Tiled.Renderers
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
+            {
                 foreach (var renderDetails in _currentRenderDetails)
                 {
                     _graphicsDevice.SetVertexBuffer(renderDetails.VertexBuffer);
@@ -121,6 +122,7 @@ namespace MonoGame.Extended.Tiled.Renderers
                         }
                     }
                 }
+            }
         }
 
         protected virtual MapRenderDetails BuildRenderDetails()
@@ -149,31 +151,37 @@ namespace MonoGame.Extended.Tiled.Renderers
 
                     mapDetails.AddGroup(group);
                 }
-                else if (objectLayer != null)
+                else
                 {
-                    if (!_config.DrawObjectLayers)
-                        continue;
+                    if (objectLayer != null)
+                    {
+                        if (!_config.DrawObjectLayers)
+                            continue;
 
-                    var groups = CreateGroupsByTileset(
-                        objectLayer.Objects.Reverse(),
-                        objectLayer,
-                        o => (o.ObjectType != TiledObjectType.Tile) || !o.IsVisible,
-                        o => (o.Position - new Vector2(0, o.Height)).ToPoint(),
-                        o => new SizeF(o.Width, o.Height));
+                        var groups = CreateGroupsByTileset(
+                            objectLayer.Objects.Reverse(),
+                            objectLayer,
+                            o => (o.ObjectType != TiledObjectType.Tile) || !o.IsVisible,
+                            o => (o.Position - new Vector2(0, o.Height)).ToPoint(),
+                            o => new SizeF(o.Width, o.Height));
 
-                    foreach (var groupRenderDetails in groups)
-                        mapDetails.AddGroup(groupRenderDetails);
-                }
-                else if (tileLayer != null)
-                {
-                    var groups = CreateGroupsByTileset(
-                        GetTilesGroupedByTileset(tileLayer),
-                        tileLayer,
-                        t => t.IsBlank,
-                        t => tileLayer.GetTileLocation(t));
+                        foreach (var groupRenderDetails in groups)
+                            mapDetails.AddGroup(groupRenderDetails);
+                    }
+                    else
+                    {
+                        if (tileLayer != null)
+                        {
+                            var groups = CreateGroupsByTileset(
+                                GetTilesGroupedByTileset(tileLayer),
+                                tileLayer,
+                                t => t.IsBlank,
+                                t => tileLayer.GetTileLocation(t));
 
-                    foreach (var groupRenderDetails in groups)
-                        mapDetails.AddGroup(groupRenderDetails);
+                            foreach (var groupRenderDetails in groups)
+                                mapDetails.AddGroup(groupRenderDetails);
+                        }
+                    }
                 }
             }
 

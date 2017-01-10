@@ -29,10 +29,13 @@ namespace MonoGame.Extended.Particles.Modifiers.Containers
                     xPos = left + (left - xPos);
                     xVel = -xVel*RestitutionCoefficient;
                 }
-                else if (particle->Position.X > right)
+                else
                 {
-                    xPos = right - (xPos - right);
-                    xVel = -xVel*RestitutionCoefficient;
+                    if (particle->Position.X > right)
+                    {
+                        xPos = right - (xPos - right);
+                        xVel = -xVel*RestitutionCoefficient;
+                    }
                 }
 
                 if (particle->Position.Y < top)
@@ -40,10 +43,13 @@ namespace MonoGame.Extended.Particles.Modifiers.Containers
                     yPos = top + (top - yPos);
                     yVel = -yVel*RestitutionCoefficient;
                 }
-                else if ((int) particle->Position.Y > bottom)
+                else
                 {
-                    yPos = bottom - (yPos - bottom);
-                    yVel = -yVel*RestitutionCoefficient;
+                    if ((int) particle->Position.Y > bottom)
+                    {
+                        yPos = bottom - (yPos - bottom);
+                        yVel = -yVel*RestitutionCoefficient;
+                    }
                 }
                 particle->Position = new Vector2(xPos, yPos);
                 particle->Velocity = new Vector2(xVel, yVel);

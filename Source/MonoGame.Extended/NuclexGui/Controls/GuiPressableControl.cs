@@ -93,8 +93,10 @@ namespace MonoGame.Extended.NuclexGui.Controls
         protected override void OnMousePressed(MouseButton button)
         {
             if (Enabled)
+            {
                 if (button == MouseButton.Left)
                     _pressedDownByMouse = true;
+            }
         }
 
         /// <summary>Called when a mouse button has been released again</summary>
@@ -109,8 +111,10 @@ namespace MonoGame.Extended.NuclexGui.Controls
                 // The user can move the mouse cursor away from the control while still holding
                 // the mouse button down to do the well-known last-second-abort.
                 if (_mouseHovering && Enabled)
+                {
                     if (!Depressed)
                         OnPressed();
+                }
             }
         }
 
@@ -122,11 +126,13 @@ namespace MonoGame.Extended.NuclexGui.Controls
         protected override bool OnButtonPressed(Buttons button)
         {
             if (ShortcutButton.HasValue)
+            {
                 if (button == ShortcutButton.Value)
                 {
                     _pressedDownByGamepadShortcut = true;
                     return true;
                 }
+            }
 
             return false;
         }
@@ -136,13 +142,17 @@ namespace MonoGame.Extended.NuclexGui.Controls
         protected override void OnButtonReleased(Buttons button)
         {
             if (ShortcutButton.HasValue)
+            {
                 if (_pressedDownByGamepadShortcut)
+                {
                     if (button == ShortcutButton.Value)
                     {
                         _pressedDownByGamepadShortcut = false;
                         if (!Depressed)
                             OnPressed();
                     }
+                }
+            }
         }
 
         /// <summary>Called when a key on the keyboard has been pressed down</summary>
@@ -153,17 +163,21 @@ namespace MonoGame.Extended.NuclexGui.Controls
         protected override bool OnKeyPressed(Keys keyCode)
         {
             if (ShortcutButton.HasValue)
+            {
                 if (keyCode == KeyFromButton(ShortcutButton.Value))
                 {
                     _pressedDownByKeyboardShortcut = true;
                     return true;
                 }
+            }
             if (HasFocus)
+            {
                 if (keyCode == Keys.Space)
                 {
                     _pressedDownByKeyboard = true;
                     return true;
                 }
+            }
 
             return false;
         }
@@ -173,20 +187,26 @@ namespace MonoGame.Extended.NuclexGui.Controls
         protected override void OnKeyReleased(Keys keyCode)
         {
             if (_pressedDownByKeyboardShortcut)
+            {
                 if (ShortcutButton.HasValue)
+                {
                     if (keyCode == KeyFromButton(ShortcutButton.Value))
                     {
                         _pressedDownByKeyboardShortcut = false;
                         if (!Depressed)
                             OnPressed();
                     }
+                }
+            }
             if (_pressedDownByKeyboard)
+            {
                 if (keyCode == Keys.Space)
                 {
                     _pressedDownByKeyboard = false;
                     if (!Depressed)
                         OnPressed();
                 }
+            }
         }
 
         /// <summary>Called when the control is pressed</summary>

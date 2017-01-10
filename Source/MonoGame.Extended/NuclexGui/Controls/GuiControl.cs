@@ -116,8 +116,10 @@ namespace MonoGame.Extended.NuclexGui.Controls
                     // Look for name collisions with our siblings
                     var parent = Parent;
                     if (parent != null)
+                    {
                         if (parent._children.IsNameTaken(value))
                             throw new InvalidOperationException("Another control is already using this name");
+                    }
 
                     // Everything seems to be ok, accept the new name
                     _name = value;
@@ -169,9 +171,11 @@ namespace MonoGame.Extended.NuclexGui.Controls
                 // control not living in any GUI hierarchy and thus, does not have
                 // absolute bounds yet.
                 if (ReferenceEquals(_screen, null))
+                {
                     throw new InvalidOperationException(
                         "Obtaining absolute bounds requires the control to be part of a screen"
                     );
+                }
 
                 // Transform the unified coordinate bounds into absolute pixel coordinates
                 // for the screen's dimensions

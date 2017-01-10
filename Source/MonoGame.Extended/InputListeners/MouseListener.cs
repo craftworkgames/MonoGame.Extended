@@ -130,10 +130,9 @@ namespace MonoGame.Extended.InputListeners
                     button);
 
                 if (_mouseDownArgs.Button == args.Button)
+                {
                     if (_dragging)
-                    {
                         MouseDrag?.Invoke(this, args);
-                    }
                     else
                     {
                         // Only start to drag based on DragThreshold
@@ -145,6 +144,7 @@ namespace MonoGame.Extended.InputListeners
                             MouseDragStart?.Invoke(this, args);
                         }
                     }
+                }
             }
         }
 
@@ -180,8 +180,10 @@ namespace MonoGame.Extended.InputListeners
 
             // Handle mouse wheel events.
             if (_previousState.ScrollWheelValue != _currentState.ScrollWheelValue)
+            {
                 MouseWheelMoved?.Invoke(this,
                     new MouseEventArgs(ViewportAdapter, gameTime.TotalGameTime, _previousState, _currentState));
+            }
 
             _previousState = _currentState;
         }

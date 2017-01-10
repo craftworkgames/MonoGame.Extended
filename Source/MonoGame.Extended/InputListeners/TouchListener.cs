@@ -26,6 +26,7 @@ namespace MonoGame.Extended.InputListeners
             var touchCollection = TouchPanel.GetState();
 
             foreach (var touchLocation in touchCollection)
+            {
                 switch (touchLocation.State)
                 {
                     case TouchLocationState.Pressed:
@@ -41,6 +42,7 @@ namespace MonoGame.Extended.InputListeners
                         TouchCancelled?.Invoke(this, new TouchEventArgs(touchLocation));
                         break;
                 }
+            }
         }
     }
 }

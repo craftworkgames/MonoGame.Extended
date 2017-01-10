@@ -20,9 +20,7 @@ namespace MonoGame.Extended.Particles.Modifiers
                 var deltaColor = VelocityColor - StationaryColor;
 
                 if (velocity2 >= velocityThreshold2)
-                {
                     VelocityColor.CopyTo(out particle->Color);
-                }
                 else
                 {
                     var t = (float) Math.Sqrt(velocity2)/VelocityThreshold;

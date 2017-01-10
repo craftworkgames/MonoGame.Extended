@@ -9,22 +9,20 @@ namespace MonoGame.Extended.Gui
 {
     public class GuiSpriteBatchRenderer
     {
-        private readonly GuiControlCollection _controls;
         private readonly BitmapFont _defaultFont;
         private readonly SpriteBatch _spriteBatch;
 
-        public GuiSpriteBatchRenderer(GuiControlCollection controls, GraphicsDevice graphicsDevice, BitmapFont defaultFont)
+        public GuiSpriteBatchRenderer(GraphicsDevice graphicsDevice, BitmapFont defaultFont)
         {
-            _controls = controls;
             _defaultFont = defaultFont;
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
 
-        public void Draw()
+        public void Draw(GuiScreen screen)
         {
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
 
-            DrawChildren(_controls, Vector2.Zero);
+            DrawChildren(screen.Controls, Vector2.Zero);
 
             _spriteBatch.End();
         }
@@ -49,9 +47,7 @@ namespace MonoGame.Extended.Gui
                 _spriteBatch.Draw(control.BackgroundRegion, destinationRectangle, control.BackgroundColor);
             }
             else
-            {
                 _spriteBatch.FillRectangle(location, size, control.BackgroundColor);
-            }
 
             if (_defaultFont != null && !string.IsNullOrWhiteSpace(control.Text))
             {

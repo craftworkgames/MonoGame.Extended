@@ -65,9 +65,11 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
                 // Do we have only one character left to check?
                 // -> Opening is either to its left or to its right.
                 if (right - left <= 1)
+                {
                     if (x - leftX <= rightX - x)
                         return left;
                     else return right;
+                }
 
                 // The position of the opening is still not absolutely clear, cut the string
                 // in the middle of the search range so we can close in further.

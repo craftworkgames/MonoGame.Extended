@@ -123,14 +123,18 @@ namespace MonoGame.Extended.Tiled
                     else
                         shape = new PolylineF(points);
                 }
-                else if (objectType == TiledObjectType.Ellipse)
+                else
                 {
-                    var center = new Vector2(x + width / 2.0f, y + height / 2.0f);
-                    shape = new EllipseF(center, width / 2.0f, height / 2.0f);
-                }
-                else if ((objectType == TiledObjectType.Rectangle) || (objectType == TiledObjectType.Tile))
-                {
-                    shape = new RectangleF(x, y, width, height);
+                    if (objectType == TiledObjectType.Ellipse)
+                    {
+                        var center = new Vector2(x + width / 2.0f, y + height / 2.0f);
+                        shape = new EllipseF(center, width / 2.0f, height / 2.0f);
+                    }
+                    else
+                    {
+                        if ((objectType == TiledObjectType.Rectangle) || (objectType == TiledObjectType.Tile))
+                            shape = new RectangleF(x, y, width, height);
+                    }
                 }
 
                 objects[i] = new TiledObject(objectType, id, gid >= 0 ? gid : (int?)null, shape, x, y, tilesetTile)
@@ -225,6 +229,7 @@ namespace MonoGame.Extended.Tiled
             input.GetData(data);
 
             for (var i = 0; i < input.Width * input.Height; i++)
+            {
                 if ((data[i].R == color.R) && (data[i].G == color.G) && (data[i].B == color.B))
                 {
                     data[i].R = 0;
@@ -232,6 +237,7 @@ namespace MonoGame.Extended.Tiled
                     data[i].B = 0;
                     data[i].A = 0;
                 }
+            }
 
             var output = new Texture2D(graphicsDevice, input.Width, input.Height);
             output.SetData(data);

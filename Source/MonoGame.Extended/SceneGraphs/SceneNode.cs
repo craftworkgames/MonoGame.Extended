@@ -64,6 +64,7 @@ namespace MonoGame.Extended.SceneGraphs
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (var drawable in Entities.OfType<ISpriteBatchDrawable>())
+            {
                 if (drawable.IsVisible)
                 {
                     var texture = drawable.TextureRegion.Texture;
@@ -75,6 +76,7 @@ namespace MonoGame.Extended.SceneGraphs
                     spriteBatch.Draw(texture, position, sourceRectangle, drawable.Color, rotation, drawable.Origin,
                         scale, drawable.Effect, 0);
                 }
+            }
 
             foreach (var child in Children)
                 child.Draw(spriteBatch);

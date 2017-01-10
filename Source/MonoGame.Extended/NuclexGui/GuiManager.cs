@@ -200,8 +200,10 @@ namespace MonoGame.Extended.NuclexGui
         public void Draw(GameTime gameTime)
         {
             if (_guiVisualizer != null)
+            {
                 if (_screen != null)
                     _guiVisualizer.Draw(_screen);
+            }
         }
 
         /// <summary>Handles second-stage initialization of the GUI manager</summary>
@@ -349,6 +351,7 @@ namespace MonoGame.Extended.NuclexGui
             var inputService = (IGuiInputService) serviceProvider.GetService(typeof(IGuiInputService));
 
             if (inputService == null)
+            {
                 throw new InvalidOperationException(
                     "Using the GUI with the default input capturer requires the IInputService. " +
                     "Please either add the IInputService to Game.Services by using the " +
@@ -356,6 +359,7 @@ namespace MonoGame.Extended.NuclexGui
                     "implementation for the GUI and assign it before GuiManager.Initialize() " +
                     "is called."
                 );
+            }
 
             return inputService;
         }
@@ -371,6 +375,7 @@ namespace MonoGame.Extended.NuclexGui
                 (IGraphicsDeviceService) serviceProvider.GetService(typeof(IGraphicsDeviceService));
 
             if (graphicsDeviceService == null)
+            {
                 throw new InvalidOperationException(
                     "Using the GUI with the default visualizer requires the IGraphicsDeviceService. " +
                     "Please either add an IGraphicsDeviceService to Game.Services by using " +
@@ -378,6 +383,7 @@ namespace MonoGame.Extended.NuclexGui
                     "IGuiVisualizer implementation for the GUI and assign it before " +
                     "GuiManager.Initialize() is called."
                 );
+            }
 
             return graphicsDeviceService;
         }

@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Gui.Keepers;
+using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.SceneGraphs;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
@@ -13,6 +15,7 @@ namespace MonoGame.Extended.Gui.Controls
         {
             BackgroundColor = Color.White;
             TextColor = Color.White;
+            IsEnabled = true;
             Children = new GuiControlCollection(this);
         }
 
@@ -36,5 +39,49 @@ namespace MonoGame.Extended.Gui.Controls
         public Color TextColor { get; set; }
 
         public GuiControlCollection Children { get; }
+
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                _isEnabled = value;
+                SetStyle(!_isEnabled ? _disabledStyle : null);
+            }
+        }
+
+        private GuiControlStyle _disabledStyle;
+        public GuiControlStyle DisabledStyle
+        {
+            get { return _disabledStyle; }
+            set
+            {
+                _disabledStyle = value;
+                SetStyle(!_isEnabled ? _disabledStyle : null);
+            }
+        }
+
+        public GuiControlStyle HoverStyle { get; set; }
+
+        public virtual void MouseMoved(MouseEventArgs args)
+        {
+            if(IsEnabled)
+                SetStyle(BoundingRectangle.Contains(args.Position) ? HoverStyle : null);
+        }
+
+        private GuiControlStyle _currentStyle;
+
+        protected void SetStyle(GuiControlStyle style)
+        {
+            if (_currentStyle != style)
+            {
+                _currentStyle?.Revert(this);
+                _currentStyle = style;
+                _currentStyle?.Apply(this);
+            }
+        }
+
+
     }
 }

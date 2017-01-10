@@ -13,12 +13,18 @@ namespace MonoGame.Extended.Particles.Profiles
 
             if (value < Width) // Top
                 offset = new Vector2(Random.NextSingle(Width*-0.5f, Width*0.5f), Height*-0.5f);
-            else if (value < 2*Width) // Bottom
-                offset = new Vector2(Random.NextSingle(Width*-0.5f, Width*0.5f), Height*0.5f);
-            else if (value < 2*Width + Height) // Left
-                offset = new Vector2(Width*-0.5f, Random.NextSingle(Height*-0.5f, Height*0.5f));
-            else // Right
-                offset = new Vector2(Width*0.5f, Random.NextSingle(Height*-0.5f, Height*0.5f));
+            else
+            {
+                if (value < 2*Width) // Bottom
+                    offset = new Vector2(Random.NextSingle(Width*-0.5f, Width*0.5f), Height*0.5f);
+                else
+                {
+                    if (value < 2*Width + Height) // Left
+                        offset = new Vector2(Width*-0.5f, Random.NextSingle(Height*-0.5f, Height*0.5f));
+                    else // Right
+                        offset = new Vector2(Width*0.5f, Random.NextSingle(Height*-0.5f, Height*0.5f));
+                }
+            }
 
             Random.NextUnitVector(out heading);
         }
