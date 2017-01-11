@@ -7,7 +7,12 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui
 {
-    public class GuiSpriteBatchRenderer
+    public interface IGuiRenderer
+    {
+        void Draw(GuiScreen screen);
+    }
+
+    public class GuiSpriteBatchRenderer : IGuiRenderer
     {
         private readonly BitmapFont _defaultFont;
         private readonly SpriteBatch _spriteBatch;
@@ -20,34 +25,28 @@ namespace MonoGame.Extended.Gui
 
         public void Draw(GuiScreen screen)
         {
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
+            _spriteBatch.Begin(blendState: BlendState.AlphaBlend);
 
-            DrawChildren(screen.Controls, Vector2.Zero);
+            DrawChildren(screen.Controls);
 
             _spriteBatch.End();
         }
 
-        private void DrawChildren(GuiControlCollection controls, Vector2 offset)
+        private void DrawChildren(GuiControlCollection controls)
         {
             foreach (var control in controls)
-                DrawControl(control, offset);
+                DrawControl(control);
 
             foreach (var childControl in controls)
-                DrawChildren(childControl.Children, offset + childControl.Position);
+                DrawChildren(childControl.Children);
         }
 
-        private void DrawControl(GuiControl control, Vector2 offset)
+        private void DrawControl(GuiControl control)
         {
-            var location = offset + control.Position;
-            var size = control.Size;
-
-            if (control.BackgroundRegion != null)
-            {
-                var destinationRectangle = new Rectangle((int) location.X, (int) location.Y, (int) size.Width, (int) size.Height);
-                _spriteBatch.Draw(control.BackgroundRegion, destinationRectangle, control.BackgroundColor);
-            }
+            if (control.TextureRegion != null)
+                _spriteBatch.Draw(control.TextureRegion, control.BoundingRectangle.ToRectangle(), control.Color);
             else
-                _spriteBatch.FillRectangle(location, size, control.BackgroundColor);
+                _spriteBatch.FillRectangle(control.BoundingRectangle, control.Color);
 
             if (_defaultFont != null && !string.IsNullOrWhiteSpace(control.Text))
             {

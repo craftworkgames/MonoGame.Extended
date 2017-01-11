@@ -38,6 +38,7 @@
     <Compile Include="Controls\GuiControl.cs" />
     <Compile Include="Controls\GuiControlCollection.cs" />
     <Compile Include="Controls\GuiPanel.cs" />
+    <Compile Include="GuiManager.cs" />
     <Compile Include="GuiScreen.cs" />
     <Compile Include="GuiSkin.cs" />
     <Compile Include="GuiSpriteBatchRenderer.cs" />

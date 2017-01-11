@@ -19,6 +19,14 @@ namespace MonoGame.Extended.Gui.Keepers
         public Type TargetType { get; }
         public Dictionary<string, object> Setters { get; set; }
 
+        public void ApplyIf(GuiControl control, bool predicate)
+        {
+            if (predicate)
+                Apply(control);
+            else
+                Revert(control);
+        }
+
         public void Apply(GuiControl control)
         {
             _previousState = Setters

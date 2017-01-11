@@ -53,19 +53,19 @@
 
     //    private static void DrawBackground(SpriteBatch spriteBatch, GuiControl control, Rectangle rectangle)
     //    {
-    //        if (control.BackgroundRegion == null)
+    //        if (control.TextureRegion == null)
     //        {
-    //            spriteBatch.FillRectangle(rectangle, control.BackgroundColor);
+    //            spriteBatch.FillRectangle(rectangle, control.Color);
     //        }
     //        else
     //        {
     //            var targetRectangle = rectangle;
-    //            var sourceRectangle = control.BackgroundRegion.Bounds;
+    //            var sourceRectangle = control.TextureRegion.Bounds;
     //            var destinationRectangle = GuiAlignmentHelper.GetDestinationRectangle(
     //                control.HorizontalAlignment, control.VerticalAlignment, sourceRectangle, targetRectangle);
-    //            var color = control.BackgroundColor * (control.BackgroundColor.A / 255f);
+    //            var color = control.Color * (control.Color.A / 255f);
 
-    //            spriteBatch.Draw(control.BackgroundRegion, destinationRectangle, color);
+    //            spriteBatch.Draw(control.TextureRegion, destinationRectangle, color);
     //        }
     //    }
 

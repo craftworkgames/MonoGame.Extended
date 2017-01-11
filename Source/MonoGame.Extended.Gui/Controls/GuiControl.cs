@@ -13,10 +13,11 @@ namespace MonoGame.Extended.Gui.Controls
     {
         protected GuiControl()
         {
-            BackgroundColor = Color.White;
+            Color = Color.White;
             TextColor = Color.White;
             IsEnabled = true;
             Children = new GuiControlCollection(this);
+            Origin = Vector2.One*0.5f;
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -25,16 +26,22 @@ namespace MonoGame.Extended.Gui.Controls
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JsonIgnore]
-        public RectangleF BoundingRectangle => new RectangleF(Parent != null ? Parent.Position + Position : Position, Size);
+        public RectangleF BoundingRectangle
+            => new RectangleF((Parent != null ? Parent.Position + Position : Position) - Size*Origin, Size);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public GuiThickness Margin { get; set; }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public bool IsFocused { get; set; }
+
         public string Name { get; set; }
         public Vector2 Position { get; set; }
+        public Vector2 Origin { get; set; }
+
         public SizeF Size { get; set; }
-        public Color BackgroundColor { get; set; }
-        public TextureRegion2D BackgroundRegion { get; set; }
+        public Color Color { get; set; }
+        public TextureRegion2D TextureRegion { get; set; }
         public string Text { get; set; }
         public Color TextColor { get; set; }
 
@@ -47,9 +54,11 @@ namespace MonoGame.Extended.Gui.Controls
             set
             {
                 _isEnabled = value;
-                SetStyle(!_isEnabled ? _disabledStyle : null);
+                DisabledStyle?.ApplyIf(this, !_isEnabled);
             }
         }
+
+        public GuiControlStyle HoverStyle { get; set; }
 
         private GuiControlStyle _disabledStyle;
         public GuiControlStyle DisabledStyle
@@ -58,30 +67,24 @@ namespace MonoGame.Extended.Gui.Controls
             set
             {
                 _disabledStyle = value;
-                SetStyle(!_isEnabled ? _disabledStyle : null);
+                DisabledStyle?.ApplyIf(this, !_isEnabled);
             }
         }
 
-        public GuiControlStyle HoverStyle { get; set; }
+        public virtual void OnMouseDown(MouseEventArgs args) { }
+        public virtual void OnMouseUp(MouseEventArgs args) { }
+        public virtual void OnKeyTyped(KeyboardEventArgs args) { }
 
-        public virtual void MouseMoved(MouseEventArgs args)
+        public virtual void OnMouseEnter(MouseEventArgs args)
         {
             if(IsEnabled)
-                SetStyle(BoundingRectangle.Contains(args.Position) ? HoverStyle : null);
+                HoverStyle?.Apply(this);
         }
 
-        private GuiControlStyle _currentStyle;
-
-        protected void SetStyle(GuiControlStyle style)
+        public virtual void OnMouseLeave(MouseEventArgs args)
         {
-            if (_currentStyle != style)
-            {
-                _currentStyle?.Revert(this);
-                _currentStyle = style;
-                _currentStyle?.Apply(this);
-            }
+            if(IsEnabled)
+                HoverStyle?.Revert(this);
         }
-
-
     }
 }
