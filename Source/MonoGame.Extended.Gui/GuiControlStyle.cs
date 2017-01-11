@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using MonoGame.Extended.Gui.Controls;
 
-namespace MonoGame.Extended.Gui.Keepers
+namespace MonoGame.Extended.Gui
 {
     public class GuiControlStyle
     {

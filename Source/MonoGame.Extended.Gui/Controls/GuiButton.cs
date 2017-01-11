@@ -1,5 +1,4 @@
 ﻿using System;
-using MonoGame.Extended.Gui.Keepers;
 using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.TextureAtlases;
 

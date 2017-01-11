@@ -42,7 +42,7 @@
     <Compile Include="GuiScreen.cs" />
     <Compile Include="GuiSkin.cs" />
     <Compile Include="GuiSpriteBatchRenderer.cs" />
-    <Compile Include="Keepers\GuiControlStyle.cs" />
+    <Compile Include="GuiControlStyle.cs" />
     <Compile Include="Keepers\GuiToggleButton.cs" />
     <Compile Include="Keepers\GuiAlignmentHelper.cs" />
     <Compile Include="Keepers\GuiComponent.cs" />

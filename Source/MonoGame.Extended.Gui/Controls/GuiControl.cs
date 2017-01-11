@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Gui.Keepers;
 using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.SceneGraphs;
 using MonoGame.Extended.Shapes;
