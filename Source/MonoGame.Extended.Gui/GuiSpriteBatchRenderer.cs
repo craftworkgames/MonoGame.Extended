@@ -25,12 +25,20 @@ namespace MonoGame.Extended.Gui
 
         public void Draw(GuiScreen screen)
         {
-            _spriteBatch.Begin(blendState: BlendState.AlphaBlend);
+            _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect, TransformMatrix);
 
             DrawChildren(screen.Controls);
 
             _spriteBatch.End();
         }
+
+        public SpriteSortMode SortMode { get; set; }
+        public BlendState BlendState { get; set; } = BlendState.AlphaBlend;
+        public SamplerState SamplerState { get; set; } = SamplerState.LinearClamp;
+        public DepthStencilState DepthStencilState { get; set; } = DepthStencilState.Default;
+        public RasterizerState RasterizerState { get; set; }
+        public Effect Effect { get; set; }
+        public Matrix? TransformMatrix { get; set; }
 
         private void DrawChildren(GuiControlCollection controls)
         {

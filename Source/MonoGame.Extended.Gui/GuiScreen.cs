@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Gui
         public T FindControl<T>(string name)
             where T : GuiControl
         {
-            return FindControl<T>(Controls, name) as T;
+            return FindControl<T>(Controls, name);
         }
 
         private static T FindControl<T>(GuiControlCollection controls, string name)
@@ -23,10 +23,11 @@ namespace MonoGame.Extended.Gui
         {
             foreach (var control in controls)
             {
-                if (control is T && control.Name == name)
+                if (control.Name == name)
                     return control as T;
 
-                return FindControl<T>(control.Children, name);
+                if(control.Children.Any())
+                    return FindControl<T>(control.Children, name);
             }
 
             return null;

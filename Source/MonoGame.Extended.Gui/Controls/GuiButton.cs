@@ -17,6 +17,7 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public event EventHandler Clicked;
+        public event EventHandler PressedStateChanged;
 
         private bool _isPressed;
         public bool IsPressed
@@ -24,8 +25,12 @@ namespace MonoGame.Extended.Gui.Controls
             get { return _isPressed; }
             set
             {
-                _isPressed = value;
-                PressedStyle?.ApplyIf(this, _isPressed);
+                if (_isPressed != value)
+                {
+                    _isPressed = value;
+                    PressedStyle?.ApplyIf(this, _isPressed);
+                    PressedStateChanged?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
 
@@ -35,8 +40,11 @@ namespace MonoGame.Extended.Gui.Controls
             get { return _pressedStyle; }
             set
             {
-                _pressedStyle = value;
-                PressedStyle?.ApplyIf(this, _isPressed);
+                if (_pressedStyle != value)
+                {
+                    _pressedStyle = value;
+                    PressedStyle?.ApplyIf(this, _isPressed);
+                }
             }
         }
 
