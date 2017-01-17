@@ -1,5 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿#region
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
+
+#endregion
 
 namespace MonoGame.Extended.Content.Pipeline
 {

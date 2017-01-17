@@ -13,7 +13,7 @@ namespace Demo.Platformer.Services
         public TiledObjectToEntityService(EntityFactory entityFactory)
         {
             _entityFactory = entityFactory;
-            _createEntityFunctions = new Dictionary<string, Func<TiledObject, Entity>>
+            _createEntityFunctions = new Dictionary<string, Func<TiledMapObject, Entity>>
             {
                 {"Spawn", tiledObject => _entityFactory.CreatePlayer(tiledObject.Position)},
                 {"Solid", tiledObject => _entityFactory.CreateSolid(tiledObject.Position, tiledObject.Size) },
@@ -22,9 +22,9 @@ namespace Demo.Platformer.Services
             };
         }
 
-        private readonly Dictionary<string, Func<TiledObject, Entity>> _createEntityFunctions;
+        private readonly Dictionary<string, Func<TiledMapObject, Entity>> _createEntityFunctions;
 
-        public void CreateEntities(TiledObject[] tiledObjects)
+        public void CreateEntities(TiledMapObject[] tiledObjects)
         {
             foreach (var tiledObject in tiledObjects)
                 _createEntityFunctions[tiledObject.Type](tiledObject);

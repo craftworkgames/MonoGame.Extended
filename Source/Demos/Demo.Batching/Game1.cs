@@ -16,6 +16,7 @@ namespace Demo.Batching
         public float Rotation;
         public Color Color;
         public Texture2D Texture;
+        public Matrix2D TransformMatrix;
     }
 
     public class Game1 : Game
@@ -35,6 +36,9 @@ namespace Demo.Batching
         private readonly Random _random = new Random();
         private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
         private readonly SpriteInfo[] _sprites = new SpriteInfo[2048];
+        private Matrix _worldMatrix;
+        private Matrix _viewMatrix;
+        private Matrix _projectionMatrix;
 
         public Game1()
         {
@@ -42,7 +46,7 @@ namespace Demo.Batching
             IsMouseVisible = true;
             Window.AllowUserResizing = false;
             // disable fixed time step so max frames can be measured otherwise the update & draw frames would be capped to the default 60 fps timestep
-            //IsFixedTimeStep = false;
+            IsFixedTimeStep = false;
 
             _graphicsDeviceManager = new GraphicsDeviceManager(this)
             {
@@ -57,10 +61,10 @@ namespace Demo.Batching
         {
             var graphicsDevice = GraphicsDevice;
 
+            _effect = new DefaultEffect2D(graphicsDevice);
             _batch = new DynamicBatchRenderer2D(graphicsDevice);
             _spriteBatch = new SpriteBatch(graphicsDevice);
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
-            _effect = new DefaultEffect2D(graphicsDevice);
 
             // load the texture for the sprites
             _spriteTexture1 = Content.Load<Texture2D>("logo-square-128");
@@ -68,11 +72,6 @@ namespace Demo.Batching
             _spriteOrigin = new Vector2(_spriteTexture1.Width * 0.5f, _spriteTexture1.Height * 0.5f);
 
             var viewport = GraphicsDevice.Viewport;
-
-            _effect.World = Matrix.Identity;
-            _effect.View = Matrix.Identity;
-            _effect.Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) *
-                                 Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, -1);
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _sprites.Length; index++)
@@ -106,6 +105,8 @@ namespace Demo.Batching
 
                 sprite.Color = ColorHelper.FromHsl(sprite.Rotation / MathHelper.TwoPi, 0.5f, 0.3f);
 
+                sprite.TransformMatrix = Matrix2D.CreateFrom(sprite.Position, sprite.Rotation, null, _spriteOrigin);
+
                 _sprites[index] = sprite;
             }
 
@@ -120,17 +121,27 @@ namespace Demo.Batching
 
             graphicsDevice.Clear(Color.Black);
 
+            // update the matrices
+            _worldMatrix = Matrix.Identity;
+            _viewMatrix = _effect.View = Matrix.Identity;
+            _projectionMatrix = _effect.Projection = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0, 0, -1);
+
             // comment and uncomment either of the two below lines to compare
             DrawSpritesWithBatch2D();
             //DrawSpritesWithSpriteBatch();
 
-            _batch.Begin();
+            _batch.Begin(ref _viewMatrix, ref _projectionMatrix);
 
             // use StringBuilder to prevent garbage
             _stringBuilder.Clear();
             _stringBuilder.Append("FPS: ");
             _stringBuilder.Append(_fpsCounter.FramesPerSecond); // but, this StringBulder method causes a small amount of garbage...
             _batch.DrawString(_bitmapFont, _stringBuilder, Vector2.Zero);
+
+            _stringBuilder.Clear();
+            _stringBuilder.Append("Draw Calls: ");
+            _stringBuilder.Append(GraphicsDevice.Metrics.DrawCount);
+            _batch.DrawString(_bitmapFont, _stringBuilder, new Vector2(0, _bitmapFont.LineHeight));
 
             _batch.End();
 
@@ -141,13 +152,13 @@ namespace Demo.Batching
 
         private void DrawSpritesWithBatch2D()
         {
-            _batch.Begin(Batch2DSortMode.Texture, effect: _effect);
+            _batch.Begin(ref _viewMatrix, ref _projectionMatrix);
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _sprites.Length; index++)
             {
                 var sprite = _sprites[index];
-                _batch.DrawSprite(sprite.Texture, sprite.Position, rotation: sprite.Rotation, origin: _spriteOrigin, color: sprite.Color);
+                _batch.DrawTexture(sprite.Texture, ref sprite.TransformMatrix, sprite.Color);
             }
 
             _batch.End();
@@ -155,6 +166,8 @@ namespace Demo.Batching
 
         private void DrawSpritesWithSpriteBatch()
         {
+            _effect.Projection = _projectionMatrix;
+            _effect.View = _viewMatrix;
             _spriteBatch.Begin(SpriteSortMode.Texture, effect: _effect);
 
             // ReSharper disable once ForCanBeConvertedToForeach

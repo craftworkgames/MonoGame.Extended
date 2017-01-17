@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿#region
+
+using Newtonsoft.Json;
+
+#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {
@@ -14,6 +18,5 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
         {
             return string.Format("{0} {1}", X, Y);
         }
-
     }
 }

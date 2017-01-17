@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Graphics.Effects
     ///     monitor.
     /// </summary>
     /// <seealso cref="Effect" />
-    /// <seealso cref="IMatrixChainEffect" />
+    /// <seealso cref="IEffectMatrices" />
     public abstract class MatrixChainEffect : Effect, IMatrixChainEffect
     {
         private Matrix _projection = Matrix.Identity;

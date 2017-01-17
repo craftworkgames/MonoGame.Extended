@@ -66,22 +66,13 @@
     <None Include="Content\Fonts\courier-new-32.fnt" />
     <None Include="Content\Sprites\zombie-animations.aa" />
     <None Include="Content\Tilesets\free-tileset.json" />
-    <None Include="Content\Tilesets\isometric.tmx" />
     <None Include="Content\Tilesets\level01.tmx" />
     <None Include="Content\read-me.md" />
     <None Include="Content\Sprites\fireball.png" />
     <None Include="Content\Fonts\courier-new-32_0.png" />
     <None Include="Content\Tilesets\free-tileset.png" />
     <None Include="Content\Backgrounds\hills.png" />
-    <None Include="Content\Tilesets\isometric_tileset.png" />
-    <None Include="Content\Tilesets\test-tileset.png" />
     <None Include="Content\Sprites\zombie.png" />
-    <None Include="Content\Tilesets\test-tileset-atlas.json" />
-    <None Include="Content\Tilesets\test-tileset-left-down.tmx" />
-    <None Include="Content\Tilesets\test-tileset-left-up.tmx" />
-    <None Include="Content\Tilesets\test-tileset-map1.tmx" />
-    <None Include="Content\Tilesets\test-tileset-right-down.tmx" />
-    <None Include="Content\Tilesets\test-tileset-right-up.tmx" />
     <None Include="Content\Sprites\zombie-atlas.json" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -97,6 +88,10 @@
     <ProjectReference Include="..\..\MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj">
       <Project>{02562c6f-5bfb-467e-8a95-68b6ce2d635a}</Project>
       <Name>MonoGame.Extended.Collisions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj">
+      <Project>{9b3ab8a1-78aa-471a-afd0-b10b932115bc}</Project>
+      <Name>MonoGame.Extended.Graphics</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj">
       <Project>{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}</Project>

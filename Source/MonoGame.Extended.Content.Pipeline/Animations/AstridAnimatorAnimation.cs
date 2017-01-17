@@ -1,9 +1,20 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
+
+#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.Animations
 {
     public class AstridAnimatorAnimation
     {
+        public string Name { get; set; }
+        public int FramesPerSecond { get; set; }
+        public List<string> Frames { get; set; }
+        public bool IsLooping { get; set; }
+        public bool IsReversed { get; set; }
+        public bool IsPingPong { get; set; }
+
         public AstridAnimatorAnimation(string name, int framesPerSecond)
         {
             Name = name;
@@ -13,12 +24,5 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
             IsReversed = false;
             IsPingPong = false;
         }
-
-        public string Name { get; set; }
-        public int FramesPerSecond { get; set; }
-        public List<string> Frames { get; set; }
-        public bool IsLooping { get; set; }
-        public bool IsReversed { get; set; }
-        public bool IsPingPong { get; set; }
     }
 }

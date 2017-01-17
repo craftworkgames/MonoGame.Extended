@@ -1,123 +1,119 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Tiled.Graphics;
+
+#endregion
 
 namespace MonoGame.Extended.Tiled
 {
-    public class TiledMap : IDisposable
+    public sealed class TiledMap : IDisposable
     {
-        private readonly List<TiledLayer> _layers;
-        private readonly List<TiledTileset> _tilesets;
+        private readonly List<TiledMapImageLayer> _imageLayers;
+        private readonly List<TiledMapLayer> _layers;
+        private readonly Dictionary<string, TiledMapLayer> _layersByName;
+        private readonly List<TiledMapObjectLayer> _objectLayers;
+        private readonly List<TiledMapTileLayer> _tileLayers;
+        private readonly List<TiledMapTileset> _tilesets;
 
         public string Name { get; }
         public int Width { get; }
         public int Height { get; }
         public int TileWidth { get; }
         public int TileHeight { get; }
+        public TiledMapTileDrawOrder RenderOrder { get; }
+        public TiledMapOrientation Orientation { get; }
+        public TiledMapProperties Properties { get; }
+        public IReadOnlyList<TiledMapTileset> Tilesets { get; }
+        public IReadOnlyList<TiledMapLayer> Layers { get; }
+        public IReadOnlyList<TiledMapImageLayer> ImageLayers { get; }
+        public IReadOnlyList<TiledMapTileLayer> TileLayers { get; }
+        public IReadOnlyList<TiledMapObjectLayer> ObjectLayers { get; }
 
         public Color? BackgroundColor { get; set; }
-        public TiledRenderOrder RenderOrder { get; set; }
-        public TiledProperties Properties { get; private set; }
-        public TiledMapOrientation Orientation { get; private set; }
 
-        public IReadOnlyList<TiledTileset> Tilesets => _tilesets;
-        public IReadOnlyList<TiledLayer> Layers => _layers;
-        public IReadOnlyList<TiledImageLayer> ImageLayers => _layers.OfType<TiledImageLayer>().ToList();
-        public IReadOnlyList<TiledTileLayer> TileLayers => _layers.OfType<TiledTileLayer>().ToList();
-        public IReadOnlyList<TiledObjectLayer> ObjectLayers => _layers.OfType<TiledObjectLayer>().ToList();
         public int WidthInPixels => Width * TileWidth;
         public int HeightInPixels => Height * TileHeight;
 
-        public TiledMap(string name, int width, int height, int tileWidth, int tileHeight,
-            TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
+        private TiledMap()
         {
-            _layers = new List<TiledLayer>();
-            _tilesets = new List<TiledTileset>();
+            _layers = new List<TiledMapLayer>();
+            Layers = new ReadOnlyCollection<TiledMapLayer>(_layers);
+            _imageLayers = new List<TiledMapImageLayer>();
+            ImageLayers = new ReadOnlyCollection<TiledMapImageLayer>(_imageLayers);
+            _tileLayers = new List<TiledMapTileLayer>();
+            TileLayers = new ReadOnlyCollection<TiledMapTileLayer>(_tileLayers);
+            _objectLayers = new List<TiledMapObjectLayer>();
+            ObjectLayers = new ReadOnlyCollection<TiledMapObjectLayer>(_objectLayers);
+            _layersByName = new Dictionary<string, TiledMapLayer>();
+            _tilesets = new List<TiledMapTileset>();
+            Tilesets = new ReadOnlyCollection<TiledMapTileset>(_tilesets);
+            Properties = new TiledMapProperties();
+        }
 
+        public TiledMap(string name, int width, int height, int tileWidth, int tileHeight,
+            TiledMapTileDrawOrder renderOrder, TiledMapOrientation orientation)
+            : this()
+        {
             Name = name;
             Width = width;
             Height = height;
             TileWidth = tileWidth;
             TileHeight = tileHeight;
-            Properties = new TiledProperties();
+            RenderOrder = renderOrder;
             Orientation = orientation;
         }
 
         public void Dispose()
         {
-            foreach (var tiledLayer in _layers)
-                tiledLayer.Dispose();
+            foreach (var layer in _layers)
+                layer.Dispose();
         }
 
-        public TiledTileset CreateTileset(Texture2D texture, int firstId, int tileWidth, int tileHeight, int tileCount,
-            int spacing = 2, int margin = 2)
+        internal void AddTileset(TiledMapTileset tileset)
         {
-            var tileset = new TiledTileset(texture, firstId, tileWidth, tileHeight, tileCount, spacing, margin);
             _tilesets.Add(tileset);
-            return tileset;
         }
 
-        public TiledTileLayer CreateTileLayer(string name, int width, int height, int[] data)
+        public void AddLayer(TiledMapLayer layer)
         {
-            var layer = new TiledTileLayer(this, name, width, height, data);
             _layers.Add(layer);
+            _layersByName.Add(layer.Name, layer);
+
+            var imageLayer = layer as TiledMapImageLayer;
+            if (imageLayer != null)
+                _imageLayers.Add(imageLayer);
+
+            var tileLayer = layer as TiledMapTileLayer;
+            if (tileLayer != null)
+                _tileLayers.Add(tileLayer);
+
+            var objectLayer = layer as TiledMapObjectLayer;
+            if (objectLayer != null)
+                _objectLayers.Add(objectLayer);
+        }
+
+        public TiledMapLayer GetLayer(string layerName)
+        {
+            TiledMapLayer layer;
+            _layersByName.TryGetValue(layerName, out layer);
             return layer;
         }
 
-        public TiledImageLayer CreateImageLayer(string name, Texture2D texture, Vector2 position)
+        public T GetLayer<T>(string layerName)
+            where T : TiledMapLayer
         {
-            var layer = new TiledImageLayer(name, texture, position);
-            _layers.Add(layer);
-            return layer;
+            return GetLayer(layerName) as T;
         }
 
-        public void AddLayer(TiledLayer layer)
+        public TiledMapTileset GetTilesetByTileGlobalIdentifier(int tileIdentifier)
         {
-            _layers.Add(layer);
-        }
-
-        public TiledLayer GetLayer(string name)
-        {
-            return _layers.FirstOrDefault(i => i.Name == name);
-        }
-
-        public T GetLayer<T>(string name)
-            where T : TiledLayer
-        {
-            return (T)GetLayer(name);
-        }
-
-        public TiledObjectLayer GetObjectGroup(string name)
-        {
-            return ObjectLayers.FirstOrDefault(i => i.Name == name);
-        }
-
-        public TextureRegion2D GetTileRegion(int id)
-        {
-            if (id == 0)
-                return null;
-
-            var tileset = _tilesets.LastOrDefault(i => i.FirstId <= id);
-
-            if (tileset == null)
-                throw new InvalidOperationException($"No tileset found for id {id}");
-
-            return tileset.GetTileRegion(id);
-        }
-
-        public TiledTilesetTile GetTilesetTileById(int tilesetTileId)
-        {
-            return _tilesets
-                .SelectMany(ts => ts.Tiles, (ts, t) => t)
-                .FirstOrDefault(t => t.Id == tilesetTileId - 1);
-        }
-
-        public TiledTileset GetTilesetByTileId(int tileId)
-        {
-            return _tilesets.FirstOrDefault(ts => ts.ContainsTileId(tileId));
+            return _tilesets.FirstOrDefault(tileset => tileset.ContainsGlobalIdentifier(tileIdentifier));
         }
     }
 }

@@ -1,12 +1,22 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Content
 {
     public static class ContentReaderExtensions
     {
+        private static readonly FieldInfo ContentReaderGraphicsDeviceFieldInfo = typeof(ContentReader).GetTypeInfo().GetDeclaredField("graphicsDevice");
+        private static byte[] _scratchBuffer;
+
+        public static GraphicsDevice GetGraphicsDevice(this ContentReader contentReader)
+        {
+            return (GraphicsDevice)ContentReaderGraphicsDeviceFieldInfo.GetValue(contentReader);
+        }
+
         public static string GetRelativeAssetPath(this ContentReader contentReader, string relativePath)
         {
             var assetName = contentReader.AssetName;
@@ -29,6 +39,14 @@ namespace MonoGame.Extended.Content
                 .ToArray();
 
             return string.Join("/", values);
+        }
+
+        internal static byte[] GetScratchBuffer(this ContentReader contentReader, int size)
+        {
+            size = Math.Max(size, 1024 * 1024);
+            if (_scratchBuffer == null || _scratchBuffer.Length < size)
+                _scratchBuffer = new byte[size];
+            return _scratchBuffer;
         }
     }
 }

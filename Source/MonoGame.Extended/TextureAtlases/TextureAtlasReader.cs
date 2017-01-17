@@ -1,6 +1,10 @@
+#region
+
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
+
+#endregion
 
 namespace MonoGame.Extended.TextureAtlases
 {

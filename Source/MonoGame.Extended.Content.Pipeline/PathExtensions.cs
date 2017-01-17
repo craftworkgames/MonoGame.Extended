@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.IO;
+
+#endregion
 
 namespace MonoGame.Extended.Content.Pipeline
 {

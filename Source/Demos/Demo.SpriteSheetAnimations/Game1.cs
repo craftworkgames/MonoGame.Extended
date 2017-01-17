@@ -7,10 +7,10 @@ using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions;
-using MonoGame.Extended.Tiled.Renderers;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Tiled.Graphics;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.SpriteSheetAnimations
@@ -23,7 +23,7 @@ namespace Demo.SpriteSheetAnimations
         private Camera2D _camera;
         private SpriteBatch _spriteBatch;
         private TiledMap _tiledMap;
-        private IMapRenderer _mapRenderer;
+        private TiledMapRenderer _mapRenderer;
         private ViewportAdapter _viewportAdapter;
         private CollisionWorld _world;
         private Zombie _zombie;
@@ -49,7 +49,7 @@ namespace Demo.SpriteSheetAnimations
                 Origin = new Vector2(400, 240),
                 Position = new Vector2(408, 270)
             };
-            _mapRenderer = new FullMapRenderer(GraphicsDevice);
+            _mapRenderer = new TiledMapRenderer(GraphicsDevice);
 
             Window.Title = $"MonoGame.Extended - {GetType().Name}";
             Window.Position = Point.Zero;
@@ -63,10 +63,10 @@ namespace Demo.SpriteSheetAnimations
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Content.Load<BitmapFont>("Fonts/courier-new-32");
             _tiledMap = Content.Load<TiledMap>("Tilesets/level01");
-            _mapRenderer.SwapMap(_tiledMap);
+            _mapRenderer.Map = _tiledMap;
 
             _world = new CollisionWorld(new Vector2(0, 900));
-            _world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
+            //_world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
 
             var zombieAnimations = Content.Load<SpriteSheetAnimationFactory>("Sprites/zombie-animations");
             _zombie = new Zombie(zombieAnimations);
@@ -158,8 +158,20 @@ namespace Demo.SpriteSheetAnimations
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            var viewMatrix = _camera.GetViewMatrix();
+            var projectionMatrix = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height, 0, 0f, -1f);
+
+            _mapRenderer.Begin(ref viewMatrix, ref projectionMatrix);
+
+            foreach (var layer in _mapRenderer.Map.Layers)
+            {
+                _mapRenderer.DrawLayer(layer);
+            }
+
+            _mapRenderer.End();
+
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _mapRenderer.Draw(_camera.GetViewMatrix());
             _zombie.Draw(_spriteBatch);
             _spriteBatch.Draw(_fireballSprite);
             _spriteBatch.End();

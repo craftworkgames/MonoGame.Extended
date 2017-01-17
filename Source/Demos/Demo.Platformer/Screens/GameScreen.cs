@@ -11,7 +11,7 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Tiled;
-using MonoGame.Extended.Tiled.Renderers;
+using MonoGame.Extended.Tiled.Graphics;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Platformer.Screens
@@ -27,7 +27,7 @@ namespace Demo.Platformer.Screens
 
         private Camera2D _camera;
         private TiledMap _tiledMap;
-        private IMapRenderer _mapRenderer;
+        private TiledMapRenderer _mapRenderer;
         private EntityComponentSystem _entityComponentSystem;
         private EntityFactory _entityFactory;
 
@@ -51,14 +51,16 @@ namespace Demo.Platformer.Screens
             _camera = new Camera2D(viewportAdapter);
 
             _tiledMap = Content.Load<TiledMap>("level-1");
-            _mapRenderer = new FullMapRenderer(GraphicsDevice, new MapRendererConfig {DrawObjectLayers = false});
-            _mapRenderer.SwapMap(_tiledMap);
+            _mapRenderer = new TiledMapRenderer(GraphicsDevice)
+            {
+                Map = _tiledMap
+            };
 
             _entityComponentSystem = new EntityComponentSystem();
             _entityFactory = new EntityFactory(_entityComponentSystem, Content);
 
             var service = new TiledObjectToEntityService(_entityFactory);
-            var spawnPoint = _tiledMap.GetObjectGroup("entities").Objects.Single(i => i.Type == "Spawn").Position;
+            var spawnPoint = _tiledMap.GetLayer<TiledMapObjectLayer>("entities").Objects.Single(i => i.Type == "Spawn").Position;
 
             _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
             _entityComponentSystem.RegisterSystem(new EnemyMovementSystem());
@@ -68,7 +70,7 @@ namespace Demo.Platformer.Screens
             _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
             _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
 
-            service.CreateEntities(_tiledMap.GetObjectGroup("entities").Objects);
+            service.CreateEntities(_tiledMap.GetLayer<TiledMapObjectLayer>("entities").Objects);
         }
 
         public override void Update(GameTime gameTime)
@@ -82,11 +84,21 @@ namespace Demo.Platformer.Screens
         {
             base.Draw(gameTime);
 
-            var viewMatrix = _camera.GetViewMatrix();
-
             GraphicsDevice.Clear(Color.Black);
 
-            _mapRenderer.Draw(viewMatrix);
+            var viewMatrix = _camera.GetViewMatrix();
+            var projectionMatrix = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height, 0, 0f, -1f);
+
+            _mapRenderer.Begin(ref viewMatrix, ref projectionMatrix);
+
+            foreach (var layer in _mapRenderer.Map.Layers)
+            {
+                _mapRenderer.DrawLayer(layer);
+            }
+
+            _mapRenderer.End();
+
             _entityComponentSystem.Draw(gameTime);
         }
     }

@@ -1,4 +1,8 @@
+#region
+
 using Newtonsoft.Json;
+
+#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {
@@ -29,6 +33,5 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
         {
             return Image;
         }
-
     }
 }

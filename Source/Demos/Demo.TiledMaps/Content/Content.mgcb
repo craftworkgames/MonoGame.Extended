@@ -11,6 +11,7 @@
 #-------------------------------- References --------------------------------#
 
 /reference:../../../MonoGame.Extended.Content.Pipeline/bin/MonoGame.Extended.Content.Pipeline.dll
+/reference:../../../MonoGame.Extended.Content.Pipeline.Tiled/bin/MonoGame.Extended.Content.Pipeline.Tiled.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -111,23 +112,6 @@
 /processor:TiledMapProcessor
 /build:level03.tmx
 
-#begin placeholder-level-0.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:placeholder-level-0.tmx
-
-#begin placeholder-tileset.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:placeholder-tileset.png
-
 #begin level04.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -150,39 +134,10 @@
 /processorParam:TextureFormat=Color
 /build:L05TS1.png
 
-#begin L05TS2.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:L05TS2.png
-
-#begin L05TS3.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:L05TS3.png
-
-#begin very-large.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:very-large.tmx
-
 #begin alphacolortile.png
 /importer:TextureImporter
 /processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyColor=255,0,0,255
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
@@ -190,4 +145,26 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:alphacolortile.png
+
+#begin non-uniform-tileset.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:non-uniform-tileset.png
+
+#begin level06.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:level06.tmx
+
+#begin level07.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:level07.tmx
 

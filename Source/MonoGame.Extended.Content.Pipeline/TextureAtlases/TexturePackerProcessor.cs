@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region
+
+using System;
 using Microsoft.Xna.Framework.Content.Pipeline;
+
+#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {
@@ -10,7 +14,7 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
         {
             try
             {
-                var output = new TexturePackerProcessorResult { Data = input };
+                var output = new TexturePackerProcessorResult {Data = input};
                 return output;
             }
             catch (Exception ex)

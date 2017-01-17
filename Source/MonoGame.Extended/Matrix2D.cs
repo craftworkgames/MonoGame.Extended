@@ -123,7 +123,7 @@ namespace MonoGame.Extended
         /// <summary>
         ///     Transforms the specified <see cref="Vector2" /> by this <see cref="Matrix2D" />.
         /// </summary>
-        /// <param name="vector">The <see cref="Vector2" />.</param>
+        /// <param name="vector">The vector.</param>
         /// <returns>The resulting <see cref="Vector2" />.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Transform(Vector2 vector)
@@ -136,13 +136,33 @@ namespace MonoGame.Extended
         /// <summary>
         ///     Transforms the specified <see cref="Vector2" /> by this <see cref="Matrix2D" />.
         /// </summary>
-        /// <param name="vector">The <see cref="Vector2" />.</param>
+        /// <param name="vector">The vector.</param>
         /// <param name="result">The resulting <see cref="Vector2" />.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Transform(Vector2 vector, out Vector2 result)
         {
             result.X = vector.X * M11 + vector.Y * M21 + M31;
             result.Y = vector.X * M12 + vector.Y * M22 + M32;
+        }
+
+        /// <summary>
+        ///     Transforms the specified <see cref="Vector2" /> by this <see cref="Matrix2D" />.
+        /// </summary>
+        /// <param name="x">The x value of the vector.</param>
+        /// <param name="y">The y value of the vector.</param>
+        /// <param name="result">The resulting <see cref="Vector2" />.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Transform(float x, float y, out Vector2 result)
+        {
+            result.X = x * M11 + y * M21 + M31;
+            result.Y = x * M12 + y * M22 + M32;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Transform(float x, float y, ref Vector3 result)
+        {
+            result.X = x * M11 + y * M21 + M31;
+            result.Y = x * M12 + y * M22 + M32;
         }
 
         /// <summary>

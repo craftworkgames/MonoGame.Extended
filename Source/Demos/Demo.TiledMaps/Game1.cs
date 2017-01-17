@@ -1,13 +1,19 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Primitives;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
-using MonoGame.Extended.Tiled.Renderers;
+using MonoGame.Extended.Tiled.Graphics;
 using MonoGame.Extended.ViewportAdapters;
+
+#endregion
 
 namespace Demo.TiledMaps
 {
@@ -21,9 +27,9 @@ namespace Demo.TiledMaps
         private Sprite _sprite;
         private SpriteBatch _spriteBatch;
         private Texture2D _texture;
-        private IMapRenderer _mapRenderer;
+        private TiledMapRenderer _mapRenderer;
         private ViewportAdapter _viewportAdapter;
-        private KeyboardState _oldKeyboardState = Keyboard.GetState();
+        private KeyboardState _previousKeyboardState = Keyboard.GetState();
         private bool _showHelp;
         private TiledMap _tiledMap;
 
@@ -31,7 +37,12 @@ namespace Demo.TiledMaps
 
         public Game1()
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this) { SynchronizeWithVerticalRetrace = false };
+            _graphicsDeviceManager = new GraphicsDeviceManager(this) 
+			{
+				SynchronizeWithVerticalRetrace = false,
+                PreferredBackBufferWidth = 1024,
+                PreferredBackBufferHeight = 768
+            };
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             IsFixedTimeStep = false;
@@ -39,9 +50,9 @@ namespace Demo.TiledMaps
 
         protected override void Initialize()
         {
-            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1024, 768);
             _camera = new Camera2D(_viewportAdapter);
-            _mapRenderer = new FullMapRenderer(GraphicsDevice);
+            _mapRenderer = new TiledMapRenderer(GraphicsDevice);
 
             Window.AllowUserResizing = true;
             Window.Position = Point.Zero;
@@ -56,12 +67,13 @@ namespace Demo.TiledMaps
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _texture = Content.Load<Texture2D>("monogame-extended-logo");
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
-            _sprite = new Sprite(_texture) { Position = new Vector2(600, 240) };
+            _sprite = new Sprite(_texture) {Position = new Vector2(600, 240)};
 
-            _availableMaps = new Queue<string>(new[] { "level01", "level02", "level03", "level04", "level05", "very-large" });
+            _availableMaps =
+                new Queue<string>(new[] {"level01", "level02", "level03", "level04", "level05", "level06", "level07"});
 
             _tiledMap = LoadNextMap();
-            _mapRenderer.SwapMap(_tiledMap);
+            _mapRenderer.Map = _tiledMap;
             _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
         }
 
@@ -84,23 +96,35 @@ namespace Demo.TiledMaps
             var mouseState = Mouse.GetState();
 
             _mapRenderer.Update(gameTime);
+
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
             const float cameraSpeed = 500f;
             const float zoomSpeed = 0.3f;
 
+            var moveDirection = Vector2.Zero;
+
             if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
-                _camera.Move(new Vector2(0, -cameraSpeed) * deltaSeconds);
+                moveDirection -= Vector2.UnitY;
 
             if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
-                _camera.Move(new Vector2(-cameraSpeed, 0) * deltaSeconds);
+                moveDirection -= Vector2.UnitX;
 
             if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
-                _camera.Move(new Vector2(0, cameraSpeed) * deltaSeconds);
+                moveDirection += Vector2.UnitY;
 
             if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
-                _camera.Move(new Vector2(cameraSpeed, 0) * deltaSeconds);
+                moveDirection += Vector2.UnitX;
+
+            // need to normalize the direction vector incase moving diagonally, but can't normalize the zero vector
+            // however, the zero vector means we didn't want to move this frame anyways so all good
+            var isCameraMoving = moveDirection != Vector2.Zero;
+            if (isCameraMoving)
+            {
+                moveDirection.Normalize();
+                _camera.Move(moveDirection * cameraSpeed * deltaSeconds);
+            }
 
             if (keyboardState.IsKeyDown(Keys.R))
                 _camera.ZoomIn(zoomSpeed * deltaSeconds);
@@ -108,48 +132,104 @@ namespace Demo.TiledMaps
             if (keyboardState.IsKeyDown(Keys.F))
                 _camera.ZoomOut(zoomSpeed * deltaSeconds);
 
-            if (_oldKeyboardState.IsKeyDown(Keys.Tab) && keyboardState.IsKeyUp(Keys.Tab))
+            if (_previousKeyboardState.IsKeyDown(Keys.Tab) && keyboardState.IsKeyUp(Keys.Tab))
             {
                 _tiledMap = LoadNextMap();
-                _mapRenderer.SwapMap(_tiledMap);
-                _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
+                _mapRenderer.Map = _tiledMap;
+                LookAtMapCenter();
             }
 
-            if (_oldKeyboardState.IsKeyDown(Keys.H) && keyboardState.IsKeyUp(Keys.H))
+            if (_previousKeyboardState.IsKeyDown(Keys.H) && keyboardState.IsKeyUp(Keys.H))
                 _showHelp = !_showHelp;
+
+            if (keyboardState.IsKeyDown(Keys.Z))
+                _camera.Position = Vector2.Zero;
+
+            if (keyboardState.IsKeyDown(Keys.X))
+                _camera.LookAt(Vector2.Zero);
+
+            if (keyboardState.IsKeyDown(Keys.C))
+                LookAtMapCenter();
 
             _sprite.Rotation += MathHelper.ToRadians(5) * deltaSeconds;
             _sprite.Position = _camera.ScreenToWorld(mouseState.X, mouseState.Y);
 
+            _previousKeyboardState = keyboardState;
+
             _fpsCounter.Update(gameTime);
 
-            _oldKeyboardState = keyboardState;
-
             base.Update(gameTime);
+        }
+
+        private void LookAtMapCenter()
+        {
+            switch (_tiledMap.Orientation)
+            {
+                case TiledMapOrientation.Orthogonal:
+                    _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
+                    break;
+                case TiledMapOrientation.Isometric:
+                    _camera.LookAt(new Vector2(0, _tiledMap.HeightInPixels + _tiledMap.TileHeight) * 0.5f);
+                    break;
+                case TiledMapOrientation.Staggered:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _mapRenderer.Draw(_camera.GetViewMatrix());
+            var viewMatrix = _camera.GetViewMatrix();
+            var projectionMatrix = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height, 0, 0f, -1f);
+
+            _mapRenderer.Begin(ref viewMatrix, ref projectionMatrix);
+
+            foreach (var layer in _mapRenderer.Map.Layers)
+                _mapRenderer.DrawLayer(layer);
+
+            _mapRenderer.End();
 
             var textColor = Color.Black;
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
-            _spriteBatch.DrawString(_bitmapFont, $"Map: {_tiledMap.Name}", new Vector2(5, _bitmapFont.LineHeight * 0), Color.Black);
-            _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.FramesPerSecond:0}", new Vector2(5, _bitmapFont.LineHeight * 1), Color.Black);
-            _spriteBatch.DrawString(_bitmapFont, $"Camera: {_camera.Position}", new Vector2(5, _bitmapFont.LineHeight * 2), Color.Black);
 
-            if (_showHelp)
+            var baseTextPosition = new Point2(5, 0);
+            var textPosition = new Point2(0, 0);
+
+            // textPosition = base position (point) + offset (vector2)
+            textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 0);
+            _spriteBatch.DrawString(_bitmapFont, $"Map: {_tiledMap.Name}; {_tiledMap.TileLayers.Count} tile layer(s) @ {_tiledMap.Width}x{_tiledMap.Height} tiles, {_tiledMap.ImageLayers.Count} image layer(s)", textPosition, textColor);
+            textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 1);
+            // we can safely get the metrics without worrying about spritebatch interfering because spritebatch submits on End()
+            _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.FramesPerSecond:0}, Draw Calls: {GraphicsDevice.Metrics.DrawCount}, Texture Count: {GraphicsDevice.Metrics.TextureCount}, Triangle Count: {GraphicsDevice.Metrics.PrimitiveCount}", textPosition, textColor);
+            textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 2);
+            _spriteBatch.DrawString(_bitmapFont, $"Camera Position: (x={_camera.Position.X}, y={_camera.Position.Y})", textPosition, textColor);
+
+            if (!_showHelp)
             {
-                _spriteBatch.DrawString(_bitmapFont, "H: Hide help", new Vector2(5, _bitmapFont.LineHeight * 3), textColor);
-                _spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: move", new Vector2(5, _bitmapFont.LineHeight * 4), textColor);
-                _spriteBatch.DrawString(_bitmapFont, "RF: zoom", new Vector2(5, _bitmapFont.LineHeight * 5), textColor);
-                _spriteBatch.DrawString(_bitmapFont, "Tab: Switch map", new Vector2(5, _bitmapFont.LineHeight * 6), textColor);
+                _spriteBatch.DrawString(_bitmapFont, "H: Show help", new Vector2(5, _bitmapFont.LineHeight * 3),
+                    textColor);
             }
             else
             {
-                _spriteBatch.DrawString(_bitmapFont, "H: Show help", new Vector2(5, _bitmapFont.LineHeight * 3), textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 3);
+                _spriteBatch.DrawString(_bitmapFont, "H: Hide help", textPosition, textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 4);
+                _spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: Pan camera", textPosition, textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 5);
+                _spriteBatch.DrawString(_bitmapFont, "RF: Zoom camera in / out", textPosition, textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 6);
+                _spriteBatch.DrawString(_bitmapFont, "Z: Move camera to the origin", textPosition, textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 7);
+                _spriteBatch.DrawString(_bitmapFont, "X: Move camera to look at the origin", textPosition, textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 8);
+                _spriteBatch.DrawString(_bitmapFont, "C: Move camera to look at center of the map", textPosition,
+                    textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 9);
+                _spriteBatch.DrawString(_bitmapFont, "Tab: Cycle through maps", textPosition, textColor);
             }
 
             _spriteBatch.End();

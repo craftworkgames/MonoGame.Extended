@@ -5,8 +5,8 @@ namespace MonoGame.Extended.Graphics.Effects
     /// <summary>
     ///     An <see cref="Effect" /> that allows 2D objects, within a 3D context, to be represented on a 2D monitor.
     /// </summary>
-    /// <seealso cref="Effect" />
-    /// <seealso cref="IMatrixChainEffect" />
+    /// <seealso cref="MatrixChainEffect" />
+    /// <seealso cref="ITexture2DEffect" />
     public class DefaultEffect2D : MatrixChainEffect, ITexture2DEffect
     {
         private Texture2D _texture;
@@ -51,7 +51,7 @@ namespace MonoGame.Extended.Graphics.Effects
 
         private void CacheEffectParameters()
         {
-            _textureParameter = Parameters["TextureSampler+Texture"];
+            _textureParameter = Parameters["Texture"];
         }
 
         /// <summary>
