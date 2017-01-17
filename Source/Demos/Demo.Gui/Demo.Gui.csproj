@@ -61,20 +61,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\kenney-gui-blue-atlas.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\kenney-gui-blue.png" />
-    <Content Include="Content\montserrat-32_0.png" />
+    <Content Include="Content\adventure-gui.png" />
+    <Content Include="Content\raw\adventure\buttonLong_grey.png" />
+    <Content Include="Content\raw\adventure\buttonLong_grey_pressed.png" />
+    <Content Include="Content\raw\adventure\buttonRound_beige.png" />
+    <Content Include="Content\raw\adventure\buttonRound_beige_checked.png" />
+    <Content Include="Content\raw\adventure\buttonSquare_blue.png" />
+    <Content Include="Content\raw\adventure\buttonSquare_blue_pressed.png" />
+    <Content Include="Content\raw\adventure\checkBox_beige_checked.png" />
+    <Content Include="Content\raw\adventure\checkBox_beige_unchecked.png" />
+    <Content Include="Content\raw\adventure\cursorSword_silver.png" />
+    <Content Include="Content\raw\adventure\panelInset_beige.png" />
+    <Content Include="Content\raw\adventure\panel_brown.png" />
+    <Content Include="Content\raw\adventure\progress-bar-blue.png" />
+    <Content Include="Content\raw\adventure\progress-bar-green.png" />
+    <Content Include="Content\raw\adventure\progress-bar-red.png" />
     <Content Include="Content\small-font_0.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="Content\title-screen.gui">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="Content\montserrat-32.fnt" />
+    <None Include="Content\adventure-gui-atlas.json" />
+    <None Include="Content\raw\adventure\adventure-gui.tps" />
+    <None Include="Content\raw\small-font.bmfc" />
     <None Include="Content\small-font.fnt" />
     <None Include="packages.config" />
   </ItemGroup>

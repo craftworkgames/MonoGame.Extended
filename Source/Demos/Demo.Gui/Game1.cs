@@ -1,11 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Gui
 {
@@ -13,9 +12,7 @@ namespace Demo.Gui
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
-        private SpriteBatch _spriteBatch;
-        private BitmapFont _font;
-        //private GuiSpriteBatchRenderer _guiRenderer;
+        private GuiManager _guiManager;
 
         public Game1()
         {
@@ -27,53 +24,48 @@ namespace Demo.Gui
 
         protected override void LoadContent()
         {
-            var texture = Content.Load<Texture2D>("kenney-gui-blue");
-            var textureRegion = new TextureRegion2D(texture, 190, 94, 100, 100);
-            var bluePanel = new NinePatchRegion2D(textureRegion, 10, 10, 10, 10);
-            _font = Content.Load<BitmapFont>("small-font");
+            var font = Content.Load<BitmapFont>("small-font");
+            var textureAtlas = Content.Load<TextureAtlas>("adventure-gui-atlas");
+            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            var renderer = new GuiSpriteBatchRenderer(GraphicsDevice, font);
 
-            //var screen = new GuiScreen
-            //{
-            //    Controls =
-            //    {
-            //        new GuiPanel
-            //        {
-            //            Name = "HelloPanel",
-            //            Position = new Vector2(100, 100),
-            //            Size = new SizeF(400, 240),
-            //            BackgroundRegion = bluePanel,
-            //            Controls =
-            //            {
-            //                new GuiLabel
-            //                {
-            //                  Position = new Vector2(10, 10),
-            //                  Size = new SizeF(80, 25),
-            //                  Text = "Label:",
-            //                  HorizontalTextAlignment = GuiHorizontalAlignment.Right,
-            //                  VerticalTextAlignment = GuiVerticalAlignment.Centre
-            //                },
-            //                new GuiButton
-            //                {
-            //                    Position = new Vector2(100, 10),
-            //                    Size = new SizeF(80, 25),
-            //                    BackgroundRegion = bluePanel,
-            //                    BackgroundColor = Color.DarkBlue,
-            //                    Text = "Button",
-            //                    HoverStyle = new GuiControlStyle(typeof(GuiButton))
-            //                    {
-            //                        Setters =
-            //                        {
-            //                            { "BackgroundColor", Color.White }
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //};
+            var buttonRegion = textureAtlas["buttonLong_grey"];
+            var buttonRegionPressed = textureAtlas["buttonLong_grey_pressed"];
 
-            //_guiRenderer = new GuiSpriteBatchRenderer(screen, font);
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _guiManager = new GuiManager(viewportAdapter, renderer);
+
+            var screen = new GuiScreen
+            {
+                Controls =
+                {
+                    new GuiButton(buttonRegion)
+                    {
+                        Name = "MyButton",
+                        Position = new Vector2(400, 240),
+                        Text = "Hello World",
+                        TextOffset = new Vector2(0, -2),
+                        Color = Color.DarkRed,
+                        PressedStyle = new GuiControlStyle(typeof(GuiButton))
+                        {
+                            Setters =
+                            {
+                                { nameof(GuiButton.TextureRegion), buttonRegionPressed },
+                                { nameof(GuiButton.TextOffset), new Vector2(0, 2) }
+                            }
+                        },
+                        HoverStyle = new GuiControlStyle(typeof(GuiButton))
+                        {
+                            Setters =
+                            {
+                                { nameof(GuiButton.Color), Color.Red }
+                            }
+                        }
+
+                    }
+                }
+            };
+
+            _guiManager.Screen = screen;
         }
 
         protected override void UnloadContent()
@@ -87,19 +79,19 @@ namespace Demo.Gui
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
+            _guiManager.Update(gameTime);
+
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
-
             base.Draw(gameTime);
 
-            _spriteBatch.Begin(samplerState: SamplerState.PointWrap, blendState: BlendState.AlphaBlend);
-            //_guiRenderer.Draw(_spriteBatch);
-            _spriteBatch.DrawString(_font, "Work in progress", Vector2.Zero, Color.White);
-            _spriteBatch.End();
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            _guiManager.Draw(gameTime);
+
         }
     }
 }

@@ -41,8 +41,10 @@ namespace MonoGame.Extended.Gui.Controls
         public SizeF Size { get; set; }
         public Color Color { get; set; }
         public TextureRegion2D TextureRegion { get; set; }
+
         public string Text { get; set; }
         public Color TextColor { get; set; }
+        public Vector2 TextOffset { get; set; }
 
         public GuiControlCollection Children { get; }
 

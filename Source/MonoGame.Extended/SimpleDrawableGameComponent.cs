@@ -21,7 +21,7 @@ namespace MonoGame.Extended
                     return;
 
                 _isVisible = value;
-                DrawOrderChanged?.Invoke(this, EventArgs.Empty);
+                VisibleChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 

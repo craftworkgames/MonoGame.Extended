@@ -5,8 +5,8 @@ namespace MonoGame.Extended.TextureAtlases
 {
     public class NinePatchRegion2D : TextureRegion2D
     {
-        public NinePatchRegion2D(Texture2D texture, Rectangle outterRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
-            : this(new TextureRegion2D(texture, outterRegion), leftPadding, topPadding, rightPadding, bottomPadding)
+        public NinePatchRegion2D(Texture2D texture, Rectangle region, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
+            : this(new TextureRegion2D(texture, region), leftPadding, topPadding, rightPadding, bottomPadding)
         {
         }
 
