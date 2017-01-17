@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{395CBDA7-100B-4B27-8211-F8F90C61B06B}</ProjectGuid>
+    <ProjectGuid>{90B096CB-61A5-485F-BA3E-2530166E5E72}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MonoGame.Extended.Content.Pipeline.Tiled.Tests</RootNamespace>
-    <AssemblyName>MonoGame.Extended.Content.Pipeline.Tiled.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>MonoGame.Extended.Content.Pipeline.Tests.Tiled</RootNamespace>
+    <AssemblyName>MonoGame.Extended.Content.Pipeline.Tests.Tiled</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

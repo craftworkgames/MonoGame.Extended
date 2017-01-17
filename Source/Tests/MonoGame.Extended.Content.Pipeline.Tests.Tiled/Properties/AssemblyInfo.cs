@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MonoGame.Extended.Content.Pipeline.Tiled.Tests")]
+[assembly: AssemblyTitle("MonoGame.Extended.Content.Pipeline.Tests.Tiled")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MonoGame.Extended.Content.Pipeline.Tiled.Tests")]
+[assembly: AssemblyProduct("MonoGame.Extended.Content.Pipeline.Tests.Tiled")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("395cbda7-100b-4b27-8211-f8f90c61b06b")]
+[assembly: Guid("90b096cb-61a5-485f-ba3e-2530166e5e72")]
 
 // Version information for an assembly consists of the following four values:
 //
