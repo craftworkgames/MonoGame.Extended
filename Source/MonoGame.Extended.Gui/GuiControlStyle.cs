@@ -17,7 +17,7 @@ namespace MonoGame.Extended.Gui
         }
 
         public Type TargetType { get; }
-        public Dictionary<string, object> Setters { get; set; }
+        public Dictionary<string, object> Setters { get; }
         
         public void ApplyIf(GuiControl control, bool predicate)
         {

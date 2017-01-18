@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.Content.Pipeline.TextureAtlases;
 using NSubstitute;
