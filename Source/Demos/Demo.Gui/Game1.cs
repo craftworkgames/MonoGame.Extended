@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
@@ -12,6 +13,7 @@ namespace Demo.Gui
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
+        private Camera2D _camera;
         private GuiManager _guiManager;
 
         public Game1()
@@ -28,6 +30,8 @@ namespace Demo.Gui
             var textureAtlas = Content.Load<TextureAtlas>("adventure-gui-atlas");
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             var renderer = new GuiSpriteBatchRenderer(GraphicsDevice, font);
+
+            _camera = new Camera2D(viewportAdapter);
 
             var buttonRegion = textureAtlas["buttonLong_grey"];
             var buttonRegionPressed = textureAtlas["buttonLong_grey_pressed"];

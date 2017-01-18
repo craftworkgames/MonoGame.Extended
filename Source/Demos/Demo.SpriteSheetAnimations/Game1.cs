@@ -166,7 +166,7 @@ namespace Demo.SpriteSheetAnimations
 
             foreach (var layer in _mapRenderer.Map.Layers)
             {
-                _mapRenderer.DrawLayer(layer);
+                _mapRenderer.Draw(layer);
             }
 
             _mapRenderer.End();

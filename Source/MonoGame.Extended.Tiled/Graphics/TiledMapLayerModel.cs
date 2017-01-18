@@ -20,22 +20,22 @@ namespace MonoGame.Extended.Tiled.Graphics
 
         internal VertexPositionTexture[] Vertices;
 
-        internal TiledMapLayerModel(ContentReader input, bool isDynamicData = false)
+        internal TiledMapLayerModel(ContentReader reader, bool isDynamicData = false)
         {
-            var graphicsDevice = input.GetGraphicsDevice();
+            var graphicsDevice = reader.GetGraphicsDevice();
 
-            LayerName = input.ReadString();
-            var textureAssetName = input.ReadString();
-            Texture = input.ContentManager.Load<Texture2D>(textureAssetName);
+            LayerName = reader.ReadString();
+            var textureAssetName = reader.ReadString();
+            Texture = reader.ContentManager.Load<Texture2D>(textureAssetName);
 
-            var vertexCount = input.ReadInt32();
+            var vertexCount = reader.ReadInt32();
             var vertices = new VertexPositionTexture[vertexCount];
             for (var i = 0; i < vertexCount; i++)
             {
-                var x = input.ReadSingle();
-                var y = input.ReadSingle();
-                var textureCoordinateX = input.ReadSingle();
-                var textureCoordinateY = input.ReadSingle();
+                var x = reader.ReadSingle();
+                var y = reader.ReadSingle();
+                var textureCoordinateX = reader.ReadSingle();
+                var textureCoordinateY = reader.ReadSingle();
                 vertices[i] = new VertexPositionTexture(new Vector3(x, y, 0), new Vector2(textureCoordinateX, textureCoordinateY));
             }
 
@@ -47,11 +47,11 @@ namespace MonoGame.Extended.Tiled.Graphics
                 : new VertexBuffer(graphicsDevice, VertexPositionTexture.VertexDeclaration, vertexCount, BufferUsage.WriteOnly);
             VertexBuffer.SetData(vertices, 0, vertexCount);
 
-            var indexCount = input.ReadInt32();
+            var indexCount = reader.ReadInt32();
             var indices = new ushort[indexCount];
             for (var i = 0; i < indexCount; i++)
             {
-                indices[i] = input.ReadUInt16();
+                indices[i] = reader.ReadUInt16();
             }
 
             IndexBuffer = isDynamicData

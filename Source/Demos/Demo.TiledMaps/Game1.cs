@@ -73,7 +73,6 @@ namespace Demo.TiledMaps
                 new Queue<string>(new[] {"level01", "level02", "level03", "level04", "level05", "level06", "level07"});
 
             _tiledMap = LoadNextMap();
-            _mapRenderer.Map = _tiledMap;
             _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
         }
 
@@ -95,7 +94,7 @@ namespace Demo.TiledMaps
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
 
-            _mapRenderer.Update(gameTime);
+            _mapRenderer.Update(_tiledMap, gameTime);
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
@@ -135,7 +134,6 @@ namespace Demo.TiledMaps
             if (_previousKeyboardState.IsKeyDown(Keys.Tab) && keyboardState.IsKeyUp(Keys.Tab))
             {
                 _tiledMap = LoadNextMap();
-                _mapRenderer.Map = _tiledMap;
                 LookAtMapCenter();
             }
 
@@ -183,16 +181,24 @@ namespace Demo.TiledMaps
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             var viewMatrix = _camera.GetViewMatrix();
-            var projectionMatrix = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width,
-                GraphicsDevice.Viewport.Height, 0, 0f, -1f);
+            var projectionMatrix = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0, 0f, -1f);
 
             _mapRenderer.Begin(ref viewMatrix, ref projectionMatrix);
 
-            foreach (var layer in _mapRenderer.Map.Layers)
-                _mapRenderer.DrawLayer(layer);
+            foreach (var layer in _tiledMap.Layers)
+                _mapRenderer.Draw(layer);
 
             _mapRenderer.End();
 
+            DrawText();
+
+            _fpsCounter.Draw(gameTime);
+
+            base.Draw(gameTime);
+        }
+
+        private void DrawText()
+        {
             var textColor = Color.Black;
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
 
@@ -201,12 +207,17 @@ namespace Demo.TiledMaps
 
             // textPosition = base position (point) + offset (vector2)
             textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 0);
-            _spriteBatch.DrawString(_bitmapFont, $"Map: {_tiledMap.Name}; {_tiledMap.TileLayers.Count} tile layer(s) @ {_tiledMap.Width}x{_tiledMap.Height} tiles, {_tiledMap.ImageLayers.Count} image layer(s)", textPosition, textColor);
+            _spriteBatch.DrawString(_bitmapFont,
+                $"Map: {_tiledMap.Name}; {_tiledMap.TileLayers.Count} tile layer(s) @ {_tiledMap.Width}x{_tiledMap.Height} tiles, {_tiledMap.ImageLayers.Count} image layer(s)",
+                textPosition, textColor);
             textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 1);
             // we can safely get the metrics without worrying about spritebatch interfering because spritebatch submits on End()
-            _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.FramesPerSecond:0}, Draw Calls: {GraphicsDevice.Metrics.DrawCount}, Texture Count: {GraphicsDevice.Metrics.TextureCount}, Triangle Count: {GraphicsDevice.Metrics.PrimitiveCount}", textPosition, textColor);
+            _spriteBatch.DrawString(_bitmapFont,
+                $"FPS: {_fpsCounter.FramesPerSecond:0}, Draw Calls: {GraphicsDevice.Metrics.DrawCount}, Texture Count: {GraphicsDevice.Metrics.TextureCount}, Triangle Count: {GraphicsDevice.Metrics.PrimitiveCount}",
+                textPosition, textColor);
             textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 2);
-            _spriteBatch.DrawString(_bitmapFont, $"Camera Position: (x={_camera.Position.X}, y={_camera.Position.Y})", textPosition, textColor);
+            _spriteBatch.DrawString(_bitmapFont, $"Camera Position: (x={_camera.Position.X}, y={_camera.Position.Y})",
+                textPosition, textColor);
 
             if (!_showHelp)
             {
@@ -233,10 +244,6 @@ namespace Demo.TiledMaps
             }
 
             _spriteBatch.End();
-
-            _fpsCounter.Draw(gameTime);
-
-            base.Draw(gameTime);
         }
     }
 }

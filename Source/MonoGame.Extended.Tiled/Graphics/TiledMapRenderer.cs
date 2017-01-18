@@ -12,25 +12,18 @@ namespace MonoGame.Extended.Tiled.Graphics
 {
     public class TiledMapRenderer : Renderer
     {
-        private readonly BasicEffect _basicEffect;
-
-        private TiledMap _map;
-        private SamplerState _samplerState;
-
-        private Matrix _modelToWorldTransformMatrix = Matrix.Identity;
-
-        public TiledMap Map
+        public TiledMapRenderer(GraphicsDevice graphicsDevice)
+            : base(graphicsDevice, new BasicEffect(graphicsDevice))
         {
-            get { return _map; }
-            set
-            {
-                if (_map == value)
-                    return;
-                var oldMap = _map;
-                _map = value;
-                OnMapChanged(oldMap, value);
-            }
+            _basicEffect = (BasicEffect)Effect;
+            _basicEffect.TextureEnabled = true;
+
+            SamplerState = SamplerState.PointClamp;
         }
+
+        private readonly BasicEffect _basicEffect;
+        private SamplerState _samplerState;
+        private Matrix _modelToWorldTransformMatrix = Matrix.Identity;
 
         /// <summary>
         ///     Gets or sets the <see cref="Microsoft.Xna.Framework.Graphics.SamplerState" /> associated with this
@@ -53,19 +46,6 @@ namespace MonoGame.Extended.Tiled.Graphics
             }
         }
 
-        public TiledMapRenderer(GraphicsDevice graphicsDevice)
-            : base(graphicsDevice, new BasicEffect(graphicsDevice))
-        {
-            _basicEffect = (BasicEffect)Effect;
-            _basicEffect.TextureEnabled = true;
-
-            SamplerState = SamplerState.PointClamp;
-        }
-
-        protected virtual void OnMapChanged(TiledMap oldMap, TiledMap newMap)
-        {
-        }
-
         protected override void ApplyStates()
         {
             base.ApplyStates();
@@ -76,17 +56,25 @@ namespace MonoGame.Extended.Tiled.Graphics
             _basicEffect.Projection = Projection;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(TiledMap map, GameTime gameTime)
         {
-            foreach (var tileset in _map.Tilesets)
+            foreach (var tileset in map.Tilesets)
+            {
                 foreach (var animatedTilesetTile in tileset.AnimatedTiles)
                     animatedTilesetTile.Update(gameTime);
+            }
 
-            foreach (var layer in _map.TileLayers)
-                UpdateAnimatedModels(gameTime, layer.AnimatedModels);
+            foreach (var layer in map.TileLayers)
+                UpdateAnimatedModels(layer.AnimatedModels);
         }
 
-        public void DrawLayer(TiledMapLayer layer, float depth = 0.0f)
+        public void Draw(TiledMap map)
+        {
+            foreach (var layer in map.Layers)
+                Draw(layer);
+        } 
+
+        public void Draw(TiledMapLayer layer, float depth = 0.0f)
         {
             if (!layer.IsVisible)
                 return;
@@ -121,8 +109,7 @@ namespace MonoGame.Extended.Tiled.Graphics
             }
         }
 
-        private static unsafe void UpdateAnimatedModels(GameTime gameTime,
-            IEnumerable<TiledMapLayerAnimatedModel> animatedModels)
+        private static unsafe void UpdateAnimatedModels(IEnumerable<TiledMapLayerAnimatedModel> animatedModels)
         {
             foreach (var animatedModel in animatedModels)
             {

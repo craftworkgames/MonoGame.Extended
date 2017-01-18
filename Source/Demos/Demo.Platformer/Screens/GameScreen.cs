@@ -94,7 +94,7 @@ namespace Demo.Platformer.Screens
 
             foreach (var layer in _mapRenderer.Map.Layers)
             {
-                _mapRenderer.DrawLayer(layer);
+                _mapRenderer.Draw(layer);
             }
 
             _mapRenderer.End();
