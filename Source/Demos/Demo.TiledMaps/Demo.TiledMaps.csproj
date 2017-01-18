@@ -60,28 +60,29 @@
     <Content Include="Content\alphacolortile.png" />
     <Content Include="Content\isometric-tiles.png" />
     <Content Include="Content\L05TS1.png" />
-    <Content Include="Content\L05TS2.png" />
-    <Content Include="Content\L05TS3.png" />
     <Content Include="Icon.ico" />
-    <Content Include="Content\placeholder-tileset.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Content\free-tileset.json" />
-    <None Include="Content\level01.tmx" />
-    <None Include="Content\level02.tmx" />
+    <None Include="Content\level01.tmx">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Content\level02.tmx">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Content\level03.tmx" />
     <None Include="Content\level04.tmx" />
     <None Include="Content\level05.tmx" />
+    <None Include="Content\level06.tmx" />
+    <None Include="Content\level07.tmx" />
     <None Include="Content\montserrat-32.fnt" />
-    <None Include="Content\very-large.tmx" />
     <None Include="Content\free-tileset.png" />
     <None Include="Content\hills.png" />
     <None Include="Content\monogame-extended-logo.png" />
     <None Include="Content\montserrat-32_0.png" />
     <None Include="Content\rpg_maker_vx_rtp_tileset_by_telles0808.png" />
     <None Include="packages.config" />
-    <None Include="Content\placeholder-level-0.tmx" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
@@ -92,6 +93,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj">
+      <Project>{9b3ab8a1-78aa-471a-afd0-b10b932115bc}</Project>
+      <Name>MonoGame.Extended.Graphics</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj">
       <Project>{07b2ade2-73e3-41c4-aea1-d5566a5ab902}</Project>
       <Name>MonoGame.Extended.Tiled</Name>

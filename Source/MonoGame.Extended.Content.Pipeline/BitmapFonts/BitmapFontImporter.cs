@@ -1,10 +1,15 @@
+#region
+
 using System.IO;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
 
+#endregion
+
 namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
-    [ContentImporter(".fnt", DefaultProcessor = "BitmapFontProcessor", DisplayName = "BMFont Importer - MonoGame.Extended")]
+    [ContentImporter(".fnt", DefaultProcessor = "BitmapFontProcessor",
+         DisplayName = "BMFont Importer - MonoGame.Extended")]
     public class BitmapFontImporter : ContentImporter<BitmapFontFile>
     {
         public override BitmapFontFile Import(string filename, ContentImporterContext context)

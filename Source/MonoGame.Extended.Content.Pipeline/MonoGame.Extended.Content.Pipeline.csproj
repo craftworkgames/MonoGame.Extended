@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,6 +45,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,6 +68,7 @@
     <Compile Include="BitmapFonts\BitmapFontKerning.cs" />
     <Compile Include="BitmapFonts\BitmapFontPage.cs" />
     <Compile Include="BitmapFonts\BitmapFontProcessorResult.cs" />
+    <Compile Include="ContentLogger.cs" />
     <Compile Include="ContentWriterExtensions.cs" />
     <Compile Include="PathExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,36 +85,8 @@
     <Compile Include="TextureAtlases\TexturePackerRectangle.cs" />
     <Compile Include="TextureAtlases\TexturePackerSize.cs" />
     <Compile Include="TextureAtlases\TexturePackerWriter.cs" />
-    <Compile Include="Tiled\TmxDataTile.cs" />
-    <Compile Include="Tiled\TiledMapImporter.cs" />
-    <Compile Include="Tiled\TiledMapProcessor.cs" />
-    <Compile Include="Tiled\TiledMapProcessorResult.cs" />
-    <Compile Include="Tiled\TiledMapWriter.cs" />
-    <Compile Include="Tiled\TmxData.cs" />
-    <Compile Include="Tiled\TmxEllipse.cs" />
-    <Compile Include="Tiled\TmxFrame.cs" />
-    <Compile Include="Tiled\TmxImage.cs" />
-    <Compile Include="Tiled\TmxImageLayer.cs" />
-    <Compile Include="Tiled\TmxLayer.cs" />
-    <Compile Include="Tiled\TmxPolygon.cs" />
-    <Compile Include="Tiled\TmxPolyline.cs" />
-    <Compile Include="Tiled\TmxTileLayer.cs" />
-    <Compile Include="Tiled\TmxMap.cs" />
-    <Compile Include="Tiled\TmxObject.cs" />
-    <Compile Include="Tiled\TmxObjectLayer.cs" />
-    <Compile Include="Tiled\TmxOrientation.cs" />
-    <Compile Include="Tiled\TmxProperty.cs" />
-    <Compile Include="Tiled\TmxRenderOrder.cs" />
-    <Compile Include="Tiled\TmxTerrain.cs" />
-    <Compile Include="Tiled\TmxTile.cs" />
-    <Compile Include="Tiled\TmxTileOffset.cs" />
-    <Compile Include="Tiled\TmxTileset.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj">
-      <Project>{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}</Project>
-      <Name>MonoGame.Extended.Tiled</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
       <Name>MonoGame.Extended</Name>

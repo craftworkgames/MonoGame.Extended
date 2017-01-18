@@ -11,6 +11,7 @@
 #-------------------------------- References --------------------------------#
 
 /reference:../../../MonoGame.Extended.Content.Pipeline/bin/MonoGame.Extended.Content.Pipeline.dll
+/reference:../../../MonoGame.Extended.Content.Pipeline.Tiled/bin/MonoGame.Extended.Content.Pipeline.Tiled.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -60,69 +61,10 @@
 /processorParam:TextureFormat=Color
 /build:Tilesets/free-tileset.png
 
-#begin Tilesets/isometric.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Tilesets/isometric.tmx
-
-#begin Tilesets/isometric_tileset.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Tilesets/isometric_tileset.png
-
 #begin Tilesets/level01.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Tilesets/level01.tmx
-
-#begin Tilesets/test-tileset-atlas.json
-/importer:TexturePackerJsonImporter
-/processor:TexturePackerProcessor
-/build:Tilesets/test-tileset-atlas.json
-
-#begin Tilesets/test-tileset-left-down.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Tilesets/test-tileset-left-down.tmx
-
-#begin Tilesets/test-tileset-left-up.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Tilesets/test-tileset-left-up.tmx
-
-#begin Tilesets/test-tileset-map1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Tilesets/test-tileset-map1.tmx
-
-#begin Tilesets/test-tileset-right-down.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Tilesets/test-tileset-right-down.tmx
-
-#begin Tilesets/test-tileset-right-up.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Tilesets/test-tileset-right-up.tmx
-
-#begin Tilesets/test-tileset.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Tilesets/test-tileset.png
 
 #begin Sprites/fireball.png
 /importer:TextureImporter

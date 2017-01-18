@@ -1,10 +1,15 @@
-﻿using System.IO;
+﻿#region
+
+using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Newtonsoft.Json;
 
+#endregion
+
 namespace MonoGame.Extended.Content.Pipeline.Animations
 {
-    [ContentImporter(".aa", DefaultProcessor = "AstridAnimatorProcessor", DisplayName = "Astrid Animator Importer - MonoGame.Extended")]
+    [ContentImporter(".aa", DefaultProcessor = "AstridAnimatorProcessor",
+         DisplayName = "Astrid Animator Importer - MonoGame.Extended")]
     public class AstridAnimatorImporter : ContentImporter<ContentImporterResult<AstridAnimatorFile>>
     {
         public override ContentImporterResult<AstridAnimatorFile> Import(string filename, ContentImporterContext context)

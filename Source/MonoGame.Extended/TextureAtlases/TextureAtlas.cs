@@ -1,8 +1,12 @@
+#region
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+#endregion
 
 namespace MonoGame.Extended.TextureAtlases
 {
@@ -30,6 +34,25 @@ namespace MonoGame.Extended.TextureAtlases
         private readonly List<TextureRegion2D> _regions;
 
         /// <summary>
+        ///     Gets a source <see cref="Texture2D" /> image.
+        /// </summary>
+        public Texture2D Texture { get; }
+
+        /// <summary>
+        ///     Gets a list of regions in the <see cref="TextureAtlas" />.
+        /// </summary>
+        public IEnumerable<TextureRegion2D> Regions => _regions;
+
+        /// <summary>
+        ///     Gets the number of regions in the <see cref="TextureAtlas" />.
+        /// </summary>
+        public int RegionCount => _regions.Count;
+
+        public TextureRegion2D this[string name] => GetRegion(name);
+
+        public TextureRegion2D this[int index] => GetRegion(index);
+
+        /// <summary>
         ///     Initializes a new texture atlas with an empty list of regions.
         /// </summary>
         /// <param name="texture">Source <see cref="Texture2D " /> image used to draw on screen.</param>
@@ -51,25 +74,6 @@ namespace MonoGame.Extended.TextureAtlases
             foreach (var region in regions)
                 CreateRegion(region.Key, region.Value.X, region.Value.Y, region.Value.Width, region.Value.Height);
         }
-
-        /// <summary>
-        ///     Gets a source <see cref="Texture2D" /> image.
-        /// </summary>
-        public Texture2D Texture { get; }
-
-        /// <summary>
-        ///     Gets a list of regions in the <see cref="TextureAtlas" />.
-        /// </summary>
-        public IEnumerable<TextureRegion2D> Regions => _regions;
-
-        /// <summary>
-        ///     Gets the number of regions in the <see cref="TextureAtlas" />.
-        /// </summary>
-        public int RegionCount => _regions.Count;
-
-        public TextureRegion2D this[string name] => GetRegion(name);
-
-        public TextureRegion2D this[int index] => GetRegion(index);
 
         /// <summary>
         ///     Gets the enumerator of the <see cref="TextureAtlas" />' list of regions.

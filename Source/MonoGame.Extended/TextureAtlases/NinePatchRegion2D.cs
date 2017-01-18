@@ -1,16 +1,28 @@
+#region
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+#endregion
 
 namespace MonoGame.Extended.TextureAtlases
 {
     public class NinePatchRegion2D : TextureRegion2D
     {
-        public NinePatchRegion2D(Texture2D texture, Rectangle region, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
-            : this(new TextureRegion2D(texture, region), leftPadding, topPadding, rightPadding, bottomPadding)
+        public Rectangle[] SourcePatches { get; }
+        public int LeftPadding { get; }
+        public int TopPadding { get; }
+        public int RightPadding { get; }
+        public int BottomPadding { get; }
+
+        public NinePatchRegion2D(Texture2D texture, Rectangle outterRegion, int leftPadding, int topPadding,
+            int rightPadding, int bottomPadding)
+            : this(new TextureRegion2D(texture, outterRegion), leftPadding, topPadding, rightPadding, bottomPadding)
         {
         }
 
-        public NinePatchRegion2D(TextureRegion2D textureRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
+        public NinePatchRegion2D(TextureRegion2D textureRegion, int leftPadding, int topPadding, int rightPadding,
+            int bottomPadding)
             : base(textureRegion.Texture, textureRegion.X, textureRegion.Y, textureRegion.Width, textureRegion.Height)
         {
             LeftPadding = leftPadding;
@@ -20,12 +32,6 @@ namespace MonoGame.Extended.TextureAtlases
 
             SourcePatches = CreatePatches(textureRegion.Bounds);
         }
-
-        public Rectangle[] SourcePatches { get; }
-        public int LeftPadding { get; }
-        public int TopPadding { get; }
-        public int RightPadding { get; }
-        public int BottomPadding { get; }
 
         public Rectangle[] CreatePatches(Rectangle rectangle)
         {

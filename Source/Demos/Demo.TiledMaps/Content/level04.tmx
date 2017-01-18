@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" nextobjectid="1">
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" nextobjectidentifier="1">
  <tileset firstgid="1" name="rpg_maker_tiles" tilewidth="32" tileheight="32" tilecount="2016" columns="32">
   <image source="rpg_maker_vx_rtp_tileset_by_telles0808.png" width="1024" height="2016"/>
-  <tile id="577" probability="0"/>
+  <tile identifier="577" probability="0"/>
  </tileset>
  <tileset firstgid="2017" name="alphacolortile" tilewidth="128" tileheight="128" tilecount="1" columns="1">
   <image source="alphacolortile.png" trans="ff0000" width="128" height="128"/>

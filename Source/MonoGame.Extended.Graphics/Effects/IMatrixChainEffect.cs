@@ -7,32 +7,8 @@ namespace MonoGame.Extended.Graphics.Effects
     ///     Defines an <see cref="Effect" /> that uses the standard chain of matrix transformations to represent a 3D object on
     ///     a 2D monitor.
     /// </summary>
-    public interface IMatrixChainEffect
+    public interface IMatrixChainEffect : IEffectMatrices
     {
-        /// <summary>
-        ///     Gets or sets the model-to-world <see cref="Matrix" />.
-        /// </summary>
-        /// <value>
-        ///     The model-to-world <see cref="Matrix" />.
-        /// </value>
-        Matrix World { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the world-to-view <see cref="Matrix" />.
-        /// </summary>
-        /// <value>
-        ///     The world-to-view <see cref="Matrix" />.
-        /// </value>
-        Matrix View { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the view-to-projection <see cref="Matrix" />.
-        /// </summary>
-        /// <value>
-        ///     The view-to-projection <see cref="Matrix" />.
-        /// </value>
-        Matrix Projection { get; set; }
-
         /// <summary>
         ///     Sets the model-to-world <see cref="Matrix" />.
         /// </summary>
