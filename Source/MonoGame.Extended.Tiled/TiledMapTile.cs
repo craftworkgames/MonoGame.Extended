@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using MonoGame.Extended.Graphics;
-
-namespace MonoGame.Extended.Tiled
+﻿namespace MonoGame.Extended.Tiled
 {
     public struct TiledMapTile
     {
@@ -10,17 +7,12 @@ namespace MonoGame.Extended.Tiled
         public readonly ushort X;
         public readonly ushort Y;
 
-        private const uint FlippedHorizontallyFlag = 0x80000000;
-        private const uint FlippedVerticallyFlag = 0x40000000;
-        private const uint FlippedDiagonallyFlag = 0x20000000;
-        private const uint AllFlippedFlags = FlippedHorizontallyFlag | FlippedVerticallyFlag | FlippedDiagonallyFlag;
-
-        public int GlobalIdentifier => (int)(GlobalTileIdentifierWithFlags & ~AllFlippedFlags);
-        public bool IsFlippedHorizontally => (GlobalTileIdentifierWithFlags & FlippedHorizontallyFlag) != 0;
-        public bool IsFlippedVertically => (GlobalTileIdentifierWithFlags & FlippedVerticallyFlag) != 0;
-        public bool IsFlippedDiagonally => (GlobalTileIdentifierWithFlags & FlippedDiagonallyFlag) != 0;
+        public int GlobalIdentifier => (int)(GlobalTileIdentifierWithFlags & ~(uint)TiledMapTileFlipFlags.All);
+        public bool IsFlippedHorizontally => (GlobalTileIdentifierWithFlags & (uint)TiledMapTileFlipFlags.FlipHorizontally) != 0;
+        public bool IsFlippedVertically => (GlobalTileIdentifierWithFlags & (uint)TiledMapTileFlipFlags.FlipVertically) != 0;
+        public bool IsFlippedDiagonally => (GlobalTileIdentifierWithFlags & (uint)TiledMapTileFlipFlags.FlipDiagonally) != 0;
         public bool IsBlank => GlobalIdentifier == 0;
-        public FlipFlags Flags => (FlipFlags)((GlobalTileIdentifierWithFlags & AllFlippedFlags) >> 29);
+        public TiledMapTileFlipFlags Flags => (TiledMapTileFlipFlags)(GlobalTileIdentifierWithFlags & (uint)TiledMapTileFlipFlags.All);
 
         internal TiledMapTile(uint globalTileIdentifierWithFlags, ushort x, ushort y)
         {

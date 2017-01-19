@@ -56,7 +56,6 @@
     <Compile Include="Geometry\GraphicsGeometryBuilder.cs" />
     <Compile Include="Geometry\GraphicsGeometryBuffer.cs" />
     <Compile Include="Geometry\SpriteBuilderPositionColorTextureU16.cs" />
-    <Compile Include="Effects\IMatrixChainEffect.cs" />
     <Compile Include="PrimitiveTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueRenderer.cs" />

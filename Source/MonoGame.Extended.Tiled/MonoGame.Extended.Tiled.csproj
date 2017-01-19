@@ -66,6 +66,7 @@
     <Compile Include="TiledMapRectangleObject.cs" />
     <Compile Include="TiledMapTileDrawOrder.cs" />
     <Compile Include="TiledMapTile.cs" />
+    <Compile Include="TiledMapTileFlipFlags.cs" />
     <Compile Include="TiledMapTileLayer.cs" />
     <Compile Include="TiledMapTileset.cs" />
     <Compile Include="TiledMapTilesetAnimatedTile.cs" />
