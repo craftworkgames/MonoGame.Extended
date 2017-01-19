@@ -10,9 +10,7 @@
     <!-- The description can be used in package manager UI. Note that the
          nuget.org gallery uses information you add in the portal. -->
     <description>
-      Makes MonoGame more awesome.
-      Tile based maps, Bitmap Fonts, Sprites and SpriteBatch extensions,
-      Input Listeners, Texture Atlases, 2D Camera, Viewport Adapters.
+      Makes MonoGame more awesome: Support for Tiled maps. See http://www.mapeditor.org
     </description>
     <!-- Authors contain text that appears directly on the gallery -->
     <authors>Dylan Wilson</authors>
@@ -34,7 +32,7 @@
     <!-- Copyright information -->
     <copyright>Copyright 2017 - Craftwork Games</copyright>
     <!-- Tags appear in the gallery and can be used for tag searches -->
-    <tags>monogame extended pipeline bmfont tiled texture atlas input event sprite</tags>
+    <tags>monogame extended pipeline tiled</tags>
     <references>
       <group>
         <reference file="MonoGame.Extended.Tiled.dll" />
