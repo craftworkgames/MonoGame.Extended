@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,28 +18,22 @@ namespace MonoGame.Extended.Content
             return (GraphicsDevice)ContentReaderGraphicsDeviceFieldInfo.GetValue(contentReader);
         }
 
-        public static string GetRelativeAssetPath(this ContentReader contentReader, string relativePath)
+        public static string GetRelativeAssetName(this ContentReader contentReader, string relativeName)
         {
-            var assetName = contentReader.AssetName;
-            var assetNodes = assetName.Split(new[] {'/', '\\'}, StringSplitOptions.RemoveEmptyEntries);
-            var relativeNodes = relativePath.Split(new[] {'/', '\\'}, StringSplitOptions.RemoveEmptyEntries);
-            var relativeIndex = assetNodes.Length - 1;
-            var newPathNodes = new List<string>();
+            var assetDirectory = Path.GetDirectoryName(contentReader.AssetName);
+            var assetName = Path.Combine(assetDirectory, relativeName).Replace('\\', '/');
 
-            foreach (var relativeNode in relativeNodes)
+            var ellipseIndex = assetName.IndexOf("/../", StringComparison.Ordinal);
+            while (ellipseIndex != -1)
             {
-                if (relativeNode == "..")
-                    relativeIndex--;
-                else
-                    newPathNodes.Add(relativeNode);
+                var lastDirectoryIndex = assetName.LastIndexOf('/', ellipseIndex - 1);
+                if (lastDirectoryIndex == -1)
+                    lastDirectoryIndex = 0;
+                assetName = assetName.Remove(lastDirectoryIndex, ellipseIndex + 4);
+                ellipseIndex = assetName.IndexOf("/../", StringComparison.Ordinal);
             }
 
-            var values = assetNodes
-                .Take(relativeIndex)
-                .Concat(newPathNodes)
-                .ToArray();
-
-            return string.Join("/", values);
+            return assetName;
         }
 
         internal static byte[] GetScratchBuffer(this ContentReader contentReader, int size)

@@ -2,9 +2,11 @@
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Content;
 
 #endregion
 
@@ -43,7 +45,7 @@ namespace MonoGame.Extended.Tiled
         internal TiledMapTileset(ContentReader input)
             : this()
         {
-            var textureAssetName = input.ReadString();
+            var textureAssetName = input.GetRelativeAssetName(input.ReadString());
             Texture = input.ContentManager.Load<Texture2D>(textureAssetName);
             FirstGlobalIdentifier = input.ReadInt32();
             TileWidth = input.ReadInt32();

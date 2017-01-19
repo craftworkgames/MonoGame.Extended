@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using MonoGame.Extended.Primitives;
 using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests.Primitives

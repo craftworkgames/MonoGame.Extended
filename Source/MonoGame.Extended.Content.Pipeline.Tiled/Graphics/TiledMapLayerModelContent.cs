@@ -1,14 +1,11 @@
 #region
 
-using System;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics;
-using MonoGame.Extended.Primitives;
 using MonoGame.Extended.Tiled;
 
 #endregion

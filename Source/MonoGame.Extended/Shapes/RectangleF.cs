@@ -79,9 +79,9 @@ namespace MonoGame.Extended.Shapes
         /// <summary>
         ///     The width-height coordinates of this <see cref="RectangleF" />.
         /// </summary>
-        public SizeF Size
+        public Size2 Size
         {
-            get { return new SizeF(Width, Height); }
+            get { return new Size2(Width, Height); }
             set
             {
                 Width = value.Width;
@@ -118,7 +118,7 @@ namespace MonoGame.Extended.Shapes
         /// </summary>
         /// <param name="location">The x and y coordinates of the top-left corner of the created <see cref="RectangleF" />.</param>
         /// <param name="size">The width and height of the created <see cref="RectangleF" />.</param>
-        public RectangleF(Vector2 location, SizeF size)
+        public RectangleF(Vector2 location, Size2 size)
         {
             X = location.X;
             Y = location.Y;

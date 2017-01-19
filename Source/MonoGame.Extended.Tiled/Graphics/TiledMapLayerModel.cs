@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Tiled.Graphics
             var graphicsDevice = reader.GetGraphicsDevice();
 
             LayerName = reader.ReadString();
-            var textureAssetName = reader.ReadString();
+            var textureAssetName = reader.GetRelativeAssetName(reader.ReadString());
             Texture = reader.ContentManager.Load<Texture2D>(textureAssetName);
 
             var vertexCount = reader.ReadInt32();

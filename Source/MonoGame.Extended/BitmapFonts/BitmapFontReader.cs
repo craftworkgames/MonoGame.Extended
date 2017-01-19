@@ -21,7 +21,7 @@ namespace MonoGame.Extended.BitmapFonts
             }
 
             var textures = assets
-                .Select(textureName => reader.ContentManager.Load<Texture2D>(reader.GetRelativeAssetPath(textureName)))
+                .Select(textureName => reader.ContentManager.Load<Texture2D>(reader.GetRelativeAssetName(textureName)))
                 .ToArray();
 
             var lineHeight = reader.ReadInt32();

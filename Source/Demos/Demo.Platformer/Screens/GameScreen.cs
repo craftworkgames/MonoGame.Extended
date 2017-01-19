@@ -89,14 +89,26 @@ namespace Demo.Platformer.Screens
 
             _mapRenderer.Begin(ref viewMatrix, ref projectionMatrix);
 
-            foreach (var layer in _map.Layers)
-            {
-                _mapRenderer.Draw(layer);
-            }
+            // painter's algorithm; just draw things in the expected order
 
-            _mapRenderer.End();
+            var backgroundLayer = _map.GetLayer("background");
+            _mapRenderer.Draw(backgroundLayer);
+
+            var solidsLayer = _map.GetLayer("solids");
+            _mapRenderer.Draw(solidsLayer);
+
+            var decorationsLayer = _map.GetLayer("decorations");
+            _mapRenderer.Draw(decorationsLayer);
 
             _entityComponentSystem.Draw(gameTime);
+
+            var decorations2Layer = _map.GetLayer("decorations2");
+            _mapRenderer.Draw(decorations2Layer);
+
+            var deadliesLayer = _map.GetLayer("deadlies");
+            _mapRenderer.Draw(deadliesLayer);
+
+            _mapRenderer.End();
         }
     }
 }

@@ -54,19 +54,14 @@ namespace MonoGame.Extended
             return new Vector2(size.Width, size.Height);
         }
 
-        public static implicit operator SizeF(Size size)
+        public static Size2 operator /(Size size, float value)
         {
-            return new SizeF(size.Width, size.Height);
+            return new Size2(size.Width / value, size.Height / value);
         }
 
-        public static SizeF operator /(Size size, float value)
+        public static Size2 operator *(Size size, float value)
         {
-            return new SizeF(size.Width / value, size.Height / value);
-        }
-
-        public static SizeF operator *(Size size, float value)
-        {
-            return new SizeF(size.Width * value, size.Height * value);
+            return new Size2(size.Width * value, size.Height * value);
         }
 
         public static Size operator *(Size size, int value)

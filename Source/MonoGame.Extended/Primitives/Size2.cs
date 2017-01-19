@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Primitives
+namespace MonoGame.Extended
 {
     /// <summary>
     ///     A two dimensional size defined by two real numbers, a width and a height.
@@ -246,6 +246,18 @@ namespace MonoGame.Extended.Primitives
         public static implicit operator Size2(Vector2 vector)
         {
             return new Size2(vector.X, vector.Y);
+        }
+
+        /// <summary>
+        ///     Performs an implicit conversion from a <see cref="Size" /> to a <see cref="Size2" />.
+        /// </summary>
+        /// <param name="size">The size.</param>
+        /// <returns>
+        ///     The resulting <see cref="Size2" />.
+        /// </returns>
+        public static implicit operator Size2(Size size)
+        {
+            return new Size2(size.Width, size.Height);
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Primitives;
 using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests.Primitives
@@ -257,6 +256,26 @@ namespace MonoGame.Extended.Tests.Primitives
         public void FromVector(Vector2 vector, Size2 expectedSize)
         {
             var actualSize = (Size2)vector;
+            Assert.AreEqual(expectedSize, actualSize);
+        }
+
+        public IEnumerable<TestCaseData> FromSizeTestCases
+        {
+            get
+            {
+                yield return
+                    new TestCaseData(new Size(), new Size2()).SetName("The empty size converted to a size is the empty size.");
+                yield return
+                    new TestCaseData(new Size(int.MinValue, int.MaxValue), new Size2(int.MinValue, int.MaxValue)).SetName(
+                        "A non-zero size converted to a size is the expected size.");
+            }
+        }
+
+        [Test]
+        [TestCaseSource(nameof(FromSizeTestCases))]
+        public void FromSize(Size size, Size2 expectedSize)
+        {
+            var actualSize = (Size2)size;
             Assert.AreEqual(expectedSize, actualSize);
         }
 

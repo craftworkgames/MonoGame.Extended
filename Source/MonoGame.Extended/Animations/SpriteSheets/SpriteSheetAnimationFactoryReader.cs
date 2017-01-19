@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Animations.SpriteSheets
         protected override SpriteSheetAnimationFactory Read(ContentReader reader,
             SpriteSheetAnimationFactory existingInstance)
         {
-            var textureAtlasAssetName = reader.GetRelativeAssetPath(reader.ReadString());
+            var textureAtlasAssetName = reader.GetRelativeAssetName(reader.ReadString());
             var textureAtlas = reader.ContentManager.Load<TextureAtlas>(textureAtlasAssetName);
             var frameCount = reader.ReadInt32();
             var regions = new List<TextureRegion2D>();
