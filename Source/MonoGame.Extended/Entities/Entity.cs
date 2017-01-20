@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Entities.Systems;
+using System.Collections.ObjectModel;
 
 namespace MonoGame.Extended.Entities
 {
     public class Entity
     {
         private readonly List<EntityComponent> _components;
-        private readonly HashSet<EntitySystem> _systems;
+        private readonly List<EntitySystem> _systems;
 
         private readonly Transform2D _transform;
 
         public Entity(long id, string name)
         {
             _components = new List<EntityComponent>();
-            _systems = new HashSet<EntitySystem>();
+            _systems = new List<EntitySystem>();
 
             _transform = new Transform2D();
             _transform.Entity = this;
@@ -38,6 +38,7 @@ namespace MonoGame.Extended.Entities
         public string Name { get; }
         public object Tag { get; set; }
 
+        public IReadOnlyCollection<EntityComponent> Components => new ReadOnlyCollection<EntityComponent>(_components);
         public Transform2D Transform => _transform;
 
         public override string ToString()
@@ -56,6 +57,9 @@ namespace MonoGame.Extended.Entities
             if (component.Entity != null)
                 throw new InvalidOperationException("Component already attached to another entity");
 
+            if (_components.Contains(component))
+                throw new InvalidOperationException("Component already attached to entity");
+
             component.Entity = this;
             _components.Add(component);
         }
@@ -68,7 +72,7 @@ namespace MonoGame.Extended.Entities
             if (component is Transform2D)
                 throw new ArgumentException($"Cannot detach {typeof(Transform2D)}");
 
-            if (component.Entity != this)
+            if (component.Entity != this || !_components.Contains(component))
                 throw new InvalidOperationException("Component not attached to entity");
 
             component.Entity = null;
@@ -97,7 +101,7 @@ namespace MonoGame.Extended.Entities
 
         internal void DetachSystem(EntitySystem system)
         {
-            if (system.Entity != this)
+            if (system.Entity != this || !_systems.Contains(system))
                 throw new InvalidOperationException("System not attached to entity");
 
             _systems.Remove(system);
@@ -123,12 +127,7 @@ namespace MonoGame.Extended.Entities
 
         public T GetComponent<T>() where T : EntityComponent
         {
-            return GetComponents<T>().FirstOrDefault();
-        }
-
-        public IEnumerable<T> GetComponents<T>() where T : EntityComponent
-        {
-            return _components.OfType<T>();
+            return (T)_components.Find(e => e.GetType() == typeof(T));
         }
     }
 }
