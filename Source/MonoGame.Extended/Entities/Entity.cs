@@ -87,7 +87,7 @@ namespace MonoGame.Extended.Entities
             component.Dispose();
         }
 
-        protected EntitySystem AttachSystem(EntitySystem system)
+        public EntitySystem AttachSystem(EntitySystem system)
         {
             if (system == null)
                 throw new ArgumentNullException(nameof(system));
