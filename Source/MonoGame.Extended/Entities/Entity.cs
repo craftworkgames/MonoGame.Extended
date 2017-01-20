@@ -14,7 +14,9 @@ namespace MonoGame.Extended.Entities
 
         private readonly Transform2DComponent _transform;
 
-        public Entity(long id, string name)
+        private bool _initialized;
+
+        public Entity()
         {
             _components = new List<EntityComponent>();
             _systems = new List<EntitySystem>();
@@ -23,9 +25,6 @@ namespace MonoGame.Extended.Entities
             _transform.Entity = this;
 
             _components.Add(_transform);
-
-            Id = id;
-            Name = name;
         }
 
         public Entity Parent
@@ -34,8 +33,8 @@ namespace MonoGame.Extended.Entities
             set { _transform.Parent = value; }
         }
 
-        public long Id { get; }
-        public string Name { get; }
+        public long Id { get; set; }
+        public string Name { get; set; }
         public object Tag { get; set; }
 
         public IReadOnlyCollection<EntityComponent> Components => new ReadOnlyCollection<EntityComponent>(_components);
@@ -98,7 +97,10 @@ namespace MonoGame.Extended.Entities
             if (_systems.Contains(system))
                 throw new InvalidOperationException($"{system.GetType()} is already attached to entity");
 
-            system.Initialize(this);
+            if (_initialized)
+                system.Initialize(this);
+
+            _systems.Add(system);
             return system;
         }
 
@@ -110,17 +112,36 @@ namespace MonoGame.Extended.Entities
             _systems.Remove(system);
         }
 
+        public void Initialize()
+        {
+            if (_initialized)
+                throw new Exception("Entity already initialized");
+
+            foreach (var system in _systems)
+                system.Initialize(this);
+
+            OnInitialized();
+        }
+
+        protected virtual void OnInitialized() { }
+
         public virtual void Update(GameTime gameTime)
         {
             foreach (var system in _systems)
                 system.Update(gameTime);
+            OnUpdate(gameTime);
         }
+
+        protected virtual void OnUpdate(GameTime gameTime) { }
 
         public virtual void Draw(GameTime gameTime)
         {
             foreach (var system in _systems)
                 system.Draw(gameTime);
+            OnDraw(gameTime);
         }
+
+        protected virtual void OnDraw(GameTime gameTime) { }
 
         public void Destroy(float delaySeconds = 0f)
         {
