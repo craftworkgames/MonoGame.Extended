@@ -47,6 +47,9 @@ namespace MonoGame.Extended.Entities
 
         public void AttachComponent(EntityComponent component)
         {
+            if (component == null)
+                throw new ArgumentNullException(nameof(component));
+
             if (component is Transform2D)
                 throw new ArgumentException($"Cannot attach {typeof(Transform2D)}");
 
@@ -59,6 +62,9 @@ namespace MonoGame.Extended.Entities
 
         public void DetachComponent(EntityComponent component)
         {
+            if (component == null)
+                throw new ArgumentNullException(nameof(component));
+
             if (component is Transform2D)
                 throw new ArgumentException($"Cannot detach {typeof(Transform2D)}");
 
@@ -69,8 +75,17 @@ namespace MonoGame.Extended.Entities
             _components.Remove(component);
         }
 
+        public void DisposeComponent(EntityComponent component)
+        {
+            DetachComponent(component);
+            component.Dispose();
+        }
+
         protected void AttachSystem(EntitySystem system)
         {
+            if (system == null)
+                throw new ArgumentNullException(nameof(system));
+
             if (system.Entity != null)
                 throw new ArgumentException($"{system.GetType()} is already attached to another entity");
 

@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using MonoGame.Extended;
 using System;
 
 namespace MonoGame.Extended.Entities.Components

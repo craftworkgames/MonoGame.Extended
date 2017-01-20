@@ -38,8 +38,10 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Entities\Components\SpriteCollection.cs" />
+    <Compile Include="Entities\Components\SpriteCollectionEventArgs.cs" />
     <Compile Include="Entities\Components\Transform2D.cs" />
-    <Compile Include="Entities\EntityComponentSystem.cs" />
+    <Compile Include="Entities\EntityEventArgs.cs" />
     <Compile Include="Entities\Systems\EntitySystem.cs" />
     <Compile Include="FloatHelper.cs" />
     <Compile Include="Primitives\BoundingRectangle.cs" />
@@ -75,8 +77,6 @@
     <Compile Include="ColorHelper.cs" />
     <Compile Include="Entities\Components\EntityComponent.cs" />
     <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Entities\Systems\AnimatedSpriteSystem.cs" />
-    <Compile Include="Entities\Systems\ComponentSystem.cs" />
     <Compile Include="Entities\Systems\ParticleEmitterSystem.cs" />
     <Compile Include="Entities\Systems\SpriteBatchSystem.cs" />
     <Compile Include="NuclexGui\Controls\Desktop\GuiButtonControl.cs" />
