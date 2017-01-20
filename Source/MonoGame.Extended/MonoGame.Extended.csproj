@@ -38,6 +38,8 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Entities\Components\TransformComponent.cs" />
+    <Compile Include="Entities\Systems\EntitySystem.cs" />
     <Compile Include="FloatHelper.cs" />
     <Compile Include="Primitives\BoundingRectangle.cs" />
     <Compile Include="Primitives\Point2.cs" />
