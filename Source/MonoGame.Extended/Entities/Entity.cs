@@ -12,14 +12,14 @@ namespace MonoGame.Extended.Entities
         private readonly List<EntityComponent> _components;
         private readonly HashSet<EntitySystem> _systems;
 
-        private readonly TransformComponent _transform;
+        private readonly Transform2DComponent _transform;
 
         public Entity(long id, string name)
         {
             _components = new List<EntityComponent>();
             _systems = new HashSet<EntitySystem>();
 
-            _transform = new TransformComponent();
+            _transform = new Transform2DComponent();
             _transform.Entity = this;
 
             _components.Add(_transform);
@@ -38,7 +38,7 @@ namespace MonoGame.Extended.Entities
         public string Name { get; }
         public object Tag { get; set; }
 
-        public TransformComponent Transform => _transform;
+        public Transform2DComponent Transform => _transform;
 
         public override string ToString()
         {
@@ -47,8 +47,8 @@ namespace MonoGame.Extended.Entities
 
         public void AttachComponent(EntityComponent component)
         {
-            if (component is TransformComponent)
-                throw new ArgumentException($"Cannot attach {typeof(TransformComponent)}");
+            if (component is Transform2DComponent)
+                throw new ArgumentException($"Cannot attach {typeof(Transform2DComponent)}");
 
             if (component.Entity != null)
                 throw new InvalidOperationException("Component already attached to another entity");
@@ -59,8 +59,8 @@ namespace MonoGame.Extended.Entities
 
         public void DetachComponent(EntityComponent component)
         {
-            if (component is TransformComponent)
-                throw new ArgumentException($"Cannot detach {typeof(TransformComponent)}");
+            if (component is Transform2DComponent)
+                throw new ArgumentException($"Cannot detach {typeof(Transform2DComponent)}");
 
             if (component.Entity != this)
                 throw new InvalidOperationException("Component not attached to entity");

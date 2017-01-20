@@ -4,11 +4,11 @@ using System;
 
 namespace MonoGame.Extended.Entities.Components
 {
-    public sealed class TransformComponent : EntityComponent, IBaseTransform<Matrix2D, TransformComponent>
+    public sealed class Transform2DComponent : EntityComponent, IBaseTransform<Matrix2D, Transform2DComponent>
     {
         private readonly Transform _transform;
 
-        internal TransformComponent()
+        internal Transform2DComponent()
         {
             _transform = new Transform(this);
         }
@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Entities.Components
         internal Entity Parent
         {
             get { return _transform.Parent.Component.Entity; }
-            set { _transform.Parent = value.GetComponent<TransformComponent>()._transform; }
+            set { _transform.Parent = value.GetComponent<Transform2DComponent>()._transform; }
         }
 
         public Vector2 Position
@@ -41,42 +41,42 @@ namespace MonoGame.Extended.Entities.Components
         public float WorldRotation => _transform.WorldRotation;
         public Vector2 WorldScale => _transform.WorldScale;
 
-        Matrix2D IBaseTransform<Matrix2D, TransformComponent>.LocalMatrix => _transform.LocalMatrix;
-        Matrix2D IBaseTransform<Matrix2D, TransformComponent>.WorldMatrix => _transform.WorldMatrix;
+        Matrix2D IBaseTransform<Matrix2D, Transform2DComponent>.LocalMatrix => _transform.LocalMatrix;
+        Matrix2D IBaseTransform<Matrix2D, Transform2DComponent>.WorldMatrix => _transform.WorldMatrix;
 
-        TransformComponent IBaseTransform<Matrix2D, TransformComponent>.Parent
+        Transform2DComponent IBaseTransform<Matrix2D, Transform2DComponent>.Parent
         {
             get { return _transform.Parent.Component; }
             set { _transform.Parent = value._transform; }
         }
 
-        event Action IBaseTransform<Matrix2D, TransformComponent>.TranformUpdated
+        event Action IBaseTransform<Matrix2D, Transform2DComponent>.TranformUpdated
         {
             add { _transform.TranformUpdated += value; }
             remove { _transform.TranformUpdated -= value; }
         }
 
-        event Action IBaseTransform<Matrix2D, TransformComponent>.TransformBecameDirty
+        event Action IBaseTransform<Matrix2D, Transform2DComponent>.TransformBecameDirty
         {
             add { _transform.TransformBecameDirty += value; }
             remove { _transform.TransformBecameDirty -= value; }
         }
 
-        void IBaseTransform<Matrix2D, TransformComponent>.GetLocalMatrix(out Matrix2D matrix)
+        void IBaseTransform<Matrix2D, Transform2DComponent>.GetLocalMatrix(out Matrix2D matrix)
         {
             _transform.GetLocalMatrix(out matrix);
         }
 
-        void IBaseTransform<Matrix2D, TransformComponent>.GetWorldMatrix(out Matrix2D matrix)
+        void IBaseTransform<Matrix2D, Transform2DComponent>.GetWorldMatrix(out Matrix2D matrix)
         {
             _transform.GetWorldMatrix(out matrix);
         }
 
         private class Transform : Transform2D<Transform>
         {
-            public TransformComponent Component { get; }
+            public Transform2DComponent Component { get; }
 
-            public Transform(TransformComponent component)
+            public Transform(Transform2DComponent component)
             {
                 Component = component;
 
