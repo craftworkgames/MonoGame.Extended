@@ -1,14 +1,12 @@
 #region
 
-using System;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics;
-using MonoGame.Extended.Primitives;
+using MonoGame.Extended.Tiled;
 
 #endregion
 
@@ -41,7 +39,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled.Graphics
         {
         }
 
-        public void AddTileVertices(Point2 position, Rectangle? sourceRectangle = null, FlipFlags flags = FlipFlags.None)
+        public void AddTileVertices(Point2 position, Rectangle? sourceRectangle = null, TiledMapTileFlipFlags flags = TiledMapTileFlipFlags.None)
         {
             float texelLeft, texelTop, texelRight, texelBottom;
             var sourceRectangle1 = sourceRectangle ?? new Rectangle(0, 0, ImageSize.Width, ImageSize.Height);
@@ -83,9 +81,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled.Graphics
             vertexBottomRight.TextureCoordinate.Y = texelBottom;
             vertexBottomRight.TextureCoordinate.X = texelRight;
 
-            var flipDiagonally = (flags & FlipFlags.FlipDiagonally) != 0;
-            var flipHorizontally = (flags & FlipFlags.FlipHorizontally) != 0;
-            var flipVertically = (flags & FlipFlags.FlipVertically) != 0;
+            var flipDiagonally = (flags & TiledMapTileFlipFlags.FlipDiagonally) != 0;
+            var flipHorizontally = (flags & TiledMapTileFlipFlags.FlipHorizontally) != 0;
+            var flipVertically = (flags & TiledMapTileFlipFlags.FlipVertically) != 0;
 
             if (flipDiagonally)
             {

@@ -26,7 +26,7 @@ namespace MonoGame.Extended.Gui.Controls
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JsonIgnore]
         public RectangleF BoundingRectangle
-            => new RectangleF((Parent != null ? Parent.Position + Position : Position) - Size*Origin, Size);
+            => new RectangleF((Parent != null ? Parent.Position + Position : Position) - Size * Origin, Size);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public GuiThickness Margin { get; set; }
@@ -38,7 +38,7 @@ namespace MonoGame.Extended.Gui.Controls
         public Vector2 Position { get; set; }
         public Vector2 Origin { get; set; }
 
-        public SizeF Size { get; set; }
+        public Size2 Size { get; set; }
         public Color Color { get; set; }
         public TextureRegion2D TextureRegion { get; set; }
 

@@ -68,10 +68,10 @@ namespace MonoGame.Extended.Tiled.Graphics
                 UpdateAnimatedModels(layer.AnimatedModels);
         }
 
-        public void Draw(TiledMap map)
+        public void Draw(TiledMap map, float depth = 0.0f)
         {
             foreach (var layer in map.Layers)
-                Draw(layer);
+                Draw(layer, depth);
         } 
 
         public void Draw(TiledMapLayer layer, float depth = 0.0f)

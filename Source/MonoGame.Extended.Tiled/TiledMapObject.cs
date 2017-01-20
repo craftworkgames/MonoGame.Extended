@@ -1,13 +1,7 @@
 #region
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using MonoGame.Extended.Shapes;
 
 #endregion
 
@@ -23,11 +17,7 @@ namespace MonoGame.Extended.Tiled
         public float Opacity { get; set; }
         public float Rotation { get; set; }
         public Vector2 Position { get; }
-        public IShapeF Shape { get; protected set; }
-        public float Width { get; }
-        public float Height { get; }
-        public SizeF Size => Shape.BoundingRectangle.Size;
-        public RectangleF BoundingRectangle => Shape.BoundingRectangle;
+        public Size2 Size { get; set; }
 
         internal TiledMapObject(ContentReader input)
         {
@@ -35,8 +25,9 @@ namespace MonoGame.Extended.Tiled
             Name = input.ReadString();
             Type = input.ReadString();
             Position = new Vector2(input.ReadSingle(), input.ReadSingle());
-            Width = input.ReadSingle();
-            Height= input.ReadSingle();
+            var width = input.ReadSingle();
+            var height = input.ReadSingle();
+            Size = new Size2(width, height);
             Rotation = input.ReadSingle();
             IsVisible = input.ReadBoolean();
 

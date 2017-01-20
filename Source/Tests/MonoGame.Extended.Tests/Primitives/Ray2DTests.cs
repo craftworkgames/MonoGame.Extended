@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Primitives;
 using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests.Primitives

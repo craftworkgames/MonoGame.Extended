@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Content;
-using MonoGame.Extended.Primitives;
 
 namespace MonoGame.Extended.Tiled
 {

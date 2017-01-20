@@ -1,7 +1,6 @@
 ﻿using Demo.Platformer.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
 using MonoGame.Extended.Screens;
 
 namespace Demo.Platformer
@@ -38,11 +37,11 @@ namespace Demo.Platformer
             base.Update(gameTime);
         }
 
-        //protected override void Draw(GameTime gameTime)
-        //{
-        //    GraphicsDevice.Clear(Color.Black);
+        protected override void Draw(GameTime gameTime)
+        {
+            //GraphicsDevice.Clear(Color.Black);
 
-        //    base.Draw(gameTime);
-        //}
+            base.Draw(gameTime);
+        }
     }
 }

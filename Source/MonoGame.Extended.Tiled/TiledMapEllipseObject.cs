@@ -16,8 +16,8 @@ namespace MonoGame.Extended.Tiled
         internal TiledMapEllipseObject(ContentReader input) 
             : base(input)
         {
-            RadiusX = Width / 2.0f;
-            RadiusY = Height / 2.0f;
+            RadiusX = Size.Width / 2.0f;
+            RadiusY = Size.Height / 2.0f;
             Center = new Vector2(Position.X + RadiusX, Position.Y);
         }
     }

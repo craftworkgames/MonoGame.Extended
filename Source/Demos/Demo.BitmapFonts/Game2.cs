@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.ViewportAdapters;
@@ -63,7 +64,7 @@ namespace Demo.BitmapFonts
 
             const string helloWorld = "The quick brown fox jumps over the lazy dog\nThe lazy dog jumps back over the quick brown fox";
             
-            var position = new Vector2(400, 140);
+            var position = new Point2(400, 140);
             var offset = new Vector2(0, 50);
             var scale = Vector2.One;
             var color = Color.White;
@@ -88,7 +89,7 @@ namespace Demo.BitmapFonts
 
             // bitmap font
             var bitmapFontSize = _bitmapFontImpact.MeasureString(helloWorld);
-            var bitmapFontOrigin = bitmapFontSize / 2f;
+            var bitmapFontOrigin = (Point2)(bitmapFontSize / 2f);
 
             _spriteBatch.DrawString(
                 bitmapFont: _bitmapFontImpact,

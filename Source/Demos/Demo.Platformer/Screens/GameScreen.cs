@@ -26,7 +26,7 @@ namespace Demo.Platformer.Screens
         }
 
         private Camera2D _camera;
-        private TiledMap _tiledMap;
+        private TiledMap _map;
         private TiledMapRenderer _mapRenderer;
         private EntityComponentSystem _entityComponentSystem;
         private EntityFactory _entityFactory;
@@ -50,17 +50,14 @@ namespace Demo.Platformer.Screens
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
 
-            _tiledMap = Content.Load<TiledMap>("level-1");
-            _mapRenderer = new TiledMapRenderer(GraphicsDevice)
-            {
-                Map = _tiledMap
-            };
+            _map = Content.Load<TiledMap>("level-1");
+            _mapRenderer = new TiledMapRenderer(GraphicsDevice);
 
             _entityComponentSystem = new EntityComponentSystem();
             _entityFactory = new EntityFactory(_entityComponentSystem, Content);
 
             var service = new TiledObjectToEntityService(_entityFactory);
-            var spawnPoint = _tiledMap.GetLayer<TiledMapObjectLayer>("entities").Objects.Single(i => i.Type == "Spawn").Position;
+            var spawnPoint = _map.GetLayer<TiledMapObjectLayer>("entities").Objects.Single(i => i.Type == "Spawn").Position;
 
             _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
             _entityComponentSystem.RegisterSystem(new EnemyMovementSystem());
@@ -70,7 +67,7 @@ namespace Demo.Platformer.Screens
             _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
             _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
 
-            service.CreateEntities(_tiledMap.GetLayer<TiledMapObjectLayer>("entities").Objects);
+            service.CreateEntities(_map.GetLayer<TiledMapObjectLayer>("entities").Objects);
         }
 
         public override void Update(GameTime gameTime)
@@ -92,14 +89,26 @@ namespace Demo.Platformer.Screens
 
             _mapRenderer.Begin(ref viewMatrix, ref projectionMatrix);
 
-            foreach (var layer in _mapRenderer.Map.Layers)
-            {
-                _mapRenderer.Draw(layer);
-            }
+            // painter's algorithm; just draw things in the expected order
 
-            _mapRenderer.End();
+            var backgroundLayer = _map.GetLayer("background");
+            _mapRenderer.Draw(backgroundLayer);
+
+            var solidsLayer = _map.GetLayer("solids");
+            _mapRenderer.Draw(solidsLayer);
+
+            var decorationsLayer = _map.GetLayer("decorations");
+            _mapRenderer.Draw(decorationsLayer);
 
             _entityComponentSystem.Draw(gameTime);
+
+            var decorations2Layer = _map.GetLayer("decorations2");
+            _mapRenderer.Draw(decorations2Layer);
+
+            var deadliesLayer = _map.GetLayer("deadlies");
+            _mapRenderer.Draw(deadliesLayer);
+
+            _mapRenderer.End();
         }
     }
 }

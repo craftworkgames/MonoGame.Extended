@@ -94,7 +94,7 @@ namespace MonoGame.Extended.Shapes
         /// <param name="location">Where to draw</param>
         /// <param name="size">The size of the rectangle</param>
         /// <param name="color">The color to draw the rectangle in</param>
-        public static void FillRectangle(this SpriteBatch spriteBatch, Vector2 location, SizeF size, Color color)
+        public static void FillRectangle(this SpriteBatch spriteBatch, Vector2 location, Size2 size, Color color)
         {
             spriteBatch.Draw(GetTexture(spriteBatch), location, null, color, 0, Vector2.Zero, size, SpriteEffects.None, 0);
         }
@@ -111,7 +111,7 @@ namespace MonoGame.Extended.Shapes
         public static void FillRectangle(this SpriteBatch spriteBatch, float x, float y, float width, float height,
             Color color)
         {
-            FillRectangle(spriteBatch, new Vector2(x, y), new SizeF(width, height), color);
+            FillRectangle(spriteBatch, new Vector2(x, y), new Size2(width, height), color);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace MonoGame.Extended.Shapes
         /// <param name="size">The size of the rectangle</param>
         /// <param name="color">The color to draw the rectangle in</param>
         /// <param name="thickness">The thickness of the line</param>
-        public static void DrawRectangle(this SpriteBatch spriteBatch, Vector2 location, SizeF size, Color color,
+        public static void DrawRectangle(this SpriteBatch spriteBatch, Vector2 location, Size2 size, Color color,
             float thickness = 1f)
         {
             DrawRectangle(spriteBatch, new RectangleF(location.X, location.Y, size.Width, size.Height), color, thickness);

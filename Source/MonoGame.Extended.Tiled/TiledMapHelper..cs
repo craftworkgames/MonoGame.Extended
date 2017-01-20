@@ -1,7 +1,6 @@
 ﻿#region
 
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Primitives;
 
 #endregion
 

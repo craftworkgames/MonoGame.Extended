@@ -56,14 +56,14 @@ namespace Demo.Platformer.Entities
             return entity;
         }
 
-        public Entity CreateSolid(Vector2 position, SizeF size)
+        public Entity CreateSolid(Vector2 position, Size2 size)
         {
             var entity = _entityComponentSystem.CreateEntity(position);
             entity.AttachComponent(new BasicCollisionBody(size, Vector2.Zero) { IsStatic = true });
             return entity;
         }
 
-        public Entity CreateDeadly(Vector2 position, SizeF size)
+        public Entity CreateDeadly(Vector2 position, Size2 size)
         {
             var entity = _entityComponentSystem.CreateEntity(position);
             entity.AttachComponent(new BasicCollisionBody(size, Vector2.Zero) { IsStatic = true, Tag = "Deadly" });
@@ -97,7 +97,7 @@ namespace Demo.Platformer.Entities
             return entity;
         }
 
-        public Entity CreateBadGuy(Vector2 position, SizeF size)
+        public Entity CreateBadGuy(Vector2 position, Size2 size)
         {
             var entity = _entityComponentSystem.CreateEntity(position);
             var textureRegion = _characterTextureAtlas[90];

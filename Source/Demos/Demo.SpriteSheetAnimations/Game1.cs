@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions;
@@ -22,7 +21,7 @@ namespace Demo.SpriteSheetAnimations
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private Camera2D _camera;
         private SpriteBatch _spriteBatch;
-        private TiledMap _tiledMap;
+        private TiledMap _map;
         private TiledMapRenderer _mapRenderer;
         private ViewportAdapter _viewportAdapter;
         private CollisionWorld _world;
@@ -62,8 +61,7 @@ namespace Demo.SpriteSheetAnimations
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Content.Load<BitmapFont>("Fonts/courier-new-32");
-            _tiledMap = Content.Load<TiledMap>("Tilesets/level01");
-            _mapRenderer.Map = _tiledMap;
+            _map = Content.Load<TiledMap>("Tilesets/level01");
 
             _world = new CollisionWorld(new Vector2(0, 900));
             //_world.CreateGrid(_tiledMap.GetLayer<TiledTileLayer>("Tile Layer 1"));
@@ -96,7 +94,7 @@ namespace Demo.SpriteSheetAnimations
 
         protected override void UnloadContent()
         {
-            _tiledMap.Dispose();
+            _map.Dispose();
             _world.Dispose();
         }
 
@@ -135,15 +133,15 @@ namespace Demo.SpriteSheetAnimations
             if (keyboardState.IsKeyDown(Keys.Space))
                 _zombie.Attack();
 
-            if (keyboardState.IsKeyDown(Keys.Up))
-                _zombie.Jump();
+            //if (keyboardState.IsKeyDown(Keys.Up))
+            //    _zombie.Jump();
 
             if (keyboardState.IsKeyDown(Keys.Enter))
                 _zombie.Die();
 
             // update must be called before collision detection
             _zombie.Update(gameTime);
-            _world.Update(gameTime);
+            //_world.Update(gameTime);
             _camera.LookAt(_zombie.Position);
 
             _animation.Update(deltaSeconds);
@@ -164,7 +162,7 @@ namespace Demo.SpriteSheetAnimations
 
             _mapRenderer.Begin(ref viewMatrix, ref projectionMatrix);
 
-            foreach (var layer in _mapRenderer.Map.Layers)
+            foreach (var layer in _map.Layers)
             {
                 _mapRenderer.Draw(layer);
             }

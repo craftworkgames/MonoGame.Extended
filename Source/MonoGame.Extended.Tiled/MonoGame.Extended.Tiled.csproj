@@ -37,10 +37,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj">
-      <Project>{9b3ab8a1-78aa-471a-afd0-b10b932115bc}</Project>
-      <Name>MonoGame.Extended.Graphics</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
       <Name>MonoGame.Extended</Name>
@@ -70,6 +66,7 @@
     <Compile Include="TiledMapRectangleObject.cs" />
     <Compile Include="TiledMapTileDrawOrder.cs" />
     <Compile Include="TiledMapTile.cs" />
+    <Compile Include="TiledMapTileFlipFlags.cs" />
     <Compile Include="TiledMapTileLayer.cs" />
     <Compile Include="TiledMapTileset.cs" />
     <Compile Include="TiledMapTilesetAnimatedTile.cs" />
