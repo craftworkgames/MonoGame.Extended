@@ -11,10 +11,10 @@ namespace MonoGame.Extended.Entities.Systems
         private readonly Camera2D _camera;
         private readonly SpriteBatch _spriteBatch;
 
-        public SpriteBatchSystem(GraphicsDevice graphicsDevice, Camera2D camera)
+        public SpriteBatchSystem(GraphicsDevice graphicsDevice, Camera2D camera, SpriteBatch spriteBatch = null)
         {
             _camera = camera;
-            _spriteBatch = new SpriteBatch(graphicsDevice);
+            _spriteBatch = spriteBatch ?? new SpriteBatch(graphicsDevice);
         }
 
         public Effect Effect { get; set; }
