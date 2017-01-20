@@ -41,9 +41,9 @@
     <Compile Include="Entities\Components\CollectionComponent.cs" />
     <Compile Include="Entities\Components\CollectionComponentEventArgs.cs" />
     <Compile Include="Entities\Components\GenericCollectionComponent.cs" />
-    <Compile Include="Entities\Components\SpriteCollection.cs" />
-    <Compile Include="Entities\Components\SpriteCollectionEventArgs.cs" />
-    <Compile Include="Entities\Components\Transform2D.cs" />
+    <Compile Include="Entities\Components\SpriteCollectionComponent.cs" />
+    <Compile Include="Entities\Components\SpriteCollectionComponentEventArgs.cs" />
+    <Compile Include="Entities\Components\Transform2DComponent.cs" />
     <Compile Include="Entities\EntityEventArgs.cs" />
     <Compile Include="Entities\Systems\EntitySystem.cs" />
     <Compile Include="FloatHelper.cs" />

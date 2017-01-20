@@ -5,30 +5,30 @@ using System.Collections.ObjectModel;
 
 namespace MonoGame.Extended.Entities.Components
 {
-    public class SpriteCollection : CollectionComponent<Sprite, SpriteCollectionEventArgs>
+    public class SpriteCollectionComponent : CollectionComponent<Sprite, SpriteCollectionComponentEventArgs>
     {
         private List<AnimatedSprite> _animatedSprite = new List<AnimatedSprite>();
 
         public IReadOnlyCollection<Sprite> Sprites => Collection;
         public IReadOnlyCollection<AnimatedSprite> AnimatedSprites => new ReadOnlyCollection<AnimatedSprite>(_animatedSprite);
 
-        public SpriteCollection()
+        public SpriteCollectionComponent()
         {
             ItemAdded += SpriteCollection_ItemAdded;
             ItemRemoved += SpriteCollection_ItemRemoved;
         }
 
-        protected override SpriteCollectionEventArgs CreateEventArgs(Sprite sprite)
+        protected override SpriteCollectionComponentEventArgs CreateEventArgs(Sprite sprite)
         {
-            return new SpriteCollectionEventArgs(Entity, sprite);
+            return new SpriteCollectionComponentEventArgs(Entity, sprite);
         }
 
-        private void SpriteCollection_ItemAdded(object sender, SpriteCollectionEventArgs e)
+        private void SpriteCollection_ItemAdded(object sender, SpriteCollectionComponentEventArgs e)
         {
             ModifyCollection(e.Item, _animatedSprite.Add);
         }
 
-        private void SpriteCollection_ItemRemoved(object sender, SpriteCollectionEventArgs e)
+        private void SpriteCollection_ItemRemoved(object sender, SpriteCollectionComponentEventArgs e)
         {
             ModifyCollection(e.Item, i => _animatedSprite.Remove(i));
         }

@@ -27,7 +27,7 @@ namespace MonoGame.Extended.Entities.Systems
         public override void Update(GameTime gameTime)
         {
             var deltaTime = gameTime.GetElapsedSeconds();
-            var sprites = GetComponent<SpriteCollection>()?.AnimatedSprites;
+            var sprites = GetComponent<SpriteCollectionComponent>()?.AnimatedSprites;
 
             if (sprites != null)
             {
@@ -38,7 +38,7 @@ namespace MonoGame.Extended.Entities.Systems
 
         public override void Draw(GameTime gameTime)
         {
-            var sprites = GetComponent<SpriteCollection>().Sprites;
+            var sprites = GetComponent<SpriteCollectionComponent>().Sprites;
             //var emitters = GetComponents<ParticleEmitter>();
             var transformMatrix = _camera.GetViewMatrix();
 

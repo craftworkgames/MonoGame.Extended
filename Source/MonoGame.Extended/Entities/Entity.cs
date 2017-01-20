@@ -12,14 +12,14 @@ namespace MonoGame.Extended.Entities
         private readonly List<EntityComponent> _components;
         private readonly List<EntitySystem> _systems;
 
-        private readonly Transform2D _transform;
+        private readonly Transform2DComponent _transform;
 
         public Entity(long id, string name)
         {
             _components = new List<EntityComponent>();
             _systems = new List<EntitySystem>();
 
-            _transform = new Transform2D();
+            _transform = new Transform2DComponent();
             _transform.Entity = this;
 
             _components.Add(_transform);
@@ -39,7 +39,7 @@ namespace MonoGame.Extended.Entities
         public object Tag { get; set; }
 
         public IReadOnlyCollection<EntityComponent> Components => new ReadOnlyCollection<EntityComponent>(_components);
-        public Transform2D Transform => _transform;
+        public Transform2DComponent Transform => _transform;
 
         public override string ToString()
         {
@@ -51,8 +51,8 @@ namespace MonoGame.Extended.Entities
             if (component == null)
                 throw new ArgumentNullException(nameof(component));
 
-            if (component is Transform2D)
-                throw new ArgumentException($"Cannot attach {typeof(Transform2D)}");
+            if (component is Transform2DComponent)
+                throw new ArgumentException($"Cannot attach {typeof(Transform2DComponent)}");
 
             if (component.Entity != null)
                 throw new InvalidOperationException("Component already attached to another entity");
@@ -69,8 +69,8 @@ namespace MonoGame.Extended.Entities
             if (component == null)
                 throw new ArgumentNullException(nameof(component));
 
-            if (component is Transform2D)
-                throw new ArgumentException($"Cannot detach {typeof(Transform2D)}");
+            if (component is Transform2DComponent)
+                throw new ArgumentException($"Cannot detach {typeof(Transform2DComponent)}");
 
             if (component.Entity != this || !_components.Contains(component))
                 throw new InvalidOperationException("Component not attached to entity");
