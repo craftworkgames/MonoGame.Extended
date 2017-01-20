@@ -1,6 +1,7 @@
 ﻿using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace MonoGame.Extended.Entities.Components
 {
@@ -9,7 +10,7 @@ namespace MonoGame.Extended.Entities.Components
         private List<AnimatedSprite> _animatedSprite = new List<AnimatedSprite>();
 
         public IReadOnlyCollection<Sprite> Sprites => Collection;
-        public IReadOnlyCollection<AnimatedSprite> AnimatedSprites => _animatedSprite;
+        public IReadOnlyCollection<AnimatedSprite> AnimatedSprites => new ReadOnlyCollection<AnimatedSprite>(_animatedSprite);
 
         public SpriteCollection()
         {
