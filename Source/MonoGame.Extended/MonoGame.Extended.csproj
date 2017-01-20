@@ -38,6 +38,8 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Entities\Components\CollectionComponent.cs" />
+    <Compile Include="Entities\Components\CollectionComponentEventArgs.cs" />
     <Compile Include="Entities\Components\SpriteCollection.cs" />
     <Compile Include="Entities\Components\SpriteCollectionEventArgs.cs" />
     <Compile Include="Entities\Components\Transform2D.cs" />

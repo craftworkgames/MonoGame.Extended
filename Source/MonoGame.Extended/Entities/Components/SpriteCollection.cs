@@ -1,73 +1,42 @@
 ﻿using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections;
 
 namespace MonoGame.Extended.Entities.Components
 {
-    public class SpriteCollection : EntityComponent, ICollection<Sprite>
+    public class SpriteCollection : CollectionComponent<Sprite, SpriteCollectionEventArgs>
     {
-        private readonly List<Sprite> _sprites = new List<Sprite>();
+        private List<AnimatedSprite> _animatedSprite = new List<AnimatedSprite>();
 
-        public event EventHandler<SpriteCollectionEventArgs> SpriteAdded;
-        public event EventHandler<SpriteCollectionEventArgs> SpriteRemoved;
+        public IReadOnlyCollection<Sprite> Sprites => Collection;
+        public IReadOnlyCollection<AnimatedSprite> AnimatedSprites => _animatedSprite;
 
-        public int Count => _sprites.Count;
-        public bool IsReadOnly => false;
-
-        public IEnumerable<Sprite> Sprites => _sprites;
-        public IEnumerable<AnimatedSprite> AnimatedSprites => 
-            (IEnumerable<AnimatedSprite>)_sprites.Where(s => s is AnimatedSprite);
-
-        public void Add(Sprite item)
+        public SpriteCollection()
         {
-            _sprites.Add(item);
-            SpriteAdded?.Invoke(this, CreateEventArgs(item));
+            ItemAdded += SpriteCollection_ItemAdded;
+            ItemRemoved += SpriteCollection_ItemRemoved;
         }
 
-        public void Clear()
-        {
-            foreach (var sprite in _sprites)
-                SpriteRemoved?.Invoke(this, CreateEventArgs(sprite));
-            _sprites.Clear();
-        }
-
-        public bool Contains(Sprite item)
-        {
-            return _sprites.Contains(item);
-        }
-
-        void ICollection<Sprite>.CopyTo(Sprite[] array, int arrayIndex)
-        {
-            foreach (var sprite in array)
-                SpriteAdded?.Invoke(this, CreateEventArgs(sprite));
-            _sprites.CopyTo(array, arrayIndex);
-        }
-
-        public IEnumerator<Sprite> GetEnumerator()
-        {
-            return _sprites.GetEnumerator();
-        }
-
-        public bool Remove(Sprite item)
-        {
-            bool removed = _sprites.Remove(item);
-            if (removed)
-                SpriteRemoved?.Invoke(this, CreateEventArgs(item));
-            return removed;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _sprites.GetEnumerator();
-        }
-
-        private SpriteCollectionEventArgs CreateEventArgs(Sprite sprite)
+        protected override SpriteCollectionEventArgs CreateEventArgs(Sprite sprite)
         {
             return new SpriteCollectionEventArgs(Entity, sprite);
+        }
+
+        private void SpriteCollection_ItemAdded(object sender, SpriteCollectionEventArgs e)
+        {
+            ModifyCollection(e.Item, _animatedSprite.Add);
+        }
+
+        private void SpriteCollection_ItemRemoved(object sender, SpriteCollectionEventArgs e)
+        {
+            ModifyCollection(e.Item, i => _animatedSprite.Remove(i));
+        }
+
+        private void ModifyCollection(Sprite sprite, Action<AnimatedSprite> action)
+        {
+            var animatedSprite = sprite as AnimatedSprite;
+            if (animatedSprite != null)
+                action(animatedSprite);
         }
     }
 }

@@ -2,15 +2,14 @@
 
 namespace MonoGame.Extended.Entities.Components
 {
-    public sealed class SpriteCollectionEventArgs : EntityEventArgs
+    public sealed class SpriteCollectionEventArgs : CollectionComponentEventArgs<Sprite>
     {
         public SpriteCollectionEventArgs(Entity entity, Sprite sprite)
-            : base(entity)
+            : base(entity, sprite)
         {
-            Sprite = sprite;
+
         }
 
-        public Sprite Sprite { get; }
-        public bool IsAnimated => Sprite is AnimatedSprite;
+        public bool IsAnimated => Item is AnimatedSprite;
     }
 }
