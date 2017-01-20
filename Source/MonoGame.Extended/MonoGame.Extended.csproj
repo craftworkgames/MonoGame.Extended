@@ -38,7 +38,7 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
-    <Compile Include="Entities\Components\Transform2DComponent.cs" />
+    <Compile Include="Entities\Components\Transform2D.cs" />
     <Compile Include="Entities\EntityComponentSystem.cs" />
     <Compile Include="Entities\Systems\EntitySystem.cs" />
     <Compile Include="FloatHelper.cs" />
