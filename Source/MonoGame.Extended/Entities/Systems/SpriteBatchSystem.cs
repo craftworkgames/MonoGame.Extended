@@ -59,10 +59,5 @@ namespace MonoGame.Extended.Entities.Systems
 
             _spriteBatch.End();
         }
-
-        protected override void OnRemoved()
-        {
-            
-        }
     }
 }

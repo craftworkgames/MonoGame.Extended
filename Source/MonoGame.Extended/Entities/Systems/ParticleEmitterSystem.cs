@@ -13,10 +13,5 @@ namespace MonoGame.Extended.Entities.Systems
             foreach (var particleEmitter in emitters)
                 particleEmitter.Update(deltaTime);
         }
-
-        protected override void OnRemoved()
-        {
-            
-        }
     }
 }

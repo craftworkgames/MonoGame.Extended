@@ -58,7 +58,7 @@ namespace MonoGame.Extended.Entities.Systems
         /// to remove the system from any event handlers in order to avoid
         /// memory leaks.
         /// </summary>
-        protected abstract void OnRemoved();
+        protected virtual void OnRemoved() { }
 
         public virtual void Update(GameTime gameTime) { }
 
