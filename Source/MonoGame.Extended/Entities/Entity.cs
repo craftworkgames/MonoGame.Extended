@@ -46,7 +46,7 @@ namespace MonoGame.Extended.Entities
             return Name;
         }
 
-        public void AttachComponent(EntityComponent component)
+        public EntityComponent AttachComponent(EntityComponent component)
         {
             if (component == null)
                 throw new ArgumentNullException(nameof(component));
@@ -62,6 +62,8 @@ namespace MonoGame.Extended.Entities
 
             component.Entity = this;
             _components.Add(component);
+
+            return component;
         }
 
         public void DetachComponent(EntityComponent component)
@@ -85,7 +87,7 @@ namespace MonoGame.Extended.Entities
             component.Dispose();
         }
 
-        protected void AttachSystem(EntitySystem system)
+        protected EntitySystem AttachSystem(EntitySystem system)
         {
             if (system == null)
                 throw new ArgumentNullException(nameof(system));
@@ -97,6 +99,7 @@ namespace MonoGame.Extended.Entities
                 throw new InvalidOperationException($"{system.GetType()} is already attached to entity");
 
             system.Initialize(this);
+            return system;
         }
 
         internal void DetachSystem(EntitySystem system)
