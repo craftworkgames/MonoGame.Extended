@@ -48,7 +48,7 @@ namespace MonoGame.Extended.Entities.Systems
             if (sprites != null)
             {
                 foreach (var sprite in sprites)
-                    _spriteBatch.Draw(sprite);
+                    DrawSprite(sprite);
             }
 
             //if (emitters != null)
@@ -58,6 +58,27 @@ namespace MonoGame.Extended.Entities.Systems
             //}
 
             _spriteBatch.End();
+        }
+
+        private void DrawSprite(Sprite sprite)
+        {
+            if (sprite.IsVisible)
+            {
+                var texture = sprite.TextureRegion.Texture;
+                var sourceRectangle = sprite.TextureRegion.Bounds;
+
+                var transform = Entity.Transform;
+
+                _spriteBatch.Draw(texture, 
+                    transform.WorldPosition, 
+                    sourceRectangle, 
+                    sprite.Color * sprite.Alpha, 
+                    sprite.Rotation + transform.WorldRotation,
+                    sprite.Origin,
+                    sprite.Scale * transform.WorldScale, 
+                    sprite.Effect, 
+                    sprite.Depth);
+            }
         }
     }
 }
