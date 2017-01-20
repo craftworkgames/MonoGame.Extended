@@ -29,12 +29,6 @@ namespace MonoGame.Extended.Entities.Systems
             return Entity.GetComponent<TEntityComponent>();
         }
 
-        protected IEnumerable<TEntityComponent> GetComponents<TEntityComponent>()
-            where TEntityComponent : EntityComponent
-        {
-            return Entity.GetComponents<TEntityComponent>();
-        }
-
         internal void Initialize(Entity entity)
         {
             Entity = entity;
