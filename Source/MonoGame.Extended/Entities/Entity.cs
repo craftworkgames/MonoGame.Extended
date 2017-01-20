@@ -7,26 +7,38 @@ using MonoGame.Extended.Entities.Systems;
 
 namespace MonoGame.Extended.Entities
 {
-    public class Entity : Transform2D<Entity>
+    public class Entity
     {
         private readonly List<EntityComponent> _components;
         private readonly HashSet<EntitySystem> _systems;
 
-        public Entity(EntityComponentSystem componentSystem, long id, string name)
+        private readonly TransformComponent _transform;
+
+        public Entity(long id, string name)
         {
             _components = new List<EntityComponent>();
             _systems = new HashSet<EntitySystem>();
 
+            _transform = new TransformComponent();
+            _transform.Entity = this;
+
+            _components.Add(_transform);
+
             Id = id;
             Name = name;
-            Position = Vector2.Zero;
-            Rotation = 0;
-            Scale = Vector2.One;
+        }
+
+        public Entity Parent
+        {
+            get { return _transform.Parent; }
+            set { _transform.Parent = value; }
         }
 
         public long Id { get; }
         public string Name { get; }
         public object Tag { get; set; }
+
+        public TransformComponent Transform => _transform;
 
         public override string ToString()
         {
@@ -35,6 +47,9 @@ namespace MonoGame.Extended.Entities
 
         public void AttachComponent(EntityComponent component)
         {
+            if (component is TransformComponent)
+                throw new ArgumentException($"Cannot attach {typeof(TransformComponent)}");
+
             if (component.Entity != null)
                 throw new InvalidOperationException("Component already attached to another entity");
 
@@ -44,6 +59,9 @@ namespace MonoGame.Extended.Entities
 
         public void DetachComponent(EntityComponent component)
         {
+            if (component is TransformComponent)
+                throw new ArgumentException($"Cannot detach {typeof(TransformComponent)}");
+
             if (component.Entity != this)
                 throw new InvalidOperationException("Component not attached to entity");
 
