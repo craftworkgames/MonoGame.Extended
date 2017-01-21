@@ -18,7 +18,9 @@ namespace MonoGame.Extended.Entities
 
         public void AddComponent(Type componentType) => Ecs.AddComponent(Guid, componentType);
 
+        public object GetComponent<T>() => Ecs.GetEntityComponent(Guid, typeof(T));
         public object GetComponent(Type componentType) => Ecs.GetEntityComponent(Guid, componentType);
+
         public IEnumerable GetComponents() => Ecs.GetEntityComponents(Guid);
         public IEnumerable GetComponents(Type componentType) => Ecs.GetEntityComponents(Guid, componentType);
         public IEnumerable GetComponents<T>() => Ecs.GetEntityComponents(Guid, typeof(T));
