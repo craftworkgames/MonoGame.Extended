@@ -5,8 +5,6 @@ namespace MonoGame.Extended.Entities
 {
     public interface IEntitySystem
     {
-        void Initialize(Game game);
-
         void LoadContent(ContentManager contentManager);
         void UnloadContent();
 

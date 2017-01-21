@@ -55,11 +55,13 @@ namespace MonoGame.Extended.Entities
                     _components.Add(entityComponent);
                 }
 
+                Entity entityInst = entity.ToEntity(this);
+
                 foreach (var system in _systems)
                 {
-                    system.EntityCreated(entity.ToEntity(this));
+                    system.EntityCreated(entityInst);
                     foreach (var component in addedComponents)
-                        system.ComponentAdded(entity.ToEntity(this), component);
+                        system.ComponentAdded(entityInst, component);
                 }
 
                 _entities.Add(entity);
@@ -126,7 +128,9 @@ namespace MonoGame.Extended.Entities
 
         internal object GetEntityComponent(Guid entity, Type componentType)
         {
-            return _components.Where(e => e.Type == componentType).FirstOrDefault();
+            return _components.Where(c => c.Entity == entity && c.Type == componentType)
+                .FirstOrDefault()
+                .Component;
         }
 
         internal IEnumerable GetEntityComponents(Guid entity)
@@ -156,7 +160,7 @@ namespace MonoGame.Extended.Entities
 
         #region DrawableGameComponent Methods
 
-        public override void Initialize() => ForEachSystem(s => s.Initialize(Game));
+        public override void Initialize() => ForEachSystem(s => s.LoadContent(Game.Content));
 
         protected override void LoadContent() => ForEachSystem(s => s.LoadContent(Game.Content));
         protected override void UnloadContent() => ForEachSystem(s => s.UnloadContent());

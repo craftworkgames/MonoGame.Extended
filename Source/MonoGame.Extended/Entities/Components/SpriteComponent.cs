@@ -39,13 +39,17 @@ namespace MonoGame.Extended.Entities.Components
 
             if (AnimationChanged)
             {
-                CurrentAnimation.OnCompleted = null;
-                CurrentAnimation = null;
+                if (CurrentAnimation != null)
+                {
+                    CurrentAnimation.OnCompleted = null;
+                    CurrentAnimation = null;
+                }
 
                 if (AnimationFactory != null)
                 {
                     CurrentAnimation = AnimationFactory.Create(name);
                     CurrentAnimation.OnCompleted = onCompleted;
+                    TextureRegion = CurrentAnimation.CurrentFrame;
                 }
             }
 

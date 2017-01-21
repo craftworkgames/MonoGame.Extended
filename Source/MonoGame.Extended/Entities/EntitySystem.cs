@@ -5,8 +5,6 @@ namespace MonoGame.Extended.Entities
 {
     public abstract class EntitySystem : IEntitySystem
     {
-        public virtual void Initialize(Game game) { }
-
         public virtual void LoadContent(ContentManager contentManager) { }
         public virtual void UnloadContent() { }
 

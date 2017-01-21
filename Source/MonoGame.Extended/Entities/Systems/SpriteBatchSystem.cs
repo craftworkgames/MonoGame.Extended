@@ -60,12 +60,12 @@ namespace MonoGame.Extended.Entities.Systems
 
             _spriteBatch.Draw(
                 texture         : sprite.TextureRegion.Texture,
-                position        : sprite.Position + transform?.Position ?? Vector2.Zero,
+                position        : sprite.Position + (transform?.Position ?? Vector2.Zero),
                 sourceRectangle : sprite.TextureRegion.Bounds,
                 color           : sprite.Color * sprite.Alpha,
-                rotation        : sprite.Rotation + transform?.Rotation ?? 0f,
+                rotation        : sprite.Rotation + (transform?.Rotation ?? 0f),
                 origin          : sprite.Origin,
-                scale           : sprite.Scale * transform?.Scale ?? Vector2.One,
+                scale           : sprite.Scale * (transform?.Scale ?? Vector2.One),
                 effects         : sprite.Effect,
                 layerDepth      : sprite.Depth);
         }
