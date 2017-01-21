@@ -1,149 +1,199 @@
+using Microsoft.Xna.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities.Components;
-using MonoGame.Extended.Entities.Systems;
 
 namespace MonoGame.Extended.Entities
 {
-    public class EntityComponentSystem
+    public sealed class EntityComponentSystem : DrawableGameComponent
     {
-        private readonly List<EntityComponent> _components;
-        private readonly List<DyingEntity> _dyingEntities;
-        private readonly List<Entity> _entities;
-        private readonly Dictionary<string, Entity> _entitiesByName;
+        #region Private Variables
 
-        private readonly List<ComponentSystem> _systems;
-        private long _nextEntityId;
+        private readonly Dictionary<Type, Func<object>> _componentFactories;
+        private readonly Dictionary<string, ICollection<Type>> _entityDefinitions;
 
-        public EntityComponentSystem()
+        private readonly HashSet<EntityComponent> _components;
+        private readonly List<Guid> _entities;
+
+        private readonly HashSet<IEntitySystem> _systems;
+
+        #endregion
+
+        public EntityComponentSystem(Game game) 
+            : base(game)
         {
-            _entities = new List<Entity>();
-            _entitiesByName = new Dictionary<string, Entity>();
-            _dyingEntities = new List<DyingEntity>();
-            _components = new List<EntityComponent>();
-            _systems = new List<ComponentSystem>();
-            _nextEntityId = 1;
+            _components         = new HashSet<EntityComponent>();
+            _componentFactories = new Dictionary<Type, Func<object>>();
+            _entities           = new List<Guid>();
+            _entityDefinitions  = new Dictionary<string, ICollection<Type>>();
+            _systems            = new HashSet<IEntitySystem>();
         }
 
-        internal event EventHandler<EntityComponent> ComponentAttached;
-        internal event EventHandler<EntityComponent> ComponentDetached;
-        internal event EventHandler<Entity> EntityCreated;
-        internal event EventHandler<Entity> EntityDestroyed;
+        #region Entity Methods
 
-        public void RegisterSystem(ComponentSystem system)
+        public void CreateEntity(string entityName)
         {
-            if (system.Parent != null)
-                throw new InvalidOperationException("Component system already registered");
+            Guid entity = Guid.NewGuid();
 
-            system.Parent = this;
-            _systems.Add(system);
-        }
-
-        public Entity CreateEntity()
-        {
-            return CreateEntity(null);
-        }
-
-        public Entity CreateEntity(Vector2 position, float rotation = 0)
-        {
-            return CreateEntity(null, position, rotation);
-        }
-
-        public Entity CreateEntity(string name, Vector2 position, float rotation = 0)
-        {
-            var entity = CreateEntity(name);
-            entity.Position = position;
-            entity.Rotation = rotation;
-            return entity;
-        }
-
-        public Entity CreateEntity(string name)
-        {
-            var entity = new Entity(this, _nextEntityId, name);
-
-            _entities.Add(entity);
-
-            if (name != null)
-                _entitiesByName.Add(name, entity);
-
-            EntityCreated?.Invoke(this, entity);
-            _nextEntityId++;
-            return entity;
-        }
-
-        public void DestroyEntity(Entity entity, float delaySeconds)
-        {
-            if (delaySeconds.Equals(0f))
-                DestroyEntity(entity);
-            else
-                _dyingEntities.Add(new DyingEntity {Entity = entity, SecondsUntilDeath = delaySeconds});
-        }
-
-        public void DestroyEntity(Entity entity)
-        {
-            foreach (var component in _components.Where(c => c.Entity == entity).ToArray())
-                DetachComponent(component);
-
-            if (entity.Name != null)
-                _entitiesByName.Remove(entity.Name);
-
-            _entities.Remove(entity);
-            EntityDestroyed?.Invoke(this, entity);
-        }
-
-        public Entity GetEntity(string name)
-        {
-            Entity entity;
-            return _entitiesByName.TryGetValue(name, out entity) ? entity : null;
-        }
-
-        internal void AttachComponent(EntityComponent component)
-        {
-            _components.Add(component);
-            ComponentAttached?.Invoke(this, component);
-        }
-
-        internal void DetachComponent(EntityComponent component)
-        {
-            _components.Remove(component);
-            (component as IDisposable)?.Dispose();
-            ComponentDetached?.Invoke(this, component);
-        }
-
-        internal IEnumerable<T> GetComponents<T>()
-        {
-            return _components.OfType<T>();
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            foreach (var componentSystem in _systems)
-                componentSystem.Update(gameTime);
-
-            for (var i = 0; i < _dyingEntities.Count; i++)
+            try
             {
-                _dyingEntities[i].SecondsUntilDeath -= gameTime.GetElapsedSeconds();
+                List<object> addedComponents = new List<object>();
 
-                if (_dyingEntities[i].SecondsUntilDeath <= 0)
+                foreach (var type in _entityDefinitions[entityName])
                 {
-                    DestroyEntity(_dyingEntities[i].Entity);
-                    _dyingEntities.Remove(_dyingEntities[i]);
+                    var entityComponent = new EntityComponent()
+                    {
+                        Entity = entity,
+                        Type = type,
+                        Component = _componentFactories[type]()
+                    };
+
+                    addedComponents.Add(entityComponent.Component);
+                    _components.Add(entityComponent);
                 }
+
+                foreach (var system in _systems)
+                {
+                    system.EntityCreated(entity.ToEntity(this));
+                    foreach (var component in addedComponents)
+                        system.ComponentAdded(entity.ToEntity(this), component);
+                }
+
+                _entities.Add(entity);
+            }
+            catch (Exception)
+            {
+                _components.RemoveWhere(e => e.Entity == entity);
+                throw;
             }
         }
 
-        public void Draw(GameTime gameTime)
+        internal void DestroyEntity(Guid entity)
         {
-            foreach (var componentSystem in _systems)
-                componentSystem.Draw(gameTime);
+            _entities.Remove(entity);
+            ForEachSystem(s => s.EntityRemoved(entity.ToEntity(this)));
+            _components.RemoveWhere(e => e.Entity == entity);
         }
 
-        public class DyingEntity
+        internal void AddComponent(Guid entity, Type type)
         {
-            public Entity Entity;
-            public float SecondsUntilDeath;
+            var entityComponent = new EntityComponent()
+            {
+                Entity = entity,
+                Type = type,
+                Component = _componentFactories[type]()
+            };
+
+            _components.Add(entityComponent);
+            ForEachSystem(s => s.ComponentAdded(new Entity(this, entity), entityComponent.Component));
         }
+
+        internal void RemoveComponent(Guid entity, Type componentType, object component)
+        {
+            _components.RemoveWhere(e =>
+            {
+                if (e.Entity == entity && e.Type == componentType && e.Component == component)
+                {
+                    ForEachSystem(s => s.ComponentRemoved(entity.ToEntity(this), e.Component));
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        internal void RemoveComponents(Guid entity, Type type)
+        {
+            _components.RemoveWhere(e =>
+            {
+                if (e.Entity == entity && e.Type == type)
+                {
+                    ForEachSystem(s => s.ComponentRemoved(entity.ToEntity(this), e.Component));
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        internal object GetEntityComponent(Guid entity, Type componentType)
+        {
+            return _components.Where(e => e.Type == componentType).FirstOrDefault();
+        }
+
+        internal IEnumerable GetEntityComponents(Guid entity)
+        {
+            return from component in _components
+                   where entity == component.Entity
+                   select component.Component;
+        }
+
+        internal IEnumerable GetEntityComponents(Guid entity, Type componentType)
+        {
+            return from component in _components
+                   where entity == component.Entity && componentType == component.Type
+                   select component.Component;
+        }
+
+        #endregion
+
+        #region Register Methods
+
+        public void RegisterComponent(Type componentType, Func<object> factory)
+            => _componentFactories[componentType] = factory;
+
+        public void RegisterEntity(string entityName, ICollection<Type> components)
+            => _entityDefinitions[entityName] = components;
+
+        public void RegisterSystem(IEntitySystem system)
+        {
+            _systems.Add(system);
+        }
+
+        #endregion
+
+        #region DrawableGameComponent Methods
+
+        public override void Initialize() => ForEachSystem(s => s.Initialize(Game));
+
+        protected override void LoadContent() => ForEachSystem(s => s.LoadContent(Game.Content));
+        protected override void UnloadContent() => ForEachSystem(s => s.UnloadContent());
+
+        public override void Update(GameTime gameTime)
+        {
+            foreach (var system in _systems)
+            {
+                foreach (var entity in _entities)
+                    system.Update(entity.ToEntity(this), gameTime);
+            }
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            foreach (var system in _systems)
+            {
+                foreach (var entity in _entities)
+                    system.Draw(entity.ToEntity(this), gameTime);
+            }
+        }
+
+        #endregion
+
+        private void ForEachSystem(Action<IEntitySystem> action)
+        {
+            foreach (var system in _systems)
+                action(system);
+        }
+
+        private struct EntityComponent
+        {
+            public Guid Entity;
+            public Type Type;
+            public object Component;
+        }
+    }
+
+    static class GuidExtensions
+    {
+        internal static Entity ToEntity(this Guid guid, EntityComponentSystem ecs) => new Entity(ecs, guid);
     }
 }
