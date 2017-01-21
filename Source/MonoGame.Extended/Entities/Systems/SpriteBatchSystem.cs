@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Particles;
-using MonoGame.Extended.Sprites;
+using MonoGame.Extended.Entities.Components;
 
 namespace MonoGame.Extended.Entities.Systems
 {
@@ -25,8 +24,8 @@ namespace MonoGame.Extended.Entities.Systems
 
         public override void Update(Entity entity, GameTime gameTime)
         {
-            var sprites = entity.GetComponents<Components.Sprite>();
-            foreach (Components.Sprite sprite in sprites)
+            var sprites = entity.GetComponents<SpriteComponent>();
+            foreach (SpriteComponent sprite in sprites)
             {
                 if (sprite.CurrentAnimation != null && !sprite.CurrentAnimation.IsComplete)
                 {
@@ -38,14 +37,14 @@ namespace MonoGame.Extended.Entities.Systems
 
         public override void Draw(Entity entity, GameTime gameTime)
         {
-            var entityTransform = entity.GetComponent<Components.Transform>();
+            var entityTransform = entity.GetComponent<Components.TransformComponent>();
             var transformMatrix = _camera.GetViewMatrix();
 
             _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect,
                 transformMatrix);
 
-            var sprites = entity.GetComponents<Components.Sprite>();
-            foreach (Components.Sprite sprite in sprites)
+            var sprites = entity.GetComponents<SpriteComponent>();
+            foreach (SpriteComponent sprite in sprites)
                 DrawSprite(sprite, entityTransform);
 
             //foreach (ParticleEmitter particleEmitter in entity.GetComponents<ParticleEmitter>())
@@ -54,7 +53,7 @@ namespace MonoGame.Extended.Entities.Systems
             _spriteBatch.End();
         }
 
-        private void DrawSprite(Components.Sprite sprite, Components.Transform transform)
+        private void DrawSprite(SpriteComponent sprite, TransformComponent transform)
         {
             if (!sprite.IsVisible || sprite.TextureRegion == null)
                 return;

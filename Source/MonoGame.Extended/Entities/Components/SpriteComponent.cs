@@ -6,7 +6,7 @@ using System;
 
 namespace MonoGame.Extended.Entities.Components
 {
-    public sealed class Sprite
+    public sealed class SpriteComponent
     {
         public bool IsVisible { get; set; } = true;
 
