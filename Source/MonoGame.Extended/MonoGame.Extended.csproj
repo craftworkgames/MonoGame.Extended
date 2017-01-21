@@ -38,6 +38,8 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Entities\Components\Sprite.cs" />
+    <Compile Include="Entities\Components\Transform.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\IEntitySystem.cs" />
     <Compile Include="FloatHelper.cs" />
@@ -282,9 +284,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entities\Components\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

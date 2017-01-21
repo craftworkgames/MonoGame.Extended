@@ -14,16 +14,21 @@ namespace MonoGame.Extended.Entities
             Guid = guid;
         }
 
+        public bool IsAlive => Ecs.EntityExists(Guid);
+
         public void Destroy() => Ecs.DestroyEntity(Guid);
 
-        public void AddComponent(Type componentType) => Ecs.AddComponent(Guid, componentType);
+        public void AddComponent(Type componentType, object component = null) => Ecs.AddComponent(Guid, componentType, component);
 
-        public object GetComponent<T>() => Ecs.GetEntityComponent(Guid, typeof(T));
+        public T GetComponent<T>() => (T)Ecs.GetEntityComponent(Guid, typeof(T));
         public object GetComponent(Type componentType) => Ecs.GetEntityComponent(Guid, componentType);
 
         public IEnumerable GetComponents() => Ecs.GetEntityComponents(Guid);
         public IEnumerable GetComponents(Type componentType) => Ecs.GetEntityComponents(Guid, componentType);
         public IEnumerable GetComponents<T>() => Ecs.GetEntityComponents(Guid, typeof(T));
+
+        public bool HasComponent<T>() => GetComponent<T>() != null;
+        public bool HasComponent(Type componentType) => GetComponents(componentType) != null;
 
         public void RemoveComponent(Type componentType, object component) => Ecs.RemoveComponent(Guid, componentType, component);
         public void RemoveComponents(Type componentType) => Ecs.RemoveComponents(Guid, componentType);
