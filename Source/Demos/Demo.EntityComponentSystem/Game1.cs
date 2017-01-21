@@ -48,7 +48,7 @@ namespace Demo.EntityComponentSystem
         public override void Update(Entity entity, GameTime gameTime)
         {
             if (entity.HasComponent<LogoTag>())
-                entity.GetComponent<TransformComponent>().Rotation += gameTime.GetElapsedSeconds();
+                entity.GetComponent<Transform>().Rotation += gameTime.GetElapsedSeconds();
         }
     }
 
@@ -110,10 +110,10 @@ namespace Demo.EntityComponentSystem
 
             _entityComponentSystem.RegisterComponent<LogoTag>(() => new LogoTag());
             _entityComponentSystem.RegisterComponent<MotwTag>(() => new MotwTag());
-            _entityComponentSystem.RegisterComponent<TransformComponent>(() => new TransformComponent());
+            _entityComponentSystem.RegisterComponent<Transform>(() => new Transform());
             _entityComponentSystem.RegisterComponent<SpriteComponent>(() => new SpriteComponent());
 
-            _entityComponentSystem.RegisterEntity("logo", new Type[] { typeof(LogoTag), typeof(SpriteComponent), typeof(TransformComponent) });
+            _entityComponentSystem.RegisterEntity("logo", new Type[] { typeof(LogoTag), typeof(SpriteComponent), typeof(Transform) });
             _entityComponentSystem.RegisterEntity("motw", new Type[] { typeof(MotwTag), typeof(SpriteComponent) });
 
             _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(spriteBatch, camera));

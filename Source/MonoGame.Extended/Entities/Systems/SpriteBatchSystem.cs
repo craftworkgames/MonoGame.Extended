@@ -37,7 +37,7 @@ namespace MonoGame.Extended.Entities.Systems
 
         public override void Draw(Entity entity, GameTime gameTime)
         {
-            var entityTransform = entity.GetComponent<Components.TransformComponent>();
+            var entityTransform = entity.GetComponent<Components.Transform>();
             var transformMatrix = _camera.GetViewMatrix();
 
             _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect,
@@ -53,7 +53,7 @@ namespace MonoGame.Extended.Entities.Systems
             _spriteBatch.End();
         }
 
-        private void DrawSprite(SpriteComponent sprite, TransformComponent transform)
+        private void DrawSprite(SpriteComponent sprite, Transform transform)
         {
             if (!sprite.IsVisible || sprite.TextureRegion == null)
                 return;
