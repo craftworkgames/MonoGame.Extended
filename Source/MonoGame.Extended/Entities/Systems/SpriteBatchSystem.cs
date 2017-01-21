@@ -5,15 +5,15 @@ using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.Entities.Systems
 {
-    public class SpriteBatchSystem : ComponentSystem
+    public class SpriteBatchSystem : EntitySystem
     {
         private readonly Camera2D _camera;
         private readonly SpriteBatch _spriteBatch;
 
-        public SpriteBatchSystem(GraphicsDevice graphicsDevice, Camera2D camera)
+        public SpriteBatchSystem(SpriteBatch spriteBatch, Camera2D camera)
         {
             _camera = camera;
-            _spriteBatch = new SpriteBatch(graphicsDevice);
+            _spriteBatch = spriteBatch;
         }
 
         public Effect Effect { get; set; }
@@ -23,19 +23,17 @@ namespace MonoGame.Extended.Entities.Systems
         public BlendState BlendState { get; set; }
         public SpriteSortMode SortMode { get; set; } = SpriteSortMode.Deferred;
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(Entity entity, GameTime gameTime)
         {
-            var sprites = GetComponents<Sprite>();
-            var emitters = GetComponents<ParticleEmitter>();
             var transformMatrix = _camera.GetViewMatrix();
 
             _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect,
                 transformMatrix);
 
-            foreach (var sprite in sprites)
+            foreach (Sprite sprite in entity.GetComponents<Sprite>())
                 _spriteBatch.Draw(sprite);
 
-            foreach (var particleEmitter in emitters)
+            foreach (ParticleEmitter particleEmitter in entity.GetComponents<ParticleEmitter>())
                 _spriteBatch.Draw(particleEmitter);
 
             _spriteBatch.End();
