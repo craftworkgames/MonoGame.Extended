@@ -8,15 +8,16 @@ namespace MonoGame.Extended.Entities
 {
     public class Entity : Transform2D<Entity>
     {
+        private static long _nextEntityId = 0;
         private readonly List<EntityComponent> _components;
         private readonly EntityComponentSystem _entityComponentSystem;
 
-        public Entity(EntityComponentSystem entityComponentSystem, long id, string name)
+        public Entity(EntityComponentSystem entityComponentSystem, string name)
         {
             _entityComponentSystem = entityComponentSystem;
             _components = new List<EntityComponent>();
 
-            Id = id;
+            Id = _nextEntityId++;
             Name = name;
             Position = Vector2.Zero;
             Rotation = 0;
