@@ -15,7 +15,6 @@ namespace MonoGame.Extended.Entities
         private readonly Dictionary<string, Entity> _entitiesByName;
 
         private readonly List<ComponentSystem> _systems;
-        private long _nextEntityId;
 
         public EntityComponentSystem()
         {
@@ -24,7 +23,6 @@ namespace MonoGame.Extended.Entities
             _dyingEntities = new List<DyingEntity>();
             _components = new List<EntityComponent>();
             _systems = new List<ComponentSystem>();
-            _nextEntityId = 1;
         }
 
         internal event EventHandler<EntityComponent> ComponentAttached;
@@ -61,7 +59,7 @@ namespace MonoGame.Extended.Entities
 
         public Entity CreateEntity(string name)
         {
-            var entity = new Entity(this, _nextEntityId, name);
+            var entity = new Entity(this, name);
 
             _entities.Add(entity);
 
@@ -69,7 +67,6 @@ namespace MonoGame.Extended.Entities
                 _entitiesByName.Add(name, entity);
 
             EntityCreated?.Invoke(this, entity);
-            _nextEntityId++;
             return entity;
         }
 
