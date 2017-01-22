@@ -76,9 +76,20 @@ namespace MonoGame.Extended.Entities
 
         internal void DestroyEntity(Guid entity)
         {
-            _entities.Remove(entity);
-            ForEachSystem(s => s.EntityRemovedInternal(entity.ToEntity(this)));
-            _components.RemoveWhere(e => e.entity == entity);
+            if (_entities.Remove(entity))
+            {
+                Entity entityInst = entity.ToEntity(this);
+
+                var components = from comp in _components
+                                 where comp.entity == entity
+                                 select comp;
+
+                foreach (var comp in components)
+                    ForEachSystem(s => s.ComponentRemovedInternal(entityInst, comp.type, comp.component));
+
+                ForEachSystem(s => s.EntityRemovedInternal(entityInst));
+                _components.RemoveWhere(c => components.Contains(c));
+            }
         }
 
         internal bool EntityExists(Guid entity)
