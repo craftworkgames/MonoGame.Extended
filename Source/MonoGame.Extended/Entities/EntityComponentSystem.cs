@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Entities
 
         #region Entity Methods
 
-        public void CreateEntity(string entityName)
+        public void CreateEntity(string entityName, Action<Entity> initializer = null)
         {
             Guid entity = Guid.NewGuid();
 
@@ -64,6 +64,7 @@ namespace MonoGame.Extended.Entities
                         system.ComponentAdded(entityInst, component);
                 }
 
+                initializer?.Invoke(entityInst);
                 _entities.Add(entity);
             }
             catch (Exception)
