@@ -7,83 +7,26 @@ using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Particles;
-using MonoGame.Extended.Particles.Modifiers;
-using MonoGame.Extended.Particles.Modifiers.Containers;
-using MonoGame.Extended.Particles.Modifiers.Interpolators;
-using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Content;
 
 namespace Demo.EntityComponentSystem
 {
-    class LogoTag
+    class Rotator
     {
-        
+        public float Speed { get; set; } = 1f;
     }
 
-    class LogoSystem : EntitySystem
+    class RotatorSystem : EntitySystem
     {
-        private Texture2D _texture;
-
-        public override void LoadContent(ContentManager contentManager)
-        {
-            _texture = contentManager.Load<Texture2D>("logo-square-128");
-        }
-
-        public override void EntityCreated(Entity entity)
-        {
-            if (entity.HasComponent<LogoTag>())
-            {
-                SpriteComponent sprite = entity.GetComponent<SpriteComponent>();
-                sprite.TextureRegion = new Sprite(_texture).TextureRegion;
-                sprite.Position = new Vector2(400, 240);
-                sprite.Origin = (sprite.TextureRegion.Size / 2);
-            }
-        }
-
         public override void Update(Entity entity, GameTime gameTime)
         {
-            if (entity.HasComponent<LogoTag>())
-                entity.GetComponent<Transform>().Rotation += gameTime.GetElapsedSeconds();
-        }
-    }
+            var transform = entity.GetComponent<Transform>();
+            var rotator = entity.GetComponent<Rotator>();
 
-    class MotwTag
-    {
-
-    }
-
-    class MotwSystem : EntitySystem
-    {
-        private SpriteSheetAnimationFactory _animation;
-
-        public override void LoadContent(ContentManager contentManager)
-        {
-            var texture = contentManager.Load<Texture2D>("motw");
-            var textureAtlas = TextureAtlas.Create(texture, 52, 72);
-
-            _animation = new SpriteSheetAnimationFactory(textureAtlas);
-            _animation.Add("idle", new SpriteSheetAnimationData(new[] { 0 }));
-            _animation.Add("walkSouth", new SpriteSheetAnimationData(new[] { 0, 1, 2, 1 }, isLooping: true));
-            _animation.Add("walkWest", new SpriteSheetAnimationData(new[] { 12, 13, 14, 13 }, isLooping: true));
-            _animation.Add("walkEast", new SpriteSheetAnimationData(new[] { 24, 25, 26, 25 }, isLooping: true));
-            _animation.Add("walkNorth", new SpriteSheetAnimationData(new[] { 36, 37, 38, 37 }, isLooping: true));
-        }
-
-        public override void EntityCreated(Entity entity)
-        {
-            if (entity.HasComponent<MotwTag>())
-            {
-                var sprite = entity.GetComponent<SpriteComponent>();
-                sprite.AnimationFactory = _animation;
-                sprite.Play("walkSouth");
-                sprite.Position = new Vector2(50, 50);
-                sprite.Origin = sprite.TextureRegion.Size / 2;
-            }
+            if (transform != null && rotator != null)
+                transform.Rotation += gameTime.GetElapsedSeconds() * rotator.Speed;
         }
     }
 
@@ -106,28 +49,56 @@ namespace Demo.EntityComponentSystem
             var spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _entityComponentSystem = new MonoGame.Extended.Entities.EntityComponentSystem(this);
-            Components.Add(_entityComponentSystem);
 
-            _entityComponentSystem.RegisterComponent<LogoTag>(() => new LogoTag());
-            _entityComponentSystem.RegisterComponent<MotwTag>(() => new MotwTag());
+            _entityComponentSystem.RegisterComponent<Rotator>(() => new Rotator());
             _entityComponentSystem.RegisterComponent<Transform>(() => new Transform());
             _entityComponentSystem.RegisterComponent<SpriteComponent>(() => new SpriteComponent());
 
-            _entityComponentSystem.RegisterEntity("logo", new Type[] { typeof(LogoTag), typeof(SpriteComponent), typeof(Transform) });
-            _entityComponentSystem.RegisterEntity("motw", new Type[] { typeof(MotwTag), typeof(SpriteComponent) });
+            _entityComponentSystem.RegisterEntity("logo", new Type[] { typeof(Rotator), typeof(SpriteComponent), typeof(Transform) });
+            _entityComponentSystem.RegisterEntity("motw", new Type[] { typeof(SpriteComponent) });
 
             _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(spriteBatch, camera));
             _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
             _entityComponentSystem.RegisterSystem(new ParticleEmitterSystem());
-            _entityComponentSystem.RegisterSystem(new LogoSystem());
-            _entityComponentSystem.RegisterSystem(new MotwSystem());
+            _entityComponentSystem.RegisterSystem(new RotatorSystem());
 
             _entityComponentSystem.Initialize();
-
-            _entityComponentSystem.CreateEntity("logo");
-            _entityComponentSystem.CreateEntity("motw");
+            Components.Add(_entityComponentSystem);
 
             base.Initialize();
+        }
+
+        protected override void LoadContent()
+        {
+            _entityComponentSystem.CreateEntity("logo", (entity) =>
+            {
+                var texture = Content.Load<Texture2D>("logo-square-128");
+                var sprite = entity.GetComponent<SpriteComponent>();
+                sprite.TextureRegion = new Sprite(texture).TextureRegion;
+                sprite.Position = new Vector2(400, 240);
+                sprite.Origin = (sprite.TextureRegion.Size / 2);
+            });
+
+            _entityComponentSystem.CreateEntity("motw", (entity) =>
+            {
+                var texture = Content.Load<Texture2D>("motw");
+                var textureAtlas = TextureAtlas.Create(texture, 52, 72);
+
+                var animation = new SpriteSheetAnimationFactory(textureAtlas);
+                animation.Add("idle", new SpriteSheetAnimationData(new[] { 0 }));
+                animation.Add("walkSouth", new SpriteSheetAnimationData(new[] { 0, 1, 2, 1 }, isLooping: true));
+                animation.Add("walkWest", new SpriteSheetAnimationData(new[] { 12, 13, 14, 13 }, isLooping: true));
+                animation.Add("walkEast", new SpriteSheetAnimationData(new[] { 24, 25, 26, 25 }, isLooping: true));
+                animation.Add("walkNorth", new SpriteSheetAnimationData(new[] { 36, 37, 38, 37 }, isLooping: true));
+
+                var sprite = entity.GetComponent<SpriteComponent>();
+                sprite.AnimationFactory = animation;
+                sprite.Play("walkSouth");
+                sprite.Position = new Vector2(50, 50);
+                sprite.Origin = sprite.TextureRegion.Size / 2;
+            });
+
+            base.LoadContent();
         }
 
         protected override void Update(GameTime gameTime)
