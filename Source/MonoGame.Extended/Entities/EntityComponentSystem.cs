@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Entities
     {
         #region Private Variables
 
-        private readonly Dictionary<Type, Func<object>> _componentFactories;
+        private readonly Dictionary<Type, ComponentDefinition> _componentDefinitions;
         private readonly Dictionary<string, ICollection<Type>> _entityDefinitions;
 
         private readonly HashSet<EntityComponent> _components;
@@ -23,11 +23,11 @@ namespace MonoGame.Extended.Entities
         public EntityComponentSystem(Game game) 
             : base(game)
         {
-            _components         = new HashSet<EntityComponent>();
-            _componentFactories = new Dictionary<Type, Func<object>>();
-            _entities           = new List<Guid>();
-            _entityDefinitions  = new Dictionary<string, ICollection<Type>>();
-            _systems            = new HashSet<EntitySystem>();
+            _components           = new HashSet<EntityComponent>();
+            _componentDefinitions = new Dictionary<Type, ComponentDefinition>();
+            _entities             = new List<Guid>();
+            _entityDefinitions    = new Dictionary<string, ICollection<Type>>();
+            _systems              = new HashSet<EntitySystem>();
         }
 
         #region Entity Methods
@@ -42,16 +42,16 @@ namespace MonoGame.Extended.Entities
 
                 foreach (var type in _entityDefinitions[entityName])
                 {
-                    VerifyType(type);
+                    VerifyComponent(entity, type);
 
                     var entityComponent = new EntityComponent()
                     {
-                        Entity = entity,
-                        Type = type,
-                        Component = _componentFactories[type]()
+                        entity = entity,
+                        type = type,
+                        component = _componentDefinitions[type].factory()
                     };
 
-                    addedComponents.Add(entityComponent.Component);
+                    addedComponents.Add(entityComponent.component);
                     _components.Add(entityComponent);
                 }
 
@@ -69,7 +69,7 @@ namespace MonoGame.Extended.Entities
             }
             catch (Exception)
             {
-                _components.RemoveWhere(e => e.Entity == entity);
+                _components.RemoveWhere(e => e.entity == entity);
                 throw;
             }
         }
@@ -78,7 +78,7 @@ namespace MonoGame.Extended.Entities
         {
             _entities.Remove(entity);
             ForEachSystem(s => s.EntityRemovedInternal(entity.ToEntity(this)));
-            _components.RemoveWhere(e => e.Entity == entity);
+            _components.RemoveWhere(e => e.entity == entity);
         }
 
         internal bool EntityExists(Guid entity)
@@ -88,13 +88,13 @@ namespace MonoGame.Extended.Entities
 
         internal void AddComponent(Guid entity, Type type, object component = null)
         {
-            VerifyType(type);
+            VerifyComponent(entity, type);
 
             var entityComponent = new EntityComponent()
             {
-                Entity = entity,
-                Type = type,
-                Component = component ?? _componentFactories[type]()
+                entity = entity,
+                type = type,
+                component = component ?? _componentDefinitions[type].factory()
             };
 
             _components.Add(entityComponent);
@@ -105,9 +105,9 @@ namespace MonoGame.Extended.Entities
         {
             _components.RemoveWhere(e =>
             {
-                if (e.Entity == entity && e.Type == componentType && e.Component == component)
+                if (e.entity == entity && e.type == componentType && e.component == component)
                 {
-                    ForEachSystem(s => s.ComponentRemovedInternal(entity.ToEntity(this), e.Component));
+                    ForEachSystem(s => s.ComponentRemovedInternal(entity.ToEntity(this), e.component));
                     return true;
                 }
                 return false;
@@ -118,9 +118,9 @@ namespace MonoGame.Extended.Entities
         {
             _components.RemoveWhere(e =>
             {
-                if (e.Entity == entity && e.Type == type)
+                if (e.entity == entity && e.type == type)
                 {
-                    ForEachSystem(s => s.ComponentRemovedInternal(entity.ToEntity(this), e.Component));
+                    ForEachSystem(s => s.ComponentRemovedInternal(entity.ToEntity(this), e.component));
                     return true;
                 }
                 return false;
@@ -129,33 +129,37 @@ namespace MonoGame.Extended.Entities
 
         internal object GetEntityComponent(Guid entity, Type componentType)
         {
-            return _components.Where(c => c.Entity == entity && c.Type == componentType)
+            return _components.Where(c => c.entity == entity && c.type == componentType)
                 .FirstOrDefault()
-                .Component;
+                .component;
         }
 
         internal IEnumerable GetEntityComponents(Guid entity)
         {
             return from component in _components
-                   where entity == component.Entity
-                   select component.Component;
+                   where entity == component.entity
+                   select component.component;
         }
 
         internal IEnumerable GetEntityComponents(Guid entity, Type componentType)
         {
             return from component in _components
-                   where entity == component.Entity && componentType == component.Type
-                   select component.Component;
+                   where entity == component.entity && componentType == component.type
+                   select component.component;
         }
 
         #endregion
 
         #region Register Methods
 
-        public void RegisterComponent<T>(Func<object> factory) => RegisterComponent(typeof(T), factory);
-        public void RegisterComponent(Type componentType, Func<object> factory)
+        public void RegisterComponent<T>(Func<object> factory, bool allowDuplicates) => RegisterComponent(typeof(T), factory, allowDuplicates);
+        public void RegisterComponent(Type componentType, Func<object> factory, bool allowDuplicates = true)
         {
-            _componentFactories.Add(componentType, factory);
+            _componentDefinitions.Add(componentType, new ComponentDefinition()
+            {
+                factory = factory,
+                allowDuplicates = allowDuplicates
+            });
         }
 
         public void RegisterEntity(string entityName, ICollection<Type> components)
@@ -206,17 +210,30 @@ namespace MonoGame.Extended.Entities
                 action(system);
         }
 
-        private void VerifyType(Type type)
+        private void VerifyComponent(Guid entity, Type type)
         {
-            if (!_componentFactories.ContainsKey(type))
-                throw new ArgumentException($"{type} is not a registered component");
+            if (!_componentDefinitions.ContainsKey(type))
+                throw new ArgumentException($"{type.Name} is not a registered component");
+
+            if (_componentDefinitions[type].allowDuplicates)
+            {
+                int count = _components.Where(c => c.entity == entity && c.type == type).Count();
+                if (count > 1)
+                    throw new ArgumentException($"{type.Name} already exists on the entity");
+            }
+        }
+
+        private struct ComponentDefinition
+        {
+            public Func<object> factory;
+            public bool allowDuplicates;
         }
 
         private struct EntityComponent
         {
-            public Guid Entity;
-            public Type Type;
-            public object Component;
+            public Guid entity;
+            public Type type;
+            public object component;
         }
 
         #endregion
