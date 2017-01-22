@@ -178,7 +178,7 @@ namespace MonoGame.Extended.Entities
             });
         }
 
-        public void RegisterEntity(string entityName, Action<Entity> factory, ICollection<Type> components)
+        public void RegisterEntity(string entityName, ICollection<Type> components, Action<Entity> factory = null)
         {
             _entityDefinitions.Add(entityName, new EntityDefinition()
             {

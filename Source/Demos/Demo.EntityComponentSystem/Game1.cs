@@ -54,8 +54,8 @@ namespace Demo.EntityComponentSystem
             _entityComponentSystem.RegisterComponent<Transform>(() => new Transform());
             _entityComponentSystem.RegisterComponent<SpriteComponent>(() => new SpriteComponent());
 
-            _entityComponentSystem.RegisterEntity("logo", null, new Type[] { typeof(Rotator), typeof(SpriteComponent), typeof(Transform) });
-            _entityComponentSystem.RegisterEntity("motw", null, new Type[] { typeof(SpriteComponent) });
+            _entityComponentSystem.RegisterEntity("logo", new Type[] { typeof(Rotator), typeof(SpriteComponent), typeof(Transform) });
+            _entityComponentSystem.RegisterEntity("motw", new Type[] { typeof(SpriteComponent) });
 
             _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(spriteBatch, camera));
             _entityComponentSystem.RegisterSystem(new SpriteAnimatorSystem());
