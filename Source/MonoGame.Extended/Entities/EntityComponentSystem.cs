@@ -38,7 +38,7 @@ namespace MonoGame.Extended.Entities
 
             try
             {
-                List<object> addedComponents = new List<object>();
+                List<EntityComponent> addedComponents = new List<EntityComponent>();
 
                 foreach (var type in _entityDefinitions[entityName])
                 {
@@ -51,7 +51,7 @@ namespace MonoGame.Extended.Entities
                         component = _componentDefinitions[type].factory()
                     };
 
-                    addedComponents.Add(entityComponent.component);
+                    addedComponents.Add(entityComponent);
                     _components.Add(entityComponent);
                 }
 
@@ -61,7 +61,7 @@ namespace MonoGame.Extended.Entities
                 {
                     system.EntityCreatedInternal(entityInst);
                     foreach (var component in addedComponents)
-                        system.ComponentAddedInternal(entityInst, component);
+                        system.ComponentAddedInternal(entityInst, component.type, component.component);
                 }
 
                 initializer?.Invoke(entityInst);
@@ -86,19 +86,19 @@ namespace MonoGame.Extended.Entities
             return _entities.Contains(entity);
         }
 
-        internal void AddComponent(Guid entity, Type type, object component = null)
+        internal void AddComponent(Guid entity, Type componentType, object component = null)
         {
-            VerifyComponent(entity, type);
+            VerifyComponent(entity, componentType);
 
             var entityComponent = new EntityComponent()
             {
                 entity = entity,
-                type = type,
-                component = component ?? _componentDefinitions[type].factory()
+                type = componentType,
+                component = component ?? _componentDefinitions[componentType].factory()
             };
 
             _components.Add(entityComponent);
-            ForEachSystem(s => s.ComponentAddedInternal(entity.ToEntity(this), component));
+            ForEachSystem(s => s.ComponentAddedInternal(entity.ToEntity(this), entityComponent.type, component));
         }
 
         internal void RemoveComponent(Guid entity, Type componentType, object component)
@@ -107,20 +107,20 @@ namespace MonoGame.Extended.Entities
             {
                 if (e.entity == entity && e.type == componentType && e.component == component)
                 {
-                    ForEachSystem(s => s.ComponentRemovedInternal(entity.ToEntity(this), e.component));
+                    ForEachSystem(s => s.ComponentRemovedInternal(entity.ToEntity(this), componentType, e.component));
                     return true;
                 }
                 return false;
             });
         }
 
-        internal void RemoveComponents(Guid entity, Type type)
+        internal void RemoveComponents(Guid entity, Type componentType)
         {
             _components.RemoveWhere(e =>
             {
-                if (e.entity == entity && e.type == type)
+                if (e.entity == entity && e.type == componentType)
                 {
-                    ForEachSystem(s => s.ComponentRemovedInternal(entity.ToEntity(this), e.component));
+                    ForEachSystem(s => s.ComponentRemovedInternal(entity.ToEntity(this), componentType, e.component));
                     return true;
                 }
                 return false;

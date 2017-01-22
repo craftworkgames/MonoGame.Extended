@@ -21,8 +21,8 @@ namespace MonoGame.Extended.Entities
         protected virtual void EntityCreated(Entity entity) { }
         protected virtual void EntityRemoved(Entity entity) { }
 
-        protected virtual void ComponentAdded(Entity entity, object component) { }
-        protected virtual void ComponentRemoved(Entity entity, object component) { }
+        protected virtual void ComponentAdded(Entity entity, Type type, object component) { }
+        protected virtual void ComponentRemoved(Entity entity, Type type, object component) { }
 
         #endregion
 
@@ -37,8 +37,8 @@ namespace MonoGame.Extended.Entities
         internal void EntityCreatedInternal(Entity entity) => EntityCreated(entity);
         internal void EntityRemovedInternal(Entity entity) => EntityRemoved(entity);
 
-        internal void ComponentAddedInternal(Entity entity, object component) => ComponentAdded(entity, component);
-        internal void ComponentRemovedInternal(Entity entity, object component) => ComponentRemoved(entity, component);
+        internal void ComponentAddedInternal(Entity entity, Type type, object component) => ComponentAdded(entity, type, component);
+        internal void ComponentRemovedInternal(Entity entity, Type type, object component) => ComponentRemoved(entity, type, component);
 
         #endregion
     }
