@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Entities
         private readonly HashSet<EntityComponent> _components;
         private readonly List<Guid> _entities;
 
-        private readonly HashSet<IEntitySystem> _systems;
+        private readonly HashSet<EntitySystem> _systems;
 
         #endregion
 
@@ -27,7 +27,7 @@ namespace MonoGame.Extended.Entities
             _componentFactories = new Dictionary<Type, Func<object>>();
             _entities           = new List<Guid>();
             _entityDefinitions  = new Dictionary<string, ICollection<Type>>();
-            _systems            = new HashSet<IEntitySystem>();
+            _systems            = new HashSet<EntitySystem>();
         }
 
         #region Entity Methods
@@ -59,9 +59,9 @@ namespace MonoGame.Extended.Entities
 
                 foreach (var system in _systems)
                 {
-                    system.EntityCreated(entityInst);
+                    system.EntityCreatedInternal(entityInst);
                     foreach (var component in addedComponents)
-                        system.ComponentAdded(entityInst, component);
+                        system.ComponentAddedInternal(entityInst, component);
                 }
 
                 initializer?.Invoke(entityInst);
@@ -77,7 +77,7 @@ namespace MonoGame.Extended.Entities
         internal void DestroyEntity(Guid entity)
         {
             _entities.Remove(entity);
-            ForEachSystem(s => s.EntityRemoved(entity.ToEntity(this)));
+            ForEachSystem(s => s.EntityRemovedInternal(entity.ToEntity(this)));
             _components.RemoveWhere(e => e.Entity == entity);
         }
 
@@ -98,7 +98,7 @@ namespace MonoGame.Extended.Entities
             };
 
             _components.Add(entityComponent);
-            ForEachSystem(s => s.ComponentAdded(entity.ToEntity(this), component));
+            ForEachSystem(s => s.ComponentAddedInternal(entity.ToEntity(this), component));
         }
 
         internal void RemoveComponent(Guid entity, Type componentType, object component)
@@ -107,7 +107,7 @@ namespace MonoGame.Extended.Entities
             {
                 if (e.Entity == entity && e.Type == componentType && e.Component == component)
                 {
-                    ForEachSystem(s => s.ComponentRemoved(entity.ToEntity(this), e.Component));
+                    ForEachSystem(s => s.ComponentRemovedInternal(entity.ToEntity(this), e.Component));
                     return true;
                 }
                 return false;
@@ -120,7 +120,7 @@ namespace MonoGame.Extended.Entities
             {
                 if (e.Entity == entity && e.Type == type)
                 {
-                    ForEachSystem(s => s.ComponentRemoved(entity.ToEntity(this), e.Component));
+                    ForEachSystem(s => s.ComponentRemovedInternal(entity.ToEntity(this), e.Component));
                     return true;
                 }
                 return false;
@@ -152,26 +152,38 @@ namespace MonoGame.Extended.Entities
 
         #region Register Methods
 
-        public void RegisterComponent<T>(Func<object> factory) => _componentFactories.Add(typeof(T), factory);
-        public void RegisterComponent(Type componentType, Func<object> factory) => _componentFactories.Add(componentType, factory);
-        public void RegisterEntity(string entityName, ICollection<Type> components) => _entityDefinitions.Add(entityName, components);
-        public void RegisterSystem(IEntitySystem system) => _systems.Add(system);
+        public void RegisterComponent<T>(Func<object> factory) => RegisterComponent(typeof(T), factory);
+        public void RegisterComponent(Type componentType, Func<object> factory)
+        {
+            _componentFactories.Add(componentType, factory);
+        }
+
+        public void RegisterEntity(string entityName, ICollection<Type> components)
+        {
+            _entityDefinitions.Add(entityName, components);
+        }
+
+        public void RegisterSystem(EntitySystem system)
+        {
+            system.Ecs = this;
+            _systems.Add(system);
+        }
 
         #endregion
 
         #region DrawableGameComponent Methods
 
-        public override void Initialize() => ForEachSystem(s => s.LoadContent(Game.Content));
+        public override void Initialize() => LoadContent();
 
-        protected override void LoadContent() => ForEachSystem(s => s.LoadContent(Game.Content));
-        protected override void UnloadContent() => ForEachSystem(s => s.UnloadContent());
+        protected override void LoadContent() => ForEachSystem(s => s.LoadContentInternal(Game.Content));
+        protected override void UnloadContent() => ForEachSystem(s => s.UnloadContentInternal());
 
         public override void Update(GameTime gameTime)
         {
             foreach (var system in _systems)
             {
                 foreach (var entity in _entities)
-                    system.Update(entity.ToEntity(this), gameTime);
+                    system.UpdateInternal(entity.ToEntity(this), gameTime);
             }
         }
 
@@ -180,7 +192,7 @@ namespace MonoGame.Extended.Entities
             foreach (var system in _systems)
             {
                 foreach (var entity in _entities)
-                    system.Draw(entity.ToEntity(this), gameTime);
+                    system.DrawInternal(entity.ToEntity(this), gameTime);
             }
         }
 
@@ -188,7 +200,7 @@ namespace MonoGame.Extended.Entities
 
         #region Utility
 
-        private void ForEachSystem(Action<IEntitySystem> action)
+        private void ForEachSystem(Action<EntitySystem> action)
         {
             foreach (var system in _systems)
                 action(system);

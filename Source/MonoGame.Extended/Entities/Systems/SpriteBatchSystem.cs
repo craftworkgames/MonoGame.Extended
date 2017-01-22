@@ -22,7 +22,7 @@ namespace MonoGame.Extended.Entities.Systems
         public BlendState BlendState { get; set; }
         public SpriteSortMode SortMode { get; set; } = SpriteSortMode.BackToFront;
 
-        public override void Update(Entity entity, GameTime gameTime)
+        protected override void Update(Entity entity, GameTime gameTime)
         {
             var sprites = entity.GetComponents<SpriteComponent>();
             foreach (SpriteComponent sprite in sprites)
@@ -35,7 +35,7 @@ namespace MonoGame.Extended.Entities.Systems
             }
         }
 
-        public override void Draw(Entity entity, GameTime gameTime)
+        protected override void Draw(Entity entity, GameTime gameTime)
         {
             var entityTransform = entity.GetComponent<Components.Transform>();
             var transformMatrix = _camera.GetViewMatrix();

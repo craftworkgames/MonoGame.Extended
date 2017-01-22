@@ -41,7 +41,6 @@
     <Compile Include="Entities\Components\SpriteComponent.cs" />
     <Compile Include="Entities\Components\Transform.cs" />
     <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Entities\IEntitySystem.cs" />
     <Compile Include="FloatHelper.cs" />
     <Compile Include="Graphics\IMatrixChainEffect.cs" />
     <Compile Include="Graphics\Renderer.cs" />

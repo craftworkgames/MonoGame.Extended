@@ -20,7 +20,7 @@ namespace Demo.EntityComponentSystem
 
     class RotatorSystem : EntitySystem
     {
-        public override void Update(Entity entity, GameTime gameTime)
+        protected override void Update(Entity entity, GameTime gameTime)
         {
             var transform = entity.GetComponent<Transform>();
             var rotator = entity.GetComponent<Rotator>();

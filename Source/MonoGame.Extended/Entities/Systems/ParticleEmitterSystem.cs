@@ -5,7 +5,7 @@ namespace MonoGame.Extended.Entities.Systems
 {
     public class ParticleEmitterSystem : EntitySystem
     {
-        public override void Update(Entity entity, GameTime gameTime)
+        protected override void Update(Entity entity, GameTime gameTime)
         {
             var deltaTime = gameTime.GetElapsedSeconds();
             foreach (ParticleEmitter particleEmitter in entity.GetComponents<ParticleEmitter>())
