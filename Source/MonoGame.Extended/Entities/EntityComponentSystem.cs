@@ -59,9 +59,9 @@ namespace MonoGame.Extended.Entities
 
                 foreach (var system in _systems)
                 {
-                    system.EntityCreatedInternal(entityInst);
                     foreach (var component in addedComponents)
                         system.ComponentAddedInternal(entityInst, component.type, component.component);
+                    system.EntityCreatedInternal(entityInst);
                 }
 
                 initializer?.Invoke(entityInst);
