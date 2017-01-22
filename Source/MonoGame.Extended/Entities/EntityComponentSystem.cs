@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Entities
         #region Private Variables
 
         private readonly Dictionary<Type, ComponentDefinition> _componentDefinitions;
-        private readonly Dictionary<string, ICollection<Type>> _entityDefinitions;
+        private readonly Dictionary<string, EntityDefinition> _entityDefinitions;
 
         private readonly HashSet<EntityComponent> _components;
         private readonly List<Guid> _entities;
@@ -26,13 +26,13 @@ namespace MonoGame.Extended.Entities
             _components           = new HashSet<EntityComponent>();
             _componentDefinitions = new Dictionary<Type, ComponentDefinition>();
             _entities             = new List<Guid>();
-            _entityDefinitions    = new Dictionary<string, ICollection<Type>>();
+            _entityDefinitions    = new Dictionary<string, EntityDefinition>();
             _systems              = new HashSet<EntitySystem>();
         }
 
         #region Entity Methods
 
-        public void CreateEntity(string entityName, Action<Entity> initializer = null)
+        public void CreateEntity(string entityName, Action<Entity> customFactory = null)
         {
             Guid entity = Guid.NewGuid();
 
@@ -40,7 +40,7 @@ namespace MonoGame.Extended.Entities
             {
                 List<EntityComponent> addedComponents = new List<EntityComponent>();
 
-                foreach (var type in _entityDefinitions[entityName])
+                foreach (var type in _entityDefinitions[entityName].components)
                 {
                     VerifyComponent(entity, type);
 
@@ -64,7 +64,7 @@ namespace MonoGame.Extended.Entities
                     system.EntityCreatedInternal(entityInst);
                 }
 
-                initializer?.Invoke(entityInst);
+                (customFactory ?? _entityDefinitions[entityName].factory)?.Invoke(entityInst);
                 _entities.Add(entity);
             }
             catch (Exception)
@@ -178,9 +178,13 @@ namespace MonoGame.Extended.Entities
             });
         }
 
-        public void RegisterEntity(string entityName, ICollection<Type> components)
+        public void RegisterEntity(string entityName, Action<Entity> factory, ICollection<Type> components)
         {
-            _entityDefinitions.Add(entityName, components);
+            _entityDefinitions.Add(entityName, new EntityDefinition()
+            {
+                factory = factory,
+                components = components
+            });
         }
 
         public void RegisterSystem(EntitySystem system)
@@ -250,6 +254,12 @@ namespace MonoGame.Extended.Entities
             public Guid entity;
             public Type type;
             public object component;
+        }
+
+        private struct EntityDefinition
+        {
+            public IEnumerable<Type> components;
+            public Action<Entity> factory;
         }
 
         #endregion
