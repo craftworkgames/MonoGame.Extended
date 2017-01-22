@@ -55,10 +55,10 @@ namespace Demo.EntityComponentSystem
             _entityComponentSystem.RegisterComponent<SpriteComponent>(() => new SpriteComponent());
 
             _entityComponentSystem.RegisterEntity("logo", new Type[] { typeof(Rotator), typeof(SpriteComponent), typeof(Transform) });
-            _entityComponentSystem.RegisterEntity("motw", new Type[] { typeof(SpriteComponent) });
+            _entityComponentSystem.RegisterEntity("motw", new Type[] { typeof(SpriteComponent), typeof(SpriteAnimatorSystem) });
 
             _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(spriteBatch, camera));
-            _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
+            _entityComponentSystem.RegisterSystem(new SpriteAnimatorSystem());
             _entityComponentSystem.RegisterSystem(new ParticleEmitterSystem());
             _entityComponentSystem.RegisterSystem(new RotatorSystem());
 

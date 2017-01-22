@@ -163,8 +163,13 @@ namespace MonoGame.Extended.Entities
 
         #region Register Methods
 
-        public void RegisterComponent<T>(Func<object> factory, bool allowDuplicates = true) => RegisterComponent(typeof(T), factory, allowDuplicates);
-        public void RegisterComponent(Type componentType, Func<object> factory, bool allowDuplicates = true)
+        public void RegisterComponent<T>(bool allowDuplicates = false) where T : new() 
+            => RegisterComponent(typeof(T), () => new T(), allowDuplicates);
+
+        public void RegisterComponent<T>(Func<object> factory, bool allowDuplicates = false) 
+            => RegisterComponent(typeof(T), factory, allowDuplicates);
+
+        public void RegisterComponent(Type componentType, Func<object> factory, bool allowDuplicates = false)
         {
             _componentDefinitions.Add(componentType, new ComponentDefinition()
             {

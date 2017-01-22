@@ -27,6 +27,7 @@ namespace MonoGame.Extended.Entities.Components
         #region Animation
 
         public bool AnimationChanged { get; private set; } = false;
+        public bool IsAnimated => AnimationFactory != null;
 
         public SpriteSheetAnimationFactory AnimationFactory { get; set; } = null;
         public SpriteSheetAnimation CurrentAnimation { get; private set; } = null;

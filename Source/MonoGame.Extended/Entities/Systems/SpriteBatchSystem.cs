@@ -22,22 +22,9 @@ namespace MonoGame.Extended.Entities.Systems
         public BlendState BlendState { get; set; }
         public SpriteSortMode SortMode { get; set; } = SpriteSortMode.BackToFront;
 
-        protected override void Update(Entity entity, GameTime gameTime)
-        {
-            var sprites = entity.GetComponents<SpriteComponent>();
-            foreach (SpriteComponent sprite in sprites)
-            {
-                if (sprite.CurrentAnimation != null && !sprite.CurrentAnimation.IsComplete)
-                {
-                    sprite.CurrentAnimation.Update(gameTime);
-                    sprite.TextureRegion = sprite.CurrentAnimation.CurrentFrame;
-                }
-            }
-        }
-
         protected override void Draw(Entity entity, GameTime gameTime)
         {
-            var entityTransform = entity.GetComponent<Components.Transform>();
+            var entityTransform = entity.GetComponent<Transform>();
             var transformMatrix = _camera.GetViewMatrix();
 
             _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect,

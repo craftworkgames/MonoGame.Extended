@@ -41,6 +41,7 @@
     <Compile Include="Entities\Components\SpriteComponent.cs" />
     <Compile Include="Entities\Components\Transform.cs" />
     <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\Systems\SpriteAnimatorSystem.cs" />
     <Compile Include="FloatHelper.cs" />
     <Compile Include="Graphics\IMatrixChainEffect.cs" />
     <Compile Include="Graphics\Renderer.cs" />
@@ -76,7 +77,6 @@
     <Compile Include="Collections\Pool.cs" />
     <Compile Include="ColorHelper.cs" />
     <Compile Include="Entities\EntityComponentSystem.cs" />
-    <Compile Include="Entities\Systems\AnimatedSpriteSystem.cs" />
     <Compile Include="Entities\EntitySystem.cs" />
     <Compile Include="Entities\Systems\ParticleEmitterSystem.cs" />
     <Compile Include="Entities\Systems\SpriteBatchSystem.cs" />
