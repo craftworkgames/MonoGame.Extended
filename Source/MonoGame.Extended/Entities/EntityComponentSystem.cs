@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 
 namespace MonoGame.Extended.Entities
 {
-    public sealed class EntityComponentSystem : DrawableGameComponent
+    public sealed class EntityComponentSystem
     {
         #region Private Variables
 
@@ -20,8 +21,7 @@ namespace MonoGame.Extended.Entities
 
         #endregion
 
-        public EntityComponentSystem(Game game) 
-            : base(game)
+        public EntityComponentSystem()
         {
             _components           = new HashSet<EntityComponent>();
             _componentDefinitions = new Dictionary<Type, ComponentDefinition>();
@@ -163,7 +163,7 @@ namespace MonoGame.Extended.Entities
 
         #region Register Methods
 
-        public void RegisterComponent<T>(Func<object> factory, bool allowDuplicates) => RegisterComponent(typeof(T), factory, allowDuplicates);
+        public void RegisterComponent<T>(Func<object> factory, bool allowDuplicates = true) => RegisterComponent(typeof(T), factory, allowDuplicates);
         public void RegisterComponent(Type componentType, Func<object> factory, bool allowDuplicates = true)
         {
             _componentDefinitions.Add(componentType, new ComponentDefinition()
@@ -188,12 +188,12 @@ namespace MonoGame.Extended.Entities
 
         #region DrawableGameComponent Methods
 
-        public override void Initialize() => LoadContent();
+        public void Initialize() => ForEachSystem(s => s.InitializeInternal());
 
-        protected override void LoadContent() => ForEachSystem(s => s.LoadContentInternal(Game.Content));
-        protected override void UnloadContent() => ForEachSystem(s => s.UnloadContentInternal());
+        public void LoadContent(ContentManager contentManager) => ForEachSystem(s => s.LoadContentInternal(contentManager));
+        public void UnloadContent() => ForEachSystem(s => s.UnloadContentInternal());
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             foreach (var system in _systems)
             {
@@ -202,7 +202,7 @@ namespace MonoGame.Extended.Entities
             }
         }
 
-        public override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
             foreach (var system in _systems)
             {

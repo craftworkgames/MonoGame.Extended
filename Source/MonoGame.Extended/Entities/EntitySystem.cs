@@ -8,6 +8,8 @@ namespace MonoGame.Extended.Entities
     {
         internal EntityComponentSystem Ecs { get; set; }
 
+        protected virtual void Initialize() { }
+
         protected virtual void LoadContent(ContentManager contentManager) { }
         protected virtual void UnloadContent() { }
 
@@ -27,6 +29,8 @@ namespace MonoGame.Extended.Entities
         #endregion
 
         #region Internal Proxy Methods
+
+        internal void InitializeInternal() { }
 
         internal void LoadContentInternal(ContentManager contentManager) => LoadContent(contentManager);
         internal void UnloadContentInternal() => UnloadContent();

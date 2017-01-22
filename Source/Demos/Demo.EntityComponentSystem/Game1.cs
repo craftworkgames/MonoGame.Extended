@@ -48,7 +48,7 @@ namespace Demo.EntityComponentSystem
             var camera = new Camera2D(new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480));
             var spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _entityComponentSystem = new MonoGame.Extended.Entities.EntityComponentSystem(this);
+            _entityComponentSystem = new MonoGame.Extended.Entities.EntityComponentSystem();
 
             _entityComponentSystem.RegisterComponent<Rotator>(() => new Rotator());
             _entityComponentSystem.RegisterComponent<Transform>(() => new Transform());
@@ -63,7 +63,6 @@ namespace Demo.EntityComponentSystem
             _entityComponentSystem.RegisterSystem(new RotatorSystem());
 
             _entityComponentSystem.Initialize();
-            Components.Add(_entityComponentSystem);
 
             base.Initialize();
         }
@@ -98,6 +97,7 @@ namespace Demo.EntityComponentSystem
                 sprite.Origin = sprite.TextureRegion.Size / 2;
             });
 
+            _entityComponentSystem.LoadContent(Content);
             base.LoadContent();
         }
 
@@ -107,12 +107,14 @@ namespace Demo.EntityComponentSystem
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
+            _entityComponentSystem.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
+            _entityComponentSystem.Draw(gameTime);
             base.Draw(gameTime);
         }
     }
