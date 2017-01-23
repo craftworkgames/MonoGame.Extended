@@ -18,7 +18,8 @@ namespace MonoGame.Extended.Entities
 
         public void Destroy() => Ecs.DestroyEntity(Guid);
 
-        public void AddComponent(Type componentType, object component = null) => Ecs.AddComponent(Guid, componentType, component);
+        public T AddComponent<T>(object component = null) where T : class => (T)Ecs.AddComponent(Guid, typeof(T), component);
+        public object AddComponent(Type componentType, object component = null) => Ecs.AddComponent(Guid, componentType, component);
 
         public T GetComponent<T>() where T : class => Ecs.GetEntityComponent(Guid, typeof(T)) as T;
         public object GetComponent(Type componentType) => Ecs.GetEntityComponent(Guid, componentType);

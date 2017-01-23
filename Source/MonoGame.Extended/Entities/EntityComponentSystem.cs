@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MonoGame.Extended.Entities
 {
@@ -19,6 +20,10 @@ namespace MonoGame.Extended.Entities
 
         private readonly HashSet<EntitySystem> _systems;
 
+        private readonly Queue<Action> _addedTasks;
+        private readonly Queue<Action> _removedTasks;
+        private readonly HashSet<Guid> _pendingDeletion;
+
         #endregion
 
         public EntityComponentSystem()
@@ -28,76 +33,31 @@ namespace MonoGame.Extended.Entities
             _entities             = new List<Guid>();
             _entityDefinitions    = new Dictionary<string, EntityDefinition>();
             _systems              = new HashSet<EntitySystem>();
+
+            _addedTasks = new Queue<Action>();
+            _removedTasks = new Queue<Action>();
+            _pendingDeletion = new HashSet<Guid>();
         }
 
         #region Entity Methods
 
         public void CreateEntity(string entityName, Action<Entity> customFactory = null)
         {
-            Guid entity = Guid.NewGuid();
-
-            try
-            {
-                List<EntityComponent> addedComponents = new List<EntityComponent>();
-
-                foreach (var type in _entityDefinitions[entityName].components)
-                {
-                    VerifyComponent(entity, type);
-
-                    var entityComponent = new EntityComponent()
-                    {
-                        entity = entity,
-                        type = type,
-                        component = _componentDefinitions[type].factory()
-                    };
-
-                    addedComponents.Add(entityComponent);
-                    _components.Add(entityComponent);
-                }
-
-                Entity entityInst = entity.ToEntity(this);
-
-                foreach (var system in _systems)
-                {
-                    foreach (var component in addedComponents)
-                        system.ComponentAddedInternal(entityInst, component.type, component.component);
-                    system.EntityCreatedInternal(entityInst);
-                }
-
-                (customFactory ?? _entityDefinitions[entityName].factory)?.Invoke(entityInst);
-                _entities.Add(entity);
-            }
-            catch (Exception)
-            {
-                _components.RemoveWhere(e => e.entity == entity);
-                throw;
-            }
+            _addedTasks.Enqueue(() => CreateEntityDeferred(entityName, customFactory));
         }
 
         internal void DestroyEntity(Guid entity)
         {
-            if (_entities.Remove(entity))
-            {
-                Entity entityInst = entity.ToEntity(this);
-
-                var components = from comp in _components
-                                 where comp.entity == entity
-                                 select comp;
-
-                foreach (var comp in components)
-                    ForEachSystem(s => s.ComponentRemovedInternal(entityInst, comp.type, comp.component));
-
-                ForEachSystem(s => s.EntityRemovedInternal(entityInst));
-                _components.RemoveWhere(c => components.Contains(c));
-            }
+            _pendingDeletion.Add(entity);
+            _removedTasks.Enqueue(() => DestroyEntityDeferred(entity));
         }
 
         internal bool EntityExists(Guid entity)
         {
-            return _entities.Contains(entity);
+            return _entities.Contains(entity) && !_pendingDeletion.Contains(entity);
         }
 
-        internal void AddComponent(Guid entity, Type componentType, object component = null)
+        internal object AddComponent(Guid entity, Type componentType, object component = null)
         {
             VerifyComponent(entity, componentType);
 
@@ -110,6 +70,8 @@ namespace MonoGame.Extended.Entities
 
             _components.Add(entityComponent);
             ForEachSystem(s => s.ComponentAddedInternal(entity.ToEntity(this), entityComponent.type, component));
+
+            return component;
         }
 
         internal void RemoveComponent(Guid entity, Type componentType, object component)
@@ -204,19 +166,103 @@ namespace MonoGame.Extended.Entities
 
         public void Update(GameTime gameTime)
         {
+            DoCreateEntityDeferred();
             foreach (var system in _systems)
             {
                 foreach (var entity in _entities)
+                {
                     system.UpdateInternal(entity.ToEntity(this), gameTime);
+                }
             }
+            DoDestroyEntityDeffered();
         }
 
         public void Draw(GameTime gameTime)
         {
+            //DoCreateEntityDeferred();
             foreach (var system in _systems)
             {
-                foreach (var entity in _entities)
+                foreach (var entity in _entities.Reverse<Guid>())
                     system.DrawInternal(entity.ToEntity(this), gameTime);
+            }
+            DoDestroyEntityDeffered();
+        }
+
+        #endregion
+
+        #region Deferred Methods
+
+        private void DoCreateEntityDeferred()
+        {
+            while (_addedTasks.Count > 0)
+                _addedTasks.Dequeue().Invoke();
+        }
+
+        private void DoDestroyEntityDeffered()
+        {
+            while (_removedTasks.Count > 0)
+                _removedTasks.Dequeue().Invoke();
+            _pendingDeletion.Clear();
+        }
+
+        private void CreateEntityDeferred(string entityName, Action<Entity> customFactory)
+        {
+            Guid entity = Guid.NewGuid();
+
+            try
+            {
+                List<EntityComponent> addedComponents = new List<EntityComponent>();
+
+                foreach (var type in _entityDefinitions[entityName].components)
+                {
+                    VerifyComponent(entity, type);
+
+                    var entityComponent = new EntityComponent()
+                    {
+                        entity = entity,
+                        type = type,
+                        component = _componentDefinitions[type].factory()
+                    };
+
+                    addedComponents.Add(entityComponent);
+                    _components.Add(entityComponent);
+                }
+
+                Entity entityInst = entity.ToEntity(this);
+
+                foreach (var system in _systems)
+                {
+                    foreach (var component in addedComponents)
+                        system.ComponentAddedInternal(entityInst, component.type, component.component);
+                    system.EntityCreatedInternal(entityInst);
+                }
+
+                (customFactory ?? _entityDefinitions[entityName].factory)?.Invoke(entityInst);
+                _entities.Add(entity);
+            }
+            catch (Exception)
+            {
+                _components.RemoveWhere(e => e.entity == entity);
+                throw;
+            }
+        }
+
+        private void DestroyEntityDeferred(Guid entity)
+        {
+            if (_entities.Contains(entity))
+            {
+                Entity entityInst = entity.ToEntity(this);
+
+                var components = from comp in _components
+                                 where comp.entity == entity
+                                 select comp;
+
+                foreach (var comp in components)
+                    ForEachSystem(s => s.ComponentRemovedInternal(entityInst, comp.type, comp.component));
+                ForEachSystem(s => s.EntityRemovedInternal(entityInst));
+
+                _components.RemoveWhere(c => components.Contains(c));
+                _entities.Remove(entity);
             }
         }
 
