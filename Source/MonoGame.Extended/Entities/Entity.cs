@@ -16,6 +16,7 @@ namespace MonoGame.Extended.Entities
 
         public bool IsAlive => Ecs.EntityExists(Guid);
 
+        public void CreateEntity(string entityName, Action<Entity> customFactory = null) => Ecs.CreateEntity(entityName, customFactory);
         public void Destroy() => Ecs.DestroyEntity(Guid);
 
         public T AddComponent<T>(object component = null) where T : class => (T)Ecs.AddComponent(Guid, typeof(T), component);

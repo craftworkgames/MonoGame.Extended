@@ -171,7 +171,8 @@ namespace MonoGame.Extended.Entities
             {
                 foreach (var entity in _entities)
                 {
-                    system.UpdateInternal(entity.ToEntity(this), gameTime);
+                    if (EntityExists(entity))
+                        system.UpdateInternal(entity.ToEntity(this), gameTime);
                 }
             }
             DoDestroyEntityDeffered();
@@ -182,8 +183,11 @@ namespace MonoGame.Extended.Entities
             //DoCreateEntityDeferred();
             foreach (var system in _systems)
             {
-                foreach (var entity in _entities.Reverse<Guid>())
-                    system.DrawInternal(entity.ToEntity(this), gameTime);
+                foreach (var entity in _entities)
+                {
+                    if (EntityExists(entity))
+                        system.DrawInternal(entity.ToEntity(this), gameTime);
+                }
             }
             DoDestroyEntityDeffered();
         }
