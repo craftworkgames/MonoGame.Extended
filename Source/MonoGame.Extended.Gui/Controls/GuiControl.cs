@@ -19,6 +19,12 @@ namespace MonoGame.Extended.Gui.Controls
             Origin = Vector2.One*0.5f;
         }
 
+        protected GuiControl(TextureRegion2D textureRegion)
+            : this()
+        {
+            TextureRegion = textureRegion;
+        }
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JsonIgnore]
         public GuiControl Parent { get; internal set; }
@@ -40,7 +46,25 @@ namespace MonoGame.Extended.Gui.Controls
 
         public Size2 Size { get; set; }
         public Color Color { get; set; }
-        public TextureRegion2D TextureRegion { get; set; }
+
+        private TextureRegion2D _textureRegion;
+        public TextureRegion2D TextureRegion
+        {
+            get { return _textureRegion; }
+            set
+            {
+                if (_textureRegion != value)
+                {
+                    // if this is the first time a texture region has been set and this control has no size, 
+                    // use the size of the texture region
+                    if (_textureRegion == null && value != null && Size.IsEmpty)
+                        Size = value.Size;
+
+                    _textureRegion = value;
+
+                }
+            }
+        }
 
         public string Text { get; set; }
         public Color TextColor { get; set; }

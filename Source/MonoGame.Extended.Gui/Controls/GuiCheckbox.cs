@@ -4,21 +4,6 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public class GuiProgressBar : GuiControl
-    {
-        public GuiProgressBar()
-        {
-        }
-
-        public GuiProgressBar(TextureRegion2D textureRegion)
-        {
-            TextureRegion = textureRegion;
-            Size = textureRegion.Size;
-        }
-
-        public float Progress { get; set; }
-    }
-
     public class GuiCheckbox : GuiControl
     {
         public GuiCheckbox()
@@ -26,9 +11,8 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public GuiCheckbox(TextureRegion2D textureRegion)
+            : base(textureRegion)
         {
-            TextureRegion = textureRegion;
-            Size = TextureRegion.Size;
         }
 
         public event EventHandler CheckStateChanged;

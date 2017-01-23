@@ -11,9 +11,8 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public GuiButton(TextureRegion2D textureRegion)
+            : base(textureRegion)
         {
-            TextureRegion = textureRegion;
-            Size = TextureRegion.Size;
         }
 
         public event EventHandler Clicked;

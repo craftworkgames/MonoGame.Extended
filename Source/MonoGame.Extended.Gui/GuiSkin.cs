@@ -6,16 +6,10 @@ namespace MonoGame.Extended.Gui
     {
         public GuiSkin()
         {
-            Templates = new List<GuiControlTemplate>();
+            Templates = new Dictionary<string, GuiControlStyle>();
         }
 
         public string Name { get; set; }
-        public List<GuiControlTemplate> Templates { get; }
-    }
-
-    public class GuiControlTemplate
-    {
-        public string Name { get; set; }
-        public string Type { get; set; }
+        public Dictionary<string, GuiControlStyle> Templates { get; }
     }
 }

@@ -40,6 +40,8 @@
     <Compile Include="Controls\GuiControlCollection.cs" />
     <Compile Include="Controls\GuiLabel.cs" />
     <Compile Include="Controls\GuiPanel.cs" />
+    <Compile Include="Controls\GuiProgressBar.cs" />
+    <Compile Include="GuiControlFactory.cs" />
     <Compile Include="GuiManager.cs" />
     <Compile Include="GuiScreen.cs" />
     <Compile Include="GuiSkin.cs" />

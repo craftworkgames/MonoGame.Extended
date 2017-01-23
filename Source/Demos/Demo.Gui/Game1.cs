@@ -35,37 +35,67 @@ namespace Demo.Gui
 
             var buttonRegion = textureAtlas["buttonLong_grey"];
             var buttonRegionPressed = textureAtlas["buttonLong_grey_pressed"];
+            var panelRegion = new NinePatchRegion2D(textureAtlas["panel_brown"], 10);
+            var panelInsetRegion = new NinePatchRegion2D(textureAtlas["panelInset_beige"], 10);
+
+            var skin = new GuiSkin
+            {
+                Templates =
+                {
+                    {
+                        "white-button",
+                        new GuiControlStyle(typeof(GuiButton))
+                        {
+                            { "TextureRegion", buttonRegion },
+                            { "TextOffset", new Vector2(0, -2) },
+                            { "TextColor", Color.SandyBrown },
+                            { "Color", Color.SaddleBrown },
+                            { "PressedStyle", new GuiControlStyle(typeof(GuiButton))
+                                {
+                                    { "TextureRegion", buttonRegionPressed },
+                                    { "TextOffset", new Vector2(0, 2) }
+                                }
+                            },
+                            { "HoverStyle", new GuiControlStyle(typeof(GuiButton))
+                                {
+                                    { "Color", Color.SandyBrown },
+                                    { "TextColor", Color.White },
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "brown-panel",
+                        new GuiControlStyle(typeof(GuiPanel))
+                        {
+                            { "TextureRegion", panelRegion },
+                            { "Size", new Size2(400, 300) }
+                        }
+                    },
+                    {
+                        "beige-inset-panel",
+                        new GuiControlStyle(typeof(GuiPanel))
+                        {
+                            { "TextureRegion", panelInsetRegion },
+                            { "Size", new Size2(380, 280) }
+                        }
+                    }
+                }
+            };
+
 
             _guiManager = new GuiManager(viewportAdapter, renderer);
 
+            var controlFactory = new GuiControlFactory(skin);
             var screen = new GuiScreen
             {
                 Controls =
                 {
-                    new GuiButton(buttonRegion)
-                    {
-                        Name = "MyButton",
-                        Position = new Vector2(400, 240),
-                        Text = "Hello World",
-                        TextOffset = new Vector2(0, -2),
-                        Color = Color.DarkRed,
-                        PressedStyle = new GuiControlStyle(typeof(GuiButton))
-                        {
-                            Setters =
-                            {
-                                { nameof(GuiButton.TextureRegion), buttonRegionPressed },
-                                { nameof(GuiButton.TextOffset), new Vector2(0, 2) }
-                            }
-                        },
-                        HoverStyle = new GuiControlStyle(typeof(GuiButton))
-                        {
-                            Setters =
-                            {
-                                { nameof(GuiButton.Color), Color.Red }
-                            }
-                        }
-
-                    }
+                    controlFactory.CreateControl<GuiPanel>("brown-panel", new Vector2(400, 240), "Panel"),
+                    controlFactory.CreateControl<GuiPanel>("beige-inset-panel", new Vector2(400, 240), "Panel"),
+                    controlFactory.CreateControl<GuiButton>("white-button", new Vector2(400, 190), "PlayButton", "Play"),
+                    controlFactory.CreateControl<GuiButton>("white-button", new Vector2(400, 240), "OptionsButton", "Options"),
+                    controlFactory.CreateControl<GuiButton>("white-button", new Vector2(400, 290), "QuitButton", "Quit")                    
                 }
             };
 
