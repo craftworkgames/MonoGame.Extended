@@ -1,11 +1,10 @@
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities.Components;
 
 namespace Demo.Platformer.Entities.Components
 {
-    public class EnemyAi : EntityComponent
+    public sealed class Enemy
     {
-        public EnemyAi()
+        public Enemy()
         {
             Direction = new Vector2(30, 0);
             WalkTime = 4.0f;

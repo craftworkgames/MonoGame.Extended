@@ -2,30 +2,38 @@ using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Sprites;
+using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Components;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    public class EnemyMovementSystem : ComponentSystem
+    public sealed class EnemyMovementSystem : EntitySystem
     {
-        public override void Update(GameTime gameTime)
+        protected override void Update(Entity entity, GameTime gameTime)
         {
             var deltaTime = gameTime.GetElapsedSeconds();
-
-            foreach (var component in GetComponents<EnemyAi>())
+            var component = entity.GetComponent<Enemy>();
+            if (component != null)
             {
-                component.Position += component.Direction * deltaTime;
+                entity.GetComponent<CollisionBody>().Position += component.Direction * deltaTime;
                 component.WalkTimeRemaining -= deltaTime;
 
-                if (component.WalkTimeRemaining <= 0)
+                if (component.WalkTimeRemaining <= 0f)
                 {
-                    var sprite = component.Entity.GetComponent<Sprite>();
-                    sprite.Effect = sprite.Effect == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                    var sprite = entity.GetComponent<SpriteComponent>();
+                    sprite.Effect = FlipSpriteEffect(sprite.Effect);
+
                     component.Direction = -component.Direction;
                     component.WalkTimeRemaining = component.WalkTime;
                 }
             }
+        }
+
+        private SpriteEffects FlipSpriteEffect(SpriteEffects effect)
+        {
+            return effect == SpriteEffects.None
+                ? SpriteEffects.FlipHorizontally
+                : SpriteEffects.None;
         }
     }
 }

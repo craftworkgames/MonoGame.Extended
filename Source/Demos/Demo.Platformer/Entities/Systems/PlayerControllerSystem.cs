@@ -7,43 +7,27 @@ using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Sprites;
+using MonoGame.Extended.Entities.Components;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    public class PlayerMovementSystem : ComponentSystem
+    public sealed class PlayerControllerSystem : EntitySystem
     {
         private const float _walkSpeed = 220f;
         private const float _jumpSpeed = 425f;
         private KeyboardState _previousKeyboardState;
         private float _jumpDelay = 1.0f;
-        private Entity _playerEntity;
 
-        protected override void OnEntityCreated(Entity entity)
+        protected override void Update(Entity entity, GameTime gameTime)
         {
-            if (entity.Name == Entities.Player)
-                _playerEntity = entity;
-
-            base.OnEntityCreated(entity);
-        }
-
-        protected override void OnEntityDestroyed(Entity entity)
-        {
-            if (entity.Name == Entities.Player)
-                _playerEntity = null;
-
-            base.OnEntityDestroyed(entity);
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            if(_playerEntity == null)
+            if (!entity.HasComponent<Player>())
                 return;
 
             var deltaTime = gameTime.GetElapsedSeconds();
             var keyboardState = Keyboard.GetState();
-            var body = _playerEntity.GetComponent<BasicCollisionBody>();
-            var playerState = _playerEntity.GetComponent<CharacterState>();
-            var sprite = _playerEntity.GetComponent<AnimatedSprite>();
+            var body = entity.GetComponent<CollisionBody>();
+            var playerState = entity.GetComponent<CharacterState>();
+            var sprite = entity.GetComponent<SpriteComponent>();
             var velocity = new Vector2(0, body.Velocity.Y);
 
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
