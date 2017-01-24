@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Serialization
 {
-    public class SizeFJsonConverter : JsonConverter
+    public class Size2JsonConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {

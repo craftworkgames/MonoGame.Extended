@@ -108,7 +108,7 @@
     //                {
     //                    new ColorJsonConverter(),
     //                    new Vector2JsonConverter(),
-    //                    new SizeFJsonConverter(),
+    //                    new Size2JsonConverter(),
     //                    new GuiThicknessConveter(),
     //                    new GuiLayoutConverter(_contentManager),
     //                    new ContentConverter<BitmapFont>(_contentManager),
