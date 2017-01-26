@@ -51,5 +51,14 @@ namespace MonoGame.Extended
 
             return new Color(r, g, b, a);
         }
+
+        public static string ToHex(Color color)
+        {
+            var rx = $"{color.R:x2}";
+            var gx = $"{color.G:x2}";
+            var bx = $"{color.B:x2}";
+            var ax = $"{color.A:x2}";
+            return $"#{rx}{gx}{bx}{ax}";
+        }
     }
 }

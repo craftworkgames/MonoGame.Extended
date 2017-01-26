@@ -148,7 +148,7 @@
     <Compile Include="Screens\ScreenComponent.cs" />
     <Compile Include="Serialization\ColorJsonConverter.cs" />
     <Compile Include="Serialization\Vector2JsonConverter.cs" />
-    <Compile Include="Serialization\SizeFJsonConverter.cs" />
+    <Compile Include="Serialization\Size2JsonConverter.cs" />
     <Compile Include="IColorable.cs" />
     <Compile Include="IPoolable.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />

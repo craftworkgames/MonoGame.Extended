@@ -31,7 +31,7 @@ namespace MonoGame.Extended.TextureAtlases
         }
 
         public NinePatchRegion2D(TextureRegion2D textureRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
-            : base(textureRegion.Texture, textureRegion.X, textureRegion.Y, textureRegion.Width, textureRegion.Height)
+            : base(textureRegion.Name, textureRegion.Texture, textureRegion.X, textureRegion.Y, textureRegion.Width, textureRegion.Height)
         {
             LeftPadding = leftPadding;
             TopPadding = topPadding;

@@ -1,11 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
+using MonoGame.Extended.Gui.Serialization;
+using MonoGame.Extended.Serialization;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
+using Newtonsoft.Json;
 
 namespace Demo.Gui
 {
@@ -83,6 +88,19 @@ namespace Demo.Gui
                 }
             };
 
+            var serializer = new JsonSerializer();
+
+            using (var stringWriter = new StringWriter())
+            {
+                serializer.Converters.Add(new TextureRegion2DConveter());
+                serializer.Converters.Add(new ColorJsonConverter());
+                serializer.Converters.Add(new NinePatchRegion2DConveter());
+                serializer.Converters.Add(new Size2JsonConverter());
+                serializer.Converters.Add(new Vector2JsonConverter());
+                serializer.Formatting = Formatting.Indented;
+                serializer.Serialize(stringWriter, skin);
+                var json = stringWriter.ToString();
+            }
 
             _guiManager = new GuiManager(viewportAdapter, renderer);
 
