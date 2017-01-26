@@ -15,7 +15,7 @@ namespace Demo.BitmapFonts
         private BoxingViewportAdapter _viewportAdapter;
         private Texture2D _backgroundTexture;
         private BitmapFont _bitmapFontImpact;
-        private SpriteFont _spriteFontImpact;
+        
         private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFontMontserrat;
 
@@ -34,7 +34,7 @@ namespace Demo.BitmapFonts
             _backgroundTexture = Content.Load<Texture2D>("vignette");
             _bitmapFontImpact = Content.Load<BitmapFont>("impact-32");
             _bitmapFontMontserrat = Content.Load<BitmapFont>("montserrat-32");
-            _spriteFontImpact = Content.Load<SpriteFont>("test");
+            
             _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
@@ -69,23 +69,6 @@ namespace Demo.BitmapFonts
             var scale = Vector2.One;
             var color = Color.White;
             var rotation = 0;//MathHelper.Pi/64f;
-
-            // sprite font
-            var spriteFontSize = _spriteFontImpact.MeasureString(helloWorld);
-            var spriteFontOrigin = spriteFontSize / 2f;
-
-            _spriteBatch.DrawString(
-                spriteFont: _spriteFontImpact,
-                text: helloWorld,
-                position: position - offset,
-                color: color,
-                rotation: rotation,
-                origin: spriteFontOrigin,
-                scale: scale,
-                effects: SpriteEffects.None,
-                layerDepth: 0);
-
-            _spriteBatch.DrawRectangle(position - spriteFontOrigin - offset, spriteFontSize, Color.Magenta);
 
             // bitmap font
             var bitmapFontSize = _bitmapFontImpact.MeasureString(helloWorld);

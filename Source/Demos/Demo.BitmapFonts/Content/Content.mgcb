@@ -55,12 +55,6 @@
 /processorParam:TextureFormat=Color
 /build:vignette.png
 
-#begin test.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:TextureFormat=Compressed
-/build:test.spritefont
-
 #begin impact-32.fnt
 /importer:BitmapFontImporter
 /processor:BitmapFontProcessor
