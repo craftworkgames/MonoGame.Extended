@@ -11,6 +11,7 @@ using MonoGame.Extended.Serialization;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Demo.Gui
 {
@@ -31,10 +32,8 @@ namespace Demo.Gui
 
         protected override void LoadContent()
         {
-            var font = Content.Load<BitmapFont>("small-font");
             var textureAtlas = Content.Load<TextureAtlas>("adventure-gui-atlas");
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            var renderer = new GuiSpriteBatchRenderer(GraphicsDevice, font);
 
             _camera = new Camera2D(viewportAdapter);
 
@@ -45,6 +44,14 @@ namespace Demo.Gui
 
             var skin = new GuiSkin
             {
+                TextureAtlases = new Dictionary<string, TextureAtlas>()
+                {
+                    { "adventure-gui-atlas", Content.Load<TextureAtlas>("adventure-gui-atlas") }
+                },
+                Fonts = new Dictionary<string, BitmapFont>
+                {
+                    { "small-font", Content.Load<BitmapFont>("small-font") }
+                },
                 Templates =
                 {
                     {
@@ -102,6 +109,7 @@ namespace Demo.Gui
                 var json = stringWriter.ToString();
             }
 
+            var renderer = new GuiSpriteBatchRenderer(GraphicsDevice, skin.DefaultFont);
             _guiManager = new GuiManager(viewportAdapter, renderer);
 
             var controlFactory = new GuiControlFactory(skin);
