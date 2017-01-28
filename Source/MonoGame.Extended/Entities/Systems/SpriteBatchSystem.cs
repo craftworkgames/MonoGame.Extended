@@ -1,19 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Particles;
-using MonoGame.Extended.Sprites;
+using MonoGame.Extended.Entities.Components;
 
 namespace MonoGame.Extended.Entities.Systems
 {
-    public class SpriteBatchSystem : ComponentSystem
+    public class SpriteBatchSystem : EntitySystem
     {
         private readonly Camera2D _camera;
         private readonly SpriteBatch _spriteBatch;
 
-        public SpriteBatchSystem(GraphicsDevice graphicsDevice, Camera2D camera)
+        public SpriteBatchSystem(SpriteBatch spriteBatch, Camera2D camera)
         {
             _camera = camera;
-            _spriteBatch = new SpriteBatch(graphicsDevice);
+            _spriteBatch = spriteBatch;
         }
 
         public Effect Effect { get; set; }
@@ -21,24 +20,41 @@ namespace MonoGame.Extended.Entities.Systems
         public DepthStencilState DepthStencilState { get; set; }
         public SamplerState SamplerState { get; set; }
         public BlendState BlendState { get; set; }
-        public SpriteSortMode SortMode { get; set; } = SpriteSortMode.Deferred;
+        public SpriteSortMode SortMode { get; set; } = SpriteSortMode.BackToFront;
 
-        public override void Draw(GameTime gameTime)
+        protected override void Draw(Entity entity, GameTime gameTime)
         {
-            var sprites = GetComponents<Sprite>();
-            var emitters = GetComponents<ParticleEmitter>();
+            var entityTransform = entity.GetComponent<Transform>();
             var transformMatrix = _camera.GetViewMatrix();
 
             _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect,
                 transformMatrix);
 
-            foreach (var sprite in sprites)
-                _spriteBatch.Draw(sprite);
+            var sprites = entity.GetComponents<SpriteComponent>();
+            foreach (SpriteComponent sprite in sprites)
+                DrawSprite(sprite, entityTransform);
 
-            foreach (var particleEmitter in emitters)
-                _spriteBatch.Draw(particleEmitter);
+            //foreach (ParticleEmitter particleEmitter in entity.GetComponents<ParticleEmitter>())
+            //    _spriteBatch.Draw(particleEmitter);
 
             _spriteBatch.End();
+        }
+
+        private void DrawSprite(SpriteComponent sprite, Transform transform)
+        {
+            if (!sprite.IsVisible || sprite.TextureRegion == null)
+                return;
+
+            _spriteBatch.Draw(
+                texture         : sprite.TextureRegion.Texture,
+                position        : sprite.Position + (transform?.Position ?? Vector2.Zero),
+                sourceRectangle : sprite.TextureRegion.Bounds,
+                color           : sprite.Color * sprite.Alpha,
+                rotation        : sprite.Rotation + (transform?.Rotation ?? 0f),
+                origin          : sprite.Origin,
+                scale           : sprite.Scale * (transform?.Scale ?? Vector2.One),
+                effects         : sprite.Effect,
+                layerDepth      : sprite.Depth);
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Demo.Platformer.Entities;
 using Demo.Platformer.Entities.Systems;
-using Demo.Platformer.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,6 +11,10 @@ using MonoGame.Extended.Screens;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Graphics;
 using MonoGame.Extended.ViewportAdapters;
+using Demo.Platformer.Entities.Components;
+using MonoGame.Extended.Entities.Components;
+using Demo.Platformer.Entities.Factories;
+using Demo.Platformer.Entities;
 
 namespace Demo.Platformer.Screens
 {
@@ -29,7 +31,6 @@ namespace Demo.Platformer.Screens
         private TiledMap _map;
         private TiledMapRenderer _mapRenderer;
         private EntityComponentSystem _entityComponentSystem;
-        private EntityFactory _entityFactory;
 
         public IServiceProvider Services { get; }
         public ContentManager Content { get; private set; }
@@ -39,35 +40,31 @@ namespace Demo.Platformer.Screens
         public override void Initialize()
         {
             base.Initialize();
-
             Content = new ContentManager(Services, "Content");
         }
 
         public override void LoadContent()
         {
-            base.LoadContent();
-
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
+
+
+            _entityComponentSystem = new EntityComponentSystem();
+            var factories = new TiledEntityFactoryCollection();
+
+            _entityComponentSystem.RegisterComponents();
+            _entityComponentSystem.RegisterEntities(factories);
+            _entityComponentSystem.RegisterSystems(new SpriteBatch(GraphicsDevice), _camera);
+
+            _entityComponentSystem.LoadContent(Content);
+            factories.LoadContent(Content);
 
             _map = Content.Load<TiledMap>("level-1");
             _mapRenderer = new TiledMapRenderer(GraphicsDevice);
 
-            _entityComponentSystem = new EntityComponentSystem();
-            _entityFactory = new EntityFactory(_entityComponentSystem, Content);
+            factories.BuildFromMap(_entityComponentSystem, _map);
 
-            var service = new TiledObjectToEntityService(_entityFactory);
-            var spawnPoint = _map.GetLayer<TiledMapObjectLayer>("entities").Objects.Single(i => i.Type == "Spawn").Position;
-
-            _entityComponentSystem.RegisterSystem(new PlayerMovementSystem());
-            _entityComponentSystem.RegisterSystem(new EnemyMovementSystem());
-            _entityComponentSystem.RegisterSystem(new CharacterStateSystem(_entityFactory, spawnPoint));
-            _entityComponentSystem.RegisterSystem(new BasicCollisionSystem(gravity: new Vector2(0, 1150)));
-            _entityComponentSystem.RegisterSystem(new ParticleEmitterSystem());
-            _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
-            _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera) { SamplerState = SamplerState.PointClamp });
-
-            service.CreateEntities(_map.GetLayer<TiledMapObjectLayer>("entities").Objects);
+            base.LoadContent();
         }
 
         public override void Update(GameTime gameTime)

@@ -1,71 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities.Components;
+using System.Collections;
 
 namespace MonoGame.Extended.Entities
 {
-    public class Entity : Transform2D<Entity>
+    public struct Entity
     {
-        private readonly List<EntityComponent> _components;
-        private readonly EntityComponentSystem _entityComponentSystem;
+        private EntityComponentSystem Ecs { get; }
+        private Guid Guid { get; }
 
-        public Entity(EntityComponentSystem entityComponentSystem, long id, string name)
+        internal Entity(EntityComponentSystem ecs, Guid guid)
         {
-            _entityComponentSystem = entityComponentSystem;
-            _components = new List<EntityComponent>();
-
-            Id = id;
-            Name = name;
-            Position = Vector2.Zero;
-            Rotation = 0;
-            Scale = Vector2.One;
+            Ecs = ecs;
+            Guid = guid;
         }
 
-        public long Id { get; }
-        public string Name { get; }
-        public object Tag { get; set; }
+        public bool IsAlive => Ecs.EntityExists(Guid);
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        public void CreateEntity(string entityName, Action<Entity> customFactory = null) => Ecs.CreateEntity(entityName, customFactory);
+        public void Destroy() => Ecs.DestroyEntity(Guid);
 
-        public void AttachComponent(EntityComponent component)
-        {
-            if (component.Entity != null)
-                throw new InvalidOperationException("Component already attached to another entity");
+        public T AddComponent<T>(object component = null) where T : class => (T)Ecs.AddComponent(Guid, typeof(T), component);
+        public object AddComponent(Type componentType, object component = null) => Ecs.AddComponent(Guid, componentType, component);
 
-            component.Entity = this;
+        public T GetComponent<T>() where T : class => Ecs.GetEntityComponent(Guid, typeof(T)) as T;
+        public object GetComponent(Type componentType) => Ecs.GetEntityComponent(Guid, componentType);
 
-            _components.Add(component);
-            _entityComponentSystem.AttachComponent(component);
-        }
+        public IEnumerable GetComponents() => Ecs.GetEntityComponents(Guid);
+        public IEnumerable GetComponents(Type componentType) => Ecs.GetEntityComponents(Guid, componentType);
+        public IEnumerable GetComponents<T>() => Ecs.GetEntityComponents(Guid, typeof(T));
 
-        public void DetachComponent(EntityComponent component)
-        {
-            if (component.Entity != this)
-                throw new InvalidOperationException("Component not attached to entity");
+        public bool HasComponent<T>() where T : class => GetComponent<T>() != null;
+        public bool HasComponent(Type componentType) => GetComponent(componentType) != null;
 
-            component.Entity = null;
-            _components.Remove(component);
-            _entityComponentSystem.DetachComponent(component);
-        }
-
-        public void Destroy(float delaySeconds = 0f)
-        {
-            _entityComponentSystem.DestroyEntity(this, delaySeconds);
-        }
-
-        public T GetComponent<T>() where T : EntityComponent
-        {
-            return GetComponents<T>().FirstOrDefault();
-        }
-
-        public IEnumerable<T> GetComponents<T>()
-        {
-            return _components.OfType<T>();
-        }
+        public void RemoveComponent(Type componentType, object component) => Ecs.RemoveComponent(Guid, componentType, component);
+        public void RemoveComponents(Type componentType) => Ecs.RemoveComponents(Guid, componentType);
     }
 }

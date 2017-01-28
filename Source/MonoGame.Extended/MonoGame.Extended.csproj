@@ -38,6 +38,10 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Entities\Components\SpriteComponent.cs" />
+    <Compile Include="Entities\Components\Transform.cs" />
+    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\Systems\SpriteAnimatorSystem.cs" />
     <Compile Include="FloatHelper.cs" />
     <Compile Include="Graphics\Renderer.cs" />
     <Compile Include="Primitives\BoundingRectangle.cs" />
@@ -71,11 +75,8 @@
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\Pool.cs" />
     <Compile Include="ColorHelper.cs" />
-    <Compile Include="Entities\Components\EntityComponent.cs" />
-    <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityComponentSystem.cs" />
-    <Compile Include="Entities\Systems\AnimatedSpriteSystem.cs" />
-    <Compile Include="Entities\Systems\ComponentSystem.cs" />
+    <Compile Include="Entities\EntitySystem.cs" />
     <Compile Include="Entities\Systems\ParticleEmitterSystem.cs" />
     <Compile Include="Entities\Systems\SpriteBatchSystem.cs" />
     <Compile Include="NuclexGui\Controls\Desktop\GuiButtonControl.cs" />
@@ -281,6 +282,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

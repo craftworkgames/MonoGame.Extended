@@ -5,117 +5,116 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Particles;
-using MonoGame.Extended.Particles.Modifiers;
-using MonoGame.Extended.Particles.Modifiers.Containers;
-using MonoGame.Extended.Particles.Modifiers.Interpolators;
-using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.EntityComponentSystem
 {
+    class Rotator
+    {
+        public float Speed { get; set; } = 1f;
+    }
+
+    class RotatorSystem : EntitySystem
+    {
+        protected override void Update(Entity entity, GameTime gameTime)
+        {
+            var transform = entity.GetComponent<Transform>();
+            var rotator = entity.GetComponent<Rotator>();
+
+            if (transform != null && rotator != null)
+                transform.Rotation += gameTime.GetElapsedSeconds() * rotator.Speed;
+        }
+    }
+
     public class Game1 : Game
     {
-        // ReSharper disable once NotAccessedField.Local
-        private readonly GraphicsDeviceManager _graphicsDeviceManager;
-        private Camera2D _camera;
-
         private MonoGame.Extended.Entities.EntityComponentSystem _entityComponentSystem;
-        private Entity _entity;
 
         public Game1()
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this);
+            new GraphicsDeviceManager(this);
+
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
         }
 
-        protected override void LoadContent()
+        protected override void Initialize()
         {
-            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            var camera = new Camera2D(new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480));
+            var spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _entityComponentSystem = new MonoGame.Extended.Entities.EntityComponentSystem();
-            _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera));
-            _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
+
+            _entityComponentSystem.RegisterComponent<Rotator>(() => new Rotator());
+            _entityComponentSystem.RegisterComponent<Transform>(() => new Transform());
+            _entityComponentSystem.RegisterComponent<SpriteComponent>(() => new SpriteComponent());
+
+            _entityComponentSystem.RegisterEntity("logo", new Type[] { typeof(Rotator), typeof(SpriteComponent), typeof(Transform) });
+            _entityComponentSystem.RegisterEntity("motw", new Type[] { typeof(SpriteComponent) });
+
+            _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(spriteBatch, camera));
+            _entityComponentSystem.RegisterSystem(new SpriteAnimatorSystem());
             _entityComponentSystem.RegisterSystem(new ParticleEmitterSystem());
+            _entityComponentSystem.RegisterSystem(new RotatorSystem());
 
-            var logoTexture = Content.Load<Texture2D>("logo-square-128");
-            _entity = _entityComponentSystem.CreateEntity("logo", new Vector2(400, 240));
-            _entity.AttachComponent(new Sprite(logoTexture));
-            
-            var motwTexture = Content.Load<Texture2D>("motw");
-            var motwAtlas = TextureAtlas.Create(motwTexture, 52, 72);
-            var motwAnimationFactory = new SpriteSheetAnimationFactory(motwAtlas);
-            motwAnimationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 0 }));
-            motwAnimationFactory.Add("walkSouth", new SpriteSheetAnimationData(new[] { 0, 1, 2, 1 }, isLooping: false));
-            motwAnimationFactory.Add("walkWest", new SpriteSheetAnimationData(new[] { 12, 13, 14, 13 }, isLooping: false));
-            motwAnimationFactory.Add("walkEast", new SpriteSheetAnimationData(new[] { 24, 25, 26, 25 }, isLooping: false));
-            motwAnimationFactory.Add("walkNorth", new SpriteSheetAnimationData(new[] { 36, 37, 38, 37 }, isLooping: false));
+            _entityComponentSystem.Initialize();
 
-            var animatedEntity = _entityComponentSystem.CreateEntity("animated", new Vector2(50, 50));
-            animatedEntity.AttachComponent(new AnimatedSprite(motwAnimationFactory, "walkSouth"));
-
-            var particleEntity = _entityComponentSystem.CreateEntity("particles", new Vector2(500, 50));
-            var particleEmitter = new ParticleEmitter(new TextureRegion2D(logoTexture), 500, TimeSpan.FromSeconds(0.5f),
-                Profile.Point())
-            {
-                Parameters = new ParticleReleaseParameters
-                {
-                    Speed = new Range<float>(0f, 150f),
-                    Quantity = 30,
-                    Rotation = new Range<float>(-1f, 1f),
-                    Scale = new Range<float>(3.0f, 4.0f)
-                },
-                Modifiers = new IModifier[]
-                {
-                    new AgeModifier
-                    {
-                        Interpolators = new IInterpolator[]
-                        {
-                            new ColorInterpolator
-                            {
-                                InitialColor = new HslColor(0.8f, 0.8f, 0.8f),
-                                FinalColor = new HslColor(0.5f, 0.9f, 1.0f)
-                            }
-                        }
-                    },
-                    new RotationModifier {RotationRate = -2.1f},
-                    new RectangleContainerModifier {Width = 800, Height = 480},
-                    new LinearGravityModifier {Direction = -Vector2.UnitY, Strength = 130f}
-                }
-            };
-            particleEntity.AttachComponent(particleEmitter);
+            base.Initialize();
         }
 
-        protected override void UnloadContent()
+        protected override void LoadContent()
         {
+            _entityComponentSystem.CreateEntity("logo", (entity) =>
+            {
+                var texture = Content.Load<Texture2D>("logo-square-128");
+                var sprite = entity.GetComponent<SpriteComponent>();
+                sprite.TextureRegion = new Sprite(texture).TextureRegion;
+                sprite.Position = new Vector2(400, 240);
+                sprite.Origin = (sprite.TextureRegion.Size / 2);
+            });
+
+            _entityComponentSystem.CreateEntity("motw", (entity) =>
+            {
+                var texture = Content.Load<Texture2D>("motw");
+                var textureAtlas = TextureAtlas.Create(texture, 52, 72);
+
+                var animation = new SpriteSheetAnimationFactory(textureAtlas);
+                animation.Add("idle", new SpriteSheetAnimationData(new[] { 0 }));
+                animation.Add("walkSouth", new SpriteSheetAnimationData(new[] { 0, 1, 2, 1 }, isLooping: true));
+                animation.Add("walkWest", new SpriteSheetAnimationData(new[] { 12, 13, 14, 13 }, isLooping: true));
+                animation.Add("walkEast", new SpriteSheetAnimationData(new[] { 24, 25, 26, 25 }, isLooping: true));
+                animation.Add("walkNorth", new SpriteSheetAnimationData(new[] { 36, 37, 38, 37 }, isLooping: true));
+
+                var sprite = entity.GetComponent<SpriteComponent>();
+                sprite.AnimationFactory = animation;
+                sprite.Play("walkSouth");
+                sprite.Position = new Vector2(50, 50);
+                sprite.Origin = sprite.TextureRegion.Size / 2;
+            });
+
+            _entityComponentSystem.LoadContent(Content);
+            base.LoadContent();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
-
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _entity.Rotation += deltaTime;
             _entityComponentSystem.Update(gameTime);
-
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
             _entityComponentSystem.Draw(gameTime);
-
             base.Draw(gameTime);
         }
     }

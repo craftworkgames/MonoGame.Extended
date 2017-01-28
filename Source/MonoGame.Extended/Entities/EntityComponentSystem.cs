@@ -1,149 +1,322 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities.Components;
-using MonoGame.Extended.Entities.Systems;
+using System.Threading.Tasks;
 
 namespace MonoGame.Extended.Entities
 {
-    public class EntityComponentSystem
+    public sealed class EntityComponentSystem
     {
-        private readonly List<EntityComponent> _components;
-        private readonly List<DyingEntity> _dyingEntities;
-        private readonly List<Entity> _entities;
-        private readonly Dictionary<string, Entity> _entitiesByName;
+        #region Private Variables
 
-        private readonly List<ComponentSystem> _systems;
-        private long _nextEntityId;
+        private readonly Dictionary<Type, ComponentDefinition> _componentDefinitions;
+        private readonly Dictionary<string, EntityDefinition> _entityDefinitions;
+
+        private readonly HashSet<EntityComponent> _components;
+        private readonly List<Guid> _entities;
+
+        private readonly HashSet<EntitySystem> _systems;
+
+        private readonly Queue<Action> _addedTasks;
+        private readonly Queue<Action> _removedTasks;
+        private readonly HashSet<Guid> _pendingDeletion;
+
+        #endregion
 
         public EntityComponentSystem()
         {
-            _entities = new List<Entity>();
-            _entitiesByName = new Dictionary<string, Entity>();
-            _dyingEntities = new List<DyingEntity>();
-            _components = new List<EntityComponent>();
-            _systems = new List<ComponentSystem>();
-            _nextEntityId = 1;
+            _components           = new HashSet<EntityComponent>();
+            _componentDefinitions = new Dictionary<Type, ComponentDefinition>();
+            _entities             = new List<Guid>();
+            _entityDefinitions    = new Dictionary<string, EntityDefinition>();
+            _systems              = new HashSet<EntitySystem>();
+
+            _addedTasks = new Queue<Action>();
+            _removedTasks = new Queue<Action>();
+            _pendingDeletion = new HashSet<Guid>();
         }
 
-        internal event EventHandler<EntityComponent> ComponentAttached;
-        internal event EventHandler<EntityComponent> ComponentDetached;
-        internal event EventHandler<Entity> EntityCreated;
-        internal event EventHandler<Entity> EntityDestroyed;
+        #region Entity Methods
 
-        public void RegisterSystem(ComponentSystem system)
+        public void CreateEntity(string entityName, Action<Entity> customFactory = null)
         {
-            if (system.Parent != null)
-                throw new InvalidOperationException("Component system already registered");
+            _addedTasks.Enqueue(() => CreateEntityDeferred(entityName, customFactory));
+        }
 
-            system.Parent = this;
+        internal void DestroyEntity(Guid entity)
+        {
+            _pendingDeletion.Add(entity);
+            _removedTasks.Enqueue(() => DestroyEntityDeferred(entity));
+        }
+
+        internal bool EntityExists(Guid entity)
+        {
+            return _entities.Contains(entity) && !_pendingDeletion.Contains(entity);
+        }
+
+        internal object AddComponent(Guid entity, Type componentType, object component = null)
+        {
+            VerifyComponent(entity, componentType);
+
+            var entityComponent = new EntityComponent()
+            {
+                entity = entity,
+                type = componentType,
+                component = component ?? _componentDefinitions[componentType].factory()
+            };
+
+            _components.Add(entityComponent);
+            ForEachSystem(s => s.ComponentAddedInternal(entity.ToEntity(this), entityComponent.type, component));
+
+            return component;
+        }
+
+        internal void RemoveComponent(Guid entity, Type componentType, object component)
+        {
+            _components.RemoveWhere(e =>
+            {
+                if (e.entity == entity && e.type == componentType && e.component == component)
+                {
+                    ForEachSystem(s => s.ComponentRemovedInternal(entity.ToEntity(this), componentType, e.component));
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        internal void RemoveComponents(Guid entity, Type componentType)
+        {
+            _components.RemoveWhere(e =>
+            {
+                if (e.entity == entity && e.type == componentType)
+                {
+                    ForEachSystem(s => s.ComponentRemovedInternal(entity.ToEntity(this), componentType, e.component));
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        internal object GetEntityComponent(Guid entity, Type componentType)
+        {
+            return _components.Where(c => c.entity == entity && c.type == componentType)
+                .FirstOrDefault()
+                .component;
+        }
+
+        internal IEnumerable GetEntityComponents(Guid entity)
+        {
+            return from component in _components
+                   where entity == component.entity
+                   select component.component;
+        }
+
+        internal IEnumerable GetEntityComponents(Guid entity, Type componentType)
+        {
+            return from component in _components
+                   where entity == component.entity && componentType == component.type
+                   select component.component;
+        }
+
+        #endregion
+
+        #region Register Methods
+
+        public void RegisterComponent<T>(bool allowDuplicates = false) where T : new() 
+            => RegisterComponent(typeof(T), () => new T(), allowDuplicates);
+
+        public void RegisterComponent<T>(Func<object> factory, bool allowDuplicates = false) 
+            => RegisterComponent(typeof(T), factory, allowDuplicates);
+
+        public void RegisterComponent(Type componentType, Func<object> factory, bool allowDuplicates = false)
+        {
+            _componentDefinitions.Add(componentType, new ComponentDefinition()
+            {
+                factory = factory,
+                allowDuplicates = allowDuplicates
+            });
+        }
+
+        public void RegisterEntity(string entityName, ICollection<Type> components, Action<Entity> factory = null)
+        {
+            _entityDefinitions.Add(entityName, new EntityDefinition()
+            {
+                factory = factory,
+                components = components
+            });
+        }
+
+        public void RegisterSystem(EntitySystem system)
+        {
+            system.Ecs = this;
             _systems.Add(system);
         }
 
-        public Entity CreateEntity()
-        {
-            return CreateEntity(null);
-        }
+        #endregion
 
-        public Entity CreateEntity(Vector2 position, float rotation = 0)
-        {
-            return CreateEntity(null, position, rotation);
-        }
+        #region DrawableGameComponent Methods
 
-        public Entity CreateEntity(string name, Vector2 position, float rotation = 0)
-        {
-            var entity = CreateEntity(name);
-            entity.Position = position;
-            entity.Rotation = rotation;
-            return entity;
-        }
+        public void Initialize() => ForEachSystem(s => s.InitializeInternal());
 
-        public Entity CreateEntity(string name)
-        {
-            var entity = new Entity(this, _nextEntityId, name);
-
-            _entities.Add(entity);
-
-            if (name != null)
-                _entitiesByName.Add(name, entity);
-
-            EntityCreated?.Invoke(this, entity);
-            _nextEntityId++;
-            return entity;
-        }
-
-        public void DestroyEntity(Entity entity, float delaySeconds)
-        {
-            if (delaySeconds.Equals(0f))
-                DestroyEntity(entity);
-            else
-                _dyingEntities.Add(new DyingEntity {Entity = entity, SecondsUntilDeath = delaySeconds});
-        }
-
-        public void DestroyEntity(Entity entity)
-        {
-            foreach (var component in _components.Where(c => c.Entity == entity).ToArray())
-                DetachComponent(component);
-
-            if (entity.Name != null)
-                _entitiesByName.Remove(entity.Name);
-
-            _entities.Remove(entity);
-            EntityDestroyed?.Invoke(this, entity);
-        }
-
-        public Entity GetEntity(string name)
-        {
-            Entity entity;
-            return _entitiesByName.TryGetValue(name, out entity) ? entity : null;
-        }
-
-        internal void AttachComponent(EntityComponent component)
-        {
-            _components.Add(component);
-            ComponentAttached?.Invoke(this, component);
-        }
-
-        internal void DetachComponent(EntityComponent component)
-        {
-            _components.Remove(component);
-            (component as IDisposable)?.Dispose();
-            ComponentDetached?.Invoke(this, component);
-        }
-
-        internal IEnumerable<T> GetComponents<T>()
-        {
-            return _components.OfType<T>();
-        }
+        public void LoadContent(ContentManager contentManager) => ForEachSystem(s => s.LoadContentInternal(contentManager));
+        public void UnloadContent() => ForEachSystem(s => s.UnloadContentInternal());
 
         public void Update(GameTime gameTime)
         {
-            foreach (var componentSystem in _systems)
-                componentSystem.Update(gameTime);
-
-            for (var i = 0; i < _dyingEntities.Count; i++)
+            DoCreateEntityDeferred();
+            foreach (var system in _systems)
             {
-                _dyingEntities[i].SecondsUntilDeath -= gameTime.GetElapsedSeconds();
-
-                if (_dyingEntities[i].SecondsUntilDeath <= 0)
+                foreach (var entity in _entities)
                 {
-                    DestroyEntity(_dyingEntities[i].Entity);
-                    _dyingEntities.Remove(_dyingEntities[i]);
+                    if (EntityExists(entity))
+                        system.UpdateInternal(entity.ToEntity(this), gameTime);
                 }
             }
+            DoDestroyEntityDeffered();
         }
 
         public void Draw(GameTime gameTime)
         {
-            foreach (var componentSystem in _systems)
-                componentSystem.Draw(gameTime);
+            //DoCreateEntityDeferred();
+            foreach (var system in _systems)
+            {
+                foreach (var entity in _entities)
+                {
+                    if (EntityExists(entity))
+                        system.DrawInternal(entity.ToEntity(this), gameTime);
+                }
+            }
+            DoDestroyEntityDeffered();
         }
 
-        public class DyingEntity
+        #endregion
+
+        #region Deferred Methods
+
+        private void DoCreateEntityDeferred()
         {
-            public Entity Entity;
-            public float SecondsUntilDeath;
+            while (_addedTasks.Count > 0)
+                _addedTasks.Dequeue().Invoke();
         }
+
+        private void DoDestroyEntityDeffered()
+        {
+            while (_removedTasks.Count > 0)
+                _removedTasks.Dequeue().Invoke();
+            _pendingDeletion.Clear();
+        }
+
+        private void CreateEntityDeferred(string entityName, Action<Entity> customFactory)
+        {
+            Guid entity = Guid.NewGuid();
+
+            try
+            {
+                List<EntityComponent> addedComponents = new List<EntityComponent>();
+
+                foreach (var type in _entityDefinitions[entityName].components)
+                {
+                    VerifyComponent(entity, type);
+
+                    var entityComponent = new EntityComponent()
+                    {
+                        entity = entity,
+                        type = type,
+                        component = _componentDefinitions[type].factory()
+                    };
+
+                    addedComponents.Add(entityComponent);
+                    _components.Add(entityComponent);
+                }
+
+                Entity entityInst = entity.ToEntity(this);
+
+                foreach (var system in _systems)
+                {
+                    foreach (var component in addedComponents)
+                        system.ComponentAddedInternal(entityInst, component.type, component.component);
+                    system.EntityCreatedInternal(entityInst);
+                }
+
+                (customFactory ?? _entityDefinitions[entityName].factory)?.Invoke(entityInst);
+                _entities.Add(entity);
+            }
+            catch (Exception)
+            {
+                _components.RemoveWhere(e => e.entity == entity);
+                throw;
+            }
+        }
+
+        private void DestroyEntityDeferred(Guid entity)
+        {
+            if (_entities.Contains(entity))
+            {
+                Entity entityInst = entity.ToEntity(this);
+
+                var components = from comp in _components
+                                 where comp.entity == entity
+                                 select comp;
+
+                foreach (var comp in components)
+                    ForEachSystem(s => s.ComponentRemovedInternal(entityInst, comp.type, comp.component));
+                ForEachSystem(s => s.EntityRemovedInternal(entityInst));
+
+                _components.RemoveWhere(c => components.Contains(c));
+                _entities.Remove(entity);
+            }
+        }
+
+        #endregion
+
+        #region Utility
+
+        private void ForEachSystem(Action<EntitySystem> action)
+        {
+            foreach (var system in _systems)
+                action(system);
+        }
+
+        private void VerifyComponent(Guid entity, Type type)
+        {
+            if (!_componentDefinitions.ContainsKey(type))
+                throw new ArgumentException($"{type.Name} is not a registered component");
+
+            if (_componentDefinitions[type].allowDuplicates)
+            {
+                int count = _components.Where(c => c.entity == entity && c.type == type).Count();
+                if (count > 1)
+                    throw new ArgumentException($"{type.Name} already exists on the entity");
+            }
+        }
+
+        private struct ComponentDefinition
+        {
+            public Func<object> factory;
+            public bool allowDuplicates;
+        }
+
+        private struct EntityComponent
+        {
+            public Guid entity;
+            public Type type;
+            public object component;
+        }
+
+        private struct EntityDefinition
+        {
+            public IEnumerable<Type> components;
+            public Action<Entity> factory;
+        }
+
+        #endregion
+    }
+
+    static class GuidExtensions
+    {
+        internal static Entity ToEntity(this Guid guid, EntityComponentSystem ecs) => new Entity(ecs, guid);
     }
 }

@@ -1,13 +1,12 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Particles
 {
-    public unsafe class ParticleEmitter : EntityComponent, IDisposable
+    public unsafe class ParticleEmitter : IDisposable
     {
         private readonly FastRandom _random = new FastRandom();
         private readonly float _term;
@@ -33,6 +32,8 @@ namespace MonoGame.Extended.Particles
             ModifierExecutionStrategy = ParticleModifierExecutionStrategy.Serial;
             Parameters = new ParticleReleaseParameters();
         }
+
+        public Vector2 Position { get; set; }
 
         public int ActiveParticles => Buffer.Count;
         public Vector2 Offset { get; set; }
