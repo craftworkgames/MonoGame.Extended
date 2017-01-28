@@ -1,4 +1,36 @@
 ﻿{
- "templates": [
- ]
+  "Name": "adventure",
+  "TextureAtlases": [ "adventure-gui-atlas" ],
+  "Fonts": [ "small-font" ],
+  "DefaultFont": "small-font",
+  "Templates": {
+    "white-button": {
+      "TextureRegion": "buttonLong_grey",
+      "TextOffset": "0 -2",
+      "TextColor": "#f4a460ff",
+      "Color": "#8b4513ff",
+      "PressedStyle": {
+        "TextureRegion": "buttonLong_grey_pressed",
+        "TextOffset": "0 2"
+      },
+      "HoverStyle": {
+        "Color": "#f4a460ff",
+        "TextColor": "#ffffffff"
+      }
+    },
+    "brown-panel": {
+      "TextureRegion": {
+        "Name": "panel_brown",
+        "Padding": "10 10 10 10"
+      },
+      "Size": "400 300"
+    },
+    "beige-inset-panel": {
+      "TextureRegion": {
+        "Name": "panelInset_beige",
+        "Padding": "10 10 10 10"
+      },
+      "Size": "380 280"
+    }
+  }
 }

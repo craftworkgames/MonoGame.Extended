@@ -12,6 +12,9 @@ using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework.Content;
+using Newtonsoft.Json.Linq;
 
 namespace Demo.Gui
 {
@@ -32,6 +35,8 @@ namespace Demo.Gui
 
         protected override void LoadContent()
         {
+            var skin0 = LoadSkin(@"Content/adventure-gui-skin.json");
+
             var textureAtlas = Content.Load<TextureAtlas>("adventure-gui-atlas");
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
 
@@ -128,6 +133,26 @@ namespace Demo.Gui
             _guiManager.Screen = screen;
         }
 
+        private GuiSkin LoadSkin(string name)
+        {
+            var serializer = new JsonSerializer();
+
+            serializer.Converters.Add(new GuiSkinJsonConverter(Content));
+            serializer.Converters.Add(new TextureRegion2DConveter());
+            serializer.Converters.Add(new ColorJsonConverter());
+            serializer.Converters.Add(new NinePatchRegion2DConveter());
+            serializer.Converters.Add(new Size2JsonConverter());
+            serializer.Converters.Add(new Vector2JsonConverter());
+
+            using (var stream = TitleContainer.OpenStream(name))
+            using (var streamReader = new StreamReader(stream))
+            using (var jsonReader = new JsonTextReader(streamReader))
+            {
+                var skin = serializer.Deserialize<GuiSkin>(jsonReader);
+                return skin;
+            }
+        }
+
         protected override void UnloadContent()
         {
         }
@@ -152,6 +177,49 @@ namespace Demo.Gui
 
             _guiManager.Draw(gameTime);
 
+        }
+    }
+
+    public class GuiSkinJsonConverter : JsonConverter
+    {
+        private readonly ContentManager _contentManager;
+
+        public GuiSkinJsonConverter(ContentManager contentManager)
+        {
+            _contentManager = contentManager;
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(GuiSkin);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var root = JToken.Load(reader);
+            var fonts = LoadObject<string[]>(root, serializer, "Fonts")
+                .ToDictionary(c => c, c => _contentManager.Load<BitmapFont>(c));
+
+            var atlases = LoadObject<string[]>(root, serializer, "TextureAtlases")
+                .ToDictionary(c => c, c => _contentManager.Load<TextureAtlas>(c));
+
+            return new GuiSkin
+            {
+                Name = root.Value<string>("Name"),
+                TextureAtlases = atlases,
+                Fonts = fonts
+            };
+        }
+
+        private static T LoadObject<T>(JToken root, JsonSerializer serializer, string key)
+        {
+            return root
+                .Value<JToken>(key)
+                .ToObject<T>(serializer);
         }
     }
 }
