@@ -98,7 +98,7 @@ namespace MonoGame.Extended.Particles
 
         public void Trigger()
         {
-            Trigger(Position);
+            Trigger(Entity.Transform.Position);
         }
 
         public void Trigger(Vector2 position)

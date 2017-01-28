@@ -9,7 +9,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
 {
-    public class Sprite : EntityComponent, IColorable, ISceneEntity, ISpriteBatchDrawable
+    public class Sprite : IMovable, IRotatable, IScalable, IColorable, ISceneEntity, ISpriteBatchDrawable
     {
         private TextureRegion2D _textureRegion;
 
@@ -57,6 +57,9 @@ namespace MonoGame.Extended.Sprites
         }
 
         public bool IsVisible { get; set; }
+        public Vector2 Position { get; set; }
+        public float Rotation { get; set; }
+        public Vector2 Scale { get; set; }
         public Vector2 Origin { get; set; }
         public SpriteEffects Effect { get; set; }
 

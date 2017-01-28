@@ -14,6 +14,21 @@ namespace MonoGame.Extended
         All = WorldMatrixIsDirty | LocalMatrixIsDirty
     }
 
+    public interface IBaseTransform<TMatrix, TParent>
+        where TMatrix : struct where TParent : IBaseTransform<TMatrix, TParent>
+    {
+        TMatrix LocalMatrix { get; }
+        TMatrix WorldMatrix { get; }
+
+        TParent Parent { get; set; }
+
+        event Action TransformBecameDirty;
+        event Action TranformUpdated;
+
+        void GetLocalMatrix(out TMatrix matrix);
+        void GetWorldMatrix(out TMatrix matrix);
+    }
+
     /// <summary>
     ///     Represents the base class for the position, rotation, and scale of a game object in two-dimensions or
     ///     three-dimensions.
@@ -32,7 +47,7 @@ namespace MonoGame.Extended
     ///     </para>
     /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public abstract class BaseTransform<TMatrix, TParent>
+    public abstract class BaseTransform<TMatrix, TParent> : IBaseTransform<TMatrix, TParent>
         where TMatrix : struct where TParent : BaseTransform<TMatrix, TParent>
     {
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created
