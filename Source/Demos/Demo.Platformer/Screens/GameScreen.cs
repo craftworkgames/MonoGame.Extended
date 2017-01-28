@@ -87,28 +87,24 @@ namespace Demo.Platformer.Screens
             var projectionMatrix = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width,
                 GraphicsDevice.Viewport.Height, 0, 0f, -1f);
 
-            _mapRenderer.Begin(ref viewMatrix, ref projectionMatrix);
-
             // painter's algorithm; just draw things in the expected order
 
             var backgroundLayer = _map.GetLayer("background");
-            _mapRenderer.Draw(backgroundLayer);
+            _mapRenderer.Draw(backgroundLayer, ref viewMatrix, ref projectionMatrix);
 
             var solidsLayer = _map.GetLayer("solids");
             _mapRenderer.Draw(solidsLayer);
 
             var decorationsLayer = _map.GetLayer("decorations");
-            _mapRenderer.Draw(decorationsLayer);
+            _mapRenderer.Draw(decorationsLayer, ref viewMatrix, ref projectionMatrix);
 
             _entityComponentSystem.Draw(gameTime);
 
             var decorations2Layer = _map.GetLayer("decorations2");
-            _mapRenderer.Draw(decorations2Layer);
+            _mapRenderer.Draw(decorations2Layer, ref viewMatrix, ref projectionMatrix);
 
             var deadliesLayer = _map.GetLayer("deadlies");
-            _mapRenderer.Draw(deadliesLayer);
-
-            _mapRenderer.End();
+            _mapRenderer.Draw(deadliesLayer, ref viewMatrix, ref projectionMatrix);
         }
     }
 }

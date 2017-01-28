@@ -24,7 +24,7 @@ namespace Demo.Batching
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
-        private DynamicBatchRenderer2D _batch;
+        private Batcher2D _batcher;
         private readonly StringBuilder _stringBuilder = new StringBuilder();
         private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFont;
@@ -62,7 +62,7 @@ namespace Demo.Batching
             var graphicsDevice = GraphicsDevice;
 
             _effect = new DefaultEffect2D(graphicsDevice);
-            _batch = new DynamicBatchRenderer2D(graphicsDevice);
+            _batcher = new Batcher2D(graphicsDevice);
             _spriteBatch = new SpriteBatch(graphicsDevice);
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
 
@@ -127,41 +127,42 @@ namespace Demo.Batching
             _projectionMatrix = _effect.Projection = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0, 0, -1);
 
             // comment and uncomment either of the two below lines to compare
-            DrawSpritesWithBatch2D();
+
+            DrawSpritesWithBatcher2D();
             //DrawSpritesWithSpriteBatch();
 
-            _batch.Begin(ref _viewMatrix, ref _projectionMatrix);
+            //_batcher.Begin(viewMatrix: _viewMatrix, projectionMatrix: _projectionMatrix);
 
-            // use StringBuilder to prevent garbage
-            _stringBuilder.Clear();
-            _stringBuilder.Append("FPS: ");
-            _stringBuilder.Append(_fpsCounter.FramesPerSecond); // but, this StringBulder method causes a small amount of garbage...
-            _batch.DrawString(_bitmapFont, _stringBuilder, Vector2.Zero);
+            //// use StringBuilder to prevent garbage
+            //_stringBuilder.Clear();
+            //_stringBuilder.Append("FPS: ");
+            //_stringBuilder.Append(_fpsCounter.FramesPerSecond); // but, this StringBulder method causes a small amount of garbage...
+            //_batcher.DrawString(_bitmapFont, _stringBuilder, Vector2.Zero);
 
-            _stringBuilder.Clear();
-            _stringBuilder.Append("Draw Calls: ");
-            _stringBuilder.Append(GraphicsDevice.Metrics.DrawCount);
-            _batch.DrawString(_bitmapFont, _stringBuilder, new Vector2(0, _bitmapFont.LineHeight));
+            //_stringBuilder.Clear();
+            //_stringBuilder.Append("Draw Calls: ");
+            //_stringBuilder.Append(GraphicsDevice.Metrics.DrawCount);
+            //_batcher.DrawString(_bitmapFont, _stringBuilder, new Vector2(0, _bitmapFont.LineHeight));
 
-            _batch.End();
+            //_batcher.End();
 
             base.Draw(gameTime);
 
             _fpsCounter.Draw(gameTime);
         }
 
-        private void DrawSpritesWithBatch2D()
+        private void DrawSpritesWithBatcher2D()
         {
-            _batch.Begin(ref _viewMatrix, ref _projectionMatrix);
+            _batcher.Begin(viewMatrix: _viewMatrix, projectionMatrix: _projectionMatrix);
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _sprites.Length; index++)
             {
                 var sprite = _sprites[index];
-                _batch.DrawTexture(sprite.Texture, ref sprite.TransformMatrix, sprite.Color);
+                _batcher.DrawTexture(sprite.Texture, ref sprite.TransformMatrix, sprite.Color);
             }
 
-            _batch.End();
+            _batcher.End();
         }
 
         private void DrawSpritesWithSpriteBatch()

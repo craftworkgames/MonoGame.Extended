@@ -30,7 +30,7 @@ namespace Demo.TiledMaps
         private ViewportAdapter _viewportAdapter;
         private KeyboardState _previousKeyboardState = Keyboard.GetState();
         private bool _showHelp;
-        private TiledMap _tiledMap;
+        private TiledMap _map;
 
         private Queue<string> _availableMaps;
 
@@ -38,13 +38,13 @@ namespace Demo.TiledMaps
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this) 
 			{
-				SynchronizeWithVerticalRetrace = false,
+				SynchronizeWithVerticalRetrace = true,
                 PreferredBackBufferWidth = 1024,
                 PreferredBackBufferHeight = 768
             };
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            IsFixedTimeStep = false;
+            IsFixedTimeStep = true;
         }
 
         protected override void Initialize()
@@ -71,16 +71,16 @@ namespace Demo.TiledMaps
             _availableMaps =
                 new Queue<string>(new[] {"level01", "level02", "level03", "level04", "level05", "level06", "level07"});
 
-            _tiledMap = LoadNextMap();
-            _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
+            _map = LoadNextMap();
+            _camera.LookAt(new Vector2(_map.WidthInPixels, _map.HeightInPixels) * 0.5f);
         }
 
         private TiledMap LoadNextMap()
         {
             var name = _availableMaps.Dequeue();
-            _tiledMap = Content.Load<TiledMap>(name);
+            _map = Content.Load<TiledMap>(name);
             _availableMaps.Enqueue(name);
-            return _tiledMap;
+            return _map;
         }
 
         protected override void UnloadContent()
@@ -93,7 +93,7 @@ namespace Demo.TiledMaps
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
 
-            _mapRenderer.Update(_tiledMap, gameTime);
+            _mapRenderer.Update(_map, gameTime);
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
@@ -132,7 +132,7 @@ namespace Demo.TiledMaps
 
             if (_previousKeyboardState.IsKeyDown(Keys.Tab) && keyboardState.IsKeyUp(Keys.Tab))
             {
-                _tiledMap = LoadNextMap();
+                _map = LoadNextMap();
                 LookAtMapCenter();
             }
 
@@ -160,13 +160,13 @@ namespace Demo.TiledMaps
 
         private void LookAtMapCenter()
         {
-            switch (_tiledMap.Orientation)
+            switch (_map.Orientation)
             {
                 case TiledMapOrientation.Orthogonal:
-                    _camera.LookAt(new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels) * 0.5f);
+                    _camera.LookAt(new Vector2(_map.WidthInPixels, _map.HeightInPixels) * 0.5f);
                     break;
                 case TiledMapOrientation.Isometric:
-                    _camera.LookAt(new Vector2(0, _tiledMap.HeightInPixels + _tiledMap.TileHeight) * 0.5f);
+                    _camera.LookAt(new Vector2(0, _map.HeightInPixels + _map.TileHeight) * 0.5f);
                     break;
                 case TiledMapOrientation.Staggered:
                     break;
@@ -182,12 +182,7 @@ namespace Demo.TiledMaps
             var viewMatrix = _camera.GetViewMatrix();
             var projectionMatrix = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0, 0f, -1f);
 
-            _mapRenderer.Begin(ref viewMatrix, ref projectionMatrix);
-
-            foreach (var layer in _tiledMap.Layers)
-                _mapRenderer.Draw(layer);
-
-            _mapRenderer.End();
+            _mapRenderer.Draw(_map, ref viewMatrix, ref projectionMatrix);
 
             DrawText();
 
@@ -207,7 +202,7 @@ namespace Demo.TiledMaps
             // textPosition = base position (point) + offset (vector2)
             textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 0);
             _spriteBatch.DrawString(_bitmapFont,
-                $"Map: {_tiledMap.Name}; {_tiledMap.TileLayers.Count} tile layer(s) @ {_tiledMap.Width}x{_tiledMap.Height} tiles, {_tiledMap.ImageLayers.Count} image layer(s)",
+                $"Map: {_map.Name}; {_map.TileLayers.Count} tile layer(s) @ {_map.Width}x{_map.Height} tiles, {_map.ImageLayers.Count} image layer(s)",
                 textPosition, textColor);
             textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 1);
             // we can safely get the metrics without worrying about spritebatch interfering because spritebatch submits on End()

@@ -41,24 +41,18 @@
     <EmbeddedResource Include="Effects\Resources\DefaultEffect2D.mgfxo" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BatchRenderer.cs" />
-    <Compile Include="DynamicBatchRenderer.cs" />
-    <Compile Include="Geometry\GraphicsGeometryBufferPositionTextureU16.cs" />
-    <Compile Include="Geometry\GraphicsGeometryBufferPositionColorTextureU16.cs" />
-    <Compile Include="Geometry\SpriteBuilderPositionTextureU16.cs" />
-    <Compile Include="IDrawCallData.cs" />
-    <Compile Include="DynamicBatchRenderer2D.cs" />
-    <Compile Include="DrawCall.cs" />
+    <Compile Include="Batcher.cs" />
+    <Compile Include="IBatchDrawCallInfo.cs" />
+    <Compile Include="Batcher2D.cs" />
     <Compile Include="Effects\DefaultEffect2D.cs" />
     <Compile Include="Effects\EffectResource.cs" />
     <Compile Include="Effects\ITexture2DEffect.cs" />
     <Compile Include="Effects\MatrixChainEffect.cs" />
-    <Compile Include="Geometry\GraphicsGeometryBuilder.cs" />
-    <Compile Include="Geometry\GraphicsGeometryBuffer.cs" />
-    <Compile Include="Geometry\SpriteBuilderPositionColorTextureU16.cs" />
+    <Compile Include="Geometry\GeometryBuilder.cs" />
+    <Compile Include="Geometry\GeometryBuilder2D.cs" />
+    <Compile Include="IMatrixChainEffect.cs" />
     <Compile Include="PrimitiveTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueueRenderer.cs" />
     <Compile Include="FlipFlags.cs" />
   </ItemGroup>
   <ItemGroup>
