@@ -22,7 +22,7 @@ namespace MonoGame.Extended.Graphics
     /// </summary>
     /// <seealso cref="IDisposable" />
     /// <remarks>
-    ///     <para>For drawing user interfaces, consider using <see cref="UIBatcher" /> instead because it supports scissor rectangles.</para>
+    ///     <para>For drawing user interfaces, consider using <see cref="UIBatcher(ref Matrix, ref Matrix, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect)" /> instead because it supports scissor rectangles.</para>
     /// </remarks>
     public sealed class Batcher2D : Batcher<Batcher2D.DrawCallInfo>
     {
@@ -101,7 +101,7 @@ namespace MonoGame.Extended.Graphics
             var currentDrawCall = DrawCalls[0];
             DrawCalls[newDrawCallsCount++] = DrawCalls[0];
 
-            var drawCallIndexCount = ((PrimitiveType)currentDrawCall.PrimitiveType).GetVerticesCount(currentDrawCall.PrimitiveCount);
+            var drawCallIndexCount = currentDrawCall.PrimitiveType.GetVerticesCount(currentDrawCall.PrimitiveCount);
             Array.Copy(_indices, currentDrawCall.StartIndex, _sortedIndices, 0, drawCallIndexCount);
             var sortedIndexCount = drawCallIndexCount;
 
@@ -110,7 +110,7 @@ namespace MonoGame.Extended.Graphics
             for (var i = 1; i < EnqueuedDrawCallCount; i++)
             {
                 currentDrawCall = DrawCalls[i];
-                drawCallIndexCount = ((PrimitiveType)currentDrawCall.PrimitiveType).GetVerticesCount(currentDrawCall.PrimitiveCount);
+                drawCallIndexCount = currentDrawCall.PrimitiveType.GetVerticesCount(currentDrawCall.PrimitiveCount);
                 Array.Copy(_indices, currentDrawCall.StartIndex, _sortedIndices, sortedIndexCount, drawCallIndexCount);
                 sortedIndexCount += drawCallIndexCount;
 
@@ -130,7 +130,7 @@ namespace MonoGame.Extended.Graphics
         /// <param name="drawCall">The draw call information.</param>
         protected override void InvokeDrawCall(ref DrawCallInfo drawCall)
         {
-            GraphicsDevice.DrawIndexedPrimitives((PrimitiveType)drawCall.PrimitiveType, 0, drawCall.StartIndex, drawCall.PrimitiveCount);
+            GraphicsDevice.DrawIndexedPrimitives(drawCall.PrimitiveType, 0, drawCall.StartIndex, drawCall.PrimitiveCount);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace MonoGame.Extended.Graphics
         /// <param name="color">The <see cref="Color" />. Use <code>null</code> to use the default <see cref="Color.White" />.</param>
         /// <param name="flags">The <see cref="FlipFlags" />. The default value is <see cref="FlipFlags.None" />.</param>
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0</code>.</param>
-        /// <exception cref="InvalidOperationException">The <see cref="Batcher{TDrawCallInfo}.Begin" /> method has not been called.</exception>
+        /// <exception cref="InvalidOperationException">The <see cref="Batcher{TDrawCallInfo}.Begin(ref Matrix, ref Matrix, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect)" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
         public void DrawSprite(Texture2D texture, ref Matrix2D transformMatrix, ref Rectangle sourceRectangle,
             Color? color = null, FlipFlags flags = FlipFlags.None, float depth = 0)
@@ -165,7 +165,7 @@ namespace MonoGame.Extended.Graphics
         /// <param name="color">The <see cref="Color" />. Use <code>null</code> to use the default <see cref="Color.White" />.</param>
         /// <param name="flags">The <see cref="FlipFlags" />. The default value is <see cref="FlipFlags.None" />.</param>
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0</code>.</param>
-        /// <exception cref="InvalidOperationException">The <see cref="Batcher{TDrawCallInfo}.Begin" /> method has not been called.</exception>
+        /// <exception cref="InvalidOperationException">The <see cref="Batcher{TDrawCallInfo}.Begin(ref Matrix, ref Matrix, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect)" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="texture" /> is null.</exception>
         public void DrawTexture(Texture2D texture, ref Matrix2D transformMatrix, Color? color = null,
             FlipFlags flags = FlipFlags.None, float depth = 0)
@@ -203,7 +203,7 @@ namespace MonoGame.Extended.Graphics
         /// </param>
         /// <param name="flags">The <see cref="FlipFlags" />. The default value is <see cref="FlipFlags.None" />.</param>
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0f</code>.</param>
-        /// <exception cref="InvalidOperationException">The <see cref="Batcher{TDrawCallInfo}.Begin" /> method has not been called.</exception>
+        /// <exception cref="InvalidOperationException">The <see cref="Batcher{TDrawCallInfo}.Begin(ref Matrix, ref Matrix, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect)" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="bitmapFont" /> is null or <paramref name="text" /> is null.</exception>
         public void DrawString(BitmapFont bitmapFont, StringBuilder text, ref Matrix2D transformMatrix,
             Color? color = null, FlipFlags flags = FlipFlags.None, float depth = 0f)
@@ -294,7 +294,7 @@ namespace MonoGame.Extended.Graphics
         /// </param>
         /// <param name="flags">The <see cref="FlipFlags" />. The default value is <see cref="FlipFlags.None" />.</param>
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0f</code></param>
-        /// <exception cref="InvalidOperationException">The <see cref="Batcher{TDrawCallInfo}.Begin" /> method has not been called.</exception>
+        /// <exception cref="InvalidOperationException">The <see cref="Batcher{TDrawCallInfo}.Begin(ref Matrix, ref Matrix, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect)" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="bitmapFont" /> is null or <paramref name="text" /> is null.</exception>
         public void DrawString(BitmapFont bitmapFont, StringBuilder text, Vector2 position, Color? color = null,
             float rotation = 0f, Vector2? origin = null, Vector2? scale = null,
@@ -319,7 +319,7 @@ namespace MonoGame.Extended.Graphics
         /// </param>
         /// <param name="flags">The <see cref="FlipFlags" />. The default value is <see cref="FlipFlags.None" />.</param>
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0f</code></param>
-        /// <exception cref="InvalidOperationException">The <see cref="Batcher{TDrawCallInfo}.Begin" /> method has not been called.</exception>
+        /// <exception cref="InvalidOperationException">The <see cref="Batcher{TDrawCallInfo}.Begin(ref Matrix, ref Matrix, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect)" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="bitmapFont" /> is null or <paramref name="text" /> is null.</exception>
         public void DrawString(BitmapFont bitmapFont, string text, ref Matrix2D transformMatrix, Color? color = null,
             FlipFlags flags = FlipFlags.None, float depth = 0f)
@@ -410,7 +410,7 @@ namespace MonoGame.Extended.Graphics
         /// </param>
         /// <param name="flags">The <see cref="FlipFlags" />. The default value is <see cref="FlipFlags.None" />.</param>
         /// <param name="depth">The depth <see cref="float" />. The default value is <code>0f</code></param>
-        /// <exception cref="InvalidOperationException">The <see cref="Batcher{TDrawCallInfo}.Begin" /> method has not been called.</exception>
+        /// <exception cref="InvalidOperationException">The <see cref="Batcher{TDrawCallInfo}.Begin(ref Matrix, ref Matrix, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect)" /> method has not been called.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="bitmapFont" /> is null or <paramref name="text" /> is null.</exception>
         public void DrawString(BitmapFont bitmapFont, string text, Vector2 position, Color? color = null,
             float rotation = 0f, Vector2? origin = null, Vector2? scale = null,
@@ -425,16 +425,16 @@ namespace MonoGame.Extended.Graphics
         [EditorBrowsable(EditorBrowsableState.Never)]
         public struct DrawCallInfo : IBatchDrawCallInfo<DrawCallInfo>, IComparable<DrawCallInfo>
         {
+            internal readonly PrimitiveType PrimitiveType;
             internal int StartIndex;
             internal int PrimitiveCount;
             internal readonly Texture2D Texture;
             internal readonly uint TextureKey;
             internal readonly uint DepthKey;
-            internal readonly byte PrimitiveType;
 
             internal unsafe DrawCallInfo(Texture2D texture, PrimitiveType primitiveType, int startIndex, int primitiveCount, float depth)
             {
-                PrimitiveType = (byte)primitiveType;
+                PrimitiveType = primitiveType;
                 StartIndex = startIndex;
                 PrimitiveCount = primitiveCount;
                 Texture = texture;
@@ -461,7 +461,7 @@ namespace MonoGame.Extended.Graphics
             [SuppressMessage("ReSharper", "ImpureMethodCallOnReadonlyValueField")]
             public int CompareTo(DrawCallInfo other)
             {
-                var result = PrimitiveType.CompareTo(other.PrimitiveType);
+                var result = ((byte)PrimitiveType).CompareTo((byte)other.PrimitiveType);
                 if (result != 0)
                     return result;
                 result = TextureKey.CompareTo(other.TextureKey);
