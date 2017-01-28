@@ -4,56 +4,35 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics;
 
 #endregion
 
 namespace MonoGame.Extended.Tiled.Graphics
 {
-    public class TiledMapRenderer : Renderer
+    public class TiledMapRenderer : IDisposable
     {
-        public TiledMapRenderer(GraphicsDevice graphicsDevice)
-            : base(graphicsDevice, new BasicEffect(graphicsDevice))
-        {
-            _basicEffect = (BasicEffect)Effect;
-            _basicEffect.TextureEnabled = true;
-
-            SamplerState = SamplerState.PointClamp;
-        }
-
         private readonly BasicEffect _basicEffect;
-        private SamplerState _samplerState;
-        private Matrix _modelToWorldTransformMatrix = Matrix.Identity;
+        private Matrix _worldMatrix = Matrix.Identity;
 
         /// <summary>
-        ///     Gets or sets the <see cref="Microsoft.Xna.Framework.Graphics.SamplerState" /> associated with this
-        ///     <see cref="TiledMapRenderer" />.
+        ///     Gets the <see cref="GraphicsDevice" /> associated with this <see cref="TiledMapRenderer" />.
         /// </summary>
         /// <value>
-        ///     The <see cref="Microsoft.Xna.Framework.Graphics.SamplerState" /> associated with this
-        ///     <see cref="TiledMapRenderer" />.
+        ///     The <see cref="GraphicsDevice" /> associated with this <see cref="TiledMapRenderer" />.
         /// </value>
-        /// <exception cref="InvalidOperationException">
-        ///     <see cref="SamplerState" /> cannot be set until <see cref="Renderer.End" /> has been invoked.
-        /// </exception>
-        public SamplerState SamplerState
+        public GraphicsDevice GraphicsDevice { get; }
+
+        public TiledMapRenderer(GraphicsDevice graphicsDevice)
         {
-            get { return _samplerState; }
-            set
+            if (graphicsDevice == null)
+                throw new ArgumentNullException(nameof(graphicsDevice));
+
+            GraphicsDevice = graphicsDevice;
+
+            _basicEffect = new BasicEffect(graphicsDevice)
             {
-                EnsureHasNotBegun();
-                _samplerState = value;
-            }
-        }
-
-        protected override void ApplyStates()
-        {
-            base.ApplyStates();
-
-            GraphicsDevice.SamplerStates[0] = SamplerState;
-
-            _basicEffect.View = View;
-            _basicEffect.Projection = Projection;
+                TextureEnabled = true
+            };
         }
 
         public void Update(TiledMap map, GameTime gameTime)
@@ -68,13 +47,28 @@ namespace MonoGame.Extended.Tiled.Graphics
                 UpdateAnimatedModels(layer.AnimatedModels);
         }
 
-        public void Draw(TiledMap map, float depth = 0.0f)
+        public void Draw(TiledMap map, Matrix? viewMatrix = null, Matrix? projectionMatrix = null, float depth = 0.0f)
+        {
+            var viewMatrix1 = viewMatrix ?? Matrix.Identity;
+            var projectionMatrix1 = projectionMatrix ?? Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0, 0, -1);
+            Draw(map, ref viewMatrix1, ref projectionMatrix1, depth);
+        }
+
+        public void Draw(TiledMap map, ref Matrix viewMatrix, ref Matrix projectionMatrix, float depth = 0.0f)
         {
             foreach (var layer in map.Layers)
-                Draw(layer, depth);
-        } 
+                Draw(layer, ref viewMatrix, ref projectionMatrix, depth);
+        }
 
-        public void Draw(TiledMapLayer layer, float depth = 0.0f)
+        public void Draw(TiledMapLayer layer, Matrix? viewMatrix = null, Matrix? projectionMatrix = null,
+            float depth = 0.0f)
+        {
+            var viewMatrix1 = viewMatrix ?? Matrix.Identity;
+            var projectionMatrix1 = projectionMatrix ?? Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0, 0, -1);
+            Draw(layer, ref viewMatrix1, ref projectionMatrix1, depth);
+        }
+
+        public void Draw(TiledMapLayer layer, ref Matrix viewMatrix, ref Matrix projectionMatrix, float depth = 0.0f)
         {
             if (!layer.IsVisible)
                 return;
@@ -82,13 +76,15 @@ namespace MonoGame.Extended.Tiled.Graphics
             if (layer is TiledMapObjectLayer)
                 return;
 
-            _modelToWorldTransformMatrix.Translation = new Vector3(layer.OffsetX, layer.OffsetY, depth);
+            _worldMatrix.Translation = new Vector3(layer.OffsetX, layer.OffsetY, depth);
 
             // render each model
             foreach (var model in layer.Models)
             {
                 // model-to-world transform
-                _basicEffect.World = _modelToWorldTransformMatrix;
+                _basicEffect.World = _worldMatrix;
+                _basicEffect.View = viewMatrix;
+                _basicEffect.Projection = projectionMatrix;
                 // desired alpha
                 _basicEffect.Alpha = layer.Opacity;
                 // bind the texture if the texture is different than what is already binded
@@ -99,7 +95,7 @@ namespace MonoGame.Extended.Tiled.Graphics
                 GraphicsDevice.Indices = model.IndexBuffer;
 
                 // for each pass in our effect
-                foreach (var pass in Effect.CurrentTechnique.Passes)
+                foreach (var pass in _basicEffect.CurrentTechnique.Passes)
                 {
                     // apply the pass, effectively choosing which vertex shader and fragment (pixel) shader to use
                     pass.Apply();
@@ -132,6 +128,28 @@ namespace MonoGame.Extended.Tiled.Graphics
                 // copy (upload) the updated vertices to the GPU's memory
                 animatedModel.VertexBuffer.SetData(animatedModel.Vertices, 0, animatedModel.Vertices.Length);
             }
+        }
+
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="diposing">
+        ///     <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
+        ///     unmanaged resources.
+        /// </param>
+        protected virtual void Dispose(bool diposing)
+        {
+            if (diposing)
+                _basicEffect.Dispose();
         }
     }
 }

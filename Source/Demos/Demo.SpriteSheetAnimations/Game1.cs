@@ -160,14 +160,7 @@ namespace Demo.SpriteSheetAnimations
             var projectionMatrix = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width,
                 GraphicsDevice.Viewport.Height, 0, 0f, -1f);
 
-            _mapRenderer.Begin(ref viewMatrix, ref projectionMatrix);
-
-            foreach (var layer in _map.Layers)
-            {
-                _mapRenderer.Draw(layer);
-            }
-
-            _mapRenderer.End();
+            _mapRenderer.Draw(_map, ref viewMatrix, ref projectionMatrix);
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             _zombie.Draw(_spriteBatch);
