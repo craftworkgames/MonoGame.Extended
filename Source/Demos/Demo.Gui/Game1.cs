@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -11,8 +13,6 @@ using MonoGame.Extended.Serialization;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using Newtonsoft.Json.Linq;
 
@@ -37,87 +37,76 @@ namespace Demo.Gui
         {
             var skin0 = LoadSkin(@"Content/adventure-gui-skin.json");
 
-            var textureAtlas = Content.Load<TextureAtlas>("adventure-gui-atlas");
+            //var textureAtlas = Content.Load<TextureAtlas>("adventure-gui-atlas");
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
 
             _camera = new Camera2D(viewportAdapter);
 
-            var buttonRegion = textureAtlas["buttonLong_grey"];
-            var buttonRegionPressed = textureAtlas["buttonLong_grey_pressed"];
-            var panelRegion = new NinePatchRegion2D(textureAtlas["panel_brown"], 10);
-            var panelInsetRegion = new NinePatchRegion2D(textureAtlas["panelInset_beige"], 10);
+            //var buttonRegion = textureAtlas["buttonLong_grey"];
+            //var buttonRegionPressed = textureAtlas["buttonLong_grey_pressed"];
+            //var panelRegion = new NinePatchRegion2D(textureAtlas["panel_brown"], 10);
+            //var panelInsetRegion = new NinePatchRegion2D(textureAtlas["panelInset_beige"], 10);
 
-            var skin = new GuiSkin
-            {
-                TextureAtlases = new Dictionary<string, TextureAtlas>()
-                {
-                    { "adventure-gui-atlas", Content.Load<TextureAtlas>("adventure-gui-atlas") }
-                },
-                Fonts = new Dictionary<string, BitmapFont>
-                {
-                    { "small-font", Content.Load<BitmapFont>("small-font") }
-                },
-                Templates =
-                {
-                    {
-                        "white-button",
-                        new GuiControlStyle(typeof(GuiButton))
-                        {
-                            { "TextureRegion", buttonRegion },
-                            { "TextOffset", new Vector2(0, -2) },
-                            { "TextColor", Color.SandyBrown },
-                            { "Color", Color.SaddleBrown },
-                            { "PressedStyle", new GuiControlStyle(typeof(GuiButton))
-                                {
-                                    { "TextureRegion", buttonRegionPressed },
-                                    { "TextOffset", new Vector2(0, 2) }
-                                }
-                            },
-                            { "HoverStyle", new GuiControlStyle(typeof(GuiButton))
-                                {
-                                    { "Color", Color.SandyBrown },
-                                    { "TextColor", Color.White },
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "brown-panel",
-                        new GuiControlStyle(typeof(GuiPanel))
-                        {
-                            { "TextureRegion", panelRegion },
-                            { "Size", new Size2(400, 300) }
-                        }
-                    },
-                    {
-                        "beige-inset-panel",
-                        new GuiControlStyle(typeof(GuiPanel))
-                        {
-                            { "TextureRegion", panelInsetRegion },
-                            { "Size", new Size2(380, 280) }
-                        }
-                    }
-                }
-            };
+            //var skin = new GuiSkin
+            //{
+            //    Name = "adventure-gui-skin",
+            //    TextureAtlases = { Content.Load<TextureAtlas>("adventure-gui-atlas") },
+            //    Fonts = { Content.Load<BitmapFont>("small-font") },
+            //    Templates =
+            //    {
+            //        {
+            //            "white-button",
+            //            new GuiControlStyle(typeof(GuiButton))
+            //            {
+            //                { "TextureRegion", buttonRegion },
+            //                { "TextOffset", new Vector2(0, -2) },
+            //                { "TextColor", Color.SandyBrown },
+            //                { "Color", Color.SaddleBrown },
+            //                { "PressedStyle", new GuiControlStyle(typeof(GuiButton))
+            //                    {
+            //                        { "TextureRegion", buttonRegionPressed },
+            //                        { "TextOffset", new Vector2(0, 2) }
+            //                    }
+            //                },
+            //                { "HoverStyle", new GuiControlStyle(typeof(GuiButton))
+            //                    {
+            //                        { "Color", Color.SandyBrown },
+            //                        { "TextColor", Color.White },
+            //                    }
+            //                }
+            //            }
+            //        },
+            //        {
+            //            "brown-panel",
+            //            new GuiControlStyle(typeof(GuiPanel))
+            //            {
+            //                { "TextureRegion", panelRegion },
+            //                { "Size", new Size2(400, 300) }
+            //            }
+            //        },
+            //        {
+            //            "beige-inset-panel",
+            //            new GuiControlStyle(typeof(GuiPanel))
+            //            {
+            //                { "TextureRegion", panelInsetRegion },
+            //                { "Size", new Size2(380, 280) }
+            //            }
+            //        }
+            //    }
+            //};
 
-            var serializer = new JsonSerializer();
+            //var serializer = CreateSerializer();
 
-            using (var stringWriter = new StringWriter())
-            {
-                serializer.Converters.Add(new TextureRegion2DConveter());
-                serializer.Converters.Add(new ColorJsonConverter());
-                serializer.Converters.Add(new NinePatchRegion2DConveter());
-                serializer.Converters.Add(new Size2JsonConverter());
-                serializer.Converters.Add(new Vector2JsonConverter());
-                serializer.Formatting = Formatting.Indented;
-                serializer.Serialize(stringWriter, skin);
-                var json = stringWriter.ToString();
-            }
+            //using (var stringWriter = new StringWriter())
+            //{
+            //    serializer.Serialize(stringWriter, skin);
+            //    var json = stringWriter.ToString();
+            //}
 
-            var renderer = new GuiSpriteBatchRenderer(GraphicsDevice, skin.DefaultFont);
+            var renderer = new GuiSpriteBatchRenderer(GraphicsDevice, skin0.DefaultFont);
             _guiManager = new GuiManager(viewportAdapter, renderer);
 
-            var controlFactory = new GuiControlFactory(skin);
+            var controlFactory = new GuiControlFactory(skin0);
             var screen = new GuiScreen
             {
                 Controls =
@@ -133,17 +122,28 @@ namespace Demo.Gui
             _guiManager.Screen = screen;
         }
 
-        private GuiSkin LoadSkin(string name)
+        private JsonSerializer CreateSerializer()
         {
+            var textureRegionService = new TextureRegionService();
             var serializer = new JsonSerializer();
-
-            serializer.Converters.Add(new GuiSkinJsonConverter(Content));
-            serializer.Converters.Add(new TextureRegion2DConveter());
             serializer.Converters.Add(new ColorJsonConverter());
+            serializer.Converters.Add(new ContentConverter<BitmapFont>(Content, font => font.Name));
+            serializer.Converters.Add(new TextureAtlasConverter(Content, textureRegionService));
+            serializer.Converters.Add(new GuiControlStyleConverter());
             serializer.Converters.Add(new NinePatchRegion2DConveter());
             serializer.Converters.Add(new Size2JsonConverter());
+            serializer.Converters.Add(new TextureRegion2DConveter(textureRegionService));
+            //serializer.Converters.Add(new TypeJsonConverter());
             serializer.Converters.Add(new Vector2JsonConverter());
+            serializer.ContractResolver = new GuiJsonContractResolver();
+            serializer.Formatting = Formatting.Indented;
+            return serializer;
+        }
 
+        private GuiSkin LoadSkin(string name)
+        {
+            var serializer = CreateSerializer();
+            
             using (var stream = TitleContainer.OpenStream(name))
             using (var streamReader = new StreamReader(stream))
             using (var jsonReader = new JsonTextReader(streamReader))
@@ -180,46 +180,172 @@ namespace Demo.Gui
         }
     }
 
-    public class GuiSkinJsonConverter : JsonConverter
+    public class GuiControlStyleConverter : JsonConverter
     {
-        private readonly ContentManager _contentManager;
+        private readonly Dictionary<string, Type> _controlTypes;
 
-        public GuiSkinJsonConverter(ContentManager contentManager)
+        public GuiControlStyleConverter()
         {
-            _contentManager = contentManager;
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(GuiSkin);
+            _controlTypes = typeof(GuiControl)
+                .Assembly
+                .GetTypes()
+                .Where(t => t.IsSubclassOf(typeof(GuiControl)))
+                .ToDictionary(t => t.Name);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            var style = (GuiControlStyle) value;
+            var dictionary = new Dictionary<string, object> {{"TargetType", style.TargetType.Name}};
+
+            foreach (var keyValuePair in style)
+                dictionary.Add(keyValuePair.Key, keyValuePair.Value);
+
+            serializer.Serialize(writer, dictionary);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var root = JToken.Load(reader);
-            var fonts = LoadObject<string[]>(root, serializer, "Fonts")
-                .ToDictionary(c => c, c => _contentManager.Load<BitmapFont>(c));
+            const string targetTypeKey = "TargetType";
+            var dictionary = serializer.Deserialize<Dictionary<string, object>>(reader);
+            var typeName = (string) dictionary[targetTypeKey];
+            var targetType = _controlTypes[typeName];
+            var properties = targetType.GetProperties().ToDictionary(p => p.Name);
+            var style = new GuiControlStyle(targetType);
 
-            var atlases = LoadObject<string[]>(root, serializer, "TextureAtlases")
-                .ToDictionary(c => c, c => _contentManager.Load<TextureAtlas>(c));
-
-            return new GuiSkin
+            foreach (var keyValuePair in dictionary.Where(i => i.Key != targetTypeKey))
             {
-                Name = root.Value<string>("Name"),
-                TextureAtlases = atlases,
-                Fonts = fonts
-            };
+                var property = properties[keyValuePair.Key];
+                var json = JsonConvert.SerializeObject(keyValuePair.Value);
+
+                using (var textReader = new StringReader(json))
+                using (var jsonReader = new JsonTextReader(textReader))
+                {
+                    var value = serializer.Deserialize(jsonReader, property.PropertyType);
+                    style.Add(keyValuePair.Key, value);
+                }
+            }
+
+            return style;
         }
 
-        private static T LoadObject<T>(JToken root, JsonSerializer serializer, string key)
+        public override bool CanConvert(Type objectType)
         {
-            return root
-                .Value<JToken>(key)
-                .ToObject<T>(serializer);
+            return objectType == typeof(GuiControlStyle);
         }
     }
+
+    public class ContentConverter<T> : JsonConverter
+    {
+        private readonly ContentManager _contentManager;
+        private readonly Func<T, string> _getAssetName;
+
+        public ContentConverter(ContentManager contentManager, Func<T, string> getAssetName)
+        {
+            _contentManager = contentManager;
+            _getAssetName = getAssetName;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            var asset = (T) value;
+            var assetName = _getAssetName(asset);
+            writer.WriteValue(assetName);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var assetName = (string) reader.Value;
+            return _contentManager.Load<T>(assetName);
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(T);
+        }
+    }
+
+    public class TextureAtlasConverter : ContentConverter<TextureAtlas>
+    {
+        private readonly TextureRegionService _textureRegionService;
+
+        public TextureAtlasConverter(ContentManager contentManager, TextureRegionService textureRegionService) 
+            : base(contentManager, atlas => atlas.Name)
+        {
+            _textureRegionService = textureRegionService;
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var textureAtlas = base.ReadJson(reader, objectType, existingValue, serializer) as TextureAtlas;
+
+            if (textureAtlas != null)
+                _textureRegionService.TextureAtlases.Add(textureAtlas);
+
+            return textureAtlas;
+        }
+    }
+
+    //public class TypeJsonConverter : JsonConverter
+    //{
+    //    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    //    {
+    //    }
+
+    //    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    //    {
+    //        var typeName = (string) reader.Value;
+    //        return typeof(TypeJsonConverter).Assembly.CreateInstance(typeName);
+    //    }
+
+    //    public override bool CanConvert(Type objectType)
+    //    {
+    //        return objectType == typeof(Type);
+    //    }
+    //}
+
+    //public class GuiSkinJsonConverter : JsonConverter
+    //{
+    //    private readonly ContentManager _contentManager;
+
+    //    public GuiSkinJsonConverter(ContentManager contentManager)
+    //    {
+    //        _contentManager = contentManager;
+    //    }
+
+    //    public override bool CanConvert(Type objectType)
+    //    {
+    //        return objectType == typeof(GuiSkin);
+    //    }
+
+    //    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    //    {
+    //    }
+
+    //    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    //    {
+    //        var root = JToken.Load(reader);
+    //        var fonts = LoadObject<string[]>(root, serializer, "Fonts")
+    //            .Select(c => _contentManager.Load<BitmapFont>(c))
+    //            .ToList();
+
+    //        var atlases = LoadObject<string[]>(root, serializer, "TextureAtlases")
+    //            .Select(c => _contentManager.Load<TextureAtlas>(c))
+    //            .ToList();
+
+    //        return new GuiSkin
+    //        {
+    //            Name = root.Value<string>("Name"),
+    //            TextureAtlases = atlases,
+    //            Fonts = fonts
+    //        };
+    //    }
+
+    //    private static T LoadObject<T>(JToken root, JsonSerializer serializer, string key)
+    //    {
+    //        return root
+    //            .Value<JToken>(key)
+    //            .ToObject<T>(serializer);
+    //    }
+    //}
 }

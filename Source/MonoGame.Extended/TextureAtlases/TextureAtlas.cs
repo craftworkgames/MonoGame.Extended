@@ -29,9 +29,36 @@ namespace MonoGame.Extended.TextureAtlases
     /// </remarks>
     public class TextureAtlas : IEnumerable<TextureRegion2D>
     {
-        private readonly Dictionary<string, int> _regionMap;
+        /// <summary>
+        ///     Initializes a new texture atlas with an empty list of regions.
+        /// </summary>
+        /// <param name="name">The asset name of this texture atlas</param>
+        /// <param name="texture">Source <see cref="Texture2D " /> image used to draw on screen.</param>
+        public TextureAtlas(string name, Texture2D texture)
+        {
+            Name = name;
+            Texture = texture;
+            _regions = new List<TextureRegion2D>();
+            _regionMap = new Dictionary<string, int>();
+        }
 
+        /// <summary>
+        ///     Initializes a new texture atlas and populates it with regions.
+        /// </summary>
+        /// <param name="name">The asset name of this texture atlas</param>
+        /// <param name="texture">Source <see cref="Texture2D " /> image used to draw on screen.</param>
+        /// <param name="regions">A collection of regions to populate the atlas with.</param>
+        public TextureAtlas(string name, Texture2D texture, Dictionary<string, Rectangle> regions)
+            : this(name, texture)
+        {
+            foreach (var region in regions)
+                CreateRegion(region.Key, region.Value.X, region.Value.Y, region.Value.Width, region.Value.Height);
+        }
+
+        private readonly Dictionary<string, int> _regionMap;
         private readonly List<TextureRegion2D> _regions;
+
+        public string Name { get; }
 
         /// <summary>
         ///     Gets a source <see cref="Texture2D" /> image.
@@ -49,31 +76,7 @@ namespace MonoGame.Extended.TextureAtlases
         public int RegionCount => _regions.Count;
 
         public TextureRegion2D this[string name] => GetRegion(name);
-
         public TextureRegion2D this[int index] => GetRegion(index);
-
-        /// <summary>
-        ///     Initializes a new texture atlas with an empty list of regions.
-        /// </summary>
-        /// <param name="texture">Source <see cref="Texture2D " /> image used to draw on screen.</param>
-        public TextureAtlas(Texture2D texture)
-        {
-            Texture = texture;
-            _regions = new List<TextureRegion2D>();
-            _regionMap = new Dictionary<string, int>();
-        }
-
-        /// <summary>
-        ///     Initializes a new texture atlas and populates it with regions.
-        /// </summary>
-        /// <param name="texture">Source <see cref="Texture2D " /> image used to draw on screen.</param>
-        /// <param name="regions">A collection of regions to populate the atlas with.</param>
-        public TextureAtlas(Texture2D texture, Dictionary<string, Rectangle> regions)
-            : this(texture)
-        {
-            foreach (var region in regions)
-                CreateRegion(region.Key, region.Value.X, region.Value.Y, region.Value.Width, region.Value.Height);
-        }
 
         /// <summary>
         ///     Gets the enumerator of the <see cref="TextureAtlas" />' list of regions.
@@ -169,6 +172,7 @@ namespace MonoGame.Extended.TextureAtlases
         /// <summary>
         ///     Creates a new <see cref="TextureAtlas" /> and populates it with a grid of <see cref="TextureRegion2D" />.
         /// </summary>
+        /// <param name="name">The name of this texture atlas</param>
         /// <param name="texture">Source <see cref="Texture2D" /> image used to draw on screen</param>
         /// <param name="regionWidth">Width of the <see cref="TextureRegion2D" />.</param>
         /// <param name="regionHeight">Height of the <see cref="TextureRegion2D" />.</param>
@@ -176,10 +180,10 @@ namespace MonoGame.Extended.TextureAtlases
         /// <param name="margin">Minimum distance of the regions from the border of the source <see cref="Texture2D" /> image.</param>
         /// <param name="spacing">Horizontal and vertical space between regions.</param>
         /// <returns>A created and populated <see cref="TextureAtlas" />.</returns>
-        public static TextureAtlas Create(Texture2D texture, int regionWidth, int regionHeight,
+        public static TextureAtlas Create(string name, Texture2D texture, int regionWidth, int regionHeight,
             int maxRegionCount = int.MaxValue, int margin = 0, int spacing = 0)
         {
-            var textureAtlas = new TextureAtlas(texture);
+            var textureAtlas = new TextureAtlas(name, texture);
             var count = 0;
             var width = texture.Width - margin;
             var height = texture.Height - margin;

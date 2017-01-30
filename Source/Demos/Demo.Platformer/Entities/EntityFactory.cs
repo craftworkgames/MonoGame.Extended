@@ -34,7 +34,7 @@ namespace Demo.Platformer.Entities
         private void LoadContent(ContentManager content)
         {
             var texture = content.Load<Texture2D>("tiny-characters");
-            _characterTextureAtlas = TextureAtlas.Create(texture, 32, 32, 112);
+            _characterTextureAtlas = TextureAtlas.Create("tiny-characters-atlas", texture, 32, 32, 112);
         }
 
         public Entity CreatePlayer(Vector2 position)

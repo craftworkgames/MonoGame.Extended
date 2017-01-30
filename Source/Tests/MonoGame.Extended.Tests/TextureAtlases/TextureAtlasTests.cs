@@ -14,7 +14,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         public void TextureAtlas_CreateRegion_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 100, 200);
-            var atlas = new TextureAtlas(texture);
+            var atlas = new TextureAtlas(null, texture);
 
             var region = atlas.CreateRegion("region0", 10, 20, 30, 40);
 
@@ -29,7 +29,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         public void TextureAtlas_GetRegionsByIndex_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 100, 200);
-            var atlas = new TextureAtlas(texture);
+            var atlas = new TextureAtlas(null, texture);
 
             var region0 = atlas.CreateRegion("region0", 10, 20, 30, 40);
             var region1 = atlas.CreateRegion("region1", 50, 60, 35, 45);
@@ -45,7 +45,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         public void TextureAtlas_GetRegionsByName_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 100, 200);
-            var atlas = new TextureAtlas(texture);
+            var atlas = new TextureAtlas(null, texture);
 
             var region0 = atlas.CreateRegion("region0", 10, 20, 30, 40);
             var region1 = atlas.CreateRegion("region1", 50, 60, 35, 45);
@@ -60,7 +60,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         public void TextureAtlas_RemoveRegions_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 100, 200);
-            var atlas = new TextureAtlas(texture);
+            var atlas = new TextureAtlas(null, texture);
 
             var region0 = atlas.CreateRegion("region0", 10, 20, 30, 40);
             var region1 = atlas.CreateRegion("region1", 50, 60, 35, 45);
@@ -87,7 +87,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         public void TextureAtlas_CreateRegionThatAlreadyExistsThrowsException_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 100, 200);
-            var atlas = new TextureAtlas(texture);
+            var atlas = new TextureAtlas(null, texture);
 
             atlas.CreateRegion("region0", 10, 20, 30, 40);
             Assert.Throws<InvalidOperationException>(() => atlas.CreateRegion("region0", 50, 60, 35, 45));
@@ -97,7 +97,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         public void TextureAtlas_GetRegion_InvalidIndexThrowsException_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 100, 200);
-            var atlas = new TextureAtlas(texture);
+            var atlas = new TextureAtlas(null, texture);
 
             atlas.CreateRegion("region0", 10, 20, 30, 40);
             Assert.Throws<IndexOutOfRangeException>(() => atlas.GetRegion(-1));
@@ -107,7 +107,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         public void TextureAtlas_GetRegion_InvalidNameThrowsException_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 100, 200);
-            var atlas = new TextureAtlas(texture);
+            var atlas = new TextureAtlas(null, texture);
 
             atlas.CreateRegion("region0", 10, 20, 30, 40);
             Assert.Throws<KeyNotFoundException>(() => atlas.GetRegion("region1"));
@@ -117,7 +117,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         public void TextureAtlas_EnumerateRegions_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 100, 200);
-            var atlas = new TextureAtlas(texture);
+            var atlas = new TextureAtlas(null, texture);
 
             var regions = new TextureRegion2D[3];
             regions[0] = atlas.CreateRegion("region0", 10, 20, 30, 40);
@@ -136,7 +136,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         public void TextureAtlas_Create_WithDefaultParameters_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 50, 100) {Name = "testTexture"};
-            var atlas = TextureAtlas.Create(texture, 25, 50);
+            var atlas = TextureAtlas.Create(null, texture, 25, 50);
 
             Assert.AreEqual(4, atlas.RegionCount);
             Assert.IsTrue(atlas.Regions.All(i => i.Width == 25));
@@ -149,7 +149,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         public void TextureAtlas_Create_WithMaxRegionCount_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 64, 64);
-            var atlas = TextureAtlas.Create(texture, 32, 32, maxRegionCount: 3);
+            var atlas = TextureAtlas.Create(null, texture, 32, 32, maxRegionCount: 3);
 
             Assert.AreEqual(3, atlas.RegionCount);
         }
@@ -158,7 +158,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         public void TextureAtlas_Create_WithMargin_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 24, 24);
-            var atlas = TextureAtlas.Create(texture, 10, 10, margin: 2);
+            var atlas = TextureAtlas.Create(null, texture, 10, 10, margin: 2);
 
             Assert.AreEqual(4, atlas.RegionCount);
             Assert.IsTrue(atlas.Regions.All(i => i.Width == 10 && i.Height == 10));
@@ -172,7 +172,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         public void TextureAtlas_Create_WithSpacing_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 24, 24);
-            var atlas = TextureAtlas.Create(texture, 10, 10, spacing: 2);
+            var atlas = TextureAtlas.Create(null, texture, 10, 10, spacing: 2);
 
             Assert.AreEqual(4, atlas.RegionCount);
             Assert.IsTrue(atlas.Regions.All(i => i.Width == 10 && i.Height == 10));
@@ -186,7 +186,7 @@ namespace MonoGame.Extended.Tests.TextureAtlases
         public void TextureAtlas_Create_WithMarginAndSpacing_Test()
         {
             var texture = new Texture2D(TestHelper.CreateGraphicsDevice(), 28, 28);
-            var atlas = TextureAtlas.Create(texture, 10, 10, margin: 3, spacing: 2);
+            var atlas = TextureAtlas.Create(null, texture, 10, 10, margin: 3, spacing: 2);
 
             Assert.AreEqual(4, atlas.RegionCount);
             Assert.IsTrue(atlas.Regions.All(i => i.Width == 10 && i.Height == 10));

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using MonoGame.Extended.BitmapFonts;
 using System.Linq;
 using MonoGame.Extended.TextureAtlases;
+using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui
 {
@@ -9,13 +10,24 @@ namespace MonoGame.Extended.Gui
     {
         public GuiSkin()
         {
+            TextureAtlases = new List<TextureAtlas>();
+            Fonts = new List<BitmapFont>();
             Templates = new Dictionary<string, GuiControlStyle>();
         }
 
-        public BitmapFont DefaultFont => Fonts.Values.FirstOrDefault();
-        public Dictionary<string, BitmapFont> Fonts { get; set; }
+        [JsonProperty(Order = 0)]
         public string Name { get; set; }
-        public Dictionary<string, GuiControlStyle> Templates { get; }
-        public Dictionary<string, TextureAtlas> TextureAtlases { get; set; }
+
+        [JsonProperty(Order = 1)]
+        public IList<TextureAtlas> TextureAtlases { get; set; }
+
+        [JsonProperty(Order = 2)]
+        public IList<BitmapFont> Fonts { get; set; }
+
+        [JsonProperty(Order = 3)]
+        public BitmapFont DefaultFont => Fonts.FirstOrDefault();
+
+        [JsonProperty(Order = 4)]
+        public IDictionary<string, GuiControlStyle> Templates { get; }
     }
 }

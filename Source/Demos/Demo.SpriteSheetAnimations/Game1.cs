@@ -72,7 +72,7 @@ namespace Demo.SpriteSheetAnimations
             zombieActor.Position = new Vector2(462.5f, 896f);
 
             var fireballTexture = Content.Load<Texture2D>("Sprites/fireball");
-            var fireballAtlas = TextureAtlas.Create(fireballTexture, 130, 50);
+            var fireballAtlas = TextureAtlas.Create("Sprites/fireball-atlas", fireballTexture, 130, 50);
             _animation = new SpriteSheetAnimation("fireballAnimation", fireballAtlas.Regions.ToArray())
             {
                 FrameDuration = 0.2f
@@ -80,7 +80,7 @@ namespace Demo.SpriteSheetAnimations
             _fireballSprite = new Sprite(_animation.CurrentFrame) { Position = _zombie.Position };
 
             var motwTexture = Content.Load<Texture2D>("Sprites/motw");
-            var motwAtlas = TextureAtlas.Create(motwTexture, 52, 72);
+            var motwAtlas = TextureAtlas.Create("Sprites/fireball-atlas", motwTexture, 52, 72);
             var motwAnimationFactory = new SpriteSheetAnimationFactory(motwAtlas);
             motwAnimationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 0 }));
             motwAnimationFactory.Add("walkSouth", new SpriteSheetAnimationData(new[] { 0, 1, 2, 1 }, isLooping: false));

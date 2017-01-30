@@ -4,32 +4,34 @@
   "Fonts": [ "small-font" ],
   "DefaultFont": "small-font",
   "Templates": {
+
     "white-button": {
+      "TargetType": "GuiButton",
       "TextureRegion": "buttonLong_grey",
       "TextOffset": "0 -2",
       "TextColor": "#f4a460ff",
       "Color": "#8b4513ff",
       "PressedStyle": {
+        "TargetType": "GuiButton",
         "TextureRegion": "buttonLong_grey_pressed",
         "TextOffset": "0 2"
       },
       "HoverStyle": {
+        "TargetType": "GuiButton",
         "Color": "#f4a460ff",
         "TextColor": "#ffffffff"
       }
     },
+
     "brown-panel": {
-      "TextureRegion": {
-        "Name": "panel_brown",
-        "Padding": "10 10 10 10"
-      },
+      "TargetType": "GuiButton",
+      "TextureRegion": "panel_brown",
       "Size": "400 300"
     },
+
     "beige-inset-panel": {
-      "TextureRegion": {
-        "Name": "panelInset_beige",
-        "Padding": "10 10 10 10"
-      },
+      "TargetType": "GuiButton",
+      "TextureRegion": "panelInset_beige",
       "Size": "380 280"
     }
   }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using MonoGame.Extended.Gui.Controls;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -13,7 +12,7 @@ namespace MonoGame.Extended.Gui.Serialization
         {
             var properties = base.CreateProperties(type, memberSerialization);
 
-            if (type.GetTypeInfo().IsSubclassOf(typeof(GuiControl)))
+            if (type.GetTypeInfo().IsAbstract) //.IsSubclassOf(typeof(GuiControl)))
             {
                 properties.Insert(0, new JsonProperty
                 {

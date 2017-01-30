@@ -49,7 +49,7 @@ namespace Demo.EntityComponentSystem
             _entity.AttachComponent(new Sprite(logoTexture));
             
             var motwTexture = Content.Load<Texture2D>("motw");
-            var motwAtlas = TextureAtlas.Create(motwTexture, 52, 72);
+            var motwAtlas = TextureAtlas.Create("motw-atlas", motwTexture, 52, 72);
             var motwAnimationFactory = new SpriteSheetAnimationFactory(motwAtlas);
             motwAnimationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 0 }));
             motwAnimationFactory.Add("walkSouth", new SpriteSheetAnimationData(new[] { 0, 1, 2, 1 }, isLooping: false));
