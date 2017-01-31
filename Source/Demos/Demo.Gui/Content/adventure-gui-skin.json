@@ -3,6 +3,12 @@
   "TextureAtlases": [ "adventure-gui-atlas" ],
   "Fonts": [ "small-font" ],
   "DefaultFont": "small-font",
+  "NinePatches": [
+    {
+      "TextureRegion": "panel_brown",
+      "Padding": "10 10 10 10"
+    }
+  ], 
   "Templates": {
 
     "white-button": {

@@ -14,7 +14,6 @@ using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
 using Microsoft.Xna.Framework.Content;
-using Newtonsoft.Json.Linq;
 
 namespace Demo.Gui
 {
@@ -35,78 +34,14 @@ namespace Demo.Gui
 
         protected override void LoadContent()
         {
-            var skin0 = LoadSkin(@"Content/adventure-gui-skin.json");
-
-            //var textureAtlas = Content.Load<TextureAtlas>("adventure-gui-atlas");
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-
             _camera = new Camera2D(viewportAdapter);
 
-            //var buttonRegion = textureAtlas["buttonLong_grey"];
-            //var buttonRegionPressed = textureAtlas["buttonLong_grey_pressed"];
-            //var panelRegion = new NinePatchRegion2D(textureAtlas["panel_brown"], 10);
-            //var panelInsetRegion = new NinePatchRegion2D(textureAtlas["panelInset_beige"], 10);
-
-            //var skin = new GuiSkin
-            //{
-            //    Name = "adventure-gui-skin",
-            //    TextureAtlases = { Content.Load<TextureAtlas>("adventure-gui-atlas") },
-            //    Fonts = { Content.Load<BitmapFont>("small-font") },
-            //    Templates =
-            //    {
-            //        {
-            //            "white-button",
-            //            new GuiControlStyle(typeof(GuiButton))
-            //            {
-            //                { "TextureRegion", buttonRegion },
-            //                { "TextOffset", new Vector2(0, -2) },
-            //                { "TextColor", Color.SandyBrown },
-            //                { "Color", Color.SaddleBrown },
-            //                { "PressedStyle", new GuiControlStyle(typeof(GuiButton))
-            //                    {
-            //                        { "TextureRegion", buttonRegionPressed },
-            //                        { "TextOffset", new Vector2(0, 2) }
-            //                    }
-            //                },
-            //                { "HoverStyle", new GuiControlStyle(typeof(GuiButton))
-            //                    {
-            //                        { "Color", Color.SandyBrown },
-            //                        { "TextColor", Color.White },
-            //                    }
-            //                }
-            //            }
-            //        },
-            //        {
-            //            "brown-panel",
-            //            new GuiControlStyle(typeof(GuiPanel))
-            //            {
-            //                { "TextureRegion", panelRegion },
-            //                { "Size", new Size2(400, 300) }
-            //            }
-            //        },
-            //        {
-            //            "beige-inset-panel",
-            //            new GuiControlStyle(typeof(GuiPanel))
-            //            {
-            //                { "TextureRegion", panelInsetRegion },
-            //                { "Size", new Size2(380, 280) }
-            //            }
-            //        }
-            //    }
-            //};
-
-            //var serializer = CreateSerializer();
-
-            //using (var stringWriter = new StringWriter())
-            //{
-            //    serializer.Serialize(stringWriter, skin);
-            //    var json = stringWriter.ToString();
-            //}
-
-            var renderer = new GuiSpriteBatchRenderer(GraphicsDevice, skin0.DefaultFont);
+            var skin = LoadSkin(@"Content/adventure-gui-skin.json");
+            var renderer = new GuiSpriteBatchRenderer(GraphicsDevice, skin.DefaultFont);
             _guiManager = new GuiManager(viewportAdapter, renderer);
 
-            var controlFactory = new GuiControlFactory(skin0);
+            var controlFactory = new GuiControlFactory(skin);
             var screen = new GuiScreen
             {
                 Controls =
@@ -130,7 +65,7 @@ namespace Demo.Gui
             serializer.Converters.Add(new ContentConverter<BitmapFont>(Content, font => font.Name));
             serializer.Converters.Add(new TextureAtlasConverter(Content, textureRegionService));
             serializer.Converters.Add(new GuiControlStyleConverter());
-            serializer.Converters.Add(new NinePatchRegion2DConveter());
+            serializer.Converters.Add(new NinePatchRegion2DConveter(textureRegionService));
             serializer.Converters.Add(new Size2JsonConverter());
             serializer.Converters.Add(new TextureRegion2DConveter(textureRegionService));
             //serializer.Converters.Add(new TypeJsonConverter());
@@ -267,9 +202,9 @@ namespace Demo.Gui
 
     public class TextureAtlasConverter : ContentConverter<TextureAtlas>
     {
-        private readonly TextureRegionService _textureRegionService;
+        private readonly ITextureRegionService _textureRegionService;
 
-        public TextureAtlasConverter(ContentManager contentManager, TextureRegionService textureRegionService) 
+        public TextureAtlasConverter(ContentManager contentManager, ITextureRegionService textureRegionService) 
             : base(contentManager, atlas => atlas.Name)
         {
             _textureRegionService = textureRegionService;
@@ -285,67 +220,4 @@ namespace Demo.Gui
             return textureAtlas;
         }
     }
-
-    //public class TypeJsonConverter : JsonConverter
-    //{
-    //    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-    //    {
-    //    }
-
-    //    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-    //    {
-    //        var typeName = (string) reader.Value;
-    //        return typeof(TypeJsonConverter).Assembly.CreateInstance(typeName);
-    //    }
-
-    //    public override bool CanConvert(Type objectType)
-    //    {
-    //        return objectType == typeof(Type);
-    //    }
-    //}
-
-    //public class GuiSkinJsonConverter : JsonConverter
-    //{
-    //    private readonly ContentManager _contentManager;
-
-    //    public GuiSkinJsonConverter(ContentManager contentManager)
-    //    {
-    //        _contentManager = contentManager;
-    //    }
-
-    //    public override bool CanConvert(Type objectType)
-    //    {
-    //        return objectType == typeof(GuiSkin);
-    //    }
-
-    //    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-    //    {
-    //    }
-
-    //    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-    //    {
-    //        var root = JToken.Load(reader);
-    //        var fonts = LoadObject<string[]>(root, serializer, "Fonts")
-    //            .Select(c => _contentManager.Load<BitmapFont>(c))
-    //            .ToList();
-
-    //        var atlases = LoadObject<string[]>(root, serializer, "TextureAtlases")
-    //            .Select(c => _contentManager.Load<TextureAtlas>(c))
-    //            .ToList();
-
-    //        return new GuiSkin
-    //        {
-    //            Name = root.Value<string>("Name"),
-    //            TextureAtlases = atlases,
-    //            Fonts = fonts
-    //        };
-    //    }
-
-    //    private static T LoadObject<T>(JToken root, JsonSerializer serializer, string key)
-    //    {
-    //        return root
-    //            .Value<JToken>(key)
-    //            .ToObject<T>(serializer);
-    //    }
-    //}
 }

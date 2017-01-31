@@ -59,7 +59,9 @@
     <Compile Include="Serialization\GuiSkinSerializer.cs" />
     <Compile Include="Serialization\GuiThicknessConveter.cs" />
     <Compile Include="Serialization\JsonShortTypeNameProvider.cs" />
+    <Compile Include="Serialization\NinePatchRegion2DConveter.cs" />
     <Compile Include="Serialization\TextureRegion2DConveter.cs" />
+    <Compile Include="Serialization\TextureRegionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
