@@ -51,17 +51,15 @@
     <Compile Include="Keepers\GuiAlignmentHelper.cs" />
     <Compile Include="Keepers\GuiComponent.cs" />
     <Compile Include="Keepers\GuiRenderer.cs" />
-    <Compile Include="GuiThickness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Keepers\GuiControlStyleConveter.cs" />
-    <Compile Include="Serialization\GuiControlConverter.cs" />
+    <Compile Include="Serialization\GuiControlStyleJsonConverter.cs" />
     <Compile Include="Serialization\GuiJsonContractResolver.cs" />
-    <Compile Include="Serialization\GuiSkinSerializer.cs" />
-    <Compile Include="Serialization\GuiThicknessConveter.cs" />
+    <Compile Include="Serialization\GuiJsonSerializer.cs" />
+    <Compile Include="Serialization\GuiTextureAtlasJsonConverter.cs" />
     <Compile Include="Serialization\JsonShortTypeNameProvider.cs" />
-    <Compile Include="Serialization\NinePatchRegion2DConveter.cs" />
-    <Compile Include="Serialization\TextureRegion2DConveter.cs" />
-    <Compile Include="Serialization\TextureRegionService.cs" />
+    <Compile Include="Serialization\GuiNinePatchRegion2DJsonConverter.cs" />
+    <Compile Include="Serialization\GuiTextureRegionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

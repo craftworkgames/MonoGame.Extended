@@ -2,7 +2,6 @@
   "Name": "adventure",
   "TextureAtlases": [ "adventure-gui-atlas" ],
   "Fonts": [ "small-font" ],
-  "DefaultFont": "small-font",
   "NinePatches": [
     {
       "TextureRegion": "panel_brown",
@@ -34,13 +33,13 @@
     },
 
     "brown-panel": {
-      "TargetType": "GuiButton",
+      "TargetType": "GuiPanel",
       "TextureRegion": "panel_brown",
       "Size": "400 300"
     },
 
     "beige-inset-panel": {
-      "TargetType": "GuiButton",
+      "TargetType": "GuiPanel",
       "TextureRegion": "panelInset_beige",
       "Size": "380 280"
     }

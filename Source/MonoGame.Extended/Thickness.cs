@@ -1,21 +1,21 @@
 using System;
 using System.Linq;
 
-namespace MonoGame.Extended.Gui
+namespace MonoGame.Extended
 {
-    public struct GuiThickness : IEquatable<GuiThickness>
+    public struct Thickness : IEquatable<Thickness>
     {
-        public GuiThickness(int all)
+        public Thickness(int all)
             : this(all, all, all, all)
         {
         }
 
-        public GuiThickness(int leftRight, int topBottom)
+        public Thickness(int leftRight, int topBottom)
             : this(leftRight, topBottom, leftRight, topBottom)
         {
         }
 
-        public GuiThickness(int left, int top, int right, int bottom)
+        public Thickness(int left, int top, int right, int bottom)
             : this()
         {
             Left = left;
@@ -31,9 +31,9 @@ namespace MonoGame.Extended.Gui
 
         public override bool Equals(object obj)
         {
-            if (obj is GuiThickness)
+            if (obj is Thickness)
             {
-                var other = (GuiThickness) obj;
+                var other = (Thickness)obj;
                 return Equals(other);
             }
 
@@ -45,32 +45,32 @@ namespace MonoGame.Extended.Gui
             unchecked
             {
                 var hashCode = Left;
-                hashCode = (hashCode*397) ^ Top;
-                hashCode = (hashCode*397) ^ Right;
-                hashCode = (hashCode*397) ^ Bottom;
+                hashCode = (hashCode * 397) ^ Top;
+                hashCode = (hashCode * 397) ^ Right;
+                hashCode = (hashCode * 397) ^ Bottom;
                 return hashCode;
             }
         }
 
-        public bool Equals(GuiThickness other)
+        public bool Equals(Thickness other)
         {
-            return (Left == other.Left) && (Right == other.Right) && (Top == other.Top) && (Bottom == other.Bottom);
+            return Left == other.Left && Right == other.Right && Top == other.Top && Bottom == other.Bottom;
         }
 
-        public static GuiThickness Parse(string value)
+        public static Thickness Parse(string value)
         {
-            var ints = value.Split(new[] {',', ' '}, StringSplitOptions.RemoveEmptyEntries)
+            var ints = value.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
                 .ToArray();
 
             switch (ints.Length)
             {
                 case 1:
-                    return new GuiThickness(ints[0]);
+                    return new Thickness(ints[0]);
                 case 2:
-                    return new GuiThickness(ints[0], ints[1]);
+                    return new Thickness(ints[0], ints[1]);
                 case 4:
-                    return new GuiThickness(ints[0], ints[1], ints[2], ints[3]);
+                    return new Thickness(ints[0], ints[1], ints[2], ints[3]);
                 default:
                     throw new FormatException($"Invalid thickness {value}");
             }
@@ -78,7 +78,7 @@ namespace MonoGame.Extended.Gui
 
         public override string ToString()
         {
-            if ((Left == Right) && (Top == Bottom))
+            if (Left == Right && Top == Bottom)
                 return Left == Top ? $"{Left}" : $"{Left} {Top}";
 
             return $"{Left}, {Right}, {Top}, {Bottom}";

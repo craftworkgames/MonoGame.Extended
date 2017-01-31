@@ -35,7 +35,7 @@ namespace MonoGame.Extended.Gui.Controls
             => new RectangleF((Parent != null ? Parent.Position + Position : Position) - Size * Origin, Size);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public GuiThickness Margin { get; set; }
+        public Thickness Margin { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsFocused { get; set; }

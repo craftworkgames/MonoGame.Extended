@@ -3,13 +3,13 @@ using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MonoGame.Extended.Gui.Serialization
+namespace MonoGame.Extended.Serialization
 {
-    public class NinePatchRegion2DConveter : JsonConverter
+    public class NinePatchRegion2DJsonConverter : JsonConverter
     {
         private readonly ITextureRegionService _textureRegionService;
 
-        public NinePatchRegion2DConveter(ITextureRegionService textureRegionService)
+        public NinePatchRegion2DJsonConverter(ITextureRegionService textureRegionService)
         {
             _textureRegionService = textureRegionService;
         }
@@ -29,13 +29,11 @@ namespace MonoGame.Extended.Gui.Serialization
         {
             var jsonObject = serializer.Deserialize<JObject>(reader);
             var paddingAsString = jsonObject.Value<string>("Padding");
-            var thickness = GuiThickness.Parse(paddingAsString);
+            var thickness = Thickness.Parse(paddingAsString);
             var regionName = jsonObject.Value<string>("TextureRegion");
             var region = _textureRegionService.GetTextureRegion(regionName);
-            var ninePatch = new NinePatchRegion2D(region, thickness.Left, thickness.Top, thickness.Right, thickness.Bottom);
 
-            _textureRegionService.NinePatches.Add(ninePatch);
-            return ninePatch;
+            return new NinePatchRegion2D(region, thickness.Left, thickness.Top, thickness.Right, thickness.Bottom);
         }
 
         public override bool CanConvert(Type objectType)

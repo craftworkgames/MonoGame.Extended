@@ -1,24 +1,24 @@
 using System;
 using Newtonsoft.Json;
 
-namespace MonoGame.Extended.Gui.Serialization
+namespace MonoGame.Extended.Serialization
 {
-    public class GuiThicknessConveter : JsonConverter
+    public class ThicknessJsonConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var thickness = (GuiThickness)value;
+            var thickness = (Thickness)value;
             writer.WriteValue($"{thickness.Left} {thickness.Top} {thickness.Right} {thickness.Bottom}");
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return GuiThickness.Parse((string)reader.Value);
+            return Thickness.Parse((string)reader.Value);
         }
 
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(GuiThickness);
+            return objectType == typeof(Thickness);
         }
     }
 }

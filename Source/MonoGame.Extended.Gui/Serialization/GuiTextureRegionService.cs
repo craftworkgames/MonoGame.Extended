@@ -1,19 +1,19 @@
 using System.Collections.Generic;
 using System.Linq;
+using MonoGame.Extended.Serialization;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Serialization
 {
-    public interface ITextureRegionService
+    public interface IGuiTextureRegionService : ITextureRegionService
     {
         IList<TextureAtlas> TextureAtlases { get; }
         IList<NinePatchRegion2D> NinePatches { get; }
-        TextureRegion2D GetTextureRegion(string name);
     }
 
-    public class TextureRegionService : ITextureRegionService
+    public class GuiTextureRegionService : IGuiTextureRegionService
     {
-        public TextureRegionService()
+        public GuiTextureRegionService()
         {
             TextureAtlases = new List<TextureAtlas>();
             NinePatches = new List<NinePatchRegion2D>();

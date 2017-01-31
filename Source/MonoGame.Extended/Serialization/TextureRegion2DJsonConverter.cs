@@ -2,13 +2,13 @@ using System;
 using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 
-namespace MonoGame.Extended.Gui.Serialization
+namespace MonoGame.Extended.Serialization
 {
-    public class TextureRegion2DConveter : JsonConverter
+    public class TextureRegion2DJsonConverter : JsonConverter
     {
         private readonly ITextureRegionService _textureRegionService;
 
-        public TextureRegion2DConveter(ITextureRegionService textureRegionService)
+        public TextureRegion2DJsonConverter(ITextureRegionService textureRegionService)
         {
             _textureRegionService = textureRegionService;
         }
