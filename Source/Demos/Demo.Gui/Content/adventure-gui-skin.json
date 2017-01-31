@@ -6,7 +6,11 @@
   "NinePatches": [
     {
       "TextureRegion": "panel_brown",
-      "Padding": "10 10 10 10"
+      "Padding": "10"
+    },
+    {
+      "TextureRegion": "panelInset_beige",
+      "Padding": "10"
     }
   ], 
   "Templates": {

@@ -32,7 +32,10 @@ namespace MonoGame.Extended.Gui.Serialization
             var thickness = GuiThickness.Parse(paddingAsString);
             var regionName = jsonObject.Value<string>("TextureRegion");
             var region = _textureRegionService.GetTextureRegion(regionName);
-            return new NinePatchRegion2D(region, thickness.Left, thickness.Top, thickness.Right, thickness.Bottom);
+            var ninePatch = new NinePatchRegion2D(region, thickness.Left, thickness.Top, thickness.Right, thickness.Bottom);
+
+            _textureRegionService.NinePatches.Add(ninePatch);
+            return ninePatch;
         }
 
         public override bool CanConvert(Type objectType)
