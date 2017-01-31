@@ -1,10 +1,6 @@
-﻿#region
-
-using System.IO;
+﻿using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Newtonsoft.Json;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {

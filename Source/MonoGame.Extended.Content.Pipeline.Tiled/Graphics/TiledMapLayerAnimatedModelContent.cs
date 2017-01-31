@@ -1,9 +1,5 @@
-﻿#region
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled.Graphics
 {

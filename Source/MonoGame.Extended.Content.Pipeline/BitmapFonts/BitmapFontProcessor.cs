@@ -1,10 +1,6 @@
-#region
-
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {

@@ -1,8 +1,4 @@
-#region
-
 using System.Collections.Generic;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {

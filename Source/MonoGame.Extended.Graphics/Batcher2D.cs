@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Text;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -11,8 +9,6 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics.Effects;
 using MonoGame.Extended.Graphics.Geometry;
-
-#endregion
 
 namespace MonoGame.Extended.Graphics
 {

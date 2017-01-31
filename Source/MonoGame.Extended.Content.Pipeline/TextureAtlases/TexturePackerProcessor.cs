@@ -1,9 +1,5 @@
-﻿#region
-
-using System;
+﻿using System;
 using Microsoft.Xna.Framework.Content.Pipeline;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {

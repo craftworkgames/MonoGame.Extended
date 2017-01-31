@@ -1,9 +1,5 @@
-﻿#region
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-
-#endregion
 
 namespace MonoGame.Extended.Tiled
 {

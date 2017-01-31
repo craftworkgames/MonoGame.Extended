@@ -1,19 +1,23 @@
-#region
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
-#endregion
 
 namespace MonoGame.Extended.TextureAtlases
 {
     public class NinePatchRegion2D : TextureRegion2D
     {
         public Rectangle[] SourcePatches { get; }
-        public int LeftPadding { get; }
-        public int TopPadding { get; }
-        public int RightPadding { get; }
-        public int BottomPadding { get; }
+        public Thickness Padding { get; }
+        public int LeftPadding => Padding.Left;
+        public int TopPadding => Padding.Top;
+        public int RightPadding => Padding.Right;
+        public int BottomPadding => Padding.Bottom;
+
+        public NinePatchRegion2D(TextureRegion2D textureRegion, Thickness padding)
+            : base(textureRegion.Name, textureRegion.Texture, textureRegion.X, textureRegion.Y, textureRegion.Width, textureRegion.Height)
+        {
+            Padding = padding;
+            SourcePatches = CreatePatches(textureRegion.Bounds);
+        }
 
         public NinePatchRegion2D(TextureRegion2D textureRegion, int padding)
             : this(textureRegion, padding, padding, padding, padding)
@@ -25,20 +29,14 @@ namespace MonoGame.Extended.TextureAtlases
         {
         }
 
-        public NinePatchRegion2D(Texture2D texture, Rectangle outterRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
-            : this(new TextureRegion2D(texture, outterRegion), leftPadding, topPadding, rightPadding, bottomPadding)
+        public NinePatchRegion2D(TextureRegion2D textureRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
+            : this(textureRegion, new Thickness(leftPadding, topPadding, rightPadding, bottomPadding))
         {
         }
 
-        public NinePatchRegion2D(TextureRegion2D textureRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
-            : base(textureRegion.Name, textureRegion.Texture, textureRegion.X, textureRegion.Y, textureRegion.Width, textureRegion.Height)
+        public NinePatchRegion2D(Texture2D texture, Thickness thickness)
+            : this(new TextureRegion2D(texture), thickness)
         {
-            LeftPadding = leftPadding;
-            TopPadding = topPadding;
-            RightPadding = rightPadding;
-            BottomPadding = bottomPadding;
-
-            SourcePatches = CreatePatches(textureRegion.Bounds);
         }
 
         public Rectangle[] CreatePatches(Rectangle rectangle)

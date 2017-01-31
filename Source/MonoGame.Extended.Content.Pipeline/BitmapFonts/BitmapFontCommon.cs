@@ -1,8 +1,4 @@
-#region
-
 using System.Xml.Serialization;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {

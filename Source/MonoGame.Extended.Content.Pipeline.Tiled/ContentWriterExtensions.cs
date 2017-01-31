@@ -1,9 +1,5 @@
-﻿#region
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {

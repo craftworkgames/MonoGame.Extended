@@ -12,11 +12,11 @@ namespace MonoGame.Extended.Gui
             _skin = skin;
         }
 
-        public T CreateControl<T>(string skinName, Vector2 position, string controlName, string text = null)
+        public T CreateControl<T>(string skin, Vector2 position, string controlName = null, string text = null)
             where T : GuiControl, new()
         {
             var control = new T();
-            _skin.Templates[skinName].Apply(control);
+            _skin.Templates[skin].Apply(control);
             control.Name = controlName;
             control.Position = position;
             control.Text = text;

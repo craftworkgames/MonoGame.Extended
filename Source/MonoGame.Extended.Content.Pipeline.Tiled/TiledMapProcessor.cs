@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -11,8 +9,6 @@ using MonoGame.Extended.Content.Pipeline.Tiled.Graphics;
 using MonoGame.Extended.Tiled;
 using MonoGame.Utilities;
 using CompressionMode = System.IO.Compression.CompressionMode;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {

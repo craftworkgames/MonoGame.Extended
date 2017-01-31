@@ -1,10 +1,6 @@
-#region
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
-
-#endregion
 
 namespace MonoGame.Extended.Tests
 {

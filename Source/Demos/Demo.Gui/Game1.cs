@@ -39,14 +39,15 @@ namespace Demo.Gui
             {
                 Controls =
                 {
-                    controlFactory.CreateControl<GuiPanel>("brown-panel", new Vector2(400, 240), "Panel"),
-                    controlFactory.CreateControl<GuiPanel>("beige-inset-panel", new Vector2(400, 240), "Panel"),
-                    controlFactory.CreateControl<GuiButton>("white-button", new Vector2(400, 190), "PlayButton", "Play"),
-                    controlFactory.CreateControl<GuiButton>("white-button", new Vector2(400, 240), "OptionsButton", "Options"),
-                    controlFactory.CreateControl<GuiButton>("white-button", new Vector2(400, 290), "QuitButton", "Quit")                    
+                    controlFactory.CreateControl<GuiPanel>(skin: "brown-panel", position: new Vector2(400, 240)),
+                    controlFactory.CreateControl<GuiPanel>(skin: "beige-inset-panel", position: new Vector2(400, 240)),
+                    controlFactory.CreateControl<GuiButton>(skin: "white-button", position: new Vector2(400, 190), controlName: "PlayButton", text: "Play"),
+                    controlFactory.CreateControl<GuiButton>(skin: "white-button", position: new Vector2(400, 240), controlName: "OptionsButton", text: "Options"),
+                    controlFactory.CreateControl<GuiButton>(skin: "white-button", position: new Vector2(400, 290), controlName: "QuitButton", text: "Quit")                    
                 }
             };
 
+            screen.FindControl<GuiButton>("QuitButton").Clicked += (sender, args) => Exit();
             _guiManager.Screen = screen;
         }
 

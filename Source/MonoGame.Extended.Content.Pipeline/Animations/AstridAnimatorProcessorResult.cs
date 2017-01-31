@@ -1,9 +1,5 @@
-﻿#region
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.Animations
 {

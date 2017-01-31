@@ -1,10 +1,6 @@
-#region
-
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.BitmapFonts;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {

@@ -1,10 +1,6 @@
-#region
-
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using MonoGame.Extended.Content.Pipeline.Tiled.Graphics;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {

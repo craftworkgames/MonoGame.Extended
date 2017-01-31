@@ -1,12 +1,8 @@
-﻿#region
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.TextureAtlases;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {

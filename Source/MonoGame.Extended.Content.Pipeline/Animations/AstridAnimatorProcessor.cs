@@ -1,10 +1,6 @@
-#region
-
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.Animations
 {

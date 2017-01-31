@@ -1,10 +1,6 @@
-#region
-
 using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Shapes;
-
-#endregion
 
 namespace MonoGame.Extended.Tiled
 {

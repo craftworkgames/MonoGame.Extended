@@ -56,34 +56,34 @@ namespace MonoGame.Extended.Gui
 
         private void DrawControl(GuiControl control)
         {
-            if (control is GuiProgressBar)
-            {
-                _spriteBatch.End();
+            //if (control is GuiProgressBar)
+            //{
+            //    _spriteBatch.End();
 
-                var bar = (GuiProgressBar) control;
-                _spriteBatch.GraphicsDevice.ScissorRectangle = new RectangleF(control.BoundingRectangle.X,
-                        control.BoundingRectangle.Y, control.BoundingRectangle.Width * bar.Progress, control.BoundingRectangle.Height)
-                    .ToRectangle();
+            //    var bar = (GuiProgressBar) control;
+            //    _spriteBatch.GraphicsDevice.ScissorRectangle = new RectangleF(control.BoundingRectangle.X,
+            //            control.BoundingRectangle.Y, control.BoundingRectangle.Width * bar.Progress, control.BoundingRectangle.Height)
+            //        .ToRectangle();
 
-                _spriteBatch.Begin(rasterizerState: _rasterizerState);
+            //    _spriteBatch.Begin(rasterizerState: _rasterizerState);
 
+            //    if (control.TextureRegion != null)
+            //        _spriteBatch.Draw(control.TextureRegion, control.BoundingRectangle.ToRectangle(), control.Color);
+            //    else
+            //        _spriteBatch.FillRectangle(control.BoundingRectangle, control.Color);
+
+            //    _spriteBatch.End();
+
+            //    _spriteBatch.Begin(rasterizerState: RasterizerState);
+            //}
+            //else
+            //{
                 if (control.TextureRegion != null)
                     _spriteBatch.Draw(control.TextureRegion, control.BoundingRectangle.ToRectangle(), control.Color);
                 else
                     _spriteBatch.FillRectangle(control.BoundingRectangle, control.Color);
 
-                _spriteBatch.End();
-
-                _spriteBatch.Begin(rasterizerState: RasterizerState);
-            }
-            else
-            {
-                if (control.TextureRegion != null)
-                    _spriteBatch.Draw(control.TextureRegion, control.BoundingRectangle.ToRectangle(), control.Color);
-                else
-                    _spriteBatch.FillRectangle(control.BoundingRectangle, control.Color);
-
-            }
+            //}
 
             if (_defaultFont != null && !string.IsNullOrWhiteSpace(control.Text))
             {

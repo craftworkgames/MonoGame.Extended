@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -9,8 +7,6 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Content.Pipeline.Tiled.Graphics;
 using MonoGame.Extended.Tiled;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {

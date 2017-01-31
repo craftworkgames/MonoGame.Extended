@@ -1,5 +1,3 @@
-#region
-
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -7,8 +5,6 @@ using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
-
-#endregion
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled.Graphics
 {

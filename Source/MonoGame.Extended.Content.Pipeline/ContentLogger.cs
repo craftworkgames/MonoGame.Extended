@@ -1,8 +1,4 @@
-﻿#region
-
-using Microsoft.Xna.Framework.Content.Pipeline;
-
-#endregion
+﻿using Microsoft.Xna.Framework.Content.Pipeline;
 
 namespace MonoGame.Extended.Content.Pipeline
 {
