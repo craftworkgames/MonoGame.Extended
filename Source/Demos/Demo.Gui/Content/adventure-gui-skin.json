@@ -41,7 +41,7 @@
     "beige-inset-panel": {
       "TargetType": "GuiPanel",
       "TextureRegion": "panelInset_beige",
-      "Size": "380 280"
+      "Size": "385 280"
     }
   }
 }

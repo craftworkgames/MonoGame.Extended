@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Gui.Controls;
 
@@ -12,14 +13,23 @@ namespace MonoGame.Extended.Gui
             _skin = skin;
         }
 
-        public T CreateControl<T>(string skin, Vector2 position, string controlName = null, string text = null)
+        public T Create<T>(string template, Vector2 position, string name = null, string text = null)
             where T : GuiControl, new()
         {
             var control = new T();
-            _skin.Templates[skin].Apply(control);
-            control.Name = controlName;
+            _skin.Templates[template].Apply(control);
+            control.Name = name;
             control.Position = position;
             control.Text = text;
+            return control;
+        }
+
+        public T Create<T>(string template, Action<T> onCreate)
+            where T : GuiControl, new()
+        {
+            var control = new T();
+            _skin.Templates[template].Apply(control);
+            onCreate(control);
             return control;
         }
     }

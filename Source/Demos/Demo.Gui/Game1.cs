@@ -39,11 +39,19 @@ namespace Demo.Gui
             {
                 Controls =
                 {
-                    controlFactory.CreateControl<GuiPanel>(skin: "brown-panel", position: new Vector2(400, 240)),
-                    controlFactory.CreateControl<GuiPanel>(skin: "beige-inset-panel", position: new Vector2(400, 240)),
-                    controlFactory.CreateControl<GuiButton>(skin: "white-button", position: new Vector2(400, 190), controlName: "PlayButton", text: "Play"),
-                    controlFactory.CreateControl<GuiButton>(skin: "white-button", position: new Vector2(400, 240), controlName: "OptionsButton", text: "Options"),
-                    controlFactory.CreateControl<GuiButton>(skin: "white-button", position: new Vector2(400, 290), controlName: "QuitButton", text: "Quit")                    
+                    controlFactory.Create<GuiPanel>("brown-panel", c =>
+                    {
+                        c.Position = new Vector2(400, 240);
+                        c.Size = new Size2(750, 430);
+                    }),
+                    controlFactory.Create<GuiPanel>("beige-inset-panel", c =>
+                    {
+                        c.Position = new Vector2(400, 240);
+                        c.Size = new Size2(730, 410);
+                    }),
+                    controlFactory.Create<GuiButton>("white-button", position: new Vector2(400, 190), name: "PlayButton", text: "Play"),
+                    controlFactory.Create<GuiButton>("white-button", position: new Vector2(400, 240), name: "OptionsButton", text: "Options"),
+                    controlFactory.Create<GuiButton>("white-button", position: new Vector2(400, 290), name: "QuitButton", text: "Quit")                    
                 }
             };
 
