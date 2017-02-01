@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Gui.Controls
             Color = Color.White;
             TextColor = Color.White;
             IsEnabled = true;
-            Children = new GuiControlCollection(this);
+            Controls = new GuiControlCollection(this);
             Origin = Vector2.One*0.5f;
         }
 
@@ -32,7 +32,13 @@ namespace MonoGame.Extended.Gui.Controls
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JsonIgnore]
         public RectangleF BoundingRectangle
-            => new RectangleF((Parent != null ? Parent.Position + Position : Position) - Size * Origin, Size);
+        {
+            get
+            {
+                var position = Parent != null ? Parent.Position - Parent.Size * Parent.Origin + Position : Position;
+                return new RectangleF(position - Size * Origin, Size);
+            }
+        }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Thickness Margin { get; set; }
@@ -70,7 +76,7 @@ namespace MonoGame.Extended.Gui.Controls
         public Color TextColor { get; set; }
         public Vector2 TextOffset { get; set; }
 
-        public GuiControlCollection Children { get; }
+        public GuiControlCollection Controls { get; }
 
         private bool _isEnabled;
         public bool IsEnabled

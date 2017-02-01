@@ -7,6 +7,30 @@ namespace MonoGame.Extended
     public static class Vector2Extensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 Round(this Vector2 value, int digits, MidpointRounding mode)
+        {
+            var x = (float)Math.Round(value.X, digits, mode);
+            var y = (float)Math.Round(value.Y, digits, mode);
+            return new Vector2(x, y);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 Round(this Vector2 value, int digits)
+        {
+            var x = (float)Math.Round(value.X, digits);
+            var y = (float)Math.Round(value.Y, digits);
+            return new Vector2(x, y);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 Round(this Vector2 value)
+        {
+            var x = (float)Math.Round(value.X);
+            var y = (float)Math.Round(value.Y);
+            return new Vector2(x, y);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EqualsWithTolerence(this Vector2 value, Vector2 otherValue, float tolerance = 0.00001f)
         {
             return (Math.Abs(value.X - otherValue.X) <= tolerance) && (Math.Abs(value.Y - otherValue.Y) <= tolerance);

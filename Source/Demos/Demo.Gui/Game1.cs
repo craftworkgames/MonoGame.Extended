@@ -48,6 +48,11 @@ namespace Demo.Gui
                     {
                         c.Position = new Vector2(400, 240);
                         c.Size = new Size2(730, 410);
+                        c.Controls.Add(controlFactory.Create<GuiButton>("white-button", b =>
+                        {
+                            b.Position = (Vector2)c.Size - ((Vector2) b.Size / 2f).Round();
+                            b.Text = "Nested Button";
+                        }));
                     }),
                     controlFactory.Create<GuiButton>("white-button", position: new Vector2(400, 190), name: "PlayButton", text: "Play"),
                     controlFactory.Create<GuiButton>("white-button", position: new Vector2(400, 240), name: "OptionsButton", text: "Options"),

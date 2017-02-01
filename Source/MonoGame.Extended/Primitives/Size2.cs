@@ -157,7 +157,7 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Calculates the <see cref="Size2" /> representing the vector subtraction of two <see cref="Size2" /> structures.
+        /// Calculates the <see cref="Size2" /> representing the vector subtraction of two <see cref="Size2" /> structures.
         /// </summary>
         /// <param name="first">The first size.</param>
         /// <param name="second">The second size.</param>
@@ -167,6 +167,16 @@ namespace MonoGame.Extended
         public static Size2 operator -(Size2 first, Size2 second)
         {
             return Subtract(first, second);
+        }
+
+        public static Size2 operator /(Size2 size, float value)
+        {
+            return new Size2(size.Width / value, size.Height / value);
+        }
+
+        public static Size2 operator *(Size2 size, float value)
+        {
+            return new Size2(size.Width * value, size.Height * value);
         }
 
         /// <summary>

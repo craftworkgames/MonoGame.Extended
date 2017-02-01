@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.ViewportAdapters;
@@ -78,15 +79,25 @@ namespace MonoGame.Extended.Gui
 
         private static GuiControl FindControlAtPoint(GuiControlCollection controls, Point point)
         {
+            var topMostControl = (GuiControl) null;
+
             for (var i = controls.Count - 1; i >= 0; i--)
             {
-                var child = controls[i];
+                var control = controls[i];
 
-                if (child.BoundingRectangle.Contains(point))
-                    return child;
+                if (topMostControl == null && control.BoundingRectangle.Contains(point))
+                    topMostControl = control;
+                
+                if (control.Controls.Any())
+                {
+                    var child = FindControlAtPoint(control.Controls, point);
+
+                    if (child != null)
+                        topMostControl = child;
+                }
             }
 
-            return null;
+            return topMostControl;
         }
 
     }

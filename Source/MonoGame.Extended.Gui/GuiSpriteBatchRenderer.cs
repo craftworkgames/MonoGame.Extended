@@ -51,7 +51,7 @@ namespace MonoGame.Extended.Gui
                 DrawControl(control);
 
             foreach (var childControl in controls)
-                DrawChildren(childControl.Children);
+                DrawChildren(childControl.Controls);
         }
 
         private void DrawControl(GuiControl control)

@@ -26,8 +26,13 @@ namespace MonoGame.Extended.Gui
                 if (control.Name == name)
                     return control as T;
 
-                if(control.Children.Any())
-                    return FindControl<T>(control.Children, name);
+                if (control.Controls.Any())
+                {
+                    var childControl = FindControl<T>(control.Controls, name);
+
+                    if (childControl != null)
+                        return childControl;
+                }
             }
 
             return null;
