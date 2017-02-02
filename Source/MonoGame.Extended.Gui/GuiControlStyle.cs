@@ -53,7 +53,9 @@ namespace MonoGame.Extended.Gui
             {
                 var propertyInfo = targetType.GetRuntimeProperty(propertyName);
                 var value = setters[propertyName];
-                propertyInfo.SetValue(control, value);
+
+                if(propertyInfo.CanWrite)
+                    propertyInfo.SetValue(control, value);
             }
         }
 

@@ -88,6 +88,9 @@
     <None Include="Content\raw\adventure\adventure-gui.tps" />
     <None Include="Content\raw\small-font.bmfc" />
     <None Include="Content\small-font.fnt" />
+    <Content Include="Content\title-screen.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

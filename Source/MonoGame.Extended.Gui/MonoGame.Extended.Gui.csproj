@@ -49,11 +49,12 @@
     <Compile Include="Keepers\GuiToggleButton.cs" />
     <Compile Include="Keepers\GuiAlignmentHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\GuiControlJsonConverter.cs" />
     <Compile Include="Serialization\GuiControlStyleJsonConverter.cs" />
     <Compile Include="Serialization\GuiJsonContractResolver.cs" />
     <Compile Include="Serialization\GuiJsonSerializer.cs" />
+    <Compile Include="Serialization\GuiSkinJsonConverter.cs" />
     <Compile Include="Serialization\GuiTextureAtlasJsonConverter.cs" />
-    <Compile Include="Serialization\JsonShortTypeNameProvider.cs" />
     <Compile Include="Serialization\GuiNinePatchRegion2DJsonConverter.cs" />
     <Compile Include="Serialization\GuiTextureRegionService.cs" />
   </ItemGroup>

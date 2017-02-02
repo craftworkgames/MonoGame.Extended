@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using MonoGame.Extended.Gui.Controls;
+using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui
 {
@@ -10,6 +11,10 @@ namespace MonoGame.Extended.Gui
             Controls = new GuiControlCollection();
         }
 
+        [JsonProperty(Order = 1)]
+        public GuiSkin Skin { get; set; }
+
+        [JsonProperty(Order = 2)]
         public GuiControlCollection Controls { get; }
 
         public T FindControl<T>(string name)

@@ -30,38 +30,63 @@ namespace Demo.Gui
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
 
+            var titleScreen = LoadScreen(@"Content/title-screen.json");
+
             var skin = LoadSkin(@"Content/adventure-gui-skin.json");
             var renderer = new GuiSpriteBatchRenderer(GraphicsDevice, skin.DefaultFont);
             _guiManager = new GuiManager(viewportAdapter, renderer);
 
+            
+
             var controlFactory = new GuiControlFactory(skin);
-            var screen = new GuiScreen
+            //var screen = new GuiScreen
+            //{
+            //    Controls =
+            //    {
+            //        controlFactory.Create<GuiPanel>("brown-panel", c =>
+            //        {
+            //            c.Position = new Vector2(400, 240);
+            //            c.Size = new Size2(750, 430);
+            //        }),
+            //        controlFactory.Create<GuiPanel>("beige-inset-panel", c =>
+            //        {
+            //            c.Position = new Vector2(400, 240);
+            //            c.Size = new Size2(730, 410);
+            //            c.Controls.Add(controlFactory.Create<GuiButton>("white-button", b =>
+            //            {
+            //                b.Position = (Vector2)c.Size - ((Vector2) b.Size / 2f).Round();
+            //                b.Text = "Nested Button";
+            //            }));
+            //        }),
+            //        controlFactory.Create<GuiButton>("white-button", position: new Vector2(400, 190), name: "PlayButton", text: "Play"),
+            //        controlFactory.Create<GuiButton>("white-button", position: new Vector2(400, 240), name: "OptionsButton", text: "Options"),
+            //        controlFactory.Create<GuiButton>("white-button", position: new Vector2(400, 290), name: "QuitButton", text: "Quit")                    
+            //    }
+            //};
+
+            //titleScreen.FindControl<GuiButton>("QuitButton").Clicked += (sender, args) => Exit();
+            _guiManager.Screen = titleScreen;
+        }
+
+        private GuiScreen LoadScreen(string name)
+        {
+            var skinService = new GuiSkinService();
+            var serializer = new GuiJsonSerializer(Content)
             {
-                Controls =
+                Converters =
                 {
-                    controlFactory.Create<GuiPanel>("brown-panel", c =>
-                    {
-                        c.Position = new Vector2(400, 240);
-                        c.Size = new Size2(750, 430);
-                    }),
-                    controlFactory.Create<GuiPanel>("beige-inset-panel", c =>
-                    {
-                        c.Position = new Vector2(400, 240);
-                        c.Size = new Size2(730, 410);
-                        c.Controls.Add(controlFactory.Create<GuiButton>("white-button", b =>
-                        {
-                            b.Position = (Vector2)c.Size - ((Vector2) b.Size / 2f).Round();
-                            b.Text = "Nested Button";
-                        }));
-                    }),
-                    controlFactory.Create<GuiButton>("white-button", position: new Vector2(400, 190), name: "PlayButton", text: "Play"),
-                    controlFactory.Create<GuiButton>("white-button", position: new Vector2(400, 240), name: "OptionsButton", text: "Options"),
-                    controlFactory.Create<GuiButton>("white-button", position: new Vector2(400, 290), name: "QuitButton", text: "Quit")                    
+                    new GuiSkinJsonConverter(Content, skinService),
+                    new GuiControlJsonConverter(skinService)
                 }
             };
 
-            screen.FindControl<GuiButton>("QuitButton").Clicked += (sender, args) => Exit();
-            _guiManager.Screen = screen;
+            using (var stream = TitleContainer.OpenStream(name))
+            using (var streamReader = new StreamReader(stream))
+            using (var jsonReader = new JsonTextReader(streamReader))
+            {
+                var screen = serializer.Deserialize<GuiScreen>(jsonReader);
+                return screen;
+            }
         }
 
         private GuiSkin LoadSkin(string name)

@@ -15,31 +15,31 @@
   "Templates": {
 
     "white-button": {
-      "TargetType": "GuiButton",
+      "Type": "GuiButton",
       "TextureRegion": "buttonLong_grey",
       "TextOffset": "0 -2",
       "TextColor": "#f4a460ff",
       "Color": "#8b4513ff",
       "PressedStyle": {
-        "TargetType": "GuiButton",
+        "Type": "GuiButton",
         "TextureRegion": "buttonLong_grey_pressed",
         "TextOffset": "0 2"
       },
       "HoverStyle": {
-        "TargetType": "GuiButton",
+        "Type": "GuiButton",
         "Color": "#9E4C16ff",
         "TextColor": "#ffffffff"
       }
     },
 
     "brown-panel": {
-      "TargetType": "GuiPanel",
+      "Type": "GuiPanel",
       "TextureRegion": "panel_brown",
       "Size": "400 300"
     },
 
     "beige-inset-panel": {
-      "TargetType": "GuiPanel",
+      "Type": "GuiPanel",
       "TextureRegion": "panelInset_beige",
       "Size": "385 280"
     }
