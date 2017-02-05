@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Gui
         public void Apply(GuiControl control)
         {
             _previousState = _setters
-                .ToDictionary(i => i.Key, i => TargetType.GetRuntimeProperty(i.Key).GetValue(control));
+                .ToDictionary(i => i.Key, i => TargetType.GetRuntimeProperty(i.Key)?.GetValue(control));
 
             ChangePropertyValues(control, _setters);
         }
@@ -54,7 +54,7 @@ namespace MonoGame.Extended.Gui
                 var propertyInfo = targetType.GetRuntimeProperty(propertyName);
                 var value = setters[propertyName];
 
-                if(propertyInfo.CanWrite)
+                if(propertyInfo != null && propertyInfo.CanWrite)
                     propertyInfo.SetValue(control, value);
             }
         }

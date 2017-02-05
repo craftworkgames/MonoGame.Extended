@@ -32,5 +32,12 @@ namespace MonoGame.Extended.Gui
             onCreate(control);
             return control;
         }
+
+        public GuiControl Create(Type type, string template)
+        {
+            var control = (GuiControl) Activator.CreateInstance(type);
+            _skin.Templates[template].Apply(control);
+            return control;
+        }
     }
 }

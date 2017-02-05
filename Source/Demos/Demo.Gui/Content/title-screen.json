@@ -2,36 +2,25 @@
   "Skin": "Content/adventure-gui-skin.json",
   "Controls": [
     {
-      "Type": "GuiButton",
+      "Type": "GuiPanel",
       "Skin": "brown-panel",
       "Position": "400 240",
-      "Size": "210 110"
+      "Size": "700 380",
+      "Controls": [
+
+      ]
     },
     {
       "Type": "GuiPanel",
       "Skin": "beige-inset-panel",
       "Position": "400 240",
-      "Size": "200 100",
-      "Controls": [
-        {
-          "Type": "GuiButton",
-          "Name": "PlayButton",
-          "Text": "Play",
-          "Position": "400 190"
-        },
-        {
-          "Type": "GuiButton",
-          "Name": "OptionsButton",
-          "Text": "Options",
-          "Position": "400 240"
-        },
-        {
-          "Type": "GuiButton",
-          "Name": "QuitButton",
-          "Text": "Quit",
-          "Position": "400 290"
-        }
-      ]
+      "Size": "680 360"
+    },
+    {
+      "Type": "GuiButton",
+      "Skin": "white-button",
+      "Position": "400 240",
+      "Text": "Play"
     }
   ]
 }

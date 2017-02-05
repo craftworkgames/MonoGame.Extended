@@ -50,21 +50,26 @@ namespace MonoGame.Extended.Gui.Serialization
             foreach (var keyValuePair in dictionary.Where(i => i.Key != _typeProperty))
             {
                 var propertyName = keyValuePair.Key;
+                var rawValue = keyValuePair.Value;
+                var value = properties.TryGetValue(propertyName, out var propertyInfo)
+                    ? DeserializeValueAs(serializer, rawValue, propertyInfo.PropertyType)
+                    : DeserializeValueAs(serializer, rawValue, typeof(object));
 
-                if (properties.TryGetValue(propertyName, out var propertyInfo))
-                {
-                    var json = JsonConvert.SerializeObject(keyValuePair.Value);
-
-                    using (var textReader = new StringReader(json))
-                    using (var jsonReader = new JsonTextReader(textReader))
-                    {
-                        var value = serializer.Deserialize(jsonReader, propertyInfo.PropertyType);
-                        style.Add(propertyName, value);
-                    }
-                }
+                style.Add(propertyName, value);
             }
 
             return style;
+        }
+
+        private object DeserializeValueAs(JsonSerializer serializer, object value, Type type)
+        {
+            var json = JsonConvert.SerializeObject(value);
+
+            using (var textReader = new StringReader(json))
+            using (var jsonReader = new JsonTextReader(textReader))
+            {
+                return serializer.Deserialize(jsonReader, type);
+            }
         }
 
         public override bool CanConvert(Type objectType)
