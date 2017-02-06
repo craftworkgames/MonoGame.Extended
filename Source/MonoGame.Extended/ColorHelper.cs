@@ -1,4 +1,8 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
@@ -59,6 +63,19 @@ namespace MonoGame.Extended
             var bx = $"{color.B:x2}";
             var ax = $"{color.A:x2}";
             return $"#{rx}{gx}{bx}{ax}";
+        }
+        
+        private static readonly Dictionary<string, Color> _colorsByName = typeof(Color)
+            .GetRuntimeProperties()
+            .Where(p => p.PropertyType == typeof(Color))
+            .ToDictionary(p => p.Name, p => (Color) p.GetValue(null), StringComparer.OrdinalIgnoreCase);
+
+        public static Color FromName(string name)
+        {
+            if(_colorsByName.TryGetValue(name, out var color))
+                return color;
+
+            throw new InvalidOperationException($"{name} is not a valid color");
         }
     }
 }

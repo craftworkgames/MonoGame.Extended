@@ -24,6 +24,18 @@ namespace MonoGame.Extended.Gui.Serialization
             var style = (GuiControlStyle) _styleConverter.ReadJson(reader, objectType, existingValue, serializer);
             var skin = (string) style["Skin"];
             var control = controlFactory.Create(style.TargetType, skin);
+
+            if (style.TryGetValue(nameof(GuiControl.Controls), out var childControls))
+            {
+                var controlCollection = childControls as GuiControlCollection;
+
+                if (controlCollection != null)
+                {
+                    foreach (var child in controlCollection)
+                        control.Controls.Add(child);
+                }
+            }
+
             style.Apply(control);
             return control;
         }

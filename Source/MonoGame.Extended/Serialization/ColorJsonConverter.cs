@@ -16,10 +16,10 @@ namespace MonoGame.Extended.Serialization
             return objectType == typeof(Color);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-            JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return ColorHelper.FromHex((string) reader.Value);
+            var value = (string)reader.Value;
+            return value.StartsWith("#") ? ColorHelper.FromHex(value) : ColorHelper.FromName(value);
         }
     }
 }

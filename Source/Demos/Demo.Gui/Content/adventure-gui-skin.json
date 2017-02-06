@@ -13,6 +13,14 @@
     }
   ], 
   "Templates": {
+    "close-button": {
+      "Type": "GuiButton",
+      "TextureRegion": "buttonRound_close",
+      "HoverStyle": {
+        "Type": "GuiButton",
+        "Color": "LightGray"
+      }
+    },
 
     "white-button": {
       "Type": "GuiButton",

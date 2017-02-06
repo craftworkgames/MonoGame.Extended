@@ -7,7 +7,11 @@
       "Position": "400 240",
       "Size": "700 380",
       "Controls": [
-
+        {
+          "Type": "GuiButton",
+          "Skin": "close-button",
+          "Position": "690 10"
+        }
       ]
     },
     {
