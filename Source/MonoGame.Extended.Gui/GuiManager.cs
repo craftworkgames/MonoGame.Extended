@@ -85,15 +85,18 @@ namespace MonoGame.Extended.Gui
             {
                 var control = controls[i];
 
-                if (topMostControl == null && control.BoundingRectangle.Contains(point))
-                    topMostControl = control;
-                
-                if (control.Controls.Any())
+                if (control.IsVisible)
                 {
-                    var child = FindControlAtPoint(control.Controls, point);
+                    if (topMostControl == null && control.BoundingRectangle.Contains(point))
+                        topMostControl = control;
 
-                    if (child != null)
-                        topMostControl = child;
+                    if (control.Controls.Any())
+                    {
+                        var child = FindControlAtPoint(control.Controls, point);
+
+                        if (child != null)
+                            topMostControl = child;
+                    }
                 }
             }
 

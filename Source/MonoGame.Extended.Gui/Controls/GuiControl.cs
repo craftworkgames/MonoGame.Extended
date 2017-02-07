@@ -15,6 +15,7 @@ namespace MonoGame.Extended.Gui.Controls
             Color = Color.White;
             TextColor = Color.White;
             IsEnabled = true;
+            IsVisible = true;
             Controls = new GuiControlCollection(this);
             Origin = Vector2.One*0.5f;
         }
@@ -88,6 +89,8 @@ namespace MonoGame.Extended.Gui.Controls
                 DisabledStyle?.ApplyIf(this, !_isEnabled);
             }
         }
+
+        public bool IsVisible { get; set; }
 
         public GuiControlStyle HoverStyle { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
@@ -47,10 +48,10 @@ namespace MonoGame.Extended.Gui
 
         private void DrawChildren(GuiControlCollection controls)
         {
-            foreach (var control in controls)
+            foreach (var control in controls.Where(c => c.IsVisible))
                 DrawControl(control);
 
-            foreach (var childControl in controls)
+            foreach (var childControl in controls.Where(c => c.IsVisible))
                 DrawChildren(childControl.Controls);
         }
 

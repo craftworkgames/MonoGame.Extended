@@ -3,28 +3,38 @@
   "Controls": [
     {
       "Type": "GuiPanel",
+      "Name": "MainPanel", 
       "Skin": "brown-panel",
       "Position": "400 240",
       "Size": "700 380",
       "Controls": [
         {
+          "Type": "GuiPanel",
+          "Skin": "beige-inset-panel",
+          "Position": "350 190",
+          "Size": "680 360"
+        },
+        {
+          "Name": "CloseButton",
           "Type": "GuiButton",
           "Skin": "close-button",
           "Position": "690 10"
+        },
+        {
+          "Name": "PlayButton",
+          "Type": "GuiButton",
+          "Skin": "white-button",
+          "Position": "350 190",
+          "Text": "Play"
+        },
+        {
+          "Name": "QuitButton",
+          "Type": "GuiButton",
+          "Skin": "white-button",
+          "Position": "350 240",
+          "Text": "Quit"
         }
       ]
-    },
-    {
-      "Type": "GuiPanel",
-      "Skin": "beige-inset-panel",
-      "Position": "400 240",
-      "Size": "680 360"
-    },
-    {
-      "Type": "GuiButton",
-      "Skin": "white-button",
-      "Position": "400 240",
-      "Text": "Play"
     }
   ]
 }
