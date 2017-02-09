@@ -25,7 +25,9 @@ namespace MonoGame.Extended.Gui.Serialization
             var skin = (string) style["Skin"];
             var control = controlFactory.Create(style.TargetType, skin);
 
-            if (style.TryGetValue(nameof(GuiControl.Controls), out var childControls))
+            object childControls;
+
+            if (style.TryGetValue(nameof(GuiControl.Controls), out childControls))
             {
                 var controlCollection = childControls as GuiControlCollection;
 
