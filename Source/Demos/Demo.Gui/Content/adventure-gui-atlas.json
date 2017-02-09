@@ -1,8 +1,17 @@
 {"frames": [
 
 {
+	"filename": "monogame-title.png",
+	"frame": {"x":2,"y":2,"w":504,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":504,"h":120},
+	"sourceSize": {"w":504,"h":120},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
 	"filename": "panel_brown.png",
-	"frame": {"x":2,"y":2,"w":100,"h":100},
+	"frame": {"x":2,"y":124,"w":100,"h":100},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
@@ -11,7 +20,7 @@
 },
 {
 	"filename": "panelInset_beige.png",
-	"frame": {"x":104,"y":2,"w":93,"h":94},
+	"frame": {"x":104,"y":124,"w":93,"h":94},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":93,"h":94},
@@ -19,17 +28,8 @@
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
-	"filename": "buttonLong_grey.png",
-	"frame": {"x":2,"y":104,"w":190,"h":49},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":190,"h":49},
-	"sourceSize": {"w":190,"h":49},
-	"pivot": {"x":0.5,"y":0.5}
-},
-{
 	"filename": "buttonLong_grey_pressed.png",
-	"frame": {"x":293,"y":2,"w":190,"h":49},
+	"frame": {"x":2,"y":226,"w":190,"h":49},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":190,"h":49},
@@ -38,7 +38,7 @@
 },
 {
 	"filename": "buttonSquare_blue.png",
-	"frame": {"x":246,"y":2,"w":45,"h":49},
+	"frame": {"x":438,"y":124,"w":45,"h":49},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":49},
@@ -46,8 +46,17 @@
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
+	"filename": "buttonLong_grey.png",
+	"frame": {"x":246,"y":124,"w":190,"h":49},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":190,"h":49},
+	"sourceSize": {"w":190,"h":49},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
 	"filename": "buttonSquare_blue_pressed.png",
-	"frame": {"x":199,"y":2,"w":45,"h":49},
+	"frame": {"x":199,"y":124,"w":45,"h":49},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":49},
@@ -56,16 +65,7 @@
 },
 {
 	"filename": "buttonRound_beige.png",
-	"frame": {"x":268,"y":104,"w":35,"h":38},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":35,"h":38},
-	"sourceSize": {"w":35,"h":38},
-	"pivot": {"x":0.5,"y":0.5}
-},
-{
-	"filename": "buttonRound_close.png",
-	"frame": {"x":231,"y":104,"w":35,"h":38},
+	"frame": {"x":268,"y":226,"w":35,"h":38},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":35,"h":38},
@@ -74,7 +74,16 @@
 },
 {
 	"filename": "buttonRound_beige_checked.png",
-	"frame": {"x":194,"y":104,"w":35,"h":38},
+	"frame": {"x":231,"y":226,"w":35,"h":38},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":35,"h":38},
+	"sourceSize": {"w":35,"h":38},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "buttonRound_close.png",
+	"frame": {"x":194,"y":226,"w":35,"h":38},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":35,"h":38},
@@ -83,7 +92,7 @@
 },
 {
 	"filename": "cursorSword_silver.png",
-	"frame": {"x":305,"y":104,"w":34,"h":37},
+	"frame": {"x":305,"y":226,"w":34,"h":37},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":37},
@@ -91,8 +100,8 @@
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
-	"filename": "checkBox_beige_unchecked.png",
-	"frame": {"x":378,"y":104,"w":35,"h":35},
+	"filename": "checkBox_beige_checked.png",
+	"frame": {"x":378,"y":226,"w":35,"h":35},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":35,"h":35},
@@ -100,8 +109,8 @@
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
-	"filename": "checkBox_beige_checked.png",
-	"frame": {"x":341,"y":104,"w":35,"h":35},
+	"filename": "checkBox_beige_unchecked.png",
+	"frame": {"x":341,"y":226,"w":35,"h":35},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":35,"h":35},
@@ -110,7 +119,7 @@
 },
 {
 	"filename": "progress-bar-blue.png",
-	"frame": {"x":2,"y":155,"w":36,"h":18},
+	"frame": {"x":2,"y":277,"w":36,"h":18},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":36,"h":18},
@@ -119,7 +128,7 @@
 },
 {
 	"filename": "progress-bar-green.png",
-	"frame": {"x":453,"y":104,"w":36,"h":18},
+	"frame": {"x":453,"y":226,"w":36,"h":18},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":36,"h":18},
@@ -128,7 +137,7 @@
 },
 {
 	"filename": "progress-bar-red.png",
-	"frame": {"x":415,"y":104,"w":36,"h":18},
+	"frame": {"x":415,"y":226,"w":36,"h":18},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":36,"h":18},
@@ -140,8 +149,8 @@
 	"version": "1.0",
 	"image": "adventure-gui.png",
 	"format": "RGBA8888",
-	"size": {"w":512,"h":256},
+	"size": {"w":512,"h":512},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:f058a3361a942d0c3be3e67b0d1db68e:4f2e07137c0fe0c5cb9ec7e920412d93:664eb9b3a42185355129a17c82b53558$"
+	"smartupdate": "$TexturePacker:SmartUpdate:38fdf8c62bf242f03c9f8e8f92e18b28:02887d8c671f5977b559008cb9be207f:664eb9b3a42185355129a17c82b53558$"
 }
 }

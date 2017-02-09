@@ -2,6 +2,10 @@
   "Name": "adventure",
   "TextureAtlases": [ "adventure-gui-atlas" ],
   "Fonts": [ "small-font" ],
+  "Cursor": {
+    "TextureRegion": "cursorSword_silver",
+    "Color": "#aaaaaa"
+  },
   "NinePatches": [
     {
       "TextureRegion": "panel_brown",
@@ -11,7 +15,7 @@
       "TextureRegion": "panelInset_beige",
       "Padding": "10"
     }
-  ], 
+  ],
   "Templates": {
     "close-button": {
       "Type": "GuiButton",
@@ -50,6 +54,16 @@
       "Type": "GuiPanel",
       "TextureRegion": "panelInset_beige",
       "Size": "385 280"
+    },
+
+    "label": {
+      "Type": "GuiLabel",
+      "TextColor": "Black"
+    },
+
+    "monogame-title": {
+      "Type": "GuiImage",
+      "TextureRegion": "monogame-title"
     }
   }
 }

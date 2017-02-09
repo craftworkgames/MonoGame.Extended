@@ -39,7 +39,6 @@
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
     <Compile Include="FloatHelper.cs" />
-    <Compile Include="Graphics\Renderer.cs" />
     <Compile Include="Serialization\NinePatchRegion2DJsonConverter.cs" />
     <Compile Include="Serialization\ThicknessJsonConverter.cs" />
     <Compile Include="Thickness.cs" />

@@ -21,7 +21,7 @@ namespace Demo.Gui
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
             Window.AllowUserResizing = true;
         }
 
@@ -32,10 +32,7 @@ namespace Demo.Gui
 
             var titleScreen = LoadScreen(@"Content/title-screen.json");
             var renderer = new GuiSpriteBatchRenderer(GraphicsDevice, titleScreen.Skin.DefaultFont);
-            _guiManager = new GuiManager(viewportAdapter, renderer)
-            {
-                Screen = titleScreen
-            };
+            _guiManager = new GuiManager(viewportAdapter, renderer) { Screen = titleScreen };
 
             var panel = titleScreen.FindControl<GuiPanel>("MainPanel");
 

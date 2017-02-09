@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Gui
 {
     public interface IGuiRenderer
     {
-        void Draw(GuiScreen screen);
+        void Draw(GuiManager manager, GuiScreen screen);
     }
 
     public class GuiSpriteBatchRenderer : IGuiRenderer
@@ -29,11 +29,16 @@ namespace MonoGame.Extended.Gui
             };
         }
 
-        public void Draw(GuiScreen screen)
+        public void Draw(GuiManager manager, GuiScreen screen)
         {
             _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect, TransformMatrix);
 
             DrawChildren(screen.Controls);
+
+            var cursor = screen.Skin?.Cursor;
+
+            if (cursor != null)
+                _spriteBatch.Draw(cursor.TextureRegion, manager.CursorPosition, cursor.Color);
 
             _spriteBatch.End();
         }

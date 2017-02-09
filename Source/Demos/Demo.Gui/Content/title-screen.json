@@ -3,7 +3,7 @@
   "Controls": [
     {
       "Type": "GuiPanel",
-      "Name": "MainPanel", 
+      "Name": "MainPanel",
       "Skin": "brown-panel",
       "Position": "400 240",
       "Size": "700 380",
@@ -19,6 +19,11 @@
           "Type": "GuiButton",
           "Skin": "close-button",
           "Position": "690 10"
+        },
+        {
+          "Type": "GuiImage",
+          "Skin": "monogame-title",
+          "Position": "350 100"
         },
         {
           "Name": "PlayButton",

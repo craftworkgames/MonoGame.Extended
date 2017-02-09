@@ -30,6 +30,7 @@ namespace MonoGame.Extended.Gui
         }
 
         public GuiScreen Screen { get; set; }
+        public Vector2 CursorPosition { get; set; }
 
         public void Update(GameTime gameTime)
         {
@@ -40,11 +41,13 @@ namespace MonoGame.Extended.Gui
         public void Draw(GameTime gameTime)
         {
             if (Screen != null)
-                _renderer.Draw(Screen);
+                _renderer.Draw(this, Screen);
         }
 
         private void OnMouseMoved(object sender, MouseEventArgs args)
         {
+            CursorPosition = args.Position.ToVector2();
+
             if (Screen == null)
                 return;
 

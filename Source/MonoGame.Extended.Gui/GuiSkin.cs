@@ -32,6 +32,9 @@ namespace MonoGame.Extended.Gui
         public BitmapFont DefaultFont => Fonts.FirstOrDefault();
 
         [JsonProperty(Order = 5)]
+        public GuiCursor Cursor { get; set; }
+
+        [JsonProperty(Order = 6)]
         public IDictionary<string, GuiControlStyle> Templates { get; }
     }
 }
