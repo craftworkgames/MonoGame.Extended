@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Microsoft.Xna.Framework.Content;
@@ -10,12 +8,12 @@ namespace MonoGame.Extended.Content
 {
     public static class ContentReaderExtensions
     {
-        private static readonly FieldInfo ContentReaderGraphicsDeviceFieldInfo = typeof(ContentReader).GetTypeInfo().GetDeclaredField("graphicsDevice");
+        private static readonly FieldInfo _contentReaderGraphicsDeviceFieldInfo = typeof(ContentReader).GetTypeInfo().GetDeclaredField("graphicsDevice");
         private static byte[] _scratchBuffer;
 
         public static GraphicsDevice GetGraphicsDevice(this ContentReader contentReader)
         {
-            return (GraphicsDevice)ContentReaderGraphicsDeviceFieldInfo.GetValue(contentReader);
+            return (GraphicsDevice)_contentReaderGraphicsDeviceFieldInfo.GetValue(contentReader);
         }
 
         public static string GetRelativeAssetName(this ContentReader contentReader, string relativeName)

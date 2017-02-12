@@ -8,17 +8,17 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         [XmlAttribute(AttributeName = "gid")] public uint GlobalIdentifier;
 
-        private const uint FlippedHorizontallyFlag = 0x80000000;
-        private const uint FlippedVerticallyFlag = 0x40000000;
-        private const uint FlippedDiagonallyFlag = 0x20000000;
-        private const uint AllFlippedFlags = FlippedHorizontallyFlag | FlippedVerticallyFlag | FlippedDiagonallyFlag;
+        private const uint _flippedHorizontallyFlag = 0x80000000;
+        private const uint _flippedVerticallyFlag = 0x40000000;
+        private const uint _flippedDiagonallyFlag = 0x20000000;
+        private const uint _allFlippedFlags = _flippedHorizontallyFlag | _flippedVerticallyFlag | _flippedDiagonallyFlag;
 
-        public int GlobalIdentifierWithoutFlags => (int)(GlobalIdentifier & ~AllFlippedFlags);
-        public bool IsFlippedHorizontally => (GlobalIdentifier & FlippedHorizontallyFlag) != 0;
-        public bool IsFlippedVertically => (GlobalIdentifier & FlippedVerticallyFlag) != 0;
-        public bool IsFlippedDiagonally => (GlobalIdentifier & FlippedDiagonallyFlag) != 0;
+        public int GlobalIdentifierWithoutFlags => (int)(GlobalIdentifier & ~_allFlippedFlags);
+        public bool IsFlippedHorizontally => (GlobalIdentifier & _flippedHorizontallyFlag) != 0;
+        public bool IsFlippedVertically => (GlobalIdentifier & _flippedVerticallyFlag) != 0;
+        public bool IsFlippedDiagonally => (GlobalIdentifier & _flippedDiagonallyFlag) != 0;
         public bool IsBlank => GlobalIdentifier == 0;
-        public FlipFlags Flags => (FlipFlags)((GlobalIdentifier & AllFlippedFlags) >> 29);
+        public FlipFlags Flags => (FlipFlags)((GlobalIdentifier & _allFlippedFlags) >> 29);
 
         internal TiledMapTileContent(uint globalTileIdentifierWithFlags)
         {
