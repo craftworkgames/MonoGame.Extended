@@ -38,6 +38,13 @@
           "Skin": "white-button",
           "Position": "350 240",
           "Text": "Quit"
+        },
+        {
+          "Name": "NameBox",
+          "Type": "GuiTextBox",
+          "Skin": "text-box",
+          "Position": "550 340",
+          "Text": "Quit"
         }
       ]
     }

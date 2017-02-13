@@ -64,6 +64,12 @@
     "monogame-title": {
       "Type": "GuiImage",
       "TextureRegion": "monogame-title"
-    }
+    },
+
+    "text-box": {
+      "Type": "GuiTextBox",
+      "TextureRegion": "grey_textBox",
+      "TextColor": "#444444" 
+    } 
   }
 }

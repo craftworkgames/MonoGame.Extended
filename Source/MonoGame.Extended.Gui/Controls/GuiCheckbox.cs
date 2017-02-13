@@ -4,13 +4,13 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public class GuiCheckbox : GuiControl
+    public class GuiCheckBox : GuiControl
     {
-        public GuiCheckbox()
+        public GuiCheckBox()
         {
         }
 
-        public GuiCheckbox(TextureRegion2D textureRegion)
+        public GuiCheckBox(TextureRegion2D textureRegion)
             : base(textureRegion)
         {
         }
