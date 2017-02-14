@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Shapes;
@@ -18,10 +19,12 @@ namespace MonoGame.Extended.Gui
 
     public class GuiSpriteBatchRenderer : IGuiRenderer
     {
+        private readonly Func<Matrix> _getTransformMatrix;
         private readonly SpriteBatch _spriteBatch;
 
-        public GuiSpriteBatchRenderer(GraphicsDevice graphicsDevice, BitmapFont defaultFont)
+        public GuiSpriteBatchRenderer(GraphicsDevice graphicsDevice, BitmapFont defaultFont, Func<Matrix> getTransformMatrix)
         {
+            _getTransformMatrix = getTransformMatrix;
             DefaultFont = defaultFont;
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
@@ -29,15 +32,14 @@ namespace MonoGame.Extended.Gui
         public BitmapFont DefaultFont { get; }
         public SpriteSortMode SortMode { get; set; }
         public BlendState BlendState { get; set; } = BlendState.AlphaBlend;
-        public SamplerState SamplerState { get; set; } = SamplerState.LinearClamp;
+        public SamplerState SamplerState { get; set; } = SamplerState.PointClamp;
         public DepthStencilState DepthStencilState { get; set; } = DepthStencilState.Default;
         public RasterizerState RasterizerState { get; set; } = RasterizerState.CullNone;
         public Effect Effect { get; set; }
-        public Matrix? TransformMatrix { get; set; }
 
         public void Begin()
         {
-            _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect, TransformMatrix);
+            _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect, _getTransformMatrix());
         }
 
         public void End()
@@ -60,7 +62,7 @@ namespace MonoGame.Extended.Gui
 
         public void DrawText(BitmapFont font, string text, Vector2 position, Color color)
         {
-            _spriteBatch.DrawString(font, text, position, color);
+            _spriteBatch.DrawString(font ?? DefaultFont, text, position, color);
         }
     }
 }

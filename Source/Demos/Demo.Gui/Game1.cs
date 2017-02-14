@@ -31,8 +31,8 @@ namespace Demo.Gui
             _camera = new Camera2D(viewportAdapter);
 
             var titleScreen = LoadScreen(@"Content/title-screen.json");
-            var renderer = new GuiSpriteBatchRenderer(GraphicsDevice, titleScreen.Skin.DefaultFont);
-            _guiManager = new GuiManager(viewportAdapter, renderer) { Screen = titleScreen };
+            var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, titleScreen.Skin.DefaultFont, _camera.GetViewMatrix);
+            _guiManager = new GuiManager(viewportAdapter, guiRenderer) { Screen = titleScreen };
 
             var panel = titleScreen.FindControl<GuiPanel>("MainPanel");
 
@@ -88,7 +88,6 @@ namespace Demo.Gui
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _guiManager.Draw(gameTime);
-
         }
     }
 }

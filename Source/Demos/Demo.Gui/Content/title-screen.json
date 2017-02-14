@@ -44,7 +44,7 @@
           "Type": "GuiTextBox",
           "Skin": "text-box",
           "Position": "550 340",
-          "Text": "Quit"
+          "Text": "This is a TextBox :)"
         }
       ]
     }

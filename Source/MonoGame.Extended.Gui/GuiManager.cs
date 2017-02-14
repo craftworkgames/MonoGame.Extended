@@ -27,6 +27,7 @@ namespace MonoGame.Extended.Gui
 
             _keyboardListener = new KeyboardListener();
             _keyboardListener.KeyTyped += (sender, args) => _focusedControl?.OnKeyTyped(args);
+            _keyboardListener.KeyPressed += (sender, args) => _focusedControl?.OnKeyPressed(args);
         }
 
         public GuiScreen Screen { get; set; }
@@ -40,11 +41,13 @@ namespace MonoGame.Extended.Gui
 
         public void Draw(GameTime gameTime)
         {
+            var deltaSeconds = gameTime.GetElapsedSeconds();
+
             _renderer.Begin();
 
             if (Screen != null)
             {
-                DrawChildren(Screen.Controls);
+                DrawChildren(Screen.Controls, deltaSeconds);
 
                 var cursor = Screen.Skin?.Cursor;
 
@@ -55,13 +58,13 @@ namespace MonoGame.Extended.Gui
             _renderer.End();
         }
         
-        private void DrawChildren(GuiControlCollection controls)
+        private void DrawChildren(GuiControlCollection controls, float deltaSeconds)
         {
             foreach (var control in controls.Where(c => c.IsVisible))
-                control.Draw(_renderer);
+                control.Draw(_renderer, deltaSeconds);
 
             foreach (var childControl in controls.Where(c => c.IsVisible))
-                DrawChildren(childControl.Controls);
+                DrawChildren(childControl.Controls, deltaSeconds);
         }
 
         private void OnMouseMoved(object sender, MouseEventArgs args)

@@ -81,9 +81,11 @@ namespace MonoGame.Extended.InputListeners
             var elapsedTime = (gameTime.TotalGameTime - _lastPressTime).TotalMilliseconds;
 
             if (currentState.IsKeyDown(_previousKey) &&
-                ((_isInitial && (elapsedTime > InitialDelay)) || (!_isInitial && (elapsedTime > RepeatDelay))))
+                (_isInitial && elapsedTime > InitialDelay || !_isInitial && elapsedTime > RepeatDelay))
             {
                 var args = new KeyboardEventArgs(_previousKey, currentState);
+
+                KeyPressed?.Invoke(this, args);
 
                 if (args.Character.HasValue)
                     KeyTyped?.Invoke(this, args);

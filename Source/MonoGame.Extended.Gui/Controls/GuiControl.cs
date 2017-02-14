@@ -110,18 +110,11 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        public virtual void OnMouseDown(MouseEventArgs args)
-        {
-        }
-
-        public virtual void OnMouseUp(MouseEventArgs args)
-        {
-        }
-
-        public virtual void OnKeyTyped(KeyboardEventArgs args)
-        {
-        }
-
+        public virtual void OnMouseDown(MouseEventArgs args) { }
+        public virtual void OnMouseUp(MouseEventArgs args) { }
+        public virtual void OnKeyTyped(KeyboardEventArgs args) { }
+        public virtual void OnKeyPressed(KeyboardEventArgs args) { }
+        
         public virtual void OnMouseEnter(MouseEventArgs args)
         {
             if (IsEnabled)
@@ -134,18 +127,22 @@ namespace MonoGame.Extended.Gui.Controls
                 HoverStyle?.Revert(this);
         }
 
-        public virtual void Draw(IGuiRenderer renderer)
+        public virtual void Draw(IGuiRenderer renderer, float deltaSeconds)
         {
             renderer.DrawRegion(TextureRegion, BoundingRectangle.ToRectangle(), Color);
 
             if (string.IsNullOrWhiteSpace(Text))
                 return;
+            
+            renderer.DrawText(Font, Text, GetTextPosition(renderer), TextColor);
+        }
 
+        protected Vector2 GetTextPosition(IGuiRenderer renderer)
+        {
             var font = Font ?? renderer.DefaultFont;
-            var textSize = font.MeasureString(Text);
-            var textPosition = BoundingRectangle.Center - new Vector2(textSize.Width * 0.5f, textSize.Height * 0.5f);
-
-            renderer.DrawText(font, Text, textPosition + TextOffset, TextColor);
+            var textSize = font.GetStringRectangle(Text, Vector2.Zero).Size.ToVector2();
+            var textPosition = BoundingRectangle.Center - textSize * 0.5f;
+            return textPosition + TextOffset;
         }
     }
 }
