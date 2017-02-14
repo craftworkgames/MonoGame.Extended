@@ -40,8 +40,28 @@ namespace MonoGame.Extended.Gui
 
         public void Draw(GameTime gameTime)
         {
+            _renderer.Begin();
+
             if (Screen != null)
-                _renderer.Draw(this, Screen);
+            {
+                DrawChildren(Screen.Controls);
+
+                var cursor = Screen.Skin?.Cursor;
+
+                if (cursor != null)
+                    _renderer.DrawRegion(cursor.TextureRegion, CursorPosition, cursor.Color);
+            }
+
+            _renderer.End();
+        }
+        
+        private void DrawChildren(GuiControlCollection controls)
+        {
+            foreach (var control in controls.Where(c => c.IsVisible))
+                control.Draw(_renderer);
+
+            foreach (var childControl in controls.Where(c => c.IsVisible))
+                DrawChildren(childControl.Controls);
         }
 
         private void OnMouseMoved(object sender, MouseEventArgs args)

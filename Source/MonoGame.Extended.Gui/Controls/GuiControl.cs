@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.SceneGraphs;
 using MonoGame.Extended.Shapes;
@@ -17,7 +18,7 @@ namespace MonoGame.Extended.Gui.Controls
             IsEnabled = true;
             IsVisible = true;
             Controls = new GuiControlCollection(this);
-            Origin = Vector2.One*0.5f;
+            Origin = Vector2.One * 0.5f;
         }
 
         protected GuiControl(TextureRegion2D textureRegion)
@@ -55,6 +56,7 @@ namespace MonoGame.Extended.Gui.Controls
         public Color Color { get; set; }
 
         private TextureRegion2D _textureRegion;
+
         public TextureRegion2D TextureRegion
         {
             get { return _textureRegion; }
@@ -73,6 +75,7 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
+        public BitmapFont Font { get; set; }
         public string Text { get; set; }
         public Color TextColor { get; set; }
         public Vector2 TextOffset { get; set; }
@@ -80,6 +83,7 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiControlCollection Controls { get; }
 
         private bool _isEnabled;
+
         public bool IsEnabled
         {
             get { return _isEnabled; }
@@ -95,6 +99,7 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiControlStyle HoverStyle { get; set; }
 
         private GuiControlStyle _disabledStyle;
+
         public GuiControlStyle DisabledStyle
         {
             get { return _disabledStyle; }
@@ -105,20 +110,42 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        public virtual void OnMouseDown(MouseEventArgs args) { }
-        public virtual void OnMouseUp(MouseEventArgs args) { }
-        public virtual void OnKeyTyped(KeyboardEventArgs args) { }
+        public virtual void OnMouseDown(MouseEventArgs args)
+        {
+        }
+
+        public virtual void OnMouseUp(MouseEventArgs args)
+        {
+        }
+
+        public virtual void OnKeyTyped(KeyboardEventArgs args)
+        {
+        }
 
         public virtual void OnMouseEnter(MouseEventArgs args)
         {
-            if(IsEnabled)
+            if (IsEnabled)
                 HoverStyle?.Apply(this);
         }
 
         public virtual void OnMouseLeave(MouseEventArgs args)
         {
-            if(IsEnabled)
+            if (IsEnabled)
                 HoverStyle?.Revert(this);
+        }
+
+        public virtual void Draw(IGuiRenderer renderer)
+        {
+            renderer.DrawRegion(TextureRegion, BoundingRectangle.ToRectangle(), Color);
+
+            if (string.IsNullOrWhiteSpace(Text))
+                return;
+
+            var font = Font ?? renderer.DefaultFont;
+            var textSize = font.MeasureString(Text);
+            var textPosition = BoundingRectangle.Center - new Vector2(textSize.Width * 0.5f, textSize.Height * 0.5f);
+
+            renderer.DrawText(font, Text, textPosition + TextOffset, TextColor);
         }
     }
 }
