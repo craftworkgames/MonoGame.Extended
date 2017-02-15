@@ -15,7 +15,7 @@ namespace Demo.Gui
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private Camera2D _camera;
-        private GuiManager _guiManager;
+        private GuiSystem _guiSystem;
 
         public Game1()
         {
@@ -32,7 +32,7 @@ namespace Demo.Gui
 
             var titleScreen = LoadScreen(@"Content/title-screen.json");
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, titleScreen.Skin.DefaultFont, _camera.GetViewMatrix);
-            _guiManager = new GuiManager(viewportAdapter, guiRenderer) { Screen = titleScreen };
+            _guiSystem = new GuiSystem(viewportAdapter, guiRenderer) { Screen = titleScreen };
 
             var panel = titleScreen.FindControl<GuiPanel>("MainPanel");
 
@@ -76,7 +76,7 @@ namespace Demo.Gui
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _guiManager.Update(gameTime);
+            _guiSystem.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -87,7 +87,7 @@ namespace Demo.Gui
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _guiManager.Draw(gameTime);
+            _guiSystem.Draw(gameTime);
         }
     }
 }

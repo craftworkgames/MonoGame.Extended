@@ -6,7 +6,7 @@ using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.Gui
 {
-    public class GuiManager
+    public class GuiSystem
     {
         private readonly IGuiRenderer _renderer;
         private readonly MouseListener _mouseListener;
@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Gui
         private GuiControl _focusedControl;
         private GuiControl _hoveredControl;
 
-        public GuiManager(ViewportAdapter viewportAdapter, IGuiRenderer renderer)
+        public GuiSystem(ViewportAdapter viewportAdapter, IGuiRenderer renderer)
         {
             _renderer = renderer;
 

@@ -14,6 +14,10 @@
     {
       "TextureRegion": "panelInset_beige",
       "Padding": "10"
+    },
+    {
+      "TextureRegion": "grey_textBox",
+      "Padding": "10" 
     }
   ],
   "Templates": {
@@ -58,7 +62,7 @@
 
     "label": {
       "Type": "GuiLabel",
-      "TextColor": "Black"
+      "TextColor": "#444444"
     },
 
     "monogame-title": {
@@ -69,7 +73,7 @@
     "text-box": {
       "Type": "GuiTextBox",
       "TextureRegion": "grey_textBox",
-      "TextColor": "#444444" 
+      "TextColor": "#444444"
     } 
   }
 }

@@ -40,11 +40,18 @@
           "Text": "Quit"
         },
         {
-          "Name": "NameBox",
+          "Name": "NameLabel",
+          "Skin": "label",
+          "Type": "GuiLabel",
+          "Position": "350 310",
+          "Text": "email"
+        },
+        {
+          "Name": "EmptyTextBox",
           "Type": "GuiTextBox",
           "Skin": "text-box",
-          "Position": "550 340",
-          "Text": "This is a TextBox :)"
+          "Position": "350 340",
+          "Size": "300 42"
         }
       ]
     }

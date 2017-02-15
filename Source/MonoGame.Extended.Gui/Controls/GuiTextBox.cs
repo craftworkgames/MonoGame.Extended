@@ -20,67 +20,66 @@ namespace MonoGame.Extended.Gui.Controls
             : base(textureRegion)
         {
             Text = text;
-            IsKeyboardFocused = false;
         }
 
         public int SelectionStart { get; set; }
-        public bool IsKeyboardFocused { get; set; }
 
         public override void OnMouseDown(MouseEventArgs args)
         {
             base.OnMouseDown(args);
 
             SelectionStart = Text.Length;
-            IsKeyboardFocused = true;
+            _isCaretVisible = true;
         }
 
         public override void OnKeyPressed(KeyboardEventArgs args)
         {
             base.OnKeyPressed(args);
 
-            if (args.Key == Keys.Back)
+            switch (args.Key)
             {
-                if (SelectionStart > 0 && Text.Length > 0)
-                {
-                    SelectionStart--;
-                    Text = Text.Remove(SelectionStart, 1);
-                }
-            }
-            else if(args.Key == Keys.Delete)
-            {
-                if (SelectionStart < Text.Length)
-                    Text = Text.Remove(SelectionStart, 1);
-            }
-            else if (args.Key == Keys.Left)
-            {
-                if (SelectionStart > 0)
-                    SelectionStart--;
-            }
-            else if (args.Key == Keys.Right)
-            {
-                if (SelectionStart < Text.Length)
-                    SelectionStart++;
-            }
-            else if (args.Character != null)
-            {
-                SelectionStart++;
-                Text += args.Character;
+                case Keys.Back:
+                    if (SelectionStart > 0 && Text.Length > 0)
+                    {
+                        SelectionStart--;
+                        Text = Text.Remove(SelectionStart, 1);
+                    }
+                    break;
+                case Keys.Delete:
+                    if (SelectionStart < Text.Length)
+                        Text = Text.Remove(SelectionStart, 1);
+                    break;
+                case Keys.Left:
+                    if (SelectionStart > 0)
+                        SelectionStart--;
+                    break;
+                case Keys.Right:
+                    if (SelectionStart < Text.Length)
+                        SelectionStart++;
+                    break;
+                default:
+                    if (args.Character != null)
+                    {
+                        SelectionStart++;
+                        Text += args.Character;
+                    }
+                    break;
             }
 
-            _isCursorVisible = true;
+            _isCaretVisible = true;
         }
 
-        private const float _blinkRate = 0.53f;
-        private float _nextBlink = _blinkRate;
-        private bool _isCursorVisible = true;
+        private const float _caretBlinkRate = 0.53f;
+        private float _nextCaretBlink = _caretBlinkRate;
+        private bool _isCaretVisible = true;
 
         public override void Draw(IGuiRenderer renderer, float deltaSeconds)
         {
             base.Draw(renderer, deltaSeconds);
 
-            if (IsKeyboardFocused)
+            if (IsFocused)
             {
-                if (_isCursorVisible)
+                if (_isCaretVisible)
                 {
                     var font = Font ?? renderer.DefaultFont;
                     var textPosition = GetTextPosition(renderer);
@@ -90,12 +89,12 @@ namespace MonoGame.Extended.Gui.Controls
                     renderer.DrawRegion(null, textRectangle, TextColor);
                 }
 
-                _nextBlink -= deltaSeconds;
+                _nextCaretBlink -= deltaSeconds;
 
-                if (_nextBlink <= 0)
+                if (_nextCaretBlink <= 0)
                 {
-                    _isCursorVisible = !_isCursorVisible;
-                    _nextBlink = _blinkRate;
+                    _isCaretVisible = !_isCaretVisible;
+                    _nextCaretBlink = _caretBlinkRate;
                 }
             }
         }
