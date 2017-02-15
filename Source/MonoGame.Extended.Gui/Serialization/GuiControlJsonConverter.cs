@@ -8,6 +8,7 @@ namespace MonoGame.Extended.Gui.Serialization
     {
         private readonly IGuiSkinService _guiSkinService;
         private readonly GuiControlStyleJsonConverter _styleConverter = new GuiControlStyleJsonConverter();
+        private const string _styleProperty = "Style";
 
         public GuiControlJsonConverter(IGuiSkinService guiSkinService)
         {
@@ -22,7 +23,7 @@ namespace MonoGame.Extended.Gui.Serialization
         {
             var controlFactory = new GuiControlFactory(_guiSkinService.Skin);
             var style = (GuiControlStyle) _styleConverter.ReadJson(reader, objectType, existingValue, serializer);
-            var skin = (string) style["Skin"];
+            var skin = (string) style[_styleProperty];
             var control = controlFactory.Create(style.TargetType, skin);
 
             object childControls;

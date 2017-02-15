@@ -17,7 +17,7 @@ namespace MonoGame.Extended.Gui
             where T : GuiControl, new()
         {
             var control = new T();
-            _skin.Templates[template].Apply(control);
+            _skin.GetStyle(template).Apply(control);
             control.Name = name;
             control.Position = position;
             control.Text = text;
@@ -28,7 +28,7 @@ namespace MonoGame.Extended.Gui
             where T : GuiControl, new()
         {
             var control = new T();
-            _skin.Templates[template].Apply(control);
+            _skin.GetStyle(template).Apply(control);
             onCreate(control);
             return control;
         }
@@ -36,7 +36,7 @@ namespace MonoGame.Extended.Gui
         public GuiControl Create(Type type, string template)
         {
             var control = (GuiControl) Activator.CreateInstance(type);
-            _skin.Templates[template].Apply(control);
+            _skin.GetStyle(template).Apply(control);
             return control;
         }
     }

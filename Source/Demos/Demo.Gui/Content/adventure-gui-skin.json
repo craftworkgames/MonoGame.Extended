@@ -20,8 +20,9 @@
       "Padding": "10" 
     }
   ],
-  "Templates": {
-    "close-button": {
+  "Styles": [
+    {
+      "Name": "close-button",
       "Type": "GuiButton",
       "TextureRegion": "buttonRound_close",
       "HoverStyle": {
@@ -29,8 +30,8 @@
         "Color": "LightGray"
       }
     },
-    
-    "white-button": {
+    {
+      "Name": "white-button",
       "Type": "GuiButton",
       "TextureRegion": "buttonLong_grey",
       "TextOffset": "0 -2",
@@ -47,42 +48,43 @@
         "TextColor": "#ffffffff"
       }
     },
-
-    "checkbox": {
+    {
+      "Name": "checkbox",
       "Type": "GuiCheckBox",
       "TextureRegion": "checkBox_beige_unchecked",
       "CheckedStyle": {
         "Type": "GuiCheckBox",
         "TextureRegion": "checkBox_beige_checked"
-      } 
+      }
     },
 
-    "brown-panel": {
+    {
+      "Name": "brown-panel",
       "Type": "GuiPanel",
       "TextureRegion": "panel_brown",
       "Size": "400 300"
     },
-
-    "beige-inset-panel": {
+    {
+      "Name": "beige-inset-panel",
       "Type": "GuiPanel",
       "TextureRegion": "panelInset_beige",
       "Size": "385 280"
     },
-
-    "label": {
+    {
+      "Name": "label",
       "Type": "GuiLabel",
       "TextColor": "#444444"
     },
-
-    "monogame-title": {
+    {
+      "Name": "monogame-title",
       "Type": "GuiImage",
       "TextureRegion": "monogame-title"
     },
-
-    "text-box": {
+    {
+      "Name": "text-box",
       "Type": "GuiTextBox",
       "TextureRegion": "grey_textBox",
       "TextColor": "#444444"
-    } 
-  }
+    }
+  ]
 }

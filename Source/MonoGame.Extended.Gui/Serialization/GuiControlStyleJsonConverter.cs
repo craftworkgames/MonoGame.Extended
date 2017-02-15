@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using MonoGame.Extended.Collections;
 using MonoGame.Extended.Gui.Controls;
 using Newtonsoft.Json;
 
@@ -12,6 +13,7 @@ namespace MonoGame.Extended.Gui.Serialization
     {
         private readonly Dictionary<string, Type> _controlTypes;
         private const string _typeProperty = "Type";
+        private const string _nameProperty = "Name";
 
         public GuiControlStyleJsonConverter()
         {
@@ -40,12 +42,13 @@ namespace MonoGame.Extended.Gui.Serialization
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var dictionary = serializer.Deserialize<Dictionary<string, object>>(reader);
-            var typeName = (string)dictionary[_typeProperty];
-            var targetType = _controlTypes[typeName];
+            var name = dictionary.GetValueOrDefault(_nameProperty) as string;
+            var typeName = dictionary.GetValueOrDefault(_typeProperty) as string;
+            var targetType =  typeName != null ? _controlTypes[typeName] : typeof(GuiControl);
             var properties = targetType
                 .GetRuntimeProperties()
                 .ToDictionary(p => p.Name);
-            var style = new GuiControlStyle(targetType);
+            var style = new GuiControlStyle(name, targetType);
 
             foreach (var keyValuePair in dictionary.Where(i => i.Key != _typeProperty))
             {

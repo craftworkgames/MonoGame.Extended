@@ -4,44 +4,44 @@
     {
       "Type": "GuiPanel",
       "Name": "MainPanel",
-      "Skin": "brown-panel",
+      "Style": "brown-panel",
       "Position": "400 240",
       "Size": "700 380",
       "Controls": [
         {
           "Type": "GuiPanel",
-          "Skin": "beige-inset-panel",
+          "Style": "beige-inset-panel",
           "Position": "350 190",
           "Size": "680 360"
         },
         {
           "Name": "CloseButton",
           "Type": "GuiButton",
-          "Skin": "close-button",
+          "Style": "close-button",
           "Position": "690 10"
         },
         {
           "Type": "GuiImage",
-          "Skin": "monogame-title",
+          "Style": "monogame-title",
           "Position": "350 100"
         },
         {
           "Name": "PlayButton",
           "Type": "GuiButton",
-          "Skin": "white-button",
+          "Style": "white-button",
           "Position": "350 190",
           "Text": "Play"
         },
         {
           "Name": "QuitButton",
           "Type": "GuiButton",
-          "Skin": "white-button",
+          "Style": "white-button",
           "Position": "350 240",
           "Text": "Quit"
         },
         {
           "Name": "EmailLabel",
-          "Skin": "label",
+          "Style": "label",
           "Type": "GuiLabel",
           "Position": "350 315",
           "Text": "email"
@@ -49,14 +49,14 @@
         {
           "Name": "EmailTextBox",
           "Type": "GuiTextBox",
-          "Skin": "text-box",
+          "Style": "text-box",
           "Position": "350 345",
           "Size": "300 42"
         },
         {
           "Name": "CheckBox",
           "Type": "GuiCheckBox",
-          "Skin": "checkbox",
+          "Style": "checkbox",
           "Position": "350 285",
           "Size": "250 35",
           "Text": "sign me up to all the things",

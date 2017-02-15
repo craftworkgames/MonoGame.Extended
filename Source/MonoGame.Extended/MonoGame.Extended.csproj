@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationComponent.cs" />
+    <Compile Include="Collections\DictionaryExtensions.cs" />
     <Compile Include="FloatHelper.cs" />
     <Compile Include="Serialization\NinePatchRegion2DJsonConverter.cs" />
     <Compile Include="Serialization\ThicknessJsonConverter.cs" />
