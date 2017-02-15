@@ -29,7 +29,7 @@
         "Color": "LightGray"
       }
     },
-
+    
     "white-button": {
       "Type": "GuiButton",
       "TextureRegion": "buttonLong_grey",
@@ -46,6 +46,15 @@
         "Color": "#9E4C16ff",
         "TextColor": "#ffffffff"
       }
+    },
+
+    "checkbox": {
+      "Type": "GuiCheckBox",
+      "TextureRegion": "checkBox_beige_unchecked",
+      "CheckedStyle": {
+        "Type": "GuiCheckBox",
+        "TextureRegion": "checkBox_beige_checked"
+      } 
     },
 
     "brown-panel": {

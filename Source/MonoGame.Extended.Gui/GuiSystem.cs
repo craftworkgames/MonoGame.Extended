@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.Gui
@@ -61,7 +62,10 @@ namespace MonoGame.Extended.Gui
         private void DrawChildren(GuiControlCollection controls, float deltaSeconds)
         {
             foreach (var control in controls.Where(c => c.IsVisible))
+            {
+                //_renderer.DrawRegion(null, control.BoundingRectangle.ToRectangle(), Color.Magenta);
                 control.Draw(_renderer, deltaSeconds);
+            }
 
             foreach (var childControl in controls.Where(c => c.IsVisible))
                 DrawChildren(childControl.Controls, deltaSeconds);

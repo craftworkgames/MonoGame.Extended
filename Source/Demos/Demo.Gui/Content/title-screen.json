@@ -40,18 +40,27 @@
           "Text": "Quit"
         },
         {
-          "Name": "NameLabel",
+          "Name": "EmailLabel",
           "Skin": "label",
           "Type": "GuiLabel",
-          "Position": "350 310",
+          "Position": "350 315",
           "Text": "email"
         },
         {
-          "Name": "EmptyTextBox",
+          "Name": "EmailTextBox",
           "Type": "GuiTextBox",
           "Skin": "text-box",
-          "Position": "350 340",
+          "Position": "350 345",
           "Size": "300 42"
+        },
+        {
+          "Name": "CheckBox",
+          "Type": "GuiCheckBox",
+          "Skin": "checkbox",
+          "Position": "350 285",
+          "Size": "250 35",
+          "Text": "sign me up to all the things",
+          "TextColor": "#444444"
         }
       ]
     }
