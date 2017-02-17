@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Sprites
 {
-    public static class SpriteBatchExtensions
+    public static class SpriteExtensions
     {
         public static void Draw(this Sprite sprite, SpriteBatch spriteBatch)
         {

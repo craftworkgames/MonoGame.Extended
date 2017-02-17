@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\clipping-test.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

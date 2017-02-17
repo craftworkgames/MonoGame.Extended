@@ -220,7 +220,7 @@
     <Compile Include="Particles\Profiles\RingProfile.cs" />
     <Compile Include="Particles\Profiles\SprayProfile.cs" />
     <Compile Include="Particles\ParticleReleaseParameters.cs" />
-    <Compile Include="Particles\SpriteBatchExtensions.cs" />
+    <Compile Include="Particles\ParticleExtensions.cs" />
     <Compile Include="RandomExtensions.cs" />
     <Compile Include="Range.cs" />
     <Compile Include="RenderTarget2DExtensions.cs" />
@@ -230,8 +230,8 @@
     <Compile Include="SceneGraphs\SceneGraph.cs" />
     <Compile Include="SceneGraphs\SceneNode.cs" />
     <Compile Include="SceneGraphs\SceneNodeCollection.cs" />
-    <Compile Include="SceneGraphs\SpriteBatchExtensions.cs" />
-    <Compile Include="Shapes\SpriteBatchExtensions.cs" />
+    <Compile Include="SceneGraphs\SceneGraphExtensions.cs" />
+    <Compile Include="Shapes\ShapeExtensions.cs" />
     <Compile Include="Shapes\CircleF.cs" />
     <Compile Include="Shapes\PolygonF.cs" />
     <Compile Include="Shapes\RectangleF.cs" />
@@ -239,10 +239,10 @@
     <Compile Include="Shapes\ShapeF.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="TextureAtlases\NinePatchRegion2D.cs" />
-    <Compile Include="Sprites\SpriteBatchExtensions.cs" />
+    <Compile Include="Sprites\SpriteExtensions.cs" />
     <Compile Include="TextureAtlases\TextureAtlas.cs" />
     <Compile Include="TextureAtlases\TextureAtlasReader.cs" />
-    <Compile Include="TextureAtlases\SpriteBatchExtensions.cs" />
+    <Compile Include="TextureAtlases\TextureAtlasExtensions.cs" />
     <Compile Include="TextureAtlases\TextureRegion2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprites\Sprite.cs" />

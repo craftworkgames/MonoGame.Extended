@@ -2,7 +2,7 @@
 
 namespace MonoGame.Extended.SceneGraphs
 {
-    public static class SpriteBatchExtensions
+    public static class SceneGraphExtensions
     {
         public static void Draw(this SpriteBatch spriteBatch, SceneGraph sceneGraph)
         {

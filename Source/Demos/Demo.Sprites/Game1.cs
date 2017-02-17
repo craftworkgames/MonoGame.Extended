@@ -2,7 +2,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
+using MonoGame.Extended.TextureAtlases;
+
 
 namespace Demo.Sprites
 {
@@ -18,6 +21,8 @@ namespace Demo.Sprites
         private Sprite _spikeyBallSprite;
         private SpriteBatch _spriteBatch;
 
+        private TextureRegion2D _clippingTextureRegion;
+
         public Game1()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
@@ -32,6 +37,8 @@ namespace Demo.Sprites
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _backgroundTexture = Content.Load<Texture2D>("bg_sharbi");
+
+            _clippingTextureRegion = new TextureRegion2D(Content.Load<Texture2D>("clipping-test"));
 
             var axeTexture = Content.Load<Texture2D>("axe");
             _axeSprite = new Sprite(axeTexture)
@@ -63,6 +70,8 @@ namespace Demo.Sprites
         {
         }
 
+        private MouseState _previousMouseState;
+
         protected override void Update(GameTime gameTime)
         {
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -71,9 +80,7 @@ namespace Demo.Sprites
             var mouseState = Mouse.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
-            {
                 Exit();
-            }
 
             _axeSprite.Rotation = MathHelper.ToRadians(180) + MathHelper.PiOver2 * 0.8f * (float)Math.Sin(gameTime.TotalGameTime.TotalSeconds);
 
@@ -84,8 +91,27 @@ namespace Demo.Sprites
             _particleSprite0.Color = Color.White * _particleOpacity;
             _particleSprite1.Color = Color.White * (1.0f - _particleOpacity);
 
+            var dx = mouseState.X - _previousMouseState.X;
+            var dy = mouseState.Y - _previousMouseState.Y;
+
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                _clippingRectangle.X += dx;
+                _clippingRectangle.Y += dy;
+            }
+
+            if (mouseState.RightButton == ButtonState.Pressed)
+            {
+                _clippingRectangle.Width += dx;
+                _clippingRectangle.Height += dy;
+            }
+
+            _previousMouseState = mouseState;
+
             base.Update(gameTime);
         }
+
+        private Rectangle _clippingRectangle = new Rectangle(50 + 32, 250 + 32, 64, 64);
 
         protected override void Draw(GameTime gameTime)
         {
@@ -95,6 +121,12 @@ namespace Demo.Sprites
             _spriteBatch.Draw(_spikeyBallSprite);
             _spriteBatch.Draw(_particleSprite0);
             _spriteBatch.Draw(_particleSprite1);
+
+            // clipping test
+            _spriteBatch.Draw(_clippingTextureRegion, new Rectangle(50, 50, 128, 128), Color.White, clippingRectangle: null);
+            _spriteBatch.Draw(_clippingTextureRegion, new Rectangle(50, 250, 128, 128), Color.White, clippingRectangle: _clippingRectangle);
+            _spriteBatch.DrawRectangle(_clippingRectangle.ToRectangleF(), Color.White);
+
             _spriteBatch.End();
 
             base.Draw(gameTime);

@@ -4,7 +4,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Particles
 {
-    public static class SpriteBatchExtensions
+    public static class ParticleExtensions
     {
         public static void Draw(this SpriteBatch spriteBatch, ParticleEffect effect)
         {

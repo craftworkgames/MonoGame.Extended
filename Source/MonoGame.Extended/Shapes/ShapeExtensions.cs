@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Shapes
     /// <summary>
     ///     Sprite batch extensions for drawing primitive shapes
     /// </summary>
-    public static class SpriteBatchExtensions
+    public static class ShapeExtensions
     {
         private static Texture2D _texture;
 
