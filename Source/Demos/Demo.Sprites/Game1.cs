@@ -38,7 +38,8 @@ namespace Demo.Sprites
 
             _backgroundTexture = Content.Load<Texture2D>("bg_sharbi");
 
-            _clippingTextureRegion = new TextureRegion2D(Content.Load<Texture2D>("clipping-test"));
+            var testRegion = new TextureRegion2D(Content.Load<Texture2D>("clipping-test"));
+            _clippingTextureRegion = new NinePatchRegion2D(testRegion, 16);
 
             var axeTexture = Content.Load<Texture2D>("axe");
             _axeSprite = new Sprite(axeTexture)
@@ -124,7 +125,7 @@ namespace Demo.Sprites
 
             // clipping test
             _spriteBatch.Draw(_clippingTextureRegion, new Rectangle(50, 50, 128, 128), Color.White, clippingRectangle: null);
-            _spriteBatch.Draw(_clippingTextureRegion, new Rectangle(50, 250, 256, 128), Color.White, clippingRectangle: _clippingRectangle);
+            _spriteBatch.Draw(_clippingTextureRegion, new Rectangle(50, 250, 512, 512), Color.White, clippingRectangle: _clippingRectangle);
             _spriteBatch.DrawRectangle(_clippingRectangle.ToRectangleF(), Color.White);
 
             _spriteBatch.End();
