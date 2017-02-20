@@ -111,11 +111,11 @@ namespace Demo.Sprites
             base.Update(gameTime);
         }
 
-        private Rectangle _clippingRectangle = new Rectangle(50 + 32, 250 + 32, 64, 64);
+        private Rectangle _clippingRectangle = new Rectangle(50 + 32, 250 - 32, 64, 128 + 64);
 
         protected override void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
             _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
             _spriteBatch.Draw(_axeSprite);
             _spriteBatch.Draw(_spikeyBallSprite);
@@ -124,7 +124,7 @@ namespace Demo.Sprites
 
             // clipping test
             _spriteBatch.Draw(_clippingTextureRegion, new Rectangle(50, 50, 128, 128), Color.White, clippingRectangle: null);
-            _spriteBatch.Draw(_clippingTextureRegion, new Rectangle(50, 250, 128, 128), Color.White, clippingRectangle: _clippingRectangle);
+            _spriteBatch.Draw(_clippingTextureRegion, new Rectangle(50, 250, 256, 128), Color.White, clippingRectangle: _clippingRectangle);
             _spriteBatch.DrawRectangle(_clippingRectangle.ToRectangleF(), Color.White);
 
             _spriteBatch.End();
