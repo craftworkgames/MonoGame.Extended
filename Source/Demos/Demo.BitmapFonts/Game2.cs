@@ -18,6 +18,8 @@ namespace Demo.BitmapFonts
         
         private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFontMontserrat;
+        private Rectangle _clippingRectangle = new Rectangle(100, 100, 300, 300);
+        private MouseState _previousMouseState;
 
         public Game2()
         {
@@ -45,10 +47,27 @@ namespace Demo.BitmapFonts
         protected override void Update(GameTime gameTime)
         {
             var keyboardState = Keyboard.GetState();
+            var mouseState = Mouse.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
+            var dx = mouseState.X - _previousMouseState.X;
+            var dy = mouseState.Y - _previousMouseState.Y;
+
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                _clippingRectangle.X += dx;
+                _clippingRectangle.Y += dy;
+            }
+
+            if (mouseState.RightButton == ButtonState.Pressed)
+            {
+                _clippingRectangle.Width += dx;
+                _clippingRectangle.Height += dy;
+            }
+
+            _previousMouseState = mouseState;
             base.Update(gameTime);
         }
 
@@ -99,8 +118,10 @@ namespace Demo.BitmapFonts
                 origin: bitmapFontMontserratOrigin,
                 scale: scale,
                 effect: SpriteEffects.None,
-                layerDepth: 0);
+                layerDepth: 0,
+                clippingRectangle: _clippingRectangle);
 
+            _spriteBatch.DrawRectangle(_clippingRectangle, Color.White);
             _spriteBatch.DrawRectangle(position - bitmapFontMontserratOrigin + offset * 3, bitmapFontMontserratSize, Color.Green);
 
             _spriteBatch.End();
