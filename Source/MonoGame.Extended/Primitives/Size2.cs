@@ -271,6 +271,18 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        ///     Performs an explicit conversion from a <see cref="Size2" /> to a <see cref="Point" />.
+        /// </summary>
+        /// <param name="size">The size.</param>
+        /// <returns>
+        ///     The resulting <see cref="Size2" />.
+        /// </returns>
+        public static explicit operator Point(Size2 size)
+        {
+            return new Point((int)size.Width, (int)size.Height);
+        }
+
+        /// <summary>
         ///     Returns a <see cref="string" /> that represents this <see cref="Size2" />.
         /// </summary>
         /// <returns>

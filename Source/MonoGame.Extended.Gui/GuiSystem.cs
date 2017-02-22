@@ -53,7 +53,7 @@ namespace MonoGame.Extended.Gui
                 var cursor = Screen.Skin?.Cursor;
 
                 if (cursor != null)
-                    _renderer.DrawRegion(cursor.TextureRegion, CursorPosition, cursor.Color);
+                    _renderer.DrawRegion(cursor.TextureRegion, CursorPosition, cursor.Color, null);
             }
 
             _renderer.End();
@@ -62,10 +62,7 @@ namespace MonoGame.Extended.Gui
         private void DrawChildren(GuiControlCollection controls, float deltaSeconds)
         {
             foreach (var control in controls.Where(c => c.IsVisible))
-            {
-                //_renderer.DrawRegion(null, control.BoundingRectangle.ToRectangle(), Color.Magenta);
                 control.Draw(_renderer, deltaSeconds);
-            }
 
             foreach (var childControl in controls.Where(c => c.IsVisible))
                 DrawChildren(childControl.Controls, deltaSeconds);

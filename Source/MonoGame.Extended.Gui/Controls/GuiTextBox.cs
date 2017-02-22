@@ -86,7 +86,7 @@ namespace MonoGame.Extended.Gui.Controls
                     var textRectangle = font.GetStringRectangle(Text.Substring(0, SelectionStart), textPosition);
                     textRectangle.X = textRectangle.Right;
                     textRectangle.Width = 1;
-                    renderer.DrawRegion(null, textRectangle, TextColor);
+                    renderer.DrawRectangle(textRectangle, TextColor);
                 }
 
                 _nextCaretBlink -= deltaSeconds;

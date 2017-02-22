@@ -2,14 +2,12 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.InputListeners;
-using MonoGame.Extended.SceneGraphs;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public abstract class GuiControl : ISceneEntity, IMovable, ISizable
+    public abstract class GuiControl : IMovable, ISizable
     {
         protected GuiControl()
         {
@@ -33,18 +31,21 @@ namespace MonoGame.Extended.Gui.Controls
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JsonIgnore]
-        public RectangleF BoundingRectangle
+        public Rectangle BoundingRectangle
         {
             get
             {
                 var position = Parent != null ? Parent.Position - Parent.Size * Parent.Origin + Position : Position;
-                return new RectangleF(position - Size * Origin, Size);
+                return new Rectangle((position - Size * Origin).ToPoint(), (Point)Size);
             }
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Thickness Margin { get; set; }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Thickness Padding { get; set; }
+        
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsFocused { get; set; }
 
@@ -55,8 +56,17 @@ namespace MonoGame.Extended.Gui.Controls
         public Size2 Size { get; set; }
         public Color Color { get; set; }
 
-        private TextureRegion2D _textureRegion;
+        public Rectangle ClippingRectangle
+        {
+            get
+            {
+                var r = BoundingRectangle;
+                return new Rectangle(r.Left + Padding.Left, r.Top + Padding.Top, 
+                    r.Width - Padding.Right - Padding.Left, r.Height - Padding.Bottom - Padding.Top);
+            }
+        }
 
+        private TextureRegion2D _textureRegion;
         public TextureRegion2D TextureRegion
         {
             get { return _textureRegion; }
@@ -79,11 +89,10 @@ namespace MonoGame.Extended.Gui.Controls
         public string Text { get; set; }
         public Color TextColor { get; set; }
         public Vector2 TextOffset { get; set; }
-
+        
         public GuiControlCollection Controls { get; }
 
         private bool _isEnabled;
-
         public bool IsEnabled
         {
             get { return _isEnabled; }
@@ -95,11 +104,9 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public bool IsVisible { get; set; }
-
         public GuiControlStyle HoverStyle { get; set; }
 
         private GuiControlStyle _disabledStyle;
-
         public GuiControlStyle DisabledStyle
         {
             get { return _disabledStyle; }
@@ -129,19 +136,17 @@ namespace MonoGame.Extended.Gui.Controls
 
         public virtual void Draw(IGuiRenderer renderer, float deltaSeconds)
         {
-            renderer.DrawRegion(TextureRegion, BoundingRectangle.ToRectangle(), Color);
-
-            if (string.IsNullOrWhiteSpace(Text))
-                return;
+            renderer.DrawRegion(TextureRegion, BoundingRectangle, Color, ClippingRectangle);
             
-            renderer.DrawText(Font, Text, GetTextPosition(renderer), TextColor);
+            if(!string.IsNullOrWhiteSpace(Text))
+                renderer.DrawText(Font, Text, GetTextPosition(renderer), TextColor, ClippingRectangle);
         }
 
         protected Vector2 GetTextPosition(IGuiRenderer renderer)
         {
             var font = Font ?? renderer.DefaultFont;
             var textSize = font.GetStringRectangle(Text, Vector2.Zero).Size.ToVector2();
-            var textPosition = BoundingRectangle.Center - textSize * 0.5f;
+            var textPosition = BoundingRectangle.Center.ToVector2() - textSize * 0.5f;
             return textPosition + TextOffset;
         }
     }

@@ -11,9 +11,10 @@ namespace MonoGame.Extended.Gui
     {
         BitmapFont DefaultFont { get; }
         void Begin();
-        void DrawRegion(TextureRegion2D textureRegion, Rectangle rectangle, Color color);
-        void DrawRegion(TextureRegion2D textureRegion, Vector2 position, Color color);
-        void DrawText(BitmapFont font, string text, Vector2 position, Color color);
+        void DrawRegion(TextureRegion2D textureRegion, Rectangle rectangle, Color color, Rectangle? clippingRectangle);
+        void DrawRegion(TextureRegion2D textureRegion, Vector2 position, Color color, Rectangle? clippingRectangle);
+        void DrawText(BitmapFont font, string text, Vector2 position, Color color, Rectangle? clippingRectangle);
+        void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f);
         void End();
     }
 
@@ -47,22 +48,26 @@ namespace MonoGame.Extended.Gui
             _spriteBatch.End();
         }
 
-        public void DrawRegion(TextureRegion2D textureRegion, Rectangle rectangle, Color color)
+        public void DrawRegion(TextureRegion2D textureRegion, Rectangle rectangle, Color color, Rectangle? clippingRectangle)
+        {
+            if(textureRegion != null)
+                _spriteBatch.Draw(textureRegion, rectangle, color, clippingRectangle);
+        }
+
+        public void DrawRegion(TextureRegion2D textureRegion, Vector2 position, Color color, Rectangle? clippingRectangle)
         {
             if (textureRegion != null)
-                _spriteBatch.Draw(textureRegion, rectangle, color);
-            else
-                _spriteBatch.FillRectangle(rectangle, color);
+                _spriteBatch.Draw(textureRegion, position, color, clippingRectangle);
         }
 
-        public void DrawRegion(TextureRegion2D textureRegion, Vector2 position, Color color)
+        public void DrawText(BitmapFont font, string text, Vector2 position, Color color, Rectangle? clippingRectangle)
         {
-            _spriteBatch.Draw(textureRegion, position, color);
+            _spriteBatch.DrawString(font ?? DefaultFont, text, position, color, clippingRectangle);
         }
 
-        public void DrawText(BitmapFont font, string text, Vector2 position, Color color)
+        public void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f)
         {
-            _spriteBatch.DrawString(font ?? DefaultFont, text, position, color);
+            _spriteBatch.DrawRectangle(rectangle, color, thickness);
         }
     }
 }

@@ -58,17 +58,18 @@ namespace MonoGame.Extended.Gui.Controls
 
         public override void Draw(IGuiRenderer renderer, float deltaSeconds)
         {
-            var boundingRectangle = BoundingRectangle.ToRectangle();
+            var boundingRectangle = BoundingRectangle;
             var checkRectangle = new Rectangle(boundingRectangle.Location, TextureRegion.Size);
-            renderer.DrawRegion(TextureRegion, checkRectangle, Color);
+
+            renderer.DrawRegion(TextureRegion, checkRectangle, Color, ClippingRectangle);
 
             if (!string.IsNullOrWhiteSpace(Text))
             {
                 var font = Font ?? renderer.DefaultFont;
-                var textPosition = BoundingRectangle.Location +
-                                   new Vector2(TextureRegion.Width + 5,
-                                       TextureRegion.Height * 0.5f - font.LineHeight * 0.5f);
-                renderer.DrawText(Font, Text, textPosition, TextColor);
+                var textPosition = BoundingRectangle.Location.ToVector2() +
+                    new Vector2(TextureRegion.Width + 5, TextureRegion.Height * 0.5f - font.LineHeight * 0.5f);
+
+                renderer.DrawText(Font, Text, textPosition, TextColor, ClippingRectangle);
             }
         }
     }
