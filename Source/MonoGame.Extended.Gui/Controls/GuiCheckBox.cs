@@ -56,21 +56,20 @@ namespace MonoGame.Extended.Gui.Controls
                 IsChecked = !IsChecked;
         }
 
-        public override void Draw(IGuiRenderer renderer, float deltaSeconds)
+        protected override void DrawBackground(IGuiRenderer renderer, float deltaSeconds)
         {
             var boundingRectangle = BoundingRectangle;
             var checkRectangle = new Rectangle(boundingRectangle.Location, TextureRegion.Size);
 
-            renderer.DrawRegion(TextureRegion, checkRectangle, Color, ClippingRectangle);
+            renderer.DrawRegion(TextureRegion, checkRectangle, Color);
+        }
 
-            if (!string.IsNullOrWhiteSpace(Text))
-            {
-                var font = Font ?? renderer.DefaultFont;
-                var textPosition = BoundingRectangle.Location.ToVector2() +
-                    new Vector2(TextureRegion.Width + 5, TextureRegion.Height * 0.5f - font.LineHeight * 0.5f);
+        protected override void DrawText(IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        {
+            textInfo.Position = BoundingRectangle.Location.ToVector2() +
+                    new Vector2(TextureRegion.Width + 5, TextureRegion.Height * 0.5f - textInfo.Font.LineHeight * 0.5f);
 
-                renderer.DrawText(Font, Text, textPosition, TextColor, ClippingRectangle);
-            }
+            base.DrawText(renderer, deltaSeconds, textInfo);
         }
     }
 }

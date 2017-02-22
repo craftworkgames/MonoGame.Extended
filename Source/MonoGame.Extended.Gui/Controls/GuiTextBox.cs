@@ -73,21 +73,26 @@ namespace MonoGame.Extended.Gui.Controls
         private float _nextCaretBlink = _caretBlinkRate;
         private bool _isCaretVisible = true;
 
-        public override void Draw(IGuiRenderer renderer, float deltaSeconds)
+        protected override void DrawText(IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         {
-            base.Draw(renderer, deltaSeconds);
+            var caretRectangle = textInfo.Font.GetStringRectangle(Text.Substring(0, SelectionStart), textInfo.Position);
+
+            // TODO: Finish the caret position stuff when it's outside the clipping rectangle
+            if (caretRectangle.Right > ClippingRectangle.Right)
+            {
+                var textOffset = caretRectangle.Right - ClippingRectangle.Right;
+                textInfo.Position.X -= textOffset;
+            }
+
+            caretRectangle.X = caretRectangle.Right < ClippingRectangle.Right ? caretRectangle.Right : ClippingRectangle.Right;
+            caretRectangle.Width = 1;
+
+            base.DrawText(renderer, deltaSeconds, textInfo);
 
             if (IsFocused)
             {
                 if (_isCaretVisible)
-                {
-                    var font = Font ?? renderer.DefaultFont;
-                    var textPosition = GetTextPosition(renderer);
-                    var textRectangle = font.GetStringRectangle(Text.Substring(0, SelectionStart), textPosition);
-                    textRectangle.X = textRectangle.Right;
-                    textRectangle.Width = 1;
-                    renderer.DrawRectangle(textRectangle, TextColor);
-                }
+                    renderer.DrawRectangle(caretRectangle, TextColor);
 
                 _nextCaretBlink -= deltaSeconds;
 

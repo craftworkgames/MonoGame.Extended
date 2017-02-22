@@ -83,7 +83,7 @@
     {
       "Name": "text-box",
       "Type": "GuiTextBox",
-      "Padding": "5 0",  
+      "Padding": "8 0",  
       "TextureRegion": "grey_textBox",
       "TextColor": "#444444"
     }

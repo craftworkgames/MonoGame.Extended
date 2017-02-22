@@ -134,20 +134,47 @@ namespace MonoGame.Extended.Gui.Controls
                 HoverStyle?.Revert(this);
         }
 
-        public virtual void Draw(IGuiRenderer renderer, float deltaSeconds)
+        public void Draw(IGuiRenderer renderer, float deltaSeconds)
         {
-            renderer.DrawRegion(TextureRegion, BoundingRectangle, Color, ClippingRectangle);
-            
-            if(!string.IsNullOrWhiteSpace(Text))
-                renderer.DrawText(Font, Text, GetTextPosition(renderer), TextColor, ClippingRectangle);
+            DrawBackground(renderer, deltaSeconds);
+
+            var font = Font ?? renderer.DefaultFont;
+            var textSize = font.GetStringRectangle(Text ?? string.Empty, Vector2.Zero).Size.ToVector2();
+            var textPosition = BoundingRectangle.Center.ToVector2() - textSize * 0.5f;
+            var textInfo = new TextInfo(Text, font, textPosition, textSize, TextColor, ClippingRectangle);
+
+            DrawText(renderer, deltaSeconds, textInfo);
         }
 
-        protected Vector2 GetTextPosition(IGuiRenderer renderer)
+        protected virtual void DrawBackground(IGuiRenderer renderer, float deltaSeconds)
         {
-            var font = Font ?? renderer.DefaultFont;
-            var textSize = font.GetStringRectangle(Text, Vector2.Zero).Size.ToVector2();
-            var textPosition = BoundingRectangle.Center.ToVector2() - textSize * 0.5f;
-            return textPosition + TextOffset;
+            renderer.DrawRegion(TextureRegion, BoundingRectangle, Color);
+        }
+
+        protected virtual void DrawText(IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        {
+            if (!string.IsNullOrWhiteSpace(textInfo.Text))
+                renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position, textInfo.Color, textInfo.ClippingRectangle);
+        }
+
+        protected struct TextInfo
+        {
+            public TextInfo(string text, BitmapFont font, Vector2 position, Vector2 size, Color color, Rectangle? clippingRectangle)
+            {
+                Text = text;
+                Font = font;
+                Size = size;
+                Color = color;
+                ClippingRectangle = clippingRectangle;
+                Position = position;
+            }
+
+            public string Text;
+            public BitmapFont Font;
+            public Vector2 Size;
+            public Color Color;
+            public Rectangle? ClippingRectangle;
+            public Vector2 Position;
         }
     }
 }
