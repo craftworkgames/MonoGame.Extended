@@ -75,6 +75,7 @@
     <Content Include="Content\raw\adventure\panelInset_beige.png" />
     <Content Include="Content\raw\adventure\panel_brown.png" />
     <Content Include="Content\raw\adventure\progress-bar-blue.png" />
+    <Content Include="Content\raw\adventure\progress-bar-container.png" />
     <Content Include="Content\raw\adventure\progress-bar-green.png" />
     <Content Include="Content\raw\adventure\progress-bar-red.png" />
     <Content Include="Content\small-font_0.png" />

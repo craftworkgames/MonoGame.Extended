@@ -51,7 +51,8 @@
           "Type": "GuiTextBox",
           "Style": "text-box",
           "Position": "350 345",
-          "Size": "300 42"
+          "Size": "300 42",
+          "Text": "Let's put some really long text in the textbox to test the clipping area"
         },
         {
           "Name": "CheckBox",
@@ -61,6 +62,13 @@
           "Size": "250 35",
           "Text": "sign me up to all the things",
           "TextColor": "#444444"
+        },
+        {
+          "Name": "ProgressBar",
+          "Type": "GuiProgressBar",
+          "Style": "progress-bar",
+          "Position": "100 300",
+          "Progress": 0.5 
         }
       ]
     }

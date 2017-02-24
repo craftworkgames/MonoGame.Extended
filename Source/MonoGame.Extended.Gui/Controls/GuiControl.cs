@@ -80,7 +80,6 @@ namespace MonoGame.Extended.Gui.Controls
                         Size = value.Size;
 
                     _textureRegion = value;
-
                 }
             }
         }

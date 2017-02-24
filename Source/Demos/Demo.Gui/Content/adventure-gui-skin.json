@@ -7,18 +7,11 @@
     "Color": "#aaaaaa"
   },
   "NinePatches": [
-    {
-      "TextureRegion": "panel_brown",
-      "Padding": "10"
-    },
-    {
-      "TextureRegion": "panelInset_beige",
-      "Padding": "10"
-    },
-    {
-      "TextureRegion": "grey_textBox",
-      "Padding": "10" 
-    }
+    { "TextureRegion": "panel_brown", "Padding": "10" },
+    { "TextureRegion": "panelInset_beige", "Padding": "10" },
+    { "TextureRegion": "grey_textBox", "Padding": "10" },
+    { "TextureRegion": "progress-bar-container", "Padding": "10" },
+    { "TextureRegion": "progress-bar-blue", "Padding": "10" }
   ],
   "Styles": [
     {
@@ -83,9 +76,16 @@
     {
       "Name": "text-box",
       "Type": "GuiTextBox",
-      "Padding": "8 0",  
+      "Padding": "8 0",
       "TextureRegion": "grey_textBox",
       "TextColor": "#444444"
+    },
+    {
+      "Name": "progress-bar",
+      "Type": "GuiProgressBar",
+      "TextureRegion": "progress-bar-container",
+      "BarRegion": "progress-bar-blue",
+      "Size": "100 32"
     }
   ]
 }

@@ -16,6 +16,8 @@ namespace Demo.Gui
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private Camera2D _camera;
         private GuiSystem _guiSystem;
+        private GuiProgressBar _progressBar;
+        private float _progressDelta = 0.2f;
 
         public Game1()
         {
@@ -41,6 +43,8 @@ namespace Demo.Gui
 
             var quitButton = titleScreen.FindControl<GuiButton>("QuitButton");
             quitButton.Clicked += (sender, args) => Exit();
+
+            _progressBar = titleScreen.FindControl<GuiProgressBar>("ProgressBar");
 
         }
 
@@ -71,10 +75,18 @@ namespace Demo.Gui
 
         protected override void Update(GameTime gameTime)
         {
+            var deltaTime = gameTime.GetElapsedSeconds();
             var keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
+
+            _progressBar.Progress += deltaTime * _progressDelta;
+
+            if (_progressBar.Progress >= 1.1f)
+                _progressDelta = -_progressDelta;
+            else if (_progressBar.Progress <= -0.1f)
+                _progressDelta = -_progressDelta;
 
             _guiSystem.Update(gameTime);
 

@@ -42,6 +42,7 @@
     <Compile Include="Controls\GuiImage.cs" />
     <Compile Include="Controls\GuiLabel.cs" />
     <Compile Include="Controls\GuiPanel.cs" />
+    <Compile Include="Controls\GuiProgressBar.cs" />
     <Compile Include="Controls\GuiTextBox.cs" />
     <Compile Include="GuiControlFactory.cs" />
     <Compile Include="GuiCursor.cs" />
