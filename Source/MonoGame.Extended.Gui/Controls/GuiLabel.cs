@@ -13,8 +13,8 @@ namespace MonoGame.Extended.Gui.Controls
             Text = text;
         }
 
-        public GuiLabel(string text, TextureRegion2D textureRegion)
-            : base(textureRegion)
+        public GuiLabel(string text, TextureRegion2D backgroundRegion)
+            : base(backgroundRegion)
         {
             Text = text;
         }

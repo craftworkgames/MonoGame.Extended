@@ -7,17 +7,17 @@ namespace MonoGame.Extended.Gui.Controls
     public class GuiTextBox : GuiControl
     {
         public GuiTextBox()
-            : this(textureRegion: null, text: string.Empty)
+            : this(backgroundRegion: null, text: string.Empty)
         {
         }
 
-        public GuiTextBox(TextureRegion2D textureRegion)
-            : this(textureRegion: textureRegion, text: string.Empty)
+        public GuiTextBox(TextureRegion2D backgroundRegion)
+            : this(backgroundRegion: backgroundRegion, text: string.Empty)
         {
         }
 
-        public GuiTextBox(TextureRegion2D textureRegion, string text)
-            : base(textureRegion)
+        public GuiTextBox(TextureRegion2D backgroundRegion, string text)
+            : base(backgroundRegion)
         {
             Text = text;
         }

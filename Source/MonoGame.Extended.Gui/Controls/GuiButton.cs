@@ -10,8 +10,8 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public GuiButton(TextureRegion2D textureRegion)
-            : base(textureRegion)
+        public GuiButton(TextureRegion2D backgroundRegion)
+            : base(backgroundRegion)
         {
         }
 

@@ -19,10 +19,10 @@ namespace MonoGame.Extended.Gui.Controls
             Origin = Vector2.One * 0.5f;
         }
 
-        protected GuiControl(TextureRegion2D textureRegion)
+        protected GuiControl(TextureRegion2D backgroundRegion)
             : this()
         {
-            TextureRegion = textureRegion;
+            BackgroundRegion = backgroundRegion;
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -66,20 +66,20 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        private TextureRegion2D _textureRegion;
-        public TextureRegion2D TextureRegion
+        private TextureRegion2D _backgroundRegion;
+        public TextureRegion2D BackgroundRegion
         {
-            get { return _textureRegion; }
+            get { return _backgroundRegion; }
             set
             {
-                if (_textureRegion != value)
+                if (_backgroundRegion != value)
                 {
                     // if this is the first time a texture region has been set and this control has no size, 
                     // use the size of the texture region
-                    if (_textureRegion == null && value != null && Size.IsEmpty)
+                    if (_backgroundRegion == null && value != null && Size.IsEmpty)
                         Size = value.Size;
 
-                    _textureRegion = value;
+                    _backgroundRegion = value;
                 }
             }
         }
@@ -147,7 +147,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected virtual void DrawBackground(IGuiRenderer renderer, float deltaSeconds)
         {
-            renderer.DrawRegion(TextureRegion, BoundingRectangle, Color);
+            renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
         }
 
         protected virtual void DrawText(IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)

@@ -17,7 +17,7 @@
     {
       "Name": "close-button",
       "Type": "GuiButton",
-      "TextureRegion": "buttonRound_close",
+      "BackgroundRegion": "buttonRound_close",
       "HoverStyle": {
         "Type": "GuiButton",
         "Color": "LightGray"
@@ -26,13 +26,13 @@
     {
       "Name": "white-button",
       "Type": "GuiButton",
-      "TextureRegion": "buttonLong_grey",
+      "BackgroundRegion": "buttonLong_grey",
       "TextOffset": "0 -2",
       "TextColor": "#f4a460ff",
       "Color": "#8b4513ff",
       "PressedStyle": {
         "Type": "GuiButton",
-        "TextureRegion": "buttonLong_grey_pressed",
+        "BackgroundRegion": "buttonLong_grey_pressed",
         "TextOffset": "0 2"
       },
       "HoverStyle": {
@@ -44,23 +44,23 @@
     {
       "Name": "checkbox",
       "Type": "GuiCheckBox",
-      "TextureRegion": "checkBox_beige_unchecked",
+      "BackgroundRegion": "checkBox_beige_unchecked",
       "CheckedStyle": {
         "Type": "GuiCheckBox",
-        "TextureRegion": "checkBox_beige_checked"
+        "BackgroundRegion": "checkBox_beige_checked"
       }
     },
 
     {
       "Name": "brown-panel",
       "Type": "GuiPanel",
-      "TextureRegion": "panel_brown",
+      "BackgroundRegion": "panel_brown",
       "Size": "400 300"
     },
     {
       "Name": "beige-inset-panel",
       "Type": "GuiPanel",
-      "TextureRegion": "panelInset_beige",
+      "BackgroundRegion": "panelInset_beige",
       "Size": "385 280"
     },
     {
@@ -71,19 +71,19 @@
     {
       "Name": "monogame-title",
       "Type": "GuiImage",
-      "TextureRegion": "monogame-title"
+      "BackgroundRegion": "monogame-title"
     },
     {
       "Name": "text-box",
       "Type": "GuiTextBox",
       "Padding": "8 0",
-      "TextureRegion": "grey_textBox",
+      "BackgroundRegion": "grey_textBox",
       "TextColor": "#444444"
     },
     {
       "Name": "progress-bar",
       "Type": "GuiProgressBar",
-      "TextureRegion": "progress-bar-container",
+      "BackgroundRegion": "progress-bar-container",
       "BarRegion": "progress-bar-blue",
       "Size": "100 32"
     }

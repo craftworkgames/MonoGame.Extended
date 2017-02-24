@@ -12,8 +12,8 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public GuiCheckBox(TextureRegion2D textureRegion)
-            : base(textureRegion)
+        public GuiCheckBox(TextureRegion2D backgroundRegion)
+            : base(backgroundRegion)
         {
         }
 
@@ -59,15 +59,15 @@ namespace MonoGame.Extended.Gui.Controls
         protected override void DrawBackground(IGuiRenderer renderer, float deltaSeconds)
         {
             var boundingRectangle = BoundingRectangle;
-            var checkRectangle = new Rectangle(boundingRectangle.Location, TextureRegion.Size);
+            var checkRectangle = new Rectangle(boundingRectangle.Location, BackgroundRegion.Size);
 
-            renderer.DrawRegion(TextureRegion, checkRectangle, Color);
+            renderer.DrawRegion(BackgroundRegion, checkRectangle, Color);
         }
 
         protected override void DrawText(IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         {
             textInfo.Position = BoundingRectangle.Location.ToVector2() +
-                    new Vector2(TextureRegion.Width + 5, TextureRegion.Height * 0.5f - textInfo.Font.LineHeight * 0.5f);
+                    new Vector2(BackgroundRegion.Width + 5, BackgroundRegion.Height * 0.5f - textInfo.Font.LineHeight * 0.5f);
 
             base.DrawText(renderer, deltaSeconds, textInfo);
         }
