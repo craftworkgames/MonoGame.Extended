@@ -21,7 +21,6 @@ namespace MonoGame.Extended.NuclexGui.Input
 
         private readonly KeyboardListener _keyboardListener;
         private readonly MouseListener _mouseListener;
-        private TouchListener _touchListener;
 
         /// <summary>Initializes a new input capturer, taking the input service from a service provider</summary>
         /// <param name="serviceProvider">Service provider the input capturer will take the input service from</param>
@@ -39,12 +38,10 @@ namespace MonoGame.Extended.NuclexGui.Input
             _keyboardListener = inputService.KeyboardListener;
             _mouseListener = inputService.MouseListener;
             _gamePadListener = inputService.GamePadListener;
-            _touchListener = inputService.TouchListener;
 
             SubscribeInputDevices();
         }
 
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
         // ~MainInputCapturer() {
         //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
         //   Dispose(false);
@@ -55,7 +52,6 @@ namespace MonoGame.Extended.NuclexGui.Input
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
 
@@ -90,79 +86,76 @@ namespace MonoGame.Extended.NuclexGui.Input
                     }
                 }
 
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
                 _disposedValue = true;
             }
         }
 
         private void SubscribeInputDevices()
         {
-            _keyboardListener.KeyPressed += _keyboardListener_KeyPressed;
-            _keyboardListener.KeyReleased += _keyboardListener_KeyReleased;
-            _keyboardListener.KeyTyped += _keyboardListener_KeyTyped;
+            _keyboardListener.KeyPressed += KeyboardListener_KeyPressed;
+            _keyboardListener.KeyReleased += KeyboardListener_KeyReleased;
+            _keyboardListener.KeyTyped += KeyboardListener_KeyTyped;
 
-            _mouseListener.MouseDown += _mouseListener_MouseDown;
-            _mouseListener.MouseUp += _mouseListener_MouseUp;
-            _mouseListener.MouseMoved += _mouseListener_MouseMoved;
-            _mouseListener.MouseWheelMoved += _mouseListener_MouseWheelMoved;
+            _mouseListener.MouseDown += MouseListener_MouseDown;
+            _mouseListener.MouseUp += MouseListener_MouseUp;
+            _mouseListener.MouseMoved += MouseListener_MouseMoved;
+            _mouseListener.MouseWheelMoved += MouseListener_MouseWheelMoved;
 
-            _gamePadListener.ButtonDown += _gamePadListener_ButtonDown;
-            _gamePadListener.ButtonUp += _gamePadListener_ButtonUp;
+            _gamePadListener.ButtonDown += GamePadListener_ButtonDown;
+            _gamePadListener.ButtonUp += GamePadListener_ButtonUp;
         }
 
         private void UnsubscribeInputDevices()
         {
-            _keyboardListener.KeyPressed -= _keyboardListener_KeyPressed;
-            _keyboardListener.KeyReleased -= _keyboardListener_KeyReleased;
-            _keyboardListener.KeyTyped -= _keyboardListener_KeyTyped;
+            _keyboardListener.KeyPressed -= KeyboardListener_KeyPressed;
+            _keyboardListener.KeyReleased -= KeyboardListener_KeyReleased;
+            _keyboardListener.KeyTyped -= KeyboardListener_KeyTyped;
 
-            _mouseListener.MouseDown -= _mouseListener_MouseDown;
-            _mouseListener.MouseUp -= _mouseListener_MouseUp;
-            _mouseListener.MouseMoved -= _mouseListener_MouseMoved;
-            _mouseListener.MouseWheelMoved -= _mouseListener_MouseWheelMoved;
+            _mouseListener.MouseDown -= MouseListener_MouseDown;
+            _mouseListener.MouseUp -= MouseListener_MouseUp;
+            _mouseListener.MouseMoved -= MouseListener_MouseMoved;
+            _mouseListener.MouseWheelMoved -= MouseListener_MouseWheelMoved;
 
-            _gamePadListener.ButtonDown -= _gamePadListener_ButtonDown;
-            _gamePadListener.ButtonUp -= _gamePadListener_ButtonUp;
+            _gamePadListener.ButtonDown -= GamePadListener_ButtonDown;
+            _gamePadListener.ButtonUp -= GamePadListener_ButtonUp;
         }
 
-        private void _keyboardListener_KeyPressed(object sender, KeyboardEventArgs e)
+        private void KeyboardListener_KeyPressed(object sender, KeyboardEventArgs e)
         {
             _inputReceiver.InjectKeyPress(e.Key);
         }
 
-        private void _keyboardListener_KeyReleased(object sender, KeyboardEventArgs e)
+        private void KeyboardListener_KeyReleased(object sender, KeyboardEventArgs e)
         {
             _inputReceiver.InjectKeyRelease(e.Key);
         }
 
-        private void _keyboardListener_KeyTyped(object sender, KeyboardEventArgs e)
+        private void KeyboardListener_KeyTyped(object sender, KeyboardEventArgs e)
         {
             _inputReceiver.InjectCharacter(e.Character.GetValueOrDefault());
         }
 
-        private void _mouseListener_MouseDown(object sender, MouseEventArgs e)
+        private void MouseListener_MouseDown(object sender, MouseEventArgs e)
         {
             _inputReceiver.InjectMousePress(e.Button);
         }
 
-        private void _mouseListener_MouseUp(object sender, MouseEventArgs e)
+        private void MouseListener_MouseUp(object sender, MouseEventArgs e)
         {
             _inputReceiver.InjectMouseRelease(e.Button);
         }
 
-        private void _mouseListener_MouseMoved(object sender, MouseEventArgs e)
+        private void MouseListener_MouseMoved(object sender, MouseEventArgs e)
         {
             _inputReceiver.InjectMouseMove(e.Position.X, e.Position.Y);
         }
 
-        private void _mouseListener_MouseWheelMoved(object sender, MouseEventArgs e)
+        private void MouseListener_MouseWheelMoved(object sender, MouseEventArgs e)
         {
             _inputReceiver.InjectMouseWheel(e.ScrollWheelDelta);
         }
 
-        private void _gamePadListener_ButtonDown(object sender, GamePadEventArgs e)
+        private void GamePadListener_ButtonDown(object sender, GamePadEventArgs e)
         {
             if ((e.Button & Buttons.DPadUp) != 0)
                 _inputReceiver.InjectCommand(Command.Up);
@@ -185,7 +178,7 @@ namespace MonoGame.Extended.NuclexGui.Input
             }
         }
 
-        private void _gamePadListener_ButtonUp(object sender, GamePadEventArgs e)
+        private void GamePadListener_ButtonUp(object sender, GamePadEventArgs e)
         {
             _inputReceiver.InjectButtonRelease(e.Button);
         }

@@ -8,7 +8,6 @@ using GameEventHandler = System.EventHandler<System.EventArgs>;
 
 namespace MonoGame.Extended.NuclexGui
 {
-    // TODO: Ownership issue with the GUI visualizer
     //   If an instance creates its own GUI visualizer (because the user didn't assign
     //   a custom one), it belongs to the instance and should be disposed. If the
     //   use does assign a custom visualizer, it shouldn't be disposed.

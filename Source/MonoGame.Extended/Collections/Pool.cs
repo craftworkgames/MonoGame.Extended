@@ -48,7 +48,7 @@ namespace MonoGame.Extended.Collections
     ///     // Helper method for this instance that should reset the state in preperation for the next time it is requested
     ///     public void Reset()
     ///     {
-    ///         // TODO: Reset the state of your object here
+    ///         // Reset the state of your object here
     ///     }
     /// 
     ///     // Called by you or the Pool when this object is to be returned

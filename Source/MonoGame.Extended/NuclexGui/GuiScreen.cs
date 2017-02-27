@@ -179,7 +179,6 @@ namespace MonoGame.Extended.NuclexGui
                     if (focusedControl == null)
                         return; // Also catches when focusedControl is not part of the tree
 
-                    // TODO: Should this be propagated down the control tree?
                     focusedControl.ProcessCommand(command);
 
                     break;
@@ -189,8 +188,6 @@ namespace MonoGame.Extended.NuclexGui
                 case Command.SelectPrevious:
                 case Command.SelectNext:
                 {
-                    // TODO: Implement focus switching
-
                     break;
                 }
 

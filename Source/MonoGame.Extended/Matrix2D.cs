@@ -13,8 +13,6 @@ namespace MonoGame.Extended
 
     // Original code was from Matrix2D.cs in the Nez Library: https://github.com/prime31/Nez/
 
-    //TODO: Lerp(...), Transpose(...)
-
     /// <summary>
     ///     Defines a 3x3 matrix using floating point numbers which can store two dimensional translation, scale and rotation
     ///     information in a right-handed coordinate system.

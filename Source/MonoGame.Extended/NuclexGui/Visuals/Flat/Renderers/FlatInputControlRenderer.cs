@@ -10,7 +10,6 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat.Renderers
         /// <summary>Style from the skin this renderer uses</summary>
         private const string _style = "input.normal";
 
-        // TODO: Find a better solution than remembering the graphics interface here
         //   Otherwise the renderer could try to renderer when no frame is being drawn.
         //   Also, the renderer makes the assumption that all drawing happens through
         //   one graphics interface only.
@@ -50,7 +49,6 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat.Renderers
                         _style, controlBounds, text.Substring(0, control.CaretPosition)
                     );
 
-                    // TODO: Renderer should query the size of the control's frame
                     //   Otherwise text will be visible over the frame, which might look bad
                     //   if a skin uses a frame wider than 2 pixels or in a different color
                     //   than the text.

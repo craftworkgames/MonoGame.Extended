@@ -177,7 +177,6 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         {
             var frame = LookupFrame(frameName);
 
-            // TODO: Find the closest gap across multiple text anchors
             //   Frames can repeat their text in several places. Though this is probably
             //   not used very often (if at all), it should work here consistently.
 

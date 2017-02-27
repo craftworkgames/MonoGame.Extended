@@ -10,7 +10,6 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat.Renderers
         /// <summary>Style used to draw this control</summary>
         private const string _style = "list";
 
-        // TODO: Find a better solution than remembering the graphics interface here
         //   Otherwise the renderer could try to renderer when no frame is being drawn.
         //   Also, this way the renderer makes the assumption that all drawing happens
         //   through one graphics interface only.
@@ -117,7 +116,6 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat.Renderers
         /// <returns>The height of a single row in the list</returns>
         public float GetRowHeight(RectangleF bounds)
         {
-            // TODO: Add method for querying the row height to the graphics interface
             //   The code below is not optimal, but the XNA SpriteFont isn't very talkative
             //   when it comes to providing informations about itself ;)
 
