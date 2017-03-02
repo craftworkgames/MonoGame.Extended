@@ -111,5 +111,32 @@ namespace MonoGame.Extended.Tiled
         {
             return _tilesets.FirstOrDefault(tileset => tileset.ContainsGlobalIdentifier(tileIdentifier));
         }
+
+        public IEnumerable<Rectangle> GetBounds(Func<TiledMapTile, bool> includePred)
+        {
+            var bounds = new List<Rectangle>();
+
+            foreach (var tileLayer in TileLayers)
+                tileLayer.ForEach(t =>
+                {
+                    if (includePred(t))
+                        bounds.Add(t.GetBounds(tileLayer));
+                });
+
+            return bounds;
+        }
+
+        public IEnumerable<Rectangle> GetBounds(Func<TiledMapLayer, bool> includePred)
+        {
+            var bounds = new List<Rectangle>();
+            var solidLayers = from tileLayer in TileLayers
+                              where includePred(tileLayer)
+                              select tileLayer;
+
+            foreach (var layer in solidLayers)
+                layer.ForEach(t => bounds.Add(t.GetBounds(layer)));
+
+            return bounds;
+        }
     }
 }
