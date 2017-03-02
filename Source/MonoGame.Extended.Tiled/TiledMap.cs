@@ -120,7 +120,11 @@ namespace MonoGame.Extended.Tiled
                 tileLayer.ForEach(t =>
                 {
                     if (includePred(t))
-                        bounds.Add(t.GetBounds(tileLayer));
+                    {
+                        var tileBounds = t.GetBounds(tileLayer);
+                        if (!bounds.Contains(tileBounds))
+                            bounds.Add(t.GetBounds(tileLayer));
+                    }
                 });
 
             return bounds;
@@ -134,7 +138,12 @@ namespace MonoGame.Extended.Tiled
                               select tileLayer;
 
             foreach (var layer in solidLayers)
-                layer.ForEach(t => bounds.Add(t.GetBounds(layer)));
+                layer.ForEach(t =>
+                {
+                    var tileBounds = t.GetBounds(layer);
+                    if (!bounds.Contains(tileBounds))
+                        bounds.Add(tileBounds);
+                });
 
             return bounds;
         }
