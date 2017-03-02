@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26206.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platformer2D", "Platformer2D.csproj", "{75787324-20FC-4AA7-8E4E-00AE508F4069}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Android", "Demo.Android.csproj", "{75787324-20FC-4AA7-8E4E-00AE508F4069}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

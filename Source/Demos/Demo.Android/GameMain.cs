@@ -1,8 +1,7 @@
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Platformer2D
+namespace Demo.Android
 {
     public class GameMain : Game
     {

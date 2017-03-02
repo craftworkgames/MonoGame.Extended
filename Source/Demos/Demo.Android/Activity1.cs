@@ -3,7 +3,7 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 
-namespace Platformer2D
+namespace Demo.Android
 {
     [Activity(
         Label = "Demo.Android",

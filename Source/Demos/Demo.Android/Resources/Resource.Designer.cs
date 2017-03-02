@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("Platformer2D.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("Demo.Android.Resource", IsApplication=true)]
 
-namespace Platformer2D
+namespace Demo.Android
 {
 	
 	
