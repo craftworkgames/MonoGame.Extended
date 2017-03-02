@@ -57,9 +57,7 @@ namespace MonoGame.Extended.Tiled
         public void ForEach(Action<int, int, TiledMapTile> f)
         {
             if (f == null)
-            {
                 return;
-            }
 
             for (int y = 0; y < Height; ++y)
             {
@@ -69,9 +67,7 @@ namespace MonoGame.Extended.Tiled
                     TryGetTile(x, y, out tile);
 
                     if (tile.HasValue)
-                    {
                         f(x, y, tile.Value);
-                    }
                 }
             }
         }
