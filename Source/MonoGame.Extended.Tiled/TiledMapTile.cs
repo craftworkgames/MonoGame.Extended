@@ -18,7 +18,7 @@ namespace MonoGame.Extended.Tiled
 
         public Rectangle GetBounds(int tileWidth, int tileHeight)
         {
-            return new Rectangle(X, Y, tileWidth, tileHeight);
+            return new Rectangle(X * tileWidth, Y * tileHeight, tileWidth, tileHeight);
         }
 
         public Rectangle GetBounds(TiledMapTileLayer layer)
