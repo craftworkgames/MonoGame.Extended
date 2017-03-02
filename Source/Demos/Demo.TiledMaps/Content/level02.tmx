@@ -7,6 +7,9 @@
   <image source="isometric-tiles.png" width="783" height="902"/>
  </tileset>
  <layer name="Camada de Tiles 1" width="10" height="10">
+  <properties>
+   <property name="Solid" type="bool" value="true"/>
+  </properties>
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -111,6 +114,9 @@
   </data>
  </layer>
  <layer name="Camada de Tiles 2" width="10" height="10">
+  <properties>
+   <property name="Solid" type="bool" value="true"/>
+  </properties>
   <data>
    <tile gid="1"/>
    <tile gid="1"/>
@@ -215,6 +221,9 @@
   </data>
  </layer>
  <layer name="Camada de Tiles 3" width="10" height="10">
+  <properties>
+   <property name="Solid" type="bool" value="true"/>
+  </properties>
   <data>
    <tile gid="17"/>
    <tile gid="17"/>
@@ -319,6 +328,9 @@
   </data>
  </layer>
  <layer name="Camada de Tiles 4" width="10" height="10">
+  <properties>
+   <property name="Solid" type="bool" value="true"/>
+  </properties>
   <data>
    <tile gid="33"/>
    <tile gid="33"/>
@@ -423,6 +435,9 @@
   </data>
  </layer>
  <layer name="Camada de Tiles 5" width="10" height="10">
+  <properties>
+   <property name="Solid" type="bool" value="true"/>
+  </properties>
   <data>
    <tile gid="0"/>
    <tile gid="0"/>

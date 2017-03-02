@@ -32,6 +32,9 @@
 </data>
  </layer>
  <layer name="Camada de Tiles 3" width="10" height="10">
+  <properties>
+   <property name="Solid" type="bool" value="true"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,
 1091,0,0,0,0,0,0,0,0,0,
@@ -46,6 +49,9 @@
 </data>
  </layer>
  <layer name="Camada de Tiles 4" width="10" height="10">
+  <properties>
+   <property name="Solid" type="bool" value="true"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,1414,0,0,0,0,0,
 1414,0,0,1414,1446,0,0,0,0,0,
