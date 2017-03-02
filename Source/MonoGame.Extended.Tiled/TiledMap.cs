@@ -112,7 +112,7 @@ namespace MonoGame.Extended.Tiled
             return _tilesets.FirstOrDefault(tileset => tileset.ContainsGlobalIdentifier(tileIdentifier));
         }
 
-        public IEnumerable<Rectangle> GetBounds(Func<TiledMapTile, bool> includePred)
+        public IEnumerable<Rectangle> GetBounds(Predicate<TiledMapTile> includePred)
         {
             var bounds = new List<Rectangle>();
 
@@ -130,7 +130,7 @@ namespace MonoGame.Extended.Tiled
             return bounds;
         }
 
-        public IEnumerable<Rectangle> GetBounds(Func<TiledMapLayer, bool> includePred)
+        public IEnumerable<Rectangle> GetBounds(Predicate<TiledMapLayer> includePred)
         {
             var bounds = new List<Rectangle>();
             var solidLayers = from tileLayer in TileLayers
