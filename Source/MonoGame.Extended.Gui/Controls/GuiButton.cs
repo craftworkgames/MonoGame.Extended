@@ -46,22 +46,40 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
+        private bool _isPointerDown;
+
         public override void OnPointerDown(GuiPointerEventArgs args)
         {
             base.OnPointerDown(args);
-            
+
             if (IsEnabled)
+            {
+                _isPointerDown = true;
                 IsPressed = true;
+            }
         }
 
         public override void OnPointerUp(GuiPointerEventArgs args)
         {
             base.OnPointerUp(args);
 
-            IsPressed = false;
+            _isPointerDown = false;
 
-            if(BoundingRectangle.Contains(args.Position) && IsEnabled)
-                Clicked?.Invoke(this, EventArgs.Empty);
+            if (IsPressed)
+            {
+                IsPressed = false;
+
+                if (BoundingRectangle.Contains(args.Position) && IsEnabled)
+                    Clicked?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public override void OnPointerEnter(GuiPointerEventArgs args)
+        {
+            base.OnPointerEnter(args);
+
+            if (IsEnabled && _isPointerDown)
+                IsPressed = true;
         }
 
         public override void OnPointerLeave(GuiPointerEventArgs args)

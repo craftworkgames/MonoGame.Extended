@@ -154,7 +154,7 @@ namespace MonoGame.Extended.Gui.Controls
         protected virtual void DrawText(IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         {
             if (!string.IsNullOrWhiteSpace(textInfo.Text))
-                renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position, textInfo.Color, textInfo.ClippingRectangle);
+                renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, textInfo.ClippingRectangle);
         }
 
         protected struct TextInfo
