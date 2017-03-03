@@ -51,6 +51,6 @@
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:montserrat-32_0.png
-

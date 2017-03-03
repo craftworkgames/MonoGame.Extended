@@ -8,9 +8,24 @@ namespace MonoGame.Extended.Tests
 {
     public class MockGameWindow : GameWindow
     {
-        public void RaiseOnClientSizeChangedEvent()
+        public override bool AllowUserResizing { get; set; }
+        public override Rectangle ClientBounds { get; }
+        public override DisplayOrientation CurrentOrientation { get; }
+        public override IntPtr Handle { get; }
+        public override string ScreenDeviceName { get; }
+
+        public MockGameWindow()
         {
-            OnClientSizeChanged();
+            this.ClientSizeChanged += OnClientSizeChanged;
+        }
+
+        private void OnClientSizeChanged(object sender, EventArgs eventArgs)
+        {
+        }
+
+        internal void RaiseOnClientSizeChangedEvent()
+        {
+            OnClientSizeChanged(this, EventArgs.Empty);
         }
 
         public override void BeginScreenDeviceChange(bool willBeFullScreen)
@@ -28,13 +43,6 @@ namespace MonoGame.Extended.Tests
         protected override void SetTitle(string title)
         {
         }
-
-        public override bool AllowUserResizing { get; set; }
-        public override Rectangle ClientBounds { get; }
-        public override Point Position { get; set; }
-        public override DisplayOrientation CurrentOrientation { get; }
-        public override IntPtr Handle { get; }
-        public override string ScreenDeviceName { get; }
 
 #if __MonoCS__
         public override Icon Icon { get; set; }

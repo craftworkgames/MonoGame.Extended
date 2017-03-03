@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
-using MonoGame.Extended.Animations.SpriteSheets;
 
 namespace MonoGame.Extended.Content.Pipeline.Animations
 {
@@ -9,7 +8,7 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
     {
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return typeof(SpriteSheetAnimationFactoryReader).AssemblyQualifiedName;
+            return "MonoGame.Extended.Animations.SpriteSheets.SpriteSheetAnimationFactoryReader, MonoGame.Extended";
         }
 
         protected override void Write(ContentWriter writer, AstridAnimatorProcessorResult input)

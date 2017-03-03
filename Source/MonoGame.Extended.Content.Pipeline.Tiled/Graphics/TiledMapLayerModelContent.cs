@@ -1,12 +1,13 @@
-using System.IO;
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Content.Pipeline.Tiled;
 using MonoGame.Extended.Tiled;
 
-namespace MonoGame.Extended.Content.Pipeline.Tiled.Graphics
+namespace MonoGame.Extended.Content.Pipeline.Graphics
 {
     public class TiledMapLayerModelContent
     {
@@ -116,14 +117,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled.Graphics
             _vertices.Add(vertexBottomLeft);
             _vertices.Add(vertexBottomRight);
 
-            Debug.Assert(Vertices.Count <= TiledMapConstants.MaximumVerticesPerModel);
+            Debug.Assert(Vertices.Count <= TiledMapHelper.MaximumVerticesPerModel);
         }
 
         public void AddTileIndices()
         {
             var indexOffset = Vertices.Count;
 
-            Debug.Assert(3 + indexOffset <= TiledMapConstants.MaximumVerticesPerModel);
+            Debug.Assert(3 + indexOffset <= TiledMapHelper.MaximumVerticesPerModel);
 
             _indices.Add((ushort)(0 + indexOffset));
             _indices.Add((ushort)(1 + indexOffset));
@@ -132,7 +133,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled.Graphics
             _indices.Add((ushort)(3 + indexOffset));
             _indices.Add((ushort)(2 + indexOffset));
 
-            Debug.Assert(Indices.Count <= TiledMapConstants.MaximumIndicesPerModel);
+            Debug.Assert(Indices.Count <= TiledMapHelper.MaximumIndicesPerModel);
         }
     }
 }

@@ -11,7 +11,7 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Tiled;
-using MonoGame.Extended.Tiled.Graphics;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Platformer.Screens
