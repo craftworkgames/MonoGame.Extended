@@ -4,6 +4,9 @@
   <image source="L05TS1.png" width="303" height="171"/>
  </tileset>
  <layer name="Tile Layer 1" width="10" height="10">
+  <properties>
+   <property name="Solid" type="bool" value="true"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,1,0,0,0,0,

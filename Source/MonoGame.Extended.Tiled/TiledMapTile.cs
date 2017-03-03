@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended.Tiled
+﻿using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Tiled
 {
     public struct TiledMapTile
     {
@@ -13,6 +15,16 @@
         public bool IsFlippedDiagonally => (GlobalTileIdentifierWithFlags & (uint)TiledMapTileFlipFlags.FlipDiagonally) != 0;
         public bool IsBlank => GlobalIdentifier == 0;
         public TiledMapTileFlipFlags Flags => (TiledMapTileFlipFlags)(GlobalTileIdentifierWithFlags & (uint)TiledMapTileFlipFlags.All);
+
+        public Rectangle GetBounds(int tileWidth, int tileHeight)
+        {
+            return new Rectangle(X * tileWidth, Y * tileHeight, tileWidth, tileHeight);
+        }
+
+        public Rectangle GetBounds(TiledMapTileLayer layer)
+        {
+            return GetBounds(layer.TileWidth, layer.TileHeight);
+        }
 
         internal TiledMapTile(uint globalTileIdentifierWithFlags, ushort x, ushort y)
         {

@@ -27,6 +27,8 @@ namespace Demo.TiledMaps
         private KeyboardState _previousKeyboardState = Keyboard.GetState();
         private bool _showHelp;
         private TiledMap _map;
+        private bool _showSolidity;
+        private Texture2D _white1x1Texture;
 
         private Queue<string> _availableMaps;
 
@@ -63,6 +65,8 @@ namespace Demo.TiledMaps
             _texture = Content.Load<Texture2D>("monogame-extended-logo");
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
             _sprite = new Sprite(_texture) {Position = new Vector2(600, 240)};
+            _white1x1Texture = new Texture2D(GraphicsDevice, 1, 1);
+            _white1x1Texture.SetData(new[] { Color.White });
 
             _availableMaps =
                 new Queue<string>(new[] {"level01", "level02", "level03", "level04", "level05", "level06", "level07"});
@@ -144,6 +148,9 @@ namespace Demo.TiledMaps
             if (keyboardState.IsKeyDown(Keys.C))
                 LookAtMapCenter();
 
+            if (_previousKeyboardState.IsKeyDown(Keys.B) && keyboardState.IsKeyUp(Keys.B))
+                _showSolidity = !_showSolidity;
+
             _sprite.Rotation += MathHelper.ToRadians(5) * deltaSeconds;
             _sprite.Position = _camera.ScreenToWorld(mouseState.X, mouseState.Y);
 
@@ -180,11 +187,28 @@ namespace Demo.TiledMaps
 
             _mapRenderer.Draw(_map, ref viewMatrix, ref projectionMatrix);
 
+            if (_showSolidity)
+                DrawSolidity();
+
             DrawText();
 
             _fpsCounter.Draw(gameTime);
 
             base.Draw(gameTime);
+        }
+
+        private void DrawSolidity()
+        {
+            if (_map.Orientation != TiledMapOrientation.Orthogonal)
+                return;
+
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+
+            var bounds = _map.GetBounds(l => l.Properties.ContainsKey("Solid") && l.Properties["Solid"] == "true");
+            foreach (var b in bounds)
+                _spriteBatch.Draw(_white1x1Texture, b, new Color(Color.Blue, 0.5f));
+
+            _spriteBatch.End();
         }
 
         private void DrawText()
@@ -230,6 +254,8 @@ namespace Demo.TiledMaps
                 _spriteBatch.DrawString(_bitmapFont, "C: Move camera to look at center of the map", textPosition,
                     textColor);
                 textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 9);
+                _spriteBatch.DrawString(_bitmapFont, "B: Show solid tile bounds", textPosition, textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 10);
                 _spriteBatch.DrawString(_bitmapFont, "Tab: Cycle through maps", textPosition, textColor);
             }
 

@@ -48,5 +48,28 @@ namespace MonoGame.Extended.Tiled
             tile = Tiles[index];
             return true;
         }
+
+        public void ForEach(Action<TiledMapTile> f)
+        {
+            ForEach((x, y, t) => f(t));
+        }
+
+        public void ForEach(Action<int, int, TiledMapTile> f)
+        {
+            if (f == null)
+                return;
+
+            for (int y = 0; y < Height; ++y)
+            {
+                for (int x = 0; x < Width; ++x)
+                {
+                    TiledMapTile? tile;
+                    TryGetTile(x, y, out tile);
+
+                    if (tile.HasValue)
+                        f(x, y, tile.Value);
+                }
+            }
+        }
     }
 }

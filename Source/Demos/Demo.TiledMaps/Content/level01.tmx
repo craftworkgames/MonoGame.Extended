@@ -32,26 +32,30 @@
  </imagelayer>
  <layer name="Water" width="40" height="10">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NgGAWjYBSMgoEBgljwYAJCWPBgAgPtPgAzvv49QAYAAA==
+   H4sIAAAAAAAAC2NgGAWjYBSMgoEBgljwYAJCWPBgAgPtPgAzvv49QAYAAA==
   </data>
  </layer>
  <layer name="Ground" width="40" height="10">
   <properties>
+   <property name="Solid" type="bool" value="true"/>
    <property name="customlayerprop" value="1"/>
    <property name="customlayerprop2" value="2"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NgoC5gAWJWJMxGgVmMVHERKqCm+1io4iJMM0fdBwGg+Gcmw0xauw/kLiYg5iBgPkwdsZgcv2KzE+QuYvyPHlaEMMwsYv3FgUMMX/ww4lFLrPtI9RcxZpIbZsPdfQBmr3hmQAYAAA==
+   H4sIAAAAAAAAC2NgoC5gAWJWJMxGgVmMVHERKqCm+1io4iJMM0fdBwGg+Gcmw0xauw/kLiYg5iBgPkwdsZgcv2KzE+QuYvyPHlaEMMwsYv3FgUMMX/ww4lFLrPtI9RcxZpIbZsPdfQBmr3hmQAYAAA==
   </data>
  </layer>
  <layer name="Platforms" width="40" height="10">
+  <properties>
+   <property name="Solid" type="bool" value="true"/>
+  </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NgGAWDDfACMR8Q82MRw4f5GcgDyGbz4xEj11xy9Y+CUTAKBjcAAB+IdqlABgAA
+   H4sIAAAAAAAAC2NgGAWDDfACMR8Q82MRw4f5GcgDyGbz4xEj11xy9Y+CUTAKBjcAAB+IdqlABgAA
   </data>
  </layer>
  <layer name="Details" width="40" height="10">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NgGLlAGIuYBJQWRROXpNAuKSxmSkPNlaXQbHKBzADZSwiAwgkUD9IE1MkhsUUYEHGHDsSp4Sg6A3S/44orUagcKB3J4VCDDtDTGy8DwwJ+BoYDfEAMZB8AshOIdyntAdBdC3ghNAM/hE4YWBehAqCbFiDzeQeZ+2gJAHOitUlABgAA
+   H4sIAAAAAAAAC2NgGLlAGIuYBJQWRROXpNAuKSxmSkPNlaXQbHKBzADZSwiAwgkUD9IE1MkhsUUYEHGHDsSp4Sg6A3S/44orUagcKB3J4VCDDtDTGy8DwwJ+BoYDfEAMZB8AshOIdyntAdBdC3ghNAM/hE4YWBehAqCbFiDzeQeZ+2gJAHOitUlABgAA
   </data>
  </layer>
  <objectgroup color="#befdf9" draworder="index" name="Objects Layer 1">
@@ -77,7 +81,7 @@
  </objectgroup>
  <layer name="Tile Layer 5" width="40" height="10">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NgGAWjYBSMglEwCkgHADV9EcVABgAA
+   H4sIAAAAAAAAC2NgGAWjYBSMglEwCkgHADV9EcVABgAA
   </data>
  </layer>
 </map>
