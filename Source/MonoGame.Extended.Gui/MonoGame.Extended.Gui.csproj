@@ -46,6 +46,7 @@
     <Compile Include="Controls\GuiTextBox.cs" />
     <Compile Include="GuiControlFactory.cs" />
     <Compile Include="GuiCursor.cs" />
+    <Compile Include="GuiPointerEventArgs.cs" />
     <Compile Include="GuiSystem.cs" />
     <Compile Include="GuiScreen.cs" />
     <Compile Include="GuiSkin.cs" />

@@ -1,5 +1,4 @@
 ﻿using System;
-using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
@@ -47,30 +46,30 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        public override void OnMouseDown(MouseEventArgs args)
+        public override void OnPointerDown(GuiPointerEventArgs args)
         {
+            base.OnPointerDown(args);
+            
             if (IsEnabled)
                 IsPressed = true;
-
-            base.OnMouseDown(args);
         }
 
-        public override void OnMouseUp(MouseEventArgs args)
+        public override void OnPointerUp(GuiPointerEventArgs args)
         {
+            base.OnPointerUp(args);
+
             IsPressed = false;
 
             if(BoundingRectangle.Contains(args.Position) && IsEnabled)
                 Clicked?.Invoke(this, EventArgs.Empty);
-
-            base.OnMouseUp(args);
         }
 
-        public override void OnMouseLeave(MouseEventArgs args)
+        public override void OnPointerLeave(GuiPointerEventArgs args)
         {
+            base.OnPointerLeave(args);
+
             if (IsEnabled)
                 IsPressed = false;
-
-            base.OnMouseLeave(args);
         }
     }
 }

@@ -67,8 +67,7 @@ namespace MonoGame.Extended.InputListeners
             if ((getButtonState(_currentState) == ButtonState.Pressed) &&
                 (getButtonState(_previousState) == ButtonState.Released))
             {
-                var args = new MouseEventArgs(ViewportAdapter, _gameTime.TotalGameTime, _previousState, _currentState,
-                    button);
+                var args = new MouseEventArgs(ViewportAdapter, _gameTime.TotalGameTime, _previousState, _currentState, button);
 
                 MouseDown?.Invoke(this, args);
                 _mouseDownArgs = args;
@@ -94,8 +93,7 @@ namespace MonoGame.Extended.InputListeners
             if ((getButtonState(_currentState) == ButtonState.Released) &&
                 (getButtonState(_previousState) == ButtonState.Pressed))
             {
-                var args = new MouseEventArgs(ViewportAdapter, _gameTime.TotalGameTime, _previousState, _currentState,
-                    button);
+                var args = new MouseEventArgs(ViewportAdapter, _gameTime.TotalGameTime, _previousState, _currentState, button);
 
                 if (_mouseDownArgs.Button == args.Button)
                 {
@@ -126,8 +124,7 @@ namespace MonoGame.Extended.InputListeners
             if ((getButtonState(_currentState) == ButtonState.Pressed) &&
                 (getButtonState(_previousState) == ButtonState.Pressed))
             {
-                var args = new MouseEventArgs(ViewportAdapter, _gameTime.TotalGameTime, _previousState, _currentState,
-                    button);
+                var args = new MouseEventArgs(ViewportAdapter, _gameTime.TotalGameTime, _previousState, _currentState, button);
 
                 if (_mouseDownArgs.Button == args.Button)
                 {

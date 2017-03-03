@@ -48,9 +48,9 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        public override void OnMouseUp(MouseEventArgs args)
+        public override void OnPointerUp(GuiPointerEventArgs args)
         {
-            base.OnMouseUp(args);
+            base.OnPointerUp(args);
 
             if (IsFocused && BoundingRectangle.Contains(args.Position))
                 IsChecked = !IsChecked;

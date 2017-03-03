@@ -116,18 +116,19 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        public virtual void OnMouseDown(MouseEventArgs args) { }
-        public virtual void OnMouseUp(MouseEventArgs args) { }
         public virtual void OnKeyTyped(KeyboardEventArgs args) { }
         public virtual void OnKeyPressed(KeyboardEventArgs args) { }
+
+        public virtual void OnPointerDown(GuiPointerEventArgs args) { }
+        public virtual void OnPointerUp(GuiPointerEventArgs args) { }
         
-        public virtual void OnMouseEnter(MouseEventArgs args)
+        public virtual void OnPointerEnter(GuiPointerEventArgs args)
         {
             if (IsEnabled)
                 HoverStyle?.Apply(this);
         }
 
-        public virtual void OnMouseLeave(MouseEventArgs args)
+        public virtual void OnPointerLeave(GuiPointerEventArgs args)
         {
             if (IsEnabled)
                 HoverStyle?.Revert(this);

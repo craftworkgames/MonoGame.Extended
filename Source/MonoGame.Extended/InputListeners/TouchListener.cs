@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.InputListeners
 {
@@ -11,10 +12,18 @@ namespace MonoGame.Extended.InputListeners
         {
         }
 
-        // ReSharper disable once UnusedParameter.Local
+        public TouchListener(ViewportAdapter viewportAdapter)
+            : this(new TouchListenerSettings())
+        {
+            ViewportAdapter = viewportAdapter;
+        }
+
         public TouchListener(TouchListenerSettings settings)
         {
+            ViewportAdapter = settings.ViewportAdapter;
         }
+
+        public ViewportAdapter ViewportAdapter { get; set; }
 
         public event EventHandler<TouchEventArgs> TouchStarted;
         public event EventHandler<TouchEventArgs> TouchEnded;
@@ -30,16 +39,16 @@ namespace MonoGame.Extended.InputListeners
                 switch (touchLocation.State)
                 {
                     case TouchLocationState.Pressed:
-                        TouchStarted?.Invoke(this, new TouchEventArgs(touchLocation));
+                        TouchStarted?.Invoke(this, new TouchEventArgs(ViewportAdapter, gameTime.TotalGameTime, touchLocation));
                         break;
                     case TouchLocationState.Moved:
-                        TouchMoved?.Invoke(this, new TouchEventArgs(touchLocation));
+                        TouchMoved?.Invoke(this, new TouchEventArgs(ViewportAdapter, gameTime.TotalGameTime, touchLocation));
                         break;
                     case TouchLocationState.Released:
-                        TouchEnded?.Invoke(this, new TouchEventArgs(touchLocation));
+                        TouchEnded?.Invoke(this, new TouchEventArgs(ViewportAdapter, gameTime.TotalGameTime, touchLocation));
                         break;
                     case TouchLocationState.Invalid:
-                        TouchCancelled?.Invoke(this, new TouchEventArgs(touchLocation));
+                        TouchCancelled?.Invoke(this, new TouchEventArgs(ViewportAdapter, gameTime.TotalGameTime, touchLocation));
                         break;
                 }
             }

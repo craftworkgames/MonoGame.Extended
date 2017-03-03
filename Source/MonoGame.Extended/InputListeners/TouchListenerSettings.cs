@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended.InputListeners
+﻿using MonoGame.Extended.ViewportAdapters;
+
+namespace MonoGame.Extended.InputListeners
 {
     public class TouchListenerSettings : InputListenerSettings<TouchListener>
     {
@@ -6,9 +8,11 @@
         {
         }
 
+        public ViewportAdapter ViewportAdapter { get; set; }
+
         public override TouchListener CreateListener()
         {
-            return new TouchListener();
+            return new TouchListener(this);
         }
     }
 }

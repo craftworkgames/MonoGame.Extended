@@ -24,9 +24,9 @@ namespace MonoGame.Extended.Gui.Controls
 
         public int SelectionStart { get; set; }
 
-        public override void OnMouseDown(MouseEventArgs args)
+        public override void OnPointerDown(GuiPointerEventArgs args)
         {
-            base.OnMouseDown(args);
+            base.OnPointerDown(args);
 
             SelectionStart = Text.Length;
             _isCaretVisible = true;
