@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics.Effects;
+using MonoGame.Extended.Tiled;
 
-namespace MonoGame.Extended.Tiled.Graphics
+namespace MonoGame.Extended.Graphics
 {
     public class TiledMapRenderer : IDisposable
     {
-        private readonly TiledMapDefaultEffect _defaultEffect;
+        private readonly TiledMapEffect _defaultEffect;
         private Matrix _worldMatrix = Matrix.Identity;
 
         /// <summary>
@@ -25,7 +27,7 @@ namespace MonoGame.Extended.Tiled.Graphics
 
             GraphicsDevice = graphicsDevice;
 
-            _defaultEffect = new TiledMapDefaultEffect(graphicsDevice);
+            _defaultEffect = new TiledMapEffect(graphicsDevice);
         }
 
         public void Update(TiledMap map, GameTime gameTime)
@@ -40,27 +42,27 @@ namespace MonoGame.Extended.Tiled.Graphics
                 UpdateAnimatedModels(layer.AnimatedModels);
         }
 
-        public void Draw(TiledMap map, Matrix? viewMatrix = null, Matrix? projectionMatrix = null, ITiledMapEffect effect = null, float depth = 0.0f)
+        public void Draw(TiledMap map, Matrix? viewMatrix = null, Matrix? projectionMatrix = null, Effect effect = null, float depth = 0.0f)
         {
             var viewMatrix1 = viewMatrix ?? Matrix.Identity;
             var projectionMatrix1 = projectionMatrix ?? Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0, 0, -1);
             Draw(map, ref viewMatrix1, ref projectionMatrix1, effect, depth);
         }
 
-        public void Draw(TiledMap map, ref Matrix viewMatrix, ref Matrix projectionMatrix, ITiledMapEffect effect = null, float depth = 0.0f)
+        public void Draw(TiledMap map, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect = null, float depth = 0.0f)
         {
             foreach (var layer in map.Layers)
                 Draw(layer, ref viewMatrix, ref projectionMatrix, effect, depth);
         }
 
-        public void Draw(TiledMapLayer layer, Matrix? viewMatrix = null, Matrix? projectionMatrix = null, ITiledMapEffect effect = null, float depth = 0.0f)
+        public void Draw(TiledMapLayer layer, Matrix? viewMatrix = null, Matrix? projectionMatrix = null, Effect effect = null, float depth = 0.0f)
         {
             var viewMatrix1 = viewMatrix ?? Matrix.Identity;
             var projectionMatrix1 = projectionMatrix ?? Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0, 0, -1);
             Draw(layer, ref viewMatrix1, ref projectionMatrix1, effect, depth);
         }
 
-        public void Draw(TiledMapLayer layer, ref Matrix viewMatrix, ref Matrix projectionMatrix, ITiledMapEffect effect = null, float depth = 0.0f)
+        public void Draw(TiledMapLayer layer, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect = null, float depth = 0.0f)
         {
             if (!layer.IsVisible)
                 return;
@@ -71,19 +73,24 @@ namespace MonoGame.Extended.Tiled.Graphics
             _worldMatrix.Translation = new Vector3(layer.OffsetX, layer.OffsetY, depth);
 
             var effect1 = effect ?? _defaultEffect;
+            var tiledMapEffect = effect1 as ITiledMapEffect;
+            if (tiledMapEffect == null)
+                return;
 
             // render each model
             foreach (var model in layer.Models)
             {
                 // model-to-world transform
-                effect1.World = _worldMatrix;
-                effect1.View = viewMatrix;
-                effect1.Projection = projectionMatrix;
+                tiledMapEffect.World = _worldMatrix;
+                tiledMapEffect.View = viewMatrix;
+                tiledMapEffect.Projection = projectionMatrix;
+
                 // desired alpha
-                effect1.Alpha = layer.Opacity;
-                // bind the texture if the texture is different than what is already binded
-                if (effect1.Texture != model.Texture)
-                    effect1.Texture = model.Texture;
+                tiledMapEffect.Alpha = layer.Opacity;
+
+                // desired texture
+                tiledMapEffect.Texture = model.Texture;
+
                 // bind the vertex and index buffer
                 GraphicsDevice.SetVertexBuffer(model.VertexBuffer);
                 GraphicsDevice.Indices = model.IndexBuffer;
@@ -93,6 +100,7 @@ namespace MonoGame.Extended.Tiled.Graphics
                 {
                     // apply the pass, effectively choosing which vertex shader and fragment (pixel) shader to use
                     pass.Apply();
+
                     // draw the geometry from the vertex buffer / index buffer
                     GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, model.TrianglesCount);
                 }

@@ -5,9 +5,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Graphics.Effects;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
-using MonoGame.Extended.Tiled.Graphics;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.TiledMaps
@@ -27,6 +28,7 @@ namespace Demo.TiledMaps
         private KeyboardState _previousKeyboardState = Keyboard.GetState();
         private bool _showHelp;
         private TiledMap _map;
+        private Effect _customEffect;
 
         private Queue<string> _availableMaps;
 
@@ -34,13 +36,13 @@ namespace Demo.TiledMaps
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this) 
 			{
-				SynchronizeWithVerticalRetrace = true,
+				SynchronizeWithVerticalRetrace = false,
                 PreferredBackBufferWidth = 1024,
                 PreferredBackBufferHeight = 768
             };
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            IsFixedTimeStep = true;
+            IsFixedTimeStep = false;
         }
 
         protected override void Initialize()
@@ -50,7 +52,6 @@ namespace Demo.TiledMaps
             _mapRenderer = new TiledMapRenderer(GraphicsDevice);
 
             Window.AllowUserResizing = true;
-            Window.Position = Point.Zero;
 
             _fpsCounter = new FramesPerSecondCounter();
 
@@ -69,6 +70,15 @@ namespace Demo.TiledMaps
 
             _map = LoadNextMap();
             _camera.LookAt(new Vector2(_map.WidthInPixels, _map.HeightInPixels) * 0.5f);
+
+            var effect = new CustomEffect(GraphicsDevice)
+            {
+                Alpha = 0.5f,
+                TextureEnabled = true,
+                VertexColorEnabled = false
+            };
+
+            _customEffect = effect;
         }
 
         private TiledMap LoadNextMap()
@@ -178,7 +188,7 @@ namespace Demo.TiledMaps
             var viewMatrix = _camera.GetViewMatrix();
             var projectionMatrix = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0, 0f, -1f);
 
-            _mapRenderer.Draw(_map, ref viewMatrix, ref projectionMatrix);
+            _mapRenderer.Draw(_map, ref viewMatrix, ref projectionMatrix, _customEffect);
 
             DrawText();
 

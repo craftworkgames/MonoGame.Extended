@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -25,13 +24,13 @@ namespace Demo.Batching
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
         private Batcher2D _batcher;
-        private readonly StringBuilder _stringBuilder = new StringBuilder();
         private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFont;
         private Texture2D _spriteTexture1;
         private Texture2D _spriteTexture2;
         private Vector2 _spriteOrigin;
-        private DefaultEffect2D _effect;
+        private Vector2 _spriteScale;
+        private DefaultEffect _effect;
 
         private readonly Random _random = new Random();
         private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
@@ -52,8 +51,8 @@ namespace Demo.Batching
             {
                 // also disable v-sync so max frames can be measured otherwise draw frames would be capped to the screen's refresh rate 
                 SynchronizeWithVerticalRetrace = false,
-                PreferredBackBufferWidth = 1024,
-                PreferredBackBufferHeight = 768
+                PreferredBackBufferWidth = 800,
+                PreferredBackBufferHeight = 600
             };
         }
 
@@ -61,7 +60,11 @@ namespace Demo.Batching
         {
             var graphicsDevice = GraphicsDevice;
 
-            _effect = new DefaultEffect2D(graphicsDevice);
+            _effect = new DefaultEffect(graphicsDevice)
+            {
+                TextureEnabled = true,
+                VertexColorEnabled = true
+            };
             _batcher = new Batcher2D(graphicsDevice);
             _spriteBatch = new SpriteBatch(graphicsDevice);
             _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
@@ -70,6 +73,7 @@ namespace Demo.Batching
             _spriteTexture1 = Content.Load<Texture2D>("logo-square-128");
             _spriteTexture2 = Content.Load<Texture2D>("logo-square-128-copy");
             _spriteOrigin = new Vector2(_spriteTexture1.Width * 0.5f, _spriteTexture1.Height * 0.5f);
+            _spriteScale = new Vector2(0.5f);
 
             var viewport = GraphicsDevice.Viewport;
 
@@ -99,13 +103,13 @@ namespace Demo.Batching
                 var sprite = _sprites[index];
 
                 if (index % 2 == 0)
-                    sprite.Rotation = (sprite.Rotation + MathHelper.ToRadians(1)) % MathHelper.TwoPi;
+                    sprite.Rotation = (sprite.Rotation + MathHelper.ToRadians(0.5f)) % MathHelper.TwoPi;
                 else
-                    sprite.Rotation = (sprite.Rotation - MathHelper.ToRadians(1) + MathHelper.TwoPi) % MathHelper.TwoPi;
+                    sprite.Rotation = (sprite.Rotation - MathHelper.ToRadians(0.5f) + MathHelper.TwoPi) % MathHelper.TwoPi;
 
                 sprite.Color = ColorHelper.FromHsl(sprite.Rotation / MathHelper.TwoPi, 0.5f, 0.3f);
 
-                sprite.TransformMatrix = Matrix2D.CreateFrom(sprite.Position, sprite.Rotation, null, _spriteOrigin);
+                sprite.TransformMatrix = Matrix2D.CreateFrom(sprite.Position, sprite.Rotation, _spriteScale, _spriteOrigin);
 
                 _sprites[index] = sprite;
             }
@@ -117,9 +121,11 @@ namespace Demo.Batching
 
         protected override void Draw(GameTime gameTime)
         {
+            Window.Title = _fpsCounter.FramesPerSecond.ToString();
+
             var graphicsDevice = GraphicsDevice;
 
-            graphicsDevice.Clear(Color.Black);
+            graphicsDevice.Clear(Color.CornflowerBlue);
 
             // update the matrices
             _worldMatrix = Matrix.Identity;
@@ -131,21 +137,6 @@ namespace Demo.Batching
             DrawSpritesWithBatcher2D();
             //DrawSpritesWithSpriteBatch();
 
-            //_batcher.Begin(viewMatrix: _viewMatrix, projectionMatrix: _projectionMatrix);
-
-            //// use StringBuilder to prevent garbage
-            //_stringBuilder.Clear();
-            //_stringBuilder.Append("FPS: ");
-            //_stringBuilder.Append(_fpsCounter.FramesPerSecond); // but, this StringBulder method causes a small amount of garbage...
-            //_batcher.DrawString(_bitmapFont, _stringBuilder, Vector2.Zero);
-
-            //_stringBuilder.Clear();
-            //_stringBuilder.Append("Draw Calls: ");
-            //_stringBuilder.Append(GraphicsDevice.Metrics.DrawCount);
-            //_batcher.DrawString(_bitmapFont, _stringBuilder, new Vector2(0, _bitmapFont.LineHeight));
-
-            //_batcher.End();
-
             base.Draw(gameTime);
 
             _fpsCounter.Draw(gameTime);
@@ -153,7 +144,7 @@ namespace Demo.Batching
 
         private void DrawSpritesWithBatcher2D()
         {
-            _batcher.Begin(viewMatrix: _viewMatrix, projectionMatrix: _projectionMatrix);
+            _batcher.Begin(_viewMatrix, _projectionMatrix, effect: _effect);
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < _sprites.Length; index++)
@@ -175,7 +166,7 @@ namespace Demo.Batching
             for (var index = 0; index < _sprites.Length; index++)
             {
                 var sprite = _sprites[index];
-                _spriteBatch.Draw(sprite.Texture, sprite.Position, rotation: sprite.Rotation, origin: _spriteOrigin, color: sprite.Color);
+                _spriteBatch.Draw(sprite.Texture, sprite.Position, null, sprite.Color, sprite.Rotation, _spriteOrigin, _spriteScale, SpriteEffects.None, 0);
             }
 
             _spriteBatch.End();

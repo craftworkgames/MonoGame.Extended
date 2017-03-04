@@ -9,7 +9,7 @@ using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.Tiled;
-using MonoGame.Extended.Tiled.Graphics;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.SpriteSheetAnimations

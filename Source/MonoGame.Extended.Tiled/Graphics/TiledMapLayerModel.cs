@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
 
-namespace MonoGame.Extended.Tiled.Graphics
+namespace MonoGame.Extended.Graphics
 {
     public class TiledMapLayerModel : IDisposable
     {

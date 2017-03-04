@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using MonoGame.Extended.Content.Pipeline.Tiled;
 
-namespace MonoGame.Extended.Content.Pipeline.Tiled.Graphics
+namespace MonoGame.Extended.Content.Pipeline.Graphics
 {
     public class TiledMapLayerAnimatedModelContent : TiledMapLayerModelContent
     {
