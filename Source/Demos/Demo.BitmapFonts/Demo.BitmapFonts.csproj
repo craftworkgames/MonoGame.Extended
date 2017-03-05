@@ -33,7 +33,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game2.cs" />
@@ -76,7 +77,6 @@
     </None>
     <Content Include="Content\impact-32_0.png" />
     <EmbeddedResource Include="Icon.bmp" />
-    <EmbeddedResource Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -109,8 +109,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="OpenTK.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
