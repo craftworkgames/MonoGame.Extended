@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Content.Pipeline.Graphics
     {
         private readonly List<TiledMapTilesetTileContent> _animatedTilesetTiles;
 
-        public IReadOnlyList<TiledMapTilesetTileContent> AnimatedTilesetTiles { get; }
+        public ReadOnlyCollection<TiledMapTilesetTileContent> AnimatedTilesetTiles { get; }
         public TiledMapTilesetContent Tileset { get; }
 
         public TiledMapLayerAnimatedModelContent(string layerName, TiledMapTilesetContent tileset)

@@ -84,14 +84,22 @@ namespace MonoGame.Extended.Tiled
 
         private static void ReadModels(ContentReader input, TiledMapLayer layer, TiledMap map)
         {
-            var modelsCount = input.ReadInt32();
+            var modelCount = input.ReadInt32();
+            var animatedModelCount = input.ReadInt32();
 
-            for (var i = 0; i < modelsCount; i++)
+            var models = layer.Models = new TiledMapLayerModel[modelCount];
+            var animatedModels = layer.AnimatedModels = new TiledMapLayerAnimatedModel[animatedModelCount];
+
+            var animatedModelIndex = 0;
+
+            for (var modelIndex = 0; modelIndex < modelCount; modelIndex++)
             {
                 var isAnimated = input.ReadBoolean();
                 var model = isAnimated ? new TiledMapLayerAnimatedModel(input, map) : new TiledMapLayerModel(input);
 
-                layer.AddModel(model);
+                models[modelIndex] = model;
+                if (isAnimated)
+                    animatedModels[animatedModelIndex++] = (TiledMapLayerAnimatedModel)model;
             }
         }
     }

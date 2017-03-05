@@ -24,8 +24,8 @@ namespace MonoGame.Extended.Tiled
         public int Margin { get; }
         public int TileCount { get; }
         public int Columns { get; }
-        public IReadOnlyList<TiledMapTilesetTile> Tiles { get; private set; }
-        public IReadOnlyList<TiledMapTilesetAnimatedTile> AnimatedTiles { get; private set; }
+        public ReadOnlyCollection<TiledMapTilesetTile> Tiles { get; private set; }
+        public ReadOnlyCollection<TiledMapTilesetAnimatedTile> AnimatedTiles { get; private set; }
         public TiledMapProperties Properties { get; private set; }
 
         private TiledMapTileset()

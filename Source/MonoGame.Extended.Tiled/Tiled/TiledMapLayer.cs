@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Graphics;
 
@@ -7,8 +6,8 @@ namespace MonoGame.Extended.Tiled
 {
     public abstract class TiledMapLayer : IDisposable
     {
-        internal readonly List<TiledMapLayerModel> Models;
-        internal readonly List<TiledMapLayerAnimatedModel> AnimatedModels;
+        internal TiledMapLayerModel[] Models;
+        internal TiledMapLayerAnimatedModel[] AnimatedModels;
 
         public string Name { get; }
         public TiledMapProperties Properties { get; }
@@ -19,8 +18,8 @@ namespace MonoGame.Extended.Tiled
 
         internal TiledMapLayer(ContentReader input)
         {
-            Models = new List<TiledMapLayerModel>();
-            AnimatedModels = new List<TiledMapLayerAnimatedModel>();
+            Models = null;
+            AnimatedModels = null;
 
             Name = input.ReadString();
             Properties = new TiledMapProperties();
@@ -42,17 +41,10 @@ namespace MonoGame.Extended.Tiled
         {
             if (!diposing)
                 return;
+            if (Models == null)
+                return;
             foreach (var model in Models)
                 model.Dispose();
-        }
-
-        internal void AddModel(TiledMapLayerModel model)
-        {
-            Models.Add(model);
-
-            var animatedModel = model as TiledMapLayerAnimatedModel;
-            if (animatedModel != null)
-                AnimatedModels.Add(animatedModel);
         }
     }
 }

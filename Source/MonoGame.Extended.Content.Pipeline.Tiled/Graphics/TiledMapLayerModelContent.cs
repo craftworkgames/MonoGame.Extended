@@ -15,8 +15,8 @@ namespace MonoGame.Extended.Content.Pipeline.Graphics
         private readonly List<ushort> _indices;
 
         public string LayerName { get; }
-        public IReadOnlyList<VertexPositionTexture> Vertices { get; }
-        public IReadOnlyList<ushort> Indices { get; }
+        public ReadOnlyCollection<VertexPositionTexture> Vertices { get; }
+        public ReadOnlyCollection<ushort> Indices { get; }
         public Size ImageSize { get; }
         public string TextureAssetName { get; }
 

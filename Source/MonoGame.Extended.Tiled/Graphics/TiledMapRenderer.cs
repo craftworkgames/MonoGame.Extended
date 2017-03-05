@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics.Effects;
@@ -32,14 +31,24 @@ namespace MonoGame.Extended.Graphics
 
         public void Update(TiledMap map, GameTime gameTime)
         {
-            foreach (var tileset in map.Tilesets)
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var tilesetIndex = 0; tilesetIndex < map.Tilesets.Count; tilesetIndex++)
             {
-                foreach (var animatedTilesetTile in tileset.AnimatedTiles)
+                var tileset = map.Tilesets[tilesetIndex];
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var animatedTileIndex = 0; animatedTileIndex < tileset.AnimatedTiles.Count; animatedTileIndex++)
+                {
+                    var animatedTilesetTile = tileset.AnimatedTiles[animatedTileIndex];
                     animatedTilesetTile.Update(gameTime);
+                }
             }
 
-            foreach (var layer in map.TileLayers)
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < map.TileLayers.Count; index++)
+            {
+                var layer = map.TileLayers[index];
                 UpdateAnimatedModels(layer.AnimatedModels);
+            }
         }
 
         public void Draw(TiledMap map, Matrix? viewMatrix = null, Matrix? projectionMatrix = null, Effect effect = null, float depth = 0.0f)
@@ -51,8 +60,12 @@ namespace MonoGame.Extended.Graphics
 
         public void Draw(TiledMap map, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect = null, float depth = 0.0f)
         {
-            foreach (var layer in map.Layers)
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < map.Layers.Count; index++)
+            {
+                var layer = map.Layers[index];
                 Draw(layer, ref viewMatrix, ref projectionMatrix, effect, depth);
+            }
         }
 
         public void Draw(TiledMapLayer layer, Matrix? viewMatrix = null, Matrix? projectionMatrix = null, Effect effect = null, float depth = 0.0f)
@@ -77,10 +90,9 @@ namespace MonoGame.Extended.Graphics
             if (tiledMapEffect == null)
                 return;
 
-            // render each model
             foreach (var model in layer.Models)
             {
-                // model-to-world transform
+// model-to-world transform
                 tiledMapEffect.World = _worldMatrix;
                 tiledMapEffect.View = viewMatrix;
                 tiledMapEffect.Projection = projectionMatrix;
@@ -107,7 +119,8 @@ namespace MonoGame.Extended.Graphics
             }
         }
 
-        private static unsafe void UpdateAnimatedModels(IEnumerable<TiledMapLayerAnimatedModel> animatedModels)
+        // ReSharper disable once ParameterTypeCanBeEnumerable.Local
+        private static unsafe void UpdateAnimatedModels(TiledMapLayerAnimatedModel[] animatedModels)
         {
             foreach (var animatedModel in animatedModels)
             {
