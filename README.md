@@ -22,7 +22,7 @@ Thanks to all those that support the project on Patreon!  Running an open source
  - Benny
  - Walter
  - Marcel
- - [Nathanial]([optimuspi](http://www.optimuspi.com/))
+ - Nathanial ([optimuspi](http://www.optimuspi.com/))
  - Austin
 
  If you're not on the list and you should be please let me know! Managing Patreon is a job in itself.
