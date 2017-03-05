@@ -25,7 +25,7 @@ namespace Demo.TiledMaps
         private Texture2D _texture;
         private TiledMapRenderer _mapRenderer;
         private ViewportAdapter _viewportAdapter;
-        private KeyboardState _previousKeyboardState = Keyboard.GetState();
+        private KeyboardState _previousKeyboardState;
         private bool _showHelp;
         private TiledMap _map;
         private Effect _customEffect;

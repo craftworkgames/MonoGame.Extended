@@ -15,20 +15,18 @@ Thanks to all those that support the project on Patreon!  Running an open source
 
 [![image](https://cloud.githubusercontent.com/assets/3201643/17462536/f5608898-5cf3-11e6-8e81-47d6594a8d9c.png)](https://www.patreon.com/craftworkgames)
 
-### Special thanks to the supporters
+### Special thanks to the top supporters
 
- - Austin
  - Ben
- - Chris
- - Conor
- - Iliyan
- - James
- - Laurence
+ - Patrick ([PRT Studios](http://prt-studios.com/))
+ - Benny
+ - Walter
  - Marcel
- - Mario
- - Max
- - [Nathanial](http://www.optimuspi.com/)
- - Nox
+ - [Nathanial]([optimuspi](http://www.optimuspi.com/))
+ - Austin
+
+ If you're not on the list and you should be please let me know! Managing Patreon is a job in itself.
+
 
 ## We're working towards the v0.6 release
 
@@ -106,13 +104,13 @@ The `MonoGame.Extended.Content.Pipeline.dll` needs to be referenced by the [Pipe
  - [ ] Screen Management 
 
 #### GUI System
- - [ ] Controls
-	 - [ ] Label**
-	 - [ ] Button (Text or Image)**
+ - [x] Controls
+	 - [x] Label**
+	 - [x] Button (Text or Image)**
 	 - [ ] Toggle Button (Checkbox)**
-	 - [ ] Progress Bar
-	 - [ ] Text Box**
-	 - [ ] Image
+	 - [x] Progress Bar
+	 - [x] Text Box**
+	 - [x] Image
 	 - [ ] Slider
  - [ ] Layout
 	 - [ ] Canvas
@@ -122,8 +120,8 @@ The `MonoGame.Extended.Content.Pipeline.dll` needs to be referenced by the [Pipe
 	 - [ ] Grid
  - [ ] Dialog
  - [ ] Window
- - [ ] Skinning**
- - [ ] Events**
+ - [x] Skinning
+ - [x] Events
  - [ ] Drag and Drop
 
 #### Particle System
@@ -145,7 +143,7 @@ The `MonoGame.Extended.Content.Pipeline.dll` needs to be referenced by the [Pipe
  - [x] Windows
  - [x] Linux
  - [x] Mac
- - [ ] Android^^
+ - [x] Android^^
  - [ ] iOS^^
 
 \** Work in progress

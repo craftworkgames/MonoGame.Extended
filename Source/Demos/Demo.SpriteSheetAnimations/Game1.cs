@@ -51,7 +51,7 @@ namespace Demo.SpriteSheetAnimations
             _mapRenderer = new TiledMapRenderer(GraphicsDevice);
 
             Window.Title = $"MonoGame.Extended - {GetType().Name}";
-            Window.Position = Point.Zero;
+            Window.Position = new Point(100, 100);
             Window.AllowUserResizing = true;
 
             base.Initialize();
