@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>MonoGame.Extended.NuclexGui</id>
-    <version>0.2.0.0</version>
+    <version>$version$</version>
     <description>
       A port of the Nuclex GUI system (https://nuclexframework.codeplex.com/) to make MonoGame more awesome.
     </description>
@@ -25,7 +25,7 @@
     <!-- Dependencies are automatically installed when the package is installed -->
     <dependencies>
       <dependency id="Newtonsoft.Json" version="9.0" />
-      <dependency id="MonoGame.Extended" version="0.2.0.0" />
+      <dependency id="MonoGame.Extended" version="[$version$]" />
     </dependencies>
   </metadata>
   <files>

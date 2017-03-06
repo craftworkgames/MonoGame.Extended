@@ -11,6 +11,11 @@ namespace MonoGame.Extended.Gui
     {
         private Dictionary<string, object> _previousState;
 
+        public GuiControlStyle(Type targetType)
+            : this(targetType.FullName, targetType)
+        {
+        }
+
         public GuiControlStyle(string name, Type targetType)
         {
             Name = name;

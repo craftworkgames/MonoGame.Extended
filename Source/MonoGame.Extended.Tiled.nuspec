@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>MonoGame.Extended.Tiled</id>
-    <version>0.2.0.0</version>
+    <version>$version$</version>
     <description>
       Support for Tiled maps to make MonoGame more awesome. See http://www.mapeditor.org
     </description>
@@ -24,8 +24,8 @@
     </references>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="9.0" />
-      <dependency id="MonoGame.Extended" version="0.2.0.0" />
-      <dependency id="MonoGame.Extended.Graphics" version="0.2.0.0" />
+      <dependency id="MonoGame.Extended" version="[$version$]" />
+      <dependency id="MonoGame.Extended.Graphics" version="[$version$]" />
     </dependencies>
   </metadata>
   <files>
