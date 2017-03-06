@@ -2,15 +2,13 @@
 <!-- https://docs.microsoft.com/en-us/nuget/schema/nuspec -->
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
-    <id>MonoGame.Extended</id>
+    <id>MonoGame.Extended.NuclexGui</id>
     <version>0.2.0.0</version>
     <description>
-      Makes MonoGame more awesome.
-      Tile based maps, Bitmap Fonts, Sprites and SpriteBatch extensions,
-      Input Listeners, Texture Atlases, 2D Camera, Viewport Adapters.
+      A port of the Nuclex GUI system (https://nuclexframework.codeplex.com/) to make MonoGame more awesome.
     </description>
     <authors>Dylan Wilson</authors>
-    <title>MonoGame.Extended</title>
+    <title>MonoGame.Extended.NuclexGui</title>
     <owners>Craftwork Games</owners>
     <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>
     <licenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</licenseUrl>
@@ -18,20 +16,19 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2017 - Craftwork Games</copyright>
-    <tags>monogame extended pipeline bmfont tiled texture atlas input event sprite</tags>
+    <tags>monogame extended nuclex gui</tags>
     <references>
       <group>
-        <reference file="MonoGame.Extended.dll" />
+        <reference file="MonoGame.Extended.NuclexGui.dll" />
       </group>
     </references>
+    <!-- Dependencies are automatically installed when the package is installed -->
     <dependencies>
       <dependency id="Newtonsoft.Json" version="9.0" />
+      <dependency id="MonoGame.Extended" version="0.2.0.0" />
     </dependencies>
   </metadata>
   <files>
-    <file src="MonoGame.Extended\bin\Release\MonoGame.Extended.dll" target="lib" />
-    <file src="MonoGame.Extended.Content.Pipeline\bin\MonoGame.Extended.Content.Pipeline.dll" target="lib" />
-    <!-- A readme.txt will be displayed when the package is installed -->
-    <file src="readme.txt" target="" />
+    <file src="MonoGame.Extended.NuclexGui\bin\Release\MonoGame.Extended.NuclexGui.dll" target="lib" />
   </files>
 </package>

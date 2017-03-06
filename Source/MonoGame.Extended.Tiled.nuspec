@@ -1,44 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!--https://docs.nuget.org/ndocs/schema/nuspec-->
+<!-- https://docs.microsoft.com/en-us/nuget/schema/nuspec -->
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
-    <!-- Required elements -->
-    <!-- The identifier that must be unique within the hosting gallery -->
     <id>MonoGame.Extended.Tiled</id>
-    <!-- The package version number that is used when resolving dependencies -->
     <version>0.2.0.0</version>
-    <!-- The description can be used in package manager UI. Note that the
-         nuget.org gallery uses information you add in the portal. -->
     <description>
-      Makes MonoGame more awesome: Support for Tiled maps. See http://www.mapeditor.org
+      Support for Tiled maps to make MonoGame more awesome. See http://www.mapeditor.org
     </description>
-    <!-- Authors contain text that appears directly on the gallery -->
     <authors>Dylan Wilson</authors>
-    <!--Optional elements-->
     <title>MonoGame.Extended.Tiled</title>
-    <!-- Owners are typically nuget.org identities that allow gallery
-         users to earily find other packages by the same owners.  -->
     <owners>Craftwork Games</owners>
-    <!-- License and project URLs provide links for the gallery -->
     <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>
     <licenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</licenseUrl>
-    <!-- The icon is used in Visual Studio's package manager UI -->
     <iconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</iconUrl>
-    <!-- If true, this value prompts the user to accept the license when
-         installing the package. -->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <!-- Any details about this particular release -->
     <releaseNotes></releaseNotes>
-    <!-- Copyright information -->
     <copyright>Copyright 2017 - Craftwork Games</copyright>
-    <!-- Tags appear in the gallery and can be used for tag searches -->
     <tags>monogame extended pipeline tiled</tags>
     <references>
       <group>
         <reference file="MonoGame.Extended.Tiled.dll" />
       </group>
     </references>
-    <!-- Dependencies are automatically installed when the package is installed -->
     <dependencies>
       <dependency id="Newtonsoft.Json" version="9.0" />
       <dependency id="MonoGame.Extended" version="0.2.0.0" />

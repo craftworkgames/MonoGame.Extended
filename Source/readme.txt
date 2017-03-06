@@ -11,3 +11,11 @@ The `MonoGame.Extended.Content.Pipeline.dll` is intended to be used with the [Pi
 To reference the DLL in the Pipeline tool please edit your `Content.mgcb` file and add a reference to it.
 
 **Remember**: the versions need to match exactly for everything to work.
+
+There's also a few other NuGet packages available including:
+
+ - MonoGame.Extended.Tiled
+ - MonoGame.Extended.Graphics
+ - MonoGame.Extended.Gui
+ - MonoGame.Extended.NuclexGui
+ - and more to come...
