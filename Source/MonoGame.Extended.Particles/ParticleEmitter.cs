@@ -1,13 +1,12 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Particles
 {
-    public unsafe class ParticleEmitter : EntityComponent, IDisposable
+    public unsafe class ParticleEmitter : Transform2D<ParticleEmitter>, IDisposable
     {
         private readonly FastRandom _random = new FastRandom();
         private readonly float _term;

@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Particles;
 
 namespace MonoGame.Extended.Entities.Systems
@@ -8,10 +9,10 @@ namespace MonoGame.Extended.Entities.Systems
         public override void Update(GameTime gameTime)
         {
             var deltaTime = gameTime.GetElapsedSeconds();
-            var emitters = GetComponents<ParticleEmitter>();
+            var components = GetComponents<TransformableComponent<ParticleEmitter>>();
 
-            foreach (var particleEmitter in emitters)
-                particleEmitter.Update(deltaTime);
+            foreach (var component in components)
+                component.Target.Update(deltaTime);
         }
     }
 }

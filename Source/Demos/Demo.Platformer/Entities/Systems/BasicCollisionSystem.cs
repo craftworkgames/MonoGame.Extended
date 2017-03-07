@@ -56,7 +56,7 @@ namespace Demo.Platformer.Entities.Systems
             foreach (var bodyA in _movingBodies)
             {
                 bodyA.Velocity += _gravity * deltaTime;
-                bodyA.Position += bodyA.Velocity * deltaTime;
+                bodyA.Entity.Position += bodyA.Velocity * deltaTime;
 
                 foreach (var bodyB in _staticBodies.Concat(_movingBodies))
                 {

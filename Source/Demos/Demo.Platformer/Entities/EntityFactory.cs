@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Particles;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
@@ -47,7 +48,7 @@ namespace Demo.Platformer.Entities
             animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 0, 1, 2, 3 }));
             animationFactory.Add("jump", new SpriteSheetAnimationData(new[] { 8, 9 }, isLooping: false));
 
-            entity.AttachComponent(new AnimatedSprite(animationFactory));
+            entity.AttachComponent(new TransformableComponent<Sprite>(new AnimatedSprite(animationFactory)));
             entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f));
             entity.AttachComponent(new PlayerCollisionHandler());
             entity.AttachComponent(new CharacterState());
@@ -92,7 +93,7 @@ namespace Demo.Platformer.Entities
                     new RotationModifier { RotationRate = random.NextSingle(-MathHelper.TwoPi, MathHelper.TwoPi) }
                 }
             };
-            entity.AttachComponent(particleEmitter);
+            entity.AttachComponent(new TransformableComponent<ParticleEmitter>(particleEmitter));
             entity.Destroy(delaySeconds: totalSeconds);
             return entity;
         }
@@ -106,7 +107,7 @@ namespace Demo.Platformer.Entities
             animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 100 }, 1.0f));
             animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 96, 97, 98, 99 }, isPingPong: true));
 
-            entity.AttachComponent(new AnimatedSprite(animationFactory, "walk"));
+            entity.AttachComponent(new TransformableComponent<Sprite>(new AnimatedSprite(animationFactory, "walk")));
             entity.AttachComponent(new BasicCollisionBody(textureRegion.Size, Vector2.One * 0.5f) {Tag = "Deadly"});
             entity.AttachComponent(new EnemyCollisionHandler());
             entity.AttachComponent(new CharacterState());

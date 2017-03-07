@@ -14,7 +14,7 @@ namespace Demo.Platformer.Entities.Components
 
             if (absDepthY < absDepthX)
             {
-                bodyA.Position += new Vector2(0, depth.Y); // move the player out of the ground or roof
+                bodyA.Entity.Position += new Vector2(0, depth.Y); // move the player out of the ground or roof
                 var isOnGround = bodyA.Velocity.Y > 0;
 
                 if (isOnGround)
@@ -25,7 +25,7 @@ namespace Demo.Platformer.Entities.Components
             }
             else
             {
-                bodyA.Position += new Vector2(depth.X, 0);  // move the player out of the wall
+                bodyA.Entity.Position += new Vector2(depth.X, 0);  // move the player out of the wall
                 bodyA.Velocity = new Vector2(bodyA.Velocity.X, bodyA.Velocity.Y < 0 ? 0 : bodyA.Velocity.Y); // drop the player down if they hit a wall
             }
         }

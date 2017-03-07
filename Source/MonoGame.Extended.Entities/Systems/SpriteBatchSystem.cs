@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Particles;
 using MonoGame.Extended.Sprites;
 
@@ -25,18 +26,23 @@ namespace MonoGame.Extended.Entities.Systems
 
         public override void Draw(GameTime gameTime)
         {
-            var sprites = GetComponents<Sprite>();
-            var emitters = GetComponents<ParticleEmitter>();
+            var spriteComponents = GetComponents<TransformableComponent<Sprite>>();
+            var particleEmitterComponents = GetComponents<TransformableComponent<ParticleEmitter>>();
             var transformMatrix = _camera.GetViewMatrix();
 
-            _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect,
-                transformMatrix);
+            _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect, transformMatrix);
 
-            foreach (var sprite in sprites)
+            foreach (var spriteComponent in spriteComponents)
+            {
+                var sprite = spriteComponent.Target;
                 _spriteBatch.Draw(sprite);
+            }
 
-            foreach (var particleEmitter in emitters)
+            foreach (var particleEmitterComponent in particleEmitterComponents)
+            {
+                var particleEmitter = particleEmitterComponent.Target;
                 _spriteBatch.Draw(particleEmitter);
+            }
 
             _spriteBatch.End();
         }

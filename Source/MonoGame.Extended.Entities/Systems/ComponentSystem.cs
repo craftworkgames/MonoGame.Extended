@@ -33,7 +33,7 @@ namespace MonoGame.Extended.Entities.Systems
             }
         }
 
-        protected IEnumerable<T> GetComponents<T>()
+        protected IEnumerable<T> GetComponents<T>() where T : EntityComponent
         {
             return Parent.GetComponents<T>();
         }

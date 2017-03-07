@@ -27,7 +27,7 @@ namespace MonoGame.Extended
     ///         objects hierarchically.
     ///     </para>
     ///     <para>
-    ///         This class shouldn't be used directly. Instead use either of the derived classes; <see cref="Transform2D" /> or
+    ///         This class shouldn't be used directly. Instead use either of the derived classes; <see cref="Transform2D{TParent}" /> or
     ///         Transform3D.
     ///     </para>
     /// </remarks>

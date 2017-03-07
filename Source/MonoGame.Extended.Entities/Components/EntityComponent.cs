@@ -2,12 +2,10 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Entities.Components
 {
-    public abstract class EntityComponent : IMovable, IRotatable, IScalable
+    public abstract class EntityComponent : IMovable, IRotatable, IScalable 
     {
         private Vector2 _position;
-
         private float _rotation;
-
         private Vector2 _scale;
 
         protected EntityComponent()
@@ -16,7 +14,7 @@ namespace MonoGame.Extended.Entities.Components
 
         public Entity Entity { get; internal set; }
 
-        public Vector2 Position
+        public virtual Vector2 Position
         {
             get { return Entity?.Position ?? _position; }
             set
@@ -28,7 +26,7 @@ namespace MonoGame.Extended.Entities.Components
             }
         }
 
-        public float Rotation
+        public virtual float Rotation
         {
             get { return Entity?.Rotation ?? _rotation; }
             set
@@ -40,7 +38,7 @@ namespace MonoGame.Extended.Entities.Components
             }
         }
 
-        public Vector2 Scale
+        public virtual Vector2 Scale
         {
             get { return Entity?.Scale ?? _scale; }
             set
@@ -49,6 +47,32 @@ namespace MonoGame.Extended.Entities.Components
 
                 if (Entity != null)
                     _scale = value;
+            }
+        }
+    }
+
+
+    public class TransformableComponent<T> : EntityComponent, IMovable, IRotatable, IScalable 
+        where T : Transform2D<T>
+    {
+        public TransformableComponent(T transformable)
+        {
+            _target = transformable;
+        }
+
+        private readonly T _target;
+        public T Target
+        {
+            get
+            {
+                if (Entity != null)
+                {
+                    _target.Position = Entity.Position;
+                    _target.Rotation = Entity.Rotation;
+                    _target.Scale = Entity.Scale;
+                }
+
+                return _target;
             }
         }
     }

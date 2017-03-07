@@ -18,4 +18,6 @@ There's also a few other NuGet packages available including:
  - MonoGame.Extended.Graphics
  - MonoGame.Extended.Gui
  - MonoGame.Extended.NuclexGui
+ - MonoGame.Particles
+ - MonoGame.Entities
  - and more to come...

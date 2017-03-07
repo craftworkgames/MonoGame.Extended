@@ -112,7 +112,7 @@ namespace MonoGame.Extended.Entities
             ComponentDetached?.Invoke(this, component);
         }
 
-        internal IEnumerable<T> GetComponents<T>()
+        internal IEnumerable<T> GetComponents<T>() where T : EntityComponent
         {
             return _components.OfType<T>();
         }

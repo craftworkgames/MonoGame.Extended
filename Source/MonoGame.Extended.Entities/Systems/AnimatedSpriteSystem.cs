@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.Entities.Systems
@@ -8,9 +10,9 @@ namespace MonoGame.Extended.Entities.Systems
         public override void Update(GameTime gameTime)
         {
             var deltaTime = gameTime.GetElapsedSeconds();
-            var sprites = GetComponents<AnimatedSprite>();
+            var sprites = GetComponents<TransformableComponent<Sprite>>();
 
-            foreach (var animatedSprite in sprites)
+            foreach (var animatedSprite in sprites.Select(c => c.Target).OfType<AnimatedSprite>())
                 animatedSprite.Update(deltaTime);
         }
     }

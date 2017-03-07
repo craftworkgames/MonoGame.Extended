@@ -1,9 +1,10 @@
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities.Components;
 
 namespace Demo.Platformer.Entities.Components
 {
-    public class EnemyAi : EntityComponent
+    public class EnemyAi : EntityComponent, IMovable
     {
         public EnemyAi()
         {
@@ -15,5 +16,11 @@ namespace Demo.Platformer.Entities.Components
         public Vector2 Direction { get; set; }
         public float WalkTime { get; set; }
         public float WalkTimeRemaining { get; set; }
+
+        public Vector2 Position
+        {
+            get { return Entity.Position; }
+            set { Entity.Position = value; }
+        }
     }
 }
