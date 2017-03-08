@@ -2,7 +2,7 @@
 
 namespace MonoGame.Extended.SceneGraphs
 {
-    public class SceneEntityCollection : Collection<ISceneEntity>
+    public class SceneEntityCollection : Collection<IRectangular>
     {
     }
 }

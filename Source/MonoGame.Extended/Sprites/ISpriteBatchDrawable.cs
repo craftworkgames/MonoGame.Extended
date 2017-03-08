@@ -1,15 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.SceneGraphs
+namespace MonoGame.Extended.Sprites
 {
-    public interface ISceneEntity
-    {
-        RectangleF BoundingRectangle { get; }
-    }
-
     public interface ISpriteBatchDrawable
     {
         bool IsVisible { get; }

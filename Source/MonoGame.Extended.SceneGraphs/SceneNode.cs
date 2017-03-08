@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Shapes;
+using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.SceneGraphs
 {

@@ -41,8 +41,10 @@
     <Compile Include="Animations\AnimationComponent.cs" />
     <Compile Include="Collections\DictionaryExtensions.cs" />
     <Compile Include="FloatHelper.cs" />
+    <Compile Include="IRectangular.cs" />
     <Compile Include="Serialization\NinePatchRegion2DJsonConverter.cs" />
     <Compile Include="Serialization\ThicknessJsonConverter.cs" />
+    <Compile Include="Sprites\ISpriteBatchDrawable.cs" />
     <Compile Include="Thickness.cs" />
     <Compile Include="BoundingRectangle.cs" />
     <Compile Include="Point2.cs" />
@@ -125,12 +127,6 @@
     <Compile Include="Range.cs" />
     <Compile Include="RenderTarget2DExtensions.cs" />
     <Compile Include="MatrixExtensions.cs" />
-    <Compile Include="SceneGraphs\ISceneEntity.cs" />
-    <Compile Include="SceneGraphs\SceneEntityCollection.cs" />
-    <Compile Include="SceneGraphs\SceneGraph.cs" />
-    <Compile Include="SceneGraphs\SceneNode.cs" />
-    <Compile Include="SceneGraphs\SceneNodeCollection.cs" />
-    <Compile Include="SceneGraphs\SceneGraphExtensions.cs" />
     <Compile Include="Shapes\ShapeExtensions.cs" />
     <Compile Include="Shapes\CircleF.cs" />
     <Compile Include="Shapes\PolygonF.cs" />

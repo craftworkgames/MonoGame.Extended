@@ -113,6 +113,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Extended.SceneGraphs\MonoGame.Extended.SceneGraphs.csproj">
+      <Project>{fe61c3d7-d96d-4aa4-9ef1-17e457bb2c7c}</Project>
+      <Name>MonoGame.Extended.SceneGraphs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
       <Name>MonoGame.Extended</Name>
