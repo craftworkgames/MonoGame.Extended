@@ -64,7 +64,6 @@
     <Compile Include="Animations\SpriteSheets\SpriteSheetAnimation.cs" />
     <Compile Include="Animations\SpriteSheets\SpriteSheetAnimationData.cs" />
     <Compile Include="Animations\SpriteSheets\SpriteSheetAnimationFactory.cs" />
-    <Compile Include="Animations\SpriteSheets\SpriteSheetAnimator.cs" />
     <Compile Include="Animations\SpriteSheets\SpriteSheetAnimationFactoryReader.cs" />
     <Compile Include="Animations\Tweens\TweenAnimation.cs" />
     <Compile Include="Animations\Tweens\PropertyTween.cs" />
@@ -125,7 +124,6 @@
     <Compile Include="FastRandom.cs" />
     <Compile Include="RandomExtensions.cs" />
     <Compile Include="Range.cs" />
-    <Compile Include="RenderTarget2DExtensions.cs" />
     <Compile Include="MatrixExtensions.cs" />
     <Compile Include="Shapes\ShapeExtensions.cs" />
     <Compile Include="Shapes\CircleF.cs" />
