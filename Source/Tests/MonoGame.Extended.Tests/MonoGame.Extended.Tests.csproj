@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssertExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontTests.cs" />
     <Compile Include="TestGraphicsDevice.cs" />
     <Compile Include="Collections\BitVector32Tests.cs" />
@@ -76,10 +77,10 @@
     <Compile Include="Primitives\Segment2DTests.cs" />
     <Compile Include="Primitives\Size2Tests.cs" />
     <Compile Include="RangeTests.cs" />
-    <Compile Include="Shapes\EllipseFTest.cs" />
+    <Compile Include="Primitives\EllipseFTest.cs" />
     <Compile Include="Shapes\PolygonFTests.cs" />
-    <Compile Include="Shapes\CircleTests.cs" />
-    <Compile Include="Shapes\RectangleFTests.cs" />
+    <Compile Include="Primitives\CircleFTests.cs" />
+    <Compile Include="Primitives\RectangleFTests.cs" />
     <Compile Include="Sprites\SpriteTests.cs" />
     <Compile Include="TextureAtlases\TextureAtlasTests.cs" />
     <Compile Include="Vector2ExtensionsTests.cs" />

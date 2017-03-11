@@ -5,9 +5,9 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Shapes
 {
-    public struct PolygonF : IShapeF, IEquatable<PolygonF>
+    public class Polygon : IEquatable<Polygon>
     {
-        public PolygonF(IEnumerable<Vector2> vertices)
+        public Polygon(IEnumerable<Vector2> vertices)
         {
             _localVertices = vertices.ToArray();
             _transformedVertices = _localVertices;
@@ -102,13 +102,13 @@ namespace MonoGame.Extended.Shapes
             return newVertices;
         }
 
-        public PolygonF TransformedCopy(Vector2 offset, float rotation, Vector2 scale)
+        public Polygon TransformedCopy(Vector2 offset, float rotation, Vector2 scale)
         {
-            var polygon = new PolygonF(_localVertices);
+            var polygon = new Polygon(_localVertices);
             polygon.Offset(offset);
             polygon.Rotate(rotation);
             polygon.Scale(scale - Vector2.One);
-            return new PolygonF(polygon.Vertices);
+            return new Polygon(polygon.Vertices);
         }
 
         public RectangleF BoundingRectangle
@@ -147,12 +147,12 @@ namespace MonoGame.Extended.Shapes
             return (intersects & 1) == 1;
         }
 
-        public static bool operator ==(PolygonF a, PolygonF b)
+        public static bool operator ==(Polygon a, Polygon b)
         {
             return a.Equals(b);
         }
 
-        public static bool operator !=(PolygonF a, PolygonF b)
+        public static bool operator !=(Polygon a, Polygon b)
         {
             return !(a == b);
         }
@@ -160,10 +160,10 @@ namespace MonoGame.Extended.Shapes
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            return obj is PolygonF && Equals((PolygonF) obj);
+            return obj is Polygon && Equals((Polygon) obj);
         }
 
-        public bool Equals(PolygonF other)
+        public bool Equals(Polygon other)
         {
             return Vertices.SequenceEqual(other.Vertices);
         }

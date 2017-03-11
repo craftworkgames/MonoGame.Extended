@@ -110,6 +110,58 @@ namespace MonoGame.Extended
         /// <summary>
         ///     Determines whether this <see cref="Segment2D" /> intersects with the specified <see cref="BoundingRectangle" />.
         /// </summary>
+        /// <param name="rectangle">The bounding box.</param>
+        /// <param name="intersectionPoint">
+        ///     When this method returns, contains the <see cref="Point2" /> of intersection, if an
+        ///     intersection was found; otherwise, the <see cref="Point2.NaN" />. This parameter is passed uninitialized.
+        /// </param>
+        /// <returns>
+        ///     <c>true</c> if this <see cref="Segment2D" /> intersects with <paramref name="rectangle" />; otherwise,
+        ///     <c>false</c>.
+        /// </returns>
+        public bool Intersects(RectangleF rectangle, out Point2 intersectionPoint)
+        {
+            // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.3; Basic Primitive Tests - Intersecting Lines, Rays, and (Directed Segments). pg 179-181
+
+            var minimumPoint = rectangle.TopLeft;
+            var maximumPoint = rectangle.BottomRight;
+            var minimumDistance = float.MinValue;
+            var maximumDistance = float.MaxValue;
+
+            var direction = End - Start;
+            if (
+                !PrimitivesHelper.IntersectsSlab(Start.X, direction.X, minimumPoint.X, maximumPoint.X, ref minimumDistance,
+                    ref maximumDistance))
+            {
+                intersectionPoint = Point2.NaN;
+                return false;
+            }
+
+            if (
+                !PrimitivesHelper.IntersectsSlab(Start.Y, direction.Y, minimumPoint.Y, maximumPoint.Y, ref minimumDistance,
+                    ref maximumDistance))
+            {
+                intersectionPoint = Point2.NaN;
+                return false;
+            }
+
+            // Segment intersects the 2 slabs.
+
+            if (minimumDistance <= 0)
+                intersectionPoint = Start;
+            else
+            {
+                intersectionPoint = minimumDistance * direction;
+                intersectionPoint.X += Start.X;
+                intersectionPoint.Y += Start.Y;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        ///     Determines whether this <see cref="Segment2D" /> intersects with the specified <see cref="BoundingRectangle" />.
+        /// </summary>
         /// <param name="boundingRectangle">The bounding box.</param>
         /// <param name="intersectionPoint">
         ///     When this method returns, contains the <see cref="Point2" /> of intersection, if an
@@ -123,14 +175,14 @@ namespace MonoGame.Extended
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.3; Basic Primitive Tests - Intersecting Lines, Rays, and (Directed Segments). pg 179-181
 
-            var minimumPoint = boundingRectangle.Centre - boundingRectangle.Radii;
-            var maximumPoint = boundingRectangle.Centre + boundingRectangle.Radii;
+            var minimumPoint = boundingRectangle.Center - boundingRectangle.HalfExtents;
+            var maximumPoint = boundingRectangle.Center + boundingRectangle.HalfExtents;
             var minimumDistance = float.MinValue;
             var maximumDistance = float.MaxValue;
 
             var direction = End - Start;
             if (
-                !RayHelper.IntersectsSlab(Start.X, direction.X, minimumPoint.X, maximumPoint.X, ref minimumDistance,
+                !PrimitivesHelper.IntersectsSlab(Start.X, direction.X, minimumPoint.X, maximumPoint.X, ref minimumDistance,
                     ref maximumDistance))
             {
                 intersectionPoint = Point2.NaN;
@@ -138,7 +190,7 @@ namespace MonoGame.Extended
             }
 
             if (
-                !RayHelper.IntersectsSlab(Start.Y, direction.Y, minimumPoint.Y, maximumPoint.Y, ref minimumDistance,
+                !PrimitivesHelper.IntersectsSlab(Start.Y, direction.Y, minimumPoint.Y, maximumPoint.Y, ref minimumDistance,
                     ref maximumDistance))
             {
                 intersectionPoint = Point2.NaN;
@@ -158,7 +210,6 @@ namespace MonoGame.Extended
 
             return true;
         }
-
 
         /// <summary>
         ///     Compares two <see cref="Segment2D" /> structures. The result specifies

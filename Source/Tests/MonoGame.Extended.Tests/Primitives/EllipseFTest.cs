@@ -1,8 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.Shapes;
 using NUnit.Framework;
 
-namespace MonoGame.Extended.Tests.Shapes
+namespace MonoGame.Extended.Tests.Primitives
 {
     [TestFixture]
     public class EllipseFTest

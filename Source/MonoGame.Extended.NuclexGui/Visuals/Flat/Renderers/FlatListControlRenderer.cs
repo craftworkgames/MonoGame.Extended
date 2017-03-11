@@ -1,6 +1,5 @@
 ﻿using System;
 using MonoGame.Extended.NuclexGui.Controls.Desktop;
-using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.NuclexGui.Visuals.Flat.Renderers
 {

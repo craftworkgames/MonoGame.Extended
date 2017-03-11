@@ -58,8 +58,8 @@ namespace MonoGame.Extended
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.3; Basic Primitive Tests - Intersecting Lines, Rays, and (Directed Segments). pg 179-181
 
-            var minimum = boundingRectangle.Centre - boundingRectangle.Radii;
-            var maximum = boundingRectangle.Centre + boundingRectangle.Radii;
+            var minimum = boundingRectangle.Center - boundingRectangle.HalfExtents;
+            var maximum = boundingRectangle.Center + boundingRectangle.HalfExtents;
 
             // Set to the smallest possible value so the algorithm can find the first hit along the ray
             var minimumDistanceAlongRay = float.MinValue;
@@ -69,7 +69,7 @@ namespace MonoGame.Extended
             // For all relevant slabs which in this case is two.
 
             // The first, horizontal, slab.
-            if (!RayHelper.IntersectsSlab(Position.X, Direction.X, minimum.X, maximum.X,
+            if (!PrimitivesHelper.IntersectsSlab(Position.X, Direction.X, minimum.X, maximum.X,
                 ref minimumDistanceAlongRay,
                 ref maximumDistanceAlongRay))
             {
@@ -78,7 +78,7 @@ namespace MonoGame.Extended
             }
 
             // The second, vertical, slab.
-            if (!RayHelper.IntersectsSlab(Position.Y, Direction.Y, minimum.Y, maximum.Y,
+            if (!PrimitivesHelper.IntersectsSlab(Position.Y, Direction.Y, minimum.Y, maximum.Y,
                 ref minimumDistanceAlongRay,
                 ref maximumDistanceAlongRay))
             {

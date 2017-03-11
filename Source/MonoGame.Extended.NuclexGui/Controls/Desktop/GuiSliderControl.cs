@@ -1,6 +1,5 @@
 ﻿using System;
 using MonoGame.Extended.InputListeners;
-using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.NuclexGui.Controls.Desktop
 {
