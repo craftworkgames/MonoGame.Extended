@@ -63,7 +63,7 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
             if (button == MouseButton.Left)
             {
                 var thumbRegion = GetThumbRegion();
-                if (thumbRegion.Contains(_pickupX, _pickupY))
+                if (thumbRegion.Contains(new Point2(_pickupX, _pickupY)))
                 {
                     _pressedDown = true;
 
@@ -97,7 +97,7 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
                 _pickupY = y;
             }
 
-            _mouseOverThumb = GetThumbRegion().Contains(x, y);
+            _mouseOverThumb = GetThumbRegion().Contains(new Point2(x, y));
         }
 
         /// <summary>
