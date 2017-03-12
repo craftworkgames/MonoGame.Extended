@@ -8,11 +8,8 @@ namespace MonoGame.Extended
     public class Camera2D : IMovable, IRotatable
     {
         private readonly ViewportAdapter _viewportAdapter;
-
         private float _maximumZoom = float.MaxValue;
-
         private float _minimumZoom;
-
         private float _zoom;
 
         public Camera2D(GraphicsDevice graphicsDevice)
@@ -116,12 +113,7 @@ namespace MonoGame.Extended
             if (value < MinimumZoom)
                 Zoom = MinimumZoom;
             else
-            {
-                if (value > MaximumZoom)
-                    Zoom = MaximumZoom;
-                else
-                    Zoom = value;
-            }
+                Zoom = value > MaximumZoom ? MaximumZoom : value;
         }
 
         public void LookAt(Vector2 position)

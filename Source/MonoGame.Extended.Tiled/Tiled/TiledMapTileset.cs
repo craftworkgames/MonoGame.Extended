@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,8 +9,6 @@ namespace MonoGame.Extended.Tiled
 {
     public class TiledMapTileset
     {
-        private readonly List<TiledMapTilesetTile> _tiles;
-        internal readonly List<TiledMapTilesetAnimatedTile> _animatedTiles;
         private readonly Dictionary<int, TiledMapTilesetAnimatedTile> _animatedTilesByLocalTileIdentifier;
 
         public string Name => Texture.Name;
@@ -23,17 +22,7 @@ namespace MonoGame.Extended.Tiled
         public int Columns { get; }
         public ReadOnlyCollection<TiledMapTilesetTile> Tiles { get; private set; }
         public ReadOnlyCollection<TiledMapTilesetAnimatedTile> AnimatedTiles { get; private set; }
-        public TiledMapProperties Properties { get; private set; }
-
-        private TiledMapTileset()
-        {
-            Properties = new TiledMapProperties();
-            _tiles = new List<TiledMapTilesetTile>();
-            _animatedTiles = new List<TiledMapTilesetAnimatedTile>();
-            Tiles = new ReadOnlyCollection<TiledMapTilesetTile>(_tiles);
-            AnimatedTiles = new ReadOnlyCollection<TiledMapTilesetAnimatedTile>(_animatedTiles);
-            _animatedTilesByLocalTileIdentifier = new Dictionary<int, TiledMapTilesetAnimatedTile>();
-        }
+        public TiledMapProperties Properties { get; }
 
         internal TiledMapTileset(ContentReader input)
         {
@@ -81,24 +70,9 @@ namespace MonoGame.Extended.Tiled
 
             input.ReadTiledMapProperties(Properties);
 
-            Tiles = tiles;
-            AnimatedTiles = animatedTiles;
+            Tiles = new ReadOnlyCollection<TiledMapTilesetTile>(tiles);
+            AnimatedTiles = new ReadOnlyCollection<TiledMapTilesetAnimatedTile>(animatedTiles);
         }
-
-        private readonly Dictionary<int, TiledMapTilesetAnimatedTile> _animatedTilesByLocalTileIdentifier;
-
-        public string Name => Texture.Name;
-        public Texture2D Texture { get; }
-        public int FirstGlobalIdentifier { get; }
-        public int TileWidth { get; }
-        public int TileHeight { get; }
-        public int Spacing { get; }
-        public int Margin { get; }
-        public int TileCount { get; }
-        public int Columns { get; }
-        public IReadOnlyList<TiledMapTilesetTile> Tiles { get; }
-        public IReadOnlyList<TiledMapTilesetAnimatedTile> AnimatedTiles { get; }
-        public TiledMapProperties Properties { get; }
 
         public Rectangle GetTileRegion(int localTileIdentifier)
         {

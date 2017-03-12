@@ -197,51 +197,51 @@ namespace Demo.TiledMaps
 
         private void DrawText()
         {
-            //var textColor = Color.Black;
-            //_spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
+            var textColor = Color.Black;
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
 
-            //var baseTextPosition = new Point2(5, 0);
-            //var textPosition = new Point2(0, 0);
+            var baseTextPosition = new Point2(5, 0);
 
-            //// textPosition = base position (point) + offset (vector2)
-            //textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 0);
-            //_spriteBatch.DrawString(_bitmapFont,
-            //    $"Map: {_map.Name}; {_map.TileLayers.Count} tile layer(s) @ {_map.Width}x{_map.Height} tiles, {_map.ImageLayers.Count} image layer(s)",
-            //    textPosition, textColor);
-            //textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 1);
-            //// we can safely get the metrics without worrying about spritebatch interfering because spritebatch submits on End()
-            //_spriteBatch.DrawString(_bitmapFont,
-            //    $"FPS: {_fpsCounter.FramesPerSecond:0}, Draw Calls: {GraphicsDevice.Metrics.DrawCount}, Texture Count: {GraphicsDevice.Metrics.TextureCount}, Triangle Count: {GraphicsDevice.Metrics.PrimitiveCount}",
-            //    textPosition, textColor);
-            //textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 2);
-            //_spriteBatch.DrawString(_bitmapFont, $"Camera Position: (x={_camera.Position.X}, y={_camera.Position.Y})",
-            //    textPosition, textColor);
+            // textPosition = base position (point) + offset (vector2)
+            var textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 0);
+            _spriteBatch.DrawString(_bitmapFont,
+                $"Map: {_map.Name}; {_map.TileLayers.Count} tile layer(s) @ {_map.Width}x{_map.Height} tiles, {_map.ImageLayers.Count} image layer(s)",
+                textPosition, textColor);
+            textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 1);
 
-            //if (!_showHelp)
-            //{
-            //    _spriteBatch.DrawString(_bitmapFont, "H: Show help", new Vector2(5, _bitmapFont.LineHeight * 3),
-            //        textColor);
-            //}
-            //else
-            //{
-            //    textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 3);
-            //    _spriteBatch.DrawString(_bitmapFont, "H: Hide help", textPosition, textColor);
-            //    textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 4);
-            //    _spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: Pan camera", textPosition, textColor);
-            //    textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 5);
-            //    _spriteBatch.DrawString(_bitmapFont, "RF: Zoom camera in / out", textPosition, textColor);
-            //    textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 6);
-            //    _spriteBatch.DrawString(_bitmapFont, "Z: Move camera to the origin", textPosition, textColor);
-            //    textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 7);
-            //    _spriteBatch.DrawString(_bitmapFont, "X: Move camera to look at the origin", textPosition, textColor);
-            //    textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 8);
-            //    _spriteBatch.DrawString(_bitmapFont, "C: Move camera to look at center of the map", textPosition,
-            //        textColor);
-            //    textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 9);
-            //    _spriteBatch.DrawString(_bitmapFont, "Tab: Cycle through maps", textPosition, textColor);
-            //}
+            // we can safely get the metrics without worrying about spritebatch interfering because spritebatch submits on End()
+            _spriteBatch.DrawString(_bitmapFont,
+                $"FPS: {_fpsCounter.FramesPerSecond:0}, Draw Calls: {GraphicsDevice.Metrics.DrawCount}, Texture Count: {GraphicsDevice.Metrics.TextureCount}, Triangle Count: {GraphicsDevice.Metrics.PrimitiveCount}",
+                textPosition, textColor);
+            textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 2);
+            _spriteBatch.DrawString(_bitmapFont, $"Camera Position: (x={_camera.Position.X}, y={_camera.Position.Y})",
+                textPosition, textColor);
 
-            //_spriteBatch.End();
+            if (!_showHelp)
+            {
+                _spriteBatch.DrawString(_bitmapFont, "H: Show help", new Vector2(5, _bitmapFont.LineHeight * 3),
+                    textColor);
+            }
+            else
+            {
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 3);
+                _spriteBatch.DrawString(_bitmapFont, "H: Hide help", textPosition, textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 4);
+                _spriteBatch.DrawString(_bitmapFont, "WASD/Arrows: Pan camera", textPosition, textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 5);
+                _spriteBatch.DrawString(_bitmapFont, "RF: Zoom camera in / out", textPosition, textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 6);
+                _spriteBatch.DrawString(_bitmapFont, "Z: Move camera to the origin", textPosition, textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 7);
+                _spriteBatch.DrawString(_bitmapFont, "X: Move camera to look at the origin", textPosition, textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 8);
+                _spriteBatch.DrawString(_bitmapFont, "C: Move camera to look at center of the map", textPosition,
+                    textColor);
+                textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 9);
+                _spriteBatch.DrawString(_bitmapFont, "Tab: Cycle through maps", textPosition, textColor);
+            }
+
+            _spriteBatch.End();
         }
     }
 }
