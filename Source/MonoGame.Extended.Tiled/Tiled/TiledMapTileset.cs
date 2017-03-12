@@ -8,6 +8,33 @@ namespace MonoGame.Extended.Tiled
 {
     public class TiledMapTileset
     {
+        private readonly List<TiledMapTilesetTile> _tiles;
+        internal readonly List<TiledMapTilesetAnimatedTile> _animatedTiles;
+        private readonly Dictionary<int, TiledMapTilesetAnimatedTile> _animatedTilesByLocalTileIdentifier;
+
+        public string Name => Texture.Name;
+        public Texture2D Texture { get; }
+        public int FirstGlobalIdentifier { get; }
+        public int TileWidth { get; }
+        public int TileHeight { get; }
+        public int Spacing { get; }
+        public int Margin { get; }
+        public int TileCount { get; }
+        public int Columns { get; }
+        public ReadOnlyCollection<TiledMapTilesetTile> Tiles { get; private set; }
+        public ReadOnlyCollection<TiledMapTilesetAnimatedTile> AnimatedTiles { get; private set; }
+        public TiledMapProperties Properties { get; private set; }
+
+        private TiledMapTileset()
+        {
+            Properties = new TiledMapProperties();
+            _tiles = new List<TiledMapTilesetTile>();
+            _animatedTiles = new List<TiledMapTilesetAnimatedTile>();
+            Tiles = new ReadOnlyCollection<TiledMapTilesetTile>(_tiles);
+            AnimatedTiles = new ReadOnlyCollection<TiledMapTilesetAnimatedTile>(_animatedTiles);
+            _animatedTilesByLocalTileIdentifier = new Dictionary<int, TiledMapTilesetAnimatedTile>();
+        }
+
         internal TiledMapTileset(ContentReader input)
         {
             var textureAssetName = input.GetRelativeAssetName(input.ReadString());

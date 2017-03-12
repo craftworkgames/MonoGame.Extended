@@ -14,7 +14,7 @@ namespace MonoGame.Extended.Tiled
         private int _frameIndex;
         private TimeSpan _timer;
 
-        public IReadOnlyList<TiledMapTilesetTileAnimationFrame> AnimationFrames { get; }
+        public ReadOnlyCollection<TiledMapTilesetTileAnimationFrame> AnimationFrames { get; }
         public TiledMapTilesetTileAnimationFrame CurrentAnimationFrame { get; private set; }
 
         // ReSharper disable once SuggestBaseTypeForParameter

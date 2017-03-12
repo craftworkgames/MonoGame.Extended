@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
@@ -220,6 +221,10 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         private static void WriteModels(ContentWriter output, IReadOnlyCollection<TiledMapLayerModelContent> models)
         {
             output.Write(models.Count);
+
+            var animatedModelsCount = models.Count(x => x is TiledMapLayerAnimatedModelContent);
+            output.Write(animatedModelsCount);
+
             foreach (var model in models)
             {
                 var animatedModel = model as TiledMapLayerAnimatedModelContent;

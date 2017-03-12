@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using MonoGame.Extended.TextureAtlases;
 
@@ -16,10 +17,10 @@ namespace MonoGame.Extended.Animations.SpriteSheets
         public SpriteSheetAnimationFactory(IEnumerable<TextureRegion2D> frames)
         {
             _animationDataDictionary = new Dictionary<string, SpriteSheetAnimationData>();
-            Frames = frames.ToArray();
+            Frames = new ReadOnlyCollection<TextureRegion2D>(frames.ToArray());
         }
 
-        public IReadOnlyList<TextureRegion2D> Frames { get; }
+        public ReadOnlyCollection<TextureRegion2D> Frames { get; }
 
         public void Add(string name, SpriteSheetAnimationData data)
         {

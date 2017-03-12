@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -91,7 +92,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         }
 
         private static TiledMapTile[] CreateTiles(TiledMapTileDrawOrderContent renderOrder, int mapWidth, int mapHeight,
-            IReadOnlyList<TiledMapTileContent> tileData)
+             List<TiledMapTileContent> tileData)
         {
             TiledMapTile[] tiles;
 
@@ -117,7 +118,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         }
 
         private static IEnumerable<TiledMapTile> CreateTilesInLeftDownOrder(
-            IReadOnlyList<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
+            // ReSharper disable once SuggestBaseTypeForParameter
+            List<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
         {
             for (var y = 0; y < mapHeight; y++)
             for (var x = mapWidth - 1; x >= 0; x--)
@@ -132,7 +134,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         }
 
         private static IEnumerable<TiledMapTile> CreateTilesInLeftUpOrder(
-            IReadOnlyList<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
+            // ReSharper disable once SuggestBaseTypeForParameter
+            List<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
         {
             for (var y = mapHeight - 1; y >= 0; y--)
             for (var x = mapWidth - 1; x >= 0; x--)
@@ -147,7 +150,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         }
 
         private static IEnumerable<TiledMapTile> CreateTilesInRightDownOrder(
-            IReadOnlyList<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
+            // ReSharper disable once SuggestBaseTypeForParameter
+            List<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
         {
             for (var y = 0; y < mapHeight; y++)
             for (var x = 0; x < mapWidth; x++)
@@ -162,7 +166,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         }
 
         private static IEnumerable<TiledMapTile> CreateTilesInRightUpOrder(
-            IReadOnlyList<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
+            // ReSharper disable once SuggestBaseTypeForParameter
+            List<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
         {
             for (var y = mapHeight - 1; y >= 0; y--)
             for (var x = mapWidth - 1; x >= 0; x--)

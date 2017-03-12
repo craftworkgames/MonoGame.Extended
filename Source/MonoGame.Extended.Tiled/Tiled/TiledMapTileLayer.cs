@@ -13,7 +13,7 @@ namespace MonoGame.Extended.Tiled
         public int Height { get; }
         public int TileWidth { get; }
         public int TileHeight { get; }
-        public IReadOnlyList<TiledMapTile> Tiles { get; }
+        public ReadOnlyCollection<TiledMapTile> Tiles { get; }
 
         internal TiledMapTileLayer(ContentReader input, TiledMap map) 
             : base(input)

@@ -24,11 +24,11 @@ namespace MonoGame.Extended.Tiled
         public TiledMapTileDrawOrder RenderOrder { get; }
         public TiledMapOrientation Orientation { get; }
         public TiledMapProperties Properties { get; }
-        public IReadOnlyList<TiledMapTileset> Tilesets { get; }
-        public IReadOnlyList<TiledMapLayer> Layers { get; }
-        public IReadOnlyList<TiledMapImageLayer> ImageLayers { get; }
-        public IReadOnlyList<TiledMapTileLayer> TileLayers { get; }
-        public IReadOnlyList<TiledMapObjectLayer> ObjectLayers { get; }
+        public ReadOnlyCollection<TiledMapTileset> Tilesets { get; }
+        public ReadOnlyCollection<TiledMapLayer> Layers { get; }
+        public ReadOnlyCollection<TiledMapImageLayer> ImageLayers { get; }
+        public ReadOnlyCollection<TiledMapTileLayer> TileLayers { get; }
+        public ReadOnlyCollection<TiledMapObjectLayer> ObjectLayers { get; }
 
         public Color? BackgroundColor { get; set; }
 
@@ -108,7 +108,11 @@ namespace MonoGame.Extended.Tiled
 
         public TiledMapTileset GetTilesetByTileGlobalIdentifier(int tileIdentifier)
         {
-            return _tilesets.FirstOrDefault(tileset => tileset.ContainsGlobalIdentifier(tileIdentifier));
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var tileset in _tilesets)
+                if (tileset.ContainsGlobalIdentifier(tileIdentifier))
+                    return tileset;
+            return null;
         }
     }
 }
