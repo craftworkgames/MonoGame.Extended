@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Shapes
+namespace MonoGame.Extended
 {
-    public class EllipseF : IShapeF
+    public class EllipseF
     {
         public EllipseF(Vector2 center, float radiusX, float radiusY)
         {

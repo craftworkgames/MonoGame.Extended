@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.NuclexGui.Controls;
-using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 {

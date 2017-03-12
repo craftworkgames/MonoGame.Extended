@@ -31,13 +31,13 @@ namespace MonoGame.Extended.BitmapFonts
             return char.IsLowSurrogate(s, index) ? 0 : char.ConvertToUtf32(s, index);
         }
 
-        public Size MeasureString(string text)
+        public Size2 MeasureString(string text)
         {
             if (string.IsNullOrEmpty(text))
-                return Size.Empty;
+                return Size2.Empty;
 
             var stringRectangle = GetStringRectangle(text, Point.Zero);
-            return new Size(stringRectangle.Width, stringRectangle.Height);
+            return new Size2(stringRectangle.Width, stringRectangle.Height);
         }
 
         public Rectangle GetStringRectangle(string text, Vector2 position)

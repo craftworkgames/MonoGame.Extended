@@ -1,8 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Shapes;
 
-namespace MonoGame.Extended.Shapes
+namespace MonoGame.Extended
 {
     /// <summary>
     ///     Sprite batch extensions for drawing primitive shapes
@@ -23,7 +24,7 @@ namespace MonoGame.Extended.Shapes
         }
 
         /// <summary>
-        ///     Draws a closed polygon from a <see cref="PolygonF" /> shape
+        ///     Draws a closed polygon from a <see cref="Polygon" /> shape
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// ///
@@ -31,7 +32,7 @@ namespace MonoGame.Extended.Shapes
         /// <param name="polygon">The polygon to draw</param>
         /// <param name="color">The color to use</param>
         /// <param name="thickness">The thickness of the lines</param>
-        public static void DrawPolygon(this SpriteBatch spriteBatch, Vector2 position, PolygonF polygon, Color color,
+        public static void DrawPolygon(this SpriteBatch spriteBatch, Vector2 position, Polygon polygon, Color color,
             float thickness = 1f)
         {
             DrawPolygon(spriteBatch, position, polygon.Vertices, color, thickness);
@@ -84,7 +85,7 @@ namespace MonoGame.Extended.Shapes
         /// <param name="color">The color to draw the rectangle in</param>
         public static void FillRectangle(this SpriteBatch spriteBatch, RectangleF rectangle, Color color)
         {
-            FillRectangle(spriteBatch, rectangle.Location, rectangle.Size, color);
+            FillRectangle(spriteBatch, rectangle.Position, rectangle.Size, color);
         }
 
         /// <summary>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Demo.Platformer.Entities.Components;
@@ -60,22 +61,50 @@ namespace Demo.Platformer.Entities.Systems
 
                 foreach (var bodyB in _staticBodies.Concat(_movingBodies))
                 {
-                    if (bodyA != bodyB)
+                    if (bodyA == bodyB)
+                        continue;
+
+                    var depth = IntersectionDepth(bodyA.BoundingRectangle, bodyB.BoundingRectangle);
+
+                    if (depth != Vector2.Zero)
                     {
-                        var depth = bodyA.BoundingRectangle.IntersectionDepth(bodyB.BoundingRectangle);
+                        var collisionHandlers = bodyA.Entity.GetComponents<BasicCollisionHandler>();
 
-                        if (depth != Vector2.Zero)
-                        {
-                            var collisionHandlers = bodyA.Entity.GetComponents<BasicCollisionHandler>();
-
-                            foreach (var collisionHandler in collisionHandlers)
-                                collisionHandler.OnCollision(bodyA, bodyB, depth);
-                        }
+                        foreach (var collisionHandler in collisionHandlers)
+                            collisionHandler.OnCollision(bodyA, bodyB, depth);
                     }
                 }
             }
 
 
+        }
+
+        public Vector2 IntersectionDepth(RectangleF first, RectangleF second)
+        {
+            // Calculate half sizes.
+            var thisHalfWidth = first.Width / 2.0f;
+            var thisHalfHeight = first.Height / 2.0f;
+            var otherHalfWidth = second.Width / 2.0f;
+            var otherHalfHeight = second.Height / 2.0f;
+
+            // Calculate centers.
+            var centerA = new Vector2(first.Left + thisHalfWidth, first.Top + thisHalfHeight);
+            var centerB = new Vector2(second.Left + otherHalfWidth, second.Top + otherHalfHeight);
+
+            // Calculate current and minimum-non-intersecting distances between centers.
+            var distanceX = centerA.X - centerB.X;
+            var distanceY = centerA.Y - centerB.Y;
+            var minDistanceX = thisHalfWidth + otherHalfWidth;
+            var minDistanceY = thisHalfHeight + otherHalfHeight;
+
+            // If we are not intersecting at all, return (0, 0).
+            if ((Math.Abs(distanceX) >= minDistanceX) || (Math.Abs(distanceY) >= minDistanceY))
+                return Vector2.Zero;
+
+            // Calculate and return intersection depths.
+            var depthX = distanceX > 0 ? minDistanceX - distanceX : -minDistanceX - distanceX;
+            var depthY = distanceY > 0 ? minDistanceY - distanceY : -minDistanceY - distanceY;
+            return new Vector2(depthX, depthY);
         }
     }
 }

@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Shapes
 {
-    public class PolylineF : IShapeF
+    public class Polyline
     {
-        public PolylineF(IEnumerable<Vector2> points)
+        public Polyline(IEnumerable<Vector2> points)
         {
             Points = points;
         }

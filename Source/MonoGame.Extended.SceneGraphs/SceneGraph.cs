@@ -22,9 +22,9 @@ namespace MonoGame.Extended.SceneGraphs
         {
             var node = RootNode;
 
-            while ((node != null) && node.BoundingRectangle.Contains(x, y))
+            while ((node != null) && node.BoundingRectangle.Contains(new Point2(x, y)))
             {
-                var childNode = node.Children.FirstOrDefault(c => c.BoundingRectangle.Contains(x, y));
+                var childNode = node.Children.FirstOrDefault(c => c.BoundingRectangle.Contains(new Point2(x, y)));
 
                 if (childNode != null)
                     node = childNode;

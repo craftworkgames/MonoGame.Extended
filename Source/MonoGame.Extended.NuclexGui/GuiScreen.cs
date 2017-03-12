@@ -6,7 +6,6 @@ using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.NuclexGui.Controls;
 using MonoGame.Extended.NuclexGui.Input;
 using MonoGame.Extended.NuclexGui.Support;
-using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.NuclexGui
 {

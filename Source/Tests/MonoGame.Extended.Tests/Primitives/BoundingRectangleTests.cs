@@ -26,8 +26,8 @@ namespace MonoGame.Extended.Tests.Primitives
         public void Constructor(Point2 centre, Vector2 radii)
         {
             var boundingRectangle = new BoundingRectangle(centre, radii);
-            Assert.AreEqual(centre, boundingRectangle.Centre);
-            Assert.AreEqual(radii, boundingRectangle.Radii);
+            Assert.AreEqual(centre, boundingRectangle.Center);
+            Assert.AreEqual(radii, boundingRectangle.HalfExtents);
         }
 
         public IEnumerable<TestCaseData> CreateFromMinimumMaximumTestCases
@@ -103,7 +103,7 @@ namespace MonoGame.Extended.Tests.Primitives
         public void CreateFromTransformed(BoundingRectangle boundingRectangle, Matrix2D transformMatrix,
             BoundingRectangle expectedBoundingRectangle)
         {
-            var actualBoundingRectangle = BoundingRectangle.CreateFrom(boundingRectangle, ref transformMatrix);
+            var actualBoundingRectangle = BoundingRectangle.Transform(boundingRectangle, ref transformMatrix);
             Assert.AreEqual(expectedBoundingRectangle, actualBoundingRectangle);
         }
 
@@ -145,8 +145,8 @@ namespace MonoGame.Extended.Tests.Primitives
                 yield return
                     new TestCaseData(new BoundingRectangle(new Point2(-30, -30), new Size2(15, 15)),
                         new BoundingRectangle(new Point2(20, 20), new Size2(10, 10)),
-                        null).SetName(
-                        "The intersection of two non-overlapping non-empty bounding rectangles is null.");
+                        BoundingRectangle.Empty).SetName(
+                        "The intersection of two non-overlapping non-empty bounding rectangles is the empty bounding rectangle.");
             }
         }
 

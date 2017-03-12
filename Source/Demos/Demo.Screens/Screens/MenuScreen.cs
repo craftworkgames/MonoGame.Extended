@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Screens;
 
@@ -78,7 +79,7 @@ namespace Demo.Screens.Screens
 
             foreach (var menuItem in MenuItems)
             {
-                var isHovered = menuItem.BoundingRectangle.Contains(mouseState.X, mouseState.Y);
+                var isHovered = menuItem.BoundingRectangle.Contains(new Point2(mouseState.X, mouseState.Y));
                 
                 menuItem.Color = isHovered ? Color.Yellow : Color.White;
 

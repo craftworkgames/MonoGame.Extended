@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
 namespace Demo.SpaceGame.Entities
@@ -73,7 +72,7 @@ namespace Demo.SpaceGame.Entities
             }
         }
 
-        public void SpawnNewMeteor(Vector2 playerPosition)
+        public void SpawnNewMeteor(Point2 playerPosition)
         {
             var rotationSpeed = _random.Next(-10, 10) * 0.1f;
             var spawnCircle = new CircleF(playerPosition, 630);

@@ -16,16 +16,6 @@ namespace MonoGame.Extended.Tests
 
         public MockGameWindow()
         {
-            this.ClientSizeChanged += OnClientSizeChanged;
-        }
-
-        private void OnClientSizeChanged(object sender, EventArgs eventArgs)
-        {
-        }
-
-        internal void RaiseOnClientSizeChangedEvent()
-        {
-            OnClientSizeChanged(this, EventArgs.Empty);
         }
 
         public override void BeginScreenDeviceChange(bool willBeFullScreen)

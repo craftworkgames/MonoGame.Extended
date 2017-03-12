@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.NuclexGui.Input;
-using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.NuclexGui.Controls
 {

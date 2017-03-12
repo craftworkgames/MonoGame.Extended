@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Collisions
 {

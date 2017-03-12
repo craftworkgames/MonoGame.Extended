@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Shapes
+namespace MonoGame.Extended
 {
     public static class RectangleExtensions
     {

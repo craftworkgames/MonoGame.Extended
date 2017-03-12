@@ -49,14 +49,14 @@
     <Compile Include="BoundingRectangle.cs" />
     <Compile Include="Point2.cs" />
     <Compile Include="Ray2D.cs" />
-    <Compile Include="RayHelper.cs" />
+    <Compile Include="PrimitivesHelper.cs" />
     <Compile Include="Segment2D.cs" />
     <Compile Include="Size2.cs" />
     <Compile Include="Serialization\ContentManagerJsonConverter.cs" />
     <Compile Include="Serialization\ITextureRegionService.cs" />
     <Compile Include="Serialization\TextureRegion2DJsonConverter.cs" />
-    <Compile Include="Shapes\EllipseF.cs" />
-    <Compile Include="Shapes\PolylineF.cs" />
+    <Compile Include="EllipseF.cs" />
+    <Compile Include="Shapes\Polyline.cs" />
     <Compile Include="Sprites\AnimatedSprite.cs" />
     <Compile Include="Animations\Tweens\DelayTween.cs" />
     <Compile Include="Animations\Tweens\FluentTweening.cs" />
@@ -125,13 +125,11 @@
     <Compile Include="RandomExtensions.cs" />
     <Compile Include="Range.cs" />
     <Compile Include="MatrixExtensions.cs" />
-    <Compile Include="Shapes\ShapeExtensions.cs" />
-    <Compile Include="Shapes\CircleF.cs" />
-    <Compile Include="Shapes\PolygonF.cs" />
-    <Compile Include="Shapes\RectangleF.cs" />
-    <Compile Include="Shapes\RectangleExtensions.cs" />
-    <Compile Include="Shapes\ShapeF.cs" />
-    <Compile Include="Size.cs" />
+    <Compile Include="ShapeExtensions.cs" />
+    <Compile Include="CircleF.cs" />
+    <Compile Include="Shapes\Polygon.cs" />
+    <Compile Include="RectangleF.cs" />
+    <Compile Include="RectangleExtensions.cs" />
     <Compile Include="TextureAtlases\NinePatchRegion2D.cs" />
     <Compile Include="Sprites\SpriteExtensions.cs" />
     <Compile Include="TextureAtlases\TextureAtlas.cs" />
@@ -167,6 +165,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
