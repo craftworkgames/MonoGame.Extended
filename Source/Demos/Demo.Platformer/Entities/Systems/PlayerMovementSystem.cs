@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Sprites;
 
@@ -43,7 +44,7 @@ namespace Demo.Platformer.Entities.Systems
             var keyboardState = Keyboard.GetState();
             var body = _playerEntity.GetComponent<BasicCollisionBody>();
             var playerState = _playerEntity.GetComponent<CharacterState>();
-            var sprite = _playerEntity.GetComponent<AnimatedSprite>();
+            var sprite = _playerEntity.GetComponent<TransformableComponent<Sprite>>().Target as AnimatedSprite;
             var velocity = new Vector2(0, body.Velocity.Y);
 
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))

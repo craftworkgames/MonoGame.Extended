@@ -5,8 +5,6 @@ namespace MonoGame.Extended.Graphics
 {
     public sealed class TiledMapLayerAnimatedModel : TiledMapLayerModel
     {
-        public TiledMapTilesetAnimatedTile[] AnimatedTilesetTiles { get; }
-
         internal TiledMapLayerAnimatedModel(ContentReader reader, TiledMap map) 
             : base(reader, true)
         {
@@ -22,5 +20,7 @@ namespace MonoGame.Extended.Graphics
                 AnimatedTilesetTiles[i] = tileset.GetAnimatedTilesetTileByLocalTileIdentifier(tileLocalIdentifier);
             }
         }
+
+        public TiledMapTilesetAnimatedTile[] AnimatedTilesetTiles { get; }
     }
 }

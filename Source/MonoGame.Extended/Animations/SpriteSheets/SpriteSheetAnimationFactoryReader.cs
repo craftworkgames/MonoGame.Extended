@@ -7,8 +7,7 @@ namespace MonoGame.Extended.Animations.SpriteSheets
 {
     public class SpriteSheetAnimationFactoryReader : ContentTypeReader<SpriteSheetAnimationFactory>
     {
-        protected override SpriteSheetAnimationFactory Read(ContentReader reader,
-            SpriteSheetAnimationFactory existingInstance)
+        protected override SpriteSheetAnimationFactory Read(ContentReader reader, SpriteSheetAnimationFactory existingInstance)
         {
             var textureAtlasAssetName = reader.GetRelativeAssetName(reader.ReadString());
             var textureAtlas = reader.ContentManager.Load<TextureAtlas>(textureAtlasAssetName);
@@ -32,7 +31,7 @@ namespace MonoGame.Extended.Animations.SpriteSheets
                 var isLooping = reader.ReadBoolean();
                 var isReversed = reader.ReadBoolean();
                 var isPingPong = reader.ReadBoolean();
-                var frameDuration = 1.0f/framesPerSecond;
+                var frameDuration = 1.0f / framesPerSecond;
                 var frameIndexCount = reader.ReadInt32();
                 var frameIndicies = new int[frameIndexCount];
 

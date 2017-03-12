@@ -59,7 +59,7 @@ namespace MonoGame.Extended.Gui.Controls
         protected override void DrawBackground(IGuiRenderer renderer, float deltaSeconds)
         {
             var boundingRectangle = BoundingRectangle;
-            var checkRectangle = new Rectangle(boundingRectangle.Location, BackgroundRegion.Size);
+            var checkRectangle = new Rectangle(boundingRectangle.X, boundingRectangle.Y, BackgroundRegion.Width, BackgroundRegion.Height);
 
             renderer.DrawRegion(BackgroundRegion, checkRectangle, Color);
         }

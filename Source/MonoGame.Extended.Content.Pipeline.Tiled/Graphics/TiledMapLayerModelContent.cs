@@ -17,7 +17,7 @@ namespace MonoGame.Extended.Content.Pipeline.Graphics
         public string LayerName { get; }
         public ReadOnlyCollection<VertexPositionTexture> Vertices { get; }
         public ReadOnlyCollection<ushort> Indices { get; }
-        public Size ImageSize { get; }
+        public Size2 ImageSize { get; }
         public string TextureAssetName { get; }
 
         public TiledMapLayerModelContent(string layerName, TiledMapImageContent image)
@@ -27,7 +27,7 @@ namespace MonoGame.Extended.Content.Pipeline.Graphics
             Vertices = new ReadOnlyCollection<VertexPositionTexture>(_vertices);
             _indices = new List<ushort>();
             Indices = new ReadOnlyCollection<ushort>(_indices);
-            ImageSize = new Size(image.Width, image.Height);
+            ImageSize = new Size2(image.Width, image.Height);
             TextureAssetName = Path.ChangeExtension(image.Source, null);
         }
 
@@ -39,7 +39,7 @@ namespace MonoGame.Extended.Content.Pipeline.Graphics
         public void AddTileVertices(Point2 position, Rectangle? sourceRectangle = null, TiledMapTileFlipFlags flags = TiledMapTileFlipFlags.None)
         {
             float texelLeft, texelTop, texelRight, texelBottom;
-            var sourceRectangle1 = sourceRectangle ?? new Rectangle(0, 0, ImageSize.Width, ImageSize.Height);
+            var sourceRectangle1 = sourceRectangle ?? new Rectangle(0, 0, (int)ImageSize.Width, (int)ImageSize.Height);
 
             if (sourceRectangle.HasValue)
             {

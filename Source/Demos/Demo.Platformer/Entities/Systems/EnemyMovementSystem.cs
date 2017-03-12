@@ -2,6 +2,7 @@ using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Sprites;
 
@@ -20,7 +21,8 @@ namespace Demo.Platformer.Entities.Systems
 
                 if (component.WalkTimeRemaining <= 0)
                 {
-                    var sprite = component.Entity.GetComponent<Sprite>();
+                    var transformableComponent = component.Entity.GetComponent<TransformableComponent<Sprite>>();
+                    var sprite = transformableComponent.Target;
                     sprite.Effect = sprite.Effect == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
                     component.Direction = -component.Direction;
                     component.WalkTimeRemaining = component.WalkTime;

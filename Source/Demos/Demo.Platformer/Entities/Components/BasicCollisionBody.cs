@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities.Components;
-using MonoGame.Extended.Shapes;
 
 namespace Demo.Platformer.Entities.Components
 {
@@ -10,7 +9,7 @@ namespace Demo.Platformer.Entities.Components
         public Vector2 Velocity { get; set; }
         public Size2 Size { get; set; }
         public Vector2 Origin { get; set; }
-        public RectangleF BoundingRectangle => new RectangleF(Position - Size * Origin, Size);
+        public RectangleF BoundingRectangle => new RectangleF(Entity.Position - Size * Origin, Size);
         public bool IsStatic { get; set; }
         public object Tag { get; set; }
 

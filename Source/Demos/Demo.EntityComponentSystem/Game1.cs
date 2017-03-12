@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Particles;
 using MonoGame.Extended.Particles.Modifiers;
@@ -46,7 +47,7 @@ namespace Demo.EntityComponentSystem
 
             var logoTexture = Content.Load<Texture2D>("logo-square-128");
             _entity = _entityComponentSystem.CreateEntity("logo", new Vector2(400, 240));
-            _entity.AttachComponent(new Sprite(logoTexture));
+            _entity.AttachComponent(new TransformableComponent<Sprite>(new Sprite(logoTexture)));
             
             var motwTexture = Content.Load<Texture2D>("motw");
             var motwAtlas = TextureAtlas.Create("motw-atlas", motwTexture, 52, 72);
@@ -58,7 +59,7 @@ namespace Demo.EntityComponentSystem
             motwAnimationFactory.Add("walkNorth", new SpriteSheetAnimationData(new[] { 36, 37, 38, 37 }, isLooping: false));
 
             var animatedEntity = _entityComponentSystem.CreateEntity("animated", new Vector2(50, 50));
-            animatedEntity.AttachComponent(new AnimatedSprite(motwAnimationFactory, "walkSouth"));
+            animatedEntity.AttachComponent(new TransformableComponent<Sprite>(new AnimatedSprite(motwAnimationFactory, "walkSouth")));
 
             var particleEntity = _entityComponentSystem.CreateEntity("particles", new Vector2(500, 50));
             var particleEmitter = new ParticleEmitter(new TextureRegion2D(logoTexture), 500, TimeSpan.FromSeconds(0.5f),
@@ -89,7 +90,7 @@ namespace Demo.EntityComponentSystem
                     new LinearGravityModifier {Direction = -Vector2.UnitY, Strength = 130f}
                 }
             };
-            particleEntity.AttachComponent(particleEmitter);
+            particleEntity.AttachComponent(new TransformableComponent<ParticleEmitter>(particleEmitter));
         }
 
         protected override void UnloadContent()

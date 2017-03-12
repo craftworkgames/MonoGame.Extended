@@ -1,4 +1,5 @@
-﻿namespace MonoGame.Extended
+﻿
+namespace MonoGame.Extended
 {
     public interface ISizable
     {

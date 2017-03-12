@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using NSubstitute;
@@ -60,7 +59,7 @@ namespace MonoGame.Extended.Tests.Sprites
                 Rotation = MathHelper.ToRadians(90)
             };
 
-            Assert.AreEqual(new RectangleF(-100, -25, 200, 50), sprite.BoundingRectangle);
+            AssertExtensions.AreApproximatelyEqual(new RectangleF(-100, -25, 200, 50), sprite.BoundingRectangle);
         }
 
         [Test]

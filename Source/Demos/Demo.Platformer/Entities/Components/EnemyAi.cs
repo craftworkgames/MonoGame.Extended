@@ -1,9 +1,10 @@
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities.Components;
 
 namespace Demo.Platformer.Entities.Components
 {
-    public class EnemyAi : EntityComponent
+    public class EnemyAi : EntityComponent, IMovable
     {
         public EnemyAi()
         {

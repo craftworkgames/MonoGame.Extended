@@ -1,22 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!--https://docs.nuget.org/ndocs/schema/nuspec-->
+<!-- https://docs.microsoft.com/en-us/nuget/schema/nuspec -->
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
-    <!-- Required elements -->
-    <!-- The identifier that must be unique within the hosting gallery -->
     <id>MonoGame.Extended.Graphics</id>
-    <!-- The package version number that is used when resolving dependencies -->
-    <version>0.2.0.0</version>
-    <!-- The description can be used in package manager UI. Note that the
-         nuget.org gallery uses information you add in the portal. -->
+    <version>$version$</version>
     <description>
       Makes MonoGame more awesome.
       Tile based maps, Bitmap Fonts, Sprites and SpriteBatch extensions,
       Input Listeners, Texture Atlases, 2D Camera, Viewport Adapters.
     </description>
-    <!-- Authors contain text that appears directly on the gallery -->
     <authors>Dylan Wilson</authors>
-    <!-- Optional elements -->
     <title>MonoGame.Extended.Graphics</title>
     <owners>Craftwork Games</owners>
     <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>
@@ -33,7 +26,7 @@
     </references>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="9.0" />
-      <dependency id="MonoGame.Extended" version="0.2.0.0" />
+      <dependency id="MonoGame.Extended" version="[$version$]" />
     </dependencies>
   </metadata>
   <files>

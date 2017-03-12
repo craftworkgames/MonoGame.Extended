@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics;
-using MonoGame.Extended.Graphics.Effects;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.ViewportAdapters;

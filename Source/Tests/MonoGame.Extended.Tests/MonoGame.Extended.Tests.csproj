@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssertExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontTests.cs" />
     <Compile Include="TestGraphicsDevice.cs" />
     <Compile Include="Collections\BitVector32Tests.cs" />
@@ -76,10 +77,10 @@
     <Compile Include="Primitives\Segment2DTests.cs" />
     <Compile Include="Primitives\Size2Tests.cs" />
     <Compile Include="RangeTests.cs" />
-    <Compile Include="Shapes\EllipseFTest.cs" />
+    <Compile Include="Primitives\EllipseFTest.cs" />
     <Compile Include="Shapes\PolygonFTests.cs" />
-    <Compile Include="Shapes\CircleTests.cs" />
-    <Compile Include="Shapes\RectangleFTests.cs" />
+    <Compile Include="Primitives\CircleFTests.cs" />
+    <Compile Include="Primitives\RectangleFTests.cs" />
     <Compile Include="Sprites\SpriteTests.cs" />
     <Compile Include="TextureAtlases\TextureAtlasTests.cs" />
     <Compile Include="Vector2ExtensionsTests.cs" />
@@ -94,6 +95,10 @@
     <ProjectReference Include="..\..\MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj">
       <Project>{9B3AB8A1-78AA-471A-AFD0-B10B932115BC}</Project>
       <Name>MonoGame.Extended.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Extended.Particles\MonoGame.Extended.Particles.csproj">
+      <Project>{6c8b9e29-d09b-4901-80fd-45aaa35882c6}</Project>
+      <Name>MonoGame.Extended.Particles</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj">
       <Project>{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}</Project>

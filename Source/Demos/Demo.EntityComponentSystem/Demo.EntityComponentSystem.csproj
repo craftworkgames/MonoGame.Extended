@@ -110,6 +110,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj">
+      <Project>{35fd1f05-af04-469a-b37a-f9b36c34401c}</Project>
+      <Name>MonoGame.Extended.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Extended.Particles\MonoGame.Extended.Particles.csproj">
+      <Project>{6c8b9e29-d09b-4901-80fd-45aaa35882c6}</Project>
+      <Name>MonoGame.Extended.Particles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
       <Name>MonoGame.Extended</Name>
