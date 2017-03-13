@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace MonoGame.Extended.InputListeners
+namespace MonoGame.Extended.Input.InputListeners
 {
     /// <summary>
     ///     This is a listener that exposes several events for easier handling of gamepads.

@@ -125,6 +125,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj">
+      <Project>{49c87598-994c-49b5-bbb3-7ffc342635d3}</Project>
+      <Name>MonoGame.Extended.Input</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
       <Name>MonoGame.Extended</Name>

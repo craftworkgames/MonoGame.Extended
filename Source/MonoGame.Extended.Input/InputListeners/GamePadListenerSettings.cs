@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.InputListeners
+namespace MonoGame.Extended.Input.InputListeners
 {
     /// <summary>
     ///     This is a class that contains settings to be used to initialise a <see cref="GamePadListener" />.

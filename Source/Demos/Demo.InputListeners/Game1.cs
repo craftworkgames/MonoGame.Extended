@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.InputListeners

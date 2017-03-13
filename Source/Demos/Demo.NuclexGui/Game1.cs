@@ -2,10 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.ViewportAdapters;
 using MonoGame.Extended.NuclexGui;
-using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.NuclexGui.Controls.Desktop;
 
 namespace Demo.NuclexGui

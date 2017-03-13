@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Gui.Controls;
-using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.Gui

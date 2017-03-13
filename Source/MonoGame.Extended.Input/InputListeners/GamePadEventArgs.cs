@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace MonoGame.Extended.InputListeners
+namespace MonoGame.Extended.Input.InputListeners
 {
     /// <summary>
     ///     This class contains all information resulting from events fired by

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace MonoGame.Extended.InputListeners
+namespace MonoGame.Extended.Input.InputListeners
 {
     public class TouchEventArgs : EventArgs
     {

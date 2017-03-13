@@ -1,6 +1,6 @@
 ﻿using MonoGame.Extended.ViewportAdapters;
 
-namespace MonoGame.Extended.InputListeners
+namespace MonoGame.Extended.Input.InputListeners
 {
     public class MouseListenerSettings : InputListenerSettings<MouseListener>
     {

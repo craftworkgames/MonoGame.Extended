@@ -1,6 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.Input.InputListeners;
 
 namespace MonoGame.Extended.Gui
 {

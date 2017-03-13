@@ -1,5 +1,5 @@
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls

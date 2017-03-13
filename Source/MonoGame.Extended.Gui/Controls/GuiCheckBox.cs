@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.InputListeners;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 

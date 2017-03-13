@@ -112,6 +112,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj">
+      <Project>{49c87598-994c-49b5-bbb3-7ffc342635d3}</Project>
+      <Name>MonoGame.Extended.Input</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Extended.NuclexGui\MonoGame.Extended.NuclexGui.csproj">
       <Project>{d8bc4f21-e71d-46ce-b6d3-259f1e0dfaba}</Project>
       <Name>MonoGame.Extended.NuclexGui</Name>

@@ -1,6 +1,6 @@
 using System;
 
-namespace MonoGame.Extended.InputListeners
+namespace MonoGame.Extended.Input.InputListeners
 {
     [Flags]
     public enum KeyboardModifiers

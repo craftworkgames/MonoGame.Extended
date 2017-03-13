@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.InputListeners
+namespace MonoGame.Extended.Input
 {
     /// <summary>Player index enumeration with slots for 8 players</summary>
     public enum ExtendedPlayerIndex

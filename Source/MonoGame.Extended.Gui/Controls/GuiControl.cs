@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 

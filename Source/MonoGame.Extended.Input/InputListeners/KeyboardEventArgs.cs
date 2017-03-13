@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Xna.Framework.Input;
 
-namespace MonoGame.Extended.InputListeners
+namespace MonoGame.Extended.Input.InputListeners
 {
     public class KeyboardEventArgs : EventArgs
     {

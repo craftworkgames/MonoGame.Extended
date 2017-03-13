@@ -1,4 +1,4 @@
-namespace MonoGame.Extended.InputListeners
+namespace MonoGame.Extended.Input.InputListeners
 {
     public class KeyboardListenerSettings : InputListenerSettings<KeyboardListener>
     {

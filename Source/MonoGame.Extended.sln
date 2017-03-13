@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26206.0
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended", "MonoGame.Extended\MonoGame.Extended.csproj", "{41724C52-3D50-45BB-81EB-3C8A247EAFD1}"
 EndProject
@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		MonoGame.Extended.Entities.nuspec = MonoGame.Extended.Entities.nuspec
 		MonoGame.Extended.Graphics.nuspec = MonoGame.Extended.Graphics.nuspec
 		MonoGame.Extended.Gui.nuspec = MonoGame.Extended.Gui.nuspec
+		MonoGame.Extended.Input.nuspec = MonoGame.Extended.Input.nuspec
 		MonoGame.Extended.NuclexGui.nuspec = MonoGame.Extended.NuclexGui.nuspec
 		MonoGame.Extended.nuspec = MonoGame.Extended.nuspec
 		MonoGame.Extended.Particles.nuspec = MonoGame.Extended.Particles.nuspec
@@ -164,6 +165,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Entities", "MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj", "{35FD1F05-AF04-469A-B37A-F9B36C34401C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.SceneGraphs", "MonoGame.Extended.SceneGraphs\MonoGame.Extended.SceneGraphs.csproj", "{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Input", "MonoGame.Extended.Input\MonoGame.Extended.Input.csproj", "{49C87598-994C-49B5-BBB3-7FFC342635D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -437,6 +440,14 @@ Global
 		{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}.Release|x86.ActiveCfg = Release|Any CPU
 		{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}.Release|x86.Build.0 = Release|Any CPU
+		{49C87598-994C-49B5-BBB3-7FFC342635D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49C87598-994C-49B5-BBB3-7FFC342635D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49C87598-994C-49B5-BBB3-7FFC342635D3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{49C87598-994C-49B5-BBB3-7FFC342635D3}.Debug|x86.Build.0 = Debug|Any CPU
+		{49C87598-994C-49B5-BBB3-7FFC342635D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49C87598-994C-49B5-BBB3-7FFC342635D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49C87598-994C-49B5-BBB3-7FFC342635D3}.Release|x86.ActiveCfg = Release|Any CPU
+		{49C87598-994C-49B5-BBB3-7FFC342635D3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

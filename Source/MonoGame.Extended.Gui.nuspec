@@ -25,6 +25,7 @@
     <dependencies>
       <dependency id="Newtonsoft.Json" version="9.0" />
       <dependency id="MonoGame.Extended" version="[$version$]" />
+      <dependency id="MonoGame.Extended.Input" version="[$version$]" />
     </dependencies>
   </metadata>
   <files>
