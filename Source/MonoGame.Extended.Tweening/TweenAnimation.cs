@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using MonoGame.Extended.Animations;
 
-namespace MonoGame.Extended.Animations.Tweens
+namespace MonoGame.Extended.Tweening
 {
     public abstract class TweenAnimation<T> : Animation
     {

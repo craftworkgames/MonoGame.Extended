@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq.Expressions;
+using MonoGame.Extended.Animations;
 
-namespace MonoGame.Extended.Animations.Tweens
+namespace MonoGame.Extended.Tweening
 {
     public class PropertyTween<T> : Animation
         where T : struct

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
-using MonoGame.Extended.Animations.Tweens;
+using MonoGame.Extended.Tweening;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -27,7 +27,10 @@ namespace Demo.Animations
 
         protected override void Initialize()
         {
-            Components.Add(new AnimationComponent(this));
+            var animationComponent = new AnimationComponent(this);
+            var tweenComponent = new TweeningComponent(this, animationComponent);
+            Components.Add(animationComponent);
+            Components.Add(tweenComponent);
 
             base.Initialize();
         }

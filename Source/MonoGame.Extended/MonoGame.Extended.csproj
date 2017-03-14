@@ -37,8 +37,6 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Animations\Animation.cs" />
-    <Compile Include="Animations\AnimationComponent.cs" />
     <Compile Include="Collections\DictionaryExtensions.cs" />
     <Compile Include="FloatHelper.cs" />
     <Compile Include="IRectangular.cs" />
@@ -57,19 +55,7 @@
     <Compile Include="Serialization\TextureRegion2DJsonConverter.cs" />
     <Compile Include="EllipseF.cs" />
     <Compile Include="Shapes\Polyline.cs" />
-    <Compile Include="Sprites\AnimatedSprite.cs" />
-    <Compile Include="Animations\Tweens\DelayTween.cs" />
-    <Compile Include="Animations\Tweens\FluentTweening.cs" />
-    <Compile Include="Animations\Tweens\EasingFunctions.cs" />
-    <Compile Include="Animations\SpriteSheets\SpriteSheetAnimation.cs" />
-    <Compile Include="Animations\SpriteSheets\SpriteSheetAnimationData.cs" />
-    <Compile Include="Animations\SpriteSheets\SpriteSheetAnimationFactory.cs" />
-    <Compile Include="Animations\SpriteSheets\SpriteSheetAnimationFactoryReader.cs" />
-    <Compile Include="Animations\Tweens\TweenAnimation.cs" />
-    <Compile Include="Animations\Tweens\PropertyTween.cs" />
     <Compile Include="Angle.cs" />
-    <Compile Include="Animations\Tweens\TweenChain.cs" />
-    <Compile Include="Animations\Tweens\TweenGroup.cs" />
     <Compile Include="BitmapFonts\BitmapFont.cs" />
     <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="BitmapFonts\BitmapFontReader.cs" />
@@ -147,7 +133,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Animations\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

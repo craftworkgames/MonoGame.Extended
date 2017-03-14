@@ -1,6 +1,6 @@
 using System;
 
-namespace MonoGame.Extended.Animations.Tweens
+namespace MonoGame.Extended.Tweening
 {
     public class TweenChain<T> : TweenAnimation<T>
     {

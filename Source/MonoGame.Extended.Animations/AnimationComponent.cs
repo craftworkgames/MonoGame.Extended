@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Animations.Tweens;
 
 namespace MonoGame.Extended.Animations
 {
@@ -9,7 +8,6 @@ namespace MonoGame.Extended.Animations
         public AnimationComponent(Game game)
             : base(game)
         {
-            FluentTweening.AnimationComponent = this;
             Animations = new List<Animation>();
         }
 

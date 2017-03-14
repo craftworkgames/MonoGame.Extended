@@ -6,9 +6,7 @@ namespace MonoGame.Extended.Animations
     public abstract class Animation : IUpdate, IDisposable
     {
         private readonly bool _disposeOnComplete;
-
         private readonly Action _onCompleteAction;
-
         private bool _isComplete;
 
         protected Animation(Action onCompleteAction, bool disposeOnComplete)

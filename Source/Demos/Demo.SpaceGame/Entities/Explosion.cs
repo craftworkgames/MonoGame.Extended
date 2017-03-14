@@ -12,9 +12,11 @@ namespace Demo.SpaceGame.Entities
 
         public Explosion(SpriteSheetAnimationFactory animations, Vector2 position, float radius)
         {
-            _sprite = new AnimatedSprite(animations);
-            _sprite.Position = position;
-            _sprite.Scale = Vector2.One*radius*0.2f;
+            _sprite = new AnimatedSprite(animations)
+            {
+                Position = position,
+                Scale = Vector2.One * radius * 0.2f
+            };
             _sprite.Play("explode", Destroy);
         }
 

@@ -2,13 +2,13 @@
 <!-- https://docs.microsoft.com/en-us/nuget/schema/nuspec -->
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
-    <id>MonoGame.Extended.Entities</id>
+    <id>MonoGame.Extended.Animations</id>
     <version>$version$</version>
     <description>
-      An Entity Component System for MonoGame to make MonoGame more awesome.
+      Animations to make MonoGame more awesome.
     </description>
     <authors>Dylan Wilson</authors>
-    <title>MonoGame.Extended.Entities</title>
+    <title>MonoGame.Extended.Animations</title>
     <owners>Craftwork Games</owners>
     <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>
     <licenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</licenseUrl>
@@ -16,20 +16,18 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2017 - Craftwork Games</copyright>
-    <tags>monogame extended entity component system ecs</tags>
+    <tags>monogame extended animation sprite sheet</tags>
     <references>
       <group>
-        <reference file="MonoGame.Extended.Entities.dll" />
+        <reference file="MonoGame.Extended.Animations.dll" />
       </group>
     </references>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="9.0" />
       <dependency id="MonoGame.Extended" version="[$version$]" />
-      <dependency id="MonoGame.Extended.Animations" version="[$version$]" />
-      <dependency id="MonoGame.Extended.Particles" version="[$version$]" />
     </dependencies>
   </metadata>
   <files>
-    <file src="MonoGame.Extended.Entities\bin\Release\MonoGame.Extended.Entities.dll" target="lib" />
+    <file src="MonoGame.Extended.Animations\bin\Release\MonoGame.Extended.Animations.dll" target="lib" />
   </files>
 </package>

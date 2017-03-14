@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Animations;
 using MonoGame.Extended.Entities.Components;
 using MonoGame.Extended.Sprites;
 

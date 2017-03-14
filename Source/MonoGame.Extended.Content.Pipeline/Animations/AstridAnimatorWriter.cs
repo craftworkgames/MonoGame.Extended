@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Content.Pipeline.Animations
     {
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return "MonoGame.Extended.Animations.SpriteSheets.SpriteSheetAnimationFactoryReader, MonoGame.Extended";
+            return "MonoGame.Extended.Animations.SpriteSheets.SpriteSheetAnimationFactoryReader, MonoGame.Extended.Animations";
         }
 
         protected override void Write(ContentWriter writer, AstridAnimatorProcessorResult input)

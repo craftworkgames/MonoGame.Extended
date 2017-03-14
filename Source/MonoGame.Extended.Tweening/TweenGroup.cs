@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace MonoGame.Extended.Animations.Tweens
+namespace MonoGame.Extended.Tweening
 {
     public class TweenGroup<T> : TweenAnimation<T>
     {

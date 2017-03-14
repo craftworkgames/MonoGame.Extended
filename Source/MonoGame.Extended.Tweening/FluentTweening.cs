@@ -1,18 +1,18 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Animations.Tweens
+namespace MonoGame.Extended.Tweening
 {
     public static class FluentTweening
     {
-        internal static AnimationComponent AnimationComponent { get; set; }
+        internal static TweeningComponent TweeningComponent { get; set; }
 
         public static TweenGroup<T> CreateTweenGroup<T>(this T target, Action onCompleteAction = null,
             bool disposeOnComplete = true)
             where T : class
         {
             var tweenGroup = new TweenGroup<T>(target, onCompleteAction, disposeOnComplete);
-            AnimationComponent.Animations.Add(tweenGroup);
+            TweeningComponent.AddTween(tweenGroup);
             return tweenGroup;
         }
 
@@ -20,7 +20,7 @@ namespace MonoGame.Extended.Animations.Tweens
             bool disposeOnComplete = true)
         {
             var tweenGroup = new TweenChain<T>(target, onCompleteAction, disposeOnComplete);
-            AnimationComponent.Animations.Add(tweenGroup);
+            TweeningComponent.AddTween(tweenGroup);
             return tweenGroup;
         }
 

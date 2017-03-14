@@ -1,4 +1,6 @@
-namespace MonoGame.Extended.Animations.Tweens
+using MonoGame.Extended.Animations;
+
+namespace MonoGame.Extended.Tweening
 {
     public class DelayTween : Animation
     {

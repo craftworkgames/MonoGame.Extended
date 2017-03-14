@@ -136,6 +136,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj">
+      <Project>{587ce536-216f-41a1-b223-ae502c125b09}</Project>
+      <Name>MonoGame.Extended.Animations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj">
       <Project>{02562c6f-5bfb-467e-8a95-68b6ce2d635a}</Project>
       <Name>MonoGame.Extended.Collisions</Name>
