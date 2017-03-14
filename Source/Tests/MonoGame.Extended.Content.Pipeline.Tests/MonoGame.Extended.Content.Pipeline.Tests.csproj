@@ -72,6 +72,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Extended.Content.Pipeline.Animations\MonoGame.Extended.Content.Pipeline.Animations.csproj">
+      <Project>{e41b1841-fb13-489f-92da-beee176a2c57}</Project>
+      <Name>MonoGame.Extended.Content.Pipeline.Animations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Extended.Content.Pipeline.Tiled\MonoGame.Extended.Content.Pipeline.Tiled.csproj">
       <Project>{96BE0F14-3DC8-43B9-992F-654BD36CC3C7}</Project>
       <Name>MonoGame.Extended.Content.Pipeline.Tiled</Name>
