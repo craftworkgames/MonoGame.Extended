@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
         {
             try
             {
-                var output = new TexturePackerProcessorResult { Data = input };
+                var output = new TexturePackerProcessorResult {Data = input};
                 return output;
             }
             catch (Exception ex)

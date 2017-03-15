@@ -1,0 +1,76 @@
+﻿{
+  "Skin": "Content/adventure-gui-skin.json",
+  "Controls": [
+    {
+      "Type": "GuiPanel",
+      "Name": "MainPanel",
+      "Style": "brown-panel",
+      "Position": "400 240",
+      "Size": "700 380",
+      "Controls": [
+        {
+          "Type": "GuiPanel",
+          "Style": "beige-inset-panel",
+          "Position": "350 190",
+          "Size": "680 360"
+        },
+        {
+          "Name": "CloseButton",
+          "Type": "GuiButton",
+          "Style": "close-button",
+          "Position": "690 10"
+        },
+        {
+          "Type": "GuiImage",
+          "Style": "monogame-title",
+          "Position": "350 100"
+        },
+        {
+          "Name": "PlayButton",
+          "Type": "GuiButton",
+          "Style": "white-button",
+          "Position": "350 190",
+          "Text": "Play"
+        },
+        {
+          "Name": "QuitButton",
+          "Type": "GuiButton",
+          "Style": "white-button",
+          "Position": "350 240",
+          "Text": "Quit"
+        },
+        {
+          "Name": "EmailLabel",
+          "Style": "label",
+          "Type": "GuiLabel",
+          "Position": "350 315",
+          "Text": "email"
+        },
+        {
+          "Name": "EmailTextBox",
+          "Type": "GuiTextBox",
+          "Style": "text-box",
+          "Position": "350 345",
+          "Size": "300 42",
+          "Text": "Let's put some really long text in the textbox to test the clipping area"
+        },
+        {
+          "Name": "CheckBox",
+          "Type": "GuiCheckBox",
+          "Style": "checkbox",
+          "Position": "350 285",
+          "Size": "250 35",
+          "Text": "sign me up to all the things",
+          "TextColor": "#444444"
+        },
+        {
+          "Name": "ProgressBar",
+          "Type": "GuiProgressBar",
+          "Style": "progress-bar",
+          "Position": "100 300",
+          "Progress": 0.5 
+        }
+      ]
+    }
+  ]
+}

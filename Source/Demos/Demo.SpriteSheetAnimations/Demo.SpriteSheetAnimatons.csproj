@@ -12,6 +12,21 @@
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,6 +38,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -42,54 +58,73 @@
     <Compile Include="Zombie.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Framework, Version=3.5.0.1678, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MonoGame.Framework.DesktopGL.3.5.0.1678\lib\net40\MonoGame.Framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NVorbis, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MonoGame.Framework.DesktopGL.3.5.0.1678\lib\net40\NVorbis.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MonoGame.Framework.DesktopGL.3.5.0.1678\lib\net40\OpenTK.dll</HintPath>
+    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MonoGame.Framework.DesktopGL.3.6.0.1625\lib\net40\MonoGame.Framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icon.ico" />
+    <None Include="app.manifest" />
+    <None Include="C:\Program Files %28x86%29\MonoGame\v3.0\Assemblies\DesktopGL\libopenal.1.dylib">
+      <Link>libopenal.1.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="C:\Program Files %28x86%29\MonoGame\v3.0\Assemblies\DesktopGL\libSDL2-2.0.0.dylib">
+      <Link>libSDL2-2.0.0.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="c:\program files %28x86%29\monogame\v3.0\assemblies\desktopgl\x64\SDL2.dll">
+      <Link>x64\SDL2.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="c:\program files %28x86%29\monogame\v3.0\assemblies\desktopgl\x64\soft_oal.dll">
+      <Link>x64\soft_oal.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="c:\program files %28x86%29\monogame\v3.0\assemblies\desktopgl\x86\SDL2.dll">
+      <Link>x86\SDL2.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="c:\program files %28x86%29\monogame\v3.0\assemblies\desktopgl\x86\soft_oal.dll">
+      <Link>x86\soft_oal.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Content Include="Content\Sprites\motw.png" />
+    <EmbeddedResource Include="Icon.bmp" />
+    <EmbeddedResource Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="c:\program files %28x86%29\monogame\v3.0\assemblies\desktopgl\x64\libopenal.so.1">
+      <Link>x64\libopenal.so.1</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="c:\program files %28x86%29\monogame\v3.0\assemblies\desktopgl\x64\libSDL2-2.0.so.0">
+      <Link>x64\libSDL2-2.0.so.0</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="c:\program files %28x86%29\monogame\v3.0\assemblies\desktopgl\x86\libopenal.so.1">
+      <Link>x86\libopenal.so.1</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="c:\program files %28x86%29\monogame\v3.0\assemblies\desktopgl\x86\libSDL2-2.0.so.0">
+      <Link>x86\libSDL2-2.0.so.0</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Fonts\courier-new-32.fnt" />
     <None Include="Content\Sprites\zombie-animations.aa" />
     <None Include="Content\Tilesets\free-tileset.json" />
-    <None Include="Content\Tilesets\isometric.tmx" />
     <None Include="Content\Tilesets\level01.tmx" />
     <None Include="Content\read-me.md" />
     <None Include="Content\Sprites\fireball.png" />
     <None Include="Content\Fonts\courier-new-32_0.png" />
     <None Include="Content\Tilesets\free-tileset.png" />
     <None Include="Content\Backgrounds\hills.png" />
-    <None Include="Content\Backgrounds\Hills_1.png" />
-    <None Include="Content\Backgrounds\Hills_2.png" />
-    <None Include="Content\Backgrounds\Hills_3.png" />
-    <None Include="Content\Backgrounds\Hills_4.png" />
-    <None Include="Content\Backgrounds\Hills_Couds.png" />
-    <None Include="Content\Backgrounds\Hills_Sky.png" />
-    <None Include="Content\Tilesets\isometric_tileset.png" />
-    <None Include="Content\Sprites\shadedDark42.png" />
-    <None Include="Content\Sprites\stump.png" />
-    <None Include="Content\Tilesets\test-tileset.png" />
     <None Include="Content\Sprites\zombie.png" />
-    <None Include="Content\Tilesets\test-tileset-atlas.json" />
-    <None Include="Content\Tilesets\test-tileset-left-down.tmx" />
-    <None Include="Content\Tilesets\test-tileset-left-up.tmx" />
-    <None Include="Content\Tilesets\test-tileset-map1.tmx" />
-    <None Include="Content\Tilesets\test-tileset-right-down.tmx" />
-    <None Include="Content\Tilesets\test-tileset-right-up.tmx" />
     <None Include="Content\Sprites\zombie-atlas.json" />
+    <None Include="MonoGame.Framework.dll.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -101,10 +136,33 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj">
+      <Project>{587ce536-216f-41a1-b223-ae502c125b09}</Project>
+      <Name>MonoGame.Extended.Animations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj">
+      <Project>{02562c6f-5bfb-467e-8a95-68b6ce2d635a}</Project>
+      <Name>MonoGame.Extended.Collisions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj">
+      <Project>{9b3ab8a1-78aa-471a-afd0-b10b932115bc}</Project>
+      <Name>MonoGame.Extended.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj">
+      <Project>{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}</Project>
+      <Name>MonoGame.Extended.Tiled</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
       <Name>MonoGame.Extended</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

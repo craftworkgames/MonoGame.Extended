@@ -15,3 +15,9 @@
 ## [Fireball Effect](http://opengameart.org/content/high-res-fire-ball)
 
 	fireball.png
+
+## [Masters of the Wind](finalbossblues.com/timefantasy/author/despain/page/4/)**
+
+	motw.png
+
+** Please read the license details on the website. 

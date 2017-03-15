@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6C8B9E29-D09B-4901-80FD-45AAA35882C6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MonoGame.Extended.Particles</RootNamespace>
+    <AssemblyName>MonoGame.Extended.Particles</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj">
+      <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
+      <Name>MonoGame.Extended</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ColorExtensions.cs" />
+    <Compile Include="FastRandomExtensions.cs" />
+    <Compile Include="HslColor.cs" />
+    <Compile Include="LineSegment.cs" />
+    <Compile Include="Modifiers\AgeModifier.cs" />
+    <Compile Include="Modifiers\Containers\CircleContainerModifier.cs" />
+    <Compile Include="Modifiers\Containers\RectangleContainerModifier.cs" />
+    <Compile Include="Modifiers\Containers\RectangleLoopContainerModifier.cs" />
+    <Compile Include="Modifiers\DragModifier.cs" />
+    <Compile Include="Modifiers\IModifier.cs" />
+    <Compile Include="Modifiers\Interpolators\ColorInterpolator.cs" />
+    <Compile Include="Modifiers\Interpolators\HueInterpolator.cs" />
+    <Compile Include="Modifiers\Interpolators\IInterpolator.cs" />
+    <Compile Include="Modifiers\Interpolators\OpacityInterpolator.cs" />
+    <Compile Include="Modifiers\Interpolators\RotationInterpolator.cs" />
+    <Compile Include="Modifiers\Interpolators\ScaleInterpolator.cs" />
+    <Compile Include="Modifiers\LinearGravityModifier.cs" />
+    <Compile Include="Modifiers\OpacityFastFadeModifier.cs" />
+    <Compile Include="Modifiers\RotationModifier.cs" />
+    <Compile Include="Modifiers\VelocityColorModifier.cs" />
+    <Compile Include="Modifiers\VelocityModifier.cs" />
+    <Compile Include="Modifiers\VortexModifier.cs" />
+    <Compile Include="Particle.cs" />
+    <Compile Include="ParticleBuffer.cs" />
+    <Compile Include="ParticleEffect.cs" />
+    <Compile Include="ParticleEmitter.cs" />
+    <Compile Include="ParticleExtensions.cs" />
+    <Compile Include="ParticleModifierExecutionStrategy.cs" />
+    <Compile Include="ParticleReleaseParameters.cs" />
+    <Compile Include="Profiles\BoxFillProfile.cs" />
+    <Compile Include="Profiles\BoxProfile.cs" />
+    <Compile Include="Profiles\BoxUniformProfile.cs" />
+    <Compile Include="Profiles\CircleProfile.cs" />
+    <Compile Include="Profiles\LineProfile.cs" />
+    <Compile Include="Profiles\PointProfile.cs" />
+    <Compile Include="Profiles\Profile.cs" />
+    <Compile Include="Profiles\RingProfile.cs" />
+    <Compile Include="Profiles\SprayProfile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.Portable.3.6.0.1625\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+</Project>

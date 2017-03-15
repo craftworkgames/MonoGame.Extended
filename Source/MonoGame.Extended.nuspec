@@ -1,33 +1,37 @@
-﻿<?xml version="1.0"?>
-<package >
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://docs.microsoft.com/en-us/nuget/schema/nuspec -->
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>MonoGame.Extended</id>
-    <version>0.2.0.0</version>
-    <title>MonoGame.Extended</title>
-    <authors>Dylan Wilson</authors>
-    <owners>Craftwork Games</owners>
-    <licenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</iconUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <version>$version$</version>
     <description>
       Makes MonoGame more awesome.
       Tile based maps, Bitmap Fonts, Sprites and SpriteBatch extensions,
       Input Listeners, Texture Atlases, 2D Camera, Viewport Adapters.
     </description>
+    <authors>Dylan Wilson</authors>
+    <title>MonoGame.Extended</title>
+    <owners>Craftwork Games</owners>
+    <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>
+    <licenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</licenseUrl>
+    <iconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright 2015 - Craftwork Games</copyright>
-    <tags>monogame pipeline bmfont tiled texture atlas input event sprite</tags>
+    <copyright>Copyright 2017 - Craftwork Games</copyright>
+    <tags>monogame extended pipeline bmfont tiled texture atlas input event sprite</tags>
     <references>
       <group>
         <reference file="MonoGame.Extended.dll" />
       </group>
     </references>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="9.0" />
+    </dependencies>
   </metadata>
   <files>
     <file src="MonoGame.Extended\bin\Release\MonoGame.Extended.dll" target="lib" />
     <file src="MonoGame.Extended.Content.Pipeline\bin\MonoGame.Extended.Content.Pipeline.dll" target="lib" />
-    <file src="MonoGame.Extended.Content.Pipeline\bin\Newtonsoft.Json.dll" target="lib" />
+    <!-- A readme.txt will be displayed when the package is installed -->
     <file src="readme.txt" target="" />
   </files>
 </package>

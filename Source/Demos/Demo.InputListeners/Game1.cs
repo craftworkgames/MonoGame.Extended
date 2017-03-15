@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.InputListeners;
+using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.InputListeners
@@ -17,7 +17,6 @@ namespace Demo.InputListeners
         private SpriteBatch _spriteBatch;
         private Texture2D _backgroundTexture;
         private BitmapFont _bitmapFont;
-        private InputListenerManager _inputManager;
         private string _typedString = string.Empty;
         private bool _isCursorVisible = true;
         private const float _cursorBlinkDelay = 0.5f;
@@ -35,9 +34,10 @@ namespace Demo.InputListeners
 
         protected override void Initialize()
         {
-            _inputManager = new InputListenerManager();
-            var mouseListener = _inputManager.AddListener(new MouseListenerSettings());
-            var keyboardListener = _inputManager.AddListener(new KeyboardListenerSettings());
+            var mouseListener = new MouseListener(new MouseListenerSettings());
+            var keyboardListener = new KeyboardListener(new KeyboardListenerSettings());
+
+            Components.Add(new InputListenerComponent(this, mouseListener, keyboardListener));
 
             keyboardListener.KeyPressed += (sender, args) =>
             {
@@ -112,8 +112,6 @@ namespace Demo.InputListeners
                 _cursorBlinkDelta = _cursorBlinkDelay;
             }
 
-            _inputManager.Update(gameTime);
-
             base.Update(gameTime);
         }
 
@@ -129,10 +127,10 @@ namespace Demo.InputListeners
             }
 
             var textInputY = 14 * _bitmapFont.LineHeight - 2;
-            var position = new Vector2(4, textInputY);
+            var position = new Point(4, textInputY);
             var stringRectangle = _bitmapFont.GetStringRectangle(_typedString, position);
 
-            _spriteBatch.DrawString(_bitmapFont, _typedString, position, Color.White);
+            _spriteBatch.DrawString(_bitmapFont, _typedString, position.ToVector2(), Color.White);
 
             if (_isCursorVisible)
                 _spriteBatch.DrawString(_bitmapFont, "_", new Vector2(stringRectangle.Width, textInputY), Color.White);

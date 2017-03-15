@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
+using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Collisions;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 
 namespace Demo.SpriteSheetAnimations
@@ -21,14 +21,13 @@ namespace Demo.SpriteSheetAnimations
 
     public class Zombie : IUpdate, IActorTarget
     {
-        private readonly SpriteSheetAnimator _animator;
-        private readonly Sprite _sprite;
+        private readonly AnimatedSprite _sprite;
 
         private float _direction = -1.0f;
 
         private ZombieState _state;
 
-        public RectangleF BoundingBox => _sprite.GetBoundingRectangle();
+        public RectangleF BoundingBox => _sprite.BoundingRectangle;
 
         public bool IsOnGround { get; private set; }
 
@@ -52,19 +51,19 @@ namespace Demo.SpriteSheetAnimations
                     switch (_state)
                     {
                         case ZombieState.Attacking:
-                            _animator.PlayAnimation("attack", () => State = ZombieState.Idle);
+                            _sprite.Play("attack", () => State = ZombieState.Idle);
                             break;
                         case ZombieState.Dying:
-                            _animator.PlayAnimation("die", () => State = ZombieState.Appearing);
+                            _sprite.Play("die", () => State = ZombieState.Appearing);
                             break;
                         case ZombieState.Idle:
-                            _animator.PlayAnimation("idle");
+                            _sprite.Play("idle");
                             break;
                         case ZombieState.Appearing:
-                            _animator.PlayAnimation("appear", () => State = ZombieState.Idle);
+                            _sprite.Play("appear", () => State = ZombieState.Idle);
                             break;
                         case ZombieState.Walking:
-                            _animator.PlayAnimation("walk", () => State = ZombieState.Idle);
+                            _sprite.Play("walk", () => State = ZombieState.Idle);
                             break;
                     }
                 }
@@ -73,10 +72,9 @@ namespace Demo.SpriteSheetAnimations
 
         public Vector2 Velocity { get; set; }
 
-        public Zombie(SpriteSheetAnimationGroup animationGroup)
+        public Zombie(SpriteSheetAnimationFactory animations)
         {
-            _animator = new SpriteSheetAnimator(animationGroup);
-            _sprite = _animator.Sprite;
+            _sprite = new AnimatedSprite(animations);
 
             State = ZombieState.Appearing;
             IsOnGround = false;
@@ -84,14 +82,12 @@ namespace Demo.SpriteSheetAnimations
 
         public void Update(GameTime gameTime)
         {
-            _animator.Update(gameTime);
+            _sprite.Update(gameTime);
 
             IsOnGround = false;
 
             if (State == ZombieState.Walking && Math.Abs(Velocity.X) < 0.1f)
-            {
                 State = ZombieState.Idle;
-            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -107,17 +103,13 @@ namespace Demo.SpriteSheetAnimations
             Velocity = new Vector2(200f * _direction, Velocity.Y);
 
             if (IsReady)
-            {
                 State = ZombieState.Walking;
-            }
         }
 
         public void Attack()
         {
             if (IsReady)
-            {
                 State = ZombieState.Attacking;
-            }
         }
 
         public void Die()

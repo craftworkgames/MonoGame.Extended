@@ -29,6 +29,5 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
         {
             return Image;
         }
-
     }
 }

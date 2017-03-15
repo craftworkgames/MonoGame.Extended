@@ -2,7 +2,6 @@
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {
@@ -22,7 +21,7 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 
             foreach (var region in data.Regions)
             {
-                var regionName = Path.GetFileNameWithoutExtension(region.Filename);
+                var regionName = Path.ChangeExtension(region.Filename, null);
                 Debug.Assert(regionName != null, "regionName != null");
 
                 writer.Write(regionName);
@@ -35,12 +34,12 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            return typeof(TextureAtlas).AssemblyQualifiedName;
+            return "MonoGame.Extended.TextureAtlases.TextureAtlas, MonoGame.Extended";
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return typeof(TextureAtlasReader).AssemblyQualifiedName;
+            return "MonoGame.Extended.TextureAtlases.TextureAtlasReader, MonoGame.Extended";
         }
     }
 }

@@ -21,6 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,17 +34,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
-      <HintPath>$(MSBuildExtensionsPath)\MonoGame\v3.0\Tools\MonoGame.Framework.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="MonoGame.Framework.Content.Pipeline">
-      <HintPath>$(MSBuildExtensionsPath)\MonoGame\v3.0\Tools\MonoGame.Framework.Content.Pipeline.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\MSBuild\MonoGame\v3.0\Tools\MonoGame.Framework.Content.Pipeline.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,12 +55,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animations\AstridAnimatorAnimation.cs" />
-    <Compile Include="Animations\AstridAnimatorImporter.cs" />
-    <Compile Include="Animations\AstridAnimatorFile.cs" />
-    <Compile Include="Animations\AstridAnimatorProcessor.cs" />
-    <Compile Include="Animations\AstridAnimatorProcessorResult.cs" />
-    <Compile Include="Animations\AstridAnimatorWriter.cs" />
     <Compile Include="ContentImporterResult.cs" />
     <Compile Include="BitmapFonts\BitmapFontChar.cs" />
     <Compile Include="BitmapFonts\BitmapFontCommon.cs" />
@@ -65,9 +63,9 @@
     <Compile Include="BitmapFonts\BitmapFontKerning.cs" />
     <Compile Include="BitmapFonts\BitmapFontPage.cs" />
     <Compile Include="BitmapFonts\BitmapFontProcessorResult.cs" />
+    <Compile Include="ContentLogger.cs" />
     <Compile Include="ContentWriterExtensions.cs" />
     <Compile Include="PathExtensions.cs" />
-    <Compile Include="PathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BitmapFonts\BitmapFontImporter.cs" />
     <Compile Include="BitmapFonts\BitmapFontProcessor.cs" />
@@ -82,42 +80,11 @@
     <Compile Include="TextureAtlases\TexturePackerRectangle.cs" />
     <Compile Include="TextureAtlases\TexturePackerSize.cs" />
     <Compile Include="TextureAtlases\TexturePackerWriter.cs" />
-    <Compile Include="Tiled\TmxDataTile.cs" />
-    <Compile Include="Tiled\TiledMapImporter.cs" />
-    <Compile Include="Tiled\TiledMapProcessor.cs" />
-    <Compile Include="Tiled\TiledMapProcessorResult.cs" />
-    <Compile Include="Tiled\TiledMapWriter.cs" />
-    <Compile Include="Tiled\TmxData.cs" />
-    <Compile Include="Tiled\TmxEllipse.cs" />
-    <Compile Include="Tiled\TmxImage.cs" />
-    <Compile Include="Tiled\TmxImageLayer.cs" />
-    <Compile Include="Tiled\TmxLayer.cs" />
-    <Compile Include="Tiled\TmxPolygon.cs" />
-    <Compile Include="Tiled\TmxPolyline.cs" />
-    <Compile Include="Tiled\TmxTileLayer.cs" />
-    <Compile Include="Tiled\TmxMap.cs" />
-    <Compile Include="Tiled\TmxObject.cs" />
-    <Compile Include="Tiled\TmxObjectGroup.cs" />
-    <Compile Include="Tiled\TmxOrientation.cs" />
-    <Compile Include="Tiled\TmxProperty.cs" />
-    <Compile Include="Tiled\TmxRenderOrder.cs" />
-    <Compile Include="Tiled\TmxTerrain.cs" />
-    <Compile Include="Tiled\TmxTile.cs" />
-    <Compile Include="Tiled\TmxTileOffset.cs" />
-    <Compile Include="Tiled\TmxTileset.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj">
-      <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
-      <Name>MonoGame.Extended</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

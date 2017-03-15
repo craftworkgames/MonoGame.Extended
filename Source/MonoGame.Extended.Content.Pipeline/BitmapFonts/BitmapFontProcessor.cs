@@ -22,7 +22,6 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
                 }
 
                 return result;
-
             }
             catch (Exception ex)
             {

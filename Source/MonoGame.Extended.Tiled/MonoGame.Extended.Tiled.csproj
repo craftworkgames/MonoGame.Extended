@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MonoGame.Extended</RootNamespace>
+    <AssemblyName>MonoGame.Extended.Tiled</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj">
+      <Project>{9b3ab8a1-78aa-471a-afd0-b10b932115bc}</Project>
+      <Name>MonoGame.Extended.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj">
+      <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
+      <Name>MonoGame.Extended</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Graphics\Effects\TiledMapEffect.cs" />
+    <Compile Include="Tiled\ContentReaderExtensions.cs" />
+    <Compile Include="Graphics\Effects\ITiledMapEffect.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Graphics\TiledMapLayerAnimatedModel.cs" />
+    <Compile Include="Graphics\TiledMapRenderer.cs" />
+    <Compile Include="Graphics\TiledMapLayerModel.cs" />
+    <Compile Include="Tiled\TiledMapEllipseObject.cs" />
+    <Compile Include="Tiled\TiledMapHelper.cs" />
+    <Compile Include="Tiled\TiledMapImageLayer.cs" />
+    <Compile Include="Tiled\TiledMapLayer.cs" />
+    <Compile Include="Tiled\TiledMapLayerType.cs" />
+    <Compile Include="Tiled\TiledMap.cs" />
+    <Compile Include="Tiled\TiledMapObjectDrawOrder.cs" />
+    <Compile Include="Tiled\TiledMapOrientation.cs" />
+    <Compile Include="Tiled\TiledMapPolygonObject.cs" />
+    <Compile Include="Tiled\TiledMapPolylineObject.cs" />
+    <Compile Include="Tiled\TiledMapReader.cs" />
+    <Compile Include="Tiled\TiledMapObject.cs" />
+    <Compile Include="Tiled\TiledMapObjectLayer.cs" />
+    <Compile Include="Tiled\TiledMapObjectType.cs" />
+    <Compile Include="Tiled\TiledMapProperties.cs" />
+    <Compile Include="Tiled\TiledMapRectangleObject.cs" />
+    <Compile Include="Tiled\TiledMapTileDrawOrder.cs" />
+    <Compile Include="Tiled\TiledMapTile.cs" />
+    <Compile Include="Tiled\TiledMapTileFlipFlags.cs" />
+    <Compile Include="Tiled\TiledMapTileLayer.cs" />
+    <Compile Include="Tiled\TiledMapTileset.cs" />
+    <Compile Include="Tiled\TiledMapTilesetAnimatedTile.cs" />
+    <Compile Include="Tiled\TiledMapTilesetTile.cs" />
+    <Compile Include="Tiled\TiledMapTilesetTileAnimationFrame.cs" />
+    <Compile Include="Tiled\TiledMapTileObject.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.Portable.3.6.0.1625\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -48,7 +48,7 @@ namespace Demo.ViewportAdapters
 
             // the boxing viewport adapter uses letterboxing or pillarboxing to maintain aspect ratio
             // it's a little more complicated and needs to listen to the window client size changing event
-            _boxingViewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            _boxingViewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480, 88, 70);
 
             // typically you'll only ever want to use one viewport adapter for a game, but in this sample we'll be 
             // switching between them.
@@ -109,17 +109,17 @@ namespace Demo.ViewportAdapters
             _spriteBatch.Begin(transformMatrix: _currentViewportAdapter.GetScaleMatrix());
             _spriteBatch.Draw(_backgroundTexture, destinationRectangle, Color.White);
 
-            _spriteBatch.DrawString(_bitmapFont, $"Press D: {typeof (DefaultViewportAdapter).Name}", new Vector2(5, 5), Color.White);
+            _spriteBatch.DrawString(_bitmapFont, $"Press D: {typeof (DefaultViewportAdapter).Name}", new Vector2(49, 40), Color.White);
 
-            _spriteBatch.DrawString(_bitmapFont, $"Press S: {typeof (ScalingViewportAdapter).Name}", new Vector2(5, 5 + _bitmapFont.LineHeight * 1), Color.White);
+            _spriteBatch.DrawString(_bitmapFont, $"Press S: {typeof (ScalingViewportAdapter).Name}", new Vector2(49, 40 + _bitmapFont.LineHeight * 1), Color.White);
 
-            _spriteBatch.DrawString(_bitmapFont, $"Press B: {typeof (BoxingViewportAdapter).Name}", new Vector2(5, 5 + _bitmapFont.LineHeight * 2), Color.White);
+            _spriteBatch.DrawString(_bitmapFont, $"Press B: {typeof (BoxingViewportAdapter).Name}", new Vector2(49, 40 + _bitmapFont.LineHeight * 2), Color.White);
 
-            _spriteBatch.DrawString(_bitmapFont, $"Current: {_currentViewportAdapter.GetType().Name}", new Vector2(5, 5 + _bitmapFont.LineHeight * 4), Color.Black);
+            _spriteBatch.DrawString(_bitmapFont, $"Current: {_currentViewportAdapter.GetType().Name}", new Vector2(49, 40 + _bitmapFont.LineHeight * 4), Color.Black);
 
-            _spriteBatch.DrawString(_bitmapFont, @"Try resizing the window", new Vector2(5, 5 + _bitmapFont.LineHeight * 6), Color.Black);
+            _spriteBatch.DrawString(_bitmapFont, @"Try resizing the window", new Vector2(49, 40 + _bitmapFont.LineHeight * 6), Color.Black);
 
-            _spriteBatch.DrawString(_bitmapFont, $"Mouse: {_mousePosition}", new Vector2(5, 5 + _bitmapFont.LineHeight * 8), Color.Black);
+            _spriteBatch.DrawString(_bitmapFont, $"Mouse: {_mousePosition}", new Vector2(49, 40 + _bitmapFont.LineHeight * 8), Color.Black);
 
             _spriteBatch.End();
 

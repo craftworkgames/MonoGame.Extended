@@ -1,35 +1,33 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Animations;
+using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Sprites;
 
 namespace Demo.SpaceGame.Entities
 {
     public class Explosion : Entity
     {
-        private readonly SpriteSheetAnimator _animator;
+        private readonly AnimatedSprite _sprite;
 
-        public Explosion(SpriteSheetAnimationGroup animations, Vector2 position, float radius)
+        public Explosion(SpriteSheetAnimationFactory animations, Vector2 position, float radius)
         {
-            _animator = new SpriteSheetAnimator(animations)
+            _sprite = new AnimatedSprite(animations)
             {
-                Sprite = {
-                    Position = position,
-                    Scale = Vector2.One * radius * 0.2f
-                },
-                IsLooping = false
+                Position = position,
+                Scale = Vector2.One * radius * 0.2f
             };
-            _animator.PlayAnimation("explode", Destroy);
+            _sprite.Play("explode", Destroy);
         }
 
         public override void Update(GameTime gameTime)
         {
-            _animator.Update(gameTime);
+            _sprite.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_animator);
+            spriteBatch.Draw(_sprite);
         }
     }
 }

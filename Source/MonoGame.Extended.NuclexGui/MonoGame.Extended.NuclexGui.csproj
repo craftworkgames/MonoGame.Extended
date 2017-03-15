@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D8BC4F21-E71D-46CE-B6D3-259F1E0DFABA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MonoGame.Extended.NuclexGui</RootNamespace>
+    <AssemblyName>MonoGame.Extended.NuclexGui</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <Content Include="Resources\Skins\DefaultFont.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\Desktop\GuiButtonControl.cs" />
+    <Compile Include="Controls\Desktop\GuiChoiceControl.cs" />
+    <Compile Include="Controls\Desktop\GuiCloseWindowButtonControl.cs" />
+    <Compile Include="Controls\Desktop\GuiDraggableControl.cs" />
+    <Compile Include="Controls\Desktop\GuiHorizontalSliderControl.cs" />
+    <Compile Include="Controls\Desktop\GuiInputControl.cs" />
+    <Compile Include="Controls\Desktop\GuiListControl.cs" />
+    <Compile Include="Controls\Desktop\GuiOptionControl.cs" />
+    <Compile Include="Controls\Desktop\GuiSliderControl.cs" />
+    <Compile Include="Controls\Desktop\GuiVerticalSliderControl.cs" />
+    <Compile Include="Controls\Desktop\GuiWindowControl.cs" />
+    <Compile Include="Controls\Desktop\IListRowLocator.cs" />
+    <Compile Include="Controls\Desktop\IOpeningLocator.cs" />
+    <Compile Include="Controls\Desktop\IThumbLocator.cs" />
+    <Compile Include="Controls\GuiControl.cs" />
+    <Compile Include="Controls\GuiControlEventArgs.cs" />
+    <Compile Include="Controls\GuiControlInput.cs" />
+    <Compile Include="Controls\GuiDesktopControl.cs" />
+    <Compile Include="Controls\GuiLabelControl.cs" />
+    <Compile Include="Controls\GuiPressableControl.cs" />
+    <Compile Include="Controls\GuiProgressControl.cs" />
+    <Compile Include="Controls\IFocusable.cs" />
+    <Compile Include="Controls\IWritable.cs" />
+    <Compile Include="Controls\ParentingControlCollection.cs" />
+    <Compile Include="GuiManager.cs" />
+    <Compile Include="GuiScreen.cs" />
+    <Compile Include="IGuiInputService.cs" />
+    <Compile Include="IGuiService.cs" />
+    <Compile Include="Input\Command.cs" />
+    <Compile Include="Input\DefaultInputCapturer.cs" />
+    <Compile Include="Input\IInputCapturer.cs" />
+    <Compile Include="Input\IInputReceiver.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Support\EnumHelper.cs" />
+    <Compile Include="Support\WeakReference.cs" />
+    <Compile Include="UniRectangle.cs" />
+    <Compile Include="UniScalar.cs" />
+    <Compile Include="UniVector.cs" />
+    <Compile Include="Visuals\Flat\FlatGuiGraphics.cs" />
+    <Compile Include="Visuals\Flat\FlatGuiGraphicsDrawing.cs" />
+    <Compile Include="Visuals\Flat\FlatGuiVisualizer.cs" />
+    <Compile Include="Visuals\Flat\GuiSkin.cs" />
+    <Compile Include="Visuals\Flat\GuiSkinConverters.cs" />
+    <Compile Include="Visuals\Flat\IFlatControlRenderer.cs" />
+    <Compile Include="Visuals\Flat\IFlatGuiGraphics.cs" />
+    <Compile Include="Visuals\Flat\OpeningLocator.cs" />
+    <Compile Include="Visuals\Flat\Renderers\FlatButtonControlRenderer.cs" />
+    <Compile Include="Visuals\Flat\Renderers\FlatChoiceControlRenderer.cs" />
+    <Compile Include="Visuals\Flat\Renderers\FlatHorizontalSliderControlRenderer.cs" />
+    <Compile Include="Visuals\Flat\Renderers\FlatInputControlRenderer.cs" />
+    <Compile Include="Visuals\Flat\Renderers\FlatLabelControlRenderer.cs" />
+    <Compile Include="Visuals\Flat\Renderers\FlatListControlRenderer.cs" />
+    <Compile Include="Visuals\Flat\Renderers\FlatOptionControlRenderer.cs" />
+    <Compile Include="Visuals\Flat\Renderers\FlatProgressControlRenderer.cs" />
+    <Compile Include="Visuals\Flat\Renderers\FlatVerticalSliderControlRenderer.cs" />
+    <Compile Include="Visuals\Flat\Renderers\FlatWindowControlRenderer.cs" />
+    <Compile Include="Visuals\IGuiVisualizer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Skins\SuaveSheet.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Skins\SuaveSkin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Skins\TitleFont.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.Portable.3.6.0.1625\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj">
+      <Project>{49c87598-994c-49b5-bbb3-7ffc342635d3}</Project>
+      <Name>MonoGame.Extended.Input</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj">
+      <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
+      <Name>MonoGame.Extended</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+</Project>

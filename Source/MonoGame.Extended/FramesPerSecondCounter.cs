@@ -1,51 +1,34 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
     public class FramesPerSecondCounter : IUpdate
     {
-        public FramesPerSecondCounter(int maximumSamples = 100)
+        private static readonly TimeSpan _oneSecondTimeSpan = new TimeSpan(0, 0, 1);
+        private int _framesCounter;
+        private TimeSpan _timer = _oneSecondTimeSpan;
+
+        public FramesPerSecondCounter()
         {
-            MaximumSamples = maximumSamples;
         }
 
-        private readonly Queue<float> _sampleBuffer = new Queue<float>();
-
-        public long TotalFrames { get; private set; }
-        public float AverageFramesPerSecond { get; private set; }
-        public float CurrentFramesPerSecond { get; private set; }
-        public int MaximumSamples { get; }
-
-        public void Reset()
-        {
-            TotalFrames = 0;
-            _sampleBuffer.Clear();
-        }
-
-        public void Update(float deltaTime)
-        {
-            CurrentFramesPerSecond = 1.0f / deltaTime;
-
-            _sampleBuffer.Enqueue(CurrentFramesPerSecond);
-
-            if (_sampleBuffer.Count > MaximumSamples)
-            {
-                _sampleBuffer.Dequeue();
-                AverageFramesPerSecond = _sampleBuffer.Average(i => i);
-            }
-            else
-            {
-                AverageFramesPerSecond = CurrentFramesPerSecond;
-            }
-
-            TotalFrames++;
-        }
+        public int FramesPerSecond { get; private set; }
 
         public void Update(GameTime gameTime)
         {
-            Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            _timer += gameTime.ElapsedGameTime;
+            if (_timer <= _oneSecondTimeSpan)
+                return;
+
+            FramesPerSecond = _framesCounter;
+            _framesCounter = 0;
+            _timer -= _oneSecondTimeSpan;
+        }
+
+        public void Draw(GameTime gameTime)
+        {
+            _framesCounter++;
         }
     }
 }

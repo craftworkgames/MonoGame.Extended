@@ -15,9 +15,9 @@ namespace MonoGame.Extended.Timers
         {
         }
 
-        public event EventHandler Tick;
-
         public TimeSpan NextTickTime { get; protected set; }
+
+        public event EventHandler Tick;
 
         protected override void OnStopped()
         {
@@ -29,7 +29,7 @@ namespace MonoGame.Extended.Timers
             if (CurrentTime >= NextTickTime)
             {
                 NextTickTime = CurrentTime + Interval;
-                Tick.Raise(this, EventArgs.Empty);
+                Tick?.Invoke(this, EventArgs.Empty);
             }
         }
     }
