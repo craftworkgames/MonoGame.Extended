@@ -23,6 +23,7 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public int SelectionStart { get; set; }
+        public char? PasswordCharacter { get; set; }
 
         public override void OnPointerDown(GuiPointerEventArgs args)
         {
@@ -75,7 +76,10 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected override void DrawText(IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         {
-            var caretRectangle = textInfo.Font.GetStringRectangle(Text.Substring(0, SelectionStart), textInfo.Position);
+            if (PasswordCharacter.HasValue)
+                textInfo = GetTextInfo(renderer, new string(PasswordCharacter.Value, textInfo.Text.Length));
+
+            var caretRectangle = textInfo.Font.GetStringRectangle(textInfo.Text.Substring(0, SelectionStart), textInfo.Position);
 
             // TODO: Finish the caret position stuff when it's outside the clipping rectangle
             if (caretRectangle.Right > ClippingRectangle.Right)

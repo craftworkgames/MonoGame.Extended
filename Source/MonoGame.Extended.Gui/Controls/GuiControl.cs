@@ -137,13 +137,16 @@ namespace MonoGame.Extended.Gui.Controls
         public void Draw(IGuiRenderer renderer, float deltaSeconds)
         {
             DrawBackground(renderer, deltaSeconds);
+            DrawText(renderer, deltaSeconds, GetTextInfo(renderer, Text));
+        }
 
+        protected TextInfo GetTextInfo(IGuiRenderer renderer, string text)
+        {
             var font = Font ?? renderer.DefaultFont;
-            var textSize = font.GetStringRectangle(Text ?? string.Empty, Vector2.Zero).Size.ToVector2();
+            var textSize = font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size.ToVector2();
             var textPosition = BoundingRectangle.Center.ToVector2() - textSize * 0.5f;
-            var textInfo = new TextInfo(Text, font, textPosition, textSize, TextColor, ClippingRectangle);
-
-            DrawText(renderer, deltaSeconds, textInfo);
+            var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, ClippingRectangle);
+            return textInfo;
         }
 
         protected virtual void DrawBackground(IGuiRenderer renderer, float deltaSeconds)
