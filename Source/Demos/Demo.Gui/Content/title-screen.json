@@ -52,7 +52,7 @@
           "Style": "text-box",
           "Position": "350 345",
           "Size": "300 42",
-          "Text": "Let's put some really long text in the textbox to test the clipping area"
+          "Text": "Hello World"
         },
         {
           "Name": "CheckBox",

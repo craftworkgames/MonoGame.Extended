@@ -34,28 +34,14 @@ namespace MonoGame.Extended.BitmapFonts
             if (text == null) throw new ArgumentNullException(nameof(text));
             if (effect != SpriteEffects.None) throw new NotSupportedException($"{effect} is not currently supported for {nameof(BitmapFont)}");
 
-            var dx = position.X;
-            var dy = position.Y;
+            var glyphs = bitmapFont.GetGlyphs(text, position);
 
-            for (var i = 0; i < text.Length; i++)
+            foreach (var glyph in glyphs)
             {
-                var character = BitmapFont.GetUnicodeCodePoint(text, i);
-                var fontRegion = bitmapFont.GetCharacterRegion(character);
-
-                if (fontRegion != null)
+                if (glyph.FontRegion != null)
                 {
-                    var characterPosition = new Vector2(dx + fontRegion.XOffset, dy + fontRegion.YOffset);
-                    var characterOrigin = position - characterPosition + origin;
-
-                    spriteBatch.Draw(fontRegion.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
-
-                    dx += fontRegion.XAdvance + bitmapFont.LetterSpacing;
-                }
-
-                if (character == '\n')
-                {
-                    dy += bitmapFont.LineHeight;
-                    dx = position.X;
+                    var characterOrigin = position - glyph.Position + origin;
+                    spriteBatch.Draw(glyph.FontRegion.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
                 }
             }
         }

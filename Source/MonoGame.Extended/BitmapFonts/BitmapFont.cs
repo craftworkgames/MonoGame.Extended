@@ -47,39 +47,69 @@ namespace MonoGame.Extended.BitmapFonts
 
         public Rectangle GetStringRectangle(string text, Point position)
         {
+            var glyphs = GetGlyphs(text, position.ToVector2());
+            var rectangle = new Rectangle(position.X, position.Y, 0, LineHeight);
+
+            foreach (var glyph in glyphs)
+            {
+                if (glyph.FontRegion != null)
+                {
+                    var right = glyph.Position.X + glyph.FontRegion.Width;
+
+                    if (right > rectangle.Right)
+                        rectangle.Width = (int) (right - rectangle.Left);
+                }
+
+                if (glyph.Character == '\n')
+                    rectangle.Height += LineHeight;
+            }
+
+            return rectangle;
+        }
+
+        public BitmapFontGlyph[] GetGlyphs(string text, Vector2 position)
+        {
+            var glyphs = new BitmapFontGlyph[text.Length];
             var dx = position.X;
             var dy = position.Y;
-            var rectangle = new Rectangle(dx, dy, 0, LineHeight);
 
             for (var i = 0; i < text.Length; i++)
             {
                 var character = GetUnicodeCodePoint(text, i);
-                var fontRegion = GetCharacterRegion(character);
-
-                if (fontRegion != null)
+                glyphs[i] = new BitmapFontGlyph
                 {
-                    var characterPosition = new Point(dx + fontRegion.XOffset, dy + fontRegion.YOffset);
-                    var right = characterPosition.X + fontRegion.Width;
+                    Character = character,
+                    FontRegion = GetCharacterRegion(character),
+                    Position = new Vector2(dx, dy)
+                };
 
-                    if (right > rectangle.Right)
-                        rectangle.Width = right - rectangle.Left;
-
-                    dx += fontRegion.XAdvance + LetterSpacing;
+                if (glyphs[i].FontRegion != null)
+                {
+                    glyphs[i].Position.X += glyphs[i].FontRegion.XOffset;
+                    glyphs[i].Position.Y += glyphs[i].FontRegion.YOffset;
+                    dx += glyphs[i].FontRegion.XAdvance + LetterSpacing;
                 }
 
                 if (character == '\n')
                 {
-                    rectangle.Height += LineHeight;
+                    dy += LineHeight;
                     dx = position.X;
                 }
             }
 
-            return rectangle;
+            return glyphs;
         }
 
         public override string ToString()
         {
             return $"{Name}";
         }
+    }
+
+    public struct BitmapFontGlyph
+    {
+        public int Character;
+        public Vector2 Position;
+        public BitmapFontRegion FontRegion;
     }
 }
