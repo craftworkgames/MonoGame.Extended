@@ -105,13 +105,16 @@ namespace MonoGame.Extended.Gui.Controls
 
             // TODO: Finish the caret position stuff when it's outside the clipping rectangle
             if (caretRectangle.Right > ClippingRectangle.Right)
-            {
-                var textOffset = caretRectangle.Right - ClippingRectangle.Right;
-                textInfo.Position.X -= textOffset;
-            }
+                textInfo.Position.X -= caretRectangle.Right - ClippingRectangle.Right;
 
             caretRectangle.X = caretRectangle.Right < ClippingRectangle.Right ? caretRectangle.Right : ClippingRectangle.Right;
             caretRectangle.Width = 1;
+
+            if (caretRectangle.Left < ClippingRectangle.Left)
+            {
+                textInfo.Position.X += ClippingRectangle.Left - caretRectangle.Left;
+                caretRectangle.X = ClippingRectangle.Left;
+            }
 
             base.DrawText(context, renderer, deltaSeconds, textInfo);
 

@@ -52,7 +52,7 @@
           "Style": "text-box",
           "Position": "350 345",
           "Size": "300 42",
-          "Text": "Hello World"
+          "Text": "Hello World is some really long text that goes outside the clipping rectangle"
         },
         {
           "Name": "CheckBox",
