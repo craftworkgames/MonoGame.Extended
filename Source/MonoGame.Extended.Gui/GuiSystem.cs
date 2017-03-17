@@ -1,12 +1,19 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended.Gui
 {
-    public class GuiSystem
+    public interface IGuiContext
+    {
+        BitmapFont DefaultFont { get; }
+        Vector2 CursorPosition { get; }
+    }
+
+    public class GuiSystem : IGuiContext
     {
         private readonly IGuiRenderer _renderer;
         private readonly MouseListener _mouseListener;
@@ -32,12 +39,13 @@ namespace MonoGame.Extended.Gui
             _touchListener.TouchEnded += (s, e) => OnPointerUp(GuiPointerEventArgs.FromTouchArgs(e));
 
             _keyboardListener = new KeyboardListener();
-            _keyboardListener.KeyTyped += (sender, args) => _focusedControl?.OnKeyTyped(args);
-            _keyboardListener.KeyPressed += (sender, args) => _focusedControl?.OnKeyPressed(args);
+            _keyboardListener.KeyTyped += (sender, args) => _focusedControl?.OnKeyTyped(this, args);
+            _keyboardListener.KeyPressed += (sender, args) => _focusedControl?.OnKeyPressed(this, args);
         }
 
         public GuiScreen Screen { get; set; }
         public Vector2 CursorPosition { get; set; }
+        public BitmapFont DefaultFont => Screen?.Skin?.DefaultFont;
 
         public void Update(GameTime gameTime)
         {
@@ -68,7 +76,7 @@ namespace MonoGame.Extended.Gui
         private void DrawChildren(GuiControlCollection controls, float deltaSeconds)
         {
             foreach (var control in controls.Where(c => c.IsVisible))
-                control.Draw(_renderer, deltaSeconds);
+                control.Draw(this, _renderer, deltaSeconds);
 
             foreach (var childControl in controls.Where(c => c.IsVisible))
                 DrawChildren(childControl.Controls, deltaSeconds);
@@ -80,7 +88,7 @@ namespace MonoGame.Extended.Gui
                 return;
 
             _preFocusedControl = FindControlAtPoint(Screen.Controls, args.Position);
-            _hoveredControl?.OnPointerDown(args);
+            _hoveredControl?.OnPointerDown(this, args);
         }
 
         private void OnPointerUp(GuiPointerEventArgs args)
@@ -107,7 +115,7 @@ namespace MonoGame.Extended.Gui
             }
 
             _preFocusedControl = null;
-            _hoveredControl?.OnPointerUp(args);
+            _hoveredControl?.OnPointerUp(this, args);
         }
 
         private void OnPointerMoved(GuiPointerEventArgs args)
@@ -121,9 +129,9 @@ namespace MonoGame.Extended.Gui
 
             if (_hoveredControl != hoveredControl)
             {
-                _hoveredControl?.OnPointerLeave(args);
+                _hoveredControl?.OnPointerLeave(this, args);
                 _hoveredControl = hoveredControl;
-                _hoveredControl?.OnPointerEnter(args);
+                _hoveredControl?.OnPointerEnter(this, args);
             }
         }
         

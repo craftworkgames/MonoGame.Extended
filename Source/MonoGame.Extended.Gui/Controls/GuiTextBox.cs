@@ -1,3 +1,5 @@
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.TextureAtlases;
@@ -25,17 +27,37 @@ namespace MonoGame.Extended.Gui.Controls
         public int SelectionStart { get; set; }
         public char? PasswordCharacter { get; set; }
 
-        public override void OnPointerDown(GuiPointerEventArgs args)
+        public override void OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerDown(args);
-
-            SelectionStart = Text.Length;
+            base.OnPointerDown(context, args);
+            
+            SelectionStart = FindNearestGlyphIndex(context, args.Position);
             _isCaretVisible = true;
         }
 
-        public override void OnKeyPressed(KeyboardEventArgs args)
+        private int FindNearestGlyphIndex(IGuiContext context, Point position)
         {
-            base.OnKeyPressed(args);
+            var font = Font ?? context.DefaultFont;
+            var textInfo = GetTextInfo(context, Text);
+            var glyphs = font.GetGlyphs(textInfo.Text, textInfo.Position);
+
+            for (var i = 0; i < glyphs.Length; i++)
+            {
+                var glyph = glyphs[i];
+                var glyphMiddle = (int)(glyph.Position.X + glyph.FontRegion.Width * 0.5f);
+
+                if (position.X >= glyphMiddle)
+                    continue;
+
+                return i;
+            }
+
+            return glyphs.Length;
+        }
+
+        public override void OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
+        {
+            base.OnKeyPressed(context, args);
 
             switch (args.Key)
             {
@@ -74,10 +96,10 @@ namespace MonoGame.Extended.Gui.Controls
         private float _nextCaretBlink = _caretBlinkRate;
         private bool _isCaretVisible = true;
 
-        protected override void DrawText(IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        protected override void DrawText(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         {
             if (PasswordCharacter.HasValue)
-                textInfo = GetTextInfo(renderer, new string(PasswordCharacter.Value, textInfo.Text.Length));
+                textInfo = GetTextInfo(context, new string(PasswordCharacter.Value, textInfo.Text.Length));
 
             var caretRectangle = textInfo.Font.GetStringRectangle(textInfo.Text.Substring(0, SelectionStart), textInfo.Position);
 
@@ -91,7 +113,7 @@ namespace MonoGame.Extended.Gui.Controls
             caretRectangle.X = caretRectangle.Right < ClippingRectangle.Right ? caretRectangle.Right : ClippingRectangle.Right;
             caretRectangle.Width = 1;
 
-            base.DrawText(renderer, deltaSeconds, textInfo);
+            base.DrawText(context, renderer, deltaSeconds, textInfo);
 
             if (IsFocused)
             {

@@ -9,7 +9,6 @@ namespace MonoGame.Extended.Gui
 {
     public interface IGuiRenderer
     {
-        BitmapFont DefaultFont { get; }
         void Begin();
         void DrawRegion(TextureRegion2D textureRegion, Rectangle rectangle, Color color, Rectangle? clippingRectangle = null);
         void DrawRegion(TextureRegion2D textureRegion, Vector2 position, Color color, Rectangle? clippingRectangle = null);
@@ -26,11 +25,9 @@ namespace MonoGame.Extended.Gui
         public GuiSpriteBatchRenderer(GraphicsDevice graphicsDevice, BitmapFont defaultFont, Func<Matrix> getTransformMatrix)
         {
             _getTransformMatrix = getTransformMatrix;
-            DefaultFont = defaultFont;
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
 
-        public BitmapFont DefaultFont { get; }
         public SpriteSortMode SortMode { get; set; }
         public BlendState BlendState { get; set; } = BlendState.AlphaBlend;
         public SamplerState SamplerState { get; set; } = SamplerState.PointClamp;
@@ -62,7 +59,7 @@ namespace MonoGame.Extended.Gui
 
         public void DrawText(BitmapFont font, string text, Vector2 position, Color color, Rectangle? clippingRectangle = null)
         {
-            _spriteBatch.DrawString(font ?? DefaultFont, text, position, color, clippingRectangle);
+            _spriteBatch.DrawString(font, text, position, color, clippingRectangle);
         }
 
         public void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f)

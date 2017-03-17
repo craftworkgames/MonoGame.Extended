@@ -47,15 +47,15 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        public override void OnPointerUp(GuiPointerEventArgs args)
+        public override void OnPointerUp(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerUp(args);
+            base.OnPointerUp(context, args);
 
             if (IsFocused && BoundingRectangle.Contains(args.Position))
                 IsChecked = !IsChecked;
         }
 
-        protected override void DrawBackground(IGuiRenderer renderer, float deltaSeconds)
+        protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             var boundingRectangle = BoundingRectangle;
             var checkRectangle = new Rectangle(boundingRectangle.X, boundingRectangle.Y, BackgroundRegion.Width, BackgroundRegion.Height);
@@ -63,12 +63,12 @@ namespace MonoGame.Extended.Gui.Controls
             renderer.DrawRegion(BackgroundRegion, checkRectangle, Color);
         }
 
-        protected override void DrawText(IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        protected override void DrawText(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         {
             textInfo.Position = BoundingRectangle.Location.ToVector2() +
                     new Vector2(BackgroundRegion.Width + 5, BackgroundRegion.Height * 0.5f - textInfo.Font.LineHeight * 0.5f);
 
-            base.DrawText(renderer, deltaSeconds, textInfo);
+            base.DrawText(context, renderer, deltaSeconds, textInfo);
         }
     }
 }

@@ -48,9 +48,9 @@ namespace MonoGame.Extended.Gui.Controls
 
         private bool _isPointerDown;
 
-        public override void OnPointerDown(GuiPointerEventArgs args)
+        public override void OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerDown(args);
+            base.OnPointerDown(context, args);
 
             if (IsEnabled)
             {
@@ -59,9 +59,9 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        public override void OnPointerUp(GuiPointerEventArgs args)
+        public override void OnPointerUp(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerUp(args);
+            base.OnPointerUp(context, args);
 
             _isPointerDown = false;
 
@@ -74,17 +74,17 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        public override void OnPointerEnter(GuiPointerEventArgs args)
+        public override void OnPointerEnter(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerEnter(args);
+            base.OnPointerEnter(context, args);
 
             if (IsEnabled && _isPointerDown)
                 IsPressed = true;
         }
 
-        public override void OnPointerLeave(GuiPointerEventArgs args)
+        public override void OnPointerLeave(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerLeave(args);
+            base.OnPointerLeave(context, args);
 
             if (IsEnabled)
                 IsPressed = false;

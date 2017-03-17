@@ -34,9 +34,9 @@ namespace MonoGame.Extended.Gui.Controls
 
         public event EventHandler ProgressChanged;
 
-        protected override void DrawBackground(IGuiRenderer renderer, float deltaSeconds)
+        protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
-            base.DrawBackground(renderer, deltaSeconds);
+            base.DrawBackground(context, renderer, deltaSeconds);
 
             var boundingRectangle = BoundingRectangle;
             var clippingRectangle = new Rectangle(boundingRectangle.X, boundingRectangle.Y, (int)(boundingRectangle.Width * Progress), boundingRectangle.Height);

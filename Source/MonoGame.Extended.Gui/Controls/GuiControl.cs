@@ -116,45 +116,45 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        public virtual void OnKeyTyped(KeyboardEventArgs args) { }
-        public virtual void OnKeyPressed(KeyboardEventArgs args) { }
+        public virtual void OnKeyTyped(IGuiContext context, KeyboardEventArgs args) { }
+        public virtual void OnKeyPressed(IGuiContext context, KeyboardEventArgs args) { }
 
-        public virtual void OnPointerDown(GuiPointerEventArgs args) { }
-        public virtual void OnPointerUp(GuiPointerEventArgs args) { }
+        public virtual void OnPointerDown(IGuiContext context, GuiPointerEventArgs args) { }
+        public virtual void OnPointerUp(IGuiContext context, GuiPointerEventArgs args) { }
         
-        public virtual void OnPointerEnter(GuiPointerEventArgs args)
+        public virtual void OnPointerEnter(IGuiContext context, GuiPointerEventArgs args)
         {
             if (IsEnabled)
                 HoverStyle?.Apply(this);
         }
 
-        public virtual void OnPointerLeave(GuiPointerEventArgs args)
+        public virtual void OnPointerLeave(IGuiContext context, GuiPointerEventArgs args)
         {
             if (IsEnabled)
                 HoverStyle?.Revert(this);
         }
 
-        public void Draw(IGuiRenderer renderer, float deltaSeconds)
+        public void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
-            DrawBackground(renderer, deltaSeconds);
-            DrawText(renderer, deltaSeconds, GetTextInfo(renderer, Text));
+            DrawBackground(context, renderer, deltaSeconds);
+            DrawText(context, renderer, deltaSeconds, GetTextInfo(context, Text));
         }
 
-        protected TextInfo GetTextInfo(IGuiRenderer renderer, string text)
+        protected TextInfo GetTextInfo(IGuiContext context, string text)
         {
-            var font = Font ?? renderer.DefaultFont;
+            var font = Font ?? context.DefaultFont;
             var textSize = font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size.ToVector2();
             var textPosition = BoundingRectangle.Center.ToVector2() - textSize * 0.5f;
             var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, ClippingRectangle);
             return textInfo;
         }
 
-        protected virtual void DrawBackground(IGuiRenderer renderer, float deltaSeconds)
+        protected virtual void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
         }
 
-        protected virtual void DrawText(IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        protected virtual void DrawText(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         {
             if (!string.IsNullOrWhiteSpace(textInfo.Text))
                 renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, textInfo.ClippingRectangle);
