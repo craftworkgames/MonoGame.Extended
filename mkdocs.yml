@@ -1,5 +1,1 @@
 site_name: MonoGame.Extended
-docs_dir: Documentation
-pages:
-- Home: index.md
-- About: about.md
