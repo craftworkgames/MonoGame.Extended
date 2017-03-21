@@ -60,48 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\MonoGame.Extended.Tiled\Tiled\TiledMapHelper.cs">
-      <Link>Tiled\TiledMapHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\MonoGame.Extended.Tiled\Tiled\TiledMapLayerType.cs">
-      <Link>Tiled\TiledMapLayerType.cs</Link>
-    </Compile>
-    <Compile Include="..\MonoGame.Extended.Tiled\Tiled\TiledMapObjectType.cs">
-      <Link>Tiled\TiledMapObjectType.cs</Link>
-    </Compile>
-    <Compile Include="..\MonoGame.Extended.Tiled\Tiled\TiledMapTile.cs">
-      <Link>Tiled\TiledMapTile.cs</Link>
-    </Compile>
-    <Compile Include="..\MonoGame.Extended.Tiled\Tiled\TiledMapTileFlipFlags.cs">
-      <Link>Tiled\TiledMapTileFlipFlags.cs</Link>
-    </Compile>
-    <Compile Include="Tiled\ContentWriterExtensions.cs" />
-    <Compile Include="Graphics\TiledMapLayerAnimatedModelContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Graphics\TiledMapLayerModelContent.cs" />
-    <Compile Include="Tiled\TiledMapEllipseContent.cs" />
-    <Compile Include="Tiled\TiledMapImageContent.cs" />
-    <Compile Include="Tiled\TiledMapImageLayerContent.cs" />
-    <Compile Include="Tiled\TiledMapLayerContent.cs" />
-    <Compile Include="Tiled\TiledMapContent.cs" />
-    <Compile Include="Tiled\TiledMapImporter.cs" />
-    <Compile Include="Tiled\TiledMapObjectDrawOrderContent.cs" />
-    <Compile Include="Tiled\TiledMapProcessor.cs" />
-    <Compile Include="Tiled\TiledMapWriter.cs" />
-    <Compile Include="Tiled\TiledMapObjectContent.cs" />
-    <Compile Include="Tiled\TiledMapObjectLayerContent.cs" />
-    <Compile Include="Tiled\TiledMapOrientationContent.cs" />
-    <Compile Include="Tiled\TiledMapPolygonContent.cs" />
-    <Compile Include="Tiled\TiledMapPolylineContent.cs" />
-    <Compile Include="Tiled\TiledMapPropertyContent.cs" />
-    <Compile Include="Tiled\TiledMapTileDrawOrderContent.cs" />
-    <Compile Include="Tiled\TiledMapTerrainContent.cs" />
-    <Compile Include="Tiled\TiledMapTileLayerContent.cs" />
-    <Compile Include="Tiled\TiledMapTileLayerDataContent.cs" />
-    <Compile Include="Tiled\TiledMapTileOffsetContent.cs" />
-    <Compile Include="Tiled\TiledMapTilesetContent.cs" />
-    <Compile Include="Tiled\TiledMapTilesetTileContent.cs" />
-    <Compile Include="Tiled\TiledMapTilesetTileAnimationFrameContent.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj">
@@ -118,6 +77,10 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Graphics\" />
+    <Folder Include="Tiled\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

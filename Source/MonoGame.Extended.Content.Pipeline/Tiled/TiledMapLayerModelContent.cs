@@ -4,10 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Content.Pipeline.Tiled;
 using MonoGame.Extended.Tiled;
 
-namespace MonoGame.Extended.Content.Pipeline.Graphics
+namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     public class TiledMapLayerModelContent
     {
@@ -89,6 +88,7 @@ namespace MonoGame.Extended.Content.Pipeline.Graphics
             }
 
             if (flipHorizontally)
+            {
                 if (flipDiagonally)
                 {
                     FloatHelper.Swap(ref vertexTopLeft.TextureCoordinate.Y, ref vertexTopRight.TextureCoordinate.Y);
@@ -99,6 +99,7 @@ namespace MonoGame.Extended.Content.Pipeline.Graphics
                     FloatHelper.Swap(ref vertexTopLeft.TextureCoordinate.X, ref vertexTopRight.TextureCoordinate.X);
                     FloatHelper.Swap(ref vertexBottomLeft.TextureCoordinate.X, ref vertexBottomRight.TextureCoordinate.X);
                 }
+            }
 
             if (flipVertically)
                 if (flipDiagonally)

@@ -6,7 +6,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
-using MonoGame.Extended.Content.Pipeline.Graphics;
 using MonoGame.Extended.Tiled;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled

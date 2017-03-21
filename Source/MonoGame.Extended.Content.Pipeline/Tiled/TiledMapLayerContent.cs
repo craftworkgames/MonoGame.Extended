@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using MonoGame.Extended.Content.Pipeline.Graphics;
 using MonoGame.Extended.Tiled;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled

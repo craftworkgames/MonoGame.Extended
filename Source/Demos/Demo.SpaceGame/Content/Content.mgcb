@@ -11,7 +11,6 @@
 #-------------------------------- References --------------------------------#
 
 /reference:../../../MonoGame.Extended.Content.Pipeline/bin/MonoGame.Extended.Content.Pipeline.dll
-/reference:../../../MonoGame.Extended.Content.Pipeline.Animations/bin/MonoGame.Extended.Content.Pipeline.Animations.dll
 
 #---------------------------------- Content ---------------------------------#
 

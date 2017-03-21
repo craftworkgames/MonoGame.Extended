@@ -29,6 +29,5 @@
   </metadata>
   <files>
     <file src="MonoGame.Extended.Animations\bin\Release\MonoGame.Extended.Animations.dll" target="lib" />
-    <file src="MonoGame.Extended.Content.Pipeline.Animations\bin\MonoGame.Extended.Content.Pipeline.Animations.dll" target="lib" />
   </files>
 </package>

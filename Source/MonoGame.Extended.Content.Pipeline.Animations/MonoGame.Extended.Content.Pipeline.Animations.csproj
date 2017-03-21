@@ -51,12 +51,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AstridAnimatorAnimation.cs" />
-    <Compile Include="AstridAnimatorFile.cs" />
-    <Compile Include="AstridAnimatorImporter.cs" />
-    <Compile Include="AstridAnimatorProcessor.cs" />
-    <Compile Include="AstridAnimatorProcessorResult.cs" />
-    <Compile Include="AstridAnimatorWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
