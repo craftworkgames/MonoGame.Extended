@@ -30,5 +30,7 @@
   </metadata>
   <files>
     <file src="MonoGame.Extended.Tiled\bin\Release\MonoGame.Extended.Tiled.dll" target="lib" />
+    <!-- A readme.txt will be displayed when the package is installed -->
+    <file src="readme.txt" target="" />
   </files>
 </package>

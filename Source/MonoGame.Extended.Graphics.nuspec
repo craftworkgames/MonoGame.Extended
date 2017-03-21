@@ -31,5 +31,7 @@
   </metadata>
   <files>
     <file src="MonoGame.Extended.Graphics\bin\Release\MonoGame.Extended.Graphics.dll" target="lib" />
+    <!-- A readme.txt will be displayed when the package is installed -->
+    <file src="readme.txt" target="" />
   </files>
 </package>
