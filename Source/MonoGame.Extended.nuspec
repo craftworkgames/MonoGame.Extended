@@ -30,7 +30,6 @@
   </metadata>
   <files>
     <file src="MonoGame.Extended\bin\Release\MonoGame.Extended.dll" target="lib" />
-    <file src="MonoGame.Extended.Content.Pipeline\bin\MonoGame.Extended.Content.Pipeline.dll" target="lib" />
     <!-- A readme.txt will be displayed when the package is installed -->
     <file src="readme.txt" target="" />
   </files>
