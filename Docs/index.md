@@ -1,17 +1,17 @@
-# Welcome to MkDocs
+# MonoGame.Extended Documentation
 
-For full documentation visit [mkdocs.org](http://mkdocs.org).
+Welcome to the documentation for [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended), a collection of NuGet packages that make [MonoGame](http://www.monogame.net/) more awesome.
 
-## Commands
+We're only just getting started building this documentation. If you're not finding what you're looking for we've got a number of other places to get help.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs help` - Print this help message.
+ - We've got a live chatroom on [gitter](https://gitter.im/craftworkgames/MonoGame.Extended)
+ - We've got our own section on the [MonoGame Community Forums](http://community.monogame.net/c/extended)
+ - Development is usually discussed in [github issues](https://github.com/craftworkgames/MonoGame.Extended/issues)
+ - We've even got a [tag on stackoverflow](http://gamedev.stackexchange.com/questions/tagged/monogame-extended) ;)
 
-## Project layout
+ *Initially the plan is to port over the relevant pages from the wiki. Over time, this should become the place to be for those with the need to read.*
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+## Index
+
+ - [Installation](installation.md)
+ 
