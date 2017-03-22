@@ -3,7 +3,6 @@
 MonoGame.Extended is a collection of NuGet packages that make MonoGame more awesome.
 
 
-
 ## IMPORTANT!
 
 To get the full experience you'll also need to install an additional NuGet package:
@@ -13,6 +12,7 @@ To get the full experience you'll also need to install an additional NuGet packa
 Once you've installed that package, follow the instructions to add it to your
 Content Pipeline.
 
+For more information, take a look at the [installation guide](http://craftworkgames.github.io/MonoGame.Extended/installation/).
 
 
 ## Check out the other packages
