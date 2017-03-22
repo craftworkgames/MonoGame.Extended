@@ -1,3 +1,5 @@
+# Installation
+
 MonoGame.Extended is a collection of [portable class libraries](https://msdn.microsoft.com/en-us/library/gg597391) (PCL) designed to be referenced from any MonoGame project to add common extensions and classes for making your games more awesome.
 
 The libraries are distributed as [NuGet packages](https://www.nuget.org/packages?q=MonoGame.Extended) and can be installed using the NuGet Package Manager in [Visual Studio](https://www.visualstudio.com), [Xamarin Studio](https://xamarin.com/studio), or [MonoDevelop](http://www.monodevelop.com). They can also be installed by running the following command (or the equivilant command for the package you want to install) in the [Package Manager Console](http://docs.nuget.org/consume/package-manager-console).
@@ -16,7 +18,7 @@ This package won't add any references to your project. Instead it will download 
 
 You'll need to manually add the reference to your content file (usually `Content.mgcb`) using one of the following methods.
 
-#### Using the MonoGame Pipeline GUI
+### Using the MonoGame Pipeline GUI
 
 To add the reference using the Pipeline GUI tool follow these steps:
 
@@ -26,7 +28,7 @@ To add the reference using the Pipeline GUI tool follow these steps:
 
 ![MonoGame Pipeline Add References](https://dl.dropboxusercontent.com/u/82020056/MonoGame.Extended/how-to-add-content-pipeline-reference.png)
  
-#### Using a text editor
+### Using a text editor
 
 An alternative way to add the reference is by manually editing the `Content.mgcb` file in a text editor or Visual Studio. Look for the references section and update it like this:
 
