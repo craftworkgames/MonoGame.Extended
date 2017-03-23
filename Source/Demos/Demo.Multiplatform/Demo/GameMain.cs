@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -9,8 +8,13 @@ using MonoGame.Extended.Gui.Serialization;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
 
-namespace Demo.Android
+namespace Demo
 {
+    public class PlatformConfig
+    {
+        public bool IsFullScreen { get; set; } = true;
+    }
+
     public class GameMain : Game
     {
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
@@ -19,14 +23,16 @@ namespace Demo.Android
         private GuiProgressBar _progressBar;
         private float _progressDelta = 0.2f;
 
-        public GameMain()
+        public GameMain(PlatformConfig config)
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this)
             {
-                IsFullScreen = true,
+                IsFullScreen = config.IsFullScreen,
                 SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight
             };
             Content.RootDirectory = "Content";
+            IsMouseVisible = true;
+            Window.AllowUserResizing = true;
         }
 
         protected override void LoadContent()
@@ -61,6 +67,7 @@ namespace Demo.Android
                 }
             };
 
+            // this is a quick and dirty way to load a file bypassing the content pipeline
             using (var stream = TitleContainer.OpenStream(name))
             using (var streamReader = new StreamReader(stream))
             using (var jsonReader = new JsonTextReader(streamReader))

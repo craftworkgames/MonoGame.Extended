@@ -51,9 +51,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
-    <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\MonoGame\v3.0\Assemblies\Android\MonoGame.Framework.dll</HintPath>
+    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MonoGame.Framework.Android.3.6.0.1625\lib\MonoAndroid\MonoGame.Framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -66,18 +66,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activity1.cs" />
-    <Compile Include="GameMain.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="Content\Content.mgcb" />
-    <AndroidAsset Include="Assets\adventure-gui-skin.json">
+    <AndroidAsset Include="..\Demo\Content\title-screen.json">
+      <Link>Assets\title-screen.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AndroidAsset>
-    <AndroidAsset Include="Assets\title-screen.json">
+    <AndroidAsset Include="..\Demo\Content\adventure-gui-atlas.json">
+      <Link>Assets\adventure-gui-atlas.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AndroidAsset>
+    <MonoGameContentReference Include="..\Demo\Content\Content.mgcb">
+      <Link>Content\Content.mgcb</Link>
+    </MonoGameContentReference>
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
@@ -101,13 +104,17 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MonoGame.Extended.Gui\MonoGame.Extended.Gui.csproj">
+    <ProjectReference Include="..\..\..\MonoGame.Extended.Gui\MonoGame.Extended.Gui.csproj">
       <Project>{8e425575-378a-4f83-88c9-f8bebad227c9}</Project>
       <Name>MonoGame.Extended.Gui</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj">
+    <ProjectReference Include="..\..\..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
       <Name>MonoGame.Extended</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Demo\Demo.csproj">
+      <Project>{d8c6d896-5abf-4823-84da-f1191beec004}</Project>
+      <Name>Demo</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />

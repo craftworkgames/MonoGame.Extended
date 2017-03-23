@@ -20,7 +20,7 @@ namespace Demo.Android
         {
             base.OnCreate(bundle);
 
-            var game = new GameMain();
+            var game = new GameMain(new PlatformConfig { IsFullScreen = true });
             var view = (View)game.Services.GetService(typeof(View));
 
             HideSystemUi();
