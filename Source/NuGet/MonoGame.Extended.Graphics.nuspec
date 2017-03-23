@@ -2,13 +2,15 @@
 <!-- https://docs.microsoft.com/en-us/nuget/schema/nuspec -->
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
-    <id>MonoGame.Extended.Animations</id>
+    <id>MonoGame.Extended.Graphics</id>
     <version>$version$</version>
     <description>
-      Animations to make MonoGame more awesome.
+      Makes MonoGame more awesome.
+      Tile based maps, Bitmap Fonts, Sprites and SpriteBatch extensions,
+      Input Listeners, Texture Atlases, 2D Camera, Viewport Adapters.
     </description>
     <authors>Dylan Wilson</authors>
-    <title>MonoGame.Extended.Animations</title>
+    <title>MonoGame.Extended.Graphics</title>
     <owners>Craftwork Games</owners>
     <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>
     <licenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</licenseUrl>
@@ -16,10 +18,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2017 - Craftwork Games</copyright>
-    <tags>monogame extended animation sprite sheet</tags>
+    <tags>monogame extended pipeline bmfont tiled texture atlas input event sprite</tags>
     <references>
       <group>
-        <reference file="MonoGame.Extended.Animations.dll" />
+        <reference file="MonoGame.Extended.Graphics.dll" />
       </group>
     </references>
     <dependencies>
@@ -28,8 +30,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="MonoGame.Extended.Animations\bin\Release\MonoGame.Extended.Animations.dll" target="lib" />
+    <file src="MonoGame.Extended.Graphics\bin\Release\MonoGame.Extended.Graphics.dll" target="lib" />
     <!-- A readme.txt will be displayed when the package is installed -->
-    <file src="readme.txt" target="" />
+    <file src="NuGet\readme.txt" target="" />
   </files>
 </package>

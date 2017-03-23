@@ -6,20 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended", "MonoGa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{068B9F42-8B49-4FAF-9D8C-701862FAC799}"
 	ProjectSection(SolutionItems) = preProject
-		MonoGame.Extended.Animations.nuspec = MonoGame.Extended.Animations.nuspec
-		MonoGame.Extended.Content.Pipeline.nuspec = MonoGame.Extended.Content.Pipeline.nuspec
-		MonoGame.Extended.Entities.nuspec = MonoGame.Extended.Entities.nuspec
-		MonoGame.Extended.Graphics.nuspec = MonoGame.Extended.Graphics.nuspec
-		MonoGame.Extended.Gui.nuspec = MonoGame.Extended.Gui.nuspec
-		MonoGame.Extended.Input.nuspec = MonoGame.Extended.Input.nuspec
-		MonoGame.Extended.NuclexGui.nuspec = MonoGame.Extended.NuclexGui.nuspec
-		MonoGame.Extended.nuspec = MonoGame.Extended.nuspec
-		MonoGame.Extended.Particles.nuspec = MonoGame.Extended.Particles.nuspec
-		MonoGame.Extended.SceneGraphs.nuspec = MonoGame.Extended.SceneGraphs.nuspec
-		MonoGame.Extended.Tiled.nuspec = MonoGame.Extended.Tiled.nuspec
-		MonoGame.Extended.Tweening.nuspec = MonoGame.Extended.Tweening.nuspec
 		..\README.md = ..\README.md
-		readme.txt = readme.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Content.Pipeline", "MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj", "{28CD24BD-432C-4987-9E9D-65CFCF120EA0}"
@@ -155,6 +142,23 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Tweening", "MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj", "{1CF61F4F-A2EE-49BF-95D0-379E870DE90E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Animations", "MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj", "{587CE536-216F-41A1-B223-AE502C125B09}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{F3E80350-2F27-4EDB-8BE9-0145643A5336}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\MonoGame.Extended.Animations.nuspec = NuGet\MonoGame.Extended.Animations.nuspec
+		NuGet\MonoGame.Extended.Content.Pipeline.nuspec = NuGet\MonoGame.Extended.Content.Pipeline.nuspec
+		NuGet\MonoGame.Extended.Entities.nuspec = NuGet\MonoGame.Extended.Entities.nuspec
+		NuGet\MonoGame.Extended.Graphics.nuspec = NuGet\MonoGame.Extended.Graphics.nuspec
+		NuGet\MonoGame.Extended.Gui.nuspec = NuGet\MonoGame.Extended.Gui.nuspec
+		NuGet\MonoGame.Extended.Input.nuspec = NuGet\MonoGame.Extended.Input.nuspec
+		NuGet\MonoGame.Extended.NuclexGui.nuspec = NuGet\MonoGame.Extended.NuclexGui.nuspec
+		NuGet\MonoGame.Extended.nuspec = NuGet\MonoGame.Extended.nuspec
+		NuGet\MonoGame.Extended.Particles.nuspec = NuGet\MonoGame.Extended.Particles.nuspec
+		NuGet\MonoGame.Extended.SceneGraphs.nuspec = NuGet\MonoGame.Extended.SceneGraphs.nuspec
+		NuGet\MonoGame.Extended.Tiled.nuspec = NuGet\MonoGame.Extended.Tiled.nuspec
+		NuGet\MonoGame.Extended.Tweening.nuspec = NuGet\MonoGame.Extended.Tweening.nuspec
+		NuGet\readme.txt = NuGet\readme.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -471,5 +475,6 @@ Global
 		{43CBA868-9BFC-4E02-8A7A-142C603B087E} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
 		{CEF2144F-7E98-45A5-BE08-E6DBC307A5C1} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
 		{A88FC71D-12E3-42A5-AFF3-89C6498C3C65} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
+		{F3E80350-2F27-4EDB-8BE9-0145643A5336} = {068B9F42-8B49-4FAF-9D8C-701862FAC799}
 	EndGlobalSection
 EndGlobal

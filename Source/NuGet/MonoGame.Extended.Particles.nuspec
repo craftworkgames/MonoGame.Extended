@@ -2,15 +2,13 @@
 <!-- https://docs.microsoft.com/en-us/nuget/schema/nuspec -->
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
-    <id>MonoGame.Extended</id>
+    <id>MonoGame.Extended.Particles</id>
     <version>$version$</version>
     <description>
-      Makes MonoGame more awesome.
-      Tile based maps, Bitmap Fonts, Sprites and SpriteBatch extensions,
-      Input Listeners, Texture Atlases, 2D Camera, Viewport Adapters.
+      A high performance particle system to make MonoGame more awesome.
     </description>
     <authors>Dylan Wilson</authors>
-    <title>MonoGame.Extended</title>
+    <title>MonoGame.Extended.Particles</title>
     <owners>Craftwork Games</owners>
     <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>
     <licenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</licenseUrl>
@@ -18,19 +16,20 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2017 - Craftwork Games</copyright>
-    <tags>monogame extended pipeline bmfont tiled texture atlas input event sprite</tags>
+    <tags>monogame extended particle system</tags>
     <references>
       <group>
-        <reference file="MonoGame.Extended.dll" />
+        <reference file="MonoGame.Extended.Particles.dll" />
       </group>
     </references>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="9.0" />
+      <dependency id="MonoGame.Extended" version="[$version$]" />
     </dependencies>
   </metadata>
   <files>
-    <file src="MonoGame.Extended\bin\Release\MonoGame.Extended.dll" target="lib" />
+    <file src="MonoGame.Extended.Particles\bin\Release\MonoGame.Extended.Particles.dll" target="lib" />
     <!-- A readme.txt will be displayed when the package is installed -->
-    <file src="readme.txt" target="" />
+    <file src="NuGet\readme.txt" target="" />
   </files>
 </package>

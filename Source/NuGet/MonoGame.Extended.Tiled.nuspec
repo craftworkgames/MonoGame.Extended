@@ -2,13 +2,13 @@
 <!-- https://docs.microsoft.com/en-us/nuget/schema/nuspec -->
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
-    <id>MonoGame.Extended.Tweening</id>
+    <id>MonoGame.Extended.Tiled</id>
     <version>$version$</version>
     <description>
-      A tweening system to make MonoGame more awesome.
+      Support for Tiled maps to make MonoGame more awesome. See http://www.mapeditor.org
     </description>
     <authors>Dylan Wilson</authors>
-    <title>MonoGame.Extended.Tweening</title>
+    <title>MonoGame.Extended.Tiled</title>
     <owners>Craftwork Games</owners>
     <projectUrl>https://github.com/craftworkgames/MonoGame.Extended</projectUrl>
     <licenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</licenseUrl>
@@ -16,21 +16,21 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2017 - Craftwork Games</copyright>
-    <tags>monogame extended animations tweening</tags>
+    <tags>monogame extended pipeline tiled</tags>
     <references>
       <group>
-        <reference file="MonoGame.Extended.Tweening.dll" />
+        <reference file="MonoGame.Extended.Tiled.dll" />
       </group>
     </references>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="9.0" />
       <dependency id="MonoGame.Extended" version="[$version$]" />
-      <dependency id="MonoGame.Extended.Animations" version="[$version$]" />
+      <dependency id="MonoGame.Extended.Graphics" version="[$version$]" />
     </dependencies>
   </metadata>
   <files>
-    <file src="MonoGame.Extended.Tweening\bin\Release\MonoGame.Extended.Tweening.dll" target="lib" />
+    <file src="MonoGame.Extended.Tiled\bin\Release\MonoGame.Extended.Tiled.dll" target="lib" />
     <!-- A readme.txt will be displayed when the package is installed -->
-    <file src="readme.txt" target="" />
+    <file src="NuGet\readme.txt" target="" />
   </files>
 </package>
