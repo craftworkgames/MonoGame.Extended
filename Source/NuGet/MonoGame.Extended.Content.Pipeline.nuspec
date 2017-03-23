@@ -22,10 +22,10 @@
     </references>
   </metadata>
   <files>
-    <file src="MonoGame.Extended.Content.Pipeline\bin\MonoGame.Extended.Content.Pipeline.dll" target="tools" />
-    <file src="MonoGame.Extended.Content.Pipeline\bin\MonoGame.Extended.dll" target="tools" />
-    <file src="MonoGame.Extended.Content.Pipeline\bin\Newtonsoft.Json.dll" target="tools" />
+    <file src="..\MonoGame.Extended.Content.Pipeline\bin\MonoGame.Extended.Content.Pipeline.dll" target="tools" />
+    <file src="..\MonoGame.Extended.Content.Pipeline\bin\MonoGame.Extended.dll" target="tools" />
+    <file src="..\MonoGame.Extended.Content.Pipeline\bin\Newtonsoft.Json.dll" target="tools" />
     <!-- A readme.txt will be displayed when the package is installed -->
-    <file src="MonoGame.Extended.Content.Pipeline\readme.txt" target="" />
+    <file src="..\MonoGame.Extended.Content.Pipeline\readme.txt" target="" />
   </files>
 </package>

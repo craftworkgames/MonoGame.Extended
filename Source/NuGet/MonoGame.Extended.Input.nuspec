@@ -28,8 +28,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="MonoGame.Extended.Input\bin\Release\MonoGame.Extended.Input.dll" target="lib" />
+    <file src="..\MonoGame.Extended.Input\bin\Release\MonoGame.Extended.Input.dll" target="lib" />
     <!-- A readme.txt will be displayed when the package is installed -->
-    <file src="NuGet\readme.txt" target="" />
+    <file src="readme.txt" target="" />
   </files>
 </package>
