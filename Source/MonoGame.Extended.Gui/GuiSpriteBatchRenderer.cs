@@ -22,7 +22,7 @@ namespace MonoGame.Extended.Gui
         private readonly Func<Matrix> _getTransformMatrix;
         private readonly SpriteBatch _spriteBatch;
 
-        public GuiSpriteBatchRenderer(GraphicsDevice graphicsDevice, BitmapFont defaultFont, Func<Matrix> getTransformMatrix)
+        public GuiSpriteBatchRenderer(GraphicsDevice graphicsDevice, Func<Matrix> getTransformMatrix)
         {
             _getTransformMatrix = getTransformMatrix;
             _spriteBatch = new SpriteBatch(graphicsDevice);

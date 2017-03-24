@@ -74,13 +74,13 @@
       <Link>Assets\title-screen.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AndroidAsset>
-    <AndroidAsset Include="..\Demo\Content\adventure-gui-atlas.json">
-      <Link>Assets\adventure-gui-atlas.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AndroidAsset>
     <MonoGameContentReference Include="..\Demo\Content\Content.mgcb">
       <Link>Content\Content.mgcb</Link>
     </MonoGameContentReference>
+    <AndroidAsset Include="..\Demo\Content\adventure-gui-skin.json">
+      <Link>Assets\adventure-gui-skin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AndroidAsset>
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
