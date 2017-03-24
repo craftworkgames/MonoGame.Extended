@@ -71,14 +71,14 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="..\Demo\Content\title-screen.json">
-      <Link>Assets\title-screen.json</Link>
+      <Link>Assets\Raw\title-screen.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AndroidAsset>
     <MonoGameContentReference Include="..\Demo\Content\Content.mgcb">
       <Link>Content\Content.mgcb</Link>
     </MonoGameContentReference>
     <AndroidAsset Include="..\Demo\Content\adventure-gui-skin.json">
-      <Link>Assets\adventure-gui-skin.json</Link>
+      <Link>Assets\Raw\adventure-gui-skin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AndroidAsset>
     <None Include="packages.config" />

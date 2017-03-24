@@ -47,6 +47,7 @@
   <ItemGroup>
     <None Include="Content\adventure-gui-atlas.json" />
     <None Include="Content\adventure-gui-skin.json" />
+    <None Include="Content\Content.mgcb" />
     <None Include="Content\small-font.fnt" />
     <None Include="Content\title-screen.json" />
     <None Include="packages.config" />

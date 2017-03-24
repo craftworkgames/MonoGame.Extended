@@ -40,7 +40,7 @@ namespace Demo
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
 
-            var titleScreen = LoadScreen(@"title-screen.json");
+            var titleScreen = LoadScreen(@"Raw/title-screen.json");
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _camera.GetViewMatrix);
             _guiSystem = new GuiSystem(viewportAdapter, guiRenderer) { Screen = titleScreen };
 
