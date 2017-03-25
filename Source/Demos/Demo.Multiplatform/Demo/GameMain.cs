@@ -17,6 +17,7 @@ namespace Demo
 
     public class GameMain : Game
     {
+        // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private Camera2D _camera;
         private GuiSystem _guiSystem;
