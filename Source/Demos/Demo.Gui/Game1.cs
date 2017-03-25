@@ -34,7 +34,7 @@ namespace Demo.Gui
             _camera = new Camera2D(viewportAdapter);
 
             var titleScreen = LoadScreen(@"Content/title-screen.json");
-            var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, titleScreen.Skin.DefaultFont, _camera.GetViewMatrix);
+            var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _camera.GetViewMatrix);
             _guiSystem = new GuiSystem(viewportAdapter, guiRenderer) { Screen = titleScreen };
 
             var panel = titleScreen.FindControl<GuiPanel>("MainPanel");
