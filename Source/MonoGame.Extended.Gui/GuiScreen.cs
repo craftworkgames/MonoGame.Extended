@@ -6,8 +6,9 @@ namespace MonoGame.Extended.Gui
 {
     public class GuiScreen
     {
-        public GuiScreen()
+        public GuiScreen(GuiSkin skin)
         {
+            Skin = skin;
             Controls = new GuiControlCollection();
         }
 

@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Collections\DictionaryExtensions.cs" />
+    <Compile Include="Collections\KeyedCollection.cs" />
     <Compile Include="FloatHelper.cs" />
     <Compile Include="IRectangular.cs" />
     <Compile Include="Serialization\NinePatchRegion2DJsonConverter.cs" />
