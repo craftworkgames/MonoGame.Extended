@@ -2,32 +2,36 @@ using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using MonoGame.Extended.Entities.Components;
-using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Sprites;
+using MonoGame.Extended.Entities;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    public class EnemyMovementSystem : ComponentSystem
+    [System(
+        Layer = 0,
+        GameLoopType = GameLoopType.Update,
+        AspectType = AspectType.RequiresAllOf,
+        ComponentTypes = new[]
+        {
+            typeof(TransformComponent), typeof(EnemyAiComponent)
+        })]
+    public class EnemyMovementSystem : MonoGame.Extended.Entities.System
     {
-        public override void Update(GameTime gameTime)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
             var deltaTime = gameTime.GetElapsedSeconds();
 
-            foreach (var component in GetComponents<EnemyAi>())
-            {
-                component.Position += component.Direction * deltaTime;
-                component.WalkTimeRemaining -= deltaTime;
+            var enemy = entity.GetComponent<EnemyAiComponent>();
+            var transform = entity.GetComponent<TransformComponent>();
+            var sprite = entity.GetComponent<SpriteComponent>();
+            transform.Position += enemy.Direction * deltaTime;
+            enemy.WalkTimeRemaining -= deltaTime;
 
-                if (component.WalkTimeRemaining <= 0)
-                {
-                    var transformableComponent = component.Entity.GetComponent<TransformableComponent<Sprite>>();
-                    var sprite = transformableComponent.Target;
-                    sprite.Effect = sprite.Effect == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                    component.Direction = -component.Direction;
-                    component.WalkTimeRemaining = component.WalkTime;
-                }
-            }
+            if (enemy.WalkTimeRemaining > 0)
+                return;
+
+            sprite.Effects = sprite.Effects == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            enemy.Direction = -enemy.Direction;
+            enemy.WalkTimeRemaining = enemy.WalkTime;
         }
     }
 }

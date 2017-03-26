@@ -44,5 +44,13 @@ namespace MonoGame.Extended
         public event EventHandler<EventArgs> VisibleChanged;
 
         public abstract void Draw(GameTime gameTime);
+
+        protected virtual void LoadContent()
+        {
+        }
+
+        protected virtual void UnloadContent()
+        {
+        }
     }
 }

@@ -11,21 +11,21 @@ namespace MonoGame.Extended.Collections
     /// <typeparam name="T">The type of the elements in the pool.</typeparam>
     /// <remarks>
     ///     <para>
-    ///         Requesting a free element from the <see cref="Pool{T}" /> is a O(1) operation. Returning a used element back to
-    ///         the <see cref="Pool{T}" /> is an O(1) operation for the oldest or newest elements or O(n) otherwise, where n is
+    ///         Requesting a free element from the <see cref="ObjectPool{T}" /> is a O(1) operation. Returning a used element back to
+    ///         the <see cref="ObjectPool{T}" /> is an O(1) operation for the oldest or newest elements or O(n) otherwise, where n is
     ///         the <see cref="Count" />.
     ///     </para>
     /// </remarks>
     /// <example>
     ///     The following example demonstrates how to request and return a simple object from and to a
-    ///     <see cref="Pool{T}" />.
+    ///     <see cref="ObjectPool{T}" />.
     ///     <code>
     /// <![CDATA[ 
     /// // Create the pool
     /// var pool = new Pool<MyPoolable>();
     /// ...
     /// // Get an object from the pool
-    /// var myPoolableInstance = pool.Request();
+    /// var myPoolableInstance = pool.New();
     /// ...
     /// // Return the object back to the pool
     /// myPoolableInstance.Return();
@@ -73,7 +73,7 @@ namespace MonoGame.Extended.Collections
     /// ]]>
     /// </code>
     /// </example>
-    public class Pool<T> : ICollection<T>
+    public class ObjectPool<T> : ICollection<T>
         where T : class, IPoolable
     {
         // since we are constraining T to classes, these two deqeues are just really two object reference arrays
@@ -84,12 +84,12 @@ namespace MonoGame.Extended.Collections
         private readonly Deque<T> _usedItems;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Pool{T}" /> class that has a specified capacity and an element
+        ///     Initializes a new instance of the <see cref="ObjectPool{T}" /> class that has a specified capacity and an element
         ///     instantiating delegate.
         /// </summary>
-        /// <param name="capacity">The number of elements that the new <see cref="Pool{T}" /> can store.</param>
+        /// <param name="capacity">The number of elements that the new <see cref="ObjectPool{T}" /> can store.</param>
         /// <param name="instantiationFunction">The delegate responsible for instantiating elements.</param>
-        public Pool(int capacity, Func<int, T> instantiationFunction)
+        public ObjectPool(int capacity, Func<int, T> instantiationFunction)
         {
             if (instantiationFunction == null)
                 throw new ArgumentNullException(nameof(instantiationFunction));
@@ -107,16 +107,16 @@ namespace MonoGame.Extended.Collections
         /// <summary>
         ///     Gets or sets the total number of elements the internal data structure can hold.
         /// </summary>
-        /// <returns>The number of elements that the <see cref="Pool{T}" /> can contain.</returns>
+        /// <returns>The number of elements that the <see cref="ObjectPool{T}" /> can contain.</returns>
         /// <remarks>
         ///     Once set, <see cref="Capacity" /> can not be changed.
         /// </remarks>
         public int Capacity => _usedItems.Count;
 
         /// <summary>
-        ///     Gets the number of elements contained in the <see cref="Pool{T}" />.
+        ///     Gets the number of elements contained in the <see cref="ObjectPool{T}" />.
         /// </summary>
-        /// <returns>The number of elements contained in the <see cref="Pool{T}" />.</returns>
+        /// <returns>The number of elements contained in the <see cref="ObjectPool{T}" />.</returns>
         public int Count => _usedItems.Count;
 
         bool ICollection<T>.IsReadOnly => true;
@@ -142,14 +142,14 @@ namespace MonoGame.Extended.Collections
         }
 
         /// <summary>
-        ///     Returns all in use elements back to the <see cref="Pool{T}" />.
+        ///     Returns all in use elements back to the <see cref="ObjectPool{T}" />.
         /// </summary>
         /// <remarks>
         ///     <para><see cref="Count" /> is set to 0.</para>
         ///     <para><see cref="Capacity" /> remains unchanged.</para>
         ///     <para>
         ///         The order which elements are returned is the same as the order they were requested using
-        ///         <see cref="Request" />.
+        ///         <see cref="New" />.
         ///     </para>
         ///     <para>This method is an O(n) operation where n is <see cref="Count" />.</para>
         /// </remarks>
@@ -182,17 +182,17 @@ namespace MonoGame.Extended.Collections
         }
 
         /// <summary>
-        ///     Get a free element from the <see cref="Pool{T}" />.
+        ///     Get a free element from the <see cref="ObjectPool{T}" />.
         /// </summary>
-        /// <param name="killExistingObjectIfFull">
-        ///     <c>true</c> to forcibly kill an existing, in use, element in the <see cref="Pool{T}" /> if <see cref="Count" /> is
+        /// <param name="killExistingIfFull">
+        ///     <c>true</c> to forcibly kill an existing, in use, element in the <see cref="ObjectPool{T}" /> if <see cref="Count" /> is
         ///     equal to <see cref="Capacity" />; otherwise, <c>false</c>.
         /// </param>
-        /// <returns>A free <see cref="T" /> element from the <see cref="Pool{T}" />.</returns>
+        /// <returns>A free <see cref="T" /> element from the <see cref="ObjectPool{T}" />.</returns>
         /// <remarks>
         ///     <para>This method is an O(1) operation.</para>
         /// </remarks>
-        public T Request(bool killExistingObjectIfFull = false)
+        public T New(bool killExistingIfFull = false)
         {
             while (true)
             {
@@ -205,13 +205,13 @@ namespace MonoGame.Extended.Collections
                     return poolable;
                 }
 
-                if (!killExistingObjectIfFull)
+                if (!killExistingIfFull)
                     return null;
                 if (!_usedItems.GetFront(out poolable))
                     return null;
 
                 poolable.Return();
-                killExistingObjectIfFull = false;
+                killExistingIfFull = false;
             }
         }
 

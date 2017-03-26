@@ -4,89 +4,76 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Animations;
 using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Components;
-using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Sprites;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    public class PlayerMovementSystem : ComponentSystem
+    [System(
+        Layer = 0,
+        GameLoopType = GameLoopType.Update,
+        AspectType = AspectType.RequiresAllOf,
+        ComponentTypes = new[]
+        {
+            typeof(PlayerComponent),
+            typeof(AnimationComponent),
+            typeof(BasicCollisionBodyComponent),
+            typeof(SpriteComponent)
+        })]
+    public class PlayerMovementSystem : MonoGame.Extended.Entities.System
     {
-        private const float _walkSpeed = 220f;
-        private const float _jumpSpeed = 425f;
         private KeyboardState _previousKeyboardState;
-        private float _jumpDelay = 1.0f;
-        private Entity _playerEntity;
+        private KeyboardState _keyboardState;
 
-        protected override void OnEntityCreated(Entity entity)
+        protected override void Begin(GameTime gameTime)
         {
-            if (entity.Name == Entities.Player)
-                _playerEntity = entity;
+            base.Begin(gameTime);
 
-            base.OnEntityCreated(entity);
+            _previousKeyboardState = _keyboardState;
+            _keyboardState = Keyboard.GetState();
         }
 
-        protected override void OnEntityDestroyed(Entity entity)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
-            if (entity.Name == Entities.Player)
-                _playerEntity = null;
+            base.Process(gameTime, entity);
 
-            base.OnEntityDestroyed(entity);
-        }
+            var physics = entity.GetComponent<BasicCollisionBodyComponent>();
+            var player = entity.GetComponent<PlayerComponent>();
+            var animation = entity.GetComponent<AnimationComponent>();
+            var sprite = entity.GetComponent<SpriteComponent>();
+            var velocity = new Vector2(0, physics.Velocity.Y);
 
-        public override void Update(GameTime gameTime)
-        {
-            if(_playerEntity == null)
-                return;
-
-            var deltaTime = gameTime.GetElapsedSeconds();
-            var keyboardState = Keyboard.GetState();
-            var body = _playerEntity.GetComponent<BasicCollisionBody>();
-            var playerState = _playerEntity.GetComponent<CharacterState>();
-            var sprite = _playerEntity.GetComponent<TransformableComponent<Sprite>>().Target as AnimatedSprite;
-            var velocity = new Vector2(0, body.Velocity.Y);
-
-            if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
+            if (_keyboardState.IsKeyDown(Keys.Left) || _keyboardState.IsKeyDown(Keys.A))
             {
-                sprite.Effect = SpriteEffects.FlipHorizontally;
-                sprite.Play("walk");
-                velocity += new Vector2(-_walkSpeed, 0);
+                sprite.Effects = SpriteEffects.FlipHorizontally;
+                animation.Play("walk");
+                velocity.X -= player.WalkSpeed;
             }
 
-            if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
+            if (_keyboardState.IsKeyDown(Keys.Right) || _keyboardState.IsKeyDown(Keys.D))
             {
-                sprite.Effect = SpriteEffects.None;
-                sprite.Play("walk");
-                velocity += new Vector2(_walkSpeed, 0);
-            }
-            
-            if (playerState.IsJumping)
-                _jumpDelay -= deltaTime * 2.8f;
-            else
-                _jumpDelay = 1.0f;
-
-            if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
-            {
-                if(!playerState.IsJumping)
-                    sprite.Play("jump");
-
-                velocity = new Vector2(velocity.X, -_jumpSpeed * _jumpDelay);
-                playerState.IsJumping = true;
-            }
-            else if (_previousKeyboardState.IsKeyDown(Keys.W) || _previousKeyboardState.IsKeyDown(Keys.Up))
-            {
-                // when the jump button is released we kill most of the upward velocity
-                velocity = new Vector2(velocity.X, velocity.Y * 0.2f);
+                sprite.Effects = SpriteEffects.None;
+                animation.Play("walk");
+                velocity.X += player.WalkSpeed;
             }
 
-            if (!playerState.IsJumping && Math.Abs(body.Velocity.X) < float.Epsilon)
-                sprite.Play("idle");
+            //if (_keyboardState.IsKeyDown(Keys.W) || _keyboardState.IsKeyDown(Keys.Up))
+            //{
+            //    if (!player.IsJumping)
+            //        animation.Play("jump");
 
-            body.Velocity = velocity;
-            
-            _previousKeyboardState = keyboardState;
+            //    velocity.Y = -player.JumpSpeed;
+            //    player.IsJumping = true;
+            //}
+            //else if (_previousKeyboardState.IsKeyDown(Keys.W) || _previousKeyboardState.IsKeyDown(Keys.Up))
+            //{
+            //    // when the jump button is released we kill most of the upward velocity
+            //    velocity.Y *= 0.2f;
+            //}
+
+            if (!player.IsJumping && Math.Abs(physics.Velocity.X) < float.Epsilon)
+                animation.Play("idle");
+
+            physics.Velocity = velocity;
         }
     }
 }

@@ -1,19 +1,12 @@
-﻿using System;
+﻿using System.Reflection;
+using Demo.EntityComponentSystem.Components;
+using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Components;
-using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Particles;
-using MonoGame.Extended.Particles.Modifiers;
-using MonoGame.Extended.Particles.Modifiers.Containers;
-using MonoGame.Extended.Particles.Modifiers.Interpolators;
-using MonoGame.Extended.Particles.Profiles;
-using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -25,8 +18,9 @@ namespace Demo.EntityComponentSystem
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private Camera2D _camera;
 
-        private MonoGame.Extended.Entities.EntityComponentSystem _entityComponentSystem;
+        private EntityComponentSystemManager _ecs;
         private Entity _entity;
+        private Entity _animatedEntity;
 
         public Game1()
         {
@@ -36,20 +30,36 @@ namespace Demo.EntityComponentSystem
             Window.AllowUserResizing = true;
         }
 
+        protected override void Initialize()
+        {
+            _ecs = new EntityComponentSystemManager(this);
+            Services.AddService(_ecs);
+
+            _ecs.Scan(Assembly.GetExecutingAssembly());
+
+            base.Initialize();
+        }
+
         protected override void LoadContent()
         {
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
+            Services.AddService(_camera);
 
-            _entityComponentSystem = new MonoGame.Extended.Entities.EntityComponentSystem();
-            _entityComponentSystem.RegisterSystem(new SpriteBatchSystem(GraphicsDevice, _camera));
-            _entityComponentSystem.RegisterSystem(new AnimatedSpriteSystem());
-            _entityComponentSystem.RegisterSystem(new ParticleEmitterSystem());
+            var spriteBatch = new SpriteBatch(GraphicsDevice);
+            Services.AddService(spriteBatch);
 
             var logoTexture = Content.Load<Texture2D>("logo-square-128");
-            _entity = _entityComponentSystem.CreateEntity("logo", new Vector2(400, 240));
-            _entity.AttachComponent(new TransformableComponent<Sprite>(new Sprite(logoTexture)));
-            
+
+            _entity = _ecs.CreateEntity();
+
+            var transform = _entity.AddComponent<TransformComponent>();
+            transform.Position = new Vector2(200, 400);
+
+            var sprite = _entity.AddComponent<SpriteComponent>();
+            sprite.Texture = logoTexture;
+            sprite.Origin = new Vector2(logoTexture.Width / 2f, logoTexture.Height / 2f);
+
             var motwTexture = Content.Load<Texture2D>("motw");
             var motwAtlas = TextureAtlas.Create("motw-atlas", motwTexture, 52, 72);
             var motwAnimationFactory = new SpriteSheetAnimationFactory(motwAtlas);
@@ -59,39 +69,13 @@ namespace Demo.EntityComponentSystem
             motwAnimationFactory.Add("walkEast", new SpriteSheetAnimationData(new[] { 24, 25, 26, 25 }, isLooping: false));
             motwAnimationFactory.Add("walkNorth", new SpriteSheetAnimationData(new[] { 36, 37, 38, 37 }, isLooping: false));
 
-            var animatedEntity = _entityComponentSystem.CreateEntity("animated", new Vector2(50, 50));
-            animatedEntity.AttachComponent(new TransformableComponent<Sprite>(new AnimatedSprite(motwAnimationFactory, "walkSouth")));
+            _animatedEntity = _ecs.CreateEntity();
 
-            var particleEntity = _entityComponentSystem.CreateEntity("particles", new Vector2(500, 50));
-            var particleEmitter = new ParticleEmitter(new TextureRegion2D(logoTexture), 500, TimeSpan.FromSeconds(0.5f),
-                Profile.Point())
-            {
-                Parameters = new ParticleReleaseParameters
-                {
-                    Speed = new Range<float>(0f, 150f),
-                    Quantity = 30,
-                    Rotation = new Range<float>(-1f, 1f),
-                    Scale = new Range<float>(3.0f, 4.0f)
-                },
-                Modifiers = new IModifier[]
-                {
-                    new AgeModifier
-                    {
-                        Interpolators = new IInterpolator[]
-                        {
-                            new ColorInterpolator
-                            {
-                                InitialColor = new HslColor(0.8f, 0.8f, 0.8f),
-                                FinalColor = new HslColor(0.5f, 0.9f, 1.0f)
-                            }
-                        }
-                    },
-                    new RotationModifier {RotationRate = -2.1f},
-                    new RectangleContainerModifier {Width = 800, Height = 480},
-                    new LinearGravityModifier {Direction = -Vector2.UnitY, Strength = 130f}
-                }
-            };
-            particleEntity.AttachComponent(new TransformableComponent<ParticleEmitter>(particleEmitter));
+            _animatedEntity.AddComponent<SpriteComponent>();
+            _animatedEntity.AddComponent<TransformComponent>();
+            var animatedSpriteComponent = _animatedEntity.AddComponent<AnimatedSpriteComponent>();
+            animatedSpriteComponent.AnimationFactory = motwAnimationFactory;
+            animatedSpriteComponent.Play("walkSouth").IsLooping = true;
         }
 
         protected override void UnloadContent()
@@ -106,8 +90,10 @@ namespace Demo.EntityComponentSystem
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _entity.Rotation += deltaTime;
-            _entityComponentSystem.Update(gameTime);
+            var transform = _entity.GetComponent<TransformComponent>();
+            transform.Rotation += deltaTime;
+
+            _ecs.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -116,7 +102,7 @@ namespace Demo.EntityComponentSystem
         {
             GraphicsDevice.Clear(Color.Black);
 
-            _entityComponentSystem.Draw(gameTime);
+            _ecs.Draw(gameTime);
 
             base.Draw(gameTime);
         }

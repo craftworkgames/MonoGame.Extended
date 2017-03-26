@@ -21,9 +21,9 @@ namespace MonoGame.Extended.Tests.Collections
                 ResetValue = -1;
             }
 
-            void IPoolable.Initialize(ReturnToPoolDelegate returnFunction)
+            void IPoolable.Initialize(ReturnToPoolDelegate returnDelegate)
             {
-                _returnFunction = returnFunction;
+                _returnFunction = returnDelegate;
             }
 
             public void Return()
@@ -50,7 +50,7 @@ namespace MonoGame.Extended.Tests.Collections
         [TestCase(50)]
         public void Pool_Constructor_Default(int count)
         {
-            var pool = new Pool<TestPoolable>(count, i => new TestPoolable(i));
+            var pool = new ObjectPool<TestPoolable>(count, i => new TestPoolable(i));
             Assert.IsTrue(pool.Count == 0);
             foreach (var poolable in pool)
             {
@@ -65,15 +65,15 @@ namespace MonoGame.Extended.Tests.Collections
         [TestCase(50)]
         public void Pool_Create(int count)
         {
-            var pool = new Pool<TestPoolable>(count, i => new TestPoolable(i));
+            var pool = new ObjectPool<TestPoolable>(count, i => new TestPoolable(i));
 
             for (var i = 0; i < count; i++)
             {
-                var poolable = pool.Request();
+                var poolable = pool.New();
                 Assert.IsTrue(poolable.Value == i);
             }
 
-            var nextPoolable = pool.Request();
+            var nextPoolable = pool.New();
             Assert.IsNull(nextPoolable);
         }
 
@@ -84,11 +84,11 @@ namespace MonoGame.Extended.Tests.Collections
         [TestCase(50)]
         public void Pool_ForEach_Iteration(int count)
         {
-            var pool = new Pool<TestPoolable>(count, i => new TestPoolable(i));
+            var pool = new ObjectPool<TestPoolable>(count, i => new TestPoolable(i));
 
             for (var i = 0; i < count; i++)
             {
-                var poolable = pool.Request();
+                var poolable = pool.New();
                 Assert.IsTrue(poolable.Value == i);
             }
 
@@ -107,11 +107,11 @@ namespace MonoGame.Extended.Tests.Collections
         [TestCase(50)]
         public void Pool_Return(int count)
         {
-            var pool = new Pool<TestPoolable>(count, i => new TestPoolable(i));
+            var pool = new ObjectPool<TestPoolable>(count, i => new TestPoolable(i));
 
             for (var i = 0; i < count; i++)
             {
-                var poolable = pool.Request();
+                var poolable = pool.New();
                 Assert.IsTrue(poolable.Value == i);
             }
 

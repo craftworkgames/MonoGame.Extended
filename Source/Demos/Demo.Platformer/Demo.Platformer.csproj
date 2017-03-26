@@ -37,21 +37,24 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Entities\Components\BasicCollisionBody.cs" />
-    <Compile Include="Entities\Components\BasicCollisionHandler.cs" />
-    <Compile Include="Entities\Components\EnemyAi.cs" />
-    <Compile Include="Entities\Components\EnemyCollisionHandler.cs" />
-    <Compile Include="Entities\Components\PlayerCollisionHandler.cs" />
-    <Compile Include="Entities\Components\CharacterState.cs" />
-    <Compile Include="Entities\Systems\BasicCollisionSystem.cs" />
+    <Compile Include="Entities\Components\AnimationComponent.cs" />
+    <Compile Include="Entities\Components\BasicCollisionBodyComponent.cs" />
+    <Compile Include="Entities\Components\EnemyAiComponent.cs" />
+    <Compile Include="Entities\Components\CharacterComponent.cs" />
+    <Compile Include="Entities\Components\PlayerComponent.cs" />
+    <Compile Include="Entities\Components\SpriteComponent.cs" />
+    <Compile Include="Entities\Components\TransformComponent.cs" />
+    <Compile Include="Entities\Systems\AnimationSystem.cs" />
+    <Compile Include="Entities\Systems\PhysicsSystem.cs" />
+    <Compile Include="Entities\Systems\CollisionSystem.cs" />
     <Compile Include="Entities\Systems\EnemyMovementSystem.cs" />
     <Compile Include="Entities\Systems\PlayerMovementSystem.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
     <Compile Include="Entities\Systems\CharacterStateSystem.cs" />
+    <Compile Include="Entities\Systems\SpriteSystem.cs" />
     <Compile Include="GameMain.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Services\TiledObjectToEntityService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +63,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>

@@ -1,35 +1,32 @@
-using System.Linq;
-using Demo.Platformer.Entities.Components;
-using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities.Systems;
+//using Demo.Platformer.Entities.Components;
+//using Microsoft.Xna.Framework;
+//using MonoGame.Extended.Entities;
 
-namespace Demo.Platformer.Entities.Systems
-{
-    public class CharacterStateSystem : ComponentSystem
-    {
-        private readonly EntityFactory _entityFactory;
-        private readonly Vector2 _spawnPoint;
+//namespace Demo.Platformer.Entities.Systems
+//{
+//    public class CharacterStateSystem : MonoGame.Extended.Entities.System
+//    {
+//        private readonly EntityFactory _entityFactory;
+//        private readonly Vector2 _spawnPoint;
 
-        public CharacterStateSystem(EntityFactory entityFactory, Vector2 spawnPoint)
-        {
-            _entityFactory = entityFactory;
-            _spawnPoint = spawnPoint;
-        }
+//        public CharacterStateSystem(EntityFactory entityFactory, Vector2 spawnPoint)
+//            : base(Aspect.Contains(typeof(CharacterComponent)))
+//        {
+//            _entityFactory = entityFactory;
+//            _spawnPoint = spawnPoint;
+//        }
 
-        public override void Update(GameTime gameTime)
-        {
-            foreach (var component in GetComponents<CharacterState>().ToArray())
-            {
-                if (!component.IsAlive)
-                {
-                    _entityFactory.CreateBloodExplosion(component.Entity.Position);
-                    component.Entity.Destroy();
+//        protected override void Process(GameTime gameTime, Entity entity)
+//        {
+//            var state = entity.GetComponent<CharacterComponent>();
+//            if (state.IsAlive)
+//                return;
 
-                    if(component.Entity.Name == Entities.Player)
-                        _entityFactory.CreatePlayer(_spawnPoint);
-                }
+//            _entityFactory.CreateBloodExplosion(state.Entity.Position);
+//            state.Entity.Destroy();
 
-            }
-        }
-    }
-}
+//            if (state.Entity.Name == Entities.Player)
+//                _entityFactory.CreatePlayer(_spawnPoint);
+//        }
+//    }
+//}
