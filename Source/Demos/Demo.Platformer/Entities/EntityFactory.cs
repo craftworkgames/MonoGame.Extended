@@ -20,11 +20,13 @@ namespace Demo.Platformer.Entities
     public class EntityFactory
     {
         private readonly EntityComponentSystemManager _ecs;
+        private readonly EntityManager _entityManager;
         private TextureAtlas _characterTextureAtlas;
 
         public EntityFactory(EntityComponentSystemManager ecs, ContentManager contentManager)
         {
             _ecs = ecs;
+            _entityManager = ecs.EntityManager;
 
             LoadContent(contentManager);
         }
@@ -37,7 +39,7 @@ namespace Demo.Platformer.Entities
 
         public Entity CreatePlayer(Vector2 position)
         {
-            var entity = _ecs.CreateEntity();
+            var entity = _entityManager.CreateEntity();
 
             var transform = entity.Attach<TransformComponent>();
             transform.Position = position;
@@ -71,7 +73,7 @@ namespace Demo.Platformer.Entities
 
         public Entity CreateSolid(Vector2 position, Size2 size)
         {
-            var entity = _ecs.CreateEntity();
+            var entity = _entityManager.CreateEntity();
             var transform = entity.Attach<TransformComponent>();
             transform.Position = position;
             var collision = entity.Attach<BasicCollisionBodyComponent>();
@@ -82,7 +84,7 @@ namespace Demo.Platformer.Entities
 
         public Entity CreateDeadly(Vector2 position, Size2 size)
         {
-            var entity = _ecs.CreateEntity();
+            var entity = _entityManager.CreateEntity();
             var transform = entity.Attach<TransformComponent>();
             transform.Position = position;
 
@@ -122,7 +124,7 @@ namespace Demo.Platformer.Entities
 
         public Entity CreateBadGuy(Vector2 position, Size2 size)
         {
-            var entity = _ecs.CreateEntity();
+            var entity = _entityManager.CreateEntity();
             var transform = entity.Attach<TransformComponent>();
             transform.Position = position;
 

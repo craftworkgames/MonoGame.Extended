@@ -61,7 +61,7 @@
 
 //        protected override void Process(GameTime gameTime, Entity entity, PlayerComponent player)
 //        {
-//            var health = entity.Get<HealthComponent>();
+//            var health = entity.GetEntityByName<HealthComponent>();
 //            if (health == null)
 //                return;
 

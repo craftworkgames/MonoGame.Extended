@@ -105,12 +105,12 @@
 
 //        private void AddMissile(TransformComponent parentTransform, float angle = 90.0f, float offsetX = 0.0f)
 //        {
-//            var missile = Manager.CreateEntityFromTemplate(MissileTemplate.Name);
+//            var missile = Manager.NewFromTemplate(MissileTemplate.Name);
 
-//            var missileTransform = missile.Get<TransformComponent>();
+//            var missileTransform = missile.GetEntityByName<TransformComponent>();
 //            missileTransform.Position = parentTransform.WorldPosition + new Vector2(1 + offsetX, -20);
 
-//            var missilePhysics = missile.Get<PhysicsComponent>();
+//            var missilePhysics = missile.GetEntityByName<PhysicsComponent>();
 //            missilePhysics.Speed = -0.5f;
 //            missilePhysics.Angle = angle;
 //        }

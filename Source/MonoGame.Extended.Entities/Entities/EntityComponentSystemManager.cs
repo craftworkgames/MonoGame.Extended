@@ -30,7 +30,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -41,13 +40,17 @@ namespace MonoGame.Extended.Entities
     public delegate void EntityDelegate(Entity entity);
     public delegate void EntityComponentDelegate(Entity entity, Component component);
 
-    public sealed partial class EntityComponentSystemManager : DrawableGameComponent
+    public sealed class EntityComponentSystemManager : DrawableGameComponent
     {
-        private bool _hasInitialized;
+        private readonly SystemManager _systemManager;
+
+        public EntityManager EntityManager { get; }
 
         public EntityComponentSystemManager(Game game)
             : base(game)
         {
+            EntityManager = new EntityManager();
+            _systemManager = new SystemManager(this);
         }
 
         public void Scan(params Assembly[] assemblies)
@@ -126,8 +129,8 @@ namespace MonoGame.Extended.Entities
 
             system.Aspect = aspect;
 
-            AddSystem(system, systemAttribute.GameLoopType,
-                systemAttribute.Layer); //, systemAttribute.ExecutionType);
+            _systemManager.AddSystem(system, systemAttribute.GameLoopType,
+                systemAttribute.Layer, SystemExecutionType.Synchronous); //, systemAttribute.ExecutionType);
         }
 
         // ReSharper disable once ParameterTypeCanBeEnumerable.Local
@@ -158,7 +161,7 @@ namespace MonoGame.Extended.Entities
             if (componentPoolAttribute == null)
                 return;
 
-            CreateComponentPool(componentType, componentPoolAttribute.InitialSize);
+            EntityManager.CreateComponentPool(componentType, componentPoolAttribute.InitialSize, componentPoolAttribute.IsFullPolicy);
         }
 
         // ReSharper disable once ParameterTypeCanBeEnumerable.Local
@@ -182,55 +185,38 @@ namespace MonoGame.Extended.Entities
                 return;
 
             var entityTemplate = (EntityTemplate)Activator.CreateInstance(type);
-            AddEntityTemplate(entityTemplateAttribute.Name, entityTemplate);
+            EntityManager.AddEntityTemplate(entityTemplateAttribute.Name, entityTemplate);
         }
 
         public override void Initialize()
         {
             base.Initialize();
 
-            InitializeIfNecessary();
-        }
-
-        private void InitializeIfNecessary()
-        {
-            if (_hasInitialized)
-                return;
-
-            _hasInitialized = true;
-
-            foreach (var system in Systems)
-            {
-                system.Initialize();
-                system.LoadContent();
-            }
-        }
-
-        protected override void LoadContent()
-        {
-            base.LoadContent();
+            _systemManager.InitializeIfNecessary();
         }
 
         protected override void UnloadContent()
         {
             base.UnloadContent();
 
-            foreach (var system in Systems)
+            foreach (var system in _systemManager.Systems)
                 system.UnloadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
-            InitializeIfNecessary();
-            RemoveMarkedComponents();
-            RemoveMarkedEntities();
-            RefreshMarkedEntities();
-            UpdateSystems(gameTime);
+            _systemManager.InitializeIfNecessary();
+
+            EntityManager.RemoveMarkedComponents();
+            EntityManager.RemoveMarkedEntities();
+            EntityManager.RefreshMarkedEntitiesWith(_systemManager.Systems);
+
+            _systemManager.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            DrawSystems(gameTime);
+            _systemManager.Draw(gameTime);
         }
     }
 }

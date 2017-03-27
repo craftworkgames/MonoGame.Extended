@@ -18,6 +18,7 @@ namespace Demo.EntityComponentSystem
         private Camera2D _camera;
 
         private EntityComponentSystemManager _ecs;
+        private EntityManager _entityManager;
         private Entity _entity;
         private Entity _animatedEntity;
 
@@ -32,6 +33,7 @@ namespace Demo.EntityComponentSystem
         protected override void Initialize()
         {
             _ecs = new EntityComponentSystemManager(this);
+            _entityManager = _ecs.EntityManager;
             Services.AddService(_ecs);
 
             _ecs.Scan(Assembly.GetExecutingAssembly());
@@ -50,7 +52,7 @@ namespace Demo.EntityComponentSystem
 
             var logoTexture = Content.Load<Texture2D>("logo-square-128");
 
-            _entity = _ecs.CreateEntity();
+            _entity = _entityManager.CreateEntity();
 
             var transform = _entity.Attach<TransformComponent>();
             transform.Position = new Vector2(200, 400);
@@ -68,7 +70,7 @@ namespace Demo.EntityComponentSystem
             motwAnimationFactory.Add("walkEast", new SpriteSheetAnimationData(new[] { 24, 25, 26, 25 }, isLooping: false));
             motwAnimationFactory.Add("walkNorth", new SpriteSheetAnimationData(new[] { 36, 37, 38, 37 }, isLooping: false));
 
-            _animatedEntity = _ecs.CreateEntity();
+            _animatedEntity = _entityManager.CreateEntity();
 
             _animatedEntity.Attach<SpriteComponent>();
             _animatedEntity.Attach<TransformComponent>();

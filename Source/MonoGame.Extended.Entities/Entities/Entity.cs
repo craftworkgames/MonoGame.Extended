@@ -34,7 +34,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using MonoGame.Extended.Collections;
@@ -55,15 +54,13 @@ namespace MonoGame.Extended.Entities
             IsBeingRefreshedMask = BitVector32.CreateMask(IsBeingRefreshedMask);
         }
 
-        internal EntityComponentSystemManager Manager;
+        internal EntityManager Manager;
         internal BigInteger SystemBits;
         internal BigInteger TypeBits;
         private ReturnToPoolDelegate _returnToPoolDelegate;
         internal BitVector32 Flags;
-
-        internal int Index;
-        internal Guid Identifier;
         internal string _group;
+        public string _name;
 
         internal bool IsBeingRemoved
         {
@@ -95,11 +92,12 @@ namespace MonoGame.Extended.Entities
             set
             {
                 _group = value;
-                Manager.SetGroupForEntity(value, this);
+                Manager.AddEntityToGroup(value, this);
             }
         }
 
-        public bool IsActive => Manager.IsActive(this);
+        IPoolable IPoolable.NextNode { get; set; }
+        IPoolable IPoolable.PreviousNode { get; set; }
 
         internal Entity()
         {
@@ -107,18 +105,17 @@ namespace MonoGame.Extended.Entities
 
         public void Destroy()
         {
-            Manager.Remove(this);
+            Manager.MarkEntityToBeRemoved(this);
         }
 
         public T Attach<T>() where T : Component
         {
-            var component = Manager.AddComponent<T>(this);
-            return component;
+            return Manager.AddComponent<T>(this);
         }
 
         public void Detach<T>() where T : Component
         {
-            Manager.RemoveComponent(this, ComponentTypeManager.GetTypeFor<T>());
+            Manager.MarkComponentToBeRemoved(this, ComponentTypeManager.GetTypeFor<T>());
         }
 
         public T Get<T>() where T : Component
@@ -126,15 +123,8 @@ namespace MonoGame.Extended.Entities
             return Manager.GetComponent<T>(this);
         }
 
-        public void Refresh()
-        {
-            Manager.Refresh(this);
-        }
-
         internal void Reset()
         {
-            Index = -1;
-            Identifier = Guid.Empty;
             _group = null;
             SystemBits = 0;
             TypeBits = 0;
@@ -145,7 +135,7 @@ namespace MonoGame.Extended.Entities
 
         public override string ToString()
         {
-            return $"Entity{{{Identifier}}}";
+            return $"{RuntimeHelpers.GetHashCode(this):X8}";
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

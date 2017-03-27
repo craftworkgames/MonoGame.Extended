@@ -35,16 +35,14 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Entities
 {
-    // Can onlybe applied to Component
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public sealed class ComponentPoolAttribute : Attribute
     {
         public int InitialSize { get; set; } = 10;
-        public bool CanResize { get; set; } = true;
-        public int ResizeSize { get; set; } = 20;
-        public bool IsThreadSafe { get; set; } = false;
+        public ObjectPoolIsFullPolicy IsFullPolicy { get; set; } = ObjectPoolIsFullPolicy.Resize;
     }
 }

@@ -50,8 +50,8 @@ namespace Demo.StarWarriorGame.Systems
     {
         protected override void Process(GameTime gameTime)
         {
-            var bullets = Manager.GetEntitiesByGroup("BULLETS");
-            var ships = Manager.GetEntitiesByGroup("SHIPS");
+            var bullets = EntityManager.GetEntitiesByGroup("BULLETS");
+            var ships = EntityManager.GetEntitiesByGroup("SHIPS");
             if (bullets == null || ships == null)
                 return;
 
@@ -70,9 +70,8 @@ namespace Demo.StarWarriorGame.Systems
                     if (!CollisionExists(bulletTransform, shipTransform))
                         continue;
 
-                    var bulletExplosion = Manager.CreateEntityFromTemplate(BulletExplosionTemplate.Name);
+                    var bulletExplosion = EntityManager.CreateEntityFromTemplate(BulletExplosionTemplate.Name);
                     bulletExplosion.Get<TransformComponent>().Position = bulletTransform.Position;
-                    bulletExplosion.Refresh();
                     bullet.Destroy();
 
                     var healthComponent = ship.Get<HealthComponent>();
@@ -80,11 +79,9 @@ namespace Demo.StarWarriorGame.Systems
 
                     if (healthComponent.IsAlive)
                         continue;
-
-                    
-                    var shipExplosion = Manager.CreateEntityFromTemplate(ShipExplosionTemplate.Name);
+                  
+                    var shipExplosion = EntityManager.CreateEntityFromTemplate(ShipExplosionTemplate.Name);
                     shipExplosion.Get<TransformComponent>().Position = shipTransform.Position;
-                    shipExplosion.Refresh();
                     ship.Destroy();
                     break;
                 }

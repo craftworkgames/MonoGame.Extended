@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace MonoGame.Extended.Collections
 {
@@ -14,8 +15,9 @@ namespace MonoGame.Extended.Collections
     public class ObjectPool<T> : IEnumerable<T>
         where T : class, IPoolable
     {
-        private readonly Deque<T> _freeItems;
-        private readonly Deque<T> _usedItems;
+        private readonly Deque<T> _freeItems; // circular buffer for O(1) operations
+        private T _headNode; // linked list for iteration
+        private T _tailNode;
 
         private readonly Func<T> _instantiationFunction;
 
@@ -23,17 +25,19 @@ namespace MonoGame.Extended.Collections
         public int Capacity { get; private set; }
         public int Count { get; private set; }
 
-        public ObjectPool(Func<T> instantiationFunc, int initialSize = 16, ObjectPoolIsFullPolicy isFullPolicy = ObjectPoolIsFullPolicy.ReturnNull)
+        public event Action<T> ItemUsed;
+        public event Action<T> ItemReturned;
+
+        public ObjectPool(Func<T> instantiationFunc, int capacity = 16, ObjectPoolIsFullPolicy isFullPolicy = ObjectPoolIsFullPolicy.ReturnNull)
         {
             if (instantiationFunc == null)
                 throw new ArgumentNullException(nameof(instantiationFunc));
 
             _instantiationFunction = instantiationFunc;
-            _freeItems = new Deque<T>(initialSize);
-            _usedItems = new Deque<T>(initialSize);
+            _freeItems = new Deque<T>(capacity);
             IsFullPolicy = isFullPolicy;
             
-            for (var i = 0; i < initialSize; i++)
+            for (var i = 0; i < capacity; i++)
             {
                 var poolable = CreateObject();
                 _freeItems.AddToBack(poolable);
@@ -42,22 +46,17 @@ namespace MonoGame.Extended.Collections
 
         public IEnumerator<T> GetEnumerator()
         {
-            return _usedItems.GetEnumerator();
+            var node = _headNode;
+            while (node != null)
+            {
+                node = (T)_headNode.NextNode;
+                yield return node;
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return _usedItems.GetEnumerator();
-        }
-
-        public void ReturnAll()
-        {
-            while (_usedItems.Count > 0)
-            {
-                T item;
-                _usedItems.GetFront(out item);
-                item.Return();
-            }
+            return GetEnumerator();
         }
 
         public T New()
@@ -81,10 +80,12 @@ namespace MonoGame.Extended.Collections
                             poolable = CreateObject();
                             break;
                         case ObjectPoolIsFullPolicy.KillExisting:
-                            if (!_usedItems.GetFront(out poolable))
+                            if (_headNode == null)
                                 return null;
-                            poolable.Return();
+                            var newHeadNode = (T)_headNode.NextNode;
+                            _headNode.Return();
                             _freeItems.RemoveFromBack(out poolable);
+                            _headNode = newHeadNode;
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -92,25 +93,57 @@ namespace MonoGame.Extended.Collections
                 }
             }
 
-            poolable.Initialize(Return);
-            _usedItems.AddToBack(poolable);
+            Use(poolable);
             return poolable;
         }
 
         private T CreateObject()
         {
             Count++;
-            var poolable = _instantiationFunction();
-            if (poolable == null)
+            var item = _instantiationFunction();
+            item.PreviousNode = _tailNode;
+            item.NextNode = null;
+            if (_tailNode != null)
+                _tailNode.NextNode = item;
+            _tailNode = item;
+            if (item == null)
                 throw new NullReferenceException($"The created pooled object of type '{typeof(T).Name}' is null.");
-            return poolable;
+            return item;
         }
 
-        private void Return(IPoolable poolable)
+        private void Return(IPoolable item)
         {
-            var poolable1 = (T) poolable;
+            Debug.Assert(item != null);
+
+            var poolable1 = (T) item;
+
+            var previousNode = (T)item.PreviousNode;
+            var nextNode = (T)item.NextNode;
+
+            if (previousNode != null)
+                previousNode.NextNode = nextNode;
+            if (nextNode != null)
+                nextNode.PreviousNode = previousNode;
+
+            if (item == _headNode)
+                _headNode = nextNode;
+            if (item == _tailNode)
+                _tailNode = previousNode;
+
             _freeItems.AddToBack(poolable1);
-            _usedItems.Remove(poolable1);
+
+            ItemReturned?.Invoke((T)item);
+        }
+
+        private void Use(T item)
+        {
+            item.Initialize(Return);
+            item.NextNode = null;
+            item.PreviousNode = _tailNode;
+            _tailNode.NextNode = item;
+            _tailNode = item;
+
+            ItemUsed?.Invoke(item);
         }
     }
 }

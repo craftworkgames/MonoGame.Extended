@@ -45,18 +45,19 @@ namespace MonoGame.Extended.Entities
 {
     public abstract class System
     {
-        private readonly Dictionary<int, int> _activeEntitiesLookup = new Dictionary<int, int>();
+        private readonly Dictionary<Entity, int> _activeEntitiesLookup = new Dictionary<Entity, int>();
         // ReSharper disable once InconsistentNaming
         internal readonly Bag<Entity> _activeEntities = new Bag<Entity>();
         internal BigInteger Bit;
         internal Aspect Aspect;
         private TimeSpan _timer;
 
-        public EntityComponentSystemManager Manager { get; internal set; }
+        internal EntityComponentSystemManager Manager;
         public bool IsEnabled { get; set; }
         public IEnumerable<Entity> ActiveEntities => _activeEntities;
         public Game Game => Manager.Game;
         public GraphicsDevice GraphicsDevice => Manager.GraphicsDevice;
+        public EntityManager EntityManager => Manager.EntityManager;
 
         public TimeSpan ProcessingDelay { get; set; }
 
@@ -190,14 +191,14 @@ namespace MonoGame.Extended.Entities
             if (entity == null)
                 return;
             int activeEntityIndex;
-            if (!_activeEntitiesLookup.TryGetValue(entity.Index, out activeEntityIndex))
+            if (!_activeEntitiesLookup.TryGetValue(entity, out activeEntityIndex))
                 return;
-            _activeEntitiesLookup.Remove(entity.Index);
+            _activeEntitiesLookup.Remove(entity);
 
             if (_activeEntities.Count > 0)
             {
                 var swapEntity = _activeEntities[_activeEntities.Count - 1];
-                _activeEntitiesLookup[swapEntity.Index] = activeEntityIndex;
+                _activeEntitiesLookup[swapEntity] = activeEntityIndex;
             }
 
             _activeEntities.Remove(activeEntityIndex);
@@ -206,10 +207,10 @@ namespace MonoGame.Extended.Entities
 
         private void Enable(Entity entity)
         {
-            if (entity == null || _activeEntitiesLookup.ContainsKey(entity.Index))
+            if (entity == null || _activeEntitiesLookup.ContainsKey(entity))
                 return;
 
-            _activeEntitiesLookup.Add(entity.Index, _activeEntities.Count);
+            _activeEntitiesLookup.Add(entity, _activeEntities.Count);
             _activeEntities.Add(entity);
             OnEntityEnabled(entity);
         }

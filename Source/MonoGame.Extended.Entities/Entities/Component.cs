@@ -44,6 +44,9 @@ namespace MonoGame.Extended.Entities
 
         public Entity Entity { get; internal set; }
 
+        IPoolable IPoolable.NextNode { get; set; }
+        IPoolable IPoolable.PreviousNode { get; set; }
+
         protected Component()
         {
         }
@@ -78,7 +81,7 @@ namespace MonoGame.Extended.Entities
 
         public override string ToString()
         {
-            return $"Entity{{{Entity.Identifier}}}";
+            return $"Entity: {Entity}";
         }
     }
 }

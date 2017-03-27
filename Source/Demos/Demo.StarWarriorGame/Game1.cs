@@ -18,6 +18,7 @@ namespace Demo.StarWarriorGame
         private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
         private readonly Random _random = new Random();
         private readonly EntityComponentSystemManager _ecs;
+        private readonly EntityManager _entityManager;
 
         private SpriteBatch _spriteBatch;
         private BitmapFont _font;
@@ -45,6 +46,7 @@ namespace Demo.StarWarriorGame
         };
 
             _ecs = new EntityComponentSystemManager(this);
+            _entityManager = _ecs.EntityManager;
 
             // scan for components and systems in provided assemblies
             _ecs.Scan(Assembly.GetExecutingAssembly());
@@ -98,15 +100,15 @@ namespace Demo.StarWarriorGame
 
             _spriteBatch.DrawString(_font, fps, new Vector2(32, 32), Color.Yellow);
 
-#if DEBUG
-            var entityCount = $"Entities Count: {_ecs.Entities.Count}";
-            var removedEntityCount = $"Removed Entities Count: {_ecs.TotalEntitiesRemovedCount}";
-            var totalEntityCount = $"Total Entities Count: {_ecs.TotalEntitiesCreatedCount}";
+//#if DEBUG
+//            //var entityCount = $"Entities Count: {_ecs.Entities.Count}";
+//            //var removedEntityCount = $"Removed Entities Count: {_ecs.TotalEntitiesRemovedCount}";
+//            //var totalEntityCount = $"Total Entities Count: {_ecs.TotalEntitiesCreatedCount}";
 
-            _spriteBatch.DrawString(_font, entityCount, new Vector2(32, 62), Color.Yellow);
-            _spriteBatch.DrawString(_font, removedEntityCount, new Vector2(32, 92), Color.Yellow);
-            _spriteBatch.DrawString(_font, totalEntityCount, new Vector2(32, 122), Color.Yellow);
-#endif
+//            _spriteBatch.DrawString(_font, entityCount, new Vector2(32, 62), Color.Yellow);
+//            _spriteBatch.DrawString(_font, removedEntityCount, new Vector2(32, 92), Color.Yellow);
+//            _spriteBatch.DrawString(_font, totalEntityCount, new Vector2(32, 122), Color.Yellow);
+//#endif
 
             _spriteBatch.End();
         }
@@ -118,7 +120,7 @@ namespace Demo.StarWarriorGame
             var random = new Random();
             for (var index = 0; 2 > index; ++index)
             {
-                var entity = _ecs.CreateEntityFromTemplate(EnemyShipTemplate.Name);
+                var entity = _entityManager.CreateEntityFromTemplate(EnemyShipTemplate.Name);
 
                 var transform = entity.Get<TransformComponent>();
                 var position = new Vector2
@@ -138,7 +140,7 @@ namespace Demo.StarWarriorGame
         {
             var viewport = GraphicsDevice.Viewport;
 
-            var entity = _ecs.CreateEntity();
+            var entity = _entityManager.CreateEntity();
             entity.Group = "SHIPS";
 
             var transform = entity.Attach<TransformComponent>();

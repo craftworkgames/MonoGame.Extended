@@ -27,27 +27,27 @@ namespace Demo.Platformer.Entities.Systems
 
         protected override void Process(GameTime gameTime, Entity entity, TransformComponent transform, BasicCollisionBodyComponent body)
         {
-            foreach (var entityB in Manager.Entities)
-            {
-                if (entity == entityB)
-                    return;
-                var collisionComponentB = entityB.Get<BasicCollisionBodyComponent>();
-                if (collisionComponentB == null)
-                    return;
+            //foreach (var entityB in EntityManager.Entities)
+            //{
+            //    if (entity == entityB)
+            //        return;
+            //    var collisionComponentB = entityB.Get<BasicCollisionBodyComponent>();
+            //    if (collisionComponentB == null)
+            //        return;
 
-                var rectangleA = body.BoundingRectangle;
-                var rectangleB = collisionComponentB.BoundingRectangle;
-                var depth = IntersectionDepth(rectangleA, rectangleB);
-                if (depth == Vector2.Zero)
-                    return;
+            //    var rectangleA = body.BoundingRectangle;
+            //    var rectangleB = collisionComponentB.BoundingRectangle;
+            //    var depth = IntersectionDepth(rectangleA, rectangleB);
+            //    if (depth == Vector2.Zero)
+            //        return;
 
-               var collisionPair = new CollisionPair(body, collisionComponentB, depth);
+            //   var collisionPair = new CollisionPair(body, collisionComponentB, depth);
 
-                if (CollisionPairs.Contains(collisionPair))
-                    continue;
+            //    if (CollisionPairs.Contains(collisionPair))
+            //        continue;
 
-                CollisionPairs.Add(collisionPair);
-            }
+            //    CollisionPairs.Add(collisionPair);
+            //}
         }
 
         protected override void End(GameTime gameTime)

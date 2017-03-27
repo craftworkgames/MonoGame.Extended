@@ -56,7 +56,7 @@ namespace Demo.StarWarriorGame.Systems
                 return;
             weapon.ShootTimerDelay -= weapon.ShootDelay;
 
-            var missile = Manager.CreateEntityFromTemplate(MissileTemplate.Name);
+            var missile = EntityManager.CreateEntityFromTemplate(MissileTemplate.Name);
             var missileTransform = missile.Get<TransformComponent>();
 
             var worldPosition = transform.WorldPosition;

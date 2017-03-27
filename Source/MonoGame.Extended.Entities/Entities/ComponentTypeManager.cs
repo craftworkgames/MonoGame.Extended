@@ -1,5 +1,5 @@
 ﻿// Original code dervied from:
-// https://github.com/thelinuxlich/artemis_CSharp/blob/master/Artemis_XNA_INDEPENDENT/Manager/ComponentTypeManager.cs
+// https://github.com/thelinuxlich/artemis_CSharp/blob/master/Artemis_XNA_INDEPENDENT/Entities/ComponentTypeManager.cs
 
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ComponentTypeManager.cs" company="GAMADU.COM">
@@ -41,7 +41,7 @@ using System.Reflection;
 
 namespace MonoGame.Extended.Entities
 {
-    public static class ComponentTypeManager
+    internal static class ComponentTypeManager
     {
         private static readonly Dictionary<Type, ComponentType> ComponentTypes = new Dictionary<Type, ComponentType>();
 

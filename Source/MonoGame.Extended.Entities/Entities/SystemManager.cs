@@ -36,8 +36,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Numerics;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
 
@@ -55,18 +55,32 @@ namespace MonoGame.Extended.Entities
         //Asynchronous,
     }
 
-    public sealed partial class EntityComponentSystemManager
+    internal sealed class SystemManager
     {
-        private readonly Dictionary<System, BigInteger> _systemBits = new Dictionary<System, BigInteger>();
+        private readonly EntityComponentSystemManager _manager;
+        private readonly Dictionary<System, BigInteger> _systemBits;
         private int _systemBitPositionIndex;
-        private SystemLayer[] _updateLayers = new SystemLayer[0];
-        private SystemLayer[] _drawLayers = new SystemLayer[0];
-        private readonly SystemLayer _dummyLayer = new SystemLayer();
+        private SystemLayer[] _updateLayers;
+        private SystemLayer[] _drawLayers;
+        private readonly SystemLayer _dummyLayer;
+        private bool _hasInitialized;
 
-        public Bag<System> Systems { get; } = new Bag<System>();
+        public Bag<System> Systems { get; }
+
+        internal SystemManager(EntityComponentSystemManager manager)
+        {
+            _manager = manager;
+            _systemBits = new Dictionary<System, BigInteger>();
+            _updateLayers = new SystemLayer[0];
+            _drawLayers = new SystemLayer[0];
+            _dummyLayer  = new SystemLayer();
+            Systems = new Bag<System>();
+        }
 
         public BigInteger GetBitFor(System system)
         {
+            Debug.Assert(system != null);
+
             BigInteger bit;
             if (_systemBits.TryGetValue(system, out bit))
                 return bit;
@@ -76,12 +90,26 @@ namespace MonoGame.Extended.Entities
             return bit;
         }
 
-        internal void UpdateSystems(GameTime gameTime)
+        internal void InitializeIfNecessary()
+        {
+            if (_hasInitialized)
+                return;
+
+            _hasInitialized = true;
+
+            foreach (var system in Systems)
+            {
+                system.Initialize();
+                system.LoadContent();
+            }
+        }
+
+        internal void Update(GameTime gameTime)
         {
             ProcessLayers(gameTime, _updateLayers);
         }
 
-        internal void DrawSystems(GameTime gameTime)
+        internal void Draw(GameTime gameTime)
         {
             ProcessLayers(gameTime, _drawLayers);
         }
@@ -89,6 +117,8 @@ namespace MonoGame.Extended.Entities
         // ReSharper disable once SuggestBaseTypeForParameter
         private static void ProcessLayers(GameTime gameTime, SystemLayer[] layers)
         {
+            Debug.Assert(layers != null);
+
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var i = 0; i < layers.Length; ++i)
             {
@@ -102,6 +132,8 @@ namespace MonoGame.Extended.Entities
 
         private static void ProcessSystemsSynchronous(GameTime gameTime, Bag<System> systems)
         {
+            Debug.Assert(systems != null);
+
             for (int index = 0, j = systems.Count; index < j; ++index)
                 systems[index].ProcessInternal(gameTime);
         }
@@ -114,13 +146,18 @@ namespace MonoGame.Extended.Entities
         //    Parallel.ForEach(systems, system => system.ProcessInternal());
         //}
 
-        internal T AddSystem<T>(T system, GameLoopType gameLoopType, int layer = 0, SystemExecutionType executionType = SystemExecutionType.Synchronous) where T : System
+        internal T AddSystem<T>(T system, GameLoopType gameLoopType, int layer, SystemExecutionType executionType) where T : System
         {
+            Debug.Assert(system != null);
+
             return (T)AddSystem(system.GetType(), system, gameLoopType, layer, executionType);
         }
 
-        private System AddSystem(Type systemType, System system, GameLoopType gameLoopType, int layer = 0, SystemExecutionType executionType = SystemExecutionType.Synchronous)
+        private System AddSystem(Type systemType, System system, GameLoopType gameLoopType, int layer, SystemExecutionType executionType)
         {
+            Debug.Assert(systemType != null);
+            Debug.Assert(system != null);
+
             if (Systems.Contains(system))
                 throw new InvalidOperationException($"System '{systemType}' has already been added.");
 
@@ -143,6 +180,8 @@ namespace MonoGame.Extended.Entities
 
         private void AddSystemTo(ref SystemLayer[] layers, System system, int layerIndex, SystemExecutionType executionType)
         {
+            Debug.Assert(layers != null);
+
             _dummyLayer.LayerIndex = layerIndex;
             var index = Array.BinarySearch(layers, _dummyLayer);
             SystemLayer layer;
@@ -170,7 +209,7 @@ namespace MonoGame.Extended.Entities
                     throw new ArgumentOutOfRangeException(nameof(executionType), executionType, null);
             }
 
-            system.Manager = this;
+            system.Manager = _manager;
             Systems.Add(system);
         }
 

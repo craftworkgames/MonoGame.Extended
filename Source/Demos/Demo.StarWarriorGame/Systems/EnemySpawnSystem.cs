@@ -59,15 +59,15 @@
 //        protected override void Process(GameTime gameTime)
 //        {
 //            var viewport = GraphicsDevice.Viewport;
-//            var entity = Manager.CreateEntityFromTemplate(EnemyShipTemplate.Name);
-//            var transform = entity.Get<TransformComponent>();
+//            var entity = Manager.NewFromTemplate(EnemyShipTemplate.Name);
+//            var transform = entity.GetEntityByName<TransformComponent>();
 
 //            Vector2 position;
 //            position.X = _random.Next(viewport.Width);
 //            position.Y = _random.Next(400) + 50;
 //            transform.Position = position;
 
-//            var physics = entity.Get<PhysicsComponent>();
+//            var physics = entity.GetEntityByName<PhysicsComponent>();
 //            physics.Speed = 0.05f;
 //            physics.Angle = _random.Next() % 2 == 0 ? 0 : 180;
 //        }

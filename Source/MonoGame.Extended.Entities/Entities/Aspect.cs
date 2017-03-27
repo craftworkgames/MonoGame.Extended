@@ -41,7 +41,7 @@ using System.Text;
 
 namespace MonoGame.Extended.Entities
 {
-    public class Aspect
+    internal class Aspect
     {
         protected BigInteger ContainsTypesMap { get; set; }
         protected BigInteger ExcludeTypesMap { get; set; }

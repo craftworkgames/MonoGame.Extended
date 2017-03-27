@@ -38,8 +38,7 @@ using System;
 
 namespace MonoGame.Extended.Entities
 {
-    // can only be applied to IEntityTemplate
-    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public sealed class EntityTemplateAttribute : Attribute
     {
         public string Name { get; }

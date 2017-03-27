@@ -53,15 +53,14 @@
     <Compile Include="Entities\ComponentAttribute.cs" />
     <Compile Include="Entities\ComponentPool.cs" />
     <Compile Include="Entities\ComponentPoolAttribute.cs" />
+    <Compile Include="Entities\EntityManager.cs" />
     <Compile Include="Entities\EntityProcessingSystem.cs" />
     <Compile Include="Entities\ProcessingSystem.cs" />
     <Compile Include="Entities\SystemAttribute.cs" />
     <Compile Include="Entities\EntityTemplateAttribute.cs" />
     <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Entities\EntityComponentSystemManager.Components.cs" />
     <Compile Include="Entities\EntityComponentSystemManager.cs" />
-    <Compile Include="Entities\EntityComponentSystemManager.Entities.cs" />
-    <Compile Include="Entities\EntityComponentSystemManager.Systems.cs" />
+    <Compile Include="Entities\SystemManager.cs" />
     <Compile Include="Entities\EntityTemplate.cs" />
     <Compile Include="Entities\Component.cs" />
     <Compile Include="Entities\ComponentType.cs" />
