@@ -67,13 +67,14 @@ namespace MonoGame.Extended.Entities
 
         internal void Return()
         {
+            Reset();
+
             if (_returnToPoolDelegate == null)
             {
                 return;
             }
 
             Entity = null;
-            Reset();
 
             _returnToPoolDelegate.Invoke(this);
             _returnToPoolDelegate = null;

@@ -47,24 +47,25 @@ namespace MonoGame.Extended.Entities
         private readonly Dictionary<string, Entity> _entitiesByName;
         private readonly Dictionary<string, EntityTemplate> _entityTemplatesByName;
         private readonly Dictionary<string, Bag<Entity>> _entitiesByGroup;
-        private readonly List<Entity> _entitiesToRemove;
         private readonly List<Entity> _entitiesToRefresh;
 
         private readonly List<IComponentPool> _componentPools;
         private readonly Bag<Dictionary<Entity, Component>> _componentTypeEntitiesToComponents;
         private readonly List<ValueTuple<Entity, ComponentType>> _componentsToRemove;
 
+        public int TotalEntitiesCount => _pool.TotalCount;
+        public int ActiveEntitiesCount => _pool.InUseCount;
+
         public EntityManager() 
         {
             _pool = new ObjectPool<Entity>(CreateObject, 100, ObjectPoolIsFullPolicy.Resize);
-            _pool.ItemUsed += OnItemUsed;
-            _pool.ItemReturned += OnItemReturned;
+            _pool.ItemUsed += OnEntityUsed;
+            _pool.ItemReturned += OnEntityReturned;
 
             _entitiesByName = new Dictionary<string, Entity>();
             _entityTemplatesByName = new Dictionary<string, EntityTemplate>();
             _entitiesByGroup = new Dictionary<string, Bag<Entity>>();
 
-            _entitiesToRemove = new List<Entity>();
             _entitiesToRefresh = new List<Entity>();
 
             _componentPools = new List<IComponentPool>();
@@ -77,15 +78,15 @@ namespace MonoGame.Extended.Entities
             return new Entity();
         }
 
-        private void OnItemUsed(Entity entity)
+        private void OnEntityUsed(Entity entity)
         {
             entity.Manager = this;
+            entity.IsAlive = true;
             MarkEntityToBeRefreshed(entity);
         }
 
-        private void OnItemReturned(Entity entity)
+        private void OnEntityReturned(Entity entity)
         {
-            
         }
 
         public Entity CreateEntity()
@@ -143,11 +144,7 @@ namespace MonoGame.Extended.Entities
 
         internal void RemoveEntityName(string name)
         {
-            Debug.Assert(!string.IsNullOrEmpty(name));
-
-            var result = _entitiesByName.Remove(name);
-
-            Debug.Assert(result);
+            _entitiesByName.Remove(name);
         }
 
         public Bag<Entity> GetEntitiesByGroup(string groupName)
@@ -188,31 +185,6 @@ namespace MonoGame.Extended.Entities
                 entities.Remove(entity);
         }
 
-        internal void MarkEntityToBeRemoved(Entity entity)
-        {
-            Debug.Assert(entity != null);
-
-            if (entity.IsBeingRemoved)
-                return;
-            entity.IsBeingRemoved = true;
-            _entitiesToRemove.Add(entity);
-        }
-
-        internal void RemoveMarkedEntities()
-        {
-            if (_entitiesToRemove.Count <= 0)
-                return;
-
-            for (var i = _entitiesToRemove.Count - 1; i >= 0; --i)
-            {
-                var entity = _entitiesToRemove[i];
-                RemoveEntity(entity);
-                entity.IsBeingRemoved = false;
-            }
-
-            _entitiesToRemove.Clear();
-        }
-
         internal void RemoveEntity(Entity entity)
         {
             Debug.Assert(entity != null);
@@ -226,10 +198,18 @@ namespace MonoGame.Extended.Entities
         {
             Debug.Assert(entity != null);
 
-            if (entity.IsBeingRefreshed)
+            if (entity.NeedsRefresh)
                 return;
-            entity.IsBeingRefreshed = true;
+            entity.NeedsRefresh = true;
             _entitiesToRefresh.Add(entity);
+        }
+
+        internal void MarkEntityToBeRemoved(Entity entity)
+        {
+            Debug.Assert(entity != null);
+
+            MarkEntityToBeRefreshed(entity);
+            entity.IsAlive = false;
         }
 
         internal void RefreshEntity(Entity entity, Bag<System> systems)
@@ -239,6 +219,11 @@ namespace MonoGame.Extended.Entities
 
             for (var i = systems.Count - 1; i >= 0; --i)
                 systems[i].OnEntityChanged(entity);
+
+            entity.NeedsRefresh = false;
+
+            if (!entity.IsAlive)
+                 RemoveEntity(entity);
         }
 
         internal void RefreshMarkedEntitiesWith(Bag<System> systems)
@@ -252,7 +237,6 @@ namespace MonoGame.Extended.Entities
             {
                 var entity = _entitiesToRefresh[index];
                 RefreshEntity(entity, systems);
-                entity.IsBeingRefreshed = false;
             }
 
             _entitiesToRefresh.Clear();

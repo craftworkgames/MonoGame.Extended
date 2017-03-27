@@ -94,17 +94,17 @@ namespace Demo.StarWarriorGame
 
             _ecs.Draw(gameTime);
 
-            _spriteBatch.DrawString(_font, fps, new Vector2(32, 32), Color.Yellow);
+            _spriteBatch.DrawString(_font, fps, new Vector2(16, 16), Color.Yellow);
 
-//#if DEBUG
-//            //var entityCount = $"Entities Count: {_ecs.Entities.Count}";
-//            //var removedEntityCount = $"Removed Entities Count: {_ecs.TotalEntitiesRemovedCount}";
-//            //var totalEntityCount = $"Total Entities Count: {_ecs.TotalEntitiesCreatedCount}";
+#if DEBUG
+            var entityCount = $"Active Entities Count: {_entityManager.ActiveEntitiesCount}";
+            //var removedEntityCount = $"Removed Entities TotalCount: {_ecs.TotalEntitiesRemovedCount}";
+            var totalEntityCount = $"Total Entities TotalCount: {_entityManager.TotalEntitiesCount}";
 
-//            _spriteBatch.DrawString(_font, entityCount, new Vector2(32, 62), Color.Yellow);
-//            _spriteBatch.DrawString(_font, removedEntityCount, new Vector2(32, 92), Color.Yellow);
-//            _spriteBatch.DrawString(_font, totalEntityCount, new Vector2(32, 122), Color.Yellow);
-//#endif
+            _spriteBatch.DrawString(_font, entityCount, new Vector2(16, 62), Color.Yellow);
+            _spriteBatch.DrawString(_font, totalEntityCount, new Vector2(16, 92), Color.Yellow);
+            //_spriteBatch.DrawString(_font, removedEntityCount, new Vector2(32, 122), Color.Yellow);
+#endif
 
             _spriteBatch.End();
         }

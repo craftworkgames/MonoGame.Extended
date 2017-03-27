@@ -43,15 +43,13 @@ namespace MonoGame.Extended.Entities
 {
     public sealed class Entity : IPoolable
     {
-        private static readonly uint IsEnabledMask;
-        private static readonly uint IsBeingRemovedMask;
-        private static readonly uint IsBeingRefreshedMask;
+        private static readonly uint IsAliveMask;
+        private static readonly uint NeedsRefreshMask;
 
         static Entity()
         {
-            IsEnabledMask = BitVector32.CreateMask();
-            IsBeingRemovedMask = BitVector32.CreateMask(IsEnabledMask);
-            IsBeingRefreshedMask = BitVector32.CreateMask(IsBeingRefreshedMask);
+            IsAliveMask = BitVector32.CreateMask();
+            NeedsRefreshMask = BitVector32.CreateMask(IsAliveMask);
         }
 
         internal EntityManager Manager;
@@ -60,30 +58,32 @@ namespace MonoGame.Extended.Entities
         private ReturnToPoolDelegate _returnToPoolDelegate;
         internal BitVector32 Flags;
         internal string _group;
-        public string _name;
+        internal string _name;
 
-        internal bool IsBeingRemoved
+        public bool IsAlive
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return Flags[IsBeingRemovedMask]; }
+            get { return Flags[IsAliveMask]; }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set { Flags[IsBeingRemovedMask] = value; }
+            internal set { Flags[IsAliveMask] = value; }
         }
 
-        internal bool IsBeingRefreshed
+        internal bool NeedsRefresh
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return Flags[IsBeingRefreshedMask]; }
+            get { return Flags[NeedsRefreshMask]; }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set { Flags[IsBeingRefreshedMask] = value; }
+            set { Flags[NeedsRefreshMask] = value; }
         }
 
-        public bool IsEnabled
+        public string Name
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return Flags[IsEnabledMask]; }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            internal set { Flags[IsEnabledMask] = value; }
+            get { return _name; }
+            set
+            {
+                _name = value;
+                Manager.AddEntityName(value, this);
+            }
         }
 
         public string Group
@@ -128,9 +128,7 @@ namespace MonoGame.Extended.Entities
             _group = null;
             SystemBits = 0;
             TypeBits = 0;
-            IsEnabled = true;
-            IsBeingRefreshed = false;
-            IsBeingRemoved = false;
+            Flags = 0;
         }
 
         public override string ToString()
@@ -165,6 +163,7 @@ namespace MonoGame.Extended.Entities
         void IPoolable.Initialize(ReturnToPoolDelegate returnDelegate)
         {
             Reset();
+            _returnToPoolDelegate = returnDelegate;
         }
 
         void IPoolable.Return()
@@ -174,12 +173,12 @@ namespace MonoGame.Extended.Entities
 
         internal void Return()
         {
+            Reset();
+
             if (_returnToPoolDelegate == null)
             {
                 return;
             }
-
-            Reset();
 
             _returnToPoolDelegate.Invoke(this);
             _returnToPoolDelegate = null;

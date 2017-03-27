@@ -342,7 +342,7 @@ namespace MonoGame.Extended.Collections
                 throw new ArgumentOutOfRangeException(nameof(index), index, "Index was less than zero.");
 
             if (index >= Count)
-                throw new ArgumentOutOfRangeException(nameof(index), index, "Index was equal or greater than Count.");
+                throw new ArgumentOutOfRangeException(nameof(index), index, "Index was equal or greater than TotalCount.");
 
             if (index == 0)
             {

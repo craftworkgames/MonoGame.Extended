@@ -23,7 +23,9 @@ namespace MonoGame.Extended.Collections
 
         public ObjectPoolIsFullPolicy IsFullPolicy { get; }
         public int Capacity { get; private set; }
-        public int Count { get; private set; }
+        public int TotalCount { get; private set; }
+        public int AvailableCount => _freeItems.Count;
+        public int InUseCount => TotalCount - AvailableCount;
 
         public event Action<T> ItemUsed;
         public event Action<T> ItemReturned;
@@ -65,7 +67,7 @@ namespace MonoGame.Extended.Collections
 
             if (!_freeItems.RemoveFromFront(out poolable))
             {
-                if (Count <= Capacity)
+                if (TotalCount <= Capacity)
                 {
                     poolable = CreateObject();
                 }
@@ -99,7 +101,7 @@ namespace MonoGame.Extended.Collections
 
         private T CreateObject()
         {
-            Count++;
+            TotalCount++;
             var item = _instantiationFunction();
             item.PreviousNode = _tailNode;
             item.NextNode = null;

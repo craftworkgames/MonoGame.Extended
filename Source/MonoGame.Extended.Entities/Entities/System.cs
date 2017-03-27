@@ -36,10 +36,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Numerics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Entities
 {
@@ -47,7 +47,7 @@ namespace MonoGame.Extended.Entities
     {
         private readonly Dictionary<Entity, int> _activeEntitiesLookup = new Dictionary<Entity, int>();
         // ReSharper disable once InconsistentNaming
-        internal readonly Bag<Entity> _activeEntities = new Bag<Entity>();
+        internal readonly List<Entity> _activeEntities = new List<Entity>();
         internal BigInteger Bit;
         internal Aspect Aspect;
         private TimeSpan _timer;
@@ -85,25 +85,25 @@ namespace MonoGame.Extended.Entities
 
         public virtual void OnEntityChanged(Entity entity)
         {
-            var contains = (Bit & entity.SystemBits) == Bit;
             var isInterested = Aspect.IsInterestedIn(entity);
+            if (!isInterested)
+                return;
 
-            if (isInterested && !contains)
+            var contains = (Bit & entity.SystemBits) == Bit;
+
+            if (!contains && entity.IsAlive)
             {
                 Add(entity);
             }
-            else if (!isInterested && contains)
+            else if (contains && !entity.IsAlive)
             {
                 Remove(entity);
             }
-            else if (isInterested && entity.IsEnabled)
+            else
             {
-                Enable(entity);
+                throw new Exception();
             }
-            else if (isInterested && !entity.IsEnabled)
-            {
-                Disable(entity);
-            }
+           
         }
 
         public virtual void OnEntityDisabled(Entity entity)
@@ -168,8 +168,12 @@ namespace MonoGame.Extended.Entities
                 return;
 
             entity.AddSystemBit(Bit);
-            if (entity.IsEnabled)
-                Enable(entity);
+
+            if (_activeEntitiesLookup.ContainsKey(entity))
+                return;
+
+            _activeEntitiesLookup.Add(entity, _activeEntities.Count);
+            _activeEntities.Add(entity);
 
             OnEntityAdded(entity);
         }
@@ -180,39 +184,21 @@ namespace MonoGame.Extended.Entities
                 return;
 
             entity.RemoveSystemBit(Bit);
-            if (entity.IsEnabled)
-                Disable(entity);
 
-            OnEntityRemoved(entity);
-        }
-
-        private void Disable(Entity entity)
-        {
-            if (entity == null)
-                return;
             int activeEntityIndex;
             if (!_activeEntitiesLookup.TryGetValue(entity, out activeEntityIndex))
                 return;
             _activeEntitiesLookup.Remove(entity);
 
-            if (_activeEntities.Count > 0)
-            {
-                var swapEntity = _activeEntities[_activeEntities.Count - 1];
+            var swapEntity = _activeEntities[_activeEntities.Count - 1];
+
+            if (entity != swapEntity)
                 _activeEntitiesLookup[swapEntity] = activeEntityIndex;
-            }
 
-            _activeEntities.Remove(activeEntityIndex);
-            OnEntityDisabled(entity);
-        }
+            _activeEntities[activeEntityIndex] = swapEntity;
+            _activeEntities.RemoveAt(_activeEntities.Count - 1);
 
-        private void Enable(Entity entity)
-        {
-            if (entity == null || _activeEntitiesLookup.ContainsKey(entity))
-                return;
-
-            _activeEntitiesLookup.Add(entity, _activeEntities.Count);
-            _activeEntities.Add(entity);
-            OnEntityEnabled(entity);
+            OnEntityRemoved(entity);
         }
     }
 }

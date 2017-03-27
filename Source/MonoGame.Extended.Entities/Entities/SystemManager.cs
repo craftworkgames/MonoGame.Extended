@@ -125,7 +125,7 @@ namespace MonoGame.Extended.Entities
                 var system = layers[i];
                 if (system.SynchronousSystems.Count > 0)
                     ProcessSystemsSynchronous(gameTime, system.SynchronousSystems);
-                //if (system.AsynchronousSystems.Count > 0)
+                //if (system.AsynchronousSystems.TotalCount > 0)
                 //    ProcessSystemsAsynchronous(gameTime, system.AsynchronousSystems);
             }
         }

@@ -208,7 +208,6 @@ namespace MonoGame.Extended.Entities
             _systemManager.InitializeIfNecessary();
 
             EntityManager.RemoveMarkedComponents();
-            EntityManager.RemoveMarkedEntities();
             EntityManager.RefreshMarkedEntitiesWith(_systemManager.Systems);
 
             _systemManager.Update(gameTime);
