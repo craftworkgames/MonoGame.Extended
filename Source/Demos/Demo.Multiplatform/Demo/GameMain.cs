@@ -36,6 +36,7 @@ namespace Demo
 
             _demos = new List<DemoBase>
             {
+                new ParticlesDemo(this),
                 new CameraDemo(this),
                 new BitmapFontsDemo(this)
             };

@@ -26,16 +26,11 @@ namespace Demo.Demos
         {
         }
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-
-            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
-        }
-
         protected override void LoadContent()
         {
+            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            _camera = new Camera2D(viewportAdapter);
+
             _bitmapFont = Content.Load<BitmapFont>("Fonts/montserrat-32");
             _backgroundSky = Content.Load<Texture2D>("Textures/hills-sky");
             _backgroundClouds = Content.Load<Texture2D>("Textures/hills-clouds");

@@ -37,6 +37,7 @@
     <Compile Include="Demos\BitmapFontsDemo.cs" />
     <Compile Include="Demos\CameraDemo.cs" />
     <Compile Include="Demos\DemoBase.cs" />
+    <Compile Include="Demos\ParticlesDemo.cs" />
     <Compile Include="Screens\DemoScreen.cs" />
     <Compile Include="GameMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,6 +65,10 @@
       <Project>{8e425575-378a-4f83-88c9-f8bebad227c9}</Project>
       <Name>MonoGame.Extended.Gui</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\MonoGame.Extended.Particles\MonoGame.Extended.Particles.csproj">
+      <Project>{6C8B9E29-D09B-4901-80FD-45AAA35882C6}</Project>
+      <Name>MonoGame.Extended.Particles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
       <Name>MonoGame.Extended</Name>
@@ -74,6 +79,13 @@
     <Content Include="Content\Fonts\impact-32_0.png" />
     <Content Include="Content\Fonts\montserrat-32_0.png" />
     <Content Include="Content\small-font_0.png" />
+    <Content Include="Content\Textures\hills-1.png" />
+    <Content Include="Content\Textures\hills-2.png" />
+    <Content Include="Content\Textures\hills-3.png" />
+    <Content Include="Content\Textures\hills-4.png" />
+    <Content Include="Content\Textures\hills-clouds.png" />
+    <Content Include="Content\Textures\hills-sky.png" />
+    <Content Include="Content\Textures\hills.png" />
     <Content Include="Content\Textures\logo-square-512.png" />
     <Content Include="Content\Textures\vignette.png" />
   </ItemGroup>
