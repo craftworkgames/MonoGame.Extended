@@ -1,111 +1,160 @@
-﻿using System.Reflection;
-using Demo.EntityComponentSystem.Components;
+﻿using System;
+using System.Reflection;
+using Demo.StarWarriorGame.Components;
+using Demo.StarWarriorGame.Templates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Animations.SpriteSheets;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Entities;
-using MonoGame.Extended.TextureAtlases;
-using MonoGame.Extended.ViewportAdapters;
 
-namespace Demo.EntityComponentSystem
+namespace Demo.StarWarriorGame
 {
     public class Game1 : Game
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
-        private Camera2D _camera;
+        private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
+        private readonly Random _random = new Random();
+        private readonly EntityComponentSystemManager _ecs;
+        private readonly EntityManager _entityManager;
 
-        private EntityComponentSystemManager _ecs;
-        private EntityManager _entityManager;
-        private Entity _entity;
-        private Entity _animatedEntity;
+        private SpriteBatch _spriteBatch;
+        private BitmapFont _font;
 
         public Game1()
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            Window.AllowUserResizing = true;
+            Window.AllowUserResizing = false;
+            IsFixedTimeStep = true;
+
+            _graphicsDeviceManager = new GraphicsDeviceManager(this)
+            {
+                IsFullScreen = false,
+                PreferredBackBufferWidth = 800,
+                PreferredBackBufferHeight = 600,
+                PreferredBackBufferFormat = SurfaceFormat.Color,
+                PreferMultiSampling = false,
+                PreferredDepthStencilFormat = DepthFormat.None,
+                SynchronizeWithVerticalRetrace = true,
+        };
+
+            _ecs = new EntityComponentSystemManager(this);
+            _entityManager = _ecs.EntityManager;
+
+            // scan for components and systems in provided assemblies
+            _ecs.Scan(Assembly.GetExecutingAssembly());
+
+            Services.AddService(Content);
+            Services.AddService(_ecs);
+            Services.AddService(_random);
         }
 
         protected override void Initialize()
         {
-            _ecs = new EntityComponentSystemManager(this);
-            _entityManager = _ecs.EntityManager;
-            Services.AddService(_ecs);
-
-            _ecs.Scan(Assembly.GetExecutingAssembly());
-
             base.Initialize();
+
+            InitializePlayerShip();
+            InitializeEnemyShips();
         }
 
         protected override void LoadContent()
         {
-            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
-            Services.AddService(_camera);
+            var graphicsDevice = GraphicsDevice;
+           
+            _spriteBatch = new SpriteBatch(graphicsDevice);
+            Services.AddService(_spriteBatch);
 
-            var spriteBatch = new SpriteBatch(GraphicsDevice);
-            Services.AddService(spriteBatch);
-
-            var logoTexture = Content.Load<Texture2D>("logo-square-128");
-
-            _entity = _entityManager.CreateEntity();
-
-            var transform = _entity.Attach<TransformComponent>();
-            transform.Position = new Vector2(200, 400);
-
-            var sprite = _entity.Attach<SpriteComponent>();
-            sprite.Texture = logoTexture;
-            sprite.Origin = new Vector2(logoTexture.Width / 2f, logoTexture.Height / 2f);
-
-            var motwTexture = Content.Load<Texture2D>("motw");
-            var motwAtlas = TextureAtlas.Create("motw-atlas", motwTexture, 52, 72);
-            var motwAnimationFactory = new SpriteSheetAnimationFactory(motwAtlas);
-            motwAnimationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 0 }));
-            motwAnimationFactory.Add("walkSouth", new SpriteSheetAnimationData(new[] { 0, 1, 2, 1 }, isLooping: false));
-            motwAnimationFactory.Add("walkWest", new SpriteSheetAnimationData(new[] { 12, 13, 14, 13 }, isLooping: false));
-            motwAnimationFactory.Add("walkEast", new SpriteSheetAnimationData(new[] { 24, 25, 26, 25 }, isLooping: false));
-            motwAnimationFactory.Add("walkNorth", new SpriteSheetAnimationData(new[] { 36, 37, 38, 37 }, isLooping: false));
-
-            _animatedEntity = _entityManager.CreateEntity();
-
-            _animatedEntity.Attach<SpriteComponent>();
-            _animatedEntity.Attach<TransformComponent>();
-            var animatedSpriteComponent = _animatedEntity.Attach<AnimatedSpriteComponent>();
-            animatedSpriteComponent.AnimationFactory = motwAnimationFactory;
-            animatedSpriteComponent.Play("walkSouth").IsLooping = true;
-        }
-
-        protected override void UnloadContent()
-        {
+            _font = Content.Load<BitmapFont>("montserrat-32");
+            Services.AddService(_font);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            var keyboardState = Keyboard.GetState();
+            var keyboard = Keyboard.GetState();
+            var gamePadState = GamePad.GetState(PlayerIndex.One);
 
-            if (keyboardState.IsKeyDown(Keys.Escape))
+            if (gamePadState.Buttons.Back == ButtonState.Pressed || keyboard.IsKeyDown(Keys.Escape))
                 Exit();
 
-            var transform = _entity.Get<TransformComponent>();
-            transform.Rotation += deltaTime;
-
+            _fpsCounter.Update(gameTime);
             _ecs.Update(gameTime);
-
-            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            _fpsCounter.Draw(gameTime);
+            var fps = $"FPS: {_fpsCounter.FramesPerSecond}";
+
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            _spriteBatch.Begin();
 
             _ecs.Draw(gameTime);
 
-            base.Draw(gameTime);
+            _spriteBatch.DrawString(_font, fps, new Vector2(32, 32), Color.Yellow);
+
+//#if DEBUG
+//            //var entityCount = $"Entities Count: {_ecs.Entities.Count}";
+//            //var removedEntityCount = $"Removed Entities Count: {_ecs.TotalEntitiesRemovedCount}";
+//            //var totalEntityCount = $"Total Entities Count: {_ecs.TotalEntitiesCreatedCount}";
+
+//            _spriteBatch.DrawString(_font, entityCount, new Vector2(32, 62), Color.Yellow);
+//            _spriteBatch.DrawString(_font, removedEntityCount, new Vector2(32, 92), Color.Yellow);
+//            _spriteBatch.DrawString(_font, totalEntityCount, new Vector2(32, 122), Color.Yellow);
+//#endif
+
+            _spriteBatch.End();
         }
+
+        private void InitializeEnemyShips()
+        {
+            var viewport = GraphicsDevice.Viewport;
+
+            var random = new Random();
+            for (var index = 0; 2 > index; ++index)
+            {
+                var entity = _entityManager.CreateEntityFromTemplate(EnemyShipTemplate.Name);
+
+                var transform = entity.Get<TransformComponent>();
+                var position = new Vector2
+                {
+                    X = random.Next(viewport.Width - 100) + 50,
+                    Y = random.Next((int) (viewport.Height * 0.75 + 0.5)) + 50
+                };
+                transform.Position = position;
+
+                var physics = entity.Get<PhysicsComponent>();
+                physics.Speed = 0.05f;
+                physics.Angle = random.Next() % 2 == 0 ? 0 : 180;
+            }
+        }
+
+        private void InitializePlayerShip()
+        {
+            var viewport = GraphicsDevice.Viewport;
+
+            var entity = _entityManager.CreateEntity();
+            entity.Group = "SHIPS";
+
+            var transform = entity.Attach<TransformComponent>();
+            var position = new Vector2
+            {
+                X = viewport.Width * 0.5f,
+                Y = viewport.Height - 50
+            };
+            transform.Position = position;
+
+            var spatial = entity.Attach<SpatialFormComponent>();
+            spatial.SpatialFormFile = "PlayerShip";
+
+            var health = entity.Attach<HealthComponent>();
+            health.Health = health.MaximumHealth = 30;
+
+            entity.Attach<PlayerComponent>();
+        }
+
     }
 }
