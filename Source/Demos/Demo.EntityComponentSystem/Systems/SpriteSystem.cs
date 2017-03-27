@@ -1,5 +1,4 @@
 ﻿using Demo.EntityComponentSystem.Components;
-using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -10,12 +9,12 @@ namespace Demo.EntityComponentSystem.Systems
     [System(
         Layer = 0,
         GameLoopType = GameLoopType.Draw,
-        AspectType = AspectType.RequiresAllOf,
+        AspectType = AspectType.AllOf,
         ComponentTypes = new[]
         {
             typeof(SpriteComponent), typeof(TransformComponent)
         })]
-    public class SpriteSystem : MonoGame.Extended.Entities.System
+    public class SpriteSystem : EntityProcessingSystem<SpriteComponent, TransformComponent>
     {
         private Camera2D _camera;
         private SpriteBatch _spriteBatch;
@@ -42,12 +41,10 @@ namespace Demo.EntityComponentSystem.Systems
             _spriteBatch.Begin(SortMode, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect, transformMatrix);
         }
 
-        protected override void Process(GameTime gameTime, Entity entity)
+        protected override void Process(GameTime gameTime, Entity entity, SpriteComponent sprite, TransformComponent transform)
         {
-            var sprite = entity.GetComponent<SpriteComponent>();
             if (sprite.Texture == null)
                 return;
-            var transform = entity.GetComponent<TransformComponent>();
 
             _spriteBatch.Draw(sprite.Texture, transform.WorldPosition, sprite.SourceRectangle, sprite.Color,
                 transform.WorldRotation, sprite.Origin, transform.WorldScale, sprite.Effects, sprite.Depth);

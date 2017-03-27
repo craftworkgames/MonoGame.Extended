@@ -7,7 +7,7 @@ namespace MonoGame.Extended
     // Code derived from top answer: http://gamedev.stackexchange.com/questions/113977/should-i-store-local-forward-right-up-vector-or-calculate-when-necessary
 
     [Flags]
-    public enum TransformFlags : byte
+    internal enum TransformFlags : byte
     {
         WorldMatrixIsDirty = 1 << 0,
         LocalMatrixIsDirty = 1 << 1,

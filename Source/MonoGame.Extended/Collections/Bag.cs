@@ -58,7 +58,7 @@ namespace MonoGame.Extended.Collections
             get { return _items[index]; }
             set
             {
-                EnsureCapacity(index);
+                EnsureCapacity(index + 1);
                 if (index >= Count)
                     Count = index + 1;
                 _items[index] = value;
@@ -131,7 +131,7 @@ namespace MonoGame.Extended.Collections
             if (capacity < _items.Length)
                 return;
 
-            var newCapacity = (int)(_items.Length * 1.5);
+            var newCapacity = Math.Max((int)(_items.Length * 1.5), capacity);
             var oldElements = _items;
             _items = new T[newCapacity];
             Array.Copy(oldElements, 0, _items, 0, oldElements.Length);

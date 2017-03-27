@@ -46,9 +46,11 @@ namespace MonoGame.Extended.Entities
     public abstract class System
     {
         private readonly Dictionary<int, int> _activeEntitiesLookup = new Dictionary<int, int>();
-        private readonly Bag<Entity> _activeEntities = new Bag<Entity>();
+        // ReSharper disable once InconsistentNaming
+        internal readonly Bag<Entity> _activeEntities = new Bag<Entity>();
         internal BigInteger Bit;
         internal Aspect Aspect;
+        private TimeSpan _timer;
 
         public EntityComponentSystemManager Manager { get; internal set; }
         public bool IsEnabled { get; set; }
@@ -56,9 +58,12 @@ namespace MonoGame.Extended.Entities
         public Game Game => Manager.Game;
         public GraphicsDevice GraphicsDevice => Manager.GraphicsDevice;
 
+        public TimeSpan ProcessingDelay { get; set; }
+
         protected System()
         {
             IsEnabled = true;
+            _timer = TimeSpan.Zero;
         }
 
         public virtual void Initialize()
@@ -112,14 +117,12 @@ namespace MonoGame.Extended.Entities
         {
         }
 
-        internal void Process(GameTime gameTime)
+        internal void ProcessInternal(GameTime gameTime)
         {
             if (!CheckProcessing(gameTime))
                 return;
             Begin(gameTime);
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = _activeEntities.Count - 1; index >= 0; --index)
-                Process(gameTime, _activeEntities[index]);
+            Process(gameTime);
             End(gameTime);
         }
 
@@ -134,7 +137,19 @@ namespace MonoGame.Extended.Entities
 
         protected virtual bool CheckProcessing(GameTime gameTime)
         {
+            // ReSharper disable once InvertIf
+            if (ProcessingDelay != TimeSpan.Zero)
+            {
+                _timer += gameTime.ElapsedGameTime;
+                if (_timer <= ProcessingDelay)
+                    return false;
+                _timer -= ProcessingDelay;
+            }
             return IsEnabled;
+        }
+
+        protected virtual void Process(GameTime gameTime)
+        {
         }
 
         protected virtual void End(GameTime gameTime)
@@ -144,10 +159,6 @@ namespace MonoGame.Extended.Entities
         protected virtual bool IsInterestedIn(Entity entity)
         {
             return Aspect.IsInterestedIn(entity);
-        }
-
-        protected virtual void Process(GameTime gameTime, Entity entity)
-        {
         }
 
         protected void Add(Entity entity)

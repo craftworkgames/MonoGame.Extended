@@ -1,9 +1,9 @@
 ﻿// Original code dervied from:
-// https://github.com/thelinuxlich/artemis_CSharp/blob/master/Artemis_XNA_INDEPENDENT/ComponentType.cs
+// https://github.com/thelinuxlich/starwarrior_CSharp/blob/master/StarWarrior/StarWarrior/Systems/EnemyShipMovementSystem.cs
 
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ComponentType.cs" company="GAMADU.COM">
-//     Copyright © 2013 GAMADU.COM. Contains rights reserved.
+// <copyright file="EnemyShipMovementSystem.cs" company="GAMADU.COM">
+//     Copyright © 2013 GAMADU.COM. All rights reserved.
 //
 //     Redistribution and use in source and binary forms, with or without modification, are
 //     permitted provided that the following conditions are met:
@@ -30,53 +30,29 @@
 //     or implied, of GAMADU.COM.
 // </copyright>
 // <summary>
-//   Represents a Component Type.
+//   The enemy ship movement system.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Diagnostics;
-using System.Numerics;
+using Demo.StarWarriorGame.Components;
+using Microsoft.Xna.Framework;
+using MonoGame.Extended.Entities;
 
-namespace MonoGame.Extended.Entities
+namespace Demo.StarWarriorGame.Systems
 {
-    [DebuggerDisplay("Identifier:{Index}, Bit:{Bit}")]
-    public sealed class ComponentType
+    [System(
+        AspectType = AspectType.AllOf,
+        ComponentTypes = new[] { typeof(TransformComponent), typeof(PhysicsComponent), typeof(EnemyComponent) },
+        GameLoopType = GameLoopType.Update,
+        Layer = 0)]
+    public class EnemyShipMovementSystem : EntityProcessingSystem<TransformComponent, PhysicsComponent, EnemyComponent>
     {
-        private static BigInteger _nextBit;
-        private static int _nextIndex;
-
-        public int Index { get; }
-        public BigInteger Bit { get; }
-        public Type Type { get; }
-
-        static ComponentType()
+        protected override void Process(GameTime gameTime, Entity entity, TransformComponent transform, PhysicsComponent physics, EnemyComponent enemy)
         {
-            _nextBit = 1;
-            _nextIndex = 0;
-        }
-
-        internal ComponentType(Type type)
-        {
-            Index = _nextIndex++;
-            Bit = _nextBit;
-            _nextBit <<= 1;
-            Type = type;
-        }
-    }
-
-    internal static class ComponentType<TComponent> where TComponent : Component
-    {
-        // ReSharper disable once StaticMemberInGenericType
-        public static ComponentType Type { get; }
-
-        static ComponentType()
-        {
-            Type = ComponentTypeManager.GetTypeFor<TComponent>();
-            if (Type != null)
-                return;
-            Type = new ComponentType(typeof(TComponent));
-            ComponentTypeManager.SetTypeFor<TComponent>(Type);
+            var worldPosition = transform.WorldPosition;
+            var viewport = GraphicsDevice.Viewport;
+            if (worldPosition.X < 0 || worldPosition.X > viewport.Width)
+                physics.AddAngle(180);
         }
     }
 }

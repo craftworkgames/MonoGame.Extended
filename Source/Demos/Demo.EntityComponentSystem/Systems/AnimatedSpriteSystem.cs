@@ -7,18 +7,15 @@ namespace Demo.EntityComponentSystem.Systems
     [System(
         Layer = 0,
         GameLoopType = GameLoopType.Update,
-        AspectType = AspectType.RequiresAllOf,
+        AspectType = AspectType.AllOf,
         ComponentTypes = new[]
         {
             typeof(SpriteComponent), typeof(AnimatedSpriteComponent)
         })]
-    public class AnimatedSpriteSystem : MonoGame.Extended.Entities.System
+    public class AnimatedSpriteSystem : EntityProcessingSystem<SpriteComponent, AnimatedSpriteComponent>
     {
-        protected override void Process(GameTime gameTime, Entity entity)
+        protected override void Process(GameTime gameTime, Entity entity, SpriteComponent sprite, AnimatedSpriteComponent animatedSprite)
         {
-            var sprite = entity.GetComponent<SpriteComponent>();
-            var animatedSprite = entity.GetComponent<AnimatedSpriteComponent>();
-
             var animation = animatedSprite.CurrentAnimation;
             if (animation == null || animation.IsComplete)
                 return;

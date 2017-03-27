@@ -1,9 +1,9 @@
 ﻿// Original code dervied from:
-// https://github.com/thelinuxlich/artemis_CSharp/blob/master/Artemis_XNA_INDEPENDENT/Interface/IEntityTemplate.cs.cs
+// https://github.com/thelinuxlich/starwarrior_CSharp/blob/master/StarWarrior/StarWarrior/Spatials/Explosion.cs
 
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IEntityTemplate.cs" company="GAMADU.COM">
-//     Copyright © 2013 GAMADU.COM. Contains rights reserved.
+// <copyright file="Explosion.cs" company="GAMADU.COM">
+//     Copyright © 2013 GAMADU.COM. All rights reserved.
 //
 //     Redistribution and use in source and binary forms, with or without modification, are
 //     permitted provided that the following conditions are met:
@@ -30,14 +30,29 @@
 //     or implied, of GAMADU.COM.
 // </copyright>
 // <summary>
-//   Interface IEntityTemplate.
+//   The explosion.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace MonoGame.Extended.Entities
+using Demo.StarWarriorGame.Components;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace Demo.StarWarriorGame.Spatials
 {
-    public abstract class EntityTemplate
+    internal static class Explosion
     {
-        public abstract Entity BuildEntity(Entity entity, EntityComponentSystemManager manager, params object[] args);
+        private static Texture2D _circle;
+
+        public static void Render(SpriteBatch spriteBatch, ContentManager contentManager, TransformComponent transform, Color color, int radius)
+        {
+            if (_circle == null)
+                _circle = contentManager.Load<Texture2D>("explosion");
+
+            var worldPosition = transform.WorldPosition;
+            var renderPosition = new Vector2(worldPosition.X - radius, worldPosition.Y - radius);
+            spriteBatch.Draw(_circle, renderPosition, null, Color.White, 0, Vector2.Zero, 0.3f, SpriteEffects.None, 0);
+        }
     }
 }

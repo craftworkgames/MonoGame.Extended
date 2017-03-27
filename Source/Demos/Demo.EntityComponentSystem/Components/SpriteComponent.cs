@@ -5,7 +5,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.EntityComponentSystem.Components
 {
     [Component]
-    [ComponentPool(Capacity = 20)]
+    [ComponentPool(InitialSize = 20)]
     public class SpriteComponent : Component
     {
         public Vector2 Origin { get; set; }

@@ -39,14 +39,14 @@ namespace Demo.Platformer.Entities
         {
             var entity = _ecs.CreateEntity();
 
-            var transform = entity.AddComponent<TransformComponent>();
+            var transform = entity.Attach<TransformComponent>();
             transform.Position = position;
 
             var textureRegion = _characterTextureAtlas[0];
-            var sprite = entity.AddComponent<SpriteComponent>();
+            var sprite = entity.Attach<SpriteComponent>();
             sprite.Origin = new Vector2(textureRegion.Width / 2f, textureRegion.Height / 2f);
 
-            var animatedSprite = entity.AddComponent<AnimationComponent>();
+            var animatedSprite = entity.Attach<AnimationComponent>();
             var animationFactory = animatedSprite.AnimationFactory = new SpriteSheetAnimationFactory(_characterTextureAtlas); ;
 
             animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 12, 13 }, 1.0f));
@@ -55,15 +55,15 @@ namespace Demo.Platformer.Entities
 
             animatedSprite.Play("idle");
 
-            var collision = entity.AddComponent<BasicCollisionBodyComponent>();
+            var collision = entity.Attach<BasicCollisionBodyComponent>();
             collision.Size = textureRegion.Size;
             collision.Origin = Vector2.One * 0.5f;
 
-            var player = entity.AddComponent<PlayerComponent>();
+            var player = entity.Attach<PlayerComponent>();
             player.WalkSpeed = 220f;
             player.JumpSpeed = 420f;
 
-            var character = entity.AddComponent<CharacterComponent>();
+            var character = entity.Attach<CharacterComponent>();
             character.HealthPoints = 20;
 
             return entity;
@@ -72,9 +72,9 @@ namespace Demo.Platformer.Entities
         public Entity CreateSolid(Vector2 position, Size2 size)
         {
             var entity = _ecs.CreateEntity();
-            var transform = entity.AddComponent<TransformComponent>();
+            var transform = entity.Attach<TransformComponent>();
             transform.Position = position;
-            var collision = entity.AddComponent<BasicCollisionBodyComponent>();
+            var collision = entity.Attach<BasicCollisionBodyComponent>();
             collision.Size = size;
             collision.IsStatic = true;
             return entity;
@@ -83,10 +83,10 @@ namespace Demo.Platformer.Entities
         public Entity CreateDeadly(Vector2 position, Size2 size)
         {
             var entity = _ecs.CreateEntity();
-            var transform = entity.AddComponent<TransformComponent>();
+            var transform = entity.Attach<TransformComponent>();
             transform.Position = position;
 
-            var collision = entity.AddComponent<BasicCollisionBodyComponent>();
+            var collision = entity.Attach<BasicCollisionBodyComponent>();
             collision.Size = size;
             collision.IsStatic = true;
 
@@ -123,18 +123,18 @@ namespace Demo.Platformer.Entities
         public Entity CreateBadGuy(Vector2 position, Size2 size)
         {
             var entity = _ecs.CreateEntity();
-            var transform = entity.AddComponent<TransformComponent>();
+            var transform = entity.Attach<TransformComponent>();
             transform.Position = position;
 
-            var collision = entity.AddComponent<BasicCollisionBodyComponent>();
+            var collision = entity.Attach<BasicCollisionBodyComponent>();
             collision.Size = size;
             collision.Origin = Vector2.One * 0.5f;
 
             var textureRegion = _characterTextureAtlas[90];
-            var sprite = entity.AddComponent<SpriteComponent>();
+            var sprite = entity.Attach<SpriteComponent>();
             sprite.Origin = new Vector2(textureRegion.Width / 2f, textureRegion.Height / 2f);
 
-            var animatedSprite = entity.AddComponent<AnimationComponent>();
+            var animatedSprite = entity.Attach<AnimationComponent>();
             var animationFactory = animatedSprite.AnimationFactory = new SpriteSheetAnimationFactory(_characterTextureAtlas); ;
 
             animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 100 }, 1.0f));
@@ -142,10 +142,10 @@ namespace Demo.Platformer.Entities
 
             animatedSprite.Play("walk");
 
-            var character = entity.AddComponent<CharacterComponent>();
+            var character = entity.Attach<CharacterComponent>();
             character.HealthPoints = 20;
 
-            entity.AddComponent<EnemyAiComponent>();
+            entity.Attach<EnemyAiComponent>();
 
             return entity;
         }

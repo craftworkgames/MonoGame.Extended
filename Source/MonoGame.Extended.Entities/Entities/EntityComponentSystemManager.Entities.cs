@@ -3,7 +3,7 @@
 
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EntityManager.cs" company="GAMADU.COM">
-//     Copyright � 2013 GAMADU.COM. RequiresAllOf rights reserved.
+//     Copyright � 2013 GAMADU.COM. AllOf rights reserved.
 //
 //     Redistribution and use in source and binary forms, with or without modification, are
 //     permitted provided that the following conditions are met:
@@ -36,7 +36,6 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Entities
@@ -59,19 +58,19 @@ namespace MonoGame.Extended.Entities
         private readonly Dictionary<Guid, Entity> _identifiersToEntities = new Dictionary<Guid, Entity>();
         private int _nextAvailableEntityIndex;
         private readonly Bag<int> _entityIndexPool = new Bag<int>();
-        private readonly Bag<Entity> _entityPool = new Bag<Entity>();
+        private readonly ObjectPool<Entity> _entityPool = new ObjectPool<Entity>(() => new Entity(), 16, ObjectPoolIsFullPolicy.Resize);
+
         private readonly Bag<Entity> _entitiesToBeRemoved = new Bag<Entity>();
         private readonly Bag<Entity> _refreshed = new Bag<Entity>();
         private readonly Dictionary<string, EntityTemplate> _entityTemplatesByName = new Dictionary<string, EntityTemplate>();
         private readonly Dictionary<string, Entity> _entitiesByName = new Dictionary<string, Entity>();
         private readonly Dictionary<string, Bag<Entity>> _entitiesByGroup = new Dictionary<string, Bag<Entity>>();
-        private readonly Bag<string> _groupByEntity = new Bag<string>();
 
         public Bag<Entity> Entities { get; } = new Bag<Entity>();
         public int EntitiesRequestedCount { get; private set; }
         public int RemovedEntitiesRetention { get; set; } = 100;
-        public long TotalCreatedEntitiesCount { get; private set; }
-        public long TotalRemovedEntitiesCount { get; private set; }
+        public long TotalEntitiesCreatedCount { get; private set; }
+        public long TotalEntitiesRemovedCount { get; private set; }
 
         public event EntityDelegate EntityAdded;
         public event EntityDelegate EntityRemoved;
@@ -80,41 +79,37 @@ namespace MonoGame.Extended.Entities
         {
             var identifier1 = identifier ?? Guid.NewGuid();
 
-            Entity entity;
-            if (!_entityPool.IsEmpty)
-            {
-                entity = _entityPool.Remove(_entityPool.Count - 1);
-                entity.Reset();
-                entity.Identifier = identifier1;
-            }
-            else
-            {
-                var index = _entityIndexPool.IsEmpty ? _nextAvailableEntityIndex++ : _entityIndexPool.Remove(_entityIndexPool.Count - 1);
-                entity = new Entity(this, index, identifier1);
-            }
+            var entity = _entityPool.New();
+
+            entity.Manager = this;
+            entity.Identifier = identifier1;
+            entity.Index = _entityIndexPool.IsEmpty
+                ? _nextAvailableEntityIndex++
+                : _entityIndexPool[_entityIndexPool.Count - 1];
 
             _identifiersToEntities[entity.Identifier] = entity;
             Entities[entity.Index] = entity;
 
             ++EntitiesRequestedCount;
 
-            if (TotalCreatedEntitiesCount < long.MaxValue)
+            if (TotalEntitiesCreatedCount < long.MaxValue)
             {
-                ++TotalCreatedEntitiesCount;
+                ++TotalEntitiesCreatedCount;
             }
+
+            Refresh(entity);
 
             EntityAdded?.Invoke(entity);
 
             return entity;
         }
 
-        public Entity CreateEntityFromTemplate(string templateName, params object[] templateArgs)
+        public Entity CreateEntityFromTemplate(string templateName)
         {
-            return CreateEntityFromTemplate(null, templateName, templateArgs);
+            return CreateEntityFromTemplate(null, templateName);
         }
 
-        private Entity CreateEntityFromTemplate(Guid? identifier, string templateName,
-            params object[] templateArgs)
+        private Entity CreateEntityFromTemplate(Guid? identifier, string templateName)
         {
             if (string.IsNullOrEmpty(templateName))
                 throw new ArgumentNullException(nameof(templateName));
@@ -125,7 +120,7 @@ namespace MonoGame.Extended.Entities
             if (entityTemplate == null)
                 throw new MissingEntityTemplateException(templateName);
 
-            entity = entityTemplate.BuildEntity(entity, this, templateArgs);
+            entityTemplate.Build(entity);
             Refresh(entity);
             return entity;
         }
@@ -135,20 +130,20 @@ namespace MonoGame.Extended.Entities
             _entityTemplatesByName.Add(tempalteName, entityTemplate);
         }
 
-        //public Bag<Entity> GetEntities(Aspect aspect)
+        //public Bag<Entity> GetEntitiesByGroup(Aspect aspect)
         //{
         //    var entities = aspect.Entities;
         //    if (entities == null)
         //        entities = aspect.Entities = new Bag<Entity>();
         //    else
-        //        entities.Clear();
+        //        entities.ReturnAll();
 
         //    // ReSharper disable once ForCanBeConvertedToForeach
         //    for (var index = 0; index < Entities.Count; ++index)
         //    {
         //        var entity = Entities[index];
         //        if (entity != null && aspect.IsInterestedIn(entity))
-        //            entities.Add(entity);
+        //            entities.Attach(entity);
         //    }
 
         //    return entities;
@@ -200,35 +195,19 @@ namespace MonoGame.Extended.Entities
             _entitiesByName.Remove(name);
         }
 
-        //public Bag<Entity> GetEntities(string groupName)
-        //{
-        //    Bag<Entity> bag;
-        //    return _entitiesByGroup.TryGetValue(groupName, out bag) ? bag : null;
-        //}
-
-        internal string GetEntityGroup(Entity entity)
+        public Bag<Entity> GetEntitiesByGroup(string groupName)
         {
-            if (entity == null)
-                return null;
-            var entityIndex = entity.Index;
-            return entityIndex >= _groupByEntity.Capacity ? null : _groupByEntity[entityIndex];
+            Bag<Entity> bag;
+            return _entitiesByGroup.TryGetValue(groupName, out bag) ? bag : null;
         }
 
         internal void RemoveEntityFromGroupIfPossible(Entity entity)
         {
-            if (entity == null)
+            if (string.IsNullOrEmpty(entity?.Group))
                 return;
 
-            var entityIndex = entity.Index;
-            if (entityIndex >= _groupByEntity.Capacity)
-                return;
-            var group = _groupByEntity[entityIndex];
-            if (group == null)
-                return;
-
-            _groupByEntity[entityIndex] = null;
             Bag<Entity> entities;
-            if (_entitiesByGroup.TryGetValue(group, out entities))
+            if (_entitiesByGroup.TryGetValue(entity.Group, out entities))
                 entities.Remove(entity);
         }
 
@@ -239,6 +218,8 @@ namespace MonoGame.Extended.Entities
 
             RemoveEntityFromGroupIfPossible(entity);
 
+            entity._group = group;
+
             Bag<Entity> entities;
             if (!_entitiesByGroup.TryGetValue(group, out entities))
             {
@@ -247,33 +228,36 @@ namespace MonoGame.Extended.Entities
             }
 
             entities.Add(entity);
-            _groupByEntity[entity.Index] = group;
         }
 
         public void Remove(Entity entity)
         {
-            if (entity == null || entity.MarkedForRemoval)
+            if (entity == null || entity.IsBeingRemoved)
                 return;
-            entity.MarkedForRemoval = true;
+            entity.IsBeingRemoved = true;
             _entitiesToBeRemoved.Add(entity);
         }
 
-        internal void ForceRemove(Entity entity)
+        internal void InternalRemove(Entity entity)
         {
             if (entity == null)
                 return;
 
-            Entities[entity.Index] = null;
+            RemoveEntityFromGroupIfPossible(entity);
+
+            var swapEntity = Entities[Entities.Count - 1];
+            if (swapEntity != null)
+                swapEntity.Index = entity.Index;
+            Entities[entity.Index] = swapEntity;
+            Entities[Entities.Count - 1] = null;
+
             RemoveComponents(entity);
 
             --EntitiesRequestedCount;
-            if (TotalRemovedEntitiesCount < long.MaxValue)
-                ++TotalRemovedEntitiesCount;
+            if (TotalEntitiesRemovedCount < long.MaxValue)
+                ++TotalEntitiesRemovedCount;
 
-            if (_entityPool.Count < RemovedEntitiesRetention)
-                _entityPool.Add(entity);
-            else
-                _entityIndexPool.Add(entity.Index);
+            entity.Return();
 
             EntityRemoved?.Invoke(entity);
 
@@ -289,8 +273,8 @@ namespace MonoGame.Extended.Entities
             {
                 var entity = _entitiesToBeRemoved[index];
                 RemoveEntityFromGroupIfPossible(entity);
-                entity.MarkedForRemoval = false;
-                ForceRemove(entity);
+                entity.IsBeingRemoved = false;
+                InternalRemove(entity);
             }
 
             _entitiesToBeRemoved.Clear();
@@ -298,16 +282,16 @@ namespace MonoGame.Extended.Entities
 
         internal void Refresh(Entity entity)
         {
-            if (entity == null || entity.IsRefreshing)
+            if (entity == null || entity.IsBeingRefreshed)
                 return;
-            entity.IsRefreshing = true;
+            entity.IsBeingRefreshed = true;
             _refreshed.Add(entity);
         }
 
-        internal void ForceRefresh(Entity entity)
+        internal void InternalRefresh(Entity entity)
         {
-            for (int index = 0, s = Systems.Count; s > index; ++index)
-                Systems[index].OnEntityChanged(entity);
+            for (var i = Systems.Count - 1; i >= 0; --i)
+                Systems[i].OnEntityChanged(entity);
         }
 
         private void RefreshMarkedEntities()
@@ -318,8 +302,8 @@ namespace MonoGame.Extended.Entities
             for (var index = _refreshed.Count - 1; index >= 0; --index)
             {
                 var entity = _refreshed[index];
-                ForceRefresh(entity);
-                entity.IsRefreshing = false;
+                InternalRefresh(entity);
+                entity.IsBeingRefreshed = false;
                 _refreshed.Remove(index);
             }
 

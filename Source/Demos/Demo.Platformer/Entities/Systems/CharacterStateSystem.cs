@@ -18,7 +18,7 @@
 
 //        protected override void Process(GameTime gameTime, Entity entity)
 //        {
-//            var state = entity.GetComponent<CharacterComponent>();
+//            var state = entity.Get<CharacterComponent>();
 //            if (state.IsAlive)
 //                return;
 

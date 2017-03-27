@@ -5,7 +5,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.EntityComponentSystem.Components
 {
     [Component]
-    [ComponentPool(Capacity = 20)]
+    [ComponentPool(InitialSize = 20)]
     public class AnimatedSpriteComponent : Component
     {
         private SpriteSheetAnimationFactory _animationFactory;

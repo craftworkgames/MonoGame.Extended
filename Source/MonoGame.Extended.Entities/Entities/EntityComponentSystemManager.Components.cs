@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Entities
@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Entities
     public sealed partial class EntityComponentSystemManager
     {
         private readonly Bag<IComponentPool> _componentPools = new Bag<IComponentPool>();
-        private readonly Bag<Bag<Component>> _componentsByType = new Bag<Bag<Component>>();
+        private readonly Bag<Dictionary<Entity, Component>> _componentsByType = new Bag<Dictionary<Entity, Component>>();
         private readonly Bag<ValueTuple<Entity, ComponentType>> _componentsToBeRemoved = new Bag<ValueTuple<Entity, ComponentType>>();
 
         public event EntityComponentDelegate ComponentAdded;
@@ -27,7 +27,7 @@ namespace MonoGame.Extended.Entities
         //            continue;
         //        var component = components[entityIndex];
         //        if (component != null)
-        //            entityComponents.Add(component);
+        //            entityComponents.Attach(component);
         //    }
 
         //    return entityComponents;
@@ -47,30 +47,44 @@ namespace MonoGame.Extended.Entities
             return (T)AddComponent(entity, type);
         }
 
-        internal Component AddComponent(Entity entity, ComponentType type)
+        internal Component AddComponent(Entity entity, ComponentType componentType)
         {
-            if (type.Index >= _componentsByType.Capacity)
-                _componentsByType[type.Index] = null;
+            if (componentType.Index >= _componentsByType.Capacity)
+                _componentsByType[componentType.Index] = null;
 
-            var components = _componentsByType[type.Index];
+            var components = _componentsByType[componentType.Index];
             if (components == null)
+                _componentsByType[componentType.Index] = components = new Dictionary<Entity, Component>();
+
+            Component component;
+
+            if (componentType.IsPooled)
             {
-                _componentsByType[type.Index] = components = new Bag<Component>();
+                var componentPool = _componentPools[componentType.Index];
+                component = componentPool.New();
+            }
+            else
+            {
+                component = (Component)Activator.CreateInstance(componentType.Type);
             }
 
-            var component = GetComponentFromPool(type);
             if (component == null)
                 return null;
+
             component.Entity = entity;
+            components[entity] = component;
 
-            components[entity.Index] = component;
-            entity.AddTypeBit(type.Bit);
+            entity.AddTypeBit(componentType.Bit);
 
-            ComponentAdded?.Invoke(entity, component);
-
-            Refresh(entity);
+            OnComponentAdded(entity, component);
 
             return component;
+        }
+
+        private void OnComponentAdded(Entity entity, Component component)
+        {
+            ComponentAdded?.Invoke(entity, component);
+            Refresh(entity);
         }
 
         public T GetComponent<T>(Entity entity) where T : Component
@@ -82,11 +96,12 @@ namespace MonoGame.Extended.Entities
         {
             if (componentType.Index >= _componentsByType.Capacity)
                 return null;
-            var entityIndex = entity.Index;
             var components = _componentsByType[componentType.Index];
-            if (components == null || entityIndex >= components.Capacity)
+            if (components == null)
                 return null;
-            return components[entityIndex];
+            Component component;
+            components.TryGetValue(entity, out component);
+            return component;
         }
 
         internal void RemoveComponent<T>(Entity entity) where T : Component
@@ -116,14 +131,12 @@ namespace MonoGame.Extended.Entities
                 if (components == null || entityIndex >= components.Count)
                     continue;
 
-                var componentToBeRemoved = components[entityIndex];
-                if (componentToBeRemoved != null)
-                {
-                    OnRemovedComponent(componentToBeRemoved);
-                    ComponentRemoved?.Invoke(entity, componentToBeRemoved);
-                }
+                Component component;
+                if (!components.TryGetValue(entity, out component))
+                    continue;
 
-                components[entityIndex] = null;
+                components.Remove(entity);
+                OnRemovedComponent(entity, component);
             }
         }
 
@@ -140,35 +153,34 @@ namespace MonoGame.Extended.Entities
                 if (components == null || entityIndex >= components.Count)
                     continue;
 
-                var componentToBeRemoved = components[entityIndex];
-                if (componentToBeRemoved != null)
-                {
-                    OnRemovedComponent(componentToBeRemoved);
-                    ComponentRemoved?.Invoke(entity, componentToBeRemoved);
-                }
+                Component component;
+                if (!components.TryGetValue(entity, out component))
+                    continue;
 
                 entity.RemoveTypeBit(componentType.Bit);
                 Refresh(entity);
-                components[entityIndex] = null;
+
+                components.Remove(entity);
+                OnRemovedComponent(entity, component);
             }
 
             _componentsToBeRemoved.Clear();
         }
 
-        private static void OnRemovedComponent(Component component)
+        private void OnRemovedComponent(Entity entity, Component component)
         {
             var poolable = component as IPoolable;
             poolable?.Return();
-        }
 
-        internal Component GetComponentFromPool(ComponentType componentType)
-        {
-            var componentPool = _componentPools[componentType.Index] ?? CreateComponentPool(componentType);
-            return componentPool.New();
+            ComponentRemoved?.Invoke(entity, component);
         }
 
         internal IComponentPool CreateComponentPool(ComponentType componentType, int? capacity = null)
         {
+            if (componentType.IsPooled)
+                return _componentPools[componentType.Index];
+
+            componentType.IsPooled = true;
             var poolType = typeof(ComponentPool<>).MakeGenericType(componentType.Type);
             var componentPool = (IComponentPool)Activator.CreateInstance(poolType, capacity);
             return _componentPools[componentType.Index] = componentPool;

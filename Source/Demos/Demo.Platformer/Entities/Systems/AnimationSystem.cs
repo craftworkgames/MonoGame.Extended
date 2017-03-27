@@ -8,25 +8,22 @@ namespace Demo.Platformer.Entities.Systems
     [System(
         Layer = 0,
         GameLoopType = GameLoopType.Update,
-        AspectType = AspectType.RequiresAllOf,
+        AspectType = AspectType.AllOf,
         ComponentTypes = new[]
         {
             typeof(SpriteComponent), typeof(AnimationComponent)
         })]
-    public class AnimationSystem : MonoGame.Extended.Entities.System
+    public class AnimationSystem : EntityProcessingSystem<SpriteComponent, AnimationComponent>
     {
-        protected override void Process(GameTime gameTime, Entity entity)
+        protected override void Process(GameTime gameTime, Entity entity, SpriteComponent sprite, AnimationComponent animation)
         {
-            var sprite = entity.GetComponent<SpriteComponent>();
-            var animatedSprite = entity.GetComponent<AnimationComponent>();
-
-            var animation = animatedSprite.CurrentAnimation;
-            if (animation == null || animation.IsComplete)
+            var currentAnimation = animation.CurrentAnimation;
+            if (currentAnimation == null || currentAnimation.IsComplete)
                 return;
 
-            animation.Update(gameTime);
-            sprite.Texture = animation.CurrentFrame.Texture;
-            sprite.SourceRectangle = animation.CurrentFrame.Bounds;
+            currentAnimation.Update(gameTime);
+            sprite.Texture = currentAnimation.CurrentFrame.Texture;
+            sprite.SourceRectangle = currentAnimation.CurrentFrame.Bounds;
         }
     }
 }

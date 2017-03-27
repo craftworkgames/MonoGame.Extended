@@ -3,7 +3,7 @@
 
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Aspect.cs" company="GAMADU.COM">
-//     Copyright © 2013 GAMADU.COM. RequiresAllOf rights reserved.
+//     Copyright © 2013 GAMADU.COM. AllOf rights reserved.
 //
 //     Redistribution and use in source and binary forms, with or without modification, are
 //     permitted provided that the following conditions are met:
@@ -30,7 +30,7 @@
 //     or implied, of GAMADU.COM.
 // </copyright>
 // <summary>
-//   Specify a Filter class to filter what Entities (with what Components) a EntitySystem will Process.
+//   Specify a Filter class to filter what Entities (with what Components) a EntitySystem will ProcessInternal.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -134,9 +134,9 @@ namespace MonoGame.Extended.Entities
             var builder = new StringBuilder(1024);
 
             builder.AppendLine("Aspect :");
-            AppendTypesAsString(builder, " RequiresAllOf the components : ", ContainsTypesMap);
-            AppendTypesAsString(builder, " RequiresAllOf none of the components : ", ExcludeTypesMap);
-            AppendTypesAsString(builder, " RequiresAllOf atleast one of the components : ", OneTypesMap);
+            AppendTypesAsString(builder, " AllOf the components : ", ContainsTypesMap);
+            AppendTypesAsString(builder, " AllOf none of the components : ", ExcludeTypesMap);
+            AppendTypesAsString(builder, " AllOf atleast one of the components : ", OneTypesMap);
 
             return builder.ToString();
         }

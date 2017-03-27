@@ -38,88 +38,109 @@ using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using MonoGame.Extended.Collections;
+// ReSharper disable InconsistentNaming
 
 namespace MonoGame.Extended.Entities
 {
-    public sealed class Entity
+    public sealed class Entity : IPoolable
     {
-        private readonly EntityComponentSystemManager _manager;
+        private static readonly uint IsEnabledMask;
+        private static readonly uint IsBeingRemovedMask;
+        private static readonly uint IsBeingRefreshedMask;
+
+        static Entity()
+        {
+            IsEnabledMask = BitVector32.CreateMask();
+            IsBeingRemovedMask = BitVector32.CreateMask(IsEnabledMask);
+            IsBeingRefreshedMask = BitVector32.CreateMask(IsBeingRefreshedMask);
+        }
+
+        internal EntityComponentSystemManager Manager;
         internal BigInteger SystemBits;
         internal BigInteger TypeBits;
+        private ReturnToPoolDelegate _returnToPoolDelegate;
+        internal BitVector32 Flags;
 
         internal int Index;
         internal Guid Identifier;
+        internal string _group;
 
-        public bool IsEnabled { get; internal set; }
-        public bool MarkedForRemoval { get; internal set; }
-        public bool IsRefreshing { get; internal set; }
+        internal bool IsBeingRemoved
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return Flags[IsBeingRemovedMask]; }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set { Flags[IsBeingRemovedMask] = value; }
+        }
+
+        internal bool IsBeingRefreshed
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return Flags[IsBeingRefreshedMask]; }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set { Flags[IsBeingRefreshedMask] = value; }
+        }
+
+        public bool IsEnabled
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return Flags[IsEnabledMask]; }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal set { Flags[IsEnabledMask] = value; }
+        }
 
         public string Group
         {
-            get
-            {
-                return _manager.GetEntityGroup(this);
-            }
+            get { return _group; }
             set
             {
-                _manager.SetGroupForEntity(value, this);
+                _group = value;
+                Manager.SetGroupForEntity(value, this);
             }
         }
 
-        public bool IsGrouped => _manager.GetEntityGroup(this) != null;
-        public bool IsActive => _manager.IsActive(this);
+        public bool IsActive => Manager.IsActive(this);
 
-        internal Entity(EntityComponentSystemManager manager, int index, Guid identifier)
+        internal Entity()
         {
-            Index = index;
-            Identifier = identifier;
-            SystemBits = 0;
-            TypeBits = 0;
-            IsEnabled = true;
-            _manager = manager;
         }
 
-        public T AddComponent<T>() where T : Component
+        public void Destroy()
         {
-            var component = _manager.AddComponent<T>(this);
+            Manager.Remove(this);
+        }
+
+        public T Attach<T>() where T : Component
+        {
+            var component = Manager.AddComponent<T>(this);
             return component;
         }
 
-        public void Delete()
+        public void Detach<T>() where T : Component
         {
-            _manager.RemoveEntityFromGroupIfPossible(this);
+            Manager.RemoveComponent(this, ComponentTypeManager.GetTypeFor<T>());
         }
 
-        public T GetComponent<T>() where T : Component
+        public T Get<T>() where T : Component
         {
-            return _manager.GetComponent<T>(this);
-        }
-
-        public bool HasComponent<T>() where T : Component
-        {
-            return _manager.GetComponent(this, ComponentType<T>.Type) == null;
+            return Manager.GetComponent<T>(this);
         }
 
         public void Refresh()
         {
-            _manager.Refresh(this);
+            Manager.Refresh(this);
         }
 
-        public void RemoveComponent<T>() where T : Component
+        internal void Reset()
         {
-            _manager.RemoveComponent(this, ComponentTypeManager.GetTypeFor<T>());
-        }
-
-        public void RemoveComponent(ComponentType componentType)
-        {
-            _manager.RemoveComponent(this, componentType);
-        }
-
-        public void Reset()
-        {
+            Index = -1;
+            Identifier = Guid.Empty;
+            _group = null;
             SystemBits = 0;
             TypeBits = 0;
             IsEnabled = true;
+            IsBeingRefreshed = false;
+            IsBeingRemoved = false;
         }
 
         public override string ToString()
@@ -149,6 +170,29 @@ namespace MonoGame.Extended.Entities
         internal void RemoveTypeBit(BigInteger bit)
         {
             TypeBits &= ~bit;
+        }
+
+        void IPoolable.Initialize(ReturnToPoolDelegate returnDelegate)
+        {
+            Reset();
+        }
+
+        void IPoolable.Return()
+        {
+            Return();
+        }
+
+        internal void Return()
+        {
+            if (_returnToPoolDelegate == null)
+            {
+                return;
+            }
+
+            Reset();
+
+            _returnToPoolDelegate.Invoke(this);
+            _returnToPoolDelegate = null;
         }
     }
 }

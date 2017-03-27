@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Demo.EntityComponentSystem.Components;
-using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -53,10 +52,10 @@ namespace Demo.EntityComponentSystem
 
             _entity = _ecs.CreateEntity();
 
-            var transform = _entity.AddComponent<TransformComponent>();
+            var transform = _entity.Attach<TransformComponent>();
             transform.Position = new Vector2(200, 400);
 
-            var sprite = _entity.AddComponent<SpriteComponent>();
+            var sprite = _entity.Attach<SpriteComponent>();
             sprite.Texture = logoTexture;
             sprite.Origin = new Vector2(logoTexture.Width / 2f, logoTexture.Height / 2f);
 
@@ -71,9 +70,9 @@ namespace Demo.EntityComponentSystem
 
             _animatedEntity = _ecs.CreateEntity();
 
-            _animatedEntity.AddComponent<SpriteComponent>();
-            _animatedEntity.AddComponent<TransformComponent>();
-            var animatedSpriteComponent = _animatedEntity.AddComponent<AnimatedSpriteComponent>();
+            _animatedEntity.Attach<SpriteComponent>();
+            _animatedEntity.Attach<TransformComponent>();
+            var animatedSpriteComponent = _animatedEntity.Attach<AnimatedSpriteComponent>();
             animatedSpriteComponent.AnimationFactory = motwAnimationFactory;
             animatedSpriteComponent.Play("walkSouth").IsLooping = true;
         }
@@ -90,7 +89,7 @@ namespace Demo.EntityComponentSystem
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            var transform = _entity.GetComponent<TransformComponent>();
+            var transform = _entity.Get<TransformComponent>();
             transform.Rotation += deltaTime;
 
             _ecs.Update(gameTime);

@@ -9,12 +9,12 @@ namespace Demo.Platformer.Entities.Systems
     [System(
         Layer = 0,
         GameLoopType = GameLoopType.Update,
-        AspectType = AspectType.RequiresAllOf,
+        AspectType = AspectType.AllOf,
         ComponentTypes = new[]
         {
             typeof(BasicCollisionBodyComponent), typeof(TransformComponent)
         })]
-    public class PhysicsSystem : MonoGame.Extended.Entities.System
+    public class PhysicsSystem : EntityProcessingSystem<TransformComponent, BasicCollisionBodyComponent>
     {
         private readonly Vector2 _gravity;
 
@@ -23,11 +23,8 @@ namespace Demo.Platformer.Entities.Systems
             _gravity = new Vector2(0, 0);
         }
 
-        protected override void Process(GameTime gameTime, Entity entity)
+        protected override void Process(GameTime gameTime, Entity entity, TransformComponent transform, BasicCollisionBodyComponent body)
         {
-            var body = entity.GetComponent<BasicCollisionBodyComponent>();
-            var transform = entity.GetComponent<TransformComponent>();
-
             if (!body.IsStatic)
             {
                 var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;

@@ -103,7 +103,7 @@ namespace MonoGame.Extended.Entities
         private static void ProcessSystemsSynchronous(GameTime gameTime, Bag<System> systems)
         {
             for (int index = 0, j = systems.Count; index < j; ++index)
-                systems[index].Process(gameTime);
+                systems[index].ProcessInternal(gameTime);
         }
 
         //// ReSharper disable once ParameterTypeCanBeEnumerable.Local
@@ -111,7 +111,7 @@ namespace MonoGame.Extended.Entities
         //{
         //    // block
         //    // does not garantee async...
-        //    Parallel.ForEach(systems, system => system.Process());
+        //    Parallel.ForEach(systems, system => system.ProcessInternal());
         //}
 
         internal T AddSystem<T>(T system, GameLoopType gameLoopType, int layer = 0, SystemExecutionType executionType = SystemExecutionType.Synchronous) where T : System
@@ -164,7 +164,7 @@ namespace MonoGame.Extended.Entities
                     layer.SynchronousSystems.Add(system);
                     break;
                 //case SystemExecutionType.Asynchronous:
-                //    layer.AsynchronousSystems.Add(system);
+                //    layer.AsynchronousSystems.Attach(system);
                 //    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(executionType), executionType, null);

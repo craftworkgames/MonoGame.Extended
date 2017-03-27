@@ -11,7 +11,7 @@ namespace Demo.Platformer.Entities.Systems
     [System(
         Layer = 0,
         GameLoopType = GameLoopType.Update,
-        AspectType = AspectType.RequiresAllOf,
+        AspectType = AspectType.AllOf,
         ComponentTypes = new[]
         {
             typeof(PlayerComponent),
@@ -19,7 +19,7 @@ namespace Demo.Platformer.Entities.Systems
             typeof(BasicCollisionBodyComponent),
             typeof(SpriteComponent)
         })]
-    public class PlayerMovementSystem : MonoGame.Extended.Entities.System
+    public class PlayerMovementSystem : EntityProcessingSystem<SpriteComponent, AnimationComponent>
     {
         private KeyboardState _previousKeyboardState;
         private KeyboardState _keyboardState;
@@ -32,14 +32,10 @@ namespace Demo.Platformer.Entities.Systems
             _keyboardState = Keyboard.GetState();
         }
 
-        protected override void Process(GameTime gameTime, Entity entity)
+        protected override void Process(GameTime gameTime, Entity entity, SpriteComponent sprite, AnimationComponent animation)
         {
-            base.Process(gameTime, entity);
-
-            var physics = entity.GetComponent<BasicCollisionBodyComponent>();
-            var player = entity.GetComponent<PlayerComponent>();
-            var animation = entity.GetComponent<AnimationComponent>();
-            var sprite = entity.GetComponent<SpriteComponent>();
+            var physics = entity.Get<BasicCollisionBodyComponent>();
+            var player = entity.Get<PlayerComponent>();
             var velocity = new Vector2(0, physics.Velocity.Y);
 
             if (_keyboardState.IsKeyDown(Keys.Left) || _keyboardState.IsKeyDown(Keys.A))

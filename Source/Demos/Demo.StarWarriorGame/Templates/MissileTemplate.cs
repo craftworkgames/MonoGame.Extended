@@ -1,9 +1,9 @@
 ﻿// Original code dervied from:
-// https://github.com/thelinuxlich/artemis_CSharp/blob/master/Artemis_XNA_INDEPENDENT/Attributes/ArtemisEntitySystem.cs
+// https://github.com/thelinuxlich/starwarrior_CSharp/blob/master/StarWarrior/StarWarrior/Templates/MissileTemplate.cs
 
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ArtemisEntitySystem.cs" company="GAMADU.COM">
-//     Copyright © 2013 GAMADU.COM. Contains rights reserved.
+// <copyright file="MissileTemplate.cs" company="GAMADU.COM">
+//     Copyright © 2013 GAMADU.COM. All rights reserved.
 //
 //     Redistribution and use in source and binary forms, with or without modification, are
 //     permitted provided that the following conditions are met:
@@ -30,36 +30,36 @@
 //     or implied, of GAMADU.COM.
 // </copyright>
 // <summary>
-//   Class ArtemisEntitySystem.
+//   The missile template.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Diagnostics.CodeAnalysis;
+using Demo.StarWarriorGame.Components;
+using MonoGame.Extended.Entities;
 
-namespace MonoGame.Extended.Entities
+namespace Demo.StarWarriorGame.Templates
 {
-    public enum AspectType
+    [EntityTemplate(Name)]
+    public class MissileTemplate : EntityTemplate
     {
-        RequiresAllOf,
-        RequiresNoneOf,
-        RequiresAtleastOneOf
-    }
+        public const string Name = "MissileTemplate";
 
-    // Can only be applied to System
-    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
-    public sealed class SystemAttribute : Attribute
-    {
-        public Type[] ComponentTypes { get; set; }
-        public GameLoopType GameLoopType { get; set; }
-        public int Layer { get; set; }
-        public AspectType AspectType { get; set; }
-        //public SystemExecutionType ExecutionType { get; set; }
-
-        public SystemAttribute()
+        [SuppressMessage("ReSharper", "UnusedVariable")]
+        protected override void Build(Entity entity)
         {
-            GameLoopType = GameLoopType.Update;
-            Layer = 0;
-            //ExecutionType = SystemExecutionType.Synchronous;
+            entity.Group = "BULLETS";
+
+            var transform = entity.Attach<TransformComponent>();
+
+            var spatial = entity.Attach<SpatialFormComponent>();
+            spatial.SpatialFormFile = "Missile";
+
+            var physics = entity.Attach<PhysicsComponent>();
+
+            var expires = entity.Attach<ExpiresComponent>();
+            expires.LifeTime = TimeSpan.FromMilliseconds(2000);
         }
     }
 }

@@ -9,20 +9,17 @@ namespace Demo.Platformer.Entities.Systems
     [System(
         Layer = 0,
         GameLoopType = GameLoopType.Update,
-        AspectType = AspectType.RequiresAllOf,
+        AspectType = AspectType.AllOf,
         ComponentTypes = new[]
         {
-            typeof(TransformComponent), typeof(EnemyAiComponent)
+            typeof(TransformComponent), typeof(EnemyAiComponent), typeof(SpriteComponent)
         })]
-    public class EnemyMovementSystem : MonoGame.Extended.Entities.System
+    public class EnemyMovementSystem : EntityProcessingSystem<EnemyAiComponent, TransformComponent, SpriteComponent>
     {
-        protected override void Process(GameTime gameTime, Entity entity)
+        protected override void Process(GameTime gameTime, Entity entity, EnemyAiComponent enemy, TransformComponent transform, SpriteComponent sprite)
         {
             var deltaTime = gameTime.GetElapsedSeconds();
 
-            var enemy = entity.GetComponent<EnemyAiComponent>();
-            var transform = entity.GetComponent<TransformComponent>();
-            var sprite = entity.GetComponent<SpriteComponent>();
             transform.Position += enemy.Direction * deltaTime;
             enemy.WalkTimeRemaining -= deltaTime;
 

@@ -3,7 +3,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.Platformer.Entities.Components
 {
     [Component]
-    [ComponentPool(Capacity = 100)]
+    [ComponentPool(InitialSize = 100)]
     public class CharacterComponent : Component
     {
         public int HealthPoints { get; set; }

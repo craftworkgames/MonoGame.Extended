@@ -6,7 +6,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.Platformer.Entities.Components
 {
     [Component]
-    [ComponentPool(Capacity = 100)]
+    [ComponentPool(InitialSize = 5, CanResize = true, ResizeSize = 20, IsThreadSafe = false)]
     public class TransformComponent : Component
     {
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created
@@ -192,6 +192,14 @@ namespace Demo.Platformer.Entities.Components
                 matrix = Matrix2D.CreateScale(_scale) * Matrix2D.CreateRotationZ(-_rotation) *
                          Matrix2D.CreateTranslation(_position);
             }
+        }
+
+        [Flags]
+        private enum TransformFlags : byte
+        {
+            WorldMatrixIsDirty = 1 << 0,
+            LocalMatrixIsDirty = 1 << 1,
+            All = WorldMatrixIsDirty | LocalMatrixIsDirty
         }
     }
 }

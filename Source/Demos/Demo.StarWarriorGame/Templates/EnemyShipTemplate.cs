@@ -1,9 +1,9 @@
 ﻿// Original code dervied from:
-// https://github.com/thelinuxlich/artemis_CSharp/blob/master/Artemis_XNA_INDEPENDENT/Attributes/ArtemisComponentPool.cs
+// https://github.com/thelinuxlich/starwarrior_CSharp/blob/master/StarWarrior/StarWarrior/Templates/EnemyShipTemplate.cs
 
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ArtemisEntityTemplate.cs" company="GAMADU.COM">
-//     Copyright © 2013 GAMADU.COM. Contains rights reserved.
+// <copyright file="EnemyShipTemplate.cs" company="GAMADU.COM">
+//     Copyright © 2013 GAMADU.COM. All rights reserved.
 //
 //     Redistribution and use in source and binary forms, with or without modification, are
 //     permitted provided that the following conditions are met:
@@ -30,18 +30,41 @@
 //     or implied, of GAMADU.COM.
 // </copyright>
 // <summary>
-//   Class ArtemisEntityTemplate.
+//   The enemy ship template.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Diagnostics.CodeAnalysis;
+using Demo.StarWarriorGame.Components;
+using MonoGame.Extended.Entities;
 
-namespace MonoGame.Extended.Entities
+namespace Demo.StarWarriorGame.Templates
 {
-    // can only be applied to IEntityTemplate
-    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
-    public sealed class EntityTemplateAttribute : Attribute
+    [EntityTemplate(Name)]
+    public class EnemyShipTemplate : EntityTemplate
     {
-        public string Name { get; }
+        public const string Name = "EnemyShipTemplate";
+
+        [SuppressMessage("ReSharper", "UnusedVariable")]
+        protected override void Build(Entity entity)
+        {
+            entity.Group = "SHIPS";
+
+            var transform = entity.Attach<TransformComponent>();
+
+            var spatial = entity.Attach<SpatialFormComponent>();
+            spatial.SpatialFormFile = "EnemyShip";
+
+            var health = entity.Attach<HealthComponent>();
+            health.Health = health.MaximumHealth = 10;
+
+            var weapon = entity.Attach<WeaponComponent>();
+            weapon.ShootDelay = TimeSpan.FromSeconds(2);
+
+            var enemy = entity.Attach<EnemyComponent>();
+
+            var physics = entity.Attach<PhysicsComponent>();
+        }
     }
 }

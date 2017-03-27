@@ -1,9 +1,9 @@
 ﻿// Original code dervied from:
-// https://github.com/thelinuxlich/artemis_CSharp/blob/master/Artemis_XNA_INDEPENDENT/ComponentType.cs
+// https://github.com/thelinuxlich/starwarrior_CSharp/blob/master/StarWarrior/StarWarrior/Components/ExpiresComponent.cs
 
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ArtemisComponentPool.cs" company="GAMADU.COM">
-//     Copyright © 2013 GAMADU.COM. Contains rights reserved.
+// <copyright file="ExpiresComponent.cs" company="GAMADU.COM">
+//     Copyright © 2013 GAMADU.COM. All rights reserved.
 //
 //     Redistribution and use in source and binary forms, with or without modification, are
 //     permitted provided that the following conditions are met:
@@ -30,18 +30,24 @@
 //     or implied, of GAMADU.COM.
 // </copyright>
 // <summary>
-//   Class ArtemisComponentPool.
+//   The expires.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using MonoGame.Extended.Entities;
 
-namespace MonoGame.Extended.Entities
+namespace Demo.StarWarriorGame.Components
 {
-    // Can onlybe applied to Component
-    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    public sealed class ComponentPoolAttribute : Attribute
+    [Component]
+    public class ExpiresComponent : Component
     {
-        public int Capacity { get; set; } = 10;
+        public bool IsExpired => LifeTime <= TimeSpan.Zero;
+        public TimeSpan LifeTime { get; set; }
+
+        public override void Reset()
+        {
+            LifeTime = TimeSpan.Zero;
+        }
     }
 }

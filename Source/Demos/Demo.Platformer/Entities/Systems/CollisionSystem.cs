@@ -11,12 +11,12 @@ namespace Demo.Platformer.Entities.Systems
     [System(
         Layer = 0,
         GameLoopType = GameLoopType.Update,
-        AspectType = AspectType.RequiresAllOf,
+        AspectType = AspectType.AllOf,
         ComponentTypes = new[]
         {
             typeof(BasicCollisionBodyComponent), typeof(TransformComponent)
         })]
-    public class CollisionSystem : MonoGame.Extended.Entities.System
+    public class CollisionSystem : EntityProcessingSystem<TransformComponent, BasicCollisionBodyComponent>
     {
         internal HashSet<CollisionPair> CollisionPairs = new HashSet<CollisionPair>();
 
@@ -25,25 +25,23 @@ namespace Demo.Platformer.Entities.Systems
             CollisionPairs.Clear();
         }
 
-        protected override void Process(GameTime gameTime, Entity entity)
+        protected override void Process(GameTime gameTime, Entity entity, TransformComponent transform, BasicCollisionBodyComponent body)
         {
-            var collisionComponent = entity.GetComponent<BasicCollisionBodyComponent>();
-
             foreach (var entityB in Manager.Entities)
             {
                 if (entity == entityB)
                     return;
-                var collisionComponentB = entityB.GetComponent<BasicCollisionBodyComponent>();
+                var collisionComponentB = entityB.Get<BasicCollisionBodyComponent>();
                 if (collisionComponentB == null)
                     return;
 
-                var rectangleA = collisionComponent.BoundingRectangle;
+                var rectangleA = body.BoundingRectangle;
                 var rectangleB = collisionComponentB.BoundingRectangle;
                 var depth = IntersectionDepth(rectangleA, rectangleB);
                 if (depth == Vector2.Zero)
                     return;
 
-               var collisionPair = new CollisionPair(collisionComponent, collisionComponentB, depth);
+               var collisionPair = new CollisionPair(body, collisionComponentB, depth);
 
                 if (CollisionPairs.Contains(collisionPair))
                     continue;
@@ -60,9 +58,9 @@ namespace Demo.Platformer.Entities.Systems
 
         private void ResolveCollision(BasicCollisionBodyComponent bodyA, BasicCollisionBodyComponent bodyB, Vector2 depth)
         {
-            var player = bodyA.Entity.GetComponent<PlayerComponent>();
+            var player = bodyA.Entity.Get<PlayerComponent>();
 
-            var transform = bodyA.Entity.GetComponent<TransformComponent>();
+            var transform = bodyA.Entity.Get<TransformComponent>();
             var absDepthX = Math.Abs(depth.X);
             var absDepthY = Math.Abs(depth.Y);
 

@@ -4,7 +4,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.Platformer.Entities.Components
 {
     [Component]
-    [ComponentPool(Capacity = 1)]
+    [ComponentPool(InitialSize = 1)]
     public class PlayerComponent : Component
     {
         public float WalkSpeed { get; set; }

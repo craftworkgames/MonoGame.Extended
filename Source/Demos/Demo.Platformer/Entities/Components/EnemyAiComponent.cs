@@ -4,7 +4,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.Platformer.Entities.Components
 {
     [Component]
-    [ComponentPool(Capacity = 100)]
+    [ComponentPool(InitialSize = 100)]
     public class EnemyAiComponent : Component
     {
         public Vector2 Direction { get; set; }

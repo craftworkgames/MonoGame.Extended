@@ -12,12 +12,12 @@ namespace Demo.Platformer.Entities.Systems
     [System(
         Layer = 0,
         GameLoopType = GameLoopType.Draw,
-        AspectType = AspectType.RequiresAllOf,
+        AspectType = AspectType.AllOf,
         ComponentTypes = new[]
         {
             typeof(SpriteComponent), typeof(TransformComponent)
         })]
-    public class SpriteSystem : MonoGame.Extended.Entities.System
+    public class SpriteSystem : EntityProcessingSystem
     {
         private Camera2D _camera;
         private SpriteBatch _spriteBatch;
@@ -55,10 +55,10 @@ namespace Demo.Platformer.Entities.Systems
 
         protected override void Process(GameTime gameTime, Entity entity)
         {
-            var sprite = entity.GetComponent<SpriteComponent>();
+            var sprite = entity.Get<SpriteComponent>();
             if (sprite.Texture == null)
                 return;
-            var transform = entity.GetComponent<TransformComponent>();
+            var transform = entity.Get<TransformComponent>();
 
             _spriteBatch.Draw(sprite.Texture, transform.WorldPosition, sprite.SourceRectangle, sprite.Color,
                 transform.WorldRotation, sprite.Origin, transform.WorldScale, sprite.Effects, sprite.Depth);
