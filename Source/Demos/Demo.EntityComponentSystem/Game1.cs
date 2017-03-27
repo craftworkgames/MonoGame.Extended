@@ -99,7 +99,7 @@ namespace Demo.StarWarriorGame
 #if DEBUG
             var entityCount = $"Active Entities Count: {_entityManager.ActiveEntitiesCount}";
             //var removedEntityCount = $"Removed Entities TotalCount: {_ecs.TotalEntitiesRemovedCount}";
-            var totalEntityCount = $"Total Entities TotalCount: {_entityManager.TotalEntitiesCount}";
+            var totalEntityCount = $"Allocated Entities Count: {_entityManager.TotalEntitiesCount}";
 
             _spriteBatch.DrawString(_font, entityCount, new Vector2(16, 62), Color.Yellow);
             _spriteBatch.DrawString(_font, totalEntityCount, new Vector2(16, 92), Color.Yellow);
