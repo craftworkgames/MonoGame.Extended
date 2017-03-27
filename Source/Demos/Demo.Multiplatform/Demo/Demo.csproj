@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Demos\BitmapFontsDemo.cs" />
+    <Compile Include="Demos\CameraDemo.cs" />
+    <Compile Include="Demos\DemoBase.cs" />
     <Compile Include="Screens\DemoScreen.cs" />
     <Compile Include="GameMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -50,6 +53,8 @@
     <None Include="Content\adventure-gui-atlas.json" />
     <None Include="Content\adventure-gui-skin.json" />
     <None Include="Content\Content.mgcb" />
+    <None Include="Content\Fonts\impact-32.fnt" />
+    <None Include="Content\Fonts\montserrat-32.fnt" />
     <None Include="Content\small-font.fnt" />
     <None Include="Content\title-screen.json" />
     <None Include="packages.config" />
@@ -66,7 +71,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\adventure-gui.png" />
+    <Content Include="Content\Fonts\impact-32_0.png" />
+    <Content Include="Content\Fonts\montserrat-32_0.png" />
     <Content Include="Content\small-font_0.png" />
+    <Content Include="Content\Textures\logo-square-512.png" />
+    <Content Include="Content\Textures\vignette.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

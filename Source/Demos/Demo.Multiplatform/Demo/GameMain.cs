@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Demo.Demos;
 using Demo.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -17,6 +19,8 @@ namespace Demo
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private GuiSystem _guiSystem;
+        private readonly List<DemoBase> _demos;
+        private int _demoIndex = 0;
 
         public GameMain(PlatformConfig config)
         {
@@ -29,11 +33,17 @@ namespace Demo
             Content.RootDirectory = "Content";
             IsMouseVisible = false;
             Window.AllowUserResizing = true;
+
+            _demos = new List<DemoBase>
+            {
+                new CameraDemo(this),
+                new BitmapFontsDemo(this)
+            };
         }
 
         protected override void LoadContent()
         {
-            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            var viewportAdapter = new DefaultViewportAdapter(GraphicsDevice);
             var camera = new Camera2D(viewportAdapter);
 
             var skin = LoadSkin(@"Raw/adventure-gui-skin.json");
@@ -41,8 +51,22 @@ namespace Demo
 
             _guiSystem = new GuiSystem(viewportAdapter, guiRenderer)
             {
-                Screen = new DemoScreen(skin)
+                Screen = new DemoScreen(skin, NextDemo)
             };
+
+            _demos[_demoIndex].Load();
+        }
+
+        private void NextDemo()
+        {
+            _demos[_demoIndex].Unload();
+
+            if (_demoIndex == _demos.Count - 1)
+                _demoIndex = 0;
+            else
+                _demoIndex++;
+
+            _demos[_demoIndex].Load();
         }
 
         private GuiSkin LoadSkin(string assetName)
@@ -61,7 +85,7 @@ namespace Demo
                 Exit();
 
             _guiSystem.Update(gameTime);
-
+            _demos[_demoIndex].OnUpdate(gameTime);
             base.Update(gameTime);
         }
 
@@ -69,8 +93,8 @@ namespace Demo
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            _demos[_demoIndex].OnDraw(gameTime);
             _guiSystem.Draw(gameTime);
-
             base.Draw(gameTime);
         }
     }
