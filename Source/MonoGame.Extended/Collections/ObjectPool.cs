@@ -15,6 +15,8 @@ namespace MonoGame.Extended.Collections
     public class ObjectPool<T> : IEnumerable<T>
         where T : class, IPoolable
     {
+        private ReturnToPoolDelegate _returnToPoolDelegate;
+
         private readonly Deque<T> _freeItems; // circular buffer for O(1) operations
         private T _headNode; // linked list for iteration
         private T _tailNode;
@@ -34,6 +36,8 @@ namespace MonoGame.Extended.Collections
         {
             if (instantiationFunc == null)
                 throw new ArgumentNullException(nameof(instantiationFunc));
+
+            _returnToPoolDelegate = Return;
 
             _instantiationFunction = instantiationFunc;
             _freeItems = new Deque<T>(capacity);
@@ -139,7 +143,7 @@ namespace MonoGame.Extended.Collections
 
         private void Use(T item)
         {
-            item.Initialize(Return);
+            item.Initialize(_returnToPoolDelegate);
             item.NextNode = null;
             item.PreviousNode = _tailNode;
             _tailNode.NextNode = item;
