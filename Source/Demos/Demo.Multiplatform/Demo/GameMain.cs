@@ -36,10 +36,25 @@ namespace Demo
 
             _demos = new List<DemoBase>
             {
+                new SceneGraphsDemo(this),
                 new ParticlesDemo(this),
                 new CameraDemo(this),
                 new BitmapFontsDemo(this)
             };
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            
+            // TODO: Allow switching to full-screen mode from the UI
+            //if (_isFullScreen)
+            //{
+            //    _graphicsDeviceManager.IsFullScreen = true;
+            //    _graphicsDeviceManager.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            //    _graphicsDeviceManager.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            //    _graphicsDeviceManager.ApplyChanges();
+            //}
         }
 
         protected override void LoadContent()

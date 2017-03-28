@@ -7,12 +7,10 @@ using MonoGame.Extended.SceneGraphs;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace Demo.SceneGraphs
+namespace Demo.Demos
 {
-    public class Game1 : Game
+    public class SceneGraphsDemo : DemoBase
     {
-        private readonly GraphicsDeviceManager _graphicsDeviceManager;
-        private readonly bool _isFullScreen;
         private BitmapFont _bitmapFont;
         private Camera2D _camera;
         private SceneNode _carNode;
@@ -24,36 +22,16 @@ namespace Demo.SceneGraphs
         private float _speed = 0.15f;
         private SpriteBatch _spriteBatch;
 
-        public Game1()
+        public SceneGraphsDemo(Game game)
+            : base(game)
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this);
-            _isFullScreen = false;
-
-            Content.RootDirectory = "Content";
-            Window.Title = "MonoGame.Extended Game";
-            Window.AllowUserResizing = true;
-            Window.Position = Point.Zero;
-            IsMouseVisible = true;
-        }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-
-            if (_isFullScreen)
-            {
-                _graphicsDeviceManager.IsFullScreen = true;
-                _graphicsDeviceManager.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-                _graphicsDeviceManager.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-                _graphicsDeviceManager.ApplyChanges();
-            }
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
+            _bitmapFont = Content.Load<BitmapFont>("Fonts/montserrat-32");
 
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter)
@@ -62,9 +40,9 @@ namespace Demo.SceneGraphs
             };
             _sceneGraph = new SceneGraph();
 
-            var carHullTexture = Content.Load<Texture2D>("car-hull");
+            var carHullTexture = Content.Load<Texture2D>("Textures/car-hull");
             var carHullSprite = new Sprite(carHullTexture);
-            var carWheelTexture = Content.Load<Texture2D>("car-wheel");
+            var carWheelTexture = Content.Load<Texture2D>("Textures/car-wheel");
             var carWheelSprite = new Sprite(carWheelTexture);
 
             _carNode = new SceneNode("car-hull", viewportAdapter.Center.ToVector2());
@@ -92,19 +70,13 @@ namespace Demo.SceneGraphs
             var mouseState = Mouse.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
-            {
                 Exit();
-            }
 
             if (keyboardState.IsKeyDown(Keys.W))
-            {
                 _speed += deltaTime * 0.5f;
-            }
 
             if (keyboardState.IsKeyDown(Keys.S))
-            {
                 _speed -= deltaTime * 0.5f;
-            }
 
             _leftWheelNode.Rotation += _speed;
             _rightWheelNode.Rotation = _leftWheelNode.Rotation;
@@ -152,9 +124,7 @@ namespace Demo.SceneGraphs
             _spriteBatch.Begin();
 
             if (_hoveredNode != null)
-            {
                 _spriteBatch.DrawString(_bitmapFont, _hoveredNode.Name, new Vector2(14, 2), Color.White);
-            }
 
             _spriteBatch.End();
 
