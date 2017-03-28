@@ -25,6 +25,7 @@ namespace Demo.Demos
         protected ContentManager Content { get; private set; }
         protected GameWindow Window => _game.Window;
         protected GraphicsDevice GraphicsDevice => _game.GraphicsDevice;
+        protected GameComponentCollection Components => _game.Components;
 
         protected virtual void Initialize() { }
         protected virtual void LoadContent() { }
@@ -55,6 +56,7 @@ namespace Demo.Demos
         {
             if (Content != null)
             {
+                Components.Clear();
                 UnloadContent();
                 Content.Unload();
                 Content.Dispose();

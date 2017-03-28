@@ -59,10 +59,6 @@ namespace Demo.Demos
             _sceneGraph.RootNode.Children.Add(_carNode);
         }
 
-        protected override void UnloadContent()
-        {
-        }
-
         protected override void Update(GameTime gameTime)
         {
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;

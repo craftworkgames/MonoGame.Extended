@@ -37,6 +37,7 @@
     <Compile Include="Demos\BitmapFontsDemo.cs" />
     <Compile Include="Demos\CameraDemo.cs" />
     <Compile Include="Demos\DemoBase.cs" />
+    <Compile Include="Demos\InputListenersDemo.cs" />
     <Compile Include="Demos\ParticlesDemo.cs" />
     <Compile Include="Demos\SceneGraphsDemo.cs" />
     <Compile Include="Screens\DemoScreen.cs" />
@@ -65,6 +66,10 @@
     <ProjectReference Include="..\..\..\MonoGame.Extended.Gui\MonoGame.Extended.Gui.csproj">
       <Project>{8e425575-378a-4f83-88c9-f8bebad227c9}</Project>
       <Name>MonoGame.Extended.Gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj">
+      <Project>{49c87598-994c-49b5-bbb3-7ffc342635d3}</Project>
+      <Name>MonoGame.Extended.Input</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\MonoGame.Extended.Particles\MonoGame.Extended.Particles.csproj">
       <Project>{6C8B9E29-D09B-4901-80FD-45AAA35882C6}</Project>
