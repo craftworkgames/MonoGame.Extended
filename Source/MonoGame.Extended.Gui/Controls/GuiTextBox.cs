@@ -38,7 +38,7 @@ namespace MonoGame.Extended.Gui.Controls
         private int FindNearestGlyphIndex(IGuiContext context, Point position)
         {
             var font = Font ?? context.DefaultFont;
-            var textInfo = GetTextInfo(context, Text);
+            var textInfo = GetTextInfo(context, Text, BoundingRectangle, HorizontalAlignment.Centre, VerticalAlignment.Centre);
             var glyphs = font.GetGlyphs(textInfo.Text, textInfo.Position);
 
             for (var i = 0; i < glyphs.Length; i++)
@@ -99,7 +99,7 @@ namespace MonoGame.Extended.Gui.Controls
         protected override void DrawText(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         {
             if (PasswordCharacter.HasValue)
-                textInfo = GetTextInfo(context, new string(PasswordCharacter.Value, textInfo.Text.Length));
+                textInfo = GetTextInfo(context, new string(PasswordCharacter.Value, textInfo.Text.Length), BoundingRectangle, HorizontalAlignment.Centre, VerticalAlignment.Centre);
 
             var caretRectangle = textInfo.Font.GetStringRectangle(textInfo.Text.Substring(0, SelectionStart), textInfo.Position);
 

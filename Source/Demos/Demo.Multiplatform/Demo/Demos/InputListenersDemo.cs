@@ -11,7 +11,7 @@ namespace Demo.Demos
 {
     public class InputListenersDemo : DemoBase
     {
-        private readonly Game _game;
+        private readonly Game _this;
         private readonly List<string> _logLines = new List<string>();
         private SpriteBatch _spriteBatch;
         private Texture2D _backgroundTexture;
@@ -24,7 +24,7 @@ namespace Demo.Demos
 
         public InputListenersDemo(Game game) : base(game)
         {
-            _game = game;
+            _this = game;
         }
 
         protected override void Initialize()
@@ -32,7 +32,7 @@ namespace Demo.Demos
             var mouseListener = new MouseListener(new MouseListenerSettings());
             var keyboardListener = new KeyboardListener(new KeyboardListenerSettings());
 
-            Components.Add(new InputListenerComponent(_game, mouseListener, keyboardListener));
+            Components.Add(new InputListenerComponent(_this, mouseListener, keyboardListener));
 
             keyboardListener.KeyPressed += (sender, args) =>
             {

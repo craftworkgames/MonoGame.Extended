@@ -86,6 +86,14 @@
       "BackgroundRegion": "progress-bar-container",
       "BarRegion": "progress-bar-blue",
       "Size": "100 32"
+    },
+    {
+      "Name": "list-box",
+      "Type": "GuiListBox",
+      "Size": "200 200",
+      "Padding": "10 5", 
+      "BackgroundRegion": "grey_textBox",
+      "TextColor": "#444444"
     }
   ]
 }

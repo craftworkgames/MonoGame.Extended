@@ -68,7 +68,13 @@
           "Type": "GuiProgressBar",
           "Style": "progress-bar",
           "Position": "100 300",
-          "Progress": 0.5 
+          "Progress": 0.5
+        },
+        {
+          "Name": "ListBox",
+          "Type": "GuiListBox",
+          "Style": "list-box",
+          "Position": "50 50"
         }
       ]
     }
