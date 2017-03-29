@@ -28,10 +28,7 @@ namespace MonoGame.Extended.Gui.Serialization
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var style = (GuiControlStyle)value;
-            var dictionary = new Dictionary<string, object>
-            {
-                [_typeProperty] = style.TargetType.Name
-            };
+            var dictionary = new Dictionary<string, object> { [_typeProperty] = style.TargetType.Name };
 
             foreach (var keyValuePair in style)
                 dictionary.Add(keyValuePair.Key, keyValuePair.Value);
@@ -66,7 +63,7 @@ namespace MonoGame.Extended.Gui.Serialization
             return style;
         }
 
-        private object DeserializeValueAs(JsonSerializer serializer, object value, Type type)
+        private static object DeserializeValueAs(JsonSerializer serializer, object value, Type type)
         {
             var json = JsonConvert.SerializeObject(value);
 

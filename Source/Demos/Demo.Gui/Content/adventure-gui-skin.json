@@ -90,8 +90,8 @@
     {
       "Name": "list-box",
       "Type": "GuiListBox",
-      "Size": "200 200",
-      "Padding": "10 5", 
+      "Size": "200 150",
+      "Padding": "7 5", 
       "BackgroundRegion": "grey_textBox",
       "TextColor": "#444444"
     }

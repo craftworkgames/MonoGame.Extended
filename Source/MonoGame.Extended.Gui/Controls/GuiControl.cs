@@ -137,7 +137,7 @@ namespace MonoGame.Extended.Gui.Controls
         public void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             DrawBackground(context, renderer, deltaSeconds);
-            DrawText(context, renderer, deltaSeconds, GetTextInfo(context, Text, BoundingRectangle, HorizontalAlignment.Centre, VerticalAlignment.Centre));
+            DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, Text, BoundingRectangle, HorizontalAlignment.Centre, VerticalAlignment.Centre));
         }
 
         protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment)
@@ -155,7 +155,7 @@ namespace MonoGame.Extended.Gui.Controls
             renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
         }
 
-        protected virtual void DrawText(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        protected virtual void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         {
             if (!string.IsNullOrWhiteSpace(textInfo.Text))
                 renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, textInfo.ClippingRectangle);

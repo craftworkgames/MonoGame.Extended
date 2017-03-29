@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui
@@ -14,6 +13,7 @@ namespace MonoGame.Extended.Gui
         void DrawRegion(TextureRegion2D textureRegion, Vector2 position, Color color, Rectangle? clippingRectangle = null);
         void DrawText(BitmapFont font, string text, Vector2 position, Color color, Rectangle? clippingRectangle = null);
         void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f);
+        void FillRectangle(Rectangle rectangle, Color color);
         void End();
     }
 
@@ -65,6 +65,11 @@ namespace MonoGame.Extended.Gui
         public void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f)
         {
             _spriteBatch.DrawRectangle(rectangle, color, thickness);
+        }
+
+        public void FillRectangle(Rectangle rectangle, Color color)
+        {
+            _spriteBatch.FillRectangle(rectangle, color);
         }
     }
 }

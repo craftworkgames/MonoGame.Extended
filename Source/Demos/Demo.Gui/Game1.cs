@@ -6,6 +6,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Serialization;
+using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
 
@@ -46,6 +47,9 @@ namespace Demo.Gui
             quitButton.Clicked += (sender, args) => Exit();
 
             _progressBar = titleScreen.FindControl<GuiProgressBar>("ProgressBar");
+
+            var listBox = titleScreen.FindControl<GuiListBox>("ListBox");
+            listBox.Items.Add(new Vector2(123.0f, 456.78f));
 
         }
 

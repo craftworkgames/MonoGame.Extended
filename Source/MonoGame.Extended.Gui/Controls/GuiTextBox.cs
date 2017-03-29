@@ -96,7 +96,7 @@ namespace MonoGame.Extended.Gui.Controls
         private float _nextCaretBlink = _caretBlinkRate;
         private bool _isCaretVisible = true;
 
-        protected override void DrawText(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         {
             if (PasswordCharacter.HasValue)
                 textInfo = GetTextInfo(context, new string(PasswordCharacter.Value, textInfo.Text.Length), BoundingRectangle, HorizontalAlignment.Centre, VerticalAlignment.Centre);
@@ -116,7 +116,7 @@ namespace MonoGame.Extended.Gui.Controls
                 caretRectangle.X = ClippingRectangle.Left;
             }
 
-            base.DrawText(context, renderer, deltaSeconds, textInfo);
+            base.DrawForeground(context, renderer, deltaSeconds, textInfo);
 
             if (IsFocused)
             {

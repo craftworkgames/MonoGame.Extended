@@ -7,6 +7,7 @@ namespace MonoGame.Extended.Gui.Controls
     public class GuiListBox : GuiControl
     {
         public GuiListBox()
+            : this(null)
         {
         }
 
@@ -15,33 +16,58 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public List<string> Items { get; set; } = new List<string> {"Item 1", "Item 2", "Item 3"};
+        public int SelectedIndex { get; set; } = -1;
+        public List<object> Items { get; } = new List<object>();
+        public Color SelectedTextColor { get; set; } = Color.White;
+        public Thickness ItemPadding { get; set; } = new Thickness(4, 2);
 
-        //protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
-        //{
-        //    base.DrawBackground(context, renderer, deltaSeconds);
-
-        //    var targetRectangle = ClippingRectangle;
-
-        //    foreach (var item in Items)
-        //    {
-        //        var itemTextInfo = GetTextInfo(context, item, targetRectangle, HorizontalAlignment.Left, VerticalAlignment.Top);
-        //        var rectangle = new Rectangle(itemTextInfo.Position.ToPoint(), itemTextInfo.Size.ToPoint());
-        //        renderer.DrawRectangle(rectangle, Color.LightBlue);
-        //        targetRectangle.Y += (int)itemTextInfo.Size.Y;
-        //    }
-        //}
-
-        protected override void DrawText(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        public object SelectedItem
         {
-            var targetRectangle = ClippingRectangle;
+            get { return SelectedIndex >= 0 && SelectedIndex <= Items.Count - 1 ? Items[SelectedIndex] : null; }
+            set { SelectedIndex = Items.IndexOf(value); }
+        }
 
-            foreach (var item in Items)
+        public override void OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
+        {
+            base.OnPointerDown(context, args);
+
+            for (var i = 0; i < Items.Count; i++)
             {
-                var itemTextInfo = GetTextInfo(context, item, targetRectangle, HorizontalAlignment.Left, VerticalAlignment.Top);
-                renderer.DrawText(itemTextInfo.Font, itemTextInfo.Text, itemTextInfo.Position + TextOffset, itemTextInfo.Color, itemTextInfo.ClippingRectangle);
-                targetRectangle.Y += (int)itemTextInfo.Size.Y;
+                var itemRectangle = GetItemRectangle(context, i);
+
+                if (itemRectangle.Contains(args.Position))
+                {
+                    SelectedIndex = i;
+                    break;
+                }
             }
+        }
+
+        protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        {
+            for (var i = 0; i < Items.Count; i++)
+            {
+                var itemRectangle = GetItemRectangle(context, i);
+
+                if (SelectedIndex == i)
+                    renderer.FillRectangle(itemRectangle, Color.CornflowerBlue);
+
+                var item = Items[i];
+                var textRectangle = new Rectangle(itemRectangle.X + ItemPadding.Left, itemRectangle.Y + ItemPadding.Top,
+                    itemRectangle.Width - ItemPadding.Right, itemRectangle.Height - ItemPadding.Bottom);
+                var itemTextInfo = GetTextInfo(context, item?.ToString() ?? string.Empty, textRectangle, HorizontalAlignment.Left, VerticalAlignment.Top);
+                var textColor = i == SelectedIndex ? SelectedTextColor : itemTextInfo.Color;
+
+                renderer.DrawText(itemTextInfo.Font, itemTextInfo.Text, itemTextInfo.Position + TextOffset, textColor, itemTextInfo.ClippingRectangle);
+            }
+        }
+
+        private Rectangle GetItemRectangle(IGuiContext context, int index)
+        {
+            var font = Font ?? context.DefaultFont;
+            var contentRectangle = ClippingRectangle;
+            var itemHeight = font.LineHeight + ItemPadding.Top + ItemPadding.Bottom;
+            return new Rectangle(contentRectangle.X, contentRectangle.Y + itemHeight * index, contentRectangle.Width, itemHeight);
         }
     }
 }

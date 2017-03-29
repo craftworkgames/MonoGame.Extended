@@ -61,8 +61,21 @@ namespace MonoGame.Extended.Gui
                 var propertyInfo = targetType.GetRuntimeProperty(propertyName);
                 var value = setters[propertyName];
 
-                if(propertyInfo != null && propertyInfo.CanWrite)
-                    propertyInfo.SetValue(control, value);
+                if (propertyInfo != null)
+                {
+                    if(propertyInfo.CanWrite)
+                        propertyInfo.SetValue(control, value);
+
+                    // special case when we have a list of items as objects (like on a list box)
+                    if (propertyInfo.PropertyType == typeof(List<object>))
+                    {
+                        var items = (List<object>)value;
+                        var addMethod = propertyInfo.PropertyType.GetRuntimeMethod("Add", new[] { typeof(object) });
+
+                        foreach (var item in items)
+                            addMethod.Invoke(propertyInfo.GetValue(control), new[] {item});
+                    }
+                }
             }
         }
 
