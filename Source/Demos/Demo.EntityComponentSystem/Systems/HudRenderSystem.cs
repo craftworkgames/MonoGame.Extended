@@ -35,6 +35,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using System;
+using System.Text;
 using Demo.StarWarriorGame.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -49,6 +51,7 @@ namespace Demo.StarWarriorGame.Systems
     {
         private BitmapFont _font;
         private SpriteBatch _spriteBatch;
+        private readonly StringBuilder _stringBuilder = new StringBuilder();
 
         public override void LoadContent()
         {
@@ -60,7 +63,15 @@ namespace Demo.StarWarriorGame.Systems
         {
             var viewport = GraphicsDevice.Viewport;
             var renderPosition = new Vector2(20, viewport.Height - 40);
-            _spriteBatch.DrawString(_font, "Health: " + health.HealthPercentage + "%", renderPosition, Color.White);
+
+            _stringBuilder.Clear();
+            _stringBuilder.Append("Health: ");
+            _stringBuilder.Append((float)Math.Round(health.HealthPercentage * 100, 1));
+            _stringBuilder.Append("%");
+
+            //TODO: Use StringBuilder directly for drawing to avoid generating garbage.
+            var text = _stringBuilder.ToString();
+            _spriteBatch.DrawString(_font, text, renderPosition, Color.White);
         }
     }
 }

@@ -34,7 +34,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarriorGame.Components
@@ -42,22 +41,67 @@ namespace Demo.StarWarriorGame.Components
     [Component]
     public class HealthComponent : Component
     {
-        public float Health { get; set; }
-        public double HealthPercentage => Math.Round(Health / MaximumHealth * 100f);
+        private int _health;
+        private int _maximumHealth;
+        private float _healthPercentage;
+        private bool _needsToRefresh;
+
+        public int Health
+        {
+            get { return _health; }
+            set
+            {
+                _health = value;
+                _needsToRefresh = true;
+            }
+        }
+
+        public int MaximumHealth
+        {
+            get { return _maximumHealth; }
+            set
+            {
+                _maximumHealth = value;
+                _needsToRefresh = true;
+            }
+        }
+
+        public float HealthPercentage
+        {
+            get
+            {
+                RefreshDerivedValues();
+                return _healthPercentage;
+            }
+        }
+
+        private void RefreshDerivedValues()
+        {
+            if (!_needsToRefresh)
+                return;
+            _needsToRefresh = false;
+            _healthPercentage = (float)_health / MaximumHealth;
+        }
+
         public bool IsAlive => Health > 0;
-        public float MaximumHealth { get; set; }
 
         public override void Reset()
         {
-            Health = 0;
-            MaximumHealth = 0;
+            _health = 0;
+            _maximumHealth = 0;
+            _healthPercentage = 0;
+            _needsToRefresh = true;
         }
 
         public void AddDamage(int damage)
         {
-            Health -= damage;
-            if (Health < 0)
-                Health = 0;
+            if (damage <= 0)
+                return;
+
+            _health -= damage;
+            if (_health < 0)
+                _health = 0;
+            _needsToRefresh = true;
         }
     }
 }
