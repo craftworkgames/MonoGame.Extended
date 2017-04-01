@@ -3,22 +3,12 @@ using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    [System(
-        Layer = 0,
-        GameLoopType = GameLoopType.Update,
-        AspectType = AspectType.AllOf,
-        ComponentTypes = new[]
-        {
-            typeof(PlayerComponent),
-            typeof(AnimationComponent),
-            typeof(BasicCollisionBodyComponent),
-            typeof(SpriteComponent)
-        })]
+    [Aspect(AspectType.All, typeof(PlayerComponent), typeof(AnimationComponent), typeof(BasicCollisionBodyComponent), typeof(SpriteComponent))]
+    [System(GameLoopType.Update, Layer = 0)]
     public class PlayerMovementSystem : EntityProcessingSystem<SpriteComponent, AnimationComponent>
     {
         private KeyboardState _previousKeyboardState;

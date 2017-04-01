@@ -43,11 +43,8 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarriorGame.Systems
 {
-    [System(
-        AspectType = AspectType.AllOf,
-        ComponentTypes = new[] { typeof(PlayerComponent), typeof(HealthComponent) },
-        GameLoopType = GameLoopType.Draw,
-        Layer = 0)]
+    [Aspect(AspectType.All, typeof(PlayerComponent), typeof(HealthComponent))]
+    [System(GameLoopType.Draw, Layer = 0)]
     public class HudRenderSystem : EntityProcessingSystem<PlayerComponent, HealthComponent>
     {
         private BitmapFont _font;

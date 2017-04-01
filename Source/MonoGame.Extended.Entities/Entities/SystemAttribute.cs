@@ -38,27 +38,17 @@ using System;
 
 namespace MonoGame.Extended.Entities
 {
-    public enum AspectType
-    {
-        Empty,
-        AllOf,
-        NoneOf,
-        AtleastOneOf
-    }
-
     // Can only be applied to System
-    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public sealed class SystemAttribute : Attribute
     {
-        public Type[] ComponentTypes { get; set; }
-        public GameLoopType GameLoopType { get; set; }
+        public GameLoopType GameLoopType { get; }
         public int Layer { get; set; }
-        public AspectType AspectType { get; set; }
         //public SystemExecutionType ExecutionType { get; set; }
 
-        public SystemAttribute()
+        public SystemAttribute(GameLoopType gameLoopType)
         {
-            GameLoopType = GameLoopType.Update;
+            GameLoopType = gameLoopType;
             Layer = 0;
             //ExecutionType = SystemExecutionType.Synchronous;
         }

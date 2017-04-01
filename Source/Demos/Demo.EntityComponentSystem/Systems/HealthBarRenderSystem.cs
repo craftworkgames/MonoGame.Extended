@@ -42,11 +42,8 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarriorGame.Systems
 {
-    [System(
-        AspectType = AspectType.AllOf,
-        ComponentTypes = new[] { typeof(HealthComponent), typeof(TransformComponent) },
-        GameLoopType = GameLoopType.Draw,
-        Layer = 0)]
+    [Aspect(AspectType.All, typeof(HealthComponent), typeof(TransformComponent))]
+    [System(GameLoopType.Draw, Layer = 0)]
     public class HealthBarRenderSystem : EntityProcessingSystem<HealthComponent, TransformComponent>
     {
         private BitmapFont _font;

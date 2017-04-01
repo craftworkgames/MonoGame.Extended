@@ -36,7 +36,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Numerics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -85,7 +84,7 @@ namespace MonoGame.Extended.Entities
 
         public virtual void OnEntityChanged(Entity entity)
         {
-            var isInterested = Aspect.IsInterestedIn(entity);
+            var isInterested = Aspect.Matches(entity.ComponentBits);
             if (!isInterested)
                 return;
 
@@ -157,9 +156,9 @@ namespace MonoGame.Extended.Entities
         {
         }
 
-        protected virtual bool IsInterestedIn(Entity entity)
+        protected bool IsInterestedIn(Entity entity)
         {
-            return Aspect.IsInterestedIn(entity);
+            return Aspect.Matches(entity.ComponentBits);
         }
 
         protected void Add(Entity entity)

@@ -6,14 +6,8 @@ using TransformComponent = Demo.Platformer.Entities.Components.TransformComponen
 
 namespace Demo.Platformer.Entities.Systems
 {
-    [System(
-        Layer = 0,
-        GameLoopType = GameLoopType.Update,
-        AspectType = AspectType.AllOf,
-        ComponentTypes = new[]
-        {
-            typeof(BasicCollisionBodyComponent), typeof(TransformComponent)
-        })]
+    [Aspect(AspectType.All, typeof(BasicCollisionBodyComponent), typeof(TransformComponent))]
+    [System(GameLoopType.Update, Layer = 0)]
     public class PhysicsSystem : EntityProcessingSystem<TransformComponent, BasicCollisionBodyComponent>
     {
         private readonly Vector2 _gravity;

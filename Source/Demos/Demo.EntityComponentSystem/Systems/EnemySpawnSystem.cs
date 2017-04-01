@@ -42,11 +42,7 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarriorGame.Systems
 {
-    [System(
-        AspectType = AspectType.Empty,
-        ComponentTypes = new Type[] { },
-        GameLoopType = GameLoopType.Update,
-        Layer = 1)]
+    [System(GameLoopType.Update, Layer = 1)]
     public class EnemySpawnSystem : ProcessingSystem
     {
         private readonly Random _random = new Random();

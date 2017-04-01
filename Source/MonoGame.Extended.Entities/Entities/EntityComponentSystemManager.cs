@@ -105,32 +105,39 @@ namespace MonoGame.Extended.Entities
             if (systemAttribute == null)
                 return;
 
-            var system = (System)Activator.CreateInstance(type);
+            var aspect = new Aspect();
+            var aspectAttributeType = typeof(AspectAttribute);
 
-            Aspect aspect;
-
-            switch (systemAttribute.AspectType)
+            foreach (var attribute in attributes)
             {
-                case AspectType.Empty:
-                    aspect = Aspect.Empty();
-                    break;
-                case AspectType.AllOf:
-                    aspect = Aspect.AllOf(systemAttribute.ComponentTypes);
-                    break;
-                case AspectType.NoneOf:
-                    aspect = Aspect.NoneOf(systemAttribute.ComponentTypes);
-                    break;
-                case AspectType.AtleastOneOf:
-                    aspect = Aspect.OneOf(systemAttribute.ComponentTypes);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                var attributeType = attribute.GetType();
+
+                if (attributeType != aspectAttributeType)
+                    continue;
+                
+                var aspectAttribute = (AspectAttribute)attribute;
+                switch (aspectAttribute.Type)
+                {
+                    case AspectType.All:
+                        aspect.AndMask = Aspect.CreateMaskFrom(aspectAttribute.Components);
+                        break;
+                    case AspectType.Any:
+                        aspect.OrMask = Aspect.CreateMaskFrom(aspectAttribute.Components);
+                        break;
+                    case AspectType.None:
+                        aspect.NorMask = Aspect.CreateMaskFrom(aspectAttribute.Components);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
             }
 
+            var system = (System)Activator.CreateInstance(type);
             system.Aspect = aspect;
 
             _systemManager.AddSystem(system, systemAttribute.GameLoopType,
-                systemAttribute.Layer, SystemExecutionType.Synchronous); //, systemAttribute.ExecutionType);
+                systemAttribute.Layer, SystemExecutionType.Synchronous);
         }
 
         // ReSharper disable once ParameterTypeCanBeEnumerable.Local

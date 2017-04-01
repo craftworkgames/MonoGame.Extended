@@ -3,7 +3,7 @@
 
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Aspect.cs" company="GAMADU.COM">
-//     Copyright © 2013 GAMADU.COM. AllOf rights reserved.
+//     Copyright © 2013 GAMADU.COM. All rights reserved.
 //
 //     Redistribution and use in source and binary forms, with or without modification, are
 //     permitted provided that the following conditions are met:
@@ -39,7 +39,7 @@ using System.Numerics;
 
 namespace MonoGame.Extended.Entities
 {
-    internal class Aspect
+    internal class ComponentTypeMatcher
     {
         // match entities with components using boolean logic: 
         // (A and B and C and ..) AND (D or E or F or ...) AND NOT(G or H or I or ..)
@@ -74,33 +74,54 @@ namespace MonoGame.Extended.Entities
         // orMask:      111000000
         // norMask:     000100000
 
-        internal BigInteger AndMask;
-        internal BigInteger OrMask;
-        internal BigInteger NorMask;
 
-        internal static BigInteger CreateMaskFrom(Type[] types)
+        private readonly BigInteger _andMask;
+        private readonly BigInteger _orMask;
+        private readonly BigInteger _norMask;
+
+        // ReSharper disable ParameterTypeCanBeEnumerable.Local
+        internal ComponentTypeMatcher(Type[] andTypes, Type[] orTypes, Type[] norTypes)
+            // ReSharper restore ParameterTypeCanBeEnumerable.Local
         {
-            if (types == null)
-                return new BigInteger(0);
+            _andMask = 0;
+            _orMask = 0;
+            _norMask = 0;
 
-            BigInteger mask;
-
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var type in types)
+            if (andTypes != null)
             {
-                var componentType = ComponentTypeManager.GetTypeFor(type);
-                mask |= componentType.Bit;
+                foreach (var type in andTypes)
+                {
+                    var componentType = ComponentTypeManager.GetTypeFor(type);
+                    _andMask |= componentType.Bit;
+                }
             }
 
-            return mask;
+            if (norTypes != null)
+            {
+                foreach (var type in norTypes)
+                {
+                    var componentType = ComponentTypeManager.GetTypeFor(type);
+                    _norMask |= componentType.Bit;
+                }
+            }
+
+            // ReSharper disable once InvertIf
+            if (orTypes != null)
+            {
+                foreach (var type in orTypes)
+                {
+                    var componentType = ComponentTypeManager.GetTypeFor(type);
+                    _orMask |= componentType.Bit;
+                }
+            }
         }
 
         internal bool Matches(BigInteger componentBits)
         {
             return
-                ((AndMask & componentBits) == AndMask || AndMask == 0) &&
-                ((NorMask & componentBits) == 0 || NorMask == 0) &&
-                ((OrMask & componentBits) != 0 || OrMask == 0);
+                ((_andMask & componentBits) == _andMask || _andMask == 0) &&
+                ((_norMask & componentBits) == 0 || _norMask == 0) &&
+                ((_orMask & componentBits) != 0 || _orMask == 0);
         }
     }
 }

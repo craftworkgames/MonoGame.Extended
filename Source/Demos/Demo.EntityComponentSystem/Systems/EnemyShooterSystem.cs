@@ -42,11 +42,8 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarriorGame.Systems
 {
-    [System(
-        AspectType = AspectType.AllOf,
-        ComponentTypes = new[] { typeof(WeaponComponent), typeof(TransformComponent), typeof(EnemyComponent) },
-        GameLoopType = GameLoopType.Update,
-        Layer = 1)]
+    [Aspect(AspectType.All, typeof(WeaponComponent), typeof(TransformComponent), typeof(EnemyComponent))]
+    [System(GameLoopType.Update, Layer = 1)]
     public class EnemyShooterSystem : EntityProcessingSystem<TransformComponent, WeaponComponent>
     {
         protected override void Process(GameTime gameTime, Entity entity, TransformComponent transform, WeaponComponent weapon)

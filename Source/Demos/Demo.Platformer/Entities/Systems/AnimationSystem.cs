@@ -5,14 +5,8 @@ using SpriteComponent = Demo.Platformer.Entities.Components.SpriteComponent;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    [System(
-        Layer = 0,
-        GameLoopType = GameLoopType.Update,
-        AspectType = AspectType.AllOf,
-        ComponentTypes = new[]
-        {
-            typeof(SpriteComponent), typeof(AnimationComponent)
-        })]
+    [Aspect(AspectType.All, typeof(SpriteComponent), typeof(AnimationComponent))]
+    [System(GameLoopType.Draw, Layer = 0)]
     public class AnimationSystem : EntityProcessingSystem<SpriteComponent, AnimationComponent>
     {
         protected override void Process(GameTime gameTime, Entity entity, SpriteComponent sprite, AnimationComponent animation)

@@ -6,14 +6,8 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    [System(
-        Layer = 0,
-        GameLoopType = GameLoopType.Update,
-        AspectType = AspectType.AllOf,
-        ComponentTypes = new[]
-        {
-            typeof(TransformComponent), typeof(EnemyAiComponent), typeof(SpriteComponent)
-        })]
+    [Aspect(AspectType.All, typeof(TransformComponent), typeof(EnemyAiComponent), typeof(SpriteComponent))]
+    [System(GameLoopType.Update, Layer = 0)]
     public class EnemyMovementSystem : EntityProcessingSystem<EnemyAiComponent, TransformComponent, SpriteComponent>
     {
         protected override void Process(GameTime gameTime, Entity entity, EnemyAiComponent enemy, TransformComponent transform, SpriteComponent sprite)

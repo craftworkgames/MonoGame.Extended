@@ -54,7 +54,7 @@ namespace MonoGame.Extended.Entities
 
         internal EntityManager Manager;
         internal BigInteger SystemBits;
-        internal BigInteger TypeBits;
+        internal BigInteger ComponentBits;
         private ReturnToPoolDelegate _returnToPoolDelegate;
         internal BitVector32 Flags;
         internal string _group;
@@ -127,7 +127,7 @@ namespace MonoGame.Extended.Entities
         {
             _group = null;
             SystemBits = 0;
-            TypeBits = 0;
+            ComponentBits = 0;
             Flags = 0;
         }
 
@@ -143,9 +143,9 @@ namespace MonoGame.Extended.Entities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void AddTypeBit(BigInteger bit)
+        internal void AddComponentBit(BigInteger bit)
         {
-            TypeBits |= bit;
+            ComponentBits |= bit;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -155,9 +155,9 @@ namespace MonoGame.Extended.Entities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void RemoveTypeBit(BigInteger bit)
+        internal void RemoveComponentBit(BigInteger bit)
         {
-            TypeBits &= ~bit;
+            ComponentBits &= ~bit;
         }
 
         void IPoolable.Initialize(ReturnToPoolDelegate returnDelegate)

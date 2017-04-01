@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-using Demo.Platformer.Entities.Components;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
@@ -9,14 +7,8 @@ using TransformComponent = Demo.Platformer.Entities.Components.TransformComponen
 
 namespace Demo.Platformer.Entities.Systems
 {
-    [System(
-        Layer = 0,
-        GameLoopType = GameLoopType.Draw,
-        AspectType = AspectType.AllOf,
-        ComponentTypes = new[]
-        {
-            typeof(SpriteComponent), typeof(TransformComponent)
-        })]
+    [Aspect(AspectType.All, typeof(SpriteComponent), typeof(TransformComponent))]
+    [System(GameLoopType.Draw, Layer = 0)]
     public class SpriteSystem : EntityProcessingSystem
     {
         private Camera2D _camera;

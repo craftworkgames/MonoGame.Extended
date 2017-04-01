@@ -49,6 +49,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\AspectAttribute.cs" />
     <Compile Include="Entities\Aspect.cs" />
     <Compile Include="Entities\ComponentAttribute.cs" />
     <Compile Include="Entities\ComponentPool.cs" />

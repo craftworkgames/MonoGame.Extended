@@ -41,11 +41,7 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarriorGame.Systems
 {
-    [System(
-        AspectType = AspectType.AllOf, 
-        ComponentTypes = new[] {typeof(TransformComponent) }, 
-        GameLoopType = GameLoopType.Update, 
-        Layer = 1)]
+    [System(GameLoopType.Update, Layer = 1)]
     public class CollisionSystem : ProcessingSystem
     {
         protected override void Process(GameTime gameTime)

@@ -3,7 +3,7 @@
 
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EntityManager.cs" company="GAMADU.COM">
-//     Copyright � 2013 GAMADU.COM. AllOf rights reserved.
+//     Copyright � 2013 GAMADU.COM. All rights reserved.
 //
 //     Redistribution and use in source and binary forms, with or without modification, are
 //     permitted provided that the following conditions are met:
@@ -278,7 +278,7 @@ namespace MonoGame.Extended.Entities
             component.Entity = entity;
             components[entity] = component;
 
-            entity.AddTypeBit(componentType.Bit);
+            entity.AddComponentBit(componentType.Bit);
 
             MarkEntityToBeRefreshed(entity);
 
@@ -340,7 +340,7 @@ namespace MonoGame.Extended.Entities
                 if (!components.TryGetValue(entity, out component))
                     continue;
 
-                entity.RemoveTypeBit(componentType.Bit);
+                entity.RemoveComponentBit(componentType.Bit);
                 MarkEntityToBeRefreshed(entity);
 
                 components.Remove(entity);
@@ -354,7 +354,7 @@ namespace MonoGame.Extended.Entities
         {
             Debug.Assert(entity != null);
 
-            entity.TypeBits = 0;
+            entity.ComponentBits = 0;
             MarkEntityToBeRefreshed(entity);
 
             for (var i = _componentTypeEntitiesToComponents.Count - 1; i >= 0; --i)

@@ -8,14 +8,8 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    [System(
-        Layer = 0,
-        GameLoopType = GameLoopType.Update,
-        AspectType = AspectType.AllOf,
-        ComponentTypes = new[]
-        {
-            typeof(BasicCollisionBodyComponent), typeof(TransformComponent)
-        })]
+    [Aspect(AspectType.All, typeof(BasicCollisionBodyComponent), typeof(TransformComponent))]
+    [System(GameLoopType.Update, Layer = 0)]
     public class CollisionSystem : EntityProcessingSystem<TransformComponent, BasicCollisionBodyComponent>
     {
         internal HashSet<CollisionPair> CollisionPairs = new HashSet<CollisionPair>();
