@@ -40,7 +40,7 @@ Thanks to all those that support the project on Patreon!  Running an open source
  - Marcel
  - Nathanial ([optimuspi](http://www.optimuspi.com/))
  - Austin
- - McKenzie
+ - McKenzie ([Pseudo Motion](https://pseudomotion.wordpress.com/))
 
 If you're not on the list and you should be please let me know! Managing Patreon is a job in itself.
 
