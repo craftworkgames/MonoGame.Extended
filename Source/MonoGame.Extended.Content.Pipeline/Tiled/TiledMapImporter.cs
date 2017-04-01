@@ -55,6 +55,10 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     using (var file = new FileStream(tilesetFilePath, FileMode.Open))
                     {
                         map.Tilesets[i] = (TiledMapTilesetContent)tilesetSerializer.Deserialize(file);
+                        // Tileset "firstgid" and "Source" are taken from parent attribute.
+                        // TSX file doesn't have to know what's his FirstGlobalIdentifier
+                        map.Tilesets[i].Source = tileset.Source;
+                        map.Tilesets[i].FirstGlobalIdentifier = tileset.FirstGlobalIdentifier;
                     }
 
                     ContentLogger.Log($"Imported tileset '{tilesetFilePath}'");
