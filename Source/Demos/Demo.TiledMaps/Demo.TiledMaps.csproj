@@ -108,6 +108,7 @@
       <Link>x86\libSDL2-2.0.so.0</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Content\abstractTiles_sheet.png" />
     <Content Include="Content\alphacolortile.png" />
     <Content Include="Content\isometric-tiles.png" />
     <Content Include="Content\L05TS1.png" />
@@ -126,6 +127,7 @@
     <None Include="Content\level05.tmx" />
     <None Include="Content\level06.tmx" />
     <None Include="Content\level07.tmx" />
+    <None Include="Content\level08.tmx" />
     <None Include="Content\montserrat-32.fnt" />
     <None Include="Content\free-tileset.png" />
     <None Include="Content\hills.png" />
@@ -139,6 +141,8 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\platformerTiles_sheet.png" />
+    <Content Include="Content\voxelTiles_sheet.png" />
     <Content Include="OpenTK.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -163,6 +167,11 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Content\abstractTiles_sheet.tsx" />
+    <TypeScriptCompile Include="Content\platformerTiles_sheet.tsx" />
+    <TypeScriptCompile Include="Content\voxelTiles_sheet.tsx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
