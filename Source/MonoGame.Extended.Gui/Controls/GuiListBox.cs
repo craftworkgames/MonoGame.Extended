@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
@@ -16,10 +19,27 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public int SelectedIndex { get; set; } = -1;
+        private int _selectedIndex = -1;
+        public int SelectedIndex
+        {
+            get { return _selectedIndex; }
+            set
+            {
+                if (_selectedIndex != value)
+                {
+                    _selectedIndex = value;
+                    SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
         public List<object> Items { get; } = new List<object>();
         public Color SelectedTextColor { get; set; } = Color.White;
         public Thickness ItemPadding { get; set; } = new Thickness(4, 2);
+
+        public event EventHandler SelectedIndexChanged;
+
+        private int _firstIndex;
 
         public object SelectedItem
         {
@@ -27,13 +47,41 @@ namespace MonoGame.Extended.Gui.Controls
             set { SelectedIndex = Items.IndexOf(value); }
         }
 
+        public override void OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
+        {
+            base.OnKeyPressed(context, args);
+
+            if (args.Key == Keys.Down) ScrollDown();
+            if (args.Key == Keys.Up) ScrollUp();
+        }
+
+        public override void OnScrolled(int delta)
+        {
+            base.OnScrolled(delta);
+
+            if (delta < 0) ScrollDown();
+            if (delta > 0) ScrollUp();
+        }
+
+        private void ScrollDown()
+        {
+            if (SelectedIndex < Items.Count - 1)
+                SelectedIndex++;
+        }
+
+        private void ScrollUp()
+        {
+            if (SelectedIndex > 0)
+                SelectedIndex--;
+        }
+
         public override void OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
         {
             base.OnPointerDown(context, args);
 
-            for (var i = 0; i < Items.Count; i++)
+            for (var i = _firstIndex; i < Items.Count; i++)
             {
-                var itemRectangle = GetItemRectangle(context, i);
+                var itemRectangle = GetItemRectangle(context, i - _firstIndex);
 
                 if (itemRectangle.Contains(args.Position))
                 {
@@ -45,12 +93,14 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         {
-            for (var i = 0; i < Items.Count; i++)
+            ScrollIntoView(context);
+
+            for (var i = _firstIndex; i < Items.Count; i++)
             {
-                var itemRectangle = GetItemRectangle(context, i);
+                var itemRectangle = GetItemRectangle(context, i - _firstIndex);
 
                 if (SelectedIndex == i)
-                    renderer.FillRectangle(itemRectangle, Color.CornflowerBlue);
+                    renderer.FillRectangle(itemRectangle, Color.CornflowerBlue, ClippingRectangle);
 
                 var item = Items[i];
                 var textRectangle = new Rectangle(itemRectangle.X + ItemPadding.Left, itemRectangle.Y + ItemPadding.Top,
@@ -68,6 +118,17 @@ namespace MonoGame.Extended.Gui.Controls
             var contentRectangle = ClippingRectangle;
             var itemHeight = font.LineHeight + ItemPadding.Top + ItemPadding.Bottom;
             return new Rectangle(contentRectangle.X, contentRectangle.Y + itemHeight * index, contentRectangle.Width, itemHeight);
+        }
+
+        private void ScrollIntoView(IGuiContext context)
+        {
+            var selectedItemRectangle = GetItemRectangle(context, SelectedIndex - _firstIndex);
+
+            if (selectedItemRectangle.Bottom > ClippingRectangle.Bottom)
+                _firstIndex++;
+
+            if (selectedItemRectangle.Top < ClippingRectangle.Top)
+                _firstIndex--;
         }
     }
 }

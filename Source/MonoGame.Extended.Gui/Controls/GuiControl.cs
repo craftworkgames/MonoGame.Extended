@@ -116,6 +116,8 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
+        public virtual void OnScrolled(int delta) { }
+
         public virtual void OnKeyTyped(IGuiContext context, KeyboardEventArgs args) { }
         public virtual void OnKeyPressed(IGuiContext context, KeyboardEventArgs args) { }
 

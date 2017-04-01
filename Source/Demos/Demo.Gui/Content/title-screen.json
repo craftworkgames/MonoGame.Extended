@@ -75,7 +75,7 @@
           "Type": "GuiListBox",
           "Style": "list-box",
           "Position": "580 240",
-          "Items": [ "Milk", "Bread", "Butter", "Eggs" ],
+          "Items": [ "Milk", "Bread", "Butter", "Eggs", "Chicken", "Ham", "Pork", "Marshmallows", "Beer" ],
           "SelectedItem": "Butter"
         }
       ]
