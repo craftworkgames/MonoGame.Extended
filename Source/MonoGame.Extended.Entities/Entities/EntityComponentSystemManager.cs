@@ -30,16 +30,13 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Entities
 {
-    public delegate void EntityDelegate(Entity entity);
-    public delegate void EntityComponentDelegate(Entity entity, Component component);
-
     public sealed class EntityComponentSystemManager : DrawableGameComponent
     {
         private readonly SystemManager _systemManager;
@@ -49,150 +46,191 @@ namespace MonoGame.Extended.Entities
         public EntityComponentSystemManager(Game game)
             : base(game)
         {
-            EntityManager = new EntityManager();
             _systemManager = new SystemManager(this);
+            EntityManager = new EntityManager(_systemManager);
         }
 
+        // don't call this every frame, lol
         public void Scan(params Assembly[] assemblies)
         {
+            var componentTypeInfos = new List<TypeInfo>();
+            var entityTemplateTypeInfos = new List<TypeInfo>();
+            var systemTypeInfos = new List<TypeInfo>();
+
+            var componentTypeInfo = typeof(Component).GetTypeInfo();
+            var systemTypeInfo = typeof(System).GetTypeInfo();
+            var entityTempalteTypeInfo = typeof(EntityTemplate).GetTypeInfo();
+
             foreach (var assembly in assemblies)
             {
-                var types = assembly.ExportedTypes;
-                foreach (var type in types)
-                   Scan(type);
-            }
-        }
+                var typeInfos = assembly.ExportedTypes.Select(x => x.GetTypeInfo()).ToArray();
 
-        [SuppressMessage("ReSharper", "InvertIf")]
-        private void Scan(Type type)
-        {
-            var typeInfo = type.GetTypeInfo();
-
-            var isSystem = typeof(System).GetTypeInfo().IsAssignableFrom(typeInfo);
-            var isComponent = typeof(Component).GetTypeInfo().IsAssignableFrom(typeInfo);
-            var isEntityTemplate = typeof(EntityTemplate).GetTypeInfo().IsAssignableFrom(typeInfo);
-
-            if (!isSystem && !isComponent && !isEntityTemplate)
-                return;
-
-            var attributes = type.GetTypeInfo().GetCustomAttributes(false);
-            var attributesArray = attributes as Attribute[] ?? attributes.ToArray();
-
-            if (isSystem)
-                ScanSystem(type, attributesArray);
-            else if (isComponent)
-                ScanComponent(type, attributesArray);
-            else
-                ScanEntityTemplate(type, attributesArray);
-        }
-
-        // ReSharper disable once ParameterTypeCanBeEnumerable.Local
-        private void ScanSystem(Type type, Attribute[] attributes)
-        {
-            var systemAttributeType = typeof(SystemAttribute);
-
-            SystemAttribute systemAttribute = null;
-
-            foreach (var attribute in attributes)
-            {
-                var attributeType = attribute.GetType();
-
-                if (attributeType == systemAttributeType)
-                    systemAttribute = (SystemAttribute)attribute;
-
-            }
-
-            if (systemAttribute == null)
-                return;
-
-            var aspect = new Aspect();
-            var aspectAttributeType = typeof(AspectAttribute);
-
-            foreach (var attribute in attributes)
-            {
-                var attributeType = attribute.GetType();
-
-                if (attributeType != aspectAttributeType)
-                    continue;
-                
-                var aspectAttribute = (AspectAttribute)attribute;
-                switch (aspectAttribute.Type)
+                foreach (var typeInfo in typeInfos)
                 {
-                    case AspectType.All:
-                        aspect.AndMask = Aspect.CreateMaskFrom(aspectAttribute.Components);
-                        break;
-                    case AspectType.Any:
-                        aspect.OrMask = Aspect.CreateMaskFrom(aspectAttribute.Components);
-                        break;
-                    case AspectType.None:
-                        aspect.NorMask = Aspect.CreateMaskFrom(aspectAttribute.Components);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                    var isComponent = componentTypeInfo.IsAssignableFrom(typeInfo);
+                    if (isComponent)
+                    {
+                        componentTypeInfos.Add(typeInfo);
+                        continue;
+                    }
 
+                    var isSystem = systemTypeInfo.IsAssignableFrom(typeInfo);
+                    if (isSystem)
+                    {
+                        systemTypeInfos.Add(typeInfo);
+                        continue;
+                    }
+
+                    var isEntityTemplate = entityTempalteTypeInfo.IsAssignableFrom(typeInfo);
+                    // ReSharper disable once InvertIf
+                    if (isEntityTemplate)
+                    {
+                        entityTemplateTypeInfos.Add(typeInfo);
+                        // ReSharper disable once RedundantJumpStatement
+                        continue;
+                    }
+                }
             }
 
-            var system = (System)Activator.CreateInstance(type);
-            system.Aspect = aspect;
+            var registeredComponentCount = RegisterComponents(componentTypeInfos);
+            RegisterEntityTemplates(entityTemplateTypeInfos);
+            CreateSystems(systemTypeInfos, registeredComponentCount);
+        }
 
-            _systemManager.AddSystem(system, systemAttribute.GameLoopType,
-                systemAttribute.Layer, SystemExecutionType.Synchronous);
+        private int RegisterComponents(List<TypeInfo> componentTypeInfos)
+        {
+            List<TypeInfo> registeredComponentTypeInfos;
+            List<Tuple<TypeInfo, ComponentPoolAttribute>> registeredPooledComponentTypeInfos;
+            GetRegisteredComponents(componentTypeInfos, out registeredComponentTypeInfos, out registeredPooledComponentTypeInfos);
+
+            EntityManager.CreateComponentTypesFrom(registeredComponentTypeInfos);
+            EntityManager.CreateComponentPoolsFrom(registeredPooledComponentTypeInfos);
+            return registeredComponentTypeInfos.Count;
         }
 
         // ReSharper disable once ParameterTypeCanBeEnumerable.Local
-        private void ScanComponent(Type type, Attribute[] attributes)
+        private static void GetRegisteredComponents(List<TypeInfo> componentTypeInfos, out List<TypeInfo> registeredComponentTypeInfos, out List<Tuple<TypeInfo, ComponentPoolAttribute>> pooledComponentTypeInfos)
         {
+            registeredComponentTypeInfos = new List<TypeInfo>();
+            pooledComponentTypeInfos = new List<Tuple<TypeInfo, ComponentPoolAttribute>>();
+
             var componentAttributeType = typeof(ComponentAttribute);
             var componentPoolAttributeType = typeof(ComponentPoolAttribute);
 
-            ComponentAttribute componentAttribute = null;
-            ComponentPoolAttribute componentPoolAttribute = null;
-
-            foreach (var attribute in attributes)
+            foreach (var typeInfo in componentTypeInfos)
             {
-                var attributeType = attribute.GetType();
+                ComponentAttribute componentAttribute = null;
+                ComponentPoolAttribute componentPoolAttribute = null;
 
-                if (attributeType == componentAttributeType)
-                    componentAttribute = (ComponentAttribute) attribute;
+                var attributes = typeInfo.GetCustomAttributes(false);
+                foreach (var attribute in attributes)
+                {
+                    var attributeType = attribute.GetType();
 
-                if (attributeType == componentPoolAttributeType)
-                    componentPoolAttribute = (ComponentPoolAttribute) attribute;
+                    if (attributeType == componentAttributeType)
+                        componentAttribute = (ComponentAttribute)attribute;
+
+                    if (attributeType == componentPoolAttributeType)
+                        componentPoolAttribute = (ComponentPoolAttribute)attribute;
+                }
+
+                if (componentAttribute == null)
+                    continue;
+
+                registeredComponentTypeInfos.Add(typeInfo);
+
+                if (componentPoolAttribute == null)
+                    continue;
+
+                pooledComponentTypeInfos.Add(new Tuple<TypeInfo, ComponentPoolAttribute>(typeInfo, componentPoolAttribute));
             }
-
-            if (componentAttribute == null)
-                return;
-
-            var componentType = ComponentTypeManager.GetTypeFor(type);
-
-            if (componentPoolAttribute == null)
-                return;
-
-            EntityManager.CreateComponentPool(componentType, componentPoolAttribute.InitialSize, componentPoolAttribute.IsFullPolicy);
         }
 
         // ReSharper disable once ParameterTypeCanBeEnumerable.Local
-        private void ScanEntityTemplate(Type type, Attribute[] attributes)
+        private void RegisterEntityTemplates(List<TypeInfo> entityTempalteTypeInfos)
         {
             var entityTemplateAttributeType = typeof(EntityTemplateAttribute);
 
-            EntityTemplateAttribute entityTemplateAttribute = null;
-
-            foreach (var attribute in attributes)
+            foreach (var typeInfo in entityTempalteTypeInfos)
             {
-                var attributeType = attribute.GetType();
 
-                if (attributeType == entityTemplateAttributeType)
+                EntityTemplateAttribute entityTemplateAttribute = null;
+
+                var attributes = typeInfo.GetCustomAttributes(false);
+                foreach (var attribute in attributes)
                 {
-                    entityTemplateAttribute = (EntityTemplateAttribute) attribute;
+                    var attributeType = attribute.GetType();
+
+                    if (attributeType == entityTemplateAttributeType)
+                        entityTemplateAttribute = (EntityTemplateAttribute)attribute;
                 }
+
+                if (entityTemplateAttribute == null)
+                    return;
+
+                var entityTemplate = (EntityTemplate)Activator.CreateInstance(typeInfo.AsType());
+                EntityManager.AddEntityTemplate(entityTemplateAttribute.Name, entityTemplate);
             }
+        }
 
-            if (entityTemplateAttribute == null)
-                return;
+        // ReSharper disable once ParameterTypeCanBeEnumerable.Local
+        private void CreateSystems(List<TypeInfo> systemTypeInfos, int componentCount)
+        {
+            var systemAttributeType = typeof(SystemAttribute);
+            var aspectAttributeType = typeof(AspectAttribute);
 
-            var entityTemplate = (EntityTemplate)Activator.CreateInstance(type);
-            EntityManager.AddEntityTemplate(entityTemplateAttribute.Name, entityTemplate);
+            var andMask = new BitVector(componentCount);
+            var orMask = new BitVector(componentCount);
+            var norMask = new BitVector(componentCount);
+
+            foreach (var typeInfo in systemTypeInfos)
+            {
+                SystemAttribute systemAttribute = null;
+
+                andMask.SetAll(false);
+                orMask.SetAll(false);
+                norMask.SetAll(false);
+
+                var attributes = typeInfo.GetCustomAttributes(false);
+                foreach (var attribute in attributes)
+                {
+                    var attributeType = attribute.GetType();
+
+                    if (attributeType == systemAttributeType)
+                        systemAttribute = (SystemAttribute)attribute;
+
+                    if(attributeType != aspectAttributeType)
+                        continue;
+
+                    var aspectAttribute = (AspectAttribute)attribute;
+                    switch (aspectAttribute.Type)
+                    {
+                        case AspectType.All:
+                            EntityManager.FillComponentBits(andMask, aspectAttribute.Components);
+                            break;
+                        case AspectType.Any:
+                            EntityManager.FillComponentBits(orMask, aspectAttribute.Components);
+                            break;
+                        case AspectType.None:
+                            EntityManager.FillComponentBits(norMask, aspectAttribute.Components);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                }
+
+                if (systemAttribute == null)
+                    return;
+
+                var aspect = new Aspect(andMask, orMask, norMask);
+
+                var system = (System)Activator.CreateInstance(typeInfo.AsType());
+                system.Aspect = aspect;
+
+                _systemManager.AddSystem(system, systemAttribute.GameLoopType,
+                    systemAttribute.Layer, SystemExecutionType.Synchronous);
+            }
         }
 
         public override void Initialize()

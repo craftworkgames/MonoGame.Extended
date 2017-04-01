@@ -34,8 +34,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Numerics;
+using System.Linq.Expressions;
 
 namespace MonoGame.Extended.Entities
 {
@@ -74,33 +73,30 @@ namespace MonoGame.Extended.Entities
         // orMask:      111000000
         // norMask:     000100000
 
-        internal BigInteger AndMask;
-        internal BigInteger OrMask;
-        internal BigInteger NorMask;
+        internal BitVector AndMask;
+        internal BitVector OrMask;
+        internal BitVector NorMask;
+        internal static BitVector Result;
 
-        internal static BigInteger CreateMaskFrom(Type[] types)
+        public Aspect(BitVector andMask, BitVector orMask, BitVector norMask)
         {
-            if (types == null)
-                return new BigInteger(0);
-
-            BigInteger mask;
-
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var type in types)
-            {
-                var componentType = ComponentTypeManager.GetTypeFor(type);
-                mask |= componentType.Bit;
-            }
-
-            return mask;
+            if (Result == null)
+                Result = new BitVector(andMask.Length);
+            AndMask = new BitVector(andMask);
+            OrMask = orMask.EqualsZero() ? new BitVector(andMask.Length, true) : new BitVector(orMask);
+            NorMask = new BitVector(norMask);
         }
 
-        internal bool Matches(BigInteger componentBits)
+        internal bool Matches(BitVector componentBits)
         {
-            return
-                ((AndMask & componentBits) == AndMask || AndMask == 0) &&
-                ((NorMask & componentBits) == 0 || NorMask == 0) &&
-                ((OrMask & componentBits) != 0 || OrMask == 0);
+            AndMask.And(componentBits, ref Result);
+            if (!Result.Equals(AndMask))
+                return false;
+            NorMask.And(componentBits, ref Result);
+            if (!Result.EqualsZero())
+                return false;
+            OrMask.And(componentBits, ref Result);
+            return !Result.EqualsZero();
         }
     }
 }

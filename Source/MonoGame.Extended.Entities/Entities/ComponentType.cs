@@ -36,48 +36,22 @@
 
 using System;
 using System.Diagnostics;
-using System.Numerics;
 
 namespace MonoGame.Extended.Entities
 {
-    [DebuggerDisplay("Identifier:{Index}, Bit:{Bit}")]
+    [DebuggerDisplay("Index:{" + nameof(Index) + "}")]
     public sealed class ComponentType
     {
-        private static BigInteger _nextBit;
         private static int _nextIndex;
 
         public int Index { get; }
-        public BigInteger Bit { get; }
         public Type Type { get; }
         public bool IsPooled { get; internal set; }
-
-        static ComponentType()
-        {
-            _nextBit = 1;
-            _nextIndex = 0;
-        }
 
         internal ComponentType(Type type)
         {
             Index = _nextIndex++;
-            Bit = _nextBit;
-            _nextBit <<= 1;
             Type = type;
-        }
-    }
-
-    internal static class ComponentType<TComponent> where TComponent : Component
-    {
-        // ReSharper disable once StaticMemberInGenericType
-        public static ComponentType Type { get; }
-
-        static ComponentType()
-        {
-            Type = ComponentTypeManager.GetTypeFor<TComponent>();
-            if (Type != null)
-                return;
-            Type = new ComponentType(typeof(TComponent));
-            ComponentTypeManager.SetTypeFor<TComponent>(Type);
         }
     }
 }

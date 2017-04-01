@@ -37,12 +37,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Entities
 {
     public class EntityManager
     {
+        private readonly SystemManager _systemManager;
         private readonly ObjectPool<Entity> _pool;
         private readonly Dictionary<string, Entity> _entitiesByName;
         private readonly Dictionary<string, EntityTemplate> _entityTemplatesByName;
@@ -51,14 +53,18 @@ namespace MonoGame.Extended.Entities
 
         private readonly List<IComponentPool> _componentPools;
         private readonly Bag<Dictionary<Entity, Component>> _componentTypeEntitiesToComponents;
-        private readonly List<ValueTuple<Entity, ComponentType>> _componentsToRemove;
+        private readonly List<EntityComponentTypePair> _componentsToRemove;
+
+        private readonly Dictionary<Type, ComponentType> _componentTypes = new Dictionary<Type, ComponentType>();
 
         public int TotalEntitiesCount => _pool.TotalCount;
         public int ActiveEntitiesCount => _pool.InUseCount;
 
-        public EntityManager() 
+        internal EntityManager(SystemManager systemManager)
         {
-            _pool = new ObjectPool<Entity>(CreateObject, 100, ObjectPoolIsFullPolicy.Resize);
+            _systemManager = systemManager;
+
+            _pool = new ObjectPool<Entity>(CreateEntityObject, 100, ObjectPoolIsFullPolicy.Resize);
             _pool.ItemUsed += OnEntityUsed;
             _pool.ItemReturned += OnEntityReturned;
 
@@ -70,23 +76,12 @@ namespace MonoGame.Extended.Entities
 
             _componentPools = new List<IComponentPool>();
             _componentTypeEntitiesToComponents = new Bag<Dictionary<Entity, Component>>();
-            _componentsToRemove = new List<ValueTuple<Entity, ComponentType>>();
+            _componentsToRemove = new List<EntityComponentTypePair>();
         }
 
-        private static Entity CreateObject()
+        private Entity CreateEntityObject()
         {
-            return new Entity();
-        }
-
-        private void OnEntityUsed(Entity entity)
-        {
-            entity.Manager = this;
-            entity.IsAlive = true;
-            MarkEntityToBeRefreshed(entity);
-        }
-
-        private void OnEntityReturned(Entity entity)
-        {
+            return new Entity(_systemManager.SystemCount, _componentTypes.Count);
         }
 
         public Entity CreateEntity()
@@ -242,12 +237,23 @@ namespace MonoGame.Extended.Entities
             _entitiesToRefresh.Clear();
         }
 
+        private void OnEntityUsed(Entity entity)
+        {
+            entity.Manager = this;
+            entity.IsAlive = true;
+            MarkEntityToBeRefreshed(entity);
+        }
+
+        private void OnEntityReturned(Entity entity)
+        {
+        }
+
         internal T AddComponent<T>(Entity entity) where T : Component
         {
             Debug.Assert(entity != null);
 
-            var type = ComponentTypeManager.GetTypeFor<T>();
-            return (T) AddComponent(entity, type);
+            var componentType = GetComponentTypeFrom(typeof(T));
+            return (T) AddComponent(entity, componentType);
         }
 
         internal Component AddComponent(Entity entity, ComponentType componentType)
@@ -278,7 +284,7 @@ namespace MonoGame.Extended.Entities
             component.Entity = entity;
             components[entity] = component;
 
-            entity.AddComponentBit(componentType.Bit);
+            entity.ComponentBits[componentType.Index] = true;
 
             MarkEntityToBeRefreshed(entity);
 
@@ -289,8 +295,8 @@ namespace MonoGame.Extended.Entities
         {
             Debug.Assert(entity != null);
 
-            var type = ComponentTypeManager.GetTypeFor<T>();
-            return (T)GetComponent(entity, type);
+            var componentType = GetComponentTypeFrom(typeof(T));
+            return (T)GetComponent(entity, componentType);
         }
 
         internal Component GetComponent(Entity entity, ComponentType componentType)
@@ -312,7 +318,7 @@ namespace MonoGame.Extended.Entities
         {
             Debug.Assert(entity != null);
 
-            MarkComponentToBeRemoved(entity, ComponentType<T>.Type);
+            MarkComponentToBeRemoved(entity, GetComponentTypeFrom(typeof(T)));
         }
 
         internal void MarkComponentToBeRemoved(Entity entity, ComponentType componentType)
@@ -320,7 +326,7 @@ namespace MonoGame.Extended.Entities
             Debug.Assert(entity != null);
             Debug.Assert(componentType != null);
 
-            var pair = new ValueTuple<Entity, ComponentType>(entity, componentType);
+            var pair = new EntityComponentTypePair(entity, componentType);
             if (!_componentsToRemove.Contains(pair))
                 _componentsToRemove.Add(pair);
         }
@@ -330,8 +336,8 @@ namespace MonoGame.Extended.Entities
             for (var i = _componentsToRemove.Count - 1; i >= 0; --i)
             {
                 var pair = _componentsToRemove[i];
-                var entity = pair.Item1;
-                var componentType = pair.Item2;
+                var entity = pair.Entity;
+                var componentType = pair.ComponentType;
                 var components = _componentTypeEntitiesToComponents[componentType.Index];
 
                 Debug.Assert(components != null);
@@ -340,7 +346,7 @@ namespace MonoGame.Extended.Entities
                 if (!components.TryGetValue(entity, out component))
                     continue;
 
-                entity.RemoveComponentBit(componentType.Bit);
+                entity.ComponentBits[componentType.Index] = false;
                 MarkEntityToBeRefreshed(entity);
 
                 components.Remove(entity);
@@ -354,7 +360,6 @@ namespace MonoGame.Extended.Entities
         {
             Debug.Assert(entity != null);
 
-            entity.ComponentBits = 0;
             MarkEntityToBeRefreshed(entity);
 
             for (var i = _componentTypeEntitiesToComponents.Count - 1; i >= 0; --i)
@@ -372,18 +377,65 @@ namespace MonoGame.Extended.Entities
             }
         }
 
-        internal IComponentPool CreateComponentPool(ComponentType componentType, int initialSize, ObjectPoolIsFullPolicy isFullPolicy)
+        internal void CreateComponentTypesFrom(List<TypeInfo> componentTypeInfos)
+        {
+            foreach (var componentTypeInfo in componentTypeInfos)
+            {
+                var type = componentTypeInfo.AsType();
+                var componentType = new ComponentType(type);
+                _componentTypes.Add(type, componentType);
+            }
+        }
+
+        internal ComponentType GetComponentTypeFrom(Type type)
+        {
+            ComponentType result;
+            _componentTypes.TryGetValue(type, out result);
+            return result;
+        }
+
+        internal void FillComponentBits(BitVector bits, Type[] types)
+        {
+            foreach (var type in types)
+            {
+                var componentType = GetComponentTypeFrom(type);
+                bits[componentType.Index] = true;
+            }
+        }
+
+        internal void CreateComponentPoolsFrom(List<Tuple<TypeInfo, ComponentPoolAttribute>> componentTypeInfos)
+        {
+            foreach (var tuple in componentTypeInfos)
+            {
+                var type = tuple.Item1.AsType();
+                var attribute = tuple.Item2;
+                var componentType = GetComponentTypeFrom(type);
+                CreateComponentPool(componentType, attribute.InitialSize, attribute.IsFullPolicy);
+            }
+        }
+
+        private void CreateComponentPool(ComponentType componentType, int initialSize, ObjectPoolIsFullPolicy isFullPolicy)
         {
             Debug.Assert(componentType != null);
             Debug.Assert(initialSize > 0);
-
-            if (componentType.IsPooled)
-                return _componentPools[componentType.Index];
+            Debug.Assert(componentType.IsPooled == false);
 
             componentType.IsPooled = true;
             var poolType = typeof(ComponentPool<>).MakeGenericType(componentType.Type);
             var componentPool = (IComponentPool)Activator.CreateInstance(poolType, initialSize, isFullPolicy);
-            return _componentPools[componentType.Index] = componentPool;
+            _componentPools[componentType.Index] = componentPool;
+        }
+
+        internal struct EntityComponentTypePair
+        {
+            public Entity Entity;
+            public ComponentType ComponentType;
+
+            public EntityComponentTypePair(Entity entity, ComponentType componentType)
+            {
+                Entity = entity;
+                ComponentType = componentType;
+            }
         }
     }
 }

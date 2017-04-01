@@ -10,8 +10,8 @@ namespace MonoGame.Extended.Collections
     /// </summary>
     /// <remarks>
     ///     <para>
-    ///         <see cref="BitVector32" /> is more efficient than <see cref="BitArray" /> for boolean values and small integers
-    ///         that are used internally. A <see cref="BitArray" /> can grow indefinitely as needed, but it has the memory and
+    ///         <see cref="BitVector32" /> is more efficient than <see cref="BitVector" /> for boolean values and small integers
+    ///         that are used internally. A <see cref="BitVector" /> can grow indefinitely as needed, but it has the memory and
     ///         performance overhead that a class instance requires. In contrast, a <see cref="BitVector32" /> uses only 32
     ///         bits.
     ///     </para>

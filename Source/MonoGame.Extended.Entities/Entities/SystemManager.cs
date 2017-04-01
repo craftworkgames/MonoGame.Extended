@@ -58,8 +58,7 @@ namespace MonoGame.Extended.Entities
     internal sealed class SystemManager
     {
         private readonly EntityComponentSystemManager _manager;
-        private readonly Dictionary<System, BigInteger> _systemBits;
-        private int _systemBitPositionIndex;
+        internal int SystemCount;
         private SystemLayer[] _updateLayers;
         private SystemLayer[] _drawLayers;
         private readonly SystemLayer _dummyLayer;
@@ -70,24 +69,10 @@ namespace MonoGame.Extended.Entities
         internal SystemManager(EntityComponentSystemManager manager)
         {
             _manager = manager;
-            _systemBits = new Dictionary<System, BigInteger>();
             _updateLayers = new SystemLayer[0];
             _drawLayers = new SystemLayer[0];
             _dummyLayer  = new SystemLayer();
             Systems = new Bag<System>();
-        }
-
-        public BigInteger GetBitFor(System system)
-        {
-            Debug.Assert(system != null);
-
-            BigInteger bit;
-            if (_systemBits.TryGetValue(system, out bit))
-                return bit;
-            bit = new BigInteger(1) << _systemBitPositionIndex;
-            ++_systemBitPositionIndex;
-            _systemBits.Add(system, bit);
-            return bit;
         }
 
         internal void InitializeIfNecessary()
@@ -161,7 +146,7 @@ namespace MonoGame.Extended.Entities
             if (Systems.Contains(system))
                 throw new InvalidOperationException($"System '{systemType}' has already been added.");
 
-            system.Bit = GetBitFor(system);
+            system.BitIndex = SystemCount++;
 
             switch (gameLoopType)
             {

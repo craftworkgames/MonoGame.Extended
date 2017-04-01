@@ -41,13 +41,7 @@ namespace MonoGame.Extended.Collections
 
             _instantiationFunction = instantiationFunc;
             _freeItems = new Deque<T>(capacity);
-            IsFullPolicy = isFullPolicy;
-            
-            for (var i = 0; i < capacity; i++)
-            {
-                var poolable = CreateObject();
-                _freeItems.AddToBack(poolable);
-            }
+            IsFullPolicy = isFullPolicy;      
         }
 
         public IEnumerator<T> GetEnumerator()

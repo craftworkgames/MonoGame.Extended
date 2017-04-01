@@ -36,7 +36,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -47,7 +46,7 @@ namespace MonoGame.Extended.Entities
         private readonly Dictionary<Entity, int> _activeEntitiesLookup = new Dictionary<Entity, int>();
         // ReSharper disable once InconsistentNaming
         internal readonly List<Entity> _activeEntities = new List<Entity>();
-        internal BigInteger Bit;
+        internal int BitIndex;
         internal Aspect Aspect;
         private TimeSpan _timer;
 
@@ -88,7 +87,7 @@ namespace MonoGame.Extended.Entities
             if (!isInterested)
                 return;
 
-            var contains = (Bit & entity.SystemBits) == Bit;
+            var contains = entity.SystemBits[BitIndex];
 
             if (!contains && entity.IsAlive)
             {
@@ -166,7 +165,7 @@ namespace MonoGame.Extended.Entities
             if (entity == null)
                 return;
 
-            entity.AddSystemBit(Bit);
+            entity.SystemBits[BitIndex] = true;
 
             if (_activeEntitiesLookup.ContainsKey(entity))
                 return;
@@ -182,7 +181,7 @@ namespace MonoGame.Extended.Entities
             if (entity == null)
                 return;
 
-            entity.RemoveSystemBit(Bit);
+            entity.SystemBits[BitIndex] = false;
 
             int activeEntityIndex;
             if (!_activeEntitiesLookup.TryGetValue(entity, out activeEntityIndex))

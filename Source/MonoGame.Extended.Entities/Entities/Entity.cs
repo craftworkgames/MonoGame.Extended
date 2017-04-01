@@ -34,7 +34,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using MonoGame.Extended.Collections;
 // ReSharper disable InconsistentNaming
@@ -53,8 +52,8 @@ namespace MonoGame.Extended.Entities
         }
 
         internal EntityManager Manager;
-        internal BigInteger SystemBits;
-        internal BigInteger ComponentBits;
+        internal BitVector SystemBits;
+        internal BitVector ComponentBits;
         private ReturnToPoolDelegate _returnToPoolDelegate;
         internal BitVector32 Flags;
         internal string _group;
@@ -99,8 +98,10 @@ namespace MonoGame.Extended.Entities
         IPoolable IPoolable.NextNode { get; set; }
         IPoolable IPoolable.PreviousNode { get; set; }
 
-        internal Entity()
+        internal Entity(int systemTypeCount, int componentTypeCount)
         {
+            SystemBits = new BitVector(systemTypeCount);
+            ComponentBits = new BitVector(componentTypeCount);
         }
 
         public void Destroy()
@@ -115,7 +116,7 @@ namespace MonoGame.Extended.Entities
 
         public void Detach<T>() where T : Component
         {
-            Manager.MarkComponentToBeRemoved(this, ComponentTypeManager.GetTypeFor<T>());
+            Manager.MarkComponentToBeRemoved<T>(this);
         }
 
         public T Get<T>() where T : Component
@@ -126,38 +127,14 @@ namespace MonoGame.Extended.Entities
         internal void Reset()
         {
             _group = null;
-            SystemBits = 0;
-            ComponentBits = 0;
+            SystemBits.SetAll(false);
+            ComponentBits.SetAll(false);
             Flags = 0;
         }
 
         public override string ToString()
         {
             return $"{RuntimeHelpers.GetHashCode(this):X8}";
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void AddSystemBit(BigInteger bit)
-        {
-            SystemBits |= bit;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void AddComponentBit(BigInteger bit)
-        {
-            ComponentBits |= bit;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void RemoveSystemBit(BigInteger bit)
-        {
-            SystemBits &= ~bit;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void RemoveComponentBit(BigInteger bit)
-        {
-            ComponentBits &= ~bit;
         }
 
         void IPoolable.Initialize(ReturnToPoolDelegate returnDelegate)
