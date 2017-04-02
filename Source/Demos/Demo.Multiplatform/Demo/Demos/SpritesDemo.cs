@@ -3,17 +3,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
-
-namespace Demo.Sprites
+namespace Demo.Demos
 {
-    public class Game1 : Game
+    public class SpritesDemo : DemoBase
     {
-        // ReSharper disable once NotAccessedField.Local
-        private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private Sprite _axeSprite;
         private Texture2D _backgroundTexture;
         private float _particleOpacity;
@@ -24,25 +20,20 @@ namespace Demo.Sprites
 
         private TextureRegion2D _clippingTextureRegion;
 
-        public Game1()
+        public SpritesDemo(Game game) : base(game)
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-            Window.AllowUserResizing = true;
-            Window.Position = Point.Zero;
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _backgroundTexture = Content.Load<Texture2D>("bg_sharbi");
+            _backgroundTexture = Content.Load<Texture2D>("Textures/bg_sharbi");
 
-            var testRegion = new TextureRegion2D(Content.Load<Texture2D>("clipping-test"));
+            var testRegion = new TextureRegion2D(Content.Load<Texture2D>("Textures/clipping-test"));
             _clippingTextureRegion = new NinePatchRegion2D(testRegion, 16);
 
-            var axeTexture = Content.Load<Texture2D>("axe");
+            var axeTexture = Content.Load<Texture2D>("Textures/axe");
             _axeSprite = new Sprite(axeTexture)
             {
                 Origin = new Vector2(243, 679),
@@ -50,13 +41,13 @@ namespace Demo.Sprites
                 Scale = Vector2.One * 0.5f
             };
 
-            var spikeyBallTexture = Content.Load<Texture2D>("spike_ball");
+            var spikeyBallTexture = Content.Load<Texture2D>("Textures/spike_ball");
             _spikeyBallSprite = new Sprite(spikeyBallTexture)
             {
                 Position = new Vector2(400, 340)
             };
 
-            var particleTexture = Content.Load<Texture2D>("particle");
+            var particleTexture = Content.Load<Texture2D>("Textures/particle");
             _particleSprite0 = new Sprite(particleTexture)
             {
                 Position = new Vector2(600, 340)
