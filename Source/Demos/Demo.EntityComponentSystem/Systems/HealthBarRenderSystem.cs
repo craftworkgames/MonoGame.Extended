@@ -64,10 +64,10 @@ namespace Demo.StarWarriorGame.Systems
             var transform = entity.Get<TransformComponent>();
 
             _stringBuilder.Clear();
-            _stringBuilder.Append((float)Math.Round(health.HealthRatio * 100, 1));
+            _stringBuilder.Append((float)Math.Round(health.Ratio * 100, 1));
             _stringBuilder.Append("%");
 
-            var c = health.HealthRatio / 1;
+            var c = health.Ratio / 1;
             var color = new Color(1.0f - c, c, 0.0f);
             var worldPosition = transform.WorldPosition;
             var renderPosition = worldPosition + new Vector2(0, 25);
