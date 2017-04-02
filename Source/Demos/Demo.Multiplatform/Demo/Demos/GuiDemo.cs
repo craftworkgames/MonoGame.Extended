@@ -1,4 +1,3 @@
-﻿using System;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -6,29 +5,22 @@ using MonoGame.Extended;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Serialization;
-using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
 
-namespace Demo.Gui
+namespace Demo.Demos
 {
-    public class Game1 : Game
+    public class GuiDemo : DemoBase
     {
-        // ReSharper disable once NotAccessedField.Local
-        private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private Camera2D _camera;
         private GuiSystem _guiSystem;
         private GuiProgressBar _progressBar;
         private float _progressDelta = 0.2f;
-
-        public Game1()
+        
+        public GuiDemo(Game game) : base(game)
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = false;
-            Window.AllowUserResizing = true;
         }
-
+        
         protected override void LoadContent()
         {
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);

@@ -38,6 +38,7 @@
     <Compile Include="Demos\BitmapFontsDemo.cs" />
     <Compile Include="Demos\CameraDemo.cs" />
     <Compile Include="Demos\DemoBase.cs" />
+    <Compile Include="Demos\GuiDemo.cs" />
     <Compile Include="Demos\InputListenersDemo.cs" />
     <Compile Include="Demos\ParticlesDemo.cs" />
     <Compile Include="Demos\SceneGraphsDemo.cs" />
@@ -56,12 +57,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\adventure-gui-atlas.json" />
-    <None Include="Content\adventure-gui-skin.json" />
+    <Content Include="Content\adventure-gui-skin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Content\Content.mgcb" />
     <None Include="Content\Fonts\impact-32.fnt" />
     <None Include="Content\Fonts\montserrat-32.fnt" />
     <None Include="Content\small-font.fnt" />
-    <None Include="Content\title-screen.json" />
+    <Content Include="Content\title-screen.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

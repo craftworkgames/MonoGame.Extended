@@ -1,5 +1,5 @@
 ﻿{
-  "Skin": "Raw/adventure-gui-skin.json",
+  "Skin": "Content/adventure-gui-skin.json",
   "Controls": [
     {
       "Type": "GuiPanel",
@@ -52,7 +52,7 @@
           "Style": "text-box",
           "Position": "350 345",
           "Size": "300 42",
-          "Text": "Let's put some really long text in the textbox to test the clipping area"
+          "Text": "Hello World is some really long text that goes outside the clipping rectangle"
         },
         {
           "Name": "CheckBox",
@@ -68,7 +68,15 @@
           "Type": "GuiProgressBar",
           "Style": "progress-bar",
           "Position": "100 300",
-          "Progress": 0.5 
+          "Progress": 0.5
+        },
+        {
+          "Name": "ListBox",
+          "Type": "GuiListBox",
+          "Style": "list-box",
+          "Position": "580 240",
+          "Items": [ "Milk", "Bread", "Butter", "Eggs", "Chicken", "Ham", "Pork", "Marshmallows", "Beer" ],
+          "SelectedItem": "Butter"
         }
       ]
     }

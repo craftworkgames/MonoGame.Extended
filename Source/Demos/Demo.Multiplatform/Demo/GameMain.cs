@@ -39,6 +39,7 @@ namespace Demo
 
             _demos = new List<DemoBase>
             {
+                new GuiDemo(this),
                 new BatchingDemo(this),
                 new TweeningDemo(this),
                 new InputListenersDemo(this),

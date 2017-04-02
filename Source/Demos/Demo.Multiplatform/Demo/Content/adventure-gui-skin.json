@@ -7,11 +7,26 @@
     "Color": "#aaaaaa"
   },
   "NinePatches": [
-    { "TextureRegion": "panel_brown", "Padding": "10" },
-    { "TextureRegion": "panelInset_beige", "Padding": "10" },
-    { "TextureRegion": "grey_textBox", "Padding": "10" },
-    { "TextureRegion": "progress-bar-container", "Padding": "10" },
-    { "TextureRegion": "progress-bar-blue", "Padding": "10" }
+    {
+      "TextureRegion": "panel_brown",
+      "Padding": "10"
+    },
+    {
+      "TextureRegion": "panelInset_beige",
+      "Padding": "10"
+    },
+    {
+      "TextureRegion": "grey_textBox",
+      "Padding": "10"
+    },
+    {
+      "TextureRegion": "progress-bar-container",
+      "Padding": "10"
+    },
+    {
+      "TextureRegion": "progress-bar-blue",
+      "Padding": "10"
+    }
   ],
   "Styles": [
     {
@@ -86,6 +101,14 @@
       "BackgroundRegion": "progress-bar-container",
       "BarRegion": "progress-bar-blue",
       "Size": "100 32"
+    },
+    {
+      "Name": "list-box",
+      "Type": "GuiListBox",
+      "Size": "200 150",
+      "Padding": "7 5",
+      "BackgroundRegion": "grey_textBox",
+      "TextColor": "#444444"
     }
   ]
 }
