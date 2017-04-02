@@ -6,7 +6,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.TextureAtlases;
-using AnimationComponent = Demo.Platformer.Entities.Components.AnimationComponent;
+//using AnimationComponent = Demo.Platformer.Entities.Components.AnimationComponent;
 using SpriteComponent = Demo.Platformer.Entities.Components.SpriteComponent;
 using TransformComponent = Demo.Platformer.Entities.Components.TransformComponent;
 
@@ -48,14 +48,14 @@ namespace Demo.Platformer.Entities
             var sprite = entity.Attach<SpriteComponent>();
             sprite.Origin = new Vector2(textureRegion.Width / 2f, textureRegion.Height / 2f);
 
-            var animatedSprite = entity.Attach<AnimationComponent>();
-            var animationFactory = animatedSprite.AnimationFactory = new SpriteSheetAnimationFactory(_characterTextureAtlas); ;
+            //var animatedSprite = entity.Attach<AnimationComponent>();
+            //var animationFactory = animatedSprite.AnimationFactory = new SpriteSheetAnimationFactory(_characterTextureAtlas); ;
 
-            animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 12, 13 }, 1.0f));
-            animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 0, 1, 2, 3 }));
-            animationFactory.Add("jump", new SpriteSheetAnimationData(new[] { 8, 9 }, isLooping: false));
+            //animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 12, 13 }, 1.0f));
+            //animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 0, 1, 2, 3 }));
+            //animationFactory.Add("jump", new SpriteSheetAnimationData(new[] { 8, 9 }, isLooping: false));
 
-            animatedSprite.Play("idle");
+            //animatedSprite.Play("idle");
 
             var collision = entity.Attach<CollisionBodyComponent>();
             collision.Size = textureRegion.Size;

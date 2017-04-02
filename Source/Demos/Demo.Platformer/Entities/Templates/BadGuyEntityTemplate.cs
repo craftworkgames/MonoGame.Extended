@@ -25,18 +25,18 @@ namespace Demo.Platformer.Entities.Templates
 
             collision.Origin = Vector2.One * 0.5f;
 
-            var textureRegion = _characterTextureAtlas[90];
-            var sprite = entity.Attach<SpriteComponent>();
-            sprite.Origin = new Vector2(textureRegion.Width / 2f, textureRegion.Height / 2f);
+            //var textureRegion = _characterTextureAtlas[90];
+            //var sprite = entity.Attach<SpriteComponent>();
+            //sprite.Origin = new Vector2(textureRegion.Width / 2f, textureRegion.Height / 2f);
 
-            var animatedSprite = entity.Attach<AnimationComponent>();
-            animatedSprite.
-            var animationFactory = animatedSprite.AnimationFactory = new SpriteSheetAnimationFactory(_characterTextureAtlas); ;
+            //var animatedSprite = entity.Attach<AnimationComponent>();
+            //animatedSprite.
+            //var animationFactory = animatedSprite.AnimationFactory = new SpriteSheetAnimationFactory(_characterTextureAtlas); ;
 
-            animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 100 }, 1.0f));
-            animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 96, 97, 98, 99 }, isPingPong: true));
+            //animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 100 }, 1.0f));
+            //animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 96, 97, 98, 99 }, isPingPong: true));
 
-            animatedSprite.Play("walk");
+            //animatedSprite.Play("walk");
 
             var health = entity.Attach<HealthComponent>();
             health.Points = health.MaximumPoints = 20;
