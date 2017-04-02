@@ -36,6 +36,7 @@ namespace Demo
 
             _demos = new List<DemoBase>
             {
+                new TweeningDemo(this),
                 new InputListenersDemo(this),
                 new SceneGraphsDemo(this),
                 new ParticlesDemo(this),

@@ -1,38 +1,34 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
-using MonoGame.Extended.Tweening;
 using MonoGame.Extended.Sprites;
+using MonoGame.Extended.Tweening;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace Demo.Animations
+namespace Demo.Demos
 {
-    public class Game1 : Game
+    public class TweeningDemo : DemoBase
     {
-        // ReSharper disable once NotAccessedField.Local
-        private readonly GraphicsDeviceManager _graphicsDeviceManager;
+        private readonly Game _game;
         private SpriteBatch _spriteBatch;
         private Sprite _sprite;
         private Camera2D _camera;
 
-        public Game1()
+        public TweeningDemo(Game game) : base(game)
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-            Window.AllowUserResizing = true;
+            _game = game;
         }
 
         protected override void Initialize()
         {
-            var animationComponent = new AnimationComponent(this);
-            var tweenComponent = new TweeningComponent(this, animationComponent);
+            base.Initialize();
+
+            var animationComponent = new AnimationComponent(_game);
+            var tweenComponent = new TweeningComponent(_game, animationComponent);
             Components.Add(animationComponent);
             Components.Add(tweenComponent);
-
-            base.Initialize();
         }
 
         protected override void LoadContent()
@@ -42,8 +38,8 @@ namespace Demo.Animations
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
 
-            var logoTexture = Content.Load<Texture2D>("logo-square-128");
-            
+            var logoTexture = Content.Load<Texture2D>("Textures/logo-square-128");
+
             _sprite = new Sprite(logoTexture)
             {
                 Position = viewportAdapter.Center.ToVector2(),
