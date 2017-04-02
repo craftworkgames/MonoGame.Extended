@@ -7,7 +7,7 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Graphics.Effects;
 
-namespace Demo.Batching
+namespace Demo.Demos
 {
     public struct SpriteInfo
     {
@@ -18,11 +18,8 @@ namespace Demo.Batching
         public Matrix2D TransformMatrix;
     }
 
-    public class Game1 : Game
+    public class BatchingDemo : DemoBase
     {
-        // ReSharper disable once NotAccessedField.Local
-        private readonly GraphicsDeviceManager _graphicsDeviceManager;
-
         private Batcher2D _batcher;
         private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFont;
@@ -33,27 +30,23 @@ namespace Demo.Batching
         private DefaultEffect _effect;
 
         private readonly Random _random = new Random();
-        private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
         private readonly SpriteInfo[] _sprites = new SpriteInfo[2048];
         private Matrix _worldMatrix;
         private Matrix _viewMatrix;
         private Matrix _projectionMatrix;
 
-        public Game1()
+        public BatchingDemo(Game game) : base(game)
         {
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-            Window.AllowUserResizing = false;
             // disable fixed time step so max frames can be measured otherwise the update & draw frames would be capped to the default 60 fps timestep
-            IsFixedTimeStep = false;
+            game.IsFixedTimeStep = false;
 
-            _graphicsDeviceManager = new GraphicsDeviceManager(this)
-            {
-                // also disable v-sync so max frames can be measured otherwise draw frames would be capped to the screen's refresh rate 
-                SynchronizeWithVerticalRetrace = false,
-                PreferredBackBufferWidth = 800,
-                PreferredBackBufferHeight = 600
-            };
+            //_graphicsDeviceManager = new GraphicsDeviceManager(this)
+            //{
+            //    // also disable v-sync so max frames can be measured otherwise draw frames would be capped to the screen's refresh rate 
+            //    SynchronizeWithVerticalRetrace = false,
+            //    PreferredBackBufferWidth = 800,
+            //    PreferredBackBufferHeight = 600
+            //};
         }
 
         protected override void LoadContent()
@@ -67,11 +60,11 @@ namespace Demo.Batching
             };
             _batcher = new Batcher2D(graphicsDevice);
             _spriteBatch = new SpriteBatch(graphicsDevice);
-            _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
+            _bitmapFont = Content.Load<BitmapFont>("Fonts/montserrat-32");
 
             // load the texture for the sprites
-            _spriteTexture1 = Content.Load<Texture2D>("logo-square-128");
-            _spriteTexture2 = Content.Load<Texture2D>("logo-square-128-copy");
+            _spriteTexture1 = Content.Load<Texture2D>("Textures/logo-square-128");
+            _spriteTexture2 = Content.Load<Texture2D>("Textures/logo-square-512");
             _spriteOrigin = new Vector2(_spriteTexture1.Width * 0.5f, _spriteTexture1.Height * 0.5f);
             _spriteScale = new Vector2(0.5f);
 
@@ -114,15 +107,11 @@ namespace Demo.Batching
                 _sprites[index] = sprite;
             }
 
-            _fpsCounter.Update(gameTime);
-
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            Window.Title = _fpsCounter.FramesPerSecond.ToString();
-
             var graphicsDevice = GraphicsDevice;
 
             graphicsDevice.Clear(Color.CornflowerBlue);
@@ -138,8 +127,6 @@ namespace Demo.Batching
             //DrawSpritesWithSpriteBatch();
 
             base.Draw(gameTime);
-
-            _fpsCounter.Draw(gameTime);
         }
 
         private void DrawSpritesWithBatcher2D()

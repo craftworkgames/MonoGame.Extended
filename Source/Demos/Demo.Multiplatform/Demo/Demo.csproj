@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Demos\BatchingDemo.cs" />
     <Compile Include="Demos\BitmapFontsDemo.cs" />
     <Compile Include="Demos\CameraDemo.cs" />
     <Compile Include="Demos\DemoBase.cs" />
@@ -67,6 +68,10 @@
     <ProjectReference Include="..\..\..\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj">
       <Project>{587ce536-216f-41a1-b223-ae502c125b09}</Project>
       <Name>MonoGame.Extended.Animations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj">
+      <Project>{9b3ab8a1-78aa-471a-afd0-b10b932115bc}</Project>
+      <Name>MonoGame.Extended.Graphics</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\MonoGame.Extended.Gui\MonoGame.Extended.Gui.csproj">
       <Project>{8e425575-378a-4f83-88c9-f8bebad227c9}</Project>

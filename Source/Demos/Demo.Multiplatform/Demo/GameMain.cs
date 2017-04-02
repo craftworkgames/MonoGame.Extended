@@ -18,8 +18,11 @@ namespace Demo
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
-        private GuiSystem _guiSystem;
+        private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
         private readonly List<DemoBase> _demos;
+
+        private string _demoTitle;
+        private GuiSystem _guiSystem;
         private int _demoIndex = 0;
 
         public GameMain(PlatformConfig config)
@@ -36,6 +39,7 @@ namespace Demo
 
             _demos = new List<DemoBase>
             {
+                new BatchingDemo(this),
                 new TweeningDemo(this),
                 new InputListenersDemo(this),
                 new SceneGraphsDemo(this),
@@ -72,7 +76,13 @@ namespace Demo
                 Screen = new DemoScreen(skin, NextDemo)
             };
 
-            _demos[_demoIndex].Load();
+            LoadDemo(_demoIndex);
+        }
+
+        private void LoadDemo(int index)
+        {
+            _demos[index].Load();
+            _demoTitle = _demos[index].GetType().Name;
         }
 
         private void NextDemo()
@@ -84,7 +94,7 @@ namespace Demo
             else
                 _demoIndex++;
 
-            _demos[_demoIndex].Load();
+            LoadDemo(_demoIndex);
         }
 
         private GuiSkin LoadSkin(string assetName)
@@ -102,6 +112,7 @@ namespace Demo
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
+            _fpsCounter.Update(gameTime);
             _guiSystem.Update(gameTime);
             _demos[_demoIndex].OnUpdate(gameTime);
             base.Update(gameTime);
@@ -111,8 +122,13 @@ namespace Demo
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            _fpsCounter.Draw(gameTime);
+            Window.Title = $"{_demoTitle} - {_fpsCounter.FramesPerSecond}";
+
             _demos[_demoIndex].OnDraw(gameTime);
+
             _guiSystem.Draw(gameTime);
+
             base.Draw(gameTime);
         }
     }
