@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Demo.EntityComponentSystem
+namespace Demo.StarWarriorGame
 {
-    internal static class Program
+    public static class Program
     {
         [STAThread]
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             using (var game = new Game1())
             {

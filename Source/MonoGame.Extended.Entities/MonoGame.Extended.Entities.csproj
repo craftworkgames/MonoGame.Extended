@@ -7,7 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{35FD1F05-AF04-469A-B37A-F9B36C34401C}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>MonoGame.Extended.Entities</RootNamespace>
+    <RootNamespace>MonoGame.Extended</RootNamespace>
     <AssemblyName>MonoGame.Extended.Entities</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -48,14 +49,27 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\EntityComponent.cs" />
-    <Compile Include="Entity.cs" />
-    <Compile Include="EntityComponentSystem.cs" />
+    <Compile Include="Entities\AspectAttribute.cs" />
+    <Compile Include="Entities\Aspect.cs" />
+    <Compile Include="Entities\BitVector.cs" />
+    <Compile Include="Entities\EntityComponentAttribute.cs" />
+    <Compile Include="Entities\EntityComponentPool.cs" />
+    <Compile Include="Entities\EntityComponentPoolAttribute.cs" />
+    <Compile Include="Entities\EntityComponentDelegate.cs" />
+    <Compile Include="Entities\EntityDelegate.cs" />
+    <Compile Include="Entities\EntityManager.cs" />
+    <Compile Include="Entities\EntityProcessingSystem.cs" />
+    <Compile Include="Entities\EntitySystemAttribute.cs" />
+    <Compile Include="Entities\EntityTemplateAttribute.cs" />
+    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\EntityComponentSystemManager.cs" />
+    <Compile Include="Entities\SystemManager.cs" />
+    <Compile Include="Entities\EntityTemplate.cs" />
+    <Compile Include="Entities\EntityComponent.cs" />
+    <Compile Include="Entities\EntityComponentType.cs" />
+    <Compile Include="Entities\TransformComponent2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Systems\AnimatedSpriteSystem.cs" />
-    <Compile Include="Systems\ComponentSystem.cs" />
-    <Compile Include="Systems\ParticleEmitterSystem.cs" />
-    <Compile Include="Systems\SpriteBatchSystem.cs" />
+    <Compile Include="Entities\EntitySystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
@@ -65,5 +79,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

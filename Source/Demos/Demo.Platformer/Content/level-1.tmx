@@ -36,7 +36,7 @@
   <object id="5" type="Solid" x="480" y="224" width="160" height="256"/>
   <object id="6" type="Solid" x="640" y="288" width="160" height="192"/>
   <object id="7" name="Spikes" type="Deadly" x="352" y="320" width="128" height="32"/>
-  <object id="8" name="Player Spawn" type="Spawn" gid="257" x="76" y="287" width="32" height="32"/>
+  <object id="8" name="Player Spawn" type="Spawn" gid="257" x="76" y="240" width="32" height="32"/>
   <object id="9" name="Bad Guy" type="BadGuy" gid="353" x="485" y="224" width="32" height="32"/>
   <object id="11" name="Bad Guy" type="BadGuy" gid="353" x="310" y="223" width="32" height="32"/>
   <object id="15" type="Solid" x="800" y="0" width="32" height="480"/>

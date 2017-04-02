@@ -37,6 +37,7 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Collections\Bag.cs" />
     <Compile Include="Collections\DictionaryExtensions.cs" />
     <Compile Include="Collections\KeyedCollection.cs" />
     <Compile Include="FloatHelper.cs" />
@@ -64,7 +65,7 @@
     <Compile Include="Collections\BitVector32.cs" />
     <Compile Include="Collections\Deque.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
-    <Compile Include="Collections\Pool.cs" />
+    <Compile Include="Collections\ObjectPool.cs" />
     <Compile Include="ColorHelper.cs" />
     <Compile Include="Collections\IObservableCollection.cs" />
     <Compile Include="Collections\ItemEventArgs.cs" />
@@ -80,7 +81,7 @@
     <Compile Include="Serialization\Vector2JsonConverter.cs" />
     <Compile Include="Serialization\Size2JsonConverter.cs" />
     <Compile Include="IColorable.cs" />
-    <Compile Include="IPoolable.cs" />
+    <Compile Include="Collections\IPoolable.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
     <Compile Include="Camera2D.cs" />
     <Compile Include="Content\ContentReaderExtensions.cs" />

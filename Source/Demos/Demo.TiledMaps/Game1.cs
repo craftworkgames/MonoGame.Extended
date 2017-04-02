@@ -210,7 +210,7 @@ namespace Demo.TiledMaps
 
             // we can safely get the metrics without worrying about spritebatch interfering because spritebatch submits on End()
             _spriteBatch.DrawString(_bitmapFont,
-                $"FPS: {_fpsCounter.FramesPerSecond:0}, Draw Calls: {GraphicsDevice.Metrics.DrawCount}, Texture Count: {GraphicsDevice.Metrics.TextureCount}, Triangle Count: {GraphicsDevice.Metrics.PrimitiveCount}",
+                $"FPS: {_fpsCounter.FramesPerSecond:0}, Draw Calls: {GraphicsDevice.Metrics.DrawCount}, Texture TotalCount: {GraphicsDevice.Metrics.TextureCount}, Triangle TotalCount: {GraphicsDevice.Metrics.PrimitiveCount}",
                 textPosition, textColor);
             textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 2);
             _spriteBatch.DrawString(_bitmapFont, $"Camera Position: (x={_camera.Position.X}, y={_camera.Position.Y})",
