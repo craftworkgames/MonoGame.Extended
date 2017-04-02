@@ -116,6 +116,8 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
+        public virtual void OnScrolled(int delta) { }
+
         public virtual void OnKeyTyped(IGuiContext context, KeyboardEventArgs args) { }
         public virtual void OnKeyPressed(IGuiContext context, KeyboardEventArgs args) { }
 
@@ -137,15 +139,16 @@ namespace MonoGame.Extended.Gui.Controls
         public void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             DrawBackground(context, renderer, deltaSeconds);
-            DrawText(context, renderer, deltaSeconds, GetTextInfo(context, Text));
+            DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, Text, BoundingRectangle, HorizontalAlignment.Centre, VerticalAlignment.Centre));
         }
 
-        protected TextInfo GetTextInfo(IGuiContext context, string text)
+        protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment)
         {
             var font = Font ?? context.DefaultFont;
-            var textSize = font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size.ToVector2();
-            var textPosition = BoundingRectangle.Center.ToVector2() - textSize * 0.5f;
-            var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, ClippingRectangle);
+            var textRectangle = font.GetStringRectangle(text ?? string.Empty, Vector2.Zero);
+            var destinationRectangle = GuiAlignmentHelper.GetDestinationRectangle(horizontalAlignment, verticalAlignment, textRectangle, targetRectangle);
+            var textPosition = destinationRectangle.Location.ToVector2();
+            var textInfo = new TextInfo(text, font, textPosition, textRectangle.Size.ToVector2(), TextColor, ClippingRectangle);
             return textInfo;
         }
 
@@ -154,7 +157,7 @@ namespace MonoGame.Extended.Gui.Controls
             renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
         }
 
-        protected virtual void DrawText(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        protected virtual void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         {
             if (!string.IsNullOrWhiteSpace(textInfo.Text))
                 renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, textInfo.ClippingRectangle);

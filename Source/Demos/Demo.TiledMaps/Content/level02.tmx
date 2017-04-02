@@ -3,9 +3,6 @@
  <tileset firstgid="1" name="isometric-tiles" tilewidth="111" tileheight="128" spacing="1" tilecount="49" columns="7">
   <image source="isometric-tiles.png" width="783" height="902"/>
  </tileset>
- <tileset firstgid="50" name="isometric-tiles" tilewidth="111" tileheight="128" spacing="1" tilecount="49" columns="7">
-  <image source="isometric-tiles.png" width="783" height="902"/>
- </tileset>
  <layer name="Camada de Tiles 1" width="10" height="10">
   <data>
    <tile gid="0"/>

@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui
@@ -13,7 +12,8 @@ namespace MonoGame.Extended.Gui
         void DrawRegion(TextureRegion2D textureRegion, Rectangle rectangle, Color color, Rectangle? clippingRectangle = null);
         void DrawRegion(TextureRegion2D textureRegion, Vector2 position, Color color, Rectangle? clippingRectangle = null);
         void DrawText(BitmapFont font, string text, Vector2 position, Color color, Rectangle? clippingRectangle = null);
-        void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f);
+        void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f, Rectangle? clippingRectangle = null);
+        void FillRectangle(Rectangle rectangle, Color color, Rectangle? clippingRectangle = null);
         void End();
     }
 
@@ -22,7 +22,7 @@ namespace MonoGame.Extended.Gui
         private readonly Func<Matrix> _getTransformMatrix;
         private readonly SpriteBatch _spriteBatch;
 
-        public GuiSpriteBatchRenderer(GraphicsDevice graphicsDevice, BitmapFont defaultFont, Func<Matrix> getTransformMatrix)
+        public GuiSpriteBatchRenderer(GraphicsDevice graphicsDevice, Func<Matrix> getTransformMatrix)
         {
             _getTransformMatrix = getTransformMatrix;
             _spriteBatch = new SpriteBatch(graphicsDevice);
@@ -62,9 +62,20 @@ namespace MonoGame.Extended.Gui
             _spriteBatch.DrawString(font, text, position, color, clippingRectangle);
         }
 
-        public void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f)
+        public void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f, Rectangle? clippingRectangle = null)
         {
+            if (clippingRectangle.HasValue)
+                rectangle = rectangle.Clip(clippingRectangle.Value);
+
             _spriteBatch.DrawRectangle(rectangle, color, thickness);
+        }
+
+        public void FillRectangle(Rectangle rectangle, Color color, Rectangle? clippingRectangle = null)
+        {
+            if (clippingRectangle.HasValue)
+                rectangle = rectangle.Clip(clippingRectangle.Value);
+
+            _spriteBatch.FillRectangle(rectangle, color);
         }
     }
 }

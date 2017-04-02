@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Newtonsoft.Json;
@@ -36,20 +35,17 @@ namespace MonoGame.Extended.Gui.Serialization
             if (reader.ValueType == typeof(string))
             {
                 var assetName = (string) reader.Value;
-                var skinSerializer = new GuiJsonSerializer(_contentManager);
 
                 // TODO: Load this using the ContentManager instead.
                 using (var stream = TitleContainer.OpenStream(assetName))
-                using (var streamReader = new StreamReader(stream))
-                using (var jsonReader = new JsonTextReader(streamReader))
                 {
-                    var skin = skinSerializer.Deserialize<GuiSkin>(jsonReader);
+                    var skin = GuiSkin.FromStream(stream, _contentManager);
                     _skinService.Skin = skin;
                     return skin;
                 }
             }
 
-            throw new InvalidOperationException("This converter can only convert from a string");
+            throw new InvalidOperationException($"{nameof(GuiSkinJsonConverter)} can only convert from a string");
         }
 
         public override bool CanConvert(Type objectType)

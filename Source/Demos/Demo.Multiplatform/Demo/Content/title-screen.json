@@ -1,5 +1,5 @@
 ﻿{
-  "Skin": "adventure-gui-skin.json",
+  "Skin": "Raw/adventure-gui-skin.json",
   "Controls": [
     {
       "Type": "GuiPanel",

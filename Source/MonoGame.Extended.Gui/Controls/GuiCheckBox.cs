@@ -63,12 +63,12 @@ namespace MonoGame.Extended.Gui.Controls
             renderer.DrawRegion(BackgroundRegion, checkRectangle, Color);
         }
 
-        protected override void DrawText(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         {
             textInfo.Position = BoundingRectangle.Location.ToVector2() +
                     new Vector2(BackgroundRegion.Width + 5, BackgroundRegion.Height * 0.5f - textInfo.Font.LineHeight * 0.5f);
 
-            base.DrawText(context, renderer, deltaSeconds, textInfo);
+            base.DrawForeground(context, renderer, deltaSeconds, textInfo);
         }
     }
 }

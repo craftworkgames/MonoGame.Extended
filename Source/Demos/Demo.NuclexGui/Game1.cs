@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -76,6 +77,9 @@ namespace Demo.NuclexGui
 
         private void Button2_Pressed(object sender, System.EventArgs e)
         {
+            if(_gui.Screen.Desktop.Children.Any(i => i.Name == "window"))
+                return;
+
             var window = new GuiWindowControl
             {
                 Name = "window",

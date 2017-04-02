@@ -38,6 +38,7 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -55,7 +56,6 @@
       <HintPath>..\..\..\packages\MonoGame.Framework.Android.3.6.0.1625\lib\MonoAndroid\MonoGame.Framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -71,16 +71,16 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="..\Demo\Content\title-screen.json">
-      <Link>Assets\title-screen.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Demo\Content\adventure-gui-atlas.json">
-      <Link>Assets\adventure-gui-atlas.json</Link>
+      <Link>Assets\Raw\title-screen.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AndroidAsset>
     <MonoGameContentReference Include="..\Demo\Content\Content.mgcb">
       <Link>Content\Content.mgcb</Link>
     </MonoGameContentReference>
+    <AndroidAsset Include="..\Demo\Content\adventure-gui-skin.json">
+      <Link>Assets\Raw\adventure-gui-skin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AndroidAsset>
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />

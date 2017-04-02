@@ -6,6 +6,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Serialization;
+using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 using Newtonsoft.Json;
 
@@ -34,7 +35,7 @@ namespace Demo.Gui
             _camera = new Camera2D(viewportAdapter);
 
             var titleScreen = LoadScreen(@"Content/title-screen.json");
-            var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, titleScreen.Skin.DefaultFont, _camera.GetViewMatrix);
+            var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _camera.GetViewMatrix);
             _guiSystem = new GuiSystem(viewportAdapter, guiRenderer) { Screen = titleScreen };
 
             var panel = titleScreen.FindControl<GuiPanel>("MainPanel");
@@ -46,6 +47,9 @@ namespace Demo.Gui
             quitButton.Clicked += (sender, args) => Exit();
 
             _progressBar = titleScreen.FindControl<GuiProgressBar>("ProgressBar");
+
+            var listBox = titleScreen.FindControl<GuiListBox>("ListBox");
+            listBox.Items.Add(new Vector2(123.0f, 456.78f));
 
         }
 

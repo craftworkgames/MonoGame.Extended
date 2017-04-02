@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="Collections\Bag.cs" />
     <Compile Include="Collections\DictionaryExtensions.cs" />
+    <Compile Include="Collections\KeyedCollection.cs" />
     <Compile Include="FloatHelper.cs" />
     <Compile Include="IRectangular.cs" />
     <Compile Include="Serialization\NinePatchRegion2DJsonConverter.cs" />
@@ -134,9 +135,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Animations\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

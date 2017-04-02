@@ -39,5 +39,33 @@ namespace MonoGame.Extended
         {
             return new RectangleF(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
         }
+
+        public static Rectangle Clip(this Rectangle rectangle, Rectangle clippingRectangle)
+        {
+            var clip = clippingRectangle;
+            rectangle.X = clip.X > rectangle.X ? clip.X : rectangle.X;
+            rectangle.Y = clip.Y > rectangle.Y ? clip.Y : rectangle.Y;
+            rectangle.Width = rectangle.Right > clip.Right ? clip.Right - rectangle.X : rectangle.Width;
+            rectangle.Height = rectangle.Bottom > clip.Bottom ? clip.Bottom - rectangle.Y : rectangle.Height;
+
+            if (rectangle.Width <= 0 || rectangle.Height <= 0)
+                return Rectangle.Empty;
+
+            return rectangle;
+        }
+
+        public static RectangleF Clip(this RectangleF rectangle, RectangleF clippingRectangle)
+        {
+            var clip = clippingRectangle;
+            rectangle.X = clip.X > rectangle.X ? clip.X : rectangle.X;
+            rectangle.Y = clip.Y > rectangle.Y ? clip.Y : rectangle.Y;
+            rectangle.Width = rectangle.Right > clip.Right ? clip.Right - rectangle.X : rectangle.Width;
+            rectangle.Height = rectangle.Bottom > clip.Bottom ? clip.Bottom - rectangle.Y : rectangle.Height;
+
+            if(rectangle.Width <= 0 || rectangle.Height <= 0)
+                return RectangleF.Empty;
+
+            return rectangle;
+        }
     }
 }

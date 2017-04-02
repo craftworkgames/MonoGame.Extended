@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Demos\BitmapFontsDemo.cs" />
+    <Compile Include="Demos\CameraDemo.cs" />
+    <Compile Include="Demos\DemoBase.cs" />
+    <Compile Include="Demos\InputListenersDemo.cs" />
+    <Compile Include="Demos\ParticlesDemo.cs" />
+    <Compile Include="Demos\SceneGraphsDemo.cs" />
+    <Compile Include="Screens\DemoScreen.cs" />
     <Compile Include="GameMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -47,6 +55,9 @@
   <ItemGroup>
     <None Include="Content\adventure-gui-atlas.json" />
     <None Include="Content\adventure-gui-skin.json" />
+    <None Include="Content\Content.mgcb" />
+    <None Include="Content\Fonts\impact-32.fnt" />
+    <None Include="Content\Fonts\montserrat-32.fnt" />
     <None Include="Content\small-font.fnt" />
     <None Include="Content\title-screen.json" />
     <None Include="packages.config" />
@@ -56,6 +67,18 @@
       <Project>{8e425575-378a-4f83-88c9-f8bebad227c9}</Project>
       <Name>MonoGame.Extended.Gui</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj">
+      <Project>{49c87598-994c-49b5-bbb3-7ffc342635d3}</Project>
+      <Name>MonoGame.Extended.Input</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\MonoGame.Extended.Particles\MonoGame.Extended.Particles.csproj">
+      <Project>{6C8B9E29-D09B-4901-80FD-45AAA35882C6}</Project>
+      <Name>MonoGame.Extended.Particles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\MonoGame.Extended.SceneGraphs\MonoGame.Extended.SceneGraphs.csproj">
+      <Project>{fe61c3d7-d96d-4aa4-9ef1-17e457bb2c7c}</Project>
+      <Name>MonoGame.Extended.SceneGraphs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
       <Name>MonoGame.Extended</Name>
@@ -63,7 +86,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\adventure-gui.png" />
+    <Content Include="Content\Fonts\impact-32_0.png" />
+    <Content Include="Content\Fonts\montserrat-32_0.png" />
     <Content Include="Content\small-font_0.png" />
+    <Content Include="Content\Textures\car-hull.png" />
+    <Content Include="Content\Textures\car-wheel.png" />
+    <Content Include="Content\Textures\hills-1.png" />
+    <Content Include="Content\Textures\hills-2.png" />
+    <Content Include="Content\Textures\hills-3.png" />
+    <Content Include="Content\Textures\hills-4.png" />
+    <Content Include="Content\Textures\hills-clouds.png" />
+    <Content Include="Content\Textures\hills-sky.png" />
+    <Content Include="Content\Textures\hills.png" />
+    <Content Include="Content\Textures\logo-square-128.png" />
+    <Content Include="Content\Textures\logo-square-512.png" />
+    <Content Include="Content\Textures\vignette.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

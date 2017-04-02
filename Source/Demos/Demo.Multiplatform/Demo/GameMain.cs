@@ -1,12 +1,11 @@
-using System.IO;
+using System.Collections.Generic;
+using Demo.Demos;
+using Demo.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Gui;
-using MonoGame.Extended.Gui.Controls;
-using MonoGame.Extended.Gui.Serialization;
 using MonoGame.Extended.ViewportAdapters;
-using Newtonsoft.Json;
 
 namespace Demo
 {
@@ -17,11 +16,11 @@ namespace Demo
 
     public class GameMain : Game
     {
+        // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
-        private Camera2D _camera;
         private GuiSystem _guiSystem;
-        private GuiProgressBar _progressBar;
-        private float _progressDelta = 0.2f;
+        private readonly List<DemoBase> _demos;
+        private int _demoIndex = 0;
 
         public GameMain(PlatformConfig config)
         {
@@ -30,70 +29,80 @@ namespace Demo
                 IsFullScreen = config.IsFullScreen,
                 SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight
             };
+
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
             Window.AllowUserResizing = true;
+
+            _demos = new List<DemoBase>
+            {
+                new InputListenersDemo(this),
+                new SceneGraphsDemo(this),
+                new ParticlesDemo(this),
+                new CameraDemo(this),
+                new BitmapFontsDemo(this)
+            };
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            
+            // TODO: Allow switching to full-screen mode from the UI
+            //if (_isFullScreen)
+            //{
+            //    _graphicsDeviceManager.IsFullScreen = true;
+            //    _graphicsDeviceManager.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            //    _graphicsDeviceManager.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            //    _graphicsDeviceManager.ApplyChanges();
+            //}
         }
 
         protected override void LoadContent()
         {
-            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            var viewportAdapter = new DefaultViewportAdapter(GraphicsDevice);
+            var camera = new Camera2D(viewportAdapter);
 
-            var titleScreen = LoadScreen(@"title-screen.json");
-            var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, titleScreen.Skin.DefaultFont, _camera.GetViewMatrix);
-            _guiSystem = new GuiSystem(viewportAdapter, guiRenderer) { Screen = titleScreen };
+            var skin = LoadSkin(@"Raw/adventure-gui-skin.json");
+            var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, camera.GetViewMatrix);
 
-            var panel = titleScreen.FindControl<GuiPanel>("MainPanel");
-
-            var closeButton = titleScreen.FindControl<GuiButton>("CloseButton");
-            closeButton.Clicked += (sender, args) => { panel.IsVisible = false; };
-
-            var quitButton = titleScreen.FindControl<GuiButton>("QuitButton");
-            quitButton.Clicked += (sender, args) => Exit();
-
-            _progressBar = titleScreen.FindControl<GuiProgressBar>("ProgressBar");
-        }
-
-        private GuiScreen LoadScreen(string name)
-        {
-            var skinService = new GuiSkinService();
-            var serializer = new GuiJsonSerializer(Content)
+            _guiSystem = new GuiSystem(viewportAdapter, guiRenderer)
             {
-                Converters =
-                {
-                    new GuiSkinJsonConverter(Content, skinService),
-                    new GuiControlJsonConverter(skinService)
-                }
+                Screen = new DemoScreen(skin, NextDemo)
             };
 
-            // this is a quick and dirty way to load a file bypassing the content pipeline
-            using (var stream = TitleContainer.OpenStream(name))
-            using (var streamReader = new StreamReader(stream))
-            using (var jsonReader = new JsonTextReader(streamReader))
+            _demos[_demoIndex].Load();
+        }
+
+        private void NextDemo()
+        {
+            _demos[_demoIndex].Unload();
+
+            if (_demoIndex == _demos.Count - 1)
+                _demoIndex = 0;
+            else
+                _demoIndex++;
+
+            _demos[_demoIndex].Load();
+        }
+
+        private GuiSkin LoadSkin(string assetName)
+        {
+            using (var stream = TitleContainer.OpenStream(assetName))
             {
-                var screen = serializer.Deserialize<GuiScreen>(jsonReader);
-                return screen;
+                return GuiSkin.FromStream(stream, Content);
             }
         }
 
         protected override void Update(GameTime gameTime)
         {
-            var deltaTime = gameTime.GetElapsedSeconds();
             var keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _progressBar.Progress += deltaTime * _progressDelta;
-
-            if (_progressBar.Progress >= 1.1f)
-                _progressDelta = -_progressDelta;
-            else if (_progressBar.Progress <= -0.1f)
-                _progressDelta = -_progressDelta;
-
             _guiSystem.Update(gameTime);
-
+            _demos[_demoIndex].OnUpdate(gameTime);
             base.Update(gameTime);
         }
 
@@ -101,8 +110,8 @@ namespace Demo
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            _demos[_demoIndex].OnDraw(gameTime);
             _guiSystem.Draw(gameTime);
-
             base.Draw(gameTime);
         }
     }

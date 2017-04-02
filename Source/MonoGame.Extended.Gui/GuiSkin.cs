@@ -1,77 +1,18 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using MonoGame.Extended.BitmapFonts;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using MonoGame.Extended.Collections;
+using MonoGame.Extended.Gui.Controls;
+using MonoGame.Extended.Gui.Serialization;
 using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui
 {
-    public class KeyedCollection<TKey, TValue> : ICollection<TValue>
-    {
-        private readonly Func<TValue, TKey> _getKey;
-        private readonly Dictionary<TKey, TValue> _dictionary = new Dictionary<TKey, TValue>();
-
-        public KeyedCollection(Func<TValue, TKey> getKey)
-        {
-            _getKey = getKey;
-        }
-
-        public TValue this[TKey key] => _dictionary[key];
-        public ICollection<TKey> Keys => _dictionary.Keys;
-        public ICollection<TValue> Values => _dictionary.Values;
-        public int Count => _dictionary.Count;
-        public bool IsReadOnly => false;
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public IEnumerator<TValue> GetEnumerator()
-        {
-            return _dictionary.Values.GetEnumerator();
-        }
-
-        public void Add(TValue item)
-        {
-            _dictionary.Add(_getKey(item), item);
-        }
-
-        public void Clear()
-        {
-            _dictionary.Clear();
-        }
-
-        public bool Contains(TValue item)
-        {
-            return _dictionary.ContainsKey(_getKey(item));
-        }
-
-        public void CopyTo(TValue[] array, int arrayIndex)
-        {
-            throw new NotSupportedException();
-        }
-
-        public bool Remove(TValue item)
-        {
-            return _dictionary.Remove(_getKey(item));
-        }
-
-        public bool ContainsKey(TKey key)
-        {
-            return _dictionary.ContainsKey(key);
-        }
-
-        public bool TryGetValue(TKey key, out TValue value)
-        {
-            return _dictionary.TryGetValue(key, out value);
-        }
-    }
-
-    
-
     public class GuiSkin
     {
         public GuiSkin()
@@ -108,6 +49,44 @@ namespace MonoGame.Extended.Gui
         public GuiControlStyle GetStyle(string name)
         {
             return _styles[name];
+        }
+
+        public static GuiSkin FromStream(Stream stream, ContentManager contentManager)
+        {
+            var skinSerializer = new GuiJsonSerializer(contentManager);
+
+            using (var streamReader = new StreamReader(stream))
+            using (var jsonReader = new JsonTextReader(streamReader))
+            {
+                return skinSerializer.Deserialize<GuiSkin>(jsonReader);
+            }
+        }
+
+        public T Create<T>(string template, Vector2 position, string name = null, string text = null)
+            where T : GuiControl, new()
+        {
+            var control = new T();
+            GetStyle(template).Apply(control);
+            control.Name = name;
+            control.Position = position;
+            control.Text = text;
+            return control;
+        }
+
+        public T Create<T>(string template, Action<T> onCreate)
+            where T : GuiControl, new()
+        {
+            var control = new T();
+            GetStyle(template).Apply(control);
+            onCreate(control);
+            return control;
+        }
+
+        public GuiControl Create(Type type, string template)
+        {
+            var control = (GuiControl)Activator.CreateInstance(type);
+            GetStyle(template).Apply(control);
+            return control;
         }
     }
 }
