@@ -34,6 +34,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Runtime.CompilerServices;
 using MonoGame.Extended.Collections;
 // ReSharper disable InconsistentNaming
@@ -123,6 +124,13 @@ namespace MonoGame.Extended.Entities
         public void Destroy()
         {
             Manager.MarkEntityToBeRemoved(this);
+        }
+
+        public T Attach<T>(Action<T> configure) where T : EntityComponent
+        {
+            var component = Attach<T>();
+            configure(component);
+            return component;
         }
 
         public T Attach<T>() where T : EntityComponent

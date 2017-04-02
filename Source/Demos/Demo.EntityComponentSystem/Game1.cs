@@ -39,7 +39,7 @@ namespace Demo.StarWarriorGame
                 PreferMultiSampling = false,
                 PreferredDepthStencilFormat = DepthFormat.None,
                 SynchronizeWithVerticalRetrace = true,
-        };
+            };
 
             _ecs = new EntityComponentSystemManager(this);
             _entityManager = _ecs.EntityManager;
@@ -63,7 +63,7 @@ namespace Demo.StarWarriorGame
         protected override void LoadContent()
         {
             var graphicsDevice = GraphicsDevice;
-           
+
             _spriteBatch = new SpriteBatch(graphicsDevice);
             Services.AddService(_spriteBatch);
 
@@ -88,7 +88,7 @@ namespace Demo.StarWarriorGame
             _fpsCounter.Draw(gameTime);
             var fps = $"FPS: {_fpsCounter.FramesPerSecond}";
 
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin();
 
@@ -122,7 +122,7 @@ namespace Demo.StarWarriorGame
                 var position = new Vector2
                 {
                     X = random.Next(viewport.Width - 100) + 50,
-                    Y = random.Next((int) (viewport.Height * 0.75 + 0.5)) + 50
+                    Y = random.Next((int)(viewport.Height * 0.75 + 0.5)) + 50
                 };
                 transform.Position = position;
 

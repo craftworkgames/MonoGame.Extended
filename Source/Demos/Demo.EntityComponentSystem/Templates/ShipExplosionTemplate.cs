@@ -35,7 +35,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using Demo.StarWarriorGame.Components;
 using MonoGame.Extended.Entities;
 
@@ -46,18 +45,12 @@ namespace Demo.StarWarriorGame.Templates
     {
         public const string Name = "ShipExplosionTemplate";
 
-        [SuppressMessage("ReSharper", "UnusedVariable")]
         protected override void Build(Entity entity)
         {
             entity.Group = "EFFECTS";
-
-            var transform = entity.Attach<TransformComponent>();
-
-            var spatial = entity.Attach<SpatialFormComponent>();
-            spatial.SpatialFormFile = "ShipExplosion";
-
-            var expires = entity.Attach<ExpiresComponent>();
-            expires.LifeTime = TimeSpan.FromMilliseconds(1000);
+            entity.Attach<TransformComponent>();
+            entity.Attach<SpatialFormComponent>(c => c.SpatialFormFile = "ShipExplosion");
+            entity.Attach<ExpiresComponent>(c => c.LifeTime = TimeSpan.FromMilliseconds(1000));
         }
     }
 }

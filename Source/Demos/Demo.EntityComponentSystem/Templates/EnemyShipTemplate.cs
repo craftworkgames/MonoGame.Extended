@@ -35,7 +35,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using Demo.StarWarriorGame.Components;
 using MonoGame.Extended.Entities;
 
@@ -46,25 +45,19 @@ namespace Demo.StarWarriorGame.Templates
     {
         public const string Name = "EnemyShipTemplate";
 
-        [SuppressMessage("ReSharper", "UnusedVariable")]
         protected override void Build(Entity entity)
         {
             entity.Group = "SHIPS";
-
-            var transform = entity.Attach<TransformComponent>();
-
-            var spatial = entity.Attach<SpatialFormComponent>();
-            spatial.SpatialFormFile = "EnemyShip";
-
-            var health = entity.Attach<HealthComponent>();
-            health.Points = health.MaximumPoints = 10;
-
-            var weapon = entity.Attach<WeaponComponent>();
-            weapon.ShootDelay = TimeSpan.FromSeconds(2);
-
-            var enemy = entity.Attach<EnemyComponent>();
-
-            var physics = entity.Attach<PhysicsComponent>();
+            entity.Attach<TransformComponent>();
+            entity.Attach<SpatialFormComponent>(c => c.SpatialFormFile = "EnemyShip");
+            entity.Attach<HealthComponent>(c => 
+            {
+                c.Points = 10;
+                c.MaximumPoints = 10;
+            });
+            entity.Attach<WeaponComponent>(c => c.ShootDelay = TimeSpan.FromSeconds(2));
+            entity.Attach<EnemyComponent>();
+            entity.Attach<PhysicsComponent>();
         }
     }
 }
