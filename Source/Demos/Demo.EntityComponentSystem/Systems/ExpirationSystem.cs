@@ -44,10 +44,12 @@ namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(ExpiresComponent))]
     [System(GameLoopType.Update, Layer = 0)]
-    public class ExpirationSystem : EntityProcessingSystem<ExpiresComponent>
+    public class ExpirationSystem : EntityProcessingSystem
     {
-        protected override void Process(GameTime gameTime, Entity entity, ExpiresComponent expires)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
+            var expires = entity.Get<ExpiresComponent>();
+
             expires.LifeTime -= gameTime.ElapsedGameTime;
             if (expires.LifeTime > TimeSpan.Zero)
                 return;

@@ -8,10 +8,14 @@ namespace Demo.Platformer.Entities.Systems
 {
     [Aspect(AspectType.All, typeof(TransformComponent), typeof(EnemyAiComponent), typeof(SpriteComponent))]
     [System(GameLoopType.Update, Layer = 0)]
-    public class EnemyMovementSystem : EntityProcessingSystem<EnemyAiComponent, TransformComponent, SpriteComponent>
+    public class EnemyMovementSystem : EntityProcessingSystem
     {
-        protected override void Process(GameTime gameTime, Entity entity, EnemyAiComponent enemy, TransformComponent transform, SpriteComponent sprite)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
+            var enemy = entity.Get<EnemyAiComponent>();
+            var transform = entity.Get<TransformComponent>();
+            var sprite = entity.Get<SpriteComponent>();
+
             var deltaTime = gameTime.GetElapsedSeconds();
 
             transform.Position += enemy.Direction * deltaTime;

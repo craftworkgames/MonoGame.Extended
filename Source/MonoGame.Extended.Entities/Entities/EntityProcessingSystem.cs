@@ -1,5 +1,5 @@
 ﻿// Original code derived from: 
-// https://github.com/thelinuxlich/artemis_CSharp/blob/master/Artemis_XNA_INDEPENDENT/System/ProcessingSystem.cs
+// https://github.com/thelinuxlich/artemis_CSharp/blob/master/Artemis_XNA_INDEPENDENT/System/EntityProcessingSystem.cs
 
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EntityProcessingSystem.cs" company="GAMADU.COM">
@@ -30,16 +30,62 @@
 //     or implied, of GAMADU.COM.
 // </copyright>
 // <summary>
-//   Class EntityComponentProcessingSystem.
+//   Class EntityProcessingSystem.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Entities
 {
-    public class EntityProcessingSystem : System
+    public abstract class EntityProcessingSystem : EntitySystem
     {
+        private readonly Dictionary<Entity, int> _activeEntitiesLookup = new Dictionary<Entity, int>();
+        // ReSharper disable once InconsistentNaming
+        internal readonly List<Entity> _activeEntities = new List<Entity>();
+        internal int BitIndex;
+        internal Aspect Aspect;
+
+        public IEnumerable<Entity> ActiveEntities => _activeEntities;
+
+        protected EntityProcessingSystem()
+        {
+        }
+
+        internal virtual void RefreshEntityComponents(Entity entity)
+        {
+            var isInterested = Aspect.Matches(entity.ComponentBits);
+            if (!isInterested)
+                return;
+
+            var contains = entity.SystemBits[BitIndex];
+
+            if (!contains && entity.IsActive)
+            {
+                Add(entity);
+            }
+            else if (contains && !entity.IsActive)
+            {
+                Remove(entity);
+            }
+        }
+        public virtual void OnEntityAdded(Entity entity)
+        {
+        }
+
+        public virtual void OnEntityDisabled(Entity entity)
+        {
+        }
+
+        public virtual void OnEntityEnabled(Entity entity)
+        {
+        }
+
+        public virtual void OnEntityRemoved(Entity entity)
+        {
+        }
+
         protected override void Process(GameTime gameTime)
         {
             base.Process(gameTime);
@@ -54,59 +100,49 @@ namespace MonoGame.Extended.Entities
         protected virtual void Process(GameTime gameTime, Entity entity)
         {
         }
-    }
 
-    public class EntityProcessingSystem<T1> : System where T1 : Component
-    {
-        protected override void Process(GameTime gameTime)
+        protected bool IsInterestedIn(Entity entity)
         {
-            base.Process(gameTime);
-
-            for (var i = _activeEntities.Count - 1; i >= 0; i--)
-            {
-                var entity = _activeEntities[i];
-                Process(gameTime, entity, entity.Get<T1>());
-            }
+            return Aspect.Matches(entity.ComponentBits);
         }
 
-        protected virtual void Process(GameTime gameTime, Entity entity, T1 component1)
+        internal void Add(Entity entity)
         {
-        }
-    }
+            if (entity == null)
+                return;
 
-    public class EntityProcessingSystem<T1, T2> : System where T1 : Component where T2 : Component
-    {
-        protected override void Process(GameTime gameTime)
-        {
-            base.Process(gameTime);
+            entity.SystemBits[BitIndex] = true;
 
-            for (var i = _activeEntities.Count - 1; i >= 0; i--)
-            {
-                var entity = _activeEntities[i];
-                Process(gameTime, entity, entity.Get<T1>(), entity.Get<T2>());
-            }
+            if (_activeEntitiesLookup.ContainsKey(entity))
+                return;
+
+            _activeEntitiesLookup.Add(entity, _activeEntities.Count);
+            _activeEntities.Add(entity);
+
+            OnEntityAdded(entity);
         }
 
-        protected virtual void Process(GameTime gameTime, Entity entity, T1 component1, T2 component2)
+        internal void Remove(Entity entity)
         {
-        }
-    }
+            if (entity == null)
+                return;
 
-    public class EntityProcessingSystem<T1, T2, T3> : System where T1 : Component where T2 : Component where T3 : Component
-    {
-        protected override void Process(GameTime gameTime)
-        {
-            base.Process(gameTime);
+            entity.SystemBits[BitIndex] = false;
 
-            for (var i = _activeEntities.Count - 1; i >= 0; i--)
-            {
-                var entity = _activeEntities[i];
-                Process(gameTime, entity, entity.Get<T1>(), entity.Get<T2>(), entity.Get<T3>());
-            }
-        }
+            int activeEntityIndex;
+            if (!_activeEntitiesLookup.TryGetValue(entity, out activeEntityIndex))
+                return;
+            _activeEntitiesLookup.Remove(entity);
 
-        protected virtual void Process(GameTime gameTime, Entity entity, T1 component1, T2 component2, T3 component3)
-        {
+            var swapEntity = _activeEntities[_activeEntities.Count - 1];
+
+            if (entity != swapEntity)
+                _activeEntitiesLookup[swapEntity] = activeEntityIndex;
+
+            _activeEntities[activeEntityIndex] = swapEntity;
+            _activeEntities.RemoveAt(_activeEntities.Count - 1);
+
+            OnEntityRemoved(entity);
         }
-    }
+    }  
 }

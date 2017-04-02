@@ -5,8 +5,8 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.Platformer.Entities.Components
 {
-    [Component]
-    public class TransformComponent : Component
+    [EntityComponent]
+    public class TransformComponent : EntityComponent
     {
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created
         private Matrix2D _localMatrix; // model space to local space

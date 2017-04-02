@@ -40,15 +40,14 @@ using System.Diagnostics;
 namespace MonoGame.Extended.Entities
 {
     [DebuggerDisplay("Index:{" + nameof(Index) + "}")]
-    public sealed class ComponentType
+    public sealed class EntityComponentType
     {
         private static int _nextIndex;
 
         public int Index { get; }
         public Type Type { get; }
-        public bool IsPooled { get; internal set; }
 
-        internal ComponentType(Type type)
+        internal EntityComponentType(Type type)
         {
             Index = _nextIndex++;
             Type = type;

@@ -2,8 +2,8 @@
 
 namespace Demo.StarWarriorGame.Components
 {
-    [Component]
-    public class PlayerComponent : Component
+    [EntityComponent]
+    public class PlayerComponent : EntityComponent
     {
     }
 }

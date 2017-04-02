@@ -46,7 +46,7 @@ namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(SpatialFormComponent), typeof(TransformComponent))]
     [System(GameLoopType.Draw, Layer = 0)]
-    public class RenderSystem : EntityProcessingSystem<SpatialFormComponent, TransformComponent>
+    public class RenderSystem : EntityProcessingSystem
     {
         private ContentManager _contentManager;
         private SpriteBatch _spriteBatch;
@@ -57,11 +57,14 @@ namespace Demo.StarWarriorGame.Systems
             _contentManager = Game.Services.GetService<ContentManager>();
         }
 
-        protected override void Process(GameTime gameTime, Entity entity, SpatialFormComponent spatialFormComponent,TransformComponent transformComponent)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
-            var spatialName = spatialFormComponent.SpatialFormFile;
+            var spatial = entity.Get<SpatialFormComponent>();
+            var transform = entity.Get<TransformComponent>();
 
-            var worldPosition = transformComponent.WorldPosition;
+            var spatialName = spatial.SpatialFormFile;
+
+            var worldPosition = transform.WorldPosition;
             if (!(worldPosition.X >= 0) || !(worldPosition.Y >= 0) ||
                 !(worldPosition.X < _spriteBatch.GraphicsDevice.Viewport.Width) ||
                 !(worldPosition.Y < _spriteBatch.GraphicsDevice.Viewport.Height))
@@ -70,23 +73,23 @@ namespace Demo.StarWarriorGame.Systems
             // very naive render ...
             if (string.Compare("PlayerShip", spatialName, StringComparison.InvariantCultureIgnoreCase) == 0)
             {
-                PlayerShip.Render(_spriteBatch, _contentManager, transformComponent);
+                PlayerShip.Render(_spriteBatch, _contentManager, transform);
             }
             else if (string.Compare("Missile", spatialName, StringComparison.InvariantCultureIgnoreCase) == 0)
             {
-                Missile.Render(_spriteBatch, _contentManager, transformComponent);
+                Missile.Render(_spriteBatch, _contentManager, transform);
             }
             else if (string.Compare("EnemyShip", spatialName, StringComparison.InvariantCultureIgnoreCase) == 0)
             {
-                EnemyShip.Render(_spriteBatch, _contentManager, transformComponent);
+                EnemyShip.Render(_spriteBatch, _contentManager, transform);
             }
             else if (string.Compare("BulletExplosion", spatialName, StringComparison.InvariantCultureIgnoreCase) == 0)
             {
-                Explosion.Render(_spriteBatch, _contentManager, transformComponent, Color.Red, 10);
+                Explosion.Render(_spriteBatch, _contentManager, transform, Color.Red, 10);
             }
             else if (string.Compare("ShipExplosion", spatialName, StringComparison.InvariantCultureIgnoreCase) == 0)
             {
-                ShipExplosion.Render(_spriteBatch, _contentManager, transformComponent, Color.Yellow, 30);
+                ShipExplosion.Render(_spriteBatch, _contentManager, transform, Color.Yellow, 30);
             }
         }
     }

@@ -19,7 +19,7 @@
 //        protected override void Process(GameTime gameTime, Entity entity)
 //        {
 //            var state = entity.GetEntityByTag<CharacterComponent>();
-//            if (state.IsAlive)
+//            if (state.IsActive)
 //                return;
 
 //            _entityFactory.CreateBloodExplosion(state.Entity.Position);

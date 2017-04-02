@@ -40,7 +40,7 @@ using MonoGame.Extended.Collections;
 namespace MonoGame.Extended.Entities
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    public sealed class ComponentPoolAttribute : Attribute
+    public sealed class EntityComponentPoolAttribute : Attribute
     {
         public int InitialSize { get; set; } = 10;
         public ObjectPoolIsFullPolicy IsFullPolicy { get; set; } = ObjectPoolIsFullPolicy.Resize;

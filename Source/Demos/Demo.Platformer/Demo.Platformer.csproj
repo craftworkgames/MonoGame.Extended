@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Entities\Components\AnimationComponent.cs" />
-    <Compile Include="Entities\Components\BasicCollisionBodyComponent.cs" />
+    <Compile Include="Entities\Components\CollisionBodyComponent.cs" />
     <Compile Include="Entities\Components\EnemyAiComponent.cs" />
     <Compile Include="Entities\Components\CharacterComponent.cs" />
     <Compile Include="Entities\Components\PlayerComponent.cs" />

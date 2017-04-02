@@ -49,44 +49,51 @@ namespace MonoGame.Extended.Entities
         private readonly Dictionary<string, Entity> _entitiesByName;
         private readonly Dictionary<string, EntityTemplate> _entityTemplatesByName;
         private readonly Dictionary<string, Bag<Entity>> _entitiesByGroup;
-        private readonly List<Entity> _entitiesToRefresh;
+        private readonly List<Entity> _markedEntities;
 
-        private readonly List<IComponentPool> _componentPools;
-        private readonly Bag<Dictionary<Entity, Component>> _componentTypeEntitiesToComponents;
+        private readonly Dictionary<int, IComponentPool> _componentPoolsByComponentTypeIndex;
+        private readonly Bag<Dictionary<Entity, EntityComponent>> _componentTypeEntitiesToComponents;
         private readonly List<EntityComponentTypePair> _componentsToRemove;
 
-        private readonly Dictionary<Type, ComponentType> _componentTypes = new Dictionary<Type, ComponentType>();
+        private readonly Dictionary<Type, EntityComponentType> _componentTypes = new Dictionary<Type, EntityComponentType>();
 
         public int TotalEntitiesCount => _pool.TotalCount;
         public int ActiveEntitiesCount => _pool.InUseCount;
+
+        public event EntityDelegate EntityCreated;
+        public event EntityDelegate EntityAdded;
+        public event EntityDelegate EntityRemoved;
+        public event EntityDelegate EntityDestroyed;
 
         internal EntityManager(SystemManager systemManager)
         {
             _systemManager = systemManager;
 
             _pool = new ObjectPool<Entity>(CreateEntityObject, 100, ObjectPoolIsFullPolicy.Resize);
-            _pool.ItemUsed += OnEntityUsed;
-            _pool.ItemReturned += OnEntityReturned;
+            _pool.ItemUsed += OnEntityCreated;
+            _pool.ItemReturned += OnEntityDestroyed;
 
             _entitiesByName = new Dictionary<string, Entity>();
             _entityTemplatesByName = new Dictionary<string, EntityTemplate>();
             _entitiesByGroup = new Dictionary<string, Bag<Entity>>();
 
-            _entitiesToRefresh = new List<Entity>();
+            _markedEntities = new List<Entity>();
 
-            _componentPools = new List<IComponentPool>();
-            _componentTypeEntitiesToComponents = new Bag<Dictionary<Entity, Component>>();
+            _componentPoolsByComponentTypeIndex = new Dictionary<int, IComponentPool>();
+            _componentTypeEntitiesToComponents = new Bag<Dictionary<Entity, EntityComponent>>();
             _componentsToRemove = new List<EntityComponentTypePair>();
         }
 
         private Entity CreateEntityObject()
         {
-            return new Entity(_systemManager.SystemCount, _componentTypes.Count);
+            return new Entity(_systemManager.ProcessingSystems.Count, _componentTypes.Count);
         }
 
         public Entity CreateEntity()
         {
-            return _pool.New();
+            var entity = _pool.New();
+            MarkEntityToBeAdded(entity);
+            return entity;
         }
 
         public Entity CreateEntityFromTemplate(string name)
@@ -95,6 +102,8 @@ namespace MonoGame.Extended.Entities
                 throw new ArgumentNullException(nameof(name));
 
             var entity = _pool.New();
+            MarkEntityToBeAdded(entity);
+
             EntityTemplate entityTemplate;
             _entityTemplatesByName.TryGetValue(name, out entityTemplate);
             if (entityTemplate == null)
@@ -180,7 +189,7 @@ namespace MonoGame.Extended.Entities
                 entities.Remove(entity);
         }
 
-        internal void RemoveEntity(Entity entity)
+        internal void DestroyEntity(Entity entity)
         {
             Debug.Assert(entity != null);
 
@@ -189,66 +198,89 @@ namespace MonoGame.Extended.Entities
             entity.Return();
         }
 
+        internal void MarkEntityToBeAdded(Entity entity)
+        {
+            Debug.Assert(entity != null);
+
+            entity.WaitingToBeAdded = true;
+            if (entity.WaitingToRefreshComponents)
+                return;
+            entity.WaitingToRefreshComponents = true;
+            _markedEntities.Add(entity);
+        }
+
         internal void MarkEntityToBeRefreshed(Entity entity)
         {
             Debug.Assert(entity != null);
 
-            if (entity.NeedsRefresh)
+            if (entity.WaitingToRefreshComponents)
                 return;
-            entity.NeedsRefresh = true;
-            _entitiesToRefresh.Add(entity);
+            entity.WaitingToRefreshComponents = true;
+            _markedEntities.Add(entity);
         }
 
         internal void MarkEntityToBeRemoved(Entity entity)
         {
             Debug.Assert(entity != null);
-
-            MarkEntityToBeRefreshed(entity);
-            entity.IsAlive = false;
-        }
-
-        internal void RefreshEntity(Entity entity, Bag<System> systems)
-        {
             Debug.Assert(entity != null);
-            Debug.Assert(systems != null);
 
-            for (var i = systems.Count - 1; i >= 0; --i)
-                systems[i].OnEntityChanged(entity);
-
-            entity.NeedsRefresh = false;
-
-            if (!entity.IsAlive)
-                 RemoveEntity(entity);
+            entity.WaitingToBeRemoved = true;
+            if (entity.WaitingToRefreshComponents)
+                return;
+            entity.WaitingToRefreshComponents = true;
+            _markedEntities.Add(entity);
+            OnEntityRemoved(entity);
         }
 
-        internal void RefreshMarkedEntitiesWith(Bag<System> systems)
+        internal void ProcessMarkedEntitiesWith(List<EntityProcessingSystem> processingSystems)
         {
-            Debug.Assert(systems != null);
+            Debug.Assert(processingSystems != null);
 
-            if (_entitiesToRefresh.Count <= 0)
-                return;
-
-            for (var index = _entitiesToRefresh.Count - 1; index >= 0; --index)
+            foreach (var entity in _markedEntities)
             {
-                var entity = _entitiesToRefresh[index];
-                RefreshEntity(entity, systems);
+                foreach (var system in processingSystems)
+                    system.RefreshEntityComponents(entity);
+
+                if (entity.WaitingToBeAdded)
+                {
+                    entity.WaitingToBeAdded = false;
+                    OnEntityAdded(entity);
+                }
+
+                if (entity.WaitingToBeRemoved)
+                {
+                    entity.WaitingToBeRemoved = false;
+                    DestroyEntity(entity);
+                }
+
+                entity.WaitingToRefreshComponents = false;
             }
 
-            _entitiesToRefresh.Clear();
+            _markedEntities.Clear();
         }
 
-        private void OnEntityUsed(Entity entity)
+        private void OnEntityCreated(Entity entity)
         {
             entity.Manager = this;
-            entity.IsAlive = true;
-            MarkEntityToBeRefreshed(entity);
+            EntityCreated?.Invoke(entity);
         }
 
-        private void OnEntityReturned(Entity entity)
+        private void OnEntityDestroyed(Entity entity)
         {
+            EntityDestroyed?.Invoke(entity);
         }
 
-        internal T AddComponent<T>(Entity entity) where T : Component
+        private void OnEntityAdded(Entity entity)
+        {
+            EntityAdded?.Invoke(entity);
+        }
+
+        private void OnEntityRemoved(Entity entity)
+        {
+            EntityRemoved?.Invoke(entity);
+        }
+
+        internal T AddComponent<T>(Entity entity) where T : EntityComponent
         {
             Debug.Assert(entity != null);
 
@@ -256,7 +288,7 @@ namespace MonoGame.Extended.Entities
             return (T) AddComponent(entity, componentType);
         }
 
-        internal Component AddComponent(Entity entity, ComponentType componentType)
+        internal EntityComponent AddComponent(Entity entity, EntityComponentType componentType)
         {
             Debug.Assert(entity != null);
             Debug.Assert(componentType != null);
@@ -265,20 +297,20 @@ namespace MonoGame.Extended.Entities
                 _componentTypeEntitiesToComponents[componentType.Index] = null;
             var components = _componentTypeEntitiesToComponents[componentType.Index];
             if (components == null)
-                _componentTypeEntitiesToComponents[componentType.Index] = components = new Dictionary<Entity, Component>();
+                _componentTypeEntitiesToComponents[componentType.Index] = components = new Dictionary<Entity, EntityComponent>();
 
-            Component component;
+            EntityComponent component;
 
-            if (componentType.IsPooled)
+            IComponentPool componentPool;
+            if (_componentPoolsByComponentTypeIndex.TryGetValue(componentType.Index, out componentPool))
             {
-                var componentPool = _componentPools[componentType.Index];
                 component = componentPool.New();
                 if (component == null)
                     return null;
             }
             else
             {
-                component = (Component)Activator.CreateInstance(componentType.Type);
+                component = (EntityComponent)Activator.CreateInstance(componentType.Type);
             }
 
             component.Entity = entity;
@@ -291,7 +323,7 @@ namespace MonoGame.Extended.Entities
             return component;
         }
 
-        internal T GetComponent<T>(Entity entity) where T : Component
+        internal T GetComponent<T>(Entity entity) where T : EntityComponent
         {
             Debug.Assert(entity != null);
 
@@ -299,7 +331,7 @@ namespace MonoGame.Extended.Entities
             return (T)GetComponent(entity, componentType);
         }
 
-        internal Component GetComponent(Entity entity, ComponentType componentType)
+        internal EntityComponent GetComponent(Entity entity, EntityComponentType componentType)
         {
             Debug.Assert(entity != null);
             Debug.Assert(componentType != null);
@@ -309,19 +341,19 @@ namespace MonoGame.Extended.Entities
 
             Debug.Assert(components != null);
 
-            Component component;
+            EntityComponent component;
             components.TryGetValue(entity, out component);
             return component;
         }
 
-        internal void MarkComponentToBeRemoved<T>(Entity entity) where T : Component
+        internal void MarkComponentToBeRemoved<T>(Entity entity) where T : EntityComponent
         {
             Debug.Assert(entity != null);
 
             MarkComponentToBeRemoved(entity, GetComponentTypeFrom(typeof(T)));
         }
 
-        internal void MarkComponentToBeRemoved(Entity entity, ComponentType componentType)
+        internal void MarkComponentToBeRemoved(Entity entity, EntityComponentType componentType)
         {
             Debug.Assert(entity != null);
             Debug.Assert(componentType != null);
@@ -342,7 +374,7 @@ namespace MonoGame.Extended.Entities
 
                 Debug.Assert(components != null);
 
-                Component component;
+                EntityComponent component;
                 if (!components.TryGetValue(entity, out component))
                     continue;
 
@@ -368,7 +400,7 @@ namespace MonoGame.Extended.Entities
 
                 Debug.Assert(components != null);
 
-                Component component;
+                EntityComponent component;
                 if (!components.TryGetValue(entity, out component))
                     continue;
 
@@ -382,14 +414,14 @@ namespace MonoGame.Extended.Entities
             foreach (var componentTypeInfo in componentTypeInfos)
             {
                 var type = componentTypeInfo.AsType();
-                var componentType = new ComponentType(type);
+                var componentType = new EntityComponentType(type);
                 _componentTypes.Add(type, componentType);
             }
         }
 
-        internal ComponentType GetComponentTypeFrom(Type type)
+        internal EntityComponentType GetComponentTypeFrom(Type type)
         {
-            ComponentType result;
+            EntityComponentType result;
             _componentTypes.TryGetValue(type, out result);
             return result;
         }
@@ -403,7 +435,7 @@ namespace MonoGame.Extended.Entities
             }
         }
 
-        internal void CreateComponentPoolsFrom(List<Tuple<TypeInfo, ComponentPoolAttribute>> componentTypeInfos)
+        internal void CreateComponentPoolsFrom(List<Tuple<TypeInfo, EntityComponentPoolAttribute>> componentTypeInfos)
         {
             foreach (var tuple in componentTypeInfos)
             {
@@ -414,24 +446,24 @@ namespace MonoGame.Extended.Entities
             }
         }
 
-        private void CreateComponentPool(ComponentType componentType, int initialSize, ObjectPoolIsFullPolicy isFullPolicy)
+        private void CreateComponentPool(EntityComponentType componentType, int initialSize, ObjectPoolIsFullPolicy isFullPolicy)
         {
             Debug.Assert(componentType != null);
             Debug.Assert(initialSize > 0);
-            Debug.Assert(componentType.IsPooled == false);
+            Debug.Assert(!_componentPoolsByComponentTypeIndex.ContainsKey(componentType.Index));
 
-            componentType.IsPooled = true;
             var poolType = typeof(ComponentPool<>).MakeGenericType(componentType.Type);
             var componentPool = (IComponentPool)Activator.CreateInstance(poolType, initialSize, isFullPolicy);
-            _componentPools[componentType.Index] = componentPool;
+
+            _componentPoolsByComponentTypeIndex.Add(componentType.Index, componentPool);
         }
 
         internal struct EntityComponentTypePair
         {
             public Entity Entity;
-            public ComponentType ComponentType;
+            public EntityComponentType ComponentType;
 
-            public EntityComponentTypePair(Entity entity, ComponentType componentType)
+            public EntityComponentTypePair(Entity entity, EntityComponentType componentType)
             {
                 Entity = entity;
                 ComponentType = componentType;

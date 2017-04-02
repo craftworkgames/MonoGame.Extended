@@ -44,10 +44,13 @@ namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(WeaponComponent), typeof(TransformComponent), typeof(EnemyComponent))]
     [System(GameLoopType.Update, Layer = 1)]
-    public class EnemyShooterSystem : EntityProcessingSystem<TransformComponent, WeaponComponent>
+    public class EnemyShooterSystem : EntityProcessingSystem
     {
-        protected override void Process(GameTime gameTime, Entity entity, TransformComponent transform, WeaponComponent weapon)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
+            var transform = entity.Get<TransformComponent>();
+            var weapon = entity.Get<WeaponComponent>();
+                
             weapon.ShootTimerDelay += gameTime.ElapsedGameTime;
             if (weapon.ShootTimerDelay <= weapon.ShootDelay)
                 return;

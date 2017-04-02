@@ -38,7 +38,7 @@ using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Entities
 {
-    public abstract class Component : IPoolable
+    public abstract class EntityComponent : IPoolable
     {
         private ReturnToPoolDelegate _returnToPoolDelegate;
 
@@ -47,7 +47,7 @@ namespace MonoGame.Extended.Entities
         IPoolable IPoolable.NextNode { get; set; }
         IPoolable IPoolable.PreviousNode { get; set; }
 
-        protected Component()
+        protected EntityComponent()
         {
         }
 

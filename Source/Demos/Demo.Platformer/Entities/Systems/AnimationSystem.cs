@@ -7,10 +7,13 @@ namespace Demo.Platformer.Entities.Systems
 {
     [Aspect(AspectType.All, typeof(SpriteComponent), typeof(AnimationComponent))]
     [System(GameLoopType.Draw, Layer = 0)]
-    public class AnimationSystem : EntityProcessingSystem<SpriteComponent, AnimationComponent>
+    public class AnimationSystem : EntityProcessingSystem
     {
-        protected override void Process(GameTime gameTime, Entity entity, SpriteComponent sprite, AnimationComponent animation)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
+            var sprite = entity.Get<SpriteComponent>();
+            var animation = entity.Get<AnimationComponent>();
+
             var currentAnimation = animation.CurrentAnimation;
             if (currentAnimation == null || currentAnimation.IsComplete)
                 return;

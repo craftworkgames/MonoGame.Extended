@@ -47,7 +47,7 @@ namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(PlayerComponent), typeof(HealthComponent))]
     [System(GameLoopType.Draw, Layer = 0)]
-    public class HudRenderSystem : EntityProcessingSystem<PlayerComponent, HealthComponent>
+    public class HudRenderSystem : EntityProcessingSystem
     {
         private BitmapFont _font;
         private SpriteBatch _spriteBatch;
@@ -59,8 +59,11 @@ namespace Demo.StarWarriorGame.Systems
             _font = Game.Services.GetService<BitmapFont>();
         }
 
-        protected override void Process(GameTime gameTime, Entity entity, PlayerComponent player, HealthComponent health)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
+            var player = entity.Get<PlayerComponent>();
+            var health = entity.Get<HealthComponent>();
+
             var viewport = GraphicsDevice.Viewport;
             var renderPosition = new Vector2(20, viewport.Height - 40);
 

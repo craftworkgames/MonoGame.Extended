@@ -39,8 +39,8 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarriorGame.Components
 {
-    [Component]
-    public class WeaponComponent : Component
+    [EntityComponent]
+    public class WeaponComponent : EntityComponent
     {
         public TimeSpan ShootTimerDelay { get; set; }
         public TimeSpan ShootDelay { get; set; }

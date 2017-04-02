@@ -52,25 +52,24 @@
     <Compile Include="Entities\AspectAttribute.cs" />
     <Compile Include="Entities\Aspect.cs" />
     <Compile Include="Entities\BitVector.cs" />
-    <Compile Include="Entities\ComponentAttribute.cs" />
-    <Compile Include="Entities\ComponentPool.cs" />
-    <Compile Include="Entities\ComponentPoolAttribute.cs" />
+    <Compile Include="Entities\EntityComponentAttribute.cs" />
+    <Compile Include="Entities\EntityComponentPool.cs" />
+    <Compile Include="Entities\EntityComponentPoolAttribute.cs" />
     <Compile Include="Entities\EntityComponentDelegate.cs" />
     <Compile Include="Entities\EntityDelegate.cs" />
     <Compile Include="Entities\EntityManager.cs" />
     <Compile Include="Entities\EntityProcessingSystem.cs" />
-    <Compile Include="Entities\ProcessingSystem.cs" />
     <Compile Include="Entities\SystemAttribute.cs" />
     <Compile Include="Entities\EntityTemplateAttribute.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityComponentSystemManager.cs" />
     <Compile Include="Entities\SystemManager.cs" />
     <Compile Include="Entities\EntityTemplate.cs" />
-    <Compile Include="Entities\Component.cs" />
-    <Compile Include="Entities\ComponentType.cs" />
+    <Compile Include="Entities\EntityComponent.cs" />
+    <Compile Include="Entities\EntityComponentType.cs" />
     <Compile Include="Entities\TransformComponent2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Entities\System.cs" />
+    <Compile Include="Entities\EntitySystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">

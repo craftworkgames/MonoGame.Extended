@@ -7,9 +7,9 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    [Aspect(AspectType.All, typeof(PlayerComponent), typeof(AnimationComponent), typeof(BasicCollisionBodyComponent), typeof(SpriteComponent))]
+    [Aspect(AspectType.All, typeof(PlayerComponent), typeof(AnimationComponent), typeof(CollisionBodyComponent), typeof(SpriteComponent))]
     [System(GameLoopType.Update, Layer = 0)]
-    public class PlayerMovementSystem : EntityProcessingSystem<SpriteComponent, AnimationComponent>
+    public class PlayerMovementSystem : EntityProcessingSystem
     {
         private KeyboardState _previousKeyboardState;
         private KeyboardState _keyboardState;
@@ -22,9 +22,12 @@ namespace Demo.Platformer.Entities.Systems
             _keyboardState = Keyboard.GetState();
         }
 
-        protected override void Process(GameTime gameTime, Entity entity, SpriteComponent sprite, AnimationComponent animation)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
-            var physics = entity.Get<BasicCollisionBodyComponent>();
+            var sprite = entity.Get<SpriteComponent>();
+            var animation = entity.Get<AnimationComponent>();
+
+            var physics = entity.Get<CollisionBodyComponent>();
             var player = entity.Get<PlayerComponent>();
             var velocity = new Vector2(0, physics.Velocity.Y);
 

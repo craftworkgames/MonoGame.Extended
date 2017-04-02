@@ -43,15 +43,18 @@ namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(TransformComponent), typeof(PhysicsComponent))]
     [System(GameLoopType.Update, Layer = 1)]
-    public class MovementSystem : EntityProcessingSystem<TransformComponent, PhysicsComponent>
+    public class MovementSystem : EntityProcessingSystem
     {
-        protected override void Process(GameTime gameTime, Entity entity, TransformComponent transform ,PhysicsComponent velocity)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
+            var transform = entity.Get<TransformComponent>();
+            var physics = entity.Get<PhysicsComponent>();
+
             var milliseconds = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-            var deltaPosition = velocity.Speed * milliseconds;
+            var deltaPosition = physics.Speed * milliseconds;
             var deltaRotatedPosition = new Vector2(
-                (float)(Math.Cos(velocity.AngleAsRadians) * deltaPosition), 
-                (float)(Math.Sin(velocity.AngleAsRadians) * deltaPosition));
+                (float)(Math.Cos(physics.AngleAsRadians) * deltaPosition), 
+                (float)(Math.Sin(physics.AngleAsRadians) * deltaPosition));
             transform.Position += deltaRotatedPosition;
         }
     }

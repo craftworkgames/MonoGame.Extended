@@ -39,8 +39,8 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarriorGame.Components
 {
-    [Component]
-    public class PhysicsComponent : Component
+    [EntityComponent]
+    public class PhysicsComponent : EntityComponent
     {
         private const float ToRadians = (float)(Math.PI / 180.0);
 

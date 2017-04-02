@@ -46,7 +46,7 @@ namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(HealthComponent), typeof(TransformComponent))]
     [System(GameLoopType.Draw, Layer = 0)]
-    public class HealthBarRenderSystem : EntityProcessingSystem<HealthComponent, TransformComponent>
+    public class HealthBarRenderSystem : EntityProcessingSystem
     {
         private BitmapFont _font;
         private SpriteBatch _spriteBatch;
@@ -58,8 +58,11 @@ namespace Demo.StarWarriorGame.Systems
             _font = Game.Services.GetService<BitmapFont>();
         }
 
-        protected override void Process(GameTime gameTime, Entity entity, HealthComponent health, TransformComponent transform)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
+            var health = entity.Get<HealthComponent>();
+            var transform = entity.Get<TransformComponent>();
+
             _stringBuilder.Clear();
             _stringBuilder.Append((float)Math.Round(health.HealthPercentage * 100, 1));
             _stringBuilder.Append("%");

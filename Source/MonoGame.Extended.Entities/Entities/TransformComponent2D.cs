@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Entities
 {
-    public class TransformComponent2D : Component
+    public class TransformComponent2D : EntityComponent
     {
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created
         private Matrix2D _localMatrix; // model space to local space

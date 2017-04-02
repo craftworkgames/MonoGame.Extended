@@ -38,8 +38,8 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarriorGame.Components
 {
-    [Component]
-    public class EnemyComponent : Component
+    [EntityComponent]
+    public class EnemyComponent : EntityComponent
     {
     }
 }

@@ -3,9 +3,9 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.Platformer.Entities.Components
 {
-    [Component]
-    [ComponentPool(InitialSize = 1)]
-    public class PlayerComponent : Component
+    [EntityComponent]
+    [EntityComponentPool(InitialSize = 1)]
+    public class PlayerComponent : EntityComponent
     {
         public float WalkSpeed { get; set; }
         public float JumpSpeed { get; set; }

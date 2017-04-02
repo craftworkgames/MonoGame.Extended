@@ -46,7 +46,7 @@ namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(PlayerComponent), typeof(TransformComponent))]
     [System(GameLoopType.Update, Layer = 0)]
-    public class PlayerShipControlSystem : EntityProcessingSystem<PlayerComponent, TransformComponent>
+    public class PlayerShipControlSystem : EntityProcessingSystem
     {
         private TimeSpan _missileLaunchTimer;
         private readonly TimeSpan _missileLaunchDelay;
@@ -58,8 +58,10 @@ namespace Demo.StarWarriorGame.Systems
         }
 
         [SuppressMessage("ReSharper", "InvertIf")]
-        protected override void Process(GameTime gameTime, Entity entity, PlayerComponent player, TransformComponent transform)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
+            var transform = entity.Get<TransformComponent>();
+
             var keyboard = Keyboard.GetState();
             var direction = Vector2.Zero;
 

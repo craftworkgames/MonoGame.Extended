@@ -4,9 +4,9 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.Platformer.Entities.Components
 {
-    [Component]
-    [ComponentPool(InitialSize = 100)]
-    public class AnimationComponent : Component
+    [EntityComponent]
+    [EntityComponentPool(InitialSize = 100)]
+    public class AnimationComponent : EntityComponent
     {
         private SpriteSheetAnimationFactory _animationFactory;
 

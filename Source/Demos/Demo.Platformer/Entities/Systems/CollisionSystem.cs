@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using Demo.Platformer.Entities.Components;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
@@ -8,72 +8,59 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.Platformer.Entities.Systems
 {
-    [Aspect(AspectType.All, typeof(BasicCollisionBodyComponent), typeof(TransformComponent))]
+    [Aspect(AspectType.All, typeof(CollisionBodyComponent), typeof(TransformComponent))]
     [System(GameLoopType.Update, Layer = 0)]
-    public class CollisionSystem : EntityProcessingSystem<TransformComponent, BasicCollisionBodyComponent>
+    public class CollisionSystem : EntitySystem
     {
-        internal HashSet<CollisionPair> CollisionPairs = new HashSet<CollisionPair>();
+        private readonly List<CollisionBodyComponent> _staticBodies = new List<CollisionBodyComponent>();
+        private readonly List<CollisionBodyComponent> _movingBodies = new List<CollisionBodyComponent>();
 
-        protected override void Begin(GameTime gameTime)
+        public CollisionSystem()
         {
-            CollisionPairs.Clear();
+            EntityManager.EntityAdded += OnEntityAdded;
+            EntityManager.EntityRemoved += OnEntityRemoved;
         }
 
-        protected override void Process(GameTime gameTime, Entity entity, TransformComponent transform, BasicCollisionBodyComponent body)
+        private void OnEntityAdded(Entity entity)
         {
-            //foreach (var entityB in EntityManager.Entities)
-            //{
-            //    if (entity == entityB)
-            //        return;
-            //    var collisionComponentB = entityB.Get<BasicCollisionBodyComponent>();
-            //    if (collisionComponentB == null)
-            //        return;
+            var collision = entity.Get<CollisionBodyComponent>();
+            if (collision == null)
+                return;
 
-            //    var rectangleA = body.BoundingRectangle;
-            //    var rectangleB = collisionComponentB.BoundingRectangle;
-            //    var depth = IntersectionDepth(rectangleA, rectangleB);
-            //    if (depth == Vector2.Zero)
-            //        return;
-
-            //   var collisionPair = new CollisionPair(body, collisionComponentB, depth);
-
-            //    if (CollisionPairs.Contains(collisionPair))
-            //        continue;
-
-            //    CollisionPairs.Add(collisionPair);
-            //}
-        }
-
-        protected override void End(GameTime gameTime)
-        {
-            foreach (var collisionPair in CollisionPairs)
-                ResolveCollision(collisionPair.FirstBody, collisionPair.SecondBody, collisionPair.Depth);
-        }
-
-        private void ResolveCollision(BasicCollisionBodyComponent bodyA, BasicCollisionBodyComponent bodyB, Vector2 depth)
-        {
-            var player = bodyA.Entity.Get<PlayerComponent>();
-
-            var transform = bodyA.Entity.Get<TransformComponent>();
-            var absDepthX = Math.Abs(depth.X);
-            var absDepthY = Math.Abs(depth.Y);
-
-            if (absDepthY < absDepthX)
-            {
-                transform.Position += new Vector2(0, depth.Y); // move the player out of the ground or roof
-                var isOnGround = bodyA.Velocity.Y > 0;
-
-                if (isOnGround)
-                {
-                    bodyA.Velocity = new Vector2(bodyA.Velocity.X, 0); // set y velocity to zero only if this is a ground collision
-                    if (player != null)
-                        player.IsJumping = false;
-                }
-            }
+            if (collision.IsStatic)
+                _staticBodies.Add(collision);
             else
+                _movingBodies.Add(collision);
+        }
+
+        private void OnEntityRemoved(Entity entity)
+        {
+            var collision = entity.Get<CollisionBodyComponent>();
+            if (collision == null)
+                return;
+
+            if (collision.IsStatic)
+                _staticBodies.Remove(collision);
+            else
+                _movingBodies.Remove(collision);
+        }
+
+        protected override void Process(GameTime gameTime)
+        {
+            foreach (var bodyA in _movingBodies)
             {
-                transform.Position += new Vector2(depth.X, 0);  // move the player out of the wall
-                bodyA.Velocity = new Vector2(bodyA.Velocity.X, bodyA.Velocity.Y < 0 ? 0 : bodyA.Velocity.Y); // drop the player down if they hit a wall
+                foreach (var bodyB in _staticBodies.Concat(_movingBodies))
+                {
+                    if (bodyA == bodyB)
+                        continue;
+
+                    var depth = IntersectionDepth(bodyA.BoundingRectangle, bodyB.BoundingRectangle);
+
+                    if (depth != Vector2.Zero)
+                    {
+                        bodyA.OnCollision(bodyA, bodyB, depth);
+                    }
+                }
             }
         }
 
@@ -103,57 +90,6 @@ namespace Demo.Platformer.Entities.Systems
             var depthX = distanceX > 0 ? minDistanceX - distanceX : -minDistanceX - distanceX;
             var depthY = distanceY > 0 ? minDistanceY - distanceY : -minDistanceY - distanceY;
             return new Vector2(depthX, depthY);
-        }
-
-        // ReSharper disable once UseNameofExpression
-        [DebuggerDisplay("{DebugDisplayString,nq}")]
-        public struct CollisionPair : IEquatable<CollisionPair>
-        {
-            public readonly BasicCollisionBodyComponent FirstBody;
-            public readonly BasicCollisionBodyComponent SecondBody;
-            public readonly Vector2 Depth;
-
-            public CollisionPair(BasicCollisionBodyComponent firstBody, BasicCollisionBodyComponent secondBody, Vector2 depth)
-            {
-                FirstBody = firstBody;
-                SecondBody = secondBody;
-                Depth = depth;
-            }
-
-            public static bool operator ==(CollisionPair first, CollisionPair second)
-            {
-                return first.FirstBody == second.FirstBody && first.SecondBody == second.SecondBody;
-            }
-
-            public static bool operator !=(CollisionPair first, CollisionPair second)
-            {
-                return !(first == second);
-            }
-
-            public bool Equals(CollisionPair other)
-            {
-                return FirstBody == other.FirstBody && SecondBody == other.SecondBody;
-            }
-
-            public override bool Equals(object other)
-            {
-                throw new NotSupportedException();
-            }
-
-            public override int GetHashCode()
-            {
-                unchecked
-                {
-                    return (FirstBody.GetHashCode() * 397) ^ SecondBody.GetHashCode();
-                }
-            }
-
-            internal string DebugDisplayString => $"FirstBody = {FirstBody}, SecondBody = {SecondBody}";
-
-            public override string ToString()
-            {
-                return $"{{FirstBody = {FirstBody}, SecondBody = {SecondBody}}}";
-            }
         }
     }
 }

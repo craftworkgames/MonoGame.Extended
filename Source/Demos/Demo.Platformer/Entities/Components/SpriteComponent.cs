@@ -4,9 +4,9 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.Platformer.Entities.Components
 {
-    [Component]
-    [ComponentPool(InitialSize = 100)]
-    public class SpriteComponent : Component
+    [EntityComponent]
+    [EntityComponentPool(InitialSize = 100)]
+    public class SpriteComponent : EntityComponent
     {
         public Vector2 Origin { get; set; }
         public Color Color { get; set; }

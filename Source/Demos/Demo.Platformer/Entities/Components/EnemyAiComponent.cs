@@ -3,9 +3,9 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.Platformer.Entities.Components
 {
-    [Component]
-    [ComponentPool(InitialSize = 100)]
-    public class EnemyAiComponent : Component
+    [EntityComponent]
+    [EntityComponentPool(InitialSize = 100)]
+    public class EnemyAiComponent : EntityComponent
     {
         public Vector2 Direction { get; set; }
         public float WalkTime { get; set; }

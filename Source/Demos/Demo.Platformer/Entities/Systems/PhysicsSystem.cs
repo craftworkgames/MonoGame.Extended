@@ -6,9 +6,9 @@ using TransformComponent = Demo.Platformer.Entities.Components.TransformComponen
 
 namespace Demo.Platformer.Entities.Systems
 {
-    [Aspect(AspectType.All, typeof(BasicCollisionBodyComponent), typeof(TransformComponent))]
+    [Aspect(AspectType.All, typeof(CollisionBodyComponent), typeof(TransformComponent))]
     [System(GameLoopType.Update, Layer = 0)]
-    public class PhysicsSystem : EntityProcessingSystem<TransformComponent, BasicCollisionBodyComponent>
+    public class PhysicsSystem : EntityProcessingSystem
     {
         private readonly Vector2 _gravity;
 
@@ -17,8 +17,11 @@ namespace Demo.Platformer.Entities.Systems
             _gravity = new Vector2(0, 0);
         }
 
-        protected override void Process(GameTime gameTime, Entity entity, TransformComponent transform, BasicCollisionBodyComponent body)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
+            var transform = entity.Get<TransformComponent>();
+            var body = entity.Get<CollisionBodyComponent>();
+
             if (!body.IsStatic)
             {
                 var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;

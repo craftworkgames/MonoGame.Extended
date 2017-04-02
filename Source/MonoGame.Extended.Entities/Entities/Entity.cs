@@ -42,13 +42,15 @@ namespace MonoGame.Extended.Entities
 {
     public sealed class Entity : IPoolable
     {
-        private static readonly uint IsAliveMask;
-        private static readonly uint NeedsRefreshMask;
+        private static readonly uint ToBeAddedMask;
+        private static readonly uint ToBeRemovedMask;
+        private static readonly uint ToRefreshComponentsMask;
 
         static Entity()
         {
-            IsAliveMask = BitVector32.CreateMask();
-            NeedsRefreshMask = BitVector32.CreateMask(IsAliveMask);
+            ToBeAddedMask = BitVector32.CreateMask();
+            ToBeRemovedMask = BitVector32.CreateMask(ToBeAddedMask);
+            ToRefreshComponentsMask = BitVector32.CreateMask(ToBeRemovedMask);
         }
 
         internal EntityManager Manager;
@@ -59,20 +61,34 @@ namespace MonoGame.Extended.Entities
         internal string _group;
         internal string _name;
 
-        public bool IsAlive
+        public bool IsActive
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return Flags[IsAliveMask]; }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            internal set { Flags[IsAliveMask] = value; }
+            get { return !Flags[ToBeRemovedMask]; }
         }
 
-        internal bool NeedsRefresh
+        public bool WaitingToBeAdded
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return Flags[NeedsRefreshMask]; }
+            get { return Flags[ToBeAddedMask]; }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set { Flags[NeedsRefreshMask] = value; }
+            internal set { Flags[ToBeAddedMask] = value; }
+        }
+
+        public bool WaitingToBeRemoved
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return Flags[ToBeRemovedMask]; }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal set { Flags[ToBeRemovedMask] = value; }
+        }
+
+        internal bool WaitingToRefreshComponents
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return Flags[ToRefreshComponentsMask]; }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set { Flags[ToRefreshComponentsMask] = value; }
         }
 
         public string Name
@@ -109,17 +125,17 @@ namespace MonoGame.Extended.Entities
             Manager.MarkEntityToBeRemoved(this);
         }
 
-        public T Attach<T>() where T : Component
+        public T Attach<T>() where T : EntityComponent
         {
             return Manager.AddComponent<T>(this);
         }
 
-        public void Detach<T>() where T : Component
+        public void Detach<T>() where T : EntityComponent
         {
             Manager.MarkComponentToBeRemoved<T>(this);
         }
 
-        public T Get<T>() where T : Component
+        public T Get<T>() where T : EntityComponent
         {
             return Manager.GetComponent<T>(this);
         }

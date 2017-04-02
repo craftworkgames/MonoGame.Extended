@@ -35,31 +35,24 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Entities
 {
-    public abstract class System
+    public abstract class EntitySystem
     {
-        private readonly Dictionary<Entity, int> _activeEntitiesLookup = new Dictionary<Entity, int>();
-        // ReSharper disable once InconsistentNaming
-        internal readonly List<Entity> _activeEntities = new List<Entity>();
-        internal int BitIndex;
-        internal Aspect Aspect;
         private TimeSpan _timer;
 
         internal EntityComponentSystemManager Manager;
         public bool IsEnabled { get; set; }
-        public IEnumerable<Entity> ActiveEntities => _activeEntities;
         public Game Game => Manager.Game;
         public GraphicsDevice GraphicsDevice => Manager.GraphicsDevice;
         public EntityManager EntityManager => Manager.EntityManager;
 
         public TimeSpan ProcessingDelay { get; set; }
 
-        protected System()
+        protected EntitySystem()
         {
             IsEnabled = true;
             _timer = TimeSpan.Zero;
@@ -74,45 +67,6 @@ namespace MonoGame.Extended.Entities
         }
 
         public virtual void UnloadContent()
-        {
-        }
-
-        public virtual void OnEntityAdded(Entity entity)
-        {
-        }
-
-        public virtual void OnEntityChanged(Entity entity)
-        {
-            var isInterested = Aspect.Matches(entity.ComponentBits);
-            if (!isInterested)
-                return;
-
-            var contains = entity.SystemBits[BitIndex];
-
-            if (!contains && entity.IsAlive)
-            {
-                Add(entity);
-            }
-            else if (contains && !entity.IsAlive)
-            {
-                Remove(entity);
-            }
-            else
-            {
-                throw new Exception();
-            }
-           
-        }
-
-        public virtual void OnEntityDisabled(Entity entity)
-        {
-        }
-
-        public virtual void OnEntityEnabled(Entity entity)
-        {
-        }
-
-        public virtual void OnEntityRemoved(Entity entity)
         {
         }
 
@@ -153,50 +107,6 @@ namespace MonoGame.Extended.Entities
 
         protected virtual void End(GameTime gameTime)
         {
-        }
-
-        protected bool IsInterestedIn(Entity entity)
-        {
-            return Aspect.Matches(entity.ComponentBits);
-        }
-
-        protected void Add(Entity entity)
-        {
-            if (entity == null)
-                return;
-
-            entity.SystemBits[BitIndex] = true;
-
-            if (_activeEntitiesLookup.ContainsKey(entity))
-                return;
-
-            _activeEntitiesLookup.Add(entity, _activeEntities.Count);
-            _activeEntities.Add(entity);
-
-            OnEntityAdded(entity);
-        }
-
-        protected void Remove(Entity entity)
-        {
-            if (entity == null)
-                return;
-
-            entity.SystemBits[BitIndex] = false;
-
-            int activeEntityIndex;
-            if (!_activeEntitiesLookup.TryGetValue(entity, out activeEntityIndex))
-                return;
-            _activeEntitiesLookup.Remove(entity);
-
-            var swapEntity = _activeEntities[_activeEntities.Count - 1];
-
-            if (entity != swapEntity)
-                _activeEntitiesLookup[swapEntity] = activeEntityIndex;
-
-            _activeEntities[activeEntityIndex] = swapEntity;
-            _activeEntities.RemoveAt(_activeEntities.Count - 1);
-
-            OnEntityRemoved(entity);
         }
     }
 }

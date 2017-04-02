@@ -57,7 +57,7 @@ namespace Demo.Platformer.Entities
 
             animatedSprite.Play("idle");
 
-            var collision = entity.Attach<BasicCollisionBodyComponent>();
+            var collision = entity.Attach<CollisionBodyComponent>();
             collision.Size = textureRegion.Size;
             collision.Origin = Vector2.One * 0.5f;
 
@@ -76,7 +76,7 @@ namespace Demo.Platformer.Entities
             var entity = _entityManager.CreateEntity();
             var transform = entity.Attach<TransformComponent>();
             transform.Position = position;
-            var collision = entity.Attach<BasicCollisionBodyComponent>();
+            var collision = entity.Attach<CollisionBodyComponent>();
             collision.Size = size;
             collision.IsStatic = true;
             return entity;
@@ -88,7 +88,7 @@ namespace Demo.Platformer.Entities
             var transform = entity.Attach<TransformComponent>();
             transform.Position = position;
 
-            var collision = entity.Attach<BasicCollisionBodyComponent>();
+            var collision = entity.Attach<CollisionBodyComponent>();
             collision.Size = size;
             collision.IsStatic = true;
 
@@ -128,7 +128,7 @@ namespace Demo.Platformer.Entities
             var transform = entity.Attach<TransformComponent>();
             transform.Position = position;
 
-            var collision = entity.Attach<BasicCollisionBodyComponent>();
+            var collision = entity.Attach<CollisionBodyComponent>();
             collision.Size = size;
             collision.Origin = Vector2.One * 0.5f;
 

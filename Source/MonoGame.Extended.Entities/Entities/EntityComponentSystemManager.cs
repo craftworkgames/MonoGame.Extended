@@ -57,8 +57,8 @@ namespace MonoGame.Extended.Entities
             var entityTemplateTypeInfos = new List<TypeInfo>();
             var systemTypeInfos = new List<TypeInfo>();
 
-            var componentTypeInfo = typeof(Component).GetTypeInfo();
-            var systemTypeInfo = typeof(System).GetTypeInfo();
+            var componentTypeInfo = typeof(EntityComponent).GetTypeInfo();
+            var systemTypeInfo = typeof(EntitySystem).GetTypeInfo();
             var entityTempalteTypeInfo = typeof(EntityTemplate).GetTypeInfo();
 
             foreach (var assembly in assemblies)
@@ -100,7 +100,7 @@ namespace MonoGame.Extended.Entities
         private int RegisterComponents(List<TypeInfo> componentTypeInfos)
         {
             List<TypeInfo> registeredComponentTypeInfos;
-            List<Tuple<TypeInfo, ComponentPoolAttribute>> registeredPooledComponentTypeInfos;
+            List<Tuple<TypeInfo, EntityComponentPoolAttribute>> registeredPooledComponentTypeInfos;
             GetRegisteredComponents(componentTypeInfos, out registeredComponentTypeInfos, out registeredPooledComponentTypeInfos);
 
             EntityManager.CreateComponentTypesFrom(registeredComponentTypeInfos);
@@ -109,18 +109,18 @@ namespace MonoGame.Extended.Entities
         }
 
         // ReSharper disable once ParameterTypeCanBeEnumerable.Local
-        private static void GetRegisteredComponents(List<TypeInfo> componentTypeInfos, out List<TypeInfo> registeredComponentTypeInfos, out List<Tuple<TypeInfo, ComponentPoolAttribute>> pooledComponentTypeInfos)
+        private static void GetRegisteredComponents(List<TypeInfo> componentTypeInfos, out List<TypeInfo> registeredComponentTypeInfos, out List<Tuple<TypeInfo, EntityComponentPoolAttribute>> pooledComponentTypeInfos)
         {
             registeredComponentTypeInfos = new List<TypeInfo>();
-            pooledComponentTypeInfos = new List<Tuple<TypeInfo, ComponentPoolAttribute>>();
+            pooledComponentTypeInfos = new List<Tuple<TypeInfo, EntityComponentPoolAttribute>>();
 
-            var componentAttributeType = typeof(ComponentAttribute);
-            var componentPoolAttributeType = typeof(ComponentPoolAttribute);
+            var componentAttributeType = typeof(EntityComponentAttribute);
+            var componentPoolAttributeType = typeof(EntityComponentPoolAttribute);
 
             foreach (var typeInfo in componentTypeInfos)
             {
-                ComponentAttribute componentAttribute = null;
-                ComponentPoolAttribute componentPoolAttribute = null;
+                EntityComponentAttribute componentAttribute = null;
+                EntityComponentPoolAttribute componentPoolAttribute = null;
 
                 var attributes = typeInfo.GetCustomAttributes(false);
                 foreach (var attribute in attributes)
@@ -128,10 +128,10 @@ namespace MonoGame.Extended.Entities
                     var attributeType = attribute.GetType();
 
                     if (attributeType == componentAttributeType)
-                        componentAttribute = (ComponentAttribute)attribute;
+                        componentAttribute = (EntityComponentAttribute)attribute;
 
                     if (attributeType == componentPoolAttributeType)
-                        componentPoolAttribute = (ComponentPoolAttribute)attribute;
+                        componentPoolAttribute = (EntityComponentPoolAttribute)attribute;
                 }
 
                 if (componentAttribute == null)
@@ -142,7 +142,7 @@ namespace MonoGame.Extended.Entities
                 if (componentPoolAttribute == null)
                     continue;
 
-                pooledComponentTypeInfos.Add(new Tuple<TypeInfo, ComponentPoolAttribute>(typeInfo, componentPoolAttribute));
+                pooledComponentTypeInfos.Add(new Tuple<TypeInfo, EntityComponentPoolAttribute>(typeInfo, componentPoolAttribute));
             }
         }
 
@@ -223,10 +223,10 @@ namespace MonoGame.Extended.Entities
                 if (systemAttribute == null)
                     return;
 
-                var aspect = new Aspect(andMask, orMask, norMask);
-
-                var system = (System)Activator.CreateInstance(typeInfo.AsType());
-                system.Aspect = aspect;
+                var system = (EntitySystem)Activator.CreateInstance(typeInfo.AsType());
+                var processingSystem = system as EntityProcessingSystem;
+                if (processingSystem != null)
+                    processingSystem.Aspect = new Aspect(andMask, orMask, norMask);
 
                 _systemManager.AddSystem(system, systemAttribute.GameLoopType,
                     systemAttribute.Layer, SystemExecutionType.Synchronous);
@@ -253,7 +253,7 @@ namespace MonoGame.Extended.Entities
             _systemManager.InitializeIfNecessary();
 
             EntityManager.RemoveMarkedComponents();
-            EntityManager.RefreshMarkedEntitiesWith(_systemManager.Systems);
+            EntityManager.ProcessMarkedEntitiesWith(_systemManager.ProcessingSystems);
 
             _systemManager.Update(gameTime);
         }

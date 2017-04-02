@@ -58,13 +58,13 @@ namespace MonoGame.Extended.Entities
     internal sealed class SystemManager
     {
         private readonly EntityComponentSystemManager _manager;
-        internal int SystemCount;
         private SystemLayer[] _updateLayers;
         private SystemLayer[] _drawLayers;
         private readonly SystemLayer _dummyLayer;
         private bool _hasInitialized;
 
-        public Bag<System> Systems { get; }
+        internal List<EntitySystem> Systems;
+        internal List<EntityProcessingSystem> ProcessingSystems;
 
         internal SystemManager(EntityComponentSystemManager manager)
         {
@@ -72,7 +72,8 @@ namespace MonoGame.Extended.Entities
             _updateLayers = new SystemLayer[0];
             _drawLayers = new SystemLayer[0];
             _dummyLayer  = new SystemLayer();
-            Systems = new Bag<System>();
+            Systems = new List<EntitySystem>();
+            ProcessingSystems = new List<EntityProcessingSystem>();
         }
 
         internal void InitializeIfNecessary()
@@ -115,7 +116,7 @@ namespace MonoGame.Extended.Entities
             }
         }
 
-        private static void ProcessSystemsSynchronous(GameTime gameTime, Bag<System> systems)
+        private static void ProcessSystemsSynchronous(GameTime gameTime, Bag<EntitySystem> systems)
         {
             Debug.Assert(systems != null);
 
@@ -131,14 +132,14 @@ namespace MonoGame.Extended.Entities
         //    Parallel.ForEach(systems, system => system.ProcessInternal());
         //}
 
-        internal T AddSystem<T>(T system, GameLoopType gameLoopType, int layer, SystemExecutionType executionType) where T : System
+        internal T AddSystem<T>(T system, GameLoopType gameLoopType, int layer, SystemExecutionType executionType) where T : EntitySystem
         {
             Debug.Assert(system != null);
 
             return (T)AddSystem(system.GetType(), system, gameLoopType, layer, executionType);
         }
 
-        private System AddSystem(Type systemType, System system, GameLoopType gameLoopType, int layer, SystemExecutionType executionType)
+        private EntitySystem AddSystem(Type systemType, EntitySystem system, GameLoopType gameLoopType, int layer, SystemExecutionType executionType)
         {
             Debug.Assert(systemType != null);
             Debug.Assert(system != null);
@@ -146,7 +147,17 @@ namespace MonoGame.Extended.Entities
             if (Systems.Contains(system))
                 throw new InvalidOperationException($"System '{systemType}' has already been added.");
 
-            system.BitIndex = SystemCount++;
+            system.Manager = _manager;
+
+            Systems.Add(system);
+
+
+            var processingSystem = system as EntityProcessingSystem;
+            if (processingSystem != null)
+            {
+                processingSystem.BitIndex = ProcessingSystems.Count;
+                ProcessingSystems.Add(processingSystem);
+            }
 
             switch (gameLoopType)
             {
@@ -163,7 +174,7 @@ namespace MonoGame.Extended.Entities
             return system;
         }
 
-        private void AddSystemTo(ref SystemLayer[] layers, System system, int layerIndex, SystemExecutionType executionType)
+        private void AddSystemTo(ref SystemLayer[] layers, EntitySystem system, int layerIndex, SystemExecutionType executionType)
         {
             Debug.Assert(layers != null);
 
@@ -193,23 +204,20 @@ namespace MonoGame.Extended.Entities
                 default:
                     throw new ArgumentOutOfRangeException(nameof(executionType), executionType, null);
             }
-
-            system.Manager = _manager;
-            Systems.Add(system);
         }
 
         private sealed class SystemLayer : IComparable<SystemLayer>
         {
             public int LayerIndex;
 
-            public readonly Bag<System> SynchronousSystems;
+            public readonly Bag<EntitySystem> SynchronousSystems;
             //public readonly Bag<System> AsynchronousSystems;
 
             public SystemLayer(int layerIndex = 0)
             {
                 LayerIndex = layerIndex;
                 //AsynchronousSystems = new Bag<System>();
-                SynchronousSystems = new Bag<System>();
+                SynchronousSystems = new Bag<EntitySystem>();
             }
 
             public int CompareTo(SystemLayer other)

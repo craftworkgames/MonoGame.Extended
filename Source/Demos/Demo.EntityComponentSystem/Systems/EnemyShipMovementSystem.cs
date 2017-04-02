@@ -42,10 +42,13 @@ namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(TransformComponent), typeof(PhysicsComponent), typeof(EnemyComponent))]
     [System(GameLoopType.Update, Layer = 0)]
-    public class EnemyShipMovementSystem : EntityProcessingSystem<TransformComponent, PhysicsComponent, EnemyComponent>
+    public class EnemyShipMovementSystem : EntityProcessingSystem
     {
-        protected override void Process(GameTime gameTime, Entity entity, TransformComponent transform, PhysicsComponent physics, EnemyComponent enemy)
+        protected override void Process(GameTime gameTime, Entity entity)
         {
+            var transform = entity.Get<TransformComponent>();
+            var physics = entity.Get<PhysicsComponent>();
+
             var worldPosition = transform.WorldPosition;
             var viewport = GraphicsDevice.Viewport;
             if (worldPosition.X < 0 || worldPosition.X > viewport.Width)

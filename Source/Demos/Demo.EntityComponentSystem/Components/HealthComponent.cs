@@ -38,8 +38,8 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarriorGame.Components
 {
-    [Component]
-    public class HealthComponent : Component
+    [EntityComponent]
+    public class HealthComponent : EntityComponent
     {
         private int _health;
         private int _maximumHealth;
