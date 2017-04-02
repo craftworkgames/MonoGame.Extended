@@ -8,7 +8,7 @@ using TransformComponent = Demo.Platformer.Entities.Components.TransformComponen
 namespace Demo.Platformer.Entities.Systems
 {
     [Aspect(AspectType.All, typeof(SpriteComponent), typeof(TransformComponent))]
-    [System(GameLoopType.Draw, Layer = 0)]
+    [EntitySystem(GameLoopType.Draw, Layer = 0)]
     public class SpriteSystem : EntityProcessingSystem
     {
         private Camera2D _camera;

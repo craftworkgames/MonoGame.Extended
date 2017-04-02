@@ -7,7 +7,7 @@ using TransformComponent = Demo.Platformer.Entities.Components.TransformComponen
 namespace Demo.Platformer.Entities.Systems
 {
     [Aspect(AspectType.All, typeof(CollisionBodyComponent), typeof(TransformComponent))]
-    [System(GameLoopType.Update, Layer = 0)]
+    [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class PhysicsSystem : EntityProcessingSystem
     {
         private readonly Vector2 _gravity;

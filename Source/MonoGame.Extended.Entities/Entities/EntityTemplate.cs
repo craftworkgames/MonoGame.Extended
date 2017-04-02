@@ -40,6 +40,10 @@ namespace MonoGame.Extended.Entities
     {
         protected internal EntityComponentSystemManager Manager { get; internal set; }
 
+        protected internal virtual void Initialize()
+        {
+        }
+
         protected internal abstract void Build(Entity entity);
     }
 }

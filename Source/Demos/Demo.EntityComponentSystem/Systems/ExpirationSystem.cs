@@ -43,7 +43,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(ExpiresComponent))]
-    [System(GameLoopType.Update, Layer = 0)]
+    [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class ExpirationSystem : EntityProcessingSystem
     {
         protected override void Process(GameTime gameTime, Entity entity)

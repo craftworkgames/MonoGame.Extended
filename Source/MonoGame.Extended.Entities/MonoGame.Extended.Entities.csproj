@@ -59,7 +59,7 @@
     <Compile Include="Entities\EntityDelegate.cs" />
     <Compile Include="Entities\EntityManager.cs" />
     <Compile Include="Entities\EntityProcessingSystem.cs" />
-    <Compile Include="Entities\SystemAttribute.cs" />
+    <Compile Include="Entities\EntitySystemAttribute.cs" />
     <Compile Include="Entities\EntityTemplateAttribute.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityComponentSystemManager.cs" />

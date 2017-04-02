@@ -45,7 +45,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(PlayerComponent), typeof(TransformComponent))]
-    [System(GameLoopType.Update, Layer = 0)]
+    [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class PlayerShipControlSystem : EntityProcessingSystem
     {
         private TimeSpan _missileLaunchTimer;

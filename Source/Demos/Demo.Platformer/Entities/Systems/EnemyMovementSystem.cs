@@ -7,7 +7,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.Platformer.Entities.Systems
 {
     [Aspect(AspectType.All, typeof(TransformComponent), typeof(EnemyAiComponent), typeof(SpriteComponent))]
-    [System(GameLoopType.Update, Layer = 0)]
+    [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class EnemyMovementSystem : EntityProcessingSystem
     {
         protected override void Process(GameTime gameTime, Entity entity)

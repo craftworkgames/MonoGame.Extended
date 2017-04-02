@@ -151,7 +151,7 @@ namespace Demo.StarWarriorGame
             spatial.SpatialFormFile = "PlayerShip";
 
             var health = entity.Attach<HealthComponent>();
-            health.Health = health.MaximumHealth = 30;
+            health.Points = health.MaximumPoints = 30;
 
             entity.Attach<PlayerComponent>();
         }

@@ -6,7 +6,7 @@ using SpriteComponent = Demo.Platformer.Entities.Components.SpriteComponent;
 namespace Demo.Platformer.Entities.Systems
 {
     [Aspect(AspectType.All, typeof(SpriteComponent), typeof(AnimationComponent))]
-    [System(GameLoopType.Draw, Layer = 0)]
+    [EntitySystem(GameLoopType.Draw, Layer = 0)]
     public class AnimationSystem : EntityProcessingSystem
     {
         protected override void Process(GameTime gameTime, Entity entity)
@@ -14,7 +14,7 @@ namespace Demo.Platformer.Entities.Systems
             var sprite = entity.Get<SpriteComponent>();
             var animation = entity.Get<AnimationComponent>();
 
-            var currentAnimation = animation.CurrentAnimation;
+            var currentAnimation = animation.CurrentAnimationName;
             if (currentAnimation == null || currentAnimation.IsComplete)
                 return;
 

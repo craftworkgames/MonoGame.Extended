@@ -9,13 +9,17 @@ using MonoGame.Extended.Entities;
 namespace Demo.Platformer.Entities.Systems
 {
     [Aspect(AspectType.All, typeof(CollisionBodyComponent), typeof(TransformComponent))]
-    [System(GameLoopType.Update, Layer = 0)]
+    [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class CollisionSystem : EntitySystem
     {
         private readonly List<CollisionBodyComponent> _staticBodies = new List<CollisionBodyComponent>();
         private readonly List<CollisionBodyComponent> _movingBodies = new List<CollisionBodyComponent>();
 
         public CollisionSystem()
+        {
+        }
+
+        public override void Initialize()
         {
             EntityManager.EntityAdded += OnEntityAdded;
             EntityManager.EntityRemoved += OnEntityRemoved;
@@ -56,10 +60,10 @@ namespace Demo.Platformer.Entities.Systems
 
                     var depth = IntersectionDepth(bodyA.BoundingRectangle, bodyB.BoundingRectangle);
 
-                    if (depth != Vector2.Zero)
-                    {
-                        bodyA.OnCollision(bodyA, bodyB, depth);
-                    }
+                    //if (depth != Vector2.Zero)
+                    //{
+                    //    bodyA.OnCollision(bodyA, bodyB, depth);
+                    //}
                 }
             }
         }

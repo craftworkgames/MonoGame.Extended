@@ -43,7 +43,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(WeaponComponent), typeof(TransformComponent), typeof(EnemyComponent))]
-    [System(GameLoopType.Update, Layer = 1)]
+    [EntitySystem(GameLoopType.Update, Layer = 1)]
     public class EnemyShooterSystem : EntityProcessingSystem
     {
         protected override void Process(GameTime gameTime, Entity entity)

@@ -45,7 +45,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(SpatialFormComponent), typeof(TransformComponent))]
-    [System(GameLoopType.Draw, Layer = 0)]
+    [EntitySystem(GameLoopType.Draw, Layer = 0)]
     public class RenderSystem : EntityProcessingSystem
     {
         private ContentManager _contentManager;

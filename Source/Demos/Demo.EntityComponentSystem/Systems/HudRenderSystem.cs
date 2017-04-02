@@ -46,7 +46,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(PlayerComponent), typeof(HealthComponent))]
-    [System(GameLoopType.Draw, Layer = 0)]
+    [EntitySystem(GameLoopType.Draw, Layer = 0)]
     public class HudRenderSystem : EntityProcessingSystem
     {
         private BitmapFont _font;
@@ -69,7 +69,7 @@ namespace Demo.StarWarriorGame.Systems
 
             _stringBuilder.Clear();
             _stringBuilder.Append("Health: ");
-            _stringBuilder.Append((float)Math.Round(health.HealthPercentage * 100, 1));
+            _stringBuilder.Append((float)Math.Round(health.Ratio * 100, 1));
             _stringBuilder.Append("%");
 
             //TODO: Use StringBuilder directly for drawing to avoid generating garbage.

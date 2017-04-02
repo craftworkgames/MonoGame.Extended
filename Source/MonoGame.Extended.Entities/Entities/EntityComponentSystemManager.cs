@@ -176,7 +176,7 @@ namespace MonoGame.Extended.Entities
         // ReSharper disable once ParameterTypeCanBeEnumerable.Local
         private void CreateSystems(List<TypeInfo> systemTypeInfos, int componentCount)
         {
-            var systemAttributeType = typeof(SystemAttribute);
+            var systemAttributeType = typeof(EntitySystemAttribute);
             var aspectAttributeType = typeof(AspectAttribute);
 
             var andMask = new BitVector(componentCount);
@@ -185,7 +185,7 @@ namespace MonoGame.Extended.Entities
 
             foreach (var typeInfo in systemTypeInfos)
             {
-                SystemAttribute systemAttribute = null;
+                EntitySystemAttribute systemAttribute = null;
 
                 andMask.SetAll(false);
                 orMask.SetAll(false);
@@ -197,7 +197,7 @@ namespace MonoGame.Extended.Entities
                     var attributeType = attribute.GetType();
 
                     if (attributeType == systemAttributeType)
-                        systemAttribute = (SystemAttribute)attribute;
+                        systemAttribute = (EntitySystemAttribute)attribute;
 
                     if(attributeType != aspectAttributeType)
                         continue;

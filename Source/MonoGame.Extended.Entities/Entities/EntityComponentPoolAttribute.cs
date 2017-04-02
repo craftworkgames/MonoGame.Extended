@@ -43,6 +43,6 @@ namespace MonoGame.Extended.Entities
     public sealed class EntityComponentPoolAttribute : Attribute
     {
         public int InitialSize { get; set; } = 10;
-        public ObjectPoolIsFullPolicy IsFullPolicy { get; set; } = ObjectPoolIsFullPolicy.Resize;
+        public ObjectPoolIsFullPolicy IsFullPolicy { get; set; } = ObjectPoolIsFullPolicy.IncreaseSize;
     }
 }

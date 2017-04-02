@@ -40,7 +40,7 @@
     <Compile Include="Entities\Components\AnimationComponent.cs" />
     <Compile Include="Entities\Components\CollisionBodyComponent.cs" />
     <Compile Include="Entities\Components\EnemyAiComponent.cs" />
-    <Compile Include="Entities\Components\CharacterComponent.cs" />
+    <Compile Include="Entities\Components\HealthComponent.cs" />
     <Compile Include="Entities\Components\PlayerComponent.cs" />
     <Compile Include="Entities\Components\SpriteComponent.cs" />
     <Compile Include="Entities\Components\TransformComponent.cs" />
@@ -50,8 +50,9 @@
     <Compile Include="Entities\Systems\EnemyMovementSystem.cs" />
     <Compile Include="Entities\Systems\PlayerMovementSystem.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
-    <Compile Include="Entities\Systems\CharacterStateSystem.cs" />
+    <Compile Include="Entities\Systems\DeathSystem.cs" />
     <Compile Include="Entities\Systems\SpriteSystem.cs" />
+    <Compile Include="Entities\Templates\BadGuyEntityTemplate.cs" />
     <Compile Include="GameMain.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

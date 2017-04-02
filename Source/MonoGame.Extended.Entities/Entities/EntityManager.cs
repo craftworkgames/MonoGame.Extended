@@ -69,7 +69,7 @@ namespace MonoGame.Extended.Entities
         {
             _systemManager = systemManager;
 
-            _pool = new ObjectPool<Entity>(CreateEntityObject, 100, ObjectPoolIsFullPolicy.Resize);
+            _pool = new ObjectPool<Entity>(CreateEntityObject, 100, ObjectPoolIsFullPolicy.IncreaseSize);
             _pool.ItemUsed += OnEntityCreated;
             _pool.ItemReturned += OnEntityDestroyed;
 

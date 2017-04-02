@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Collections
     public enum ObjectPoolIsFullPolicy
     {
         ReturnNull,
-        Resize,
+        IncreaseSize,
         KillExisting,
     }
 
@@ -75,7 +75,7 @@ namespace MonoGame.Extended.Collections
                     {
                         case ObjectPoolIsFullPolicy.ReturnNull:
                             return null;
-                        case ObjectPoolIsFullPolicy.Resize:
+                        case ObjectPoolIsFullPolicy.IncreaseSize:
                             Capacity++;
                             poolable = CreateObject();
                             break;

@@ -42,7 +42,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.StarWarriorGame.Systems
 {
     [Aspect(AspectType.All, typeof(TransformComponent), typeof(PhysicsComponent))]
-    [System(GameLoopType.Update, Layer = 1)]
+    [EntitySystem(GameLoopType.Update, Layer = 1)]
     public class MovementSystem : EntityProcessingSystem
     {
         protected override void Process(GameTime gameTime, Entity entity)

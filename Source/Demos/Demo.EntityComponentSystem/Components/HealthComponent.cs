@@ -41,56 +41,38 @@ namespace Demo.StarWarriorGame.Components
     [EntityComponent]
     public class HealthComponent : EntityComponent
     {
-        private int _health;
-        private int _maximumHealth;
-        private float _healthPercentage;
-        private bool _needsToRefresh;
+        private int _points;
+        private int _maximumPoints;
 
-        public int Health
+        public int Points
         {
-            get { return _health; }
+            get { return _points; }
             set
             {
-                _health = value;
-                _needsToRefresh = true;
+                _points = value;
+                CalculateRatio();
             }
         }
 
-        public int MaximumHealth
+        public int MaximumPoints
         {
-            get { return _maximumHealth; }
+            get { return _maximumPoints; }
             set
             {
-                _maximumHealth = value;
-                _needsToRefresh = true;
+                _maximumPoints = value;
+                CalculateRatio();
             }
         }
 
-        public float HealthPercentage
-        {
-            get
-            {
-                RefreshDerivedValues();
-                return _healthPercentage;
-            }
-        }
+        public float Ratio { get; private set; }
 
-        private void RefreshDerivedValues()
-        {
-            if (!_needsToRefresh)
-                return;
-            _needsToRefresh = false;
-            _healthPercentage = (float)_health / MaximumHealth;
-        }
-
-        public bool IsAlive => Health > 0;
+        public bool IsAlive => Points > 0;
 
         public override void Reset()
         {
-            _health = 0;
-            _maximumHealth = 0;
-            _healthPercentage = 0;
-            _needsToRefresh = true;
+            _points = 0;
+            _maximumPoints = 0;
+            Ratio = 0;
         }
 
         public void AddDamage(int damage)
@@ -98,10 +80,15 @@ namespace Demo.StarWarriorGame.Components
             if (damage <= 0)
                 return;
 
-            _health -= damage;
-            if (_health < 0)
-                _health = 0;
-            _needsToRefresh = true;
+            _points -= damage;
+            if (_points < 0)
+                _points = 0;
+            CalculateRatio();
+        }
+
+        private void CalculateRatio()
+        {
+            Ratio = (float)_points / MaximumPoints;
         }
     }
 }

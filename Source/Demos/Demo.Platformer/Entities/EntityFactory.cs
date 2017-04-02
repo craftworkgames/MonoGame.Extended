@@ -65,8 +65,8 @@ namespace Demo.Platformer.Entities
             player.WalkSpeed = 220f;
             player.JumpSpeed = 420f;
 
-            var character = entity.Attach<CharacterComponent>();
-            character.HealthPoints = 20;
+            var health = entity.Attach<HealthComponent>();
+            health.Points = 20;
 
             return entity;
         }
@@ -121,35 +121,5 @@ namespace Demo.Platformer.Entities
         //    entity.Destroy(delaySeconds: totalSeconds);
         //    return entity;
         //}
-
-        public Entity CreateBadGuy(Vector2 position, Size2 size)
-        {
-            var entity = _entityManager.CreateEntity();
-            var transform = entity.Attach<TransformComponent>();
-            transform.Position = position;
-
-            var collision = entity.Attach<CollisionBodyComponent>();
-            collision.Size = size;
-            collision.Origin = Vector2.One * 0.5f;
-
-            var textureRegion = _characterTextureAtlas[90];
-            var sprite = entity.Attach<SpriteComponent>();
-            sprite.Origin = new Vector2(textureRegion.Width / 2f, textureRegion.Height / 2f);
-
-            var animatedSprite = entity.Attach<AnimationComponent>();
-            var animationFactory = animatedSprite.AnimationFactory = new SpriteSheetAnimationFactory(_characterTextureAtlas); ;
-
-            animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 100 }, 1.0f));
-            animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 96, 97, 98, 99 }, isPingPong: true));
-
-            animatedSprite.Play("walk");
-
-            var character = entity.Attach<CharacterComponent>();
-            character.HealthPoints = 20;
-
-            entity.Attach<EnemyAiComponent>();
-
-            return entity;
-        }
     }
 }

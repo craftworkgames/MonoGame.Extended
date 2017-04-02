@@ -1,5 +1,5 @@
 ﻿// Original code dervied from:
-// https://github.com/thelinuxlich/artemis_CSharp/blob/master/Artemis_XNA_INDEPENDENT/Attributes/ArtemisEntitySystem.cs
+// https://github.com/thelinuxlich/artemis_CSharp/blob/master/Artemis_XNA_INDEPENDENT/Attributes/EntitySystem.cs
 
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ArtemisEntitySystem.cs" company="GAMADU.COM">
@@ -38,19 +38,16 @@ using System;
 
 namespace MonoGame.Extended.Entities
 {
-    // Can only be applied to System
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    public sealed class SystemAttribute : Attribute
+    public sealed class EntitySystemAttribute : Attribute
     {
         public GameLoopType GameLoopType { get; }
         public int Layer { get; set; }
-        //public SystemExecutionType ExecutionType { get; set; }
 
-        public SystemAttribute(GameLoopType gameLoopType)
+        public EntitySystemAttribute(GameLoopType gameLoopType)
         {
             GameLoopType = gameLoopType;
             Layer = 0;
-            //ExecutionType = SystemExecutionType.Synchronous;
         }
     }
 }

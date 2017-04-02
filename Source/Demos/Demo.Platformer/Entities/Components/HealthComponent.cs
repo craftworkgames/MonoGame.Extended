@@ -1,9 +1,9 @@
-﻿// Original code dervied from:
-// https://github.com/thelinuxlich/starwarrior_CSharp/blob/master/StarWarrior/StarWarrior/Templates/EnemyShipTemplate.cs
+// Original code dervied from:
+// https://github.com/thelinuxlich/starwarrior_CSharp/blob/master/StarWarrior/StarWarrior/Components/HealthComponent.cs
 
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EnemyShipTemplate.cs" company="GAMADU.COM">
-//     Copyright © 2013 GAMADU.COM. All rights reserved.
+// <copyright file="HealthComponent.cs" company="GAMADU.COM">
+//     Copyright � 2013 GAMADU.COM. All rights reserved.
 //
 //     Redistribution and use in source and binary forms, with or without modification, are
 //     permitted provided that the following conditions are met:
@@ -30,41 +30,65 @@
 //     or implied, of GAMADU.COM.
 // </copyright>
 // <summary>
-//   The enemy ship template.
+//   The health.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Diagnostics.CodeAnalysis;
-using Demo.StarWarriorGame.Components;
 using MonoGame.Extended.Entities;
 
-namespace Demo.StarWarriorGame.Templates
+namespace Demo.Platformer.Entities.Components
 {
-    [EntityTemplate(Name)]
-    public class EnemyShipTemplate : EntityTemplate
+    [EntityComponent]
+    public class HealthComponent : EntityComponent
     {
-        public const string Name = "EnemyShipTemplate";
+        private int _points;
+        private int _maximumPoints;
 
-        [SuppressMessage("ReSharper", "UnusedVariable")]
-        protected override void Build(Entity entity)
+        public int Points
         {
-            entity.Group = "SHIPS";
+            get { return _points; }
+            set
+            {
+                _points = value;
+                CalculateRatio();
+            }
+        }
 
-            var transform = entity.Attach<TransformComponent>();
+        public int MaximumPoints
+        {
+            get { return _maximumPoints; }
+            set
+            {
+                _maximumPoints = value;
+                CalculateRatio();
+            }
+        }
 
-            var spatial = entity.Attach<SpatialFormComponent>();
-            spatial.SpatialFormFile = "EnemyShip";
+        public float Ratio { get; private set; }
 
-            var health = entity.Attach<HealthComponent>();
-            health.Points = health.MaximumPoints = 10;
+        public bool IsAlive => Points > 0;
 
-            var weapon = entity.Attach<WeaponComponent>();
-            weapon.ShootDelay = TimeSpan.FromSeconds(2);
+        public override void Reset()
+        {
+            _points = 0;
+            _maximumPoints = 0;
+            Ratio = 0;
+        }
 
-            var enemy = entity.Attach<EnemyComponent>();
+        public void AddDamage(int damage)
+        {
+            if (damage <= 0)
+                return;
 
-            var physics = entity.Attach<PhysicsComponent>();
+            _points -= damage;
+            if (_points < 0)
+                _points = 0;
+            CalculateRatio();
+        }
+
+        private void CalculateRatio()
+        {
+            Ratio = (float)_points / MaximumPoints;
         }
     }
 }
