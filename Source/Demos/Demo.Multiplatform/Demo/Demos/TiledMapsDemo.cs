@@ -6,40 +6,28 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Graphics.Effects;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace Demo.TiledMaps
+namespace Demo.Demos
 {
-    public class Game1 : Game
+    public class TiledMapsDemo : DemoBase
     {
         private FramesPerSecondCounter _fpsCounter;
         private BitmapFont _bitmapFont;
         private Camera2D _camera;
-        // ReSharper disable once NotAccessedField.Local
-        private GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
-        private Texture2D _texture;
         private TiledMapRenderer _mapRenderer;
         private ViewportAdapter _viewportAdapter;
         private KeyboardState _previousKeyboardState;
         private bool _showHelp;
         private TiledMap _map;
         private Effect _customEffect;
-
         private Queue<string> _availableMaps;
 
-        public Game1()
+        public TiledMapsDemo(Game game) : base(game)
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this) 
-			{
-				SynchronizeWithVerticalRetrace = false,
-                PreferredBackBufferWidth = 1024,
-                PreferredBackBufferHeight = 768
-            };
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-            IsFixedTimeStep = false;
         }
 
         protected override void Initialize()
@@ -58,11 +46,10 @@ namespace Demo.TiledMaps
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _texture = Content.Load<Texture2D>("monogame-extended-logo");
-            _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
+            _bitmapFont = Content.Load<BitmapFont>("Fonts/montserrat-32");
 
             _availableMaps =
-                new Queue<string>(new[] {"level01", "level02", "level03", "level04", "level05", "level06", "level07"});
+                new Queue<string>(new[] { "level01", "level02", "level03", "level04", "level05", "level06", "level07" });
 
             _map = LoadNextMap();
             _camera.LookAt(new Vector2(_map.WidthInPixels, _map.HeightInPixels) * 0.5f);
@@ -80,7 +67,7 @@ namespace Demo.TiledMaps
         private TiledMap LoadNextMap()
         {
             var name = _availableMaps.Dequeue();
-            _map = Content.Load<TiledMap>(name);
+            _map = Content.Load<TiledMap>($"TiledMaps/{name}");
             _availableMaps.Enqueue(name);
             return _map;
         }
@@ -241,6 +228,25 @@ namespace Demo.TiledMaps
             }
 
             _spriteBatch.End();
+        }
+    }
+
+    public class CustomEffect : DefaultEffect, ITiledMapEffect
+    {
+        public CustomEffect(GraphicsDevice graphicsDevice)
+            : base(graphicsDevice)
+        {
+        }
+
+        public CustomEffect(GraphicsDevice graphicsDevice, byte[] byteCode)
+            : base(graphicsDevice, byteCode)
+        {
+
+        }
+
+        public CustomEffect(Effect cloneSource)
+            : base(cloneSource)
+        {
         }
     }
 }

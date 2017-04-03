@@ -44,6 +44,7 @@
     <Compile Include="Demos\ParticlesDemo.cs" />
     <Compile Include="Demos\SceneGraphsDemo.cs" />
     <Compile Include="Demos\SpritesDemo.cs" />
+    <Compile Include="Demos\TiledMapsDemo.cs" />
     <Compile Include="Demos\TweeningDemo.cs" />
     <Compile Include="Screens\DemoScreen.cs" />
     <Compile Include="GameMain.cs" />
@@ -76,9 +77,31 @@
     <Content Include="Content\Textures\clipping-test.png" />
     <None Include="Content\Textures\particle.png" />
     <None Include="Content\Textures\spike_ball.png" />
+    <Content Include="Content\TiledMaps\abstractTiles_sheet.png" />
+    <Content Include="Content\TiledMaps\alphacolortile.png" />
+    <None Include="Content\TiledMaps\free-tileset.png" />
+    <None Include="Content\TiledMaps\hills.png" />
+    <Content Include="Content\TiledMaps\isometric-tiles.png" />
+    <Content Include="Content\TiledMaps\L05TS1.png" />
+    <Content Include="Content\TiledMaps\platformerTiles_sheet.png" />
+    <None Include="Content\TiledMaps\rpg_maker_vx_rtp_tileset_by_telles0808.png" />
+    <Content Include="Content\TiledMaps\voxelTiles_sheet.png" />
     <Content Include="Content\title-screen.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Content\TiledMaps\free-tileset.json" />
+    <None Include="Content\TiledMaps\level01.tmx">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Content\TiledMaps\level02.tmx">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Content\TiledMaps\level03.tmx" />
+    <None Include="Content\TiledMaps\level04.tmx" />
+    <None Include="Content\TiledMaps\level05.tmx" />
+    <None Include="Content\TiledMaps\level06.tmx" />
+    <None Include="Content\TiledMaps\level07.tmx" />
+    <None Include="Content\TiledMaps\level08.tmx" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +129,10 @@
       <Project>{fe61c3d7-d96d-4aa4-9ef1-17e457bb2c7c}</Project>
       <Name>MonoGame.Extended.SceneGraphs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj">
+      <Project>{07b2ade2-73e3-41c4-aea1-d5566a5ab902}</Project>
+      <Name>MonoGame.Extended.Tiled</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj">
       <Project>{1cf61f4f-a2ee-49bf-95d0-379e870de90e}</Project>
       <Name>MonoGame.Extended.Tweening</Name>
@@ -132,6 +159,11 @@
     <Content Include="Content\Textures\logo-square-128.png" />
     <Content Include="Content\Textures\logo-square-512.png" />
     <Content Include="Content\Textures\vignette.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Content\TiledMaps\abstractTiles_sheet.tsx" />
+    <TypeScriptCompile Include="Content\TiledMaps\platformerTiles_sheet.tsx" />
+    <TypeScriptCompile Include="Content\TiledMaps\voxelTiles_sheet.tsx" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

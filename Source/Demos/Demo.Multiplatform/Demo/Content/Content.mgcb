@@ -332,3 +332,163 @@
 /processorParam:TextureFormat=Color
 /build:Animations/zombie.png
 
+#begin TiledMaps/abstractTiles_sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TiledMaps/abstractTiles_sheet.png
+
+#begin TiledMaps/alphacolortile.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TiledMaps/alphacolortile.png
+
+#begin TiledMaps/free-tileset.json
+/importer:TexturePackerJsonImporter
+/processor:TexturePackerProcessor
+/build:TiledMaps/free-tileset.json
+
+#begin TiledMaps/free-tileset.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TiledMaps/free-tileset.png
+
+#begin TiledMaps/hills.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TiledMaps/hills.png
+
+#begin TiledMaps/isometric-tiles.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TiledMaps/isometric-tiles.png
+
+#begin TiledMaps/L05TS1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TiledMaps/L05TS1.png
+
+#begin TiledMaps/level01.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:TiledMaps/level01.tmx
+
+#begin TiledMaps/level02.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:TiledMaps/level02.tmx
+
+#begin TiledMaps/level03.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:TiledMaps/level03.tmx
+
+#begin TiledMaps/level04.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:TiledMaps/level04.tmx
+
+#begin TiledMaps/level05.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:TiledMaps/level05.tmx
+
+#begin TiledMaps/level06.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:TiledMaps/level06.tmx
+
+#begin TiledMaps/level07.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:TiledMaps/level07.tmx
+
+#begin TiledMaps/non-uniform-tileset.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TiledMaps/non-uniform-tileset.png
+
+#begin TiledMaps/platformerTiles_sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TiledMaps/platformerTiles_sheet.png
+
+#begin TiledMaps/rpg_maker_vx_rtp_tileset_by_telles0808.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TiledMaps/rpg_maker_vx_rtp_tileset_by_telles0808.png
+
+#begin TiledMaps/voxelTiles_sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TiledMaps/voxelTiles_sheet.png
+
