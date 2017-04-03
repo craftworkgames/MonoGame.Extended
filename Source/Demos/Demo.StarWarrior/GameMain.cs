@@ -11,7 +11,7 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarrior
 {
-    public class Game1 : Game
+    public class GameMain : Game
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
@@ -23,7 +23,7 @@ namespace Demo.StarWarrior
         private SpriteBatch _spriteBatch;
         private BitmapFont _font;
 
-        public Game1()
+        public GameMain()
         {
             Content.RootDirectory = "Content";
             IsMouseVisible = true;

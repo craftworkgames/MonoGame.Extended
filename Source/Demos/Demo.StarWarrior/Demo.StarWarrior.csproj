@@ -68,7 +68,7 @@
     <Compile Include="Templates\EnemyShipTemplate.cs" />
     <Compile Include="Templates\MissileTemplate.cs" />
     <Compile Include="Templates\ShipExplosionTemplate.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="GameMain.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
