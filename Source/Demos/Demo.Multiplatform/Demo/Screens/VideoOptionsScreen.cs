@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Demo.Screens.Screens
+namespace Demo.Screens
 {
     public class VideoOptionsScreen : MenuScreen
     {

@@ -43,12 +43,22 @@
     <Compile Include="Demos\InputListenersDemo.cs" />
     <Compile Include="Demos\ParticlesDemo.cs" />
     <Compile Include="Demos\SceneGraphsDemo.cs" />
+    <Compile Include="Demos\ScreensDemo.cs" />
     <Compile Include="Demos\SpritesDemo.cs" />
     <Compile Include="Demos\TiledMapsDemo.cs" />
     <Compile Include="Demos\TweeningDemo.cs" />
+    <Compile Include="Screens\AudioOptionsScreen.cs" />
     <Compile Include="Screens\DemoScreen.cs" />
     <Compile Include="GameMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Screens\KeyboardOptionsScreen.cs" />
+    <Compile Include="Screens\LoadGameScreen.cs" />
+    <Compile Include="Screens\MainMenuScreen.cs" />
+    <Compile Include="Screens\MenuItem.cs" />
+    <Compile Include="Screens\MenuScreen.cs" />
+    <Compile Include="Screens\MouseOptionsScreen.cs" />
+    <Compile Include="Screens\OptionsScreen.cs" />
+    <Compile Include="Screens\VideoOptionsScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

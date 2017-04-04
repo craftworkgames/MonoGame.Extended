@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 
-namespace Demo.Screens.Screens
+namespace Demo.Screens
 {
     public class MenuItem
     {

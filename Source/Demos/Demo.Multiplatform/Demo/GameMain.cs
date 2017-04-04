@@ -39,6 +39,7 @@ namespace Demo
 
             _demos = new List<DemoBase>
             {
+                new ScreensDemo(this),
                 new TiledMapsDemo(this),
                 new AnimationsDemo(this),
                 new SpritesDemo(this),
@@ -129,11 +130,10 @@ namespace Demo
             _fpsCounter.Draw(gameTime);
             Window.Title = $"{_demoTitle} - {_fpsCounter.FramesPerSecond}";
 
-            _demos[_demoIndex].OnDraw(gameTime);
-
-            _guiSystem.Draw(gameTime);
-
             base.Draw(gameTime);
+
+            _demos[_demoIndex].OnDraw(gameTime);
+            _guiSystem.Draw(gameTime);
         }
     }
 }

@@ -8,7 +8,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Screens;
 
-namespace Demo.Screens.Screens
+namespace Demo.Screens
 {
     public abstract class MenuScreen : Screen
     {
@@ -57,7 +57,7 @@ namespace Demo.Screens.Screens
             var graphicsDeviceService = (IGraphicsDeviceService)_serviceProvider.GetService(typeof(IGraphicsDeviceService));
 
             _spriteBatch = new SpriteBatch(graphicsDeviceService.GraphicsDevice);
-            Font = Content.Load<BitmapFont>("montserrat-32");
+            Font = Content.Load<BitmapFont>("Fonts/montserrat-32");
         }
 
         public override void UnloadContent()

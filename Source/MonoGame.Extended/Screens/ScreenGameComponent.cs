@@ -10,18 +10,18 @@ namespace MonoGame.Extended.Screens
         T FindScreen<T>() where T : Screen;
     }
 
-    public class ScreenComponent : DrawableGameComponent, IScreenManager
+    public class ScreenGameComponent : DrawableGameComponent, IScreenManager
     {
         private readonly List<Screen> _screens;
 
-        public ScreenComponent(Game game, IEnumerable<Screen> screens)
+        public ScreenGameComponent(Game game, IEnumerable<Screen> screens)
             : this(game)
         {
             foreach (var screen in screens)
                 Register(screen);
         }
 
-        public ScreenComponent(Game game)
+        public ScreenGameComponent(Game game)
             : base(game)
         {
             _screens = new List<Screen>();

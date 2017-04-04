@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace Demo.Screens.Screens
+namespace Demo.Screens
 {
     public class MainMenuScreen : MenuScreen
     {

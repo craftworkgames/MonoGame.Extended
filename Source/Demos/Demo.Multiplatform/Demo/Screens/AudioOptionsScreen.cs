@@ -1,15 +1,14 @@
-using System;
-using MonoGame.Extended.Screens;
+﻿using System;
 
-namespace Demo.Screens.Screens
+namespace Demo.Screens
 {
-    public class KeyboardOptionsScreen : MenuScreen
+    public class AudioOptionsScreen : MenuScreen
     {
-        public KeyboardOptionsScreen(IServiceProvider serviceProvider) 
+        public AudioOptionsScreen(IServiceProvider serviceProvider) 
             : base(serviceProvider)
         {
         }
-        
+
         public override void LoadContent()
         {
             base.LoadContent();

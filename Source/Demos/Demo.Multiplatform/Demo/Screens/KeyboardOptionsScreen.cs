@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 
-namespace Demo.Screens.Screens
+namespace Demo.Screens
 {
-    public class AudioOptionsScreen : MenuScreen
+    public class KeyboardOptionsScreen : MenuScreen
     {
-        public AudioOptionsScreen(IServiceProvider serviceProvider) 
+        public KeyboardOptionsScreen(IServiceProvider serviceProvider) 
             : base(serviceProvider)
         {
         }
-
+        
         public override void LoadContent()
         {
             base.LoadContent();
