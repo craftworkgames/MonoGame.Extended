@@ -492,3 +492,18 @@
 /processorParam:TextureFormat=Color
 /build:TiledMaps/voxelTiles_sheet.png
 
+#begin TiledMaps/level08.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:TiledMaps/level08.tmx
+
+#begin TiledMaps/platformerTiles_sheet.tsx
+/importer:
+/processor:
+/build:TiledMaps/platformerTiles_sheet.tsx
+
+#begin TiledMaps/voxelTiles_sheet.tsx
+/importer:
+/processor:
+/build:TiledMaps/voxelTiles_sheet.tsx
+

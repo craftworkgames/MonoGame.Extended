@@ -14,7 +14,6 @@ namespace Demo.Features.Demos
 {
     public class TiledMapsDemo : DemoBase
     {
-        private FramesPerSecondCounter _fpsCounter;
         private BitmapFont _bitmapFont;
         private Camera2D _camera;
         private SpriteBatch _spriteBatch;
@@ -38,8 +37,6 @@ namespace Demo.Features.Demos
 
             Window.AllowUserResizing = true;
 
-            _fpsCounter = new FramesPerSecondCounter();
-
             base.Initialize();
         }
 
@@ -49,7 +46,7 @@ namespace Demo.Features.Demos
             _bitmapFont = Content.Load<BitmapFont>("Fonts/montserrat-32");
 
             _availableMaps =
-                new Queue<string>(new[] { "level01", "level02", "level03", "level04", "level05", "level06", "level07" });
+                new Queue<string>(new[] {"level08",}); //"level01", "level02", "level03", "level04", "level05", "level06", "level07" });
 
             _map = LoadNextMap();
             _camera.LookAt(new Vector2(_map.WidthInPixels, _map.HeightInPixels) * 0.5f);
@@ -80,7 +77,6 @@ namespace Demo.Features.Demos
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
-            var mouseState = Mouse.GetState();
 
             _mapRenderer.Update(_map, gameTime);
 
@@ -139,8 +135,6 @@ namespace Demo.Features.Demos
 
             _previousKeyboardState = keyboardState;
 
-            _fpsCounter.Update(gameTime);
-
             base.Update(gameTime);
         }
 
@@ -176,8 +170,6 @@ namespace Demo.Features.Demos
 
             DrawText();
 
-            _fpsCounter.Draw(gameTime);
-
             base.Draw(gameTime);
         }
 
@@ -186,19 +178,13 @@ namespace Demo.Features.Demos
             var textColor = Color.Black;
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
 
-            var baseTextPosition = new Point2(5, 0);
-
-            // textPosition = base position (point) + offset (vector2)
+            var baseTextPosition = new Point2(5, _bitmapFont.LineHeight);
             var textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 0);
             _spriteBatch.DrawString(_bitmapFont,
                 $"Map: {_map.Name}; {_map.TileLayers.Count} tile layer(s) @ {_map.Width}x{_map.Height} tiles, {_map.ImageLayers.Count} image layer(s)",
                 textPosition, textColor);
-            textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 1);
 
             // we can safely get the metrics without worrying about spritebatch interfering because spritebatch submits on End()
-            _spriteBatch.DrawString(_bitmapFont,
-                $"FPS: {_fpsCounter.FramesPerSecond:0}, Draw Calls: {GraphicsDevice.Metrics.DrawCount}, Texture TotalCount: {GraphicsDevice.Metrics.TextureCount}, Triangle TotalCount: {GraphicsDevice.Metrics.PrimitiveCount}",
-                textPosition, textColor);
             textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 2);
             _spriteBatch.DrawString(_bitmapFont, $"Camera Position: (x={_camera.Position.X}, y={_camera.Position.Y})",
                 textPosition, textColor);
