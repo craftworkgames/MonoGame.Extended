@@ -39,19 +39,19 @@ namespace Demo.Features
 
             _demos = new List<DemoBase>
             {
-                //new ScreensDemo(this),
-                //new ViewportAdaptersDemo(this),
+                new ScreensDemo(this),
+                new ViewportAdaptersDemo(this),
                 new TiledMapsDemo(this),
-                //new AnimationsDemo(this),
-                //new SpritesDemo(this),
-                //new GuiDemo(this),
-                //new BatchingDemo(this),
-                //new TweeningDemo(this),
-                //new InputListenersDemo(this),
-                //new SceneGraphsDemo(this),
-                //new ParticlesDemo(this),
-                //new CameraDemo(this),
-                //new BitmapFontsDemo(this)
+                new AnimationsDemo(this),
+                new SpritesDemo(this),
+                new GuiDemo(this),
+                new BatchingDemo(this),
+                new TweeningDemo(this),
+                new InputListenersDemo(this),
+                new SceneGraphsDemo(this),
+                new ParticlesDemo(this),
+                new CameraDemo(this),
+                new BitmapFontsDemo(this)
             };
         }
 
