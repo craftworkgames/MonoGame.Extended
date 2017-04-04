@@ -47,6 +47,7 @@
     <Compile Include="Demos\SpritesDemo.cs" />
     <Compile Include="Demos\TiledMapsDemo.cs" />
     <Compile Include="Demos\TweeningDemo.cs" />
+    <Compile Include="Demos\ViewportAdaptersDemo.cs" />
     <Compile Include="Screens\AudioOptionsScreen.cs" />
     <Compile Include="Screens\DemoScreen.cs" />
     <Compile Include="GameMain.cs" />

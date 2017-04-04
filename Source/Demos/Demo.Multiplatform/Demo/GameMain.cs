@@ -39,6 +39,7 @@ namespace Demo
 
             _demos = new List<DemoBase>
             {
+                new ViewportAdaptersDemo(this),
                 new ScreensDemo(this),
                 new TiledMapsDemo(this),
                 new AnimationsDemo(this),

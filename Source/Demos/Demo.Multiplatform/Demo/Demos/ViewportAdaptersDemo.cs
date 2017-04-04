@@ -1,15 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace Demo.ViewportAdapters
+namespace Demo.Demos
 {
-    public class Game1 : Game
+    public class ViewportAdaptersDemo : DemoBase
     {
-        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
-        private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private Texture2D _backgroundTexture;
         private BitmapFont _bitmapFont;
         private BoxingViewportAdapter _boxingViewportAdapter;
@@ -19,18 +17,10 @@ namespace Demo.ViewportAdapters
         private ScalingViewportAdapter _scalingViewportAdapter;
         private SpriteBatch _spriteBatch;
 
-        public Game1()
+        public ViewportAdaptersDemo(Game game) : base(game)
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-            Window.AllowUserResizing = true;
-            Window.Position = new Point(100, 100);
-
-            _graphicsDeviceManager.PreferredBackBufferWidth = 900;
-            _graphicsDeviceManager.PreferredBackBufferHeight = 700;
         }
-
+        
         protected override void Initialize()
         {
             base.Initialize();
@@ -58,8 +48,8 @@ namespace Demo.ViewportAdapters
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _backgroundTexture = Content.Load<Texture2D>("vignette");
-            _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
+            _backgroundTexture = Content.Load<Texture2D>("Textures/vignette");
+            _bitmapFont = Content.Load<BitmapFont>("Fonts/montserrat-32");
         }
 
         protected override void UnloadContent()
@@ -108,19 +98,12 @@ namespace Demo.ViewportAdapters
 
             _spriteBatch.Begin(transformMatrix: _currentViewportAdapter.GetScaleMatrix());
             _spriteBatch.Draw(_backgroundTexture, destinationRectangle, Color.White);
-
-            _spriteBatch.DrawString(_bitmapFont, $"Press D: {typeof (DefaultViewportAdapter).Name}", new Vector2(49, 40), Color.White);
-
-            _spriteBatch.DrawString(_bitmapFont, $"Press S: {typeof (ScalingViewportAdapter).Name}", new Vector2(49, 40 + _bitmapFont.LineHeight * 1), Color.White);
-
-            _spriteBatch.DrawString(_bitmapFont, $"Press B: {typeof (BoxingViewportAdapter).Name}", new Vector2(49, 40 + _bitmapFont.LineHeight * 2), Color.White);
-
+            _spriteBatch.DrawString(_bitmapFont, $"Press D: {typeof(DefaultViewportAdapter).Name}", new Vector2(49, 40), Color.White);
+            _spriteBatch.DrawString(_bitmapFont, $"Press S: {typeof(ScalingViewportAdapter).Name}", new Vector2(49, 40 + _bitmapFont.LineHeight * 1), Color.White);
+            _spriteBatch.DrawString(_bitmapFont, $"Press B: {typeof(BoxingViewportAdapter).Name}", new Vector2(49, 40 + _bitmapFont.LineHeight * 2), Color.White);
             _spriteBatch.DrawString(_bitmapFont, $"Current: {_currentViewportAdapter.GetType().Name}", new Vector2(49, 40 + _bitmapFont.LineHeight * 4), Color.Black);
-
             _spriteBatch.DrawString(_bitmapFont, @"Try resizing the window", new Vector2(49, 40 + _bitmapFont.LineHeight * 6), Color.Black);
-
             _spriteBatch.DrawString(_bitmapFont, $"Mouse: {_mousePosition}", new Vector2(49, 40 + _bitmapFont.LineHeight * 8), Color.Black);
-
             _spriteBatch.End();
 
             base.Draw(gameTime);
