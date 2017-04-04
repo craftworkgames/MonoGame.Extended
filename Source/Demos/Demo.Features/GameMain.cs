@@ -39,7 +39,7 @@ namespace Demo.Features
 
             _demos = new List<DemoBase>
             {
-                new ScreensDemo(this),
+                //new ScreensDemo(this),
                 new ViewportAdaptersDemo(this),
                 new TiledMapsDemo(this),
                 new AnimationsDemo(this),
@@ -53,6 +53,7 @@ namespace Demo.Features
                 new CameraDemo(this),
                 new BitmapFontsDemo(this)
             };
+            _demos.Sort();
         }
 
         protected override void Initialize()

@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Demo.Features.Demos
 {
-    public abstract class DemoBase
+    public abstract class DemoBase : IComparable<DemoBase>
     {
         private readonly Game _game;
         private bool _isInitialized;
@@ -72,6 +73,11 @@ namespace Demo.Features.Demos
         public void OnDraw(GameTime gameTime)
         {
             Draw(gameTime);
+        }
+
+        public int CompareTo(DemoBase other)
+        {
+            return string.Compare(GetType().Name, other.GetType().Name, StringComparison.Ordinal);
         }
     }
 }
