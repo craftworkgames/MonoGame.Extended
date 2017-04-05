@@ -147,9 +147,10 @@ namespace MonoGame.Extended.TextureAtlases
             if (_regionMap.ContainsKey(name))
                 throw new InvalidOperationException($"Region {name} already exists in the texture atlas");
 
-            var region = new NinePatchRegion2D(new TextureRegion2D(name, Texture, x, y, width, height), thickness);
-            AddRegion(region);
-            return region;
+            var textureRegion = new TextureRegion2D(name, Texture, x, y, width, height);
+            var ninePatchRegion = new NinePatchRegion2D(textureRegion, thickness);
+            AddRegion(ninePatchRegion);
+            return ninePatchRegion;
         }
 
         /// <summary>
@@ -196,10 +197,22 @@ namespace MonoGame.Extended.TextureAtlases
         /// <returns>The <see cref="TextureRegion2D" />.</returns>
         public TextureRegion2D GetRegion(string name)
         {
+            return GetRegion<TextureRegion2D>(name);
+        }
+
+        /// <summary>
+        /// Gets a texture region from the <see cref="TextureAtlas" /> of a specified type.
+        /// This is can be useful if the atlas contains <see cref="NinePatchRegion2D"/>'s.
+        /// </summary>
+        /// <typeparam name="T">Type of the region to get</typeparam>
+        /// <param name="name">Name of the region to get</param>
+        /// <returns>The texture region</returns>
+        public T GetRegion<T>(string name) where T : TextureRegion2D
+        {
             int index;
 
             if (_regionMap.TryGetValue(name, out index))
-                return GetRegion(index);
+                return (T) GetRegion(index);
 
             throw new KeyNotFoundException(name);
         }
