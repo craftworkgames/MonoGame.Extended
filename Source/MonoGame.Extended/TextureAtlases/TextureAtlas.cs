@@ -93,6 +93,27 @@ namespace MonoGame.Extended.TextureAtlases
         }
 
         /// <summary>
+        /// Determines whether the texture atlas contains a region
+        /// </summary>
+        /// <param name="name">Name of the texture region.</param>
+        /// <returns></returns>
+        public bool ContainsRegion(string name)
+        {
+            return _regionMap.ContainsKey(name);
+        }
+
+        /// <summary>
+        /// Internal method for adding region
+        /// </summary>
+        /// <param name="region">Texture region.</param>
+        private void AddRegion(TextureRegion2D region)
+        {
+            var index = _regions.Count;
+            _regions.Add(region);
+            _regionMap.Add(region.Name, index);
+        }
+
+        /// <summary>
         ///     Creates a new texture region and adds it to the list of the <see cref="TextureAtlas" />' regions.
         /// </summary>
         /// <param name="name">Name of the texture region.</param>
@@ -107,9 +128,27 @@ namespace MonoGame.Extended.TextureAtlases
                 throw new InvalidOperationException($"Region {name} already exists in the texture atlas");
 
             var region = new TextureRegion2D(name, Texture, x, y, width, height);
-            var index = _regions.Count;
-            _regions.Add(region);
-            _regionMap.Add(name, index);
+            AddRegion(region);
+            return region;
+        }
+
+        /// <summary>
+        ///     Creates a new nine patch texture region and adds it to the list of the <see cref="TextureAtlas" />' regions.
+        /// </summary>
+        /// <param name="name">Name of the texture region.</param>
+        /// <param name="x">X coordinate of the region's top left corner.</param>
+        /// <param name="y">Y coordinate of the region's top left corner.</param>
+        /// <param name="width">Width of the texture region.</param>
+        /// <param name="height">Height of the texture region.</param>
+        /// <param name="thickness">Thickness of the nine patch region.</param>
+        /// <returns>Created texture region.</returns>
+        public NinePatchRegion2D CreateNinePatchRegion(string name, int x, int y, int width, int height, Thickness thickness)
+        {
+            if (_regionMap.ContainsKey(name))
+                throw new InvalidOperationException($"Region {name} already exists in the texture atlas");
+
+            var region = new NinePatchRegion2D(new TextureRegion2D(name, Texture, x, y, width, height), thickness);
+            AddRegion(region);
             return region;
         }
 
