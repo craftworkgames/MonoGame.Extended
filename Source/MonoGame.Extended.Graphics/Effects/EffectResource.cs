@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Effects
@@ -24,11 +27,49 @@ namespace MonoGame.Extended.Graphics.Effects
     public class EffectResource
     {
         private static EffectResource _defaultEffect;
+        private static string _shaderExtension;
 
         /// <summary>
         ///     Gets the <see cref="Effects.DefaultEffect" /> embedded into the MonoGame.Extended.Graphics library.
         /// </summary>
-        public static EffectResource DefaultEffect => _defaultEffect ?? (_defaultEffect = new EffectResource("MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.ogl.mgfxo"));
+        public static EffectResource DefaultEffect => _defaultEffect ?? (_defaultEffect = new EffectResource($"MonoGame.Extended.Graphics.Effects.Resources.DefaultEffect.{_shaderExtension}.mgfxo"));
+
+        static EffectResource()
+        {
+            DetermineShaderExtension();
+        }
+
+        private static void DetermineShaderExtension()
+        {
+            // use reflection to figure out if Shader.Profile is OpenGL (0) or DirectX (1),
+            // may need to be changed / fixed for future shader profiles
+
+            var assembly = typeof(Game).GetTypeInfo().Assembly;
+            Debug.Assert(assembly != null);
+
+            var shaderType = assembly.GetType("Microsoft.Xna.Framework.Graphics.Shader");
+            Debug.Assert(shaderType != null);
+            var shaderTypeInfo = shaderType.GetTypeInfo();
+            Debug.Assert(shaderTypeInfo != null);
+
+            // https://github.com/MonoGame/MonoGame/blob/develop/MonoGame.Framework/Graphics/Shader/Shader.cs#L47
+            var profileProperty = shaderTypeInfo.GetDeclaredProperty("Profile");
+            var value = (int)profileProperty.GetValue(null);
+
+            switch (value)
+            {
+                case 0:
+                    // OpenGL
+                    _shaderExtension = "ogl";
+                    break;
+                case 1:
+                    // DirectX
+                    _shaderExtension = "dx11";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown shader profile.");
+            }
+        }
 
         private readonly string _resourceName;
         private volatile byte[] _bytecode;

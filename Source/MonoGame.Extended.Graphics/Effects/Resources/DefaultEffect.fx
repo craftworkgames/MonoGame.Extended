@@ -37,7 +37,7 @@ float4 PixelShaderFunctionPositionTexture(VertexShaderOutputPositionTexture inpu
 	return SAMPLE_TEXTURE(Texture, input.TextureCoordinate) * DiffuseColor;
 }
 
-VertexShaderOutputPosition VertexShaderFunctionPositionColor(VertexShaderInputPositionColor input)
+VertexShaderOutputPositionColor VertexShaderFunctionPositionColor(VertexShaderInputPositionColor input)
 {
 	VertexShaderOutputPositionColor output;
 	output.Position = mul(input.Position, WorldViewProjection);
