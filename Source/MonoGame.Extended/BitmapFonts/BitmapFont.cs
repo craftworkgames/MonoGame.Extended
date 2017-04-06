@@ -19,6 +19,7 @@ namespace MonoGame.Extended.BitmapFonts
         public string Name { get; }
         public int LineHeight { get; }
         public int LetterSpacing { get; set; } = 0;
+        public static bool UseKernings { get; set; } = false;
 
         public BitmapFontRegion GetCharacterRegion(int character)
         {
@@ -73,6 +74,7 @@ namespace MonoGame.Extended.BitmapFonts
             var dx = position.X;
             var dy = position.Y;
 
+            BitmapFontGlyph? lastGlyph = null;
             for (var i = 0; i < text.Length; i++)
             {
                 var character = GetUnicodeCodePoint(text, i);
@@ -90,10 +92,22 @@ namespace MonoGame.Extended.BitmapFonts
                     dx += glyphs[i].FontRegion.XAdvance + LetterSpacing;
                 }
 
+                if (UseKernings && lastGlyph != null && lastGlyph.Value.FontRegion != null)
+                {
+                    int amount;
+                    if (lastGlyph.Value.FontRegion.Kernings.TryGetValue(character, out amount))
+                    {
+                        dx += amount;
+                    }
+                }
+
+                lastGlyph = glyphs[i];
+
                 if (character == '\n')
                 {
                     dy += LineHeight;
                     dx = position.X;
+                    lastGlyph = null;
                 }
             }
 
