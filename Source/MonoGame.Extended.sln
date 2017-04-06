@@ -92,6 +92,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Features", "Demos\Demo.Features\Demo.Features.csproj", "{D8C6D896-5ABF-4823-84DA-F1191BEEC004}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Features.Windows", "Demos\Demo.Features.Windows\Demo.Features.Windows.csproj", "{57C47653-BC51-43BA-98F4-1D0EEE78782D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

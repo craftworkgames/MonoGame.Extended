@@ -45,18 +45,18 @@ namespace MonoGame.Extended.BitmapFonts
 
             var characterMap = regions.ToDictionary(r => r.Character);
             var kerningsCount = reader.ReadInt32();
-            for (var k = 0; k < kerningsCount; ++k)
+
+            for (var k = 0; k < kerningsCount; k++)
             {
-                int first = reader.ReadInt32();
-                int second = reader.ReadInt32();
-                int amount = reader.ReadInt32();
+                var first = reader.ReadInt32();
+                var second = reader.ReadInt32();
+                var amount = reader.ReadInt32();
 
                 // Find region
-                BitmapFontRegion region = null;
+                BitmapFontRegion region;
+
                 if (!characterMap.TryGetValue(first, out region))
-                {
                     continue;
-                }
 
                 region.Kernings[second] = amount;
             }
