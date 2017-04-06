@@ -43,6 +43,24 @@ namespace MonoGame.Extended.BitmapFonts
                 regions[r] = new BitmapFontRegion(textureRegion, character, xOffset, yOffset, xAdvance);
             }
 
+            var characterMap = regions.ToDictionary(r => r.Character);
+            var kerningsCount = reader.ReadInt32();
+            for (var k = 0; k < kerningsCount; ++k)
+            {
+                int first = reader.ReadInt32();
+                int second = reader.ReadInt32();
+                int amount = reader.ReadInt32();
+
+                // Find region
+                BitmapFontRegion region = null;
+                if (!characterMap.TryGetValue(first, out region))
+                {
+                    continue;
+                }
+
+                region.Kernings[second] = amount;
+            }
+
             return new BitmapFont(reader.AssetName, regions, lineHeight);
         }
     }

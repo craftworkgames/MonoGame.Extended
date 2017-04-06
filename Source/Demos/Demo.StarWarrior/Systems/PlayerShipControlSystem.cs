@@ -41,6 +41,7 @@ using Demo.StarWarrior.Templates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.BitmapFonts;
 
 namespace Demo.StarWarrior.Systems
 {
@@ -50,6 +51,7 @@ namespace Demo.StarWarrior.Systems
     {
         private TimeSpan _missileLaunchTimer;
         private readonly TimeSpan _missileLaunchDelay;
+        private KeyboardState _lastState;
 
         public PlayerShipControlSystem()
         {
@@ -77,6 +79,11 @@ namespace Demo.StarWarrior.Systems
             if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right))
                 direction += Vector2.UnitX;
 
+            if (keyboard.IsKeyDown(Keys.K) && !_lastState.IsKeyDown(Keys.K))
+            {
+                BitmapFont.UseKernings = !BitmapFont.UseKernings;
+            }
+
             var isMoving = direction != Vector2.Zero;
             if (isMoving)
             {
@@ -98,6 +105,8 @@ namespace Demo.StarWarrior.Systems
                     AddMissile(transform, 91, +9);
                 }
             }
+
+            _lastState = keyboard;
         }
 
         private void AddMissile(TransformComponent parentTransform, float angle = 90.0f, float offsetX = 0.0f)

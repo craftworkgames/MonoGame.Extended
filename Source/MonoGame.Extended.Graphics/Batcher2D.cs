@@ -221,6 +221,7 @@ namespace MonoGame.Extended.Graphics
             var lineSpacing = bitmapFont.LineHeight;
             var offset = new Vector2(0, 0);
 
+            BitmapFontRegion lastGlyph = null;
             for (var i = 0; i < text.Length;)
             {
                 int character;
@@ -248,6 +249,7 @@ namespace MonoGame.Extended.Graphics
                     case '\n':
                         offset.X = 0;
                         offset.Y += lineSpacing;
+                        lastGlyph = null;
                         continue;
                 }
 
@@ -263,9 +265,21 @@ namespace MonoGame.Extended.Graphics
                 var bounds = textureRegion.Bounds;
                 DrawSprite(textureRegion.Texture, ref transform1Matrix, ref bounds, color, flags, depth);
 
+                var advance = fontRegion.XAdvance + bitmapFont.LetterSpacing;
+                if (BitmapFont.UseKernings && lastGlyph != null)
+                {
+                    int amount;
+                    if (lastGlyph.Kernings.TryGetValue(character, out amount))
+                    {
+                        advance += amount;
+                    }
+                }
+
                 offset.X += i != text.Length - 1
-                    ? fontRegion.XAdvance + bitmapFont.LetterSpacing
+                    ? advance
                     : fontRegion.XOffset + fontRegion.Width;
+
+                lastGlyph = fontRegion;
             }
         }
 
@@ -337,6 +351,7 @@ namespace MonoGame.Extended.Graphics
             var lineSpacing = bitmapFont.LineHeight;
             var offset = new Vector2(0, 0);
 
+            BitmapFontRegion lastGlyph = null;
             for (var i = 0; i < text.Length;)
             {
                 int character;
@@ -364,6 +379,7 @@ namespace MonoGame.Extended.Graphics
                     case '\n':
                         offset.X = 0;
                         offset.Y += lineSpacing;
+                        lastGlyph = null;
                         continue;
                 }
 
@@ -379,9 +395,21 @@ namespace MonoGame.Extended.Graphics
                 var bounds = textureRegion.Bounds;
                 DrawSprite(textureRegion.Texture, ref transform1Matrix, ref bounds, color, flags, depth);
 
+                var advance = fontRegion.XAdvance + bitmapFont.LetterSpacing;
+                if (BitmapFont.UseKernings && lastGlyph != null)
+                {
+                    int amount;
+                    if (lastGlyph.Kernings.TryGetValue(character, out amount))
+                    {
+                        advance += amount;
+                    }
+                }
+
                 offset.X += i != text.Length - 1
-                    ? fontRegion.XAdvance + bitmapFont.LetterSpacing
+                    ? advance
                     : fontRegion.XOffset + fontRegion.Width;
+
+                lastGlyph = fontRegion;
             }
         }
 

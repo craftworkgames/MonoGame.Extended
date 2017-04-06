@@ -29,6 +29,14 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
                 writer.Write(c.YOffset);
                 writer.Write(c.XAdvance);
             }
+
+            writer.Write(fontFile.Kernings.Count);
+            foreach(var k in fontFile.Kernings)
+            {
+                writer.Write(k.First);
+                writer.Write(k.Second);
+                writer.Write(k.Amount);
+            }
         }
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
