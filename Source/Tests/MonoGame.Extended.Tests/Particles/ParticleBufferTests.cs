@@ -104,71 +104,71 @@ namespace MonoGame.Extended.Tests.Particles
             }
         }
 
-        public class CopyToMethod
-        {
-            [Test]
-            public void WhenBufferIsSequential_CopiesParticlesInOrder()
-            {
-                unsafe
-                {
-                    var subject = new ParticleBuffer(10);
-                    var iterator = subject.Release(5);
+        //public class CopyToMethod
+        //{
+        //    [Test]
+        //    public void WhenBufferIsSequential_CopiesParticlesInOrder()
+        //    {
+        //        unsafe
+        //        {
+        //            var subject = new ParticleBuffer(10);
+        //            var iterator = subject.Release(5);
 
-                    do
-                    {
-                        var particle = iterator.Next();
-                        particle->Age = 1f;
-                    }
-                    while (iterator.HasNext);
+        //            do
+        //            {
+        //                var particle = iterator.Next();
+        //                particle->Age = 1f;
+        //            }
+        //            while (iterator.HasNext);
 
-                    var destination = new Particle[10];
+        //            var destination = new Particle[10];
 
-                    fixed (Particle* buffer = destination)
-                    {
-                        subject.CopyTo((IntPtr)buffer);
-                    }
+        //            fixed (Particle* buffer = destination)
+        //            {
+        //                subject.CopyTo((IntPtr)buffer);
+        //            }
 
-                    Assert.AreEqual(destination[0].Age, 1f, 0.0001);
-                    Assert.AreEqual(destination[1].Age, 1f, 0.0001);
-                    Assert.AreEqual(destination[2].Age, 1f, 0.0001);
-                    Assert.AreEqual(destination[3].Age, 1f, 0.0001);
-                    Assert.AreEqual(destination[4].Age, 1f, 0.0001);
-                }
-            }
-        }
+        //            Assert.AreEqual(destination[0].Age, 1f, 0.0001);
+        //            Assert.AreEqual(destination[1].Age, 1f, 0.0001);
+        //            Assert.AreEqual(destination[2].Age, 1f, 0.0001);
+        //            Assert.AreEqual(destination[3].Age, 1f, 0.0001);
+        //            Assert.AreEqual(destination[4].Age, 1f, 0.0001);
+        //        }
+        //    }
+        //}
 
-        public class CopyToReverseMethod
-        {
-            [Test]
-            public void WhenBufferIsSequential_CopiesParticlesInReverseOrder()
-            {
-                unsafe
-                {
-                    var subject = new ParticleBuffer(10);
-                    var iterator = subject.Release(5);
+        //public class CopyToReverseMethod
+        //{
+        //    [Test]
+        //    public void WhenBufferIsSequential_CopiesParticlesInReverseOrder()
+        //    {
+        //        unsafe
+        //        {
+        //            var subject = new ParticleBuffer(10);
+        //            var iterator = subject.Release(5);
                     
-                    do
-                    {
-                        var particle = iterator.Next();
-                        particle->Age = 1f;
-                    }
-                    while (iterator.HasNext);
+        //            do
+        //            {
+        //                var particle = iterator.Next();
+        //                particle->Age = 1f;
+        //            }
+        //            while (iterator.HasNext);
 
-                    var destination = new Particle[10];
+        //            var destination = new Particle[10];
 
-                    fixed (Particle* buffer = destination)
-                    {
-                        subject.CopyToReverse((IntPtr)buffer);
-                    }
+        //            fixed (Particle* buffer = destination)
+        //            {
+        //                subject.CopyToReverse((IntPtr)buffer);
+        //            }
 
-                    Assert.AreEqual(destination[0].Age, 1f, 0.0001);
-                    Assert.AreEqual(destination[1].Age, 1f, 0.0001);
-                    Assert.AreEqual(destination[2].Age, 1f, 0.0001);
-                    Assert.AreEqual(destination[3].Age, 1f, 0.0001);
-                    Assert.AreEqual(destination[4].Age, 1f, 0.0001);
-                }
-            }
-        }
+        //            Assert.AreEqual(destination[0].Age, 1f, 0.0001);
+        //            Assert.AreEqual(destination[1].Age, 1f, 0.0001);
+        //            Assert.AreEqual(destination[2].Age, 1f, 0.0001);
+        //            Assert.AreEqual(destination[3].Age, 1f, 0.0001);
+        //            Assert.AreEqual(destination[4].Age, 1f, 0.0001);
+        //        }
+        //    }
+        //}
 
         public class DisposeMethod
         {
