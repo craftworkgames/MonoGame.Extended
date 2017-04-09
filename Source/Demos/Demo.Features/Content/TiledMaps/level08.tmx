@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="staggered" renderorder="right-down" width="40" height="30" tilewidth="111" tileheight="64" staggeraxis="y" staggerindex="odd" nextobjectid="1">
+<map version="1.0" orientation="isometric" renderorder="right-down" width="40" height="30" tilewidth="111" tileheight="64" nextobjectid="1">
  <tileset firstgid="1" source="abstractTiles_sheet.tsx"/>
  <tileset firstgid="64" source="platformerTiles_sheet.tsx"/>
  <tileset firstgid="127" source="voxelTiles_sheet.tsx"/>
@@ -10,12 +10,7 @@
  </layer>
  <layer name="surface" width="40" height="30">
   <data encoding="base64" compression="zlib">
-   eJzt1LENgDAMRNHrGZKSDZjCOzADbaZDFAh0iYSUAp/CvcYuv1wYsD+I7IAXgbuxZIY0BE01V9eGunH9uIVxj+IN1RvV+05B+5IV0rBD82bs+QMVKbfZuObsgEFN2QFmZmadDvYtDbY=
-  </data>
- </layer>
- <layer name="high" width="40" height="30">
-  <data encoding="base64" compression="zlib">
-   eJzt1DEKwEAIAEHJ+31RXhesEuSOkMoN7DRabiFG/ENOB7zIuBvPyZCFbJMmNztB76H1FXojva+Qb7AQm7rnDyQit0n65pgOkCRJIy5IFwsh
+   eJzt1MEJgDAMheHcHdKjGziEZIfO4NXptAcxxISihybo+yC0vf2UUiL4A44OaGC6GrfIEAOrNZuzq9C9cT5mUdOT7mndYe++6kkj+mys9pM4R76/aqWcd6bJP1DK1GfJ0ud1ZOrzBnxjdMBHDdEBAAAAL+0vhBoc
   </data>
  </layer>
 </map>
