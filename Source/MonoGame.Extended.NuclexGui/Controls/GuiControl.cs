@@ -76,7 +76,7 @@ namespace MonoGame.Extended.NuclexGui.Controls
         }
 
         /// <summary>Location and extents of the control</summary>
-        public UniRectangle Bounds { get; set; }
+        public UniRectangle Bounds;
 
         /// <summary>Children of the control</summary>
         public Collection<GuiControl> Children => _children;

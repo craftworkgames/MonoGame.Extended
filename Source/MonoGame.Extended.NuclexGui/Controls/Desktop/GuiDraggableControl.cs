@@ -63,7 +63,9 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
             if (_beingDragged)
             {
                 // Adjust the control's position within the container
-                Bounds.FractionalOffset(x - _pickupX, y - _pickupY);
+                var dx = x - _pickupX;
+                var dy = y - _pickupY;
+                Bounds.AbsoluteOffset(dx, dy);
             }
             else
             {
