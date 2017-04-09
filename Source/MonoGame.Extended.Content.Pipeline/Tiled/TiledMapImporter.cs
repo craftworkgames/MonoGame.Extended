@@ -27,14 +27,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             return map;
         }
 
-        private static TiledMapContent DeserializeTiledMapContent(string filePath)
+        private static TiledMapContent DeserializeTiledMapContent(string mapFilePath)
         {
-            using (var reader = new StreamReader(filePath))
+            using (var reader = new StreamReader(mapFilePath))
             {
                 var mapSerializer = new XmlSerializer(typeof(TiledMapContent));
                 var map = (TiledMapContent)mapSerializer.Deserialize(reader);
 
-                map.FilePath = filePath;
+                map.FilePath = mapFilePath;
 
                 var tilesetSerializer = new XmlSerializer(typeof(TiledMapTilesetContent));
 
@@ -44,26 +44,43 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
                     if (string.IsNullOrWhiteSpace(tileset.Source))
                         continue;
-                    var directoryName = Path.GetDirectoryName(filePath);
-                    var tilesetLocation = tileset.Source.Replace('/', Path.DirectorySeparatorChar);
 
-                    Debug.Assert(directoryName != null, "directoryName != null");
-                    var tilesetFilePath = Path.Combine(directoryName, tilesetLocation);
-
-                    ContentLogger.Log($"Importing tileset '{tilesetFilePath}'");
-
-                    using (var file = new FileStream(tilesetFilePath, FileMode.Open))
-                    {
-                        map.Tilesets[i] = (TiledMapTilesetContent)tilesetSerializer.Deserialize(file);
-                    }
-
-                    ContentLogger.Log($"Imported tileset '{tilesetFilePath}'");
+                    var tilesetFilePath = GetTilesetFilePath(mapFilePath, tileset);
+                    map.Tilesets[i] = ImportTileset(tilesetFilePath, tilesetSerializer, tileset);
                 }
 
-                map.Name = filePath;
+                map.Name = mapFilePath;
 
                 return map;
             }
+        }
+
+        private static string GetTilesetFilePath(string mapFilePath, TiledMapTilesetContent tileset)
+        {
+            var directoryName = Path.GetDirectoryName(mapFilePath);
+            Debug.Assert(directoryName != null, "directoryName != null");
+
+            var tilesetLocation = tileset.Source.Replace('/', Path.DirectorySeparatorChar);
+            var tilesetFilePath = Path.Combine(directoryName, tilesetLocation);
+            return tilesetFilePath;
+        }
+
+        private static TiledMapTilesetContent ImportTileset(string tilesetFilePath, XmlSerializer tilesetSerializer, TiledMapTilesetContent tileset)
+        {
+            TiledMapTilesetContent result;
+
+            ContentLogger.Log($"Importing tileset '{tilesetFilePath}'");
+
+            using (var file = new FileStream(tilesetFilePath, FileMode.Open))
+            {
+                var importedTileset = (TiledMapTilesetContent)tilesetSerializer.Deserialize(file);
+                importedTileset.FirstGlobalIdentifier = tileset.FirstGlobalIdentifier;
+                result = importedTileset;
+            }
+
+            ContentLogger.Log($"Imported tileset '{tilesetFilePath}'");
+
+            return result;
         }
     }
 }
