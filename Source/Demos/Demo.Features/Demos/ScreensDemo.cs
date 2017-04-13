@@ -7,7 +7,7 @@ namespace Demo.Features.Demos
 {
     public class ScreensDemo : DemoBase
     {
-        public ScreensDemo(Game game) : base(game)
+        public ScreensDemo(GameMain game) : base(game)
         {
             ScreenGameComponent screenGameComponent;
             Components.Add(screenGameComponent = new ScreenGameComponent(game));

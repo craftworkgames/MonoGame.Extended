@@ -62,6 +62,13 @@ namespace MonoGame.Extended.Gui
             }
         }
 
+
+        public T Create<T>(string template, string name = null, string text = null)
+            where T : GuiControl, new()
+        {
+            return Create<T>(template, Vector2.Zero, name, text);
+        }
+
         public T Create<T>(string template, Vector2 position, string name = null, string text = null)
             where T : GuiControl, new()
         {

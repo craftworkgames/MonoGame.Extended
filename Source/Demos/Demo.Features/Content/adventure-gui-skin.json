@@ -8,6 +8,14 @@
   },
   "NinePatches": [
     {
+      "TextureRegion": "buttonLong_grey",
+      "Padding": 10
+    },
+    {
+      "TextureRegion": "buttonLong_grey_pressed",
+      "Padding": 10
+    },
+    {
       "TextureRegion": "panel_brown",
       "Padding": "10"
     },

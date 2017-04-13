@@ -21,7 +21,7 @@ namespace Demo.Features.Demos
         private SpriteBatch _spriteBatch;
         private Vector2 _worldPosition;
 
-        public CameraDemo(Game game) 
+        public CameraDemo(GameMain game) 
             : base(game)
         {
         }

@@ -16,7 +16,7 @@ namespace Demo.Features.Demos
 {
     public class ParticlesDemo : DemoBase
     {
-        public ParticlesDemo(Game game) 
+        public ParticlesDemo(GameMain game) 
             : base(game)
         {
         }

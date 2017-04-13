@@ -20,7 +20,7 @@ namespace Demo.Features.Demos
 
         private TextureRegion2D _clippingTextureRegion;
 
-        public SpritesDemo(Game game) : base(game)
+        public SpritesDemo(GameMain game) : base(game)
         {
         }
 

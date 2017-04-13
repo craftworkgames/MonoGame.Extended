@@ -22,7 +22,7 @@ namespace Demo.Features.Demos
         private float _speed = 0.15f;
         private SpriteBatch _spriteBatch;
 
-        public SceneGraphsDemo(Game game)
+        public SceneGraphsDemo(GameMain game)
             : base(game)
         {
         }

@@ -25,6 +25,8 @@ namespace Demo.Features
         private GuiSystem _guiSystem;
         private int _demoIndex = 0;
 
+        public ViewportAdapter ViewportAdapter { get; private set; }
+
         public GameMain(PlatformConfig config)
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this)
@@ -34,7 +36,7 @@ namespace Demo.Features
             };
 
             Content.RootDirectory = "Content";
-            IsMouseVisible = false;
+            IsMouseVisible = true;
             Window.AllowUserResizing = true;
 
             _demos = new List<DemoBase>
@@ -72,13 +74,12 @@ namespace Demo.Features
 
         protected override void LoadContent()
         {
-            var viewportAdapter = new DefaultViewportAdapter(GraphicsDevice);
-            var camera = new Camera2D(viewportAdapter);
+            ViewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
 
             var skin = LoadSkin(@"Raw/adventure-gui-skin.json");
-            var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, camera.GetViewMatrix);
+            var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, ViewportAdapter.GetScaleMatrix);
 
-            _guiSystem = new GuiSystem(viewportAdapter, guiRenderer)
+            _guiSystem = new GuiSystem(ViewportAdapter, guiRenderer)
             {
                 Screen = new DemoScreen(skin, NextDemo)
             };

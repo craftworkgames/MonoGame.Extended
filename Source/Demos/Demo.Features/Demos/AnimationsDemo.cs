@@ -8,21 +8,18 @@ using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
-using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Features.Demos
 {
     public class AnimationsDemo : DemoBase
     {
-        private Camera2D _camera;
         private SpriteBatch _spriteBatch;
-        private ViewportAdapter _viewportAdapter;
         private Zombie _zombie;
         private SpriteSheetAnimation _animation;
         private Sprite _fireballSprite;
         private AnimatedSprite _motwSprite;
 
-        public AnimationsDemo(Game game) : base(game)
+        public AnimationsDemo(GameMain game) : base(game)
         {
         }
 
@@ -30,15 +27,15 @@ namespace Demo.Features.Demos
         {
             base.Initialize();
 
-            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(_viewportAdapter)
-            {
-                MinimumZoom = 0.1f,
-                MaximumZoom = 2.0f,
-                Zoom = 1f,
-                Origin = new Vector2(400, 240),
-                Position = new Vector2(408, 270)
-            };
+            //_viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            //_camera = new Camera2D(_viewportAdapter)
+            //{
+            //    MinimumZoom = 0.1f,
+            //    MaximumZoom = 2.0f,
+            //    Zoom = 1f,
+            //    Origin = new Vector2(400, 240),
+            //    Position = new Vector2(408, 270)
+            //};
         }
 
         protected override void LoadContent()
@@ -85,10 +82,10 @@ namespace Demo.Features.Demos
 
             // camera
             if (keyboardState.IsKeyDown(Keys.R))
-                _camera.ZoomIn(deltaSeconds);
+                Camera.ZoomIn(deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.F))
-                _camera.ZoomOut(deltaSeconds);
+                Camera.ZoomOut(deltaSeconds);
 
             // zombie
             if (keyboardState.IsKeyDown(Keys.Left))
@@ -109,7 +106,7 @@ namespace Demo.Features.Demos
             // update must be called before collision detection
             _zombie.Update(gameTime);
             //_world.Update(gameTime);
-            _camera.LookAt(_zombie.Position);
+            Camera.LookAt(_zombie.Position);
 
             _animation.Update(deltaSeconds);
             _fireballSprite.TextureRegion = _animation.CurrentFrame;
@@ -123,12 +120,12 @@ namespace Demo.Features.Demos
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
+            _spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
             _zombie.Draw(_spriteBatch);
             _spriteBatch.Draw(_fireballSprite);
             _spriteBatch.End();
 
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _camera.GetViewMatrix());
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: Camera.GetViewMatrix());
 
             _spriteBatch.Draw(_motwSprite);
             _spriteBatch.End();

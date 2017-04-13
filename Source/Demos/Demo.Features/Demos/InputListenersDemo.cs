@@ -11,7 +11,7 @@ namespace Demo.Features.Demos
 {
     public class InputListenersDemo : DemoBase
     {
-        private readonly Game _this;
+        private readonly GameMain _this;
         private readonly List<string> _logLines = new List<string>();
         private SpriteBatch _spriteBatch;
         private Texture2D _backgroundTexture;
@@ -22,7 +22,7 @@ namespace Demo.Features.Demos
         private float _cursorBlinkDelta = _cursorBlinkDelay;
         private Camera2D _camera;
 
-        public InputListenersDemo(Game game) : base(game)
+        public InputListenersDemo(GameMain game) : base(game)
         {
             _this = game;
         }

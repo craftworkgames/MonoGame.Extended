@@ -17,7 +17,7 @@ namespace Demo.Features.Demos
         private ScalingViewportAdapter _scalingViewportAdapter;
         private SpriteBatch _spriteBatch;
 
-        public ViewportAdaptersDemo(Game game) : base(game)
+        public ViewportAdaptersDemo(GameMain game) : base(game)
         {
         }
         

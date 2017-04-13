@@ -25,7 +25,7 @@ namespace Demo.Features.Demos
         private Effect _customEffect;
         private Queue<string> _availableMaps;
 
-        public TiledMapsDemo(Game game) : base(game)
+        public TiledMapsDemo(GameMain game) : base(game)
         {
         }
 

@@ -35,10 +35,10 @@ namespace Demo.Features.Demos
         private Matrix _viewMatrix;
         private Matrix _projectionMatrix;
 
-        public BatchingDemo(Game game) : base(game)
+        public BatchingDemo(GameMain game) : base(game)
         {
             // disable fixed time step so max frames can be measured otherwise the update & draw frames would be capped to the default 60 fps timestep
-            game.IsFixedTimeStep = false;
+            //game.IsFixedTimeStep = false;
 
             //_graphicsDeviceManager = new GraphicsDeviceManager(this)
             //{

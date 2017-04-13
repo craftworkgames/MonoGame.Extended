@@ -15,6 +15,7 @@ namespace MonoGame.Extended.Gui
 
     public class GuiSystem : IGuiContext
     {
+        private readonly ViewportAdapter _viewportAdapter;
         private readonly IGuiRenderer _renderer;
         private readonly MouseListener _mouseListener;
         private readonly TouchListener _touchListener;
@@ -26,6 +27,7 @@ namespace MonoGame.Extended.Gui
 
         public GuiSystem(ViewportAdapter viewportAdapter, IGuiRenderer renderer)
         {
+            _viewportAdapter = viewportAdapter;
             _renderer = renderer;
 
             _mouseListener = new MouseListener(viewportAdapter);

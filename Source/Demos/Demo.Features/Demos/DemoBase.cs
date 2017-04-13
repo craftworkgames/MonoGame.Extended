@@ -2,15 +2,17 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Features.Demos
 {
     public abstract class DemoBase : IComparable<DemoBase>
     {
-        private readonly Game _game;
+        private readonly GameMain _game;
         private bool _isInitialized;
 
-        protected DemoBase(Game game)
+        protected DemoBase(GameMain game)
         {
             _game = game;
 
@@ -28,7 +30,15 @@ namespace Demo.Features.Demos
         protected GraphicsDevice GraphicsDevice => _game.GraphicsDevice;
         protected GameComponentCollection Components => _game.Components;
 
-        protected virtual void Initialize() { }
+        protected Camera2D Camera { get; private set; }
+        protected ViewportAdapter ViewportAdapter { get; private set; }
+
+        protected virtual void Initialize()
+        {
+            ViewportAdapter = _game.ViewportAdapter;
+            Camera = new Camera2D(ViewportAdapter);
+        }
+
         protected virtual void LoadContent() { }
         protected virtual void UnloadContent() { }
         protected virtual void Update(GameTime gameTime) { }

@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 
@@ -10,9 +11,24 @@ namespace Demo.Features.Screens
         public DemoScreen(GuiSkin skin, Action onNextDemo)
             : base(skin)
         {
-            var button = Skin.Create<GuiButton>("white-button", new Vector2(100, 32), text: "Next Demo");
-            button.Clicked += (s, e) => onNextDemo();
-            Controls.Add(button);
+            var button = Skin.Create<GuiButton>("white-button", c => { c.Text = "Next Demo"; });
+            var stackPanel = new GuiStackPanel
+            {
+                Origin = Vector2.Zero,
+                Controls = { button }
+            };
+
+            PerformLayout(stackPanel);
+            Controls.Add(stackPanel);
+
+            button.Clicked += (sender, args) => onNextDemo();
+        }
+
+        private static void PerformLayout(GuiStackPanel control)
+        {
+            control.Position = Vector2.Zero;
+            control.Size = new Size2(200, 480);
+            control.PerformLayout();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Demo.Features.Demos
         private GuiProgressBar _progressBar;
         private float _progressDelta = 0.2f;
         
-        public GuiDemo(Game game) : base(game)
+        public GuiDemo(GameMain game) : base(game)
         {
         }
         

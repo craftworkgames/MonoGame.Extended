@@ -9,7 +9,7 @@ namespace Demo.Features.Demos
 {
     public class BitmapFontsDemo : DemoBase
     {
-        public BitmapFontsDemo(Game parent)
+        public BitmapFontsDemo(GameMain parent)
             : base(parent)
         {
         }

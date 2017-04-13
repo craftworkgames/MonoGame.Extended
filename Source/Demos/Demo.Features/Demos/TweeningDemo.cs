@@ -16,7 +16,7 @@ namespace Demo.Features.Demos
         private Sprite _sprite;
         private Camera2D _camera;
 
-        public TweeningDemo(Game game) : base(game)
+        public TweeningDemo(GameMain game) : base(game)
         {
             _game = game;
         }

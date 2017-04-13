@@ -70,16 +70,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\Demo\Content\title-screen.json">
-      <Link>Assets\Raw\title-screen.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AndroidAsset>
-    <MonoGameContentReference Include="..\Demo\Content\Content.mgcb">
-      <Link>Content\Content.mgcb</Link>
-    </MonoGameContentReference>
-    <AndroidAsset Include="..\Demo\Content\adventure-gui-skin.json">
+    <AndroidAsset Include="..\Demo.Features\Content\adventure-gui-skin.json">
       <Link>Assets\Raw\adventure-gui-skin.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AndroidAsset>
+    <None Include="..\Demo.Features\Content\Content.mgcb">
+      <Link>Content\Content.mgcb</Link>
+    </None>
+    <AndroidAsset Include="..\Demo.Features\Content\title-screen.json">
+      <Link>Assets\Raw\title-screen.json</Link>
     </AndroidAsset>
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
@@ -104,15 +102,15 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MonoGame.Extended.Gui\MonoGame.Extended.Gui.csproj">
+    <ProjectReference Include="..\..\MonoGame.Extended.Gui\MonoGame.Extended.Gui.csproj">
       <Project>{8e425575-378a-4f83-88c9-f8bebad227c9}</Project>
       <Name>MonoGame.Extended.Gui</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\MonoGame.Extended\MonoGame.Extended.csproj">
+    <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
       <Name>MonoGame.Extended</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Demo\Demo.csproj">
+    <ProjectReference Include="..\Demo.Features\Demo.Features.csproj">
       <Project>{d8c6d896-5abf-4823-84da-f1191beec004}</Project>
       <Name>Demo</Name>
     </ProjectReference>
