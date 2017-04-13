@@ -40,6 +40,7 @@
     <Compile Include="Demos\CameraDemo.cs" />
     <Compile Include="Demos\DemoBase.cs" />
     <Compile Include="Demos\GuiDemo.cs" />
+    <Compile Include="Demos\GuiLayoutDemo.cs" />
     <Compile Include="Demos\InputListenersDemo.cs" />
     <Compile Include="Demos\ParticlesDemo.cs" />
     <Compile Include="Demos\SceneGraphsDemo.cs" />

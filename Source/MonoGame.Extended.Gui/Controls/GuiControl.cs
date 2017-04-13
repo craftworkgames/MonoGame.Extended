@@ -56,6 +56,18 @@ namespace MonoGame.Extended.Gui.Controls
         public Size2 Size { get; set; }
         public Color Color { get; set; }
 
+        public float Width
+        {
+            get { return Size.Width; }
+            set { Size = new Size2(value, Size.Height); }
+        }
+
+        public float Height
+        {
+            get { return Size.Height; }
+            set { Size = new Size2(Size.Width, value); }
+        }
+
         public Rectangle ClippingRectangle
         {
             get

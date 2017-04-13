@@ -36,17 +36,18 @@ namespace Demo.Features
             };
 
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
             Window.AllowUserResizing = true;
 
             _demos = new List<DemoBase>
             {
+                new GuiLayoutDemo(this),
+                new GuiDemo(this),
                 //new ScreensDemo(this),
                 new ViewportAdaptersDemo(this),
                 new TiledMapsDemo(this),
                 new AnimationsDemo(this),
                 new SpritesDemo(this),
-                new GuiDemo(this),
                 new BatchingDemo(this),
                 new TweeningDemo(this),
                 new InputListenersDemo(this),
@@ -55,7 +56,7 @@ namespace Demo.Features
                 new CameraDemo(this),
                 new BitmapFontsDemo(this)
             };
-            _demos.Sort();
+            //_demos.Sort();
         }
 
         protected override void Initialize()
@@ -128,7 +129,7 @@ namespace Demo.Features
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             _fpsCounter.Draw(gameTime);
             Window.Title = $"{_demoTitle} - {_fpsCounter.FramesPerSecond}";

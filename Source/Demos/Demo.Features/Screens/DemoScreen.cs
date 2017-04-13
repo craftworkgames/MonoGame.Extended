@@ -27,7 +27,7 @@ namespace Demo.Features.Screens
         private static void PerformLayout(GuiStackPanel control)
         {
             control.Position = Vector2.Zero;
-            control.Size = new Size2(200, 480);
+            control.Size = new Size2(100, 380);
             control.PerformLayout();
         }
     }

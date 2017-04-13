@@ -38,6 +38,13 @@ namespace Demo.Platformer.Entities.Systems
             _pixelTexture.SetData(new [] { Color.White });
         }
 
+        public override void UnloadContent()
+        {
+            _pixelTexture.Dispose();
+
+            base.UnloadContent();
+        }
+
         protected override void Begin(GameTime gameTime)
         {
             var transformMatrix = _camera.GetViewMatrix();
