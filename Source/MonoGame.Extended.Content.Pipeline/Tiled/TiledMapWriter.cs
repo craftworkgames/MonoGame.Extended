@@ -63,6 +63,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             output.Write(tilesetTile.LocalIdentifier);
 
             output.Write(tilesetTile.Frames.Count);
+
+            output.Write(tilesetTile.Objects.Count);
+            foreach (var @object in tilesetTile.Objects)
+                WriteObject(output, @object);
+
             foreach (var frame in tilesetTile.Frames)
             {
                 output.Write(frame.TileIdentifier);
