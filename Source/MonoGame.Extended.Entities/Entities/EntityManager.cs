@@ -422,7 +422,10 @@ namespace MonoGame.Extended.Entities
         internal EntityComponentType GetComponentTypeFrom(Type type)
         {
             EntityComponentType result;
-            _componentTypes.TryGetValue(type, out result);
+
+            if (!_componentTypes.TryGetValue(type, out result))
+                throw new InvalidOperationException($"{type.Name} is not marked with the EntityComponent attribute");
+
             return result;
         }
 

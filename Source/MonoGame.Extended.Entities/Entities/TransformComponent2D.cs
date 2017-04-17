@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Entities
 {
+    [EntityComponent]
     public class TransformComponent2D : EntityComponent
     {
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created

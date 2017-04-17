@@ -42,7 +42,6 @@ namespace Demo.Features.Demos
     {
         private Camera2D _camera;
         private GuiSystem _guiSystem;
-        private float _progressDelta = 0.2f;
 
         public GuiLayoutDemo(GameMain game) : base(game)
         {
