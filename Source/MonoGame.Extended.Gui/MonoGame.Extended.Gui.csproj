@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Controls\GuiButton.cs" />
+    <Compile Include="Controls\GuiCanvas.cs" />
     <Compile Include="Controls\GuiCheckBox.cs" />
     <Compile Include="Controls\GuiControl.cs" />
     <Compile Include="Controls\GuiControlCollection.cs" />
@@ -43,6 +44,7 @@
     <Compile Include="Controls\GuiLabel.cs" />
     <Compile Include="Controls\GuiLayoutControl.cs" />
     <Compile Include="Controls\GuiListBox.cs" />
+    <Compile Include="GuiOrientation.cs" />
     <Compile Include="Controls\GuiPanel.cs" />
     <Compile Include="Controls\GuiProgressBar.cs" />
     <Compile Include="Controls\GuiTextBox.cs" />
@@ -87,9 +89,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\Layout\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
