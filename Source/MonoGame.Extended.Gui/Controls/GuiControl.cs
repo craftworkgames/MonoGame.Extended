@@ -52,9 +52,14 @@ namespace MonoGame.Extended.Gui.Controls
         public string Name { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 Origin { get; set; }
-
         public Size2 Size { get; set; }
         public Color Color { get; set; }
+        public BitmapFont Font { get; set; }
+        public string Text { get; set; }
+        public Color TextColor { get; set; }
+        public Vector2 TextOffset { get; set; }
+        public TextureRegion2D BackgroundRegion { get; set; }
+        public GuiControlCollection Controls { get; }
 
         public float Width
         {
@@ -68,6 +73,22 @@ namespace MonoGame.Extended.Gui.Controls
             set { Size = new Size2(Size.Width, value); }
         }
 
+        public Size2 DesiredSize { get; protected set; }
+        public Size2 ActualSize { get; protected set; }
+
+        public void Measure(Size2 availableSize)
+        {
+            DesiredSize = CalculateDesiredSize(availableSize);
+        }
+
+        protected virtual Size2 CalculateDesiredSize(Size2 availableSize)
+        {
+            if (!Size.IsEmpty)
+                return Size;
+
+            return BackgroundRegion?.Size ?? Size2.Empty;
+        }
+
         public Rectangle ClippingRectangle
         {
             get
@@ -77,31 +98,6 @@ namespace MonoGame.Extended.Gui.Controls
                     r.Width - Padding.Right - Padding.Left, r.Height - Padding.Bottom - Padding.Top);
             }
         }
-
-        private TextureRegion2D _backgroundRegion;
-        public TextureRegion2D BackgroundRegion
-        {
-            get { return _backgroundRegion; }
-            set
-            {
-                if (_backgroundRegion != value)
-                {
-                    // if this is the first time a texture region has been set and this control has no size, 
-                    // use the size of the texture region
-                    if (_backgroundRegion == null && value != null && Size.IsEmpty)
-                        Size = value.Size;
-
-                    _backgroundRegion = value;
-                }
-            }
-        }
-
-        public BitmapFont Font { get; set; }
-        public string Text { get; set; }
-        public Color TextColor { get; set; }
-        public Vector2 TextOffset { get; set; }
-        
-        public GuiControlCollection Controls { get; }
 
         private bool _isEnabled;
         public bool IsEnabled

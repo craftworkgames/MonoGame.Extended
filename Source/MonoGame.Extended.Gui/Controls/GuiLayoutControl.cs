@@ -16,8 +16,6 @@ namespace MonoGame.Extended.Gui.Controls
             Origin = Vector2.Zero;
         }
 
-        public abstract void PerformLayout();
-
-
+        public abstract void Layout(RectangleF rectangle);
     }
 }

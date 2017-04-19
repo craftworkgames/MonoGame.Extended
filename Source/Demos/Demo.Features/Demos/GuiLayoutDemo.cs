@@ -11,9 +11,8 @@ namespace Demo.Features.Demos
 {
     public class GuiLayoutScreen : GuiScreen
     {
-
-
-        public GuiLayoutScreen(GuiSkin skin, GraphicsDevice graphicsDevice) : base(skin)
+        public GuiLayoutScreen(GuiSkin skin, GraphicsDevice graphicsDevice) 
+            : base(skin)
         {
             // TODO: Dispose the texture
             var texture = new Texture2D(graphicsDevice, 1, 1);
@@ -22,17 +21,19 @@ namespace Demo.Features.Demos
 
             var stackPanel = new GuiStackPanel(backgroundRegion)
             {
-                Position = new Vector2(150, 150),
-                Size = new Size2(500, 180),
+                //Position = new Vector2(150, 150),
+                //Size = new Size2(500, 180),
+                //Orientation = GuiOrientation.Horizontal,
+                Margin = new Thickness(0, 100, 0, 0),
                 Text = "Stack Panel",
                 Controls =
                 {
-                    Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 1"; c.Margin = new Thickness(5, 2); c.Width = 100; }),
+                    Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 1"; c.Margin = new Thickness(5, 2); }),
                     Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 2"; c.Margin = new Thickness(5, 2); }),
                     Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; c.Margin = new Thickness(5, 2); }),
                 }
             };
-            stackPanel.PerformLayout();
+            //stackPanel.PerformLayout();
 
             Controls.Add(stackPanel);
         }
@@ -54,7 +55,11 @@ namespace Demo.Features.Demos
 
             var skin = LoadSkin(@"Raw/adventure-gui-skin.json");
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _camera.GetViewMatrix);
-            _guiSystem = new GuiSystem(viewportAdapter, guiRenderer) { Screen = new GuiLayoutScreen(skin, GraphicsDevice) };
+
+            _guiSystem = new GuiSystem(viewportAdapter, guiRenderer)
+            {
+                Screen = new GuiLayoutScreen(skin, GraphicsDevice)
+            };
         }
 
         private GuiSkin LoadSkin(string assetName)

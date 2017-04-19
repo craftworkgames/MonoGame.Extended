@@ -46,7 +46,19 @@ namespace MonoGame.Extended.Gui
             _keyboardListener.KeyPressed += (sender, args) => _focusedControl?.OnKeyPressed(this, args);
         }
 
-        public GuiScreen Screen { get; set; }
+        private GuiScreen _screen;
+        public GuiScreen Screen
+        {
+            get { return _screen; }
+            set
+            {
+                if (_screen != value)
+                {
+                    _screen = value;
+                    _screen?.Layout(_viewportAdapter.BoundingRectangle);
+                }
+            }
+        }
         public Vector2 CursorPosition { get; set; }
         public BitmapFont DefaultFont => Screen?.Skin?.DefaultFont;
 
