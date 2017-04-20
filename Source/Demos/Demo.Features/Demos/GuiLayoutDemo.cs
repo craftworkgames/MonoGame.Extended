@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -56,6 +58,10 @@ namespace Demo.Features.Demos
                             Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; c.Width = 80; }),
                         }
                     },
+                    new GuiListBox(backgroundRegion)
+                    {
+                        Name = "DisplayModesListBox"
+                    }
                 }
             };
 
@@ -63,6 +69,9 @@ namespace Demo.Features.Demos
             //stackPanel.PerformLayout();
 
             Controls.Add(uniformGrid);
+
+            var listBox = FindControl<GuiListBox>("DisplayModesListBox");
+            listBox.Items.AddRange(GraphicsAdapter.DefaultAdapter.SupportedDisplayModes.Select(i => $"{i.Width}x{i.Height}"));
         }
     }
 

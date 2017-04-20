@@ -127,7 +127,7 @@ namespace MonoGame.Extended.Gui.Controls
             if (selectedItemRectangle.Bottom > ClippingRectangle.Bottom)
                 _firstIndex++;
 
-            if (selectedItemRectangle.Top < ClippingRectangle.Top)
+            if (selectedItemRectangle.Top < ClippingRectangle.Top && _firstIndex > 0)
                 _firstIndex--;
         }
     }
