@@ -20,8 +20,12 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected static void PlaceControl(GuiControl control, float x, float y, float width, float height)
         {
+            control.Origin = Vector2.Zero;
             control.Position = new Vector2(x + control.Margin.Left, y + control.Margin.Top);
             control.Size = new Size2(width - control.Margin.Left - control.Margin.Right, height - control.Margin.Top - control.Margin.Bottom);
+
+            var layoutControl = control as GuiLayoutControl;
+            layoutControl?.Layout(new RectangleF(x, y, width, height));
         }
     }
 }

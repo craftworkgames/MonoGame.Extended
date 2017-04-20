@@ -20,13 +20,12 @@ namespace MonoGame.Extended.Gui.Controls
 
         public override void Layout(RectangleF rectangle)
         {
-            var y = rectangle.X;
-            var x = rectangle.Y;
+            var x = 0f;
+            var y = 0f;
             var availableSize = rectangle.Size;
 
             foreach (var control in Controls)
             {
-                control.Origin = Vector2.Zero;
                 control.Measure(availableSize);
                 var desiredSize = control.DesiredSize;
 

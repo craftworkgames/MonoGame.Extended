@@ -11,7 +11,7 @@ namespace Demo.Features.Demos
 {
     public class GuiLayoutScreen : GuiScreen
     {
-        public GuiLayoutScreen(GuiSkin skin, GraphicsDevice graphicsDevice) 
+        public GuiLayoutScreen(GuiSkin skin, GraphicsDevice graphicsDevice)
             : base(skin)
         {
             // TODO: Dispose the texture
@@ -19,23 +19,50 @@ namespace Demo.Features.Demos
             texture.SetData(new[] { new Color(Color.Black, 0.5f) });
             var backgroundRegion = new TextureRegion2D(texture);
 
-            var stackPanel = new GuiStackPanel(backgroundRegion)
+            var uniformGrid = new GuiUniformGrid(backgroundRegion)
             {
-                //Position = new Vector2(150, 150),
-                //Size = new Size2(500, 180),
-                //Orientation = GuiOrientation.Horizontal,
-                Margin = new Thickness(0, 100, 0, 0),
-                Text = "Stack Panel",
+                Text = "Uniform Grid",
                 Controls =
                 {
-                    Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 1"; c.Margin = new Thickness(5, 2); }),
-                    Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 2"; c.Margin = new Thickness(5, 2); }),
-                    Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; c.Margin = new Thickness(5, 2); }),
+                    new GuiCanvas(backgroundRegion)
+                    {
+                        Text = "Canvas",
+                        Controls =
+                        {
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 1"; c.Position = new Vector2(0, 0); }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 2"; c.Position = new Vector2(50, 50); }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; c.Position = new Vector2(100, 100); }),
+                        }
+                    },
+                    new GuiStackPanel(backgroundRegion)
+                    {
+                        Text = "Stack Panel (Vertical)",
+                        Orientation = GuiOrientation.Vertical,
+                        Controls =
+                        {
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 1"; }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 2"; }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; }),
+                        }
+                    },
+                    new GuiStackPanel(backgroundRegion)
+                    {
+                        Text = "Stack Panel (Horizontal)",
+                        Orientation = GuiOrientation.Horizontal,
+                        Controls =
+                        {
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 1"; c.Width = 80; }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 2"; c.Width = 80; }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; c.Width = 80; }),
+                        }
+                    },
                 }
             };
+
+            //var stackPanel = ;
             //stackPanel.PerformLayout();
 
-            Controls.Add(stackPanel);
+            Controls.Add(uniformGrid);
         }
     }
 
