@@ -122,10 +122,10 @@ namespace Demo.Features.Demos
             }
 
             var textInputY = 14 * _bitmapFont.LineHeight - 2;
-            var position = new Point(4, textInputY);
+            var position = new Point2(4, textInputY);
             var stringRectangle = _bitmapFont.GetStringRectangle(_typedString, position);
 
-            _spriteBatch.DrawString(_bitmapFont, _typedString, position.ToVector2(), Color.White);
+            _spriteBatch.DrawString(_bitmapFont, _typedString, position, Color.White);
 
             if (_isCursorVisible)
                 _spriteBatch.DrawString(_bitmapFont, "_", new Vector2(stringRectangle.Width, textInputY), Color.White);

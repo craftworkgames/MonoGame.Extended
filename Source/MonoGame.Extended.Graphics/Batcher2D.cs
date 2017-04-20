@@ -348,68 +348,16 @@ namespace MonoGame.Extended.Graphics
             if (text == null)
                 throw new ArgumentNullException(nameof(text));
 
-            var lineSpacing = bitmapFont.LineHeight;
-            var offset = new Vector2(0, 0);
-
-            BitmapFontRegion lastGlyph = null;
-            for (var i = 0; i < text.Length;)
+            var glyphs = bitmapFont.GetGlyphs(text);
+            foreach (var glyph in glyphs)
             {
-                int character;
-                if (char.IsLowSurrogate(text[i]))
-                {
-                    character = char.ConvertToUtf32(text[i - 1], text[i]);
-                    i += 2;
-                }
-                else if (char.IsHighSurrogate(text[i]))
-                {
-                    character = char.ConvertToUtf32(text[i], text[i - 1]);
-                    i += 2;
-                }
-                else
-                {
-                    character = text[i];
-                    i += 1;
-                }
-
-                // ReSharper disable once SwitchStatementMissingSomeCases
-                switch (character)
-                {
-                    case '\r':
-                        continue;
-                    case '\n':
-                        offset.X = 0;
-                        offset.Y += lineSpacing;
-                        lastGlyph = null;
-                        continue;
-                }
-
-                var fontRegion = bitmapFont.GetCharacterRegion(character);
-                if (fontRegion == null)
-                    continue;
-
                 var transform1Matrix = transformMatrix;
-                transform1Matrix.M31 += offset.X + fontRegion.XOffset;
-                transform1Matrix.M32 += offset.Y + fontRegion.YOffset;
+                transform1Matrix.M31 += glyph.Position.X;
+                transform1Matrix.M32 += glyph.Position.Y;
 
-                var textureRegion = fontRegion.TextureRegion;
-                var bounds = textureRegion.Bounds;
-                DrawSprite(textureRegion.Texture, ref transform1Matrix, ref bounds, color, flags, depth);
-
-                var advance = fontRegion.XAdvance + bitmapFont.LetterSpacing;
-                if (BitmapFont.UseKernings && lastGlyph != null)
-                {
-                    int amount;
-                    if (lastGlyph.Kernings.TryGetValue(character, out amount))
-                    {
-                        advance += amount;
-                    }
-                }
-
-                offset.X += i != text.Length - 1
-                    ? advance
-                    : fontRegion.XOffset + fontRegion.Width;
-
-                lastGlyph = fontRegion;
+                var texture = glyph.FontRegion.TextureRegion.Texture;
+                var bounds = texture.Bounds;
+                DrawSprite(texture, ref transform1Matrix, ref bounds, color, flags, depth);
             }
         }
 

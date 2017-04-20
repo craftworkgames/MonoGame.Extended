@@ -39,7 +39,7 @@ namespace MonoGame.Extended.Gui.Controls
         {
             var font = Font ?? context.DefaultFont;
             var textInfo = GetTextInfo(context, Text, BoundingRectangle, HorizontalAlignment.Centre, VerticalAlignment.Centre);
-            var glyphs = font.GetGlyphs(textInfo.Text, textInfo.Position);
+            var glyphs = font.GetGlyphs(textInfo.Text, textInfo.Position).ToArray();
 
             for (var i = 0; i < glyphs.Length; i++)
             {
@@ -121,7 +121,7 @@ namespace MonoGame.Extended.Gui.Controls
             if (IsFocused)
             {
                 if (_isCaretVisible)
-                    renderer.DrawRectangle(caretRectangle, TextColor);
+                    renderer.DrawRectangle((Rectangle)caretRectangle, TextColor);
 
                 _nextCaretBlink -= deltaSeconds;
 
