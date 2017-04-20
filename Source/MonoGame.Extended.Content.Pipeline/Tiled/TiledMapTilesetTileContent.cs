@@ -17,6 +17,10 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlElement(ElementName = "image")]
         public TiledMapImageContent Image { get; set; }
 
+        [XmlArray("objectgroup")]
+        [XmlArrayItem("object")]
+        public List<TiledMapObjectContent> Objects { get; set; }
+
         [XmlArray("animation")]
         [XmlArrayItem("frame")]
         public List<TiledMapTilesetTileAnimationFrameContent> Frames { get; set; }

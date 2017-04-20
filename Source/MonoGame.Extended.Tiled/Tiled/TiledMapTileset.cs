@@ -53,7 +53,7 @@ namespace MonoGame.Extended.Tiled
 
                 if (animationFramesCount <= 0)
                 {
-                    tilesetTile = new TiledMapTilesetTile(localTileIdentifier);
+                    tilesetTile = new TiledMapTilesetTile(localTileIdentifier,input);
                 }
                 else
                 {
