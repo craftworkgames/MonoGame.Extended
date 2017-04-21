@@ -31,7 +31,7 @@ namespace Demo.Features.Demos
                         Text = "Canvas",
                         Controls =
                         {
-                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 1"; c.Position = new Vector2(0, 0); }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Reasonably long text"; c.Position = new Vector2(0, 0); }),
                             Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 2"; c.Position = new Vector2(50, 50); }),
                             Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; c.Position = new Vector2(100, 100); }),
                         }

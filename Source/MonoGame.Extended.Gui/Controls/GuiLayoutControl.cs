@@ -16,19 +16,25 @@ namespace MonoGame.Extended.Gui.Controls
             Origin = Vector2.Zero;
         }
 
-        public abstract void Layout(RectangleF rectangle);
+        protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
+        {
+            return availableSize;
+        }
 
-        protected static void PlaceControl(GuiControl control, float x, float y, float width, float height)
+        public abstract void Layout(IGuiContext context, RectangleF rectangle);
+
+        protected static void PlaceControl(IGuiContext context, GuiControl control, float x, float y, float width, float height)
         {
             var rectangle = new Rectangle((int)x, (int)y, (int)width, (int)height);
-            var minimumSize = control.GetMinimumSize(new Size2(width, height));
-            var finalRect = GuiAlignmentHelper.GetDestinationRectangle(control.HorizontalAlignment, control.VerticalAlignment, minimumSize, rectangle);
+            var minimumSize = control.GetDesiredSize(context, new Size2(width, height));
+            var destinationRectangle = GuiAlignmentHelper.GetDestinationRectangle(control.HorizontalAlignment, control.VerticalAlignment, minimumSize, rectangle);
+
             control.Origin = Vector2.Zero;
-            control.Position = new Vector2(finalRect.X + control.Margin.Left, finalRect.Y + control.Margin.Top);
-            control.Size = new Size2(finalRect.Width - control.Margin.Left - control.Margin.Right, finalRect.Height - control.Margin.Top - control.Margin.Bottom);
+            control.Position = new Vector2(destinationRectangle.X + control.Margin.Left, destinationRectangle.Y + control.Margin.Top);
+            control.Size = new Size2(destinationRectangle.Width - control.Margin.Left - control.Margin.Right, destinationRectangle.Height - control.Margin.Top - control.Margin.Bottom);
 
             var layoutControl = control as GuiLayoutControl;
-            layoutControl?.Layout(new RectangleF(x, y, width, height));
+            layoutControl?.Layout(context, new RectangleF(x, y, width, height));
         }
     }
 }

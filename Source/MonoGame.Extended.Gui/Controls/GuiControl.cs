@@ -52,7 +52,6 @@ namespace MonoGame.Extended.Gui.Controls
         public string Name { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 Origin { get; set; }
-        public Size2 Size { get; set; }
         public Color Color { get; set; }
         public BitmapFont Font { get; set; }
         public string Text { get; set; }
@@ -61,22 +60,9 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiControlCollection Controls { get; }
         public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Stretch;
         public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Stretch;
+        public TextureRegion2D BackgroundRegion { get; set; }
 
-        private TextureRegion2D _backgroundRegion;
-        public TextureRegion2D BackgroundRegion
-        {
-            get { return _backgroundRegion; }
-            set
-            {
-                if (_backgroundRegion != value)
-                {
-                    if (value != null && Size.IsEmpty)
-                        Size = value.Size;
-
-                    _backgroundRegion = value;
-                }
-            }
-        }
+        public Size2 Size { get; set; }
 
         public float Width
         {
@@ -90,17 +76,15 @@ namespace MonoGame.Extended.Gui.Controls
             set { Size = new Size2(Size.Width, value); }
         }
 
-        public Size2 ActualSize { get; protected set; }
-
-        public Size2 GetMinimumSize(Size2 availableSize)
+        public Size2 GetDesiredSize(IGuiContext context, Size2 availableSize)
         {
-            return CalculateMinimumSize(availableSize);
+            return CalculateDesiredSize(context, availableSize);
         }
 
-        protected virtual Size2 CalculateMinimumSize(Size2 availableSize)
+        protected virtual Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
         {
-            if (!Size.IsEmpty)
-                return Size;
+            //if (!Size.IsEmpty)
+            //    return Size;
 
             var minimumSize = Size2.Empty;
             var ninePatch = BackgroundRegion as NinePatchRegion2D;
@@ -110,8 +94,24 @@ namespace MonoGame.Extended.Gui.Controls
                 minimumSize.Width += ninePatch.LeftPadding + ninePatch.RightPadding;
                 minimumSize.Height += ninePatch.TopPadding + ninePatch.BottomPadding;
             }
-            
-            return minimumSize;
+            else if(BackgroundRegion != null)
+            {
+                minimumSize.Width += BackgroundRegion.Width;
+                minimumSize.Height += BackgroundRegion.Height;
+            }
+
+            var font = Font ?? context.DefaultFont;
+
+            if (font != null && !string.IsNullOrEmpty(Text))
+            {
+                var textSize = font.MeasureString(Text);
+                minimumSize.Width += textSize.Width;
+                minimumSize.Height += textSize.Height;
+            }
+
+            // ReSharper disable CompareOfFloatsByEqualityOperator
+            return new Size2(Size.Width == 0 ? minimumSize.Width : Size.Width, Size.Height == 0 ? minimumSize.Height : Size.Height);
+            // ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
         public Rectangle ClippingRectangle

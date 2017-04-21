@@ -18,7 +18,7 @@ namespace MonoGame.Extended.Gui.Controls
         public int Columns { get; set; }
         public int Rows { get; set; }
 
-        public override void Layout(RectangleF rectangle)
+        public override void Layout(IGuiContext context, RectangleF rectangle)
         {
             var columns = Columns == 0 ? Math.Ceiling(Math.Sqrt(Controls.Count)) : Columns;
             var rows = Rows == 0 ? columns : Rows;
@@ -31,7 +31,7 @@ namespace MonoGame.Extended.Gui.Controls
             {
                 var x = columnIndex * cellWidth;
                 var y = rowIndex * cellHeight;
-                PlaceControl(control, x, y, cellWidth, cellHeight);
+                PlaceControl(context, control, x, y, cellWidth, cellHeight);
                 columnIndex++;
 
                 if (columnIndex > columns - 1)

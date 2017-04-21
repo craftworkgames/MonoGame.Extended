@@ -55,7 +55,7 @@ namespace MonoGame.Extended.Gui
                 if (_screen != value)
                 {
                     _screen = value;
-                    _screen?.Layout(_viewportAdapter.BoundingRectangle);
+                    _screen?.Layout(this, _viewportAdapter.BoundingRectangle);
                 }
             }
         }

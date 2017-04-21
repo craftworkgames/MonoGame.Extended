@@ -15,13 +15,13 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public override void Layout(RectangleF rectangle)
+        public override void Layout(IGuiContext context, RectangleF rectangle)
         {
             foreach (var control in Controls)
             {
-                control.Origin = Vector2.Zero;
-                var desiredSize = control.GetMinimumSize(rectangle.Size);
-                PlaceControl(control, control.Position.X, control.Position.Y, desiredSize.Width, desiredSize.Height);
+                //control.Origin = Vector2.Zero;
+                var desiredSize = control.GetDesiredSize(context, rectangle.Size);
+                PlaceControl(context, control, control.Position.X, control.Position.Y, desiredSize.Width, desiredSize.Height);
             }
         }
     }

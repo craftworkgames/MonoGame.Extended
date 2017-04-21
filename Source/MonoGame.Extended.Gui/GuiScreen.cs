@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Gui.Controls;
 using Newtonsoft.Json;
 
@@ -44,18 +45,18 @@ namespace MonoGame.Extended.Gui
             return null;
         }
 
-        public void Layout(RectangleF rectangle)
+        public void Layout(IGuiContext context, RectangleF rectangle)
         {
             foreach (var control in Controls)
             {
                 if (control.Size.IsEmpty)
                 {
                     control.Position = rectangle.Position;
-                    control.Size = rectangle.Size;
+                    control.Size = control.GetDesiredSize(context, rectangle.Size);
                 }
 
                 var layoutControl = control as GuiLayoutControl;
-                layoutControl?.Layout(rectangle);
+                layoutControl?.Layout(context, rectangle);
             }
         }
     }
