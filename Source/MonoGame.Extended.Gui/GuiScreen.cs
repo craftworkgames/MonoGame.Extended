@@ -48,8 +48,6 @@ namespace MonoGame.Extended.Gui
         {
             foreach (var control in Controls)
             {
-                control.Measure(rectangle.Size);
-
                 if (control.Size.IsEmpty)
                 {
                     control.Position = rectangle.Position;

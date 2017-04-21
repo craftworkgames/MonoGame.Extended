@@ -26,8 +26,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             foreach (var control in Controls)
             {
-                control.Measure(availableSize);
-                var desiredSize = control.DesiredSize;
+                var desiredSize = control.GetMinimumSize(availableSize);
 
                 switch (Orientation)
                 {

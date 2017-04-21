@@ -8,17 +8,17 @@ namespace MonoGame.Extended.Gui
 
     public static class GuiAlignmentHelper
     {
-        public static Rectangle GetDestinationRectangle(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Rectangle sourceRectangle, Rectangle targetRectangle)
+        public static Rectangle GetDestinationRectangle(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Size2 size, Rectangle targetRectangle)
         {
-            var x = GetHorizontalPosition(horizontalAlignment, sourceRectangle, targetRectangle);
-            var y = GetVerticalPosition(verticalAlignment, sourceRectangle, targetRectangle);
-            var width = horizontalAlignment == HorizontalAlignment.Stretch ? targetRectangle.Width : sourceRectangle.Width;
-            var height = verticalAlignment == VerticalAlignment.Stretch ? targetRectangle.Height : sourceRectangle.Height;
+            var x = GetHorizontalPosition(horizontalAlignment, size, targetRectangle);
+            var y = GetVerticalPosition(verticalAlignment, size, targetRectangle);
+            var width = horizontalAlignment == HorizontalAlignment.Stretch ? targetRectangle.Width : size.Width;
+            var height = verticalAlignment == VerticalAlignment.Stretch ? targetRectangle.Height : size.Height;
 
-            return new Rectangle(x, y, width, height);
+            return new Rectangle(x, y, (int) width, (int) height);
         }
 
-        public static int GetHorizontalPosition(HorizontalAlignment horizontalAlignment, Rectangle sourceRectangle, Rectangle targetRectangle)
+        public static int GetHorizontalPosition(HorizontalAlignment horizontalAlignment, Size2 size, Rectangle targetRectangle)
         {
             switch (horizontalAlignment)
             {
@@ -26,15 +26,15 @@ namespace MonoGame.Extended.Gui
                 case HorizontalAlignment.Left:
                     return targetRectangle.X;
                 case HorizontalAlignment.Right:
-                    return targetRectangle.Right - sourceRectangle.Width;
+                    return (int) (targetRectangle.Right - size.Width);
                 case HorizontalAlignment.Centre:
-                    return targetRectangle.X + targetRectangle.Width / 2 - sourceRectangle.Width / 2;
+                    return (int) (targetRectangle.X + targetRectangle.Width / 2 - size.Width / 2);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(horizontalAlignment), horizontalAlignment, $"{horizontalAlignment} is not supported");
             }
         }
 
-        public static int GetVerticalPosition(VerticalAlignment verticalAlignment, Rectangle sourceRectangle, Rectangle targetRectangle)
+        public static int GetVerticalPosition(VerticalAlignment verticalAlignment, Size2 size, Rectangle targetRectangle)
         {
             switch (verticalAlignment)
             {
@@ -42,9 +42,9 @@ namespace MonoGame.Extended.Gui
                 case VerticalAlignment.Top:
                     return targetRectangle.Y;
                 case VerticalAlignment.Bottom:
-                    return targetRectangle.Bottom - sourceRectangle.Height;
+                    return (int) (targetRectangle.Bottom - size.Height);
                 case VerticalAlignment.Centre:
-                    return targetRectangle.Y + targetRectangle.Height / 2 - sourceRectangle.Height / 2;
+                    return (int) (targetRectangle.Y + targetRectangle.Height / 2 - size.Height / 2);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(verticalAlignment), verticalAlignment, $"{verticalAlignment} is not supported");
             }

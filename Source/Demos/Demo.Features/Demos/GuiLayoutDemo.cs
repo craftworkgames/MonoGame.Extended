@@ -42,9 +42,10 @@ namespace Demo.Features.Demos
                         Orientation = GuiOrientation.Vertical,
                         Controls =
                         {
-                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 1"; }),
-                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 2"; }),
-                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 1"; c.HorizontalAlignment = HorizontalAlignment.Centre; }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 2"; c.HorizontalAlignment = HorizontalAlignment.Right; }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; c.HorizontalAlignment = HorizontalAlignment.Left; }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 4"; }),
                         }
                     },
                     new GuiStackPanel(backgroundRegion)
@@ -53,8 +54,9 @@ namespace Demo.Features.Demos
                         Orientation = GuiOrientation.Horizontal,
                         Controls =
                         {
-                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 1"; c.Width = 80; }),
-                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 2"; c.Width = 80; }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 1"; c.Width = 80; c.VerticalAlignment = VerticalAlignment.Centre; }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 2"; c.Width = 80; c.VerticalAlignment = VerticalAlignment.Top; }),
+                            Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; c.Width = 80; c.VerticalAlignment = VerticalAlignment.Bottom; }),
                             Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; c.Width = 80; }),
                         }
                     },

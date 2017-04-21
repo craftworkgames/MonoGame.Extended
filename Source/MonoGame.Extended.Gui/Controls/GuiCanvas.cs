@@ -20,8 +20,7 @@ namespace MonoGame.Extended.Gui.Controls
             foreach (var control in Controls)
             {
                 control.Origin = Vector2.Zero;
-                control.Measure(rectangle.Size);
-                var desiredSize = control.DesiredSize;
+                var desiredSize = control.GetMinimumSize(rectangle.Size);
                 PlaceControl(control, control.Position.X, control.Position.Y, desiredSize.Width, desiredSize.Height);
             }
         }
