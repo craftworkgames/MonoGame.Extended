@@ -63,9 +63,6 @@
     <Compile Include="..\MonoGame.Extended.Tiled\Tiled\TiledMapObjectType.cs">
       <Link>Tiled\TiledMapObjectType.cs</Link>
     </Compile>
-    <Compile Include="..\MonoGame.Extended.Tiled\Tiled\TiledMapTile.cs">
-      <Link>Tiled\TiledMapTile.cs</Link>
-    </Compile>
     <Compile Include="..\MonoGame.Extended.Tiled\Tiled\TiledMapTileFlipFlags.cs">
       <Link>Tiled\TiledMapTileFlipFlags.cs</Link>
     </Compile>
@@ -118,6 +115,7 @@
     <Compile Include="Tiled\TiledMapProcessor.cs" />
     <Compile Include="Tiled\TiledMapPropertyContent.cs" />
     <Compile Include="Tiled\TiledMapTerrainContent.cs" />
+    <Compile Include="Tiled\TiledMapTile.cs" />
     <Compile Include="Tiled\TiledMapTileDrawOrderContent.cs" />
     <Compile Include="Tiled\TiledMapTileLayerContent.cs" />
     <Compile Include="Tiled\TiledMapTileLayerDataContent.cs" />

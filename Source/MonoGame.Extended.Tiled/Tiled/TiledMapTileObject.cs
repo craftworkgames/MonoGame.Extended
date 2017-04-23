@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Tiled
             : base(input)
         {
             var globalTileIdentifierWithFlags = input.ReadUInt32();
-            var tile = new TiledMapTile(globalTileIdentifierWithFlags, 0, 0);
+            var tile = new TiledMapTile(globalTileIdentifierWithFlags);
             var tileset = map.GetTilesetByTileGlobalIdentifier(tile.GlobalIdentifier);
             var localTileIdentifier = tile.GlobalIdentifier - tileset.FirstGlobalIdentifier;
             TilesetTile = tileset.Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier);
