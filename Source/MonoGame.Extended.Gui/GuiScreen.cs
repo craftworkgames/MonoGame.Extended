@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using System;
+using System.Linq;
 using MonoGame.Extended.Gui.Controls;
 using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui
 {
-    public class GuiScreen
+    public class GuiScreen : IDisposable
     {
         public GuiScreen(GuiSkin skin)
         {
@@ -18,6 +18,12 @@ namespace MonoGame.Extended.Gui
 
         [JsonProperty(Order = 2)]
         public GuiControlCollection Controls { get; }
+
+        public float Width { get; private set; }
+        public float Height { get; private set; }
+        public Size2 Size => new Size2(Width, Height);
+
+        public virtual void Initialize() { }
 
         public T FindControl<T>(string name)
             where T : GuiControl
@@ -47,6 +53,11 @@ namespace MonoGame.Extended.Gui
 
         public void Layout(IGuiContext context, RectangleF rectangle)
         {
+            Width = rectangle.Width;
+            Height = rectangle.Height;
+
+            Initialize();
+
             foreach (var control in Controls)
             {
                 if (control.Size.IsEmpty)
@@ -58,6 +69,19 @@ namespace MonoGame.Extended.Gui
                 var layoutControl = control as GuiLayoutControl;
                 layoutControl?.Layout(context, rectangle);
             }
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (isDisposing)
+            {
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

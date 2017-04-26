@@ -73,7 +73,6 @@
         "BackgroundRegion": "checkBox_beige_checked"
       }
     },
-
     {
       "Name": "brown-panel",
       "Type": "GuiPanel",
@@ -99,7 +98,7 @@
     {
       "Name": "text-box",
       "Type": "GuiTextBox",
-      "Padding": "8 0",
+      "ClipPadding": "8 0",
       "BackgroundRegion": "grey_textBox",
       "TextColor": "#444444"
     },
@@ -114,8 +113,16 @@
       "Name": "list-box",
       "Type": "GuiListBox",
       "Size": "200 150",
-      "Padding": "7 5",
+      "ClipPadding": "7 5",
       "BackgroundRegion": "grey_textBox",
+      "TextColor": "#444444"
+    },
+    {
+      "Name": "dialog",
+      "Type": "GuiDialog",
+      "Padding": "10",
+      "Size": "400 240",
+      "BackgroundRegion": "panel_brown",
       "TextColor": "#444444"
     }
   ]

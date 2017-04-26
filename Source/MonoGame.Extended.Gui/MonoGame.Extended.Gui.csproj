@@ -40,6 +40,7 @@
     <Compile Include="Controls\GuiCheckBox.cs" />
     <Compile Include="Controls\GuiControl.cs" />
     <Compile Include="Controls\GuiControlCollection.cs" />
+    <Compile Include="Controls\GuiDialog.cs" />
     <Compile Include="Controls\GuiImage.cs" />
     <Compile Include="Controls\GuiLabel.cs" />
     <Compile Include="Controls\GuiLayoutControl.cs" />

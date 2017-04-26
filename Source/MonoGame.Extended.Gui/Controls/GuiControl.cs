@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Gui.Controls
             IsEnabled = true;
             IsVisible = true;
             Controls = new GuiControlCollection(this);
-            Origin = Vector2.One * 0.5f;
+            Origin = Vector2.Zero;
         }
 
         protected GuiControl(TextureRegion2D backgroundRegion)
@@ -44,8 +44,18 @@ namespace MonoGame.Extended.Gui.Controls
         public Thickness Margin { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public Thickness Padding { get; set; }
-        
+        public Thickness ClipPadding { get; set; }
+
+        public Rectangle ClippingRectangle
+        {
+            get
+            {
+                var r = BoundingRectangle;
+                return new Rectangle(r.Left + ClipPadding.Left, r.Top + ClipPadding.Top,
+                    r.Width - ClipPadding.Right - ClipPadding.Left, r.Height - ClipPadding.Bottom - ClipPadding.Top);
+            }
+        }
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsFocused { get; set; }
 
@@ -83,9 +93,6 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected virtual Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
         {
-            //if (!Size.IsEmpty)
-            //    return Size;
-
             var minimumSize = Size2.Empty;
             var ninePatch = BackgroundRegion as NinePatchRegion2D;
 
@@ -112,16 +119,6 @@ namespace MonoGame.Extended.Gui.Controls
             // ReSharper disable CompareOfFloatsByEqualityOperator
             return new Size2(Size.Width == 0 ? minimumSize.Width : Size.Width, Size.Height == 0 ? minimumSize.Height : Size.Height);
             // ReSharper restore CompareOfFloatsByEqualityOperator
-        }
-
-        public Rectangle ClippingRectangle
-        {
-            get
-            {
-                var r = BoundingRectangle;
-                return new Rectangle(r.Left + Padding.Left, r.Top + Padding.Top, 
-                    r.Width - Padding.Right - Padding.Left, r.Height - Padding.Bottom - Padding.Top);
-            }
         }
 
         private bool _isEnabled;

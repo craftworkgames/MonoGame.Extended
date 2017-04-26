@@ -18,6 +18,33 @@ namespace MonoGame.Extended.Gui.Controls
 
         public GuiOrientation Orientation { get; set; } = GuiOrientation.Vertical;
 
+        protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
+        {
+            var width = 0f;
+            var height = 0f;
+
+            foreach (var control in Controls)
+            {
+                var desiredSize = control.GetDesiredSize(context, availableSize);
+
+                switch (Orientation)
+                {
+                    case GuiOrientation.Horizontal:
+                        width += desiredSize.Width;
+                        height = desiredSize.Height > height ? desiredSize.Height : height;
+                        break;
+                    case GuiOrientation.Vertical:
+                        width = desiredSize.Width > width ? desiredSize.Width : width;
+                        height += desiredSize.Height;
+                        break;
+                    default:
+                        throw new InvalidOperationException($"Unexpected orientation {Orientation}");
+                }
+            }
+
+            return new Size2(width, height);
+        }
+
         public override void Layout(IGuiContext context, RectangleF rectangle)
         {
             var x = 0f;

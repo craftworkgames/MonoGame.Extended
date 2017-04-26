@@ -29,7 +29,6 @@ namespace MonoGame.Extended.Gui.Controls
             var minimumSize = control.GetDesiredSize(context, new Size2(width, height));
             var destinationRectangle = GuiAlignmentHelper.GetDestinationRectangle(control.HorizontalAlignment, control.VerticalAlignment, minimumSize, rectangle);
 
-            control.Origin = Vector2.Zero;
             control.Position = new Vector2(destinationRectangle.X + control.Margin.Left, destinationRectangle.Y + control.Margin.Top);
             control.Size = new Size2(destinationRectangle.Width - control.Margin.Left - control.Margin.Right, destinationRectangle.Height - control.Margin.Top - control.Margin.Bottom);
 

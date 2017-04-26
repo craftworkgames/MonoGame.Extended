@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,13 +12,23 @@ namespace Demo.Features.Demos
 {
     public class GuiLayoutScreen : GuiScreen
     {
+        private readonly Texture2D _texture;
+
         public GuiLayoutScreen(GuiSkin skin, GraphicsDevice graphicsDevice)
             : base(skin)
         {
-            // TODO: Dispose the texture
-            var texture = new Texture2D(graphicsDevice, 1, 1);
-            texture.SetData(new[] { new Color(Color.Black, 0.5f) });
-            var backgroundRegion = new TextureRegion2D(texture);
+            _texture = new Texture2D(graphicsDevice, 1, 1);
+            _texture.SetData(new[] { new Color(Color.Black, 0.5f) });
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            _texture.Dispose();
+        }
+
+        public override void Initialize()
+        {
+            var backgroundRegion = new TextureRegion2D(_texture);
 
             var uniformGrid = new GuiUniformGrid(backgroundRegion)
             {
