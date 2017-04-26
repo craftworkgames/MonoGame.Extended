@@ -24,7 +24,7 @@ namespace MonoGame.Extended.Tiled
             TileHeight = map.TileHeight;
 
             var tileCount = input.ReadInt32();
-            var tiles = new TiledMapTile[tileCount];
+            var tiles = new TiledMapTile[Width * Height];
             Tiles = new ReadOnlyCollection<TiledMapTile>(tiles);
 
             for (var i = 0; i < tileCount; i++)
@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Tiled
                 var globalTileIdentifierWithFlags = input.ReadUInt32();
                 var x = input.ReadUInt16();
                 var y = input.ReadUInt16();
-                tiles[i] = new TiledMapTile(globalTileIdentifierWithFlags, x, y);
+                tiles[x + y * Width] = new TiledMapTile(globalTileIdentifierWithFlags);
             }
         }
 
