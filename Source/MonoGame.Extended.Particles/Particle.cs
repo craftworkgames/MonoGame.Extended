@@ -16,6 +16,7 @@ namespace MonoGame.Extended.Particles
         public Vector2 Scale;
         public float Rotation;
         public float Mass;
+        public float LayerDepth;
 
         public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Particle));
     }

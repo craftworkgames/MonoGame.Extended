@@ -38,6 +38,12 @@ namespace MonoGame.Extended.Particles
                 e.Trigger(position);
         }
 
+        public void Trigger(Vector2 position, float layerDepth)
+        {
+            foreach (var e in Emitters)
+                e.Trigger(position, layerDepth);
+        }
+
         public void Trigger(LineSegment line)
         {
             foreach (var e in Emitters)
