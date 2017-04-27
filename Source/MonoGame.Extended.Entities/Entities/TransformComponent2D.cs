@@ -167,7 +167,7 @@ namespace MonoGame.Extended.Entities
             if (Parent != null)
             {
                 Parent.GetWorldMatrix(out matrix);
-                Matrix2D.Multiply(ref localMatrix, ref matrix, out matrix);
+                Matrix2D.Multiply(ref matrix, ref localMatrix, out matrix);
             }
             else
             {

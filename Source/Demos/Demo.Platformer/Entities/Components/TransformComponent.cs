@@ -169,7 +169,7 @@ namespace Demo.Platformer.Entities.Components
             if (Parent != null)
             {
                 Parent.GetWorldMatrix(out matrix);
-                Matrix2D.Multiply(ref localMatrix, ref matrix, out matrix);
+                Matrix2D.Multiply(ref matrix, ref localMatrix, out matrix);
             }
             else
             {
