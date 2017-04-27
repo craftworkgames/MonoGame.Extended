@@ -121,7 +121,6 @@
       "Name": "dialog",
       "Type": "GuiDialog",
       "Padding": "10",
-      "Size": "400 240",
       "BackgroundRegion": "panel_brown",
       "TextColor": "#444444"
     }

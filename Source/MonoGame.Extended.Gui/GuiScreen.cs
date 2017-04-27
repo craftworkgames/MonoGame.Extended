@@ -59,16 +59,7 @@ namespace MonoGame.Extended.Gui
             Initialize();
 
             foreach (var control in Controls)
-            {
-                if (control.Size.IsEmpty)
-                {
-                    control.Position = rectangle.Position;
-                    control.Size = control.GetDesiredSize(context, rectangle.Size);
-                }
-
-                var layoutControl = control as GuiLayoutControl;
-                layoutControl?.Layout(context, rectangle);
-            }
+                GuiAlignmentHelper.PlaceControl(context, control, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
         }
 
         protected virtual void Dispose(bool isDisposing)

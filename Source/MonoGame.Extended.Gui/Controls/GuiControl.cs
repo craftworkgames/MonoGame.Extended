@@ -35,8 +35,12 @@ namespace MonoGame.Extended.Gui.Controls
         {
             get
             {
-                var position = Parent != null ? Parent.Position - Parent.Size * Parent.Origin + Position : Position;
-                return new Rectangle((position - Size * Origin).ToPoint(), (Point)Size);
+                var offset = Vector2.Zero;
+
+                if (Parent != null)
+                    offset = Parent.BoundingRectangle.Location.ToVector2();
+
+                return new Rectangle((offset + Position - Size * Origin).ToPoint(), (Point)Size);
             }
         }
 
@@ -116,6 +120,9 @@ namespace MonoGame.Extended.Gui.Controls
                 minimumSize.Height += textSize.Height;
             }
 
+            minimumSize.Width += Margin.Left + Margin.Right;
+            minimumSize.Height += Margin.Top + Margin.Bottom;
+
             // ReSharper disable CompareOfFloatsByEqualityOperator
             return new Size2(Size.Width == 0 ? minimumSize.Width : Size.Width, Size.Height == 0 ? minimumSize.Height : Size.Height);
             // ReSharper restore CompareOfFloatsByEqualityOperator
@@ -185,6 +192,7 @@ namespace MonoGame.Extended.Gui.Controls
         protected virtual void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
+            //renderer.DrawRectangle(BoundingRectangle, Color.Red);
         }
 
         protected virtual void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)

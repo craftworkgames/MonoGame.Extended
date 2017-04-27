@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Gui.Controls;
 
 namespace MonoGame.Extended.Gui
 {
@@ -8,6 +9,19 @@ namespace MonoGame.Extended.Gui
 
     public static class GuiAlignmentHelper
     {
+        public static void PlaceControl(IGuiContext context, GuiControl control, float x, float y, float width, float height)
+        {
+            var rectangle = new Rectangle((int)x, (int)y, (int)width, (int)height);
+            var desiredSize = control.GetDesiredSize(context, new Size2(width, height));
+            var destinationRectangle = GetDestinationRectangle(control.HorizontalAlignment, control.VerticalAlignment, desiredSize, rectangle);
+
+            control.Position = new Vector2(destinationRectangle.X + control.Margin.Left, destinationRectangle.Y + control.Margin.Top);
+            control.Size = new Size2(destinationRectangle.Width - control.Margin.Left - control.Margin.Right, destinationRectangle.Height - control.Margin.Top - control.Margin.Bottom);
+
+            var layoutControl = control as GuiLayoutControl;
+            layoutControl?.Layout(context, new RectangleF(x, y, width, height));
+        }
+
         public static Rectangle GetDestinationRectangle(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Size2 size, Rectangle targetRectangle)
         {
             var x = GetHorizontalPosition(horizontalAlignment, size, targetRectangle);

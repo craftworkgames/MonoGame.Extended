@@ -1,4 +1,5 @@
-﻿using MonoGame.Extended.TextureAtlases;
+﻿using System.Linq;
+using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -12,6 +13,8 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiDialog(TextureRegion2D backgroundRegion)
             : base(backgroundRegion)
         {
+            HorizontalAlignment = HorizontalAlignment.Centre;
+            VerticalAlignment = VerticalAlignment.Centre;
         }
 
         public Thickness Padding { get; set; }
@@ -26,6 +29,14 @@ namespace MonoGame.Extended.Gui.Controls
         public void Hide()
         {
             Owner.Controls.Remove(this);
+        }
+
+        protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
+        {
+            var sizes = Controls.Select(i => i.GetDesiredSize(context, availableSize)).ToArray();
+            var width = sizes.Max(s => s.Width);
+            var height = sizes.Max(s => s.Height);
+            return new Size2(width, height);
         }
 
         public override void Layout(IGuiContext context, RectangleF rectangle)

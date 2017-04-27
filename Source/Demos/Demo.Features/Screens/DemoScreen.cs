@@ -31,28 +31,36 @@ namespace Demo.Features.Screens
         public override void Initialize()
         {
             //var dialog = Skin.Create<GuiDialog>("dialog");
-            //var okayButton = Skin.Create<GuiButton>("white-button", c => 
-            //{
-            //    c.Text = "Yes";
-            //    c.Width = 100;
-            //    c.Margin = new Thickness(5);
-            //});
-            //var cancelButton = Skin.Create<GuiButton>("white-button", c =>
-            //{
-            //    c.Text = "No";
-            //    c.Width = 100;
-            //    c.Margin = new Thickness(5);
-            //});
 
             //var stackPanel = new GuiStackPanel
             //{
-            //    Orientation = GuiOrientation.Horizontal,
-            //    VerticalAlignment = VerticalAlignment.Bottom,
-            //    HorizontalAlignment = HorizontalAlignment.Centre,
-            //    Controls = { okayButton, cancelButton }
+            //    Controls =
+            //    {
+            //        Skin.Create<GuiLabel>("label", c => c.Text = "Are you sure you want to do that?"),
+            //        new GuiStackPanel
+            //        {
+            //            Orientation = GuiOrientation.Horizontal,
+            //            VerticalAlignment = VerticalAlignment.Bottom,
+            //            HorizontalAlignment = HorizontalAlignment.Centre,
+            //            Controls =
+            //            {
+            //                Skin.Create<GuiButton>("white-button", c =>
+            //                {
+            //                    c.Text = "Yes";
+            //                    c.Width = 100;
+            //                    c.Margin = new Thickness(5);
+            //                }),
+            //                Skin.Create<GuiButton>("white-button", c =>
+            //                {
+            //                    c.Text = "No";
+            //                    c.Width = 100;
+            //                    c.Margin = new Thickness(5);
+            //                })
+            //            }
+            //        }
+            //    }
             //};
 
-            //dialog.Controls.Add(Skin.Create<GuiLabel>("label", c => c.Text = "Are you sure you want to do that?"));
             //dialog.Controls.Add(stackPanel);
 
             //dialog.Show(this);
