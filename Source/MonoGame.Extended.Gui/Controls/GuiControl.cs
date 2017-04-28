@@ -117,8 +117,8 @@ namespace MonoGame.Extended.Gui.Controls
             if (font != null && !string.IsNullOrEmpty(Text))
             {
                 var textSize = font.MeasureString(Text);
-                minimumSize.Width += textSize.Width + 2;
-                minimumSize.Height += textSize.Height + 2;
+                minimumSize.Width += textSize.Width;
+                minimumSize.Height += textSize.Height;
             }
 
             // ReSharper disable CompareOfFloatsByEqualityOperator
