@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             foreach (var control in Controls)
             {
-                var desiredSize = control.GetDesiredSize(context, availableSize);
+                var desiredSize = GuiLayoutHelper.GetSizeWithMargins(control, context, availableSize);
 
                 switch (Orientation)
                 {
@@ -53,7 +53,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             foreach (var control in Controls)
             {
-                var desiredSize = control.GetDesiredSize(context, availableSize);
+                var desiredSize = GuiLayoutHelper.GetSizeWithMargins(control, context, availableSize);
 
                 switch (Orientation)
                 {

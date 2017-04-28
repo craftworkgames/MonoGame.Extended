@@ -33,16 +33,16 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
         {
-            var sizes = Controls.Select(i => i.GetDesiredSize(context, availableSize)).ToArray();
+            var sizes = Controls.Select(control => GuiLayoutHelper.GetSizeWithMargins(control, context, availableSize)).ToArray();
             var width = sizes.Max(s => s.Width);
             var height = sizes.Max(s => s.Height);
-            return new Size2(width, height);
+            return new Size2(width, height) + Padding.Size;
         }
 
         public override void Layout(IGuiContext context, RectangleF rectangle)
         {
             foreach (var control in Controls)
-                PlaceControl(context, control, Padding.Left, Padding.Top, Width - Padding.Left - Padding.Right, Height - Padding.Top - Padding.Bottom);
+                PlaceControl(context, control, Padding.Left, Padding.Top, Width - Padding.Size.Width, Height - Padding.Size.Height);
         }
     }
 }

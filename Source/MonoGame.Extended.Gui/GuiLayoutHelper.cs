@@ -7,15 +7,20 @@ namespace MonoGame.Extended.Gui
     public enum HorizontalAlignment { Left, Right, Centre, Stretch }
     public enum VerticalAlignment { Top, Bottom, Centre, Stretch }
 
-    public static class GuiAlignmentHelper
+    public static class GuiLayoutHelper
     {
+        public static Size2 GetSizeWithMargins(GuiControl control, IGuiContext context, Size2 availableSize)
+        {
+            return control.GetDesiredSize(context, availableSize) + new Size2(control.Margin.Left + control.Margin.Right, control.Margin.Top + control.Margin.Bottom);
+        }
+
         public static void PlaceControl(IGuiContext context, GuiControl control, float x, float y, float width, float height)
         {
             var rectangle = new Rectangle((int)x, (int)y, (int)width, (int)height);
             var desiredSize = control.GetDesiredSize(context, new Size2(width, height));
             var destinationRectangle = GetDestinationRectangle(control.HorizontalAlignment, control.VerticalAlignment, desiredSize, rectangle);
 
-            control.Position = new Vector2(destinationRectangle.X + control.Margin.Left, destinationRectangle.Y + control.Margin.Top);
+            control.Position = control.Offset + new Vector2(destinationRectangle.X + control.Margin.Left, destinationRectangle.Y + control.Margin.Top);
             control.Size = new Size2(destinationRectangle.Width - control.Margin.Left - control.Margin.Right, destinationRectangle.Height - control.Margin.Top - control.Margin.Bottom);
 
             var layoutControl = control as GuiLayoutControl;

@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MonoGame.Framework.Portable.3.6.0.1625\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NSubstitute, Version=1.10.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NSubstitute.1.10.0.0\lib\net45\NSubstitute.dll</HintPath>
       <Private>True</Private>
@@ -49,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\GuiControlCollectionTests.cs" />
-    <Compile Include="Controls\GuiPanelTests.cs" />
+    <Compile Include="Controls\GuiButtonTests.cs" />
     <Compile Include="GuiRendererTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -61,6 +65,10 @@
     <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj">
       <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
       <Name>MonoGame.Extended</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Extended.Tests\MonoGame.Extended.Tests.csproj">
+      <Project>{cef2144f-7e98-45a5-be08-e6dbc307a5c1}</Project>
+      <Name>MonoGame.Extended.Tests</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

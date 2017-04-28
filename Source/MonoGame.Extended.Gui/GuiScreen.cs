@@ -59,7 +59,7 @@ namespace MonoGame.Extended.Gui
             Initialize();
 
             foreach (var control in Controls)
-                GuiAlignmentHelper.PlaceControl(context, control, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
+                GuiLayoutHelper.PlaceControl(context, control, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
         }
 
         protected virtual void Dispose(bool isDisposing)

@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected static void PlaceControl(IGuiContext context, GuiControl control, float x, float y, float width, float height)
         {
-            GuiAlignmentHelper.PlaceControl(context, control, x, y, width, height);
+            GuiLayoutHelper.PlaceControl(context, control, x, y, width, height);
         }
     }
 }

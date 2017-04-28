@@ -65,6 +65,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         public string Name { get; set; }
         public Vector2 Position { get; set; }
+        public Vector2 Offset { get; set; }
         public Vector2 Origin { get; set; }
         public Color Color { get; set; }
         public BitmapFont Font { get; set; }
@@ -116,12 +117,9 @@ namespace MonoGame.Extended.Gui.Controls
             if (font != null && !string.IsNullOrEmpty(Text))
             {
                 var textSize = font.MeasureString(Text);
-                minimumSize.Width += textSize.Width;
-                minimumSize.Height += textSize.Height;
+                minimumSize.Width += textSize.Width + 2;
+                minimumSize.Height += textSize.Height + 2;
             }
-
-            minimumSize.Width += Margin.Left + Margin.Right;
-            minimumSize.Height += Margin.Top + Margin.Bottom;
 
             // ReSharper disable CompareOfFloatsByEqualityOperator
             return new Size2(Size.Width == 0 ? minimumSize.Width : Size.Width, Size.Height == 0 ? minimumSize.Height : Size.Height);
@@ -183,7 +181,7 @@ namespace MonoGame.Extended.Gui.Controls
         {
             var font = Font ?? context.DefaultFont;
             var textRectangle = font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size;
-            var destinationRectangle = GuiAlignmentHelper.GetDestinationRectangle(horizontalAlignment, verticalAlignment, new Size2(textRectangle.X, textRectangle.Y), targetRectangle);
+            var destinationRectangle = GuiLayoutHelper.GetDestinationRectangle(horizontalAlignment, verticalAlignment, new Size2(textRectangle.X, textRectangle.Y), targetRectangle);
             var textPosition = destinationRectangle.Location.ToVector2();
             var textInfo = new TextInfo(text, font, textPosition, textRectangle.ToVector2(), TextColor, ClippingRectangle);
             return textInfo;

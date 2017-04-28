@@ -58,7 +58,7 @@
     <Compile Include="GuiSkin.cs" />
     <Compile Include="GuiSpriteBatchRenderer.cs" />
     <Compile Include="GuiControlStyle.cs" />
-    <Compile Include="GuiAlignmentHelper.cs" />
+    <Compile Include="GuiLayoutHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\GuiControlJsonConverter.cs" />
     <Compile Include="Serialization\GuiControlStyleJsonConverter.cs" />

@@ -15,6 +15,12 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
+        protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
+        {
+            var size = base.CalculateDesiredSize(context, availableSize);
+            return size;
+        }
+
         public event EventHandler Clicked;
         public event EventHandler PressedStateChanged;
 
