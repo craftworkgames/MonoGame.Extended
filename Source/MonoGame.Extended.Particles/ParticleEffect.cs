@@ -32,13 +32,7 @@ namespace MonoGame.Extended.Particles
                 e.Update(elapsedSeconds);
         }
 
-        public void Trigger(Vector2 position)
-        {
-            foreach (var e in Emitters)
-                e.Trigger(position);
-        }
-
-        public void Trigger(Vector2 position, float layerDepth)
+        public void Trigger(Vector2 position, float layerDepth = 0)
         {
             foreach (var e in Emitters)
                 e.Trigger(position, layerDepth);

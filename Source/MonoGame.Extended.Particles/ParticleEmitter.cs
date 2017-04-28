@@ -100,13 +100,7 @@ namespace MonoGame.Extended.Particles
             Trigger(Position);
         }
 
-        public void Trigger(Vector2 position)
-        {
-            var numToRelease = _random.Next(Parameters.Quantity);
-            Release(position + Offset, numToRelease);
-        }
-
-        public void Trigger(Vector2 position, float layerDepth)
+        public void Trigger(Vector2 position, float layerDepth = 0)
         {
             var numToRelease = _random.Next(Parameters.Quantity);
             Release(position + Offset, numToRelease, layerDepth);
