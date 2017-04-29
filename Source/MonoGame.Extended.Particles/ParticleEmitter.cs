@@ -100,10 +100,10 @@ namespace MonoGame.Extended.Particles
             Trigger(Position);
         }
 
-        public void Trigger(Vector2 position)
+        public void Trigger(Vector2 position, float layerDepth = 0)
         {
             var numToRelease = _random.Next(Parameters.Quantity);
-            Release(position + Offset, numToRelease);
+            Release(position + Offset, numToRelease, layerDepth);
         }
 
         public void Trigger(LineSegment line)
@@ -118,7 +118,7 @@ namespace MonoGame.Extended.Particles
             }
         }
 
-        private void Release(Vector2 position, int numToRelease)
+        private void Release(Vector2 position, int numToRelease, float layerDepth = 0)
         {
             var iterator = Buffer.Release(numToRelease);
 
@@ -145,6 +145,7 @@ namespace MonoGame.Extended.Particles
                 particle->Scale = new Vector2(scale, scale);
                 particle->Rotation = _random.NextSingle(Parameters.Rotation);
                 particle->Mass = _random.NextSingle(Parameters.Mass);
+                particle->LayerDepth = layerDepth;
             }
         }
 
