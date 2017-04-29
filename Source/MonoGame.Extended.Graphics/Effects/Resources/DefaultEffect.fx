@@ -4,13 +4,14 @@
 DECLARE_TEXTURE(Texture, 0);
 
 BEGIN_CONSTANTS
+
+float4 DiffuseColor = float4(1, 1, 1, 1);
+
 MATRIX_CONSTANTS
 
 float4x4 WorldViewProjection _vs(c0) _cb(c0);
 
 END_CONSTANTS
-
-float4 DiffuseColor = float4(1, 1, 1, 1);
 
 VertexShaderOutputPosition VertexShaderFunctionPosition(VertexShaderInputPosition input)
 {
