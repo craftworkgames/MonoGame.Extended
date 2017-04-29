@@ -7,6 +7,8 @@ namespace Demo.Features.Demos
 {
     public class ScreensDemo : DemoBase
     {
+        public override string Name => "Screens";
+
         public ScreensDemo(GameMain game) : base(game)
         {
             ScreenGameComponent screenGameComponent;

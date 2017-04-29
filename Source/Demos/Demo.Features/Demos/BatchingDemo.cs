@@ -20,6 +20,8 @@ namespace Demo.Features.Demos
 
     public class BatchingDemo : DemoBase
     {
+        public override string Name => "Batching";
+
         private Batcher2D _batcher;
         private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFont;

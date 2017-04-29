@@ -10,6 +10,8 @@ namespace Demo.Features.Demos
 {
     public class CameraDemo : DemoBase
     {
+        public override string Name => "Camera";
+
         private const float _cloudsRepeatWidth = 800;
         private Texture2D _backgroundClouds;
         private Texture2D[] _backgroundHills;

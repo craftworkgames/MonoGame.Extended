@@ -12,6 +12,8 @@ namespace Demo.Features.Demos
 {
     public class GuiDemo : DemoBase
     {
+        public override string Name => "GUI";
+
         private Camera2D _camera;
         private GuiSystem _guiSystem;
         private GuiProgressBar _progressBar;

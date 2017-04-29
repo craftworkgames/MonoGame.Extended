@@ -14,6 +14,8 @@ namespace Demo.Features.Demos
 {
     public class TiledMapsDemo : DemoBase
     {
+        public override string Name => "Tiled Maps";
+
         private BitmapFont _bitmapFont;
         private Camera2D _camera;
         private SpriteBatch _spriteBatch;

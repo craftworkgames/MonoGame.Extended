@@ -9,6 +9,8 @@ namespace Demo.Features.Demos
 {
     public class BitmapFontsDemo : DemoBase
     {
+        public override string Name => "Bitmap Fonts";
+
         public BitmapFontsDemo(GameMain parent)
             : base(parent)
         {

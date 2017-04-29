@@ -11,6 +11,8 @@ namespace Demo.Features.Demos
 {
     public class SceneGraphsDemo : DemoBase
     {
+        public override string Name => "Scene Graphs";
+
         private BitmapFont _bitmapFont;
         private Camera2D _camera;
         private SceneNode _carNode;

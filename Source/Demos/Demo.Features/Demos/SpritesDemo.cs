@@ -10,6 +10,8 @@ namespace Demo.Features.Demos
 {
     public class SpritesDemo : DemoBase
     {
+        public override string Name => "Sprites";
+
         private Sprite _axeSprite;
         private Texture2D _backgroundTexture;
         private float _particleOpacity;

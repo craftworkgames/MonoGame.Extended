@@ -36,20 +36,22 @@ namespace Demo.Features.Screens
 
         public override void Initialize()
         {
-            var grid = new GuiUniformGrid();
+            var dialog = Skin.Create<GuiDialog>("dialog");
+            var grid = new GuiUniformGrid {Columns = 3};
 
-            foreach (var demo in _demos.Values)
+            foreach (var demo in _demos.Values.OrderBy(i => i.Name))
             {
                 var button = Skin.Create<GuiButton>("white-button", c =>
                 {
                     c.Text = demo.Name;
-                    c.Margin = new Thickness(8);
+                    c.Margin = new Thickness(4);
                     c.Clicked += (sender, args) => LoadDemo(demo);
                 });
                 grid.Controls.Add(button);
             }
 
-            Controls.Add(grid);
+            dialog.Controls.Add(grid);
+            Controls.Add(dialog);
             //DialogDemo();
         }
 

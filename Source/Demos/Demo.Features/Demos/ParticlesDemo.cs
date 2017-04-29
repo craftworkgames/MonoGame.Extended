@@ -16,6 +16,8 @@ namespace Demo.Features.Demos
 {
     public class ParticlesDemo : DemoBase
     {
+        public override string Name => "Particles";
+
         public ParticlesDemo(GameMain game) 
             : base(game)
         {

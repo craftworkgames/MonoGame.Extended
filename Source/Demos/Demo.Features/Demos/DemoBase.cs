@@ -19,7 +19,7 @@ namespace Demo.Features.Demos
             Window.AllowUserResizing = true;
         }
 
-        public virtual string Name => GetType().Name;
+        public abstract string Name { get; }
 
         protected bool IsMouseVisible
         {

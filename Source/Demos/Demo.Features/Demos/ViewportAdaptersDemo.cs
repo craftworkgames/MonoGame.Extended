@@ -8,6 +8,8 @@ namespace Demo.Features.Demos
 {
     public class ViewportAdaptersDemo : DemoBase
     {
+        public override string Name => "Viewport Adapters";
+
         private Texture2D _backgroundTexture;
         private BitmapFont _bitmapFont;
         private BoxingViewportAdapter _boxingViewportAdapter;

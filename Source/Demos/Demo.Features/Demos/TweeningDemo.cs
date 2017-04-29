@@ -11,6 +11,8 @@ namespace Demo.Features.Demos
 {
     public class TweeningDemo : DemoBase
     {
+        public override string Name => "Tweening";
+
         private readonly Game _game;
         private SpriteBatch _spriteBatch;
         private Sprite _sprite;

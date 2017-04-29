@@ -13,6 +13,8 @@ namespace Demo.Features.Demos
 {
     public class AnimationsDemo : DemoBase
     {
+        public override string Name => "Animations";
+
         private SpriteBatch _spriteBatch;
         private Zombie _zombie;
         private SpriteSheetAnimation _animation;

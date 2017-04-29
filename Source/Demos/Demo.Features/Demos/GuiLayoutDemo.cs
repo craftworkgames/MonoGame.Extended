@@ -88,6 +88,8 @@ namespace Demo.Features.Demos
 
     public class GuiLayoutDemo : DemoBase
     {
+        public override string Name => "GUI Layouts";
+
         private Camera2D _camera;
         private GuiSystem _guiSystem;
 

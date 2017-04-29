@@ -11,6 +11,8 @@ namespace Demo.Features.Demos
 {
     public class InputListenersDemo : DemoBase
     {
+        public override string Name => "Input Listeners";
+
         private readonly GameMain _this;
         private readonly List<string> _logLines = new List<string>();
         private SpriteBatch _spriteBatch;
