@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 namespace MonoGame.Extended.Entities
 {
     [EntityComponent]
-    public class TransformComponent2D : EntityComponent
+    public class TransformComponent2D : EntityComponent, IMovable, IRotatable, IScalable
     {
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created
         private Matrix2D _localMatrix; // model space to local space
@@ -180,8 +180,8 @@ namespace MonoGame.Extended.Entities
         {
             matrix = Matrix2D.CreateScale(_scale) *
                      Matrix2D.CreateRotationZ(_rotation) *
-                         Matrix2D.CreateTranslation(_position);
-            }
+                     Matrix2D.CreateTranslation(_position);
+        }
 
         [Flags]
         private enum TransformFlags : byte
