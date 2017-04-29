@@ -72,9 +72,8 @@ namespace Demo.StarWarrior.Systems
             var worldPosition = transform.WorldPosition;
             var renderPosition = worldPosition + new Vector2(0, 25);
 
-            //TODO: Use StringBuilder directly for drawing to avoid generating garbage.
-            var text = _stringBuilder.ToString();
-            _spriteBatch.DrawString(_font, text, renderPosition, color, 0.0f, _font.MeasureString(text) * 0.5f, 1.0f, SpriteEffects.None, 0.5f);
+            var stringSize = _font.MeasureString(_stringBuilder) * 0.5f;
+            _spriteBatch.DrawString(_font, _stringBuilder, renderPosition, color, 0.0f, stringSize, 1.0f, SpriteEffects.None, 0.5f);
         }
     }
 }

@@ -180,10 +180,10 @@ namespace MonoGame.Extended.Gui.Controls
         protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment)
         {
             var font = Font ?? context.DefaultFont;
-            var textRectangle = font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size;
-            var destinationRectangle = GuiLayoutHelper.GetDestinationRectangle(horizontalAlignment, verticalAlignment, new Size2(textRectangle.X, textRectangle.Y), targetRectangle);
+            var textSize = font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size;
+            var destinationRectangle = GuiLayoutHelper.GetDestinationRectangle(horizontalAlignment, verticalAlignment, textSize, targetRectangle);
             var textPosition = destinationRectangle.Location.ToVector2();
-            var textInfo = new TextInfo(text, font, textPosition, textRectangle.ToVector2(), TextColor, ClippingRectangle);
+            var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, ClippingRectangle);
             return textInfo;
         }
 

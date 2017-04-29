@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
@@ -31,18 +32,36 @@ namespace MonoGame.Extended.BitmapFonts
         public static void DrawString(this SpriteBatch spriteBatch, BitmapFont bitmapFont, string text, Vector2 position,
             Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float layerDepth, Rectangle? clippingRectangle = null)
         {
-            if (text == null) throw new ArgumentNullException(nameof(text));
-            if (effect != SpriteEffects.None) throw new NotSupportedException($"{effect} is not currently supported for {nameof(BitmapFont)}");
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+            if (effect != SpriteEffects.None)
+                throw new NotSupportedException($"{effect} is not currently supported for {nameof(BitmapFont)}");
 
             var glyphs = bitmapFont.GetGlyphs(text, position);
-
             foreach (var glyph in glyphs)
             {
-                if (glyph.FontRegion != null)
-                {
-                    var characterOrigin = position - glyph.Position + origin;
-                    spriteBatch.Draw(glyph.FontRegion.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
-                }
+                if (glyph.FontRegion == null)
+                    continue;
+                var characterOrigin = position - glyph.Position + origin;
+                spriteBatch.Draw(glyph.FontRegion.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
+            }
+        }
+
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont bitmapFont, StringBuilder text, Vector2 position,
+            Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float layerDepth, Rectangle? clippingRectangle = null)
+        {
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+            if (effect != SpriteEffects.None)
+                throw new NotSupportedException($"{effect} is not currently supported for {nameof(BitmapFont)}");
+
+            var glyphs = bitmapFont.GetGlyphs(text, position);
+            foreach (var glyph in glyphs)
+            {
+                if (glyph.FontRegion == null)
+                    continue;
+                var characterOrigin = position - glyph.Position + origin;
+                spriteBatch.Draw(glyph.FontRegion.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
             }
         }
 
@@ -68,6 +87,12 @@ namespace MonoGame.Extended.BitmapFonts
         /// </param>
         /// <param name="clippingRectangle">Clips the boundaries of the text so that it's not drawn outside the clipping rectangle</param>
         public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position,
+            Color color, float rotation, Vector2 origin, float scale, SpriteEffects effect, float layerDepth, Rectangle? clippingRectangle = null)
+        {
+            DrawString(spriteBatch, font, text, position, color, rotation, origin, new Vector2(scale, scale), effect, layerDepth, clippingRectangle);
+        }
+
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, StringBuilder text, Vector2 position,
             Color color, float rotation, Vector2 origin, float scale, SpriteEffects effect, float layerDepth, Rectangle? clippingRectangle = null)
         {
             DrawString(spriteBatch, font, text, position, color, rotation, origin, new Vector2(scale, scale), effect, layerDepth, clippingRectangle);
@@ -119,6 +144,12 @@ namespace MonoGame.Extended.BitmapFonts
         public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position, Color color, Rectangle? clippingRectangle = null)
         {
             DrawString(spriteBatch, font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: Vector2.One, effect: SpriteEffects.None, 
+                layerDepth: 0, clippingRectangle: clippingRectangle);
+        }
+
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, StringBuilder text, Vector2 position, Color color, Rectangle? clippingRectangle = null)
+        {
+            DrawString(spriteBatch, font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: Vector2.One, effect: SpriteEffects.None,
                 layerDepth: 0, clippingRectangle: clippingRectangle);
         }
     }
