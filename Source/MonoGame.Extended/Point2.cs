@@ -19,16 +19,6 @@ namespace MonoGame.Extended
     ///         coordinate axes, conventionally denoted the X axis and Y axis, are perpindicular to each other. For the
     ///         three-dimensional rectangular coordinate system, the third axis is called the Z axis.
     ///     </para>
-    ///     <para>
-    ///         In general, a point is a position in space, the location of which is described in terms of a coordinate system,
-    ///         given by a reference point, called the origin, and a number of coordinate axes. Points in an n-dimensional
-    ///         coordinate system are each specified by an n-tuple of realnumbers (x1, x2, . . . , xn). The n-tuple is called
-    ///         the coordinate of the point. The point described by the n-tuple is the one reached by starting at the origin
-    ///         and moving x1 units along the first coordinate axis, x2 units along the second coordinate axis, and so on for
-    ///         all given numbers. The origin is the point with all zero components, (0, 0, . . . , 0). A coordinate system may
-    ///         be given relative to a parent coordinate system, in which case the origin of the subordinate coordinate system
-    ///         may correspond to any point in the parent coordinate system.
-    ///     </para>
     /// </remarks>
     /// <seealso cref="IEquatable{T}" />
     /// <seealso cref="IEquatableByRef{Point2}" />

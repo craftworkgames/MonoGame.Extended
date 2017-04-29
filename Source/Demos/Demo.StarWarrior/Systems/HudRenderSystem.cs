@@ -72,9 +72,7 @@ namespace Demo.StarWarrior.Systems
             _stringBuilder.Append((float)Math.Round(health.Ratio * 100, 1));
             _stringBuilder.Append("%");
 
-            //TODO: Use StringBuilder directly for drawing to avoid generating garbage.
-            var text = _stringBuilder.ToString();
-            _spriteBatch.DrawString(_font, text, renderPosition, Color.White);
+            _spriteBatch.DrawString(_font, _stringBuilder, renderPosition, Color.White);
         }
     }
 }
