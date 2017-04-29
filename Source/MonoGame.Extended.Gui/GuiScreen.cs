@@ -22,8 +22,19 @@ namespace MonoGame.Extended.Gui
         public float Width { get; private set; }
         public float Height { get; private set; }
         public Size2 Size => new Size2(Width, Height);
+        public bool IsVisible { get; set; } = true;
 
         public virtual void Initialize() { }
+
+        public void Show()
+        {
+            IsVisible = true;
+        }
+
+        public void Hide()
+        {
+            IsVisible = false;
+        }
 
         public T FindControl<T>(string name)
             where T : GuiControl

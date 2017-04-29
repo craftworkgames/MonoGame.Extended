@@ -19,6 +19,8 @@ namespace Demo.Features.Demos
             Window.AllowUserResizing = true;
         }
 
+        public virtual string Name => GetType().Name;
+
         protected bool IsMouseVisible
         {
             get { return _game.IsMouseVisible; }

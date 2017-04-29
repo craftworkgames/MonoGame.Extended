@@ -50,7 +50,7 @@
     <Compile Include="Demos\TweeningDemo.cs" />
     <Compile Include="Demos\ViewportAdaptersDemo.cs" />
     <Compile Include="Screens\AudioOptionsScreen.cs" />
-    <Compile Include="Screens\DemoScreen.cs" />
+    <Compile Include="Screens\SelectDemoScreen.cs" />
     <Compile Include="GameMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screens\KeyboardOptionsScreen.cs" />

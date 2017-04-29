@@ -71,19 +71,19 @@ namespace MonoGame.Extended.Gui
 
         public void Draw(GameTime gameTime)
         {
+            if(Screen == null || !Screen.IsVisible)
+                return;
+
             var deltaSeconds = gameTime.GetElapsedSeconds();
 
             _renderer.Begin();
 
-            if (Screen != null)
-            {
-                DrawChildren(Screen.Controls, deltaSeconds);
+            DrawChildren(Screen.Controls, deltaSeconds);
 
-                var cursor = Screen.Skin?.Cursor;
+            var cursor = Screen.Skin?.Cursor;
 
-                if (cursor != null)
-                    _renderer.DrawRegion(cursor.TextureRegion, CursorPosition, cursor.Color);
-            }
+            if (cursor != null)
+                _renderer.DrawRegion(cursor.TextureRegion, CursorPosition, cursor.Color);
 
             _renderer.End();
         }
@@ -99,7 +99,7 @@ namespace MonoGame.Extended.Gui
 
         private void OnPointerDown(GuiPointerEventArgs args)
         {
-            if (Screen == null)
+            if (Screen == null || !Screen.IsVisible)
                 return;
 
             _preFocusedControl = FindControlAtPoint(Screen.Controls, args.Position);
@@ -108,7 +108,7 @@ namespace MonoGame.Extended.Gui
 
         private void OnPointerUp(GuiPointerEventArgs args)
         {
-            if (Screen == null)
+            if (Screen == null || !Screen.IsVisible)
                 return;
 
             var postFocusedControl = FindControlAtPoint(Screen.Controls, args.Position);
@@ -137,7 +137,7 @@ namespace MonoGame.Extended.Gui
         {
             CursorPosition = args.Position.ToVector2();
 
-            if (Screen == null)
+            if (Screen == null || !Screen.IsVisible)
                 return;
 
             var hoveredControl = FindControlAtPoint(Screen.Controls, args.Position);

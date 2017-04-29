@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Demo.Features.Demos;
 using Demo.Features.Screens;
 using Microsoft.Xna.Framework;
@@ -19,9 +20,9 @@ namespace Demo.Features
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
-        private readonly List<DemoBase> _demos;
+        private readonly Dictionary<string, DemoBase> _demos;
+        private DemoBase _currentDemo;
 
-        private string _demoTitle;
         private GuiSystem _guiSystem;
         private int _demoIndex = 0;
 
@@ -39,7 +40,7 @@ namespace Demo.Features
             IsMouseVisible = false;
             Window.AllowUserResizing = true;
 
-            _demos = new List<DemoBase>
+            _demos = new DemoBase[]
             {
                 new GuiLayoutDemo(this),
                 new GuiDemo(this),
@@ -55,8 +56,7 @@ namespace Demo.Features
                 new ParticlesDemo(this),
                 new CameraDemo(this),
                 new BitmapFontsDemo(this)
-            };
-            //_demos.Sort();
+            }.ToDictionary(d => d.Name);
         }
 
         protected override void Initialize()
@@ -82,28 +82,18 @@ namespace Demo.Features
 
             _guiSystem = new GuiSystem(ViewportAdapter, guiRenderer)
             {
-                Screen = new DemoScreen(skin, NextDemo)
+                Screen = new SelectDemoScreen(skin, _demos, LoadDemo)
             };
 
-            LoadDemo(_demoIndex);
+            //LoadDemo(_demoIndex);
         }
 
-        private void LoadDemo(int index)
+        private void LoadDemo(string name)
         {
-            _demos[index].Load();
-            _demoTitle = _demos[index].GetType().Name;
-        }
-
-        private void NextDemo()
-        {
-            _demos[_demoIndex].Unload();
-
-            if (_demoIndex == _demos.Count - 1)
-                _demoIndex = 0;
-            else
-                _demoIndex++;
-
-            LoadDemo(_demoIndex);
+            IsMouseVisible = true;
+            _currentDemo?.Unload();
+            _currentDemo = _demos[name];
+            _currentDemo.Load();
         }
 
         private GuiSkin LoadSkin(string assetName)
@@ -114,17 +104,30 @@ namespace Demo.Features
             }
         }
 
+        private KeyboardState _previousKeyboardState;
+
         protected override void Update(GameTime gameTime)
         {
             var keyboardState = Keyboard.GetState();
 
-            if (keyboardState.IsKeyDown(Keys.Escape))
-                Exit();
+            if (keyboardState.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape))
+                Back();
 
             _fpsCounter.Update(gameTime);
             _guiSystem.Update(gameTime);
-            _demos[_demoIndex].OnUpdate(gameTime);
+            _currentDemo?.OnUpdate(gameTime);
+
+            _previousKeyboardState = keyboardState;
             base.Update(gameTime);
+        }
+
+        private void Back()
+        {
+            if (_guiSystem.Screen.IsVisible)
+                Exit();
+
+            IsMouseVisible = false;
+            _guiSystem.Screen.Show();
         }
 
         protected override void Draw(GameTime gameTime)
@@ -132,11 +135,12 @@ namespace Demo.Features
             GraphicsDevice.Clear(Color.Black);
 
             _fpsCounter.Draw(gameTime);
-            Window.Title = $"{_demoTitle} - {_fpsCounter.FramesPerSecond}";
+            Window.Title = $"{_currentDemo?.Name} {_fpsCounter.FramesPerSecond}";
 
             base.Draw(gameTime);
 
-            _demos[_demoIndex].OnDraw(gameTime);
+            _currentDemo?.OnDraw(gameTime);
+
             _guiSystem.Draw(gameTime);
         }
     }
