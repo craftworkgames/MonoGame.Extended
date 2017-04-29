@@ -24,6 +24,7 @@ namespace Demo.Features.Demos
         private TiledMap _map;
         private Effect _customEffect;
         private Queue<string> _availableMaps;
+        private Effect _customEffect2;
 
         public TiledMapsDemo(GameMain game) : base(game)
         {
@@ -59,6 +60,8 @@ namespace Demo.Features.Demos
             };
 
             _customEffect = effect;
+
+            _customEffect2 = new SpriteEffect(GraphicsDevice);
         }
 
         private TiledMap LoadNextMap()
@@ -176,7 +179,7 @@ namespace Demo.Features.Demos
         private void DrawText()
         {
             var textColor = Color.Black;
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend, effect: _customEffect2);
 
             var baseTextPosition = new Point2(5, _bitmapFont.LineHeight);
             var textPosition = baseTextPosition + new Vector2(0, _bitmapFont.LineHeight * 0);

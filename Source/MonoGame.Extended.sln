@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.12
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended", "MonoGame.Extended\MonoGame.Extended.csproj", "{41724C52-3D50-45BB-81EB-3C8A247EAFD1}"
 EndProject
@@ -91,10 +91,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.StarWarrior", "Demos\D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Features", "Demos\Demo.Features\Demo.Features.csproj", "{D8C6D896-5ABF-4823-84DA-F1191BEEC004}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Features.Windows", "Demos\Demo.Features.Windows\Demo.Features.Windows.csproj", "{57C47653-BC51-43BA-98F4-1D0EEE78782D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Features.WindowsOpenGL", "Demos\Demo.Features.Windows\Demo.Features.WindowsOpenGL.csproj", "{57C47653-BC51-43BA-98F4-1D0EEE78782D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Features.WindowsDirectX", "Demos\Demo.Features.Windows\Demo.Features.WindowsDirectX.csproj", "{BDAEDFAF-2EDA-4BCA-9675-3625456FAB78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -296,6 +298,14 @@ Global
 		{57C47653-BC51-43BA-98F4-1D0EEE78782D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{57C47653-BC51-43BA-98F4-1D0EEE78782D}.Release|x86.ActiveCfg = Release|Any CPU
 		{57C47653-BC51-43BA-98F4-1D0EEE78782D}.Release|x86.Build.0 = Release|Any CPU
+		{BDAEDFAF-2EDA-4BCA-9675-3625456FAB78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDAEDFAF-2EDA-4BCA-9675-3625456FAB78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDAEDFAF-2EDA-4BCA-9675-3625456FAB78}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDAEDFAF-2EDA-4BCA-9675-3625456FAB78}.Debug|x86.Build.0 = Debug|Any CPU
+		{BDAEDFAF-2EDA-4BCA-9675-3625456FAB78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDAEDFAF-2EDA-4BCA-9675-3625456FAB78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDAEDFAF-2EDA-4BCA-9675-3625456FAB78}.Release|x86.ActiveCfg = Release|Any CPU
+		{BDAEDFAF-2EDA-4BCA-9675-3625456FAB78}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -313,5 +323,6 @@ Global
 		{52CC60A4-D806-46BF-B104-53E56A764B0E} = {932F8931-4A8D-4205-BFCF-98E794207786}
 		{D8C6D896-5ABF-4823-84DA-F1191BEEC004} = {932F8931-4A8D-4205-BFCF-98E794207786}
 		{57C47653-BC51-43BA-98F4-1D0EEE78782D} = {932F8931-4A8D-4205-BFCF-98E794207786}
+		{BDAEDFAF-2EDA-4BCA-9675-3625456FAB78} = {932F8931-4A8D-4205-BFCF-98E794207786}
 	EndGlobalSection
 EndGlobal
