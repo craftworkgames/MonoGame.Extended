@@ -41,10 +41,10 @@ namespace Demo.Features
 
             _demos = new List<DemoBase>
             {
-                //new GuiLayoutDemo(this),
-                //new GuiDemo(this),
-                ////new ScreensDemo(this),
-                //new ViewportAdaptersDemo(this),
+                new GuiLayoutDemo(this),
+                new GuiDemo(this),
+                //new ScreensDemo(this),
+                new ViewportAdaptersDemo(this),
                 new TiledMapsDemo(this),
                 new AnimationsDemo(this),
                 new SpritesDemo(this),
