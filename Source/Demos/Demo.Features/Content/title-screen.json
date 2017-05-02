@@ -11,18 +11,21 @@
         {
           "Type": "GuiButton",
           "Name": "PlayButton",
+          "Width": "200", 
           "Text": "Play",
           "Style": "white-button"
         },
         {
           "Type": "GuiButton",
           "Name": "OptionsButton",
+          "Width": "200",
           "Text": "Options",
           "Style": "white-button"
         },
         {
           "Type": "GuiButton",
           "Name": "QuitButton",
+          "Width": "200",
           "Text": "Quit",
           "Style": "white-button"
         }

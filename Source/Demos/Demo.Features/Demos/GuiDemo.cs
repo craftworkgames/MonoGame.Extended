@@ -66,7 +66,7 @@ namespace Demo.Features.Demos
             base.Draw(gameTime);
 
             _spriteBatch.Begin(transformMatrix: _viewportAdapter.GetScaleMatrix());
-            _spriteBatch.Draw(_backgroundTexture, _viewportAdapter.BoundingRectangle, Color.DarkGray);
+            _spriteBatch.Draw(_backgroundTexture, _viewportAdapter.BoundingRectangle, Color.White);
             _spriteBatch.End();
 
             _guiSystem.Draw(gameTime);
