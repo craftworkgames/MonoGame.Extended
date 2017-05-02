@@ -181,7 +181,7 @@ namespace MonoGame.Extended.Gui.Controls
         {
             var font = Font ?? context.DefaultFont;
             var textSize = font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size;
-            var destinationRectangle = GuiLayoutHelper.GetDestinationRectangle(horizontalAlignment, verticalAlignment, textSize, targetRectangle);
+            var destinationRectangle = GuiLayoutHelper.AlignRectangle(horizontalAlignment, verticalAlignment, textSize, targetRectangle);
             var textPosition = destinationRectangle.Location.ToVector2();
             var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, ClippingRectangle);
             return textInfo;

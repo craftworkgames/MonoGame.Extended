@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.TextureAtlases;
+﻿using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -19,7 +18,6 @@ namespace MonoGame.Extended.Gui.Controls
         {
             foreach (var control in Controls)
             {
-                //control.Origin = Vector2.Zero;
                 var desiredSize = control.GetDesiredSize(context, rectangle.Size);
                 PlaceControl(context, control, control.Position.X, control.Position.Y, desiredSize.Width, desiredSize.Height);
             }

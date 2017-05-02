@@ -24,7 +24,6 @@ namespace Demo.Features
         private DemoBase _currentDemo;
 
         private GuiSystem _guiSystem;
-        private int _demoIndex = 0;
 
         public ViewportAdapter ViewportAdapter { get; private set; }
 
@@ -121,7 +120,7 @@ namespace Demo.Features
             base.Update(gameTime);
         }
 
-        private void Back()
+        public void Back()
         {
             if (_guiSystem.Screen.IsVisible)
                 Exit();

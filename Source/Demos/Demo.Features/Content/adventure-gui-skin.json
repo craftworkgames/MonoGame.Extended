@@ -49,6 +49,7 @@
     {
       "Name": "white-button",
       "Type": "GuiButton",
+      "Margin": "5 2",
       "BackgroundRegion": "buttonLong_grey",
       "TextOffset": "0 -2",
       "TextColor": "#f4a460ff",
@@ -75,13 +76,13 @@
     },
     {
       "Name": "brown-panel",
-      "Type": "GuiPanel",
+      "Type": "GuiStackPanel",
       "BackgroundRegion": "panel_brown",
       "Size": "400 300"
     },
     {
       "Name": "beige-inset-panel",
-      "Type": "GuiPanel",
+      "Type": "GuiStackPanel",
       "BackgroundRegion": "panelInset_beige",
       "Size": "385 280"
     },

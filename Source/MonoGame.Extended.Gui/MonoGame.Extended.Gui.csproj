@@ -47,7 +47,6 @@
     <Compile Include="Controls\GuiListBox.cs" />
     <Compile Include="Controls\GuiUniformGrid.cs" />
     <Compile Include="GuiOrientation.cs" />
-    <Compile Include="Controls\GuiPanel.cs" />
     <Compile Include="Controls\GuiProgressBar.cs" />
     <Compile Include="Controls\GuiTextBox.cs" />
     <Compile Include="Controls\GuiStackPanel.cs" />

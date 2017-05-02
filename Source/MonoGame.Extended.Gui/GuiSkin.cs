@@ -92,7 +92,10 @@ namespace MonoGame.Extended.Gui
         public GuiControl Create(Type type, string template)
         {
             var control = (GuiControl)Activator.CreateInstance(type);
-            GetStyle(template).Apply(control);
+
+            if (template != null)
+                GetStyle(template).Apply(control);
+
             return control;
         }
     }

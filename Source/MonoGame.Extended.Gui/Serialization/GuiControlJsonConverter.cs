@@ -23,7 +23,7 @@ namespace MonoGame.Extended.Gui.Serialization
         {
             var skin = _guiSkinService.Skin;
             var style = (GuiControlStyle) _styleConverter.ReadJson(reader, objectType, existingValue, serializer);
-            var template = (string) style[_styleProperty];
+            var template = GetControlTempalte(style, _styleProperty);
             var control = skin.Create(style.TargetType, template);
 
             object childControls;
@@ -46,6 +46,16 @@ namespace MonoGame.Extended.Gui.Serialization
         public override bool CanConvert(Type objectType)
         {
             return objectType == typeof(GuiControl);
+        }
+
+        private string GetControlTempalte(GuiControlStyle style, string styleProperty)
+        {
+            object template;
+
+            if (style.TryGetValue(_styleProperty, out template))
+                return template as string;
+
+            return null;
         }
     }
 }

@@ -81,6 +81,7 @@
     <Content Include="Content\Textures\clipping-test.png" />
     <None Include="Content\Textures\particle.png" />
     <None Include="Content\Textures\spike_ball.png" />
+    <Content Include="Content\Textures\colored_castle.png" />
     <Content Include="Content\TiledMaps\abstractTiles_sheet.png" />
     <Content Include="Content\TiledMaps\alphacolortile.png" />
     <None Include="Content\TiledMaps\free-tileset.png" />

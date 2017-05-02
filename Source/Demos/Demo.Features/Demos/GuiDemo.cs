@@ -1,5 +1,6 @@
 using System.IO;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Gui;
@@ -14,58 +15,34 @@ namespace Demo.Features.Demos
     {
         public override string Name => "GUI";
 
+        private readonly GameMain _game;
+        private SpriteBatch _spriteBatch;
+        private ViewportAdapter _viewportAdapter;
+        private Texture2D _backgroundTexture;
         private Camera2D _camera;
         private GuiSystem _guiSystem;
-        private GuiProgressBar _progressBar;
-        private float _progressDelta = 0.2f;
         
         public GuiDemo(GameMain game) : base(game)
         {
+            _game = game;
         }
         
         protected override void LoadContent()
         {
-            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            IsMouseVisible = false;
 
-            var titleScreen = LoadScreen(@"Content/title-screen.json");
+            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            _camera = new Camera2D(_viewportAdapter);
+
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _backgroundTexture = Content.Load<Texture2D>("Textures/colored_castle");
+
+            var titleScreen = GuiScreen.FromStream(Content, @"Content/title-screen.json");
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _camera.GetViewMatrix);
-            _guiSystem = new GuiSystem(viewportAdapter, guiRenderer) { Screen = titleScreen };
-
-            var panel = titleScreen.FindControl<GuiPanel>("MainPanel");
-
-            var closeButton = titleScreen.FindControl<GuiButton>("CloseButton");
-            closeButton.Clicked += (sender, args) => { panel.IsVisible = false; };
+            _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer) { Screen = titleScreen };
 
             var quitButton = titleScreen.FindControl<GuiButton>("QuitButton");
-            quitButton.Clicked += (sender, args) => Exit();
-
-            _progressBar = titleScreen.FindControl<GuiProgressBar>("ProgressBar");
-
-            var listBox = titleScreen.FindControl<GuiListBox>("ListBox");
-            listBox.Items.Add(new Vector2(123.0f, 456.78f));
-
-        }
-
-        private GuiScreen LoadScreen(string name)
-        {
-            var skinService = new GuiSkinService();
-            var serializer = new GuiJsonSerializer(Content)
-            {
-                Converters =
-                {
-                    new GuiSkinJsonConverter(Content, skinService),
-                    new GuiControlJsonConverter(skinService)
-                }
-            };
-
-            using (var stream = TitleContainer.OpenStream(name))
-            using (var streamReader = new StreamReader(stream))
-            using (var jsonReader = new JsonTextReader(streamReader))
-            {
-                var screen = serializer.Deserialize<GuiScreen>(jsonReader);
-                return screen;
-            }
+            quitButton.Clicked += (sender, args) => _game.Back();
         }
 
         protected override void UnloadContent()
@@ -74,18 +51,10 @@ namespace Demo.Features.Demos
 
         protected override void Update(GameTime gameTime)
         {
-            var deltaTime = gameTime.GetElapsedSeconds();
             var keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
-
-            _progressBar.Progress += deltaTime * _progressDelta;
-
-            if (_progressBar.Progress >= 1.1f)
-                _progressDelta = -_progressDelta;
-            else if (_progressBar.Progress <= -0.1f)
-                _progressDelta = -_progressDelta;
 
             _guiSystem.Update(gameTime);
 
@@ -96,7 +65,9 @@ namespace Demo.Features.Demos
         {
             base.Draw(gameTime);
 
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            _spriteBatch.Begin(transformMatrix: _viewportAdapter.GetScaleMatrix());
+            _spriteBatch.Draw(_backgroundTexture, _viewportAdapter.BoundingRectangle, Color.DarkGray);
+            _spriteBatch.End();
 
             _guiSystem.Draw(gameTime);
         }
