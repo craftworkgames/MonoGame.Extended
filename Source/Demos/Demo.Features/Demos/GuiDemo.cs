@@ -37,7 +37,7 @@ namespace Demo.Features.Demos
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _backgroundTexture = Content.Load<Texture2D>("Textures/colored_castle");
 
-            var titleScreen = GuiScreen.FromStream(Content, @"Content/title-screen.json");
+            var titleScreen = GuiScreen.FromFile(Content, @"Content/title-screen.json");
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _camera.GetViewMatrix);
             _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer) { Screen = titleScreen };
 

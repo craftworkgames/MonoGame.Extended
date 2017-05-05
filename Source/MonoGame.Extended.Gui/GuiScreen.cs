@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Serialization;
 using Newtonsoft.Json;
@@ -90,7 +91,7 @@ namespace MonoGame.Extended.Gui
             GC.SuppressFinalize(this);
         }
 
-        public static GuiScreen FromStream(ContentManager contentManager, string path)
+        public static GuiScreen FromStream(ContentManager contentManager, Stream stream)
         {
             var skinService = new GuiSkinService();
             var serializer = new GuiJsonSerializer(contentManager)
@@ -102,12 +103,19 @@ namespace MonoGame.Extended.Gui
                 }
             };
 
-            using (var stream = TitleContainer.OpenStream(path))
             using (var streamReader = new StreamReader(stream))
             using (var jsonReader = new JsonTextReader(streamReader))
             {
                 var screen = serializer.Deserialize<GuiScreen>(jsonReader);
                 return screen;
+            }
+        }
+
+        public static GuiScreen FromFile(ContentManager contentManager, string path)
+        {
+            using (var stream = TitleContainer.OpenStream(path))
+            {
+                return FromStream(contentManager, stream);
             }
         }
     }

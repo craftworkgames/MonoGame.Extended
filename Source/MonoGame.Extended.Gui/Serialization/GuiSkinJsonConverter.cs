@@ -39,7 +39,7 @@ namespace MonoGame.Extended.Gui.Serialization
                 // TODO: Load this using the ContentManager instead.
                 using (var stream = TitleContainer.OpenStream(assetName))
                 {
-                    var skin = GuiSkin.FromStream(stream, _contentManager);
+                    var skin = GuiSkin.FromStream(_contentManager, stream);
                     _skinService.Skin = skin;
                     return skin;
                 }
