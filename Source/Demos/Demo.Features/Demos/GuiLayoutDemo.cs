@@ -102,21 +102,13 @@ namespace Demo.Features.Demos
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _camera = new Camera2D(viewportAdapter);
 
-            var skin = LoadSkin(@"Raw/adventure-gui-skin.json");
+            var skin = GuiSkin.FromFile(Content, @"Raw/adventure-gui-skin.json");
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _camera.GetViewMatrix);
 
             _guiSystem = new GuiSystem(viewportAdapter, guiRenderer)
             {
                 Screen = new GuiLayoutScreen(skin, GraphicsDevice)
             };
-        }
-
-        private GuiSkin LoadSkin(string assetName)
-        {
-            using (var stream = TitleContainer.OpenStream(assetName))
-            {
-                return GuiSkin.FromStream(stream, Content);
-            }
         }
 
         protected override void UnloadContent()

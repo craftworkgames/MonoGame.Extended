@@ -35,6 +35,16 @@ namespace Sandbox
 
             _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer)
             {
+                Windows =
+                {
+                    new GuiWindow
+                    {
+                        Controls =
+                        {
+                            new GuiLabel("Window") { Position = new Vector2(100, 100), Size = new Size2(100, 100) }
+                        }
+                    }
+                },
                 Screen = new GuiScreen(skin)
                 {
                     Controls =
@@ -45,7 +55,7 @@ namespace Sandbox
             };
 
         }
-        
+
         protected override void Update(GameTime gameTime)
         {
             var keyboardState = Keyboard.GetState();
