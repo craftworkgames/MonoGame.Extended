@@ -1,0 +1,21 @@
+﻿{
+  "name": "test",
+  "emitters": [
+    {
+      "textureRegion": "checkBox_beige_unchecked",
+      "capacity": 500,
+      "term": 2.5,
+      "profile": {
+        "type": "ring",
+        "radius": 150,
+        "radiate": "in"
+      },
+      "parameters": {
+        "quantity": [ 3, 4 ],
+        "speed": [ 0, 50 ],
+        "rotation": [ -1, 1 ],
+        "scale": [ 3, 4 ]
+      }
+    }
+  ]
+}

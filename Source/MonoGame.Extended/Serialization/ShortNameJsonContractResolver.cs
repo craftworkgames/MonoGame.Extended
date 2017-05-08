@@ -4,15 +4,15 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace MonoGame.Extended.Gui.Serialization
+namespace MonoGame.Extended.Serialization
 {
-    public class GuiJsonContractResolver : DefaultContractResolver
+    public class ShortNameJsonContractResolver : DefaultContractResolver
     {
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
             var properties = base.CreateProperties(type, memberSerialization);
 
-            if (type.GetTypeInfo().IsAbstract) //.IsSubclassOf(typeof(GuiControl)))
+            if (type.GetTypeInfo().IsAbstract)
             {
                 properties.Insert(0, new JsonProperty
                 {
