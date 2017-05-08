@@ -28,7 +28,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\MonoGame.Extended.Input\bin\Release\MonoGame.Extended.Input.dll" target="lib" />
+    <file src="..\MonoGame.Extended.Input\bin\Release\MonoGame.Extended.Input.dll" target="lib\portable-net45+win8+wpa81" />
     <!-- A readme.txt will be displayed when the package is installed -->
     <file src="readme.txt" target="" />
   </files>
