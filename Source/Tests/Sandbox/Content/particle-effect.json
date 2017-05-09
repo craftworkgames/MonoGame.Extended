@@ -29,8 +29,8 @@
           "interpolators": [
             {
               "type": "Color",
-              "InitialColor": "#ff0000",
-              "FinalColor": "#00ff00"
+              "startValue": "#ff0000",
+              "endValue": "#00ff00"
             }
           ]
         }
