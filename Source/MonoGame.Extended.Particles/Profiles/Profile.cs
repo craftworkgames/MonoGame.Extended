@@ -2,7 +2,7 @@
 
 namespace MonoGame.Extended.Particles.Profiles
 {
-    public abstract class Profile //: ICloneable
+    public abstract class Profile
     {
         public enum CircleRadiation
         {

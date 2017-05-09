@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Serialization
@@ -15,11 +14,15 @@ namespace MonoGame.Extended.Serialization
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
             JsonSerializer serializer)
         {
-            var value = (string) reader.Value;
-            var fields = value.Split(' ');
-            var width = float.Parse(fields[0], CultureInfo.InvariantCulture.NumberFormat);
-            var height = float.Parse(fields[1], CultureInfo.InvariantCulture.NumberFormat);
-            return new Size2(width, height);
+            var values = reader.ReadAsMultiDimensional<float>();
+
+            if(values.Length == 2)
+                return new Size2(values[0], values[1]);
+
+            if (values.Length == 1)
+                return new Size2(values[0], values[1]);
+
+            throw new InvalidOperationException("Invalid size");
         }
 
         public override bool CanConvert(Type objectType)

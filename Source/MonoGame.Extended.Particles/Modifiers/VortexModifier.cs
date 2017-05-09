@@ -6,6 +6,7 @@ namespace MonoGame.Extended.Particles.Modifiers
     {
         // Note: not the real-life one
         private const float _gravConst = 100000f;
+
         public Vector2 Position { get; set; }
         public float Mass { get; set; }
         public float MaxSpeed { get; set; }

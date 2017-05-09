@@ -42,6 +42,10 @@
     <Compile Include="Collections\KeyedCollection.cs" />
     <Compile Include="FloatHelper.cs" />
     <Compile Include="IRectangular.cs" />
+    <Compile Include="Serialization\BaseTypeJsonConverter.cs" />
+    <Compile Include="Serialization\JsonReaderExtensions.cs" />
+    <Compile Include="Serialization\RangeJsonConverter.cs" />
+    <Compile Include="Serialization\ShortNameJsonContractResolver.cs" />
     <Compile Include="Serialization\NinePatchRegion2DJsonConverter.cs" />
     <Compile Include="Serialization\ThicknessJsonConverter.cs" />
     <Compile Include="Sprites\ISpriteBatchDrawable.cs" />
@@ -53,7 +57,7 @@
     <Compile Include="Segment2D.cs" />
     <Compile Include="Size2.cs" />
     <Compile Include="Serialization\ContentManagerJsonConverter.cs" />
-    <Compile Include="Serialization\ITextureRegionService.cs" />
+    <Compile Include="Serialization\TextureRegionService.cs" />
     <Compile Include="Serialization\TextureRegion2DJsonConverter.cs" />
     <Compile Include="EllipseF.cs" />
     <Compile Include="Shapes\Polyline.cs" />
