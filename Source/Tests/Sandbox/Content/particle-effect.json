@@ -6,15 +6,15 @@
       "capacity": 500,
       "term": 2.5,
       "profile": {
-        "type": "ring",
-        "radius": 150,
-        "radiate": "in"
+        "type": "circle",
+        "radius": 100,
+        "height": 200
       },
       "parameters": {
         "quantity": [ 3, 4 ],
-        "speed": [ 0, 50 ],
+        "speed": [ 0, 10 ],
         "rotation": [ -1, 1 ],
-        "scale": [ 3, 4 ]
+        "scale": [ 13, 14 ]
       }
     }
   ]

@@ -52,7 +52,7 @@ namespace Sandbox
                 {
                     Controls =
                     {
-                        new GuiLabel { Text = "Hello World" }
+                        //new GuiLabel { Text = "Hello World" }
                     }
                 }
             };
