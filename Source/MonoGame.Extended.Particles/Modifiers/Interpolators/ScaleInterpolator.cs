@@ -5,6 +5,7 @@ namespace MonoGame.Extended.Particles.Modifiers.Interpolators
     public class ScaleInterpolator : IInterpolator
     {
         private Vector2 _delta;
+
         public Vector2 StartValue { get; set; }
 
         public Vector2 EndValue

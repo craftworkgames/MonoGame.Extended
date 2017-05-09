@@ -5,17 +5,36 @@
       "textureRegion": "checkBox_beige_unchecked",
       "capacity": 500,
       "term": 2.5,
+      "ModifierExecutionStrategy": "Parallel",
       "profile": {
-        "type": "circle",
-        "radius": 100,
-        "height": 200
+        "type": "box",
+        "width": 700,
+        "height": 380
       },
       "parameters": {
         "quantity": [ 3, 4 ],
         "speed": [ 0, 10 ],
         "rotation": [ -1, 1 ],
         "scale": [ 13, 14 ]
-      }
+      },
+      "modifiers": [
+        {
+          "type": "linearGravity",
+          "direction": [ 0, 1 ],
+          "strength": 10
+        },
+        { "type": "opacityFastFade" },
+        {
+          "type": "age",
+          "interpolators": [
+            {
+              "type": "Color",
+              "InitialColor": "#ff0000",
+              "FinalColor": "#00ff00"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

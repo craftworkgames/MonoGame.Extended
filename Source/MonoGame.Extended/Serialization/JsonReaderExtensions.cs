@@ -35,8 +35,12 @@ namespace MonoGame.Extended.Serialization
                         .Cast<T>()
                         .ToArray();
 
+                case JsonToken.Integer:
+                case JsonToken.Float:
+                    return new []{ JToken.Load(reader).ToObject<T>() };
+
                 default:
-                    throw new NotSupportedException($"{tokenType} is not currently supported in the JSON parser");
+                    throw new NotSupportedException($"{tokenType} is not currently supported in the multi dimensional parser");
             }
         }
     }

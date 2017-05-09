@@ -82,6 +82,10 @@
     <Compile Include="Profiles\RingProfile.cs" />
     <Compile Include="Profiles\SprayProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\HslColorJsonConverter.cs" />
+    <Compile Include="Serialization\InterpolatorJsonConverter.cs" />
+    <Compile Include="Serialization\ModifierExecutionStrategyJsonConverter.cs" />
+    <Compile Include="Serialization\ModifierJsonConverter.cs" />
     <Compile Include="Serialization\ParticleJsonSerializer.cs" />
     <Compile Include="Serialization\ProfileJsonConverter.cs" />
     <Compile Include="Serialization\TimeSpanJsonConverter.cs" />

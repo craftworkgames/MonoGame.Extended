@@ -42,6 +42,7 @@
     <Compile Include="Collections\KeyedCollection.cs" />
     <Compile Include="FloatHelper.cs" />
     <Compile Include="IRectangular.cs" />
+    <Compile Include="Serialization\BaseTypeJsonConverter.cs" />
     <Compile Include="Serialization\JsonReaderExtensions.cs" />
     <Compile Include="Serialization\RangeJsonConverter.cs" />
     <Compile Include="Serialization\ShortNameJsonContractResolver.cs" />
