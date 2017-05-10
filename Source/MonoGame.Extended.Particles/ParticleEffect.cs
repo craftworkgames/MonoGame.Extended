@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Particles.Serialization;
 using MonoGame.Extended.Serialization;
 using Newtonsoft.Json;
