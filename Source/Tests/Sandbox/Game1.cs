@@ -1,9 +1,19 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
+using MonoGame.Extended.Particles;
+using MonoGame.Extended.Particles.Modifiers;
+using MonoGame.Extended.Particles.Modifiers.Containers;
+using MonoGame.Extended.Particles.Modifiers.Interpolators;
+using MonoGame.Extended.Particles.Profiles;
+using MonoGame.Extended.Serialization;
+using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
+using Newtonsoft.Json;
 
 // The Sandbox project is used for experiementing outside the normal demos.
 // Any code found here should be considered experimental work in progress.
@@ -16,6 +26,9 @@ namespace Sandbox
         private ViewportAdapter _viewportAdapter;
         private Camera2D _camera;
         private GuiSystem _guiSystem;
+
+        private SpriteBatch _spriteBatch;
+        private ParticleEffect _particleEffect;
 
         public Game1()
         {
@@ -54,21 +67,44 @@ namespace Sandbox
                 }
             };
 
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            
+            var particleTexture = new Texture2D(GraphicsDevice, 1, 1);
+            particleTexture.SetData(new[] { Color.White });
+
+            var textureRegionService = new TextureRegionService();
+            textureRegionService.TextureAtlases.Add(Content.Load<TextureAtlas>("adventure-gui-atlas"));
+
+            _particleEffect = ParticleEffect.FromFile(textureRegionService, @"Content/particle-effect.json");
         }
 
         protected override void Update(GameTime gameTime)
         {
+            var deltaTime = gameTime.GetElapsedSeconds();
             var keyboardState = Keyboard.GetState();
+            var mouseState = Mouse.GetState();
+            var p = _camera.ScreenToWorld(mouseState.X, mouseState.Y);
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
+
+            _particleEffect.Update(deltaTime);
+
+            if (mouseState.LeftButton == ButtonState.Pressed)
+                _particleEffect.Trigger(new Vector2(p.X, p.Y));
+
+            _particleEffect.Trigger(new Vector2(400, 240));
 
             _guiSystem.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
+
+            _spriteBatch.Begin(blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
+            _spriteBatch.Draw(_particleEffect);
+            _spriteBatch.End();
 
             _guiSystem.Draw(gameTime);
         }

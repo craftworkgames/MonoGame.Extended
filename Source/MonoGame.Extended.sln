@@ -93,6 +93,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Features", "Demos\Demo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Features.WindowsOpenGL", "Demos\Demo.Features.Windows\Demo.Features.WindowsOpenGL.csproj", "{57C47653-BC51-43BA-98F4-1D0EEE78782D}"
 	ProjectSection(ProjectDependencies) = postProject
+		{BDAEDFAF-2EDA-4BCA-9675-3625456FAB78} = {BDAEDFAF-2EDA-4BCA-9675-3625456FAB78}
 		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
 	EndProjectSection
 EndProject

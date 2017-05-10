@@ -34,7 +34,7 @@ namespace MonoGame.Extended.Particles
                     color.A = (byte) (particle->Opacity*255);
 
                 var position = new Vector2(particle->Position.X, particle->Position.Y);
-                var scale = new Vector2(particle->Scale.X/textureRegion.Width, particle->Scale.Y/textureRegion.Height);
+                var scale = particle->Scale;
                 var particleColor = new Color(color, particle->Opacity);
                 var rotation = particle->Rotation;
                 var layerDepth = particle->LayerDepth;

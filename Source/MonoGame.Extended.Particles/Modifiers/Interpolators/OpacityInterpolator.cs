@@ -3,6 +3,7 @@
     public class OpacityInterpolator : IInterpolator
     {
         private float _delta;
+
         public float StartValue { get; set; }
 
         public float EndValue

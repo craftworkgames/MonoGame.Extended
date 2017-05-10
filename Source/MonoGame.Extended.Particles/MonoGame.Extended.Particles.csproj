@@ -82,10 +82,20 @@
     <Compile Include="Profiles\RingProfile.cs" />
     <Compile Include="Profiles\SprayProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\HslColorJsonConverter.cs" />
+    <Compile Include="Serialization\InterpolatorJsonConverter.cs" />
+    <Compile Include="Serialization\ModifierExecutionStrategyJsonConverter.cs" />
+    <Compile Include="Serialization\ModifierJsonConverter.cs" />
+    <Compile Include="Serialization\ParticleJsonSerializer.cs" />
+    <Compile Include="Serialization\ProfileJsonConverter.cs" />
+    <Compile Include="Serialization\TimeSpanJsonConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Framework.Portable.3.6.0.1625\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

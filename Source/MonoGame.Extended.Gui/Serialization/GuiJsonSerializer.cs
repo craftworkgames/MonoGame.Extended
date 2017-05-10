@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace MonoGame.Extended.Gui.Serialization
 {
@@ -23,7 +19,7 @@ namespace MonoGame.Extended.Gui.Serialization
             Converters.Add(new GuiTextureAtlasJsonConverter(contentManager, textureRegionService));
             Converters.Add(new GuiNinePatchRegion2DJsonConverter(textureRegionService));
             Converters.Add(new TextureRegion2DJsonConverter(textureRegionService));
-            ContractResolver = new GuiJsonContractResolver();
+            ContractResolver = new ShortNameJsonContractResolver();
             Formatting = Formatting.Indented;
         }
     }

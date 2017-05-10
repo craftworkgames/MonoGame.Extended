@@ -1,5 +1,9 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Particles.Serialization;
+using MonoGame.Extended.Serialization;
+using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Particles
 {
@@ -23,6 +27,25 @@ namespace MonoGame.Extended.Particles
                 Update(triggerPeriod);
                 Trigger(position);
                 time += triggerPeriod;
+            }
+        }
+
+        public static ParticleEffect FromFile(ITextureRegionService textureRegionService, string path)
+        {
+            using (var stream = TitleContainer.OpenStream(path))
+            {
+                return FromStream(textureRegionService, stream);
+            }
+        }
+
+        public static ParticleEffect FromStream(ITextureRegionService textureRegionService, Stream stream)
+        {
+            var skinSerializer = new ParticleJsonSerializer(textureRegionService);
+
+            using (var streamReader = new StreamReader(stream))
+            using (var jsonReader = new JsonTextReader(streamReader))
+            {
+                return skinSerializer.Deserialize<ParticleEffect>(jsonReader);
             }
         }
 

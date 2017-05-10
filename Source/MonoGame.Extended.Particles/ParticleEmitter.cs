@@ -15,8 +15,7 @@ namespace MonoGame.Extended.Particles
 
         private float _totalSeconds;
 
-        public ParticleEmitter(TextureRegion2D textureRegion, int capacity, TimeSpan term, Profile profile,
-            bool autoTrigger = true)
+        public ParticleEmitter(TextureRegion2D textureRegion, int capacity, TimeSpan term, Profile profile, bool autoTrigger = true)
         {
             if (profile == null)
                 throw new ArgumentNullException(nameof(profile));

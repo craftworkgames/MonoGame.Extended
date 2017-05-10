@@ -217,5 +217,47 @@ namespace MonoGame.Extended.Particles
                 c1.S + t*(c2.S - c1.S),
                 c1.L + t*(c2.L - c2.L));
         }
+
+        public static HslColor FromRgb(Color color)
+        {
+            // derived from http://www.geekymonkey.com/Programming/CSharp/RGB2HSL_HSL2RGB.htm
+            var r = color.R / 255f;
+            var g = color.G / 255f;
+            var b = color.B / 255f;
+            var h = 0f; // default to black
+            var s = 0f;
+            var l = 0f;
+            var v = Math.Max(r, g);
+            v = Math.Max(v, b);
+
+            var m = Math.Min(r, g);
+            m = Math.Min(m, b);
+            l = (m + v) / 2.0f;
+
+            if (l <= 0.0)
+                return new HslColor(h, s, l);
+
+            var vm = v - m;
+            s = vm;
+
+            if (s > 0.0)
+                s /= l <= 0.5f ? v + m : 2.0f - v - m;
+            else
+                return new HslColor(h, s, l);
+
+            var r2 = (v - r) / vm;
+            var g2 = (v - g) / vm;
+            var b2 = (v - b) / vm;
+
+            if (Math.Abs(r - v) < float.Epsilon)
+                h = Math.Abs(g - m) < float.Epsilon ? 5.0f + b2 : 1.0f - g2;
+            else if (Math.Abs(g - v) < float.Epsilon)
+                h = Math.Abs(b - m) < float.Epsilon ? 1.0f + r2 : 3.0f - b2;
+            else
+                h = Math.Abs(r - m) < float.Epsilon ? 3.0f + g2 : 5.0f - r2;
+
+            h /= 6.0f;
+            return new HslColor(h, s, l);
+        }
     }
 }
