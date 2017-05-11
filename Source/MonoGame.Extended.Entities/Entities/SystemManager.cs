@@ -155,7 +155,7 @@ namespace MonoGame.Extended.Entities
             var processingSystem = system as EntityProcessingSystem;
             if (processingSystem != null)
             {
-                processingSystem.BitIndex = ProcessingSystems.Count;
+                processingSystem.Index = ProcessingSystems.Count;
                 ProcessingSystems.Add(processingSystem);
             }
 

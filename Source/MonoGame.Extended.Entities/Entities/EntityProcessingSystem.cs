@@ -41,50 +41,33 @@ namespace MonoGame.Extended.Entities
 {
     public abstract class EntityProcessingSystem : EntitySystem
     {
-        private readonly Dictionary<Entity, int> _activeEntitiesLookup = new Dictionary<Entity, int>();
-        // ReSharper disable once InconsistentNaming
-        internal readonly List<Entity> _activeEntities = new List<Entity>();
-        internal int BitIndex;
-        internal Aspect Aspect;
-
-        public IEnumerable<Entity> ActiveEntities => _activeEntities;
-
         protected EntityProcessingSystem()
         {
         }
 
+        private readonly Dictionary<Entity, int> _activeEntitiesLookup = new Dictionary<Entity, int>();
+
+        internal int Index;
+        internal Aspect Aspect;
+
+        private readonly List<Entity> _activeEntities = new List<Entity>();
+        public IReadOnlyCollection<Entity> ActiveEntities => _activeEntities;
+
         internal virtual void RefreshEntityComponents(Entity entity)
         {
+            var contains = entity.SystemBits[Index];
             var isInterested = Aspect.Matches(entity.ComponentBits);
-            if (!isInterested)
-                return;
 
-            var contains = entity.SystemBits[BitIndex];
-
-            if (!contains && entity.IsActive)
-            {
-                Add(entity);
-            }
-            else if (contains && !entity.IsActive)
-            {
+            if (contains)
                 Remove(entity);
-            }
-        }
-        public virtual void OnEntityAdded(Entity entity)
-        {
+            else if (isInterested)
+                Add(entity);
         }
 
-        public virtual void OnEntityDisabled(Entity entity)
-        {
-        }
-
-        public virtual void OnEntityEnabled(Entity entity)
-        {
-        }
-
-        public virtual void OnEntityRemoved(Entity entity)
-        {
-        }
+        public virtual void OnEntityAdded(Entity entity) { }
+        public virtual void OnEntityDisabled(Entity entity) { }
+        public virtual void OnEntityEnabled(Entity entity) { }
+        public virtual void OnEntityRemoved(Entity entity) { }
 
         protected override void Process(GameTime gameTime)
         {
@@ -111,7 +94,7 @@ namespace MonoGame.Extended.Entities
             if (entity == null)
                 return;
 
-            entity.SystemBits[BitIndex] = true;
+            entity.SystemBits[Index] = true;
 
             if (_activeEntitiesLookup.ContainsKey(entity))
                 return;
@@ -127,7 +110,7 @@ namespace MonoGame.Extended.Entities
             if (entity == null)
                 return;
 
-            entity.SystemBits[BitIndex] = false;
+            entity.SystemBits[Index] = false;
 
             int activeEntityIndex;
             if (!_activeEntitiesLookup.TryGetValue(entity, out activeEntityIndex))

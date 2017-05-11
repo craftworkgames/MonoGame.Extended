@@ -54,35 +54,27 @@ namespace MonoGame.Extended.Entities
     internal sealed class BitVector
     {
         // XPerY=n means that n Xs can be stored in 1 Y. 
-        private const int BitsPerInt32 = 32;
+        private const int _bitsPerInt32 = 32;
 
         private readonly int[] _array;
-        private int _intLength;
+        private readonly int _intLength;
 
         public int Length { get; }
 
-        private BitVector()
-        {
-        }
-
-        public BitVector(int length)
-            : this(length, false)
-        {
-        }
-
-        public BitVector(int length, bool defaultValue)
+        public BitVector(int length, bool defaultValue = false)
         {
             if (length < 0)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
-            _array = new int[GetArrayLength(length, BitsPerInt32)];
+            _array = new int[GetArrayLength(length, _bitsPerInt32)];
             Length = length;
 
             var fillValue = defaultValue ? unchecked((int)0xffffffff) : 0;
+
             for (var i = 0; i < _array.Length; i++)
                 _array[i] = fillValue;
 
-            _intLength = GetArrayLength(Length, BitsPerInt32);
+            _intLength = GetArrayLength(Length, _bitsPerInt32);
         }
 
         public BitVector(BitVector bits)
@@ -90,20 +82,17 @@ namespace MonoGame.Extended.Entities
             if (bits == null)
                 throw new ArgumentNullException(nameof(bits));
 
-            var arrayLength = GetArrayLength(bits.Length, BitsPerInt32);
+            var arrayLength = GetArrayLength(bits.Length, _bitsPerInt32);
             _array = new int[arrayLength];
             Length = bits.Length;
-            _intLength = GetArrayLength(Length, BitsPerInt32);
+            _intLength = GetArrayLength(Length, _bitsPerInt32);
 
             Array.Copy(bits._array, _array, arrayLength);
         }
 
         public bool this[int index]
         {
-            get
-            {
-                return (_array[index / 32] & (1 << (index % 32))) != 0;
-            }
+            get { return (_array[index / 32] & (1 << (index % 32))) != 0; }
             set
             {
                 if (value)
@@ -175,5 +164,4 @@ namespace MonoGame.Extended.Entities
             return result;
         }
     }
-
 }

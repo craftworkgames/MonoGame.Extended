@@ -54,42 +54,44 @@ namespace MonoGame.Extended.Entities
             ToRefreshComponentsMask = BitVector32.CreateMask(ToBeRemovedMask);
         }
 
-        internal EntityManager Manager;
-        internal BitVector SystemBits;
-        internal BitVector ComponentBits;
         private ReturnToPoolDelegate _returnToPoolDelegate;
-        internal BitVector32 Flags;
+        private BitVector32 _flags;
+
+        internal EntityManager Manager;
+        internal readonly BitVector SystemBits;
+        internal readonly BitVector ComponentBits;
+
         internal string _group;
         internal string _name;
 
         public bool IsActive
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return !Flags[ToBeRemovedMask]; }
+            get { return !_flags[ToBeRemovedMask]; }
         }
 
         public bool WaitingToBeAdded
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return Flags[ToBeAddedMask]; }
+            get { return _flags[ToBeAddedMask]; }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            internal set { Flags[ToBeAddedMask] = value; }
+            internal set { _flags[ToBeAddedMask] = value; }
         }
 
         public bool WaitingToBeRemoved
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return Flags[ToBeRemovedMask]; }
+            get { return _flags[ToBeRemovedMask]; }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            internal set { Flags[ToBeRemovedMask] = value; }
+            internal set { _flags[ToBeRemovedMask] = value; }
         }
 
         internal bool WaitingToRefreshComponents
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return Flags[ToRefreshComponentsMask]; }
+            get { return _flags[ToRefreshComponentsMask]; }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set { Flags[ToRefreshComponentsMask] = value; }
+            set { _flags[ToRefreshComponentsMask] = value; }
         }
 
         public string Name
@@ -148,12 +150,12 @@ namespace MonoGame.Extended.Entities
             return Manager.GetComponent<T>(this);
         }
 
-        internal void Reset()
+        private void Reset()
         {
             _group = null;
             SystemBits.SetAll(false);
             ComponentBits.SetAll(false);
-            Flags = 0;
+            _flags = 0;
         }
 
         public override string ToString()
