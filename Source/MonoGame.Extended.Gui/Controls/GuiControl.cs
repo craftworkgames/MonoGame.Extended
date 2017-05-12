@@ -3,11 +3,10 @@ using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.TextureAtlases;
-using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public abstract class GuiControl : IMovable, ISizable
+    public abstract class GuiControl : GuiElement<GuiControl>, IMovable, ISizable, IRectangular
     {
         protected GuiControl()
         {
@@ -25,24 +24,7 @@ namespace MonoGame.Extended.Gui.Controls
             BackgroundRegion = backgroundRegion;
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [JsonIgnore]
-        public GuiControl Parent { get; internal set; }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [JsonIgnore]
-        public Rectangle BoundingRectangle
-        {
-            get
-            {
-                var offset = Vector2.Zero;
-
-                if (Parent != null)
-                    offset = Parent.BoundingRectangle.Location.ToVector2();
-
-                return new Rectangle((offset + Position - Size * Origin).ToPoint(), (Point)Size);
-            }
-        }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Thickness Margin { get; set; }
@@ -63,11 +45,7 @@ namespace MonoGame.Extended.Gui.Controls
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsFocused { get; set; }
 
-        public string Name { get; set; }
-        public Vector2 Position { get; set; }
         public Vector2 Offset { get; set; }
-        public Vector2 Origin { get; set; }
-        public Color Color { get; set; }
         public BitmapFont Font { get; set; }
         public string Text { get; set; }
         public Color TextColor { get; set; }
@@ -75,21 +53,6 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiControlCollection Controls { get; }
         public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Stretch;
         public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Stretch;
-        public TextureRegion2D BackgroundRegion { get; set; }
-
-        public Size2 Size { get; set; }
-
-        public float Width
-        {
-            get { return Size.Width; }
-            set { Size = new Size2(value, Size.Height); }
-        }
-
-        public float Height
-        {
-            get { return Size.Height; }
-            set { Size = new Size2(Size.Width, value); }
-        }
 
         public Size2 GetDesiredSize(IGuiContext context, Size2 availableSize)
         {
@@ -171,7 +134,7 @@ namespace MonoGame.Extended.Gui.Controls
                 HoverStyle?.Revert(this);
         }
 
-        public void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             DrawBackground(context, renderer, deltaSeconds);
             DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, Text, BoundingRectangle, HorizontalAlignment.Centre, VerticalAlignment.Centre));
@@ -190,7 +153,6 @@ namespace MonoGame.Extended.Gui.Controls
         protected virtual void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
-            //renderer.DrawRectangle(BoundingRectangle, Color.Red);
         }
 
         protected virtual void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)

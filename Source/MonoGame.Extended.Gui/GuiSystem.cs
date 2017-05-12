@@ -14,12 +14,7 @@ namespace MonoGame.Extended.Gui
         Vector2 CursorPosition { get; }
     }
 
-    public class GuiWindow
-    {
-        public GuiControlCollection Controls { get; } = new GuiControlCollection();
-    }
-
-    public class GuiSystem : IGuiContext
+    public class GuiSystem : IGuiContext, IRectangular
     {
         private readonly ViewportAdapter _viewportAdapter;
         private readonly IGuiRenderer _renderer;
@@ -30,8 +25,6 @@ namespace MonoGame.Extended.Gui
         private GuiControl _preFocusedControl;
         private GuiControl _focusedControl;
         private GuiControl _hoveredControl;
-
-        public List<GuiWindow> Windows { get; } = new List<GuiWindow>();
 
         public GuiSystem(ViewportAdapter viewportAdapter, IGuiRenderer renderer)
         {
@@ -52,24 +45,22 @@ namespace MonoGame.Extended.Gui
             _keyboardListener = new KeyboardListener();
             _keyboardListener.KeyTyped += (sender, args) => _focusedControl?.OnKeyTyped(this, args);
             _keyboardListener.KeyPressed += (sender, args) => _focusedControl?.OnKeyPressed(this, args);
+
+            Screens = new GuiScreenCollection(this)
+            {
+                OnItemAdded = screen => screen.Layout(this, _viewportAdapter.BoundingRectangle)
+            };
         }
 
-        private GuiScreen _screen;
-        public GuiScreen Screen
-        {
-            get { return _screen; }
-            set
-            {
-                if (_screen != value)
-                {
-                    _screen = value;
-                    _screen?.Layout(this, _viewportAdapter.BoundingRectangle);
-                }
-            }
-        }
+        public GuiScreenCollection Screens { get; }
+
+        public GuiScreen ActiveScreen => Screens.LastOrDefault();
+
+        public Rectangle BoundingRectangle => _viewportAdapter.BoundingRectangle;
 
         public Vector2 CursorPosition { get; set; }
-        public BitmapFont DefaultFont => Screen?.Skin?.DefaultFont;
+
+        public BitmapFont DefaultFont => ActiveScreen?.Skin?.DefaultFont;
 
         public void Update(GameTime gameTime)
         {
@@ -80,26 +71,36 @@ namespace MonoGame.Extended.Gui
 
         public void Draw(GameTime gameTime)
         {
-            if(Screen == null || !Screen.IsVisible)
-                return;
-
             var deltaSeconds = gameTime.GetElapsedSeconds();
 
             _renderer.Begin();
-            
-            DrawChildren(Screen.Controls, deltaSeconds);
 
-            foreach (var window in Windows)
-                DrawChildren(window.Controls, deltaSeconds);
+            foreach (var screen in Screens)
+            {
+                if (screen.IsVisible)
+                {
+                    DrawChildren(screen.Controls, deltaSeconds);
+                    DrawWindows(screen.Windows, deltaSeconds);
+                }
+            }
 
-            var cursor = Screen.Skin?.Cursor;
+            var cursor = ActiveScreen.Skin?.Cursor;
 
             if (cursor != null)
                 _renderer.DrawRegion(cursor.TextureRegion, CursorPosition, cursor.Color);
 
             _renderer.End();
         }
-        
+
+        private void DrawWindows(GuiWindowCollection windows, float deltaSeconds)
+        {
+            foreach (var window in windows)
+            {
+                window.Draw(this, _renderer, deltaSeconds);
+                DrawChildren(window.Controls, deltaSeconds);
+            }
+        }
+
         private void DrawChildren(GuiControlCollection controls, float deltaSeconds)
         {
             foreach (var control in controls.Where(c => c.IsVisible))
@@ -111,7 +112,7 @@ namespace MonoGame.Extended.Gui
 
         private void OnPointerDown(GuiPointerEventArgs args)
         {
-            if (Screen == null || !Screen.IsVisible)
+            if (ActiveScreen == null || !ActiveScreen.IsVisible)
                 return;
 
             _preFocusedControl = FindControlAtPoint(args.Position);
@@ -120,7 +121,7 @@ namespace MonoGame.Extended.Gui
 
         private void OnPointerUp(GuiPointerEventArgs args)
         {
-            if (Screen == null || !Screen.IsVisible)
+            if (ActiveScreen == null || !ActiveScreen.IsVisible)
                 return;
 
             var postFocusedControl = FindControlAtPoint(args.Position);
@@ -149,7 +150,7 @@ namespace MonoGame.Extended.Gui
         {
             CursorPosition = args.Position.ToVector2();
 
-            if (Screen == null || !Screen.IsVisible)
+            if (ActiveScreen == null || !ActiveScreen.IsVisible)
                 return;
 
             var hoveredControl = FindControlAtPoint(args.Position);
@@ -164,19 +165,19 @@ namespace MonoGame.Extended.Gui
 
         private GuiControl FindControlAtPoint(Point point)
         {
-            if (Screen == null || !Screen.IsVisible)
+            if (ActiveScreen == null || !ActiveScreen.IsVisible)
                 return null;
 
-            for(var i = Windows.Count - 1; i >= 0; i--)
-            {
-                var window = Windows[i];
-                var control = FindControlAtPoint(window.Controls, point);
+            //for(var i = Windows.Count - 1; i >= 0; i--)
+            //{
+            //    var window = Windows[i];
+            //    var control = FindControlAtPoint(window.Controls, point);
 
-                if (control != null)
-                    return control;
-            }
+            //    if (control != null)
+            //        return control;
+            //}
 
-            return FindControlAtPoint(Screen.Controls, point);
+            return FindControlAtPoint(ActiveScreen.Controls, point);
         }
 
         private static GuiControl FindControlAtPoint(GuiControlCollection controls, Point point)

@@ -19,6 +19,7 @@ namespace MonoGame.Extended.Gui.Serialization
             Converters.Add(new GuiTextureAtlasJsonConverter(contentManager, textureRegionService));
             Converters.Add(new GuiNinePatchRegion2DJsonConverter(textureRegionService));
             Converters.Add(new TextureRegion2DJsonConverter(textureRegionService));
+            Converters.Add(new GuiAlignmentConverter());
             ContractResolver = new ShortNameJsonContractResolver();
             Formatting = Formatting.Indented;
         }

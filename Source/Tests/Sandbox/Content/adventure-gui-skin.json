@@ -54,6 +54,8 @@
       "TextOffset": "0 -2",
       "TextColor": "#f4a460ff",
       "Color": "#8b4513ff",
+      "HorizontalAlignment": "Center",
+      "VerticalAlignment": "Centre",
       "PressedStyle": {
         "Type": "GuiButton",
         "BackgroundRegion": "buttonLong_grey_pressed",

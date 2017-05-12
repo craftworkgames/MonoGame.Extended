@@ -3,19 +3,19 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Serialization;
 using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui
 {
-    public class GuiScreen : IDisposable
+    public class GuiScreen : GuiElement<GuiSystem>, IDisposable
     {
         public GuiScreen(GuiSkin skin)
         {
             Skin = skin;
             Controls = new GuiControlCollection();
+            Windows = new GuiWindowCollection(this);
         }
 
         [JsonProperty(Order = 1)]
@@ -23,10 +23,13 @@ namespace MonoGame.Extended.Gui
 
         [JsonProperty(Order = 2)]
         public GuiControlCollection Controls { get; }
+        
+        [JsonIgnore]
+        public GuiWindowCollection Windows { get; }
 
-        public float Width { get; private set; }
-        public float Height { get; private set; }
-        public Size2 Size => new Size2(Width, Height);
+        public new float Width { get; private set; }
+        public new float Height { get; private set; }
+        public new Size2 Size => new Size2(Width, Height);
         public bool IsVisible { get; set; } = true;
 
         public virtual void Initialize() { }
@@ -76,6 +79,11 @@ namespace MonoGame.Extended.Gui
 
             foreach (var control in Controls)
                 GuiLayoutHelper.PlaceControl(context, control, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
+        }
+
+        public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        {
+            renderer.DrawRectangle(BoundingRectangle, Color.Green);
         }
 
         protected virtual void Dispose(bool isDisposing)
