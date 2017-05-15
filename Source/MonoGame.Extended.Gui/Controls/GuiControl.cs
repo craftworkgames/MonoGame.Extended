@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Input.InputListeners;
@@ -47,12 +48,27 @@ namespace MonoGame.Extended.Gui.Controls
 
         public Vector2 Offset { get; set; }
         public BitmapFont Font { get; set; }
-        public string Text { get; set; }
         public Color TextColor { get; set; }
         public Vector2 TextOffset { get; set; }
         public GuiControlCollection Controls { get; }
         public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Stretch;
         public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Stretch;
+
+        private string _text;
+        public string Text
+        {
+            get { return _text; }
+            set
+            {
+                if (_text != value)
+                {
+                    _text = value;
+                    TextChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        public event EventHandler TextChanged;
 
         public Size2 GetDesiredSize(IGuiContext context, Size2 availableSize)
         {
@@ -77,7 +93,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             var font = Font ?? context.DefaultFont;
 
-            if (font != null && !string.IsNullOrEmpty(Text))
+            if (font != null && Text != null)
             {
                 var textSize = font.MeasureString(Text);
                 minimumSize.Width += textSize.Width;
@@ -165,7 +181,7 @@ namespace MonoGame.Extended.Gui.Controls
         {
             public TextInfo(string text, BitmapFont font, Vector2 position, Vector2 size, Color color, Rectangle? clippingRectangle)
             {
-                Text = text;
+                Text = text ?? string.Empty;
                 Font = font;
                 Size = size;
                 Color = color;
