@@ -107,7 +107,7 @@ namespace Demo.Features.Demos
 
             _guiSystem = new GuiSystem(viewportAdapter, guiRenderer)
             {
-                Screen = new GuiLayoutScreen(skin, GraphicsDevice)
+                Screens = { new GuiLayoutScreen(skin, GraphicsDevice) }
             };
         }
 

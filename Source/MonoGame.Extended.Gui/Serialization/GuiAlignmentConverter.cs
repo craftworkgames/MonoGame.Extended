@@ -21,7 +21,10 @@ namespace MonoGame.Extended.Gui.Serialization
                 if (value == "Center" || string.Equals(value, "Centre", StringComparison.OrdinalIgnoreCase))
                     return HorizontalAlignment.Centre;
 
-                return serializer.Deserialize<HorizontalAlignment>(reader);
+                HorizontalAlignment alignment;
+
+                if (Enum.TryParse(value, true, out alignment))
+                    return alignment;
             }
 
             if (objectType == typeof(VerticalAlignment))
@@ -31,7 +34,10 @@ namespace MonoGame.Extended.Gui.Serialization
                 if (value == "Center" || string.Equals(value, "Centre", StringComparison.OrdinalIgnoreCase))
                     return VerticalAlignment.Centre;
 
-                return serializer.Deserialize<VerticalAlignment>(reader);
+                VerticalAlignment alignment;
+
+                if (Enum.TryParse(value, true, out alignment))
+                    return alignment;
             }
 
             throw new InvalidOperationException($"Invalid value for '{objectType.Name}'");
