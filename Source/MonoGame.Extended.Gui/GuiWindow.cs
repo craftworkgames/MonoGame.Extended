@@ -11,22 +11,11 @@ namespace MonoGame.Extended.Gui
             Parent = parent;
         }
 
-        public bool IsInitialized { get; private set; }
         public GuiSkin Skin => Parent.Skin;
         public GuiControlCollection Controls { get; } = new GuiControlCollection();
 
-        protected virtual void Initialize()
-        {
-        }
-
         public void Show()
         {
-            if (!IsInitialized)
-            {
-                Initialize();
-                IsInitialized = true;
-            }
-
             Parent.Windows.Add(this);
         }
 
@@ -37,7 +26,18 @@ namespace MonoGame.Extended.Gui
 
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
-            renderer.DrawRectangle(BoundingRectangle, Color.Magenta);
+            renderer.FillRectangle(BoundingRectangle, Color.Magenta);
+        }
+
+        public Size2 GetDesiredSize(IGuiContext context, Size2 availableSize)
+        {
+            return new Size2(Width, Height);
+        }
+
+        public void Layout(IGuiContext context, RectangleF rectangle)
+        {
+            foreach (var control in Controls)
+                GuiLayoutHelper.PlaceControl(context, control, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
         }
     }
 }

@@ -28,6 +28,18 @@ namespace MonoGame.Extended.Gui
             layoutControl?.Layout(context, new RectangleF(x, y, width, height));
         }
 
+        public static void PlaceWindow(IGuiContext context, GuiWindow window, float x, float y, float width, float height)
+        {
+            var rectangle = new Rectangle((int)x, (int)y, (int)width, (int)height);
+            var availableSize = new Size2(width, height);
+            var desiredSize = window.GetDesiredSize(context, availableSize);
+            var alignedRectangle = AlignRectangle(HorizontalAlignment.Centre, VerticalAlignment.Centre, desiredSize, rectangle);
+
+            window.Position = new Vector2(alignedRectangle.X, alignedRectangle.Y);
+            window.Size = alignedRectangle.Size;
+            window.Layout(context, window.BoundingRectangle);
+        }
+
         public static Rectangle AlignRectangle(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Size2 size, Rectangle targetRectangle)
         {
             var x = GetHorizontalPosition(horizontalAlignment, size, targetRectangle);

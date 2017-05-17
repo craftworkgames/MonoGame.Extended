@@ -20,7 +20,7 @@ namespace MonoGame.Extended.Gui
             TextureAtlases = new List<TextureAtlas>();
             Fonts = new List<BitmapFont>();
             NinePatches = new List<NinePatchRegion2D>();
-            _styles = new KeyedCollection<string, GuiControlStyle>(s => s.Name);
+            _styles = new KeyedCollection<string, GuiControlStyle>(s => s.Name ?? s.TargetType.Name);
         }
 
         private readonly KeyedCollection<string, GuiControlStyle> _styles;
@@ -49,6 +49,11 @@ namespace MonoGame.Extended.Gui
         public GuiControlStyle GetStyle(string name)
         {
             return _styles[name];
+        }
+
+        public GuiControlStyle GetStyle(Type controlType)
+        {
+            return _styles.FirstOrDefault(s => s.TargetType == controlType);
         }
 
         public static GuiSkin FromFile(ContentManager contentManager, string path)

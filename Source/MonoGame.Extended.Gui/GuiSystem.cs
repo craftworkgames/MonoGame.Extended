@@ -11,7 +11,6 @@ namespace MonoGame.Extended.Gui
     {
         BitmapFont DefaultFont { get; }
         Vector2 CursorPosition { get; }
-        GuiSkin Skin { get; }
     }
 
     public class GuiSystem : IGuiContext, IRectangular
@@ -26,7 +25,7 @@ namespace MonoGame.Extended.Gui
         private GuiControl _focusedControl;
         private GuiControl _hoveredControl;
 
-        public GuiSystem(ViewportAdapter viewportAdapter, IGuiRenderer renderer, GuiSkin skin)
+        public GuiSystem(ViewportAdapter viewportAdapter, IGuiRenderer renderer)
         {
             _viewportAdapter = viewportAdapter;
             _renderer = renderer;
@@ -46,15 +45,8 @@ namespace MonoGame.Extended.Gui
             _keyboardListener.KeyTyped += (sender, args) => _focusedControl?.OnKeyTyped(this, args);
             _keyboardListener.KeyPressed += (sender, args) => _focusedControl?.OnKeyPressed(this, args);
 
-            Skin = skin;
-
-            Screens = new GuiScreenCollection(this)
-            {
-                OnItemAdded = screen => screen.Layout(this, _viewportAdapter.BoundingRectangle)
-            };
+            Screens = new GuiScreenCollection(this) { ItemAdded = InitializeScreen };
         }
-
-        public GuiSkin Skin { get; }
 
         public GuiScreenCollection Screens { get; }
 
@@ -66,11 +58,25 @@ namespace MonoGame.Extended.Gui
 
         public BitmapFont DefaultFont => ActiveScreen?.Skin?.DefaultFont;
 
+        private void InitializeScreen(GuiScreen screen)
+        {
+            screen.Initialize();
+            screen.Layout(this, BoundingRectangle);
+        }
+
         public void Update(GameTime gameTime)
         {
             _touchListener.Update(gameTime);
             _mouseListener.Update(gameTime);
             _keyboardListener.Update(gameTime);
+
+            foreach (var screen in Screens)
+            {
+                if (screen.IsLayoutRequired)
+                    screen.Layout(this, BoundingRectangle);
+
+                screen.Update(gameTime);
+            }
         }
 
         public void Draw(GameTime gameTime)

@@ -14,8 +14,15 @@ namespace MonoGame.Extended.Gui
         public GuiScreen(GuiSkin skin)
         {
             Skin = skin;
-            Controls = new GuiControlCollection();
-            Windows = new GuiWindowCollection(this);
+            Controls = new GuiControlCollection { ItemAdded = c => IsLayoutRequired = true };
+            Windows = new GuiWindowCollection(this)
+            {
+                ItemAdded = w =>
+                {
+                    ApplyStyles(w.Controls);
+                    IsLayoutRequired = true;
+                }
+            };
         }
 
         [JsonProperty(Order = 1)]
@@ -23,7 +30,7 @@ namespace MonoGame.Extended.Gui
 
         [JsonProperty(Order = 2)]
         public GuiControlCollection Controls { get; }
-        
+
         [JsonIgnore]
         public GuiWindowCollection Windows { get; }
 
@@ -32,7 +39,38 @@ namespace MonoGame.Extended.Gui
         public new Size2 Size => new Size2(Width, Height);
         public bool IsVisible { get; set; } = true;
 
-        public virtual void Initialize() { }
+        [JsonIgnore]
+        public bool IsLayoutRequired { get; private set; }
+
+        public void Initialize()
+        {
+            ApplyStyles(Controls);
+
+            foreach (var window in Windows)
+                ApplyStyles(window.Controls);
+        }
+
+        private void ApplyStyles(GuiControlCollection controls)
+        {
+            foreach (var control in controls)
+            {
+                if (control.Style != null)
+                {
+                    var style = Skin.GetStyle(control.Style);
+                    style?.Apply(control);
+                }
+                else
+                {
+                    var controlType = control.GetType();
+                    var style = Skin.GetStyle(controlType);
+                    style?.Apply(control);
+                }
+
+                ApplyStyles(control.Controls);
+            }
+        }
+
+        public virtual void Update(GameTime gameTime) { }
 
         public void Show()
         {
@@ -70,15 +108,18 @@ namespace MonoGame.Extended.Gui
             return null;
         }
 
-        public void Layout(IGuiContext context, RectangleF rectangle)
+        public void Layout(IGuiContext context, Rectangle rectangle)
         {
             Width = rectangle.Width;
             Height = rectangle.Height;
 
-            Initialize();
-
             foreach (var control in Controls)
                 GuiLayoutHelper.PlaceControl(context, control, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
+
+            foreach (var window in Windows)
+                GuiLayoutHelper.PlaceWindow(context, window, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
+
+            IsLayoutRequired = false;
         }
 
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)

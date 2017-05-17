@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls

@@ -10,7 +10,13 @@ namespace MonoGame.Extended.Gui.Controls
     public abstract class GuiControl : GuiElement<GuiControl>, IMovable, ISizable, IRectangular
     {
         protected GuiControl()
+           : this(style: null)
         {
+        }
+
+        protected GuiControl(string style)
+        {
+            Style = style;
             Color = Color.White;
             TextColor = Color.White;
             IsEnabled = true;
@@ -25,6 +31,8 @@ namespace MonoGame.Extended.Gui.Controls
             BackgroundRegion = backgroundRegion;
         }
         
+        public string Style { get; set; }
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Thickness Margin { get; set; }
 

@@ -38,15 +38,6 @@
   ],
   "Styles": [
     {
-      "Name": "close-button",
-      "Type": "GuiButton",
-      "BackgroundRegion": "buttonRound_close",
-      "HoverStyle": {
-        "Type": "GuiButton",
-        "Color": "LightGray"
-      }
-    },
-    {
       "Name": "white-button",
       "Type": "GuiButton",
       "Margin": "5 2",
@@ -65,6 +56,15 @@
         "Type": "GuiButton",
         "Color": "#9E4C16ff",
         "TextColor": "#ffffffff"
+      }
+    },
+    {
+      "Name": "close-button",
+      "Type": "GuiButton",
+      "BackgroundRegion": "buttonRound_close",
+      "HoverStyle": {
+        "Type": "GuiButton",
+        "Color": "LightGray"
       }
     },
     {

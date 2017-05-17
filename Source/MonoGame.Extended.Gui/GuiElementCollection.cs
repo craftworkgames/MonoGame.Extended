@@ -12,8 +12,8 @@ namespace MonoGame.Extended.Gui
         private readonly TParent _parent;
         private readonly List<TChild> _list = new List<TChild>();
 
-        public Action<TChild> OnItemAdded { get; set; }
-        public Action<TChild> OnItemRemoved { get; set; }
+        public Action<TChild> ItemAdded { get; set; }
+        public Action<TChild> ItemRemoved { get; set; }
 
         protected GuiElementCollection(TParent parent)
         {
@@ -34,7 +34,7 @@ namespace MonoGame.Extended.Gui
         {
             item.Parent = _parent;
             _list.Add(item);
-            OnItemAdded?.Invoke(item);
+            ItemAdded?.Invoke(item);
         }
 
         public void Clear()
@@ -42,7 +42,7 @@ namespace MonoGame.Extended.Gui
             foreach (var child in _list)
             {
                 child.Parent = null;
-                OnItemRemoved?.Invoke(child);
+                ItemRemoved?.Invoke(child);
             }
 
             _list.Clear();
@@ -61,7 +61,7 @@ namespace MonoGame.Extended.Gui
         public bool Remove(TChild item)
         {
             item.Parent = null;
-            OnItemRemoved?.Invoke(item);
+            ItemRemoved?.Invoke(item);
             return _list.Remove(item);
         }
 
@@ -78,7 +78,7 @@ namespace MonoGame.Extended.Gui
         {
             item.Parent = _parent;
             _list.Insert(index, item);
-            OnItemAdded?.Invoke(item);
+            ItemAdded?.Invoke(item);
         }
 
         public void RemoveAt(int index)
@@ -86,7 +86,7 @@ namespace MonoGame.Extended.Gui
             var child = _list[index];
             child.Parent = null;
             _list.RemoveAt(index);
-            OnItemRemoved?.Invoke(child);
+            ItemRemoved?.Invoke(child);
         }
 
         public TChild this[int index]

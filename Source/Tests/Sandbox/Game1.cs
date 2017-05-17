@@ -20,13 +20,14 @@ namespace Sandbox
         {
             Width = 300;
             Height = 200;
-        }
 
-        protected override void Initialize()
-        {
-            var button = Skin.Create<GuiButton>("white-button", text: "I'm in a dialog");
-            button.Width = 100;
-            button.Height = 32;
+            var button = new GuiButton
+            {
+                Width = 100,
+                Height = 32,
+                Text = "Yay",
+                VerticalAlignment = VerticalAlignment.Bottom
+            };
             Controls.Add(button);
         }
     }
@@ -36,11 +37,7 @@ namespace Sandbox
         public MyScreen(GuiSkin skin) 
             : base(skin)
         {
-        }
-
-        public override void Initialize()
-        {
-            var button = new GuiButton() {Text = "Press Me"};//Skin.Create<GuiButton>("white-button", text: "Open Dialog");}
+            var button = new GuiButton { Text = "Press Me" };
             button.Clicked += OpenDialog_Clicked;
             Controls.Add(button);
         }
@@ -55,7 +52,7 @@ namespace Sandbox
     public class Game1 : Game
     {
         // ReSharper disable once NotAccessedField.Local
-        private GraphicsDeviceManager _graphicsDeviceManager;
+        private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private ViewportAdapter _viewportAdapter;
         private Camera2D _camera;
         private GuiSystem _guiSystem;
@@ -67,19 +64,20 @@ namespace Sandbox
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            Window.AllowUserResizing = true;
         }
 
         protected override void LoadContent()
         {
             IsMouseVisible = false;
 
-            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, _graphicsDeviceManager.PreferredBackBufferWidth, _graphicsDeviceManager.PreferredBackBufferHeight);
             _camera = new Camera2D(_viewportAdapter);
 
             var skin = GuiSkin.FromFile(Content, @"Content/adventure-gui-skin.json");
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _viewportAdapter.GetScaleMatrix);
 
-            _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer, skin);
+            _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer);
             _guiSystem.Screens.Add(new MyScreen(skin));
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
