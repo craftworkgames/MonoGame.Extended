@@ -8,8 +8,6 @@ namespace MonoGame.Extended.Input.InputListeners
         {
         }
 
-        //public ViewportAdapter ViewportAdapter { get; set; }
-
         public abstract void Update(GameTime gameTime);
     }
 }

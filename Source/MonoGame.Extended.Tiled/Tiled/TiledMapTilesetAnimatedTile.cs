@@ -17,7 +17,6 @@ namespace MonoGame.Extended.Tiled
         public ReadOnlyCollection<TiledMapTilesetTileAnimationFrame> AnimationFrames { get; }
         public TiledMapTilesetTileAnimationFrame CurrentAnimationFrame { get; private set; }
 
-        // ReSharper disable once SuggestBaseTypeForParameter
         internal TiledMapTilesetAnimatedTile(TiledMapTileset tileset, ContentReader input, int localTileIdentifier, int animationFramesCount)
             : base(localTileIdentifier,input)
         {

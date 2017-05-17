@@ -24,9 +24,7 @@ namespace MonoGame.Extended.Gui.Controls
         {
             BackgroundRegion = backgroundRegion;
         }
-
-
-
+        
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Thickness Margin { get; set; }
 

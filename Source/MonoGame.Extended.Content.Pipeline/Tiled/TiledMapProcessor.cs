@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -21,54 +20,48 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
             var previousWorkingDirectory = Environment.CurrentDirectory;
             var newWorkingDirectory = Path.GetDirectoryName(map.FilePath);
+
             if (string.IsNullOrEmpty(newWorkingDirectory))
                 throw new NullReferenceException();
+
             Environment.CurrentDirectory = newWorkingDirectory;
 
             foreach (var layer in map.Layers)
             {
                 var imageLayer = layer as TiledMapImageLayerContent;
+
                 if (imageLayer != null)
                 {
                     ContentLogger.Log($"Processing image layer '{imageLayer.Name}'");
-
-                    var model = CreateImageLayerModel(imageLayer);
-                    layer.Models = new[]
-                    {
-                        model
-                    };
-
+                    layer.Models = new[] { CreateImageLayerModel(imageLayer) };
                     ContentLogger.Log($"Processed image layer '{imageLayer.Name}'");
-                    continue;
                 }
 
                 var tileLayer = layer as TiledMapTileLayerContent;
-                if (tileLayer == null)
-                    continue;
 
-                var data = tileLayer.Data;
-                var encodingType = data.Encoding ?? "xml";
-                var compressionType = data.Compression ?? "xml";
+                if (tileLayer != null)
+                {
+                    var data = tileLayer.Data;
+                    var encodingType = data.Encoding ?? "xml";
+                    var compressionType = data.Compression ?? "xml";
 
-                ContentLogger.Log(
-                    $"Processing tile layer '{tileLayer.Name}': Encoding: '{encodingType}', Compression: '{compressionType}'");
+                    ContentLogger.Log($"Processing tile layer '{tileLayer.Name}': Encoding: '{encodingType}', Compression: '{compressionType}'");
 
-                var tileData = DecodeTileLayerData(encodingType, tileLayer);
-                var tiles = CreateTiles(map.RenderOrder, map.Width, map.Height, tileData);
-                tileLayer.Tiles = tiles;
+                    var tileData = DecodeTileLayerData(encodingType, tileLayer);
+                    var tiles = CreateTiles(map.RenderOrder, map.Width, map.Height, tileData);
+                    tileLayer.Tiles = tiles;
 
-                layer.Models = CreateTileLayerModels(map, tileLayer.Name, tiles).ToArray();
+                    layer.Models = CreateTileLayerModels(map, tileLayer.Name, tiles).ToArray();
 
-                ContentLogger.Log($"Processed tile layer '{tileLayer}': {tiles.Length} tiles");
+                    ContentLogger.Log($"Processed tile layer '{tileLayer}': {tiles.Length} tiles");
+                }
             }
 
             Environment.CurrentDirectory = previousWorkingDirectory;
-
             return map;
         }
 
-        private static List<TiledMapTileContent> DecodeTileLayerData(string encodingType,
-            TiledMapTileLayerContent tileLayer)
+        private static List<TiledMapTileContent> DecodeTileLayerData(string encodingType, TiledMapTileLayerContent tileLayer)
         {
             List<TiledMapTileContent> tiles;
 
@@ -90,8 +83,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             return tiles;
         }
 
-        private static TiledMapTile[] CreateTiles(TiledMapTileDrawOrderContent renderOrder, int mapWidth, int mapHeight,
-             List<TiledMapTileContent> tileData)
+        private static TiledMapTile[] CreateTiles(TiledMapTileDrawOrderContent renderOrder, int mapWidth, int mapHeight, List<TiledMapTileContent> tileData)
         {
             TiledMapTile[] tiles;
 
@@ -116,9 +108,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             return tiles.ToArray();
         }
 
-        private static IEnumerable<TiledMapTile> CreateTilesInLeftDownOrder(
-            // ReSharper disable once SuggestBaseTypeForParameter
-            List<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
+        private static IEnumerable<TiledMapTile> CreateTilesInLeftDownOrder(List<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
         {
             for (var y = 0; y < mapHeight; y++)
             for (var x = mapWidth - 1; x >= 0; x--)
@@ -132,9 +122,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             }
         }
 
-        private static IEnumerable<TiledMapTile> CreateTilesInLeftUpOrder(
-            // ReSharper disable once SuggestBaseTypeForParameter
-            List<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
+        private static IEnumerable<TiledMapTile> CreateTilesInLeftUpOrder(List<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
         {
             for (var y = mapHeight - 1; y >= 0; y--)
             for (var x = mapWidth - 1; x >= 0; x--)
@@ -148,9 +136,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             }
         }
 
-        private static IEnumerable<TiledMapTile> CreateTilesInRightDownOrder(
-            // ReSharper disable once SuggestBaseTypeForParameter
-            List<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
+        private static IEnumerable<TiledMapTile> CreateTilesInRightDownOrder(List<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
         {
             for (var y = 0; y < mapHeight; y++)
             for (var x = 0; x < mapWidth; x++)
@@ -164,9 +150,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             }
         }
 
-        private static IEnumerable<TiledMapTile> CreateTilesInRightUpOrder(
-            // ReSharper disable once SuggestBaseTypeForParameter
-            List<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
+        private static IEnumerable<TiledMapTile> CreateTilesInRightUpOrder(List<TiledMapTileContent> tileLayerData, int mapWidth, int mapHeight)
         {
             for (var y = mapHeight - 1; y >= 0; y--)
             for (var x = mapWidth - 1; x >= 0; x--)
@@ -180,8 +164,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             }
         }
 
-        private static List<TiledMapTileContent> DecodeBase64Data(TiledMapTileLayerDataContent data, int width,
-            int height)
+        private static List<TiledMapTileContent> DecodeBase64Data(TiledMapTileLayerDataContent data, int width, int height)
         {
             var tileList = new List<TiledMapTileContent>();
             var encodedData = data.Value.Trim();
@@ -242,8 +225,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             return model;
         }
 
-        private static IEnumerable<TiledMapLayerModelContent> CreateTileLayerModels(TiledMapContent map,
-            string layerName, IEnumerable<TiledMapTile> tiles)
+        private static IEnumerable<TiledMapLayerModelContent> CreateTileLayerModels(TiledMapContent map, string layerName, IEnumerable<TiledMapTile> tiles)
         {
             // the code below builds the geometry (triangles) for every tile
             // for every unique tileset used by a tile in a layer, we are going to end up with a different model (list of vertices and list of indices pair)

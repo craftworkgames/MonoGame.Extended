@@ -40,7 +40,7 @@ namespace Sandbox
 
         public override void Initialize()
         {
-            var button = Skin.Create<GuiButton>("white-button", text: "Open Dialog");
+            var button = new GuiButton() {Text = "Press Me"};//Skin.Create<GuiButton>("white-button", text: "Open Dialog");}
             button.Clicked += OpenDialog_Clicked;
             Controls.Add(button);
         }
@@ -79,7 +79,7 @@ namespace Sandbox
             var skin = GuiSkin.FromFile(Content, @"Content/adventure-gui-skin.json");
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _viewportAdapter.GetScaleMatrix);
 
-            _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer);
+            _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer, skin);
             _guiSystem.Screens.Add(new MyScreen(skin));
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);

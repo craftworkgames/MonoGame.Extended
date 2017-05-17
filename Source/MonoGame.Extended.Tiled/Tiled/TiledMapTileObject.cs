@@ -1,6 +1,5 @@
 using System.Linq;
 using Microsoft.Xna.Framework.Content;
-using MonoGame.Extended.Shapes;
 
 namespace MonoGame.Extended.Tiled
 {
@@ -15,6 +14,7 @@ namespace MonoGame.Extended.Tiled
             var tile = new TiledMapTile(globalTileIdentifierWithFlags);
             var tileset = map.GetTilesetByTileGlobalIdentifier(tile.GlobalIdentifier);
             var localTileIdentifier = tile.GlobalIdentifier - tileset.FirstGlobalIdentifier;
+
             TilesetTile = tileset.Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier);
         }
     }

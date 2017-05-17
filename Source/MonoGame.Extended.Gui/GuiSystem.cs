@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
@@ -12,6 +11,7 @@ namespace MonoGame.Extended.Gui
     {
         BitmapFont DefaultFont { get; }
         Vector2 CursorPosition { get; }
+        GuiSkin Skin { get; }
     }
 
     public class GuiSystem : IGuiContext, IRectangular
@@ -26,7 +26,7 @@ namespace MonoGame.Extended.Gui
         private GuiControl _focusedControl;
         private GuiControl _hoveredControl;
 
-        public GuiSystem(ViewportAdapter viewportAdapter, IGuiRenderer renderer)
+        public GuiSystem(ViewportAdapter viewportAdapter, IGuiRenderer renderer, GuiSkin skin)
         {
             _viewportAdapter = viewportAdapter;
             _renderer = renderer;
@@ -46,11 +46,15 @@ namespace MonoGame.Extended.Gui
             _keyboardListener.KeyTyped += (sender, args) => _focusedControl?.OnKeyTyped(this, args);
             _keyboardListener.KeyPressed += (sender, args) => _focusedControl?.OnKeyPressed(this, args);
 
+            Skin = skin;
+
             Screens = new GuiScreenCollection(this)
             {
                 OnItemAdded = screen => screen.Layout(this, _viewportAdapter.BoundingRectangle)
             };
         }
+
+        public GuiSkin Skin { get; }
 
         public GuiScreenCollection Screens { get; }
 

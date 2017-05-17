@@ -204,19 +204,19 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             }
         }
 
-        public static TiledMapObjectType GetObjectType(TiledMapObjectContent @object)
+        public static TiledMapObjectType GetObjectType(TiledMapObjectContent content)
         {
-            if (@object.GlobalIdentifier > 0)
+            if (content.GlobalIdentifier > 0)
                 return TiledMapObjectType.Tile;
 
-            if (@object.Ellipse != null)
+            if (content.Ellipse != null)
                 return TiledMapObjectType.Ellipse;
 
-            if (@object.Polygon != null)
+            if (content.Polygon != null)
                 return TiledMapObjectType.Polygon;
 
             // ReSharper disable once ConvertIfStatementToReturnStatement
-            if (@object.Polyline != null)
+            if (content.Polyline != null)
                 return TiledMapObjectType.Polyline;
 
             return TiledMapObjectType.Rectangle;

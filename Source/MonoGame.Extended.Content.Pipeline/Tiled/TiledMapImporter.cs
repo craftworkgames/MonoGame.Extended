@@ -42,15 +42,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 {
                     var tileset = map.Tilesets[i];
 
-                    if (string.IsNullOrWhiteSpace(tileset.Source))
-                        continue;
-
-                    var tilesetFilePath = GetTilesetFilePath(mapFilePath, tileset);
-                    map.Tilesets[i] = ImportTileset(tilesetFilePath, tilesetSerializer, tileset);
+                    if (!string.IsNullOrWhiteSpace(tileset.Source))
+                    {
+                        var tilesetFilePath = GetTilesetFilePath(mapFilePath, tileset);
+                        map.Tilesets[i] = ImportTileset(tilesetFilePath, tilesetSerializer, tileset);
+                    }
                 }
 
                 map.Name = mapFilePath;
-
                 return map;
             }
         }
