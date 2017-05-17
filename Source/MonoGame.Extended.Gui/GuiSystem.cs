@@ -60,7 +60,6 @@ namespace MonoGame.Extended.Gui
 
         private void InitializeScreen(GuiScreen screen)
         {
-            screen.Initialize();
             screen.Layout(this, BoundingRectangle);
         }
 

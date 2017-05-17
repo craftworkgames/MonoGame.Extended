@@ -14,15 +14,15 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        protected GuiControl(string style)
+        protected GuiControl(GuiControlStyle style)
         {
-            Style = style;
             Color = Color.White;
             TextColor = Color.White;
             IsEnabled = true;
             IsVisible = true;
             Controls = new GuiControlCollection(this);
             Origin = Vector2.Zero;
+            style?.Apply(this);
         }
 
         protected GuiControl(TextureRegion2D backgroundRegion)
@@ -30,8 +30,6 @@ namespace MonoGame.Extended.Gui.Controls
         {
             BackgroundRegion = backgroundRegion;
         }
-        
-        public string Style { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Thickness Margin { get; set; }

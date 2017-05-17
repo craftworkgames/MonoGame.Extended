@@ -21,7 +21,7 @@ namespace Sandbox
             Width = 300;
             Height = 200;
 
-            var button = new GuiButton
+            var button = new GuiButton(Skin)
             {
                 Width = 100,
                 Height = 32,
@@ -29,6 +29,9 @@ namespace Sandbox
                 VerticalAlignment = VerticalAlignment.Bottom
             };
             Controls.Add(button);
+
+            var label = new GuiLabel("This is just a boring dialog.");
+            Controls.Add(label);
         }
     }
 
@@ -37,7 +40,7 @@ namespace Sandbox
         public MyScreen(GuiSkin skin) 
             : base(skin)
         {
-            var button = new GuiButton { Text = "Press Me" };
+            var button = new GuiButton(Skin) { Text = "Press Me" };
             button.Clicked += OpenDialog_Clicked;
             Controls.Add(button);
         }

@@ -15,14 +15,7 @@ namespace MonoGame.Extended.Gui
         {
             Skin = skin;
             Controls = new GuiControlCollection { ItemAdded = c => IsLayoutRequired = true };
-            Windows = new GuiWindowCollection(this)
-            {
-                ItemAdded = w =>
-                {
-                    ApplyStyles(w.Controls);
-                    IsLayoutRequired = true;
-                }
-            };
+            Windows = new GuiWindowCollection(this) { ItemAdded = w => IsLayoutRequired = true };
         }
 
         [JsonProperty(Order = 1)]
@@ -41,34 +34,6 @@ namespace MonoGame.Extended.Gui
 
         [JsonIgnore]
         public bool IsLayoutRequired { get; private set; }
-
-        public void Initialize()
-        {
-            ApplyStyles(Controls);
-
-            foreach (var window in Windows)
-                ApplyStyles(window.Controls);
-        }
-
-        private void ApplyStyles(GuiControlCollection controls)
-        {
-            foreach (var control in controls)
-            {
-                if (control.Style != null)
-                {
-                    var style = Skin.GetStyle(control.Style);
-                    style?.Apply(control);
-                }
-                else
-                {
-                    var controlType = control.GetType();
-                    var style = Skin.GetStyle(controlType);
-                    style?.Apply(control);
-                }
-
-                ApplyStyles(control.Controls);
-            }
-        }
 
         public virtual void Update(GameTime gameTime) { }
 
