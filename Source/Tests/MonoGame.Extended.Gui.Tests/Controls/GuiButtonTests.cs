@@ -17,7 +17,7 @@ namespace MonoGame.Extended.Gui.Tests.Controls
         {
             var availableSize = new Size2(800, 480);
             var context = Substitute.For<IGuiContext>();
-            var button = new GuiButton(null);
+            var button = new GuiButton();
             var desiredSize = button.GetDesiredSize(context, availableSize);
 
             Assert.That(desiredSize, Is.EqualTo(Size2.Empty));

@@ -5,6 +5,11 @@ namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiButton : GuiControl
     {
+        public GuiButton()
+            : base(style: null)
+        {
+        }
+
         public GuiButton(GuiSkin skin)
             : base(skin.GetStyle(typeof(GuiButton)))
         {

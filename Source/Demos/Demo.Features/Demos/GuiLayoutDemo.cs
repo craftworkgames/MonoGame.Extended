@@ -19,15 +19,7 @@ namespace Demo.Features.Demos
         {
             _texture = new Texture2D(graphicsDevice, 1, 1);
             _texture.SetData(new[] { new Color(Color.Black, 0.5f) });
-        }
 
-        protected override void Dispose(bool isDisposing)
-        {
-            _texture.Dispose();
-        }
-
-        public override void Initialize()
-        {
             var backgroundRegion = new TextureRegion2D(_texture);
 
             var uniformGrid = new GuiUniformGrid(backgroundRegion)
@@ -83,6 +75,11 @@ namespace Demo.Features.Demos
 
             var listBox = FindControl<GuiListBox>("DisplayModesListBox");
             listBox.Items.AddRange(GraphicsAdapter.DefaultAdapter.SupportedDisplayModes.Select(i => $"{i.Width}x{i.Height}"));
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            _texture.Dispose();
         }
     }
 
