@@ -40,9 +40,24 @@ namespace Sandbox
         public MyScreen(GuiSkin skin) 
             : base(skin)
         {
-            var button = new GuiButton(Skin) { Text = "Press Me" };
-            button.Clicked += OpenDialog_Clicked;
-            Controls.Add(button);
+            Controls.Add(new GuiUniformGrid(Skin)
+            {
+                Columns = 2,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Top,
+                Controls =
+                {
+                    new GuiButton(Skin) {Text = "Play"},
+                    new GuiButton(Skin) {Text = "Play"},
+                    new GuiButton(Skin) {Text = "Play"},
+                    new GuiButton(Skin) {Text = "Play"},
+                    new GuiButton(Skin) {Text = "Play"}
+                }
+            });
+
+            //var button = new GuiButton(Skin) { Text = "Press Me" };
+            //button.Clicked += OpenDialog_Clicked;
+            //Controls.Add(button);
 
             //var textBox = new GuiTextBox(Skin);
             //Controls.Add(textBox);

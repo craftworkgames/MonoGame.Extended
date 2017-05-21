@@ -16,6 +16,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected GuiControl(GuiSkin skin)
         {
+            Skin = skin;
             Color = Color.White;
             TextColor = Color.White;
             IsEnabled = true;
@@ -26,6 +27,9 @@ namespace MonoGame.Extended.Gui.Controls
             var style = skin?.GetStyle(GetType());
             style?.Apply(this);
         }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public GuiSkin Skin { get; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Thickness Margin { get; set; }
