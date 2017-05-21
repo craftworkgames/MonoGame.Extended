@@ -47,20 +47,23 @@ namespace Sandbox
                 VerticalAlignment = VerticalAlignment.Top,
                 Controls =
                 {
-                    new GuiButton(Skin) {Text = "Play"},
-                    new GuiButton(Skin) {Text = "Play"},
-                    new GuiButton(Skin) {Text = "Play"},
-                    new GuiButton(Skin) {Text = "Play"},
-                    new GuiButton(Skin) {Text = "Play"}
+                    new GuiLabel(Skin, "A"),
+                    new GuiUniformGrid(Skin)
+                    {
+                        Controls =
+                        {
+                            new GuiTextBox(Skin) {Text = "Play"},
+                            new GuiTextBox(Skin) {Text = "Play"},
+                        }
+                    },
+                    new GuiLabel(Skin, "B"),
+                    new GuiTextBox(Skin, "Text")
                 }
             });
 
-            //var button = new GuiButton(Skin) { Text = "Press Me" };
-            //button.Clicked += OpenDialog_Clicked;
-            //Controls.Add(button);
-
-            //var textBox = new GuiTextBox(Skin);
-            //Controls.Add(textBox);
+            var button = new GuiButton(Skin) { Text = "Press Me" };
+            button.Clicked += OpenDialog_Clicked;
+            Controls.Add(button);
         }
 
         private void OpenDialog_Clicked(object sender, EventArgs eventArgs)
