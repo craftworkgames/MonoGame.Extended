@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input.InputListeners;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -14,8 +13,8 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public GuiListBox(TextureRegion2D backgroundRegion)
-            : base(backgroundRegion)
+        public GuiListBox(GuiSkin skin) 
+            : base(skin)
         {
         }
 

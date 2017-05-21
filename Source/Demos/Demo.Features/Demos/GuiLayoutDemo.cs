@@ -22,12 +22,12 @@ namespace Demo.Features.Demos
 
             var backgroundRegion = new TextureRegion2D(_texture);
 
-            var uniformGrid = new GuiUniformGrid(backgroundRegion)
+            var uniformGrid = new GuiUniformGrid(skin)
             {
                 Text = "Uniform Grid",
                 Controls =
                 {
-                    new GuiCanvas(backgroundRegion)
+                    new GuiCanvas(skin)
                     {
                         Text = "Canvas",
                         Controls =
@@ -37,7 +37,7 @@ namespace Demo.Features.Demos
                             Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; c.Position = new Vector2(100, 100); }),
                         }
                     },
-                    new GuiStackPanel(backgroundRegion)
+                    new GuiStackPanel(skin)
                     {
                         Text = "Stack Panel (Vertical)",
                         Orientation = GuiOrientation.Vertical,
@@ -49,7 +49,7 @@ namespace Demo.Features.Demos
                             Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 4"; }),
                         }
                     },
-                    new GuiStackPanel(backgroundRegion)
+                    new GuiStackPanel(skin)
                     {
                         Text = "Stack Panel (Horizontal)",
                         Orientation = GuiOrientation.Horizontal,
@@ -61,7 +61,7 @@ namespace Demo.Features.Demos
                             Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; c.Width = 80; }),
                         }
                     },
-                    new GuiListBox(backgroundRegion)
+                    new GuiListBox(skin)
                     {
                         Name = "DisplayModesListBox"
                     }

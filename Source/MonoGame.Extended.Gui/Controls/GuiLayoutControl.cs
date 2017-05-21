@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.TextureAtlases;
-
-namespace MonoGame.Extended.Gui.Controls
+﻿namespace MonoGame.Extended.Gui.Controls
 {
     public abstract class GuiLayoutControl : GuiControl
     {
@@ -10,10 +7,9 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        protected GuiLayoutControl(TextureRegion2D backgroundRegion) 
-            : base(backgroundRegion)
+        protected GuiLayoutControl(GuiSkin skin) 
+            : base(skin)
         {
-            Origin = Vector2.Zero;
         }
 
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)

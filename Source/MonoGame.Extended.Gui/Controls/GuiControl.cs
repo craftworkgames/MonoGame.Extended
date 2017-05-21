@@ -10,11 +10,11 @@ namespace MonoGame.Extended.Gui.Controls
     public abstract class GuiControl : GuiElement<GuiControl>, IMovable, ISizable, IRectangular
     {
         protected GuiControl()
-           : this(style: null)
+           : this(skin: null)
         {
         }
 
-        protected GuiControl(GuiControlStyle style)
+        protected GuiControl(GuiSkin skin)
         {
             Color = Color.White;
             TextColor = Color.White;
@@ -22,13 +22,9 @@ namespace MonoGame.Extended.Gui.Controls
             IsVisible = true;
             Controls = new GuiControlCollection(this);
             Origin = Vector2.Zero;
-            style?.Apply(this);
-        }
 
-        protected GuiControl(TextureRegion2D backgroundRegion)
-            : this()
-        {
-            BackgroundRegion = backgroundRegion;
+            var style = skin?.GetStyle(GetType());
+            style?.Apply(this);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

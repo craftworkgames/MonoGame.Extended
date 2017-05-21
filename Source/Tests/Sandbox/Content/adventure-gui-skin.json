@@ -38,7 +38,6 @@
   ],
   "Styles": [
     {
-      "Name": "white-button",
       "Type": "GuiButton",
       "Margin": "5 2",
       "BackgroundRegion": "buttonLong_grey",
@@ -99,7 +98,6 @@
       "BackgroundRegion": "monogame-title"
     },
     {
-      "Name": "text-box",
       "Type": "GuiTextBox",
       "ClipPadding": "8 0",
       "BackgroundRegion": "grey_textBox",

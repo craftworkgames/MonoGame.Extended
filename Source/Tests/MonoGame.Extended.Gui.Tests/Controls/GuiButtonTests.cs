@@ -29,7 +29,7 @@ namespace MonoGame.Extended.Gui.Tests.Controls
             var availableSize = new Size2(800, 480);
             var context = Substitute.For<IGuiContext>();
             var backgroundRegion = MockTextureRegion();
-            var button = new GuiButton(backgroundRegion);
+            var button = new GuiButton { BackgroundRegion = backgroundRegion };
             var desiredSize = button.GetDesiredSize(context, availableSize);
 
             Assert.That(desiredSize, Is.EqualTo(backgroundRegion.Size));
@@ -42,7 +42,7 @@ namespace MonoGame.Extended.Gui.Tests.Controls
             var context = Substitute.For<IGuiContext>();
             var texture = new Texture2D(new TestGraphicsDevice(), 512, 512);
             var backgroundRegion = new NinePatchRegion2D(new TextureRegion2D(texture), new Thickness(10, 20));
-            var button = new GuiButton(backgroundRegion);
+            var button = new GuiButton() { BackgroundRegion = backgroundRegion };
             var desiredSize = button.GetDesiredSize(context, availableSize);
 
             Assert.That(desiredSize, Is.EqualTo(new Size2(20, 40)));

@@ -10,8 +10,8 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public GuiProgressBar(TextureRegion2D backgroundRegion)
-            : base(backgroundRegion)
+        public GuiProgressBar(GuiSkin skin) 
+            : base(skin)
         {
         }
 

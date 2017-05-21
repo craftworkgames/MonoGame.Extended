@@ -30,7 +30,7 @@ namespace Sandbox
             };
             Controls.Add(button);
 
-            var label = new GuiLabel("This is just a boring dialog.");
+            var label = new GuiLabel(Skin, "This is just a boring dialog.");
             Controls.Add(label);
         }
     }
@@ -43,6 +43,9 @@ namespace Sandbox
             var button = new GuiButton(Skin) { Text = "Press Me" };
             button.Clicked += OpenDialog_Clicked;
             Controls.Add(button);
+
+            //var textBox = new GuiTextBox(Skin);
+            //Controls.Add(textBox);
         }
 
         private void OpenDialog_Clicked(object sender, EventArgs eventArgs)

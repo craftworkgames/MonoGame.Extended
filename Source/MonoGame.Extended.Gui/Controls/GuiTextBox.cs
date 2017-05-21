@@ -2,26 +2,20 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input.InputListeners;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiTextBox : GuiControl
     {
         public GuiTextBox()
-            : this(backgroundRegion: null, text: string.Empty)
+            : this(null)
         {
         }
 
-        public GuiTextBox(TextureRegion2D backgroundRegion)
-            : this(backgroundRegion: backgroundRegion, text: string.Empty)
+        public GuiTextBox(GuiSkin skin, string text = null)
+            : base(skin)
         {
-        }
-
-        public GuiTextBox(TextureRegion2D backgroundRegion, string text)
-            : base(backgroundRegion)
-        {
-            Text = text;
+            Text = text ?? string.Empty;
         }
 
         public int SelectionStart { get; set; }

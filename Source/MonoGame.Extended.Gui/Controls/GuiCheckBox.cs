@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -10,8 +9,8 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public GuiCheckBox(TextureRegion2D backgroundRegion)
-            : base(backgroundRegion)
+        public GuiCheckBox(GuiSkin skin) 
+            : base(skin)
         {
         }
 

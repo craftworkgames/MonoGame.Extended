@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -11,8 +10,8 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public GuiUniformGrid(TextureRegion2D backgroundRegion)
-            : base(backgroundRegion)
+        public GuiUniformGrid(GuiSkin skin) 
+            : base(skin)
         {
         }
 

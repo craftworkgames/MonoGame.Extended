@@ -1,22 +1,16 @@
 ﻿using System;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiButton : GuiControl
     {
         public GuiButton()
-            : base(style: null)
+            : base(null)
         {
         }
 
         public GuiButton(GuiSkin skin)
-            : base(skin.GetStyle(typeof(GuiButton)))
-        {
-        }
-
-        public GuiButton(TextureRegion2D backgroundRegion)
-            : base(backgroundRegion)
+            : base(skin)
         {
         }
 

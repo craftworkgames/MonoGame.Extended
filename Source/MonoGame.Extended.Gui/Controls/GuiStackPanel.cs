@@ -1,6 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -11,8 +9,8 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public GuiStackPanel(TextureRegion2D backgroundRegion)
-            : base(backgroundRegion)
+        public GuiStackPanel(GuiSkin skin) 
+            : base(skin)
         {
         }
 
