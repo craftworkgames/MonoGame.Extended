@@ -33,20 +33,23 @@ namespace MonoGame.Extended.Gui.Controls
         {
             var font = Font ?? context.DefaultFont;
             var textInfo = GetTextInfo(context, Text, BoundingRectangle, HorizontalAlignment.Centre, VerticalAlignment.Centre);
-            var glyphs = font.GetGlyphs(textInfo.Text, textInfo.Position).ToArray();
+            var i = 0;
 
-            for (var i = 0; i < glyphs.Length; i++)
+            foreach (var glyph in font.GetGlyphs(textInfo.Text, textInfo.Position))
             {
-                var glyph = glyphs[i];
-                var glyphMiddle = (int)(glyph.Position.X + glyph.FontRegion.Width * 0.5f);
+                var fontRegionWidth = glyph.FontRegion?.Width ?? 0;
+                var glyphMiddle = (int)(glyph.Position.X + fontRegionWidth * 0.5f);
 
                 if (position.X >= glyphMiddle)
+                {
+                    i++;
                     continue;
+                }
 
                 return i;
             }
 
-            return glyphs.Length;
+            return i;
         }
 
         public override void OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
