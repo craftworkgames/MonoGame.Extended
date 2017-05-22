@@ -38,6 +38,10 @@
   ],
   "Styles": [
     {
+      "Type": "MyPanel",
+      "VerticalTextAlignment": "Bottom"
+    },
+    {
       "Type": "GuiButton",
       "Margin": "5 2",
       "BackgroundRegion": "buttonLong_grey",

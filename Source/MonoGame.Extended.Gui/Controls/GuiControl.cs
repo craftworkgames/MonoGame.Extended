@@ -57,6 +57,8 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiControlCollection Controls { get; }
         public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Stretch;
         public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Stretch;
+        public HorizontalAlignment HorizontalTextAlignment { get; set; } = HorizontalAlignment.Centre;
+        public VerticalAlignment VerticalTextAlignment { get; set; } = VerticalAlignment.Centre;
 
         private string _text;
         public string Text
@@ -157,7 +159,7 @@ namespace MonoGame.Extended.Gui.Controls
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             DrawBackground(context, renderer, deltaSeconds);
-            DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, Text, BoundingRectangle, HorizontalAlignment.Centre, VerticalAlignment.Centre));
+            DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, Text, BoundingRectangle, HorizontalTextAlignment, VerticalTextAlignment));
         }
 
         protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment)

@@ -13,6 +13,13 @@ using MonoGame.Extended.ViewportAdapters;
 // Any code found here should be considered experimental work in progress.
 namespace Sandbox
 {
+    public class MyPanel : GuiUniformGrid
+    {
+        public MyPanel(GuiSkin skin) : base(skin)
+        {
+        }
+    }
+
     public class MyWindow : GuiWindow
     {
         public MyWindow(GuiScreen parent)
@@ -20,6 +27,8 @@ namespace Sandbox
         {
             Width = 300;
             Height = 200;
+
+            Controls.Add(new MyPanel(Skin) { Text = "My Panel", HorizontalTextAlignment = HorizontalAlignment.Right });
 
             var button = new GuiButton(Skin)
             {
@@ -37,7 +46,7 @@ namespace Sandbox
 
     public class MyScreen : GuiScreen
     {
-        public MyScreen(GuiSkin skin) 
+        public MyScreen(GuiSkin skin)
             : base(skin)
         {
             Controls.Add(new GuiUniformGrid(Skin)
@@ -98,14 +107,14 @@ namespace Sandbox
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, _graphicsDeviceManager.PreferredBackBufferWidth, _graphicsDeviceManager.PreferredBackBufferHeight);
             _camera = new Camera2D(_viewportAdapter);
 
-            var skin = GuiSkin.FromFile(Content, @"Content/adventure-gui-skin.json");
+            var skin = GuiSkin.FromFile(Content, @"Content/adventure-gui-skin.json", typeof(MyPanel));
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _viewportAdapter.GetScaleMatrix);
 
             _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer);
             _guiSystem.Screens.Add(new MyScreen(skin));
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
             var particleTexture = new Texture2D(GraphicsDevice, 1, 1);
             particleTexture.SetData(new[] { Color.White });
 

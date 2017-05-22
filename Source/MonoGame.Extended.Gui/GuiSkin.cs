@@ -56,17 +56,17 @@ namespace MonoGame.Extended.Gui
             return _styles.FirstOrDefault(s => s.TargetType == controlType);
         }
 
-        public static GuiSkin FromFile(ContentManager contentManager, string path)
+        public static GuiSkin FromFile(ContentManager contentManager, string path, params Type[] customControlTypes)
         {
             using (var stream = TitleContainer.OpenStream(path))
             {
-                return FromStream(contentManager, stream);
+                return FromStream(contentManager, stream, customControlTypes);
             }
         }
 
-        public static GuiSkin FromStream(ContentManager contentManager, Stream stream)
+        public static GuiSkin FromStream(ContentManager contentManager, Stream stream, params Type[] customControlTypes)
         {
-            var skinSerializer = new GuiJsonSerializer(contentManager);
+            var skinSerializer = new GuiJsonSerializer(contentManager, customControlTypes);
 
             using (var streamReader = new StreamReader(stream))
             using (var jsonReader = new JsonTextReader(streamReader))

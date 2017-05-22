@@ -15,12 +15,13 @@ namespace MonoGame.Extended.Gui.Serialization
         private const string _typeProperty = "Type";
         private const string _nameProperty = "Name";
 
-        public GuiControlStyleJsonConverter()
+        public GuiControlStyleJsonConverter(params Type[] customControlTypes)
         {
             _controlTypes = typeof(GuiControl)
                 .GetTypeInfo()
                 .Assembly
                 .ExportedTypes
+                .Concat(customControlTypes)
                 .Where(t => t.GetTypeInfo().IsSubclassOf(typeof(GuiControl)))
                 .ToDictionary(t => t.Name);
         }
