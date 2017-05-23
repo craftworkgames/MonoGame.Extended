@@ -9,11 +9,16 @@ namespace MonoGame.Extended
     {
         public Range(T min, T max)
         {
-            if ((min.CompareTo(max) > 0) || (max.CompareTo(min) < 0))
+            if (min.CompareTo(max) > 0 || max.CompareTo(min) < 0)
                 throw new ArgumentException("Min has to be smaller than or equal to max.");
 
             Min = min;
             Max = max;
+        }
+
+        public Range(T value)
+            : this(value, value)
+        {
         }
 
         /// <summary>
