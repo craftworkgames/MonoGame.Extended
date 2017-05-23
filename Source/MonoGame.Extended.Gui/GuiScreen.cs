@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Serialization;
 using Newtonsoft.Json;
