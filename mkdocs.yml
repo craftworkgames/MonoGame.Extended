@@ -14,6 +14,7 @@ pages:
         - Camera2D: MonoGame.Extended/Camera2D.md
         - Collections: MonoGame.Extended/Collections.md
         - Object Pooling: MonoGame.Extended/Object-Pooling.md
+        - Screens: MonoGame.Extended/Screens.md
     - Animation:
         - Animated Sprites: MonoGame.Extended.Animation/Animated-Sprites.md
 - Support: Community-and-Support.md
