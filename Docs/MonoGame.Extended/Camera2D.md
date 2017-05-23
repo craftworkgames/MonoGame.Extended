@@ -59,7 +59,7 @@ Moves the camera to a new position. (see [usage](#moveUsage))
 Parameters
 * direction - The Vector2 that will become the new [Position](#position) of the camera.
 
-## Tutorial
+# Tutorial
 
 The purpose of the camera is to create a transformation matrix that changes the way a sprite batch is rendered.
 
