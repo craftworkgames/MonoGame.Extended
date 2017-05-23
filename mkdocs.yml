@@ -5,3 +5,4 @@ pages:
 - Installation: installation.md
 - Core:
     - BitmapFonts: MonoGame.Extended/BitmapFonts.md
+    - Collections: MonoGame.Extended/Collections.md
