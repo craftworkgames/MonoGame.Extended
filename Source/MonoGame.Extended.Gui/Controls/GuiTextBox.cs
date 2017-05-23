@@ -77,11 +77,17 @@ namespace MonoGame.Extended.Gui.Controls
                     if (SelectionStart < Text.Length)
                         SelectionStart++;
                     break;
+                case Keys.Home:
+                    SelectionStart = 0;
+                    break;
+                case Keys.End:
+                    SelectionStart = Text.Length;
+                    break;
                 default:
                     if (args.Character != null)
                     {
+                        Text = Text.Insert(SelectionStart, args.Character.ToString());
                         SelectionStart++;
-                        Text += args.Character;
                     }
                     break;
             }

@@ -3,3 +3,5 @@ repo_url: https://github.com/craftworkgames/MonoGame.Extended
 pages:
 - Home: index.md
 - Installation: installation.md
+- Core:
+    - BitmapFonts: MonoGame.Extended/BitmapFonts.md

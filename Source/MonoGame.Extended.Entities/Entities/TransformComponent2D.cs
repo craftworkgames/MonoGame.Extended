@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 namespace MonoGame.Extended.Entities
 {
     [EntityComponent]
-    public class TransformComponent2D : EntityComponent
+    public class TransformComponent2D : EntityComponent, IMovable, IRotatable, IScalable
     {
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created
         private Matrix2D _localMatrix; // model space to local space
@@ -148,6 +148,7 @@ namespace MonoGame.Extended.Entities
 
             RecalculateLocalMatrixIfNecessary();
             RecalculateWorldMatrix(ref _localMatrix, out _worldMatrix);
+
             _flags &= ~TransformFlags.WorldMatrixIsDirty;
         }
 
@@ -167,7 +168,7 @@ namespace MonoGame.Extended.Entities
             if (Parent != null)
             {
                 Parent.GetWorldMatrix(out matrix);
-                Matrix2D.Multiply(ref matrix, ref localMatrix, out matrix);
+                Matrix2D.Multiply(ref localMatrix, ref matrix, out matrix);
             }
             else
             {
@@ -177,18 +178,9 @@ namespace MonoGame.Extended.Entities
 
         private void RecalculateLocalMatrix(out Matrix2D matrix)
         {
-            if (Parent != null)
-            {
-                var parentPosition = Parent.Position;
-                matrix = Matrix2D.CreateTranslation(-parentPosition) * Matrix2D.CreateScale(_scale) *
-                         Matrix2D.CreateRotationZ(-_rotation) * Matrix2D.CreateTranslation(parentPosition) *
-                         Matrix2D.CreateTranslation(_position);
-            }
-            else
-            {
-                matrix = Matrix2D.CreateScale(_scale) * Matrix2D.CreateRotationZ(-_rotation) *
-                         Matrix2D.CreateTranslation(_position);
-            }
+            matrix = Matrix2D.CreateScale(_scale) *
+                     Matrix2D.CreateRotationZ(_rotation) *
+                     Matrix2D.CreateTranslation(_position);
         }
 
         [Flags]
