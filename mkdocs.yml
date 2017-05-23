@@ -11,5 +11,6 @@ pages:
 - Core:
     - BitmapFonts: MonoGame.Extended/BitmapFonts.md
     - Collections: MonoGame.Extended/Collections.md
+    - Object Pooling: MonoGame.Extended/Object-Pooling.md
 - Support: Community-and-Support.md
 
