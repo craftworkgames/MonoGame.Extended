@@ -5,6 +5,7 @@ pages:
 - Home: index.md
 - Installation:
     - NuGet: installation.md
+    - NuGet Pre-Release: NuGet-Pre-Release.md
     - Building from Source: Building-from-Source.md
     - Building the MonoGame PCL: Build-MonoGame-PCL.md
 - Core:
