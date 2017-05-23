@@ -11,6 +11,7 @@ pages:
 - Docs:
     - Core:
         - BitmapFonts: MonoGame.Extended/BitmapFonts.md
+        - Camera2D: MonoGame.Extended/Camera2D.md
         - Collections: MonoGame.Extended/Collections.md
         - Object Pooling: MonoGame.Extended/Object-Pooling.md
     - Animation:
