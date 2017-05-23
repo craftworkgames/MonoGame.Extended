@@ -8,9 +8,12 @@ pages:
     - NuGet Pre-Release: NuGet-Pre-Release.md
     - Building from Source: Building-from-Source.md
     - Building the MonoGame PCL: Build-MonoGame-PCL.md
-- Core:
-    - BitmapFonts: MonoGame.Extended/BitmapFonts.md
-    - Collections: MonoGame.Extended/Collections.md
-    - Object Pooling: MonoGame.Extended/Object-Pooling.md
+- Docs:
+    - Core:
+        - BitmapFonts: MonoGame.Extended/BitmapFonts.md
+        - Collections: MonoGame.Extended/Collections.md
+        - Object Pooling: MonoGame.Extended/Object-Pooling.md
+    - Animation:
+        - Animated Sprites: MonoGame.Extended.Animation/Animated-Sprites.md
 - Support: Community-and-Support.md
 
