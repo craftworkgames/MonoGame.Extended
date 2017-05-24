@@ -44,9 +44,10 @@ A KeyedCollection is used like a `Dictionary<>`, except you provide a function t
 
 Adds `Shuffle(Random)` to all `IList<>` classes.
 
-## ObjectPool
+## [Object Pooling](Object-Pooling.md)
 
 An `ObjectPool<T>` allows reuse of memory for a group of items to avoid Garbage Collection.
+More information is in the [Object Pooling](Object-Pooling.md) documentation.
 
 ## ObservableCollection
 
