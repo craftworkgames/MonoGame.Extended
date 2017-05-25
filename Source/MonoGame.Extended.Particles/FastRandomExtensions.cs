@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended.Particles
+﻿using MonoGame.Extended;
+
+namespace MonoGame.Extended.Particles
 {
     public static class FastRandomExtensions
     {
