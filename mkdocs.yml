@@ -15,6 +15,7 @@ pages:
         - Content Extensions: MonoGame.Extended/Content.md
         - Collections: MonoGame.Extended/Collections.md
         - Object Pooling: MonoGame.Extended/Object-Pooling.md
+        - Serialization: MonoGame.Extended/Serialization.md
         - Screens: MonoGame.Extended/Screens.md
     - Animation:
         - Animated Sprites: MonoGame.Extended.Animation/Animated-Sprites.md

@@ -32,7 +32,7 @@ MonoGame.Extended also provides another DLL that is to be used with the [MonoGam
 ## Core
 The `MonoGame.Extended` core library contains common classes and interfaces the other MonoGame.Extended libraries reference.
 
-By itself, it creates a solid foundation with sprites, [bitmap fonts](MonoGame.Extended/BitmapFonts.md), [collections](MonoGame.Extended/Collections.md), serialization, shapes, texture atlases, viewport adapters, [cameras](MonoGame.Extended/Camera2D.md), timers, math, [object pooling](MonoGame.Extended/Object-Pooling.md), [screens](MonoGame.Extended/Screens.md), and diagnostics.
+By itself, it creates a solid foundation with sprites, [bitmap fonts](MonoGame.Extended/BitmapFonts.md), [collections](MonoGame.Extended/Collections.md), [serialization](MonoGame.Extended/Serialization.md), shapes, texture atlases, viewport adapters, [cameras](MonoGame.Extended/Camera2D.md), timers, math, [object pooling](MonoGame.Extended/Object-Pooling.md), [screens](MonoGame.Extended/Screens.md), and diagnostics.
 
 ## Animations
 The `MonoGame.Extended.Animations` library contains classes useful for 2D [sprite sheet animations](MonoGame.Extended.Animation/Animated-Sprites.md).
