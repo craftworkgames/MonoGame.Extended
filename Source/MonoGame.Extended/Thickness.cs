@@ -58,23 +58,29 @@ namespace MonoGame.Extended
             return Left == other.Left && Right == other.Right && Top == other.Top && Bottom == other.Bottom;
         }
 
+        public static Thickness FromValues(int[] values)
+        {
+            switch (values.Length)
+            {
+                case 1:
+                    return new Thickness(values[0]);
+                case 2:
+                    return new Thickness(values[0], values[1]);
+                case 4:
+                    return new Thickness(values[0], values[1], values[2], values[3]);
+                default:
+                    throw new FormatException("Invalid thickness");
+            }
+        }
+
         public static Thickness Parse(string value)
         {
-            var ints = value.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)
+            var values = value
+                .Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
                 .ToArray();
 
-            switch (ints.Length)
-            {
-                case 1:
-                    return new Thickness(ints[0]);
-                case 2:
-                    return new Thickness(ints[0], ints[1]);
-                case 4:
-                    return new Thickness(ints[0], ints[1], ints[2], ints[3]);
-                default:
-                    throw new FormatException($"Invalid thickness {value}");
-            }
+            return FromValues(values);
         }
 
         public override string ToString()

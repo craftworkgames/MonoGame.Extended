@@ -11,7 +11,7 @@ namespace MonoGame.Extended.Gui
     {
         public static Size2 GetSizeWithMargins(GuiControl control, IGuiContext context, Size2 availableSize)
         {
-            return control.GetDesiredSize(context, availableSize) + new Size2(control.Margin.Left + control.Margin.Right, control.Margin.Top + control.Margin.Bottom);
+            return control.GetDesiredSize(context, availableSize) + control.Margin.Size;
         }
 
         public static void PlaceControl(IGuiContext context, GuiControl control, float x, float y, float width, float height)

@@ -78,23 +78,19 @@ namespace MonoGame.Extended.Gui.Controls
 
         public Size2 GetDesiredSize(IGuiContext context, Size2 availableSize)
         {
-            return CalculateDesiredSize(context, availableSize);
-        }
-
-        protected virtual Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
-        {
-            var minimumSize = Size2.Empty;
+            var fixedSize = Size;
+            var desiredSize = CalculateDesiredSize(context, availableSize);
             var ninePatch = BackgroundRegion as NinePatchRegion2D;
 
             if (ninePatch != null)
             {
-                minimumSize.Width += ninePatch.LeftPadding + ninePatch.RightPadding;
-                minimumSize.Height += ninePatch.TopPadding + ninePatch.BottomPadding;
+                desiredSize.Width = Math.Max(desiredSize.Width, ninePatch.Padding.Size.Width);
+                desiredSize.Height = Math.Max(desiredSize.Height, ninePatch.Padding.Size.Height);
             }
-            else if(BackgroundRegion != null)
+            else if (BackgroundRegion != null)
             {
-                minimumSize.Width += BackgroundRegion.Width;
-                minimumSize.Height += BackgroundRegion.Height;
+                desiredSize.Width = Math.Max(desiredSize.Width, BackgroundRegion.Width);
+                desiredSize.Height = Math.Max(desiredSize.Height, BackgroundRegion.Height);
             }
 
             var font = Font ?? context.DefaultFont;
@@ -102,13 +98,21 @@ namespace MonoGame.Extended.Gui.Controls
             if (font != null && Text != null)
             {
                 var textSize = font.MeasureString(Text);
-                minimumSize.Width += textSize.Width;
-                minimumSize.Height += textSize.Height;
+                desiredSize.Width += textSize.Width;
+                desiredSize.Height += textSize.Height;
             }
 
+            desiredSize.Width = Math.Min(desiredSize.Width, availableSize.Width);
+            desiredSize.Height = Math.Min(desiredSize.Height, availableSize.Height);
+
             // ReSharper disable CompareOfFloatsByEqualityOperator
-            return new Size2(Size.Width == 0 ? minimumSize.Width : Size.Width, Size.Height == 0 ? minimumSize.Height : Size.Height);
+            return new Size2(fixedSize.Width == 0 ? desiredSize.Width : fixedSize.Width, fixedSize.Height == 0 ? desiredSize.Height : fixedSize.Height);
             // ReSharper restore CompareOfFloatsByEqualityOperator
+        }
+
+        protected virtual Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
+        {
+            return Size2.Empty;
         }
 
         private bool _isEnabled;

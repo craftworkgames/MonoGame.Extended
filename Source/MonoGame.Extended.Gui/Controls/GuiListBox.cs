@@ -97,15 +97,14 @@ namespace MonoGame.Extended.Gui.Controls
             for (var i = _firstIndex; i < Items.Count; i++)
             {
                 var itemRectangle = GetItemRectangle(context, i - _firstIndex);
-
-                if (SelectedIndex == i)
-                    renderer.FillRectangle(itemRectangle, Color.CornflowerBlue, ClippingRectangle);
-
                 var item = Items[i];
                 var textRectangle = new Rectangle(itemRectangle.X + ItemPadding.Left, itemRectangle.Y + ItemPadding.Top,
                     itemRectangle.Width - ItemPadding.Right, itemRectangle.Height - ItemPadding.Bottom);
                 var itemTextInfo = GetTextInfo(context, item?.ToString() ?? string.Empty, textRectangle, HorizontalAlignment.Left, VerticalAlignment.Top);
                 var textColor = i == SelectedIndex ? SelectedTextColor : itemTextInfo.Color;
+
+                if (SelectedIndex == i)
+                    renderer.FillRectangle(itemRectangle, Color.CornflowerBlue, ClippingRectangle);
 
                 renderer.DrawText(itemTextInfo.Font, itemTextInfo.Text, itemTextInfo.Position + TextOffset, textColor, itemTextInfo.ClippingRectangle);
             }
@@ -128,6 +127,27 @@ namespace MonoGame.Extended.Gui.Controls
 
             if (selectedItemRectangle.Top < ClippingRectangle.Top && _firstIndex > 0)
                 _firstIndex--;
+        }
+
+        protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
+        {
+            var width = 0f;
+            var height = 0f;
+
+            foreach (var item in Items)
+            {
+                var text = item?.ToString() ?? string.Empty;
+                var textInfo = GetTextInfo(context, text, new Rectangle(0, 0, (int) availableSize.Width, (int) availableSize.Height), HorizontalAlignment.Left, VerticalAlignment.Top);
+                var itemWidth = textInfo.Size.X + ItemPadding.Size.Height;
+                var itemHeight = textInfo.Size.Y + ItemPadding.Size.Width;
+
+                if (itemWidth > width)
+                    width = itemWidth;
+
+                height += itemHeight;
+            }
+
+            return new Size2(width + ClipPadding.Size.Width, height + ClipPadding.Size.Height);
         }
     }
 }

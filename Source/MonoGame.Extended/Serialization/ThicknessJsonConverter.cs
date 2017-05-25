@@ -13,7 +13,8 @@ namespace MonoGame.Extended.Serialization
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return Thickness.Parse((string)reader.Value);
+            var values = reader.ReadAsMultiDimensional<int>();
+            return Thickness.FromValues(values);
         }
 
         public override bool CanConvert(Type objectType)

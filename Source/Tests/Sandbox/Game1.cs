@@ -39,6 +39,26 @@ namespace Sandbox
             };
             Controls.Add(button);
 
+            Controls.Add(new GuiStackPanel(Skin)
+            {
+                Controls =
+                {
+                    new GuiLabel(Skin, "propertyName"),
+                    new GuiStackPanel
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Centre,
+                        VerticalAlignment = VerticalAlignment.Centre,
+                        Orientation = GuiOrientation.Horizontal,
+                        Controls =
+                        {
+                            new GuiLabel(Skin, "propertyName"),
+                            new GuiTextBox(Skin, "Hello"),
+                            new GuiTextBox(Skin, "World")
+                        }
+                    }
+                }
+            });
+
             var label = new GuiLabel(Skin, "This is just a boring dialog.");
             Controls.Add(label);
         }
@@ -73,6 +93,19 @@ namespace Sandbox
             var button = new GuiButton(Skin) { Text = "Press Me" };
             button.Clicked += OpenDialog_Clicked;
             Controls.Add(button);
+
+
+            Controls.Add(new GuiListBox(Skin)
+            {
+                HorizontalAlignment = HorizontalAlignment.Centre,
+                VerticalAlignment = VerticalAlignment.Centre,
+                Items =
+                {
+                    "one",
+                    "two",
+                    "three"
+                }
+            });
         }
 
         private void OpenDialog_Clicked(object sender, EventArgs eventArgs)

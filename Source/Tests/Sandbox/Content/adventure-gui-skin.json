@@ -117,7 +117,6 @@
     {
       "Name": "list-box",
       "Type": "GuiListBox",
-      "Size": "200 150",
       "ClipPadding": "7 5",
       "BackgroundRegion": "grey_textBox",
       "TextColor": "#444444"
