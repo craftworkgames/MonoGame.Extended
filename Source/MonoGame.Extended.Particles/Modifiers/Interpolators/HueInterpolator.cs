@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended.Particles.Modifiers.Interpolators
+﻿using MonoGame.Extended;
+
+namespace MonoGame.Extended.Particles.Modifiers.Interpolators
 {
     public class HueInterpolator : IInterpolator
     {

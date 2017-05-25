@@ -41,3 +41,4 @@ An alternative way to add the reference is by manually editing the `Content.mgcb
 **Remember:** The `MonoGame.Extended.dll` and the `MonoGame.Extended.Content.Pipeline.dll` come as a pair. Always make sure the version referenced by your game matches the version referenced by the Pipeline tool.
 
 That's it! Once you've referenced the library you can start using it to make your games even more awesome.
+

@@ -3,13 +3,13 @@
 # MonoGame.Extended
 It makes MonoGame more awesome.
 
-[![Join the chat at https://gitter.im/craftworkgames/MonoGame.Extended](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/craftworkgames/MonoGame.Extended?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://build.craftworkgames.com/app/rest/builds/buildType:(id:MonoGameExtended_CI)/statusIcon)](http://build.craftworkgames.com/viewType.html?buildTypeId=MonoGameExtended_CI&guest=1)
+[![Join the chat at https://gitter.im/craftworkgames/MonoGame.Extended](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/craftworkgames/MonoGame.Extended?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://build.craftworkgames.com/app/rest/builds/buildType:(id:MonoGameExtended_CI)/statusIcon)](http://build.craftworkgames.com/viewType.html?buildTypeId=MonoGameExtended_CI&guest=1) [![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://craftworkgames.github.io/MonoGame.Extended/)
 
 MonoGame.Extended is an open source collection of NuGet packages for [MonoGame](http://www.monogame.net/). A collection of classes and extensions to make it easier to make games with MonoGame. 
 
 ## Packages
 
- - **MonoGame.Extended** - the core package creates a solid foundation with sprites, bitmap fonts, collections, serialization, shapes, texture atlases, viewport adapters, cameras, timers, math and diagnostics.
+ - **MonoGame.Extended** - the core package creates a solid foundation with sprites, [bitmap fonts](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/BitmapFonts/), [collections](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Collections/), [serialization](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Serialization/), shapes, texture atlases, viewport adapters, [cameras](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Camera2D/), timers, math, [object pooling](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Object-Pooling/), [screens](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Screens/), and diagnostics.
  - **MonoGame.Extended.Animations** - animated sprites and sprite sheets.
  - **MonoGame.Extended.Collisions (experimental)** - collision detection and response.
  - **MonoGame.Extended.Content.Pipeline** - a collection of importers for the [MonoGame Pipeline Tool](http://www.monogame.net/documentation/?page=Using_The_Pipeline_Tool).
@@ -48,7 +48,7 @@ If you're not on the list and you should be please let me know! Managing Patreon
 
 If you're using the [NuGet packages](https://www.nuget.org/packages?q=monogame.extended) please read the [install guide](http://craftworkgames.github.io/MonoGame.Extended/installation/) to setup the Pipeline tool.
 
-Alternately, you might want to [build from source](https://github.com/craftworkgames/MonoGame.Extended/wiki/Building-MonoGame.Extended-from-source) or use a [pre-release NuGet package](https://github.com/craftworkgames/MonoGame.Extended/wiki/How-to-use-the-pre-release-NuGet-packages).
+Alternately, you might want to [build from source](http://craftworkgames.github.io/MonoGame.Extended/Building-from-Source/) or use a [pre-release NuGet package](http://craftworkgames.github.io/MonoGame.Extended/NuGet-Pre-Release/).
 
 Please keep in mind that the project is still evolving. Some breaking API changes are likely to occur as we progress.
 
