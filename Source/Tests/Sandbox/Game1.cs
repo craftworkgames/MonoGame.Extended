@@ -124,8 +124,8 @@ namespace Sandbox
                                 {
                                     new ColorInterpolator
                                     {
-                                        InitialColor = new HslColor(0.33f, 0.5f, 0.5f),
-                                        FinalColor = new HslColor(0.5f, 0.9f, 1.0f)
+                                        StartValue = new HslColor(0.33f, 0.5f, 0.5f),
+                                        EndValue = new HslColor(0.5f, 0.9f, 1.0f)
                                     }
                                 }
                             },
