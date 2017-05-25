@@ -40,9 +40,12 @@
     <Compile Include="Collections\Bag.cs" />
     <Compile Include="Collections\DictionaryExtensions.cs" />
     <Compile Include="Collections\KeyedCollection.cs" />
+    <Compile Include="ColorExtensions.cs" />
     <Compile Include="FloatHelper.cs" />
+    <Compile Include="HslColor.cs" />
     <Compile Include="IRectangular.cs" />
     <Compile Include="Serialization\BaseTypeJsonConverter.cs" />
+    <Compile Include="Serialization\HslColorJsonConverter.cs" />
     <Compile Include="Serialization\JsonReaderExtensions.cs" />
     <Compile Include="Serialization\RangeJsonConverter.cs" />
     <Compile Include="Serialization\ShortNameJsonContractResolver.cs" />

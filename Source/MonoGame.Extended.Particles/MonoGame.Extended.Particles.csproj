@@ -43,9 +43,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColorExtensions.cs" />
     <Compile Include="FastRandomExtensions.cs" />
-    <Compile Include="HslColor.cs" />
     <Compile Include="LineSegment.cs" />
     <Compile Include="Modifiers\AgeModifier.cs" />
     <Compile Include="Modifiers\Containers\CircleContainerModifier.cs" />
@@ -82,7 +80,6 @@
     <Compile Include="Profiles\RingProfile.cs" />
     <Compile Include="Profiles\SprayProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialization\HslColorJsonConverter.cs" />
     <Compile Include="Serialization\InterpolatorJsonConverter.cs" />
     <Compile Include="Serialization\ModifierExecutionStrategyJsonConverter.cs" />
     <Compile Include="Serialization\ModifierJsonConverter.cs" />

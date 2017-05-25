@@ -2,7 +2,7 @@
 using System.Globalization;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Particles
+namespace MonoGame.Extended
 {
     /// <summary>
     ///     An immutable data structure representing a 24bit color composed of separate hue, saturation and lightness channels.
