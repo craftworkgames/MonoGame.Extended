@@ -9,8 +9,6 @@ We're only just getting started building this documentation. If you're not findi
  - Development is usually discussed in [github issues](https://github.com/craftworkgames/MonoGame.Extended/issues)
  - We've even got a [tag on stackoverflow](http://gamedev.stackexchange.com/questions/tagged/monogame-extended) ;)
 
- *Initially the plan is to port over the relevant pages from the wiki. Over time, this should become the place to be for those with the need to read.*
-
 
 # Getting Started
 
