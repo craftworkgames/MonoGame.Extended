@@ -1,6 +1,6 @@
 # Camera2D Class
 
->**Namespace:** [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended/wiki/MonoGame.Extended-(Namespace))
+>**Namespace:** MonoGame.Extended
 **Inheritance:** Camera2D > Object
 **Implements:** IMovable, IRotatable
 
