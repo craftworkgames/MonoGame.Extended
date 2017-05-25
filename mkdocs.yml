@@ -12,6 +12,7 @@ pages:
     - Core:
         - BitmapFonts: MonoGame.Extended/BitmapFonts.md
         - Camera2D: MonoGame.Extended/Camera2D.md
+        - Content Extensions: MonoGame.Extended/Content.md
         - Collections: MonoGame.Extended/Collections.md
         - Object Pooling: MonoGame.Extended/Object-Pooling.md
         - Screens: MonoGame.Extended/Screens.md
