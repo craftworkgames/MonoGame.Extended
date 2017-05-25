@@ -9,7 +9,7 @@ MonoGame.Extended is an open source collection of NuGet packages for [MonoGame](
 
 ## Packages
 
- - **MonoGame.Extended** - the core package creates a solid foundation with sprites, bitmap fonts, collections, serialization, shapes, texture atlases, viewport adapters, cameras, timers, math and diagnostics.
+ - **MonoGame.Extended** - the core package creates a solid foundation with sprites, [bitmap fonts](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/BitmapFonts/), [collections](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Collections/), serialization, shapes, texture atlases, viewport adapters, [cameras](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Camera2D/), timers, math and diagnostics.
  - **MonoGame.Extended.Animations** - animated sprites and sprite sheets.
  - **MonoGame.Extended.Collisions (experimental)** - collision detection and response.
  - **MonoGame.Extended.Content.Pipeline** - a collection of importers for the [MonoGame Pipeline Tool](http://www.monogame.net/documentation/?page=Using_The_Pipeline_Tool).
