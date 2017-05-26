@@ -8,8 +8,8 @@ namespace MonoGame.Extended.Particles
     {
         public static void Draw(this SpriteBatch spriteBatch, ParticleEffect effect)
         {
-            foreach (var emitter in effect.Emitters)
-                UnsafeDraw(spriteBatch, emitter);
+            for (var i = 0; i < effect.Emitters.Length; i++)
+                UnsafeDraw(spriteBatch, effect.Emitters[i]);
         }
 
         public static void Draw(this SpriteBatch spriteBatch, ParticleEmitter emitter)

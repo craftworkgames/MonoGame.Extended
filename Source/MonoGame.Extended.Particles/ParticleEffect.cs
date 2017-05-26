@@ -51,20 +51,20 @@ namespace MonoGame.Extended.Particles
 
         public void Update(float elapsedSeconds)
         {
-            foreach (var e in Emitters)
-                e.Update(elapsedSeconds);
+            for (var i = 0; i < Emitters.Length; i++)
+                Emitters[i].Update(elapsedSeconds);
         }
 
         public void Trigger(Vector2 position, float layerDepth = 0)
         {
-            foreach (var e in Emitters)
-                e.Trigger(position, layerDepth);
+            for (var i = 0; i < Emitters.Length; i++)
+                Emitters[i].Trigger(position, layerDepth);
         }
 
         public void Trigger(LineSegment line)
         {
-            foreach (var e in Emitters)
-                e.Trigger(line);
+            for (var i = 0; i < Emitters.Length; i++)
+                Emitters[i].Trigger(line);
         }
     }
 }

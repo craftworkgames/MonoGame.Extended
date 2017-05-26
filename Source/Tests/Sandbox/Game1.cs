@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
+using MonoGame.Extended.Particles;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
@@ -124,7 +125,7 @@ namespace Sandbox
         private GuiSystem _guiSystem;
 
         private SpriteBatch _spriteBatch;
-        //private ParticleEffect _particleEffect;
+        private ParticleEffect _particleEffect;
 
         public Game1()
         {
@@ -154,7 +155,7 @@ namespace Sandbox
             var textureRegionService = new TextureRegionService();
             textureRegionService.TextureAtlases.Add(Content.Load<TextureAtlas>("adventure-gui-atlas"));
 
-            //_particleEffect = ParticleEffect.FromFile(textureRegionService, @"Content/particle-effect.json");
+            _particleEffect = ParticleEffect.FromFile(textureRegionService, @"Content/particle-effect.json");
         }
 
         protected override void Update(GameTime gameTime)
@@ -167,10 +168,10 @@ namespace Sandbox
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            //_particleEffect.Update(deltaTime);
+            _particleEffect.Update(deltaTime);
 
-            //if (mouseState.LeftButton == ButtonState.Pressed)
-            //    _particleEffect.Trigger(new Vector2(p.X, p.Y));
+            if (mouseState.LeftButton == ButtonState.Pressed)
+                _particleEffect.Trigger(new Vector2(p.X, p.Y));
 
             //_particleEffect.Trigger(new Vector2(400, 240));
 
@@ -182,7 +183,7 @@ namespace Sandbox
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
-            //_spriteBatch.Draw(_particleEffect);
+            _spriteBatch.Draw(_particleEffect);
             _spriteBatch.End();
 
             _guiSystem.Draw(gameTime);
