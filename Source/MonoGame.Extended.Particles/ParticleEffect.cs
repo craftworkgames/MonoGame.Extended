@@ -7,16 +7,21 @@ using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Particles
 {
-    public class ParticleEffect
+    public class ParticleEffect : Transform2D<ParticleEffect>
     {
-        public ParticleEffect()
+        public ParticleEffect(bool autoTrigger = true, float autoTriggerDelay = 0f)
         {
+            AutoTrigger = autoTrigger;
+            AutoTriggerDelay = autoTriggerDelay;
             Emitters = new ParticleEmitter[0];
         }
 
-        public string Name { get; set; }
-        public ParticleEmitter[] Emitters { get; set; }
+        private float _nextAutoTrigger;
 
+        public string Name { get; set; }
+        public bool AutoTrigger { get; set; }
+        public float AutoTriggerDelay { get; set; }
+        public ParticleEmitter[] Emitters { get; set; }
         public int ActiveParticles => Emitters.Sum(t => t.ActiveParticles);
 
         public void FastForward(Vector2 position, float seconds, float triggerPeriod)
@@ -51,8 +56,24 @@ namespace MonoGame.Extended.Particles
 
         public void Update(float elapsedSeconds)
         {
+            if (AutoTrigger)
+            {
+                _nextAutoTrigger -= elapsedSeconds;
+
+                if (_nextAutoTrigger <= 0)
+                {
+                    Trigger();
+                    _nextAutoTrigger = AutoTriggerDelay;
+                }
+            }
+
             for (var i = 0; i < Emitters.Length; i++)
                 Emitters[i].Update(elapsedSeconds);
+        }
+
+        public void Trigger()
+        {
+            Trigger(Position);
         }
 
         public void Trigger(Vector2 position, float layerDepth = 0)

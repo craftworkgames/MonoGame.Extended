@@ -6,21 +6,18 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Particles
 {
-    public unsafe class ParticleEmitter : Transform2D<ParticleEmitter>, IDisposable
+    public unsafe class ParticleEmitter : IDisposable
     {
         private readonly FastRandom _random = new FastRandom();
         private float _totalSeconds;
-        private float _nextAutoTrigger;
 
-        public ParticleEmitter(TextureRegion2D textureRegion, int capacity, TimeSpan lifeSpan, Profile profile, bool autoTrigger = true, float autoTriggerDelay = 0f)
+        public ParticleEmitter(TextureRegion2D textureRegion, int capacity, TimeSpan lifeSpan, Profile profile)
         {
             if (profile == null)
                 throw new ArgumentNullException(nameof(profile));
 
             _lifeSpanSeconds = (float)lifeSpan.TotalSeconds;
 
-            AutoTrigger = autoTrigger;
-            AutoTriggerDelay = autoTriggerDelay;
             TextureRegion = textureRegion;
             Buffer = new ParticleBuffer(capacity);
             Offset = Vector2.Zero;
@@ -43,8 +40,6 @@ namespace MonoGame.Extended.Particles
         public Profile Profile { get; set; }
         public ParticleReleaseParameters Parameters { get; set; }
         public TextureRegion2D TextureRegion { get; set; }
-        public bool AutoTrigger { get; set; }
-        public float AutoTriggerDelay { get; set; }
 
         internal ParticleBuffer Buffer;
 
@@ -87,17 +82,6 @@ namespace MonoGame.Extended.Particles
 
         public bool Update(float elapsedSeconds)
         {
-            if (AutoTrigger)
-            {
-                _nextAutoTrigger -= elapsedSeconds;
-
-                if (_nextAutoTrigger <= 0)
-                {
-                    Trigger();
-                    _nextAutoTrigger = AutoTriggerDelay;
-                }
-            }
-
             _totalSeconds += elapsedSeconds;
 
             if (Buffer.Count == 0)
@@ -116,11 +100,6 @@ namespace MonoGame.Extended.Particles
 
             ModifierExecutionStrategy.ExecuteModifiers(Modifiers, elapsedSeconds, iterator);
             return true;
-        }
-
-        public void Trigger()
-        {
-            Trigger(Position);
         }
 
         public void Trigger(Vector2 position, float layerDepth = 0)
