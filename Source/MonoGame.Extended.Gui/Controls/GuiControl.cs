@@ -69,9 +69,14 @@ namespace MonoGame.Extended.Gui.Controls
                 if (_text != value)
                 {
                     _text = value;
-                    TextChanged?.Invoke(this, EventArgs.Empty);
+                    OnTextChanged();
                 }
             }
+        }
+
+        protected virtual void OnTextChanged()
+        {
+            TextChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler TextChanged;

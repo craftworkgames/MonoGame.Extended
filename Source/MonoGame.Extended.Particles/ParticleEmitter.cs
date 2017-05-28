@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.TextureAtlases;
+using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Particles
 {
@@ -11,13 +12,15 @@ namespace MonoGame.Extended.Particles
         private readonly FastRandom _random = new FastRandom();
         private float _totalSeconds;
 
-        public ParticleEmitter(TextureRegion2D textureRegion, int capacity, TimeSpan lifeSpan, Profile profile)
+        [JsonConstructor]
+        public ParticleEmitter(string name, TextureRegion2D textureRegion, int capacity, TimeSpan lifeSpan, Profile profile)
         {
             if (profile == null)
                 throw new ArgumentNullException(nameof(profile));
 
             _lifeSpanSeconds = (float)lifeSpan.TotalSeconds;
 
+            Name = name;
             TextureRegion = textureRegion;
             Buffer = new ParticleBuffer(capacity);
             Offset = Vector2.Zero;
@@ -27,12 +30,23 @@ namespace MonoGame.Extended.Particles
             Parameters = new ParticleReleaseParameters();
         }
 
+        public ParticleEmitter(TextureRegion2D textureRegion, int capacity, TimeSpan lifeSpan, Profile profile)
+            : this(null, textureRegion, capacity, lifeSpan, profile)
+        {
+        }
+
         public void Dispose()
         {
             Buffer.Dispose();
             GC.SuppressFinalize(this);
         }
+        
+        ~ParticleEmitter()
+        {
+            Dispose();
+        }
 
+        public string Name { get; set; }
         public int ActiveParticles => Buffer.Count;
         public Vector2 Offset { get; set; }
         public IModifier[] Modifiers { get; set; }
@@ -151,9 +165,9 @@ namespace MonoGame.Extended.Particles
             }
         }
 
-        ~ParticleEmitter()
+        public override string ToString()
         {
-            Dispose();
+            return Name;
         }
     }
 }

@@ -9,8 +9,9 @@ namespace MonoGame.Extended.Particles
 {
     public class ParticleEffect : Transform2D<ParticleEffect>
     {
-        public ParticleEffect(bool autoTrigger = true, float autoTriggerDelay = 0f)
+        public ParticleEffect(string name = null, bool autoTrigger = true, float autoTriggerDelay = 0f)
         {
+            Name = name;
             AutoTrigger = autoTrigger;
             AutoTriggerDelay = autoTriggerDelay;
             Emitters = new ParticleEmitter[0];
@@ -86,6 +87,11 @@ namespace MonoGame.Extended.Particles
         {
             for (var i = 0; i < Emitters.Length; i++)
                 Emitters[i].Trigger(line);
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

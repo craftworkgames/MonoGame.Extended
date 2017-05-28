@@ -21,6 +21,14 @@ namespace MonoGame.Extended.Gui.Controls
         public int SelectionStart { get; set; }
         public char? PasswordCharacter { get; set; }
 
+        protected override void OnTextChanged()
+        {
+            if (SelectionStart > Text.Length)
+                SelectionStart = Text.Length;
+
+            base.OnTextChanged();
+        }
+
         public override void OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
         {
             base.OnPointerDown(context, args);
