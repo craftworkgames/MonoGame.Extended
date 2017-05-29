@@ -3,13 +3,13 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Particles.Modifiers.Containers
 {
-    public class CircleContainerModifier : IModifier
+    public class CircleContainerModifier : Modifier
     {
         public float Radius { get; set; }
         public bool Inside { get; set; } = true;
         public float RestitutionCoefficient { get; set; } = 1;
 
-        public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
             var radiusSq = Radius*Radius;
             while (iterator.HasNext)

@@ -50,7 +50,7 @@
     <Compile Include="Modifiers\Containers\RectangleContainerModifier.cs" />
     <Compile Include="Modifiers\Containers\RectangleLoopContainerModifier.cs" />
     <Compile Include="Modifiers\DragModifier.cs" />
-    <Compile Include="Modifiers\IModifier.cs" />
+    <Compile Include="Modifiers\Modifier.cs" />
     <Compile Include="Modifiers\Interpolators\ColorInterpolator.cs" />
     <Compile Include="Modifiers\Interpolators\HueInterpolator.cs" />
     <Compile Include="Modifiers\Interpolators\IInterpolator.cs" />

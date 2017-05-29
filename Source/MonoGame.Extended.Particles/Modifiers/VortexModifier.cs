@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Particles.Modifiers
 {
-    public unsafe class VortexModifier : IModifier
+    public unsafe class VortexModifier : Modifier
     {
         // Note: not the real-life one
         private const float _gravConst = 100000f;
@@ -11,7 +11,7 @@ namespace MonoGame.Extended.Particles.Modifiers
         public float Mass { get; set; }
         public float MaxSpeed { get; set; }
 
-        public void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        public override void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
             while (iterator.HasNext)
             {

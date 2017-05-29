@@ -2,12 +2,12 @@
 
 namespace MonoGame.Extended.Particles.Modifiers
 {
-    public class LinearGravityModifier : IModifier
+    public class LinearGravityModifier : Modifier
     {
         public Vector2 Direction { get; set; }
         public float Strength { get; set; }
 
-        public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
             var vector = Direction*(Strength*elapsedSeconds);
 

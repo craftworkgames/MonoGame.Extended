@@ -10,11 +10,11 @@ namespace MonoGame.Extended.Particles
         public static readonly ParticleModifierExecutionStrategy Serial = new SerialModifierExecutionStrategy();
         public static readonly ParticleModifierExecutionStrategy Parallel = new ParallelModifierExecutionStrategy();
 
-        internal abstract void ExecuteModifiers(IModifier[] modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator);
+        internal abstract void ExecuteModifiers(Modifier[] modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator);
 
         internal class SerialModifierExecutionStrategy : ParticleModifierExecutionStrategy
         {
-            internal override void ExecuteModifiers(IModifier[] modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+            internal override void ExecuteModifiers(Modifier[] modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
             {
                 for (var i = 0; i < modifiers.Length; i++)
                     modifiers[i].Update(elapsedSeconds, iterator.Reset());
@@ -23,7 +23,7 @@ namespace MonoGame.Extended.Particles
 
         internal class ParallelModifierExecutionStrategy : ParticleModifierExecutionStrategy
         {
-            internal override void ExecuteModifiers(IModifier[] modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+            internal override void ExecuteModifiers(Modifier[] modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
             {
                 TPL.Parallel.ForEach(modifiers, modifier => modifier.Update(elapsedSeconds, iterator.Reset()));
             }

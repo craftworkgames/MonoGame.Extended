@@ -2,12 +2,12 @@
 
 namespace MonoGame.Extended.Particles.Modifiers.Containers
 {
-    public class RectangleLoopContainerModifier : IModifier
+    public class RectangleLoopContainerModifier : Modifier
     {
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
             while (iterator.HasNext)
             {

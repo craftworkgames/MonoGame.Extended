@@ -104,7 +104,7 @@ namespace Demo.Features.Demos
                             Rotation = new Range<float>(-1f, 1f),
                             Scale = new Range<float>(3.0f, 4.0f)
                         },
-                        Modifiers = new IModifier[]
+                        Modifiers = new Modifier[]
                         {
                             new AgeModifier
                             {

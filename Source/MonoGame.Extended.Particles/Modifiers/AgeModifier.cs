@@ -2,11 +2,11 @@
 
 namespace MonoGame.Extended.Particles.Modifiers
 {
-    public class AgeModifier : IModifier
+    public class AgeModifier : Modifier
     {
         public IInterpolator[] Interpolators { get; set; }
 
-        public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
             var n = Interpolators.Length;
             while (iterator.HasNext)

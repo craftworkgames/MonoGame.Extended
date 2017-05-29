@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Particles
             Buffer = new ParticleBuffer(capacity);
             Offset = Vector2.Zero;
             Profile = profile;
-            Modifiers = new IModifier[0];
+            Modifiers = new Modifier[0];
             ModifierExecutionStrategy = ParticleModifierExecutionStrategy.Serial;
             Parameters = new ParticleReleaseParameters();
         }
@@ -49,7 +49,7 @@ namespace MonoGame.Extended.Particles
         public string Name { get; set; }
         public int ActiveParticles => Buffer.Count;
         public Vector2 Offset { get; set; }
-        public IModifier[] Modifiers { get; set; }
+        public Modifier[] Modifiers { get; set; }
         public ParticleModifierExecutionStrategy ModifierExecutionStrategy { get; set; }
         public Profile Profile { get; set; }
         public ParticleReleaseParameters Parameters { get; set; }
