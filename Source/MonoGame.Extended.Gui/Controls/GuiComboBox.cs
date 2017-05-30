@@ -13,45 +13,11 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiComboBox(GuiSkin skin) 
             : base(skin)
         {
-            _dropDownBox = new GuiListBox(Skin)
-            {
-                Items =
-                {
-                    "test1",
-                    "test2",
-                    "test2"
-                }
-            };
         }
 
         public TextureRegion2D DropDownRegion { get; set; }
 
-        private bool _isOpen;
-        private readonly GuiListBox _dropDownBox;
-
-        public bool IsOpen
-        {
-            get { return _isOpen; }
-            set
-            {
-                if (_isOpen != value)
-                {
-                    _isOpen = value;
-
-                    if (_isOpen)
-                    {
-                        _dropDownBox.Position = new Vector2(0, Height);
-                        _dropDownBox.Width = Width;
-                        _dropDownBox.Height = 100;
-                        Controls.Add(_dropDownBox);
-                    }
-                    else
-                    {
-                        Controls.Remove(_dropDownBox);
-                    }
-                }
-            }
-        }
+        public bool IsOpen { get; set; }
 
         public override void OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
         {
