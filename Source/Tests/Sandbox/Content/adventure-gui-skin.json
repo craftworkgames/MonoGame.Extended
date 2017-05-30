@@ -1,7 +1,7 @@
 ﻿{
   "Name": "adventure",
-  "TextureAtlases": [ "adventure-gui-atlas" ],
-  "Fonts": [ "small-font" ],
+  "TextureAtlases": ["adventure-gui-atlas"],
+  "Fonts": ["small-font"],
   "Cursor": {
     "TextureRegion": "cursorSword_silver",
     "Color": "#aaaaaa"
@@ -126,6 +126,12 @@
       "Type": "GuiDialog",
       "Padding": "10",
       "BackgroundRegion": "panel_brown",
+      "TextColor": "#444444"
+    },
+    {
+      "Type": "GuiComboBox",
+      "ClipPadding": "7 5",
+      "BackgroundRegion": "buttonLong_grey_pressed",
       "TextColor": "#444444"
     }
   ]

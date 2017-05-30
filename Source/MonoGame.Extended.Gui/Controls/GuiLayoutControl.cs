@@ -10,6 +10,8 @@
         protected GuiLayoutControl(GuiSkin skin) 
             : base(skin)
         {
+            HorizontalAlignment = HorizontalAlignment.Stretch;
+            VerticalAlignment = VerticalAlignment.Stretch;
         }
 
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)

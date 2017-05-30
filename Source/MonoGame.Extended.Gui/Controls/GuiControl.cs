@@ -55,8 +55,8 @@ namespace MonoGame.Extended.Gui.Controls
         public Color TextColor { get; set; }
         public Vector2 TextOffset { get; set; }
         public GuiControlCollection Controls { get; }
-        public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Stretch;
-        public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Stretch;
+        public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Centre;
+        public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Centre;
         public HorizontalAlignment HorizontalTextAlignment { get; set; } = HorizontalAlignment.Centre;
         public VerticalAlignment VerticalTextAlignment { get; set; } = VerticalAlignment.Centre;
 
@@ -171,13 +171,13 @@ namespace MonoGame.Extended.Gui.Controls
             DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, Text, BoundingRectangle, HorizontalTextAlignment, VerticalTextAlignment));
         }
 
-        protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment)
+        protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Rectangle? clippingRectangle = null)
         {
             var font = Font ?? context.DefaultFont;
             var textSize = font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size;
             var destinationRectangle = GuiLayoutHelper.AlignRectangle(horizontalAlignment, verticalAlignment, textSize, targetRectangle);
             var textPosition = destinationRectangle.Location.ToVector2();
-            var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, ClippingRectangle);
+            var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, clippingRectangle ?? ClippingRectangle);
             return textInfo;
         }
 

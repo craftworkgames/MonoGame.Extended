@@ -70,41 +70,66 @@ namespace Sandbox
         public MyScreen(GuiSkin skin)
             : base(skin)
         {
+            //Controls.Add(new GuiUniformGrid(Skin)
+            //{
+            //    Columns = 2,
+            //    HorizontalAlignment = HorizontalAlignment.Right,
+            //    VerticalAlignment = VerticalAlignment.Top,
+            //    Controls =
+            //    {
+            //        new GuiLabel(Skin, "A"),
+            //        new GuiUniformGrid(Skin)
+            //        {
+            //            Controls =
+            //            {
+            //                new GuiTextBox(Skin) {Text = "Play"},
+            //                new GuiTextBox(Skin) {Text = "Play"},
+            //            }
+            //        },
+            //        new GuiLabel(Skin, "B"),
+            //        new GuiTextBox(Skin, "Text")
+            //    }
+            //});
+
+            //var button = new GuiButton(Skin) { Text = "Press Me" };
+            //button.Clicked += OpenDialog_Clicked;
+            //Controls.Add(button);
+
+
+            //Controls.Add(new GuiListBox(Skin)
+            //{
+            //    HorizontalAlignment = HorizontalAlignment.Centre,
+            //    VerticalAlignment = VerticalAlignment.Centre,
+            //    Items =
+            //    {
+            //        "one",
+            //        "two",
+            //        "three"
+            //    }
+            //});
+
             Controls.Add(new GuiUniformGrid(Skin)
             {
-                Columns = 2,
-                HorizontalAlignment = HorizontalAlignment.Right,
-                VerticalAlignment = VerticalAlignment.Top,
                 Controls =
                 {
-                    new GuiLabel(Skin, "A"),
-                    new GuiUniformGrid(Skin)
+                    new GuiComboBox(Skin)
                     {
-                        Controls =
+                        Items =
                         {
-                            new GuiTextBox(Skin) {Text = "Play"},
-                            new GuiTextBox(Skin) {Text = "Play"},
+                            "one",
+                            "two",
+                            "three"
                         }
                     },
-                    new GuiLabel(Skin, "B"),
-                    new GuiTextBox(Skin, "Text")
-                }
-            });
-
-            var button = new GuiButton(Skin) { Text = "Press Me" };
-            button.Clicked += OpenDialog_Clicked;
-            Controls.Add(button);
-
-
-            Controls.Add(new GuiListBox(Skin)
-            {
-                HorizontalAlignment = HorizontalAlignment.Centre,
-                VerticalAlignment = VerticalAlignment.Centre,
-                Items =
-                {
-                    "one",
-                    "two",
-                    "three"
+                    new GuiListBox(Skin)
+                    {
+                        Items =
+                        {
+                            "one",
+                            "two",
+                            "three"
+                        }
+                    }
                 }
             });
         }
