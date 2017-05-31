@@ -185,8 +185,6 @@ namespace MonoGame.Extended.Gui.Controls
         {
             if (BackgroundRegion != null)
                 renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
-            else
-                renderer.FillRectangle(BoundingRectangle, Color);
         }
 
         protected virtual void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)

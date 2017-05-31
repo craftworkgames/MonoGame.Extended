@@ -21,9 +21,16 @@ namespace MonoGame.Extended.Gui.Controls
         {
             _parent.IsOpen = false;
         }
-    }
 
-    public class GuiComboBox : GuiItemsControl
+        protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        {
+            if (BackgroundRegion != null)
+                renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
+            else
+                renderer.FillRectangle(BoundingRectangle, Color);        }
+        }
+
+        public class GuiComboBox : GuiItemsControl
     {
         private readonly GuiComboBoxList _dropDown;
 
