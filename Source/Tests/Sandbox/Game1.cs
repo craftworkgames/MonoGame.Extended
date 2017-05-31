@@ -119,7 +119,8 @@ namespace Sandbox
                             "one",
                             "two",
                             "three"
-                        }
+                        },
+                        SelectedIndex = 0
                     },
                     new GuiListBox(Skin)
                     {

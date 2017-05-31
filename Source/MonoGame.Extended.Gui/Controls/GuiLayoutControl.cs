@@ -25,5 +25,11 @@
         {
             GuiLayoutHelper.PlaceControl(context, control, x, y, width, height);
         }
+
+        protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        {
+            if (BackgroundRegion != null)
+                renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
+        }
     }
 }

@@ -7,34 +7,13 @@
     "Color": "#aaaaaa"
   },
   "NinePatches": [
-    {
-      "TextureRegion": "buttonLong_grey",
-      "Padding": 10
-    },
-    {
-      "TextureRegion": "buttonLong_grey_pressed",
-      "Padding": 10
-    },
-    {
-      "TextureRegion": "panel_brown",
-      "Padding": "10"
-    },
-    {
-      "TextureRegion": "panelInset_beige",
-      "Padding": "10"
-    },
-    {
-      "TextureRegion": "grey_textBox",
-      "Padding": "10"
-    },
-    {
-      "TextureRegion": "progress-bar-container",
-      "Padding": "10"
-    },
-    {
-      "TextureRegion": "progress-bar-blue",
-      "Padding": "10"
-    }
+    { "TextureRegion": "buttonLong_grey", "Padding": 10 },
+    { "TextureRegion": "buttonLong_grey_pressed", "Padding": 10 },
+    { "TextureRegion": "panel_brown", "Padding": "10" },
+    { "TextureRegion": "panelInset_beige", "Padding": "10" },
+    { "TextureRegion": "grey_textBox", "Padding": "10" },
+    { "TextureRegion": "progress-bar-container", "Padding": "10" },
+    { "TextureRegion": "progress-bar-blue", "Padding": "10" }
   ],
   "Styles": [
     {
@@ -131,7 +110,12 @@
     {
       "Type": "GuiComboBox",
       "ClipPadding": "7 5",
-      "BackgroundRegion": "buttonLong_grey_pressed",
+      "BackgroundRegion": "buttonLong_grey",
+      "DropDownRegion": "buttonLong_grey_pressed",
+      "TextColor": "#444444"
+    },
+    {
+      "Type": "GuiComboBoxList",
       "TextColor": "#444444"
     }
   ]

@@ -19,7 +19,7 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         private int _selectedIndex = -1;
-        public int SelectedIndex
+        public virtual int SelectedIndex
         {
             get { return _selectedIndex; }
             set
@@ -32,10 +32,10 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        public List<object> Items { get; } = new List<object>();
-        public Color SelectedTextColor { get; set; } = Color.White;
-        public Color SelectedItemColor { get; set; } = Color.CornflowerBlue;
-        public Thickness ItemPadding { get; set; } = new Thickness(4, 2);
+        public virtual List<object> Items { get; } = new List<object>();
+        public virtual Color SelectedTextColor { get; set; } = Color.White;
+        public virtual Color SelectedItemColor { get; set; } = Color.CornflowerBlue;
+        public virtual Thickness ItemPadding { get; set; } = new Thickness(4, 2);
 
         public event EventHandler SelectedIndexChanged;
 
@@ -88,16 +88,19 @@ namespace MonoGame.Extended.Gui.Controls
                 if (itemRectangle.Contains(args.Position))
                 {
                     SelectedIndex = i;
+                    OnItemClicked(context, args);
                     break;
                 }
             }
         }
 
-        protected TextInfo GetItemTextInfo(IGuiContext context, Rectangle itemRectangle, object item)
+        protected virtual void OnItemClicked(IGuiContext context, GuiPointerEventArgs args) { }
+
+        protected TextInfo GetItemTextInfo(IGuiContext context, Rectangle itemRectangle, object item, Rectangle? clippingRectangle)
         {
             var textRectangle = new Rectangle(itemRectangle.X + ItemPadding.Left, itemRectangle.Y + ItemPadding.Top,
                 itemRectangle.Width - ItemPadding.Right, itemRectangle.Height - ItemPadding.Bottom);
-            var itemTextInfo = GetTextInfo(context, item?.ToString() ?? string.Empty, textRectangle, HorizontalAlignment.Left, VerticalAlignment.Top, itemRectangle);
+            var itemTextInfo = GetTextInfo(context, item?.ToString() ?? string.Empty, textRectangle, HorizontalAlignment.Left, VerticalAlignment.Top, clippingRectangle);
             return itemTextInfo;
         }
 
@@ -140,7 +143,7 @@ namespace MonoGame.Extended.Gui.Controls
             {
                 var item = Items[i];
                 var itemRectangle = GetItemRectangle(context, i - FirstIndex, contentRectangle);
-                var itemTextInfo = GetItemTextInfo(context, itemRectangle, item);
+                var itemTextInfo = GetItemTextInfo(context, itemRectangle, item, contentRectangle);
                 var textColor = i == SelectedIndex ? SelectedTextColor : itemTextInfo.Color;
 
                 if (SelectedIndex == i)
