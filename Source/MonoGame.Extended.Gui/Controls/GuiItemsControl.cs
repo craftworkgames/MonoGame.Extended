@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input.InputListeners;
@@ -36,6 +37,7 @@ namespace MonoGame.Extended.Gui.Controls
         public virtual Color SelectedTextColor { get; set; } = Color.White;
         public virtual Color SelectedItemColor { get; set; } = Color.CornflowerBlue;
         public virtual Thickness ItemPadding { get; set; } = new Thickness(4, 2);
+        public virtual string NameProperty { get; set; }
 
         public event EventHandler SelectedIndexChanged;
 
@@ -100,8 +102,26 @@ namespace MonoGame.Extended.Gui.Controls
         {
             var textRectangle = new Rectangle(itemRectangle.X + ItemPadding.Left, itemRectangle.Y + ItemPadding.Top,
                 itemRectangle.Width - ItemPadding.Right, itemRectangle.Height - ItemPadding.Bottom);
-            var itemTextInfo = GetTextInfo(context, item?.ToString() ?? string.Empty, textRectangle, HorizontalAlignment.Left, VerticalAlignment.Top, clippingRectangle);
+            var itemTextInfo = GetTextInfo(context, GetItemName(item), textRectangle, HorizontalAlignment.Left, VerticalAlignment.Top, clippingRectangle);
             return itemTextInfo;
+        }
+
+        private string GetItemName(object item)
+        {
+            if (item != null)
+            {
+                if (NameProperty != null)
+                {
+                    return item.GetType()
+                        .GetRuntimeProperty(NameProperty)
+                        .GetValue(item)
+                        ?.ToString() ?? string.Empty;
+                }
+
+                return item.ToString();
+            }
+
+            return string.Empty;
         }
 
         protected Rectangle GetItemRectangle(IGuiContext context, int index, Rectangle contentRectangle)
@@ -125,7 +145,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected Size2 GetItemSize(IGuiContext context, Size2 availableSize, object item)
         {
-            var text = item?.ToString() ?? string.Empty;
+            var text = GetItemName(item);
             var textInfo = GetTextInfo(context, text, new Rectangle(0, 0, (int)availableSize.Width, (int)availableSize.Height), HorizontalAlignment.Left, VerticalAlignment.Top);
             var itemWidth = textInfo.Size.X + ItemPadding.Size.Height;
             var itemHeight = textInfo.Size.Y + ItemPadding.Size.Width;

@@ -80,6 +80,12 @@ namespace MonoGame.Extended.Gui.Controls
             set { _dropDown.SelectedTextColor = value; }
         }
 
+        public override string NameProperty
+        {
+            get { return _dropDown.NameProperty; }
+            set { _dropDown.NameProperty = value; }
+        }
+
         private bool _isOpen;
         public bool IsOpen
         {

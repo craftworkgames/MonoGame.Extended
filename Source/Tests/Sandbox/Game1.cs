@@ -116,11 +116,12 @@ namespace Sandbox
                     {
                         Items =
                         {
-                            "one",
-                            "two",
-                            "three"
+                            new { Name = "one", Number = 1 },
+                            new { Name = "two", Number = 2 },
+                            new { Name = "three", Number = 3 }
                         },
-                        SelectedIndex = 0
+                        SelectedIndex = 0,
+                        NameProperty = "Number"
                     },
                     new GuiListBox(Skin)
                     {
