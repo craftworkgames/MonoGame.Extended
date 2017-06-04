@@ -114,6 +114,7 @@ namespace Sandbox
                 {
                     new GuiComboBox(Skin)
                     {
+                        Name = "ComboBox",
                         Items =
                         {
                             new { Name = "one", Number = 1 },
@@ -125,6 +126,7 @@ namespace Sandbox
                     },
                     new GuiListBox(Skin)
                     {
+                        Name = "ListBox",
                         Items =
                         {
                             "one",
@@ -134,6 +136,11 @@ namespace Sandbox
                     }
                 }
             });
+
+            var listBox = FindControl<GuiListBox>("ListBox");
+            var comboBox = FindControl<GuiComboBox>("ComboBox");
+            comboBox.SelectedIndexChanged += (sender, args) => listBox.SelectedIndex = comboBox.SelectedIndex;
+            listBox.SelectedIndexChanged += (sender, args) => comboBox.SelectedIndex = listBox.SelectedIndex;
         }
 
         private void OpenDialog_Clicked(object sender, EventArgs eventArgs)
@@ -190,15 +197,15 @@ namespace Sandbox
             var deltaTime = gameTime.GetElapsedSeconds();
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
-            var p = _camera.ScreenToWorld(mouseState.X, mouseState.Y);
+            //var p = _camera.ScreenToWorld(mouseState.X, mouseState.Y);
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
             _particleEffect.Update(deltaTime);
 
-            if (mouseState.LeftButton == ButtonState.Pressed)
-                _particleEffect.Trigger(new Vector2(p.X, p.Y));
+            //if (mouseState.LeftButton == ButtonState.Pressed)
+            //    _particleEffect.Trigger(new Vector2(p.X, p.Y));
 
             //_particleEffect.Trigger(new Vector2(400, 240));
 

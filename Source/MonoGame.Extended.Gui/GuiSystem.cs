@@ -189,7 +189,7 @@ namespace MonoGame.Extended.Gui
             return FindControlAtPoint(ActiveScreen.Controls, point);
         }
 
-        private static GuiControl FindControlAtPoint(GuiControlCollection controls, Point point)
+        private GuiControl FindControlAtPoint(GuiControlCollection controls, Point point)
         {
             var topMostControl = (GuiControl) null;
 
@@ -199,7 +199,7 @@ namespace MonoGame.Extended.Gui
 
                 if (control.IsVisible)
                 {
-                    if (topMostControl == null && control.BoundingRectangle.Contains(point))
+                    if (topMostControl == null && control.Contains(this, point))
                         topMostControl = control;
 
                     if (control.Controls.Any())

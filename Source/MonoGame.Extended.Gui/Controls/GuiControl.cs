@@ -165,6 +165,11 @@ namespace MonoGame.Extended.Gui.Controls
                 HoverStyle?.Revert(this);
         }
 
+        public virtual bool Contains(IGuiContext context, Point point)
+        {
+            return BoundingRectangle.Contains(point);
+        }
+
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             DrawBackground(context, renderer, deltaSeconds);

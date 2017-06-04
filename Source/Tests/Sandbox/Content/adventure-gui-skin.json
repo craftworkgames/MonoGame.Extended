@@ -113,10 +113,6 @@
       "BackgroundRegion": "buttonLong_grey",
       "DropDownRegion": "buttonLong_grey_pressed",
       "TextColor": "#444444"
-    },
-    {
-      "Type": "GuiComboBoxList",
-      "TextColor": "#444444"
     }
   ]
 }
