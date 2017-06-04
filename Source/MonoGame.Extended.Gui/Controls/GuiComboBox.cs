@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input.InputListeners;
+using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -17,6 +18,8 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public bool IsOpen { get; set; }
+        public TextureRegion2D DropDownRegion { get; set; }
+        public Color DropDownColor { get; set; } = Color.White;
 
         public override void OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
         {
@@ -41,7 +44,6 @@ namespace MonoGame.Extended.Gui.Controls
         public override bool Contains(IGuiContext context, Point point)
         {
             return base.Contains(context, point) || GetContentRectangle(context).Contains(point);
-
         }
 
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
@@ -68,7 +70,14 @@ namespace MonoGame.Extended.Gui.Controls
             base.DrawBackground(context, renderer, deltaSeconds);
 
             if (IsOpen)
-                renderer.FillRectangle(GetContentRectangle(context), Color.White);
+            {
+                var dropDownRectangle = GetContentRectangle(context);
+
+                if (DropDownRegion != null)
+                    renderer.DrawRegion(DropDownRegion, dropDownRectangle, DropDownColor);
+                else
+                    renderer.FillRectangle(dropDownRectangle, DropDownColor);
+            }
         }
 
         protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)

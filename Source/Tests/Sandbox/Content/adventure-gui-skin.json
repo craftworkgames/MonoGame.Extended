@@ -111,7 +111,6 @@
       "Type": "GuiComboBox",
       "ClipPadding": "7 5",
       "BackgroundRegion": "buttonLong_grey",
-      "DropDownRegion": "buttonLong_grey_pressed",
       "TextColor": "#444444"
     }
   ]
