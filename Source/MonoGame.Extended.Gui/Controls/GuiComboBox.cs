@@ -43,7 +43,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         public override bool Contains(IGuiContext context, Point point)
         {
-            return base.Contains(context, point) || GetContentRectangle(context).Contains(point);
+            return base.Contains(context, point) || IsOpen && GetContentRectangle(context).Contains(point);
         }
 
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
