@@ -10,7 +10,7 @@ It is much faster than an array when removing items, and takes less space than a
 
 Bag will resize itself only when it needs to.
 
-```C#
+```csharp
 var bag = new Bag<int>(3);
 bag.Add(4);
 bag.Add(8);

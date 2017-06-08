@@ -15,7 +15,6 @@
 ## Members
 
 [_viewportAdapter](#_viewportAdapterDetail) : ViewportAdapter
-<sub>Descriptive text here</sub>
 
 [Position](#position) : Vector2
 <sub>The position of the camera as a Vector2</sub>
@@ -31,13 +30,12 @@
 ## Member Detail
 
 ##### _viewportAdapter
-```C#
+```csharp
 private readonly ViewportAdapter
 ```
-<sub>Detailed details here about the member.</sub>
 
 ##### Position
-```C#
+```csharp
 public Vector2 Position { get; set; }
 ```
 <sub>The position of the camera, used in matrix transformations.</sub>
@@ -45,10 +43,9 @@ public Vector2 Position { get; set; }
 
 <a name="constructorDetail"></a>
 **public Camera2D(GraphicsDevice graphicsDevice)**
-Description here.
 
 Parameters
-* graphicsDevice - Description here.
+* graphicsDevice
 
 ## Method Detail
 
@@ -64,7 +61,7 @@ Parameters
 The purpose of the camera is to create a transformation matrix that changes the way a sprite batch is rendered.
 
 To create a camera initialize an instance of it using one of the constructor overloads. It's recommended that you used a viewport adapter to scale the screen but you don't have too.
-```C#
+```csharp
         private Camera2D _camera;
 
         protected override void Initialize()
@@ -76,7 +73,7 @@ To create a camera initialize an instance of it using one of the constructor ove
         }
 ```
 Next you'll need to apply the camera's view matrix to one or more of the `SpriteBatch.Begin` calls in your `Draw` method.
-```C#
+```csharp
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -96,7 +93,7 @@ In other words, we use the camera to transform the way a batch of sprites is ren
 
 Once you've got a camera instance in your game you'll probably want to move it around in the `Update` method somehow. For example, you could move the camera's position with the arrow keys.
 <a name="moveUsage"></a>
-```C#
+```csharp
         protected override void Update(GameTime gameTime)
         {
             var keyboardState = Keyboard.GetState();
@@ -107,7 +104,7 @@ Once you've got a camera instance in your game you'll probably want to move it a
         }
 ```
 Last but not least, there'll be times when you want to convert from screen coordinates to world coordinates and visa-vera.  For example, if you want to know which sprite is under the mouse you'll need to convert the mouse position back into the world position that was used to position the sprite in the first place.
-```C#
+```csharp
     var mouseState = Mouse.GetState();
     _worldPosition = _camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y));
 ```
