@@ -2,7 +2,7 @@
 
 ## Example
 The `ScreenGameComponent` manages individual `Screen` objects.  Add a new `ScreenGameComponent` to your Game's `Components`, and the screen manager will pass `Initialize` `LoadContent` `UnloadContent` `Update` and `Draw` to every registered screen.
-```C#
+```csharp
 public Game1()
 {
     // Add the screen manager to your Components.
@@ -11,7 +11,7 @@ public Game1()
 }
 ```
 To register your class (MyScreen) that subclasses `Screen`.  Just pass it into the `Register` function.
-```C#
+```csharp
 public Game1()
 {
     ScreenGameComponent screenGameComponent = new ScreenGameComponent(this);

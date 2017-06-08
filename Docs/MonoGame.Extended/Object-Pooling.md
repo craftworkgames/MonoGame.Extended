@@ -10,7 +10,7 @@ Using a `Pool<T>` without first profiling for the need of one may result in a *d
 All objects which can be pooled need to implement the `IPoolable` interface.
 The following is a code snippet with comments demonstrating how to implement the interface.
 
-```c#
+```csharp
 private class MyPoolable : IPoolable
 {
     private ReturnToPoolDelegate _returnAction;
@@ -39,7 +39,7 @@ private class MyPoolable : IPoolable
 
 ## Creating a Pool
 Instantiating a `Pool<T>` is similar to any generic collection, i.e `List<T>`, but the pool does require 2 parameters for it's constructor. `T` also has to implement `IPoolable`.
-```C#
+```csharp
 var pool = new Pool<MyPoolable>(50, index => new MyPoolable());
 ```
 The first parameter is the _capacity_ of the pool; the maximum number of object instances the pool has reference to. The second parameter is the delegate responsible for creating each object instance.
@@ -53,7 +53,7 @@ All object instances are created when the pool is instantiated.
 
 A free pooled object instance can be requested from the pool instance.
 
-```c#
+```csharp
 var myPoolable = pool.Request();
 ```
 
@@ -62,6 +62,6 @@ If the pool is empty, the result will be `null`.
 
 ## Returning a Object to the Pool
 When the object instance is no longer needed it should be returned to the pool so it can be re-used.
-```c#
+```csharp
 myPoolable.Return();
 ```
