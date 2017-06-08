@@ -19,6 +19,7 @@ Note: When you ask a question, please consider how permanent the answer should b
  - A rough draft is better than none.
  - If we all wrote a little documentation, it adds up to a lot.
 
+
 ## How to contribute to the documentation
 
 The docs are located in the source [Docs/](https://github.com/craftworkgames/MonoGame.Extended/tree/develop/Docs) folder.  They are built with [MkDocs](http://www.mkdocs.org/#installation).
@@ -29,3 +30,29 @@ The docs are located in the source [Docs/](https://github.com/craftworkgames/Mon
  - If you want to go a step further, write a tutorial or a whole new page.
  - If you have any trouble editing the docs, please [tell somebody](#community-and-support).
  - You can edit the page directly on Github, it's Markdown, so you don't necessesarily need to install MkDocs to contribute.
+
+### Getting started with MKDocs
+
+Running your own dev docs server at http://127.0.0.1:8000 (your computer) can be done by installing python, and then installing mkdocs.
+
+```bash
+> python -m pip install mkdocs
+```
+
+To run your local server run the mkdocs module with the `serve` command.
+
+```bash
+> cd MonoGame.Extended
+MonoGame.Extended> python -m mkdocs serve
+INFO    -  Building documentation...
+INFO    -  Cleaning site directory
+[I 170608 01:12:06 server:283] Serving on http://127.0.0.1:8000
+[I 170608 01:12:06 handlers:60] Start watching changes
+[I 170608 01:12:06 handlers:62] Start detecting changes
+[I 170608 01:12:15 handlers:133] Browser Connected: http://127.0.0.1:8000/
+```
+Now every time you edit a `*.md` file in the `Docs/` folder the site will refresh with the latest info.
+
+To add a new page, you must add Markdown file, and then reference it in the `mkdocs.yml` file somewhere appropriate. 
+
+> All pages must be somewhere in the mkdocs.yml `pages` section, otherwise links to it will not work.
