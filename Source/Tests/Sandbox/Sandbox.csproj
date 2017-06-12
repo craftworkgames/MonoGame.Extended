@@ -42,7 +42,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Experiments\BindingScreen.cs" />
+    <Compile Include="Experiments\GuiElementExtensions.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Experiments\MyPanel.cs" />
+    <Compile Include="Experiments\MyScreen.cs" />
+    <Compile Include="Experiments\MyWindow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
