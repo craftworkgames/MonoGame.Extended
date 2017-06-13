@@ -9,6 +9,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Tiled.Graphics;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Platformer
@@ -22,7 +23,7 @@ namespace Demo.Platformer
         private Camera2D _camera;
         private TiledMap _map;
         private TiledMapRenderer _mapRenderer;
-        private EntityComponentSystemManager _ecs;
+        private EntityComponentSystem _ecs;
         private EntityFactory _entityFactory;
 
         public GameMain()
@@ -35,7 +36,7 @@ namespace Demo.Platformer
 
         protected override void Initialize()
         {
-            _ecs = new EntityComponentSystemManager(this);
+            _ecs = new EntityComponentSystem(this);
             Services.AddService(_ecs);
 
             _ecs.Scan(Assembly.GetExecutingAssembly());

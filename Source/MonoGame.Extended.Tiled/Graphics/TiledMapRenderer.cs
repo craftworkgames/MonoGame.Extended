@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics.Effects;
-using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Tiled.Graphics.Effects;
 
-namespace MonoGame.Extended.Graphics
+namespace MonoGame.Extended.Tiled.Graphics
 {
     public class TiledMapRenderer : IDisposable
     {
@@ -92,7 +91,7 @@ namespace MonoGame.Extended.Graphics
 
             foreach (var model in layer.Models)
             {
-// model-to-world transform
+                // model-to-world transform
                 tiledMapEffect.World = _worldMatrix;
                 tiledMapEffect.View = viewMatrix;
                 tiledMapEffect.Projection = projectionMatrix;

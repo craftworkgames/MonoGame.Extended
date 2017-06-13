@@ -44,7 +44,7 @@ namespace MonoGame.Extended.Entities
     {
         private TimeSpan _timer;
 
-        internal EntityComponentSystemManager Manager;
+        internal EntityComponentSystem Manager;
         public bool IsEnabled { get; set; }
         public Game Game => Manager.Game;
         public GraphicsDevice GraphicsDevice => Manager.GraphicsDevice;

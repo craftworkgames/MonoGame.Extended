@@ -8,6 +8,8 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Graphics.Effects;
 using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Tiled.Graphics;
+using MonoGame.Extended.Tiled.Graphics.Effects;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Features.Demos

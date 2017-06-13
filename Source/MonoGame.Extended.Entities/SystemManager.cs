@@ -57,7 +57,7 @@ namespace MonoGame.Extended.Entities
 
     internal sealed class SystemManager
     {
-        private readonly EntityComponentSystemManager _manager;
+        private readonly EntityComponentSystem _manager;
         private SystemLayer[] _updateLayers;
         private SystemLayer[] _drawLayers;
         private readonly SystemLayer _dummyLayer;
@@ -66,7 +66,7 @@ namespace MonoGame.Extended.Entities
         internal List<EntitySystem> Systems;
         internal List<EntityProcessingSystem> ProcessingSystems;
 
-        internal SystemManager(EntityComponentSystemManager manager)
+        internal SystemManager(EntityComponentSystem manager)
         {
             _manager = manager;
             _updateLayers = new SystemLayer[0];

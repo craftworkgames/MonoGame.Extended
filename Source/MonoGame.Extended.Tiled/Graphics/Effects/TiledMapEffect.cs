@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics.Effects;
 
-namespace MonoGame.Extended.Graphics.Effects
+namespace MonoGame.Extended.Tiled.Graphics.Effects
 {
     public class TiledMapEffect : DefaultEffect, ITiledMapEffect
     {

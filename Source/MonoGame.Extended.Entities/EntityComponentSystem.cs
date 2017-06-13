@@ -37,13 +37,13 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Entities
 {
-    public sealed class EntityComponentSystemManager : DrawableGameComponent
+    public sealed class EntityComponentSystem : DrawableGameComponent
     {
         private readonly SystemManager _systemManager;
 
         public EntityManager EntityManager { get; }
 
-        public EntityComponentSystemManager(Game game)
+        public EntityComponentSystem(Game game)
             : base(game)
         {
             _systemManager = new SystemManager(this);

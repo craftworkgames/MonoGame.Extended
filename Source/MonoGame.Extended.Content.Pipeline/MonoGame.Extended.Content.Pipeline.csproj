@@ -54,16 +54,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\MonoGame.Extended.Tiled\Tiled\TiledMapHelper.cs">
+    <Compile Include="..\MonoGame.Extended.Tiled\TiledMapHelper.cs">
       <Link>Tiled\TiledMapHelper.cs</Link>
     </Compile>
-    <Compile Include="..\MonoGame.Extended.Tiled\Tiled\TiledMapLayerType.cs">
+    <Compile Include="..\MonoGame.Extended.Tiled\TiledMapLayerType.cs">
       <Link>Tiled\TiledMapLayerType.cs</Link>
     </Compile>
-    <Compile Include="..\MonoGame.Extended.Tiled\Tiled\TiledMapObjectType.cs">
+    <Compile Include="..\MonoGame.Extended.Tiled\TiledMapObjectType.cs">
       <Link>Tiled\TiledMapObjectType.cs</Link>
     </Compile>
-    <Compile Include="..\MonoGame.Extended.Tiled\Tiled\TiledMapTileFlipFlags.cs">
+    <Compile Include="..\MonoGame.Extended.Tiled\TiledMapTileFlipFlags.cs">
       <Link>Tiled\TiledMapTileFlipFlags.cs</Link>
     </Compile>
     <Compile Include="Animations\AstridAnimatorAnimation.cs" />

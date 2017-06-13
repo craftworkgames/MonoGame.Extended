@@ -1,6 +1,6 @@
 using System;
 using Microsoft.Xna.Framework.Content;
-using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Tiled.Graphics;
 
 namespace MonoGame.Extended.Tiled
 {

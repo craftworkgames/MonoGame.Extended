@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
-using MonoGame.Extended.Tiled;
 
-namespace MonoGame.Extended.Graphics
+namespace MonoGame.Extended.Tiled.Graphics
 {
     public sealed class TiledMapLayerAnimatedModel : TiledMapLayerModel
     {
