@@ -52,6 +52,8 @@
     <Compile Include="AspectAttribute.cs" />
     <Compile Include="Aspect.cs" />
     <Compile Include="BitVector.cs" />
+    <Compile Include="DefaultDependencyResolver.cs" />
+    <Compile Include="DependencyResolver.cs" />
     <Compile Include="EntityComponentAttribute.cs" />
     <Compile Include="EntityComponentPool.cs" />
     <Compile Include="EntityComponentPoolAttribute.cs" />
