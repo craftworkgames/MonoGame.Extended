@@ -17,7 +17,7 @@ namespace Demo.StarWarrior
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
         private readonly Random _random = new Random();
-        private readonly EntityComponentSystemManager _ecs;
+        private readonly EntityComponentSystem _ecs;
         private readonly EntityManager _entityManager;
 
         private SpriteBatch _spriteBatch;
@@ -41,7 +41,7 @@ namespace Demo.StarWarrior
                 SynchronizeWithVerticalRetrace = true,
             };
 
-            _ecs = new EntityComponentSystemManager(this);
+            _ecs = new EntityComponentSystem(this);
             _entityManager = _ecs.EntityManager;
 
             // scan for components and systems in provided assemblies

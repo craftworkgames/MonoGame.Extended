@@ -44,6 +44,7 @@ namespace MonoGame.Extended.Entities
 {
     public class EntityManager
     {
+        private readonly DependencyResolver _dependencyResolver;
         private readonly SystemManager _systemManager;
         private readonly ObjectPool<Entity> _pool;
         private readonly Dictionary<string, Entity> _entitiesByName;
@@ -65,8 +66,9 @@ namespace MonoGame.Extended.Entities
         public event EntityDelegate EntityRemoved;
         public event EntityDelegate EntityDestroyed;
 
-        internal EntityManager(SystemManager systemManager)
+        internal EntityManager(SystemManager systemManager, DependencyResolver dependencyResolver)
         {
+            _dependencyResolver = dependencyResolver;
             _systemManager = systemManager;
 
             _pool = new ObjectPool<Entity>(CreateEntityObject, 100, ObjectPoolIsFullPolicy.IncreaseSize);
@@ -311,7 +313,7 @@ namespace MonoGame.Extended.Entities
             }
             else
             {
-                component = (EntityComponent)Activator.CreateInstance(componentType.Type);
+                component =  _dependencyResolver.Resolve<EntityComponent>(componentType.Type);
             }
 
             component.Entity = entity;
@@ -457,7 +459,7 @@ namespace MonoGame.Extended.Entities
             Debug.Assert(!_componentPoolsByComponentTypeIndex.ContainsKey(componentType.Index));
 
             var poolType = typeof(ComponentPool<>).MakeGenericType(componentType.Type);
-            var componentPool = (IComponentPool)Activator.CreateInstance(poolType, initialSize, isFullPolicy);
+            var componentPool = (IComponentPool)_dependencyResolver.Resolve(poolType, initialSize, isFullPolicy);
 
             _componentPoolsByComponentTypeIndex.Add(componentType.Index, componentPool);
         }

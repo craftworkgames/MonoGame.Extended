@@ -19,11 +19,11 @@ namespace Demo.Platformer.Entities
 
     public class EntityFactory
     {
-        private readonly EntityComponentSystemManager _ecs;
+        private readonly EntityComponentSystem _ecs;
         private readonly EntityManager _entityManager;
         private TextureAtlas _characterTextureAtlas;
 
-        public EntityFactory(EntityComponentSystemManager ecs, ContentManager contentManager)
+        public EntityFactory(EntityComponentSystem ecs, ContentManager contentManager)
         {
             _ecs = ecs;
             _entityManager = ecs.EntityManager;

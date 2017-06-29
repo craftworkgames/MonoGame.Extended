@@ -37,17 +37,19 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Entities
 {
-    public sealed class EntityComponentSystemManager : DrawableGameComponent
+    public sealed class EntityComponentSystem : DrawableGameComponent
     {
         private readonly SystemManager _systemManager;
+        private readonly DependencyResolver _dependencyResolver;
 
         public EntityManager EntityManager { get; }
 
-        public EntityComponentSystemManager(Game game)
+        public EntityComponentSystem(Game game, DependencyResolver dependencyResolver = null)
             : base(game)
         {
+            _dependencyResolver = dependencyResolver ?? new DefaultDependencyResolver();
             _systemManager = new SystemManager(this);
-            EntityManager = new EntityManager(_systemManager);
+            EntityManager = new EntityManager(_systemManager, _dependencyResolver);
         }
 
         // don't call this every frame, lol
@@ -153,7 +155,6 @@ namespace MonoGame.Extended.Entities
 
             foreach (var typeInfo in entityTempalteTypeInfos)
             {
-
                 EntityTemplateAttribute entityTemplateAttribute = null;
 
                 var attributes = typeInfo.GetCustomAttributes(false);
@@ -168,7 +169,7 @@ namespace MonoGame.Extended.Entities
                 if (entityTemplateAttribute == null)
                     return;
 
-                var entityTemplate = (EntityTemplate)Activator.CreateInstance(typeInfo.AsType());
+                var entityTemplate = _dependencyResolver.Resolve<EntityTemplate>(typeInfo.AsType());
                 EntityManager.AddEntityTemplate(entityTemplateAttribute.Name, entityTemplate);
             }
         }
@@ -223,7 +224,7 @@ namespace MonoGame.Extended.Entities
                 if (systemAttribute == null)
                     return;
 
-                var system = (EntitySystem)Activator.CreateInstance(typeInfo.AsType());
+                var system = _dependencyResolver.Resolve<EntitySystem>(typeInfo.AsType());
                 var processingSystem = system as EntityProcessingSystem;
                 if (processingSystem != null)
                     processingSystem.Aspect = new Aspect(andMask, orMask, norMask);

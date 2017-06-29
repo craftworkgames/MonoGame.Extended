@@ -164,7 +164,7 @@ namespace MonoGame.Extended
         /// <param name="result">The resulting rectangle.</param>
         public static void CreateFrom(Point2 minimum, Point2 maximum, out RectangleF result)
         {
-            result.X = minimum.Y;
+            result.X = minimum.X;
             result.Y = minimum.Y;
             result.Width = maximum.X - maximum.X;
             result.Height = maximum.Y - minimum.Y;

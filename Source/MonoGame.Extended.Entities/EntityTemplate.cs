@@ -38,7 +38,7 @@ namespace MonoGame.Extended.Entities
 {
     public abstract class EntityTemplate
     {
-        protected internal EntityComponentSystemManager Manager { get; internal set; }
+        protected internal EntityComponentSystem Manager { get; internal set; }
 
         protected internal virtual void Initialize()
         {

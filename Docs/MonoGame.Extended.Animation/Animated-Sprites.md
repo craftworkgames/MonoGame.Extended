@@ -25,7 +25,7 @@ Hopefully there are a couple of programs to create shis files. Once you have tho
 # Construct the move
 Lets initiate our pixels using the Texture imported and then we will use the map to limit and access easily each image.
 
-```c#
+```csharp
 var characterTexture = content.Load<Texture2D>("Sprites/kunio");
 var characterMap = content.Load<Dictionary<string, Rectangle>>("Sprites/kunioMap");
 var characterAtlas = new TextureAtlas("kunio", characterTexture, characterMap);
@@ -41,13 +41,13 @@ Using a SpriteSheetAnimationFactory we can create Animations and set index of fr
 # Drawing the final result
 On each update you will need to call the animation to make the transitions between frames.
 
-```c#
+```csharp
 characterSpriteAnimation.Update(deltaSeconds);
 ```
 
 And finally on Draw the SpriteBatch will do the rest
 
-```c#
+```csharp
 spriteBatch.Begin();
 spriteBatch.Draw(characterSpriteAnimation);
 spriteBatch.End();

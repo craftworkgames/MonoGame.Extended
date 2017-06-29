@@ -2,7 +2,7 @@
 
 namespace MonoGame.Extended.Tiled
 {
-    internal static class TiledMapHelper
+    public static class TiledMapHelper
     {
         // 4 vertices per tile
         public const int VerticesPerTile = 4;
