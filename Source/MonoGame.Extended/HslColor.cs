@@ -106,6 +106,11 @@ namespace MonoGame.Extended
             return new HslColor(a.H + b.H, a.S + b.S, a.L + b.L);
         }
 
+        public static implicit operator HslColor(string value)
+        {
+            return Parse(value);
+        }
+
         public int CompareTo(HslColor other)
         {
             // ReSharper disable ImpureMethodCallOnReadonlyValueField

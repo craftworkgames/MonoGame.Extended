@@ -1,8 +1,5 @@
-﻿using System;
-using System.Runtime.Serialization.Formatters;
-using MonoGame.Extended.Serialization;
+﻿using MonoGame.Extended.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace MonoGame.Extended.Particles.Serialization
 {
@@ -24,27 +21,8 @@ namespace MonoGame.Extended.Particles.Serialization
             Converters.Add(new HslColorJsonConverter());
             Converters.Add(new ModifierExecutionStrategyJsonConverter());
             ContractResolver = new ShortNameJsonContractResolver();
-
-                //Binder = new ShortTypeNameSerializationBinder();
-
             NullValueHandling = nullValueHandling;
-            TypeNameHandling = TypeNameHandling.Auto;
             Formatting = Formatting.Indented;
         }
     }
-
-    //public class ShortTypeNameSerializationBinder : DefaultSerializationBinder
-    //{
-    //    public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
-    //    {
-    //        assemblyName = null;
-    //        typeName = serializedType.Name;
-    //        //base.BindToName(serializedType, out assemblyName, out typeName);
-    //    }
-
-    //    public override Type BindToType(string assemblyName, string typeName)
-    //    {
-    //        return base.BindToType(assemblyName, typeName);
-    //    }
-    //}
 }
