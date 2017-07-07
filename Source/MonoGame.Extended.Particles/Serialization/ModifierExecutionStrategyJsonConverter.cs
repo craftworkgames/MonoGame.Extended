@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -8,6 +9,7 @@ namespace MonoGame.Extended.Particles.Serialization
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            writer.WriteValue(value.ToString());
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -18,7 +20,8 @@ namespace MonoGame.Extended.Particles.Serialization
 
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(ParticleModifierExecutionStrategy);
+            return objectType == typeof(ParticleModifierExecutionStrategy) 
+                || objectType.GetTypeInfo().BaseType == typeof(ParticleModifierExecutionStrategy);
         }
     }
 }

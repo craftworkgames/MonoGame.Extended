@@ -46,12 +46,12 @@ namespace MonoGame.Extended.Particles
 
         public static ParticleEffect FromStream(ITextureRegionService textureRegionService, Stream stream)
         {
-            var skinSerializer = new ParticleJsonSerializer(textureRegionService);
+            var serializer = new ParticleJsonSerializer(textureRegionService);
 
             using (var streamReader = new StreamReader(stream))
             using (var jsonReader = new JsonTextReader(streamReader))
             {
-                return skinSerializer.Deserialize<ParticleEffect>(jsonReader);
+                return serializer.Deserialize<ParticleEffect>(jsonReader);
             }
         }
 

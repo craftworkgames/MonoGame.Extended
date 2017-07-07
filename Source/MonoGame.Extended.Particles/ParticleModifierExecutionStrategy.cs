@@ -19,6 +19,11 @@ namespace MonoGame.Extended.Particles
                 for (var i = 0; i < modifiers.Length; i++)
                     modifiers[i].Update(elapsedSeconds, iterator.Reset());
             }
+
+            public override string ToString()
+            {
+                return nameof(Serial);
+            }
         }
 
         internal class ParallelModifierExecutionStrategy : ParticleModifierExecutionStrategy
@@ -26,6 +31,11 @@ namespace MonoGame.Extended.Particles
             internal override void ExecuteModifiers(Modifier[] modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
             {
                 TPL.Parallel.ForEach(modifiers, modifier => modifier.Update(elapsedSeconds, iterator.Reset()));
+            }
+
+            public override string ToString()
+            {
+                return nameof(Parallel);
             }
         }
 

@@ -184,7 +184,7 @@ namespace MonoGame.Extended.TextureAtlases
         /// <returns>The <see cref="TextureRegion2D" />.</returns>
         public TextureRegion2D GetRegion(int index)
         {
-            if ((index < 0) || (index >= _regions.Count))
+            if (index < 0 || index >= _regions.Count)
                 throw new IndexOutOfRangeException();
 
             return _regions[index];

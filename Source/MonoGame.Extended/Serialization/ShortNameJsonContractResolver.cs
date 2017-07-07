@@ -1,18 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace MonoGame.Extended.Serialization
 {
-    public class ShortNameJsonContractResolver : DefaultContractResolver
+    public class ShortNameJsonContractResolver : CamelCasePropertyNamesContractResolver
     {
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            var properties = base.CreateProperties(type, memberSerialization);
+            var properties = base.CreateProperties(type, memberSerialization)
+                .Where(p => p.Writable)
+                .ToList();
 
-            if (type.GetTypeInfo().IsAbstract)
+            var typeInfo = type.GetTypeInfo();
+
+            if (typeInfo.IsAbstract)
             {
                 properties.Insert(0, new JsonProperty
                 {

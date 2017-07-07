@@ -7,6 +7,8 @@ namespace MonoGame.Extended.Particles.Serialization
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            var timeSpan = (TimeSpan) value;
+            writer.WriteValue(timeSpan.TotalSeconds);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

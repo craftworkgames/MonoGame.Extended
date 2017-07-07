@@ -1,9 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Serialization;
 using Newtonsoft.Json;
 
-namespace MonoGame.Extended.Particles.Serialization
+namespace MonoGame.Extended.Serialization
 {
     public class HslColorJsonConverter : JsonConverter
     {
