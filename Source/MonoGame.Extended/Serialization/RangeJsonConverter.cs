@@ -26,7 +26,13 @@ namespace MonoGame.Extended.Serialization
             var values = reader.ReadAsMultiDimensional<T>();
 
             if (values.Length == 2)
-                return new Range<T>(values[0], values[1]);
+            {
+                if (values[0].CompareTo(values[1]) < 0)
+                    return new Range<T>(values[0], values[1]);
+
+                return new Range<T>(values[1], values[0]);
+            }
+                
 
             if (values.Length == 1)
                 return new Range<T>(values[0], values[0]);
