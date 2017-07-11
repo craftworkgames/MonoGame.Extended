@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
@@ -50,10 +51,12 @@ namespace MonoGame.Extended.Particles
         public int ActiveParticles => Buffer.Count;
         public Vector2 Offset { get; set; }
         public Modifier[] Modifiers { get; set; }
-        public ParticleModifierExecutionStrategy ModifierExecutionStrategy { get; set; }
         public Profile Profile { get; set; }
         public ParticleReleaseParameters Parameters { get; set; }
         public TextureRegion2D TextureRegion { get; set; }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public ParticleModifierExecutionStrategy ModifierExecutionStrategy { get; set; }
 
         internal ParticleBuffer Buffer;
 
