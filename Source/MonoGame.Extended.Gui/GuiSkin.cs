@@ -20,10 +20,9 @@ namespace MonoGame.Extended.Gui
             TextureAtlases = new List<TextureAtlas>();
             Fonts = new List<BitmapFont>();
             NinePatches = new List<NinePatchRegion2D>();
-            _styles = new KeyedCollection<string, GuiControlStyle>(s => s.Name ?? s.TargetType.Name);
+            Styles = new KeyedCollection<string, GuiControlStyle>(s => s.Name ?? s.TargetType.Name);
         }
 
-        private readonly KeyedCollection<string, GuiControlStyle> _styles;
 
         [JsonProperty(Order = 0)]
         public string Name { get; set; }
@@ -44,16 +43,16 @@ namespace MonoGame.Extended.Gui
         public GuiCursor Cursor { get; set; }
 
         [JsonProperty(Order = 6)]
-        public ICollection<GuiControlStyle> Styles => _styles;
+        public KeyedCollection<string, GuiControlStyle> Styles { get; private set; }
 
         public GuiControlStyle GetStyle(string name)
         {
-            return _styles[name];
+            return Styles[name];
         }
 
         public GuiControlStyle GetStyle(Type controlType)
         {
-            return _styles.FirstOrDefault(s => s.TargetType == controlType);
+            return Styles.FirstOrDefault(s => s.TargetType == controlType);
         }
 
         public static GuiSkin FromFile(ContentManager contentManager, string path, params Type[] customControlTypes)

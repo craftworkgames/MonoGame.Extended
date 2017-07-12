@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -92,7 +93,7 @@ namespace Demo.Features.Demos
         {
             _particleEffect = new ParticleEffect
             {
-                Emitters = new[]
+                Emitters = new List<ParticleEmitter>
                 {
                     new ParticleEmitter(textureRegion, 500, TimeSpan.FromSeconds(2.5),
                         Profile.Ring(150f, Profile.CircleRadiation.In))

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles.Serialization;
@@ -14,7 +15,7 @@ namespace MonoGame.Extended.Particles
             Name = name;
             AutoTrigger = autoTrigger;
             AutoTriggerDelay = autoTriggerDelay;
-            Emitters = new ParticleEmitter[0];
+            Emitters = new List<ParticleEmitter>();
         }
 
         private float _nextAutoTrigger;
@@ -22,7 +23,7 @@ namespace MonoGame.Extended.Particles
         public string Name { get; set; }
         public bool AutoTrigger { get; set; }
         public float AutoTriggerDelay { get; set; }
-        public ParticleEmitter[] Emitters { get; set; }
+        public List<ParticleEmitter> Emitters { get; set; }
         public int ActiveParticles => Emitters.Sum(t => t.ActiveParticles);
 
         public void FastForward(Vector2 position, float seconds, float triggerPeriod)
@@ -68,7 +69,7 @@ namespace MonoGame.Extended.Particles
                 }
             }
 
-            for (var i = 0; i < Emitters.Length; i++)
+            for (var i = 0; i < Emitters.Count; i++)
                 Emitters[i].Update(elapsedSeconds);
         }
 
@@ -79,13 +80,13 @@ namespace MonoGame.Extended.Particles
 
         public void Trigger(Vector2 position, float layerDepth = 0)
         {
-            for (var i = 0; i < Emitters.Length; i++)
+            for (var i = 0; i < Emitters.Count; i++)
                 Emitters[i].Trigger(position, layerDepth);
         }
 
         public void Trigger(LineSegment line)
         {
-            for (var i = 0; i < Emitters.Length; i++)
+            for (var i = 0; i < Emitters.Count; i++)
                 Emitters[i].Trigger(line);
         }
 

@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Particles
     {
         public static void Draw(this SpriteBatch spriteBatch, ParticleEffect effect)
         {
-            for (var i = 0; i < effect.Emitters.Length; i++)
+            for (var i = 0; i < effect.Emitters.Count; i++)
                 UnsafeDraw(spriteBatch, effect.Emitters[i]);
         }
 

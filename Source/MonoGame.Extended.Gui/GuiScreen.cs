@@ -22,7 +22,7 @@ namespace MonoGame.Extended.Gui
         public GuiSkin Skin { get; set; }
 
         [JsonProperty(Order = 2)]
-        public GuiControlCollection Controls { get; }
+        public GuiControlCollection Controls { get; set; }
 
         [JsonIgnore]
         public GuiWindowCollection Windows { get; }
