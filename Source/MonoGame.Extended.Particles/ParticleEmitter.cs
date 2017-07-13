@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles.Modifiers;
@@ -26,7 +27,7 @@ namespace MonoGame.Extended.Particles
             Buffer = new ParticleBuffer(capacity);
             Offset = Vector2.Zero;
             Profile = profile;
-            Modifiers = new Modifier[0];
+            Modifiers = new List<Modifier>();
             ModifierExecutionStrategy = ParticleModifierExecutionStrategy.Serial;
             Parameters = new ParticleReleaseParameters();
         }
@@ -50,7 +51,7 @@ namespace MonoGame.Extended.Particles
         public string Name { get; set; }
         public int ActiveParticles => Buffer.Count;
         public Vector2 Offset { get; set; }
-        public Modifier[] Modifiers { get; set; }
+        public List<Modifier> Modifiers { get; }
         public Profile Profile { get; set; }
         public ParticleReleaseParameters Parameters { get; set; }
         public TextureRegion2D TextureRegion { get; set; }
