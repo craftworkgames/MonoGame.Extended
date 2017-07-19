@@ -19,6 +19,9 @@ namespace MonoGame.Extended.Particles
 
         private static unsafe void UnsafeDraw(SpriteBatch spriteBatch, ParticleEmitter emitter)
         {
+            if(emitter.TextureRegion == null)
+                return;
+
             var textureRegion = emitter.TextureRegion;
             var origin = new Vector2(textureRegion.Width/2f, textureRegion.Height/2f);
             var iterator = emitter.Buffer.Iterator;

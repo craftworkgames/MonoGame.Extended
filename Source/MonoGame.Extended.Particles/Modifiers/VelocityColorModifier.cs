@@ -1,5 +1,4 @@
 ﻿using System;
-using MonoGame.Extended;
 
 namespace MonoGame.Extended.Particles.Modifiers
 {
