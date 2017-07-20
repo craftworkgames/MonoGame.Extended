@@ -1,14 +1,17 @@
-﻿using MonoGame.Extended.Particles.Modifiers.Interpolators;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using MonoGame.Extended.Particles.Modifiers.Interpolators;
 
 namespace MonoGame.Extended.Particles.Modifiers
 {
     public class AgeModifier : Modifier
     {
-        public IInterpolator[] Interpolators { get; set; }
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        public List<Interpolator> Interpolators { get; } = new List<Interpolator>();
 
         public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
-            var n = Interpolators.Length;
+            var n = Interpolators.Count;
             while (iterator.HasNext)
             {
                 var particle = iterator.Next();

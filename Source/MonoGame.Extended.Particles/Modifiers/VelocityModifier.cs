@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using MonoGame.Extended.Particles.Modifiers.Interpolators;
 
 namespace MonoGame.Extended.Particles.Modifiers
 {
-    public class VelocityModifier
+    public class VelocityModifier : Modifier
     {
-        public IInterpolator[] Interpolators { get; set; }
+        public List<Interpolator> Interpolators { get; set; } = new List<Interpolator>();
 
         public float VelocityThreshold { get; set; }
 
-        public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
             var velocityThreshold2 = VelocityThreshold*VelocityThreshold;
-            var n = Interpolators.Length;
+            var n = Interpolators.Count;
 
             while (iterator.HasNext)
             {

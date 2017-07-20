@@ -6,7 +6,7 @@ using MonoGame.Extended.Serialization;
 
 namespace MonoGame.Extended.Particles.Serialization
 {
-    public class InterpolatorJsonConverter : BaseTypeJsonConverter<IInterpolator>
+    public class InterpolatorJsonConverter : BaseTypeJsonConverter<Interpolator>
     {
         public InterpolatorJsonConverter() 
             : base(GetSupportedTypes(), "Interpolator")
@@ -15,11 +15,11 @@ namespace MonoGame.Extended.Particles.Serialization
 
         private static IEnumerable<TypeInfo> GetSupportedTypes()
         {
-            return typeof(IInterpolator)
+            return typeof(Interpolator)
                 .GetTypeInfo()
                 .Assembly
                 .DefinedTypes
-                .Where(type => typeof(IInterpolator).GetTypeInfo().IsAssignableFrom(type) && !type.IsAbstract);
+                .Where(type => typeof(Interpolator).GetTypeInfo().IsAssignableFrom(type) && !type.IsAbstract);
         }
     }
 }
