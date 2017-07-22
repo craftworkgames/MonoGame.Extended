@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Serialization
             writer.WritePropertyName("type");
             writer.WriteValue(_typesToNames[type]);
 
-            foreach (var property in properties.Where(p => p.CanWrite))
+            foreach (var property in properties.Where(p => p.CanWrite)) // TODO: Technically an IList property is writable as well.
             {
                 var propertyName = _namingStrategy.GetPropertyName(property.Name, false);
                 writer.WritePropertyName(propertyName);

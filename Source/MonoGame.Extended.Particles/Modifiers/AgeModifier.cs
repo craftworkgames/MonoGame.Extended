@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Particles.Modifiers
     public class AgeModifier : Modifier
     {
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public List<Interpolator> Interpolators { get; } = new List<Interpolator>();
+        public List<Interpolator> Interpolators { get; set; } = new List<Interpolator>();
 
         public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
