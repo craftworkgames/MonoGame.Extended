@@ -1,6 +1,4 @@
-﻿using MonoGame.Extended.TextureAtlases;
-
-namespace MonoGame.Extended.Gui.Controls
+﻿namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiLabel : GuiControl
     {
@@ -8,15 +6,10 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public GuiLabel(string text)
+        public GuiLabel(GuiSkin skin, string text = null) 
+            : base(skin)
         {
-            Text = text;
-        }
-
-        public GuiLabel(string text, TextureRegion2D backgroundRegion)
-            : base(backgroundRegion)
-        {
-            Text = text;
+            Text = text ?? string.Empty;
         }
     }
 }

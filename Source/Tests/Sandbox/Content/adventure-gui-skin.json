@@ -1,59 +1,34 @@
 ﻿{
   "Name": "adventure",
-  "TextureAtlases": [ "adventure-gui-atlas" ],
-  "Fonts": [ "small-font" ],
+  "TextureAtlases": ["adventure-gui-atlas"],
+  "Fonts": ["small-font"],
   "Cursor": {
     "TextureRegion": "cursorSword_silver",
     "Color": "#aaaaaa"
   },
   "NinePatches": [
-    {
-      "TextureRegion": "buttonLong_grey",
-      "Padding": 10
-    },
-    {
-      "TextureRegion": "buttonLong_grey_pressed",
-      "Padding": 10
-    },
-    {
-      "TextureRegion": "panel_brown",
-      "Padding": "10"
-    },
-    {
-      "TextureRegion": "panelInset_beige",
-      "Padding": "10"
-    },
-    {
-      "TextureRegion": "grey_textBox",
-      "Padding": "10"
-    },
-    {
-      "TextureRegion": "progress-bar-container",
-      "Padding": "10"
-    },
-    {
-      "TextureRegion": "progress-bar-blue",
-      "Padding": "10"
-    }
+    { "TextureRegion": "buttonLong_grey", "Padding": 10 },
+    { "TextureRegion": "buttonLong_grey_pressed", "Padding": 10 },
+    { "TextureRegion": "panel_brown", "Padding": "10" },
+    { "TextureRegion": "panelInset_beige", "Padding": "10" },
+    { "TextureRegion": "grey_textBox", "Padding": "10" },
+    { "TextureRegion": "progress-bar-container", "Padding": "10" },
+    { "TextureRegion": "progress-bar-blue", "Padding": "10" }
   ],
   "Styles": [
     {
-      "Name": "close-button",
-      "Type": "GuiButton",
-      "BackgroundRegion": "buttonRound_close",
-      "HoverStyle": {
-        "Type": "GuiButton",
-        "Color": "LightGray"
-      }
+      "Type": "MyPanel",
+      "VerticalTextAlignment": "Bottom"
     },
     {
-      "Name": "white-button",
       "Type": "GuiButton",
       "Margin": "5 2",
       "BackgroundRegion": "buttonLong_grey",
       "TextOffset": "0 -2",
       "TextColor": "#f4a460ff",
       "Color": "#8b4513ff",
+      "HorizontalAlignment": "Center",
+      "VerticalAlignment": "Centre",
       "PressedStyle": {
         "Type": "GuiButton",
         "BackgroundRegion": "buttonLong_grey_pressed",
@@ -63,6 +38,15 @@
         "Type": "GuiButton",
         "Color": "#9E4C16ff",
         "TextColor": "#ffffffff"
+      }
+    },
+    {
+      "Name": "close-button",
+      "Type": "GuiButton",
+      "BackgroundRegion": "buttonRound_close",
+      "HoverStyle": {
+        "Type": "GuiButton",
+        "Color": "LightGray"
       }
     },
     {
@@ -97,7 +81,6 @@
       "BackgroundRegion": "monogame-title"
     },
     {
-      "Name": "text-box",
       "Type": "GuiTextBox",
       "ClipPadding": "8 0",
       "BackgroundRegion": "grey_textBox",
@@ -113,7 +96,6 @@
     {
       "Name": "list-box",
       "Type": "GuiListBox",
-      "Size": "200 150",
       "ClipPadding": "7 5",
       "BackgroundRegion": "grey_textBox",
       "TextColor": "#444444"
@@ -123,6 +105,12 @@
       "Type": "GuiDialog",
       "Padding": "10",
       "BackgroundRegion": "panel_brown",
+      "TextColor": "#444444"
+    },
+    {
+      "Type": "GuiComboBox",
+      "ClipPadding": "7 5",
+      "BackgroundRegion": "buttonLong_grey",
       "TextColor": "#444444"
     }
   ]

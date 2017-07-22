@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.TextureAtlases;
-
-namespace MonoGame.Extended.Gui.Controls
+﻿namespace MonoGame.Extended.Gui.Controls
 {
     public abstract class GuiLayoutControl : GuiControl
     {
@@ -10,10 +7,11 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        protected GuiLayoutControl(TextureRegion2D backgroundRegion) 
-            : base(backgroundRegion)
+        protected GuiLayoutControl(GuiSkin skin) 
+            : base(skin)
         {
-            Origin = Vector2.Zero;
+            HorizontalAlignment = HorizontalAlignment.Stretch;
+            VerticalAlignment = VerticalAlignment.Stretch;
         }
 
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
@@ -26,6 +24,12 @@ namespace MonoGame.Extended.Gui.Controls
         protected static void PlaceControl(IGuiContext context, GuiControl control, float x, float y, float width, float height)
         {
             GuiLayoutHelper.PlaceControl(context, control, x, y, width, height);
+        }
+
+        protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        {
+            if (BackgroundRegion != null)
+                renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
         }
     }
 }

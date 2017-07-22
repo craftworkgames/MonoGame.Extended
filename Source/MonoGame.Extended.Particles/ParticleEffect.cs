@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles.Serialization;
@@ -7,16 +8,22 @@ using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Particles
 {
-    public class ParticleEffect
+    public class ParticleEffect : Transform2D<ParticleEffect>
     {
-        public ParticleEffect()
+        public ParticleEffect(string name = null, bool autoTrigger = true, float autoTriggerDelay = 0f)
         {
-            Emitters = new ParticleEmitter[0];
+            Name = name;
+            AutoTrigger = autoTrigger;
+            AutoTriggerDelay = autoTriggerDelay;
+            Emitters = new List<ParticleEmitter>();
         }
 
-        public string Name { get; set; }
-        public ParticleEmitter[] Emitters { get; set; }
+        private float _nextAutoTrigger;
 
+        public string Name { get; set; }
+        public bool AutoTrigger { get; set; }
+        public float AutoTriggerDelay { get; set; }
+        public List<ParticleEmitter> Emitters { get; set; }
         public int ActiveParticles => Emitters.Sum(t => t.ActiveParticles);
 
         public void FastForward(Vector2 position, float seconds, float triggerPeriod)
@@ -40,31 +47,52 @@ namespace MonoGame.Extended.Particles
 
         public static ParticleEffect FromStream(ITextureRegionService textureRegionService, Stream stream)
         {
-            var skinSerializer = new ParticleJsonSerializer(textureRegionService);
+            var serializer = new ParticleJsonSerializer(textureRegionService);
 
             using (var streamReader = new StreamReader(stream))
             using (var jsonReader = new JsonTextReader(streamReader))
             {
-                return skinSerializer.Deserialize<ParticleEffect>(jsonReader);
+                return serializer.Deserialize<ParticleEffect>(jsonReader);
             }
         }
 
         public void Update(float elapsedSeconds)
         {
-            foreach (var e in Emitters)
-                e.Update(elapsedSeconds);
+            if (AutoTrigger)
+            {
+                _nextAutoTrigger -= elapsedSeconds;
+
+                if (_nextAutoTrigger <= 0)
+                {
+                    Trigger();
+                    _nextAutoTrigger = AutoTriggerDelay;
+                }
+            }
+
+            for (var i = 0; i < Emitters.Count; i++)
+                Emitters[i].Update(elapsedSeconds);
+        }
+
+        public void Trigger()
+        {
+            Trigger(Position);
         }
 
         public void Trigger(Vector2 position, float layerDepth = 0)
         {
-            foreach (var e in Emitters)
-                e.Trigger(position, layerDepth);
+            for (var i = 0; i < Emitters.Count; i++)
+                Emitters[i].Trigger(position, layerDepth);
         }
 
         public void Trigger(LineSegment line)
         {
-            foreach (var e in Emitters)
-                e.Trigger(line);
+            for (var i = 0; i < Emitters.Count; i++)
+                Emitters[i].Trigger(line);
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

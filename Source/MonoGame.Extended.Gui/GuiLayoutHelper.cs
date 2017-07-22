@@ -11,7 +11,7 @@ namespace MonoGame.Extended.Gui
     {
         public static Size2 GetSizeWithMargins(GuiControl control, IGuiContext context, Size2 availableSize)
         {
-            return control.GetDesiredSize(context, availableSize) + new Size2(control.Margin.Left + control.Margin.Right, control.Margin.Top + control.Margin.Bottom);
+            return control.GetDesiredSize(context, availableSize) + control.Margin.Size;
         }
 
         public static void PlaceControl(IGuiContext context, GuiControl control, float x, float y, float width, float height)
@@ -26,6 +26,18 @@ namespace MonoGame.Extended.Gui
 
             var layoutControl = control as GuiLayoutControl;
             layoutControl?.Layout(context, new RectangleF(x, y, width, height));
+        }
+
+        public static void PlaceWindow(IGuiContext context, GuiWindow window, float x, float y, float width, float height)
+        {
+            var rectangle = new Rectangle((int)x, (int)y, (int)width, (int)height);
+            var availableSize = new Size2(width, height);
+            var desiredSize = window.GetDesiredSize(context, availableSize);
+            var alignedRectangle = AlignRectangle(HorizontalAlignment.Centre, VerticalAlignment.Centre, desiredSize, rectangle);
+
+            window.Position = new Vector2(alignedRectangle.X, alignedRectangle.Y);
+            window.Size = alignedRectangle.Size;
+            window.Layout(context, window.BoundingRectangle);
         }
 
         public static Rectangle AlignRectangle(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Size2 size, Rectangle targetRectangle)

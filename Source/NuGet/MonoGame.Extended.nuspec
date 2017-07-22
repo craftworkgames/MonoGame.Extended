@@ -30,6 +30,7 @@
   </metadata>
   <files>
     <file src="..\MonoGame.Extended\bin\Release\MonoGame.Extended.dll" target="lib\portable-net45+win8+wpa81" />
+    <file src="..\MonoGame.Extended\bin\Release\MonoGame.Extended.pdb" target="lib\portable-net45+win8+wpa81" />
     <!-- A readme.txt will be displayed when the package is installed -->
     <file src="readme.txt" target="" />
   </files>

@@ -11,24 +11,32 @@ namespace MonoGame.Extended.Particles
         public static readonly ParticleModifierExecutionStrategy Serial = new SerialModifierExecutionStrategy();
         public static readonly ParticleModifierExecutionStrategy Parallel = new ParallelModifierExecutionStrategy();
 
-        internal abstract void ExecuteModifiers(IEnumerable<IModifier> modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator);
+        internal abstract void ExecuteModifiers(List<Modifier> modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator);
 
         internal class SerialModifierExecutionStrategy : ParticleModifierExecutionStrategy
         {
-            internal override void ExecuteModifiers(IEnumerable<IModifier> modifiers, float elapsedSeconds,
-                ParticleBuffer.ParticleIterator iterator)
+            internal override void ExecuteModifiers(List<Modifier> modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
             {
-                foreach (var modifier in modifiers)
-                    modifier.Update(elapsedSeconds, iterator.Reset());
+                for (var i = 0; i < modifiers.Count; i++)
+                    modifiers[i].Update(elapsedSeconds, iterator.Reset());
+            }
+
+            public override string ToString()
+            {
+                return nameof(Serial);
             }
         }
 
         internal class ParallelModifierExecutionStrategy : ParticleModifierExecutionStrategy
         {
-            internal override void ExecuteModifiers(IEnumerable<IModifier> modifiers, float elapsedSeconds,
-                ParticleBuffer.ParticleIterator iterator)
+            internal override void ExecuteModifiers(List<Modifier> modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
             {
                 TPL.Parallel.ForEach(modifiers, modifier => modifier.Update(elapsedSeconds, iterator.Reset()));
+            }
+
+            public override string ToString()
+            {
+                return nameof(Parallel);
             }
         }
 

@@ -1,15 +1,14 @@
 ﻿using System;
-using MonoGame.Extended;
 
 namespace MonoGame.Extended.Particles.Modifiers
 {
-    public class VelocityColorModifier : IModifier
+    public class VelocityColorModifier : Modifier
     {
         public HslColor StationaryColor { get; set; }
         public HslColor VelocityColor { get; set; }
         public float VelocityThreshold { get; set; }
 
-        public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
             var velocityThreshold2 = VelocityThreshold*VelocityThreshold;
 

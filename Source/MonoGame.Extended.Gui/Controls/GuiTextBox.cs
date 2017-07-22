@@ -2,30 +2,32 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input.InputListeners;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiTextBox : GuiControl
     {
         public GuiTextBox()
-            : this(backgroundRegion: null, text: string.Empty)
+            : this(null)
         {
         }
 
-        public GuiTextBox(TextureRegion2D backgroundRegion)
-            : this(backgroundRegion: backgroundRegion, text: string.Empty)
+        public GuiTextBox(GuiSkin skin, string text = null)
+            : base(skin)
         {
-        }
-
-        public GuiTextBox(TextureRegion2D backgroundRegion, string text)
-            : base(backgroundRegion)
-        {
-            Text = text;
+            Text = text ?? string.Empty;
         }
 
         public int SelectionStart { get; set; }
         public char? PasswordCharacter { get; set; }
+
+        protected override void OnTextChanged()
+        {
+            if (SelectionStart > Text.Length)
+                SelectionStart = Text.Length;
+
+            base.OnTextChanged();
+        }
 
         public override void OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
         {
@@ -39,20 +41,23 @@ namespace MonoGame.Extended.Gui.Controls
         {
             var font = Font ?? context.DefaultFont;
             var textInfo = GetTextInfo(context, Text, BoundingRectangle, HorizontalAlignment.Centre, VerticalAlignment.Centre);
-            var glyphs = font.GetGlyphs(textInfo.Text, textInfo.Position).ToArray();
+            var i = 0;
 
-            for (var i = 0; i < glyphs.Length; i++)
+            foreach (var glyph in font.GetGlyphs(textInfo.Text, textInfo.Position))
             {
-                var glyph = glyphs[i];
-                var glyphMiddle = (int)(glyph.Position.X + glyph.FontRegion.Width * 0.5f);
+                var fontRegionWidth = glyph.FontRegion?.Width ?? 0;
+                var glyphMiddle = (int)(glyph.Position.X + fontRegionWidth * 0.5f);
 
                 if (position.X >= glyphMiddle)
+                {
+                    i++;
                     continue;
+                }
 
                 return i;
             }
 
-            return glyphs.Length;
+            return i;
         }
 
         public override void OnKeyPressed(IGuiContext context, KeyboardEventArgs args)

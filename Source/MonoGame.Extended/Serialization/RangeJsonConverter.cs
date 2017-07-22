@@ -7,6 +7,18 @@ namespace MonoGame.Extended.Serialization
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            var range = (Range<T>) value;
+
+            var formatting = writer.Formatting;
+            writer.Formatting = Formatting.None;
+            writer.WriteWhitespace(" ");
+            writer.WriteStartArray();
+            serializer.Serialize(writer, range.Min);
+            serializer.Serialize(writer, range.Max);
+            //writer.WriteValue(range.Min);
+            //writer.WriteValue(range.Max);
+            writer.WriteEndArray();
+            writer.Formatting = formatting;
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -14,7 +26,13 @@ namespace MonoGame.Extended.Serialization
             var values = reader.ReadAsMultiDimensional<T>();
 
             if (values.Length == 2)
-                return new Range<T>(values[0], values[1]);
+            {
+                if (values[0].CompareTo(values[1]) < 0)
+                    return new Range<T>(values[0], values[1]);
+
+                return new Range<T>(values[1], values[0]);
+            }
+                
 
             if (values.Length == 1)
                 return new Range<T>(values[0], values[0]);

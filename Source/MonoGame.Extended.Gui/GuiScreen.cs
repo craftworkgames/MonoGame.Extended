@@ -9,26 +9,33 @@ using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui
 {
-    public class GuiScreen : IDisposable
+    public class GuiScreen : GuiElement<GuiSystem>, IDisposable
     {
         public GuiScreen(GuiSkin skin)
         {
             Skin = skin;
-            Controls = new GuiControlCollection();
+            Controls = new GuiControlCollection { ItemAdded = c => IsLayoutRequired = true };
+            Windows = new GuiWindowCollection(this) { ItemAdded = w => IsLayoutRequired = true };
         }
 
         [JsonProperty(Order = 1)]
         public GuiSkin Skin { get; set; }
 
         [JsonProperty(Order = 2)]
-        public GuiControlCollection Controls { get; }
+        public GuiControlCollection Controls { get; set; }
 
-        public float Width { get; private set; }
-        public float Height { get; private set; }
-        public Size2 Size => new Size2(Width, Height);
+        [JsonIgnore]
+        public GuiWindowCollection Windows { get; }
+
+        public new float Width { get; private set; }
+        public new float Height { get; private set; }
+        public new Size2 Size => new Size2(Width, Height);
         public bool IsVisible { get; set; } = true;
 
-        public virtual void Initialize() { }
+        [JsonIgnore]
+        public bool IsLayoutRequired { get; private set; }
+
+        public virtual void Update(GameTime gameTime) { }
 
         public void Show()
         {
@@ -66,15 +73,23 @@ namespace MonoGame.Extended.Gui
             return null;
         }
 
-        public void Layout(IGuiContext context, RectangleF rectangle)
+        public void Layout(IGuiContext context, Rectangle rectangle)
         {
             Width = rectangle.Width;
             Height = rectangle.Height;
 
-            Initialize();
-
             foreach (var control in Controls)
                 GuiLayoutHelper.PlaceControl(context, control, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
+
+            foreach (var window in Windows)
+                GuiLayoutHelper.PlaceWindow(context, window, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
+
+            IsLayoutRequired = false;
+        }
+
+        public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        {
+            renderer.DrawRectangle(BoundingRectangle, Color.Green);
         }
 
         protected virtual void Dispose(bool isDisposing)

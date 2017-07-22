@@ -350,6 +350,20 @@ namespace MonoGame.Extended
             return new Point2(vector.X, vector.Y);
         }
 
+
+        /// <summary>
+        ///     Performs an implicit conversion from a <see cref="Point" /> to a <see cref="Point2" />.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns>
+        ///     The resulting <see cref="Point2" />.
+        /// </returns>
+        public static implicit operator Point2(Point point)
+        {
+            return new Point2(point.X, point.Y);
+        }
+
+
         /// <summary>
         ///     Returns a <see cref="string" /> that represents this <see cref="Point2" />.
         /// </summary>

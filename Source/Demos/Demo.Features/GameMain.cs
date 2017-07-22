@@ -81,7 +81,7 @@ namespace Demo.Features
 
             _guiSystem = new GuiSystem(ViewportAdapter, guiRenderer)
             {
-                Screen = new SelectDemoScreen(skin, _demos, LoadDemo)
+                Screens = { new SelectDemoScreen(skin, _demos, LoadDemo) }
             };
 
             //LoadDemo(_demoIndex);
@@ -114,11 +114,11 @@ namespace Demo.Features
 
         public void Back()
         {
-            if (_guiSystem.Screen.IsVisible)
+            if (_guiSystem.Screens[0].IsVisible)
                 Exit();
 
             IsMouseVisible = false;
-            _guiSystem.Screen.Show();
+            _guiSystem.Screens[0].Show();
         }
 
         protected override void Draw(GameTime gameTime)

@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace MonoGame.Extended.Tests.Particles
 {
-    internal class AssertionModifier : IModifier
+    internal class AssertionModifier : Modifier
     {
         private readonly Predicate<Particle> _predicate;
 
@@ -14,7 +14,7 @@ namespace MonoGame.Extended.Tests.Particles
             _predicate = predicate;
         }
 
-        public unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
             while (iterator.HasNext) {
                 var particle = iterator.Next();

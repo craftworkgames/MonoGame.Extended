@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -11,8 +10,8 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public GuiUniformGrid(TextureRegion2D backgroundRegion)
-            : base(backgroundRegion)
+        public GuiUniformGrid(GuiSkin skin) 
+            : base(skin)
         {
         }
 
@@ -21,36 +20,27 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
         {
-            var columns = CalculateColumns();
-            var rows = CalculateRows(columns, Controls.Count);
-            var maxCellWidth = availableSize.Width / columns;
-            var maxCellHeight = availableSize.Height / rows;
-            var sizes = Controls
-                .Select(control => GuiLayoutHelper.GetSizeWithMargins(control, context, new Size2(maxCellWidth, maxCellHeight)))
-                .ToArray();
-            var cellWidth = Math.Min(sizes.Max(s => s.Width), maxCellWidth);
-            var cellHeight = Math.Min(sizes.Max(s => s.Height), maxCellHeight);
-
-            return new Size2(cellWidth * columns, cellHeight * rows);
+            var desiredSize = CalculateGridInfo(context, availableSize).MinCellSize;
+            return desiredSize;
         }
 
         public override void Layout(IGuiContext context, RectangleF rectangle)
         {
-            var columns = CalculateColumns();
-            var rows = CalculateRows(columns, Controls.Count);
-            var cellWidth = (float)(rectangle.Width / columns);
-            var cellHeight = (float)(rectangle.Height / rows);
+            var gridInfo = CalculateGridInfo(context, rectangle.Size);
             var columnIndex = 0;
             var rowIndex = 0;
+            var cellWidth = HorizontalAlignment == HorizontalAlignment.Stretch ? gridInfo.MaxCellWidth : gridInfo.MinCellWidth;
+            var cellHeight = VerticalAlignment == VerticalAlignment.Stretch ? gridInfo.MaxCellHeight : gridInfo.MinCellHeight;
 
             foreach (var control in Controls)
             {
                 var x = columnIndex * cellWidth;
                 var y = rowIndex * cellHeight;
+
                 PlaceControl(context, control, x, y, cellWidth, cellHeight);
                 columnIndex++;
 
-                if (columnIndex > columns - 1)
+                if (columnIndex > gridInfo.Columns - 1)
                 {
                     columnIndex = 0;
                     rowIndex++;
@@ -58,14 +48,38 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        private int CalculateRows(int columns, int controlCount)
+        private struct GridInfo
         {
-            return Rows == 0 ? (int)Math.Ceiling((float)controlCount / columns) : Rows;
+            public float MinCellWidth;
+            public float MinCellHeight;
+            public float MaxCellWidth;
+            public float MaxCellHeight;
+            public float Columns;
+            public float Rows;
+            public Size2 MinCellSize => new Size2(MinCellWidth * Columns, MinCellHeight * Rows);
         }
-
-        private int CalculateColumns()
+        
+        private GridInfo CalculateGridInfo(IGuiContext context, Size2 availableSize)
         {
-            return Columns == 0 ? (int)Math.Ceiling(Math.Sqrt(Controls.Count)) : Columns;
+            var columns = Columns == 0 ? (int)Math.Ceiling(Math.Sqrt(Controls.Count)) : Columns;
+            var rows = Rows == 0 ? (int)Math.Ceiling((float)Controls.Count / columns) : Rows;
+            var maxCellWidth = availableSize.Width / columns;
+            var maxCellHeight = availableSize.Height / rows;
+            var sizes = Controls
+                .Select(control => GuiLayoutHelper.GetSizeWithMargins(control, context, new Size2(maxCellWidth, maxCellHeight)))
+                .ToArray();
+            var maxControlWidth = sizes.Length == 0 ? 0 : sizes.Max(s => s.Width);
+            var maxControlHeight = sizes.Length == 0 ? 0 : sizes.Max(s => s.Height);
+
+            return new GridInfo
+            {
+                Columns = columns,
+                Rows = rows,
+                MinCellWidth = Math.Min(maxControlWidth, maxCellWidth),
+                MinCellHeight = Math.Min(maxControlHeight, maxCellHeight),
+                MaxCellWidth = maxCellWidth,
+                MaxCellHeight =  maxCellHeight
+            };
         }
     }
 }

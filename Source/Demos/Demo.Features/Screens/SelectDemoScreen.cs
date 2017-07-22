@@ -32,12 +32,9 @@ namespace Demo.Features.Screens
 
             //Controls.Add(canvas);
             //button.Clicked += (sender, args) => onNextDemo();
-        }
 
-        public override void Initialize()
-        {
             var dialog = Skin.Create<GuiDialog>("dialog");
-            var grid = new GuiUniformGrid {Columns = 3};
+            var grid = new GuiUniformGrid { Columns = 3 };
 
             foreach (var demo in _demos.Values.OrderBy(i => i.Name))
             {

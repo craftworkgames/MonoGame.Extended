@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Serialization;
@@ -7,7 +8,7 @@ namespace MonoGame.Extended.Gui.Serialization
 {
     public sealed class GuiJsonSerializer : JsonSerializer
     {
-        public GuiJsonSerializer(ContentManager contentManager)
+        public GuiJsonSerializer(ContentManager contentManager, params Type[] customControlTypes)
         {
             var textureRegionService = new GuiTextureRegionService();
             Converters.Add(new Vector2JsonConverter());
@@ -15,10 +16,11 @@ namespace MonoGame.Extended.Gui.Serialization
             Converters.Add(new ColorJsonConverter());
             Converters.Add(new ThicknessJsonConverter());
             Converters.Add(new ContentManagerJsonConverter<BitmapFont>(contentManager, font => font.Name));
-            Converters.Add(new GuiControlStyleJsonConverter());
+            Converters.Add(new GuiControlStyleJsonConverter(customControlTypes));
             Converters.Add(new GuiTextureAtlasJsonConverter(contentManager, textureRegionService));
             Converters.Add(new GuiNinePatchRegion2DJsonConverter(textureRegionService));
             Converters.Add(new TextureRegion2DJsonConverter(textureRegionService));
+            Converters.Add(new GuiAlignmentConverter());
             ContractResolver = new ShortNameJsonContractResolver();
             Formatting = Formatting.Indented;
         }

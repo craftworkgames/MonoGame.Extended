@@ -110,7 +110,7 @@ namespace Demo.Platformer.Entities
         //            Quantity = new Range<int>(32, 64),
         //            Rotation = new Range<float>(-MathHelper.TwoPi, MathHelper.TwoPi)
         //        },
-        //        Modifiers = new IModifier[]
+        //        Modifiers = new Modifier[]
         //        {
         //            new LinearGravityModifier { Direction = Vector2.UnitY, Strength = 350 },
         //            new OpacityFastFadeModifier(),

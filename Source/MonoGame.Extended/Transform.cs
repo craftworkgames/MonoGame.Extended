@@ -88,6 +88,7 @@ namespace MonoGame.Extended
         ///         <code>null</code> disables the inheritance altogether for this instance.
         ///     </para>
         /// </remarks>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public TParent Parent
         {
             get { return _parent; }

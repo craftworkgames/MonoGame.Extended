@@ -8,8 +8,8 @@ namespace MonoGame.Extended.Particles
     {
         public static void Draw(this SpriteBatch spriteBatch, ParticleEffect effect)
         {
-            foreach (var emitter in effect.Emitters)
-                UnsafeDraw(spriteBatch, emitter);
+            for (var i = 0; i < effect.Emitters.Count; i++)
+                UnsafeDraw(spriteBatch, effect.Emitters[i]);
         }
 
         public static void Draw(this SpriteBatch spriteBatch, ParticleEmitter emitter)
@@ -19,6 +19,9 @@ namespace MonoGame.Extended.Particles
 
         private static unsafe void UnsafeDraw(SpriteBatch spriteBatch, ParticleEmitter emitter)
         {
+            if(emitter.TextureRegion == null)
+                return;
+
             var textureRegion = emitter.TextureRegion;
             var origin = new Vector2(textureRegion.Width/2f, textureRegion.Height/2f);
             var iterator = emitter.Buffer.Iterator;

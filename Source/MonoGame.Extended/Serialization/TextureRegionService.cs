@@ -6,9 +6,6 @@ namespace MonoGame.Extended.Serialization
 {
     public interface ITextureRegionService
     {
-        IList<TextureAtlas> TextureAtlases { get; }
-        IList<NinePatchRegion2D> NinePatches { get; }
-
         TextureRegion2D GetTextureRegion(string name);
     }
 

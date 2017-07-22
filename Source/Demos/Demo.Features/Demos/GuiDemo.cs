@@ -39,7 +39,7 @@ namespace Demo.Features.Demos
 
             var titleScreen = GuiScreen.FromFile(Content, @"Content/title-screen.json");
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _camera.GetViewMatrix);
-            _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer) { Screen = titleScreen };
+            _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer) { Screens = { titleScreen } };
 
             var quitButton = titleScreen.FindControl<GuiButton>("QuitButton");
             quitButton.Clicked += (sender, args) => _game.Back();

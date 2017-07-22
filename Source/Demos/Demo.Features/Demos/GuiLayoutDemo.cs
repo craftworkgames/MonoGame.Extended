@@ -19,23 +19,15 @@ namespace Demo.Features.Demos
         {
             _texture = new Texture2D(graphicsDevice, 1, 1);
             _texture.SetData(new[] { new Color(Color.Black, 0.5f) });
-        }
 
-        protected override void Dispose(bool isDisposing)
-        {
-            _texture.Dispose();
-        }
-
-        public override void Initialize()
-        {
             var backgroundRegion = new TextureRegion2D(_texture);
 
-            var uniformGrid = new GuiUniformGrid(backgroundRegion)
+            var uniformGrid = new GuiUniformGrid(skin)
             {
                 Text = "Uniform Grid",
                 Controls =
                 {
-                    new GuiCanvas(backgroundRegion)
+                    new GuiCanvas(skin)
                     {
                         Text = "Canvas",
                         Controls =
@@ -45,7 +37,7 @@ namespace Demo.Features.Demos
                             Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; c.Position = new Vector2(100, 100); }),
                         }
                     },
-                    new GuiStackPanel(backgroundRegion)
+                    new GuiStackPanel(skin)
                     {
                         Text = "Stack Panel (Vertical)",
                         Orientation = GuiOrientation.Vertical,
@@ -57,7 +49,7 @@ namespace Demo.Features.Demos
                             Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 4"; }),
                         }
                     },
-                    new GuiStackPanel(backgroundRegion)
+                    new GuiStackPanel(skin)
                     {
                         Text = "Stack Panel (Horizontal)",
                         Orientation = GuiOrientation.Horizontal,
@@ -69,7 +61,7 @@ namespace Demo.Features.Demos
                             Skin.Create<GuiButton>("white-button", c => { c.Text = "Child 3"; c.Width = 80; }),
                         }
                     },
-                    new GuiListBox(backgroundRegion)
+                    new GuiListBox(skin)
                     {
                         Name = "DisplayModesListBox"
                     }
@@ -83,6 +75,11 @@ namespace Demo.Features.Demos
 
             var listBox = FindControl<GuiListBox>("DisplayModesListBox");
             listBox.Items.AddRange(GraphicsAdapter.DefaultAdapter.SupportedDisplayModes.Select(i => $"{i.Width}x{i.Height}"));
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            _texture.Dispose();
         }
     }
 
@@ -107,10 +104,10 @@ namespace Demo.Features.Demos
 
             _guiSystem = new GuiSystem(viewportAdapter, guiRenderer)
             {
-                Screen = new GuiLayoutScreen(skin, GraphicsDevice)
+                Screens = { new GuiLayoutScreen(skin, GraphicsDevice) }
             };
         }
-        
+
         protected override void UnloadContent()
         {
         }

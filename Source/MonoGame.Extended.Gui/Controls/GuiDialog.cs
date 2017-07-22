@@ -9,9 +9,9 @@ namespace MonoGame.Extended.Gui.Controls
             : this(null)
         {
         }
-
-        public GuiDialog(TextureRegion2D backgroundRegion)
-            : base(backgroundRegion)
+        
+        public GuiDialog(GuiSkin skin) 
+            : base(skin)
         {
             HorizontalAlignment = HorizontalAlignment.Centre;
             VerticalAlignment = VerticalAlignment.Centre;

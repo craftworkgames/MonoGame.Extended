@@ -1,24 +1,17 @@
 ﻿using System;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiButton : GuiControl
     {
         public GuiButton()
-            : this(null)
+            : base(null)
         {
         }
 
-        public GuiButton(TextureRegion2D backgroundRegion)
-            : base(backgroundRegion)
+        public GuiButton(GuiSkin skin)
+            : base(skin)
         {
-        }
-
-        protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
-        {
-            var size = base.CalculateDesiredSize(context, availableSize);
-            return size;
         }
 
         public event EventHandler Clicked;

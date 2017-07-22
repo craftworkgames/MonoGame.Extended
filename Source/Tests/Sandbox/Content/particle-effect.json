@@ -3,12 +3,12 @@
   "emitters": [
     {
       "textureRegion": "checkBox_beige_unchecked",
-      "capacity": 500,
-      "term": 2.5,
+      "capacity": 1000,
+      "lifeSpan": 2.5,
+      "autoTrigger": true,
+      "offset": [100, 100],
       "profile": {
-        "type": "box",
-        "width": 800,
-        "height": 480
+        "type": "point"
       },
       "parameters": {
         "quantity": [ 3, 4 ],

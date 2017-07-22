@@ -1,19 +1,19 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiStackPanel : GuiLayoutControl
     {
         public GuiStackPanel()
-            : base(null)
+            : this(null)
         {
         }
 
-        public GuiStackPanel(TextureRegion2D backgroundRegion)
-            : base(backgroundRegion)
+        public GuiStackPanel(GuiSkin skin) 
+            : base(skin)
         {
+            HorizontalAlignment = HorizontalAlignment.Centre;
+            VerticalAlignment = VerticalAlignment.Centre;
         }
 
         public GuiOrientation Orientation { get; set; } = GuiOrientation.Vertical;

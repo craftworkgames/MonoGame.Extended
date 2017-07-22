@@ -20,10 +20,9 @@ namespace MonoGame.Extended.Gui
             TextureAtlases = new List<TextureAtlas>();
             Fonts = new List<BitmapFont>();
             NinePatches = new List<NinePatchRegion2D>();
-            _styles = new KeyedCollection<string, GuiControlStyle>(s => s.Name);
+            Styles = new KeyedCollection<string, GuiControlStyle>(s => s.Name ?? s.TargetType.Name);
         }
 
-        private readonly KeyedCollection<string, GuiControlStyle> _styles;
 
         [JsonProperty(Order = 0)]
         public string Name { get; set; }
@@ -44,24 +43,29 @@ namespace MonoGame.Extended.Gui
         public GuiCursor Cursor { get; set; }
 
         [JsonProperty(Order = 6)]
-        public ICollection<GuiControlStyle> Styles => _styles;
+        public KeyedCollection<string, GuiControlStyle> Styles { get; private set; }
 
         public GuiControlStyle GetStyle(string name)
         {
-            return _styles[name];
+            return Styles[name];
         }
 
-        public static GuiSkin FromFile(ContentManager contentManager, string path)
+        public GuiControlStyle GetStyle(Type controlType)
+        {
+            return Styles.FirstOrDefault(s => s.TargetType == controlType);
+        }
+
+        public static GuiSkin FromFile(ContentManager contentManager, string path, params Type[] customControlTypes)
         {
             using (var stream = TitleContainer.OpenStream(path))
             {
-                return FromStream(contentManager, stream);
+                return FromStream(contentManager, stream, customControlTypes);
             }
         }
 
-        public static GuiSkin FromStream(ContentManager contentManager, Stream stream)
+        public static GuiSkin FromStream(ContentManager contentManager, Stream stream, params Type[] customControlTypes)
         {
-            var skinSerializer = new GuiJsonSerializer(contentManager);
+            var skinSerializer = new GuiJsonSerializer(contentManager, customControlTypes);
 
             using (var streamReader = new StreamReader(stream))
             using (var jsonReader = new JsonTextReader(streamReader))

@@ -13,7 +13,7 @@ namespace MonoGame.Extended.Gui
         Vector2 CursorPosition { get; }
     }
 
-    public class GuiSystem : IGuiContext
+    public class GuiSystem : IGuiContext, IRectangular
     {
         private readonly ViewportAdapter _viewportAdapter;
         private readonly IGuiRenderer _renderer;
@@ -44,50 +44,72 @@ namespace MonoGame.Extended.Gui
             _keyboardListener = new KeyboardListener();
             _keyboardListener.KeyTyped += (sender, args) => _focusedControl?.OnKeyTyped(this, args);
             _keyboardListener.KeyPressed += (sender, args) => _focusedControl?.OnKeyPressed(this, args);
+
+            Screens = new GuiScreenCollection(this) { ItemAdded = InitializeScreen };
         }
 
-        private GuiScreen _screen;
-        public GuiScreen Screen
-        {
-            get { return _screen; }
-            set
-            {
-                if (_screen != value)
-                {
-                    _screen = value;
-                    _screen?.Layout(this, _viewportAdapter.BoundingRectangle);
-                }
-            }
-        }
+        public GuiScreenCollection Screens { get; }
+
+        public GuiScreen ActiveScreen => Screens.LastOrDefault();
+
+        public Rectangle BoundingRectangle => _viewportAdapter.BoundingRectangle;
+
         public Vector2 CursorPosition { get; set; }
-        public BitmapFont DefaultFont => Screen?.Skin?.DefaultFont;
+
+        public BitmapFont DefaultFont => ActiveScreen?.Skin?.DefaultFont;
+
+        private void InitializeScreen(GuiScreen screen)
+        {
+            screen.Layout(this, BoundingRectangle);
+        }
 
         public void Update(GameTime gameTime)
         {
             _touchListener.Update(gameTime);
             _mouseListener.Update(gameTime);
             _keyboardListener.Update(gameTime);
+
+            foreach (var screen in Screens)
+            {
+                if (screen.IsLayoutRequired)
+                    screen.Layout(this, BoundingRectangle);
+
+                screen.Update(gameTime);
+            }
         }
 
         public void Draw(GameTime gameTime)
         {
-            if(Screen == null || !Screen.IsVisible)
-                return;
-
             var deltaSeconds = gameTime.GetElapsedSeconds();
 
             _renderer.Begin();
 
-            DrawChildren(Screen.Controls, deltaSeconds);
+            foreach (var screen in Screens)
+            {
+                if (screen.IsVisible)
+                {
+                    DrawChildren(screen.Controls, deltaSeconds);
+                    DrawWindows(screen.Windows, deltaSeconds);
+                }
+            }
 
-            var cursor = Screen.Skin?.Cursor;
+            var cursor = ActiveScreen.Skin?.Cursor;
 
             if (cursor != null)
                 _renderer.DrawRegion(cursor.TextureRegion, CursorPosition, cursor.Color);
 
             _renderer.End();
         }
-        
+
+        private void DrawWindows(GuiWindowCollection windows, float deltaSeconds)
+        {
+            foreach (var window in windows)
+            {
+                window.Draw(this, _renderer, deltaSeconds);
+                DrawChildren(window.Controls, deltaSeconds);
+            }
+        }
+
         private void DrawChildren(GuiControlCollection controls, float deltaSeconds)
         {
             foreach (var control in controls.Where(c => c.IsVisible))
@@ -99,19 +121,19 @@ namespace MonoGame.Extended.Gui
 
         private void OnPointerDown(GuiPointerEventArgs args)
         {
-            if (Screen == null || !Screen.IsVisible)
+            if (ActiveScreen == null || !ActiveScreen.IsVisible)
                 return;
 
-            _preFocusedControl = FindControlAtPoint(Screen.Controls, args.Position);
+            _preFocusedControl = FindControlAtPoint(args.Position);
             _hoveredControl?.OnPointerDown(this, args);
         }
 
         private void OnPointerUp(GuiPointerEventArgs args)
         {
-            if (Screen == null || !Screen.IsVisible)
+            if (ActiveScreen == null || !ActiveScreen.IsVisible)
                 return;
 
-            var postFocusedControl = FindControlAtPoint(Screen.Controls, args.Position);
+            var postFocusedControl = FindControlAtPoint(args.Position);
 
             if (_preFocusedControl == postFocusedControl)
             {
@@ -137,10 +159,10 @@ namespace MonoGame.Extended.Gui
         {
             CursorPosition = args.Position.ToVector2();
 
-            if (Screen == null || !Screen.IsVisible)
+            if (ActiveScreen == null || !ActiveScreen.IsVisible)
                 return;
 
-            var hoveredControl = FindControlAtPoint(Screen.Controls, args.Position);
+            var hoveredControl = FindControlAtPoint(args.Position);
 
             if (_hoveredControl != hoveredControl)
             {
@@ -149,8 +171,25 @@ namespace MonoGame.Extended.Gui
                 _hoveredControl?.OnPointerEnter(this, args);
             }
         }
-        
-        private static GuiControl FindControlAtPoint(GuiControlCollection controls, Point point)
+
+        private GuiControl FindControlAtPoint(Point point)
+        {
+            if (ActiveScreen == null || !ActiveScreen.IsVisible)
+                return null;
+
+            //for(var i = Windows.Count - 1; i >= 0; i--)
+            //{
+            //    var window = Windows[i];
+            //    var control = FindControlAtPoint(window.Controls, point);
+
+            //    if (control != null)
+            //        return control;
+            //}
+
+            return FindControlAtPoint(ActiveScreen.Controls, point);
+        }
+
+        private GuiControl FindControlAtPoint(GuiControlCollection controls, Point point)
         {
             var topMostControl = (GuiControl) null;
 
@@ -160,7 +199,7 @@ namespace MonoGame.Extended.Gui
 
                 if (control.IsVisible)
                 {
-                    if (topMostControl == null && control.BoundingRectangle.Contains(point))
+                    if (topMostControl == null && control.Contains(this, point))
                         topMostControl = control;
 
                     if (control.Controls.Any())
