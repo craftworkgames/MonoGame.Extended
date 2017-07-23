@@ -39,7 +39,8 @@ namespace MonoGame.Extended.Tests.Particles
                     {
                         Quantity = 1
                     },
-                    Modifiers = new Modifier[] {
+                    Modifiers =
+                    {
                         new AssertionModifier(particle => particle.Age <= 1f)
                     }
                 };
