@@ -166,7 +166,7 @@ namespace MonoGame.Extended
         {
             result.X = minimum.X;
             result.Y = minimum.Y;
-            result.Width = maximum.X - maximum.X;
+            result.Width = maximum.X - minimum.X;
             result.Height = maximum.Y - minimum.Y;
         }
 
