@@ -79,6 +79,30 @@ namespace MonoGame.Extended.Particles
             set { _lifeSpanSeconds = (float) value.TotalSeconds; }
         }
 
+        private float _nextAutoTrigger;
+
+        private bool _autoTrigger = true;
+        public bool AutoTrigger
+        {
+            get => _autoTrigger;
+            set
+            {
+                _autoTrigger = value;
+                _nextAutoTrigger = 0;
+            }
+        }
+
+        private float _autoTriggerFrequency;
+        public float AutoTriggerFrequency
+        {
+            get => _autoTriggerFrequency;
+            set
+            {
+                _autoTriggerFrequency = value;
+                _nextAutoTrigger = 0;
+            }
+        }
+
         private void ReclaimExpiredParticles()
         {
             var iterator = Buffer.Iterator;
@@ -98,9 +122,20 @@ namespace MonoGame.Extended.Particles
                 Buffer.Reclaim(expired);
         }
 
-        public bool Update(float elapsedSeconds)
+        public bool Update(float elapsedSeconds, Vector2 position = default(Vector2))
         {
             _totalSeconds += elapsedSeconds;
+
+            if (_autoTrigger)
+            {
+                _nextAutoTrigger -= elapsedSeconds;
+
+                if (_nextAutoTrigger <= 0)
+                {
+                    Trigger(position);
+                    _nextAutoTrigger = _autoTriggerFrequency;
+                }
+            }
 
             if (Buffer.Count == 0)
                 return false;

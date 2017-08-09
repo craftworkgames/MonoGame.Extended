@@ -13,16 +13,10 @@ namespace MonoGame.Extended.Particles
         public ParticleEffect(string name = null, bool autoTrigger = true, float autoTriggerDelay = 0f)
         {
             Name = name;
-            AutoTrigger = autoTrigger;
-            AutoTriggerDelay = autoTriggerDelay;
             Emitters = new List<ParticleEmitter>();
         }
 
-        private float _nextAutoTrigger;
-
         public string Name { get; set; }
-        public bool AutoTrigger { get; set; }
-        public float AutoTriggerDelay { get; set; }
         public List<ParticleEmitter> Emitters { get; set; }
         public int ActiveParticles => Emitters.Sum(t => t.ActiveParticles);
 
@@ -58,19 +52,8 @@ namespace MonoGame.Extended.Particles
 
         public void Update(float elapsedSeconds)
         {
-            if (AutoTrigger)
-            {
-                _nextAutoTrigger -= elapsedSeconds;
-
-                if (_nextAutoTrigger <= 0)
-                {
-                    Trigger();
-                    _nextAutoTrigger = AutoTriggerDelay;
-                }
-            }
-
             for (var i = 0; i < Emitters.Count; i++)
-                Emitters[i].Update(elapsedSeconds);
+                Emitters[i].Update(elapsedSeconds, Position);
         }
 
         public void Trigger()
