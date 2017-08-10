@@ -84,7 +84,7 @@ namespace MonoGame.Extended.Particles
         private bool _autoTrigger = true;
         public bool AutoTrigger
         {
-            get => _autoTrigger;
+            get { return _autoTrigger; }
             set
             {
                 _autoTrigger = value;
@@ -95,7 +95,7 @@ namespace MonoGame.Extended.Particles
         private float _autoTriggerFrequency;
         public float AutoTriggerFrequency
         {
-            get => _autoTriggerFrequency;
+            get { return _autoTriggerFrequency; }
             set
             {
                 _autoTriggerFrequency = value;
