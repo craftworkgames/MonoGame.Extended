@@ -5,7 +5,7 @@ using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.SceneGraphs
 {
-    public class SceneNode : Transform2D<SceneNode>
+    public class SceneNode : Transform2D
     {
         public SceneNode(string name)
             : this(name, Vector2.Zero, 0, Vector2.One)

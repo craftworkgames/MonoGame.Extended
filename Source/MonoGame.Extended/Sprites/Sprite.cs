@@ -6,7 +6,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
 {
-    public class Sprite : Transform2D<Sprite>, IColorable, IRectangularF, ISpriteBatchDrawable
+    public class Sprite : Transform2D, IColorable, IRectangularF, ISpriteBatchDrawable
     {
         private TextureRegion2D _textureRegion;
 

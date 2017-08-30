@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Particles
 {
-    public class ParticleEffect : Transform2D<ParticleEffect>
+    public class ParticleEffect : Transform2D
     {
         public ParticleEffect(string name = null, bool autoTrigger = true, float autoTriggerDelay = 0f)
         {
