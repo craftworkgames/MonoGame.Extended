@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles;
 using NUnit.Framework;
 
@@ -110,6 +111,29 @@ namespace MonoGame.Extended.Tests.Particles
             {
                 var colour = new HslColor(h, s, l);
                 Assert.AreEqual(expected, colour.ToString());
+            }
+        }
+
+        public class ToRgbMethod
+        {
+            [TestCase(0f, 1f, 0.5f, "{R:255 G:0 B:0 A:255}")] // Color.Red
+            [TestCase(360f, 1f, 0.5f, "{R:255 G:0 B:0 A:255}")] // Color.Red
+            [TestCase(120f, 1f, 0.5f, "{R:0 G:255 B:0 A:255}")] // Color.Lime
+            public void ReturnsCorrectValue(float h, float s, float l, string expected)
+            {
+                var hslColour = new HslColor(h, s, l);
+                Color rgbColor = hslColour.ToRgb();
+
+                Assert.AreEqual(expected, rgbColor.ToString());
+            }
+
+            [Test]
+            public void FromRgbAndToRgbWorksCorrectly()
+            {
+                HslColor blueHsl = HslColor.FromRgb(Color.Blue);
+                Color blueRgb = blueHsl.ToRgb();
+
+                Assert.AreEqual(Color.Blue, blueRgb);
             }
         }
     }

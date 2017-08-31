@@ -261,7 +261,9 @@ namespace MonoGame.Extended
             else
                 h = Math.Abs(r - m) < float.Epsilon ? 3.0f + g2 : 5.0f - r2;
 
-            h /= 6.0f;
+            h *= 60;
+            h = NormalizeHue(h);
+
             return new HslColor(h, s, l);
         }
     }
