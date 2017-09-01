@@ -17,6 +17,7 @@ namespace MonoGame.Extended.Tests.Particles
             {
                 var subject = new ParticleEmitter(null, 100, TimeSpan.FromSeconds(1), Profile.Point())
                 {
+                    AutoTrigger = false,
                     Parameters = new ParticleReleaseParameters
                     {
                         Quantity = 1
@@ -25,7 +26,7 @@ namespace MonoGame.Extended.Tests.Particles
 
                 subject.Trigger(new Vector2(0f, 0f));
                 Assert.AreEqual(subject.ActiveParticles, 1);
-                    
+
                 subject.Update(2f);
                 Assert.AreEqual(subject.ActiveParticles, 0);
             }
@@ -56,7 +57,7 @@ namespace MonoGame.Extended.Tests.Particles
             [Test]
             public void WhenThereAreNoActiveParticles_GracefullyDoesNothing()
             {
-                var subject = new ParticleEmitter(null, 100, TimeSpan.FromSeconds(1), Profile.Point());
+                var subject = new ParticleEmitter(null, 100, TimeSpan.FromSeconds(1), Profile.Point()) { AutoTrigger = false };
 
                 subject.Update(0.5f);
                 Assert.AreEqual(subject.ActiveParticles, 0);
