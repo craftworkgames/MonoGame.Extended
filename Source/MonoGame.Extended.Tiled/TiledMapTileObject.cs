@@ -7,15 +7,17 @@ namespace MonoGame.Extended.Tiled
     {
         public TiledMapTilesetTile TilesetTile { get; }
 
+        public TiledMapTileset Tileset { get; }
+
         public TiledMapTileObject(ContentReader input, TiledMap map)
             : base(input)
         {
             var globalTileIdentifierWithFlags = input.ReadUInt32();
             var tile = new TiledMapTile(globalTileIdentifierWithFlags);
-            var tileset = map.GetTilesetByTileGlobalIdentifier(tile.GlobalIdentifier);
-            var localTileIdentifier = tile.GlobalIdentifier - tileset.FirstGlobalIdentifier;
+            Tileset = map.GetTilesetByTileGlobalIdentifier(tile.GlobalIdentifier);
 
-            TilesetTile = tileset.Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier);
+            var localTileIdentifier = tile.GlobalIdentifier - Tileset.FirstGlobalIdentifier;
+            TilesetTile = Tileset.Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier);
         }
     }
 }
