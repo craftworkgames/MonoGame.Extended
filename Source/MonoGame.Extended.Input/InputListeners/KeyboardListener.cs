@@ -20,10 +20,12 @@ namespace MonoGame.Extended.Input.InputListeners
 
         public KeyboardListener(KeyboardListenerSettings settings)
         {
+			RepeatPress = settings.RepeatPress;
             InitialDelay = settings.InitialDelayMilliseconds;
             RepeatDelay = settings.RepeatDelayMilliseconds;
         }
 
+		public bool RepeatPress { get; }
         public int InitialDelay { get; }
         public int RepeatDelay { get; }
 
@@ -37,7 +39,9 @@ namespace MonoGame.Extended.Input.InputListeners
 
             RaisePressedEvents(gameTime, currentState);
             RaiseReleasedEvents(currentState);
-            RaiseRepeatEvents(gameTime, currentState);
+
+			if (RepeatPress)
+				RaiseRepeatEvents(gameTime, currentState);
 
             _previousState = currentState;
         }
