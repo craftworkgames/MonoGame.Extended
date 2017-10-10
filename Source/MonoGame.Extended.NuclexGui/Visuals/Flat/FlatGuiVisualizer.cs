@@ -30,6 +30,9 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
         /// <summary>Avaiable renderers</summary>
         private readonly Dictionary<Type, IControlRendererAdapter> _renderers;
 
+        /// <summary>Assemblies which has renderer implementations</summary>
+        public static readonly List<Assembly> ExternalAssembliesWithRenderers = new List<Assembly>();
+
         /// <summary>Initializes a new gui painter for traditional GUIs</summary>
         /// <param name="contentManager">Content manager that will be used to load the skin resources</param>
         /// <param name="skinStream">Stream from which the GUI Visualizer will read the skin description</param>
@@ -119,9 +122,16 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
 
         private void FetchRenderers()
         {
+            FetchRenderers(typeof(FlatGuiVisualizer).GetTypeInfo().Assembly);
+            foreach(var assembly in ExternalAssembliesWithRenderers)
+                FetchRenderers(assembly);
+        }
+
+        private void FetchRenderers(Assembly assembly)
+        {
             foreach (
                 var typeinfo in
-                typeof(FlatGuiVisualizer).GetTypeInfo().Assembly.DefinedTypes.Where(e => e.IsPublic && !e.IsAbstract))
+                assembly.DefinedTypes.Where(e => e.IsPublic && !e.IsAbstract))
             {
                 // If the type doesn't implement the IFlatcontrolRenderer interface, there's
                 // no chance that it will implement one of the generic control drawers
