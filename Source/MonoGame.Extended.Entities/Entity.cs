@@ -152,6 +152,7 @@ namespace MonoGame.Extended.Entities
 
         private void Reset()
         {
+            _name = null;
             _group = null;
             SystemBits.SetAll(false);
             ComponentBits.SetAll(false);
