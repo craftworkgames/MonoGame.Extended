@@ -21,7 +21,7 @@ namespace MonoGame.Extended.Animations
 
         public SpriteSheetAnimation Play(string name, Action onCompleted = null)
         {
-            if ((_currentAnimation == null) || _currentAnimation.IsComplete || (_currentAnimation.Name != name))
+            if (_currentAnimation == null || _currentAnimation.IsComplete || _currentAnimation.Name != name)
             {
                 _currentAnimation = _animationFactory.Create(name);
                 _currentAnimation.OnCompleted = onCompleted;
@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Animations
 
         public void Update(float deltaTime)
         {
-            if ((_currentAnimation != null) && !_currentAnimation.IsComplete)
+            if (_currentAnimation != null && !_currentAnimation.IsComplete)
             {
                 _currentAnimation.Update(deltaTime);
                 TextureRegion = _currentAnimation.CurrentFrame;

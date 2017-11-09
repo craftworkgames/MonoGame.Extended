@@ -6,7 +6,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
 {
-    public class Sprite : Transform2D, IColorable, IRectangularF, ISpriteBatchDrawable
+    public class Sprite : IColorable//, IRectangularF//, ISpriteBatchDrawable
     {
         private TextureRegion2D _textureRegion;
 
@@ -19,7 +19,6 @@ namespace MonoGame.Extended.Sprites
             Alpha = 1.0f;
             Color = Color.White;
             IsVisible = true;
-            Scale = Vector2.One;
             Effect = SpriteEffects.None;
             OriginNormalized = new Vector2(0.5f, 0.5f);
             Depth = 0.0f;
@@ -42,15 +41,12 @@ namespace MonoGame.Extended.Sprites
 
         public Color Color { get; set; }
 
-        public RectangleF BoundingRectangle
+        public RectangleF GetBoundingRectangle(Vector2 position, float rotation, Vector2 scale)
         {
-            get
-            {
-                var corners = GetCorners();
-                var min = new Vector2(corners.Min(i => i.X), corners.Min(i => i.Y));
-                var max = new Vector2(corners.Max(i => i.X), corners.Max(i => i.Y));
-                return new RectangleF(min.X, min.Y, max.X - min.X, max.Y - min.Y);
-            }
+            var corners = GetCorners(position, rotation, scale);
+            var min = new Vector2(corners.Min(i => i.X), corners.Min(i => i.Y));
+            var max = new Vector2(corners.Max(i => i.X), corners.Max(i => i.Y));
+            return new RectangleF(min.X, min.Y, max.X - min.X, max.Y - min.Y);
         }
 
         public bool IsVisible { get; set; }
@@ -72,16 +68,16 @@ namespace MonoGame.Extended.Sprites
             }
         }
 
-        public Vector2[] GetCorners()
+        public Vector2[] GetCorners(Vector2 position, float rotation, Vector2 scale)
         {
             var min = -Origin;
             var max = min + new Vector2(TextureRegion.Width, TextureRegion.Height);
-            var offset = Position;
+            var offset = position;
 
-            if (Scale != Vector2.One)
+            if (scale != Vector2.One)
             {
-                min = min*Scale;
-                max = max*Scale;
+                min = min * scale;
+                max = max * scale;
             }
 
             var corners = new Vector2[4];
@@ -91,9 +87,9 @@ namespace MonoGame.Extended.Sprites
             corners[3] = new Vector2(min.X, max.Y);
 
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (Rotation != 0)
+            if (rotation != 0)
             {
-                var matrix = Matrix.CreateRotationZ(Rotation);
+                var matrix = Matrix.CreateRotationZ(rotation);
 
                 for (var i = 0; i < 4; i++)
                     corners[i] = Vector2.Transform(corners[i], matrix);
