@@ -1,16 +1,17 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Sprites
 {
     public static class SpriteExtensions
     {
-        public static void Draw(this Sprite sprite, SpriteBatch spriteBatch)
+        public static void Draw(this Sprite sprite, SpriteBatch spriteBatch, Vector2 position, float rotation, Vector2 scale)
         {
-            Draw(spriteBatch, sprite);
+            Draw(spriteBatch, sprite, position, rotation, scale);
         }
 
-        public static void Draw(this SpriteBatch spriteBatch, Sprite sprite)
+        public static void Draw(this SpriteBatch spriteBatch, Sprite sprite, Vector2 position, float rotation, Vector2 scale)
         {
             if (sprite == null) throw new ArgumentNullException(nameof(sprite));
 
@@ -18,10 +19,7 @@ namespace MonoGame.Extended.Sprites
             {
                 var texture = sprite.TextureRegion.Texture;
                 var sourceRectangle = sprite.TextureRegion.Bounds;
-
-                spriteBatch.Draw(texture, sprite.WorldPosition, sourceRectangle, sprite.Color*sprite.Alpha, sprite.WorldRotation,
-                    sprite.Origin,
-                    sprite.WorldScale, sprite.Effect, sprite.Depth);
+                spriteBatch.Draw(texture, position, sourceRectangle, sprite.Color*sprite.Alpha, rotation, sprite.Origin, scale, sprite.Effect, sprite.Depth);
             }
         }
     }
