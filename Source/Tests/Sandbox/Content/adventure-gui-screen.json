@@ -27,7 +27,7 @@
           ]
         },
         {
-          "Type": "GuiStackPanel",
+          "Type": "GuiForm",
           "Name": "ButtonPanel",
           "Controls": [
             {
@@ -38,18 +38,26 @@
               "Style": "list-box"
             },
             {
-              "Type": "GuiButton",
+              "Type": "GuiTextBox",
+              "Name": "TextBox",
               "Width": "200",
-              "Text": "Options",
-              "TextColor": "#ffffff",
-              "Style": "white-button"
+              "Padding": "10",
+              "Style": "text-box"
             },
             {
-              "Type": "GuiButton",
+              "Type": "GuiComboBox",
+              "Name": "ComboBox",
+              "NameProperty": "Name",
+              "Width": "200",
+              "Style": "combo-box"
+            },
+            {
+              "Type": "GuiSubmit",
+              "Name": "FormSubmit",
               "Width": "200",
               "Text": "Quit",
               "TextColor": "#ffffff",
-              "Style": "white-button"
+              "Style": "white-submit"
             }
           ]
         }

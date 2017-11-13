@@ -42,6 +42,27 @@
       }
     },
     {
+      "Name": "white-submit",
+      "Type": "GuiSubmit",
+      "Margin": "5 2",
+      "BackgroundRegion": "buttonLong_grey",
+      "TextOffset": "0 -2",
+      "TextColor": "#f4a460ff",
+      "Color": "#8b4513ff",
+      "HorizontalAlignment": "Center",
+      "VerticalAlignment": "Centre",
+      "PressedStyle": {
+        "Type": "GuiSubmit",
+        "BackgroundRegion": "buttonLong_grey_pressed",
+        "TextOffset": "0 2"
+      },
+      "HoverStyle": {
+        "Type": "GuiSubmit",
+        "Color": "#9E4C16ff",
+        "TextColor": "#ffffffff"
+      }
+    },
+    {
       "Name": "close-button",
       "Type": "GuiButton",
       "BackgroundRegion": "buttonRound_close",
@@ -64,6 +85,11 @@
       "Type": "GuiStackPanel",
       "BackgroundRegion": "panel_brown",
       "Size": "400 300"
+    },
+    {
+      "Name": "brown-form-no-size",
+      "Type": "GuiForm",
+      "BackgroundRegion": "panel_brown"
     },
     {
       "Name": "brown-panel-no-size",
@@ -115,6 +141,7 @@
       "TextColor": "#444444"
     },
     {
+      "Name": "combo-box",
       "Type": "GuiComboBox",
       "ClipPadding": "7 5",
       "BackgroundRegion": "buttonLong_grey",

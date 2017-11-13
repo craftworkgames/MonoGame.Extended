@@ -38,22 +38,20 @@ namespace MonoGame.Extended.Gui.Controls
             return new Size2(Width + Padding.Left + Padding.Right, (Height <= 0.0f ? font.LineHeight + 2 : Height) + Padding.Top + Padding.Bottom);
         }
 
-        public override void OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
+        public override bool OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerDown(context, args);
-            
             SelectionStart = FindNearestGlyphIndex(context, args.Position);
             _isCaretVisible = true;
 
             _selectionIndexes.Clear();
             _selectionIndexes.Push(SelectionStart);
             _startSelectionBox = Text.Length > 0;
+
+            return base.OnPointerDown(context, args);
         }
 
-        public override void OnPointerMove(IGuiContext context, GuiPointerEventArgs args)
+        public override bool OnPointerMove(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerMove(context, args);
-
             if (_startSelectionBox)
             {
                 var selection = FindNearestGlyphIndex(context, args.Position);
@@ -76,20 +74,22 @@ namespace MonoGame.Extended.Gui.Controls
                     SelectionStart = selection;
                 }
             }
+
+            return base.OnPointerMove(context, args);
         }
 
-        public override void OnPointerLeave(IGuiContext context, GuiPointerEventArgs args)
+        public override bool OnPointerLeave(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerLeave(context, args);
-
             _startSelectionBox = false;
+
+            return base.OnPointerLeave(context, args);
         }
 
-        public override void OnPointerUp(IGuiContext context, GuiPointerEventArgs args)
+        public override bool OnPointerUp(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerUp(context, args);
-
             _startSelectionBox = false;
+
+            return base.OnPointerUp(context, args);
         }
 
         private int FindNearestGlyphIndex(IGuiContext context, Point position)
@@ -115,12 +115,12 @@ namespace MonoGame.Extended.Gui.Controls
             return i;
         }
 
-        public override void OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
+        public override bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
         {
-            base.OnKeyPressed(context, args);
-
             switch (args.Key)
             {
+                case Keys.Tab:
+                    return false;
                 case Keys.Back:
                     if (Text.Length > 0)
                     {
@@ -208,6 +208,7 @@ namespace MonoGame.Extended.Gui.Controls
             }
 
             _isCaretVisible = true;
+            return base.OnKeyPressed(context, args);
         }
 
         private const float _caretBlinkRate = 0.53f;

@@ -4,6 +4,10 @@ using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.TextureAtlases;
+using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -153,23 +157,36 @@ namespace MonoGame.Extended.Gui.Controls
 
         public virtual void OnScrolled(int delta) { }
 
-        public virtual void OnKeyTyped(IGuiContext context, KeyboardEventArgs args) { }
-        public virtual void OnKeyPressed(IGuiContext context, KeyboardEventArgs args) { }
+        public virtual bool OnKeyTyped(IGuiContext context, KeyboardEventArgs args)
+        {
+            if (args.Key == Keys.Tab || args.Key == Keys.Enter) return false;
+            return true;
+        }
+        public virtual bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
+        {
+            if (args.Key == Keys.Tab || args.Key == Keys.Enter) return false;
+            return true;
+        }
 
-        public virtual void OnPointerDown(IGuiContext context, GuiPointerEventArgs args) { }
-        public virtual void OnPointerMove(IGuiContext context, GuiPointerEventArgs args) { }
-        public virtual void OnPointerUp(IGuiContext context, GuiPointerEventArgs args) { }
+        public virtual bool OnFocus(IGuiContext context) { return true; }
+        public virtual bool OnUnfocus(IGuiContext context) { return true; }
+
+        public virtual bool OnPointerDown(IGuiContext context, GuiPointerEventArgs args) { return true; }
+        public virtual bool OnPointerMove(IGuiContext context, GuiPointerEventArgs args) { return true; }
+        public virtual bool OnPointerUp(IGuiContext context, GuiPointerEventArgs args) { return true; }
         
-        public virtual void OnPointerEnter(IGuiContext context, GuiPointerEventArgs args)
+        public virtual bool OnPointerEnter(IGuiContext context, GuiPointerEventArgs args)
         {
             if (IsEnabled)
                 HoverStyle?.Apply(this);
+            return true;
         }
 
-        public virtual void OnPointerLeave(IGuiContext context, GuiPointerEventArgs args)
+        public virtual bool OnPointerLeave(IGuiContext context, GuiPointerEventArgs args)
         {
             if (IsEnabled)
                 HoverStyle?.Revert(this);
+            return true;
         }
 
         public virtual bool Contains(IGuiContext context, Point point)
@@ -181,6 +198,24 @@ namespace MonoGame.Extended.Gui.Controls
         {
             DrawBackground(context, renderer, deltaSeconds);
             DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, CreateBoxText(Text, Font ?? context.DefaultFont, Width), BoundingRectangle, HorizontalTextAlignment, VerticalTextAlignment));
+        }
+
+        protected List<T> FindControls<T>()
+            where T : GuiControl
+        {
+            return FindControls<T>(Controls);
+        }
+
+        protected List<T> FindControls<T>(GuiControlCollection controls)
+            where T : GuiControl
+        {
+            var results = new List<T>();
+            foreach (var control in controls)
+            {
+                if (control is T) results.Add(control as T);
+                if (control.Controls.Any()) results = results.Concat(FindControls<T>(control.Controls)).ToList();
+            }
+            return results;
         }
 
         protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Rectangle? clippingRectangle = null)

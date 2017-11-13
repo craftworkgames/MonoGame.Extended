@@ -7,6 +7,7 @@ using MonoGame.Extended.Gui;
 using MonoGame.Extended.ViewportAdapters;
 using Sandbox.Experiments;
 using MonoGame.Extended.Gui.Controls;
+using System;
 
 // The Sandbox project is used for experiementing outside the normal demos.
 // Any code found here should be considered experimental work in progress.
@@ -50,8 +51,6 @@ namespace Sandbox
 
         private GuiScreen _screen;
         private GuiSkin _skin;
-        private int _screenUpdate = 2500;
-        private int _i = 0;
 
         public Game1()
         {
@@ -73,11 +72,20 @@ namespace Sandbox
 
             _screen = GuiScreen.FromFile(Content, "Content/adventure-gui-screen.json", typeof(MyPanel));
 
-            var control = _screen.FindControl<GuiListBox>("Listbox");
-            control.Items.Add(new { Name = "Hello World" });
-            control.Items.Add(new { Name = "Hello World" });
-            control.Items.Add(new { Name = "Hello World" });
-            control.Items.Add(new { Name = "Hello World" });
+            var listBox = _screen.FindControl<GuiListBox>("Listbox");
+            listBox.Items.Add(new { Name = "Hello World 1" });
+            listBox.Items.Add(new { Name = "Hello World 2" });
+            listBox.Items.Add(new { Name = "Hello World 3" });
+            listBox.Items.Add(new { Name = "Hello World 4" });
+
+            var comboBox = _screen.FindControl<GuiComboBox>("ComboBox");
+            comboBox.Items.Add(new { Name = "Hello World 1" });
+            comboBox.Items.Add(new { Name = "Hello World 2" });
+            comboBox.Items.Add(new { Name = "Hello World 3" });
+            comboBox.Items.Add(new { Name = "Hello World 4" });
+
+            var submit = _screen.FindControl<GuiSubmit>("FormSubmit");
+            submit.Clicked += OnFormSubmitClicked;
 
             _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer)
             {
@@ -96,15 +104,6 @@ namespace Sandbox
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            //_screenUpdate -= gameTime.ElapsedGameTime.Milliseconds;
-            //if (_screenUpdate <= 0)
-            //{
-            //    _screenUpdate += 2500;
-
-            //    var control = _screen.FindControl<GuiListBox>("Listbox");
-            //    control.Items.Add(new { Name = $"Hello World: {_i++}" });
-            //}
-
             _guiSystem.Update(gameTime);
         }
 
@@ -113,6 +112,16 @@ namespace Sandbox
             GraphicsDevice.Clear(Color.Black);
 
             _guiSystem.Draw(gameTime);
+        }
+
+        private void OnFormSubmitClicked(object sender, EventArgs e)
+        {
+            var listBox = _screen.FindControl<GuiListBox>("Listbox");
+            var textBox = _screen.FindControl<GuiTextBox>("TextBox");
+            if (!string.IsNullOrEmpty(textBox.Text))
+            {
+                listBox.Items.Add(new { Name = textBox.Text });
+            }
         }
     }
 }
