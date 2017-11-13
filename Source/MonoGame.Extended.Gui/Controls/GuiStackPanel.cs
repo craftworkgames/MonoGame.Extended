@@ -18,6 +18,8 @@ namespace MonoGame.Extended.Gui.Controls
 
         public GuiOrientation Orientation { get; set; } = GuiOrientation.Vertical;
 
+        public Thickness Padding { get; set; }
+
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
         {
             var width = 0f;
@@ -42,13 +44,16 @@ namespace MonoGame.Extended.Gui.Controls
                 }
             }
 
+            width += Padding.Left + Padding.Right;
+            height += Padding.Top + Padding.Bottom;
+
             return new Size2(width, height);
         }
 
         public override void Layout(IGuiContext context, RectangleF rectangle)
         {
-            var x = 0f;
-            var y = 0f;
+            var x = (float)Padding.Left;
+            var y = (float)Padding.Top;
             var availableSize = rectangle.Size;
 
             foreach (var control in Controls)
@@ -58,12 +63,16 @@ namespace MonoGame.Extended.Gui.Controls
                 switch (Orientation)
                 {
                     case GuiOrientation.Vertical:
-                        PlaceControl(context, control, x, y, Width, desiredSize.Height);
+                        control.VerticalAlignment = VerticalAlignment.Top;
+
+                        PlaceControl(context, control, 0f, y, Width, desiredSize.Height);
                         y += desiredSize.Height;
                         availableSize.Height -= desiredSize.Height;
                         break;
                     case GuiOrientation.Horizontal:
-                        PlaceControl(context, control, x, y, desiredSize.Width, Height);
+                        control.HorizontalAlignment = HorizontalAlignment.Left;
+
+                        PlaceControl(context, control, x, 0f, desiredSize.Width, Height);
                         x += desiredSize.Width;
                         availableSize.Height -= desiredSize.Height;
                         break;

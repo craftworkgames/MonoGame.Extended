@@ -34,6 +34,7 @@ namespace MonoGame.Extended.Gui
             _mouseListener.MouseMoved += (s, e) => OnPointerMoved(GuiPointerEventArgs.FromMouseArgs(e));
             _mouseListener.MouseDown += (s, e) => OnPointerDown(GuiPointerEventArgs.FromMouseArgs(e));
             _mouseListener.MouseUp += (s, e) => OnPointerUp(GuiPointerEventArgs.FromMouseArgs(e));
+            _mouseListener.MouseMoved += (s, e) => OnPointerMove(GuiPointerEventArgs.FromMouseArgs(e));
             _mouseListener.MouseWheelMoved += (s, e) => _focusedControl?.OnScrolled(e.ScrollWheelDelta);
 
             _touchListener = new TouchListener(viewportAdapter);
@@ -126,6 +127,18 @@ namespace MonoGame.Extended.Gui
 
             _preFocusedControl = FindControlAtPoint(args.Position);
             _hoveredControl?.OnPointerDown(this, args);
+        }
+
+        private void OnPointerMove(GuiPointerEventArgs args)
+        {
+            if (ActiveScreen == null || !ActiveScreen.IsVisible)
+                return;
+
+            var moveFocusControl = FindControlAtPoint(args.Position);
+            if (_preFocusedControl == moveFocusControl)
+            {
+                _hoveredControl?.OnPointerMove(this, args);
+            }
         }
 
         private void OnPointerUp(GuiPointerEventArgs args)

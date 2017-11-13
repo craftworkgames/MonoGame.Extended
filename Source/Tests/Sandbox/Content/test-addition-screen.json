@@ -1,0 +1,12 @@
+﻿{
+  "Skin": "Content/adventure-gui-skin.json",
+  "Name": "test-addition-screen",
+  "Controls": [
+    {
+      "Type": "GuiStackPanel",
+      "Name": "MainPanel",
+      "Style": "brown-panel-no-size",
+      "Padding": "15"
+    }
+  ]
+}

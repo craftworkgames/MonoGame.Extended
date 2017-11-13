@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.ViewportAdapters;
 using Sandbox.Experiments;
+using MonoGame.Extended.Gui.Controls;
 
 // The Sandbox project is used for experiementing outside the normal demos.
 // Any code found here should be considered experimental work in progress.
@@ -47,6 +48,10 @@ namespace Sandbox
         private ViewportAdapter _viewportAdapter;
         private GuiSystem _guiSystem;
 
+        private GuiScreen _screen;
+        private GuiSkin _skin;
+        private int _screenUpdate = 2500;
+        private int _i = 0;
 
         public Game1()
         {
@@ -61,16 +66,25 @@ namespace Sandbox
 
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, _graphicsDeviceManager.PreferredBackBufferWidth, _graphicsDeviceManager.PreferredBackBufferHeight);
 
-            var skin = GuiSkin.FromFile(Content, @"Content/adventure-gui-skin.json", typeof(MyPanel));
+            _skin = GuiSkin.FromFile(Content, @"Content/adventure-gui-skin.json", typeof(MyPanel));
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _viewportAdapter.GetScaleMatrix);
 
             var viewModel = new ViewModel();
+
+            _screen = GuiScreen.FromFile(Content, "Content/adventure-gui-screen.json", typeof(MyPanel));
+
+            var control = _screen.FindControl<GuiListBox>("Listbox");
+            control.Items.Add(new { Name = "Hello World" });
+            control.Items.Add(new { Name = "Hello World" });
+            control.Items.Add(new { Name = "Hello World" });
+            control.Items.Add(new { Name = "Hello World" });
 
             _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer)
             {
                 Screens =
                 {
-                    new BindingScreen(skin, viewModel) 
+                    _screen
+                    // new BindingScreen(_skin, viewModel) 
                 }
             };
         }
@@ -81,6 +95,15 @@ namespace Sandbox
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
+
+            //_screenUpdate -= gameTime.ElapsedGameTime.Milliseconds;
+            //if (_screenUpdate <= 0)
+            //{
+            //    _screenUpdate += 2500;
+
+            //    var control = _screen.FindControl<GuiListBox>("Listbox");
+            //    control.Items.Add(new { Name = $"Hello World: {_i++}" });
+            //}
 
             _guiSystem.Update(gameTime);
         }

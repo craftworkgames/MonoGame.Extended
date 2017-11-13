@@ -21,6 +21,7 @@
       "VerticalTextAlignment": "Bottom"
     },
     {
+      "Name": "white-button",
       "Type": "GuiButton",
       "Margin": "5 2",
       "BackgroundRegion": "buttonLong_grey",
@@ -65,6 +66,11 @@
       "Size": "400 300"
     },
     {
+      "Name": "brown-panel-no-size",
+      "Type": "GuiStackPanel",
+      "BackgroundRegion": "panel_brown"
+    },
+    {
       "Name": "beige-inset-panel",
       "Type": "GuiStackPanel",
       "BackgroundRegion": "panelInset_beige",
@@ -81,6 +87,7 @@
       "BackgroundRegion": "monogame-title"
     },
     {
+      "Name":  "text-box",
       "Type": "GuiTextBox",
       "ClipPadding": "8 0",
       "BackgroundRegion": "grey_textBox",

@@ -21,7 +21,11 @@ namespace MonoGame.Extended.Gui.Controls
             TextColor = Color.White;
             IsEnabled = true;
             IsVisible = true;
-            Controls = new GuiControlCollection(this);
+            Controls = new GuiControlCollection(this)
+            {
+                ItemAdded = x => UpdateRootIsLayoutRequired(),
+                ItemRemoved = x => UpdateRootIsLayoutRequired()
+            };
             Origin = Vector2.Zero;
 
             var style = skin?.GetStyle(GetType());
@@ -36,6 +40,8 @@ namespace MonoGame.Extended.Gui.Controls
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Thickness ClipPadding { get; set; }
+
+        public bool IsLayoutRequired { get; set; }
 
         public Rectangle ClippingRectangle
         {
@@ -102,7 +108,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             if (font != null && Text != null)
             {
-                var textSize = font.MeasureString(Text);
+                var textSize = font.MeasureString(CreateBoxText(Text, font, Width));
                 desiredSize.Width += textSize.Width;
                 desiredSize.Height += textSize.Height;
             }
@@ -151,6 +157,7 @@ namespace MonoGame.Extended.Gui.Controls
         public virtual void OnKeyPressed(IGuiContext context, KeyboardEventArgs args) { }
 
         public virtual void OnPointerDown(IGuiContext context, GuiPointerEventArgs args) { }
+        public virtual void OnPointerMove(IGuiContext context, GuiPointerEventArgs args) { }
         public virtual void OnPointerUp(IGuiContext context, GuiPointerEventArgs args) { }
         
         public virtual void OnPointerEnter(IGuiContext context, GuiPointerEventArgs args)
@@ -173,7 +180,7 @@ namespace MonoGame.Extended.Gui.Controls
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             DrawBackground(context, renderer, deltaSeconds);
-            DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, Text, BoundingRectangle, HorizontalTextAlignment, VerticalTextAlignment));
+            DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, CreateBoxText(Text, Font ?? context.DefaultFont, Width), BoundingRectangle, HorizontalTextAlignment, VerticalTextAlignment));
         }
 
         protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Rectangle? clippingRectangle = null)
@@ -196,6 +203,45 @@ namespace MonoGame.Extended.Gui.Controls
         {
             if (!string.IsNullOrWhiteSpace(textInfo.Text))
                 renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, textInfo.ClippingRectangle);
+        }
+
+        protected virtual string CreateBoxText(string text, BitmapFont font, float width)
+        {
+            if (string.IsNullOrEmpty(text) || width <= 0.0f) return text;
+            var words = text.Split(' ');
+            var currentWidth = 0;
+
+            var blockText = string.Empty;
+            foreach (var word in words)
+            {
+                var spaceMeasurement = font.MeasureString($" {word}");
+                currentWidth += (int)spaceMeasurement.Width;
+
+                if (currentWidth > width)
+                {
+                    var measurement = font.MeasureString(word);
+                    blockText += string.IsNullOrEmpty(blockText) ? word : $"\n{word}";
+                    currentWidth = (int)measurement.Width;
+                }
+                else
+                {
+                    blockText += string.IsNullOrEmpty(blockText) ? word : $" {word}";
+                }
+            }
+            return blockText;
+        }
+
+        /// <summary>
+        /// Recursive Method to find the root element and update the IsLayoutRequired property.  So that the screen knows that something in the controls
+        /// have had a change to their layout.  Also, it will reset the size of the element so that it can get a clean build so that the background patches
+        /// can be rendered with the updates.
+        /// </summary>
+        private void UpdateRootIsLayoutRequired()
+        {
+            if (Parent == null) IsLayoutRequired = true;
+            else Parent.UpdateRootIsLayoutRequired();
+
+            Size = Size2.Empty;
         }
 
         protected struct TextInfo

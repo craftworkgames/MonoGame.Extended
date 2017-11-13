@@ -7,12 +7,13 @@ namespace MonoGame.Extended.Gui.Serialization
     public class GuiControlJsonConverter : JsonConverter
     {
         private readonly IGuiSkinService _guiSkinService;
-        private readonly GuiControlStyleJsonConverter _styleConverter = new GuiControlStyleJsonConverter();
+        private readonly GuiControlStyleJsonConverter _styleConverter;
         private const string _styleProperty = "Style";
 
-        public GuiControlJsonConverter(IGuiSkinService guiSkinService)
+        public GuiControlJsonConverter(IGuiSkinService guiSkinService, params Type[] customControlTypes)
         {
             _guiSkinService = guiSkinService;
+            _styleConverter = new GuiControlStyleJsonConverter(customControlTypes);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
