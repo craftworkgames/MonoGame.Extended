@@ -120,6 +120,7 @@ namespace MonoGame.Extended.Gui.Controls
             switch (args.Key)
             {
                 case Keys.Tab:
+                case Keys.Enter:
                     return false;
                 case Keys.Back:
                     if (Text.Length > 0)
