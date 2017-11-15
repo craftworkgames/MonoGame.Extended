@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Tiled
 {
     public sealed class TiledMap : IDisposable
     {
-        private readonly List<TiledMapImageLayer> _imageLayers;
-        private readonly List<TiledMapLayer> _layers;
-        private readonly Dictionary<string, TiledMapLayer> _layersByName;
-        private readonly List<TiledMapObjectLayer> _objectLayers;
-        private readonly List<TiledMapTileLayer> _tileLayers;
-        private readonly List<TiledMapTileset> _tilesets;
+        private readonly List<TiledMapImageLayer> _imageLayers = new List<TiledMapImageLayer>();
+        private readonly List<TiledMapLayer> _layers = new List<TiledMapLayer>();
+        private readonly Dictionary<string, TiledMapLayer> _layersByName = new Dictionary<string, TiledMapLayer>();
+        private readonly List<TiledMapObjectLayer> _objectLayers = new List<TiledMapObjectLayer>();
+        private readonly List<TiledMapTileLayer> _tileLayers = new List<TiledMapTileLayer>();
+        private readonly List<TiledMapTileset> _tilesets = new List<TiledMapTileset>();
 
         public string Name { get; }
         public int Width { get; }
@@ -31,28 +29,20 @@ namespace MonoGame.Extended.Tiled
         public ReadOnlyCollection<TiledMapObjectLayer> ObjectLayers { get; }
 
         public Color? BackgroundColor { get; set; }
-
         public int WidthInPixels => Width * TileWidth;
         public int HeightInPixels => Height * TileHeight;
 
         private TiledMap()
         {
-            _layers = new List<TiledMapLayer>();
             Layers = new ReadOnlyCollection<TiledMapLayer>(_layers);
-            _imageLayers = new List<TiledMapImageLayer>();
             ImageLayers = new ReadOnlyCollection<TiledMapImageLayer>(_imageLayers);
-            _tileLayers = new List<TiledMapTileLayer>();
             TileLayers = new ReadOnlyCollection<TiledMapTileLayer>(_tileLayers);
-            _objectLayers = new List<TiledMapObjectLayer>();
             ObjectLayers = new ReadOnlyCollection<TiledMapObjectLayer>(_objectLayers);
-            _layersByName = new Dictionary<string, TiledMapLayer>();
-            _tilesets = new List<TiledMapTileset>();
             Tilesets = new ReadOnlyCollection<TiledMapTileset>(_tilesets);
             Properties = new TiledMapProperties();
         }
 
-        public TiledMap(string name, int width, int height, int tileWidth, int tileHeight,
-            TiledMapTileDrawOrder renderOrder, TiledMapOrientation orientation)
+        public TiledMap(string name, int width, int height, int tileWidth, int tileHeight, TiledMapTileDrawOrder renderOrder, TiledMapOrientation orientation, Color? backgroundColor = null)
             : this()
         {
             Name = name;
@@ -62,6 +52,7 @@ namespace MonoGame.Extended.Tiled
             TileHeight = tileHeight;
             RenderOrder = renderOrder;
             Orientation = orientation;
+            BackgroundColor = backgroundColor;
         }
 
         public void Dispose()
@@ -110,8 +101,11 @@ namespace MonoGame.Extended.Tiled
         {
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var tileset in _tilesets)
+            {
                 if (tileset.ContainsGlobalIdentifier(tileIdentifier))
                     return tileset;
+            }
+
             return null;
         }
     }

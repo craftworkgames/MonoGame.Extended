@@ -49,7 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics\Effects\TiledMapEffect.cs" />
-    <Compile Include="ContentReaderExtensions.cs" />
     <Compile Include="Graphics\Effects\ITiledMapEffect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Graphics\TiledMapLayerAnimatedModel.cs" />

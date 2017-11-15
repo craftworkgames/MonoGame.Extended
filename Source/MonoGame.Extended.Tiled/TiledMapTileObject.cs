@@ -1,23 +1,19 @@
-using System.Linq;
-using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tiled
 {
     public sealed class TiledMapTileObject : TiledMapObject
     {
-        public TiledMapTilesetTile TilesetTile { get; }
-
-        public TiledMapTileset Tileset { get; }
-
-        public TiledMapTileObject(ContentReader input, TiledMap map)
-            : base(input)
+        public TiledMapTileObject(int identifier, string name, TiledMapTileset tileset, TiledMapTilesetTile tile, 
+            Size2 size, Vector2 position, float rotation = 0, float opacity = 1, bool isVisible = true) 
+            : base(identifier, name, size, position, rotation, opacity, isVisible)
         {
-            var globalTileIdentifierWithFlags = input.ReadUInt32();
-            var tile = new TiledMapTile(globalTileIdentifierWithFlags);
-            Tileset = map.GetTilesetByTileGlobalIdentifier(tile.GlobalIdentifier);
-
-            var localTileIdentifier = tile.GlobalIdentifier - Tileset.FirstGlobalIdentifier;
-            TilesetTile = Tileset.Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier);
+            Tileset = tileset;
+            Tile = tile;
         }
+
+        public TiledMapTilesetTile Tile { get; }
+        public TiledMapTileset Tileset { get; }
+        public override TiledMapObjectType Type => TiledMapObjectType.Tile;
     }
 }
