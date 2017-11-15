@@ -1,53 +1,20 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tiled
 {
     public class TiledMapObjectLayer : TiledMapLayer
     {
-        public Color Color { get; }
+        public TiledMapObjectLayer(string name, TiledMapObject[] objects, Color? color = null, TiledMapObjectDrawOrder drawOrder = TiledMapObjectDrawOrder.TopDown, 
+            Vector2? offset = null, float opacity = 1.0f, bool isVisible = true)
+            : base(name, offset, opacity, isVisible)
+        {
+            Color = color;
+            DrawOrder = drawOrder;
+            Objects = objects;
+        }
+
+        public Color? Color { get; }
         public TiledMapObjectDrawOrder DrawOrder { get; }
         public TiledMapObject[] Objects { get; }
-
-        internal TiledMapObjectLayer(ContentReader input, TiledMap map)
-            : base(input)
-        {
-            Color = input.ReadColor();
-            DrawOrder = (TiledMapObjectDrawOrder)input.ReadByte();
-
-            var objectCount = input.ReadInt32();
-
-            Objects = new TiledMapObject[objectCount];
-
-            for (var i = 0; i < objectCount; i++)
-            {
-                TiledMapObject @object;
-
-                var objectType = (TiledMapObjectType)input.ReadByte();
-                switch (objectType)
-                {
-                    case TiledMapObjectType.Rectangle:
-                        @object = new TiledMapRectangleObject(input);
-                        break;
-                    case TiledMapObjectType.Tile:
-                        @object = new TiledMapTileObject(input, map);
-                        break;
-                    case TiledMapObjectType.Ellipse:
-                        @object = new TiledMapEllipseObject(input);
-                        break;
-                    case TiledMapObjectType.Polygon:
-                        @object = new TiledMapPolygonObject(input);
-                        break;
-                    case TiledMapObjectType.Polyline:
-                        @object = new TiledMapPolylineObject(input);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                Objects[i] = @object;
-            }
-        }
     }
 }

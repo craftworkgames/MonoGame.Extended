@@ -1,23 +1,16 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tiled
 {
     public sealed class TiledMapPolygonObject : TiledMapObject
     {
-        public Point2[] Points { get; }
-
-        internal TiledMapPolygonObject(ContentReader input)
-            : base(input)
+        public TiledMapPolygonObject(int identifier, string name, Point2[] points, Size2 size, Vector2 position, float rotation = 0, float opacity = 1, bool isVisible = true) 
+            : base(identifier, name, size, position, rotation, opacity, isVisible)
         {
-            var pointCount = input.ReadInt32();
-            Points = new Point2[pointCount];
-
-            for (var i = 0; i < pointCount; i++)
-            {
-                var x = input.ReadSingle();
-                var y = input.ReadSingle();
-                Points[i] = new Point2(x, y);
-            }
+            Points = points;
         }
+
+        public Point2[] Points { get; }
+        public override TiledMapObjectType Type => TiledMapObjectType.Polygon;
     }
 }

@@ -1,20 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 
 namespace MonoGame.Extended.Tiled
 {
     public sealed class TiledMapEllipseObject : TiledMapObject
     {
-        public Vector2 Center { get; }
-        public float RadiusX { get; }
-        public float RadiusY { get; }
-
-        internal TiledMapEllipseObject(ContentReader input) 
-            : base(input)
+        public TiledMapEllipseObject(int identifier, string name, Size2 size, Vector2 position, float rotation = 0, float opacity = 1, bool isVisible = true)
+            : base(identifier, name, size, position, rotation, opacity, isVisible)
         {
-            RadiusX = Size.Width / 2.0f;
-            RadiusY = Size.Height / 2.0f;
-            Center = new Vector2(Position.X + RadiusX, Position.Y);
+            Radius = new Vector2(size.Width / 2.0f, size.Height / 2.0f);
+            Center = new Vector2(position.X + Radius.X, position.Y);
         }
+
+        public Vector2 Center { get; }
+        public Vector2 Radius { get; }
+        public override TiledMapObjectType Type => TiledMapObjectType.Ellipse;
     }
 }

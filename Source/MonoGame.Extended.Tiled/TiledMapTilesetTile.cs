@@ -43,7 +43,7 @@ namespace MonoGame.Extended.Tiled
         }
 
         public int LocalTileIdentifier { get; set; }
-        public TiledMapProperties Properties { get; private set; }
+        public TiledMapProperties Properties { get; }
         public TiledMapObject[] Objects { get; set; }
     }
 }
