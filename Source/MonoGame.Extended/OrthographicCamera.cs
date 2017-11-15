@@ -5,19 +5,23 @@ using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended
 {
-    public class Camera2D : IMovable, IRotatable
+    public abstract class Camera
+    {
+    }
+
+    public class OrthographicCamera : Camera, IMovable, IRotatable
     {
         private readonly ViewportAdapter _viewportAdapter;
         private float _maximumZoom = float.MaxValue;
         private float _minimumZoom;
         private float _zoom;
 
-        public Camera2D(GraphicsDevice graphicsDevice)
+        public OrthographicCamera(GraphicsDevice graphicsDevice)
             : this(new DefaultViewportAdapter(graphicsDevice))
         {
         }
 
-        public Camera2D(ViewportAdapter viewportAdapter)
+        public OrthographicCamera(ViewportAdapter viewportAdapter)
         {
             _viewportAdapter = viewportAdapter;
 

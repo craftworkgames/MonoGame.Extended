@@ -90,7 +90,7 @@
     <Compile Include="IColorable.cs" />
     <Compile Include="Collections\IPoolable.cs" />
     <Compile Include="Content\ContentManagerExtensions.cs" />
-    <Compile Include="Camera2D.cs" />
+    <Compile Include="OrthographicCamera.cs" />
     <Compile Include="Content\ContentReaderExtensions.cs" />
     <Compile Include="GameTimeExtensions.cs" />
     <Compile Include="IMovable.cs" />
