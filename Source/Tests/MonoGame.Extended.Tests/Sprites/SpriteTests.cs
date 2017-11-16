@@ -15,12 +15,9 @@ namespace MonoGame.Extended.Tests.Sprites
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var texture = Substitute.For<Texture2D>(graphicsDevice, 50, 200);
-            var sprite = new Sprite(texture)
-            {
-                Position = new Vector2(400, 240)
-            };
+            var sprite = new Sprite(texture);
 
-            Assert.AreEqual(new RectangleF(375, 140, 50, 200), sprite.BoundingRectangle);
+            Assert.AreEqual(new RectangleF(375, 140, 50, 200), sprite.GetBoundingRectangle(new Vector2(400, 240), 0, Vector2.One));
         }
 
         [Test]
@@ -28,12 +25,9 @@ namespace MonoGame.Extended.Tests.Sprites
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var texture = Substitute.For<Texture2D>(graphicsDevice, 50, 200);
-            var sprite = new Sprite(texture)
-            {
-                OriginNormalized = new Vector2(1.0f, 1.0f)
-            };
+            var sprite = new Sprite(texture) { OriginNormalized = new Vector2(1.0f, 1.0f) };
 
-            Assert.AreEqual(new RectangleF(-50, -200, 50, 200), sprite.BoundingRectangle);
+            Assert.AreEqual(new RectangleF(-50, -200, 50, 200), sprite.GetBoundingRectangle(Vector2.Zero, 0, Vector2.One));
         }
 
         [Test]
@@ -41,12 +35,9 @@ namespace MonoGame.Extended.Tests.Sprites
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var texture = Substitute.For<Texture2D>(graphicsDevice, 50, 200);
-            var sprite = new Sprite(texture)
-            {
-                Scale = Vector2.One * 2.0f
-            };
+            var sprite = new Sprite(texture);
 
-            Assert.AreEqual(new RectangleF(-50, -200, 100, 400), sprite.BoundingRectangle);
+            Assert.AreEqual(new RectangleF(-50, -200, 100, 400), sprite.GetBoundingRectangle(Vector2.Zero, 0, Vector2.One * 2.0f));
         }
 
         [Test]
@@ -54,12 +45,9 @@ namespace MonoGame.Extended.Tests.Sprites
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var texture = Substitute.For<Texture2D>(graphicsDevice, 50, 200);
-            var sprite = new Sprite(texture)
-            {
-                Rotation = MathHelper.ToRadians(90)
-            };
+            var sprite = new Sprite(texture);
 
-            AssertExtensions.AreApproximatelyEqual(new RectangleF(-100, -25, 200, 50), sprite.BoundingRectangle);
+            AssertExtensions.AreApproximatelyEqual(new RectangleF(-100, -25, 200, 50), sprite.GetBoundingRectangle(Vector2.Zero, MathHelper.ToRadians(90), Vector2.One * 2.0f));
         }
 
         [Test]

@@ -11,6 +11,11 @@ namespace MonoGame.Extended.Sprites
             Draw(spriteBatch, sprite, position, rotation, scale);
         }
 
+        public static void Draw(this SpriteBatch spriteBatch, Sprite sprite, Transform2D transform)
+        {
+            Draw(spriteBatch, sprite, transform.Position, transform.Rotation, transform.Scale);
+        }
+
         public static void Draw(this SpriteBatch spriteBatch, Sprite sprite, Vector2 position, float rotation, Vector2 scale)
         {
             if (sprite == null) throw new ArgumentNullException(nameof(sprite));

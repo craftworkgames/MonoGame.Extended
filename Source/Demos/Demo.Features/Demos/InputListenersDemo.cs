@@ -22,7 +22,7 @@ namespace Demo.Features.Demos
         private bool _isCursorVisible = true;
         private const float _cursorBlinkDelay = 0.5f;
         private float _cursorBlinkDelta = _cursorBlinkDelay;
-        private Camera2D _camera;
+        private OrthographicCamera _camera;
 
         public InputListenersDemo(GameMain game) : base(game)
         {
@@ -88,7 +88,7 @@ namespace Demo.Features.Demos
         protected override void LoadContent()
         {
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            _camera = new OrthographicCamera(viewportAdapter);
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _backgroundTexture = Content.Load<Texture2D>("Textures/vignette");

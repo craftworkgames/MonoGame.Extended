@@ -26,7 +26,8 @@ namespace Demo.Features.Demos
 
         private SpriteBatch _spriteBatch;
         private Sprite _sprite;
-        private Camera2D _camera;
+        private Transform2D _transform;
+        private OrthographicCamera _camera;
         private ParticleEffect _particleEffect;
         private Texture2D _particleTexture;
 
@@ -35,13 +36,11 @@ namespace Demo.Features.Demos
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            _camera = new OrthographicCamera(viewportAdapter);
 
             var logoTexture = Content.Load<Texture2D>("Textures/logo-square-128");
-            _sprite = new Sprite(logoTexture)
-            {
-                Position = viewportAdapter.Center.ToVector2()
-            };
+            _sprite = new Sprite(logoTexture);
+            _transform = new Transform2D {Position = viewportAdapter.Center.ToVector2()};
 
             _particleTexture = new Texture2D(GraphicsDevice, 1, 1);
             _particleTexture.SetData(new[] {Color.White});
@@ -65,7 +64,7 @@ namespace Demo.Features.Demos
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _sprite.Rotation += deltaTime;
+            _transform.Rotation += deltaTime;
 
             _particleEffect.Update(deltaTime);
 
@@ -83,7 +82,7 @@ namespace Demo.Features.Demos
 
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.Draw(_particleEffect);
-            _spriteBatch.Draw(_sprite);
+            _spriteBatch.Draw(_sprite, _transform.Position, _transform.Rotation, _transform.Scale);
             _spriteBatch.End();
 
             base.Draw(gameTime);

@@ -11,7 +11,7 @@ namespace Demo.Platformer.Entities.Systems
     [EntitySystem(GameLoopType.Draw, Layer = 0)]
     public class SpriteSystem : EntityProcessingSystem
     {
-        private Camera2D _camera;
+        private OrthographicCamera _camera;
         private SpriteBatch _spriteBatch;
         private Texture2D _pixelTexture;
 
@@ -26,7 +26,7 @@ namespace Demo.Platformer.Entities.Systems
         {
             base.Initialize();
 
-            _camera = Game.Services.GetService<Camera2D>();
+            _camera = Game.Services.GetService<OrthographicCamera>();
             _spriteBatch = Game.Services.GetService<SpriteBatch>();
         }
 

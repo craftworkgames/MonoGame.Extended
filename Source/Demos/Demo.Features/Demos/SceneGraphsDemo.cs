@@ -14,7 +14,7 @@ namespace Demo.Features.Demos
         public override string Name => "Scene Graphs";
 
         private BitmapFont _bitmapFont;
-        private Camera2D _camera;
+        private OrthographicCamera _camera;
         private SceneNode _carNode;
         private SceneNode _hoveredNode;
         private SceneNode _leftWheelNode;
@@ -36,7 +36,7 @@ namespace Demo.Features.Demos
             _bitmapFont = Content.Load<BitmapFont>("Fonts/montserrat-32");
 
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter)
+            _camera = new OrthographicCamera(viewportAdapter)
             {
                 Zoom = 2.0f
             };
@@ -48,13 +48,13 @@ namespace Demo.Features.Demos
             var carWheelSprite = new Sprite(carWheelTexture);
 
             _carNode = new SceneNode("car-hull", viewportAdapter.Center.ToVector2());
-            _carNode.Entities.Add(carHullSprite);
+            _carNode.Entities.Add(new SpriteEntity(carHullSprite));
 
             _leftWheelNode = new SceneNode("left-wheel", new Vector2(-29, 17));
-            _leftWheelNode.Entities.Add(carWheelSprite);
+            _leftWheelNode.Entities.Add(new SpriteEntity(carWheelSprite));
 
             _rightWheelNode = new SceneNode("right-wheel", new Vector2(40, 17));
-            _rightWheelNode.Entities.Add(carWheelSprite);
+            _rightWheelNode.Entities.Add(new SpriteEntity(carWheelSprite));
 
             _carNode.Children.Add(_rightWheelNode);
             _carNode.Children.Add(_leftWheelNode);

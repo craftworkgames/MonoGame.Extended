@@ -20,7 +20,7 @@ namespace Demo.Platformer
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
         private SpriteBatch _spriteBatch;
-        private Camera2D _camera;
+        private OrthographicCamera _camera;
         private TiledMap _map;
         private TiledMapRenderer _mapRenderer;
         private EntityComponentSystem _ecs;
@@ -49,20 +49,35 @@ namespace Demo.Platformer
             base.LoadContent();
 
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            _camera = new OrthographicCamera(viewportAdapter);
             Services.AddService(_camera);
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(_spriteBatch);
 
             _map = Content.Load<TiledMap>("level-1");
-            _mapRenderer = new TiledMapRenderer(GraphicsDevice);
+            _mapRenderer = new TiledMapRenderer(GraphicsDevice, _map);
             _entityFactory = new EntityFactory(_ecs, Content);
+
+            MapLayers.BackgroundLayer = _map.Layers.IndexOf(_map.GetLayer("background"));
+            MapLayers.SolidsLayer = _map.Layers.IndexOf(_map.GetLayer("solids"));
+            MapLayers.DecorationsLayer = _map.Layers.IndexOf(_map.GetLayer("decorations"));
+            MapLayers.Decorations2Layer = _map.Layers.IndexOf(_map.GetLayer("decorations2"));
+            MapLayers.DeadliesLayer = _map.Layers.IndexOf(_map.GetLayer("deadlies"));
 
             var service = new TiledObjectToEntityService(_entityFactory);
             var spawnPoint = _map.GetLayer<TiledMapObjectLayer>("entities").Objects.Single(i => i.Type == "Spawn").Position;
 
             service.CreateEntities(_map.GetLayer<TiledMapObjectLayer>("entities").Objects);
+        }
+
+        private static class MapLayers
+        {
+            public static int BackgroundLayer { get; set; }
+            public static int SolidsLayer { get; set; }
+            public static int DecorationsLayer { get; set; }
+            public static int Decorations2Layer { get; set; }
+            public static int DeadliesLayer { get; set; }
         }
 
         protected override void Update(GameTime gameTime)
@@ -87,22 +102,15 @@ namespace Demo.Platformer
 
             // painter's algorithm; just draw things in the expected order
 
-            var backgroundLayer = _map.GetLayer("background");
-            _mapRenderer.Draw(backgroundLayer, ref viewMatrix, ref projectionMatrix);
-
-            var solidsLayer = _map.GetLayer("solids");
-            _mapRenderer.Draw(solidsLayer);
-
-            var decorationsLayer = _map.GetLayer("decorations");
-            _mapRenderer.Draw(decorationsLayer, ref viewMatrix, ref projectionMatrix);
+            _mapRenderer.Draw(MapLayers.BackgroundLayer, ref viewMatrix, ref projectionMatrix);
+            _mapRenderer.Draw(MapLayers.SolidsLayer);
+            _mapRenderer.Draw(MapLayers.DecorationsLayer, ref viewMatrix, ref projectionMatrix);
 
             _ecs.Draw(gameTime);
 
-            var decorations2Layer = _map.GetLayer("decorations2");
-            _mapRenderer.Draw(decorations2Layer, ref viewMatrix, ref projectionMatrix);
+            _mapRenderer.Draw(MapLayers.Decorations2Layer, ref viewMatrix, ref projectionMatrix);
+            _mapRenderer.Draw(MapLayers.DeadliesLayer, ref viewMatrix, ref projectionMatrix);
 
-            var deadliesLayer = _map.GetLayer("deadlies");
-            _mapRenderer.Draw(deadliesLayer, ref viewMatrix, ref projectionMatrix);
             base.Draw(gameTime);
         }
     }

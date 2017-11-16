@@ -4,7 +4,7 @@ namespace MonoGame.Extended.Tiled
 {
     public abstract class TiledMapObject
     {
-        protected TiledMapObject(int identifier, string name, Size2 size, Vector2 position, float rotation = 0, float opacity = 1, bool isVisible = true)
+        protected TiledMapObject(int identifier, string name, Size2 size, Vector2 position, float rotation = 0, float opacity = 1, bool isVisible = true, string type = null)
         {
             Identifier = identifier;
             Name = name;
@@ -13,12 +13,13 @@ namespace MonoGame.Extended.Tiled
             Position = position;
             Size = size;
             Opacity = opacity;
+            Type = type;
             Properties = new TiledMapProperties();
         }
 
         public int Identifier { get; }
         public string Name { get; set; }
-        public abstract TiledMapObjectType Type { get; }
+        public string Type { get; set; }
         public bool IsVisible { get; set; }
         public float Opacity { get; set; }
         public float Rotation { get; set; }

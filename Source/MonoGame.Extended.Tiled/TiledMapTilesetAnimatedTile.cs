@@ -1,44 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 
 namespace MonoGame.Extended.Tiled
 {
     public class TiledMapTilesetAnimatedTile : TiledMapTilesetTile
     {
-        private readonly List<TiledMapTilesetTileAnimationFrame> _animationFrames =
-            new List<TiledMapTilesetTileAnimationFrame>();
-
+        private TimeSpan _timer = TimeSpan.Zero;
         private int _frameIndex;
-        private TimeSpan _timer;
 
         public ReadOnlyCollection<TiledMapTilesetTileAnimationFrame> AnimationFrames { get; }
         public TiledMapTilesetTileAnimationFrame CurrentAnimationFrame { get; private set; }
 
-        internal TiledMapTilesetAnimatedTile(TiledMapTileset tileset, ContentReader input, int localTileIdentifier, int animationFramesCount)
-            : base(localTileIdentifier,input)
+        public TiledMapTilesetAnimatedTile(int localTileIdentifier, TiledMapTilesetTileAnimationFrame[] frames, TiledMapObject[] objects = null)
+            : base(localTileIdentifier, objects)
         {
-            AnimationFrames = new ReadOnlyCollection<TiledMapTilesetTileAnimationFrame>(_animationFrames);
-            _timer = TimeSpan.Zero;
+            if (frames.Length == 0) throw new InvalidOperationException("There must be at least one tileset animation frame");
 
-            for (var i = 0; i < animationFramesCount; i++)
-            {
-                var localTileIdentifierForFrame = input.ReadInt32();
-                var frameDurationInMilliseconds = input.ReadInt32();
-                var tileSetTileFrame = new TiledMapTilesetTileAnimationFrame(tileset, localTileIdentifierForFrame, frameDurationInMilliseconds);
-                _animationFrames.Add(tileSetTileFrame);
-                CurrentAnimationFrame = AnimationFrames[0];
-            }
+            AnimationFrames = new ReadOnlyCollection<TiledMapTilesetTileAnimationFrame>(frames);
+            CurrentAnimationFrame = AnimationFrames[0];
         }
 
         public void Update(GameTime gameTime)
         {
-            if (_animationFrames.Count == 0)
-                return;
-
             _timer += gameTime.ElapsedGameTime;
+
             if (_timer <= CurrentAnimationFrame.Duration)
                 return;
 

@@ -1,49 +1,18 @@
-﻿using Microsoft.Xna.Framework.Content;
-using System;
+﻿using System.Collections.Generic;
 
 namespace MonoGame.Extended.Tiled
 {
     public class TiledMapTilesetTile
     {
-        internal TiledMapTilesetTile(int localTileIdentifier, ContentReader input)
+        public TiledMapTilesetTile(int localTileIdentifier, TiledMapObject[] objects = null)
         {
-            var objectCount = input.ReadInt32();
-
-            var objects = new TiledMapObject[objectCount];
-
-            for (var i = 0; i < objectCount; i++)
-            {
-                TiledMapObject @object;
-
-                var objectType = (TiledMapObjectType)input.ReadByte();
-                switch (objectType)
-                {
-                    case TiledMapObjectType.Rectangle:
-                        @object = new TiledMapRectangleObject(input);
-                        break;
-                    case TiledMapObjectType.Ellipse:
-                        @object = new TiledMapEllipseObject(input);
-                        break;
-                    case TiledMapObjectType.Polygon:
-                        @object = new TiledMapPolygonObject(input);
-                        break;
-                    case TiledMapObjectType.Polyline:
-                        @object = new TiledMapPolylineObject(input);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                objects[i] = @object;
-            }
-
-            Objects = objects;
             LocalTileIdentifier = localTileIdentifier;
+            Objects = objects != null ? new List<TiledMapObject>(objects) : new List<TiledMapObject>();
             Properties = new TiledMapProperties();
         }
 
-        public int LocalTileIdentifier { get; set; }
+        public int LocalTileIdentifier { get; }
         public TiledMapProperties Properties { get; }
-        public TiledMapObject[] Objects { get; set; }
+        public List<TiledMapObject> Objects { get; }
     }
 }

@@ -19,7 +19,7 @@ namespace Demo.Features.Demos
         private SpriteBatch _spriteBatch;
         private ViewportAdapter _viewportAdapter;
         private Texture2D _backgroundTexture;
-        private Camera2D _camera;
+        private OrthographicCamera _camera;
         private GuiSystem _guiSystem;
         
         public GuiDemo(GameMain game) : base(game)
@@ -32,7 +32,7 @@ namespace Demo.Features.Demos
             IsMouseVisible = false;
 
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(_viewportAdapter);
+            _camera = new OrthographicCamera(_viewportAdapter);
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _backgroundTexture = Content.Load<Texture2D>("Textures/colored_castle");
