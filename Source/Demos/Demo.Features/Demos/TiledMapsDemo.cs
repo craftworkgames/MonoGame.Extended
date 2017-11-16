@@ -19,7 +19,7 @@ namespace Demo.Features.Demos
         public override string Name => "Tiled Maps";
 
         private BitmapFont _bitmapFont;
-        private Camera2D _camera;
+        private OrthographicCamera _camera;
         private SpriteBatch _spriteBatch;
         private TiledMapRenderer _mapRenderer;
         private ViewportAdapter _viewportAdapter;
@@ -36,8 +36,7 @@ namespace Demo.Features.Demos
         protected override void Initialize()
         {
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1024, 768);
-            _camera = new Camera2D(_viewportAdapter);
-            _mapRenderer = new TiledMapRenderer(GraphicsDevice);
+            _camera = new OrthographicCamera(_viewportAdapter);
 
             Window.AllowUserResizing = true;
 
@@ -70,6 +69,7 @@ namespace Demo.Features.Demos
             var name = _availableMaps.Dequeue();
             _map = Content.Load<TiledMap>($"TiledMaps/{name}");
             _availableMaps.Enqueue(name);
+            _mapRenderer = new TiledMapRenderer(GraphicsDevice, _map);
             return _map;
         }
 
@@ -82,7 +82,7 @@ namespace Demo.Features.Demos
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
 
-            _mapRenderer.Update(_map, gameTime);
+            _mapRenderer.Update(gameTime);
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
@@ -170,7 +170,7 @@ namespace Demo.Features.Demos
             var viewMatrix = _camera.GetViewMatrix();
             var projectionMatrix = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0, 0f, -1f);
 
-            _mapRenderer.Draw(_map, ref viewMatrix, ref projectionMatrix, _customEffect);
+            _mapRenderer.Draw(ref viewMatrix, ref projectionMatrix, _customEffect);
 
             DrawText();
 

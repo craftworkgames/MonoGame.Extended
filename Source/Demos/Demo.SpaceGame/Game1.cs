@@ -18,7 +18,7 @@ namespace Demo.SpaceGame
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private Texture2D _backgroundTexture;
         private BulletFactory _bulletFactory;
-        private Camera2D _camera;
+        private OrthographicCamera _camera;
         private SpriteSheetAnimationFactory _explosionAnimations;
         private BitmapFont _font;
         private MeteorFactory _meteorFactory;
@@ -58,7 +58,7 @@ namespace Demo.SpaceGame
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
             _font = Content.Load<BitmapFont>("Fonts/montserrat-32");
 
-            _camera = new Camera2D(_viewportAdapter);
+            _camera = new OrthographicCamera(_viewportAdapter);
             _explosionAnimations = Content.Load<SpriteSheetAnimationFactory>("explosion-animations");
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);

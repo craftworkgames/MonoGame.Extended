@@ -41,6 +41,11 @@ namespace MonoGame.Extended.Sprites
 
         public Color Color { get; set; }
 
+        public RectangleF GetBoundingRectangle(Transform2D transform)
+        {
+            return GetBoundingRectangle(transform.Position, transform.Rotation, transform.Scale);
+        }
+
         public RectangleF GetBoundingRectangle(Vector2 position, float rotation, Vector2 scale)
         {
             var corners = GetCorners(position, rotation, scale);

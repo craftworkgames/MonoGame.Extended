@@ -87,7 +87,7 @@ namespace Demo.Features.Demos
     {
         public override string Name => "GUI Layouts";
 
-        private Camera2D _camera;
+        private OrthographicCamera _camera;
         private GuiSystem _guiSystem;
 
         public GuiLayoutDemo(GameMain game) : base(game)
@@ -97,7 +97,7 @@ namespace Demo.Features.Demos
         protected override void LoadContent()
         {
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            _camera = new OrthographicCamera(viewportAdapter);
 
             var skin = GuiSkin.FromFile(Content, @"Raw/adventure-gui-skin.json");
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _camera.GetViewMatrix);

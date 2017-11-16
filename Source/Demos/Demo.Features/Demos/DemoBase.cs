@@ -32,13 +32,13 @@ namespace Demo.Features.Demos
         protected GraphicsDevice GraphicsDevice => _game.GraphicsDevice;
         protected GameComponentCollection Components => _game.Components;
 
-        protected Camera2D Camera { get; private set; }
+        protected OrthographicCamera Camera { get; private set; }
         protected ViewportAdapter ViewportAdapter { get; private set; }
 
         protected virtual void Initialize()
         {
             ViewportAdapter = _game.ViewportAdapter;
-            Camera = new Camera2D(ViewportAdapter);
+            Camera = new OrthographicCamera(ViewportAdapter);
         }
 
         protected virtual void LoadContent() { }

@@ -63,35 +63,61 @@ namespace MonoGame.Extended.Tiled
 
 
 
-        private static TiledMapTileset ReadTileset(ContentReader input, TiledMap map)
+        private static TiledMapTileset ReadTileset(ContentReader reader, TiledMap map)
         {
-            var textureAssetName = input.GetRelativeAssetName(input.ReadString());
-            var texture = input.ContentManager.Load<Texture2D>(textureAssetName);
-            var firstGlobalIdentifier = input.ReadInt32();
-            var tileWidth = input.ReadInt32();
-            var tileHeight = input.ReadInt32();
-            var tileCount = input.ReadInt32();
-            var spacing = input.ReadInt32();
-            var margin = input.ReadInt32();
-            var columns = input.ReadInt32();
-            var explicitTileCount = input.ReadInt32();
+            var textureAssetName = reader.GetRelativeAssetName(reader.ReadString());
+            var texture = reader.ContentManager.Load<Texture2D>(textureAssetName);
+            var firstGlobalIdentifier = reader.ReadInt32();
+            var tileWidth = reader.ReadInt32();
+            var tileHeight = reader.ReadInt32();
+            var tileCount = reader.ReadInt32();
+            var spacing = reader.ReadInt32();
+            var margin = reader.ReadInt32();
+            var columns = reader.ReadInt32();
+            var explicitTileCount = reader.ReadInt32();
 
             var tileset = new TiledMapTileset(texture, firstGlobalIdentifier, tileWidth, tileHeight, tileCount, spacing, margin, columns);
 
             for (var tileIndex = 0; tileIndex < explicitTileCount; tileIndex++)
             {
-                var localTileIdentifier = input.ReadInt32();
-                var animationFramesCount = input.ReadInt32();
+                var localTileIdentifier = reader.ReadInt32();
+                var animationFramesCount = reader.ReadInt32();
                 var tilesetTile = animationFramesCount <= 0 
-                    ? new TiledMapTilesetTile(localTileIdentifier, input) 
-                    : new TiledMapTilesetAnimatedTile(tileset, input, localTileIdentifier, animationFramesCount);
+                    ? ReadTiledMapTilesetTile(reader, map, objects => new TiledMapTilesetTile(localTileIdentifier, objects)) 
+                    : ReadTiledMapTilesetTile(reader, map, objects => new TiledMapTilesetAnimatedTile(localTileIdentifier, ReadTiledMapTilesetAnimationFrames(reader, tileset, animationFramesCount)));
 
-                ReadProperties(input, tilesetTile.Properties);
+                ReadProperties(reader, tilesetTile.Properties);
                 tileset.Tiles.Add(tilesetTile);
             }
 
-            ReadProperties(input, tileset.Properties);
+            ReadProperties(reader, tileset.Properties);
             return tileset;
+        }
+
+        private static TiledMapTilesetTileAnimationFrame[] ReadTiledMapTilesetAnimationFrames(ContentReader reader, TiledMapTileset tileset, int animationFramesCount)
+        {
+            var animationFrames = new TiledMapTilesetTileAnimationFrame[animationFramesCount];
+
+            for (var i = 0; i < animationFramesCount; i++)
+            {
+                var localTileIdentifierForFrame = reader.ReadInt32();
+                var frameDurationInMilliseconds = reader.ReadInt32();
+                var tileSetTileFrame = new TiledMapTilesetTileAnimationFrame(tileset, localTileIdentifierForFrame, frameDurationInMilliseconds);
+                animationFrames[i] = tileSetTileFrame;
+            }
+
+            return animationFrames;
+        }
+
+        private static TiledMapTilesetTile ReadTiledMapTilesetTile(ContentReader reader, TiledMap map, Func<TiledMapObject[], TiledMapTilesetTile> createTile)
+        {
+            var objectCount = reader.ReadInt32();
+            var objects = new TiledMapObject[objectCount];
+
+            for (var i = 0; i < objectCount; i++)
+                objects[i] = ReadTiledMapObject(reader, map);
+
+            return createTile(objects);
         }
 
         private static void ReadLayers(ContentReader reader, TiledMap map)
@@ -179,7 +205,7 @@ namespace MonoGame.Extended.Tiled
             switch (objectType)
             {
                 case TiledMapObjectType.Rectangle:
-                    mapObject = new TiledMapRectangleObject(identifier, name, size, position, rotation, opacity, isVisible);
+                    mapObject = new TiledMapRectangleObject(identifier, name, size, position, rotation, opacity, isVisible, type);
                     break;
                 case TiledMapObjectType.Tile:
                     var globalTileIdentifierWithFlags = reader.ReadUInt32();
@@ -187,17 +213,16 @@ namespace MonoGame.Extended.Tiled
                     var tileset = map.GetTilesetByTileGlobalIdentifier(tile.GlobalIdentifier);
                     var localTileIdentifier = tile.GlobalIdentifier - tileset.FirstGlobalIdentifier;
                     var tilesetTile = tileset.Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier);
-                    mapObject = new TiledMapTileObject(identifier, name, tileset, tilesetTile, size, position, rotation, opacity, isVisible);
+                    mapObject = new TiledMapTileObject(identifier, name, tileset, tilesetTile, size, position, rotation, opacity, isVisible, type);
                     break;
                 case TiledMapObjectType.Ellipse:
                     mapObject = new TiledMapEllipseObject(identifier, name, size, position, rotation, opacity, isVisible);
                     break;
                 case TiledMapObjectType.Polygon:
-                    mapObject = new TiledMapPolygonObject(identifier, name, ReadPoints(reader), size, position, rotation, opacity, isVisible);
+                    mapObject = new TiledMapPolygonObject(identifier, name, ReadPoints(reader), size, position, rotation, opacity, isVisible, type);
                     break;
                 case TiledMapObjectType.Polyline:
-                    var points = ReadPoints(reader);
-                    mapObject = new TiledMapPolylineObject(identifier, name, ReadPoints(reader), size, position, rotation, opacity, isVisible);
+                    mapObject = new TiledMapPolylineObject(identifier, name, ReadPoints(reader), size, position, rotation, opacity, isVisible, type);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -206,7 +231,7 @@ namespace MonoGame.Extended.Tiled
             foreach (var property in properties)
                 mapObject.Properties.Add(property.Key, property.Value);
 
-            throw new ArgumentOutOfRangeException();
+            return mapObject;
         }
 
         private static Point2[] ReadPoints(ContentReader reader)

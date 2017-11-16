@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Tests
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var viewportAdapter = new DefaultViewportAdapter(graphicsDevice);
-            var camera = new Camera2D(viewportAdapter);
+            var camera = new OrthographicCamera(viewportAdapter);
             
             camera.LookAt(new Vector2(100, 200));
 
@@ -23,7 +23,7 @@ namespace MonoGame.Extended.Tests
         public void Camera2D_GetBoundingFrustum_Test()
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
-            var camera = new Camera2D(graphicsDevice);
+            var camera = new OrthographicCamera(graphicsDevice);
             var boundingFrustum = camera.GetBoundingFrustum();
             var corners = boundingFrustum.GetCorners();
 
@@ -43,7 +43,7 @@ namespace MonoGame.Extended.Tests
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
             var viewport = new DefaultViewportAdapter(graphicsDevice);
-            var camera = new Camera2D(viewport);
+            var camera = new OrthographicCamera(viewport);
             camera.Move(new Vector2(2, 0));
             camera.Move(new Vector2(0, 3));
 
@@ -59,7 +59,7 @@ namespace MonoGame.Extended.Tests
         public void Camera2D_ContainsPoint_Test()
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
-            var camera = new Camera2D(graphicsDevice);
+            var camera = new OrthographicCamera(graphicsDevice);
 
             Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Point(1, 1)));
             Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Point(799, 479)));
@@ -71,7 +71,7 @@ namespace MonoGame.Extended.Tests
         public void Camera2D_ContainsVector2_Test()
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
-            var camera = new Camera2D(graphicsDevice);
+            var camera = new OrthographicCamera(graphicsDevice);
 
             Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Vector2(799.5f, 479.5f)));
             Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Vector2(0.5f, 0.5f)));
@@ -87,7 +87,7 @@ namespace MonoGame.Extended.Tests
         public void Camera2D_ContainsRectangle_Test()
         {
             var graphicsDevice = TestHelper.CreateGraphicsDevice();
-            var camera = new Camera2D(graphicsDevice);
+            var camera = new OrthographicCamera(graphicsDevice);
 
             Assert.AreEqual(ContainmentType.Intersects, camera.Contains(new Rectangle(-50, -50, 100, 100)));
             Assert.AreEqual(ContainmentType.Contains, camera.Contains(new Rectangle(50, 50, 100, 100)));
