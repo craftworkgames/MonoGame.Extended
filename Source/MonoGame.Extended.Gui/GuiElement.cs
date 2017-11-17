@@ -14,7 +14,17 @@ namespace MonoGame.Extended.Gui
         public Vector2 Origin { get; set; }
         public Color Color { get; set; }
         public TextureRegion2D BackgroundRegion { get; set; }
-        public Size2 Size { get; set; }
+
+        private Size2 _size;
+        public Size2 Size
+        {
+            get { return _size; }
+            set
+            {
+                _size = value;
+                OnSizeChanged();
+            }
+        }
 
         private object _bindingContext;
         public object BindingContext
@@ -44,6 +54,8 @@ namespace MonoGame.Extended.Gui
                 };
             }
         }
+
+        protected virtual void OnSizeChanged() {}
 
         private void UpdateElementBindings()
         {
