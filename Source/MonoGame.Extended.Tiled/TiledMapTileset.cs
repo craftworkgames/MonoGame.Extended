@@ -38,13 +38,13 @@ namespace MonoGame.Extended.Tiled
             return TiledMapHelper.GetTileSourceRectangle(localTileIdentifier, TileWidth, TileHeight, Columns, Margin, Spacing);
         }
 
-        public TiledMapTilesetAnimatedTile GetAnimatedTilesetTileByLocalTileIdentifier(int localTileIdentifier)
-        {
-            throw new NotImplementedException();
-            //TiledMapTilesetAnimatedTile animatedTile;
-            //_animatedTilesByLocalTileIdentifier.TryGetValue(localTileIdentifier, out animatedTile);
-            //return animatedTile;
-        }
+        //public TiledMapTilesetAnimatedTile GetAnimatedTilesetTileByLocalTileIdentifier(int localTileIdentifier)
+        //{
+        //    throw new NotImplementedException();
+        //    //TiledMapTilesetAnimatedTile animatedTile;
+        //    //_animatedTilesByLocalTileIdentifier.TryGetValue(localTileIdentifier, out animatedTile);
+        //    //return animatedTile;
+        //}
 
         public bool ContainsGlobalIdentifier(int globalIdentifier)
         {

@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
-using MonoGame.Extended.Tiled.Graphics;
 
 namespace MonoGame.Extended.Tiled
 {
@@ -161,8 +158,8 @@ namespace MonoGame.Extended.Tiled
                     throw new ArgumentOutOfRangeException();
             }
 
-            if (layerType != TiledMapLayerType.ObjectLayer)
-                ReadModels(reader, layer, map);
+            //if (layerType != TiledMapLayerType.ObjectLayer)
+            //    ReadModels(reader, layer, map);
 
             foreach (var property in properties)
                 layer.Properties.Add(property.Key, property.Value);
@@ -209,7 +206,7 @@ namespace MonoGame.Extended.Tiled
                     break;
                 case TiledMapObjectType.Tile:
                     var globalTileIdentifierWithFlags = reader.ReadUInt32();
-                    var tile = new TiledMapTile(globalTileIdentifierWithFlags);
+                    var tile = new TiledMapTile(globalTileIdentifierWithFlags, (ushort)position.X, (ushort)position.Y);
                     var tileset = map.GetTilesetByTileGlobalIdentifier(tile.GlobalIdentifier);
                     var localTileIdentifier = tile.GlobalIdentifier - tileset.FirstGlobalIdentifier;
                     var tilesetTile = tileset.Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier);
@@ -275,31 +272,31 @@ namespace MonoGame.Extended.Tiled
                 var x = reader.ReadUInt16();
                 var y = reader.ReadUInt16();
 
-                tiles[x + y * width] = new TiledMapTile(globalTileIdentifierWithFlags);
+                tiles[x + y * width] = new TiledMapTile(globalTileIdentifierWithFlags, x, y);
             }
 
             return new TiledMapTileLayer(name, width, height, tileWidth, tileHeight, tiles, offset, opacity, isVisible);
         }
 
-        private static void ReadModels(ContentReader reader, TiledMapLayer layer, TiledMap map)
-        {
-            var modelCount = reader.ReadInt32();
-            var animatedModelCount = reader.ReadInt32();
+        //private static void ReadModels(ContentReader reader, TiledMapLayer layer, TiledMap map)
+        //{
+        //    var modelCount = reader.ReadInt32();
+        //    var animatedModelCount = reader.ReadInt32();
 
-            var models = layer.Models = new TiledMapLayerModel[modelCount];
-            var animatedModels = layer.AnimatedModels = new TiledMapLayerAnimatedModel[animatedModelCount];
+        //    var models = layer.Models = new TiledMapLayerModel[modelCount];
+        //    var animatedModels = layer.AnimatedModels = new TiledMapLayerAnimatedModel[animatedModelCount];
 
-            var animatedModelIndex = 0;
+        //    var animatedModelIndex = 0;
 
-            for (var modelIndex = 0; modelIndex < modelCount; modelIndex++)
-            {
-                var isAnimated = reader.ReadBoolean();
-                var model = isAnimated ? new TiledMapLayerAnimatedModel(reader, map) : new TiledMapLayerModel(reader);
+        //    for (var modelIndex = 0; modelIndex < modelCount; modelIndex++)
+        //    {
+        //        var isAnimated = reader.ReadBoolean();
+        //        var model = isAnimated ? new TiledMapLayerAnimatedModel(reader, map) : new TiledMapLayerModel(reader);
 
-                models[modelIndex] = model;
-                if (isAnimated)
-                    animatedModels[animatedModelIndex++] = (TiledMapLayerAnimatedModel)model;
-            }
-        }
+        //        models[modelIndex] = model;
+        //        if (isAnimated)
+        //            animatedModels[animatedModelIndex++] = (TiledMapLayerAnimatedModel)model;
+        //    }
+        //}
     }
 }
