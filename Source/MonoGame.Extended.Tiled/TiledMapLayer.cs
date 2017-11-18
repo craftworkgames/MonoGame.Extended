@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Tiled
     public abstract class TiledMapLayer : IDisposable
     {
         internal TiledMapLayerModel[] Models;
-        internal TiledMapLayerAnimatedModel[] AnimatedModels;
+        //internal TiledMapLayerAnimatedModel[] AnimatedModels;
 
         public string Name { get; }
         public bool IsVisible { get; set; }

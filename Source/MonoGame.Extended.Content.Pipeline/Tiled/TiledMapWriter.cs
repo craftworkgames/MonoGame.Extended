@@ -111,8 +111,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     throw new ArgumentOutOfRangeException(nameof(layer.Type));
             }
 
-            if (layer.Type != TiledMapLayerType.ObjectLayer)
-                WriteModels(output, layer.Models);
+            //if (layer.Type != TiledMapLayerType.ObjectLayer)
+            //    WriteModels(output, layer.Models);
         }
 
         private static void WriteImageLayer(ContentWriter output, TiledMapImageLayerContent imageLayer)
@@ -222,61 +222,61 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             return TiledMapObjectType.Rectangle;
         }
 
-        private static void WriteModels(ContentWriter output, IReadOnlyCollection<TiledMapLayerModelContent> models)
-        {
-            output.Write(models.Count);
+        //private static void WriteModels(ContentWriter output, IReadOnlyCollection<TiledMapLayerModelContent> models)
+        //{
+        //    output.Write(models.Count);
 
-            var animatedModelsCount = models.Count(x => x is TiledMapLayerAnimatedModelContent);
-            output.Write(animatedModelsCount);
+        //    var animatedModelsCount = models.Count(x => x is TiledMapLayerAnimatedModelContent);
+        //    output.Write(animatedModelsCount);
 
-            foreach (var model in models)
-            {
-                var animatedModel = model as TiledMapLayerAnimatedModelContent;
-                if (animatedModel != null)
-                {
-                    output.Write(true);
-                    WriteAnimatedModel(output, animatedModel);
-                }
-                else
-                {
-                    output.Write(false);
-                    WriteModel(output, model);
-                }
-            }
-        }
+        //    foreach (var model in models)
+        //    {
+        //        var animatedModel = model as TiledMapLayerAnimatedModelContent;
+        //        if (animatedModel != null)
+        //        {
+        //            output.Write(true);
+        //            WriteAnimatedModel(output, animatedModel);
+        //        }
+        //        else
+        //        {
+        //            output.Write(false);
+        //            WriteModel(output, model);
+        //        }
+        //    }
+        //}
 
-        // ReSharper disable once SuggestBaseTypeForParameter
-        private static void WriteModel(ContentWriter output, TiledMapLayerModelContent model)
-        {
-            output.Write(model.LayerName);
-            output.Write(model.TextureAssetName);
+        //// ReSharper disable once SuggestBaseTypeForParameter
+        //private static void WriteModel(ContentWriter output, TiledMapLayerModelContent model)
+        //{
+        //    output.Write(model.LayerName);
+        //    output.Write(model.TextureAssetName);
 
-            var vertexCount = model.Vertices.Count;
-            output.Write(vertexCount);
-            foreach (var vertex in model.Vertices)
-            {
-                output.Write(vertex.Position.X);
-                output.Write(vertex.Position.Y);
-                output.Write(vertex.TextureCoordinate.X);
-                output.Write(vertex.TextureCoordinate.Y);
-            }
+        //    var vertexCount = model.Vertices.Count;
+        //    output.Write(vertexCount);
+        //    foreach (var vertex in model.Vertices)
+        //    {
+        //        output.Write(vertex.Position.X);
+        //        output.Write(vertex.Position.Y);
+        //        output.Write(vertex.TextureCoordinate.X);
+        //        output.Write(vertex.TextureCoordinate.Y);
+        //    }
 
-            var indexCount = model.Indices.Count;
-            output.Write(indexCount);
-            foreach (var index in model.Indices)
-                output.Write(index);
-        }
+        //    var indexCount = model.Indices.Count;
+        //    output.Write(indexCount);
+        //    foreach (var index in model.Indices)
+        //        output.Write(index);
+        //}
 
-        private static void WriteAnimatedModel(ContentWriter output, TiledMapLayerAnimatedModelContent model)
-        {
-            WriteModel(output, model);
+        //private static void WriteAnimatedModel(ContentWriter output, TiledMapLayerAnimatedModelContent model)
+        //{
+        //    WriteModel(output, model);
 
-            output.Write(model.Tileset.FirstGlobalIdentifier);
+        //    output.Write(model.Tileset.FirstGlobalIdentifier);
 
-            output.Write(model.AnimatedTilesetTiles.Count);
-            foreach (var animatedTilesetTile in model.AnimatedTilesetTiles)
-                output.Write(animatedTilesetTile.LocalIdentifier);
-        }
+        //    output.Write(model.AnimatedTilesetTiles.Count);
+        //    foreach (var animatedTilesetTile in model.AnimatedTilesetTiles)
+        //        output.Write(animatedTilesetTile.LocalIdentifier);
+        //}
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {

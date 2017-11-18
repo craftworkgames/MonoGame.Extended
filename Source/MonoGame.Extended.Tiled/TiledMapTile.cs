@@ -2,6 +2,8 @@
 {
     public struct TiledMapTile
     {
+        public ushort X { get; }
+        public ushort Y { get; }
         internal readonly uint GlobalTileIdentifierWithFlags;
 
         public int GlobalIdentifier => (int)(GlobalTileIdentifierWithFlags & ~(uint)TiledMapTileFlipFlags.All);
@@ -11,9 +13,11 @@
         public bool IsBlank => GlobalIdentifier == 0;
         public TiledMapTileFlipFlags Flags => (TiledMapTileFlipFlags)(GlobalTileIdentifierWithFlags & (uint)TiledMapTileFlipFlags.All);
 
-        internal TiledMapTile(uint globalTileIdentifierWithFlags)
+        internal TiledMapTile(uint globalTileIdentifierWithFlags, ushort x, ushort y)
         {
             GlobalTileIdentifierWithFlags = globalTileIdentifierWithFlags;
+            X = x;
+            Y = y;
         }
 
         public override string ToString()
