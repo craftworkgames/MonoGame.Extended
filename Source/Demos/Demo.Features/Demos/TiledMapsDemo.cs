@@ -8,8 +8,7 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Graphics.Effects;
 using MonoGame.Extended.Tiled;
-using MonoGame.Extended.Tiled.Graphics;
-using MonoGame.Extended.Tiled.Graphics.Effects;
+using MonoGame.Extended.Tiled.Renderers;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Features.Demos
@@ -48,11 +47,11 @@ namespace Demo.Features.Demos
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _bitmapFont = Content.Load<BitmapFont>("Fonts/montserrat-32");
 
-            _availableMaps =
-                new Queue<string>(new[] { "level01", "level02", "level03", "level04", "level05", "level06", "level07", "level08" });
+            _availableMaps = new Queue<string>(new[] { "level07", "level01", "level02", "level03", "level04", "level05", "level06", "level07", "level08" });
 
             _map = LoadNextMap();
-            _camera.LookAt(new Vector2(_map.WidthInPixels, _map.HeightInPixels) * 0.5f);
+            //_camera.LookAt(new Vector2(_map.WidthInPixels, _map.HeightInPixels) * 0.5f);
+            _camera.Position = new Vector2(-104, -92);
 
             var effect = new CustomEffect(GraphicsDevice)
             {

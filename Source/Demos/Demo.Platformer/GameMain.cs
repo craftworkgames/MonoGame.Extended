@@ -7,9 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
-using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
-using MonoGame.Extended.Tiled.Graphics;
+using MonoGame.Extended.Tiled.Renderers;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Platformer

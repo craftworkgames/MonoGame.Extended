@@ -48,12 +48,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Graphics\Effects\TiledMapEffect.cs" />
-    <Compile Include="Graphics\Effects\ITiledMapEffect.cs" />
+    <Compile Include="Renderers\TiledMapEffect.cs" />
+    <Compile Include="Renderers\TiledMapAnimatedLayerModelBuilder.cs" />
+    <Compile Include="Renderers\TiledMapLayerModel.cs" />
+    <Compile Include="Renderers\TiledMapLayerModelBuilder.cs" />
+    <Compile Include="Renderers\TiledMapStaticLayerModel.cs" />
+    <Compile Include="Renderers\TiledMapStaticLayerModelBuilder.cs" />
+    <Compile Include="Renderers\TiledMapModel.cs" />
+    <Compile Include="Renderers\TiledMapModelBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Graphics\TiledMapLayerAnimatedModel.cs" />
-    <Compile Include="Graphics\TiledMapRenderer.cs" />
-    <Compile Include="Graphics\TiledMapLayerModel.cs" />
+    <Compile Include="Renderers\TiledMapAnimatedLayerModel.cs" />
+    <Compile Include="Renderers\TiledMapRenderer.cs" />
     <Compile Include="TiledMapEllipseObject.cs" />
     <Compile Include="TiledMapHelper.cs" />
     <Compile Include="TiledMapImageLayer.cs" />
