@@ -1,12 +1,10 @@
-using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Tiled.Graphics;
 
 namespace MonoGame.Extended.Tiled
 {
-    public abstract class TiledMapLayer : IDisposable
+    public abstract class TiledMapLayer// : IDisposable
     {
-        internal TiledMapLayerModel[] Models;
+        //internal TiledMapLayerModel[] Models;
         //internal TiledMapLayerAnimatedModel[] AnimatedModels;
 
         public string Name { get; }
@@ -24,22 +22,22 @@ namespace MonoGame.Extended.Tiled
             Properties = new TiledMapProperties();
         }
         
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+        //public void Dispose()
+        //{
+        //    Dispose(true);
+        //    GC.SuppressFinalize(this);
+        //}
 
-        protected virtual void Dispose(bool diposing)
-        {
-            if (!diposing)
-                return;
+        //protected virtual void Dispose(bool diposing)
+        //{
+        //    if (!diposing)
+        //        return;
 
-            if (Models == null)
-                return;
+        //    if (Models == null)
+        //        return;
 
-            foreach (var model in Models)
-                model.Dispose();
-        }
+        //    foreach (var model in Models)
+        //        model.Dispose();
+        //}
     }
 }

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline;
-using MonoGame.Extended.Tiled;
 using MonoGame.Utilities;
 using CompressionMode = System.IO.Compression.CompressionMode;
 
@@ -185,6 +183,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     data.Tiles = new List<TiledMapTileContent>();
 
                     for (var y = 0; y < width; y++)
+                    {
                         for (var x = 0; x < height; x++)
                         {
                             var gid = reader.ReadUInt32();
@@ -193,6 +192,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                                 GlobalIdentifier = gid
                             });
                         }
+                    }
                 }
             }
 

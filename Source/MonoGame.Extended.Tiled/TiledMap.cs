@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tiled
 {
-    public sealed class TiledMap : IDisposable
+    public sealed class TiledMap //: IDisposable
     {
         private readonly List<TiledMapImageLayer> _imageLayers = new List<TiledMapImageLayer>();
         private readonly List<TiledMapLayer> _layers = new List<TiledMapLayer>();
@@ -55,11 +55,11 @@ namespace MonoGame.Extended.Tiled
             BackgroundColor = backgroundColor;
         }
 
-        public void Dispose()
-        {
-            foreach (var layer in _layers)
-                layer.Dispose();
-        }
+        //public void Dispose()
+        //{
+        //    foreach (var layer in _layers)
+        //        layer.Dispose();
+        //}
 
         internal void AddTileset(TiledMapTileset tileset)
         {
