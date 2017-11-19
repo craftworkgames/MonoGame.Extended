@@ -62,19 +62,32 @@ namespace MonoGame.Extended.Tiled.Graphics
                     var vertices = new List<VertexPositionTexture>();
                     var indices = new List<ushort>();
 
-                    foreach (var tile in tileLayer.Tiles)
+                    foreach (var tile in tileLayer.Tiles.Where(t => tileset.ContainsGlobalIdentifier(t.GlobalIdentifier)))
                     {
                         var tileGid = tile.GlobalIdentifier;
                         var localTileIdentifier = tileGid - tileset.FirstGlobalIdentifier;
                         var position = GetTilePosition(_map, tile);
-                        var sourceRectangle = TiledMapHelper.GetTileSourceRectangle(localTileIdentifier, tileset.TileWidth, tileset.TileHeight, tileset.Columns, tileset.Margin, tileset.Spacing);
+                        var tilesetColumns = tileset.Columns == 0 ? 1 : tileset.Columns; // fixes a problem (what problem exactly?)
+                        var sourceRectangle = TiledMapHelper.GetTileSourceRectangle(localTileIdentifier, tileset.TileWidth, tileset.TileHeight, tilesetColumns, tileset.Margin, tileset.Spacing);
                         var flipFlags = tile.Flags;
 
-                        AddTileIndices(indices, vertices.Count);
-                        AddTileVertices(vertices, texture, position, sourceRectangle, flipFlags);
+                        indices.AddRange(CreateTileIndices(vertices.Count));
+                        Debug.Assert(indices.Count <= TiledMapHelper.MaximumIndicesPerModel);
+
+                        vertices.AddRange(CreateVertices(texture, position, sourceRectangle, flipFlags));
+                        Debug.Assert(vertices.Count <= TiledMapHelper.MaximumVerticesPerModel);
+
+                        // check if the current model is full
+                        if (vertices.Count + TiledMapHelper.VerticesPerTile >= TiledMapHelper.MaximumVerticesPerModel)
+                        {
+                            layerModels.Add(new TiledMapLayerModelNew(_graphicsDevice, texture, vertices.ToArray(), indices.ToArray()));
+                            vertices = new List<VertexPositionTexture>();
+                            indices = new List<ushort>();
+                        }
                     }
 
-                    layerModels.Add(new TiledMapLayerModelNew(_graphicsDevice, texture, vertices.ToArray(), indices.ToArray()));
+                    if (vertices.Any())
+                        layerModels.Add(new TiledMapLayerModelNew(_graphicsDevice, texture, vertices.ToArray(), indices.ToArray()));
                 }
             }
 
@@ -96,7 +109,7 @@ namespace MonoGame.Extended.Tiled.Graphics
             }
         }
 
-        public void AddTileVertices(List<VertexPositionTexture> vertices, Texture2D texture, Point2 position, Rectangle sourceRectangle, TiledMapTileFlipFlags flags = TiledMapTileFlipFlags.None)
+        private static IEnumerable<VertexPositionTexture> CreateVertices(Texture2D texture, Point2 position, Rectangle sourceRectangle, TiledMapTileFlipFlags flags = TiledMapTileFlipFlags.None)
         {
             var reciprocalWidth = 1f / texture.Width;
             var reciprocalHeight = 1f / texture.Height;
@@ -162,28 +175,20 @@ namespace MonoGame.Extended.Tiled.Graphics
                 }
             }
 
-            vertices.Add(vertexTopLeft);
-            vertices.Add(vertexTopRight);
-            vertices.Add(vertexBottomLeft);
-            vertices.Add(vertexBottomRight);
-
-            Debug.Assert(vertices.Count <= TiledMapHelper.MaximumVerticesPerModel);
+            yield return vertexTopLeft;
+            yield return vertexTopRight;
+            yield return vertexBottomLeft;
+            yield return vertexBottomRight;
         }
 
-        public void AddTileIndices(List<ushort> indices, int indexOffset)
+        private static IEnumerable<ushort> CreateTileIndices(int indexOffset)
         {
-            //var indexOffset = Vertices.Count;
-
-            Debug.Assert(3 + indexOffset <= TiledMapHelper.MaximumVerticesPerModel);
-
-            indices.Add((ushort)(0 + indexOffset));
-            indices.Add((ushort)(1 + indexOffset));
-            indices.Add((ushort)(2 + indexOffset));
-            indices.Add((ushort)(1 + indexOffset));
-            indices.Add((ushort)(3 + indexOffset));
-            indices.Add((ushort)(2 + indexOffset));
-
-            Debug.Assert(indices.Count <= TiledMapHelper.MaximumIndicesPerModel);
+            yield return (ushort)(0 + indexOffset);
+            yield return (ushort)(1 + indexOffset);
+            yield return (ushort)(2 + indexOffset);
+            yield return (ushort)(1 + indexOffset);
+            yield return (ushort)(3 + indexOffset);
+            yield return (ushort)(2 + indexOffset);
         }
 
 
