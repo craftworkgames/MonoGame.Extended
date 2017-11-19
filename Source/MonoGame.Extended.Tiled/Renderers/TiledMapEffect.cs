@@ -1,8 +1,13 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics.Effects;
 
-namespace MonoGame.Extended.Tiled.Graphics.Effects
+namespace MonoGame.Extended.Tiled.Renderers
 {
+    public interface ITiledMapEffect : IEffectMatrices, ITextureEffect
+    {
+        float Alpha { get; set; }
+    }
+
     public class TiledMapEffect : DefaultEffect, ITiledMapEffect
     {
         public TiledMapEffect(GraphicsDevice graphicsDevice) 
