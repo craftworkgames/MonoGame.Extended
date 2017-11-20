@@ -8,65 +8,80 @@ namespace MonoGame.Extended.Tiled.Renderers
     public class TiledMapModelBuilder
     {
         private readonly GraphicsDevice _graphicsDevice;
-        private readonly TiledMap _map;
 
-        public TiledMapModelBuilder(GraphicsDevice graphicsDevice, TiledMap map)
+        public TiledMapModelBuilder(GraphicsDevice graphicsDevice)
         {
             _graphicsDevice = graphicsDevice;
-            _map = map;
         }
 
-        public TiledMapModel Build()
+        private IEnumerable<TiledMapLayerModel> CreateLayerModels(TiledMap map, TiledMapLayer layer)
+        {
+            var tileLayer = layer as TiledMapTileLayer;
+
+            if (tileLayer != null)
+                return CreateTileLayerModels(map, tileLayer);
+
+            return new List<TiledMapLayerModel>();
+        }
+
+        private IEnumerable<TiledMapLayerModel> CreateTileLayerModels(TiledMap map, TiledMapTileLayer tileLayer)
         {
             var layerModels = new List<TiledMapLayerModel>();
             var staticLayerBuilder = new TiledMapStaticLayerModelBuilder();
             var animatedLayerBuilder = new TiledMapAnimatedLayerModelBuilder();
 
-            foreach (var tileLayer in _map.Layers.OfType<TiledMapTileLayer>())
+            foreach (var tileset in map.Tilesets)
             {
-                foreach (var tileset in _map.Tilesets)
+                var texture = tileset.Texture;
+
+                foreach (var tile in tileLayer.Tiles.Where(t => tileset.ContainsGlobalIdentifier(t.GlobalIdentifier)))
                 {
-                    var texture = tileset.Texture;
+                    var tileGid = tile.GlobalIdentifier;
+                    var localTileIdentifier = tileGid - tileset.FirstGlobalIdentifier;
+                    var position = GetTilePosition(map, tile);
+                    var tilesetColumns = tileset.Columns == 0 ? 1 : tileset.Columns; // fixes a problem (what problem exactly?)
+                    var sourceRectangle = TiledMapHelper.GetTileSourceRectangle(localTileIdentifier, tileset.TileWidth, tileset.TileHeight, tilesetColumns, tileset.Margin, tileset.Spacing);
+                    var flipFlags = tile.Flags;
 
-                    foreach (var tile in tileLayer.Tiles.Where(t => tileset.ContainsGlobalIdentifier(t.GlobalIdentifier)))
+                    // animated tiles
+                    var tilesetTile = tileset.Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier);
+                    var animatedTilesetTile = tilesetTile as TiledMapTilesetAnimatedTile;
+
+                    if (animatedTilesetTile != null)
                     {
-                        var tileGid = tile.GlobalIdentifier;
-                        var localTileIdentifier = tileGid - tileset.FirstGlobalIdentifier;
-                        var position = GetTilePosition(_map, tile);
-                        var tilesetColumns = tileset.Columns == 0 ? 1 : tileset.Columns; // fixes a problem (what problem exactly?)
-                        var sourceRectangle = TiledMapHelper.GetTileSourceRectangle(localTileIdentifier, tileset.TileWidth, tileset.TileHeight, tilesetColumns, tileset.Margin, tileset.Spacing);
-                        var flipFlags = tile.Flags;
+                        animatedLayerBuilder.AddTile(texture, position, sourceRectangle, flipFlags);
+                        animatedLayerBuilder.AnimatedTilesetTiles.Add(animatedTilesetTile);
 
-                        // animated tiles
-                        var tilesetTile = tileset.Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier);
-                        var animatedTilesetTile = tilesetTile as TiledMapTilesetAnimatedTile;
-
-                        if (animatedTilesetTile != null)
-                        {
-                            animatedLayerBuilder.AddTile(texture, position, sourceRectangle, flipFlags);
-                            animatedLayerBuilder.AnimatedTilesetTiles.Add(animatedTilesetTile);
-
-                            if (animatedLayerBuilder.IsFull)
-                                layerModels.Add(animatedLayerBuilder.Build(_graphicsDevice, texture));
-                        }
-                        else
-                        {
-                            staticLayerBuilder.AddTile(texture, position, sourceRectangle, flipFlags);
-
-                            if (staticLayerBuilder.IsFull)
-                                layerModels.Add(staticLayerBuilder.Build(_graphicsDevice, texture));
-                        }
+                        if (animatedLayerBuilder.IsFull)
+                            layerModels.Add(animatedLayerBuilder.Build(_graphicsDevice, texture));
                     }
+                    else
+                    {
+                        staticLayerBuilder.AddTile(texture, position, sourceRectangle, flipFlags);
 
-                    if (staticLayerBuilder.IsBuildable)
-                        layerModels.Add(staticLayerBuilder.Build(_graphicsDevice, texture));
-
-                    if (animatedLayerBuilder.IsBuildable)
-                        layerModels.Add(animatedLayerBuilder.Build(_graphicsDevice, texture));
+                        if (staticLayerBuilder.IsFull)
+                            layerModels.Add(staticLayerBuilder.Build(_graphicsDevice, texture));
+                    }
                 }
+
+                if (staticLayerBuilder.IsBuildable)
+                    layerModels.Add(staticLayerBuilder.Build(_graphicsDevice, texture));
+
+                if (animatedLayerBuilder.IsBuildable)
+                    layerModels.Add(animatedLayerBuilder.Build(_graphicsDevice, texture));
             }
 
-            return new TiledMapModel(layerModels.ToArray());
+            return layerModels;
+        }
+
+        public TiledMapModel Build(TiledMap map)
+        {
+            var layersOfLayerModels = map.Layers
+                .Select(layer => CreateLayerModels(map, layer))
+                .Select(models => models.ToArray())
+                .ToArray();
+
+            return new TiledMapModel(map, layersOfLayerModels);
         }
 
         private static Point2 GetTilePosition(TiledMap map, TiledMapTile mapTile)

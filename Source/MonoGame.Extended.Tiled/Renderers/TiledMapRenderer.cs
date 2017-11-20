@@ -8,28 +8,22 @@ namespace MonoGame.Extended.Tiled.Renderers
 {
     public class TiledMapRenderer : IDisposable
     {
-        private readonly TiledMapModel _mapModel;
-
-        private readonly TiledMap _map;
+        private readonly TiledMapModelBuilder _mapModelBuilder;
         private readonly TiledMapEffect _defaultEffect;
-        private Matrix _worldMatrix = Matrix.Identity;
         private readonly GraphicsDevice _graphicsDevice;
+        private TiledMapModel _mapModel;
+        private Matrix _worldMatrix = Matrix.Identity;
 
-        private readonly Dictionary<TiledMapTileset, List<TiledMapTilesetAnimatedTile>> _animatedTilesByTileset;
-
-        public TiledMapRenderer(GraphicsDevice graphicsDevice, TiledMap map)
+        public TiledMapRenderer(GraphicsDevice graphicsDevice, TiledMap map = null)
         {
             if (graphicsDevice == null) throw new ArgumentNullException(nameof(graphicsDevice));
-            if (map == null) throw new ArgumentNullException(nameof(map));
 
-            _map = map;
             _graphicsDevice = graphicsDevice;
             _defaultEffect = new TiledMapEffect(graphicsDevice);
+            _mapModelBuilder = new TiledMapModelBuilder(graphicsDevice);
 
-            _animatedTilesByTileset = _map.Tilesets.ToDictionary(i => i, i => i.Tiles.OfType<TiledMapTilesetAnimatedTile>().ToList());
-
-            var modelBuilder = new TiledMapModelBuilder(graphicsDevice, map);
-            _mapModel = modelBuilder.Build();
+            if(map != null)
+                LoadMap(map);
         }
 
         public void Dispose()
@@ -37,24 +31,27 @@ namespace MonoGame.Extended.Tiled.Renderers
             _defaultEffect.Dispose();
         }
 
-        public void Update(GameTime gameTime)
+        public void LoadMap(TiledMap map)
         {
-            for (var tilesetIndex = 0; tilesetIndex < _map.Tilesets.Count; tilesetIndex++)
-            {
-                var tileset = _map.Tilesets[tilesetIndex];
-                var animatedTiles = _animatedTilesByTileset[tileset];
-
-                for (var animatedTileIndex = 0; animatedTileIndex < animatedTiles.Count; animatedTileIndex++)
-                {
-                    var animatedTilesetTile = animatedTiles[animatedTileIndex];
-                    animatedTilesetTile.Update(gameTime);
-                }
-            }
-
-            UpdateAnimatedLayers(_mapModel.Layers.OfType<TiledMapAnimatedLayerModel>());
+            _mapModel = map != null ? _mapModelBuilder.Build(map) : null;
         }
 
-        private static unsafe void UpdateAnimatedLayers(IEnumerable<TiledMapAnimatedLayerModel> animatedLayerModels)
+        public void Update(GameTime gameTime)
+        {
+            if(_mapModel == null)
+                return;
+
+            for (var tilesetIndex = 0; tilesetIndex < _mapModel.Tilesets.Count; tilesetIndex++)
+            {
+                foreach (var animatedTilesetTile in _mapModel.GetAnimatedTiles(tilesetIndex))
+                    animatedTilesetTile.Update(gameTime);
+            }
+
+            for(var layerIndex = 0; layerIndex < _mapModel.LayersOfLayerModels.Length; layerIndex++)
+                UpdateAnimatedLayerModels(_mapModel.LayersOfLayerModels[layerIndex].OfType<TiledMapAnimatedLayerModel>());
+        }
+
+        private static unsafe void UpdateAnimatedLayerModels(IEnumerable<TiledMapAnimatedLayerModel> animatedLayerModels)
         {
             foreach (var animatedModel in animatedLayerModels)
             {
@@ -67,10 +64,12 @@ namespace MonoGame.Extended.Tiled.Renderers
                     {
                         var currentFrameTextureCoordinates = animatedTile.CurrentAnimationFrame.TextureCoordinates;
 
+                        // ReSharper disable ArrangeRedundantParentheses
                         (*verticesPointer++).TextureCoordinate = currentFrameTextureCoordinates[0];
                         (*verticesPointer++).TextureCoordinate = currentFrameTextureCoordinates[1];
                         (*verticesPointer++).TextureCoordinate = currentFrameTextureCoordinates[2];
                         (*verticesPointer++).TextureCoordinate = currentFrameTextureCoordinates[3];
+                        // ReSharper restore ArrangeRedundantParentheses
                     }
                 }
 
@@ -89,7 +88,10 @@ namespace MonoGame.Extended.Tiled.Renderers
 
         public void Draw(ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect = null, float depth = 0.0f)
         {
-            for (var index = 0; index < _map.Layers.Count; index++)
+            if (_mapModel == null)
+                return;
+
+            for (var index = 0; index < _mapModel.Layers.Count; index++)
                 Draw(index, ref viewMatrix, ref projectionMatrix, effect, depth);
         }
 
@@ -103,7 +105,10 @@ namespace MonoGame.Extended.Tiled.Renderers
 
         public void Draw(int layerIndex, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect = null, float depth = 0.0f)
         {
-            var layer = _map.Layers[layerIndex];
+            if (_mapModel == null)
+                return;
+
+            var layer = _mapModel.Layers[layerIndex];
 
             if (!layer.IsVisible)
                 return;
@@ -123,7 +128,7 @@ namespace MonoGame.Extended.Tiled.Renderers
             tiledMapEffect.View = viewMatrix;
             tiledMapEffect.Projection = projectionMatrix;
 
-            foreach (var layerModel in _mapModel.Layers)
+            foreach (var layerModel in _mapModel.LayersOfLayerModels[layerIndex])
             {
                 // desired alpha
                 tiledMapEffect.Alpha = layer.Opacity;
