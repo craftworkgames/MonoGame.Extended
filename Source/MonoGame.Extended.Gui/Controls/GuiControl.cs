@@ -109,13 +109,25 @@ namespace MonoGame.Extended.Gui.Controls
             }
 
             var font = Font ?? context.DefaultFont;
+            var fontSize = Size2.Empty;
 
             if (font != null && Text != null)
             {
                 var textSize = font.MeasureString(CreateBoxText(Text, font, Width));
-                desiredSize.Width += textSize.Width;
-                desiredSize.Height += textSize.Height;
+                fontSize.Width += textSize.Width;
+                fontSize.Height += textSize.Height;
             }
+
+            var buttonSize = Size2.Empty;
+
+            var guiButton = this as GuiButton;
+            if (guiButton?.IconRegion != null)
+            {
+                buttonSize = guiButton.IconRegion.Size;
+            }
+
+            desiredSize.Width += Math.Max(fontSize.Width, buttonSize.Width);
+            desiredSize.Height += Math.Max(fontSize.Height, buttonSize.Height);
 
             desiredSize.Width = Math.Min(desiredSize.Width, availableSize.Width);
             desiredSize.Height = Math.Min(desiredSize.Height, availableSize.Height);
