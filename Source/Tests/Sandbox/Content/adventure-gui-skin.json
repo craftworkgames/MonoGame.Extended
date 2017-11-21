@@ -97,6 +97,11 @@
       "BackgroundRegion": "panel_brown"
     },
     {
+      "Name": "brown-grid-no-size",
+      "Type": "GuiUniformGrid",
+      "BackgroundRegion": "panel_brown"
+    },
+    {
       "Name": "beige-inset-panel",
       "Type": "GuiStackPanel",
       "BackgroundRegion": "panelInset_beige",

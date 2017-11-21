@@ -157,16 +157,8 @@ namespace MonoGame.Extended.Gui.Controls
 
         public virtual void OnScrolled(int delta) { }
 
-        public virtual bool OnKeyTyped(IGuiContext context, KeyboardEventArgs args)
-        {
-            if (args.Key == Keys.Tab || args.Key == Keys.Enter) return false;
-            return true;
-        }
-        public virtual bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
-        {
-            if (args.Key == Keys.Tab || args.Key == Keys.Enter) return false;
-            return true;
-        }
+        public virtual bool OnKeyTyped(IGuiContext context, KeyboardEventArgs args) { return true; }
+        public virtual bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args) { return true; }
 
         public virtual bool OnFocus(IGuiContext context) { return true; }
         public virtual bool OnUnfocus(IGuiContext context) { return true; }

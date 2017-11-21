@@ -121,7 +121,7 @@ namespace MonoGame.Extended.Gui.Controls
             {
                 case Keys.Tab:
                 case Keys.Enter:
-                    return false;
+                    return true;
                 case Keys.Back:
                     if (Text.Length > 0)
                     {
