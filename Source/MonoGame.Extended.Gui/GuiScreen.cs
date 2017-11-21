@@ -18,6 +18,10 @@ namespace MonoGame.Extended.Gui
             Windows = new GuiWindowCollection(this) { ItemAdded = w => IsLayoutRequired = true };
         }
 
+        public virtual void Dispose()
+        {
+        }
+
         [JsonProperty(Order = 1)]
         public GuiSkin Skin { get; set; }
 
@@ -90,19 +94,6 @@ namespace MonoGame.Extended.Gui
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             renderer.DrawRectangle(BoundingRectangle, Color.Green);
-        }
-
-        protected virtual void Dispose(bool isDisposing)
-        {
-            if (isDisposing)
-            {
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         public static GuiScreen FromStream(ContentManager contentManager, Stream stream)

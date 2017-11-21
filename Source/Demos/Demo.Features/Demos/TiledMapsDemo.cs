@@ -31,6 +31,12 @@ namespace Demo.Features.Demos
         {
         }
 
+        public override void Dispose()
+        {
+            _mapRenderer.Dispose();
+            base.Dispose();
+        }
+
         protected override void Initialize()
         {
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1024, 768);
@@ -61,7 +67,7 @@ namespace Demo.Features.Demos
 
             _customEffect = effect;
         }
-
+        
         private TiledMap LoadNextMap()
         {
             var name = _availableMaps.Dequeue();

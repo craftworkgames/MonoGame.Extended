@@ -19,19 +19,6 @@ namespace Demo.Features.Screens
         {
             _demos = demos;
             _loadDemo = loadDemo;
-            //var button = Skin.Create<GuiButton>("white-button", c =>
-            //{
-            //    c.Position = new Vector2(670, 430);
-            //    c.Size = new Size2(120, 42);
-            //    c.Text = "Next Demo";
-            //});
-            //var canvas = new GuiCanvas
-            //{
-            //    Controls = { button }
-            //};
-
-            //Controls.Add(canvas);
-            //button.Clicked += (sender, args) => onNextDemo();
 
             var dialog = Skin.Create<GuiDialog>("dialog");
             var grid = new GuiUniformGrid { Columns = 3 };
@@ -49,7 +36,14 @@ namespace Demo.Features.Screens
 
             dialog.Controls.Add(grid);
             Controls.Add(dialog);
-            //DialogDemo();
+        }
+
+        public override void Dispose()
+        {
+            foreach (var demo in _demos.Values)
+                demo.Dispose();
+
+            base.Dispose();
         }
 
         private void LoadDemo(DemoBase demo)

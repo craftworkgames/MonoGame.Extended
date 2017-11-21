@@ -28,11 +28,13 @@ namespace MonoGame.Extended.Tiled.Renderers
 
         public void Dispose()
         {
+            _mapModel?.Dispose();
             _defaultEffect.Dispose();
         }
 
         public void LoadMap(TiledMap map)
         {
+            _mapModel?.Dispose();
             _mapModel = map != null ? _mapModelBuilder.Build(map) : null;
         }
 
