@@ -77,9 +77,10 @@ namespace Demo.Features.Demos
             listBox.Items.AddRange(GraphicsAdapter.DefaultAdapter.SupportedDisplayModes.Select(i => $"{i.Width}x{i.Height}"));
         }
 
-        protected override void Dispose(bool isDisposing)
+        public override void Dispose()
         {
             _texture.Dispose();
+            base.Dispose();
         }
     }
 

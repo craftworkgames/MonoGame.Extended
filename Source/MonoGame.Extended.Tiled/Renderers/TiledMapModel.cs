@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MonoGame.Extended.Tiled.Renderers
 {
-    public class TiledMapModel
+    public class TiledMapModel : IDisposable
     {
         private readonly TiledMap _map;
         private readonly Dictionary<TiledMapTileset, List<TiledMapTilesetAnimatedTile>> _animatedTilesByTileset;
@@ -16,6 +17,12 @@ namespace MonoGame.Extended.Tiled.Renderers
             _animatedTilesByTileset = _map.Tilesets
                 .ToDictionary(i => i, i => i.Tiles.OfType<TiledMapTilesetAnimatedTile>()
                 .ToList());
+        }
+
+        public void Dispose()
+        {
+            foreach (var layerModel in LayersOfLayerModels.SelectMany(i => i))
+                layerModel.Dispose();
         }
 
         public ReadOnlyCollection<TiledMapTileset> Tilesets => _map.Tilesets;

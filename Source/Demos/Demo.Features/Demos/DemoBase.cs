@@ -7,7 +7,7 @@ using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Features.Demos
 {
-    public abstract class DemoBase : IComparable<DemoBase>
+    public abstract class DemoBase : IDisposable, IComparable<DemoBase>
     {
         private readonly GameMain _game;
         private bool _isInitialized;
@@ -17,6 +17,10 @@ namespace Demo.Features.Demos
             _game = game;
 
             Window.AllowUserResizing = true;
+        }
+
+        public virtual void Dispose()
+        {
         }
 
         public abstract string Name { get; }
