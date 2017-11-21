@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
+using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -12,6 +14,24 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiButton(GuiSkin skin)
             : base(skin)
         {
+        }
+
+        private Point _iconPosition;
+
+        public Color IconColor { get; set; } = Color.White;
+
+        private TextureRegion2D _iconRegion;
+        public TextureRegion2D IconRegion
+        {
+            get { return _iconRegion; }
+            set
+            {
+                if (_iconRegion != value)
+                {
+                    _iconRegion = value;
+                    RecalculateIconPosition();
+                }
+            }
         }
 
         public event EventHandler Clicked;
@@ -48,21 +68,18 @@ namespace MonoGame.Extended.Gui.Controls
 
         private bool _isPointerDown;
 
-        public override void OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
+        public override bool OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerDown(context, args);
-
             if (IsEnabled)
             {
                 _isPointerDown = true;
                 IsPressed = true;
             }
+            return base.OnPointerDown(context, args);
         }
 
-        public override void OnPointerUp(IGuiContext context, GuiPointerEventArgs args)
+        public override bool OnPointerUp(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerUp(context, args);
-
             _isPointerDown = false;
 
             if (IsPressed)
@@ -70,24 +87,52 @@ namespace MonoGame.Extended.Gui.Controls
                 IsPressed = false;
 
                 if (BoundingRectangle.Contains(args.Position) && IsEnabled)
-                    Clicked?.Invoke(this, EventArgs.Empty);
+                    TriggerClicked();
             }
+            return base.OnPointerUp(context, args);
         }
 
-        public override void OnPointerEnter(IGuiContext context, GuiPointerEventArgs args)
+        public override bool OnPointerEnter(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerEnter(context, args);
-
             if (IsEnabled && _isPointerDown)
                 IsPressed = true;
+
+            return base.OnPointerEnter(context, args);
         }
 
-        public override void OnPointerLeave(IGuiContext context, GuiPointerEventArgs args)
+        public override bool OnPointerLeave(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerLeave(context, args);
-
             if (IsEnabled)
                 IsPressed = false;
+            return base.OnPointerLeave(context, args);
+        }
+
+        public void TriggerClicked()
+        {
+            Clicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected override void OnSizeChanged()
+        {
+            if (IconRegion != null)
+                RecalculateIconPosition();
+        }
+
+        private void RecalculateIconPosition()
+        {
+            var x = (BoundingRectangle.Width - IconRegion.Width) / 2;
+            var y = (BoundingRectangle.Height - IconRegion.Height) / 2;
+            _iconPosition = new Point(x, y);
+        }
+
+        protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        {
+            base.DrawForeground(context, renderer, deltaSeconds, textInfo);
+
+            if (IconRegion != null)
+            {
+                renderer.DrawRegion(IconRegion, new Rectangle(BoundingRectangle.Location + _iconPosition + Offset.ToPoint(), IconRegion.Bounds.Size), IconColor);
+            }
         }
     }
 }

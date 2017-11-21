@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.ViewportAdapters;
 using Sandbox.Experiments;
+using MonoGame.Extended.Gui.Controls;
+using System;
 
 // The Sandbox project is used for experiementing outside the normal demos.
 // Any code found here should be considered experimental work in progress.
@@ -47,6 +49,8 @@ namespace Sandbox
         private ViewportAdapter _viewportAdapter;
         private GuiSystem _guiSystem;
 
+        private GuiScreen _screen;
+        private GuiSkin _skin;
 
         public Game1()
         {
@@ -61,16 +65,34 @@ namespace Sandbox
 
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, _graphicsDeviceManager.PreferredBackBufferWidth, _graphicsDeviceManager.PreferredBackBufferHeight);
 
-            var skin = GuiSkin.FromFile(Content, @"Content/adventure-gui-skin.json", typeof(MyPanel));
+            _skin = GuiSkin.FromFile(Content, @"Content/adventure-gui-skin.json", typeof(MyPanel));
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _viewportAdapter.GetScaleMatrix);
 
             var viewModel = new ViewModel();
+
+            _screen = GuiScreen.FromFile(Content, "Content/adventure-gui-screen.json", typeof(MyPanel));
+
+            var listBox = _screen.FindControl<GuiListBox>("Listbox");
+            listBox.Items.Add(new { Name = "Hello World 1" });
+            listBox.Items.Add(new { Name = "Hello World 2" });
+            listBox.Items.Add(new { Name = "Hello World 3" });
+            listBox.Items.Add(new { Name = "Hello World 4" });
+
+            var comboBox = _screen.FindControl<GuiComboBox>("ComboBox");
+            comboBox.Items.Add(new { Name = "Hello World 1" });
+            comboBox.Items.Add(new { Name = "Hello World 2" });
+            comboBox.Items.Add(new { Name = "Hello World 3" });
+            comboBox.Items.Add(new { Name = "Hello World 4" });
+
+            var submit = _screen.FindControl<GuiSubmit>("FormSubmit");
+            submit.Clicked += OnFormSubmitClicked;
 
             _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer)
             {
                 Screens =
                 {
-                    new BindingScreen(skin, viewModel) 
+                    _screen
+                    // new BindingScreen(_skin, viewModel) 
                 }
             };
         }
@@ -90,6 +112,16 @@ namespace Sandbox
             GraphicsDevice.Clear(Color.Black);
 
             _guiSystem.Draw(gameTime);
+        }
+
+        private void OnFormSubmitClicked(object sender, EventArgs e)
+        {
+            var listBox = _screen.FindControl<GuiListBox>("Listbox");
+            var textBox = _screen.FindControl<GuiTextBox>("TextBox");
+            if (!string.IsNullOrEmpty(textBox.Text))
+            {
+                listBox.Items.Add(new { Name = textBox.Text });
+            }
         }
     }
 }

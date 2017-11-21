@@ -21,19 +21,18 @@ namespace MonoGame.Extended.Gui.Controls
         public TextureRegion2D DropDownRegion { get; set; }
         public Color DropDownColor { get; set; } = Color.White;
 
-        public override void OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
+        public override bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
         {
-            base.OnKeyPressed(context, args);
-
             if (args.Key == Keys.Enter)
                 IsOpen = false;
+
+            return base.OnKeyPressed(context, args);
         }
 
-        public override void OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
+        public override bool OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerDown(context, args);
-
             IsOpen = !IsOpen;
+            return base.OnPointerDown(context, args);
         }
 
         protected override Rectangle GetContentRectangle(IGuiContext context)

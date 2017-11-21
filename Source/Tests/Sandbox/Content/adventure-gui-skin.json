@@ -21,6 +21,7 @@
       "VerticalTextAlignment": "Bottom"
     },
     {
+      "Name": "white-button",
       "Type": "GuiButton",
       "Margin": "5 2",
       "BackgroundRegion": "buttonLong_grey",
@@ -36,6 +37,27 @@
       },
       "HoverStyle": {
         "Type": "GuiButton",
+        "Color": "#9E4C16ff",
+        "TextColor": "#ffffffff"
+      }
+    },
+    {
+      "Name": "white-submit",
+      "Type": "GuiSubmit",
+      "Margin": "5 2",
+      "BackgroundRegion": "buttonLong_grey",
+      "TextOffset": "0 -2",
+      "TextColor": "#f4a460ff",
+      "Color": "#8b4513ff",
+      "HorizontalAlignment": "Center",
+      "VerticalAlignment": "Centre",
+      "PressedStyle": {
+        "Type": "GuiSubmit",
+        "BackgroundRegion": "buttonLong_grey_pressed",
+        "TextOffset": "0 2"
+      },
+      "HoverStyle": {
+        "Type": "GuiSubmit",
         "Color": "#9E4C16ff",
         "TextColor": "#ffffffff"
       }
@@ -65,6 +87,16 @@
       "Size": "400 300"
     },
     {
+      "Name": "brown-form-no-size",
+      "Type": "GuiForm",
+      "BackgroundRegion": "panel_brown"
+    },
+    {
+      "Name": "brown-panel-no-size",
+      "Type": "GuiStackPanel",
+      "BackgroundRegion": "panel_brown"
+    },
+    {
       "Name": "beige-inset-panel",
       "Type": "GuiStackPanel",
       "BackgroundRegion": "panelInset_beige",
@@ -81,6 +113,7 @@
       "BackgroundRegion": "monogame-title"
     },
     {
+      "Name":  "text-box",
       "Type": "GuiTextBox",
       "ClipPadding": "8 0",
       "BackgroundRegion": "grey_textBox",
@@ -108,6 +141,7 @@
       "TextColor": "#444444"
     },
     {
+      "Name": "combo-box",
       "Type": "GuiComboBox",
       "ClipPadding": "7 5",
       "BackgroundRegion": "buttonLong_grey",

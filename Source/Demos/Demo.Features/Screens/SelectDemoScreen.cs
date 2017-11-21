@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
+using MonoGame.Extended.TextureAtlases;
 
 namespace Demo.Features.Screens
 {
@@ -14,7 +15,7 @@ namespace Demo.Features.Screens
         private readonly IDictionary<string, DemoBase> _demos;
         private readonly Action<string> _loadDemo;
 
-        public SelectDemoScreen(GuiSkin skin, IDictionary<string, DemoBase> demos, Action<string> loadDemo)
+        public SelectDemoScreen(GuiSkin skin, IDictionary<string, DemoBase> demos, Action<string> loadDemo, Action exitGameAction)
             : base(skin)
         {
             _demos = demos;
@@ -45,6 +46,20 @@ namespace Demo.Features.Screens
                     c.Clicked += (sender, args) => LoadDemo(demo);
                 });
                 grid.Controls.Add(button);
+            }
+
+            // Close button
+            var atlas = skin.TextureAtlases[0];
+            var closeButtonRegion = atlas?.GetRegion("buttonRound_close");
+            if (closeButtonRegion != null)
+            {
+                var closeButton = Skin.Create<GuiButton>("white-button", c =>
+                {
+                    c.IconRegion = closeButtonRegion;
+                    c.Margin = new Thickness(4);
+                    c.Clicked += (sender, args) => exitGameAction();
+                });
+                grid.Controls.Add(closeButton);
             }
 
             dialog.Controls.Add(grid);

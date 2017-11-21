@@ -14,8 +14,8 @@ namespace MonoGame.Extended.Gui
         public GuiScreen(GuiSkin skin)
         {
             Skin = skin;
-            Controls = new GuiControlCollection { ItemAdded = c => IsLayoutRequired = true };
-            Windows = new GuiWindowCollection(this) { ItemAdded = w => IsLayoutRequired = true };
+            Controls = new GuiControlCollection { ItemAdded = c => _isLayoutRequired = true };
+            Windows = new GuiWindowCollection(this) { ItemAdded = w => _isLayoutRequired = true };
         }
 
         [JsonProperty(Order = 1)]
@@ -33,7 +33,8 @@ namespace MonoGame.Extended.Gui
         public bool IsVisible { get; set; } = true;
 
         [JsonIgnore]
-        public bool IsLayoutRequired { get; private set; }
+        public bool IsLayoutRequired { get { return _isLayoutRequired || Controls.Any(x => x.IsLayoutRequired); } }
+        private bool _isLayoutRequired = false;
 
         public virtual void Update(GameTime gameTime) { }
 
@@ -84,7 +85,8 @@ namespace MonoGame.Extended.Gui
             foreach (var window in Windows)
                 GuiLayoutHelper.PlaceWindow(context, window, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
 
-            IsLayoutRequired = false;
+            _isLayoutRequired = false;
+            foreach (var control in Controls) control.IsLayoutRequired = false;
         }
 
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
@@ -105,31 +107,46 @@ namespace MonoGame.Extended.Gui
             GC.SuppressFinalize(this);
         }
 
-        public static GuiScreen FromStream(ContentManager contentManager, Stream stream)
+        public static GuiScreen FromStream(ContentManager contentManager, Stream stream, params Type[] customControlTypes)
+        {
+            return FromStream<GuiScreen>(contentManager, stream, customControlTypes);
+        }
+
+        public static TScreen FromStream<TScreen>(ContentManager contentManager, Stream stream, params Type[] customControlTypes)
+            where TScreen : GuiScreen
         {
             var skinService = new GuiSkinService();
-            var serializer = new GuiJsonSerializer(contentManager)
+            var serializer = new GuiJsonSerializer(contentManager, customControlTypes)
             {
                 Converters =
                 {
-                    new GuiSkinJsonConverter(contentManager, skinService),
-                    new GuiControlJsonConverter(skinService)
+                    new GuiSkinJsonConverter(contentManager, skinService, customControlTypes),
+                    new GuiControlJsonConverter(skinService, customControlTypes)
                 }
             };
 
             using (var streamReader = new StreamReader(stream))
             using (var jsonReader = new JsonTextReader(streamReader))
             {
-                var screen = serializer.Deserialize<GuiScreen>(jsonReader);
+                var screen = serializer.Deserialize<TScreen>(jsonReader);
                 return screen;
             }
         }
 
-        public static GuiScreen FromFile(ContentManager contentManager, string path)
+        public static GuiScreen FromFile(ContentManager contentManager, string path, params Type[] customControlTypes)
         {
             using (var stream = TitleContainer.OpenStream(path))
             {
-                return FromStream(contentManager, stream);
+                return FromStream<GuiScreen>(contentManager, stream, customControlTypes);
+            }
+        }
+
+        public static TScreen FromFile<TScreen>(ContentManager contentManager, string path, params Type[] customControlTypes)
+            where TScreen : GuiScreen
+        {
+            using (var stream = TitleContainer.OpenStream(path))
+            {
+                return FromStream<TScreen>(contentManager, stream, customControlTypes);
             }
         }
     }

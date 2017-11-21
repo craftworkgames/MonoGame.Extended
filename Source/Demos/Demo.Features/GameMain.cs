@@ -81,7 +81,7 @@ namespace Demo.Features
 
             _guiSystem = new GuiSystem(ViewportAdapter, guiRenderer)
             {
-                Screens = { new SelectDemoScreen(skin, _demos, LoadDemo) }
+                Screens = { new SelectDemoScreen(skin, _demos, LoadDemo, Exit) }
             };
 
             //LoadDemo(_demoIndex);
