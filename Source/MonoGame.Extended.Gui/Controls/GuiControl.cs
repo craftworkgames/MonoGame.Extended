@@ -4,6 +4,10 @@ using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.TextureAtlases;
+using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -21,7 +25,11 @@ namespace MonoGame.Extended.Gui.Controls
             TextColor = Color.White;
             IsEnabled = true;
             IsVisible = true;
-            Controls = new GuiControlCollection(this);
+            Controls = new GuiControlCollection(this)
+            {
+                ItemAdded = x => UpdateRootIsLayoutRequired(),
+                ItemRemoved = x => UpdateRootIsLayoutRequired()
+            };
             Origin = Vector2.Zero;
 
             var style = skin?.GetStyle(GetType());
@@ -36,6 +44,8 @@ namespace MonoGame.Extended.Gui.Controls
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Thickness ClipPadding { get; set; }
+
+        public bool IsLayoutRequired { get; set; }
 
         public Rectangle ClippingRectangle
         {
@@ -103,7 +113,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             if (font != null && Text != null)
             {
-                var textSize = font.MeasureString(Text);
+                var textSize = font.MeasureString(CreateBoxText(Text, font, Width));
                 fontSize.Width += textSize.Width;
                 fontSize.Height += textSize.Height;
             }
@@ -159,22 +169,36 @@ namespace MonoGame.Extended.Gui.Controls
 
         public virtual void OnScrolled(int delta) { }
 
-        public virtual void OnKeyTyped(IGuiContext context, KeyboardEventArgs args) { }
-        public virtual void OnKeyPressed(IGuiContext context, KeyboardEventArgs args) { }
+        public virtual bool OnKeyTyped(IGuiContext context, KeyboardEventArgs args)
+        {
+            if (args.Key == Keys.Tab || args.Key == Keys.Enter) return false;
+            return true;
+        }
+        public virtual bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
+        {
+            if (args.Key == Keys.Tab || args.Key == Keys.Enter) return false;
+            return true;
+        }
 
-        public virtual void OnPointerDown(IGuiContext context, GuiPointerEventArgs args) { }
-        public virtual void OnPointerUp(IGuiContext context, GuiPointerEventArgs args) { }
+        public virtual bool OnFocus(IGuiContext context) { return true; }
+        public virtual bool OnUnfocus(IGuiContext context) { return true; }
+
+        public virtual bool OnPointerDown(IGuiContext context, GuiPointerEventArgs args) { return true; }
+        public virtual bool OnPointerMove(IGuiContext context, GuiPointerEventArgs args) { return true; }
+        public virtual bool OnPointerUp(IGuiContext context, GuiPointerEventArgs args) { return true; }
         
-        public virtual void OnPointerEnter(IGuiContext context, GuiPointerEventArgs args)
+        public virtual bool OnPointerEnter(IGuiContext context, GuiPointerEventArgs args)
         {
             if (IsEnabled)
                 HoverStyle?.Apply(this);
+            return true;
         }
 
-        public virtual void OnPointerLeave(IGuiContext context, GuiPointerEventArgs args)
+        public virtual bool OnPointerLeave(IGuiContext context, GuiPointerEventArgs args)
         {
             if (IsEnabled)
                 HoverStyle?.Revert(this);
+            return true;
         }
 
         public virtual bool Contains(IGuiContext context, Point point)
@@ -185,7 +209,25 @@ namespace MonoGame.Extended.Gui.Controls
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             DrawBackground(context, renderer, deltaSeconds);
-            DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, Text, BoundingRectangle, HorizontalTextAlignment, VerticalTextAlignment));
+            DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, CreateBoxText(Text, Font ?? context.DefaultFont, Width), BoundingRectangle, HorizontalTextAlignment, VerticalTextAlignment));
+        }
+
+        protected List<T> FindControls<T>()
+            where T : GuiControl
+        {
+            return FindControls<T>(Controls);
+        }
+
+        protected List<T> FindControls<T>(GuiControlCollection controls)
+            where T : GuiControl
+        {
+            var results = new List<T>();
+            foreach (var control in controls)
+            {
+                if (control is T) results.Add(control as T);
+                if (control.Controls.Any()) results = results.Concat(FindControls<T>(control.Controls)).ToList();
+            }
+            return results;
         }
 
         protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Rectangle? clippingRectangle = null)
@@ -208,6 +250,45 @@ namespace MonoGame.Extended.Gui.Controls
         {
             if (!string.IsNullOrWhiteSpace(textInfo.Text))
                 renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, textInfo.ClippingRectangle);
+        }
+
+        protected virtual string CreateBoxText(string text, BitmapFont font, float width)
+        {
+            if (string.IsNullOrEmpty(text) || width <= 0.0f) return text;
+            var words = text.Split(' ');
+            var currentWidth = 0;
+
+            var blockText = string.Empty;
+            foreach (var word in words)
+            {
+                var spaceMeasurement = font.MeasureString($" {word}");
+                currentWidth += (int)spaceMeasurement.Width;
+
+                if (currentWidth > width)
+                {
+                    var measurement = font.MeasureString(word);
+                    blockText += string.IsNullOrEmpty(blockText) ? word : $"\n{word}";
+                    currentWidth = (int)measurement.Width;
+                }
+                else
+                {
+                    blockText += string.IsNullOrEmpty(blockText) ? word : $" {word}";
+                }
+            }
+            return blockText;
+        }
+
+        /// <summary>
+        /// Recursive Method to find the root element and update the IsLayoutRequired property.  So that the screen knows that something in the controls
+        /// have had a change to their layout.  Also, it will reset the size of the element so that it can get a clean build so that the background patches
+        /// can be rendered with the updates.
+        /// </summary>
+        private void UpdateRootIsLayoutRequired()
+        {
+            if (Parent == null) IsLayoutRequired = true;
+            else Parent.UpdateRootIsLayoutRequired();
+
+            Size = Size2.Empty;
         }
 
         protected struct TextInfo

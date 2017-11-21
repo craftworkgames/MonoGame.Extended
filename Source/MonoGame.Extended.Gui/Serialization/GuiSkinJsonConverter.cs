@@ -19,11 +19,13 @@ namespace MonoGame.Extended.Gui.Serialization
     {
         private readonly ContentManager _contentManager;
         private readonly IGuiSkinService _skinService;
+        private readonly Type[] _customControlTypes;
 
-        public GuiSkinJsonConverter(ContentManager contentManager, IGuiSkinService skinService)
+        public GuiSkinJsonConverter(ContentManager contentManager, IGuiSkinService skinService, params Type[] customControlTypes)
         {
             _contentManager = contentManager;
             _skinService = skinService;
+            _customControlTypes = customControlTypes;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -39,7 +41,7 @@ namespace MonoGame.Extended.Gui.Serialization
                 // TODO: Load this using the ContentManager instead.
                 using (var stream = TitleContainer.OpenStream(assetName))
                 {
-                    var skin = GuiSkin.FromStream(_contentManager, stream);
+                    var skin = GuiSkin.FromStream(_contentManager, stream, _customControlTypes);
                     _skinService.Skin = skin;
                     return skin;
                 }

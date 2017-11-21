@@ -49,12 +49,12 @@ namespace MonoGame.Extended.Gui.Controls
             set { SelectedIndex = Items.IndexOf(value); }
         }
 
-        public override void OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
+        public override bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
         {
-            base.OnKeyPressed(context, args);
-
             if (args.Key == Keys.Down) ScrollDown();
             if (args.Key == Keys.Up) ScrollUp();
+
+            return base.OnKeyPressed(context, args);
         }
 
         public override void OnScrolled(int delta)
@@ -77,10 +77,8 @@ namespace MonoGame.Extended.Gui.Controls
                 SelectedIndex--;
         }
 
-        public override void OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
+        public override bool OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerDown(context, args);
-
             var contentRectangle = GetContentRectangle(context);
 
             for (var i = FirstIndex; i < Items.Count; i++)
@@ -94,6 +92,8 @@ namespace MonoGame.Extended.Gui.Controls
                     break;
                 }
             }
+
+            return base.OnPointerDown(context, args);
         }
 
         protected virtual void OnItemClicked(IGuiContext context, GuiPointerEventArgs args) { }

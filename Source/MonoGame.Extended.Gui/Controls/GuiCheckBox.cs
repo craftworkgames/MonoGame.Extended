@@ -45,12 +45,12 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        public override void OnPointerUp(IGuiContext context, GuiPointerEventArgs args)
+        public override bool OnPointerUp(IGuiContext context, GuiPointerEventArgs args)
         {
-            base.OnPointerUp(context, args);
-
             if (IsFocused && BoundingRectangle.Contains(args.Position))
                 IsChecked = !IsChecked;
+
+            return base.OnPointerUp(context, args);
         }
 
         protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
