@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
+using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -12,6 +14,24 @@ namespace MonoGame.Extended.Gui.Controls
         public GuiButton(GuiSkin skin)
             : base(skin)
         {
+        }
+
+        private Point _iconPosition;
+
+        public Color IconColor { get; set; } = Color.White;
+
+        private TextureRegion2D _iconRegion;
+        public TextureRegion2D IconRegion
+        {
+            get { return _iconRegion; }
+            set
+            {
+                if (_iconRegion != value)
+                {
+                    _iconRegion = value;
+                    RecalculateIconPosition();
+                }
+            }
         }
 
         public event EventHandler Clicked;
@@ -88,6 +108,29 @@ namespace MonoGame.Extended.Gui.Controls
 
             if (IsEnabled)
                 IsPressed = false;
+        }
+
+        protected override void OnSizeChanged()
+        {
+            if (IconRegion != null)
+                RecalculateIconPosition();
+        }
+
+        private void RecalculateIconPosition()
+        {
+            var x = (BoundingRectangle.Width - IconRegion.Width) / 2;
+            var y = (BoundingRectangle.Height - IconRegion.Height) / 2;
+            _iconPosition = new Point(x, y);
+        }
+
+        protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        {
+            base.DrawForeground(context, renderer, deltaSeconds, textInfo);
+
+            if (IconRegion != null)
+            {
+                renderer.DrawRegion(IconRegion, new Rectangle(BoundingRectangle.Location + _iconPosition + Offset.ToPoint(), IconRegion.Bounds.Size), IconColor);
+            }
         }
     }
 }

@@ -51,7 +51,7 @@ namespace MonoGame.Extended.Gui.Tests.Controls
         [Test]
         public void DesiredSizeShouldAtLeastBeTheSizeOfTheText()
         {
-            const string text = "abc";
+            const string text = "abcdefg";
 
             var availableSize = new Size2(800, 480);
             var context = Substitute.For<IGuiContext>();
@@ -62,6 +62,42 @@ namespace MonoGame.Extended.Gui.Tests.Controls
             var desiredSize = button.GetDesiredSize(context, availableSize);
 
             Assert.That(desiredSize, Is.EqualTo(expectedSize));
+        }
+
+        [Test]
+        public void DesiredSizeShouldAtLeastBeTheSizeOfTheIcon()
+        {
+            var texture = new Texture2D(new TestGraphicsDevice(), 35, 38);
+            var icon = new TextureRegion2D(texture);
+
+            var availableSize = new Size2(800, 480);
+            var context = Substitute.For<IGuiContext>();
+            var button = new GuiButton { IconRegion = icon };
+            var desiredSize = button.GetDesiredSize(context, availableSize);
+
+            Assert.That(desiredSize, Is.EqualTo(icon.Size));
+        }
+
+        [Test]
+        public void DesiredSizeShouldBeTheSizeOfTheBiggestTextOrIcon()
+        {
+            const string text = "abcdefg";
+
+            var texture = new Texture2D(new TestGraphicsDevice(), 35, 38);
+            var icon = new TextureRegion2D(texture);
+            var iconExpectedSize = icon.Size;
+
+            var availableSize = new Size2(800, 480);
+            var context = Substitute.For<IGuiContext>();
+
+            var font = CreateMockFont(text, 32);
+            var fontExpectedSize = font.MeasureString(text);
+
+            var button = new GuiButton { Text = text, Font = font, IconRegion = icon };
+            var desiredSize = button.GetDesiredSize(context, availableSize);
+
+            Assert.That(desiredSize.Width, Is.EqualTo(fontExpectedSize.Width));
+            Assert.That(desiredSize.Height, Is.EqualTo(iconExpectedSize.Height));
         }
 
         private static BitmapFont CreateMockFont(string text, int lineHeight)
