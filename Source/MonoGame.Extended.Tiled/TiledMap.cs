@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tiled
 {
-    public sealed class TiledMap //: IDisposable
+    public sealed class TiledMap
     {
         private readonly List<TiledMapImageLayer> _imageLayers = new List<TiledMapImageLayer>();
         private readonly List<TiledMapLayer> _layers = new List<TiledMapLayer>();
@@ -55,13 +55,7 @@ namespace MonoGame.Extended.Tiled
             BackgroundColor = backgroundColor;
         }
 
-        //public void Dispose()
-        //{
-        //    foreach (var layer in _layers)
-        //        layer.Dispose();
-        //}
-
-        internal void AddTileset(TiledMapTileset tileset)
+        public void AddTileset(TiledMapTileset tileset)
         {
             _tilesets.Add(tileset);
         }
@@ -99,14 +93,7 @@ namespace MonoGame.Extended.Tiled
 
         public TiledMapTileset GetTilesetByTileGlobalIdentifier(int tileIdentifier)
         {
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var tileset in _tilesets)
-            {
-                if (tileset.ContainsGlobalIdentifier(tileIdentifier))
-                    return tileset;
-            }
-
-            return null;
+            return _tilesets.FirstOrDefault(tileset => tileset.ContainsGlobalIdentifier(tileIdentifier));
         }
     }
 }
