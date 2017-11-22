@@ -57,6 +57,7 @@
       "PressedStyle": {
         "Type": "GuiButton",
         "BackgroundRegion": "buttonLong_grey_pressed",
+        "Offset": "0 2",
         "TextOffset": "0 2"
       },
       "HoverStyle": {

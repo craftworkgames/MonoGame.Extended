@@ -127,7 +127,6 @@ namespace Sandbox
                 listBox.Items.Add(new { Name = textBox.Text });
             }
         }
-
         private void OnClientSizeChanged(object sender, EventArgs eventArgs)
         {
             if (_guiSystem != null)
