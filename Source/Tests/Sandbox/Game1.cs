@@ -71,25 +71,25 @@ namespace Sandbox
 
             var viewModel = new ViewModel();
 
-            _screen = GuiScreen.FromFile(Content, "Content/test-addition-screen.json", typeof(MyPanel));
-            Window.ClientSizeChanged += OnClientSizeChanged;
+            //_screen = GuiScreen.FromFile(Content, "Content/test-addition-screen.json", typeof(MyPanel));
+            //Window.ClientSizeChanged += OnClientSizeChanged;
 
-            //_screen = GuiScreen.FromFile(Content, "Content/adventure-gui-screen.json", typeof(MyPanel));
+            _screen = GuiScreen.FromFile(Content, "Content/adventure-gui-screen.json", typeof(MyPanel));
 
-            //var listBox = _screen.FindControl<GuiListBox>("Listbox");
-            //listBox.Items.Add(new { Name = "Hello World 1" });
-            //listBox.Items.Add(new { Name = "Hello World 2" });
-            //listBox.Items.Add(new { Name = "Hello World 3" });
-            //listBox.Items.Add(new { Name = "Hello World 4" });
+            var listBox = _screen.FindControl<GuiListBox>("Listbox");
+            listBox.Items.Add(new { Name = "Hello World 1" });
+            listBox.Items.Add(new { Name = "Hello World 2" });
+            listBox.Items.Add(new { Name = "Hello World 3" });
+            listBox.Items.Add(new { Name = "Hello World 4" });
 
-            //var comboBox = _screen.FindControl<GuiComboBox>("ComboBox");
-            //comboBox.Items.Add(new { Name = "Hello World 1" });
-            //comboBox.Items.Add(new { Name = "Hello World 2" });
-            //comboBox.Items.Add(new { Name = "Hello World 3" });
-            //comboBox.Items.Add(new { Name = "Hello World 4" });
+            var comboBox = _screen.FindControl<GuiComboBox>("ComboBox");
+            comboBox.Items.Add(new { Name = "Hello World 1" });
+            comboBox.Items.Add(new { Name = "Hello World 2" });
+            comboBox.Items.Add(new { Name = "Hello World 3" });
+            comboBox.Items.Add(new { Name = "Hello World 4" });
 
-            //var submit = _screen.FindControl<GuiSubmit>("FormSubmit");
-            //submit.Clicked += OnFormSubmitClicked;
+            var submit = _screen.FindControl<GuiSubmit>("FormSubmit");
+            submit.Clicked += OnFormSubmitClicked;
 
             _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer)
             {

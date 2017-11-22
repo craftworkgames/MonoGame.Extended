@@ -70,6 +70,8 @@ namespace MonoGame.Extended.Gui.Controls
         public HorizontalAlignment HorizontalTextAlignment { get; set; } = HorizontalAlignment.Centre;
         public VerticalAlignment VerticalTextAlignment { get; set; } = VerticalAlignment.Centre;
 
+        private bool _isHovering;
+
         private string _text;
         public string Text
         {
@@ -181,15 +183,21 @@ namespace MonoGame.Extended.Gui.Controls
         
         public virtual bool OnPointerEnter(IGuiContext context, GuiPointerEventArgs args)
         {
-            if (IsEnabled)
+            if (IsEnabled && !_isHovering)
+            {
+                _isHovering = true;
                 HoverStyle?.Apply(this);
+            }
             return true;
         }
 
         public virtual bool OnPointerLeave(IGuiContext context, GuiPointerEventArgs args)
         {
-            if (IsEnabled)
+            if (IsEnabled && _isHovering)
+            {
+                _isHovering = false;
                 HoverStyle?.Revert(this);
+            }
             return true;
         }
 
@@ -202,6 +210,11 @@ namespace MonoGame.Extended.Gui.Controls
         {
             DrawBackground(context, renderer, deltaSeconds);
             DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, CreateBoxText(Text, Font ?? context.DefaultFont, Width), BoundingRectangle, HorizontalTextAlignment, VerticalTextAlignment));
+        }
+
+        public bool HasParent(GuiControl control)
+        {
+            return Parent != null && (Parent == control || Parent.HasParent(control));
         }
 
         protected List<T> FindControls<T>()

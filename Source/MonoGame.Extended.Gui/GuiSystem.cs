@@ -162,7 +162,8 @@ namespace MonoGame.Extended.Gui
 
             if (_hoveredControl != hoveredControl)
             {
-                PropagateDown(_hoveredControl, x => x.OnPointerLeave(this, args));
+                if (_hoveredControl != null && (hoveredControl == null || !hoveredControl.HasParent(_hoveredControl)))
+                    PropagateDown(_hoveredControl, x => x.OnPointerLeave(this, args));
                 _hoveredControl = hoveredControl;
                 PropagateDown(_hoveredControl, x => x.OnPointerEnter(this, args));
             }
