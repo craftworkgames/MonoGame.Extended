@@ -162,7 +162,8 @@ namespace MonoGame.Extended.Gui
 
             if (_hoveredControl != hoveredControl)
             {
-                PropagateDown(_hoveredControl, x => x.OnPointerLeave(this, args));
+                if (_hoveredControl != null && (hoveredControl == null || !hoveredControl.HasParent(_hoveredControl)))
+                    PropagateDown(_hoveredControl, x => x.OnPointerLeave(this, args));
                 _hoveredControl = hoveredControl;
                 PropagateDown(_hoveredControl, x => x.OnPointerEnter(this, args));
             }
@@ -200,7 +201,7 @@ namespace MonoGame.Extended.Gui
         /// <param name="predicate">A function to check if the propagation should resume, if returns false it will continue down the tree.</param>
         private void PropagateDown(GuiControl control, Func<GuiControl, bool> predicate)
         {
-            while(control != null && !predicate(control))
+            while(control != null && predicate(control))
             {
                 control = control.Parent;
             }

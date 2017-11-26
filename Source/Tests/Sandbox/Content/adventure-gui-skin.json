@@ -94,6 +94,15 @@
     {
       "Name": "brown-panel-no-size",
       "Type": "GuiStackPanel",
+      "BackgroundRegion": "panel_brown",
+      "HoverStyle": {
+        "Type": "GuiStackPanel",
+        "BackgroundRegion": "panelInset_beige"
+      }
+    },
+    {
+      "Name": "brown-grid-no-size",
+      "Type": "GuiUniformGrid",
       "BackgroundRegion": "panel_brown"
     },
     {

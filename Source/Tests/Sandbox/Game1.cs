@@ -63,12 +63,16 @@ namespace Sandbox
         {
             IsMouseVisible = false;
 
-            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, _graphicsDeviceManager.PreferredBackBufferWidth, _graphicsDeviceManager.PreferredBackBufferHeight);
+            // _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, _graphicsDeviceManager.PreferredBackBufferWidth, _graphicsDeviceManager.PreferredBackBufferHeight);
+            _viewportAdapter = new WindowViewportAdapter(Window, GraphicsDevice);
 
             _skin = GuiSkin.FromFile(Content, @"Content/adventure-gui-skin.json", typeof(MyPanel));
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _viewportAdapter.GetScaleMatrix);
 
             var viewModel = new ViewModel();
+
+            //_screen = GuiScreen.FromFile(Content, "Content/test-addition-screen.json", typeof(MyPanel));
+            //Window.ClientSizeChanged += OnClientSizeChanged;
 
             _screen = GuiScreen.FromFile(Content, "Content/adventure-gui-screen.json", typeof(MyPanel));
 
@@ -121,6 +125,16 @@ namespace Sandbox
             if (!string.IsNullOrEmpty(textBox.Text))
             {
                 listBox.Items.Add(new { Name = textBox.Text });
+            }
+        }
+        private void OnClientSizeChanged(object sender, EventArgs eventArgs)
+        {
+            if (_guiSystem != null)
+            {
+                foreach (var screen in _guiSystem.Screens)
+                {
+                    screen.Layout(_guiSystem, _guiSystem.BoundingRectangle);
+                }
             }
         }
     }
