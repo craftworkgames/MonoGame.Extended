@@ -103,7 +103,6 @@
     <Compile Include="Tiled\TiledMapImageContent.cs" />
     <Compile Include="Tiled\TiledMapImageLayerContent.cs" />
     <Compile Include="Tiled\TiledMapImporter.cs" />
-    <Compile Include="Tiled\TiledMapLayerAnimatedModelContent.cs" />
     <Compile Include="Tiled\TiledMapLayerContent.cs" />
     <Compile Include="Tiled\TiledMapLayerModelContent.cs" />
     <Compile Include="Tiled\TiledMapObjectContent.cs" />
@@ -116,6 +115,7 @@
     <Compile Include="Tiled\TiledMapPropertyContent.cs" />
     <Compile Include="Tiled\TiledMapTerrainContent.cs" />
     <Compile Include="Tiled\TiledMapTile.cs" />
+    <Compile Include="Tiled\TiledMapTileContent.cs" />
     <Compile Include="Tiled\TiledMapTileDrawOrderContent.cs" />
     <Compile Include="Tiled\TiledMapTileLayerContent.cs" />
     <Compile Include="Tiled\TiledMapTileLayerDataContent.cs" />
