@@ -21,7 +21,19 @@ namespace MonoGame.Extended.Tiled.Renderers
             if (tileLayer != null)
                 return CreateTileLayerModels(map, tileLayer);
 
+            var imageLayer = layer as TiledMapImageLayer;
+
+            if (imageLayer != null)
+                return CreateImageLayerModels(imageLayer);
+
             return new List<TiledMapLayerModel>();
+        }
+
+        private IEnumerable<TiledMapLayerModel> CreateImageLayerModels(TiledMapImageLayer imageLayer)
+        {
+            var modelBuilder = new TiledMapStaticLayerModelBuilder();
+            modelBuilder.AddSprite(imageLayer.Image, imageLayer.Position, imageLayer.Image.Bounds, TiledMapTileFlipFlags.None);
+            yield return modelBuilder.Build(_graphicsDevice, imageLayer.Image);
         }
 
         private IEnumerable<TiledMapLayerModel> CreateTileLayerModels(TiledMap map, TiledMapTileLayer tileLayer)
@@ -49,7 +61,7 @@ namespace MonoGame.Extended.Tiled.Renderers
 
                     if (animatedTilesetTile != null)
                     {
-                        animatedLayerBuilder.AddTile(texture, position, sourceRectangle, flipFlags);
+                        animatedLayerBuilder.AddSprite(texture, position, sourceRectangle, flipFlags);
                         animatedLayerBuilder.AnimatedTilesetTiles.Add(animatedTilesetTile);
 
                         if (animatedLayerBuilder.IsFull)
@@ -57,7 +69,7 @@ namespace MonoGame.Extended.Tiled.Renderers
                     }
                     else
                     {
-                        staticLayerBuilder.AddTile(texture, position, sourceRectangle, flipFlags);
+                        staticLayerBuilder.AddSprite(texture, position, sourceRectangle, flipFlags);
 
                         if (staticLayerBuilder.IsFull)
                             layerModels.Add(staticLayerBuilder.Build(_graphicsDevice, texture));

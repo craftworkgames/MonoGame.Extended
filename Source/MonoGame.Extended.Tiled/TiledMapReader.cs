@@ -57,9 +57,7 @@ namespace MonoGame.Extended.Tiled
                 map.AddTileset(tileset);
             }
         }
-
-
-
+        
         private static TiledMapTileset ReadTileset(ContentReader reader, TiledMap map)
         {
             var textureAssetName = reader.GetRelativeAssetName(reader.ReadString());
@@ -157,9 +155,6 @@ namespace MonoGame.Extended.Tiled
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
-            //if (layerType != TiledMapLayerType.ObjectLayer)
-            //    ReadModels(reader, layer, map);
 
             foreach (var property in properties)
                 layer.Properties.Add(property.Key, property.Value);
@@ -277,26 +272,5 @@ namespace MonoGame.Extended.Tiled
 
             return new TiledMapTileLayer(name, width, height, tileWidth, tileHeight, tiles, offset, opacity, isVisible);
         }
-
-        //private static void ReadModels(ContentReader reader, TiledMapLayer layer, TiledMap map)
-        //{
-        //    var modelCount = reader.ReadInt32();
-        //    var animatedModelCount = reader.ReadInt32();
-
-        //    var models = layer.Models = new TiledMapLayerModel[modelCount];
-        //    var animatedModels = layer.AnimatedModels = new TiledMapLayerAnimatedModel[animatedModelCount];
-
-        //    var animatedModelIndex = 0;
-
-        //    for (var modelIndex = 0; modelIndex < modelCount; modelIndex++)
-        //    {
-        //        var isAnimated = reader.ReadBoolean();
-        //        var model = isAnimated ? new TiledMapLayerAnimatedModel(reader, map) : new TiledMapLayerModel(reader);
-
-        //        models[modelIndex] = model;
-        //        if (isAnimated)
-        //            animatedModels[animatedModelIndex++] = (TiledMapLayerAnimatedModel)model;
-        //    }
-        //}
     }
 }

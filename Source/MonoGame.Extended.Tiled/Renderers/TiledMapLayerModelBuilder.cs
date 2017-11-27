@@ -31,7 +31,7 @@ namespace MonoGame.Extended.Tiled.Renderers
             return model;
         }
 
-        public void AddTile(Texture2D texture, Point2 position, Rectangle sourceRectangle, TiledMapTileFlipFlags flipFlags)
+        public void AddSprite(Texture2D texture, Point2 position, Rectangle sourceRectangle, TiledMapTileFlipFlags flipFlags)
         {
             Indices.AddRange(CreateTileIndices(Vertices.Count));
             Debug.Assert(Indices.Count <= TiledMapHelper.MaximumIndicesPerModel);
@@ -40,7 +40,7 @@ namespace MonoGame.Extended.Tiled.Renderers
             Debug.Assert(Vertices.Count <= TiledMapHelper.MaximumVerticesPerModel);
         }
 
-        private static IEnumerable<VertexPositionTexture> CreateVertices(Texture2D texture, Point2 position, Rectangle sourceRectangle, TiledMapTileFlipFlags flags = TiledMapTileFlipFlags.None)
+        private static IEnumerable<VertexPositionTexture> CreateVertices(Texture2D texture, Vector2 position, Rectangle sourceRectangle, TiledMapTileFlipFlags flags = TiledMapTileFlipFlags.None)
         {
             var reciprocalWidth = 1f / texture.Width;
             var reciprocalHeight = 1f / texture.Height;
