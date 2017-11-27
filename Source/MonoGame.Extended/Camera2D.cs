@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.ViewportAdapters;
@@ -23,6 +23,7 @@ namespace MonoGame.Extended
 
             Rotation = 0;
             Zoom = 1;
+            zPosition = 1;
             Origin = new Vector2(viewportAdapter.VirtualWidth/2f, viewportAdapter.VirtualHeight/2f);
             Position = Vector2.Zero;
         }
@@ -70,7 +71,7 @@ namespace MonoGame.Extended
                 _maximumZoom = value;
             }
         }
-
+        public float zPosition { get; set;}
         public RectangleF BoundingRectangle
         {
             get
@@ -116,6 +117,42 @@ namespace MonoGame.Extended
                 Zoom = value > MaximumZoom ? MaximumZoom : value;
         }
 
+        public void DollyIn(float deltaDolly)
+        {
+            zPosition -= deltaDolly;
+        }
+
+        public void DollyOut(float deltaDolly)
+        {
+            zPosition += deltaDolly;
+        }
+
+        /// <summary>
+        /// Outputs a Z dolly value.
+        /// Let's say you want a layer with a Z Position of 2 to be drawn at a scale of 0.5.
+        /// You'd call this function with 0.5 as the zoom parameter and 2 as the zOffset parameter:
+        ///
+        /// GetZPositionFromZoom(0.5, 2);
+        ///
+        /// The result would be 4. In other words, you'd have to set the camera's zPosition to 4.
+        /// <seealso cref="GetZoomFromZPosition(float, float)"/>
+        /// </summary>
+        public float GetZPositionFromZoom(float zoom, float zOffset)
+        {
+            return (1 / (zoom)) + zOffset;
+        }
+
+        /// <summary>
+        /// Outputs a zoom value.
+        /// This is the sister function to GetZPositionFromZoom.
+        /// Finds a layer's zoom value relative to an other layer.
+        /// <seealso cref="GetZPositionFromZoom(float, float)"/>
+        /// </summary>
+        public float GetZoomFromZPosition(float zPosition, float zOffset)
+        {
+            //Might be a good idea to return 0 in case of a division by 0.
+            return (1 / (zPosition - zOffset));
+        }
         public void LookAt(Vector2 position)
         {
             Position = position - new Vector2(_viewportAdapter.VirtualWidth/2f, _viewportAdapter.VirtualHeight/2f);
@@ -144,29 +181,37 @@ namespace MonoGame.Extended
                 Matrix.Invert(GetViewMatrix()));
         }
 
-        public Matrix GetViewMatrix(Vector2 parallaxFactor)
+        public bool IsVisible(float zOffset)
         {
-            return GetVirtualViewMatrix(parallaxFactor)*_viewportAdapter.GetScaleMatrix();
+            float zoom = GetZoomFromZPosition(zPosition, zOffset);
+            //10 Mean we can only get within 0.1 Z distance from a layer before we are considered behind it.
+            return zoom > 0 && zoom < 10;
+        }
+        
+        public Matrix GetViewMatrix(float zOffset)
+        {
+            return GetVirtualViewMatrix(zOffset) * _viewportAdapter.GetScaleMatrix();
         }
 
-        private Matrix GetVirtualViewMatrix(Vector2 parallaxFactor)
+        private Matrix GetVirtualViewMatrix(float zOffset)
         {
             return
-                Matrix.CreateTranslation(new Vector3(-Position*parallaxFactor, 0.0f))*
+                Matrix.CreateTranslation(new Vector3(-Position, 0.0f))*
                 Matrix.CreateTranslation(new Vector3(-Origin, 0.0f))*
                 Matrix.CreateRotationZ(Rotation)*
                 Matrix.CreateScale(Zoom, Zoom, 1)*
+                Matrix.CreateScale(GetZoomFromZPosition(zPosition, zOffset), GetZoomFromZPosition(zPosition, zOffset), 1)*
                 Matrix.CreateTranslation(new Vector3(Origin, 0.0f));
         }
 
         private Matrix GetVirtualViewMatrix()
         {
-            return GetVirtualViewMatrix(Vector2.One);
+            return GetVirtualViewMatrix(0);
         }
 
         public Matrix GetViewMatrix()
         {
-            return GetViewMatrix(Vector2.One);
+            return GetViewMatrix(0);
         }
 
         public Matrix GetInverseViewMatrix()
