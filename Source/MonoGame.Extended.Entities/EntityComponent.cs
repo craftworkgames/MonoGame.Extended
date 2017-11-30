@@ -38,51 +38,52 @@ using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Entities
 {
-    public abstract class EntityComponent : IPoolable
-    {
-        private ReturnToPoolDelegate _returnToPoolDelegate;
+    //public abstract class EntityComponent : IPoolable
+    //{
+    //    private ReturnToPoolDelegate _returnToPool;
 
-        public Entity Entity { get; internal set; }
+    //    public Entity Entity { get; internal set; }
 
-        IPoolable IPoolable.NextNode { get; set; }
-        IPoolable IPoolable.PreviousNode { get; set; }
+    //    IPoolable IPoolable.NextNode { get; set; }
+    //    IPoolable IPoolable.PreviousNode { get; set; }
 
-        protected EntityComponent()
-        {
-        }
+    //    protected EntityComponent()
+    //    {
+    //    }
 
-        public virtual void Reset()
-        {
-        }
+    //    public virtual void Reset()
+    //    {
+    //    }
 
-        void IPoolable.Initialize(ReturnToPoolDelegate returnDelegate)
-        {
-            Reset();
-        }
+    //    void IPoolable.Initialize(ReturnToPoolDelegate returnDelegate)
+    //    {
+    //        _returnToPool = returnDelegate;
+    //        Reset();
+    //    }
 
-        void IPoolable.Return()
-        {
-            Return();
-        }
+    //    void IPoolable.Return()
+    //    {
+    //        Return();
+    //    }
 
-        internal void Return()
-        {
-            Reset();
+    //    internal void Return()
+    //    {
+    //        Reset();
 
-            if (_returnToPoolDelegate == null)
-            {
-                return;
-            }
+    //        if (_returnToPool == null)
+    //        {
+    //            return;
+    //        }
 
-            Entity = null;
+    //        Entity = null;
 
-            _returnToPoolDelegate.Invoke(this);
-            _returnToPoolDelegate = null;
-        }
+    //        _returnToPool.Invoke(this);
+    //        _returnToPool = null;
+    //    }
 
-        public override string ToString()
-        {
-            return $"Entity: {Entity}";
-        }
-    }
+    //    public override string ToString()
+    //    {
+    //        return $"Entity: {Entity}";
+    //    }
+    //}
 }

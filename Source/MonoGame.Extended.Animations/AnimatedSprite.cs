@@ -1,10 +1,12 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Animations.SpriteSheets;
+using MonoGame.Extended.Entities;
 using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.Animations
 {
+    [EntityComponent]
     public class AnimatedSprite : Sprite
     {
         private readonly SpriteSheetAnimationFactory _animationFactory;

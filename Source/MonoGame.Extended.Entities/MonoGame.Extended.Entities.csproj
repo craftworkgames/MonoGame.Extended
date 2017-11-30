@@ -54,7 +54,6 @@
     <Compile Include="BitVector.cs" />
     <Compile Include="DefaultDependencyResolver.cs" />
     <Compile Include="DependencyResolver.cs" />
-    <Compile Include="EntityComponentAttribute.cs" />
     <Compile Include="EntityComponentPool.cs" />
     <Compile Include="EntityComponentPoolAttribute.cs" />
     <Compile Include="EntityComponentDelegate.cs" />
@@ -69,7 +68,6 @@
     <Compile Include="EntityTemplate.cs" />
     <Compile Include="EntityComponent.cs" />
     <Compile Include="EntityComponentType.cs" />
-    <Compile Include="TransformComponent2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EntitySystem.cs" />
   </ItemGroup>

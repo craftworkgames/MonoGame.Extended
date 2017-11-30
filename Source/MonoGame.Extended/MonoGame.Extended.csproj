@@ -41,6 +41,7 @@
     <Compile Include="Collections\DictionaryExtensions.cs" />
     <Compile Include="Collections\KeyedCollection.cs" />
     <Compile Include="ColorExtensions.cs" />
+    <Compile Include="Entities\EntityComponentAttribute.cs" />
     <Compile Include="FloatHelper.cs" />
     <Compile Include="HslColor.cs" />
     <Compile Include="IRectangular.cs" />

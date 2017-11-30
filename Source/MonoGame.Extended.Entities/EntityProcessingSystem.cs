@@ -80,9 +80,7 @@ namespace MonoGame.Extended.Entities
             }
         }
 
-        protected virtual void Process(GameTime gameTime, Entity entity)
-        {
-        }
+        protected abstract void Process(GameTime gameTime, Entity entity);
 
         protected bool IsInterestedIn(Entity entity)
         {

@@ -34,6 +34,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Animations;
+using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.Entities
 {
@@ -55,48 +57,31 @@ namespace MonoGame.Extended.Entities
         // don't call this every frame, lol
         public void Scan(params Assembly[] assemblies)
         {
-            var componentTypeInfos = new List<TypeInfo>();
-            var entityTemplateTypeInfos = new List<TypeInfo>();
-            var systemTypeInfos = new List<TypeInfo>();
-
-            var componentTypeInfo = typeof(EntityComponent).GetTypeInfo();
-            var systemTypeInfo = typeof(EntitySystem).GetTypeInfo();
-            var entityTempalteTypeInfo = typeof(EntityTemplate).GetTypeInfo();
-
-            foreach (var assembly in assemblies)
-            {
-                var typeInfos = assembly.ExportedTypes.Select(x => x.GetTypeInfo()).ToArray();
-
-                foreach (var typeInfo in typeInfos)
+            var exportedTypes = assemblies
+                .Concat(new []
                 {
-                    var isComponent = componentTypeInfo.IsAssignableFrom(typeInfo);
-                    if (isComponent)
-                    {
-                        componentTypeInfos.Add(typeInfo);
-                        continue;
-                    }
+                    typeof(Sprite).GetTypeInfo().Assembly,
+                    typeof(AnimatedSprite).GetTypeInfo().Assembly
+                })
+                .SelectMany(a => a.ExportedTypes)
+                .Select(x => x.GetTypeInfo())
+                .ToArray();
 
-                    var isSystem = systemTypeInfo.IsAssignableFrom(typeInfo);
-                    if (isSystem)
-                    {
-                        systemTypeInfos.Add(typeInfo);
-                        continue;
-                    }
+            var componentTypes = exportedTypes
+                .Where(t => t.IsDefined(typeof(EntityComponentAttribute)))
+                .ToList();
 
-                    var isEntityTemplate = entityTempalteTypeInfo.IsAssignableFrom(typeInfo);
-                    // ReSharper disable once InvertIf
-                    if (isEntityTemplate)
-                    {
-                        entityTemplateTypeInfos.Add(typeInfo);
-                        // ReSharper disable once RedundantJumpStatement
-                        continue;
-                    }
-                }
-            }
+            var systemTypes = exportedTypes
+                .Where(t => typeof(EntitySystem).GetTypeInfo().IsAssignableFrom(t))
+                .ToList();
+            
+            var templateTypes = exportedTypes
+                .Where(t => typeof(EntityTemplate).GetTypeInfo().IsAssignableFrom(t))
+                .ToList();
 
-            var registeredComponentCount = RegisterComponents(componentTypeInfos);
-            RegisterEntityTemplates(entityTemplateTypeInfos);
-            CreateSystems(systemTypeInfos, registeredComponentCount);
+            var registeredComponentCount = RegisterComponents(componentTypes);
+            RegisterEntityTemplates(templateTypes);
+            CreateSystems(systemTypes, registeredComponentCount);
         }
 
         private int RegisterComponents(List<TypeInfo> componentTypeInfos)
@@ -226,11 +211,11 @@ namespace MonoGame.Extended.Entities
 
                 var system = _dependencyResolver.Resolve<EntitySystem>(typeInfo.AsType());
                 var processingSystem = system as EntityProcessingSystem;
+
                 if (processingSystem != null)
                     processingSystem.Aspect = new Aspect(andMask, orMask, norMask);
 
-                _systemManager.AddSystem(system, systemAttribute.GameLoopType,
-                    systemAttribute.Layer, SystemExecutionType.Synchronous);
+                _systemManager.AddSystem(system, systemAttribute.GameLoopType, systemAttribute.Layer, SystemExecutionType.Synchronous);
             }
         }
 

@@ -147,7 +147,7 @@ namespace MonoGame.Extended.Entities
             if (Systems.Contains(system))
                 throw new InvalidOperationException($"System '{systemType}' has already been added.");
 
-            system.Manager = _manager;
+            system.EntityComponentSystem = _manager;
 
             Systems.Add(system);
 

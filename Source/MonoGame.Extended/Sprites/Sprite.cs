@@ -2,11 +2,13 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Entities;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
 {
-    public class Sprite : IColorable//, IRectangularF//, ISpriteBatchDrawable
+    [EntityComponent]
+    public class Sprite : IColorable
     {
         private TextureRegion2D _textureRegion;
 
