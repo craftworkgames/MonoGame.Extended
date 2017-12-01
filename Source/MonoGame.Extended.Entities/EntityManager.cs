@@ -91,9 +91,10 @@ namespace MonoGame.Extended.Entities
             return new Entity(_systemManager.ProcessingSystems.Count, _componentTypes.Count);
         }
 
-        public Entity CreateEntity()
+        public Entity CreateEntity(string name = null)
         {
             var entity = _pool.New();
+            entity.Name = name;
             MarkEntityToBeAdded(entity);
             return entity;
         }

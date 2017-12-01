@@ -208,6 +208,13 @@ namespace MonoGame.Extended
         private float _rotation;
         private Vector2 _scale = Vector2.One;
 
+        public Transform2D(Vector2? position = null, float rotation = 0, Vector2? scale = null)
+        {
+            Position = position ?? Vector2.Zero;
+            Rotation = rotation;
+            Scale = scale ?? Vector2.One;
+        }
+
         /// <summary>
         ///     Gets the world position.
         /// </summary>

@@ -166,7 +166,7 @@ namespace MonoGame.Extended.Entities
 
         public override string ToString()
         {
-            return $"{RuntimeHelpers.GetHashCode(this):X8}";
+            return $"{RuntimeHelpers.GetHashCode(this):X8} {Name}";
         }
 
         void IPoolable.Initialize(ReturnToPoolDelegate returnDelegate)
