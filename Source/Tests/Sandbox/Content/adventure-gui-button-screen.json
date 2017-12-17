@@ -33,34 +33,44 @@
           "Spacing": "10",
           "Controls": [
             {
-              "Type": "GuiListBox",
-              "Name": "Listbox",
-              "NameProperty": "Name",
+              "Type": "GuiButton",
+              "Name": "Button1",
               "Width": "200",
-              "Style": "list-box"
-            },
-            {
-              "Type": "GuiTextBox",
-              "Name": "TextBox",
-              "Width": "200",
-              "Padding": "10",
-              "Style": "text-box"
-            },
-            {
-              "Type": "GuiComboBox",
-              "Name": "ComboBox",
-              "Text": "Placeholder",
-              "NameProperty": "Name",
-              "Width": "200",
-              "Style": "combo-box"
-            },
-            {
-              "Type": "GuiSubmit",
-              "Name": "FormSubmit",
-              "Width": "200",
-              "Text": "Quit",
+              "Text": "Button 1",
               "TextColor": "#ffffff",
-              "Style": "white-submit"
+              "Style": "white-disable-button"
+            },
+            {
+              "Type": "GuiButton",
+              "Name": "Button2",
+              "Width": "200",
+              "Text": "Button 2",
+              "TextColor": "#ffffff",
+              "Style": "white-disable-button"
+            },
+            {
+              "Type": "GuiButton",
+              "Name": "Button3",
+              "Width": "200",
+              "Text": "Button 3",
+              "TextColor": "#ffffff",
+              "Style": "white-disable-button"
+            },
+            {
+              "Type": "GuiButton",
+              "Name": "Button4",
+              "Width": "200",
+              "Text": "Button 4",
+              "TextColor": "#ffffff",
+              "Style": "white-disable-button"
+            },
+            {
+              "Type": "GuiButton",
+              "Name": "Disable",
+              "Width": "200",
+              "Text": "Disable Buttons",
+              "TextColor": "#ffffff",
+              "Style": "white-button"
             }
           ]
         }

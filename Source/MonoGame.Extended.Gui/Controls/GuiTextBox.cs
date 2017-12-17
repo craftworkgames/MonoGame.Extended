@@ -26,9 +26,8 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected override void OnTextChanged()
         {
-            if (SelectionStart > Text.Length)
+            if (!string.IsNullOrEmpty(Text) && SelectionStart > Text.Length)
                 SelectionStart = Text.Length;
-
             base.OnTextChanged();
         }
 
