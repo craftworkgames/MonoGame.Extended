@@ -119,6 +119,9 @@
     <Content Include="Content\particle-effect.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Content\adventure-gui-button-screen.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Content\adventure-gui-screen.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

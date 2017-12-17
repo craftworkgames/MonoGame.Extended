@@ -60,6 +60,10 @@ namespace MonoGame.Extended.Gui.Controls
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsFocused { get; set; }
 
+        [JsonIgnore]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Guid Id { get; set; } = Guid.NewGuid();
+
         public Vector2 Offset { get; set; }
         public BitmapFont Font { get; set; }
         public Color TextColor { get; set; }
@@ -150,8 +154,11 @@ namespace MonoGame.Extended.Gui.Controls
             get { return _isEnabled; }
             set
             {
-                _isEnabled = value;
-                DisabledStyle?.ApplyIf(this, !_isEnabled);
+                if (_isEnabled != value)
+                {
+                    _isEnabled = value;
+                    DisabledStyle?.ApplyIf(this, !_isEnabled);
+                }
             }
         }
 
@@ -215,6 +222,28 @@ namespace MonoGame.Extended.Gui.Controls
         public bool HasParent(GuiControl control)
         {
             return Parent != null && (Parent == control || Parent.HasParent(control));
+        }
+
+        public override void SetBinding(string viewProperty, string viewModelProperty)
+        {
+            SetBindingToRoot(new Binding
+            {
+                Element = this,
+                ViewProperty = viewProperty,
+                ViewModelProperty = viewModelProperty
+            });
+        }
+
+        private void SetBindingToRoot(Binding binding)
+        {
+            if (Parent != null)
+            {
+                Parent.SetBindingToRoot(binding);
+            }
+            else
+            {
+                _bindings.Add(binding);
+            }
         }
 
         protected List<T> FindControls<T>()

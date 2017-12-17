@@ -27,7 +27,7 @@ namespace MonoGame.Extended.Gui
         }
 
         private object _bindingContext;
-        public object BindingContext
+        public virtual object BindingContext
         {
             get { return _bindingContext; }
             set
@@ -74,16 +74,16 @@ namespace MonoGame.Extended.Gui
             }
         }
 
-        private struct Binding
+        protected struct Binding
         {
             public GuiElement Element;
             public string ViewProperty;
             public string ViewModelProperty;
         }
 
-        private static readonly List<Binding> _bindings = new List<Binding>();
+        protected readonly List<Binding> _bindings = new List<Binding>();
 
-        public void SetBinding(string viewProperty, string viewModelProperty)
+        public virtual void SetBinding(string viewProperty, string viewModelProperty)
         {
             _bindings.Add(new Binding
             {
