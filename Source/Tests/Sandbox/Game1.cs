@@ -92,8 +92,6 @@ namespace Sandbox
 
             var viewModel = new ViewModel();
 
-            // adventure-gui-button-screen
-
             LoadGuiButtonScreen();
 
             //_screen = GuiScreen.FromFile(Content, "Content/test-addition-screen.json", typeof(MyPanel));
