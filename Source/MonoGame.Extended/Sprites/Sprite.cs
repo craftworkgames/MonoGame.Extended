@@ -43,7 +43,7 @@ namespace MonoGame.Extended.Sprites
 
         public Color Color { get; set; }
 
-        public RectangleF GetBoundingRectangle(Transform2D transform)
+        public RectangleF GetBoundingRectangle(Transform2 transform)
         {
             return GetBoundingRectangle(transform.Position, transform.Rotation, transform.Scale);
         }

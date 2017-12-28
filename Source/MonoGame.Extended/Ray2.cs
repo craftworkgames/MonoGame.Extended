@@ -11,31 +11,31 @@ namespace MonoGame.Extended
     /// <seealso cref="IEquatable{T}" />
     /// <seealso cref="IEquatableByRef{Ray2}" />
     [DebuggerDisplay("{DebugDisplayString,nq}")]
-    public struct Ray2D : IEquatable<Ray2D>, IEquatableByRef<Ray2D>
+    public struct Ray2 : IEquatable<Ray2>, IEquatableByRef<Ray2>
     {
         /// <summary>
-        ///     The starting <see cref="Point2" /> of this <see cref="Ray2D" />.
+        ///     The starting <see cref="Point2" /> of this <see cref="Ray2" />.
         /// </summary>
         public Point2 Position;
 
         /// <summary>
-        ///     The direction <see cref="Vector2" /> of this <see cref="Ray2D" />.
+        ///     The direction <see cref="Vector2" /> of this <see cref="Ray2" />.
         /// </summary>
         public Vector2 Direction;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Ray2D" /> structure from the specified position and direction.
+        ///     Initializes a new instance of the <see cref="Ray2" /> structure from the specified position and direction.
         /// </summary>
         /// <param name="position">The starting point.</param>
         /// <param name="direction">The direction vector.</param>
-        public Ray2D(Point2 position, Vector2 direction)
+        public Ray2(Point2 position, Vector2 direction)
         {
             Position = position;
             Direction = direction;
         }
 
         /// <summary>
-        ///     Determines whether this <see cref="Ray2D" /> intersects with a specified <see cref="BoundingRectangle" />.
+        ///     Determines whether this <see cref="Ray2" /> intersects with a specified <see cref="BoundingRectangle" />.
         /// </summary>
         /// <param name="boundingRectangle">The bounding rectangle.</param>
         /// <param name="rayNearDistance">
@@ -51,7 +51,7 @@ namespace MonoGame.Extended
         ///     This parameter is passed uninitialized.
         /// </param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="Ray2D" /> intersects with <paramref name="boundingRectangle" />; otherwise,
+        ///     <c>true</c> if this <see cref="Ray2" /> intersects with <paramref name="boundingRectangle" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
         public bool Intersects(BoundingRectangle boundingRectangle, out float rayNearDistance, out float rayFarDistance)
@@ -93,44 +93,44 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Compares two <see cref="Ray2D" /> structures. The result specifies whether the values of the
+        ///     Compares two <see cref="Ray2" /> structures. The result specifies whether the values of the
         ///     <see cref="Position" />
-        ///     and <see cref="Direction" /> fields of the two <see cref="Ray2D" /> structures are equal.
+        ///     and <see cref="Direction" /> fields of the two <see cref="Ray2" /> structures are equal.
         /// </summary>
         /// <param name="first">The first ray.</param>
         /// <param name="second">The second ray.</param>
         /// <returns>
         ///     <c>true</c> if the <see cref="Position" /> and <see cref="Direction" />
-        ///     fields of the two <see cref="Ray2D" />
+        ///     fields of the two <see cref="Ray2" />
         ///     structures are equal; otherwise, <c>false</c>.
         /// </returns>
-        public static bool operator ==(Ray2D first, Ray2D second)
+        public static bool operator ==(Ray2 first, Ray2 second)
         {
             return first.Equals(ref second);
         }
 
         /// <summary>
-        ///     Indicates whether this <see cref="Ray2D" /> is equal to another <see cref="Ray2D" />.
+        ///     Indicates whether this <see cref="Ray2" /> is equal to another <see cref="Ray2" />.
         /// </summary>
         /// <param name="ray">The ray.</param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="Ray2D" /> is equal to the <paramref name="ray" /> parameter; otherwise,
+        ///     <c>true</c> if this <see cref="Ray2" /> is equal to the <paramref name="ray" /> parameter; otherwise,
         ///     <c>false</c>.
         /// </returns>
-        public bool Equals(Ray2D ray)
+        public bool Equals(Ray2 ray)
         {
             return Equals(ref ray);
         }
 
         /// <summary>
-        ///     Indicates whether this <see cref="Ray2D" /> is equal to another <see cref="Ray2D" />.
+        ///     Indicates whether this <see cref="Ray2" /> is equal to another <see cref="Ray2" />.
         /// </summary>
         /// <param name="ray">The ray.</param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="Ray2D" /> is equal to the <paramref name="ray" />; otherwise,
+        ///     <c>true</c> if this <see cref="Ray2" /> is equal to the <paramref name="ray" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
-        public bool Equals(ref Ray2D ray)
+        public bool Equals(ref Ray2 ray)
         {
             // ReSharper disable CompareOfFloatsByEqualityOperator
             return (ray.Position == Position) && (ray.Direction == Direction);
@@ -138,42 +138,42 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Returns a value indicating whether this <see cref="Ray2D" /> is equal to a specified object.
+        ///     Returns a value indicating whether this <see cref="Ray2" /> is equal to a specified object.
         /// </summary>
         /// <param name="obj">The object to make the comparison with.</param>
         /// <returns>
-        ///     <c>true</c> if this  <see cref="Ray2D" /> is equal to <paramref name="obj" />; otherwise, <c>false</c>.
+        ///     <c>true</c> if this  <see cref="Ray2" /> is equal to <paramref name="obj" />; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj is Ray2D)
-                return Equals((Ray2D) obj);
+            if (obj is Ray2)
+                return Equals((Ray2) obj);
             return false;
         }
 
         /// <summary>
-        ///     Compares two <see cref="Ray2D" /> structures. The result specifies whether the values of the
+        ///     Compares two <see cref="Ray2" /> structures. The result specifies whether the values of the
         ///     <see cref='Position' />
-        ///     and <see cref="Direction" /> fields of the two <see cref="Ray2D" /> structures are unequal.
+        ///     and <see cref="Direction" /> fields of the two <see cref="Ray2" /> structures are unequal.
         /// </summary>
         /// <param name="first">The first ray.</param>
         /// <param name="second">The second ray.</param>
         /// <returns>
         ///     <c>true</c> if the <see cref="Position" /> and <see cref="Direction" />
-        ///     fields of the two <see cref="Ray2D" />
+        ///     fields of the two <see cref="Ray2" />
         ///     structures are unequal; otherwise, <c>false</c>.
         /// </returns>
-        public static bool operator !=(Ray2D first, Ray2D second)
+        public static bool operator !=(Ray2 first, Ray2 second)
         {
             return !(first == second);
         }
 
         /// <summary>
-        ///     Returns a hash code of this <see cref="Ray2D" /> suitable for use in hashing algorithms and data
+        ///     Returns a hash code of this <see cref="Ray2" /> suitable for use in hashing algorithms and data
         ///     structures like a hash table.
         /// </summary>
         /// <returns>
-        ///     A hash code of this <see cref="Ray2D" />.
+        ///     A hash code of this <see cref="Ray2" />.
         /// </returns>
         public override int GetHashCode()
         {
@@ -184,10 +184,10 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Returns a <see cref="string" /> that represents this <see cref="Ray2D" />.
+        ///     Returns a <see cref="string" /> that represents this <see cref="Ray2" />.
         /// </summary>
         /// <returns>
-        ///     A <see cref="string" /> that represents this <see cref="Ray2D" />.
+        ///     A <see cref="string" /> that represents this <see cref="Ray2" />.
         /// </returns>
         public override string ToString()
         {

@@ -56,7 +56,7 @@
     <Compile Include="Thickness.cs" />
     <Compile Include="BoundingRectangle.cs" />
     <Compile Include="Point2.cs" />
-    <Compile Include="Ray2D.cs" />
+    <Compile Include="Ray2.cs" />
     <Compile Include="PrimitivesHelper.cs" />
     <Compile Include="Segment2D.cs" />
     <Compile Include="Size2.cs" />
@@ -78,7 +78,7 @@
     <Compile Include="Collections\IObservableCollection.cs" />
     <Compile Include="Collections\ItemEventArgs.cs" />
     <Compile Include="IEquatableByRef.cs" />
-    <Compile Include="Matrix2D.cs" />
+    <Compile Include="Matrix2.cs" />
     <Compile Include="SimpleDrawableGameComponent.cs" />
     <Compile Include="SimpleGameComponent.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />

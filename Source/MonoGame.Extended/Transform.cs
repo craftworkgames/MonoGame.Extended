@@ -27,7 +27,7 @@ namespace MonoGame.Extended
     ///         objects hierarchically.
     ///     </para>
     ///     <para>
-    ///         This class shouldn't be used directly. Instead use either of the derived classes; <see cref="Transform2D" /> or
+    ///         This class shouldn't be used directly. Instead use either of the derived classes; <see cref="Transform2" /> or
     ///         Transform3D.
     ///     </para>
     /// </remarks>
@@ -46,10 +46,10 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets the model-to-local space <see cref="Matrix2D" />.
+        ///     Gets the model-to-local space <see cref="Matrix2" />.
         /// </summary>
         /// <value>
-        ///     The model-to-local space <see cref="Matrix2D" />.
+        ///     The model-to-local space <see cref="Matrix2" />.
         /// </value>
         public TMatrix LocalMatrix
         {
@@ -61,10 +61,10 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets the local-to-world space <see cref="Matrix2D" />.
+        ///     Gets the local-to-world space <see cref="Matrix2" />.
         /// </summary>
         /// <value>
-        ///     The local-to-world space <see cref="Matrix2D" />.
+        ///     The local-to-world space <see cref="Matrix2" />.
         /// </value>
         public TMatrix WorldMatrix
         {
@@ -107,9 +107,9 @@ namespace MonoGame.Extended
         public event Action TranformUpdated; // observer pattern for after the world (or local) matrix was re-calculated
 
         /// <summary>
-        ///     Gets the model-to-local space <see cref="Matrix2D" />.
+        ///     Gets the model-to-local space <see cref="Matrix2" />.
         /// </summary>
-        /// <param name="matrix">The model-to-local space <see cref="Matrix2D" />.</param>
+        /// <param name="matrix">The model-to-local space <see cref="Matrix2" />.</param>
         public void GetLocalMatrix(out TMatrix matrix)
         {
             RecalculateLocalMatrixIfNecessary();
@@ -117,9 +117,9 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets the local-to-world space <see cref="Matrix2D" />.
+        ///     Gets the local-to-world space <see cref="Matrix2" />.
         /// </summary>
-        /// <param name="matrix">The local-to-world space <see cref="Matrix2D" />.</param>
+        /// <param name="matrix">The local-to-world space <see cref="Matrix2" />.</param>
         public void GetWorldMatrix(out TMatrix matrix)
         {
             RecalculateWorldMatrixIfNecessary();
@@ -202,13 +202,13 @@ namespace MonoGame.Extended
     ///     </para>
     /// </remarks>
     [EntityComponent]
-    public class Transform2D : BaseTransform<Matrix2D>, IMovable, IRotatable, IScalable
+    public class Transform2 : BaseTransform<Matrix2>, IMovable, IRotatable, IScalable
     {
         private Vector2 _position;
         private float _rotation;
         private Vector2 _scale = Vector2.One;
 
-        public Transform2D(Vector2? position = null, float rotation = 0, Vector2? scale = null)
+        public Transform2(Vector2? position = null, float rotation = 0, Vector2? scale = null)
         {
             Position = position ?? Vector2.Zero;
             Rotation = rotation;
@@ -290,12 +290,12 @@ namespace MonoGame.Extended
             }
         }
 
-        protected internal override void RecalculateWorldMatrix(ref Matrix2D localMatrix, out Matrix2D matrix)
+        protected internal override void RecalculateWorldMatrix(ref Matrix2 localMatrix, out Matrix2 matrix)
         {
             if (Parent != null)
             {
                 Parent.GetWorldMatrix(out matrix);
-                Matrix2D.Multiply(ref localMatrix, ref matrix, out matrix);
+                Matrix2.Multiply(ref localMatrix, ref matrix, out matrix);
             }
             else
             {
@@ -303,11 +303,11 @@ namespace MonoGame.Extended
             }
         }
 
-        protected internal override void RecalculateLocalMatrix(out Matrix2D matrix)
+        protected internal override void RecalculateLocalMatrix(out Matrix2 matrix)
         {
-            matrix = Matrix2D.CreateScale(_scale) *
-                     Matrix2D.CreateRotationZ(_rotation) *
-                     Matrix2D.CreateTranslation(_position);
+            matrix = Matrix2.CreateScale(_scale) *
+                     Matrix2.CreateRotationZ(_rotation) *
+                     Matrix2.CreateTranslation(_position);
         }
 
     }

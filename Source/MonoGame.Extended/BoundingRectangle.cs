@@ -112,7 +112,7 @@ namespace MonoGame.Extended
         /// <summary>
         ///     Computes the <see cref="BoundingRectangle" /> from the specified <see cref="BoundingRectangle" /> transformed by
         ///     the
-        ///     specified <see cref="Matrix2D" />.
+        ///     specified <see cref="Matrix2" />.
         /// </summary>
         /// <param name="boundingRectangle">The bounding rectangle.</param>
         /// <param name="transformMatrix">The transform matrix.</param>
@@ -129,7 +129,7 @@ namespace MonoGame.Extended
         ///     </para>
         /// </remarks>
         public static void Transform(ref BoundingRectangle boundingRectangle,
-            ref Matrix2D transformMatrix, out BoundingRectangle result)
+            ref Matrix2 transformMatrix, out BoundingRectangle result)
         {
             PrimitivesHelper.TransformRectangle(ref boundingRectangle.Center, ref boundingRectangle.HalfExtents, ref transformMatrix);
             result.Center = boundingRectangle.Center;
@@ -139,7 +139,7 @@ namespace MonoGame.Extended
         /// <summary>
         ///     Computes the <see cref="BoundingRectangle" /> from the specified <see cref="BoundingRectangle" /> transformed by
         ///     the
-        ///     specified <see cref="Matrix2D" />.
+        ///     specified <see cref="Matrix2" />.
         /// </summary>
         /// <param name="boundingRectangle">The bounding rectangle.</param>
         /// <param name="transformMatrix">The transform matrix.</param>
@@ -155,7 +155,7 @@ namespace MonoGame.Extended
         ///     </para>
         /// </remarks>
         public static BoundingRectangle Transform(BoundingRectangle boundingRectangle,
-            ref Matrix2D transformMatrix)
+            ref Matrix2 transformMatrix)
         {
             BoundingRectangle result;
             Transform(ref boundingRectangle, ref transformMatrix, out result);
