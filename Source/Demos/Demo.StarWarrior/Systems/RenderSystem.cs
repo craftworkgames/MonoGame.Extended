@@ -40,11 +40,12 @@ using Demo.StarWarrior.Spatials;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarrior.Systems
 {
-    [Aspect(AspectType.All, typeof(SpatialFormComponent), typeof(TransformComponent))]
+    [Aspect(AspectType.All, typeof(SpatialFormComponent), typeof(Transform2))]
     [EntitySystem(GameLoopType.Draw, Layer = 0)]
     public class RenderSystem : EntityProcessingSystem
     {
@@ -60,7 +61,7 @@ namespace Demo.StarWarrior.Systems
         protected override void Process(GameTime gameTime, Entity entity)
         {
             var spatial = entity.Get<SpatialFormComponent>();
-            var transform = entity.Get<TransformComponent>();
+            var transform = entity.Get<Transform2>();
 
             var spatialName = spatial.SpatialFormFile;
 

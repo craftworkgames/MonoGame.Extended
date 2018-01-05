@@ -15,7 +15,7 @@ namespace Demo.Features.Demos
         private readonly Game _game;
         private SpriteBatch _spriteBatch;
         private Sprite _sprite;
-        private Transform2D _transform;
+        private Transform2 _transform;
         private OrthographicCamera _camera;
 
         public TweeningDemo(GameMain game) : base(game)
@@ -46,7 +46,7 @@ namespace Demo.Features.Demos
             {
                 Color = new Color(Color.White, 0.0f)
             };
-            _transform = new Transform2D
+            _transform = new Transform2
             {
                 Position = viewportAdapter.Center.ToVector2(),
                 Scale = Vector2.One * 0.5f

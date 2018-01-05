@@ -36,6 +36,7 @@
 
 using System;
 using Demo.StarWarrior.Components;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarrior.Templates
@@ -48,7 +49,7 @@ namespace Demo.StarWarrior.Templates
         protected override void Build(Entity entity)
         {
             entity.Group = "BULLETS";
-            entity.Attach<TransformComponent>();
+            entity.Attach<Transform2>();
             entity.Attach<SpatialFormComponent>(c => c.SpatialFormFile = "Missile");
             entity.Attach<PhysicsComponent>();
             entity.Attach<ExpiresComponent>(c => c.LifeTime = TimeSpan.FromMilliseconds(2000));

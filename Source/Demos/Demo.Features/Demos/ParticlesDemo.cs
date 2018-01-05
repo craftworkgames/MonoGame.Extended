@@ -26,7 +26,7 @@ namespace Demo.Features.Demos
 
         private SpriteBatch _spriteBatch;
         private Sprite _sprite;
-        private Transform2D _transform;
+        private Transform2 _transform;
         private OrthographicCamera _camera;
         private ParticleEffect _particleEffect;
         private Texture2D _particleTexture;
@@ -40,7 +40,7 @@ namespace Demo.Features.Demos
 
             var logoTexture = Content.Load<Texture2D>("Textures/logo-square-128");
             _sprite = new Sprite(logoTexture);
-            _transform = new Transform2D {Position = viewportAdapter.Center.ToVector2()};
+            _transform = new Transform2 { Position = viewportAdapter.Center.ToVector2()};
 
             _particleTexture = new Texture2D(GraphicsDevice, 1, 1);
             _particleTexture.SetData(new[] {Color.White});

@@ -151,7 +151,7 @@ namespace Demo.Features.Demos
         private readonly AnimatedSprite _sprite;
         private float _direction = -1.0f;
         private ZombieState _state;
-        private Transform2D _transform;
+        private Transform2 _transform;
 
         public RectangleF BoundingBox => _sprite.GetBoundingRectangle(_transform.Position, _transform.Rotation, _transform.Scale);
         public bool IsOnGround { get; private set; }
@@ -199,7 +199,7 @@ namespace Demo.Features.Demos
         public Zombie(SpriteSheetAnimationFactory animations)
         {
             _sprite = new AnimatedSprite(animations);
-            _transform = new Transform2D();
+            _transform = new Transform2();
 
             State = ZombieState.Appearing;
             IsOnGround = false;

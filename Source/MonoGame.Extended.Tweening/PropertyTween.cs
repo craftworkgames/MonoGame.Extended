@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq.Expressions;
 using MonoGame.Extended.Animations;
 
@@ -48,18 +49,21 @@ namespace MonoGame.Extended.Tweening
 
             _currentMultiplier = EasingFunction(CurrentTime/Duration);
 
-            if (CurrentTime >= Duration)
+            var isComplete = CurrentTime >= Duration;
+
+            if (isComplete)
             {
                 CurrentTime = Duration;
                 _currentMultiplier = 1.0f;
-                return true;
             }
 
+            // ReSharper disable PossibleInvalidOperationException
             var difference = Subtract(TargetValue, _initialValue.Value);
             var multiply = Multiply(difference, _currentMultiplier);
             var newValue = Add(_initialValue.Value, multiply);
+            // ReSharper restore PossibleInvalidOperationException
             _setValue(newValue);
-            return false;
+            return isComplete;
         }
     }
 }
