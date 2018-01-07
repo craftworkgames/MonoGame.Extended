@@ -7,8 +7,8 @@
     <ProjectGuid>{270EE933-60A7-4E5C-8A3E-E5F6DDB04D9C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MonoGame.Extended.Tests</RootNamespace>
-    <AssemblyName>MonoGame.Extended.Tests</AssemblyName>
+    <RootNamespace>MonoGame.Extended.NuclexGui.Tests</RootNamespace>
+    <AssemblyName>MonoGame.Extended.NuclexGui.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
