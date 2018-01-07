@@ -109,6 +109,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Tests\Sandbox\Sa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Entities.Tests", "Tests\MonoGame.Extended.Entities.Tests\MonoGame.Extended.Entities.Tests.csproj", "{5B993DD9-A9B8-434C-B444-F1CFFB947F79}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.NuclexGui.Tests", "Tests\MonoGame.Extended.NuclexGui.Tests\MonoGame.Extended.NuclexGui.Tests.csproj", "{270EE933-60A7-4E5C-8A3E-E5F6DDB04D9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -333,6 +335,14 @@ Global
 		{5B993DD9-A9B8-434C-B444-F1CFFB947F79}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5B993DD9-A9B8-434C-B444-F1CFFB947F79}.Release|x86.ActiveCfg = Release|Any CPU
 		{5B993DD9-A9B8-434C-B444-F1CFFB947F79}.Release|x86.Build.0 = Release|Any CPU
+		{270EE933-60A7-4E5C-8A3E-E5F6DDB04D9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{270EE933-60A7-4E5C-8A3E-E5F6DDB04D9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{270EE933-60A7-4E5C-8A3E-E5F6DDB04D9C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{270EE933-60A7-4E5C-8A3E-E5F6DDB04D9C}.Debug|x86.Build.0 = Debug|Any CPU
+		{270EE933-60A7-4E5C-8A3E-E5F6DDB04D9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{270EE933-60A7-4E5C-8A3E-E5F6DDB04D9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{270EE933-60A7-4E5C-8A3E-E5F6DDB04D9C}.Release|x86.ActiveCfg = Release|Any CPU
+		{270EE933-60A7-4E5C-8A3E-E5F6DDB04D9C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -353,6 +363,7 @@ Global
 		{BDAEDFAF-2EDA-4BCA-9675-3625456FAB78} = {932F8931-4A8D-4205-BFCF-98E794207786}
 		{9A920A4D-3794-4AB4-9A76-3C19407A1C5F} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
 		{5B993DD9-A9B8-434C-B444-F1CFFB947F79} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
+		{270EE933-60A7-4E5C-8A3E-E5F6DDB04D9C} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8ED5A62D-25EC-4331-9F99-BDD1E10C02A0}
