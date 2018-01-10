@@ -99,7 +99,6 @@
     <None Include="Content\Fonts\Heading3.spritefont" />
     <None Include="Content\Fonts\Heading2.spritefont" />
     <None Include="Content\Fonts\Heading1.spritefont" />
-    <None Include="Content\Heading1.spritefont" />
     <None Include="Content\DefaultFont.spritefont" />
     <None Include="Content\logo-square-128.png" />
     <None Include="Content\TitleFont.spritefont" />
