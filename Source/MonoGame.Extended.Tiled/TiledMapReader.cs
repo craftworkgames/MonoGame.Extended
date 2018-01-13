@@ -76,10 +76,13 @@ namespace MonoGame.Extended.Tiled
             for (var tileIndex = 0; tileIndex < explicitTileCount; tileIndex++)
             {
                 var localTileIdentifier = reader.ReadInt32();
+                var type = reader.ReadString();
                 var animationFramesCount = reader.ReadInt32();
                 var tilesetTile = animationFramesCount <= 0 
-                    ? ReadTiledMapTilesetTile(reader, map, objects => new TiledMapTilesetTile(localTileIdentifier, objects)) 
-                    : ReadTiledMapTilesetTile(reader, map, objects => new TiledMapTilesetAnimatedTile(localTileIdentifier, ReadTiledMapTilesetAnimationFrames(reader, tileset, animationFramesCount)));
+                    ? ReadTiledMapTilesetTile(reader, map, objects => 
+                        new TiledMapTilesetTile(localTileIdentifier, type, objects)) 
+                    : ReadTiledMapTilesetTile(reader, map, objects => 
+                        new TiledMapTilesetAnimatedTile(localTileIdentifier, ReadTiledMapTilesetAnimationFrames(reader, tileset, animationFramesCount), type, objects));
 
                 ReadProperties(reader, tilesetTile.Properties);
                 tileset.Tiles.Add(tilesetTile);

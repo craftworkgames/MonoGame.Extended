@@ -12,8 +12,8 @@ namespace MonoGame.Extended.Tiled
         public ReadOnlyCollection<TiledMapTilesetTileAnimationFrame> AnimationFrames { get; }
         public TiledMapTilesetTileAnimationFrame CurrentAnimationFrame { get; private set; }
 
-        public TiledMapTilesetAnimatedTile(int localTileIdentifier, TiledMapTilesetTileAnimationFrame[] frames, TiledMapObject[] objects = null)
-            : base(localTileIdentifier, objects)
+        public TiledMapTilesetAnimatedTile(int localTileIdentifier, TiledMapTilesetTileAnimationFrame[] frames, string type = null, TiledMapObject[] objects = null)
+            : base(localTileIdentifier, type, objects)
         {
             if (frames.Length == 0) throw new InvalidOperationException("There must be at least one tileset animation frame");
 
