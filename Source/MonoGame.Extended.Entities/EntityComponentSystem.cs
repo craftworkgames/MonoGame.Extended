@@ -64,6 +64,7 @@ namespace MonoGame.Extended.Entities
                     typeof(AnimatedSprite).GetTypeInfo().Assembly
                 })
                 .SelectMany(a => a.ExportedTypes)
+                .Distinct()
                 .Select(x => x.GetTypeInfo())
                 .ToArray();
 
