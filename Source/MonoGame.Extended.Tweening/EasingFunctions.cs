@@ -9,13 +9,13 @@ namespace MonoGame.Extended.Tweening
     {
         public static float Linear(float value) => value;
 
-        public static float CubicEaseIn(float value) => Power.EaseIn(value, 2);
-        public static float CubicEaseOut(float value) => Power.EaseOut(value, 2);
-        public static float CubicEaseInOut(float value) => Power.EaseInOut(value, 2);
+        public static float CubicEaseIn(float value) => Power.EaseIn(value, 3);
+        public static float CubicEaseOut(float value) => Power.EaseOut(value, 3);
+        public static float CubicEaseInOut(float value) => Power.EaseInOut(value, 3);
 
-        public static float QuadraticEaseIn(float value) => Power.EaseIn(value, 3);
-        public static float QuadraticEaseOut(float value) => Power.EaseOut(value, 3);
-        public static float QuadraticEaseInOut(float value) => Power.EaseInOut(value, 3);
+        public static float QuadraticEaseIn(float value) => Power.EaseIn(value, 2);
+        public static float QuadraticEaseOut(float value) => Power.EaseOut(value, 2);
+        public static float QuadraticEaseInOut(float value) => Power.EaseInOut(value, 2);
 
         public static float QuarticEaseIn(float value) => Power.EaseIn(value, 4);
         public static float QuarticEaseOut(float value) => Power.EaseOut(value, 4);
