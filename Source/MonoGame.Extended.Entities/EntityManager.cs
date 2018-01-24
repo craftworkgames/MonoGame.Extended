@@ -165,41 +165,41 @@ namespace MonoGame.Extended.Entities
             return bag;
         }
 
-        internal void AddEntityToGroup(string group, Entity entity)
-        {
-            Debug.Assert(entity != null);
+        //internal void AddEntityToGroup(string group, Entity entity)
+        //{
+        //    Debug.Assert(entity != null);
 
-            if (string.IsNullOrEmpty(group))
-                return;
+        //    if (string.IsNullOrEmpty(group))
+        //        return;
 
-            RemoveEntityFromGroup(entity);
+        //    RemoveEntityFromGroup(entity);
 
-            entity._group = group;
+        //    entity._group = group;
 
-            Bag<Entity> entities;
+        //    Bag<Entity> entities;
 
-            if (!_entitiesByGroup.TryGetValue(group, out entities))
-            {
-                entities = new Bag<Entity>();
-                _entitiesByGroup.Add(group, entities);
-            }
+        //    if (!_entitiesByGroup.TryGetValue(group, out entities))
+        //    {
+        //        entities = new Bag<Entity>();
+        //        _entitiesByGroup.Add(group, entities);
+        //    }
 
-            entities.Add(entity);
-        }
+        //    entities.Add(entity);
+        //}
 
-        internal void RemoveEntityFromGroup(Entity entity)
-        {
-            Bag<Entity> entities;
+        //internal void RemoveEntityFromGroup(Entity entity)
+        //{
+        //    Bag<Entity> entities;
 
-            if (_entitiesByGroup.TryGetValue(entity._group, out entities))
-                entities.Remove(entity);
-        }
+        //    if (_entitiesByGroup.TryGetValue(entity._group, out entities))
+        //        entities.Remove(entity);
+        //}
 
         internal void DestroyEntity(Entity entity)
         {
             Debug.Assert(entity != null);
 
-            RemoveEntityFromGroup(entity);
+            //RemoveEntityFromGroup(entity);
             RemoveComponents(entity);
             entity.Return();
         }
@@ -405,6 +405,7 @@ namespace MonoGame.Extended.Entities
 
                 components.Remove(entity);
                 (component as IPoolable)?.Return();
+                (component as IDisposable)?.Dispose();
             }
 
             _componentsToRemove.Clear();
@@ -420,10 +421,9 @@ namespace MonoGame.Extended.Entities
             {
                 var components = _entitiesToComponentsBag[i];
 
-                Debug.Assert(components != null);
-
                 object component;
-                if (!components.TryGetValue(entity, out component))
+
+                if (components == null || !components.TryGetValue(entity, out component))
                     continue;
 
                 components.Remove(entity);

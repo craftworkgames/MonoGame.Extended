@@ -104,15 +104,15 @@ namespace MonoGame.Extended.Entities
             }
         }
 
-        public string Group
-        {
-            get { return _group; }
-            set
-            {
-                _group = value;
-                Manager.AddEntityToGroup(value, this);
-            }
-        }
+        //public string Group
+        //{
+        //    get { return _group; }
+        //    set
+        //    {
+        //        _group = value;
+        //        Manager.AddEntityToGroup(value, this);
+        //    }
+        //}
 
         IPoolable IPoolable.NextNode { get; set; }
         IPoolable IPoolable.PreviousNode { get; set; }
