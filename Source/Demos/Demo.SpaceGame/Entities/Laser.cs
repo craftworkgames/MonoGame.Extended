@@ -9,7 +9,7 @@ namespace Demo.SpaceGame.Entities
     public class Laser : Entity
     {
         private readonly Sprite _sprite;
-        private readonly Transform2D _transform;
+        private readonly Transform2 _transform;
         private float _timeToLive;
 
         public Vector2 Position
@@ -30,7 +30,7 @@ namespace Demo.SpaceGame.Entities
         {
             _timeToLive = 1.0f;
             _sprite = new Sprite(textureRegion);
-            _transform = new Transform2D
+            _transform = new Transform2
             {
                 Scale = Vector2.One * 0.5f
             };

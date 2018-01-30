@@ -12,7 +12,7 @@ namespace Demo.SpaceGame.Entities
         private readonly IBulletFactory _bulletFactory;
 
         private readonly Sprite _sprite;
-        private readonly Transform2D _transform;
+        private readonly Transform2 _transform;
 
         private float _fireCooldown;
         public CircleF BoundingCircle;
@@ -41,7 +41,7 @@ namespace Demo.SpaceGame.Entities
         {
             _bulletFactory = bulletFactory;
             _sprite = new Sprite(textureRegion);
-            _transform = new Transform2D
+            _transform = new Transform2
             {
                 Scale = Vector2.One * 0.5f,
                 Position = new Vector2(400, 240)

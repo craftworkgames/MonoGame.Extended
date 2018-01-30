@@ -36,17 +36,18 @@
 
 using Demo.StarWarrior.Components;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarrior.Systems
 {
-    [Aspect(AspectType.All, typeof(TransformComponent), typeof(PhysicsComponent), typeof(EnemyComponent))]
+    [Aspect(AspectType.All, typeof(Transform2), typeof(PhysicsComponent), typeof(EnemyComponent))]
     [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class EnemyShipMovementSystem : EntityProcessingSystem
     {
         protected override void Process(GameTime gameTime, Entity entity)
         {
-            var transform = entity.Get<TransformComponent>();
+            var transform = entity.Get<Transform2>();
             var physics = entity.Get<PhysicsComponent>();
 
             var worldPosition = transform.WorldPosition;

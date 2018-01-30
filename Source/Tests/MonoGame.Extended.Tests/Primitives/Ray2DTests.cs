@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace MonoGame.Extended.Tests.Primitives
 {
     [TestFixture]
-    public class Ray2DTests
+    public class Ray2Tests
     {
         public IEnumerable<TestCaseData> ConstructorTestCases
         {
@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Tests.Primitives
         [TestCaseSource(nameof(ConstructorTestCases))]
         public void Constructor(Point2 position, Vector2 direction)
         {
-            var ray = new Ray2D(position, direction);
+            var ray = new Ray2(position, direction);
             Assert.AreEqual(position, ray.Position);
             Assert.AreEqual(direction, ray.Direction);
         }
@@ -35,10 +35,10 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Ray2D(), new Point2(), new Vector2()).SetName(
+                    new TestCaseData(new Ray2(), new Point2(), new Vector2()).SetName(
                         "The degenerate ray has the expected position and direction.");
                 yield return
-                    new TestCaseData(new Ray2D(new Point2(5, 5), new Vector2(15, 15)), new Point2(5, 5),
+                    new TestCaseData(new Ray2(new Point2(5, 5), new Vector2(15, 15)), new Point2(5, 5),
                             new Vector2(15, 15)).SetName
                         (
                             "A non-degenerate ray has the expected position and direction.");
@@ -47,7 +47,7 @@ namespace MonoGame.Extended.Tests.Primitives
 
         [Test]
         [TestCaseSource(nameof(PositionDirectionTestCases))]
-        public void PositionDirection(Ray2D ray, Point2 expectedPosition, Vector2 expecetedDirection)
+        public void PositionDirection(Ray2 ray, Point2 expectedPosition, Vector2 expecetedDirection)
         {
             Assert.AreEqual(expectedPosition, ray.Position);
             Assert.AreEqual(expecetedDirection, ray.Direction);
@@ -66,18 +66,18 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Ray2D(), new BoundingRectangle(), true, Point2.Zero, Point2.Zero).SetName(
+                    new TestCaseData(new Ray2(), new BoundingRectangle(), true, Point2.Zero, Point2.Zero).SetName(
                         "The degenerate ray intersects the empty bounding box.");
                 yield return
-                    new TestCaseData(new Ray2D(new Point2(-75, -75), new Vector2(75, -75)),
+                    new TestCaseData(new Ray2(new Point2(-75, -75), new Vector2(75, -75)),
                         new BoundingRectangle(new Point2(), new Size2(50, 50)), false, Point2.NaN, Point2.NaN).SetName(
                         "A non-degenerate ray that does not cross a non-empty bounding box does not intersect the bounding box.");
                 yield return
-                    new TestCaseData(new Ray2D(new Point2(0, 0), new Vector2(25, 0)), new BoundingRectangle(new Point2(), new Size2(50, 50)),
+                    new TestCaseData(new Ray2(new Point2(0, 0), new Vector2(25, 0)), new BoundingRectangle(new Point2(), new Size2(50, 50)),
                         true, new Point2(0, 0), new Point2(50, 0)).SetName(
                         "A non-degenerate ray starting from inside a non-empty bounding box intersects the bounding box.");
                 yield return
-                    new TestCaseData(new Ray2D(new Point2(-100, 0), new Vector2(100, 0)),
+                    new TestCaseData(new Ray2(new Point2(-100, 0), new Vector2(100, 0)),
                         new BoundingRectangle(new Point2(), new Size2(50, 50)),
                         true, new Point2(-50, 0), new Point2(50, 0)).SetName(
                         "A non-degenerate ray crossing a non-empty bounding box intersects the bounding box.");
@@ -86,7 +86,7 @@ namespace MonoGame.Extended.Tests.Primitives
 
         [Test]
         [TestCaseSource(nameof(IntersectsBoundingRectangleTestCases))]
-        public void IntersectsBoundingRectangle(Ray2D ray, BoundingRectangle boundingRectangle, bool expectedResult,
+        public void IntersectsBoundingRectangle(Ray2 ray, BoundingRectangle boundingRectangle, bool expectedResult,
             Point2 firstExpectedIntersectionPoint, Point2 secondExpectedIntersectionPoint)
         {
             float rayNearDistance, rayFarDistance;
@@ -112,16 +112,16 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Ray2D(), new Ray2D(), true).SetName("Two degenerate rays are equal.");
+                    new TestCaseData(new Ray2(), new Ray2(), true).SetName("Two degenerate rays are equal.");
                 yield return
-                    new TestCaseData(new Ray2D(new Point2(float.MinValue, float.MaxValue),
-                        new Vector2(float.MaxValue, float.MinValue)), new Ray2D(new Point2(float.MaxValue, float.MinValue),
+                    new TestCaseData(new Ray2(new Point2(float.MinValue, float.MaxValue),
+                        new Vector2(float.MaxValue, float.MinValue)), new Ray2(new Point2(float.MaxValue, float.MinValue),
                         new Vector2(float.MaxValue, float.MinValue)), false).SetName(
                         "Two different non-degenerate rays are not equal.");
                 yield return
                     new TestCaseData(
-                            new Ray2D(new Point2(float.MinValue, float.MaxValue),
-                                new Vector2(float.MinValue, float.MaxValue)), new Ray2D(new Point2(float.MinValue, float.MaxValue),
+                            new Ray2(new Point2(float.MinValue, float.MaxValue),
+                                new Vector2(float.MinValue, float.MaxValue)), new Ray2(new Point2(float.MinValue, float.MaxValue),
                                 new Vector2(float.MinValue, float.MaxValue)), true)
                         .SetName(
                             "Two identical non-degenerate rays are equal.");
@@ -130,7 +130,7 @@ namespace MonoGame.Extended.Tests.Primitives
 
         [Test]
         [TestCaseSource(nameof(EqualityTestCases))]
-        public void Equality(Ray2D ray1, Ray2D ray2, bool expectedToBeEqual)
+        public void Equality(Ray2 ray1, Ray2 ray2, bool expectedToBeEqual)
         {
             Assert.IsTrue(Equals(ray1, ray2) == expectedToBeEqual);
             Assert.IsTrue(ray1 == ray2 == expectedToBeEqual);
@@ -146,16 +146,16 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Ray2D(), null, false).SetName("A ray is not equal to a null object.");
+                    new TestCaseData(new Ray2(), null, false).SetName("A ray is not equal to a null object.");
                 yield return
-                    new TestCaseData(new Ray2D(), new object(), false).SetName(
+                    new TestCaseData(new Ray2(), new object(), false).SetName(
                         "A ray is not equal to an instantiated object.");
             }
         }
 
         [Test]
         [TestCaseSource(nameof(InequalityTestCases))]
-        public void Inequality(Ray2D ray, object obj, bool expectedToBeEqual)
+        public void Inequality(Ray2 ray, object obj, bool expectedToBeEqual)
         {
             Assert.IsTrue(ray.Equals(obj) == expectedToBeEqual);
         }
@@ -165,22 +165,22 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Ray2D(), new Ray2D(), true).SetName(
+                    new TestCaseData(new Ray2(), new Ray2(), true).SetName(
                         "Two degenerate rays have the same hash code.");
                 yield return
-                    new TestCaseData(new Ray2D(new Point2(50, 50), new Vector2(50, 50)),
-                        new Ray2D(new Point2(50, 50), new Vector2(50, 50)), true).SetName(
+                    new TestCaseData(new Ray2(new Point2(50, 50), new Vector2(50, 50)),
+                        new Ray2(new Point2(50, 50), new Vector2(50, 50)), true).SetName(
                         "Two indentical non-zero points have the same hash code.");
                 yield return
-                    new TestCaseData(new Ray2D(new Point2(0, 0), new Vector2(50, 50)),
-                        new Ray2D(new Point2(50, 50), new Vector2(50, 50)), false).SetName(
+                    new TestCaseData(new Ray2(new Point2(0, 0), new Vector2(50, 50)),
+                        new Ray2(new Point2(50, 50), new Vector2(50, 50)), false).SetName(
                         "Two different non-zero points do not have the same hash code.");
             }
         }
 
         [Test]
         [TestCaseSource(nameof(HashCodeTestCases))]
-        public void HashCode(Ray2D ray1, Ray2D ray2, bool expectedThatHashCodesAreEqual)
+        public void HashCode(Ray2 ray1, Ray2 ray2, bool expectedThatHashCodesAreEqual)
         {
             var hashCode1 = ray1.GetHashCode();
             var hashCode2 = ray2.GetHashCode();
@@ -195,11 +195,11 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Ray2D(),
+                    new TestCaseData(new Ray2(),
                         string.Format(CultureInfo.CurrentCulture, "Position: {0}, Direction: {1}", new Point2(),
                             new Vector2())).SetName(
                         "The degenerate ray has the expected string representation using the current culture.");
-                yield return new TestCaseData(new Ray2D(new Point2(5.1f, -5.123f), new Vector2(0, 1)),
+                yield return new TestCaseData(new Ray2(new Point2(5.1f, -5.123f), new Vector2(0, 1)),
                     string.Format(CultureInfo.CurrentCulture, "Position: {0}, Direction: {1}", new Point2(5.1f, -5.123f),
                         new Vector2(0, 1))).SetName(
                     "A non-degenerate ray has the expected string representation using the current culture.");
@@ -208,7 +208,7 @@ namespace MonoGame.Extended.Tests.Primitives
 
         [Test]
         [TestCaseSource(nameof(StringCases))]
-        public void String(Ray2D ray, string expectedString)
+        public void String(Ray2 ray, string expectedString)
         {
             var actualString = ray.ToString();
             Assert.AreEqual(expectedString, actualString);

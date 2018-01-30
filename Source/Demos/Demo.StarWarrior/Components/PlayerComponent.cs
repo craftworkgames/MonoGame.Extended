@@ -3,7 +3,7 @@
 namespace Demo.StarWarrior.Components
 {
     [EntityComponent]
-    public class PlayerComponent : EntityComponent
+    public class PlayerComponent
     {
     }
 }

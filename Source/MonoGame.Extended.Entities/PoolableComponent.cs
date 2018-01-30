@@ -38,52 +38,40 @@ using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Entities
 {
-    //public abstract class EntityComponent : IPoolable
-    //{
-    //    private ReturnToPoolDelegate _returnToPool;
+    public abstract class PoolableComponent : IPoolable
+    {
+        private ReturnToPoolDelegate _returnToPool;
+        IPoolable IPoolable.NextNode { get; set; }
+        IPoolable IPoolable.PreviousNode { get; set; }
 
-    //    public Entity Entity { get; internal set; }
+        protected PoolableComponent()
+        {
+        }
 
-    //    IPoolable IPoolable.NextNode { get; set; }
-    //    IPoolable IPoolable.PreviousNode { get; set; }
+        public virtual void Reset()
+        {
+        }
 
-    //    protected EntityComponent()
-    //    {
-    //    }
+        void IPoolable.Initialize(ReturnToPoolDelegate returnDelegate)
+        {
+            _returnToPool = returnDelegate;
+            Reset();
+        }
 
-    //    public virtual void Reset()
-    //    {
-    //    }
+        void IPoolable.Return()
+        {
+            Return();
+        }
 
-    //    void IPoolable.Initialize(ReturnToPoolDelegate returnDelegate)
-    //    {
-    //        _returnToPool = returnDelegate;
-    //        Reset();
-    //    }
+        internal void Return()
+        {
+            Reset();
 
-    //    void IPoolable.Return()
-    //    {
-    //        Return();
-    //    }
+            if (_returnToPool == null)
+                return;
 
-    //    internal void Return()
-    //    {
-    //        Reset();
-
-    //        if (_returnToPool == null)
-    //        {
-    //            return;
-    //        }
-
-    //        Entity = null;
-
-    //        _returnToPool.Invoke(this);
-    //        _returnToPool = null;
-    //    }
-
-    //    public override string ToString()
-    //    {
-    //        return $"Entity: {Entity}";
-    //    }
-    //}
+            _returnToPool.Invoke(this);
+            _returnToPool = null;
+        }
+    }
 }

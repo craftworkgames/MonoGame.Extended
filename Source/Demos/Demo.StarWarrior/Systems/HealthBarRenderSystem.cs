@@ -39,12 +39,13 @@ using System.Text;
 using Demo.StarWarrior.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarrior.Systems
 {
-    [Aspect(AspectType.All, typeof(HealthComponent), typeof(TransformComponent))]
+    [Aspect(AspectType.All, typeof(HealthComponent), typeof(Transform2))]
     [EntitySystem(GameLoopType.Draw, Layer = 0)]
     public class HealthBarRenderSystem : EntityProcessingSystem
     {
@@ -61,7 +62,7 @@ namespace Demo.StarWarrior.Systems
         protected override void Process(GameTime gameTime, Entity entity)
         {
             var health = entity.Get<HealthComponent>();
-            var transform = entity.Get<TransformComponent>();
+            var transform = entity.Get<Transform2>();
 
             _stringBuilder.Clear();
             _stringBuilder.Append((float)Math.Round(health.Ratio * 100, 1));

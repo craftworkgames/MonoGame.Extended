@@ -39,7 +39,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.StarWarrior.Components
 {
     [EntityComponent]
-    public class HealthComponent : EntityComponent
+    public class HealthComponent : PoolableComponent
     {
         private int _points;
         private int _maximumPoints;

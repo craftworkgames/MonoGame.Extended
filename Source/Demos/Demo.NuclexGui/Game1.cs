@@ -17,7 +17,7 @@ namespace Demo.NuclexGui
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
         private Sprite _sprite;
-        private Transform2D _transform;
+        private Transform2 _transform;
         private OrthographicCamera _camera;
 
         private readonly InputListenerComponent _inputManager;
@@ -183,7 +183,7 @@ namespace Demo.NuclexGui
 
             var logoTexture = Content.Load<Texture2D>("logo-square-128");
             _sprite = new Sprite(logoTexture);
-            _transform = new Transform2D
+            _transform = new Transform2
             {
                 Position = viewportAdapter.Center.ToVector2()
             };

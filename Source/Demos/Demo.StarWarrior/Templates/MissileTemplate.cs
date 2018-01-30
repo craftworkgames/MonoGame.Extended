@@ -48,7 +48,7 @@ namespace Demo.StarWarrior.Templates
 
         protected override void Build(Entity entity)
         {
-            entity.Group = "BULLETS";
+            //entity.Group = "BULLETS";
             entity.Attach<Transform2>();
             entity.Attach<SpatialFormComponent>(c => c.SpatialFormFile = "Missile");
             entity.Attach<PhysicsComponent>();

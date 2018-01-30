@@ -137,7 +137,7 @@ namespace Demo.StarWarrior
             var viewport = GraphicsDevice.Viewport;
 
             var entity = _entityManager.CreateEntity();
-            entity.Group = "SHIPS";
+            //entity.Group = "SHIPS";
 
             var transform = entity.Attach<Transform2>();
             var position = new Vector2

@@ -37,17 +37,18 @@
 using System;
 using Demo.StarWarrior.Components;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarrior.Systems
 {
-    [Aspect(AspectType.All, typeof(TransformComponent), typeof(PhysicsComponent))]
+    [Aspect(AspectType.All, typeof(Transform2), typeof(PhysicsComponent))]
     [EntitySystem(GameLoopType.Update, Layer = 1)]
     public class MovementSystem : EntityProcessingSystem
     {
         protected override void Process(GameTime gameTime, Entity entity)
         {
-            var transform = entity.Get<TransformComponent>();
+            var transform = entity.Get<Transform2>();
             var physics = entity.Get<PhysicsComponent>();
 
             var milliseconds = (float)gameTime.ElapsedGameTime.TotalMilliseconds;

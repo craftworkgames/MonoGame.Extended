@@ -10,13 +10,13 @@ namespace Demo.SpaceGame.Entities
     public class Explosion : Entity
     {
         private readonly AnimatedSprite _sprite;
-        private readonly Transform2D _transform;
+        private readonly Transform2 _transform;
 
         public Explosion(SpriteSheetAnimationFactory animations, Vector2 position, float radius)
         {
             _sprite = new AnimatedSprite(animations);
             _sprite.Play("explode", Destroy);
-            _transform = new Transform2D {Position = position, Scale = Vector2.One * radius * 0.2f};
+            _transform = new Transform2 {Position = position, Scale = Vector2.One * radius * 0.2f};
         }
 
         public override void Update(GameTime gameTime)
