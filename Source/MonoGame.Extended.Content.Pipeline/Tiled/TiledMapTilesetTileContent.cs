@@ -9,6 +9,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         {
             Probability = 1.0f;
             Properties = new List<TiledMapPropertyContent>();
+            Type = string.Empty;
         }
 
         [XmlAttribute(AttributeName = "id")]

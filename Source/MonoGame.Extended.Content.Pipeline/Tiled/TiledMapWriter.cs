@@ -15,9 +15,18 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         protected override void Write(ContentWriter writer, TiledMapContent map)
         {
-            WriteMetaData(writer, map);
-            WriteTilesets(writer, map.Tilesets);
-            WriteLayers(writer, map.Layers);
+            try
+            {
+                WriteMetaData(writer, map);
+                WriteTilesets(writer, map.Tilesets);
+                WriteLayers(writer, map.Layers);
+            }
+            catch (Exception ex)
+            {
+                ContentLogger.Logger.LogImportantMessage("Wtf");
+                ContentLogger.Logger.LogImportantMessage(ex.StackTrace);
+                throw;
+            }
         }
 
         private static void WriteMetaData(ContentWriter writer, TiledMapContent map)

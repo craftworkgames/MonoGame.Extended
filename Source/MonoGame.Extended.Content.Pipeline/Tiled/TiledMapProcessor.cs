@@ -14,46 +14,56 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         public override TiledMapContent Process(TiledMapContent map, ContentProcessorContext context)
         {
-            ContentLogger.Logger = context.Logger;
-
-            var previousWorkingDirectory = Environment.CurrentDirectory;
-            var newWorkingDirectory = Path.GetDirectoryName(map.FilePath);
-
-            if (string.IsNullOrEmpty(newWorkingDirectory))
-                throw new NullReferenceException();
-
-            Environment.CurrentDirectory = newWorkingDirectory;
-
-            foreach (var layer in map.Layers)
+            try
             {
-                var imageLayer = layer as TiledMapImageLayerContent;
+                ContentLogger.Logger = context.Logger;
 
-                if (imageLayer != null)
+                var previousWorkingDirectory = Environment.CurrentDirectory;
+                var newWorkingDirectory = Path.GetDirectoryName(map.FilePath);
+
+                if (string.IsNullOrEmpty(newWorkingDirectory))
+                    throw new NullReferenceException();
+
+                Environment.CurrentDirectory = newWorkingDirectory;
+
+                foreach (var layer in map.Layers)
                 {
-                    ContentLogger.Log($"Processing image layer '{imageLayer.Name}'");
-                    ContentLogger.Log($"Processed image layer '{imageLayer.Name}'");
+                    var imageLayer = layer as TiledMapImageLayerContent;
+
+                    if (imageLayer != null)
+                    {
+                        ContentLogger.Log($"Processing image layer '{imageLayer.Name}'");
+                        ContentLogger.Log($"Processed image layer '{imageLayer.Name}'");
+                    }
+
+                    var tileLayer = layer as TiledMapTileLayerContent;
+
+                    if (tileLayer != null)
+                    {
+                        var data = tileLayer.Data;
+                        var encodingType = data.Encoding ?? "xml";
+                        var compressionType = data.Compression ?? "xml";
+
+                        ContentLogger.Log(
+                            $"Processing tile layer '{tileLayer.Name}': Encoding: '{encodingType}', Compression: '{compressionType}'");
+
+                        var tileData = DecodeTileLayerData(encodingType, tileLayer);
+                        var tiles = CreateTiles(map.RenderOrder, map.Width, map.Height, tileData);
+                        tileLayer.Tiles = tiles;
+
+                        ContentLogger.Log($"Processed tile layer '{tileLayer}': {tiles.Length} tiles");
+                    }
                 }
 
-                var tileLayer = layer as TiledMapTileLayerContent;
-
-                if (tileLayer != null)
-                {
-                    var data = tileLayer.Data;
-                    var encodingType = data.Encoding ?? "xml";
-                    var compressionType = data.Compression ?? "xml";
-
-                    ContentLogger.Log($"Processing tile layer '{tileLayer.Name}': Encoding: '{encodingType}', Compression: '{compressionType}'");
-
-                    var tileData = DecodeTileLayerData(encodingType, tileLayer);
-                    var tiles = CreateTiles(map.RenderOrder, map.Width, map.Height, tileData);
-                    tileLayer.Tiles = tiles;
-
-                    ContentLogger.Log($"Processed tile layer '{tileLayer}': {tiles.Length} tiles");
-                }
+                Environment.CurrentDirectory = previousWorkingDirectory;
+                return map;
             }
-
-            Environment.CurrentDirectory = previousWorkingDirectory;
-            return map;
+            catch (Exception ex)
+            {
+                context.Logger.LogImportantMessage(ex.Message);
+                context.Logger.LogImportantMessage("Hello World!");
+                return null;
+            }
         }
 
         private static List<TiledMapTileContent> DecodeTileLayerData(string encodingType, TiledMapTileLayerContent tileLayer)
