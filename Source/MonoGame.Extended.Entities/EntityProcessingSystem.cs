@@ -39,7 +39,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Entities
 {
-    public abstract class EntityProcessingSystem : EntitySystem
+    public abstract class EntityProcessingSystem : ProcessingSystem
     {
         protected EntityProcessingSystem()
         {
@@ -80,9 +80,7 @@ namespace MonoGame.Extended.Entities
             }
         }
 
-        protected virtual void Process(GameTime gameTime, Entity entity)
-        {
-        }
+        protected abstract void Process(GameTime gameTime, Entity entity);
 
         protected bool IsInterestedIn(Entity entity)
         {

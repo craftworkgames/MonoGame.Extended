@@ -428,6 +428,7 @@ namespace MonoGame.Extended.Entities
 
                 components.Remove(entity);
                 (component as IPoolable)?.Return();
+                (component as IDisposable)?.Dispose();
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Shapes;
@@ -47,13 +48,13 @@ namespace MonoGame.Extended
         /// <param name="points">The points to connect with lines</param>
         /// <param name="color">The color to use</param>
         /// <param name="thickness">The thickness of the lines</param>
-        public static void DrawPolygon(this SpriteBatch spriteBatch, Vector2 offset, Vector2[] points, Color color,
+        public static void DrawPolygon(this SpriteBatch spriteBatch, Vector2 offset, IReadOnlyList<Vector2> points, Color color,
             float thickness = 1f)
         {
-            if (points.Length == 0)
+            if (points.Count == 0)
                 return;
 
-            if (points.Length == 1)
+            if (points.Count == 1)
             {
                 DrawPoint(spriteBatch, points[0], color, (int) thickness);
                 return;
@@ -61,10 +62,10 @@ namespace MonoGame.Extended
 
             var texture = GetTexture(spriteBatch);
 
-            for (var i = 0; i < points.Length - 1; i++)
+            for (var i = 0; i < points.Count - 1; i++)
                 DrawPolygonEdge(spriteBatch, texture, points[i] + offset, points[i + 1] + offset, color, thickness);
 
-            DrawPolygonEdge(spriteBatch, texture, points[points.Length - 1] + offset, points[0] + offset, color,
+            DrawPolygonEdge(spriteBatch, texture, points[points.Count - 1] + offset, points[0] + offset, color,
                 thickness);
         }
 

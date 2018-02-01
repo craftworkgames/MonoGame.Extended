@@ -40,7 +40,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Entities
 {
-    public abstract class EntitySystem
+    public abstract class ProcessingSystem
     {
         private TimeSpan _timer;
 
@@ -52,7 +52,7 @@ namespace MonoGame.Extended.Entities
 
         public TimeSpan ProcessingDelay { get; set; }
 
-        protected EntitySystem()
+        protected ProcessingSystem()
         {
             IsEnabled = true;
             _timer = TimeSpan.Zero;

@@ -69,7 +69,7 @@
     <Compile Include="PoolableComponent.cs" />
     <Compile Include="EntityComponentType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EntitySystem.cs" />
+    <Compile Include="ProcessingSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">

@@ -73,7 +73,7 @@ namespace MonoGame.Extended.Entities
                 .ToList();
 
             var systemTypes = exportedTypes
-                .Where(t => typeof(EntitySystem).GetTypeInfo().IsAssignableFrom(t))
+                .Where(t => typeof(ProcessingSystem).GetTypeInfo().IsAssignableFrom(t))
                 .ToList();
             
             var templateTypes = exportedTypes
@@ -210,7 +210,7 @@ namespace MonoGame.Extended.Entities
                 if (systemAttribute == null)
                     return;
 
-                var system = _dependencyResolver.Resolve<EntitySystem>(typeInfo.AsType());
+                var system = _dependencyResolver.Resolve<ProcessingSystem>(typeInfo.AsType());
                 var processingSystem = system as EntityProcessingSystem;
 
                 if (processingSystem != null)

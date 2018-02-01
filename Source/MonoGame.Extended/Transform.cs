@@ -310,5 +310,9 @@ namespace MonoGame.Extended
                      Matrix2.CreateTranslation(_position);
         }
 
+        public override string ToString()
+        {
+            return $"Position: {Position}, Rotation: {Rotation}, Scale: {Scale}";
+        }
     }
 }
