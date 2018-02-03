@@ -75,7 +75,7 @@ namespace MonoGame.Extended.NuclexGui
             // By default, the desktop control will cover the whole drawing area
             _desktopControl = new GuiDesktopControl
             {
-                Bounds = new UniRectangle(new UniVector(0, 0), new UniVector(1, 1))
+                Bounds = new UniRectangle(new UniVector(0, 0), new UniVector(new UniScalar(1, 0), new UniScalar(1, 0)))
             };
 
             _desktopControl.SetScreen(this);
