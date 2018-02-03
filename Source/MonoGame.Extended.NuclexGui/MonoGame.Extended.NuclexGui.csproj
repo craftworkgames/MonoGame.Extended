@@ -50,6 +50,7 @@
     <Compile Include="Controls\Desktop\GuiInputControl.cs" />
     <Compile Include="Controls\Desktop\GuiListControl.cs" />
     <Compile Include="Controls\Desktop\GuiOptionControl.cs" />
+    <Compile Include="Controls\Desktop\GuiResizableControl.cs" />
     <Compile Include="Controls\Desktop\GuiSliderControl.cs" />
     <Compile Include="Controls\Desktop\GuiVerticalSliderControl.cs" />
     <Compile Include="Controls\Desktop\GuiWindowControl.cs" />
