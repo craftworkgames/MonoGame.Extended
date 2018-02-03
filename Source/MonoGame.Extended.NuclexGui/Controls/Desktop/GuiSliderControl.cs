@@ -103,7 +103,7 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         /// <summary>
         ///     Called when the mouse has left the control and is no longer hovering over it
         /// </summary>
-        protected override void OnMouseLeft()
+        protected override void OnMouseLeft(float x, float y)
         {
             _mouseOverThumb = false;
         }
