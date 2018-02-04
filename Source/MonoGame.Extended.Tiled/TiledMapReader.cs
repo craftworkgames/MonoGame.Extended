@@ -51,7 +51,7 @@ namespace MonoGame.Extended.Tiled
             }
         }
 
-        private static void ReadLayers(ContentReader input, TiledMap map)
+        internal static void ReadLayers(ContentReader input, TiledMap map, bool nested = false)
         {
             var layerCount = input.ReadInt32();
 
@@ -71,6 +71,9 @@ namespace MonoGame.Extended.Tiled
                     case TiledMapLayerType.ObjectLayer:
                         layer = new TiledMapObjectLayer(input, map);
                         break;
+                    case TiledMapLayerType.GroupLayer:
+                        layer = new TiledMapGroupLayer(input, map);
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -78,7 +81,7 @@ namespace MonoGame.Extended.Tiled
                 if (layerType != TiledMapLayerType.ObjectLayer)
                     ReadModels(input, layer, map);
 
-                map.AddLayer(layer);
+                map.AddLayer(layer, nested);
             }
         }
 
