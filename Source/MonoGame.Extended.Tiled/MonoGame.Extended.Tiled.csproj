@@ -58,6 +58,7 @@
     <Compile Include="Graphics\TiledMapRenderer.cs" />
     <Compile Include="Graphics\TiledMapLayerModel.cs" />
     <Compile Include="TiledMapEllipseObject.cs" />
+    <Compile Include="TiledMapGroupLayer.cs" />
     <Compile Include="TiledMapHelper.cs" />
     <Compile Include="TiledMapImageLayer.cs" />
     <Compile Include="TiledMapLayer.cs" />
