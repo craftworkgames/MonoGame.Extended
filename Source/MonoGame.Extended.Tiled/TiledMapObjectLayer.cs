@@ -10,8 +10,8 @@ namespace MonoGame.Extended.Tiled
         public TiledMapObjectDrawOrder DrawOrder { get; }
         public TiledMapObject[] Objects { get; }
 
-        internal TiledMapObjectLayer(ContentReader input, TiledMap map)
-            : base(input)
+        internal TiledMapObjectLayer(ContentReader input, TiledMap map, TiledMapGroupLayer parent)
+            : base(input, parent)
         {
             Color = input.ReadColor();
             DrawOrder = (TiledMapObjectDrawOrder)input.ReadByte();

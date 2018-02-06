@@ -7,10 +7,10 @@ namespace MonoGame.Extended.Tiled
     {
         public ReadOnlyCollection<TiledMapLayer> Layers { get; }
 
-        internal TiledMapGroupLayer(ContentReader input, TiledMap map) 
-            : base(input)
+        internal TiledMapGroupLayer(ContentReader input, TiledMap map, TiledMapGroupLayer parent) 
+            : base(input, parent)
         {
-            TiledMapReader.ReadLayers(input, map, true);
+            TiledMapReader.ReadLayers(input, map, true, this);
         }
     }
 }
