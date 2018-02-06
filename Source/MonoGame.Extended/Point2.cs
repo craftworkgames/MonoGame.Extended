@@ -320,7 +320,7 @@ namespace MonoGame.Extended
         ///     The the <see cref="Point2" /> that contains the maximal coordinate values from two <see cref="Point2" />
         ///     structures.
         /// </returns>
-        public static Point2 Maximum(Vector2 first, Vector2 second)
+        public static Point2 Maximum(Point2 first, Point2 second)
         {
             return new Point2(first.X > second.X ? first.X : second.X,
                 first.Y > second.Y ? first.Y : second.Y);
