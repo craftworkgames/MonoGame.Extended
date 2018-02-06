@@ -54,7 +54,6 @@ namespace MonoGame.Extended.Entities
             EntityManager = new EntityManager(_systemManager, _dependencyResolver);
         }
 
-        // don't call this every frame, lol
         public void Scan(params Assembly[] assemblies)
         {
             var exportedTypes = assemblies
@@ -210,13 +209,13 @@ namespace MonoGame.Extended.Entities
                 if (systemAttribute == null)
                     return;
 
-                var system = _dependencyResolver.Resolve<ProcessingSystem>(typeInfo.AsType());
-                var processingSystem = system as EntityProcessingSystem;
+                var processingSystem = _dependencyResolver.Resolve<ProcessingSystem>(typeInfo.AsType());
+                var entityProcessingSystem = processingSystem as EntityProcessingSystem;
 
-                if (processingSystem != null)
-                    processingSystem.Aspect = new Aspect(andMask, orMask, norMask);
+                if (entityProcessingSystem != null)
+                    entityProcessingSystem.Aspect = new Aspect(andMask, orMask, norMask);
 
-                _systemManager.AddSystem(system, systemAttribute.GameLoopType, systemAttribute.Layer, SystemExecutionType.Synchronous);
+                _systemManager.AddSystem(processingSystem, systemAttribute.GameLoopType, systemAttribute.Layer, SystemExecutionType.Synchronous);
             }
         }
 
