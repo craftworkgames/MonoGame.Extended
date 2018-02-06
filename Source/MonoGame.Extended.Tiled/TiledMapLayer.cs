@@ -10,13 +10,29 @@ namespace MonoGame.Extended.Tiled
         internal TiledMapLayerAnimatedModel[] AnimatedModels;
 
         public string Name { get; }
+        public TiledMapGroupLayer Parent { get; }
         public TiledMapProperties Properties { get; }
         public bool IsVisible { get; set; }
         public float Opacity { get; set; }
-        public float OffsetX { get; }
-        public float OffsetY { get; }
+        public float OffsetX
+        {
+            get
+            {
+                return (Parent?.OffsetX ?? 0) + _offsetX;
+            }
+        }
+        public float OffsetY
+        {
+            get
+            {
+                return (Parent?.OffsetY ?? 0) + _offsetY;
+            }
+        }
 
-        internal TiledMapLayer(ContentReader input)
+        private float _offsetX;
+        private float _offsetY;
+
+        internal TiledMapLayer(ContentReader input, TiledMapGroupLayer parent)
         {
             Models = null;
             AnimatedModels = null;
@@ -25,8 +41,9 @@ namespace MonoGame.Extended.Tiled
             Properties = new TiledMapProperties();
             IsVisible = input.ReadBoolean();
             Opacity = input.ReadSingle();
-            OffsetX = input.ReadSingle();
-            OffsetY = input.ReadSingle();
+            _offsetX = input.ReadSingle();
+            _offsetY = input.ReadSingle();
+            Parent = parent;
 
             input.ReadTiledMapProperties(Properties);
         }

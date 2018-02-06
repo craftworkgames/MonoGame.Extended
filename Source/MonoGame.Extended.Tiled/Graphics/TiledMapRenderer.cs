@@ -76,11 +76,6 @@ namespace MonoGame.Extended.Tiled.Graphics
 
         public void Draw(TiledMapLayer layer, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect = null, float depth = 0.0f)
         {
-            Draw(layer, ref viewMatrix, ref projectionMatrix, effect, depth, layer.OffsetX, layer.OffsetY);
-        }
-
-        private void Draw(TiledMapLayer layer, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect, float depth, float offsetX, float offsetY)
-        {
             if (!layer.IsVisible)
                 return;
 
@@ -92,12 +87,12 @@ namespace MonoGame.Extended.Tiled.Graphics
                 var group = layer as TiledMapGroupLayer;
 
                 for (int i = 0; i < group.Layers.Count; i++)
-                    Draw(group.Layers[i], ref viewMatrix, ref projectionMatrix, effect, depth, offsetX + group.OffsetX, offsetY + group.OffsetY);
+                    Draw(group.Layers[i], ref viewMatrix, ref projectionMatrix, effect, depth);
 
                 return;
             }
 
-            _worldMatrix.Translation = new Vector3(offsetX, offsetY, depth);
+            _worldMatrix.Translation = new Vector3(layer.OffsetX, layer.OffsetY, depth);
 
             var effect1 = effect ?? _defaultEffect;
             var tiledMapEffect = effect1 as ITiledMapEffect;

@@ -51,7 +51,7 @@ namespace MonoGame.Extended.Tiled
             }
         }
 
-        internal static void ReadLayers(ContentReader input, TiledMap map, bool nested = false)
+        internal static void ReadLayers(ContentReader input, TiledMap map, bool nested = false, TiledMapGroupLayer parent = null)
         {
             var layerCount = input.ReadInt32();
 
@@ -63,16 +63,16 @@ namespace MonoGame.Extended.Tiled
                 switch (layerType)
                 {
                     case TiledMapLayerType.ImageLayer:
-                        layer = new TiledMapImageLayer(input);
+                        layer = new TiledMapImageLayer(input, parent);
                         break;
                     case TiledMapLayerType.TileLayer:
-                        layer = new TiledMapTileLayer(input, map);
+                        layer = new TiledMapTileLayer(input, map, parent);
                         break;
                     case TiledMapLayerType.ObjectLayer:
-                        layer = new TiledMapObjectLayer(input, map);
+                        layer = new TiledMapObjectLayer(input, map, parent);
                         break;
                     case TiledMapLayerType.GroupLayer:
-                        layer = new TiledMapGroupLayer(input, map);
+                        layer = new TiledMapGroupLayer(input, map, parent);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
