@@ -43,7 +43,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.StarWarrior.Systems
 {
     [EntitySystem(GameLoopType.Update, Layer = 1)]
-    public class CollisionSystem : EntitySystem
+    public class CollisionSystem : ProcessingSystem
     {
         protected override void Process(GameTime gameTime)
         {

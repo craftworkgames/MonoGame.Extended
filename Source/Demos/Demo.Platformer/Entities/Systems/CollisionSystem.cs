@@ -10,7 +10,7 @@ namespace Demo.Platformer.Entities.Systems
 {
     [Aspect(AspectType.All, typeof(CollisionBodyComponent), typeof(TransformComponent))]
     [EntitySystem(GameLoopType.Update, Layer = 0)]
-    public class CollisionSystem : EntitySystem
+    public class CollisionSystem : ProcessingSystem
     {
         private readonly List<CollisionBodyComponent> _staticBodies = new List<CollisionBodyComponent>();
         private readonly List<CollisionBodyComponent> _movingBodies = new List<CollisionBodyComponent>();
