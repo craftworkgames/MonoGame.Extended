@@ -17,7 +17,7 @@ namespace Demo.SpaceGame.Entities
         private float _fireCooldown;
         public CircleF BoundingCircle;
 
-        public Vector2 Direction => Vector2.UnitX.Rotate(Rotation);
+        public Vector2 Direction => (-Vector2.UnitX).Rotate(-Rotation);
 
         public Vector2 Position
         {
@@ -74,7 +74,7 @@ namespace Demo.SpaceGame.Entities
 
         public void LookAt(Vector2 point)
         {
-            Rotation = (float)Math.Atan2(point.Y - Position.Y, point.X - Position.X);
+            Rotation = (float)Math.Atan2(point.Y - Position.Y, Position.X - point.X);
         }
 
         public void Fire()
@@ -85,8 +85,8 @@ namespace Demo.SpaceGame.Entities
             }
 
             var angle = Rotation + MathHelper.ToRadians(90);
-            var muzzle1Position = Position + new Vector2(14, 0).Rotate(angle);
-            var muzzle2Position = Position + new Vector2(-14, 0).Rotate(angle);
+            var muzzle1Position = Position + new Vector2(14, 0).Rotate(-angle);
+            var muzzle2Position = Position + new Vector2(-14, 0).Rotate(-angle);
             _bulletFactory.Create(muzzle1Position, Direction, angle, 550f);
             _bulletFactory.Create(muzzle2Position, Direction, angle, 550f);
             _fireCooldown = 0.2f;

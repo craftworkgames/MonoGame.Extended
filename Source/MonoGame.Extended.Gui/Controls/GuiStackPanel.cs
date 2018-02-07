@@ -17,8 +17,8 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public GuiOrientation Orientation { get; set; } = GuiOrientation.Vertical;
-
         public Thickness Padding { get; set; }
+        public int Spacing { get; set; } = 0;
 
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
         {
@@ -44,8 +44,9 @@ namespace MonoGame.Extended.Gui.Controls
                 }
             }
 
-            width += Padding.Left + Padding.Right;
-            height += Padding.Top + Padding.Bottom;
+
+            width += Padding.Left + Padding.Right + (Orientation == GuiOrientation.Horizontal ? (Controls.Count - 1) * Spacing : 0);
+            height += Padding.Top + Padding.Bottom + (Orientation == GuiOrientation.Vertical ? (Controls.Count - 1) * Spacing : 0);
 
             return new Size2(width, height);
         }
@@ -66,14 +67,14 @@ namespace MonoGame.Extended.Gui.Controls
                         control.VerticalAlignment = VerticalAlignment.Top;
 
                         PlaceControl(context, control, 0f, y, Width, desiredSize.Height);
-                        y += desiredSize.Height;
+                        y += desiredSize.Height + Spacing;
                         availableSize.Height -= desiredSize.Height;
                         break;
                     case GuiOrientation.Horizontal:
                         control.HorizontalAlignment = HorizontalAlignment.Left;
 
                         PlaceControl(context, control, x, 0f, desiredSize.Width, Height);
-                        x += desiredSize.Width;
+                        x += desiredSize.Width + Spacing;
                         availableSize.Height -= desiredSize.Height;
                         break;
                     default:

@@ -1,4 +1,5 @@
-﻿using MonoGame.Extended.NuclexGui.Controls;
+﻿using System;
+using MonoGame.Extended.NuclexGui.Controls;
 
 namespace MonoGame.Extended.NuclexGui.Visuals.Flat.Renderers
 {
@@ -14,7 +15,10 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat.Renderers
         /// </param>
         public void Render(GuiLabelControl control, IFlatGuiGraphics graphics)
         {
-            graphics.DrawString("label", control.GetAbsoluteBounds(), control.Text);
+            var frameName = "label";
+            if (control.Style != null) frameName = control.Style;
+
+            graphics.DrawString(frameName, control.GetAbsoluteBounds(), control.Text);
         }
     }
 }

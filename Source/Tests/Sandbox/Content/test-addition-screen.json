@@ -1,12 +1,49 @@
 ﻿{
   "Skin": "Content/adventure-gui-skin.json",
-  "Name": "test-addition-screen",
+  "Name": "test-additional-screen",
   "Controls": [
     {
-      "Type": "GuiStackPanel",
+      "Type": "GuiUniformGrid",
       "Name": "MainPanel",
-      "Style": "brown-panel-no-size",
-      "Padding": "15"
+      "Padding": "15",
+      "Style": "brown-grid-no-size",
+      "HorizontalAlignment": "Stretch",
+      "VerticalAlignment": "Top",
+      "Orientation": "Horizontal",
+      "Height": "60",
+      "Rows": "1",
+      "Columns": "2",
+      "Controls": [
+        {
+          "Type": "GuiLabel",
+          "Style": "label",
+          "TextColor": "#FFFFFF",
+          "Margin": "0 10",
+          "Width": "200",
+          "Height": "30",
+          "Text": "Hello World",
+          "HorizontalAlignment": "Left"
+        },
+        {
+          "Type": "GuiStackPanel",
+          "Orientation": "Horizontal",
+          "Margin": "0 10",
+          "Controls": [
+            {
+              "Type": "GuiButton",
+              "Width": "200",
+              "Text": "Test",
+              "Style": "white-button"
+            },
+            {
+              "Type": "GuiButton",
+              "Width": "200",
+              "Text": "Test",
+              "Style": "white-button"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

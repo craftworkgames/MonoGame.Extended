@@ -252,7 +252,7 @@ namespace MonoGame.Extended.NuclexGui.Controls
         /// <summary>
         ///     Called when the mouse has left the control and is no longer hovering over it
         /// </summary>
-        protected virtual void OnMouseLeft()
+        protected virtual void OnMouseLeft(float x, float y)
         {
         }
 

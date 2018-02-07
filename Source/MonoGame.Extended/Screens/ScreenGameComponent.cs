@@ -52,7 +52,8 @@ namespace MonoGame.Extended.Screens
         public override void Initialize()
         {
             foreach (var screen in _screens)
-                screen.Initialize();
+                if (!screen.IsInitialized) // Check if screen has already been Initialized from the register
+                    screen.Initialize();
 
             base.Initialize();
         }

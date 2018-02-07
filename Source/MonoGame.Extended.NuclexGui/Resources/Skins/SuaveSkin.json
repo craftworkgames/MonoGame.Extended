@@ -9,6 +9,22 @@
       {
         "name": "default",
         "contentPath": "DefaultFont"
+      },
+      {
+        "name": "heading1",
+        "contentPath": "Fonts/Heading1"
+      },
+      {
+        "name": "heading2",
+        "contentPath": "Fonts/Heading2"
+      },
+      {
+        "name": "heading3",
+        "contentPath": "Fonts/Heading3"
+      },
+      {
+        "name": "label-title",
+        "contentPath": "Fonts/Title"
       }
     ],
     "bitmap": [
@@ -126,6 +142,54 @@
       "text": [
         {
           "font": "default",
+          "hplacement": "left",
+          "vplacement": "center",
+          "yoffset": 0,
+          "color": "#3F3F3F"
+        }
+      ]
+    },
+    {
+      "name": "label-h1",
+      "text": [
+        {
+          "font": "heading1",
+          "hplacement": "left",
+          "vplacement": "center",
+          "yoffset": 0,
+          "color": "#3F3F3F"
+        }
+      ]
+    },
+    {
+      "name": "label-h2",
+      "text": [
+        {
+          "font": "heading2",
+          "hplacement": "left",
+          "vplacement": "center",
+          "yoffset": 0,
+          "color": "#3F3F3F"
+        }
+      ]
+    },
+    {
+      "name": "label-h3",
+      "text": [
+        {
+          "font": "heading3",
+          "hplacement": "left",
+          "vplacement": "center",
+          "yoffset": 0,
+          "color": "#3F3F3F"
+        }
+      ]
+    },
+    {
+      "name": "label-title",
+      "text": [
+        {
+          "font": "label-title",
           "hplacement": "left",
           "vplacement": "center",
           "yoffset": 0,

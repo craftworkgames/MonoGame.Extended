@@ -108,10 +108,10 @@ namespace Demo.SpaceGame
                     _player.Accelerate(-acceleration);
 
                 if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
-                    _player.Rotation -= deltaTime*3f;
+                    _player.Rotation += deltaTime*3f;
 
                 if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
-                    _player.Rotation += deltaTime*3f;
+                    _player.Rotation -= deltaTime*3f;
 
                 if (keyboardState.IsKeyDown(Keys.Space) || mouseState.LeftButton == ButtonState.Pressed)
                     _player.Fire();

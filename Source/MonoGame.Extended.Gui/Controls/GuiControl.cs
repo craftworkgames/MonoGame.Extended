@@ -60,6 +60,10 @@ namespace MonoGame.Extended.Gui.Controls
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsFocused { get; set; }
 
+        [JsonIgnore]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Guid Id { get; set; } = Guid.NewGuid();
+
         public Vector2 Offset { get; set; }
         public BitmapFont Font { get; set; }
         public Color TextColor { get; set; }
@@ -69,6 +73,8 @@ namespace MonoGame.Extended.Gui.Controls
         public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Centre;
         public HorizontalAlignment HorizontalTextAlignment { get; set; } = HorizontalAlignment.Centre;
         public VerticalAlignment VerticalTextAlignment { get; set; } = VerticalAlignment.Centre;
+
+        private bool _isHovering;
 
         private string _text;
         public string Text
@@ -148,8 +154,11 @@ namespace MonoGame.Extended.Gui.Controls
             get { return _isEnabled; }
             set
             {
-                _isEnabled = value;
-                DisabledStyle?.ApplyIf(this, !_isEnabled);
+                if (_isEnabled != value)
+                {
+                    _isEnabled = value;
+                    DisabledStyle?.ApplyIf(this, !_isEnabled);
+                }
             }
         }
 
@@ -169,16 +178,8 @@ namespace MonoGame.Extended.Gui.Controls
 
         public virtual void OnScrolled(int delta) { }
 
-        public virtual bool OnKeyTyped(IGuiContext context, KeyboardEventArgs args)
-        {
-            if (args.Key == Keys.Tab || args.Key == Keys.Enter) return false;
-            return true;
-        }
-        public virtual bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
-        {
-            if (args.Key == Keys.Tab || args.Key == Keys.Enter) return false;
-            return true;
-        }
+        public virtual bool OnKeyTyped(IGuiContext context, KeyboardEventArgs args) { return true; }
+        public virtual bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args) { return true; }
 
         public virtual bool OnFocus(IGuiContext context) { return true; }
         public virtual bool OnUnfocus(IGuiContext context) { return true; }
@@ -189,15 +190,21 @@ namespace MonoGame.Extended.Gui.Controls
         
         public virtual bool OnPointerEnter(IGuiContext context, GuiPointerEventArgs args)
         {
-            if (IsEnabled)
+            if (IsEnabled && !_isHovering)
+            {
+                _isHovering = true;
                 HoverStyle?.Apply(this);
+            }
             return true;
         }
 
         public virtual bool OnPointerLeave(IGuiContext context, GuiPointerEventArgs args)
         {
-            if (IsEnabled)
+            if (IsEnabled && _isHovering)
+            {
+                _isHovering = false;
                 HoverStyle?.Revert(this);
+            }
             return true;
         }
 
@@ -210,6 +217,33 @@ namespace MonoGame.Extended.Gui.Controls
         {
             DrawBackground(context, renderer, deltaSeconds);
             DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, CreateBoxText(Text, Font ?? context.DefaultFont, Width), BoundingRectangle, HorizontalTextAlignment, VerticalTextAlignment));
+        }
+
+        public bool HasParent(GuiControl control)
+        {
+            return Parent != null && (Parent == control || Parent.HasParent(control));
+        }
+
+        public override void SetBinding(string viewProperty, string viewModelProperty)
+        {
+            SetBindingToRoot(new Binding
+            {
+                Element = this,
+                ViewProperty = viewProperty,
+                ViewModelProperty = viewModelProperty
+            });
+        }
+
+        private void SetBindingToRoot(Binding binding)
+        {
+            if (Parent != null)
+            {
+                Parent.SetBindingToRoot(binding);
+            }
+            else
+            {
+                _bindings.Add(binding);
+            }
         }
 
         protected List<T> FindControls<T>()

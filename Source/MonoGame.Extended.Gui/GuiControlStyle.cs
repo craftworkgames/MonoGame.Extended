@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Gui
 {
     public class GuiControlStyle : IDictionary<string, object>
     {
-        private Dictionary<string, object> _previousState;
+        private Dictionary<Guid, Dictionary<string, object>> _previousStates = new Dictionary<Guid, Dictionary<string, object>>();
 
         public GuiControlStyle(Type targetType)
             : this(targetType.FullName, targetType)
@@ -38,7 +38,7 @@ namespace MonoGame.Extended.Gui
 
         public void Apply(GuiControl control)
         {
-            _previousState = _setters
+            _previousStates[control.Id] = _setters
                 .ToDictionary(i => i.Key, i => TargetType.GetRuntimeProperty(i.Key)?.GetValue(control));
 
             ChangePropertyValues(control, _setters);
@@ -46,10 +46,10 @@ namespace MonoGame.Extended.Gui
 
         public void Revert(GuiControl control)
         {
-            if (_previousState != null)
-                ChangePropertyValues(control, _previousState);
+            if (_previousStates.ContainsKey(control.Id) && _previousStates[control.Id] != null)
+                ChangePropertyValues(control, _previousStates[control.Id]);
 
-            _previousState = null;
+            _previousStates[control.Id] = null;
         }
 
         private static void ChangePropertyValues(GuiControl control, Dictionary<string, object> setters)

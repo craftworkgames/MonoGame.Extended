@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -7,6 +8,7 @@ using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.ViewportAdapters;
 using MonoGame.Extended.NuclexGui;
+using MonoGame.Extended.NuclexGui.Controls;
 using MonoGame.Extended.NuclexGui.Controls.Desktop;
 
 namespace Demo.NuclexGui
@@ -66,14 +68,90 @@ namespace Demo.NuclexGui
                 Bounds = new UniRectangle(new UniScalar(20), new UniScalar(80), new UniScalar(120), new UniScalar(50)),
                 Text = "Open Window"
             };
+            var button3 = new GuiButtonControl()
+            {
+                Name = "button3",
+                Bounds = new UniRectangle(new UniScalar(20), new UniScalar(140), new UniScalar(120), new UniScalar(50)),
+                Text = "Show Labels",
+            };
 
             // Attach relevant events
             button.Pressed += Button_Pressed;
             button2.Pressed += Button2_Pressed;
+            button3.Pressed += Button3_Pressed;
 
             // And finally, attach controls to the parent control. In this case, desktop screen.
             _gui.Screen.Desktop.Children.Add(button);
             _gui.Screen.Desktop.Children.Add(button2);
+            _gui.Screen.Desktop.Children.Add(button3);
+        }
+
+        private void Button3_Pressed(object sender, EventArgs e)
+        {
+            if (_gui.Screen.Desktop.Children.Any(i => i.Name == "window"))
+                return;
+
+            var window = new GuiWindowControl
+            {
+                Name = "window",
+                Bounds = new UniRectangle(new UniVector(new UniScalar(0.5f, -100), new UniScalar(0.5f, -60)), new UniVector(new UniScalar(200), new UniScalar(160))),
+                Title = "Labels with Styles",
+                EnableDragging = true
+            };
+
+            var labelTitle = new GuiLabelControl
+            {
+                Name = "label-title",
+                Bounds = new UniRectangle(new UniScalar(10), new UniScalar(45), new UniScalar(10), new UniScalar(10)),
+                Text = "Title",
+                Style = "label-title"
+            };
+            var label1 = new GuiLabelControl
+            {
+                Name = "label1",
+                Bounds = new UniRectangle(new UniScalar(0.0f, 10), new UniScalar(0.0f, 70), new UniScalar(10), new UniScalar(10)),
+                Text = "Heading 1",
+                Style = "label-h1",
+            };
+            var label2 = new GuiLabelControl
+            {
+                Name = "label2",
+                Bounds = new UniRectangle(new UniScalar(0.0f, 10), new UniScalar(0.0f, 90), new UniScalar(10), new UniScalar(10)),
+                Text = "Heading 2",
+                Style = "label-h2",
+            };
+            var label3 = new GuiLabelControl
+            {
+                Name = "label3",
+                Bounds = new UniRectangle(new UniScalar(0.0f, 10), new UniScalar(0.0f, 105), new UniScalar(10), new UniScalar(10)),
+                Text = "Heading 3",
+                Style = "label-h3"
+            };
+
+            var button1 = new GuiButtonControl
+            {
+                Name = "confirm",
+                Bounds = new UniRectangle(new UniScalar(0.0f, 10), new UniScalar(1.0f, -40), new UniScalar(0f, 80), new UniScalar(0f, 30)),
+                Text = "Confirm"
+            };
+            var button2 = new GuiButtonControl
+            {
+                Name = "cancel",
+                Bounds = new UniRectangle(new UniScalar(1.0f, -90), new UniScalar(1.0f, -40), new UniScalar(0f, 80), new UniScalar(0f, 30)),
+                Text = "Cancel"
+            };
+
+            button1.Pressed += DialogueConfirm_Pressed;
+            button2.Pressed += DialogueCancel_Pressed;
+
+            window.Children.Add(labelTitle);
+            window.Children.Add(label1);
+            window.Children.Add(label2);
+            window.Children.Add(label3);
+            window.Children.Add(button1);
+            window.Children.Add(button2);
+
+            _gui.Screen.Desktop.Children.Add(window);
         }
 
         private void Button2_Pressed(object sender, System.EventArgs e)

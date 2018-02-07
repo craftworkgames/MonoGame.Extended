@@ -20,6 +20,7 @@
             },
             {
               "Type": "GuiLabel",
+              "Name": "Label",
               "Text": "MonoGame.Extended is an open source collection of NuGet packages for MonoGame. A collection of classes and extensions to make it easier to make games with MonoGame.",
               "Width": "500",
               "Style": "label"
@@ -29,6 +30,7 @@
         {
           "Type": "GuiForm",
           "Name": "ButtonPanel",
+          "Spacing": "10",
           "Controls": [
             {
               "Type": "GuiListBox",
@@ -47,6 +49,7 @@
             {
               "Type": "GuiComboBox",
               "Name": "ComboBox",
+              "Text": "Placeholder",
               "NameProperty": "Name",
               "Width": "200",
               "Style": "combo-box"

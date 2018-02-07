@@ -59,33 +59,64 @@ namespace Sandbox
             Window.AllowUserResizing = true;
         }
 
+        private void LoadGuiButtonScreen()
+        {
+            _screen = GuiScreen.FromFile(Content, "Content/adventure-gui-button-screen.json", typeof(MyPanel));
+
+            var disable = _screen.FindControl<GuiButton>("Disable");
+            var disabled = false;
+            disable.Clicked += (sender, e) =>
+            {
+                disabled = !disabled;
+                foreach(var selector in new List<string>() { "Button1", "Button2", "Button3", "Button4" })
+                {
+                    var item = _screen.FindControl<GuiButton>(selector);
+                    if (item != null)
+                    {
+                        item.IsEnabled = !disabled;
+                    }
+                }
+            };
+            Window.ClientSizeChanged += OnClientSizeChanged;
+        }
+
         protected override void LoadContent()
         {
             IsMouseVisible = false;
 
-            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, _graphicsDeviceManager.PreferredBackBufferWidth, _graphicsDeviceManager.PreferredBackBufferHeight);
+            // _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, _graphicsDeviceManager.PreferredBackBufferWidth, _graphicsDeviceManager.PreferredBackBufferHeight);
+            _viewportAdapter = new WindowViewportAdapter(Window, GraphicsDevice);
 
             _skin = GuiSkin.FromFile(Content, @"Content/adventure-gui-skin.json", typeof(MyPanel));
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, _viewportAdapter.GetScaleMatrix);
 
             var viewModel = new ViewModel();
 
-            _screen = GuiScreen.FromFile(Content, "Content/adventure-gui-screen.json", typeof(MyPanel));
+            LoadGuiButtonScreen();
 
-            var listBox = _screen.FindControl<GuiListBox>("Listbox");
-            listBox.Items.Add(new { Name = "Hello World 1" });
-            listBox.Items.Add(new { Name = "Hello World 2" });
-            listBox.Items.Add(new { Name = "Hello World 3" });
-            listBox.Items.Add(new { Name = "Hello World 4" });
+            //_screen = GuiScreen.FromFile(Content, "Content/test-addition-screen.json", typeof(MyPanel));
+            //Window.ClientSizeChanged += OnClientSizeChanged;
 
-            var comboBox = _screen.FindControl<GuiComboBox>("ComboBox");
-            comboBox.Items.Add(new { Name = "Hello World 1" });
-            comboBox.Items.Add(new { Name = "Hello World 2" });
-            comboBox.Items.Add(new { Name = "Hello World 3" });
-            comboBox.Items.Add(new { Name = "Hello World 4" });
+            //_screen = GuiScreen.FromFile(Content, "Content/adventure-gui-screen.json", typeof(MyPanel));
 
-            var submit = _screen.FindControl<GuiSubmit>("FormSubmit");
-            submit.Clicked += OnFormSubmitClicked;
+            //var listBox = _screen.FindControl<GuiListBox>("Listbox");
+            //listBox.Items.Add(new { Name = "Hello World 1" });
+            //listBox.Items.Add(new { Name = "Hello World 2" });
+            //listBox.Items.Add(new { Name = "Hello World 3" });
+            //listBox.Items.Add(new { Name = "Hello World 4" });
+
+            //var comboBox = _screen.FindControl<GuiComboBox>("ComboBox");
+            //comboBox.Items.Add(new { Name = "Hello World 1" });
+            //comboBox.Items.Add(new { Name = "Hello World 2" });
+            //comboBox.Items.Add(new { Name = "Hello World 3" });
+            //comboBox.Items.Add(new { Name = "Hello World 4" });
+
+            //var submit = _screen.FindControl<GuiSubmit>("FormSubmit");
+            //submit.SetBinding(nameof(GuiButton.Text), nameof(viewModel.Name));
+            //submit.Clicked += OnFormSubmitClicked;
+            //submit.Clicked += (s, e) => { viewModel.Name = viewModel.Name == "Change" ? "Alistrasza" : "Change"; };
+
+            _screen.BindingContext = viewModel;
 
             _guiSystem = new GuiSystem(_viewportAdapter, guiRenderer)
             {
@@ -121,6 +152,16 @@ namespace Sandbox
             if (!string.IsNullOrEmpty(textBox.Text))
             {
                 listBox.Items.Add(new { Name = textBox.Text });
+            }
+        }
+        private void OnClientSizeChanged(object sender, EventArgs eventArgs)
+        {
+            if (_guiSystem != null)
+            {
+                foreach (var screen in _guiSystem.Screens)
+                {
+                    screen.Layout(_guiSystem, _guiSystem.BoundingRectangle);
+                }
             }
         }
     }

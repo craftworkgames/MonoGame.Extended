@@ -80,7 +80,7 @@ namespace MonoGame.Extended.NuclexGui.Controls
         /// <summary>
         ///     Called when the mouse has left the control and is no longer hovering over it
         /// </summary>
-        protected override void OnMouseLeft()
+        protected override void OnMouseLeft(float x, float y)
         {
             // Intentionally not calling OnActivated() here because the user has moved
             // the mouse away from the command while holding the mouse button down -

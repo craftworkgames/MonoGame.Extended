@@ -49,8 +49,8 @@ namespace MonoGame.Extended.Collections
             var node = _headNode;
             while (node != null)
             {
-                node = (T)_headNode.NextNode;
                 yield return node;
+                node = (T)node.NextNode;
             }
         }
 
@@ -101,13 +101,15 @@ namespace MonoGame.Extended.Collections
         {
             TotalCount++;
             var item = _instantiationFunction();
+            if (item == null)
+                throw new NullReferenceException($"The created pooled object of type '{typeof(T).Name}' is null.");
             item.PreviousNode = _tailNode;
             item.NextNode = null;
+            if (_headNode == null)
+                _headNode = item;
             if (_tailNode != null)
                 _tailNode.NextNode = item;
             _tailNode = item;
-            if (item == null)
-                throw new NullReferenceException($"The created pooled object of type '{typeof(T).Name}' is null.");
             return item;
         }
 
@@ -130,6 +132,9 @@ namespace MonoGame.Extended.Collections
             if (item == _tailNode)
                 _tailNode = previousNode;
 
+            if (_tailNode != null)
+                _tailNode.NextNode = null;
+
             _freeItems.AddToBack(poolable1);
 
             ItemReturned?.Invoke((T)item);
@@ -139,9 +144,12 @@ namespace MonoGame.Extended.Collections
         {
             item.Initialize(_returnToPoolDelegate);
             item.NextNode = null;
-            item.PreviousNode = _tailNode;
-            _tailNode.NextNode = item;
-            _tailNode = item;
+            if (item != _tailNode)
+            {
+                item.PreviousNode = _tailNode;
+                _tailNode.NextNode = item;
+                _tailNode = item;
+            }
 
             ItemUsed?.Invoke(item);
         }

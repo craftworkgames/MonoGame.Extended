@@ -42,6 +42,32 @@
       }
     },
     {
+      "Name": "white-disable-button",
+      "Type": "GuiButton",
+      "Margin": "5 2",
+      "BackgroundRegion": "buttonLong_grey",
+      "TextOffset": "0 -2",
+      "TextColor": "#f4a460ff",
+      "Color": "#8b4513ff",
+      "HorizontalAlignment": "Center",
+      "VerticalAlignment": "Centre",
+      "PressedStyle": {
+        "Type": "GuiButton",
+        "BackgroundRegion": "buttonLong_grey_pressed",
+        "TextOffset": "0 2"
+      },
+      "HoverStyle": {
+        "Type": "GuiButton",
+        "Color": "#9E4C16ff",
+        "TextColor": "#ffffffff"
+      },
+      "DisabledStyle": {
+        "Type": "GuiButton",
+        "Color": "#edf3ff",
+        "TextColor": "#898d93"
+      }
+    },
+    {
       "Name": "white-submit",
       "Type": "GuiSubmit",
       "Margin": "5 2",
@@ -94,6 +120,15 @@
     {
       "Name": "brown-panel-no-size",
       "Type": "GuiStackPanel",
+      "BackgroundRegion": "panel_brown",
+      "HoverStyle": {
+        "Type": "GuiStackPanel",
+        "BackgroundRegion": "panelInset_beige"
+      }
+    },
+    {
+      "Name": "brown-grid-no-size",
+      "Type": "GuiUniformGrid",
       "BackgroundRegion": "panel_brown"
     },
     {

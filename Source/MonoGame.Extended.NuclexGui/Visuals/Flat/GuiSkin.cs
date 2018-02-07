@@ -47,13 +47,15 @@ namespace MonoGame.Extended.NuclexGui.Visuals.Flat
             Center
         }
 
-        [JsonProperty("name")] public string Name;
+        [JsonProperty("name")]
+        public string Name;
 
         /// <summary>Regions that need to be drawn to render the frame</summary>
-        [JsonProperty("region")] public Region[] Regions;
+        [JsonProperty("region")]
+        public Region[] Regions;
 
-        [JsonProperty("text")]
         /// <summary>Locations where text can be drawn into the frame</summary>
+        [JsonProperty("text")]
         public Text[] Texts;
 
         /// <summary>Initializes a new frame</summary>

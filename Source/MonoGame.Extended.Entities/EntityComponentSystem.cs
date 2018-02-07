@@ -155,6 +155,7 @@ namespace MonoGame.Extended.Entities
                     return;
 
                 var entityTemplate = _dependencyResolver.Resolve<EntityTemplate>(typeInfo.AsType());
+                entityTemplate.Manager = this;
                 EntityManager.AddEntityTemplate(entityTemplateAttribute.Name, entityTemplate);
             }
         }

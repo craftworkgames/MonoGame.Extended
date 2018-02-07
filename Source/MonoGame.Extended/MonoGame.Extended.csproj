@@ -26,6 +26,8 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <LangVersion>6</LangVersion>
+    <DocumentationFile>bin\Debug\MonoGame.Extended.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Release\MonoGame.Extended.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Collections\Bag.cs" />
@@ -45,6 +48,7 @@
     <Compile Include="FloatHelper.cs" />
     <Compile Include="HslColor.cs" />
     <Compile Include="IRectangular.cs" />
+    <Compile Include="Point3.cs" />
     <Compile Include="Serialization\BaseTypeJsonConverter.cs" />
     <Compile Include="Serialization\HslColorJsonConverter.cs" />
     <Compile Include="Serialization\JsonReaderExtensions.cs" />
@@ -52,6 +56,7 @@
     <Compile Include="Serialization\ShortNameJsonContractResolver.cs" />
     <Compile Include="Serialization\NinePatchRegion2DJsonConverter.cs" />
     <Compile Include="Serialization\ThicknessJsonConverter.cs" />
+    <Compile Include="Size3.cs" />
     <Compile Include="Sprites\ISpriteBatchDrawable.cs" />
     <Compile Include="Thickness.cs" />
     <Compile Include="BoundingRectangle.cs" />

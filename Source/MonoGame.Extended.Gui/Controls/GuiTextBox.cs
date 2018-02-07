@@ -26,9 +26,8 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected override void OnTextChanged()
         {
-            if (SelectionStart > Text.Length)
+            if (!string.IsNullOrEmpty(Text) && SelectionStart > Text.Length)
                 SelectionStart = Text.Length;
-
             base.OnTextChanged();
         }
 
@@ -121,7 +120,7 @@ namespace MonoGame.Extended.Gui.Controls
             {
                 case Keys.Tab:
                 case Keys.Enter:
-                    return false;
+                    return true;
                 case Keys.Back:
                     if (Text.Length > 0)
                     {
