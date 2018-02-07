@@ -1,7 +1,7 @@
 ﻿namespace MonoGame.Extended.NuclexGui.Controls.Desktop
 {
     /// <summary>A window for hosting other controls</summary>
-    public class GuiWindowControl : GuiDraggableControl
+    public class GuiWindowControl : GuiResizableControl
     {
         /// <summary>Text in the title bar of the window</summary>
         public string Title;
@@ -19,6 +19,13 @@
         {
             get { return base.EnableDragging; }
             set { base.EnableDragging = value; }
+        }
+
+        /// <summary>Whether the window can be resized with the mouse</summary>
+        public new bool EnableResizing
+        {
+            get { return base.EnableResizing; }
+            set { base.EnableResizing = value; }
         }
 
         /// <summary>Closes the window</summary>

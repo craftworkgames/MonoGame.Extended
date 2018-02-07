@@ -124,7 +124,7 @@ namespace MonoGame.Extended.NuclexGui.Controls
         /// <summary>
         ///     Called when the mouse has left the control and is no longer hovering over it
         /// </summary>
-        internal void ProcessMouseLeave()
+        internal void ProcessMouseLeave(float x, float y)
         {
             // Because the mouse has left us, if we have a mouse-over control, it also
             // cannot be over one of our children Children leaving the parent container
@@ -136,9 +136,9 @@ namespace MonoGame.Extended.NuclexGui.Controls
             if (_mouseOverControl != null)
             {
                 if (_mouseOverControl != this)
-                    _mouseOverControl.ProcessMouseLeave();
+                    _mouseOverControl.ProcessMouseLeave(x, y);
                 else
-                    OnMouseLeft();
+                    OnMouseLeft(x, y);
 
                 _mouseOverControl = null;
             }
@@ -271,7 +271,7 @@ namespace MonoGame.Extended.NuclexGui.Controls
                 // Is the mouse over this child?
                 if (childBounds.Contains(new Point2(x, y)))
                 {
-                    SwitchMouseOverControl(control);
+                    SwitchMouseOverControl(control, x, y);
 
                     // Hand over the mouse movement data to the child control the mouse is
                     // hovering over. If this is the mouse-press control, do nothing because
@@ -293,7 +293,7 @@ namespace MonoGame.Extended.NuclexGui.Controls
                 (y >= 0.0f) && (y < size.Y)
             )
             {
-                SwitchMouseOverControl(this);
+                SwitchMouseOverControl(this, x, y);
 
                 // If we weren't pressed, we didn't deliver the out-of-order update to
                 // our implementation. Send our implementation a normal ordered update.
@@ -303,7 +303,7 @@ namespace MonoGame.Extended.NuclexGui.Controls
             else
             {
                 // redundant - our parent handles this - but convenient for unit tests
-                ProcessMouseLeave();
+                ProcessMouseLeave(x, y);
             }
         }
 
@@ -441,14 +441,14 @@ namespace MonoGame.Extended.NuclexGui.Controls
 
         /// <summary>Switches the mouse over control to a different control</summary>
         /// <param name="newMouseOverControl">New control the mouse is hovering over</param>
-        private void SwitchMouseOverControl(GuiControl newMouseOverControl)
+        private void SwitchMouseOverControl(GuiControl newMouseOverControl, float x, float y)
         {
             if (_mouseOverControl != newMouseOverControl)
             {
                 // Tell the previous mouse-over control that the mouse is no longer
                 // hovering over it
                 if (_mouseOverControl != null)
-                    _mouseOverControl.ProcessMouseLeave();
+                    _mouseOverControl.ProcessMouseLeave(x, y);
 
                 _mouseOverControl = newMouseOverControl;
 
