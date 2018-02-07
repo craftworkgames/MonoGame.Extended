@@ -67,6 +67,10 @@
       <Project>{35fd1f05-af04-469a-b37a-f9b36c34401c}</Project>
       <Name>MonoGame.Extended.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj">
+      <Project>{41724C52-3D50-45BB-81EB-3C8A247EAFD1}</Project>
+      <Name>MonoGame.Extended</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
