@@ -212,7 +212,7 @@ namespace MonoGame.Extended.TextureAtlases
             int index;
 
             if (_regionMap.TryGetValue(name, out index))
-                return (T) GetRegion(index);
+                return (T)GetRegion(index);
 
             throw new KeyNotFoundException(name);
         }
