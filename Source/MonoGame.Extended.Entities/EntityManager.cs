@@ -225,7 +225,6 @@ namespace MonoGame.Extended.Entities
         internal void MarkEntityToBeRemoved(Entity entity)
         {
             Debug.Assert(entity != null);
-            Debug.Assert(entity != null);
 
             entity.WaitingToBeRemoved = true;
             if (entity.WaitingToRefreshComponents)
