@@ -126,7 +126,6 @@ namespace MonoGame.Extended.Gui
                 DrawChildren(childControl.Controls, deltaSeconds);
         }
 
-        #region Input Event Methods
         private void OnPointerDown(GuiPointerEventArgs args)
         {
             if (ActiveScreen == null || !ActiveScreen.IsVisible)
@@ -213,15 +212,6 @@ namespace MonoGame.Extended.Gui
             if (ActiveScreen == null || !ActiveScreen.IsVisible)
                 return null;
 
-            //for(var i = Windows.Count - 1; i >= 0; i--)
-            //{
-            //    var window = Windows[i];
-            //    var control = FindControlAtPoint(window.Controls, point);
-
-            //    if (control != null)
-            //        return control;
-            //}
-
             return FindControlAtPoint(ActiveScreen.Controls, point);
         }
 
@@ -250,6 +240,5 @@ namespace MonoGame.Extended.Gui
 
             return topMostControl;
         }
-        #endregion
     }
 }
