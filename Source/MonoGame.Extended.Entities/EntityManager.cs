@@ -421,6 +421,9 @@ namespace MonoGame.Extended.Entities
             {
                 var components = _entitiesToComponentsBag[i];
 
+                if (components == null)
+                    continue;
+
                 object component;
 
                 if (components == null || !components.TryGetValue(entity, out component))
