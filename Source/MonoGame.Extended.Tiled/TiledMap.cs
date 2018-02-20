@@ -75,9 +75,10 @@ namespace MonoGame.Extended.Tiled
             _tilesets.Add(tileset);
         }
 
-        public void AddLayer(TiledMapLayer layer)
+        public void AddLayer(TiledMapLayer layer, bool nested = false)
         {
-            _layers.Add(layer);
+            if (!nested)
+                _layers.Add(layer);
             _layersByName.Add(layer.Name, layer);
 
             var imageLayer = layer as TiledMapImageLayer;

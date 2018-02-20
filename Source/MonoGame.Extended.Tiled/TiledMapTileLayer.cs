@@ -15,8 +15,8 @@ namespace MonoGame.Extended.Tiled
         public int TileHeight { get; }
         public ReadOnlyCollection<TiledMapTile> Tiles { get; }
 
-        internal TiledMapTileLayer(ContentReader input, TiledMap map) 
-            : base(input)
+        internal TiledMapTileLayer(ContentReader input, TiledMap map, TiledMapGroupLayer parent) 
+            : base(input, parent)
         {
             Width = input.ReadInt32();
             Height = input.ReadInt32();

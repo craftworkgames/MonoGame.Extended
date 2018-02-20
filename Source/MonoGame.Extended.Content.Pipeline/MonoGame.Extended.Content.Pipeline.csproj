@@ -103,6 +103,7 @@
     <Compile Include="Tiled\ContentWriterExtensions.cs" />
     <Compile Include="Tiled\TiledMapContent.cs" />
     <Compile Include="Tiled\TiledMapEllipseContent.cs" />
+    <Compile Include="Tiled\TiledMapGroupLayerContent.cs" />
     <Compile Include="Tiled\TiledMapImageContent.cs" />
     <Compile Include="Tiled\TiledMapImageLayerContent.cs" />
     <Compile Include="Tiled\TiledMapImporter.cs" />

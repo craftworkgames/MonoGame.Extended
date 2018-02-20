@@ -82,6 +82,16 @@ namespace MonoGame.Extended.Tiled.Graphics
             if (layer is TiledMapObjectLayer)
                 return;
 
+            if (layer is TiledMapGroupLayer)
+            {
+                var group = layer as TiledMapGroupLayer;
+
+                for (int i = 0; i < group.Layers.Count; i++)
+                    Draw(group.Layers[i], ref viewMatrix, ref projectionMatrix, effect, depth);
+
+                return;
+            }
+
             _worldMatrix.Translation = new Vector3(layer.OffsetX, layer.OffsetY, depth);
 
             var effect1 = effect ?? _defaultEffect;

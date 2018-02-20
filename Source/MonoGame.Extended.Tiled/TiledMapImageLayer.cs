@@ -10,8 +10,8 @@ namespace MonoGame.Extended.Tiled
         public Vector2 Position { get; set; }
         public Texture2D Texture { get; }
 
-        internal TiledMapImageLayer(ContentReader input)
-            : base(input)
+        internal TiledMapImageLayer(ContentReader input, TiledMapGroupLayer parent)
+            : base(input, parent)
         {
             var textureAssetName = input.GetRelativeAssetName(input.ReadString());
             Texture = input.ContentManager.Load<Texture2D>(textureAssetName);
