@@ -11,17 +11,17 @@ namespace MonoGame.Extended
     /// </summary>
     public static class ShapeExtensions
     {
-        private static Texture2D _texture;
+        private static Texture2D _whitePixelTexture;
 
         private static Texture2D GetTexture(SpriteBatch spriteBatch)
         {
-            if (_texture == null)
+            if (_whitePixelTexture == null)
             {
-                _texture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-                _texture.SetData(new[] {Color.White});
+                _whitePixelTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+                _whitePixelTexture.SetData(new[] {Color.White});
             }
 
-            return _texture;
+            return _whitePixelTexture;
         }
 
         /// <summary>

@@ -5,7 +5,6 @@ using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.ViewportAdapters;
 using System;
-using System.ComponentModel;
 
 namespace MonoGame.Extended.Gui
 {
