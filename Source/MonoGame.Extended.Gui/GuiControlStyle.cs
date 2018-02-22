@@ -9,7 +9,12 @@ namespace MonoGame.Extended.Gui
 {
     public class GuiControlStyle : IDictionary<string, object>
     {
-        private Dictionary<Guid, Dictionary<string, object>> _previousStates = new Dictionary<Guid, Dictionary<string, object>>();
+        private readonly Dictionary<Guid, Dictionary<string, object>> _previousStates = new Dictionary<Guid, Dictionary<string, object>>();
+
+        public GuiControlStyle()
+            : this(typeof(GuiElement))
+        {
+        }
 
         public GuiControlStyle(Type targetType)
             : this(targetType.FullName, targetType)

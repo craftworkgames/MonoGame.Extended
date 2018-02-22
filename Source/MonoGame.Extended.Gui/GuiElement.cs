@@ -13,6 +13,8 @@ namespace MonoGame.Extended.Gui
         public Vector2 Position { get; set; }
         public Vector2 Origin { get; set; }
         public Color Color { get; set; }
+        public Color BorderColor { get; set; } = Color.White;
+        public int BorderThickness { get; set; } = 0;
         public TextureRegion2D BackgroundRegion { get; set; }
 
         private Size2 _size;

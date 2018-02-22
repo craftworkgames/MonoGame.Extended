@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using MonoGame.Extended.BitmapFonts;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Collections;
@@ -22,7 +23,6 @@ namespace MonoGame.Extended.Gui
             NinePatches = new List<NinePatchRegion2D>();
             Styles = new KeyedCollection<string, GuiControlStyle>(s => s.Name ?? s.TargetType.Name);
         }
-
 
         [JsonProperty(Order = 0)]
         public string Name { get; set; }
@@ -52,7 +52,15 @@ namespace MonoGame.Extended.Gui
 
         public GuiControlStyle GetStyle(Type controlType)
         {
-            return Styles.FirstOrDefault(s => s.TargetType == controlType);
+            GuiControlStyle controlStyle = null;
+
+            while (controlStyle == null && controlType != null)
+            {
+                controlStyle = Styles.FirstOrDefault(s => s.TargetType == controlType);
+                controlType = controlType.GetTypeInfo().BaseType;
+            }
+
+            return controlStyle;
         }
 
         public static GuiSkin FromFile(ContentManager contentManager, string path, params Type[] customControlTypes)

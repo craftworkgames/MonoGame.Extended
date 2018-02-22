@@ -28,8 +28,9 @@
 
         protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
-            if (BackgroundRegion != null)
-                renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
+            base.DrawBackground(context, renderer, deltaSeconds);
+            //if (BackgroundRegion != null)
+            //    renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
         }
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.TextureAtlases;
-using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -278,6 +277,11 @@ namespace MonoGame.Extended.Gui.Controls
         {
             if (BackgroundRegion != null)
                 renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
+            else
+                renderer.FillRectangle(BoundingRectangle, Color);
+
+            if(BorderThickness != 0)
+                renderer.DrawRectangle(BoundingRectangle, BorderColor, BorderThickness);
         }
 
         protected virtual void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
