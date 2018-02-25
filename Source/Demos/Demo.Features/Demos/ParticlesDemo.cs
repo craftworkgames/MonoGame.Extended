@@ -71,7 +71,8 @@ namespace Demo.Features.Demos
             if (mouseState.LeftButton == ButtonState.Pressed)
                 _particleEffect.Trigger(new Vector2(p.X, p.Y));
 
-            _particleEffect.Trigger(new Vector2(400, 240));
+            //_particleEffect.Position = new Vector2(400, 240);
+            //_particleEffect.Trigger(new Vector2(400, 240));
 
             base.Update(gameTime);
         }
@@ -90,8 +91,9 @@ namespace Demo.Features.Demos
 
         private void ParticleInit(TextureRegion2D textureRegion)
         {
-            _particleEffect = new ParticleEffect
+            _particleEffect = new ParticleEffect(autoTrigger: false)
             {
+                Position = new Vector2(400, 240),
                 Emitters = new List<ParticleEmitter>
                 {
                     new ParticleEmitter(textureRegion, 500, TimeSpan.FromSeconds(2.5),

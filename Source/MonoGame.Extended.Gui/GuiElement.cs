@@ -7,6 +7,20 @@ using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui
 {
+    public class Binding
+    {
+        public Binding(object viewModel, string viewModelProperty, string viewProperty)
+        {
+            ViewModel = viewModel;
+            ViewModelProperty = viewModelProperty;
+            ViewProperty = viewProperty;
+        }
+
+        public object ViewModel { get; }
+        public string ViewModelProperty { get; }
+        public string ViewProperty { get; }
+    }
+
     public abstract class GuiElement
     {
         public string Name { get; set; }
@@ -15,7 +29,41 @@ namespace MonoGame.Extended.Gui
         public Color Color { get; set; }
         public Color BorderColor { get; set; } = Color.White;
         public int BorderThickness { get; set; } = 0;
-        public TextureRegion2D BackgroundRegion { get; set; }
+
+        private TextureRegion2D _backgroundRegion;
+        public TextureRegion2D BackgroundRegion
+        {
+            get { return _backgroundRegion; }
+            set
+            {
+                _backgroundRegion = value;
+
+                if (_backgroundRegion != null && Color == Color.Transparent)
+                    Color = Color.White;
+            }
+        }
+
+        public List<Binding> Bindings { get; } = new List<Binding>();
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            foreach (var binding in Bindings)
+            {
+                if (binding.ViewProperty == propertyName)
+                {
+                    var value = GetType()
+                        .GetTypeInfo()
+                        .GetDeclaredProperty(binding.ViewProperty)
+                        .GetValue(this);
+
+                    binding.ViewModel
+                        .GetType()
+                        .GetTypeInfo()
+                        .GetDeclaredProperty(binding.ViewModelProperty)
+                        .SetValue(binding.ViewModel, value);
+                }
+            }
+        }
 
         private Size2 _size;
         public Size2 Size
@@ -28,72 +76,7 @@ namespace MonoGame.Extended.Gui
             }
         }
 
-        private object _bindingContext;
-        public virtual object BindingContext
-        {
-            get { return _bindingContext; }
-            set
-            {
-                if (_bindingContext != value)
-                {
-                    _bindingContext = value;
-                    OnBindingContextChanged();
-                }
-            }
-        }
-
-        private void OnBindingContextChanged()
-        {
-            UpdateElementBindings();
-
-            var viewModel = BindingContext as INotifyPropertyChanged;
-
-            if (viewModel != null)
-            {
-                viewModel.PropertyChanged += (sender, args) =>
-                {
-                    UpdateElementBindings();
-                };
-            }
-        }
-
         protected virtual void OnSizeChanged() {}
-
-        private void UpdateElementBindings()
-        {
-            foreach (var binding in _bindings)
-            {
-                var sourceValue = _bindingContext
-                    .GetType()
-                    .GetRuntimeProperty(binding.ViewModelProperty)
-                    .GetValue(_bindingContext);
-
-                var targetProperty = binding.Element
-                    .GetType()
-                    .GetRuntimeProperty(binding.ViewProperty);
-
-                targetProperty.SetValue(binding.Element, sourceValue);
-            }
-        }
-
-        protected struct Binding
-        {
-            public GuiElement Element;
-            public string ViewProperty;
-            public string ViewModelProperty;
-        }
-
-        protected readonly List<Binding> _bindings = new List<Binding>();
-
-        public virtual void SetBinding(string viewProperty, string viewModelProperty)
-        {
-            _bindings.Add(new Binding
-            {
-                Element = this,
-                ViewProperty = viewProperty,
-                ViewModelProperty = viewModelProperty
-            });
-        }
 
         public float Width
         {

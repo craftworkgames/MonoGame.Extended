@@ -1,4 +1,7 @@
-﻿namespace MonoGame.Extended.Gui.Controls
+﻿
+using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Gui.Controls
 {
     public abstract class GuiLayoutControl : GuiControl
     {
@@ -12,6 +15,7 @@
         {
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Stretch;
+            Color = Color.Transparent;
         }
 
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
@@ -24,13 +28,6 @@
         protected static void PlaceControl(IGuiContext context, GuiControl control, float x, float y, float width, float height)
         {
             GuiLayoutHelper.PlaceControl(context, control, x, y, width, height);
-        }
-
-        protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
-        {
-            base.DrawBackground(context, renderer, deltaSeconds);
-            //if (BackgroundRegion != null)
-            //    renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
         }
     }
 }

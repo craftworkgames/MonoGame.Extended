@@ -13,7 +13,6 @@ namespace MonoGame.Extended.Gui
 
     public class GuiScreen : GuiElement<GuiSystem>, IDisposable
     {
-        private object _bindingContext;
         public GuiScreen(GuiSkin skin)
         {
             Skin = skin;
@@ -33,20 +32,6 @@ namespace MonoGame.Extended.Gui
 
         [JsonIgnore]
         public GuiWindowCollection Windows { get; }
-
-        [JsonIgnore]
-        public override object BindingContext
-        {
-            get
-            {
-                return _bindingContext;
-            }
-            set
-            {
-                _bindingContext = value;
-                foreach (var control in Controls) control.BindingContext = _bindingContext;
-            }
-        }
 
         public new float Width { get; private set; }
         public new float Height { get; private set; }
@@ -113,12 +98,6 @@ namespace MonoGame.Extended.Gui
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             renderer.DrawRectangle(BoundingRectangle, Color.Green);
-        }
-
-        public override void SetBinding(string viewProperty, string viewModelProperty)
-        {
-            foreach (var control in Controls)
-                control.SetBinding(viewProperty, viewModelProperty);
         }
 
         public static GuiScreen FromStream(ContentManager contentManager, Stream stream, params Type[] customControlTypes)

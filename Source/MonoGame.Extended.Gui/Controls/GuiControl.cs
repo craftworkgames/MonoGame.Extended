@@ -223,28 +223,6 @@ namespace MonoGame.Extended.Gui.Controls
             return Parent != null && (Parent == control || Parent.HasParent(control));
         }
 
-        public override void SetBinding(string viewProperty, string viewModelProperty)
-        {
-            SetBindingToRoot(new Binding
-            {
-                Element = this,
-                ViewProperty = viewProperty,
-                ViewModelProperty = viewModelProperty
-            });
-        }
-
-        private void SetBindingToRoot(Binding binding)
-        {
-            if (Parent != null)
-            {
-                Parent.SetBindingToRoot(binding);
-            }
-            else
-            {
-                _bindings.Add(binding);
-            }
-        }
-
         protected List<T> FindControls<T>()
             where T : GuiControl
         {
@@ -277,7 +255,7 @@ namespace MonoGame.Extended.Gui.Controls
         {
             if (BackgroundRegion != null)
                 renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
-            else
+            else if(Color != Color.Transparent)
                 renderer.FillRectangle(BoundingRectangle, Color);
 
             if(BorderThickness != 0)

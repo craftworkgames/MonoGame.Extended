@@ -27,6 +27,7 @@ namespace MonoGame.Extended.Gui.Controls
                     _isChecked = value;
                     CheckedStyle?.ApplyIf(this, _isChecked);
                     CheckStateChanged?.Invoke(this, EventArgs.Empty);
+                    OnPropertyChanged(nameof(IsChecked));
                 }
             }
         }
