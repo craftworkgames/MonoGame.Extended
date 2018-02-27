@@ -225,7 +225,6 @@ namespace MonoGame.Extended.Entities
         internal void MarkEntityToBeRemoved(Entity entity)
         {
             Debug.Assert(entity != null);
-            Debug.Assert(entity != null);
 
             entity.WaitingToBeRemoved = true;
             if (entity.WaitingToRefreshComponents)
@@ -401,7 +400,10 @@ namespace MonoGame.Extended.Entities
             {
                 var components = _componentTypeEntitiesToComponents[i];
 
-                Debug.Assert(components != null);
+                if (components == null)
+                    continue;
+
+                object component;
 
                 EntityComponent component;
                 if (!components.TryGetValue(entity, out component))

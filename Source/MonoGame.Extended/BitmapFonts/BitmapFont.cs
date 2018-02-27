@@ -187,7 +187,10 @@ namespace MonoGame.Extended.BitmapFonts
                 {
                     int amount;
                     if (_previousGlyph.Value.FontRegion.Kernings.TryGetValue(character, out amount))
+                    { 
                         _positionDelta.X += amount;
+                        _currentGlyph.Position.X += amount;
+                    }
                 }
 
                 _previousGlyph = _currentGlyph;
@@ -302,7 +305,10 @@ namespace MonoGame.Extended.BitmapFonts
                 {
                     int amount;
                     if (_previousGlyph.Value.FontRegion.Kernings.TryGetValue(character, out amount))
+                    { 
                         _positionDelta.X += amount;
+                        _currentGlyph.Position.X += amount;
+                    }
                 }
 
                 _previousGlyph = _currentGlyph;
