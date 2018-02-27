@@ -401,14 +401,11 @@ namespace MonoGame.Extended.Entities
                 if (components == null)
                     continue;
 
-                object component;
-
                 EntityComponent component;
                 if (!components.TryGetValue(entity, out component))
                     continue;
 
                 components.Remove(entity);
-                component.Return();
             }
         }
 
