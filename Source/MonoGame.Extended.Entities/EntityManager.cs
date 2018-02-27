@@ -337,14 +337,12 @@ namespace MonoGame.Extended.Entities
         {
             Debug.Assert(entity != null);
             Debug.Assert(componentType != null);
-            Debug.Assert(componentType.Index < _componentTypeEntitiesToComponents.Count);
 
             var components = _componentTypeEntitiesToComponents[componentType.Index];
 
-            Debug.Assert(components != null);
 
-            EntityComponent component;
-            components.TryGetValue(entity, out component);
+            EntityComponent component = null;
+            components?.TryGetValue(entity, out component);
             return component;
         }
 
