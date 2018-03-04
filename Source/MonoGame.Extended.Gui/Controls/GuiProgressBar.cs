@@ -31,6 +31,7 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public TextureRegion2D BarRegion { get; set; }
+        public Color BarColor { get; set; } = Color.White;
 
         public event EventHandler ProgressChanged;
 
@@ -40,7 +41,11 @@ namespace MonoGame.Extended.Gui.Controls
 
             var boundingRectangle = BoundingRectangle;
             var clippingRectangle = new Rectangle(boundingRectangle.X, boundingRectangle.Y, (int)(boundingRectangle.Width * Progress), boundingRectangle.Height);
-            renderer.DrawRegion(BarRegion, BoundingRectangle, Color, clippingRectangle);
+
+            if (BarRegion != null)
+                renderer.DrawRegion(BarRegion, BoundingRectangle, BarColor, clippingRectangle);
+            else
+                renderer.FillRectangle(BoundingRectangle, BarColor, clippingRectangle);
         }
     }
 }

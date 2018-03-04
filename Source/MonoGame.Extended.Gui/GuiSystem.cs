@@ -46,16 +46,26 @@ namespace MonoGame.Extended.Gui
             _keyboardListener = new KeyboardListener();
             _keyboardListener.KeyTyped += (sender, args) => PropagateDown(FocusedControl, x => x.OnKeyTyped(this, args));
             _keyboardListener.KeyPressed += (sender, args) => PropagateDown(FocusedControl, x => x.OnKeyPressed(this, args));
-
-            Screens = new GuiScreenCollection(this) { ItemAdded = InitializeScreen };
         }
-
-        public GuiScreenCollection Screens { get; }
 
         public GuiControl FocusedControl { get; private set; }
         public GuiControl HoveredControl { get; private set; }
 
-        public GuiScreen ActiveScreen => Screens.LastOrDefault();
+        private GuiScreen _activeScreen;
+        public GuiScreen ActiveScreen
+        {
+            get { return _activeScreen; }
+            set
+            {
+                if (_activeScreen != value)
+                {
+                    _activeScreen = value;
+
+                    if(_activeScreen != null)
+                        InitializeScreen(_activeScreen);
+                }
+            }
+        }
 
         public Rectangle BoundingRectangle => _viewportAdapter.BoundingRectangle;
 
@@ -70,17 +80,17 @@ namespace MonoGame.Extended.Gui
 
         public void Update(GameTime gameTime)
         {
+            if(ActiveScreen == null)
+                return;
+
             _touchListener.Update(gameTime);
             _mouseListener.Update(gameTime);
             _keyboardListener.Update(gameTime);
 
-            foreach (var screen in Screens)
-            {
-                if (screen.IsLayoutRequired)
-                    screen.Layout(this, BoundingRectangle);
+            if (ActiveScreen.IsLayoutRequired)
+                ActiveScreen.Layout(this, BoundingRectangle);
 
-                screen.Update(gameTime);
-            }
+            ActiveScreen.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime)
@@ -89,13 +99,10 @@ namespace MonoGame.Extended.Gui
 
             _renderer.Begin();
 
-            foreach (var screen in Screens)
+            if (ActiveScreen != null && ActiveScreen.IsVisible)
             {
-                if (screen.IsVisible)
-                {
-                    DrawChildren(screen.Controls, deltaSeconds);
-                    DrawWindows(screen.Windows, deltaSeconds);
-                }
+                DrawChildren(ActiveScreen.Controls, deltaSeconds);
+                DrawWindows(ActiveScreen.Windows, deltaSeconds);
             }
 
             var cursor = ActiveScreen?.Skin?.Cursor;

@@ -118,5 +118,58 @@ namespace MonoGame.Extended.Gui
 
             return control;
         }
+
+        public static GuiSkin FromDefault(BitmapFont font)
+        {
+            var skin = new GuiSkin
+            {
+                Fonts = { font },
+                Styles =
+                {
+                    new GuiControlStyle(typeof(GuiControl))
+                    {
+                        {nameof(GuiControl.Color), new Color(51, 51, 55)},
+                        {nameof(GuiControl.BorderColor), new Color(67, 67, 70)},
+                        {nameof(GuiControl.BorderThickness), 1},
+                        {nameof(GuiControl.TextColor), new Color(241, 241, 241)},
+                        {nameof(GuiStackPanel.Padding), new Thickness(5)}
+                    },
+                    new GuiControlStyle(typeof(GuiLabel))
+                    {
+                        {nameof(GuiControl.Color), Color.Transparent},
+                        {nameof(GuiControl.TextColor), Color.White}
+                    },
+                    new GuiControlStyle(typeof(GuiTextBox))
+                    {
+                        {nameof(GuiControl.Color), Color.LightGray},
+                        {nameof(GuiControl.TextColor), Color.Black},
+                        {nameof(GuiControl.BorderColor), new Color(67, 67, 70)},
+                    },
+                    new GuiControlStyle(typeof(GuiButton))
+                    {
+                        {nameof(GuiControl.Color), new Color(51, 51, 55)},
+                        {nameof(GuiControl.BorderColor), new Color(67, 67, 70)},
+                        {nameof(GuiControl.BorderThickness), 1},
+                        {nameof(GuiControl.TextColor), new Color(241, 241, 241)},
+
+                        {
+                            nameof(GuiControl.HoverStyle),
+                            new GuiControlStyle
+                            {
+                                {nameof(GuiButton.Color), new Color(62, 62, 64)}
+                            }
+                        },
+                        {
+                            nameof(GuiButton.PressedStyle),
+                            new GuiControlStyle
+                            {
+                                {nameof(GuiButton.Color), new Color(0, 122, 204)}
+                            }
+                        }
+                    }
+                }
+            };
+            return skin;
+        }
     }
 }
