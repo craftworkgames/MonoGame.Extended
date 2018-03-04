@@ -10,11 +10,6 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public GuiProgressBar(GuiSkin skin) 
-            : base(skin)
-        {
-        }
-
         private float _progress = 1.0f;
         public float Progress
         {

@@ -6,12 +6,6 @@ namespace MonoGame.Extended.Gui.Controls
     public abstract class GuiLayoutControl : GuiControl
     {
         protected GuiLayoutControl()
-            : this(null)
-        {
-        }
-
-        protected GuiLayoutControl(GuiSkin skin) 
-            : base(skin)
         {
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Stretch;

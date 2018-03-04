@@ -9,11 +9,6 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public GuiCheckBox(GuiSkin skin) 
-            : base(skin)
-        {
-        }
-
         public event EventHandler CheckStateChanged;
 
         private bool _isChecked;

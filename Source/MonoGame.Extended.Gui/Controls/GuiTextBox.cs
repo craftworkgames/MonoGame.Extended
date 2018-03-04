@@ -9,13 +9,7 @@ namespace MonoGame.Extended.Gui.Controls
 {
     public class GuiTextBox : GuiControl
     {
-        public GuiTextBox()
-            : this(null)
-        {
-        }
-
-        public GuiTextBox(GuiSkin skin, string text = null)
-            : base(skin)
+        public GuiTextBox(string text = null)
         {
             Text = text ?? string.Empty;
         }

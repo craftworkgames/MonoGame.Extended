@@ -13,13 +13,7 @@ namespace MonoGame.Extended.Gui.Controls
     public abstract class GuiControl : GuiElement<GuiControl>, IMovable, ISizable, IRectangular
     {
         protected GuiControl()
-           : this(skin: null)
         {
-        }
-
-        protected GuiControl(GuiSkin skin)
-        {
-            Skin = skin;
             Color = Color.White;
             TextColor = Color.White;
             IsEnabled = true;
@@ -30,13 +24,23 @@ namespace MonoGame.Extended.Gui.Controls
                 ItemRemoved = x => UpdateRootIsLayoutRequired()
             };
             Origin = Vector2.Zero;
-
-            var style = skin?.GetStyle(GetType());
-            style?.Apply(this);
         }
 
+        private GuiSkin _skin;
+
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public GuiSkin Skin { get; }
+        public GuiSkin Skin
+        {
+            get { return _skin; }
+            set
+            {
+                if (_skin != value)
+                {
+                    _skin = value;
+                    _skin?.GetStyle(GetType())?.Apply(this);
+                }
+            }
+        }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Thickness Margin { get; set; }

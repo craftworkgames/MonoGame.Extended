@@ -10,11 +10,6 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public GuiForm(GuiSkin skin)
-            : base(skin)
-        {
-        }
-
         public override bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
         {
             if (args.Key == Keys.Tab)

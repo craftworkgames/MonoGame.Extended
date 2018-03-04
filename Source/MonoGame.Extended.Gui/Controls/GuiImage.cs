@@ -8,13 +8,7 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        public GuiImage(GuiSkin skin) 
-            : base(skin)
-        {
-        }
-
-        public GuiImage(GuiSkin skin, TextureRegion2D image)
-            : base(skin)
+        public GuiImage(TextureRegion2D image)
         {
             BackgroundRegion = image;
         }

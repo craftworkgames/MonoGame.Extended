@@ -8,15 +8,9 @@ namespace MonoGame.Extended.Gui.Controls
     public class GuiComboBox : GuiItemsControl
     {
         public GuiComboBox()
-            : this(null)
         {
         }
-
-        public GuiComboBox(GuiSkin skin)
-            : base(skin)
-        {
-        }
-
+        
         public bool IsOpen { get; set; }
         public TextureRegion2D DropDownRegion { get; set; }
         public Color DropDownColor { get; set; } = Color.White;

@@ -6,12 +6,6 @@ namespace MonoGame.Extended.Gui.Controls
     public class GuiUniformGrid : GuiLayoutControl
     {
         public GuiUniformGrid()
-            : base(null)
-        {
-        }
-
-        public GuiUniformGrid(GuiSkin skin) 
-            : base(skin)
         {
         }
 

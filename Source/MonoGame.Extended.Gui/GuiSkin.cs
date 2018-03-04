@@ -151,7 +151,6 @@ namespace MonoGame.Extended.Gui
                         {nameof(GuiControl.BorderColor), new Color(67, 67, 70)},
                         {nameof(GuiControl.BorderThickness), 1},
                         {nameof(GuiControl.TextColor), new Color(241, 241, 241)},
-
                         {
                             nameof(GuiControl.HoverStyle),
                             new GuiControlStyle

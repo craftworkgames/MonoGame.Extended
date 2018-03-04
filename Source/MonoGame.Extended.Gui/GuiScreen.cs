@@ -13,9 +13,8 @@ namespace MonoGame.Extended.Gui
 
     public class GuiScreen : GuiElement<GuiSystem>, IDisposable
     {
-        public GuiScreen(GuiSkin skin)
+        public GuiScreen()
         {
-            Skin = skin;
             Controls = new GuiControlCollection { ItemAdded = c => _isLayoutRequired = true };
             Windows = new GuiWindowCollection(this) { ItemAdded = w => _isLayoutRequired = true };
         }
@@ -25,9 +24,6 @@ namespace MonoGame.Extended.Gui
         }
 
         [JsonProperty(Order = 1)]
-        public GuiSkin Skin { get; set; }
-
-        [JsonProperty(Order = 2)]
         public GuiControlCollection Controls { get; set; }
 
         [JsonIgnore]

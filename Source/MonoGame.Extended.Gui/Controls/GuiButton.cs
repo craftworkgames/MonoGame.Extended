@@ -7,12 +7,6 @@ namespace MonoGame.Extended.Gui.Controls
     public class GuiButton : GuiControl
     {
         public GuiButton()
-            : base(null)
-        {
-        }
-
-        public GuiButton(GuiSkin skin)
-            : base(skin)
         {
         }
 

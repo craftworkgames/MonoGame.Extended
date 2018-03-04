@@ -6,8 +6,7 @@
         {
         }
 
-        public GuiLabel(GuiSkin skin, string text = null) 
-            : base(skin)
+        public GuiLabel(string text = null) 
         {
             Text = text ?? string.Empty;
         }

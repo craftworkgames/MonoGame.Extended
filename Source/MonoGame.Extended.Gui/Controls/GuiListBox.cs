@@ -6,15 +6,9 @@ namespace MonoGame.Extended.Gui.Controls
     public class GuiListBox : GuiItemsControl
     {
         public GuiListBox()
-            : this(null)
         {
         }
-
-        public GuiListBox(GuiSkin skin)
-            : base(skin)
-        {
-        }
-
+        
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
         {
             var width = 0f;

@@ -11,7 +11,6 @@ namespace MonoGame.Extended.Gui
             Parent = parent;
         }
 
-        public GuiSkin Skin => Parent.Skin;
         public GuiControlCollection Controls { get; } = new GuiControlCollection();
 
         public void Show()

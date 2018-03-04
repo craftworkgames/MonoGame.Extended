@@ -5,15 +5,9 @@ namespace MonoGame.Extended.Gui.Controls
     public class GuiCanvas : GuiLayoutControl
     {
         public GuiCanvas()
-            : base(null)
         {
         }
-
-        public GuiCanvas(GuiSkin skin) 
-            : base(skin)
-        {
-        }
-
+        
         public override void Layout(IGuiContext context, RectangleF rectangle)
         {
             foreach (var control in Controls)

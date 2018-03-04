@@ -10,12 +10,6 @@ namespace MonoGame.Extended.Gui.Controls
     public abstract class GuiItemsControl : GuiControl
     {
         protected GuiItemsControl()
-            : this(null)
-        {
-        }
-
-        protected GuiItemsControl(GuiSkin skin) 
-            : base(skin)
         {
         }
 

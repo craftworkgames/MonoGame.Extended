@@ -5,12 +5,6 @@ namespace MonoGame.Extended.Gui.Controls
     public class GuiStackPanel : GuiLayoutControl
     {
         public GuiStackPanel()
-            : this(null)
-        {
-        }
-
-        public GuiStackPanel(GuiSkin skin) 
-            : base(skin)
         {
             HorizontalAlignment = HorizontalAlignment.Centre;
             VerticalAlignment = VerticalAlignment.Centre;

@@ -27,7 +27,7 @@ namespace MonoGame.Extended.Gui
 
         private GuiControl _preFocusedControl;
 
-        public GuiSystem(ViewportAdapter viewportAdapter, IGuiRenderer renderer)
+        public GuiSystem(ViewportAdapter viewportAdapter, IGuiRenderer renderer, GuiSkin defaultSkin)
         {
             _viewportAdapter = viewportAdapter;
             _renderer = renderer;
@@ -46,6 +46,8 @@ namespace MonoGame.Extended.Gui
             _keyboardListener = new KeyboardListener();
             _keyboardListener.KeyTyped += (sender, args) => PropagateDown(FocusedControl, x => x.OnKeyTyped(this, args));
             _keyboardListener.KeyPressed += (sender, args) => PropagateDown(FocusedControl, x => x.OnKeyPressed(this, args));
+
+            DefaultSkin = defaultSkin;
         }
 
         public GuiControl FocusedControl { get; private set; }
@@ -71,8 +73,10 @@ namespace MonoGame.Extended.Gui
 
         public Vector2 CursorPosition { get; set; }
 
-        public BitmapFont DefaultFont => ActiveScreen?.Skin?.DefaultFont;
+        public GuiSkin DefaultSkin { get; }
 
+        public BitmapFont DefaultFont => DefaultSkin?.DefaultFont;
+        
         private void InitializeScreen(GuiScreen screen)
         {
             screen.Layout(this, BoundingRectangle);
@@ -105,7 +109,7 @@ namespace MonoGame.Extended.Gui
                 DrawWindows(ActiveScreen.Windows, deltaSeconds);
             }
 
-            var cursor = ActiveScreen?.Skin?.Cursor;
+            var cursor = DefaultSkin?.Cursor;
 
             if (cursor != null)
                 _renderer.DrawRegion(cursor.TextureRegion, CursorPosition, cursor.Color);
@@ -125,7 +129,12 @@ namespace MonoGame.Extended.Gui
         private void DrawChildren(GuiControlCollection controls, float deltaSeconds)
         {
             foreach (var control in controls.Where(c => c.IsVisible))
+            {
+                if(control.Skin == null)
+                    control.Skin = DefaultSkin;
+
                 control.Draw(this, _renderer, deltaSeconds);
+            }
 
             foreach (var childControl in controls.Where(c => c.IsVisible))
                 DrawChildren(childControl.Controls, deltaSeconds);
@@ -169,6 +178,7 @@ namespace MonoGame.Extended.Gui
             {
                 if (HoveredControl != null && (hoveredControl == null || !hoveredControl.HasParent(HoveredControl)))
                     PropagateDown(HoveredControl, x => x.OnPointerLeave(this, args));
+
                 HoveredControl = hoveredControl;
                 PropagateDown(HoveredControl, x => x.OnPointerEnter(this, args));
             }
@@ -204,7 +214,7 @@ namespace MonoGame.Extended.Gui
         /// </summary>
         /// <param name="control">The control we want to check against</param>
         /// <param name="predicate">A function to check if the propagation should resume, if returns false it will continue down the tree.</param>
-        private void PropagateDown(GuiControl control, Func<GuiControl, bool> predicate)
+        private static void PropagateDown(GuiControl control, Func<GuiControl, bool> predicate)
         {
             while(control != null && predicate(control))
             {

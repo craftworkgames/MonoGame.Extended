@@ -6,12 +6,6 @@ namespace MonoGame.Extended.Gui.Controls
     public class GuiDialog : GuiLayoutControl
     {
         public GuiDialog()
-            : this(null)
-        {
-        }
-        
-        public GuiDialog(GuiSkin skin) 
-            : base(skin)
         {
             HorizontalAlignment = HorizontalAlignment.Centre;
             VerticalAlignment = VerticalAlignment.Centre;
