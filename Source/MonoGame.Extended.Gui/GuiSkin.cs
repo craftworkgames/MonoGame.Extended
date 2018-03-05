@@ -134,6 +134,15 @@ namespace MonoGame.Extended.Gui
                         {nameof(GuiControl.TextColor), new Color(241, 241, 241)},
                         {nameof(GuiStackPanel.Padding), new Thickness(5)}
                     },
+                    new GuiControlStyle(typeof(GuiComboBox))
+                    {
+                        {nameof(GuiControl.Color), new Color(51, 51, 55)},
+                        {nameof(GuiControl.BorderColor), new Color(67, 67, 70)},
+                        {nameof(GuiControl.BorderThickness), 1},
+                        {nameof(GuiControl.TextColor), new Color(241, 241, 241)},
+                        {nameof(GuiStackPanel.Padding), new Thickness(5)},
+                        {nameof(GuiComboBox.DropDownColor) , new Color(51, 51, 55)}
+                    },
                     new GuiControlStyle(typeof(GuiLabel))
                     {
                         {nameof(GuiControl.Color), Color.Transparent},
