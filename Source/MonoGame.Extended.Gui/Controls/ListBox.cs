@@ -1,9 +1,8 @@
-﻿using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public class ListBox : ItemsControl
+    public class ListBox : SelectorControl
     {
         public ListBox()
         {

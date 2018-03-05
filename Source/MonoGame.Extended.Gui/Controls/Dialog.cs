@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -27,7 +26,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
         {
-            var sizes = Controls.Select(control => LayoutHelper.GetSizeWithMargins(control, context, availableSize)).ToArray();
+            var sizes = Items.Select(control => LayoutHelper.GetSizeWithMargins(control, context, availableSize)).ToArray();
             var width = sizes.Max(s => s.Width);
             var height = sizes.Max(s => s.Height);
             return new Size2(width, height) + Padding.Size;
@@ -35,7 +34,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         public override void Layout(IGuiContext context, RectangleF rectangle)
         {
-            foreach (var control in Controls)
+            foreach (var control in Items)
                 PlaceControl(context, control, Padding.Left, Padding.Top, Width - Padding.Size.Width, Height - Padding.Size.Height);
         }
     }

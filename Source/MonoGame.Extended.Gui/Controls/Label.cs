@@ -1,6 +1,6 @@
 ﻿namespace MonoGame.Extended.Gui.Controls
 {
-    public class Label : Control
+    public class Label : ContentControl
     {
         public Label()
         {

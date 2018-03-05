@@ -5,8 +5,6 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -18,11 +16,7 @@ namespace MonoGame.Extended.Gui.Controls
             TextColor = Color.White;
             IsEnabled = true;
             IsVisible = true;
-            Controls = new ControlCollection(this)
-            {
-                ItemAdded = x => UpdateRootIsLayoutRequired(),
-                ItemRemoved = x => UpdateRootIsLayoutRequired()
-            };
+
             Origin = Vector2.Zero;
         }
 
@@ -71,9 +65,8 @@ namespace MonoGame.Extended.Gui.Controls
         public BitmapFont Font { get; set; }
         public Color TextColor { get; set; }
         public Vector2 TextOffset { get; set; }
-        public ControlCollection Controls { get; }
-        public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Centre;
-        public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Centre;
+        public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Stretch;
+        public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Stretch;
         public HorizontalAlignment HorizontalTextAlignment { get; set; } = HorizontalAlignment.Centre;
         public VerticalAlignment VerticalTextAlignment { get; set; } = VerticalAlignment.Centre;
 
@@ -227,23 +220,7 @@ namespace MonoGame.Extended.Gui.Controls
             return Parent != null && (Parent == control || Parent.HasParent(control));
         }
 
-        protected List<T> FindControls<T>()
-            where T : Control
-        {
-            return FindControls<T>(Controls);
-        }
 
-        protected List<T> FindControls<T>(ControlCollection controls)
-            where T : Control
-        {
-            var results = new List<T>();
-            foreach (var control in controls)
-            {
-                if (control is T) results.Add(control as T);
-                if (control.Controls.Any()) results = results.Concat(FindControls<T>(control.Controls)).ToList();
-            }
-            return results;
-        }
 
         protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Rectangle? clippingRectangle = null)
         {
@@ -298,18 +275,7 @@ namespace MonoGame.Extended.Gui.Controls
             return blockText;
         }
 
-        /// <summary>
-        /// Recursive Method to find the root element and update the IsLayoutRequired property.  So that the screen knows that something in the controls
-        /// have had a change to their layout.  Also, it will reset the size of the element so that it can get a clean build so that the background patches
-        /// can be rendered with the updates.
-        /// </summary>
-        private void UpdateRootIsLayoutRequired()
-        {
-            if (Parent == null) IsLayoutRequired = true;
-            else Parent.UpdateRootIsLayoutRequired();
 
-            Size = Size2.Empty;
-        }
 
         protected struct TextInfo
         {

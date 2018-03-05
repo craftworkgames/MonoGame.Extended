@@ -5,7 +5,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public class ComboBox : ItemsControl
+    public class ComboBox : SelectorControl
     {
         public ComboBox()
         {
@@ -69,7 +69,10 @@ namespace MonoGame.Extended.Gui.Controls
                 if (DropDownRegion != null)
                     renderer.DrawRegion(DropDownRegion, dropDownRectangle, DropDownColor);
                 else
+                {
                     renderer.FillRectangle(dropDownRectangle, DropDownColor);
+                    renderer.DrawRectangle(dropDownRectangle, BorderColor);
+                }
             }
         }
 

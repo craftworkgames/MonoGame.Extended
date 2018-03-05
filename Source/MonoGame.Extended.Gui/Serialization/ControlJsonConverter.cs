@@ -25,18 +25,18 @@ namespace MonoGame.Extended.Gui.Serialization
             var skin = _guiSkinService.Skin;
             var style = (ControlStyle) _styleConverter.ReadJson(reader, objectType, existingValue, serializer);
             var template = GetControlTemplate(style);
-            var control = skin.Create(style.TargetType, template);
+            var control = skin.Create(style.TargetType, template) as ItemsControl;
 
             object childControls;
 
-            if (style.TryGetValue(nameof(Control.Controls), out childControls))
+            if (style.TryGetValue(nameof(ItemsControl.Items), out childControls))
             {
                 var controlCollection = childControls as ControlCollection;
 
                 if (controlCollection != null)
                 {
                     foreach (var child in controlCollection)
-                        control.Controls.Add(child);
+                        control.Items.Add(child);
                 }
             }
 

@@ -137,7 +137,12 @@ namespace MonoGame.Extended.Gui
             }
 
             foreach (var childControl in controls.Where(c => c.IsVisible))
-                DrawChildren(childControl.Controls, deltaSeconds);
+            {
+                var itemsControl = childControl as ItemsControl;
+
+                if(itemsControl != null)
+                    DrawChildren(itemsControl.Items, deltaSeconds);
+            }
         }
 
         private void OnPointerDown(PointerEventArgs args)
@@ -243,9 +248,11 @@ namespace MonoGame.Extended.Gui
                     if (topMostControl == null && control.Contains(this, point))
                         topMostControl = control;
 
-                    if (control.Controls.Any())
+                    var itemsControl = control as ItemsControl;
+
+                    if (itemsControl != null && itemsControl.Items.Any())
                     {
-                        var child = FindControlAtPoint(control.Controls, point);
+                        var child = FindControlAtPoint(itemsControl.Items, point);
 
                         if (child != null)
                             topMostControl = child;

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public abstract class LayoutControl : Control
+    public abstract class LayoutControl : ItemsControl
     {
         protected LayoutControl()
         {

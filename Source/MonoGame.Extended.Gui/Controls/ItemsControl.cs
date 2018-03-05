@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Input.InputListeners;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -11,161 +7,53 @@ namespace MonoGame.Extended.Gui.Controls
     {
         protected ItemsControl()
         {
-        }
-
-        private int _selectedIndex = -1;
-        public virtual int SelectedIndex
-        {
-            get { return _selectedIndex; }
-            set
+            Items = new ControlCollection(this)
             {
-                if (_selectedIndex != value)
-                {
-                    _selectedIndex = value;
-                    SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
-                }
-            }
+                ItemAdded = x => UpdateRootIsLayoutRequired(),
+                ItemRemoved = x => UpdateRootIsLayoutRequired()
+            };
         }
 
-        public virtual List<object> Items { get; } = new List<object>();
-        public virtual Color SelectedTextColor { get; set; } = Color.White;
-        public virtual Color SelectedItemColor { get; set; } = Color.CornflowerBlue;
-        public virtual Thickness ItemPadding { get; set; } = new Thickness(4, 2);
-        public virtual string NameProperty { get; set; }
+        public ControlCollection Items { get; }
 
-        public event EventHandler SelectedIndexChanged;
-
-        protected int FirstIndex;
-
-        public object SelectedItem
+        /// <summary>
+        /// Recursive Method to find the root element and update the IsLayoutRequired property.  So that the screen knows that something in the controls
+        /// have had a change to their layout.  Also, it will reset the size of the element so that it can get a clean build so that the background patches
+        /// can be rendered with the updates.
+        /// </summary>
+        private void UpdateRootIsLayoutRequired()
         {
-            get { return SelectedIndex >= 0 && SelectedIndex <= Items.Count - 1 ? Items[SelectedIndex] : null; }
-            set { SelectedIndex = Items.IndexOf(value); }
+            var parent = Parent as ItemsControl;
+
+            if (parent == null)
+                IsLayoutRequired = true;
+            else
+                parent.UpdateRootIsLayoutRequired();
+
+            Size = Size2.Empty;
         }
 
-        public override bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
+        protected List<T> FindControls<T>()
+            where T : Control
         {
-            if (args.Key == Keys.Down) ScrollDown();
-            if (args.Key == Keys.Up) ScrollUp();
-
-            return base.OnKeyPressed(context, args);
+            return FindControls<T>(Items);
         }
 
-        public override void OnScrolled(int delta)
+        protected List<T> FindControls<T>(ControlCollection controls)
+            where T : Control
         {
-            base.OnScrolled(delta);
-
-            if (delta < 0) ScrollDown();
-            if (delta > 0) ScrollUp();
-        }
-
-        private void ScrollDown()
-        {
-            if (SelectedIndex < Items.Count - 1)
-                SelectedIndex++;
-        }
-
-        private void ScrollUp()
-        {
-            if (SelectedIndex > 0)
-                SelectedIndex--;
-        }
-
-        public override bool OnPointerDown(IGuiContext context, PointerEventArgs args)
-        {
-            var contentRectangle = GetContentRectangle(context);
-
-            for (var i = FirstIndex; i < Items.Count; i++)
+            var results = new List<T>();
+            foreach (var control in controls)
             {
-                var itemRectangle = GetItemRectangle(context, i - FirstIndex, contentRectangle);
+                if (control is T)
+                    results.Add(control as T);
 
-                if (itemRectangle.Contains(args.Position))
-                {
-                    SelectedIndex = i;
-                    OnItemClicked(context, args);
-                    break;
-                }
+                var itemsControl = control as ItemsControl;
+
+                if (itemsControl != null && itemsControl.Items.Any())
+                    results = results.Concat(FindControls<T>(itemsControl.Items)).ToList();
             }
-
-            return base.OnPointerDown(context, args);
-        }
-
-        protected virtual void OnItemClicked(IGuiContext context, PointerEventArgs args) { }
-
-        protected TextInfo GetItemTextInfo(IGuiContext context, Rectangle itemRectangle, object item, Rectangle? clippingRectangle)
-        {
-            var textRectangle = new Rectangle(itemRectangle.X + ItemPadding.Left, itemRectangle.Y + ItemPadding.Top,
-                itemRectangle.Width - ItemPadding.Right, itemRectangle.Height - ItemPadding.Bottom);
-            var itemTextInfo = GetTextInfo(context, GetItemName(item), textRectangle, HorizontalAlignment.Left, VerticalAlignment.Top, clippingRectangle);
-            return itemTextInfo;
-        }
-
-        private string GetItemName(object item)
-        {
-            if (item != null)
-            {
-                if (NameProperty != null)
-                {
-                    return item.GetType()
-                        .GetRuntimeProperty(NameProperty)
-                        .GetValue(item)
-                        ?.ToString() ?? string.Empty;
-                }
-
-                return item.ToString();
-            }
-
-            return string.Empty;
-        }
-
-        protected Rectangle GetItemRectangle(IGuiContext context, int index, Rectangle contentRectangle)
-        {
-            var font = Font ?? context.DefaultFont;
-            var itemHeight = font.LineHeight + ItemPadding.Top + ItemPadding.Bottom;
-            return new Rectangle(contentRectangle.X, contentRectangle.Y + itemHeight * index, contentRectangle.Width, itemHeight);
-        }
-
-        protected void ScrollIntoView(IGuiContext context)
-        {
-            var contentRectangle = GetContentRectangle(context);
-            var selectedItemRectangle = GetItemRectangle(context, SelectedIndex - FirstIndex, contentRectangle);
-
-            if (selectedItemRectangle.Bottom > ClippingRectangle.Bottom)
-                FirstIndex++;
-
-            if (selectedItemRectangle.Top < ClippingRectangle.Top && FirstIndex > 0)
-                FirstIndex--;
-        }
-
-        protected Size2 GetItemSize(IGuiContext context, Size2 availableSize, object item)
-        {
-            var text = GetItemName(item);
-            var textInfo = GetTextInfo(context, text, new Rectangle(0, 0, (int)availableSize.Width, (int)availableSize.Height), HorizontalAlignment.Left, VerticalAlignment.Top);
-            var itemWidth = textInfo.Size.X + ItemPadding.Size.Height;
-            var itemHeight = textInfo.Size.Y + ItemPadding.Size.Width;
-
-            return new Size2(itemWidth, itemHeight);
-        }
-
-        protected abstract Rectangle GetContentRectangle(IGuiContext context);
-
-        protected void DrawItemList(IGuiContext context, IGuiRenderer renderer)
-        {
-            var contentRectangle = GetContentRectangle(context);
-
-            for (var i = FirstIndex; i < Items.Count; i++)
-            {
-                var item = Items[i];
-                var itemRectangle = GetItemRectangle(context, i - FirstIndex, contentRectangle);
-                var itemTextInfo = GetItemTextInfo(context, itemRectangle, item, contentRectangle);
-                var textColor = i == SelectedIndex ? SelectedTextColor : itemTextInfo.Color;
-
-                if (SelectedIndex == i)
-                    renderer.FillRectangle(itemRectangle, SelectedItemColor, contentRectangle);
-
-                renderer.DrawText(itemTextInfo.Font, itemTextInfo.Text, itemTextInfo.Position + TextOffset, textColor,
-                    itemTextInfo.ClippingRectangle);
-            }
+            return results;
         }
     }
 }

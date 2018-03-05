@@ -1,9 +1,9 @@
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Input.InputListeners;
 using System.Collections.Generic;
-using MonoGame.Extended.BitmapFonts;
+using System.Linq;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -143,6 +143,7 @@ namespace MonoGame.Extended.Gui.Controls
                         var start = MathHelper.Min(_selectionIndexes.Last(), _selectionIndexes.Peek());
                         var end = MathHelper.Max(_selectionIndexes.Last(), _selectionIndexes.Peek());
                         Text = Text.Remove(start, end - start);
+                        SelectionStart = 0; // yeah, nah.
 
                         _selectionIndexes.Clear();
                     }

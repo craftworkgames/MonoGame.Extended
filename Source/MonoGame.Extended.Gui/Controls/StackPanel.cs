@@ -6,8 +6,6 @@ namespace MonoGame.Extended.Gui.Controls
     {
         public StackPanel()
         {
-            HorizontalAlignment = HorizontalAlignment.Centre;
-            VerticalAlignment = VerticalAlignment.Centre;
         }
 
         public Orientation Orientation { get; set; } = Orientation.Vertical;
@@ -19,7 +17,7 @@ namespace MonoGame.Extended.Gui.Controls
             var width = 0f;
             var height = 0f;
 
-            foreach (var control in Controls)
+            foreach (var control in Items)
             {
                 var desiredSize = LayoutHelper.GetSizeWithMargins(control, context, availableSize);
 
@@ -39,8 +37,8 @@ namespace MonoGame.Extended.Gui.Controls
             }
 
 
-            width += Padding.Left + Padding.Right + (Orientation == Orientation.Horizontal ? (Controls.Count - 1) * Spacing : 0);
-            height += Padding.Top + Padding.Bottom + (Orientation == Orientation.Vertical ? (Controls.Count - 1) * Spacing : 0);
+            width += Padding.Left + Padding.Right + (Orientation == Orientation.Horizontal ? (Items.Count - 1) * Spacing : 0);
+            height += Padding.Top + Padding.Bottom + (Orientation == Orientation.Vertical ? (Items.Count - 1) * Spacing : 0);
 
             return new Size2(width, height);
         }
@@ -51,7 +49,7 @@ namespace MonoGame.Extended.Gui.Controls
             var y = (float)Padding.Top;
             var availableSize = rectangle.Size;
 
-            foreach (var control in Controls)
+            foreach (var control in Items)
             {
                 var desiredSize = LayoutHelper.GetSizeWithMargins(control, context, availableSize);
 

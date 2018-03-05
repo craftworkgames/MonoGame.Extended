@@ -4,7 +4,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public class Button : Control
+    public class Button : ContentControl
     {
         public Button()
         {
