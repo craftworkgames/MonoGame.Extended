@@ -16,11 +16,11 @@ namespace MonoGame.Extended.Gui.Serialization
             Converters.Add(new ColorJsonConverter());
             Converters.Add(new ThicknessJsonConverter());
             Converters.Add(new ContentManagerJsonConverter<BitmapFont>(contentManager, font => font.Name));
-            Converters.Add(new GuiControlStyleJsonConverter(customControlTypes));
+            Converters.Add(new ControlStyleJsonConverter(customControlTypes));
             Converters.Add(new GuiTextureAtlasJsonConverter(contentManager, textureRegionService));
             Converters.Add(new GuiNinePatchRegion2DJsonConverter(textureRegionService));
             Converters.Add(new TextureRegion2DJsonConverter(textureRegionService));
-            Converters.Add(new GuiAlignmentConverter());
+            Converters.Add(new AlignmentConverter());
             ContractResolver = new ShortNameJsonContractResolver();
             Formatting = Formatting.Indented;
         }
