@@ -83,22 +83,22 @@ namespace MonoGame.Extended.Gui
         }
 
 
-        public T Create<T>(string template, string name = null, string text = null)
-            where T : Control, new()
-        {
-            return Create<T>(template, Vector2.Zero, name, text);
-        }
+        //public T Create<T>(string template, string name = null, string text = null)
+        //    where T : Control, new()
+        //{
+        //    return Create<T>(template, Vector2.Zero, name, text);
+        //}
 
-        public T Create<T>(string template, Vector2 position, string name = null, string text = null)
-            where T : Control, new()
-        {
-            var control = new T();
-            GetStyle(template).Apply(control);
-            control.Name = name;
-            control.Position = position;
-            control.Text = text;
-            return control;
-        }
+        //public T Create<T>(string template, Vector2 position, string name = null, string text = null)
+        //    where T : Control, new()
+        //{
+        //    var control = new T();
+        //    GetStyle(template).Apply(control);
+        //    control.Name = name;
+        //    control.Position = position;
+        //    control.Text = text;
+        //    return control;
+        //}
 
         public T Create<T>(string template, Action<T> onCreate)
             where T : Control, new()
@@ -132,7 +132,6 @@ namespace MonoGame.Extended.Gui
                         {nameof(Control.BorderColor), new Color(67, 67, 70)},
                         {nameof(Control.BorderThickness), 1},
                         {nameof(Control.TextColor), new Color(241, 241, 241)},
-                        {nameof(StackPanel.Padding), new Thickness(5)}
                     },
                     new ControlStyle(typeof(ComboBox))
                     {
@@ -140,7 +139,6 @@ namespace MonoGame.Extended.Gui
                         {nameof(Control.BorderColor), new Color(67, 67, 70)},
                         {nameof(Control.BorderThickness), 1},
                         {nameof(Control.TextColor), new Color(241, 241, 241)},
-                        {nameof(StackPanel.Padding), new Thickness(5)},
                         {nameof(ComboBox.DropDownColor) , new Color(51, 51, 55)}
                     },
                     new ControlStyle(typeof(Label))

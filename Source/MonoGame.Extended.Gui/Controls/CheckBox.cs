@@ -76,13 +76,13 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
-        {
-            var checkRectangle = GetCheckRectangle();
-            textInfo.Position = BoundingRectangle.Location.ToVector2() +
-                    new Vector2(checkRectangle.Width + 5, checkRectangle.Height * 0.5f - textInfo.Font.LineHeight * 0.5f);
+        //protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        //{
+        //    var checkRectangle = GetCheckRectangle();
+        //    textInfo.Position = BoundingRectangle.Location.ToVector2() +
+        //            new Vector2(checkRectangle.Width + 5, checkRectangle.Height * 0.5f - textInfo.Font.LineHeight * 0.5f);
 
-            base.DrawForeground(context, renderer, deltaSeconds, textInfo);
-        }
+        //    base.DrawForeground(context, renderer, deltaSeconds, textInfo);
+        //}
     }
 }

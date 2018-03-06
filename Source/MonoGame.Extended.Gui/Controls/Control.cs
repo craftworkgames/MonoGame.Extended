@@ -16,7 +16,6 @@ namespace MonoGame.Extended.Gui.Controls
             TextColor = Color.White;
             IsEnabled = true;
             IsVisible = true;
-
             Origin = Vector2.Zero;
         }
 
@@ -72,26 +71,26 @@ namespace MonoGame.Extended.Gui.Controls
 
         private bool _isHovering;
 
-        private string _text;
-        public string Text
-        {
-            get { return _text; }
-            set
-            {
-                if (_text != value)
-                {
-                    _text = value;
-                    OnTextChanged();
-                }
-            }
-        }
+        //private string _text;
+        //public string Text
+        //{
+        //    get { return _text; }
+        //    set
+        //    {
+        //        if (_text != value)
+        //        {
+        //            _text = value;
+        //            OnTextChanged();
+        //        }
+        //    }
+        //}
 
-        protected virtual void OnTextChanged()
-        {
-            TextChanged?.Invoke(this, EventArgs.Empty);
-        }
+        //protected virtual void OnTextChanged()
+        //{
+        //    TextChanged?.Invoke(this, EventArgs.Empty);
+        //}
 
-        public event EventHandler TextChanged;
+        //public event EventHandler TextChanged;
 
         public Size2 GetDesiredSize(IGuiContext context, Size2 availableSize)
         {
@@ -110,27 +109,6 @@ namespace MonoGame.Extended.Gui.Controls
                 desiredSize.Height = Math.Max(desiredSize.Height, BackgroundRegion.Height);
             }
 
-            var font = Font ?? context.DefaultFont;
-            var fontSize = Size2.Empty;
-
-            if (font != null && Text != null)
-            {
-                var textSize = font.MeasureString(CreateBoxText(Text, font, Width));
-                fontSize.Width += textSize.Width;
-                fontSize.Height += textSize.Height;
-            }
-
-            var buttonSize = Size2.Empty;
-
-            var guiButton = this as Button;
-            if (guiButton?.IconRegion != null)
-            {
-                buttonSize = guiButton.IconRegion.Size;
-            }
-
-            desiredSize.Width += Math.Max(fontSize.Width, buttonSize.Width);
-            desiredSize.Height += Math.Max(fontSize.Height, buttonSize.Height);
-
             desiredSize.Width = Math.Min(desiredSize.Width, availableSize.Width);
             desiredSize.Height = Math.Min(desiredSize.Height, availableSize.Height);
 
@@ -138,7 +116,7 @@ namespace MonoGame.Extended.Gui.Controls
             return new Size2(fixedSize.Width == 0 ? desiredSize.Width : fixedSize.Width, fixedSize.Height == 0 ? desiredSize.Height : fixedSize.Height);
             // ReSharper restore CompareOfFloatsByEqualityOperator
         }
-
+        
         protected virtual Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
         {
             return Size2.Empty;
@@ -212,26 +190,13 @@ namespace MonoGame.Extended.Gui.Controls
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             DrawBackground(context, renderer, deltaSeconds);
-            DrawForeground(context, renderer, deltaSeconds, GetTextInfo(context, CreateBoxText(Text, Font ?? context.DefaultFont, Width), BoundingRectangle, HorizontalTextAlignment, VerticalTextAlignment));
         }
 
         public bool HasParent(Control control)
         {
             return Parent != null && (Parent == control || Parent.HasParent(control));
         }
-
-
-
-        protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Rectangle? clippingRectangle = null)
-        {
-            var font = Font ?? context.DefaultFont;
-            var textSize = font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size;
-            var destinationRectangle = LayoutHelper.AlignRectangle(horizontalAlignment, verticalAlignment, textSize, targetRectangle);
-            var textPosition = destinationRectangle.Location.ToVector2();
-            var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, clippingRectangle ?? ClippingRectangle);
-            return textInfo;
-        }
-
+        
         protected virtual void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             if (BackgroundRegion != null)
@@ -243,41 +208,19 @@ namespace MonoGame.Extended.Gui.Controls
                 renderer.DrawRectangle(BoundingRectangle, BorderColor, BorderThickness);
         }
 
-        protected virtual void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+
+        protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Rectangle? clippingRectangle = null)
         {
-            if (!string.IsNullOrWhiteSpace(textInfo.Text))
-                renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, textInfo.ClippingRectangle);
-        }
-
-        protected virtual string CreateBoxText(string text, BitmapFont font, float width)
-        {
-            if (string.IsNullOrEmpty(text) || width <= 0.0f) return text;
-            var words = text.Split(' ');
-            var currentWidth = 0;
-
-            var blockText = string.Empty;
-            foreach (var word in words)
-            {
-                var spaceMeasurement = font.MeasureString($" {word}");
-                currentWidth += (int)spaceMeasurement.Width;
-
-                if (currentWidth > width)
-                {
-                    var measurement = font.MeasureString(word);
-                    blockText += string.IsNullOrEmpty(blockText) ? word : $"\n{word}";
-                    currentWidth = (int)measurement.Width;
-                }
-                else
-                {
-                    blockText += string.IsNullOrEmpty(blockText) ? word : $" {word}";
-                }
-            }
-            return blockText;
+            var font = Font ?? context.DefaultFont;
+            var textSize = font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size;
+            var destinationRectangle = LayoutHelper.AlignRectangle(horizontalAlignment, verticalAlignment, textSize, targetRectangle);
+            var textPosition = destinationRectangle.Location.ToVector2();
+            var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, clippingRectangle);// ?? ClippingRectangle);
+            return textInfo;
         }
 
 
-
-        protected struct TextInfo
+        public struct TextInfo
         {
             public TextInfo(string text, BitmapFont font, Vector2 position, Vector2 size, Color color, Rectangle? clippingRectangle)
             {

@@ -119,14 +119,14 @@ namespace MonoGame.Extended.Gui.Controls
             _iconPosition = new Point(x, y);
         }
 
-        protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
-        {
-            base.DrawForeground(context, renderer, deltaSeconds, textInfo);
+        //protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        //{
+        //    base.DrawForeground(context, renderer, deltaSeconds, textInfo);
 
-            if (IconRegion != null)
-            {
-                renderer.DrawRegion(IconRegion, new Rectangle(BoundingRectangle.Location + _iconPosition + Offset.ToPoint(), IconRegion.Bounds.Size), IconColor);
-            }
-        }
+        //    if (IconRegion != null)
+        //    {
+        //        renderer.DrawRegion(IconRegion, new Rectangle(BoundingRectangle.Location + _iconPosition + Offset.ToPoint(), IconRegion.Bounds.Size), IconColor);
+        //    }
+        //}
     }
 }

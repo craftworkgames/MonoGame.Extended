@@ -8,7 +8,7 @@
 
         public Label(string text = null) 
         {
-            Text = text ?? string.Empty;
+            Content = text ?? string.Empty;
         }
     }
 }

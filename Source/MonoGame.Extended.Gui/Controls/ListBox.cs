@@ -26,11 +26,11 @@ namespace MonoGame.Extended.Gui.Controls
             return new Size2(width + ClipPadding.Size.Width, height + ClipPadding.Size.Height);
         }
 
-        protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
-        {
-            ScrollIntoView(context);
-            DrawItemList(context, renderer);
-        }
+        //protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        //{
+        //    ScrollIntoView(context);
+        //    DrawItemList(context, renderer);
+        //}
 
         protected override Rectangle GetContentRectangle(IGuiContext context)
         {

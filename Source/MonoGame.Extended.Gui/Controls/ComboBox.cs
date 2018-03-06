@@ -76,14 +76,14 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
-        {
-            var selectedTextInfo = GetItemTextInfo(context, ClippingRectangle, SelectedItem, ClippingRectangle);
-            base.DrawForeground(context, renderer, deltaSeconds, selectedTextInfo);
+        //protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        //{
+        //    var selectedTextInfo = GetItemTextInfo(context, ClippingRectangle, SelectedItem, ClippingRectangle);
+        //    base.DrawForeground(context, renderer, deltaSeconds, selectedTextInfo);
 
-            if (IsOpen)
-                DrawItemList(context, renderer);
-        }
+        //    if (IsOpen)
+        //        DrawItemList(context, renderer);
+        //}
 
         private Rectangle GetDropDownRectangle(IGuiContext context)
         {

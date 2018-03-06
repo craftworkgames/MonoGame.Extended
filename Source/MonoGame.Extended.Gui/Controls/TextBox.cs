@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
@@ -7,7 +8,7 @@ using System.Linq;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public class TextBox : Control
+    public sealed class TextBox : Control
     {
         public TextBox(string text = null)
         {
@@ -18,12 +19,29 @@ namespace MonoGame.Extended.Gui.Controls
         public char? PasswordCharacter { get; set; }
         public Thickness Padding { get; set; }
 
-        protected override void OnTextChanged()
+        private string _text;
+        public string Text
+        {
+            get { return _text; }
+            set
+            {
+                if (_text != value)
+                {
+                    _text = value;
+                    OnTextChanged();
+                }
+            }
+        }
+
+        private void OnTextChanged()
         {
             if (!string.IsNullOrEmpty(Text) && SelectionStart > Text.Length)
                 SelectionStart = Text.Length;
-            base.OnTextChanged();
+
+            TextChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        public event EventHandler TextChanged;
 
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
         {
@@ -213,56 +231,56 @@ namespace MonoGame.Extended.Gui.Controls
         private bool _startSelectionBox = false;
         private Stack<int> _selectionIndexes = new Stack<int>();
 
-        protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
-        {
-            if (PasswordCharacter.HasValue)
-                textInfo = GetTextInfo(context, new string(PasswordCharacter.Value, textInfo.Text.Length), BoundingRectangle, HorizontalAlignment.Centre, VerticalAlignment.Centre);
+        //protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
+        //{
+        //    if (PasswordCharacter.HasValue)
+        //        textInfo = GetTextInfo(context, new string(PasswordCharacter.Value, textInfo.Text.Length), BoundingRectangle, HorizontalAlignment.Centre, VerticalAlignment.Centre);
 
-            base.DrawForeground(context, renderer, deltaSeconds, textInfo);
+        //    base.DrawForeground(context, renderer, deltaSeconds, textInfo);
 
-            if (IsFocused)
-            {
-                var caretRectangle = GetCaretRectangle(textInfo, SelectionStart);
+        //    if (IsFocused)
+        //    {
+        //        var caretRectangle = GetCaretRectangle(textInfo, SelectionStart);
 
-                if (_isCaretVisible)
-                    renderer.DrawRectangle((Rectangle)caretRectangle, TextColor);
+        //        if (_isCaretVisible)
+        //            renderer.DrawRectangle((Rectangle)caretRectangle, TextColor);
 
-                _nextCaretBlink -= deltaSeconds;
+        //        _nextCaretBlink -= deltaSeconds;
 
-                if (_nextCaretBlink <= 0)
-                {
-                    _isCaretVisible = !_isCaretVisible;
-                    _nextCaretBlink = _caretBlinkRate;
-                }
+        //        if (_nextCaretBlink <= 0)
+        //        {
+        //            _isCaretVisible = !_isCaretVisible;
+        //            _nextCaretBlink = _caretBlinkRate;
+        //        }
 
-                if (_selectionIndexes.Count > 1)
-                {
-                    var start = 0;
-                    var end = 0;
-                    var point = Point2.Zero;
-                    if (_selectionIndexes.Last() > _selectionIndexes.Peek())
-                    {
-                        start = _selectionIndexes.Peek();
-                        end = _selectionIndexes.Last();
-                        point = caretRectangle.Position;
-                    }
-                    else
-                    {
-                        start = _selectionIndexes.Last();
-                        end = _selectionIndexes.Peek();
-                        point = GetCaretRectangle(textInfo, start).Position;
-                    }
-                    var selectionRectangle = textInfo.Font.GetStringRectangle(textInfo.Text.Substring(start, end - start), point);
+        //        if (_selectionIndexes.Count > 1)
+        //        {
+        //            var start = 0;
+        //            var end = 0;
+        //            var point = Point2.Zero;
+        //            if (_selectionIndexes.Last() > _selectionIndexes.Peek())
+        //            {
+        //                start = _selectionIndexes.Peek();
+        //                end = _selectionIndexes.Last();
+        //                point = caretRectangle.Position;
+        //            }
+        //            else
+        //            {
+        //                start = _selectionIndexes.Last();
+        //                end = _selectionIndexes.Peek();
+        //                point = GetCaretRectangle(textInfo, start).Position;
+        //            }
+        //            var selectionRectangle = textInfo.Font.GetStringRectangle(textInfo.Text.Substring(start, end - start), point);
 
-                    renderer.FillRectangle((Rectangle)selectionRectangle, Color.Black * 0.25f);
-                }
-            }
-        }
+        //            renderer.FillRectangle((Rectangle)selectionRectangle, Color.Black * 0.25f);
+        //        }
+        //    }
+        //}
 
-        protected override string CreateBoxText(string text, BitmapFont font, float width)
-        {
-            return text;
-        }
+        //protected override string CreateBoxText(string text, BitmapFont font, float width)
+        //{
+        //    return text;
+        //}
 
         private RectangleF GetCaretRectangle(TextInfo textInfo, int index)
         {
