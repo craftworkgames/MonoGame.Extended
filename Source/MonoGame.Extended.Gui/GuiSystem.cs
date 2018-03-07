@@ -82,6 +82,11 @@ namespace MonoGame.Extended.Gui
             screen.Layout(this, BoundingRectangle);
         }
 
+        public void ClientSizeChanged()
+        {
+            ActiveScreen?.Layout(this, BoundingRectangle);
+        }
+
         public void Update(GameTime gameTime)
         {
             if(ActiveScreen == null)

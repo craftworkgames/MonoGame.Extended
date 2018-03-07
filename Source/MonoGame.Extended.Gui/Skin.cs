@@ -133,6 +133,10 @@ namespace MonoGame.Extended.Gui
                         {nameof(Control.BorderThickness), 1},
                         {nameof(Control.TextColor), new Color(241, 241, 241)},
                     },
+                    new ControlStyle(typeof(StackPanel))
+                    {
+                        {nameof(Control.Color), Color.Transparent}
+                    },
                     new ControlStyle(typeof(ComboBox))
                     {
                         {nameof(Control.Color), new Color(51, 51, 55)},
