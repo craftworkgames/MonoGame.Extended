@@ -44,8 +44,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             {
                 var reciprocalWidth = 1f / ImageSize.Width;
                 var reciprocalHeight = 1f / ImageSize.Height;
-                texelLeft = (sourceRectangle1.X + 0.5f) * reciprocalWidth;
-                texelTop = (sourceRectangle1.Y + 0.5f) * reciprocalHeight;
+                texelLeft = sourceRectangle1.X * reciprocalWidth;
+                texelTop = sourceRectangle1.Y * reciprocalHeight;
                 texelRight = (sourceRectangle1.X + sourceRectangle1.Width) * reciprocalWidth;
                 texelBottom = (sourceRectangle1.Y + sourceRectangle1.Height) * reciprocalHeight;
             }

@@ -26,8 +26,8 @@ namespace MonoGame.Extended.Graphics.Geometry
 
             if (sourceRectangle.Width > 0)
             {
-                texelLeft = (sourceRectangle.X + 0.5f) / texture.Width;
-                texelTop = (sourceRectangle.Y + 0.5f) / texture.Height;
+                texelLeft = sourceRectangle.X / texture.Width;
+                texelTop = sourceRectangle.Y / texture.Height;
                 texelRight = (sourceRectangle.X + sourceRectangle.Width) / (float)texture.Width;
                 texelBottom = (sourceRectangle.Y + sourceRectangle.Height) / (float)texture.Height;
             }

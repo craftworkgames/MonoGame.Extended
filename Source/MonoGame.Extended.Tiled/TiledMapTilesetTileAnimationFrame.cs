@@ -21,8 +21,8 @@ namespace MonoGame.Extended.Tiled
         {
             var sourceRectangle = tileset.GetTileRegion(LocalTileIdentifier);
             var texture = tileset.Texture;
-            var texelLeft = (sourceRectangle.X + 0.5f) / texture.Width;
-            var texelTop = (sourceRectangle.Y + 0.5f) / texture.Height;
+            var texelLeft = sourceRectangle.X / texture.Width;
+            var texelTop = sourceRectangle.Y / texture.Height;
             var texelRight = (sourceRectangle.X + sourceRectangle.Width) / (float)texture.Width;
             var texelBottom = (sourceRectangle.Y + sourceRectangle.Height) / (float)texture.Height;
 
