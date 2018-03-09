@@ -92,6 +92,13 @@ namespace MonoGame.Extended.Gui.Controls
 
         //public event EventHandler TextChanged;
 
+        public abstract Size2 GetContentSize(IGuiContext context);
+
+        public Size2 GetActualSize(IGuiContext context)
+        {
+            return GetContentSize(context) + Margin.Size;
+        }
+
         public Size2 GetDesiredSize(IGuiContext context, Size2 availableSize)
         {
             var fixedSize = Size;

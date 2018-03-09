@@ -39,6 +39,25 @@ namespace MonoGame.Extended.Gui.Controls
             return base.Contains(context, point) || IsOpen && GetContentRectangle(context).Contains(point);
         }
 
+        public override Size2 GetContentSize(IGuiContext context)
+        {
+            var width = 0f;
+            var height = 0f;
+
+            foreach (var item in Items)
+            {
+                var itemSize = GetItemSize(context, item);
+
+                if (itemSize.Width > width)
+                    width = itemSize.Width;
+
+                if (itemSize.Height > height)
+                    height = itemSize.Height;
+            }
+
+            return new Size2(width + ClipPadding.Size.Width, height + ClipPadding.Size.Height);
+        }
+
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
         {
             var width = 0f;
@@ -46,7 +65,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             foreach (var item in Items)
             {
-                var itemSize = GetItemSize(context, availableSize, item);
+                var itemSize = GetItemSize(context, item);
 
                 if (itemSize.Width > width)
                     width = itemSize.Width;
@@ -99,7 +118,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             foreach (var item in Items)
             {
-                var itemSize = GetItemSize(context, new Size2(BoundingRectangle.Width, 100), item);
+                var itemSize = GetItemSize(context, item);
                 height += itemSize.Height;
             }
 

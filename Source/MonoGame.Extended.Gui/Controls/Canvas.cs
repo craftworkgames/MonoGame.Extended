@@ -14,5 +14,10 @@
                 PlaceControl(context, control, control.Position.X, control.Position.Y, desiredSize.Width, desiredSize.Height);
             }
         }
+
+        public override Size2 GetContentSize(IGuiContext context)
+        {
+            return new Size2();
+        }
     }
 }

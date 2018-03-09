@@ -137,13 +137,13 @@ namespace MonoGame.Extended.Gui.Controls
                 FirstIndex--;
         }
 
-        protected Size2 GetItemSize(IGuiContext context, Size2 availableSize, object item)
+        protected Size2 GetItemSize(IGuiContext context, object item)
         {
             var text = GetItemName(item);
-            var textInfo = GetTextInfo(context, text, new Rectangle(0, 0, (int)availableSize.Width, (int)availableSize.Height), HorizontalAlignment.Left, VerticalAlignment.Top);
-            var itemWidth = textInfo.Size.X + ItemPadding.Size.Height;
-            var itemHeight = textInfo.Size.Y + ItemPadding.Size.Width;
-
+            var font = Font ?? context.DefaultFont;
+            var textSize = font.MeasureString(text ?? string.Empty);
+            var itemWidth = textSize.Width + ItemPadding.Size.Width;
+            var itemHeight = textSize.Height + ItemPadding.Size.Height;
             return new Size2(itemWidth, itemHeight);
         }
 

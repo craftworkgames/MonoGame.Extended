@@ -47,7 +47,6 @@
     <Compile Include="Controls\ControlCollection.cs" />
     <Compile Include="Controls\Dialog.cs" />
     <Compile Include="Controls\Form.cs" />
-    <Compile Include="Controls\Image.cs" />
     <Compile Include="Controls\SelectorControl.cs" />
     <Compile Include="Controls\Label.cs" />
     <Compile Include="Controls\LayoutControl.cs" />

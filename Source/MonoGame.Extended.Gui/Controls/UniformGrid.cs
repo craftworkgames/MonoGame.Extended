@@ -12,6 +12,18 @@ namespace MonoGame.Extended.Gui.Controls
         public int Columns { get; set; }
         public int Rows { get; set; }
 
+        public override Size2 GetContentSize(IGuiContext context)
+        {
+            var columns = Columns == 0 ? (int)Math.Ceiling(Math.Sqrt(Items.Count)) : Columns;
+            var rows = Rows == 0 ? (int)Math.Ceiling((float)Items.Count / columns) : Rows;
+            var sizes = Items
+                .Select(control => control.GetActualSize(context))
+                .ToArray();
+            var minCellWidth = sizes.Max(s => s.Width);
+            var minCellHeight = sizes.Max(s => s.Height);
+            return new Size2(minCellWidth * columns, minCellHeight * rows);
+        }
+
         protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
         {
             var desiredSize = CalculateGridInfo(context, availableSize).MinCellSize;

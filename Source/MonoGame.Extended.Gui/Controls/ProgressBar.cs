@@ -30,6 +30,11 @@ namespace MonoGame.Extended.Gui.Controls
 
         public event EventHandler ProgressChanged;
 
+        public override Size2 GetContentSize(IGuiContext context)
+        {
+            return new Size2(5, 5);
+        }
+
         protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             base.DrawBackground(context, renderer, deltaSeconds);

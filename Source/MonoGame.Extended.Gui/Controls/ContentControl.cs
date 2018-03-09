@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended.Gui.Controls
+﻿using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Gui.Controls
 {
     public abstract class ContentControl : Control
     {
@@ -32,6 +34,13 @@
 
             if (!string.IsNullOrWhiteSpace(textInfo.Text))
                 renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, textInfo.ClippingRectangle);
+        }
+
+        public override Size2 GetContentSize(IGuiContext context)
+        {
+            var text = Content?.ToString();
+            var font = Font ?? context.DefaultFont;
+            return font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size;
         }
 
         //protected virtual string CreateBlockText(string text, BitmapFont font, float width)
