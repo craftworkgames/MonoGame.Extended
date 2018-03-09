@@ -9,13 +9,13 @@ namespace MonoGame.Extended.Gui.Controls
         {
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Stretch;
-            Color = Color.Transparent;
+            BackgroundColor = Color.Transparent;
         }
 
-        protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
-        {
-            return availableSize;
-        }
+        //protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
+        //{
+        //    return availableSize;
+        //}
 
         public abstract void Layout(IGuiContext context, RectangleF rectangle);
 

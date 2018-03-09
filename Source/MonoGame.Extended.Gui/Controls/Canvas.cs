@@ -10,8 +10,8 @@
         {
             foreach (var control in Items)
             {
-                var desiredSize = control.GetDesiredSize(context, rectangle.Size);
-                PlaceControl(context, control, control.Position.X, control.Position.Y, desiredSize.Width, desiredSize.Height);
+                var actualSize = control.GetActualSize(context);
+                PlaceControl(context, control, control.Position.X, control.Position.Y, actualSize.Width, actualSize.Height);
             }
         }
 

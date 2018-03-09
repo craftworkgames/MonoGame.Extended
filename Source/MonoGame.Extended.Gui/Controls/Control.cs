@@ -3,7 +3,6 @@ using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Input.InputListeners;
-using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui.Controls
@@ -12,7 +11,7 @@ namespace MonoGame.Extended.Gui.Controls
     {
         protected Control()
         {
-            Color = Color.White;
+            BackgroundColor = Color.White;
             TextColor = Color.White;
             IsEnabled = true;
             IsVisible = true;
@@ -30,13 +29,16 @@ namespace MonoGame.Extended.Gui.Controls
                 if (_skin != value)
                 {
                     _skin = value;
-                    _skin?.GetStyle(GetType())?.Apply(this);
+                    _skin?.Apply(this);
                 }
             }
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Thickness Margin { get; set; }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Thickness Padding { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Thickness ClipPadding { get; set; }
@@ -48,8 +50,16 @@ namespace MonoGame.Extended.Gui.Controls
             get
             {
                 var r = BoundingRectangle;
-                return new Rectangle(r.Left + ClipPadding.Left, r.Top + ClipPadding.Top,
-                    r.Width - ClipPadding.Right - ClipPadding.Left, r.Height - ClipPadding.Bottom - ClipPadding.Top);
+                return new Rectangle(r.Left + ClipPadding.Left, r.Top + ClipPadding.Top, r.Width - ClipPadding.Width, r.Height - ClipPadding.Height);
+            }
+        }
+
+        public Rectangle ContentRectangle
+        {
+            get
+            {
+                var r = BoundingRectangle;
+                return new Rectangle(r.Left + Padding.Left, r.Top + Padding.Top, r.Width - Padding.Width, r.Height - Padding.Height);
             }
         }
 
@@ -71,62 +81,15 @@ namespace MonoGame.Extended.Gui.Controls
 
         private bool _isHovering;
 
-        //private string _text;
-        //public string Text
-        //{
-        //    get { return _text; }
-        //    set
-        //    {
-        //        if (_text != value)
-        //        {
-        //            _text = value;
-        //            OnTextChanged();
-        //        }
-        //    }
-        //}
-
-        //protected virtual void OnTextChanged()
-        //{
-        //    TextChanged?.Invoke(this, EventArgs.Empty);
-        //}
-
-        //public event EventHandler TextChanged;
-
         public abstract Size2 GetContentSize(IGuiContext context);
 
-        public Size2 GetActualSize(IGuiContext context)
-        {
-            return GetContentSize(context) + Margin.Size;
-        }
-
-        public Size2 GetDesiredSize(IGuiContext context, Size2 availableSize)
+        public virtual Size2 GetActualSize(IGuiContext context)
         {
             var fixedSize = Size;
-            var desiredSize = CalculateDesiredSize(context, availableSize);
-            var ninePatch = BackgroundRegion as NinePatchRegion2D;
-
-            if (ninePatch != null)
-            {
-                desiredSize.Width = Math.Max(desiredSize.Width, ninePatch.Padding.Size.Width);
-                desiredSize.Height = Math.Max(desiredSize.Height, ninePatch.Padding.Size.Height);
-            }
-            else if (BackgroundRegion != null)
-            {
-                desiredSize.Width = Math.Max(desiredSize.Width, BackgroundRegion.Width);
-                desiredSize.Height = Math.Max(desiredSize.Height, BackgroundRegion.Height);
-            }
-
-            desiredSize.Width = Math.Min(desiredSize.Width, availableSize.Width);
-            desiredSize.Height = Math.Min(desiredSize.Height, availableSize.Height);
-
+            var desiredSize = GetContentSize(context) + Margin.Size + Padding.Size;
             // ReSharper disable CompareOfFloatsByEqualityOperator
             return new Size2(fixedSize.Width == 0 ? desiredSize.Width : fixedSize.Width, fixedSize.Height == 0 ? desiredSize.Height : fixedSize.Height);
             // ReSharper restore CompareOfFloatsByEqualityOperator
-        }
-        
-        protected virtual Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
-        {
-            return Size2.Empty;
         }
 
         private bool _isEnabled;
@@ -207,15 +170,18 @@ namespace MonoGame.Extended.Gui.Controls
         protected virtual void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             if (BackgroundRegion != null)
-                renderer.DrawRegion(BackgroundRegion, BoundingRectangle, Color);
-            else if(Color != Color.Transparent)
-                renderer.FillRectangle(BoundingRectangle, Color);
+                renderer.DrawRegion(BackgroundRegion, BoundingRectangle, BackgroundColor);
+            else if(BackgroundColor != Color.Transparent)
+                renderer.FillRectangle(BoundingRectangle, BackgroundColor);
 
             if(BorderThickness != 0)
                 renderer.DrawRectangle(BoundingRectangle, BorderColor, BorderThickness);
+
+            // handy debug rectangles
+            //renderer.DrawRectangle(ContentRectangle, Color.Magenta);
+            //renderer.DrawRectangle(BoundingRectangle, Color.Lime);
         }
-
-
+        
         protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Rectangle? clippingRectangle = null)
         {
             var font = Font ?? context.DefaultFont;
@@ -225,8 +191,7 @@ namespace MonoGame.Extended.Gui.Controls
             var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, clippingRectangle);// ?? ClippingRectangle);
             return textInfo;
         }
-
-
+        
         public struct TextInfo
         {
             public TextInfo(string text, BitmapFont font, Vector2 position, Vector2 size, Color color, Rectangle? clippingRectangle)

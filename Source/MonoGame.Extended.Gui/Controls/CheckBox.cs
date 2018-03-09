@@ -62,7 +62,7 @@ namespace MonoGame.Extended.Gui.Controls
         protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             if (BackgroundRegion != null)
-                renderer.DrawRegion(BackgroundRegion, GetCheckRectangle(), Color);
+                renderer.DrawRegion(BackgroundRegion, GetCheckRectangle(), BackgroundColor);
             else
             {
                 renderer.DrawRectangle(GetCheckRectangle(), BorderColor, BorderThickness);

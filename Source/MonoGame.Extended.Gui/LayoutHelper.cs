@@ -9,16 +9,16 @@ namespace MonoGame.Extended.Gui
 
     public static class LayoutHelper
     {
-        public static Size2 GetSizeWithMargins(Control control, IGuiContext context, Size2 availableSize)
-        {
-            return control.GetDesiredSize(context, availableSize) + control.Margin.Size;
-        }
+        //public static Size2 GetSizeWithMargins(Control control, IGuiContext context, Size2 availableSize)
+        //{
+        //    return control.GetDesiredSize(context, availableSize) + control.Margin.Size;
+        //}
 
         public static void PlaceControl(IGuiContext context, Control control, float x, float y, float width, float height)
         {
             var rectangle = new Rectangle((int)x, (int)y, (int)width, (int)height);
             var availableSize = new Size2(width, height);
-            var desiredSize = GetSizeWithMargins(control, context, availableSize);
+            var desiredSize = control.GetActualSize(context);
             var alignedRectangle = AlignRectangle(control.HorizontalAlignment, control.VerticalAlignment, desiredSize, rectangle);
 
             control.Position = new Vector2(control.Margin.Left + alignedRectangle.X, control.Margin.Top + alignedRectangle.Y);

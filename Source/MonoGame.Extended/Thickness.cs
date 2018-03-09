@@ -28,7 +28,9 @@ namespace MonoGame.Extended
         public int Top { get; set; }
         public int Right { get; set; }
         public int Bottom { get; set; }
-        public Size2 Size => new Size2(Left + Right, Top + Bottom);
+        public int Width => Left + Right;
+        public int Height => Top + Bottom;
+        public Size2 Size => new Size2(Width, Height);
 
         public override bool Equals(object obj)
         {

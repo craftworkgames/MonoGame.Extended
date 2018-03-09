@@ -73,7 +73,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         public override bool OnPointerDown(IGuiContext context, PointerEventArgs args)
         {
-            var contentRectangle = GetContentRectangle(context);
+            var contentRectangle = GetListAreaRectangle(context);
 
             for (var i = FirstIndex; i < Items.Count; i++)
             {
@@ -127,7 +127,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected void ScrollIntoView(IGuiContext context)
         {
-            var contentRectangle = GetContentRectangle(context);
+            var contentRectangle = GetListAreaRectangle(context);
             var selectedItemRectangle = GetItemRectangle(context, SelectedIndex - FirstIndex, contentRectangle);
 
             if (selectedItemRectangle.Bottom > ClippingRectangle.Bottom)
@@ -142,29 +142,28 @@ namespace MonoGame.Extended.Gui.Controls
             var text = GetItemName(item);
             var font = Font ?? context.DefaultFont;
             var textSize = font.MeasureString(text ?? string.Empty);
-            var itemWidth = textSize.Width + ItemPadding.Size.Width;
-            var itemHeight = textSize.Height + ItemPadding.Size.Height;
+            var itemWidth = textSize.Width + ItemPadding.Width;
+            var itemHeight = textSize.Height + ItemPadding.Height;
             return new Size2(itemWidth, itemHeight);
         }
 
-        protected abstract Rectangle GetContentRectangle(IGuiContext context);
+        protected abstract Rectangle GetListAreaRectangle(IGuiContext context);
 
         protected void DrawItemList(IGuiContext context, IGuiRenderer renderer)
         {
-            var contentRectangle = GetContentRectangle(context);
+            var listRectangle = GetListAreaRectangle(context);
 
             for (var i = FirstIndex; i < Items.Count; i++)
             {
                 var item = Items[i];
-                var itemRectangle = GetItemRectangle(context, i - FirstIndex, contentRectangle);
-                var itemTextInfo = GetItemTextInfo(context, itemRectangle, item, contentRectangle);
+                var itemRectangle = GetItemRectangle(context, i - FirstIndex, listRectangle);
+                var itemTextInfo = GetItemTextInfo(context, itemRectangle, item, listRectangle);
                 var textColor = i == SelectedIndex ? SelectedTextColor : itemTextInfo.Color;
 
                 if (SelectedIndex == i)
-                    renderer.FillRectangle(itemRectangle, SelectedItemColor, contentRectangle);
+                    renderer.FillRectangle(itemRectangle, SelectedItemColor, listRectangle);
 
-                renderer.DrawText(itemTextInfo.Font, itemTextInfo.Text, itemTextInfo.Position + TextOffset, textColor,
-                    itemTextInfo.ClippingRectangle);
+                renderer.DrawText(itemTextInfo.Font, itemTextInfo.Text, itemTextInfo.Position + TextOffset, textColor, itemTextInfo.ClippingRectangle);
             }
         }
     }

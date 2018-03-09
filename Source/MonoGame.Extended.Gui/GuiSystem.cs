@@ -78,7 +78,9 @@ namespace MonoGame.Extended.Gui
         
         private void InitializeScreen(Screen screen)
         {
+            SkinControl(screen.Content);
             screen.Layout(this, BoundingRectangle);
+
         }
 
         public void ClientSizeChanged()
@@ -130,11 +132,23 @@ namespace MonoGame.Extended.Gui
         //    }
         //}
 
+        
+        private void SkinControl(Control control)
+        {
+            var skin = control.Skin ?? DefaultSkin;
+            skin?.Apply(control);
+
+            var itemsControl = control as ItemsControl;
+
+            if (itemsControl != null)
+            {
+                foreach (var childControl in itemsControl.Items)
+                    SkinControl(childControl);
+            }
+        }
+
         private void DrawControl(Control control, float deltaSeconds)
         {
-            if(control.Skin == null)
-                control.Skin = DefaultSkin;
-
             if (control.IsVisible)
             {
                 control.Draw(this, _renderer, deltaSeconds);

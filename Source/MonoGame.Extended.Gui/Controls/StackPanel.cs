@@ -41,35 +41,35 @@ namespace MonoGame.Extended.Gui.Controls
             return new Size2(width, height);
         }
 
-        protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
-        {
-            var width = 0f;
-            var height = 0f;
+        //protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
+        //{
+        //    var width = 0f;
+        //    var height = 0f;
 
-            foreach (var control in Items)
-            {
-                var desiredSize = LayoutHelper.GetSizeWithMargins(control, context, availableSize);
+        //    foreach (var control in Items)
+        //    {
+        //        var desiredSize = LayoutHelper.GetSizeWithMargins(control, context, availableSize);
 
-                switch (Orientation)
-                {
-                    case Orientation.Horizontal:
-                        width += desiredSize.Width;
-                        height = desiredSize.Height > height ? desiredSize.Height : height;
-                        break;
-                    case Orientation.Vertical:
-                        width = desiredSize.Width > width ? desiredSize.Width : width;
-                        height += desiredSize.Height;
-                        break;
-                    default:
-                        throw new InvalidOperationException($"Unexpected orientation {Orientation}");
-                }
-            }
+        //        switch (Orientation)
+        //        {
+        //            case Orientation.Horizontal:
+        //                width += desiredSize.Width;
+        //                height = desiredSize.Height > height ? desiredSize.Height : height;
+        //                break;
+        //            case Orientation.Vertical:
+        //                width = desiredSize.Width > width ? desiredSize.Width : width;
+        //                height += desiredSize.Height;
+        //                break;
+        //            default:
+        //                throw new InvalidOperationException($"Unexpected orientation {Orientation}");
+        //        }
+        //    }
             
-            width += Orientation == Orientation.Horizontal ? (Items.Count - 1) * Spacing : 0;
-            height += Orientation == Orientation.Vertical ? (Items.Count - 1) * Spacing : 0;
+        //    width += Orientation == Orientation.Horizontal ? (Items.Count - 1) * Spacing : 0;
+        //    height += Orientation == Orientation.Vertical ? (Items.Count - 1) * Spacing : 0;
 
-            return new Size2(width, height);
-        }
+        //    return new Size2(width, height);
+        //}
 
         public override void Layout(IGuiContext context, RectangleF rectangle)
         {
@@ -79,7 +79,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             foreach (var control in Items)
             {
-                var desiredSize = LayoutHelper.GetSizeWithMargins(control, context, availableSize);
+                var desiredSize = control.GetActualSize(context);
 
                 switch (Orientation)
                 {

@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input.InputListeners;
@@ -23,20 +24,20 @@ namespace MonoGame.Extended.Gui.Controls
             return base.OnKeyPressed(context, args);
         }
 
-        public override bool OnPointerDown(IGuiContext context, PointerEventArgs args)
+        public override bool OnPointerUp(IGuiContext context, PointerEventArgs args)
         {
             IsOpen = !IsOpen;
-            return base.OnPointerDown(context, args);
+            return base.OnPointerUp(context, args);
         }
 
-        protected override Rectangle GetContentRectangle(IGuiContext context)
+        protected override Rectangle GetListAreaRectangle(IGuiContext context)
         {
             return GetDropDownRectangle(context);
         }
 
         public override bool Contains(IGuiContext context, Point point)
         {
-            return base.Contains(context, point) || IsOpen && GetContentRectangle(context).Contains(point);
+            return base.Contains(context, point) || IsOpen && GetListAreaRectangle(context).Contains(point);
         }
 
         public override Size2 GetContentSize(IGuiContext context)
@@ -55,26 +56,7 @@ namespace MonoGame.Extended.Gui.Controls
                     height = itemSize.Height;
             }
 
-            return new Size2(width + ClipPadding.Size.Width, height + ClipPadding.Size.Height);
-        }
-
-        protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
-        {
-            var width = 0f;
-            var height = 0f;
-
-            foreach (var item in Items)
-            {
-                var itemSize = GetItemSize(context, item);
-
-                if (itemSize.Width > width)
-                    width = itemSize.Width;
-
-                if (itemSize.Height > height)
-                    height = itemSize.Height;
-            }
-
-            return new Size2(width + ClipPadding.Size.Width, height + ClipPadding.Size.Height);
+            return new Size2(width + ClipPadding.Width, height + ClipPadding.Height);
         }
 
         protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
@@ -83,10 +65,12 @@ namespace MonoGame.Extended.Gui.Controls
 
             if (IsOpen)
             {
-                var dropDownRectangle = GetContentRectangle(context);
+                var dropDownRectangle = GetListAreaRectangle(context);
 
                 if (DropDownRegion != null)
+                {
                     renderer.DrawRegion(DropDownRegion, dropDownRectangle, DropDownColor);
+                }
                 else
                 {
                     renderer.FillRectangle(dropDownRectangle, DropDownColor);
@@ -99,9 +83,8 @@ namespace MonoGame.Extended.Gui.Controls
         {
             base.Draw(context, renderer, deltaSeconds);
 
-            var selectedTextInfo = GetItemTextInfo(context, ClippingRectangle, SelectedItem, ClippingRectangle);
+            var selectedTextInfo = GetItemTextInfo(context, ContentRectangle, SelectedItem, ClippingRectangle);
 
-            //base.DrawForeground(context, renderer, deltaSeconds, selectedTextInfo);
             if (!string.IsNullOrWhiteSpace(selectedTextInfo.Text))
                 renderer.DrawText(selectedTextInfo.Font, selectedTextInfo.Text, selectedTextInfo.Position + TextOffset, selectedTextInfo.Color, selectedTextInfo.ClippingRectangle);
             
@@ -113,16 +96,13 @@ namespace MonoGame.Extended.Gui.Controls
         private Rectangle GetDropDownRectangle(IGuiContext context)
         {
             var dropDownRectangle = BoundingRectangle;
+
             dropDownRectangle.Y = dropDownRectangle.Y + dropDownRectangle.Height;
-            var height = 0f;
+            dropDownRectangle.Height = (int) Items
+                .Select(item => GetItemSize(context, item))
+                .Select(itemSize => itemSize.Height)
+                .Sum();
 
-            foreach (var item in Items)
-            {
-                var itemSize = GetItemSize(context, item);
-                height += itemSize.Height;
-            }
-
-            dropDownRectangle.Height = (int)height;
             return dropDownRectangle;
         }
     }

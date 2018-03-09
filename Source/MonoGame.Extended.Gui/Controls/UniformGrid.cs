@@ -24,11 +24,11 @@ namespace MonoGame.Extended.Gui.Controls
             return new Size2(minCellWidth * columns, minCellHeight * rows);
         }
 
-        protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
-        {
-            var desiredSize = CalculateGridInfo(context, availableSize).MinCellSize;
-            return desiredSize;
-        }
+        //protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
+        //{
+        //    var desiredSize = CalculateGridInfo(context, availableSize).MinCellSize;
+        //    return desiredSize;
+        //}
 
         public override void Layout(IGuiContext context, RectangleF rectangle)
         {
@@ -72,7 +72,7 @@ namespace MonoGame.Extended.Gui.Controls
             var maxCellWidth = availableSize.Width / columns;
             var maxCellHeight = availableSize.Height / rows;
             var sizes = Items
-                .Select(control => LayoutHelper.GetSizeWithMargins(control, context, new Size2(maxCellWidth, maxCellHeight)))
+                .Select(control => control.GetActualSize(context)) // LayoutHelper.GetSizeWithMargins(control, context, new Size2(maxCellWidth, maxCellHeight)))
                 .ToArray();
             var maxControlWidth = sizes.Length == 0 ? 0 : sizes.Max(s => s.Width);
             var maxControlHeight = sizes.Length == 0 ? 0 : sizes.Max(s => s.Height);

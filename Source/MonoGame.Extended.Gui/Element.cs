@@ -26,7 +26,7 @@ namespace MonoGame.Extended.Gui
         public string Name { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 Origin { get; set; }
-        public Color Color { get; set; }
+        public Color BackgroundColor { get; set; }
         public Color BorderColor { get; set; } = Color.White;
         public int BorderThickness { get; set; } = 0;
 
@@ -38,8 +38,8 @@ namespace MonoGame.Extended.Gui
             {
                 _backgroundRegion = value;
 
-                if (_backgroundRegion != null && Color == Color.Transparent)
-                    Color = Color.White;
+                if (_backgroundRegion != null && BackgroundColor == Color.Transparent)
+                    BackgroundColor = Color.White;
             }
         }
 

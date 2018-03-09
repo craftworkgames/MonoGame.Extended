@@ -47,20 +47,36 @@ namespace MonoGame.Extended.Gui
 
         public ControlStyle GetStyle(string name)
         {
-            return Styles[name];
+            ControlStyle controlStyle;
+
+            if (Styles.TryGetValue(name, out controlStyle))
+                return controlStyle;
+
+            return null;
         }
 
         public ControlStyle GetStyle(Type controlType)
         {
-            ControlStyle controlStyle = null;
+            return GetStyle(controlType.FullName);
+        }
 
-            while (controlStyle == null && controlType != null)
+        public void Apply(Control control)
+        {
+            // TODO: This allocates memory on each apply because it needs to apply styles in reverse
+            var types = new List<Type>();
+            var controlType = control.GetType();
+
+            while (controlType != null)
             {
-                controlStyle = Styles.FirstOrDefault(s => s.TargetType == controlType);
+                types.Add(controlType);
                 controlType = controlType.GetTypeInfo().BaseType;
             }
 
-            return controlStyle;
+            for (var i = types.Count - 1; i >= 0; i--)
+            {
+                var style = GetStyle(types[i]);
+                style?.Apply(control);
+            }
         }
 
         public static Skin FromFile(ContentManager contentManager, string path, params Type[] customControlTypes)
@@ -82,23 +98,6 @@ namespace MonoGame.Extended.Gui
             }
         }
 
-
-        //public T Create<T>(string template, string name = null, string text = null)
-        //    where T : Control, new()
-        //{
-        //    return Create<T>(template, Vector2.Zero, name, text);
-        //}
-
-        //public T Create<T>(string template, Vector2 position, string name = null, string text = null)
-        //    where T : Control, new()
-        //{
-        //    var control = new T();
-        //    GetStyle(template).Apply(control);
-        //    control.Name = name;
-        //    control.Position = position;
-        //    control.Text = text;
-        //    return control;
-        //}
 
         public T Create<T>(string template, Action<T> onCreate)
             where T : Control, new()
@@ -126,57 +125,67 @@ namespace MonoGame.Extended.Gui
                 Fonts = { font },
                 Styles =
                 {
-                    new ControlStyle(typeof(Control))
-                    {
-                        {nameof(Control.Color), new Color(51, 51, 55)},
+                    new ControlStyle(typeof(Control)) {
+                        {nameof(Control.BackgroundColor), new Color(51, 51, 55)},
                         {nameof(Control.BorderColor), new Color(67, 67, 70)},
                         {nameof(Control.BorderThickness), 1},
                         {nameof(Control.TextColor), new Color(241, 241, 241)},
+                        {nameof(Control.Margin), new Thickness(5)},
+                        {nameof(Control.Padding), new Thickness(5)},
                     },
-                    new ControlStyle(typeof(StackPanel))
-                    {
-                        {nameof(Control.Color), Color.Transparent}
+                    new ControlStyle(typeof(LayoutControl)) {
+                        {nameof(Control.BackgroundColor), Color.Transparent},
+                        {nameof(Control.BorderColor), Color.Transparent },
+                        {nameof(Control.BorderThickness), 0},
+                        {nameof(Control.Padding), new Thickness(0)},
+                        {nameof(Control.Margin), new Thickness(0)},
                     },
-                    new ControlStyle(typeof(ComboBox))
-                    {
-                        {nameof(Control.Color), new Color(51, 51, 55)},
-                        {nameof(Control.BorderColor), new Color(67, 67, 70)},
-                        {nameof(Control.BorderThickness), 1},
-                        {nameof(Control.TextColor), new Color(241, 241, 241)},
-                        {nameof(ComboBox.DropDownColor) , new Color(51, 51, 55)}
+                    new ControlStyle(typeof(ComboBox)) {
+                        {nameof(ComboBox.DropDownColor), new Color(71, 71, 75)},
+                        {nameof(ComboBox.SelectedItemColor), new Color(0, 122, 204)}
                     },
-                    new ControlStyle(typeof(Label))
+                    //new ControlStyle(typeof(CheckBox))
+                    //{
+                    //    {nameof(CheckBox.HorizontalTextAlignment), HorizontalAlignment.Left }
+                    //},
+                    new ControlStyle(typeof(ListBox))
                     {
-                        {nameof(Control.Color), Color.Transparent},
-                        {nameof(Control.TextColor), Color.White}
+                        {nameof(ListBox.SelectedItemColor), new Color(0, 122, 204)}  
                     },
-                    new ControlStyle(typeof(TextBox))
-                    {
-                        {nameof(Control.Color), Color.LightGray},
+                    new ControlStyle(typeof(Label)) {
+                        {nameof(Label.BackgroundColor), Color.Transparent},
+                        {nameof(Label.TextColor), Color.White},
+                        {nameof(Label.BorderColor), Color.Transparent},
+                        {nameof(Label.BorderThickness), 0},
+                        {nameof(Label.HorizontalTextAlignment), HorizontalAlignment.Left},
+                        {nameof(Label.VerticalTextAlignment), VerticalAlignment.Bottom},
+                        {nameof(Control.Margin), new Thickness(5,0)},
+                        {nameof(Control.Padding), new Thickness(0)},
+                    },
+                    new ControlStyle(typeof(TextBox)) {
+                        {nameof(Control.BackgroundColor), Color.DarkGray},
                         {nameof(Control.TextColor), Color.Black},
                         {nameof(Control.BorderColor), new Color(67, 67, 70)},
+                        {nameof(Control.BorderThickness), 2},
                     },
-                    new ControlStyle(typeof(Button))
-                    {
-                        {nameof(Control.Color), new Color(51, 51, 55)},
-                        {nameof(Control.BorderColor), new Color(67, 67, 70)},
-                        {nameof(Control.BorderThickness), 1},
-                        {nameof(Control.TextColor), new Color(241, 241, 241)},
+                    new ControlStyle(typeof(Button)) {
                         {
-                            nameof(Control.HoverStyle),
-                            new ControlStyle
-                            {
-                                {nameof(Button.Color), new Color(62, 62, 64)}
+                            nameof(Button.HoverStyle), new ControlStyle {
+                                {nameof(Button.BackgroundColor), new Color(62, 62, 64)}
                             }
                         },
                         {
-                            nameof(Button.PressedStyle),
-                            new ControlStyle
-                            {
-                                {nameof(Button.Color), new Color(0, 122, 204)}
+                            nameof(Button.PressedStyle), new ControlStyle {
+                                {nameof(Button.BackgroundColor), new Color(0, 122, 204)}
                             }
                         }
+                    },
+                    new ControlStyle(typeof(ProgressBar)) {
+                        {nameof(ProgressBar.BarColor), new Color(0, 122, 204) },
+                        {nameof(ProgressBar.Height), 32 },
+                        {nameof(ProgressBar.Padding), new Thickness(5, 4)},
                     }
+
                 }
             };
             return skin;

@@ -39,7 +39,7 @@ namespace MonoGame.Extended.Gui.Controls
         {
             base.DrawBackground(context, renderer, deltaSeconds);
 
-            var boundingRectangle = BoundingRectangle;
+            var boundingRectangle = ContentRectangle;
             var clippingRectangle = new Rectangle(boundingRectangle.X, boundingRectangle.Y, (int)(boundingRectangle.Width * Progress), boundingRectangle.Height);
 
             if (BarRegion != null)

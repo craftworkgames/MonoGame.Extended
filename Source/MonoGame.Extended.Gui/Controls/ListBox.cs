@@ -23,25 +23,7 @@ namespace MonoGame.Extended.Gui.Controls
                 height += itemSize.Height;
             }
 
-            return new Size2(width + ClipPadding.Size.Width, height + ClipPadding.Size.Height);
-        }
-
-        protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
-        {
-            var width = 0f;
-            var height = 0f;
-
-            foreach (var item in Items)
-            {
-                var itemSize = GetItemSize(context, item);
-
-                if (itemSize.Width > width)
-                    width = itemSize.Width;
-
-                height += itemSize.Height;
-            }
-
-            return new Size2(width + ClipPadding.Size.Width, height + ClipPadding.Size.Height);
+            return new Size2(width + ClipPadding.Width, height + ClipPadding.Height);
         }
 
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
@@ -52,9 +34,9 @@ namespace MonoGame.Extended.Gui.Controls
             DrawItemList(context, renderer);
         }
 
-        protected override Rectangle GetContentRectangle(IGuiContext context)
+        protected override Rectangle GetListAreaRectangle(IGuiContext context)
         {
-            return ClippingRectangle;
+            return ContentRectangle;
         }
     }
 }

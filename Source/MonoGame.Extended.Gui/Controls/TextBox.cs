@@ -15,7 +15,6 @@ namespace MonoGame.Extended.Gui.Controls
 
         public int SelectionStart { get; set; }
         public char? PasswordCharacter { get; set; }
-        public Thickness Padding { get; set; }
 
         private string _text;
         public string Text
@@ -43,14 +42,15 @@ namespace MonoGame.Extended.Gui.Controls
 
         public override Size2 GetContentSize(IGuiContext context)
         {
-            return new Size2();
+            var font = Font ?? context.DefaultFont;
+            return font.MeasureString(Text ?? string.Empty);
         }
 
-        protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
-        {
-            var font = Font ?? context.DefaultFont;
-            return new Size2(Width + Padding.Left + Padding.Right, (Height <= 0.0f ? font.LineHeight + 2 : Height) + Padding.Top + Padding.Bottom);
-        }
+        //protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
+        //{
+        //    var font = Font ?? context.DefaultFont;
+        //    return new Size2(Width + Padding.Left + Padding.Right, (Height <= 0.0f ? font.LineHeight + 2 : Height) + Padding.Top + Padding.Bottom);
+        //}
 
         public override bool OnPointerDown(IGuiContext context, PointerEventArgs args)
         {
@@ -109,7 +109,7 @@ namespace MonoGame.Extended.Gui.Controls
         private int FindNearestGlyphIndex(IGuiContext context, Point position)
         {
             var font = Font ?? context.DefaultFont;
-            var textInfo = GetTextInfo(context, Text, BoundingRectangle, HorizontalTextAlignment, VerticalTextAlignment);
+            var textInfo = GetTextInfo(context, Text, ContentRectangle, HorizontalTextAlignment, VerticalTextAlignment);
             var i = 0;
 
             foreach (var glyph in font.GetGlyphs(textInfo.Text, textInfo.Position))
@@ -244,7 +244,7 @@ namespace MonoGame.Extended.Gui.Controls
         private void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             var text = PasswordCharacter.HasValue ? new string(PasswordCharacter.Value, Text.Length) : Text;
-            var textInfo = GetTextInfo(context, text, BoundingRectangle, HorizontalTextAlignment, VerticalTextAlignment);
+            var textInfo = GetTextInfo(context, text, ContentRectangle, HorizontalTextAlignment, VerticalTextAlignment);
 
             if (!string.IsNullOrWhiteSpace(textInfo.Text))
                 renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, textInfo.ClippingRectangle);
