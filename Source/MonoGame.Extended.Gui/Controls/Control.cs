@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
@@ -210,6 +211,23 @@ namespace MonoGame.Extended.Gui.Controls
             public Color Color;
             public Rectangle? ClippingRectangle;
             public Vector2 Position;
+        }
+
+        public Dictionary<string, object> AttachedProperties { get; } = new Dictionary<string, object>();
+
+        public object GetAttachedProperty(string name)
+        {
+            object value;
+
+            if (AttachedProperties.TryGetValue(name, out value))
+                return value;
+
+            return null;
+        }
+
+        public void SetAttachedProperty(string name, object value)
+        {
+            AttachedProperties[name] = value;
         }
     }
 }

@@ -46,6 +46,7 @@
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\ControlCollection.cs" />
     <Compile Include="Controls\Dialog.cs" />
+    <Compile Include="Controls\DockPanel.cs" />
     <Compile Include="Controls\Form.cs" />
     <Compile Include="Controls\SelectorControl.cs" />
     <Compile Include="Controls\Label.cs" />

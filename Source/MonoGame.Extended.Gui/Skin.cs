@@ -130,7 +130,7 @@ namespace MonoGame.Extended.Gui
                         {nameof(Control.BorderColor), new Color(67, 67, 70)},
                         {nameof(Control.BorderThickness), 1},
                         {nameof(Control.TextColor), new Color(241, 241, 241)},
-                        {nameof(Control.Margin), new Thickness(5)},
+                        //{nameof(Control.Margin), new Thickness(5)},
                         {nameof(Control.Padding), new Thickness(5)},
                     },
                     new ControlStyle(typeof(LayoutControl)) {
