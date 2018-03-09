@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Input.InputListeners;
@@ -110,8 +109,8 @@ namespace MonoGame.Extended.Gui
 
             if (ActiveScreen != null && ActiveScreen.IsVisible)
             {
-                DrawChildren(ActiveScreen.Controls, deltaSeconds);
-                DrawWindows(ActiveScreen.Windows, deltaSeconds);
+                DrawControl(ActiveScreen.Content, deltaSeconds);
+                //DrawWindows(ActiveScreen.Windows, deltaSeconds);
             }
 
             var cursor = DefaultSkin?.Cursor;
@@ -122,31 +121,31 @@ namespace MonoGame.Extended.Gui
             _renderer.End();
         }
 
-        private void DrawWindows(WindowCollection windows, float deltaSeconds)
-        {
-            foreach (var window in windows)
-            {
-                window.Draw(this, _renderer, deltaSeconds);
-                DrawChildren(window.Controls, deltaSeconds);
-            }
-        }
+        //private void DrawWindows(WindowCollection windows, float deltaSeconds)
+        //{
+        //    foreach (var window in windows)
+        //    {
+        //        window.Draw(this, _renderer, deltaSeconds);
+        //        DrawChildren(window.Controls, deltaSeconds);
+        //    }
+        //}
 
-        private void DrawChildren(ControlCollection controls, float deltaSeconds)
+        private void DrawControl(Control control, float deltaSeconds)
         {
-            foreach (var control in controls.Where(c => c.IsVisible))
-            {
-                if(control.Skin == null)
-                    control.Skin = DefaultSkin;
+            if(control.Skin == null)
+                control.Skin = DefaultSkin;
 
+            if (control.IsVisible)
+            {
                 control.Draw(this, _renderer, deltaSeconds);
-            }
 
-            foreach (var childControl in controls.Where(c => c.IsVisible))
-            {
-                var itemsControl = childControl as ItemsControl;
+                var itemsControl = control as ItemsControl;
 
-                if(itemsControl != null)
-                    DrawChildren(itemsControl.Items, deltaSeconds);
+                if (itemsControl != null)
+                {
+                    foreach (var childControl in itemsControl.Items)
+                        DrawControl(childControl, deltaSeconds);
+                }
             }
         }
 
@@ -237,34 +236,27 @@ namespace MonoGame.Extended.Gui
             if (ActiveScreen == null || !ActiveScreen.IsVisible)
                 return null;
 
-            return FindControlAtPoint(ActiveScreen.Controls, point);
+            return FindControlAtPoint(ActiveScreen.Content, point);
         }
 
-        private Control FindControlAtPoint(ControlCollection controls, Point point)
+        private Control FindControlAtPoint(Control control, Point point)
         {
-            var topMostControl = (Control) null;
+            var topMostControl = control != null && control.IsVisible && control.Contains(this, point) ? control : null;
+            var itemsControl = topMostControl as ItemsControl;
 
-            for (var i = controls.Count - 1; i >= 0; i--)
+            if (itemsControl != null)
             {
-                var control = controls[i];
+                var controls = itemsControl.Items;
 
-                if (control.IsVisible)
+                for (var i = controls.Count - 1; i >= 0; i--)
                 {
-                    if (topMostControl == null && control.Contains(this, point))
-                        topMostControl = control;
+                    var childControl = FindControlAtPoint(controls[i], point);
 
-                    var itemsControl = control as ItemsControl;
-
-                    if (itemsControl != null && itemsControl.Items.Any())
-                    {
-                        var child = FindControlAtPoint(itemsControl.Items, point);
-
-                        if (child != null)
-                            topMostControl = child;
-                    }
+                    if (childControl != null)
+                        topMostControl = childControl;
                 }
             }
-
+            
             return topMostControl;
         }
     }

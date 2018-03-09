@@ -9,13 +9,10 @@ using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui
 {
-    public class ScreenRoot : Control { }
-
     public class Screen : Element<GuiSystem>, IDisposable
     {
         public Screen()
         {
-            Controls = new ControlCollection { ItemAdded = c => _isLayoutRequired = true };
             Windows = new WindowCollection(this) { ItemAdded = w => _isLayoutRequired = true };
         }
 
@@ -23,8 +20,20 @@ namespace MonoGame.Extended.Gui
         {
         }
 
+        private Control _content;
         [JsonProperty(Order = 1)]
-        public ControlCollection Controls { get; set; }
+        public Control Content
+        {
+            get { return _content; }
+            set
+            {
+                if (_content != value)
+                {
+                    _content = value;
+                    _isLayoutRequired = true;
+                }
+            }
+        }
 
         [JsonIgnore]
         public WindowCollection Windows { get; }
@@ -34,9 +43,9 @@ namespace MonoGame.Extended.Gui
         public new Size2 Size => new Size2(Width, Height);
         public bool IsVisible { get; set; } = true;
 
-        [JsonIgnore]
-        public bool IsLayoutRequired { get { return _isLayoutRequired || Controls.Any(x => x.IsLayoutRequired); } }
         private bool _isLayoutRequired;
+        [JsonIgnore]
+        public bool IsLayoutRequired => _isLayoutRequired || Content.IsLayoutRequired;
 
         public virtual void Update(GameTime gameTime) { }
 
@@ -53,26 +62,23 @@ namespace MonoGame.Extended.Gui
         public T FindControl<T>(string name)
             where T : Control
         {
-            return FindControl<T>(Controls, name);
+            return FindControl<T>(Content, name);
         }
 
-        private static T FindControl<T>(ControlCollection controls, string name)
+        private static T FindControl<T>(Control rootControl, string name)
             where T : Control
         {
-            foreach (var control in controls)
+            if (rootControl.Name == name)
+                return rootControl as T;
+
+            var itemsControl = rootControl as ItemsControl;
+
+            if (itemsControl != null && itemsControl.Items.Any())
             {
-                if (control.Name == name)
-                    return control as T;
+                var childControl = FindControl<T>(itemsControl, name);
 
-                var itemsControl = control as ItemsControl;
-
-                if (itemsControl != null && itemsControl.Items.Any())
-                {
-                    var childControl = FindControl<T>(itemsControl.Items, name);
-
-                    if (childControl != null)
-                        return childControl;
-                }
+                if (childControl != null)
+                    return childControl;
             }
 
             return null;
@@ -83,14 +89,13 @@ namespace MonoGame.Extended.Gui
             Width = rectangle.Width;
             Height = rectangle.Height;
 
-            foreach (var control in Controls)
-                LayoutHelper.PlaceControl(context, control, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
+            LayoutHelper.PlaceControl(context, Content, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
 
             foreach (var window in Windows)
                 LayoutHelper.PlaceWindow(context, window, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
 
             _isLayoutRequired = false;
-            foreach (var control in Controls) control.IsLayoutRequired = false;
+            Content.IsLayoutRequired = false;
         }
 
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
