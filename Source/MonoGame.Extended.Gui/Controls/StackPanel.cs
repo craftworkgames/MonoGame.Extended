@@ -34,18 +34,17 @@ namespace MonoGame.Extended.Gui.Controls
                         throw new InvalidOperationException($"Unexpected orientation {Orientation}");
                 }
             }
-
-
-            //width += Padding.Left + Padding.Right + (Orientation == Orientation.Horizontal ? (Items.Count - 1) * Spacing : 0);
-            //height += Padding.Top + Padding.Bottom + (Orientation == Orientation.Vertical ? (Items.Count - 1) * Spacing : 0);
+            
+            width += Orientation == Orientation.Horizontal ? (Items.Count - 1) * Spacing : 0;
+            height += Orientation == Orientation.Vertical ? (Items.Count - 1) * Spacing : 0;
 
             return new Size2(width, height);
         }
 
         public override void Layout(IGuiContext context, RectangleF rectangle)
         {
-            var x = 0f;//(float)Padding.Left;
-            var y = 0f;//(float)Padding.Top;
+            var x = 0f;
+            var y = 0f;
             var availableSize = rectangle.Size;
 
             foreach (var control in Items)
