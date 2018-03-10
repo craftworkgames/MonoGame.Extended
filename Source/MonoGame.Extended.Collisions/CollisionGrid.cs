@@ -12,6 +12,14 @@ namespace MonoGame.Extended.Collisions
     {
         private readonly CollisionGridCell[] _data;
 
+        /// <summary>
+        /// Creates a new collision grid of specified size.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="columns">Number of columns in the grid.</param>
+        /// <param name="rows">Number of rows in the grid.</param>
+        /// <param name="cellWidth">The width of each individual cell.</param>
+        /// <param name="cellHeight">The height of each individual cell.</param>
         public CollisionGrid(int[] data, int columns, int rows, int cellWidth, int cellHeight)
         {
             _data = new CollisionGridCell[data.Length];

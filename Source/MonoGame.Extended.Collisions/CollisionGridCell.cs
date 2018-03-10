@@ -9,6 +9,13 @@ namespace MonoGame.Extended.Collisions
     {
         private readonly CollisionGrid _parentGrid;
 
+        /// <summary>
+        /// Creates a collision grid cell at a location in the parent grid.
+        /// </summary>
+        /// <param name="parentGrid">The collision grid which this cell is a part of.</param>
+        /// <param name="column">The column position of this cell.</param>
+        /// <param name="row">The row position of this cell.</param>
+        /// <param name="data"></param>
         public CollisionGridCell(CollisionGrid parentGrid, int column, int row, int data)
         {
             _parentGrid = parentGrid;
