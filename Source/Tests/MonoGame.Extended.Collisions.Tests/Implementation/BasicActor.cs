@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collisions;
 
 namespace MonoGame.Extended.Gui.Tests
@@ -13,6 +14,10 @@ namespace MonoGame.Extended.Gui.Tests
             if (collisionInfo.Other is BasicActor)
             {
                 CollisionCount++;
+            }
+            else
+            {
+                Console.WriteLine(collisionInfo.Other.GetType().Name);
             }
         }
 
