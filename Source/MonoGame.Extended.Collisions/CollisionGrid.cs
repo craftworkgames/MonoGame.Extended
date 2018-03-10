@@ -4,6 +4,10 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Collisions
 {
+    /// <summary>
+    /// Represents a collision grid. This is used to break the game world into
+    /// chunks to detect collisions efficiently.
+    /// </summary>
     public class CollisionGrid
     {
         private readonly CollisionGridCell[] _data;
@@ -25,9 +29,24 @@ namespace MonoGame.Extended.Collisions
             CellHeight = cellHeight;
         }
 
+        /// <summary>
+        /// Gets the number of columns in this grid.
+        /// </summary>
         public int Columns { get; }
+
+        /// <summary>
+        /// Gets the number of rows in this grid.
+        /// </summary>
         public int Rows { get; private set; }
+
+        /// <summary>
+        /// Gets the width of each cell.
+        /// </summary>
         public int CellWidth { get; }
+
+        /// <summary>
+        /// Gets the height of each cell.
+        /// </summary>
         public int CellHeight { get; }
 
         public CollisionGridCell GetCellAtIndex(int column, int row)
