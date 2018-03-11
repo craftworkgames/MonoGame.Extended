@@ -59,8 +59,10 @@ namespace MonoGame.Extended.Gui.Controls
             return new Rectangle(boundingRectangle.X, boundingRectangle.Y, boundingRectangle.Height, boundingRectangle.Height);
         }
 
-        protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
+            base.Draw(context, renderer, deltaSeconds);
+
             if (BackgroundRegion != null)
                 renderer.DrawRegion(BackgroundRegion, GetCheckRectangle(), BackgroundColor);
             else
@@ -75,6 +77,11 @@ namespace MonoGame.Extended.Gui.Controls
                 }
             }
         }
+
+        //protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        //{
+
+        //}
 
         //protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         //{

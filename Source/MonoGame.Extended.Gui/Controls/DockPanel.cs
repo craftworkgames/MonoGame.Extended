@@ -14,7 +14,7 @@ namespace MonoGame.Extended.Gui.Controls
             return new Size2();
         }
 
-        public override void Layout(IGuiContext context, RectangleF rectangle)
+        protected override void Layout(IGuiContext context, RectangleF rectangle)
         {
             for (var i = 0; i < Items.Count; i++)
             {

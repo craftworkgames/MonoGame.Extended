@@ -31,9 +31,17 @@ namespace MonoGame.Extended.Gui.Controls
                 {
                     _skin = value;
                     _skin?.Apply(this);
+
+                    foreach (var childControl in Children)
+                    {
+                        if(childControl.Skin == null)
+                            childControl.Skin = value;
+                    }
                 }
             }
         }
+
+        public abstract IEnumerable<Control> Children { get; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Thickness Margin { get; set; }
@@ -92,6 +100,8 @@ namespace MonoGame.Extended.Gui.Controls
             return new Size2(fixedSize.Width == 0 ? desiredSize.Width : fixedSize.Width, fixedSize.Height == 0 ? desiredSize.Height : fixedSize.Height);
             // ReSharper restore CompareOfFloatsByEqualityOperator
         }
+
+        public virtual void InvalidateMeasure() { }
 
         private bool _isEnabled;
         public bool IsEnabled
@@ -158,31 +168,28 @@ namespace MonoGame.Extended.Gui.Controls
             return BoundingRectangle.Contains(point);
         }
 
-        public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
-        {
-            DrawBackground(context, renderer, deltaSeconds);
-        }
+        public virtual void Update(IGuiContext context, float deltaSeconds) { }
 
-        public bool HasParent(Control control)
-        {
-            return Parent != null && (Parent == control || Parent.HasParent(control));
-        }
-        
-        protected virtual void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
             if (BackgroundRegion != null)
                 renderer.DrawRegion(BackgroundRegion, BoundingRectangle, BackgroundColor);
-            else if(BackgroundColor != Color.Transparent)
+            else if (BackgroundColor != Color.Transparent)
                 renderer.FillRectangle(BoundingRectangle, BackgroundColor);
 
-            if(BorderThickness != 0)
+            if (BorderThickness != 0)
                 renderer.DrawRectangle(BoundingRectangle, BorderColor, BorderThickness);
 
             // handy debug rectangles
             //renderer.DrawRectangle(ContentRectangle, Color.Magenta);
             //renderer.DrawRectangle(BoundingRectangle, Color.Lime);
         }
-        
+
+        public bool HasParent(Control control)
+        {
+            return Parent != null && (Parent == control || Parent.HasParent(control));
+        }
+       
         protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Rectangle? clippingRectangle = null)
         {
             var font = Font ?? context.DefaultFont;

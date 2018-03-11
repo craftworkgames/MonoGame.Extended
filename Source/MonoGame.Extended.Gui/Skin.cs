@@ -142,7 +142,8 @@ namespace MonoGame.Extended.Gui
                     },
                     new ControlStyle(typeof(ComboBox)) {
                         {nameof(ComboBox.DropDownColor), new Color(71, 71, 75)},
-                        {nameof(ComboBox.SelectedItemColor), new Color(0, 122, 204)}
+                        {nameof(ComboBox.SelectedItemColor), new Color(0, 122, 204)},
+                        {nameof(ComboBox.HorizontalTextAlignment), HorizontalAlignment.Left }
                     },
                     //new ControlStyle(typeof(CheckBox))
                     //{
@@ -150,7 +151,8 @@ namespace MonoGame.Extended.Gui
                     //},
                     new ControlStyle(typeof(ListBox))
                     {
-                        {nameof(ListBox.SelectedItemColor), new Color(0, 122, 204)}  
+                        {nameof(ListBox.SelectedItemColor), new Color(0, 122, 204)},
+                        {nameof(ListBox.HorizontalTextAlignment), HorizontalAlignment.Left }
                     },
                     new ControlStyle(typeof(Label)) {
                         {nameof(Label.BackgroundColor), Color.Transparent},

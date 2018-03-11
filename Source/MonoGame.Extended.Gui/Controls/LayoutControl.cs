@@ -12,12 +12,24 @@ namespace MonoGame.Extended.Gui.Controls
             BackgroundColor = Color.Transparent;
         }
 
-        //protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
-        //{
-        //    return availableSize;
-        //}
+        private bool _isLayoutValid;
 
-        public abstract void Layout(IGuiContext context, RectangleF rectangle);
+        public override void InvalidateMeasure()
+        {
+            base.InvalidateMeasure();
+
+            _isLayoutValid = false;
+        }
+
+        public override void Update(IGuiContext context, float deltaSeconds)
+        {
+            base.Update(context, deltaSeconds);
+
+            if (!_isLayoutValid)
+                Layout(context, new RectangleF(0, 0, ContentRectangle.Width, ContentRectangle.Height));
+        }
+
+        protected abstract void Layout(IGuiContext context, RectangleF rectangle);
 
         protected static void PlaceControl(IGuiContext context, Control control, float x, float y, float width, float height)
         {

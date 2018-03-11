@@ -4,6 +4,7 @@ using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.ViewportAdapters;
 using System;
+using System.Linq;
 
 namespace MonoGame.Extended.Gui
 {
@@ -78,9 +79,10 @@ namespace MonoGame.Extended.Gui
         
         private void InitializeScreen(Screen screen)
         {
-            SkinControl(screen.Content);
-            screen.Layout(this, BoundingRectangle);
+            if (screen.Content != null && screen.Content.Skin == null)
+                screen.Content.Skin = DefaultSkin;
 
+            screen.Layout(this, BoundingRectangle);
         }
 
         public void ClientSizeChanged()
@@ -92,10 +94,15 @@ namespace MonoGame.Extended.Gui
         {
             if(ActiveScreen == null)
                 return;
-
+            
             _touchListener.Update(gameTime);
             _mouseListener.Update(gameTime);
             _keyboardListener.Update(gameTime);
+
+            var deltaSeconds = gameTime.GetElapsedSeconds();
+
+            if (ActiveScreen != null && ActiveScreen.IsVisible)
+                UpdateControl(ActiveScreen.Content, deltaSeconds);
 
             if (ActiveScreen.IsLayoutRequired)
                 ActiveScreen.Layout(this, BoundingRectangle);
@@ -132,18 +139,14 @@ namespace MonoGame.Extended.Gui
         //    }
         //}
 
-        
-        private void SkinControl(Control control)
+        private void UpdateControl(Control control, float deltaSeconds)
         {
-            var skin = control.Skin ?? DefaultSkin;
-            skin?.Apply(control);
-
-            var itemsControl = control as ItemsControl;
-
-            if (itemsControl != null)
+            if (control.IsVisible)
             {
-                foreach (var childControl in itemsControl.Items)
-                    SkinControl(childControl);
+                control.Update(this, deltaSeconds);
+
+                foreach (var childControl in control.Children)
+                    UpdateControl(childControl, deltaSeconds);
             }
         }
 
@@ -153,13 +156,8 @@ namespace MonoGame.Extended.Gui
             {
                 control.Draw(this, _renderer, deltaSeconds);
 
-                var itemsControl = control as ItemsControl;
-
-                if (itemsControl != null)
-                {
-                    foreach (var childControl in itemsControl.Items)
-                        DrawControl(childControl, deltaSeconds);
-                }
+                foreach (var childControl in control.Children)
+                    DrawControl(childControl, deltaSeconds);
             }
         }
 
@@ -255,23 +253,19 @@ namespace MonoGame.Extended.Gui
 
         private Control FindControlAtPoint(Control control, Point point)
         {
-            var topMostControl = control != null && control.IsVisible && control.Contains(this, point) ? control : null;
-            var itemsControl = topMostControl as ItemsControl;
-
-            if (itemsControl != null)
+            foreach (var controlChild in control.Children.Reverse())
             {
-                var controls = itemsControl.Items;
+                var c = FindControlAtPoint(controlChild, point);
 
-                for (var i = controls.Count - 1; i >= 0; i--)
-                {
-                    var childControl = FindControlAtPoint(controls[i], point);
-
-                    if (childControl != null)
-                        topMostControl = childControl;
-                }
+                if (c != null)
+                    return c;
             }
+
+
+            if (control.IsVisible && control.Contains(this, point))
+                return control;
             
-            return topMostControl;
+            return null;
         }
     }
 }

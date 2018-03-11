@@ -9,11 +9,11 @@ using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui
 {
-    public class Screen : Element<GuiSystem>, IDisposable
+    public class Screen //: Element<GuiSystem>, IDisposable
     {
         public Screen()
         {
-            Windows = new WindowCollection(this) { ItemAdded = w => _isLayoutRequired = true };
+            //Windows = new WindowCollection(this) { ItemAdded = w => _isLayoutRequired = true };
         }
 
         public virtual void Dispose()
@@ -35,19 +35,22 @@ namespace MonoGame.Extended.Gui
             }
         }
 
-        [JsonIgnore]
-        public WindowCollection Windows { get; }
+        //[JsonIgnore]
+        //public WindowCollection Windows { get; }
 
-        public new float Width { get; private set; }
-        public new float Height { get; private set; }
-        public new Size2 Size => new Size2(Width, Height);
+        public float Width { get; private set; }
+        public float Height { get; private set; }
+        public Size2 Size => new Size2(Width, Height);
         public bool IsVisible { get; set; } = true;
 
         private bool _isLayoutRequired;
         [JsonIgnore]
         public bool IsLayoutRequired => _isLayoutRequired || Content.IsLayoutRequired;
 
-        public virtual void Update(GameTime gameTime) { }
+        public virtual void Update(GameTime gameTime)
+        {
+            
+        }
 
         public void Show()
         {
@@ -71,14 +74,12 @@ namespace MonoGame.Extended.Gui
             if (rootControl.Name == name)
                 return rootControl as T;
 
-            var itemsControl = rootControl as ItemsControl;
-
-            if (itemsControl != null && itemsControl.Items.Any())
+            foreach (var childControl in rootControl.Children)
             {
-                var childControl = FindControl<T>(itemsControl, name);
+                var control = FindControl<T>(childControl, name);
 
-                if (childControl != null)
-                    return childControl;
+                if (control != null)
+                    return control;
             }
 
             return null;
@@ -91,17 +92,17 @@ namespace MonoGame.Extended.Gui
 
             LayoutHelper.PlaceControl(context, Content, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
 
-            foreach (var window in Windows)
-                LayoutHelper.PlaceWindow(context, window, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
+            //foreach (var window in Windows)
+            //    LayoutHelper.PlaceWindow(context, window, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
 
             _isLayoutRequired = false;
             Content.IsLayoutRequired = false;
         }
 
-        public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
-        {
-            renderer.DrawRectangle(BoundingRectangle, Color.Green);
-        }
+        //public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        //{
+        //    renderer.DrawRectangle(BoundingRectangle, Color.Green);
+        //}
 
         public static Screen FromStream(ContentManager contentManager, Stream stream, params Type[] customControlTypes)
         {

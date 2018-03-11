@@ -59,9 +59,9 @@ namespace MonoGame.Extended.Gui.Controls
             return new Size2(width + ClipPadding.Width, height + ClipPadding.Height);
         }
 
-        protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
-            base.DrawBackground(context, renderer, deltaSeconds);
+            base.Draw(context, renderer, deltaSeconds);
 
             if (IsOpen)
             {
@@ -76,21 +76,14 @@ namespace MonoGame.Extended.Gui.Controls
                     renderer.FillRectangle(dropDownRectangle, DropDownColor);
                     renderer.DrawRectangle(dropDownRectangle, BorderColor);
                 }
-            }
-        }
 
-        public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
-        {
-            base.Draw(context, renderer, deltaSeconds);
+                DrawItemList(context, renderer);
+            }
 
             var selectedTextInfo = GetItemTextInfo(context, ContentRectangle, SelectedItem, ClippingRectangle);
 
             if (!string.IsNullOrWhiteSpace(selectedTextInfo.Text))
                 renderer.DrawText(selectedTextInfo.Font, selectedTextInfo.Text, selectedTextInfo.Position + TextOffset, selectedTextInfo.Color, selectedTextInfo.ClippingRectangle);
-            
-            if (IsOpen)
-                DrawItemList(context, renderer);
-
         }
 
         private Rectangle GetDropDownRectangle(IGuiContext context)

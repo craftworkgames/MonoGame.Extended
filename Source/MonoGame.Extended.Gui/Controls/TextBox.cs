@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input.InputListeners;
@@ -39,6 +41,8 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public event EventHandler TextChanged;
+
+        public override IEnumerable<Control> Children { get; } = Enumerable.Empty<Control>();
 
         public override Size2 GetContentSize(IGuiContext context)
         {

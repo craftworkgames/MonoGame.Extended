@@ -24,13 +24,7 @@ namespace MonoGame.Extended.Gui.Controls
             return new Size2(minCellWidth * columns, minCellHeight * rows);
         }
 
-        //protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
-        //{
-        //    var desiredSize = CalculateGridInfo(context, availableSize).MinCellSize;
-        //    return desiredSize;
-        //}
-
-        public override void Layout(IGuiContext context, RectangleF rectangle)
+        protected override void Layout(IGuiContext context, RectangleF rectangle)
         {
             var gridInfo = CalculateGridInfo(context, rectangle.Size);
             var columnIndex = 0;

@@ -41,12 +41,8 @@ namespace MonoGame.Extended.Gui.Controls
             return new Size2(width, height);
         }
 
-        public override void Layout(IGuiContext context, RectangleF rectangle)
+        protected override void Layout(IGuiContext context, RectangleF rectangle)
         {
-            var x = 0f;
-            var y = 0f;
-            var availableSize = rectangle.Size;
-
             foreach (var control in Items)
             {
                 var actualSize = control.GetActualSize(context);
@@ -56,16 +52,16 @@ namespace MonoGame.Extended.Gui.Controls
                     case Orientation.Vertical:
                         //control.VerticalAlignment = VerticalAlignment.Top;
 
-                        PlaceControl(context, control, 0f, y, Width, actualSize.Height);
-                        y += actualSize.Height + Spacing;
-                        availableSize.Height -= actualSize.Height;
+                        PlaceControl(context, control, rectangle.X, rectangle.Y, rectangle.Width, actualSize.Height);
+                        rectangle.Y += actualSize.Height + Spacing;
+                        rectangle.Height -= actualSize.Height;
                         break;
                     case Orientation.Horizontal:
                         //control.HorizontalAlignment = HorizontalAlignment.Left;
 
-                        PlaceControl(context, control, x, 0f, actualSize.Width, Height);
-                        x += actualSize.Width + Spacing;
-                        availableSize.Height -= actualSize.Height;
+                        PlaceControl(context, control, rectangle.X, rectangle.Y, actualSize.Width, rectangle.Height);
+                        rectangle.X += actualSize.Width + Spacing;
+                        rectangle.Height -= actualSize.Height;
                         break;
                     default:
                         throw new InvalidOperationException($"Unexpected orientation {Orientation}");

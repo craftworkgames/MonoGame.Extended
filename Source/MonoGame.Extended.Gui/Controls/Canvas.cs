@@ -6,7 +6,7 @@
         {
         }
         
-        public override void Layout(IGuiContext context, RectangleF rectangle)
+        protected override void Layout(IGuiContext context, RectangleF rectangle)
         {
             foreach (var control in Items)
             {

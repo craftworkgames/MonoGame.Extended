@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.TextureAtlases;
 
@@ -30,14 +32,16 @@ namespace MonoGame.Extended.Gui.Controls
 
         public event EventHandler ProgressChanged;
 
+        public override IEnumerable<Control> Children { get; } = Enumerable.Empty<Control>();
+
         public override Size2 GetContentSize(IGuiContext context)
         {
             return new Size2(5, 5);
         }
 
-        protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
-            base.DrawBackground(context, renderer, deltaSeconds);
+            base.Draw(context, renderer, deltaSeconds);
 
             var boundingRectangle = ContentRectangle;
             var clippingRectangle = new Rectangle(boundingRectangle.X, boundingRectangle.Y, (int)(boundingRectangle.Width * Progress), boundingRectangle.Height);
@@ -47,5 +51,12 @@ namespace MonoGame.Extended.Gui.Controls
             else
                 renderer.FillRectangle(BoundingRectangle, BarColor, clippingRectangle);
         }
+
+        //protected override void DrawBackground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        //{
+        //    base.DrawBackground(context, renderer, deltaSeconds);
+
+
+        //}
     }
 }

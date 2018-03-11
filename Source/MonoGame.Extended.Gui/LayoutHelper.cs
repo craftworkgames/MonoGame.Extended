@@ -17,28 +17,25 @@ namespace MonoGame.Extended.Gui
         public static void PlaceControl(IGuiContext context, Control control, float x, float y, float width, float height)
         {
             var rectangle = new Rectangle((int)x, (int)y, (int)width, (int)height);
-            var availableSize = new Size2(width, height);
             var desiredSize = control.GetActualSize(context);
             var alignedRectangle = AlignRectangle(control.HorizontalAlignment, control.VerticalAlignment, desiredSize, rectangle);
 
             control.Position = new Vector2(control.Margin.Left + alignedRectangle.X, control.Margin.Top + alignedRectangle.Y);
             control.Size = alignedRectangle.Size - control.Margin.Size;
-
-            var layoutControl = control as LayoutControl;
-            layoutControl?.Layout(context, new RectangleF(x, y, width, height));
+            control.InvalidateMeasure();
         }
 
-        public static void PlaceWindow(IGuiContext context, Window window, float x, float y, float width, float height)
-        {
-            var rectangle = new Rectangle((int)x, (int)y, (int)width, (int)height);
-            var availableSize = new Size2(width, height);
-            var desiredSize = window.GetDesiredSize(context, availableSize);
-            var alignedRectangle = AlignRectangle(HorizontalAlignment.Centre, VerticalAlignment.Centre, desiredSize, rectangle);
+        //public static void PlaceWindow(IGuiContext context, Window window, float x, float y, float width, float height)
+        //{
+        //    var rectangle = new Rectangle((int)x, (int)y, (int)width, (int)height);
+        //    var availableSize = new Size2(width, height);
+        //    var desiredSize = window.GetDesiredSize(context, availableSize);
+        //    var alignedRectangle = AlignRectangle(HorizontalAlignment.Centre, VerticalAlignment.Centre, desiredSize, rectangle);
 
-            window.Position = new Vector2(alignedRectangle.X, alignedRectangle.Y);
-            window.Size = alignedRectangle.Size;
-            window.Layout(context, window.BoundingRectangle);
-        }
+        //    window.Position = new Vector2(alignedRectangle.X, alignedRectangle.Y);
+        //    window.Size = alignedRectangle.Size;
+        //    window.Layout(context, window.BoundingRectangle);
+        //}
 
         public static Rectangle AlignRectangle(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Size2 size, Rectangle targetRectangle)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -26,6 +27,8 @@ namespace MonoGame.Extended.Gui.Controls
                 }
             }
         }
+
+        public override IEnumerable<Control> Children => Items.OfType<Control>();
 
         public virtual List<object> Items { get; } = new List<object>();
         public virtual Color SelectedTextColor { get; set; } = Color.White;
@@ -96,7 +99,7 @@ namespace MonoGame.Extended.Gui.Controls
         {
             var textRectangle = new Rectangle(itemRectangle.X + ItemPadding.Left, itemRectangle.Y + ItemPadding.Top,
                 itemRectangle.Width - ItemPadding.Right, itemRectangle.Height - ItemPadding.Bottom);
-            var itemTextInfo = GetTextInfo(context, GetItemName(item), textRectangle, HorizontalAlignment.Left, VerticalAlignment.Top, clippingRectangle);
+            var itemTextInfo = GetTextInfo(context, GetItemName(item), textRectangle, HorizontalTextAlignment, VerticalTextAlignment, clippingRectangle);
             return itemTextInfo;
         }
 
