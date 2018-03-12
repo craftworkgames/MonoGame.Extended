@@ -1,6 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -10,23 +8,23 @@ namespace MonoGame.Extended.Gui.Controls
         {
         }
 
-        private Point _iconPosition;
+        //private Point _iconPosition;
 
-        public Color IconColor { get; set; } = Color.White;
+        //public Color IconColor { get; set; } = Color.White;
 
-        private TextureRegion2D _iconRegion;
-        public TextureRegion2D IconRegion
-        {
-            get { return _iconRegion; }
-            set
-            {
-                if (_iconRegion != value)
-                {
-                    _iconRegion = value;
-                    RecalculateIconPosition();
-                }
-            }
-        }
+        //private TextureRegion2D _iconRegion;
+        //public TextureRegion2D IconRegion
+        //{
+        //    get { return _iconRegion; }
+        //    set
+        //    {
+        //        if (_iconRegion != value)
+        //        {
+        //            _iconRegion = value;
+        //            RecalculateIconPosition();
+        //        }
+        //    }
+        //}
 
         public event EventHandler Clicked;
         public event EventHandler PressedStateChanged;
@@ -106,18 +104,18 @@ namespace MonoGame.Extended.Gui.Controls
             Clicked?.Invoke(this, EventArgs.Empty);
         }
 
-        protected override void OnSizeChanged()
-        {
-            if (IconRegion != null)
-                RecalculateIconPosition();
-        }
+        //protected override void OnSizeChanged()
+        //{
+        //    if (IconRegion != null)
+        //        RecalculateIconPosition();
+        //}
 
-        private void RecalculateIconPosition()
-        {
-            var x = (BoundingRectangle.Width - IconRegion.Width) / 2;
-            var y = (BoundingRectangle.Height - IconRegion.Height) / 2;
-            _iconPosition = new Point(x, y);
-        }
+        //private void RecalculateIconPosition()
+        //{
+        //    var x = (BoundingRectangle.Width - IconRegion.Width) / 2;
+        //    var y = (BoundingRectangle.Height - IconRegion.Height) / 2;
+        //    _iconPosition = new Point(x, y);
+        //}
 
         //protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
         //{

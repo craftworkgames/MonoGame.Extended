@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public Orientation Orientation { get; set; } = Orientation.Vertical;
-        public int Spacing { get; set; } = 0;
+        public int Spacing { get; set; }
 
         public override Size2 GetContentSize(IGuiContext context)
         {
@@ -50,18 +50,14 @@ namespace MonoGame.Extended.Gui.Controls
                 switch (Orientation)
                 {
                     case Orientation.Vertical:
-                        //control.VerticalAlignment = VerticalAlignment.Top;
-
                         PlaceControl(context, control, rectangle.X, rectangle.Y, rectangle.Width, actualSize.Height);
                         rectangle.Y += actualSize.Height + Spacing;
                         rectangle.Height -= actualSize.Height;
                         break;
                     case Orientation.Horizontal:
-                        //control.HorizontalAlignment = HorizontalAlignment.Left;
-
                         PlaceControl(context, control, rectangle.X, rectangle.Y, actualSize.Width, rectangle.Height);
                         rectangle.X += actualSize.Width + Spacing;
-                        rectangle.Height -= actualSize.Height;
+                        rectangle.Width -= actualSize.Width;
                         break;
                     default:
                         throw new InvalidOperationException($"Unexpected orientation {Orientation}");

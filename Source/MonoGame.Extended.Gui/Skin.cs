@@ -132,6 +132,10 @@ namespace MonoGame.Extended.Gui
                         {nameof(Control.TextColor), new Color(241, 241, 241)},
                         //{nameof(Control.Margin), new Thickness(5)},
                         {nameof(Control.Padding), new Thickness(5)},
+                        {nameof(Control.DisabledStyle), new ControlStyle(typeof(Control)) {
+                                { nameof(Control.TextColor), new Color(78,78,80) }
+                            } 
+                        }
                     },
                     new ControlStyle(typeof(LayoutControl)) {
                         {nameof(Control.BackgroundColor), Color.Transparent},
@@ -187,7 +191,6 @@ namespace MonoGame.Extended.Gui
                         {nameof(ProgressBar.Height), 32 },
                         {nameof(ProgressBar.Padding), new Thickness(5, 4)},
                     }
-
                 }
             };
             return skin;

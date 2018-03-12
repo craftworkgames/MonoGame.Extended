@@ -34,7 +34,7 @@ namespace MonoGame.Extended.Gui.Controls
 
                     foreach (var childControl in Children)
                     {
-                        if(childControl.Skin == null)
+                        if (childControl.Skin == null)
                             childControl.Skin = value;
                     }
                 }

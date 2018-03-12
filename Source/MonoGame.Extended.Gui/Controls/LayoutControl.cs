@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -17,7 +16,6 @@ namespace MonoGame.Extended.Gui.Controls
         public override void InvalidateMeasure()
         {
             base.InvalidateMeasure();
-
             _isLayoutValid = false;
         }
 
@@ -26,7 +24,10 @@ namespace MonoGame.Extended.Gui.Controls
             base.Update(context, deltaSeconds);
 
             if (!_isLayoutValid)
+            {
                 Layout(context, new RectangleF(0, 0, ContentRectangle.Width, ContentRectangle.Height));
+                _isLayoutValid = true;
+            }
         }
 
         protected abstract void Layout(IGuiContext context, RectangleF rectangle);
