@@ -14,6 +14,9 @@ namespace MonoGame.Extended.Particles
             Scale = new Range<float>(1f, 1f);
             Rotation = new Range<float>(-MathHelper.Pi, MathHelper.Pi);
             Mass = 1f;
+            MaintainAspectRatioOnScale = true;
+            ScaleX = new Range<float>(1f, 1f);
+            ScaleY = new Range<float>(1f, 1f);
         }
 
         public Range<int> Quantity { get; set; }
@@ -23,5 +26,9 @@ namespace MonoGame.Extended.Particles
         public Range<float> Scale { get; set; }
         public Range<float> Rotation { get; set; }
         public Range<float> Mass { get; set; }
+        public bool MaintainAspectRatioOnScale { get; set; }
+        public Range<float> ScaleX { get; set; }
+        public Range<float> ScaleY { get; set; }
+
     }
 }
