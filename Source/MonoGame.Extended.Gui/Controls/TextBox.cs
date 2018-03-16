@@ -44,10 +44,10 @@ namespace MonoGame.Extended.Gui.Controls
 
         public override IEnumerable<Control> Children { get; } = Enumerable.Empty<Control>();
 
-        public override Size2 GetContentSize(IGuiContext context)
+        public override Size GetContentSize(IGuiContext context)
         {
             var font = Font ?? context.DefaultFont;
-            return font.MeasureString(Text ?? string.Empty);
+            return (Size)font.MeasureString(Text ?? string.Empty);
         }
 
         //protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
@@ -242,11 +242,6 @@ namespace MonoGame.Extended.Gui.Controls
         {
             base.Draw(context, renderer, deltaSeconds);
 
-            DrawForeground(context, renderer, deltaSeconds);
-        }
-
-        private void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
-        {
             var text = PasswordCharacter.HasValue ? new string(PasswordCharacter.Value, Text.Length) : Text;
             var textInfo = GetTextInfo(context, text, ContentRectangle, HorizontalTextAlignment, VerticalTextAlignment);
 
@@ -291,6 +286,7 @@ namespace MonoGame.Extended.Gui.Controls
                 //}
             }
         }
+
 
         //protected override string CreateBoxText(string text, BitmapFont font, float width)
         //{

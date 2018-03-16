@@ -34,9 +34,9 @@ namespace MonoGame.Extended.Gui.Controls
 
         public override IEnumerable<Control> Children { get; } = Enumerable.Empty<Control>();
 
-        public override Size2 GetContentSize(IGuiContext context)
+        public override Size GetContentSize(IGuiContext context)
         {
-            return new Size2(5, 5);
+            return new Size(5, 5);
         }
 
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)

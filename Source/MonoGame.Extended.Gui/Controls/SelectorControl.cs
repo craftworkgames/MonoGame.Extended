@@ -140,14 +140,14 @@ namespace MonoGame.Extended.Gui.Controls
                 FirstIndex--;
         }
 
-        protected Size2 GetItemSize(IGuiContext context, object item)
+        protected Size GetItemSize(IGuiContext context, object item)
         {
             var text = GetItemName(item);
             var font = Font ?? context.DefaultFont;
-            var textSize = font.MeasureString(text ?? string.Empty);
+            var textSize = (Size)font.MeasureString(text ?? string.Empty);
             var itemWidth = textSize.Width + ItemPadding.Width;
             var itemHeight = textSize.Height + ItemPadding.Height;
-            return new Size2(itemWidth, itemHeight);
+            return new Size(itemWidth, itemHeight);
         }
 
         protected abstract Rectangle GetListAreaRectangle(IGuiContext context);

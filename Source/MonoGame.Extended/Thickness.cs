@@ -30,7 +30,12 @@ namespace MonoGame.Extended
         public int Bottom { get; set; }
         public int Width => Left + Right;
         public int Height => Top + Bottom;
-        public Size2 Size => new Size2(Width, Height);
+        public Size Size => new Size(Width, Height);
+
+        public static implicit operator Thickness(int value)
+        {
+            return new Thickness(value);
+        }
 
         public override bool Equals(object obj)
         {

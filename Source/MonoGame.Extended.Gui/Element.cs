@@ -24,8 +24,8 @@ namespace MonoGame.Extended.Gui
     public abstract class Element
     {
         public string Name { get; set; }
-        public Vector2 Position { get; set; }
-        public Vector2 Origin { get; set; }
+        public Point Position { get; set; }
+        public Point Origin { get; set; }
         public Color BackgroundColor { get; set; }
         public Color BorderColor { get; set; } = Color.White;
         public int BorderThickness { get; set; } = 0;
@@ -65,8 +65,8 @@ namespace MonoGame.Extended.Gui
             }
         }
 
-        private Size2 _size;
-        public Size2 Size
+        private Size _size;
+        public Size Size
         {
             get { return _size; }
             set
@@ -76,19 +76,21 @@ namespace MonoGame.Extended.Gui
             }
         }
 
-        protected virtual void OnSizeChanged() {}
+        protected virtual void OnSizeChanged() { }
 
-        public float Width
+        public int Width
         {
             get { return Size.Width; }
-            set { Size = new Size2(value, Size.Height); }
+            set { Size = new Size(value, Size.Height); }
         }
 
-        public float Height
+        public int Height
         {
             get { return Size.Height; }
-            set { Size = new Size2(Size.Width, value); }
+            set { Size = new Size(Size.Width, value); }
         }
+
+        public Size ActualSize { get; internal set; }
 
         public abstract void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds);
     }
@@ -106,12 +108,12 @@ namespace MonoGame.Extended.Gui
         {
             get
             {
-                var offset = Vector2.Zero;
+                var offset = Point.Zero;
 
                 if (Parent != null)
-                    offset = Parent.BoundingRectangle.Location.ToVector2();
+                    offset = Parent.BoundingRectangle.Location;
 
-                return new Rectangle((offset + Position - Size * Origin).ToPoint(), (Point)Size);
+                return new Rectangle(offset + Position - ActualSize * Origin, ActualSize);
             }
         }
     }

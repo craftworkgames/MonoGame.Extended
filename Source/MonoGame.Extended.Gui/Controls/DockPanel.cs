@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -9,14 +10,14 @@ namespace MonoGame.Extended.Gui.Controls
 
     public class DockPanel : LayoutControl
     {
-        public override Size2 GetContentSize(IGuiContext context)
+        public override Size GetContentSize(IGuiContext context)
         {
-            var size = new Size2();
+            var size = new Size();
 
             for (var i = 0; i < Items.Count; i++)
             {
                 var control = Items[i];
-                var actualSize = control.GetActualSize(context);
+                var actualSize = control.CalculateActualSize(context);
 
                 if (LastChildFill && i == Items.Count - 1)
                 {
@@ -46,7 +47,7 @@ namespace MonoGame.Extended.Gui.Controls
             return size;
         }
 
-        protected override void Layout(IGuiContext context, RectangleF rectangle)
+        protected override void Layout(IGuiContext context, Rectangle rectangle)
         {
             for (var i = 0; i < Items.Count; i++)
             {
@@ -58,7 +59,7 @@ namespace MonoGame.Extended.Gui.Controls
                 }
                 else
                 {
-                    var actualSize = control.GetActualSize(context);
+                    var actualSize = control.CalculateActualSize(context);
                     var dock = control.GetAttachedProperty(DockProperty) as Dock? ?? Dock.Left;
 
                     switch (dock)

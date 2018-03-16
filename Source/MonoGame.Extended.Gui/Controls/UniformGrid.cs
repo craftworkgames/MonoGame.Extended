@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -12,19 +13,19 @@ namespace MonoGame.Extended.Gui.Controls
         public int Columns { get; set; }
         public int Rows { get; set; }
 
-        public override Size2 GetContentSize(IGuiContext context)
+        public override Size GetContentSize(IGuiContext context)
         {
             var columns = Columns == 0 ? (int)Math.Ceiling(Math.Sqrt(Items.Count)) : Columns;
             var rows = Rows == 0 ? (int)Math.Ceiling((float)Items.Count / columns) : Rows;
             var sizes = Items
-                .Select(control => control.GetActualSize(context))
+                .Select(control => control.CalculateActualSize(context))
                 .ToArray();
             var minCellWidth = sizes.Max(s => s.Width);
             var minCellHeight = sizes.Max(s => s.Height);
-            return new Size2(minCellWidth * columns, minCellHeight * rows);
+            return new Size(minCellWidth * columns, minCellHeight * rows);
         }
 
-        protected override void Layout(IGuiContext context, RectangleF rectangle)
+        protected override void Layout(IGuiContext context, Rectangle rectangle)
         {
             var gridInfo = CalculateGridInfo(context, rectangle.Size);
             var columnIndex = 0;
@@ -66,7 +67,7 @@ namespace MonoGame.Extended.Gui.Controls
             var maxCellWidth = availableSize.Width / columns;
             var maxCellHeight = availableSize.Height / rows;
             var sizes = Items
-                .Select(control => control.GetActualSize(context)) // LayoutHelper.GetSizeWithMargins(control, context, new Size2(maxCellWidth, maxCellHeight)))
+                .Select(control => control.CalculateActualSize(context)) // LayoutHelper.GetSizeWithMargins(control, context, new Size2(maxCellWidth, maxCellHeight)))
                 .ToArray();
             var maxControlWidth = sizes.Length == 0 ? 0 : sizes.Max(s => s.Width);
             var maxControlHeight = sizes.Length == 0 ? 0 : sizes.Max(s => s.Height);

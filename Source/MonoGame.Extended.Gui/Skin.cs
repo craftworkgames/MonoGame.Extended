@@ -118,9 +118,11 @@ namespace MonoGame.Extended.Gui
             return control;
         }
 
-        public static Skin FromDefault(BitmapFont font)
+        public static Skin Default { get; set; }
+
+        public static Skin CreateDefault(BitmapFont font)
         {
-            var skin = new Skin
+            Default = new Skin
             {
                 Fonts = { font },
                 Styles =
@@ -149,10 +151,12 @@ namespace MonoGame.Extended.Gui
                         {nameof(ComboBox.SelectedItemColor), new Color(0, 122, 204)},
                         {nameof(ComboBox.HorizontalTextAlignment), HorizontalAlignment.Left }
                     },
-                    //new ControlStyle(typeof(CheckBox))
-                    //{
-                    //    {nameof(CheckBox.HorizontalTextAlignment), HorizontalAlignment.Left }
-                    //},
+                    new ControlStyle(typeof(CheckBox))
+                    {
+                        {nameof(CheckBox.HorizontalTextAlignment), HorizontalAlignment.Left },
+                        {nameof(CheckBox.BorderThickness), 0},
+                        {nameof(CheckBox.BackgroundColor), Color.Transparent},
+                    },
                     new ControlStyle(typeof(ListBox))
                     {
                         {nameof(ListBox.SelectedItemColor), new Color(0, 122, 204)},
@@ -193,7 +197,7 @@ namespace MonoGame.Extended.Gui
                     }
                 }
             };
-            return skin;
+            return Default;
         }
     }
 }

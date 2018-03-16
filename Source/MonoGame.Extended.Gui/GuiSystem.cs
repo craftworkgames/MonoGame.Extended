@@ -27,7 +27,7 @@ namespace MonoGame.Extended.Gui
 
         private Control _preFocusedControl;
 
-        public GuiSystem(ViewportAdapter viewportAdapter, IGuiRenderer renderer, Skin defaultSkin)
+        public GuiSystem(ViewportAdapter viewportAdapter, IGuiRenderer renderer)
         {
             _viewportAdapter = viewportAdapter;
             _renderer = renderer;
@@ -46,8 +46,6 @@ namespace MonoGame.Extended.Gui
             _keyboardListener = new KeyboardListener();
             _keyboardListener.KeyTyped += (sender, args) => PropagateDown(FocusedControl, x => x.OnKeyTyped(this, args));
             _keyboardListener.KeyPressed += (sender, args) => PropagateDown(FocusedControl, x => x.OnKeyPressed(this, args));
-
-            DefaultSkin = defaultSkin;
         }
 
         public Control FocusedControl { get; private set; }
@@ -73,20 +71,16 @@ namespace MonoGame.Extended.Gui
 
         public Vector2 CursorPosition { get; set; }
 
-        public Skin DefaultSkin { get; }
-
-        public BitmapFont DefaultFont => DefaultSkin?.DefaultFont;
+        public BitmapFont DefaultFont => Skin.Default?.DefaultFont;
         
         private void InitializeScreen(Screen screen)
         {
-            if (screen.Content != null && screen.Content.Skin == null)
-                screen.Content.Skin = DefaultSkin;
-
             screen.Layout(this, BoundingRectangle);
         }
 
         public void ClientSizeChanged()
         {
+            //ActiveScreen?.Content?.InvalidateMeasure();
             ActiveScreen?.Layout(this, BoundingRectangle);
         }
 
@@ -104,8 +98,8 @@ namespace MonoGame.Extended.Gui
             if (ActiveScreen != null && ActiveScreen.IsVisible)
                 UpdateControl(ActiveScreen.Content, deltaSeconds);
 
-            if (ActiveScreen.IsLayoutRequired)
-                ActiveScreen.Layout(this, BoundingRectangle);
+            //if (ActiveScreen.IsLayoutRequired)
+            //    ActiveScreen.Layout(this, BoundingRectangle);
 
             ActiveScreen.Update(gameTime);
         }
@@ -122,7 +116,7 @@ namespace MonoGame.Extended.Gui
                 //DrawWindows(ActiveScreen.Windows, deltaSeconds);
             }
 
-            var cursor = DefaultSkin?.Cursor;
+            var cursor = Skin.Default?.Cursor;
 
             if (cursor != null)
                 _renderer.DrawRegion(cursor.TextureRegion, CursorPosition, cursor.Color);

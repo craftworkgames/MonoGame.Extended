@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -11,14 +12,14 @@ namespace MonoGame.Extended.Gui.Controls
         public Orientation Orientation { get; set; } = Orientation.Vertical;
         public int Spacing { get; set; }
 
-        public override Size2 GetContentSize(IGuiContext context)
+        public override Size GetContentSize(IGuiContext context)
         {
-            var width = 0f;
-            var height = 0f;
+            var width = 0;
+            var height = 0;
 
             foreach (var control in Items)
             {
-                var actualSize = control.GetActualSize(context);
+                var actualSize = control.CalculateActualSize(context);
 
                 switch (Orientation)
                 {
@@ -38,14 +39,14 @@ namespace MonoGame.Extended.Gui.Controls
             width += Orientation == Orientation.Horizontal ? (Items.Count - 1) * Spacing : 0;
             height += Orientation == Orientation.Vertical ? (Items.Count - 1) * Spacing : 0;
 
-            return new Size2(width, height);
+            return new Size(width, height);
         }
 
-        protected override void Layout(IGuiContext context, RectangleF rectangle)
+        protected override void Layout(IGuiContext context, Rectangle rectangle)
         {
             foreach (var control in Items)
             {
-                var actualSize = control.GetActualSize(context);
+                var actualSize = control.CalculateActualSize(context);
 
                 switch (Orientation)
                 {

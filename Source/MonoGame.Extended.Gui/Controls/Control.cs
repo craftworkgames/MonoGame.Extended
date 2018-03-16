@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public abstract class Control : Element<Control>, IMovable, ISizable, IRectangular
+    public abstract class Control : Element<Control>, IRectangular
     {
         protected Control()
         {
@@ -16,7 +16,8 @@ namespace MonoGame.Extended.Gui.Controls
             TextColor = Color.White;
             IsEnabled = true;
             IsVisible = true;
-            Origin = Vector2.Zero;
+            Origin = Point.Zero;
+            Skin = Skin.Default;
         }
 
         private Skin _skin;
@@ -31,12 +32,6 @@ namespace MonoGame.Extended.Gui.Controls
                 {
                     _skin = value;
                     _skin?.Apply(this);
-
-                    foreach (var childControl in Children)
-                    {
-                        if (childControl.Skin == null)
-                            childControl.Skin = value;
-                    }
                 }
             }
         }
@@ -90,15 +85,13 @@ namespace MonoGame.Extended.Gui.Controls
 
         private bool _isHovering;
 
-        public abstract Size2 GetContentSize(IGuiContext context);
+        public abstract Size GetContentSize(IGuiContext context);
 
-        public virtual Size2 GetActualSize(IGuiContext context)
+        public virtual Size CalculateActualSize(IGuiContext context)
         {
             var fixedSize = Size;
             var desiredSize = GetContentSize(context) + Margin.Size + Padding.Size;
-            // ReSharper disable CompareOfFloatsByEqualityOperator
-            return new Size2(fixedSize.Width == 0 ? desiredSize.Width : fixedSize.Width, fixedSize.Height == 0 ? desiredSize.Height : fixedSize.Height);
-            // ReSharper restore CompareOfFloatsByEqualityOperator
+            return new Size(fixedSize.Width == 0 ? desiredSize.Width : fixedSize.Width, fixedSize.Height == 0 ? desiredSize.Height : fixedSize.Height);
         }
 
         public virtual void InvalidateMeasure() { }
@@ -193,7 +186,7 @@ namespace MonoGame.Extended.Gui.Controls
         protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Rectangle? clippingRectangle = null)
         {
             var font = Font ?? context.DefaultFont;
-            var textSize = font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size;
+            var textSize = (Size)font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size;
             var destinationRectangle = LayoutHelper.AlignRectangle(horizontalAlignment, verticalAlignment, textSize, targetRectangle);
             var textPosition = destinationRectangle.Location.ToVector2();
             var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, clippingRectangle);// ?? ClippingRectangle);
@@ -202,7 +195,7 @@ namespace MonoGame.Extended.Gui.Controls
         
         public struct TextInfo
         {
-            public TextInfo(string text, BitmapFont font, Vector2 position, Vector2 size, Color color, Rectangle? clippingRectangle)
+            public TextInfo(string text, BitmapFont font, Vector2 position, Size size, Color color, Rectangle? clippingRectangle)
             {
                 Text = text ?? string.Empty;
                 Font = font;
@@ -214,7 +207,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             public string Text;
             public BitmapFont Font;
-            public Vector2 Size;
+            public Size Size;
             public Color Color;
             public Rectangle? ClippingRectangle;
             public Vector2 Position;

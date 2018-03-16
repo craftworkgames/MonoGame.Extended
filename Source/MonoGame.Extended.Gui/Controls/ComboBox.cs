@@ -40,10 +40,10 @@ namespace MonoGame.Extended.Gui.Controls
             return base.Contains(context, point) || IsOpen && GetListAreaRectangle(context).Contains(point);
         }
 
-        public override Size2 GetContentSize(IGuiContext context)
+        public override Size GetContentSize(IGuiContext context)
         {
-            var width = 0f;
-            var height = 0f;
+            var width = 0;
+            var height = 0;
 
             foreach (var item in Items)
             {
@@ -56,7 +56,7 @@ namespace MonoGame.Extended.Gui.Controls
                     height = itemSize.Height;
             }
 
-            return new Size2(width + ClipPadding.Width, height + ClipPadding.Height);
+            return new Size(width + ClipPadding.Width, height + ClipPadding.Height);
         }
 
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)

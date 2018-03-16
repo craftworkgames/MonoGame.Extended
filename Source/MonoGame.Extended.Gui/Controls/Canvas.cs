@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended.Gui.Controls
+﻿using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Gui.Controls
 {
     public class Canvas : LayoutControl
     {
@@ -6,18 +8,18 @@
         {
         }
         
-        protected override void Layout(IGuiContext context, RectangleF rectangle)
+        protected override void Layout(IGuiContext context, Rectangle rectangle)
         {
             foreach (var control in Items)
             {
-                var actualSize = control.GetActualSize(context);
+                var actualSize = control.CalculateActualSize(context);
                 PlaceControl(context, control, control.Position.X, control.Position.Y, actualSize.Width, actualSize.Height);
             }
         }
 
-        public override Size2 GetContentSize(IGuiContext context)
+        public override Size GetContentSize(IGuiContext context)
         {
-            return new Size2();
+            return new Size();
         }
     }
 }

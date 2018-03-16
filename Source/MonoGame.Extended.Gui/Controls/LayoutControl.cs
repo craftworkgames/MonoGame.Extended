@@ -25,12 +25,12 @@ namespace MonoGame.Extended.Gui.Controls
 
             if (!_isLayoutValid)
             {
-                Layout(context, new RectangleF(0, 0, ContentRectangle.Width, ContentRectangle.Height));
+                Layout(context, new Rectangle(0, 0, ContentRectangle.Width, ContentRectangle.Height));
                 _isLayoutValid = true;
             }
         }
 
-        protected abstract void Layout(IGuiContext context, RectangleF rectangle);
+        protected abstract void Layout(IGuiContext context, Rectangle rectangle);
 
         protected static void PlaceControl(IGuiContext context, Control control, float x, float y, float width, float height)
         {
