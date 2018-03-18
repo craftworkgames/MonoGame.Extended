@@ -176,7 +176,13 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        public virtual void OnScrolled(int delta) { }
+        #region Control Actions & Handlers
+
+        public event EventHandler OnScrolledHandler;
+        public virtual void OnScrolled(int delta)
+        {
+            OnScrolledHandler?.Invoke(this, EventArgs.Empty);
+        }
 
         public event EventHandler OnKeyTypedHandler;
         public virtual bool OnKeyTyped(IGuiContext context, KeyboardEventArgs args)
@@ -250,6 +256,8 @@ namespace MonoGame.Extended.Gui.Controls
             OnPointerLeaveHandler?.Invoke(this, EventArgs.Empty);
             return true;
         }
+
+        #endregion
 
         public virtual bool Contains(IGuiContext context, Point point)
         {
