@@ -181,13 +181,41 @@ namespace MonoGame.Extended.Gui.Controls
         public virtual bool OnKeyTyped(IGuiContext context, KeyboardEventArgs args) { return true; }
         public virtual bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args) { return true; }
 
-        public virtual bool OnFocus(IGuiContext context) { return true; }
-        public virtual bool OnUnfocus(IGuiContext context) { return true; }
+        public event EventHandler OnFocusHandler;
+        public virtual bool OnFocus(IGuiContext context)
+        {
+            OnFocusHandler?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
 
-        public virtual bool OnPointerDown(IGuiContext context, GuiPointerEventArgs args) { return true; }
-        public virtual bool OnPointerMove(IGuiContext context, GuiPointerEventArgs args) { return true; }
-        public virtual bool OnPointerUp(IGuiContext context, GuiPointerEventArgs args) { return true; }
-        
+        public event EventHandler OnUnfocusHandler;
+        public virtual bool OnUnfocus(IGuiContext context)
+        {
+            OnUnfocusHandler?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
+        public event EventHandler OnPointerDownHandler;
+        public virtual bool OnPointerDown(IGuiContext context, GuiPointerEventArgs args)
+        {
+            OnPointerDownHandler?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
+        public event EventHandler OnPointerMoveHandler;
+        public virtual bool OnPointerMove(IGuiContext context, GuiPointerEventArgs args)
+        {
+            OnPointerMoveHandler?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
+        public event EventHandler OnPointerUpHandler;
+        public virtual bool OnPointerUp(IGuiContext context, GuiPointerEventArgs args)
+        {
+            OnPointerUpHandler?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
         public virtual bool OnPointerEnter(IGuiContext context, GuiPointerEventArgs args)
         {
             if (IsEnabled && !_isHovering)
