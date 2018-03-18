@@ -322,6 +322,8 @@ namespace MonoGame.Extended.Entities
 
             MarkEntityToBeRefreshed(entity);
 
+            component.OnAddedToEntity();
+
             return component;
         }
 
@@ -383,6 +385,8 @@ namespace MonoGame.Extended.Entities
 
                 components.Remove(entity);
                 component.Return();
+
+                component.OnRemovedFromEntity();
             }
 
             _componentsToRemove.Clear();
