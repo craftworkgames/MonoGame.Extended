@@ -70,6 +70,22 @@ namespace MonoGame.Extended.Gui.Controls
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsFocused { get; set; }
 
+        private bool _isHovered;
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public bool IsHovered
+        {
+            get { return _isHovered; }
+            private set
+            {
+                if (_isHovered != value)
+                {
+                    _isHovered = value;
+                    HoverStyle?.ApplyIf(this, _isHovered);
+                }
+            }
+        }
+
         [JsonIgnore]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -82,9 +98,7 @@ namespace MonoGame.Extended.Gui.Controls
         public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Stretch;
         public HorizontalAlignment HorizontalTextAlignment { get; set; } = HorizontalAlignment.Centre;
         public VerticalAlignment VerticalTextAlignment { get; set; } = VerticalAlignment.Centre;
-
-        private bool _isHovering;
-
+        
         public abstract Size GetContentSize(IGuiContext context);
 
         public virtual Size CalculateActualSize(IGuiContext context)
@@ -111,7 +125,20 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public bool IsVisible { get; set; }
-        public ControlStyle HoverStyle { get; set; }
+
+        private ControlStyle _hoverStyle;
+        public ControlStyle HoverStyle
+        {
+            get { return _hoverStyle; }
+            set
+            {
+                if (_hoverStyle != value)
+                {
+                    _hoverStyle = value;
+                    HoverStyle?.ApplyIf(this, _isHovered);
+                }
+            }
+        }
 
         private ControlStyle _disabledStyle;
         public ControlStyle DisabledStyle
@@ -138,21 +165,17 @@ namespace MonoGame.Extended.Gui.Controls
         
         public virtual bool OnPointerEnter(IGuiContext context, PointerEventArgs args)
         {
-            if (IsEnabled && !_isHovering)
-            {
-                _isHovering = true;
-                HoverStyle?.Apply(this);
-            }
+            if (IsEnabled && !IsHovered)
+                IsHovered = true;
+
             return true;
         }
 
         public virtual bool OnPointerLeave(IGuiContext context, PointerEventArgs args)
         {
-            if (IsEnabled && _isHovering)
-            {
-                _isHovering = false;
-                HoverStyle?.Revert(this);
-            }
+            if (IsEnabled && IsHovered)
+                IsHovered = false;
+
             return true;
         }
 

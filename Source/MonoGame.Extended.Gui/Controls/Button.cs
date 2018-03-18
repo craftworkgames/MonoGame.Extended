@@ -2,29 +2,105 @@
 
 namespace MonoGame.Extended.Gui.Controls
 {
+    public class ToggleButton : Button
+    {
+        public ToggleButton()
+        {
+        }
+
+        public event EventHandler CheckedStateChanged;
+
+        private bool _isChecked;
+        public bool IsChecked
+        {
+            get { return _isChecked; }
+            set
+            {
+                if (_isChecked != value)
+                {
+                    _isChecked = value;
+                    CheckedStyle?.ApplyIf(this, _isChecked);
+                    CheckedStateChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        private ControlStyle _checkedStyle;
+        public ControlStyle CheckedStyle
+        {
+            get { return _checkedStyle; }
+            set
+            {
+                if (_checkedStyle != value)
+                {
+                    _checkedStyle = value;
+                    CheckedStyle?.ApplyIf(this, _isChecked);
+                }
+            }
+        }
+
+        private ControlStyle _checkedHoverStyle;
+        public ControlStyle CheckedHoverStyle
+        {
+            get { return _checkedHoverStyle; }
+            set
+            {
+                if (_checkedHoverStyle != value)
+                {
+                    _checkedHoverStyle = value;
+                    CheckedHoverStyle?.ApplyIf(this, _isChecked && IsHovered);
+                }
+            }
+        }
+
+        public override bool OnPointerUp(IGuiContext context, PointerEventArgs args)
+        {
+            base.OnPointerUp(context, args);
+
+            if (IsFocused && BoundingRectangle.Contains(args.Position))
+            {
+                HoverStyle?.Revert(this);
+                CheckedHoverStyle?.Revert(this);
+
+                IsChecked = !IsChecked;
+
+                if (IsChecked)
+                    CheckedHoverStyle?.Apply(this);
+                else
+                    HoverStyle?.Apply(this);
+            }
+
+            return true;
+        }
+
+        public override bool OnPointerEnter(IGuiContext context, PointerEventArgs args)
+        {
+            if (IsChecked)
+            {
+                CheckedHoverStyle?.Apply(this);
+                return true;
+            }
+
+            return base.OnPointerEnter(context, args);
+        }
+
+        public override bool OnPointerLeave(IGuiContext context, PointerEventArgs args)
+        {
+            if (IsChecked)
+            {
+                CheckedHoverStyle?.Revert(this);
+                return true;
+            }
+
+            return base.OnPointerLeave(context, args);
+        }
+    }
+
     public class Button : ContentControl
     {
         public Button()
         {
         }
-
-        //private Point _iconPosition;
-
-        //public Color IconColor { get; set; } = Color.White;
-
-        //private TextureRegion2D _iconRegion;
-        //public TextureRegion2D IconRegion
-        //{
-        //    get { return _iconRegion; }
-        //    set
-        //    {
-        //        if (_iconRegion != value)
-        //        {
-        //            _iconRegion = value;
-        //            RecalculateIconPosition();
-        //        }
-        //    }
-        //}
 
         public event EventHandler Clicked;
         public event EventHandler PressedStateChanged;
@@ -67,6 +143,7 @@ namespace MonoGame.Extended.Gui.Controls
                 _isPointerDown = true;
                 IsPressed = true;
             }
+
             return base.OnPointerDown(context, args);
         }
 
@@ -79,8 +156,9 @@ namespace MonoGame.Extended.Gui.Controls
                 IsPressed = false;
 
                 if (BoundingRectangle.Contains(args.Position) && IsEnabled)
-                    TriggerClicked();
+                    Click();
             }
+
             return base.OnPointerUp(context, args);
         }
 
@@ -96,35 +174,13 @@ namespace MonoGame.Extended.Gui.Controls
         {
             if (IsEnabled)
                 IsPressed = false;
+
             return base.OnPointerLeave(context, args);
         }
 
-        public void TriggerClicked()
+        public void Click()
         {
             Clicked?.Invoke(this, EventArgs.Empty);
         }
-
-        //protected override void OnSizeChanged()
-        //{
-        //    if (IconRegion != null)
-        //        RecalculateIconPosition();
-        //}
-
-        //private void RecalculateIconPosition()
-        //{
-        //    var x = (BoundingRectangle.Width - IconRegion.Width) / 2;
-        //    var y = (BoundingRectangle.Height - IconRegion.Height) / 2;
-        //    _iconPosition = new Point(x, y);
-        //}
-
-        //protected override void DrawForeground(IGuiContext context, IGuiRenderer renderer, float deltaSeconds, TextInfo textInfo)
-        //{
-        //    base.DrawForeground(context, renderer, deltaSeconds, textInfo);
-
-        //    if (IconRegion != null)
-        //    {
-        //        renderer.DrawRegion(IconRegion, new Rectangle(BoundingRectangle.Location + _iconPosition + Offset.ToPoint(), IconRegion.Bounds.Size), IconColor);
-        //    }
-        //}
     }
 }

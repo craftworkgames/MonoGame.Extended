@@ -132,7 +132,6 @@ namespace MonoGame.Extended.Gui
                         {nameof(Control.BorderColor), new Color(67, 67, 70)},
                         {nameof(Control.BorderThickness), 1},
                         {nameof(Control.TextColor), new Color(241, 241, 241)},
-                        //{nameof(Control.Margin), new Thickness(5)},
                         {nameof(Control.Padding), new Thickness(5)},
                         {nameof(Control.DisabledStyle), new ControlStyle(typeof(Control)) {
                                 { nameof(Control.TextColor), new Color(78,78,80) }
@@ -181,12 +180,25 @@ namespace MonoGame.Extended.Gui
                     new ControlStyle(typeof(Button)) {
                         {
                             nameof(Button.HoverStyle), new ControlStyle {
-                                {nameof(Button.BackgroundColor), new Color(62, 62, 64)}
+                                {nameof(Button.BackgroundColor), new Color(62, 62, 64)},
+                                {nameof(Button.BorderColor), Color.WhiteSmoke }
                             }
                         },
                         {
                             nameof(Button.PressedStyle), new ControlStyle {
                                 {nameof(Button.BackgroundColor), new Color(0, 122, 204)}
+                            }
+                        }
+                    },
+                    new ControlStyle(typeof(ToggleButton)) {
+                        {
+                            nameof(ToggleButton.CheckedStyle), new ControlStyle {
+                                {nameof(Button.BackgroundColor), new Color(0, 122, 204)}
+                            }
+                        },
+                        {
+                            nameof(ToggleButton.CheckedHoverStyle), new ControlStyle {
+                                {nameof(Button.BorderColor), Color.WhiteSmoke}
                             }
                         }
                     },
