@@ -178,8 +178,19 @@ namespace MonoGame.Extended.Gui.Controls
 
         public virtual void OnScrolled(int delta) { }
 
-        public virtual bool OnKeyTyped(IGuiContext context, KeyboardEventArgs args) { return true; }
-        public virtual bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args) { return true; }
+        public event EventHandler OnKeyTypedHandler;
+        public virtual bool OnKeyTyped(IGuiContext context, KeyboardEventArgs args)
+        {
+            OnKeyTypedHandler?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
+        public event EventHandler OnKeyPressedHandler;
+        public virtual bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args)
+        {
+            OnKeyPressedHandler?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
 
         public event EventHandler OnFocusHandler;
         public virtual bool OnFocus(IGuiContext context)
@@ -216,6 +227,7 @@ namespace MonoGame.Extended.Gui.Controls
             return true;
         }
 
+        public event EventHandler OnPointerEnterHandler;
         public virtual bool OnPointerEnter(IGuiContext context, GuiPointerEventArgs args)
         {
             if (IsEnabled && !_isHovering)
@@ -223,9 +235,11 @@ namespace MonoGame.Extended.Gui.Controls
                 _isHovering = true;
                 HoverStyle?.Apply(this);
             }
+            OnPointerEnterHandler?.Invoke(this, EventArgs.Empty);
             return true;
         }
 
+        public event EventHandler OnPointerLeaveHandler;
         public virtual bool OnPointerLeave(IGuiContext context, GuiPointerEventArgs args)
         {
             if (IsEnabled && _isHovering)
@@ -233,6 +247,7 @@ namespace MonoGame.Extended.Gui.Controls
                 _isHovering = false;
                 HoverStyle?.Revert(this);
             }
+            OnPointerLeaveHandler?.Invoke(this, EventArgs.Empty);
             return true;
         }
 
