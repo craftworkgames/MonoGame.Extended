@@ -97,8 +97,10 @@ namespace MonoGame.Extended.Gui
             {
                 if (screen.IsVisible)
                 {
+                    screen.Draw(this, _renderer, deltaSeconds);
                     DrawChildren(screen.Controls, deltaSeconds);
                     DrawWindows(screen.Windows, deltaSeconds);
+                    screen.LateDraw(this, _renderer, deltaSeconds);
                 }
             }
 
