@@ -120,10 +120,10 @@ namespace MonoGame.Extended.Gui
         private void DrawChildren(GuiControlCollection controls, float deltaSeconds)
         {
             foreach (var control in controls.Where(c => c.IsVisible))
+            {
                 control.Draw(this, _renderer, deltaSeconds);
-
-            foreach (var childControl in controls.Where(c => c.IsVisible))
-                DrawChildren(childControl.Controls, deltaSeconds);
+                DrawChildren(control.Controls, deltaSeconds);
+            }
         }
 
         #region Input Event Methods
