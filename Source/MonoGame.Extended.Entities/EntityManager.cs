@@ -410,6 +410,7 @@ namespace MonoGame.Extended.Entities
                     continue;
 
                 components.Remove(entity);
+                component.OnRemovedFromEntity();
             }
         }
 
