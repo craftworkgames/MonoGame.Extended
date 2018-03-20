@@ -186,8 +186,10 @@ namespace MonoGame.Extended.Entities
 
         internal void RemoveEntityFromGroup(Entity entity)
         {
-            Bag<Entity> entities;
+            if (string.IsNullOrEmpty(entity._group))
+                return;
 
+            Bag<Entity> entities;
             if (_entitiesByGroup.TryGetValue(entity._group, out entities))
                 entities.Remove(entity);
         }
