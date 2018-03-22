@@ -83,9 +83,10 @@ namespace MonoGame.Extended
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="rectangle">The rectangle to draw</param>
         /// <param name="color">The color to draw the rectangle in</param>
-        public static void FillRectangle(this SpriteBatch spriteBatch, RectangleF rectangle, Color color)
+        /// <param name="rotation">The rotation of the rectangle to draw</param>
+        public static void FillRectangle(this SpriteBatch spriteBatch, RectangleF rectangle, Color color, float rotation = 0)
         {
-            FillRectangle(spriteBatch, rectangle.Position, rectangle.Size, color);
+            FillRectangle(spriteBatch, rectangle.Position, rectangle.Size, color, rotation);
         }
 
         /// <summary>
@@ -95,9 +96,10 @@ namespace MonoGame.Extended
         /// <param name="location">Where to draw</param>
         /// <param name="size">The size of the rectangle</param>
         /// <param name="color">The color to draw the rectangle in</param>
-        public static void FillRectangle(this SpriteBatch spriteBatch, Vector2 location, Size2 size, Color color)
+        /// <param name="rotation">The rotation of the rectangle to draw</param>
+        public static void FillRectangle(this SpriteBatch spriteBatch, Vector2 location, Size2 size, Color color, float rotation = 0)
         {
-            spriteBatch.Draw(GetTexture(spriteBatch), location, null, color, 0, Vector2.Zero, size, SpriteEffects.None, 0);
+            spriteBatch.Draw(GetTexture(spriteBatch), location, null, color, rotation, Vector2.Zero, size, SpriteEffects.None, 0);
         }
 
         /// <summary>
@@ -109,10 +111,11 @@ namespace MonoGame.Extended
         /// <param name="width">Width</param>
         /// <param name="height">Height</param>
         /// <param name="color">The color to draw the rectangle in</param>
+        /// <param name="rotation">The rotation of the rectangle to draw</param>
         public static void FillRectangle(this SpriteBatch spriteBatch, float x, float y, float width, float height,
-            Color color)
+            Color color, float rotation = 0)
         {
-            FillRectangle(spriteBatch, new Vector2(x, y), new Size2(width, height), color);
+            FillRectangle(spriteBatch, new Vector2(x, y), new Size2(width, height), color, rotation);
         }
 
         /// <summary>
@@ -122,8 +125,9 @@ namespace MonoGame.Extended
         /// <param name="rectangle">The rectangle to draw</param>
         /// <param name="color">The color to draw the rectangle in</param>
         /// <param name="thickness">The thickness of the lines</param>
+        /// <param name="rotation">The rotation of the rectangle to draw</param>
         public static void DrawRectangle(this SpriteBatch spriteBatch, RectangleF rectangle, Color color,
-            float thickness = 1f)
+            float thickness = 1f, float rotation = 0)
         {
             var texture = GetTexture(spriteBatch);
             var topLeft = new Vector2(rectangle.X, rectangle.Y);
@@ -132,10 +136,10 @@ namespace MonoGame.Extended
             var horizontalScale = new Vector2(rectangle.Width, thickness);
             var verticalScale = new Vector2(thickness, rectangle.Height);
 
-            spriteBatch.Draw(texture, topLeft, scale: horizontalScale, color: color);
-            spriteBatch.Draw(texture, topLeft, scale: verticalScale, color: color);
-            spriteBatch.Draw(texture, topRight, scale: verticalScale, color: color);
-            spriteBatch.Draw(texture, bottomLeft, scale: horizontalScale, color: color);
+            spriteBatch.Draw(texture, topLeft, scale: horizontalScale, color: color, rotation: rotation);
+            spriteBatch.Draw(texture, topLeft, scale: verticalScale, color: color, rotation: rotation);
+            spriteBatch.Draw(texture, topRight, scale: verticalScale, color: color, rotation: rotation);
+            spriteBatch.Draw(texture, bottomLeft, scale: horizontalScale, color: color, rotation: rotation);
         }
 
         /// <summary>
@@ -146,10 +150,11 @@ namespace MonoGame.Extended
         /// <param name="size">The size of the rectangle</param>
         /// <param name="color">The color to draw the rectangle in</param>
         /// <param name="thickness">The thickness of the line</param>
+        /// <param name="rotation">The rotation of the rectangle to draw</param>
         public static void DrawRectangle(this SpriteBatch spriteBatch, Vector2 location, Size2 size, Color color,
-            float thickness = 1f)
+            float thickness = 1f, float rotation = 0)
         {
-            DrawRectangle(spriteBatch, new RectangleF(location.X, location.Y, size.Width, size.Height), color, thickness);
+            DrawRectangle(spriteBatch, new RectangleF(location.X, location.Y, size.Width, size.Height), color, thickness, rotation);
         }
 
         /// <summary>
