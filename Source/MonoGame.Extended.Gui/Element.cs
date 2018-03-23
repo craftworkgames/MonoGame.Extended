@@ -78,6 +78,11 @@ namespace MonoGame.Extended.Gui
 
         protected virtual void OnSizeChanged() { }
 
+        public int MinWidth { get; set; }
+        public int MinHeight { get; set; }
+        public int MaxWidth { get; set; } = int.MaxValue;
+        public int MaxHeight { get; set; } = int.MaxValue;
+
         public int Width
         {
             get { return Size.Width; }

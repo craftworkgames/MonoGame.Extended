@@ -105,7 +105,22 @@ namespace MonoGame.Extended.Gui.Controls
         {
             var fixedSize = Size;
             var desiredSize = GetContentSize(context) + Margin.Size + Padding.Size;
-            return new Size(fixedSize.Width == 0 ? desiredSize.Width : fixedSize.Width, fixedSize.Height == 0 ? desiredSize.Height : fixedSize.Height);
+
+            if (desiredSize.Width < MinWidth)
+                desiredSize.Width = MinWidth;
+
+            if (desiredSize.Height < MinHeight)
+                desiredSize.Height = MinHeight;
+
+            if (desiredSize.Width > MaxWidth)
+                desiredSize.Width = MaxWidth;
+
+            if (desiredSize.Height > MaxWidth)
+                desiredSize.Height = MaxHeight;
+
+            var width = fixedSize.Width == 0 ? desiredSize.Width : fixedSize.Width;
+            var height = fixedSize.Height == 0 ? desiredSize.Height : fixedSize.Height;
+            return new Size(width, height);
         }
 
         public virtual void InvalidateMeasure() { }
