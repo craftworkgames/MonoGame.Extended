@@ -80,6 +80,9 @@ namespace MonoGame.Extended.Entities
             _returnToPoolDelegate = null;
         }
 
+        public virtual void OnAddedToEntity() { }
+        public virtual void OnRemovedFromEntity() { }
+
         public override string ToString()
         {
             return $"Entity: {Entity}";
