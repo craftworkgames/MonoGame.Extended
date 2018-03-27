@@ -120,6 +120,11 @@ namespace MonoGame.Extended.Gui.Controls
 
         private void RecalculateIconPosition()
         {
+            if (IconRegion == null)
+            {
+                _iconPosition = Point.Zero;
+                return;
+            }
             var x = (BoundingRectangle.Width - IconRegion.Width) / 2;
             var y = (BoundingRectangle.Height - IconRegion.Height) / 2;
             _iconPosition = new Point(x, y);

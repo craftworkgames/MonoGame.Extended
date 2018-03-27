@@ -111,6 +111,9 @@ namespace MonoGame.Extended.Gui
             renderer.DrawRectangle(BoundingRectangle, Color.Green);
         }
 
+        public virtual void LateDraw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        { }
+
         public override void SetBinding(string viewProperty, string viewModelProperty)
         {
             foreach (var control in Controls) control.SetBinding(viewProperty, viewModelProperty);

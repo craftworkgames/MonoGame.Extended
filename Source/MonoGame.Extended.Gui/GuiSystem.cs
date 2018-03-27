@@ -1,11 +1,10 @@
-﻿using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.ViewportAdapters;
 using System;
-using System.ComponentModel;
+using System.Linq;
 
 namespace MonoGame.Extended.Gui
 {
@@ -29,6 +28,9 @@ namespace MonoGame.Extended.Gui
         private GuiControl _preFocusedControl;
         private GuiControl _focusedControl;
         private GuiControl _hoveredControl;
+
+        public event EventHandler OnPointerDownHandler;
+        public event EventHandler OnPointerUpHandler;
 
         public GuiSystem(ViewportAdapter viewportAdapter, IGuiRenderer renderer)
         {
@@ -95,8 +97,10 @@ namespace MonoGame.Extended.Gui
             {
                 if (screen.IsVisible)
                 {
+                    screen.Draw(this, _renderer, deltaSeconds);
                     DrawChildren(screen.Controls, deltaSeconds);
                     DrawWindows(screen.Windows, deltaSeconds);
+                    screen.LateDraw(this, _renderer, deltaSeconds);
                 }
             }
 
@@ -131,8 +135,9 @@ namespace MonoGame.Extended.Gui
         {
             if (ActiveScreen == null || !ActiveScreen.IsVisible)
                 return;
-
+            
             _preFocusedControl = FindControlAtPoint(args.Position);
+            OnPointerDownHandler?.Invoke(this, EventArgs.Empty);
             PropagateDown(_hoveredControl, x => x.OnPointerDown(this, args));
         }
 
@@ -149,6 +154,7 @@ namespace MonoGame.Extended.Gui
             }
 
             _preFocusedControl = null;
+            OnPointerUpHandler?.Invoke(this, EventArgs.Empty);
             PropagateDown(_hoveredControl, x => x.OnPointerUp(this, args));
         }
 
