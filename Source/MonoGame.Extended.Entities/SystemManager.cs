@@ -95,10 +95,24 @@ namespace MonoGame.Extended.Entities
             ProcessLayers(gameTime, _updateLayers);
         }
 
+		internal void Update(GameTime gameTime, int layer)
+		{
+			Debug.Assert(layer < _updateLayers.Length);
+
+			ProcessLayer(gameTime, _updateLayers, layer);
+		}
+
         internal void Draw(GameTime gameTime)
         {
             ProcessLayers(gameTime, _drawLayers);
         }
+
+		internal void Draw(GameTime gameTime, int layer)
+		{
+			Debug.Assert(layer < _drawLayers.Length);
+
+			ProcessLayer(gameTime, _drawLayers, layer);
+		}
 
         // ReSharper disable once SuggestBaseTypeForParameter
         private static void ProcessLayers(GameTime gameTime, SystemLayer[] layers)
@@ -107,16 +121,23 @@ namespace MonoGame.Extended.Entities
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var i = 0; i < layers.Length; ++i)
-            {
-                var system = layers[i];
-                if (system.SynchronousSystems.Count > 0)
-                    ProcessSystemsSynchronous(gameTime, system.SynchronousSystems);
-                //if (system.AsynchronousSystems.TotalCount > 0)
-                //    ProcessSystemsAsynchronous(gameTime, system.AsynchronousSystems);
-            }
-        }
+			{
+				ProcessLayer(gameTime, layers, i);
+				//if (system.AsynchronousSystems.TotalCount > 0)
+				//    ProcessSystemsAsynchronous(gameTime, system.AsynchronousSystems);
+			}
+		}
 
-        private static void ProcessSystemsSynchronous(GameTime gameTime, Bag<EntitySystem> systems)
+		private static void ProcessLayer(GameTime gameTime, SystemLayer[] layers, int layer)
+		{
+			var system = layers[layer];
+			Debug.Assert(system != null);
+
+			if (system.SynchronousSystems.Count > 0)
+				ProcessSystemsSynchronous(gameTime, system.SynchronousSystems);
+		}
+
+		private static void ProcessSystemsSynchronous(GameTime gameTime, Bag<EntitySystem> systems)
         {
             Debug.Assert(systems != null);
 
