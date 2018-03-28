@@ -221,13 +221,13 @@ namespace MonoGame.Extended.Gui.Controls
             return Parent != null && (Parent == control || Parent.HasParent(control));
         }
        
-        protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Rectangle? clippingRectangle = null)
+        protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment)
         {
             var font = Font ?? context.DefaultFont;
             var textSize = (Size)font.GetStringRectangle(text ?? string.Empty, Vector2.Zero).Size;
             var destinationRectangle = LayoutHelper.AlignRectangle(horizontalAlignment, verticalAlignment, textSize, targetRectangle);
             var textPosition = destinationRectangle.Location.ToVector2();
-            var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, clippingRectangle);// ?? ClippingRectangle);
+            var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, targetRectangle);
             return textInfo;
         }
         

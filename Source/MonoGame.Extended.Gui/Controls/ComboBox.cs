@@ -80,7 +80,7 @@ namespace MonoGame.Extended.Gui.Controls
                 DrawItemList(context, renderer);
             }
 
-            var selectedTextInfo = GetItemTextInfo(context, ContentRectangle, SelectedItem, ClippingRectangle);
+            var selectedTextInfo = GetItemTextInfo(context, ContentRectangle, SelectedItem);
 
             if (!string.IsNullOrWhiteSpace(selectedTextInfo.Text))
                 renderer.DrawText(selectedTextInfo.Font, selectedTextInfo.Text, selectedTextInfo.Position + TextOffset, selectedTextInfo.Color, selectedTextInfo.ClippingRectangle);

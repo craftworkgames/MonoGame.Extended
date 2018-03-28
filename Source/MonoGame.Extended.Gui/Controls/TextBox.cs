@@ -47,7 +47,8 @@ namespace MonoGame.Extended.Gui.Controls
         public override Size GetContentSize(IGuiContext context)
         {
             var font = Font ?? context.DefaultFont;
-            return (Size)font.MeasureString(Text ?? string.Empty);
+            var stringSize = (Size)font.MeasureString(Text ?? string.Empty);
+            return new Size(stringSize.Width, stringSize.Height < font.LineHeight ? font.LineHeight : stringSize.Height);
         }
 
         //protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
