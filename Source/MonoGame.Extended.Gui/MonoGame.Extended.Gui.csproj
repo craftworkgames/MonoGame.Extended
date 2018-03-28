@@ -42,6 +42,7 @@
     <Compile Include="Controls\Canvas.cs" />
     <Compile Include="Controls\CheckBox.cs" />
     <Compile Include="Controls\ComboBox.cs" />
+    <Compile Include="Controls\CompositeControl.cs" />
     <Compile Include="Controls\ContentControl.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\ControlCollection.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Controls\ListBox.cs" />
     <Compile Include="Controls\ItemsControl.cs" />
     <Compile Include="Controls\Submit.cs" />
+    <Compile Include="Controls\ToggleButton.cs" />
     <Compile Include="Controls\UniformGrid.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="Orientation.cs" />

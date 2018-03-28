@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public class ContentControl : ItemsControl
+    public class ContentControl : Control
     {
         private bool _contentChanged = true;
 
@@ -34,12 +34,6 @@ namespace MonoGame.Extended.Gui.Controls
 
         public bool HasContent => Content == null;
 
-        //protected override void OnSizeChanged()
-        //{
-        //    base.OnSizeChanged();
-        //    _contentChanged = true;
-        //}
-
         public override void InvalidateMeasure()
         {
             base.InvalidateMeasure();
@@ -58,11 +52,8 @@ namespace MonoGame.Extended.Gui.Controls
                     control.ActualSize = ContentRectangle.Size;
                     control.Position = new Point(Padding.Left, Padding.Top);
                     control.InvalidateMeasure();
-
                     _contentChanged = false;
                 }
-
-                //control.Update(context, deltaSeconds);
             }
         }
 
@@ -91,7 +82,7 @@ namespace MonoGame.Extended.Gui.Controls
             var control = Content as Control;
 
             if (control != null)
-                return control.GetContentSize(context);
+                return control.CalculateActualSize(context);
 
             var text = Content?.ToString();
             var font = Font ?? context.DefaultFont;
