@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Tests.Primitives
         [TestCaseSource(nameof(ConstructorTestCases))]
         public void Constructor(Point2 startingPoint, Point2 endingPoint)
         {
-            var segment = new Segment2D(startingPoint, endingPoint);
+            var segment = new Segment2(startingPoint, endingPoint);
             Assert.AreEqual(startingPoint, segment.Start);
             Assert.AreEqual(endingPoint, segment.End);
         }
@@ -35,20 +35,20 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Segment2D(), new Point2(), new Point2()).SetName(
+                    new TestCaseData(new Segment2(), new Point2(), new Point2()).SetName(
                         "The closest point on the empty segment to the zero point is the zero point.");
                 yield return
-                    new TestCaseData(new Segment2D(new Point2(0, 0), new Point2(200, 0)), new Point2(-100, 200),
+                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(200, 0)), new Point2(-100, 200),
                         new Point2(0, 0)).SetName(
                         "The closest point on a non-empty segment to a point which is projected beyond the start of the segment is the segment's starting point.")
                     ;
                 yield return
-                    new TestCaseData(new Segment2D(new Point2(0, 0), new Point2(200, 0)), new Point2(400, 200),
+                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(200, 0)), new Point2(400, 200),
                         new Point2(200, 0)).SetName(
                         "The closest point on a non-empty segment to a point which is projected beyond the end of the segment is the segment's ending point.")
                     ;
                 yield return
-                    new TestCaseData(new Segment2D(new Point2(0, 0), new Point2(200, 0)), new Point2(100, 200),
+                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(200, 0)), new Point2(100, 200),
                         new Point2(100, 0)).SetName(
                         "The closest point on a non-empty segment to a point which is projected inside the segment is the projected point.")
                     ;
@@ -57,7 +57,7 @@ namespace MonoGame.Extended.Tests.Primitives
 
         [Test]
         [TestCaseSource(nameof(ClosestPointTestCases))]
-        public void ClosestPoint(Segment2D segment, Point2 point, Point2 expectedClosestPoint)
+        public void ClosestPoint(Segment2 segment, Point2 point, Point2 expectedClosestPoint)
         {
             var actualClosestPoint = segment.ClosestPointTo(point);
             Assert.AreEqual(expectedClosestPoint, actualClosestPoint);
@@ -68,20 +68,20 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Segment2D(), new Point2(), 0).SetName(
+                    new TestCaseData(new Segment2(), new Point2(), 0).SetName(
                         "The squared distance of the zero point to the empty segment is 0.");
                 yield return
-                    new TestCaseData(new Segment2D(new Point2(0, 0), new Point2(20, 0)), new Point2(-10, 20), 500)
+                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(20, 0)), new Point2(-10, 20), 500)
                         .SetName(
                             "The squared distance of a point projected beyond the start of a non-empty segment is the squared distance from the segment's starting point to the point.")
                     ;
                 yield return
-                    new TestCaseData(new Segment2D(new Point2(0, 0), new Point2(20, 0)), new Point2(40, 20), 400)
+                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(20, 0)), new Point2(40, 20), 400)
                         .SetName(
                             "The squared distance of a point projected beyond the end of a non-empty segment is the squared distance from the segment's ending point to the point.")
                     ;
                 yield return
-                    new TestCaseData(new Segment2D(new Point2(0, 0), new Point2(20, 0)), new Point2(10, 25), 625).SetName
+                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(20, 0)), new Point2(10, 25), 625).SetName
                     (
                         "The squared distance of a point projected inside a non-empty segment is the squared distance from the projected point to the point.")
                     ;
@@ -90,7 +90,7 @@ namespace MonoGame.Extended.Tests.Primitives
 
         [Test]
         [TestCaseSource(nameof(SquaredDistanceToPointTestCases))]
-        public void SquaredDistanceToPoint(Segment2D segment, Point2 point,
+        public void SquaredDistanceToPoint(Segment2 segment, Point2 point,
             float expectedDistance)
         {
             var actualDistance = segment.SquaredDistanceTo(point);
@@ -102,18 +102,18 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Segment2D(), new BoundingRectangle(), true, Point2.Zero).SetName(
+                    new TestCaseData(new Segment2(), new BoundingRectangle(), true, Point2.Zero).SetName(
                         "The empty segment intersects the empty bounding box.");
                 yield return
-                    new TestCaseData(new Segment2D(new Point2(-75, -75), new Point2(75, -75)),
+                    new TestCaseData(new Segment2(new Point2(-75, -75), new Point2(75, -75)),
                         new BoundingRectangle(new Point2(), new Size2(50, 50)), false, Point2.NaN).SetName(
                         "A non-empty segment outside a non-empty bounding box does not intersect the bounding box.");
                 yield return
-                    new TestCaseData(new Segment2D(new Point2(0, 0), new Point2(25, 0)), new BoundingRectangle(new Point2(), new Size2(50, 50)),
+                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(25, 0)), new BoundingRectangle(new Point2(), new Size2(50, 50)),
                         true, new Point2(0, 0)).SetName(
                         "A non-empty segment inside a non-empty bounding box intersects the bounding box.");
                 yield return
-                    new TestCaseData(new Segment2D(new Point2(-100, 0), new Point2(100, 0)),
+                    new TestCaseData(new Segment2(new Point2(-100, 0), new Point2(100, 0)),
                         new BoundingRectangle(new Point2(), new Size2(50, 50)),
                         true, new Point2(-50, 0)).SetName(
                         "A non-empty segment crossing a non-empty bounding box intersects the bounding box.");
@@ -122,7 +122,7 @@ namespace MonoGame.Extended.Tests.Primitives
 
         [Test]
         [TestCaseSource(nameof(IntersectsBoundingRectangleTestCases))]
-        public void IntersectsBoundingRectangle(Segment2D segment, BoundingRectangle boundingRectangle, bool expectedResult,
+        public void IntersectsBoundingRectangle(Segment2 segment, BoundingRectangle boundingRectangle, bool expectedResult,
             Point2 expectedIntersectionPoint)
         {
             Point2 actualIntersectionPoint;
@@ -145,18 +145,18 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Segment2D(), new Segment2D(), true).SetName("Empty segments are equal.")
+                    new TestCaseData(new Segment2(), new Segment2(), true).SetName("Empty segments are equal.")
                     ;
                 yield return
                     new TestCaseData(
-                        new Segment2D(new Point2(0, 0), new Point2(float.MaxValue, float.MinValue)),
-                        new Segment2D(new Point2(0, 0),
+                        new Segment2(new Point2(0, 0), new Point2(float.MaxValue, float.MinValue)),
+                        new Segment2(new Point2(0, 0),
                             new Point2(float.MinValue, float.MaxValue)), false).SetName(
                         "Two different non-empty segments are not equal.");
                 yield return
                     new TestCaseData(
-                        new Segment2D(new Point2(0, 0), new Point2(float.MinValue, float.MaxValue)),
-                        new Segment2D(new Point2(0, 0),
+                        new Segment2(new Point2(0, 0), new Point2(float.MinValue, float.MaxValue)),
+                        new Segment2(new Point2(0, 0),
                             new Point2(float.MinValue, float.MaxValue)), true).SetName(
                         "Two identical non-empty segments are equal.");
             }
@@ -164,7 +164,7 @@ namespace MonoGame.Extended.Tests.Primitives
 
         [Test]
         [TestCaseSource(nameof(EqualityTestCases))]
-        public void Equality(Segment2D segment1, Segment2D segment2, bool expectedToBeEqual)
+        public void Equality(Segment2 segment1, Segment2 segment2, bool expectedToBeEqual)
         {
             Assert.IsTrue(Equals(segment1, segment2) == expectedToBeEqual);
             Assert.IsTrue(segment1 == segment2 == expectedToBeEqual);
@@ -180,16 +180,16 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Segment2D(), null, false).SetName("A segment is not equal to a null object.");
+                    new TestCaseData(new Segment2(), null, false).SetName("A segment is not equal to a null object.");
                 yield return
-                    new TestCaseData(new Segment2D(), new object(), false).SetName(
+                    new TestCaseData(new Segment2(), new object(), false).SetName(
                         "A segment is not equal to an instantiated object.");
             }
         }
 
         [Test]
         [TestCaseSource(nameof(InequalityTestCases))]
-        public void Inequality(Segment2D segment, object obj, bool expectedToBeEqual)
+        public void Inequality(Segment2 segment, object obj, bool expectedToBeEqual)
         {
             Assert.IsTrue(segment.Equals(obj) == expectedToBeEqual);
         }
@@ -199,22 +199,22 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Segment2D(), new Segment2D(), true).SetName(
+                    new TestCaseData(new Segment2(), new Segment2(), true).SetName(
                         "Two empty segments have the same hash code.");
                 yield return
-                    new TestCaseData(new Segment2D(new Point2(0, 0), new Point2(50, 50)),
-                        new Segment2D(new Point2(0, 0), new Point2(50, 50)), true).SetName(
+                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(50, 50)),
+                        new Segment2(new Point2(0, 0), new Point2(50, 50)), true).SetName(
                         "Two indentical non-empty segments have the same hash code.");
                 yield return
-                    new TestCaseData(new Segment2D(new Point2(0, 0), new Point2(50, 50)),
-                        new Segment2D(new Point2(50, 50), new Point2(50, 50)), false).SetName(
+                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(50, 50)),
+                        new Segment2(new Point2(50, 50), new Point2(50, 50)), false).SetName(
                         "Two different non-empty segments do not have the same hash code.");
             }
         }
 
         [Test]
         [TestCaseSource(nameof(HashCodeTestCases))]
-        public void HashCode(Segment2D segment1, Segment2D segment2, bool expectedThatHashCodesAreEqual)
+        public void HashCode(Segment2 segment1, Segment2 segment2, bool expectedThatHashCodesAreEqual)
         {
             var hashCode1 = segment1.GetHashCode();
             var hashCode2 = segment2.GetHashCode();
@@ -229,11 +229,11 @@ namespace MonoGame.Extended.Tests.Primitives
             get
             {
                 yield return
-                    new TestCaseData(new Segment2D(),
+                    new TestCaseData(new Segment2(),
                         string.Format(CultureInfo.CurrentCulture, "{0} -> {1}", new Point2(),
                             new Point2())).SetName(
                         "The empty segment has the expected string representation using the current culture.");
-                yield return new TestCaseData(new Segment2D(new Point2(5.1f, -5.123f), new Point2(5.4f, -5.4123f)),
+                yield return new TestCaseData(new Segment2(new Point2(5.1f, -5.123f), new Point2(5.4f, -5.4123f)),
                     string.Format(CultureInfo.CurrentCulture, "{0} -> {1}", new Point2(5.1f, -5.123f),
                         new Point2(5.4f, -5.4123f))).SetName(
                     "A non-empty segment has the expected string representation using the current culture.");
@@ -242,7 +242,7 @@ namespace MonoGame.Extended.Tests.Primitives
 
         [Test]
         [TestCaseSource(nameof(StringCases))]
-        public void String(Segment2D segment, string expectedString)
+        public void String(Segment2 segment, string expectedString)
         {
             var actualString = segment.ToString();
             Assert.AreEqual(expectedString, actualString);

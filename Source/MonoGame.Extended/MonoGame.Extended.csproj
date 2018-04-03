@@ -64,7 +64,7 @@
     <Compile Include="Point2.cs" />
     <Compile Include="Ray2.cs" />
     <Compile Include="PrimitivesHelper.cs" />
-    <Compile Include="Segment2D.cs" />
+    <Compile Include="Segment2.cs" />
     <Compile Include="Size2.cs" />
     <Compile Include="Serialization\ContentManagerJsonConverter.cs" />
     <Compile Include="Serialization\TextureRegionService.cs" />

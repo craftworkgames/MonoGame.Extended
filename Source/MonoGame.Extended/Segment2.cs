@@ -9,48 +9,48 @@ namespace MonoGame.Extended
     /// </summary>
     /// <seealso cref="IEquatable{T}" />
     /// <seealso cref="IEquatableByRef{Segment2}" />
-    public struct Segment2D : IEquatable<Segment2D>, IEquatableByRef<Segment2D>
+    public struct Segment2 : IEquatable<Segment2>, IEquatableByRef<Segment2>
     {
         /// <summary>
-        ///     The starting <see cref="Point2" /> of this <see cref="Segment2D" />.
+        ///     The starting <see cref="Point2" /> of this <see cref="Segment2" />.
         /// </summary>
         public Point2 Start;
 
         /// <summary>
-        ///     The ending <see cref="Point2" /> of this <see cref="Segment2D" />.
+        ///     The ending <see cref="Point2" /> of this <see cref="Segment2" />.
         /// </summary>
         public Point2 End;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Segment2D" /> structure from the specified starting and ending
+        ///     Initializes a new instance of the <see cref="Segment2" /> structure from the specified starting and ending
         ///     <see cref="Point2" /> structures.
         /// </summary>
         /// <param name="start">The starting point.</param>
         /// <param name="end">The ending point.</param>
-        public Segment2D(Point2 start, Point2 end)
+        public Segment2(Point2 start, Point2 end)
         {
             Start = start;
             End = end;
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Segment2D" /> structure.
+        ///     Initializes a new instance of the <see cref="Segment2" /> structure.
         /// </summary>
         /// <param name="x1">The starting x-coordinate.</param>
         /// <param name="y1">The starting y-coordinate.</param>
         /// <param name="x2">The ending x-coordinate.</param>
         /// <param name="y2">The ending y-coordinate.</param>
-        public Segment2D(float x1, float y1, float x2, float y2)
+        public Segment2(float x1, float y1, float x2, float y2)
             : this(new Point2(x1, y1), new Point2(x2, y2))
         {
         }
 
         // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.1.2; Basic Primitive Tests - Closest Point on Line Segment to Point. pg 127-130
         /// <summary>
-        ///     Computes the closest <see cref="Point2" /> on this <see cref="Segment2D" /> to a specified <see cref="Point2" />.
+        ///     Computes the closest <see cref="Point2" /> on this <see cref="Segment2" /> to a specified <see cref="Point2" />.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns>The closest <see cref="Point2" /> on this <see cref="Segment2D" /> to the <paramref name="point" />.</returns>
+        /// <returns>The closest <see cref="Point2" /> on this <see cref="Segment2" /> to the <paramref name="point" />.</returns>
         public Point2 ClosestPointTo(Point2 point)
         {
             // Computes the parameterized position: d(t) = Start + t * (End – Start)
@@ -76,10 +76,10 @@ namespace MonoGame.Extended
 
         // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.1.2.1; Basic Primitive Tests - Distance of Point to Segment. pg 127-130        
         /// <summary>
-        ///     Computes the squared distance from this <see cref="Segment2D" /> to a specified <see cref="Point2" />.
+        ///     Computes the squared distance from this <see cref="Segment2" /> to a specified <see cref="Point2" />.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns>The squared distance from this <see cref="Segment2D" /> to a specified <see cref="Point2" />.</returns>
+        /// <returns>The squared distance from this <see cref="Segment2" /> to a specified <see cref="Point2" />.</returns>
         public float SquaredDistanceTo(Point2 point)
         {
             var startToEnd = End - Start;
@@ -98,17 +98,17 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Computes the distance from this <see cref="Segment2D" /> to a specified <see cref="Point2" />.
+        ///     Computes the distance from this <see cref="Segment2" /> to a specified <see cref="Point2" />.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns>The distance from this <see cref="Segment2D" /> to a specified <see cref="Point2" />.</returns>
+        /// <returns>The distance from this <see cref="Segment2" /> to a specified <see cref="Point2" />.</returns>
         public float DistanceTo(Point2 point)
         {
             return (float) Math.Sqrt(SquaredDistanceTo(point));
         }
 
         /// <summary>
-        ///     Determines whether this <see cref="Segment2D" /> intersects with the specified <see cref="BoundingRectangle" />.
+        ///     Determines whether this <see cref="Segment2" /> intersects with the specified <see cref="BoundingRectangle" />.
         /// </summary>
         /// <param name="rectangle">The bounding box.</param>
         /// <param name="intersectionPoint">
@@ -116,7 +116,7 @@ namespace MonoGame.Extended
         ///     intersection was found; otherwise, the <see cref="Point2.NaN" />. This parameter is passed uninitialized.
         /// </param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="Segment2D" /> intersects with <paramref name="rectangle" />; otherwise,
+        ///     <c>true</c> if this <see cref="Segment2" /> intersects with <paramref name="rectangle" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
         public bool Intersects(RectangleF rectangle, out Point2 intersectionPoint)
@@ -160,7 +160,7 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Determines whether this <see cref="Segment2D" /> intersects with the specified <see cref="BoundingRectangle" />.
+        ///     Determines whether this <see cref="Segment2" /> intersects with the specified <see cref="BoundingRectangle" />.
         /// </summary>
         /// <param name="boundingRectangle">The bounding box.</param>
         /// <param name="intersectionPoint">
@@ -168,7 +168,7 @@ namespace MonoGame.Extended
         ///     intersection was found; otherwise, the <see cref="Point2.NaN" />. This parameter is passed uninitialized.
         /// </param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="Segment2D" /> intersects with <paramref name="boundingRectangle" />; otherwise,
+        ///     <c>true</c> if this <see cref="Segment2" /> intersects with <paramref name="boundingRectangle" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
         public bool Intersects(BoundingRectangle boundingRectangle, out Point2 intersectionPoint)
@@ -212,86 +212,86 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Compares two <see cref="Segment2D" /> structures. The result specifies
+        ///     Compares two <see cref="Segment2" /> structures. The result specifies
         ///     whether the values of the <see cref="Start" /> and <see cref="End" />
-        ///     fields of the two <see cref='Segment2D' />
+        ///     fields of the two <see cref='Segment2' />
         ///     structures are equal.
         /// </summary>
         /// <param name="first">The first segment.</param>
         /// <param name="second">The second segment.</param>
         /// <returns>
         ///     <c>true</c> if the <see cref="Start" /> and <see cref="End" />
-        ///     fields of the two <see cref="Segment2D" />
+        ///     fields of the two <see cref="Segment2" />
         ///     structures are equal; otherwise, <c>false</c>.
         /// </returns>
-        public static bool operator ==(Segment2D first, Segment2D second)
+        public static bool operator ==(Segment2 first, Segment2 second)
         {
             return first.Equals(ref second);
         }
 
         /// <summary>
-        ///     Indicates whether this <see cref="Segment2D" /> is equal to another <see cref="Segment2D" />.
+        ///     Indicates whether this <see cref="Segment2" /> is equal to another <see cref="Segment2" />.
         /// </summary>
         /// <param name="segment">The segment.</param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="Segment2D" /> is equal to the <paramref name="segment" />; otherwise, <c>false</c>.
+        ///     <c>true</c> if this <see cref="Segment2" /> is equal to the <paramref name="segment" />; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(Segment2D segment)
+        public bool Equals(Segment2 segment)
         {
             return Equals(ref segment);
         }
 
         /// <summary>
-        ///     Indicates whether this <see cref="Segment2D" /> is equal to another <see cref="Segment2D" />.
+        ///     Indicates whether this <see cref="Segment2" /> is equal to another <see cref="Segment2" />.
         /// </summary>
         /// <param name="segment">The segment.</param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="Segment2D" /> is equal to the <paramref name="segment" /> parameter; otherwise,
+        ///     <c>true</c> if this <see cref="Segment2" /> is equal to the <paramref name="segment" /> parameter; otherwise,
         ///     <c>false</c>.
         /// </returns>
-        public bool Equals(ref Segment2D segment)
+        public bool Equals(ref Segment2 segment)
         {
             return (Start == segment.Start) && (End == segment.End);
         }
 
         /// <summary>
-        ///     Returns a value indicating whether this <see cref="Segment2D" /> is equal to a specified object.
+        ///     Returns a value indicating whether this <see cref="Segment2" /> is equal to a specified object.
         /// </summary>
         /// <param name="obj">The object to make the comparison with.</param>
         /// <returns>
-        ///     <c>true</c> if this  <see cref="Segment2D" /> is equal to <paramref name="obj" />; otherwise, <c>false</c>.
+        ///     <c>true</c> if this  <see cref="Segment2" /> is equal to <paramref name="obj" />; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj is Segment2D)
-                return Equals((Segment2D) obj);
+            if (obj is Segment2)
+                return Equals((Segment2) obj);
             return false;
         }
 
         /// <summary>
-        ///     Compares two <see cref="Segment2D" /> structures. The result specifies
+        ///     Compares two <see cref="Segment2" /> structures. The result specifies
         ///     whether the values of the <see cref="Start" /> and <see cref="End" />
-        ///     fields of the two <see cref="Segment2D" />
+        ///     fields of the two <see cref="Segment2" />
         ///     structures are unequal.
         /// </summary>
         /// <param name="first">The first point.</param>
         /// <param name="second">The second point.</param>
         /// <returns>
         ///     <c>true</c> if the <see cref="Start" /> and <see cref="End" />
-        ///     fields of the two <see cref="Segment2D" />
+        ///     fields of the two <see cref="Segment2" />
         ///     structures are unequal; otherwise, <c>false</c>.
         /// </returns>
-        public static bool operator !=(Segment2D first, Segment2D second)
+        public static bool operator !=(Segment2 first, Segment2 second)
         {
             return !(first == second);
         }
 
         /// <summary>
-        ///     Returns a hash code of this <see cref="Segment2D" /> suitable for use in hashing algorithms and data
+        ///     Returns a hash code of this <see cref="Segment2" /> suitable for use in hashing algorithms and data
         ///     structures like a hash table.
         /// </summary>
         /// <returns>
-        ///     A hash code of this <see cref="Segment2D" />.
+        ///     A hash code of this <see cref="Segment2" />.
         /// </returns>
         public override int GetHashCode()
         {
@@ -302,10 +302,10 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Returns a <see cref="string" /> that represents this <see cref="Segment2D" />.
+        ///     Returns a <see cref="string" /> that represents this <see cref="Segment2" />.
         /// </summary>
         /// <returns>
-        ///     A <see cref="string" /> that represents this <see cref="Segment2D" />.
+        ///     A <see cref="string" /> that represents this <see cref="Segment2" />.
         /// </returns>
         public override string ToString()
         {
