@@ -72,6 +72,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{F3E80350
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Entities.Tests", "Tests\MonoGame.Extended.Entities.Tests\MonoGame.Extended.Entities.Tests.csproj", "{5B993DD9-A9B8-434C-B444-F1CFFB947F79}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pong", "Demos\Pong\Pong.csproj", "{55033148-02B0-4810-840A-011516846975}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -224,6 +226,14 @@ Global
 		{5B993DD9-A9B8-434C-B444-F1CFFB947F79}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5B993DD9-A9B8-434C-B444-F1CFFB947F79}.Release|x86.ActiveCfg = Release|Any CPU
 		{5B993DD9-A9B8-434C-B444-F1CFFB947F79}.Release|x86.Build.0 = Release|Any CPU
+		{55033148-02B0-4810-840A-011516846975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55033148-02B0-4810-840A-011516846975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55033148-02B0-4810-840A-011516846975}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{55033148-02B0-4810-840A-011516846975}.Debug|x86.Build.0 = Debug|Any CPU
+		{55033148-02B0-4810-840A-011516846975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55033148-02B0-4810-840A-011516846975}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55033148-02B0-4810-840A-011516846975}.Release|x86.ActiveCfg = Release|Any CPU
+		{55033148-02B0-4810-840A-011516846975}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -235,6 +245,7 @@ Global
 		{A88FC71D-12E3-42A5-AFF3-89C6498C3C65} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
 		{F3E80350-2F27-4EDB-8BE9-0145643A5336} = {068B9F42-8B49-4FAF-9D8C-701862FAC799}
 		{5B993DD9-A9B8-434C-B444-F1CFFB947F79} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
+		{55033148-02B0-4810-840A-011516846975} = {932F8931-4A8D-4205-BFCF-98E794207786}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8ED5A62D-25EC-4331-9F99-BDD1E10C02A0}
