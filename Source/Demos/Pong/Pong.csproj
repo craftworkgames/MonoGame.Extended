@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\ballGrey.png" />
+    <Content Include="Content\court.png" />
     <Content Include="Content\paddleBlue.png" />
     <Content Include="Content\paddleRed.png" />
   </ItemGroup>

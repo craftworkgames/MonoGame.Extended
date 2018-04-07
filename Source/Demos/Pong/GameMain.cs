@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -28,35 +30,41 @@ namespace Pong
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private const int _screenWidth = 480;
-        private const int _screenHeight = 800;
+        private const int _screenWidth = 800;
+        private const int _screenHeight = 480;
         private Paddle _bluePaddle;
         private Paddle _redPaddle;
         private Ball _ball;
+        private Texture2D _court;
 
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferWidth = _screenWidth,
-                PreferredBackBufferHeight = _screenHeight
+                PreferredBackBufferHeight = _screenHeight,
+                SynchronizeWithVerticalRetrace = false
             };
             Content.RootDirectory = "Content";
+            IsFixedTimeStep = true;
+            TargetElapsedTime = TimeSpan.FromSeconds(1f / 60f);
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            _court = Content.Load<Texture2D>("court");
+
             _bluePaddle = new Paddle
             {
-                Position = new Vector2(_screenWidth / 2f, _screenHeight - 50),
+                Position = new Vector2(50, _screenWidth / 2f),
                 Sprite = new Sprite(Content.Load<Texture2D>("paddleBlue"))
             };
 
             _redPaddle = new Paddle
             {
-                Position = new Vector2(_screenWidth / 2f, 50),
+                Position = new Vector2(_screenWidth - 50, _screenHeight / 2f),
                 Sprite = new Sprite(Content.Load<Texture2D>("paddleRed"))
             };
 
@@ -64,7 +72,7 @@ namespace Pong
             {
                 Position = new Vector2(_screenWidth / 2f, _screenHeight / 2f),
                 Sprite = new Sprite(Content.Load<Texture2D>("ballGrey")),
-                Velocity = new Vector2(50, 150)
+                Velocity = new Vector2(250, 200)
             };
         }
 
@@ -77,46 +85,136 @@ namespace Pong
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _ball.Position += _ball.Velocity * elapsedSeconds;
+            MovePaddlePlayer(mouseState);
 
-            _bluePaddle.Position.X = mouseState.Position.X;
+            MovePaddleAi(_redPaddle, elapsedSeconds);
 
-            if (ConstrainBounds(_ball))
-                _ball.Velocity.X = -_ball.Velocity.X;
+            ConstrainPaddle(_bluePaddle);
+            ConstrainPaddle(_redPaddle);
+            
+            MoveBall(elapsedSeconds);
 
-            ConstrainBounds(_bluePaddle);
-            ConstrainBounds(_redPaddle);
+            if (BallHitPaddle(_ball, _bluePaddle))
+            {
+                // TODO: Play pong sound
+                // TODO: Change the angle of the bounce
+                _ball.Velocity *= 1.01f;
+            }
+
+            if (BallHitPaddle(_ball, _redPaddle))
+            {
+                // TODO: Play ping sound
+                // TODO: Change the angle of the bounce
+                _ball.Velocity *= 1.01f;
+            }
 
             base.Update(gameTime);
         }
 
-        private static bool ConstrainBounds(GameObject gameObject)
+        private void MovePaddlePlayer(MouseState mouseState)
         {
-            if (gameObject.BoundingRectangle.Left < 0)
-            {
-                gameObject.Position.X = gameObject.BoundingRectangle.Width / 2f;
-                return true;
-            }
+            _bluePaddle.Position.Y = mouseState.Position.Y;
+        }
 
-            if (gameObject.BoundingRectangle.Right > _screenWidth)
+        private static bool BallHitPaddle(Ball ball, Paddle paddle)
+        {
+            if (ball.BoundingRectangle.Intersects(paddle.BoundingRectangle))
             {
-                gameObject.Position.X = _screenWidth - gameObject.BoundingRectangle.Width / 2f;
+                if (ball.BoundingRectangle.Left < paddle.BoundingRectangle.Left)
+                    ball.Position.X = paddle.BoundingRectangle.Left - ball.BoundingRectangle.Width / 2;
+
+                if (ball.BoundingRectangle.Right > paddle.BoundingRectangle.Right)
+                    ball.Position.X = paddle.BoundingRectangle.Right + ball.BoundingRectangle.Width / 2;
+                
+                ball.Velocity.X = -ball.Velocity.X;
                 return true;
             }
 
             return false;
         }
 
+        private void MoveBall(float elapsedSeconds)
+        {
+            _ball.Position += _ball.Velocity * elapsedSeconds;
+
+            var halfHeight = _ball.BoundingRectangle.Height / 2;
+            var halfWidth = _ball.BoundingRectangle.Width / 2;
+
+            // top and bottom walls
+            // TODO: Play 'tink' sound
+            if (_ball.Position.Y - halfHeight < 0)
+            {
+                _ball.Position.Y = halfHeight;
+                _ball.Velocity.Y = -_ball.Velocity.Y;
+            }
+
+            if (_ball.Position.Y + halfHeight > _screenHeight)
+            {
+                _ball.Position.Y = _screenHeight - halfHeight;
+                _ball.Velocity.Y = -_ball.Velocity.Y;
+            }
+
+            // left and right is out of bounds 
+            // TODO: Play sound and update score
+            // TODO: Reset ball to default velocity
+            if (_ball.Position.X > _screenWidth + halfWidth && _ball.Velocity.X > 0)
+                _ball.Position.X = -halfWidth;
+
+            if (_ball.Position.X < -halfWidth && _ball.Velocity.X < 0)
+                _ball.Position.X = _screenWidth + halfWidth;
+        }
+
+        private static void ConstrainPaddle(Paddle paddle)
+        {
+            if (paddle.BoundingRectangle.Left < 0)
+                paddle.Position.X = paddle.BoundingRectangle.Width / 2f;
+
+            if (paddle.BoundingRectangle.Right > _screenWidth)
+                paddle.Position.X = _screenWidth - paddle.BoundingRectangle.Width / 2f;
+
+            if (paddle.BoundingRectangle.Top < 0)
+                paddle.Position.Y = paddle.BoundingRectangle.Height / 2f;
+
+            if (paddle.BoundingRectangle.Bottom > _screenHeight)
+                paddle.Position.Y = _screenHeight - paddle.BoundingRectangle.Height / 2f;
+        }
+
+        private void MovePaddleAi(Paddle paddle, float elapsedSeconds)
+        {
+            const float difficulty = 0.80f;
+            var paddleSpeed = Math.Abs(_ball.Velocity.Y) * difficulty;
+
+            if (paddleSpeed < 0)
+                paddleSpeed = -paddleSpeed;
+
+            //ball moving down
+            if (_ball.Velocity.Y > 0)
+            {
+                if (_ball.Position.Y > paddle.Position.Y)
+                    paddle.Position.Y += paddleSpeed * elapsedSeconds;
+                else
+                    paddle.Position.Y -= paddleSpeed * elapsedSeconds;
+            }
+
+            //ball moving up
+            if (_ball.Velocity.Y < 0)
+            {
+                if (_ball.Position.Y < paddle.Position.Y)
+                    paddle.Position.Y -= paddleSpeed * elapsedSeconds;
+                else
+                    paddle.Position.Y += paddleSpeed * elapsedSeconds;
+            }
+        }
+
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            _spriteBatch.Draw(_court, new Rectangle(0, 0, _screenWidth, _screenHeight), Color.White);
             _spriteBatch.Draw(_redPaddle.Sprite, _redPaddle.Position);
-            _spriteBatch.Draw(_bluePaddle.Sprite, _bluePaddle.Position);
+            _spriteBatch.Draw(_bluePaddle.Sprite, _bluePaddle.Position); 
             _spriteBatch.Draw(_ball.Sprite, _ball.Position);
             _spriteBatch.End();
-
+            
             base.Draw(gameTime);
         }
     }
