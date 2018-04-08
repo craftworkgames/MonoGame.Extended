@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\..\..\MonoGame.Extended.Content.Pipeline\bin\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -36,6 +37,23 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:court.png
+
+#begin kenney-rocket-square.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:kenney-rocket-square.fnt
+
+#begin kenney-rocket-square_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:kenney-rocket-square_0.png
 
 #begin paddleBlue.png
 /importer:TextureImporter

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Sprites;
 
 namespace Pong
@@ -36,6 +36,10 @@ namespace Pong
         private Paddle _redPaddle;
         private Ball _ball;
         private Texture2D _court;
+        private BitmapFont _font;
+        private int _leftScore;
+        private int _rightScore;
+        private readonly FastRandom _random = new FastRandom();
 
         public GameMain()
         {
@@ -53,6 +57,8 @@ namespace Pong
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            _font = Content.Load<BitmapFont>("kenney-rocket-square");
 
             _court = Content.Load<Texture2D>("court");
 
@@ -105,7 +111,7 @@ namespace Pong
             {
                 // TODO: Play ping sound
                 // TODO: Change the angle of the bounce
-                _ball.Velocity *= 1.01f;
+                _ball.Velocity *= 1.05f;
             }
 
             base.Update(gameTime);
@@ -158,10 +164,18 @@ namespace Pong
             // TODO: Play sound and update score
             // TODO: Reset ball to default velocity
             if (_ball.Position.X > _screenWidth + halfWidth && _ball.Velocity.X > 0)
-                _ball.Position.X = -halfWidth;
+            {
+                _ball.Position = new Vector2(_screenWidth / 2f, _screenHeight / 2f);
+                _ball.Velocity = new Vector2(_random.Next(2, 5) * -100, 100);
+                _leftScore++;
+            }
 
             if (_ball.Position.X < -halfWidth && _ball.Velocity.X < 0)
-                _ball.Position.X = _screenWidth + halfWidth;
+            {
+                _ball.Position = new Vector2(_screenWidth / 2f, _screenHeight / 2f);
+                _ball.Velocity = new Vector2(_random.Next(2, 5) * 100, 100);
+                _rightScore++;
+            }
         }
 
         private static void ConstrainPaddle(Paddle paddle)
@@ -210,12 +224,21 @@ namespace Pong
         {
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _spriteBatch.Draw(_court, new Rectangle(0, 0, _screenWidth, _screenHeight), Color.White);
+
+            DrawScores();
+
             _spriteBatch.Draw(_redPaddle.Sprite, _redPaddle.Position);
             _spriteBatch.Draw(_bluePaddle.Sprite, _bluePaddle.Position); 
             _spriteBatch.Draw(_ball.Sprite, _ball.Position);
             _spriteBatch.End();
             
             base.Draw(gameTime);
+        }
+
+        private void DrawScores()
+        {
+            _spriteBatch.DrawString(_font, $"{_leftScore:00}", new Vector2(172, 10), new Color(0.2f, 0.2f, 0.2f), 0, Vector2.Zero, Vector2.One * 4f, SpriteEffects.None, 0);
+            _spriteBatch.DrawString(_font, $"{_rightScore:00}", new Vector2(430, 10), new Color(0.2f, 0.2f, 0.2f), 0, Vector2.Zero, Vector2.One * 4f, SpriteEffects.None, 0);
         }
     }
 }
