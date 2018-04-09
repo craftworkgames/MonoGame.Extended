@@ -79,3 +79,9 @@
 /processorParam:TextureFormat=Color
 /build:paddleRed.png
 
+#begin pip.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:pip.wav
+

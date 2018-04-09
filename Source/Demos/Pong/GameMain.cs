@@ -1,7 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Sprites;
@@ -41,6 +43,8 @@ namespace Pong
         private int _rightScore;
         private readonly FastRandom _random = new FastRandom();
 
+        private SoundEffect _plopSoundEffect;
+
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this)
@@ -57,6 +61,8 @@ namespace Pong
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            _plopSoundEffect = Content.Load<SoundEffect>("pip");
 
             _font = Content.Load<BitmapFont>("kenney-rocket-square");
 
@@ -104,7 +110,8 @@ namespace Pong
             {
                 // TODO: Play pong sound
                 // TODO: Change the angle of the bounce
-                _ball.Velocity *= 1.01f;
+                _ball.Velocity *= 1.05f;
+                _plopSoundEffect.Play(1.0f, _random.NextSingle(0.5f, 1.0f), -1f);
             }
 
             if (BallHitPaddle(_ball, _redPaddle))
@@ -112,6 +119,7 @@ namespace Pong
                 // TODO: Play ping sound
                 // TODO: Change the angle of the bounce
                 _ball.Velocity *= 1.05f;
+                _plopSoundEffect.Play(1f, _random.NextSingle(-1f, 1f), 1f);
             }
 
             base.Update(gameTime);

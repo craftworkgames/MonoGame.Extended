@@ -113,6 +113,7 @@
     <Content Include="Content\kenney-rocket-square_0.png" />
     <Content Include="Content\paddleBlue.png" />
     <Content Include="Content\paddleRed.png" />
+    <Content Include="Content\pip.wav" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj">
