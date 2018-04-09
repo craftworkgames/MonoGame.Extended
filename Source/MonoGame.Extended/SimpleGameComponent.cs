@@ -3,15 +3,24 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
-    public abstract class SimpleGameComponent : IGameComponent, IUpdateable
+    public abstract class SimpleGameComponent : IGameComponent, IUpdateable, IDisposable, IComparable<GameComponent>, IComparable<SimpleGameComponent>
     {
-        private bool _isEnabled = true;
-        private int _updateOrder;
+        private bool _isInitialized;
 
         protected SimpleGameComponent()
         {
         }
 
+        public void Dispose()
+        {
+            if (_isInitialized)
+            {
+                UnloadContent();
+                _isInitialized = false;
+            }
+        }
+
+        private bool _isEnabled = true;
         public bool IsEnabled
         {
             get { return _isEnabled; }
@@ -27,10 +36,19 @@ namespace MonoGame.Extended
 
         public virtual void Initialize()
         {
+            if (!_isInitialized)
+            {
+                LoadContent();
+                _isInitialized = true;
+            }
         }
+
+        protected virtual void LoadContent() { }
+        protected virtual void UnloadContent() { }
 
         bool IUpdateable.Enabled => _isEnabled;
 
+        private int _updateOrder;
         public int UpdateOrder
         {
             get { return _updateOrder; }
@@ -48,5 +66,15 @@ namespace MonoGame.Extended
         public event EventHandler<EventArgs> UpdateOrderChanged;
 
         public abstract void Update(GameTime gameTime);
+        
+        public int CompareTo(GameComponent other)
+        {
+            return other.UpdateOrder - UpdateOrder;
+        }
+
+        public int CompareTo(SimpleGameComponent other)
+        {
+            return other.UpdateOrder - UpdateOrder;
+        }
     }
 }
