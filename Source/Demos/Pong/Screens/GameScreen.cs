@@ -169,7 +169,7 @@ namespace Pong.Screens
                 _ball.Position = new Vector2(ScreenWidth / 2f, ScreenHeight / 2f);
                 _ball.Velocity = new Vector2(_random.Next(2, 5) * -100, 100);
                 _leftScore++;
-                ScreenManager.LoadScreen(new MagentaScreen(_game));
+                ScreenManager.LoadScreen(new MagentaScreen(_game), new Transition(GraphicsDevice, Color.Black));
             }
 
             if (_ball.Position.X < -halfWidth && _ball.Velocity.X < 0)
@@ -177,7 +177,7 @@ namespace Pong.Screens
                 _ball.Position = new Vector2(ScreenWidth / 2f, ScreenHeight / 2f);
                 _ball.Velocity = new Vector2(_random.Next(2, 5) * 100, 100);
                 _rightScore++;
-                ScreenManager.LoadScreen(new MagentaScreen(_game));
+                ScreenManager.LoadScreen(new MagentaScreen(_game), new Transition(GraphicsDevice, Color.Black));
 
             }
         }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
 using MonoGame.Extended.Screens;
 
 namespace Pong.Screens
@@ -27,16 +26,12 @@ namespace Pong.Screens
             var mouseState = Mouse.GetState();
 
             if (mouseState.LeftButton == ButtonState.Pressed)
-                ScreenManager.LoadScreen(new GameScreen(_game));
+                ScreenManager.LoadScreen(new GameScreen(_game), new Transition(_game.GraphicsDevice, Color.Black));
         }
 
         public override void Draw(GameTime gameTime)
         {
-            _game.GraphicsDevice.Clear(Color.Black);
-
-            _spriteBatch.Begin();
-            _spriteBatch.FillRectangle(new RectangleF(100, 100, 100, 100), Color.Magenta);
-            _spriteBatch.End();
+            _game.GraphicsDevice.Clear(Color.Magenta);
         }
     }
 }
