@@ -51,6 +51,7 @@
     <Compile Include="IRectangular.cs" />
     <Compile Include="Point3.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
+    <Compile Include="Screens\Transition.cs" />
     <Compile Include="Serialization\BaseTypeJsonConverter.cs" />
     <Compile Include="Serialization\HslColorJsonConverter.cs" />
     <Compile Include="Serialization\JsonReaderExtensions.cs" />
