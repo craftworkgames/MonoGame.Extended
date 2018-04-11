@@ -1,20 +1,19 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Sprites;
 using Pong.GameObjects;
 
 namespace Pong.Screens
 {
-    public class GameScreen : Screen
+    public class PongGameScreen : GameScreen
     {
-        private readonly Game _game;
         private SpriteBatch _spriteBatch;
         private Paddle _bluePaddle;
         private Paddle _redPaddle;
@@ -26,26 +25,22 @@ namespace Pong.Screens
         private int _rightScore;
         private readonly FastRandom _random = new FastRandom();
 
-        public GameScreen(Game game)
+        public PongGameScreen(Game game)
+            : base(game)
         {
-            _game = game;
+            game.IsMouseVisible = false;
         }
 
-        public ContentManager Content => _game.Content;
-        public GraphicsDevice GraphicsDevice => _game.GraphicsDevice;
-        public int ScreenWidth => _game.GraphicsDevice.Viewport.Width;
-        public int ScreenHeight => _game.GraphicsDevice.Viewport.Height;
+        public int ScreenWidth => GraphicsDevice.Viewport.Width;
+        public int ScreenHeight => GraphicsDevice.Viewport.Height;
 
         public override void LoadContent()
         {
             base.LoadContent();
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             _plopSoundEffect = Content.Load<SoundEffect>("pip");
-
             _font = Content.Load<BitmapFont>("kenney-rocket-square");
-
             _court = Content.Load<Texture2D>("court");
 
             _bluePaddle = new Paddle
@@ -66,6 +61,12 @@ namespace Pong.Screens
                 Sprite = new Sprite(Content.Load<Texture2D>("ballGrey")),
                 Velocity = new Vector2(250, 200)
             };
+        }
+
+        public override void UnloadContent()
+        {
+            base.UnloadContent();
+            _spriteBatch.Dispose();
         }
 
         public override void Update(GameTime gameTime)
@@ -169,7 +170,7 @@ namespace Pong.Screens
                 _ball.Position = new Vector2(ScreenWidth / 2f, ScreenHeight / 2f);
                 _ball.Velocity = new Vector2(_random.Next(2, 5) * -100, 100);
                 _leftScore++;
-                ScreenManager.LoadScreen(new MagentaScreen(_game), new Transition(GraphicsDevice, Color.Black));
+                ScreenManager.LoadScreen(new MagentaScreen(Game), new ExpandTransition(GraphicsDevice, Color.Black, 0.5f));
             }
 
             if (_ball.Position.X < -halfWidth && _ball.Velocity.X < 0)
@@ -177,7 +178,7 @@ namespace Pong.Screens
                 _ball.Position = new Vector2(ScreenWidth / 2f, ScreenHeight / 2f);
                 _ball.Velocity = new Vector2(_random.Next(2, 5) * 100, 100);
                 _rightScore++;
-                ScreenManager.LoadScreen(new MagentaScreen(_game), new Transition(GraphicsDevice, Color.Black));
+                ScreenManager.LoadScreen(new MagentaScreen(Game), new ExpandTransition(GraphicsDevice, Color.Black, 0.5f));
 
             }
         }

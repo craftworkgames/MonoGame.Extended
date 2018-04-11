@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Screens.Transitions;
 
 namespace MonoGame.Extended.Screens
 {
@@ -13,10 +14,11 @@ namespace MonoGame.Extended.Screens
         private bool _isLoaded;
         private Transition _activeTransition;
 
-        public bool UpdateDuringTransitions { get; set; } = false;
-
         public void LoadScreen(Screen screen, Transition transition)
         {
+            if(_activeTransition != null)
+                return;
+
             _activeTransition = transition;
             _activeTransition.StateChanged += (sender, args) => LoadScreen(screen);
             _activeTransition.Completed += (sender, args) =>
@@ -65,10 +67,8 @@ namespace MonoGame.Extended.Screens
 
         public override void Update(GameTime gameTime)
         {
-            if (_activeTransition != null)
-                _activeTransition.Update(gameTime);
-            else
-                _activeScreen?.Update(gameTime);
+            _activeScreen?.Update(gameTime);
+            _activeTransition?.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)

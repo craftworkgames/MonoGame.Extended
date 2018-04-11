@@ -50,8 +50,11 @@
     <Compile Include="HslColor.cs" />
     <Compile Include="IRectangular.cs" />
     <Compile Include="Point3.cs" />
+    <Compile Include="Screens\GameScreen.cs" />
+    <Compile Include="Screens\Transitions\FadeTransition.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
-    <Compile Include="Screens\Transition.cs" />
+    <Compile Include="Screens\Transitions\ExpandTransition.cs" />
+    <Compile Include="Screens\Transitions\Transition.cs" />
     <Compile Include="Serialization\BaseTypeJsonConverter.cs" />
     <Compile Include="Serialization\HslColorJsonConverter.cs" />
     <Compile Include="Serialization\JsonReaderExtensions.cs" />
