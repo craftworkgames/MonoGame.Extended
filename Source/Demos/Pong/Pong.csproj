@@ -49,7 +49,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screens\PongGameScreen.cs" />
-    <Compile Include="Screens\MagentaScreen.cs" />
+    <Compile Include="Screens\TitleScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -119,6 +119,7 @@
     <Content Include="Content\paddleBlue.png" />
     <Content Include="Content\paddleRed.png" />
     <Content Include="Content\pip.wav" />
+    <Content Include="Content\title-screen.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj">
