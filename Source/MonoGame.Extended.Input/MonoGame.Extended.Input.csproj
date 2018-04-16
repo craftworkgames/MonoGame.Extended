@@ -54,13 +54,17 @@
     <Compile Include="InputListeners\KeyboardListener.cs" />
     <Compile Include="InputListeners\KeyboardListenerSettings.cs" />
     <Compile Include="InputListeners\KeyboardModifiers.cs" />
-    <Compile Include="InputListeners\MouseButton.cs" />
     <Compile Include="InputListeners\MouseEventArgs.cs" />
     <Compile Include="InputListeners\MouseListener.cs" />
     <Compile Include="InputListeners\MouseListenerSettings.cs" />
     <Compile Include="InputListeners\TouchEventArgs.cs" />
     <Compile Include="InputListeners\TouchListener.cs" />
     <Compile Include="InputListeners\TouchListenerSettings.cs" />
+    <Compile Include="KeyboardExtended.cs" />
+    <Compile Include="KeyboardStateExtended.cs" />
+    <Compile Include="MouseButton.cs" />
+    <Compile Include="MouseExtended.cs" />
+    <Compile Include="MouseStateExtended.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

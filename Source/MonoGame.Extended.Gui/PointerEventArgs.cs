@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Input;
 using MonoGame.Extended.Input.InputListeners;
 
 namespace MonoGame.Extended.Gui

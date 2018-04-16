@@ -2,6 +2,7 @@
 using MonoGame.Extended;
 using System;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Input;
 
 namespace MonoGame.Extended.NuclexGui.Controls.Desktop
 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using MonoGame.Extended.Input;
 using MonoGame.Extended.Input.InputListeners;
 
 namespace MonoGame.Extended.NuclexGui.Controls.Desktop
@@ -111,8 +112,7 @@ namespace MonoGame.Extended.NuclexGui.Controls.Desktop
         /// <summary>Fires the slider's Moved event</summary>
         protected virtual void OnMoved()
         {
-            if (Moved != null)
-                Moved(this, EventArgs.Empty);
+            Moved?.Invoke(this, EventArgs.Empty);
         }
     }
 }

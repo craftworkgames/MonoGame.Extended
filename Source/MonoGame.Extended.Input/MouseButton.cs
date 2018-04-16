@@ -1,6 +1,6 @@
-using System;
+﻿using System;
 
-namespace MonoGame.Extended.Input.InputListeners
+namespace MonoGame.Extended.Input
 {
     [Flags]
     public enum MouseButton

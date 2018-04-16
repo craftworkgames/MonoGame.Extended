@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
@@ -34,17 +33,7 @@ namespace Pong
         {
             base.LoadContent();
 
-            _screenManager.LoadScreen(new PongGameScreen(this), new FadeTransition(GraphicsDevice, Color.Black, 0.5f));
-        }
-
-        protected override void Update(GameTime gameTime)
-        {
-            var keyboardState = Keyboard.GetState();
-            
-            if (keyboardState.IsKeyDown(Keys.Escape))
-                Exit();
-            
-            base.Update(gameTime);
+            _screenManager.LoadScreen(new TitleScreen(this), new FadeTransition(GraphicsDevice, Color.Black, 0.5f));
         }
     }
 }

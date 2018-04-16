@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Sprites;
@@ -72,7 +73,11 @@ namespace Pong.Screens
         public override void Update(GameTime gameTime)
         {
             var elapsedSeconds = gameTime.GetElapsedSeconds();
-            var mouseState = Mouse.GetState();
+            var mouseState = MouseExtended.GetState();
+            var keyboardState = KeyboardExtended.GetState();
+
+            if (keyboardState.WasKeyJustDown(Keys.Escape))
+                ScreenManager.LoadScreen(new TitleScreen(Game), new ExpandTransition(GraphicsDevice, Color.Black));
 
             MovePaddlePlayer(mouseState);
 
@@ -119,7 +124,7 @@ namespace Pong.Screens
             _spriteBatch.DrawString(_font, $"{_rightScore:00}", new Vector2(430, 10), new Color(0.2f, 0.2f, 0.2f), 0, Vector2.Zero, Vector2.One * 4f, SpriteEffects.None, 0);
         }
 
-        private void MovePaddlePlayer(MouseState mouseState)
+        private void MovePaddlePlayer(MouseStateExtended mouseState)
         {
             _bluePaddle.Position.Y = mouseState.Position.Y;
         }
@@ -170,7 +175,6 @@ namespace Pong.Screens
                 _ball.Position = new Vector2(ScreenWidth / 2f, ScreenHeight / 2f);
                 _ball.Velocity = new Vector2(_random.Next(2, 5) * -100, 100);
                 _leftScore++;
-                ScreenManager.LoadScreen(new TitleScreen(Game), new ExpandTransition(GraphicsDevice, Color.Black, 0.5f));
             }
 
             if (_ball.Position.X < -halfWidth && _ball.Velocity.X < 0)
@@ -178,7 +182,6 @@ namespace Pong.Screens
                 _ball.Position = new Vector2(ScreenWidth / 2f, ScreenHeight / 2f);
                 _ball.Velocity = new Vector2(_random.Next(2, 5) * 100, 100);
                 _rightScore++;
-                ScreenManager.LoadScreen(new TitleScreen(Game), new ExpandTransition(GraphicsDevice, Color.Black, 0.5f));
             }
         }
 

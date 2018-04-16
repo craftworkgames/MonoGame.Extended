@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
+using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 
@@ -27,9 +27,13 @@ namespace Pong.Screens
 
         public override void Update(GameTime gameTime)
         {
-            var mouseState = Mouse.GetState();
+            var mouseState = MouseExtended.GetState();
+            var keyboardState = KeyboardExtended.GetState();
 
-            if (mouseState.LeftButton == ButtonState.Pressed)
+            if (keyboardState.WasKeyJustDown(Keys.Escape))
+                Game.Exit();
+
+            if (mouseState.LeftButton == ButtonState.Pressed || keyboardState.WasAnyKeyJustDown())
                 ScreenManager.LoadScreen(new PongGameScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 0.5f));
         }
 
