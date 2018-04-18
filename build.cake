@@ -32,12 +32,29 @@ Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    // TODO: Get the tests working!
-    // NUnit($"./Source/Tests/**/bin/{configuration}/*.Tests.dll", new NUnitSettings 
-    // {
-    //     ShadowCopy = false,
-    //     X86 = true
-    // });
+    var testRuns = 0;
+    var failedRuns = 0;
+
+    foreach (var project in GetFiles($"./Source/Tests/**/*.Tests.csproj"))
+    { 
+        try
+        {
+            var filename = project.GetFilename().ChangeExtension("dll");
+            var testDll = project.GetDirectory().CombineWithFilePath($"bin/{configuration}/{filename}");
+            Information("Test Run {0} - {1}", testRuns++, filename);
+            NUnit(testDll.FullPath, new NUnitSettings 
+            {
+                ShadowCopy = false
+            });            
+        }
+        catch
+        {
+            failedRuns++;
+        }
+    }
+
+    if(failedRuns > 0)
+        throw new Exception($"{failedRuns} of {testRuns} test runs failed.");
 });
 
 Task("Default")
