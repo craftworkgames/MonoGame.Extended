@@ -73,6 +73,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Entities.Tests", "Tests\MonoGame.Extended.Entities.Tests\MonoGame.Extended.Entities.Tests.csproj", "{5B993DD9-A9B8-434C-B444-F1CFFB947F79}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pong", "Demos\Pong\Pong.csproj", "{55033148-02B0-4810-840A-011516846975}"
+	ProjectSection(ProjectDependencies) = postProject
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
