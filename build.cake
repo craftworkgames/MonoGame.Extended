@@ -1,5 +1,6 @@
 #tool nuget:?package=vswhere
 #tool nuget:?package=NUnit.Runners&version=2.6.4
+#tool nuget:?package=GitVersion.CommandLine
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
@@ -57,7 +58,23 @@ Task("Test")
         throw new Exception($"{failedRuns} of {testRuns} test runs failed.");
 });
 
+Task("Pack")
+    .IsDependentOn("Test")
+    .Does(() =>
+{
+    var nuspecFiles = GetFiles("./Source/NuGet/MonoGame.Extended*.nuspec");
+    var artifactsDirectory = "./artifacts";
+    var gitVersion = GitVersion();
+    CreateDirectory(artifactsDirectory);
+    CleanDirectory(artifactsDirectory);    
+    NuGetPack(nuspecFiles, new NuGetPackSettings 
+    {
+        Version = $"{gitVersion.MajorMinorPatch}",
+        OutputDirectory = artifactsDirectory
+    });
+});
+
 Task("Default")
-    .IsDependentOn("Test");
+    .IsDependentOn("Pack");
 
 RunTarget(target);
