@@ -90,17 +90,13 @@ namespace Pong.Screens
 
             if (BallHitPaddle(_ball, _bluePaddle))
             {
-                // TODO: Play pong sound
                 // TODO: Change the angle of the bounce
-                _ball.Velocity *= 1.05f;
                 _plopSoundEffect.Play(1.0f, _random.NextSingle(0.5f, 1.0f), -1f);
             }
 
             if (BallHitPaddle(_ball, _redPaddle))
             {
-                // TODO: Play ping sound
                 // TODO: Change the angle of the bounce
-                _ball.Velocity *= 1.05f;
                 _plopSoundEffect.Play(1f, _random.NextSingle(-1f, 1f), 1f);
             }
         }
@@ -112,9 +108,9 @@ namespace Pong.Screens
 
             DrawScores();
 
-            _spriteBatch.Draw(_redPaddle.Sprite, _redPaddle.Position);
-            _spriteBatch.Draw(_bluePaddle.Sprite, _bluePaddle.Position);
-            _spriteBatch.Draw(_ball.Sprite, _ball.Position);
+            _spriteBatch.Draw(_redPaddle.Sprite, _redPaddle.Position, _redPaddle.Rotation, _redPaddle.Scale);
+            _spriteBatch.Draw(_bluePaddle.Sprite, _bluePaddle.Position, _bluePaddle.Rotation, _bluePaddle.Scale);
+            _spriteBatch.Draw(_ball.Sprite, _ball.Position, _ball.Rotation, _ball.Scale); 
             _spriteBatch.End();
         }
 

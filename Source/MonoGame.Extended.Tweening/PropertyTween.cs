@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq.Expressions;
 using MonoGame.Extended.Animations;
 
@@ -27,8 +26,7 @@ namespace MonoGame.Extended.Tweening
             Multiply = Expression.Lambda<Func<T, float, T>>(Expression.Multiply(a, c), a, c).Compile();
         }
 
-        public PropertyTween(Func<T> getValue, Action<T> setValue, T targetValue, float duration,
-            EasingFunction easingFunction)
+        public PropertyTween(Func<T> getValue, Action<T> setValue, T targetValue, float duration, EasingFunction easingFunction)
             : base(null, true)
         {
             _getValue = getValue;
