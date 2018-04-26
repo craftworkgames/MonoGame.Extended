@@ -42,7 +42,7 @@ namespace MonoGame.Extended.Tweening
         private readonly List<TweenMember> _members;
         private Func<float, float> _easingFunction;
         private bool _isInitialized;
-        private bool _isReversed;
+        //private bool _isReversed;
         private bool _needsReset;
         private float _elapsedDuration;
         private Action _onBegin;
@@ -92,6 +92,12 @@ namespace MonoGame.Extended.Tweening
                 _needsReset = false;
                 _elapsedDuration = 0;
                 _onBegin?.Invoke();
+
+                if (IsAutoReverse)
+                {
+                    foreach (var member in _members)
+                        member.Swap();
+                }
             }
 
             _elapsedDuration += elapsedSeconds;
@@ -99,8 +105,8 @@ namespace MonoGame.Extended.Tweening
             var n = _completion = _elapsedDuration / Duration;
             var raiseEnd = false;
 
-            if (_isReversed)
-                n = _completion = 1f - n;
+            if (_easingFunction != null)
+                n = _easingFunction(n);
 
             if (_elapsedDuration >= Duration)
             {
@@ -111,23 +117,14 @@ namespace MonoGame.Extended.Tweening
 
                     _remainingDelay = _repeatDelay;
                     _needsReset = true;
-
-                    if (IsAutoReverse)
-                        _isReversed = !_isReversed;
-                }
-                else
-                {
-                    n = _completion = 1;
                 }
 
+                n = _completion = 1;
                 raiseEnd = true;
             }
-            
-            if (_easingFunction != null)
-                n = _easingFunction(n);
 
             foreach (var member in _members)
-                member.Update(n);
+                member.Interpolate(n);
 
             if (raiseEnd)
                 _onEnd?.Invoke();

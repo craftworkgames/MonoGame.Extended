@@ -6,7 +6,8 @@ namespace MonoGame.Extended.Tweening
     public abstract class TweenMember
     {
         public abstract void Initialize();
-        public abstract void Update(float n);
+        public abstract void Interpolate(float n);
+        public abstract void Swap();
     }
 
     public abstract class TweenMember<T> : TweenMember
@@ -42,7 +43,7 @@ namespace MonoGame.Extended.Tweening
         private readonly Func<object, object> _getMethod;
         private readonly Action<object, object> _setMethod;
         private T _startValue;
-        private readonly T _endValue;
+        private T _endValue;
         private T _range;
         
         public override void Initialize()
@@ -51,10 +52,16 @@ namespace MonoGame.Extended.Tweening
             _range = Subtract(_endValue, _startValue);
         }
 
-        public override void Update(float n)
+        public override void Interpolate(float n)
         {
             var value = Add(_startValue, Multiply(_range, n));
             _setMethod(Target, value);
+        }
+
+        public override void Swap()
+        {
+            _endValue = _startValue;
+            Initialize();
         }
     }
 }
