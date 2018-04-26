@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Tweening.NewTweening
+namespace MonoGame.Extended.Tweening
 {
     public class Tweener
     {
@@ -27,21 +27,23 @@ namespace Tweening.NewTweening
 
         public void Update(float elapsedSeconds)
         {
-            foreach (var tween in _activeTweens)
+            for (var i = _activeTweens.Count - 1; i >= 0; i--)
+            {
+                var tween = _activeTweens[i];
                 tween.Update(elapsedSeconds);
+            }
         }
 
         private static TweenMember<T> GetMember<T>(object target, string memberName, T toValue)
             where T : struct
         {
-            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
             var type = target.GetType();
-            var property = type.GetProperty(memberName, flags);
+            var property = type.GetTypeInfo().GetDeclaredProperty(memberName);
 
             if (property != null)
                 return new TweenPropertyMember<T>(target, property, toValue);
 
-            var field = type.GetField(memberName, flags);
+            var field = type.GetTypeInfo().GetDeclaredField(memberName);
 
             if (field != null)
                 return new TweenFieldMember<T>(target, field, toValue);

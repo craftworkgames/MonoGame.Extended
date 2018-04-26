@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Tweening
+namespace MonoGame.Extended.Tweening
 {
     public sealed class TweenPropertyMember<T> : TweenMember<T>
         where T : struct 
@@ -34,7 +34,7 @@ namespace Tweening
             var param = Expression.Parameter(typeof(object));
             var argument = Expression.Parameter(typeof(object));
             var expression = Expression.Convert(param, propertyInfo.DeclaringType);
-            var methodInfo = propertyInfo.GetSetMethod();
+            var methodInfo = propertyInfo.SetMethod;
             var arguments = Expression.Convert(argument, propertyInfo.PropertyType);
             var setterCall = Expression.Call(expression, methodInfo, arguments);
             return Expression.Lambda<Action<object, object>>(setterCall, param, argument).Compile();

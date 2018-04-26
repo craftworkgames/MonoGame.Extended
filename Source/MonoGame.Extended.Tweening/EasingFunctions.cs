@@ -3,39 +3,37 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tweening
 {
-    public delegate float EasingFunction(float value);
-
     public static class EasingFunctions
     {
         public static float Linear(float value) => value;
 
-        public static float CubicEaseIn(float value) => Power.EaseIn(value, 3);
-        public static float CubicEaseOut(float value) => Power.EaseOut(value, 3);
-        public static float CubicEaseInOut(float value) => Power.EaseInOut(value, 3);
+        public static float CubicIn(float value) => Power.In(value, 3);
+        public static float CubicOut(float value) => Power.Out(value, 3);
+        public static float CubicInOut(float value) => Power.InOut(value, 3);
 
-        public static float QuadraticEaseIn(float value) => Power.EaseIn(value, 2);
-        public static float QuadraticEaseOut(float value) => Power.EaseOut(value, 2);
-        public static float QuadraticEaseInOut(float value) => Power.EaseInOut(value, 2);
+        public static float QuadraticIn(float value) => Power.In(value, 2);
+        public static float QuadraticOut(float value) => Power.Out(value, 2);
+        public static float QuadraticInOut(float value) => Power.InOut(value, 2);
 
-        public static float QuarticEaseIn(float value) => Power.EaseIn(value, 4);
-        public static float QuarticEaseOut(float value) => Power.EaseOut(value, 4);
-        public static float QuarticEaseInOut(float value) => Power.EaseInOut(value, 4);
+        public static float QuarticIn(float value) => Power.In(value, 4);
+        public static float QuarticOut(float value) => Power.Out(value, 4);
+        public static float QuarticInOut(float value) => Power.InOut(value, 4);
 
-        public static float QuinticEaseIn(float value) => Power.EaseIn(value, 5);
-        public static float QuinticEaseOut(float value) => Power.EaseOut(value, 5);
-        public static float QuinticEaseInOut(float value) => Power.EaseInOut(value, 5);
+        public static float QuinticIn(float value) => Power.In(value, 5);
+        public static float QuinticOut(float value) => Power.Out(value, 5);
+        public static float QuinticInOut(float value) => Power.InOut(value, 5);
 
-        public static float SineEaseIn(float value)
-            => (float) Math.Sin(value*MathHelper.PiOver2 - MathHelper.PiOver2) + 1;
-
-        public static float SineEaseOut(float value) => (float) Math.Sin(value*MathHelper.PiOver2);
-
-        public static float SineEaseInOut(float value)
-            => (float) (Math.Sin(value*MathHelper.Pi - MathHelper.PiOver2) + 1)/2;
+        public static float SineIn(float value) => (float) Math.Sin(value*MathHelper.PiOver2 - MathHelper.PiOver2) + 1;
+        public static float SineOut(float value) => (float) Math.Sin(value*MathHelper.PiOver2);
+        public static float SineInOut(float value) => (float) (Math.Sin(value*MathHelper.Pi - MathHelper.PiOver2) + 1)/2;
 
         public static float ExponentialIn(float value) => (float) Math.Pow(2, 10*(value - 1));
         public static float ExponentialOut(float value) => Out(value, ExponentialIn);
         public static float ExponentialInOut(float value) => InOut(value, ExponentialIn);
+
+        public static float CircleIn(float value) => (float) -(Math.Sqrt(1 - value * value) - 1);
+        public static float CircleOut(float value) => (float) Math.Sqrt(1 - (value - 1) * (value - 1));
+        public static float CircleInOut(float value) => (float) (value <= .5 ? (Math.Sqrt(1 - value * value * 4) - 1) / -2 : (Math.Sqrt(1 - (value * 2 - 2) * (value * 2 - 2)) + 1) / 2);
 
         public static float ElasticIn(float value)
         {
@@ -81,12 +79,12 @@ namespace MonoGame.Extended.Tweening
         }
 
 
-        private static float Out(float value, EasingFunction function)
+        private static float Out(float value, Func<float, float> function)
         {
             return 1 - function(1 - value);
         }
 
-        private static float InOut(float value, EasingFunction function)
+        private static float InOut(float value, Func<float, float> function)
         {
             if (value < 0.5f)
                 return 0.5f*function(value*2);
@@ -96,23 +94,23 @@ namespace MonoGame.Extended.Tweening
 
         private static class Power
         {
-            public static float EaseIn(double value, int power)
+            public static float In(double value, int power)
             {
                 return (float) Math.Pow(value, power);
             }
 
-            public static float EaseOut(double value, int power)
+            public static float Out(double value, int power)
             {
                 var sign = power%2 == 0 ? -1 : 1;
                 return (float) (sign*(Math.Pow(value - 1, power) + sign));
             }
 
-            public static float EaseInOut(double s, int power)
+            public static float InOut(double s, int power)
             {
                 s *= 2;
 
                 if (s < 1)
-                    return EaseIn(s, power)/2;
+                    return In(s, power)/2;
 
                 var sign = power%2 == 0 ? -1 : 1;
                 return (float) (sign/2.0*(Math.Pow(s - 2, power) + sign*2));

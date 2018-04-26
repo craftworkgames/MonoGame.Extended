@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Tweening
+namespace MonoGame.Extended.Tweening
 {
     public sealed class TweenFieldMember<T> : TweenMember<T>
         where T : struct 

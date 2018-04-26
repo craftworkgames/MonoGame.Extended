@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
 
-namespace Tweening
+namespace MonoGame.Extended.Tweening
 {
     public abstract class TweenMember
     {
@@ -56,6 +56,5 @@ namespace Tweening
             var value = Add(_startValue, Multiply(_range, n));
             _setMethod(Target, value);
         }
-
     }
 }

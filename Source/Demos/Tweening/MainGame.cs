@@ -3,13 +3,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using Tweening.NewTweening;
+using MonoGame.Extended.Tweening;
 
 namespace Tweening
 {
     public class MainGame : Game
     {
-        public Vector2 Position = new Vector2(100, 100);
+        public Vector2 Position = new Vector2(100, 50);
         public float Alpha { get; set; } = 1.0f;
 
         // ReSharper disable once NotAccessedField.Local
@@ -26,15 +26,21 @@ namespace Tweening
             TargetElapsedTime = TimeSpan.FromSeconds(1f / 60f);
         }
 
+        private Color _backgroundColor = Color.CornflowerBlue;
+
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _tweener.Create(this, a => a.Position, new Vector2(700, 380), 5);
-                //.Easing(Ease.CubeInOut);
+            _tweener.Create(this, a => a.Position, new Vector2(650, 50), duration: 2, delay: 1)
+                .RepeatForever(repeatDelay: 1)
+                .AutoReverse()
+                .Easing(EasingFunctions.BounceOut);
+            //.OnBegin(() => _backgroundColor = Color.Green)
+            //.OnEnd(() => _backgroundColor = Color.Red);
 
-            _tweener.Create(this, a => a.Alpha, 0, 5);
             //.Easing(Ease.CubeInOut);
+
         }
 
         protected override void UnloadContent()
@@ -56,7 +62,7 @@ namespace Tweening
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(_backgroundColor);
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _spriteBatch.FillRectangle(Position.X, Position.Y, 50, 50, new Color(Alpha, Alpha, Alpha));
