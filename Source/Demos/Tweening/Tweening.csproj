@@ -106,6 +106,10 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj">
+      <Project>{49c87598-994c-49b5-bbb3-7ffc342635d3}</Project>
+      <Name>MonoGame.Extended.Input</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj">
       <Project>{1cf61f4f-a2ee-49bf-95d0-379e870de90e}</Project>
       <Name>MonoGame.Extended.Tweening</Name>

@@ -5,6 +5,15 @@ namespace MonoGame.Extended.Tweening
 {
     public abstract class TweenMember
     {
+        protected TweenMember(object target)
+        {
+            Target = target;
+        }
+
+        public object Target { get; }
+        public abstract Type Type { get; }
+        public abstract string Name { get; }
+
         public abstract void Initialize();
         public abstract void Interpolate(float n);
         public abstract void Swap();
@@ -28,18 +37,13 @@ namespace MonoGame.Extended.Tweening
         }
 
         protected TweenMember(object target, Func<object, object> getMethod, Action<object, object> setMethod, T endValue)
+            : base(target)
         {
-            Target = target;
-
             _endValue = endValue;
             _getMethod = getMethod;
             _setMethod = setMethod; 
         }
         
-        public abstract Type Type { get; }
-        public abstract string Name { get; }
-        public object Target { get; }
-
         private readonly Func<object, object> _getMethod;
         private readonly Action<object, object> _setMethod;
         private T _startValue;

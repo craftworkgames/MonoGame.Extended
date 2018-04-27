@@ -110,8 +110,7 @@ namespace MonoGame.Extended
         /// <param name="width">Width</param>
         /// <param name="height">Height</param>
         /// <param name="color">The color to draw the rectangle in</param>
-        public static void FillRectangle(this SpriteBatch spriteBatch, float x, float y, float width, float height,
-            Color color)
+        public static void FillRectangle(this SpriteBatch spriteBatch, float x, float y, float width, float height, Color color)
         {
             FillRectangle(spriteBatch, new Vector2(x, y), new Size2(width, height), color);
         }
@@ -123,8 +122,7 @@ namespace MonoGame.Extended
         /// <param name="rectangle">The rectangle to draw</param>
         /// <param name="color">The color to draw the rectangle in</param>
         /// <param name="thickness">The thickness of the lines</param>
-        public static void DrawRectangle(this SpriteBatch spriteBatch, RectangleF rectangle, Color color,
-            float thickness = 1f)
+        public static void DrawRectangle(this SpriteBatch spriteBatch, RectangleF rectangle, Color color, float thickness = 1f)
         {
             var texture = GetTexture(spriteBatch);
             var topLeft = new Vector2(rectangle.X, rectangle.Y);

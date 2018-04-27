@@ -1,72 +1,76 @@
 ﻿using System;
-using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tweening
 {
     public class Tween
     {
-        public Tween(object target, float duration, float delay, IEnumerable<TweenMember> members)
+        internal Tween(object target, float duration, float delay, TweenMember member)
         {
             Target = target;
+            Member = member;
             Duration = duration;
             Delay = delay;
+            IsAlive = true;
 
             _remainingDelay = delay;
-            _members = new List<TweenMember>(members);
         }
 
         public object Target { get; }
+        public TweenMember Member { get; }
         public float Duration { get; }
         public float Delay { get; }
         public bool IsPaused { get; set; }
         public bool IsRepeating => _remainingRepeats != 0;
         public bool IsRepeatingForever => _remainingRepeats < 0;
         public bool IsAutoReverse { get; private set; }
+        public bool IsAlive { get; private set; }
+        public bool IsComplete { get; private set; }
         public float TimeRemaining => Duration - _elapsedDuration;
+        public float Completion => MathHelper.Clamp(_completion, 0, 1);
 
-        private float _completion;
-        public float Completion
-        {
-            get
-            {
-                if (_completion < 0)
-                    return 0;
-
-                if (_completion > 1)
-                    return 1;
-
-                return _completion;
-            }
-        }
-
-        private readonly List<TweenMember> _members;
         private Func<float, float> _easingFunction;
         private bool _isInitialized;
-        //private bool _isReversed;
-        private bool _needsReset;
+        private float _completion;
         private float _elapsedDuration;
-        private Action _onBegin;
-        private Action _onEnd;
-        private int _remainingRepeats;
-        private float _repeatDelay;
         private float _remainingDelay;
+        private float _repeatDelay;
+        private int _remainingRepeats;
+        private Action<Tween> _onBegin;
+        private Action<Tween> _onEnd;
 
         public Tween Easing(Func<float, float> easingFunction) { _easingFunction = easingFunction; return this; }
-        public Tween OnBegin(Action callback) { _onBegin = callback; return this; }
-        public Tween OnEnd(Action callback) { _onEnd = callback; return this; }
+        public Tween OnBegin(Action<Tween> action) { _onBegin = action; return this; }
+        public Tween OnEnd(Action<Tween> action) { _onEnd = action; return this; }
         public Tween Pause() { IsPaused = true; return this; }
         public Tween Resume() { IsPaused = false; return this; }
         public Tween Repeat(int count, float repeatDelay = 0f) { _remainingRepeats = count; _repeatDelay = repeatDelay; return this; }
         public Tween RepeatForever(float repeatDelay = 0f) { _remainingRepeats = -1; _repeatDelay = repeatDelay; return this; }
         public Tween AutoReverse() { IsAutoReverse = true; return this; }
 
-        public void Cancel() { throw new NotImplementedException(); }
+        public void Cancel()
+        {
+            _remainingRepeats = 0;
+            IsAlive = false;
+        }
 
-        public void CancelAndComplete() { throw new NotImplementedException(); }
+        public void CancelAndComplete()
+        {
+            if (IsAlive)
+            {
+                _completion = 1;
+
+                Member.Interpolate(1);
+                IsComplete = true;
+                _onEnd?.Invoke(this);
+            }
+
+            Cancel();
+        }
 
         public void Update(float elapsedSeconds)
         {
-            if(IsPaused)
+            if(IsPaused || !IsAlive)
                 return;
 
             if (_remainingDelay > 0)
@@ -80,30 +84,23 @@ namespace MonoGame.Extended.Tweening
             if (!_isInitialized)
             {
                 _isInitialized = true;
-
-                foreach (var member in _members)
-                    member.Initialize();
-
-                _onBegin?.Invoke();
+                Member.Initialize();
+                _onBegin?.Invoke(this);
             }
 
-            if (_needsReset)
+            if (IsComplete)
             {
-                _needsReset = false;
+                IsComplete = false;
                 _elapsedDuration = 0;
-                _onBegin?.Invoke();
+                _onBegin?.Invoke(this);
 
                 if (IsAutoReverse)
-                {
-                    foreach (var member in _members)
-                        member.Swap();
-                }
+                    Member.Swap();
             }
 
             _elapsedDuration += elapsedSeconds;
 
             var n = _completion = _elapsedDuration / Duration;
-            var raiseEnd = false;
 
             if (_easingFunction != null)
                 n = _easingFunction(n);
@@ -116,18 +113,19 @@ namespace MonoGame.Extended.Tweening
                         _remainingRepeats--;
 
                     _remainingDelay = _repeatDelay;
-                    _needsReset = true;
                 }
 
                 n = _completion = 1;
-                raiseEnd = true;
+                IsComplete = true;
             }
 
-            foreach (var member in _members)
-                member.Interpolate(n);
+            Member.Interpolate(n);
 
-            if (raiseEnd)
-                _onEnd?.Invoke();
+            if (IsComplete)
+            {
+                IsAlive = _remainingRepeats != 0;
+                _onEnd?.Invoke(this);
+            }
         }
     }
 }
