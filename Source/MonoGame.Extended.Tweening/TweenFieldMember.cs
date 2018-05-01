@@ -10,8 +10,8 @@ namespace MonoGame.Extended.Tweening
     {
         private readonly FieldInfo _fieldInfo;
 
-        public TweenFieldMember(object target, FieldInfo fieldInfo, T endValue) 
-            : base(target, CompileGetMethod(fieldInfo), CompileSetMethod(fieldInfo), endValue)
+        public TweenFieldMember(object target, FieldInfo fieldInfo) 
+            : base(target, CompileGetMethod(fieldInfo), CompileSetMethod(fieldInfo))
         {
             _fieldInfo = fieldInfo;
         }

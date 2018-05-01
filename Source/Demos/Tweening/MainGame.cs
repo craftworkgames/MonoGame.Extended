@@ -103,12 +103,12 @@ namespace Tweening
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            _spriteBatch.FillRectangle(Linear.X, Linear.Y, Size.X, Size.X, Color.White);
-            _spriteBatch.FillRectangle(Quadratic.X, Quadratic.Y, Size.X, Size.X, Color.White);
-            _spriteBatch.FillRectangle(Exponential.X, Exponential.Y, Size.X, Size.X, Color.White);
-            _spriteBatch.FillRectangle(Bounce.X, Bounce.Y, Size.X, Size.X, Color.White);
-            _spriteBatch.FillRectangle(Back.X, Back.Y, Size.X, Size.X, Color.White);
-            _spriteBatch.FillRectangle(Elastic.X, Elastic.Y, Size.X, Size.X, Color.White);
+            _spriteBatch.FillRectangle(Linear.X, Linear.Y, Size.X, Size.X, Color.Red);
+            _spriteBatch.FillRectangle(Quadratic.X, Quadratic.Y, Size.X, Size.X, Color.Green);
+            _spriteBatch.FillRectangle(Exponential.X, Exponential.Y, Size.X, Size.X, Color.Blue);
+            _spriteBatch.FillRectangle(Bounce.X, Bounce.Y, Size.X, Size.X, Color.DarkOrange);
+            _spriteBatch.FillRectangle(Back.X, Back.Y, Size.X, Size.X, Color.Purple);
+            _spriteBatch.FillRectangle(Elastic.X, Elastic.Y, Size.X, Size.X, Color.Yellow);
             _spriteBatch.End();
 
             base.Draw(gameTime);

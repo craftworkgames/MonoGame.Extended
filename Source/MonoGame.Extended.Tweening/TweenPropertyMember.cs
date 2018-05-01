@@ -10,8 +10,8 @@ namespace MonoGame.Extended.Tweening
     {
         private readonly PropertyInfo _propertyInfo;
 
-        public TweenPropertyMember(object target, PropertyInfo propertyInfo, T endValue)
-            : base(target, CompileGetMethod(propertyInfo), CompileSetMethod(propertyInfo), endValue)
+        public TweenPropertyMember(object target, PropertyInfo propertyInfo)
+            : base(target, CompileGetMethod(propertyInfo), CompileSetMethod(propertyInfo))
         {
             _propertyInfo = propertyInfo;
         }

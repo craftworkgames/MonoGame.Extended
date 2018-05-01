@@ -3,12 +3,47 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tweening
 {
-    public class Tween
+    public class Tween<T> : Tween
+        where T : struct 
     {
-        internal Tween(object target, float duration, float delay, TweenMember member)
+        internal Tween(object target, float duration, float delay, TweenMember<T> member, T endValue) 
+            : base(target, duration, delay)
+        {
+            Member = member;
+            _endValue = endValue;
+        }
+
+        public TweenMember<T> Member { get; }
+        public override string MemberName => Member.Name;
+
+        private T _startValue;
+        private T _endValue;
+        private T _range;
+
+        protected override void Initialize()
+        {
+            _startValue = Member.Value;
+            _range = TweenMember<T>.Subtract(_endValue, _startValue);
+        }
+
+        protected override void Interpolate(float n)
+        {
+            var value = TweenMember<T>.Add(_startValue, TweenMember<T>.Multiply(_range, n));
+            Member.Value = value;
+        }
+
+        protected override void Swap()
+        {
+            _endValue = _startValue;
+            Initialize();
+        }
+    }
+
+    public abstract class Tween
+    {
+        internal Tween(object target, float duration, float delay)
         {
             Target = target;
-            Member = member;
             Duration = duration;
             Delay = delay;
             IsAlive = true;
@@ -17,7 +52,7 @@ namespace MonoGame.Extended.Tweening
         }
 
         public object Target { get; }
-        public TweenMember Member { get; }
+        public abstract string MemberName { get; }
         public float Duration { get; }
         public float Delay { get; }
         public bool IsPaused { get; set; }
@@ -48,6 +83,10 @@ namespace MonoGame.Extended.Tweening
         public Tween RepeatForever(float repeatDelay = 0f) { _remainingRepeats = -1; _repeatDelay = repeatDelay; return this; }
         public Tween AutoReverse() { IsAutoReverse = true; return this; }
 
+        protected abstract void Initialize();
+        protected abstract void Interpolate(float n);
+        protected abstract void Swap();
+
         public void Cancel()
         {
             _remainingRepeats = 0;
@@ -60,7 +99,7 @@ namespace MonoGame.Extended.Tweening
             {
                 _completion = 1;
 
-                Member.Interpolate(1);
+                Interpolate(1);
                 IsComplete = true;
                 _onEnd?.Invoke(this);
             }
@@ -84,7 +123,7 @@ namespace MonoGame.Extended.Tweening
             if (!_isInitialized)
             {
                 _isInitialized = true;
-                Member.Initialize();
+                Initialize();
                 _onBegin?.Invoke(this);
             }
 
@@ -95,7 +134,7 @@ namespace MonoGame.Extended.Tweening
                 _onBegin?.Invoke(this);
 
                 if (IsAutoReverse)
-                    Member.Swap();
+                    Swap();
             }
 
             _elapsedDuration += elapsedSeconds;
@@ -119,7 +158,7 @@ namespace MonoGame.Extended.Tweening
                 IsComplete = true;
             }
 
-            Member.Interpolate(n);
+            Interpolate(n);
 
             if (IsComplete)
             {
@@ -127,5 +166,6 @@ namespace MonoGame.Extended.Tweening
                 _onEnd?.Invoke(this);
             }
         }
+
     }
 }

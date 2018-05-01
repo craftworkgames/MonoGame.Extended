@@ -26,12 +26,12 @@ namespace MonoGame.Extended.Tweening
         {
             var memberExpression = (MemberExpression)expression.Body;
             var memberInfo = memberExpression.Member;
-            var member = GetMember(target, memberInfo.Name, toValue);
+            var member = GetMember<TMember>(target, memberInfo.Name);
             var activeTween = FindTween(target, member.Name);
 
             activeTween?.Cancel();
 
-            var tween = new Tween(target, duration, delay, member);
+            var tween = new Tween<TMember>(target, duration, delay, member, toValue);
             _activeTweens.Add(tween);
             return tween;
         }
@@ -51,7 +51,7 @@ namespace MonoGame.Extended.Tweening
 
         public Tween FindTween(object target, string memberName)
         {
-            return _activeTweens.FirstOrDefault(t => t.Target == target && t.Member.Name == memberName);
+            return _activeTweens.FirstOrDefault(t => t.Target == target && t.MemberName == memberName);
         }
 
         public void CancelAll()
@@ -66,19 +66,19 @@ namespace MonoGame.Extended.Tweening
                 tween.CancelAndComplete();
         }
 
-        private static TweenMember<T> GetMember<T>(object target, string memberName, T toValue)
+        private static TweenMember<T> GetMember<T>(object target, string memberName)
             where T : struct
         {
             var type = target.GetType();
             var property = type.GetTypeInfo().GetDeclaredProperty(memberName);
 
             if (property != null)
-                return new TweenPropertyMember<T>(target, property, toValue);
+                return new TweenPropertyMember<T>(target, property);
 
             var field = type.GetTypeInfo().GetDeclaredField(memberName);
 
             if (field != null)
-                return new TweenFieldMember<T>(target, field, toValue);
+                return new TweenFieldMember<T>(target, field);
 
             throw new InvalidOperationException($"'{memberName}' is not a property or field of the target");
         }

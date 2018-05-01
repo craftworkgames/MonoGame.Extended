@@ -13,19 +13,11 @@ namespace MonoGame.Extended.Tweening
         public object Target { get; }
         public abstract Type Type { get; }
         public abstract string Name { get; }
-
-        public abstract void Initialize();
-        public abstract void Interpolate(float n);
-        public abstract void Swap();
     }
 
     public abstract class TweenMember<T> : TweenMember
         where T : struct 
     {
-        protected static Func<T, T, T> Add;
-        protected static Func<T, T, T> Subtract;
-        protected static Func<T, float, T> Multiply;
-
         static TweenMember()
         {
             var a = Expression.Parameter(typeof(T));
@@ -36,36 +28,24 @@ namespace MonoGame.Extended.Tweening
             Multiply = Expression.Lambda<Func<T, float, T>>(Expression.Multiply(a, c), a, c).Compile();
         }
 
-        protected TweenMember(object target, Func<object, object> getMethod, Action<object, object> setMethod, T endValue)
+        public static Func<T, T, T> Add { get; }
+        public static Func<T, T, T> Subtract { get; }
+        public static Func<T, float, T> Multiply { get; }
+
+        protected TweenMember(object target, Func<object, object> getMethod, Action<object, object> setMethod)
             : base(target)
         {
-            _endValue = endValue;
             _getMethod = getMethod;
             _setMethod = setMethod; 
         }
         
         private readonly Func<object, object> _getMethod;
         private readonly Action<object, object> _setMethod;
-        private T _startValue;
-        private T _endValue;
-        private T _range;
-        
-        public override void Initialize()
-        {
-            _startValue = (T)_getMethod(Target);
-            _range = Subtract(_endValue, _startValue);
-        }
 
-        public override void Interpolate(float n)
+        public T Value
         {
-            var value = Add(_startValue, Multiply(_range, n));
-            _setMethod(Target, value);
-        }
-
-        public override void Swap()
-        {
-            _endValue = _startValue;
-            Initialize();
+            get => (T)_getMethod(Target);
+            set => _setMethod(Target, value);
         }
     }
 }
