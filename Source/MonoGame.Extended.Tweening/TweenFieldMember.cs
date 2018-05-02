@@ -19,7 +19,7 @@ namespace MonoGame.Extended.Tweening
         private static Func<object, object> CompileGetMethod(FieldInfo fieldInfo)
         {
             var self = Expression.Parameter(typeof(object));
-            var instance = Expression.Convert(self, fieldInfo.DeclaringType ?? throw new InvalidOperationException());
+            var instance = Expression.Convert(self, fieldInfo.DeclaringType);
             var field = Expression.Field(instance, fieldInfo);
             var convert = Expression.TypeAs(field, typeof(object));
 

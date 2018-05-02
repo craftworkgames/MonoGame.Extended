@@ -44,8 +44,8 @@ namespace MonoGame.Extended.Tweening
 
         public T Value
         {
-            get => (T)_getMethod(Target);
-            set => _setMethod(Target, value);
+            get { return (T) _getMethod(Target); }
+            set { _setMethod(Target, value); }
         }
     }
 }

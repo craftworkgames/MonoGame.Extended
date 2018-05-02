@@ -22,8 +22,8 @@ namespace MonoGame.Extended.Input
 
         public static IntPtr WindowHandle
         {
-            get => Mouse.WindowHandle;
-            set => Mouse.WindowHandle = value;
+            get { return Mouse.WindowHandle; }
+            set { Mouse.WindowHandle = value; }
         }
     }
 }
