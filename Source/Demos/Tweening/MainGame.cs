@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Tweening;
+using MonoGame.Extended.BitmapFonts;
 
 namespace Tweening
 {
@@ -14,6 +15,7 @@ namespace Tweening
         private GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
         private readonly Tweener _tweener = new Tweener();
+        private BitmapFont _bitmapFont;
 
         public MainGame()
         {
@@ -34,6 +36,8 @@ namespace Tweening
 
         protected override void LoadContent()
         {
+            _bitmapFont = Content.Load<BitmapFont>("kenney-rocket-square");
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _tweener.TweenTo(this, a => a.Linear, new Vector2(550, 50), duration: 2, delay: 1)
@@ -87,7 +91,7 @@ namespace Tweening
             if (keyboardState.WasKeyJustDown(Keys.Tab))
                 _tweener.CancelAndCompleteAll();
 
-            if (mouseState.WasButtonJustDown(MouseButton.Left))
+            if (mouseState.IsButtonDown(MouseButton.Left))
             {
                 _tweener.TweenTo(this, a => a.Linear, mouseState.Position.ToVector2(), 1.0f)
                     .Easing(EasingFunctions.QuadraticOut);
@@ -109,6 +113,8 @@ namespace Tweening
             _spriteBatch.FillRectangle(Bounce.X, Bounce.Y, Size.X, Size.X, Color.DarkOrange);
             _spriteBatch.FillRectangle(Back.X, Back.Y, Size.X, Size.X, Color.Purple);
             _spriteBatch.FillRectangle(Elastic.X, Elastic.Y, Size.X, Size.X, Color.Yellow);
+
+            _spriteBatch.DrawString(_bitmapFont, $"{_tweener.AllocationCount}", Vector2.One, Color.WhiteSmoke);
             _spriteBatch.End();
 
             base.Draw(gameTime);

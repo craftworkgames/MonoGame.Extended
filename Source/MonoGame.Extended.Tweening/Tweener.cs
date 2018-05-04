@@ -6,6 +6,7 @@ using System.Reflection;
 
 namespace MonoGame.Extended.Tweening
 {
+
     public class Tweener : IDisposable
     {
         public Tweener()
@@ -16,7 +17,10 @@ namespace MonoGame.Extended.Tweening
         {
             CancelAll();
             _activeTweens.Clear();
+            _memberCache.Clear();
         }
+
+        public long AllocationCount { get; private set; }
 
         private readonly List<Tween> _activeTweens = new List<Tween>();
 
@@ -31,6 +35,7 @@ namespace MonoGame.Extended.Tweening
 
             activeTween?.Cancel();
 
+            AllocationCount++;
             var tween = new Tween<TMember>(target, duration, delay, member, toValue);
             _activeTweens.Add(tween);
             return tween;
@@ -66,9 +71,37 @@ namespace MonoGame.Extended.Tweening
                 tween.CancelAndComplete();
         }
 
-        private static TweenMember<T> GetMember<T>(object target, string memberName)
+        private struct TweenMemberKey
+        {
+            public object Target;
+            public string MemberName;
+        }
+
+        private Dictionary<TweenMemberKey, TweenMember> _memberCache = new Dictionary<TweenMemberKey, TweenMember>();
+
+        private TweenMember<T> GetMember<T>(object target, string memberName)
             where T : struct
         {
+            TweenMember member;
+            var key = new TweenMemberKey { Target = target, MemberName = memberName };
+
+            if (_memberCache.TryGetValue(key, out member))
+            {
+                return (TweenMember<T>) member;
+            }
+            else
+            {
+                member = CreateMember<T>(target, memberName);
+                _memberCache.Add(key, member);
+                return (TweenMember<T>) member;
+            }
+        }
+
+        private TweenMember<T> CreateMember<T>(object target, string memberName)
+            where T : struct
+        {
+            AllocationCount++;
+
             var type = target.GetType();
             var property = type.GetTypeInfo().GetDeclaredProperty(memberName);
 
