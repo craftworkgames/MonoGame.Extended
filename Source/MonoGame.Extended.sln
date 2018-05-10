@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended", "MonoGame.Extended\MonoGame.Extended.csproj", "{41724C52-3D50-45BB-81EB-3C8A247EAFD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended", "MonoGame.Extended\MonoGame.Extended.csproj", "{41724C52-3D50-45BB-81EB-3C8A247EAFD1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{068B9F42-8B49-4FAF-9D8C-701862FAC799}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Content.Pipeline", "MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj", "{28CD24BD-432C-4987-9E9D-65CFCF120EA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Content.Pipeline", "MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj", "{28CD24BD-432C-4987-9E9D-65CFCF120EA0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{8E425575-378A-4F83-88C9-F8BEBAD227C9} = {8E425575-378A-4F83-88C9-F8BEBAD227C9}
 		{9B3AB8A1-78AA-471A-AFD0-B10B932115BC} = {9B3AB8A1-78AA-471A-AFD0-B10B932115BC}
@@ -32,27 +32,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{932F8931
 		Demos\README.md = Demos\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Collisions", "MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj", "{02562C6F-5BFB-467E-8A95-68B6CE2D635A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Collisions", "MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj", "{02562C6F-5BFB-467E-8A95-68B6CE2D635A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Gui", "MonoGame.Extended.Gui\MonoGame.Extended.Gui.csproj", "{8E425575-378A-4F83-88C9-F8BEBAD227C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Gui", "MonoGame.Extended.Gui\MonoGame.Extended.Gui.csproj", "{8E425575-378A-4F83-88C9-F8BEBAD227C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Graphics", "MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj", "{9B3AB8A1-78AA-471A-AFD0-B10B932115BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Graphics", "MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj", "{9B3AB8A1-78AA-471A-AFD0-B10B932115BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Tiled", "MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj", "{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Tiled", "MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj", "{07B2ADE2-73E3-41C4-AEA1-D5566A5AB902}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.NuclexGui", "MonoGame.Extended.NuclexGui\MonoGame.Extended.NuclexGui.csproj", "{D8BC4F21-E71D-46CE-B6D3-259F1E0DFABA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.NuclexGui", "MonoGame.Extended.NuclexGui\MonoGame.Extended.NuclexGui.csproj", "{D8BC4F21-E71D-46CE-B6D3-259F1E0DFABA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Particles", "MonoGame.Extended.Particles\MonoGame.Extended.Particles.csproj", "{6C8B9E29-D09B-4901-80FD-45AAA35882C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Particles", "MonoGame.Extended.Particles\MonoGame.Extended.Particles.csproj", "{6C8B9E29-D09B-4901-80FD-45AAA35882C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Entities", "MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj", "{35FD1F05-AF04-469A-B37A-F9B36C34401C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Entities", "MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj", "{35FD1F05-AF04-469A-B37A-F9B36C34401C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.SceneGraphs", "MonoGame.Extended.SceneGraphs\MonoGame.Extended.SceneGraphs.csproj", "{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.SceneGraphs", "MonoGame.Extended.SceneGraphs\MonoGame.Extended.SceneGraphs.csproj", "{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Input", "MonoGame.Extended.Input\MonoGame.Extended.Input.csproj", "{49C87598-994C-49B5-BBB3-7FFC342635D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Input", "MonoGame.Extended.Input\MonoGame.Extended.Input.csproj", "{49C87598-994C-49B5-BBB3-7FFC342635D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Tweening", "MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj", "{1CF61F4F-A2EE-49BF-95D0-379E870DE90E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Tweening", "MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj", "{1CF61F4F-A2EE-49BF-95D0-379E870DE90E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Animations", "MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj", "{587CE536-216F-41A1-B223-AE502C125B09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Animations", "MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj", "{587CE536-216F-41A1-B223-AE502C125B09}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{F3E80350-2F27-4EDB-8BE9-0145643A5336}"
 	ProjectSection(SolutionItems) = preProject
@@ -71,14 +71,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{F3E80350
 		NuGet\readme.txt = NuGet\readme.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pong", "Demos\Pong\Pong.csproj", "{55033148-02B0-4810-840A-011516846975}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pong", "Demos\Pong\Pong.csproj", "{55033148-02B0-4810-840A-011516846975}"
 	ProjectSection(ProjectDependencies) = postProject
 		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platformer", "Demos\Platformer\Platformer.csproj", "{1DDD3C52-B2F2-4DB3-8BF9-57BD93928EA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platformer", "Demos\Platformer\Platformer.csproj", "{1DDD3C52-B2F2-4DB3-8BF9-57BD93928EA8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tweening", "Demos\Tweening\Tweening.csproj", "{F46BC5FE-4939-4069-911F-5774AB0A3F51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tweening", "Demos\Tweening\Tweening.csproj", "{F46BC5FE-4939-4069-911F-5774AB0A3F51}"
+	ProjectSection(ProjectDependencies) = postProject
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Tests", "Tests\MonoGame.Extended.Tests\MonoGame.Extended.Tests.csproj", "{F54F8F82-7B7D-4C96-B22D-D4B2F5C2E9F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -216,6 +224,14 @@ Global
 		{F46BC5FE-4939-4069-911F-5774AB0A3F51}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F46BC5FE-4939-4069-911F-5774AB0A3F51}.Release|x86.ActiveCfg = Release|Any CPU
 		{F46BC5FE-4939-4069-911F-5774AB0A3F51}.Release|x86.Build.0 = Release|Any CPU
+		{F54F8F82-7B7D-4C96-B22D-D4B2F5C2E9F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F54F8F82-7B7D-4C96-B22D-D4B2F5C2E9F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F54F8F82-7B7D-4C96-B22D-D4B2F5C2E9F6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F54F8F82-7B7D-4C96-B22D-D4B2F5C2E9F6}.Debug|x86.Build.0 = Debug|Any CPU
+		{F54F8F82-7B7D-4C96-B22D-D4B2F5C2E9F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F54F8F82-7B7D-4C96-B22D-D4B2F5C2E9F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F54F8F82-7B7D-4C96-B22D-D4B2F5C2E9F6}.Release|x86.ActiveCfg = Release|Any CPU
+		{F54F8F82-7B7D-4C96-B22D-D4B2F5C2E9F6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -225,6 +241,7 @@ Global
 		{55033148-02B0-4810-840A-011516846975} = {932F8931-4A8D-4205-BFCF-98E794207786}
 		{1DDD3C52-B2F2-4DB3-8BF9-57BD93928EA8} = {932F8931-4A8D-4205-BFCF-98E794207786}
 		{F46BC5FE-4939-4069-911F-5774AB0A3F51} = {932F8931-4A8D-4205-BFCF-98E794207786}
+		{F54F8F82-7B7D-4C96-B22D-D4B2F5C2E9F6} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8ED5A62D-25EC-4331-9F99-BDD1E10C02A0}

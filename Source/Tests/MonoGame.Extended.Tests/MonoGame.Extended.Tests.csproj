@@ -3,7 +3,11 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Extended.Particles\MonoGame.Extended.Particles.csproj" />
     <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -11,6 +15,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NSubstitute" Version="3.1.0" />
-    <PackageReference Include="NUnit" Version="3.10.1" />
+    <PackageReference Include="NUnit" Version="2.6.5" />
   </ItemGroup>
 </Project>

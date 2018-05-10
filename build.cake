@@ -12,69 +12,66 @@ var msBuildPath = vsLatest?.CombineWithFilePath("./MSBuild/15.0/Bin/amd64/MSBuil
 Task("Restore")
     .Does(() =>
 {
-    NuGetRestore(solution);
+    DotNetCoreRestore(solution);
 });
 
 Task("Build")
     .IsDependentOn("Restore")
     .Does(() =>
 {
-    Information("Build using {0}", msBuildPath);
-    MSBuild(solution, new MSBuildSettings 
+    DotNetCoreBuild(solution, new DotNetCoreBuildSettings 
     {
-        Verbosity = Verbosity.Minimal,
-        ToolVersion = MSBuildToolVersion.VS2017,
-        ToolPath = msBuildPath,
+        //ArgumentCustomization = args => args.Append("/unsafe"),
         Configuration = configuration
     });
 });
 
-Task("Test")
-    .IsDependentOn("Build")
-    .Does(() =>
-{
-    var testRuns = 0;
-    var failedRuns = 0;
+// Task("Test")
+//     .IsDependentOn("Build")
+//     .Does(() =>
+// {
+//     var testRuns = 0;
+//     var failedRuns = 0;
 
-    foreach (var project in GetFiles($"./Source/Tests/**/*.Tests.csproj"))
-    { 
-        try
-        {
-            var filename = project.GetFilename().ChangeExtension("dll");
-            var testDll = project.GetDirectory().CombineWithFilePath($"bin/{configuration}/{filename}");
-            Information("Test Run {0} - {1}", testRuns++, filename);
-            NUnit(testDll.FullPath, new NUnitSettings 
-            {
-                ShadowCopy = false
-            });            
-        }
-        catch
-        {
-            failedRuns++;
-        }
-    }
+//     foreach (var project in GetFiles($"./Source/Tests/**/*.Tests.csproj"))
+//     { 
+//         try
+//         {
+//             var filename = project.GetFilename().ChangeExtension("dll");
+//             var testDll = project.GetDirectory().CombineWithFilePath($"bin/{configuration}/{filename}");
+//             Information("Test Run {0} - {1}", testRuns++, filename);
+//             NUnit(testDll.FullPath, new NUnitSettings 
+//             {
+//                 ShadowCopy = false
+//             });            
+//         }
+//         catch
+//         {
+//             failedRuns++;
+//         }
+//     }
 
-    if(failedRuns > 0)
-        throw new Exception($"{failedRuns} of {testRuns} test runs failed.");
-});
+//     if(failedRuns > 0)
+//         throw new Exception($"{failedRuns} of {testRuns} test runs failed.");
+// });
 
-Task("Pack")
-    .IsDependentOn("Test")
-    .Does(() =>
-{
-    var nuspecFiles = GetFiles("./Source/NuGet/MonoGame.Extended*.nuspec");
-    var artifactsDirectory = "./artifacts";
-    var gitVersion = GitVersion();
-    CreateDirectory(artifactsDirectory);
-    CleanDirectory(artifactsDirectory);    
-    NuGetPack(nuspecFiles, new NuGetPackSettings 
-    {
-        Version = $"{gitVersion.MajorMinorPatch}",
-        OutputDirectory = artifactsDirectory
-    });
-});
+// Task("Pack")
+//     .IsDependentOn("Test")
+//     .Does(() =>
+// {
+//     var nuspecFiles = GetFiles("./Source/NuGet/MonoGame.Extended*.nuspec");
+//     var artifactsDirectory = "./artifacts";
+//     var gitVersion = GitVersion();
+//     CreateDirectory(artifactsDirectory);
+//     CleanDirectory(artifactsDirectory);    
+//     NuGetPack(nuspecFiles, new NuGetPackSettings 
+//     {
+//         Version = $"{gitVersion.MajorMinorPatch}",
+//         OutputDirectory = artifactsDirectory
+//     });
+// });
 
 Task("Default")
-    .IsDependentOn("Pack");
+    .IsDependentOn("Build");
 
 RunTarget(target);

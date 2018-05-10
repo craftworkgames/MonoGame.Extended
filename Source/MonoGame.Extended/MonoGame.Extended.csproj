@@ -2,6 +2,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup>
+    <NoWarn>NU1701</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.Portable" Version="3.6.0.1625" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
