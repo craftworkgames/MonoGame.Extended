@@ -1,33 +1,32 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.TextureAtlases;
-using NUnit.Framework;
+using Xunit;
 
 namespace MonoGame.Extended.Tests.BitmapFonts
 {
-    [TestFixture]
     public class BitmapFontTests
     {
-        [Test]
+        [Fact]
         public void BitmapFont_Constructor_Test()
         {
             var font = CreateTestFont();
 
-            Assert.That(font.Name, Is.EqualTo("Impact"));
-            Assert.That(font.LineHeight, Is.EqualTo(22));
+            Assert.Equal("Impact", font.Name);
+            Assert.Equal(22, font.LineHeight);
         }
 
-        [Test]
+        [Fact]
         public void BitmapFont_MeasureString_SingleWord_Test()
         {
             var font = CreateTestFont();
             var size = font.MeasureString("fox");
 
-            Assert.That(size.Width, Is.EqualTo(40));
-            Assert.That(size.Height, Is.EqualTo(font.LineHeight));
+            Assert.Equal(40, size.Width);
+            Assert.Equal(font.LineHeight, size.Height);
         }
 
-        [Test]
+        [Fact]
         public void BitmapFont_MeasureString_WithLetterSpacing_Test()
         {
             var font = CreateTestFont();
@@ -35,28 +34,28 @@ namespace MonoGame.Extended.Tests.BitmapFonts
 
             var size = font.MeasureString("fox");
 
-            Assert.That(size.Width, Is.EqualTo(46));
-            Assert.That(size.Height, Is.EqualTo(font.LineHeight));
+            Assert.Equal(46, size.Width);
+            Assert.Equal(size.Height, font.LineHeight);
         }
 
-        [Test]
+        [Fact]
         public void BitmapFont_MeasureString_MultipleLines_Test()
         {
             var font = CreateTestFont();
             var size = font.MeasureString("box fox\nbox of fox");
 
-            Assert.That(size.Width, Is.EqualTo(123));
-            Assert.That(size.Height, Is.EqualTo(font.LineHeight * 2));
+            Assert.Equal(123, size.Width);
+            Assert.Equal(size.Height, font.LineHeight * 2);
         }
 
-        [Test]
+        [Fact]
         public void BitmapFont_MeasureString_EmptyString_Test()
         {
             var font = CreateTestFont();
             var size = font.MeasureString(string.Empty);
 
-            Assert.That(size.Width, Is.EqualTo(0));
-            Assert.That(size.Height, Is.EqualTo(0));
+            Assert.Equal(0, size.Width);
+            Assert.Equal(0, size.Height);
         }
 
         private static BitmapFont CreateTestFont()
