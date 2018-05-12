@@ -1,6 +1,6 @@
 ﻿//using System.Collections.Generic;
 //using System.Globalization;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests.Primitives
 //{
@@ -21,13 +21,13 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ConstructorTestCases))]
 //        public void Constructor(Point2 startingPoint, Point2 endingPoint)
 //        {
 //            var segment = new Segment2(startingPoint, endingPoint);
-//            Assert.AreEqual(startingPoint, segment.Start);
-//            Assert.AreEqual(endingPoint, segment.End);
+//            Assert.Equal(startingPoint, segment.Start);
+//            Assert.Equal(endingPoint, segment.End);
 //        }
 
 //        public IEnumerable<TestCaseData> ClosestPointTestCases
@@ -55,12 +55,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ClosestPointTestCases))]
 //        public void ClosestPoint(Segment2 segment, Point2 point, Point2 expectedClosestPoint)
 //        {
 //            var actualClosestPoint = segment.ClosestPointTo(point);
-//            Assert.AreEqual(expectedClosestPoint, actualClosestPoint);
+//            Assert.Equal(expectedClosestPoint, actualClosestPoint);
 //        }
 
 //        public IEnumerable<TestCaseData> SquaredDistanceToPointTestCases
@@ -88,13 +88,13 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(SquaredDistanceToPointTestCases))]
 //        public void SquaredDistanceToPoint(Segment2 segment, Point2 point,
 //            float expectedDistance)
 //        {
 //            var actualDistance = segment.SquaredDistanceTo(point);
-//            Assert.AreEqual(expectedDistance, actualDistance);
+//            Assert.Equal(expectedDistance, actualDistance);
 //        }
 
 //        public IEnumerable<TestCaseData> IntersectsBoundingRectangleTestCases
@@ -120,18 +120,18 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(IntersectsBoundingRectangleTestCases))]
 //        public void IntersectsBoundingRectangle(Segment2 segment, BoundingRectangle boundingRectangle, bool expectedResult,
 //            Point2 expectedIntersectionPoint)
 //        {
 //            Point2 actualIntersectionPoint;
 //            var actualResult = segment.Intersects(boundingRectangle, out actualIntersectionPoint);
-//            Assert.AreEqual(expectedResult, actualResult);
+//            Assert.Equal(expectedResult, actualResult);
 
 //            if (actualResult)
 //            {
-//                Assert.AreEqual(expectedIntersectionPoint, actualIntersectionPoint);
+//                Assert.Equal(expectedIntersectionPoint, actualIntersectionPoint);
 //            }
 //            else
 //            {
@@ -162,7 +162,7 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(EqualityTestCases))]
 //        public void Equality(Segment2 segment1, Segment2 segment2, bool expectedToBeEqual)
 //        {
@@ -172,7 +172,7 @@
 //            Assert.IsTrue(segment1.Equals(segment2) == expectedToBeEqual);
 
 //            if (expectedToBeEqual)
-//                Assert.AreEqual(segment1.GetHashCode(), segment2.GetHashCode());
+//                Assert.Equal(segment1.GetHashCode(), segment2.GetHashCode());
 //        }
 
 //        public IEnumerable<TestCaseData> InequalityTestCases
@@ -187,7 +187,7 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(InequalityTestCases))]
 //        public void Inequality(Segment2 segment, object obj, bool expectedToBeEqual)
 //        {
@@ -212,14 +212,14 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(HashCodeTestCases))]
 //        public void HashCode(Segment2 segment1, Segment2 segment2, bool expectedThatHashCodesAreEqual)
 //        {
 //            var hashCode1 = segment1.GetHashCode();
 //            var hashCode2 = segment2.GetHashCode();
 //            if (expectedThatHashCodesAreEqual)
-//                Assert.AreEqual(hashCode1, hashCode2);
+//                Assert.Equal(hashCode1, hashCode2);
 //            else
 //                Assert.AreNotEqual(hashCode1, hashCode2);
 //        }
@@ -240,12 +240,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(StringCases))]
 //        public void String(Segment2 segment, string expectedString)
 //        {
 //            var actualString = segment.ToString();
-//            Assert.AreEqual(expectedString, actualString);
+//            Assert.Equal(expectedString, actualString);
 //        }
 //    }
 //}

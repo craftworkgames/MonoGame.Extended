@@ -1,13 +1,13 @@
 //using Microsoft.Xna.Framework;
 //using MonoGame.Extended.Shapes;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests.Shapes
 //{
-//    [TestFixture]
+//    
 //    public class PolygonFTests
 //    {
-//        [Test]
+//        [Fact]
 //        public void Polygon_Contains_Point_Test()
 //        {
 //            var vertices = new[]
@@ -27,7 +27,7 @@
 //            Assert.IsFalse(polygon.Contains(new Vector2(-11f, -11f)));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Polygon_Transform_Translation_Test()
 //        {
 //            var vertices = new[] 
@@ -41,13 +41,13 @@
 //            var polygon = new Polygon(vertices);
 //            polygon.Offset(new Vector2(2, 3));
 
-//            Assert.AreEqual(new Vector2(2, 3), polygon.Vertices[0]);
-//            Assert.AreEqual(new Vector2(12, 3), polygon.Vertices[1]);
-//            Assert.AreEqual(new Vector2(12, 13), polygon.Vertices[2]);
-//            Assert.AreEqual(new Vector2(2, 13), polygon.Vertices[3]);
+//            Assert.Equal(new Vector2(2, 3), polygon.Vertices[0]);
+//            Assert.Equal(new Vector2(12, 3), polygon.Vertices[1]);
+//            Assert.Equal(new Vector2(12, 13), polygon.Vertices[2]);
+//            Assert.Equal(new Vector2(2, 13), polygon.Vertices[3]);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Polygon_Transform_Rotation_Test()
 //        {
 //            var vertices = new[]
@@ -66,7 +66,7 @@
 //            Assert.IsTrue(new Vector2(-10, -5).EqualsWithTolerence(polygon.Vertices[2], tolerance));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Polygon_Transform_Scale_Test()
 //        {
 //            var vertices = new[]

@@ -2,11 +2,11 @@
 //using System.Collections.Generic;
 //using System.Globalization;
 //using Microsoft.Xna.Framework;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests.Primitives
 //{
-//    [TestFixture]
+//    
 //    public class CircleFTests
 //    {
 //        public IEnumerable<TestCaseData> ConstructorTestCases
@@ -22,13 +22,13 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ConstructorTestCases))]
 //        public void Constructor(Point2 centre, float radius)
 //        {
 //            var circle = new CircleF(centre, radius);
-//            Assert.AreEqual(centre, circle.Center);
-//            Assert.AreEqual(radius, circle.Radius);
+//            Assert.Equal(centre, circle.Center);
+//            Assert.Equal(radius, circle.Radius);
 //        }
 
 //        public IEnumerable<TestCaseData> CreateFromMinimumMaximumTestCases
@@ -47,12 +47,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(CreateFromMinimumMaximumTestCases))]
 //        public void CreateFromMinimumMaximum(Point2 minimum, Point2 maximum, CircleF expectedBoundingCircle)
 //        {
 //            var actualBoundingCircle = CircleF.CreateFrom(minimum, maximum);
-//            Assert.AreEqual(expectedBoundingCircle, actualBoundingCircle);
+//            Assert.Equal(expectedBoundingCircle, actualBoundingCircle);
 //        }
 
 //        public IEnumerable<TestCaseData> CreateFromPointsTestCases
@@ -76,12 +76,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(CreateFromPointsTestCases))]
 //        public void CreateFromPoints(Point2[] points, CircleF expectedCircle)
 //        {
 //            var actualCircle = CircleF.CreateFrom(points);
-//            Assert.AreEqual(expectedCircle, actualCircle);
+//            Assert.Equal(expectedCircle, actualCircle);
 //        }
 
 //        public IEnumerable<TestCaseData> IntersectsCircleTestCases
@@ -102,12 +102,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(IntersectsCircleTestCases))]
 //        public void Intersects(CircleF circle, CircleF circle2, bool expectedToIntersect)
 //        {
-//            Assert.AreEqual(expectedToIntersect, circle.Intersects(circle2));
-//            Assert.AreEqual(expectedToIntersect, CircleF.Intersects(circle, circle2));
+//            Assert.Equal(expectedToIntersect, circle.Intersects(circle2));
+//            Assert.Equal(expectedToIntersect, CircleF.Intersects(circle, circle2));
 //        }
 
 //        public IEnumerable<TestCaseData> IntersectsRectangleTestCases
@@ -128,12 +128,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(IntersectsRectangleTestCases))]
 //        public void Intersects(CircleF circle, RectangleF rectangle, bool expectedToIntersect)
 //        {
-//            Assert.AreEqual(expectedToIntersect, circle.Intersects((BoundingRectangle)rectangle));
-//            Assert.AreEqual(expectedToIntersect, CircleF.Intersects(circle, (BoundingRectangle)rectangle));
+//            Assert.Equal(expectedToIntersect, circle.Intersects((BoundingRectangle)rectangle));
+//            Assert.Equal(expectedToIntersect, CircleF.Intersects(circle, (BoundingRectangle)rectangle));
 //        }
 
 //        public IEnumerable<TestCaseData> ContainsPointTestCases
@@ -154,12 +154,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ContainsPointTestCases))]
 //        public void ContainsPoint(CircleF circle, Point2 point, bool expectedToContainPoint)
 //        {
-//            Assert.AreEqual(expectedToContainPoint, circle.Contains(point));
-//            Assert.AreEqual(expectedToContainPoint, CircleF.Contains(circle, point));
+//            Assert.Equal(expectedToContainPoint, circle.Contains(point));
+//            Assert.Equal(expectedToContainPoint, CircleF.Contains(circle, point));
 //        }
 
 //        public IEnumerable<TestCaseData> ClosestPointTestCases
@@ -182,12 +182,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ClosestPointTestCases))]
 //        public void ClosestPoint(CircleF circle, Point2 point, Point2 expectedClosestPoint)
 //        {
 //            var actualClosestPoint = circle.ClosestPointTo(point);
-//            Assert.AreEqual(expectedClosestPoint, actualClosestPoint);
+//            Assert.Equal(expectedClosestPoint, actualClosestPoint);
 //        }
 
 //        public IEnumerable<TestCaseData> BoundaryPointTestCases
@@ -204,7 +204,7 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(BoundaryPointTestCases))]
 //        public void BoundaryPointAt(CircleF circle, float angle, Point2 expectedPoint)
 //        {
@@ -233,7 +233,7 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(EqualityTestCases))]
 //        public void Equality(CircleF circle1, CircleF circle2, bool expectedToBeEqual)
 //        {
@@ -243,7 +243,7 @@
 //            Assert.IsTrue(circle1.Equals(circle2) == expectedToBeEqual);
 
 //            if (expectedToBeEqual)
-//                Assert.AreEqual(circle1.GetHashCode(), circle2.GetHashCode());
+//                Assert.Equal(circle1.GetHashCode(), circle2.GetHashCode());
 //        }
 
 //        public IEnumerable<TestCaseData> InequalityTestCases
@@ -259,7 +259,7 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(InequalityTestCases))]
 //        public void Inequality(CircleF circle, object obj, bool expectedToBeEqual)
 //        {
@@ -284,14 +284,14 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(HashCodeTestCases))]
 //        public void HashCode(CircleF circle1, CircleF circle2, bool expectedThatHashCodesAreEqual)
 //        {
 //            var hashCode1 = circle1.GetHashCode();
 //            var hashCode2 = circle2.GetHashCode();
 //            if (expectedThatHashCodesAreEqual)
-//                Assert.AreEqual(hashCode1, hashCode2);
+//                Assert.Equal(hashCode1, hashCode2);
 //            else
 //                Assert.AreNotEqual(hashCode1, hashCode2);
 //        }
@@ -310,12 +310,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ToRectangleTestCases))]
 //        public void ToRectangle(CircleF circle, Rectangle expectedRectangle)
 //        {
 //            var actualRectangle = (Rectangle)circle;
-//            Assert.AreEqual(expectedRectangle, actualRectangle);
+//            Assert.Equal(expectedRectangle, actualRectangle);
 //        }
 
 //        public IEnumerable<TestCaseData> ToRectangleFTestCases
@@ -332,12 +332,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ToRectangleFTestCases))]
 //        public void ToRectangleF(CircleF circle, RectangleF expectedRectangle)
 //        {
 //            var actualRectangle = (RectangleF)circle;
-//            Assert.AreEqual(expectedRectangle, actualRectangle);
+//            Assert.Equal(expectedRectangle, actualRectangle);
 //        }
 
 //        public IEnumerable<TestCaseData> FromRectangleTestCases
@@ -354,12 +354,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(FromRectangleTestCases))]
 //        public void FromRectangle(Rectangle rectangle, CircleF expectedCircle)
 //        {
 //            var actualCircle = (CircleF)rectangle;
-//            Assert.AreEqual(expectedCircle, actualCircle);
+//            Assert.Equal(expectedCircle, actualCircle);
 //        }
 
 //        public IEnumerable<TestCaseData> FromRectangleFTestCases
@@ -376,12 +376,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(FromRectangleFTestCases))]
 //        public void FromRectangleF(RectangleF rectangle, CircleF expectedCircle)
 //        {
 //            var actualCircle = (CircleF)rectangle;
-//            Assert.AreEqual(expectedCircle, actualCircle);
+//            Assert.Equal(expectedCircle, actualCircle);
 //        }
 
 //        public IEnumerable<TestCaseData> StringCases
@@ -400,12 +400,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(StringCases))]
 //        public void String(CircleF circle, string expectedString)
 //        {
 //            var actualString = circle.ToString();
-//            Assert.AreEqual(expectedString, actualString);
+//            Assert.Equal(expectedString, actualString);
 //        }
 //    }
 //}

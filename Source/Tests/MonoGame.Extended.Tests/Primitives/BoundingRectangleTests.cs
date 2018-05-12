@@ -1,11 +1,11 @@
 ﻿//using System.Collections.Generic;
 //using System.Globalization;
 //using Microsoft.Xna.Framework;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests.Primitives
 //{
-//    [TestFixture]
+//    
 //    public class BoundingRectangleTests
 //    {
 //        public IEnumerable<TestCaseData> ConstructorTestCases
@@ -21,13 +21,13 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ConstructorTestCases))]
 //        public void Constructor(Point2 centre, Vector2 radii)
 //        {
 //            var boundingRectangle = new BoundingRectangle(centre, radii);
-//            Assert.AreEqual(centre, boundingRectangle.Center);
-//            Assert.AreEqual(radii, boundingRectangle.HalfExtents);
+//            Assert.Equal(centre, boundingRectangle.Center);
+//            Assert.Equal(radii, boundingRectangle.HalfExtents);
 //        }
 
 //        public IEnumerable<TestCaseData> CreateFromMinimumMaximumTestCases
@@ -46,12 +46,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(CreateFromMinimumMaximumTestCases))]
 //        public void CreateFromMinimumMaximum(Point2 minimum, Point2 maximum, BoundingRectangle expectedBoundingRectangle)
 //        {
 //            var actualBoundingRectangle = BoundingRectangle.CreateFrom(minimum, maximum);
-//            Assert.AreEqual(expectedBoundingRectangle, actualBoundingRectangle);
+//            Assert.Equal(expectedBoundingRectangle, actualBoundingRectangle);
 //        }
 
 //        public IEnumerable<TestCaseData> CreateFromPointsTestCases
@@ -75,12 +75,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(CreateFromPointsTestCases))]
 //        public void CreateFromPoints(Point2[] points, BoundingRectangle expectedBoundingRectangle)
 //        {
 //            var actualBoundingRectangle = BoundingRectangle.CreateFrom(points);
-//            Assert.AreEqual(expectedBoundingRectangle, actualBoundingRectangle);
+//            Assert.Equal(expectedBoundingRectangle, actualBoundingRectangle);
 //        }
 
 //        public IEnumerable<TestCaseData> CreateFromTransformedTestCases
@@ -98,13 +98,13 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(CreateFromTransformedTestCases))]
 //        public void CreateFromTransformed(BoundingRectangle boundingRectangle, Matrix2 transformMatrix,
 //            BoundingRectangle expectedBoundingRectangle)
 //        {
 //            var actualBoundingRectangle = BoundingRectangle.Transform(boundingRectangle, ref transformMatrix);
-//            Assert.AreEqual(expectedBoundingRectangle, actualBoundingRectangle);
+//            Assert.Equal(expectedBoundingRectangle, actualBoundingRectangle);
 //        }
 
 //        public IEnumerable<TestCaseData> UnionTestCases
@@ -122,12 +122,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(UnionTestCases))]
 //        public void Union(BoundingRectangle boundingRectangle1, BoundingRectangle boundingRectangle2, BoundingRectangle expectedBoundingRectangle)
 //        {
-//            Assert.AreEqual(expectedBoundingRectangle, boundingRectangle1.Union(boundingRectangle2));
-//            Assert.AreEqual(expectedBoundingRectangle, BoundingRectangle.Union(boundingRectangle1, boundingRectangle2));
+//            Assert.Equal(expectedBoundingRectangle, boundingRectangle1.Union(boundingRectangle2));
+//            Assert.Equal(expectedBoundingRectangle, BoundingRectangle.Union(boundingRectangle1, boundingRectangle2));
 //        }
 
 //        public IEnumerable<TestCaseData> IntersectionTestCases
@@ -150,13 +150,13 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(IntersectionTestCases))]
 //        public void Intersection(BoundingRectangle boundingRectangle1, BoundingRectangle boundingRectangle2,
 //            BoundingRectangle? expectedBoundingRectangle)
 //        {
-//            Assert.AreEqual(expectedBoundingRectangle, boundingRectangle1.Intersection(boundingRectangle2));
-//            Assert.AreEqual(expectedBoundingRectangle, BoundingRectangle.Intersection(boundingRectangle1, boundingRectangle2));
+//            Assert.Equal(expectedBoundingRectangle, boundingRectangle1.Intersection(boundingRectangle2));
+//            Assert.Equal(expectedBoundingRectangle, BoundingRectangle.Intersection(boundingRectangle1, boundingRectangle2));
 //        }
 
 //        public IEnumerable<TestCaseData> IntersectsTestCases
@@ -177,12 +177,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(IntersectsTestCases))]
 //        public void Intersects(BoundingRectangle boundingRectangle1, BoundingRectangle boundingRectangle2, bool expectedToIntersect)
 //        {
-//            Assert.AreEqual(expectedToIntersect, boundingRectangle1.Intersects(boundingRectangle2));
-//            Assert.AreEqual(expectedToIntersect, BoundingRectangle.Intersects(boundingRectangle1, boundingRectangle2));
+//            Assert.Equal(expectedToIntersect, boundingRectangle1.Intersects(boundingRectangle2));
+//            Assert.Equal(expectedToIntersect, BoundingRectangle.Intersects(boundingRectangle1, boundingRectangle2));
 //        }
 
 //        public IEnumerable<TestCaseData> ContainsPointTestCases
@@ -203,12 +203,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ContainsPointTestCases))]
 //        public void ContainsPoint(BoundingRectangle boundingRectangle, Point2 point, bool expectedToContainPoint)
 //        {
-//            Assert.AreEqual(expectedToContainPoint, boundingRectangle.Contains(point));
-//            Assert.AreEqual(expectedToContainPoint, BoundingRectangle.Contains(boundingRectangle, point));
+//            Assert.Equal(expectedToContainPoint, boundingRectangle.Contains(point));
+//            Assert.Equal(expectedToContainPoint, BoundingRectangle.Contains(boundingRectangle, point));
 //        }
 
 //        public IEnumerable<TestCaseData> ClosestPointTestCases
@@ -231,12 +231,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ClosestPointTestCases))]
 //        public void ClosestPoint(BoundingRectangle boundingRectangle, Point2 point, Point2 expectedClosestPoint)
 //        {
 //            var actualClosestPoint = boundingRectangle.ClosestPointTo(point);
-//            Assert.AreEqual(expectedClosestPoint, actualClosestPoint);
+//            Assert.Equal(expectedClosestPoint, actualClosestPoint);
 //        }
 
 //        public IEnumerable<TestCaseData> EqualityTestCases
@@ -262,7 +262,7 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(EqualityTestCases))]
 //        public void Equality(BoundingRectangle boundingRectangle1, BoundingRectangle boundingRectangle2, bool expectedToBeEqual)
 //        {
@@ -272,7 +272,7 @@
 //            Assert.IsTrue(boundingRectangle1.Equals(boundingRectangle2) == expectedToBeEqual);
 
 //            if (expectedToBeEqual)
-//                Assert.AreEqual(boundingRectangle1.GetHashCode(), boundingRectangle2.GetHashCode());
+//                Assert.Equal(boundingRectangle1.GetHashCode(), boundingRectangle2.GetHashCode());
 //        }
 
 //        public IEnumerable<TestCaseData> InequalityTestCases
@@ -288,7 +288,7 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(InequalityTestCases))]
 //        public void Inequality(BoundingRectangle boundingRectangle, object obj, bool expectedToBeEqual)
 //        {
@@ -313,14 +313,14 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(HashCodeTestCases))]
 //        public void HashCode(BoundingRectangle boundingRectangle1, BoundingRectangle boundingRectangle2, bool expectedThatHashCodesAreEqual)
 //        {
 //            var hashCode1 = boundingRectangle1.GetHashCode();
 //            var hashCode2 = boundingRectangle2.GetHashCode();
 //            if (expectedThatHashCodesAreEqual)
-//                Assert.AreEqual(hashCode1, hashCode2);
+//                Assert.Equal(hashCode1, hashCode2);
 //            else
 //                Assert.AreNotEqual(hashCode1, hashCode2);
 //        }
@@ -339,12 +339,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ToRectangleTestCases))]
 //        public void ToRectangle(BoundingRectangle boundingRectangle, Rectangle expectedRectangle)
 //        {
 //            var actualRectangle = (Rectangle)boundingRectangle;
-//            Assert.AreEqual(expectedRectangle, actualRectangle);
+//            Assert.Equal(expectedRectangle, actualRectangle);
 //        }
 
 //        public IEnumerable<TestCaseData> FromRectangleTestCases
@@ -361,12 +361,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(FromRectangleTestCases))]
 //        public void FromRectangle(Rectangle rectangle, BoundingRectangle expectedBoundingRectangle)
 //        {
 //            var actualBoundingRectangle = (BoundingRectangle)rectangle;
-//            Assert.AreEqual(expectedBoundingRectangle, actualBoundingRectangle);
+//            Assert.Equal(expectedBoundingRectangle, actualBoundingRectangle);
 //        }
 
 //        public IEnumerable<TestCaseData> StringCases
@@ -385,12 +385,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(StringCases))]
 //        public void String(BoundingRectangle boundingRectangle, string expectedString)
 //        {
 //            var actualString = boundingRectangle.ToString();
-//            Assert.AreEqual(expectedString, actualString);
+//            Assert.Equal(expectedString, actualString);
 //        }
 //    }
 //}

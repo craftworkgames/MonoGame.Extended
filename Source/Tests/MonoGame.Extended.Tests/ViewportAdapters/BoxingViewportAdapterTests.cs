@@ -1,13 +1,13 @@
 //using Microsoft.Xna.Framework.Graphics;
 //using MonoGame.Extended.ViewportAdapters;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests.ViewportAdapters
 //{
-//    [TestFixture]
+//    
 //    public class BoxingViewportAdapterTests
 //    {
-//        [Test]
+//        [Fact]
 //        public void BoxingViewportAdapter_Letterbox_Test()
 //        {
 //            var gameWindow = new MockGameWindow();
@@ -17,12 +17,12 @@
 //            graphicsDevice.Viewport = new Viewport(0, 0, 1024, 768);
 //            viewportAdapter.Reset();
 
-//            Assert.AreEqual(1024, graphicsDevice.Viewport.Width);
-//            Assert.AreEqual(614, graphicsDevice.Viewport.Height);
-//            Assert.AreEqual(BoxingMode.Letterbox, viewportAdapter.BoxingMode);
+//            Assert.Equal(1024, graphicsDevice.Viewport.Width);
+//            Assert.Equal(614, graphicsDevice.Viewport.Height);
+//            Assert.Equal(BoxingMode.Letterbox, viewportAdapter.BoxingMode);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void BoxingViewportAdapter_Pillarbox_Test()
 //        {
 //            var gameWindow = new MockGameWindow();
@@ -32,9 +32,9 @@
 //            graphicsDevice.Viewport = new Viewport(0, 0, 900, 500);
 //            viewportAdapter.Reset();
 
-//            Assert.AreEqual(833, graphicsDevice.Viewport.Width);
-//            Assert.AreEqual(500, graphicsDevice.Viewport.Height);
-//            Assert.AreEqual(BoxingMode.Pillarbox, viewportAdapter.BoxingMode);
+//            Assert.Equal(833, graphicsDevice.Viewport.Width);
+//            Assert.Equal(500, graphicsDevice.Viewport.Height);
+//            Assert.Equal(BoxingMode.Pillarbox, viewportAdapter.BoxingMode);
 //        }
 
 //    }

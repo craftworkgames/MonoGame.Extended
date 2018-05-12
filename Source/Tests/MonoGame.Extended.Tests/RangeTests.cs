@@ -1,12 +1,12 @@
 ﻿//using System;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests
 //{
-//    [TestFixture]
+//    
 //    public class RangeTests
 //    {
-//        [Test]
+//        [Fact]
 //        public void ConstructorTest()
 //        {
 //            //can pass min < max
@@ -17,7 +17,7 @@
 //            Assert.DoesNotThrow(() => new Range<int>(10, 10));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void DegenerateTest()
 //        {
 //            var proper = new Range<double>(0, 1);
@@ -29,13 +29,13 @@
 //            Assert.IsTrue(degenerate.IsDegenerate);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void IntegerTest()
 //        {
 //            var range = new Range<int>(10, 100);
 
-//            Assert.AreEqual(range.Min, 10);
-//            Assert.AreEqual(range.Max, 100);
+//            Assert.Equal(range.Min, 10);
+//            Assert.Equal(range.Max, 100);
 
 //            for (var i = 10; i <= 100; i++)
 //            {
@@ -48,13 +48,13 @@
 //            Assert.IsFalse(range.IsInBetween(100, maxValueExclusive: true));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void FloatTest()
 //        {
 //            var range = new Range<float>(0f, 1f);
 
-//            Assert.AreEqual(range.Min, 0f);
-//            Assert.AreEqual(range.Max, 1f);
+//            Assert.Equal(range.Min, 0f);
+//            Assert.Equal(range.Max, 1f);
 
 //            for (float i = 0; i <= 1f; i += 0.001f)
 //            {
@@ -68,7 +68,7 @@
 //            Assert.IsFalse(range.IsInBetween(1f, maxValueExclusive: true));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void OperatorTest()
 //        {
 //            var rangeA = new Range<int>(0, 1);
@@ -87,16 +87,16 @@
 //            Assert.IsFalse(rangeA.Equals(rangeD));
 
 //            Range<int> implict = 1;
-//            Assert.AreEqual(implict.Max, 1);
-//            Assert.AreEqual(implict.Min, 1);
+//            Assert.Equal(implict.Max, 1);
+//            Assert.Equal(implict.Min, 1);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void ToStringTest()
 //        {
 //            var range = new Range<float>(0, 1);
 
-//            Assert.AreEqual(range.ToString(), "Range<Single> [0 1]");
+//            Assert.Equal(range.ToString(), "Range<Single> [0 1]");
 //        }
 //    }
 //}

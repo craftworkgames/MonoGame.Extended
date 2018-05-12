@@ -115,6 +115,13 @@ namespace Tweening
             _spriteBatch.FillRectangle(Elastic.X, Elastic.Y, Size.X, Size.X, Color.Yellow);
 
             _spriteBatch.DrawString(_bitmapFont, $"{_tweener.AllocationCount}", Vector2.One, Color.WhiteSmoke);
+
+            _spriteBatch.DrawString(_bitmapFont, "fox", new Vector2(100, 100), Color.Honeydew);
+            var r = _bitmapFont.GetStringRectangle("fox", new Point2(100, 100));
+            var s = _bitmapFont.MeasureString("fox");
+            _spriteBatch.DrawRectangle(r, Color.Red);
+            _spriteBatch.DrawRectangle(new RectangleF(r.X, r.Y, s.Width, s.Height), Color.Green);
+
             _spriteBatch.End();
 
             base.Draw(gameTime);

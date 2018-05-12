@@ -3,16 +3,16 @@
 //using MonoGame.Extended.Particles;
 //using MonoGame.Extended.Particles.Modifiers;
 //using MonoGame.Extended.Particles.Profiles;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests.Particles
 //{
-//    [TestFixture]
+//    
 //    public class EmitterTests
 //    {
 //        public class UpdateMethod
 //        {
-//            [Test]
+//            [Fact]
 //            public void WhenThereAreParticlesToExpire_DecreasesActiveParticleCount()
 //            {
 //                var subject = new ParticleEmitter(null, 100, TimeSpan.FromSeconds(1), Profile.Point())
@@ -25,13 +25,13 @@
 //                };
 
 //                subject.Trigger(new Vector2(0f, 0f));
-//                Assert.AreEqual(subject.ActiveParticles, 1);
+//                Assert.Equal(subject.ActiveParticles, 1);
 
 //                subject.Update(2f);
-//                Assert.AreEqual(subject.ActiveParticles, 0);
+//                Assert.Equal(subject.ActiveParticles, 0);
 //            }
 
-//            [Test]
+//            [Fact]
 //            public void WhenThereAreParticlesToExpire_DoesNotPassExpiredParticlesToModifiers()
 //            {
 //                var subject = new ParticleEmitter(null, 100, TimeSpan.FromSeconds(1), Profile.Point())
@@ -54,19 +54,19 @@
 //                subject.Update(0.5f);
 //            }
 
-//            [Test]
+//            [Fact]
 //            public void WhenThereAreNoActiveParticles_GracefullyDoesNothing()
 //            {
 //                var subject = new ParticleEmitter(null, 100, TimeSpan.FromSeconds(1), Profile.Point()) { AutoTrigger = false };
 
 //                subject.Update(0.5f);
-//                Assert.AreEqual(subject.ActiveParticles, 0);
+//                Assert.Equal(subject.ActiveParticles, 0);
 //            }
 //        }
 
 //        public class TriggerMethod
 //        {
-//            [Test]
+//            [Fact]
 //            public void WhenEnoughHeadroom_IncreasesActiveParticlesCountByReleaseQuantity()
 //            {
 //                var subject = new ParticleEmitter(null, 100, TimeSpan.FromSeconds(1), Profile.Point())
@@ -76,12 +76,12 @@
 //                        Quantity = 10
 //                    }
 //                };
-//                Assert.AreEqual(subject.ActiveParticles, 0);
+//                Assert.Equal(subject.ActiveParticles, 0);
 //                subject.Trigger(new Vector2(0f, 0f));
-//                Assert.AreEqual(subject.ActiveParticles, 10);
+//                Assert.Equal(subject.ActiveParticles, 10);
 //            }
 
-//            [Test]
+//            [Fact]
 //            public void WhenNotEnoughHeadroom_IncreasesActiveParticlesCountByRemainingParticles()
 //            {
 //                var subject = new ParticleEmitter(null, 15, TimeSpan.FromSeconds(1), Profile.Point())
@@ -93,12 +93,12 @@
 //                };
 
 //                subject.Trigger(new Vector2(0f, 0f));
-//                Assert.AreEqual(subject.ActiveParticles, 10);
+//                Assert.Equal(subject.ActiveParticles, 10);
 //                subject.Trigger(new Vector2(0f, 0f));
-//                Assert.AreEqual(subject.ActiveParticles, 15);
+//                Assert.Equal(subject.ActiveParticles, 15);
 //            }
 
-//            [Test]
+//            [Fact]
 //            public void WhenNoRemainingParticles_DoesNotIncreaseActiveParticlesCount()
 //            {
 //                var subject = new ParticleEmitter(null, 10, TimeSpan.FromSeconds(1), Profile.Point())
@@ -110,15 +110,15 @@
 //                };
 
 //                subject.Trigger(new Vector2(0f, 0f));
-//                Assert.AreEqual(subject.ActiveParticles, 10);
+//                Assert.Equal(subject.ActiveParticles, 10);
 //                subject.Trigger(new Vector2(0f, 0f));
-//                Assert.AreEqual(subject.ActiveParticles, 10);
+//                Assert.Equal(subject.ActiveParticles, 10);
 //            }
 //        }
 
 //        public class DisposeMethod
 //        {
-//            [Test]
+//            [Fact]
 //            public void IsIdempotent()
 //            {
 //                var subject = new ParticleEmitter(null, 10, TimeSpan.FromSeconds(1), Profile.Point());

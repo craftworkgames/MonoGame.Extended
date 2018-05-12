@@ -1,11 +1,11 @@
 ﻿//using System.Collections.Generic;
 //using System.Globalization;
 //using Microsoft.Xna.Framework;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests.Primitives
 //{
-//    [TestFixture]
+//    
 //    public class Point2Tests
 //    {
 //        public IEnumerable<TestCaseData> ConstructorTestCases
@@ -22,13 +22,13 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ConstructorTestCases))]
 //        public void Constructor(float x, float y)
 //        {
 //            var point = new Point2(x, y);
-//            Assert.AreEqual(x, point.X);
-//            Assert.AreEqual(y, point.Y);
+//            Assert.Equal(x, point.X);
+//            Assert.Equal(y, point.Y);
 //        }
 
 //        public IEnumerable<TestCaseData> CoordinatesTestCases
@@ -45,18 +45,18 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(CoordinatesTestCases))]
 //        public void Coordinates(Point2 point, float expectedX, float expecetedY)
 //        {
-//            Assert.AreEqual(expectedX, point.X);
-//            Assert.AreEqual(expecetedY, point.Y);
+//            Assert.Equal(expectedX, point.X);
+//            Assert.Equal(expecetedY, point.Y);
 
 //            point.X = 10;
-//            Assert.AreEqual(10, point.X);
+//            Assert.Equal(10, point.X);
 
 //            point.Y = -10.123f;
-//            Assert.AreEqual(-10.123f, point.Y);
+//            Assert.Equal(-10.123f, point.Y);
 //        }
 
 //        public IEnumerable<TestCaseData> VectorAdditionTestCases
@@ -72,12 +72,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(VectorAdditionTestCases))]
 //        public void VectorAddition(Point2 point, Vector2 vector, Point2 expectedPoint)
 //        {
-//            Assert.AreEqual(expectedPoint, point + vector);
-//            Assert.AreEqual(expectedPoint, Point2.Add(point, vector));
+//            Assert.Equal(expectedPoint, point + vector);
+//            Assert.Equal(expectedPoint, Point2.Add(point, vector));
 //        }
 
 //        public IEnumerable<TestCaseData> VectorSubtractionTestCases
@@ -93,12 +93,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(VectorSubtractionTestCases))]
 //        public void VectorSubtraction(Point2 point, Vector2 vector, Point2 expectedPoint)
 //        {
-//            Assert.AreEqual(expectedPoint, point - vector);
-//            Assert.AreEqual(expectedPoint, Point2.Subtract(point, vector));
+//            Assert.Equal(expectedPoint, point - vector);
+//            Assert.Equal(expectedPoint, Point2.Subtract(point, vector));
 //        }
 
 
@@ -115,12 +115,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(DisplacementTestCases))]
 //        public void Displacement(Point2 point1, Point2 point2, Vector2 expectedVector)
 //        {
-//            Assert.AreEqual(expectedVector, point2 - point1);
-//            Assert.AreEqual(expectedVector, Point2.Displacement(point2, point1));
+//            Assert.Equal(expectedVector, point2 - point1);
+//            Assert.Equal(expectedVector, Point2.Displacement(point2, point1));
 //        }
 
 //        public IEnumerable<TestCaseData> SizeAdditionTestCases
@@ -136,12 +136,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(SizeAdditionTestCases))]
 //        public void SizeAdditon(Point2 point, Size2 size, Point2 expectedPoint)
 //        {
-//            Assert.AreEqual(expectedPoint, point + size);
-//            Assert.AreEqual(expectedPoint, Point2.Add(point, size));
+//            Assert.Equal(expectedPoint, point + size);
+//            Assert.Equal(expectedPoint, Point2.Add(point, size));
 //        }
 
 //        public IEnumerable<TestCaseData> SizeSubtractionTestCases
@@ -157,12 +157,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(SizeSubtractionTestCases))]
 //        public void SizeSubtraction(Point2 point, Size2 size, Point2 expectedPoint)
 //        {
-//            Assert.AreEqual(expectedPoint, point - size);
-//            Assert.AreEqual(expectedPoint, Point2.Subtract(point, size));
+//            Assert.Equal(expectedPoint, point - size);
+//            Assert.Equal(expectedPoint, Point2.Subtract(point, size));
 //        }
 
 //        public IEnumerable<TestCaseData> MinimumTestCases
@@ -179,12 +179,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(MinimumTestCases))]
 //        public void Minimum(Point2 point1, Point2 point2, Point2 expectedPoint)
 //        {
 //            var actualPoint = Point2.Minimum(point1, point2);
-//            Assert.AreEqual(expectedPoint, actualPoint);
+//            Assert.Equal(expectedPoint, actualPoint);
 //        }
 
 //        public IEnumerable<TestCaseData> MaximumTestCases
@@ -201,12 +201,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(MaximumTestCases))]
 //        public void Maximum(Point2 point1, Point2 point2, Point2 expectedPoint)
 //        {
 //            var actualPoint = Point2.Maximum(point1, point2);
-//            Assert.AreEqual(expectedPoint, actualPoint);
+//            Assert.Equal(expectedPoint, actualPoint);
 //        }
 
 //        public IEnumerable<TestCaseData> EqualityTestCases
@@ -227,7 +227,7 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(EqualityTestCases))]
 //        public void Equality(Point2 point1, Point2 point2, bool expectedToBeEqual)
 //        {
@@ -237,7 +237,7 @@
 //            Assert.IsTrue(point1.Equals(point2) == expectedToBeEqual);
 
 //            if (expectedToBeEqual)
-//                Assert.AreEqual(point1.GetHashCode(), point2.GetHashCode());
+//                Assert.Equal(point1.GetHashCode(), point2.GetHashCode());
 //        }
 
 //        public IEnumerable<TestCaseData> InequalityTestCases
@@ -252,7 +252,7 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(InequalityTestCases))]
 //        public void Inequality(Point2 point, object obj, bool expectedToBeEqual)
 //        {
@@ -275,14 +275,14 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(HashCodeTestCases))]
 //        public void HashCode(Point2 point1, Point2 point2, bool expectedThatHashCodesAreEqual)
 //        {
 //            var hashCode1 = point1.GetHashCode();
 //            var hashCode2 = point2.GetHashCode();
 //            if (expectedThatHashCodesAreEqual)
-//                Assert.AreEqual(hashCode1, hashCode2);
+//                Assert.Equal(hashCode1, hashCode2);
 //            else
 //                Assert.AreNotEqual(hashCode1, hashCode2);
 //        }
@@ -301,12 +301,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ToVectorTestCases))]
 //        public void ToVector(Point2 point, Vector2 expectedVector)
 //        {
 //            var actualVector = (Vector2)point;
-//            Assert.AreEqual(expectedVector, actualVector);
+//            Assert.Equal(expectedVector, actualVector);
 //        }
 
 //        public IEnumerable<TestCaseData> FromVectorTestCases
@@ -323,12 +323,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(FromVectorTestCases))]
 //        public void FromVector(Vector2 vector, Point2 expectedPoint)
 //        {
 //            var actualPoint = (Point2)vector;
-//            Assert.AreEqual(expectedPoint, actualPoint);
+//            Assert.Equal(expectedPoint, actualPoint);
 //        }
 
 //        public IEnumerable<TestCaseData> StringCases
@@ -345,12 +345,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(StringCases))]
 //        public void String(Point2 point, string expectedString)
 //        {
 //            var actualString = point.ToString();
-//            Assert.AreEqual(expectedString, actualString);
+//            Assert.Equal(expectedString, actualString);
 //        }
 //    }
 //}

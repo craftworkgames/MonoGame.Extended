@@ -5,14 +5,14 @@
 //using MonoGame.Extended.Tiled;
 //using MonoGame.Extended.Tiled.Graphics;
 //using NSubstitute;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests.Tiled.Renderers
 //{
-//    [TestFixture]
+//    
 //    public class FullMapRendererTest
 //    {
-//        [Test]
+//        [Fact]
 //        public void Draw_MapObjectLayer_MissingGID_NoGroups()
 //        {
 //            var gd = TestHelper.CreateGraphicsDevice();
@@ -38,7 +38,7 @@
 //            Assert.IsNull(gd.Indices);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Draw_MapObjectLayer_ShapeObject_NoGroups()
 //        {
 //            var gd = TestHelper.CreateGraphicsDevice();
@@ -64,7 +64,7 @@
 //            Assert.IsNull(gd.Indices);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Draw_MapObjectLayer_TileObject_OneGroup()
 //        {
 //            var gd = TestHelper.CreateGraphicsDevice();
@@ -87,11 +87,11 @@
 
 //            r.Draw(new Matrix());
 
-//            Assert.IsNotNull(gd.Indices);
-//            Assert.AreEqual(6, gd.Indices.IndexCount);
+//            Assert.NotNull(gd.Indices);
+//            Assert.Equal(6, gd.Indices.IndexCount);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Draw_MapObjectLayer_NotVisible_NoGroups()
 //        {
 //            var gd = TestHelper.CreateGraphicsDevice();
@@ -117,7 +117,7 @@
 //            Assert.IsNull(gd.Indices);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Draw_MapObjectLayer_NoObjects_NoGroups()
 //        {
 //            var gd = TestHelper.CreateGraphicsDevice();
@@ -139,7 +139,7 @@
 //            Assert.IsNull(gd.Indices);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Draw_MapTileLayer_TwoVisible_OneGroup()
 //        {
 //            var gd = TestHelper.CreateGraphicsDevice();
@@ -154,11 +154,11 @@
 
 //            r.Draw(new Matrix());
 
-//            Assert.IsNotNull(gd.Indices);
-//            Assert.AreEqual(12, gd.Indices.IndexCount);
+//            Assert.NotNull(gd.Indices);
+//            Assert.Equal(12, gd.Indices.IndexCount);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Draw_MapTileLayer_AllBlank_NoGroups()
 //        {
 //            var gd = TestHelper.CreateGraphicsDevice();
@@ -176,7 +176,7 @@
 //            Assert.IsNull(gd.Indices);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Draw_MapImageLayer_OneGroup()
 //        {
 //            var gd = TestHelper.CreateGraphicsDevice();
@@ -190,11 +190,11 @@
 
 //            r.Draw(new Matrix());
 
-//            Assert.IsNotNull(gd.Indices);
-//            Assert.AreEqual(6, gd.Indices.IndexCount);
+//            Assert.NotNull(gd.Indices);
+//            Assert.Equal(6, gd.Indices.IndexCount);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Draw_MapNoGroups()
 //        {
 //            var gd = TestHelper.CreateGraphicsDevice();
@@ -206,7 +206,7 @@
 //            Assert.IsNull(gd.Indices);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Draw_NoMap()
 //        {
 //            var gd = TestHelper.CreateGraphicsDevice();
@@ -217,7 +217,7 @@
 //            Assert.IsNull(gd.Indices);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void CreatePrimatives()
 //        {
 //            var gd = TestHelper.CreateGraphicsDevice();
@@ -230,20 +230,20 @@
 //            var r = new MockRenderer(gd);
 //            r.CreatePrimitives(new Point(0, 0), region, 0, 0.5f, out vertices, out indexes);
 
-//            Assert.AreEqual(4, vertices.Length);
-//            Assert.AreEqual(new Vector3(0, 0, .5f), vertices[0].Position);
-//            Assert.AreEqual(new Vector2(0.0234375f, 0.0234375f), vertices[0].TextureCoordinate);
-//            Assert.AreEqual(new Vector3(32, 0, .5f), vertices[1].Position);
-//            Assert.AreEqual(new Vector2(0.515625f, 0.0234375f), vertices[1].TextureCoordinate);
-//            Assert.AreEqual(new Vector3(0, 32, .5f), vertices[2].Position);
-//            Assert.AreEqual(new Vector2(0.0234375f, 0.515625f), vertices[2].TextureCoordinate);
-//            Assert.AreEqual(new Vector3(32, 32, .5f), vertices[3].Position);
-//            Assert.AreEqual(new Vector2(0.515625f, 0.515625f), vertices[3].TextureCoordinate);
+//            Assert.Equal(4, vertices.Length);
+//            Assert.Equal(new Vector3(0, 0, .5f), vertices[0].Position);
+//            Assert.Equal(new Vector2(0.0234375f, 0.0234375f), vertices[0].TextureCoordinate);
+//            Assert.Equal(new Vector3(32, 0, .5f), vertices[1].Position);
+//            Assert.Equal(new Vector2(0.515625f, 0.0234375f), vertices[1].TextureCoordinate);
+//            Assert.Equal(new Vector3(0, 32, .5f), vertices[2].Position);
+//            Assert.Equal(new Vector2(0.0234375f, 0.515625f), vertices[2].TextureCoordinate);
+//            Assert.Equal(new Vector3(32, 32, .5f), vertices[3].Position);
+//            Assert.Equal(new Vector2(0.515625f, 0.515625f), vertices[3].TextureCoordinate);
 
-//            CollectionAssert.AreEqual(new[] { 0, 1, 2, 1, 3, 2 }, indexes);
+//            CollectionAssert.Equal(new[] { 0, 1, 2, 1, 3, 2 }, indexes);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void CreatePrimatives_Offset10()
 //        {
 //            var gd = TestHelper.CreateGraphicsDevice();
@@ -256,17 +256,17 @@
 //            var r = new MockRenderer(gd);
 //            r.CreatePrimitives(new Point(0, 0), region, 10, 0.5f, out vertices, out indexes);
 
-//            Assert.AreEqual(4, vertices.Length);
-//            Assert.AreEqual(new Vector3(0, 0, .5f), vertices[0].Position);
-//            Assert.AreEqual(new Vector2(0.0234375f, 0.0234375f), vertices[0].TextureCoordinate);
-//            Assert.AreEqual(new Vector3(32, 0, .5f), vertices[1].Position);
-//            Assert.AreEqual(new Vector2(0.515625f, 0.0234375f), vertices[1].TextureCoordinate);
-//            Assert.AreEqual(new Vector3(0, 32, .5f), vertices[2].Position);
-//            Assert.AreEqual(new Vector2(0.0234375f, 0.515625f), vertices[2].TextureCoordinate);
-//            Assert.AreEqual(new Vector3(32, 32, .5f), vertices[3].Position);
-//            Assert.AreEqual(new Vector2(0.515625f, 0.515625f), vertices[3].TextureCoordinate);
+//            Assert.Equal(4, vertices.Length);
+//            Assert.Equal(new Vector3(0, 0, .5f), vertices[0].Position);
+//            Assert.Equal(new Vector2(0.0234375f, 0.0234375f), vertices[0].TextureCoordinate);
+//            Assert.Equal(new Vector3(32, 0, .5f), vertices[1].Position);
+//            Assert.Equal(new Vector2(0.515625f, 0.0234375f), vertices[1].TextureCoordinate);
+//            Assert.Equal(new Vector3(0, 32, .5f), vertices[2].Position);
+//            Assert.Equal(new Vector2(0.0234375f, 0.515625f), vertices[2].TextureCoordinate);
+//            Assert.Equal(new Vector3(32, 32, .5f), vertices[3].Position);
+//            Assert.Equal(new Vector2(0.515625f, 0.515625f), vertices[3].TextureCoordinate);
 
-//            CollectionAssert.AreEqual(new[] { 40, 41, 42, 41, 43, 42 }, indexes);
+//            CollectionAssert.Equal(new[] { 40, 41, 42, 41, 43, 42 }, indexes);
 //        }
 //    }
 

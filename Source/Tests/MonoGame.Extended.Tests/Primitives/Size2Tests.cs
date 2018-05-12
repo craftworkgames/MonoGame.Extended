@@ -1,11 +1,11 @@
 ﻿//using System.Collections.Generic;
 //using System.Globalization;
 //using Microsoft.Xna.Framework;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests.Primitives
 //{
-//    [TestFixture]
+//    
 //    public class Size2Tests
 //    {
 //        public IEnumerable<TestCaseData> ConstructorTestCases
@@ -22,13 +22,13 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ConstructorTestCases))]
 //        public void Constructor(float width, float height)
 //        {
 //            var size = new Size2(width, height);
-//            Assert.AreEqual(width, size.Width);
-//            Assert.AreEqual(height, size.Height);
+//            Assert.Equal(width, size.Width);
+//            Assert.Equal(height, size.Height);
 //        }
 
 //        public IEnumerable<TestCaseData> DimensionsTestCases
@@ -45,18 +45,18 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(DimensionsTestCases))]
 //        public void Dimensions(Size2 size, float expectedWidth, float expecetedHeight)
 //        {
-//            Assert.AreEqual(expectedWidth, size.Width);
-//            Assert.AreEqual(expecetedHeight, size.Height);
+//            Assert.Equal(expectedWidth, size.Width);
+//            Assert.Equal(expecetedHeight, size.Height);
 
 //            size.Width = 10;
-//            Assert.AreEqual(10, size.Width);
+//            Assert.Equal(10, size.Width);
 
 //            size.Height = -10.123f;
-//            Assert.AreEqual(-10.123f, size.Height);
+//            Assert.Equal(-10.123f, size.Height);
 //        }
 
 //        public IEnumerable<TestCaseData> AdditionTestCases
@@ -72,12 +72,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(AdditionTestCases))]
 //        public void Addition(Size2 size1, Size2 size2, Size2 expectedSize)
 //        {
-//            Assert.AreEqual(expectedSize, size1 + size2);
-//            Assert.AreEqual(expectedSize, Size2.Add(size1, size2));
+//            Assert.Equal(expectedSize, size1 + size2);
+//            Assert.Equal(expectedSize, Size2.Add(size1, size2));
 //        }
 
 //        public IEnumerable<TestCaseData> SubtractionTestCases
@@ -93,12 +93,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(SubtractionTestCases))]
 //        public void Subtraction(Size2 size1, Size2 size2, Size2 expectedSize)
 //        {
-//            Assert.AreEqual(expectedSize, size1 - size2);
-//            Assert.AreEqual(expectedSize, Size2.Subtract(size1, size2));
+//            Assert.Equal(expectedSize, size1 - size2);
+//            Assert.Equal(expectedSize, Size2.Subtract(size1, size2));
 //        }
 
 //        public IEnumerable<TestCaseData> EqualityTestCases
@@ -119,7 +119,7 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(EqualityTestCases))]
 //        public void Equality(Size2 size1, Size2 size2, bool expectedToBeEqual)
 //        {
@@ -129,7 +129,7 @@
 //            Assert.IsTrue(size1.Equals(size2) == expectedToBeEqual);
 
 //            if (expectedToBeEqual)
-//                Assert.AreEqual(size1.GetHashCode(), size2.GetHashCode());
+//                Assert.Equal(size1.GetHashCode(), size2.GetHashCode());
 //        }
 
 //        public IEnumerable<TestCaseData> InequalityTestCases
@@ -144,7 +144,7 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(InequalityTestCases))]
 //        public void Inequality(Size2 size, object obj, bool expectedToBeEqual)
 //        {
@@ -167,14 +167,14 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(HashCodeTestCases))]
 //        public void HashCode(Size2 size1, Size2 size2, bool expectedThatHashCodesAreEqual)
 //        {
 //            var hashCode1 = size1.GetHashCode();
 //            var hashCode2 = size2.GetHashCode();
 //            if (expectedThatHashCodesAreEqual)
-//                Assert.AreEqual(hashCode1, hashCode2);
+//                Assert.Equal(hashCode1, hashCode2);
 //            else
 //                Assert.AreNotEqual(hashCode1, hashCode2);
 //        }
@@ -191,12 +191,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ToPointTestCases))]
 //        public void ToPoint(Size2 size, Point2 expectedPoint)
 //        {
 //            var actualPoint = (Point2)size;
-//            Assert.AreEqual(expectedPoint, actualPoint);
+//            Assert.Equal(expectedPoint, actualPoint);
 //        }
 
 //        public IEnumerable<TestCaseData> FromPointTestCases
@@ -211,12 +211,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(FromPointTestCases))]
 //        public void FromPoint(Point2 point, Size2 expectedSize)
 //        {
 //            var actualSize = (Size2)point;
-//            Assert.AreEqual(expectedSize, actualSize);
+//            Assert.Equal(expectedSize, actualSize);
 //        }
 
 //        public IEnumerable<TestCaseData> ToVectorTestCases
@@ -231,12 +231,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ToVectorTestCases))]
 //        public void ToVector(Size2 size, Vector2 expectedVector)
 //        {
 //            var actualVector = (Vector2)size;
-//            Assert.AreEqual(expectedVector, actualVector);
+//            Assert.Equal(expectedVector, actualVector);
 //        }
 
 //        public IEnumerable<TestCaseData> FromVectorTestCases
@@ -251,12 +251,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(FromVectorTestCases))]
 //        public void FromVector(Vector2 vector, Size2 expectedSize)
 //        {
 //            var actualSize = (Size2)vector;
-//            Assert.AreEqual(expectedSize, actualSize);
+//            Assert.Equal(expectedSize, actualSize);
 //        }
 
 //        //public IEnumerable<TestCaseData> FromSizeTestCases
@@ -271,12 +271,12 @@
 //        //    }
 //        //}
 
-//        //[Test]
+//        //[Fact]
 //        //[TestCaseSource(nameof(FromSizeTestCases))]
 //        //public void FromSize(Size2 size, Size2 expectedSize)
 //        //{
 //        //    var actualSize = (Size2)size;
-//        //    Assert.AreEqual(expectedSize, actualSize);
+//        //    Assert.Equal(expectedSize, actualSize);
 //        //}
 
 //        public IEnumerable<TestCaseData> StringCases
@@ -293,12 +293,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(StringCases))]
 //        public void String(Size2 size, string expectedString)
 //        {
 //            var actualString = size.ToString();
-//            Assert.AreEqual(expectedString, actualString);
+//            Assert.Equal(expectedString, actualString);
 //        }
 //    }
 //}

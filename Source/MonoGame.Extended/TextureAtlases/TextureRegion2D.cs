@@ -28,8 +28,6 @@ namespace MonoGame.Extended.TextureAtlases
 
         public TextureRegion2D(string name, Texture2D texture, int x, int y, int width, int height)
         {
-            if (texture == null) throw new ArgumentNullException(nameof(texture));
-
             Name = name;
             Texture = texture;
             X = x;

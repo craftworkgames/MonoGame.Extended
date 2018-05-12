@@ -1,14 +1,14 @@
 ﻿//using System;
 //using Microsoft.Xna.Framework;
 //using MonoGame.Extended.Particles.Profiles;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests.Particles.Profiles
 //{
-//    [TestFixture]
+//    
 //    public class RingProfileTests
 //    {
-//        [Test]
+//        [Fact]
 //        public void ReturnsOffsetEqualToRadius()
 //        {
 //            var subject = new RingProfile
@@ -19,10 +19,10 @@
 //            subject.GetOffsetAndHeading(out offset, out heading);
 
 //            var length = Math.Sqrt(offset.X * offset.X + offset.Y * offset.Y);
-//            Assert.AreEqual(10f, length, 0.000001);
+//            Assert.Equal(10f, length, 0.000001);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void WhenRadiateIsTrue_HeadingIsEqualToNormalizedOffset()
 //        {
 //            var subject = new RingProfile
@@ -33,8 +33,8 @@
 //            Vector2 offset, heading;
 //            subject.GetOffsetAndHeading(out offset, out heading);
 
-//            Assert.AreEqual(heading.X, offset.X / 10, 0.000001);
-//            Assert.AreEqual(heading.Y, offset.Y / 10, 0.000001);
+//            Assert.Equal(heading.X, offset.X / 10, 0.000001);
+//            Assert.Equal(heading.Y, offset.Y / 10, 0.000001);
 
 //        }
 

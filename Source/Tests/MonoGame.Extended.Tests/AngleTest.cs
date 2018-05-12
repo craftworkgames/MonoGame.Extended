@@ -1,14 +1,14 @@
 ﻿//using Microsoft.Xna.Framework;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests
 //{
-//    [TestFixture]
+//    
 //    public class AngleTest
 //    {
 //        private const float _delta = 0.00001f;
 
-//        [Test]
+//        [Fact]
 //        public void ConstructorTest()
 //        {
 //            const float value = 0.5f;
@@ -24,14 +24,14 @@
 //            Assert.That(0.5f, Is.EqualTo(revolutions.Revolutions).Within(_delta));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void ConversionTest()
 //        {
 //            //from radians
 //            var radians = new Angle(MathHelper.Pi);
-//            Assert.AreEqual(180f, radians.Degrees, _delta);
-//            Assert.AreEqual(200f, radians.Gradians, _delta);
-//            Assert.AreEqual(0.5f, radians.Revolutions, _delta);
+//            Assert.Equal(180f, radians.Degrees, _delta);
+//            Assert.Equal(200f, radians.Gradians, _delta);
+//            Assert.Equal(0.5f, radians.Revolutions, _delta);
 //            //to radians
 //            var degrees = new Angle(180f, AngleType.Degree);
 //            var gradians = new Angle(200f, AngleType.Gradian);
@@ -42,7 +42,7 @@
 //            Assert.That(MathHelper.Pi, Is.EqualTo(revolutions.Radians).Within(_delta));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void WrapTest()
 //        {
 //            for (var f = -10f; f < 10f; f += 0.1f)
@@ -61,23 +61,23 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void VectorTest()
 //        {
 //            var angle = Angle.FromVector(Vector2.One);
-//            Assert.AreEqual(-MathHelper.Pi / 4d, angle.Radians, _delta);
-//            Assert.AreEqual(10f, angle.ToVector(10f).Length());
+//            Assert.Equal(-MathHelper.Pi / 4d, angle.Radians, _delta);
+//            Assert.Equal(10f, angle.ToVector(10f).Length());
 
 //            angle = Angle.FromVector(Vector2.UnitX);
-//            Assert.AreEqual(0, angle.Radians, _delta);
+//            Assert.Equal(0, angle.Radians, _delta);
 //            Assert.IsTrue(Vector2.UnitX.EqualsWithTolerence(angle.ToUnitVector()));
 
 //            angle = Angle.FromVector(-Vector2.UnitY);
-//            Assert.AreEqual(MathHelper.Pi / 2d, angle.Radians, _delta);
+//            Assert.Equal(MathHelper.Pi / 2d, angle.Radians, _delta);
 //            Assert.IsTrue((-Vector2.UnitY).EqualsWithTolerence(angle.ToUnitVector()));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void EqualsTest()
 //        {
 //            var angle1 = new Angle(0);

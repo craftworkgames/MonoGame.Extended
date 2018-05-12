@@ -1,12 +1,12 @@
 ﻿using MonoGame.Extended.Gui.Controls;
-using NUnit.Framework;
+using Xunit;
 
 namespace MonoGame.Extended.Gui.Tests
 {
-    //[TestFixture]
+    //
     //public class GuiRendererTests
     //{
-    //    [Test]
+    //    [Fact]
     //    public void GuiRenderer_TargetScreen_Test()
     //    {
     //        var screen = new GuiScreen();

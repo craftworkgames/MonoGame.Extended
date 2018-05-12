@@ -19,10 +19,6 @@ namespace MonoGame.Extended.Tests.Collections
             _random = new Random();
         }
 
-        public void Dispose()
-        {
-        }
-
         [Fact]
         public void Deque_Constructor_Default()
         {

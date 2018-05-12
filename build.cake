@@ -26,34 +26,31 @@ Task("Build")
     });
 });
 
-// Task("Test")
-//     .IsDependentOn("Build")
-//     .Does(() =>
-// {
-//     var testRuns = 0;
-//     var failedRuns = 0;
+Task("Test")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+    var testRuns = 0;
+    var failedRuns = 0;
 
-//     foreach (var project in GetFiles($"./Source/Tests/**/*.Tests.csproj"))
-//     { 
-//         try
-//         {
-//             var filename = project.GetFilename().ChangeExtension("dll");
-//             var testDll = project.GetDirectory().CombineWithFilePath($"bin/{configuration}/{filename}");
-//             Information("Test Run {0} - {1}", testRuns++, filename);
-//             NUnit(testDll.FullPath, new NUnitSettings 
-//             {
-//                 ShadowCopy = false
-//             });            
-//         }
-//         catch
-//         {
-//             failedRuns++;
-//         }
-//     }
+    foreach (var project in GetFiles($"./Source/Tests/**/*.Tests.csproj"))
+    { 
+        try
+        {
+            // var filename = project.GetFilename().ChangeExtension("dll");
+            // var testDll = project.GetDirectory().CombineWithFilePath($"bin/{configuration}/netcoreapp2.0/{filename}");
+            Information("Test Run {0} - {1}", testRuns++, project);
+            DotNetCoreTest(project.FullPath);            
+        }
+        catch
+        {
+            failedRuns++;
+        }
+    }
 
-//     if(failedRuns > 0)
-//         throw new Exception($"{failedRuns} of {testRuns} test runs failed.");
-// });
+    if(failedRuns > 0)
+        throw new Exception($"{failedRuns} of {testRuns} test runs failed.");
+});
 
 // Task("Pack")
 //     .IsDependentOn("Test")
@@ -72,6 +69,6 @@ Task("Build")
 // });
 
 Task("Default")
-    .IsDependentOn("Build");
+    .IsDependentOn("Test");
 
 RunTarget(target);

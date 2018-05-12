@@ -2,10 +2,10 @@
 
 //namespace MonoGame.Extended.Content.Pipeline.Tests.Tiled
 //{
-//    [TestFixture]
+//    
 //    public class TiledMapImporterProcessorTests
 //    {
-//        [Test]
+//        [Fact]
 //        public void TiledMapImporter_Import_Test()
 //        {
 //            var filePath = PathExtensions.GetApplicationFullPath("TestData", "level01.tmx");
@@ -17,67 +17,67 @@
 
 //            var map = importer.Import(filePath, importerContext);
 
-//            Assert.AreEqual("1.0", map.Version);
-//            Assert.AreEqual(TmxOrientation.Orthogonal, map.Orientation);
-//            Assert.AreEqual(TmxRenderOrder.RightDown, map.RenderOrder);
-//            Assert.AreEqual(20, map.Width);
-//            Assert.AreEqual(10, map.Height);
-//            Assert.AreEqual(128, map.TileWidth);
-//            Assert.AreEqual(128, map.TileHeight);
-//            Assert.AreEqual("#7d7d7d", map.BackgroundColor);
-//            Assert.AreEqual("awesome", map.Properties[0].Name);
-//            Assert.AreEqual("42", map.Properties[0].Value);
-//            Assert.AreEqual(1, map.Tilesets.Count);
-//            Assert.AreEqual(3, map.Layers.Count);
-//            Assert.AreEqual(TmxOrientation.Orthogonal,map.Orientation);
+//            Assert.Equal("1.0", map.Version);
+//            Assert.Equal(TmxOrientation.Orthogonal, map.Orientation);
+//            Assert.Equal(TmxRenderOrder.RightDown, map.RenderOrder);
+//            Assert.Equal(20, map.Width);
+//            Assert.Equal(10, map.Height);
+//            Assert.Equal(128, map.TileWidth);
+//            Assert.Equal(128, map.TileHeight);
+//            Assert.Equal("#7d7d7d", map.BackgroundColor);
+//            Assert.Equal("awesome", map.Properties[0].Name);
+//            Assert.Equal("42", map.Properties[0].Value);
+//            Assert.Equal(1, map.Tilesets.Count);
+//            Assert.Equal(3, map.Layers.Count);
+//            Assert.Equal(TmxOrientation.Orthogonal,map.Orientation);
 
 //            var tileset = map.Tilesets.First();
-//            Assert.AreEqual(1, tileset.FirstGlobalIdentifier);
-//            Assert.AreEqual("free-tileset.png", tileset.Image.Source);
-//            Assert.AreEqual(652, tileset.Image.Width);
-//            Assert.AreEqual(783, tileset.Image.Height);
-//            Assert.AreEqual(2, tileset.Margin);
-//            Assert.AreEqual(30, tileset.TileCount);
-//            Assert.AreEqual("free-tileset", tileset.Name);
-//            Assert.AreEqual(null, tileset.Source);
-//            Assert.AreEqual(2, tileset.Spacing);
-//            Assert.AreEqual(0, tileset.TerrainTypes.Count);
-//            Assert.AreEqual(0, tileset.Properties.Count);
-//            Assert.AreEqual(128, tileset.TileHeight);
-//            Assert.AreEqual(128, tileset.TileWidth);
-//            Assert.AreEqual(0, tileset.TileOffset.X);
-//            Assert.AreEqual(0, tileset.TileOffset.Y);
+//            Assert.Equal(1, tileset.FirstGlobalIdentifier);
+//            Assert.Equal("free-tileset.png", tileset.Image.Source);
+//            Assert.Equal(652, tileset.Image.Width);
+//            Assert.Equal(783, tileset.Image.Height);
+//            Assert.Equal(2, tileset.Margin);
+//            Assert.Equal(30, tileset.TileCount);
+//            Assert.Equal("free-tileset", tileset.Name);
+//            Assert.Equal(null, tileset.Source);
+//            Assert.Equal(2, tileset.Spacing);
+//            Assert.Equal(0, tileset.TerrainTypes.Count);
+//            Assert.Equal(0, tileset.Properties.Count);
+//            Assert.Equal(128, tileset.TileHeight);
+//            Assert.Equal(128, tileset.TileWidth);
+//            Assert.Equal(0, tileset.TileOffset.X);
+//            Assert.Equal(0, tileset.TileOffset.Y);
 
 //            var tileLayer2 = (TmxTileLayer) map.Layers[0];
-//            Assert.AreEqual("Tile Layer 2", tileLayer2.Name);
-//            Assert.AreEqual(1, tileLayer2.Opacity);
-//            Assert.AreEqual(0, tileLayer2.Properties.Count);
-//            Assert.AreEqual(true, tileLayer2.Visible);
-//            Assert.AreEqual(200, tileLayer2.Data.Tiles.Count);
-//            Assert.AreEqual(0, tileLayer2.X);
-//            Assert.AreEqual(0, tileLayer2.Y);
+//            Assert.Equal("Tile Layer 2", tileLayer2.Name);
+//            Assert.Equal(1, tileLayer2.Opacity);
+//            Assert.Equal(0, tileLayer2.Properties.Count);
+//            Assert.Equal(true, tileLayer2.Visible);
+//            Assert.Equal(200, tileLayer2.Data.Tiles.Count);
+//            Assert.Equal(0, tileLayer2.X);
+//            Assert.Equal(0, tileLayer2.Y);
 
 //            var imageLayer = (TmxImageLayer)map.Layers[1];
-//            Assert.AreEqual("Image Layer 1", imageLayer.Name);
-//            Assert.AreEqual(1, imageLayer.Opacity);
-//            Assert.AreEqual(0, imageLayer.Properties.Count);
-//            Assert.AreEqual(true, imageLayer.Visible);
-//            Assert.AreEqual("hills.png", imageLayer.Image.Source);
-//            Assert.AreEqual(100, imageLayer.X);
-//            Assert.AreEqual(100, imageLayer.Y);
+//            Assert.Equal("Image Layer 1", imageLayer.Name);
+//            Assert.Equal(1, imageLayer.Opacity);
+//            Assert.Equal(0, imageLayer.Properties.Count);
+//            Assert.Equal(true, imageLayer.Visible);
+//            Assert.Equal("hills.png", imageLayer.Image.Source);
+//            Assert.Equal(100, imageLayer.X);
+//            Assert.Equal(100, imageLayer.Y);
 
 //            var tileLayer1 = (TmxTileLayer)map.Layers[2];
-//            Assert.AreEqual("Tile Layer 1", tileLayer1.Name);
-//            Assert.AreEqual(2, tileLayer1.Properties.Count);
+//            Assert.Equal("Tile Layer 1", tileLayer1.Name);
+//            Assert.Equal(2, tileLayer1.Properties.Count);
 
-//            Assert.AreEqual("customlayerprop", tileLayer1.Properties[0].Name);
-//            Assert.AreEqual("1", tileLayer1.Properties[0].Value);
+//            Assert.Equal("customlayerprop", tileLayer1.Properties[0].Name);
+//            Assert.Equal("1", tileLayer1.Properties[0].Value);
 
-//            Assert.AreEqual("customlayerprop2", tileLayer1.Properties[1].Name);
-//            Assert.AreEqual("2", tileLayer1.Properties[1].Value);
+//            Assert.Equal("customlayerprop2", tileLayer1.Properties[1].Name);
+//            Assert.Equal("2", tileLayer1.Properties[1].Value);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void TiledMapImporter_Xml_Test()
 //        {
 //            var filePath = PathExtensions.GetApplicationFullPath("TestData", "test-tileset-xml.tmx");
@@ -90,7 +90,7 @@
 //            Assert.IsTrue(new uint[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(actualData));
 //        }
         
-//        [Test]
+//        [Fact]
 //        public void TiledMapImporter_Csv_Test()
 //        {
 //            var filePath = PathExtensions.GetApplicationFullPath("TestData", "test-tileset-csv.tmx");
@@ -98,12 +98,12 @@
 //            var layer = map.Layers.OfType<TmxTileLayer>().First();
 //            var data = layer.Data.Tiles.Select(i => i.GlobalIdentifier).ToArray();
 
-//            Assert.AreEqual("csv", layer.Data.Encoding);
+//            Assert.Equal("csv", layer.Data.Encoding);
 //            Assert.IsNull(layer.Data.Compression);
 //            Assert.IsTrue(new uint[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(data));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void TiledMapImporter_Base64_Test()
 //        {
 //            var filePath = PathExtensions.GetApplicationFullPath("TestData", "test-tileset-base64.tmx");
@@ -111,12 +111,12 @@
 //            var layer = map.Layers.OfType<TmxTileLayer>().First();
 //            var data = layer.Data.Tiles.Select(i => i.GlobalIdentifier).ToArray();
 
-//            Assert.AreEqual("base64", layer.Data.Encoding);
+//            Assert.Equal("base64", layer.Data.Encoding);
 //            Assert.IsNull(layer.Data.Compression);
 //            Assert.IsTrue(new uint[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(data));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void TiledMapImporter_Gzip_Test()
 //        {
 //            var filePath = PathExtensions.GetApplicationFullPath("TestData", "test-tileset-gzip.tmx");
@@ -124,13 +124,13 @@
 //            var layer = map.Layers.OfType<TmxTileLayer>().First();
 //            var data = layer.Data.Tiles.Select(i => i.GlobalIdentifier).ToArray();
 
-//            Assert.AreEqual("base64", layer.Data.Encoding);
-//            Assert.AreEqual("gzip", layer.Data.Compression);
+//            Assert.Equal("base64", layer.Data.Encoding);
+//            Assert.Equal("gzip", layer.Data.Compression);
 //            Assert.IsTrue(new uint[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(data));
 //        }
 
 
-//        [Test]
+//        [Fact]
 //        public void TiledMapImporter_Zlib_Test()
 //        {
 //            var filePath = PathExtensions.GetApplicationFullPath("TestData", "test-tileset-zlib.tmx");
@@ -138,42 +138,42 @@
 //            var layer = map.Layers.OfType<TmxTileLayer>().First();
 //            var data = layer.Data.Tiles.Select(i => i.GlobalIdentifier).ToArray();
 
-//            Assert.AreEqual("base64", layer.Data.Encoding);
-//            Assert.AreEqual("zlib", layer.Data.Compression);
+//            Assert.Equal("base64", layer.Data.Encoding);
+//            Assert.Equal("zlib", layer.Data.Compression);
 //            Assert.IsTrue(new uint[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }.SequenceEqual(data));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void TiledMapImporter_ObjectLayer_Test()
 //        {
 //            var filePath = PathExtensions.GetApplicationFullPath("TestData", "test-object-layer.tmx");
 //            var map = ImportAndProcessMap(filePath);
 
-//            Assert.AreEqual(1, map.Layers.Count);
+//            Assert.Equal(1, map.Layers.Count);
 //            Assert.IsInstanceOf<TmxObjectLayer>(map.Layers[0]);
 //            var tmxObjectGroup = map.Layers[0] as TmxObjectLayer;
 //            var tmxObject = tmxObjectGroup.Objects[0];
 //            var tmxPolygon = tmxObjectGroup.Objects[3].Polygon;
 //            var tmxPolyline = tmxObjectGroup.Objects[4].Polyline;
 
-//            Assert.AreEqual("Object Layer 1", tmxObjectGroup.Name);
-//            Assert.AreEqual(1, tmxObject.Identifier);
-//            Assert.AreEqual(131.345f, tmxObject.X);
-//            Assert.AreEqual(65.234f, tmxObject.Y);
-//            Assert.AreEqual(311.111f, tmxObject.Width);
-//            Assert.AreEqual(311.232f, tmxObject.Height);
-//            Assert.AreEqual(1, tmxObject.Properties.Count);
-//            Assert.AreEqual("shape", tmxObject.Properties[0].Name);
-//            Assert.AreEqual("circle", tmxObject.Properties[0].Value);
-//            Assert.IsNotNull(tmxObject.Ellipse);
+//            Assert.Equal("Object Layer 1", tmxObjectGroup.Name);
+//            Assert.Equal(1, tmxObject.Identifier);
+//            Assert.Equal(131.345f, tmxObject.X);
+//            Assert.Equal(65.234f, tmxObject.Y);
+//            Assert.Equal(311.111f, tmxObject.Width);
+//            Assert.Equal(311.232f, tmxObject.Height);
+//            Assert.Equal(1, tmxObject.Properties.Count);
+//            Assert.Equal("shape", tmxObject.Properties[0].Name);
+//            Assert.Equal("circle", tmxObject.Properties[0].Value);
+//            Assert.NotNull(tmxObject.Ellipse);
 //            Assert.IsFalse(tmxObjectGroup.Objects[1].Visible);
-//            Assert.AreEqual(-1, tmxObjectGroup.Objects[1].GlobalIdentifier);
-//            Assert.AreEqual(23, tmxObjectGroup.Objects[5].GlobalIdentifier);
-//            Assert.AreEqual("rectangle", tmxObjectGroup.Objects[2].Type);
-//            Assert.IsNotNull(tmxPolygon);
-//            Assert.AreEqual("0,0 180,90 -8,275 -45,81 38,77", tmxPolygon.Points);
-//            Assert.IsNotNull(tmxPolyline);
-//            Assert.AreEqual("0,0 28,299 326,413 461,308", tmxPolyline.Points);
+//            Assert.Equal(-1, tmxObjectGroup.Objects[1].GlobalIdentifier);
+//            Assert.Equal(23, tmxObjectGroup.Objects[5].GlobalIdentifier);
+//            Assert.Equal("rectangle", tmxObjectGroup.Objects[2].Type);
+//            Assert.NotNull(tmxPolygon);
+//            Assert.Equal("0,0 180,90 -8,275 -45,81 38,77", tmxPolygon.Points);
+//            Assert.NotNull(tmxPolyline);
+//            Assert.Equal("0,0 28,299 326,413 461,308", tmxPolyline.Points);
 //        }
 
 

@@ -48,11 +48,15 @@ namespace MonoGame.Extended.BitmapFonts
             return new Size2(stringRectangle.Width, stringRectangle.Height);
         }
 
-        public RectangleF GetStringRectangle(string text, Point2? position = null)
+        public RectangleF GetStringRectangle(string text)
         {
-            var position1 = position ?? new Point2();
-            var glyphs = GetGlyphs(text, position1);
-            var rectangle = new RectangleF(position1.X, position1.Y, 0, LineHeight);
+            return GetStringRectangle(text, Point2.Zero);
+        }
+
+        public RectangleF GetStringRectangle(string text, Point2 position)
+        {
+            var glyphs = GetGlyphs(text, position);
+            var rectangle = new RectangleF(position.X, position.Y, 0, LineHeight);
 
             foreach (var glyph in glyphs)
             {
@@ -183,10 +187,9 @@ namespace MonoGame.Extended.BitmapFonts
                     _positionDelta.X += _currentGlyph.FontRegion.XAdvance + _font.LetterSpacing;
                 }
 
-                if (UseKernings && _previousGlyph.HasValue && _previousGlyph.Value.FontRegion != null)
+                if (UseKernings && _previousGlyph?.FontRegion != null)
                 {
-                    int amount;
-                    if (_previousGlyph.Value.FontRegion.Kernings.TryGetValue(character, out amount))
+                    if (_previousGlyph.Value.FontRegion.Kernings.TryGetValue(character, out var amount))
                     { 
                         _positionDelta.X += amount;
                         _currentGlyph.Position.X += amount;

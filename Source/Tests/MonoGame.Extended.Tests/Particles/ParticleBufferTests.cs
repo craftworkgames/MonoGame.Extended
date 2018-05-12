@@ -1,112 +1,112 @@
 ﻿//using System;
 //using MonoGame.Extended.Particles;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests.Particles
 //{
-//    [TestFixture]
+//    
 //    public class ParticleBufferTests
 //    {
 //        public class AvailableProperty
 //        {
-//            [Test]
+//            [Fact]
 //            public void WhenNoParticlesReleased_ReturnsBufferSize()
 //            {
 //                var subject = new ParticleBuffer(100);
 
-//                Assert.AreEqual(subject.Available, 100);
+//                Assert.Equal(subject.Available, 100);
 //            }
 
-//            [Test]
+//            [Fact]
 //            public void WhenSomeParticlesReleased_ReturnsAvailableCount()
 //            {
 //                var subject = new ParticleBuffer(100);
 
 //                subject.Release(10);
-//                Assert.AreEqual(subject.Available, 90);
+//                Assert.Equal(subject.Available, 90);
 //            }
 
-//            [Test]
+//            [Fact]
 //            public void WhenAllParticlesReleased_ReturnsZero()
 //            {
 //                var subject = new ParticleBuffer(100);
 
 //                subject.Release(100);
-//                Assert.AreEqual(subject.Available, 0);
+//                Assert.Equal(subject.Available, 0);
 
 //            }
 //        }
 
 //        public class CountProperty
 //        {
-//            [Test]
+//            [Fact]
 //            public void WhenNoParticlesReleased_ReturnsZero()
 //            {
 //                var subject = new ParticleBuffer(100);
-//                Assert.AreEqual(subject.Count, 0);
+//                Assert.Equal(subject.Count, 0);
 //            }
 
-//            [Test]
+//            [Fact]
 //            public void WhenSomeParticlesReleased_ReturnsCount()
 //            {
 //                var subject = new ParticleBuffer(100);
 
 //                subject.Release(10);
-//                Assert.AreEqual(subject.Count, 10);
+//                Assert.Equal(subject.Count, 10);
 
 //            }
 
-//            [Test]
+//            [Fact]
 //            public void WhenAllParticlesReleased_ReturnsZero()
 //            {
 //                var subject = new ParticleBuffer(100);
 
 //                subject.Release(100);
-//                Assert.AreEqual(subject.Count, 100);
+//                Assert.Equal(subject.Count, 100);
 
 //            }
 //        }
 
 //        public class ReleaseMethod
 //        {
-//            [Test]
+//            [Fact]
 //            public void WhenPassedReasonableQuantity_ReturnsNumberReleased()
 //            {
 //                var subject = new ParticleBuffer(100);
 
 //                var count = subject.Release(50);
 
-//                Assert.AreEqual(count.Total, 50);
+//                Assert.Equal(count.Total, 50);
 //            }
 
-//            [Test]
+//            [Fact]
 //            public void WhenPassedImpossibleQuantity_ReturnsNumberActuallyReleased()
 //            {
 //                var subject = new ParticleBuffer(100);
 
 //                var count = subject.Release(200);
-//                Assert.AreEqual(count.Total, 100);
+//                Assert.Equal(count.Total, 100);
 //            }
 //        }
 
 //        public class ReclaimMethod
 //        {
-//            [Test]
+//            [Fact]
 //            public void WhenPassedReasonableNumber_ReclaimsParticles()
 //            {
 //                var subject = new ParticleBuffer(100);
 
 //                subject.Release(100);
-//                Assert.AreEqual(subject.Count, 100);
+//                Assert.Equal(subject.Count, 100);
 
 //                subject.Reclaim(50);
-//                Assert.AreEqual(subject.Count, 50);
+//                Assert.Equal(subject.Count, 50);
 //            }
 //        }
 
 //        //public class CopyToMethod
 //        //{
-//        //    [Test]
+//        //    [Fact]
 //        //    public void WhenBufferIsSequential_CopiesParticlesInOrder()
 //        //    {
 //        //        unsafe
@@ -128,18 +128,18 @@
 //        //                subject.CopyTo((IntPtr)buffer);
 //        //            }
 
-//        //            Assert.AreEqual(destination[0].Age, 1f, 0.0001);
-//        //            Assert.AreEqual(destination[1].Age, 1f, 0.0001);
-//        //            Assert.AreEqual(destination[2].Age, 1f, 0.0001);
-//        //            Assert.AreEqual(destination[3].Age, 1f, 0.0001);
-//        //            Assert.AreEqual(destination[4].Age, 1f, 0.0001);
+//        //            Assert.Equal(destination[0].Age, 1f, 0.0001);
+//        //            Assert.Equal(destination[1].Age, 1f, 0.0001);
+//        //            Assert.Equal(destination[2].Age, 1f, 0.0001);
+//        //            Assert.Equal(destination[3].Age, 1f, 0.0001);
+//        //            Assert.Equal(destination[4].Age, 1f, 0.0001);
 //        //        }
 //        //    }
 //        //}
 
 //        //public class CopyToReverseMethod
 //        //{
-//        //    [Test]
+//        //    [Fact]
 //        //    public void WhenBufferIsSequential_CopiesParticlesInReverseOrder()
 //        //    {
 //        //        unsafe
@@ -161,18 +161,18 @@
 //        //                subject.CopyToReverse((IntPtr)buffer);
 //        //            }
 
-//        //            Assert.AreEqual(destination[0].Age, 1f, 0.0001);
-//        //            Assert.AreEqual(destination[1].Age, 1f, 0.0001);
-//        //            Assert.AreEqual(destination[2].Age, 1f, 0.0001);
-//        //            Assert.AreEqual(destination[3].Age, 1f, 0.0001);
-//        //            Assert.AreEqual(destination[4].Age, 1f, 0.0001);
+//        //            Assert.Equal(destination[0].Age, 1f, 0.0001);
+//        //            Assert.Equal(destination[1].Age, 1f, 0.0001);
+//        //            Assert.Equal(destination[2].Age, 1f, 0.0001);
+//        //            Assert.Equal(destination[3].Age, 1f, 0.0001);
+//        //            Assert.Equal(destination[4].Age, 1f, 0.0001);
 //        //        }
 //        //    }
 //        //}
 
 //        public class DisposeMethod
 //        {
-//            [Test]
+//            [Fact]
 //            public void IsIdempotent()
 //            {
 //                var subject = new ParticleBuffer(100);

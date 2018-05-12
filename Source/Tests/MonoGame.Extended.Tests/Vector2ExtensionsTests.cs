@@ -1,14 +1,14 @@
 //using System;
 //using System.Collections.Generic;
 //using Microsoft.Xna.Framework;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests
 //{
-//    [TestFixture]
+//    
 //    public class Vector2ExtensionsTests
 //    {
-//        [Test]
+//        [Fact]
 //        public void Vector2_EqualsWithTolerence_Test()
 //        {
 //            var a = new Vector2(1f, 1f);
@@ -18,7 +18,7 @@
 //            Assert.IsTrue(a.EqualsWithTolerence(b));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Vector2_NormalizedCopy_Test()
 //        {
 //            var a = new Vector2(5, -10);
@@ -27,7 +27,7 @@
 //            Assert.IsTrue(new Vector2(0.4472136f, -0.8944272f).EqualsWithTolerence(b));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Vector2_Perpendicular_Test()
 //        {
 //            // http://mathworld.wolfram.com/PerpendicularVector.html
@@ -35,11 +35,11 @@
 //            var b = a.PerpendicularClockwise();
 //            var c = a.PerpendicularCounterClockwise();
 
-//            Assert.AreEqual(new Vector2(-10, -5), b);
-//            Assert.AreEqual(new Vector2(10, 5), c);
+//            Assert.Equal(new Vector2(-10, -5), b);
+//            Assert.Equal(new Vector2(10, 5), c);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Vector2_Rotate_90_Degrees_Test()
 //        {
 //            var a = new Vector2(0, -10);
@@ -48,7 +48,7 @@
 //            Assert.IsTrue(new Vector2(10, 0).EqualsWithTolerence(b));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Vector2_Rotate_360_Degrees_Test()
 //        {
 //            var a = new Vector2(0, 10);
@@ -57,7 +57,7 @@
 //            Assert.IsTrue(new Vector2(0, 10).EqualsWithTolerence(b));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Vector2_Rotate_45_Degrees_Test()
 //        {
 //            var a = new Vector2(0, -10);
@@ -66,16 +66,16 @@
 //            Assert.IsTrue(new Vector2(7.071068f, -7.071068f).EqualsWithTolerence(b));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Vector2_Truncate_Test()
 //        {
 //            var a = new Vector2(10, 10);
 //            var b = a.Truncate(5);
             
-//            Assert.AreEqual(5f, b.Length(), 0.001f);
+//            Assert.Equal(5f, b.Length(), 0.001f);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Vector2_IsNaN_Test()
 //        {
 //            var a = new Vector2(float.NaN, 10);
@@ -89,16 +89,16 @@
 //            Assert.IsFalse(d.IsNaN());
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Vector2_ToAngle_Test()
 //        {
 //            var a = new Vector2(0, -10);
 //            var b = new Vector2(10, 0);
 //            var c = -Vector2.UnitY.Rotate(MathHelper.ToRadians(45));
 
-//            Assert.AreEqual(MathHelper.ToRadians(0), a.ToAngle());
-//            Assert.AreEqual(MathHelper.ToRadians(90), b.ToAngle());
-//            Assert.AreEqual(MathHelper.ToRadians(45), c.ToAngle());
+//            Assert.Equal(MathHelper.ToRadians(0), a.ToAngle());
+//            Assert.Equal(MathHelper.ToRadians(90), b.ToAngle());
+//            Assert.Equal(MathHelper.ToRadians(45), c.ToAngle());
 //        }
 //    }
 //}

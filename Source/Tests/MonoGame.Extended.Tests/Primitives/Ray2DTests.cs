@@ -1,11 +1,11 @@
 ﻿//using System.Collections.Generic;
 //using System.Globalization;
 //using Microsoft.Xna.Framework;
-//using NUnit.Framework;
+//using Xunit;
 
 //namespace MonoGame.Extended.Tests.Primitives
 //{
-//    [TestFixture]
+//    
 //    public class Ray2Tests
 //    {
 //        public IEnumerable<TestCaseData> ConstructorTestCases
@@ -21,13 +21,13 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(ConstructorTestCases))]
 //        public void Constructor(Point2 position, Vector2 direction)
 //        {
 //            var ray = new Ray2(position, direction);
-//            Assert.AreEqual(position, ray.Position);
-//            Assert.AreEqual(direction, ray.Direction);
+//            Assert.Equal(position, ray.Position);
+//            Assert.Equal(direction, ray.Direction);
 //        }
 
 //        public IEnumerable<TestCaseData> PositionDirectionTestCases
@@ -45,20 +45,20 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(PositionDirectionTestCases))]
 //        public void PositionDirection(Ray2 ray, Point2 expectedPosition, Vector2 expecetedDirection)
 //        {
-//            Assert.AreEqual(expectedPosition, ray.Position);
-//            Assert.AreEqual(expecetedDirection, ray.Direction);
+//            Assert.Equal(expectedPosition, ray.Position);
+//            Assert.Equal(expecetedDirection, ray.Direction);
 
 //            ray.Position.X = 10;
 //            ray.Position.Y = 10;
-//            Assert.AreEqual(new Point2(10, 10), ray.Position);
+//            Assert.Equal(new Point2(10, 10), ray.Position);
 
 //            ray.Direction.X = -10.123f;
 //            ray.Direction.Y = 10.123f;
-//            Assert.AreEqual(new Vector2(-10.123f, 10.123f), ray.Direction);
+//            Assert.Equal(new Vector2(-10.123f, 10.123f), ray.Direction);
 //        }
 
 //        public IEnumerable<TestCaseData> IntersectsBoundingRectangleTestCases
@@ -84,21 +84,21 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(IntersectsBoundingRectangleTestCases))]
 //        public void IntersectsBoundingRectangle(Ray2 ray, BoundingRectangle boundingRectangle, bool expectedResult,
 //            Point2 firstExpectedIntersectionPoint, Point2 secondExpectedIntersectionPoint)
 //        {
 //            float rayNearDistance, rayFarDistance;
 //            var actualResult = ray.Intersects(boundingRectangle, out rayNearDistance, out rayFarDistance);
-//            Assert.AreEqual(expectedResult, actualResult);
+//            Assert.Equal(expectedResult, actualResult);
 
 //            if (actualResult)
 //            {
 //                var firstActualIntersectionPoint = ray.Position + ray.Direction * rayNearDistance;
-//                Assert.AreEqual(firstExpectedIntersectionPoint, firstActualIntersectionPoint);
+//                Assert.Equal(firstExpectedIntersectionPoint, firstActualIntersectionPoint);
 //                var secondActualIntersectionPoint = ray.Position + ray.Direction * rayFarDistance;
-//                Assert.AreEqual(secondExpectedIntersectionPoint, secondActualIntersectionPoint);
+//                Assert.Equal(secondExpectedIntersectionPoint, secondActualIntersectionPoint);
 //            }
 //            else
 //            {
@@ -128,7 +128,7 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(EqualityTestCases))]
 //        public void Equality(Ray2 ray1, Ray2 ray2, bool expectedToBeEqual)
 //        {
@@ -138,7 +138,7 @@
 //            Assert.IsTrue(ray1.Equals(ray2) == expectedToBeEqual);
 
 //            if (expectedToBeEqual)
-//                Assert.AreEqual(ray1.GetHashCode(), ray2.GetHashCode());
+//                Assert.Equal(ray1.GetHashCode(), ray2.GetHashCode());
 //        }
 
 //        public IEnumerable<TestCaseData> InequalityTestCases
@@ -153,7 +153,7 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(InequalityTestCases))]
 //        public void Inequality(Ray2 ray, object obj, bool expectedToBeEqual)
 //        {
@@ -178,14 +178,14 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(HashCodeTestCases))]
 //        public void HashCode(Ray2 ray1, Ray2 ray2, bool expectedThatHashCodesAreEqual)
 //        {
 //            var hashCode1 = ray1.GetHashCode();
 //            var hashCode2 = ray2.GetHashCode();
 //            if (expectedThatHashCodesAreEqual)
-//                Assert.AreEqual(hashCode1, hashCode2);
+//                Assert.Equal(hashCode1, hashCode2);
 //            else
 //                Assert.AreNotEqual(hashCode1, hashCode2);
 //        }
@@ -206,12 +206,12 @@
 //            }
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCaseSource(nameof(StringCases))]
 //        public void String(Ray2 ray, string expectedString)
 //        {
 //            var actualString = ray.ToString();
-//            Assert.AreEqual(expectedString, actualString);
+//            Assert.Equal(expectedString, actualString);
 //        }
 //    }
 //}
