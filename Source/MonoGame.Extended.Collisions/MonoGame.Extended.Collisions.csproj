@@ -47,6 +47,9 @@
     <Compile Include="CollisionWorldExtensions.cs" />
     <Compile Include="IActorTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuadTree\QuadTree.cs" />
+    <Compile Include="QuadTree\QuadTreeData.cs" />
+    <Compile Include="QuadTree\QuadTreeNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj">
