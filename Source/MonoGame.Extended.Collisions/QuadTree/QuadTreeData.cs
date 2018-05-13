@@ -13,7 +13,7 @@
         }
 
         /// <summary>
-        /// Gets or sets whether the Target for collision.
+        /// Gets or sets the Target for collision.
         /// </summary>
         public IActorTarget Target { get; set; }
 
