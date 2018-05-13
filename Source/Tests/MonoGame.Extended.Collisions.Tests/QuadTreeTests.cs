@@ -1,4 +1,5 @@
-﻿using MonoGame.Extended.Collisions.QuadTree;
+﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended.Collisions.QuadTree;
 using NUnit.Framework;
 
 namespace MonoGame.Extended.Gui.Tests
@@ -8,7 +9,8 @@ namespace MonoGame.Extended.Gui.Tests
     {
         private QuadTree MakeTree()
         {
-            var bounds = new RectangleF(0, 0, 20.0f, 30.0f);
+            // Bounds set to ensure actors will fit inside the tree with default bounds.
+            var bounds = new RectangleF(-10f, -15, 20.0f, 30.0f);
             var tree = new QuadTree(bounds);
 
             return tree;
@@ -34,7 +36,9 @@ namespace MonoGame.Extended.Gui.Tests
         public void NumTargetsOneTest()
         {
             var tree = MakeTree();
-            tree.Insert(new QuadTreeData(new BasicActor()));
+            var actor = new BasicActor();
+
+            tree.Insert(new QuadTreeData(actor));
 
             Assert.AreEqual(1, tree.NumTargets());
         }
@@ -44,13 +48,12 @@ namespace MonoGame.Extended.Gui.Tests
         public void NumTargetsMultipleTest()
         {
             var tree = MakeTree();
-            tree.Insert(new QuadTreeData(new BasicActor()));
-            tree.Insert(new QuadTreeData(new BasicActor()));
-            tree.Insert(new QuadTreeData(new BasicActor()));
-            tree.Insert(new QuadTreeData(new BasicActor()));
-            tree.Insert(new QuadTreeData(new BasicActor()));
+            for (int i = 0; i < 5; i++)
+            {
+                tree.Insert(new QuadTreeData(new BasicActor()));
+            }
 
-            Assert.AreEqual(1, tree.NumTargets());
+            Assert.AreEqual(5, tree.NumTargets());
         }
     }
 }
