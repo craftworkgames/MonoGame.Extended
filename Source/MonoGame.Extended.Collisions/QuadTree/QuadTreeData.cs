@@ -1,8 +1,8 @@
 ﻿namespace MonoGame.Extended.Collisions.QuadTree
 {
     /// <summary>
-    /// Data structure for the quad tree.
-    /// Holds the entity and collision data for it.
+    ///     Data structure for the quad tree.
+    ///     Holds the entity and collision data for it.
     /// </summary>
     public struct QuadTreeData
     {
@@ -13,13 +13,13 @@
         }
 
         /// <summary>
-        /// Gets or sets the Target for collision.
+        ///     Gets or sets the Target for collision.
         /// </summary>
         public IActorTarget Target { get; set; }
 
         /// <summary>
-        /// Gets or sets whether Target has had its collision handled this
-        /// iteration.
+        ///     Gets or sets whether Target has had its collision handled this
+        ///     iteration.
         /// </summary>
         public bool Flag { get; set; }
     }
