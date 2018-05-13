@@ -11,19 +11,32 @@ namespace MonoGame.Extended.Collisions.QuadTree
     public class QuadTree
     {
         protected List<QuadTree> Children = new List<QuadTree>();
-        protected List<QuadTreeData> Contents;
+        protected List<QuadTreeData> Contents = new List<QuadTreeData>();
         protected int CurrentDepth { get; set; }
         protected int MaxDepth { get; set; }
         protected int MaxObjectsPerNode { get; set; }
         protected RectangleF NodeBounds { get; set; }
 
+        /// <summary>
+        /// Gets whether the current node is a leaf node.
+        /// </summary>
+        public bool IsLeaf => Children.Count == 0;
 
-        public bool IsLeaf()
+        /// <summary>
+        /// Creates a quad tree with the given bounds.
+        /// </summary>
+        /// <param name="bounds">The bounds of the new quad tree.</param>
+        public QuadTree(RectangleF bounds)
         {
-            return Children.Count == 0;
+            CurrentDepth = 0;
+            NodeBounds = bounds;
         }
 
-        public int NumObjects()
+        /// <summary>
+        /// Counts the number of targets in the current QuadTree.
+        /// </summary>
+        /// <returns>Returns the targets of objects found.</returns>
+        public int NumTargets()
         {
             Reset();
 
@@ -42,7 +55,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
             while (process.Count > 0)
             {
                 var processing = process.Dequeue();
-                if (!processing.IsLeaf())
+                if (!processing.IsLeaf)
                 {
                     foreach (var child in processing.Children)
                     {
@@ -73,17 +86,17 @@ namespace MonoGame.Extended.Collisions.QuadTree
         public void Insert(QuadTreeData data)
         {
             var actorBounds = data.Target.BoundingBox;
-            if (!this.NodeBounds.Intersects(actorBounds))
+            if (!NodeBounds.Intersects(actorBounds))
             {
                 return; // Object doesn't fit into this node.
             }
 
-            if (IsLeaf() && Contents.Count >= MaxObjectsPerNode)
+            if (IsLeaf&& Contents.Count >= MaxObjectsPerNode)
             {
                 Split();
             }
 
-            if (IsLeaf())
+            if (IsLeaf)
             {
                 Contents.Add(data);
             }
@@ -99,7 +112,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
         }
         public void Remove(QuadTreeData data)
         {
-            if (IsLeaf())
+            if (IsLeaf)
             {
                 int removeIndex = -1;
 
@@ -135,7 +148,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
 
         public void Reset()
         {
-            if (IsLeaf())
+            if (IsLeaf)
             {
                 for (int i = 0, size = Contents.Count; i < size; i++)
                 {
@@ -154,9 +167,9 @@ namespace MonoGame.Extended.Collisions.QuadTree
         }
         public void Shake()
         {
-            if (!IsLeaf())
+            if (!IsLeaf)
             {
-                int numObjects = NumObjects();
+                int numObjects = NumTargets();
                 if (numObjects == 0)
                 {
                     Children.Clear();
@@ -168,7 +181,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
                     while (process.Count > 0)
                     {
                         QuadTree processing = process.Dequeue();
-                        if (!processing.IsLeaf())
+                        if (!processing.IsLeaf)
                         {
                             for (int i = 0, size = processing.Children.Count; i < size; i++)
                             {
@@ -205,8 +218,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
 
             for (int i = 0; i < 4; ++i)
             {
-                var node = new QuadTree();
-                node.NodeBounds = childAreas[i];
+                var node = new QuadTree(childAreas[i]);
                 Children[i].CurrentDepth = CurrentDepth + 1;
             }
             for (int i = 0, size = Contents.Count; i < size; ++i)
@@ -224,7 +236,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
                 return result;
             }
 
-            if (IsLeaf())
+            if (IsLeaf)
             {
                 for (int i = 0, size = Contents.Count; i < size; i++)
                 {
