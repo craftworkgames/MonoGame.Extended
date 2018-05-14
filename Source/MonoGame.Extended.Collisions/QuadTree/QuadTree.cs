@@ -210,11 +210,24 @@ namespace MonoGame.Extended.Collisions.QuadTree
             if (!RectangleF.Intersects(area, NodeBounds)) return result;
 
             if (IsLeaf)
+            {
+                for (int i = 0, size = Contents.Count; i < size; i++)
+                {
+                    if (RectangleF.Intersects(Contents[i].Target.BoundingBox, area))
+                    {
+                        result.Add(Contents[i]);
+                    }
+                }
+            }
+            else
+            {
                 for (int i = 0, size = Contents.Count; i < size; i++)
                 {
                     var recurse = Children[i].Query(area);
                     result.AddRange(recurse);
                 }
+            }
+
 
             return result;
         }
