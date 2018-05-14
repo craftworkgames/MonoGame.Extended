@@ -8,6 +8,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
     public class QuadTree
     {
         private const int DefaultMaxDepth = 5;
+        private const int DefaultMaxObjectsPerNode = 5;
 
         protected List<QuadTree> Children = new List<QuadTree>();
         protected List<QuadTreeData> Contents = new List<QuadTreeData>();
@@ -25,7 +26,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
         protected int CurrentDepth { get; set; }
         protected int MaxDepth { get; set; } = DefaultMaxDepth;
 
-        protected int MaxObjectsPerNode { get; set; }
+        protected int MaxObjectsPerNode { get; set; } = DefaultMaxObjectsPerNode;
         protected RectangleF NodeBounds { get; set; }
 
         /// <summary>
@@ -83,7 +84,12 @@ namespace MonoGame.Extended.Collisions.QuadTree
         public void Insert(QuadTreeData data)
         {
             var actorBounds = data.Target.BoundingBox;
-            if (!NodeBounds.Intersects(actorBounds)) return; // Object doesn't fit into this node.
+            
+            // Object doesn't fit into this node.
+            if (!NodeBounds.Intersects(actorBounds))
+            {
+                return;
+            }
 
             if (IsLeaf && Contents.Count >= MaxObjectsPerNode) Split();
 
@@ -133,8 +139,10 @@ namespace MonoGame.Extended.Collisions.QuadTree
                     Contents[i] = quadTreeData;
                 }
             else
+            {
                 for (int i = 0, size = Contents.Count; i < size; i++)
                     Children[i].Reset();
+            }
         }
 
         public void Shake()
@@ -184,10 +192,14 @@ namespace MonoGame.Extended.Collisions.QuadTree
             for (var i = 0; i < 4; ++i)
             {
                 var node = new QuadTree(childAreas[i]);
+                Children.Add(node);
                 Children[i].CurrentDepth = CurrentDepth + 1;
             }
 
-            for (int i = 0, size = Contents.Count; i < size; ++i) Children[i].Insert(Contents[i]);
+            for (int i = 0, size = Contents.Count; i < size; ++i)
+            {
+                Children[i].Insert(Contents[i]);
+            }
 
             Contents.Clear();
         }
