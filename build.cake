@@ -52,23 +52,27 @@ Task("Test")
         throw new Exception($"{failedRuns} of {testRuns} test runs failed.");
 });
 
-// Task("Pack")
-//     .IsDependentOn("Test")
-//     .Does(() =>
-// {
-//     var nuspecFiles = GetFiles("./Source/NuGet/MonoGame.Extended*.nuspec");
-//     var artifactsDirectory = "./artifacts";
-//     var gitVersion = GitVersion();
-//     CreateDirectory(artifactsDirectory);
-//     CleanDirectory(artifactsDirectory);    
-//     NuGetPack(nuspecFiles, new NuGetPackSettings 
-//     {
-//         Version = $"{gitVersion.MajorMinorPatch}",
-//         OutputDirectory = artifactsDirectory
-//     });
-// });
+Task("Pack")
+    //.IsDependentOn("Test")
+    .Does(() =>
+{
+    var artifactsDirectory = "./artifacts";
+    var gitVersion = GitVersion();
+    CreateDirectory(artifactsDirectory);
+    CleanDirectory(artifactsDirectory);    
+
+    foreach (var project in GetFiles($"./Source/MonoGame.Extended*/*.csproj"))
+    {
+        DotNetCorePack(project.FullPath, new DotNetCorePackSettings 
+        {
+            IncludeSymbols = true,
+            OutputDirectory = artifactsDirectory,
+            ArgumentCustomization = args => args.Append($"/p:VersionPrefix={gitVersion.MajorMinorPatch} /p:VersionSuffix=alpha{gitVersion.BuildMetaDataPadded}")
+        });
+    }
+});
 
 Task("Default")
-    .IsDependentOn("Test");
+    .IsDependentOn("Pack");
 
 RunTarget(target);
