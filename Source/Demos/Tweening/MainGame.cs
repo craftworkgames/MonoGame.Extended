@@ -42,32 +42,32 @@ namespace Tweening
 
             _tweener.TweenTo(this, a => a.Linear, new Vector2(550, 50), duration: 2, delay: 1)
                 .RepeatForever(repeatDelay: 0.2f)
-                .AutoReverse()
+                .RepeatReverse()
                 .Easing(EasingFunctions.Linear);
 
             _tweener.TweenTo(this, a => a.Quadratic, new Vector2(550, 100), duration: 2, delay: 1)
                 .RepeatForever(repeatDelay: 0.2f)
-                .AutoReverse()
+                .RepeatReverse()
                 .Easing(EasingFunctions.QuadraticInOut);
 
             _tweener.TweenTo(this, a => a.Exponential, new Vector2(550, 150), duration: 2, delay: 1)
                 .RepeatForever(repeatDelay: 0.2f)
-                .AutoReverse()
+                .RepeatReverse()
                 .Easing(EasingFunctions.ExponentialInOut);
 
             _tweener.TweenTo(this, a => a.Bounce, new Vector2(550, 200), duration: 2, delay: 1)
                 .RepeatForever(repeatDelay: 0.2f)
-                .AutoReverse()
+                .RepeatReverse()
                 .Easing(EasingFunctions.BounceOut);
 
             _tweener.TweenTo(this, a => a.Back, new Vector2(550, 250), duration: 2, delay: 1)
                 .RepeatForever(repeatDelay: 0.2f)
-                .AutoReverse()
+                .RepeatReverse()
                 .Easing(EasingFunctions.BackOut);
 
             _tweener.TweenTo(this, a => a.Elastic, new Vector2(550, 300), duration: 2, delay: 1)
                 .RepeatForever(repeatDelay: 0.2f)
-                .AutoReverse()
+                .RepeatReverse()
                 .Easing(EasingFunctions.ElasticOut);
         }
 

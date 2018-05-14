@@ -79,9 +79,35 @@ namespace MonoGame.Extended.Tweening
         public Tween OnEnd(Action<Tween> action) { _onEnd = action; return this; }
         public Tween Pause() { IsPaused = true; return this; }
         public Tween Resume() { IsPaused = false; return this; }
-        public Tween Repeat(int count, float repeatDelay = 0f) { _remainingRepeats = count; _repeatDelay = repeatDelay; return this; }
-        public Tween RepeatForever(float repeatDelay = 0f) { _remainingRepeats = -1; _repeatDelay = repeatDelay; return this; }
-        public Tween AutoReverse() { IsAutoReverse = true; return this; }
+
+        public Tween Repeat(int count, float repeatDelay = 0f)
+        {
+            _remainingRepeats = count;
+            _repeatDelay = repeatDelay;
+            return this;
+        }
+
+        public Tween RepeatForever(float repeatDelay = 0f)
+        {
+            _remainingRepeats = -1;
+            _repeatDelay = repeatDelay;
+            return this;
+        }
+
+        public Tween RepeatReverse(int count = 1, float repeatDelay = 0f)
+        {
+            Repeat(count, repeatDelay);
+            IsAutoReverse = true;
+            return this;
+        }
+
+        public Tween RepeatForeverReverse(float repeatDelay = 0f)
+        {
+            RepeatForever(repeatDelay);
+            IsAutoReverse = true;
+            return this;
+        }
+
 
         protected abstract void Initialize();
         protected abstract void Interpolate(float n);
@@ -153,6 +179,10 @@ namespace MonoGame.Extended.Tweening
 
                     _remainingDelay = _repeatDelay;
                 }
+                else if (_remainingRepeats == 0)
+                {
+                    IsAlive = false;
+                }
 
                 n = _completion = 1;
                 IsComplete = true;
@@ -161,10 +191,7 @@ namespace MonoGame.Extended.Tweening
             Interpolate(n);
 
             if (IsComplete)
-            {
-                IsAlive = _remainingRepeats != 0;
                 _onEnd?.Invoke(this);
-            }
         }
 
     }

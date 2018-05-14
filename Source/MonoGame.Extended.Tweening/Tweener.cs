@@ -6,7 +6,6 @@ using System.Reflection;
 
 namespace MonoGame.Extended.Tweening
 {
-
     public class Tweener : IDisposable
     {
         public Tweener()
@@ -24,7 +23,7 @@ namespace MonoGame.Extended.Tweening
 
         private readonly List<Tween> _activeTweens = new List<Tween>();
 
-        public Tween TweenTo<TTarget, TMember>(TTarget target, Expression<Func<TTarget, TMember>> expression, TMember toValue, float duration, float delay = 0f)
+        public Tween<TMember> TweenTo<TTarget, TMember>(TTarget target, Expression<Func<TTarget, TMember>> expression, TMember toValue, float duration, float delay = 0f)
             where TTarget : class
             where TMember : struct
         {
@@ -73,28 +72,25 @@ namespace MonoGame.Extended.Tweening
 
         private struct TweenMemberKey
         {
+#pragma warning disable 414
             public object Target;
             public string MemberName;
+#pragma warning restore 414
         }
 
-        private Dictionary<TweenMemberKey, TweenMember> _memberCache = new Dictionary<TweenMemberKey, TweenMember>();
+        private readonly Dictionary<TweenMemberKey, TweenMember> _memberCache = new Dictionary<TweenMemberKey, TweenMember>();
 
         private TweenMember<T> GetMember<T>(object target, string memberName)
             where T : struct
         {
-            TweenMember member;
             var key = new TweenMemberKey { Target = target, MemberName = memberName };
 
-            if (_memberCache.TryGetValue(key, out member))
-            {
+            if (_memberCache.TryGetValue(key, out var member))
                 return (TweenMember<T>) member;
-            }
-            else
-            {
-                member = CreateMember<T>(target, memberName);
-                _memberCache.Add(key, member);
-                return (TweenMember<T>) member;
-            }
+
+            member = CreateMember<T>(target, memberName);
+            _memberCache.Add(key, member);
+            return (TweenMember<T>) member;
         }
 
         private TweenMember<T> CreateMember<T>(object target, string memberName)
@@ -103,12 +99,12 @@ namespace MonoGame.Extended.Tweening
             AllocationCount++;
 
             var type = target.GetType();
-            var property = type.GetTypeInfo().GetDeclaredProperty(memberName);
+            var property = type.GetTypeInfo().GetProperty(memberName);
 
             if (property != null)
                 return new TweenPropertyMember<T>(target, property);
 
-            var field = type.GetTypeInfo().GetDeclaredField(memberName);
+            var field = type.GetTypeInfo().GetField(memberName);
 
             if (field != null)
                 return new TweenFieldMember<T>(target, field);
