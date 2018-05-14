@@ -53,7 +53,7 @@ Task("Test")
 });
 
 Task("Pack")
-    //.IsDependentOn("Test")
+    .IsDependentOn("Test")
     .Does(() =>
 {
     var artifactsDirectory = "./artifacts";
