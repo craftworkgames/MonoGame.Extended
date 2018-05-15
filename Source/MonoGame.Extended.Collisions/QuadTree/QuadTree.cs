@@ -27,7 +27,11 @@ namespace MonoGame.Extended.Collisions.QuadTree
         protected int MaxDepth { get; set; } = DefaultMaxDepth;
 
         protected int MaxObjectsPerNode { get; set; } = DefaultMaxObjectsPerNode;
-        protected RectangleF NodeBounds { get; set; }
+
+        /// <summary>
+        /// Gets the bounds of the area contained in this quad tree.
+        /// </summary>
+        public  RectangleF NodeBounds { get; protected set; }
 
         /// <summary>
         ///     Gets whether the current node is a leaf node.
@@ -81,12 +85,16 @@ namespace MonoGame.Extended.Collisions.QuadTree
             return objectCount;
         }
 
+        /// <summary>
+        /// Inserts the data into the tree.
+        /// </summary>
+        /// <param name="data"></param>
         public void Insert(QuadTreeData data)
         {
             var actorBounds = data.Target.BoundingBox;
             
             // Object doesn't fit into this node.
-            if (!NodeBounds.Intersects(actorBounds))
+            if (!RectangleF.Intersects(NodeBounds, actorBounds))
             {
                 return;
             }
@@ -94,10 +102,16 @@ namespace MonoGame.Extended.Collisions.QuadTree
             if (IsLeaf && Contents.Count >= MaxObjectsPerNode) Split();
 
             if (IsLeaf)
+            {
                 Contents.Add(data);
+            }
             else
+            {
                 foreach (var child in Children)
+                {
                     child.Insert(data);
+                }
+            }
         }
 
         public void Remove(QuadTreeData data)
@@ -107,17 +121,25 @@ namespace MonoGame.Extended.Collisions.QuadTree
                 var removeIndex = -1;
 
                 for (int i = 0, size = Contents.Count; i < size; i++)
+                {
                     if (Contents[i].Target == data.Target)
                     {
                         removeIndex = i;
                         break;
                     }
+                }
 
-                if (removeIndex != -1) Contents.Remove(data);
+                if (removeIndex != -1)
+                {
+                    Contents.Remove(data);
+                }
             }
             else
             {
-                for (int i = 0, size = Children.Count; i < size; i++) Children[i].Remove(data);
+                for (int i = 0, size = Children.Count; i < size; i++)
+                {
+                    Children[i].Remove(data);
+                }
             }
 
             Shake();
@@ -129,6 +151,9 @@ namespace MonoGame.Extended.Collisions.QuadTree
             Insert(data);
         }
 
+        /// <summary>
+        /// Prepare the quad tree 
+        /// </summary>
         public void Reset()
         {
             if (IsLeaf)
@@ -189,7 +214,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
                 RectangleF.CreateFrom(new Point2(min.X, center.Y), new Point2(center.X, max.Y))
             };
 
-            for (var i = 0; i < 4; ++i)
+            for (var i = 0; i < childAreas.Length; ++i)
             {
                 var node = new QuadTree(childAreas[i]);
                 Children.Add(node);
@@ -198,7 +223,10 @@ namespace MonoGame.Extended.Collisions.QuadTree
 
             for (int i = 0, size = Contents.Count; i < size; ++i)
             {
-                Children[i].Insert(Contents[i]);
+                for (int j = 0; j < Children.Count; j++)
+                {
+                    Children[j].Insert(Contents[i]);
+                }
             }
 
             Contents.Clear();

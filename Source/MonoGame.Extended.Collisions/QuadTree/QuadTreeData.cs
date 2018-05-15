@@ -4,7 +4,7 @@
     ///     Data structure for the quad tree.
     ///     Holds the entity and collision data for it.
     /// </summary>
-    public struct QuadTreeData
+    public class QuadTreeData
     {
         public QuadTreeData(IActorTarget target)
         {
