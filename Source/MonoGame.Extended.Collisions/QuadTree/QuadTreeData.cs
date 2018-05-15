@@ -1,4 +1,4 @@
-﻿namespace MonoGame.Extended.Collisions.QuadTree
+﻿namespace MonoGame.Extended.Collisions
 {
     /// <summary>
     ///     Data structure for the quad tree.

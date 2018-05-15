@@ -7,8 +7,8 @@
     <ProjectGuid>{E4ED3DE2-6880-4CDB-BDF9-841D12EA38C7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MonoGame.Extended.Gui.Tests</RootNamespace>
-    <AssemblyName>MonoGame.Extended.Gui.Tests</AssemblyName>
+    <RootNamespace>MonoGame.Extended.Collisions.Tests</RootNamespace>
+    <AssemblyName>MonoGame.Extended.Collisions.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

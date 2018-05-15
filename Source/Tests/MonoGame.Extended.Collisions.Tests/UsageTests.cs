@@ -1,9 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Collisions;
 using NUnit.Framework;
 
-namespace MonoGame.Extended.Gui.Tests
+namespace MonoGame.Extended.Collisions.Tests
 {
     /// <summary>
     /// Simple usage tests showing how to use this library.

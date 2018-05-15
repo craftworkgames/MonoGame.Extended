@@ -1,8 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Collisions;
 
-namespace MonoGame.Extended.Gui.Tests
+namespace MonoGame.Extended.Collisions.Tests
 {
     public class BasicActor : IActorTarget
     {

@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Microsoft.Xna.Framework;
-using MonoGame.Extended.Collisions.QuadTree;
 using NUnit.Framework;
 
-namespace MonoGame.Extended.Gui.Tests
+namespace MonoGame.Extended.Collisions.Tests
 {
     [TestFixture]
     public class QuadTreeTests
