@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collisions.QuadTree;
 using NUnit.Framework;
@@ -60,6 +61,19 @@ namespace MonoGame.Extended.Gui.Tests
         }
 
         [Test]
+        public void NumTargetsManyTest()
+        {
+            var tree = MakeTree();
+            for (int i = 0; i < 1000; i++)
+            {
+                tree.Insert(new QuadTreeData(new BasicActor()));
+                Assert.AreEqual(i + 1, tree.NumTargets());
+            }
+
+            Assert.AreEqual(1000, tree.NumTargets());
+        }
+
+        [Test]
         public void InsertOneTest()
         {
             var tree = MakeTree();
@@ -101,6 +115,22 @@ namespace MonoGame.Extended.Gui.Tests
         }
 
         [Test]
+        public void InsertManyTest()
+        {
+            var tree = MakeTree();
+
+            for (int i = 0; i < 1000; i++)
+            {
+                tree.Insert(new QuadTreeData(new BasicActor()
+                {
+                    BoundingBox = new RectangleF(0, 0, 1, 1)
+                }));
+            }
+
+            Assert.AreEqual(1000, tree.NumTargets());
+        }
+
+        [Test]
         public void InsertMultipleOverlappingQuadrantsTest()
         {
             var tree = MakeTree();
@@ -115,6 +145,193 @@ namespace MonoGame.Extended.Gui.Tests
             }
 
             Assert.AreEqual(10, tree.NumTargets());
+        }
+
+        [Test]
+        public void RemoveToEmptyTest()
+        {
+            var actor = new BasicActor()
+            {
+                BoundingBox = new RectangleF(-5f, -7f, 10.0f, 15.0f)
+            };
+            var data = new QuadTreeData(actor);
+
+            var tree = MakeTree();
+            tree.Insert(data);
+
+            tree.Remove(data);
+
+            Assert.AreEqual(0, tree.NumTargets());
+        }
+
+        [Test]
+        public void RemoveTwoTest()
+        {
+            var tree = MakeTree();
+            var inserted = new List<QuadTreeData>();
+            var numTargets = 2;
+
+            for (int i = 0; i < numTargets; i++)
+            {
+                var data = new QuadTreeData(new BasicActor()
+                {
+                    BoundingBox = new RectangleF(0, 0, 1, 1)
+                });
+                tree.Insert(data);
+                inserted.Add(data);
+            }
+
+
+            var inTree = numTargets;
+            Assert.AreEqual(inTree, tree.NumTargets());
+
+            foreach (var data in inserted)
+            {
+                tree.Remove(data);
+                Assert.AreEqual(--inTree, tree.NumTargets());
+            }
+        }
+
+        [Test]
+        public void RemoveThreeTest()
+        {
+            var tree = MakeTree();
+            var inserted = new List<QuadTreeData>();
+            var numTargets = 3;
+
+            for (int i = 0; i < numTargets; i++)
+            {
+                var data = new QuadTreeData(new BasicActor()
+                {
+                    BoundingBox = new RectangleF(0, 0, 1, 1)
+                });
+                tree.Insert(data);
+                inserted.Add(data);
+            }
+
+
+            var inTree = numTargets;
+            Assert.AreEqual(inTree, tree.NumTargets());
+
+            foreach (var data in inserted)
+            {
+                tree.Remove(data);
+                Assert.AreEqual(--inTree, tree.NumTargets());
+            }
+        }
+
+        [Test]
+        public void RemoveManyTest()
+        {
+            var tree = MakeTree();
+            var inserted = new List<QuadTreeData>();
+            var numTargets = 1000;
+
+            for (int i = 0; i < numTargets; i++)
+            {
+                var data = new QuadTreeData(new BasicActor()
+                {
+                    BoundingBox = new RectangleF(0, 0, 1, 1)
+                });
+                tree.Insert(data);
+                inserted.Add(data);
+            }
+
+
+            var inTree = numTargets;
+            Assert.AreEqual(inTree, tree.NumTargets());
+
+            foreach (var data in inserted)
+            {
+                tree.Remove(data);
+                Assert.AreEqual(--inTree, tree.NumTargets());
+            }
+        }
+
+
+        [Test]
+        public void ShakeWhenEmptyTest()
+        {
+            var tree = MakeTree();
+            tree.Shake();
+
+            Assert.AreEqual(0, tree.NumTargets());
+        }
+
+        [Test]
+        public void ShakeAfterSplittingTest()
+        {
+            var tree = MakeTree();
+
+            tree.Split();
+            var data = new QuadTreeData(new BasicActor());
+            tree.Insert(data);
+            tree.Shake();
+            Assert.AreEqual(1, tree.NumTargets());
+        }
+
+        [Test]
+        public void ShakeWhenContainingOneTest()
+        {
+            var tree = MakeTree();
+            var numTargets = 1;
+
+            for (int i = 0; i < numTargets; i++)
+            {
+                var data = new QuadTreeData(new BasicActor());
+                tree.Insert(data);
+            }
+
+            tree.Shake();
+            Assert.AreEqual(numTargets, tree.NumTargets());
+        }
+
+        [Test]
+        public void ShakeWhenContainingTwoTest()
+        {
+            var tree = MakeTree();
+            var numTargets = 2;
+
+            for (int i = 0; i < numTargets; i++)
+            {
+                var data = new QuadTreeData(new BasicActor());
+                tree.Insert(data);
+            }
+
+            tree.Shake();
+            Assert.AreEqual(numTargets, tree.NumTargets());
+        }
+
+        [Test]
+        public void ShakeWhenContainingThreeTest()
+        {
+            var tree = MakeTree();
+            var numTargets = 3;
+
+            for (int i = 0; i < numTargets; i++)
+            {
+                var data = new QuadTreeData(new BasicActor());
+                tree.Insert(data);
+            }
+
+            tree.Shake();
+            Assert.AreEqual(numTargets, tree.NumTargets());
+        }
+
+        [Test]
+        public void ShakeWhenContainingManyTest()
+        {
+            var tree = MakeTree();
+            var numTargets = QuadTree.DefaultMaxObjectsPerNode + 1;
+
+            for (int i = 0; i < numTargets; i++)
+            {
+                var data = new QuadTreeData(new BasicActor());
+                tree.Insert(data);
+            }
+
+            tree.Shake();
+            Assert.AreEqual(numTargets, tree.NumTargets());
         }
     }
 }

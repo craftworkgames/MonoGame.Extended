@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content;
 
 namespace MonoGame.Extended.Collisions.QuadTree
 {
@@ -7,8 +8,8 @@ namespace MonoGame.Extended.Collisions.QuadTree
     /// </summary>
     public class QuadTree
     {
-        private const int DefaultMaxDepth = 5;
-        private const int DefaultMaxObjectsPerNode = 5;
+        public const int DefaultMaxDepth = 7;
+        public const int DefaultMaxObjectsPerNode = 25;
 
         protected List<QuadTree> Children = new List<QuadTree>();
         protected List<QuadTreeData> Contents = new List<QuadTreeData>();
@@ -46,14 +47,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
         {
             Reset();
 
-            var objectCount = Contents.Count;
-            for (var i = 0; i < Contents.Count; ++i)
-            {
-                var data = Contents[i];
-                data.Flag = true;
-                Contents[i] = data;
-            }
-
+            var objectCount = 0;
 
             // Do BFS on nodes to count children.
             var process = new Queue<QuadTree>();
@@ -68,14 +62,12 @@ namespace MonoGame.Extended.Collisions.QuadTree
                 else
                 {
                     var contents = processing.Contents;
-                    for (var i = 0; i < contents.Count; i++)
+                    foreach (var data in contents)
                     {
-                        var obj = contents[i];
-                        if (!obj.Flag)
+                        if (!data.Flag)
                         {
                             objectCount++;
-                            obj.Flag = true;
-                            contents[i] = obj;
+                            data.Flag = true;
                         }
                     }
                 }
@@ -131,14 +123,14 @@ namespace MonoGame.Extended.Collisions.QuadTree
 
                 if (removeIndex != -1)
                 {
-                    Contents.Remove(data);
+                    Contents.RemoveAt(removeIndex);
                 }
             }
             else
             {
-                for (int i = 0, size = Children.Count; i < size; i++)
+                foreach (var quadTree in Children)
                 {
-                    Children[i].Remove(data);
+                    quadTree.Remove(data);
                 }
             }
 
@@ -165,7 +157,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
                 }
             else
             {
-                for (int i = 0, size = Contents.Count; i < size; i++)
+                for (int i = 0, size = Children.Count; i < size; i++)
                     Children[i].Reset();
             }
         }
@@ -187,10 +179,21 @@ namespace MonoGame.Extended.Collisions.QuadTree
                     {
                         var processing = process.Dequeue();
                         if (!processing.IsLeaf)
-                            for (int i = 0, size = processing.Children.Count; i < size; i++)
-                                process.Enqueue(processing.Children[i]);
+                            foreach (var subTree in processing.Children)
+                            {
+                                process.Enqueue(subTree);
+                            }
                         else
-                            Contents.AddRange(processing.Contents);
+                        {
+                            foreach (var data in processing.Contents)
+                            {
+                                if (!data.Flag)
+                                {
+                                    Contents.Add(data);
+                                    data.Flag = true;
+                                }
+                            }
+                        }
                     }
 
                     Children.Clear();
