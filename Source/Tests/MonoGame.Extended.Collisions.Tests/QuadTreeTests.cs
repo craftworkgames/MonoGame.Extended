@@ -9,11 +9,13 @@ namespace MonoGame.Extended.Collisions.Tests
         private QuadTree MakeTree()
         {
             // Bounds set to ensure actors will fit inside the tree with default bounds.
-            var bounds = new RectangleF(-10f, -15, 20.0f, 30.0f);
+            var bounds = _quadTreeArea;
             var tree = new QuadTree(bounds);
 
             return tree;
         }
+
+        private readonly RectangleF _quadTreeArea = new RectangleF(-10f, -15, 20.0f, 30.0f);
 
         [Test]
         public void ConstructorTest()
@@ -256,7 +258,17 @@ namespace MonoGame.Extended.Collisions.Tests
         }
 
         [Test]
-        public void ShakeAfterSplittingTest()
+        public void ShakeAfterSplittingWhenEmptyTest()
+        {
+            var tree = MakeTree();
+
+            tree.Split();
+            tree.Shake();
+            Assert.AreEqual(0, tree.NumTargets());
+        }
+
+        [Test]
+        public void ShakeAfterSplittingNotEmptyTest()
         {
             var tree = MakeTree();
 
@@ -329,6 +341,82 @@ namespace MonoGame.Extended.Collisions.Tests
 
             tree.Shake();
             Assert.AreEqual(numTargets, tree.NumTargets());
+        }
+
+        [Test]
+        public void QueryWhenEmptyTest()
+        {
+            var tree = MakeTree();
+
+            var query = tree.Query(_quadTreeArea);
+            
+            Assert.AreEqual(0, query.Count);
+            Assert.AreEqual(0, tree.NumTargets());
+        }
+
+        [Test]
+        public void QueryLeafNodeNotEmptyTest()
+        {
+            var tree = MakeTree();
+            var actor = new BasicActor();
+            tree.Insert(new QuadTreeData(actor));
+
+            var query = tree.Query(_quadTreeArea);
+            Assert.AreEqual(1, query.Count);
+            Assert.AreEqual(tree.NumTargets(), query.Count);
+        }
+
+        [Test]
+        public void QueryLeafNodeMultipleTest()
+        {
+            var tree = MakeTree();
+            var numTargets = QuadTree.DefaultMaxObjectsPerNode;
+            for (int i = 0; i < numTargets; i++)
+            {
+                var data = new QuadTreeData(new BasicActor());
+                tree.Insert(data);
+            }
+
+
+            var query = tree.Query(_quadTreeArea);
+            Assert.AreEqual(numTargets, query.Count);
+            Assert.AreEqual(tree.NumTargets(), query.Count);
+        }
+
+        [Test]
+        public void QueryNonLeafManyTest()
+        {
+            var tree = MakeTree();
+            var numTargets = 2*QuadTree.DefaultMaxObjectsPerNode;
+            for (int i = 0; i < numTargets; i++)
+            {
+                var data = new QuadTreeData(new BasicActor());
+                tree.Insert(data);
+            }
+
+
+            var query = tree.Query(_quadTreeArea);
+            Assert.AreEqual(numTargets, query.Count);
+            Assert.AreEqual(tree.NumTargets(), query.Count);
+        }
+
+        [Test]
+        public void QueryTwiceConsecutiveTest()
+        {
+            var tree = MakeTree();
+            var numTargets = 2 * QuadTree.DefaultMaxObjectsPerNode;
+            for (int i = 0; i < numTargets; i++)
+            {
+                var data = new QuadTreeData(new BasicActor());
+                tree.Insert(data);
+            }
+
+
+            var query1 = tree.Query(_quadTreeArea);
+            var query2 = tree.Query(_quadTreeArea);
+            Assert.AreEqual(numTargets, query1.Count);
+            Assert.AreEqual(tree.NumTargets(), query1.Count);
+            Assert.AreEqual(query1.Count, query2.Count);
         }
     }
 }

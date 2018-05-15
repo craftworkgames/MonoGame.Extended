@@ -39,7 +39,7 @@ namespace MonoGame.Extended.Collisions
         public bool IsLeaf => Children.Count == 0;
 
         /// <summary>
-        ///     Counts the number of targets in the current QuadTree.
+        ///     Counts the number of unique targets in the current QuadTree.
         /// </summary>
         /// <returns>Returns the targets of objects found.</returns>
         public int NumTargets()
@@ -79,7 +79,7 @@ namespace MonoGame.Extended.Collisions
         /// <summary>
         /// Inserts the data into the tree.
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="data">Data being inserted.</param>
         public void Insert(QuadTreeData data)
         {
             var actorBounds = data.Target.BoundingBox;
@@ -161,6 +161,9 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
+        /// <summary>
+        /// Removes unneccesary leaf nodes and simplifies the quad tree.
+        /// </summary>
         public void Shake()
         {
             if (!IsLeaf)
@@ -200,6 +203,9 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
+        /// <summary>
+        /// Splits a quadtree into quadrants.
+        /// </summary>
         public void Split()
         {
             if (CurrentDepth + 1 >= MaxDepth) return;
@@ -234,26 +240,39 @@ namespace MonoGame.Extended.Collisions
             Contents.Clear();
         }
 
+        /// <summary>
+        /// Queries the quadtree for targets that intersect with the given area.
+        /// </summary>
+        /// <param name="area">The area to query for overlapping targets</param>
+        /// <returns>A unique list of targets intersected by area.</returns>
         public List<QuadTreeData> Query(RectangleF area)
         {
+            Reset();
+            return QueryWithoutReset(area);
+        }
+
+        private List<QuadTreeData> QueryWithoutReset(RectangleF area)
+        {
             var result = new List<QuadTreeData>();
+
             if (!RectangleF.Intersects(area, NodeBounds)) return result;
 
             if (IsLeaf)
             {
                 for (int i = 0, size = Contents.Count; i < size; i++)
                 {
-                    if (RectangleF.Intersects(Contents[i].Target.BoundingBox, area))
+                    if (RectangleF.Intersects(Contents[i].Target.BoundingBox, area) && !Contents[i].Flag)
                     {
                         result.Add(Contents[i]);
+                        Contents[i].Flag = true;
                     }
                 }
             }
             else
             {
-                for (int i = 0, size = Contents.Count; i < size; i++)
+                for (int i = 0, size = Children.Count; i < size; i++)
                 {
-                    var recurse = Children[i].Query(area);
+                    var recurse = Children[i].QueryWithoutReset(area);
                     result.AddRange(recurse);
                 }
             }
