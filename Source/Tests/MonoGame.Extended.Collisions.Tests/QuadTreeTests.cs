@@ -355,6 +355,17 @@ namespace MonoGame.Extended.Collisions.Tests
         }
 
         [Test]
+        public void QueryNotOverlappingTest()
+        {
+            var tree = MakeTree();
+
+            var query = tree.Query(new RectangleF(100f, 100f, 1f, 1f));
+
+            Assert.AreEqual(0, query.Count);
+            Assert.AreEqual(0, tree.NumTargets());
+        }
+
+        [Test]
         public void QueryLeafNodeNotEmptyTest()
         {
             var tree = MakeTree();
@@ -364,6 +375,17 @@ namespace MonoGame.Extended.Collisions.Tests
             var query = tree.Query(_quadTreeArea);
             Assert.AreEqual(1, query.Count);
             Assert.AreEqual(tree.NumTargets(), query.Count);
+        }
+
+        [Test]
+        public void QueryLeafNodeNoOverlapTest()
+        {
+            var tree = MakeTree();
+            var actor = new BasicActor();
+            tree.Insert(new QuadTreeData(actor));
+
+            var query = tree.Query(new RectangleF(100f, 100f, 1f, 1f));
+            Assert.AreEqual(0, query.Count);
         }
 
         [Test]
