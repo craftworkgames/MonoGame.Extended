@@ -72,9 +72,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{F3E80350
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pong", "Demos\Pong\Pong.csproj", "{55033148-02B0-4810-840A-011516846975}"
-	ProjectSection(ProjectDependencies) = postProject
-		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platformer", "Demos\Platformer\Platformer.csproj", "{1DDD3C52-B2F2-4DB3-8BF9-57BD93928EA8}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -94,7 +91,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Content.P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Entities.Tests", "Tests\MonoGame.Extended.Entities.Tests\MonoGame.Extended.Entities.Tests.csproj", "{F39A4B4A-F5DE-4996-86A4-949B91E5604A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Gui.Tests", "Tests\MonoGame.Extended.Gui.Tests\MonoGame.Extended.Gui.Tests.csproj", "{43CBA868-9BFC-4E02-8A7A-142C603B087E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Gui.Tests", "Tests\MonoGame.Extended.Gui.Tests\MonoGame.Extended.Gui.Tests.csproj", "{43CBA868-9BFC-4E02-8A7A-142C603B087E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Tiled.Tests", "Tests\MonoGame.Extended.Tiled.Tests\MonoGame.Extended.Tiled.Tests.csproj", "{34841DEB-EEC0-477C-B19D-CBB6DF49ED39}"
 EndProject
