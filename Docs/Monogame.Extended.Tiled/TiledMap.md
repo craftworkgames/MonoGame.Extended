@@ -3,9 +3,9 @@
 # Tiled
 Tiled is an [open sourced](https://github.com/bjorn/tiled) free to use "generic tile map editor". Tiled lets you easily design and view tile maps, and through the `Monogame.Extended.Tiled` package, you can load and display a map generated with Tiled in monogame
 
-To load a TiledMap into your project, you first need to add it to your `ContentManager`
-In order to compile the tile map for use in `MonoGame` you must add a reference to the pipeline tool
-First open the `Content.mgcb` file in the `Content/` folder
+To load a TiledMap into your project, you first need to add it to your `ContentManager`, and in order to compile the tile map for use in `MonoGame` you must add a reference to the pipeline tool.
+
+To do so, first open the `Content.mgcb` file in the `Content/` folder
 
 ![Imgur](https://i.imgur.com/fvHuZcu.png)
 
