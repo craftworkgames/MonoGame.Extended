@@ -39,6 +39,7 @@
     <Compile Include="Demos\BatchingDemo.cs" />
     <Compile Include="Demos\BitmapFontsDemo.cs" />
     <Compile Include="Demos\CameraDemo.cs" />
+    <Compile Include="Demos\CollisionDemo.cs" />
     <Compile Include="Demos\DemoBase.cs" />
     <Compile Include="Demos\GuiDemo.cs" />
     <Compile Include="Demos\GuiLayoutDemo.cs" />
@@ -114,6 +115,10 @@
     <ProjectReference Include="..\..\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj">
       <Project>{587ce536-216f-41a1-b223-ae502c125b09}</Project>
       <Name>MonoGame.Extended.Animations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj">
+      <Project>{02562c6f-5bfb-467e-8a95-68b6ce2d635a}</Project>
+      <Name>MonoGame.Extended.Collisions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj">
       <Project>{9b3ab8a1-78aa-471a-afd0-b10b932115bc}</Project>

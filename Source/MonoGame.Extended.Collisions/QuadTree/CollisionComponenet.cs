@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Collisions
 {
-    public class QuadTreeCollisionComponent : SimpleGameComponent
+    public class CollisionComponent : SimpleGameComponent
     {
         private readonly Dictionary<IActorTarget, QuadTreeData> _targetDataDictionary =
             new Dictionary<IActorTarget, QuadTreeData>();
 
         private readonly QuadTree _collisionTree;
 
-        public QuadTreeCollisionComponent(RectangleF boundary)
+        public CollisionComponent(RectangleF boundary)
         {
             _collisionTree = new QuadTree(boundary);
         }
@@ -43,6 +42,7 @@ namespace MonoGame.Extended.Collisions
             {
                 var data = new QuadTreeData(target);
                 _targetDataDictionary.Add(target, data);
+                _collisionTree.Insert(data);
             }
         }
 
