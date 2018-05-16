@@ -7,6 +7,11 @@ It makes MonoGame more awesome.
 
 MonoGame.Extended is an open source collection of NuGet packages for [MonoGame](http://www.monogame.net/). A collection of classes and extensions to make it easier to make games with MonoGame. 
 
+## Things are changing around here
+
+We're in the process of migrating MonoGame.Extended to .NET Standard among other things.
+Please be patient, things will break.
+
 ## Packages
 
  - **MonoGame.Extended** - the core package creates a solid foundation with sprites, [bitmap fonts](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/BitmapFonts/), [collections](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Collections/), [serialization](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Serialization/), shapes, texture atlases, viewport adapters, [cameras](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Camera2D/), timers, math, [object pooling](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Object-Pooling/), [screens](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Screens/), and diagnostics.
