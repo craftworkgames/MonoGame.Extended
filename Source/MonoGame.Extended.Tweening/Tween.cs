@@ -94,20 +94,14 @@ namespace MonoGame.Extended.Tweening
             return this;
         }
 
-        public Tween RepeatReverse(int count = 1, float repeatDelay = 0f)
+        public Tween AutoReverse()
         {
-            Repeat(count, repeatDelay);
+            if (_remainingRepeats == 0)
+                _remainingRepeats = 1;
+
             IsAutoReverse = true;
             return this;
         }
-
-        public Tween RepeatForeverReverse(float repeatDelay = 0f)
-        {
-            RepeatForever(repeatDelay);
-            IsAutoReverse = true;
-            return this;
-        }
-
 
         protected abstract void Initialize();
         protected abstract void Interpolate(float n);
