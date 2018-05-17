@@ -261,7 +261,8 @@ namespace MonoGame.Extended.Collisions
             {
                 for (int i = 0, size = Contents.Count; i < size; i++)
                 {
-                    if (RectangleF.Intersects(Contents[i].Target.BoundingBox, area) && !Contents[i].Flag)
+                    if (RectangleF.Intersects(Contents[i].BoundingBox, area) 
+                        && !Contents[i].Flag)
                     {
                         result.Add(Contents[i]);
                         Contents[i].Flag = true;

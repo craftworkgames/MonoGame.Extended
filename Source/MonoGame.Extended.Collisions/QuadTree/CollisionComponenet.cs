@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Collisions
@@ -17,10 +18,20 @@ namespace MonoGame.Extended.Collisions
 
         public override void Update(GameTime gameTime)
         {
+            // Update bounding box locations.
+            foreach (var value in _targetDataDictionary.Values)
+            {
+                _collisionTree.Remove(value);
+                value.BoundingBox = value.Target.BoundingBox;
+                _collisionTree.Insert(value);
+            }
+
+            // Detect collisions
             foreach (var value in _targetDataDictionary.Values)
             {
                 var target = value.Target;
-                var collisions =_collisionTree.Query(target.BoundingBox);
+                var collisions =_collisionTree.Query(target.BoundingBox)
+                    .Where(data => data.Target != target);
 
                 // Generate list of collision Infos
                 foreach (var other in collisions)
