@@ -2,9 +2,21 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
+
   <PropertyGroup>
     <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>craftworkgames</Authors>
+    <Description>It makes MonoGame more awesome.</Description>
+    <PackageTags>monogame extended pipeline bmfont tiled texture atlas input viewport fps shapes sprite</PackageTags>
+    <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</PackageIconUrl>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.Portable" Version="3.6.0.1625" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
