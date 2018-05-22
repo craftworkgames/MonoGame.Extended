@@ -10,9 +10,8 @@ namespace Demo.Features.Demos
 {
     public class CollisionDemo : DemoBase
     {
-        private readonly CollisionComponent _collisionComponent =
-            new CollisionComponent(new RectangleF(-1000, -500, 2000, 1000));
-        private List<DemoActor> _actors = new List<DemoActor>();
+        private CollisionComponent _collisionComponent;
+        private List<DemoActor> _actors;
         private SpriteBatch _spriteBatch;
         private Texture2D _spikeyBallTexture;
         private Texture2D _blankTexture;
@@ -25,6 +24,10 @@ namespace Demo.Features.Demos
 
         protected override void LoadContent()
         {
+            _collisionComponent = new CollisionComponent(new RectangleF(-1000, -500, 2000, 1000));
+            _actors = new List<DemoActor>();
+
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             var spikeyBallTexture = Content.Load<Texture2D>("Textures/spike_ball");
             _spikeyBallTexture = spikeyBallTexture;
@@ -32,12 +35,21 @@ namespace Demo.Features.Demos
             _blankTexture = new Texture2D(GraphicsDevice, 1, 1);
             _blankTexture.SetData(new[] { Color.WhiteSmoke });
 
-            var demoBall = new DemoBall(new Sprite(_spikeyBallTexture))
+            var demoBall1 = new DemoBall(new Sprite(_spikeyBallTexture))
             {
-                Position = new Vector2(100, 100),
-                BoundingBox = new RectangleF(100, 100, 20, 20)
+                Position = new Vector2(200, 240),
+                BoundingBox = new RectangleF(200, 240, 20, 20),
+                Velocity = new Vector2(0, -120)
             };
-            _actors.Add(demoBall);
+            _actors.Add(demoBall1);
+
+            var demoBall2 = new DemoBall(new Sprite(_spikeyBallTexture))
+            {
+                Position = new Vector2(600, 240),
+                BoundingBox = new RectangleF(600, 240, 20, 20),
+                Velocity = new Vector2(0, 120)
+            };
+            _actors.Add(demoBall2);
 
             var wall1 = new DemoWall(new Sprite(_blankTexture));
             wall1.BoundingBox = new RectangleF(0, 0, 800, 20);
@@ -130,9 +142,10 @@ namespace Demo.Features.Demos
     /// </summary>
     class DemoBall : DemoActor
     {
+        private ICollidable _prevCollision;
+
         public DemoBall(Sprite sprite) : base(sprite)
         {
-            Velocity = new Vector2(0f, 80f);
         }
 
         public override void Update(GameTime gameTime)
@@ -143,9 +156,13 @@ namespace Demo.Features.Demos
 
         public override void OnCollision(CollisionInfo collisionInfo)
         {
-//            throw new Exception("Collided with ball!");
-            Velocity *= -1;
-            base.OnCollision(collisionInfo);
+            if (collisionInfo.Other != _prevCollision)
+            {
+                Velocity *= -1;
+                base.OnCollision(collisionInfo);
+            }
+
+            _prevCollision = collisionInfo.Other;
         }
     }
 
