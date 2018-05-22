@@ -4,6 +4,10 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Collisions
 {
+    /// <summary>
+    /// Handles basic collision between actors.
+    /// When two actors collide, their OnCollision method is called.
+    /// </summary>
     public class CollisionComponent : SimpleGameComponent
     {
         private readonly Dictionary<IActorTarget, QuadTreeData> _targetDataDictionary =
