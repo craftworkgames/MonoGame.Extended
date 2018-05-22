@@ -69,7 +69,7 @@ Task("Pack")
     CleanDirectory(artifactsDirectory);    
     NuGetPack(nuspecFiles, new NuGetPackSettings 
     {
-        Version = $"{gitVersion.MajorMinorPatch}",
+        Version = $"{gitVersion.NuGetVersion}",
         OutputDirectory = artifactsDirectory
     });
 });
