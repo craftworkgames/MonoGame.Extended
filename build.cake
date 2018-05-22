@@ -59,7 +59,7 @@ Task("Test")
 });
 
 Task("Pack")
-    .IsDependentOn("Test")
+    .IsDependentOn("Build") // Disabled Tests for now!
     .Does(() =>
 {
     var nuspecFiles = GetFiles("./Source/NuGet/MonoGame.Extended*.nuspec");
