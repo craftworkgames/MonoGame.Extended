@@ -105,6 +105,10 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
+        /// <summary>
+        /// Removes data from the QuadTree
+        /// </summary>
+        /// <param name="data">The data to be removed.</param>
         public void Remove(QuadTreeData data)
         {
             if (IsLeaf)
@@ -136,15 +140,12 @@ namespace MonoGame.Extended.Collisions
             Shake();
         }
 
-        public void Update(QuadTreeData data)
-        {
-            Remove(data);
-            Insert(data);
-        }
-
         /// <summary>
-        /// Prepare the quad tree 
+        /// Resets all QuadTreeData.Flag to false.
         /// </summary>
+        /// <remarks>
+        /// Used internally to query and count contents without duplicates.
+        /// </remarks>
         public void Reset()
         {
             if (IsLeaf)
