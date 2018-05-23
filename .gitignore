@@ -28,7 +28,7 @@ site/
 # Cake
 tools/
 
-# NuGet Package
+# NuGet Packages
 artifacts/
 
 # Rider
