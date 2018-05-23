@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended", "MonoGame.Extended\MonoGame.Extended.csproj", "{41724C52-3D50-45BB-81EB-3C8A247EAFD1}"
 EndProject
@@ -88,6 +88,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{F3E80350
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.StarWarrior", "Demos\Demo.StarWarrior\Demo.StarWarrior.csproj", "{52CC60A4-D806-46BF-B104-53E56A764B0E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0} = {28CD24BD-432C-4987-9E9D-65CFCF120EA0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Features", "Demos\Demo.Features\Demo.Features.csproj", "{D8C6D896-5ABF-4823-84DA-F1191BEEC004}"
 EndProject
