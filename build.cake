@@ -67,7 +67,7 @@ Task("Pack")
         {
             IncludeSymbols = true,
             OutputDirectory = artifactsDirectory,
-            ArgumentCustomization = args => args.Append($"/p:VersionPrefix={gitVersion.NuGetVersion} /p:VersionSuffix=alpha{gitVersion.BuildMetaDataPadded}")
+            ArgumentCustomization = args => args.Append($"/p:Version={gitVersion.NuGetVersion}")
         });
     }
 });
