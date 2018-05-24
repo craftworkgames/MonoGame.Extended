@@ -12,6 +12,7 @@ var msBuildPath = vsLatest?.CombineWithFilePath("./MSBuild/15.0/Bin/amd64/MSBuil
 Task("Restore")
     .Does(() =>
 {
+    Information("##teamcity[progressMessage 'Restoring packages...']");    
     DotNetCoreRestore(solution);
 });
 
@@ -19,9 +20,9 @@ Task("Build")
     .IsDependentOn("Restore")
     .Does(() =>
 {
+    Information("##teamcity[progressMessage 'Building solution...']");    
     DotNetCoreBuild(solution, new DotNetCoreBuildSettings 
     {
-        //ArgumentCustomization = args => args.Append("/unsafe"),
         Configuration = configuration
     });
 });
@@ -30,6 +31,7 @@ Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
 {
+    Information("##teamcity[progressMessage 'Running tests...']");    
     var testRuns = 0;
     var failedRuns = 0;
 
@@ -56,6 +58,7 @@ Task("Pack")
     .IsDependentOn("Test")
     .Does(() =>
 {
+    Information("##teamcity[progressMessage 'Packing packages...']");    
     var artifactsDirectory = "./artifacts";
     var gitVersion = GitVersion();
     CreateDirectory(artifactsDirectory);

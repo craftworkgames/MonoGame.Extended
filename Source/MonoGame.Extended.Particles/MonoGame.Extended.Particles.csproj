@@ -5,8 +5,8 @@
 
   <PropertyGroup>
     <Authors>craftworkgames</Authors>
-    <Description>It makes MonoGame more awesome.</Description>
-    <PackageTags>monogame extended pipeline bmfont tiled texture atlas input viewport fps shapes sprite</PackageTags>
+    <Description>A high performance particle system to make MonoGame more awesome.</Description>
+    <PackageTags>monogame particle system</PackageTags>
     <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
     <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</PackageLicenseUrl>
