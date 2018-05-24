@@ -5,19 +5,19 @@ namespace MonoGame.Extended.Collisions
     /// <summary>
     ///     Class for doing collision handling with a quad tree.
     /// </summary>
-    public class QuadTree
+    public class Quadtree
     {
         public const int DefaultMaxDepth = 7;
         public const int DefaultMaxObjectsPerNode = 25;
 
-        protected List<QuadTree> Children = new List<QuadTree>();
-        protected List<QuadTreeData> Contents = new List<QuadTreeData>();
+        protected List<Quadtree> Children = new List<Quadtree>();
+        protected List<QuadtreeData> Contents = new List<QuadtreeData>();
 
         /// <summary>
         ///     Creates a quad tree with the given bounds.
         /// </summary>
         /// <param name="bounds">The bounds of the new quad tree.</param>
-        public QuadTree(RectangleF bounds)
+        public Quadtree(RectangleF bounds)
         {
             CurrentDepth = 0;
             NodeBounds = bounds;
@@ -29,7 +29,7 @@ namespace MonoGame.Extended.Collisions
         protected int MaxObjectsPerNode { get; set; } = DefaultMaxObjectsPerNode;
 
         /// <summary>
-        /// Gets the bounds of the area contained in this quad tree.
+        ///     Gets the bounds of the area contained in this quad tree.
         /// </summary>
         public  RectangleF NodeBounds { get; protected set; }
 
@@ -39,7 +39,7 @@ namespace MonoGame.Extended.Collisions
         public bool IsLeaf => Children.Count == 0;
 
         /// <summary>
-        ///     Counts the number of unique targets in the current QuadTree.
+        ///     Counts the number of unique targets in the current Quadtree.
         /// </summary>
         /// <returns>Returns the targets of objects found.</returns>
         public int NumTargets()
@@ -49,7 +49,7 @@ namespace MonoGame.Extended.Collisions
             var objectCount = 0;
 
             // Do BFS on nodes to count children.
-            var process = new Queue<QuadTree>();
+            var process = new Queue<Quadtree>();
             process.Enqueue(this);
             while (process.Count > 0)
             {
@@ -77,10 +77,10 @@ namespace MonoGame.Extended.Collisions
         }
 
         /// <summary>
-        /// Inserts the data into the tree.
+        ///     Inserts the data into the tree.
         /// </summary>
         /// <param name="data">Data being inserted.</param>
-        public void Insert(QuadTreeData data)
+        public void Insert(QuadtreeData data)
         {
             var actorBounds = data.Target.BoundingBox;
             
@@ -106,10 +106,10 @@ namespace MonoGame.Extended.Collisions
         }
 
         /// <summary>
-        /// Removes data from the QuadTree
+        ///     Removes data from the Quadtree
         /// </summary>
         /// <param name="data">The data to be removed.</param>
-        public void Remove(QuadTreeData data)
+        public void Remove(QuadtreeData data)
         {
             if (IsLeaf)
             {
@@ -141,10 +141,10 @@ namespace MonoGame.Extended.Collisions
         }
 
         /// <summary>
-        /// Resets all QuadTreeData.Flag to false.
+        ///     Resets all QuadtreeData.Flag to false.
         /// </summary>
         /// <remarks>
-        /// Used internally to query and count contents without duplicates.
+        ///     Used internally to query and count contents without duplicates.
         /// </remarks>
         public void Reset()
         {
@@ -163,7 +163,7 @@ namespace MonoGame.Extended.Collisions
         }
 
         /// <summary>
-        /// Removes unneccesary leaf nodes and simplifies the quad tree.
+        ///     Removes unneccesary leaf nodes and simplifies the quad tree.
         /// </summary>
         public void Shake()
         {
@@ -176,7 +176,7 @@ namespace MonoGame.Extended.Collisions
                 }
                 else if (numObjects < MaxObjectsPerNode)
                 {
-                    var process = new Queue<QuadTree>();
+                    var process = new Queue<Quadtree>();
                     process.Enqueue(this);
                     while (process.Count > 0)
                     {
@@ -205,7 +205,7 @@ namespace MonoGame.Extended.Collisions
         }
 
         /// <summary>
-        /// Splits a quadtree into quadrants.
+        ///     Splits a quadtree into quadrants.
         /// </summary>
         public void Split()
         {
@@ -225,7 +225,7 @@ namespace MonoGame.Extended.Collisions
 
             for (var i = 0; i < childAreas.Length; ++i)
             {
-                var node = new QuadTree(childAreas[i]);
+                var node = new Quadtree(childAreas[i]);
                 Children.Add(node);
                 Children[i].CurrentDepth = CurrentDepth + 1;
             }
@@ -242,19 +242,19 @@ namespace MonoGame.Extended.Collisions
         }
 
         /// <summary>
-        /// Queries the quadtree for targets that intersect with the given area.
+        ///     Queries the quadtree for targets that intersect with the given area.
         /// </summary>
         /// <param name="area">The area to query for overlapping targets</param>
         /// <returns>A unique list of targets intersected by area.</returns>
-        public List<QuadTreeData> Query(RectangleF area)
+        public List<QuadtreeData> Query(RectangleF area)
         {
             Reset();
             return QueryWithoutReset(area);
         }
 
-        private List<QuadTreeData> QueryWithoutReset(RectangleF area)
+        private List<QuadtreeData> QueryWithoutReset(RectangleF area)
         {
-            var result = new List<QuadTreeData>();
+            var result = new List<QuadtreeData>();
 
             if (!RectangleF.Intersects(area, NodeBounds)) return result;
 

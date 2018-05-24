@@ -4,9 +4,9 @@
     ///     Data structure for the quad tree.
     ///     Holds the entity and collision data for it.
     /// </summary>
-    public class QuadTreeData
+    public class QuadtreeData
     {
-        public QuadTreeData(IActorTarget target)
+        public QuadtreeData(IActorTarget target)
         {
             Target = target;
             BoundingBox = target.BoundingBox;

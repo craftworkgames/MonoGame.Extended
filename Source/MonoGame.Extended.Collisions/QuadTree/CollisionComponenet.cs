@@ -10,14 +10,14 @@ namespace MonoGame.Extended.Collisions
     /// </summary>
     public class CollisionComponent : SimpleGameComponent
     {
-        private readonly Dictionary<IActorTarget, QuadTreeData> _targetDataDictionary =
-            new Dictionary<IActorTarget, QuadTreeData>();
+        private readonly Dictionary<IActorTarget, QuadtreeData> _targetDataDictionary =
+            new Dictionary<IActorTarget, QuadtreeData>();
 
-        private readonly QuadTree _collisionTree;
+        private readonly Quadtree _collisionTree;
 
         public CollisionComponent(RectangleF boundary)
         {
-            _collisionTree = new QuadTree(boundary);
+            _collisionTree = new Quadtree(boundary);
         }
 
         public override void Update(GameTime gameTime)
@@ -55,7 +55,7 @@ namespace MonoGame.Extended.Collisions
         {
             if (!_targetDataDictionary.ContainsKey(target))
             {
-                var data = new QuadTreeData(target);
+                var data = new QuadtreeData(target);
                 _targetDataDictionary.Add(target, data);
                 _collisionTree.Insert(data);
             }
