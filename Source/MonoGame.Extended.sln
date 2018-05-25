@@ -29,9 +29,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E5A148A1-DE7B-4D17-ABE8-831B9673B863}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{932F8931-4A8D-4205-BFCF-98E794207786}"
-	ProjectSection(SolutionItems) = preProject
-		Demos\README.md = Demos\README.md
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Collisions", "MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj", "{02562C6F-5BFB-467E-8A95-68B6CE2D635A}"
 EndProject
@@ -95,6 +92,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Gui.Tests", "Tests\MonoGame.Extended.Gui.Tests\MonoGame.Extended.Gui.Tests.csproj", "{43CBA868-9BFC-4E02-8A7A-142C603B087E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Tiled.Tests", "Tests\MonoGame.Extended.Tiled.Tests\MonoGame.Extended.Tiled.Tests.csproj", "{34841DEB-EEC0-477C-B19D-CBB6DF49ED39}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gui", "Demos\Gui\Gui.csproj", "{8AC0C265-E986-4AB1-8FF7-4A0582695B0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -280,6 +279,14 @@ Global
 		{34841DEB-EEC0-477C-B19D-CBB6DF49ED39}.Release|Any CPU.Build.0 = Release|Any CPU
 		{34841DEB-EEC0-477C-B19D-CBB6DF49ED39}.Release|x86.ActiveCfg = Release|Any CPU
 		{34841DEB-EEC0-477C-B19D-CBB6DF49ED39}.Release|x86.Build.0 = Release|Any CPU
+		{8AC0C265-E986-4AB1-8FF7-4A0582695B0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AC0C265-E986-4AB1-8FF7-4A0582695B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AC0C265-E986-4AB1-8FF7-4A0582695B0D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8AC0C265-E986-4AB1-8FF7-4A0582695B0D}.Debug|x86.Build.0 = Debug|Any CPU
+		{8AC0C265-E986-4AB1-8FF7-4A0582695B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AC0C265-E986-4AB1-8FF7-4A0582695B0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AC0C265-E986-4AB1-8FF7-4A0582695B0D}.Release|x86.ActiveCfg = Release|Any CPU
+		{8AC0C265-E986-4AB1-8FF7-4A0582695B0D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -295,6 +302,7 @@ Global
 		{F39A4B4A-F5DE-4996-86A4-949B91E5604A} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
 		{43CBA868-9BFC-4E02-8A7A-142C603B087E} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
 		{34841DEB-EEC0-477C-B19D-CBB6DF49ED39} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
+		{8AC0C265-E986-4AB1-8FF7-4A0582695B0D} = {932F8931-4A8D-4205-BFCF-98E794207786}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8ED5A62D-25EC-4331-9F99-BDD1E10C02A0}
