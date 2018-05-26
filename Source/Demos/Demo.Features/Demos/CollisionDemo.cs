@@ -142,27 +142,23 @@ namespace Demo.Features.Demos
     /// </summary>
     class DemoBall : DemoActor
     {
-        private ICollidable _prevCollision;
-
         public DemoBall(Sprite sprite) : base(sprite)
         {
         }
 
         public override void Update(GameTime gameTime)
         {
-            BoundingBox = new RectangleF(Position.X, Position.Y, BoundingBox.Width, BoundingBox.Height);
             base.Update(gameTime);
+            BoundingBox = new RectangleF(Position.X, Position.Y, BoundingBox.Width, BoundingBox.Height);
         }
 
         public override void OnCollision(CollisionInfo collisionInfo)
         {
-            if (collisionInfo.Other != _prevCollision)
-            {
-                Velocity *= -1;
-                base.OnCollision(collisionInfo);
-            }
 
-            _prevCollision = collisionInfo.Other;
+            Velocity *= -1;
+            Position -= collisionInfo.PenetrationVector;
+            BoundingBox = new RectangleF(Position.X, Position.Y, BoundingBox.Width, BoundingBox.Height);
+            base.OnCollision(collisionInfo);
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
@@ -43,7 +44,7 @@ namespace MonoGame.Extended.Collisions
                     var collisionInfo = new CollisionInfo
                     {
                         Other = other.Target,
-                        PenetrationVector = RectangleF.Intersection(target.BoundingBox, other.Target.BoundingBox).Size
+                        PenetrationVector = PenetrationVector(value.BoundingBox, other.BoundingBox)
                     };
 
                     target.OnCollision(collisionInfo);
@@ -70,5 +71,31 @@ namespace MonoGame.Extended.Collisions
                 _targetDataDictionary.Remove(target);
             }
         }
+
+        private static Vector2 PenetrationVector(RectangleF rect1, RectangleF rect2)
+        {
+            var intersectingRectangle = RectangleF.Intersection(rect1, rect2);
+            Debug.Assert(!intersectingRectangle.IsEmpty,
+                "Violation of: !intersect.IsEmpty; Rectangles must intersect to calculate a penetration vector.");
+
+            Vector2 penetration;
+            if (intersectingRectangle.Width < intersectingRectangle.Height)
+            {
+                var d = rect1.Center.X < rect2.Center.X
+                    ? intersectingRectangle.Width
+                    : -intersectingRectangle.Width;
+                penetration = new Vector2(d, 0);
+            }
+            else
+            {
+                var d = rect1.Center.Y < rect2.Center.Y
+                    ? intersectingRectangle.Height
+                    : -intersectingRectangle.Height;
+                penetration = new Vector2(0, d);
+            }
+
+            return penetration;
+        }
+
     }
 }
