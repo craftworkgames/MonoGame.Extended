@@ -35,7 +35,7 @@ namespace MonoGame.Extended.TextureAtlases
             Name = name;
             Texture = texture;
             _regions = new List<TextureRegion2D>();
-            _regionMap = new Dictionary<string, int>();
+            _regionMap = new Dictionary<string, TextureRegion2D>();
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace MonoGame.Extended.TextureAtlases
                 CreateRegion(region.Key, region.Value.X, region.Value.Y, region.Value.Width, region.Value.Height);
         }
 
-        private readonly Dictionary<string, int> _regionMap;
+        private readonly Dictionary<string, TextureRegion2D> _regionMap;
         private readonly List<TextureRegion2D> _regions;
 
         public string Name { get; }
@@ -108,9 +108,8 @@ namespace MonoGame.Extended.TextureAtlases
         /// <param name="region">Texture region.</param>
         private void AddRegion(TextureRegion2D region)
         {
-            var index = _regions.Count;
             _regions.Add(region);
-            _regionMap.Add(region.Name, index);
+            _regionMap.Add(region.Name, region);
         }
 
         /// <summary>
@@ -159,7 +158,7 @@ namespace MonoGame.Extended.TextureAtlases
         /// <param name="index">An index of the <see cref="TextureRegion2D" /> in <see cref="Region" /> to remove</param>
         public void RemoveRegion(int index)
         {
-            _regions.RemoveAt(index);
+			RemoveRegion(_regions[index].Name);
         }
 
         /// <summary>
@@ -168,12 +167,12 @@ namespace MonoGame.Extended.TextureAtlases
         /// <param name="name">Name of the <see cref="TextureRegion2D" /> to remove</param>
         public void RemoveRegion(string name)
         {
-            int index;
+            TextureRegion2D texture;
 
-            if (_regionMap.TryGetValue(name, out index))
+            if (_regionMap.TryGetValue(name, out texture))
             {
-                RemoveRegion(index);
                 _regionMap.Remove(name);
+				_regions.Remove(texture);
             }
         }
 
@@ -209,10 +208,10 @@ namespace MonoGame.Extended.TextureAtlases
         /// <returns>The texture region</returns>
         public T GetRegion<T>(string name) where T : TextureRegion2D
         {
-            int index;
+            TextureRegion2D texture;
 
-            if (_regionMap.TryGetValue(name, out index))
-                return (T)GetRegion(index);
+            if (_regionMap.TryGetValue(name, out texture))
+                return (T)texture;
 
             throw new KeyNotFoundException(name);
         }
