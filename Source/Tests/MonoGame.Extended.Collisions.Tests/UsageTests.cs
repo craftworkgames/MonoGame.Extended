@@ -1,20 +1,18 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using NUnit.Framework;
+using Xunit;
 
 namespace MonoGame.Extended.Collisions.Tests
 {
     /// <summary>
     /// Simple usage tests showing how to use this library.
     /// </summary>
-    [TestFixture]
-    [Ignore("This test currently fails.")]
     public class UsageTests
     {
         /// <summary>
         /// This is a basic test to make sure two actors collide in a <see cref="CollisionWorld"/>
         /// </summary>
-        [Test]
+        [Fact(Skip = "This test currently fails and needs fixed.")]
         public void BasicUsageTest()
         {
             var world = new CollisionWorld(Vector2.Zero);
@@ -34,8 +32,8 @@ namespace MonoGame.Extended.Collisions.Tests
             
 
             // The two actors should have collided.
-            Assert.AreEqual(actor1.CollisionCount, actor2.CollisionCount);
-            Assert.AreEqual(1, actor1.CollisionCount);
+            Assert.Equal(actor1.CollisionCount, actor2.CollisionCount);
+            Assert.Equal(1, actor1.CollisionCount);
         }
     }
 }

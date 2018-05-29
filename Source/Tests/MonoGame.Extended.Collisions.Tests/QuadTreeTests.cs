@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using NUnit.Framework;
+using Xunit;
 
 namespace MonoGame.Extended.Collisions.Tests
 {
-    [TestFixture]
     public class QuadTreeTests
     {
         private Quadtree MakeTree()
@@ -17,37 +16,37 @@ namespace MonoGame.Extended.Collisions.Tests
 
         private readonly RectangleF _quadTreeArea = new RectangleF(-10f, -15, 20.0f, 30.0f);
 
-        [Test]
+        [Fact]
         public void ConstructorTest()
         {
             var bounds = new RectangleF(-10f, -15, 20.0f, 30.0f);
             var tree = new Quadtree(bounds);
 
-            Assert.AreEqual(bounds, tree.NodeBounds);
-            Assert.AreEqual(true, tree.IsLeaf);
+            Assert.Equal(bounds, tree.NodeBounds);
+            Assert.True(tree.IsLeaf);
         }
 
-        [Test]
+        [Fact]
         public void NumTargetsEmptyTest()
         {
             var tree = MakeTree();
 
-            Assert.AreEqual(0, tree.NumTargets());
+            Assert.Equal(0, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void NumTargetsOneTest()
         {
             var tree = MakeTree();
             var actor = new BasicActor();
 
             tree.Insert(new QuadtreeData(actor));
-
-            Assert.AreEqual(1, tree.NumTargets());
+            
+            Assert.Equal(1, tree.NumTargets());
         }
 
 
-        [Test]
+        [Fact]
         public void NumTargetsMultipleTest()
         {
             var tree = MakeTree();
@@ -56,23 +55,23 @@ namespace MonoGame.Extended.Collisions.Tests
                 tree.Insert(new QuadtreeData(new BasicActor()));
             }
 
-            Assert.AreEqual(5, tree.NumTargets());
+            Assert.Equal(5, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void NumTargetsManyTest()
         {
             var tree = MakeTree();
             for (int i = 0; i < 1000; i++)
             {
                 tree.Insert(new QuadtreeData(new BasicActor()));
-                Assert.AreEqual(i + 1, tree.NumTargets());
+                Assert.Equal(i + 1, tree.NumTargets());
             }
 
-            Assert.AreEqual(1000, tree.NumTargets());
+            Assert.Equal(1000, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void InsertOneTest()
         {
             var tree = MakeTree();
@@ -80,10 +79,10 @@ namespace MonoGame.Extended.Collisions.Tests
 
             tree.Insert(new QuadtreeData(actor));
 
-            Assert.AreEqual(1, tree.NumTargets());
+            Assert.Equal(1, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void InsertOneOverlappingQuadrantsTest()
         {
             var tree = MakeTree();
@@ -94,10 +93,10 @@ namespace MonoGame.Extended.Collisions.Tests
 
             tree.Insert(new QuadtreeData(actor));
 
-            Assert.AreEqual(1, tree.NumTargets());
+            Assert.Equal(1, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void InsertMultipleTest()
         {
             var tree = MakeTree();
@@ -110,10 +109,10 @@ namespace MonoGame.Extended.Collisions.Tests
                 }));
             }
 
-            Assert.AreEqual(10, tree.NumTargets());
+            Assert.Equal(10, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void InsertManyTest()
         {
             var tree = MakeTree();
@@ -126,10 +125,10 @@ namespace MonoGame.Extended.Collisions.Tests
                 }));
             }
 
-            Assert.AreEqual(1000, tree.NumTargets());
+            Assert.Equal(1000, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void InsertMultipleOverlappingQuadrantsTest()
         {
             var tree = MakeTree();
@@ -143,10 +142,10 @@ namespace MonoGame.Extended.Collisions.Tests
                 tree.Insert(new QuadtreeData(actor));
             }
 
-            Assert.AreEqual(10, tree.NumTargets());
+            Assert.Equal(10, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void RemoveToEmptyTest()
         {
             var actor = new BasicActor()
@@ -160,10 +159,10 @@ namespace MonoGame.Extended.Collisions.Tests
 
             tree.Remove(data);
 
-            Assert.AreEqual(0, tree.NumTargets());
+            Assert.Equal(0, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void RemoveTwoTest()
         {
             var tree = MakeTree();
@@ -182,16 +181,16 @@ namespace MonoGame.Extended.Collisions.Tests
 
 
             var inTree = numTargets;
-            Assert.AreEqual(inTree, tree.NumTargets());
+            Assert.Equal(inTree, tree.NumTargets());
 
             foreach (var data in inserted)
             {
                 tree.Remove(data);
-                Assert.AreEqual(--inTree, tree.NumTargets());
+                Assert.Equal(--inTree, tree.NumTargets());
             }
         }
 
-        [Test]
+        [Fact]
         public void RemoveThreeTest()
         {
             var tree = MakeTree();
@@ -210,16 +209,16 @@ namespace MonoGame.Extended.Collisions.Tests
 
 
             var inTree = numTargets;
-            Assert.AreEqual(inTree, tree.NumTargets());
+            Assert.Equal(inTree, tree.NumTargets());
 
             foreach (var data in inserted)
             {
                 tree.Remove(data);
-                Assert.AreEqual(--inTree, tree.NumTargets());
+                Assert.Equal(--inTree, tree.NumTargets());
             }
         }
 
-        [Test]
+        [Fact]
         public void RemoveManyTest()
         {
             var tree = MakeTree();
@@ -238,36 +237,36 @@ namespace MonoGame.Extended.Collisions.Tests
 
 
             var inTree = numTargets;
-            Assert.AreEqual(inTree, tree.NumTargets());
+            Assert.Equal(inTree, tree.NumTargets());
 
             foreach (var data in inserted)
             {
                 tree.Remove(data);
-                Assert.AreEqual(--inTree, tree.NumTargets());
+                Assert.Equal(--inTree, tree.NumTargets());
             }
         }
 
 
-        [Test]
+        [Fact]
         public void ShakeWhenEmptyTest()
         {
             var tree = MakeTree();
             tree.Shake();
 
-            Assert.AreEqual(0, tree.NumTargets());
+            Assert.Equal(0, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void ShakeAfterSplittingWhenEmptyTest()
         {
             var tree = MakeTree();
 
             tree.Split();
             tree.Shake();
-            Assert.AreEqual(0, tree.NumTargets());
+            Assert.Equal(0, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void ShakeAfterSplittingNotEmptyTest()
         {
             var tree = MakeTree();
@@ -276,10 +275,10 @@ namespace MonoGame.Extended.Collisions.Tests
             var data = new QuadtreeData(new BasicActor());
             tree.Insert(data);
             tree.Shake();
-            Assert.AreEqual(1, tree.NumTargets());
+            Assert.Equal(1, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void ShakeWhenContainingOneTest()
         {
             var tree = MakeTree();
@@ -292,10 +291,10 @@ namespace MonoGame.Extended.Collisions.Tests
             }
 
             tree.Shake();
-            Assert.AreEqual(numTargets, tree.NumTargets());
+            Assert.Equal(numTargets, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void ShakeWhenContainingTwoTest()
         {
             var tree = MakeTree();
@@ -308,10 +307,10 @@ namespace MonoGame.Extended.Collisions.Tests
             }
 
             tree.Shake();
-            Assert.AreEqual(numTargets, tree.NumTargets());
+            Assert.Equal(numTargets, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void ShakeWhenContainingThreeTest()
         {
             var tree = MakeTree();
@@ -324,10 +323,10 @@ namespace MonoGame.Extended.Collisions.Tests
             }
 
             tree.Shake();
-            Assert.AreEqual(numTargets, tree.NumTargets());
+            Assert.Equal(numTargets, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void ShakeWhenContainingManyTest()
         {
             var tree = MakeTree();
@@ -340,32 +339,32 @@ namespace MonoGame.Extended.Collisions.Tests
             }
 
             tree.Shake();
-            Assert.AreEqual(numTargets, tree.NumTargets());
+            Assert.Equal(numTargets, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void QueryWhenEmptyTest()
         {
             var tree = MakeTree();
 
             var query = tree.Query(_quadTreeArea);
             
-            Assert.AreEqual(0, query.Count);
-            Assert.AreEqual(0, tree.NumTargets());
+            Assert.Empty(query);
+            Assert.Equal(0, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void QueryNotOverlappingTest()
         {
             var tree = MakeTree();
 
             var query = tree.Query(new RectangleF(100f, 100f, 1f, 1f));
 
-            Assert.AreEqual(0, query.Count);
-            Assert.AreEqual(0, tree.NumTargets());
+            Assert.Empty(query);
+            Assert.Equal(0, tree.NumTargets());
         }
 
-        [Test]
+        [Fact]
         public void QueryLeafNodeNotEmptyTest()
         {
             var tree = MakeTree();
@@ -373,11 +372,11 @@ namespace MonoGame.Extended.Collisions.Tests
             tree.Insert(new QuadtreeData(actor));
 
             var query = tree.Query(_quadTreeArea);
-            Assert.AreEqual(1, query.Count);
-            Assert.AreEqual(tree.NumTargets(), query.Count);
+            Assert.Single(query);
+            Assert.Equal(tree.NumTargets(), query.Count);
         }
 
-        [Test]
+        [Fact]
         public void QueryLeafNodeNoOverlapTest()
         {
             var tree = MakeTree();
@@ -385,10 +384,10 @@ namespace MonoGame.Extended.Collisions.Tests
             tree.Insert(new QuadtreeData(actor));
 
             var query = tree.Query(new RectangleF(100f, 100f, 1f, 1f));
-            Assert.AreEqual(0, query.Count);
+            Assert.Empty(query);
         }
 
-        [Test]
+        [Fact]
         public void QueryLeafNodeMultipleTest()
         {
             var tree = MakeTree();
@@ -401,11 +400,11 @@ namespace MonoGame.Extended.Collisions.Tests
 
 
             var query = tree.Query(_quadTreeArea);
-            Assert.AreEqual(numTargets, query.Count);
-            Assert.AreEqual(tree.NumTargets(), query.Count);
+            Assert.Equal(numTargets, query.Count);
+            Assert.Equal(tree.NumTargets(), query.Count);
         }
 
-        [Test]
+        [Fact]
         public void QueryNonLeafManyTest()
         {
             var tree = MakeTree();
@@ -418,11 +417,11 @@ namespace MonoGame.Extended.Collisions.Tests
 
 
             var query = tree.Query(_quadTreeArea);
-            Assert.AreEqual(numTargets, query.Count);
-            Assert.AreEqual(tree.NumTargets(), query.Count);
+            Assert.Equal(numTargets, query.Count);
+            Assert.Equal(tree.NumTargets(), query.Count);
         }
 
-        [Test]
+        [Fact]
         public void QueryTwiceConsecutiveTest()
         {
             var tree = MakeTree();
@@ -436,9 +435,9 @@ namespace MonoGame.Extended.Collisions.Tests
 
             var query1 = tree.Query(_quadTreeArea);
             var query2 = tree.Query(_quadTreeArea);
-            Assert.AreEqual(numTargets, query1.Count);
-            Assert.AreEqual(tree.NumTargets(), query1.Count);
-            Assert.AreEqual(query1.Count, query2.Count);
+            Assert.Equal(numTargets, query1.Count);
+            Assert.Equal(tree.NumTargets(), query1.Count);
+            Assert.Equal(query1.Count, query2.Count);
         }
     }
 }
