@@ -17,7 +17,7 @@ namespace Demo.Features.Demos
         private Texture2D[] _backgroundHills;
         private Texture2D _backgroundSky;
         private BitmapFont _bitmapFont;
-        private Camera2D _camera;
+        private OrthographicCamera _camera;
 
         private float _cloudsOffset;
         private SpriteBatch _spriteBatch;
@@ -31,7 +31,7 @@ namespace Demo.Features.Demos
         protected override void LoadContent()
         {
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            _camera = new OrthographicCamera(viewportAdapter);
 
             _bitmapFont = Content.Load<BitmapFont>("Fonts/montserrat-32");
             _backgroundSky = Content.Load<Texture2D>("Textures/hills-sky");

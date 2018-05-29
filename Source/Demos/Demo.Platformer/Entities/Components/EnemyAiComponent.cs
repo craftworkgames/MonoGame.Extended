@@ -5,7 +5,7 @@ namespace Demo.Platformer.Entities.Components
 {
     [EntityComponent]
     [EntityComponentPool(InitialSize = 100)]
-    public class EnemyAiComponent : EntityComponent
+    public class EnemyAiComponent : PoolableComponent
     {
         public Vector2 Direction { get; set; }
         public float WalkTime { get; set; }

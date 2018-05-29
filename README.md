@@ -1,11 +1,28 @@
+# We're in the process of developing MonoGame.Extended 2.0!
+
+That's exciting news but it may cause some confusion, pain and disruption for a while. Here's what you need to know:
+ 
+ - Everything that used to be in the `develop` branch is now in `master`
+ - NuGet packages built from `master` have been [published to nuget.org as version 1.1](https://www.nuget.org/packages?q=monogame.extended)
+ - There's lots of breaking changes happening to create a cleaner more useful API
+ - From now on we're going to (attempt) to use [Git Flow](https://gitversion.readthedocs.io/en/latest/git-branching-strategies/gitflow/)
+ - We're now using [cake builds](https://cakebuild.net/) so that you can build everything (including the NuGet packages) locally
+ - We're migrating everything to [.NET Standard!](https://www.patreon.com/posts/one-library-to-18916187)
+ - and more news coming soon...
+
 ![MonoGame.Extended Logo](https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-banner-800.png)
 
 # MonoGame.Extended
 It makes MonoGame more awesome.
 
-[![Join the chat at https://gitter.im/craftworkgames/MonoGame.Extended](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/craftworkgames/MonoGame.Extended?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://build.craftworkgames.com/app/rest/builds/buildType:(id:MonoGameExtended_CI)/statusIcon)](http://build.craftworkgames.com/viewType.html?buildTypeId=MonoGameExtended_CI&guest=1) [![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://craftworkgames.github.io/MonoGame.Extended/)
+[![Join the chat at https://gitter.im/craftworkgames/MonoGame.Extended](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/craftworkgames/MonoGame.Extended?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://build.craftworkgames.com/app/rest/builds/buildType:(id:MonoGameExtended_Build)/statusIcon)](http://build.craftworkgames.com/viewType.html?buildTypeId=MonoGameExtended_CI&guest=1) [![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://craftworkgames.github.io/MonoGame.Extended/)
 
 MonoGame.Extended is an open source collection of NuGet packages for [MonoGame](http://www.monogame.net/). A collection of classes and extensions to make it easier to make games with MonoGame. 
+
+## Things are changing around here
+
+We're in the process of migrating MonoGame.Extended to .NET Standard among other things.
+Please be patient, things will break.
 
 ## Packages
 

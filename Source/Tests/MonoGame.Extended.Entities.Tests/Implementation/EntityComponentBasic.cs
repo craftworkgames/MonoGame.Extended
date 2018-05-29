@@ -3,7 +3,7 @@
 namespace MonoGame.Extended.Gui.Tests.Implementation
 {
     [EntityComponent]
-    public class EntityComponentBasic : TransformComponent2D
+    public class EntityComponentBasic
     {
         public int Number { get; set; }
     }

@@ -4,16 +4,16 @@
 //using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 //using Microsoft.Xna.Framework.Graphics;
 //using MonoGame.Extended.Tests;
-//using NUnit.Framework;
+//using Xunit;
 
 //#endregion
 
 //namespace MonoGame.Extended.Tiled.Tests
 //{
-//    [TestFixture]
+//    
 //    public class TiledTilesetTests
 //    {
-//        [Test]
+//        [Fact]
 //        public void Constructor()
 //        {
 //            var graphicsDevice = TestHelper.CreateGraphicsDevice();
@@ -25,7 +25,7 @@
 //            //Assert.IsNull(tiledTileset.GetTileRegion(0));
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void GetTileRegion_BlankTile()
 //        {
 //            var graphicsDevice = TestHelper.CreateGraphicsDevice();
@@ -37,7 +37,7 @@
 //            //Assert.IsNull(tiledTileset.GetTileRegion(0));
 //        }
 
-//        [Test]
+//        [Fact]
 //        [TestCase(9, Result = false, Description = "Too low")]
 //        [TestCase(10, Result = true, Description = "Min tile")]
 //        [TestCase(11, Result = true, Description = "Middle tile")]
@@ -53,7 +53,7 @@
 //            return tiledTileset.ContainsTileId(id);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Constructor_NoMargin([Values(0, 2)] int spacing)
 //        {
 //            var graphicsDevice = TestHelper.CreateGraphicsDevice();
@@ -62,35 +62,35 @@
 //            var tiledTileset = new TiledTileset(texture, 1, 32, 32, 4, spacing, 0);
 
 //            var region = tiledTileset.GetTileRegion(1);
-//            Assert.AreEqual(texture, region.Texture);
-//            Assert.AreEqual(0, region.X);
-//            Assert.AreEqual(0, region.Y);
-//            Assert.AreEqual(32, region.Width);
-//            Assert.AreEqual(32, region.Height);
+//            Assert.Equal(texture, region.Texture);
+//            Assert.Equal(0, region.X);
+//            Assert.Equal(0, region.Y);
+//            Assert.Equal(32, region.Width);
+//            Assert.Equal(32, region.Height);
 
 //            region = tiledTileset.GetTileRegion(2);
-//            Assert.AreEqual(texture, region.Texture);
-//            Assert.AreEqual(spacing + 32, region.X);
-//            Assert.AreEqual(0, region.Y);
-//            Assert.AreEqual(32, region.Width);
-//            Assert.AreEqual(32, region.Height);
+//            Assert.Equal(texture, region.Texture);
+//            Assert.Equal(spacing + 32, region.X);
+//            Assert.Equal(0, region.Y);
+//            Assert.Equal(32, region.Width);
+//            Assert.Equal(32, region.Height);
 
 //            region = tiledTileset.GetTileRegion(3);
-//            Assert.AreEqual(texture, region.Texture);
-//            Assert.AreEqual(0, region.X);
-//            Assert.AreEqual(spacing + 32, region.Y);
-//            Assert.AreEqual(32, region.Width);
-//            Assert.AreEqual(32, region.Height);
+//            Assert.Equal(texture, region.Texture);
+//            Assert.Equal(0, region.X);
+//            Assert.Equal(spacing + 32, region.Y);
+//            Assert.Equal(32, region.Width);
+//            Assert.Equal(32, region.Height);
 
 //            region = tiledTileset.GetTileRegion(4);
-//            Assert.AreEqual(texture, region.Texture);
-//            Assert.AreEqual(spacing + 32, region.X);
-//            Assert.AreEqual(spacing + 32, region.Y);
-//            Assert.AreEqual(32, region.Width);
-//            Assert.AreEqual(32, region.Height);
+//            Assert.Equal(texture, region.Texture);
+//            Assert.Equal(spacing + 32, region.X);
+//            Assert.Equal(spacing + 32, region.Y);
+//            Assert.Equal(32, region.Width);
+//            Assert.Equal(32, region.Height);
 //        }
 
-//        [Test]
+//        [Fact]
 //        public void Constructor_NoSpacing([Values(0, 2)] int margin)
 //        {
 //            var graphicsDevice = TestHelper.CreateGraphicsDevice();
@@ -99,32 +99,32 @@
 //            var tileset = new TiledTileset(texture, 1, 32, 32, 4, 0, margin);
 
 //            var region = tileset.GetTileRegion(1);
-//            Assert.AreEqual(texture, region.Texture);
-//            Assert.AreEqual(margin, region.X);
-//            Assert.AreEqual(margin, region.Y);
-//            Assert.AreEqual(32, region.Width);
-//            Assert.AreEqual(32, region.Height);
+//            Assert.Equal(texture, region.Texture);
+//            Assert.Equal(margin, region.X);
+//            Assert.Equal(margin, region.Y);
+//            Assert.Equal(32, region.Width);
+//            Assert.Equal(32, region.Height);
 
 //            region = tileset.GetTileRegion(2);
-//            Assert.AreEqual(texture, region.Texture);
-//            Assert.AreEqual(margin + 32, region.X);
-//            Assert.AreEqual(margin, region.Y);
-//            Assert.AreEqual(32, region.Width);
-//            Assert.AreEqual(32, region.Height);
+//            Assert.Equal(texture, region.Texture);
+//            Assert.Equal(margin + 32, region.X);
+//            Assert.Equal(margin, region.Y);
+//            Assert.Equal(32, region.Width);
+//            Assert.Equal(32, region.Height);
 
 //            region = tileset.GetTileRegion(3);
-//            Assert.AreEqual(texture, region.Texture);
-//            Assert.AreEqual(margin, region.X);
-//            Assert.AreEqual(margin + 32, region.Y);
-//            Assert.AreEqual(32, region.Width);
-//            Assert.AreEqual(32, region.Height);
+//            Assert.Equal(texture, region.Texture);
+//            Assert.Equal(margin, region.X);
+//            Assert.Equal(margin + 32, region.Y);
+//            Assert.Equal(32, region.Width);
+//            Assert.Equal(32, region.Height);
 
 //            region = tileset.GetTileRegion(4);
-//            Assert.AreEqual(texture, region.Texture);
-//            Assert.AreEqual(margin + 32, region.X);
-//            Assert.AreEqual(margin + 32, region.Y);
-//            Assert.AreEqual(32, region.Width);
-//            Assert.AreEqual(32, region.Height);
+//            Assert.Equal(texture, region.Texture);
+//            Assert.Equal(margin + 32, region.X);
+//            Assert.Equal(margin + 32, region.Y);
+//            Assert.Equal(32, region.Width);
+//            Assert.Equal(32, region.Height);
 //        }
 //    }
 //}

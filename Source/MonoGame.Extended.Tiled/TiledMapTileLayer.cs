@@ -1,45 +1,37 @@
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 
 namespace MonoGame.Extended.Tiled
 {
     public class TiledMapTileLayer : TiledMapLayer
     {
-        // immutable
+        public TiledMapTileLayer(string name, int width, int height, int tileWidth, int tileHeight, IEnumerable<TiledMapTile> tiles, 
+            Vector2? offset = null, float opacity = 1, bool isVisible = true) 
+            : base(name, offset, opacity, isVisible)
+        {
+            Width = width;
+            Height = height;
+            TileWidth = tileWidth;
+            TileHeight = tileHeight;
+            Tiles = new List<TiledMapTile>(tiles);
+        }
+
         public int Width { get; }
         public int Height { get; }
         public int TileWidth { get; }
         public int TileHeight { get; }
-        public ReadOnlyCollection<TiledMapTile> Tiles { get; }
+        public List<TiledMapTile> Tiles { get; }
 
-        internal TiledMapTileLayer(ContentReader input, TiledMap map) 
-            : base(input)
+        public int GetTileIndex(ushort x, ushort y)
         {
-            Width = input.ReadInt32();
-            Height = input.ReadInt32();
-            TileWidth = map.TileWidth;
-            TileHeight = map.TileHeight;
-
-            var tileCount = input.ReadInt32();
-            var tiles = new TiledMapTile[Width * Height];
-            Tiles = new ReadOnlyCollection<TiledMapTile>(tiles);
-
-            for (var i = 0; i < tileCount; i++)
-            {
-                var globalTileIdentifierWithFlags = input.ReadUInt32();
-                var x = input.ReadUInt16();
-                var y = input.ReadUInt16();
-                tiles[x + y * Width] = new TiledMapTile(globalTileIdentifierWithFlags);
-            }
+            return x + y * Width;
         }
 
-        public bool TryGetTile(int x, int y, out TiledMapTile? tile)
+        public bool TryGetTile(ushort x, ushort y, out TiledMapTile? tile)
         {
-            var index = x + y * Width;
-            if ((index < 0) || (index >= Tiles.Count))
+            var index = GetTileIndex(x, y);
+
+            if (index < 0 || index >= Tiles.Count)
             {
                 tile = null;
                 return false;
@@ -47,6 +39,23 @@ namespace MonoGame.Extended.Tiled
 
             tile = Tiles[index];
             return true;
+        }
+
+        public TiledMapTile GetTile(ushort x, ushort y)
+        {
+            var index = GetTileIndex(x, y);
+            return Tiles[index];
+        }
+
+        public void SetTile(ushort x, ushort y, uint globalIdentifier)
+        {
+            var index = GetTileIndex(x, y);
+            Tiles[index] = new TiledMapTile(globalIdentifier, x, y);
+        }
+        
+        public void RemoveTile(ushort x, ushort y)
+        {
+            SetTile(x, y, 0);
         }
     }
 }

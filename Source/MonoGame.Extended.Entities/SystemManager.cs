@@ -37,7 +37,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Numerics;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
 
@@ -63,7 +62,7 @@ namespace MonoGame.Extended.Entities
         private readonly SystemLayer _dummyLayer;
         private bool _hasInitialized;
 
-        internal List<EntitySystem> Systems;
+        internal List<ProcessingSystem> Systems;
         internal List<EntityProcessingSystem> ProcessingSystems;
 
         internal SystemManager(EntityComponentSystem manager)
@@ -72,7 +71,7 @@ namespace MonoGame.Extended.Entities
             _updateLayers = new SystemLayer[0];
             _drawLayers = new SystemLayer[0];
             _dummyLayer  = new SystemLayer();
-            Systems = new List<EntitySystem>();
+            Systems = new List<ProcessingSystem>();
             ProcessingSystems = new List<EntityProcessingSystem>();
         }
 
@@ -116,7 +115,7 @@ namespace MonoGame.Extended.Entities
             }
         }
 
-        private static void ProcessSystemsSynchronous(GameTime gameTime, Bag<EntitySystem> systems)
+        private static void ProcessSystemsSynchronous(GameTime gameTime, Bag<ProcessingSystem> systems)
         {
             Debug.Assert(systems != null);
 
@@ -132,14 +131,14 @@ namespace MonoGame.Extended.Entities
         //    Parallel.ForEach(systems, system => system.ProcessInternal());
         //}
 
-        internal T AddSystem<T>(T system, GameLoopType gameLoopType, int layer, SystemExecutionType executionType) where T : EntitySystem
+        internal T AddSystem<T>(T system, GameLoopType gameLoopType, int layer, SystemExecutionType executionType) where T : ProcessingSystem
         {
             Debug.Assert(system != null);
 
             return (T)AddSystem(system.GetType(), system, gameLoopType, layer, executionType);
         }
 
-        private EntitySystem AddSystem(Type systemType, EntitySystem system, GameLoopType gameLoopType, int layer, SystemExecutionType executionType)
+        private ProcessingSystem AddSystem(Type systemType, ProcessingSystem system, GameLoopType gameLoopType, int layer, SystemExecutionType executionType)
         {
             Debug.Assert(systemType != null);
             Debug.Assert(system != null);
@@ -147,7 +146,7 @@ namespace MonoGame.Extended.Entities
             if (Systems.Contains(system))
                 throw new InvalidOperationException($"System '{systemType}' has already been added.");
 
-            system.Manager = _manager;
+            system.EntityComponentSystem = _manager;
 
             Systems.Add(system);
 
@@ -174,7 +173,7 @@ namespace MonoGame.Extended.Entities
             return system;
         }
 
-        private void AddSystemTo(ref SystemLayer[] layers, EntitySystem system, int layerIndex, SystemExecutionType executionType)
+        private void AddSystemTo(ref SystemLayer[] layers, ProcessingSystem system, int layerIndex, SystemExecutionType executionType)
         {
             Debug.Assert(layers != null);
 
@@ -210,14 +209,14 @@ namespace MonoGame.Extended.Entities
         {
             public int LayerIndex;
 
-            public readonly Bag<EntitySystem> SynchronousSystems;
+            public readonly Bag<ProcessingSystem> SynchronousSystems;
             //public readonly Bag<System> AsynchronousSystems;
 
             public SystemLayer(int layerIndex = 0)
             {
                 LayerIndex = layerIndex;
                 //AsynchronousSystems = new Bag<System>();
-                SynchronousSystems = new Bag<EntitySystem>();
+                SynchronousSystems = new Bag<ProcessingSystem>();
             }
 
             public int CompareTo(SystemLayer other)

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Input.InputListeners;
+using MonoGame.Extended.Input;
 
 namespace MonoGame.Extended.NuclexGui.Controls
 {

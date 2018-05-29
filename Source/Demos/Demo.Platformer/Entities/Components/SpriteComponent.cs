@@ -6,7 +6,7 @@ namespace Demo.Platformer.Entities.Components
 {
     [EntityComponent]
     [EntityComponentPool(InitialSize = 100)]
-    public class SpriteComponent : EntityComponent
+    public class SpriteComponent : PoolableComponent
     {
         public Vector2 Origin { get; set; }
         public Color Color { get; set; }

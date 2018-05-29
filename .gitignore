@@ -25,6 +25,15 @@ bld/
 # Mkdocs
 site/
 
+# Cake
+tools/
+
+# NuGet Packages
+artifacts/
+
+# Rider
+.idea/
+
 # Visual Studo 2015 cache/options directory
 .vs/
 

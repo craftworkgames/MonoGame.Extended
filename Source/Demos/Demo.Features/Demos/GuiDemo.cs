@@ -1,13 +1,10 @@
-using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
-using MonoGame.Extended.Gui.Serialization;
 using MonoGame.Extended.ViewportAdapters;
-using Newtonsoft.Json;
 
 namespace Demo.Features.Demos
 {
@@ -19,7 +16,7 @@ namespace Demo.Features.Demos
         private SpriteBatch _spriteBatch;
         private ViewportAdapter _viewportAdapter;
         private Texture2D _backgroundTexture;
-        private Camera2D _camera;
+        private OrthographicCamera _camera;
         private GuiSystem _guiSystem;
         
         public GuiDemo(GameMain game) : base(game)
@@ -32,7 +29,7 @@ namespace Demo.Features.Demos
             IsMouseVisible = false;
 
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(_viewportAdapter);
+            _camera = new OrthographicCamera(_viewportAdapter);
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _backgroundTexture = Content.Load<Texture2D>("Textures/colored_castle");

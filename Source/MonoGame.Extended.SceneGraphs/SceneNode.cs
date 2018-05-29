@@ -5,7 +5,24 @@ using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.SceneGraphs
 {
-    public class SceneNode : Transform2D
+    public abstract class SceneEntity : Transform2, IRectangularF
+    {
+        public abstract RectangleF BoundingRectangle { get; }
+    }
+
+    public class SpriteEntity : SceneEntity
+    {
+        private readonly Sprite _sprite;
+
+        public SpriteEntity(Sprite sprite)
+        {
+            _sprite = sprite;
+        }
+
+        public override RectangleF BoundingRectangle => _sprite.GetBoundingRectangle(Position, Rotation, Scale);
+    }
+
+    public class SceneNode : Transform2
     {
         public SceneNode(string name)
             : this(name, Vector2.Zero, 0, Vector2.One)

@@ -40,12 +40,12 @@ using MonoGame.Extended.Entities;
 namespace Demo.StarWarrior.Components
 {
     [EntityComponent]
-    public class PhysicsComponent : EntityComponent
+    public class PhysicsComponent : PoolableComponent
     {
-        private const float ToRadians = (float)(Math.PI / 180.0);
+        private const float _toRadians = (float)(Math.PI / 180.0);
 
         public float Angle { get; set; }
-        public float AngleAsRadians => Angle * ToRadians;
+        public float AngleAsRadians => Angle * _toRadians;
         public float Speed { get; set; }
 
         public override void Reset()

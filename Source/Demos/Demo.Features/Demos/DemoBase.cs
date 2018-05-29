@@ -7,7 +7,7 @@ using MonoGame.Extended.ViewportAdapters;
 
 namespace Demo.Features.Demos
 {
-    public abstract class DemoBase : IComparable<DemoBase>
+    public abstract class DemoBase : IDisposable, IComparable<DemoBase>
     {
         private readonly GameMain _game;
         private bool _isInitialized;
@@ -17,6 +17,10 @@ namespace Demo.Features.Demos
             _game = game;
 
             Window.AllowUserResizing = true;
+        }
+
+        public virtual void Dispose()
+        {
         }
 
         public abstract string Name { get; }
@@ -32,13 +36,13 @@ namespace Demo.Features.Demos
         protected GraphicsDevice GraphicsDevice => _game.GraphicsDevice;
         protected GameComponentCollection Components => _game.Components;
 
-        protected Camera2D Camera { get; private set; }
+        protected OrthographicCamera Camera { get; private set; }
         protected ViewportAdapter ViewportAdapter { get; private set; }
 
         protected virtual void Initialize()
         {
             ViewportAdapter = _game.ViewportAdapter;
-            Camera = new Camera2D(ViewportAdapter);
+            Camera = new OrthographicCamera(ViewportAdapter);
         }
 
         protected virtual void LoadContent() { }

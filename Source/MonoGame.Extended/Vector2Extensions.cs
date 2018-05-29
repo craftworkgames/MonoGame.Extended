@@ -7,6 +7,20 @@ namespace MonoGame.Extended
     public static class Vector2Extensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Size2 ToSize(this Vector2 value)
+        {
+            return new Size2(value.X, value.Y);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Size2 ToAbsoluteSize(this Vector2 value)
+        {
+            var x = Math.Abs(value.X);
+            var y = Math.Abs(value.Y);
+            return new Size2(x, y);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 Round(this Vector2 value, int digits, MidpointRounding mode)
         {
             var x = (float)Math.Round(value.X, digits, mode);

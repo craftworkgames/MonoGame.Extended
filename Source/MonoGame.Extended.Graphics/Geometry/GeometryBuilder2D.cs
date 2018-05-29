@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Graphics.Geometry
         {
         }
 
-        public void BuildSprite(int indexOffset, ref Matrix2D transformMatrix, Texture2D texture,
+        public void BuildSprite(int indexOffset, ref Matrix2 transformMatrix, Texture2D texture,
             ref Rectangle sourceRectangle,
             Color? color = null, FlipFlags flags = FlipFlags.None, float depth = 0)
         {
@@ -26,8 +26,8 @@ namespace MonoGame.Extended.Graphics.Geometry
 
             if (sourceRectangle.Width > 0)
             {
-                texelLeft = sourceRectangle.X / texture.Width;
-                texelTop = sourceRectangle.Y / texture.Height;
+                texelLeft = (float)sourceRectangle.X / texture.Width;
+                texelTop = (float)sourceRectangle.Y / texture.Height;
                 texelRight = (sourceRectangle.X + sourceRectangle.Width) / (float)texture.Width;
                 texelBottom = (sourceRectangle.Y + sourceRectangle.Height) / (float)texture.Height;
             }

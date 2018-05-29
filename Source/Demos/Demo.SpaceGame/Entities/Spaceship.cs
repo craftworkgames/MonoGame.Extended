@@ -12,6 +12,7 @@ namespace Demo.SpaceGame.Entities
         private readonly IBulletFactory _bulletFactory;
 
         private readonly Sprite _sprite;
+        private readonly Transform2 _transform;
 
         private float _fireCooldown;
         public CircleF BoundingCircle;
@@ -20,18 +21,18 @@ namespace Demo.SpaceGame.Entities
 
         public Vector2 Position
         {
-            get { return _sprite.Position; }
+            get { return _transform.Position; }
             set
             {
-                _sprite.Position = value;
+                _transform.Position = value;
                 BoundingCircle.Center = value;
             }
         }
 
         public float Rotation
         {
-            get { return _sprite.Rotation - MathHelper.ToRadians(90); }
-            set { _sprite.Rotation = value + MathHelper.ToRadians(90); }
+            get { return _transform.Rotation - MathHelper.ToRadians(90); }
+            set { _transform.Rotation = value + MathHelper.ToRadians(90); }
         }
 
         public Vector2 Velocity { get; set; }
@@ -39,12 +40,13 @@ namespace Demo.SpaceGame.Entities
         public Spaceship(TextureRegion2D textureRegion, IBulletFactory bulletFactory)
         {
             _bulletFactory = bulletFactory;
-            _sprite = new Sprite(textureRegion)
+            _sprite = new Sprite(textureRegion);
+            _transform = new Transform2
             {
                 Scale = Vector2.One * 0.5f,
                 Position = new Vector2(400, 240)
             };
-            BoundingCircle = new CircleF(_sprite.Position, 20);
+            BoundingCircle = new CircleF(_transform.Position, 20);
         }
 
         public override void Update(GameTime gameTime)
@@ -62,7 +64,7 @@ namespace Demo.SpaceGame.Entities
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_sprite);
+            spriteBatch.Draw(_sprite, _transform);
         }
 
         public void Accelerate(float acceleration)

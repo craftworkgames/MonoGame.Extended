@@ -10,6 +10,7 @@ namespace Demo.SpaceGame.Entities
     {
         private const float _radius = 55f / 4f;
         private readonly Sprite _sprite;
+        private readonly Transform2 _transform;
 
         public CircleF BoundingCircle;
 
@@ -17,18 +18,18 @@ namespace Demo.SpaceGame.Entities
 
         public Vector2 Position
         {
-            get { return _sprite.Position; }
+            get { return _transform.Position; }
             set
             {
-                _sprite.Position = value;
-                BoundingCircle.Center = _sprite.Position;
+                _transform.Position = value;
+                BoundingCircle.Center = _transform.Position;
             }
         }
 
         public float Rotation
         {
-            get { return _sprite.Rotation; }
-            set { _sprite.Rotation = value; }
+            get { return _transform.Rotation; }
+            set { _transform.Rotation = value; }
         }
 
         public float RotationSpeed { get; }
@@ -38,7 +39,7 @@ namespace Demo.SpaceGame.Entities
         public Meteor(TextureRegion2D textureRegion, Vector2 position, Vector2 velocity, float rotationSpeed, int size)
         {
             _sprite = new Sprite(textureRegion);
-            BoundingCircle = new CircleF(_sprite.Position, _radius * size);
+            BoundingCircle = new CircleF(_transform.Position, _radius * size);
 
             Position = position;
             Velocity = velocity;
@@ -66,7 +67,7 @@ namespace Demo.SpaceGame.Entities
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_sprite);
+            spriteBatch.Draw(_sprite, _transform);
         }
 
         public bool Contains(Vector2 position)

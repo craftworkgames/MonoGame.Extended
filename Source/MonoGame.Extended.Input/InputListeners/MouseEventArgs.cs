@@ -21,14 +21,14 @@ namespace MonoGame.Extended.Input.InputListeners
             Time = time;
         }
 
-        public TimeSpan Time { get; private set; }
+        public TimeSpan Time { get; }
 
         public MouseState PreviousState { get; }
         public MouseState CurrentState { get; }
-        public Point Position { get; private set; }
-        public MouseButton Button { get; private set; }
-        public int ScrollWheelValue { get; private set; }
-        public int ScrollWheelDelta { get; private set; }
+        public Point Position { get; }
+        public MouseButton Button { get; }
+        public int ScrollWheelValue { get; }
+        public int ScrollWheelDelta { get; }
 
         public Vector2 DistanceMoved => CurrentState.Position.ToVector2() - PreviousState.Position.ToVector2();
     }

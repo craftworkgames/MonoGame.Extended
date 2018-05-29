@@ -104,15 +104,15 @@ namespace MonoGame.Extended.Entities
             }
         }
 
-        public string Group
-        {
-            get { return _group; }
-            set
-            {
-                _group = value;
-                Manager.AddEntityToGroup(value, this);
-            }
-        }
+        //public string Group
+        //{
+        //    get { return _group; }
+        //    set
+        //    {
+        //        _group = value;
+        //        Manager.AddEntityToGroup(value, this);
+        //    }
+        //}
 
         IPoolable IPoolable.NextNode { get; set; }
         IPoolable IPoolable.PreviousNode { get; set; }
@@ -128,24 +128,29 @@ namespace MonoGame.Extended.Entities
             Manager.MarkEntityToBeRemoved(this);
         }
 
-        public T Attach<T>(Action<T> configure) where T : EntityComponent
+        public T Attach<T>(T component) where T : class
+        {
+            return Manager.AddComponent(this, component);
+        }
+
+        public T Attach<T>(Action<T> configure) where T : class 
         {
             var component = Attach<T>();
             configure(component);
             return component;
         }
 
-        public T Attach<T>() where T : EntityComponent
+        public T Attach<T>() where T : class
         {
             return Manager.AddComponent<T>(this);
         }
 
-        public void Detach<T>() where T : EntityComponent
+        public void Detach<T>() where T : class
         {
             Manager.MarkComponentToBeRemoved<T>(this);
         }
 
-        public T Get<T>() where T : EntityComponent
+        public T Get<T>() where T : class
         {
             return Manager.GetComponent<T>(this);
         }
@@ -161,7 +166,7 @@ namespace MonoGame.Extended.Entities
 
         public override string ToString()
         {
-            return $"{RuntimeHelpers.GetHashCode(this):X8}";
+            return $"{RuntimeHelpers.GetHashCode(this):X8} {Name}";
         }
 
         void IPoolable.Initialize(ReturnToPoolDelegate returnDelegate)

@@ -5,7 +5,7 @@ namespace Demo.Platformer.Entities.Components
 {
     [EntityComponent]
     [EntityComponentPool(InitialSize = 1)]
-    public class PlayerComponent : EntityComponent
+    public class PlayerComponent : PoolableComponent
     {
         public float WalkSpeed { get; set; }
         public float JumpSpeed { get; set; }

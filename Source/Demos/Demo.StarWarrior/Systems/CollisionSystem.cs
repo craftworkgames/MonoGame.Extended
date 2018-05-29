@@ -37,12 +37,13 @@
 using Demo.StarWarrior.Components;
 using Demo.StarWarrior.Templates;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarrior.Systems
 {
     [EntitySystem(GameLoopType.Update, Layer = 1)]
-    public class CollisionSystem : EntitySystem
+    public class CollisionSystem : ProcessingSystem
     {
         protected override void Process(GameTime gameTime)
         {
@@ -60,14 +61,14 @@ namespace Demo.StarWarrior.Systems
                 for (var bulletIndex = 0; bullets.Count > bulletIndex; ++bulletIndex)
                 {
                     var bullet = bullets[bulletIndex];
-                    var bulletTransform = bullet.Get<TransformComponent>();
-                    var shipTransform = ship.Get<TransformComponent>();
+                    var bulletTransform = bullet.Get<Transform2>();
+                    var shipTransform = ship.Get<Transform2>();
 
                     if (!CollisionExists(bulletTransform, shipTransform))
                         continue;
 
                     var bulletExplosion = EntityManager.CreateEntityFromTemplate(BulletExplosionTemplate.Name);
-                    bulletExplosion.Get<TransformComponent>().Position = bulletTransform.Position;
+                    bulletExplosion.Get<Transform2>().Position = bulletTransform.Position;
                     bullet.Destroy();
 
                     var healthComponent = ship.Get<HealthComponent>();
@@ -77,7 +78,7 @@ namespace Demo.StarWarrior.Systems
                         continue;
                   
                     var shipExplosion = EntityManager.CreateEntityFromTemplate(ShipExplosionTemplate.Name);
-                    shipExplosion.Get<TransformComponent>().Position = shipTransform.Position;
+                    shipExplosion.Get<Transform2>().Position = shipTransform.Position;
                     ship.Destroy();
                     break;
                 }
@@ -85,7 +86,7 @@ namespace Demo.StarWarrior.Systems
         }
 
         // ReSharper disable once SuggestBaseTypeForParameter
-        private static bool CollisionExists(TransformComponent bulletTransform, TransformComponent shipTransform)
+        private static bool CollisionExists(Transform2 bulletTransform, Transform2 shipTransform)
         {
             return Vector2.Distance(bulletTransform.WorldPosition, shipTransform.WorldPosition) < 20;
         }

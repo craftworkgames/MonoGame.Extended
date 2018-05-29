@@ -1,114 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8E425575-378A-4F83-88C9-F8BEBAD227C9}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MonoGame.Extended.Gui</RootNamespace>
-    <AssemblyName>MonoGame.Extended.Gui</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>6</LangVersion>
-    <DocumentationFile>bin\Debug\MonoGame.Extended.Gui.XML</DocumentationFile>
-    <NoWarn>1591</NoWarn>
+
+  <PropertyGroup>
+    <Authors>craftworkgames</Authors>
+    <Description>A GUI system for MonoGame written from the ground up to make MonoGame more awesome.</Description>
+    <PackageTags>monogame gui</PackageTags>
+    <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</PackageIconUrl>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\MonoGame.Extended.Gui.XML</DocumentationFile>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="Controls\GuiButton.cs" />
-    <Compile Include="Controls\GuiCanvas.cs" />
-    <Compile Include="Controls\GuiCheckBox.cs" />
-    <Compile Include="Controls\GuiComboBox.cs" />
-    <Compile Include="Controls\GuiControl.cs" />
-    <Compile Include="Controls\GuiControlCollection.cs" />
-    <Compile Include="Controls\GuiDialog.cs" />
-    <Compile Include="Controls\GuiForm.cs" />
-    <Compile Include="Controls\GuiImage.cs" />
-    <Compile Include="Controls\GuiItemsControl.cs" />
-    <Compile Include="Controls\GuiLabel.cs" />
-    <Compile Include="Controls\GuiLayoutControl.cs" />
-    <Compile Include="Controls\GuiListBox.cs" />
-    <Compile Include="Controls\GuiSubmit.cs" />
-    <Compile Include="Controls\GuiUniformGrid.cs" />
-    <Compile Include="GuiElement.cs" />
-    <Compile Include="GuiOrientation.cs" />
-    <Compile Include="Controls\GuiProgressBar.cs" />
-    <Compile Include="Controls\GuiTextBox.cs" />
-    <Compile Include="Controls\GuiStackPanel.cs" />
-    <Compile Include="GuiCursor.cs" />
-    <Compile Include="GuiElementCollection.cs" />
-    <Compile Include="GuiPointerEventArgs.cs" />
-    <Compile Include="GuiScreenCollection.cs" />
-    <Compile Include="GuiSystem.cs" />
-    <Compile Include="GuiScreen.cs" />
-    <Compile Include="GuiSkin.cs" />
-    <Compile Include="GuiSpriteBatchRenderer.cs" />
-    <Compile Include="GuiControlStyle.cs" />
-    <Compile Include="GuiLayoutHelper.cs" />
-    <Compile Include="GuiWindow.cs" />
-    <Compile Include="GuiWindowCollection.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialization\GuiAlignmentConverter.cs" />
-    <Compile Include="Serialization\GuiControlJsonConverter.cs" />
-    <Compile Include="Serialization\GuiControlStyleJsonConverter.cs" />
-    <Compile Include="Serialization\GuiJsonSerializer.cs" />
-    <Compile Include="Serialization\GuiSkinJsonConverter.cs" />
-    <Compile Include="Serialization\GuiTextureAtlasJsonConverter.cs" />
-    <Compile Include="Serialization\GuiNinePatchRegion2DJsonConverter.cs" />
-    <Compile Include="Serialization\GuiTextureRegionService.cs" />
+    <ProjectReference Include="..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj" />
+    <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Framework.Portable.3.6.0.1625\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj">
-      <Project>{49c87598-994c-49b5-bbb3-7ffc342635d3}</Project>
-      <Name>MonoGame.Extended.Input</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj">
-      <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
-      <Name>MonoGame.Extended</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

@@ -18,8 +18,7 @@ namespace MonoGame.Extended.Tiled
         // these optimal maximum numbers of course are not considering texture bindings which would practically lower the actual number of tiles per vertex / index buffer
         // thus, the reason why it is a good to have ONE giant tileset (at least per layer)
 
-        internal static Rectangle GetTileSourceRectangle(int localTileIdentifier, int tileWidth, int tileHeight,
-            int columns, int margin, int spacing)
+        internal static Rectangle GetTileSourceRectangle(int localTileIdentifier, int tileWidth, int tileHeight, int columns, int margin, int spacing)
         {
             var x = margin + localTileIdentifier % columns * (tileWidth + spacing);
             var y = margin + localTileIdentifier / columns * (tileHeight + spacing);

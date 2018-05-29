@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
@@ -15,9 +15,18 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         protected override void Write(ContentWriter writer, TiledMapContent map)
         {
-            WriteMetaData(writer, map);
-            WriteTilesets(writer, map.Tilesets);
-            WriteLayers(writer, map.Layers);
+            try
+            {
+                WriteMetaData(writer, map);
+                WriteTilesets(writer, map.Tilesets);
+                WriteLayers(writer, map.Layers);
+            }
+            catch (Exception ex)
+            {
+                ContentLogger.Logger.LogImportantMessage("Wtf");
+                ContentLogger.Logger.LogImportantMessage(ex.StackTrace);
+                throw;
+            }
         }
 
         private static void WriteMetaData(ContentWriter writer, TiledMapContent map)
@@ -32,141 +41,138 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             writer.WriteTiledMapProperties(map.Properties);
         }
 
-        private static void WriteTilesets(ContentWriter output, IReadOnlyCollection<TiledMapTilesetContent> tilesets)
+        private static void WriteTilesets(ContentWriter writer, IReadOnlyCollection<TiledMapTilesetContent> tilesets)
         {
-            output.Write(tilesets.Count);
+            writer.Write(tilesets.Count);
             foreach (var tileset in tilesets)
-                WriteTileset(output, tileset);
+                WriteTileset(writer, tileset);
         }
 
-        private static void WriteTileset(ContentWriter output, TiledMapTilesetContent tileset)
+        private static void WriteTileset(ContentWriter writer, TiledMapTilesetContent tileset)
         {
-            output.Write(Path.ChangeExtension(tileset.Image.Source, null));
-            output.Write(tileset.FirstGlobalIdentifier);
-            output.Write(tileset.TileWidth);
-            output.Write(tileset.TileHeight);
-            output.Write(tileset.TileCount);
-            output.Write(tileset.Spacing);
-            output.Write(tileset.Margin);
+            writer.Write(Path.ChangeExtension(tileset.Image.Source, null));
+            writer.Write(tileset.FirstGlobalIdentifier);
+            writer.Write(tileset.TileWidth);
+            writer.Write(tileset.TileHeight);
+            writer.Write(tileset.TileCount);
+            writer.Write(tileset.Spacing);
+            writer.Write(tileset.Margin);
+            writer.Write(tileset.Columns);
+            writer.Write(tileset.Tiles.Count);
 
-            output.Write(tileset.Columns);
-
-            output.Write(tileset.Tiles.Count);
             foreach (var tilesetTile in tileset.Tiles)
-                WriteTilesetTile(output, tilesetTile);
+                WriteTilesetTile(writer, tilesetTile);
 
-            output.WriteTiledMapProperties(tileset.Properties);
+            writer.WriteTiledMapProperties(tileset.Properties);
         }
 
-        private static void WriteTilesetTile(ContentWriter output, TiledMapTilesetTileContent tilesetTile)
+        private static void WriteTilesetTile(ContentWriter writer, TiledMapTilesetTileContent tilesetTile)
         {
-            output.Write(tilesetTile.LocalIdentifier);
+            writer.Write(tilesetTile.LocalIdentifier);
+            writer.Write(tilesetTile.Type);
+            writer.Write(tilesetTile.Frames.Count);
+            writer.Write(tilesetTile.Objects.Count);
 
-            output.Write(tilesetTile.Frames.Count);
-
-            output.Write(tilesetTile.Objects.Count);
             foreach (var @object in tilesetTile.Objects)
-                WriteObject(output, @object);
+                WriteObject(writer, @object);
 
             foreach (var frame in tilesetTile.Frames)
             {
-                output.Write(frame.TileIdentifier);
-                output.Write(frame.Duration);
+                writer.Write(frame.TileIdentifier);
+                writer.Write(frame.Duration);
             }
 
-            output.WriteTiledMapProperties(tilesetTile.Properties);
+            writer.WriteTiledMapProperties(tilesetTile.Properties);
         }
 
-        private static void WriteLayers(ContentWriter output, IReadOnlyCollection<TiledMapLayerContent> layers)
+        private static void WriteLayers(ContentWriter writer, IReadOnlyCollection<TiledMapLayerContent> layers)
         {
-            output.Write(layers.Count);
+            writer.Write(layers.Count);
+
             foreach (var layer in layers)
-                WriteLayer(output, layer);
+                WriteLayer(writer, layer);
         }
 
-        private static void WriteLayer(ContentWriter output, TiledMapLayerContent layer)
+        private static void WriteLayer(ContentWriter writer, TiledMapLayerContent layer)
         {
-            output.Write((byte)layer.Type);
+            writer.Write((byte)layer.Type);
 
-            output.Write(layer.Name ?? string.Empty);
-            output.Write(layer.Visible);
-            output.Write(layer.Opacity);
-            output.Write(layer.OffsetX);
-            output.Write(layer.OffsetY);
+            writer.Write(layer.Name ?? string.Empty);
+            writer.Write(layer.Visible);
+            writer.Write(layer.Opacity);
+            writer.Write(layer.OffsetX);
+            writer.Write(layer.OffsetY);
 
-            output.WriteTiledMapProperties(layer.Properties);
+            writer.WriteTiledMapProperties(layer.Properties);
 
             switch (layer.Type)
             {
                 case TiledMapLayerType.ImageLayer:
-                    WriteImageLayer(output, (TiledMapImageLayerContent)layer);
+                    WriteImageLayer(writer, (TiledMapImageLayerContent)layer);
                     break;
                 case TiledMapLayerType.TileLayer:
-                    WriteTileLayer(output, (TiledMapTileLayerContent)layer);
+                    WriteTileLayer(writer, (TiledMapTileLayerContent)layer);
                     break;
                 case TiledMapLayerType.ObjectLayer:
-                    WriteObjectLayer(output, (TiledMapObjectLayerContent)layer);
+                    WriteObjectLayer(writer, (TiledMapObjectLayerContent)layer);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(layer.Type));
             }
-
-            if (layer.Type != TiledMapLayerType.ObjectLayer)
-                WriteModels(output, layer.Models);
         }
 
-        private static void WriteImageLayer(ContentWriter output, TiledMapImageLayerContent imageLayer)
+        private static void WriteImageLayer(ContentWriter writer, TiledMapImageLayerContent imageLayer)
         {
             var textureAssetName = Path.ChangeExtension(imageLayer.Image.Source, null);
-            output.Write(textureAssetName);
-            output.Write(new Vector2(imageLayer.X, imageLayer.Y));
+            writer.Write(textureAssetName);
+            writer.Write(new Vector2(imageLayer.X, imageLayer.Y));
         }
 
         // ReSharper disable once SuggestBaseTypeForParameter
-        private static void WriteTileLayer(ContentWriter output, TiledMapTileLayerContent tileLayer)
+        private static void WriteTileLayer(ContentWriter writer, TiledMapTileLayerContent tileLayer)
         {
-            output.Write(tileLayer.Width);
-            output.Write(tileLayer.Height);
+            writer.Write(tileLayer.Width);
+            writer.Write(tileLayer.Height);
 
-            output.Write(tileLayer.Tiles.Length);
+            writer.Write(tileLayer.Tiles.Length);
 
             foreach (var tile in tileLayer.Tiles)
             {
-                output.Write(tile.GlobalTileIdentifierWithFlags);
-                output.Write(tile.X);
-                output.Write(tile.Y);
+                writer.Write(tile.GlobalTileIdentifierWithFlags);
+                writer.Write(tile.X);
+                writer.Write(tile.Y);
             }
         }
 
-        private static void WriteObjectLayer(ContentWriter output, TiledMapObjectLayerContent layer)
+        private static void WriteObjectLayer(ContentWriter writer, TiledMapObjectLayerContent layer)
         {
-            output.Write(ColorHelper.FromHex(layer.Color));
-            output.Write((byte)layer.DrawOrder);
+            writer.Write(ColorHelper.FromHex(layer.Color));
+            writer.Write((byte)layer.DrawOrder);
 
-            output.Write(layer.Objects.Count);
+            writer.Write(layer.Objects.Count);
 
             foreach (var @object in layer.Objects)
-                WriteObject(output, @object);
+                WriteObject(writer, @object);
         }
 
 
-        private static void WriteObject(ContentWriter output, TiledMapObjectContent @object)
+        private static void WriteObject(ContentWriter writer, TiledMapObjectContent @object)
         {
             var type = GetObjectType(@object);
 
-            output.Write((byte)type);
+            writer.Write((byte)type);
 
-            output.Write(@object.Identifier);
-            output.Write(@object.Name ?? string.Empty);
-            output.Write(@object.Type ?? string.Empty);
-            output.Write(@object.X);
-            output.Write(@object.Y);
-            output.Write(@object.Width);
-            output.Write(@object.Height);
-            output.Write(@object.Rotation);
-            output.Write(@object.Visible);
+            writer.Write(@object.Identifier);
+            writer.Write(@object.Name ?? string.Empty);
+            writer.Write(@object.Type ?? string.Empty);
+            writer.Write(@object.X);
+            writer.Write(@object.Y);
+            writer.Write(@object.Width);
+            writer.Write(@object.Height);
+            writer.Write(@object.Rotation);
+            writer.Write(@object.Visible);
 
-            output.WriteTiledMapProperties(@object.Properties);
+            writer.WriteTiledMapProperties(@object.Properties);
 
             switch (type)
             {
@@ -174,13 +180,13 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 case TiledMapObjectType.Ellipse:
                     break;
                 case TiledMapObjectType.Tile:
-                    output.Write(@object.GlobalIdentifier);
+                    writer.Write(@object.GlobalIdentifier);
                     break;
                 case TiledMapObjectType.Polygon:
-                    WritePolyPoints(output, @object.Polygon.Points);
+                    WritePolyPoints(writer, @object.Polygon.Points);
                     break;
                 case TiledMapObjectType.Polyline:
-                    WritePolyPoints(output, @object.Polyline.Points);
+                    WritePolyPoints(writer, @object.Polyline.Points);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -221,63 +227,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
             return TiledMapObjectType.Rectangle;
         }
-
-        private static void WriteModels(ContentWriter output, IReadOnlyCollection<TiledMapLayerModelContent> models)
-        {
-            output.Write(models.Count);
-
-            var animatedModelsCount = models.Count(x => x is TiledMapLayerAnimatedModelContent);
-            output.Write(animatedModelsCount);
-
-            foreach (var model in models)
-            {
-                var animatedModel = model as TiledMapLayerAnimatedModelContent;
-                if (animatedModel != null)
-                {
-                    output.Write(true);
-                    WriteAnimatedModel(output, animatedModel);
-                }
-                else
-                {
-                    output.Write(false);
-                    WriteModel(output, model);
-                }
-            }
-        }
-
-        // ReSharper disable once SuggestBaseTypeForParameter
-        private static void WriteModel(ContentWriter output, TiledMapLayerModelContent model)
-        {
-            output.Write(model.LayerName);
-            output.Write(model.TextureAssetName);
-
-            var vertexCount = model.Vertices.Count;
-            output.Write(vertexCount);
-            foreach (var vertex in model.Vertices)
-            {
-                output.Write(vertex.Position.X);
-                output.Write(vertex.Position.Y);
-                output.Write(vertex.TextureCoordinate.X);
-                output.Write(vertex.TextureCoordinate.Y);
-            }
-
-            var indexCount = model.Indices.Count;
-            output.Write(indexCount);
-            foreach (var index in model.Indices)
-                output.Write(index);
-        }
-
-        private static void WriteAnimatedModel(ContentWriter output, TiledMapLayerAnimatedModelContent model)
-        {
-            WriteModel(output, model);
-
-            output.Write(model.Tileset.FirstGlobalIdentifier);
-
-            output.Write(model.AnimatedTilesetTiles.Count);
-            foreach (var animatedTilesetTile in model.AnimatedTilesetTiles)
-                output.Write(animatedTilesetTile.LocalIdentifier);
-        }
-
+        
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
             return "MonoGame.Extended.Tiled.TiledMap, MonoGame.Extended.Tiled";

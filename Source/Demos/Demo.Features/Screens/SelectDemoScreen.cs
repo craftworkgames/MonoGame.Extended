@@ -10,36 +10,22 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace Demo.Features.Screens
 {
-    public class SelectDemoScreen : GuiScreen
+    public class SelectDemoScreen : Screen
     {
         private readonly IDictionary<string, DemoBase> _demos;
         private readonly Action<string> _loadDemo;
 
-        public SelectDemoScreen(GuiSkin skin, IDictionary<string, DemoBase> demos, Action<string> loadDemo, Action exitGameAction)
-            : base(skin)
+        public SelectDemoScreen(IDictionary<string, DemoBase> demos, Action<string> loadDemo, Action exitGameAction)
         {
             _demos = demos;
             _loadDemo = loadDemo;
-            //var button = Skin.Create<GuiButton>("white-button", c =>
-            //{
-            //    c.Position = new Vector2(670, 430);
-            //    c.Size = new Size2(120, 42);
-            //    c.Text = "Next Demo";
-            //});
-            //var canvas = new GuiCanvas
-            //{
-            //    Controls = { button }
-            //};
 
-            //Controls.Add(canvas);
-            //button.Clicked += (sender, args) => onNextDemo();
-
-            var dialog = Skin.Create<GuiDialog>("dialog");
-            var grid = new GuiUniformGrid { Columns = 3 };
+            var dialog = Skin.Create<Dialog>("dialog");
+            var grid = new UniformGrid { Columns = 3 };
 
             foreach (var demo in _demos.Values.OrderBy(i => i.Name))
             {
-                var button = Skin.Create<GuiButton>("white-button", c =>
+                var button = Skin.Create<Button>("white-button", c =>
                 {
                     c.Text = demo.Name;
                     c.Margin = new Thickness(4);
@@ -64,7 +50,14 @@ namespace Demo.Features.Screens
 
             dialog.Controls.Add(grid);
             Controls.Add(dialog);
-            //DialogDemo();
+        }
+
+        public override void Dispose()
+        {
+            foreach (var demo in _demos.Values)
+                demo.Dispose();
+
+            base.Dispose();
         }
 
         private void LoadDemo(DemoBase demo)
@@ -114,7 +107,7 @@ namespace Demo.Features.Screens
             };
 
             dialog.Controls.Add(stackPanel);
-            dialog.Controls.Add(Skin.Create<GuiLabel>("label", c =>
+            dialog.Controls.Add(Skin.Create<Label>("label", c =>
             {
                 c.Text = "Please confirm";
                 c.VerticalAlignment = VerticalAlignment.Top;
@@ -122,7 +115,7 @@ namespace Demo.Features.Screens
                 c.Offset = new Vector2(0, -30);
                 c.BackgroundRegion = Skin.NinePatches.FirstOrDefault(i => i.Name == "progress-bar-blue");
             }));
-            dialog.Controls.Add(Skin.Create<GuiButton>("close-button", c =>
+            dialog.Controls.Add(Skin.Create<Button>("close-button", c =>
             {
                 c.HorizontalAlignment = HorizontalAlignment.Right;
                 c.VerticalAlignment = VerticalAlignment.Top;

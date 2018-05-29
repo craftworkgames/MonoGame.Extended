@@ -12,11 +12,11 @@ namespace Demo.Features.Demos
     public class TweeningDemo : DemoBase
     {
         public override string Name => "Tweening";
-
         private readonly Game _game;
         private SpriteBatch _spriteBatch;
         private Sprite _sprite;
-        private Camera2D _camera;
+        private Transform2 _transform;
+        private OrthographicCamera _camera;
 
         public TweeningDemo(GameMain game) : base(game)
         {
@@ -38,15 +38,18 @@ namespace Demo.Features.Demos
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            _camera = new OrthographicCamera(viewportAdapter);
 
             var logoTexture = Content.Load<Texture2D>("Textures/logo-square-128");
 
             _sprite = new Sprite(logoTexture)
             {
-                Position = viewportAdapter.Center.ToVector2(),
-                Scale = Vector2.One * 0.5f,
                 Color = new Color(Color.White, 0.0f)
+            };
+            _transform = new Transform2
+            {
+                Position = viewportAdapter.Center.ToVector2(),
+                Scale = Vector2.One * 0.5f
             };
 
             CreateTweenThing();
@@ -55,7 +58,7 @@ namespace Demo.Features.Demos
 
         private void CreateTweenThing()
         {
-            _sprite.CreateTweenChain(CreateTweenThing)
+            _transform.CreateTweenChain(CreateTweenThing)
                 .Rotate(MathHelper.Pi, 1.0f, EasingFunctions.BounceOut)
                 .Scale(new Vector2(1.1f), 1.0f, EasingFunctions.BounceOut);
         }
@@ -71,7 +74,7 @@ namespace Demo.Features.Demos
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                _sprite
+                _transform
                     .CreateTweenGroup()
                     .MoveTo(new Vector2(mouseState.X, mouseState.Y), 1.0f, EasingFunctions.BounceOut);
             }
@@ -87,7 +90,7 @@ namespace Demo.Features.Demos
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
-            _spriteBatch.Draw(_sprite);
+            _spriteBatch.Draw(_sprite, _transform.Position, _transform.Rotation, _transform.Scale);
             _spriteBatch.End();
 
             base.Draw(gameTime);

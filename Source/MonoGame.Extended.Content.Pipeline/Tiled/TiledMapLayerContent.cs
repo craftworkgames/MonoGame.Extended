@@ -30,10 +30,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         [XmlIgnore]
         public TiledMapLayerType Type { get; }
-
-        [XmlIgnore]
-        public TiledMapLayerModelContent[] Models { get; set; }
-
+        
         protected TiledMapLayerContent(TiledMapLayerType type)
         {
             Type = type;

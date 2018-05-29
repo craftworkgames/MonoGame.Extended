@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Shapes;
@@ -10,17 +11,17 @@ namespace MonoGame.Extended
     /// </summary>
     public static class ShapeExtensions
     {
-        private static Texture2D _texture;
+        private static Texture2D _whitePixelTexture;
 
         private static Texture2D GetTexture(SpriteBatch spriteBatch)
         {
-            if (_texture == null)
+            if (_whitePixelTexture == null)
             {
-                _texture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-                _texture.SetData(new[] {Color.White});
+                _whitePixelTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+                _whitePixelTexture.SetData(new[] {Color.White});
             }
 
-            return _texture;
+            return _whitePixelTexture;
         }
 
         /// <summary>
@@ -47,13 +48,13 @@ namespace MonoGame.Extended
         /// <param name="points">The points to connect with lines</param>
         /// <param name="color">The color to use</param>
         /// <param name="thickness">The thickness of the lines</param>
-        public static void DrawPolygon(this SpriteBatch spriteBatch, Vector2 offset, Vector2[] points, Color color,
+        public static void DrawPolygon(this SpriteBatch spriteBatch, Vector2 offset, IReadOnlyList<Vector2> points, Color color,
             float thickness = 1f)
         {
-            if (points.Length == 0)
+            if (points.Count == 0)
                 return;
 
-            if (points.Length == 1)
+            if (points.Count == 1)
             {
                 DrawPoint(spriteBatch, points[0], color, (int) thickness);
                 return;
@@ -61,10 +62,10 @@ namespace MonoGame.Extended
 
             var texture = GetTexture(spriteBatch);
 
-            for (var i = 0; i < points.Length - 1; i++)
+            for (var i = 0; i < points.Count - 1; i++)
                 DrawPolygonEdge(spriteBatch, texture, points[i] + offset, points[i + 1] + offset, color, thickness);
 
-            DrawPolygonEdge(spriteBatch, texture, points[points.Length - 1] + offset, points[0] + offset, color,
+            DrawPolygonEdge(spriteBatch, texture, points[points.Count - 1] + offset, points[0] + offset, color,
                 thickness);
         }
 
@@ -109,8 +110,7 @@ namespace MonoGame.Extended
         /// <param name="width">Width</param>
         /// <param name="height">Height</param>
         /// <param name="color">The color to draw the rectangle in</param>
-        public static void FillRectangle(this SpriteBatch spriteBatch, float x, float y, float width, float height,
-            Color color)
+        public static void FillRectangle(this SpriteBatch spriteBatch, float x, float y, float width, float height, Color color)
         {
             FillRectangle(spriteBatch, new Vector2(x, y), new Size2(width, height), color);
         }
@@ -122,8 +122,7 @@ namespace MonoGame.Extended
         /// <param name="rectangle">The rectangle to draw</param>
         /// <param name="color">The color to draw the rectangle in</param>
         /// <param name="thickness">The thickness of the lines</param>
-        public static void DrawRectangle(this SpriteBatch spriteBatch, RectangleF rectangle, Color color,
-            float thickness = 1f)
+        public static void DrawRectangle(this SpriteBatch spriteBatch, RectangleF rectangle, Color color, float thickness = 1f)
         {
             var texture = GetTexture(spriteBatch);
             var topLeft = new Vector2(rectangle.X, rectangle.Y);

@@ -19,7 +19,8 @@ namespace Demo.NuclexGui
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
         private Sprite _sprite;
-        private Camera2D _camera;
+        private Transform2 _transform;
+        private OrthographicCamera _camera;
 
         private readonly InputListenerComponent _inputManager;
         private readonly GuiManager _gui;
@@ -256,10 +257,11 @@ namespace Demo.NuclexGui
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            _camera = new OrthographicCamera(viewportAdapter);
 
             var logoTexture = Content.Load<Texture2D>("logo-square-128");
-            _sprite = new Sprite(logoTexture)
+            _sprite = new Sprite(logoTexture);
+            _transform = new Transform2
             {
                 Position = viewportAdapter.Center.ToVector2()
             };
@@ -281,7 +283,7 @@ namespace Demo.NuclexGui
             _inputManager.Update(gameTime);
             _gui.Update(gameTime);
 
-            _sprite.Rotation += deltaTime * _rotateDirection;
+            _transform.Rotation += deltaTime * _rotateDirection;
 
             base.Update(gameTime);
         }
@@ -292,7 +294,7 @@ namespace Demo.NuclexGui
 
             _spriteBatch.Begin(blendState: BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
 
-            _spriteBatch.Draw(_sprite);
+            _spriteBatch.Draw(_sprite, _transform);
             _spriteBatch.End();
 
             // Draw GUI on top of everything

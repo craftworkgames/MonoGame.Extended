@@ -59,6 +59,14 @@ namespace Demo.Features
             }.ToDictionary(d => d.Name);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            foreach (var demo in _demos.Values)
+                demo.Dispose();
+
+            base.Dispose(disposing);
+        }
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -92,6 +100,7 @@ namespace Demo.Features
         {
             IsMouseVisible = true;
             _currentDemo?.Unload();
+            _currentDemo?.Dispose();
             _currentDemo = _demos[name];
             _currentDemo.Load();
         }

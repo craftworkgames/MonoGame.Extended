@@ -40,7 +40,7 @@ using MonoGame.Extended.Entities;
 namespace Demo.StarWarrior.Components
 {
     [EntityComponent]
-    public class ExpiresComponent : EntityComponent
+    public class ExpiresComponent : PoolableComponent
     {
         public bool IsExpired => LifeTime <= TimeSpan.Zero;
         public TimeSpan LifeTime { get; set; }

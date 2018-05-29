@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
 using MonoGame.Extended.Collections;
-using NUnit.Framework;
+using Xunit;
 
 namespace MonoGame.Extended.Tests.Collections
 {
-    [TestFixture]
     public class DequeTests
     {
         private class TestDequeElement
@@ -13,32 +12,26 @@ namespace MonoGame.Extended.Tests.Collections
             public int Value { get; set; }
         }
 
-        private Random _random;
+        private readonly Random _random;
 
-        [TestFixtureSetUp]
-        public void Initialize()
+        public DequeTests()
         {
             _random = new Random();
         }
 
-        [TestFixtureTearDown]
-        public void Dispose()
-        {
-        }
-
-        [TestCase]
+        [Fact]
         public void Deque_Constructor_Default()
         {
             var deque = new Deque<object>();
-            Assert.IsTrue(deque.Count == 0);
-            Assert.IsTrue(deque.Capacity == 0);
+            Assert.True(deque.Count == 0);
+            Assert.True(deque.Capacity == 0);
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Constructor_Collection(int count)
         {
             var elements = new TestDequeElement[count];
@@ -46,35 +39,35 @@ namespace MonoGame.Extended.Tests.Collections
             {
                 elements[i] = new TestDequeElement
                 {
-                    Value =  i
+                    Value = i
                 };
             }
             var deque = new Deque<TestDequeElement>(elements);
-            Assert.IsTrue(deque.Count == count);
-            Assert.IsTrue(deque.Capacity == count);
+            Assert.True(deque.Count == count);
+            Assert.True(deque.Capacity == count);
             for (var index = 0; index < deque.Count; index++)
             {
-                Assert.IsTrue(deque[index].Value == index); 
+                Assert.True(deque[index].Value == index);
             }
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Constructor_Capacity(int capacity)
         {
             var deque = new Deque<TestDequeElement>(capacity);
-            Assert.IsTrue(deque.Count == 0);
-            Assert.IsTrue(deque.Capacity == capacity);
+            Assert.True(deque.Count == 0);
+            Assert.True(deque.Capacity == capacity);
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Clear(int count)
         {
             var elements = new TestDequeElement[count];
@@ -87,15 +80,15 @@ namespace MonoGame.Extended.Tests.Collections
             }
             var deque = new Deque<TestDequeElement>(elements);
             deque.Clear();
-            Assert.IsTrue(deque.Count == 0);
-            Assert.IsTrue(deque.Capacity >= count);
+            Assert.True(deque.Count == 0);
+            Assert.True(deque.Capacity >= count);
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Trim_And_Clear(int count)
         {
             var elements = new TestDequeElement[count];
@@ -109,15 +102,15 @@ namespace MonoGame.Extended.Tests.Collections
             var deque = new Deque<TestDequeElement>(elements);
             deque.Clear();
             deque.TrimExcess();
-            Assert.IsTrue(deque.Count == 0);
-            Assert.IsTrue(deque.Capacity == 0);
+            Assert.True(deque.Count == 0);
+            Assert.True(deque.Capacity == 0);
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Trim_Front(int count)
         {
             var elements = new TestDequeElement[count];
@@ -132,19 +125,18 @@ namespace MonoGame.Extended.Tests.Collections
 
             for (var i = 0; i < count; i++)
             {
-                TestDequeElement element;
-                deque.RemoveFromFront(out element);
+                deque.RemoveFromFront(out _);
                 deque.Capacity = deque.Count;
-                Assert.IsTrue(deque.Count == count - 1 - i);
-                Assert.IsTrue(deque.Capacity == count - 1 - i);
+                Assert.True(deque.Count == count - 1 - i);
+                Assert.True(deque.Capacity == count - 1 - i);
             }
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Trim_Back(int count)
         {
             var elements = new TestDequeElement[count];
@@ -159,19 +151,18 @@ namespace MonoGame.Extended.Tests.Collections
 
             for (var i = 0; i < count; i++)
             {
-                TestDequeElement element;
-                deque.RemoveFromBack(out element);
+                deque.RemoveFromBack(out _);
                 deque.Capacity = deque.Count;
-                Assert.IsTrue(deque.Count == count - 1 - i);
-                Assert.IsTrue(deque.Capacity == count - 1 - i);
+                Assert.True(deque.Count == count - 1 - i);
+                Assert.True(deque.Capacity == count - 1 - i);
             }
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Add_Front(int count)
         {
             var deque = new Deque<TestDequeElement>();
@@ -182,20 +173,20 @@ namespace MonoGame.Extended.Tests.Collections
                     Value = i
                 });
             }
-            Assert.IsTrue(deque.Count == count);
-            Assert.IsTrue(deque.Capacity >= count);
+            Assert.True(deque.Count == count);
+            Assert.True(deque.Capacity >= count);
             for (var index = 0; index < deque.Count; index++)
             {
                 var element = deque[index];
-                Assert.IsTrue(element.Value == deque.Count - 1 - index);
+                Assert.True(element.Value == deque.Count - 1 - index);
             }
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Add_Back(int count)
         {
             var deque = new Deque<TestDequeElement>();
@@ -206,20 +197,20 @@ namespace MonoGame.Extended.Tests.Collections
                     Value = i
                 });
             }
-            Assert.IsTrue(deque.Count == count);
-            Assert.IsTrue(deque.Capacity >= count);
+            Assert.True(deque.Count == count);
+            Assert.True(deque.Capacity >= count);
             for (var index = 0; index < deque.Count; index++)
             {
                 var element = deque[index];
-                Assert.IsTrue(element.Value == index);
+                Assert.True(element.Value == index);
             }
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Remove_Front(int count)
         {
             var elements = new TestDequeElement[count];
@@ -232,20 +223,19 @@ namespace MonoGame.Extended.Tests.Collections
             }
             var deque = new Deque<TestDequeElement>(elements);
 
-            TestDequeElement element;
             var index = 0;
-            while (deque.RemoveFromFront(out element))
+            while (deque.RemoveFromFront(out var element))
             {
-                Assert.IsTrue(element.Value == index);
+                Assert.True(element.Value == index);
                 index++;
             }
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Remove_Back(int count)
         {
             var elements = new TestDequeElement[count];
@@ -258,20 +248,19 @@ namespace MonoGame.Extended.Tests.Collections
             }
             var deque = new Deque<TestDequeElement>(elements);
 
-            TestDequeElement element;
             var index = 0;
-            while (deque.RemoveFromBack(out element))
+            while (deque.RemoveFromBack(out var element))
             {
-                Assert.IsTrue(element.Value == elements.Length - 1 - index);
+                Assert.True(element.Value == elements.Length - 1 - index);
                 index++;
             }
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Get_Front(int count)
         {
             var elements = new TestDequeElement[count];
@@ -286,18 +275,17 @@ namespace MonoGame.Extended.Tests.Collections
             var indices = Enumerable.Range(0, count);
             foreach (var index in indices)
             {
-                TestDequeElement element;
-                deque.GetFront(out element);
+                deque.GetFront(out var element);
                 deque.RemoveFromFront();
-                Assert.IsTrue(element.Value == index);
+                Assert.True(element.Value == index);
             }
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Get_Back(int count)
         {
             var elements = new TestDequeElement[count];
@@ -312,18 +300,17 @@ namespace MonoGame.Extended.Tests.Collections
             var indices = Enumerable.Range(0, count);
             foreach (var index in indices)
             {
-                TestDequeElement element;
-                deque.GetBack(out element);
+                deque.GetBack(out var element);
                 deque.RemoveFromBack();
-                Assert.IsTrue(element.Value == count - 1 - index);
+                Assert.True(element.Value == count - 1 - index);
             }
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Get_Index(int count)
         {
             var elements = new TestDequeElement[count];
@@ -338,17 +325,16 @@ namespace MonoGame.Extended.Tests.Collections
             var indices = Enumerable.Range(0, count).ToList().Shuffle(_random);
             foreach (var index in indices)
             {
-                TestDequeElement element;
-                deque.Get(index, out element);
-                Assert.IsTrue(element.Value == index);
+                deque.Get(index, out var element);
+                Assert.True(element.Value == index);
             }
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_ForEach_Iteration(int count)
         {
             var elements = new TestDequeElement[count];
@@ -363,16 +349,16 @@ namespace MonoGame.Extended.Tests.Collections
             var counter = 0;
             foreach (var element in deque)
             {
-                Assert.IsTrue(element.Value == counter);
+                Assert.True(element.Value == counter);
                 counter++;
             }
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_ForEach_Iteration_Modified(int count)
         {
             var elements = new TestDequeElement[count];
@@ -387,17 +373,17 @@ namespace MonoGame.Extended.Tests.Collections
             var counter = 0;
             foreach (var element in deque)
             {
-                Assert.IsTrue(element.Value == counter);
+                Assert.True(element.Value == counter);
                 counter++;
                 deque.RemoveFromFront();
             }
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(50)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(50)]
         public void Deque_Remove(int count)
         {
             var elements = new TestDequeElement[count];
@@ -415,7 +401,7 @@ namespace MonoGame.Extended.Tests.Collections
                 var index = _random.Next(0, deque.Count - 1);
                 deque.RemoveAt(index);
                 counter--;
-                Assert.IsTrue(deque.Count == counter);
+                Assert.True(deque.Count == counter);
             }
         }
     }

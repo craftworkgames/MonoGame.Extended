@@ -1,14 +1,14 @@
 using System;
 using System.IO;
 using MonoGame.Extended.Content.Pipeline.Animations;
-using NUnit.Framework;
+using Xunit;
 
 namespace MonoGame.Extended.Content.Pipeline.Tests
 {
-    [TestFixture]
+    
     public class AstridAnimatorProcessorTests
     {
-        [Test]
+        [Fact]
         public void AstridAnimatorProcessor_Process_Test()
         {
             var filePath = PathExtensions.GetApplicationFullPath("TestData", "astrid-animator.aa");
@@ -19,12 +19,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             var processor = new AstridAnimatorProcessor();
             var result = processor.Process(importerResult, null);
 
-            Assert.AreEqual("astrid-animator-atlas", result.TextureAtlasAssetName);
-            Assert.AreEqual("TestData", Path.GetFileName(result.Directory));
-            Assert.AreEqual(3, result.Frames.Count);
-            Assert.AreEqual("appear_01", result.Frames[0]);
-            Assert.AreEqual("appear_02", result.Frames[1]);
-            Assert.AreEqual("die_01", result.Frames[2]);
+            Assert.Equal("astrid-animator-atlas", result.TextureAtlasAssetName);
+            Assert.Equal("TestData", Path.GetFileName(result.Directory));
+            Assert.Equal(3, result.Frames.Count);
+            Assert.Equal("appear_01", result.Frames[0]);
+            Assert.Equal("appear_02", result.Frames[1]);
+            Assert.Equal("die_01", result.Frames[2]);
         }
     }
 }

@@ -38,12 +38,13 @@ using System;
 using Demo.StarWarrior.Components;
 using Demo.StarWarrior.Templates;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarrior.Systems
 {
     [EntitySystem(GameLoopType.Update, Layer = 1)]
-    public class EnemySpawnSystem : EntitySystem
+    public class EnemySpawnSystem : ProcessingSystem
     {
         private readonly Random _random = new Random();
 
@@ -56,7 +57,7 @@ namespace Demo.StarWarrior.Systems
         {
             var viewport = GraphicsDevice.Viewport;
             var entity = EntityManager.CreateEntityFromTemplate(EnemyShipTemplate.Name);
-            var transform = entity.Get<TransformComponent>();
+            var transform = entity.Get<Transform2>();
 
             Vector2 position;
             position.X = _random.Next(viewport.Width);

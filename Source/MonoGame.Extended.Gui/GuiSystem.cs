@@ -1,11 +1,10 @@
-﻿using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.ViewportAdapters;
 using System;
-using System.ComponentModel;
+using System.Linq;
 
 namespace MonoGame.Extended.Gui
 {
@@ -13,9 +12,9 @@ namespace MonoGame.Extended.Gui
     {
         BitmapFont DefaultFont { get; }
         Vector2 CursorPosition { get; }
-        GuiControl FocusedControl { get; }
+        Control FocusedControl { get; }
 
-        void SetFocus(GuiControl focusedControl);
+        void SetFocus(Control focusedControl);
     }
 
     public class GuiSystem : IGuiContext, IRectangular
@@ -26,9 +25,7 @@ namespace MonoGame.Extended.Gui
         private readonly TouchListener _touchListener;
         private readonly KeyboardListener _keyboardListener;
 
-        private GuiControl _preFocusedControl;
-        private GuiControl _focusedControl;
-        private GuiControl _hoveredControl;
+        private Control _preFocusedControl;
 
         public GuiSystem(ViewportAdapter viewportAdapter, IGuiRenderer renderer)
         {
@@ -36,53 +33,75 @@ namespace MonoGame.Extended.Gui
             _renderer = renderer;
 
             _mouseListener = new MouseListener(viewportAdapter);
-            _mouseListener.MouseDown += (s, e) => OnPointerDown(GuiPointerEventArgs.FromMouseArgs(e));
-            _mouseListener.MouseMoved += (s, e) => OnPointerMoved(GuiPointerEventArgs.FromMouseArgs(e));
-            _mouseListener.MouseUp += (s, e) => OnPointerUp(GuiPointerEventArgs.FromMouseArgs(e));
-            _mouseListener.MouseWheelMoved += (s, e) => _focusedControl?.OnScrolled(e.ScrollWheelDelta);
+            _mouseListener.MouseDown += (s, e) => OnPointerDown(PointerEventArgs.FromMouseArgs(e));
+            _mouseListener.MouseMoved += (s, e) => OnPointerMoved(PointerEventArgs.FromMouseArgs(e));
+            _mouseListener.MouseUp += (s, e) => OnPointerUp(PointerEventArgs.FromMouseArgs(e));
+            _mouseListener.MouseWheelMoved += (s, e) => FocusedControl?.OnScrolled(e.ScrollWheelDelta);
 
             _touchListener = new TouchListener(viewportAdapter);
-            _touchListener.TouchStarted += (s, e) => OnPointerDown(GuiPointerEventArgs.FromTouchArgs(e));
-            _touchListener.TouchMoved += (s, e) => OnPointerMoved(GuiPointerEventArgs.FromTouchArgs(e));
-            _touchListener.TouchEnded += (s, e) => OnPointerUp(GuiPointerEventArgs.FromTouchArgs(e));
+            _touchListener.TouchStarted += (s, e) => OnPointerDown(PointerEventArgs.FromTouchArgs(e));
+            _touchListener.TouchMoved += (s, e) => OnPointerMoved(PointerEventArgs.FromTouchArgs(e));
+            _touchListener.TouchEnded += (s, e) => OnPointerUp(PointerEventArgs.FromTouchArgs(e));
 
             _keyboardListener = new KeyboardListener();
-            _keyboardListener.KeyTyped += (sender, args) => PropagateDown(_focusedControl, x => x.OnKeyTyped(this, args));
-            _keyboardListener.KeyPressed += (sender, args) => PropagateDown(_focusedControl, x => x.OnKeyPressed(this, args));
-
-            Screens = new GuiScreenCollection(this) { ItemAdded = InitializeScreen };
+            _keyboardListener.KeyTyped += (sender, args) => PropagateDown(FocusedControl, x => x.OnKeyTyped(this, args));
+            _keyboardListener.KeyPressed += (sender, args) => PropagateDown(FocusedControl, x => x.OnKeyPressed(this, args));
         }
 
-        public GuiScreenCollection Screens { get; }
+        public Control FocusedControl { get; private set; }
+        public Control HoveredControl { get; private set; }
 
-        public GuiControl FocusedControl { get { return _focusedControl; } }
+        private Screen _activeScreen;
+        public Screen ActiveScreen
+        {
+            get { return _activeScreen; }
+            set
+            {
+                if (_activeScreen != value)
+                {
+                    _activeScreen = value;
 
-        public GuiScreen ActiveScreen => Screens.LastOrDefault();
+                    if(_activeScreen != null)
+                        InitializeScreen(_activeScreen);
+                }
+            }
+        }
 
         public Rectangle BoundingRectangle => _viewportAdapter.BoundingRectangle;
 
         public Vector2 CursorPosition { get; set; }
 
-        public BitmapFont DefaultFont => ActiveScreen?.Skin?.DefaultFont;
-
-        private void InitializeScreen(GuiScreen screen)
+        public BitmapFont DefaultFont => Skin.Default?.DefaultFont;
+        
+        private void InitializeScreen(Screen screen)
         {
             screen.Layout(this, BoundingRectangle);
         }
 
+        public void ClientSizeChanged()
+        {
+            //ActiveScreen?.Content?.InvalidateMeasure();
+            ActiveScreen?.Layout(this, BoundingRectangle);
+        }
+
         public void Update(GameTime gameTime)
         {
+            if(ActiveScreen == null)
+                return;
+            
             _touchListener.Update(gameTime);
             _mouseListener.Update(gameTime);
             _keyboardListener.Update(gameTime);
 
-            foreach (var screen in Screens)
-            {
-                if (screen.IsLayoutRequired)
-                    screen.Layout(this, BoundingRectangle);
+            var deltaSeconds = gameTime.GetElapsedSeconds();
 
-                screen.Update(gameTime);
-            }
+            if (ActiveScreen != null && ActiveScreen.IsVisible)
+                UpdateControl(ActiveScreen.Content, deltaSeconds);
+
+            //if (ActiveScreen.IsLayoutRequired)
+            //    ActiveScreen.Layout(this, BoundingRectangle);
+
+            ActiveScreen.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime)
@@ -91,16 +110,13 @@ namespace MonoGame.Extended.Gui
 
             _renderer.Begin();
 
-            foreach (var screen in Screens)
+            if (ActiveScreen != null && ActiveScreen.IsVisible)
             {
-                if (screen.IsVisible)
-                {
-                    DrawChildren(screen.Controls, deltaSeconds);
-                    DrawWindows(screen.Windows, deltaSeconds);
-                }
+                DrawControl(ActiveScreen.Content, deltaSeconds);
+                //DrawWindows(ActiveScreen.Windows, deltaSeconds);
             }
 
-            var cursor = ActiveScreen.Skin?.Cursor;
+            var cursor = Skin.Default?.Cursor;
 
             if (cursor != null)
                 _renderer.DrawRegion(cursor.TextureRegion, CursorPosition, cursor.Color);
@@ -108,35 +124,47 @@ namespace MonoGame.Extended.Gui
             _renderer.End();
         }
 
-        private void DrawWindows(GuiWindowCollection windows, float deltaSeconds)
+        //private void DrawWindows(WindowCollection windows, float deltaSeconds)
+        //{
+        //    foreach (var window in windows)
+        //    {
+        //        window.Draw(this, _renderer, deltaSeconds);
+        //        DrawChildren(window.Controls, deltaSeconds);
+        //    }
+        //}
+
+        private void UpdateControl(Control control, float deltaSeconds)
         {
-            foreach (var window in windows)
+            if (control.IsVisible)
             {
-                window.Draw(this, _renderer, deltaSeconds);
-                DrawChildren(window.Controls, deltaSeconds);
+                control.Update(this, deltaSeconds);
+
+                foreach (var childControl in control.Children)
+                    UpdateControl(childControl, deltaSeconds);
             }
         }
 
-        private void DrawChildren(GuiControlCollection controls, float deltaSeconds)
+        private void DrawControl(Control control, float deltaSeconds)
         {
-            foreach (var control in controls.Where(c => c.IsVisible))
+            if (control.IsVisible)
             {
                 control.Draw(this, _renderer, deltaSeconds);
-                DrawChildren(control.Controls, deltaSeconds);
+
+                foreach (var childControl in control.Children)
+                    DrawControl(childControl, deltaSeconds);
             }
         }
 
-        #region Input Event Methods
-        private void OnPointerDown(GuiPointerEventArgs args)
+        private void OnPointerDown(PointerEventArgs args)
         {
             if (ActiveScreen == null || !ActiveScreen.IsVisible)
                 return;
 
             _preFocusedControl = FindControlAtPoint(args.Position);
-            PropagateDown(_hoveredControl, x => x.OnPointerDown(this, args));
+            PropagateDown(HoveredControl, x => x.OnPointerDown(this, args));
         }
 
-        private void OnPointerUp(GuiPointerEventArgs args)
+        private void OnPointerUp(PointerEventArgs args)
         {
             if (ActiveScreen == null || !ActiveScreen.IsVisible)
                 return;
@@ -149,10 +177,10 @@ namespace MonoGame.Extended.Gui
             }
 
             _preFocusedControl = null;
-            PropagateDown(_hoveredControl, x => x.OnPointerUp(this, args));
+            PropagateDown(HoveredControl, x => x.OnPointerUp(this, args));
         }
 
-        private void OnPointerMoved(GuiPointerEventArgs args)
+        private void OnPointerMoved(PointerEventArgs args)
         {
             CursorPosition = args.Position.ToVector2();
 
@@ -161,35 +189,36 @@ namespace MonoGame.Extended.Gui
 
             var hoveredControl = FindControlAtPoint(args.Position);
 
-            if (_hoveredControl != hoveredControl)
+            if (HoveredControl != hoveredControl)
             {
-                if (_hoveredControl != null && (hoveredControl == null || !hoveredControl.HasParent(_hoveredControl)))
-                    PropagateDown(_hoveredControl, x => x.OnPointerLeave(this, args));
-                _hoveredControl = hoveredControl;
-                PropagateDown(_hoveredControl, x => x.OnPointerEnter(this, args));
+                if (HoveredControl != null && (hoveredControl == null || !hoveredControl.HasParent(HoveredControl)))
+                    PropagateDown(HoveredControl, x => x.OnPointerLeave(this, args));
+
+                HoveredControl = hoveredControl;
+                PropagateDown(HoveredControl, x => x.OnPointerEnter(this, args));
             }
             else
             {
-                PropagateDown(_hoveredControl, x => x.OnPointerMove(this, args));
+                PropagateDown(HoveredControl, x => x.OnPointerMove(this, args));
             }
         }
 
-        public void SetFocus(GuiControl focusedControl)
+        public void SetFocus(Control focusedControl)
         {
-            if (_focusedControl != focusedControl)
+            if (FocusedControl != focusedControl)
             {
-                if (_focusedControl != null)
+                if (FocusedControl != null)
                 {
-                    _focusedControl.IsFocused = false;
-                    PropagateDown(_focusedControl, x => x.OnUnfocus(this));
+                    FocusedControl.IsFocused = false;
+                    PropagateDown(FocusedControl, x => x.OnUnfocus(this));
                 }
 
-                _focusedControl = focusedControl;
+                FocusedControl = focusedControl;
 
-                if (_focusedControl != null)
+                if (FocusedControl != null)
                 {
-                    _focusedControl.IsFocused = true;
-                    PropagateDown(_focusedControl, x => x.OnFocus(this));
+                    FocusedControl.IsFocused = true;
+                    PropagateDown(FocusedControl, x => x.OnFocus(this));
                 }
             }
         }
@@ -200,7 +229,7 @@ namespace MonoGame.Extended.Gui
         /// </summary>
         /// <param name="control">The control we want to check against</param>
         /// <param name="predicate">A function to check if the propagation should resume, if returns false it will continue down the tree.</param>
-        private void PropagateDown(GuiControl control, Func<GuiControl, bool> predicate)
+        private static void PropagateDown(Control control, Func<Control, bool> predicate)
         {
             while(control != null && predicate(control))
             {
@@ -208,48 +237,29 @@ namespace MonoGame.Extended.Gui
             }
         }
 
-        private GuiControl FindControlAtPoint(Point point)
+        private Control FindControlAtPoint(Point point)
         {
             if (ActiveScreen == null || !ActiveScreen.IsVisible)
                 return null;
 
-            //for(var i = Windows.Count - 1; i >= 0; i--)
-            //{
-            //    var window = Windows[i];
-            //    var control = FindControlAtPoint(window.Controls, point);
-
-            //    if (control != null)
-            //        return control;
-            //}
-
-            return FindControlAtPoint(ActiveScreen.Controls, point);
+            return FindControlAtPoint(ActiveScreen.Content, point);
         }
 
-        private GuiControl FindControlAtPoint(GuiControlCollection controls, Point point)
+        private Control FindControlAtPoint(Control control, Point point)
         {
-            var topMostControl = (GuiControl) null;
-
-            for (var i = controls.Count - 1; i >= 0; i--)
+            foreach (var controlChild in control.Children.Reverse())
             {
-                var control = controls[i];
+                var c = FindControlAtPoint(controlChild, point);
 
-                if (control.IsVisible)
-                {
-                    if (topMostControl == null && control.Contains(this, point))
-                        topMostControl = control;
-
-                    if (control.Controls.Any())
-                    {
-                        var child = FindControlAtPoint(control.Controls, point);
-
-                        if (child != null)
-                            topMostControl = child;
-                    }
-                }
+                if (c != null)
+                    return c;
             }
 
-            return topMostControl;
+
+            if (control.IsVisible && control.Contains(this, point))
+                return control;
+            
+            return null;
         }
-        #endregion
     }
 }

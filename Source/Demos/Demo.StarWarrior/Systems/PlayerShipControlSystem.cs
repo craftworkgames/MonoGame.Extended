@@ -40,12 +40,13 @@ using Demo.StarWarrior.Components;
 using Demo.StarWarrior.Templates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.BitmapFonts;
 
 namespace Demo.StarWarrior.Systems
 {
-    [Aspect(AspectType.All, typeof(PlayerComponent), typeof(TransformComponent))]
+    [Aspect(AspectType.All, typeof(PlayerComponent), typeof(Transform2))]
     [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class PlayerShipControlSystem : EntityProcessingSystem
     {
@@ -62,7 +63,7 @@ namespace Demo.StarWarrior.Systems
         [SuppressMessage("ReSharper", "InvertIf")]
         protected override void Process(GameTime gameTime, Entity entity)
         {
-            var transform = entity.Get<TransformComponent>();
+            var transform = entity.Get<Transform2>();
 
             var keyboard = Keyboard.GetState();
             var direction = Vector2.Zero;
@@ -109,11 +110,11 @@ namespace Demo.StarWarrior.Systems
             _lastState = keyboard;
         }
 
-        private void AddMissile(TransformComponent parentTransform, float angle = 90.0f, float offsetX = 0.0f)
+        private void AddMissile(Transform2 parentTransform, float angle = 90.0f, float offsetX = 0.0f)
         {
             var missile = EntityManager.CreateEntityFromTemplate(MissileTemplate.Name);
 
-            var missileTransform = missile.Get<TransformComponent>();
+            var missileTransform = missile.Get<Transform2>();
             missileTransform.Position = parentTransform.WorldPosition + new Vector2(1 + offsetX, -20);
 
             var missilePhysics = missile.Get<PhysicsComponent>();

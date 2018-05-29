@@ -1,159 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{41724C52-3D50-45BB-81EB-3C8A247EAFD1}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MonoGame.Extended</RootNamespace>
-    <AssemblyName>MonoGame.Extended</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <LangVersion>6</LangVersion>
-    <DocumentationFile>bin\Debug\MonoGame.Extended.XML</DocumentationFile>
-    <NoWarn>1591</NoWarn>
+
+  <PropertyGroup>
+    <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Release\MonoGame.Extended.XML</DocumentationFile>
+
+  <PropertyGroup>
+    <Authors>craftworkgames</Authors>
+    <Description>It makes MonoGame more awesome.</Description>
+    <PackageTags>monogame extended pipeline bmfont tiled texture atlas input viewport fps shapes sprite</PackageTags>
+    <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</PackageIconUrl>
   </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="Collections\Bag.cs" />
-    <Compile Include="Collections\DictionaryExtensions.cs" />
-    <Compile Include="Collections\KeyedCollection.cs" />
-    <Compile Include="ColorExtensions.cs" />
-    <Compile Include="FloatHelper.cs" />
-    <Compile Include="HslColor.cs" />
-    <Compile Include="IRectangular.cs" />
-    <Compile Include="Point3.cs" />
-    <Compile Include="Serialization\BaseTypeJsonConverter.cs" />
-    <Compile Include="Serialization\HslColorJsonConverter.cs" />
-    <Compile Include="Serialization\JsonReaderExtensions.cs" />
-    <Compile Include="Serialization\RangeJsonConverter.cs" />
-    <Compile Include="Serialization\ShortNameJsonContractResolver.cs" />
-    <Compile Include="Serialization\NinePatchRegion2DJsonConverter.cs" />
-    <Compile Include="Serialization\ThicknessJsonConverter.cs" />
-    <Compile Include="Size3.cs" />
-    <Compile Include="Sprites\ISpriteBatchDrawable.cs" />
-    <Compile Include="Thickness.cs" />
-    <Compile Include="BoundingRectangle.cs" />
-    <Compile Include="Point2.cs" />
-    <Compile Include="Ray2D.cs" />
-    <Compile Include="PrimitivesHelper.cs" />
-    <Compile Include="Segment2D.cs" />
-    <Compile Include="Size2.cs" />
-    <Compile Include="Serialization\ContentManagerJsonConverter.cs" />
-    <Compile Include="Serialization\TextureRegionService.cs" />
-    <Compile Include="Serialization\TextureRegion2DJsonConverter.cs" />
-    <Compile Include="EllipseF.cs" />
-    <Compile Include="Shapes\Polyline.cs" />
-    <Compile Include="Angle.cs" />
-    <Compile Include="BitmapFonts\BitmapFont.cs" />
-    <Compile Include="BitmapFonts\BitmapFontExtensions.cs" />
-    <Compile Include="BitmapFonts\BitmapFontReader.cs" />
-    <Compile Include="BitmapFonts\BitmapFontRegion.cs" />
-    <Compile Include="Collections\BitVector32.cs" />
-    <Compile Include="Collections\Deque.cs" />
-    <Compile Include="Collections\ListExtensions.cs" />
-    <Compile Include="Collections\ObjectPool.cs" />
-    <Compile Include="ColorHelper.cs" />
-    <Compile Include="Collections\IObservableCollection.cs" />
-    <Compile Include="Collections\ItemEventArgs.cs" />
-    <Compile Include="IEquatableByRef.cs" />
-    <Compile Include="Matrix2D.cs" />
-    <Compile Include="SimpleDrawableGameComponent.cs" />
-    <Compile Include="SimpleGameComponent.cs" />
-    <Compile Include="Collections\ObservableCollection.cs" />
-    <Compile Include="Vector2Extensions.cs" />
-    <Compile Include="Screens\Screen.cs" />
-    <Compile Include="Screens\ScreenGameComponent.cs" />
-    <Compile Include="Serialization\ColorJsonConverter.cs" />
-    <Compile Include="Serialization\Vector2JsonConverter.cs" />
-    <Compile Include="Serialization\Size2JsonConverter.cs" />
-    <Compile Include="IColorable.cs" />
-    <Compile Include="Collections\IPoolable.cs" />
-    <Compile Include="Content\ContentManagerExtensions.cs" />
-    <Compile Include="Camera2D.cs" />
-    <Compile Include="Content\ContentReaderExtensions.cs" />
-    <Compile Include="GameTimeExtensions.cs" />
-    <Compile Include="IMovable.cs" />
-    <Compile Include="IRotatable.cs" />
-    <Compile Include="IScalable.cs" />
-    <Compile Include="ISizable.cs" />
-    <Compile Include="IUpdate.cs" />
-    <Compile Include="FastRandom.cs" />
-    <Compile Include="RandomExtensions.cs" />
-    <Compile Include="Range.cs" />
-    <Compile Include="MatrixExtensions.cs" />
-    <Compile Include="ShapeExtensions.cs" />
-    <Compile Include="CircleF.cs" />
-    <Compile Include="Shapes\Polygon.cs" />
-    <Compile Include="RectangleF.cs" />
-    <Compile Include="RectangleExtensions.cs" />
-    <Compile Include="TextureAtlases\NinePatchRegion2D.cs" />
-    <Compile Include="Sprites\SpriteExtensions.cs" />
-    <Compile Include="TextureAtlases\TextureAtlas.cs" />
-    <Compile Include="TextureAtlases\TextureAtlasReader.cs" />
-    <Compile Include="TextureAtlases\TextureAtlasExtensions.cs" />
-    <Compile Include="TextureAtlases\TextureRegion2D.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sprites\Sprite.cs" />
-    <Compile Include="Timers\ContinuousClock.cs" />
-    <Compile Include="Timers\CountdownTimer.cs" />
-    <Compile Include="Timers\GameTimer.cs" />
-    <Compile Include="Timers\TimerState.cs" />
-    <Compile Include="Transform.cs" />
-    <Compile Include="ViewportAdapters\BoxingViewportAdapter.cs" />
-    <Compile Include="ViewportAdapters\DefaultViewportAdapter.cs" />
-    <Compile Include="ViewportAdapters\WindowViewportAdapter.cs" />
-    <Compile Include="ViewportAdapters\ScalingViewportAdapter.cs" />
-    <Compile Include="ViewportAdapters\ViewportAdapter.cs" />
-    <Compile Include="FramesPerSecondCounter.cs" />
-    <Compile Include="FramesPerSecondCounterComponent.cs" />
+    <PackageReference Include="MonoGame.Framework.Portable" Version="3.6.0.1625" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Framework.Portable.3.6.0.1625\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="mscorlib" />
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Core" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

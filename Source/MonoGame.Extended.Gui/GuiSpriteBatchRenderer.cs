@@ -47,7 +47,7 @@ namespace MonoGame.Extended.Gui
 
         public void DrawRegion(TextureRegion2D textureRegion, Rectangle rectangle, Color color, Rectangle? clippingRectangle = null)
         {
-            if(textureRegion != null)
+            if (textureRegion != null)
                 _spriteBatch.Draw(textureRegion, rectangle, color, clippingRectangle);
         }
 

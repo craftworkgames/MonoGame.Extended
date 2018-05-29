@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
@@ -8,18 +9,19 @@ namespace Demo.SpaceGame.Entities
     public class Laser : Entity
     {
         private readonly Sprite _sprite;
+        private readonly Transform2 _transform;
         private float _timeToLive;
 
         public Vector2 Position
         {
-            get { return _sprite.Position; }
-            set { _sprite.Position = value; }
+            get { return _transform.Position; }
+            set { _transform.Position = value; }
         }
 
         public float Rotation
         {
-            get { return _sprite.Rotation; }
-            set { _sprite.Rotation = value; }
+            get { return _transform.Rotation; }
+            set { _transform.Rotation = value; }
         }
 
         public Vector2 Velocity { get; set; }
@@ -27,7 +29,8 @@ namespace Demo.SpaceGame.Entities
         public Laser(TextureRegion2D textureRegion, Vector2 velocity)
         {
             _timeToLive = 1.0f;
-            _sprite = new Sprite(textureRegion)
+            _sprite = new Sprite(textureRegion);
+            _transform = new Transform2
             {
                 Scale = Vector2.One * 0.5f
             };
@@ -50,7 +53,7 @@ namespace Demo.SpaceGame.Entities
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_sprite);
+            spriteBatch.Draw(_sprite, _transform);
         }
     }
 }

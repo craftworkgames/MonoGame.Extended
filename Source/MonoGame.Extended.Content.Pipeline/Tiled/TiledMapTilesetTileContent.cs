@@ -5,8 +5,18 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     public class TiledMapTilesetTileContent
     {
+        public TiledMapTilesetTileContent()
+        {
+            Probability = 1.0f;
+            Properties = new List<TiledMapPropertyContent>();
+            Type = string.Empty;
+        }
+
         [XmlAttribute(AttributeName = "id")]
         public int LocalIdentifier { get; set; }
+
+        [XmlAttribute(AttributeName = "type")]
+        public string Type { get; set; }
 
         [XmlElement(ElementName = "terrain")]
         public TiledMapTerrainContent Terrain { get; set; }
@@ -28,13 +38,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlArray("properties")]
         [XmlArrayItem("property")]
         public List<TiledMapPropertyContent> Properties { get; set; }
-
-        public TiledMapTilesetTileContent()
-        {
-            Probability = 1.0f;
-            Properties = new List<TiledMapPropertyContent>();
-        }
-
+        
         public override string ToString()
         {
             return LocalIdentifier.ToString();

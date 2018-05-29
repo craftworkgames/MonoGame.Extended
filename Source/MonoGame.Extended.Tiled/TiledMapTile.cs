@@ -2,7 +2,9 @@
 {
     public struct TiledMapTile
     {
-        internal readonly uint GlobalTileIdentifierWithFlags;
+        public readonly ushort X;
+        public readonly ushort Y;
+        public readonly uint GlobalTileIdentifierWithFlags;
 
         public int GlobalIdentifier => (int)(GlobalTileIdentifierWithFlags & ~(uint)TiledMapTileFlipFlags.All);
         public bool IsFlippedHorizontally => (GlobalTileIdentifierWithFlags & (uint)TiledMapTileFlipFlags.FlipHorizontally) != 0;
@@ -11,9 +13,11 @@
         public bool IsBlank => GlobalIdentifier == 0;
         public TiledMapTileFlipFlags Flags => (TiledMapTileFlipFlags)(GlobalTileIdentifierWithFlags & (uint)TiledMapTileFlipFlags.All);
 
-        internal TiledMapTile(uint globalTileIdentifierWithFlags)
+        public TiledMapTile(uint globalTileIdentifierWithFlags, ushort x, ushort y)
         {
             GlobalTileIdentifierWithFlags = globalTileIdentifierWithFlags;
+            X = x;
+            Y = y;
         }
 
         public override string ToString()

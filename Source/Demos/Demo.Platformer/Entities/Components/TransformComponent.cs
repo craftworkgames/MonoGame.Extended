@@ -6,12 +6,12 @@ using MonoGame.Extended.Entities;
 namespace Demo.Platformer.Entities.Components
 {
     [EntityComponent]
-    public class TransformComponent : EntityComponent
+    public class TransformComponent : PoolableComponent
     {
         private TransformFlags _flags = TransformFlags.All; // dirty flags, set all dirty flags when created
-        private Matrix2D _localMatrix; // model space to local space
+        private Matrix2 _localMatrix; // model space to local space
         private TransformComponent _parent; // parent
-        private Matrix2D _worldMatrix; // local space to world space
+        private Matrix2 _worldMatrix; // local space to world space
         private Vector2 _position;
         private float _rotation;
         private Vector2 _scale = Vector2.One;
@@ -53,7 +53,7 @@ namespace Demo.Platformer.Entities.Components
             }
         }
 
-        public Matrix2D LocalMatrix
+        public Matrix2 LocalMatrix
         {
             get
             {
@@ -62,7 +62,7 @@ namespace Demo.Platformer.Entities.Components
             }
         }
 
-        public Matrix2D WorldMatrix
+        public Matrix2 WorldMatrix
         {
             get
             {
@@ -91,20 +91,20 @@ namespace Demo.Platformer.Entities.Components
         {
             Parent = null;
             _flags = TransformFlags.All;
-            _localMatrix = Matrix2D.Identity;
-            _worldMatrix = Matrix2D.Identity;
+            _localMatrix = Matrix2.Identity;
+            _worldMatrix = Matrix2.Identity;
             _position = Vector2.Zero;
             _rotation = 0;
             _scale = Vector2.One;
         }
 
-        public void GetLocalMatrix(out Matrix2D matrix)
+        public void GetLocalMatrix(out Matrix2 matrix)
         {
             RecalculateLocalMatrixIfNecessary();
             matrix = _localMatrix;
         }
 
-        public void GetWorldMatrix(out Matrix2D matrix)
+        public void GetWorldMatrix(out Matrix2 matrix)
         {
             RecalculateWorldMatrixIfNecessary();
             matrix = _worldMatrix;
@@ -164,12 +164,12 @@ namespace Demo.Platformer.Entities.Components
             WorldMatrixBecameDirty();
         }
 
-        private void RecalculateWorldMatrix(ref Matrix2D localMatrix, out Matrix2D matrix)
+        private void RecalculateWorldMatrix(ref Matrix2 localMatrix, out Matrix2 matrix)
         {
             if (Parent != null)
             {
                 Parent.GetWorldMatrix(out matrix);
-                Matrix2D.Multiply(ref matrix, ref localMatrix, out matrix);
+                Matrix2.Multiply(ref matrix, ref localMatrix, out matrix);
             }
             else
             {
@@ -177,19 +177,19 @@ namespace Demo.Platformer.Entities.Components
             }
         }
 
-        private void RecalculateLocalMatrix(out Matrix2D matrix)
+        private void RecalculateLocalMatrix(out Matrix2 matrix)
         {
             if (Parent != null)
             {
                 var parentPosition = Parent.Position;
-                matrix = Matrix2D.CreateTranslation(-parentPosition) * Matrix2D.CreateScale(_scale) *
-                         Matrix2D.CreateRotationZ(-_rotation) * Matrix2D.CreateTranslation(parentPosition) *
-                         Matrix2D.CreateTranslation(_position);
+                matrix = Matrix2.CreateTranslation(-parentPosition) * Matrix2.CreateScale(_scale) *
+                         Matrix2.CreateRotationZ(-_rotation) * Matrix2.CreateTranslation(parentPosition) *
+                         Matrix2.CreateTranslation(_position);
             }
             else
             {
-                matrix = Matrix2D.CreateScale(_scale) * Matrix2D.CreateRotationZ(-_rotation) *
-                         Matrix2D.CreateTranslation(_position);
+                matrix = Matrix2.CreateScale(_scale) * Matrix2.CreateRotationZ(-_rotation) *
+                         Matrix2.CreateTranslation(_position);
             }
         }
 

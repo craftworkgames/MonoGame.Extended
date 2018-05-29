@@ -38,17 +38,18 @@
 using Demo.StarWarrior.Components;
 using Demo.StarWarrior.Templates;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarrior.Systems
 {
-    [Aspect(AspectType.All, typeof(WeaponComponent), typeof(TransformComponent), typeof(EnemyComponent))]
+    [Aspect(AspectType.All, typeof(WeaponComponent), typeof(Transform2), typeof(EnemyComponent))]
     [EntitySystem(GameLoopType.Update, Layer = 1)]
     public class EnemyShooterSystem : EntityProcessingSystem
     {
         protected override void Process(GameTime gameTime, Entity entity)
         {
-            var transform = entity.Get<TransformComponent>();
+            var transform = entity.Get<Transform2>();
             var weapon = entity.Get<WeaponComponent>();
                 
             weapon.ShootTimerDelay += gameTime.ElapsedGameTime;
@@ -57,7 +58,7 @@ namespace Demo.StarWarrior.Systems
             weapon.ShootTimerDelay -= weapon.ShootDelay;
 
             var missile = EntityManager.CreateEntityFromTemplate(MissileTemplate.Name);
-            var missileTransform = missile.Get<TransformComponent>();
+            var missileTransform = missile.Get<Transform2>();
 
             var worldPosition = transform.WorldPosition;
             missileTransform.Position = worldPosition + new Vector2(0, 20);

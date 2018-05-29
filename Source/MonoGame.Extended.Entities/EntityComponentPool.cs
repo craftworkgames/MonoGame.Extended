@@ -4,10 +4,10 @@ namespace MonoGame.Extended.Entities
 {
     internal interface IComponentPool
     {
-        EntityComponent New();
+        object New();
     }
 
-    internal class ComponentPool<T> : ObjectPool<T>, IComponentPool where T : EntityComponent, IPoolable, new()
+    internal class ComponentPool<T> : ObjectPool<T>, IComponentPool where T : class, IPoolable, new()
     {
         public ComponentPool(int intitialSize = 16, ObjectPoolIsFullPolicy isFullPolicy = ObjectPoolIsFullPolicy.ReturnNull) 
             : base(CreateObject, intitialSize, isFullPolicy)
@@ -19,7 +19,7 @@ namespace MonoGame.Extended.Entities
             return new T();
         }
 
-        EntityComponent IComponentPool.New()
+        object IComponentPool.New()
         {
             return base.New();
         }

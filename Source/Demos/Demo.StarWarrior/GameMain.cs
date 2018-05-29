@@ -118,7 +118,7 @@ namespace Demo.StarWarrior
             {
                 var entity = _entityManager.CreateEntityFromTemplate(EnemyShipTemplate.Name);
 
-                var transform = entity.Get<TransformComponent>();
+                var transform = entity.Get<Transform2>();
                 var position = new Vector2
                 {
                     X = random.Next(viewport.Width - 100) + 50,
@@ -137,9 +137,9 @@ namespace Demo.StarWarrior
             var viewport = GraphicsDevice.Viewport;
 
             var entity = _entityManager.CreateEntity();
-            entity.Group = "SHIPS";
+            //entity.Group = "SHIPS";
 
-            var transform = entity.Attach<TransformComponent>();
+            var transform = entity.Attach<Transform2>();
             var position = new Vector2
             {
                 X = viewport.Width * 0.5f,

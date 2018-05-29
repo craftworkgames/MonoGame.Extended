@@ -39,24 +39,24 @@ namespace Demo.Features.Demos
             _axeSprite = new Sprite(axeTexture)
             {
                 Origin = new Vector2(243, 679),
-                Position = new Vector2(400, 0),
-                Scale = Vector2.One * 0.5f
+                //Position = new Vector2(400, 0),
+                //Scale = Vector2.One * 0.5f
             };
 
             var spikeyBallTexture = Content.Load<Texture2D>("Textures/spike_ball");
             _spikeyBallSprite = new Sprite(spikeyBallTexture)
             {
-                Position = new Vector2(400, 340)
+                //Position = new Vector2(400, 340)
             };
 
             var particleTexture = Content.Load<Texture2D>("Textures/particle");
             _particleSprite0 = new Sprite(particleTexture)
             {
-                Position = new Vector2(600, 340)
+                //Position = new Vector2(600, 340)
             };
             _particleSprite1 = new Sprite(particleTexture)
             {
-                Position = new Vector2(200, 340)
+                //Position = new Vector2(200, 340)
             };
             _particleOpacity = 0.0f;
         }
@@ -77,10 +77,10 @@ namespace Demo.Features.Demos
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _axeSprite.Rotation = MathHelper.ToRadians(180) + MathHelper.PiOver2 * 0.8f * (float)Math.Sin(gameTime.TotalGameTime.TotalSeconds);
+            //_axeSprite.Rotation = MathHelper.ToRadians(180) + MathHelper.PiOver2 * 0.8f * (float)Math.Sin(gameTime.TotalGameTime.TotalSeconds);
 
-            _spikeyBallSprite.Rotation -= deltaTime * 2.5f;
-            _spikeyBallSprite.Position = new Vector2(mouseState.X, mouseState.Y);
+            //_spikeyBallSprite.Rotation -= deltaTime * 2.5f;
+            //_spikeyBallSprite.Position = new Vector2(mouseState.X, mouseState.Y);
 
             _particleOpacity = 0.5f + (float)Math.Sin(gameTime.TotalGameTime.TotalSeconds);
             _particleSprite0.Color = Color.White * _particleOpacity;
@@ -112,10 +112,10 @@ namespace Demo.Features.Demos
         {
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
             _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
-            _spriteBatch.Draw(_axeSprite);
-            _spriteBatch.Draw(_spikeyBallSprite);
-            _spriteBatch.Draw(_particleSprite0);
-            _spriteBatch.Draw(_particleSprite1);
+            //_spriteBatch.Draw(_axeSprite);
+            //_spriteBatch.Draw(_spikeyBallSprite);
+            //_spriteBatch.Draw(_particleSprite0);
+            //_spriteBatch.Draw(_particleSprite1);
 
             // clipping test
             _spriteBatch.Draw(_clippingTextureRegion, new Rectangle(50, 50, 128, 128), Color.White, clippingRectangle: null);

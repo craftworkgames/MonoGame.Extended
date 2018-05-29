@@ -7,7 +7,7 @@ namespace Demo.Platformer.Entities.Components
 {
     [EntityComponent]
     [EntityComponentPool(InitialSize = 100)]
-    public class CollisionBodyComponent : EntityComponent
+    public class CollisionBodyComponent : PoolableComponent
     {
         public Vector2 Velocity { get; set; }
         public Size2 Size { get; set; }

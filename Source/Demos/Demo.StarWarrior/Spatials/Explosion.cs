@@ -38,6 +38,7 @@ using Demo.StarWarrior.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 
 namespace Demo.StarWarrior.Spatials
 {
@@ -45,7 +46,7 @@ namespace Demo.StarWarrior.Spatials
     {
         private static Texture2D _circle;
 
-        public static void Render(SpriteBatch spriteBatch, ContentManager contentManager, TransformComponent transform, Color color, int radius)
+        public static void Render(SpriteBatch spriteBatch, ContentManager contentManager, Transform2 transform, Color color, int radius)
         {
             if (_circle == null)
                 _circle = contentManager.Load<Texture2D>("explosion");

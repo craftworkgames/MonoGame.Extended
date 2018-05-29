@@ -1,0 +1,5 @@
+next-version: 2.0
+mode: ContinuousDelivery
+branches: {}
+ignore:
+  sha: []

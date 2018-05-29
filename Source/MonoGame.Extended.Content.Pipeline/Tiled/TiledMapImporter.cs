@@ -11,20 +11,29 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         public override TiledMapContent Import(string filePath, ContentImporterContext context)
         {
-            if (filePath == null)
-                throw new ArgumentNullException(nameof(filePath));
+            try
+            {
+                if (filePath == null)
+                    throw new ArgumentNullException(nameof(filePath));
 
-            ContentLogger.Logger = context.Logger;
-            ContentLogger.Log($"Importing '{filePath}'");
+                ContentLogger.Logger = context.Logger;
+                ContentLogger.Log($"Importing '{filePath}'");
 
-            var map = DeserializeTiledMapContent(filePath);
+                var map = DeserializeTiledMapContent(filePath);
 
-            if (map.Width > ushort.MaxValue || map.Height > ushort.MaxValue)
-                throw new InvalidContentException($"The map '{filePath} is much too large. The maximum supported width and height for a Tiled map is {ushort.MaxValue}.");
+                if (map.Width > ushort.MaxValue || map.Height > ushort.MaxValue)
+                    throw new InvalidContentException($"The map '{filePath} is much too large. The maximum supported width and height for a Tiled map is {ushort.MaxValue}.");
 
-            ContentLogger.Log($"Imported '{filePath}'");
+                ContentLogger.Log($"Imported '{filePath}'");
 
-            return map;
+                return map;
+
+            }
+            catch (Exception e)
+            {
+                context.Logger.LogImportantMessage(e.StackTrace);
+                return null;
+            }
         }
 
         private static TiledMapContent DeserializeTiledMapContent(string mapFilePath)
