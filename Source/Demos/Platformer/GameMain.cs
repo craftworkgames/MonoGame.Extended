@@ -1,8 +1,11 @@
-﻿using Autofac;
+﻿using System.Linq;
+using Autofac;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Tiled.Renderers;
 using Platformer.Collisions;
 using Platformer.Systems;
 
@@ -15,6 +18,8 @@ namespace Platformer
         private SpriteBatch _spriteBatch;
         private World _world;
         private Body _player;
+        private TiledMap _map;
+        private TiledMapRenderer _renderer;
 
         public GameMain()
         {
@@ -30,19 +35,9 @@ namespace Platformer
 
         protected override void LoadContent()
         {
-            //_entityFactory = new EntityFactory(EntityComponentSystem.EntityManager);
-            //_entityFactory.CreatePlayer(new Vector2(400, 240));
-
-            //for (var x = 0; x < 25; x++)
-            //{
-            //    for (var y = 0; y < 15; y++)
-            //    {
-            //        if(x == 0 || y == 0 || x == 24 || y == 14)
-            //            _entityFactory.CreateTile(x, y);
-
-            //    }
-            //}
-
+            _map = Content.Load<TiledMap>("test-map");
+            _renderer = new TiledMapRenderer(GraphicsDevice, _map);
+            
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _world = new World(new Vector2(0, 3600));
 
@@ -61,6 +56,31 @@ namespace Platformer
                 BodyType = BodyType.Dynamic
             };
             _world.Bodies.Add(_player);
+
+            foreach (var tileLayer in _map.TileLayers)
+            {
+                for (var x = 0; x < tileLayer.Width; x++)
+                {
+                    for (var y = 0; y < tileLayer.Height; y++)
+                    {
+                        var tile = tileLayer.GetTile((ushort)x, (ushort)y);
+
+                        if (tile.GlobalIdentifier == 1)
+                        {
+                            var tileWidth = _map.TileWidth;
+                            var tileHeight = _map.TileHeight;
+                            var block = new Body
+                            {
+                                Position = new Vector2(x * tileWidth + tileWidth * 0.5f, y * tileHeight + tileHeight * 0.5f),
+                                Size = new Vector2(tileWidth, tileHeight),
+                                BodyType = BodyType.Static
+                            };
+                            _world.Bodies.Add(block);
+
+                        }
+                    }
+                }
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -71,6 +91,8 @@ namespace Platformer
 
             if (currentKeyboardState.IsKeyDown(Keys.Escape))
                 Exit();
+
+            _renderer.Update(gameTime);
 
             _world.Update(deltaTime);
             _world.OnCollision = OnCollision;
@@ -131,9 +153,11 @@ namespace Platformer
         {
             base.Draw(gameTime);
 
+            _renderer.Draw();
+
             _spriteBatch.Begin();
 
-            foreach (var body in _world.Bodies)
+            foreach (var body in _world.Bodies.Where(b => b.BodyType == BodyType.Dynamic))
             {
                 var box = body.BoundingBox;
                 _spriteBatch.FillRectangle(new RectangleF(box.Min.X, box.Min.Y, box.Width, box.Height), body.BodyType == BodyType.Static ? Color.WhiteSmoke : Color.Green);
