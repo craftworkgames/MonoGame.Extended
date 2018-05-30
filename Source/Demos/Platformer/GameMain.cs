@@ -1,9 +1,12 @@
-﻿using System.Linq;
-using Autofac;
+﻿using Autofac;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Entities;
+using MonoGame.Extended.Input;
+using MonoGame.Extended.Sprites;
+using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using Platformer.Collisions;
@@ -13,13 +16,11 @@ namespace Platformer
 {
     public class GameMain : GameBase
     {
-        //private EntityFactory _entityFactory;
-
-        private SpriteBatch _spriteBatch;
         private World _world;
         private Body _player;
         private TiledMap _map;
         private TiledMapRenderer _renderer;
+        private Entity _playerEntity;
 
         public GameMain()
         {
@@ -35,10 +36,18 @@ namespace Platformer
 
         protected override void LoadContent()
         {
+            var dudeTexture = Content.Load<Texture2D>("hero");
+            var dudeAtlas = TextureAtlas.Create("dudeAtlas", dudeTexture, 16, 16);
+            var dude = EntityComponentSystem.EntityManager.CreateEntity("dude");
+            dude.Attach(new Sprite(dudeAtlas[0]));
+            dude.Attach(new Transform2(new Vector2(100, 100), 0, Vector2.One * 4));
+
+            _playerEntity = dude;
+
             _map = Content.Load<TiledMap>("test-map");
             _renderer = new TiledMapRenderer(GraphicsDevice, _map);
             
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            //_spriteBatch = new SpriteBatch(GraphicsDevice);
             _world = new World(new Vector2(0, 3600));
 
             var floor = new Body
@@ -86,8 +95,8 @@ namespace Platformer
         protected override void Update(GameTime gameTime)
         {
             var deltaTime = gameTime.GetElapsedSeconds();
-            var currentKeyboardState = Keyboard.GetState();
-            var mouseState = Mouse.GetState();
+            var currentKeyboardState = KeyboardExtended.GetState();
+            //var mouseState = Mouse.GetState();
 
             if (currentKeyboardState.IsKeyDown(Keys.Escape))
                 Exit();
@@ -97,79 +106,79 @@ namespace Platformer
             _world.Update(deltaTime);
             _world.OnCollision = OnCollision;
 
-            _player.Velocity = new Vector2(0, _player.Velocity.Y);
+            //_player.Velocity = new Vector2(0, _player.Velocity.Y);
 
             if (KeyboardInputService.IsKeyDown(Keys.Right))
-                _player.Velocity = new Vector2(350, _player.Velocity.Y);
+                _player.Velocity.X += 1000 * deltaTime;
+            else if (KeyboardInputService.IsKeyDown(Keys.Left))
+                _player.Velocity.X -= 1000 * deltaTime;
+            else
+                _player.Velocity.X = _player.Velocity.Y * 0.99f * deltaTime;
 
-            if (KeyboardInputService.IsKeyDown(Keys.Left))
-                _player.Velocity = new Vector2(-350, _player.Velocity.Y);
-
-            if (KeyboardInputService.IsKeyDown(Keys.Up))
+            if (currentKeyboardState.WasKeyJustUp(Keys.Up))
                 _player.Velocity = new Vector2(_player.Velocity.X, -900);
 
-            if (KeyboardInputService.IsKeyDown(Keys.Down))
-                _player.Velocity += new Vector2(0, 50) * deltaTime;
+            //if (mouseState.LeftButton == ButtonState.Pressed)
+            //{
+            //    var mousePosition = new Vector2(mouseState.X, mouseState.Y);
+            //    _mouseBox = !_mouseBox.HasValue ? new AABB(mousePosition, mousePosition) : new AABB(_mouseBox.Value.Min, mousePosition);
+            //}
+            //else
+            //{
+            //    if (_mouseBox.HasValue)
+            //    {
+            //        var box = _mouseBox.Value;
+            //        _world.Bodies.Add(new Body
+            //        {
+            //            BodyType = BodyType.Static,
+            //            Position = box.Min + box.Center,
+            //            Size = new Vector2(box.Width, box.Height)
+            //        });
+            //        _mouseBox = null;
+            //    }
+            //}
 
-            if (mouseState.LeftButton == ButtonState.Pressed)
-            {
-                var mousePosition = new Vector2(mouseState.X, mouseState.Y);
-                _mouseBox = !_mouseBox.HasValue ? new AABB(mousePosition, mousePosition) : new AABB(_mouseBox.Value.Min, mousePosition);
-            }
-            else
-            {
-                if (_mouseBox.HasValue)
-                {
-                    var box = _mouseBox.Value;
-                    _world.Bodies.Add(new Body
-                    {
-                        BodyType = BodyType.Static,
-                        Position = box.Min + box.Center,
-                        Size = new Vector2(box.Width, box.Height)
-                    });
-                    _mouseBox = null;
-                }
-            }
+            _playerEntity.Get<Transform2>().Position = _player.Position;
 
             base.Update(gameTime);
         }
 
-        private AABB? _mouseBox;
+        //private AABB? _mouseBox;
 
         private static void OnCollision(Manifold manifold)
         {
-            var player = manifold.BodyB.BodyType == BodyType.Dynamic ? manifold.BodyB : manifold.BodyA;
+            var body = manifold.BodyB.BodyType == BodyType.Dynamic ? manifold.BodyB : manifold.BodyA;
 
-            player.Position -= manifold.Normal * manifold.Penetration;
+            body.Position -= manifold.Normal * manifold.Penetration;
 
-            if(manifold.Normal.Y < 0 || manifold.Normal.Y > 0)
-                player.Velocity = new Vector2(player.Velocity.X, 0);
+            if (manifold.Normal.Y < 0 || manifold.Normal.Y > 0)
+                body.Velocity = new Vector2(body.Velocity.X, 0);
 
-            if (manifold.Normal.X < 0 || manifold.Normal.X > 0)
-                player.Velocity = new Vector2(0, player.Velocity.Y);
+            //if (manifold.Normal.X < 0 || manifold.Normal.X > 0)
+            //    body.Velocity = new Vector2(0, body.Velocity.Y);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            base.Draw(gameTime);
-
             _renderer.Draw();
 
-            _spriteBatch.Begin();
+            //_spriteBatch.Begin();
 
-            foreach (var body in _world.Bodies.Where(b => b.BodyType == BodyType.Dynamic))
-            {
-                var box = body.BoundingBox;
-                _spriteBatch.FillRectangle(new RectangleF(box.Min.X, box.Min.Y, box.Width, box.Height), body.BodyType == BodyType.Static ? Color.WhiteSmoke : Color.Green);
-            }
+            //foreach (var body in _world.Bodies.Where(b => b.BodyType == BodyType.Dynamic))
+            //{
+            //    var box = body.BoundingBox;
+            //    _spriteBatch.FillRectangle(new RectangleF(box.Min.X, box.Min.Y, box.Width, box.Height), body.BodyType == BodyType.Static ? Color.WhiteSmoke : Color.Green);
+            //}
 
-            if (_mouseBox.HasValue)
-            {
-                var box = _mouseBox.Value;
-                _spriteBatch.DrawRectangle(new RectangleF(box.Min.X, box.Min.Y, box.Width, box.Height), Color.Magenta);
-            }
+            //if (_mouseBox.HasValue)
+            //{
+            //    var box = _mouseBox.Value;
+            //    _spriteBatch.DrawRectangle(new RectangleF(box.Min.X, box.Min.Y, box.Width, box.Height), Color.Magenta);
+            //}
 
-            _spriteBatch.End();
+            //_spriteBatch.End();
+
+            base.Draw(gameTime);
         }
     }
 }

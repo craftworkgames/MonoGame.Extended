@@ -62,7 +62,7 @@ namespace Platformer
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDeviceManager.GraphicsDevice.Clear(Color.Black);
+            //GraphicsDeviceManager.GraphicsDevice.Clear(Color.Black);
             EntityComponentSystem.Draw(gameTime);
             base.Draw(gameTime);
         }

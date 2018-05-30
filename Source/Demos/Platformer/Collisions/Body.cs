@@ -13,7 +13,7 @@ namespace Platformer.Collisions
     {
         public BodyType BodyType { get; set; } = BodyType.Static;
         public Vector2 Position { get; set; }
-        public Vector2 Velocity { get; set; }
+        public Vector2 Velocity;
         public AABB BoundingBox => new AABB(Position - Size / 2f, Position + Size / 2f);
         public Vector2 Size { get; set; }
     }

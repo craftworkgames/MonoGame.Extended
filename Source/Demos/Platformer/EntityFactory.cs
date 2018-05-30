@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Sprites;
 using Platformer.Components;
 
 namespace Platformer
@@ -17,7 +18,7 @@ namespace Platformer
         public Entity CreatePlayer(Vector2 position)
         {
             var entity = _entityManager.CreateEntity();
-            entity.Attach<SpriteComponent>(s => s.Color = Color.WhiteSmoke);
+            entity.Attach<Sprite>(s => s.Color = Color.WhiteSmoke);
             entity.Attach<Transform2>(t => t.Position = position);
             entity.Attach<VelocityComponent>();
             entity.Attach<PlayerComponent>();
@@ -27,7 +28,7 @@ namespace Platformer
         public Entity CreateTile(int x, int y)
         {
             var entity = _entityManager.CreateEntity();
-            entity.Attach<SpriteComponent>(s => s.Color = Color.Blue);
+            entity.Attach<Sprite>(s => s.Color = Color.Blue);
             entity.Attach<Transform2>(t => t.Position = new Vector2(32 * x, 32 * y));
             return entity;
         }

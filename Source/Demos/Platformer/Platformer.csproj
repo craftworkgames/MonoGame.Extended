@@ -15,6 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj" />
+    <ProjectReference Include="..\..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj" />
     <ProjectReference Include="..\..\MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj" />
   </ItemGroup>
 </Project>
