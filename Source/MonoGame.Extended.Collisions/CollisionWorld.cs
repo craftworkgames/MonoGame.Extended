@@ -33,7 +33,7 @@ namespace MonoGame.Extended.Collisions
                 if (_grid != null)
                     foreach (var collidable in _grid.GetCollidables(actor.BoundingBox))
                     {
-                        var intersection = RectangleF.Intersect(collidable.BoundingBox, actor.BoundingBox);
+                        var intersection = RectangleF.Intersection(collidable.BoundingBox, actor.BoundingBox);
 
                         if (intersection.IsEmpty)
                             continue;
