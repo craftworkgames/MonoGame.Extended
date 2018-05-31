@@ -5,13 +5,14 @@ using MonoGame.Extended.Entities;
 
 namespace Platformer
 {
+    // TODO: Are we really benefiting from a base class here?
     public abstract class GameBase : Game
     {
         // ReSharper disable once NotAccessedField.Local
         protected GraphicsDeviceManager GraphicsDeviceManager { get; }
         protected IContainer Container { get; private set; }
         protected EntityComponentSystem EntityComponentSystem { get; private set; }
-        protected KeyboardInputService KeyboardInputService { get; }
+        //protected KeyboardInputService KeyboardInputService { get; }
 
         public int Width { get; }
         public int Height { get; }
@@ -28,7 +29,7 @@ namespace Platformer
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
             Content.RootDirectory = "Content";
-            KeyboardInputService = new KeyboardInputService();
+            //KeyboardInputService = new KeyboardInputService();
         }
 
         protected override void Dispose(bool disposing)
@@ -41,7 +42,7 @@ namespace Platformer
         {
             var containerBuilder = new ContainerBuilder();
 
-            containerBuilder.RegisterInstance(KeyboardInputService);
+            //containerBuilder.RegisterInstance(KeyboardInputService);
 
             RegisterDependencies(containerBuilder);
             Container = containerBuilder.Build();
@@ -55,7 +56,7 @@ namespace Platformer
 
         protected override void Update(GameTime gameTime)
         {
-            KeyboardInputService.Update();
+            //KeyboardInputService.Update();
             EntityComponentSystem.Update(gameTime);
             base.Update(gameTime);
         }

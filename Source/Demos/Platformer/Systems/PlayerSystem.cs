@@ -1,35 +1,38 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Input;
+using Platformer.Collisions;
 using Platformer.Components;
 
 namespace Platformer.Systems
 {
-    [Aspect(AspectType.All, typeof(VelocityComponent), typeof(PlayerComponent))]
+    [Aspect(AspectType.All, typeof(Body), typeof(PlayerState), typeof(Transform2))]
     [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class PlayerSystem : EntityProcessingSystem
     {
-        private readonly KeyboardInputService _inputService;
-
-        public PlayerSystem(KeyboardInputService inputService)
-        {
-            _inputService = inputService;
-        }
-
         protected override void Process(GameTime gameTime, Entity entity)
         {
-            var movement = entity.Get<VelocityComponent>();
+            var player = entity.Get<PlayerState>();
+            var transform = entity.Get<Transform2>();
+            var body = entity.Get<Body>();
+            var keyboardState = KeyboardExtended.GetState();
 
-            movement.Velocity = new Vector2(0, movement.Velocity.Y);
+            if (keyboardState.IsKeyDown(Keys.Right))
+                body.Velocity.X += 150;
 
-            if (_inputService.IsKeyDown(Keys.Left) || _inputService.IsKeyDown(Keys.A))
-                movement.Velocity = new Vector2(-260, movement.Velocity.Y);
+            if (keyboardState.IsKeyDown(Keys.Left))
+                body.Velocity.X -= 150;
 
-            if (_inputService.IsKeyDown(Keys.Right) || _inputService.IsKeyDown(Keys.D))
-                movement.Velocity = new Vector2(260, movement.Velocity.Y);
+            if (keyboardState.WasKeyJustUp(Keys.Up))
+                body.Velocity.Y -= 550 + Math.Abs(body.Velocity.X) * 0.4f;
 
-            if (_inputService.IsKeyTapped(Keys.Up) || _inputService.IsKeyTapped(Keys.W))
-                movement.Velocity = new Vector2(movement.Velocity.X, -600);
+            body.Velocity.X *= 0.7f;
+
+            // TODO: Can we remove this?
+            transform.Position = body.Position;
         }
     }
 }

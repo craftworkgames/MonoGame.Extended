@@ -27,15 +27,17 @@ namespace Platformer.Collisions
 
         public void Update(float deltaTime)
         {
-            foreach (var body in Bodies.Where(b => b.BodyType == BodyType.Dynamic))
+            var dynamicBodies = Bodies.Where(b => b.BodyType == BodyType.Dynamic).ToArray();
+
+            foreach (var body in dynamicBodies)
             {
+                body.Velocity += Gravity;
                 body.Position += body.Velocity * deltaTime;
-                body.Velocity += Gravity * deltaTime;
             }
 
-            foreach (var bodyA in Bodies)
+            foreach (var bodyB in dynamicBodies)
             {
-                foreach (var bodyB in Bodies.Where(b => b.BodyType == BodyType.Dynamic))
+                foreach (var bodyA in Bodies.Where(b => b.BodyType == BodyType.Static))
                 {
                     if (bodyA != bodyB && CollisionTester.AabbAabb(bodyA.BoundingBox, bodyB.BoundingBox))
                         _collisionPairs.Add(new CollisionPair {BodyA = bodyA, BodyB = bodyB});
