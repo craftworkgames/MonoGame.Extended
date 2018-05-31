@@ -28,7 +28,7 @@ namespace Platformer
         protected override void LoadContent()
         {
             _entityFactory = new EntityFactory(EntityComponentSystem.EntityManager, Content);
-            _entityFactory.CreatePlayer(new Vector2(100, 100));
+            _entityFactory.CreatePlayer(new Vector2(100, 240));
 
             // TOOD: Load maps and collision data more nicely :)
             _map = Content.Load<TiledMap>("test-map");

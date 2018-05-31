@@ -2,8 +2,9 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Animations;
+using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Entities;
-using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using Platformer.Collisions;
 using Platformer.Components;
@@ -27,9 +28,11 @@ namespace Platformer
             var dudeAtlas = TextureAtlas.Create("dudeAtlas", dudeTexture, 16, 16);
 
             var entity = _entityManager.CreateEntity();
-            entity.Attach(new Sprite(dudeAtlas[0]));
+            var animationFactory = new SpriteSheetAnimationFactory(dudeAtlas);
+            animationFactory.Add("idle", new SpriteSheetAnimationData(new[] {0, 1, 2}));
+            entity.Attach(new AnimatedSprite(animationFactory, "idle"));
             entity.Attach(new Transform2(position, 0, Vector2.One * 4));
-            entity.Attach(new Body { Position = new Vector2(400, 240), Size = new Vector2(32, 64), BodyType = BodyType.Dynamic });
+            entity.Attach(new Body { Position = position, Size = new Vector2(32, 64), BodyType = BodyType.Dynamic });
             entity.Attach<PlayerState>();
             return entity;
         }
