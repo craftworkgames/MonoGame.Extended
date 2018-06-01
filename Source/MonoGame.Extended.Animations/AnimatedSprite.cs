@@ -26,7 +26,9 @@ namespace MonoGame.Extended.Animations
             if (_currentAnimation == null || _currentAnimation.IsComplete || _currentAnimation.Name != name)
             {
                 _currentAnimation = _animationFactory.Create(name);
-                _currentAnimation.OnCompleted = onCompleted;
+
+                if(_currentAnimation != null)
+                    _currentAnimation.OnCompleted = onCompleted;
             }
 
             return _currentAnimation;

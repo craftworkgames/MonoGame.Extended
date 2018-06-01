@@ -29,11 +29,17 @@ namespace Platformer
 
             var entity = _entityManager.CreateEntity();
             var animationFactory = new SpriteSheetAnimationFactory(dudeAtlas);
-            animationFactory.Add("idle", new SpriteSheetAnimationData(new[] {0, 1, 2}));
+            animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 0, 1, 2, 1 }));
+            animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 6, 7, 8, 9, 10, 11 }, frameDuration: 0.1f));
+            animationFactory.Add("jump", new SpriteSheetAnimationData(new[] { 10, 12 }, frameDuration: 1.0f, isLooping: false));
+            animationFactory.Add("fall", new SpriteSheetAnimationData(new[] { 13, 14 }, frameDuration: 1.0f, isLooping: false));
+            animationFactory.Add("swim", new SpriteSheetAnimationData(new[] { 18, 19, 20, 21, 22, 23 }));
+            animationFactory.Add("kick", new SpriteSheetAnimationData(new[] { 15 }, frameDuration: 0.5f, isLooping: false));
+            animationFactory.Add("cool", new SpriteSheetAnimationData(new[] { 17 }, frameDuration: 0.5f, isLooping: false));
             entity.Attach(new AnimatedSprite(animationFactory, "idle"));
             entity.Attach(new Transform2(position, 0, Vector2.One * 4));
             entity.Attach(new Body { Position = position, Size = new Vector2(32, 64), BodyType = BodyType.Dynamic });
-            entity.Attach<PlayerState>();
+            entity.Attach<Player>();
             return entity;
         }
 

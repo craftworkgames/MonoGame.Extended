@@ -47,7 +47,7 @@ namespace MonoGame.Extended
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EqualsWithTolerence(this Vector2 value, Vector2 otherValue, float tolerance = 0.00001f)
         {
-            return (Math.Abs(value.X - otherValue.X) <= tolerance) && (Math.Abs(value.Y - otherValue.Y) <= tolerance);
+            return Math.Abs(value.X - otherValue.X) <= tolerance && (Math.Abs(value.Y - otherValue.Y) <= tolerance);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
