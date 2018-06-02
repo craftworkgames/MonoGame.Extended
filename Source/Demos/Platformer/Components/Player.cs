@@ -10,7 +10,8 @@ namespace Platformer.Components
     public enum State
     {
         Idle,
-        Attacking,
+        Kicking,
+        Punching,
         Jumping,
         Falling,
         Walking,
@@ -22,5 +23,7 @@ namespace Platformer.Components
     {
         public Facing Facing { get; set; } = Facing.Right;
         public State State { get; set; }
+        public bool IsAttacking => State == State.Kicking || State == State.Punching;
+        public bool CanJump => State == State.Idle || State == State.Walking;
     }
 }

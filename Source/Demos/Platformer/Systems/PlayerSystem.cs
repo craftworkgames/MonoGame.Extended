@@ -23,20 +23,16 @@ namespace Platformer.Systems
             var body = entity.Get<Body>();
             var keyboardState = KeyboardExtended.GetState();
             
-            if (keyboardState.WasKeyJustUp(Keys.Up))
+            if (player.CanJump)
             {
-                if (player.State != State.Jumping && player.State != State.Falling && player.State != State.Attacking)
+                if(keyboardState.WasKeyJustUp(Keys.Up))
                     body.Velocity.Y -= 550 + Math.Abs(body.Velocity.X) * 0.4f;
 
-                player.State = State.Jumping;
-            }
-
-            if (keyboardState.WasKeyJustUp(Keys.Z))
-            {
-                if(player.State == State.Idle)
+                if (keyboardState.WasKeyJustUp(Keys.Z))
+                {
                     body.Velocity.Y -= 550 + Math.Abs(body.Velocity.X) * 0.4f;
-
-                player.State = State.Attacking;
+                    player.State = player.State == State.Idle ? State.Punching : State.Kicking;
+                }
             }
             
             if (keyboardState.IsKeyDown(Keys.Right))
@@ -51,18 +47,18 @@ namespace Platformer.Systems
                 player.Facing = Facing.Left;
             }
 
-            if (body.Velocity.Y < 0)
-                player.State = State.Jumping;
-
-            if (body.Velocity.Y > 0)
-                player.State = State.Falling;
-
-            if (player.State != State.Attacking)
+            if (!player.IsAttacking)
             {
                 if (body.Velocity.X > 0 || body.Velocity.X < 0)
                     player.State = State.Walking;
+
+                if (body.Velocity.Y < 0)
+                    player.State = State.Jumping;
+
+                if (body.Velocity.Y > 0)
+                    player.State = State.Falling;
                 
-                if (body.Velocity.EqualsWithTolerence(Vector2.Zero, 5f))
+                if (body.Velocity.EqualsWithTolerence(Vector2.Zero, 5))
                     player.State = State.Idle;
             }
 
@@ -84,8 +80,11 @@ namespace Platformer.Systems
                 case State.Idle:
                     sprite.Play("idle");
                     break;
-                case State.Attacking:
+                case State.Kicking:
                     sprite.Play("kick", () => player.State = State.Idle);
+                    break;
+                case State.Punching:
+                    sprite.Play("punch", () => player.State = State.Idle);
                     break;
                 case State.Cool:
                     sprite.Play("cool");

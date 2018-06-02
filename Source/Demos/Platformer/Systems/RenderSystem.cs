@@ -12,15 +12,17 @@ namespace Platformer.Systems
     public class RenderSystem : EntityProcessingSystem
     {
         private readonly SpriteBatch _spriteBatch;
+        private readonly OrthographicCamera _camera;
 
-        public RenderSystem(SpriteBatch spriteBatch)
+        public RenderSystem(SpriteBatch spriteBatch, OrthographicCamera camera)
         {
             _spriteBatch = spriteBatch;
+            _camera = camera;
         }
 
         protected override void Begin(GameTime gameTime)
         {
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _camera.GetViewMatrix());
         }
 
         protected override void Process(GameTime gameTime, Entity entity)

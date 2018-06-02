@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using MonoGame.Extended.Entities;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using Platformer.Systems;
@@ -12,6 +14,8 @@ namespace Platformer
         private TiledMap _map;
         private TiledMapRenderer _renderer;
         private EntityFactory _entityFactory;
+        private OrthographicCamera _camera;
+        private Entity _playerEntity;
 
         public GameMain()
         {
@@ -19,7 +23,10 @@ namespace Platformer
 
         protected override void RegisterDependencies(ContainerBuilder builder)
         {
+            _camera = new OrthographicCamera(GraphicsDevice);
+
             builder.RegisterInstance(new SpriteBatch(GraphicsDevice));
+            builder.RegisterInstance(_camera);
             builder.RegisterType<RenderSystem>();
             builder.RegisterType<PlayerSystem>();
             builder.RegisterType<WorldSystem>();
@@ -28,7 +35,7 @@ namespace Platformer
         protected override void LoadContent()
         {
             _entityFactory = new EntityFactory(EntityComponentSystem.EntityManager, Content);
-            _entityFactory.CreatePlayer(new Vector2(100, 240));
+            _playerEntity = _entityFactory.CreatePlayer(new Vector2(100, 240));
 
             // TOOD: Load maps and collision data more nicely :)
             _map = Content.Load<TiledMap>("test-map");
@@ -63,13 +70,16 @@ namespace Platformer
             //    Exit();
 
             _renderer.Update(gameTime);
+            //_camera.LookAt(_playerEntity.Get<Transform2>().Position);
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            _renderer.Draw();
+            GraphicsDevice.Clear(Color.Black);
+
+            _renderer.Draw(_camera.GetViewMatrix());
 
             base.Draw(gameTime);
         }

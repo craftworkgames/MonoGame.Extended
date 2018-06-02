@@ -35,7 +35,7 @@ namespace MonoGame.Extended
 
         public float Zoom
         {
-            get { return _zoom; }
+            get => _zoom;
             set
             {
                 if ((value < MinimumZoom) || (value > MaximumZoom))
@@ -47,7 +47,7 @@ namespace MonoGame.Extended
 
         public float MinimumZoom
         {
-            get { return _minimumZoom; }
+            get => _minimumZoom;
             set
             {
                 if (value < 0)
@@ -62,7 +62,7 @@ namespace MonoGame.Extended
 
         public float MaximumZoom
         {
-            get { return _maximumZoom; }
+            get => _maximumZoom;
             set
             {
                 if (value < 0)
