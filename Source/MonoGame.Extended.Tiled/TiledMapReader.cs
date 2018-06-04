@@ -60,8 +60,7 @@ namespace MonoGame.Extended.Tiled
         
         private static TiledMapTileset ReadTileset(ContentReader reader, TiledMap map)
         {
-            var textureAssetName = reader.GetRelativeAssetName(reader.ReadString());
-            var texture = reader.ContentManager.Load<Texture2D>(textureAssetName);
+			var texture = reader.ReadExternalReference<Texture2D>();
             var firstGlobalIdentifier = reader.ReadInt32();
             var tileWidth = reader.ReadInt32();
             var tileHeight = reader.ReadInt32();
@@ -246,8 +245,7 @@ namespace MonoGame.Extended.Tiled
 
         private static TiledMapImageLayer ReadImageLayer(ContentReader reader, string name, Vector2 offset, float opacity, bool isVisible)
         {
-            var textureAssetName = reader.GetRelativeAssetName(reader.ReadString());
-            var texture = reader.ContentManager.Load<Texture2D>(textureAssetName);
+            var texture = reader.ReadExternalReference<Texture2D>();
             var x = reader.ReadSingle();
             var y = reader.ReadSingle();
             var position = new Vector2(x, y);

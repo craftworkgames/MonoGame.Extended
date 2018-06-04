@@ -4,6 +4,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Utilities;
 using CompressionMode = System.IO.Compression.CompressionMode;
 
@@ -26,6 +28,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
                 Environment.CurrentDirectory = newWorkingDirectory;
 
+				foreach (var tileset in map.Tilesets)
+					tileset.Image.Content = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(tileset.Image.Source), "");
+
                 foreach (var layer in map.Layers)
                 {
                     var imageLayer = layer as TiledMapImageLayerContent;
@@ -33,6 +38,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     if (imageLayer != null)
                     {
                         ContentLogger.Log($"Processing image layer '{imageLayer.Name}'");
+						imageLayer.Image.Content = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(imageLayer.Image.Source), "");
                         ContentLogger.Log($"Processed image layer '{imageLayer.Name}'");
                     }
 

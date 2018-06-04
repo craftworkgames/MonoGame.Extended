@@ -19,7 +19,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 ContentLogger.Logger = context.Logger;
                 ContentLogger.Log($"Importing '{filePath}'");
 
-                var map = DeserializeTiledMapContent(filePath);
+                var map = DeserializeTiledMapContent(filePath, context);
 
                 if (map.Width > ushort.MaxValue || map.Height > ushort.MaxValue)
                     throw new InvalidContentException($"The map '{filePath} is much too large. The maximum supported width and height for a Tiled map is {ushort.MaxValue}.");
@@ -36,7 +36,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             }
         }
 
-        private static TiledMapContent DeserializeTiledMapContent(string mapFilePath)
+        private static TiledMapContent DeserializeTiledMapContent(string mapFilePath, ContentImporterContext context)
         {
             using (var reader = new StreamReader(mapFilePath))
             {
@@ -54,9 +54,13 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     if (!string.IsNullOrWhiteSpace(tileset.Source))
                     {
                         var tilesetFilePath = GetTilesetFilePath(mapFilePath, tileset);
-                        map.Tilesets[i] = ImportTileset(tilesetFilePath, tilesetSerializer, tileset);
+                        map.Tilesets[i] = ImportTileset(tilesetFilePath, tilesetSerializer, tileset, context);
                     }
                 }
+
+				for (var i = 0; i < map.Layers.Count; i++)
+					if (map.Layers[i] is TiledMapImageLayerContent imageLayer)
+						context.AddDependency(imageLayer.Image.Source);
 
                 map.Name = mapFilePath;
                 return map;
@@ -73,7 +77,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             return tilesetFilePath;
         }
 
-        private static TiledMapTilesetContent ImportTileset(string tilesetFilePath, XmlSerializer tilesetSerializer, TiledMapTilesetContent tileset)
+        private static TiledMapTilesetContent ImportTileset(string tilesetFilePath, XmlSerializer tilesetSerializer, TiledMapTilesetContent tileset, ContentImporterContext context)
         {
             TiledMapTilesetContent result;
 
@@ -83,6 +87,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             {
                 var importedTileset = (TiledMapTilesetContent)tilesetSerializer.Deserialize(file);
                 importedTileset.FirstGlobalIdentifier = tileset.FirstGlobalIdentifier;
+				context.AddDependency(importedTileset.Image.Source);
                 result = importedTileset;
             }
 
