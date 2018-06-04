@@ -1,56 +1,67 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace Platformer.Collisions
 {
-    public struct CollisionPair
-    {
-        public Body BodyA;
-        public Body BodyB;
-    }
-
     public class World
     {
         public World(Vector2 gravity)
         {
             Gravity = gravity;
-            Bodies = new List<Body>();
         }
 
-        private readonly List<CollisionPair> _collisionPairs = new List<CollisionPair>();
-
         public Vector2 Gravity { get; set; }
-        public List<Body> Bodies { get; }
-        public Action<Manifold> OnCollision { get; set; }
 
+        private readonly List<Body> _dynamicBodies = new List<Body>();
+        private readonly List<Body> _staticBodies = new List<Body>();
+
+        public void AddBody(Body body)
+        {
+            if (body.BodyType == BodyType.Dynamic)
+                _dynamicBodies.Add(body);
+            else
+                _staticBodies.Add(body);
+        }
+
+        public void RemoveBody(Body body)
+        {
+            if (body.BodyType == BodyType.Dynamic)
+                _dynamicBodies.Remove(body);
+            else
+                _staticBodies.Remove(body);
+        }
+        
         public void Update(float deltaTime)
         {
-            var dynamicBodies = Bodies.Where(b => b.BodyType == BodyType.Dynamic).ToArray();
-
-            foreach (var body in dynamicBodies)
-            {
+            // apply gravity (and other forces?)
+            foreach (var body in _dynamicBodies)
                 body.Velocity += Gravity;
-                body.Position += body.Velocity * deltaTime;
-            }
 
-            foreach (var bodyB in dynamicBodies)
+            foreach (var body in _dynamicBodies)
             {
-                foreach (var bodyA in Bodies.Where(b => b.BodyType == BodyType.Static))
+                body.Position.X += body.Velocity.X * deltaTime;
+                ResolveCollisions(body);
+
+                body.Position.Y += body.Velocity.Y * deltaTime;
+                ResolveCollisions(body);
+            }
+        }
+
+        private void ResolveCollisions(Body dynamicBody)
+        {
+            foreach (var staticBody in _staticBodies)
+            {
+                var vector = staticBody.Position - dynamicBody.Position;
+
+                if (CollisionTester.AabbAabb(dynamicBody.BoundingBox, staticBody.BoundingBox, vector, out var manifold))
                 {
-                    if (bodyA != bodyB && CollisionTester.AabbAabb(bodyA.BoundingBox, bodyB.BoundingBox))
-                        _collisionPairs.Add(new CollisionPair {BodyA = bodyA, BodyB = bodyB});
+                    dynamicBody.Position -= manifold.Normal * manifold.Penetration;
+                    dynamicBody.Velocity = dynamicBody.Velocity * new Vector2(Math.Abs(manifold.Normal.Y), Math.Abs(manifold.Normal.X));
                 }
             }
 
-            foreach (var collisionPair in _collisionPairs)
-            {
-                if (CollisionTester.AabbAabb(collisionPair.BodyA, collisionPair.BodyB, out var manifold))
-                    OnCollision?.Invoke(manifold);
-            }
-
-            _collisionPairs.Clear();
+            // TODO: Dynamic bodies colliding with dynamic bodies.
         }
     }
 }

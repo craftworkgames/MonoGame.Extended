@@ -13,19 +13,19 @@ namespace Platformer.Systems
 
         public WorldSystem()
         {
-            _world = new World(new Vector2(0, 60)) {OnCollision = OnCollision};
+            _world = new World(new Vector2(0, 60));// {OnCollision = OnCollision};
         }
 
         public override void OnEntityAdded(Entity entity)
         {
             var body = entity.Get<Body>();
-            _world.Bodies.Add(body);
+            _world.AddBody(body);
         }
 
         public override void OnEntityRemoved(Entity entity)
         {
             var body = entity.Get<Body>();
-            _world.Bodies.Remove(body);
+            _world.RemoveBody(body);
         }
 
         protected override void Process(GameTime gameTime)
@@ -40,17 +40,17 @@ namespace Platformer.Systems
         {
         }
 
-        private static void OnCollision(Manifold manifold)
-        {
-            var body = manifold.BodyB.BodyType == BodyType.Dynamic ? manifold.BodyB : manifold.BodyA;
+        //private static void OnCollision(Manifold manifold)
+        //{
+        //    var body = manifold.BodyB.BodyType == BodyType.Dynamic ? manifold.BodyB : manifold.BodyA;
 
-            body.Position -= manifold.Normal * manifold.Penetration;
+        //    body.Position -= manifold.Normal * manifold.Penetration;
 
-            if (manifold.Normal.Y < 0 || manifold.Normal.Y > 0)
-                body.Velocity.Y = 0;
+        //    if (manifold.Normal.Y < 0 || manifold.Normal.Y > 0)
+        //        body.Velocity.Y = 0;
 
-            //if (manifold.Normal.X < 0 || manifold.Normal.X > 0)
-            //    body.Velocity = new Vector2(0, body.Velocity.Y);
-        }
+        //    //if (manifold.Normal.X < 0 || manifold.Normal.X > 0)
+        //    //    body.Velocity = new Vector2(0, body.Velocity.Y);
+        //}
     }
 }

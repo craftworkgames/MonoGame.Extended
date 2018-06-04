@@ -11,10 +11,10 @@ namespace Platformer.Collisions
     [EntityComponent]
     public class Body
     {
-        public BodyType BodyType { get; set; } = BodyType.Static;
-        public Vector2 Position { get; set; }
+        public BodyType BodyType = BodyType.Static;
+        public Vector2 Position;
         public Vector2 Velocity;
         public AABB BoundingBox => new AABB(Position - Size / 2f, Position + Size / 2f);
-        public Vector2 Size { get; set; }
+        public Vector2 Size;
     }
 }

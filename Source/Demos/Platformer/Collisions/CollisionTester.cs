@@ -17,13 +17,9 @@ namespace Platformer.Collisions
             return true;
         }
         
-        public static bool AabbAabb(Body bodyA, Body bodyB, out Manifold manifold)
+        public static bool AabbAabb(AABB aBox, AABB bBox, Vector2 vector, out Manifold manifold)
         {
-            manifold = new Manifold {BodyA = bodyA, BodyB = bodyB};
-
-            var aBox = bodyA.BoundingBox;
-            var bBox = bodyB.BoundingBox;
-            var vector = bodyA.Position - bodyB.Position;
+            manifold = new Manifold();
 
             // Calculate half extents along x axis
             var axExtent = (aBox.Max.X - aBox.Min.X) / 2f;
