@@ -50,39 +50,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         private static void WriteTileset(ContentWriter writer, TiledMapTilesetContent tileset)
         {
-			writer.WriteObject(tileset.Image.Content);
             writer.Write(tileset.FirstGlobalIdentifier);
-            writer.Write(tileset.TileWidth);
-            writer.Write(tileset.TileHeight);
-            writer.Write(tileset.TileCount);
-            writer.Write(tileset.Spacing);
-            writer.Write(tileset.Margin);
-            writer.Write(tileset.Columns);
-            writer.Write(tileset.Tiles.Count);
-
-            foreach (var tilesetTile in tileset.Tiles)
-                WriteTilesetTile(writer, tilesetTile);
-
-            writer.WriteTiledMapProperties(tileset.Properties);
-        }
-
-        private static void WriteTilesetTile(ContentWriter writer, TiledMapTilesetTileContent tilesetTile)
-        {
-            writer.Write(tilesetTile.LocalIdentifier);
-            writer.Write(tilesetTile.Type);
-            writer.Write(tilesetTile.Frames.Count);
-            writer.Write(tilesetTile.Objects.Count);
-
-            foreach (var @object in tilesetTile.Objects)
-                WriteObject(writer, @object);
-
-            foreach (var frame in tilesetTile.Frames)
-            {
-                writer.Write(frame.TileIdentifier);
-                writer.Write(frame.Duration);
-            }
-
-            writer.WriteTiledMapProperties(tilesetTile.Properties);
+			TiledMapTilesetWriter.WriteTileset(writer, tileset);
         }
 
         private static void WriteLayers(ContentWriter writer, IReadOnlyCollection<TiledMapLayerContent> layers)
