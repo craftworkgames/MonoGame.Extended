@@ -50,7 +50,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         private static void WriteTileset(ContentWriter writer, TiledMapTilesetContent tileset)
         {
-			writer.WriteExternalReference(tileset.Image.Content);
+			writer.WriteObject(tileset.Image.Content);
             writer.Write(tileset.FirstGlobalIdentifier);
             writer.Write(tileset.TileWidth);
             writer.Write(tileset.TileHeight);
@@ -123,7 +123,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         private static void WriteImageLayer(ContentWriter writer, TiledMapImageLayerContent imageLayer)
         {
-            writer.WriteExternalReference(imageLayer.Image.Content);
+            writer.WriteExternalReference(imageLayer.Image.ContentRef);
             writer.Write(new Vector2(imageLayer.X, imageLayer.Y));
         }
 

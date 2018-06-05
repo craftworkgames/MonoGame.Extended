@@ -60,7 +60,7 @@ namespace MonoGame.Extended.Tiled
         
         private static TiledMapTileset ReadTileset(ContentReader reader, TiledMap map)
         {
-			var texture = reader.ReadExternalReference<Texture2D>();
+			var texture = reader.ReadObject<Texture2D>();
             var firstGlobalIdentifier = reader.ReadInt32();
             var tileWidth = reader.ReadInt32();
             var tileHeight = reader.ReadInt32();
