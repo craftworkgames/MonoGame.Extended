@@ -36,7 +36,6 @@ namespace Platformer
         {
             _entityFactory = new EntityFactory(EntityComponentSystem.EntityManager, Content);
             _playerEntity = _entityFactory.CreatePlayer(new Vector2(100, 240));
-
             // TOOD: Load maps and collision data more nicely :)
             _map = Content.Load<TiledMap>("test-map");
             _renderer = new TiledMapRenderer(GraphicsDevice, _map);
@@ -58,6 +57,11 @@ namespace Platformer
                     }
                 }
             }
+
+            
+
+            //_entityFactory.CreateBlue(new Vector2(600, 100));
+
         }
 
         protected override void Update(GameTime gameTime)

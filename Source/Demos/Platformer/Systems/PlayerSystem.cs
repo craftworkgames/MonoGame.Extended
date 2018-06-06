@@ -96,7 +96,7 @@ namespace Platformer.Systems
             body.Velocity.X *= 0.7f;
 
             // TODO: Can we remove this?
-            transform.Position = body.Position;
+            //transform.Position = body.Position;
         }
     }
 }

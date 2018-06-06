@@ -38,13 +38,13 @@ namespace Platformer.Collisions
             foreach (var body in _dynamicBodies)
                 body.Velocity += Gravity;
 
-            foreach (var body in _dynamicBodies)
+            foreach (var dynamicBody in _dynamicBodies)
             {
-                body.Position.X += body.Velocity.X * deltaTime;
-                ResolveCollisions(body);
+                dynamicBody.Position.X += dynamicBody.Velocity.X * deltaTime;
+                ResolveCollisions(dynamicBody);
 
-                body.Position.Y += body.Velocity.Y * deltaTime;
-                ResolveCollisions(body);
+                dynamicBody.Position.Y += dynamicBody.Velocity.Y * deltaTime;
+                ResolveCollisions(dynamicBody);
             }
         }
 

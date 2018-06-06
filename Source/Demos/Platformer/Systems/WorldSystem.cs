@@ -5,7 +5,7 @@ using Platformer.Collisions;
 
 namespace Platformer.Systems
 {
-    [Aspect(AspectType.All, typeof(Body))]
+    [Aspect(AspectType.All, typeof(Body), typeof(Transform2))]
     [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class WorldSystem : EntityProcessingSystem
     {
@@ -38,19 +38,10 @@ namespace Platformer.Systems
 
         protected override void Process(GameTime gameTime, Entity entity)
         {
+            var transform = entity.Get<Transform2>();
+            var body = entity.Get<Body>();
+
+            transform.Position = body.Position;
         }
-
-        //private static void OnCollision(Manifold manifold)
-        //{
-        //    var body = manifold.BodyB.BodyType == BodyType.Dynamic ? manifold.BodyB : manifold.BodyA;
-
-        //    body.Position -= manifold.Normal * manifold.Penetration;
-
-        //    if (manifold.Normal.Y < 0 || manifold.Normal.Y > 0)
-        //        body.Velocity.Y = 0;
-
-        //    //if (manifold.Normal.X < 0 || manifold.Normal.X > 0)
-        //    //    body.Velocity = new Vector2(0, body.Velocity.Y);
-        //}
     }
 }
