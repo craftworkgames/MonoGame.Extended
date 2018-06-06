@@ -16,10 +16,10 @@ namespace MonoGame.Extended.Tiled
 			if (existingInstance != null)
 				return existingInstance;
 
-			return ReadTileset(reader, 0);
+			return ReadTileset(reader);
 		}
 
-		public static TiledMapTileset ReadTileset(ContentReader reader, int firstGlobalIdentifier)
+		public static TiledMapTileset ReadTileset(ContentReader reader)
 		{
 			var texture = reader.ReadObject<Texture2D>();
             var tileWidth = reader.ReadInt32();
@@ -30,7 +30,7 @@ namespace MonoGame.Extended.Tiled
             var columns = reader.ReadInt32();
             var explicitTileCount = reader.ReadInt32();
 
-            var tileset = new TiledMapTileset(texture, firstGlobalIdentifier, tileWidth, tileHeight, tileCount, spacing, margin, columns);
+            var tileset = new TiledMapTileset(texture, tileWidth, tileHeight, tileCount, spacing, margin, columns);
 
             for (var tileIndex = 0; tileIndex < explicitTileCount; tileIndex++)
             {
@@ -102,11 +102,8 @@ namespace MonoGame.Extended.Tiled
 					mapObject = new TiledMapRectangleObject(identifier, name, size, position, rotation, opacity, isVisible, type);
 					break;
 				case TiledMapObjectType.Tile:
-					var globalTileIdentifierWithFlags = reader.ReadUInt32();
-					var tile = new TiledMapTile(globalTileIdentifierWithFlags, (ushort)position.X, (ushort)position.Y);
-					var localTileIdentifier = tile.GlobalIdentifier - tileset.FirstGlobalIdentifier;
-					var tilesetTile = tileset.Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier);
-					mapObject = new TiledMapTileObject(identifier, name, tileset, tilesetTile, size, position, rotation, opacity, isVisible, type);
+					reader.ReadUInt32(); // Tile objects within TiledMapTilesetTiles currently ignore the gid and behave like rectangle objects.
+					mapObject = new TiledMapRectangleObject(identifier, name, size, position, rotation, opacity, isVisible, type);
 					break;
 				case TiledMapObjectType.Ellipse:
 					mapObject = new TiledMapEllipseObject(identifier, name, size, position, rotation, opacity, isVisible);

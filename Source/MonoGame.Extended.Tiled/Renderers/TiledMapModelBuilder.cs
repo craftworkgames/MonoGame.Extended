@@ -44,12 +44,14 @@ namespace MonoGame.Extended.Tiled.Renderers
 
             foreach (var tileset in map.Tilesets)
             {
+				var firstGlobalIdentifier = map.GetTilesetFirstGlobalIdentifier(tileset);
+				var lastGlobalIdentifier = tileset.TileCount + firstGlobalIdentifier - 1;
                 var texture = tileset.Texture;
 
-                foreach (var tile in tileLayer.Tiles.Where(t => tileset.ContainsGlobalIdentifier(t.GlobalIdentifier)))
+                foreach (var tile in tileLayer.Tiles.Where(t => firstGlobalIdentifier <= t.GlobalIdentifier && t.GlobalIdentifier <= lastGlobalIdentifier))
                 {
                     var tileGid = tile.GlobalIdentifier;
-                    var localTileIdentifier = tileGid - tileset.FirstGlobalIdentifier;
+                    var localTileIdentifier = tileGid - firstGlobalIdentifier;
                     var position = GetTilePosition(map, tile);
                     var tilesetColumns = tileset.Columns == 0 ? 1 : tileset.Columns; // fixes a problem (what problem exactly?)
                     var sourceRectangle = TiledMapHelper.GetTileSourceRectangle(localTileIdentifier, tileset.TileWidth, tileset.TileHeight, tilesetColumns, tileset.Margin, tileset.Spacing);

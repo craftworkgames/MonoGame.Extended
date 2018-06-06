@@ -53,23 +53,20 @@ namespace MonoGame.Extended.Tiled
 
             for (var i = 0; i < tilesetCount; i++)
             {
+				var firstGlobalIdentifier = reader.ReadInt32();
                 var tileset = ReadTileset(reader, map);
-                map.AddTileset(tileset);
+                map.AddTileset(tileset, firstGlobalIdentifier);
             }
         }
         
         private static TiledMapTileset ReadTileset(ContentReader reader, TiledMap map)
         {
 			TiledMapTileset tileset;
-            var firstGlobalIdentifier = reader.ReadInt32();
 			var external = reader.ReadBoolean();
 			if (external)
-			{
 				tileset = reader.ReadExternalReference<TiledMapTileset>();
-				tileset.FirstGlobalIdentifier = firstGlobalIdentifier;
-			}
 			else
-				tileset = TiledMapTilesetReader.ReadTileset(reader, firstGlobalIdentifier);
+				tileset = TiledMapTilesetReader.ReadTileset(reader);
 
 			return tileset;
         }
@@ -162,7 +159,7 @@ namespace MonoGame.Extended.Tiled
                     var globalTileIdentifierWithFlags = reader.ReadUInt32();
                     var tile = new TiledMapTile(globalTileIdentifierWithFlags, (ushort)position.X, (ushort)position.Y);
                     var tileset = map.GetTilesetByTileGlobalIdentifier(tile.GlobalIdentifier);
-                    var localTileIdentifier = tile.GlobalIdentifier - tileset.FirstGlobalIdentifier;
+                    var localTileIdentifier = tile.GlobalIdentifier - map.GetTilesetFirstGlobalIdentifier(tileset);
                     var tilesetTile = tileset.Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier);
                     mapObject = new TiledMapTileObject(identifier, name, tileset, tilesetTile, size, position, rotation, opacity, isVisible, type);
                     break;
