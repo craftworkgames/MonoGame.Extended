@@ -60,8 +60,16 @@ namespace MonoGame.Extended.Tiled
         
         private static TiledMapTileset ReadTileset(ContentReader reader, TiledMap map)
         {
+			TiledMapTileset tileset;
             var firstGlobalIdentifier = reader.ReadInt32();
-			var tileset = TiledMapTilesetReader.ReadTileset(reader, firstGlobalIdentifier);
+			var external = reader.ReadBoolean();
+			if (external)
+			{
+				tileset = reader.ReadExternalReference<TiledMapTileset>();
+				tileset.FirstGlobalIdentifier = firstGlobalIdentifier;
+			}
+			else
+				tileset = TiledMapTilesetReader.ReadTileset(reader, firstGlobalIdentifier);
 
 			return tileset;
         }

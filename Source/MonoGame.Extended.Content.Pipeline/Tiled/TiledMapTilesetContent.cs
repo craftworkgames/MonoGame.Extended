@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework.Content.Pipeline;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
@@ -6,6 +7,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     [XmlRoot(ElementName = "tileset")]
     public class TiledMapTilesetContent
     {
+		[XmlIgnore]
+		public ExternalReference<TiledMapTilesetContent> Content { get; set; }
+
         [XmlAttribute(AttributeName = "firstgid")]
         public int FirstGlobalIdentifier { get; set; }
 

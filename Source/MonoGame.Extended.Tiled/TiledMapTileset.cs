@@ -23,7 +23,7 @@ namespace MonoGame.Extended.Tiled
 
         public string Name => Texture.Name;
         public Texture2D Texture { get; }
-        public int FirstGlobalIdentifier { get; }
+        public int FirstGlobalIdentifier { get; internal set; }
         public int TileWidth { get; }
         public int TileHeight { get; }
         public int Spacing { get; }

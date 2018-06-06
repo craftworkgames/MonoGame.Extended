@@ -29,7 +29,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 Environment.CurrentDirectory = newWorkingDirectory;
 
 				foreach (var tileset in map.Tilesets)
-					tileset.Image.Content = context.BuildAndLoadAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(tileset.Image.Source), "");
+				{
+					if (String.IsNullOrWhiteSpace(tileset.Source))
+						tileset.Image.Content = context.BuildAndLoadAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(tileset.Image.Source), "");
+					else
+					{
+						tileset.Content = context.BuildAsset<TiledMapTilesetContent, TiledMapTilesetContent>(new ExternalReference<TiledMapTilesetContent>(tileset.Source), "");
+					}
+				}
 
                 foreach (var layer in map.Layers)
                 {

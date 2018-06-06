@@ -51,7 +51,16 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         private static void WriteTileset(ContentWriter writer, TiledMapTilesetContent tileset)
         {
             writer.Write(tileset.FirstGlobalIdentifier);
-			TiledMapTilesetWriter.WriteTileset(writer, tileset);
+			if (tileset.Content != null)
+			{
+				writer.Write(true);
+				writer.WriteExternalReference(tileset.Content);
+			}
+			else
+			{
+				writer.Write(false);
+				TiledMapTilesetWriter.WriteTileset(writer, tileset);
+			}
         }
 
         private static void WriteLayers(ContentWriter writer, IReadOnlyCollection<TiledMapLayerContent> layers)
