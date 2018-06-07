@@ -59,8 +59,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 }
 
 				for (var i = 0; i < map.Layers.Count; i++)
+				{
 					if (map.Layers[i] is TiledMapImageLayerContent imageLayer)
 						context.AddDependency(imageLayer.Image.Source);
+					if (map.Layers[i] is TiledMapObjectLayerContent objectLayer)
+						foreach (var obj in objectLayer.Objects)
+							if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
+								context.AddDependency(obj.TemplateSource);
+				}
 
                 map.Name = mapFilePath;
                 return map;
@@ -88,6 +94,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 var importedTileset = (TiledMapTilesetContent)tilesetSerializer.Deserialize(file);
                 importedTileset.FirstGlobalIdentifier = tileset.FirstGlobalIdentifier;
 				context.AddDependency(importedTileset.Image.Source);
+
+				foreach (var tile in importedTileset.Tiles)
+					foreach (var obj in tile.Objects)
+						if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
+							context.AddDependency(obj.TemplateSource);
+
                 result = importedTileset;
             }
 

@@ -42,6 +42,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 				context.AddDependency(tileset.Image.Source);
 
+				foreach (var tile in tileset.Tiles)
+					foreach (var obj in tile.Objects)
+						if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
+							context.AddDependency(obj.TemplateSource);
+
 				return tileset;
 			}
 		}

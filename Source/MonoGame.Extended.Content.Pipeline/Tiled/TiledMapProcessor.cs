@@ -40,33 +40,37 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
                 foreach (var layer in map.Layers)
                 {
-                    var imageLayer = layer as TiledMapImageLayerContent;
-
-                    if (imageLayer != null)
-                    {
-                        ContentLogger.Log($"Processing image layer '{imageLayer.Name}'");
+					if (layer is TiledMapImageLayerContent imageLayer)
+					{
+						ContentLogger.Log($"Processing image layer '{imageLayer.Name}'");
 						imageLayer.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(imageLayer.Image.Source), "");
-                        ContentLogger.Log($"Processed image layer '{imageLayer.Name}'");
-                    }
+						ContentLogger.Log($"Processed image layer '{imageLayer.Name}'");
+					}
 
-                    var tileLayer = layer as TiledMapTileLayerContent;
+					if (layer is TiledMapTileLayerContent tileLayer)
+					{
+						var data = tileLayer.Data;
+						var encodingType = data.Encoding ?? "xml";
+						var compressionType = data.Compression ?? "xml";
 
-                    if (tileLayer != null)
-                    {
-                        var data = tileLayer.Data;
-                        var encodingType = data.Encoding ?? "xml";
-                        var compressionType = data.Compression ?? "xml";
+						ContentLogger.Log(
+							$"Processing tile layer '{tileLayer.Name}': Encoding: '{encodingType}', Compression: '{compressionType}'");
 
-                        ContentLogger.Log(
-                            $"Processing tile layer '{tileLayer.Name}': Encoding: '{encodingType}', Compression: '{compressionType}'");
+						var tileData = DecodeTileLayerData(encodingType, tileLayer);
+						var tiles = CreateTiles(map.RenderOrder, map.Width, map.Height, tileData);
+						tileLayer.Tiles = tiles;
 
-                        var tileData = DecodeTileLayerData(encodingType, tileLayer);
-                        var tiles = CreateTiles(map.RenderOrder, map.Width, map.Height, tileData);
-                        tileLayer.Tiles = tiles;
+						ContentLogger.Log($"Processed tile layer '{tileLayer}': {tiles.Length} tiles");
+					}
 
-                        ContentLogger.Log($"Processed tile layer '{tileLayer}': {tiles.Length} tiles");
-                    }
-                }
+					if (layer is TiledMapObjectLayerContent objectLayer)
+					{
+						ContentLogger.Log($"Processing object layer '{objectLayer.Name}'");
+						foreach (var obj in objectLayer.Objects)
+							TiledMapObjectContent.Process(obj, context);
+						ContentLogger.Log($"Processed object layer '{objectLayer.Name}'");
+					}
+				}
 
                 Environment.CurrentDirectory = previousWorkingDirectory;
                 return map;
