@@ -2,14 +2,19 @@
 
 namespace MonoGame.Extended
 {
+    /// <summary>
+    ///     Base class for shapes.
+    /// </summary>
+    /// <remakarks>
+    ///     Created to allow checking intersection between shapes of different types.
+    /// </remakarks>
     public interface IShapeF
     {
-        bool Intersects(IShapeF other);
     }
 
     public static class Shape
     {
-        public static bool Intersects(IShapeF a, IShapeF b)
+        public static bool Intersects(this IShapeF a, IShapeF b)
         {
             var intersects = false;
 

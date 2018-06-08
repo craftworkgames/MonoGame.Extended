@@ -677,11 +677,6 @@ namespace MonoGame.Extended
             return $"{{X: {X}, Y: {Y}, Width: {Width}, Height: {Height}";
         }
 
-        public bool Intersects(IShapeF other)
-        {
-            return Shape.Intersects(this, other);
-        }
-
         internal string DebugDisplayString => string.Concat(X, "  ", Y, "  ", Width, "  ", Height);
     }
 }

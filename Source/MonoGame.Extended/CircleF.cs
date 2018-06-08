@@ -492,11 +492,6 @@ namespace MonoGame.Extended
             return $"Centre: {Center}, Radius: {Radius}";
         }
 
-        public bool Intersects(IShapeF other)
-        {
-            return Shape.Intersects(this, other);
-        }
-
         internal string DebugDisplayString => ToString();
     }
 }
