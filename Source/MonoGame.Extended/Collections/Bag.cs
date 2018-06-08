@@ -55,7 +55,7 @@ namespace MonoGame.Extended.Collections
 
         public T this[int index]
         {
-            get { return _items[index]; }
+            get => _items[index];
             set
             {
                 EnsureCapacity(index + 1);

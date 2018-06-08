@@ -1,12 +1,9 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
+﻿using MonoGame.Extended.Entities.Legacy;
 using MonoGame.Extended.Gui.Tests.Implementation;
 using Xunit;
 
-namespace MonoGame.Extended.Gui.Tests
+namespace MonoGame.Extended.Entities.Tests
 {
-    
     public class EntityTemplateTests
     {
         [Fact]

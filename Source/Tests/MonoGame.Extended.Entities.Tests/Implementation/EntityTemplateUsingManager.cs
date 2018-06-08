@@ -1,4 +1,5 @@
 ﻿using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Legacy;
 
 namespace MonoGame.Extended.Gui.Tests.Implementation
 {

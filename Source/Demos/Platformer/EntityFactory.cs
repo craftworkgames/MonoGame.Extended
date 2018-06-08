@@ -5,6 +5,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Legacy;
 using MonoGame.Extended.TextureAtlases;
 using Platformer.Collisions;
 using Platformer.Components;

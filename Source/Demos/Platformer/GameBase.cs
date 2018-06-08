@@ -2,6 +2,7 @@
 using Autofac;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Legacy;
 
 namespace Platformer
 {
