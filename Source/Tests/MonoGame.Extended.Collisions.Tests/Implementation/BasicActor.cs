@@ -3,17 +3,17 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Collisions.Tests
 {
-    public class BasicActor : IActorTarget
+    public class BasicActor : ICollisionActor
     {
         public Vector2 Position { get; set; }
-        public RectangleF BoundingBox { get; set; }
+        public IShapeF Bounds { get; set; }
         public Vector2 Velocity { get; set; }
 
         public BasicActor()
         {
-            BoundingBox = new RectangleF(0f, 0f, 1f, 1f);
+            Bounds = new RectangleF(0f, 0f, 1f, 1f);
         }
-        public void OnCollision(CollisionInfo collisionInfo)
+        public void OnCollision(CollisionEventArgs collisionInfo)
         {
             if (collisionInfo.Other is BasicActor)
             {

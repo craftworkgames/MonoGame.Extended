@@ -12,8 +12,8 @@ namespace MonoGame.Extended.Collisions
     /// </summary>
     public class CollisionComponent : SimpleGameComponent
     {
-        private readonly Dictionary<IActorTarget, QuadtreeData> _targetDataDictionary =
-            new Dictionary<IActorTarget, QuadtreeData>();
+        private readonly Dictionary<ICollisionActor, QuadtreeData> _targetDataDictionary =
+            new Dictionary<ICollisionActor, QuadtreeData>();
 
         private readonly Quadtree _collisionTree;
 
@@ -28,7 +28,7 @@ namespace MonoGame.Extended.Collisions
             foreach (var value in _targetDataDictionary.Values)
             {
                 _collisionTree.Remove(value);
-                value.Bounds = value.Target.BoundingBox;
+                value.Bounds = value.Target.Bounds;
                 _collisionTree.Insert(value);
             }
 
@@ -36,13 +36,13 @@ namespace MonoGame.Extended.Collisions
             foreach (var value in _targetDataDictionary.Values)
             {
                 var target = value.Target;
-                var collisions =_collisionTree.Query(target.BoundingBox)
+                var collisions =_collisionTree.Query(target.Bounds)
                     .Where(data => data.Target != target);
 
                 // Generate list of collision Infos
                 foreach (var other in collisions)
                 {
-                    var collisionInfo = new CollisionInfo
+                    var collisionInfo = new CollisionEventArgs()
                     {
                         Other = other.Target,
                         PenetrationVector = CalculatePenetrationVector(value.Bounds, other.Bounds)
@@ -53,7 +53,7 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
-        public void Insert(IActorTarget target)
+        public void Insert(ICollisionActor target)
         {
             if (!_targetDataDictionary.ContainsKey(target))
             {
@@ -63,7 +63,7 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
-        public void Remove(IActorTarget target)
+        public void Remove(ICollisionActor target)
         {
             if (_targetDataDictionary.ContainsKey(target))
             {
@@ -72,6 +72,8 @@ namespace MonoGame.Extended.Collisions
                 _targetDataDictionary.Remove(target);
             }
         }
+
+        #region Penetration Vectors
 
         private static Vector2 CalculatePenetrationVector(IShapeF a, IShapeF b)
         {
@@ -140,5 +142,6 @@ namespace MonoGame.Extended.Collisions
             return -PenetrationVector(circ, rect);
         }
 
+        #endregion
     }
 }
