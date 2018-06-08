@@ -42,6 +42,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlElement(ElementName = "layer", Type = typeof(TiledMapTileLayerContent))]
         [XmlElement(ElementName = "imagelayer", Type = typeof(TiledMapImageLayerContent))]
         [XmlElement(ElementName = "objectgroup", Type = typeof(TiledMapObjectLayerContent))]
+		[XmlElement(ElementName = "group", Type = typeof(TiledMapGroupLayerContent))]
         public List<TiledMapLayerContent> Layers { get; set; }
 
         [XmlArray("properties")]

@@ -17,16 +17,16 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         public override TiledMapContent Process(TiledMapContent map, ContentProcessorContext context)
         {
             try
-            {
-                ContentLogger.Logger = context.Logger;
+			{
+				ContentLogger.Logger = context.Logger;
 
-                var previousWorkingDirectory = Environment.CurrentDirectory;
-                var newWorkingDirectory = Path.GetDirectoryName(map.FilePath);
+				var previousWorkingDirectory = Environment.CurrentDirectory;
+				var newWorkingDirectory = Path.GetDirectoryName(map.FilePath);
 
-                if (string.IsNullOrEmpty(newWorkingDirectory))
-                    throw new NullReferenceException();
+				if (string.IsNullOrEmpty(newWorkingDirectory))
+					throw new NullReferenceException();
 
-                Environment.CurrentDirectory = newWorkingDirectory;
+				Environment.CurrentDirectory = newWorkingDirectory;
 
 				foreach (var tileset in map.Tilesets)
 				{
@@ -38,44 +38,17 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 					}
 				}
 
-                foreach (var layer in map.Layers)
-                {
-					if (layer is TiledMapImageLayerContent imageLayer)
-					{
-						ContentLogger.Log($"Processing image layer '{imageLayer.Name}'");
-						imageLayer.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(imageLayer.Image.Source), "");
-						ContentLogger.Log($"Processed image layer '{imageLayer.Name}'");
-					}
+				ProcessLayers(map, context, map.Layers);
 
-					if (layer is TiledMapTileLayerContent tileLayer)
-					{
-						var data = tileLayer.Data;
-						var encodingType = data.Encoding ?? "xml";
-						var compressionType = data.Compression ?? "xml";
+				map.Layers = FlattenGroups(map.Layers, out var hadGroups);
 
-						ContentLogger.Log(
-							$"Processing tile layer '{tileLayer.Name}': Encoding: '{encodingType}', Compression: '{compressionType}'");
+				if (hadGroups) ContentLogger.Log($"FYI, TiledMap '{map.Name}' contains group layers. These are currently not supported " +
+					$"as is, and they will be discarded with the sub layers moved to the root.");
 
-						var tileData = DecodeTileLayerData(encodingType, tileLayer);
-						var tiles = CreateTiles(map.RenderOrder, map.Width, map.Height, tileData);
-						tileLayer.Tiles = tiles;
-
-						ContentLogger.Log($"Processed tile layer '{tileLayer}': {tiles.Length} tiles");
-					}
-
-					if (layer is TiledMapObjectLayerContent objectLayer)
-					{
-						ContentLogger.Log($"Processing object layer '{objectLayer.Name}'");
-						foreach (var obj in objectLayer.Objects)
-							TiledMapObjectContent.Process(obj, context);
-						ContentLogger.Log($"Processed object layer '{objectLayer.Name}'");
-					}
-				}
-
-                Environment.CurrentDirectory = previousWorkingDirectory;
-                return map;
-            }
-            catch (Exception ex)
+				Environment.CurrentDirectory = previousWorkingDirectory;
+				return map;
+			}
+			catch (Exception ex)
             {
                 context.Logger.LogImportantMessage(ex.Message);
                 context.Logger.LogImportantMessage("Hello World!");
@@ -83,7 +56,73 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             }
         }
 
-        private static List<TiledMapTileContent> DecodeTileLayerData(string encodingType, TiledMapTileLayerContent tileLayer)
+		private static void ProcessLayers(TiledMapContent map, ContentProcessorContext context, List<TiledMapLayerContent> layers)
+		{
+			foreach (var layer in layers)
+			{
+				if (layer is TiledMapImageLayerContent imageLayer)
+				{
+					ContentLogger.Log($"Processing image layer '{imageLayer.Name}'");
+					imageLayer.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(imageLayer.Image.Source), "");
+					ContentLogger.Log($"Processed image layer '{imageLayer.Name}'");
+				}
+
+				if (layer is TiledMapTileLayerContent tileLayer)
+				{
+					var data = tileLayer.Data;
+					var encodingType = data.Encoding ?? "xml";
+					var compressionType = data.Compression ?? "xml";
+
+					ContentLogger.Log(
+						$"Processing tile layer '{tileLayer.Name}': Encoding: '{encodingType}', Compression: '{compressionType}'");
+
+					var tileData = DecodeTileLayerData(encodingType, tileLayer);
+					var tiles = CreateTiles(map.RenderOrder, map.Width, map.Height, tileData);
+					tileLayer.Tiles = tiles;
+
+					ContentLogger.Log($"Processed tile layer '{tileLayer}': {tiles.Length} tiles");
+				}
+
+				if (layer is TiledMapObjectLayerContent objectLayer)
+				{
+					ContentLogger.Log($"Processing object layer '{objectLayer.Name}'");
+					foreach (var obj in objectLayer.Objects)
+						TiledMapObjectContent.Process(obj, context);
+					ContentLogger.Log($"Processed object layer '{objectLayer.Name}'");
+				}
+
+				if (layer is TiledMapGroupLayerContent groupLayer)
+					ProcessLayers(map, context, groupLayer.Layers);
+			}
+		}
+
+		private static List<TiledMapLayerContent> FlattenGroups(List<TiledMapLayerContent> layers, out bool hadGroups)
+		{
+			hadGroups = false;
+			var result = new List<TiledMapLayerContent>();
+
+			foreach (var layer in layers)
+			{
+				if (layer is TiledMapGroupLayerContent groupLayer)
+				{
+					hadGroups = true;
+					foreach (var sublayer in groupLayer.Layers)
+					{
+						sublayer.OffsetX += groupLayer.OffsetX;
+						sublayer.OffsetY += groupLayer.OffsetY;
+						sublayer.Opacity *= groupLayer.Opacity;
+						sublayer.Visible &= groupLayer.Visible;
+					}
+					result.AddRange(FlattenGroups(groupLayer.Layers, out var subHadGroups));
+				}
+				else
+					result.Add(layer);
+			}
+
+			return result;
+		}
+
+		private static List<TiledMapTileContent> DecodeTileLayerData(string encodingType, TiledMapTileLayerContent tileLayer)
         {
             List<TiledMapTileContent> tiles;
 

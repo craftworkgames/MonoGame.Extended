@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
@@ -39,41 +40,48 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         private static TiledMapContent DeserializeTiledMapContent(string mapFilePath, ContentImporterContext context)
         {
             using (var reader = new StreamReader(mapFilePath))
-            {
-                var mapSerializer = new XmlSerializer(typeof(TiledMapContent));
-                var map = (TiledMapContent)mapSerializer.Deserialize(reader);
+			{
+				var mapSerializer = new XmlSerializer(typeof(TiledMapContent));
+				var map = (TiledMapContent)mapSerializer.Deserialize(reader);
 
-                map.FilePath = mapFilePath;
+				map.FilePath = mapFilePath;
 
-                var tilesetSerializer = new XmlSerializer(typeof(TiledMapTilesetContent));
+				var tilesetSerializer = new XmlSerializer(typeof(TiledMapTilesetContent));
 
-                for (var i = 0; i < map.Tilesets.Count; i++)
-                {
-                    var tileset = map.Tilesets[i];
-
-                    if (!string.IsNullOrWhiteSpace(tileset.Source))
-                    {
-                        var tilesetFilePath = GetTilesetFilePath(mapFilePath, tileset);
-                        map.Tilesets[i] = ImportTileset(tilesetFilePath, tilesetSerializer, tileset, context);
-                    }
-                }
-
-				for (var i = 0; i < map.Layers.Count; i++)
+				for (var i = 0; i < map.Tilesets.Count; i++)
 				{
-					if (map.Layers[i] is TiledMapImageLayerContent imageLayer)
-						context.AddDependency(imageLayer.Image.Source);
-					if (map.Layers[i] is TiledMapObjectLayerContent objectLayer)
-						foreach (var obj in objectLayer.Objects)
-							if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
-								context.AddDependency(obj.TemplateSource);
+					var tileset = map.Tilesets[i];
+
+					if (!string.IsNullOrWhiteSpace(tileset.Source))
+					{
+						var tilesetFilePath = GetTilesetFilePath(mapFilePath, tileset);
+						map.Tilesets[i] = ImportTileset(tilesetFilePath, tilesetSerializer, tileset, context);
+					}
 				}
 
-                map.Name = mapFilePath;
-                return map;
-            }
-        }
+				ImportLayers(context, map.Layers);
 
-        private static string GetTilesetFilePath(string mapFilePath, TiledMapTilesetContent tileset)
+				map.Name = mapFilePath;
+				return map;
+			}
+		}
+
+		private static void ImportLayers(ContentImporterContext context, List<TiledMapLayerContent> layers)
+		{
+			for (var i = 0; i < layers.Count; i++)
+			{
+				if (layers[i] is TiledMapImageLayerContent imageLayer)
+					context.AddDependency(imageLayer.Image.Source);
+				if (layers[i] is TiledMapObjectLayerContent objectLayer)
+					foreach (var obj in objectLayer.Objects)
+						if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
+							context.AddDependency(obj.TemplateSource);
+				if (layers[i] is TiledMapGroupLayerContent groupLayer)
+					ImportLayers(context, groupLayer.Layers);
+			}
+		}
+
+		private static string GetTilesetFilePath(string mapFilePath, TiledMapTilesetContent tileset)
         {
             var directoryName = Path.GetDirectoryName(mapFilePath);
             Debug.Assert(directoryName != null, "directoryName != null");
