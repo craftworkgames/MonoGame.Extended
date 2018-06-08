@@ -73,6 +73,11 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
+        public bool Contains(ICollisionActor target)
+        {
+            return _targetDataDictionary.ContainsKey(target);
+        }
+
         #region Penetration Vectors
 
         private static Vector2 CalculatePenetrationVector(IShapeF a, IShapeF b)
