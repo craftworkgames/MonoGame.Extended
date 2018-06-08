@@ -33,6 +33,15 @@ namespace MonoGame.Extended
         [DataMember] public float Radius;
 
         /// <summary>
+        /// Gets or sets the position of the circle.
+        /// </summary>
+        public Point2 Position
+        {
+            get => Center;
+            set => Center = value;
+        }
+
+        /// <summary>
         ///     Gets the distance from a point to the opposite point, both on the boundary of this <see cref="CircleF" />.
         /// </summary>
         public float Diameter => 2 * Radius;

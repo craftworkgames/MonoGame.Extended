@@ -8,6 +8,10 @@
     /// </remakarks>
     public interface IShapeF
     {
+        /// <summary>
+        /// Gets or sets the position of the shape.
+        /// </summary>
+        Point2 Position { get; set; }
     }
 
     /// <summary>
