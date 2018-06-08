@@ -26,7 +26,7 @@ namespace MonoGame.Extended
     /// <seealso cref="IEquatableByRef{T}" />
     [DataContract]
     [DebuggerDisplay("{DebugDisplayString,nq}")]
-    public struct RectangleF : IEquatable<RectangleF>, IEquatableByRef<RectangleF>
+    public struct RectangleF : IEquatable<RectangleF>, IEquatableByRef<RectangleF>, IShapeF
     {
         /// <summary>
         ///     The <see cref="RectangleF" /> with <see cref="X" />, <see cref="Y" />, <see cref="Width" /> and
@@ -675,6 +675,11 @@ namespace MonoGame.Extended
         public override string ToString()
         {
             return $"{{X: {X}, Y: {Y}, Width: {Width}, Height: {Height}";
+        }
+
+        public bool Intersects(IShapeF other)
+        {
+            return Shape.Intersects(this, other);
         }
 
         internal string DebugDisplayString => string.Concat(X, "  ", Y, "  ", Width, "  ", Height);

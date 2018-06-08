@@ -20,7 +20,7 @@ namespace MonoGame.Extended
     /// <seealso cref="IEquatable{T}" />
     /// <seealso cref="IEquatableByRef{T}" />
     [DataContract]
-    public struct CircleF : IEquatable<CircleF>, IEquatableByRef<CircleF>
+    public struct CircleF : IEquatable<CircleF>, IEquatableByRef<CircleF>, IShapeF
     {
         /// <summary>
         ///     The centre position of this <see cref="CircleF" />.
@@ -490,6 +490,11 @@ namespace MonoGame.Extended
         public override string ToString()
         {
             return $"Centre: {Center}, Radius: {Radius}";
+        }
+
+        public bool Intersects(IShapeF other)
+        {
+            return Shape.Intersects(this, other);
         }
 
         internal string DebugDisplayString => ToString();
