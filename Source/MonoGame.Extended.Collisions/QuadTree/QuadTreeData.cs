@@ -9,7 +9,7 @@
         public QuadtreeData(IActorTarget target)
         {
             Target = target;
-            BoundingBox = target.BoundingBox;
+            Bounds = target.BoundingBox;
             Flag = false;
         }
 
@@ -27,6 +27,6 @@
         /// <summary>
         ///     Gets or sets the bounding box for collision detection.
         /// </summary>
-        public RectangleF BoundingBox { get; set; }
+        public IShapeF Bounds { get; set; }
     }
 }

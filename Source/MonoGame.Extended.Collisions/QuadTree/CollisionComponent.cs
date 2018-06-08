@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -27,7 +28,7 @@ namespace MonoGame.Extended.Collisions
             foreach (var value in _targetDataDictionary.Values)
             {
                 _collisionTree.Remove(value);
-                value.BoundingBox = value.Target.BoundingBox;
+                value.Bounds = value.Target.BoundingBox;
                 _collisionTree.Insert(value);
             }
 
@@ -44,7 +45,7 @@ namespace MonoGame.Extended.Collisions
                     var collisionInfo = new CollisionInfo
                     {
                         Other = other.Target,
-                        PenetrationVector = PenetrationVector(value.BoundingBox, other.BoundingBox)
+                        PenetrationVector = CalculatePenetrationVector(value.Bounds, other.Bounds)
                     };
 
                     target.OnCollision(collisionInfo);
@@ -72,6 +73,23 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
+        private static Vector2 CalculatePenetrationVector(IShapeF a, IShapeF b)
+        {
+            switch (a)
+            {
+                case RectangleF rectA when b is RectangleF rectB:
+                    return PenetrationVector(rectA, rectB);
+                case CircleF circA when b is CircleF circB:
+                    return PenetrationVector(circA, circB);
+                case CircleF circA when b is RectangleF rectB:
+                    return PenetrationVector(circA, rectB);
+                case RectangleF rectA when b is CircleF circB:
+                    return PenetrationVector(rectA, circB);
+            }
+
+            throw new NotSupportedException("Shapes must be either a CircleF or RectangleF");
+        }
+
         private static Vector2 PenetrationVector(RectangleF rect1, RectangleF rect2)
         {
             var intersectingRectangle = RectangleF.Intersection(rect1, rect2);
@@ -95,6 +113,31 @@ namespace MonoGame.Extended.Collisions
             }
 
             return penetration;
+        }
+
+        private static Vector2 PenetrationVector(CircleF circ1, CircleF circ2)
+        {
+            var rWant = circ1.Radius + circ2.Radius;
+            var disp = Point2.Displacement(circ1.Center, circ2.Center);
+            var rCurr = Math.Sqrt(disp.X * disp.X + disp.Y * disp.Y);
+
+            var penVector = rWant/(float)rCurr * disp;
+
+            return penVector;
+        }
+
+        private static Vector2 PenetrationVector(CircleF circ, RectangleF rect)
+        {
+            var closestPoint = rect.ClosestPointTo(circ.Center);
+            var closestVector = Point2.Displacement(circ.Center, closestPoint);
+            var distance = closestVector.Length();
+
+            return (circ.Radius / distance) * closestVector;
+        }
+
+        private static Vector2 PenetrationVector(RectangleF rect, CircleF circ)
+        {
+            return -PenetrationVector(circ, rect);
         }
 
     }

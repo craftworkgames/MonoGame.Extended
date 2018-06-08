@@ -53,8 +53,8 @@
         /// <returns>True if the circle and rectangle intersect.</returns>
         public static bool Intersects(CircleF circ, RectangleF rect)
         {
-            var boundingRect = new BoundingRectangle(rect.Center, rect.Size / 2);
-            return circ.Intersects(boundingRect);
+            var closestPoint = rect.ClosestPointTo(circ.Center);
+            return circ.Contains(closestPoint);
         }
     }
 }
