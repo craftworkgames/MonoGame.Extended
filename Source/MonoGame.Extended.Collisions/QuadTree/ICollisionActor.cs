@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Collisions
     /// </summary>
     public interface ICollisionActor
     {
-        IShapeF Bounds { get; set; }
+        IShapeF Bounds { get; }
 
         void OnCollision(CollisionEventArgs collisionInfo);
     }
