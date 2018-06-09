@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿using System;
+using MonoGame.Extended.Entities.Systems;
+using Xunit;
 
 namespace MonoGame.Extended.Entities.Tests
 {
@@ -8,7 +10,7 @@ namespace MonoGame.Extended.Entities.Tests
         public void CreateComponentManager()
         {
             var manager = new ComponentManager();
-
+            throw new NotImplementedException();
         }
     }
 
@@ -17,7 +19,7 @@ namespace MonoGame.Extended.Entities.Tests
         [Fact]
         public void CreateComponentMapper()
         {
-            var mapper = new ComponentMapper<object>();
+            var mapper = new ComponentMapper<object>(0);
 
             Assert.Equal(typeof(object), mapper.ComponentType);
             Assert.Empty(mapper.Components);
@@ -28,14 +30,14 @@ namespace MonoGame.Extended.Entities.Tests
         {
             const int entityId = 3;
 
-            var mapper = new ComponentMapper<Transform2>();
+            var mapper = new ComponentMapper<Transform2>(1);
             var component = new Transform2();
 
-            mapper.Put(entityId, component);
+            mapper.CreateComponent(entityId, component);
 
             Assert.Equal(typeof(Transform2), mapper.ComponentType);
             Assert.True(mapper.Components.Count >= 1);
-            Assert.Same(component, mapper.Get(entityId));
+            Assert.Same(component, mapper.GetComponent(entityId));
         }
 
         [Fact]
@@ -43,13 +45,13 @@ namespace MonoGame.Extended.Entities.Tests
         {
             const int entityId = 1;
 
-            var mapper = new ComponentMapper<Transform2>();
+            var mapper = new ComponentMapper<Transform2>(2);
             var component = new Transform2();
 
-            mapper.Put(entityId, component);
-            mapper.Delete(entityId);
+            mapper.CreateComponent(entityId, component);
+            mapper.DeleteComponent(entityId);
 
-            Assert.False(mapper.Has(entityId));
+            Assert.False(mapper.HasComponent(entityId));
         }
 
         [Fact]
@@ -57,14 +59,14 @@ namespace MonoGame.Extended.Entities.Tests
         {
             const int entityId = 0;
 
-            var mapper = new ComponentMapper<Transform2>();
+            var mapper = new ComponentMapper<Transform2>(3);
             var component = new Transform2();
 
-            Assert.False(mapper.Has(entityId));
+            Assert.False(mapper.HasComponent(entityId));
 
-            mapper.Put(entityId, component);
+            mapper.CreateComponent(entityId, component);
 
-            Assert.True(mapper.Has(entityId));
+            Assert.True(mapper.HasComponent(entityId));
         }
     }
 }

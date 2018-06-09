@@ -1,156 +1,92 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Screens;
-using MonoGame.Extended.Screens.Transitions;
-using Sandbox.Screens;
+using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Systems;
 
 namespace Sandbox
 {
-    public class EcsAspect
+    public class MyRenderSystem : DrawSystem
     {
-        private readonly BitArray _allSet;
-        private readonly BitArray _exclusionSet;
-        private readonly BitArray _oneSet;
+        private readonly SpriteBatch _spriteBatch;
+        private ComponentMapper<Transform2> _transformMapper;
 
-        private const int _defaultSize = 32;
-
-        public EcsAspect()
+        public MyRenderSystem(GraphicsDevice graphicsDevice)
         {
-            _allSet = new BitArray(_defaultSize);
-            _exclusionSet = new BitArray(_defaultSize);
-            _oneSet = new BitArray(_defaultSize);
+            _spriteBatch = new SpriteBatch(graphicsDevice);
         }
 
-        public void All(bool[] set)
+        public override void Initialize(ComponentManager componentManager)
         {
-            for (var i = 0; i < set.Length; i++)
-                _allSet.Set(i, set[i]);
-        }
-
-        public bool IsInterested(EcsEntity entity)
-        {
-            return IsInterested(entity.ComponentBits);
-        }
-
-        public bool IsInterested(BitArray componentBits)
-        {
-            if (componentBits.And(_allSet) == componentBits)
-                return true;
-
-            return false;
-        }
-    }
-
-    public abstract class EcsSystem
-    {
-        public virtual void Update(GameTime gameTime) { }
-        public virtual void Draw(GameTime gameTime) { }
-    }
-
-    public class EcsEntity
-    {
-        internal EcsEntity()
-        {
-            ComponentBits = new BitArray(32);
-        }
-
-        public BitArray ComponentBits { get; }
-        
-        public void Attach<T>() 
-            where T : class
-        {
-        }
-
-        public void Attach<T>(T component) 
-            where T : class
-        {
-        }
-
-        public void Detach<T>()
-        {
-        }
-
-        public T Get<T>()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class EcsWorld : DrawableGameComponent
-    {
-        private readonly List<EcsEntity> _entities = new List<EcsEntity>();
-        private readonly List<EcsSystem> _systems = new List<EcsSystem>();
-
-        public EcsWorld(Game game) 
-            : base(game)
-        {
-        }
-
-        public EcsEntity CreateEntity()
-        {
-            var entity = new EcsEntity();
-            _entities.Add(entity);
-            return entity;
-        }
-
-        public void DestroyEntity(EcsEntity entity)
-        {
-            _entities.Remove(entity);
-        }
-
-        public void AddSystem(EcsSystem system)
-        {
-            _systems.Add(system);
-        }
-
-        public void RemoveSystem(EcsSystem system)
-        {
-            _systems.Remove(system);
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            foreach (var system in _systems)
-                system.Update(gameTime);
+            _transformMapper = componentManager.GetMapper<Transform2>();
         }
 
         public override void Draw(GameTime gameTime)
         {
-            foreach (var system in _systems)
-                system.Draw(gameTime);
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+
+            foreach (var entity in World.EntityManager.Entities)
+            {
+                var transform = _transformMapper.GetComponent(entity);
+
+                _spriteBatch.DrawRectangle(transform.Position, new Size2(100, 100), Color.Black);
+            }
+
+            _spriteBatch.End();
         }
+
     }
 
-    public class GameMain : Game
+    public class MainGame : Game
     {
         // ReSharper disable once NotAccessedField.Local
-        private readonly GraphicsDeviceManager _graphics;
-        private readonly ScreenManager _screenManager;
+        private GraphicsDeviceManager _graphicsDeviceManager;
+        private SpriteBatch _spriteBatch;
+        private EntityWorld _world;
 
-        public GameMain()
+        public MainGame()
         {
-            _graphics = new GraphicsDeviceManager(this)
-            {
-                PreferredBackBufferWidth = 800,
-                PreferredBackBufferHeight = 480,
-                SynchronizeWithVerticalRetrace = false
-            };
-
+            _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsFixedTimeStep = true;
-            TargetElapsedTime = TimeSpan.FromSeconds(1f / 60f);
-
-            _screenManager = Components.Add<ScreenManager>();
+            IsMouseVisible = true;
         }
 
         protected override void LoadContent()
         {
-            base.LoadContent();
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _world = new EntityWorld();
+            _world.RegisterSystem(new MyRenderSystem(GraphicsDevice));
 
-            _screenManager.LoadScreen(new TitleScreen(this), new FadeTransition(GraphicsDevice, Color.Black, 0.5f));
+            var entity = _world.CreateEntity();
+            entity.Attach(new Transform2(new Vector2(400, 240)));
+
+        }
+
+        protected override void UnloadContent()
+        {
+            _spriteBatch.Dispose();
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            var keyboardState = Keyboard.GetState();
+
+            if (keyboardState.IsKeyDown(Keys.Escape))
+                Exit();
+
+            _world.Update(gameTime);
+
+            base.Update(gameTime);
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            _world.Draw(gameTime);
+
+            base.Draw(gameTime);
         }
     }
 }

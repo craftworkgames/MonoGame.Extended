@@ -5,9 +5,9 @@ namespace Sandbox
     public static class Program
     {
         [STAThread]
-        private static void Main()
+        public static void Main()
         {
-            using (var game = new GameMain())
+            using (var game = new MainGame())
                 game.Run();
         }
     }

@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Legacy;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
