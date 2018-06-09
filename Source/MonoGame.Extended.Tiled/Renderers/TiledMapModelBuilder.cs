@@ -106,10 +106,8 @@ namespace MonoGame.Extended.Tiled.Renderers
                     return TiledMapHelper.GetOrthogonalPosition(mapTile.X, mapTile.Y, map.TileWidth, map.TileHeight);
                 case TiledMapOrientation.Isometric:
                     return TiledMapHelper.GetIsometricPosition(mapTile.X, mapTile.Y, map.TileWidth, map.TileHeight);
-                case TiledMapOrientation.Staggered:
-                    throw new NotImplementedException("Staggered maps are not yet implemented.");
                 default:
-                    throw new NotSupportedException($"Tiled Map {map.Orientation} is not supported.");
+                    throw new NotSupportedException($"{map.Orientation} Tiled Maps are not yet implemented.");
             }
         }
     }

@@ -14,6 +14,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlElement(ElementName = "tile")]
         public List<TiledMapTileContent> Tiles { get; set; }
 
+		[XmlElement(ElementName = "chunk")]
+		public List<TiledMapTileLayerDataChunkContent> Chunks { get; set; }
+
         [XmlText]
         public string Value { get; set; }
 

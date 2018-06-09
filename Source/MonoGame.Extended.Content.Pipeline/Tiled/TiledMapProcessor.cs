@@ -28,6 +28,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 				Environment.CurrentDirectory = newWorkingDirectory;
 
+				if (map.Orientation == TiledMapOrientationContent.Hexagonal || map.Orientation == TiledMapOrientationContent.Staggered)
+					throw new NotSupportedException($"{map.Orientation} Tiled Maps are currently not implemented!");
+
 				foreach (var tileset in map.Tilesets)
 				{
 					if (String.IsNullOrWhiteSpace(tileset.Source))
@@ -42,8 +45,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 				map.Layers = FlattenGroups(map.Layers, out var hadGroups);
 
-				if (hadGroups) ContentLogger.Log($"FYI, TiledMap '{map.Name}' contains group layers. These are currently not supported " +
-					$"as is, and they will be discarded with the sub layers moved to the root.");
+				if (hadGroups) ContentLogger.Log($"FYI, TiledMap '{map.FilePath}' contains group layers. These are currently not supported \n" +
+					$"as is, and they will be discarded with the sub layers moved to root.");
 
 				Environment.CurrentDirectory = previousWorkingDirectory;
 				return map;
@@ -69,6 +72,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 				if (layer is TiledMapTileLayerContent tileLayer)
 				{
+					if (tileLayer.Data.Chunks.Count > 0)
+						throw new NotSupportedException($"{map.FilePath} contains data chunks. These are currently not supported.");
+
 					var data = tileLayer.Data;
 					var encodingType = data.Encoding ?? "xml";
 					var compressionType = data.Compression ?? "xml";

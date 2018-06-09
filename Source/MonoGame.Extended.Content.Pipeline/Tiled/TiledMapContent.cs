@@ -36,6 +36,15 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlAttribute(AttributeName = "tileheight")]
         public int TileHeight { get; set; }
 
+		[XmlAttribute(AttributeName = "hexsidelength")]
+		public int HexSideLength { get; set; }
+
+		[XmlAttribute(AttributeName = "staggeraxis")]
+		public TiledMapStaggerAxisContent StaggerAxis { get; set; }
+
+		[XmlAttribute(AttributeName = "staggerindex")]
+		public TiledMapStaggerIndexContent StaggerIndex { get; set; }
+
         [XmlElement(ElementName = "tileset")]
         public List<TiledMapTilesetContent> Tilesets { get; set; }
 
