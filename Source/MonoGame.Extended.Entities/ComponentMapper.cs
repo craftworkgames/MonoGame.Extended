@@ -24,7 +24,6 @@ namespace MonoGame.Extended.Entities
             Components = new Bag<T>();
         }
 
-        public int Id { get; }
         public Bag<T> Components { get; }
 
         public void CreateComponent(int entityId, T component)

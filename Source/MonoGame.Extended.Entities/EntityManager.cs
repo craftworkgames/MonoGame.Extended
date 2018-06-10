@@ -7,6 +7,7 @@ namespace MonoGame.Extended.Entities
     public class EntityManager : UpdateSystem
     {
         public EntityManager(ComponentManager componentManager)
+            : base(Aspect.All())
         {
             _componentManager = componentManager;
             Entities = new Bag<Entity>(128);

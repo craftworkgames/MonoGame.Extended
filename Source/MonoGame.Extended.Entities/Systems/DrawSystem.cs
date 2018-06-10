@@ -4,7 +4,8 @@ namespace MonoGame.Extended.Entities.Systems
 {
     public abstract class DrawSystem : BaseSystem
     {
-        protected DrawSystem()
+        protected DrawSystem(Aspect.Builder aspect)
+            : base(aspect)
         {
         }
 

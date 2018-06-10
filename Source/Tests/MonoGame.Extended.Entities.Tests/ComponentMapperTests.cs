@@ -1,19 +1,7 @@
-﻿using System;
-using MonoGame.Extended.Entities.Systems;
-using Xunit;
+﻿using Xunit;
 
 namespace MonoGame.Extended.Entities.Tests
 {
-    public class ComponentManagerTests
-    {
-        [Fact]
-        public void CreateComponentManager()
-        {
-            var manager = new ComponentManager();
-            throw new NotImplementedException();
-        }
-    }
-
     public class ComponentMapperTests
     {
         [Fact]

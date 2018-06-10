@@ -4,7 +4,8 @@ namespace MonoGame.Extended.Entities.Systems
 {
     public abstract class UpdateSystem : BaseSystem
     {
-        protected UpdateSystem()
+        protected UpdateSystem(Aspect.Builder aspect)
+            : base(aspect)
         {
         }
 

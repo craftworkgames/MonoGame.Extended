@@ -13,6 +13,7 @@ namespace Sandbox
         private ComponentMapper<Transform2> _transformMapper;
 
         public MyRenderSystem(GraphicsDevice graphicsDevice)
+            : base(Aspect.All(typeof(Transform2)))
         {
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
@@ -26,7 +27,7 @@ namespace Sandbox
         {
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-            foreach (var entity in World.EntityManager.Entities)
+            foreach (var entity in GetEntities())
             {
                 var transform = _transformMapper.GetComponent(entity);
 
