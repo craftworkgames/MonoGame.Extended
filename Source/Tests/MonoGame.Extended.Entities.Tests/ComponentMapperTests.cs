@@ -21,11 +21,11 @@ namespace MonoGame.Extended.Entities.Tests
             var mapper = new ComponentMapper<Transform2>(1);
             var component = new Transform2();
 
-            mapper.CreateComponent(entityId, component);
+            mapper.Put(entityId, component);
 
             Assert.Equal(typeof(Transform2), mapper.ComponentType);
             Assert.True(mapper.Components.Count >= 1);
-            Assert.Same(component, mapper.GetComponent(entityId));
+            Assert.Same(component, mapper.Get(entityId));
         }
 
         [Fact]
@@ -36,10 +36,10 @@ namespace MonoGame.Extended.Entities.Tests
             var mapper = new ComponentMapper<Transform2>(2);
             var component = new Transform2();
 
-            mapper.CreateComponent(entityId, component);
-            mapper.DeleteComponent(entityId);
+            mapper.Put(entityId, component);
+            mapper.Delete(entityId);
 
-            Assert.False(mapper.HasComponent(entityId));
+            Assert.False(mapper.Has(entityId));
         }
 
         [Fact]
@@ -50,11 +50,11 @@ namespace MonoGame.Extended.Entities.Tests
             var mapper = new ComponentMapper<Transform2>(3);
             var component = new Transform2();
 
-            Assert.False(mapper.HasComponent(entityId));
+            Assert.False(mapper.Has(entityId));
 
-            mapper.CreateComponent(entityId, component);
+            mapper.Put(entityId, component);
 
-            Assert.True(mapper.HasComponent(entityId));
+            Assert.True(mapper.Has(entityId));
         }
     }
 }

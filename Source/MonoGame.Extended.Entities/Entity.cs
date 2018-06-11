@@ -4,11 +4,13 @@ namespace MonoGame.Extended.Entities
 {
     public class Entity : IEquatable<Entity>
     {
+        private readonly EntityManager _entityManager;
         private readonly ComponentManager _componentManager;
 
-        public Entity(int id, ComponentManager componentManager)
+        public Entity(int id, EntityManager entityManager, ComponentManager componentManager)
         {
             Id = id;
+            _entityManager = entityManager;
             _componentManager = componentManager;
         }
 
@@ -18,26 +20,26 @@ namespace MonoGame.Extended.Entities
             where T : class 
         {
             var mapper = _componentManager.GetMapper<T>();
-            mapper.CreateComponent(Id, component);
+            mapper.Put(Id, component);
         }
 
         public void Detach<T>()
             where T : class
         {
             var mapper = _componentManager.GetMapper<T>();
-            mapper.DeleteComponent(Id);
+            mapper.Delete(Id);
         }
 
         public T Get<T>()
             where T : class 
         {
             var mapper = _componentManager.GetMapper<T>();
-            return mapper.GetComponent(Id);
+            return mapper.Get(Id);
         }
 
         public void Destory()
         {
-            throw new NotImplementedException();
+            _entityManager.DestroyEntity(this);
         }
 
         public bool Equals(Entity other)

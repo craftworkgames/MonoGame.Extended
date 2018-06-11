@@ -213,6 +213,11 @@ namespace MonoGame.Extended
         {
         }
 
+        public Transform2(float x, float y, float rotation = 0, float scaleX = 1, float scaleY = 1)
+            : this(new Vector2(x, y), rotation, new Vector2(scaleX, scaleY))
+        {
+        }
+
         public Transform2(Vector2? position = null, float rotation = 0, Vector2? scale = null)
         {
             Position = position ?? Vector2.Zero;

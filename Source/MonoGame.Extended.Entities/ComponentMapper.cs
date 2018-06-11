@@ -26,27 +26,27 @@ namespace MonoGame.Extended.Entities
 
         public Bag<T> Components { get; }
 
-        public void CreateComponent(int entityId, T component)
+        public void Put(int entityId, T component)
         {
             Components[entityId] = component;
         }
 
-        public T GetComponent(Entity entity)
+        public T Get(Entity entity)
         {
-            return GetComponent(entity.Id);
+            return Get(entity.Id);
         }
 
-        public T GetComponent(int entityId)
+        public T Get(int entityId)
         {
             return Components[entityId];
         }
 
-        public bool HasComponent(int entityId)
+        public bool Has(int entityId)
         {
             return Components[entityId] != null;
         }
 
-        public void DeleteComponent(int entityId)
+        public void Delete(int entityId)
         {
             Components[entityId] = null;
         }

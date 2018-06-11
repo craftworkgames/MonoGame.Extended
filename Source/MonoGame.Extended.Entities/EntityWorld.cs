@@ -48,6 +48,16 @@ namespace MonoGame.Extended.Entities
             return EntityManager.CreateEntity();
         }
 
+        public void DestroyEntity(int entityId)
+        {
+            EntityManager.DestroyEntity(entityId);
+        }
+
+        public void DestroyEntity(Entity entity)
+        {
+            EntityManager.DestroyEntity(entity);
+        }
+        
         public override void Update(GameTime gameTime)
         {
             foreach (var system in _updateSystems)
