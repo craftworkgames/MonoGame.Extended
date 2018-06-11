@@ -53,10 +53,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 					var tileset = map.Tilesets[i];
 
 					if (!string.IsNullOrWhiteSpace(tileset.Source))
-					{
-						var tilesetFilePath = GetTilesetFilePath(mapFilePath, tileset);
-						map.Tilesets[i] = ImportTileset(tilesetFilePath, tilesetSerializer, tileset, context);
-					}
+						map.Tilesets[i] = ImportTileset(tileset.Source, tilesetSerializer, tileset, context);
 				}
 
 				ImportLayers(context, map.Layers);
@@ -71,25 +68,21 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			for (var i = 0; i < layers.Count; i++)
 			{
 				if (layers[i] is TiledMapImageLayerContent imageLayer)
+					// Tell the pipeline that we depend on this image and need to rebuild the map if the image changes.
+					// (Maybe the image is a different size)
 					context.AddDependency(imageLayer.Image.Source);
 				if (layers[i] is TiledMapObjectLayerContent objectLayer)
 					foreach (var obj in objectLayer.Objects)
 						if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
+							// Tell the pipeline that we depend on this template and need to rebuild the map if the template changes.
+							// (Templates are loaded into objects on process, so all objects which depend on the template file
+							//  need the change to the template)
 							context.AddDependency(obj.TemplateSource);
 				if (layers[i] is TiledMapGroupLayerContent groupLayer)
+					// Yay recursion!
 					ImportLayers(context, groupLayer.Layers);
 			}
 		}
-
-		private static string GetTilesetFilePath(string mapFilePath, TiledMapTilesetContent tileset)
-        {
-            var directoryName = Path.GetDirectoryName(mapFilePath);
-            Debug.Assert(directoryName != null, "directoryName != null");
-
-            var tilesetLocation = tileset.Source.Replace('/', Path.DirectorySeparatorChar);
-            var tilesetFilePath = Path.Combine(directoryName, tilesetLocation);
-            return tilesetFilePath;
-        }
 
         private static TiledMapTilesetContent ImportTileset(string tilesetFilePath, XmlSerializer tilesetSerializer, TiledMapTilesetContent tileset, ContentImporterContext context)
         {
@@ -97,15 +90,17 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
             ContentLogger.Log($"Importing tileset '{tilesetFilePath}'");
 
-            using (var file = new FileStream(tilesetFilePath, FileMode.Open))
+            using (var reader = new StreamReader(tilesetFilePath))
             {
-                var importedTileset = (TiledMapTilesetContent)tilesetSerializer.Deserialize(file);
+                var importedTileset = (TiledMapTilesetContent)tilesetSerializer.Deserialize(reader);
                 importedTileset.FirstGlobalIdentifier = tileset.FirstGlobalIdentifier;
+				// We depend on the tileset. If the tileset changes, the map also needs to rebuild.
 				context.AddDependency(importedTileset.Image.Source);
 
 				foreach (var tile in importedTileset.Tiles)
 					foreach (var obj in tile.Objects)
 						if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
+							// We depend on the template.
 							context.AddDependency(obj.TemplateSource);
 
                 result = importedTileset;

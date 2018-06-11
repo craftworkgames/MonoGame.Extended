@@ -20,25 +20,18 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			{
 				ContentLogger.Logger = context.Logger;
 
-				var previousWorkingDirectory = Environment.CurrentDirectory;
-				var newWorkingDirectory = Path.GetDirectoryName(map.FilePath);
-
-				if (string.IsNullOrEmpty(newWorkingDirectory))
-					throw new NullReferenceException();
-
-				Environment.CurrentDirectory = newWorkingDirectory;
-
 				if (map.Orientation == TiledMapOrientationContent.Hexagonal || map.Orientation == TiledMapOrientationContent.Staggered)
 					throw new NotSupportedException($"{map.Orientation} Tiled Maps are currently not implemented!");
 
 				foreach (var tileset in map.Tilesets)
 				{
 					if (String.IsNullOrWhiteSpace(tileset.Source))
+						// Load the Texture2DContent for the tileset as it will be saved into the map content file.
 						tileset.Image.Content = context.BuildAndLoadAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(tileset.Image.Source), "");
 					else
-					{
+						// Link to the tileset for the content loader to load at runtime.
 						tileset.Content = context.BuildAsset<TiledMapTilesetContent, TiledMapTilesetContent>(new ExternalReference<TiledMapTilesetContent>(tileset.Source), "");
-					}
+					
 				}
 
 				ProcessLayers(map, context, map.Layers);
@@ -47,8 +40,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 				if (hadGroups) ContentLogger.Log($"FYI, TiledMap '{map.FilePath}' contains group layers. These are currently not supported \n" +
 					$"as is, and they will be discarded with the sub layers moved to root.");
-
-				Environment.CurrentDirectory = previousWorkingDirectory;
+				
 				return map;
 			}
 			catch (Exception ex)

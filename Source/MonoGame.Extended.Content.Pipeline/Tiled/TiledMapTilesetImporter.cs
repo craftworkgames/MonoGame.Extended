@@ -45,6 +45,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				foreach (var tile in tileset.Tiles)
 					foreach (var obj in tile.Objects)
 						if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
+							// We depend on the template.
 							context.AddDependency(obj.TemplateSource);
 
 				return tileset;

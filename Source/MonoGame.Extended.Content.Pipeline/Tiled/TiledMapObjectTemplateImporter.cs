@@ -28,8 +28,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			}
 			catch (Exception e)
 			{
-				foreach (var data in e.Data)
-					context.Logger.LogImportantMessage(data.ToString());
 				context.Logger.LogImportantMessage(e.StackTrace);
 				return null;
 			}
@@ -43,6 +41,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				var template = (TiledMapObjectTemplateContent)templateSerializer.Deserialize(reader);
 
 				if (!String.IsNullOrWhiteSpace(template.Tileset?.Source))
+					// We depend on this tileset.
 					context.AddDependency(template.Tileset.Source);
 
 				return template;

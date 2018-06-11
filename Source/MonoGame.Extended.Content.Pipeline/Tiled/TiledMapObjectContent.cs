@@ -6,6 +6,13 @@ using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
+	// This content class is going to be a lot more complex than the others we use.
+	// Objects can reference a template file which has starting values for the
+	// object. The value in the object file overrides any value specified in the
+	// template. All values have to be able to store a null value so we know if the
+	// XML parser actually found a value for the property and not just a default
+	// value. Default values are used when the object and any templates don't 
+	// specify a value.
 	public class TiledMapObjectContent
 	{
 		private uint? _globalIdentifier;
@@ -69,6 +76,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			{
 				var template = context.BuildAndLoadAsset<TiledMapObjectLayerContent, TiledMapObjectTemplateContent>(new ExternalReference<TiledMapObjectLayerContent>(obj.TemplateSource), "");
 
+				// Nothing says a template can't reference another template.
+				// Yay recusion!
 				Process(template.Object, context);
 
 				if (!obj._globalIdentifier.HasValue && template.Object._globalIdentifier.HasValue)
