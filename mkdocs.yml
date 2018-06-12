@@ -1,4 +1,5 @@
 site_name: MonoGame.Extended
+edit_uri: edit/develop/Docs/
 theme:
   name: 'readthedocs'
 repo_url: https://github.com/craftworkgames/MonoGame.Extended
