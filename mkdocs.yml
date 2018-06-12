@@ -1,4 +1,6 @@
 site_name: MonoGame.Extended
+theme:
+  name: 'readthedocs'
 repo_url: https://github.com/craftworkgames/MonoGame.Extended
 pages:
 - Home: index.md
