@@ -4,6 +4,13 @@ using Xunit;
 
 namespace MonoGame.Extended.Collisions.Tests
 {
+    /// <summary>
+    /// Test collision of actors with various shapes.
+    /// </summary>
+    /// <remarks>
+    /// Uses the fact that <see cref="BasicActor"/> moves itself away from
+    /// <see cref="BasicWall"/> on collision.
+    /// </remarks>
     public class CollisionComponentTests
     {
         private CollisionComponent collisionComponent;
@@ -15,6 +22,8 @@ namespace MonoGame.Extended.Collisions.Tests
             collisionComponent = new CollisionComponent(new RectangleF(Point2.Zero, new Point2(10, 10)));
         }
 
+
+        #region Circle Circle
 
         [Fact]
         public void PenetrationVectorSameCircleTest()
@@ -40,7 +49,7 @@ namespace MonoGame.Extended.Collisions.Tests
             collisionComponent.Insert(actor1);
             collisionComponent.Insert(actor2);
             collisionComponent.Update(_gameTime);
-
+            Assert.True(Math.Abs(actor1.Position.Y - -4f) < float.Epsilon);
         }
 
         [Fact]
@@ -133,6 +142,99 @@ namespace MonoGame.Extended.Collisions.Tests
             // The circle centers should be about 4 units away after moving
             Assert.True(Math.Abs(actor1.Position.Y - 2.0f) < float.Epsilon);
         }
+
+        #endregion
+
+        #region Circle Rectangle
+
+        [Fact]
+        public void PenetrationVectorCircleRectangleTest()
+        {
+            Point2 pos1 = new Point2(0, 1);
+            Point2 pos2 = new Point2(-2, -1);
+
+            IShapeF shape1 = new CircleF(pos1, 2.0f);
+            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+
+
+            var actor1 = new BasicActor()
+            {
+                Position = pos1,
+                Bounds = shape1
+            };
+            var actor2 = new BasicWall()
+            {
+                Position = pos2,
+                Bounds = shape2
+            };
+
+            Assert.True(shape1.Intersects(shape2));
+            collisionComponent.Insert(actor1);
+            collisionComponent.Insert(actor2);
+            collisionComponent.Update(_gameTime);
+            Assert.True(Math.Abs(actor1.Position.X - 0.0f) < float.Epsilon);
+            Assert.True(Math.Abs(actor1.Position.Y - 3.0f) < float.Epsilon);
+        }
+
+        [Fact]
+        public void PenetrationVectorCircleContainedInRectangleTest()
+        {
+            Point2 pos1 = new Point2(0, 0);
+            Point2 pos2 = new Point2(-2, -1);
+
+            IShapeF shape1 = new CircleF(pos1, 1.0f);
+            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+
+
+            var actor1 = new BasicActor()
+            {
+                Position = pos1,
+                Bounds = shape1
+            };
+            var actor2 = new BasicWall()
+            {
+                Position = pos2,
+                Bounds = shape2
+            };
+
+            Assert.True(shape1.Intersects(shape2));
+            collisionComponent.Insert(actor1);
+            collisionComponent.Insert(actor2);
+            collisionComponent.Update(_gameTime);
+            Assert.True(Math.Abs(actor1.Position.X - 0.0f) < float.Epsilon);
+            Assert.True(Math.Abs(actor1.Position.Y - -2.0f) < float.Epsilon);
+        }
+
+        [Fact]
+        public void PenetrationVectorCircleOffAxisRectangleTest()
+        {
+            Point2 pos1 = new Point2(2, 1);
+            Point2 pos2 = new Point2(-2, -1);
+
+            IShapeF shape1 = new CircleF(pos1, 2.0f);
+            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+
+
+            var actor1 = new BasicActor()
+            {
+                Position = pos1,
+                Bounds = shape1
+            };
+            var actor2 = new BasicWall()
+            {
+                Position = pos2,
+                Bounds = shape2
+            };
+
+            Assert.True(shape1.Intersects(shape2));
+            collisionComponent.Insert(actor1);
+            collisionComponent.Insert(actor2);
+            collisionComponent.Update(_gameTime);
+            Assert.True(Math.Abs(actor1.Position.X - 2.0f) < float.Epsilon);
+            Assert.True(Math.Abs(actor1.Position.Y - 3.0f) < float.Epsilon);
+        }
+
+        #endregion
 
     }
 }
