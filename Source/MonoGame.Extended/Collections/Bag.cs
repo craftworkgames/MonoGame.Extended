@@ -43,6 +43,7 @@ namespace MonoGame.Extended.Collections
     public class Bag<T> : IEnumerable<T>
     {
         private T[] _items;
+        private readonly bool _isPrimitive;
 
         public int Capacity => _items.Length;
         public bool IsEmpty => Count == 0;
@@ -50,6 +51,7 @@ namespace MonoGame.Extended.Collections
 
         public Bag(int capacity = 16)
         {
+            _isPrimitive = typeof(T).IsPrimitive;
             _items = new T[capacity];
         }
 
@@ -80,15 +82,20 @@ namespace MonoGame.Extended.Collections
 
         public void Clear()
         {
-            Array.Clear(_items, 0, Count);
             Count = 0;
+
+            // non-primitive types are cleared so the garbage collector can release them
+            if (!_isPrimitive)
+                Array.Clear(_items, 0, Count);
         }
 
         public bool Contains(T element)
         {
             for (var index = Count - 1; index >= 0; --index)
+            {
                 if (element.Equals(_items[index]))
                     return true;
+            }
 
             return false;
         }
@@ -105,6 +112,7 @@ namespace MonoGame.Extended.Collections
         public bool Remove(T element)
         {
             for (var index = Count - 1; index >= 0; --index)
+            {
                 if (element.Equals(_items[index]))
                 {
                     --Count;
@@ -113,6 +121,7 @@ namespace MonoGame.Extended.Collections
 
                     return true;
                 }
+            }
 
             return false;
         }
@@ -120,9 +129,13 @@ namespace MonoGame.Extended.Collections
         public bool RemoveAll(Bag<T> bag)
         {
             var isResult = false;
+
             for (var index = bag.Count - 1; index >= 0; --index)
+            {
                 if (Remove(bag[index]))
                     isResult = true;
+            }
+
             return isResult;
         }
 

@@ -8,7 +8,6 @@ namespace MonoGame.Extended.Entities
     public class EntityManager : UpdateSystem
     {
         public EntityManager(ComponentManager componentManager)
-            : base(Aspect.All())
         {
             _componentManager = componentManager;
             Entities = new Bag<Entity>(128);
@@ -19,17 +18,22 @@ namespace MonoGame.Extended.Entities
 
         public Bag<Entity> Entities { get; }
 
+        public event EventHandler<Entity> EntityAdded;
+        public event EventHandler<int> EntityRemoved;
+
         public Entity CreateEntity()
         {
             // TODO: Recycle dead entites
             var id = _nextId++;
             var entity = new Entity(id, this, _componentManager);
             Entities[id] = entity;
+            EntityAdded?.Invoke(this, entity);
             return entity;
         }
 
         public void DestroyEntity(int entityId)
         {
+            EntityRemoved?.Invoke(this, entityId);
             throw new NotImplementedException();
             //Entities[entityId] = null;
         }
@@ -40,10 +44,6 @@ namespace MonoGame.Extended.Entities
         }
 
         public override void Update(GameTime gameTime)
-        {
-        }
-
-        public override void Initialize(ComponentManager componentManager)
         {
         }
     }

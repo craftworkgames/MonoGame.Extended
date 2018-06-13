@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
@@ -6,23 +7,27 @@ using MonoGame.Extended.Entities.Systems;
 
 namespace MonoGame.Extended.Entities
 {
-    public class ComponentManager : UpdateSystem
+    public interface IComponentMapperService
+    {
+        ComponentMapper<T> GetMapper<T>() where T : class;
+    }
+
+    public class ComponentManager : UpdateSystem, IComponentMapperService
     {
         public ComponentManager()
-            : base(Aspect.All())
         {
-            _mappers = new Bag<ComponentMapper>();
+            _componentMappers = new Bag<ComponentMapper>();
             _componentTypes = new Dictionary<Type, int>();
         }
 
-        private readonly Bag<ComponentMapper> _mappers;
+        private readonly Bag<ComponentMapper> _componentMappers;
         private readonly Dictionary<Type, int> _componentTypes;
 
         private ComponentMapper<T> CreateMapperForType<T>(int id)
             where T : class 
         {
             var mapper = new ComponentMapper<T>(id);
-            _mappers[id] = mapper;
+            _componentMappers[id] = mapper;
             return mapper;
         }
 
@@ -31,8 +36,8 @@ namespace MonoGame.Extended.Entities
         {
             var id = GetComponentTypeId(typeof(T));
 
-            if (_mappers[id] != null)
-                return _mappers[id] as ComponentMapper<T>;
+            if (_componentMappers[id] != null)
+                return _componentMappers[id] as ComponentMapper<T>;
 
             return CreateMapperForType<T>(id);
         }
@@ -47,9 +52,17 @@ namespace MonoGame.Extended.Entities
             return id;
         }
 
-        public override void Initialize(ComponentManager componentManager)
+        public BitArray GetComponentBits(int entityId)
         {
-            // TODO : Okay this is weird.
+            var bits = new BitArray(16);
+
+            for (var componentId = 0; componentId < _componentMappers.Count; componentId++)
+            {
+                if (_componentMappers[componentId].Has(entityId))
+                    bits[componentId] = true;
+            }
+
+            return bits;
         }
 
         public override void Update(GameTime gameTime)

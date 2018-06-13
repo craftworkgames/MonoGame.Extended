@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace MonoGame.Extended.Entities
 {
@@ -15,6 +16,7 @@ namespace MonoGame.Extended.Entities
         }
 
         public int Id { get; }
+        public BitArray ComponentBits => _componentManager.GetComponentBits(Id);
 
         public void Attach<T>(T component)
             where T : class 

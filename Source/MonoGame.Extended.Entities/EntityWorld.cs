@@ -6,12 +6,8 @@ namespace MonoGame.Extended.Entities
 {
     public class EntityWorld : SimpleDrawableGameComponent
     {
-        // TODO: Make these private again
-        public EntityManager EntityManager { get; }
-        public ComponentManager ComponentManager { get; }
-
         private readonly Bag<UpdateSystem> _updateSystems;
-        private readonly Bag<DrawSystem> _drawSystems;
+        private readonly Bag<EntityDrawSystem> _drawSystems;
 
         public EntityWorld()
         {
@@ -23,15 +19,20 @@ namespace MonoGame.Extended.Entities
                 ComponentManager,
                 EntityManager
             };
-            _drawSystems = new Bag<DrawSystem>();
+            _drawSystems = new Bag<EntityDrawSystem>();
         }
 
+        internal EntityManager EntityManager { get; }
+        internal ComponentManager ComponentManager { get; }
+        
+        public Bag<Entity> AllEntities => EntityManager.Entities;
+
         // TODO: Move this to world configuration
-        public void RegisterSystem(BaseSystem system)
+        public void RegisterSystem(UpdateSystem system)
         {
             switch (system)
             {
-                case DrawSystem drawSystem:
+                case EntityDrawSystem drawSystem:
                     _drawSystems.Add(drawSystem);
                     break;
                 case UpdateSystem updateSystem:
@@ -39,8 +40,16 @@ namespace MonoGame.Extended.Entities
                     break;
             }
 
-            system.World = this;
-            system.Initialize(ComponentManager);
+            if (system is EntityUpdateSystem entitySystem)
+            {
+                entitySystem.World = this;
+                entitySystem.Initialize(ComponentManager);
+            }
+        }
+
+        public Entity GetEntity(int entityId)
+        {
+            return AllEntities[entityId];
         }
 
         public Entity CreateEntity()

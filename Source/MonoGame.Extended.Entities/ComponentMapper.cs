@@ -13,6 +13,7 @@ namespace MonoGame.Extended.Entities
 
         public int Id { get; }
         public Type ComponentType { get; }
+        public abstract bool Has(int entityId);
     }
 
     public class ComponentMapper<T> : ComponentMapper
@@ -41,8 +42,11 @@ namespace MonoGame.Extended.Entities
             return Components[entityId];
         }
 
-        public bool Has(int entityId)
+        public override bool Has(int entityId)
         {
+            if (entityId >= Components.Count)
+                return false;
+
             return Components[entityId] != null;
         }
 
