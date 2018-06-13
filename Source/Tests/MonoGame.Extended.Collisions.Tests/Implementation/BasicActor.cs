@@ -15,6 +15,9 @@ namespace MonoGame.Extended.Collisions.Tests
         }
         public void OnCollision(CollisionEventArgs collisionInfo)
         {
+            Bounds.Position -= collisionInfo.PenetrationVector;
+            Position -= collisionInfo.PenetrationVector;
+
             if (collisionInfo.Other is BasicActor)
             {
                 CollisionCount++;

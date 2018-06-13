@@ -80,6 +80,12 @@ namespace MonoGame.Extended.Collisions
 
         #region Penetration Vectors
 
+        /// <summary>
+        /// Calculate a's penetration into b
+        /// </summary>
+        /// <param name="a">The penetrating shape.</param>
+        /// <param name="b">The shape being penetrated.</param>
+        /// <returns>The distance vector from the edge of b to a's Position</returns>
         private static Vector2 CalculatePenetrationVector(IShapeF a, IShapeF b)
         {
             switch (a)
@@ -124,13 +130,11 @@ namespace MonoGame.Extended.Collisions
 
         private static Vector2 PenetrationVector(CircleF circ1, CircleF circ2)
         {
-            var rWant = circ1.Radius + circ2.Radius;
-            var disp = Point2.Displacement(circ1.Center, circ2.Center);
-            var rCurr = Math.Sqrt(disp.X * disp.X + disp.Y * disp.Y);
+            var displacement = Point2.Displacement(circ1.Center, circ2.Center);
+            var desiredDisplacement = displacement.NormalizedCopy() * (circ1.Radius + circ2.Radius);
 
-            var penVector = rWant/(float)rCurr * disp;
-
-            return penVector;
+            var penetration = displacement - desiredDisplacement;
+            return penetration;
         }
 
         private static Vector2 PenetrationVector(CircleF circ, RectangleF rect)
