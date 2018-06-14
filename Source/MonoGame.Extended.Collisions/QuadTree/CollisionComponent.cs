@@ -17,11 +17,23 @@ namespace MonoGame.Extended.Collisions
 
         private readonly Quadtree _collisionTree;
 
+        /// <summary>
+        /// Creates a collision tree covering the specified area.
+        /// </summary>
+        /// <param name="boundary">Boundary of the collision tree.</param>
         public CollisionComponent(RectangleF boundary)
         {
             _collisionTree = new Quadtree(boundary);
         }
 
+        /// <summary>
+        /// Update the collision tree and process collisions.
+        /// </summary>
+        /// <remarks>
+        /// Boundary shapes are updated if they were changed since the last
+        /// update.
+        /// </remarks>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             // Update bounding box locations.
@@ -53,6 +65,11 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
+        /// <summary>
+        /// Inserts the target into the collision tree.
+        /// The target will have its OnCollision called when collisions occur.
+        /// </summary>
+        /// <param name="target">Target to insert.</param>
         public void Insert(ICollisionActor target)
         {
             if (!_targetDataDictionary.ContainsKey(target))
@@ -63,6 +80,10 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
+        /// <summary>
+        /// Removes the target from the collision tree.
+        /// </summary>
+        /// <param name="target">Target to remove.</param>
         public void Remove(ICollisionActor target)
         {
             if (_targetDataDictionary.ContainsKey(target))
@@ -73,6 +94,11 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
+        /// <summary>
+        /// Gets if the target is inserted in the collision tree.
+        /// </summary>
+        /// <param name="target">Actor to check if contained</param>
+        /// <returns>True if the target is contained in the collision tree.</returns>
         public bool Contains(ICollisionActor target)
         {
             return _targetDataDictionary.ContainsKey(target);

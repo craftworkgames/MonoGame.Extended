@@ -292,8 +292,8 @@ namespace MonoGame.Extended.Collisions.Tests
             collisionComponent.Insert(actor1);
             collisionComponent.Insert(actor2);
             collisionComponent.Update(_gameTime);
-            Assert.True(Math.Abs(actor1.Position.X - 0.0f) < float.Epsilon);
-            Assert.True(Math.Abs(actor1.Position.Y - 1.0f) < float.Epsilon);
+            Assert.True(Math.Abs(actor1.Position.X - 4.0f) < float.Epsilon);
+            Assert.True(Math.Abs(actor1.Position.Y - 3.0f) < float.Epsilon);
         }
 
 
