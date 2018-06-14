@@ -1,62 +1,6 @@
-# Camera2D Class
+# Cameras
 
->**Namespace:** MonoGame.Extended
-**Inheritance:** Camera2D > Object
-**Implements:** IMovable, IRotatable
-
->[Members](#members)
-[Methods](#methods)
-[Member Detail](#member-detail)
-[Constructor Detail](#constructor-detail)
-[Method Detail](#method-detail)
-[Tutorial](#tutorial)
-[Further Reading](#further-reading)
-
-## Members
-
-[_viewportAdapter](#_viewportAdapterDetail) : ViewportAdapter
-
-[Position](#position) : Vector2
-<sub>The position of the camera as a Vector2</sub>
-
-## Methods
-
-[public Camera2D](#constructorDetail)(GraphicsDevice graphicsDevice)
-<sub>Constructor</sub>
-
-[public void Move](#moveDetail)(Vector2 direction)
-<sub>Moves the camera</sub>
-
-## Member Detail
-
-##### _viewportAdapter
-```csharp
-private readonly ViewportAdapter
-```
-
-##### Position
-```csharp
-public Vector2 Position { get; set; }
-```
-<sub>The position of the camera, used in matrix transformations.</sub>
-## Constructor Detail
-
-<a name="constructorDetail"></a>
-**public Camera2D(GraphicsDevice graphicsDevice)**
-
-Parameters
-* graphicsDevice
-
-## Method Detail
-
-<a name="moveDetail"></a>
-**public void Move(Vector2 direction)**
-Moves the camera to a new position. (see [usage](#moveUsage))
-
-Parameters
-* direction - The Vector2 that will become the new [Position](#position) of the camera.
-
-# Tutorial
+## Orthographic Camera
 
 The purpose of the camera is to create a transformation matrix that changes the way a sprite batch is rendered.
 

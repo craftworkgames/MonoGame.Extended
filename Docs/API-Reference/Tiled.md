@@ -1,6 +1,8 @@
 <a alight="right" href="https://www.mapeditor.org/"><img align="right" src="https://raw.githubusercontent.com/bjorn/tiled/master/src/tiled/images/about-tiled-logo.png" height="200"></a>
 
 # Tiled
+The `MonoGame.Extended.Tiled` library loads and renders maps created with the popular [Tiled Map Editor](http://www.mapeditor.org/).
+
 Tiled is an [open sourced](https://github.com/bjorn/tiled) free to use "generic tile map editor". Tiled lets you easily design and view tile maps, and through the `Monogame.Extended.Tiled` package, you can load and display a map generated with Tiled in monogame
 
 To load a TiledMap into your project, you first need to add it to your `ContentManager`, and in order to compile the tile map for use in `MonoGame` you must add a reference to the pipeline tool.

@@ -3,23 +3,4 @@ edit_uri: edit/develop/Docs/
 theme:
   name: 'readthedocs'
 repo_url: https://github.com/craftworkgames/MonoGame.Extended
-pages:
-- Home: index.md
-- Installation:
-    - NuGet: installation.md
-    - NuGet Pre-Release: NuGet-Pre-Release.md
-    - Building from Source: Building-from-Source.md
-    - Building the MonoGame PCL: Build-MonoGame-PCL.md
-- Docs:
-    - Core:
-        - BitmapFonts: MonoGame.Extended/BitmapFonts.md
-        - Camera2D: MonoGame.Extended/Camera2D.md
-        - Content Extensions: MonoGame.Extended/Content.md
-        - Collections: MonoGame.Extended/Collections.md
-        - Object Pooling: MonoGame.Extended/Object-Pooling.md
-        - Serialization: MonoGame.Extended/Serialization.md
-        - Screens: MonoGame.Extended/Screens.md
-    - Animation:
-        - Animated Sprites: MonoGame.Extended.Animation/Animated-Sprites.md
-- Support: Community-and-Support.md
-- Showcase: Showcase.md
+

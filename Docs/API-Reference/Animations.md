@@ -1,3 +1,8 @@
+## Animations
+
+The `MonoGame.Extended.Animations` library contains classes useful for 2D [sprite sheet animations](MonoGame.Extended.Animation/Animated-Sprites.md).
+
+
 With Textures and Sprites we can import Sprite Sheets, collections of maped images paced on one same file, and draw them on screen through SpriteBatch like any other object on our game. Lets see how add "movement" on these sprites using the SpriteSheetAnimation classes from Animations.SpriteSheets package.
 
 # Starting choosing what to animate
