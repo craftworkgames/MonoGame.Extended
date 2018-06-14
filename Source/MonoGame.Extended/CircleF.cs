@@ -20,7 +20,7 @@ namespace MonoGame.Extended
     /// <seealso cref="IEquatable{T}" />
     /// <seealso cref="IEquatableByRef{T}" />
     [DataContract]
-    public struct CircleF : IEquatable<CircleF>, IEquatableByRef<CircleF>
+    public struct CircleF : IEquatable<CircleF>, IEquatableByRef<CircleF>, IShapeF
     {
         /// <summary>
         ///     The centre position of this <see cref="CircleF" />.
@@ -31,6 +31,15 @@ namespace MonoGame.Extended
         ///     The distance from the <see cref="Center" /> point to any point on the boundary of this <see cref="CircleF" />.
         /// </summary>
         [DataMember] public float Radius;
+
+        /// <summary>
+        /// Gets or sets the position of the circle.
+        /// </summary>
+        public Point2 Position
+        {
+            get => Center;
+            set => Center = value;
+        }
 
         /// <summary>
         ///     Gets the distance from a point to the opposite point, both on the boundary of this <see cref="CircleF" />.
