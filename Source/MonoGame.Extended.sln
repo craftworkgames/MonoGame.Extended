@@ -99,6 +99,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Collision
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.SpaceGame", "Demos\Demo.SpaceGame\Demo.SpaceGame.csproj", "{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.StarWarrior", "Demos\Demo.StarWarrior\Demo.StarWarrior.csproj", "{52CC60A4-D806-46BF-B104-53E56A764B0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -307,6 +309,14 @@ Global
 		{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD}.Release|x86.ActiveCfg = Release|Any CPU
 		{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD}.Release|x86.Build.0 = Release|Any CPU
+		{52CC60A4-D806-46BF-B104-53E56A764B0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52CC60A4-D806-46BF-B104-53E56A764B0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52CC60A4-D806-46BF-B104-53E56A764B0E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{52CC60A4-D806-46BF-B104-53E56A764B0E}.Debug|x86.Build.0 = Debug|Any CPU
+		{52CC60A4-D806-46BF-B104-53E56A764B0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52CC60A4-D806-46BF-B104-53E56A764B0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52CC60A4-D806-46BF-B104-53E56A764B0E}.Release|x86.ActiveCfg = Release|Any CPU
+		{52CC60A4-D806-46BF-B104-53E56A764B0E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -325,6 +335,7 @@ Global
 		{8AC0C265-E986-4AB1-8FF7-4A0582695B0D} = {932F8931-4A8D-4205-BFCF-98E794207786}
 		{CB439E84-F0F6-4790-8CD1-8A66C3D7B4DA} = {E5A148A1-DE7B-4D17-ABE8-831B9673B863}
 		{D5314E38-8F5A-48A5-A092-BD8BBEACB5DD} = {932F8931-4A8D-4205-BFCF-98E794207786}
+		{52CC60A4-D806-46BF-B104-53E56A764B0E} = {932F8931-4A8D-4205-BFCF-98E794207786}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8ED5A62D-25EC-4331-9F99-BDD1E10C02A0}
