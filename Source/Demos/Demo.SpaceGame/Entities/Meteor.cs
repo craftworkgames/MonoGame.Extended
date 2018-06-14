@@ -10,7 +10,7 @@ namespace Demo.SpaceGame.Entities
     {
         private const float _radius = 55f / 4f;
         private readonly Sprite _sprite;
-        private readonly Transform2 _transform;
+        private readonly Transform2 _transform = new Transform2();
 
         public CircleF BoundingCircle;
 
