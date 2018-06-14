@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <ApplicationIcon />
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
