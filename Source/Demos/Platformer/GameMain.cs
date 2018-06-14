@@ -1,7 +1,9 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Content.Pipeline;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
@@ -19,6 +21,8 @@ namespace Platformer
 
         public GameMain()
         {
+            // this must be here to work around issue #495 until we come up with a better solution
+            Console.WriteLine(DirtyHackForDotNetBuild.Message);
         }
 
         protected override void RegisterDependencies(ContainerBuilder builder)
