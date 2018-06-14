@@ -236,5 +236,68 @@ namespace MonoGame.Extended.Collisions.Tests
 
         #endregion
 
+        #region Rectangle Rectangle
+
+        [Fact]
+        public void PenetrationVectorRectangleRectangleTest()
+        {
+            Point2 pos1 = new Point2(0, 0);
+            Point2 pos2 = new Point2(-2, -1);
+
+            IShapeF shape1 = new RectangleF(pos1, new Size2(4, 2));
+            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+
+
+            var actor1 = new BasicActor()
+            {
+                Position = pos1,
+                Bounds = shape1
+            };
+            var actor2 = new BasicWall()
+            {
+                Position = pos2,
+                Bounds = shape2
+            };
+
+            Assert.True(shape1.Intersects(shape2));
+            collisionComponent.Insert(actor1);
+            collisionComponent.Insert(actor2);
+            collisionComponent.Update(_gameTime);
+            Assert.True(Math.Abs(actor1.Position.X - 0.0f) < float.Epsilon);
+            Assert.True(Math.Abs(actor1.Position.Y - 1.0f) < float.Epsilon);
+        }
+
+        [Fact]
+        public void PenetrationVectorRectangleRectangleOffAxisTest()
+        {
+            Point2 pos1 = new Point2(4, 2);
+            Point2 pos2 = new Point2(3, 1);
+
+            IShapeF shape1 = new RectangleF(pos1, new Size2(4, 2));
+            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+
+
+            var actor1 = new BasicActor()
+            {
+                Position = pos1,
+                Bounds = shape1
+            };
+            var actor2 = new BasicWall()
+            {
+                Position = pos2,
+                Bounds = shape2
+            };
+
+            Assert.True(shape1.Intersects(shape2));
+            collisionComponent.Insert(actor1);
+            collisionComponent.Insert(actor2);
+            collisionComponent.Update(_gameTime);
+            Assert.True(Math.Abs(actor1.Position.X - 0.0f) < float.Epsilon);
+            Assert.True(Math.Abs(actor1.Position.Y - 1.0f) < float.Epsilon);
+        }
+
+
+        #endregion
+
     }
 }
