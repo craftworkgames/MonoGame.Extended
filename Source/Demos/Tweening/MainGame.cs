@@ -6,7 +6,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Tweening;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Content.Pipeline;
 
 namespace Tweening
 {
@@ -20,9 +19,6 @@ namespace Tweening
 
         public MainGame()
         {
-            // this must be here to work around issue #495 until we come up with a better solution
-            Console.WriteLine(DirtyHackForDotNetBuild.Message);
-
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;

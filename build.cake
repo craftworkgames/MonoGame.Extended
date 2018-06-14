@@ -9,20 +9,20 @@ var solution = "./Source/MonoGame.Extended.sln";
 var vsLatest  = VSWhereLatest();
 var msBuildPath = vsLatest?.CombineWithFilePath("./MSBuild/15.0/Bin/amd64/MSBuild.exe");
 
+TaskSetup(context => Information($"##teamcity[blockOpened name='{context.Task.Name}']"));
+TaskTeardown(context => Information($"##teamcity[blockClosed name='{context.Task.Name}']"));
+
 Task("Restore")
     .Does(() =>
 {
-    Information("##teamcity[blockOpened name='Restore']");
     Information("##teamcity[progressMessage 'Restoring packages...']");    
     DotNetCoreRestore(solution);
-    Information("##teamcity[blockClosed name='Restore']");
 });
 
 Task("Build")
     .IsDependentOn("Restore")
     .Does(() =>
 {
-    Information("##teamcity[blockOpened name='Build']");
     Information("##teamcity[progressMessage 'Building solution...']");    
 
     var buildSettings = new DotNetCoreBuildSettings { Configuration = configuration };
@@ -32,15 +32,12 @@ Task("Build")
         
     // then we can build the rest of the solution
     DotNetCoreBuild(solution, buildSettings);
-    
-    Information("##teamcity[blockClosed name='Build']");
 });
 
 Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    Information("##teamcity[blockOpened name='Test']");
     Information("##teamcity[progressMessage 'Running tests...']");    
     var testRuns = 0;
     var failedRuns = 0;
@@ -62,15 +59,12 @@ Task("Test")
 
     if(failedRuns > 0)
         throw new Exception($"{failedRuns} of {testRuns} test runs failed.");
-
-    Information("##teamcity[blockClosed name='Test']");
 });
 
 Task("Pack")
     .IsDependentOn("Test")
     .Does(() =>
 {
-    Information("##teamcity[blockOpened name='Pack']");
     Information("##teamcity[progressMessage 'Packing packages...']");    
     var artifactsDirectory = "./artifacts";
     var gitVersion = GitVersion();
@@ -86,8 +80,6 @@ Task("Pack")
             ArgumentCustomization = args => args.Append($"/p:Version={gitVersion.NuGetVersion}")
         });
     }
-
-    Information("##teamcity[blockClosed name='Pack']");
 });
 
 Task("Default")

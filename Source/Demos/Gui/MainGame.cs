@@ -3,12 +3,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Content.Pipeline;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace SpaceShooter
+namespace Gui
 {
     public class MainGame : Game
     {
@@ -18,9 +17,6 @@ namespace SpaceShooter
 
         public MainGame()
         {
-            // this must be here to work around issue #495 until we come up with a better solution
-            Console.WriteLine(DirtyHackForDotNetBuild.Message);
-
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
 
             Content.RootDirectory = "Content";
