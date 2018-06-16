@@ -24,8 +24,6 @@
     <Compile Remove="Demos\ParticlesDemo.cs" />
     <Compile Remove="Demos\SceneGraphsDemo.cs" />
     <Compile Remove="Demos\ScreensDemo.cs" />
-    <Compile Remove="Demos\SpritesDemo.cs" />
-    <Compile Remove="Demos\TiledMapsDemo.cs" />
     <Compile Remove="Demos\TweeningDemo.cs" />
     <Compile Remove="Demos\ViewportAdaptersDemo.cs" />
   </ItemGroup>
