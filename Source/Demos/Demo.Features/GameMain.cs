@@ -89,18 +89,15 @@ namespace Demo.Features
             //var skin = GuiSkin.FromFile(Content, @"Raw/adventure-gui-skin.json");
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, ViewportAdapter.GetScaleMatrix);
 
-            _selectDemoScreen = new SelectDemoScreen(_demos, LoadDemo, Exit);
             var font = Content.Load<BitmapFont>("small-font");
             BitmapFont.UseKernings = false;
             Skin.CreateDefault(font);
+            _selectDemoScreen = new SelectDemoScreen(_demos, LoadDemo, Exit);
 
             _guiSystem = new GuiSystem(ViewportAdapter, guiRenderer)
             {
-                
+                ActiveScreen = _selectDemoScreen,
             };
-            _guiSystem.ActiveScreen = _selectDemoScreen;
-
-            //LoadDemo(_demoIndex);
         }
 
         private void LoadDemo(string name)

@@ -4,6 +4,7 @@ using System.Linq;
 using Demo.Features.Demos;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.TextureAtlases;
@@ -22,13 +23,14 @@ namespace Demo.Features.Screens
 
             //var dialog = Skin.Create<Dialog>("dialog");
 
-            var grid = new UniformGrid { Columns = 3 };
+            //var grid = new UniformGrid { Columns = 3 };
+            var grid = new StackPanel();
 
             foreach (var demo in _demos.Values.OrderBy(i => i.Name))
             {
                 var button = new Button()
                 {
-                    Content =  demo.Name,
+                    Content = demo.Name,
                     Margin = new Thickness(4),
                 };
                 button.Clicked += (sender, args) => LoadDemo(demo);
