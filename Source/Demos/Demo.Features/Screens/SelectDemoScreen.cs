@@ -50,6 +50,7 @@ namespace Demo.Features.Screens
             //}
 
             //dialog.Controls.Add(grid);
+            this.Content = grid;
             //Controls.Add(dialog);
         }
 

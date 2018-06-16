@@ -5,6 +5,7 @@ using Demo.Features.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -89,10 +90,15 @@ namespace Demo.Features
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, ViewportAdapter.GetScaleMatrix);
 
             _selectDemoScreen = new SelectDemoScreen(_demos, LoadDemo, Exit);
+            var font = Content.Load<BitmapFont>("small-font");
+            BitmapFont.UseKernings = false;
+            Skin.CreateDefault(font);
+
             _guiSystem = new GuiSystem(ViewportAdapter, guiRenderer)
             {
-                ActiveScreen = _selectDemoScreen,
+                
             };
+            _guiSystem.ActiveScreen = _selectDemoScreen;
 
             //LoadDemo(_demoIndex);
         }
