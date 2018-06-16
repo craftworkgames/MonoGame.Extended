@@ -21,10 +21,7 @@ namespace Demo.Features.Screens
             _demos = demos;
             _loadDemo = loadDemo;
 
-            //var dialog = Skin.Create<Dialog>("dialog");
-
-            //var grid = new UniformGrid { Columns = 3 };
-            var grid = new StackPanel();
+            var grid = new UniformGrid();
 
             foreach (var demo in _demos.Values.OrderBy(i => i.Name))
             {
@@ -37,23 +34,15 @@ namespace Demo.Features.Screens
                 grid.Items.Add(button);
             }
 
-            // Close button
-            //var atlas = skin.TextureAtlases[0];
-            //var closeButtonRegion = atlas?.GetRegion("buttonRound_close");
-            //if (closeButtonRegion != null)
-            //{
-            //    var closeButton = Skin.Create<GuiButton>("white-button", c =>
-            //    {
-            //        c.IconRegion = closeButtonRegion;
-            //        c.Margin = new Thickness(4);
-            //        c.Clicked += (sender, args) => exitGameAction();
-            //    });
-            //    grid.Controls.Add(closeButton);
-            //}
+            var closeButton = new Button()
+            {
+                Margin = 4,
+                Content = "Close",
+            };
+            closeButton.Clicked += (sender, args) => exitGameAction();
+            grid.Items.Add(closeButton);
 
-            //dialog.Controls.Add(grid);
             this.Content = grid;
-            //Controls.Add(dialog);
         }
 
         public override void Dispose()
