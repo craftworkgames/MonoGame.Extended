@@ -45,18 +45,18 @@ namespace Demo.Features
                 //new GuiLayoutDemo(this),
                 //new GuiDemo(this),
                 //new ScreensDemo(this),
-                //new ViewportAdaptersDemo(this),
+                new ViewportAdaptersDemo(this),
                 new CollisionDemo(this),
                 new TiledMapsDemo(this),
-                //new AnimationsDemo(this),
+                new AnimationsDemo(this),
                 new SpritesDemo(this),
-                //new BatchingDemo(this),
+                new BatchingDemo(this),
                 //new TweeningDemo(this),
-                //new InputListenersDemo(this),
-                //new SceneGraphsDemo(this),
-                //new ParticlesDemo(this),
-                //new CameraDemo(this),
-                //new BitmapFontsDemo(this)
+                new InputListenersDemo(this),
+                new SceneGraphsDemo(this),
+                new ParticlesDemo(this),
+                new CameraDemo(this),
+                new BitmapFontsDemo(this)
             }.ToDictionary(d => d.Name);
         }
 
