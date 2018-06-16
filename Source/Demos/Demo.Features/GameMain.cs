@@ -133,6 +133,8 @@ namespace Demo.Features
                 Exit();
 
             IsMouseVisible = false;
+            _currentDemo = null;
+            _selectDemoScreen.IsVisible = true;
             _guiSystem.ActiveScreen = _selectDemoScreen;
         }
 
