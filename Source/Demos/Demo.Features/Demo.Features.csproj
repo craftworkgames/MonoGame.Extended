@@ -9,6 +9,31 @@
     <MonoGameContentReference Include="**\*.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Screens\**" />
+    <EmbeddedResource Remove="Screens\**" />
+    <MonoGameContentReference Remove="Screens\**" />
+    <None Remove="Screens\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Demos\AnimationsDemo.cs" />
+    <Compile Remove="Demos\BatchingDemo.cs" />
+    <Compile Remove="Demos\BitmapFontsDemo.cs" />
+    <Compile Remove="Demos\CameraDemo.cs" />
+    <Compile Remove="Demos\GuiDemo.cs" />
+    <Compile Remove="Demos\GuiLayoutDemo.cs" />
+    <Compile Remove="Demos\InputListenersDemo.cs" />
+    <Compile Remove="Demos\ParticlesDemo.cs" />
+    <Compile Remove="Demos\SceneGraphsDemo.cs" />
+    <Compile Remove="Demos\ScreensDemo.cs" />
+    <Compile Remove="Demos\SpritesDemo.cs" />
+    <Compile Remove="Demos\TiledMapsDemo.cs" />
+    <Compile Remove="Demos\TweeningDemo.cs" />
+    <Compile Remove="Demos\ViewportAdaptersDemo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Screens\SelectDemoScreen.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.4" />
     <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7" />
