@@ -261,8 +261,11 @@ namespace MonoGame.Extended
         /// </returns>
         public static bool Contains(ref CircleF circle, Point2 point)
         {
-            var distance = circle.Center - point;
-            return Math.Abs(distance.X) <= circle.Radius && Math.Abs(distance.Y) <= circle.Radius;
+            var dx = circle.Center.X - point.X;
+            var dy = circle.Center.Y - point.Y;
+            var d2 = dx * dx + dy * dy;
+            var r2 = circle.Radius * circle.Radius;
+            return d2 <= r2;
         }
 
         /// <summary>
