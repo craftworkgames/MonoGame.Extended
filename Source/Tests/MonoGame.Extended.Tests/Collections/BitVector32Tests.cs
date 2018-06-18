@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using MonoGame.Extended.Collections;
 using Xunit;
 
@@ -9,41 +10,41 @@ namespace MonoGame.Extended.Tests.Collections
         [Fact]
         public void Constructors()
         {
-            var bitVector = new BitVector32((uint)31);
-            Assert.Equal(31, (int)bitVector);
+            var bitVector = new BitVector32(31);
+            Assert.Equal(31, bitVector.Data);
             Assert.True(bitVector[31]);
             Assert.False(bitVector[32]);
             Assert.Equal("BitVector32{00000000000000000000000000011111}", bitVector.ToString());
 
             var bitVector2 = new BitVector32(bitVector);
-            Assert.True(bitVector == bitVector2);
+            Assert.True(bitVector.Data == bitVector2.Data);
             Assert.Equal(bitVector.GetHashCode(), bitVector2.GetHashCode());
 
             bitVector2[32] = true;
-            Assert.False(bitVector == bitVector2);
+            Assert.False(bitVector.Data == bitVector2.Data);
             Assert.False(bitVector.GetHashCode() == bitVector2.GetHashCode());
         }
 
         [Fact]
         public void Constructors_MaxValue()
         {
-            var bitVector = new BitVector32(uint.MaxValue);
-            Assert.Equal(uint.MaxValue, (uint)bitVector);
+            var bitVector = new BitVector32(int.MaxValue);
+            Assert.Equal(int.MaxValue, bitVector.Data);
             Assert.Equal("BitVector32{11111111111111111111111111111111}", BitVector32.ToString(bitVector));
         }
 
         [Fact]
         public void Constructors_MinValue()
         {
-            var bitVector = new BitVector32(uint.MinValue);
-            Assert.Equal(uint.MinValue, (uint)bitVector);
+            var bitVector = new BitVector32(int.MinValue);
+            Assert.Equal(int.MinValue, bitVector.Data);
             Assert.Equal("BitVector32{00000000000000000000000000000000}", BitVector32.ToString(bitVector));
         }
 
         [Fact]
         public void Indexers()
         {
-            var bitVector = new BitVector32((uint)7);
+            var bitVector = new BitVector32(7);
             Assert.True(bitVector[0]);
             Assert.True(bitVector[1]);
             Assert.True(bitVector[2]);
@@ -62,26 +63,26 @@ namespace MonoGame.Extended.Tests.Collections
             var section = BitVector32.CreateSection(31);
             section = BitVector32.CreateSection(64, section);
 
-            var bitVector1 = new BitVector32((uint)0xffff77);
-            var bitVector2 = new BitVector32((uint)bitVector1[section]);
+            var bitVector1 = new BitVector32(0xffff77);
+            var bitVector2 = new BitVector32(bitVector1[section]);
             Assert.Equal(123, bitVector1[section]);
         }
 
         [Fact]
         public void CreateMask()
         {
-            Assert.Equal(1, (int)BitVector32.CreateMask());
-            Assert.Equal(1, (int)BitVector32.CreateMask(0));
-            Assert.Equal(2, (int)BitVector32.CreateMask(1));
-            Assert.Equal(32, (int)BitVector32.CreateMask(16));
+            Assert.Equal(1, BitVector32.CreateMask());
+            Assert.Equal(1, BitVector32.CreateMask(0));
+            Assert.Equal(2, BitVector32.CreateMask(1));
+            Assert.Equal(32, BitVector32.CreateMask(16));
             var overflow = -2;
-            Assert.Equal((uint)overflow, BitVector32.CreateMask(int.MaxValue));
+            Assert.Equal(overflow, BitVector32.CreateMask(int.MaxValue));
             // ReSharper disable once ConvertToConstant.Local
             var overflow2 = -4;
-            Assert.Equal((uint)overflow2, BitVector32.CreateMask((uint)overflow));
+            Assert.Equal(overflow2, BitVector32.CreateMask(overflow));
             // ReSharper disable once ConvertToConstant.Local
             overflow = int.MinValue + 1;
-            Assert.Equal(2, (int)BitVector32.CreateMask((uint)overflow));
+            Assert.Equal(2, (int)BitVector32.CreateMask(overflow));
         }
 
         [Fact]
@@ -90,7 +91,7 @@ namespace MonoGame.Extended.Tests.Collections
             // ReSharper disable once ConvertToConstant.Local
             var overflow = int.MinValue;
 
-            Assert.Throws<InvalidOperationException>(() => BitVector32.CreateMask((uint)overflow));
+            Assert.Throws<InvalidOperationException>(() => BitVector32.CreateMask(overflow));
         }
 
         [Fact]
@@ -153,7 +154,7 @@ namespace MonoGame.Extended.Tests.Collections
             var section1 = BitVector32.CreateSection(32767);
             var section2 = BitVector32.CreateSection(32767, section1);
             var section3 = BitVector32.CreateSection(3, section2);
-            var bitVector = new BitVector32((uint)0)
+            var bitVector = new BitVector32(0)
             {
                 [section3] = 3
             };
@@ -171,14 +172,14 @@ namespace MonoGame.Extended.Tests.Collections
         [Fact]
         public void NegativeIndexer()
         {
-            var bitVector = new BitVector32(uint.MaxValue);
-            Assert.True(bitVector[uint.MinValue], "UInt32.MinValue");
+            var bitVector = new BitVector32(int.MaxValue);
+            Assert.True(bitVector[int.MinValue], "Int32.MinValue");
         }
 
         [Fact]
         public void TestSectionIndexer()
         {
-            var bitVector = new BitVector32(uint.MaxValue);
+            var bitVector = new BitVector32(int.MaxValue);
             var section = BitVector32.CreateSection(1);
             section = BitVector32.CreateSection(short.MaxValue, section);
             section = BitVector32.CreateSection(short.MaxValue, section);
@@ -186,7 +187,7 @@ namespace MonoGame.Extended.Tests.Collections
             Assert.Equal(1, bitVector[section]);
             bitVector[section] = 0;
 
-            Assert.Equal(int.MaxValue, (int)bitVector);
+            Assert.Equal(int.MaxValue, bitVector.Data);
         }
 
         [Fact]

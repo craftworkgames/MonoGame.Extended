@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
+using System.Collections.Specialized;
 
 namespace MonoGame.Extended.Graphics.Effects
 {
@@ -15,19 +16,19 @@ namespace MonoGame.Extended.Graphics.Effects
         ///     The bitmask for use with <see cref="MatrixChainEffect.Flags" /> indicating wether <see cref="Texture" /> has
         ///     changed in the last frame.
         /// </summary>
-        protected static uint DirtyTextureBitMask = BitVector32.CreateMask(UseDefaultProjectionBitMask);
+        protected static int DirtyTextureBitMask = BitVector32.CreateMask(UseDefaultProjectionBitMask);
 
         /// <summary>
         ///     The bitmask for use with <see cref="MatrixChainEffect.Flags" /> indicating wether the underlying vertex shader and
         ///     fragment (pixel) shaders have changed to one of the pre-defined shaders in the last frame.
         /// </summary>
-        protected static uint DirtyShaderIndexBitMask = BitVector32.CreateMask(DirtyTextureBitMask);
+        protected static int DirtyShaderIndexBitMask = BitVector32.CreateMask(DirtyTextureBitMask);
 
         /// <summary>
         ///     The bitmask for use with <see cref="MatrixChainEffect.Flags" /> indicating wether the material color has changed in
         ///     the last frame.
         /// </summary>
-        public static uint DirtyMaterialColorBitMask = BitVector32.CreateMask(DirtyShaderIndexBitMask);
+        public static int DirtyMaterialColorBitMask = BitVector32.CreateMask(DirtyShaderIndexBitMask);
 
         private Texture2D _texture;
         private EffectParameter _textureParameter;

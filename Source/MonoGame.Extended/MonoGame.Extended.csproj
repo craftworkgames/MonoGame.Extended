@@ -21,4 +21,10 @@
     <PackageReference Include="MonoGame.Framework.Portable" Version="3.6.0.1625" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Numerics.Vectors">
+      <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.0.0\ref\netcoreapp2.0\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
