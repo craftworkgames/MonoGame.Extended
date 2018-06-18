@@ -38,7 +38,7 @@ namespace Demo.Features.Demos
             var demoBall1 = new DemoBall(new Sprite(_spikeyBallTexture))
             {
                 Position = new Vector2(200, 240),
-                BoundingBox = new RectangleF(200, 240, 20, 20),
+                Bounds = new RectangleF(200, 240, 20, 20),
                 Velocity = new Vector2(0, -120)
             };
             _actors.Add(demoBall1);
@@ -46,17 +46,17 @@ namespace Demo.Features.Demos
             var demoBall2 = new DemoBall(new Sprite(_spikeyBallTexture))
             {
                 Position = new Vector2(600, 240),
-                BoundingBox = new RectangleF(600, 240, 20, 20),
+                Bounds = new RectangleF(600, 240, 20, 20),
                 Velocity = new Vector2(0, 120)
             };
             _actors.Add(demoBall2);
 
             var wall1 = new DemoWall(new Sprite(_blankTexture));
-            wall1.BoundingBox = new RectangleF(0, 0, 800, 20);
+            wall1.Bounds = new RectangleF(0, 0, 800, 20);
             _actors.Add(wall1);
 
             var wall2 = new DemoWall(new Sprite(_blankTexture));
-            wall2.BoundingBox = new RectangleF(0, 460, 800, 20);
+            wall2.Bounds = new RectangleF(0, 460, 800, 20);
             _actors.Add(wall2);
 
             foreach (var actor in _actors)
@@ -87,7 +87,7 @@ namespace Demo.Features.Demos
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
             foreach (var actor in _actors)
             {
-                _spriteBatch.Draw(_blankTexture, actor.BoundingBox.ToRectangle(), Color.WhiteSmoke);
+                //_spriteBatch.Draw(_blankTexture, actor.BoundingBox.ToRectangle(), Color.WhiteSmoke);
                 actor.Draw(_spriteBatch);
             }
             _spriteBatch.End();
@@ -98,30 +98,30 @@ namespace Demo.Features.Demos
 
     #region Collision Demo Implementation
 
-    class DemoActor : IActorTarget, IUpdate
+    class DemoActor : ICollisionActor, IUpdate
     {
         private readonly Sprite _sprite;
 
         public DemoActor(Sprite sprite)
         {
             _sprite = sprite;
-            BoundingBox = sprite.BoundingRectangle;
+            Bounds = sprite.GetBoundingRectangle(new Transform2());
         }
 
 
         public Vector2 Position { get; set; }
-        public RectangleF BoundingBox { get; set; }
+        public IShapeF Bounds { get; set; }
+
         public Vector2 Velocity { get; set; }
 
-        public virtual void OnCollision(CollisionInfo collisionInfo)
+        public virtual void OnCollision(CollisionEventArgs collisionInfo)
         {
 
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _sprite.Position = Position;
-            _sprite.Draw(spriteBatch);
+            _sprite.Draw(spriteBatch, Position, 0, Vector2.One);
         }
 
         public virtual void Update(GameTime gameTime)
@@ -149,15 +149,15 @@ namespace Demo.Features.Demos
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            BoundingBox = new RectangleF(Position.X, Position.Y, BoundingBox.Width, BoundingBox.Height);
+            Bounds.Position = Position;
         }
 
-        public override void OnCollision(CollisionInfo collisionInfo)
+        public override void OnCollision(CollisionEventArgs collisionInfo)
         {
 
             Velocity *= -1;
             Position -= collisionInfo.PenetrationVector;
-            BoundingBox = new RectangleF(Position.X, Position.Y, BoundingBox.Width, BoundingBox.Height);
+            Bounds.Position = Position;
             base.OnCollision(collisionInfo);
         }
     }

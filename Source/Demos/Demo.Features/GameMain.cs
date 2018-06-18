@@ -5,6 +5,7 @@ using Demo.Features.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -41,16 +42,16 @@ namespace Demo.Features
 
             _demos = new DemoBase[]
             {
-                new GuiLayoutDemo(this),
-                new GuiDemo(this),
+                //new GuiLayoutDemo(this),
+                //new GuiDemo(this),
                 //new ScreensDemo(this),
                 new ViewportAdaptersDemo(this),
-                new CollisionDemo(this), 
+                new CollisionDemo(this),
                 new TiledMapsDemo(this),
                 new AnimationsDemo(this),
                 new SpritesDemo(this),
                 new BatchingDemo(this),
-                new TweeningDemo(this),
+                //new TweeningDemo(this),
                 new InputListenersDemo(this),
                 new SceneGraphsDemo(this),
                 new ParticlesDemo(this),
@@ -85,15 +86,18 @@ namespace Demo.Features
         {
             ViewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
 
-            var skin = GuiSkin.FromFile(Content, @"Raw/adventure-gui-skin.json");
+            //var skin = GuiSkin.FromFile(Content, @"Raw/adventure-gui-skin.json");
             var guiRenderer = new GuiSpriteBatchRenderer(GraphicsDevice, ViewportAdapter.GetScaleMatrix);
+
+            var font = Content.Load<BitmapFont>("small-font");
+            BitmapFont.UseKernings = false;
+            Skin.CreateDefault(font);
+            _selectDemoScreen = new SelectDemoScreen(_demos, LoadDemo, Exit);
 
             _guiSystem = new GuiSystem(ViewportAdapter, guiRenderer)
             {
-                Screens = { new SelectDemoScreen(skin, _demos, LoadDemo, Exit) }
+                ActiveScreen = _selectDemoScreen,
             };
-
-            //LoadDemo(_demoIndex);
         }
 
         private void LoadDemo(string name)
@@ -106,6 +110,7 @@ namespace Demo.Features
         }
 
         private KeyboardState _previousKeyboardState;
+        private SelectDemoScreen _selectDemoScreen;
 
         protected override void Update(GameTime gameTime)
         {
@@ -124,11 +129,13 @@ namespace Demo.Features
 
         public void Back()
         {
-            if (_guiSystem.Screens[0].IsVisible)
+            if (_selectDemoScreen.IsVisible)
                 Exit();
 
             IsMouseVisible = false;
-            _guiSystem.Screens[0].Show();
+            _currentDemo = null;
+            _selectDemoScreen.IsVisible = true;
+            _guiSystem.ActiveScreen = _selectDemoScreen;
         }
 
         protected override void Draw(GameTime gameTime)

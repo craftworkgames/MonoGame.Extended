@@ -18,7 +18,7 @@ namespace Demo.Platformer.Services
                 {"Spawn", tiledObject => _entityFactory.CreatePlayer(tiledObject.Position)},
                 {"Solid", tiledObject => _entityFactory.CreateSolid(tiledObject.Position, tiledObject.Size) },
                 {"Deadly", tiledObject => _entityFactory.CreateDeadly(tiledObject.Position, tiledObject.Size) },
-                //{"BadGuy", tiledObject => _entityFactory.CreateBadGuy(tiledObject.Position, tiledObject.Size) }
+                {"BadGuy", tiledObject => _entityFactory.CreateBadGuy(tiledObject.Position, tiledObject.Size) }
             };
         }
 

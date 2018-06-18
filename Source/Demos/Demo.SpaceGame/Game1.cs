@@ -25,10 +25,6 @@ namespace Demo.SpaceGame
         private Spaceship _player;
         private MouseState _previousMouseState;
         private int _score;
-
-        private int _shieldHealth = 10;
-        private float _shieldRadius = 50;
-
         private SpriteBatch _spriteBatch;
         private ViewportAdapter _viewportAdapter;
 
@@ -161,10 +157,9 @@ namespace Demo.SpaceGame
                         _meteorFactory.SplitMeteor(meteor);
                 }
 
-                if (_player != null && _shieldHealth > 0 && meteor.BoundingCircle.Intersects(new CircleF(_player.Position, _shieldRadius)))
+                if (_player != null && _player.ShieldHealth > 0 && meteor.BoundingCircle.Intersects(new CircleF(_player.Position, _player.ShieldRadius)))
                 {
-                    _shieldHealth--;
-                    _shieldRadius--;
+                    _player.HitShield();
                     Explode(meteor.Position, meteor.Size);
                     meteor.Destroy();
                 }
@@ -197,10 +192,7 @@ namespace Demo.SpaceGame
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
 
-            if (_player != null && _shieldHealth > 0)
-            {
-                _spriteBatch.DrawCircle(_player.Position, _shieldRadius, 32, Color.Green, _shieldHealth);
-            }
+
 
             _spriteBatch.End();
 

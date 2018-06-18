@@ -121,5 +121,10 @@ namespace Demo.Platformer.Entities
         //    entity.Destroy(delaySeconds: totalSeconds);
         //    return entity;
         //}
+        public Entity CreateBadGuy(Vector2 position, Size2 size)
+        {
+            // TODO: Create a real life bad guy
+            return null;
+        }
     }
 }
