@@ -37,7 +37,11 @@ namespace MonoGame.Extended.Sprites
         public Vector2 OriginNormalized
         {
             get { return new Vector2(Origin.X/TextureRegion.Width, Origin.Y/TextureRegion.Height); }
-            set { Origin = new Vector2(value.X*TextureRegion.Width, value.Y*TextureRegion.Height); }
+            set {
+                  Origin = Effect == SpriteEffects.None
+                      ? new Vector2(value.X * TextureRegion.Width, value.Y * TextureRegion.Height)
+                      : new Vector2((1 - value.X) * TextureRegion.Width, value.Y * TextureRegion.Height);
+                }
         }
 
         public Color Color { get; set; }
@@ -66,9 +70,9 @@ namespace MonoGame.Extended.Sprites
                     throw new InvalidOperationException("TextureRegion cannot be null");
 
                 // preserve the origin if the texture size changes
-                var originNormalized = OriginNormalized;
+                //var originNormalized = OriginNormalized;
                 _textureRegion = value;
-                OriginNormalized = originNormalized;
+                OriginNormalized = _textureRegion.Anchor;
             }
         }
 

@@ -29,6 +29,7 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
                 writer.Write(region.Frame.Y);
                 writer.Write(region.Frame.Width);
                 writer.Write(region.Frame.Height);
+                writer.Write(new Microsoft.Xna.Framework.Vector2((float)region.PivotPoint.X,(float)region.PivotPoint.Y));
             }
         }
 
