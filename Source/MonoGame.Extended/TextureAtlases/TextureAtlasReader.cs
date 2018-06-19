@@ -21,7 +21,7 @@ namespace MonoGame.Extended.TextureAtlases
                     reader.ReadInt32(),
                     reader.ReadInt32(),
                     reader.ReadInt32(),
-                    reader.ReadInt32()
+                    reader.ReadInt32(),
                     reader.ReadVector2());
             }
 
