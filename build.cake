@@ -9,6 +9,9 @@ var solution = "./Source/MonoGame.Extended.sln";
 var vsLatest  = VSWhereLatest();
 var msBuildPath = vsLatest?.CombineWithFilePath("./MSBuild/15.0/Bin/amd64/MSBuild.exe");
 
+TaskSetup(context => Information($"##teamcity[blockOpened name='{context.Task.Name}']"));
+TaskTeardown(context => Information($"##teamcity[blockClosed name='{context.Task.Name}']"));
+
 Task("Restore")
     .Does(() =>
 {
@@ -21,10 +24,14 @@ Task("Build")
     .Does(() =>
 {
     Information("##teamcity[progressMessage 'Building solution...']");    
-    DotNetCoreBuild(solution, new DotNetCoreBuildSettings 
-    {
-        Configuration = configuration
-    });
+
+    var buildSettings = new DotNetCoreBuildSettings { Configuration = configuration };
+
+    // first we build the Extended Content Pipeline DLL as a workaround to issue #495
+    DotNetCoreBuild($"./Source/MonoGame.Extended.Content.Pipeline/MonoGame.Extended.Content.Pipeline.csproj", buildSettings);
+        
+    // then we can build the rest of the solution
+    DotNetCoreBuild(solution, buildSettings);
 });
 
 Task("Test")

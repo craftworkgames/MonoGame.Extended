@@ -7,7 +7,7 @@ using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace SpaceShooter
+namespace Gui
 {
     public class MainGame : Game
     {

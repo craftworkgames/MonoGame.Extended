@@ -15,13 +15,17 @@ namespace Demo.SpaceGame.Entities
         private readonly Transform2 _transform;
 
         private float _fireCooldown;
+
+        public int ShieldHealth { get; private set; } = 10;
+        public float ShieldRadius { get; private set; } = 50;
+
         public CircleF BoundingCircle;
 
-        public Vector2 Direction => (-Vector2.UnitX).Rotate(-Rotation);
+        public Vector2 Direction => Vector2.UnitX.Rotate(Rotation);
 
         public Vector2 Position
         {
-            get { return _transform.Position; }
+            get => _transform.Position;
             set
             {
                 _transform.Position = value;
@@ -31,8 +35,8 @@ namespace Demo.SpaceGame.Entities
 
         public float Rotation
         {
-            get { return _transform.Rotation - MathHelper.ToRadians(90); }
-            set { _transform.Rotation = value + MathHelper.ToRadians(90); }
+            get => _transform.Rotation - MathHelper.ToRadians(90);
+            set => _transform.Rotation = value + MathHelper.ToRadians(90);
         }
 
         public Vector2 Velocity { get; set; }
@@ -65,6 +69,9 @@ namespace Demo.SpaceGame.Entities
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_sprite, _transform);
+
+            if (ShieldHealth > 0)
+                spriteBatch.DrawCircle(Position, ShieldRadius, 32, Color.Green * 0.2f, ShieldHealth);
         }
 
         public void Accelerate(float acceleration)
@@ -74,7 +81,7 @@ namespace Demo.SpaceGame.Entities
 
         public void LookAt(Vector2 point)
         {
-            Rotation = (float)Math.Atan2(point.Y - Position.Y, Position.X - point.X);
+            Rotation = (float)Math.Atan2(point.Y - Position.Y, point.X - Position.X);
         }
 
         public void Fire()
@@ -85,11 +92,17 @@ namespace Demo.SpaceGame.Entities
             }
 
             var angle = Rotation + MathHelper.ToRadians(90);
-            var muzzle1Position = Position + new Vector2(14, 0).Rotate(-angle);
-            var muzzle2Position = Position + new Vector2(-14, 0).Rotate(-angle);
+            var muzzle1Position = Position + new Vector2(14, 0).Rotate(angle);
+            var muzzle2Position = Position + new Vector2(-14, 0).Rotate(angle);
             _bulletFactory.Create(muzzle1Position, Direction, angle, 550f);
             _bulletFactory.Create(muzzle2Position, Direction, angle, 550f);
             _fireCooldown = 0.2f;
+        }
+
+        public void HitShield()
+        {
+            ShieldHealth--;
+            ShieldRadius--;
         }
     }
 }

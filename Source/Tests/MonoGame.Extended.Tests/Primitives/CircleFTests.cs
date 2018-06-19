@@ -1,14 +1,23 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Globalization;
-//using Microsoft.Xna.Framework;
-//using Xunit;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using Microsoft.Xna.Framework;
+using Xunit;
 
-//namespace MonoGame.Extended.Tests.Primitives
-//{
-//    
-//    public class CircleFTests
-//    {
+namespace MonoGame.Extended.Tests.Primitives
+{
+
+public class CircleFTests
+{
+
+        [Fact]
+        public void CircCircIntersectionDiagonalCircleTest()
+        {
+            var circle = new CircleF(new Point2(16.0f, 16.0f), 16.0f);
+            var point = new Point2(0, 0);
+
+            Assert.False(circle.Contains(point));
+        }
 //        public IEnumerable<TestCaseData> ConstructorTestCases
 //        {
 //            get
@@ -407,5 +416,5 @@
 //            var actualString = circle.ToString();
 //            Assert.Equal(expectedString, actualString);
 //        }
-//    }
-//}
+    }
+}
