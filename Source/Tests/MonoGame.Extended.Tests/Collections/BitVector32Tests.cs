@@ -28,16 +28,16 @@ namespace MonoGame.Extended.Tests.Collections
         [Fact]
         public void Constructors_MaxValue()
         {
-            var bitVector = new BitVector32(int.MaxValue);
-            Assert.Equal(int.MaxValue, bitVector.Data);
+            var bitVector = new BitVector32(-1);
+            Assert.Equal(-1, bitVector.Data);
             Assert.Equal("BitVector32{11111111111111111111111111111111}", BitVector32.ToString(bitVector));
         }
 
         [Fact]
         public void Constructors_MinValue()
         {
-            var bitVector = new BitVector32(int.MinValue);
-            Assert.Equal(int.MinValue, bitVector.Data);
+            var bitVector = new BitVector32(0);
+            Assert.Equal(0, bitVector.Data);
             Assert.Equal("BitVector32{00000000000000000000000000000000}", BitVector32.ToString(bitVector));
         }
 
@@ -172,14 +172,14 @@ namespace MonoGame.Extended.Tests.Collections
         [Fact]
         public void NegativeIndexer()
         {
-            var bitVector = new BitVector32(int.MaxValue);
-            Assert.True(bitVector[int.MinValue], "Int32.MinValue");
+            var bitVector = new BitVector32(-1);
+            Assert.True(bitVector[0], "Int32.MinValue");
         }
 
         [Fact]
         public void TestSectionIndexer()
         {
-            var bitVector = new BitVector32(int.MaxValue);
+            var bitVector = new BitVector32(-1);
             var section = BitVector32.CreateSection(1);
             section = BitVector32.CreateSection(short.MaxValue, section);
             section = BitVector32.CreateSection(short.MaxValue, section);
