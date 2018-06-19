@@ -48,7 +48,7 @@ namespace MonoGame.Extended.TextureAtlases
             : this(name, texture)
         {
             foreach (var region in regions)
-                CreateRegion(region.Key, region.Value.X, region.Value.Y, region.Value.Width, region.Value.Height, default(Vector2));
+                CreateRegion(region.Key, region.Value.X, region.Value.Y, region.Value.Width, region.Value.Height);
         }
 
         private readonly Dictionary<string, int> _regionMap;
@@ -122,12 +122,12 @@ namespace MonoGame.Extended.TextureAtlases
         /// <param name="width">Width of the texture region.</param>
         /// <param name="height">Height of the texture region.</param>
         /// <returns>Created texture region.</returns>
-        public TextureRegion2D CreateRegion(string name, int x, int y, int width, int height, Vector2 anchor)
+        public TextureRegion2D CreateRegion(string name, int x, int y, int width, int height, Vector2 originNormalized = default(Vector2))
         {
             if (_regionMap.ContainsKey(name))
                 throw new InvalidOperationException($"Region {name} already exists in the texture atlas");
 
-            var region = new TextureRegion2D(name, Texture, x, y, width, height, anchor);
+            var region = new TextureRegion2D(name, Texture, x, y, width, height, originNormalized);
             AddRegion(region);
             return region;
         }
@@ -243,7 +243,7 @@ namespace MonoGame.Extended.TextureAtlases
                 for (var x = margin; x < width; x += xIncrement)
                 {
                     var regionName = $"{texture.Name ?? "region"}{count}";
-                    textureAtlas.CreateRegion(regionName, x, y, regionWidth, regionHeight, default(Vector2));
+                    textureAtlas.CreateRegion(regionName, x, y, regionWidth, regionHeight);
                     count++;
 
                     if (count >= maxRegionCount)

@@ -6,27 +6,27 @@ namespace MonoGame.Extended.TextureAtlases
 {
     public class TextureRegion2D
     {
-        public TextureRegion2D(Texture2D texture, int x, int y, int width, int height)
-            : this(null, texture, x, y, width, height)
+        public TextureRegion2D(Texture2D texture, int x, int y, int width, int height, Vector2 originNormalized = default(Vector2))
+            : this(null, texture, x, y, width, height, originNormalized)
         {
         }
 
-        public TextureRegion2D(Texture2D texture, Rectangle region)
-            : this(null, texture, region.X, region.Y, region.Width, region.Height)
+        public TextureRegion2D(Texture2D texture, Rectangle region, Vector2 originNormalized = default(Vector2))
+            : this(null, texture, region.X, region.Y, region.Width, region.Height, originNormalized)
         {
         }
 
-        public TextureRegion2D(string name, Texture2D texture, Rectangle region)
-            : this(name, texture, region.X, region.Y, region.Width, region.Height)
+        public TextureRegion2D(string name, Texture2D texture, Rectangle region, Vector2 originNormalized = default(Vector2))
+            : this(name, texture, region.X, region.Y, region.Width, region.Height, originNormalized)
         {
         }
 
-        public TextureRegion2D(Texture2D texture)
-            : this(texture.Name, texture, 0, 0, texture.Width, texture.Height)
+        public TextureRegion2D(Texture2D texture, Vector2 originNormalized = default(Vector2))
+            : this(texture.Name, texture, 0, 0, texture.Width, texture.Height, originNormalized)
         {
         }
 
-        public TextureRegion2D(string name, Texture2D texture, int x, int y, int width, int height, Vector2 anchor = default(Vector2))
+        public TextureRegion2D(string name, Texture2D texture, int x, int y, int width, int height, Vector2 originNormalized = default(Vector2))
         {
             if (texture == null) throw new ArgumentNullException(nameof(texture));
 
@@ -36,7 +36,7 @@ namespace MonoGame.Extended.TextureAtlases
             Y = y;
             Width = width;
             Height = height;
-            Anchor = anchor;
+            OriginNormalized = originNormalized;
         }
 
         public string Name { get; }
@@ -48,7 +48,7 @@ namespace MonoGame.Extended.TextureAtlases
         public Size2 Size => new Size2(Width, Height);
         public object Tag { get; set; }
         public Rectangle Bounds => new Rectangle(X, Y, Width, Height);
-        public Vector2 Anchor { get; }
+        public Vector2 OriginNormalized { get; }
 
         public override string ToString()
         {

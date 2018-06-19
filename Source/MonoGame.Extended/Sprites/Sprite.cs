@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -34,15 +34,7 @@ namespace MonoGame.Extended.Sprites
         public float Depth { get; set; }
         public object Tag { get; set; }
 
-        public Vector2 OriginNormalized
-        {
-            get { return new Vector2(Origin.X/TextureRegion.Width, Origin.Y/TextureRegion.Height); }
-            set {
-                  Origin = Effect == SpriteEffects.None
-                      ? new Vector2(value.X * TextureRegion.Width, value.Y * TextureRegion.Height)
-                      : new Vector2((1 - value.X) * TextureRegion.Width, value.Y * TextureRegion.Height);
-                }
-        }
+        public Vector2 OriginNormalized { get; set; }
 
         public Color Color { get; set; }
 
@@ -59,7 +51,9 @@ namespace MonoGame.Extended.Sprites
 
         public bool IsVisible { get; set; }
         public Vector2 Origin { get; set; }
-        public SpriteEffects Effect { get; set; }
+
+        private SpriteEffects effect;
+        public SpriteEffects Effect { get { return effect; } set { effect = value; GetOrigin(); } }
 
         public TextureRegion2D TextureRegion
         {
@@ -70,9 +64,12 @@ namespace MonoGame.Extended.Sprites
                     throw new InvalidOperationException("TextureRegion cannot be null");
 
                 // preserve the origin if the texture size changes
-                //var originNormalized = OriginNormalized;
+                /*var originNormalized = OriginNormalized;
                 _textureRegion = value;
-                OriginNormalized = _textureRegion.Anchor;
+                OriginNormalized = originNormalized;*/
+                _textureRegion = value;
+                OriginNormalized = _textureRegion.OriginNormalized;
+                GetOrigin();
             }
         }
 
@@ -84,8 +81,8 @@ namespace MonoGame.Extended.Sprites
 
             if (Scale != Vector2.One)
             {
-                min = min*Scale;
-                max = max*Scale;
+                min = min * Scale;
+                max = max * Scale;
             }
 
             var corners = new Vector2[4];
@@ -107,6 +104,14 @@ namespace MonoGame.Extended.Sprites
                 corners[i] += offset;
 
             return corners;
+        }
+
+        private void GetOrigin()
+        {
+            Origin = TextureRegion.Size *
+                                            new Vector2(
+                                                (int)Effect % 2 == 0 ? OriginNormalized.X : 1 - OriginNormalized.X,
+                                                (int)Effect < 2 ? OriginNormalized.Y : 1 - OriginNormalized.Y);
         }
     }
 }
