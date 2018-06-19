@@ -1,9 +1,8 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using MonoGame.Extended.Entities.Legacy;
+using MonoGame.Extended.Entities;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using Platformer.Systems;
@@ -16,7 +15,7 @@ namespace Platformer
         private TiledMapRenderer _renderer;
         private EntityFactory _entityFactory;
         private OrthographicCamera _camera;
-        private Entity _playerEntity;
+        private EntityWorld _world;
 
         public GameMain()
         {
@@ -28,15 +27,17 @@ namespace Platformer
 
             builder.RegisterInstance(new SpriteBatch(GraphicsDevice));
             builder.RegisterInstance(_camera);
-            builder.RegisterType<RenderSystem>();
-            builder.RegisterType<PlayerSystem>();
-            builder.RegisterType<WorldSystem>();
         }
 
         protected override void LoadContent()
         {
-            _entityFactory = new EntityFactory(EntityComponentSystem.EntityManager, Content);
-            _playerEntity = _entityFactory.CreatePlayer(new Vector2(100, 240));
+            _world = new EntityWorld();
+            _world.RegisterSystem(new WorldSystem());
+            _world.RegisterSystem(new PlayerSystem());
+            _world.RegisterSystem(new RenderSystem(new SpriteBatch(GraphicsDevice), _camera));
+
+            _entityFactory = new EntityFactory(_world, Content);
+
             // TOOD: Load maps and collision data more nicely :)
             _map = Content.Load<TiledMap>("test-map");
             _renderer = new TiledMapRenderer(GraphicsDevice, _map);
@@ -59,10 +60,9 @@ namespace Platformer
                 }
             }
 
-            
-
-            //_entityFactory.CreateBlue(new Vector2(600, 100));
-
+            _entityFactory.CreateBlue(new Vector2(600, 240));
+            _entityFactory.CreateBlue(new Vector2(700, 100));
+            _entityFactory.CreatePlayer(new Vector2(100, 240));
         }
 
         protected override void Update(GameTime gameTime)
@@ -77,14 +77,17 @@ namespace Platformer
             _renderer.Update(gameTime);
             //_camera.LookAt(_playerEntity.Get<Transform2>().Position);
 
+            _world.Update(gameTime);
+
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
+            
             _renderer.Draw(_camera.GetViewMatrix());
+            _world.Draw(gameTime);
 
             base.Draw(gameTime);
         }

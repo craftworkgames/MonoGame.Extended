@@ -20,8 +20,15 @@ namespace MonoGame.Extended.Entities.Systems
             {
                 _world = value;
                 _subscription = new EntitySubscription(_world.EntityManager, _aspectBuilder.Build(_world.ComponentManager));
+
+                // TODO: Undisposed events.
+                _world.EntityManager.EntityAdded += (sender, entityId) => OnEntityAdded(entityId);
+                _world.EntityManager.EntityRemoved += (sender, entityId) => OnEntityRemoved(entityId);
             }
         }
+
+        protected virtual void OnEntityAdded(int entityId) { }
+        protected virtual void OnEntityRemoved(int entityId) { }
 
         public Bag<int> ActiveEntities => _subscription.ActiveEntities;
 

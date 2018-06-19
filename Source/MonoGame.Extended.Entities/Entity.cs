@@ -11,18 +11,37 @@ namespace MonoGame.Extended.Entities
         public Entity(int id, EntityManager entityManager, ComponentManager componentManager)
         {
             Id = id;
+
+            _componentBits = new BitArray(16);
             _entityManager = entityManager;
             _componentManager = componentManager;
         }
 
-        public int Id { get; }
-        public BitArray ComponentBits => _componentManager.GetComponentBits(Id);
+        public int Id { get; internal set; }
+
+        private BitArray _componentBits;
+        private bool _componentsChanged;
+
+        public BitArray ComponentBits
+        {
+            get
+            {
+                if (_componentsChanged)
+                {
+                    _componentManager.RefreshComponentBits(Id, ref _componentBits);
+                    _componentsChanged = false;
+                }
+
+                return _componentBits;
+            }
+        } 
 
         public void Attach<T>(T component)
             where T : class 
         {
             var mapper = _componentManager.GetMapper<T>();
             mapper.Put(Id, component);
+            _componentsChanged = true;
         }
 
         public void Detach<T>()
@@ -30,6 +49,7 @@ namespace MonoGame.Extended.Entities
         {
             var mapper = _componentManager.GetMapper<T>();
             mapper.Delete(Id);
+            _componentsChanged = true;
         }
 
         public T Get<T>()
@@ -41,7 +61,7 @@ namespace MonoGame.Extended.Entities
 
         public void Destory()
         {
-            _entityManager.DestroyEntity(this);
+            _entityManager.DestroyEntity(Id);
         }
 
         public bool Equals(Entity other)

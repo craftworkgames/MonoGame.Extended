@@ -82,6 +82,9 @@ namespace MonoGame.Extended.Collections
 
         public void Clear()
         {
+            if(Count == 0)
+                return;
+
             Count = 0;
 
             // non-primitive types are cleared so the garbage collector can release them
@@ -100,7 +103,7 @@ namespace MonoGame.Extended.Collections
             return false;
         }
 
-        public T Remove(int index)
+        public T RemoveAt(int index)
         {
             var result = _items[index];
             --Count;

@@ -1,46 +1,51 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
-using MonoGame.Extended.Entities.Legacy;
+using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Systems;
 using Platformer.Collisions;
 
 namespace Platformer.Systems
 {
-    [Aspect(AspectType.All, typeof(Body), typeof(Transform2))]
-    [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class WorldSystem : EntityProcessingSystem
     {
         private readonly World _world;
+        private ComponentMapper<Transform2> _transformMapper;
+        private ComponentMapper<Body> _bodyMapper;
 
         public WorldSystem()
+            : base(Aspect.All(typeof(Body), typeof(Transform2)))
         {
-            _world = new World(new Vector2(0, 60));// {OnCollision = OnCollision};
+            _world = new World(new Vector2(0, 60));
         }
 
-        public override void OnEntityAdded(Entity entity)
+        public override void Initialize(IComponentMapperService mapperService)
         {
-            var body = entity.Get<Body>();
+            _transformMapper = mapperService.GetMapper<Transform2>();
+            _bodyMapper = mapperService.GetMapper<Body>();
+        }
+
+        protected override void OnEntityAdded(int entityId)
+        {
+            var body = _bodyMapper.Get(entityId);
             _world.AddBody(body);
         }
 
-        public override void OnEntityRemoved(Entity entity)
+        protected override void OnEntityRemoved(int entityId)
         {
-            var body = entity.Get<Body>();
+            var body = _bodyMapper.Get(entityId);
             _world.RemoveBody(body);
         }
-
-        protected override void Process(GameTime gameTime)
+        
+        public override void Update(GameTime gameTime)
         {
-            var elapsedSeconds = gameTime.GetElapsedSeconds();
-            _world.Update(elapsedSeconds);
-
-            base.Process(gameTime);
+            base.Update(gameTime);
+            _world.Update(gameTime.GetElapsedSeconds());
         }
 
-        protected override void Process(GameTime gameTime, Entity entity)
+        public override void Process(GameTime gameTime, int entityId)
         {
-            var transform = entity.Get<Transform2>();
-            var body = entity.Get<Body>();
-
+            var transform = _transformMapper.Get(entityId);
+            var body = _bodyMapper.Get(entityId);
             transform.Position = body.Position;
         }
     }

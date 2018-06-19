@@ -21,9 +21,8 @@ namespace MonoGame.Extended.Entities
             _entityManager.EntityAdded += OnEntityAdded;
         }
 
-        // TODO: It's a bit heavy handed to rebuild the actives every time one entity is added or removed.
-        private void OnEntityAdded(object sender, Entity e) => RebuildActives();
-        private void OnEntityRemoved(object sender, int e) => RebuildActives();
+        private void OnEntityAdded(object sender, int id) => _activeEntities.Add(id);
+        private void OnEntityRemoved(object sender, int id) => _activeEntities.Remove(id);
 
         public void Dispose()
         {
@@ -47,6 +46,7 @@ namespace MonoGame.Extended.Entities
 
             foreach (var entity in _entityManager.Entities)
             {
+                // TODO: Technically, many entities will probably share the same set of components. odb calls this the composition identity.
                 if (_aspect.IsInterested(entity.ComponentBits))
                 {
                     _activeEntities[count] = entity.Id;

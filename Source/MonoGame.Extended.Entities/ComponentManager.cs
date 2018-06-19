@@ -52,21 +52,24 @@ namespace MonoGame.Extended.Entities
             return id;
         }
 
-        public BitArray GetComponentBits(int entityId)
+        public void RefreshComponentBits(int entityId, ref BitArray bits)
         {
-            var bits = new BitArray(16);
-
             for (var componentId = 0; componentId < _componentMappers.Count; componentId++)
-            {
-                if (_componentMappers[componentId].Has(entityId))
-                    bits[componentId] = true;
-            }
+                bits[componentId] = _componentMappers[componentId].Has(entityId);
 
-            return bits;
+            for (var i = _componentMappers.Count; i < bits.Length; i++)
+                bits[i] = false;
         }
 
         public override void Update(GameTime gameTime)
         {
+        }
+
+        public long GetCompositionIdentity(BitArray bits)
+        {
+            var array = new int[2];
+            bits.CopyTo(array, 0);
+            return (uint)array[0] + ((long)(uint)array[1] << 32);
         }
     }
 }

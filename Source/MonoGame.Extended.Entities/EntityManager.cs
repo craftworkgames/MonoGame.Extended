@@ -7,10 +7,15 @@ namespace MonoGame.Extended.Entities
 {
     public class EntityManager : UpdateSystem
     {
+        private const int _defaultBagSize = 128;
+
         public EntityManager(ComponentManager componentManager)
         {
             _componentManager = componentManager;
-            Entities = new Bag<Entity>(128);
+            _newEntities = new Bag<int>(_defaultBagSize);
+            _removedEntities = new Bag<int>(_defaultBagSize);
+
+            Entities = new Bag<Entity>(_defaultBagSize);
         }
 
         private readonly ComponentManager _componentManager;
@@ -18,7 +23,10 @@ namespace MonoGame.Extended.Entities
 
         public Bag<Entity> Entities { get; }
 
-        public event EventHandler<Entity> EntityAdded;
+        private Bag<int> _newEntities;
+        private Bag<int> _removedEntities;
+
+        public event EventHandler<int> EntityAdded;
         public event EventHandler<int> EntityRemoved;
 
         public Entity CreateEntity()
@@ -27,7 +35,7 @@ namespace MonoGame.Extended.Entities
             var id = _nextId++;
             var entity = new Entity(id, this, _componentManager);
             Entities[id] = entity;
-            EntityAdded?.Invoke(this, entity);
+            _newEntities.Add(id);
             return entity;
         }
 
@@ -45,6 +53,14 @@ namespace MonoGame.Extended.Entities
 
         public override void Update(GameTime gameTime)
         {
+            foreach (var newEntity in _newEntities)
+                EntityAdded?.Invoke(this, newEntity);
+
+            foreach (var removedEntity in _removedEntities)
+                EntityRemoved?.Invoke(this, removedEntity);
+
+            _newEntities.Clear();
+            _removedEntities.Clear();
         }
     }
 }

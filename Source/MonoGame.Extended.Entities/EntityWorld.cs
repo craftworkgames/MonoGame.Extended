@@ -22,6 +22,17 @@ namespace MonoGame.Extended.Entities
             _drawSystems = new Bag<EntityDrawSystem>();
         }
 
+        public override void Dispose()
+        {
+            foreach (var updateSystem in _updateSystems)
+                updateSystem.Dispose();
+
+            foreach (var drawSystem in _drawSystems)
+                drawSystem.Dispose();
+
+            base.Dispose();
+        }
+
         internal EntityManager EntityManager { get; }
         internal ComponentManager ComponentManager { get; }
         

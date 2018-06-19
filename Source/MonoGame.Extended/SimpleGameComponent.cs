@@ -11,7 +11,7 @@ namespace MonoGame.Extended
         {
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (_isInitialized)
             {
@@ -23,7 +23,7 @@ namespace MonoGame.Extended
         private bool _isEnabled = true;
         public bool IsEnabled
         {
-            get { return _isEnabled; }
+            get => _isEnabled;
             set
             {
                 if (_isEnabled == value)
@@ -51,7 +51,7 @@ namespace MonoGame.Extended
         private int _updateOrder;
         public int UpdateOrder
         {
-            get { return _updateOrder; }
+            get => _updateOrder;
             set
             {
                 if (_updateOrder == value)

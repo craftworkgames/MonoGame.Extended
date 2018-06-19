@@ -14,13 +14,13 @@ namespace MonoGame.Extended.Entities.Systems
             Begin();
 
             foreach (var entityId in ActiveEntities)
-                Process(entityId);
+                Process(gameTime, entityId);
 
             End();
         }
 
         public virtual void Begin() { }
-        public abstract void Process(int entityId);
+        public abstract void Process(GameTime gameTime, int entityId);
         public virtual void End() { }
     }
 }

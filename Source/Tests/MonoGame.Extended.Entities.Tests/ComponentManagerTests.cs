@@ -1,4 +1,5 @@
-﻿using MonoGame.Extended.Sprites;
+﻿using System.Collections;
+using MonoGame.Extended.Sprites;
 using Xunit;
 
 namespace MonoGame.Extended.Entities.Tests
@@ -27,6 +28,21 @@ namespace MonoGame.Extended.Entities.Tests
             Assert.Equal(0, componentManager.GetComponentTypeId(typeof(Transform2)));
             Assert.Equal(1, componentManager.GetComponentTypeId(typeof(Sprite)));
             Assert.Equal(0, componentManager.GetComponentTypeId(typeof(Transform2)));
+        }
+
+        [Fact]
+        public void GetCompositionIdentity()
+        {
+            var compositionBits = new BitArray(3)
+            {
+                [0] = true,
+                [1] = false,
+                [2] = true
+            };
+            var componentManager = new ComponentManager();
+            var identity = componentManager.GetCompositionIdentity(compositionBits);
+
+            Assert.Equal(0b101, identity);
         }
     }
 }
