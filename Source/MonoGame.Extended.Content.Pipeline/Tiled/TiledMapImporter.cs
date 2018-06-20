@@ -46,14 +46,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 				map.FilePath = mapFilePath;
 
-				var tilesetSerializer = new XmlSerializer(typeof(TiledMapTilesetContent));
-
 				for (var i = 0; i < map.Tilesets.Count; i++)
 				{
 					var tileset = map.Tilesets[i];
 
 					if (!string.IsNullOrWhiteSpace(tileset.Source))
-						map.Tilesets[i] = ImportTileset(tileset.Source, tilesetSerializer, tileset, context);
+						AddTilesetDependency(tileset.Source, context);
 				}
 
 				ImportLayers(context, map.Layers);
@@ -68,47 +66,35 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			for (var i = 0; i < layers.Count; i++)
 			{
 				if (layers[i] is TiledMapImageLayerContent imageLayer)
+				{
+					ContentLogger.Log($"Adding dependency for '{imageLayer.Image?.Source}'");
+
 					// Tell the pipeline that we depend on this image and need to rebuild the map if the image changes.
 					// (Maybe the image is a different size)
-					context.AddDependency(imageLayer.Image.Source);
+					context.AddDependency(imageLayer.Image?.Source);
+				}
 				if (layers[i] is TiledMapObjectLayerContent objectLayer)
 					foreach (var obj in objectLayer.Objects)
 						if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
+						{
+							ContentLogger.Log($"Adding dependency for '{obj.TemplateSource}'");
 							// Tell the pipeline that we depend on this template and need to rebuild the map if the template changes.
 							// (Templates are loaded into objects on process, so all objects which depend on the template file
 							//  need the change to the template)
 							context.AddDependency(obj.TemplateSource);
+						}
 				if (layers[i] is TiledMapGroupLayerContent groupLayer)
 					// Yay recursion!
 					ImportLayers(context, groupLayer.Layers);
 			}
 		}
 
-        private static TiledMapTilesetContent ImportTileset(string tilesetFilePath, XmlSerializer tilesetSerializer, TiledMapTilesetContent tileset, ContentImporterContext context)
+        private static void AddTilesetDependency(string tilesetFilePath, ContentImporterContext context)
         {
-            TiledMapTilesetContent result;
+            ContentLogger.Log($"Adding dependency '{tilesetFilePath}'");
 
-            ContentLogger.Log($"Importing tileset '{tilesetFilePath}'");
-
-            using (var reader = new StreamReader(tilesetFilePath))
-            {
-                var importedTileset = (TiledMapTilesetContent)tilesetSerializer.Deserialize(reader);
-                importedTileset.FirstGlobalIdentifier = tileset.FirstGlobalIdentifier;
-				// We depend on the tileset. If the tileset changes, the map also needs to rebuild.
-				context.AddDependency(importedTileset.Image.Source);
-
-				foreach (var tile in importedTileset.Tiles)
-					foreach (var obj in tile.Objects)
-						if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
-							// We depend on the template.
-							context.AddDependency(obj.TemplateSource);
-
-                result = importedTileset;
-            }
-
-            ContentLogger.Log($"Imported tileset '{tilesetFilePath}'");
-
-            return result;
+			// We depend on the tileset. If the tileset changes, the map also needs to rebuild.
+			context.AddDependency(tilesetFilePath);
         }
     }
 }
