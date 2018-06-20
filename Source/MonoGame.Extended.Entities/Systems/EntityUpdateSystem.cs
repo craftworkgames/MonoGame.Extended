@@ -4,12 +4,12 @@ namespace MonoGame.Extended.Entities.Systems
 {
     public abstract class EntityUpdateSystem : UpdateSystem
     {
-        protected EntityUpdateSystem(Aspect.Builder aspectBuilder)
+        protected EntityUpdateSystem(AspectBuilder aspectBuilder)
         {
             _aspectBuilder = aspectBuilder;
         }
 
-        private readonly Aspect.Builder _aspectBuilder;
+        private readonly AspectBuilder _aspectBuilder;
         private EntitySubscription _subscription;
 
         private EntityWorld _world;

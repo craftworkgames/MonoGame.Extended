@@ -23,8 +23,8 @@ namespace MonoGame.Extended.Entities
 
         public Bag<Entity> Entities { get; }
 
-        private Bag<int> _newEntities;
-        private Bag<int> _removedEntities;
+        private readonly Bag<int> _newEntities;
+        private readonly Bag<int> _removedEntities;
 
         public event EventHandler<int> EntityAdded;
         public event EventHandler<int> EntityRemoved;

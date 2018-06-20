@@ -65,11 +65,11 @@ namespace MonoGame.Extended.Entities
         {
         }
 
-        public long GetCompositionIdentity(BitArray bits)
-        {
-            var array = new int[2];
-            bits.CopyTo(array, 0);
-            return (uint)array[0] + ((long)(uint)array[1] << 32);
-        }
+        //public long GetCompositionIdentity(BitArray bits)
+        //{
+        //    var array = new int[2];
+        //    bits.CopyTo(array, 0);
+        //    return (uint)array[0] + ((long)(uint)array[1] << 32);
+        //}
     }
 }

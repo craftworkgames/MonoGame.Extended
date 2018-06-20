@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Entities.Tests
         [Fact]
         public void MatchAllTypes()
         {
-            var builder = new Aspect.Builder()
+            var builder = new AspectBuilder()
                 .All(typeof(Transform2), typeof(Sprite));
 
             Assert.Equal(2, builder.AllTypes.Count);
@@ -20,7 +20,7 @@ namespace MonoGame.Extended.Entities.Tests
         [Fact]
         public void MatchAllTypesIsEmpty()
         {
-            var builder = new Aspect.Builder()
+            var builder = new AspectBuilder()
                 .All();
 
             Assert.Empty(builder.AllTypes);
@@ -31,7 +31,7 @@ namespace MonoGame.Extended.Entities.Tests
         [Fact]
         public void MatchOneOfType()
         {
-            var builder = new Aspect.Builder()
+            var builder = new AspectBuilder()
                 .One(typeof(Transform2), typeof(Sprite));
 
             Assert.Equal(2, builder.OneTypes.Count);
@@ -42,7 +42,7 @@ namespace MonoGame.Extended.Entities.Tests
         [Fact]
         public void ExcludeTypes()
         {
-            var builder = new Aspect.Builder()
+            var builder = new AspectBuilder()
                 .Exclude(typeof(Transform2), typeof(Sprite));
 
             Assert.Equal(2, builder.ExclusionTypes.Count);
@@ -54,7 +54,7 @@ namespace MonoGame.Extended.Entities.Tests
         public void BuildAspect()
         {
             var componentManager = new ComponentManager();
-            var builder = new Aspect.Builder()
+            var builder = new AspectBuilder()
                 .All(typeof(Transform2), typeof(Sprite))
                 .One(typeof(string))
                 .Exclude(typeof(Texture2D));

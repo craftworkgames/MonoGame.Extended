@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Entities
         private readonly Aspect _aspect;
         private readonly bool _rebuildActives;
 
-        public EntitySubscription(EntityManager entityManager, Aspect aspect)
+        internal EntitySubscription(EntityManager entityManager, Aspect aspect)
         {
             _entityManager = entityManager;
             _aspect = aspect;

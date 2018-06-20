@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Entities
         private readonly EntityManager _entityManager;
         private readonly ComponentManager _componentManager;
 
-        public Entity(int id, EntityManager entityManager, ComponentManager componentManager)
+        internal Entity(int id, EntityManager entityManager, ComponentManager componentManager)
         {
             Id = id;
 
@@ -17,7 +17,7 @@ namespace MonoGame.Extended.Entities
             _componentManager = componentManager;
         }
 
-        public int Id { get; internal set; }
+        public int Id { get; }
 
         private BitArray _componentBits;
         private bool _componentsChanged;
