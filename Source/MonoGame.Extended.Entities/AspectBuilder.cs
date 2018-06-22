@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Specialized;
 using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Entities
@@ -44,19 +45,19 @@ namespace MonoGame.Extended.Entities
         public Aspect Build(ComponentManager componentManager)
         {
             var aspect = new Aspect();
-            Associate(componentManager, AllTypes, aspect.AllSet);
-            Associate(componentManager, OneTypes, aspect.OneSet);
-            Associate(componentManager, ExclusionTypes, aspect.ExclusionSet);
+            Associate(componentManager, AllTypes, ref aspect.AllSet);
+            Associate(componentManager, OneTypes, ref aspect.OneSet);
+            Associate(componentManager, ExclusionTypes, ref aspect.ExclusionSet);
             return aspect;
         }
 
         // ReSharper disable once ParameterTypeCanBeEnumerable.Local
-        private static void Associate(ComponentManager componentManager, Bag<Type> types, BitArray bitArray)
+        private static void Associate(ComponentManager componentManager, Bag<Type> types, ref BitVector32 bits)
         {
             foreach (var type in types)
             {
                 var id = componentManager.GetComponentTypeId(type);
-                bitArray.Set(id, true);
+                bits[1 << id] = true;
             }
         }
     }

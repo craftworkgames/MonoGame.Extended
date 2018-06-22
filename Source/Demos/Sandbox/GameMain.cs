@@ -31,7 +31,7 @@ namespace Sandbox
 
             var random = new FastRandom();
 
-            for(var i = 0; i < 1000; i++)
+            for(var i = 0; i < 50000; i++)
             {
                 var entity = _world.CreateEntity();
                 entity.Attach(new Transform2(random.NextSingle(0, 800), random.NextSingle(-480, 480)));

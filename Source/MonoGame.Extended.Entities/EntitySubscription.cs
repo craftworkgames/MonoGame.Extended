@@ -17,15 +17,17 @@ namespace MonoGame.Extended.Entities
             _activeEntities = new Bag<int>(entityManager.Entities.Capacity);
             _rebuildActives = true;
 
-            _entityManager.EntityRemoved += OnEntityRemoved;
             _entityManager.EntityAdded += OnEntityAdded;
+            _entityManager.EntityRemoved += OnEntityRemoved;
         }
 
-        private void OnEntityAdded(object sender, int id) => _activeEntities.Add(id);
-        private void OnEntityRemoved(object sender, int id) => _activeEntities.Remove(id);
+        private void OnEntityAdded(int id) => _activeEntities.Add(id);
+        private void OnEntityRemoved(int id) => _activeEntities.Remove(id);
 
         public void Dispose()
         {
+            _entityManager.EntityAdded -= OnEntityAdded;
+            _entityManager.EntityRemoved -= OnEntityRemoved;
         }
 
         public Bag<int> ActiveEntities
@@ -46,7 +48,6 @@ namespace MonoGame.Extended.Entities
 
             foreach (var entity in _entityManager.Entities)
             {
-                // TODO: Technically, many entities will probably share the same set of components. odb calls this the composition identity.
                 if (_aspect.IsInterested(entity.ComponentBits))
                 {
                     _activeEntities[count] = entity.Id;

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
 using MonoGame.Extended.Entities.Systems;
@@ -23,23 +23,30 @@ namespace MonoGame.Extended.Entities
         private readonly Bag<ComponentMapper> _componentMappers;
         private readonly Dictionary<Type, int> _componentTypes;
 
-        private ComponentMapper<T> CreateMapperForType<T>(int id)
+        public Action<int> ComponentsChanged;
+
+        private ComponentMapper<T> CreateMapperForType<T>(int componentTypeId)
             where T : class 
         {
-            var mapper = new ComponentMapper<T>(id);
-            _componentMappers[id] = mapper;
+            var mapper = new ComponentMapper<T>(componentTypeId, ComponentsChanged);
+            _componentMappers[componentTypeId] = mapper;
             return mapper;
+        }
+
+        public ComponentMapper GetMapper(int componentTypeId)
+        {
+            return _componentMappers[componentTypeId];
         }
 
         public ComponentMapper<T> GetMapper<T>() 
             where T : class
         {
-            var id = GetComponentTypeId(typeof(T));
+            var componentTypeId = GetComponentTypeId(typeof(T));
 
-            if (_componentMappers[id] != null)
-                return _componentMappers[id] as ComponentMapper<T>;
+            if (_componentMappers[componentTypeId] != null)
+                return _componentMappers[componentTypeId] as ComponentMapper<T>;
 
-            return CreateMapperForType<T>(id);
+            return CreateMapperForType<T>(componentTypeId);
         }
 
         public int GetComponentTypeId(Type type)
@@ -52,24 +59,22 @@ namespace MonoGame.Extended.Entities
             return id;
         }
 
-        public void RefreshComponentBits(int entityId, ref BitArray bits)
+        public BitVector32 GetComponentBits(int entityId)
         {
-            for (var componentId = 0; componentId < _componentMappers.Count; componentId++)
-                bits[componentId] = _componentMappers[componentId].Has(entityId);
+            var componentBits = new BitVector32();
+            var mask = BitVector32.CreateMask();
 
-            for (var i = _componentMappers.Count; i < bits.Length; i++)
-                bits[i] = false;
+            for (var componentId = 0; componentId < _componentMappers.Count; componentId++)
+            {
+                componentBits[mask] = _componentMappers[componentId].Has(entityId);
+                mask = BitVector32.CreateMask(mask);
+            }
+
+            return componentBits;
         }
 
         public override void Update(GameTime gameTime)
         {
         }
-
-        //public long GetCompositionIdentity(BitArray bits)
-        //{
-        //    var array = new int[2];
-        //    bits.CopyTo(array, 0);
-        //    return (uint)array[0] + ((long)(uint)array[1] << 32);
-        //}
     }
 }

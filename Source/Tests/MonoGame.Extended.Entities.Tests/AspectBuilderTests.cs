@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
 using Xunit;
 
@@ -61,9 +62,9 @@ namespace MonoGame.Extended.Entities.Tests
 
             var aspect = builder.Build(componentManager);
 
-            Assert.NotEmpty(aspect.AllSet);
-            Assert.NotEmpty(aspect.OneSet);
-            Assert.NotEmpty(aspect.ExclusionSet);
+            Assert.True(aspect.AllSet.Data != 0);
+            Assert.True(aspect.OneSet.Data != 0);
+            Assert.True(aspect.ExclusionSet.Data != 0);
         }
     }
 }

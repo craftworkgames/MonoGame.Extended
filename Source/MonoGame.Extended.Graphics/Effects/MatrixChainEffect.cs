@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Specialized;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
 
@@ -15,12 +16,12 @@ namespace MonoGame.Extended.Graphics.Effects
         /// <summary>
         ///     The bitmask for use with <see cref="Flags"/> indicating wether <see cref="World"/>, <see cref="View"/>, or <see cref="Projection"/> has changed in the last frame.
         /// </summary>
-        protected static uint DirtyWorldViewProjectionBitMask = BitVector32.CreateMask();
+        protected static int DirtyWorldViewProjectionBitMask = BitVector32.CreateMask();
 
         /// <summary>
         ///     The bitmask for use with <see cref="Flags"/> indicating wether to use a default projection matrix or a custom projection matrix.
         /// </summary>
-        protected static uint UseDefaultProjectionBitMask = BitVector32.CreateMask(DirtyWorldViewProjectionBitMask);
+        protected static int UseDefaultProjectionBitMask = BitVector32.CreateMask(DirtyWorldViewProjectionBitMask);
 
         /// <summary>
         ///     The dirty flags associated with this <see cref="MatrixChainEffect"/>.

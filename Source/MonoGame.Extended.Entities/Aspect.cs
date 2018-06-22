@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Specialized;
 
 namespace MonoGame.Extended.Entities
 {
@@ -7,14 +7,14 @@ namespace MonoGame.Extended.Entities
     {
         internal Aspect()
         {
-            AllSet = new BitArray(32);
-            ExclusionSet = new BitArray(32);
-            OneSet = new BitArray(32);
+            AllSet = new BitVector32();
+            ExclusionSet = new BitVector32();
+            OneSet = new BitVector32();
         }
 
-        public BitArray AllSet { get; }
-        public BitArray ExclusionSet { get; }
-        public BitArray OneSet { get; }
+        public BitVector32 AllSet;
+        public BitVector32 ExclusionSet;
+        public BitVector32 OneSet;
 
         public static AspectBuilder All(params Type[] types)
         {
@@ -31,19 +31,18 @@ namespace MonoGame.Extended.Entities
             return new AspectBuilder().Exclude(types);
         }
 
-        public bool IsInterested(BitArray componentBits)
+        public bool IsInterested(BitVector32 componentBits)
         {
-            if (!AllSet.IsEmpty() && !componentBits.ContainsAll(AllSet))
+            if (AllSet.Data != 0 && (componentBits.Data & AllSet.Data) != AllSet.Data)
                 return false;
 
-            if (!ExclusionSet.IsEmpty() && ExclusionSet.Intersects(componentBits))
+            if (ExclusionSet.Data != 0 && (componentBits.Data & ExclusionSet.Data) != 0)
                 return false;
 
-            if (!OneSet.IsEmpty() && !OneSet.Intersects(componentBits))
+            if (OneSet.Data != 0 && (componentBits.Data & OneSet.Data) == 0)
                 return false;
 
             return true;
         }
-
     }
 }

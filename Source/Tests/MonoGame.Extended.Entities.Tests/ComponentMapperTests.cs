@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Entities.Tests
         [Fact]
         public void CreateComponentMapper()
         {
-            var mapper = new ComponentMapper<object>(0);
+            var mapper = new ComponentMapper<object>(0, _ => {});
 
             Assert.Equal(typeof(object), mapper.ComponentType);
             Assert.Empty(mapper.Components);
@@ -18,7 +18,7 @@ namespace MonoGame.Extended.Entities.Tests
         {
             const int entityId = 3;
 
-            var mapper = new ComponentMapper<Transform2>(1);
+            var mapper = new ComponentMapper<Transform2>(1, _ => { });
             var component = new Transform2();
 
             mapper.Put(entityId, component);
@@ -33,7 +33,7 @@ namespace MonoGame.Extended.Entities.Tests
         {
             const int entityId = 1;
 
-            var mapper = new ComponentMapper<Transform2>(2);
+            var mapper = new ComponentMapper<Transform2>(2, _ => { });
             var component = new Transform2();
 
             mapper.Put(entityId, component);
@@ -47,7 +47,7 @@ namespace MonoGame.Extended.Entities.Tests
         {
             const int entityId = 0;
 
-            var mapper = new ComponentMapper<Transform2>(3);
+            var mapper = new ComponentMapper<Transform2>(3, _ => { });
             var component = new Transform2();
 
             Assert.False(mapper.Has(entityId));

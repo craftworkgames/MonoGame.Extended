@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections.Specialized;
 using MonoGame.Extended.Sprites;
 using Xunit;
 
@@ -11,22 +11,22 @@ namespace MonoGame.Extended.Entities.Tests
     public class AspectTests
     {
         private readonly ComponentManager _componentManager;
-        private readonly BitArray _entityA;
-        private readonly BitArray _entityB;
+        private readonly BitVector32 _entityA;
+        private readonly BitVector32 _entityB;
 
         public AspectTests()
         {
             _componentManager = new ComponentManager();
-            _entityA = new BitArray(3)
+            _entityA = new BitVector32
             {
-                [_componentManager.GetComponentTypeId(typeof(Transform2))] = true,
-                [_componentManager.GetComponentTypeId(typeof(Sprite))] = true,
-                [_componentManager.GetComponentTypeId(typeof(DummyComponent))] = true
+                [1 << _componentManager.GetComponentTypeId(typeof(Transform2))] = true,
+                [1 << _componentManager.GetComponentTypeId(typeof(Sprite))] = true,
+                [1 << _componentManager.GetComponentTypeId(typeof(DummyComponent))] = true
             };
-            _entityB = new BitArray(3)
+            _entityB = new BitVector32
             {
-                [_componentManager.GetComponentTypeId(typeof(Transform2))] = true,
-                [_componentManager.GetComponentTypeId(typeof(Sprite))] = true,
+                [1 << _componentManager.GetComponentTypeId(typeof(Transform2))] = true,
+                [1 << _componentManager.GetComponentTypeId(typeof(Sprite))] = true,
             };
         }
 

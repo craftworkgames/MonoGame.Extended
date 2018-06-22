@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Specialized;
 
 namespace MonoGame.Extended.Entities
 {
@@ -12,36 +13,19 @@ namespace MonoGame.Extended.Entities
         {
             Id = id;
 
-            _componentBits = new BitArray(16);
             _entityManager = entityManager;
             _componentManager = componentManager;
         }
 
         public int Id { get; }
-
-        private BitArray _componentBits;
-        private bool _componentsChanged;
-
-        public BitArray ComponentBits
-        {
-            get
-            {
-                if (_componentsChanged)
-                {
-                    _componentManager.RefreshComponentBits(Id, ref _componentBits);
-                    _componentsChanged = false;
-                }
-
-                return _componentBits;
-            }
-        } 
+        
+        public BitVector32 ComponentBits => _entityManager.GetComponentBits(Id);
 
         public void Attach<T>(T component)
             where T : class 
         {
             var mapper = _componentManager.GetMapper<T>();
             mapper.Put(Id, component);
-            _componentsChanged = true;
         }
 
         public void Detach<T>()
@@ -49,7 +33,6 @@ namespace MonoGame.Extended.Entities
         {
             var mapper = _componentManager.GetMapper<T>();
             mapper.Delete(Id);
-            _componentsChanged = true;
         }
 
         public T Get<T>()

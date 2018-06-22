@@ -14,7 +14,7 @@ namespace MonoGame.Extended.Entities
             ComponentManager = new ComponentManager();
             EntityManager = new EntityManager(ComponentManager);
 
-            _updateSystems = new Bag<UpdateSystem>()
+            _updateSystems = new Bag<UpdateSystem>
             {
                 ComponentManager,
                 EntityManager
