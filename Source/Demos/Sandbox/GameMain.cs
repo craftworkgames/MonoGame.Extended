@@ -31,11 +31,11 @@ namespace Sandbox
 
             var random = new FastRandom();
 
-            for(var i = 0; i < 50000; i++)
+            for(var i = 0; i < 2000; i++)
             {
                 var entity = _world.CreateEntity();
                 entity.Attach(new Transform2(random.NextSingle(0, 800), random.NextSingle(-480, 480)));
-                entity.Attach(new Raindrop { Velocity = new Vector2(random.Next(-3, 3), random.Next(-100)) });
+                entity.Attach(new Raindrop { Velocity = new Vector2(random.Next(-3, 3), random.Next(-10, 10)) });
             }
         }
 

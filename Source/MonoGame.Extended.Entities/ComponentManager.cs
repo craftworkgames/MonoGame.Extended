@@ -26,8 +26,11 @@ namespace MonoGame.Extended.Entities
         public Action<int> ComponentsChanged;
 
         private ComponentMapper<T> CreateMapperForType<T>(int componentTypeId)
-            where T : class 
+            where T : class
         {
+            if (componentTypeId >= 32)
+                throw new InvalidOperationException("Component type limit exceeded. We currently only allow 32 component types for performance reasons.");
+
             var mapper = new ComponentMapper<T>(componentTypeId, ComponentsChanged);
             _componentMappers[componentTypeId] = mapper;
             return mapper;
@@ -59,7 +62,7 @@ namespace MonoGame.Extended.Entities
             return id;
         }
 
-        public BitVector32 GetComponentBits(int entityId)
+        public BitVector32 CreateComponentBits(int entityId)
         {
             var componentBits = new BitVector32();
             var mask = BitVector32.CreateMask();

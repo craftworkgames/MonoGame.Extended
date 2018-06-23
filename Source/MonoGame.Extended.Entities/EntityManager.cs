@@ -49,9 +49,10 @@ namespace MonoGame.Extended.Entities
 
         public void DestroyEntity(int entityId)
         {
+            _removedEntities.Add(entityId);
+            _entityToComponentBits[entityId] = default(BitVector32);
+            Entities[entityId] = null;
             EntityRemoved?.Invoke(entityId);
-            throw new NotImplementedException();
-            //Entities[entityId] = null;
         }
 
         public void DestroyEntity(Entity entity)
@@ -73,20 +74,20 @@ namespace MonoGame.Extended.Entities
         {
             foreach (var entity in _addedEntities)
             {
-                _entityToComponentBits[entity] = _componentManager.GetComponentBits(entity);
+                _entityToComponentBits[entity] = _componentManager.CreateComponentBits(entity);
                 EntityAdded?.Invoke(entity);
+            }
+
+            foreach (var entity in _changedEntities)
+            {
+                _entityToComponentBits[entity] = _componentManager.CreateComponentBits(entity);
+                EntityChanged?.Invoke(entity);
             }
 
             foreach (var entity in _removedEntities)
             {
                 _entityToComponentBits[entity] = default(BitVector32);
                 EntityRemoved?.Invoke(entity);
-            }
-
-            foreach (var entity in _changedEntities)
-            {
-                _entityToComponentBits[entity] = _componentManager.GetComponentBits(entity);
-                EntityChanged?.Invoke(entity);
             }
 
             _addedEntities.Clear();

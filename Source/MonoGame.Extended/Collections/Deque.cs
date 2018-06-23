@@ -131,8 +131,8 @@ namespace MonoGame.Extended.Collections
         /// </remarks>
         public Func<int, int> ResizeFunction
         {
-            get { return _resizeFunction; }
-            set { _resizeFunction = value ?? Deque.DefaultResizeFunction; }
+            get => _resizeFunction;
+            set => _resizeFunction = value ?? Deque.DefaultResizeFunction;
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace MonoGame.Extended.Collections
         /// </remarks>
         public int Capacity
         {
-            get { return _items.Length; }
+            get => _items.Length;
             set
             {
                 if (value < Count)
@@ -274,14 +274,17 @@ namespace MonoGame.Extended.Collections
         public int IndexOf(T item)
         {
             var comparer = EqualityComparer<T>.Default;
-            T checkFrontBackItem;
-            if (Get(0, out checkFrontBackItem) && comparer.Equals(checkFrontBackItem, item))
+
+            if (Get(0, out var checkFrontBackItem) && comparer.Equals(checkFrontBackItem, item))
                 return 0;
+
             var backIndex = Count - 1;
+
             if (Get(backIndex, out checkFrontBackItem) && comparer.Equals(checkFrontBackItem, item))
                 return backIndex;
 
             int index;
+
             if (Count <= _items.Length - _frontArrayIndex)
                 index = Array.IndexOf(_items, item, _frontArrayIndex, Count);
             else

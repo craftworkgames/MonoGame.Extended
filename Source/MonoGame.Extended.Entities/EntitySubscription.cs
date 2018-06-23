@@ -3,12 +3,12 @@ using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Entities
 {
-    public class EntitySubscription : IDisposable
+    internal class EntitySubscription : IDisposable
     {
         private readonly Bag<int> _activeEntities;
         private readonly EntityManager _entityManager;
         private readonly Aspect _aspect;
-        private readonly bool _rebuildActives;
+        private bool _rebuildActives;
 
         internal EntitySubscription(EntityManager entityManager, Aspect aspect)
         {
@@ -19,10 +19,17 @@ namespace MonoGame.Extended.Entities
 
             _entityManager.EntityAdded += OnEntityAdded;
             _entityManager.EntityRemoved += OnEntityRemoved;
+            _entityManager.EntityChanged += OnEntityChanged;
         }
 
-        private void OnEntityAdded(int id) => _activeEntities.Add(id);
-        private void OnEntityRemoved(int id) => _activeEntities.Remove(id);
+        private void OnEntityAdded(int entityId)
+        {
+            if (_aspect.IsInterested(_entityManager.GetComponentBits(entityId)))
+                _activeEntities.Add(entityId);
+        }
+
+        private void OnEntityRemoved(int entityId) => _rebuildActives = true;
+        private void OnEntityChanged(int entityId) => _rebuildActives = true;
 
         public void Dispose()
         {
@@ -43,17 +50,12 @@ namespace MonoGame.Extended.Entities
 
         private void RebuildActives()
         {
-            var count = 0;
             _activeEntities.Clear();
 
             foreach (var entity in _entityManager.Entities)
-            {
-                if (_aspect.IsInterested(entity.ComponentBits))
-                {
-                    _activeEntities[count] = entity.Id;
-                    count++;
-                }
-            }
+                OnEntityAdded(entity.Id);
+
+            _rebuildActives = false;
         }
     }
 }

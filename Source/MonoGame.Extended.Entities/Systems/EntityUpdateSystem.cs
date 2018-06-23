@@ -9,6 +9,17 @@ namespace MonoGame.Extended.Entities.Systems
             _aspectBuilder = aspectBuilder;
         }
 
+        public override void Dispose()
+        {
+            if (_world != null)
+            {
+                _world.EntityManager.EntityAdded -= OnEntityAdded;
+                _world.EntityManager.EntityRemoved -= OnEntityRemoved;
+            }
+
+            base.Dispose();
+        }
+
         private readonly AspectBuilder _aspectBuilder;
         private EntitySubscription _subscription;
 
@@ -20,8 +31,6 @@ namespace MonoGame.Extended.Entities.Systems
             {
                 _world = value;
                 _subscription = new EntitySubscription(_world.EntityManager, _aspectBuilder.Build(_world.ComponentManager));
-
-                // TODO: Undisposed events.
                 _world.EntityManager.EntityAdded += OnEntityAdded;
                 _world.EntityManager.EntityRemoved += OnEntityRemoved;
             }
