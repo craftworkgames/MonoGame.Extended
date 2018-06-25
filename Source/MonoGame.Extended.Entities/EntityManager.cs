@@ -20,6 +20,8 @@ namespace MonoGame.Extended.Entities
             _componentManager.ComponentsChanged += OnComponentsChanged;
 
             Entities = new Bag<Entity>(_defaultBagSize);
+
+            _entityPool = new Pool<Entity>(() => new Entity(_nextId++, this, _componentManager), _defaultBagSize);
         }
 
         private readonly ComponentManager _componentManager;
@@ -27,6 +29,7 @@ namespace MonoGame.Extended.Entities
 
         public Bag<Entity> Entities { get; }
 
+        private readonly Pool<Entity> _entityPool;
         private readonly Bag<int> _addedEntities;
         private readonly Bag<int> _removedEntities;
         private readonly Bag<int> _changedEntities;
@@ -38,9 +41,8 @@ namespace MonoGame.Extended.Entities
 
         public Entity CreateEntity()
         {
-            // TODO: Recycle dead entites
-            var id = _nextId++;
-            var entity = new Entity(id, this, _componentManager);
+            var entity = _entityPool.Obtain();
+            var id = entity.Id;
             Entities[id] = entity;
             _addedEntities.Add(id);
             _entityToComponentBits[id] = new BitVector32(0);
@@ -51,8 +53,8 @@ namespace MonoGame.Extended.Entities
         {
             _removedEntities.Add(entityId);
             _entityToComponentBits[entityId] = default(BitVector32);
+            _entityPool.Free(Entities[entityId]);
             Entities[entityId] = null;
-            EntityRemoved?.Invoke(entityId);
         }
 
         public void DestroyEntity(Entity entity)

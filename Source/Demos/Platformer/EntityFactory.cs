@@ -57,6 +57,7 @@ namespace Platformer
             entity.Attach(new AnimatedSprite(animationFactory, "idle") { Effect = SpriteEffects.FlipHorizontally });
             entity.Attach(new Transform2(position, 0, Vector2.One * 4));
             entity.Attach(new Body { Position = position, Size = new Vector2(32, 64), BodyType = BodyType.Dynamic });
+            entity.Attach(new Enemy());
             return entity;
         }
 

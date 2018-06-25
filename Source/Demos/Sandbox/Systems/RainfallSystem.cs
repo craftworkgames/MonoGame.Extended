@@ -8,12 +8,14 @@ namespace Sandbox.Systems
 {
     public class RainfallSystem : EntityUpdateSystem
     {
+        private readonly EntityWorld _world;
         private ComponentMapper<Transform2> _transformMapper;
         private ComponentMapper<Raindrop> _raindropMapper;
 
-        public RainfallSystem()
+        public RainfallSystem(EntityWorld world)
             : base(Aspect.All(typeof(Transform2), typeof(Raindrop)))
         {
+            _world = world;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -35,7 +37,7 @@ namespace Sandbox.Systems
                 transform.Position += raindrop.Velocity * elapsedSeconds;
 
                 if (transform.Position.Y >= 480)
-                    transform.Position = new Vector2(transform.Position.X, 0);
+                    _world.DestroyEntity(entity);
             }
         }
     }

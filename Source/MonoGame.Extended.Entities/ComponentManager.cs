@@ -69,7 +69,7 @@ namespace MonoGame.Extended.Entities
 
             for (var componentId = 0; componentId < _componentMappers.Count; componentId++)
             {
-                componentBits[mask] = _componentMappers[componentId].Has(entityId);
+                componentBits[mask] = _componentMappers[componentId]?.Has(entityId) ?? false;
                 mask = BitVector32.CreateMask(mask);
             }
 

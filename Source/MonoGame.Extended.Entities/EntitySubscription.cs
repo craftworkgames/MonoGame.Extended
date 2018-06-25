@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Entities
@@ -52,7 +53,8 @@ namespace MonoGame.Extended.Entities
         {
             _activeEntities.Clear();
 
-            foreach (var entity in _entityManager.Entities)
+            // TODO: This doesn't really feel like the right place to be doing this.
+            foreach (var entity in _entityManager.Entities.Where(e => e != null))
                 OnEntityAdded(entity.Id);
 
             _rebuildActives = false;

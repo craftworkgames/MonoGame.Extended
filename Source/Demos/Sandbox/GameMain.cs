@@ -27,7 +27,7 @@ namespace Sandbox
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _world = new EntityWorld();
             _world.RegisterSystem(new RenderSystem(GraphicsDevice));
-            _world.RegisterSystem(new RainfallSystem());
+            _world.RegisterSystem(new RainfallSystem(_world));
 
             var random = new FastRandom();
 

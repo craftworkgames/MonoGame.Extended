@@ -34,6 +34,7 @@ namespace Platformer
             _world = new EntityWorld();
             _world.RegisterSystem(new WorldSystem());
             _world.RegisterSystem(new PlayerSystem());
+            _world.RegisterSystem(new EnemySystem());
             _world.RegisterSystem(new RenderSystem(new SpriteBatch(GraphicsDevice), _camera));
 
             _entityFactory = new EntityFactory(_world, Content);

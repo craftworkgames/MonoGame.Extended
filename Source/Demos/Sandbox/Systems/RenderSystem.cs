@@ -33,7 +33,7 @@ namespace Sandbox.Systems
             {
                 var transform = _transformMapper.Get(entity);
 
-                _spriteBatch.FillRectangle(transform.Position, new Size2(3, 3), Color.LightBlue);
+                _spriteBatch.FillRectangle(transform.Position, new Size2(3, 3), Color.SandyBrown);
             }
 
             _spriteBatch.End();

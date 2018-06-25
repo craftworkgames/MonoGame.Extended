@@ -1,4 +1,3 @@
-using MonoGame.Extended.Entities;
 
 namespace Platformer.Components
 {
@@ -18,7 +17,6 @@ namespace Platformer.Components
         Cool
     }
 
-    [EntityComponent]
     public class Player
     {
         public Facing Facing { get; set; } = Facing.Right;

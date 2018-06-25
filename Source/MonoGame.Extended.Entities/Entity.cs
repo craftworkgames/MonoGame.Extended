@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Entities
             _componentManager = componentManager;
         }
 
-        public int Id { get; }
+        public int Id { get; internal set; }
         
         public BitVector32 ComponentBits => _entityManager.GetComponentBits(Id);
 
@@ -63,6 +63,7 @@ namespace MonoGame.Extended.Entities
 
         public override int GetHashCode()
         {
+            // ReSharper disable once NonReadonlyMemberInGetHashCode
             return Id;
         }
 

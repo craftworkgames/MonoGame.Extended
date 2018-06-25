@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
 
 namespace Platformer.Collisions
 {
@@ -8,7 +7,6 @@ namespace Platformer.Collisions
         Static, Dynamic
     }
 
-    [EntityComponent]
     public class Body
     {
         public BodyType BodyType = BodyType.Static;
