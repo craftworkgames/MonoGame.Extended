@@ -47,7 +47,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             {
                 context.Logger.LogImportantMessage(ex.Message);
                 context.Logger.LogImportantMessage("Hello World!");
-                return null;
+				throw ex;
             }
         }
 

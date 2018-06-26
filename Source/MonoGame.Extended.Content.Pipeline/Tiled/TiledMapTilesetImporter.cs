@@ -29,7 +29,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			catch (Exception e)
 			{
 				context.Logger.LogImportantMessage(e.StackTrace);
-				return null;
+				throw e;
 			}
 		}
 
@@ -40,13 +40,15 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				var tilesetSerializer = new XmlSerializer(typeof(TiledMapTilesetContent));
 				var tileset = (TiledMapTilesetContent)tilesetSerializer.Deserialize(reader);
 
-				ContentLogger.Log($"Adding dependency '{tileset.Image?.Source}'");
-				context.AddDependency(tileset.Image?.Source);
+				tileset.Image.Source = $"{Path.GetDirectoryName(filePath)}/{tileset.Image.Source}";
+				ContentLogger.Log($"Adding dependency '{tileset.Image.Source}'");
+				context.AddDependency(tileset.Image.Source);
 
 				foreach (var tile in tileset.Tiles)
 					foreach (var obj in tile.Objects)
 						if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
 						{
+							obj.TemplateSource = $"{Path.GetDirectoryName(filePath)}/{obj.TemplateSource}";
 							ContentLogger.Log($"Adding dependency '{obj.TemplateSource}'");
 
 							// We depend on the template.

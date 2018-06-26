@@ -33,7 +33,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             catch (Exception e)
             {
                 context.Logger.LogImportantMessage(e.StackTrace);
-                return null;
+				throw e;
             }
         }
 
@@ -51,32 +51,45 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 					var tileset = map.Tilesets[i];
 
 					if (!string.IsNullOrWhiteSpace(tileset.Source))
-						AddTilesetDependency(tileset.Source, context);
+					{
+						tileset.Source = $"{Path.GetDirectoryName(mapFilePath)}/{tileset.Source}";
+						ContentLogger.Log($"Adding dependency for {tileset.Source}");
+						// We depend on the tileset. If the tileset changes, the map also needs to rebuild.
+						context.AddDependency(tileset.Source);
+					}
+					else
+					{
+						tileset.Image.Source = $"{Path.GetDirectoryName(mapFilePath)}/{tileset.Image.Source}";
+						ContentLogger.Log($"Adding dependency for {tileset.Image.Source}");
+						context.AddDependency(tileset.Image.Source);
+					}
 				}
 
-				ImportLayers(context, map.Layers);
+				ImportLayers(context, map.Layers, Path.GetDirectoryName(mapFilePath));
 
 				map.Name = mapFilePath;
 				return map;
 			}
 		}
 
-		private static void ImportLayers(ContentImporterContext context, List<TiledMapLayerContent> layers)
+		private static void ImportLayers(ContentImporterContext context, List<TiledMapLayerContent> layers, string path)
 		{
 			for (var i = 0; i < layers.Count; i++)
 			{
 				if (layers[i] is TiledMapImageLayerContent imageLayer)
 				{
-					ContentLogger.Log($"Adding dependency for '{imageLayer.Image?.Source}'");
+					imageLayer.Image.Source = $"{path}/{imageLayer.Image.Source}";
+					ContentLogger.Log($"Adding dependency for '{imageLayer.Image.Source}'");
 
 					// Tell the pipeline that we depend on this image and need to rebuild the map if the image changes.
 					// (Maybe the image is a different size)
-					context.AddDependency(imageLayer.Image?.Source);
+					context.AddDependency(imageLayer.Image.Source);
 				}
 				if (layers[i] is TiledMapObjectLayerContent objectLayer)
 					foreach (var obj in objectLayer.Objects)
 						if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
 						{
+							obj.TemplateSource = $"{path}/{obj.TemplateSource}";
 							ContentLogger.Log($"Adding dependency for '{obj.TemplateSource}'");
 							// Tell the pipeline that we depend on this template and need to rebuild the map if the template changes.
 							// (Templates are loaded into objects on process, so all objects which depend on the template file
@@ -85,16 +98,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 						}
 				if (layers[i] is TiledMapGroupLayerContent groupLayer)
 					// Yay recursion!
-					ImportLayers(context, groupLayer.Layers);
+					ImportLayers(context, groupLayer.Layers, path);
 			}
 		}
-
-        private static void AddTilesetDependency(string tilesetFilePath, ContentImporterContext context)
-        {
-            ContentLogger.Log($"Adding dependency '{tilesetFilePath}'");
-
-			// We depend on the tileset. If the tileset changes, the map also needs to rebuild.
-			context.AddDependency(tilesetFilePath);
-        }
     }
 }

@@ -30,7 +30,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			catch (Exception ex)
 			{
 				context.Logger.LogImportantMessage(ex.Message);
-				return null;
+				throw ex;
 			}
 		}
 	}
