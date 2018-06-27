@@ -13,7 +13,7 @@ namespace Sandbox
         // ReSharper disable once NotAccessedField.Local
         private GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
-        private EntityWorld _world;
+        private World _world;
 
         public MainGame()
         {
@@ -25,9 +25,10 @@ namespace Sandbox
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _world = new EntityWorld();
-            _world.RegisterSystem(new RenderSystem(GraphicsDevice));
-            _world.RegisterSystem(new RainfallSystem(_world));
+            _world = new WorldBuilder()
+                .AddSystem(new RenderSystem(GraphicsDevice))
+                .AddSystem(new RainfallSystem())
+                .Build();
 
             var random = new FastRandom();
 

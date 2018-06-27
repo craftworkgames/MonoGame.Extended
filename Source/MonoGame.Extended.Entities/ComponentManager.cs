@@ -24,7 +24,7 @@ namespace MonoGame.Extended.Entities
         {
         }
 
-        public void Initialize(EntityWorld world)
+        public void Initialize(World world)
         {
         }
 

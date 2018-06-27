@@ -3,6 +3,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using Platformer.Collisions;
+using World = Platformer.Collisions.World;
 
 namespace Platformer.Systems
 {

@@ -4,12 +4,12 @@ using MonoGame.Extended.Entities.Systems;
 
 namespace MonoGame.Extended.Entities
 {
-    public class EntityWorld : SimpleDrawableGameComponent
+    public class World : SimpleDrawableGameComponent
     {
         private readonly Bag<IUpdateSystem> _updateSystems;
         private readonly Bag<IDrawSystem> _drawSystems;
 
-        public EntityWorld()
+        internal World()
         {
             _updateSystems = new Bag<IUpdateSystem>();
             _drawSystems = new Bag<IDrawSystem>();
@@ -34,8 +34,7 @@ namespace MonoGame.Extended.Entities
         
         public Bag<Entity> AllEntities => EntityManager.Entities;
 
-        // TODO: Move this to world configuration
-        public void RegisterSystem(ISystem system)
+        internal void RegisterSystem(ISystem system)
         {
             // ReSharper disable once ConvertIfStatementToSwitchStatement
             if (system is IUpdateSystem updateSystem)

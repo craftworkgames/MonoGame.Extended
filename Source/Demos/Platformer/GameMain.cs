@@ -15,7 +15,7 @@ namespace Platformer
         private TiledMapRenderer _renderer;
         private EntityFactory _entityFactory;
         private OrthographicCamera _camera;
-        private EntityWorld _world;
+        private World _world;
 
         public GameMain()
         {
@@ -31,11 +31,14 @@ namespace Platformer
 
         protected override void LoadContent()
         {
-            _world = new EntityWorld();
-            _world.RegisterSystem(new WorldSystem());
-            _world.RegisterSystem(new PlayerSystem());
-            _world.RegisterSystem(new EnemySystem());
-            _world.RegisterSystem(new RenderSystem(new SpriteBatch(GraphicsDevice), _camera));
+            _world = new WorldBuilder()
+                .AddSystem(new WorldSystem())
+                .AddSystem(new PlayerSystem())
+                .AddSystem(new EnemySystem())
+                .AddSystem(new RenderSystem(new SpriteBatch(GraphicsDevice), _camera))
+                .Build();
+
+            Components.Add(_world);
 
             _entityFactory = new EntityFactory(_world, Content);
 
@@ -78,7 +81,7 @@ namespace Platformer
             _renderer.Update(gameTime);
             //_camera.LookAt(_playerEntity.Get<Transform2>().Position);
 
-            _world.Update(gameTime);
+            //_world.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -88,7 +91,7 @@ namespace Platformer
             GraphicsDevice.Clear(Color.Black);
             
             _renderer.Draw(_camera.GetViewMatrix());
-            _world.Draw(gameTime);
+            //_world.Draw(gameTime);
 
             base.Draw(gameTime);
         }

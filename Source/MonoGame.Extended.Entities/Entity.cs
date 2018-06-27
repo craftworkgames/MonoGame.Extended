@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Entities
             _componentManager = componentManager;
         }
 
-        public int Id { get; internal set; }
+        public int Id { get; }
         
         public BitVector32 ComponentBits => _entityManager.GetComponentBits(Id);
 

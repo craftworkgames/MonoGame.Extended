@@ -8,15 +8,16 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.TextureAtlases;
 using Platformer.Collisions;
 using Platformer.Components;
+using World = MonoGame.Extended.Entities.World;
 
 namespace Platformer
 {
     public class EntityFactory
     {
-        private readonly EntityWorld _world;
+        private readonly World _world;
         private readonly ContentManager _contentManager;
 
-        public EntityFactory(EntityWorld world, ContentManager contentManager)
+        public EntityFactory(World world, ContentManager contentManager)
         {
             _world = world;
             _contentManager = contentManager;

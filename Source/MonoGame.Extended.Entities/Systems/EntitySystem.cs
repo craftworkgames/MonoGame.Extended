@@ -11,37 +11,40 @@ namespace MonoGame.Extended.Entities.Systems
 
         public void Dispose()
         {
-            if (World != null)
+            if (_world != null)
             {
-                World.EntityManager.EntityAdded -= OnEntityAdded;
-                World.EntityManager.EntityRemoved -= OnEntityRemoved;
+                _world.EntityManager.EntityAdded -= OnEntityAdded;
+                _world.EntityManager.EntityRemoved -= OnEntityRemoved;
             }
         }
-
-        public virtual void Initialize(EntityWorld world)
-        {
-            World = world;
-
-            var aspect = _aspectBuilder.Build(World.ComponentManager);
-            _subscription = new EntitySubscription(World.EntityManager, aspect);
-            World.EntityManager.EntityAdded += OnEntityAdded;
-            World.EntityManager.EntityRemoved += OnEntityRemoved;
-            World.EntityManager.EntityChanged += OnEntityChanged;
-
-            Initialize(world.ComponentManager);
-        }
-
-        public abstract void Initialize(IComponentMapperService mapperService);
 
         private readonly AspectBuilder _aspectBuilder;
         private EntitySubscription _subscription;
 
-        public EntityWorld World { get; private set; }
+        private World _world;
 
         protected virtual void OnEntityChanged(int entityId) { }
         protected virtual void OnEntityAdded(int entityId) { }
         protected virtual void OnEntityRemoved(int entityId) { }
 
         public Bag<int> ActiveEntities => _subscription.ActiveEntities;
+
+        public virtual void Initialize(World world)
+        {
+            _world = world;
+
+            var aspect = _aspectBuilder.Build(_world.ComponentManager);
+            _subscription = new EntitySubscription(_world.EntityManager, aspect);
+            _world.EntityManager.EntityAdded += OnEntityAdded;
+            _world.EntityManager.EntityRemoved += OnEntityRemoved;
+            _world.EntityManager.EntityChanged += OnEntityChanged;
+
+            Initialize(world.ComponentManager);
+        }
+
+        public abstract void Initialize(IComponentMapperService mapperService);
+
+        protected void DestroyEntity(int entityId) => _world.DestroyEntity(entityId);
+        protected Entity CreateEntity() => _world.CreateEntity();
     }
 }

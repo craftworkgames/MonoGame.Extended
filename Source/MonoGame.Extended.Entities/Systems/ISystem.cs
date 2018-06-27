@@ -4,6 +4,6 @@ namespace MonoGame.Extended.Entities.Systems
 {
     public interface ISystem : IDisposable
     {
-        void Initialize(EntityWorld world);
+        void Initialize(World world);
     }
 }
