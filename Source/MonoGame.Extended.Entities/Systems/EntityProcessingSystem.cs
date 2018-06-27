@@ -4,7 +4,7 @@ namespace MonoGame.Extended.Entities.Systems
 {
     public abstract class EntityProcessingSystem : EntityUpdateSystem
     {
-        protected EntityProcessingSystem(AspectBuilder aspectBuilder) 
+        protected EntityProcessingSystem(AspectBuilder aspectBuilder)
             : base(aspectBuilder)
         {
         }

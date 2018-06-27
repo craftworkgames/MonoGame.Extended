@@ -6,20 +6,16 @@ namespace MonoGame.Extended.Entities
 {
     public class EntityWorld : SimpleDrawableGameComponent
     {
-        private readonly Bag<UpdateSystem> _updateSystems;
-        private readonly Bag<EntityDrawSystem> _drawSystems;
+        private readonly Bag<IUpdateSystem> _updateSystems;
+        private readonly Bag<IDrawSystem> _drawSystems;
 
         public EntityWorld()
         {
-            ComponentManager = new ComponentManager();
-            EntityManager = new EntityManager(ComponentManager);
+            _updateSystems = new Bag<IUpdateSystem>();
+            _drawSystems = new Bag<IDrawSystem>();
 
-            _updateSystems = new Bag<UpdateSystem>
-            {
-                ComponentManager,
-                EntityManager
-            };
-            _drawSystems = new Bag<EntityDrawSystem>();
+            RegisterSystem(ComponentManager = new ComponentManager());
+            RegisterSystem(EntityManager = new EntityManager(ComponentManager));
         }
 
         public override void Dispose()
@@ -39,23 +35,16 @@ namespace MonoGame.Extended.Entities
         public Bag<Entity> AllEntities => EntityManager.Entities;
 
         // TODO: Move this to world configuration
-        public void RegisterSystem(UpdateSystem system)
+        public void RegisterSystem(ISystem system)
         {
-            switch (system)
-            {
-                case EntityDrawSystem drawSystem:
-                    _drawSystems.Add(drawSystem);
-                    break;
-                case UpdateSystem updateSystem:
-                    _updateSystems.Add(updateSystem);
-                    break;
-            }
+            // ReSharper disable once ConvertIfStatementToSwitchStatement
+            if (system is IUpdateSystem updateSystem)
+                _updateSystems.Add(updateSystem);
 
-            if (system is EntityUpdateSystem entitySystem)
-            {
-                entitySystem.World = this;
-                entitySystem.Initialize(ComponentManager);
-            }
+            if (system is IDrawSystem drawSystem)
+                _drawSystems.Add(drawSystem);
+
+            system.Initialize(this);
         }
 
         public Entity GetEntity(int entityId)

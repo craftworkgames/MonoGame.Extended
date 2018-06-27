@@ -6,7 +6,7 @@ using MonoGame.Extended.Entities.Systems;
 
 namespace MonoGame.Extended.Entities
 {
-    public class EntityManager : UpdateSystem
+    public class EntityManager : IUpdateSystem
     {
         private const int _defaultBagSize = 128;
 
@@ -22,6 +22,14 @@ namespace MonoGame.Extended.Entities
             Entities = new Bag<Entity>(_defaultBagSize);
 
             _entityPool = new Pool<Entity>(() => new Entity(_nextId++, this, _componentManager), _defaultBagSize);
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public void Initialize(EntityWorld world)
+        {
         }
 
         private readonly ComponentManager _componentManager;
@@ -72,7 +80,7 @@ namespace MonoGame.Extended.Entities
             _changedEntities.Add(entityId);
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             foreach (var entity in _addedEntities)
             {

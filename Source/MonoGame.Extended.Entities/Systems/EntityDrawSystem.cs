@@ -2,16 +2,11 @@
 
 namespace MonoGame.Extended.Entities.Systems
 {
-    public abstract class EntityDrawSystem : EntityUpdateSystem
+    public abstract class EntityDrawSystem : EntitySystem, IDrawSystem
     {
         protected EntityDrawSystem(AspectBuilder aspect)
             : base(aspect)
         {
-        }
-
-        public sealed override void Update(GameTime gameTime)
-        {
-            Draw(gameTime);
         }
 
         public abstract void Draw(GameTime gameTime);
