@@ -26,12 +26,12 @@
 /processorParam:TextureFormat=Color
 /build:ballGrey.png
 
-#begin kenney-rocket-square.fnt
+#begin Sensation.fnt
 /importer:BitmapFontImporter
 /processor:BitmapFontProcessor
-/build:kenney-rocket-square.fnt
+/build:Sensation.fnt
 
-#begin kenney-rocket-square_0.png
+#begin Sensation_0.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -41,5 +41,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:kenney-rocket-square_0.png
+/build:Sensation_0.png
 

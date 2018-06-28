@@ -36,6 +36,7 @@ namespace MonoGame.Extended.Entities
         private ComponentMapper<T> CreateMapperForType<T>(int componentTypeId)
             where T : class
         {
+            // TODO: We can probably do better than this without a huge performance penalty by creating our own bit vector that grows after the first 32 bits.
             if (componentTypeId >= 32)
                 throw new InvalidOperationException("Component type limit exceeded. We currently only allow 32 component types for performance reasons.");
 

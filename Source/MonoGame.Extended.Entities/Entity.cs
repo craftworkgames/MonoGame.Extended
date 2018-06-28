@@ -43,7 +43,7 @@ namespace MonoGame.Extended.Entities
 
         public void Destory()
         {
-            _entityManager.DestroyEntity(Id);
+            _entityManager.Destroy(Id);
         }
 
         public bool Equals(Entity other)

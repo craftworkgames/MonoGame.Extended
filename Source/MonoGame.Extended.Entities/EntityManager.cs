@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
 using MonoGame.Extended.Entities.Systems;
@@ -19,8 +21,7 @@ namespace MonoGame.Extended.Entities
             _entityToComponentBits = new Bag<BitVector32>(_defaultBagSize);
             _componentManager.ComponentsChanged += OnComponentsChanged;
 
-            Entities = new Bag<Entity>(_defaultBagSize);
-
+            _entityBag = new Bag<Entity>(_defaultBagSize);
             _entityPool = new Pool<Entity>(() => new Entity(_nextId++, this, _componentManager), _defaultBagSize);
         }
 
@@ -35,8 +36,11 @@ namespace MonoGame.Extended.Entities
         private readonly ComponentManager _componentManager;
         private int _nextId;
 
-        public Bag<Entity> Entities { get; }
+        public int Capacity => _entityBag.Capacity;
+        public IEnumerable<int> Entities => _entityBag.Where(e => e != null).Select(e => e.Id);
+        public int ActiveCount { get; private set; }
 
+        private readonly Bag<Entity> _entityBag;
         private readonly Pool<Entity> _entityPool;
         private readonly Bag<int> _addedEntities;
         private readonly Bag<int> _removedEntities;
@@ -47,29 +51,34 @@ namespace MonoGame.Extended.Entities
         public event Action<int> EntityRemoved;
         public event Action<int> EntityChanged;
 
-        public Entity CreateEntity()
+        public Entity Create()
         {
             var entity = _entityPool.Obtain();
             var id = entity.Id;
-            Entities[id] = entity;
+            _entityBag[id] = entity;
             _addedEntities.Add(id);
             _entityToComponentBits[id] = new BitVector32(0);
             return entity;
         }
 
-        public void DestroyEntity(int entityId)
+        public void Destroy(int entityId)
         {
             _removedEntities.Add(entityId);
             _entityToComponentBits[entityId] = default(BitVector32);
-            _entityPool.Free(Entities[entityId]);
-            Entities[entityId] = null;
+            _entityPool.Free(_entityBag[entityId]);
+            _entityBag[entityId] = null;
         }
 
-        public void DestroyEntity(Entity entity)
+        public void Destroy(Entity entity)
         {
-            DestroyEntity(entity.Id);
+            Destroy(entity.Id);
         }
-        
+
+        public Entity Get(int entityId)
+        {
+            return _entityBag[entityId];
+        }
+
         public BitVector32 GetComponentBits(int entityId)
         {
             return _entityToComponentBits[entityId];
@@ -85,6 +94,7 @@ namespace MonoGame.Extended.Entities
             foreach (var entity in _addedEntities)
             {
                 _entityToComponentBits[entity] = _componentManager.CreateComponentBits(entity);
+                ActiveCount++;
                 EntityAdded?.Invoke(entity);
             }
 
@@ -97,6 +107,7 @@ namespace MonoGame.Extended.Entities
             foreach (var entity in _removedEntities)
             {
                 _entityToComponentBits[entity] = default(BitVector32);
+                ActiveCount--;
                 EntityRemoved?.Invoke(entity);
             }
 

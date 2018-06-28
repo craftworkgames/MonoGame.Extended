@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
 using MonoGame.Extended.Entities.Systems;
 
@@ -31,8 +32,8 @@ namespace MonoGame.Extended.Entities
 
         internal EntityManager EntityManager { get; }
         internal ComponentManager ComponentManager { get; }
-        
-        public Bag<Entity> AllEntities => EntityManager.Entities;
+
+        public int EntityCount => EntityManager.ActiveCount;
 
         internal void RegisterSystem(ISystem system)
         {
@@ -48,22 +49,22 @@ namespace MonoGame.Extended.Entities
 
         public Entity GetEntity(int entityId)
         {
-            return AllEntities[entityId];
+            return EntityManager.Get(entityId);
         }
 
         public Entity CreateEntity()
         {
-            return EntityManager.CreateEntity();
+            return EntityManager.Create();
         }
 
         public void DestroyEntity(int entityId)
         {
-            EntityManager.DestroyEntity(entityId);
+            EntityManager.Destroy(entityId);
         }
 
         public void DestroyEntity(Entity entity)
         {
-            EntityManager.DestroyEntity(entity);
+            EntityManager.Destroy(entity);
         }
         
         public override void Update(GameTime gameTime)

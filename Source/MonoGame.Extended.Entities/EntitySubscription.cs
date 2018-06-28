@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Entities
         {
             _entityManager = entityManager;
             _aspect = aspect;
-            _activeEntities = new Bag<int>(entityManager.Entities.Capacity);
+            _activeEntities = new Bag<int>(entityManager.Capacity);
             _rebuildActives = true;
 
             _entityManager.EntityAdded += OnEntityAdded;
@@ -53,9 +53,8 @@ namespace MonoGame.Extended.Entities
         {
             _activeEntities.Clear();
 
-            // TODO: This doesn't really feel like the right place to be doing this.
-            foreach (var entity in _entityManager.Entities.Where(e => e != null))
-                OnEntityAdded(entity.Id);
+            foreach (var entity in _entityManager.Entities)
+                OnEntityAdded(entity);
 
             _rebuildActives = false;
         }

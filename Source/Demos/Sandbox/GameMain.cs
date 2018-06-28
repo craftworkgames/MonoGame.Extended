@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Entities;
-using Sandbox.Components;
 using Sandbox.Systems;
 
 namespace Sandbox
@@ -24,20 +23,15 @@ namespace Sandbox
 
         protected override void LoadContent()
         {
+            var font = Content.Load<BitmapFont>("Sensation");
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _world = new WorldBuilder()
-                .AddSystem(new RenderSystem(GraphicsDevice))
                 .AddSystem(new RainfallSystem())
+                .AddSystem(new ExpirySystem())
+                .AddSystem(new RenderSystem(GraphicsDevice))
+                .AddSystem(new HudSystem(GraphicsDevice, font))
                 .Build();
-
-            var random = new FastRandom();
-
-            for(var i = 0; i < 2000; i++)
-            {
-                var entity = _world.CreateEntity();
-                entity.Attach(new Transform2(random.NextSingle(0, 800), random.NextSingle(-480, 480)));
-                entity.Attach(new Raindrop { Velocity = new Vector2(random.Next(-3, 3), random.Next(-10, 10)) });
-            }
         }
 
         protected override void UnloadContent()

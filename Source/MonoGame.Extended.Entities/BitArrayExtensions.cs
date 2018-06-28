@@ -1,18 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Specialized;
 
 namespace MonoGame.Extended.Entities
 {
-    public static class BitVector32Extensions
-    {
-        public static bool IsEmpty(this BitVector32 bitVector)
-        {
-            return bitVector.Data == 0;
-        }
-
-    }
-
     public static class BitArrayExtensions
     {
         public static bool IsEmpty(this BitArray bitArray)
