@@ -88,7 +88,7 @@ namespace MonoGame.Extended.Collisions.Tests
             var tree = MakeTree();
             var actor = new BasicActor
             {
-                BoundingBox = new RectangleF(-2.5f, -2.5f, 5f, 5f)
+                Bounds = new RectangleF(-2.5f, -2.5f, 5f, 5f)
             };
 
             tree.Insert(new QuadtreeData(actor));
@@ -105,7 +105,7 @@ namespace MonoGame.Extended.Collisions.Tests
             {
                 tree.Insert(new QuadtreeData(new BasicActor()
                 {
-                    BoundingBox = new RectangleF(0, 0, 1, 1)
+                    Bounds = new RectangleF(0, 0, 1, 1)
                 }));
             }
 
@@ -121,7 +121,7 @@ namespace MonoGame.Extended.Collisions.Tests
             {
                 tree.Insert(new QuadtreeData(new BasicActor()
                 {
-                    BoundingBox = new RectangleF(0, 0, 1, 1)
+                    Bounds = new RectangleF(0, 0, 1, 1)
                 }));
             }
 
@@ -137,7 +137,7 @@ namespace MonoGame.Extended.Collisions.Tests
             {
                 var actor = new BasicActor()
                 {
-                    BoundingBox = new RectangleF(-10f, -15, 20.0f, 30.0f)
+                    Bounds = new RectangleF(-10f, -15, 20.0f, 30.0f)
                 };
                 tree.Insert(new QuadtreeData(actor));
             }
@@ -150,7 +150,7 @@ namespace MonoGame.Extended.Collisions.Tests
         {
             var actor = new BasicActor()
             {
-                BoundingBox = new RectangleF(-5f, -7f, 10.0f, 15.0f)
+                Bounds = new RectangleF(-5f, -7f, 10.0f, 15.0f)
             };
             var data = new QuadtreeData(actor);
 
@@ -173,7 +173,7 @@ namespace MonoGame.Extended.Collisions.Tests
             {
                 var data = new QuadtreeData(new BasicActor()
                 {
-                    BoundingBox = new RectangleF(0, 0, 1, 1)
+                    Bounds = new RectangleF(0, 0, 1, 1)
                 });
                 tree.Insert(data);
                 inserted.Add(data);
@@ -201,7 +201,7 @@ namespace MonoGame.Extended.Collisions.Tests
             {
                 var data = new QuadtreeData(new BasicActor()
                 {
-                    BoundingBox = new RectangleF(0, 0, 1, 1)
+                    Bounds = new RectangleF(0, 0, 1, 1)
                 });
                 tree.Insert(data);
                 inserted.Add(data);
@@ -229,7 +229,7 @@ namespace MonoGame.Extended.Collisions.Tests
             {
                 var data = new QuadtreeData(new BasicActor()
                 {
-                    BoundingBox = new RectangleF(0, 0, 1, 1)
+                    Bounds = new RectangleF(0, 0, 1, 1)
                 });
                 tree.Insert(data);
                 inserted.Add(data);

@@ -26,7 +26,7 @@ namespace MonoGame.Extended
     /// <seealso cref="IEquatableByRef{T}" />
     [DataContract]
     [DebuggerDisplay("{DebugDisplayString,nq}")]
-    public struct RectangleF : IEquatable<RectangleF>, IEquatableByRef<RectangleF>
+    public struct RectangleF : IEquatable<RectangleF>, IEquatableByRef<RectangleF>, IShapeF
     {
         /// <summary>
         ///     The <see cref="RectangleF" /> with <see cref="X" />, <see cref="Y" />, <see cref="Width" /> and

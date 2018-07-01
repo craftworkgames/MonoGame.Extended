@@ -82,10 +82,10 @@ namespace MonoGame.Extended.Collisions
         /// <param name="data">Data being inserted.</param>
         public void Insert(QuadtreeData data)
         {
-            var actorBounds = data.Target.BoundingBox;
+            var actorBounds = data.Target.Bounds;
             
             // Object doesn't fit into this node.
-            if (!RectangleF.Intersects(NodeBounds, actorBounds))
+            if (!NodeBounds.Intersects(actorBounds))
             {
                 return;
             }
@@ -246,23 +246,23 @@ namespace MonoGame.Extended.Collisions
         /// </summary>
         /// <param name="area">The area to query for overlapping targets</param>
         /// <returns>A unique list of targets intersected by area.</returns>
-        public List<QuadtreeData> Query(RectangleF area)
+        public List<QuadtreeData> Query(IShapeF area)
         {
             Reset();
             return QueryWithoutReset(area);
         }
 
-        private List<QuadtreeData> QueryWithoutReset(RectangleF area)
+        private List<QuadtreeData> QueryWithoutReset(IShapeF area)
         {
             var result = new List<QuadtreeData>();
 
-            if (!RectangleF.Intersects(area, NodeBounds)) return result;
+            if (!NodeBounds.Intersects(area)) return result;
 
             if (IsLeaf)
             {
                 for (int i = 0, size = Contents.Count; i < size; i++)
                 {
-                    if (RectangleF.Intersects(Contents[i].BoundingBox, area) 
+                    if (Contents[i].Bounds.Intersects(area) 
                         && !Contents[i].Flag)
                     {
                         result.Add(Contents[i]);
