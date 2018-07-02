@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 		public static void WriteTileset(ContentWriter writer, TiledMapTilesetContent tileset)
 		{
-			writer.WriteObject(tileset.Image.Content);
+			writer.WriteExternalReference(tileset.Image.ContentRef);
             writer.Write(tileset.TileWidth);
             writer.Write(tileset.TileHeight);
             writer.Write(tileset.TileCount);

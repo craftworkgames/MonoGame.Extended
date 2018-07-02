@@ -27,7 +27,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				{
 					if (String.IsNullOrWhiteSpace(tileset.Source))
 						// Load the Texture2DContent for the tileset as it will be saved into the map content file.
-						tileset.Image.Content = context.BuildAndLoadAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(tileset.Image.Source), "");
+						tileset.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(tileset.Image.Source), "");
 					else
 						// Link to the tileset for the content loader to load at runtime.
 						tileset.Content = context.BuildAsset<TiledMapTilesetContent, TiledMapTilesetContent>(new ExternalReference<TiledMapTilesetContent>(tileset.Source), "");
