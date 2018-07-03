@@ -1,9 +1,17 @@
+using Microsoft.Xna.Framework.Content.Pipeline;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     public class TiledMapImageContent
     {
+		//[XmlIgnore]
+		//public Texture2DContent Content { get; set; }
+
+		[XmlIgnore]
+		public ExternalReference<Texture2DContent> ContentRef { get; set; }
+
         [XmlAttribute(AttributeName = "source")]
         public string Source { get; set; }
 

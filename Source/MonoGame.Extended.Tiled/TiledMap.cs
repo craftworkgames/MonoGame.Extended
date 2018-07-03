@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -13,6 +14,7 @@ namespace MonoGame.Extended.Tiled
         private readonly List<TiledMapObjectLayer> _objectLayers = new List<TiledMapObjectLayer>();
         private readonly List<TiledMapTileLayer> _tileLayers = new List<TiledMapTileLayer>();
         private readonly List<TiledMapTileset> _tilesets = new List<TiledMapTileset>();
+		private readonly List<Tuple<TiledMapTileset, int>> _firstGlobalIdentifiers = new List<Tuple<TiledMapTileset, int>>();
 
         public string Name { get; }
         public int Width { get; }
@@ -55,9 +57,10 @@ namespace MonoGame.Extended.Tiled
             BackgroundColor = backgroundColor;
         }
 
-        public void AddTileset(TiledMapTileset tileset)
+        public void AddTileset(TiledMapTileset tileset, int firstGlobalIdentifier)
         {
             _tilesets.Add(tileset);
+			_firstGlobalIdentifiers.Add(new Tuple<TiledMapTileset, int>(tileset, firstGlobalIdentifier));
         }
 
         public void AddLayer(TiledMapLayer layer)
@@ -93,7 +96,15 @@ namespace MonoGame.Extended.Tiled
 
         public TiledMapTileset GetTilesetByTileGlobalIdentifier(int tileIdentifier)
         {
-            return _tilesets.FirstOrDefault(tileset => tileset.ContainsGlobalIdentifier(tileIdentifier));
+			foreach (var tileset in _firstGlobalIdentifiers)
+				if (tileIdentifier >= tileset.Item2 && tileIdentifier < tileset.Item2 + tileset.Item1.TileCount)
+					return tileset.Item1;
+			return null;
         }
+
+		public int GetTilesetFirstGlobalIdentifier(TiledMapTileset tileset)
+		{
+			return _firstGlobalIdentifiers.FirstOrDefault(t => t.Item1 == tileset).Item2;
+		}
     }
 }

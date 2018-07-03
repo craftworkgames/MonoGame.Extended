@@ -6,6 +6,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         [XmlEnum(Name = "orthogonal")] Orthogonal,
         [XmlEnum(Name = "isometric")] Isometric,
-        [XmlEnum(Name = "staggered")] Staggered
+        [XmlEnum(Name = "staggered")] Staggered,
+		[XmlEnum(Name = "hexagonal")] Hexagonal
     }
 }
