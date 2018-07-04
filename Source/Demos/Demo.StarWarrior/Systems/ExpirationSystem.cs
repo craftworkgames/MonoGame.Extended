@@ -39,22 +39,31 @@ using System;
 using Demo.StarWarrior.Components;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Systems;
 
 namespace Demo.StarWarrior.Systems
 {
-    [Aspect(AspectType.All, typeof(ExpiresComponent))]
-    [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class ExpirationSystem : EntityProcessingSystem
     {
-        protected override void Process(GameTime gameTime, Entity entity)
+        public ExpirationSystem() 
+            : base(Aspect.All(typeof(ExpiresComponent)))
         {
+        }
+
+        public override void Initialize(IComponentMapperService mapperService)
+        {
+        }
+
+        public override void Process(GameTime gameTime, int entityId)
+        {
+            var entity = GetEntity(entityId);
             var expires = entity.Get<ExpiresComponent>();
 
             expires.LifeTime -= gameTime.ElapsedGameTime;
             if (expires.LifeTime > TimeSpan.Zero)
                 return;
 
-            entity.Destroy();
+            entity.Destory();
             expires.LifeTime = TimeSpan.Zero;
         }
     }

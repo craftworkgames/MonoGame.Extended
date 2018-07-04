@@ -46,5 +46,6 @@ namespace MonoGame.Extended.Entities.Systems
 
         protected void DestroyEntity(int entityId) => _world.DestroyEntity(entityId);
         protected Entity CreateEntity() => _world.CreateEntity();
+        protected Entity GetEntity(int entityId) => _world.GetEntity(entityId);
     }
 }

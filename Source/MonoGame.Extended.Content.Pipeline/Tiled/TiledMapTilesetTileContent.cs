@@ -7,7 +7,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     {
         public TiledMapTilesetTileContent()
         {
-            Probability = 1.0f;
             Properties = new List<TiledMapPropertyContent>();
             Type = string.Empty;
         }
@@ -17,12 +16,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         [XmlAttribute(AttributeName = "type")]
         public string Type { get; set; }
-
-        [XmlElement(ElementName = "terrain")]
-        public TiledMapTerrainContent Terrain { get; set; }
-
-        [XmlAttribute(AttributeName = "probability")]
-        public float Probability { get; set; }
 
         [XmlElement(ElementName = "image")]
         public TiledMapImageContent Image { get; set; }

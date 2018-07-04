@@ -12,20 +12,12 @@ namespace MonoGame.Extended.Entities
         ComponentMapper<T> GetMapper<T>() where T : class;
     }
 
-    public class ComponentManager : IUpdateSystem, IComponentMapperService
+    public class ComponentManager : UpdateSystem, IComponentMapperService
     {
         public ComponentManager()
         {
             _componentMappers = new Bag<ComponentMapper>();
             _componentTypes = new Dictionary<Type, int>();
-        }
-        
-        public void Dispose()
-        {
-        }
-
-        public void Initialize(World world)
-        {
         }
 
         private readonly Bag<ComponentMapper> _componentMappers;
@@ -85,7 +77,7 @@ namespace MonoGame.Extended.Entities
             return componentBits;
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
         }
     }

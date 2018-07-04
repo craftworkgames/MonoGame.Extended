@@ -33,22 +33,13 @@
 //   The weapon.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 using System;
-using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarrior.Components
 {
-    [EntityComponent]
-    public class WeaponComponent : PoolableComponent
+    public class WeaponComponent
     {
         public TimeSpan ShootTimerDelay { get; set; }
         public TimeSpan ShootDelay { get; set; }
-
-        public override void Reset()
-        {
-            ShootTimerDelay = TimeSpan.Zero;
-            ShootDelay = TimeSpan.Zero;
-        }
     }
 }

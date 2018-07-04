@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Reflection;
 using Demo.StarWarrior.Components;
-using Demo.StarWarrior.Templates;
+using Demo.StarWarrior.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -17,11 +16,11 @@ namespace Demo.StarWarrior
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
         private readonly Random _random = new Random();
-        private readonly EntityComponentSystem _ecs;
-        private readonly EntityManager _entityManager;
 
+        private EntityFactory _entityFactory;
         private SpriteBatch _spriteBatch;
         private BitmapFont _font;
+        private World _world;
 
         public GameMain()
         {
@@ -40,35 +39,32 @@ namespace Demo.StarWarrior
                 PreferredDepthStencilFormat = DepthFormat.None,
                 SynchronizeWithVerticalRetrace = true,
             };
-
-            _ecs = new EntityComponentSystem(this);
-            _entityManager = _ecs.EntityManager;
-
-            // scan for components and systems in provided assemblies
-            _ecs.Scan(Assembly.GetExecutingAssembly());
-
-            Services.AddService(Content);
-            Services.AddService(_ecs);
-            Services.AddService(_random);
-        }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-
-            InitializePlayerShip();
-            InitializeEnemyShips();
         }
 
         protected override void LoadContent()
         {
-            var graphicsDevice = GraphicsDevice;
-
-            _spriteBatch = new SpriteBatch(graphicsDevice);
-            Services.AddService(_spriteBatch);
-
+            _entityFactory = new EntityFactory();
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
             _font = Content.Load<BitmapFont>("montserrat-32");
-            Services.AddService(_font);
+
+            _world = new WorldBuilder()
+                .AddSystem(new CollisionSystem())
+                .AddSystem(new EnemyShipMovementSystem(GraphicsDevice))
+                .AddSystem(new EnemyShooterSystem(_entityFactory))
+                .AddSystem(new EnemySpawnSystem(GraphicsDevice, _entityFactory))
+                .AddSystem(new ExpirationSystem())
+                .AddSystem(new HealthBarRenderSystem(_spriteBatch, _font))
+                .AddSystem(new HudRenderSystem(GraphicsDevice, _spriteBatch, _font))
+                .AddSystem(new MovementSystem())
+                .AddSystem(new PlayerShipControlSystem(_entityFactory))
+                .AddSystem(new RenderSystem(_spriteBatch, Content))
+                .Build();
+
+            _entityFactory.World = _world;
+
+            InitializePlayerShip();
+            InitializeEnemyShips();
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -80,7 +76,7 @@ namespace Demo.StarWarrior
                 Exit();
 
             _fpsCounter.Update(gameTime);
-            _ecs.Update(gameTime);
+            _world.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -92,19 +88,19 @@ namespace Demo.StarWarrior
 
             _spriteBatch.Begin();
 
-            _ecs.Draw(gameTime);
+            _world.Draw(gameTime);
 
             _spriteBatch.DrawString(_font, fps, new Vector2(16, 16), Color.White);
 
-#if DEBUG
-            var entityCount = $"Active Entities Count: {_entityManager.ActiveEntitiesCount}";
-            //var removedEntityCount = $"Removed Entities TotalCount: {_ecs.TotalEntitiesRemovedCount}";
-            var totalEntityCount = $"Allocated Entities Count: {_entityManager.TotalEntitiesCount}";
+//#if DEBUG
+//            var entityCount = $"Active Entities Count: {_entityManager.ActiveEntitiesCount}";
+//            //var removedEntityCount = $"Removed Entities TotalCount: {_ecs.TotalEntitiesRemovedCount}";
+//            var totalEntityCount = $"Allocated Entities Count: {_entityManager.TotalEntitiesCount}";
 
-            _spriteBatch.DrawString(_font, entityCount, new Vector2(16, 62), Color.White);
-            _spriteBatch.DrawString(_font, totalEntityCount, new Vector2(16, 92), Color.White);
-            //_spriteBatch.DrawString(_font, removedEntityCount, new Vector2(32, 122), Color.Yellow);
-#endif
+//            _spriteBatch.DrawString(_font, entityCount, new Vector2(16, 62), Color.White);
+//            _spriteBatch.DrawString(_font, totalEntityCount, new Vector2(16, 92), Color.White);
+//            //_spriteBatch.DrawString(_font, removedEntityCount, new Vector2(32, 122), Color.Yellow);
+//#endif
 
             _spriteBatch.End();
         }
@@ -116,7 +112,7 @@ namespace Demo.StarWarrior
             var random = new Random();
             for (var index = 0; 2 > index; ++index)
             {
-                var entity = _entityManager.CreateEntityFromTemplate(EnemyShipTemplate.Name);
+                var entity = _entityFactory.CreateEnemyShip();
 
                 var transform = entity.Get<Transform2>();
                 var position = new Vector2
@@ -136,25 +132,11 @@ namespace Demo.StarWarrior
         {
             var viewport = GraphicsDevice.Viewport;
 
-            var entity = _entityManager.CreateEntity();
-            //entity.Group = "SHIPS";
-
-            var transform = entity.Attach<Transform2>();
-            var position = new Vector2
-            {
-                X = viewport.Width * 0.5f,
-                Y = viewport.Height - 50
-            };
-            transform.Position = position;
-
-            var spatial = entity.Attach<SpatialFormComponent>();
-            spatial.SpatialFormFile = "PlayerShip";
-
-            var health = entity.Attach<HealthComponent>();
-            health.Points = health.MaximumPoints = 30;
-
-            entity.Attach<PlayerComponent>();
+            var entity = _world.CreateEntity();
+            entity.Attach(new Transform2(x: viewport.Width * 0.5f, y: viewport.Height - 50f));
+            entity.Attach(new SpatialFormComponent {SpatialFormFile = "PlayerShip" });
+            entity.Attach(new HealthComponent {Points = 30, MaximumPoints = 30});
+            entity.Attach(new PlayerComponent());
         }
-
     }
 }

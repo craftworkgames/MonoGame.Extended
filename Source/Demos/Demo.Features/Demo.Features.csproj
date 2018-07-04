@@ -1,188 +1,50 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D8C6D896-5ABF-4823-84DA-F1191BEEC004}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Demo.Features</RootNamespace>
-    <AssemblyName>Demo.Features</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>6</LangVersion>
-    <NoWarn>1591</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Demos\AnimationsDemo.cs" />
-    <Compile Include="Demos\BatchingDemo.cs" />
-    <Compile Include="Demos\BitmapFontsDemo.cs" />
-    <Compile Include="Demos\CameraDemo.cs" />
-    <Compile Include="Demos\CollisionDemo.cs" />
-    <Compile Include="Demos\DemoBase.cs" />
-    <Compile Include="Demos\GuiDemo.cs" />
-    <Compile Include="Demos\GuiLayoutDemo.cs" />
-    <Compile Include="Demos\InputListenersDemo.cs" />
-    <Compile Include="Demos\ParticlesDemo.cs" />
-    <Compile Include="Demos\SceneGraphsDemo.cs" />
-    <Compile Include="Demos\ScreensDemo.cs" />
-    <Compile Include="Demos\SpritesDemo.cs" />
-    <Compile Include="Demos\TiledMapsDemo.cs" />
-    <Compile Include="Demos\TweeningDemo.cs" />
-    <Compile Include="Demos\ViewportAdaptersDemo.cs" />
-    <Compile Include="Screens\AudioOptionsScreen.cs" />
+    <MonoGameContentReference Include="**\*.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Screens\**" />
+    <EmbeddedResource Remove="Screens\**" />
+    <MonoGameContentReference Remove="Screens\**" />
+    <None Remove="Screens\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Demos\GuiDemo.cs" />
+    <Compile Remove="Demos\GuiLayoutDemo.cs" />
+    <Compile Remove="Demos\ScreensDemo.cs" />
+    <Compile Remove="Demos\TweeningDemo.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Screens\SelectDemoScreen.cs" />
-    <Compile Include="GameMain.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Screens\KeyboardOptionsScreen.cs" />
-    <Compile Include="Screens\LoadGameScreen.cs" />
-    <Compile Include="Screens\MainMenuScreen.cs" />
-    <Compile Include="Screens\MenuItem.cs" />
-    <Compile Include="Screens\MenuScreen.cs" />
-    <Compile Include="Screens\MouseOptionsScreen.cs" />
-    <Compile Include="Screens\OptionsScreen.cs" />
-    <Compile Include="Screens\VideoOptionsScreen.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\adventure-gui-atlas.json" />
-    <Content Include="Content\adventure-gui-skin.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="Content\Animations\zombie-animations.aa" />
-    <None Include="Content\Animations\zombie-atlas.json" />
-    <None Include="Content\Content.mgcb" />
-    <None Include="Content\Fonts\impact-32.fnt" />
-    <None Include="Content\Fonts\montserrat-32.fnt" />
-    <None Include="Content\small-font.fnt" />
-    <None Include="Content\Textures\axe.png" />
-    <None Include="Content\Textures\bg_sharbi.png" />
-    <None Include="Content\Animations\fireball.png" />
-    <Content Include="Content\Animations\motw.png" />
-    <None Include="Content\Animations\zombie.png" />
-    <Content Include="Content\Textures\clipping-test.png" />
-    <None Include="Content\Textures\particle.png" />
-    <None Include="Content\Textures\spike_ball.png" />
-    <Content Include="Content\Textures\colored_castle.png" />
-    <Content Include="Content\TiledMaps\abstractTiles_sheet.png" />
-    <Content Include="Content\TiledMaps\alphacolortile.png" />
-    <None Include="Content\TiledMaps\free-tileset.png" />
-    <None Include="Content\TiledMaps\hills.png" />
-    <Content Include="Content\TiledMaps\isometric-tiles.png" />
-    <Content Include="Content\TiledMaps\L05TS1.png" />
-    <Content Include="Content\TiledMaps\platformerTiles_sheet.png" />
-    <None Include="Content\TiledMaps\rpg_maker_vx_rtp_tileset_by_telles0808.png" />
-    <Content Include="Content\TiledMaps\voxelTiles_sheet.png" />
-    <Content Include="Content\title-screen.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="Content\TiledMaps\free-tileset.json" />
-    <None Include="Content\TiledMaps\level01.tmx">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Content\TiledMaps\level02.tmx">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Content\TiledMaps\level03.tmx" />
-    <None Include="Content\TiledMaps\level04.tmx" />
-    <None Include="Content\TiledMaps\level05.tmx" />
-    <None Include="Content\TiledMaps\level06.tmx" />
-    <None Include="Content\TiledMaps\level07.tmx" />
-    <None Include="Content\TiledMaps\level08.tmx" />
-    <None Include="packages.config" />
+    <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.4" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj">
-      <Project>{587ce536-216f-41a1-b223-ae502c125b09}</Project>
-      <Name>MonoGame.Extended.Animations</Name>
+    <ProjectReference Include="..\..\MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj" />
+    <ProjectReference Include="..\..\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj">
+      <Private>true</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj">
-      <Project>{02562c6f-5bfb-467e-8a95-68b6ce2d635a}</Project>
-      <Name>MonoGame.Extended.Collisions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj">
-      <Project>{9b3ab8a1-78aa-471a-afd0-b10b932115bc}</Project>
-      <Name>MonoGame.Extended.Graphics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended.Gui\MonoGame.Extended.Gui.csproj">
-      <Project>{8e425575-378a-4f83-88c9-f8bebad227c9}</Project>
-      <Name>MonoGame.Extended.Gui</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj">
-      <Project>{49c87598-994c-49b5-bbb3-7ffc342635d3}</Project>
-      <Name>MonoGame.Extended.Input</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended.Particles\MonoGame.Extended.Particles.csproj">
-      <Project>{6C8B9E29-D09B-4901-80FD-45AAA35882C6}</Project>
-      <Name>MonoGame.Extended.Particles</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended.SceneGraphs\MonoGame.Extended.SceneGraphs.csproj">
-      <Project>{fe61c3d7-d96d-4aa4-9ef1-17e457bb2c7c}</Project>
-      <Name>MonoGame.Extended.SceneGraphs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj">
-      <Project>{07b2ade2-73e3-41c4-aea1-d5566a5ab902}</Project>
-      <Name>MonoGame.Extended.Tiled</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj">
-      <Project>{1cf61f4f-a2ee-49bf-95d0-379e870de90e}</Project>
-      <Name>MonoGame.Extended.Tweening</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj">
-      <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
-      <Name>MonoGame.Extended</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj" />
+    <ProjectReference Include="..\..\MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj" />
+    <ProjectReference Include="..\..\MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj" />
+    <ProjectReference Include="..\..\MonoGame.Extended.Gui\MonoGame.Extended.Gui.csproj" />
+    <ProjectReference Include="..\..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj" />
+    <ProjectReference Include="..\..\MonoGame.Extended.Particles\MonoGame.Extended.Particles.csproj" />
+    <ProjectReference Include="..\..\MonoGame.Extended.SceneGraphs\MonoGame.Extended.SceneGraphs.csproj" />
+    <ProjectReference Include="..\..\MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj" />
+    <ProjectReference Include="..\..\MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj" />
+    <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\adventure-gui.png" />
-    <Content Include="Content\Fonts\impact-32_0.png" />
-    <Content Include="Content\Fonts\montserrat-32_0.png" />
-    <Content Include="Content\small-font_0.png" />
-    <Content Include="Content\Textures\car-hull.png" />
-    <Content Include="Content\Textures\car-wheel.png" />
-    <Content Include="Content\Textures\hills-1.png" />
-    <Content Include="Content\Textures\hills-2.png" />
-    <Content Include="Content\Textures\hills-3.png" />
-    <Content Include="Content\Textures\hills-4.png" />
-    <Content Include="Content\Textures\hills-clouds.png" />
-    <Content Include="Content\Textures\hills-sky.png" />
-    <Content Include="Content\Textures\hills.png" />
-    <Content Include="Content\Textures\logo-square-128.png" />
-    <Content Include="Content\Textures\logo-square-512.png" />
-    <Content Include="Content\Textures\vignette.png" />
+    <Folder Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Content\TiledMaps\abstractTiles_sheet.tsx" />
-    <TypeScriptCompile Include="Content\TiledMaps\platformerTiles_sheet.tsx" />
-    <TypeScriptCompile Include="Content\TiledMaps\voxelTiles_sheet.tsx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MonoGame.Framework.Portable.3.6.0.1625\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

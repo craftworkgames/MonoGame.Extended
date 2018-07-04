@@ -36,27 +36,30 @@
 
 using System;
 using Demo.StarWarrior.Components;
-using Demo.StarWarrior.Templates;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Systems;
 
 namespace Demo.StarWarrior.Systems
 {
-    [EntitySystem(GameLoopType.Update, Layer = 1)]
-    public class EnemySpawnSystem : ProcessingSystem
+    public class EnemySpawnSystem : UpdateSystem
     {
+        private readonly GraphicsDevice _graphicsDevice;
+        private readonly EntityFactory _entityFactory;
         private readonly Random _random = new Random();
 
-        public EnemySpawnSystem()
+        public EnemySpawnSystem(GraphicsDevice graphicsDevice, EntityFactory entityFactory)
         {
-            ProcessingDelay = TimeSpan.FromMilliseconds(250);
+            _graphicsDevice = graphicsDevice;
+            _entityFactory = entityFactory;
         }
 
-        protected override void Process(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
-            var viewport = GraphicsDevice.Viewport;
-            var entity = EntityManager.CreateEntityFromTemplate(EnemyShipTemplate.Name);
+            var viewport = _graphicsDevice.Viewport;
+            var entity = _entityFactory.CreateEnemyShip();
             var transform = entity.Get<Transform2>();
 
             Vector2 position;

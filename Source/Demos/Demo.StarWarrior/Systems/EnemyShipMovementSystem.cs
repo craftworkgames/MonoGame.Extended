@@ -36,22 +36,39 @@
 
 using Demo.StarWarrior.Components;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Systems;
 
 namespace Demo.StarWarrior.Systems
 {
-    [Aspect(AspectType.All, typeof(Transform2), typeof(PhysicsComponent), typeof(EnemyComponent))]
-    [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class EnemyShipMovementSystem : EntityProcessingSystem
     {
-        protected override void Process(GameTime gameTime, Entity entity)
+        private readonly GraphicsDevice _graphicsDevice;
+        private ComponentMapper<Transform2> _transformMapper;
+        private ComponentMapper<PhysicsComponent> _physicsMapper;
+
+        public EnemyShipMovementSystem(GraphicsDevice graphicsDevice) 
+            : base(Aspect.All(typeof(Transform2), typeof(PhysicsComponent), typeof(EnemyComponent)))
         {
-            var transform = entity.Get<Transform2>();
-            var physics = entity.Get<PhysicsComponent>();
+            _graphicsDevice = graphicsDevice;
+        }
+
+        public override void Initialize(IComponentMapperService mapperService)
+        {
+            _transformMapper = mapperService.GetMapper<Transform2>();
+            _physicsMapper = mapperService.GetMapper<PhysicsComponent>();
+        }
+
+        public override void Process(GameTime gameTime, int entityId)
+        {
+            var transform = _transformMapper.Get(entityId);
+            var physics = _physicsMapper.Get(entityId);
 
             var worldPosition = transform.WorldPosition;
-            var viewport = GraphicsDevice.Viewport;
+            var viewport = _graphicsDevice.Viewport;
+
             if (worldPosition.X < 0 || worldPosition.X > viewport.Width)
                 physics.AddAngle(180);
         }

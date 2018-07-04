@@ -35,34 +35,50 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using Demo.StarWarrior.Components;
-using Demo.StarWarrior.Templates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Entities.Systems;
 
 namespace Demo.StarWarrior.Systems
 {
-    [Aspect(AspectType.All, typeof(PlayerComponent), typeof(Transform2))]
-    [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class PlayerShipControlSystem : EntityProcessingSystem
     {
+        private readonly EntityFactory _entityFactory;
         private TimeSpan _missileLaunchTimer;
         private readonly TimeSpan _missileLaunchDelay;
         private KeyboardState _lastState;
 
-        public PlayerShipControlSystem()
+        public PlayerShipControlSystem(EntityFactory entityFactory)
+            : base(Aspect.All(typeof(PlayerComponent), typeof(Transform2)))
         {
+            _entityFactory = entityFactory;
             _missileLaunchDelay = TimeSpan.FromMilliseconds(250);
             _missileLaunchTimer = TimeSpan.Zero;
         }
 
-        [SuppressMessage("ReSharper", "InvertIf")]
-        protected override void Process(GameTime gameTime, Entity entity)
+        private void AddMissile(Transform2 parentTransform, float angle = 90.0f, float offsetX = 0.0f)
         {
+            var missile = _entityFactory.CreateMissile();
+
+            var missileTransform = missile.Get<Transform2>();
+            missileTransform.Position = parentTransform.WorldPosition + new Vector2(1 + offsetX, -20);
+
+            var missilePhysics = missile.Get<PhysicsComponent>();
+            missilePhysics.Speed = -0.5f;
+            missilePhysics.Angle = angle;
+        }
+
+        public override void Initialize(IComponentMapperService mapperService)
+        {
+        }
+
+        public override void Process(GameTime gameTime, int entityId)
+        {
+            var entity = GetEntity(entityId);
             var transform = entity.Get<Transform2>();
 
             var keyboard = Keyboard.GetState();
@@ -108,18 +124,6 @@ namespace Demo.StarWarrior.Systems
             }
 
             _lastState = keyboard;
-        }
-
-        private void AddMissile(Transform2 parentTransform, float angle = 90.0f, float offsetX = 0.0f)
-        {
-            var missile = EntityManager.CreateEntityFromTemplate(MissileTemplate.Name);
-
-            var missileTransform = missile.Get<Transform2>();
-            missileTransform.Position = parentTransform.WorldPosition + new Vector2(1 + offsetX, -20);
-
-            var missilePhysics = missile.Get<PhysicsComponent>();
-            missilePhysics.Speed = -0.5f;
-            missilePhysics.Angle = angle;
         }
     }
 }

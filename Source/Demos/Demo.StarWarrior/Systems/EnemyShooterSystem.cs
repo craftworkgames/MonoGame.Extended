@@ -36,28 +36,39 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using Demo.StarWarrior.Components;
-using Demo.StarWarrior.Templates;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Systems;
 
 namespace Demo.StarWarrior.Systems
 {
-    [Aspect(AspectType.All, typeof(WeaponComponent), typeof(Transform2), typeof(EnemyComponent))]
-    [EntitySystem(GameLoopType.Update, Layer = 1)]
     public class EnemyShooterSystem : EntityProcessingSystem
     {
-        protected override void Process(GameTime gameTime, Entity entity)
+        private readonly EntityFactory _entityFactory;
+
+        public EnemyShooterSystem(EntityFactory entityFactory) 
+            : base(Aspect.All(typeof(WeaponComponent), typeof(Transform2), typeof(EnemyComponent)))
         {
+            _entityFactory = entityFactory;
+        }
+
+        public override void Initialize(IComponentMapperService mapperService)
+        {
+        }
+
+        public override void Process(GameTime gameTime, int entityId)
+        {
+            var entity = GetEntity(entityId);
             var transform = entity.Get<Transform2>();
             var weapon = entity.Get<WeaponComponent>();
-                
+
             weapon.ShootTimerDelay += gameTime.ElapsedGameTime;
             if (weapon.ShootTimerDelay <= weapon.ShootDelay)
                 return;
             weapon.ShootTimerDelay -= weapon.ShootDelay;
 
-            var missile = EntityManager.CreateEntityFromTemplate(MissileTemplate.Name);
+            var missile = _entityFactory.CreateMissile();
             var missileTransform = missile.Get<Transform2>();
 
             var worldPosition = transform.WorldPosition;

@@ -42,37 +42,48 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Systems;
 
 namespace Demo.StarWarrior.Systems
 {
-    [Aspect(AspectType.All, typeof(PlayerComponent), typeof(HealthComponent))]
-    [EntitySystem(GameLoopType.Draw, Layer = 0)]
-    public class HudRenderSystem : EntityProcessingSystem
+    public class HudRenderSystem : EntityDrawSystem
     {
-        private BitmapFont _font;
-        private SpriteBatch _spriteBatch;
+        private readonly GraphicsDevice _graphicsDevice;
+        private readonly BitmapFont _font;
+        private readonly SpriteBatch _spriteBatch;
         private readonly StringBuilder _stringBuilder = new StringBuilder();
 
-        public override void LoadContent()
+
+        public HudRenderSystem(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, BitmapFont font) 
+            : base(Aspect.All(typeof(PlayerComponent), typeof(HealthComponent)))
         {
-            _spriteBatch = Game.Services.GetService<SpriteBatch>();
-            _font = Game.Services.GetService<BitmapFont>();
+            _graphicsDevice = graphicsDevice;
+            _spriteBatch = spriteBatch;
+            _font = font;
         }
 
-        protected override void Process(GameTime gameTime, Entity entity)
+        public override void Initialize(IComponentMapperService mapperService)
         {
-            var player = entity.Get<PlayerComponent>();
-            var health = entity.Get<HealthComponent>();
+        }
 
-            var viewport = GraphicsDevice.Viewport;
-            var renderPosition = new Vector2(20, viewport.Height - 40);
+        public override void Draw(GameTime gameTime)
+        {
+            foreach (var entityId in ActiveEntities)
+            {
+                var entity = GetEntity(entityId);
+                var player = entity.Get<PlayerComponent>();
+                var health = entity.Get<HealthComponent>();
 
-            _stringBuilder.Clear();
-            _stringBuilder.Append("Health: ");
-            _stringBuilder.Append((float)Math.Round(health.Ratio * 100, 1));
-            _stringBuilder.Append("%");
+                var viewport = _graphicsDevice.Viewport;
+                var renderPosition = new Vector2(20, viewport.Height - 40);
 
-            _spriteBatch.DrawString(_font, _stringBuilder, renderPosition, Color.White);
+                _stringBuilder.Clear();
+                _stringBuilder.Append("Health: ");
+                _stringBuilder.Append((float)Math.Round(health.Ratio * 100, 1));
+                _stringBuilder.Append("%");
+
+                _spriteBatch.DrawString(_font, _stringBuilder, renderPosition, Color.White);
+            }
         }
     }
 }

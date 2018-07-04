@@ -42,39 +42,47 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Systems;
 
 namespace Demo.StarWarrior.Systems
 {
-    [Aspect(AspectType.All, typeof(HealthComponent), typeof(Transform2))]
-    [EntitySystem(GameLoopType.Draw, Layer = 0)]
-    public class HealthBarRenderSystem : EntityProcessingSystem
+    public class HealthBarRenderSystem : EntityDrawSystem
     {
-        private BitmapFont _font;
-        private SpriteBatch _spriteBatch;
+        private readonly BitmapFont _font;
+        private readonly SpriteBatch _spriteBatch;
         private readonly StringBuilder _stringBuilder = new StringBuilder();
 
-        public override void LoadContent()
+        public HealthBarRenderSystem(SpriteBatch spriteBatch, BitmapFont font) 
+            : base(Aspect.All(typeof(HealthComponent), typeof(Transform2)))
         {
-            _spriteBatch = Game.Services.GetService<SpriteBatch>();
-            _font = Game.Services.GetService<BitmapFont>();
+            _spriteBatch = spriteBatch;
+            _font = font;
         }
 
-        protected override void Process(GameTime gameTime, Entity entity)
+        public override void Initialize(IComponentMapperService mapperService)
         {
-            var health = entity.Get<HealthComponent>();
-            var transform = entity.Get<Transform2>();
+        }
 
-            _stringBuilder.Clear();
-            _stringBuilder.Append((float)Math.Round(health.Ratio * 100, 1));
-            _stringBuilder.Append("%");
+        public override void Draw(GameTime gameTime)
+        {
+            foreach (var entityId in ActiveEntities)
+            {
+                var entity = GetEntity(entityId);
+                var health = entity.Get<HealthComponent>();
+                var transform = entity.Get<Transform2>();
 
-            var c = health.Ratio / 1;
-            var color = new Color(1.0f - c, c, 0.0f);
-            var worldPosition = transform.WorldPosition;
-            var renderPosition = worldPosition + new Vector2(0, 25);
+                _stringBuilder.Clear();
+                _stringBuilder.Append((float)Math.Round(health.Ratio * 100, 1));
+                _stringBuilder.Append("%");
 
-            var stringSize = _font.MeasureString(_stringBuilder) * 0.5f;
-            _spriteBatch.DrawString(_font, _stringBuilder, renderPosition, color, 0.0f, stringSize, 1.0f, SpriteEffects.None, 0.5f);
+                var c = health.Ratio / 1;
+                var color = new Color(1.0f - c, c, 0.0f);
+                var worldPosition = transform.WorldPosition;
+                var renderPosition = worldPosition + new Vector2(0, 25);
+
+                var stringSize = _font.MeasureString(_stringBuilder) * 0.5f;
+                _spriteBatch.DrawString(_font, _stringBuilder, renderPosition, color, 0.0f, stringSize, 1.0f, SpriteEffects.None, 0.5f);
+            }
         }
     }
 }

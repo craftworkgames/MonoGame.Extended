@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework.Content.Pipeline;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
@@ -6,6 +7,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     [XmlRoot(ElementName = "tileset")]
     public class TiledMapTilesetContent
     {
+		[XmlIgnore]
+		public ExternalReference<TiledMapTilesetContent> Content { get; set; }
+
         [XmlAttribute(AttributeName = "firstgid")]
         public int FirstGlobalIdentifier { get; set; }
 
@@ -36,6 +40,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlElement(ElementName = "tileoffset")]
         public TiledMapTileOffsetContent TileOffset { get; set; }
 
+		[XmlElement(ElementName = "grid")]
+		public TiledMapTilesetGridContent Grid { get; set; }
+
         [XmlElement(ElementName = "tile")]
         public List<TiledMapTilesetTileContent> Tiles { get; set; }
 
@@ -46,16 +53,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlElement(ElementName = "image")]
         public TiledMapImageContent Image { get; set; }
 
-        [XmlArray("terraintypes")]
-        [XmlArrayItem("terrain")]
-        public List<TiledMapTerrainContent> TerrainTypes { get; set; }
-
         public TiledMapTilesetContent()
         {
             TileOffset = new TiledMapTileOffsetContent();
             Tiles = new List<TiledMapTilesetTileContent>();
             Properties = new List<TiledMapPropertyContent>();
-            TerrainTypes = new List<TiledMapTerrainContent>();
         }
 
         public bool ContainsGlobalIdentifier(int globalIdentifier)
