@@ -90,12 +90,11 @@ namespace MonoGame.Extended.Tiled.Renderers
 
         public TiledMapModel Build(TiledMap map)
         {
-            var layersOfLayerModels = map.Layers
-                .Select(layer => CreateLayerModels(map, layer))
-                .Select(models => models.ToArray())
-                .ToArray();
+			var dictionary = new Dictionary<TiledMapLayer, TiledMapLayerModel[]>();
+			foreach (var layer in map.Layers)
+				dictionary.Add(layer, CreateLayerModels(map, layer).ToArray());
 
-            return new TiledMapModel(map, layersOfLayerModels);
+            return new TiledMapModel(map, dictionary);
         }
 
         private static Point2 GetTilePosition(TiledMap map, TiledMapTile mapTile)

@@ -49,8 +49,8 @@ namespace MonoGame.Extended.Tiled.Renderers
                     animatedTilesetTile.Update(gameTime);
             }
 
-            for(var layerIndex = 0; layerIndex < _mapModel.LayersOfLayerModels.Length; layerIndex++)
-                UpdateAnimatedLayerModels(_mapModel.LayersOfLayerModels[layerIndex].OfType<TiledMapAnimatedLayerModel>());
+            foreach(var layer in _mapModel.LayersOfLayerModels)
+                UpdateAnimatedLayerModels(layer.Value.OfType<TiledMapAnimatedLayerModel>());
         }
 
         private static unsafe void UpdateAnimatedLayerModels(IEnumerable<TiledMapAnimatedLayerModel> animatedLayerModels)
@@ -130,7 +130,7 @@ namespace MonoGame.Extended.Tiled.Renderers
             tiledMapEffect.View = viewMatrix;
             tiledMapEffect.Projection = projectionMatrix;
 
-            foreach (var layerModel in _mapModel.LayersOfLayerModels[layerIndex])
+            foreach (var layerModel in _mapModel.LayersOfLayerModels[layer])
             {
                 // desired alpha
                 tiledMapEffect.Alpha = layer.Opacity;
