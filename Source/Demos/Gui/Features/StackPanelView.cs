@@ -2,7 +2,7 @@
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
 
-namespace SpaceShooter.Features
+namespace Gui.Features
 {
     public class StackPanelView
     {

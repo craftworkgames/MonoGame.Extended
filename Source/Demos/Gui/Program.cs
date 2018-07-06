@@ -1,7 +1,6 @@
 ﻿using System;
-using Gui;
 
-namespace SpaceShooter
+namespace Gui
 {
     /// <summary>
     /// The main class.
