@@ -35,6 +35,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Specialized;
 using System.Runtime.CompilerServices;
 using MonoGame.Extended.Collections;
 // ReSharper disable InconsistentNaming
@@ -43,9 +44,9 @@ namespace MonoGame.Extended.Entities
 {
     public sealed class Entity : IPoolable
     {
-        private static readonly uint ToBeAddedMask;
-        private static readonly uint ToBeRemovedMask;
-        private static readonly uint ToRefreshComponentsMask;
+        private static readonly int ToBeAddedMask;
+        private static readonly int ToBeRemovedMask;
+        private static readonly int ToRefreshComponentsMask;
 
         static Entity()
         {
@@ -161,7 +162,7 @@ namespace MonoGame.Extended.Entities
             _group = null;
             SystemBits.SetAll(false);
             ComponentBits.SetAll(false);
-            _flags = 0;
+			_flags = new BitVector32();
         }
 
         public override string ToString()
