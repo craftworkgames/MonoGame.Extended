@@ -97,6 +97,14 @@ namespace MonoGame.Extended.Tiled.Renderers
                 Draw(index, ref viewMatrix, ref projectionMatrix, effect, depth);
         }
 
+		public void Draw(TiledMapLayer layer, Matrix? viewMatrix = null, Matrix? projectionMatrix = null, Effect effect = null, float depth = 0.0f)
+		{
+			var viewMatrix1 = viewMatrix ?? Matrix.Identity;
+			var projectionMatrix1 = projectionMatrix ?? Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, 0, -1);
+
+			Draw(layer, ref viewMatrix1, ref projectionMatrix1, effect, depth);
+		}
+
         public void Draw(int layerIndex, Matrix? viewMatrix = null, Matrix? projectionMatrix = null, Effect effect = null, float depth = 0.0f)
         {
             var viewMatrix1 = viewMatrix ?? Matrix.Identity;
@@ -105,12 +113,16 @@ namespace MonoGame.Extended.Tiled.Renderers
             Draw(layerIndex, ref viewMatrix1, ref projectionMatrix1, effect, depth);
         }
 
-        public void Draw(int layerIndex, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect = null, float depth = 0.0f)
-        {
+		public void Draw(int layerIndex, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect = null, float depth = 0.0f)
+		{
+            var layer = _mapModel.Layers[layerIndex];
+
+			Draw(layer, ref viewMatrix, ref projectionMatrix, effect, depth);
+		}
+		public void Draw(TiledMapLayer layer, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect = null, float depth = 0.0f)
+		{ 
             if (_mapModel == null)
                 return;
-
-            var layer = _mapModel.Layers[layerIndex];
 
             if (!layer.IsVisible)
                 return;
