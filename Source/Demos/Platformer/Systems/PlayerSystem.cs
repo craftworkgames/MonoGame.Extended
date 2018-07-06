@@ -5,27 +5,44 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Input;
 using Platformer.Collisions;
 using Platformer.Components;
 
 namespace Platformer.Systems
 {
-    [Aspect(AspectType.All, typeof(Body), typeof(Player), typeof(Transform2), typeof(AnimatedSprite))]
-    [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class PlayerSystem : EntityProcessingSystem
     {
-        protected override void Process(GameTime gameTime, Entity entity)
+        private ComponentMapper<Player> _playerMapper;
+        private ComponentMapper<AnimatedSprite> _spriteMapper;
+        private ComponentMapper<Transform2> _transformMapper;
+        private ComponentMapper<Body> _bodyMapper;
+
+        public PlayerSystem() 
+            : base(Aspect.All(typeof(Body), typeof(Player), typeof(Transform2), typeof(AnimatedSprite)))
         {
-            var player = entity.Get<Player>();
-            var sprite = entity.Get<AnimatedSprite>();
-            var transform = entity.Get<Transform2>();
-            var body = entity.Get<Body>();
+        }
+
+        public override void Initialize(IComponentMapperService mapperService)
+        {
+            _playerMapper = mapperService.GetMapper<Player>();
+            _spriteMapper = mapperService.GetMapper<AnimatedSprite>();
+            _transformMapper = mapperService.GetMapper<Transform2>();
+            _bodyMapper = mapperService.GetMapper<Body>();
+        }
+
+        public override void Process(GameTime gameTime, int entityId)
+        {
+            var player = _playerMapper.Get(entityId);
+            var sprite = _spriteMapper.Get(entityId);
+            var transform = _transformMapper.Get(entityId);
+            var body = _bodyMapper.Get(entityId);
             var keyboardState = KeyboardExtended.GetState();
-            
+
             if (player.CanJump)
             {
-                if(keyboardState.WasKeyJustUp(Keys.Up))
+                if (keyboardState.WasKeyJustUp(Keys.Up))
                     body.Velocity.Y -= 550 + Math.Abs(body.Velocity.X) * 0.4f;
 
                 if (keyboardState.WasKeyJustUp(Keys.Z))
@@ -34,7 +51,7 @@ namespace Platformer.Systems
                     player.State = player.State == State.Idle ? State.Punching : State.Kicking;
                 }
             }
-            
+
             if (keyboardState.IsKeyDown(Keys.Right))
             {
                 body.Velocity.X += 150;
@@ -57,7 +74,7 @@ namespace Platformer.Systems
 
                 if (body.Velocity.Y > 0)
                     player.State = State.Falling;
-                
+
                 if (body.Velocity.EqualsWithTolerence(Vector2.Zero, 5))
                     player.State = State.Idle;
             }
@@ -96,7 +113,7 @@ namespace Platformer.Systems
             body.Velocity.X *= 0.7f;
 
             // TODO: Can we remove this?
-            transform.Position = body.Position;
+            //transform.Position = body.Position;
         }
     }
 }

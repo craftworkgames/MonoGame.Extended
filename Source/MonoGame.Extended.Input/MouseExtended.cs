@@ -6,6 +6,7 @@ namespace MonoGame.Extended.Input
 {
     public static class MouseExtended
     {
+        // TODO: This global static state was a horrible idea.
         private static MouseState _currentMouseState;
         private static MouseState _previousMouseState;
 
@@ -22,8 +23,8 @@ namespace MonoGame.Extended.Input
 
         public static IntPtr WindowHandle
         {
-            get { return Mouse.WindowHandle; }
-            set { Mouse.WindowHandle = value; }
+            get => Mouse.WindowHandle;
+            set => Mouse.WindowHandle = value;
         }
     }
 }

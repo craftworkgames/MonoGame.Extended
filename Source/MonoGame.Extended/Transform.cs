@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
 
 namespace MonoGame.Extended
 {
@@ -201,7 +200,6 @@ namespace MonoGame.Extended
     ///         objects hierarchically.
     ///     </para>
     /// </remarks>
-    [EntityComponent]
     public class Transform2 : BaseTransform<Matrix2>, IMovable, IRotatable, IScalable
     {
         private Vector2 _position;
@@ -210,6 +208,11 @@ namespace MonoGame.Extended
 
         public Transform2()
             : this(Vector2.Zero, 0, Vector2.One)
+        {
+        }
+
+        public Transform2(float x, float y, float rotation = 0, float scaleX = 1, float scaleY = 1)
+            : this(new Vector2(x, y), rotation, new Vector2(scaleX, scaleY))
         {
         }
 

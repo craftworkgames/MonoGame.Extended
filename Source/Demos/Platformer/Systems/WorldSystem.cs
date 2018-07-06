@@ -1,56 +1,53 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Systems;
 using Platformer.Collisions;
+using World = Platformer.Collisions.World;
 
 namespace Platformer.Systems
 {
-    [Aspect(AspectType.All, typeof(Body))]
-    [EntitySystem(GameLoopType.Update, Layer = 0)]
     public class WorldSystem : EntityProcessingSystem
     {
         private readonly World _world;
+        private ComponentMapper<Transform2> _transformMapper;
+        private ComponentMapper<Body> _bodyMapper;
 
         public WorldSystem()
+            : base(Aspect.All(typeof(Body), typeof(Transform2)))
         {
-            _world = new World(new Vector2(0, 60)) {OnCollision = OnCollision};
+            _world = new World(new Vector2(0, 60));
         }
 
-        public override void OnEntityAdded(Entity entity)
+        public override void Initialize(IComponentMapperService mapperService)
         {
-            var body = entity.Get<Body>();
-            _world.Bodies.Add(body);
+            _transformMapper = mapperService.GetMapper<Transform2>();
+            _bodyMapper = mapperService.GetMapper<Body>();
         }
 
-        public override void OnEntityRemoved(Entity entity)
+        protected override void OnEntityAdded(int entityId)
         {
-            var body = entity.Get<Body>();
-            _world.Bodies.Remove(body);
+            var body = _bodyMapper.Get(entityId);
+            _world.AddBody(body);
         }
 
-        protected override void Process(GameTime gameTime)
+        protected override void OnEntityRemoved(int entityId)
         {
-            var elapsedSeconds = gameTime.GetElapsedSeconds();
-            _world.Update(elapsedSeconds);
-
-            base.Process(gameTime);
+            var body = _bodyMapper.Get(entityId);
+            _world.RemoveBody(body);
+        }
+        
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            _world.Update(gameTime.GetElapsedSeconds());
         }
 
-        protected override void Process(GameTime gameTime, Entity entity)
+        public override void Process(GameTime gameTime, int entityId)
         {
-        }
-
-        private static void OnCollision(Manifold manifold)
-        {
-            var body = manifold.BodyB.BodyType == BodyType.Dynamic ? manifold.BodyB : manifold.BodyA;
-
-            body.Position -= manifold.Normal * manifold.Penetration;
-
-            if (manifold.Normal.Y < 0 || manifold.Normal.Y > 0)
-                body.Velocity.Y = 0;
-
-            //if (manifold.Normal.X < 0 || manifold.Normal.X > 0)
-            //    body.Velocity = new Vector2(0, body.Velocity.Y);
+            var transform = _transformMapper.Get(entityId);
+            var body = _bodyMapper.Get(entityId);
+            transform.Position = body.Position;
         }
     }
 }

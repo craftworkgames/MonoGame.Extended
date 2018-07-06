@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,7 +28,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				{
 					if (String.IsNullOrWhiteSpace(tileset.Source))
 						// Load the Texture2DContent for the tileset as it will be saved into the map content file.
-						tileset.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(tileset.Image.Source), "");
+						tileset.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(tileset.Image.Source), "", new OpaqueDataDictionary() { { "ColorKeyColor", tileset.Image.TransparentColor }, { "ColorKeyEnabled", true } }, "", "");
 					else
 						// Link to the tileset for the content loader to load at runtime.
 						tileset.Content = context.BuildAsset<TiledMapTilesetContent, TiledMapTilesetContent>(new ExternalReference<TiledMapTilesetContent>(tileset.Source), "");
@@ -58,7 +59,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				if (layer is TiledMapImageLayerContent imageLayer)
 				{
 					ContentLogger.Log($"Processing image layer '{imageLayer.Name}'");
-					imageLayer.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(imageLayer.Image.Source), "");
+					imageLayer.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(imageLayer.Image.Source), "", new OpaqueDataDictionary() { { "ColorKeyColor", imageLayer.Image.TransparentColor }, { "ColorKeyEnabled", true } }, "", "");
 					ContentLogger.Log($"Processed image layer '{imageLayer.Name}'");
 				}
 
