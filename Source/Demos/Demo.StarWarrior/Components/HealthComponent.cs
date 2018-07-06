@@ -34,12 +34,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using MonoGame.Extended.Entities;
-
 namespace Demo.StarWarrior.Components
 {
-    [EntityComponent]
-    public class HealthComponent : PoolableComponent
+    public class HealthComponent
     {
         private int _points;
         private int _maximumPoints;
@@ -67,13 +64,6 @@ namespace Demo.StarWarrior.Components
         public float Ratio { get; private set; }
 
         public bool IsAlive => Points > 0;
-
-        public override void Reset()
-        {
-            _points = 0;
-            _maximumPoints = 0;
-            Ratio = 0;
-        }
 
         public void AddDamage(int damage)
         {

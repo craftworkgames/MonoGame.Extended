@@ -37,7 +37,7 @@ namespace Demo.Features
             };
 
             Content.RootDirectory = "Content";
-            IsMouseVisible = false;
+            IsMouseVisible = true;
             Window.AllowUserResizing = true;
 
             _demos = new DemoBase[]

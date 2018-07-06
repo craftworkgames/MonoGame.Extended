@@ -38,14 +38,8 @@ using MonoGame.Extended.Entities;
 
 namespace Demo.StarWarrior.Components
 {
-    [EntityComponent]
-    public class SpatialFormComponent //: EntityComponent
+    public class SpatialFormComponent
     {
         public string SpatialFormFile { get; set; }
-
-        //public override void Reset()
-        //{
-        //    SpatialFormFile = null;
-        //}
     }
 }

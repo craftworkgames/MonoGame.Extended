@@ -8,17 +8,18 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.TextureAtlases;
 using Platformer.Collisions;
 using Platformer.Components;
+using World = MonoGame.Extended.Entities.World;
 
 namespace Platformer
 {
     public class EntityFactory
     {
-        private readonly EntityManager _entityManager;
+        private readonly World _world;
         private readonly ContentManager _contentManager;
 
-        public EntityFactory(EntityManager entityManager, ContentManager contentManager)
+        public EntityFactory(World world, ContentManager contentManager)
         {
-            _entityManager = entityManager;
+            _world = world;
             _contentManager = contentManager;
         }
 
@@ -27,7 +28,7 @@ namespace Platformer
             var dudeTexture = _contentManager.Load<Texture2D>("hero");
             var dudeAtlas = TextureAtlas.Create("dudeAtlas", dudeTexture, 16, 16);
 
-            var entity = _entityManager.CreateEntity();
+            var entity = _world.CreateEntity();
             var animationFactory = new SpriteSheetAnimationFactory(dudeAtlas);
             animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 0, 1, 2, 1 }));
             animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 6, 7, 8, 9, 10, 11 }, frameDuration: 0.1f));
@@ -40,13 +41,30 @@ namespace Platformer
             entity.Attach(new AnimatedSprite(animationFactory, "idle"));
             entity.Attach(new Transform2(position, 0, Vector2.One * 4));
             entity.Attach(new Body { Position = position, Size = new Vector2(32, 64), BodyType = BodyType.Dynamic });
-            entity.Attach<Player>();
+            entity.Attach(new Player());
+            return entity;
+        }
+
+        public Entity CreateBlue(Vector2 position)
+        {
+            var dudeTexture = _contentManager.Load<Texture2D>("blueguy");
+            var dudeAtlas = TextureAtlas.Create("blueguyAtlas", dudeTexture, 16, 16);
+
+            var entity = _world.CreateEntity();
+            var animationFactory = new SpriteSheetAnimationFactory(dudeAtlas);
+            animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 0, 1, 2, 3, 2, 1 }));
+            animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 6, 7, 8, 9, 10, 11 }, frameDuration: 0.1f));
+            animationFactory.Add("jump", new SpriteSheetAnimationData(new[] { 10, 12 }, frameDuration: 1.0f, isLooping: false));
+            entity.Attach(new AnimatedSprite(animationFactory, "idle") { Effect = SpriteEffects.FlipHorizontally });
+            entity.Attach(new Transform2(position, 0, Vector2.One * 4));
+            entity.Attach(new Body { Position = position, Size = new Vector2(32, 64), BodyType = BodyType.Dynamic });
+            entity.Attach(new Enemy());
             return entity;
         }
 
         public void CreateTile(int x, int y, int width, int height)
         {
-            var entity = _entityManager.CreateEntity();
+            var entity = _world.CreateEntity();
             entity.Attach(new Body
             {
                 Position = new Vector2(x * width + width * 0.5f, y * height + height * 0.5f),

@@ -39,22 +39,31 @@ using Demo.StarWarrior.Components;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Systems;
 
 namespace Demo.StarWarrior.Systems
 {
-    [Aspect(AspectType.All, typeof(Transform2), typeof(PhysicsComponent))]
-    [EntitySystem(GameLoopType.Update, Layer = 1)]
     public class MovementSystem : EntityProcessingSystem
     {
-        protected override void Process(GameTime gameTime, Entity entity)
+        public MovementSystem() 
+            : base(Aspect.All(typeof(Transform2), typeof(PhysicsComponent)))
         {
+        }
+
+        public override void Initialize(IComponentMapperService mapperService)
+        {
+        }
+
+        public override void Process(GameTime gameTime, int entityId)
+        {
+            var entity = GetEntity(entityId);
             var transform = entity.Get<Transform2>();
             var physics = entity.Get<PhysicsComponent>();
 
             var milliseconds = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             var deltaPosition = physics.Speed * milliseconds;
             var deltaRotatedPosition = new Vector2(
-                (float)(Math.Cos(physics.AngleAsRadians) * deltaPosition), 
+                (float)(Math.Cos(physics.AngleAsRadians) * deltaPosition),
                 (float)(Math.Sin(physics.AngleAsRadians) * deltaPosition));
             transform.Position += deltaRotatedPosition;
         }

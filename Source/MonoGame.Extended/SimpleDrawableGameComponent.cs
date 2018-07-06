@@ -12,7 +12,7 @@ namespace MonoGame.Extended
         private bool _isVisible = true;
         public bool Visible
         {
-            get { return _isVisible; }
+            get => _isVisible;
             set
             {
                 if (_isVisible == value)
@@ -28,7 +28,7 @@ namespace MonoGame.Extended
         private int _drawOrder;
         public int DrawOrder
         {
-            get { return _drawOrder; }
+            get => _drawOrder;
             set
             {
                 if (_drawOrder == value)

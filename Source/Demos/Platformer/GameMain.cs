@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -16,7 +15,7 @@ namespace Platformer
         private TiledMapRenderer _renderer;
         private EntityFactory _entityFactory;
         private OrthographicCamera _camera;
-        private Entity _playerEntity;
+        private World _world;
 
         public GameMain()
         {
@@ -28,15 +27,20 @@ namespace Platformer
 
             builder.RegisterInstance(new SpriteBatch(GraphicsDevice));
             builder.RegisterInstance(_camera);
-            builder.RegisterType<RenderSystem>();
-            builder.RegisterType<PlayerSystem>();
-            builder.RegisterType<WorldSystem>();
         }
 
         protected override void LoadContent()
         {
-            _entityFactory = new EntityFactory(EntityComponentSystem.EntityManager, Content);
-            _playerEntity = _entityFactory.CreatePlayer(new Vector2(100, 240));
+            _world = new WorldBuilder()
+                .AddSystem(new WorldSystem())
+                .AddSystem(new PlayerSystem())
+                .AddSystem(new EnemySystem())
+                .AddSystem(new RenderSystem(new SpriteBatch(GraphicsDevice), _camera))
+                .Build();
+
+            Components.Add(_world);
+
+            _entityFactory = new EntityFactory(_world, Content);
 
             // TOOD: Load maps and collision data more nicely :)
             _map = Content.Load<TiledMap>("test-map");
@@ -59,6 +63,10 @@ namespace Platformer
                     }
                 }
             }
+
+            _entityFactory.CreateBlue(new Vector2(600, 240));
+            _entityFactory.CreateBlue(new Vector2(700, 100));
+            _entityFactory.CreatePlayer(new Vector2(100, 240));
         }
 
         protected override void Update(GameTime gameTime)
@@ -73,14 +81,17 @@ namespace Platformer
             _renderer.Update(gameTime);
             //_camera.LookAt(_playerEntity.Get<Transform2>().Position);
 
+            //_world.Update(gameTime);
+
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
+            
             _renderer.Draw(_camera.GetViewMatrix());
+            //_world.Draw(gameTime);
 
             base.Draw(gameTime);
         }

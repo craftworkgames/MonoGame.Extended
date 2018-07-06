@@ -1,196 +1,80 @@
-﻿// Original code dervied from:
-// https://github.com/thelinuxlich/artemis_CSharp/blob/master/Artemis_XNA_INDEPENDENT/Entity.cs
-
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Entity.cs" company="GAMADU.COM">
-//     Copyright © 2013 GAMADU.COM. Contains rights reserved.
-//
-//     Redistribution and use in source and binary forms, with or without modification, are
-//     permitted provided that the following conditions are met:
-//
-//        1. Redistributions of source code must retain the above copyright notice, this list of
-//           conditions and the following disclaimer.
-//
-//        2. Redistributions in binary form must reproduce the above copyright notice, this list
-//           of conditions and the following disclaimer in the documentation and/or other materials
-//           provided with the distribution.
-//
-//     THIS SOFTWARE IS PROVIDED BY GAMADU.COM 'AS IS' AND ANY EXPRESS OR IMPLIED
-//     WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-//     FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL GAMADU.COM OR
-//     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-//     CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-//     SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-//     ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//     NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-//     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//     The views and conclusions contained in the software and documentation are those of the
-//     authors and should not be interpreted as representing official policies, either expressed
-//     or implied, of GAMADU.COM.
-// </copyright>
-// <summary>
-//   Basic unity of this entity system.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System;
-using System.Runtime.CompilerServices;
-using MonoGame.Extended.Collections;
-// ReSharper disable InconsistentNaming
+﻿using System;
+using System.Collections.Specialized;
 
 namespace MonoGame.Extended.Entities
 {
-    public sealed class Entity : IPoolable
+    public class Entity : IEquatable<Entity>
     {
-        private static readonly uint ToBeAddedMask;
-        private static readonly uint ToBeRemovedMask;
-        private static readonly uint ToRefreshComponentsMask;
+        private readonly EntityManager _entityManager;
+        private readonly ComponentManager _componentManager;
 
-        static Entity()
+        internal Entity(int id, EntityManager entityManager, ComponentManager componentManager)
         {
-            ToBeAddedMask = BitVector32.CreateMask();
-            ToBeRemovedMask = BitVector32.CreateMask(ToBeAddedMask);
-            ToRefreshComponentsMask = BitVector32.CreateMask(ToBeRemovedMask);
+            Id = id;
+
+            _entityManager = entityManager;
+            _componentManager = componentManager;
         }
 
-        private ReturnToPoolDelegate _returnToPoolDelegate;
-        private BitVector32 _flags;
+        public int Id { get; }
+        
+        public BitVector32 ComponentBits => _entityManager.GetComponentBits(Id);
 
-        internal EntityManager Manager;
-        internal readonly BitVector SystemBits;
-        internal readonly BitVector ComponentBits;
-
-        internal string _group;
-        internal string _name;
-
-        public bool IsActive
+        public void Attach<T>(T component)
+            where T : class 
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return !_flags[ToBeRemovedMask]; }
+            var mapper = _componentManager.GetMapper<T>();
+            mapper.Put(Id, component);
         }
 
-        public bool WaitingToBeAdded
+        public void Detach<T>()
+            where T : class
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return _flags[ToBeAddedMask]; }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            internal set { _flags[ToBeAddedMask] = value; }
+            var mapper = _componentManager.GetMapper<T>();
+            mapper.Delete(Id);
         }
 
-        public bool WaitingToBeRemoved
+        public T Get<T>()
+            where T : class 
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return _flags[ToBeRemovedMask]; }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            internal set { _flags[ToBeRemovedMask] = value; }
+            var mapper = _componentManager.GetMapper<T>();
+            return mapper.Get(Id);
         }
 
-        internal bool WaitingToRefreshComponents
+        public void Destory()
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return _flags[ToRefreshComponentsMask]; }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set { _flags[ToRefreshComponentsMask] = value; }
+            _entityManager.Destroy(Id);
         }
 
-        public string Name
+        public bool Equals(Entity other)
         {
-            get { return _name; }
-            set
-            {
-                _name = value;
-                Manager.AddEntityName(value, this);
-            }
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Id == other.Id;
         }
 
-        //public string Group
-        //{
-        //    get { return _group; }
-        //    set
-        //    {
-        //        _group = value;
-        //        Manager.AddEntityToGroup(value, this);
-        //    }
-        //}
-
-        IPoolable IPoolable.NextNode { get; set; }
-        IPoolable IPoolable.PreviousNode { get; set; }
-
-        internal Entity(int systemTypeCount, int componentTypeCount)
+        public override bool Equals(object obj)
         {
-            SystemBits = new BitVector(systemTypeCount);
-            ComponentBits = new BitVector(componentTypeCount);
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Entity) obj);
         }
 
-        public void Destroy()
+        public override int GetHashCode()
         {
-            Manager.MarkEntityToBeRemoved(this);
+            // ReSharper disable once NonReadonlyMemberInGetHashCode
+            return Id;
         }
 
-        public T Attach<T>(T component) where T : class
+        public static bool operator ==(Entity left, Entity right)
         {
-            return Manager.AddComponent(this, component);
+            return Equals(left, right);
         }
 
-        public T Attach<T>(Action<T> configure) where T : class 
+        public static bool operator !=(Entity left, Entity right)
         {
-            var component = Attach<T>();
-            configure(component);
-            return component;
-        }
-
-        public T Attach<T>() where T : class
-        {
-            return Manager.AddComponent<T>(this);
-        }
-
-        public void Detach<T>() where T : class
-        {
-            Manager.MarkComponentToBeRemoved<T>(this);
-        }
-
-        public T Get<T>() where T : class
-        {
-            return Manager.GetComponent<T>(this);
-        }
-
-        private void Reset()
-        {
-            _name = null;
-            _group = null;
-            SystemBits.SetAll(false);
-            ComponentBits.SetAll(false);
-            _flags = 0;
-        }
-
-        public override string ToString()
-        {
-            return $"{RuntimeHelpers.GetHashCode(this):X8} {Name}";
-        }
-
-        void IPoolable.Initialize(ReturnToPoolDelegate returnDelegate)
-        {
-            Reset();
-            _returnToPoolDelegate = returnDelegate;
-        }
-
-        void IPoolable.Return()
-        {
-            Return();
-        }
-
-        internal void Return()
-        {
-            Reset();
-
-            if (_returnToPoolDelegate == null)
-            {
-                return;
-            }
-
-            _returnToPoolDelegate.Invoke(this);
-            _returnToPoolDelegate = null;
+            return !Equals(left, right);
         }
     }
 }

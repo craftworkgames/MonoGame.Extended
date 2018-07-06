@@ -34,55 +34,54 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Demo.StarWarrior.Components;
-using Demo.StarWarrior.Templates;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
-using MonoGame.Extended.Entities;
+using MonoGame.Extended.Entities.Systems;
 
 namespace Demo.StarWarrior.Systems
 {
-    [EntitySystem(GameLoopType.Update, Layer = 1)]
-    public class CollisionSystem : ProcessingSystem
+    public class CollisionSystem : UpdateSystem
     {
-        protected override void Process(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
-            var bullets = EntityManager.GetEntitiesByGroup("BULLETS");
-            var ships = EntityManager.GetEntitiesByGroup("SHIPS");
-            if (bullets == null || ships == null)
-                return;
+            //var bullets = EntityManager.GetEntitiesByGroup("BULLETS");
+            //var ships = EntityManager.GetEntitiesByGroup("SHIPS");
+            //if (bullets == null || ships == null)
+            //    return;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var shipIndex = 0; ships.Count > shipIndex; ++shipIndex)
-            {
-                var ship = ships[shipIndex];
+            //// ReSharper disable once ForCanBeConvertedToForeach
+            //for (var shipIndex = 0; ships.Count > shipIndex; ++shipIndex)
+            //{
+            //    var ship = ships[shipIndex];
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var bulletIndex = 0; bullets.Count > bulletIndex; ++bulletIndex)
-                {
-                    var bullet = bullets[bulletIndex];
-                    var bulletTransform = bullet.Get<Transform2>();
-                    var shipTransform = ship.Get<Transform2>();
+            //    // ReSharper disable once ForCanBeConvertedToForeach
+            //    for (var bulletIndex = 0; bullets.Count > bulletIndex; ++bulletIndex)
+            //    {
+            //        var bullet = bullets[bulletIndex];
+            //        var bulletTransform = bullet.Get<Transform2>();
+            //        var shipTransform = ship.Get<Transform2>();
 
-                    if (!CollisionExists(bulletTransform, shipTransform))
-                        continue;
+            //        if (!CollisionExists(bulletTransform, shipTransform))
+            //            continue;
 
-                    var bulletExplosion = EntityManager.CreateEntityFromTemplate(BulletExplosionTemplate.Name);
-                    bulletExplosion.Get<Transform2>().Position = bulletTransform.Position;
-                    bullet.Destroy();
+            //        var bulletExplosion = EntityManager.CreateEntityFromTemplate(BulletExplosionTemplate.Name);
+            //        bulletExplosion.Get<Transform2>().Position = bulletTransform.Position;
+            //        bullet.Destroy();
 
-                    var healthComponent = ship.Get<HealthComponent>();
-                    healthComponent.AddDamage(4);
+            //        var healthComponent = ship.Get<HealthComponent>();
+            //        healthComponent.AddDamage(4);
 
-                    if (healthComponent.IsAlive)
-                        continue;
-                  
-                    var shipExplosion = EntityManager.CreateEntityFromTemplate(ShipExplosionTemplate.Name);
-                    shipExplosion.Get<Transform2>().Position = shipTransform.Position;
-                    ship.Destroy();
-                    break;
-                }
-            }
+            //        if (healthComponent.IsAlive)
+            //            continue;
+
+            //        var shipExplosion = EntityManager.CreateEntityFromTemplate(ShipExplosionTemplate.Name);
+            //        shipExplosion.Get<Transform2>().Position = shipTransform.Position;
+            //        ship.Destroy();
+            //        break;
+            //    }
+            //}
+
+
         }
 
         // ReSharper disable once SuggestBaseTypeForParameter

@@ -7,10 +7,16 @@ namespace MonoGame.Extended
     public static class Vector2Extensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Size2 ToSize(this Vector2 value)
-        {
-            return new Size2(value.X, value.Y);
-        }
+        public static Vector2 SetX(this Vector2 vector2, float x) => new Vector2(x, vector2.Y);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 SetY(this Vector2 vector2, float y) => new Vector2(vector2.X, y);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 Translate(this Vector2 vector2, float x, float y) => new Vector2(vector2.X + x, vector2.Y + y);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Size2 ToSize(this Vector2 value) => new Size2(value.X, value.Y);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Size2 ToAbsoluteSize(this Vector2 value)
@@ -67,16 +73,10 @@ namespace MonoGame.Extended
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2 PerpendicularClockwise(this Vector2 value)
-        {
-            return new Vector2(value.Y, -value.X);
-        }
+        public static Vector2 PerpendicularClockwise(this Vector2 value) => new Vector2(value.Y, -value.X);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2 PerpendicularCounterClockwise(this Vector2 value)
-        {
-            return new Vector2(-value.Y, value.X);
-        }
+        public static Vector2 PerpendicularCounterClockwise(this Vector2 value) => new Vector2(-value.Y, value.X);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 Truncate(this Vector2 value, float maxLength)
@@ -88,16 +88,10 @@ namespace MonoGame.Extended
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNaN(this Vector2 value)
-        {
-            return float.IsNaN(value.X) || float.IsNaN(value.Y);
-        }
+        public static bool IsNaN(this Vector2 value) => float.IsNaN(value.X) || float.IsNaN(value.Y);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float ToAngle(this Vector2 value)
-        {
-            return (float) Math.Atan2(value.X, -value.Y);
-        }
+        public static float ToAngle(this Vector2 value) => (float) Math.Atan2(value.X, -value.Y);
 
         /// <summary>
         ///     Calculates the dot product of two vectors. If the two vectors are unit vectors, the dot product returns a floating
