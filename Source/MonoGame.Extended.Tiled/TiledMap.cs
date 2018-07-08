@@ -63,22 +63,30 @@ namespace MonoGame.Extended.Tiled
 			_firstGlobalIdentifiers.Add(new Tuple<TiledMapTileset, int>(tileset, firstGlobalIdentifier));
         }
 
-        public void AddLayer(TiledMapLayer layer)
+		public void AddLayer(TiledMapLayer layer)
+			=> AddLayer(layer, true);
+
+		private void AddLayer(TiledMapLayer layer, bool root)
         {
-            _layers.Add(layer);
-            _layersByName.Add(layer.Name, layer);
+			if (root) _layers.Add(layer);
+			_layersByName.Add(layer.Name, layer);
 
-            var imageLayer = layer as TiledMapImageLayer;
-            if (imageLayer != null)
-                _imageLayers.Add(imageLayer);
-
-            var tileLayer = layer as TiledMapTileLayer;
-            if (tileLayer != null)
-                _tileLayers.Add(tileLayer);
-
-            var objectLayer = layer as TiledMapObjectLayer;
-            if (objectLayer != null)
-                _objectLayers.Add(objectLayer);
+			switch(layer)
+			{
+				case TiledMapImageLayer imageLayer:
+					_imageLayers.Add(imageLayer);
+					break;
+				case TiledMapTileLayer tileLayer:
+					_tileLayers.Add(tileLayer);
+					break;
+				case TiledMapObjectLayer objectLayer:
+					_objectLayers.Add(objectLayer);
+					break;
+				case TiledMapGroupLayer groupLayer:
+					foreach (var subLayer in groupLayer.Layers)
+						AddLayer(subLayer, false);
+					break;
+			}
         }
 
         public TiledMapLayer GetLayer(string layerName)
@@ -105,6 +113,18 @@ namespace MonoGame.Extended.Tiled
 		public int GetTilesetFirstGlobalIdentifier(TiledMapTileset tileset)
 		{
 			return _firstGlobalIdentifiers.FirstOrDefault(t => t.Item1 == tileset).Item2;
+		}
+
+		private static int CountLayers(TiledMapLayer layer)
+		{
+			var value = 0;
+			if (layer is TiledMapGroupLayer groupLayer)
+				foreach (var subLayer in groupLayer.Layers)
+					value += CountLayers(subLayer);
+			else
+				value = 1;
+
+			return value;
 		}
     }
 }

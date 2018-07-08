@@ -16,17 +16,16 @@ namespace MonoGame.Extended.Tiled.Renderers
 
         private IEnumerable<TiledMapLayerModel> CreateLayerModels(TiledMap map, TiledMapLayer layer)
         {
-            var tileLayer = layer as TiledMapTileLayer;
+			switch(layer)
+			{
+				case TiledMapTileLayer tileLayer:
+					return CreateTileLayerModels(map, tileLayer);
+				case TiledMapImageLayer imageLayer:
+					return CreateImageLayerModels(imageLayer);
+				default:
+					return new List<TiledMapLayerModel>();
+			}
 
-            if (tileLayer != null)
-                return CreateTileLayerModels(map, tileLayer);
-
-            var imageLayer = layer as TiledMapImageLayer;
-
-            if (imageLayer != null)
-                return CreateImageLayerModels(imageLayer);
-
-            return new List<TiledMapLayerModel>();
         }
 
         private IEnumerable<TiledMapLayerModel> CreateImageLayerModels(TiledMapImageLayer imageLayer)
@@ -90,15 +89,23 @@ namespace MonoGame.Extended.Tiled.Renderers
 
         public TiledMapModel Build(TiledMap map)
         {
-            var layersOfLayerModels = map.Layers
-                .Select(layer => CreateLayerModels(map, layer))
-                .Select(models => models.ToArray())
-                .ToArray();
+			var dictionary = new Dictionary<TiledMapLayer, TiledMapLayerModel[]>();
+			foreach (var layer in map.Layers)
+				BuildLayer(map, layer, dictionary);
 
-            return new TiledMapModel(map, layersOfLayerModels);
+            return new TiledMapModel(map, dictionary);
         }
 
-        private static Point2 GetTilePosition(TiledMap map, TiledMapTile mapTile)
+		private void BuildLayer(TiledMap map, TiledMapLayer layer, Dictionary<TiledMapLayer, TiledMapLayerModel[]> dictionary)
+		{
+			if (layer is TiledMapGroupLayer groupLayer)
+				foreach (var subLayer in groupLayer.Layers)
+					BuildLayer(map, subLayer, dictionary);
+			else
+				dictionary.Add(layer, CreateLayerModels(map, layer).ToArray());
+		}
+
+		private static Point2 GetTilePosition(TiledMap map, TiledMapTile mapTile)
         {
             switch (map.Orientation)
             {

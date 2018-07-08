@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Tiled.Renderers
         private readonly TiledMap _map;
         private readonly Dictionary<TiledMapTileset, List<TiledMapTilesetAnimatedTile>> _animatedTilesByTileset;
 
-        public TiledMapModel(TiledMap map, TiledMapLayerModel[][] layersOfLayerModels)
+        public TiledMapModel(TiledMap map, Dictionary<TiledMapLayer, TiledMapLayerModel[]> layersOfLayerModels)
         {
             _map = map;
             LayersOfLayerModels = layersOfLayerModels;
@@ -21,15 +21,16 @@ namespace MonoGame.Extended.Tiled.Renderers
 
         public void Dispose()
         {
-            foreach (var layerModel in LayersOfLayerModels.SelectMany(i => i))
-                layerModel.Dispose();
+			foreach (var layerModel in LayersOfLayerModels)
+				foreach (var model in layerModel.Value)
+					model.Dispose();
         }
 
         public ReadOnlyCollection<TiledMapTileset> Tilesets => _map.Tilesets;
         public ReadOnlyCollection<TiledMapLayer> Layers => _map.Layers;
 
         // each layer has many models
-        public TiledMapLayerModel[][] LayersOfLayerModels { get; }
+        public Dictionary<TiledMapLayer, TiledMapLayerModel[]> LayersOfLayerModels { get; }
 
         public IEnumerable<TiledMapTilesetAnimatedTile> GetAnimatedTiles(int tilesetIndex)
         {

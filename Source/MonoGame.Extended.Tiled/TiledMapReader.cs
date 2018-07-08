@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -72,14 +73,19 @@ namespace MonoGame.Extended.Tiled
         }
 
         private static void ReadLayers(ContentReader reader, TiledMap map)
+		{
+			foreach (var layer in ReadGroup(reader, map))
+				map.AddLayer(layer);
+		}
+		private static List<TiledMapLayer> ReadGroup(ContentReader reader, TiledMap map)
         {
             var layerCount = reader.ReadInt32();
+			var value = new List<TiledMapLayer>(layerCount);
 
             for (var i = 0; i < layerCount; i++)
-            {
-                var layer = ReadLayer(reader, map);
-                map.AddLayer(layer);
-            }
+                value.Add(ReadLayer(reader, map));
+
+			return value;
         }
 
         private static TiledMapLayer ReadLayer(ContentReader reader, TiledMap map)
@@ -108,6 +114,9 @@ namespace MonoGame.Extended.Tiled
                 case TiledMapLayerType.ObjectLayer:
                     layer = ReadObjectLayer(reader, name, offset, opacity, isVisible, map);
                     break;
+				case TiledMapLayerType.GroupLayer:
+					layer = new TiledMapGroupLayer(name, ReadGroup(reader, map), offset, opacity, isVisible);
+					break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

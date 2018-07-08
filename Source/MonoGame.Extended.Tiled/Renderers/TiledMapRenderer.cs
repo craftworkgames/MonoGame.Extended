@@ -49,8 +49,8 @@ namespace MonoGame.Extended.Tiled.Renderers
                     animatedTilesetTile.Update(gameTime);
             }
 
-            for(var layerIndex = 0; layerIndex < _mapModel.LayersOfLayerModels.Length; layerIndex++)
-                UpdateAnimatedLayerModels(_mapModel.LayersOfLayerModels[layerIndex].OfType<TiledMapAnimatedLayerModel>());
+            foreach(var layer in _mapModel.LayersOfLayerModels)
+                UpdateAnimatedLayerModels(layer.Value.OfType<TiledMapAnimatedLayerModel>());
         }
 
         private static unsafe void UpdateAnimatedLayerModels(IEnumerable<TiledMapAnimatedLayerModel> animatedLayerModels)
@@ -97,6 +97,14 @@ namespace MonoGame.Extended.Tiled.Renderers
                 Draw(index, ref viewMatrix, ref projectionMatrix, effect, depth);
         }
 
+		public void Draw(TiledMapLayer layer, Matrix? viewMatrix = null, Matrix? projectionMatrix = null, Effect effect = null, float depth = 0.0f)
+		{
+			var viewMatrix1 = viewMatrix ?? Matrix.Identity;
+			var projectionMatrix1 = projectionMatrix ?? Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, 0, -1);
+
+			Draw(layer, ref viewMatrix1, ref projectionMatrix1, effect, depth);
+		}
+
         public void Draw(int layerIndex, Matrix? viewMatrix = null, Matrix? projectionMatrix = null, Effect effect = null, float depth = 0.0f)
         {
             var viewMatrix1 = viewMatrix ?? Matrix.Identity;
@@ -105,53 +113,73 @@ namespace MonoGame.Extended.Tiled.Renderers
             Draw(layerIndex, ref viewMatrix1, ref projectionMatrix1, effect, depth);
         }
 
-        public void Draw(int layerIndex, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect = null, float depth = 0.0f)
-        {
-            if (_mapModel == null)
-                return;
-
+		public void Draw(int layerIndex, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect = null, float depth = 0.0f)
+		{
             var layer = _mapModel.Layers[layerIndex];
 
-            if (!layer.IsVisible)
-                return;
+			Draw(layer, ref viewMatrix, ref projectionMatrix, effect, depth);
+		}
 
-            if (layer is TiledMapObjectLayer)
-                return;
+		public void Draw(TiledMapLayer layer, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect = null, float depth = 0.0f)
+		{
+			if (_mapModel == null)
+				return;
 
-            _worldMatrix.Translation = new Vector3(layer.Offset.X, layer.Offset.Y, depth);
+			if (!layer.IsVisible)
+				return;
 
-            var effect1 = effect ?? _defaultEffect;
-            var tiledMapEffect = effect1 as ITiledMapEffect;
-            if (tiledMapEffect == null)
-                return;
+			if (layer is TiledMapObjectLayer)
+				return;
 
-            // model-to-world transform
-            tiledMapEffect.World = _worldMatrix;
-            tiledMapEffect.View = viewMatrix;
-            tiledMapEffect.Projection = projectionMatrix;
+			Draw(layer, Vector2.Zero, ref viewMatrix, ref projectionMatrix, effect, depth);
+		}
 
-            foreach (var layerModel in _mapModel.LayersOfLayerModels[layerIndex])
-            {
-                // desired alpha
-                tiledMapEffect.Alpha = layer.Opacity;
+		private void Draw(TiledMapLayer layer, Vector2 parentOffset, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect, float depth)
+		{ 
+			var offset = parentOffset + layer.Offset;
 
-                // desired texture
-                tiledMapEffect.Texture = layerModel.Texture;
+			if (layer is TiledMapGroupLayer groupLayer)
+			{
+				foreach (var subLayer in groupLayer.Layers)
+					Draw(subLayer, offset, ref viewMatrix, ref projectionMatrix, effect, depth);
+			}
+			else
+			{
+				_worldMatrix.Translation = new Vector3(offset, depth);
 
-                // bind the vertex and index buffer
-                _graphicsDevice.SetVertexBuffer(layerModel.VertexBuffer);
-                _graphicsDevice.Indices = layerModel.IndexBuffer;
+				var effect1 = effect ?? _defaultEffect;
+				var tiledMapEffect = effect1 as ITiledMapEffect;
+				if (tiledMapEffect == null)
+					return;
 
-                // for each pass in our effect
-                foreach (var pass in effect1.CurrentTechnique.Passes)
-                {
-                    // apply the pass, effectively choosing which vertex shader and fragment (pixel) shader to use
-                    pass.Apply();
+				// model-to-world transform
+				tiledMapEffect.World = _worldMatrix;
+				tiledMapEffect.View = viewMatrix;
+				tiledMapEffect.Projection = projectionMatrix;
 
-                    // draw the geometry from the vertex buffer / index buffer
-                    _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, layerModel.TriangleCount);
-                }
-            }
+				foreach (var layerModel in _mapModel.LayersOfLayerModels[layer])
+				{
+					// desired alpha
+					tiledMapEffect.Alpha = layer.Opacity;
+
+					// desired texture
+					tiledMapEffect.Texture = layerModel.Texture;
+
+					// bind the vertex and index buffer
+					_graphicsDevice.SetVertexBuffer(layerModel.VertexBuffer);
+					_graphicsDevice.Indices = layerModel.IndexBuffer;
+
+					// for each pass in our effect
+					foreach (var pass in effect1.CurrentTechnique.Passes)
+					{
+						// apply the pass, effectively choosing which vertex shader and fragment (pixel) shader to use
+						pass.Apply();
+
+						// draw the geometry from the vertex buffer / index buffer
+						_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, layerModel.TriangleCount);
+					}
+				}
+			}
         }
     }
 }

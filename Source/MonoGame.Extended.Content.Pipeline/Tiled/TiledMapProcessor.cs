@@ -36,11 +36,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				}
 
 				ProcessLayers(map, context, map.Layers);
-
-				map.Layers = FlattenGroups(map.Layers, out var hadGroups);
-
-				if (hadGroups) ContentLogger.Log($"FYI, TiledMap '{map.FilePath}' contains group layers. These are currently not supported \n" +
-					$"as is, and they will be discarded with the sub layers moved to root.");
 				
 				return map;
 			}
@@ -93,32 +88,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				if (layer is TiledMapGroupLayerContent groupLayer)
 					ProcessLayers(map, context, groupLayer.Layers);
 			}
-		}
-
-		private static List<TiledMapLayerContent> FlattenGroups(List<TiledMapLayerContent> layers, out bool hadGroups)
-		{
-			hadGroups = false;
-			var result = new List<TiledMapLayerContent>();
-
-			foreach (var layer in layers)
-			{
-				if (layer is TiledMapGroupLayerContent groupLayer)
-				{
-					hadGroups = true;
-					foreach (var sublayer in groupLayer.Layers)
-					{
-						sublayer.OffsetX += groupLayer.OffsetX;
-						sublayer.OffsetY += groupLayer.OffsetY;
-						sublayer.Opacity *= groupLayer.Opacity;
-						sublayer.Visible &= groupLayer.Visible;
-					}
-					result.AddRange(FlattenGroups(groupLayer.Layers, out var subHadGroups));
-				}
-				else
-					result.Add(layer);
-			}
-
-			return result;
 		}
 
 		private static List<TiledMapTileContent> DecodeTileLayerData(string encodingType, TiledMapTileLayerContent tileLayer)

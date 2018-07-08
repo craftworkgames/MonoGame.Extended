@@ -94,6 +94,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 case TiledMapLayerType.ObjectLayer:
                     WriteObjectLayer(writer, (TiledMapObjectLayerContent)layer);
                     break;
+				case TiledMapLayerType.GroupLayer:
+					WriteLayers(writer, ((TiledMapGroupLayerContent)layer).Layers);
+					break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(layer.Type));
             }
