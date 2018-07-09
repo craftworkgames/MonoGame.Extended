@@ -1,6 +1,42 @@
-# We're in the process of developing MonoGame.Extended 2.0!
+![MonoGame.Extended Logo](https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-banner-800.png)
 
-That's exciting news but it may cause some confusion, pain and disruption for a while. Here's what you need to know:
+# MonoGame.Extended
+
+MonoGame.Extended is an extension to the [MonoGame](http://www.monogame.net/) framework that makes it easier to make games. It's a collection of packages designed to let you choose what you want without getting in your way.
+
+It makes MonoGame more awesome.
+
+[![Build Status](http://build.craftworkgames.com/app/rest/builds/buildType:(id:MonoGameExtended_Build)/statusIcon)](http://build.craftworkgames.com/viewType.html?buildTypeId=MonoGameExtended_CI&guest=1) [![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://docs.monogameextended.net/)
+
+## Getting started
+
+The libraries are distributed as NuGet packages and can be installed into your existing MonoGame project using your favorite NuGet Package Manager in Visual Studio, Xamarin Studio, or MonoDevelop. 
+
+For example:
+
+    Install-Package MonoGame.Extended
+
+Once you've installed one or more of the main packages you might also want to install the Content Pipeline extensions.
+
+To do this you'll need to manually reference the `MonoGame.Extended.Content.Pipeline.dll` in the [MonoGame Content Pipeline Tool](http://docs.monogameextended.net/Installation/#referencing-the-content-pipeline-extension) because it doesn't support NuGet directly.
+
+Alternately, if you want to try the latest and greatest you might want to [build from source](http://docs.monogameextended.net/Development/Building-from-Source/).
+
+## Where to next?
+
+ - Check out [the demos](https://github.com/craftworkgames/MonoGame.Extended/tree/develop/Source/Demos)
+ - Join our live [Discord chat](https://discord.gg/xPUEkj9)
+ - Read the [Documentation](http://docs.monogameextended.net/)
+ - Submit an [issue on GitHub](https://github.com/craftworkgames/MonoGame.Extended/issues)
+ - Ask a question on [gamedev stack overflow](http://gamedev.stackexchange.com/questions/tagged/monogame-extended)
+ - Post on our [MonoGame community forum](http://community.monogame.net/category/extended)
+ - Follow development [on Patreon](https://www.patreon.com/craftworkgames)
+ 
+## News
+
+We're in the process of developing MonoGame.Extended 2.0! 
+
+There may be some confusion, pain and disruption for a while. Here's what you need to know:
  
  - Everything that used to be in the `develop` branch is now in `master`
  - NuGet packages built from `master` have been [published to nuget.org as version 1.1](https://www.nuget.org/packages?q=monogame.extended)
@@ -8,99 +44,38 @@ That's exciting news but it may cause some confusion, pain and disruption for a 
  - From now on we're going to (attempt) to use [Git Flow](https://gitversion.readthedocs.io/en/latest/git-branching-strategies/gitflow/)
  - We're now using [cake builds](https://cakebuild.net/) so that you can build everything (including the NuGet packages) locally
  - We're migrating everything to [.NET Standard!](https://www.patreon.com/posts/one-library-to-18916187)
- - and more news coming soon...
-
-![MonoGame.Extended Logo](https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-banner-800.png)
-
-# MonoGame.Extended
-It makes MonoGame more awesome.
-
-[![Join the chat at https://gitter.im/craftworkgames/MonoGame.Extended](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/craftworkgames/MonoGame.Extended?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](http://build.craftworkgames.com/app/rest/builds/buildType:(id:MonoGameExtended_Build)/statusIcon)](http://build.craftworkgames.com/viewType.html?buildTypeId=MonoGameExtended_CI&guest=1) [![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://craftworkgames.github.io/MonoGame.Extended/)
-
-MonoGame.Extended is an open source collection of NuGet packages for [MonoGame](http://www.monogame.net/). A collection of classes and extensions to make it easier to make games with MonoGame. 
-
-## Things are changing around here
-
-We're in the process of migrating MonoGame.Extended to .NET Standard among other things.
-Please be patient, things will break.
-
-## Packages
-
- - **MonoGame.Extended** - the core package creates a solid foundation with sprites, [bitmap fonts](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/BitmapFonts/), [collections](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Collections/), [serialization](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Serialization/), shapes, texture atlases, viewport adapters, [cameras](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Camera2D/), timers, math, [object pooling](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Object-Pooling/), [screens](http://craftworkgames.github.io/MonoGame.Extended/MonoGame.Extended/Screens/), and diagnostics.
- - **MonoGame.Extended.Animations** - animated sprites and sprite sheets.
- - **MonoGame.Extended.Collisions (experimental)** - collision detection and response.
- - **MonoGame.Extended.Content.Pipeline** - a collection of importers for the [MonoGame Pipeline Tool](http://www.monogame.net/documentation/?page=Using_The_Pipeline_Tool).
- - **MonoGame.Extended.Entities (experimental)** - An entity component system.
- - **MonoGame.Extended.Graphics** - high performance geometry and sprite rendering.
- - **MonoGame.Extended.Gui (wip)** - a gui system built from the ground up for desktop and mobile games.
- - **MonoGame.Extended.Input** - event based input listeners with mouse, keyboard, touch and game pad support.
- - **MonoGame.Extended.NuclexGui** - a port of the [Nuclex GUI framework](https://nuclexframework.codeplex.com/wikipage?title=Nuclex.UserInterface).
- - **MonoGame.Extended.Particles** - high performance particle engine ported from the [Mercury Particle Engine](matthew-davey.github.io/mercury-particle-engine/).
- - **MonoGame.Extended.SceneGraphs** - scene graphs and trees.
- - **MonoGame.Extended.Tiled** - load and render maps created with the popular [Tiled Map Editor](http://www.mapeditor.org/).
- - **MonoGame.Extended.Tweening (experimental)** - tween based animations.
 
 ## Patreon Supporters
 
-Thanks to all those that support the project on Patreon!  Running an open source project can be done on a shoe string budget, but it's certainly not free. A little funding goes a long way. It keeps the build server up and running and let's me devote more of my time to the project. Even just a few supporters really helps.
-
-**What happens to MonoGame.Extended if we don't get the funding?** Never fear. The project won't die. The code will always be safely open sourced on github.
+Thanks to all those that support the project on Patreon! You're helping to keep the build server up and running allowing me to devote more of my time to the project.
 
 [![image](https://cloud.githubusercontent.com/assets/3201643/17462536/f5608898-5cf3-11e6-8e81-47d6594a8d9c.png)](https://www.patreon.com/craftworkgames)
 
-### Special thanks to the top supporters
+## Special thanks
 
- - Ben 
- - Patrick ([PRT Studios](http://prt-studios.com/))
- - Benny
- - Walter
- - Marcel
- - Nathanial ([optimuspi](http://www.optimuspi.com/))
- - Austin
- - McKenzie ([Pseudo Motion](https://pseudomotion.wordpress.com/))
+As a reward to some of my patrons I've linked thier websites here:
+ - [PRT Studios](http://prt-studios.com/)
+ - [optimuspi](http://www.optimuspi.com/)
+ - [Pseudo Motion](https://pseudomotion.wordpress.com/)
 
-If you're not on the list and you should be please let me know! Managing Patreon is a job in itself.
+If you're not on the list and you should be please let me know!
 
-## Getting Started
-
-If you're using the [NuGet packages](https://www.nuget.org/packages?q=monogame.extended) please read the [install guide](http://craftworkgames.github.io/MonoGame.Extended/installation/) to setup the Pipeline tool.
-
-Alternately, you might want to [build from source](http://craftworkgames.github.io/MonoGame.Extended/Building-from-Source/) or use a [pre-release NuGet package](http://craftworkgames.github.io/MonoGame.Extended/NuGet-Pre-Release/).
-
-Please keep in mind that the project is still evolving. Some breaking API changes are likely to occur as we progress.
-
-## Forums
-
-Our forum is part of the [MonoGame community](http://community.monogame.net/category/extended). Please ask any questions or post about problems or bugs that you have found there. Let us know if you're making a game with MonoGame.Extended!
-
-## Documentation
-
-We've got several feature demos in the repository and we're working on a new [documentation site](http://craftworkgames.github.io/MonoGame.Extended/). You can also pop into [the forums](http://community.monogame.net/c/extended), check out [my blog](http://dylanwilson.net/), ask a question on [gamedev stack overflow](http://gamedev.stackexchange.com/questions/tagged/monogame-extended) or use our [live chat](https://gitter.im/craftworkgames/MonoGame.Extended).
-
-## Contributing
-
-If you would like to contribute start with one of the following:
-
- - Please post your thoughts on our [forum](http://community.monogame.net/category/extended).
- - Join the discussion on one of the [issues](https://github.com/craftworkgames/MonoGame.Extended/issues). We often use github issues to discuss new features as well.
- - Talk about it on your [blog](http://dylanwilson.net/) or [twitter](https://twitter.com/craftworkgames).
- - and of course, you can fork the project.
- 
-## Design goals
- - The primary goal is to make it easier to *make games*.
- - Choose the features you like and the rest stays out of your way.
- - A clean and consistent API familiar to MonoGame developers.
- - It's *not* a game engine, but extends the framework.
- - Follows [C# coding guidelines](https://msdn.microsoft.com/en-us/library/ms229002(v=vs.110).aspx).
-
-## License
-
-MonoGame.Extended is released under the [The MIT License (MIT)](https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE).
- 
-## Special Thanks
+Also thanks to
 
  - Matthew-Davey for letting us use the [Mercury Particle Engine](https://github.com/Matthew-Davey/mercury-particle-engine).
  - John McDonald for [2D XNA Primitives](https://bitbucket.org/C3/2d-xna-primitives/wiki/Home)
  - [LibGDX](https://libgdx.badlogicgames.com) for a whole lot of inspiration.
  - @prime31 for [Nez](https://github.com/prime31/Nez), which ideas and code bounce back and forth.
  - All of our contributors!
+
+## Design goals
+
+ - The primary goal is to make it easier to *make games*.
+ - Choose the features you like and the rest stays out of your way.
+ - A clean and consistent API familiar to MonoGame developers.
+ - It's *not* a game engine, but extends the framework.
+ - Follow [C# coding guidelines](https://msdn.microsoft.com/en-us/library/ms229002(v=vs.110).aspx).
+
+## License
+
+MonoGame.Extended is released under the [The MIT License (MIT)](https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE).
