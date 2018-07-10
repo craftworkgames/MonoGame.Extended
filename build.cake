@@ -52,7 +52,7 @@ Task("Test")
     { 
         try
         {
-            testRuns++
+            testRuns++;
             Information("Test Run {0} of {1} - {2}", testRuns, testProjects.Count, project.GetFilenameWithoutExtension());
             DotNetCoreTest(project.FullPath);            
         }
@@ -80,6 +80,7 @@ Task("Pack")
     {
         DotNetCorePack(project.FullPath, new DotNetCorePackSettings 
         {
+            Configuration = configuration,
             IncludeSymbols = true,
             OutputDirectory = artifactsDirectory,
             ArgumentCustomization = args => args.Append($"/p:Version={gitVersion.NuGetVersion}")
