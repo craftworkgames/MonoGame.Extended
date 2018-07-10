@@ -1,6 +1,6 @@
 #tool nuget:?package=vswhere
 #tool nuget:?package=NUnit.Runners&version=2.6.4
-#tool nuget:?package=GitVersion.CommandLine
+#tool nuget:?package=GitVersion.CommandLine&prerelease
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
@@ -8,6 +8,7 @@ var solution = "./Source/MonoGame.Extended.sln";
 
 var vsLatest  = VSWhereLatest();
 var msBuildPath = vsLatest?.CombineWithFilePath("./MSBuild/15.0/Bin/amd64/MSBuild.exe");
+var gitVersion = GitVersion();
 
 TaskSetup(context => Information($"##teamcity[blockOpened name='{context.Task.Name}']"));
 TaskTeardown(context => Information($"##teamcity[blockClosed name='{context.Task.Name}']"));
@@ -25,7 +26,11 @@ Task("Build")
 {
     Information("##teamcity[progressMessage 'Building solution...']");    
 
-    var buildSettings = new DotNetCoreBuildSettings { Configuration = configuration };
+    var buildSettings = new DotNetCoreBuildSettings 
+    { 
+        Configuration = configuration,
+        ArgumentCustomization = args => args.Append($"/p:Version={gitVersion.AssemblySemVer}")
+    };
 
     // first we build the Extended Content Pipeline DLL as a workaround to issue #495
     DotNetCoreBuild($"./Source/MonoGame.Extended.Content.Pipeline/MonoGame.Extended.Content.Pipeline.csproj", buildSettings);
@@ -41,14 +46,14 @@ Task("Test")
     Information("##teamcity[progressMessage 'Running tests...']");    
     var testRuns = 0;
     var failedRuns = 0;
+    var testProjects = GetFiles($"./Source/Tests/**/*.Tests.csproj");
 
-    foreach (var project in GetFiles($"./Source/Tests/**/*.Tests.csproj"))
+    foreach (var project in testProjects)
     { 
         try
         {
-            // var filename = project.GetFilename().ChangeExtension("dll");
-            // var testDll = project.GetDirectory().CombineWithFilePath($"bin/{configuration}/netcoreapp2.0/{filename}");
-            Information("Test Run {0} - {1}", testRuns++, project);
+            testRuns++
+            Information("Test Run {0} of {1} - {2}", testRuns, testProjects.Count, project.GetFilenameWithoutExtension());
             DotNetCoreTest(project.FullPath);            
         }
         catch
@@ -67,7 +72,7 @@ Task("Pack")
 {
     Information("##teamcity[progressMessage 'Packing packages...']");    
     var artifactsDirectory = "./artifacts";
-    var gitVersion = GitVersion();
+
     CreateDirectory(artifactsDirectory);
     CleanDirectory(artifactsDirectory);    
 

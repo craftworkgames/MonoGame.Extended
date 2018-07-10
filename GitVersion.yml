@@ -1,5 +1,4 @@
 next-version: 2.0
 mode: ContinuousDelivery
-branches: {}
-ignore:
-  sha: []
+assembly-versioning-scheme: MajorMinorPatchTag
+assembly-file-versioning-scheme: MajorMinorPatchTag

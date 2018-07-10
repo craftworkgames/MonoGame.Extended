@@ -13,7 +13,12 @@
     <PackageIconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</PackageIconUrl>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <NoWarn>NU1701</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.Portable" Version="3.6.0.1625" PrivateAssets="All" />
     <ProjectReference Include="..\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj" />
     <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj" />
   </ItemGroup>
