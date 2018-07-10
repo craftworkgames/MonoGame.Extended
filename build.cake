@@ -10,6 +10,8 @@ var vsLatest  = VSWhereLatest();
 var msBuildPath = vsLatest?.CombineWithFilePath("./MSBuild/15.0/Bin/amd64/MSBuild.exe");
 var gitVersion = GitVersion();
 
+Information($"##teamcity[buildNumber '{gitVersion.NuGetVersion}']");
+
 TaskSetup(context => Information($"##teamcity[blockOpened name='{context.Task.Name}']"));
 TaskTeardown(context => Information($"##teamcity[blockClosed name='{context.Task.Name}']"));
 
