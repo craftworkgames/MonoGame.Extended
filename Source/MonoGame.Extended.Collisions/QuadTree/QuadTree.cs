@@ -111,6 +111,12 @@ namespace MonoGame.Extended.Collisions
         /// <param name="data">The data to be removed.</param>
         public void Remove(QuadtreeData data)
         {
+            // Object doesn't fit into this node, and wouldn't have been inserted.
+            if (!NodeBounds.Intersects(data.Bounds))
+            {
+                return;
+            }
+
             if (IsLeaf)
             {
                 var removeIndex = -1;
