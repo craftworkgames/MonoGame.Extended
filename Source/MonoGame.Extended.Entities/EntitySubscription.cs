@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Entities

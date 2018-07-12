@@ -1,7 +1,6 @@
 ﻿using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.Graphics.Effects
 {

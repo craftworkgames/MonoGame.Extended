@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
 using MonoGame.Extended.Input;
-using MonoGame.Extended.Input.InputListeners;
 
 namespace MonoGame.Extended.NuclexGui.Controls.Desktop
 {
