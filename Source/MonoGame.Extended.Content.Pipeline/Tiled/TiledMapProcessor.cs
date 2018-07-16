@@ -35,7 +35,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     else
                         // Link to the tileset for the content loader to load at runtime.
                         tileset.Content = context.BuildAsset<TiledMapTilesetContent, TiledMapTilesetContent>(new ExternalReference<TiledMapTilesetContent>(tileset.Source), "");
-
                 }
 
                 ProcessLayers(map, context, map.Layers);
@@ -94,7 +93,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             }
         }
 
-        private static OpaqueDataDictionary GetImageParameters(List<TiledMapPropertyContent> customProperties, TiledMapImageContent imageContent)
+        public static OpaqueDataDictionary GetImageParameters(List<TiledMapPropertyContent> customProperties, TiledMapImageContent imageContent)
         {
             bool colorKeyEnabled = true, generateMipmaps = false, premultiplyAlpha = true, resizeToPowerOfTwo = false, makeSquare = false;
             string textureFormat = "Color";
@@ -115,8 +114,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                     textureFormat = property.Value;
             }
 
-            return new OpaqueDataDictionary() { { "ColorKeyColor", imageContent.TransparentColor }, { "ColorKeyEnabled", colorKeyEnabled}, {"GenerateMipmaps", generateMipmaps},
-                                    {"PremultiplyAlpha", premultiplyAlpha},{"ResizeToPowerOfTwo",resizeToPowerOfTwo },{"MakeSquare",makeSquare },{"TextureFormat",textureFormat } };
+            //test out textureformat later (not sure if its a string or what)
+            return new OpaqueDataDictionary() {{ "ColorKeyColor", imageContent.TransparentColor }, { "ColorKeyEnabled", colorKeyEnabled}, {"GenerateMipmaps", generateMipmaps},
+                                    {"PremultiplyAlpha", premultiplyAlpha},{"ResizeToPowerOfTwo",resizeToPowerOfTwo },{"MakeSquare",makeSquare } };
         }
 
         private static List<TiledMapTileContent> DecodeTileLayerData(string encodingType, TiledMapTileLayerContent tileLayer)
