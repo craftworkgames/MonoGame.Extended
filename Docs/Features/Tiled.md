@@ -7,7 +7,7 @@ Tiled is an [open sourced](https://github.com/bjorn/tiled) free to use "generic 
 
 To load a TiledMap into your project, you first need to add it to your `ContentManager`, and in order to compile the tile map for use in `MonoGame` you must add a reference to the pipeline tool.
 
-Instructions to do so can be found [here](http://craftworkgames.github.io/MonoGame.Extended/installation)
+Instructions to do so can be found [here](http://docs.monogameextended.net/Installation/#installation)
 
 # Using the map in your game
 
