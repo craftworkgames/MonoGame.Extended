@@ -63,7 +63,7 @@ namespace StarWarrior.Systems
             if (expires.LifeTime > TimeSpan.Zero)
                 return;
 
-            entity.Destory();
+            entity.Destroy();
             expires.LifeTime = TimeSpan.Zero;
         }
     }

@@ -14,7 +14,7 @@ namespace Sandbox.Systems
         private ComponentMapper<Expiry> _expiryMapper;
 
         private const float _minSpawnDelay = 0.0f;
-        private const float _maxSpawnDelay = 0.05f;
+        private const float _maxSpawnDelay = 0.0f;
         private float _spawnDelay = _maxSpawnDelay;
 
         public RainfallSystem()
@@ -58,8 +58,12 @@ namespace Sandbox.Systems
 
             if (_spawnDelay <= 0)
             {
-                var position = new Vector2(_random.NextSingle(0, 800), _random.NextSingle(-240, -480));
-                CreateRaindrop(position);
+                for (var q = 0; q < 50; q++)
+                {
+                    var position = new Vector2(_random.NextSingle(0, 800), _random.NextSingle(-240, -480));
+                    CreateRaindrop(position);
+                }
+
                 _spawnDelay = _random.NextSingle(_minSpawnDelay, _maxSpawnDelay);
             }
         }
