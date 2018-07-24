@@ -41,7 +41,7 @@ namespace MonoGame.Extended.Entities
             return mapper.Get(Id);
         }
 
-        public void Destory()
+        public void Destroy()
         {
             _entityManager.Destroy(Id);
         }
