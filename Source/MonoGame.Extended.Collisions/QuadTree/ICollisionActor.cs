@@ -1,4 +1,4 @@
-﻿namespace MonoGame.Extended.Collisions
+﻿namespace MonoGame.Extended.Collisions.QuadTree
 {
     /// <summary>
     /// An actor that can be collided with.

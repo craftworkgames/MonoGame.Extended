@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MonoGame.Extended.Collisions
+namespace MonoGame.Extended.Collisions.QuadTree
 {
     /// <summary>
     ///     Class for doing collision handling with a quad tree.
@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Collisions
         public const int DefaultMaxDepth = 7;
         public const int DefaultMaxObjectsPerNode = 25;
 
-        protected List<Quadtree> Children = new List<Quadtree>();
+        protected List<Quadtree> Subtrees = new List<Quadtree>();
         protected List<QuadtreeData> Contents = new List<QuadtreeData>();
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace MonoGame.Extended.Collisions
         /// <summary>
         ///     Gets whether the current node is a leaf node.
         /// </summary>
-        public bool IsLeaf => Children.Count == 0;
+        public bool IsLeaf => Subtrees.Count == 0;
 
         /// <summary>
         ///     Counts the number of unique targets in the current Quadtree.
@@ -56,7 +56,7 @@ namespace MonoGame.Extended.Collisions
                 var processing = process.Dequeue();
                 if (!processing.IsLeaf)
                 {
-                    foreach (var child in processing.Children) process.Enqueue(child);
+                    foreach (var child in processing.Subtrees) process.Enqueue(child);
                 }
                 else
                 {
@@ -98,7 +98,7 @@ namespace MonoGame.Extended.Collisions
             }
             else
             {
-                foreach (var child in Children)
+                foreach (var child in Subtrees)
                 {
                     child.Insert(data);
                 }
@@ -137,13 +137,13 @@ namespace MonoGame.Extended.Collisions
             }
             else
             {
-                foreach (var quadTree in Children)
+                foreach (var quadTree in Subtrees)
                 {
                     quadTree.Remove(data);
                 }
             }
 
-            Shake();
+            //Shake();
         }
 
         /// <summary>
@@ -157,14 +157,12 @@ namespace MonoGame.Extended.Collisions
             if (IsLeaf)
                 for (int i = 0, size = Contents.Count; i < size; i++)
                 {
-                    var quadTreeData = Contents[i];
-                    quadTreeData.Flag = false;
-                    Contents[i] = quadTreeData;
+                    Contents[i].Flag = false;
                 }
             else
             {
-                for (int i = 0, size = Children.Count; i < size; i++)
-                    Children[i].Reset();
+                for (int i = 0, size = Subtrees.Count; i < size; i++)
+                    Subtrees[i].Reset();
             }
         }
 
@@ -173,40 +171,40 @@ namespace MonoGame.Extended.Collisions
         /// </summary>
         public void Shake()
         {
-            if (!IsLeaf)
+            if (IsLeaf) return;
+            var numObjects = NumTargets();
+            if (numObjects == 0)
             {
-                var numObjects = NumTargets();
-                if (numObjects == 0)
+                Subtrees.Clear();
+            }
+            else if (numObjects < MaxObjectsPerNode)
+            {
+                // Move contents of Quadtree up from leaves if they would fit
+                // in the current node.
+                var process = new Queue<Quadtree>();
+                process.Enqueue(this);
+                while (process.Count > 0)
                 {
-                    Children.Clear();
-                }
-                else if (numObjects < MaxObjectsPerNode)
-                {
-                    var process = new Queue<Quadtree>();
-                    process.Enqueue(this);
-                    while (process.Count > 0)
-                    {
-                        var processing = process.Dequeue();
-                        if (!processing.IsLeaf)
-                            foreach (var subTree in processing.Children)
-                            {
-                                process.Enqueue(subTree);
-                            }
-                        else
+                    var processing = process.Dequeue();
+                    if (!processing.IsLeaf)
+                        foreach (var subTree in processing.Subtrees)
                         {
-                            foreach (var data in processing.Contents)
+                            process.Enqueue(subTree);
+                        }
+                    else
+                    {
+                        foreach (var data in processing.Contents)
+                        {
+                            if (!data.Flag)
                             {
-                                if (!data.Flag)
-                                {
-                                    Contents.Add(data);
-                                    data.Flag = true;
-                                }
+                                Contents.Add(data);
+                                data.Flag = true;
                             }
                         }
                     }
-
-                    Children.Clear();
                 }
+
+                Subtrees.Clear();
             }
         }
 
@@ -232,15 +230,15 @@ namespace MonoGame.Extended.Collisions
             for (var i = 0; i < childAreas.Length; ++i)
             {
                 var node = new Quadtree(childAreas[i]);
-                Children.Add(node);
-                Children[i].CurrentDepth = CurrentDepth + 1;
+                Subtrees.Add(node);
+                Subtrees[i].CurrentDepth = CurrentDepth + 1;
             }
 
             for (int i = 0, size = Contents.Count; i < size; ++i)
             {
-                for (int j = 0; j < Children.Count; j++)
+                for (int j = 0; j < Subtrees.Count; j++)
                 {
-                    Children[j].Insert(Contents[i]);
+                    Subtrees[j].Insert(Contents[i]);
                 }
             }
 
@@ -278,9 +276,9 @@ namespace MonoGame.Extended.Collisions
             }
             else
             {
-                for (int i = 0, size = Children.Count; i < size; i++)
+                for (int i = 0, size = Subtrees.Count; i < size; i++)
                 {
-                    var recurse = Children[i].QueryWithoutReset(area);
+                    var recurse = Subtrees[i].QueryWithoutReset(area);
                     result.AddRange(recurse);
                 }
             }

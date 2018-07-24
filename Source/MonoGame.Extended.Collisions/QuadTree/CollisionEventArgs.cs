@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Collisions
+namespace MonoGame.Extended.Collisions.QuadTree
 {
     /// <summary>
     /// This class holds data on a collision. It is passed as a parameter to
