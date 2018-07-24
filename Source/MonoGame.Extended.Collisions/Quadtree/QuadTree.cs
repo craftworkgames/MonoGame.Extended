@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MonoGame.Extended.Collisions.QuadTree
+namespace MonoGame.Extended.Collisions
 {
     /// <summary>
     ///     Class for doing collision handling with a quad tree.
@@ -143,7 +143,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
                 }
             }
 
-            //Shake();
+            Shake();
         }
 
         /// <summary>

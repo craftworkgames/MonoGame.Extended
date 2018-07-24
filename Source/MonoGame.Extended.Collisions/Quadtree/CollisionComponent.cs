@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Collisions.QuadTree
+namespace MonoGame.Extended.Collisions
 {
     /// <summary>
     /// Handles basic collision between actors.

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using MonoGame.Extended.Collisions.QuadTree;
+using MonoGame.Extended.Collisions;
 using Xunit;
 
 namespace MonoGame.Extended.Collisions.Tests
@@ -409,7 +409,7 @@ namespace MonoGame.Extended.Collisions.Tests
         public void QueryNonLeafManyTest()
         {
             var tree = MakeTree();
-            var numTargets = 2*Quadtree.DefaultMaxObjectsPerNode;
+            var numTargets = 2* Quadtree.DefaultMaxObjectsPerNode;
             for (int i = 0; i < numTargets; i++)
             {
                 var data = new QuadtreeData(new BasicActor());

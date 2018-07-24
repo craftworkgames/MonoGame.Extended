@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Collisions.QuadTree;
+using MonoGame.Extended.Collisions;
 
 namespace MonoGame.Extended.Collisions.Tests
 {
