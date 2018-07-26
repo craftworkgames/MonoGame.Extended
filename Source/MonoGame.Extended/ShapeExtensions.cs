@@ -138,7 +138,7 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Draws a rectangle with the thickness provided
+        /// Draws a rectangle with the thickness provided
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="location">Where to draw</param>
@@ -149,6 +149,15 @@ namespace MonoGame.Extended
             float thickness = 1f)
         {
             DrawRectangle(spriteBatch, new RectangleF(location.X, location.Y, size.Width, size.Height), color, thickness);
+        }
+
+
+        /// <summary>
+        /// Draws a rectangle outline.
+        /// </summary>
+        public static void DrawRectangle(this SpriteBatch spriteBatch, float x, float y, float width, float height, Color color, float thickness = 1f)
+        {
+            DrawRectangle(spriteBatch, new RectangleF(x, y, width, height), color, thickness);
         }
 
         /// <summary>
