@@ -16,7 +16,7 @@ namespace Sandbox.Systems
         private ComponentMapper<Raindrop> _raindropMapper;
         
         public RenderSystem(GraphicsDevice graphicsDevice)
-            : base(Aspect.All(typeof(Transform2)))
+            : base(Aspect.All(typeof(Transform2), typeof(Raindrop)))
         {
             _graphicsDevice = graphicsDevice;
             _spriteBatch = new SpriteBatch(graphicsDevice);
