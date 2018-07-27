@@ -9,17 +9,22 @@ using MonoGame.Extended.Sprites;
 
 namespace JamGame.Systems
 {
-    public class PlayerMovementSystem : EntityUpdateSystem
+    public class PlayerControlSystem : EntityUpdateSystem
     {
         private readonly MainGame _mainGame;
+        private readonly EntityFactory _entityFactory;
         private ComponentMapper<Transform2> _transformMapper;
         private ComponentMapper<Sprite> _spriteMapper;
         private const int _playerSpeed = 64;
+        private KeyboardState _previousKeyboardState;
 
-        public PlayerMovementSystem(MainGame mainGame) 
+        private Entity _spawningFireball;
+
+        public PlayerControlSystem(MainGame mainGame, EntityFactory entityFactory) 
             : base(Aspect.All(typeof(Player), typeof(Transform2), typeof(Sprite)))
         {
             _mainGame = mainGame;
+            _entityFactory = entityFactory;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -54,7 +59,21 @@ namespace JamGame.Systems
 
                 if (_mainGame.KeyboardState.IsKeyDown(Keys.Down))
                     transform.Position += new Vector2(0, _playerSpeed) * elapsedSeconds;
+
+                if (_previousKeyboardState.IsKeyUp(Keys.Space) && _mainGame.KeyboardState.IsKeyDown(Keys.Space))
+                    _spawningFireball = _entityFactory.SpawnFireball(transform.Position.X + 16, transform.Position.Y);
+
+                if (_spawningFireball != null && _previousKeyboardState.IsKeyDown(Keys.Space) && _mainGame.KeyboardState.IsKeyUp(Keys.Space))
+                {
+                    _spawningFireball.Get<Body>().Velocity = new Vector2(100, 0);
+                    _spawningFireball = null;
+                }
+
+                if(_spawningFireball != null)
+                    _spawningFireball.Get<Transform2>().Position = new Vector2(transform.Position.X + 16, transform.Position.Y);
             }
+
+            _previousKeyboardState = _mainGame.KeyboardState;
         }
     }
 }

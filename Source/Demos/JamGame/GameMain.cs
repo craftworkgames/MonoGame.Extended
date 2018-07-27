@@ -1,12 +1,9 @@
-﻿using JamGame.Components;
-using JamGame.Systems;
+﻿using JamGame.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Entities;
-using MonoGame.Extended.Sprites;
 
 namespace JamGame
 {
@@ -37,20 +34,23 @@ namespace JamGame
             var font = Content.Load<BitmapFont>("Sensation");
             var texture = Content.Load<Texture2D>("0x72_16x16DungeonTileset.v4");
             var tileset = new Tileset(texture, 16, 16);
+            var entityFactory = new EntityFactory(tileset);
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _world = new WorldBuilder()
                 .AddSystem(new MapRenderingSystem(GraphicsDevice, tileset))
                 .AddSystem(new SpriteRenderingSystem(GraphicsDevice, texture))
                 .AddSystem(new HudSystem(this, GraphicsDevice, font, tileset))
-                .AddSystem(new PlayerMovementSystem(this))
+                .AddSystem(new PlayerControlSystem(this, entityFactory))
+                .AddSystem(new BodyMovementSystem())
                 .Build();
 
-            var player = _world.CreateEntity();
-            player.Attach(new Sprite(tileset.GetTile(232)));
-            player.Attach(new Transform2(100, 100));
-            player.Attach(new Player());
+            entityFactory.World = _world;
+            entityFactory.SpawnPlayer(100, 100);
 
+            entityFactory.SpawnZombie(200, 80);
+            entityFactory.SpawnSkeleton(200, 100);
+            entityFactory.SpawnPurpleThing(200, 120);
         }
 
         protected override void UnloadContent()
