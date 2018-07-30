@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using JamGame.Components;
+﻿using JamGame.Components;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
@@ -27,12 +26,6 @@ namespace JamGame.Systems
             if (body.IsHit)
             {
                 var entity = GetEntity(entityId);
-
-                var hasProjectile = entity.Has<Projectile>();
-                var hasEnemy = entity.Has<Enemy>();
-
-                if (hasProjectile && hasEnemy)
-                    Debug.Fail("Wtf");
 
                 if (entity.Has<Projectile>())
                     entity.Destroy();

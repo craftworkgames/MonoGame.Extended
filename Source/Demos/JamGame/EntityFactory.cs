@@ -40,7 +40,7 @@ namespace JamGame
             var entity = World.CreateEntity();
             entity.Attach(new Sprite(_tileset.GetTile(165)));
             entity.Attach(new Transform2(x, y));
-            entity.Attach(new Body {Size = new Size2(16, 16)});
+            entity.Attach(new Body {Size = new Size2(16, 16), Velocity = new Vector2(-4, 0) });
             entity.Attach(new Enemy());
         }
 
@@ -58,7 +58,7 @@ namespace JamGame
             var entity = World.CreateEntity();
             entity.Attach(new Sprite(_tileset.GetTile(240)));
             entity.Attach(new Transform2(x, y) { Scale = Vector2.One * 0.75f });
-            entity.Attach(new Body { Size = new Size2(8, 8) });
+            entity.Attach(new Body { Size = new Size2(16, 16) });
             entity.Attach(new Projectile());
             return entity;
         }
