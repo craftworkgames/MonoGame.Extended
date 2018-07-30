@@ -14,6 +14,7 @@ namespace MonoGame.Extended.Entities
         public int Id { get; }
         public Type ComponentType { get; }
         public abstract bool Has(int entityId);
+        public abstract void Delete(int entityId);
     }
 
     public class ComponentMapper<T> : ComponentMapper
@@ -54,7 +55,7 @@ namespace MonoGame.Extended.Entities
             return Components[entityId] != null;
         }
 
-        public void Delete(int entityId)
+        public override void Delete(int entityId)
         {
             Components[entityId] = null;
             _onCompositionChanged(entityId);

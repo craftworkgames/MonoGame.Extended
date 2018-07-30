@@ -77,6 +77,12 @@ namespace MonoGame.Extended.Entities
             return componentBits;
         }
 
+        public void Destroy(int entityId)
+        {
+            foreach (var componentMapper in _componentMappers)
+                componentMapper.Delete(entityId);
+        }
+
         public override void Update(GameTime gameTime)
         {
         }

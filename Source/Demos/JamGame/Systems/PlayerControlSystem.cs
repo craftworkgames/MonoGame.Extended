@@ -65,7 +65,7 @@ namespace JamGame.Systems
 
                 if (_spawningFireball != null && _previousKeyboardState.IsKeyDown(Keys.Space) && _mainGame.KeyboardState.IsKeyUp(Keys.Space))
                 {
-                    _spawningFireball.Get<Body>().Velocity = new Vector2(100, 0);
+                    _spawningFireball.Get<Body>().Velocity = new Vector2(200, 0);
                     _spawningFireball = null;
                 }
 

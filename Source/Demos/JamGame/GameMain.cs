@@ -43,6 +43,8 @@ namespace JamGame
                 .AddSystem(new HudSystem(this, GraphicsDevice, font, tileset))
                 .AddSystem(new PlayerControlSystem(this, entityFactory))
                 .AddSystem(new BodyMovementSystem())
+                .AddSystem(new CollisionSystem())
+                .AddSystem(new CollisionResponseSystem())
                 .Build();
 
             entityFactory.World = _world;

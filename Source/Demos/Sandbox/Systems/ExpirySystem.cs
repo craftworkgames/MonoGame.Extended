@@ -27,12 +27,7 @@ namespace Sandbox.Systems
             expiry.TimeRemaining -= gameTime.GetElapsedSeconds();
 
             if (expiry.TimeRemaining <= 0)
-            {
-
-                // TODO: We shouldn't need to delete the components ourselves!
-                _expiryMapper.Delete(entityId);
                 DestroyEntity(entityId);
-            }
         }
     }
 }
