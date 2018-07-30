@@ -58,7 +58,6 @@ namespace MonoGame.Extended.Entities
         public void Destroy(int entityId)
         {
             Debug.Assert(!_removedEntities.Contains(entityId));
-            _entityToComponentBits[entityId] = default(BitVector32);
             _removedEntities.Add(entityId);
         }
 
@@ -101,10 +100,13 @@ namespace MonoGame.Extended.Entities
             {
                 var entity = _entityBag[entityId];
                 _entityBag[entityId] = null;
+                _componentManager.Destroy(entityId);
+                _entityToComponentBits[entityId] = default(BitVector32);
                 ActiveCount--;
-                EntityRemoved?.Invoke(entityId);
+
                 // we must notify subscribers before removing it from the pool
                 // otherwise an entity system could still be using the entity when the same id is obtained.
+                EntityRemoved?.Invoke(entityId);
                 _entityPool.Free(entity);
             }
 

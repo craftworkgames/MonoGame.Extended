@@ -58,7 +58,6 @@ namespace MonoGame.Extended.Entities
 
         public void DestroyEntity(int entityId)
         {
-            ComponentManager.Destroy(entityId);
             EntityManager.Destroy(entityId);
         }
 
