@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Entities;
 
@@ -44,15 +45,20 @@ namespace JamGame
                 .AddSystem(new PlayerControlSystem(this, entityFactory))
                 .AddSystem(new BodyMovementSystem())
                 .AddSystem(new CollisionSystem())
-                .AddSystem(new CollisionResponseSystem())
+                .AddSystem(new CollisionResponseSystem(entityFactory))
                 .Build();
 
             entityFactory.World = _world;
             entityFactory.SpawnPlayer(100, 100);
 
-            entityFactory.SpawnZombie(200, 80);
-            entityFactory.SpawnSkeleton(200, 100);
-            entityFactory.SpawnPurpleThing(200, 120);
+            var random = new FastRandom();
+
+            for (var i = 0; i < 20; i++)
+            {
+                entityFactory.SpawnZombie(random.Next(150, 800), random.Next(0, 480));
+                //entityFactory.SpawnSkeleton(random.Next(150, 250), random.Next(110, 250));
+                //entityFactory.SpawnPurpleThing(random.Next(150, 250), random.Next(110, 250));
+            }
         }
 
         protected override void UnloadContent()

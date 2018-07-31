@@ -1,6 +1,9 @@
-﻿using JamGame.Components;
+﻿using System.Linq;
+using JamGame.Components;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using MonoGame.Extended.Animations;
+using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Sprites;
 
@@ -31,7 +34,7 @@ namespace JamGame
             var entity = World.CreateEntity();
             entity.Attach(new Sprite(_tileset.GetTile(145)));
             entity.Attach(new Transform2(x, y));
-            entity.Attach(new Body { Size = new Size2(16, 16) });
+            entity.Attach(new Body { Size = new Size2(16, 16), Velocity = new Vector2(-8, 0) });
             entity.Attach(new Enemy());
         }
 
@@ -49,7 +52,7 @@ namespace JamGame
             var entity = World.CreateEntity();
             entity.Attach(new Sprite(_tileset.GetTile(213)));
             entity.Attach(new Transform2(x, y));
-            entity.Attach(new Body { Size = new Size2(16, 16) });
+            entity.Attach(new Body { Size = new Size2(16, 16), Velocity = new Vector2(-2, 0) });
             entity.Attach(new Enemy());
         }
 
@@ -61,6 +64,19 @@ namespace JamGame
             entity.Attach(new Body { Size = new Size2(16, 16) });
             entity.Attach(new Projectile());
             return entity;
+        }
+
+        public void SpawnExplosion(Vector2 position, Vector2 velocity)
+        {
+            var frames = new[] {256, 257, 258, 259, 260, 261, 262, 263, 264};
+            var animationFactory = new SpriteSheetAnimationFactory(frames.Select(f => _tileset.GetTile(f)));
+            animationFactory.Add("explode", new SpriteSheetAnimationData(new []{0,1,2,3,4,5,6,7,8}, isLooping: false, frameDuration: 1f / 32f));
+            var entity = World.CreateEntity();
+            var animatedSprite = new AnimatedSprite(animationFactory);
+            entity.Attach(animatedSprite);
+            entity.Attach(new Transform2(position));
+            entity.Attach(new Body {Velocity = velocity});
+            animatedSprite.Play("explode", () => entity.Destroy());
         }
     }
 }

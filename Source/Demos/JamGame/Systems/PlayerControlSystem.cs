@@ -63,14 +63,17 @@ namespace JamGame.Systems
                 if (_previousKeyboardState.IsKeyUp(Keys.Space) && _mainGame.KeyboardState.IsKeyDown(Keys.Space))
                     _spawningFireball = _entityFactory.SpawnFireball(transform.Position.X + 16, transform.Position.Y);
 
-                if (_spawningFireball != null && _previousKeyboardState.IsKeyDown(Keys.Space) && _mainGame.KeyboardState.IsKeyUp(Keys.Space))
+                // Kinda hacky but it works for now.
+                var spawningFireballBody = _spawningFireball?.Get<Body>();
+                if (spawningFireballBody != null && _previousKeyboardState.IsKeyDown(Keys.Space) && _mainGame.KeyboardState.IsKeyUp(Keys.Space))
                 {
-                    _spawningFireball.Get<Body>().Velocity = new Vector2(200, 0);
+                    spawningFireballBody.Velocity = new Vector2(200, 0);
                     _spawningFireball = null;
                 }
 
-                if(_spawningFireball != null)
-                    _spawningFireball.Get<Transform2>().Position = new Vector2(transform.Position.X + 16, transform.Position.Y);
+                var spawningFireballTransform = _spawningFireball?.Get<Transform2>();
+                if(spawningFireballTransform != null)
+                    spawningFireballTransform.Position = new Vector2(transform.Position.X + 16, transform.Position.Y);
             }
 
             _previousKeyboardState = _mainGame.KeyboardState;
