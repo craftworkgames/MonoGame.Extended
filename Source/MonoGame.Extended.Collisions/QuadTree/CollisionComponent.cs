@@ -177,39 +177,50 @@ namespace MonoGame.Extended.Collisions
 
         private static Vector2 PenetrationVector(CircleF circ, RectangleF rect)
         {
-            var displacement = Point2.Displacement(circ.Center, rect.Center);
+            var collisionPoint = rect.ClosestPointTo(circ.Center);
+            var cToCollPoint = collisionPoint - circ.Center;
 
-            Vector2 desiredDisplacement;
-            if (displacement != Vector2.Zero)
+            if (rect.Contains(circ.Center) || cToCollPoint.Equals(Vector2.Zero))
             {
-                // Calculate penetration as only in X or Y direction.
-                // Whichever is lower.
-                var dispx = new Vector2(displacement.X, 0);
-                var dispy = new Vector2(0, displacement.Y);
-                dispx.Normalize();
-                dispy.Normalize();
+                var displacement = Point2.Displacement(circ.Center, rect.Center);
 
-                dispx *= (circ.Radius + rect.Width / 2);
-                dispy *= (circ.Radius + rect.Height / 2);
-
-                if (dispx.LengthSquared() < dispy.LengthSquared())
+                Vector2 desiredDisplacement;
+                if (displacement != Vector2.Zero)
                 {
-                    desiredDisplacement = dispx;
-                    displacement.Y = 0;
+                    // Calculate penetration as only in X or Y direction.
+                    // Whichever is lower.
+                    var dispx = new Vector2(displacement.X, 0);
+                    var dispy = new Vector2(0, displacement.Y);
+                    dispx.Normalize();
+                    dispy.Normalize();
+
+                    dispx *= (circ.Radius + rect.Width / 2);
+                    dispy *= (circ.Radius + rect.Height / 2);
+
+                    if (dispx.LengthSquared() < dispy.LengthSquared())
+                    {
+                        desiredDisplacement = dispx;
+                        displacement.Y = 0;
+                    }
+                    else
+                    {
+                        desiredDisplacement = dispy;
+                        displacement.X = 0;
+                    }
                 }
                 else
                 {
-                    desiredDisplacement = dispy;
-                    displacement.X = 0;
+                    desiredDisplacement = -Vector2.UnitY * (circ.Radius + rect.Height / 2);
                 }
+
+                var penetration = displacement - desiredDisplacement;
+                return penetration;
             }
             else
             {
-                desiredDisplacement = -Vector2.UnitY * (circ.Radius + rect.Height / 2);
+                var penetration = circ.Radius * cToCollPoint.NormalizedCopy() - cToCollPoint;
+                return penetration;
             }
-
-            var penetration = displacement - desiredDisplacement;
-            return penetration;
         }
 
         private static Vector2 PenetrationVector(RectangleF rect, CircleF circ)
