@@ -1,4 +1,4 @@
-# Documenation
+# Documentation
 
 ## We need your help writing better documentation
  - Good documentation is what separates good open source projects from great ones. 
