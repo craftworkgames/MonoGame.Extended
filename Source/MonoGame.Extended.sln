@@ -111,6 +111,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarWarrior", "Demos\StarWa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JamGame", "Demos\JamGame\JamGame.csproj", "{DA792AA2-8905-46A0-A7B8-76A84FA41BA8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{6FDA382F-CD7A-4B9C-8242-0547EEE63612}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
