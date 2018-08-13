@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
@@ -47,6 +48,7 @@ namespace MonoGame.Extended.Entities
         {
             var entity = _entityPool.Obtain();
             var id = entity.Id;
+            Debug.Assert(_entityBag[id] == null);
             _entityBag[id] = entity;
             _addedEntities.Add(id);
             _entityToComponentBits[id] = new BitVector32(0);
@@ -55,10 +57,8 @@ namespace MonoGame.Extended.Entities
 
         public void Destroy(int entityId)
         {
+            Debug.Assert(!_removedEntities.Contains(entityId));
             _removedEntities.Add(entityId);
-            _entityToComponentBits[entityId] = default(BitVector32);
-            _entityPool.Free(_entityBag[entityId]);
-            _entityBag[entityId] = null;
         }
 
         public void Destroy(Entity entity)
@@ -83,24 +83,31 @@ namespace MonoGame.Extended.Entities
 
         public override void Update(GameTime gameTime)
         {
-            foreach (var entity in _addedEntities)
+            foreach (var entityId in _addedEntities)
             {
-                _entityToComponentBits[entity] = _componentManager.CreateComponentBits(entity);
+                _entityToComponentBits[entityId] = _componentManager.CreateComponentBits(entityId);
                 ActiveCount++;
-                EntityAdded?.Invoke(entity);
+                EntityAdded?.Invoke(entityId);
             }
 
-            foreach (var entity in _changedEntities)
+            foreach (var entityId in _changedEntities)
             {
-                _entityToComponentBits[entity] = _componentManager.CreateComponentBits(entity);
-                EntityChanged?.Invoke(entity);
+                _entityToComponentBits[entityId] = _componentManager.CreateComponentBits(entityId);
+                EntityChanged?.Invoke(entityId);
             }
 
-            foreach (var entity in _removedEntities)
+            foreach (var entityId in _removedEntities)
             {
-                _entityToComponentBits[entity] = default(BitVector32);
+                var entity = _entityBag[entityId];
+                _entityBag[entityId] = null;
+                _componentManager.Destroy(entityId);
+                _entityToComponentBits[entityId] = default(BitVector32);
                 ActiveCount--;
-                EntityRemoved?.Invoke(entity);
+
+                // we must notify subscribers before removing it from the pool
+                // otherwise an entity system could still be using the entity when the same id is obtained.
+                EntityRemoved?.Invoke(entityId);
+                _entityPool.Free(entity);
             }
 
             _addedEntities.Clear();

@@ -57,7 +57,7 @@ namespace MonoGame.Extended.Collections
 
         public T this[int index]
         {
-            get => _items[index];
+            get => index >= _items.Length ? default(T) : _items[index];
             set
             {
                 EnsureCapacity(index + 1);
