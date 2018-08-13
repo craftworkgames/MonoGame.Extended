@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Sprites;
@@ -14,6 +15,7 @@ namespace Features.Demos
         private SpriteBatch _spriteBatch;
         private Texture2D _spikeyBallTexture;
         private Texture2D _blankTexture;
+        private DemoBall _controllableBall;
 
         public CollisionDemo(GameMain game) : base(game)
         {
@@ -37,7 +39,6 @@ namespace Features.Demos
             var demoBall1 = new DemoBall(new Sprite(_spikeyBallTexture))
             {
                 Position = new Vector2(200, 240),
-                Bounds = new RectangleF(200, 240, 20, 20),
                 Velocity = new Vector2(0, -120)
             };
             _actors.Add(demoBall1);
@@ -45,18 +46,32 @@ namespace Features.Demos
             var demoBall2 = new DemoBall(new Sprite(_spikeyBallTexture))
             {
                 Position = new Vector2(600, 240),
-                Bounds = new RectangleF(600, 240, 20, 20),
                 Velocity = new Vector2(0, 120)
             };
             _actors.Add(demoBall2);
 
+            var controllableBall = new DemoBall(new Sprite(_spikeyBallTexture))
+            {
+                Position = new Vector2(400, 240),
+                Velocity = new Vector2(0, 0)
+            };
+            _actors.Add(controllableBall);
+            _controllableBall = controllableBall;
+
             var wall1 = new DemoWall(new Sprite(_blankTexture));
             wall1.Bounds = new RectangleF(0, 0, 800, 20);
+            wall1.Position = new Vector2(0, 0);
             _actors.Add(wall1);
 
             var wall2 = new DemoWall(new Sprite(_blankTexture));
-            wall2.Bounds = new RectangleF(0, 460, 800, 20);
+            wall2.Position = new Vector2(0, 460);
+            wall2.Bounds = new RectangleF(0, 0, 800, 20);
             _actors.Add(wall2);
+
+            var centerWall = new DemoWall(new Sprite(_blankTexture));
+            centerWall.Bounds = new RectangleF(0, 0, 50, 50);
+            centerWall.Position = new Vector2(400, 200);
+            _actors.Add(centerWall);
 
             foreach (var actor in _actors)
             {
@@ -73,6 +88,8 @@ namespace Features.Demos
 
         protected override void Update(GameTime gameTime)
         {
+            UpdateControlledBall(gameTime, _controllableBall);
+
             foreach (var actor in _actors)
             {
                 actor.Update(gameTime);
@@ -81,13 +98,35 @@ namespace Features.Demos
             base.Update(gameTime);
         }
 
+        private void UpdateControlledBall(GameTime gameTime, DemoActor actor)
+        {
+            var kb = Keyboard.GetState();
+            var speed = 150.0f;
+
+            var position = actor.Position;
+            var distance = speed * gameTime.GetElapsedSeconds();
+
+            if (kb.IsKeyDown(Keys.W)) position.Y -= distance;
+            if (kb.IsKeyDown(Keys.S)) position.Y += distance;
+            if (kb.IsKeyDown(Keys.A)) position.X -= distance;
+            if (kb.IsKeyDown(Keys.D)) position.X += distance;
+
+            actor.Position = position;
+        }
+
         protected override void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
             foreach (var actor in _actors)
             {
-                //_spriteBatch.Draw(_blankTexture, actor.BoundingBox.ToRectangle(), Color.WhiteSmoke);
                 actor.Draw(_spriteBatch);
+                if (actor.Bounds is RectangleF rect)
+                {
+                    _spriteBatch.Draw(_blankTexture, rect.ToRectangle(), Color.WhiteSmoke);
+                } else if (actor.Bounds is CircleF circle)
+                {
+                    _spriteBatch.Draw(_blankTexture, circle.Position, Color.WhiteSmoke);
+                }
             }
             _spriteBatch.End();
 
@@ -100,6 +139,7 @@ namespace Features.Demos
     class DemoActor : ICollisionActor, IUpdate
     {
         private readonly Sprite _sprite;
+        private Vector2 _position;
 
         public DemoActor(Sprite sprite)
         {
@@ -108,7 +148,18 @@ namespace Features.Demos
         }
 
 
-        public Vector2 Position { get; set; }
+        public Vector2 Offset { get; set; }
+
+        public Vector2 Position
+        {
+            get { return _position; }
+            set
+            {
+                _position = value;
+                Bounds.Position = value + Offset;
+            }
+        }
+
         public IShapeF Bounds { get; set; }
 
         public Vector2 Velocity { get; set; }
@@ -133,6 +184,7 @@ namespace Features.Demos
     {
         public DemoWall(Sprite sprite) : base(sprite)
         {
+
         }
     }
 
@@ -141,8 +193,11 @@ namespace Features.Demos
     /// </summary>
     class DemoBall : DemoActor
     {
+        private Vector2 Offset = new Vector2(75, 75);
+
         public DemoBall(Sprite sprite) : base(sprite)
         {
+            Bounds = new CircleF(Position + Offset, 60);
         }
 
         public override void Update(GameTime gameTime)
@@ -156,7 +211,6 @@ namespace Features.Demos
 
             Velocity *= -1;
             Position -= collisionInfo.PenetrationVector;
-            Bounds.Position = Position;
             base.OnCollision(collisionInfo);
         }
     }
