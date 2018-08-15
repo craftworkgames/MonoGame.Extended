@@ -5,6 +5,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     public class TiledMapTileLayerContent : TiledMapLayerContent
     {
+        public TiledMapTileLayerContent()
+            : base(TiledMapLayerType.TileLayer)
+        {
+        }
+
         [XmlAttribute(AttributeName = "x")]
         public int X { get; set; }
 
@@ -22,10 +27,5 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         [XmlIgnore]
         public TiledMapTile[] Tiles { get; set; }
-
-        public TiledMapTileLayerContent() 
-            : base(TiledMapLayerType.TileLayer)
-        {
-        }
     }
 }

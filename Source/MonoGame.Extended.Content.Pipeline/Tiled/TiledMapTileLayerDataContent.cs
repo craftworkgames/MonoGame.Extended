@@ -5,6 +5,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     public class TiledMapTileLayerDataContent
     {
+        public TiledMapTileLayerDataContent()
+        {
+            Tiles = new List<TiledMapTileContent>();
+        }
+
         [XmlAttribute(AttributeName = "encoding")]
         public string Encoding { get; set; }
 
@@ -19,12 +24,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         [XmlText]
         public string Value { get; set; }
-
-        public TiledMapTileLayerDataContent()
-        {
-            Tiles = new List<TiledMapTileContent>();
-        }
-
+        
         public override string ToString()
         {
             return $"{Encoding} {Compression}";

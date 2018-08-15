@@ -6,8 +6,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     public static class ContentWriterExtensions
     {
         // ReSharper disable once SuggestBaseTypeForParameter
-        public static void WriteTiledMapProperties(this ContentWriter writer,
-            IReadOnlyCollection<TiledMapPropertyContent> value)
+        public static void WriteTiledMapProperties(this ContentWriter writer, IReadOnlyCollection<TiledMapPropertyContent> value)
         {
             writer.Write(value.Count);
             foreach (var property in value)

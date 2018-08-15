@@ -20,10 +20,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				tileset.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(tileset.Image.Source), "", new OpaqueDataDictionary() { { "ColorKeyColor", tileset.Image.TransparentColor }, { "ColorKeyEnabled", true } }, "", "");
 
 				foreach (var tile in tileset.Tiles)
-					foreach (var obj in tile.Objects)
-						TiledMapObjectContent.Process(obj, context);
+				{
+				    foreach (var obj in tile.Objects)
+				    {
+				        TiledMapObjectContent.Process(obj, context);
+				    }
+				}
 
-				ContentLogger.Log($"Processed tileset '{tileset.Name}'");
+			    ContentLogger.Log($"Processed tileset '{tileset.Name}'");
 
 				return tileset;
 			}

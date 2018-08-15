@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework.Content.Pipeline;
-using MonoGame.Extended.Tiled;
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -72,7 +71,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 		internal static void Process(TiledMapObjectContent obj, ContentProcessorContext context)
 		{
-			if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
+			if (!string.IsNullOrWhiteSpace(obj.TemplateSource))
 			{
 				var template = context.BuildAndLoadAsset<TiledMapObjectLayerContent, TiledMapObjectTemplateContent>(new ExternalReference<TiledMapObjectLayerContent>(obj.TemplateSource), "");
 

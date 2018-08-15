@@ -7,7 +7,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     [XmlRoot(ElementName = "tileset")]
     public class TiledMapTilesetContent
     {
-		[XmlIgnore]
+        public TiledMapTilesetContent()
+        {
+            TileOffset = new TiledMapTileOffsetContent();
+            Tiles = new List<TiledMapTilesetTileContent>();
+            Properties = new List<TiledMapPropertyContent>();
+        }
+
+        [XmlIgnore]
 		public ExternalReference<TiledMapTilesetContent> Content { get; set; }
 
         [XmlAttribute(AttributeName = "firstgid")]
@@ -52,13 +59,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         [XmlElement(ElementName = "image")]
         public TiledMapImageContent Image { get; set; }
-
-        public TiledMapTilesetContent()
-        {
-            TileOffset = new TiledMapTileOffsetContent();
-            Tiles = new List<TiledMapTilesetTileContent>();
-            Properties = new List<TiledMapPropertyContent>();
-        }
 
         public bool ContainsGlobalIdentifier(int globalIdentifier)
         {

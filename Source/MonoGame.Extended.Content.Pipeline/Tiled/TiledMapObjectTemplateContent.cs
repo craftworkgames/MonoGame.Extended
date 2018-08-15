@@ -1,7 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Content.Pipeline;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled

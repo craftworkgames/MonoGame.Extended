@@ -9,6 +9,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     [XmlInclude(typeof(TiledMapObjectLayerContent))]
     public abstract class TiledMapLayerContent
     {
+        protected TiledMapLayerContent(TiledMapLayerType type)
+        {
+            Type = type;
+            Opacity = 1.0f;
+            Visible = true;
+            Properties = new List<TiledMapPropertyContent>();
+        }
+
         [XmlAttribute(AttributeName = "name")]
         public string Name { get; set; }
 
@@ -31,14 +39,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlIgnore]
         public TiledMapLayerType Type { get; }
         
-        protected TiledMapLayerContent(TiledMapLayerType type)
-        {
-            Type = type;
-            Opacity = 1.0f;
-            Visible = true;
-            Properties = new List<TiledMapPropertyContent>();
-        }
-
         public override string ToString()
         {
             return Name;

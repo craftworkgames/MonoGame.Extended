@@ -6,6 +6,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     public class TiledMapObjectLayerContent : TiledMapLayerContent
     {
+        public TiledMapObjectLayerContent()
+            : base(TiledMapLayerType.ObjectLayer)
+        {
+            Objects = new List<TiledMapObjectContent>();
+        }
+
         [XmlAttribute(AttributeName = "color")]
         public string Color { get; set; }
 
@@ -14,13 +20,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         [XmlAttribute(AttributeName = "draworder")]
         public TiledMapObjectDrawOrderContent DrawOrder { get; set; }
-
-        public TiledMapObjectLayerContent()
-            : base(TiledMapLayerType.ObjectLayer)
-        {
-            Objects = new List<TiledMapObjectContent>();
-        }
-
+        
         public override string ToString()
         {
             return Name;

@@ -6,6 +6,13 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     [XmlRoot(ElementName = "map")]
     public class TiledMapContent
     {
+        public TiledMapContent()
+        {
+            Properties = new List<TiledMapPropertyContent>();
+            Tilesets = new List<TiledMapTilesetContent>();
+            Layers = new List<TiledMapLayerContent>();
+        }
+
         [XmlIgnore]
         public string Name { get; set; }
 
@@ -36,14 +43,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlAttribute(AttributeName = "tileheight")]
         public int TileHeight { get; set; }
 
-		[XmlAttribute(AttributeName = "hexsidelength")]
-		public int HexSideLength { get; set; }
+        [XmlAttribute(AttributeName = "hexsidelength")]
+        public int HexSideLength { get; set; }
 
-		[XmlAttribute(AttributeName = "staggeraxis")]
-		public TiledMapStaggerAxisContent StaggerAxis { get; set; }
+        [XmlAttribute(AttributeName = "staggeraxis")]
+        public TiledMapStaggerAxisContent StaggerAxis { get; set; }
 
-		[XmlAttribute(AttributeName = "staggerindex")]
-		public TiledMapStaggerIndexContent StaggerIndex { get; set; }
+        [XmlAttribute(AttributeName = "staggerindex")]
+        public TiledMapStaggerIndexContent StaggerIndex { get; set; }
 
         [XmlElement(ElementName = "tileset")]
         public List<TiledMapTilesetContent> Tilesets { get; set; }
@@ -51,18 +58,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         [XmlElement(ElementName = "layer", Type = typeof(TiledMapTileLayerContent))]
         [XmlElement(ElementName = "imagelayer", Type = typeof(TiledMapImageLayerContent))]
         [XmlElement(ElementName = "objectgroup", Type = typeof(TiledMapObjectLayerContent))]
-		[XmlElement(ElementName = "group", Type = typeof(TiledMapGroupLayerContent))]
+        [XmlElement(ElementName = "group", Type = typeof(TiledMapGroupLayerContent))]
         public List<TiledMapLayerContent> Layers { get; set; }
 
         [XmlArray("properties")]
         [XmlArrayItem("property")]
         public List<TiledMapPropertyContent> Properties { get; set; }
-
-        public TiledMapContent()
-        {
-            Properties = new List<TiledMapPropertyContent>();
-            Tilesets = new List<TiledMapTilesetContent>();
-            Layers = new List<TiledMapLayerContent>();
-        }
     }
 }

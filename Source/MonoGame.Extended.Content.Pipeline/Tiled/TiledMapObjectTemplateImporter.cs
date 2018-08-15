@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content.Pipeline;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
@@ -40,7 +38,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				var templateSerializer = new XmlSerializer(typeof(TiledMapObjectTemplateContent));
 				var template = (TiledMapObjectTemplateContent)templateSerializer.Deserialize(reader);
 
-				if (!String.IsNullOrWhiteSpace(template.Tileset?.Source))
+				if (!string.IsNullOrWhiteSpace(template.Tileset?.Source))
 				{
 					template.Tileset.Source = $"{Path.GetDirectoryName(filePath)}/{template.Tileset.Source}";
 					ContentLogger.Log($"Adding dependency '{template.Tileset.Source}'");
