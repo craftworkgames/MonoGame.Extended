@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         }
 
         [XmlIgnore]
-		public ExternalReference<TiledMapTilesetContent> Content { get; set; }
+        public ExternalReference<TiledMapTilesetContent> Content { get; set; }
 
         [XmlAttribute(AttributeName = "firstgid")]
         public int FirstGlobalIdentifier { get; set; }

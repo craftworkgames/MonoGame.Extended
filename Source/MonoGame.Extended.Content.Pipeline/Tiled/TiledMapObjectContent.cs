@@ -73,7 +73,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 		{
 			if (!string.IsNullOrWhiteSpace(obj.TemplateSource))
 			{
-				var template = context.BuildAndLoadAsset<TiledMapObjectLayerContent, TiledMapObjectTemplateContent>(new ExternalReference<TiledMapObjectLayerContent>(obj.TemplateSource), "");
+			    var externalReference = new ExternalReference<TiledMapObjectLayerContent>(obj.TemplateSource);
+			    var template = context.BuildAndLoadAsset<TiledMapObjectLayerContent, TiledMapObjectTemplateContent>(externalReference, "");
 
 				// Nothing says a template can't reference another template.
 				// Yay recusion!

@@ -17,7 +17,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 				ContentLogger.Log($"Processing tileset '{tileset.Name}'");
 				// Build the Texture2D asset and load it as it will be saved as part of this tileset file.
-				tileset.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(tileset.Image.Source), "", new OpaqueDataDictionary() { { "ColorKeyColor", tileset.Image.TransparentColor }, { "ColorKeyEnabled", true } }, "", "");
+			    var externalReference = new ExternalReference<Texture2DContent>(tileset.Image.Source);
+			    tileset.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(externalReference, "", new OpaqueDataDictionary
+			    {
+			        { "ColorKeyColor", tileset.Image.TransparentColor },
+			        { "ColorKeyEnabled", true }
+			    }, "", "");
 
 				foreach (var tile in tileset.Tiles)
 				{

@@ -25,12 +25,22 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				foreach (var tileset in map.Tilesets)
 				{
 					if (string.IsNullOrWhiteSpace(tileset.Source))
-						// Load the Texture2DContent for the tileset as it will be saved into the map content file.
-						tileset.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(tileset.Image.Source), "", new OpaqueDataDictionary() { { "ColorKeyColor", tileset.Image.TransparentColor }, { "ColorKeyEnabled", true } }, "", "");
+					{
+					    // Load the Texture2DContent for the tileset as it will be saved into the map content file.
+					    var externalReference = new ExternalReference<Texture2DContent>(tileset.Image.Source);
+					    var parameters = new OpaqueDataDictionary
+					    {
+					        { "ColorKeyColor", tileset.Image.TransparentColor },
+					        { "ColorKeyEnabled", true }
+					    };
+					    tileset.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(externalReference, "", parameters, "", "");
+					}
 					else
-						// Link to the tileset for the content loader to load at runtime.
-						tileset.Content = context.BuildAsset<TiledMapTilesetContent, TiledMapTilesetContent>(new ExternalReference<TiledMapTilesetContent>(tileset.Source), "");
-					
+					{
+					    // Link to the tileset for the content loader to load at runtime.
+					    var externalReference = new ExternalReference<TiledMapTilesetContent>(tileset.Source);
+					    tileset.Content = context.BuildAsset<TiledMapTilesetContent, TiledMapTilesetContent>(externalReference, "");
+					}
 				}
 
 				ProcessLayers(map, context, map.Layers);
@@ -52,7 +62,13 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				{
 				    case TiledMapImageLayerContent imageLayer:
 				        ContentLogger.Log($"Processing image layer '{imageLayer.Name}'");
-				        imageLayer.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(new ExternalReference<Texture2DContent>(imageLayer.Image.Source), "", new OpaqueDataDictionary() { { "ColorKeyColor", imageLayer.Image.TransparentColor }, { "ColorKeyEnabled", true } }, "", "");
+				        var externalReference = new ExternalReference<Texture2DContent>(imageLayer.Image.Source);
+				        var parameters = new OpaqueDataDictionary
+				        {
+				            { "ColorKeyColor", imageLayer.Image.TransparentColor },
+				            { "ColorKeyEnabled", true }
+				        };
+				        imageLayer.Image.ContentRef = context.BuildAsset<Texture2DContent, Texture2DContent>(externalReference, "", parameters, "", "");
 				        ContentLogger.Log($"Processed image layer '{imageLayer.Name}'");
 				        break;
 
