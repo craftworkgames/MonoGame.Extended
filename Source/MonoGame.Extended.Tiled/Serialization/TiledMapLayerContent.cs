@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using MonoGame.Extended.Tiled;
 
-namespace MonoGame.Extended.Content.Pipeline.Tiled
+namespace MonoGame.Extended.Tiled.Serialization
 {
     [XmlInclude(typeof(TiledMapTileLayerContent))]
     [XmlInclude(typeof(TiledMapImageLayerContent))]

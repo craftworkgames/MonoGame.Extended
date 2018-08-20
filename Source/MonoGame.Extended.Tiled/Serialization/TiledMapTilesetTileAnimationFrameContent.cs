@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace MonoGame.Extended.Content.Pipeline.Tiled
+namespace MonoGame.Extended.Tiled.Serialization
 {
     public class TiledMapTilesetTileAnimationFrameContent
     {

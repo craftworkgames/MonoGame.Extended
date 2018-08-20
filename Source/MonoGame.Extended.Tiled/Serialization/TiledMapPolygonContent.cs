@@ -1,8 +1,8 @@
 using System.Xml.Serialization;
 
-namespace MonoGame.Extended.Content.Pipeline.Tiled
+namespace MonoGame.Extended.Tiled.Serialization
 {
-    public class TiledMapPolylineContent
+    public class TiledMapPolygonContent
     {
         [XmlAttribute(AttributeName = "points")]
         public string Points { get; set; }

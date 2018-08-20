@@ -3,13 +3,51 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
+using MonoGame.Extended.Tiled.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
-    [ContentImporter(".tmx", DefaultProcessor = "TiledMapProcessor", DisplayName = "Tiled Map Importer - MonoGame.Extended")]
-    public class TiledMapImporter : ContentImporter<TiledMapContent>
+    public class ContentItem<T> : ContentItem
     {
-        public override TiledMapContent Import(string filePath, ContentImporterContext context)
+        public ContentItem(T data)
+        {
+            Data = data;
+        }
+
+        public T Data { get; }
+
+        private readonly Dictionary<string, ContentItem> _externalReferences = new Dictionary<string, ContentItem>();
+
+        public void BuildExternalReference<TInput>(ContentProcessorContext context, string source, OpaqueDataDictionary parameters = null)
+        {
+            var sourceAsset = new ExternalReference<TInput>(source);
+            var externalReference = context.BuildAsset<TInput, TInput>(sourceAsset, "", parameters, "", "");
+            _externalReferences.Add(source, externalReference);
+        }
+
+        public ExternalReference<TInput> GetExternalReference<TInput>(string source)
+        {
+            if (_externalReferences.TryGetValue(source, out var contentItem))
+                return contentItem as ExternalReference<TInput>;
+
+            return null;
+        }
+
+    }
+
+    public class TiledMapContentItem : ContentItem<TiledMapContent>
+    {
+        public TiledMapContentItem(TiledMapContent data) 
+            : base(data)
+        {
+        }
+    }
+
+
+    [ContentImporter(".tmx", DefaultProcessor = "TiledMapProcessor", DisplayName = "Tiled Map Importer - MonoGame.Extended")]
+    public class TiledMapImporter : ContentImporter<TiledMapContentItem>
+    {
+        public override TiledMapContentItem Import(string filePath, ContentImporterContext context)
         {
             try
             {
@@ -26,13 +64,13 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
                 ContentLogger.Log($"Imported '{filePath}'");
 
-                return map;
+                return new TiledMapContentItem(map);
 
             }
             catch (Exception e)
             {
                 context.Logger.LogImportantMessage(e.StackTrace);
-				throw e;
+				throw;
             }
         }
 

@@ -2,13 +2,23 @@
 using System;
 using System.IO;
 using System.Xml.Serialization;
+using MonoGame.Extended.Tiled.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
-	[ContentImporter(".tsx", DefaultProcessor = "TiledMapTilesetProcessor", DisplayName = "Tiled Map Tileset Importer - MonoGame.Extended")]
-	public class TiledMapTilesetImporter : ContentImporter<TiledMapTilesetContent>
+    public class TiledMapTilesetContentItem : ContentItem<TiledMapTilesetContent>
+    {
+        public TiledMapTilesetContentItem(TiledMapTilesetContent data) 
+            : base(data)
+        {
+        }
+    }
+
+
+    [ContentImporter(".tsx", DefaultProcessor = "TiledMapTilesetProcessor", DisplayName = "Tiled Map Tileset Importer - MonoGame.Extended")]
+	public class TiledMapTilesetImporter : ContentImporter<TiledMapTilesetContentItem>
 	{
-		public override TiledMapTilesetContent Import(string filePath, ContentImporterContext context)
+		public override TiledMapTilesetContentItem Import(string filePath, ContentImporterContext context)
 		{
 			try
 			{
@@ -22,12 +32,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 				ContentLogger.Log($"Imported '{filePath}'");
 
-				return tileset;
+				return new TiledMapTilesetContentItem(tileset);
 			}
 			catch (Exception e)
 			{
 				context.Logger.LogImportantMessage(e.StackTrace);
-				throw e;
+				throw;
 			}
 		}
 

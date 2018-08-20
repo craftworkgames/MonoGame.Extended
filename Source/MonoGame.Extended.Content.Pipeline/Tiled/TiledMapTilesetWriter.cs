@@ -3,21 +3,23 @@ using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Tiled;
 using System;
 using System.Globalization;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+using MonoGame.Extended.Tiled.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
 	[ContentTypeWriter]
-	public class TiledMapTilesetWriter : ContentTypeWriter<TiledMapTilesetContent>
+	public class TiledMapTilesetWriter : ContentTypeWriter<TiledMapTilesetContentItem>
 	{
 		public override string GetRuntimeReader(TargetPlatform targetPlatform) => "MonoGame.Extended.Tiled.TiledMapTilesetReader, MonoGame.Extended.Tiled";
 
 	    public override string GetRuntimeType(TargetPlatform targetPlatform) => "MonoGame.Extended.Tiled.TiledMapTileset, MonoGame.Extended.Tiled";
 
-		protected override void Write(ContentWriter writer, TiledMapTilesetContent tileset)
+		protected override void Write(ContentWriter writer, TiledMapTilesetContentItem contentItem)
 		{
 			try
 			{
-				WriteTileset(writer, tileset);
+				WriteTileset(writer, contentItem);
 			}
 			catch (Exception ex)
 			{
@@ -26,9 +28,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			}
 		}
 
-		public static void WriteTileset(ContentWriter writer, TiledMapTilesetContent tileset)
+		public static void WriteTileset(ContentWriter writer, TiledMapTilesetContentItem contentItem)
 		{
-			writer.WriteExternalReference(tileset.Image.ContentRef);
+		    var tileset = contentItem.Data;
+		    var externalReference = contentItem.GetExternalReference<Texture2DContent>(tileset.Image.Source);
+
+			writer.WriteExternalReference(externalReference);
             writer.Write(tileset.TileWidth);
             writer.Write(tileset.TileHeight);
             writer.Write(tileset.TileCount);
@@ -41,7 +46,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 WriteTilesetTile(writer, tilesetTile);
 
             writer.WriteTiledMapProperties(tileset.Properties);
-
 		}
 
         private static void WriteTilesetTile(ContentWriter writer, TiledMapTilesetTileContent tilesetTile)

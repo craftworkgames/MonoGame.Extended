@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.Content.Pipeline.Tiled;
+using MonoGame.Extended.Tiled.Serialization;
 using NSubstitute;
 using Xunit;
 
@@ -20,7 +21,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tests.Tiled
             var importerContext = Substitute.For<ContentImporterContext>();
             importerContext.Logger.Returns(logger);
 
-            var map = importer.Import(filePath, importerContext);
+            var contentItem = importer.Import(filePath, importerContext);
+            var map = contentItem.Data;
 
             Assert.Equal("1.0", map.Version);
             Assert.Equal(TiledMapOrientationContent.Orthogonal, map.Orientation);
@@ -196,7 +198,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests.Tiled
             var import = importer.Import(filename, importerContext);
             var result = processor.Process(import, processorContext);
 
-            return result;
+            return result.Data;
         }
     }
 }
