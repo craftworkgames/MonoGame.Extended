@@ -7,48 +7,6 @@ using MonoGame.Extended.Tiled.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
-    public interface IExternalReferenceRepository
-    {
-        ExternalReference<TInput> GetExternalReference<TInput>(string source);
-    }
-
-    public class ContentItem<T> : ContentItem, IExternalReferenceRepository
-    {
-        public ContentItem(T data)
-        {
-            Data = data;
-        }
-
-        public T Data { get; }
-
-        private readonly Dictionary<string, ContentItem> _externalReferences = new Dictionary<string, ContentItem>();
-
-        public void BuildExternalReference<TInput>(ContentProcessorContext context, string source, OpaqueDataDictionary parameters = null)
-        {
-            var sourceAsset = new ExternalReference<TInput>(source);
-            var externalReference = context.BuildAsset<TInput, TInput>(sourceAsset, "", parameters, "", "");
-            _externalReferences.Add(source, externalReference);
-        }
-
-        public ExternalReference<TInput> GetExternalReference<TInput>(string source)
-        {
-            if (_externalReferences.TryGetValue(source, out var contentItem))
-                return contentItem as ExternalReference<TInput>;
-
-            return null;
-        }
-
-    }
-
-    public class TiledMapContentItem : ContentItem<TiledMapContent>
-    {
-        public TiledMapContentItem(TiledMapContent data) 
-            : base(data)
-        {
-        }
-    }
-
-
     [ContentImporter(".tmx", DefaultProcessor = "TiledMapProcessor", DisplayName = "Tiled Map Importer - MonoGame.Extended")]
     public class TiledMapImporter : ContentImporter<TiledMapContentItem>
     {

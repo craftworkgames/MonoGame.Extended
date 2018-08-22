@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			}
 		}
 
-		private TiledMapObjectTemplateContent DeserializeTileMapObjectTemplateContent(string filePath, ContentImporterContext context)
+		private static TiledMapObjectTemplateContent DeserializeTileMapObjectTemplateContent(string filePath, ContentImporterContext context)
 		{
 			using (var reader = new StreamReader(filePath))
 			{

@@ -111,8 +111,6 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         private void WriteImageLayer(ContentWriter writer, TiledMapImageLayerContent imageLayer)
         {
-            //writer.WriteExternalReference(imageLayer.Image.ContentRef);
-
             var externalReference = _contentItem.GetExternalReference<Texture2DContent>(imageLayer.Image.Source);
             writer.WriteExternalReference(externalReference);
             writer.Write(new Vector2(imageLayer.X, imageLayer.Y));
