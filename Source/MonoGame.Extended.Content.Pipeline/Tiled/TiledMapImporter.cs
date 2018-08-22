@@ -7,7 +7,12 @@ using MonoGame.Extended.Tiled.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
-    public class ContentItem<T> : ContentItem
+    public interface IExternalReferenceRepository
+    {
+        ExternalReference<TInput> GetExternalReference<TInput>(string source);
+    }
+
+    public class ContentItem<T> : ContentItem, IExternalReferenceRepository
     {
         public ContentItem(T data)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Serialization;
@@ -65,11 +66,11 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			else
 			{
 				writer.Write(false);
-				TiledMapTilesetWriter.WriteTileset(writer, tileset);
+				TiledMapTilesetWriter.WriteTileset(writer, tileset, _contentItem);
 			}
         }
 
-        private static void WriteLayers(ContentWriter writer, IReadOnlyCollection<TiledMapLayerContent> layers)
+        private void WriteLayers(ContentWriter writer, IReadOnlyCollection<TiledMapLayerContent> layers)
         {
             writer.Write(layers.Count);
 
@@ -77,7 +78,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 WriteLayer(writer, layer);
         }
 
-        private static void WriteLayer(ContentWriter writer, TiledMapLayerContent layer)
+        private void WriteLayer(ContentWriter writer, TiledMapLayerContent layer)
         {
             writer.Write((byte)layer.Type);
 
@@ -108,9 +109,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             }
         }
 
-        private static void WriteImageLayer(ContentWriter writer, TiledMapImageLayerContent imageLayer)
+        private void WriteImageLayer(ContentWriter writer, TiledMapImageLayerContent imageLayer)
         {
-            writer.WriteExternalReference(imageLayer.Image.ContentRef);
+            //writer.WriteExternalReference(imageLayer.Image.ContentRef);
+
+            var externalReference = _contentItem.GetExternalReference<Texture2DContent>(imageLayer.Image.Source);
+            writer.WriteExternalReference(externalReference);
             writer.Write(new Vector2(imageLayer.X, imageLayer.Y));
         }
 

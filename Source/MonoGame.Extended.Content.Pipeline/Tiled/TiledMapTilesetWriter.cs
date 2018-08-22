@@ -19,7 +19,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 		{
 			try
 			{
-				WriteTileset(writer, contentItem);
+				WriteTileset(writer, contentItem.Data, contentItem);
 			}
 			catch (Exception ex)
 			{
@@ -28,10 +28,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			}
 		}
 
-		public static void WriteTileset(ContentWriter writer, TiledMapTilesetContentItem contentItem)
+		public static void WriteTileset(ContentWriter writer, TiledMapTilesetContent tileset, IExternalReferenceRepository externalReferenceRepository)
 		{
-		    var tileset = contentItem.Data;
-		    var externalReference = contentItem.GetExternalReference<Texture2DContent>(tileset.Image.Source);
+		    var externalReference = externalReferenceRepository.GetExternalReference<Texture2DContent>(tileset.Image.Source);
 
 			writer.WriteExternalReference(externalReference);
             writer.Write(tileset.TileWidth);
