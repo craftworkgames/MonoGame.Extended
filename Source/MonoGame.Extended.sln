@@ -52,23 +52,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Tweening"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Animations", "MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj", "{587CE536-216F-41A1-B223-AE502C125B09}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{F3E80350-2F27-4EDB-8BE9-0145643A5336}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\MonoGame.Extended.Animations.nuspec = NuGet\MonoGame.Extended.Animations.nuspec
-		NuGet\MonoGame.Extended.Content.Pipeline.nuspec = NuGet\MonoGame.Extended.Content.Pipeline.nuspec
-		NuGet\MonoGame.Extended.Entities.nuspec = NuGet\MonoGame.Extended.Entities.nuspec
-		NuGet\MonoGame.Extended.Graphics.nuspec = NuGet\MonoGame.Extended.Graphics.nuspec
-		NuGet\MonoGame.Extended.Gui.nuspec = NuGet\MonoGame.Extended.Gui.nuspec
-		NuGet\MonoGame.Extended.Input.nuspec = NuGet\MonoGame.Extended.Input.nuspec
-		NuGet\MonoGame.Extended.NuclexGui.nuspec = NuGet\MonoGame.Extended.NuclexGui.nuspec
-		NuGet\MonoGame.Extended.nuspec = NuGet\MonoGame.Extended.nuspec
-		NuGet\MonoGame.Extended.Particles.nuspec = NuGet\MonoGame.Extended.Particles.nuspec
-		NuGet\MonoGame.Extended.SceneGraphs.nuspec = NuGet\MonoGame.Extended.SceneGraphs.nuspec
-		NuGet\MonoGame.Extended.Tiled.nuspec = NuGet\MonoGame.Extended.Tiled.nuspec
-		NuGet\MonoGame.Extended.Tweening.nuspec = NuGet\MonoGame.Extended.Tweening.nuspec
-		NuGet\readme.txt = NuGet\readme.txt
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pong", "Demos\Pong\Pong.csproj", "{55033148-02B0-4810-840A-011516846975}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platformer", "Demos\Platformer\Platformer.csproj", "{1DDD3C52-B2F2-4DB3-8BF9-57BD93928EA8}"
@@ -372,7 +355,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{F3E80350-2F27-4EDB-8BE9-0145643A5336} = {068B9F42-8B49-4FAF-9D8C-701862FAC799}
 		{55033148-02B0-4810-840A-011516846975} = {932F8931-4A8D-4205-BFCF-98E794207786}
 		{1DDD3C52-B2F2-4DB3-8BF9-57BD93928EA8} = {932F8931-4A8D-4205-BFCF-98E794207786}
 		{F46BC5FE-4939-4069-911F-5774AB0A3F51} = {932F8931-4A8D-4205-BFCF-98E794207786}
