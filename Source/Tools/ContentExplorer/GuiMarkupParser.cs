@@ -18,8 +18,18 @@ namespace ContentExplorer
             typeof(Button),
             typeof(StackPanel),
             typeof(DockPanel),
-            typeof(ToggleButton)
+            typeof(ToggleButton),
+            typeof(ContentControl)
         }.ToDictionary(t => t.Name, StringComparer.OrdinalIgnoreCase);
+
+        private static readonly Dictionary<Type, Func<string, object>> _converters =
+            new Dictionary<Type, Func<string, object>>
+            {
+                {typeof(object), s => s},
+                {typeof(string), s => s},
+                {typeof(bool), s => bool.Parse(s)},
+                {typeof(int), s => int.Parse(s)}
+            };
 
         private static object ParseChildNode(XmlNode node)
         {
@@ -37,11 +47,24 @@ namespace ContentExplorer
 
                     if (property != null)
                     {
-                        // TODO: handle all the different property types
-                        if (property.PropertyType == typeof(bool))
-                            property.SetValue(item, bool.Parse(attribute.Value));
+                        if (_converters.TryGetValue(property.PropertyType, out var converter))
+                        {
+                            var value = converter(attribute.Value);
+                            property.SetValue(item, value);
+                        }
+                        else if (property.PropertyType.IsEnum)
+                        {
+                            var value = Enum.Parse(property.PropertyType, attribute.Value, true);
+                            property.SetValue(item, value);
+                        }
                         else
-                            property.SetValue(item, attribute.Value);
+                        {
+                            throw new InvalidOperationException($"Converter not found for {property.PropertyType}");
+                        }
+                    }
+                    else
+                    {
+                        // TODO: Attached properties
                     }
                 }
 

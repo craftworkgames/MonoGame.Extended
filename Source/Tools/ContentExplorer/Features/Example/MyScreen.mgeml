@@ -1,9 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<StackPanel>
-  <ToggleButton IsChecked="true">
-    Yep. It's a toggle button.
-  </ToggleButton>
-  <Button>
-    Inner button
-  </Button>
-</StackPanel>
+<DockPanel LastChildFill="False">
+  <StackPanel Orientation="Vertical" Width="150">
+    <Button Name="OpenButton" Content="Open" />
+    <Button Name="QuitButton" Content="Quit" />
+  </StackPanel>
+</DockPanel>
