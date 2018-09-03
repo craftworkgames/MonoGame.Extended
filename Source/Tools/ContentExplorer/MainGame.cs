@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
@@ -10,14 +12,23 @@ using Screen = MonoGame.Extended.Gui.Screen;
 
 namespace ContentExplorer
 {
+    public interface IPlatformSpecific
+    {
+        string OpenFile();
+    }
+
     public class MainGame : Game
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
+        private readonly IPlatformSpecific _platform;
         private GuiSystem _guiSystem;
+        private Texture2D _texture;
+        private SpriteBatch _spriteBatch;
 
-        public MainGame()
+        public MainGame(IPlatformSpecific platform)
         {
+            _platform = platform;
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
 
             Content.RootDirectory = "Content";
@@ -48,9 +59,18 @@ namespace ContentExplorer
 
             _guiSystem = new GuiSystem(viewportAdapter, guiRenderer) { ActiveScreen = demoScreen };
 
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
             demoScreen.FindControl<Button>("OpenButton").Clicked += (sender, args) =>
             {
+                var filePath = _platform.OpenFile();
 
+                _texture?.Dispose();
+
+                using (var stream = File.OpenRead(filePath))
+                {
+                    _texture = Texture2D.FromStream(GraphicsDevice, stream);
+                }
             };
             demoScreen.FindControl<Button>("QuitButton").Clicked += (sender, args) => Exit();
         }
@@ -68,6 +88,14 @@ namespace ContentExplorer
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
+            
+            if (_texture != null)
+            {
+                var position = (GraphicsDevice.Viewport.Bounds.Center - _texture.Bounds.Center).ToVector2();
+                _spriteBatch.Begin();
+                _spriteBatch.Draw(_texture, position, Color.White);
+                _spriteBatch.End();
+            }
 
             _guiSystem.Draw(gameTime);
         }

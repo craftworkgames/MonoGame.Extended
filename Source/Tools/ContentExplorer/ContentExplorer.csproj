@@ -1,22 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-    <ApplicationIcon />
-    <StartupObject />
+    <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <MonoGameContentReference Include="**\*.mgcb" />
-  </ItemGroup>
   <ItemGroup>
     <Content Include="Features\Example\MyScreen.mgeml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.8" />
-    <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7" />
+    <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.0.1681-develop" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj" />

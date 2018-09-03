@@ -15,8 +15,8 @@
 #---------------------------------- Content ---------------------------------#
 
 #begin Sensation.fnt
-/importer:BitmapFontImporter
-/processor:BitmapFontProcessor
+/importer:
+/processor:
 /build:Sensation.fnt
 
 #begin Sensation_0.png
