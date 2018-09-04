@@ -13,14 +13,11 @@ namespace ContentExplorer
         {
         }
 
-        private static readonly Dictionary<string, Type> _controlTypes = new[]
-        {
-            typeof(Button),
-            typeof(StackPanel),
-            typeof(DockPanel),
-            typeof(ToggleButton),
-            typeof(ContentControl)
-        }.ToDictionary(t => t.Name, StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, Type> _controlTypes = 
+                typeof(Control).Assembly
+                    .ExportedTypes
+                    .Where(t => t.IsSubclassOf(typeof(Control)))
+                    .ToDictionary(t => t.Name, StringComparer.OrdinalIgnoreCase);
 
         private static readonly Dictionary<Type, Func<string, object>> _converters =
             new Dictionary<Type, Func<string, object>>
@@ -31,7 +28,7 @@ namespace ContentExplorer
                 {typeof(int), s => int.Parse(s)}
             };
 
-        private static object ParseChildNode(XmlNode node)
+        private static object ParseChildNode(XmlNode node, object dataContext)
         {
             if (node is XmlText)
                 return node.InnerText.Trim();
@@ -41,26 +38,21 @@ namespace ContentExplorer
                 var typeInfo = type.GetTypeInfo();
                 var item = Activator.CreateInstance(type);
 
+                // ReSharper disable once AssignNullToNotNullAttribute
                 foreach (var attribute in node.Attributes.Cast<XmlAttribute>())
                 {
                     var property = typeInfo.GetProperty(attribute.Name);
 
                     if (property != null)
                     {
+                        var value = ParseBinding(attribute.Value, dataContext);
+
                         if (_converters.TryGetValue(property.PropertyType, out var converter))
-                        {
-                            var value = converter(attribute.Value);
-                            property.SetValue(item, value);
-                        }
+                            property.SetValue(item, converter(value));
                         else if (property.PropertyType.IsEnum)
-                        {
-                            var value = Enum.Parse(property.PropertyType, attribute.Value, true);
-                            property.SetValue(item, value);
-                        }
+                            property.SetValue(item, Enum.Parse(property.PropertyType, value, true));
                         else
-                        {
                             throw new InvalidOperationException($"Converter not found for {property.PropertyType}");
-                        }
                     }
                     else
                     {
@@ -75,10 +67,10 @@ namespace ContentExplorer
                     {
                         case ContentControl contentControl:
                             // TOOD: Throw if there's more than one child
-                            contentControl.Content = ParseChildNode(node.ChildNodes[0]);
+                            contentControl.Content = ParseChildNode(node.ChildNodes[0], dataContext);
                             break;
                         case LayoutControl layoutControl:
-                            foreach (var control in ParseChildNodes(node.ChildNodes))
+                            foreach (var control in ParseChildNodes(node.ChildNodes, dataContext))
                                 layoutControl.Items.Add(control as Control);
                             break;
                     }
@@ -90,7 +82,23 @@ namespace ContentExplorer
             throw new InvalidOperationException($"Unknown control type {node.Name}");
         }
 
-        private static IEnumerable<object> ParseChildNodes(XmlNodeList nodes)
+        private static string ParseBinding(string expression, object dataContext)
+        {
+            if (dataContext != null && expression.StartsWith("{{") && expression.EndsWith("}}"))
+            {
+                var binding = expression.Substring(2, expression.Length - 4);
+                var bindingValue = dataContext
+                    .GetType()
+                    .GetProperty(binding)
+                    ?.GetValue(dataContext);
+
+                return $"{bindingValue}";
+            }
+
+            return expression;
+        }
+
+        private static IEnumerable<object> ParseChildNodes(XmlNodeList nodes, object dataContext)
         {
             foreach (var node in nodes.Cast<XmlNode>())
             {
@@ -100,16 +108,17 @@ namespace ContentExplorer
                 }
                 else
                 {
-                    yield return ParseChildNode(node);
+                    yield return ParseChildNode(node, dataContext);
                 }
             }
         }
 
-        public Control Parse(string filePath)
+        public Control Parse(string filePath, object dataContext)
         {
             var d = new XmlDocument();
             d.Load(filePath);
-            return ParseChildNodes(d.ChildNodes).LastOrDefault() as Control;
+            return ParseChildNodes(d.ChildNodes, dataContext)
+                .LastOrDefault() as Control;
         }
     }
 }

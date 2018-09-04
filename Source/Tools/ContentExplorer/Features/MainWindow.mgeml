@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <DockPanel LastChildFill="False">
   <StackPanel Orientation="Vertical" Width="150">
+    <Label Content="{{Title}}"></Label>
     <Button Name="OpenButton" Content="Open" />
     <Button Name="QuitButton" Content="Quit" />
   </StackPanel>

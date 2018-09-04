@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
+using ContentExplorer.Features;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
+using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.ViewportAdapters;
-using Button = MonoGame.Extended.Gui.Controls.Button;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
-using Screen = MonoGame.Extended.Gui.Screen;
 
 namespace ContentExplorer
 {
@@ -25,11 +25,16 @@ namespace ContentExplorer
         private GuiSystem _guiSystem;
         private Texture2D _texture;
         private SpriteBatch _spriteBatch;
+        private MainWindowViewModel _viewModel = new MainWindowViewModel();
 
         public MainGame(IPlatformSpecific platform)
         {
             _platform = platform;
-            _graphicsDeviceManager = new GraphicsDeviceManager(this);
+            _graphicsDeviceManager = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = 1280,
+                PreferredBackBufferHeight = 800
+            };
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -54,25 +59,30 @@ namespace ContentExplorer
 
             var demoScreen = new Screen
             {
-                Content = parser.Parse("Features/Example/MyScreen.mgeml")
+                Content = parser.Parse("Features/MainWindow.mgeml", _viewModel)
             };
 
             _guiSystem = new GuiSystem(viewportAdapter, guiRenderer) { ActiveScreen = demoScreen };
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            demoScreen.FindControl<Button>("OpenButton").Clicked += (sender, args) =>
+            demoScreen.FindControl<Button>("OpenButton")
+                .Clicked += (sender, args) =>
             {
                 var filePath = _platform.OpenFile();
 
-                _texture?.Dispose();
-
-                using (var stream = File.OpenRead(filePath))
+                if (filePath != null)
                 {
-                    _texture = Texture2D.FromStream(GraphicsDevice, stream);
+                    using (var stream = File.OpenRead(filePath))
+                    {
+                        _texture?.Dispose();
+                        _texture = Texture2D.FromStream(GraphicsDevice, stream);
+                    }
                 }
             };
-            demoScreen.FindControl<Button>("QuitButton").Clicked += (sender, args) => Exit();
+
+            demoScreen.FindControl<Button>("QuitButton")
+                .Clicked += (sender, args) => Exit();
         }
 
         protected override void Update(GameTime gameTime)
@@ -92,7 +102,7 @@ namespace ContentExplorer
             if (_texture != null)
             {
                 var position = (GraphicsDevice.Viewport.Bounds.Center - _texture.Bounds.Center).ToVector2();
-                _spriteBatch.Begin();
+                _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
                 _spriteBatch.Draw(_texture, position, Color.White);
                 _spriteBatch.End();
             }
