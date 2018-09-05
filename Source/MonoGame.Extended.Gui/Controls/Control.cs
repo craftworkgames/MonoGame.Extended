@@ -267,5 +267,10 @@ namespace MonoGame.Extended.Gui.Controls
         {
             AttachedProperties[name] = value;
         }
+
+        public virtual Type GetAttachedPropertyType(string propertyName)
+        {
+            return null;
+        }
     }
 }

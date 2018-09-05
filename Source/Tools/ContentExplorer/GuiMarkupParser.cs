@@ -28,7 +28,20 @@ namespace ContentExplorer
                 {typeof(int), s => int.Parse(s)}
             };
 
-        private static object ParseChildNode(XmlNode node, object dataContext)
+        private static object ConvertValue(Type propertyType, string input, object dataContext)
+        {
+            var value = ParseBinding(input, dataContext);
+
+            if (_converters.TryGetValue(propertyType, out var converter))
+                return converter(value); //property.SetValue(control, converter(value));
+
+            if (propertyType.IsEnum)
+                return Enum.Parse(propertyType, value, true);// property.SetValue(control, Enum.Parse(propertyType, value, true));
+            
+            throw new InvalidOperationException($"Converter not found for {propertyType}");
+        }
+
+        private static object ParseChildNode(XmlNode node, Control parent, object dataContext)
         {
             if (node is XmlText)
                 return node.InnerText.Trim();
@@ -36,7 +49,7 @@ namespace ContentExplorer
             if (_controlTypes.TryGetValue(node.Name, out var type))
             {
                 var typeInfo = type.GetTypeInfo();
-                var item = Activator.CreateInstance(type);
+                var control = (Control) Activator.CreateInstance(type);
 
                 // ReSharper disable once AssignNullToNotNullAttribute
                 foreach (var attribute in node.Attributes.Cast<XmlAttribute>())
@@ -45,38 +58,43 @@ namespace ContentExplorer
 
                     if (property != null)
                     {
-                        var value = ParseBinding(attribute.Value, dataContext);
-
-                        if (_converters.TryGetValue(property.PropertyType, out var converter))
-                            property.SetValue(item, converter(value));
-                        else if (property.PropertyType.IsEnum)
-                            property.SetValue(item, Enum.Parse(property.PropertyType, value, true));
-                        else
-                            throw new InvalidOperationException($"Converter not found for {property.PropertyType}");
+                        var value = ConvertValue(property.PropertyType, attribute.Value, dataContext);
+                        property.SetValue(control, value);
                     }
                     else
                     {
-                        // TODO: Attached properties
+                        var parts = attribute.Name.Split('.');
+                        var parentType = parts[0];
+                        var propertyName = parts[1];
+                        var propertyType = parent.GetAttachedPropertyType(propertyName);
+                        var propertyValue = ConvertValue(propertyType, attribute.Value, dataContext);
+
+                        if (!string.Equals(parent.GetType().Name, parentType, StringComparison.OrdinalIgnoreCase))
+                            throw new InvalidOperationException("Attached properties are only supported on the immediate parent");
+                        
+                        control.SetAttachedProperty(propertyName, propertyValue);
                     }
                 }
 
 
                 if (node.HasChildNodes)
                 {
-                    switch (item)
+                    switch (control)
                     {
                         case ContentControl contentControl:
-                            // TOOD: Throw if there's more than one child
-                            contentControl.Content = ParseChildNode(node.ChildNodes[0], dataContext);
+                            if (node.ChildNodes.Count > 1)
+                                throw new InvalidOperationException("A content control can only have one child");
+
+                            contentControl.Content = ParseChildNode(node.ChildNodes[0], control, dataContext);
                             break;
                         case LayoutControl layoutControl:
-                            foreach (var control in ParseChildNodes(node.ChildNodes, dataContext))
-                                layoutControl.Items.Add(control as Control);
+                            foreach (var childControl in ParseChildNodes(node.ChildNodes, control, dataContext))
+                                layoutControl.Items.Add(childControl as Control);
                             break;
                     }
                 }
 
-                return item;
+                return control;
             }
 
             throw new InvalidOperationException($"Unknown control type {node.Name}");
@@ -98,7 +116,7 @@ namespace ContentExplorer
             return expression;
         }
 
-        private static IEnumerable<object> ParseChildNodes(XmlNodeList nodes, object dataContext)
+        private static IEnumerable<object> ParseChildNodes(XmlNodeList nodes, Control parent, object dataContext)
         {
             foreach (var node in nodes.Cast<XmlNode>())
             {
@@ -108,7 +126,7 @@ namespace ContentExplorer
                 }
                 else
                 {
-                    yield return ParseChildNode(node, dataContext);
+                    yield return ParseChildNode(node, parent, dataContext);
                 }
             }
         }
@@ -117,7 +135,7 @@ namespace ContentExplorer
         {
             var d = new XmlDocument();
             d.Load(filePath);
-            return ParseChildNodes(d.ChildNodes, dataContext)
+            return ParseChildNodes(d.ChildNodes, null, dataContext)
                 .LastOrDefault() as Control;
         }
     }
