@@ -1,11 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<DockPanel LastChildFill="False">
-  <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+<DockPanel LastChildFill="True">
+  <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" BackgroundColor="#111111">
     <Button Name="OpenButton" Content="Open" />
     <Button Name="QuitButton" Content="Quit" />
   </StackPanel>
 
-  <StackPanel Orientation="Vertical" Width="150">
+  <StackPanel  DockPanel.Dock="Top" Orientation="Vertical" Width="150" BackgroundColor="Green">
     <Label Content="{{Title}}"></Label>
+  </StackPanel>
+
+  <StackPanel HorizontalAlignment="Centre" VerticalAlignment="Centre">
+    <Label Content="Please choose one:" />
+    <ComboBox Name="ComboBox" />
   </StackPanel>
 </DockPanel>

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.Gui.Controls;
 
 namespace ContentExplorer
@@ -25,7 +27,8 @@ namespace ContentExplorer
                 {typeof(object), s => s},
                 {typeof(string), s => s},
                 {typeof(bool), s => bool.Parse(s)},
-                {typeof(int), s => int.Parse(s)}
+                {typeof(int), s => int.Parse(s)},
+                {typeof(Color), s => s.StartsWith("#") ? ColorHelper.FromHex(s) : ColorHelper.FromName(s) }
             };
 
         private static object ConvertValue(Type propertyType, string input, object dataContext)
@@ -70,7 +73,7 @@ namespace ContentExplorer
                         var propertyValue = ConvertValue(propertyType, attribute.Value, dataContext);
 
                         if (!string.Equals(parent.GetType().Name, parentType, StringComparison.OrdinalIgnoreCase))
-                            throw new InvalidOperationException("Attached properties are only supported on the immediate parent");
+                            throw new InvalidOperationException($"Attached properties are only supported on the immediate parent type {parentType}");
                         
                         control.SetAttachedProperty(propertyName, propertyValue);
                     }

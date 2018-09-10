@@ -83,6 +83,10 @@ namespace ContentExplorer
 
             demoScreen.FindControl<Button>("QuitButton")
                 .Clicked += (sender, args) => Exit();
+
+            var comboBox = demoScreen.FindControl<ComboBox>("ComboBox");
+            comboBox.Items.AddRange(new []{ "Hello World!", "This is cool" });
+            comboBox.SelectedIndex = 0;
         }
 
         protected override void Update(GameTime gameTime)
