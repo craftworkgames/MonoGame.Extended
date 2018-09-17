@@ -133,7 +133,7 @@ namespace MonoGame.Extended.Gui
         //    }
         //}
 
-        private void UpdateControl(Control control, float deltaSeconds)
+        public void UpdateControl(Control control, float deltaSeconds)
         {
             if (control.IsVisible)
             {

@@ -10,8 +10,13 @@ namespace MonoGame.Extended.Gui.Controls
     public sealed class TextBox : Control
     {
         public TextBox(string text = null)
+            : this()
         {
             Text = text ?? string.Empty;
+        }
+
+        public TextBox()
+        {
             HorizontalTextAlignment = HorizontalAlignment.Left;
         }
 
