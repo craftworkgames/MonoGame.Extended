@@ -54,7 +54,7 @@ namespace MonoGame.Extended.Gui
         private Screen _activeScreen;
         public Screen ActiveScreen
         {
-            get { return _activeScreen; }
+            get => _activeScreen;
             set
             {
                 if (_activeScreen != value)

@@ -1,27 +1,75 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input.InputListeners;
 
 namespace MonoGame.Extended.Gui.Controls
 {
+    public class TextContainer
+    {
+        public TextContainer()
+        {
+            _stringBuilder = new StringBuilder();
+        }
+
+        private readonly StringBuilder _stringBuilder;
+
+        public int LineIndex { get; set; }
+        public int LineCount { get; private set; }
+        public int ColumnIndex { get; set; }
+        public int CaretIndex => ColumnIndex * LineCount + ColumnIndex;
+
+        public void Append(char c)
+        {
+            if (c == '\n')
+            {
+                LineIndex++;
+                ColumnIndex = 0;
+            }
+
+            _stringBuilder.Append(c);
+        }
+    }
+
     public sealed class TextBox : Control
     {
-        public TextBox(string text = null)
+        public TextBox()
+            : this(null)
+        {
+        }
+
+        public TextBox(string text)
         {
             Text = text ?? string.Empty;
             HorizontalTextAlignment = HorizontalAlignment.Left;
+            VerticalTextAlignment = VerticalAlignment.Top;
         }
 
-        public int SelectionStart { get; set; }
+        private int _caretIndex;
+        public int CaretIndex
+        {
+            get => _caretIndex;
+            set
+            {
+                if (_caretIndex != value)
+                {
+                    _caretIndex = value;
+                    CaretIndexChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        public int LineIndex => GetLineIndex(CaretIndex);
+        public int LineCount => Text.Count(c => c == '\n');
         public char? PasswordCharacter { get; set; }
 
         private string _text;
         public string Text
         {
-            get { return _text; }
+            get => _text;
             set
             {
                 if (_text != value)
@@ -34,15 +82,29 @@ namespace MonoGame.Extended.Gui.Controls
 
         private void OnTextChanged()
         {
-            if (!string.IsNullOrEmpty(Text) && SelectionStart > Text.Length)
-                SelectionStart = Text.Length;
+            if (!string.IsNullOrEmpty(Text) && CaretIndex > Text.Length)
+                CaretIndex = Text.Length;
 
             TextChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler TextChanged;
+        public event EventHandler CaretIndexChanged;
 
         public override IEnumerable<Control> Children { get; } = Enumerable.Empty<Control>();
+
+        public int GetLineIndex(int characterIndex)
+        {
+            var lineIndex = 0;
+
+            for (var c = 0; c < characterIndex; c++)
+            {
+                if (_text[c] == '\n')
+                    lineIndex++;
+            }
+
+            return lineIndex;
+        }
 
         public override Size GetContentSize(IGuiContext context)
         {
@@ -50,66 +112,14 @@ namespace MonoGame.Extended.Gui.Controls
             var stringSize = (Size)font.MeasureString(Text ?? string.Empty);
             return new Size(stringSize.Width, stringSize.Height < font.LineHeight ? font.LineHeight : stringSize.Height);
         }
-
-        //protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
-        //{
-        //    var font = Font ?? context.DefaultFont;
-        //    return new Size2(Width + Padding.Left + Padding.Right, (Height <= 0.0f ? font.LineHeight + 2 : Height) + Padding.Top + Padding.Bottom);
-        //}
-
+        
         public override bool OnPointerDown(IGuiContext context, PointerEventArgs args)
         {
-            SelectionStart = FindNearestGlyphIndex(context, args.Position);
+            CaretIndex = FindNearestGlyphIndex(context, args.Position);
             _isCaretVisible = true;
-
-            //_selectionIndexes.Clear();
-            //_selectionIndexes.Push(SelectionStart);
-            //_startSelectionBox = Text.Length > 0;
 
             return base.OnPointerDown(context, args);
         }
-
-        //public override bool OnPointerMove(IGuiContext context, PointerEventArgs args)
-        //{
-        //    if (_startSelectionBox)
-        //    {
-        //        var selection = FindNearestGlyphIndex(context, args.Position);
-        //        if (selection != _selectionIndexes.Peek())
-        //        {
-        //            if (_selectionIndexes.Count == 1)
-        //            {
-        //                _selectionIndexes.Push(selection);
-        //            }
-        //            else if (_selectionIndexes.Last() < _selectionIndexes.Peek())
-        //            {
-        //                if (selection > _selectionIndexes.Peek()) _selectionIndexes.Pop();
-        //                else _selectionIndexes.Push(selection);
-        //            }
-        //            else
-        //            {
-        //                if (selection < _selectionIndexes.Peek()) _selectionIndexes.Pop();
-        //                else _selectionIndexes.Push(selection);
-        //            }
-        //            SelectionStart = selection;
-        //        }
-        //    }
-
-        //    return base.OnPointerMove(context, args);
-        //}
-
-        //public override bool OnPointerLeave(IGuiContext context, PointerEventArgs args)
-        //{
-        //    _startSelectionBox = false;
-
-        //    return base.OnPointerLeave(context, args);
-        //}
-
-        //public override bool OnPointerUp(IGuiContext context, PointerEventArgs args)
-        //{
-        //    _startSelectionBox = false;
-
-        //    return base.OnPointerUp(context, args);
-        //}
 
         private int FindNearestGlyphIndex(IGuiContext context, Point position)
         {
@@ -139,91 +149,44 @@ namespace MonoGame.Extended.Gui.Controls
             switch (args.Key)
             {
                 case Keys.Tab:
-                case Keys.Enter:
                     return true;
                 case Keys.Back:
-                    if (Text.Length > 0)
+                    if (Text.Length > 0 && CaretIndex > 0)
                     {
-                        if (SelectionStart > 0)// && _selectionIndexes.Count <= 1)
-                        {
-                            SelectionStart--;
-                            Text = Text.Remove(SelectionStart, 1);
-                        }
-                        //else
-                        //{
-                        //    var start = MathHelper.Min(_selectionIndexes.Last(), _selectionIndexes.Peek());
-                        //    var end = MathHelper.Max(_selectionIndexes.Last(), _selectionIndexes.Peek());
-                        //    Text = Text.Remove(start, end - start);
-
-                        //    _selectionIndexes.Clear();
-                        //}
+                        CaretIndex--;
+                        Text = Text.Remove(CaretIndex, 1);
                     }
                     break;
                 case Keys.Delete:
-                    if (SelectionStart < Text.Length)// && _selectionIndexes.Count <= 1)
-                    {
-                        Text = Text.Remove(SelectionStart, 1);
-                    }
-                    //else if (_selectionIndexes.Count > 1)
-                    //{
-                    //    var start = MathHelper.Min(_selectionIndexes.Last(), _selectionIndexes.Peek());
-                    //    var end = MathHelper.Max(_selectionIndexes.Last(), _selectionIndexes.Peek());
-                    //    Text = Text.Remove(start, end - start);
-                    //    SelectionStart = 0; // yeah, nah.
+                    if (CaretIndex < Text.Length)
+                        Text = Text.Remove(CaretIndex, 1);
 
-                    //    _selectionIndexes.Clear();
-                    //}
                     break;
                 case Keys.Left:
-                    if (SelectionStart > 0)
-                    {
-                        //if (_selectionIndexes.Count > 1)
-                        //{
-                        //    if (_selectionIndexes.Last() < SelectionStart) SelectionStart = _selectionIndexes.Last();
-                        //    _selectionIndexes.Clear();
-                        //}
-                        //else
-                        {
-                            SelectionStart--;
-                        }
-                    }
+                    if (CaretIndex > 0)
+                        CaretIndex--;
+
                     break;
                 case Keys.Right:
-                    if (SelectionStart < Text.Length)
-                    {
-                        //if (_selectionIndexes.Count > 1)
-                        //{
-                        //    if (_selectionIndexes.Last() > SelectionStart) SelectionStart = _selectionIndexes.Last();
-                        //    _selectionIndexes.Clear();
-                        //}
-                        //else
-                        {
-                            SelectionStart++;
-                        }
-                    }
+                    if (CaretIndex < Text.Length)
+                        CaretIndex++;
+
                     break;
                 case Keys.Home:
-                    SelectionStart = 0;
-                    //_selectionIndexes.Clear();
+                    CaretIndex = 0;
                     break;
                 case Keys.End:
-                    SelectionStart = Text.Length;
-                    //_selectionIndexes.Clear();
+                    CaretIndex = Text.Length;
                     break;
+                case Keys.Enter:
+                    Text = Text.Insert(CaretIndex, Environment.NewLine);
+                    CaretIndex++;
+                    return true;
                 default:
                     if (args.Character != null)
                     {
-                        //if (_selectionIndexes.Count > 1)
-                        //{
-                        //    var start = MathHelper.Min(_selectionIndexes.Last(), _selectionIndexes.Peek());
-                        //    var end = MathHelper.Max(_selectionIndexes.Last(), _selectionIndexes.Peek());
-                        //    Text = Text.Remove(start, end - start);
-
-                        //    _selectionIndexes.Clear();
-                        //}
-
-                        Text = Text.Insert(SelectionStart, args.Character.ToString());
-                        SelectionStart++;
+                        Text = Text.Insert(CaretIndex, args.Character.ToString());
+                        CaretIndex++;
                     }
                     break;
             }
@@ -235,9 +198,6 @@ namespace MonoGame.Extended.Gui.Controls
         private const float _caretBlinkRate = 0.53f;
         private float _nextCaretBlink = _caretBlinkRate;
         private bool _isCaretVisible = true;
-
-        //private bool _startSelectionBox = false;
-        //private Stack<int> _selectionIndexes = new Stack<int>();
 
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
         {
@@ -251,7 +211,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             if (IsFocused)
             {
-                var caretRectangle = GetCaretRectangle(textInfo, SelectionStart);
+                var caretRectangle = GetCaretRectangle(textInfo, CaretIndex);
 
                 if (_isCaretVisible)
                     renderer.DrawRectangle(caretRectangle, TextColor);
@@ -263,37 +223,9 @@ namespace MonoGame.Extended.Gui.Controls
                     _isCaretVisible = !_isCaretVisible;
                     _nextCaretBlink = _caretBlinkRate;
                 }
-
-                //if (_selectionIndexes.Count > 1)
-                //{
-                //    var start = 0;
-                //    var end = 0;
-                //    var point = Point2.Zero;
-                //    if (_selectionIndexes.Last() > _selectionIndexes.Peek())
-                //    {
-                //        start = _selectionIndexes.Peek();
-                //        end = _selectionIndexes.Last();
-                //        point = caretRectangle.Position;
-                //    }
-                //    else
-                //    {
-                //        start = _selectionIndexes.Last();
-                //        end = _selectionIndexes.Peek();
-                //        point = GetCaretRectangle(textInfo, start).Position;
-                //    }
-                //    var selectionRectangle = textInfo.Font.GetStringRectangle(textInfo.Text.Substring(start, end - start), point);
-
-                //    renderer.FillRectangle((Rectangle)selectionRectangle, Color.Black * 0.25f);
-                //}
             }
         }
-
-
-        //protected override string CreateBoxText(string text, BitmapFont font, float width)
-        //{
-        //    return text;
-        //}
-
+        
         private Rectangle GetCaretRectangle(TextInfo textInfo, int index)
         {
             var caretRectangle = textInfo.Font.GetStringRectangle(textInfo.Text.Substring(0, index), textInfo.Position);

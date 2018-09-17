@@ -9,6 +9,14 @@
     <MonoGameContentReference Include="**\*.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Features\MainWindow.mgeml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Features\MainWindow.mgeml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.8" />
     <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7" />
   </ItemGroup>

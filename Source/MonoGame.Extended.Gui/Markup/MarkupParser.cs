@@ -4,22 +4,21 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended;
 using MonoGame.Extended.Gui.Controls;
 
-namespace ContentExplorer
+namespace MonoGame.Extended.Gui.Markup
 {
-    public class GuiMarkupParser
+    public class MarkupParser
     {
-        public GuiMarkupParser()
+        public MarkupParser()
         {
         }
 
-        private static readonly Dictionary<string, Type> _controlTypes = 
-                typeof(Control).Assembly
-                    .ExportedTypes
-                    .Where(t => t.IsSubclassOf(typeof(Control)))
-                    .ToDictionary(t => t.Name, StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, Type> _controlTypes =
+            typeof(Control).Assembly
+                .ExportedTypes
+                .Where(t => t.IsSubclassOf(typeof(Control)))
+                .ToDictionary(t => t.Name, StringComparer.OrdinalIgnoreCase);
 
         private static readonly Dictionary<Type, Func<string, object>> _converters =
             new Dictionary<Type, Func<string, object>>
@@ -28,7 +27,7 @@ namespace ContentExplorer
                 {typeof(string), s => s},
                 {typeof(bool), s => bool.Parse(s)},
                 {typeof(int), s => int.Parse(s)},
-                {typeof(Color), s => s.StartsWith("#") ? ColorHelper.FromHex(s) : ColorHelper.FromName(s) }
+                {typeof(Color), s => s.StartsWith("#") ? ColorHelper.FromHex(s) : ColorHelper.FromName(s)}
             };
 
         private static object ConvertValue(Type propertyType, string input, object dataContext)
@@ -39,8 +38,10 @@ namespace ContentExplorer
                 return converter(value); //property.SetValue(control, converter(value));
 
             if (propertyType.IsEnum)
-                return Enum.Parse(propertyType, value, true);// property.SetValue(control, Enum.Parse(propertyType, value, true));
-            
+                return
+                    Enum.Parse(propertyType, value,
+                        true); // property.SetValue(control, Enum.Parse(propertyType, value, true));
+
             throw new InvalidOperationException($"Converter not found for {propertyType}");
         }
 
@@ -73,8 +74,9 @@ namespace ContentExplorer
                         var propertyValue = ConvertValue(propertyType, attribute.Value, dataContext);
 
                         if (!string.Equals(parent.GetType().Name, parentType, StringComparison.OrdinalIgnoreCase))
-                            throw new InvalidOperationException($"Attached properties are only supported on the immediate parent type {parentType}");
-                        
+                            throw new InvalidOperationException(
+                                $"Attached properties are only supported on the immediate parent type {parentType}");
+
                         control.SetAttachedProperty(propertyName, propertyValue);
                     }
                 }

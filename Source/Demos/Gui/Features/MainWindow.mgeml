@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DockPanel LastChildFill="True">
+  <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" BackgroundColor="#111111">
+    <Button Name="OpenButton" Content="Open" />
+    <Button Name="QuitButton" Content="Quit" />
+  </StackPanel>
+
+  <StackPanel  DockPanel.Dock="Top" Orientation="Vertical" Width="150" BackgroundColor="Green">
+    <Label Content="{{Title}}"></Label>
+  </StackPanel>
+
+  <Label DockPanel.Dock="Bottom" Name="StatusLabel" Content="TODO" />
+
+  <TextBox Name="TextBox" BackgroundColor="WhiteSmoke" Text="This is a test." />
+</DockPanel>

@@ -257,7 +257,7 @@ namespace MonoGame.Extended.BitmapFonts
             private readonly BitmapFont _font;
             private readonly StringBuilder _text;
             private int _index;
-            private Point2 _position;
+            private readonly Point2 _position;
             private Vector2 _positionDelta;
             private BitmapFontGlyph _currentGlyph;
             private BitmapFontGlyph? _previousGlyph;

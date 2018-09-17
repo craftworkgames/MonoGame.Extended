@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
+using MonoGame.Extended.Gui.Markup;
 using MonoGame.Extended.ViewportAdapters;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
@@ -55,7 +56,7 @@ namespace ContentExplorer
             BitmapFont.UseKernings = false;
             Skin.CreateDefault(font);
 
-            var parser = new GuiMarkupParser();
+            var parser = new MarkupParser();
 
             var demoScreen = new Screen
             {
