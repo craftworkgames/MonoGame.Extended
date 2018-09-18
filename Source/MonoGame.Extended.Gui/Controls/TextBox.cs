@@ -15,6 +15,11 @@ namespace MonoGame.Extended.Gui.Controls
             HorizontalTextAlignment = HorizontalAlignment.Left;
         }
 
+        public TextBox()
+            : this(null)
+        {
+        }
+
         public int SelectionStart { get; set; }
         public char? PasswordCharacter { get; set; }
 
