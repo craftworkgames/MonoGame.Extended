@@ -11,5 +11,6 @@
 
   <Label DockPanel.Dock="Bottom" Name="StatusLabel" Content="TODO" />
 
-  <TextBox Name="TextBox" BackgroundColor="WhiteSmoke" Text="This is a test." />
+  <TextBox2 Name="TextBox" BackgroundColor="WhiteSmoke" Text="This is a test.
+With multi-line text." />
 </DockPanel>

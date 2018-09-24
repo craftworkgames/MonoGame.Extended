@@ -12,30 +12,123 @@ namespace MonoGame.Extended.Gui.Controls
     {
         public TextContainer()
         {
-            _stringBuilder = new StringBuilder();
+            _lines = new List<StringBuilder>();
         }
 
-        private readonly StringBuilder _stringBuilder;
+        private readonly List<StringBuilder> _lines;
 
         public int LineIndex { get; set; }
-        public int LineCount { get; private set; }
         public int ColumnIndex { get; set; }
-        public int CaretIndex => ColumnIndex * LineCount + ColumnIndex;
-
-        public void Append(char c)
+        public int LineCount { get; private set; } = 1;
+        public int CaretIndex
         {
+            get => ColumnIndex * LineIndex + ColumnIndex;
+            //set
+            //{
+            //    LineIndex = LineIndex / value;
+            //    ColumnIndex = (LineIndex + 1) % value;
+            //}
+        }
+
+        public string Text
+        {
+            get => string.Concat(_lines.SelectMany(s => $"{s}\n"));
+            set
+            {
+                _lines.Clear();
+
+                foreach (var s in value.Split('\n'))
+                    _lines.Add(new StringBuilder(s.Trim('\r')));
+            }
+        }
+
+        private StringBuilder CurrentLine() => _lines[LineIndex];
+
+        //public void Type(string value)
+        //{
+        //    for (var i = 0; i < value.Length; i++)
+        //        Type(value[i]);
+        //}
+
+        public void Type(char c)
+        {
+            CurrentLine().Insert(ColumnIndex, c);
+
             if (c == '\n')
             {
                 LineIndex++;
+                LineCount++;
                 ColumnIndex = 0;
             }
+            else
+            {
+                ColumnIndex++;
+            }
+        }
 
-            _stringBuilder.Append(c);
+        private void RemoveCharacterAt(int index)
+        {
+            var c = CurrentLine()[index];
+
+            if (c == '\n')
+                LineCount--;
+
+            CurrentLine().Remove(index, 1);
+        }
+
+        public void Backspace()
+        {
+            if (Left())
+                RemoveCharacterAt(ColumnIndex);
+        }
+
+        public void Delete()
+        {
+            if (ColumnIndex < CurrentLine().Length)
+                RemoveCharacterAt(ColumnIndex);
+        }
+
+        public bool Left()
+        {
+            if (ColumnIndex == 0)
+                return false;
+
+            if (ColumnIndex == 0)
+                LineIndex--;
+            else
+                ColumnIndex--;
+
+            return true;
+        }
+
+        public bool Right()
+        {
+            if (ColumnIndex >= CurrentLine().Length)
+                return false;
+
+            if (CurrentLine()[ColumnIndex] == '\n')
+                LineIndex++;
+            else
+                ColumnIndex++;
+
+            return true;
+        }
+
+        public void Home()
+        {
+            ColumnIndex = 0;
+        }
+
+        public void End()
+        {
+
         }
     }
 
     public sealed class TextBox : Control
     {
+        private readonly TextContainer _textContainer = new TextContainer();
+
         public TextBox()
             : this(null)
         {
@@ -48,33 +141,32 @@ namespace MonoGame.Extended.Gui.Controls
             VerticalTextAlignment = VerticalAlignment.Top;
         }
 
-        private int _caretIndex;
+        //private int _caretIndex;
         public int CaretIndex
         {
-            get => _caretIndex;
-            set
-            {
-                if (_caretIndex != value)
-                {
-                    _caretIndex = value;
-                    CaretIndexChanged?.Invoke(this, EventArgs.Empty);
-                }
-            }
+            get => _textContainer.CaretIndex;
+            //private set
+            //{
+            //    if (_textContainer.CaretIndex != value)
+            //    {
+            //        _textContainer.CaretIndex = value;
+            //        CaretIndexChanged?.Invoke(this, EventArgs.Empty);
+            //    }
+            //}
         }
 
-        public int LineIndex => GetLineIndex(CaretIndex);
-        public int LineCount => Text.Count(c => c == '\n');
+        public int LineIndex => _textContainer.LineIndex;
+        public int LineCount => _textContainer.LineCount;
         public char? PasswordCharacter { get; set; }
 
-        private string _text;
         public string Text
         {
-            get => _text;
+            get => _textContainer.Text;
             set
             {
-                if (_text != value)
+                if (_textContainer.Text != value)
                 {
-                    _text = value;
+                    _textContainer.Text = value;
                     OnTextChanged();
                 }
             }
@@ -82,8 +174,8 @@ namespace MonoGame.Extended.Gui.Controls
 
         private void OnTextChanged()
         {
-            if (!string.IsNullOrEmpty(Text) && CaretIndex > Text.Length)
-                CaretIndex = Text.Length;
+            //if (!string.IsNullOrEmpty(Text) && CaretIndex > Text.Length)
+            //    CaretIndex = Text.Length;
 
             TextChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -93,18 +185,18 @@ namespace MonoGame.Extended.Gui.Controls
 
         public override IEnumerable<Control> Children { get; } = Enumerable.Empty<Control>();
 
-        public int GetLineIndex(int characterIndex)
-        {
-            var lineIndex = 0;
+        //public int GetLineIndex(int characterIndex)
+        //{
+        //    var lineIndex = 0;
 
-            for (var c = 0; c < characterIndex; c++)
-            {
-                if (_text[c] == '\n')
-                    lineIndex++;
-            }
+        //    for (var c = 0; c < characterIndex; c++)
+        //    {
+        //        if (_text[c] == '\n')
+        //            lineIndex++;
+        //    }
 
-            return lineIndex;
-        }
+        //    return lineIndex;
+        //}
 
         public override Size GetContentSize(IGuiContext context)
         {
@@ -115,7 +207,7 @@ namespace MonoGame.Extended.Gui.Controls
         
         public override bool OnPointerDown(IGuiContext context, PointerEventArgs args)
         {
-            CaretIndex = FindNearestGlyphIndex(context, args.Position);
+            _textContainer.ColumnIndex = FindNearestGlyphIndex(context, args.Position);
             _isCaretVisible = true;
 
             return base.OnPointerDown(context, args);
@@ -151,43 +243,30 @@ namespace MonoGame.Extended.Gui.Controls
                 case Keys.Tab:
                     return true;
                 case Keys.Back:
-                    if (Text.Length > 0 && CaretIndex > 0)
-                    {
-                        CaretIndex--;
-                        Text = Text.Remove(CaretIndex, 1);
-                    }
+                    _textContainer.Backspace();
                     break;
                 case Keys.Delete:
-                    if (CaretIndex < Text.Length)
-                        Text = Text.Remove(CaretIndex, 1);
-
+                    _textContainer.Delete();
                     break;
                 case Keys.Left:
-                    if (CaretIndex > 0)
-                        CaretIndex--;
-
+                    _textContainer.Left();
                     break;
                 case Keys.Right:
-                    if (CaretIndex < Text.Length)
-                        CaretIndex++;
-
+                    _textContainer.Right();
                     break;
                 case Keys.Home:
-                    CaretIndex = 0;
+                    _textContainer.Home();
                     break;
                 case Keys.End:
-                    CaretIndex = Text.Length;
+                    _textContainer.End();
                     break;
                 case Keys.Enter:
-                    Text = Text.Insert(CaretIndex, Environment.NewLine);
-                    CaretIndex++;
+                    _textContainer.Type('\n');
                     return true;
                 default:
-                    if (args.Character != null)
-                    {
-                        Text = Text.Insert(CaretIndex, args.Character.ToString());
-                        CaretIndex++;
-                    }
+                    if (args.Character.HasValue)
+                        _textContainer.Type(args.Character.Value);
+
                     break;
             }
 
@@ -242,6 +321,7 @@ namespace MonoGame.Extended.Gui.Controls
                 textInfo.Position.X += ClippingRectangle.Left - caretRectangle.Left;
                 caretRectangle.X = ClippingRectangle.Left;
             }
+
             return (Rectangle) caretRectangle;
         }
     }

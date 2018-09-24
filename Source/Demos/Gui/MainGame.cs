@@ -48,8 +48,8 @@ namespace Gui
             var textBox = mainScreen.FindControl<TextBox>("TextBox");
             var statusLabel = mainScreen.FindControl<Label>("StatusLabel");
 
-            textBox.CaretIndexChanged += (sender, args) =>
-                statusLabel.Content = $"Ln {textBox.LineIndex + 1}, Ch {textBox.CaretIndex + 1}";
+            //textBox.CaretIndexChanged += (sender, args) =>
+            //    statusLabel.Content = $"Ln {textBox.LineIndex + 1}, Ch {textBox.CaretIndex + 1}";
 
 
 
