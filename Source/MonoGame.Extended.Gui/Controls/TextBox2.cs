@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input.InputListeners;
@@ -19,63 +20,50 @@ namespace MonoGame.Extended.Gui.Controls
             HorizontalTextAlignment = HorizontalAlignment.Left;
             VerticalTextAlignment = VerticalAlignment.Top;
         }
-        
-        private struct TextLine
-        {
-            public int StartIndex;
-            public int Length;
-        }
+       
 
-        private readonly List<TextLine> _lines = new List<TextLine>();
         private const float _caretBlinkRate = 0.53f;
         private float _nextCaretBlink = _caretBlinkRate;
         private bool _isCaretVisible = true;
 
-        private string _text;
+        private readonly List<StringBuilder> _lines = new List<StringBuilder>();
         public string Text
         {
-            get => _text;
+            get => string.Concat(_lines.SelectMany(s => $"{s}\n"));
             set
             {
-                _text = value;
-                UpdateLineInfo();
+                _lines.Clear();
+
+                var line = new StringBuilder();
+
+                for (var i = 0; i < value.Length; i++)
+                {
+                    var c = value[i];
+
+                    if (c == '\n')
+                    {
+                        _lines.Add(line);
+                        line = new StringBuilder();
+                    }
+                    else if(c != '\r')
+                    {
+                        line.Append(c);
+                    }
+                }
+
+                _lines.Add(line);
             }
         }
 
         public int CaretIndex => ColumnIndex * LineIndex + ColumnIndex;
         public int LineIndex { get; set; }
         public int ColumnIndex { get; set; }
-
-        private void UpdateLineInfo()
-        {
-            _lines.Clear();
-            var line = new TextLine();
-
-            for (var i = 0; i < _text.Length; i++)
-            {
-                var c = _text[i];
-
-                if (c == '\n')
-                {
-                    _lines.Add(line);
-                    line = new TextLine {StartIndex = i + 1};
-                }
-                else if (c != '\r')
-                {
-                    line.Length++;
-                }
-            }
-
-            _lines.Add(line);
-        }
+        public int TabStops { get; set; } = 4;
 
         public override IEnumerable<Control> Children => Enumerable.Empty<Control>();
 
-        public string GetLineText(int lineIndex)
-        {
-            var line = _lines[lineIndex];
-            return Text.Substring(line.StartIndex, line.Length);
-        }
+        public string GetLineText(int lineIndex) => _lines[lineIndex].ToString();
+        public int GetLineLength(int lineIndex) => _lines[lineIndex].Length;
 
         public override Size GetContentSize(IGuiContext context)
         {
@@ -88,38 +76,157 @@ namespace MonoGame.Extended.Gui.Controls
         {
             switch (args.Key)
             {
-                //case Keys.Tab:
-                //    return true;
-                //case Keys.Back:
-                //    _textContainer.Backspace();
-                //    break;
-                //case Keys.Delete:
-                //    _textContainer.Delete();
-                //    break;
+                case Keys.Tab:
+                    Tab();
+                    break;
+                case Keys.Back:
+                    Backspace();
+                    break;
+                case Keys.Delete:
+                    Delete();
+                    break;
                 case Keys.Left:
                     Left();
                     break;
                 case Keys.Right:
                     Right();
                     break;
-                //case Keys.Home:
-                //    _textContainer.Home();
-                //    break;
-                //case Keys.End:
-                //    _textContainer.End();
-                //    break;
-                //case Keys.Enter:
-                //    _textContainer.Type('\n');
-                //    return true;
-                //default:
-                //    if (args.Character.HasValue)
-                //        _textContainer.Type(args.Character.Value);
+                case Keys.Up:
+                    Up();
+                    break;
+                case Keys.Down:
+                    Down();
+                    break;
+                case Keys.Home:
+                    Home();
+                    break;
+                case Keys.End:
+                    End();
+                    break;
+                case Keys.Enter:
+                    Type('\n');
+                    return true;
+                default:
+                    if (args.Character.HasValue)
+                        Type(args.Character.Value);
 
-                //    break;
+                    break;
             }
 
             _isCaretVisible = true;
             return base.OnKeyPressed(context, args);
+        }
+
+        public void Type(char c)
+        {
+            switch (c)
+            {
+                case '\n':
+                    var lineText = GetLineText(LineIndex);
+                    var left = lineText.Substring(0, ColumnIndex);
+                    var right = lineText.Substring(ColumnIndex);
+                    _lines.Insert(LineIndex + 1, new StringBuilder(right));
+                    _lines[LineIndex] = new StringBuilder(left);
+                    LineIndex++;
+                    Home();
+                    break;
+                case '\t':
+                    Tab();
+                    break;
+                default:
+                    _lines[LineIndex].Insert(ColumnIndex, c);
+                    ColumnIndex++;
+                    break;
+            }
+        }
+
+        public void Backspace()
+        {
+            if (ColumnIndex == 0 && LineIndex > 0)
+            {
+                var topLineLength = GetLineLength(LineIndex - 1);
+
+                if (RemoveLineBreak(LineIndex - 1))
+                {
+                    LineIndex--;
+                    ColumnIndex = topLineLength;
+                }
+            }
+            else if (Left())
+            {
+                RemoveCharacter(LineIndex, ColumnIndex);
+            }
+        }
+
+        public void Delete()
+        {
+            var lineLength = GetLineLength(LineIndex);
+
+            if (ColumnIndex == lineLength)
+                RemoveLineBreak(LineIndex);
+            else
+                RemoveCharacter(LineIndex, ColumnIndex);
+        }
+
+        public void RemoveCharacter(int lineIndex, int columnIndex)
+        {
+            _lines[lineIndex].Remove(columnIndex, 1);
+        }
+
+        public bool RemoveLineBreak(int lineIndex)
+        {
+            if (lineIndex < _lines.Count - 1)
+            {
+                var topLine = _lines[lineIndex];
+                var bottomLine = _lines[lineIndex + 1];
+                _lines.RemoveAt(lineIndex + 1);
+                topLine.Append(bottomLine);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool Home()
+        {
+            ColumnIndex = 0;
+            return true;
+        }
+
+        public bool End()
+        {
+            ColumnIndex = GetLineLength(LineIndex);
+            return true;
+        }
+
+        public bool Up()
+        {
+            if (LineIndex > 0)
+            {
+                LineIndex--;
+
+                if (ColumnIndex > GetLineLength(LineIndex))
+                    ColumnIndex = GetLineLength(LineIndex);
+                
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool Down()
+        {
+            if (LineIndex < _lines.Count - 1)
+            {
+                LineIndex++;
+
+                if (ColumnIndex > GetLineLength(LineIndex))
+                    ColumnIndex = GetLineLength(LineIndex);
+
+                return true;
+            }
+
+            return false;
         }
 
         public bool Left()
@@ -130,7 +237,7 @@ namespace MonoGame.Extended.Gui.Controls
                     return false;
 
                 LineIndex--;
-                ColumnIndex = _lines[LineIndex].Length;
+                ColumnIndex = GetLineLength(LineIndex);
             }
             else
             {
@@ -156,6 +263,16 @@ namespace MonoGame.Extended.Gui.Controls
             }
 
             return true;
+        }
+
+        public bool Tab()
+        {
+            var spaces = TabStops - ColumnIndex % TabStops;
+
+            for (var s = 0; s < spaces; s++)
+                Type(' ');
+
+            return spaces > 0;
         }
 
         public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
