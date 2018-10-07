@@ -54,18 +54,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Animation
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{F3E80350-2F27-4EDB-8BE9-0145643A5336}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet\MonoGame.Extended.Animations.nuspec = NuGet\MonoGame.Extended.Animations.nuspec
-		NuGet\MonoGame.Extended.Content.Pipeline.nuspec = NuGet\MonoGame.Extended.Content.Pipeline.nuspec
-		NuGet\MonoGame.Extended.Entities.nuspec = NuGet\MonoGame.Extended.Entities.nuspec
-		NuGet\MonoGame.Extended.Graphics.nuspec = NuGet\MonoGame.Extended.Graphics.nuspec
-		NuGet\MonoGame.Extended.Gui.nuspec = NuGet\MonoGame.Extended.Gui.nuspec
-		NuGet\MonoGame.Extended.Input.nuspec = NuGet\MonoGame.Extended.Input.nuspec
-		NuGet\MonoGame.Extended.NuclexGui.nuspec = NuGet\MonoGame.Extended.NuclexGui.nuspec
-		NuGet\MonoGame.Extended.nuspec = NuGet\MonoGame.Extended.nuspec
-		NuGet\MonoGame.Extended.Particles.nuspec = NuGet\MonoGame.Extended.Particles.nuspec
-		NuGet\MonoGame.Extended.SceneGraphs.nuspec = NuGet\MonoGame.Extended.SceneGraphs.nuspec
-		NuGet\MonoGame.Extended.Tiled.nuspec = NuGet\MonoGame.Extended.Tiled.nuspec
-		NuGet\MonoGame.Extended.Tweening.nuspec = NuGet\MonoGame.Extended.Tweening.nuspec
 		NuGet\readme.txt = NuGet\readme.txt
 	EndProjectSection
 EndProject
