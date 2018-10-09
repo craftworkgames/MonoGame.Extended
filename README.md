@@ -56,8 +56,7 @@ Thanks to all those that support the project on Patreon! You're helping to keep 
 As a reward to some of my patrons I've linked thier websites here:
  - [PRT Studios](http://prt-studios.com/)
  - [optimuspi](http://www.optimuspi.com/)
- - [Pseudo Motion](https://pseudomotion.wordpress.com/)
-
+ 
 If you're not on the list and you should be please let me know!
 
 Also thanks to

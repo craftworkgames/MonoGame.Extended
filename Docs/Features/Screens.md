@@ -21,4 +21,4 @@ public Game1()
 ```
 
 ## Demos
-[Demo.Features/Demos/ScreensDemo.cs](https://github.com/craftworkgames/MonoGame.Extended/blob/develop/Source/Demos/Demo.Features/Demos/ScreensDemo.cs)
+[Demos/Features/Demos/ScreensDemo.cs](https://github.com/craftworkgames/MonoGame.Extended/blob/develop/Source/Demos/Features/Demos/ScreensDemo.cs)
