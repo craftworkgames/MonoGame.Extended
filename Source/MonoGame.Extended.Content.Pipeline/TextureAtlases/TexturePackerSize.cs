@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", Width, Height);
+            return $"{Width} {Height}";
         }
     }
 }

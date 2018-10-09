@@ -24,6 +24,7 @@ namespace MonoGame.Extended.Gui.Controls
         public char? PasswordCharacter { get; set; }
 
         private string _text;
+
         public string Text
         {
             get { return _text; }
@@ -52,8 +53,9 @@ namespace MonoGame.Extended.Gui.Controls
         public override Size GetContentSize(IGuiContext context)
         {
             var font = Font ?? context.DefaultFont;
-            var stringSize = (Size)font.MeasureString(Text ?? string.Empty);
-            return new Size(stringSize.Width, stringSize.Height < font.LineHeight ? font.LineHeight : stringSize.Height);
+            var stringSize = (Size) font.MeasureString(Text ?? string.Empty);
+            return new Size(stringSize.Width,
+                stringSize.Height < font.LineHeight ? font.LineHeight : stringSize.Height);
         }
 
         //protected override Size2 CalculateDesiredSize(IGuiContext context, Size2 availableSize)
@@ -125,7 +127,7 @@ namespace MonoGame.Extended.Gui.Controls
             foreach (var glyph in font.GetGlyphs(textInfo.Text, textInfo.Position))
             {
                 var fontRegionWidth = glyph.FontRegion?.Width ?? 0;
-                var glyphMiddle = (int)(glyph.Position.X + fontRegionWidth * 0.5f);
+                var glyphMiddle = (int) (glyph.Position.X + fontRegionWidth * 0.5f);
 
                 if (position.X >= glyphMiddle)
                 {
@@ -149,7 +151,7 @@ namespace MonoGame.Extended.Gui.Controls
                 case Keys.Back:
                     if (Text.Length > 0)
                     {
-                        if (SelectionStart > 0)// && _selectionIndexes.Count <= 1)
+                        if (SelectionStart > 0) // && _selectionIndexes.Count <= 1)
                         {
                             SelectionStart--;
                             Text = Text.Remove(SelectionStart, 1);
@@ -163,9 +165,10 @@ namespace MonoGame.Extended.Gui.Controls
                         //    _selectionIndexes.Clear();
                         //}
                     }
+
                     break;
                 case Keys.Delete:
-                    if (SelectionStart < Text.Length)// && _selectionIndexes.Count <= 1)
+                    if (SelectionStart < Text.Length) // && _selectionIndexes.Count <= 1)
                     {
                         Text = Text.Remove(SelectionStart, 1);
                     }
@@ -192,6 +195,7 @@ namespace MonoGame.Extended.Gui.Controls
                             SelectionStart--;
                         }
                     }
+
                     break;
                 case Keys.Right:
                     if (SelectionStart < Text.Length)
@@ -206,6 +210,7 @@ namespace MonoGame.Extended.Gui.Controls
                             SelectionStart++;
                         }
                     }
+
                     break;
                 case Keys.Home:
                     SelectionStart = 0;
@@ -230,6 +235,7 @@ namespace MonoGame.Extended.Gui.Controls
                         Text = Text.Insert(SelectionStart, args.Character.ToString());
                         SelectionStart++;
                     }
+
                     break;
             }
 
@@ -252,7 +258,8 @@ namespace MonoGame.Extended.Gui.Controls
             var textInfo = GetTextInfo(context, text, ContentRectangle, HorizontalTextAlignment, VerticalTextAlignment);
 
             if (!string.IsNullOrWhiteSpace(textInfo.Text))
-                renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, textInfo.ClippingRectangle);
+                renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color,
+                    textInfo.ClippingRectangle);
 
             if (IsFocused)
             {
@@ -307,7 +314,9 @@ namespace MonoGame.Extended.Gui.Controls
             if (caretRectangle.Right > ClippingRectangle.Right)
                 textInfo.Position.X -= caretRectangle.Right - ClippingRectangle.Right;
 
-            caretRectangle.X = caretRectangle.Right < ClippingRectangle.Right ? caretRectangle.Right : ClippingRectangle.Right;
+            caretRectangle.X = caretRectangle.Right < ClippingRectangle.Right
+                ? caretRectangle.Right
+                : ClippingRectangle.Right;
             caretRectangle.Width = 1;
 
             if (caretRectangle.Left < ClippingRectangle.Left)
@@ -315,6 +324,7 @@ namespace MonoGame.Extended.Gui.Controls
                 textInfo.Position.X += ClippingRectangle.Left - caretRectangle.Left;
                 caretRectangle.X = ClippingRectangle.Left;
             }
+
             return (Rectangle) caretRectangle;
         }
     }

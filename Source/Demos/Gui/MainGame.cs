@@ -5,6 +5,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
+using MonoGame.Extended.Gui.Markup;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Gui
@@ -37,6 +38,21 @@ namespace Gui
             var font = Content.Load<BitmapFont>("Sensation");
             BitmapFont.UseKernings = false;
             Skin.CreateDefault(font);
+
+            //var parser = new MarkupParser();
+
+            //var mainScreen = new Screen
+            //{
+            //    Content = parser.Parse("Features/MainWindow.mgeml", new object())
+            //};
+
+            //var textBox = mainScreen.FindControl<TextBox>("TextBox");
+            //var statusLabel = mainScreen.FindControl<Label>("StatusLabel");
+
+            //textBox.CaretIndexChanged += (sender, args) =>
+            //    statusLabel.Content = $"Ln {textBox.LineIndex + 1}, Ch {textBox.CaretIndex + 1}";
+
+
 
             var stackTest = new DemoViewModel("Stack Panels",
                     new StackPanel

@@ -14,7 +14,7 @@ namespace MonoGame.Extended.Gui.Controls
         private bool _isPressed;
         public bool IsPressed
         {
-            get { return _isPressed; }
+            get => _isPressed;
             set
             {
                 if (_isPressed != value)
@@ -29,7 +29,7 @@ namespace MonoGame.Extended.Gui.Controls
         private ControlStyle _pressedStyle;
         public ControlStyle PressedStyle
         {
-            get { return _pressedStyle; }
+            get => _pressedStyle;
             set
             {
                 if (_pressedStyle != value)

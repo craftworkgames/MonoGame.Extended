@@ -47,9 +47,7 @@ namespace MonoGame.Extended.Gui
 
         public ControlStyle GetStyle(string name)
         {
-            ControlStyle controlStyle;
-
-            if (Styles.TryGetValue(name, out controlStyle))
+            if (Styles.TryGetValue(name, out var controlStyle))
                 return controlStyle;
 
             return null;
@@ -172,6 +170,12 @@ namespace MonoGame.Extended.Gui
                         {nameof(Control.Padding), new Thickness(0)},
                     },
                     new ControlStyle(typeof(TextBox)) {
+                        {nameof(Control.BackgroundColor), Color.DarkGray},
+                        {nameof(Control.TextColor), Color.Black},
+                        {nameof(Control.BorderColor), new Color(67, 67, 70)},
+                        {nameof(Control.BorderThickness), 2},
+                    },
+                    new ControlStyle(typeof(TextBox2)) {
                         {nameof(Control.BackgroundColor), Color.DarkGray},
                         {nameof(Control.TextColor), Color.Black},
                         {nameof(Control.BorderColor), new Color(67, 67, 70)},

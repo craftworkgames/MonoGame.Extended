@@ -1,16 +1,15 @@
 ﻿using Microsoft.Xna.Framework.Content.Pipeline;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml.Serialization;
+using MonoGame.Extended.Tiled.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
-	[ContentImporter(".tsx", DefaultProcessor = "TiledMapTilesetProcessor", DisplayName = "Tiled Map Tileset Importer - MonoGame.Extended")]
-	public class TiledMapTilesetImporter : ContentImporter<TiledMapTilesetContent>
+    [ContentImporter(".tsx", DefaultProcessor = "TiledMapTilesetProcessor", DisplayName = "Tiled Map Tileset Importer - MonoGame.Extended")]
+	public class TiledMapTilesetImporter : ContentImporter<TiledMapTilesetContentItem>
 	{
-		public override TiledMapTilesetContent Import(string filePath, ContentImporterContext context)
+		public override TiledMapTilesetContentItem Import(string filePath, ContentImporterContext context)
 		{
 			try
 			{
@@ -24,12 +23,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 				ContentLogger.Log($"Imported '{filePath}'");
 
-				return tileset;
+				return new TiledMapTilesetContentItem(tileset);
 			}
 			catch (Exception e)
 			{
 				context.Logger.LogImportantMessage(e.StackTrace);
-				throw e;
+				throw;
 			}
 		}
 
@@ -45,17 +44,21 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				context.AddDependency(tileset.Image.Source);
 
 				foreach (var tile in tileset.Tiles)
-					foreach (var obj in tile.Objects)
-						if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
-						{
-							obj.TemplateSource = $"{Path.GetDirectoryName(filePath)}/{obj.TemplateSource}";
-							ContentLogger.Log($"Adding dependency '{obj.TemplateSource}'");
+				{
+				    foreach (var obj in tile.Objects)
+				    {
+				        if (!string.IsNullOrWhiteSpace(obj.TemplateSource))
+				        {
+				            obj.TemplateSource = $"{Path.GetDirectoryName(filePath)}/{obj.TemplateSource}";
+				            ContentLogger.Log($"Adding dependency '{obj.TemplateSource}'");
 
-							// We depend on the template.
-							context.AddDependency(obj.TemplateSource);
-						}
+				            // We depend on the template.
+				            context.AddDependency(obj.TemplateSource);
+				        }
+				    }
+				}
 
-				return tileset;
+			    return tileset;
 			}
 		}
 	}

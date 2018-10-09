@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
+using MonoGame.Extended.Tiled.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
     [ContentImporter(".tmx", DefaultProcessor = "TiledMapProcessor", DisplayName = "Tiled Map Importer - MonoGame.Extended")]
-    public class TiledMapImporter : ContentImporter<TiledMapContent>
+    public class TiledMapImporter : ContentImporter<TiledMapContentItem>
     {
-        public override TiledMapContent Import(string filePath, ContentImporterContext context)
+        public override TiledMapContentItem Import(string filePath, ContentImporterContext context)
         {
             try
             {
@@ -27,13 +27,13 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
                 ContentLogger.Log($"Imported '{filePath}'");
 
-                return map;
+                return new TiledMapContentItem(map);
 
             }
             catch (Exception e)
             {
                 context.Logger.LogImportantMessage(e.StackTrace);
-				throw e;
+				throw;
             }
         }
 

@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Content.Pipeline;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml.Serialization;
+using MonoGame.Extended.Tiled.Serialization;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
@@ -33,14 +32,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			}
 		}
 
-		private TiledMapObjectTemplateContent DeserializeTileMapObjectTemplateContent(string filePath, ContentImporterContext context)
+		private static TiledMapObjectTemplateContent DeserializeTileMapObjectTemplateContent(string filePath, ContentImporterContext context)
 		{
 			using (var reader = new StreamReader(filePath))
 			{
 				var templateSerializer = new XmlSerializer(typeof(TiledMapObjectTemplateContent));
 				var template = (TiledMapObjectTemplateContent)templateSerializer.Deserialize(reader);
 
-				if (!String.IsNullOrWhiteSpace(template.Tileset?.Source))
+				if (!string.IsNullOrWhiteSpace(template.Tileset?.Source))
 				{
 					template.Tileset.Source = $"{Path.GetDirectoryName(filePath)}/{template.Tileset.Source}";
 					ContentLogger.Log($"Adding dependency '{template.Tileset.Source}'");

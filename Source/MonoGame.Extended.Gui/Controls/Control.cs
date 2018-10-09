@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Gui.Controls
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Skin Skin
         {
-            get { return _skin; }
+            get => _skin;
             set
             {
                 if (_skin != value)
@@ -75,7 +75,7 @@ namespace MonoGame.Extended.Gui.Controls
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsHovered
         {
-            get { return _isHovered; }
+            get => _isHovered;
             private set
             {
                 if (_isHovered != value)
@@ -128,7 +128,7 @@ namespace MonoGame.Extended.Gui.Controls
         private bool _isEnabled;
         public bool IsEnabled
         {
-            get { return _isEnabled; }
+            get => _isEnabled;
             set
             {
                 if (_isEnabled != value)
@@ -144,7 +144,7 @@ namespace MonoGame.Extended.Gui.Controls
         private ControlStyle _hoverStyle;
         public ControlStyle HoverStyle
         {
-            get { return _hoverStyle; }
+            get => _hoverStyle;
             set
             {
                 if (_hoverStyle != value)
@@ -158,7 +158,7 @@ namespace MonoGame.Extended.Gui.Controls
         private ControlStyle _disabledStyle;
         public ControlStyle DisabledStyle
         {
-            get { return _disabledStyle; }
+            get => _disabledStyle;
             set
             {
                 _disabledStyle = value;
@@ -255,17 +255,17 @@ namespace MonoGame.Extended.Gui.Controls
 
         public object GetAttachedProperty(string name)
         {
-            object value;
-
-            if (AttachedProperties.TryGetValue(name, out value))
-                return value;
-
-            return null;
+            return AttachedProperties.TryGetValue(name, out var value) ? value : null;
         }
 
         public void SetAttachedProperty(string name, object value)
         {
             AttachedProperties[name] = value;
+        }
+
+        public virtual Type GetAttachedPropertyType(string propertyName)
+        {
+            return null;
         }
     }
 }

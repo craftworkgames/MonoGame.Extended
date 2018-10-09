@@ -90,6 +90,15 @@ namespace MonoGame.Extended.Gui.Controls
         }
 
         public const string DockProperty = "Dock";
+        
+        public override Type GetAttachedPropertyType(string propertyName)
+        {
+            if (string.Equals(DockProperty, propertyName, StringComparison.OrdinalIgnoreCase))
+                return typeof(Dock);
+
+            return base.GetAttachedPropertyType(propertyName);
+        }
+
         public bool LastChildFill { get; set; } = true;
     }
 }

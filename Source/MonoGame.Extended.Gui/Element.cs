@@ -33,7 +33,7 @@ namespace MonoGame.Extended.Gui
         private TextureRegion2D _backgroundRegion;
         public TextureRegion2D BackgroundRegion
         {
-            get { return _backgroundRegion; }
+            get => _backgroundRegion;
             set
             {
                 _backgroundRegion = value;
@@ -68,7 +68,7 @@ namespace MonoGame.Extended.Gui
         private Size _size;
         public Size Size
         {
-            get { return _size; }
+            get => _size;
             set
             {
                 _size = value;
@@ -85,14 +85,14 @@ namespace MonoGame.Extended.Gui
 
         public int Width
         {
-            get { return Size.Width; }
-            set { Size = new Size(value, Size.Height); }
+            get => Size.Width;
+            set => Size = new Size(value, Size.Height);
         }
 
         public int Height
         {
-            get { return Size.Height; }
-            set { Size = new Size(Size.Width, value); }
+            get => Size.Height;
+            set => Size = new Size(Size.Width, value);
         }
 
         public Size ActualSize { get; internal set; }

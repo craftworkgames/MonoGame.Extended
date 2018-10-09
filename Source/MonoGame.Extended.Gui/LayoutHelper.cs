@@ -9,11 +9,6 @@ namespace MonoGame.Extended.Gui
 
     public static class LayoutHelper
     {
-        //public static Size2 GetSizeWithMargins(Control control, IGuiContext context, Size2 availableSize)
-        //{
-        //    return control.GetDesiredSize(context, availableSize) + control.Margin.Size;
-        //}
-
         public static void PlaceControl(IGuiContext context, Control control, float x, float y, float width, float height)
         {
             var rectangle = new Rectangle((int)x, (int)y, (int)width, (int)height);
@@ -24,18 +19,6 @@ namespace MonoGame.Extended.Gui
             control.ActualSize = (Size)alignedRectangle.Size - control.Margin.Size;
             control.InvalidateMeasure();
         }
-
-        //public static void PlaceWindow(IGuiContext context, Window window, float x, float y, float width, float height)
-        //{
-        //    var rectangle = new Rectangle((int)x, (int)y, (int)width, (int)height);
-        //    var availableSize = new Size2(width, height);
-        //    var desiredSize = window.GetDesiredSize(context, availableSize);
-        //    var alignedRectangle = AlignRectangle(HorizontalAlignment.Centre, VerticalAlignment.Centre, desiredSize, rectangle);
-
-        //    window.Position = new Vector2(alignedRectangle.X, alignedRectangle.Y);
-        //    window.Size = alignedRectangle.Size;
-        //    window.Layout(context, window.BoundingRectangle);
-        //}
 
         public static Rectangle AlignRectangle(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, Size size, Rectangle targetRectangle)
         {

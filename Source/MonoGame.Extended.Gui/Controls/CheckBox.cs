@@ -1,27 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Gui.Controls
 {
-    public class Box : Control
-    {
-        public override IEnumerable<Control> Children { get; } = Enumerable.Empty<Control>();
-
-        public override Size GetContentSize(IGuiContext context)
-        {
-            return new Size(Width, Height);
-        }
-
-        public Color FillColor { get; set; } = Color.White;
-
-        public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
-        {
-            base.Draw(context, renderer, deltaSeconds);
-            renderer.FillRectangle(ContentRectangle, FillColor);
-        }
-    }
-
     public class CheckBox : CompositeControl
     {
         public CheckBox()
@@ -63,13 +43,13 @@ namespace MonoGame.Extended.Gui.Controls
 
         public override object Content
         {
-            get { return _contentLabel.Content; }
-            set { _contentLabel.Content = value; }
+            get => _contentLabel.Content;
+            set => _contentLabel.Content = value;
         }
 
         public bool IsChecked
         {
-            get { return _toggleButton.IsChecked; }
+            get => _toggleButton.IsChecked;
             set
             {
                 _toggleButton.IsChecked = value;
