@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
@@ -38,116 +39,116 @@ namespace Gui
             BitmapFont.UseKernings = false;
             Skin.CreateDefault(font);
 
-            var parser = new MarkupParser();
+            //var parser = new MarkupParser();
 
-            var mainScreen = new Screen
-            {
-                Content = parser.Parse("Features/MainWindow.mgeml", new object())
-            };
+            //var mainScreen = new Screen
+            //{
+            //    Content = parser.Parse("Features/MainWindow.mgeml", new object())
+            //};
 
-            var textBox = mainScreen.FindControl<TextBox>("TextBox");
-            var statusLabel = mainScreen.FindControl<Label>("StatusLabel");
+            //var textBox = mainScreen.FindControl<TextBox>("TextBox");
+            //var statusLabel = mainScreen.FindControl<Label>("StatusLabel");
 
             //textBox.CaretIndexChanged += (sender, args) =>
             //    statusLabel.Content = $"Ln {textBox.LineIndex + 1}, Ch {textBox.CaretIndex + 1}";
 
 
 
-            //var stackTest = new DemoViewModel("Stack Panels",
-            //        new StackPanel
-            //        {
-            //            Items =
-            //            {
-            //                new Button { Content = "Press Me", HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top },
-            //                new Button { Content = "Press Me", HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom  },
-            //                new Button { Content = "Press Me", HorizontalAlignment = HorizontalAlignment.Centre, VerticalAlignment = VerticalAlignment.Centre  },
-            //                new Button { Content = "Press Me", HorizontalAlignment = HorizontalAlignment.Stretch, VerticalAlignment = VerticalAlignment.Stretch },
-            //            }
-            //        });
+            var stackTest = new DemoViewModel("Stack Panels",
+                    new StackPanel
+                    {
+                        Items =
+                        {
+                            new Button { Content = "Press Me", HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top },
+                            new Button { Content = "Press Me", HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom  },
+                            new Button { Content = "Press Me", HorizontalAlignment = HorizontalAlignment.Centre, VerticalAlignment = VerticalAlignment.Centre  },
+                            new Button { Content = "Press Me", HorizontalAlignment = HorizontalAlignment.Stretch, VerticalAlignment = VerticalAlignment.Stretch },
+                        }
+                    });
 
-            //var dockTest = new DemoViewModel("Dock Panels",
-            //    new DockPanel
-            //    {
-            //        Items =
-            //        {
-            //            new Button { Content = "Dock.Top", AttachedProperties = { { DockPanel.DockProperty, Dock.Top } } },
-            //            new Button { Content = "Dock.Bottom", AttachedProperties = { { DockPanel.DockProperty, Dock.Bottom } } },
-            //            new Button { Content = "Dock.Left", AttachedProperties = { { DockPanel.DockProperty, Dock.Left } } },
-            //            new Button { Content = "Dock.Right", AttachedProperties = { { DockPanel.DockProperty, Dock.Right } } },
-            //            new Button { Content = "Fill" }
-            //        }
-            //    });
+            var dockTest = new DemoViewModel("Dock Panels",
+                new DockPanel
+                {
+                    Items =
+                    {
+                        new Button { Content = "Dock.Top", AttachedProperties = { { DockPanel.DockProperty, Dock.Top } } },
+                        new Button { Content = "Dock.Bottom", AttachedProperties = { { DockPanel.DockProperty, Dock.Bottom } } },
+                        new Button { Content = "Dock.Left", AttachedProperties = { { DockPanel.DockProperty, Dock.Left } } },
+                        new Button { Content = "Dock.Right", AttachedProperties = { { DockPanel.DockProperty, Dock.Right } } },
+                        new Button { Content = "Fill" }
+                    }
+                });
 
-            //var controlTest = new DemoViewModel("Basic Controls",
-            //    new StackPanel
-            //    {
-            //        Margin = 5,
-            //        Orientation = Orientation.Vertical,
-            //        Items =
-            //        {
-            //            new Label("Buttons") { Margin = 5 },
-            //            new StackPanel
-            //            {
-            //                Orientation = Orientation.Horizontal,
-            //                Spacing = 5,
-            //                Items =
-            //                {
-            //                    new Button { Content = "Enabled" },
-            //                    new Button { Content = "Disabled", IsEnabled = false },
-            //                    new ToggleButton { Content = "ToggleButton" }
-            //                }
-            //            },
+            var controlTest = new DemoViewModel("Basic Controls",
+                new StackPanel
+                {
+                    Margin = 5,
+                    Orientation = Orientation.Vertical,
+                    Items =
+                    {
+                        new Label("Buttons") { Margin = 5 },
+                        new StackPanel
+                        {
+                            Orientation = Orientation.Horizontal,
+                            Spacing = 5,
+                            Items =
+                            {
+                                new Button { Content = "Enabled" },
+                                new Button { Content = "Disabled", IsEnabled = false },
+                                new ToggleButton { Content = "ToggleButton" }
+                            }
+                        },
 
-            //            new Label("TextBox") { Margin = 5 },
-            //            new TextBox {Text = "TextBox" },
+                        new Label("TextBox") { Margin = 5 },
+                        new TextBox {Text = "TextBox" },
 
-            //            new Label("CheckBox") { Margin = 5 },
-            //            new CheckBox {Content = "Check me please!"},
+                        new Label("CheckBox") { Margin = 5 },
+                        new CheckBox {Content = "Check me please!"},
 
-            //            new Label("ListBox") { Margin = 5 },
-            //            new ListBox {Items = {"ListBoxItem1", "ListBoxItem2", "ListBoxItem3"}, SelectedIndex = 0},
+                        new Label("ListBox") { Margin = 5 },
+                        new ListBox {Items = {"ListBoxItem1", "ListBoxItem2", "ListBoxItem3"}, SelectedIndex = 0},
 
-            //            new Label("ProgressBar") { Margin = 5 },
-            //            new ProgressBar {Progress = 0.5f, Width = 100},
+                        new Label("ProgressBar") { Margin = 5 },
+                        new ProgressBar {Progress = 0.5f, Width = 100},
 
-            //            new Label("ComboBox") { Margin = 5 },
-            //            new ComboBox {Items = {"ComboBoxItemA", "ComboBoxItemB", "ComboBoxItemC"}, SelectedIndex = 0, HorizontalAlignment = HorizontalAlignment.Left}
-            //        }
-            //    });
+                        new Label("ComboBox") { Margin = 5 },
+                        new ComboBox {Items = {"ComboBoxItemA", "ComboBoxItemB", "ComboBoxItemC"}, SelectedIndex = 0, HorizontalAlignment = HorizontalAlignment.Left}
+                    }
+                });
 
-            //var demoScreen = new Screen
-            //{
-            //    Content = new DockPanel
-            //    {
-            //        LastChildFill = true,
-            //        Items =
-            //        {
-            //            new ListBox
-            //            {
-            //                Name = "DemoList",
-            //                AttachedProperties = { { DockPanel.DockProperty, Dock.Left} },
-            //                ItemPadding = new Thickness(5),
-            //                VerticalAlignment = VerticalAlignment.Stretch,
-            //                HorizontalAlignment = HorizontalAlignment.Left,
-            //                SelectedIndex = 0,
-            //                Items = { controlTest, stackTest, dockTest }
-            //            },
-            //            new ContentControl
-            //            {
-            //                Name = "Content",
-            //                BackgroundColor = new Color(30, 30, 30)
-            //            }
-            //        }
-            //    }
-            //};
+            var demoScreen = new Screen
+            {
+                Content = new DockPanel
+                {
+                    LastChildFill = true,
+                    Items =
+                    {
+                        new ListBox
+                        {
+                            Name = "DemoList",
+                            AttachedProperties = { { DockPanel.DockProperty, Dock.Left} },
+                            ItemPadding = new Thickness(5),
+                            VerticalAlignment = VerticalAlignment.Stretch,
+                            HorizontalAlignment = HorizontalAlignment.Left,
+                            SelectedIndex = 0,
+                            Items = { controlTest, stackTest, dockTest }
+                        },
+                        new ContentControl
+                        {
+                            Name = "Content",
+                            BackgroundColor = new Color(30, 30, 30)
+                        }
+                    }
+                }
+            };
 
-            _guiSystem = new GuiSystem(viewportAdapter, guiRenderer) { ActiveScreen = mainScreen };
+            _guiSystem = new GuiSystem(viewportAdapter, guiRenderer) { ActiveScreen = demoScreen };
 
-            //var demoList = demoScreen.FindControl<ListBox>("DemoList");
-            //var demoContent = demoScreen.FindControl<ContentControl>("Content");
+            var demoList = demoScreen.FindControl<ListBox>("DemoList");
+            var demoContent = demoScreen.FindControl<ContentControl>("Content");
 
-            //demoList.SelectedIndexChanged += (sender, args) => demoContent.Content = (demoList.SelectedItem as DemoViewModel)?.Content;
-            //demoContent.Content = (demoList.SelectedItem as DemoViewModel)?.Content;
+            demoList.SelectedIndexChanged += (sender, args) => demoContent.Content = (demoList.SelectedItem as DemoViewModel)?.Content;
+            demoContent.Content = (demoList.SelectedItem as DemoViewModel)?.Content;
         }
 
         protected override void Update(GameTime gameTime)
