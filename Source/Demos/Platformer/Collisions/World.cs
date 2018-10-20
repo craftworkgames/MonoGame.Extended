@@ -61,7 +61,21 @@ namespace Platformer.Collisions
                 }
             }
 
-            // TODO: Dynamic bodies colliding with dynamic bodies.
+            foreach (var otherDynamicBody in _dynamicBodies)
+            {
+                if (dynamicBody != otherDynamicBody) //TODO: Equality should be implemented better than this
+                {
+                    var vector = otherDynamicBody.Position - dynamicBody.Position;
+
+                    if (CollisionTester.AabbAabb(dynamicBody.BoundingBox, otherDynamicBody.BoundingBox, vector, out var manifold))
+                    {
+                        //Invert how the manifold is applied from how this is done with static bodyies. 
+                        //This will create the effect that the dynamic body in motion is pushing the other dynamic body.
+                        otherDynamicBody.Position += manifold.Normal * manifold.Penetration; 
+                        otherDynamicBody.Velocity = otherDynamicBody.Velocity * new Vector2(System.Math.Abs(manifold.Normal.Y), System.Math.Abs(manifold.Normal.X));
+                    }
+                }
+            }
         }
     }
 }
