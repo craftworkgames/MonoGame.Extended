@@ -80,5 +80,11 @@ namespace MonoGame.Extended.TextureAtlases
             patchCache[BottomMiddle] = new Rectangle(leftX, bottomY, middleWidth, BottomPadding);
             patchCache[BottomRight] = new Rectangle(rightX, bottomY, RightPadding, BottomPadding);
         }
+
+        public override void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
+        {
+            spriteBatch.Draw(this, destinationRectangle, color, clippingRectangle);
+        }
+
     }
 }

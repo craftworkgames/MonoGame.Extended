@@ -42,11 +42,24 @@ namespace MonoGame.Extended.Gui.Controls
         {
             if (_content is Control control && _contentChanged)
             {
-                control.Parent = this;
-                control.ActualSize = ContentRectangle.Size;
-                control.Position = new Point(Padding.Left, Padding.Top);
-                control.InvalidateMeasure();
-                _contentChanged = false;
+                if (_contentChanged)
+                {
+                    control.Parent = this;
+                    control.ActualSize = ContentRectangle.Size;
+                    control.Position = new Point(Padding.Left, Padding.Top);
+                    if (Parent != null)
+                        control.Position += this.Position;
+                    control.InvalidateMeasure();
+                    _contentChanged = false;
+                }
+            }
+            else
+            {
+                if (_contentChanged && this.ActualSize.IsEmpty)
+                {
+                    this.ActualSize = CalculateActualSize(context);
+                    _contentChanged = false;
+                }
             }
         }
 
@@ -54,18 +67,22 @@ namespace MonoGame.Extended.Gui.Controls
         {
             base.Draw(context, renderer, deltaSeconds);
 
-            if (Content is Control control)
-            {
-                control.Draw(context, renderer, deltaSeconds);
-            }
-            else
-            {
-                var text = Content?.ToString();
-                var textInfo = GetTextInfo(context, text, ContentRectangle, HorizontalTextAlignment, VerticalTextAlignment);
+            var control = Content as Control;
 
-                if (!string.IsNullOrWhiteSpace(textInfo.Text))
-                    renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, textInfo.ClippingRectangle);
-            }
+            if (control != null)
+                control.Draw(context, renderer, deltaSeconds);
+            else
+                DrawText(context, renderer, deltaSeconds);
+        }
+
+        public virtual void DrawText(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        {
+            var text = Content?.ToString();
+            var textInfo = GetTextInfo(context, text, ContentRectangle, HorizontalTextAlignment, VerticalTextAlignment);
+            var rect = new Rectangle(ClippingRectangle.Location, ClippingRectangle.Size);
+            rect.Inflate(Margin.Width, Margin.Height);
+            if (!string.IsNullOrWhiteSpace(textInfo.Text))
+                renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, textInfo.Scale, rect);
         }
 
         public override Size GetContentSize(IGuiContext context)
@@ -75,7 +92,8 @@ namespace MonoGame.Extended.Gui.Controls
 
             var text = Content?.ToString();
             var font = Font ?? context.DefaultFont;
-            return (Size)font.MeasureString(text ?? string.Empty);
+            return (Size)font.MeasureString(text ?? string.Empty, TextScale);
+
         }
     }
 

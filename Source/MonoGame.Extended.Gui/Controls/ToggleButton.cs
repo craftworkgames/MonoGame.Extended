@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Gui.Controls
             get { return _isChecked; }
             set
             {
-                if (_isChecked != value)
+                if (_isChecked != value && IsEnabled)
                 {
                     _isChecked = value;
                     CheckedStyle?.ApplyIf(this, _isChecked);

@@ -43,6 +43,8 @@ namespace MonoGame.Extended.BitmapFonts
                 regions[r] = new BitmapFontRegion(textureRegion, character, xOffset, yOffset, xAdvance);
             }
 
+            // Remove any duplicates
+            regions = regions.GroupBy(x => x.Character).Select(x => x.First()).ToArray();
             var characterMap = regions.ToDictionary(r => r.Character);
             var kerningsCount = reader.ReadInt32();
 

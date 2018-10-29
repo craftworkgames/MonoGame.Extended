@@ -8,11 +8,17 @@ namespace MonoGame.Extended.Gui.Controls
 {
     public class ComboBox : SelectorControl
     {
+        private bool _isOpen;
+
         public ComboBox()
         {
         }
-        
-        public bool IsOpen { get; set; }
+
+        public bool IsOpen
+        {
+            get { return _isOpen; }
+            set { _isOpen = value; SetTopMost(_isOpen); }
+        }
         public TextureRegion2D DropDownRegion { get; set; }
         public Color DropDownColor { get; set; } = Color.White;
 
@@ -83,7 +89,7 @@ namespace MonoGame.Extended.Gui.Controls
             var selectedTextInfo = GetItemTextInfo(context, ContentRectangle, SelectedItem);
 
             if (!string.IsNullOrWhiteSpace(selectedTextInfo.Text))
-                renderer.DrawText(selectedTextInfo.Font, selectedTextInfo.Text, selectedTextInfo.Position + TextOffset, selectedTextInfo.Color, selectedTextInfo.ClippingRectangle);
+                renderer.DrawText(selectedTextInfo.Font, selectedTextInfo.Text, selectedTextInfo.Position + TextOffset, selectedTextInfo.Color,selectedTextInfo.Scale, selectedTextInfo.ClippingRectangle);
         }
 
         private Rectangle GetDropDownRectangle(IGuiContext context)

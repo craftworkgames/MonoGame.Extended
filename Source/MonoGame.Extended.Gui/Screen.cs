@@ -1,23 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Serialization;
+using MonoGame.Extended.Input.InputListeners;
 using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui
 {
-    public class Screen //: Element<GuiSystem>, IDisposable
+    public class Screen : Element<GuiSystem>, IDisposable
     {
+        public event EventHandler<KeyboardEventArgs> KeyPressed;
+        public event EventHandler<PointerEventArgs> PointerDown;
+        public event EventHandler<PointerEventArgs> PointerUp;
+        public event EventHandler<PointerEventArgs> PointerMoved;
+        public event EventHandler<PointerEventArgs> PointerDrag;
+        public event EventHandler<EventArgs> VisibleChanged;
+
         public Screen()
         {
-            //Windows = new WindowCollection(this) { ItemAdded = w => _isLayoutRequired = true };
-        }
 
-        public virtual void Dispose()
-        {
         }
 
         private Control _content;
@@ -35,31 +40,35 @@ namespace MonoGame.Extended.Gui
             }
         }
 
-        //[JsonIgnore]
-        //public WindowCollection Windows { get; }
-
-        public float Width { get; private set; }
-        public float Height { get; private set; }
-        public Size2 Size => new Size2(Width, Height);
-        public bool IsVisible { get; set; } = true;
+        public new float Width { get; private set; }
+        public new float Height { get; private set; }
+        public new Size2 Size => new Size2(Width, Height);
+        public bool IsVisible { get; set; } = false;
 
         private bool _isLayoutRequired;
         [JsonIgnore]
         public bool IsLayoutRequired => _isLayoutRequired || Content.IsLayoutRequired;
+        private List<Control> _topControls;
+        private bool _drawTop;
 
-        public virtual void Update(GameTime gameTime)
+        public virtual void Show()
         {
-            
-        }
 
-        public void Show()
-        {
+            if (Parent != null)
+                Parent.ActiveScreen = this;
             IsVisible = true;
+            VisibleChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public void Hide()
+        public virtual void Hide()
         {
             IsVisible = false;
+            if (Parent != null)
+            {
+                Parent.ActiveScreen = null;
+                Parent.FocusedControl = null;
+            }
+            VisibleChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public T FindControl<T>(string name)
@@ -74,7 +83,7 @@ namespace MonoGame.Extended.Gui
             if (rootControl.Name == name)
                 return rootControl as T;
 
-            foreach (var childControl in rootControl.Children)
+            foreach (var childControl in rootControl.Children.ToList())
             {
                 var control = FindControl<T>(childControl, name);
 
@@ -92,18 +101,104 @@ namespace MonoGame.Extended.Gui
 
             LayoutHelper.PlaceControl(context, Content, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
 
-            //foreach (var window in Windows)
-            //    LayoutHelper.PlaceWindow(context, window, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
-
             _isLayoutRequired = false;
             Content.IsLayoutRequired = false;
         }
 
-        //public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
-        //{
-        //    renderer.DrawRectangle(BoundingRectangle, Color.Green);
-        //}
+        public virtual void Initialize(IGuiContext context) { }
 
+        public virtual void Update(GameTime gameTime)
+        {
+            var deltaSeconds = gameTime.GetElapsedSeconds();
+            UpdateControl(Content, deltaSeconds);
+        }
+
+        public virtual void Draw(GameTime gameTime)
+        {
+            var deltaSeconds = gameTime.GetElapsedSeconds();
+            _topControls = new List<Control>();
+            DrawControl(Content, deltaSeconds);
+            _drawTop = true;
+            foreach (Control control in _topControls.ToArray())
+                DrawControl(control, deltaSeconds);
+            _drawTop = false;
+
+        }
+
+        private void UpdateControl(Control control, float deltaSeconds)
+        {
+            if (Parent == null)
+                return;
+
+            if (control.IsVisible)
+            {
+                control.Update(Parent, deltaSeconds);
+
+                foreach (var childControl in control.Children.ToList())
+                    UpdateControl(childControl, deltaSeconds);
+            }
+        }
+
+        private void DrawControl(Control control, float deltaSeconds, bool topMost = false)
+        {
+            if (Parent == null)
+                return;
+
+            if (control.IsVisible)
+            {
+                control.Draw(Parent, Parent.Renderer, deltaSeconds);
+                if (control.TopMost && !_drawTop)
+                    _topControls.Add(control);
+                else
+                    foreach (var childControl in control.Children.ToList())
+                        DrawControl(childControl, deltaSeconds);
+            }
+        }
+
+        public override void Draw(IGuiContext context, IGuiRenderer renderer, float deltaSeconds)
+        {
+
+        }
+
+        public virtual void OnPointerDown(PointerEventArgs args)
+        {
+            this.PointerDown?.Invoke(this, args);
+        }
+
+        public virtual void OnKeyPressed(KeyboardEventArgs args)
+        {
+            this.KeyPressed?.Invoke(this, args);
+        }
+
+        public virtual void OnPointerUp(PointerEventArgs args)
+        {
+            this.PointerUp?.Invoke(this, args);
+        }
+
+        public virtual void OnPointerMoved(PointerEventArgs args)
+        {
+            this.PointerMoved?.Invoke(this, args);
+        }
+
+        public virtual void OnPointerDrag(PointerEventArgs args)
+        {
+            this.PointerDrag?.Invoke(this, args);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (isDisposing)
+            {
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        #region File Loading
         public static Screen FromStream(ContentManager contentManager, Stream stream, params Type[] customControlTypes)
         {
             return FromStream<Screen>(contentManager, stream, customControlTypes);
@@ -146,5 +241,9 @@ namespace MonoGame.Extended.Gui
                 return FromStream<TScreen>(contentManager, stream, customControlTypes);
             }
         }
+
+
+        #endregion
+
     }
 }

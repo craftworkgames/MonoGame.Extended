@@ -22,6 +22,9 @@ namespace MonoGame.Extended.Entities
     {
         private readonly Action<int> _onCompositionChanged;
 
+        public EventHandler<int> EntityAdded;
+        public EventHandler<int> EntityRemoved;
+
         public ComponentMapper(int id, Action<int> onCompositionChanged)
             : base(id, typeof(T))
         {
@@ -35,6 +38,7 @@ namespace MonoGame.Extended.Entities
         {
             Components[entityId] = component;
             _onCompositionChanged(entityId);
+            EntityAdded?.Invoke(this, entityId);
         }
 
         public T Get(Entity entity)
@@ -57,6 +61,7 @@ namespace MonoGame.Extended.Entities
 
         public override void Delete(int entityId)
         {
+            EntityRemoved?.Invoke(this, entityId);
             Components[entityId] = null;
             _onCompositionChanged(entityId);
         }

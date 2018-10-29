@@ -50,5 +50,10 @@ namespace MonoGame.Extended.TextureAtlases
         {
             return $"{Name ?? string.Empty} {Bounds}";
         }
+
+        public virtual void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
+        {
+            TextureAtlasExtensions.Draw(spriteBatch, Texture, Bounds, destinationRectangle, color, clippingRectangle);
+        }
     }
 }

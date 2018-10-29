@@ -19,10 +19,24 @@ namespace MonoGame.Extended.BitmapFonts
             LineHeight = lineHeight;
         }
 
+        public BitmapFont(BitmapFont font, string name, int lineHeight)
+        {
+            foreach (var region in font.GetBitmapFontRegion())
+                _characterMap.Add(region.Character, region);
+
+            Name = name;
+            LineHeight = lineHeight;
+        }
+
         public string Name { get; }
         public int LineHeight { get; }
         public int LetterSpacing { get; set; } = 0;
         public static bool UseKernings { get; set; } = true;
+
+        public IEnumerable<BitmapFontRegion> GetBitmapFontRegion()
+        {
+            return _characterMap.Values;
+        }
 
         public BitmapFontRegion GetCharacterRegion(int character)
         {
@@ -30,12 +44,12 @@ namespace MonoGame.Extended.BitmapFonts
             return _characterMap.TryGetValue(character, out region) ? region : null;
         }
 
-        public Size2 MeasureString(string text)
+        public Size2 MeasureString(string text, Vector2 scale)
         {
             if (string.IsNullOrEmpty(text))
                 return Size2.Empty;
 
-            var stringRectangle = GetStringRectangle(text);
+            var stringRectangle = GetStringRectangle(text,Vector2.Zero, scale);
             return new Size2(stringRectangle.Width, stringRectangle.Height);
         }
 
@@ -48,12 +62,12 @@ namespace MonoGame.Extended.BitmapFonts
             return new Size2(stringRectangle.Width, stringRectangle.Height);
         }
 
-        public RectangleF GetStringRectangle(string text)
+        public RectangleF GetStringRectangle(string text, Vector2 scale)
         {
-            return GetStringRectangle(text, Point2.Zero);
+            return GetStringRectangle(text, Point2.Zero, scale);
         }
 
-        public RectangleF GetStringRectangle(string text, Point2 position)
+        public RectangleF GetStringRectangle(string text, Point2 position, Vector2 scale)
         {
             var glyphs = GetGlyphs(text, position);
             var rectangle = new RectangleF(position.X, position.Y, 0, LineHeight);
@@ -72,7 +86,7 @@ namespace MonoGame.Extended.BitmapFonts
                     rectangle.Height += LineHeight;
             }
 
-            return rectangle;
+            return new RectangleF(rectangle.Position, rectangle.Size * scale);
         }
 
         public RectangleF GetStringRectangle(StringBuilder text, Point2? position = null)
@@ -190,7 +204,7 @@ namespace MonoGame.Extended.BitmapFonts
                 if (UseKernings && _previousGlyph?.FontRegion != null)
                 {
                     if (_previousGlyph.Value.FontRegion.Kernings.TryGetValue(character, out var amount))
-                    { 
+                    {
                         _positionDelta.X += amount;
                         _currentGlyph.Position.X += amount;
                     }
@@ -257,7 +271,7 @@ namespace MonoGame.Extended.BitmapFonts
             private readonly BitmapFont _font;
             private readonly StringBuilder _text;
             private int _index;
-            private readonly Point2 _position;
+            private Point2 _position;
             private Vector2 _positionDelta;
             private BitmapFontGlyph _currentGlyph;
             private BitmapFontGlyph? _previousGlyph;
@@ -308,7 +322,7 @@ namespace MonoGame.Extended.BitmapFonts
                 {
                     int amount;
                     if (_previousGlyph.Value.FontRegion.Kernings.TryGetValue(character, out amount))
-                    { 
+                    {
                         _positionDelta.X += amount;
                         _currentGlyph.Position.X += amount;
                     }

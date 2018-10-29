@@ -43,6 +43,9 @@ namespace MonoGame.Extended.Gui
             }
         }
 
+        public TextureRegion2D Image { get; set; }
+        public Size2 ImageSize { get; set; }
+
         public List<Binding> Bindings { get; } = new List<Binding>();
 
         protected void OnPropertyChanged(string propertyName)
@@ -113,12 +116,12 @@ namespace MonoGame.Extended.Gui
         {
             get
             {
-                var offset = Point.Zero;
+                //var offset = Point.Zero;
 
-                if (Parent != null)
-                    offset = Parent.BoundingRectangle.Location;
+                //if (Parent != null)
+                //    offset = Parent.BoundingRectangle.Location;
 
-                return new Rectangle(offset + Position - ActualSize * Origin, ActualSize);
+                return new Rectangle(Position - ActualSize * Origin, ActualSize);
             }
         }
     }

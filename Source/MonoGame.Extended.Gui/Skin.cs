@@ -96,11 +96,10 @@ namespace MonoGame.Extended.Gui
             }
         }
 
-
         public T Create<T>(string template, Action<T> onCreate)
             where T : Control, new()
         {
-            var control = new T();
+            var control = Activator.CreateInstance(typeof(T)) as T;
             GetStyle(template).Apply(control);
             onCreate(control);
             return control;
@@ -133,7 +132,7 @@ namespace MonoGame.Extended.Gui
                         {nameof(Control.Padding), new Thickness(5)},
                         {nameof(Control.DisabledStyle), new ControlStyle(typeof(Control)) {
                                 { nameof(Control.TextColor), new Color(78,78,80) }
-                            } 
+                            }
                         }
                     },
                     new ControlStyle(typeof(LayoutControl)) {

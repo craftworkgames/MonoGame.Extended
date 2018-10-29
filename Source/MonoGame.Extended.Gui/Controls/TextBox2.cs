@@ -68,7 +68,7 @@ namespace MonoGame.Extended.Gui.Controls
         public override Size GetContentSize(IGuiContext context)
         {
             var font = Font ?? context.DefaultFont;
-            var stringSize = (Size)font.MeasureString(Text ?? string.Empty);
+            var stringSize = (Size)font.MeasureString(Text ?? string.Empty, TextScale);
             return new Size(stringSize.Width, stringSize.Height < font.LineHeight ? font.LineHeight : stringSize.Height);
         }
 
@@ -283,7 +283,7 @@ namespace MonoGame.Extended.Gui.Controls
             var textInfo = GetTextInfo(context, text, ContentRectangle, HorizontalTextAlignment, VerticalTextAlignment);
 
             if (!string.IsNullOrWhiteSpace(textInfo.Text))
-                renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, textInfo.ClippingRectangle);
+                renderer.DrawText(textInfo.Font, textInfo.Text, textInfo.Position + TextOffset, textInfo.Color, TextScale, textInfo.ClippingRectangle);
 
             if (IsFocused)
             {

@@ -6,6 +6,7 @@ namespace MonoGame.Extended.Gui.Controls
     {
         public Canvas()
         {
+            BackgroundColor = Color.Transparent;
         }
         
         protected override void Layout(IGuiContext context, Rectangle rectangle)
@@ -13,7 +14,7 @@ namespace MonoGame.Extended.Gui.Controls
             foreach (var control in Items)
             {
                 var actualSize = control.CalculateActualSize(context);
-                PlaceControl(context, control, control.Position.X, control.Position.Y, actualSize.Width, actualSize.Height);
+                PlaceControl(context, control, rectangle.X + control.Position.X, rectangle.Y+ control.Position.Y, actualSize.Width, actualSize.Height);
             }
         }
 

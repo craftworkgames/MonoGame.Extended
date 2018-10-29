@@ -10,6 +10,13 @@ namespace MonoGame.Extended.Gui.Controls
 
     public class DockPanel : LayoutControl
     {
+
+        public DockPanel()
+        {
+            HorizontalAlignment = HorizontalAlignment.Stretch;
+            VerticalAlignment = VerticalAlignment.Stretch;
+        }
+
         public override Size GetContentSize(IGuiContext context)
         {
             var size = new Size();
@@ -17,6 +24,8 @@ namespace MonoGame.Extended.Gui.Controls
             for (var i = 0; i < Items.Count; i++)
             {
                 var control = Items[i];
+                control.HorizontalAlignment = HorizontalAlignment.Stretch;
+                control.VerticalAlignment = VerticalAlignment.Stretch;
                 var actualSize = control.CalculateActualSize(context);
 
                 if (LastChildFill && i == Items.Count - 1)

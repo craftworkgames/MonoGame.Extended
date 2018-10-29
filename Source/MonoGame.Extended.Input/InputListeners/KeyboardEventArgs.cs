@@ -29,6 +29,9 @@ namespace MonoGame.Extended.Input.InputListeners
         private static char? ToChar(Keys key, KeyboardModifiers modifiers = KeyboardModifiers.None)
         {
             var isShiftDown = (modifiers & KeyboardModifiers.Shift) == KeyboardModifiers.Shift;
+            var isAltGrDown = false;
+            if (!isShiftDown)
+                isAltGrDown = (modifiers & KeyboardModifiers.Control) == KeyboardModifiers.Alt || (modifiers & KeyboardModifiers.Control) == KeyboardModifiers.Control;
 
             if (key == Keys.A) return isShiftDown ? 'A' : 'a';
             if (key == Keys.B) return isShiftDown ? 'B' : 'b';
@@ -112,6 +115,11 @@ namespace MonoGame.Extended.Input.InputListeners
             if ((key == Keys.OemTilde) && !isShiftDown) return '`';
             if ((key == Keys.OemTilde) && isShiftDown) return '~';
             if (key == Keys.Subtract) return '-';
+
+            //international keyboards
+            if ((key == Keys.V) && isAltGrDown) return '@';
+            if ((key == Keys.D2) && isAltGrDown) return '@';
+            if ((key == Keys.Q) && isAltGrDown) return '@';
 
             return null;
         }

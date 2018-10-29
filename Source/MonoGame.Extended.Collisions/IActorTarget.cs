@@ -9,7 +9,9 @@ namespace MonoGame.Extended.Collisions
 
     public interface IActorTarget : IMovable, ICollidable
     {
-        Vector2 Velocity { get; set; }
+        string Handle { get; }
+        Vector2 Velocity { get; }
+        int Tile { get; set; }
         void OnCollision(CollisionInfo collisionInfo);
     }
 }

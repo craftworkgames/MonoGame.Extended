@@ -22,6 +22,7 @@ namespace MonoGame.Extended.Input.InputListeners
         private MouseEventArgs _mouseDownArgs;
         private MouseEventArgs _previousClickArgs;
         private MouseState _previousState;
+        private MouseButton _mouseButton;
 
         public MouseListener()
             : this(new MouseListenerSettings())
@@ -71,6 +72,7 @@ namespace MonoGame.Extended.Input.InputListeners
 
                 MouseDown?.Invoke(this, args);
                 _mouseDownArgs = args;
+                _mouseButton = _mouseDownArgs.Button;
 
                 if (_previousClickArgs != null)
                 {
@@ -97,6 +99,7 @@ namespace MonoGame.Extended.Input.InputListeners
 
                 if (_mouseDownArgs.Button == args.Button)
                 {
+                    _mouseButton = MouseButton.None;
                     var clickMovement = DistanceBetween(args.Position, _mouseDownArgs.Position);
 
                     // If the mouse hasn't moved much between mouse down and mouse up
@@ -166,7 +169,7 @@ namespace MonoGame.Extended.Input.InputListeners
             if (HasMouseMoved)
             {
                 MouseMoved?.Invoke(this,
-                    new MouseEventArgs(ViewportAdapter, gameTime.TotalGameTime, _previousState, _currentState));
+                    new MouseEventArgs(ViewportAdapter, gameTime.TotalGameTime, _previousState, _currentState, _mouseButton));
 
                 CheckMouseDragged(s => s.LeftButton, MouseButton.Left);
                 CheckMouseDragged(s => s.MiddleButton, MouseButton.Middle);

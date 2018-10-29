@@ -144,7 +144,7 @@ namespace MonoGame.Extended.Gui.Controls
         {
             var text = GetItemName(item);
             var font = Font ?? context.DefaultFont;
-            var textSize = (Size)font.MeasureString(text ?? string.Empty);
+            var textSize = (Size)font.MeasureString(text ?? string.Empty, TextScale);
             var itemWidth = textSize.Width + ItemPadding.Width;
             var itemHeight = textSize.Height + ItemPadding.Height;
             return new Size(itemWidth, itemHeight);
@@ -166,7 +166,7 @@ namespace MonoGame.Extended.Gui.Controls
                 if (SelectedIndex == i)
                     renderer.FillRectangle(itemRectangle, SelectedItemColor, listRectangle);
 
-                renderer.DrawText(itemTextInfo.Font, itemTextInfo.Text, itemTextInfo.Position + TextOffset, textColor, itemTextInfo.ClippingRectangle);
+                renderer.DrawText(itemTextInfo.Font, itemTextInfo.Text, itemTextInfo.Position + TextOffset, textColor, TextScale, itemTextInfo.ClippingRectangle);
             }
         }
     }

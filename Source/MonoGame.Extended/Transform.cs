@@ -322,5 +322,10 @@ namespace MonoGame.Extended
         {
             return $"Position: {Position}, Rotation: {Rotation}, Scale: {Scale}";
         }
+
+        public Vector2 GetPosition()
+        {
+            return Position;
+        }
     }
 }

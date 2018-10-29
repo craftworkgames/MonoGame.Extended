@@ -32,9 +32,25 @@ namespace MonoGame.Extended.Gui
 
         public void Add(TChild item)
         {
-            item.Parent = _parent;
-            _list.Add(item);
-            ItemAdded?.Invoke(item);
+            if (item != null)
+            {
+                item.Parent = _parent;
+                _list.Add(item);
+                OnItemAdded(item);
+            }
+        }
+
+        public void Add(TChild[] items)
+        {
+            foreach (TChild item in items)
+            {
+                if (item != null)
+                {
+                    item.Parent = _parent;
+                    _list.Add(item);
+                    OnItemAdded(item);
+                }
+            }
         }
 
         public void Clear()
@@ -42,7 +58,7 @@ namespace MonoGame.Extended.Gui
             foreach (var child in _list)
             {
                 child.Parent = null;
-                ItemRemoved?.Invoke(child);
+                OnItemRemoved(child);
             }
 
             _list.Clear();
@@ -61,8 +77,9 @@ namespace MonoGame.Extended.Gui
         public bool Remove(TChild item)
         {
             item.Parent = null;
-            ItemRemoved?.Invoke(item);
-            return _list.Remove(item);
+            var result = _list.Remove(item);
+            OnItemRemoved(item);
+            return result;
         }
 
         public int Count => _list.Count;
@@ -76,9 +93,12 @@ namespace MonoGame.Extended.Gui
 
         public void Insert(int index, TChild item)
         {
-            item.Parent = _parent;
-            _list.Insert(index, item);
-            ItemAdded?.Invoke(item);
+            if (item != null)
+            {
+                item.Parent = _parent;
+                _list.Insert(index, item);
+                OnItemAdded(item);
+            }
         }
 
         public void RemoveAt(int index)
@@ -86,13 +106,23 @@ namespace MonoGame.Extended.Gui
             var child = _list[index];
             child.Parent = null;
             _list.RemoveAt(index);
-            ItemRemoved?.Invoke(child);
+            OnItemRemoved(child);
         }
 
         public TChild this[int index]
         {
             get { return _list[index]; }
             set { _list[index] = value; }
+        }
+
+        public virtual void OnItemAdded(TChild child)
+        {
+            ItemAdded?.Invoke(child);
+        }
+
+        public virtual void OnItemRemoved(TChild child)
+        {
+            ItemRemoved?.Invoke(child);
         }
     }
 }

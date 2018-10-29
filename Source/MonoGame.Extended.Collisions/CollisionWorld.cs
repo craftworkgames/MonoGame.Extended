@@ -4,51 +4,33 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Collisions
 {
-    public class CollisionWorld : IDisposable, IUpdate
+    public class CollisionWorld : IDisposable
     {
-        private readonly List<CollisionActor> _actors;
 
-        private readonly Vector2 _gravity;
         private CollisionGrid _grid;
+        private Size2 _size;
 
-        public CollisionWorld(Vector2 gravity)
+        public CollisionWorld()
         {
-            _gravity = gravity;
-            _actors = new List<CollisionActor>();
         }
 
         public void Dispose()
         {
         }
 
-        public void Update(GameTime gameTime)
+        public int Collision(Vector2 position)
         {
-            var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
-
-            foreach (var actor in _actors)
+            if (_grid != null)
             {
-                actor.Velocity += _gravity*deltaTime;
-                actor.Position += actor.Velocity*deltaTime;
+                var playerGridPosition = new Point((int)position.X / _grid.CellWidth, (int)position.Y / _grid.CellHeight);
 
-                if (_grid != null)
-                    foreach (var collidable in _grid.GetCollidables(actor.BoundingBox))
-                    {
-                        var intersection = RectangleF.Intersection(collidable.BoundingBox, actor.BoundingBox);
+                if (!IsInGrid(playerGridPosition.X, playerGridPosition.Y))
+                    return 0;
 
-                        if (intersection.IsEmpty)
-                            continue;
-
-                        var info = GetCollisionInfo(actor, collidable, intersection);
-                        actor.OnCollision(info);
-                    }
+                var collidable = _grid.GetCellAtIndex(playerGridPosition.X, playerGridPosition.Y);
+                return (int)collidable.Flag;
             }
-        }
-
-        public CollisionActor CreateActor(IActorTarget target)
-        {
-            var actor = new CollisionActor(target);
-            _actors.Add(actor);
-            return actor;
+            return 0;
         }
 
         public CollisionGrid CreateGrid(int[] data, int columns, int rows, int cellWidth, int cellHeight)
@@ -57,6 +39,7 @@ namespace MonoGame.Extended.Collisions
                 throw new InvalidOperationException("Only one collision grid can be created per world");
 
             _grid = new CollisionGrid(data, columns, rows, cellWidth, cellHeight);
+            _size = new Size2(columns, rows);
             return _grid;
         }
 
@@ -83,6 +66,22 @@ namespace MonoGame.Extended.Collisions
             }
 
             return info;
+        }
+
+        private bool IsInGrid(int x, int y)
+        {
+            return x >= 0 && x <= _size.Width && y >= 0 && y <= _size.Height;
+        }
+
+        /// <summary>
+        /// Returns the tile flag at the posiiton
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public int GetTileData(Vector2 position)
+        {
+            var cell = _grid.GetCellAtPosition(new Vector3(position, 0));
+            return cell.Data;
         }
     }
 }

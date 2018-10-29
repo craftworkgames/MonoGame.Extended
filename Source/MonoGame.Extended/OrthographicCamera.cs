@@ -11,7 +11,7 @@ namespace MonoGame.Extended
 
     public class OrthographicCamera : Camera, IMovable, IRotatable
     {
-        private readonly ViewportAdapter _viewportAdapter;
+        private ViewportAdapter _viewportAdapter;
         private float _maximumZoom = float.MaxValue;
         private float _minimumZoom;
         private float _zoom;
@@ -27,7 +27,7 @@ namespace MonoGame.Extended
 
             Rotation = 0;
             Zoom = 1;
-            Origin = new Vector2(viewportAdapter.VirtualWidth/2f, viewportAdapter.VirtualHeight/2f);
+            Origin = new Vector2(viewportAdapter.VirtualWidth / 2f, viewportAdapter.VirtualHeight / 2f);
             Position = Vector2.Zero;
         }
 
@@ -89,6 +89,11 @@ namespace MonoGame.Extended
             }
         }
 
+        public ViewportAdapter ViewportAdapter
+        {
+            get { return _viewportAdapter; }
+        }
+
         public Vector2 Position { get; set; }
         public float Rotation { get; set; }
 
@@ -122,7 +127,7 @@ namespace MonoGame.Extended
 
         public void LookAt(Vector2 position)
         {
-            Position = position - new Vector2(_viewportAdapter.VirtualWidth/2f, _viewportAdapter.VirtualHeight/2f);
+            Position = position- new Vector2(_viewportAdapter.VirtualWidth / 2f, _viewportAdapter.VirtualHeight / 2f);
         }
 
         public Vector2 WorldToScreen(float x, float y)
@@ -150,16 +155,16 @@ namespace MonoGame.Extended
 
         public Matrix GetViewMatrix(Vector2 parallaxFactor)
         {
-            return GetVirtualViewMatrix(parallaxFactor)*_viewportAdapter.GetScaleMatrix();
+            return GetVirtualViewMatrix(parallaxFactor) * _viewportAdapter.GetScaleMatrix();
         }
 
         private Matrix GetVirtualViewMatrix(Vector2 parallaxFactor)
         {
             return
-                Matrix.CreateTranslation(new Vector3(-Position*parallaxFactor, 0.0f))*
-                Matrix.CreateTranslation(new Vector3(-Origin, 0.0f))*
-                Matrix.CreateRotationZ(Rotation)*
-                Matrix.CreateScale(Zoom, Zoom, 1)*
+                Matrix.CreateTranslation(new Vector3(-Position * parallaxFactor, 0.0f)) *
+                Matrix.CreateTranslation(new Vector3(-Origin, 0.0f)) *
+                Matrix.CreateRotationZ(Rotation) *
+                Matrix.CreateScale(Zoom, Zoom, 1) *
                 Matrix.CreateTranslation(new Vector3(Origin, 0.0f));
         }
 
@@ -209,6 +214,11 @@ namespace MonoGame.Extended
             var min = new Vector3(rectangle.X, rectangle.Y, 0.5f);
             var boundingBox = new BoundingBox(min, max);
             return GetBoundingFrustum().Contains(boundingBox);
+        }
+
+        public void ResetViewPortAdapter(ViewportAdapter viewportAdapter)
+        {
+            _viewportAdapter = viewportAdapter;
         }
     }
 }

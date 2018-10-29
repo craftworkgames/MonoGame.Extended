@@ -6,8 +6,8 @@ namespace MonoGame.Extended.Gui.Controls
     {
         protected LayoutControl()
         {
-            HorizontalAlignment = HorizontalAlignment.Stretch;
-            VerticalAlignment = VerticalAlignment.Stretch;
+            HorizontalAlignment = HorizontalAlignment.Centre;
+            VerticalAlignment = VerticalAlignment.Centre;
             BackgroundColor = Color.Transparent;
         }
 
@@ -25,7 +25,9 @@ namespace MonoGame.Extended.Gui.Controls
 
             if (!_isLayoutValid)
             {
-                Layout(context, new Rectangle(0, 0, ContentRectangle.Width, ContentRectangle.Height));
+                this.ActualSize = CalculateActualSize(context);
+                var rect = ContentRectangle;// LayoutHelper.AlignRectangle(this.HorizontalAlignment, this.VerticalAlignment, this.ActualSize, ContentRectangle);
+                Layout(context, rect);
                 _isLayoutValid = true;
             }
         }
