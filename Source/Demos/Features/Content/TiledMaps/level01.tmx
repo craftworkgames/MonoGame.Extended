@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="40" height="10" tilewidth="128" tileheight="128" infinite="0" backgroundcolor="#7d7d7d" nextobjectid="23">
+<map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="40" height="10" tilewidth="128" tileheight="128" infinite="0" backgroundcolor="#7d7d7d" nextobjectid="23">
  <properties>
   <property name="awesome" value="42"/>
  </properties>
@@ -9,6 +9,10 @@
    <objectgroup draworder="index">
     <object id="0" x="0" y="0" width="128" height="128"/>
    </objectgroup>
+   <animation>
+    <frame tileid="23" duration="100"/>
+    <frame tileid="24" duration="100"/>
+   </animation>
   </tile>
   <tile id="7">
    <properties>
