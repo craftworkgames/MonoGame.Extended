@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-
 namespace MonoGame.Extended.Gui.Controls
 {
     public class CheckBox : StackPanel
@@ -78,7 +77,7 @@ namespace MonoGame.Extended.Gui.Controls
         {
             base.OnPointerUp(context, args);
 
-            if (BoundingRectangle.Contains(args.Position) || _contentLabel.BoundingRectangle.Contains(args.Position) || _checkLabel.BoundingRectangle.Contains(args.Position))
+            if (BoundingRectangle.Contains(args.Position) ||_contentLabel.BoundingRectangle.Contains(args.Position)||_checkLabel.BoundingRectangle.Contains(args.Position))
             {
                 HoverStyle?.Revert(this);
 

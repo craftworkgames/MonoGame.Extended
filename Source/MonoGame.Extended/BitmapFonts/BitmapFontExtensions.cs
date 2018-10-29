@@ -152,5 +152,17 @@ namespace MonoGame.Extended.BitmapFonts
             DrawString(spriteBatch, font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: scale, effect: SpriteEffects.None,
                 layerDepth: 0, clippingRectangle: clippingRectangle);
         }
+
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position, Color color, Rectangle? clippingRectangle = null)
+        {
+            DrawString(spriteBatch, font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: Vector2.One, effect: SpriteEffects.None,
+                layerDepth: 0, clippingRectangle: clippingRectangle);
+        }
+
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, StringBuilder text, Vector2 position, Color color, Rectangle? clippingRectangle = null)
+        {
+            DrawString(spriteBatch, font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: Vector2.One, effect: SpriteEffects.None,
+                layerDepth: 0, clippingRectangle: clippingRectangle);
+        }
     }
 }

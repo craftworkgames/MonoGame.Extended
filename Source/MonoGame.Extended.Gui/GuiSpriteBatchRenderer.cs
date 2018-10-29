@@ -11,6 +11,7 @@ namespace MonoGame.Extended.Gui
         void Begin();
         void DrawRegion(TextureRegion2D textureRegion, Rectangle rectangle, Color color, Rectangle? clippingRectangle = null);
         void DrawRegion(TextureRegion2D textureRegion, Vector2 position, Color color, Rectangle? clippingRectangle = null);
+        void DrawText(BitmapFont font, string text, Vector2 position, Color color, Rectangle? clippingRectangle = null);
         void DrawText(BitmapFont font, string text, Vector2 position, Color color,Vector2 scale, Rectangle? clippingRectangle = null);
         void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f, Rectangle? clippingRectangle = null);
         void FillRectangle(Rectangle rectangle, Color color, Rectangle? clippingRectangle = null);
@@ -58,6 +59,11 @@ namespace MonoGame.Extended.Gui
         {
             if (textureRegion != null)
                 _spriteBatch.Draw(textureRegion, position, color, clippingRectangle);
+        }
+
+        public void DrawText(BitmapFont font, string text, Vector2 position, Color color, Rectangle? clippingRectangle = null)
+        {
+            _spriteBatch.DrawString(font, text, position, color, Vector2.One, clippingRectangle);
         }
 
         public void DrawText(BitmapFont font, string text, Vector2 position, Color color, Vector2 scale, Rectangle? clippingRectangle = null)
