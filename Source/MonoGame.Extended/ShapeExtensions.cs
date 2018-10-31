@@ -75,7 +75,7 @@ namespace MonoGame.Extended
             var length = Vector2.Distance(point1, point2);
             var angle = (float) Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
             var scale = new Vector2(length, thickness);
-            spriteBatch.Draw(texture, point1, color: color, rotation: angle, scale: scale);
+            spriteBatch.Draw(texture, point1, null, color, angle, Vector2.Zero, scale, SpriteEffects.None, 0);
         }
 
         /// <summary>
@@ -131,10 +131,10 @@ namespace MonoGame.Extended
             var horizontalScale = new Vector2(rectangle.Width, thickness);
             var verticalScale = new Vector2(thickness, rectangle.Height);
 
-            spriteBatch.Draw(texture, topLeft, scale: horizontalScale, color: color);
-            spriteBatch.Draw(texture, topLeft, scale: verticalScale, color: color);
-            spriteBatch.Draw(texture, topRight, scale: verticalScale, color: color);
-            spriteBatch.Draw(texture, bottomLeft, scale: horizontalScale, color: color);
+            spriteBatch.Draw(texture, topLeft, null, color, 0f, Vector2.Zero, horizontalScale, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, topLeft, null, color, 0f, Vector2.Zero, verticalScale, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, topRight, null, color, 0f, Vector2.Zero, verticalScale, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, bottomLeft, null, color, 0f, Vector2.Zero, horizontalScale, SpriteEffects.None, 0);
         }
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace MonoGame.Extended
         {
             var scale = Vector2.One*size;
             var offset = new Vector2(0.5f) - new Vector2(size*0.5f);
-            spriteBatch.Draw(GetTexture(spriteBatch), position + offset, color: color, scale: scale);
+            spriteBatch.Draw(GetTexture(spriteBatch), position + offset, null, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0);
         }
 
         /// <summary>

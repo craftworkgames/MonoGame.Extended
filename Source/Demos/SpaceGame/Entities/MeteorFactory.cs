@@ -77,7 +77,7 @@ namespace SpaceGame.Entities
             var rotationSpeed = _random.Next(-10, 10) * 0.1f;
             var spawnCircle = new CircleF(playerPosition, 630);
             var spawnAngle = MathHelper.ToRadians(_random.Next(0, 360));
-            var spawnPosition = spawnCircle.GetPointAlongEdge(spawnAngle);
+            var spawnPosition = spawnCircle.BoundaryPointAt(spawnAngle);
             var velocity = (playerPosition - spawnPosition).Rotate(MathHelper.ToRadians(_random.Next(-15, 15))) * _random.Next(3, 10) * 0.01f;
             var textureRegion = GetMeteorRegion(4);
             var meteor = new Meteor(textureRegion, spawnPosition, velocity, rotationSpeed, 3);
