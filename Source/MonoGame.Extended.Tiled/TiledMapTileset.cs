@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -22,7 +21,6 @@ namespace MonoGame.Extended.Tiled
 
         public string Name => Texture.Name;
         public Texture2D Texture { get; }
-        //public int FirstGlobalIdentifier { get; internal set; }
         public int TileWidth { get; }
         public int TileHeight { get; }
         public int Spacing { get; }
@@ -36,18 +34,5 @@ namespace MonoGame.Extended.Tiled
         {
             return TiledMapHelper.GetTileSourceRectangle(localTileIdentifier, TileWidth, TileHeight, Columns, Margin, Spacing);
         }
-
-        //public TiledMapTilesetAnimatedTile GetAnimatedTilesetTileByLocalTileIdentifier(int localTileIdentifier)
-        //{
-        //    throw new NotImplementedException();
-        //    //TiledMapTilesetAnimatedTile animatedTile;
-        //    //_animatedTilesByLocalTileIdentifier.TryGetValue(localTileIdentifier, out animatedTile);
-        //    //return animatedTile;
-        //}
-
-        //public bool ContainsGlobalIdentifier(int globalIdentifier)
-        //{
-        //    return globalIdentifier >= FirstGlobalIdentifier && globalIdentifier < FirstGlobalIdentifier + TileCount;
-        //}
     }
 }
