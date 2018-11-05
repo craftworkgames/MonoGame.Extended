@@ -58,19 +58,25 @@ namespace Features.Demos
             _actors.Add(controllableBall);
             _controllableBall = controllableBall;
 
-            var wall1 = new DemoWall(new Sprite(_blankTexture));
-            wall1.Bounds = new RectangleF(0, 0, 800, 20);
-            wall1.Position = new Vector2(0, 0);
+            var wall1 = new DemoWall(new Sprite(_blankTexture))
+            {
+                Bounds = new RectangleF(0, 0, 800, 20),
+                Position = new Vector2(0, 0)
+            };
             _actors.Add(wall1);
 
-            var wall2 = new DemoWall(new Sprite(_blankTexture));
-            wall2.Position = new Vector2(0, 460);
-            wall2.Bounds = new RectangleF(0, 0, 800, 20);
+            var wall2 = new DemoWall(new Sprite(_blankTexture))
+            {
+                Position = new Vector2(0, 460),
+                Bounds = new RectangleF(0, 0, 800, 20)
+            };
             _actors.Add(wall2);
 
-            var centerWall = new DemoWall(new Sprite(_blankTexture));
-            centerWall.Bounds = new RectangleF(0, 0, 50, 50);
-            centerWall.Position = new Vector2(400, 200);
+            var centerWall = new DemoWall(new Sprite(_blankTexture))
+            {
+                Bounds = new RectangleF(0, 0, 50, 50),
+                Position = new Vector2(400, 200)
+            };
             _actors.Add(centerWall);
 
             foreach (var actor in _actors)
@@ -193,10 +199,9 @@ namespace Features.Demos
     /// </summary>
     class DemoBall : DemoActor
     {
-        private Vector2 Offset = new Vector2(75, 75);
-
         public DemoBall(Sprite sprite) : base(sprite)
         {
+            Offset = new Vector2(75, 75);
             Bounds = new CircleF(Position + Offset, 60);
         }
 
