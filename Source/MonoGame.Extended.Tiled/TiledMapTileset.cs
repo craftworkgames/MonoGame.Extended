@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -29,6 +30,10 @@ namespace MonoGame.Extended.Tiled
         public int Columns { get; }
         public List<TiledMapTilesetTile> Tiles { get; }
         public TiledMapProperties Properties { get; }
+
+        public int Rows => (int)Math.Ceiling((double) TileCount / Columns);
+        public int ActualWidth => TileWidth * Columns;
+        public int ActualHeight => TileHeight * Rows;
 
         public Rectangle GetTileRegion(int localTileIdentifier)
         {

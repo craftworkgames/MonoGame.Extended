@@ -13,9 +13,6 @@ namespace MonoGame.Extended.Tiled.Serialization
             Properties = new List<TiledMapPropertyContent>();
         }
 
-        //[XmlIgnore]
-        //public ExternalReference<TiledMapTilesetContent> Content { get; set; }
-
         [XmlAttribute(AttributeName = "firstgid")]
         public int FirstGlobalIdentifier { get; set; }
 
@@ -61,7 +58,7 @@ namespace MonoGame.Extended.Tiled.Serialization
 
         public bool ContainsGlobalIdentifier(int globalIdentifier)
         {
-            return (globalIdentifier >= FirstGlobalIdentifier) && (globalIdentifier < FirstGlobalIdentifier + TileCount);
+            return globalIdentifier >= FirstGlobalIdentifier && globalIdentifier < FirstGlobalIdentifier + TileCount;
         }
 
         public override string ToString()
