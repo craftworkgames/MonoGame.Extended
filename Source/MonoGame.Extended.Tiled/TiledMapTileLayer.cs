@@ -13,7 +13,8 @@ namespace MonoGame.Extended.Tiled
             Height = height;
             TileWidth = tileWidth;
             TileHeight = tileHeight;
-            Tiles = new List<TiledMapTile>(tiles);
+            Tiles = new List<TiledMapTile>(Width * Height);
+            Tiles.AddRange(tiles);
         }
 
         public int Width { get; }
