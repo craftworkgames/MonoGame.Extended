@@ -5,23 +5,21 @@ namespace MonoGame.Extended.Tiled
 {
     public class TiledMapTileLayer : TiledMapLayer
     {
-        public TiledMapTileLayer(string name, int width, int height, int tileWidth, int tileHeight, IEnumerable<TiledMapTile> tiles, 
-            Vector2? offset = null, float opacity = 1, bool isVisible = true) 
+        public TiledMapTileLayer(string name, int width, int height, int tileWidth, int tileHeight, Vector2? offset = null, float opacity = 1, bool isVisible = true) 
             : base(name, offset, opacity, isVisible)
         {
             Width = width;
             Height = height;
             TileWidth = tileWidth;
             TileHeight = tileHeight;
-            Tiles = new List<TiledMapTile>(Width * Height);
-            Tiles.AddRange(tiles);
+            Tiles = new TiledMapTile[Width * Height];
         }
 
         public int Width { get; }
         public int Height { get; }
         public int TileWidth { get; }
         public int TileHeight { get; }
-        public List<TiledMapTile> Tiles { get; }
+        public TiledMapTile[] Tiles { get; }
 
         public int GetTileIndex(ushort x, ushort y)
         {
@@ -32,7 +30,7 @@ namespace MonoGame.Extended.Tiled
         {
             var index = GetTileIndex(x, y);
 
-            if (index < 0 || index >= Tiles.Count)
+            if (index < 0 || index >= Tiles.Length)
             {
                 tile = null;
                 return false;
