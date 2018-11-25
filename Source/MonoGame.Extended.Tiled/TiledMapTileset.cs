@@ -2,10 +2,23 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Tiled
 {
-    public class TiledMapTileset
+    public interface ITileset
+    {
+        int ActualWidth { get; }
+        int Columns { get; }
+        int ActualHeight { get; }
+        int Rows { get; }
+        int TileWidth { get; }
+        int TileHeight { get; }
+        Texture2D Texture { get; }
+        TextureRegion2D GetRegion(int column, int row);
+    }
+
+    public class TiledMapTileset : ITileset
     {
         public TiledMapTileset(Texture2D texture, int tileWidth, int tileHeight, int tileCount, int spacing, int margin, int columns)
         {
@@ -22,6 +35,14 @@ namespace MonoGame.Extended.Tiled
 
         public string Name => Texture.Name;
         public Texture2D Texture { get; }
+
+        public TextureRegion2D GetRegion(int column, int row)
+        {
+            var x = Margin + column * (TileWidth + Spacing);
+            var y = Margin + row * (TileHeight + Spacing);
+            return new TextureRegion2D(Texture, x, y, TileWidth, TileHeight);
+        }
+
         public int TileWidth { get; }
         public int TileHeight { get; }
         public int Spacing { get; }
