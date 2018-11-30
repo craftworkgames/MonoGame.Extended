@@ -20,17 +20,20 @@ namespace MonoGame.Extended.Content
             var assetDirectory = Path.GetDirectoryName(contentReader.AssetName);
             var assetName = Path.Combine(assetDirectory, relativeName).Replace('\\', '/');
 
-            var ellipseIndex = assetName.IndexOf("/../", StringComparison.Ordinal);
+            return ShortenRelativePath(assetName);
+        }
+
+        public static string ShortenRelativePath(string relativePath)
+        {
+            var ellipseIndex = relativePath.IndexOf("/../", StringComparison.Ordinal);
             while (ellipseIndex != -1)
             {
-                var lastDirectoryIndex = assetName.LastIndexOf('/', ellipseIndex - 1);
-                if (lastDirectoryIndex == -1)
-                    lastDirectoryIndex = 0;
-                assetName = assetName.Remove(lastDirectoryIndex, ellipseIndex + 4);
-                ellipseIndex = assetName.IndexOf("/../", StringComparison.Ordinal);
+                var lastDirectoryIndex = relativePath.LastIndexOf('/', ellipseIndex - 1) + 1;
+                relativePath = relativePath.Remove(lastDirectoryIndex, ellipseIndex + 4 - lastDirectoryIndex);
+                ellipseIndex = relativePath.IndexOf("/../", StringComparison.Ordinal);
             }
 
-            return assetName;
+            return relativePath;
         }
     }
 }
