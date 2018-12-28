@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 
 namespace MonoGame.Extended.Particles
@@ -18,9 +18,8 @@ namespace MonoGame.Extended.Particles
         public unsafe ParticleBuffer(int size)
         {
             Size = size;
-            // add one extra spot in memory for margin between head and tail
-            // so the iterator can see that it's at the end
             _nativePointer = Marshal.AllocHGlobal(SizeInBytes);
+
             BufferEnd = (Particle*) (_nativePointer + SizeInBytes);
             Head = (Particle*) _nativePointer;
             Tail = (Particle*) _nativePointer;
@@ -40,7 +39,7 @@ namespace MonoGame.Extended.Particles
         public int Available => Size - Count;
         // current number of particles
         public int Count { get; private set; }
-        // total size of the buffer
+        // total size of the buffer (add one extra spot in memory for margin between head and tail so the iterator can see that it's at the end)
         public int SizeInBytes => Particle.SizeInBytes*(Size + 1);
         // total size of active particles
         public int ActiveSizeInBytes => Particle.SizeInBytes*Count;
@@ -51,8 +50,7 @@ namespace MonoGame.Extended.Particles
             {
                 Marshal.FreeHGlobal(_nativePointer);
                 _disposed = true;
-
-                GC.RemoveMemoryPressure(Particle.SizeInBytes*Size);
+                GC.RemoveMemoryPressure(SizeInBytes);
             }
 
             GC.SuppressFinalize(this);
