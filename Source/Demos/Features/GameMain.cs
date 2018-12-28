@@ -132,7 +132,9 @@ namespace Features
             if (_selectDemoScreen.IsVisible)
                 Exit();
 
-            IsMouseVisible = false;
+            IsMouseVisible = true;
+            _currentDemo?.Unload();
+            _currentDemo?.Dispose();
             _currentDemo = null;
             _selectDemoScreen.IsVisible = true;
             _guiSystem.ActiveScreen = _selectDemoScreen;

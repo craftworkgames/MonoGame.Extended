@@ -52,6 +52,7 @@ namespace Features.Demos
         {
             // any content not loaded with the content manager should be disposed
             _particleTexture.Dispose();
+            _particleEffect.Dispose();
         }
 
         protected override void Update(GameTime gameTime)
