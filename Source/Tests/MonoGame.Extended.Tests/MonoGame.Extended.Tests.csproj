@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <IsPackable>false</IsPackable>
@@ -16,5 +16,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj" />
     <ProjectReference Include="..\..\MonoGame.Extended.Particles\MonoGame.Extended.Particles.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\" />
   </ItemGroup>
 </Project>
