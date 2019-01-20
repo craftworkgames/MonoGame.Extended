@@ -4,7 +4,7 @@
 
 The purpose of the camera is to create a transformation matrix that changes the way a sprite batch is rendered.
 
-To create a camera initialize an instance of it using one of the constructor overloads. It's recommended that you used a viewport adapter to scale the screen but you don't have too.
+To create a camera initialize an instance of it using one of the constructor overloads. It's recommended that you used a viewport adapter to scale the screen but you don't have to.
 ```csharp
         private Camera2D _camera;
 
