@@ -14,7 +14,7 @@ To get the full experience you'll also want to install the Content Pipeline exte
 
     Install-Package MonoGame.Extended.Content.Pipeline
 
-This package won't add any references to your project. Instead it will download a DLL that's intended to be referenced from the [MonoGame Content Pipeline tool](http://www.monogame.net/documentation/?page=Pipeline).
+This package is not included in MonoGame.Extended and must be installed separately. It won't add any references to your project. Instead it will download a DLL that's intended to be referenced from the [MonoGame Content Pipeline tool](http://www.monogame.net/documentation/?page=Pipeline).
 
 You'll need to manually add the reference to your content file (usually `Content.mgcb`) using one of the following methods.
 
@@ -24,7 +24,7 @@ To add the reference using the Pipeline GUI tool follow these steps:
 
  1. Click on the **Content** node in the root of the tree.
  2. In the properties window, modify the **References** property.
- 3. Find and add the `MonoGame.Extended.Content.Pipeline.dll`. It's usually located in the **packages** folder of your solution.
+ 3. Find and add the `MonoGame.Extended.Content.Pipeline.dll`. It's usually located in the **packages** folder of your solution.  The default location of the **packages** folder in .NET Core is:  C:\Users\[User]\.nuget\packages.
 
 ![MonoGame Pipeline Add References](https://dl.dropboxusercontent.com/u/82020056/MonoGame.Extended/how-to-add-content-pipeline-reference.png)
  
