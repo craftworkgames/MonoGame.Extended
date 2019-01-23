@@ -34,7 +34,7 @@ Alternately, if you want to try the latest and greatest you might want to [build
  
 ## News
 
-We're in the process of developing MonoGame.Extended 2.0! 
+We're in the process of developing MonoGame.Extended 3.6! 
 
 There may be some confusion, pain and disruption for a while. Here's what you need to know:
  
