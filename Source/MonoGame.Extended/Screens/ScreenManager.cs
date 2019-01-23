@@ -35,11 +35,9 @@ namespace MonoGame.Extended.Screens
 
             screen.ScreenManager = this;
 
-            if (!_isInitialized)
-                screen.Initialize();
+            screen.Initialize();
 
-            if (!_isLoaded)
-                screen.LoadContent();
+            screen.LoadContent();
 
             _activeScreen = screen;
         }
