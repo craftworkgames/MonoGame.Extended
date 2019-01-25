@@ -12,6 +12,7 @@ namespace MonoGame.Extended.Gui.Serialization
         {
             var textureRegionService = new GuiTextureRegionService();
             Converters.Add(new Vector2JsonConverter());
+            Converters.Add(new SizeJsonConverter());
             Converters.Add(new Size2JsonConverter());
             Converters.Add(new ColorJsonConverter());
             Converters.Add(new ThicknessJsonConverter());
