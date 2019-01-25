@@ -20,9 +20,9 @@ namespace MonoGame.Extended.Serialization
                 return new Size2(values[0], values[1]);
 
             if (values.Length == 1)
-                return new Size2(values[0], values[1]);
+                return new Size2(values[0], values[0]);
 
-            throw new InvalidOperationException("Invalid size");
+            throw new FormatException("Invalid Size property value");
         }
 
         public override bool CanConvert(Type objectType)

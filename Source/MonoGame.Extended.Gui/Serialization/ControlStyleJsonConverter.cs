@@ -42,6 +42,10 @@ namespace MonoGame.Extended.Gui.Serialization
             var dictionary = serializer.Deserialize<Dictionary<string, object>>(reader);
             var name = dictionary.GetValueOrDefault(_nameProperty) as string;
             var typeName = dictionary.GetValueOrDefault(_typeProperty) as string;
+
+            if (!_controlTypes.ContainsKey(typeName))
+                throw new FormatException("invalid control type: " + typeName);
+
             var targetType =  typeName != null ? _controlTypes[typeName] : typeof(Control);
             var properties = targetType
                 .GetRuntimeProperties()
