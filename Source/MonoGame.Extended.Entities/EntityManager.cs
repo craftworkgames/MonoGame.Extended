@@ -98,15 +98,15 @@ namespace MonoGame.Extended.Entities
 
             foreach (var entityId in _removedEntities)
             {
+                // we must notify subscribers before removing it from the pool
+                // otherwise an entity system could still be using the entity when the same id is obtained.
+                EntityRemoved?.Invoke(entityId);
+
                 var entity = _entityBag[entityId];
                 _entityBag[entityId] = null;
                 _componentManager.Destroy(entityId);
                 _entityToComponentBits[entityId] = default(BitVector32);
                 ActiveCount--;
-
-                // we must notify subscribers before removing it from the pool
-                // otherwise an entity system could still be using the entity when the same id is obtained.
-                EntityRemoved?.Invoke(entityId);
                 _entityPool.Free(entity);
             }
 
