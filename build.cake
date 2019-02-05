@@ -85,7 +85,7 @@ Task("Pack")
             Configuration = configuration,
             IncludeSymbols = true,
             OutputDirectory = artifactsDirectory,
-            ArgumentCustomization = args => args.Append($"/p:Version={gitVersion.NuGetVersion}")
+            ArgumentCustomization = args => args.Append($"/p:Version={gitVersion.NuGetVersion} /p:SymbolPackageFormat=snupkg")
         });
     }
 });
