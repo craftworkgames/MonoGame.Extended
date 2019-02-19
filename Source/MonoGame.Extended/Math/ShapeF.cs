@@ -22,26 +22,26 @@
         /// <summary>
         ///     Check if two shapes intersect.
         /// </summary>
-        /// <param name="a">The first shape.</param>
-        /// <param name="b">The second shape.</param>
+        /// <param name="shapeA">The first shape.</param>
+        /// <param name="shapeB">The second shape.</param>
         /// <returns>True if the two shapes intersect.</returns>
-        public static bool Intersects(this IShapeF a, IShapeF b)
+        public static bool Intersects(this IShapeF shapeA, IShapeF shapeB)
         {
             var intersects = false;
 
-            if (a is RectangleF rectA && b is RectangleF rectB)
+            if (shapeA is RectangleF rectangleA && shapeB is RectangleF rectangleB)
             {
-                intersects = rectA.Intersects(rectB);
+                intersects = rectangleA.Intersects(rectangleB);
             }
-            else if (a is CircleF circA && b is CircleF circB)
+            else if (shapeA is CircleF circleA && shapeB is CircleF circleB)
             {
-                intersects = circA.Intersects(circB);
+                intersects = circleA.Intersects(circleB);
             }
-            else if (a is RectangleF rect1 && b is CircleF circ1)
+            else if (shapeA is RectangleF rect1 && shapeB is CircleF circ1)
             {
                 return Intersects(circ1, rect1);
             }
-            else if (a is CircleF circ2 && b is RectangleF rect2)
+            else if (shapeA is CircleF circ2 && shapeB is RectangleF rect2)
             {
                 return Intersects(circ2, rect2);
             }
@@ -52,13 +52,13 @@
         /// <summary>
         ///     Checks if a circle and rectangle intersect.
         /// </summary>
-        /// <param name="circ">Circle to check intersection with rectangle.</param>
-        /// <param name="rect">Rectangle to check intersection with circle.</param>
+        /// <param name="circle">Circle to check intersection with rectangle.</param>
+        /// <param name="rectangle">Rectangle to check intersection with circle.</param>
         /// <returns>True if the circle and rectangle intersect.</returns>
-        public static bool Intersects(CircleF circ, RectangleF rect)
+        public static bool Intersects(CircleF circle, RectangleF rectangle)
         {
-            var closestPoint = rect.ClosestPointTo(circ.Center);
-            return circ.Contains(closestPoint);
+            var closestPoint = rectangle.ClosestPointTo(circle.Center);
+            return circle.Contains(closestPoint);
         }
     }
 }
