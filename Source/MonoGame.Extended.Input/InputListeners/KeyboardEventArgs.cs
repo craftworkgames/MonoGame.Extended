@@ -21,6 +21,7 @@ namespace MonoGame.Extended.Input.InputListeners
                 Modifiers |= KeyboardModifiers.Alt;
         }
 
+        public bool Handled { get; set; } = false;
         public Keys Key { get; }
         public KeyboardModifiers Modifiers { get; }
 
