@@ -7,6 +7,8 @@ namespace MonoGame.Extended.Input.InputListeners
 {
     public class KeyboardListener : InputListener
     {
+        Array _KeysValues = Enum.GetValues(typeof(Keys));
+
         private bool _isInitial;
         private TimeSpan _lastPressTime;
 
@@ -50,7 +52,7 @@ namespace MonoGame.Extended.Input.InputListeners
         {
             if (!currentState.IsKeyDown(Keys.LeftAlt) && !currentState.IsKeyDown(Keys.RightAlt))
             {
-                var pressedKeys = Enum.GetValues(typeof(Keys))
+                var pressedKeys = _KeysValues
                     .Cast<Keys>()
                     .Where(key => currentState.IsKeyDown(key) && _previousState.IsKeyUp(key));
 
@@ -72,7 +74,7 @@ namespace MonoGame.Extended.Input.InputListeners
 
         private void RaiseReleasedEvents(KeyboardState currentState)
         {
-            var releasedKeys = Enum.GetValues(typeof(Keys))
+            var releasedKeys = _KeysValues
                 .Cast<Keys>()
                 .Where(key => currentState.IsKeyUp(key) && _previousState.IsKeyDown(key));
 
