@@ -1,4 +1,4 @@
-﻿# MonoGame.Extended.Content.Pipeline
+# MonoGame.Extended.Content.Pipeline
 
 This NuGet package is intended to be used with the MonoGame Content Pipeline tool. You'll need to 
 make some changes to your Content Pipline file (usually Content.mgcb) for everything to work
