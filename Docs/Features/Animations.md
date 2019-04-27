@@ -23,7 +23,7 @@ And an xml describing the coordenates and size of each sprite within the map:
 </XnaContent>
 ```
 
-Hopefully there are a couple of programs to create this files. Once you have those just throw them inside the Content Pipeline
+Hopefully there are a couple of programs to create this file. Once you have those just throw them inside the Content Pipeline
 
 ![](http://i.imgur.com/hEhyOKh.png)
 
