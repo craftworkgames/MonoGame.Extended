@@ -56,20 +56,20 @@ namespace MonoGame.Extended
 
         public float Degrees
         {
-            get { return Radians*_radianDegree; }
-            set { Radians = value*_degreeRadian; }
+            get => Radians*_radianDegree;
+            set => Radians = value*_degreeRadian;
         }
 
         public float Gradians
         {
-            get { return Radians*_radianGradian; }
-            set { Radians = value*_gradianRadian; }
+            get => Radians*_radianGradian;
+            set => Radians = value*_gradianRadian;
         }
 
         public float Revolutions
         {
-            get { return Radians*_tauInv; }
-            set { Radians = value*_tau; }
+            get => Radians*_tauInv;
+            set => Radians = value*_tau;
         }
 
         public Angle(float value, AngleType angleType = AngleType.Radian)
@@ -162,7 +162,7 @@ namespace MonoGame.Extended
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            return obj is Angle && Equals((Angle) obj);
+            return obj is Angle a && Equals(a);
         }
 
         public override int GetHashCode()
@@ -188,12 +188,12 @@ namespace MonoGame.Extended
 
         public static bool operator ==(Angle a, Angle b)
         {
-            return a.Equals(a);
+            return a.Equals(b);
         }
 
         public static bool operator !=(Angle a, Angle b)
         {
-            return !a.Equals(a);
+            return !a.Equals(b);
         }
 
         public static Angle operator -(Angle left, Angle right)
