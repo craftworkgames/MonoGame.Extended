@@ -86,7 +86,7 @@ Systems can be used to do all kinds of processing during your game. There are se
 
 - An `UpdateSystem` is a basic system that has an `Update` method called every frame.
 - A `DrawSystem` is a basic system that has a `Draw` method called every frame.
-- An `EntityUpdateSystem` is used to process to process a filtered collection of entities during the `Update` call.
+- An `EntityUpdateSystem` is used to process a filtered collection of entities during the `Update` call.
 - An `EntityDrawSystem` is used to process a filtered collection of entities during the `Draw` call.
 - An `EntityProcessingSystem` can be used to process a filtered collection of entities one at a time during the `Update` call. 
 - You can also create a system that has both an `Update` method and a `Draw` method by implementing the `IUpdateSystem` and `IDrawSystem` interfaces respectively.
