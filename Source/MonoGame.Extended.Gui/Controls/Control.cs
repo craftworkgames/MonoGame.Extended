@@ -98,6 +98,7 @@ namespace MonoGame.Extended.Gui.Controls
         public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Stretch;
         public HorizontalAlignment HorizontalTextAlignment { get; set; } = HorizontalAlignment.Centre;
         public VerticalAlignment VerticalTextAlignment { get; set; } = VerticalAlignment.Centre;
+
         
         public abstract Size GetContentSize(IGuiContext context);
 
@@ -174,23 +175,44 @@ namespace MonoGame.Extended.Gui.Controls
         public virtual bool OnFocus(IGuiContext context) { return true; }
         public virtual bool OnUnfocus(IGuiContext context) { return true; }
 
-        public virtual bool OnPointerDown(IGuiContext context, PointerEventArgs args) { return true; }
-        public virtual bool OnPointerMove(IGuiContext context, PointerEventArgs args) { return true; }
-        public virtual bool OnPointerUp(IGuiContext context, PointerEventArgs args) { return true; }
-        
+        public event EventHandler OnDown;
+        public virtual bool OnPointerDown(IGuiContext context, PointerEventArgs args)
+        {
+            OnDown?.Invoke(context, args);
+            return true; 
+        }
+
+        public event EventHandler OnMove;
+        public virtual bool OnPointerMove(IGuiContext context, PointerEventArgs args) 
+        {
+            OnMove?.Invoke(context, args); 
+            return true; 
+        }
+
+        public event EventHandler OnUp;
+        public virtual bool OnPointerUp(IGuiContext context, PointerEventArgs args)
+        {
+            OnUp?.Invoke(context, args);
+            return true;
+        }
+
+        public event EventHandler OnEnter;
         public virtual bool OnPointerEnter(IGuiContext context, PointerEventArgs args)
         {
             if (IsEnabled && !IsHovered)
                 IsHovered = true;
 
+            OnEnter?.Invoke(context, args);
             return true;
         }
 
+        public event EventHandler OnLeave;
         public virtual bool OnPointerLeave(IGuiContext context, PointerEventArgs args)
         {
             if (IsEnabled && IsHovered)
                 IsHovered = false;
 
+            OnLeave?.Invoke(context, args);
             return true;
         }
 
