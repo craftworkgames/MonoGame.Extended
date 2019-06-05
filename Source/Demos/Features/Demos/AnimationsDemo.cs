@@ -8,6 +8,7 @@ using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace Features.Demos
 {
@@ -30,7 +31,7 @@ namespace Features.Demos
             base.Initialize();
 
             //_viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            //_camera = new Camera2D(_viewportAdapter)
+            //_camera = new OrthographicCamera(_viewportAdapter)
             //{
             //    MinimumZoom = 0.1f,
             //    MaximumZoom = 2.0f,

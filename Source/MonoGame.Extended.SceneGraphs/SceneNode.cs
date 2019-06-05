@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
+using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.SceneGraphs
 {
@@ -10,7 +11,7 @@ namespace MonoGame.Extended.SceneGraphs
         public abstract RectangleF BoundingRectangle { get; }
     }
 
-    public class SpriteEntity : SceneEntity
+    public class SpriteEntity : SceneEntity, ISpriteBatchDrawable
     {
         private readonly Sprite _sprite;
 
@@ -20,6 +21,11 @@ namespace MonoGame.Extended.SceneGraphs
         }
 
         public override RectangleF BoundingRectangle => _sprite.GetBoundingRectangle(Position, Rotation, Scale);
+        public bool IsVisible => _sprite.IsVisible;
+        public TextureRegion2D TextureRegion => _sprite.TextureRegion;
+        public Color Color => _sprite.Color;
+        public Vector2 Origin => _sprite.Origin;
+        public SpriteEffects Effect => _sprite.Effect;
     }
 
     public class SceneNode : Transform2
