@@ -5,6 +5,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Content
 {
+    public interface IContentLoader
+    {
+        T Load<T>(ContentManager contentManager, string path);
+    }
+
     public static class ContentManagerExtensions
     {
         public const string DirectorySeparatorChar = "/";
@@ -18,9 +23,16 @@ namespace MonoGame.Extended.Content
         {
             // http://konaju.com/?p=21
             var serviceProvider = contentManager.ServiceProvider;
-            var graphicsDeviceService =
-                (IGraphicsDeviceService) serviceProvider.GetService(typeof(IGraphicsDeviceService));
+            var graphicsDeviceService = (IGraphicsDeviceService) serviceProvider.GetService(typeof(IGraphicsDeviceService));
             return graphicsDeviceService.GraphicsDevice;
+        }
+
+        /// <summary>
+        /// Loads the content using a custom content loader.
+        /// </summary>
+        public static T Load<T>(this ContentManager contentManager, string path, IContentLoader contentLoader)
+        {
+            return contentLoader.Load<T>(contentManager, path);
         }
     }
 }

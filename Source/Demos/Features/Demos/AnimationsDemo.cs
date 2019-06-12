@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
+using MonoGame.Extended.Content;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
@@ -17,9 +18,9 @@ namespace Features.Demos
         public override string Name => "Animations";
 
         private SpriteBatch _spriteBatch;
-        private Zombie _zombie;
-        private SpriteSheetAnimation _animation;
-        private Sprite _fireballSprite;
+        //private Zombie _zombie;
+        //private SpriteSheetAnimation _animation;
+        //private Sprite _fireballSprite;
         private AnimatedSprite _motwSprite;
 
         public AnimationsDemo(GameMain game) : base(game)
@@ -45,13 +46,13 @@ namespace Features.Demos
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            var zombieAnimations = Content.Load<SpriteSheetAnimationFactory>("Animations/zombie-animations");
-            _zombie = new Zombie(zombieAnimations) {Position = new Vector2(100, 100)};
+            //var zombieAnimations = Content.Load<SpriteSheetAnimationFactory>("Animations/zombie-animations");
+            //_zombie = new Zombie(zombieAnimations) {Position = new Vector2(100, 100)};
 
-            var fireballTexture = Content.Load<Texture2D>("Animations/fireball");
-            var fireballAtlas = TextureAtlas.Create("Animations/fireball-atlas", fireballTexture, 130, 50);
-            _animation = new SpriteSheetAnimation("fireballAnimation", fireballAtlas.Regions.ToArray()) { FrameDuration = 0.2f };
-            _fireballSprite = new Sprite(_animation.CurrentFrame);// { Position = new Vector2(-150, 100) };
+            //var fireballTexture = Content.Load<Texture2D>("Animations/fireball");
+            //var fireballAtlas = TextureAtlas.Create("Animations/fireball-atlas", fireballTexture, 130, 50);
+            //_animation = new SpriteSheetAnimation("fireballAnimation", fireballAtlas.Regions.ToArray()) { FrameDuration = 0.2f };
+            //_fireballSprite = new Sprite(_animation.CurrentFrame);// { Position = new Vector2(-150, 100) };
 
             var motwTexture = Content.Load<Texture2D>("Animations/motw");
             var motwAtlas = TextureAtlas.Create("Animations/fireball-atlas", motwTexture, 52, 72);
@@ -61,8 +62,11 @@ namespace Features.Demos
             motwAnimationFactory.Add("walkWest", new SpriteSheetAnimationData(new[] { 12, 13, 14, 13 }, isLooping: false));
             motwAnimationFactory.Add("walkEast", new SpriteSheetAnimationData(new[] { 24, 25, 26, 25 }, isLooping: false));
             motwAnimationFactory.Add("walkNorth", new SpriteSheetAnimationData(new[] { 36, 37, 38, 37 }, isLooping: false));
+
             _motwSprite = new AnimatedSprite(motwAnimationFactory);// { Position = new Vector2(20, 20) };
             _motwSprite.Play("walkSouth").IsLooping = true;
+
+            var spriteSheet = Content.Load<SpriteSheet>("Animations/motw.spritesheet", new SpriteSheetJsonContentLoader());
         }
 
         protected override void Update(GameTime gameTime)
@@ -90,29 +94,29 @@ namespace Features.Demos
             if (keyboardState.IsKeyDown(Keys.F))
                 Camera.ZoomOut(deltaSeconds);
 
-            // zombie
-            if (keyboardState.IsKeyDown(Keys.Left))
-                _zombie.Walk(-1.0f);
+            //// zombie
+            //if (keyboardState.IsKeyDown(Keys.Left))
+            //    _zombie.Walk(-1.0f);
 
-            if (keyboardState.IsKeyDown(Keys.Right))
-                _zombie.Walk(1.0f);
+            //if (keyboardState.IsKeyDown(Keys.Right))
+            //    _zombie.Walk(1.0f);
 
-            if (keyboardState.IsKeyDown(Keys.Space))
-                _zombie.Attack();
+            //if (keyboardState.IsKeyDown(Keys.Space))
+            //    _zombie.Attack();
 
-            //if (keyboardState.IsKeyDown(Keys.Up))
-            //    _zombie.Jump();
+            ////if (keyboardState.IsKeyDown(Keys.Up))
+            ////    _zombie.Jump();
 
-            if (keyboardState.IsKeyDown(Keys.Enter))
-                _zombie.Die();
+            //if (keyboardState.IsKeyDown(Keys.Enter))
+            //    _zombie.Die();
 
-            // update must be called before collision detection
-            _zombie.Update(gameTime);
-            //_world.Update(gameTime);
-            Camera.LookAt(_zombie.Position);
+            //// update must be called before collision detection
+            //_zombie.Update(gameTime);
+            ////_world.Update(gameTime);
+            //Camera.LookAt(_zombie.Position);
 
-            _animation.Update(deltaSeconds);
-            _fireballSprite.TextureRegion = _animation.CurrentFrame;
+            //_animation.Update(deltaSeconds);
+            //_fireballSprite.TextureRegion = _animation.CurrentFrame;
 
             _motwSprite.Update(deltaSeconds);
 
@@ -123,14 +127,13 @@ namespace Features.Demos
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
-            _zombie.Draw(_spriteBatch);
-            //_spriteBatch.Draw(_fireballSprite);
-            _spriteBatch.End();
+            //_spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
+            //_zombie.Draw(_spriteBatch);
+            ////_spriteBatch.Draw(_fireballSprite);
+            //_spriteBatch.End();
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: Camera.GetViewMatrix());
-
-            //_spriteBatch.Draw(_motwSprite);
+            _spriteBatch.Draw(_motwSprite, new Vector2(100, 100));
             _spriteBatch.End();
 
             base.Draw(gameTime);

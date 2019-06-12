@@ -20,7 +20,15 @@
     <Compile Remove="Demos\TweeningDemo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Content\Animations\motw.spritesheet" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Screens\SelectDemoScreen.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Animations\motw.spritesheet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
