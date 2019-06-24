@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Sprites;
@@ -7,13 +8,13 @@ namespace MonoGame.Extended.Animations
 {
     public class AnimatedSprite : Sprite
     {
-        private readonly SpriteSheetAnimationFactory _animationFactory;
+        private readonly SpriteSheet _spriteSheet;
         private SpriteSheetAnimation _currentAnimation;
 
-        public AnimatedSprite(SpriteSheetAnimationFactory animationFactory, string playAnimation = null)
-            : base(animationFactory.Frames[0])
+        public AnimatedSprite(SpriteSheet spriteSheet, string playAnimation = null)
+            : base(spriteSheet.TextureAtlas[0])
         {
-            _animationFactory = animationFactory;
+            _spriteSheet = spriteSheet;
 
             if (playAnimation != null)
                 Play(playAnimation);
@@ -23,7 +24,9 @@ namespace MonoGame.Extended.Animations
         {
             if (_currentAnimation == null || _currentAnimation.IsComplete || _currentAnimation.Name != name)
             {
-                _currentAnimation = _animationFactory.Create(name);
+                var cycle = _spriteSheet.Cycles[name];
+                var keyFrames = cycle.Frames.Select(f => _spriteSheet.TextureAtlas[f.Index]).ToArray();
+                _currentAnimation = new SpriteSheetAnimation(name, keyFrames, cycle.FrameDuration, cycle.IsLooping, cycle.IsReversed, cycle.IsPingPong);
 
                 if(_currentAnimation != null)
                     _currentAnimation.OnCompleted = onCompleted;

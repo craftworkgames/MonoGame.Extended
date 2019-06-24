@@ -1,12 +1,11 @@
-using System.IO;
+﻿using System.IO;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Content;
-using MonoGame.Extended.Serialization;
 using Newtonsoft.Json;
 
-namespace MonoGame.Extended.Animations.SpriteSheets
+namespace MonoGame.Extended.Serialization
 {
-    public class SpriteSheetJsonContentLoader : IContentLoader
+    public class JsonContentLoader : IContentLoader
     {
         public T Load<T>(ContentManager contentManager, string path)
         {

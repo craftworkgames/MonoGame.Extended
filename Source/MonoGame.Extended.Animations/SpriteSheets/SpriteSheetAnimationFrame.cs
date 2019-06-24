@@ -8,6 +8,12 @@ namespace MonoGame.Extended.Animations.SpriteSheets
     [DebuggerDisplay("{Index} {Duration}")]
     public class SpriteSheetAnimationFrame
     {
+        public SpriteSheetAnimationFrame(int index, float duration = 0.2f)
+        {
+            Index = index;
+            Duration = duration;
+        }
+
         public int Index { get; set; }
         public float Duration { get; set; }
     }
@@ -26,11 +32,11 @@ namespace MonoGame.Extended.Animations.SpriteSheets
                 case JsonToken.Integer:
                 {
                     var index = serializer.Deserialize<int>(reader);
-                    return new SpriteSheetAnimationFrame {Index = index };
+                    return new SpriteSheetAnimationFrame(index);
                 }
                 case JsonToken.StartObject:
                 {
-                    var frame = new SpriteSheetAnimationFrame();
+                    var frame = new SpriteSheetAnimationFrame(0);
                     serializer.Populate(reader, frame);
                     return frame;
                 }

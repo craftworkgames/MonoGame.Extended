@@ -35,8 +35,8 @@ namespace MonoGame.Extended.Sprites
 
         public Vector2 OriginNormalized
         {
-            get { return new Vector2(Origin.X/TextureRegion.Width, Origin.Y/TextureRegion.Height); }
-            set { Origin = new Vector2(value.X*TextureRegion.Width, value.Y*TextureRegion.Height); }
+            get => new Vector2(Origin.X/TextureRegion.Width, Origin.Y/TextureRegion.Height);
+            set => Origin = new Vector2(value.X*TextureRegion.Width, value.Y*TextureRegion.Height);
         }
 
         public Color Color { get; set; }
@@ -60,7 +60,7 @@ namespace MonoGame.Extended.Sprites
 
         public TextureRegion2D TextureRegion
         {
-            get { return _textureRegion; }
+            get => _textureRegion;
             set
             {
                 if (value == null)

@@ -21,12 +21,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Content\Animations\motw.spritesheet" />
+    <None Remove="Content\Animations\zombie-atlas.json" />
+    <None Remove="Content\Animations\zombie.spritesheet" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Screens\SelectDemoScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Animations\motw.spritesheet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Animations\zombie-atlas.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Animations\zombie.spritesheet">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

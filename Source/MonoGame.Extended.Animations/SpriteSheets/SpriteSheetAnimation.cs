@@ -49,8 +49,8 @@ namespace MonoGame.Extended.Animations.SpriteSheets
 
         public float FramesPerSecond
         {
-            get { return 1.0f/FrameDuration; }
-            set { FrameDuration = value/1.0f; }
+            get => 1.0f/FrameDuration;
+            set => FrameDuration = value/1.0f;
         }
 
         public Action OnCompleted { get; set; }
