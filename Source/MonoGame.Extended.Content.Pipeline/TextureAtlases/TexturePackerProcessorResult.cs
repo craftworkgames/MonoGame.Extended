@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
+﻿using MonoGame.Extended.TextureAtlases;
+
+namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {
     public class TexturePackerProcessorResult
     {

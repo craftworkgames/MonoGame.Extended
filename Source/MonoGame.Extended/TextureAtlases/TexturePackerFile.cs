@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
+namespace MonoGame.Extended.TextureAtlases
 {
     public class TexturePackerFile
     {

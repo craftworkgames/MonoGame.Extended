@@ -15,10 +15,15 @@ namespace MonoGame.Extended.Content
             return (GraphicsDevice)_contentReaderGraphicsDeviceFieldInfo.GetValue(contentReader);
         }
 
+        public static string RemoveExtension(string path)
+        {
+            return Path.ChangeExtension(path, null).TrimEnd('.');
+        }
+
         public static string GetRelativeAssetName(this ContentReader contentReader, string relativeName)
         {
             var assetDirectory = Path.GetDirectoryName(contentReader.AssetName);
-            var assetName = Path.Combine(assetDirectory, relativeName).Replace('\\', '/');
+            var assetName = RemoveExtension(Path.Combine(assetDirectory, relativeName).Replace('\\', '/'));
 
             return ShortenRelativePath(assetName);
         }

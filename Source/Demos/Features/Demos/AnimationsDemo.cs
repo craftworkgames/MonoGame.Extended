@@ -217,7 +217,7 @@ namespace Features.Demos
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            //spriteBatch.Draw(_sprite);
+            spriteBatch.Draw(_sprite, _transform);
         }
 
         public void Walk(float direction)

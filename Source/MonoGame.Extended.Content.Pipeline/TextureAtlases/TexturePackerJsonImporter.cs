@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
+using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
