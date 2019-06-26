@@ -75,6 +75,7 @@
 #begin Animations/zombie-atlas.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
+/processorParam:ContentType=TextureAtlas
 /build:Animations/zombie-atlas.json
 
 #begin Fonts/impact-32.fnt

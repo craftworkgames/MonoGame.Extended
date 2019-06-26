@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
 using MonoGame.Extended.Animations.SpriteSheets;
+using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
@@ -23,6 +25,8 @@ namespace Features.Demos
 
         public AnimationsDemo(GameMain game) : base(game)
         {
+            ContentTypeReaderManager.AddTypeCreator("TextureAtlas", () => new TextureAtlasJsonContentTypeReader());
+            ContentTypeReaderManager.AddTypeCreator("Default", () => new JsonContentTypeReader<TexturePackerFile>());
         }
 
         protected override void Initialize()
