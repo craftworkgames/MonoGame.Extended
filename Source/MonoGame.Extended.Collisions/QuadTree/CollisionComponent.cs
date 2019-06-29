@@ -156,7 +156,10 @@ namespace MonoGame.Extended.Collisions
 
         private static Vector2 PenetrationVector(CircleF circ1, CircleF circ2)
         {
-            Debug.Assert(circ1.Intersects(circ2));
+            if (!circ1.Intersects(circ2))
+            {
+                return Vector2.Zero;
+            }
 
             var displacement = Point2.Displacement(circ1.Center, circ2.Center);
 

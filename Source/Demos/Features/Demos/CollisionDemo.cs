@@ -36,19 +36,19 @@ namespace Features.Demos
             _blankTexture = new Texture2D(GraphicsDevice, 1, 1);
             _blankTexture.SetData(new[] { Color.WhiteSmoke });
 
-            var demoBall1 = new DemoBall(new Sprite(_spikeyBallTexture))
+            var spikyBallLeft = new DemoBall(new Sprite(_spikeyBallTexture))
             {
                 Position = new Vector2(200, 240),
                 Velocity = new Vector2(0, -120)
             };
-            _actors.Add(demoBall1);
+            _actors.Add(spikyBallLeft);
 
-            var demoBall2 = new DemoBall(new Sprite(_spikeyBallTexture))
+            var spikeyBallRight = new DemoBall(new Sprite(_spikeyBallTexture))
             {
                 Position = new Vector2(600, 240),
                 Velocity = new Vector2(0, 120)
             };
-            _actors.Add(demoBall2);
+            _actors.Add(spikeyBallRight);
 
             var controllableBall = new DemoBall(new Sprite(_spikeyBallTexture))
             {
@@ -58,26 +58,26 @@ namespace Features.Demos
             _actors.Add(controllableBall);
             _controllableBall = controllableBall;
 
-            var wall1 = new DemoWall(new Sprite(_blankTexture))
+            var topWall = new DemoWall(new Sprite(_blankTexture))
             {
                 Bounds = new RectangleF(0, 0, 800, 20),
                 Position = new Vector2(0, 0)
             };
-            _actors.Add(wall1);
+            _actors.Add(topWall);
 
-            var wall2 = new DemoWall(new Sprite(_blankTexture))
+            var bottomWall = new DemoWall(new Sprite(_blankTexture))
             {
                 Position = new Vector2(0, 460),
                 Bounds = new RectangleF(0, 0, 800, 20)
             };
-            _actors.Add(wall2);
+            _actors.Add(bottomWall);
 
-            var centerWall = new DemoWall(new Sprite(_blankTexture))
+            var spikeyBallCenter = new StationaryBall(new Sprite(_spikeyBallTexture))
             {
-                Bounds = new RectangleF(0, 0, 50, 50),
-                Position = new Vector2(400, 200)
+                Position = new Vector2(400, 240),
+                Velocity = Vector2.Zero,
             };
-            _actors.Add(centerWall);
+            _actors.Add(spikeyBallCenter);
 
             foreach (var actor in _actors)
             {
@@ -217,6 +217,20 @@ namespace Features.Demos
             Velocity *= -1;
             Position -= collisionInfo.PenetrationVector;
             base.OnCollision(collisionInfo);
+        }
+    }
+
+    /// <summary>
+    /// Ball that doesn't move when collided with.
+    /// </summary>
+    class StationaryBall : DemoBall
+    {
+        public StationaryBall(Sprite sprite) : base(sprite)
+        {
+        }
+
+        public override void OnCollision(CollisionEventArgs collisionInfo)
+        {
         }
     }
 
