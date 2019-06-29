@@ -50,7 +50,7 @@ namespace Features.Demos
             };
             _actors.Add(spikeyBallRight);
 
-            var controllableBall = new DemoBall(new Sprite(_spikeyBallTexture))
+            var controllableBall = new ControllableBall(new Sprite(_spikeyBallTexture))
             {
                 Position = new Vector2(400, 240),
                 Velocity = new Vector2(0, 0)
@@ -126,13 +126,6 @@ namespace Features.Demos
             foreach (var actor in _actors)
             {
                 actor.Draw(_spriteBatch);
-                if (actor.Bounds is RectangleF rect)
-                {
-                    _spriteBatch.Draw(_blankTexture, rect.ToRectangle(), Color.WhiteSmoke);
-                } else if (actor.Bounds is CircleF circle)
-                {
-                    _spriteBatch.Draw(_blankTexture, circle.Position, Color.WhiteSmoke);
-                }
             }
             _spriteBatch.End();
 
@@ -153,9 +146,10 @@ namespace Features.Demos
             Bounds = sprite.GetBoundingRectangle(new Transform2());
         }
 
-
-        public Vector2 Offset { get; set; }
-
+        /// <summary>
+        /// Gets or sets the actor's position and updates teh actor's bounds
+        /// position.
+        /// </summary>
         public Vector2 Position
         {
             get { return _position; }
@@ -166,8 +160,20 @@ namespace Features.Demos
             }
         }
 
+        /// <summary>
+        /// Gets or sets the actor's collision bounds.
+        /// </summary>
         public IShapeF Bounds { get; set; }
 
+        /// <summary>
+        /// Gets or sets how far the actor's collision bounds are offset from 
+        /// the actor's position.
+        /// </summary>
+        public Vector2 Offset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the actor's velocity.
+        /// </summary>
         public Vector2 Velocity { get; set; }
 
         public virtual void OnCollision(CollisionEventArgs collisionInfo)
@@ -201,14 +207,12 @@ namespace Features.Demos
     {
         public DemoBall(Sprite sprite) : base(sprite)
         {
-            Offset = new Vector2(75, 75);
             Bounds = new CircleF(Position + Offset, 60);
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            Bounds.Position = Position;
         }
 
         public override void OnCollision(CollisionEventArgs collisionInfo)
@@ -231,6 +235,27 @@ namespace Features.Demos
 
         public override void OnCollision(CollisionEventArgs collisionInfo)
         {
+        }
+    }
+
+    /// <summary>
+    /// Player controlled ball.
+    /// </summary>
+    class ControllableBall : DemoBall
+    {
+        public ControllableBall(Sprite sprite) : base(sprite)
+        {
+            Bounds = new CircleF(Position + Offset, 60);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
+        public override void OnCollision(CollisionEventArgs collisionInfo)
+        {
+            Position -= collisionInfo.PenetrationVector;
         }
     }
 
