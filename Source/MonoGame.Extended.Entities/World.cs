@@ -26,6 +26,9 @@ namespace MonoGame.Extended.Entities
             foreach (var drawSystem in _drawSystems)
                 drawSystem.Dispose();
 
+            _updateSystems.Clear();
+            _drawSystems.Clear();
+            
             base.Dispose();
         }
 
