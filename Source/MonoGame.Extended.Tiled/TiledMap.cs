@@ -69,10 +69,10 @@ namespace MonoGame.Extended.Tiled
 		private void AddLayer(TiledMapLayer layer, bool root)
         {
 			if (root) _layers.Add(layer);
+			
 			if (_layersByName.ContainsKey(layer.Name))
-			{
-				throw new Exception($"The TiledMap \"{Name}\" contains two or more layers named \"{layer.Name}\". Please ensure all layers have unique names.");
-			}
+				throw new ArgumentException($"The TiledMap '{Name}' contains two or more layers named '{layer.Name}'. Please ensure all layers have unique names.");
+
 			_layersByName.Add(layer.Name, layer);
 
 			switch(layer)
