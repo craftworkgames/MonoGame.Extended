@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Shapes;
@@ -276,6 +277,21 @@ namespace MonoGame.Extended
             DrawPolygon(spriteBatch, new Vector2(x, y), CreateCircle(radius, sides), color, thickness);
         }
 
+        /// <summary>
+        ///     Draw an ellipse.
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface</param>
+        /// <param name="center">Center of the ellipse</param>
+        /// <param name="radius">Radius of the ellipse</param>
+        /// <param name="sides">The number of sides to generate.</param>
+        /// <param name="color">The color of the ellipse.</param>
+        /// <param name="thickness">The thickness of the line around the ellipse.</param>
+        public static void DrawEllipse(this SpriteBatch spriteBatch, Vector2 center, Vector2 radius, int sides,
+            Color color, float thickness = 1f)
+        {
+            DrawPolygon(spriteBatch, center, CreateEllipse(radius.X, radius.Y, sides), color, thickness);
+        }
+
         private static Vector2[] CreateCircle(double radius, int sides)
         {
             const double max = 2.0*Math.PI;
@@ -290,6 +306,21 @@ namespace MonoGame.Extended
             }
 
             return points;
+        }
+
+        private static Vector2[] CreateEllipse(float rx, float ry, int sides)
+        {
+            var vertices = new Vector2[sides];
+
+            var t = 0.0;
+            var dt = 2.0 * Math.PI / sides;
+            for (var i = 0; i < sides; i++, t += dt)
+            {
+                var x = (float)(rx * Math.Cos(t));
+                var y = (float)(ry * Math.Sin(t));
+                vertices[i] = new Vector2(x, y);
+            }
+            return vertices;
         }
     }
 }

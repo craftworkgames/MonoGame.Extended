@@ -36,20 +36,13 @@ namespace MonoGame.Extended.Collisions
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            // Update bounding box locations.
-            foreach (var value in _targetDataDictionary.Values)
-            {
-                _collisionTree.Remove(value);
-                value.Bounds = value.Target.Bounds;
-                _collisionTree.Insert(value);
-            }
-
             // Detect collisions
             foreach (var value in _targetDataDictionary.Values)
             {
+                _collisionTree.Remove(value);
+
                 var target = value.Target;
-                var collisions =_collisionTree.Query(target.Bounds)
-                    .Where(data => data.Target != target);
+                var collisions =_collisionTree.Query(target.Bounds);
 
                 // Generate list of collision Infos
                 foreach (var other in collisions)
@@ -61,7 +54,9 @@ namespace MonoGame.Extended.Collisions
                     };
 
                     target.OnCollision(collisionInfo);
+                    value.Bounds = value.Target.Bounds;
                 }
+                _collisionTree.Insert(value);
             }
         }
 
@@ -156,7 +151,10 @@ namespace MonoGame.Extended.Collisions
 
         private static Vector2 PenetrationVector(CircleF circ1, CircleF circ2)
         {
-            Debug.Assert(circ1.Intersects(circ2));
+            if (!circ1.Intersects(circ2))
+            {
+                return Vector2.Zero;
+            }
 
             var displacement = Point2.Displacement(circ1.Center, circ2.Center);
 
