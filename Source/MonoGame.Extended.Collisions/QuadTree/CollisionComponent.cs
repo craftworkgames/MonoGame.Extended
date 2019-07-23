@@ -42,7 +42,8 @@ namespace MonoGame.Extended.Collisions
                 _collisionTree.Remove(value);
 
                 var target = value.Target;
-                var collisions =_collisionTree.Query(target.Bounds);
+                var targetBounds = target.Bounds;
+                var collisions =_collisionTree.Query(targetBounds);
 
                 // Generate list of collision Infos
                 foreach (var other in collisions)
@@ -50,11 +51,11 @@ namespace MonoGame.Extended.Collisions
                     var collisionInfo = new CollisionEventArgs()
                     {
                         Other = other.Target,
-                        PenetrationVector = CalculatePenetrationVector(value.Bounds, other.Bounds)
+                        PenetrationVector = CalculatePenetrationVector(targetBounds, other.Bounds)
                     };
 
                     target.OnCollision(collisionInfo);
-                    value.Bounds = value.Target.Bounds;
+                    value.Bounds = targetBounds;
                 }
                 _collisionTree.Insert(value);
             }
