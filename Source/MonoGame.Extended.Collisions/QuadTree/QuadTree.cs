@@ -29,7 +29,7 @@ namespace MonoGame.Extended.Collisions
         protected int MaxObjectsPerNode { get; set; } = DefaultMaxObjectsPerNode;
 
         /// <summary>
-        ///     Gets the bounds of the area contained in this quad tree.
+        ///     Gets the bounds of the collisionActor contained in this quad tree.
         /// </summary>
         public  RectangleF NodeBounds { get; protected set; }
 
@@ -242,28 +242,30 @@ namespace MonoGame.Extended.Collisions
         }
 
         /// <summary>
-        ///     Queries the quadtree for targets that intersect with the given area.
+        ///     Queries the quadtree for targets that intersect with the given collisionActor.
         /// </summary>
-        /// <param name="area">The area to query for overlapping targets</param>
-        /// <returns>A unique list of targets intersected by area.</returns>
-        public List<QuadtreeData> Query(IShapeF area)
+        /// <param name="collisionActor">The collisionActor to query for overlapping targets</param>
+        /// <returns>A unique list of targets intersected by collisionActor.</returns>
+        public List<QuadtreeData> Query(ICollisionActor collisionActor)
         {
             Reset();
-            return QueryWithoutReset(area);
+            return QueryWithoutReset(collisionActor);
         }
 
-        private List<QuadtreeData> QueryWithoutReset(IShapeF area)
+        private List<QuadtreeData> QueryWithoutReset(ICollisionActor source)
         {
             var result = new List<QuadtreeData>();
 
-            if (!NodeBounds.Intersects(area)) return result;
+            if (!NodeBounds.Intersects(source.Bounds)) return result;
 
             if (IsLeaf)
             {
                 for (int i = 0, size = Contents.Count; i < size; i++)
                 {
-                    if (Contents[i].Bounds.Intersects(area) 
-                        && !Contents[i].Flag)
+                    if ((source.CollisionMaskFlags & Contents[i].Target.CollisionLayerFlags) == 0)
+                        continue;
+
+                    if (!Contents[i].Flag && Contents[i].Bounds.Intersects(source.Bounds))
                     {
                         result.Add(Contents[i]);
                         Contents[i].Flag = true;
@@ -274,7 +276,7 @@ namespace MonoGame.Extended.Collisions
             {
                 for (int i = 0, size = Children.Count; i < size; i++)
                 {
-                    var recurse = Children[i].QueryWithoutReset(area);
+                    var recurse = Children[i].QueryWithoutReset(source);
                     result.AddRange(recurse);
                 }
             }
