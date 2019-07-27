@@ -323,4 +323,134 @@ namespace MonoGame.Extended
             return $"Position: {Position}, Rotation: {Rotation}, Scale: {Scale}";
         }
     }
+
+
+	/// <summary>
+	///     Represents the position, rotation, and scale of a three-dimensional game object.
+	/// </summary>
+	/// <seealso cref="BaseTransform{Matrix}" />
+	/// <remarks>
+	///     <para>
+	///         Every game object has a transform which is used to store and manipulate the position, rotation and scale
+	///         of the object. Every transform can have a parent, which allows to apply position, rotation and scale to game
+	///         objects hierarchically.
+	///     </para>
+	/// </remarks>
+	class Transform3 : BaseTransform<Matrix> {
+		private Vector3 _position;
+		private Quaternion _rotation;
+		private Vector3 _scale = Vector3.One;
+
+		public Transform3(Vector3? position = null, Quaternion? rotation = null, Vector3? scale = null) {
+			Position = position ?? Vector3.Zero;
+			Rotation = rotation ?? Quaternion.Identity;
+			Scale = scale ?? Vector3.One;
+		}
+
+		/// <summary>
+		///     Gets the world position.
+		/// </summary>
+		/// <value>
+		///     The world position.
+		/// </value>
+		public Vector3 WorldPosition => WorldMatrix.Translation;
+
+		/// <summary>
+		///     Gets the world scale.
+		/// </summary>
+		/// <value>
+		///     The world scale.
+		/// </value>
+		public Vector3 WorldScale {
+			get {
+				Vector3 scale = Vector3.Zero;
+				Quaternion rotation = Quaternion.Identity;
+				Vector3 translation = Vector3.Zero;
+				WorldMatrix.Decompose(out scale, out rotation, out translation);
+				return scale;
+			}
+		}
+
+
+		/// <summary>
+		///     Gets the world rotation quaternion in radians.
+		/// </summary>
+		/// <value>
+		///     The world rotation quaternion in radians.
+		/// </value>
+		public Quaternion WorldRotation {
+			get {
+				Vector3 scale = Vector3.Zero;
+				Quaternion rotation = Quaternion.Identity;
+				Vector3 translation = Vector3.Zero;
+				WorldMatrix.Decompose(out scale, out rotation, out translation);
+				return rotation;
+			}
+		}
+
+		/// <summary>
+		///     Gets or sets the local position.
+		/// </summary>
+		/// <value>
+		///     The local position.
+		/// </value>
+		public Vector3 Position {
+			get { return _position; }
+			set {
+				_position = value;
+				LocalMatrixBecameDirty();
+				WorldMatrixBecameDirty();
+			}
+		}
+
+		/// <summary>
+		///     Gets or sets the local rotation quaternion in radians.
+		/// </summary>
+		/// <value>
+		///     The local rotation quaternion in radians.
+		/// </value>
+		public Quaternion Rotation {
+			get { return _rotation; }
+			set {
+				_rotation = value;
+				LocalMatrixBecameDirty();
+				WorldMatrixBecameDirty();
+			}
+		}
+
+		/// <summary>
+		///     Gets or sets the local scale.
+		/// </summary>
+		/// <value>
+		///     The local scale.
+		/// </value>
+		public Vector3 Scale {
+			get { return _scale; }
+			set {
+				_scale = value;
+				LocalMatrixBecameDirty();
+				WorldMatrixBecameDirty();
+			}
+		}
+
+		protected internal override void RecalculateWorldMatrix(ref Matrix localMatrix, out Matrix matrix) {
+			if (Parent != null) {
+				Parent.GetWorldMatrix(out matrix);
+				Matrix.Multiply(ref localMatrix, ref matrix, out matrix);
+			}
+			else {
+				matrix = localMatrix;
+			}
+		}
+
+		protected internal override void RecalculateLocalMatrix(out Matrix matrix) {
+			matrix = Matrix.CreateScale(_scale) *
+					 Matrix.CreateFromQuaternion(_rotation) *
+					 Matrix.CreateTranslation(_position);
+		}
+
+		public override string ToString() {
+			return $"Position: {Position}, Rotation: {Rotation}, Scale: {Scale}";
+		}
+	}
 }
