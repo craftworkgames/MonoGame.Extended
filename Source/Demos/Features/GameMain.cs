@@ -45,6 +45,7 @@ namespace Features
                 //new GuiLayoutDemo(this),
                 //new GuiDemo(this),
                 //new ScreensDemo(this),
+                new ShapesDemo(this),
                 new ViewportAdaptersDemo(this),
                 new CollisionDemo(this),
                 new TiledMapsDemo(this),
