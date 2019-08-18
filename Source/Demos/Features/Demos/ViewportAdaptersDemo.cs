@@ -40,7 +40,7 @@ namespace Features.Demos
 
             // the boxing viewport adapter uses letterboxing or pillarboxing to maintain aspect ratio
             // it's a little more complicated and needs to listen to the window client size changing event
-            _boxingViewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480, 88, 70);
+            _boxingViewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);//, 88, 70);
 
             // typically you'll only ever want to use one viewport adapter for a game, but in this sample we'll be 
             // switching between them.
@@ -68,13 +68,13 @@ namespace Features.Demos
                 Exit();
 
             if (keyboardState.IsKeyDown(Keys.D))
-                _currentViewportAdapter = _defaultViewportAdapter;
+                SwitchAdapter(_defaultViewportAdapter);
 
             if (keyboardState.IsKeyDown(Keys.S))
-                _currentViewportAdapter = _scalingViewportAdapter;
+                SwitchAdapter(_scalingViewportAdapter);
 
             if (keyboardState.IsKeyDown(Keys.B))
-                _currentViewportAdapter = _boxingViewportAdapter;
+                SwitchAdapter(_boxingViewportAdapter);
 
             // if we've changed the viewport adapter mid game we need to reset the viewport back to the window size
             // this wouldn't normally be required if you're only ever using one viewport adapter
@@ -88,6 +88,12 @@ namespace Features.Demos
             _mousePosition = _currentViewportAdapter.PointToScreen(mouseState.X, mouseState.Y);
 
             base.Update(gameTime);
+        }
+
+        private void SwitchAdapter(ViewportAdapter viewportAdapter)
+        {
+            _currentViewportAdapter?.Dispose();
+            _currentViewportAdapter = viewportAdapter;
         }
 
         protected override void Draw(GameTime gameTime)

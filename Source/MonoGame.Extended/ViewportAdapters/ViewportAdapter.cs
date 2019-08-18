@@ -1,15 +1,18 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-// ReSharper disable once CheckNamespace
-
 namespace MonoGame.Extended.ViewportAdapters
 {
-    public abstract class ViewportAdapter
+    public abstract class ViewportAdapter : IDisposable
     {
         protected ViewportAdapter(GraphicsDevice graphicsDevice)
         {
             GraphicsDevice = graphicsDevice;
+        }
+
+        public virtual void Dispose()
+        {
         }
 
         public GraphicsDevice GraphicsDevice { get; }
