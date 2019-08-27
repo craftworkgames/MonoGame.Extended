@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -26,6 +27,8 @@ namespace Features.Demos
 
         public AnimationsDemo(GameMain game) : base(game)
         {
+            ContentTypeReaderManager.AddTypeCreator("TextureAtlas", () => new TextureAtlasJsonContentTypeReader());
+            ContentTypeReaderManager.AddTypeCreator("Default", () => new JsonContentTypeReader<TexturePackerFile>());
         }
 
         //protected override void Initialize()
@@ -288,7 +291,7 @@ namespace Features.Demos
 
         //public void Draw(SpriteBatch spriteBatch)
         //{
-        //    //spriteBatch.Draw(_sprite);
+        //    spriteBatch.Draw(_sprite, _transform);
         //}
 
         public void Walk(float direction)

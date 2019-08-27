@@ -11,20 +11,4 @@ namespace MonoGame.Extended.TextureAtlases
         [JsonProperty("meta")]
         public TexturePackerMeta Metadata { get; set; }
     }
-
-    //public class TexturePackerToTextureAtlasConverter
-    //{
-    //    public TextureAtlas Convert(TexturePackerFile texturePackerFile)
-    //    {
-    //        var name = texturePackerFile.Metadata.Image;
-    //        var textureAtlas = new TextureAtlas(name, texture);
-
-    //        foreach (var region in texturePackerFile.Regions)
-    //        {
-    //            textureAtlas.CreateRegion(region.Filename, region.Frame.X, region.Frame.Y, region.Frame.Width, region.Frame.Height);
-    //        }
-
-    //        return textureAtlas;
-    //    }
-    //}
 }

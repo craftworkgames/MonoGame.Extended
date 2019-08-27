@@ -85,11 +85,11 @@ namespace MonoGame.Extended.Collections
             if(Count == 0)
                 return;
 
-            Count = 0;
-
             // non-primitive types are cleared so the garbage collector can release them
             if (!_isPrimitive)
                 Array.Clear(_items, 0, Count);
+
+            Count = 0;
         }
 
         public bool Contains(T element)
