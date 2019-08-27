@@ -1,7 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <IsTool>True</IsTool>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="bin\netstandard2.0\*.dll" Pack="True" PackagePath="tools\" />
+  </ItemGroup>
 
   <PropertyGroup>
     <Authors>craftworkgames</Authors>
