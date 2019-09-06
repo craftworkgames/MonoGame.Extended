@@ -1,8 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Features.Demos
@@ -19,6 +21,7 @@ namespace Features.Demos
         private BoxingViewportAdapter _viewportAdapter;
         private Texture2D _backgroundTexture;
         private BitmapFont _bitmapFontImpact;
+        private BitmapFont _bitmapFontMonospaced;
 
         private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFontMontserrat;
@@ -32,8 +35,33 @@ namespace Features.Demos
             _backgroundTexture = Content.Load<Texture2D>("Textures/vignette");
             _bitmapFontImpact = Content.Load<BitmapFont>("Fonts/impact-32");
             _bitmapFontMontserrat = Content.Load<BitmapFont>("Fonts/montserrat-32");
+            _bitmapFontMonospaced = LoadCustomMonospacedFont();
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+        }
+
+        private BitmapFont LoadCustomMonospacedFont()
+        {
+            // this is a way to create a font in pure code without a font file.
+            const string characters = @" !""#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+            var monospacedTexture = Content.Load<Texture2D>("Fonts/monospaced");
+            var atlas = TextureAtlas.Create("monospaced-atlas", monospacedTexture, 16, 16);
+            var fontRegions = new BitmapFontRegion[characters.Length];
+            var index = 0;
+
+            for (var y = 0; y < monospacedTexture.Height; y += 16)
+            {
+                for (var x = 0; x < monospacedTexture.Width; x += 16)
+                {
+                    if (index < characters.Length)
+                    {
+                        fontRegions[index] = new BitmapFontRegion(atlas[index], characters[index], 0, 0, 16);
+                        index++;
+                    }
+                }
+            }
+
+            return new BitmapFont("monospaced", fontRegions, 16);
         }
 
         protected override void Update(GameTime gameTime)
@@ -115,6 +143,8 @@ namespace Features.Demos
 
             _spriteBatch.DrawRectangle(_clippingRectangle, Color.White);
             _spriteBatch.DrawRectangle(position - bitmapFontMontserratOrigin + offset * 3, bitmapFontMontserratSize, Color.Green);
+
+            _spriteBatch.DrawString(_bitmapFontMonospaced, "Hello Monospaced Fonts!", new Vector2(100, 400), Color.White);
 
             _spriteBatch.End();
 
