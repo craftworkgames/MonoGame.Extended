@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework.Content;
+using MonoGame.Extended.TextureAtlases;
 using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Serialization

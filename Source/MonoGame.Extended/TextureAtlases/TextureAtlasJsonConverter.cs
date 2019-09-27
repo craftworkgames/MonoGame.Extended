@@ -3,10 +3,10 @@ using System.IO;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
-using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Serialization;
 using Newtonsoft.Json;
 
-namespace MonoGame.Extended.Serialization
+namespace MonoGame.Extended.TextureAtlases
 {
     public class TextureAtlasJsonConverter : JsonConverter
     {

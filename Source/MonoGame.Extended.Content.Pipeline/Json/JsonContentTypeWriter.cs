@@ -16,12 +16,12 @@ namespace MonoGame.Extended.Content.Pipeline.Json
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return _runtimeType;// "MonoGame.Extended.Serialization.JsonContentTypeReader, MonoGame.Extended";
+            return _runtimeType;// "MonoGame.Extended.Serialization.SpriteFactoryContentTypeReader, MonoGame.Extended";
         }
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            return _runtimeType;// "MonoGame.Extended.Serialization.JsonContentTypeReader, MonoGame.Extended";
+            return _runtimeType;// "MonoGame.Extended.Serialization.SpriteFactoryContentTypeReader, MonoGame.Extended";
         }
     }
 }

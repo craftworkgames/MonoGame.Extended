@@ -81,7 +81,7 @@ namespace Features.Demos
 
         private AnimatedSprite MakeMotw()
         {
-            var spriteSheet = Content.Load<SpriteSheet>("Animations/motw.spritesheet", new JsonContentLoader());
+            var spriteSheet = Content.Load<SpriteSheet>("Animations/motw.sf", new JsonContentLoader());
             var sprite = new AnimatedSprite(spriteSheet);
             sprite.Play("idle");
 
@@ -127,31 +127,34 @@ namespace Features.Demos
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var walkSpeed = deltaSeconds * 128;
             var keyboardState = Keyboard.GetState();
+            var animation = "idle";
 
             // motw
             if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
             {
-                _motwSprite.Play("walkNorth");
+                animation = "walkNorth";
                 _motwPosition.Y -= walkSpeed;
             }
 
             if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
             {
-                _motwSprite.Play("walkWest");
+                animation = "walkWest";
                 _motwPosition.X -= walkSpeed;
             }
 
             if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
             {
-                _motwSprite.Play("walkSouth");
+                animation = "walkSouth";
                 _motwPosition.Y += walkSpeed;
             }
 
             if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
             {
-                _motwSprite.Play("walkEast");
+                animation = "walkEast";
                 _motwPosition.X += walkSpeed;
             }
+
+            _motwSprite.Play(animation);
 
             // camera
             if (keyboardState.IsKeyDown(Keys.R))

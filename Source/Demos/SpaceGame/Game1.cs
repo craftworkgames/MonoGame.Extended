@@ -19,7 +19,7 @@ namespace SpaceGame
         private Texture2D _backgroundTexture;
         private BulletFactory _bulletFactory;
         private OrthographicCamera _camera;
-        private SpriteSheetAnimationFactory _explosionAnimations;
+        //private SpriteSheetAnimationFactory _explosionAnimations;
         private BitmapFont _font;
         private MeteorFactory _meteorFactory;
         private Spaceship _player;
@@ -55,7 +55,7 @@ namespace SpaceGame
             _font = Content.Load<BitmapFont>("Fonts/montserrat-32");
 
             _camera = new OrthographicCamera(_viewportAdapter);
-            _explosionAnimations = Content.Load<SpriteSheetAnimationFactory>("explosion-animations");
+            //_explosionAnimations = Content.Load<SpriteSheetAnimationFactory>("explosion-animations");
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -168,8 +168,8 @@ namespace SpaceGame
 
         private void Explode(Vector2 position, float radius)
         {
-            var explosion = new Explosion(_explosionAnimations, position, radius);
-            _entityManager.AddEntity(explosion);
+            //var explosion = new Explosion(_explosionAnimations, position, radius);
+            //_entityManager.AddEntity(explosion);
         }
 
         protected override void Draw(GameTime gameTime)
