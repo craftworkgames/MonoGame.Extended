@@ -52,7 +52,7 @@ namespace Features.Demos
 
             //var zombieAnimations = Content.Load<SpriteSheetAnimationFactory>("Animations/zombie-animations");
             //_zombie = new Zombie(zombieAnimations) { Position = new Vector2(100, 100) };
-            
+
             _fireballSprite = MakeFireball();
 
             //_animation = new SpriteSheetAnimation("fireballAnimation", fireballAtlas.Regions.ToArray()) { FrameDuration = 0.2f };
@@ -136,16 +136,16 @@ namespace Features.Demos
                 _motwPosition.Y -= walkSpeed;
             }
 
-            if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
-            {
-                animation = "walkWest";
-                _motwPosition.X -= walkSpeed;
-            }
-
             if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
             {
                 animation = "walkSouth";
                 _motwPosition.Y += walkSpeed;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
+            {
+                animation = "walkWest";
+                _motwPosition.X -= walkSpeed;
             }
 
             if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
