@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Animations
+namespace MonoGame.Extended.Sprites
 {
     public abstract class Animation : IUpdate, IDisposable
     {

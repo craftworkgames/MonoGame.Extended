@@ -50,8 +50,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Input", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Tweening", "MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj", "{1CF61F4F-A2EE-49BF-95D0-379E870DE90E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Animations", "MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj", "{587CE536-216F-41A1-B223-AE502C125B09}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pong", "Demos\Pong\Pong.csproj", "{55033148-02B0-4810-840A-011516846975}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platformer", "Demos\Platformer\Platformer.csproj", "{1DDD3C52-B2F2-4DB3-8BF9-57BD93928EA8}"
@@ -196,14 +194,6 @@ Global
 		{1CF61F4F-A2EE-49BF-95D0-379E870DE90E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1CF61F4F-A2EE-49BF-95D0-379E870DE90E}.Release|x86.ActiveCfg = Release|Any CPU
 		{1CF61F4F-A2EE-49BF-95D0-379E870DE90E}.Release|x86.Build.0 = Release|Any CPU
-		{587CE536-216F-41A1-B223-AE502C125B09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{587CE536-216F-41A1-B223-AE502C125B09}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{587CE536-216F-41A1-B223-AE502C125B09}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{587CE536-216F-41A1-B223-AE502C125B09}.Debug|x86.Build.0 = Debug|Any CPU
-		{587CE536-216F-41A1-B223-AE502C125B09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{587CE536-216F-41A1-B223-AE502C125B09}.Release|Any CPU.Build.0 = Release|Any CPU
-		{587CE536-216F-41A1-B223-AE502C125B09}.Release|x86.ActiveCfg = Release|Any CPU
-		{587CE536-216F-41A1-B223-AE502C125B09}.Release|x86.Build.0 = Release|Any CPU
 		{55033148-02B0-4810-840A-011516846975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{55033148-02B0-4810-840A-011516846975}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55033148-02B0-4810-840A-011516846975}.Debug|x86.ActiveCfg = Debug|Any CPU

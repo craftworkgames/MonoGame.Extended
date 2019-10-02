@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
-using MonoGame.Extended.Animations.SpriteSheets;
 using MonoGame.Extended.Sprites;
 
 namespace SpaceGame.Entities

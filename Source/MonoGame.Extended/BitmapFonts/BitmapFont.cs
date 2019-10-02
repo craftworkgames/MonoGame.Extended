@@ -21,13 +21,12 @@ namespace MonoGame.Extended.BitmapFonts
 
         public string Name { get; }
         public int LineHeight { get; }
-        public int LetterSpacing { get; set; } = 0;
+        public int LetterSpacing { get; set; }
         public static bool UseKernings { get; set; } = true;
 
         public BitmapFontRegion GetCharacterRegion(int character)
         {
-            BitmapFontRegion region;
-            return _characterMap.TryGetValue(character, out region) ? region : null;
+            return _characterMap.TryGetValue(character, out var region) ? region : null;
         }
 
         public Size2 MeasureString(string text)
