@@ -45,12 +45,12 @@ protected override void Draw(GameTime gameTime) {
     // Clear the screen
     GraphicsDevice.Clear(Color.Pink);
     
-    // Transform matrix is only needed if you have a Camera2D
+    // Transform matrix is only needed if you have a OrthographicCamera
     // Setting the sampler state to `SamplerState.PointClamp` is reccomended to remove gaps between the tiles when rendering
     spriteBatch.Begin(transformMatrix: camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
 
     // map Should be the `TiledMap`
-    // Once again, the transform matrix is only needed if you have a Camera2D
+    // Once again, the transform matrix is only needed if you have a OrthographicCamera
     mapRenderer.Draw(map, camera.GetViewMatrix());
     
     // End the sprite batch
