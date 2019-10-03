@@ -81,7 +81,7 @@ namespace MonoGame.Extended.Sprites
 
             if (scale != Vector2.One)
             {
-                min = min * scale;
+                min *= scale;
                 max = max * scale;
             }
 
