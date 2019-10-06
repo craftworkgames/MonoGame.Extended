@@ -6,7 +6,7 @@ MonoGame.Extended is an extension to the [MonoGame](http://www.monogame.net/) fr
 
 It makes MonoGame more awesome.
 
-[![Build Status](http://build.craftworkgames.com/app/rest/builds/buildType:(id:MonoGameExtended_Build)/statusIcon)](http://build.craftworkgames.com/viewType.html?buildTypeId=MonoGameExtended_CI&guest=1) [![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://docs.monogameextended.net/)
+[![Build Status](https://dev.azure.com/dylanwilson/MonoGame.Extended/_apis/build/status/craftworkgames.MonoGame.Extended?branchName=develop)](https://dev.azure.com/dylanwilson/MonoGame.Extended/_build/latest?definitionId=1&branchName=develop) [![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://docs.monogameextended.net/)
 
 ## Getting started
 
