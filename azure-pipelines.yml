@@ -1,0 +1,11 @@
+trigger:
+- develop
+
+pool:
+  name: Default
+
+steps:
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo Hello world
