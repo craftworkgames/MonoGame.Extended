@@ -1,0 +1,10 @@
+trigger:
+- develop
+
+pool:
+  name: Default
+
+steps:
+- task: PowerShell@2
+  inputs:
+    filePath: 'build.ps1'
