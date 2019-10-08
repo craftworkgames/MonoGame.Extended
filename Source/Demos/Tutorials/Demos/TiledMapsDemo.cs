@@ -10,7 +10,7 @@ using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace Features.Demos
+namespace Tutorials.Demos
 {
     public class TiledMapsDemo : DemoBase
     {

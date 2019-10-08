@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace Features.Demos
+namespace Tutorials.Demos
 {
     public abstract class DemoBase : IDisposable, IComparable<DemoBase>
     {
@@ -27,8 +27,8 @@ namespace Features.Demos
 
         protected bool IsMouseVisible
         {
-            get { return _game.IsMouseVisible; }
-            set { _game.IsMouseVisible = value; }
+            get => _game.IsMouseVisible;
+            set => _game.IsMouseVisible = value;
         }
 
         protected ContentManager Content { get; private set; }
@@ -49,7 +49,7 @@ namespace Features.Demos
         protected virtual void UnloadContent() { }
         protected virtual void Update(GameTime gameTime) { }
         protected virtual void Draw(GameTime gameTime) { }
-        
+
         protected void Exit()
         {
         }

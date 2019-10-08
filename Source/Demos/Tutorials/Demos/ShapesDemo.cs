@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Shapes;
 
-namespace Features.Demos
+namespace Tutorials.Demos
 {
     public class ShapesDemo : DemoBase
     {

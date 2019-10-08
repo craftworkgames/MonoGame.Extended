@@ -13,7 +13,7 @@ using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace Features.Demos
+namespace Tutorials.Demos
 {
     public class ParticlesDemo : DemoBase
     {

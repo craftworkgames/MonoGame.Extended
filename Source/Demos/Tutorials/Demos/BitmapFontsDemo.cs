@@ -6,7 +6,7 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace Features.Demos
+namespace Tutorials.Demos
 {
     public class BitmapFontsDemo : DemoBase
     {

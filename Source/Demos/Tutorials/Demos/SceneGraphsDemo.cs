@@ -7,7 +7,7 @@ using MonoGame.Extended.SceneGraphs;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace Features.Demos
+namespace Tutorials.Demos
 {
     public class SceneGraphsDemo : DemoBase
     {

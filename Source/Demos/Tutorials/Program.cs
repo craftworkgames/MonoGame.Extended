@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Features.NetCore
+namespace Tutorials
 {
     public static class Program
     {

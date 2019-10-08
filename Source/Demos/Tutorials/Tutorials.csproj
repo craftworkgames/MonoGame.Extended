@@ -1,32 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <MonoGameContentReference Include="**\*.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Screens\**" />
-    <EmbeddedResource Remove="Screens\**" />
-    <MonoGameContentReference Remove="Screens\**" />
-    <None Remove="Screens\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Demos\GuiDemo.cs" />
-    <Compile Remove="Demos\GuiLayoutDemo.cs" />
-    <Compile Remove="Demos\ScreensDemo.cs" />
-    <Compile Remove="Demos\TweeningDemo.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="Content\Animations\motw.sf" />
     <None Remove="Content\Animations\motw.spritesheet" />
     <None Remove="Content\Animations\zombie-atlas.json" />
     <None Remove="Content\Animations\zombie.spritesheet" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Screens\SelectDemoScreen.cs" />
+    <None Remove="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Animations\motw.sf">
@@ -49,21 +36,13 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj" />
     <ProjectReference Include="..\..\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj">
       <Private>true</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj" />
-    <ProjectReference Include="..\..\MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj" />
     <ProjectReference Include="..\..\MonoGame.Extended.Gui\MonoGame.Extended.Gui.csproj" />
     <ProjectReference Include="..\..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj" />
     <ProjectReference Include="..\..\MonoGame.Extended.Particles\MonoGame.Extended.Particles.csproj" />
     <ProjectReference Include="..\..\MonoGame.Extended.SceneGraphs\MonoGame.Extended.SceneGraphs.csproj" />
-    <ProjectReference Include="..\..\MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj" />
-    <ProjectReference Include="..\..\MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj" />
     <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

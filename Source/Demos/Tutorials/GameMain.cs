@@ -1,21 +1,15 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Features.Demos;
-using Features.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.ViewportAdapters;
+using Tutorials.Demos;
 
-namespace Features
+namespace Tutorials
 {
-    public class PlatformConfig
-    {
-        public bool IsFullScreen { get; set; } = true;
-    }
-
     public class GameMain : Game
     {
         // ReSharper disable once NotAccessedField.Local
@@ -47,7 +41,7 @@ namespace Features
                 //new ScreensDemo(this),
                 new ShapesDemo(this),
                 new ViewportAdaptersDemo(this),
-                new CollisionDemo(this),
+                //new CollisionDemo(this),
                 new TiledMapsDemo(this),
                 new AnimationsDemo(this),
                 new SpritesDemo(this),
@@ -72,7 +66,7 @@ namespace Features
         protected override void Initialize()
         {
             base.Initialize();
-            
+
             // TODO: Allow switching to full-screen mode from the UI
             //if (_isFullScreen)
             //{

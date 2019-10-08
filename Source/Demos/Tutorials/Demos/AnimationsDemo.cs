@@ -10,7 +10,7 @@ using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
-namespace Features.Demos
+namespace Tutorials.Demos
 {
     public class AnimationsDemo : DemoBase
     {
@@ -19,7 +19,7 @@ namespace Features.Demos
         private SpriteBatch _spriteBatch;
         //private Zombie _zombie;
         //private SpriteSheetAnimation _animation;
-        private AnimatedSprite _zombie;
+        //private AnimatedSprite _zombie;
         private AnimatedSprite _fireballSprite;
         private AnimatedSprite _motwSprite;
         public Vector2 _motwPosition;

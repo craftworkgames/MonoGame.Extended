@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Features.Demos;
 using MonoGame.Extended;
 using MonoGame.Extended.Gui;
 using MonoGame.Extended.Gui.Controls;
+using Tutorials.Demos;
 
-namespace Features.Screens
+namespace Tutorials
 {
     public class SelectDemoScreen : Screen
     {

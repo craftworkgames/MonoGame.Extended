@@ -6,7 +6,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
-namespace Features.Demos
+namespace Tutorials.Demos
 {
     public class SpritesDemo : DemoBase
     {

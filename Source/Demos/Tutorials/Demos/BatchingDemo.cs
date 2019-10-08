@@ -7,7 +7,7 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Graphics.Effects;
 
-namespace Features.Demos
+namespace Tutorials.Demos
 {
     public struct SpriteInfo
     {
