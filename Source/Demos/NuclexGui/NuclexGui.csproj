@@ -17,7 +17,6 @@
     <ProjectReference Include="..\..\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj">
       <Private>true</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj" />
     <ProjectReference Include="..\..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj" />
     <ProjectReference Include="..\..\MonoGame.Extended.NuclexGui\MonoGame.Extended.NuclexGui.csproj" />
     <ProjectReference Include="..\..\MonoGame.Extended\MonoGame.Extended.csproj" />

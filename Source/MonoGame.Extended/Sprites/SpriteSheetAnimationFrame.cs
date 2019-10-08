@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using Newtonsoft.Json;
 
-namespace MonoGame.Extended.Animations.SpriteSheets
+namespace MonoGame.Extended.Sprites
 {
     [JsonConverter(typeof(SpriteSheetAnimationFrameJsonConverter))]
     [DebuggerDisplay("{Index} {Duration}")]

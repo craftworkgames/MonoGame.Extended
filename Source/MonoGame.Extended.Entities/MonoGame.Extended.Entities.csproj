@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.Portable" Version="3.6.0.1625" PrivateAssets="All" />
-    <ProjectReference Include="..\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj" />
     <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj" />
   </ItemGroup>
 </Project>

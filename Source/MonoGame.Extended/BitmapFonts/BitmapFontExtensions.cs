@@ -105,7 +105,7 @@ namespace MonoGame.Extended.BitmapFonts
         /// <remarks>
         ///     <see cref="BitmapFont" /> objects are loaded from the Content Manager. See the <see cref="BitmapFont" /> class for
         ///     more information.
-        ///     Before any calls to <see cref="DrawString" /> you must call <see cref="SpriteBatch.Begin" />. Once all calls 
+        ///     Before any calls to this method you must call <see cref="SpriteBatch.Begin" />. Once all calls 
         ///     are complete, call <see cref="SpriteBatch.End" />.
         ///     Use a newline character (\n) to draw more than one line of text.
         /// </remarks>

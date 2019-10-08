@@ -12,6 +12,7 @@ namespace Features.Demos
     {
         public override string Name => "Sprites";
 
+        private Sprite _apple;
         private Sprite _axeSprite;
         private Texture2D _backgroundTexture;
         private float _particleOpacity;
@@ -34,6 +35,9 @@ namespace Features.Demos
 
             var testRegion = new TextureRegion2D(Content.Load<Texture2D>("Textures/clipping-test"));
             _clippingTextureRegion = new NinePatchRegion2D(testRegion, 16);
+
+            var appleTexture = Content.Load<Texture2D>("Sprites/apple");
+            _apple = new Sprite(appleTexture);
 
             var axeTexture = Content.Load<Texture2D>("Textures/axe");
             _axeSprite = new Sprite(axeTexture)
@@ -121,6 +125,8 @@ namespace Features.Demos
             _spriteBatch.Draw(_clippingTextureRegion, new Rectangle(50, 50, 128, 128), Color.White, clippingRectangle: null);
             _spriteBatch.Draw(_clippingTextureRegion, new Rectangle(50, 250, 512, 512), Color.White, clippingRectangle: _clippingRectangle);
             _spriteBatch.DrawRectangle(_clippingRectangle.ToRectangleF(), Color.White);
+
+            _spriteBatch.Draw(_apple, new Vector2(100, 100));
 
             _spriteBatch.End();
 
