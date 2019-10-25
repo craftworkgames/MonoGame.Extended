@@ -41,8 +41,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 				if (!string.IsNullOrWhiteSpace(template.Tileset?.Source))
 				{
-					template.Tileset.Source = $"{Path.GetDirectoryName(filePath)}/{template.Tileset.Source}";
-					ContentLogger.Log($"Adding dependency '{template.Tileset.Source}'");
+                    template.Tileset.Source = Path.Combine(Path.GetDirectoryName(filePath), template.Tileset.Source);
+                    ContentLogger.Log($"Adding dependency '{template.Tileset.Source}'");
 					// We depend on this tileset.
 					context.AddDependency(template.Tileset.Source);
 				}

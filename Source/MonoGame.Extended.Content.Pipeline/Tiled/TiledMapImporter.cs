@@ -52,14 +52,14 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 					if (!string.IsNullOrWhiteSpace(tileset.Source))
 					{
-						tileset.Source = $"{Path.GetDirectoryName(mapFilePath)}/{tileset.Source}";
-						ContentLogger.Log($"Adding dependency for {tileset.Source}");
+                        tileset.Source = Path.Combine(Path.GetDirectoryName(mapFilePath), tileset.Source);
+                        ContentLogger.Log($"Adding dependency for {tileset.Source}");
 						// We depend on the tileset. If the tileset changes, the map also needs to rebuild.
 						context.AddDependency(tileset.Source);
 					}
 					else
 					{
-						tileset.Image.Source = $"{Path.GetDirectoryName(mapFilePath)}/{tileset.Image.Source}";
+                        tileset.Image.Source = Path.Combine(Path.GetDirectoryName(mapFilePath), tileset.Image.Source);
 						ContentLogger.Log($"Adding dependency for {tileset.Image.Source}");
 						context.AddDependency(tileset.Image.Source);
 					}
@@ -78,7 +78,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			{
 				if (layers[i] is TiledMapImageLayerContent imageLayer)
 				{
-					imageLayer.Image.Source = $"{path}/{imageLayer.Image.Source}";
+                    imageLayer.Image.Source = Path.Combine(path, imageLayer.Image.Source);
 					ContentLogger.Log($"Adding dependency for '{imageLayer.Image.Source}'");
 
 					// Tell the pipeline that we depend on this image and need to rebuild the map if the image changes.
@@ -89,8 +89,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 					foreach (var obj in objectLayer.Objects)
 						if (!String.IsNullOrWhiteSpace(obj.TemplateSource))
 						{
-							obj.TemplateSource = $"{path}/{obj.TemplateSource}";
-							ContentLogger.Log($"Adding dependency for '{obj.TemplateSource}'");
+                            obj.TemplateSource = Path.Combine(path, obj.TemplateSource);
+                            ContentLogger.Log($"Adding dependency for '{obj.TemplateSource}'");
 							// Tell the pipeline that we depend on this template and need to rebuild the map if the template changes.
 							// (Templates are loaded into objects on process, so all objects which depend on the template file
 							//  need the change to the template)
