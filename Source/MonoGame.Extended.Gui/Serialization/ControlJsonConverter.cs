@@ -22,21 +22,25 @@ namespace MonoGame.Extended.Gui.Serialization
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var skin = _guiSkinService.Skin;
             var style = (ControlStyle) _styleConverter.ReadJson(reader, objectType, existingValue, serializer);
             var template = GetControlTemplate(style);
-            var control = skin.Create(style.TargetType, template) as ItemsControl;
+            var skin = _guiSkinService.Skin;
+            var control = skin.Create(style.TargetType, template);
 
-            object childControls;
-
-            if (style.TryGetValue(nameof(ItemsControl.Items), out childControls))
+            var itemsControl = control as ItemsControl;
+            if (itemsControl != null)
             {
-                var controlCollection = childControls as ControlCollection;
+                object childControls;
 
-                if (controlCollection != null)
+                if (style.TryGetValue(nameof(ItemsControl.Items), out childControls))
                 {
-                    foreach (var child in controlCollection)
-                        control.Items.Add(child);
+                    var controlCollection = childControls as ControlCollection;
+
+                    if (controlCollection != null)
+                    {
+                        foreach (var child in controlCollection)
+                            itemsControl.Items.Add(child);
+                    }
                 }
             }
 

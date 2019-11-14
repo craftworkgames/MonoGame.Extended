@@ -2,28 +2,28 @@
   "Skin": "Content/adventure-gui-skin.json",
   "Controls": [
     {
-      "Type": "GuiStackPanel",
+      "Type": "StackPanel",
       "Name": "MainPanel",
       "HorizontalAlignment": "Centre",
       "VerticalAlignment": "Bottom",
       "Margin": "0 0 0 50", 
       "Controls": [
         {
-          "Type": "GuiButton",
+          "Type": "Button",
           "Name": "PlayButton",
           "Width": "200", 
           "Text": "Play",
           "Style": "white-button"
         },
         {
-          "Type": "GuiButton",
+          "Type": "Button",
           "Name": "OptionsButton",
           "Width": "200",
           "Text": "Options",
           "Style": "white-button"
         },
         {
-          "Type": "GuiButton",
+          "Type": "Button",
           "Name": "QuitButton",
           "Width": "200",
           "Text": "Quit",

@@ -39,81 +39,81 @@
   "Styles": [
     {
       "Name": "close-button",
-      "Type": "GuiButton",
+      "Type": "Button",
       "BackgroundRegion": "buttonRound_close",
       "HoverStyle": {
-        "Type": "GuiButton",
+        "Type": "Button",
         "Color": "LightGray"
       }
     },
     {
       "Name": "white-button",
-      "Type": "GuiButton",
+      "Type": "Button",
       "Margin": "5 2",
       "BackgroundRegion": "buttonLong_grey",
       "TextOffset": "0 -2",
       "TextColor": "#f4a460ff",
       "Color": "#8b4513ff",
       "PressedStyle": {
-        "Type": "GuiButton",
+        "Type": "Button",
         "BackgroundRegion": "buttonLong_grey_pressed",
         "Offset": "0 2",
         "TextOffset": "0 2"
       },
       "HoverStyle": {
-        "Type": "GuiButton",
+        "Type": "Button",
         "Color": "#9E4C16ff",
         "TextColor": "#ffffffff"
       }
     },
     {
       "Name": "checkbox",
-      "Type": "GuiCheckBox",
+      "Type": "CheckBox",
       "BackgroundRegion": "checkBox_beige_unchecked",
       "CheckedStyle": {
-        "Type": "GuiCheckBox",
+        "Type": "CheckBox",
         "BackgroundRegion": "checkBox_beige_checked"
       }
     },
     {
       "Name": "brown-panel",
-      "Type": "GuiStackPanel",
+      "Type": "StackPanel",
       "BackgroundRegion": "panel_brown",
       "Size": "400 300"
     },
     {
       "Name": "beige-inset-panel",
-      "Type": "GuiStackPanel",
+      "Type": "StackPanel",
       "BackgroundRegion": "panelInset_beige",
       "Size": "385 280"
     },
     {
       "Name": "label",
-      "Type": "GuiLabel",
+      "Type": "Label",
       "TextColor": "#444444"
     },
     {
       "Name": "monogame-title",
-      "Type": "GuiImage",
+      "Type": "Image",
       "BackgroundRegion": "monogame-title"
     },
     {
       "Name": "text-box",
-      "Type": "GuiTextBox",
+      "Type": "TextBox",
       "ClipPadding": "8 0",
       "BackgroundRegion": "grey_textBox",
       "TextColor": "#444444"
     },
     {
       "Name": "progress-bar",
-      "Type": "GuiProgressBar",
+      "Type": "ProgressBar",
       "BackgroundRegion": "progress-bar-container",
       "BarRegion": "progress-bar-blue",
       "Size": "100 32"
     },
     {
       "Name": "list-box",
-      "Type": "GuiListBox",
+      "Type": "ListBox",
       "Size": "200 150",
       "ClipPadding": "7 5",
       "BackgroundRegion": "grey_textBox",
@@ -121,7 +121,7 @@
     },
     {
       "Name": "dialog",
-      "Type": "GuiDialog",
+      "Type": "Dialog",
       "Padding": "10",
       "BackgroundRegion": "panel_brown",
       "TextColor": "#444444"
