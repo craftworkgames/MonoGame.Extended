@@ -9,7 +9,6 @@
     <PackageTags>monogame ecs entity component system</PackageTags>
     <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
     <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
-    <PackageLicenseUrl>https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE</PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</PackageIconUrl>
   </PropertyGroup>
 
@@ -19,7 +18,6 @@
 
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.Portable" Version="3.6.0.1625" PrivateAssets="All" />
-    <ProjectReference Include="..\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj" />
     <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj" />
   </ItemGroup>
 </Project>

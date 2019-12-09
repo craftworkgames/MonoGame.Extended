@@ -111,7 +111,13 @@ namespace MonoGame.Extended.Gui
             var control = (Control)Activator.CreateInstance(type);
 
             if (template != null)
-                GetStyle(template).Apply(control);
+            {
+                var style = GetStyle(template);
+                if (style != null)
+                    style.Apply(control);
+                else
+                    throw new FormatException($"invalid style {template} for control {type.Name}");
+            }
 
             return control;
         }

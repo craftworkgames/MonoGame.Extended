@@ -6,14 +6,14 @@ The purpose of the camera is to create a transformation matrix that changes the 
 
 To create a camera initialize an instance of it using one of the constructor overloads. It's recommended that you used a viewport adapter to scale the screen but you don't have to.
 ```csharp
-        private Camera2D _camera;
+        private OrthographicCamera _camera;
 
         protected override void Initialize()
         {
             base.Initialize();
 
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
-            _camera = new Camera2D(viewportAdapter);
+            _camera = new OrthographicCamera(viewportAdapter);
         }
 ```
 Next you'll need to apply the camera's view matrix to one or more of the `SpriteBatch.Begin` calls in your `Draw` method.

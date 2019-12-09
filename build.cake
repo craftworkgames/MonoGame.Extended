@@ -1,4 +1,3 @@
-#tool nuget:?package=vswhere
 #tool nuget:?package=NUnit.Runners&version=2.6.4
 #tool nuget:?package=GitVersion.CommandLine&prerelease
 
@@ -6,8 +5,6 @@ var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var solution = "./Source/MonoGame.Extended.sln";
 
-var vsLatest  = VSWhereLatest();
-var msBuildPath = vsLatest?.CombineWithFilePath("./MSBuild/15.0/Bin/amd64/MSBuild.exe");
 var gitVersion = GitVersion();
 
 Information($"##teamcity[buildNumber '{gitVersion.NuGetVersion}']");

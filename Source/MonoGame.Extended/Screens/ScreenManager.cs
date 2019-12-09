@@ -10,8 +10,8 @@ namespace MonoGame.Extended.Screens
         }
 
         private Screen _activeScreen;
-        private bool _isInitialized;
-        private bool _isLoaded;
+        //private bool _isInitialized;
+        //private bool _isLoaded;
         private Transition _activeTransition;
 
         public void LoadScreen(Screen screen, Transition transition)
@@ -46,21 +46,21 @@ namespace MonoGame.Extended.Screens
         {
             base.Initialize();
             _activeScreen?.Initialize();
-            _isInitialized = true;
+            //_isInitialized = true;
         }
 
         protected override void LoadContent()
         {
             base.LoadContent();
             _activeScreen?.LoadContent();
-            _isLoaded = true;
+            //_isLoaded = true;
         }
 
         protected override void UnloadContent()
         {
             base.UnloadContent();
             _activeScreen?.UnloadContent();
-            _isLoaded = false;
+            //_isLoaded = false;
         }
 
         public override void Update(GameTime gameTime)

@@ -53,9 +53,7 @@ namespace MonoGame.Extended.BitmapFonts
                 var amount = reader.ReadInt32();
 
                 // Find region
-                BitmapFontRegion region;
-
-                if (!characterMap.TryGetValue(first, out region))
+                if (!characterMap.TryGetValue(first, out var region))
                     continue;
 
                 region.Kernings[second] = amount;
