@@ -8,7 +8,12 @@ namespace MonoGame.Extended.Tiled.Serialization
         public string Name { get; set; }
 
         [XmlAttribute(AttributeName = "value")]
-        public string Value { get; set; }
+        public string ValueAttribute { get; set; }
+
+        [XmlText]
+        public string ValueBody { get; set; }
+
+        public string Value => ValueAttribute ?? ValueBody;
 
         public override string ToString()
         {
