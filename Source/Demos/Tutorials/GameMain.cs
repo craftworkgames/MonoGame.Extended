@@ -36,17 +36,13 @@ namespace Tutorials
 
             _demos = new DemoBase[]
             {
-                //new GuiLayoutDemo(this),
-                //new GuiDemo(this),
-                //new ScreensDemo(this),
                 new ShapesDemo(this),
                 new ViewportAdaptersDemo(this),
-                //new CollisionDemo(this),
+                new CollisionDemo(this),
                 new TiledMapsDemo(this),
                 new AnimationsDemo(this),
                 new SpritesDemo(this),
                 new BatchingDemo(this),
-                //new TweeningDemo(this),
                 new InputListenersDemo(this),
                 new SceneGraphsDemo(this),
                 new ParticlesDemo(this),
