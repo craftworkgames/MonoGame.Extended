@@ -63,8 +63,7 @@ namespace Tutorials.Demos
 
             _primitiveDrawing.DrawSegment(new Vector2(300, 310), new Vector2(400, 110), Color.White);
 
-            //TODO: offset this by position
-            _primitiveDrawing.DrawPolygon(new Vector2(600, 300), _polygon.Vertices, 5, Color.Aqua);
+            _primitiveDrawing.DrawPolygon(new Vector2(600, 300), _polygon.Vertices, Color.Aqua);
 
             _primitiveBatch.End();
 
