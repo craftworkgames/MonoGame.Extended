@@ -124,6 +124,7 @@ namespace MonoGame.Extended.VectorDraw
 
             Color colorFill = color * (outline ? 0.5f : 1.0f);
 
+            //This algorithm can't handle convext polygons...
             for (int i = 1; i < count - 1; i++)
             {
                 _primitiveBatch.AddVertex(new Vector2(vertices[0].X + position.X, vertices[0].Y + position.Y), colorFill, PrimitiveType.TriangleList);
