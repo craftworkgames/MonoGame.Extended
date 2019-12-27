@@ -2,16 +2,24 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Shapes;
+using MonoGame.Extended.VectorDraw;
 
 namespace Tutorials.Demos
 {
     public class ShapesDemo : DemoBase
     {
         private SpriteBatch _spriteBatch;
-        
+
+        //PWA - Testing
+        private PrimitiveDrawing _primitiveDrawing;
+        PrimitiveBatch _primitiveBatch;
+        private Matrix _localProjection;
+        private Matrix _localView;
+
         public ShapesDemo(GameMain game) 
             : base(game)
         {
+            
         }
 
         public override string Name => "Shapes";
@@ -28,7 +36,13 @@ namespace Tutorials.Demos
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice); 
+            
+            //PWA
+            _primitiveBatch = new PrimitiveBatch(GraphicsDevice);
+            _primitiveDrawing = new PrimitiveDrawing(_primitiveBatch);
+            _localProjection = Matrix.CreateOrthographicOffCenter(0f, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0f, 0f, 1f);
+            _localView = Matrix.Identity;
         }
 
         protected override void Draw(GameTime gameTime)
@@ -40,6 +54,11 @@ namespace Tutorials.Demos
 
             _spriteBatch.DrawCircle(100, 100, 32, 32, Color.Green, 4);
             _spriteBatch.DrawEllipse(new Vector2(200, 200), new Vector2(50, 25), 32, Color.Orange, 8);
+
+            //PWA
+            _primitiveBatch.Begin(ref _localProjection, ref _localView);
+            _primitiveDrawing.DrawCircle(new Vector2(100, 200), 32, Color.Green);
+            _primitiveBatch.End();
 
             _spriteBatch.DrawLine(300, 300, 400, 100, Color.White, 6);
 
