@@ -61,9 +61,11 @@ namespace Tutorials.Demos
             _primitiveDrawing.DrawCircle(new Vector2(100, 200), 32, Color.Green);
             _primitiveDrawing.DrawSolidCircle(new Vector2(100, 300), 32, Color.Green);
 
-            _primitiveDrawing.DrawSegment(new Vector2(300, 310), new Vector2(400, 110), Color.White);
+            _primitiveDrawing.DrawSegment(new Vector2(300, 350), new Vector2(400, 150), Color.White);
 
             _primitiveDrawing.DrawPolygon(new Vector2(600, 300), _polygon.Vertices, Color.Aqua);
+
+            _primitiveDrawing.DrawSolidPolygon(new Vector2(600, 400), _polygon.Vertices, Color.Aqua);
 
             _primitiveBatch.End();
 

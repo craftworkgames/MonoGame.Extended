@@ -108,5 +108,31 @@ namespace MonoGame.Extended.VectorDraw
                 _primitiveBatch.AddVertex(new Vector2(vertices[0].X + position.X, vertices[0].Y + position.Y), color, PrimitiveType.LineList);
             }
         }
+
+        public void DrawSolidPolygon(Vector2 position, Vector2[] vertices, Color color, bool outline = true)
+        {
+            if (!_primitiveBatch.IsReady())
+                throw new InvalidOperationException("BeginCustomDraw must be called before drawing anything.");
+
+            int count = vertices.Length;
+
+            if (count == 2)
+            {
+                DrawPolygon(position, vertices, color);
+                return;
+            }
+
+            Color colorFill = color * (outline ? 0.5f : 1.0f);
+
+            for (int i = 1; i < count - 1; i++)
+            {
+                _primitiveBatch.AddVertex(new Vector2(vertices[0].X + position.X, vertices[0].Y + position.Y), colorFill, PrimitiveType.TriangleList);
+                _primitiveBatch.AddVertex(new Vector2(vertices[i].X + position.X, vertices[i].Y + position.Y), colorFill, PrimitiveType.TriangleList);
+                _primitiveBatch.AddVertex(new Vector2(vertices[i + 1].X + position.X, vertices[i + 1].Y + position.Y), colorFill, PrimitiveType.TriangleList);
+            }
+
+            if (outline)
+                DrawPolygon(position, vertices, color);
+        }
     }
 }
