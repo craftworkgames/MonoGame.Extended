@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Triangulation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -124,12 +125,15 @@ namespace MonoGame.Extended.VectorDraw
 
             Color colorFill = color * (outline ? 0.5f : 1.0f);
 
-            //This algorithm can't handle convext polygons...
-            for (int i = 1; i < count - 1; i++)
+            Vector2[] outVertices;
+            int[] outIndices;
+            Triangulator.Triangulate(vertices, WindingOrder.CounterClockwise, out outVertices, out outIndices);
+
+            for(int i = 0; i < outIndices.Length - 2; i += 3)
             {
-                _primitiveBatch.AddVertex(new Vector2(vertices[0].X + position.X, vertices[0].Y + position.Y), colorFill, PrimitiveType.TriangleList);
-                _primitiveBatch.AddVertex(new Vector2(vertices[i].X + position.X, vertices[i].Y + position.Y), colorFill, PrimitiveType.TriangleList);
-                _primitiveBatch.AddVertex(new Vector2(vertices[i + 1].X + position.X, vertices[i + 1].Y + position.Y), colorFill, PrimitiveType.TriangleList);
+                _primitiveBatch.AddVertex(new Vector2(outVertices[outIndices[i]].X + position.X, outVertices[outIndices[i]].Y + position.Y), colorFill, PrimitiveType.TriangleList);
+                _primitiveBatch.AddVertex(new Vector2(outVertices[outIndices[i + 1]].X + position.X, outVertices[outIndices[i + 1]].Y + position.Y), colorFill, PrimitiveType.TriangleList);
+                _primitiveBatch.AddVertex(new Vector2(outVertices[outIndices[i + 2]].X + position.X, outVertices[outIndices[i + 2]].Y + position.Y), colorFill, PrimitiveType.TriangleList);
             }
 
             if (outline)
