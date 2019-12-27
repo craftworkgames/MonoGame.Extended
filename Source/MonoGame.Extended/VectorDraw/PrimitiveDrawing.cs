@@ -87,5 +87,24 @@ namespace MonoGame.Extended.VectorDraw
             _primitiveBatch.AddVertex(start, color, PrimitiveType.LineList);
             _primitiveBatch.AddVertex(end, color, PrimitiveType.LineList);
         }
+
+        public void DrawPolygon(Vector2 position, Vector2[] vertices, int count, Color color, bool closed = true)
+        {
+            if (!_primitiveBatch.IsReady())
+                throw new InvalidOperationException("BeginCustomDraw must be called before drawing anything.");
+
+            for (int i = 0; i < count - 1; i++)
+            {
+                //translate the vertices according to the position passed
+                _primitiveBatch.AddVertex(new Vector2(vertices[i].X + position.X, vertices[i].Y + position.Y), color, PrimitiveType.LineList);
+                _primitiveBatch.AddVertex(new Vector2(vertices[i + 1].X + position.X, vertices[i + 1].Y + position.Y), color, PrimitiveType.LineList);
+            }
+            if (closed)
+            {
+                //TODO: verify closed is working as expected
+                _primitiveBatch.AddVertex(new Vector2(vertices[count - 1].X + position.X, vertices[count - 1].Y + position.Y), color, PrimitiveType.LineList);
+                _primitiveBatch.AddVertex(new Vector2(vertices[0].X + position.X, vertices[0].Y + position.Y), color, PrimitiveType.LineList);
+            }
+        }
     }
 }

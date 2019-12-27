@@ -56,9 +56,16 @@ namespace Tutorials.Demos
             _spriteBatch.DrawEllipse(new Vector2(200, 200), new Vector2(50, 25), 32, Color.Orange, 8);
 
             //PWA
+            //TODO: Can we add line thickness?
             _primitiveBatch.Begin(ref _localProjection, ref _localView);
             _primitiveDrawing.DrawCircle(new Vector2(100, 200), 32, Color.Green);
             _primitiveDrawing.DrawSolidCircle(new Vector2(100, 300), 32, Color.Green);
+
+            _primitiveDrawing.DrawSegment(new Vector2(300, 310), new Vector2(400, 110), Color.White);
+
+            //TODO: offset this by position
+            _primitiveDrawing.DrawPolygon(new Vector2(600, 300), _polygon.Vertices, 5, Color.Aqua);
+
             _primitiveBatch.End();
 
             _spriteBatch.DrawLine(300, 300, 400, 100, Color.White, 6);
