@@ -139,5 +139,49 @@ namespace MonoGame.Extended.VectorDraw
             if (outline)
                 DrawPolygon(position, vertices, color);
         }
+
+        public void DrawEllipse(Vector2 center, Vector2 radius, int sides, Color color)
+        {
+            if (!_primitiveBatch.IsReady())
+                throw new InvalidOperationException("BeginCustomDraw must be called before drawing anything.");
+
+            DrawPolygon(center, CreateEllipse(radius.X, radius.Y, sides), color);
+        }
+
+        public void DrawSolidEllipse(Vector2 center, Vector2 radius, int sides, Color color, bool outline = true)
+        {
+            if (!_primitiveBatch.IsReady())
+                throw new InvalidOperationException("BeginCustomDraw must be called before drawing anything.");
+
+            Color colorFill = color * (outline ? 0.5f : 1.0f);
+
+            Vector2[] vertices = CreateEllipse(radius.X, radius.Y, sides);
+
+            Vector2[] outVertices;
+            int[] outIndices;
+            Triangulator.Triangulate(vertices, WindingOrder.CounterClockwise, out outVertices, out outIndices);
+
+            for (int i = 0; i < outIndices.Length - 2; i += 3)
+            {
+                _primitiveBatch.AddVertex(new Vector2(outVertices[outIndices[i]].X + center.X, outVertices[outIndices[i]].Y + center.Y), colorFill, PrimitiveType.TriangleList);
+                _primitiveBatch.AddVertex(new Vector2(outVertices[outIndices[i + 1]].X + center.X, outVertices[outIndices[i + 1]].Y + center.Y), colorFill, PrimitiveType.TriangleList);
+                _primitiveBatch.AddVertex(new Vector2(outVertices[outIndices[i + 2]].X + center.X, outVertices[outIndices[i + 2]].Y + center.Y), colorFill, PrimitiveType.TriangleList);
+            }
+        }
+
+        private static Vector2[] CreateEllipse(float rx, float ry, int sides)
+        {
+            var vertices = new Vector2[sides];
+
+            var t = 0.0;
+            var dt = 2.0 * Math.PI / sides;
+            for (var i = 0; i < sides; i++, t += dt)
+            {
+                var x = (float)(rx * Math.Cos(t));
+                var y = (float)(ry * Math.Sin(t));
+                vertices[i] = new Vector2(x, y);
+            }
+            return vertices;
+        }
     }
 }

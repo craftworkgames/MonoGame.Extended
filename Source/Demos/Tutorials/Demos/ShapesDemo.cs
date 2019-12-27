@@ -58,8 +58,12 @@ namespace Tutorials.Demos
             //PWA
             //TODO: Can we add line thickness?
             _primitiveBatch.Begin(ref _localProjection, ref _localView);
+            
             _primitiveDrawing.DrawCircle(new Vector2(100, 200), 32, Color.Green);
             _primitiveDrawing.DrawSolidCircle(new Vector2(100, 300), 32, Color.Green);
+
+            _primitiveDrawing.DrawEllipse(new Vector2(200, 300), new Vector2(50, 25), 32, Color.Orange);
+            _primitiveDrawing.DrawSolidEllipse(new Vector2(200, 400), new Vector2(50, 25), 32, Color.Orange);
 
             _primitiveDrawing.DrawSegment(new Vector2(300, 350), new Vector2(400, 150), Color.White);
 
