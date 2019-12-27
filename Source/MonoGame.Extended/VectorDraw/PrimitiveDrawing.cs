@@ -51,7 +51,7 @@ namespace MonoGame.Extended.VectorDraw
             }
         }
 
-        public void DrawSolidCircle(Vector2 center, float radius, Vector2 axis, Color color)
+        public void DrawSolidCircle(Vector2 center, float radius, Color color)
         {
             if (!_primitiveBatch.IsReady())
                 throw new InvalidOperationException("BeginCustomDraw must be called before drawing anything.");
@@ -76,8 +76,7 @@ namespace MonoGame.Extended.VectorDraw
                 theta += increment;
             }
 
-            DrawCircle(center, radius, color);
-            DrawSegment(center, center + axis * radius, color);
+            DrawCircle(center, radius, color);            
         }
 
         public void DrawSegment(Vector2 start, Vector2 end, Color color)

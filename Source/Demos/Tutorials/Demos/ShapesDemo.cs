@@ -58,6 +58,7 @@ namespace Tutorials.Demos
             //PWA
             _primitiveBatch.Begin(ref _localProjection, ref _localView);
             _primitiveDrawing.DrawCircle(new Vector2(100, 200), 32, Color.Green);
+            _primitiveDrawing.DrawSolidCircle(new Vector2(100, 300), 32, Color.Green);
             _primitiveBatch.End();
 
             _spriteBatch.DrawLine(300, 300, 400, 100, Color.White, 6);
