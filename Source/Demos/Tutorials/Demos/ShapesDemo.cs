@@ -51,21 +51,21 @@ namespace Tutorials.Demos
             _primitiveBatch.Begin(ref _localProjection, ref _localView);
 
             //TODO: is this working?
-            _primitiveDrawing.DrawPoint(new Vector2(500, 300), Color.Brown);
+            _primitiveDrawing.DrawPoint(new Vector2(10, 10), Color.Brown);
 
-            _primitiveDrawing.DrawRectangle(new Vector2(10, 10), 50, 50, Color.Yellow);
-            _primitiveDrawing.DrawSolidRectangle(new Vector2(10, 110), 50, 50, Color.Yellow);
+            _primitiveDrawing.DrawRectangle(new Vector2(20, 20), 50, 50, Color.Yellow);
+            _primitiveDrawing.DrawSolidRectangle(new Vector2(20, 120), 50, 50, Color.Yellow);
 
-            _primitiveDrawing.DrawCircle(new Vector2(100, 100), 32, Color.Green);
-            _primitiveDrawing.DrawSolidCircle(new Vector2(100, 200), 32, Color.Green);
+            _primitiveDrawing.DrawCircle(new Vector2(164, 42), 32, Color.Green);
+            _primitiveDrawing.DrawSolidCircle(new Vector2(164, 128), 32, Color.Green);
 
-            _primitiveDrawing.DrawEllipse(new Vector2(200, 200), new Vector2(50, 25), 32, Color.Orange);
-            _primitiveDrawing.DrawSolidEllipse(new Vector2(200, 300), new Vector2(50, 25), 32, Color.Orange);
+            _primitiveDrawing.DrawEllipse(new Vector2(300, 50), new Vector2(50, 25), 32, Color.Orange);
+            _primitiveDrawing.DrawSolidEllipse(new Vector2(300, 150), new Vector2(50, 25), 32, Color.Orange);
 
-            _primitiveDrawing.DrawSegment(new Vector2(300, 150), new Vector2(400, 150), Color.White);
+            _primitiveDrawing.DrawSegment(new Vector2(400, 20), new Vector2(450, 50), Color.White);
 
-            _primitiveDrawing.DrawPolygon(new Vector2(600, 200), _polygon.Vertices, Color.Aqua);
-            _primitiveDrawing.DrawSolidPolygon(new Vector2(600, 300), _polygon.Vertices, Color.Aqua);
+            _primitiveDrawing.DrawPolygon(new Vector2(500, 20), _polygon.Vertices, Color.Aqua);
+            _primitiveDrawing.DrawSolidPolygon(new Vector2(500, 120), _polygon.Vertices, Color.Aqua);
 
             _primitiveBatch.End();
         }

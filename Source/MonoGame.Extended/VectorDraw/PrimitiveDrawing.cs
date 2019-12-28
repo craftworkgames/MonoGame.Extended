@@ -49,12 +49,13 @@ namespace MonoGame.Extended.VectorDraw
 
             Vector2[] rectVerts = new Vector2[4]
             {
-                new Vector2(location.X, location.Y),
-                new Vector2(location.X + width, location.Y),
-                new Vector2(location.X + width, location.Y + height),
-                new Vector2(location.X, location.Y + height)
+                new Vector2(0, 0),
+                new Vector2(width, 0),
+                new Vector2(width, height),
+                new Vector2(0, height)
             };
 
+            //Location is offset here
             DrawPolygon(location, rectVerts, color);
         }
 
@@ -65,10 +66,10 @@ namespace MonoGame.Extended.VectorDraw
 
             Vector2[] rectVerts = new Vector2[4]
             {
-                new Vector2(location.X, location.Y),
-                new Vector2(location.X + width, location.Y),
-                new Vector2(location.X + width, location.Y + height),
-                new Vector2(location.X, location.Y + height)
+                new Vector2(0, 0),
+                new Vector2(width, 0),
+                new Vector2(width, height),
+                new Vector2(0, height)
             };
 
             DrawSolidPolygon(location, rectVerts, color);
