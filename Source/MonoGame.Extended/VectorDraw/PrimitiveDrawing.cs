@@ -32,6 +32,16 @@ namespace MonoGame.Extended.VectorDraw
             _primitiveBatch = primitiveBatch;
         }
 
+        public void DrawPoint(Vector2 center, Color color)
+        {
+            if (!_primitiveBatch.IsReady())
+                throw new InvalidOperationException("BeginCustomDraw must be called before drawing anything.");
+
+            //Add two points or the PrimitiveBatch acts up
+            _primitiveBatch.AddVertex(center, color, PrimitiveType.LineList);
+            _primitiveBatch.AddVertex(center, color, PrimitiveType.LineList);
+        }
+
         public void DrawCircle(Vector2 center, float radius, Color color)
         {
             if (!_primitiveBatch.IsReady())
