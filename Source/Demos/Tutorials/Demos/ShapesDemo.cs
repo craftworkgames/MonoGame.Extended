@@ -47,6 +47,9 @@ namespace Tutorials.Demos
 
         protected override void Draw(GameTime gameTime)
         {
+            _localProjection = Matrix.CreateOrthographicOffCenter(0f, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0f, 0f, 1f);
+            _localView = Matrix.Identity;
+
             //TODO: Can we add line thickness?
             _primitiveBatch.Begin(ref _localProjection, ref _localView);
 
@@ -56,16 +59,16 @@ namespace Tutorials.Demos
             _primitiveDrawing.DrawRectangle(new Vector2(20, 20), 50, 50, Color.Yellow);
             _primitiveDrawing.DrawSolidRectangle(new Vector2(20, 120), 50, 50, Color.Yellow);
 
-            _primitiveDrawing.DrawCircle(new Vector2(164, 42), 32, Color.Green);
-            _primitiveDrawing.DrawSolidCircle(new Vector2(164, 128), 32, Color.Green);
+            _primitiveDrawing.DrawCircle(new Vector2(120, 45), 25, Color.Green);
+            _primitiveDrawing.DrawSolidCircle(new Vector2(120, 145), 25, Color.Green);
 
-            _primitiveDrawing.DrawEllipse(new Vector2(300, 50), new Vector2(50, 25), 32, Color.Orange);
-            _primitiveDrawing.DrawSolidEllipse(new Vector2(300, 150), new Vector2(50, 25), 32, Color.Orange);
+            _primitiveDrawing.DrawEllipse(new Vector2(220, 45), new Vector2(50, 25), 32, Color.Orange);
+            _primitiveDrawing.DrawSolidEllipse(new Vector2(220, 145), new Vector2(50, 25), 32, Color.Orange);
 
-            _primitiveDrawing.DrawSegment(new Vector2(400, 20), new Vector2(450, 50), Color.White);
+            _primitiveDrawing.DrawSegment(new Vector2(320, 20), new Vector2(370, 170), Color.White);
 
-            _primitiveDrawing.DrawPolygon(new Vector2(500, 20), _polygon.Vertices, Color.Aqua);
-            _primitiveDrawing.DrawSolidPolygon(new Vector2(500, 120), _polygon.Vertices, Color.Aqua);
+            _primitiveDrawing.DrawPolygon(new Vector2(420, 20), _polygon.Vertices, Color.Aqua);
+            _primitiveDrawing.DrawSolidPolygon(new Vector2(420, 120), _polygon.Vertices, Color.Aqua);
 
             _primitiveBatch.End();
         }

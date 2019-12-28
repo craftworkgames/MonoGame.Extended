@@ -548,7 +548,7 @@ namespace MonoGame.Extended.Triangulation
         [Conditional("DEBUG")]
         private static void Log(string format, params object[] parameters)
         {
-            System.Console.WriteLine(format, parameters);
+            //System.Console.WriteLine(format, parameters);
         }
 
         #endregion

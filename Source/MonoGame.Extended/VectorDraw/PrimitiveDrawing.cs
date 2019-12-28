@@ -17,8 +17,8 @@ namespace MonoGame.Extended.VectorDraw
         private GraphicsDevice _device;
         private readonly Vector2[] _tempVertices = new Vector2[1000]; //TODO: something else...
 
-        private Matrix _localProjection;
-        private Matrix _localView;
+        //private Matrix _localProjection;
+        //private Matrix _localView;
 
         //TODO: do we need to split this based on platform?
 #if XBOX || WINDOWS_PHONE
