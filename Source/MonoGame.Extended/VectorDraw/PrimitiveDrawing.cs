@@ -42,7 +42,39 @@ namespace MonoGame.Extended.VectorDraw
             _primitiveBatch.AddVertex(center, color, PrimitiveType.LineList);
         }
 
-        public void DrawCircle(Vector2 center, float radius, Color color)
+        public void DrawRectangle(Vector2 location, float width, float height, Color color)
+        {
+            if (!_primitiveBatch.IsReady())
+                throw new InvalidOperationException("BeginCustomDraw must be called before drawing anything.");
+
+            Vector2[] rectVerts = new Vector2[4]
+            {
+                new Vector2(location.X, location.Y),
+                new Vector2(location.X + width, location.Y),
+                new Vector2(location.X + width, location.Y + height),
+                new Vector2(location.X, location.Y + height)
+            };
+
+            DrawPolygon(location, rectVerts, color);
+        }
+
+        public void DrawSolidRectangle(Vector2 location, float width, float height, Color color)
+        {
+            if (!_primitiveBatch.IsReady())
+                throw new InvalidOperationException("BeginCustomDraw must be called before drawing anything.");
+
+            Vector2[] rectVerts = new Vector2[4]
+            {
+                new Vector2(location.X, location.Y),
+                new Vector2(location.X + width, location.Y),
+                new Vector2(location.X + width, location.Y + height),
+                new Vector2(location.X, location.Y + height)
+            };
+
+            DrawSolidPolygon(location, rectVerts, color);
+        }
+
+            public void DrawCircle(Vector2 center, float radius, Color color)
         {
             if (!_primitiveBatch.IsReady())
                 throw new InvalidOperationException("BeginCustomDraw must be called before drawing anything.");

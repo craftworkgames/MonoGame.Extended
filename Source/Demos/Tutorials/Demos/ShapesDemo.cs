@@ -47,38 +47,25 @@ namespace Tutorials.Demos
 
         protected override void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
-
-            _spriteBatch.FillRectangle(10, 10, 50, 50, Color.DarkRed);
-            _spriteBatch.DrawRectangle(10, 10, 50, 50, Color.Red, 2);
-
-            _spriteBatch.DrawCircle(100, 100, 32, 32, Color.Green, 4);
-            _spriteBatch.DrawEllipse(new Vector2(200, 200), new Vector2(50, 25), 32, Color.Orange, 8);
-
-            _spriteBatch.DrawLine(300, 300, 400, 100, Color.White, 6);
-
-            _spriteBatch.DrawPoint(500, 300, Color.Brown, 64);
-
-            _spriteBatch.DrawPolygon(new Vector2(600, 200), _polygon, Color.Aqua);
-
-            _spriteBatch.End();
-
-            //PWA
             //TODO: Can we add line thickness?
             _primitiveBatch.Begin(ref _localProjection, ref _localView);
 
-            _primitiveDrawing.DrawPoint(new Vector2(500, 400), Color.Brown);
+            //TODO: is this working?
+            _primitiveDrawing.DrawPoint(new Vector2(500, 300), Color.Brown);
 
-            _primitiveDrawing.DrawCircle(new Vector2(100, 200), 32, Color.Green);
-            _primitiveDrawing.DrawSolidCircle(new Vector2(100, 300), 32, Color.Green);
+            _primitiveDrawing.DrawRectangle(new Vector2(10, 10), 50, 50, Color.Yellow);
+            _primitiveDrawing.DrawSolidRectangle(new Vector2(10, 110), 50, 50, Color.Yellow);
 
-            _primitiveDrawing.DrawEllipse(new Vector2(200, 300), new Vector2(50, 25), 32, Color.Orange);
-            _primitiveDrawing.DrawSolidEllipse(new Vector2(200, 400), new Vector2(50, 25), 32, Color.Orange);
+            _primitiveDrawing.DrawCircle(new Vector2(100, 100), 32, Color.Green);
+            _primitiveDrawing.DrawSolidCircle(new Vector2(100, 200), 32, Color.Green);
 
-            _primitiveDrawing.DrawSegment(new Vector2(300, 350), new Vector2(400, 150), Color.White);
+            _primitiveDrawing.DrawEllipse(new Vector2(200, 200), new Vector2(50, 25), 32, Color.Orange);
+            _primitiveDrawing.DrawSolidEllipse(new Vector2(200, 300), new Vector2(50, 25), 32, Color.Orange);
 
-            _primitiveDrawing.DrawPolygon(new Vector2(600, 300), _polygon.Vertices, Color.Aqua);
-            _primitiveDrawing.DrawSolidPolygon(new Vector2(600, 400), _polygon.Vertices, Color.Aqua);
+            _primitiveDrawing.DrawSegment(new Vector2(300, 150), new Vector2(400, 150), Color.White);
+
+            _primitiveDrawing.DrawPolygon(new Vector2(600, 200), _polygon.Vertices, Color.Aqua);
+            _primitiveDrawing.DrawSolidPolygon(new Vector2(600, 300), _polygon.Vertices, Color.Aqua);
 
             _primitiveBatch.End();
         }
