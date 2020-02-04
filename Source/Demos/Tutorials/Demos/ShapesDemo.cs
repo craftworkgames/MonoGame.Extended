@@ -8,9 +8,6 @@ namespace Tutorials.Demos
 {
     public class ShapesDemo : DemoBase
     {
-        private SpriteBatch _spriteBatch;
-
-        //PWA - Testing
         private PrimitiveDrawing _primitiveDrawing;
         PrimitiveBatch _primitiveBatch;
         private Matrix _localProjection;
@@ -36,9 +33,6 @@ namespace Tutorials.Demos
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice); 
-            
-            //PWA
             _primitiveBatch = new PrimitiveBatch(GraphicsDevice);
             _primitiveDrawing = new PrimitiveDrawing(_primitiveBatch);
             _localProjection = Matrix.CreateOrthographicOffCenter(0f, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0f, 0f, 1f);
@@ -50,10 +44,8 @@ namespace Tutorials.Demos
             _localProjection = Matrix.CreateOrthographicOffCenter(0f, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0f, 0f, 1f);
             _localView = Matrix.Identity;
 
-            //TODO: Can we add line thickness?
             _primitiveBatch.Begin(ref _localProjection, ref _localView);
 
-            //TODO: is this working?
             _primitiveDrawing.DrawPoint(new Vector2(10, 10), Color.Brown);
 
             _primitiveDrawing.DrawRectangle(new Vector2(20, 20), 50, 50, Color.Yellow);
