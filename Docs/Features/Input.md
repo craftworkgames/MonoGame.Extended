@@ -1,19 +1,36 @@
 
 ## Input
-The `MonoGame.Extended.Input` library contains input listener classes that have events you can use to subscribe to input events, instead of having to poll for input changes. 
+The `MonoGame.Extended.Input` library contains input listener classes that have events you can use to subscribe to input events, instead of having to poll for input changes.  It also contains extended keyboard and mouse states.
 
-First, add the library to your code like this:
+---
+## Input Listeners
+There are different events that you can subscribe to in the different input listener classes. Note that this is in the `MonoGame.Extended.Input.InputListeners` library, not just `MonoGame.Extended.Input`.
 ```c#
-using MonoGame.Extended.Input;
+// Some example usage
+using MonoGame.Extended.Input.InputListeners;
+private MouseListener mlistener = new MouseListener;
+
+private void OnMouseMoved(object sender, MouseEventArgs eventArgs) {
+  // What you want to happen when the mouse is moving
+}
+
+protected override void Update(GameTime gameTime)
+{
+  // Subscribe to the event
+  mlistener.MouseMoved += OnMouseMoved;
+  mlistener.Update(gameTime);
+  mlistener.MouseMoved -= OnMouseMoved;
+}
 ```
 
 ---
 ## Extended Keyboard and Mouse States
-The library also includes new methods for the keyboard and mouse states in the `KeyboardStateExtended` and `MouseStateExtended` classes.
+The library also includes some new methods and properties for the keyboard and mouse states in the `KeyboardStateExtended` and `MouseStateExtended` classes.
 ```c#
 // Some example usage
-KeyboardStateExtended kstate = KeyboardExtended.GetState();
-MouseStateExtended mstate = MouseExtended.GetState();
+using MonoGame.Extended.Input;
+private KeyboardStateExtended kstate = KeyboardExtended.GetState();
+private MouseStateExtended mstate = MouseExtended.GetState();
 
 protected override void Update(GameTime gameTime)
 {
@@ -24,28 +41,6 @@ protected override void Update(GameTime gameTime)
   }
 }
 ```
-**List of New Keyboard Methods**
-| Method | Description |
-| --- | --- |
-| `bool IsShiftDown()` | returns if any of the 2 shift keys are down |
-| `bool IsControlDown()` | returns if any of the 2 ctrl keys are down |
-| `bool IsAltDown()` | returns if any of the 2 alt keys are down |
-| `bool WasKeyJustDown(Keys key)` | returns if a key was just down but now is up |
-| `bool WasKeyJustUp(Keys key)` | returns if a key was just up but now is down |
-| `bool WasAnyKeyJustDown()` | returns if any keys were just down |
-
-**List of New Mouse Methods/Properties**
-| Method | Description |
-| --- | --- |
-| `bool PositionChanged` | returns if the mouse's position changed since the last check |
-| `int DeltaX` | returns the change in the X-coordinate of the mouse |
-| `int DeltaY` | returns the change in the Y-coordinate of the mouse |
-| `Point DeltaPosition` | returns `new Point(DeltaX, DeltaY)` |
-| `int DeltaScrollWheelValue` | returns the change in the scroll wheel value of the mouse |
-| `bool IsButtonDown(MouseButton button)` | returns if a mouse button is currently pressed |
-| `bool IsButtonUp(MouseButton button)` | returns if a mouse button is currently released |
-| `bool WasButtonJustDown(MouseButton button)` | returns if a mouse button was just pressed but now is released |
-| `bool WasButtonJustUp(MouseButton button)` | returns if a mouse button was just released but now is pressed |
 
 The `KeyboardStateExtended` and `MouseStateExtended` classes also contain all of the original methods and properties of the regular `KeyboardState` and `MouseState` classes.
 
