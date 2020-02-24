@@ -40,7 +40,7 @@ namespace MonoGame.Extended.Collisions
             // Detect collisions
             foreach (var value in _targetDataDictionary.Values)
             {
-                _collisionTree.Remove(value);
+                value.RemoveFromAllParents();
 
                 var target = value.Target;
 
@@ -68,6 +68,7 @@ namespace MonoGame.Extended.Collisions
 
                 _collisionTree.Insert(value);
             }
+            _collisionTree.Shake();
         }
 
         /// <summary>
@@ -94,8 +95,9 @@ namespace MonoGame.Extended.Collisions
             if (_targetDataDictionary.ContainsKey(target))
             {
                 var data = _targetDataDictionary[target];
-                _collisionTree.Remove(data);
+                data.RemoveFromAllParents();
                 _targetDataDictionary.Remove(target);
+                _collisionTree.Shake();
             }
         }
 

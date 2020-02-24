@@ -241,7 +241,7 @@ namespace MonoGame.Extended.Collisions.Tests
 
             foreach (var data in inserted)
             {
-                tree.Remove(data);
+                data.RemoveFromAllParents();
                 Assert.Equal(--inTree, tree.NumTargets());
             }
         }
