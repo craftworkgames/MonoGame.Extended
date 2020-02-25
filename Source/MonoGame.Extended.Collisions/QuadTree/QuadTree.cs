@@ -44,6 +44,15 @@ namespace MonoGame.Extended.Collisions
         /// </summary>
         public bool IsLeaf => Children.Count == 0;
 
+        public void UpdateLayerMask()
+        {
+            LayerMask = 0;
+            foreach (QuadTreeData quadTreeData in Contents)
+            {
+                LayerMask |= quadTreeData.CollisionLayerFlags;
+            }
+        }
+
         /// <summary>
         ///     Counts the number of unique targets in the current Quadtree.
         /// </summary>
@@ -128,7 +137,7 @@ namespace MonoGame.Extended.Collisions
         }
 
         /// <summary>
-        ///     Removes data from the Quadtree
+        ///     Removes data from the QuadTree
         /// </summary>
         /// <param name="data">The data to be removed.</param>
         public void Remove(QuadTreeData data)
@@ -137,6 +146,7 @@ namespace MonoGame.Extended.Collisions
             {
                 data.RemoveParent(this);
                 Contents.Remove(data);
+                UpdateLayerMask();
             }
             else
             {
