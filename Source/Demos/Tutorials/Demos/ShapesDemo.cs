@@ -2,16 +2,21 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Shapes;
+using MonoGame.Extended.VectorDraw;
 
 namespace Tutorials.Demos
 {
     public class ShapesDemo : DemoBase
     {
-        private SpriteBatch _spriteBatch;
-        
+        private PrimitiveDrawing _primitiveDrawing;
+        PrimitiveBatch _primitiveBatch;
+        private Matrix _localProjection;
+        private Matrix _localView;
+
         public ShapesDemo(GameMain game) 
             : base(game)
         {
+            
         }
 
         public override string Name => "Shapes";
@@ -28,26 +33,36 @@ namespace Tutorials.Demos
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _primitiveBatch = new PrimitiveBatch(GraphicsDevice);
+            _primitiveDrawing = new PrimitiveDrawing(_primitiveBatch);
+            _localProjection = Matrix.CreateOrthographicOffCenter(0f, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0f, 0f, 1f);
+            _localView = Matrix.Identity;
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
+            _localProjection = Matrix.CreateOrthographicOffCenter(0f, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0f, 0f, 1f);
+            _localView = Matrix.Identity;
 
-            _spriteBatch.FillRectangle(10, 10, 50, 50, Color.DarkRed);
-            _spriteBatch.DrawRectangle(10, 10, 50, 50, Color.Red, 2);
+            _primitiveBatch.Begin(ref _localProjection, ref _localView);
 
-            _spriteBatch.DrawCircle(100, 100, 32, 32, Color.Green, 4);
-            _spriteBatch.DrawEllipse(new Vector2(200, 200), new Vector2(50, 25), 32, Color.Orange, 8);
+            _primitiveDrawing.DrawPoint(new Vector2(10, 10), Color.Brown);
 
-            _spriteBatch.DrawLine(300, 300, 400, 100, Color.White, 6);
+            _primitiveDrawing.DrawRectangle(new Vector2(20, 20), 50, 50, Color.Yellow);
+            _primitiveDrawing.DrawSolidRectangle(new Vector2(20, 120), 50, 50, Color.Yellow);
 
-            _spriteBatch.DrawPoint(500, 300, Color.Brown, 64);
+            _primitiveDrawing.DrawCircle(new Vector2(120, 45), 25, Color.Green);
+            _primitiveDrawing.DrawSolidCircle(new Vector2(120, 145), 25, Color.Green);
 
-            _spriteBatch.DrawPolygon(new Vector2(600, 200), _polygon, Color.Aqua);
+            _primitiveDrawing.DrawEllipse(new Vector2(220, 45), new Vector2(50, 25), 32, Color.Orange);
+            _primitiveDrawing.DrawSolidEllipse(new Vector2(220, 145), new Vector2(50, 25), 32, Color.Orange);
 
-            _spriteBatch.End();
+            _primitiveDrawing.DrawSegment(new Vector2(320, 20), new Vector2(370, 170), Color.White);
+
+            _primitiveDrawing.DrawPolygon(new Vector2(420, 20), _polygon.Vertices, Color.Aqua);
+            _primitiveDrawing.DrawSolidPolygon(new Vector2(420, 120), _polygon.Vertices, Color.Aqua);
+
+            _primitiveBatch.End();
         }
     }
 }

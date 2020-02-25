@@ -1,8 +1,8 @@
 # Installation
 
-MonoGame.Extended is a collection of [portable class libraries](https://msdn.microsoft.com/en-us/library/gg597391) (PCL) designed to be referenced from any MonoGame project to add common extensions and classes for making your games more awesome.
+MonoGame.Extended is a collection of [.NET Standard libraries](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) designed to be referenced from any MonoGame project to add common extensions and classes for making your games more awesome.
 
-The libraries are distributed as [NuGet packages](https://www.nuget.org/packages?q=MonoGame.Extended) and can be installed using the NuGet Package Manager in [Visual Studio](https://www.visualstudio.com), [Xamarin Studio](https://xamarin.com/studio), or [MonoDevelop](http://www.monodevelop.com). They can also be installed by running the following command (or the equivilant command for the package you want to install) in the [Package Manager Console](http://docs.nuget.org/consume/package-manager-console).
+The libraries are distributed as [NuGet packages](https://www.nuget.org/packages?q=MonoGame.Extended) and can be installed using the NuGet Package Manager in [Visual Studio](https://www.visualstudio.com), [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/), or [MonoDevelop](http://www.monodevelop.com). They can also be installed by running the following command (or the equivalent command for the package you want to install) in the [Package Manager Console](http://docs.nuget.org/consume/package-manager-console).
 
 	Install-Package MonoGame.Extended
 
