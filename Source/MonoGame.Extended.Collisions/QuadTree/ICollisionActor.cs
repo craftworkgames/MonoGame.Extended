@@ -5,9 +5,6 @@
     /// </summary>
     public interface ICollisionActor
     {
-        int CollisionLayerFlags { get; }
-        int CollisionMaskFlags { get; }
-
         IShapeF Bounds { get; }
 
         void OnCollision(CollisionEventArgs collisionInfo);

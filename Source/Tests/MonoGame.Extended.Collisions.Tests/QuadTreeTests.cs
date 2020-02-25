@@ -40,7 +40,7 @@ namespace MonoGame.Extended.Collisions.Tests
             var tree = MakeTree();
             var actor = new BasicActor();
 
-            tree.Insert(new QuadtreeData(actor));
+            tree.Insert(new QuadTreeData(actor));
             
             Assert.Equal(1, tree.NumTargets());
         }
@@ -52,7 +52,7 @@ namespace MonoGame.Extended.Collisions.Tests
             var tree = MakeTree();
             for (int i = 0; i < 5; i++)
             {
-                tree.Insert(new QuadtreeData(new BasicActor()));
+                tree.Insert(new QuadTreeData(new BasicActor()));
             }
 
             Assert.Equal(5, tree.NumTargets());
@@ -64,7 +64,7 @@ namespace MonoGame.Extended.Collisions.Tests
             var tree = MakeTree();
             for (int i = 0; i < 1000; i++)
             {
-                tree.Insert(new QuadtreeData(new BasicActor()));
+                tree.Insert(new QuadTreeData(new BasicActor()));
                 Assert.Equal(i + 1, tree.NumTargets());
             }
 
@@ -77,7 +77,7 @@ namespace MonoGame.Extended.Collisions.Tests
             var tree = MakeTree();
             var actor = new BasicActor();
 
-            tree.Insert(new QuadtreeData(actor));
+            tree.Insert(new QuadTreeData(actor));
 
             Assert.Equal(1, tree.NumTargets());
         }
@@ -91,7 +91,7 @@ namespace MonoGame.Extended.Collisions.Tests
                 Bounds = new RectangleF(-2.5f, -2.5f, 5f, 5f)
             };
 
-            tree.Insert(new QuadtreeData(actor));
+            tree.Insert(new QuadTreeData(actor));
 
             Assert.Equal(1, tree.NumTargets());
         }
@@ -103,7 +103,7 @@ namespace MonoGame.Extended.Collisions.Tests
 
             for (int i = 0; i < 10; i++)
             {
-                tree.Insert(new QuadtreeData(new BasicActor()
+                tree.Insert(new QuadTreeData(new BasicActor()
                 {
                     Bounds = new RectangleF(0, 0, 1, 1)
                 }));
@@ -119,7 +119,7 @@ namespace MonoGame.Extended.Collisions.Tests
 
             for (int i = 0; i < 1000; i++)
             {
-                tree.Insert(new QuadtreeData(new BasicActor()
+                tree.Insert(new QuadTreeData(new BasicActor()
                 {
                     Bounds = new RectangleF(0, 0, 1, 1)
                 }));
@@ -139,7 +139,7 @@ namespace MonoGame.Extended.Collisions.Tests
                 {
                     Bounds = new RectangleF(-10f, -15, 20.0f, 30.0f)
                 };
-                tree.Insert(new QuadtreeData(actor));
+                tree.Insert(new QuadTreeData(actor));
             }
 
             Assert.Equal(10, tree.NumTargets());
@@ -152,7 +152,7 @@ namespace MonoGame.Extended.Collisions.Tests
             {
                 Bounds = new RectangleF(-5f, -7f, 10.0f, 15.0f)
             };
-            var data = new QuadtreeData(actor);
+            var data = new QuadTreeData(actor);
 
             var tree = MakeTree();
             tree.Insert(data);
@@ -166,12 +166,12 @@ namespace MonoGame.Extended.Collisions.Tests
         public void RemoveTwoTest()
         {
             var tree = MakeTree();
-            var inserted = new List<QuadtreeData>();
+            var inserted = new List<QuadTreeData>();
             var numTargets = 2;
 
             for (int i = 0; i < numTargets; i++)
             {
-                var data = new QuadtreeData(new BasicActor()
+                var data = new QuadTreeData(new BasicActor()
                 {
                     Bounds = new RectangleF(0, 0, 1, 1)
                 });
@@ -194,12 +194,12 @@ namespace MonoGame.Extended.Collisions.Tests
         public void RemoveThreeTest()
         {
             var tree = MakeTree();
-            var inserted = new List<QuadtreeData>();
+            var inserted = new List<QuadTreeData>();
             var numTargets = 3;
 
             for (int i = 0; i < numTargets; i++)
             {
-                var data = new QuadtreeData(new BasicActor()
+                var data = new QuadTreeData(new BasicActor()
                 {
                     Bounds = new RectangleF(0, 0, 1, 1)
                 });
@@ -222,12 +222,12 @@ namespace MonoGame.Extended.Collisions.Tests
         public void RemoveManyTest()
         {
             var tree = MakeTree();
-            var inserted = new List<QuadtreeData>();
+            var inserted = new List<QuadTreeData>();
             var numTargets = 1000;
 
             for (int i = 0; i < numTargets; i++)
             {
-                var data = new QuadtreeData(new BasicActor()
+                var data = new QuadTreeData(new BasicActor()
                 {
                     Bounds = new RectangleF(0, 0, 1, 1)
                 });
@@ -272,7 +272,7 @@ namespace MonoGame.Extended.Collisions.Tests
             var tree = MakeTree();
 
             tree.Split();
-            var data = new QuadtreeData(new BasicActor());
+            var data = new QuadTreeData(new BasicActor());
             tree.Insert(data);
             tree.Shake();
             Assert.Equal(1, tree.NumTargets());
@@ -286,7 +286,7 @@ namespace MonoGame.Extended.Collisions.Tests
 
             for (int i = 0; i < numTargets; i++)
             {
-                var data = new QuadtreeData(new BasicActor());
+                var data = new QuadTreeData(new BasicActor());
                 tree.Insert(data);
             }
 
@@ -302,7 +302,7 @@ namespace MonoGame.Extended.Collisions.Tests
 
             for (int i = 0; i < numTargets; i++)
             {
-                var data = new QuadtreeData(new BasicActor());
+                var data = new QuadTreeData(new BasicActor());
                 tree.Insert(data);
             }
 
@@ -318,7 +318,7 @@ namespace MonoGame.Extended.Collisions.Tests
 
             for (int i = 0; i < numTargets; i++)
             {
-                var data = new QuadtreeData(new BasicActor());
+                var data = new QuadTreeData(new BasicActor());
                 tree.Insert(data);
             }
 
@@ -334,7 +334,7 @@ namespace MonoGame.Extended.Collisions.Tests
 
             for (int i = 0; i < numTargets; i++)
             {
-                var data = new QuadtreeData(new BasicActor());
+                var data = new QuadTreeData(new BasicActor());
                 tree.Insert(data);
             }
 
@@ -347,7 +347,7 @@ namespace MonoGame.Extended.Collisions.Tests
         {
             var tree = MakeTree();
 
-            var query = tree.Query(_quadTreeArea);
+            var query = tree.Query(new QuadTreeData(new BasicActor { Bounds = _quadTreeArea }));
             
             Assert.Empty(query);
             Assert.Equal(0, tree.NumTargets());
@@ -358,7 +358,7 @@ namespace MonoGame.Extended.Collisions.Tests
         {
             var tree = MakeTree();
 
-            var query = tree.Query(new RectangleF(100f, 100f, 1f, 1f));
+            var query = tree.Query(new QuadTreeData(new BasicActor { Bounds = new RectangleF(100f, 100f, 1f, 1f) }));
 
             Assert.Empty(query);
             Assert.Equal(0, tree.NumTargets());
@@ -369,9 +369,9 @@ namespace MonoGame.Extended.Collisions.Tests
         {
             var tree = MakeTree();
             var actor = new BasicActor();
-            tree.Insert(new QuadtreeData(actor));
+            tree.Insert(new QuadTreeData(actor));
 
-            var query = tree.Query(_quadTreeArea);
+            var query = tree.Query(new QuadTreeData(new BasicActor { Bounds = _quadTreeArea }));
             Assert.Single(query);
             Assert.Equal(tree.NumTargets(), query.Count);
         }
@@ -381,9 +381,9 @@ namespace MonoGame.Extended.Collisions.Tests
         {
             var tree = MakeTree();
             var actor = new BasicActor();
-            tree.Insert(new QuadtreeData(actor));
+            tree.Insert(new QuadTreeData(actor));
 
-            var query = tree.Query(new RectangleF(100f, 100f, 1f, 1f));
+            var query = tree.Query(new QuadTreeData(new BasicActor { Bounds = new RectangleF(100f, 100f, 1f, 1f) }));
             Assert.Empty(query);
         }
 
@@ -394,12 +394,11 @@ namespace MonoGame.Extended.Collisions.Tests
             var numTargets = Quadtree.DefaultMaxObjectsPerNode;
             for (int i = 0; i < numTargets; i++)
             {
-                var data = new QuadtreeData(new BasicActor());
+                var data = new QuadTreeData(new BasicActor());
                 tree.Insert(data);
             }
 
-
-            var query = tree.Query(_quadTreeArea);
+            var query = tree.Query(new QuadTreeData(new BasicActor { Bounds = _quadTreeArea }));
             Assert.Equal(numTargets, query.Count);
             Assert.Equal(tree.NumTargets(), query.Count);
         }
@@ -411,12 +410,12 @@ namespace MonoGame.Extended.Collisions.Tests
             var numTargets = 2*Quadtree.DefaultMaxObjectsPerNode;
             for (int i = 0; i < numTargets; i++)
             {
-                var data = new QuadtreeData(new BasicActor());
+                var data = new QuadTreeData(new BasicActor());
                 tree.Insert(data);
             }
 
 
-            var query = tree.Query(_quadTreeArea);
+            var query = tree.Query(new QuadTreeData(new BasicActor { Bounds = _quadTreeArea }));
             Assert.Equal(numTargets, query.Count);
             Assert.Equal(tree.NumTargets(), query.Count);
         }
@@ -428,16 +427,27 @@ namespace MonoGame.Extended.Collisions.Tests
             var numTargets = 2 * Quadtree.DefaultMaxObjectsPerNode;
             for (int i = 0; i < numTargets; i++)
             {
-                var data = new QuadtreeData(new BasicActor());
+                var data = new QuadTreeData(new BasicActor());
                 tree.Insert(data);
             }
 
 
-            var query1 = tree.Query(_quadTreeArea);
-            var query2 = tree.Query(_quadTreeArea);
+            var query1 = tree.Query(new QuadTreeData(new BasicActor { Bounds = _quadTreeArea }));
+            var query2 = tree.Query(new QuadTreeData(new BasicActor { Bounds = _quadTreeArea }));
             Assert.Equal(numTargets, query1.Count);
             Assert.Equal(tree.NumTargets(), query1.Count);
             Assert.Equal(query1.Count, query2.Count);
+        }
+
+        [Fact]
+        public void QueryLeafNodeDifferentLayerNoOverlapTest()
+        {
+            var tree = MakeTree();
+            var actor = new BasicActor();
+            tree.Insert(new QuadTreeData(actor, 0, 1));
+
+            var query = tree.Query(new QuadTreeData(new BasicActor { Bounds = new RectangleF(0f, 0f, 1f, 1f) }, 1, 1));
+            Assert.Empty(query);
         }
     }
 }

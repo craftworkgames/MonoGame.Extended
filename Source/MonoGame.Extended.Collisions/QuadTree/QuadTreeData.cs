@@ -7,11 +7,13 @@ namespace MonoGame.Extended.Collisions
     ///     Data structure for the quad tree.
     ///     Holds the entity and collision data for it.
     /// </summary>
-    public class QuadtreeData
+    public class QuadTreeData
     {
-        public QuadtreeData(ICollisionActor target)
+        public QuadTreeData(ICollisionActor target, int collisionLayerFlags = 1, int collisionMaskFlags = 1)
         {
             Target = target;
+            CollisionLayerFlags = collisionLayerFlags;
+            CollisionMaskFlags = collisionMaskFlags;
             Bounds = target.Bounds;
         }
 
@@ -34,6 +36,16 @@ namespace MonoGame.Extended.Collisions
             Parents.Clear();
         }
 
+        /// <summary>
+        ///     The layer that other colliders collide with.
+        /// </summary>
+        public int CollisionLayerFlags { get; }
+
+        /// <summary>
+        ///     The layer that this collider collides with.
+        /// </summary>
+        public int CollisionMaskFlags { get; }
+
         public HashSet<Quadtree> Parents = new HashSet<Quadtree>();
 
         /// <summary>
@@ -55,6 +67,18 @@ namespace MonoGame.Extended.Collisions
         public void MarkClean()
         {
             Dirty = false;
+        }
+
+        private Point2 _previousPosition;
+
+        /// <summary>
+        /// Indicating whether the position of the target bounds changed.
+        /// </summary>
+        public bool PositionDirty => _previousPosition != Target.Bounds.Position;
+
+        public void MarkPositionClean()
+        {
+            _previousPosition = Target.Bounds.Position;
         }
 
         /// <summary>
