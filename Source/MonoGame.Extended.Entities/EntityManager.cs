@@ -39,7 +39,7 @@ namespace MonoGame.Extended.Entities
         private readonly Bag<int> _removedEntities;
         private readonly Bag<int> _changedEntities;
         private readonly Bag<BitVector32> _entityToComponentBits;
-        
+
         public event Action<int> EntityAdded;
         public event Action<int> EntityRemoved;
         public event Action<int> EntityChanged;
@@ -57,8 +57,8 @@ namespace MonoGame.Extended.Entities
 
         public void Destroy(int entityId)
         {
-            Debug.Assert(!_removedEntities.Contains(entityId));
-            _removedEntities.Add(entityId);
+            if (!_removedEntities.Contains(entityId))
+                _removedEntities.Add(entityId);
         }
 
         public void Destroy(Entity entity)
