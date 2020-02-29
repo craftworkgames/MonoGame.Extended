@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             if (!_isLayoutValid)
             {
-                Layout(context, new Rectangle(0, 0, ContentRectangle.Width, ContentRectangle.Height));
+                Layout(context, new Rectangle(Padding.Left, Padding.Top, ContentRectangle.Width, ContentRectangle.Height));
                 _isLayoutValid = true;
             }
         }

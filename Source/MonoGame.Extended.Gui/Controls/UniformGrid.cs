@@ -35,8 +35,8 @@ namespace MonoGame.Extended.Gui.Controls
 
             foreach (var control in Items)
             {
-                var x = columnIndex * cellWidth;
-                var y = rowIndex * cellHeight;
+                var x = columnIndex * cellWidth + rectangle.X;
+                var y = rowIndex * cellHeight + rectangle.Y;
 
                 PlaceControl(context, control, x, y, cellWidth, cellHeight);
                 columnIndex++;
