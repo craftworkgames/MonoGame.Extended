@@ -121,6 +121,16 @@ namespace MonoGame.Extended
         public Point2 TopLeft => new Point2(X, Y);
 
         /// <summary>
+        ///     Gets the <see cref="Point2" /> representing the top-right of this <see cref="RectangleF" />.
+        /// </summary>
+        public Point2 TopRight => new Point2(X + Width, Y);
+
+        /// <summary>
+        ///     Gets the <see cref="Point2" /> representing the bottom-left of this <see cref="RectangleF" />.
+        /// </summary>
+        public Point2 BottomLeft => new Point2(X, Y + Height);
+
+        /// <summary>
         ///     Gets the <see cref="Point2" /> representing the bottom-right of this <see cref="RectangleF" />.
         /// </summary>
         public Point2 BottomRight => new Point2(X + Width, Y + Height);
