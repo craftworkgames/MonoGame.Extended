@@ -2,6 +2,12 @@
 
 # MonoGame.Extended
 
+> :exclamation: I am currently looking for a new owner of the MonoGame.Extended project. If you're interested in taking full ownership and complete creative control over this repository, related websites and the Patreon page please [contact me](dylan@craftworkgames.com).
+
+> I worked on MonoGame.Extended for nearly 5 years and unfortunately my heart is no longer in it. I've given this decision a lot of thought and I strongly believe handing the project over to someone who will give it the love it deserves will be best for everyone.
+
+> A lot of things have changed in my life over the last half a decade. My family, day job and interests are no longer aligned with this project. I will continue to accept pull requests and do my best to find the right fit for the future of MonoGame.Extended.
+
 MonoGame.Extended is an extension to the [MonoGame](http://www.monogame.net/) framework that makes it easier to make games. It's a collection of packages designed to let you choose what you want without getting in your way.
 
 It makes MonoGame more awesome.
@@ -10,7 +16,7 @@ It makes MonoGame more awesome.
 
 ## Getting started
 
-The libraries are distributed as NuGet packages and can be installed into your existing MonoGame project using your favorite NuGet Package Manager in Visual Studio, Xamarin Studio, or MonoDevelop. 
+The libraries are distributed as NuGet packages and can be installed into your existing MonoGame project using your favorite NuGet Package Manager in Visual Studio, Xamarin Studio, or MonoDevelop.
 
 For example:
 
@@ -24,26 +30,26 @@ Alternately, if you want to try the latest and greatest you might want to [build
 
 ## Where to next?
 
- - Check out [the demos](https://github.com/craftworkgames/MonoGame.Extended/tree/develop/Source/Demos)
- - Join our live [Discord chat](https://discord.gg/xPUEkj9)
- - Read the [Documentation](http://docs.monogameextended.net/)
- - Submit an [issue on GitHub](https://github.com/craftworkgames/MonoGame.Extended/issues)
- - Ask a question on [gamedev stack overflow](http://gamedev.stackexchange.com/questions/tagged/monogame-extended)
- - Post on our [MonoGame community forum](http://community.monogame.net/category/extended)
- - Follow development [on Patreon](https://www.patreon.com/craftworkgames)
- 
+- Check out [the demos](https://github.com/craftworkgames/MonoGame.Extended/tree/develop/Source/Demos)
+- Join our live [Discord chat](https://discord.gg/xPUEkj9)
+- Read the [Documentation](http://docs.monogameextended.net/)
+- Submit an [issue on GitHub](https://github.com/craftworkgames/MonoGame.Extended/issues)
+- Ask a question on [gamedev stack overflow](http://gamedev.stackexchange.com/questions/tagged/monogame-extended)
+- Post on our [MonoGame community forum](http://community.monogame.net/category/extended)
+- Follow development [on Patreon](https://www.patreon.com/craftworkgames)
+
 ## News
 
-We're in the process of developing MonoGame.Extended 3.6! 
+We're in the process of developing MonoGame.Extended 3.6!
 
 There may be some confusion, pain and disruption for a while. Here's what you need to know:
- 
- - Everything that used to be in the `develop` branch is now in `master`
- - NuGet packages built from `master` have been [published to nuget.org as version 1.1](https://www.nuget.org/packages?q=monogame.extended)
- - There's lots of breaking changes happening to create a cleaner more useful API
- - From now on we're going to (attempt) to use [Git Flow](https://gitversion.readthedocs.io/en/latest/git-branching-strategies/gitflow/)
- - We're now using [cake builds](https://cakebuild.net/) so that you can build everything (including the NuGet packages) locally
- - We're migrating everything to [.NET Standard!](https://www.patreon.com/posts/one-library-to-18916187)
+
+- Everything that used to be in the `develop` branch is now in `master`
+- NuGet packages built from `master` have been [published to nuget.org as version 1.1](https://www.nuget.org/packages?q=monogame.extended)
+- There's lots of breaking changes happening to create a cleaner more useful API
+- From now on we're going to (attempt) to use [Git Flow](https://gitversion.readthedocs.io/en/latest/git-branching-strategies/gitflow/)
+- We're now using [cake builds](https://cakebuild.net/) so that you can build everything (including the NuGet packages) locally
+- We're migrating everything to [.NET Standard!](https://www.patreon.com/posts/one-library-to-18916187)
 
 ## Patreon Supporters
 
@@ -54,26 +60,27 @@ Thanks to all those that support the project on Patreon! You're helping to keep 
 ## Special thanks
 
 As a reward to some of my patrons I've linked thier websites here:
- - [PRT Studios](http://prt-studios.com/)
- - [optimuspi](http://www.optimuspi.com/)
- 
+
+- [PRT Studios](http://prt-studios.com/)
+- [optimuspi](http://www.optimuspi.com/)
+
 If you're not on the list and you should be please let me know!
 
 Also thanks to
 
- - Matthew-Davey for letting us use the [Mercury Particle Engine](https://github.com/Matthew-Davey/mercury-particle-engine).
- - John McDonald for [2D XNA Primitives](https://bitbucket.org/C3/2d-xna-primitives/wiki/Home)
- - [LibGDX](https://libgdx.badlogicgames.com) for a whole lot of inspiration.
- - @prime31 for [Nez](https://github.com/prime31/Nez), which ideas and code bounce back and forth.
- - All of our contributors!
+- Matthew-Davey for letting us use the [Mercury Particle Engine](https://github.com/Matthew-Davey/mercury-particle-engine).
+- John McDonald for [2D XNA Primitives](https://bitbucket.org/C3/2d-xna-primitives/wiki/Home)
+- [LibGDX](https://libgdx.badlogicgames.com) for a whole lot of inspiration.
+- @prime31 for [Nez](https://github.com/prime31/Nez), which ideas and code bounce back and forth.
+- All of our contributors!
 
 ## Design goals
 
- - The primary goal is to make it easier to *make games*.
- - Choose the features you like and the rest stays out of your way.
- - A clean and consistent API familiar to MonoGame developers.
- - It's *not* a game engine, but extends the framework.
- - Follow [C# coding guidelines](https://msdn.microsoft.com/en-us/library/ms229002(v=vs.110).aspx).
+- The primary goal is to make it easier to _make games_.
+- Choose the features you like and the rest stays out of your way.
+- A clean and consistent API familiar to MonoGame developers.
+- It's _not_ a game engine, but extends the framework.
+- Follow [C# coding guidelines](<https://msdn.microsoft.com/en-us/library/ms229002(v=vs.110).aspx>).
 
 ## License
 
