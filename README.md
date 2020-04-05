@@ -2,7 +2,7 @@
 
 # MonoGame.Extended
 
-> :exclamation: I am currently looking for a new owner of the MonoGame.Extended project. If you're interested in taking full ownership and complete creative control over this repository, related websites and the Patreon page please [contact me](dylan@craftworkgames.com).
+> :exclamation: I am currently looking for a new owner of the MonoGame.Extended project. If you're interested in taking full ownership and complete creative control over this repository, related websites and the Patreon page please [contact me](mailto:dylan@craftworkgames.com).
 
 > I worked on MonoGame.Extended for nearly 5 years and unfortunately my heart is no longer in it. I've given this decision a lot of thought and I strongly believe handing the project over to someone who will give it the love it deserves will be best for everyone.
 
