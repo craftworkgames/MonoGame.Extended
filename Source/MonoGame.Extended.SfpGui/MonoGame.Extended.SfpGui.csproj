@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>craftworkgames</Authors>
+    <Description>MonoGame.Extended.SfpGui Ported to use SpriteFontPlus</Description>
+    <PackageTags>monogame gui</PackageTags>
+    <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</PackageIconUrl>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>NU1701</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.Portable" Version="3.6.0.1625" PrivateAssets="All" />
+    <PackageReference Include="SpriteFontPlus" Version="0.8.0.*" />
+    <ProjectReference Include="..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj" />
+    <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj" />
+  </ItemGroup>
+</Project>
