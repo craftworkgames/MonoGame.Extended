@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -9,62 +7,67 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="svg2"
-   version="1.1"
-   inkscape:version="0.48.4 r9939"
-   width="1013.3875"
-   height="729.925"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="logo.svg"
    xml:space="preserve"
-   sodipodi:docname="SquareLogo.svg"><metadata
-     id="metadata8"><rdf:RDF><cc:Work
-         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
-     id="defs6"><clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath20"><path
-         d="m 0,583.94 810.71,0 L 810.71,0 0,0 0,583.94 z"
-         id="path22" /></clipPath></defs><sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1680"
-     inkscape:window-height="987"
-     id="namedview4"
-     showgrid="false"
-     inkscape:zoom="1"
-     inkscape:cx="583.48443"
-     inkscape:cy="383.8267"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="g10" /><g
-     id="g10"
-     inkscape:groupmode="layer"
-     inkscape:label="SquareLogo"
-     transform="matrix(1.25,0,0,-1.25,0,729.925)"
-     style="display:inline"><g
-       id="g3180"
-       style="fill:#008bba;fill-opacity:1"
-       transform="matrix(5.4871508,0,0,5.4871508,-1821.3787,-1356.8548)"
-       inkscape:export-filename="E:\Github\MonoGame.Extended\Logos\logo-square-1024.png"
-       inkscape:export-xdpi="150.12828"
-       inkscape:export-ydpi="150.12828"><g
-         style="fill:#008bba;fill-opacity:1"
-         transform="translate(450.0909,308.6783)"
-         id="g52"><path
-           inkscape:connector-curvature="0"
-           id="path54"
-           transform="matrix(0.8,0,0,-0.8,-450.0909,275.2617)"
-           d="m 483.78125,295.78125 c -18.20125,0 -33,14.83125 -33,33.03125 l 0,45.8125 c 0,18.20875 14.79875,33 33,33 l 7.75,0 0,-20.1875 -7.75,0 c -7.0575,0 -12.8125,-5.7475 -12.8125,-12.8125 l 0,-45.8125 c 0,-7.06375 5.755,-12.8125 12.8125,-12.8125 7.06375,0 12.8125,5.74875 12.8125,12.8125 l 0,15.25 20.1875,0 0,-15.25 c 0,-7.06375 5.74875,-12.8125 12.8125,-12.8125 7.05625,0 12.8125,5.74875 12.8125,12.8125 l 0,15.25 -46.0625,43.42109 14.96875,20.17266 51.3125,-63.59375 0,-15.25 c -0.0106,-18.19999 -14.83125,-33.03125 -33.03125,-33.03125 -8.8875,0 -16.9625,3.55125 -22.90625,9.28125 -5.9425,-5.73 -14.02,-9.28125 -22.90625,-9.28125 z"
-           style="fill:#008bba;fill-opacity:1;fill-rule:nonzero;stroke:none"
-           sodipodi:nodetypes="ssssccsssssccssscccccscs" /></g><path
-         style="fill:#008bba;fill-opacity:1;stroke:none"
-         d="m 413.275,309.19 -15.5386,-0.12803 -0.2864,-0.37197 -21.575,0 0,-19.95 37.375,0 0,0.35 25,-30.975 11.9,16.25 z m -21.85,-35.2 0,-16.15 17.65,0 0,16.15 z"
-         id="rect3049"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccccccccccccccc" /></g></g></svg>
+   style="enable-background:new 0 0 512 512;"
+   viewBox="0 0 512 512"
+   y="0px"
+   x="0px"
+   id="Layer_1"
+   version="1.1"><metadata
+   id="metadata17"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs15" /><sodipodi:namedview
+   inkscape:current-layer="Layer_1"
+   inkscape:window-maximized="1"
+   inkscape:window-y="-8"
+   inkscape:window-x="-8"
+   inkscape:cy="160.72423"
+   inkscape:cx="235.24126"
+   inkscape:zoom="1"
+   showgrid="false"
+   id="namedview13"
+   inkscape:window-height="1377"
+   inkscape:window-width="3440"
+   inkscape:pageshadow="2"
+   inkscape:pageopacity="0"
+   guidetolerance="10"
+   gridtolerance="10"
+   objecttolerance="10"
+   borderopacity="1"
+   bordercolor="#666666"
+   pagecolor="#ffffff" />
+<style
+   id="style2"
+   type="text/css">
+	.st0{fill:#2E8CBC;}
+	.st1{fill:none;stroke:#FFFFFF;stroke-width:56;stroke-miterlimit:10;}
+</style>
+<rect
+   inkscape:export-filename="C:\Users\JanFokke\Desktop\Logo\1024X1024.png"
+   inkscape:export-ydpi="192"
+   inkscape:export-xdpi="192"
+   id="rect4"
+   height="512"
+   width="512"
+   class="st0"
+   y="0" />
+<path
+   id="path6"
+   d="M 258.83968,267.08434 H 77.377193 v -101.6759 c 0,-50.12655 40.604697,-90.731247 90.731247,-90.731247 v 0 c 50.12655,0 90.73124,40.604697 90.73124,90.731247 z"
+   class="st1" />
+<path
+   sodipodi:nodetypes="cssssccccccsc"
+   id="path8"
+   d="m 258.83968,251.43348 v -86.02504 c 0,-50.12655 40.6047,-90.731247 90.73125,-90.731247 v 0 c 50.12655,0 90.73124,40.604697 90.73124,90.731247 v 52.86271 37.10241 l -186.38759,180.68668 -43.23141,0.10953 -42.57473,-0.2093 V 436.07 c -50.12655,0 -90.731247,-40.60477 -90.731247,-90.73133 v -74.53314"
+   class="st1" />
+<line
+   id="line10"
+   y2="447.12402"
+   x2="448.29178"
+   y1="267.08435"
+   x1="258.83969"
+   class="st1" />
+</svg>
