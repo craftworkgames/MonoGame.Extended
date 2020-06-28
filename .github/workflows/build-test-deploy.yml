@@ -111,6 +111,12 @@ jobs:
       with:
         dotnet-version: '${{ env.DOTNET_CORE_SDK_VERSION }}'
 
+    - name: "Install Fonts (Ubuntu)"
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get install ttf-mscorefonts-installer
+        sudo fc-cache
+
     - name: "Install dependencies"
       run: dotnet restore '${{ env.SOLUTION_PATH }}' --verbosity quiet
 
@@ -123,11 +129,11 @@ jobs:
     - name: "Test solution"
       run: dotnet test '${{ env.SOLUTION_PATH }}' --nologo --verbosity normal --configuration Release --no-build
 
-    - name: "Pack Solution (Ubuntu only)"
+    - name: "Pack Solution (Ubuntu)"
       if: matrix.os == 'ubuntu-latest'
       run: dotnet pack '${{ env.SOLUTION_PATH }}' --nologo --output './nuget-packages' --verbosity minimal --configuration Release --no-build -p:PackageVersion=${{ steps.version.outputs.nuGetVersion }}
 
-    - name: 'Upload packed artifacts (ubuntu only)'
+    - name: 'Upload packed artifacts (Ubuntu)'
       if: matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v2
       with:
