@@ -115,13 +115,10 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt update
-        sudo apt install cabextract
-        tar -xzf webfonts.tar.gz
-        cd msfonts/
-        cabextract *.exe
-        mkdir -p ~/.local/share/fonts/
-        cp *.ttf *.TTF ~/.local/share/fonts/
-        cd ..
+        echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections
+        sudo apt-get install -y ttf-mscorefonts-installer
+        sudo fc-cache
+        sudo fc-match Arial
 
     - name: "Install dependencies"
       run: dotnet restore '${{ env.SOLUTION_PATH }}' --verbosity quiet
