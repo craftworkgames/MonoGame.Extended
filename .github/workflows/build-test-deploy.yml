@@ -13,6 +13,9 @@ on:
     branches: [master, develop]
   pull_request:
     branches: [master, develop]
+  repository_dispatch:
+    #HACK: This allows to re-run the workflow from an external API call; useful for testing/debugging the workflow without having to commit a change in a branch
+    types: [run]
 
 jobs:
   gitversion-job:
@@ -80,7 +83,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
 
