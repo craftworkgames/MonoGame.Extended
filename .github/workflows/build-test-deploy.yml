@@ -111,7 +111,7 @@ jobs:
       with:
         dotnet-version: '${{ env.DOTNET_CORE_SDK_VERSION }}'
 
-    - name: "Install Fonts (Ubuntu)"
+    - name: "Install fonts (Ubuntu)"
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get install ttf-mscorefonts-installer
@@ -129,7 +129,7 @@ jobs:
     - name: "Test solution"
       run: dotnet test '${{ env.SOLUTION_PATH }}' --nologo --verbosity normal --configuration Release --no-build
 
-    - name: "Pack Solution (Ubuntu)"
+    - name: "Pack solution (Ubuntu)"
       if: matrix.os == 'ubuntu-latest'
       run: dotnet pack '${{ env.SOLUTION_PATH }}' --nologo --output './nuget-packages' --verbosity minimal --configuration Release --no-build -p:PackageVersion=${{ steps.version.outputs.nuGetVersion }}
 
