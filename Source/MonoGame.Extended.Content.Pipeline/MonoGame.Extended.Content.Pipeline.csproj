@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsTool>True</IsTool>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="bin\netstandard2.0\*.dll" Pack="True" PackagePath="tools\" />
+    <Content Include="bin\netcoreapp3.1\*.dll" Pack="True" PackagePath="tools\" />
   </ItemGroup>
 
   <PropertyGroup>
