@@ -59,4 +59,3 @@ Also thanks to:
 ## License
 
 MonoGame.Extended is released under the [The MIT License (MIT)](https://github.com/craftworkgames/MonoGame.Extended/blob/master/LICENSE).
-
