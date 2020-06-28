@@ -336,7 +336,7 @@ namespace MonoGame.Extended
 	///         objects hierarchically.
 	///     </para>
 	/// </remarks>
-	class Transform3 : BaseTransform<Matrix> {
+	public class Transform3 : BaseTransform<Matrix> {
 		private Vector3 _position;
 		private Quaternion _rotation;
 		private Vector3 _scale = Vector3.One;
