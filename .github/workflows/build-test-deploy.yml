@@ -114,8 +114,9 @@ jobs:
     - name: "Install fonts (Ubuntu)"
       if: matrix.os == 'ubuntu-latest'
       run: |
-        sudo apt-get install ttf-mscorefonts-installer
-        sudo fc-cache
+        sudo apt update
+        sudo apt install ttf-mscorefonts-installer
+        sudo fc-cache -f -v
 
     - name: "Install dependencies"
       run: dotnet restore '${{ env.SOLUTION_PATH }}' --verbosity quiet
