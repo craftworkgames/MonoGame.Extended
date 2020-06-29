@@ -10,7 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:../../../MonoGame.Extended.Content.Pipeline/bin/netcoreapp3.1\MonoGame.Extended.Content.Pipeline.dll
+/reference:..\..\..\MonoGame.Extended.Content.Pipeline\bin\netcoreapp3.1\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
