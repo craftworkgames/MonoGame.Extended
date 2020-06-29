@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsTool>True</IsTool>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="bin\netstandard2.0\*.dll" Pack="True" PackagePath="tools\" />
+    <Content Include="bin\netcoreapp3.1\*.dll" Pack="True" PackagePath="tools\" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -27,8 +27,9 @@
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.Content.Pipeline.Portable" Version="3.6.0.1625" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Autofac" Version="5.2.0" />
+    <PackageReference Include="MonoGame.Framework.Content.Pipeline.Portable" Version="3.7.1.189" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonoGame.Extended.Tiled\MonoGame.Extended.Tiled.csproj" />
