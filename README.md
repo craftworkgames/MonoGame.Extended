@@ -4,7 +4,7 @@
 
 MonoGame.Extended is a set of utilities (in the form of libraries/tools) to [MonoGame](http://www.monogame.net/) that makes it easier to make games. Choose what you want, the rest stays out of your way. It makes MonoGame more awesome.
 
-![Build, Test, Deploy](https://github.com/craftworkgames/MonoGame.Extended/workflows/Build,%20Test,%20Deploy/badge.svg) [![Docs](https://img.shields.io/badge/Docs-latest-brightgreen.svg?style=flat)](http://www.monogameextended.net/)
+[![Build, Test, Deploy](https://github.com/craftworkgames/MonoGame.Extended/workflows/Build,%20Test,%20Deploy/badge.svg?branch=develop)](https://github.com/craftworkgames/MonoGame.Extended/actions?query=workflow%3A%22Build%2C+Test%2C+Deploy%22) [![Docs](https://img.shields.io/badge/Docs-latest-brightgreen.svg?style=flat)](http://www.monogameextended.net/)
 
 ## Getting started
 
