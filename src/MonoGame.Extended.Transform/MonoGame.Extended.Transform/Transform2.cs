@@ -10,16 +10,18 @@ using System.Runtime.CompilerServices;
 namespace MonoGame.Extended.Transform
 {
     /// <summary>
-    ///     The position, rotation, and scale of a two-dimensional game object.
+    ///     Provides the position, rotation, and scale of a two-dimensional game object.
     /// </summary>
     /// <remarks>
     ///     <para>
-    ///         Every <see cref="Transform2" /> can have a parent, which allows to apply position, rotation and scale to
+    ///         Setting the <see cref="Parent" /> allows to apply position, rotation and scale to
     ///         game objects hierarchically.
     ///     </para>
     /// </remarks>
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
+    [SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
+    [SuppressMessage("ReSharper", "EventNeverSubscribedTo.Global", Justification = "Public API.")]
     public class Transform2
     {
         private readonly Action _parentDirtyAction;
@@ -184,6 +186,11 @@ namespace MonoGame.Extended.Transform
 
         private void RecalculateWorldMatrix()
         {
+            if (!WorldMatrixIsDirty)
+            {
+                return;
+            }
+
             RecalculateLocalMatrix();
 
             if (Parent != null)
@@ -202,7 +209,7 @@ namespace MonoGame.Extended.Transform
 
         private void RecalculateLocalMatrix()
         {
-            if (LocalMatrixIsDirty)
+            if (!LocalMatrixIsDirty)
             {
                 return;
             }
