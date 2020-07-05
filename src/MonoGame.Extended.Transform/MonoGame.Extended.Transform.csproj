@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <RootNamespace />
+        <LangVersion>8</LangVersion>
+        <Nullable>enable</Nullable>
+        <Description>Provides spatial game types in 2D and 3D.</Description>
+        <Authors>Craftwork Games</Authors>
+        <Copyright>Copyright © 2020 Craftwork Games</Copyright>
+        <License>MIT</License>
+        <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>monogame monogame.extended c# csharp dotnet .net transform</PackageTags>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <IsPackable>true</IsPackable>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
+        <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1375-develop" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <StyleCopConfigurationFilePath>..\StyleCop.json</StyleCopConfigurationFilePath>
+        <StyleCopRulesetFilePath>..\StyleCop.ruleset</StyleCopRulesetFilePath>
+        <CodeAnalysisRuleSet>$(StyleCopRulesetFilePath)</CodeAnalysisRuleSet>
+    </PropertyGroup>
+    <ItemGroup>
+        <Content Include="$(StyleCopRulesetFilePath)">
+            <Link>StyleCop.ruleset</Link>
+        </Content>
+        <AdditionalFiles Include="$(StyleCopConfigurationFilePath)">
+            <Link>StyleCop.json</Link>
+        </AdditionalFiles>
+    </ItemGroup>
+
+</Project>
