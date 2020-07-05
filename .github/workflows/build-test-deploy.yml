@@ -123,9 +123,6 @@ jobs:
     - name: "Install dependencies"
       run: dotnet restore '${{ env.SOLUTION_PATH }}' --verbosity quiet
 
-    - name: "HACK: Build the Pipeline project first to avoid build errors."
-      run: dotnet build ./Source/MonoGame.Extended.Content.Pipeline/MonoGame.Extended.Content.Pipeline.csproj
-
     - name: "Build solution"
       run: dotnet build '${{ env.SOLUTION_PATH }}' --nologo --verbosity minimal --configuration Release --no-restore /p:Version=${{ steps.version.outputs.nuGetVersion }}
 
