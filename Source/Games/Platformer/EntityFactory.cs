@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using Platformer.Collisions;
 using Platformer.Components;
@@ -27,18 +28,19 @@ namespace Platformer
             var dudeAtlas = TextureAtlas.Create("dudeAtlas", dudeTexture, 16, 16);
 
             var entity = _world.CreateEntity();
-            //var animationFactory = new SpriteSheetAnimationFactory(dudeAtlas);
-            //animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 0, 1, 2, 1 }));
-            //animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 6, 7, 8, 9, 10, 11 }, frameDuration: 0.1f));
-            //animationFactory.Add("jump", new SpriteSheetAnimationData(new[] { 10, 12 }, frameDuration: 1.0f, isLooping: false));
-            //animationFactory.Add("fall", new SpriteSheetAnimationData(new[] { 13, 14 }, frameDuration: 1.0f, isLooping: false));
-            //animationFactory.Add("swim", new SpriteSheetAnimationData(new[] { 18, 19, 20, 21, 22, 23 }));
-            //animationFactory.Add("kick", new SpriteSheetAnimationData(new[] { 15 }, frameDuration: 0.3f, isLooping: false));
-            //animationFactory.Add("punch", new SpriteSheetAnimationData(new[] { 26 }, frameDuration: 0.3f, isLooping: false));
-            //animationFactory.Add("cool", new SpriteSheetAnimationData(new[] { 17 }, frameDuration: 0.3f, isLooping: false));
-            //entity.Attach(new AnimatedSprite(animationFactory, "idle"));
+            var spriteSheet = new SpriteSheet {TextureAtlas = dudeAtlas};
+
+            AddAnimationCycle(spriteSheet, "idle", new[] {0, 1, 2, 1});
+            AddAnimationCycle(spriteSheet, "walk", new[] {6, 7, 8, 9, 10, 11});
+            AddAnimationCycle(spriteSheet, "jump", new[] {10, 12}, false);
+            AddAnimationCycle(spriteSheet, "fall", new[] {13, 14}, false);
+            AddAnimationCycle(spriteSheet, "swim", new[] {18, 19, 20, 21, 22, 23});
+            AddAnimationCycle(spriteSheet, "kick", new[] {15}, false, 0.3f);
+            AddAnimationCycle(spriteSheet, "punch", new[] {26}, false, 0.3f);
+            AddAnimationCycle(spriteSheet, "cool", new[] {17}, false, 0.3f);
+            entity.Attach(new AnimatedSprite(spriteSheet, "idle"));
             entity.Attach(new Transform2(position, 0, Vector2.One * 4));
-            entity.Attach(new Body { Position = position, Size = new Vector2(32, 64), BodyType = BodyType.Dynamic });
+            entity.Attach(new Body {Position = position, Size = new Vector2(32, 64), BodyType = BodyType.Dynamic});
             entity.Attach(new Player());
             return entity;
         }
@@ -49,15 +51,28 @@ namespace Platformer
             var dudeAtlas = TextureAtlas.Create("blueguyAtlas", dudeTexture, 16, 16);
 
             var entity = _world.CreateEntity();
-            //var animationFactory = new SpriteSheetAnimationFactory(dudeAtlas);
-            //animationFactory.Add("idle", new SpriteSheetAnimationData(new[] { 0, 1, 2, 3, 2, 1 }));
-            //animationFactory.Add("walk", new SpriteSheetAnimationData(new[] { 6, 7, 8, 9, 10, 11 }, frameDuration: 0.1f));
-            //animationFactory.Add("jump", new SpriteSheetAnimationData(new[] { 10, 12 }, frameDuration: 1.0f, isLooping: false));
-            //entity.Attach(new AnimatedSprite(animationFactory, "idle") { Effect = SpriteEffects.FlipHorizontally });
+            var spriteSheet = new SpriteSheet {TextureAtlas = dudeAtlas};
+            AddAnimationCycle(spriteSheet, "idle", new[] {0, 1, 2, 3, 2, 1});
+            AddAnimationCycle(spriteSheet, "walk", new[] {6, 7, 8, 9, 10, 11});
+            AddAnimationCycle(spriteSheet, "jump", new[] {10, 12}, false, 1.0f);
+            entity.Attach(new AnimatedSprite(spriteSheet, "idle") {Effect = SpriteEffects.FlipHorizontally});
             entity.Attach(new Transform2(position, 0, Vector2.One * 4));
-            entity.Attach(new Body { Position = position, Size = new Vector2(32, 64), BodyType = BodyType.Dynamic });
+            entity.Attach(new Body {Position = position, Size = new Vector2(32, 64), BodyType = BodyType.Dynamic});
             entity.Attach(new Enemy());
             return entity;
+        }
+
+        private void AddAnimationCycle(SpriteSheet spriteSheet, string name, int[] frames, bool isLooping = true, float frameDuration = 0.1f)
+        {
+            var cycle = new SpriteSheetAnimationCycle();
+            foreach (var f in frames)
+            {
+                cycle.Frames.Add(new SpriteSheetAnimationFrame(f, frameDuration));
+            }
+
+            cycle.IsLooping = isLooping;
+
+            spriteSheet.Cycles.Add(name, cycle);
         }
 
         public void CreateTile(int x, int y, int width, int height)
