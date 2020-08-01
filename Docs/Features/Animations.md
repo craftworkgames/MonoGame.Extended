@@ -11,7 +11,7 @@ The Image file with all the sprites combined in a Map
 
 ![](http://i.imgur.com/gVfkoF2.png)
 
-And an xml describing the coordenates and size of each sprite within the map:
+And an xml describing the coordinates and size of each sprite within the map:
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
