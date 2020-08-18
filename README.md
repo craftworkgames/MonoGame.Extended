@@ -13,6 +13,8 @@ The libraries and tools are distributed as NuGet packages. The libraries can be 
 CLI:
 
     dotnet add package MonoGame.Extended
+    
+To get access to the `develop` branch and pull-requests as packages add the private feed: `https://www.myget.org/F/lithiumtoast/api/v3/index.json` and be sure to include pre-releases when searching. 
 
 Once you've installed one or more of the main packages you might also want to install the Content Pipeline extensions.
 
