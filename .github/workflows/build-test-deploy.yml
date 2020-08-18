@@ -30,13 +30,13 @@ jobs:
       run: git fetch --prune --unshallow
 
     - name: "Install GitVersion"
-      uses: gittools/actions/gitversion/setup@v0.9.2
+      uses: gittools/actions/gitversion/setup@v0.9.3
       with:
           versionSpec: '5.2.x'
           
     - name: "Use GitVersion"
       id: gitversion # step id used as reference for output values
-      uses: gittools/actions/gitversion/execute@v0.9.2
+      uses: gittools/actions/gitversion/execute@v0.9.3
 
     - run: |
         echo "Major: ${{ steps.gitversion.outputs.major }}"
@@ -83,7 +83,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
 
@@ -123,9 +123,6 @@ jobs:
     - name: "Install dependencies"
       run: dotnet restore '${{ env.SOLUTION_PATH }}' --verbosity quiet
 
-    - name: "HACK: Build the Pipeline project first to avoid build errors."
-      run: dotnet build ./Source/MonoGame.Extended.Content.Pipeline/MonoGame.Extended.Content.Pipeline.csproj
-
     - name: "Build solution"
       run: dotnet build '${{ env.SOLUTION_PATH }}' --nologo --verbosity minimal --configuration Release --no-restore /p:Version=${{ steps.version.outputs.nuGetVersion }}
 
@@ -133,9 +130,11 @@ jobs:
       run: dotnet test '${{ env.SOLUTION_PATH }}' --nologo --verbosity normal --configuration Release --no-build
 
     - name: "Pack solution"
+      if: matrix.os == 'ubuntu-latest'
       run: dotnet pack '${{ env.SOLUTION_PATH }}' --nologo --output './nuget-packages' --verbosity minimal --configuration Release --no-build -p:PackageVersion=${{ steps.version.outputs.nuGetVersion }}
 
     - name: 'Upload packed artifacts'
+      if: matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v2
       with:
         name: nuget-packages
