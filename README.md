@@ -10,15 +10,14 @@ MonoGame.Extended is a set of utilities (in the form of libraries/tools) to [Mon
 
 The libraries and tools are distributed as NuGet packages. The libraries can be installed into your existing MonoGame project with ease using a NuGet UI or CLI.
 
+> :warning: **v3.8**: Until I have access to upload to NuGet, for MonoGame v3.8 please use the feed `https://www.myget.org/F/lithiumtoast/api/v3/index.json`. You can see an example of how to do this with the samples: `https://github.com/craftworkgames/MonoGame.Extended-samples`. Using the private NuGet feed also allows to get packages for the `develop` branch and pull-requests before official releases.
+
 CLI:
 
     dotnet add package MonoGame.Extended
-    
-To get access to the `develop` branch and pull-requests as packages add the private feed: `https://www.myget.org/F/lithiumtoast/api/v3/index.json` and be sure to include pre-releases when searching. 
+   
 
-Once you've installed one or more of the main packages you might also want to install the Content Pipeline extensions.
-
-To do this you'll need to manually reference the `MonoGame.Extended.Content.Pipeline.dll` in the [MonoGame Content Pipeline Tool](http://docs.monogameextended.net/Installation/#referencing-the-content-pipeline-extension) because it doesn't support NuGet directly.
+Once you've installed one or more of the main packages you might also want to install the Content Pipeline extensions. To do this you'll need to manually reference the `MonoGame.Extended.Content.Pipeline.dll` in the [MonoGame Content Pipeline Tool](http://docs.monogameextended.net/Installation/#referencing-the-content-pipeline-extension) because it doesn't support NuGet directly.
 
 Alternately, if you want to try the latest and greatest you might want to [build from source](http://docs.monogameextended.net/Development/Building-from-Source/).
 
