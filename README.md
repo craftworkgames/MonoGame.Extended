@@ -24,7 +24,7 @@ Alternately, if you want to try the latest and greatest you might want to [build
 
 ## Where to next?
 
-- Check out [the demos](https://github.com/craftworkgames/MonoGame.Extended/tree/develop/Source/Demos)
+- Check out [the samples](https://github.com/craftworkgames/MonoGame.Extended-samples)
 - Join our live [Discord](https://discord.gg/xPUEkj9)
 - Read the [Documentation](http://www.monogameextended.net/docs)
 - Submit an [issue on GitHub](https://github.com/craftworkgames/MonoGame.Extended/issues)
