@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Serialization;
-using MonoGame.Utilities;
+using MonoGame.Framework.Utilities.Deflate;
 using CompressionMode = System.IO.Compression.CompressionMode;
+using GZipStream = System.IO.Compression.GZipStream;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
@@ -324,15 +324,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         {
             var memoryStream = new MemoryStream(decodedData, false);
 
-            switch (compressionMode)
+            return compressionMode switch
             {
-                case "gzip":
-                    return new GZipStream(memoryStream, CompressionMode.Decompress);
-                case "zlib":
-                    return new ZlibStream(memoryStream, Utilities.CompressionMode.Decompress);
-                default:
-                    return memoryStream;
-            }
+                "gzip" => new GZipStream(memoryStream, CompressionMode.Decompress),
+                "zlib" => new ZlibStream(memoryStream, Framework.Utilities.Deflate.CompressionMode.Decompress),
+                _ => memoryStream
+            };
         }
     }
 }

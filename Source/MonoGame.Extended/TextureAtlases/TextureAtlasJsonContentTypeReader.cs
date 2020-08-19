@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
 using Newtonsoft.Json;
+using ContentReaderExtensions = MonoGame.Extended.Content.ContentReaderExtensions;
 
 namespace MonoGame.Extended.TextureAtlases
 {
