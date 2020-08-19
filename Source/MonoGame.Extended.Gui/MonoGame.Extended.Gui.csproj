@@ -17,8 +17,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" PrivateAssets="All" />
     <ProjectReference Include="..\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj" />
     <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>
