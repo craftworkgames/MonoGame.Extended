@@ -8,18 +8,14 @@ MonoGame.Extended is a set of utilities (in the form of libraries/tools) to [Mon
 
 ## Getting started
 
-The libraries and tools are distributed as NuGet packages. The libraries can be installed into your existing MonoGame project with ease using a NuGet UI or CLI.
+Code is distributed as NuGet packages in the form of libraries (`.dll` files). You can easily install the NuGet packages into your existing MonoGame project using the NuGet Package Manager UI in Visual Studio or by using the command line interface (CLI) in a terminal.
 
-> :warning: **v3.8**: Until I have access to upload to NuGet, for MonoGame v3.8 please use the feed `https://www.myget.org/F/lithiumtoast/api/v3/index.json`. You can see an example of how to do this with the samples: `https://github.com/craftworkgames/MonoGame.Extended-samples`. Using the private NuGet feed also allows to get packages for the `develop` branch and pull-requests before official releases.
+> :wrench: CLI 
+    `dotnet add package MonoGame.Extended`
+    
+> :hammer: To use the content pipeline extensions, you will need to edit your `.mgcb` file to reference the `.dll`. To see an example of how to do this with NuGet see the samples at https://github.com/craftworkgames/MonoGame.Extended-samples. The important pieces are the `NuGet.config` file and the `.mgcb` file.
 
-CLI:
-
-    dotnet add package MonoGame.Extended
-   
-
-Once you've installed one or more of the main packages you might also want to install the Content Pipeline extensions. To do this you'll need to manually reference the `MonoGame.Extended.Content.Pipeline.dll` in the [MonoGame Content Pipeline Tool](http://docs.monogameextended.net/Installation/#referencing-the-content-pipeline-extension) because it doesn't support NuGet directly.
-
-Alternately, if you want to try the latest and greatest you might want to [build from source](http://docs.monogameextended.net/Development/Building-from-Source/).
+> :eyes: To access pre-releases including rolling builds of the repository after every commit or PR commit, you can see add the NuGet feed `https://www.myget.org/F/lithiumtoast/api/v3/index.json`. See https://github.com/craftworkgames/MonoGame.Extended-samples with the `NuGet.config` file for an example of how to setup the feed.
 
 ## Where to next?
 
