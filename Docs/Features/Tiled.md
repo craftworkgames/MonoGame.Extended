@@ -49,7 +49,7 @@ protected override void Initialize()
     mapRenderer = new TiledMapRenderer(GraphicsDevice, map);
     // If you decided to use the camere, then you could also initialize it here like this
     var viewportadapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 600);
-    camera = new OrthographicCamere(viewportadapter);
+    camera = new OrthographicCamera(viewportadapter);
 }
 ```
 
