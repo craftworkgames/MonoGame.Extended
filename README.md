@@ -29,7 +29,7 @@ Code is distributed as NuGet packages in the form of libraries (`.dll` files). Y
 
 ## News
 
-We're in the process of developing MonoGame.Extended 3.8! Stay tuned.
+We're in the process of developing MonoGame.Extended 4.0! Stay tuned.
 
 ## Patreon Supporters
 
