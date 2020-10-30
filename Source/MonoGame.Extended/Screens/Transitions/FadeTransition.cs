@@ -27,7 +27,7 @@ namespace MonoGame.Extended.Screens.Transitions
         public override void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            _spriteBatch.FillRectangle(_graphicsDevice.Viewport.Bounds, Color * Value);
+            _spriteBatch.FillRectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, Color * Value);
             _spriteBatch.End();
         }
     }
