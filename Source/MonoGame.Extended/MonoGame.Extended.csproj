@@ -1,29 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <Authors>craftworkgames</Authors>
-    <Description>It makes MonoGame more awesome.</Description>
-    <PackageTags>monogame extended pipeline bmfont tiled texture atlas input viewport fps shapes sprite</PackageTags>
-    <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</PackageIconUrl>
-  </PropertyGroup>
+	<PropertyGroup>
+		<Authors>craftworkgames</Authors>
+		<Description>It makes MonoGame more awesome.</Description>
+		<PackageTags>monogame extended pipeline bmfont tiled texture atlas input viewport fps shapes sprite</PackageTags>
+		<PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</PackageIconUrl>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <NoWarn>NU1701</NoWarn>
-  </PropertyGroup>
+	<PropertyGroup>
+		<NoWarn>NU1701</NoWarn>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="MonoGame.Framework.Content.Pipeline" Version="3.8.0.1641">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-  </ItemGroup>
-  
+	<ItemGroup>
+		<PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641">
+			<PrivateAssets>All</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="MonoGame.Framework.Content.Pipeline" Version="3.8.0.1641">
+			<PrivateAssets>All</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ClrHeapAllocationAnalyzer" Version="3.0.0" />
+	</ItemGroup>
+
+
 </Project>

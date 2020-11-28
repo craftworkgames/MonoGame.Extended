@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended
+﻿using System;
+
+namespace MonoGame.Extended
 {
     /// <summary>
     ///     Base class for shapes.
@@ -25,7 +27,9 @@
         /// <param name="shapeA">The first shape.</param>
         /// <param name="shapeB">The second shape.</param>
         /// <returns>True if the two shapes intersect.</returns>
-        public static bool Intersects(this IShapeF shapeA, IShapeF shapeB)
+        public static bool Intersects<TShapeA, TShapeB>(this TShapeA shapeA, TShapeB shapeB)
+            where TShapeA : struct, IShapeF
+            where TShapeB : struct, IShapeF
         {
             var intersects = false;
 
@@ -48,6 +52,25 @@
 
             return intersects;
         }
+
+        public static RectangleF GetEnclosingRectangle<TShape>(this TShape shape)
+            where TShape : struct, IShapeF
+        {
+            if (shape is RectangleF rectangleA)
+            {
+                return rectangleA;
+            }
+            else if (shape is CircleF circleA)
+            {
+                return circleA.ToRectangleF();
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+
 
         /// <summary>
         ///     Checks if a circle and rectangle intersect.

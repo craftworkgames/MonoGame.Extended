@@ -319,14 +319,14 @@ namespace MonoGame.Extended
         /// <returns>The <see cref="Point2" /> on the boundary of this <see cref="CircleF" /> using <paramref name="angle" />.</returns>
         public Point2 BoundaryPointAt(float angle)
         {
-            var direction = new Vector2((float) Math.Cos(angle), (float) Math.Sin(angle));
+            var direction = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
             return Center + Radius * direction;
         }
 
         [Obsolete("Circle.GetPointAlongEdge() may be removed in the future. Use BoundaryPointAt() instead.")]
         public Point2 GetPointAlongEdge(float angle)
         {
-            return Center + new Vector2(Radius * (float) Math.Cos(angle), Radius * (float) Math.Sin(angle));
+            return Center + new Vector2(Radius * (float)Math.Cos(angle), Radius * (float)Math.Sin(angle));
         }
 
         /// <summary>
@@ -396,7 +396,7 @@ namespace MonoGame.Extended
         /// </returns>
         public override bool Equals(object obj)
         {
-            return obj is CircleF && Equals((CircleF) obj);
+            return obj is CircleF && Equals((CircleF)obj);
         }
 
         /// <summary>
@@ -421,10 +421,10 @@ namespace MonoGame.Extended
         /// <returns>
         ///     The resulting <see cref="Rectangle" />.
         /// </returns>
-        public static implicit operator Rectangle(CircleF circle)
+        public static explicit operator Rectangle(CircleF circle)
         {
-            var diameter = (int) circle.Diameter;
-            return new Rectangle((int) (circle.Center.X - circle.Radius), (int) (circle.Center.Y - circle.Radius),
+            var diameter = (int)circle.Diameter;
+            return new Rectangle((int)(circle.Center.X - circle.Radius), (int)(circle.Center.Y - circle.Radius),
                 diameter, diameter);
         }
 
@@ -436,7 +436,7 @@ namespace MonoGame.Extended
         /// </returns>
         public Rectangle ToRectangle()
         {
-            return this;
+            return (Rectangle)this;
         }
 
         /// <summary>
@@ -446,7 +446,7 @@ namespace MonoGame.Extended
         /// <returns>
         ///     The resulting <see cref="CircleF" />.
         /// </returns>
-        public static implicit operator CircleF(Rectangle rectangle)
+        public static explicit operator CircleF(Rectangle rectangle)
         {
             var halfWidth = rectangle.Width / 2;
             var halfHeight = rectangle.Height / 2;
@@ -461,7 +461,7 @@ namespace MonoGame.Extended
         /// <returns>
         ///     The resulting <see cref="RectangleF" />.
         /// </returns>
-        public static implicit operator RectangleF(CircleF circle)
+        public static explicit operator RectangleF(CircleF circle)
         {
             var diameter = circle.Diameter;
             return new RectangleF(circle.Center.X - circle.Radius, circle.Center.Y - circle.Radius, diameter, diameter);
@@ -475,7 +475,7 @@ namespace MonoGame.Extended
         /// </returns>
         public RectangleF ToRectangleF()
         {
-            return this;
+            return (RectangleF)this;
         }
 
         /// <summary>
@@ -485,7 +485,7 @@ namespace MonoGame.Extended
         /// <returns>
         ///     The resulting <see cref="CircleF" />.
         /// </returns>
-        public static implicit operator CircleF(RectangleF rectangle)
+        public static explicit operator CircleF(RectangleF rectangle)
         {
             var halfWidth = rectangle.Width * 0.5f;
             var halfHeight = rectangle.Height * 0.5f;

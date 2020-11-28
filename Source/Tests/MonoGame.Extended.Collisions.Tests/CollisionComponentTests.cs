@@ -22,24 +22,33 @@ namespace MonoGame.Extended.Collisions.Tests
             collisionComponent = new CollisionComponent(new RectangleF(Point2.Zero, new Point2(10, 10)));
         }
 
+        private static void AssertVector(Vector2 actual, Vector2 expected)
+        {
+            if ((expected - actual).Length() > float.Epsilon)
+                throw new Xunit.Sdk.EqualException(expected, actual);
+
+            //Assert.InRange(actual.X, expected.X - float.Epsilon, expected.X + float.Epsilon);
+            //Assert.InRange(actual.Y, expected.Y - float.Epsilon, expected.Y + float.Epsilon);
+        }
+
 
         #region Circle Circle
 
         [Fact]
         public void PenetrationVectorSameCircleTest()
         {
-            Point2 pos1 = Point2.Zero;
+            Point2 pos1 = new Point2(0, 0.1f);
             Point2 pos2 = Point2.Zero;
 
-            IShapeF shape1 = new CircleF(pos1, 2.0f);
-            IShapeF shape2 = new CircleF(pos2, 2.0f);
+            CircleF shape1 = new CircleF(pos1, 2.0f);
+            CircleF shape2 = new CircleF(pos2, 2.0f);
 
-            var actor1 = new BasicActor()
+            var actor1 = new BasicActor<CircleF>()
             {
                 Position = pos1,
                 Bounds = shape1
             };
-            var actor2 = new BasicWall()
+            var actor2 = new BasicWall<CircleF>()
             {
                 Position = pos2,
                 Bounds = shape2
@@ -49,7 +58,8 @@ namespace MonoGame.Extended.Collisions.Tests
             collisionComponent.Insert(actor1);
             collisionComponent.Insert(actor2);
             collisionComponent.Update(_gameTime);
-            Assert.True(Math.Abs(actor1.Position.Y - -4f) < float.Epsilon);
+
+            AssertVector(actor1.Position, new Vector2(0, 4));
         }
 
         [Fact]
@@ -58,15 +68,15 @@ namespace MonoGame.Extended.Collisions.Tests
             Point2 pos1 = new Point2(0, 1.5f);
             Point2 pos2 = Point2.Zero;
 
-            IShapeF shape1 = new CircleF(pos1, 2.0f);
-            IShapeF shape2 = new CircleF(pos2, 2.0f);
+            CircleF shape1 = new CircleF(pos1, 2.0f);
+            CircleF shape2 = new CircleF(pos2, 2.0f);
 
-            var actor1 = new BasicActor()
+            var actor1 = new BasicActor<CircleF>()
             {
                 Position = pos1,
                 Bounds = shape1
             };
-            var actor2 = new BasicWall()
+            var actor2 = new BasicWall<CircleF>()
             {
                 Position = pos2,
                 Bounds = shape2
@@ -76,6 +86,10 @@ namespace MonoGame.Extended.Collisions.Tests
             collisionComponent.Insert(actor1);
             collisionComponent.Insert(actor2);
             collisionComponent.Update(_gameTime);
+
+            AssertVector(actor1.Position, new Vector2(0, 4f));
+
+
             // Actor should have moved up because the distance is shorter.
             Assert.True(actor1.Position.Y > actor2.Position.Y);
             // The circle centers should be about 4 units away after moving
@@ -88,15 +102,15 @@ namespace MonoGame.Extended.Collisions.Tests
             Point2 pos1 = new Point2(2, 2.5f);
             Point2 pos2 = new Point2(2, 1);
 
-            IShapeF shape1 = new CircleF(pos1, 2.0f);
-            IShapeF shape2 = new CircleF(pos2, 2.0f);
+            CircleF shape1 = new CircleF(pos1, 2.0f);
+            CircleF shape2 = new CircleF(pos2, 2.0f);
 
-            var actor1 = new BasicActor()
+            var actor1 = new BasicActor<CircleF>()
             {
                 Position = pos1,
                 Bounds = shape1
             };
-            var actor2 = new BasicWall()
+            var actor2 = new BasicWall<CircleF>()
             {
                 Position = pos2,
                 Bounds = shape2
@@ -106,6 +120,10 @@ namespace MonoGame.Extended.Collisions.Tests
             collisionComponent.Insert(actor1);
             collisionComponent.Insert(actor2);
             collisionComponent.Update(_gameTime);
+
+            AssertVector(actor1.Position, new Vector2(2, 5f));
+
+
             // Actor should have moved up because the distance is shorter.
             Assert.True(actor1.Position.Y > actor2.Position.Y);
             // The circle centers should be about 4 units away after moving
@@ -119,15 +137,15 @@ namespace MonoGame.Extended.Collisions.Tests
             Point2 pos1 = new Point2(0, 1.5f);
             Point2 pos2 = Point2.Zero;
 
-            IShapeF shape1 = new CircleF(pos1, 0);
-            IShapeF shape2 = new CircleF(pos2, 2.0f);
+            CircleF shape1 = new CircleF(pos1, 0);
+            CircleF shape2 = new CircleF(pos2, 2.0f);
 
-            var actor1 = new BasicActor()
+            var actor1 = new BasicActor<CircleF>()
             {
                 Position = pos1,
                 Bounds = shape1
             };
-            var actor2 = new BasicWall()
+            var actor2 = new BasicWall<CircleF>()
             {
                 Position = pos2,
                 Bounds = shape2
@@ -137,6 +155,9 @@ namespace MonoGame.Extended.Collisions.Tests
             collisionComponent.Insert(actor1);
             collisionComponent.Insert(actor2);
             collisionComponent.Update(_gameTime);
+
+            AssertVector(actor1.Position, new Vector2(0, 2f));
+
             // Actor should have moved up because the distance is shorter.
             Assert.True(actor1.Position.Y > actor2.Position.Y);
             // The circle centers should be about 4 units away after moving
@@ -153,16 +174,16 @@ namespace MonoGame.Extended.Collisions.Tests
             Point2 pos1 = new Point2(0, 1);
             Point2 pos2 = new Point2(-2, -1);
 
-            IShapeF shape1 = new CircleF(pos1, 2.0f);
-            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+            CircleF shape1 = new CircleF(pos1, 2.0f);
+            RectangleF shape2 = new RectangleF(pos2, new Size2(4, 2));
 
 
-            var actor1 = new BasicActor()
+            var actor1 = new BasicActor<CircleF>()
             {
                 Position = pos1,
                 Bounds = shape1
             };
-            var actor2 = new BasicWall()
+            var actor2 = new BasicWall<RectangleF>()
             {
                 Position = pos2,
                 Bounds = shape2
@@ -172,6 +193,9 @@ namespace MonoGame.Extended.Collisions.Tests
             collisionComponent.Insert(actor1);
             collisionComponent.Insert(actor2);
             collisionComponent.Update(_gameTime);
+
+            AssertVector(actor1.Position, new Vector2(0, 3));
+
             Assert.True(Math.Abs(actor1.Position.X - 0.0f) < float.Epsilon);
             Assert.True(Math.Abs(actor1.Position.Y - 3.0f) < float.Epsilon);
         }
@@ -179,19 +203,19 @@ namespace MonoGame.Extended.Collisions.Tests
         [Fact]
         public void PenetrationVectorCircleContainedInRectangleTest()
         {
-            Point2 pos1 = new Point2(0, 0);
+            Point2 pos1 = new Point2(0, -0.5f);
             Point2 pos2 = new Point2(-2, -1);
 
-            IShapeF shape1 = new CircleF(pos1, 1.0f);
-            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+            CircleF shape1 = new CircleF(pos1, 1.0f);
+            RectangleF shape2 = new RectangleF(pos2, new Size2(4, 2));
 
 
-            var actor1 = new BasicActor()
+            var actor1 = new BasicActor<CircleF>()
             {
                 Position = pos1,
                 Bounds = shape1
             };
-            var actor2 = new BasicWall()
+            var actor2 = new BasicWall<RectangleF>()
             {
                 Position = pos2,
                 Bounds = shape2
@@ -201,9 +225,13 @@ namespace MonoGame.Extended.Collisions.Tests
             collisionComponent.Insert(actor1);
             collisionComponent.Insert(actor2);
             collisionComponent.Update(_gameTime);
-            Assert.True(Math.Abs(actor1.Position.X - 0.0f) < float.Epsilon);
-            Assert.True(Math.Abs(actor1.Position.Y - -2.0f) < float.Epsilon);
+
+            var position = new Vector2(0, -2);
+
+            AssertVector(actor1.Position, position);
         }
+
+
 
         [Fact]
         public void PenetrationVectorCircleOffAxisRectangleTest()
@@ -211,16 +239,16 @@ namespace MonoGame.Extended.Collisions.Tests
             Point2 pos1 = new Point2(2, 1);
             Point2 pos2 = new Point2(-2, -1);
 
-            IShapeF shape1 = new CircleF(pos1, 2.0f);
-            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+            CircleF shape1 = new CircleF(pos1, 2.0f);
+            RectangleF shape2 = new RectangleF(pos2, new Size2(4, 2));
 
 
-            var actor1 = new BasicActor()
+            var actor1 = new BasicActor<CircleF>()
             {
                 Position = pos1,
                 Bounds = shape1
             };
-            var actor2 = new BasicWall()
+            var actor2 = new BasicWall<RectangleF>()
             {
                 Position = pos2,
                 Bounds = shape2
@@ -230,6 +258,9 @@ namespace MonoGame.Extended.Collisions.Tests
             collisionComponent.Insert(actor1);
             collisionComponent.Insert(actor2);
             collisionComponent.Update(_gameTime);
+
+            AssertVector(actor1.Position, new Vector2(2, 3));
+
             Assert.True(Math.Abs(actor1.Position.X - 2.0f) < float.Epsilon);
             Assert.True(Math.Abs(actor1.Position.Y - 3.0f) < float.Epsilon);
         }
@@ -244,16 +275,16 @@ namespace MonoGame.Extended.Collisions.Tests
             Point2 pos1 = new Point2(0, 0);
             Point2 pos2 = new Point2(-2, -1);
 
-            IShapeF shape1 = new RectangleF(pos1, new Size2(4, 2));
-            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+            RectangleF shape1 = new RectangleF(pos1, new Size2(4, 2));
+            RectangleF shape2 = new RectangleF(pos2, new Size2(4, 2));
 
 
-            var actor1 = new BasicActor()
+            var actor1 = new BasicActor<RectangleF>()
             {
                 Position = pos1,
                 Bounds = shape1
             };
-            var actor2 = new BasicWall()
+            var actor2 = new BasicWall<RectangleF>()
             {
                 Position = pos2,
                 Bounds = shape2
@@ -263,6 +294,9 @@ namespace MonoGame.Extended.Collisions.Tests
             collisionComponent.Insert(actor1);
             collisionComponent.Insert(actor2);
             collisionComponent.Update(_gameTime);
+
+            AssertVector(actor1.Position, new Vector2(0, 1));
+
             Assert.True(Math.Abs(actor1.Position.X - 0.0f) < float.Epsilon);
             Assert.True(Math.Abs(actor1.Position.Y - 1.0f) < float.Epsilon);
         }
@@ -273,16 +307,16 @@ namespace MonoGame.Extended.Collisions.Tests
             Point2 pos1 = new Point2(4, 2);
             Point2 pos2 = new Point2(3, 1);
 
-            IShapeF shape1 = new RectangleF(pos1, new Size2(4, 2));
-            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+            RectangleF shape1 = new RectangleF(pos1, new Size2(4, 2));
+            RectangleF shape2 = new RectangleF(pos2, new Size2(4, 2));
 
 
-            var actor1 = new BasicActor()
+            var actor1 = new BasicActor<RectangleF>()
             {
                 Position = pos1,
                 Bounds = shape1
             };
-            var actor2 = new BasicWall()
+            var actor2 = new BasicWall<RectangleF>()
             {
                 Position = pos2,
                 Bounds = shape2
@@ -292,6 +326,9 @@ namespace MonoGame.Extended.Collisions.Tests
             collisionComponent.Insert(actor1);
             collisionComponent.Insert(actor2);
             collisionComponent.Update(_gameTime);
+
+            AssertVector(actor1.Position, new Vector2(4, 3));
+
             Assert.True(Math.Abs(actor1.Position.X - 4.0f) < float.Epsilon);
             Assert.True(Math.Abs(actor1.Position.Y - 3.0f) < float.Epsilon);
         }

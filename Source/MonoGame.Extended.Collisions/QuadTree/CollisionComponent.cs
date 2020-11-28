@@ -42,7 +42,7 @@ namespace MonoGame.Extended.Collisions
                 value.RemoveFromAllParents();
 
                 var target = value.Target;
-                var collisions =_collisionTree.Query(target.Bounds);
+                var collisions = _collisionTree.Query(target);
 
                 // Generate list of collision Infos
                 foreach (var other in collisions)
@@ -50,11 +50,11 @@ namespace MonoGame.Extended.Collisions
                     var collisionInfo = new CollisionEventArgs()
                     {
                         Other = other.Target,
-                        PenetrationVector = CalculatePenetrationVector(value.Bounds, other.Bounds)
+                        PenetrationVector = CalculatePenetrationVector(value.Target, other.Target)
                     };
 
                     target.OnCollision(collisionInfo);
-                    value.Bounds = value.Target.Bounds;
+                    value.EnclosingRect = value.Target.GetEnclosingRectangle();
                 }
                 _collisionTree.Insert(value);
             }
@@ -70,7 +70,7 @@ namespace MonoGame.Extended.Collisions
         {
             if (!_targetDataDictionary.ContainsKey(target))
             {
-                var data = new QuadtreeData(target);
+                var data = QuadtreeData.Create(target);
                 _targetDataDictionary.Add(target, data);
                 _collisionTree.Insert(data);
             }
@@ -103,13 +103,27 @@ namespace MonoGame.Extended.Collisions
 
         #region Penetration Vectors
 
+        private static Vector2 CalculatePenetrationVector(ICollisionActor a, ICollisionActor b)
+        {
+            return b.Do(a, (b2, a2) => a2.Do(b2, CalculatePenetrationVector, CalculatePenetrationVector), (b2, a2) => a2.Do(b2, CalculatePenetrationVector, CalculatePenetrationVector));
+        }
+
+
+        private static Vector2 CalculatePenetrationVector<TShapeA, TShapeB>(ICollisionActor<TShapeA> a, ICollisionActor<TShapeB> b)
+            where TShapeA : struct, IShapeF
+            where TShapeB : struct, IShapeF
+        {
+            return CalculatePenetrationVector(a.Bounds, b.Bounds);
+        }
         /// <summary>
         /// Calculate a's penetration into b
         /// </summary>
         /// <param name="a">The penetrating shape.</param>
         /// <param name="b">The shape being penetrated.</param>
         /// <returns>The distance vector from the edge of b to a's Position</returns>
-        private static Vector2 CalculatePenetrationVector(IShapeF a, IShapeF b)
+        private static Vector2 CalculatePenetrationVector<TShapeA, TShapeB>(TShapeA a, TShapeB b)
+            where TShapeA : struct, IShapeF
+            where TShapeB : struct, IShapeF
         {
             switch (a)
             {
@@ -189,10 +203,10 @@ namespace MonoGame.Extended.Collisions
                 {
                     // Calculate penetration as only in X or Y direction.
                     // Whichever is lower.
-                    var dispx = new Vector2(displacement.X, 0);
-                    var dispy = new Vector2(0, displacement.Y);
-                    dispx.Normalize();
-                    dispy.Normalize();
+                    var dispx = displacement.X >= 0 ? Vector2.UnitX : -Vector2.UnitX;
+                    var dispy = displacement.Y >= 0 ? Vector2.UnitY : -Vector2.UnitY;
+                    //dispx.Normalize();
+                    //dispy.Normalize();
 
                     dispx *= (circ.Radius + rect.Width / 2);
                     dispy *= (circ.Radius + rect.Height / 2);

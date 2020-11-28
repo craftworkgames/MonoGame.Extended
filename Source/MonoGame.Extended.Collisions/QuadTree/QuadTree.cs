@@ -11,6 +11,12 @@ namespace MonoGame.Extended.Collisions
         public const int DefaultMaxDepth = 7;
         public const int DefaultMaxObjectsPerNode = 25;
 
+        // prevent allocation at runtime
+        private Func<ICollisionActor<RectangleF>, List<QuadtreeData>> _queryMethodRectangle;
+        private Func<ICollisionActor<CircleF>, List<QuadtreeData>> _queryMethodCircle;
+
+
+
         protected List<Quadtree> Children = new List<Quadtree>();
         protected HashSet<QuadtreeData> Contents = new HashSet<QuadtreeData>();
 
@@ -22,6 +28,8 @@ namespace MonoGame.Extended.Collisions
         {
             CurrentDepth = 0;
             NodeBounds = bounds;
+            _queryMethodRectangle = new Func<ICollisionActor<RectangleF>, List<QuadtreeData>>(Query);
+            _queryMethodCircle = new Func<ICollisionActor<CircleF>, List<QuadtreeData>>(Query);
         }
 
         protected int CurrentDepth { get; set; }
@@ -32,7 +40,7 @@ namespace MonoGame.Extended.Collisions
         /// <summary>
         ///     Gets the bounds of the area contained in this quad tree.
         /// </summary>
-        public  RectangleF NodeBounds { get; protected set; }
+        public RectangleF NodeBounds { get; protected set; }
 
         /// <summary>
         ///     Gets whether the current node is a leaf node.
@@ -87,8 +95,8 @@ namespace MonoGame.Extended.Collisions
         /// <param name="data">Data being inserted.</param>
         public void Insert(QuadtreeData data)
         {
-            var actorBounds = data.Target.Bounds;
-            
+            var actorBounds = data.EnclosingRect;
+
             // Object doesn't fit into this node.
             if (!NodeBounds.Intersects(actorBounds))
             {
@@ -126,7 +134,7 @@ namespace MonoGame.Extended.Collisions
             }
             else
             {
-                throw new InvalidOperationException($"Cannot remove from a non leaf {nameof(Quadtree)}"); 
+                throw new InvalidOperationException($"Cannot remove from a non leaf {nameof(Quadtree)}");
             }
         }
 
@@ -237,8 +245,10 @@ namespace MonoGame.Extended.Collisions
         /// </summary>
         /// <param name="area">The area to query for overlapping targets</param>
         /// <returns>A unique list of targets intersected by area.</returns>
-        public List<QuadtreeData> Query(IShapeF area)
+        public List<QuadtreeData> Query<TShape>(TShape shape)
+            where TShape : struct, IShapeF
         {
+            var area = Shape.GetEnclosingRectangle(shape);
             var recursiveResult = new List<QuadtreeData>();
             QueryWithoutReset(area, recursiveResult);
             for (var i = 0; i < recursiveResult.Count; i++)
@@ -247,17 +257,37 @@ namespace MonoGame.Extended.Collisions
             }
             return recursiveResult;
         }
-
-        private void QueryWithoutReset(IShapeF area, List<QuadtreeData> recursiveResult)
+        public List<QuadtreeData> Query(ICollisionActor shape)
         {
-            if (!NodeBounds.Intersects(area)) 
+            return shape.Do(_queryMethodRectangle, _queryMethodCircle);
+        }
+
+        public List<QuadtreeData> Query<TShape>(ICollisionActor<TShape> actor)
+            where TShape : struct, IShapeF
+        {
+
+            var recursiveResult = new List<QuadtreeData>();
+
+            QueryWithoutReset(actor.Bounds, recursiveResult);
+            for (var i = 0; i < recursiveResult.Count; i++)
+            {
+                recursiveResult[i].MarkClean();
+            }
+            return recursiveResult;
+        }
+
+
+        private void QueryWithoutReset<TShape>(TShape area, List<QuadtreeData> recursiveResult)
+            where TShape : struct, IShapeF
+        {
+            if (!NodeBounds.Intersects(area))
                 return;
 
             if (IsLeaf)
             {
                 foreach (QuadtreeData quadtreeData in Contents)
                 {
-                    if (quadtreeData.Dirty == false && quadtreeData.Bounds.Intersects(area))
+                    if (quadtreeData.Dirty == false && quadtreeData.Target.Intersects(area))
                     {
                         recursiveResult.Add(quadtreeData);
                         quadtreeData.MarkDirty();

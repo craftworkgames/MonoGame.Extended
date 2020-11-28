@@ -9,10 +9,22 @@ namespace MonoGame.Extended.Collisions
     /// </summary>
     public class QuadtreeData
     {
-        public QuadtreeData(ICollisionActor target)
+        public static QuadtreeData Create<TShape>(ICollisionActor<TShape> actor)
+            where TShape : struct, IShapeF
+        {
+            var bounds = Shape.GetEnclosingRectangle(actor.Bounds);
+            return new QuadtreeData(actor, bounds);
+        }
+        public static QuadtreeData Create(ICollisionActor actor)
+        {
+            return new QuadtreeData(actor, actor.GetEnclosingRectangle());
+        }
+
+
+        private QuadtreeData(ICollisionActor target, RectangleF bounds)
         {
             Target = target;
-            Bounds = target.Bounds;
+            EnclosingRect = bounds;
         }
 
         public void RemoveParent(Quadtree parent)
@@ -60,6 +72,6 @@ namespace MonoGame.Extended.Collisions
         /// <summary>
         ///     Gets or sets the bounding box for collision detection.
         /// </summary>
-        public IShapeF Bounds { get; set; }
+        public RectangleF EnclosingRect { get; set; }
     }
 }
