@@ -9,10 +9,8 @@ namespace MonoGame.Extended.Collisions
         where TShape : struct, IShapeF
     {
         TShape Bounds { get; }
-
-
     }
-    
+
     public interface ICollisionActor
     {
         void OnCollision(CollisionEventArgs collisionInfo);

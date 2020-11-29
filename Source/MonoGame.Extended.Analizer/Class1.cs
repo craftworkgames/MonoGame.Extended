@@ -16,6 +16,7 @@ namespace MonoGame.Extended.Analizer
     {
         public const string NoIShapeFRuleId = "MGE0001";
         public const string ImplementIShapeFRuleId = "MGE0002";
+        public const string ImplementICollisionActorRuleId = "MGE0003";
     }
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -28,6 +29,21 @@ namespace MonoGame.Extended.Analizer
         private const string _titleImplementIShapeF = "Do not implement the Interface IShapeF.";
         public const string MessageFormatImplementIShapeF = "'{0}' implements IShapeF, using this type where IShapeF is expected may result in excpetions.";
         private const string _descriptionImplementIShapeF = "Do not implement the Interface IShapeF. Many Methods will throw a NotSupportedException if a type can't be casted to an expected struct.";
+
+        private const string _titleImplementICollisionActor = "Do not implement the Interface IShapeF.";
+        public const string MessageFormatImplementICollisionActor = "'{0}' implements IShapeF, using this type where IShapeF is expected may result in excpetions.";
+        private const string _descriptionImplementICollisionActor = "Do not implement the Interface IShapeF. Many Methods will throw a NotSupportedException if a type can't be casted to an expected struct.";
+
+        internal static DiagnosticDescriptor CollisionActorRule =
+            new DiagnosticDescriptor(
+                DiagnosticIds.ImplementICollisionActorRuleId,
+                _titleImplementICollisionActor,
+                MessageFormatImplementICollisionActor,
+                DiagnosticCategories.Category,
+                DiagnosticSeverity.Warning,
+                isEnabledByDefault: true,
+                description: _descriptionImplementICollisionActor);
+
 
         internal static DiagnosticDescriptor UseRule =
             new DiagnosticDescriptor(
@@ -49,7 +65,7 @@ namespace MonoGame.Extended.Analizer
                 isEnabledByDefault: true,
                 description: _descriptionImplementIShapeF);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(UseRule, ImplementRule);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(UseRule, ImplementRule, CollisionActorRule);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -91,6 +107,9 @@ namespace MonoGame.Extended.Analizer
                 var circleType = context.Compilation.GetTypeByMetadataName("MonoGame.Extended.CircleF");
                 var elipseType = context.Compilation.GetTypeByMetadataName("MonoGame.Extended.EllipseF");
 
+                var iCollisionActorType = context.Compilation.GetTypeByMetadataName("MonoGame.Extended.Collisions.ICollisionActor");
+                var iCollisionActorGenericType = context.Compilation.GetTypeByMetadataName("MonoGame.Extended.Collisions.ICollisionActor`1");
+
                 if (namedTypeSymbol.Interfaces.Any(x => shapeType.Equals(x, SymbolEqualityComparer.Default))
                     // we do not want to trigger the diagnostics on our internal type
                     && !namedTypeSymbol.Equals(rectType, SymbolEqualityComparer.Default)
@@ -99,6 +118,17 @@ namespace MonoGame.Extended.Analizer
                     context.ReportDiagnostic(
                         Diagnostic.Create(
                             ImplementRule,
+                            context.Symbol.Locations[0],
+                            context.Symbol.Name));
+
+
+                if (iCollisionActorType != null && namedTypeSymbol.Interfaces.Any(x => iCollisionActorType.Equals(x, SymbolEqualityComparer.Default))
+                     // we do not want to trigger the diagnostics on our internal type
+                     && !namedTypeSymbol.Equals(iCollisionActorGenericType, SymbolEqualityComparer.Default)
+                    )
+                    context.ReportDiagnostic(
+                        Diagnostic.Create(
+                            CollisionActorRule,
                             context.Symbol.Locations[0],
                             context.Symbol.Name));
             }
