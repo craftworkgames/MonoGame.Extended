@@ -105,8 +105,26 @@ namespace MonoGame.Extended.Collisions
 
         private static Vector2 CalculatePenetrationVector(ICollisionActor a, ICollisionActor b)
         {
-            return b.Do(a, (b2, a2) => a2.Do(b2, CalculatePenetrationVector, CalculatePenetrationVector), (b2, a2) => a2.Do(b2, CalculatePenetrationVector, CalculatePenetrationVector));
+            if (a is ICollisionActor<RectangleF> recActor)
+                return CalculatePenetrationVector(recActor, b);
+            else if (a is ICollisionActor<CircleF> circleActor)
+                return CalculatePenetrationVector(circleActor, b);
+            else
+                throw new NotSupportedException();
         }
+
+        private static Vector2 CalculatePenetrationVector<TShape>(ICollisionActor<TShape> a, ICollisionActor b)
+            where TShape : struct, IShapeF
+        {
+            if (b is ICollisionActor<RectangleF> recActor)
+                return CalculatePenetrationVector(a, recActor);
+            else if (b is ICollisionActor<CircleF> circleActor)
+                return CalculatePenetrationVector(a, circleActor);
+            else
+                throw new NotSupportedException();
+        }
+
+
 
 
         private static Vector2 CalculatePenetrationVector<TShapeA, TShapeB>(ICollisionActor<TShapeA> a, ICollisionActor<TShapeB> b)

@@ -11,9 +11,6 @@ namespace MonoGame.Extended.Collisions
         public const int DefaultMaxDepth = 7;
         public const int DefaultMaxObjectsPerNode = 25;
 
-        // prevent allocation at runtime
-        private Func<ICollisionActor<RectangleF>, List<QuadtreeData>> _queryMethodRectangle;
-        private Func<ICollisionActor<CircleF>, List<QuadtreeData>> _queryMethodCircle;
 
 
 
@@ -28,8 +25,6 @@ namespace MonoGame.Extended.Collisions
         {
             CurrentDepth = 0;
             NodeBounds = bounds;
-            _queryMethodRectangle = new Func<ICollisionActor<RectangleF>, List<QuadtreeData>>(Query);
-            _queryMethodCircle = new Func<ICollisionActor<CircleF>, List<QuadtreeData>>(Query);
         }
 
         protected int CurrentDepth { get; set; }
@@ -259,7 +254,13 @@ namespace MonoGame.Extended.Collisions
         }
         public List<QuadtreeData> Query(ICollisionActor shape)
         {
-            return shape.Do(_queryMethodRectangle, _queryMethodCircle);
+            if (shape is ICollisionActor<RectangleF> recActor)
+                return Query(recActor);
+            else if (shape is ICollisionActor<CircleF> circleActor)
+                return Query(circleActor);
+            else
+                throw new NotSupportedException();
+
         }
 
         public List<QuadtreeData> Query<TShape>(ICollisionActor<TShape> actor)
