@@ -1,4 +1,4 @@
-name: "Build, Test, Deploy"
+name: "Build test deploy"
 
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -19,6 +19,7 @@ on:
     types: [run]
 
 jobs:
+
   gitversion-job:
     name: "GitVersion"
     runs-on: ubuntu-latest
@@ -31,46 +32,16 @@ jobs:
       run: git fetch --prune --unshallow
 
     - name: "Install GitVersion"
-      uses: gittools/actions/gitversion/setup@v0.9.3
+      uses: gittools/actions/gitversion/setup@v0.9.6
+      env: 
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true # workaround for https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/ until the execute action is updated
       with:
-          versionSpec: '5.2.x'
+        versionSpec: '5.x'
           
     - name: "Use GitVersion"
-      id: gitversion # step id used as reference for output values
-      uses: gittools/actions/gitversion/execute@v0.9.3
+      uses: gittools/actions/gitversion/execute@v0.9.6
 
-    - run: |
-        echo "Major: ${{ steps.gitversion.outputs.major }}"
-        echo "Minor: ${{ steps.gitversion.outputs.minor }}"
-        echo "Patch: ${{ steps.gitversion.outputs.patch }}"
-        echo "PreReleaseTag: ${{ steps.gitversion.outputs.preReleaseTag }}"
-        echo "PreReleaseTagWithDash: ${{ steps.gitversion.outputs.preReleaseTagWithDash }}"
-        echo "PreReleaseLabel: ${{ steps.gitversion.outputs.preReleaseLabel }}"
-        echo "PreReleaseNumber: ${{ steps.gitversion.outputs.preReleaseNumber }}"
-        echo "WeightedPreReleaseNumber: ${{ steps.gitversion.outputs.weightedPreReleaseNumber }}"
-        echo "BuildMetaData: ${{ steps.gitversion.outputs.buildMetaData }}"
-        echo "BuildMetaDataPadded: ${{ steps.gitversion.outputs.buildMetaDataPadded }}"
-        echo "FullBuildMetaData: ${{ steps.gitversion.outputs.fullBuildMetaData }}"
-        echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
-        echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
-        echo "LegacySemVer: ${{ steps.gitversion.outputs.legacySemVer }}"
-        echo "LegacySemVerPadded: ${{ steps.gitversion.outputs.legacySemVerPadded }}"
-        echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
-        echo "AssemblySemFileVer: ${{ steps.gitversion.outputs.assemblySemFileVer }}"
-        echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
-        echo "InformationalVersion: ${{ steps.gitversion.outputs.informationalVersion }}"
-        echo "BranchName: ${{ steps.gitversion.outputs.branchName }}"
-        echo "Sha: ${{ steps.gitversion.outputs.sha }}"
-        echo "ShortSha: ${{ steps.gitversion.outputs.shortSha }}"
-        echo "NuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"
-        echo "NuGetVersion: ${{ steps.gitversion.outputs.nuGetVersion }}"
-        echo "NuGetPreReleaseTagV2: ${{ steps.gitversion.outputs.nuGetPreReleaseTagV2 }}"
-        echo "NuGetPreReleaseTag: ${{ steps.gitversion.outputs.nuGetPreReleaseTag }}"
-        echo "VersionSourceSha: ${{ steps.gitversion.outputs.versionSourceSha }}"
-        echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
-        echo "CommitsSinceVersionSourcePadded: ${{ steps.gitversion.outputs.commitsSinceVersionSourcePadded }}"
-        echo "CommitDate: ${{ steps.gitversion.outputs.commitDate }}"
-        echo "${{ steps.gitversion.outputs.nuGetVersion }}"  >> nuget-version.txt
+    - run: echo "$GitVersion_NuGetVersionV2" >> nuget-version.txt
 
     - name: 'Upload NuGetVersion version artifact'
       uses: actions/upload-artifact@v2
@@ -79,7 +50,7 @@ jobs:
         path: nuget-version.txt
 
   build-test-pack-job:
-    name: 'Build, test & pack solution'
+    name: "Build"
     needs: [gitversion-job]
     runs-on: ${{ matrix.os }}
     strategy:
@@ -88,18 +59,21 @@ jobs:
 
     steps:
 
-    - name: "Download NuGetVersion version artifact"
+    - name: "Download version artifact"
       uses: actions/download-artifact@v2
       with:
         name: nuget-version
 
-    - name: "Read NuGetVersion artifact"
+    - name: "Read Version"
       id: version
       shell: bash
       run: |
-        ls -a
-        export NUGET_VERSION=$(cat nuget-version.txt)
-        echo ::set-output name=nuGetVersion::$NUGET_VERSION
+        echo "VERSION=$(cat nuget-version.txt)" >> $GITHUB_ENV
+
+    - name: "Print Version"
+      shell: bash
+      run: |
+        echo $VERSION
 
     - name: "Checkout repository"
       uses: actions/checkout@master
@@ -112,7 +86,7 @@ jobs:
       with:
         dotnet-version: '${{ env.DOTNET_CORE_SDK_VERSION }}'
 
-    - name: "Install fonts (Ubuntu)"
+        - name: "Install fonts (Ubuntu)"
       if: matrix.os == 'ubuntu-latest'
       run: |
         echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
@@ -125,24 +99,24 @@ jobs:
       run: dotnet restore '${{ env.SOLUTION_PATH }}' --verbosity quiet
 
     - name: "Build solution"
-      run: dotnet build '${{ env.SOLUTION_PATH }}' --nologo --verbosity minimal --configuration Release --no-restore /p:Version=${{ steps.version.outputs.nuGetVersion }}
+      run: dotnet build '${{ env.SOLUTION_PATH }}' --nologo --verbosity minimal --configuration Release --no-restore /p:Version='${{ env.VERSION }}'
 
     - name: "Test solution"
       run: dotnet test '${{ env.SOLUTION_PATH }}' --nologo --verbosity normal --configuration Release --no-build
 
     - name: "Pack solution"
       if: matrix.os == 'ubuntu-latest'
-      run: dotnet pack '${{ env.SOLUTION_PATH }}' --nologo --output './nuget-packages' --verbosity minimal --configuration Release --no-build -p:PackageVersion=${{ steps.version.outputs.nuGetVersion }}
+      run: dotnet pack '${{ env.SOLUTION_PATH }}' --nologo --output "./nuget-packages-packed" --verbosity minimal --configuration Release --no-build -p:PackageVersion='${{ env.VERSION }}'
 
-    - name: 'Upload packed artifacts'
+    - name: "Upload packages"
       if: matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v2
       with:
-        name: nuget-packages
-        path: './nuget-packages/*/**'
+        name: nuget-packages-packed
+        path: './nuget-packages-packed/*/**'
 
   deploy-job:
-    name: "Deploy NuGet packages"
+    name: "Deploy"
     needs: [build-test-pack-job]
     runs-on: ubuntu-latest
     steps:
@@ -155,14 +129,14 @@ jobs:
     - name: "Download NuGet Packages"
       uses: actions/download-artifact@v1
       with:
-        name: nuget-packages
-        path: './nuget-packages'
+        name: nuget-packages-packed
+        path: './nuget-packages-packed'
 
     - name: "Echo Packages"
-      run: find ./nuget-packages/ -not -type d -exec basename {} \;
+      run: find ./nuget-packages-packed/ -not -type d -exec basename {} \;
       
     - name: "Add Packages Source: MyGet"
-      run: dotnet nuget add source $MYGET_SOURCE_URL --name 'MyGet'
+      run: dotnet nuget add source $MYGET_SOURCE_URL --name "MyGet"
  
     - name: "Upload Packages: MyGet"
-      run: dotnet nuget push './**/*.nupkg' --source 'MyGet' --skip-duplicate --api-key $MYGET_ACCESS_TOKEN
+      run: dotnet nuget push "./**/*.nupkg" --source "MyGet" --skip-duplicate --api-key $MYGET_ACCESS_TOKEN
