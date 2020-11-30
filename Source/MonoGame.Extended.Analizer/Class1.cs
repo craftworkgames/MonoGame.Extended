@@ -8,16 +8,6 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MonoGame.Extended.Analizer
 {
-    public static class DiagnosticCategories
-    {
-        public const string Category = "MonoGame.Extended Analyzers";
-    }
-    public static class DiagnosticIds
-    {
-        public const string NoIShapeFRuleId = "MGE0001";
-        public const string ImplementIShapeFRuleId = "MGE0002";
-        public const string ImplementICollisionActorRuleId = "MGE0003";
-    }
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class MonoGameAnalizer : DiagnosticAnalyzer
