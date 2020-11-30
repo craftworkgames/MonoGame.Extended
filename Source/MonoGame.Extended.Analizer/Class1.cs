@@ -20,7 +20,7 @@ namespace MonoGame.Extended.Analizer
     }
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class IShapeFUsedAnalyzer : DiagnosticAnalyzer
+    public class MonoGameAnalizer : DiagnosticAnalyzer
     {
         private const string _titleNoIShapeF = "Do not use the Interface IShapeF anywher but in where clauses.";
         public const string MessageFormatNoIShapeF = "'{0}' has the type IShapeF, considering using the actual struct or use a GenericType.";
@@ -30,9 +30,9 @@ namespace MonoGame.Extended.Analizer
         public const string MessageFormatImplementIShapeF = "'{0}' implements IShapeF, using this type where IShapeF is expected may result in excpetions.";
         private const string _descriptionImplementIShapeF = "Do not implement the Interface IShapeF. Many Methods will throw a NotSupportedException if a type can't be casted to an expected struct.";
 
-        private const string _titleImplementICollisionActor = "Do not implement the Interface IShapeF.";
-        public const string MessageFormatImplementICollisionActor = "'{0}' implements IShapeF, using this type where IShapeF is expected may result in excpetions.";
-        private const string _descriptionImplementICollisionActor = "Do not implement the Interface IShapeF. Many Methods will throw a NotSupportedException if a type can't be casted to an expected struct.";
+        private const string _titleImplementICollisionActor = "Do not implement the Interface ICollisionActor.";
+        public const string MessageFormatImplementICollisionActor = "'{0}' implements ICollisionActor, using the generic variant instead.";
+        private const string _descriptionImplementICollisionActor = "Do not implement the Interface ICollisionActor. Use the generic variant that defines the collision geometry.";
 
         internal static DiagnosticDescriptor CollisionActorRule =
             new DiagnosticDescriptor(
