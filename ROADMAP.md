@@ -5,7 +5,7 @@
 ### Highlights
 
 * Summary: Refresh of the MonoGame ecosystem for a stable foundation to build extensions on top of.
-* Date: December 1st, 2020
+* Date: Janurary 1st, 2021
 * Runtime: .NET 5 Desktop (Windows, macOS, Linux)
 
 ### Forking MonoGame
