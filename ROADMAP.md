@@ -8,6 +8,13 @@
 * Date: Janurary 1st, 2021
 * Runtime: .NET 5 Desktop (Windows, macOS, Linux)
 
+- [x] Fork FNA: https://github.com/craftworkgames/Ankura
+- [x] Delete majority of XNA types (could still delete more!)
+- [x] Create graphics samples (could still add more, specifically about texture sampler states): https://github.com/craftworkgames/Ankura/tree/develop/src/dotnet/projects/samples/graphics
+- [ ] Create input samples: https://github.com/craftworkgames/Ankura/tree/develop/src/dotnet/projects/samples/input
+- [ ] Create audio samples: not started yet
+- [ ] Create vector shooter game: https://github.com/craftworkgames/VectorVenture
+
 ### Forking MonoGame
 
 #### Why
