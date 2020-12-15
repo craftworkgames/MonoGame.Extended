@@ -50,16 +50,19 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 				{
 					var tileset = map.Tilesets[i];
 
+					string getTilesetSource(string source)
+						=> Path.GetFullPath(Path.Combine(Path.GetDirectoryName(mapFilePath), source));
+
 					if (!string.IsNullOrWhiteSpace(tileset.Source))
 					{
-                        tileset.Source = Path.Combine(Path.GetDirectoryName(mapFilePath), tileset.Source);
+                        tileset.Source = getTilesetSource(tileset.Source);
                         ContentLogger.Log($"Adding dependency for {tileset.Source}");
 						// We depend on the tileset. If the tileset changes, the map also needs to rebuild.
 						context.AddDependency(tileset.Source);
 					}
 					else
 					{
-                        tileset.Image.Source = Path.Combine(Path.GetDirectoryName(mapFilePath), tileset.Image.Source);
+                        tileset.Image.Source = getTilesetSource(tileset.Image.Source);
 						ContentLogger.Log($"Adding dependency for {tileset.Image.Source}");
 						context.AddDependency(tileset.Image.Source);
 					}
