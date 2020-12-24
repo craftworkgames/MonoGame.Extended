@@ -11,7 +11,7 @@ namespace MonoGame.Extended.Particles
 {
     public unsafe class ParticleEmitter : IDisposable
     {
-        private readonly FastRandom _random = new FastRandom(Guid.NewGuid().GetHashCode());
+        private readonly FastRandom _random = new FastRandom(Math.Abs(Guid.NewGuid().GetHashCode()));
         private float _totalSeconds;
 
         [JsonConstructor]
