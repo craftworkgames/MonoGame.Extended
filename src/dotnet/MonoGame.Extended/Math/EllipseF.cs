@@ -67,6 +67,27 @@ namespace MonoGame.Extended
                    && ellispse.RadiusY == RadiusY;
         }
 
+        public override bool Equals(object obj)
+        {
+            return obj is EllipseF && Equals((EllipseF)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = Center.GetHashCode();
+                hashCode = (hashCode * 397) ^ RadiusX.GetHashCode();
+                hashCode = (hashCode * 397) ^ RadiusY.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        public override string ToString()
+        {
+            return $"Centre: {Center}, RadiusX: {RadiusX}, RadiusY: {RadiusY}";
+        }
+
         public static bool operator ==(EllipseF first, EllipseF second)
         {
             return first.Equals(ref second);
