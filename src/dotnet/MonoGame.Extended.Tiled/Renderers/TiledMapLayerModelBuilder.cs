@@ -44,8 +44,8 @@ namespace MonoGame.Extended.Tiled.Renderers
         {
             var reciprocalWidth = 1f / texture.Width;
             var reciprocalHeight = 1f / texture.Height;
-            var texelLeft = (sourceRectangle.X + 0.5f) * reciprocalWidth;
-            var texelTop = (sourceRectangle.Y + 0.5f) * reciprocalHeight;
+            var texelLeft = sourceRectangle.X * reciprocalWidth;
+            var texelTop = sourceRectangle.Y * reciprocalHeight;
             var texelRight = (sourceRectangle.X + sourceRectangle.Width) * reciprocalWidth;
             var texelBottom = (sourceRectangle.Y + sourceRectangle.Height) * reciprocalHeight;
 
