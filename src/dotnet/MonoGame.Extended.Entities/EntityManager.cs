@@ -79,6 +79,8 @@ namespace MonoGame.Extended.Entities
         private void OnComponentsChanged(int entityId)
         {
             _changedEntities.Add(entityId);
+            _entityToComponentBits[entityId] = _componentManager.CreateComponentBits(entityId);
+            EntityChanged?.Invoke(entityId);
         }
 
         public override void Update(GameTime gameTime)
