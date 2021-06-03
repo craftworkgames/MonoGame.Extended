@@ -29,7 +29,7 @@ namespace MonoGame.Extended.Tiled.Serialization
 		[XmlIgnore]
 		public Color TransparentColor
 		{
-			get => RawTransparentColor == string.Empty ? Color.TransparentBlack : ColorHelper.FromHex(RawTransparentColor);
+			get => RawTransparentColor == string.Empty ? Color.Transparent : ColorHelper.FromHex(RawTransparentColor);
 			set => RawTransparentColor = ColorHelper.ToHex(value);
 		}
 
