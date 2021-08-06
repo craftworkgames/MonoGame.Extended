@@ -8,27 +8,3 @@ trim_trailing_whitespace = true
 [*.cs]
 indent_style = space
 indent_size = 4
-
-# Default severity for analyzer diagnostics with category 'Style'
-
-dotnet_style_qualification_for_field = false:error
-
-dotnet_naming_rule.private_members_with_underscore.symbols = private_fields
-dotnet_naming_rule.private_members_with_underscore.style  = prefix_underscore
-dotnet_naming_rule.private_members_with_underscore.severity = warning
-
-dotnet_naming_symbols.private_fields.applicable_kinds = field
-dotnet_naming_symbols.private_fields.applicable_accessibilities = private
-
-dotnet_naming_style.prefix_underscore.required_prefix = _
-dotnet_naming_style.prefix_underscore.capitalization  = camel_case
-
-# IDE0007: Use implicit type
-csharp_style_var_elsewhere = true:suggestion
-csharp_style_var_when_type_is_apparent = true:suggestion
-csharp_style_var_for_built_in_types = true:suggestion
-
-# IDE0009: Member access should be qualified.
-dotnet_style_qualification_for_event = false:warning
-dotnet_style_qualification_for_property = false:warning
-dotnet_style_qualification_for_method = false:warning
