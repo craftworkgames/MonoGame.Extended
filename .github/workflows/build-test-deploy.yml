@@ -4,7 +4,6 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CORE_SDK_VERSION: 3.1.301
-  SOLUTION_PATH: './src/dotnet/MonoGame.Extended.sln'
   MYGET_ACCESS_TOKEN: ${{ secrets.MYGET_ACCESS_TOKEN }}
   MYGET_SOURCE_URL: 'https://www.myget.org/F/lithiumtoast/api/v3/index.json'
 
@@ -19,8 +18,8 @@ on:
 
 jobs:
 
-  gitversion-job:
-    name: "GitVersion"
+  version-job:
+    name: "Version"
     runs-on: ubuntu-latest
 
     steps:
@@ -40,17 +39,17 @@ jobs:
     - name: "Use GitVersion"
       uses: gittools/actions/gitversion/execute@v0.9.6
 
-    - run: echo "$GitVersion_NuGetVersionV2" >> nuget-version.txt
+    - run: echo "$GitVersion_NuGetVersionV2" >> version.txt
 
-    - name: 'Upload NuGetVersion version artifact'
+    - name: "Upload NuGetVersion version artifact"
       uses: actions/upload-artifact@v2
       with:
-        name: nuget-version
-        path: nuget-version.txt
+        name: version
+        path: version.txt
 
   build-test-pack-job:
     name: "Build"
-    needs: [gitversion-job]
+    needs: [version-job]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -61,13 +60,13 @@ jobs:
     - name: "Download version artifact"
       uses: actions/download-artifact@v2
       with:
-        name: nuget-version
+        name: version
 
     - name: "Read Version"
       id: version
       shell: bash
       run: |
-        echo "VERSION=$(cat nuget-version.txt)" >> $GITHUB_ENV
+        echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
 
     - name: "Print Version"
       shell: bash
@@ -95,17 +94,17 @@ jobs:
         sudo fc-match Arial
 
     - name: "Download NuGet packages"
-      run: dotnet restore '${{ env.SOLUTION_PATH }}' --verbosity quiet
+      run: dotnet restore --verbosity quiet
 
     - name: "Build solution"
-      run: dotnet build '${{ env.SOLUTION_PATH }}' --nologo --verbosity minimal --configuration Release --no-restore /p:Version='${{ env.VERSION }}'
+      run: dotnet build --nologo --verbosity minimal --configuration Release --no-restore /p:Version='${{ env.VERSION }}'
 
     - name: "Test solution"
-      run: dotnet test '${{ env.SOLUTION_PATH }}' --nologo --verbosity normal --configuration Release --no-build
+      run: dotnet test --nologo --verbosity normal --configuration Release --no-build
 
     - name: "Pack solution"
       if: matrix.os == 'ubuntu-latest'
-      run: dotnet pack '${{ env.SOLUTION_PATH }}' --nologo --output "./nuget-packages-packed" --verbosity minimal --configuration Release --no-build -p:PackageVersion='${{ env.VERSION }}'
+      run: dotnet pack --nologo --output "./nuget-packages" --verbosity minimal --configuration Release --no-build -p:PackageVersion='${{ env.VERSION }}'
 
     - name: "Upload packages"
       if: matrix.os == 'ubuntu-latest'
@@ -114,28 +113,14 @@ jobs:
         name: nuget-packages-packed
         path: './nuget-packages-packed/*/**'
 
-  deploy-job:
-    name: "Deploy"
-    needs: [build-test-pack-job]
-    runs-on: ubuntu-latest
-    steps:
-
-    - name: "Setup .NET Core CLI"
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '${{ env.DOTNET_CORE_SDK_VERSION }}'
-
-    - name: "Download NuGet Packages"
-      uses: actions/download-artifact@v1
-      with:
-        name: nuget-packages-packed
-        path: './nuget-packages-packed'
-
     - name: "Echo Packages"
+      if: matrix.os == 'ubuntu-latest'
       run: find ./nuget-packages-packed/ -not -type d -exec basename {} \;
       
     - name: "Add Packages Source: MyGet"
+      if: matrix.os == 'ubuntu-latest'
       run: dotnet nuget add source $MYGET_SOURCE_URL --name "MyGet"
  
     - name: "Upload Packages: MyGet"
+      if: matrix.os == 'ubuntu-latest'
       run: dotnet nuget push "./**/*.nupkg" --source "MyGet" --skip-duplicate --api-key $MYGET_ACCESS_TOKEN
