@@ -105,17 +105,6 @@ jobs:
     - name: "Pack solution"
       if: matrix.os == 'ubuntu-latest'
       run: dotnet pack --nologo --output "./nuget-packages" --verbosity minimal --configuration Release --no-build -p:PackageVersion='${{ env.VERSION }}'
-
-    - name: "Upload packages"
-      if: matrix.os == 'ubuntu-latest'
-      uses: actions/upload-artifact@v2
-      with:
-        name: nuget-packages-packed
-        path: './nuget-packages-packed/*/**'
-
-    - name: "Echo Packages"
-      if: matrix.os == 'ubuntu-latest'
-      run: find ./nuget-packages-packed/ -not -type d -exec basename {} \;
       
     - name: "Add Packages Source: MyGet"
       if: matrix.os == 'ubuntu-latest'
