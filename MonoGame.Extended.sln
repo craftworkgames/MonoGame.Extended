@@ -25,8 +25,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Particles
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Entities", "src\cs\MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj", "{35FD1F05-AF04-469A-B37A-F9B36C34401C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.SceneGraphs", "src\cs\MonoGame.Extended.SceneGraphs\MonoGame.Extended.SceneGraphs.csproj", "{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Input", "src\cs\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj", "{49C87598-994C-49B5-BBB3-7FFC342635D3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Tweening", "src\cs\MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj", "{1CF61F4F-A2EE-49BF-95D0-379E870DE90E}"
@@ -119,14 +117,6 @@ Global
 		{35FD1F05-AF04-469A-B37A-F9B36C34401C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{35FD1F05-AF04-469A-B37A-F9B36C34401C}.Release|x86.ActiveCfg = Release|Any CPU
 		{35FD1F05-AF04-469A-B37A-F9B36C34401C}.Release|x86.Build.0 = Release|Any CPU
-		{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}.Debug|x86.Build.0 = Debug|Any CPU
-		{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}.Release|x86.ActiveCfg = Release|Any CPU
-		{FE61C3D7-D96D-4AA4-9EF1-17E457BB2C7C}.Release|x86.Build.0 = Release|Any CPU
 		{49C87598-994C-49B5-BBB3-7FFC342635D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{49C87598-994C-49B5-BBB3-7FFC342635D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49C87598-994C-49B5-BBB3-7FFC342635D3}.Debug|x86.ActiveCfg = Debug|Any CPU
