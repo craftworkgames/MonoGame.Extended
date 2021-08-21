@@ -20,6 +20,9 @@ namespace MonoGame.Extended.Entities
     public class ComponentMapper<T> : ComponentMapper
         where T : class
     {
+        public event Action<int> OnPut;
+        public event Action<int> OnDelete;
+
         private readonly Action<int> _onCompositionChanged;
 
         public ComponentMapper(int id, Action<int> onCompositionChanged)
@@ -35,6 +38,7 @@ namespace MonoGame.Extended.Entities
         {
             Components[entityId] = component;
             _onCompositionChanged(entityId);
+            OnPut?.Invoke(entityId);
         }
 
         public T Get(Entity entity)
@@ -59,6 +63,7 @@ namespace MonoGame.Extended.Entities
         {
             Components[entityId] = null;
             _onCompositionChanged(entityId);
+            OnDelete?.Invoke(entityId);
         }
     }
 }
