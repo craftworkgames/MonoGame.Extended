@@ -48,12 +48,14 @@ namespace MonoGame.Extended.TextureAtlases
 
                 // TODO: When we get to .NET Standard 2.1 it would be more robust to use
                 // [Path.GetRelativePath](https://docs.microsoft.com/en-us/dotnet/api/system.io.path.getrelativepath?view=netstandard-2.1)
+                var textureName = Path.GetFileNameWithoutExtension(metadata.Texture);
+                var textureDirectory = Path.GetDirectoryName(metadata.Texture);
                 var directory = Path.GetDirectoryName(_path);
-                var relativeAssetName = Path.Combine(directory, metadata.Texture);
-                var assetName = Path.Combine(directory, Path.GetFileNameWithoutExtension(relativeAssetName));
-                var texture = _contentManager.Load<Texture2D>(assetName);
+                var relativePath = Path.Combine(_contentManager.RootDirectory, directory, textureDirectory, textureName);
+                var resolvedAssetName = Path.GetFullPath(relativePath);
+                var texture = _contentManager.Load<Texture2D>(resolvedAssetName);
 
-                return TextureAtlas.Create(assetName, texture, metadata.RegionWidth, metadata.RegionHeight);
+                return TextureAtlas.Create(resolvedAssetName, texture, metadata.RegionWidth, metadata.RegionHeight);
             }
         }
 
