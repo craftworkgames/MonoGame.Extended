@@ -53,6 +53,7 @@ namespace MonoGame.Extended.Particles
         public Vector2 Offset { get; set; }
         public List<Modifier> Modifiers { get; }
         public Profile Profile { get; set; }
+        public float LayerDepth { get; set; }
         public ParticleReleaseParameters Parameters { get; set; }
         public TextureRegion2D TextureRegion { get; set; }
 
@@ -132,7 +133,7 @@ namespace MonoGame.Extended.Particles
 
                 if (_nextAutoTrigger <= 0)
                 {
-                    Trigger(position);
+                    Trigger(position, this.LayerDepth);
                     _nextAutoTrigger = _autoTriggerFrequency;
                 }
             }
