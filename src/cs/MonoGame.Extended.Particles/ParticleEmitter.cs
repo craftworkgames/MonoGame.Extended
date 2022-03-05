@@ -162,7 +162,7 @@ namespace MonoGame.Extended.Particles
             Release(position + Offset, numToRelease, layerDepth);
         }
 
-        public void Trigger(LineSegment line)
+        public void Trigger(LineSegment line, float layerDepth = 0)
         {
             var numToRelease = _random.Next(Parameters.Quantity);
             var lineVector = line.ToVector();
@@ -170,11 +170,11 @@ namespace MonoGame.Extended.Particles
             for (var i = 0; i < numToRelease; i++)
             {
                 var offset = lineVector * _random.NextSingle();
-                Release(line.Origin + offset, 1);
+                Release(line.Origin + offset, 1, layerDepth);
             }
         }
 
-        private void Release(Vector2 position, int numToRelease, float layerDepth = 0)
+        private void Release(Vector2 position, int numToRelease, float layerDepth)
         {
             var iterator = Buffer.Release(numToRelease);
 

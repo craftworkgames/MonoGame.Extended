@@ -74,10 +74,10 @@ namespace MonoGame.Extended.Particles
                 Emitters[i].Trigger(position, layerDepth);
         }
 
-        public void Trigger(LineSegment line)
+        public void Trigger(LineSegment line, float layerDepth = 0)
         {
             for (var i = 0; i < Emitters.Count; i++)
-                Emitters[i].Trigger(line);
+                Emitters[i].Trigger(line, layerDepth);
         }
 
         public override string ToString()
