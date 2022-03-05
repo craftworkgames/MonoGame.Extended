@@ -28,6 +28,11 @@ namespace MonoGame.Extended.Tiled
 
         public bool TryGetTile(ushort x, ushort y, out TiledMapTile? tile)
         {
+            if (x >= Width)
+            {
+                tile = null;
+                return false;
+            }
             var index = GetTileIndex(x, y);
 
             if (index < 0 || index >= Tiles.Length)
