@@ -11,7 +11,7 @@ namespace MonoGame.Extended.Particles
 {
     public class ParticleEffect : Transform2, IDisposable
     {
-        public ParticleEffect(string name = null, bool autoTrigger = true, float autoTriggerDelay = 0f)
+        public ParticleEffect(string name = null)
         {
             Name = name;
             Emitters = new List<ParticleEmitter>();
