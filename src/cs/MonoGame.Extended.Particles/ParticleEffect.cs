@@ -11,7 +11,7 @@ namespace MonoGame.Extended.Particles
 {
     public class ParticleEffect : Transform2, IDisposable
     {
-        public ParticleEffect(string name = null, bool autoTrigger = true, float autoTriggerDelay = 0f)
+        public ParticleEffect(string name = null)
         {
             Name = name;
             Emitters = new List<ParticleEmitter>();
@@ -74,10 +74,10 @@ namespace MonoGame.Extended.Particles
                 Emitters[i].Trigger(position, layerDepth);
         }
 
-        public void Trigger(LineSegment line)
+        public void Trigger(LineSegment line, float layerDepth = 0)
         {
             for (var i = 0; i < Emitters.Count; i++)
-                Emitters[i].Trigger(line);
+                Emitters[i].Trigger(line, layerDepth);
         }
 
         public override string ToString()
