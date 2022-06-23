@@ -12,9 +12,13 @@ namespace MonoGame.Extended.Input
 
         public static MouseStateExtended GetState()
         {
+            return new MouseStateExtended(_currentMouseState, _previousMouseState);
+        }
+
+        public static Refresh()
+        {
             _previousMouseState = _currentMouseState;
             _currentMouseState = Mouse.GetState();
-            return new MouseStateExtended(_currentMouseState, _previousMouseState);
         }
 
         public static void SetPosition(int x, int y) => Mouse.SetPosition(x, y);

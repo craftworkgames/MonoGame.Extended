@@ -10,9 +10,13 @@ namespace MonoGame.Extended.Input
 
         public static KeyboardStateExtended GetState()
         {
+            return new KeyboardStateExtended(_currentKeyboardState, _previousKeyboardState);
+        }
+
+        public static Refresh()
+        {
             _previousKeyboardState = _currentKeyboardState;
             _currentKeyboardState = Keyboard.GetState();
-            return new KeyboardStateExtended(_currentKeyboardState, _previousKeyboardState);
         }
     }
 }
