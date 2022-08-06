@@ -69,6 +69,9 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
                 if (string.IsNullOrWhiteSpace(obj.Type) && !string.IsNullOrWhiteSpace(template.Object.Type))
                     obj.Type = template.Object.Type;
+
+                if (string.IsNullOrWhiteSpace(obj.Class) && !string.IsNullOrWhiteSpace(template.Object.Class))
+                    obj.Class = template.Object.Class;
             }
         }
     }

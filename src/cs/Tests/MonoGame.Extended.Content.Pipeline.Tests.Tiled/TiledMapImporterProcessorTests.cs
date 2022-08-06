@@ -177,6 +177,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tests.Tiled
             Assert.Equal((uint)0, tmxObjectGroup.Objects[1].GlobalIdentifier);
             Assert.Equal((uint)23, tmxObjectGroup.Objects[5].GlobalIdentifier);
             Assert.Equal("rectangle", tmxObjectGroup.Objects[2].Type);
+            Assert.Equal("sprite", tmxObjectGroup.Objects[1].Class);
             Assert.NotNull(tmxPolygon);
             Assert.Equal("0,0 180,90 -8,275 -45,81 38,77", tmxPolygon.Points);
             Assert.NotNull(tmxPolyline);

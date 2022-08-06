@@ -7,7 +7,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="7" x="240" y="440" width="322" height="186" visible="0"/>
+  <object id="7" class="sprite" x="240" y="440" width="322" height="186" visible="0"/>
   <object id="8" type="rectangle" x="506" y="142" width="136" height="234">
    <properties>
     <property name="area" value="player-spawn"/>

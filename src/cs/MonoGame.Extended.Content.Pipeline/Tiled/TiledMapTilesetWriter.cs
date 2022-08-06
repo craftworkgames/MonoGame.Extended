@@ -74,7 +74,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
             writer.Write(@object.Identifier);
             writer.Write(@object.Name ?? string.Empty);
-            writer.Write(@object.Type ?? string.Empty);
+            writer.Write(@object.Class ?? @object.Type ?? string.Empty);
             writer.Write(@object.X);
             writer.Write(@object.Y);
             writer.Write(@object.Width);
