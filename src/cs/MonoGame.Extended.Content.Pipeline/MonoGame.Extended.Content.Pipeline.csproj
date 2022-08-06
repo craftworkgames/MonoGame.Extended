@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <IsTool>True</IsTool>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="bin\netcoreapp3.1\*.dll" Pack="True" PackagePath="tools\" />
+    <Content Include="bin\net6.0\*.dll" Pack="True" PackagePath="tools\" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -28,10 +28,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.2.0" />
-    <PackageReference Include="MonoGame.Framework.Content.Pipeline" Version="3.8.0.1641">
+    <PackageReference Include="MonoGame.Framework.Content.Pipeline" Version="3.8.1.303">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641">
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
