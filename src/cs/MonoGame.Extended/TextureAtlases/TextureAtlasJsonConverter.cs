@@ -53,8 +53,17 @@ namespace MonoGame.Extended.TextureAtlases
                 var directory = Path.GetDirectoryName(_path);
                 var relativePath = Path.Combine(_contentManager.RootDirectory, directory, textureDirectory, textureName);
                 var resolvedAssetName = Path.GetFullPath(relativePath);
-                var texture = _contentManager.Load<Texture2D>(resolvedAssetName);
-
+                Texture2D texture;
+                try
+                {
+                    texture = _contentManager.Load<Texture2D>(resolvedAssetName);
+                }
+                catch (Exception ex) {
+                    if (textureDirectory == null || textureDirectory == "") 
+                        texture = _contentManager.Load<Texture2D>(textureName);
+                    else
+                        texture = _contentManager.Load<Texture2D>(textureDirectory + "/" + textureName);
+                }
                 return TextureAtlas.Create(resolvedAssetName, texture, metadata.RegionWidth, metadata.RegionHeight);
             }
         }
