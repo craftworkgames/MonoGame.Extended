@@ -40,13 +40,6 @@ namespace MonoGame.Extended.Tests.Particles
         public class AreEqualObjectMethod
         {
             [Fact]
-            public void WhenGivenNull_ReturnsFalse()
-            {
-                var colour = new HslColor(360f, 1f, 1f);
-                Assert.NotNull(colour);
-            }
-
-            [Fact]
             public void WhenGivenEqualColour_ReturnsTrue()
             {
                 var x = new HslColor(360f, 1f, 1f);
@@ -56,7 +49,6 @@ namespace MonoGame.Extended.Tests.Particles
             }
 
             [Fact]
-
             public void WhenGivenDifferentColour_ReturnsFalse()
             {
                 var x = new HslColor(360f, 1f, 1f);
@@ -66,7 +58,6 @@ namespace MonoGame.Extended.Tests.Particles
             }
 
             [Fact]
-
             public void WhenGivenObjectOfAntotherType_ReturnsFalse()
             {
                 var colour = new HslColor(360f, 1f, 1f);
