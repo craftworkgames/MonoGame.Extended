@@ -77,6 +77,59 @@ namespace MonoGame.Extended.Tests.Primitives
 
                 Assert.Equal(new Size2(20, 30), result.Size);
             }
+
+            [Fact]
+            public void Applies_rotation_and_translation()
+            {
+                /*   Rectangle with center point aligned in coordinate system with origin 0.
+                 *
+                 *                    :
+                 *                    :
+                 *                    +-+
+                 *                    | |
+                 *                    |p|
+                 *                    | |
+                 *     ...............0-+............
+                 *                    :
+                 *                    :
+                 *                    :
+                 *
+                 *    Rotate center point p, 90 degrees around origin 0.
+                 *
+                 *                    :
+                 *                    :
+                 *                +---+
+                 *                | p |
+                 *     ...........+---0..............
+                 *                    :
+                 *                    :
+                 *                    :
+                 *
+                 *    Then translate rectangle by x=10 and y=20.
+                 *                    :
+                 *                    :     +---+
+                 *                    :     | p |
+                 *    y=21 - - - - - - - -> +---+
+                 *                    .
+                 *                    :
+                 *    ...............0..............
+                 *                    :
+                 *                    :
+                 *                    :
+                 */
+                var rectangle = new RectangleF(new Point2(0, 0), new Size2(2, 4));
+                var transform =
+                    Matrix2.CreateRotationZ(MathHelper.PiOver2)
+                    *
+                    Matrix2.CreateTranslation(10, 20);
+
+                var result = RectangleF.Transform(rectangle, ref transform);
+
+                Assert.Equal(-2 + 10, result.Center.X, 6);
+                Assert.Equal(1 + 20, result.Center.Y, 6);
+                Assert.Equal(4, result.Size.Width, 6);
+                Assert.Equal(2, result.Size.Height, 6);
+            }
         }
     }
 }

@@ -65,10 +65,10 @@ namespace MonoGame.Extended
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.2; Bounding Volumes - Axis-aligned Bounding Boxes (AABBs). pg 86-87
 
             center = transformMatrix.Transform(center);
-            halfExtents.X = halfExtents.X * Math.Abs(transformMatrix.M11) + halfExtents.X * Math.Abs(transformMatrix.M12) +
-                      halfExtents.X * Math.Abs(transformMatrix.M31);
-            halfExtents.Y = halfExtents.Y * Math.Abs(transformMatrix.M21) + halfExtents.Y * Math.Abs(transformMatrix.M22) +
-                      halfExtents.Y * Math.Abs(transformMatrix.M32);
+            var xRadius = halfExtents.X;
+            var yRadius = halfExtents.Y;
+            halfExtents.X = xRadius * Math.Abs(transformMatrix.M11) + yRadius * Math.Abs(transformMatrix.M12);
+            halfExtents.Y = xRadius * Math.Abs(transformMatrix.M21) + yRadius * Math.Abs(transformMatrix.M22);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -109,7 +109,7 @@ namespace MonoGame.Extended
         internal static void ClosestPointToPointFromRectangle(Point2 minimum, Point2 maximum, Point2 point, out Point2 result)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.1.2; Basic Primitive Tests - Closest-point Computations. pg 130-131
-           
+
             result = point;
 
             // For each coordinate axis, if the point coordinate value is outside box, clamp it to the box, else keep it as is
