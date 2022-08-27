@@ -6,15 +6,6 @@ namespace MonoGame.Extended.Tests.Primitives
     public class RectangleFTests
     {
         [Fact]
-        public void RectangleF_Intersects_Test()
-        {
-            var rect1 = new RectangleF(0, 0, 32, 32);
-            var rect2 = new RectangleF(32, 32, 32, 32);
-
-            Assert.False(rect1.Intersects(rect2));
-        }
-
-        [Fact]
         public void Rectangle_Intersects_Test()
         {
             var rect1 = new Rectangle(0, 0, 32, 32);
