@@ -31,5 +31,30 @@ namespace MonoGame.Extended.Tests.Primitives
 
             Assert.Equal(rect1, rect2);
         }
+
+        public class Transform
+        {
+            [Fact]
+            public void Center_point_is_not_translated()
+            {
+                var rectangle = new RectangleF(new Point2(0, 0), new Size2(20, 30));
+                var transform = Matrix2.Identity;
+
+                var result = RectangleF.Transform(rectangle, ref transform);
+
+                Assert.Equal(new Point2(10, 15), result.Center);
+            }
+
+            [Fact]
+            public void Center_point_is_translated()
+            {
+                var rectangleF = new RectangleF(new Point2(0, 0), new Size2(20, 30));
+                var transform = Matrix2.CreateTranslation(1, 2);
+
+                var result = RectangleF.Transform(rectangleF, ref transform);
+
+                Assert.Equal(new Point2(11, 17), result.Center);
+            }
+        }
     }
 }
