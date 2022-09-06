@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Numerics;
 using Microsoft.Xna.Framework;
 using Xunit;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -11,11 +10,20 @@ public class OrientedBoundingRectangleTests
     [Fact]
     public void Initializes_oriented_bounding_rectangle()
     {
-        var rect = new OrientedBoundingRectangle(new Point2(1, 2), new Size2(3, 4), new Matrix2(5, 6, 7, 8, 9, 10));
+        var rectangle = new OrientedBoundingRectangle(new Point2(1, 2), new Size2(3, 4), new Matrix2(5, 6, 7, 8, 9, 10));
 
-        Assert.Equal(new Point2(1, 2), rect.Center);
-        Assert.Equal(new Vector2(3, 4), rect.Radii);
-        Assert.Equal(new Matrix2(5, 6, 7, 8, 9, 10), rect.Orientation);
+        Assert.Equal(new Point2(1, 2), rectangle.Center);
+        Assert.Equal(new Vector2(3, 4), rectangle.Radii);
+        Assert.Equal(new Matrix2(5, 6, 7, 8, 9, 10), rectangle.Orientation);
+        CollectionAssert.Equal(
+            new List<Vector2>
+                {
+                    new(-3, -2),
+                    new(-33, -38),
+                    new(23, 26),
+                    new(53, 62)
+                },
+            rectangle.Points);
     }
 
     public static readonly IEnumerable<object[]> _equalsComparisons = new[]
@@ -49,7 +57,7 @@ public class OrientedBoundingRectangleTests
         [Fact]
         public void Center_point_is_not_translated()
         {
-            var rectangle = new OrientedBoundingRectangle(new Point2(1, 2), new Size2(), new Matrix2());
+            var rectangle = new OrientedBoundingRectangle(new Point2(1, 2), new Size2(), Matrix2.Identity);
             var transform = Matrix2.Identity;
 
             var result = OrientedBoundingRectangle.Transform(rectangle, ref transform);
@@ -91,7 +99,7 @@ public class OrientedBoundingRectangleTests
         }
 
         [Fact]
-        public void Rotate_45_degrees_left()
+        public void Orientation_is_rotated_45_degrees_left()
         {
             var rectangle = new OrientedBoundingRectangle(new Point2(), new Size2(), Matrix2.Identity);
             var transform = Matrix2.CreateRotationZ(MathHelper.PiOver4);
@@ -104,7 +112,7 @@ public class OrientedBoundingRectangleTests
         }
 
         [Fact]
-        public void Rotate_to_45_degrees_from_180()
+        public void Orientation_is_rotated_to_45_degrees_from_180()
         {
             var rectangle = new OrientedBoundingRectangle(new Point2(), new Size2(), Matrix2.CreateRotationZ(MathHelper.Pi));
             var transform = Matrix2.CreateRotationZ(-3 * MathHelper.PiOver4);
@@ -120,6 +128,44 @@ public class OrientedBoundingRectangleTests
             Assert.Equal(expectedOrientation.M22, result.Orientation.M22, 6);
             Assert.Equal(expectedOrientation.M31, result.Orientation.M31, 6);
             Assert.Equal(expectedOrientation.M32, result.Orientation.M32, 6);
+        }
+
+        [Fact]
+        public void Points_are_same_as_center()
+        {
+            var rectangle = new OrientedBoundingRectangle(new Point2(1, 2), new Size2(), Matrix2.Identity);
+            var transform = Matrix2.Identity;
+
+            var result = OrientedBoundingRectangle.Transform(rectangle, ref transform);
+
+            CollectionAssert.Equal(
+                new List<Vector2>
+                    {
+                        new(1, 2),
+                        new(1, 2),
+                        new(1, 2),
+                        new(1, 2)
+                    },
+                result.Points);
+        }
+
+        [Fact]
+        public void Points_are_translated()
+        {
+            var rectangle = new OrientedBoundingRectangle(new Point2(0, 0), new Size2(2, 4), Matrix2.Identity);
+            var transform = Matrix2.CreateTranslation(10, 20);
+
+            var result = OrientedBoundingRectangle.Transform(rectangle, ref transform);
+
+            CollectionAssert.Equal(
+                new List<Vector2>
+                    {
+                        new(8, 16),
+                        new(8, 24),
+                        new(12, 24),
+                        new(12, 16)
+                    },
+                result.Points);
         }
 
         [Fact]
@@ -169,11 +215,20 @@ public class OrientedBoundingRectangleTests
 
             var result = OrientedBoundingRectangle.Transform(rectangle, ref transform);
 
-            Assert.Equal(-2 + 10, result.Center.X, 6);
-            Assert.Equal(1 + 20, result.Center.Y, 6);
-            Assert.Equal(4, result.Radii.X, 6);
-            Assert.Equal(2, result.Radii.Y, 6);
+            Assert.Equal(8, result.Center.X, 6);
+            Assert.Equal(21, result.Center.Y, 6);
+            Assert.Equal(2, result.Radii.X, 6);
+            Assert.Equal(4, result.Radii.Y, 6);
             Assert.Equal(Matrix2.CreateRotationZ(MathHelper.PiOver2), result.Orientation);
+            CollectionAssert.Equal(
+                new List<Vector2>
+                    {
+                        new(4, 23),
+                        new(4, 19),
+                        new(12, 19),
+                        new(12, 23)
+                    },
+                result.Points);
         }
     }
 }

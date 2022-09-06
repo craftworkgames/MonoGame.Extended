@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
@@ -46,6 +47,28 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        /// Gets a list of points defining the corner points of the oriented rectangle.
+        /// </summary>
+        public IReadOnlyList<Vector2> Points
+        {
+            get
+            {
+                var topLeft = -Radii;
+                var bottomLeft = -new Vector2(Radii.X, -Radii.Y);
+                var topRight = (Vector2)new Point2(Radii.X, -Radii.Y);
+                var bottomRight = Radii;
+
+                return new List<Vector2>
+                    {
+                        Vector2.Transform(topRight, Orientation) + Center,
+                        Vector2.Transform(topLeft, Orientation) + Center,
+                        Vector2.Transform(bottomLeft, Orientation) + Center,
+                        Vector2.Transform(bottomRight, Orientation) + Center
+                    };
+            }
+        }
+
+        /// <summary>
         /// Computes the <see cref="OrientedBoundingRectangle"/> from the specified <paramref name="rectangle"/>
         /// transformed by <paramref name="transformMatrix"/>.
         /// </summary>
@@ -62,7 +85,6 @@ namespace MonoGame.Extended
         {
             PrimitivesHelper.TransformOrientedBoundingRectangle(
                 ref rectangle.Center,
-                ref rectangle.Radii,
                 ref rectangle.Orientation,
                 ref transformMatrix);
             result.Center = rectangle.Center;
@@ -125,6 +147,14 @@ namespace MonoGame.Extended
         public override int GetHashCode()
         {
             return HashCode.Combine(Center, Radii, Orientation);
+        }
+
+        public static explicit operator OrientedBoundingRectangle(RectangleF rectangle)
+        {
+            var radii = new Size2(rectangle.Width * 0.5f, rectangle.Height * 0.5f);
+            var centre = new Point2(rectangle.X + radii.Width, rectangle.Y + radii.Height);
+
+            return new OrientedBoundingRectangle(centre, radii, Matrix2.Identity);
         }
 
         /// <summary>

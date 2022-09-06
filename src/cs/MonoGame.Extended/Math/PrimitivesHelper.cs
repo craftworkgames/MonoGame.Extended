@@ -74,17 +74,12 @@ namespace MonoGame.Extended
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static void TransformOrientedBoundingRectangle(
             ref Point2 center,
-            ref Vector2 radii,
             ref Matrix2 orientation,
             ref Matrix2 transformMatrix)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.4; Oriented Bounding Boxes (OBBs), pg 101-105.
 
             center = transformMatrix.Transform(center);
-            var xRadius = radii.X;
-            var yRadius = radii.Y;
-            radii.X = xRadius * Math.Abs(transformMatrix.M11) + yRadius * Math.Abs(transformMatrix.M12);
-            radii.Y = xRadius * Math.Abs(transformMatrix.M21) + yRadius * Math.Abs(transformMatrix.M22);
             orientation *= transformMatrix;
             // Reset the translation since orientation is only about rotation
             orientation.M31 = 0;
