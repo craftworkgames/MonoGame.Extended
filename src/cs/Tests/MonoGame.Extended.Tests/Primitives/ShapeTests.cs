@@ -1,8 +1,11 @@
-﻿using Xunit;
+﻿using Microsoft.Xna.Framework;
+using Xunit;
 
-namespace MonoGame.Extended.Tests.Primitives
+namespace MonoGame.Extended.Tests.Primitives;
+
+public class ShapeTests
 {
-    public class ShapeTests
+    public class CircleFTests
     {
         [Fact]
         public void CircCircIntersectionSameCircleTest()
@@ -30,7 +33,10 @@ namespace MonoGame.Extended.Tests.Primitives
 
             Assert.False(shape1.Intersects(shape2));
         }
+    }
 
+    public class RectangleFTests
+    {
         [Fact]
         public void RectRectSameRectTest()
         {
@@ -68,7 +74,6 @@ namespace MonoGame.Extended.Tests.Primitives
             Assert.True(shape2.Intersects(shape1));
         }
 
-
         [Fact]
         public void RectCircOnEdgeTest()
         {
@@ -77,6 +82,36 @@ namespace MonoGame.Extended.Tests.Primitives
 
             Assert.True(shape1.Intersects(shape2));
             Assert.True(shape2.Intersects(shape1));
+        }
+    }
+
+    public class OrientedBoundingRectangleTests
+    {
+        [Fact]
+        public void Axis_aligned_rectangle_overlaps_circle()
+        {
+            IShapeF rectangle = new OrientedBoundingRectangle(Point2.Zero, new Size2(1, 1), Matrix2.Identity);
+            var circle = new CircleF(Point2.Zero, 1);
+
+            Assert.True(rectangle.Intersects(circle));
+        }
+
+        [Fact]
+        public void Axis_aligned_rectangle_does_not_intersect_circle_in_top_left()
+        {
+            IShapeF rectangle = new OrientedBoundingRectangle(Point2.Zero, new Size2(1, 1), Matrix2.Identity);
+            var circle = new CircleF(new Point2(1, 1), 1);
+
+            Assert.False(rectangle.Intersects(circle));
+        }
+
+        [Fact]
+        public void Rectangle_rotated_45_degrees_does_not_intersect_circle_in_bottom_right()
+        {
+            IShapeF rectangle = new OrientedBoundingRectangle(Point2.Zero, new Size2(1, 1), Matrix2.CreateRotationZ(MathHelper.PiOver4));
+            var circle = new CircleF(new Point2(1, -1), 1.4f);
+
+            Assert.False(rectangle.Intersects(circle));
         }
     }
 }
