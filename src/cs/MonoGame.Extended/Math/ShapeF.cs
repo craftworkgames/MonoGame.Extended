@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Extended
+﻿using System;
+
+namespace MonoGame.Extended
 {
     /// <summary>
     ///     Base class for shapes.
@@ -32,26 +34,46 @@
         /// <returns>True if the two shapes intersect.</returns>
         public static bool Intersects(this IShapeF shapeA, IShapeF shapeB)
         {
-            var intersects = false;
+            return shapeA switch
+                {
+                    CircleF circleA => IntersectsInternal(circleA, shapeB),
+                    RectangleF rectangleA => IntersectsInternal(rectangleA, shapeB),
+                    OrientedBoundingRectangle orientedBoundingRectangleA => IntersectsInternal(orientedBoundingRectangleA, shapeB),
+                    _ => throw new ArgumentOutOfRangeException(nameof(shapeA))
+                };
+        }
 
-            if (shapeA is RectangleF rectangleA && shapeB is RectangleF rectangleB)
-            {
-                intersects = rectangleA.Intersects(rectangleB);
-            }
-            else if (shapeA is CircleF circleA && shapeB is CircleF circleB)
-            {
-                intersects = circleA.Intersects(circleB);
-            }
-            else if (shapeA is RectangleF rect1 && shapeB is CircleF circ1)
-            {
-                return Intersects(circ1, rect1);
-            }
-            else if (shapeA is CircleF circ2 && shapeB is RectangleF rect2)
-            {
-                return Intersects(circ2, rect2);
-            }
+        private static bool IntersectsInternal(CircleF circle, IShapeF shape)
+        {
+            return shape switch
+                {
+                    CircleF otherCircle => CircleF.Intersects(circle, otherCircle),
+                    RectangleF otherRectangle => Intersects(circle, otherRectangle),
+                    OrientedBoundingRectangle otherOrientedBoundingRectangle => Intersects(circle, otherOrientedBoundingRectangle),
+                    _ => throw new ArgumentOutOfRangeException(nameof(shape))
+                };
+        }
 
-            return intersects;
+        private static bool IntersectsInternal(RectangleF rectangle, IShapeF shape)
+        {
+            return shape switch
+                {
+                    CircleF otherCircle => Intersects(otherCircle, rectangle),
+                    RectangleF otherRectangle => RectangleF.Intersects(rectangle, otherRectangle),
+                    OrientedBoundingRectangle otherOrientedBoundingRectangle => Intersects(rectangle, otherOrientedBoundingRectangle),
+                    _ => throw new ArgumentOutOfRangeException(nameof(shape))
+                };
+        }
+
+        private static bool IntersectsInternal(OrientedBoundingRectangle orientedBoundingRectangle, IShapeF shape)
+        {
+            return shape switch
+                {
+                    CircleF circleB => Intersects(circleB, orientedBoundingRectangle),
+                    RectangleF rectangleB => Intersects(rectangleB, orientedBoundingRectangle),
+                    OrientedBoundingRectangle orientedBoundingRectangleB => OrientedBoundingRectangle.Intersects(orientedBoundingRectangle, orientedBoundingRectangleB),
+                    _ => throw new ArgumentOutOfRangeException(nameof(shape))
+                };
         }
 
         /// <summary>
@@ -64,6 +86,36 @@
         {
             var closestPoint = rectangle.ClosestPointTo(circle.Center);
             return circle.Contains(closestPoint);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="circle"></param>
+        /// <param name="orientedBoundingRectangle"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static bool Intersects(CircleF circle, OrientedBoundingRectangle orientedBoundingRectangle)
+        {
+            var rotation = Matrix2.CreateRotationZ(-orientedBoundingRectangle.Orientation.Rotation);
+            var circleCenterInRectangleSpace = rotation.Transform(orientedBoundingRectangle.Center - circle.Center);
+            var circleInRectangleSpace = new CircleF(circleCenterInRectangleSpace, circle.Radius);
+            var rectangleInLocalSpace = OrientedBoundingRectangle.Transform(orientedBoundingRectangle, ref rotation);
+            rectangleInLocalSpace.Center = Point2.Zero;
+            var rectangle = (BoundingRectangle)new RectangleF(0, 0, rectangleInLocalSpace.Radii.X, rectangleInLocalSpace.Radii.Y);
+            return circleInRectangleSpace.Intersects(rectangle);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="rectangleF"></param>
+        /// <param name="orientedBoundingRectangle"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static bool Intersects(RectangleF rectangleF, OrientedBoundingRectangle orientedBoundingRectangle)
+        {
+            throw new NotImplementedException();
         }
     }
 }

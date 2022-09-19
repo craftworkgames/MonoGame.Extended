@@ -13,7 +13,7 @@ namespace MonoGame.Extended
     /// </summary>
     /// <seealso cref="IEquatable{T}" />
     [DebuggerDisplay($"{{{nameof(DebugDisplayString)},nq}}")]
-    public struct OrientedBoundingRectangle : IEquatable<OrientedBoundingRectangle>
+    public struct OrientedBoundingRectangle : IEquatable<OrientedBoundingRectangle>, IShapeF
     {
         /// <summary>
         /// The centre position of this <see cref="OrientedBoundingRectangle" />.
@@ -68,6 +68,14 @@ namespace MonoGame.Extended
             }
         }
 
+        public Point2 Position
+        {
+            get => Vector2.Transform(-Radii, Orientation) + Center;
+            set => throw new NotImplementedException();
+        }
+
+        public RectangleF BoundingRectangle => (RectangleF)this;
+
         /// <summary>
         /// Computes the <see cref="OrientedBoundingRectangle"/> from the specified <paramref name="rectangle"/>
         /// transformed by <paramref name="transformMatrix"/>.
@@ -87,6 +95,7 @@ namespace MonoGame.Extended
                 ref rectangle.Center,
                 ref rectangle.Orientation,
                 ref transformMatrix);
+            result = new OrientedBoundingRectangle();
             result.Center = rectangle.Center;
             result.Radii = rectangle.Radii;
             result.Orientation = rectangle.Orientation;
@@ -141,7 +150,7 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///
+        /// Returns a hash code for this object instance.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
@@ -149,12 +158,36 @@ namespace MonoGame.Extended
             return HashCode.Combine(Center, Radii, Orientation);
         }
 
+        /// <summary>
+        /// Performs an implicit conversion from a <see cref="RectangleF" /> to <see cref="OrientedBoundingRectangle" />.
+        /// </summary>
+        /// <param name="rectangle">The rectangle to convert.</param>
+        /// <returns>The resulting <see cref="OrientedBoundingRectangle" />.</returns>
         public static explicit operator OrientedBoundingRectangle(RectangleF rectangle)
         {
             var radii = new Size2(rectangle.Width * 0.5f, rectangle.Height * 0.5f);
             var centre = new Point2(rectangle.X + radii.Width, rectangle.Y + radii.Height);
 
             return new OrientedBoundingRectangle(centre, radii, Matrix2.Identity);
+        }
+
+        public static explicit operator RectangleF(OrientedBoundingRectangle orientedBoundingRectangle)
+        {
+            var topLeft = orientedBoundingRectangle.Center - orientedBoundingRectangle.Radii;
+            var rectangle = new RectangleF(topLeft, orientedBoundingRectangle.Radii * 2);
+            return RectangleF.Transform(rectangle, ref orientedBoundingRectangle.Orientation);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="rectangle"></param>
+        /// <param name="otherRectangle"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static bool Intersects(OrientedBoundingRectangle rectangle, OrientedBoundingRectangle otherRectangle)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
