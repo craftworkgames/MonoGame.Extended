@@ -4,6 +4,7 @@
 
 # Rider
 .idea/
+*.user
 
 # macOS
 .DS_Store
