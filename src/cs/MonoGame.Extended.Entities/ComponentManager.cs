@@ -42,7 +42,7 @@ namespace MonoGame.Extended.Entities
             return _componentMappers[componentTypeId];
         }
 
-        public ComponentMapper<T> GetMapper<T>() 
+        public ComponentMapper<T> GetMapper<T>()
             where T : class
         {
             var componentTypeId = GetComponentTypeId(typeof(T));
@@ -80,7 +80,7 @@ namespace MonoGame.Extended.Entities
         public void Destroy(int entityId)
         {
             foreach (var componentMapper in _componentMappers)
-                componentMapper.Delete(entityId);
+                componentMapper?.Delete(entityId);
         }
 
         public override void Update(GameTime gameTime)
