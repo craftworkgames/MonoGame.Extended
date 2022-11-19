@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Collisions
@@ -12,8 +11,7 @@ namespace MonoGame.Extended.Collisions
     /// </summary>
     public class CollisionComponent : SimpleGameComponent
     {
-        private readonly Dictionary<ICollisionActor, QuadtreeData> _targetDataDictionary =
-            new Dictionary<ICollisionActor, QuadtreeData>();
+        private readonly Dictionary<ICollisionActor, QuadtreeData> _targetDataDictionary = new();
 
         private readonly Quadtree _collisionTree;
 
@@ -47,11 +45,11 @@ namespace MonoGame.Extended.Collisions
                 // Generate list of collision Infos
                 foreach (var other in collisions)
                 {
-                    var collisionInfo = new CollisionEventArgs()
-                    {
-                        Other = other.Target,
-                        PenetrationVector = CalculatePenetrationVector(value.Bounds, other.Bounds)
-                    };
+                    var collisionInfo = new CollisionEventArgs
+                        {
+                            Other = other.Target,
+                            PenetrationVector = CalculatePenetrationVector(value.Bounds, other.Bounds)
+                        };
 
                     target.OnCollision(collisionInfo);
                 }

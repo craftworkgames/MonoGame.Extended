@@ -74,9 +74,9 @@ namespace MonoGame.Extended.Collisions
                     }
                 }
             }
-            for (var i = 0; i < dirtyItems.Count; i++)
+            foreach (var quadtreeData in dirtyItems)
             {
-                dirtyItems[i].MarkClean();
+                quadtreeData.MarkClean();
             }
             return objectCount;
         }
@@ -87,8 +87,8 @@ namespace MonoGame.Extended.Collisions
         /// <param name="data">Data being inserted.</param>
         public void Insert(QuadtreeData data)
         {
-            var actorBounds = data.Target.Bounds;
-            
+            var actorBounds = data.Bounds;
+
             // Object doesn't fit into this node.
             if (!NodeBounds.Intersects(actorBounds))
             {
@@ -126,7 +126,7 @@ namespace MonoGame.Extended.Collisions
             }
             else
             {
-                throw new InvalidOperationException($"Cannot remove from a non leaf {nameof(Quadtree)}"); 
+                throw new InvalidOperationException($"Cannot remove from a non leaf {nameof(Quadtree)}");
             }
         }
 
@@ -135,49 +135,51 @@ namespace MonoGame.Extended.Collisions
         /// </summary>
         public void Shake()
         {
-            if (!IsLeaf)
+            if (IsLeaf)
             {
-                List<QuadtreeData> dirtyItems = new List<QuadtreeData>();
+                return;
+            }
 
-                var numObjects = NumTargets();
-                if (numObjects == 0)
+            List<QuadtreeData> dirtyItems = new List<QuadtreeData>();
+
+            var numObjects = NumTargets();
+            if (numObjects == 0)
+            {
+                Children.Clear();
+            }
+            else if (numObjects < MaxObjectsPerNode)
+            {
+                var process = new Queue<Quadtree>();
+                process.Enqueue(this);
+                while (process.Count > 0)
                 {
-                    Children.Clear();
-                }
-                else if (numObjects < MaxObjectsPerNode)
-                {
-                    var process = new Queue<Quadtree>();
-                    process.Enqueue(this);
-                    while (process.Count > 0)
+                    var processing = process.Dequeue();
+                    if (!processing.IsLeaf)
                     {
-                        var processing = process.Dequeue();
-                        if (!processing.IsLeaf)
+                        foreach (var subTree in processing.Children)
                         {
-                            foreach (var subTree in processing.Children)
-                            {
-                                process.Enqueue(subTree);
-                            }
+                            process.Enqueue(subTree);
                         }
-                        else
+                    }
+                    else
+                    {
+                        foreach (var data in processing.Contents)
                         {
-                            foreach (var data in processing.Contents)
+                            if (data.Dirty == false)
                             {
-                                if (data.Dirty == false)
-                                {
-                                    AddToLeaf(data);
-                                    data.MarkDirty();
-                                    dirtyItems.Add(data);
-                                }
+                                AddToLeaf(data);
+                                data.MarkDirty();
+                                dirtyItems.Add(data);
                             }
                         }
                     }
-                    Children.Clear();
                 }
+                Children.Clear();
+            }
 
-                for (var i = 0; i < dirtyItems.Count; i++)
-                {
-                    dirtyItems[i].MarkClean();
-                }
+            foreach (var quadtreeData in dirtyItems)
+            {
+                quadtreeData.MarkClean();
             }
         }
 
@@ -241,16 +243,16 @@ namespace MonoGame.Extended.Collisions
         {
             var recursiveResult = new List<QuadtreeData>();
             QueryWithoutReset(area, recursiveResult);
-            for (var i = 0; i < recursiveResult.Count; i++)
+            foreach (var quadtreeData in recursiveResult)
             {
-                recursiveResult[i].MarkClean();
+                quadtreeData.MarkClean();
             }
             return recursiveResult;
         }
 
         private void QueryWithoutReset(IShapeF area, List<QuadtreeData> recursiveResult)
         {
-            if (!NodeBounds.Intersects(area)) 
+            if (!NodeBounds.Intersects(area))
                 return;
 
             if (IsLeaf)
