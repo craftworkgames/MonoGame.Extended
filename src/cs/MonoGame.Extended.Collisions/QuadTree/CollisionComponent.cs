@@ -54,7 +54,6 @@ namespace MonoGame.Extended.Collisions
                     };
 
                     target.OnCollision(collisionInfo);
-                    value.Bounds = value.Target.Bounds;
                 }
                 _collisionTree.Insert(value);
             }

@@ -12,7 +12,6 @@ namespace MonoGame.Extended.Collisions
         public QuadtreeData(ICollisionActor target)
         {
             Target = target;
-            Bounds = target.Bounds;
         }
 
         public void RemoveParent(Quadtree parent)
@@ -39,7 +38,7 @@ namespace MonoGame.Extended.Collisions
         /// <summary>
         ///     Gets or sets the Target for collision.
         /// </summary>
-        public ICollisionActor Target { get; set; }
+        public ICollisionActor Target { get; }
 
         /// <summary>
         ///     Gets or sets whether Target has had its collision handled this
@@ -60,6 +59,6 @@ namespace MonoGame.Extended.Collisions
         /// <summary>
         ///     Gets or sets the bounding box for collision detection.
         /// </summary>
-        public IShapeF Bounds { get; set; }
+        public IShapeF Bounds => Target.Bounds;
     }
 }
