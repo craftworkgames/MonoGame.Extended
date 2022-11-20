@@ -8,10 +8,24 @@ namespace MonoGame.Extended.Collisions
     /// </summary>
     public class Quadtree
     {
+        /// <summary>
+        /// The default maximum depth.
+        /// </summary>
         public const int DefaultMaxDepth = 7;
+
+        /// <summary>
+        /// The default maximum objects per node.
+        /// </summary>
         public const int DefaultMaxObjectsPerNode = 25;
 
+        /// <summary>
+        /// Contains the children of this node.
+        /// </summary>
         protected List<Quadtree> Children = new List<Quadtree>();
+
+        /// <summary>
+        /// Contains the data for this node in the quadtree.
+        /// </summary>
         protected HashSet<QuadtreeData> Contents = new HashSet<QuadtreeData>();
 
         /// <summary>
@@ -24,9 +38,17 @@ namespace MonoGame.Extended.Collisions
             NodeBounds = bounds;
         }
 
+        /// <summary>
+        /// Gets or sets the current depth for this node in the quadtree.
+        /// </summary>
         protected int CurrentDepth { get; set; }
+        /// <summary>
+        /// Gets or sets the maximum depth of the quadtree.
+        /// </summary>
         protected int MaxDepth { get; set; } = DefaultMaxDepth;
-
+        /// <summary>
+        /// Gets or sets the maximum objects per node in this quadtree.
+        /// </summary>
         protected int MaxObjectsPerNode { get; set; } = DefaultMaxObjectsPerNode;
 
         /// <summary>
