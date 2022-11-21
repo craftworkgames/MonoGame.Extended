@@ -90,17 +90,36 @@ public class ShapeTests
         [Fact]
         public void Axis_aligned_rectangle_overlaps_circle()
         {
+            /*
+             *                    :
+             *                    :
+             *                   +*+
+             *        ...........* *.........
+             *                   +*+
+             *                    :
+             *                    :
+             */
             IShapeF rectangle = new OrientedBoundingRectangle(Point2.Zero, new Size2(1, 1), Matrix2.Identity);
             var circle = new CircleF(Point2.Zero, 1);
 
             Assert.True(rectangle.Intersects(circle));
         }
 
+
         [Fact]
         public void Axis_aligned_rectangle_does_not_intersect_circle_in_top_left()
         {
+            /*
+             *                  * :
+             *                 * *:
+             *                  *+-+
+             *        ...........| |.........
+             *                   +-+
+             *                    :
+             *                    :
+             */
             IShapeF rectangle = new OrientedBoundingRectangle(Point2.Zero, new Size2(1, 1), Matrix2.Identity);
-            var circle = new CircleF(new Point2(1, 1), 1);
+            var circle = new CircleF(new Point2(-1, 1), 1);
 
             Assert.False(rectangle.Intersects(circle));
         }
@@ -108,6 +127,15 @@ public class ShapeTests
         [Fact]
         public void Rectangle_rotated_45_degrees_does_not_intersect_circle_in_bottom_right()
         {
+            /*
+             *                    :
+             *                    :
+             *                    +-.
+             *        .........../ / ........
+             *                  +./* *
+             *                    *   *
+             *                    :* *
+             */
             IShapeF rectangle = new OrientedBoundingRectangle(Point2.Zero, new Size2(1, 1), Matrix2.CreateRotationZ(MathHelper.PiOver4));
             var circle = new CircleF(new Point2(1, -1), 1.4f);
 
