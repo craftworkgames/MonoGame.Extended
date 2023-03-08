@@ -12,6 +12,8 @@ namespace MonoGame.Extended.Tiled.Serialization
         {
             Type = type;
             Opacity = 1.0f;
+            ParallaxX = 1.0f;
+            ParallaxY = 1.0f;
             Visible = true;
             Properties = new List<TiledMapPropertyContent>();
         }
@@ -31,13 +33,19 @@ namespace MonoGame.Extended.Tiled.Serialization
         [XmlAttribute(AttributeName = "offsety")]
         public float OffsetY { get; set; }
 
+        [XmlAttribute(AttributeName = "parallaxx")]
+        public float ParallaxX { get; set; }
+
+        [XmlAttribute(AttributeName = "parallaxy")]
+        public float ParallaxY { get; set; }
+
         [XmlArray("properties")]
         [XmlArrayItem("property")]
         public List<TiledMapPropertyContent> Properties { get; set; }
 
         [XmlIgnore]
         public TiledMapLayerType Type { get; }
-        
+
         public override string ToString()
         {
             return Name;
