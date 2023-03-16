@@ -31,11 +31,11 @@ jobs:
 
     - name: "Install GitVersion"
       uses: gittools/actions/gitversion/setup@v0.9.6
-      env: 
+      env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true # workaround for https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/ until the execute action is updated
       with:
         versionSpec: '5.x'
-          
+
     - name: "Use GitVersion"
       uses: gittools/actions/gitversion/execute@v0.9.6
 
@@ -47,7 +47,7 @@ jobs:
         name: version
         path: version.txt
 
-  build-test-pack-job:
+  build-test-job:
     name: "Build"
     needs: [version-job]
     runs-on: ${{ matrix.os }}
@@ -102,14 +102,19 @@ jobs:
     - name: "Test solution"
       run: dotnet test --nologo --verbosity normal --configuration Release --no-build
 
+  pack-publish-job:
+    name: "Publish"
+    if: github.event_name == 'push'
+    needs: [version-job, build-test-job]
+    runs-on: ubuntu-latest
+
+    steps:
+
     - name: "Pack solution"
-      if: matrix.os == 'ubuntu-latest'
       run: dotnet pack --nologo --output "./nuget-packages" --verbosity minimal --configuration Release --no-build -p:PackageVersion='${{ env.VERSION }}'
-      
+
     - name: "Add Packages Source: MyGet"
-      if: matrix.os == 'ubuntu-latest'
       run: dotnet nuget add source $MYGET_SOURCE_URL --name "MyGet"
- 
+
     - name: "Upload Packages: MyGet"
-      if: matrix.os == 'ubuntu-latest'
       run: dotnet nuget push "./**/*.nupkg" --source "MyGet" --skip-duplicate --api-key $MYGET_ACCESS_TOKEN
