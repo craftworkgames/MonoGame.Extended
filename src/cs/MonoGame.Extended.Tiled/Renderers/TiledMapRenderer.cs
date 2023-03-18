@@ -131,17 +131,18 @@ namespace MonoGame.Extended.Tiled.Renderers
 			if (layer is TiledMapObjectLayer)
 				return;
 
-			Draw(layer, Vector2.Zero, ref viewMatrix, ref projectionMatrix, effect, depth);
+			Draw(layer, Vector2.Zero, Vector2.One, ref viewMatrix, ref projectionMatrix, effect, depth);
 		}
 
-		private void Draw(TiledMapLayer layer, Vector2 parentOffset, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect, float depth)
-		{ 
+		private void Draw(TiledMapLayer layer, Vector2 parentOffset, Vector2 parentParallaxFactor, ref Matrix viewMatrix, ref Matrix projectionMatrix, Effect effect, float depth)
+		{
 			var offset = parentOffset + layer.Offset;
+            var parallaxFactor = parentParallaxFactor * layer.ParallaxFactor;
 
 			if (layer is TiledMapGroupLayer groupLayer)
 			{
 				foreach (var subLayer in groupLayer.Layers)
-					Draw(subLayer, offset, ref viewMatrix, ref projectionMatrix, effect, depth);
+					Draw(subLayer, offset, parallaxFactor, ref viewMatrix, ref projectionMatrix, effect, depth);
 			}
 			else
 			{
@@ -152,9 +153,9 @@ namespace MonoGame.Extended.Tiled.Renderers
 				if (tiledMapEffect == null)
 					return;
 
-				// model-to-world transform
-				tiledMapEffect.World = _worldMatrix;
-				tiledMapEffect.View = viewMatrix;
+                // model-to-world transform
+                tiledMapEffect.World = _worldMatrix;
+				tiledMapEffect.View = parallaxFactor == Vector2.One ? viewMatrix : IncludeParallax(viewMatrix, parallaxFactor);
 				tiledMapEffect.Projection = projectionMatrix;
 
 				foreach (var layerModel in _mapModel.LayersOfLayerModels[layer])
@@ -180,6 +181,12 @@ namespace MonoGame.Extended.Tiled.Renderers
 					}
 				}
 			}
+        }
+
+        private Matrix IncludeParallax(Matrix viewMatrix, Vector2 parallaxFactor)
+        {
+            viewMatrix.Translation *=new Vector3(parallaxFactor, 1f);
+            return viewMatrix;
         }
     }
 }
