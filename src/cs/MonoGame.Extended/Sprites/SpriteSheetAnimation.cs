@@ -41,7 +41,7 @@ namespace MonoGame.Extended.Sprites
         public new bool IsComplete => CurrentTime >= AnimationDuration;
 
         public float AnimationDuration => IsPingPong
-            ? (KeyFrames.Length*2 - 2)*FrameDuration
+            ? (KeyFrames.Length*2 - (IsLooping ? 2 : 1))*FrameDuration
             : KeyFrames.Length*FrameDuration;
 
         public TextureRegion2D CurrentFrame => KeyFrames[CurrentFrameIndex];
@@ -59,10 +59,10 @@ namespace MonoGame.Extended.Sprites
         {
             if (IsComplete)
             {
-                OnCompleted?.Invoke();
-
                 if (IsLooping)
-                    CurrentTime -= AnimationDuration;
+                    CurrentTime %= AnimationDuration;
+                else
+                    OnCompleted?.Invoke();
             }
 
             if (KeyFrames.Length == 1)
@@ -76,10 +76,15 @@ namespace MonoGame.Extended.Sprites
 
             if (IsPingPong)
             {
-                frameIndex = frameIndex%(length*2 - 2);
+                if (IsComplete)
+                    frameIndex = 0;
+                else
+                {
+                    frameIndex = frameIndex % (length * 2 - 2);
 
-                if (frameIndex >= length)
-                    frameIndex = length - 2 - (frameIndex - length);
+                    if (frameIndex >= length)
+                        frameIndex = length - 2 - (frameIndex - length);
+                }
             }
 
             if (IsLooping)
