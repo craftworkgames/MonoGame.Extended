@@ -1,3 +1,5 @@
+> :warning: **If you are interested in helping out with the future and direction of this project**: Please direct message @lithiumtoast on Discord.
+
 ![MonoGame.Extended Logo](Logos/logo-banner-800.png)
 
 # MonoGame.Extended
