@@ -89,30 +89,27 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///
+        /// Checks whether a <see cref="CircleF"/> and <see cref="OrientedBoundingRectangle"/> intersects.
         /// </summary>
-        /// <param name="circle"></param>
-        /// <param name="orientedBoundingRectangle"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
+        /// <param name="circle"><see cref="CircleF"/>to use in intersection test.</param>
+        /// <param name="orientedBoundingRectangle"><see cref="OrientedBoundingRectangle"/>to use in intersection test.</param>
+        /// <returns>True if the circle and oriented bounded rectangle intersects, otherwise false.</returns>
         public static bool Intersects(CircleF circle, OrientedBoundingRectangle orientedBoundingRectangle)
         {
             var rotation = Matrix2.CreateRotationZ(-orientedBoundingRectangle.Orientation.Rotation);
-            var circleCenterInRectangleSpace = rotation.Transform(orientedBoundingRectangle.Center - circle.Center);
+            var circleCenterInRectangleSpace = rotation.Transform(circle.Center - orientedBoundingRectangle.Center);
             var circleInRectangleSpace = new CircleF(circleCenterInRectangleSpace, circle.Radius);
             var rectangleInLocalSpace = OrientedBoundingRectangle.Transform(orientedBoundingRectangle, ref rotation);
-            rectangleInLocalSpace.Center = Point2.Zero;
-            var rectangle = (BoundingRectangle)new RectangleF(0, 0, rectangleInLocalSpace.Radii.X, rectangleInLocalSpace.Radii.Y);
-            return circleInRectangleSpace.Intersects(rectangle);
+            var boundingRectangle = new BoundingRectangle(rectangleInLocalSpace.Center, rectangleInLocalSpace.Radii);
+            return circleInRectangleSpace.Intersects(boundingRectangle);
         }
 
         /// <summary>
-        ///
+        /// Checks if a <see cref="RectangleF"/> and <see cref="OrientedBoundingRectangle"/> intersects.
         /// </summary>
         /// <param name="rectangleF"></param>
         /// <param name="orientedBoundingRectangle"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
+        /// <returns>True if objects are intersecting, otherwise false.</returns>
         public static bool Intersects(RectangleF rectangleF, OrientedBoundingRectangle orientedBoundingRectangle)
         {
             throw new NotImplementedException();
