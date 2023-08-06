@@ -88,7 +88,7 @@ public class ShapeTests
     public class OrientedBoundingRectangleTests
     {
         [Fact]
-        public void Axis_aligned_rectangle_overlaps_circle()
+        public void Axis_aligned_rectangle_intersects_circle()
         {
             /*
              *                    :
@@ -105,7 +105,6 @@ public class ShapeTests
             Assert.True(rectangle.Intersects(circle));
         }
 
-
         [Fact]
         public void Axis_aligned_rectangle_does_not_intersect_circle_in_top_left()
         {
@@ -119,7 +118,7 @@ public class ShapeTests
              *                    :
              */
             IShapeF rectangle = new OrientedBoundingRectangle(Point2.Zero, new Size2(1, 1), Matrix2.Identity);
-            var circle = new CircleF(new Point2(-1, 1), 1);
+            var circle = new CircleF(new Point2(-2, 1), .99f);
 
             Assert.False(rectangle.Intersects(circle));
         }
@@ -136,7 +135,7 @@ public class ShapeTests
              *                    *   *
              *                    :* *
              */
-            IShapeF rectangle = new OrientedBoundingRectangle(Point2.Zero, new Size2(1, 1), Matrix2.CreateRotationZ(MathHelper.PiOver4));
+            IShapeF rectangle = new OrientedBoundingRectangle(new Point2(-1, 1), new Size2(2.8f, 2.8f), Matrix2.CreateRotationZ(MathHelper.PiOver4));
             var circle = new CircleF(new Point2(1, -1), 1.4f);
 
             Assert.False(rectangle.Intersects(circle));
