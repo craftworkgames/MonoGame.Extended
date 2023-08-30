@@ -13,15 +13,13 @@ namespace MonoGame.Extended.Collisions.Tests
     /// </remarks>
     public class CollisionComponentTests
     {
-        private CollisionComponent collisionComponent;
-
-        private GameTime _gameTime = new GameTime(TimeSpan.Zero, TimeSpan.FromMilliseconds(16));
+        private readonly CollisionComponent _collisionComponent;
+        private readonly GameTime _gameTime = new GameTime(TimeSpan.Zero, TimeSpan.FromMilliseconds(16));
 
         public CollisionComponentTests()
         {
-            collisionComponent = new CollisionComponent(new RectangleF(Point2.Zero, new Point2(10, 10)));
+            _collisionComponent = new CollisionComponent(new RectangleF(Point2.Zero, new Point2(10, 10)));
         }
-
 
         #region Circle Circle
 
@@ -46,9 +44,9 @@ namespace MonoGame.Extended.Collisions.Tests
             };
 
             Assert.True(shape1.Intersects(shape2));
-            collisionComponent.Insert(actor1);
-            collisionComponent.Insert(actor2);
-            collisionComponent.Update(_gameTime);
+            _collisionComponent.Insert(actor1);
+            _collisionComponent.Insert(actor2);
+            _collisionComponent.Update(_gameTime);
             Assert.True(Math.Abs(actor1.Position.Y - -4f) < float.Epsilon);
         }
 
@@ -73,9 +71,9 @@ namespace MonoGame.Extended.Collisions.Tests
             };
 
             Assert.True(shape1.Intersects(shape2));
-            collisionComponent.Insert(actor1);
-            collisionComponent.Insert(actor2);
-            collisionComponent.Update(_gameTime);
+            _collisionComponent.Insert(actor1);
+            _collisionComponent.Insert(actor2);
+            _collisionComponent.Update(_gameTime);
             // Actor should have moved up because the distance is shorter.
             Assert.True(actor1.Position.Y > actor2.Position.Y);
             // The circle centers should be about 4 units away after moving
@@ -103,9 +101,9 @@ namespace MonoGame.Extended.Collisions.Tests
             };
 
             Assert.True(shape1.Intersects(shape2));
-            collisionComponent.Insert(actor1);
-            collisionComponent.Insert(actor2);
-            collisionComponent.Update(_gameTime);
+            _collisionComponent.Insert(actor1);
+            _collisionComponent.Insert(actor2);
+            _collisionComponent.Update(_gameTime);
             // Actor should have moved up because the distance is shorter.
             Assert.True(actor1.Position.Y > actor2.Position.Y);
             // The circle centers should be about 4 units away after moving
@@ -134,9 +132,9 @@ namespace MonoGame.Extended.Collisions.Tests
             };
 
             Assert.True(shape1.Intersects(shape2));
-            collisionComponent.Insert(actor1);
-            collisionComponent.Insert(actor2);
-            collisionComponent.Update(_gameTime);
+            _collisionComponent.Insert(actor1);
+            _collisionComponent.Insert(actor2);
+            _collisionComponent.Update(_gameTime);
             // Actor should have moved up because the distance is shorter.
             Assert.True(actor1.Position.Y > actor2.Position.Y);
             // The circle centers should be about 4 units away after moving
@@ -169,9 +167,9 @@ namespace MonoGame.Extended.Collisions.Tests
             };
 
             Assert.True(shape1.Intersects(shape2));
-            collisionComponent.Insert(actor1);
-            collisionComponent.Insert(actor2);
-            collisionComponent.Update(_gameTime);
+            _collisionComponent.Insert(actor1);
+            _collisionComponent.Insert(actor2);
+            _collisionComponent.Update(_gameTime);
             Assert.True(Math.Abs(actor1.Position.X - 0.0f) < float.Epsilon);
             Assert.True(Math.Abs(actor1.Position.Y - 3.0f) < float.Epsilon);
         }
@@ -198,9 +196,9 @@ namespace MonoGame.Extended.Collisions.Tests
             };
 
             Assert.True(shape1.Intersects(shape2));
-            collisionComponent.Insert(actor1);
-            collisionComponent.Insert(actor2);
-            collisionComponent.Update(_gameTime);
+            _collisionComponent.Insert(actor1);
+            _collisionComponent.Insert(actor2);
+            _collisionComponent.Update(_gameTime);
             Assert.True(Math.Abs(actor1.Position.X - 0.0f) < float.Epsilon);
             Assert.True(Math.Abs(actor1.Position.Y - -2.0f) < float.Epsilon);
         }
@@ -227,9 +225,9 @@ namespace MonoGame.Extended.Collisions.Tests
             };
 
             Assert.True(shape1.Intersects(shape2));
-            collisionComponent.Insert(actor1);
-            collisionComponent.Insert(actor2);
-            collisionComponent.Update(_gameTime);
+            _collisionComponent.Insert(actor1);
+            _collisionComponent.Insert(actor2);
+            _collisionComponent.Update(_gameTime);
             Assert.True(Math.Abs(actor1.Position.X - 2.0f) < float.Epsilon);
             Assert.True(Math.Abs(actor1.Position.Y - 3.0f) < float.Epsilon);
         }
@@ -260,9 +258,9 @@ namespace MonoGame.Extended.Collisions.Tests
             };
 
             Assert.True(shape1.Intersects(shape2));
-            collisionComponent.Insert(actor1);
-            collisionComponent.Insert(actor2);
-            collisionComponent.Update(_gameTime);
+            _collisionComponent.Insert(actor1);
+            _collisionComponent.Insert(actor2);
+            _collisionComponent.Update(_gameTime);
             Assert.True(Math.Abs(actor1.Position.X - 0.0f) < float.Epsilon);
             Assert.True(Math.Abs(actor1.Position.Y - 1.0f) < float.Epsilon);
         }
@@ -289,15 +287,90 @@ namespace MonoGame.Extended.Collisions.Tests
             };
 
             Assert.True(shape1.Intersects(shape2));
-            collisionComponent.Insert(actor1);
-            collisionComponent.Insert(actor2);
-            collisionComponent.Update(_gameTime);
+            _collisionComponent.Insert(actor1);
+            _collisionComponent.Insert(actor2);
+            _collisionComponent.Update(_gameTime);
             Assert.True(Math.Abs(actor1.Position.X - 4.0f) < float.Epsilon);
             Assert.True(Math.Abs(actor1.Position.Y - 3.0f) < float.Epsilon);
         }
 
-
         #endregion
 
+        public class Behaviours : CollisionComponentTests
+        {
+            [Fact]
+            public void Actors_is_colliding()
+            {
+                var staticBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
+                var anotherStaticBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
+                var staticActor = new CollisionIndicatingActor(staticBounds);
+                var anotherStaticActor = new CollisionIndicatingActor(anotherStaticBounds);
+                _collisionComponent.Insert(staticActor);
+                _collisionComponent.Insert(anotherStaticActor);
+
+                _collisionComponent.Update(_gameTime);
+
+                Assert.True(staticActor.IsColliding);
+                Assert.True(anotherStaticActor.IsColliding);
+            }
+
+            [Fact]
+            public void Actors_is_not_colliding_when_dynamic_actor_is_moved_out_of_collision_bounds()
+            {
+                var staticBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
+                var dynamicBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
+                var staticActor = new CollisionIndicatingActor(staticBounds);
+                var dynamicActor = new CollisionIndicatingActor(dynamicBounds);
+                _collisionComponent.Insert(staticActor);
+                _collisionComponent.Insert(dynamicActor);
+                dynamicActor.MoveTo(new Point2(2, 2));
+
+                _collisionComponent.Update(_gameTime);
+
+                Assert.False(staticActor.IsColliding);
+                Assert.False(dynamicActor.IsColliding);
+            }
+
+            [Fact]
+            public void Actors_is_colliding_when_dynamic_actor_is_moved_into_collision_bounds()
+            {
+                var staticBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
+                var dynamicBounds = new RectangleF(new Point2(2, 2), new Size2(1, 1));
+                var staticActor = new CollisionIndicatingActor(staticBounds);
+                var dynamicActor = new CollisionIndicatingActor(dynamicBounds);
+                _collisionComponent.Insert(staticActor);
+                _collisionComponent.Insert(dynamicActor);
+                dynamicActor.MoveTo(new Point2(0, 0));
+
+                _collisionComponent.Update(_gameTime);
+
+                Assert.True(staticActor.IsColliding);
+                Assert.True(dynamicActor.IsColliding);
+            }
+
+            private class CollisionIndicatingActor : ICollisionActor
+            {
+                private RectangleF _bounds;
+
+                public CollisionIndicatingActor(RectangleF bounds)
+                {
+                    _bounds = bounds;
+                }
+
+                public IShapeF Bounds => _bounds;
+
+                public void OnCollision(CollisionEventArgs collisionInfo)
+                {
+                    IsColliding = true;
+                }
+
+                public bool IsColliding { get; private set; }
+
+                public void MoveTo(Point2 position)
+                {
+                    _bounds = new RectangleF(position, _bounds.Size);
+                }
+            }
+        }
     }
 }

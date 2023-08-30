@@ -1,65 +1,86 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace MonoGame.Extended.Collisions
+namespace MonoGame.Extended.Collisions;
+
+/// <summary>
+/// Data structure for the quad tree.
+/// Holds the entity and collision data for it.
+/// </summary>
+public class QuadtreeData
 {
+    private readonly ICollisionActor _target;
+    private readonly HashSet<Quadtree> _parents = new();
+
     /// <summary>
-    ///     Data structure for the quad tree.
-    ///     Holds the entity and collision data for it.
+    /// Initialize a new instance of QuadTreeData.
     /// </summary>
-    public class QuadtreeData
+    /// <param name="target"></param>
+    public QuadtreeData(ICollisionActor target)
     {
-        public QuadtreeData(ICollisionActor target)
+        _target = target;
+    }
+
+    /// <summary>
+    /// Remove a parent node.
+    /// </summary>
+    /// <param name="parent"></param>
+    public void RemoveParent(Quadtree parent)
+    {
+        _parents.Remove(parent);
+    }
+
+    /// <summary>
+    /// Add a parent node.
+    /// </summary>
+    /// <param name="parent"></param>
+    public void AddParent(Quadtree parent)
+    {
+        _parents.Add(parent);
+    }
+
+    /// <summary>
+    /// Remove all parent nodes from this node.
+    /// </summary>
+    public void RemoveFromAllParents()
+    {
+        foreach (var parent in _parents.ToList())
         {
-            Target = target;
-            Bounds = target.Bounds;
+            parent.Remove(this);
         }
 
-        public void RemoveParent(Quadtree parent)
-        {
-            Parents.Remove(parent);
-        }
+        _parents.Clear();
+    }
 
-        public void AddParent(Quadtree parent)
-        {
-            Parents.Add(parent);
-        }
+    /// <summary>
+    /// Gets the bounding box for collision detection.
+    /// </summary>
+    public IShapeF Bounds => _target.Bounds;
 
-        public void RemoveFromAllParents()
-        {
-            foreach (Quadtree parent in Parents.ToList())
-            {
-                parent.Remove(this);
-            }
-            Parents.Clear();
-        }
+    /// <summary>
+    /// Gets the collision actor target.
+    /// </summary>
+    public ICollisionActor Target => _target;
 
-        public HashSet<Quadtree> Parents = new HashSet<Quadtree>();
+    /// <summary>
+    /// Gets or sets whether Target has had its collision handled this
+    /// iteration.
+    /// </summary>
+    public bool Dirty { get; private set; }
 
-        /// <summary>
-        ///     Gets or sets the Target for collision.
-        /// </summary>
-        public ICollisionActor Target { get; set; }
+    /// <summary>
+    /// Mark node as dirty.
+    /// </summary>
+    public void MarkDirty()
+    {
+        Dirty = true;
+    }
 
-        /// <summary>
-        ///     Gets or sets whether Target has had its collision handled this
-        ///     iteration.
-        /// </summary>
-        public bool Dirty { get; private set; }
-
-        public void MarkDirty()
-        {
-            Dirty = true;
-        }
-
-        public void MarkClean()
-        {
-            Dirty = false;
-        }
-
-        /// <summary>
-        ///     Gets or sets the bounding box for collision detection.
-        /// </summary>
-        public IShapeF Bounds { get; set; }
+    /// <summary>
+    /// Mark node as clean, i.e. not dirty.
+    /// </summary>
+    public void MarkClean()
+    {
+        Dirty = false;
     }
 }
