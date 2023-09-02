@@ -153,40 +153,63 @@ namespace MonoGame.Extended.Collections
             Array.Copy(oldElements, 0, _items, 0, oldElements.Length);
         }
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        IEnumerator<T> IEnumerable<T>.GetEnumerator() => GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        /// Get the <see cref="BagEnumerator"/> for this <see cref="Bag{T}"/>. 
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Use this method preferentially over <see cref="IEnumerable.GetEnumerator"/> while enumerating via foreach
+        /// to avoid boxing the enumerator on every iteration, which can be expensive in high-performance environments.
+        /// </remarks>
+        public BagEnumerator GetEnumerator()
         {
             return new BagEnumerator(this);
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        /// <summary>
+        /// Enumerates a Bag.
+        /// </summary>
+        public struct BagEnumerator : IEnumerator<T>
         {
-            return new BagEnumerator(this);
-        }
-
-        internal struct BagEnumerator : IEnumerator<T>
-        {
-            private volatile Bag<T> _bag;
+            private readonly Bag<T> _bag;
             private volatile int _index;
 
+            /// <summary>
+            /// Creates a new <see cref="BagEnumerator"/> for this <see cref="Bag{T}"/>.
+            /// </summary>
+            /// <param name="bag"></param>
             public BagEnumerator(Bag<T> bag)
             {
                 _bag = bag;
                 _index = -1;
             }
 
-            T IEnumerator<T>.Current => _bag[_index];
-            object IEnumerator.Current => _bag[_index];
+            readonly T IEnumerator<T>.Current => _bag[_index];
 
+            readonly object IEnumerator.Current => _bag[_index];
+
+            /// <summary>
+            /// Gets the element in the <see cref="Bag{T}"/> at the current position of the enumerator.
+            /// </summary>
+            public readonly T Current => _bag[_index];
+
+            /// <inheritdoc/>
             public bool MoveNext()
             {
                 return ++_index < _bag.Count;
             }
 
-            public void Dispose()
+            /// <inheritdoc/>
+            public readonly void Dispose()
             {
             }
 
-            public void Reset()
+            /// <inheritdoc/>
+            public readonly void Reset()
             {
             }
         }
