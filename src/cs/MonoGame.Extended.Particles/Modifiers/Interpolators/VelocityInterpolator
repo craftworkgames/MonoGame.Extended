@@ -1,0 +1,12 @@
+using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Particles.Modifiers.Interpolators
+{
+    public class VelocityInterpolator : Interpolator<Vector2>
+    {
+        public override unsafe void Update(float amount, Particle* particle)
+        {
+            particle->Velocity = (EndValue - StartValue) * amount + StartValue;
+        }
+    }
+}
