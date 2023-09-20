@@ -20,9 +20,10 @@ namespace MonoGame.Extended.Tiled
 
     public class TiledMapTileset : ITileset
     {
-        public TiledMapTileset(Texture2D texture, int tileWidth, int tileHeight, int tileCount, int spacing, int margin, int columns)
+        public TiledMapTileset(Texture2D texture, string type, int tileWidth, int tileHeight, int tileCount, int spacing, int margin, int columns)
         {
             Texture = texture;
+            Type = type;
             TileWidth = tileWidth;
             TileHeight = tileHeight;
             TileCount = tileCount;
@@ -43,6 +44,7 @@ namespace MonoGame.Extended.Tiled
             return new TextureRegion2D(Texture, x, y, TileWidth, TileHeight);
         }
 
+        public string Type { get; }
         public int TileWidth { get; }
         public int TileHeight { get; }
         public int Spacing { get; }

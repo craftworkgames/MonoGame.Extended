@@ -18,6 +18,7 @@ namespace MonoGame.Extended.Tiled
 		public static TiledMapTileset ReadTileset(ContentReader reader)
 		{
 			var texture = reader.ReadExternalReference<Texture2D>();
+            var @class = reader.ReadString();
             var tileWidth = reader.ReadInt32();
             var tileHeight = reader.ReadInt32();
             var tileCount = reader.ReadInt32();
@@ -26,7 +27,7 @@ namespace MonoGame.Extended.Tiled
             var columns = reader.ReadInt32();
             var explicitTileCount = reader.ReadInt32();
 
-            var tileset = new TiledMapTileset(texture, tileWidth, tileHeight, tileCount, spacing, margin, columns);
+            var tileset = new TiledMapTileset(texture, @class, tileWidth, tileHeight, tileCount, spacing, margin, columns);
 
             for (var tileIndex = 0; tileIndex < explicitTileCount; tileIndex++)
             {

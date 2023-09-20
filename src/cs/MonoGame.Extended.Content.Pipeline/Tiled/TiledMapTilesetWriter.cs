@@ -33,6 +33,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 		    var externalReference = externalReferenceRepository.GetExternalReference<Texture2DContent>(tileset.Image.Source);
 
 			writer.WriteExternalReference(externalReference);
+            writer.Write(tileset.Class ?? tileset.Type ?? string.Empty);
             writer.Write(tileset.TileWidth);
             writer.Write(tileset.TileHeight);
             writer.Write(tileset.TileCount);
