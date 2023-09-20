@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace MonoGame.Extended.Tiled.Serialization
@@ -12,6 +13,10 @@ namespace MonoGame.Extended.Tiled.Serialization
 
         [XmlText]
         public string ValueBody { get; set; }
+
+        [XmlArray("properties")]
+        [XmlArrayItem("property")]
+        public List<TiledMapPropertyContent> Properties { get; set; }
 
         public string Value => ValueAttribute ?? ValueBody;
 

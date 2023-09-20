@@ -16,22 +16,10 @@ namespace MonoGame.Extended.Tiled
                 return existingInstance;
 
             var map = ReadTiledMap(reader);
-            ReadProperties(reader, map.Properties);
+            reader.ReadTiledMapProperties(map.Properties);
             ReadTilesets(reader, map);
             ReadLayers(reader, map);
             return map;
-        }
-
-        private static void ReadProperties(ContentReader reader, TiledMapProperties properties)
-        {
-            var count = reader.ReadInt32();
-
-            for (var i = 0; i < count; i++)
-            {
-                var key = reader.ReadString();
-                var value = reader.ReadString();
-                properties[key] = value;
-            }
         }
 
         private static TiledMap ReadTiledMap(ContentReader reader)
@@ -98,7 +86,7 @@ namespace MonoGame.Extended.Tiled
             var parallaxFactor = new Vector2(parallaxX, parallaxY);
             var properties = new TiledMapProperties();
 
-            ReadProperties(reader, properties);
+            reader.ReadTiledMapProperties(properties);
 
             TiledMapLayer layer;
 
@@ -154,7 +142,7 @@ namespace MonoGame.Extended.Tiled
             var properties = new TiledMapProperties();
             const float opacity = 1.0f;
 
-            ReadProperties(reader, properties);
+            reader.ReadTiledMapProperties(properties);
 
             TiledMapObject mapObject;
 
