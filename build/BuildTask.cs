@@ -17,8 +17,11 @@ public sealed class BuildTask : FrostingTask<BuildContext>
         {
             MSBuildSettings = msBuildSettings,
             Configuration = "Release",
+            Verbosity = DotNetVerbosity.Minimal,
+            NoRestore = true,
+            NoLogo = true
         };
 
-        context.DotNetBuild("./MonoGame.Extended.sln", buildSettings);
+        context.DotNetBuild(context.SolutionPath, buildSettings);
     }
 }
