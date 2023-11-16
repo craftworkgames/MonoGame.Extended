@@ -20,7 +20,7 @@ public sealed class PackageTask : FrostingTask<BuildContext>
         msBuildSettings.WithProperty("Version", context.Version);
 
         //  Ignore warnings about adding duplicate items added to package
-        msBuildSettings.WithProperty("NoWarn", "NU5118")
+        msBuildSettings.WithProperty("NoWarn", "NU5118");
 
         DotNetPackSettings packSettings = new DotNetPackSettings()
         {
