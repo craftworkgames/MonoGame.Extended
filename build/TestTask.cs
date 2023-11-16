@@ -1,4 +1,3 @@
-
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Frosting;
@@ -10,11 +9,14 @@ public class TestTask : FrostingTask<BuildContext>
 {
     public override void Run(BuildContext context)
     {
-        DotNetTestSettings settings = new DotNetTestSettings()
+        DotNetTestSettings testSettings = new DotNetTestSettings()
         {
             Configuration = "Release",
+            Verbosity = DotNetVerbosity.Normal,
+            NoLogo = true,
+            NoBuild = true
         };
 
-        context.DotNetTest("MonoGame.Extended.sln");
+        context.DotNetTest(context.SolutionPath, testSettings);
     }
 }
