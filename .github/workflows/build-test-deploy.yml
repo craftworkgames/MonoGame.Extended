@@ -2,7 +2,7 @@ name: "Build test deploy"
 
 on:
   push:
-    branches: [develop]
+    branches: [develop, test/feature]
     tags: [v*]
   pull_request:
     branches: [develop]
@@ -16,23 +16,14 @@ jobs:
     steps:
       - name: "Clone Repository"
         uses: actions/checkout@v4
-      - name: "CAKE (Build)"
-        run: dotnet run --project ./build/Build.csproj -- --target=BuildTask
-      - name: "CAKE (Test)"
-        run: dotnet run --project ./build/Build.csproj -- --target=TestTask
-
-      # Creating packages does not need ot run on pull requets, just the build and
-      # test above.
-      - name: "CAKE (Package)"
-        if: github.event_name != 'pull_request'
-        run: dotnet run --project ./build/Build.csproj -- --target=PackageTask
-      - name: "Package Artifacts"
+      - name: "CAKE (Build -> Test -> Package)"
+        run: dotnet run --project ./build/Build.csproj -- --target=Default
+      - name: "Upload Artifacts For Deploy"
         if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@main
         with:
           name: MonoGame.Extended
           path: artifacts/*
-
 
   deploy-job:
       name: "Deploy Nugets"
@@ -45,25 +36,14 @@ jobs:
       steps:
         - name: "Clone Repository"
           uses: actions/checkout@v4
-        - name: Download Artifacts
+        - name: "Download Artifacts For Deploy"
           uses: actions/download-artifact@v3
           with:
             name: MonoGame.Extended
             path: artifacts
-        - name: "Push Package (GitHub Feed)"
-          run: dotnet nuget push artifacts/*.nupkg --source https://nuget.pkg.github.com/$GITHUB_REPOSITORY_OWNER/index.json --api-key ${GITHUB_TOKEN}
+        - name: "Push Package"
+          run: dotnet run --project ./build/Build.csproj -- --target=Deploy
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        - name: "Push Packages (MyGet Feed)"
-          run: dotnet nuget push artifacts/*.nupkg --source ${MYGET_SOURCE_URL} --api-key ${MYGET_ACCESS_TOKEN}
-          env:
             MYGET_ACCESS_TOKEN: ${{ secrets.MYGET_ACCESS_TOKEN }}
-            MYGET_SOURCE_URL: 'https://www.myget.org/F/lithiumtoast/api/v3/index.json'
-
-        # Pushes packages to nuget, but only if this is a tag release.
-        - name: "Push Packages (NuGet Feed)"
-          if: github.ref_type == 'tag' && github.repository_owner == 'craftworkgames'
-          run: dotnet nuget push artifacts/*.nupkg --source ${NUGET_SOURCE_URL} --api-key ${NUGET_ACCESS_TOKEN}
-          env:
             NUGET_ACCESS_TOKEN: ${{ secrets.NUGET_ACCESS_TOKEN }}
-            NUGET_SOURCE_URL: "https://api.nuget.org/v3/index.json"
