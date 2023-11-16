@@ -12,6 +12,8 @@ public sealed class BuildTask : FrostingTask<BuildContext>
     {
         DotNetMSBuildSettings msBuildSettings = new DotNetMSBuildSettings();
         msBuildSettings.WithProperty("Version", context.Version);
+        msBuildSettings.WithProperty("NoWarn", "CS1591");
+
 
         DotNetBuildSettings buildSettings = new DotNetBuildSettings()
         {
