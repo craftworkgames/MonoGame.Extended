@@ -10,7 +10,7 @@ namespace BuildScripts;
 [TaskName(nameof(PackageTask))]
 public sealed class PackageTask : FrostingTask<BuildContext>
 {
-    public override void Run(BuildContext context)
+    public override async void Run(BuildContext context)
     {
         context.CleanDirectories(context.ArtifactsDirectory);
         context.CreateDirectory(context.ArtifactsDirectory);
@@ -22,6 +22,8 @@ public sealed class PackageTask : FrostingTask<BuildContext>
         {
             MSBuildSettings = msBuildSettings,
             Configuration = "Release",
+            Verbosity = DotNetVerbosity.Minimal,
+            NoLogo = true,
             OutputDirectory = context.ArtifactsDirectory,
         };
 
