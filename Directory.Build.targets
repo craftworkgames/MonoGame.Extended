@@ -1,5 +1,6 @@
 <Project>
     <PropertyGroup>
+        <Version>3.9.0</Version>
         <Authors>craftworkgames</Authors>
         <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
         <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
