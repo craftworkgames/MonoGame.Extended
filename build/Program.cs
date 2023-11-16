@@ -13,3 +13,10 @@ public static class Program
             .Run(args);
     }
 }
+
+
+[TaskName("Default")]
+[IsDependentOn(typeof(BuildTask))]
+[IsDependentOn(typeof(TestTask))]
+[IsDependentOn(typeof(PackageTask))]
+public sealed class DefaultTask : FrostingTask {}
