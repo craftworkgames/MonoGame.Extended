@@ -7,9 +7,6 @@
     <Authors>craftworkgames</Authors>
     <Description>An Entity Component System to make MonoGame more awesome.</Description>
     <PackageTags>monogame ecs entity component system</PackageTags>
-    <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</PackageIconUrl>
   </PropertyGroup>
 
   <PropertyGroup>
