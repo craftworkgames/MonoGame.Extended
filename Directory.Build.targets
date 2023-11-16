@@ -4,6 +4,11 @@
         <Authors>craftworkgames</Authors>
         <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
         <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
-        <PackageIconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</PackageIconUrl>
+        <PackageIcon>logo-nuget-128.png</PackageIcon>
     </PropertyGroup>
+
+    <ItemGroup>
+        <!-- path must be relative to the individual csproj's not this .targets file -->
+        <None Include="../../../Logos/logo-nuget-128.png" Pack="true" PackagePath="" />
+    </ItemGroup>
 </Project>
