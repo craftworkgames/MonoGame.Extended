@@ -62,7 +62,7 @@ jobs:
 
         # Pushes packages to nuget, but only if this is a tag release.
         - name: "Push Packages (NuGet Feed)"
-          if: github.ref_type == 'tag'
+          if: github.ref_type == 'tag' && github.repository_owner == 'craftworkgames'
           run: dotnet nuget push artifacts/*.nupkg --source ${NUGET_SOURCE_URL} --api-key ${NUGET_ACCESS_TOKEN}
           env:
             NUGET_ACCESS_TOKEN: ${{ secrets.NUGET_ACCESS_TOKEN }}
