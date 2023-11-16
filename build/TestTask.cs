@@ -1,8 +1,6 @@
 
-using Cake.Common.IO;
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Test;
-using Cake.Core.IO;
 using Cake.Frosting;
 
 namespace BuildScripts;

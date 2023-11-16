@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Cake.Common;
 using Cake.Common.Build;
