@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Xunit;
@@ -35,7 +36,12 @@ namespace MonoGame.Extended.Tests.Collections
                     Assert.True(false);
             }
 
-            GC.EndNoGCRegion();
+            //  Wrap in if statement due to exception thrown when running test through
+            //  cake build script or when debugging test script manually.
+            if(GCSettings.LatencyMode == GCLatencyMode.NoGCRegion)
+            {
+                GC.EndNoGCRegion();
+            }
         }
 
     }
