@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Collisions.QuadTree;
 
 namespace MonoGame.Extended.Collisions
 {

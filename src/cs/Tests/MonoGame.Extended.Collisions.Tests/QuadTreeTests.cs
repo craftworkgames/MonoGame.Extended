@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MonoGame.Extended.Collisions.QuadTree;
 using Xunit;
 
 namespace MonoGame.Extended.Collisions.Tests

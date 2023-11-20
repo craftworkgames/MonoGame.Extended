@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MonoGame.Extended.Collisions
+namespace MonoGame.Extended.Collisions.QuadTree
 {
     /// <summary>
     /// Class for doing collision handling with a quad tree.
