@@ -247,6 +247,16 @@ namespace MonoGame.Extended.Collisions.QuadTree
             Clear();
         }
 
+        /// <summary>
+        /// Clear current node and all children
+        /// </summary>
+        public void ClearAll()
+        {
+            foreach (Quadtree childQuadtree in Children)
+                childQuadtree.ClearAll();
+            Clear();
+        }
+
         private void Clear()
         {
             foreach (QuadtreeData quadtreeData in Contents)

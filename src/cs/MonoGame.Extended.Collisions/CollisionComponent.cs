@@ -35,28 +35,31 @@ namespace MonoGame.Extended.Collisions
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            // Detect collisions
+            _collisionTree.ClearAll();
             foreach (var value in _targetDataDictionary.Values)
             {
-                value.RemoveFromAllParents();
+                _collisionTree.Insert(value);
+            }
+            _collisionTree.Shake();
+
+            foreach (var value in _targetDataDictionary.Values)
+            {
 
                 var target = value.Target;
-                var collisions =_collisionTree.Query(target.Bounds);
+                var collisions = _collisionTree.Query(target.Bounds);
 
-                // Generate list of collision Infos
                 foreach (var other in collisions)
-                {
-                    var collisionInfo = new CollisionEventArgs
+                    if (other != value)
+                    {
+                        var collisionInfo = new CollisionEventArgs
                         {
                             Other = other.Target,
                             PenetrationVector = CalculatePenetrationVector(value.Bounds, other.Bounds)
                         };
 
-                    target.OnCollision(collisionInfo);
-                }
-                _collisionTree.Insert(value);
+                        target.OnCollision(collisionInfo);
+                    }
             }
-            _collisionTree.Shake();
         }
 
         /// <summary>

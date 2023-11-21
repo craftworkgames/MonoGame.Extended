@@ -5,7 +5,7 @@ using MonoGame.Extended.Collisions;
 
 namespace MonoGame.Extended.Benchmarks.Collisions;
 
-[SimpleJob(RunStrategy.ColdStart, launchCount:1)]
+[SimpleJob(RunStrategy.ColdStart, launchCount:3)]
 public class DifferentPoolSizeCollision
 {
     private const int COMPONENT_BOUNDARY_SIZE = 1000;
