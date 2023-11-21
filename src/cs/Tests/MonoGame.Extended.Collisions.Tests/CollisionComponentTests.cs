@@ -332,6 +332,34 @@ namespace MonoGame.Extended.Collisions.Tests
             }
 
             [Fact]
+            public void Actors_is_colliding_when_dynamic_actor_is_moved_after_update()
+            {
+                var staticBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
+                var staticActor = new CollisionIndicatingActor(staticBounds);
+                _collisionComponent.Insert(staticActor);
+                for (int i = 0; i < QuadTree.Quadtree.DefaultMaxObjectsPerNode; i++)
+                {
+                    var fillerBounds = new RectangleF(new Point2(0, 2), new Size2(.1f, .1f));
+                    var fillerActor = new CollisionIndicatingActor(fillerBounds);
+                    _collisionComponent.Insert(fillerActor);
+                }
+
+                var dynamicBounds = new RectangleF(new Point2(2, 2), new Size2(1, 1));
+                var dynamicActor = new CollisionIndicatingActor(dynamicBounds);
+                _collisionComponent.Insert(dynamicActor);
+
+                _collisionComponent.Update(_gameTime);
+                Assert.False(staticActor.IsColliding);
+                Assert.False(dynamicActor.IsColliding);
+
+                dynamicActor.MoveTo(new Point2(0, 0));
+
+                _collisionComponent.Update(_gameTime);
+                Assert.True(dynamicActor.IsColliding);
+                Assert.True(staticActor.IsColliding);
+            }
+
+            [Fact]
             public void Actors_is_colliding_when_dynamic_actor_is_moved_into_collision_bounds()
             {
                 var staticBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
