@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
-    // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.2; Bounding Volumes - Axis-aligned Bounding Boxes (AABBs). pg 77 
+    // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.2; Bounding Volumes - Axis-aligned Bounding Boxes (AABBs). pg 77
 
     /// <summary>
     ///     An axis-aligned, four sided, two dimensional box defined by a top-left position (<see cref="X" /> and
@@ -96,6 +96,8 @@ namespace MonoGame.Extended
                 Y = value.Y;
             }
         }
+
+        public RectangleF BoundingRectangle => this;
 
         /// <summary>
         ///     Gets the <see cref="Size2" /> representing the extents of this <see cref="RectangleF" />.
@@ -227,13 +229,13 @@ namespace MonoGame.Extended
         /// <param name="transformMatrix">The transform matrix.</param>
         /// <param name="result">The resulting transformed rectangle.</param>
         /// <returns>
-        ///     The <see cref="BoundingRectangle" /> from the <paramref name="rectangle" /> transformed by the
+        ///     The <see cref="Extended.BoundingRectangle" /> from the <paramref name="rectangle" /> transformed by the
         ///     <paramref name="transformMatrix" />.
         /// </returns>
         /// <remarks>
         ///     <para>
-        ///         If a transformed <see cref="BoundingRectangle" /> is used for <paramref name="rectangle" /> then the
-        ///         resulting <see cref="BoundingRectangle" /> will have the compounded transformation, which most likely is
+        ///         If a transformed <see cref="Extended.BoundingRectangle" /> is used for <paramref name="rectangle" /> then the
+        ///         resulting <see cref="Extended.BoundingRectangle" /> will have the compounded transformation, which most likely is
         ///         not desired.
         ///     </para>
         /// </remarks>
@@ -252,20 +254,20 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Computes the <see cref="RectangleF" /> from the specified <see cref="BoundingRectangle" /> transformed by
+        ///     Computes the <see cref="RectangleF" /> from the specified <see cref="Extended.BoundingRectangle" /> transformed by
         ///     the
         ///     specified <see cref="Matrix2" />.
         /// </summary>
         /// <param name="rectangle">The bounding rectangle.</param>
         /// <param name="transformMatrix">The transform matrix.</param>
         /// <returns>
-        ///     The <see cref="BoundingRectangle" /> from the <paramref name="rectangle" /> transformed by the
+        ///     The <see cref="Extended.BoundingRectangle" /> from the <paramref name="rectangle" /> transformed by the
         ///     <paramref name="transformMatrix" />.
         /// </returns>
         /// <remarks>
         ///     <para>
-        ///         If a transformed <see cref="BoundingRectangle" /> is used for <paramref name="rectangle" /> then the
-        ///         resulting <see cref="BoundingRectangle" /> will have the compounded transformation, which most likely is
+        ///         If a transformed <see cref="Extended.BoundingRectangle" /> is used for <paramref name="rectangle" /> then the
+        ///         resulting <see cref="Extended.BoundingRectangle" /> will have the compounded transformation, which most likely is
         ///         not desired.
         ///     </para>
         /// </remarks>
