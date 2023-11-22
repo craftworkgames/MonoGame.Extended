@@ -19,6 +19,7 @@ public class QuadtreeData
     public QuadtreeData(ICollisionActor target)
     {
         _target = target;
+        Bounds = _target.Bounds.BoundingRectangle;
     }
 
     /// <summary>
@@ -37,6 +38,7 @@ public class QuadtreeData
     public void AddParent(Quadtree parent)
     {
         _parents.Add(parent);
+        Bounds = _target.Bounds.BoundingRectangle;
     }
 
     /// <summary>
@@ -55,7 +57,7 @@ public class QuadtreeData
     /// <summary>
     /// Gets the bounding box for collision detection.
     /// </summary>
-    public IShapeF Bounds => _target.Bounds;
+    public RectangleF Bounds { get; set; }
 
     /// <summary>
     /// Gets the collision actor target.

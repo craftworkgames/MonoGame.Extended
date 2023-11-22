@@ -46,10 +46,10 @@ namespace MonoGame.Extended.Collisions
             {
 
                 var target = value.Target;
-                var collisions = _collisionTree.Query(target.Bounds);
+                var collisions = _collisionTree.Query(target.Bounds.BoundingRectangle);
 
                 foreach (var other in collisions)
-                    if (other != value)
+                    if (other != value && other.Bounds.Intersects(value.Bounds))
                     {
                         var collisionInfo = new CollisionEventArgs
                         {

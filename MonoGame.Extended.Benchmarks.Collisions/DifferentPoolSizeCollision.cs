@@ -28,6 +28,7 @@ public class DifferentPoolSizeCollision
         }
 
         public IShapeF Bounds { get; set; }
+        public Vector2 Shift { get; set; }
 
         public Point2 Position {
             get => Bounds.Position;
@@ -44,7 +45,7 @@ public class DifferentPoolSizeCollision
     public int N { get; set; }
 
 
-    public int UpdateCount { get; set; } = 1;
+    public int UpdateCount { get; set; } = 10;
 
 
     private List<Collider> _colliders = new();
@@ -56,7 +57,12 @@ public class DifferentPoolSizeCollision
         {
             var collider = new Collider(new Point2(
                 _random.Next(COMPONENT_BOUNDARY_SIZE),
-                _random.Next(COMPONENT_BOUNDARY_SIZE)));
+                _random.Next(COMPONENT_BOUNDARY_SIZE)))
+            {
+                Shift = new Vector2(
+                    _random.Next(4) - 2,
+                    _random.Next(4) - 2),
+            };
             _colliders.Add(collider);
             _collisionComponent.Insert(collider);
         }
@@ -75,6 +81,8 @@ public class DifferentPoolSizeCollision
     {
         for (int i = 0; i < UpdateCount; i++)
         {
+            foreach (var collider in _colliders)
+                collider.Position += collider.Shift;
             _collisionComponent.Update(_gameTime);
         }
     }
