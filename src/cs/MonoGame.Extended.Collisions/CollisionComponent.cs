@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Collisions
         /// <param name="boundary">Boundary of the collision tree.</param>
         public CollisionComponent(RectangleF boundary)
         {
-            var layer = new Layer(DEFAULT_LAYER_NAME, boundary);
+            var layer = new Layer(DEFAULT_LAYER_NAME, new QuadTreeSpace(boundary));
             Add(layer);
             AddCollisionBetweenLayer(layer, layer);
         }
@@ -51,9 +51,9 @@ namespace MonoGame.Extended.Collisions
                 layer.Reset();
 
             foreach (var (firstLayer, secondLayer) in _layerCollision)
-            foreach (var actor in firstLayer)
+            foreach (var actor in firstLayer.Space)
             {
-                var collisions = secondLayer.Query(actor.Bounds.BoundingRectangle);
+                var collisions = secondLayer.Space.Query(actor.Bounds.BoundingRectangle);
                 foreach (var other in collisions)
                     if (actor != other && actor.Bounds.Intersects(other.Bounds))
                     {
@@ -81,7 +81,7 @@ namespace MonoGame.Extended.Collisions
         /// <param name="target">Target to insert.</param>
         public void Insert(ICollisionActor target)
         {
-            _layers[target.LayerName ?? DEFAULT_LAYER_NAME].Insert(target);
+            _layers[target.LayerName ?? DEFAULT_LAYER_NAME].Space.Insert(target);
         }
 
         /// <summary>
@@ -90,7 +90,12 @@ namespace MonoGame.Extended.Collisions
         /// <param name="target">Target to remove.</param>
         public void Remove(ICollisionActor target)
         {
-            _layers[target.LayerName ?? DEFAULT_LAYER_NAME].Remove(target);
+            if (target.LayerName is not null)
+                _layers[target.LayerName].Space.Remove(target);
+            else
+                foreach (var layer in _layers.Values)
+                    if (layer.Space.Remove(target))
+                        return;
         }
 
         #region Layers
@@ -103,6 +108,8 @@ namespace MonoGame.Extended.Collisions
         {
             if (!_layers.TryAdd(layer.Name, layer))
                 throw new DuplicateNameException(layer.Name);
+            if (layer.Name != DEFAULT_LAYER_NAME)
+                AddCollisionBetweenLayer(_layers[DEFAULT_LAYER_NAME], layer);
         }
 
         /// <summary>
@@ -112,6 +119,7 @@ namespace MonoGame.Extended.Collisions
         public void Remove(Layer layer)
         {
             _layers.Remove(layer.Name);
+            _layerCollision.RemoveWhere(tuple => tuple.Item1 == layer || tuple.Item2 == layer);
         }
 
         public void AddCollisionBetweenLayer(Layer a, Layer b)

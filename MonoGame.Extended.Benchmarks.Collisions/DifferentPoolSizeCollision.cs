@@ -2,6 +2,8 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collisions;
+using MonoGame.Extended.Collisions.Layers;
+using MonoGame.Extended.Collisions.QuadTree;
 
 namespace MonoGame.Extended.Benchmarks.Collisions;
 
@@ -40,21 +42,42 @@ public class DifferentPoolSizeCollision
         }
     }
 
-
     [Params(100, 500, 1000)]
     public int N { get; set; }
 
 
-    public int UpdateCount { get; set; } = 10;
+    [Params(1, 2)]
+    public int LayersCount { get; set; }
+
+    public int UpdateCount { get; set; } = 100;
 
 
     private List<Collider> _colliders = new();
+    private List<Layer> _layers = new();
 
     [GlobalSetup]
     public void GlobalSetup()
     {
+        if (LayersCount > 1)
+        {
+            for (int i = 0; i < LayersCount; i++)
+            {
+                var size = new Size2(COMPONENT_BOUNDARY_SIZE, COMPONENT_BOUNDARY_SIZE);
+                var layer = new Layer(i.ToString(), new QuadTreeSpace(new RectangleF(Point2.Zero, size)));
+                _collisionComponent.Add(layer);
+                _layers.Add(layer);
+            }
+            for (int i = 0; i < LayersCount - 1; i++)
+                _collisionComponent.AddCollisionBetweenLayer(_layers[i], _layers[i + 1]);
+
+        }
+
         for (int i = 0; i < N; i++)
         {
+            var layer = LayersCount == 1
+                ? _collisionComponent.Layers.First().Value
+                : _layers[i % LayersCount];
+
             var collider = new Collider(new Point2(
                 _random.Next(COMPONENT_BOUNDARY_SIZE),
                 _random.Next(COMPONENT_BOUNDARY_SIZE)))
@@ -64,7 +87,7 @@ public class DifferentPoolSizeCollision
                     _random.Next(4) - 2),
             };
             _colliders.Add(collider);
-            _collisionComponent.Insert(collider);
+            layer.Space.Insert(collider);
         }
     }
 
@@ -74,6 +97,9 @@ public class DifferentPoolSizeCollision
         foreach (var collider in _colliders)
             _collisionComponent.Remove(collider);
         _colliders.Clear();
+        foreach (var layer in _layers)
+            _collisionComponent.Remove(layer);
+        _layers.Clear();
     }
 
     [Benchmark]

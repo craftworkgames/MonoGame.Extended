@@ -271,10 +271,10 @@ namespace MonoGame.Extended.Collisions.QuadTree
         /// </summary>
         /// <param name="area">The area to query for overlapping targets</param>
         /// <returns>A unique list of targets intersected by area.</returns>
-        public List<QuadtreeData> Query(RectangleF area)
+        public List<QuadtreeData> Query(ref RectangleF area)
         {
             var recursiveResult = new List<QuadtreeData>();
-            QueryWithoutReset(area, recursiveResult);
+            QueryWithoutReset(ref area, recursiveResult);
             foreach (var quadtreeData in recursiveResult)
             {
                 quadtreeData.MarkClean();
@@ -282,7 +282,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
             return recursiveResult;
         }
 
-        private void QueryWithoutReset(RectangleF area, List<QuadtreeData> recursiveResult)
+        private void QueryWithoutReset(ref RectangleF area, List<QuadtreeData> recursiveResult)
         {
             if (!NodeBounds.Intersects(area))
                 return;
@@ -302,7 +302,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
             {
                 for (int i = 0, size = Children.Count; i < size; i++)
                 {
-                    Children[i].QueryWithoutReset(area, recursiveResult);
+                    Children[i].QueryWithoutReset(ref area, recursiveResult);
                 }
             }
         }
