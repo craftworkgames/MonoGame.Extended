@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Collisions.Layers;
 using MonoGame.Extended.Collisions.QuadTree;
 
 namespace MonoGame.Extended.Collisions
@@ -12,9 +15,16 @@ namespace MonoGame.Extended.Collisions
     /// </summary>
     public class CollisionComponent : SimpleGameComponent
     {
-        private readonly Dictionary<ICollisionActor, QuadtreeData> _targetDataDictionary = new();
+        public const string DEFAULT_LAYER_NAME = "default";
 
-        private readonly Quadtree _collisionTree;
+        private Dictionary<string, Layer> _layers = new();
+
+        /// <summary>
+        /// List of collision's layers
+        /// </summary>
+        public IReadOnlyDictionary<string, Layer> Layers => _layers;
+
+        private HashSet<(Layer, Layer)> _layerCollision = new();
 
         /// <summary>
         /// Creates a collision tree covering the specified area.
@@ -22,7 +32,9 @@ namespace MonoGame.Extended.Collisions
         /// <param name="boundary">Boundary of the collision tree.</param>
         public CollisionComponent(RectangleF boundary)
         {
-            _collisionTree = new Quadtree(boundary);
+            var layer = new Layer(DEFAULT_LAYER_NAME, boundary);
+            Add(layer);
+            AddCollisionBetweenLayer(layer, layer);
         }
 
         /// <summary>
@@ -35,30 +47,30 @@ namespace MonoGame.Extended.Collisions
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            _collisionTree.ClearAll();
-            foreach (var value in _targetDataDictionary.Values)
+            foreach (var layer in _layers.Values)
+                layer.Reset();
+
+            foreach (var (firstLayer, secondLayer) in _layerCollision)
+            foreach (var actor in firstLayer)
             {
-                _collisionTree.Insert(value);
-            }
-            _collisionTree.Shake();
-
-            foreach (var value in _targetDataDictionary.Values)
-            {
-
-                var target = value.Target;
-                var collisions = _collisionTree.Query(target.Bounds.BoundingRectangle);
-
+                var collisions = secondLayer.Query(actor.Bounds.BoundingRectangle);
                 foreach (var other in collisions)
-                    if (other != value && other.Bounds.Intersects(value.Bounds))
+                    if (actor != other && actor.Bounds.Intersects(other.Bounds))
                     {
-                        var collisionInfo = new CollisionEventArgs
-                        {
-                            Other = other.Target,
-                            PenetrationVector = CalculatePenetrationVector(value.Bounds, other.Bounds)
-                        };
+                        var penetrationVector = CalculatePenetrationVector(actor.Bounds, other.Bounds);
 
-                        target.OnCollision(collisionInfo);
+                        actor.OnCollision(new CollisionEventArgs
+                        {
+                            Other = other,
+                            PenetrationVector = penetrationVector
+                        });
+                        other.OnCollision(new CollisionEventArgs
+                        {
+                            Other = actor,
+                            PenetrationVector = -penetrationVector
+                        });
                     }
+
             }
         }
 
@@ -69,12 +81,7 @@ namespace MonoGame.Extended.Collisions
         /// <param name="target">Target to insert.</param>
         public void Insert(ICollisionActor target)
         {
-            if (!_targetDataDictionary.ContainsKey(target))
-            {
-                var data = new QuadtreeData(target);
-                _targetDataDictionary.Add(target, data);
-                _collisionTree.Insert(data);
-            }
+            _layers[target.LayerName ?? DEFAULT_LAYER_NAME].Insert(target);
         }
 
         /// <summary>
@@ -83,24 +90,41 @@ namespace MonoGame.Extended.Collisions
         /// <param name="target">Target to remove.</param>
         public void Remove(ICollisionActor target)
         {
-            if (_targetDataDictionary.ContainsKey(target))
-            {
-                var data = _targetDataDictionary[target];
-                data.RemoveFromAllParents();
-                _targetDataDictionary.Remove(target);
-                _collisionTree.Shake();
-            }
+            _layers[target.LayerName ?? DEFAULT_LAYER_NAME].Remove(target);
+        }
+
+        #region Layers
+
+        /// <summary>
+        /// Add the new layer. The name of layer must be unique.
+        /// </summary>
+        /// <param name="layer">The new layer</param>
+        public void Add(Layer layer)
+        {
+            if (!_layers.TryAdd(layer.Name, layer))
+                throw new DuplicateNameException(layer.Name);
         }
 
         /// <summary>
-        /// Gets if the target is inserted in the collision tree.
+        /// Add the new layer. The name of layer must be unique.
         /// </summary>
-        /// <param name="target">Actor to check if contained</param>
-        /// <returns>True if the target is contained in the collision tree.</returns>
-        public bool Contains(ICollisionActor target)
+        /// <param name="layer">The new layer</param>
+        public void Remove(Layer layer)
         {
-            return _targetDataDictionary.ContainsKey(target);
+            _layers.Remove(layer.Name);
         }
+
+        public void AddCollisionBetweenLayer(Layer a, Layer b)
+        {
+            _layerCollision.Add((a, b));
+        }
+
+        public void AddCollisionBetweenLayer(string nameA, string nameB)
+        {
+            _layerCollision.Add((_layers[nameA], _layers[nameB]));
+        }
+
+        #endregion
 
         #region Penetration Vectors
 
