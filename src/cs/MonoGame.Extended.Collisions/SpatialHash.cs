@@ -22,6 +22,7 @@ public class SpatialHash: ISpaceAlgorithm
         _actors.Add(actor);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void InsertToHash(ICollisionActor actor)
     {
         var rect = actor.Bounds.BoundingRectangle;
@@ -30,6 +31,7 @@ public class SpatialHash: ISpaceAlgorithm
             AddToCell(x, y, actor);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void AddToCell(float x, float y, ICollisionActor actor)
     {
         var index = GetIndex(x, y);
@@ -55,12 +57,14 @@ public class SpatialHash: ISpaceAlgorithm
     public IEnumerable<ICollisionActor> Query(RectangleF boundsBoundingRectangle)
     {
         var results = new HashSet<ICollisionActor>();
+        var bounds = boundsBoundingRectangle.BoundingRectangle;
 
         for (var x = boundsBoundingRectangle.Left; x < boundsBoundingRectangle.Right; x+=_size.Width)
         for (var y = boundsBoundingRectangle.Top; y < boundsBoundingRectangle.Bottom; y+=_size.Height)
             if (_dictionary.TryGetValue(GetIndex(x, y), out var actors))
                 foreach (var actor in actors)
-                    results.Add(actor);
+                    if (bounds.Intersects(actor.Bounds))
+                        results.Add(actor);
         return results;
     }
 
