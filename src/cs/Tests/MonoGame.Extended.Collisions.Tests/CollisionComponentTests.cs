@@ -337,7 +337,7 @@ namespace MonoGame.Extended.Collisions.Tests
                 var staticBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
                 var staticActor = new CollisionIndicatingActor(staticBounds);
                 _collisionComponent.Insert(staticActor);
-                for (int i = 0; i < QuadTree.Quadtree.DefaultMaxObjectsPerNode; i++)
+                for (int i = 0; i < QuadTree.QuadTree.DefaultMaxObjectsPerNode; i++)
                 {
                     var fillerBounds = new RectangleF(new Point2(0, 2), new Size2(.1f, .1f));
                     var fillerActor = new CollisionIndicatingActor(fillerBounds);
