@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Collisions.QuadTree;
 public class QuadtreeData
 {
     private readonly ICollisionActor _target;
-    private readonly HashSet<Quadtree> _parents = new();
+    private readonly HashSet<QuadTree> _parents = new();
 
     /// <summary>
     /// Initialize a new instance of QuadTreeData.
@@ -26,7 +26,7 @@ public class QuadtreeData
     /// Remove a parent node.
     /// </summary>
     /// <param name="parent"></param>
-    public void RemoveParent(Quadtree parent)
+    public void RemoveParent(QuadTree parent)
     {
         _parents.Remove(parent);
     }
@@ -35,7 +35,7 @@ public class QuadtreeData
     /// Add a parent node.
     /// </summary>
     /// <param name="parent"></param>
-    public void AddParent(Quadtree parent)
+    public void AddParent(QuadTree parent)
     {
         _parents.Add(parent);
         Bounds = _target.Bounds.BoundingRectangle;

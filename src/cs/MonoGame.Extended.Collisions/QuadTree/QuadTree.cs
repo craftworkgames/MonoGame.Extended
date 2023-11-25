@@ -6,7 +6,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
     /// <summary>
     /// Class for doing collision handling with a quad tree.
     /// </summary>
-    public class Quadtree
+    public class QuadTree
     {
         /// <summary>
         /// The default maximum depth.
@@ -21,7 +21,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
         /// <summary>
         /// Contains the children of this node.
         /// </summary>
-        protected List<Quadtree> Children = new List<Quadtree>();
+        protected List<QuadTree> Children = new List<QuadTree>();
 
         /// <summary>
         /// Contains the data for this node in the quadtree.
@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
         /// Creates a quad tree with the given bounds.
         /// </summary>
         /// <param name="bounds">The bounds of the new quad tree.</param>
-        public Quadtree(RectangleF bounds)
+        public QuadTree(RectangleF bounds)
         {
             CurrentDepth = 0;
             NodeBounds = bounds;
@@ -71,7 +71,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
             var objectCount = 0;
 
             // Do BFS on nodes to count children.
-            var process = new Queue<Quadtree>();
+            var process = new Queue<QuadTree>();
             process.Enqueue(this);
             while (process.Count > 0)
             {
@@ -148,7 +148,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
             }
             else
             {
-                throw new InvalidOperationException($"Cannot remove from a non leaf {nameof(Quadtree)}");
+                throw new InvalidOperationException($"Cannot remove from a non leaf {nameof(QuadTree)}");
             }
         }
 
@@ -171,7 +171,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
             }
             else if (numObjects < MaxObjectsPerNode)
             {
-                var process = new Queue<Quadtree>();
+                var process = new Queue<QuadTree>();
                 process.Enqueue(this);
                 while (process.Count > 0)
                 {
@@ -232,14 +232,14 @@ namespace MonoGame.Extended.Collisions.QuadTree
 
             for (var i = 0; i < childAreas.Length; ++i)
             {
-                var node = new Quadtree(childAreas[i]);
+                var node = new QuadTree(childAreas[i]);
                 Children.Add(node);
                 Children[i].CurrentDepth = CurrentDepth + 1;
             }
 
             foreach (QuadtreeData contentQuadtree in Contents)
             {
-                foreach (Quadtree childQuadtree in Children)
+                foreach (QuadTree childQuadtree in Children)
                 {
                     childQuadtree.Insert(contentQuadtree);
                 }
@@ -252,7 +252,7 @@ namespace MonoGame.Extended.Collisions.QuadTree
         /// </summary>
         public void ClearAll()
         {
-            foreach (Quadtree childQuadtree in Children)
+            foreach (QuadTree childQuadtree in Children)
                 childQuadtree.ClearAll();
             Clear();
         }

@@ -5,13 +5,13 @@ namespace MonoGame.Extended.Collisions.QuadTree;
 
 public class QuadTreeSpace: ISpaceAlgorithm
 {
-    private readonly Quadtree _collisionTree;
+    private readonly QuadTree _collisionTree;
     private readonly List<ICollisionActor> _actors = new();
     private readonly Dictionary<ICollisionActor, QuadtreeData> _targetDataDictionary = new();
 
     public QuadTreeSpace(RectangleF boundary)
     {
-        _collisionTree = new Quadtree(boundary);
+        _collisionTree = new QuadTree(boundary);
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ public class QuadTreeSpace: ISpaceAlgorithm
     /// <returns></returns>
     public List<ICollisionActor>.Enumerator GetEnumerator() => _actors.GetEnumerator();
 
-    /// <inheritdoc cref="Quadtree.Query"/>
+    /// <inheritdoc cref="QuadTree.Query"/>
     public IEnumerable<ICollisionActor> Query(RectangleF boundsBoundingRectangle)
     {
         return _collisionTree.Query(ref boundsBoundingRectangle).Select(x => x.Target);

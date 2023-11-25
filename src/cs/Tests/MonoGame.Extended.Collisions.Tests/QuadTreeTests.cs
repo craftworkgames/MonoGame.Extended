@@ -6,11 +6,11 @@ namespace MonoGame.Extended.Collisions.Tests
 {
     public class QuadTreeTests
     {
-        private Quadtree MakeTree()
+        private QuadTree.QuadTree MakeTree()
         {
             // Bounds set to ensure actors will fit inside the tree with default bounds.
             var bounds = _quadTreeArea;
-            var tree = new Quadtree(bounds);
+            var tree = new QuadTree.QuadTree(bounds);
 
             return tree;
         }
@@ -21,7 +21,7 @@ namespace MonoGame.Extended.Collisions.Tests
         public void ConstructorTest()
         {
             var bounds = new RectangleF(-10f, -15, 20.0f, 30.0f);
-            var tree = new Quadtree(bounds);
+            var tree = new QuadTree.QuadTree(bounds);
 
             Assert.Equal(bounds, tree.NodeBounds);
             Assert.True(tree.IsLeaf);
@@ -331,7 +331,7 @@ namespace MonoGame.Extended.Collisions.Tests
         public void ShakeWhenContainingManyTest()
         {
             var tree = MakeTree();
-            var numTargets = Quadtree.DefaultMaxObjectsPerNode + 1;
+            var numTargets = QuadTree.QuadTree.DefaultMaxObjectsPerNode + 1;
 
             for (int i = 0; i < numTargets; i++)
             {
@@ -394,7 +394,7 @@ namespace MonoGame.Extended.Collisions.Tests
         public void QueryLeafNodeMultipleTest()
         {
             var tree = MakeTree();
-            var numTargets = Quadtree.DefaultMaxObjectsPerNode;
+            var numTargets = QuadTree.QuadTree.DefaultMaxObjectsPerNode;
             for (int i = 0; i < numTargets; i++)
             {
                 var data = new QuadtreeData(new BasicActor());
@@ -411,7 +411,7 @@ namespace MonoGame.Extended.Collisions.Tests
         public void QueryNonLeafManyTest()
         {
             var tree = MakeTree();
-            var numTargets = 2*Quadtree.DefaultMaxObjectsPerNode;
+            var numTargets = 2*QuadTree.QuadTree.DefaultMaxObjectsPerNode;
             for (int i = 0; i < numTargets; i++)
             {
                 var data = new QuadtreeData(new BasicActor());
@@ -428,7 +428,7 @@ namespace MonoGame.Extended.Collisions.Tests
         public void QueryTwiceConsecutiveTest()
         {
             var tree = MakeTree();
-            var numTargets = 2 * Quadtree.DefaultMaxObjectsPerNode;
+            var numTargets = 2 * QuadTree.QuadTree.DefaultMaxObjectsPerNode;
             for (int i = 0; i < numTargets; i++)
             {
                 var data = new QuadtreeData(new BasicActor());
