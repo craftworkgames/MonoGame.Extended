@@ -32,8 +32,8 @@ namespace MonoGame.Extended.Collisions
         /// <param name="boundary">Boundary of the collision tree.</param>
         public CollisionComponent(RectangleF boundary)
         {
-            var layer = new Layer(DEFAULT_LAYER_NAME, new QuadTreeSpace(boundary));
-            Add(layer);
+            var layer = new Layer(new QuadTreeSpace(boundary));
+            Add(DEFAULT_LAYER_NAME, layer);
             AddCollisionBetweenLayer(layer, layer);
         }
 
@@ -103,22 +103,30 @@ namespace MonoGame.Extended.Collisions
         /// <summary>
         /// Add the new layer. The name of layer must be unique.
         /// </summary>
+        /// <param name="name">Name of layer</param>
         /// <param name="layer">The new layer</param>
-        public void Add(Layer layer)
+        /// <exception cref="ArgumentNullException"><paramref name="name"/> is null</exception>
+        public void Add(string name, Layer layer)
         {
-            if (!_layers.TryAdd(layer.Name, layer))
-                throw new DuplicateNameException(layer.Name);
-            if (layer.Name != DEFAULT_LAYER_NAME)
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+
+            if (!_layers.TryAdd(name, layer))
+                throw new DuplicateNameException(name);
+
+            if (name != DEFAULT_LAYER_NAME)
                 AddCollisionBetweenLayer(_layers[DEFAULT_LAYER_NAME], layer);
         }
 
         /// <summary>
-        /// Add the new layer. The name of layer must be unique.
+        /// Remove the layer and all layer's collisions.
         /// </summary>
-        /// <param name="layer">The new layer</param>
-        public void Remove(Layer layer)
+        /// <param name="name">The name of the layer to delete</param>
+        /// <param name="layer">The layer to delete</param>
+        public void Remove(string name = null, Layer layer = null)
         {
-            _layers.Remove(layer.Name);
+            name ??= _layers.First(x => x.Value == layer).Key;
+            _layers.Remove(name, out layer);
             _layerCollision.RemoveWhere(tuple => tuple.Item1 == layer || tuple.Item2 == layer);
         }
 

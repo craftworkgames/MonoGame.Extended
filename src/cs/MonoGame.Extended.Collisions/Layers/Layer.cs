@@ -1,34 +1,31 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using MonoGame.Extended.Collisions.QuadTree;
 
 namespace MonoGame.Extended.Collisions.Layers;
 
 /// <summary>
-///
+/// Layer is a group of collision's actors.
 /// </summary>
 public class Layer
 {
     /// <summary>
-    /// Name of layer
+    /// If this property equals true, layer always will reset collision space.
     /// </summary>
-    public string Name { get;  }
-
     public bool IsDynamic { get; set; } = true;
 
-    public ISpaceAlgorithm Space { get;  }
 
-    public Layer(string name, ISpaceAlgorithm spaceAlgorithm)
+    /// <summary>
+    /// The space, which contain actors.
+    /// </summary>
+    public readonly ISpaceAlgorithm Space;
+
+    /// <summary>
+    /// Constructor for layer
+    /// </summary>
+    /// <param name="spaceAlgorithm">A space algorithm for actors</param>
+    /// <exception cref="ArgumentNullException"><paramref name="spaceAlgorithm"/> is null</exception>
+    public Layer(ISpaceAlgorithm spaceAlgorithm)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException(nameof(name));
-
-        if (spaceAlgorithm is null)
-            throw new ArgumentNullException(nameof(spaceAlgorithm));
-
-        Name = name;
-        Space = spaceAlgorithm;
+        Space = spaceAlgorithm ?? throw new ArgumentNullException(nameof(spaceAlgorithm));
     }
 
     /// <summary>
