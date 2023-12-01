@@ -13,7 +13,10 @@ public class SpatialHashTests
     public void CollisionOneTrueTest()
     {
         var hash = generateSpatialHash();
-        hash.Insert(new BasicActor());
+        hash.Insert(new BasicActor()
+        {
+            Bounds = RECT,
+        });
         var collisions = hash.Query(RECT);
         Assert.Equal(1, collisions.Count());
     }
@@ -22,8 +25,14 @@ public class SpatialHashTests
     public void CollisionTwoTest()
     {
         var hash = generateSpatialHash();
-        hash.Insert(new BasicActor());
-        hash.Insert(new BasicActor());
+        hash.Insert(new BasicActor
+        {
+            Bounds = RECT,
+        });
+        hash.Insert(new BasicActor
+        {
+            Bounds = RECT,
+        });
         var collisions = hash.Query(RECT);
         Assert.Equal(2, collisions.Count());
     }
