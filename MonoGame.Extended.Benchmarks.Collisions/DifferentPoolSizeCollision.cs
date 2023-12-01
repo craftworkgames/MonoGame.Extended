@@ -63,8 +63,8 @@ public class DifferentPoolSizeCollision
             for (int i = 0; i < LayersCount; i++)
             {
                 var size = new Size2(COMPONENT_BOUNDARY_SIZE, COMPONENT_BOUNDARY_SIZE);
-                var layer = new Layer(i.ToString(), new SpatialHash(new Size2(5, 5)));//new QuadTreeSpace(new RectangleF(Point2.Zero, size)))));
-                _collisionComponent.Add(layer);
+                var layer = new Layer(new SpatialHash(new Size2(5, 5)));//new QuadTreeSpace(new RectangleF(Point2.Zero, size)))));
+                _collisionComponent.Add(i.ToString(), layer);
                 _layers.Add(layer);
             }
             for (int i = 0; i < LayersCount - 1; i++)
@@ -98,7 +98,7 @@ public class DifferentPoolSizeCollision
             _collisionComponent.Remove(collider);
         _colliders.Clear();
         foreach (var layer in _layers)
-            _collisionComponent.Remove(layer);
+            _collisionComponent.Remove(layer: layer);
         _layers.Clear();
     }
 
