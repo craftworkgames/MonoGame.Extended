@@ -32,9 +32,21 @@ namespace MonoGame.Extended.Collisions
         /// <param name="boundary">Boundary of the collision tree.</param>
         public CollisionComponent(RectangleF boundary)
         {
-            var layer = new Layer(new QuadTreeSpace(boundary));
+            SetDefaultLayer(new Layer(new QuadTreeSpace(boundary)));
+        }
+
+        /// <summary>
+        /// The main layer has the name from <see cref="DEFAULT_LAYER_NAME"/>.
+        /// The main layer collision with itself and all other layers.
+        /// </summary>
+        /// <param name="layer">Layer to set default</param>
+        public void SetDefaultLayer(Layer layer)
+        {
+            if (_layers.ContainsKey(DEFAULT_LAYER_NAME))
+                Remove(DEFAULT_LAYER_NAME);
             Add(DEFAULT_LAYER_NAME, layer);
-            AddCollisionBetweenLayer(layer, layer);
+            foreach (var otherLayer in _layers.Values)
+                AddCollisionBetweenLayer(layer, otherLayer);
         }
 
         /// <summary>
