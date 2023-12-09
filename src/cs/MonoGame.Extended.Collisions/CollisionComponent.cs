@@ -27,12 +27,23 @@ namespace MonoGame.Extended.Collisions
         private HashSet<(Layer, Layer)> _layerCollision = new();
 
         /// <summary>
-        /// Creates a collision tree covering the specified area.
+        /// Creates component with default layer, which is a collision tree covering the specified area (using <see cref="QuadTree"/>.
         /// </summary>
         /// <param name="boundary">Boundary of the collision tree.</param>
         public CollisionComponent(RectangleF boundary)
         {
             SetDefaultLayer(new Layer(new QuadTreeSpace(boundary)));
+        }
+
+        /// <summary>
+        /// Creates component with specifies default layer.
+        /// If layer is null, method creates component without default layer.
+        /// </summary>
+        /// <param name="layer">Default layer</param>
+        public CollisionComponent(Layer layer = null)
+        {
+            if (layer is not null)
+                SetDefaultLayer(layer);
         }
 
         /// <summary>
