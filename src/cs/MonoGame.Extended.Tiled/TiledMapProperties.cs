@@ -2,7 +2,13 @@
 
 namespace MonoGame.Extended.Tiled
 {
-    public class TiledMapProperties : Dictionary<string, string>
+    public class TiledMapProperties : Dictionary<string, TiledMapPropertyValue>
     {
+        public bool TryGetValue(string key, out string value)
+        {
+            bool result = TryGetValue(key, out TiledMapPropertyValue tmpVal);
+            value = result ? null : tmpVal.Value;
+            return result;
+        }
     }
 }

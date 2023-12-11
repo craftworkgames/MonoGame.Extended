@@ -38,12 +38,12 @@ namespace MonoGame.Extended.Tiled
                         new TiledMapTilesetTile(localTileIdentifier, type, objects)) 
                     : ReadTiledMapTilesetTile(reader, tileset, objects => 
                         new TiledMapTilesetAnimatedTile(localTileIdentifier, ReadTiledMapTilesetAnimationFrames(reader, tileset, animationFramesCount), type, objects));
-
-                ReadProperties(reader, tilesetTile.Properties);
+                
+                reader.ReadTiledMapProperties(tilesetTile.Properties);
                 tileset.Tiles.Add(tilesetTile);
             }
-
-            ReadProperties(reader, tileset.Properties);
+            
+            reader.ReadTiledMapProperties(tileset.Properties);
             return tileset;
 		}
 
@@ -88,7 +88,7 @@ namespace MonoGame.Extended.Tiled
 			var properties = new TiledMapProperties();
 			const float opacity = 1.0f;
 
-			ReadProperties(reader, properties);
+            reader.ReadTiledMapProperties(properties);
 
 			TiledMapObject mapObject;
 
@@ -133,18 +133,6 @@ namespace MonoGame.Extended.Tiled
 			}
 
 			return points;
-		}
-
-		private static void ReadProperties(ContentReader reader, TiledMapProperties properties)
-		{
-			var count = reader.ReadInt32();
-
-			for (var i = 0; i < count; i++)
-			{
-				var key = reader.ReadString();
-				var value = reader.ReadString();
-				properties[key] = value;
-			}
 		}
 	}
 }
