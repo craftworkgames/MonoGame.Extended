@@ -8,9 +8,9 @@ namespace MonoGame.Extended.Tiled.Serialization
     [XmlInclude(typeof(TiledMapObjectLayerContent))]
     public abstract class TiledMapLayerContent
     {
-        protected TiledMapLayerContent(TiledMapLayerType type)
+        protected TiledMapLayerContent(TiledMapLayerType layerType)
         {
-            Type = type;
+            LayerType = layerType;
             Opacity = 1.0f;
             ParallaxX = 1.0f;
             ParallaxY = 1.0f;
@@ -20,6 +20,13 @@ namespace MonoGame.Extended.Tiled.Serialization
 
         [XmlAttribute(AttributeName = "name")]
         public string Name { get; set; }
+
+        // Deprecated as of Tiled 1.9.0 (replaced by "class" attribute)
+        [XmlAttribute(DataType = "string", AttributeName = "type")]
+        public string Type { get; set; }
+
+        [XmlAttribute(DataType = "string", AttributeName = "class")]
+        public string Class { get; set; }
 
         [XmlAttribute(AttributeName = "opacity")]
         public float Opacity { get; set; }
@@ -44,7 +51,7 @@ namespace MonoGame.Extended.Tiled.Serialization
         public List<TiledMapPropertyContent> Properties { get; set; }
 
         [XmlIgnore]
-        public TiledMapLayerType Type { get; }
+        public TiledMapLayerType LayerType { get; }
 
         public override string ToString()
         {

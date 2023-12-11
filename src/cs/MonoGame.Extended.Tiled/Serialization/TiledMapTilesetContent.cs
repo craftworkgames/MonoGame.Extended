@@ -22,6 +22,13 @@ namespace MonoGame.Extended.Tiled.Serialization
         [XmlAttribute(AttributeName = "name")]
         public string Name { get; set; }
 
+        // Deprecated as of Tiled 1.9.0 (replaced by "class" attribute)
+        [XmlAttribute(DataType = "string", AttributeName = "type")]
+        public string Type { get; set; }
+
+        [XmlAttribute(DataType = "string", AttributeName = "class")]
+        public string Class { get; set; }
+
         [XmlAttribute(AttributeName = "tilewidth")]
         public int TileWidth { get; set; }
 

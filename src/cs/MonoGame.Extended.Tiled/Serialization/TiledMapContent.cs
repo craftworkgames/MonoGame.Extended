@@ -19,6 +19,13 @@ namespace MonoGame.Extended.Tiled.Serialization
         [XmlIgnore]
         public string FilePath { get; set; }
 
+        // Deprecated as of Tiled 1.9.0 (replaced by "class" attribute)
+        [XmlAttribute(DataType = "string", AttributeName = "type")]
+        public string Type { get; set; }
+
+        [XmlAttribute(DataType = "string", AttributeName = "class")]
+        public string Class { get; set; }
+
         [XmlAttribute(AttributeName = "version")]
         public string Version { get; set; }
 

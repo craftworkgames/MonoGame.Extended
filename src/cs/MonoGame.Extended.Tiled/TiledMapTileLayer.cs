@@ -5,9 +5,9 @@ namespace MonoGame.Extended.Tiled
 {
     public class TiledMapTileLayer : TiledMapLayer
     {
-        public TiledMapTileLayer(string name, int width, int height, int tileWidth, int tileHeight, Vector2? offset = null,
+        public TiledMapTileLayer(string name, string type, int width, int height, int tileWidth, int tileHeight, Vector2? offset = null,
             Vector2? parallaxFactor = null, float opacity = 1, bool isVisible = true)
-            : base(name, offset, parallaxFactor, opacity, isVisible)
+            : base(name, type, offset, parallaxFactor, opacity, isVisible)
         {
             Width = width;
             Height = height;
