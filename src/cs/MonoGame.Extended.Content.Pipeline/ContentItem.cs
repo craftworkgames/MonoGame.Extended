@@ -28,7 +28,7 @@ namespace MonoGame.Extended.Content.Pipeline
 
         public ExternalReference<TInput> GetExternalReference<TInput>(string source)
         {
-            if (_externalReferences.TryGetValue(source, out var contentItem))
+            if (source is not null && _externalReferences.TryGetValue(source, out var contentItem))
                 return contentItem as ExternalReference<TInput>;
 
             return null;
