@@ -29,25 +29,35 @@ namespace MonoGame.Extended.Tiled
             var tileset = new TiledMapTileset(texture, tileWidth, tileHeight, tileCount, spacing, margin, columns);
 
             for (var tileIndex = 0; tileIndex < explicitTileCount; tileIndex++)
-            {
-                var localTileIdentifier = reader.ReadInt32();
-                var type = reader.ReadString();
-                var animationFramesCount = reader.ReadInt32();
-                var tilesetTile = animationFramesCount <= 0 
-                    ? ReadTiledMapTilesetTile(reader, tileset, objects => 
-                        new TiledMapTilesetTile(localTileIdentifier, type, objects)) 
-                    : ReadTiledMapTilesetTile(reader, tileset, objects => 
-                        new TiledMapTilesetAnimatedTile(localTileIdentifier, ReadTiledMapTilesetAnimationFrames(reader, tileset, animationFramesCount), type, objects));
-
-                ReadProperties(reader, tilesetTile.Properties);
-                tileset.Tiles.Add(tilesetTile);
-            }
+                ReadTile(reader, tileset);
 
             ReadProperties(reader, tileset.Properties);
             return tileset;
 		}
 
-		private static TiledMapTilesetTileAnimationFrame[] ReadTiledMapTilesetAnimationFrames(ContentReader reader, TiledMapTileset tileset, int animationFramesCount)
+        private static void ReadTile(ContentReader reader, TiledMapTileset tileset)
+        {
+            var texture = reader.ReadExternalReference<Texture2D>();
+
+            var localTileIdentifier = reader.ReadInt32();
+            var type = reader.ReadString();
+            var animationFramesCount = reader.ReadInt32();
+            var objectCount = reader.ReadInt32();
+            var objects = new TiledMapObject[objectCount];
+
+            for (var i = 0; i < objectCount; i++)
+                objects[i] = ReadTiledMapObject(reader, tileset);
+
+            var tilesetTile = animationFramesCount <= 0
+                ? new TiledMapTilesetTile(localTileIdentifier, type, objects, texture)
+                : new TiledMapTilesetAnimatedTile(localTileIdentifier,
+                    ReadTiledMapTilesetAnimationFrames(reader, tileset, animationFramesCount), type, objects, texture);
+
+            ReadProperties(reader, tilesetTile.Properties);
+            tileset.Tiles.Add(tilesetTile);
+        }
+
+        private static TiledMapTilesetTileAnimationFrame[] ReadTiledMapTilesetAnimationFrames(ContentReader reader, TiledMapTileset tileset, int animationFramesCount)
 		{
 			var animationFrames = new TiledMapTilesetTileAnimationFrame[animationFramesCount];
 
@@ -64,6 +74,7 @@ namespace MonoGame.Extended.Tiled
 
 		private static TiledMapTilesetTile ReadTiledMapTilesetTile(ContentReader reader, TiledMapTileset tileset, Func<TiledMapObject[], TiledMapTilesetTile> createTile)
 		{
+            var texture = reader.ReadExternalReference<Texture2D>();
 			var objectCount = reader.ReadInt32();
 			var objects = new TiledMapObject[objectCount];
 
