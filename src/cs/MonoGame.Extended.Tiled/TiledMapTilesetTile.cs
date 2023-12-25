@@ -7,6 +7,16 @@ namespace MonoGame.Extended.Tiled
     [DebuggerDisplay("{LocalTileIdentifier}: Type: {Type}, Properties: {Properties.Count}, Objects: {Objects.Count}")]
     public class TiledMapTilesetTile
     {
+        // For remove libraries
+        public TiledMapTilesetTile(int localTileIdentifier, string type = null,
+            TiledMapObject[] objects = null)
+        {
+            LocalTileIdentifier = localTileIdentifier;
+            Type = type;
+            Objects = objects != null ? new List<TiledMapObject>(objects) : new List<TiledMapObject>();
+            Properties = new TiledMapProperties();
+        }
+
         public TiledMapTilesetTile(int localTileIdentifier, string type = null,
             TiledMapObject[] objects = null, Texture2D texture = null)
         {
