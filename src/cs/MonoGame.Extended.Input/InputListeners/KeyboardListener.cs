@@ -27,6 +27,21 @@ namespace MonoGame.Extended.Input.InputListeners
             RepeatDelay = settings.RepeatDelayMilliseconds;
         }
 
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="keyboardListener">Listener, from which will copy inner state</param>
+        public KeyboardListener(KeyboardListener keyboardListener)
+        {
+            RepeatPress = keyboardListener.RepeatPress;
+            InitialDelay = keyboardListener.InitialDelay;
+            RepeatDelay = keyboardListener.RepeatDelay;
+            _keysValues = keyboardListener._keysValues;
+            _isInitial = keyboardListener._isInitial;
+            _previousKey = keyboardListener._previousKey;
+            _previousState = keyboardListener._previousState;
+        }
+
 		public bool RepeatPress { get; }
         public int InitialDelay { get; }
         public int RepeatDelay { get; }
