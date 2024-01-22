@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework;
 namespace MonoGame.Extended.Tweening
 {
     public class Tween<T> : Tween
-        where T : struct 
+        where T : struct
     {
-        internal Tween(object target, float duration, float delay, TweenMember<T> member, T endValue) 
+        internal Tween(object target, float duration, float delay, TweenMember<T> member, T endValue)
             : base(target, duration, delay)
         {
             Member = member;
@@ -23,12 +23,12 @@ namespace MonoGame.Extended.Tweening
         protected override void Initialize()
         {
             _startValue = Member.Value;
-            _range = TweenMember<T>.Subtract(_endValue, _startValue);
+            _range = LinearOperations<T>.Subtract(_endValue, _startValue);
         }
 
         protected override void Interpolate(float n)
         {
-            var value = TweenMember<T>.Add(_startValue, TweenMember<T>.Multiply(_range, n));
+            var value = LinearOperations<T>.Add(_startValue, LinearOperations<T>.Multiply(_range, n));
             Member.Value = value;
         }
 
