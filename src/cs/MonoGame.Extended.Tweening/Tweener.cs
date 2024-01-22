@@ -35,7 +35,7 @@ namespace MonoGame.Extended.Tweening
             activeTween?.Cancel();
 
             AllocationCount++;
-            var tween = new Tween<TMember>(target, duration, delay, member, toValue);
+            var tween = new LinearTween<TMember>(target, duration, delay, member, toValue);
             _activeTweens.Add(tween);
             return tween;
         }
