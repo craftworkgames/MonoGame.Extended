@@ -51,7 +51,9 @@ namespace MonoGame.Extended.Tweening
             activeTween?.Cancel();
 
             AllocationCount++;
-            var tween = (TTween)Activator.CreateInstance(typeof(TTween), BindingFlags.Public | BindingFlags.NonPublic, null, new object?[]{target, duration, delay, member, toValue});
+            var tween = (TTween)Activator.CreateInstance(typeof(TTween),
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null,
+                new object?[]{target, duration, delay, member, toValue}, null);
             _activeTweens.Add(tween);
             return tween;
         }
