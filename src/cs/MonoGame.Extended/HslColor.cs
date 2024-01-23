@@ -220,7 +220,7 @@ namespace MonoGame.Extended
             return new HslColor(
                 c1.H + t*(h2 - c1.H),
                 c1.S + t*(c2.S - c1.S),
-                c1.L + t*(c2.L - c2.L));
+                c1.L + t*(c2.L - c1.L));
         }
 
         public static HslColor FromRgb(Color color)
