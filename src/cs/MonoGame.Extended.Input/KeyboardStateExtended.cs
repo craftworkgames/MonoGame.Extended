@@ -22,9 +22,9 @@ namespace MonoGame.Extended.Input
         public bool IsKeyDown(Keys key) => _currentKeyboardState.IsKeyDown(key);
         public bool IsKeyUp(Keys key) => _currentKeyboardState.IsKeyUp(key);
         public Keys[] GetPressedKeys() => _currentKeyboardState.GetPressedKeys();
-
+        public void GetPressedKeys(Keys[] keys) => _currentKeyboardState.GetPressedKeys(keys);
         public bool WasKeyJustDown(Keys key) => _previousKeyboardState.IsKeyDown(key) && _currentKeyboardState.IsKeyUp(key);
         public bool WasKeyJustUp(Keys key) => _previousKeyboardState.IsKeyUp(key) && _currentKeyboardState.IsKeyDown(key);
-        public bool WasAnyKeyJustDown() => _previousKeyboardState.GetPressedKeys().Any();
+        public bool WasAnyKeyJustDown() => _previousKeyboardState.GetPressedKeyCount() > 0;
    }
 }
