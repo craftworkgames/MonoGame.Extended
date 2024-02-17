@@ -4,10 +4,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.ViewportAdapters
 {
+    using MonoGame.Extended.ViewportAdapters.Exceptions;
+
     public abstract class ViewportAdapter : IDisposable
     {
         protected ViewportAdapter(GraphicsDevice graphicsDevice)
         {
+            if (graphicsDevice is null)
+            {
+                throw new NullGraphicsDeviceException($"Attempted to construct {nameof(ViewportAdapter)} but {nameof(GraphicsDevice)} is null");
+            }
+
             GraphicsDevice = graphicsDevice;
         }
 
