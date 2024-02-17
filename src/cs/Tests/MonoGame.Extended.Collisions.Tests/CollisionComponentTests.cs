@@ -4,6 +4,8 @@ using Xunit;
 
 namespace MonoGame.Extended.Collisions.Tests
 {
+    using MonoGame.Extended.Collisions.Layers;
+
     /// <summary>
     /// Test collision of actors with various shapes.
     /// </summary>
@@ -374,6 +376,16 @@ namespace MonoGame.Extended.Collisions.Tests
 
                 Assert.True(staticActor.IsColliding);
                 Assert.True(dynamicActor.IsColliding);
+            }
+
+            [Fact]
+            public void InsertActor_ThrowsUndefinedLayerException_IfThereIsNoLayerDefined()
+            {
+                var sut = new CollisionComponent();
+
+                var act = () => sut.Insert(new CollisionIndicatingActor(RectangleF.Empty));
+
+                Assert.Throws<UndefinedLayerException>(act);
             }
 
             private class CollisionIndicatingActor : ICollisionActor
