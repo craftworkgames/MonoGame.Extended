@@ -88,7 +88,7 @@ namespace MonoGame.Extended
             Transform(ref rectangle, ref transformMatrix, out var result);
             return result;
         }
-
+        
         private static void Transform(ref OrientedBoundingRectangle rectangle, ref Matrix2 transformMatrix, out OrientedBoundingRectangle result)
         {
             PrimitivesHelper.TransformOrientedBoundingRectangle(
@@ -179,15 +179,72 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///
+        /// See https://www.flipcode.com/archives/2D_OBB_Intersection.shtml
         /// </summary>
         /// <param name="rectangle"></param>
-        /// <param name="otherRectangle"></param>
+        /// <param name="other"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static bool Intersects(OrientedBoundingRectangle rectangle, OrientedBoundingRectangle otherRectangle)
+        public static bool Intersects(OrientedBoundingRectangle rectangle, OrientedBoundingRectangle other)
         {
-            throw new NotImplementedException();
+            var corners = rectangle.Points;
+            var otherCorners = other.Points;
+            return IntersectsOneWay(corners, otherCorners) && IntersectsOneWay(otherCorners, corners);
+
+            bool IntersectsOneWay(IReadOnlyList<Vector2> source, IReadOnlyList<Vector2> target)
+            {
+                var axis = new[]
+                    {
+                        source[1] - source[0],
+                        source[3] - source[0]
+                    };
+                var origin = new float[2];
+
+                // Make the length of each axis 1/edge length so we know any
+                // dot product must be less than 1 to fall within the edge.
+                for (var a = 0; a < 2; a++)
+                {
+                    axis[a] /= axis[a].LengthSquared();
+                    origin[a] = source[0].Dot(axis[a]);
+                }
+
+                for (var a = 0; a < 2; a++) {
+
+                    var t = target[0].Dot(axis[a]);
+
+                    // Find the extent of box 2 on axis a
+                    var tMin = t;
+                    var tMax = t;
+
+                    for (var c = 1; c < 4; c++)
+                    {
+                        t = target[c].Dot(axis[a]);
+
+                        if (t < tMin)
+                        {
+                            tMin = t;
+                        }
+                        else if (t > tMax)
+                        {
+                            tMax = t;
+                        }
+                    }
+
+                    // We have to subtract off the origin
+
+                    // See if [tMin, tMax] intersects [0, 1]
+                    if (tMin > 1 + origin[a] || tMax < origin[a])
+                    {
+                        // There was no intersection along this dimension;
+                        // the boxes cannot possibly overlap.
+                        return false;
+                    }
+                }
+
+                // There was no dimension along which there is no intersection.
+                // Therefore the boxes overlap.
+                return true;
+            }
         }
 
         /// <summary>
