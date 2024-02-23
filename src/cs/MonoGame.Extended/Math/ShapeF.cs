@@ -112,7 +112,7 @@ namespace MonoGame.Extended
         /// <returns>True if objects are intersecting, otherwise false.</returns>
         public static bool Intersects(RectangleF rectangleF, OrientedBoundingRectangle orientedBoundingRectangle)
         {
-            throw new NotImplementedException();
+            return OrientedBoundingRectangle.Intersects(orientedBoundingRectangle, (OrientedBoundingRectangle)rectangleF);
         }
     }
 }

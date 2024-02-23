@@ -140,5 +140,41 @@ public class ShapeTests
 
             Assert.False(rectangle.Intersects(circle));
         }
+
+        [Fact]
+        public void Axis_aligned_rectangle_does_not_intersect_rectangle()
+        {
+            /*
+             *                    :
+             *                    :
+             *                  +-+
+             *        ..........| |**.......
+             *                  +-+ *
+             *                    :**
+             *                    :
+             */
+            IShapeF rectangle = new OrientedBoundingRectangle(new Point2(-1, 0), new Size2(1, 1), Matrix2.Identity);
+            var rect = new RectangleF(new Point2(0.001f, 0), new Size2(2, 2));
+
+            Assert.False(rectangle.Intersects(rect));
+        }
+
+        [Fact]
+        public void Axis_aligned_rectangle_intersects_rectangle()
+        {
+            /*
+             *                    :
+             *                    :
+             *                  +-+
+             *        ..........| |**.......
+             *                  +-+ *
+             *                    :**
+             *                    :
+             */
+            IShapeF rectangle = new OrientedBoundingRectangle(new Point2(-1, 0), new Size2(1, 1), Matrix2.Identity);
+            var rect = new RectangleF(new Point2(0, 0), new Size2(2, 2));
+
+            Assert.True(rectangle.Intersects(rect));
+        }
     }
 }
