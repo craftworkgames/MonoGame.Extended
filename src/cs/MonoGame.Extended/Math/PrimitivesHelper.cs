@@ -72,7 +72,7 @@ namespace MonoGame.Extended
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void TransformOrientedBoundingRectangle(
+        internal static void TransformOrientedRectangle(
             ref Point2 center,
             ref Matrix2 orientation,
             ref Matrix2 transformMatrix)
