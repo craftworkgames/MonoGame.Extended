@@ -135,7 +135,7 @@ public class ShapeTests
              *                    *   *
              *                    :* *
              */
-            IShapeF rectangle = new OrientedRectangle(new Point2(-1, 1), new Size2(2.8f, 2.8f), Matrix2.CreateRotationZ(MathHelper.PiOver4));
+            IShapeF rectangle = new OrientedRectangle(new Point2(-1, 1), new Size2(1.42f, 1.42f), Matrix2.CreateRotationZ(-MathHelper.PiOver4));
             var circle = new CircleF(new Point2(1, -1), 1.4f);
 
             Assert.False(rectangle.Intersects(circle));
