@@ -173,9 +173,10 @@ namespace MonoGame.Extended
 
         public static explicit operator RectangleF(OrientedRectangle orientedRectangle)
         {
-            var topLeft = orientedRectangle.Center - orientedRectangle.Radii;
+            var topLeft = -orientedRectangle.Radii;
             var rectangle = new RectangleF(topLeft, orientedRectangle.Radii * 2);
-            return RectangleF.Transform(rectangle, ref orientedRectangle.Orientation);
+            var orientation = orientedRectangle.Orientation * Matrix2.CreateTranslation(orientedRectangle.Center);
+            return RectangleF.Transform(rectangle, ref orientation);
         }
 
         /// <summary>
