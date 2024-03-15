@@ -664,7 +664,7 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Performs an implicit conversion from a <see cref="Rectangle" /> to a <see cref="RectangleF" />.
+        ///     Performs an explicit conversion from a <see cref="Rectangle" /> to a <see cref="RectangleF" />.
         /// </summary>
         /// <param name="rectangle">The rectangle.</param>
         /// <returns>
