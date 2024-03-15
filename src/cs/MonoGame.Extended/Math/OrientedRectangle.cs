@@ -186,32 +186,50 @@ namespace MonoGame.Extended
         /// <param name="other"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static bool Intersects(OrientedRectangle rectangle, OrientedRectangle other)
+        public static (bool Intersects, Vector2 MinimumTranslationVector) Intersects(OrientedRectangle rectangle, OrientedRectangle other)
         {
             var corners = rectangle.Points;
             var otherCorners = other.Points;
-            return IntersectsOneWay(corners, otherCorners) && IntersectsOneWay(otherCorners, corners);
 
-            bool IntersectsOneWay(IReadOnlyList<Vector2> source, IReadOnlyList<Vector2> target)
+            var intersection = IntersectsOneWay(corners, otherCorners);
+            if (intersection.Intersects)
+            {
+                var otherIntersection = IntersectsOneWay(otherCorners, corners);
+
+                return intersection.Overlap < otherIntersection.Overlap
+                    ? (true, MinTranslationVector: intersection.MinimumTranslationVector)
+                    : (true, MinTranslationVector: otherIntersection.MinimumTranslationVector);
+            }
+
+            return (false, Vector2.Zero);
+
+            (bool Intersects, float Overlap, Vector2 MinimumTranslationVector) IntersectsOneWay(IReadOnlyList<Vector2> source, IReadOnlyList<Vector2> target)
             {
                 var axis = new[]
                     {
                         source[1] - source[0],
                         source[3] - source[0]
                     };
+                var normalizedAxis = new[]
+                    {
+                        axis[0],
+                        axis[1]
+                    };
                 var origin = new float[2];
+                var overlap = 0f;
+                var minimumTranslationVector = Vector2.Zero;
 
                 // Make the length of each axis 1/edge length so we know any
                 // dot product must be less than 1 to fall within the edge.
                 for (var a = 0; a < 2; a++)
                 {
-                    axis[a] /= axis[a].LengthSquared();
-                    origin[a] = source[0].Dot(axis[a]);
+                    normalizedAxis[a] /= normalizedAxis[a].LengthSquared();
+                    origin[a] = source[0].Dot(normalizedAxis[a]);
                 }
 
-                for (var a = 0; a < 2; a++) {
-
-                    var t = target[0].Dot(axis[a]);
+                for (var a = 0; a < 2; a++)
+                {
+                    var t = target[0].Dot(normalizedAxis[a]);
 
                     // Find the extent of box 2 on axis a
                     var tMin = t;
@@ -219,7 +237,7 @@ namespace MonoGame.Extended
 
                     for (var c = 1; c < 4; c++)
                     {
-                        t = target[c].Dot(axis[a]);
+                        t = target[c].Dot(normalizedAxis[a]);
 
                         if (t < tMin)
                         {
@@ -238,13 +256,24 @@ namespace MonoGame.Extended
                     {
                         // There was no intersection along this dimension;
                         // the boxes cannot possibly overlap.
-                        return false;
+                        return (false, 0, Vector2.Zero);
+                    }
+
+                    var o = Math.Min(origin[a] + 1, tMax) - Math.Max(origin[a], tMin);
+                    if (o < overlap || overlap == 0f)
+                    {
+                        overlap = o;
+                        minimumTranslationVector = new Vector2(axis[a].X, axis[a].Y) * overlap;
+                        if (tMin >= origin[a])
+                        {
+                            minimumTranslationVector = -minimumTranslationVector;
+                        }
                     }
                 }
 
                 // There was no dimension along which there is no intersection.
                 // Therefore the boxes overlap.
-                return true;
+                return (true, overlap, minimumTranslationVector);
             }
         }
 
