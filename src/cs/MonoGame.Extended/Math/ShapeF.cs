@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
@@ -42,12 +43,12 @@ namespace MonoGame.Extended
 
                     RectangleF rectangleA when b is CircleF circleB => Intersects(circleB, rectangleA),
                     RectangleF rectangleA when b is RectangleF rectangleB => Intersects(rectangleA, rectangleB),
-                    RectangleF rectangleA when b is OrientedRectangle orientedRectangleB => Intersects(rectangleA, orientedRectangleB),
+                    RectangleF rectangleA when b is OrientedRectangle orientedRectangleB => Intersects(rectangleA, orientedRectangleB).Intersects,
 
                     OrientedRectangle orientedRectangleA when b is CircleF circleB => Intersects(circleB, orientedRectangleA),
-                    OrientedRectangle orientedRectangleA when b is RectangleF rectangleB => Intersects(rectangleB, orientedRectangleA),
+                    OrientedRectangle orientedRectangleA when b is RectangleF rectangleB => Intersects(rectangleB, orientedRectangleA).Intersects,
                     OrientedRectangle orientedRectangleA when b is OrientedRectangle orientedRectangleB
-                        => OrientedRectangle.Intersects(orientedRectangleA, orientedRectangleB),
+                        => OrientedRectangle.Intersects(orientedRectangleA, orientedRectangleB).Intersects,
 
                     _ => throw new ArgumentOutOfRangeException(nameof(a))
                 };
@@ -86,7 +87,7 @@ namespace MonoGame.Extended
         /// <param name="rectangleF"></param>
         /// <param name="orientedRectangle"></param>
         /// <returns>True if objects are intersecting, otherwise false.</returns>
-        public static bool Intersects(RectangleF rectangleF, OrientedRectangle orientedRectangle)
+        public static (bool Intersects, Vector2 MinimumTranslationVector) Intersects(RectangleF rectangleF, OrientedRectangle orientedRectangle)
         {
             return OrientedRectangle.Intersects(orientedRectangle, (OrientedRectangle)rectangleF);
         }

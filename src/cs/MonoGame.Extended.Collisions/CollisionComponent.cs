@@ -311,8 +311,7 @@ namespace MonoGame.Extended.Collisions
 
         private static Vector2 PenetrationVector(RectangleF rectangleA, OrientedRectangle orientedRectangleB)
         {
-            return new Vector2();
-            throw new NotImplementedException();
+            return PenetrationVector((OrientedRectangle)rectangleA, orientedRectangleB);
         }
 
         private static Vector2 PenetrationVector(OrientedRectangle orientedRectangleA, CircleF circleB)
@@ -327,8 +326,8 @@ namespace MonoGame.Extended.Collisions
 
         private static Vector2 PenetrationVector(OrientedRectangle orientedRectangleA, OrientedRectangle orientedRectangleB)
         {
-            return new Vector2();
-            throw new NotImplementedException();
+            return OrientedRectangle.Intersects(orientedRectangleA, orientedRectangleB)
+                .MinimumTranslationVector;
         }
 
         #endregion

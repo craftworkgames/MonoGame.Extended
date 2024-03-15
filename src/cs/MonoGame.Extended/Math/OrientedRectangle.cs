@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
+using SharpDX.Direct3D;
 
 namespace MonoGame.Extended
 {
@@ -180,71 +181,108 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        /// See https://www.flipcode.com/archives/2D_OBB_Intersection.shtml
+        /// See:
+        /// https://www.flipcode.com/archives/2D_OBB_Intersection.shtml
+        /// https://dyn4j.org/2010/01/sat
         /// </summary>
         /// <param name="rectangle"></param>
         /// <param name="other"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static bool Intersects(OrientedRectangle rectangle, OrientedRectangle other)
+        public static (bool Intersects, Vector2 MinimumTranslationVector) Intersects(
+            OrientedRectangle rectangle, OrientedRectangle other)
         {
             var corners = rectangle.Points;
             var otherCorners = other.Points;
-            return IntersectsOneWay(corners, otherCorners) && IntersectsOneWay(otherCorners, corners);
 
-            bool IntersectsOneWay(IReadOnlyList<Vector2> source, IReadOnlyList<Vector2> target)
+            var allAxis = new[]
             {
-                var axis = new[]
-                    {
-                        source[1] - source[0],
-                        source[3] - source[0]
-                    };
-                var origin = new float[2];
+                corners[1] - corners[0],
+                corners[3] - corners[0],
+                otherCorners[1] - otherCorners[0],
+                otherCorners[3] - otherCorners[0],
+            };
+            var normalizedAxis = new[]
+            {
+                allAxis[0],
+                allAxis[1],
+                allAxis[2],
+                allAxis[3]
+            };
+            var overlap = 0f;
+            var minimumTranslationVector = Vector2.Zero;
 
-                // Make the length of each axis 1/edge length so we know any
-                // dot product must be less than 1 to fall within the edge.
-                for (var a = 0; a < 2; a++)
+            // Make the length of each axis 1/edge length, so we know any
+            // dot product must be less than 1 to fall within the edge.
+            for (var a = 0; a < normalizedAxis.Length; a++)
+            {
+                normalizedAxis[a] /= normalizedAxis[a].LengthSquared();
+            }
+
+            for (var a = 0; a < normalizedAxis.Length; a++)
+            {
+                var axisProjectedOnto = normalizedAxis[a];
+                var originalAxis = allAxis[a];
+
+                var p1 = Project(corners, axisProjectedOnto);
+                var p2 = Project(otherCorners, axisProjectedOnto);
+
+                if (!IsOverlapping(p1, p2))
                 {
-                    axis[a] /= axis[a].LengthSquared();
-                    origin[a] = source[0].Dot(axis[a]);
+                    // There was no intersection along this dimension;
+                    // the boxes cannot possibly overlap.
+                    return (false, Vector2.Zero);
                 }
 
-                for (var a = 0; a < 2; a++) {
-
-                    var t = target[0].Dot(axis[a]);
-
-                    // Find the extent of box 2 on axis a
-                    var tMin = t;
-                    var tMax = t;
-
-                    for (var c = 1; c < 4; c++)
+                var o = GetOverlap(p1, p2);
+                if (o < overlap || overlap == 0f)
+                {
+                    overlap = o;
+                    minimumTranslationVector = originalAxis * overlap;
+                    if (p1.Min > p2.Min)
                     {
-                        t = target[c].Dot(axis[a]);
-
-                        if (t < tMin)
-                        {
-                            tMin = t;
-                        }
-                        else if (t > tMax)
-                        {
-                            tMax = t;
-                        }
+                        minimumTranslationVector = -minimumTranslationVector;
                     }
+                }
+            }
 
-                    // We have to subtract off the origin
+            // There was no dimension along which there is no intersection.
+            // Therefore, the boxes overlap.
+            return (true, minimumTranslationVector);
 
-                    // See if [tMin, tMax] intersects [0, 1]
-                    if (tMin > 1 + origin[a] || tMax < origin[a])
+            (float Min, float Max) Project(IReadOnlyList<Vector2> vertices, Vector2 axis)
+            {
+                var t = vertices[0].Dot(axis);
+
+                // Find the extent of box 2 on axis a
+                var min = t;
+                var max = t;
+
+                for (var c = 1; c < 4; c++)
+                {
+                    t = vertices[c].Dot(axis);
+
+                    if (t < min)
                     {
-                        // There was no intersection along this dimension;
-                        // the boxes cannot possibly overlap.
-                        return false;
+                        min = t;
+                    }
+                    else if (t > max)
+                    {
+                        max = t;
                     }
                 }
 
-                // There was no dimension along which there is no intersection.
-                // Therefore the boxes overlap.
-                return true;
+                return (min, max);
+            }
+
+            bool IsOverlapping((float Min, float Max) p1, (float Min, float Max) p2)
+            {
+                return p1.Min <= p2.Max && p1.Max >= p2.Min;
+            }
+
+            float GetOverlap((float Min, float Max) p1, (float Min, float Max) p2)
+            {
+                return Math.Min(p1.Max, p2.Max) - Math.Max(p1.Min, p2.Min);
             }
         }
 
