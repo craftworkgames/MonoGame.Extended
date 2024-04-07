@@ -7,9 +7,6 @@
     <Authors>craftworkgames</Authors>
     <Description>A high performance particle system to make MonoGame more awesome.</Description>
     <PackageTags>monogame particle system</PackageTags>
-    <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</PackageIconUrl>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 

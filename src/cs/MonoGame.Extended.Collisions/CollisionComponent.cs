@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Collisions.Layers;
+using MonoGame.Extended.Collisions.QuadTree;
 
 namespace MonoGame.Extended.Collisions
 {
@@ -11,17 +15,49 @@ namespace MonoGame.Extended.Collisions
     /// </summary>
     public class CollisionComponent : SimpleGameComponent
     {
-        private readonly Dictionary<ICollisionActor, QuadtreeData> _targetDataDictionary = new();
+        public const string DEFAULT_LAYER_NAME = "default";
 
-        private readonly Quadtree _collisionTree;
+        private Dictionary<string, Layer> _layers = new();
 
         /// <summary>
-        /// Creates a collision tree covering the specified area.
+        /// List of collision's layers
+        /// </summary>
+        public IReadOnlyDictionary<string, Layer> Layers => _layers;
+
+        private HashSet<(Layer, Layer)> _layerCollision = new();
+
+        /// <summary>
+        /// Creates component with default layer, which is a collision tree covering the specified area (using <see cref="QuadTree"/>.
         /// </summary>
         /// <param name="boundary">Boundary of the collision tree.</param>
         public CollisionComponent(RectangleF boundary)
         {
-            _collisionTree = new Quadtree(boundary);
+            SetDefaultLayer(new Layer(new QuadTreeSpace(boundary)));
+        }
+
+        /// <summary>
+        /// Creates component with specifies default layer.
+        /// If layer is null, method creates component without default layer.
+        /// </summary>
+        /// <param name="layer">Default layer</param>
+        public CollisionComponent(Layer layer = null)
+        {
+            if (layer is not null)
+                SetDefaultLayer(layer);
+        }
+
+        /// <summary>
+        /// The main layer has the name from <see cref="DEFAULT_LAYER_NAME"/>.
+        /// The main layer collision with itself and all other layers.
+        /// </summary>
+        /// <param name="layer">Layer to set default</param>
+        public void SetDefaultLayer(Layer layer)
+        {
+            if (_layers.ContainsKey(DEFAULT_LAYER_NAME))
+                Remove(DEFAULT_LAYER_NAME);
+            Add(DEFAULT_LAYER_NAME, layer);
+            foreach (var otherLayer in _layers.Values)
+                AddCollisionBetweenLayer(layer, otherLayer);
         }
 
         /// <summary>
@@ -34,28 +70,31 @@ namespace MonoGame.Extended.Collisions
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            // Detect collisions
-            foreach (var value in _targetDataDictionary.Values)
+            foreach (var layer in _layers.Values)
+                layer.Reset();
+
+            foreach (var (firstLayer, secondLayer) in _layerCollision)
+            foreach (var actor in firstLayer.Space)
             {
-                value.RemoveFromAllParents();
-
-                var target = value.Target;
-                var collisions =_collisionTree.Query(target.Bounds);
-
-                // Generate list of collision Infos
+                var collisions = secondLayer.Space.Query(actor.Bounds.BoundingRectangle);
                 foreach (var other in collisions)
-                {
-                    var collisionInfo = new CollisionEventArgs
-                        {
-                            Other = other.Target,
-                            PenetrationVector = CalculatePenetrationVector(value.Bounds, other.Bounds)
-                        };
+                    if (actor != other && actor.Bounds.Intersects(other.Bounds))
+                    {
+                        var penetrationVector = CalculatePenetrationVector(actor.Bounds, other.Bounds);
 
-                    target.OnCollision(collisionInfo);
-                }
-                _collisionTree.Insert(value);
+                        actor.OnCollision(new CollisionEventArgs
+                        {
+                            Other = other,
+                            PenetrationVector = penetrationVector
+                        });
+                        other.OnCollision(new CollisionEventArgs
+                        {
+                            Other = actor,
+                            PenetrationVector = -penetrationVector
+                        });
+                    }
+
             }
-            _collisionTree.Shake();
         }
 
         /// <summary>
@@ -65,12 +104,7 @@ namespace MonoGame.Extended.Collisions
         /// <param name="target">Target to insert.</param>
         public void Insert(ICollisionActor target)
         {
-            if (!_targetDataDictionary.ContainsKey(target))
-            {
-                var data = new QuadtreeData(target);
-                _targetDataDictionary.Add(target, data);
-                _collisionTree.Insert(data);
-            }
+            _layers[target.LayerName ?? DEFAULT_LAYER_NAME].Space.Insert(target);
         }
 
         /// <summary>
@@ -79,24 +113,57 @@ namespace MonoGame.Extended.Collisions
         /// <param name="target">Target to remove.</param>
         public void Remove(ICollisionActor target)
         {
-            if (_targetDataDictionary.ContainsKey(target))
-            {
-                var data = _targetDataDictionary[target];
-                data.RemoveFromAllParents();
-                _targetDataDictionary.Remove(target);
-                _collisionTree.Shake();
-            }
+            if (target.LayerName is not null)
+                _layers[target.LayerName].Space.Remove(target);
+            else
+                foreach (var layer in _layers.Values)
+                    if (layer.Space.Remove(target))
+                        return;
+        }
+
+        #region Layers
+
+        /// <summary>
+        /// Add the new layer. The name of layer must be unique.
+        /// </summary>
+        /// <param name="name">Name of layer</param>
+        /// <param name="layer">The new layer</param>
+        /// <exception cref="ArgumentNullException"><paramref name="name"/> is null</exception>
+        public void Add(string name, Layer layer)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+
+            if (!_layers.TryAdd(name, layer))
+                throw new DuplicateNameException(name);
+
+            if (name != DEFAULT_LAYER_NAME)
+                AddCollisionBetweenLayer(_layers[DEFAULT_LAYER_NAME], layer);
         }
 
         /// <summary>
-        /// Gets if the target is inserted in the collision tree.
+        /// Remove the layer and all layer's collisions.
         /// </summary>
-        /// <param name="target">Actor to check if contained</param>
-        /// <returns>True if the target is contained in the collision tree.</returns>
-        public bool Contains(ICollisionActor target)
+        /// <param name="name">The name of the layer to delete</param>
+        /// <param name="layer">The layer to delete</param>
+        public void Remove(string name = null, Layer layer = null)
         {
-            return _targetDataDictionary.ContainsKey(target);
+            name ??= _layers.First(x => x.Value == layer).Key;
+            _layers.Remove(name, out layer);
+            _layerCollision.RemoveWhere(tuple => tuple.Item1 == layer || tuple.Item2 == layer);
         }
+
+        public void AddCollisionBetweenLayer(Layer a, Layer b)
+        {
+            _layerCollision.Add((a, b));
+        }
+
+        public void AddCollisionBetweenLayer(string nameA, string nameB)
+        {
+            _layerCollision.Add((_layers[nameA], _layers[nameB]));
+        }
+
+        #endregion
 
         #region Penetration Vectors
 

@@ -41,6 +41,16 @@ namespace MonoGame.Extended
             set => Center = value;
         }
 
+        public RectangleF BoundingRectangle
+        {
+            get
+            {
+                var minX = Center.X - Radius;
+                var minY = Center.Y - Radius;
+                return new RectangleF(minX, minY, Diameter, Diameter);
+            }
+        }
+
         /// <summary>
         ///     Gets the distance from a point to the opposite point, both on the boundary of this <see cref="CircleF" />.
         /// </summary>

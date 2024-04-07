@@ -52,12 +52,16 @@ namespace MonoGame.Extended.Tiled.Renderers
                     var tileGid = tile.GlobalIdentifier;
                     var localTileIdentifier = tileGid - firstGlobalIdentifier;
                     var position = GetTilePosition(map, tile);
-                    var tilesetColumns = tileset.Columns == 0 ? 1 : tileset.Columns; // fixes a problem (what problem exactly?)
-                    var sourceRectangle = TiledMapHelper.GetTileSourceRectangle(localTileIdentifier, tileset.TileWidth, tileset.TileHeight, tilesetColumns, tileset.Margin, tileset.Spacing);
+                    var sourceRectangle = tileset.GetTileRegion(localTileIdentifier);
                     var flipFlags = tile.Flags;
 
                     // animated tiles
                     var tilesetTile = tileset.Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier);
+                    if (tilesetTile?.Texture is not null)
+                    {
+                        position.Y += map.TileHeight - sourceRectangle.Height;
+                        texture = tilesetTile.Texture;
+                    }
 
                     if (tilesetTile is TiledMapTilesetAnimatedTile animatedTilesetTile)
                     {
