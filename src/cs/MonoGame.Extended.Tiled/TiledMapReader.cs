@@ -25,6 +25,7 @@ namespace MonoGame.Extended.Tiled
         private static TiledMap ReadTiledMap(ContentReader reader)
         {
             var name = reader.AssetName;
+            var type = reader.ReadString();
             var width = reader.ReadInt32();
             var height = reader.ReadInt32();
             var tileWidth = reader.ReadInt32();
@@ -33,7 +34,7 @@ namespace MonoGame.Extended.Tiled
             var renderOrder = (TiledMapTileDrawOrder)reader.ReadByte();
             var orientation = (TiledMapOrientation)reader.ReadByte();
 
-            return new TiledMap(name, width, height, tileWidth, tileHeight, renderOrder, orientation, backgroundColor);
+            return new TiledMap(name, type, width, height, tileWidth, tileHeight, renderOrder, orientation, backgroundColor);
         }
 
         private static void ReadTilesets(ContentReader reader, TiledMap map)
@@ -76,6 +77,7 @@ namespace MonoGame.Extended.Tiled
         {
             var layerType = (TiledMapLayerType)reader.ReadByte();
             var name = reader.ReadString();
+            var type = reader.ReadString();
             var isVisible = reader.ReadBoolean();
             var opacity = reader.ReadSingle();
             var offsetX = reader.ReadSingle();
@@ -93,16 +95,16 @@ namespace MonoGame.Extended.Tiled
             switch (layerType)
             {
                 case TiledMapLayerType.ImageLayer:
-                    layer = ReadImageLayer(reader, name, offset, parallaxFactor, opacity, isVisible);
+                    layer = ReadImageLayer(reader, name, type, offset, parallaxFactor, opacity, isVisible);
                     break;
                 case TiledMapLayerType.TileLayer:
-                    layer = ReadTileLayer(reader, name, offset, parallaxFactor, opacity, isVisible, map);
+                    layer = ReadTileLayer(reader, name, type, offset, parallaxFactor, opacity, isVisible, map);
                     break;
                 case TiledMapLayerType.ObjectLayer:
-                    layer = ReadObjectLayer(reader, name, offset, parallaxFactor, opacity, isVisible, map);
+                    layer = ReadObjectLayer(reader, name, type, offset, parallaxFactor, opacity, isVisible, map);
                     break;
 				case TiledMapLayerType.GroupLayer:
-					layer = new TiledMapGroupLayer(name, ReadGroup(reader, map), offset, parallaxFactor, opacity, isVisible);
+					layer = new TiledMapGroupLayer(name, type, ReadGroup(reader, map), offset, parallaxFactor, opacity, isVisible);
 					break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -114,7 +116,7 @@ namespace MonoGame.Extended.Tiled
             return layer;
         }
 
-        private static TiledMapLayer ReadObjectLayer(ContentReader reader, string name, Vector2 offset, Vector2 parallaxFactor, float opacity, bool isVisible, TiledMap map)
+        private static TiledMapLayer ReadObjectLayer(ContentReader reader, string name, string type, Vector2 offset, Vector2 parallaxFactor, float opacity, bool isVisible, TiledMap map)
         {
             var color = reader.ReadColor();
             var drawOrder = (TiledMapObjectDrawOrder)reader.ReadByte();
@@ -124,7 +126,7 @@ namespace MonoGame.Extended.Tiled
             for (var i = 0; i < objectCount; i++)
                 objects[i] = ReadTiledMapObject(reader, map);
 
-            return new TiledMapObjectLayer(name, objects, color, drawOrder, offset, parallaxFactor, opacity, isVisible);
+            return new TiledMapObjectLayer(name, type, objects, color, drawOrder, offset, parallaxFactor, opacity, isVisible);
         }
 
         private static TiledMapObject ReadTiledMapObject(ContentReader reader, TiledMap map)
@@ -193,16 +195,16 @@ namespace MonoGame.Extended.Tiled
             return points;
         }
 
-        private static TiledMapImageLayer ReadImageLayer(ContentReader reader, string name, Vector2 offset, Vector2 parallaxFactor, float opacity, bool isVisible)
+        private static TiledMapImageLayer ReadImageLayer(ContentReader reader, string name, string type, Vector2 offset, Vector2 parallaxFactor, float opacity, bool isVisible)
         {
             var texture = reader.ReadExternalReference<Texture2D>();
             var x = reader.ReadSingle();
             var y = reader.ReadSingle();
             var position = new Vector2(x, y);
-            return new TiledMapImageLayer(name, texture, position, offset, parallaxFactor, opacity, isVisible);
+            return new TiledMapImageLayer(name, type, texture, position, offset, parallaxFactor, opacity, isVisible);
         }
 
-        private static TiledMapTileLayer ReadTileLayer(ContentReader reader, string name, Vector2 offset, Vector2 parallaxFactor, float opacity, bool isVisible, TiledMap map)
+        private static TiledMapTileLayer ReadTileLayer(ContentReader reader, string name, string type, Vector2 offset, Vector2 parallaxFactor, float opacity, bool isVisible, TiledMap map)
         {
             var width = reader.ReadInt32();
             var height = reader.ReadInt32();
@@ -210,7 +212,7 @@ namespace MonoGame.Extended.Tiled
             var tileHeight = map.TileHeight;
 
             var tileCount = reader.ReadInt32();
-            var layer = new TiledMapTileLayer(name, width, height, tileWidth, tileHeight, offset, parallaxFactor, opacity, isVisible);
+            var layer = new TiledMapTileLayer(name, type, width, height, tileWidth, tileHeight, offset, parallaxFactor, opacity, isVisible);
 
             for (var i = 0; i < tileCount; i++)
             {

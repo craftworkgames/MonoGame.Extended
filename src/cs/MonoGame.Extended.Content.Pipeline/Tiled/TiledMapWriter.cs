@@ -36,6 +36,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         private static void WriteMetaData(ContentWriter writer, TiledMapContent map)
         {
+            writer.Write(map.Class ?? map.Type ?? string.Empty);
             writer.Write(map.Width);
             writer.Write(map.Height);
             writer.Write(map.TileWidth);
@@ -80,9 +81,10 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
         private void WriteLayer(ContentWriter writer, TiledMapLayerContent layer)
         {
-            writer.Write((byte)layer.Type);
+            writer.Write((byte)layer.LayerType);
 
             writer.Write(layer.Name ?? string.Empty);
+            writer.Write(layer.Class ?? layer.Type ?? string.Empty);
             writer.Write(layer.Visible);
             writer.Write(layer.Opacity);
             writer.Write(layer.OffsetX);
@@ -92,7 +94,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
             writer.WriteTiledMapProperties(layer.Properties);
 
-            switch (layer.Type)
+            switch (layer.LayerType)
             {
                 case TiledMapLayerType.ImageLayer:
                     WriteImageLayer(writer, (TiledMapImageLayerContent)layer);
@@ -107,7 +109,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 					WriteLayers(writer, ((TiledMapGroupLayerContent)layer).Layers);
 					break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(layer.Type));
+                    throw new ArgumentOutOfRangeException(nameof(layer.LayerType));
             }
         }
 
