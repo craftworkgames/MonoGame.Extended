@@ -14,6 +14,7 @@ namespace MonoGame.Extended.Serialization
             Converters.Add(new RangeJsonConverter<float>());
             Converters.Add(new RangeJsonConverter<HslColor>());
             Converters.Add(new ThicknessJsonConverter());
+            Converters.Add(new RectangleFJsonConverter());
             Converters.Add(new TextureAtlasJsonConverter(contentManager, contentPath));
             Converters.Add(new Size2JsonConverter());
 

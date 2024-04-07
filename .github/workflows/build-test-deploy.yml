@@ -1,15 +1,8 @@
 name: "Build test deploy"
 
-env:
-  DOTNET_CLI_TELEMETRY_OPTOUT: 1
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  DOTNET_CORE_SDK_VERSION: 6.0.302
-  MYGET_ACCESS_TOKEN: ${{ secrets.MYGET_ACCESS_TOKEN }}
-  MYGET_SOURCE_URL: 'https://www.myget.org/F/lithiumtoast/api/v3/index.json'
-
 on:
   push:
-    branches: [develop]
+    branches: [develop, test/feature]
     tags: [v*]
   pull_request:
     branches: [develop]
@@ -17,99 +10,40 @@ on:
     branches: [develop]
 
 jobs:
-
-  version-job:
-    name: "Version"
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: "Checkout Git repository"
-      uses: actions/checkout@v2
-
-    - name: "Fetch all history for all tags and branches"
-      run: git fetch --prune --unshallow
-
-    - name: "Install GitVersion"
-      uses: gittools/actions/gitversion/setup@v0.9.6
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: true # workaround for https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/ until the execute action is updated
-      with:
-        versionSpec: '5.x'
-
-    - name: "Use GitVersion"
-      uses: gittools/actions/gitversion/execute@v0.9.6
-
-    - run: echo "$GitVersion_NuGetVersionV2" >> version.txt
-
-    - name: "Upload NuGetVersion version artifact"
-      uses: actions/upload-artifact@v2
-      with:
-        name: version
-        path: version.txt
-
   build-test-pack-job:
-    name: "Build"
-    needs: [version-job]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
-
+    name: "Build-Test-Pack"
+    runs-on: ubuntu-latest
     steps:
+      - name: "Clone Repository"
+        uses: actions/checkout@v4
+      - name: "CAKE (Build -> Test -> Package)"
+        run: dotnet run --project ./build/Build.csproj -- --target=Default
+      - name: "Upload Artifacts For Deploy"
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@main
+        with:
+          name: MonoGame.Extended
+          path: artifacts/*
 
-    - name: "Download version artifact"
-      uses: actions/download-artifact@v2
-      with:
-        name: version
-
-    - name: "Read Version"
-      id: version
-      shell: bash
-      run: |
-        echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
-
-    - name: "Print Version"
-      shell: bash
-      run: |
-        echo $VERSION
-
-    - name: "Checkout repository"
-      uses: actions/checkout@master
-      with:
-        submodules: true
-        lfs: true
-
-    - name: "Setup .NET Core CLI"
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '${{ env.DOTNET_CORE_SDK_VERSION }}'
-
-    - name: "Install fonts (Ubuntu)"
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
-        sudo apt-get install -y ttf-mscorefonts-installer
-        sudo apt-get install -y fontconfig
-        sudo fc-cache -f -v
-        sudo fc-match Arial
-
-    - name: "Download NuGet packages"
-      run: dotnet restore --verbosity quiet
-
-    - name: "Build solution"
-      run: dotnet build --nologo --verbosity minimal --configuration Release --no-restore /p:Version='${{ env.VERSION }}'
-
-    - name: "Test solution"
-      run: dotnet test --nologo --verbosity normal --configuration Release --no-build
-
-    - name: "Pack solution"
-      if: matrix.os == 'ubuntu-latest' && github.event_name == 'push'
-      run: dotnet pack --nologo --output "./nuget-packages" --verbosity minimal --configuration Release --no-build -p:PackageVersion='${{ env.VERSION }}'
-
-    - name: "Add Packages Source: MyGet"
-      if: matrix.os == 'ubuntu-latest' && github.event_name == 'push'
-      run: dotnet nuget add source $MYGET_SOURCE_URL --name "MyGet"
-
-    - name: "Upload Packages: MyGet"
-      if: matrix.os == 'ubuntu-latest' && github.event_name == 'push'
-      run: dotnet nuget push "./**/*.nupkg" --source "MyGet" --skip-duplicate --api-key $MYGET_ACCESS_TOKEN
+  deploy-job:
+      name: "Deploy Nugets"
+      runs-on: ubuntu-latest
+      permissions:
+        packages: write
+        contents: write
+      needs: [build-test-pack-job]
+      if: ${{ github.event_name == 'push' }}
+      steps:
+        - name: "Clone Repository"
+          uses: actions/checkout@v4
+        - name: "Download Artifacts For Deploy"
+          uses: actions/download-artifact@main
+          with:
+            name: MonoGame.Extended
+            path: artifacts
+        - name: "Push Package"
+          run: dotnet run --project ./build/Build.csproj -- --target=Deploy
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            MYGET_ACCESS_TOKEN: ${{ secrets.MYGET_ACCESS_TOKEN }}
+            NUGET_ACCESS_TOKEN: ${{ secrets.NUGET_ACCESS_TOKEN }}

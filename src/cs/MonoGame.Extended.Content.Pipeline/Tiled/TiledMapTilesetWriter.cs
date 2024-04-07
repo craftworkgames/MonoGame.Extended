@@ -30,8 +30,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
 		public static void WriteTileset(ContentWriter writer, TiledMapTilesetContent tileset, IExternalReferenceRepository externalReferenceRepository)
 		{
-		    var externalReference = externalReferenceRepository.GetExternalReference<Texture2DContent>(tileset.Image.Source);
-
+		    var externalReference = externalReferenceRepository.GetExternalReference<Texture2DContent>(tileset.Image?.Source);
 			writer.WriteExternalReference(externalReference);
             writer.Write(tileset.Class ?? tileset.Type ?? string.Empty);
             writer.Write(tileset.TileWidth);
@@ -43,13 +42,17 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             writer.Write(tileset.Tiles.Count);
 
             foreach (var tilesetTile in tileset.Tiles)
-                WriteTilesetTile(writer, tilesetTile);
+                WriteTilesetTile(writer, tilesetTile, externalReferenceRepository);
 
             writer.WriteTiledMapProperties(tileset.Properties);
 		}
 
-        private static void WriteTilesetTile(ContentWriter writer, TiledMapTilesetTileContent tilesetTile)
+        private static void WriteTilesetTile(ContentWriter writer, TiledMapTilesetTileContent tilesetTile,
+            IExternalReferenceRepository externalReferenceRepository)
         {
+            var externalReference = externalReferenceRepository.GetExternalReference<Texture2DContent>(tilesetTile.Image?.Source);
+            writer.WriteExternalReference(externalReference);
+
             writer.Write(tilesetTile.LocalIdentifier);
             writer.Write(tilesetTile.Type);
             writer.Write(tilesetTile.Frames.Count);

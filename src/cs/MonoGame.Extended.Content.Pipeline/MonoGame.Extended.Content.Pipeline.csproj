@@ -12,9 +12,6 @@
     <Authors>craftworkgames</Authors>
     <Description>Content Pipeline importers and processors to make MonoGame more awesome.</Description>
     <PackageTags>monogame content importer processor reader tiled texturepacker bmfont animations</PackageTags>
-    <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</PackageIconUrl>
   </PropertyGroup>
 
   <PropertyGroup>

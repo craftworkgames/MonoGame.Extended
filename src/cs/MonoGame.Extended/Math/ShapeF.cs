@@ -12,6 +12,11 @@
         /// Gets or sets the position of the shape.
         /// </summary>
         Point2 Position { get; set; }
+
+        /// <summary>
+        /// Gets escribed rectangle, which lying outside the shape
+        /// </summary>
+        RectangleF BoundingRectangle { get; }
     }
 
     /// <summary>

@@ -7,9 +7,6 @@
     <Authors>craftworkgames</Authors>
     <Description>It makes MonoGame more awesome.</Description>
     <PackageTags>monogame extended pipeline bmfont tiled texture atlas input viewport fps shapes sprite</PackageTags>
-    <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/craftworkgames/MonoGame.Extended/master/Logos/logo-nuget-128.png</PackageIconUrl>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
@@ -26,5 +23,5 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
-  
+
 </Project>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
@@ -60,7 +61,10 @@ namespace MonoGame.Extended.Tiled
 
         public Rectangle GetTileRegion(int localTileIdentifier)
         {
-            return TiledMapHelper.GetTileSourceRectangle(localTileIdentifier, TileWidth, TileHeight, Columns, Margin, Spacing);
+            return Texture is not null
+                ? TiledMapHelper.GetTileSourceRectangle(localTileIdentifier, TileWidth, TileHeight, Columns, Margin,
+                    Spacing)
+                : Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier).Texture.Bounds;
         }
     }
 }
