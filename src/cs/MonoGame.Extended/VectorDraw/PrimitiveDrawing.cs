@@ -122,6 +122,31 @@ namespace MonoGame.Extended.VectorDraw
 
             DrawCircle(center, radius, color);            
         }
+        public void DrawSolidCircle(Vector2 center, float radius, Color color, Color fillcolor)
+        {
+            if (!_primitiveBatch.IsReady())
+                throw new InvalidOperationException("BeginCustomDraw must be called before drawing anything.");
+
+            const double increment = Math.PI * 2.0 / CircleSegments;
+            double theta = 0.0;
+
+            Vector2 v0 = center + radius * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
+            theta += increment;
+
+            for (int i = 1; i < CircleSegments - 1; i++)
+            {
+                Vector2 v1 = center + radius * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
+                Vector2 v2 = center + radius * new Vector2((float)Math.Cos(theta + increment), (float)Math.Sin(theta + increment));
+
+                _primitiveBatch.AddVertex(v0, fillcolor, PrimitiveType.TriangleList);
+                _primitiveBatch.AddVertex(v1, fillcolor, PrimitiveType.TriangleList);
+                _primitiveBatch.AddVertex(v2, fillcolor, PrimitiveType.TriangleList);
+
+                theta += increment;
+            }
+
+            DrawCircle(center, radius, color);
+        }
 
         public void DrawSegment(Vector2 start, Vector2 end, Color color)
         {
