@@ -49,8 +49,15 @@ public class QuadTreeSpace: ISpaceAlgorithm
         return false;
     }
 
+
     /// <summary>
-    /// Restructure a inner collection, if layer is dynamic, because actors can change own position
+    /// Checks if the target is within the space.
+    /// </summary>
+    /// <param name="target">Target to check for.</param>
+    public bool Contains(ICollisionActor target) => _actors.Contains(target);
+
+    /// <summary>
+    /// Restructure an inner collection, if layer is dynamic, because actors can change own position
     /// </summary>
     public void Reset()
     {
