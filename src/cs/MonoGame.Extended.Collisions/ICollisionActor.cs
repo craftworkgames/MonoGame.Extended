@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Collisions
     public interface ICollisionActor
     {
         /// <summary>
-        /// A name of layer, which will contains this actor.
+        /// A name of layer, which will contain this actor.
         /// If it equals null, an actor will insert into a default layer
         /// </summary>
         string LayerName { get => null; }
@@ -19,7 +19,7 @@ namespace MonoGame.Extended.Collisions
         IShapeF Bounds { get; }
 
         /// <summary>
-        /// It will called, when collision with an another actor fires
+        /// Called on collision with an another actor
         /// </summary>
         /// <param name="collisionInfo">Data about collision</param>
         void OnCollision(CollisionEventArgs collisionInfo);

@@ -102,33 +102,32 @@ namespace MonoGame.Extended.Collisions
         /// Cast an actor's colliders in a direction and check for collisions.
         /// </summary>
         /// <param name="actors">The list of actor colliders to cast.</param>
-        /// <param name="move">Normalized vector representing the direction to cast each shape.</param>
         /// <param name="hitBuffer">Buffer to receive results.</param>
+        /// <param name="move">Normalized vector representing the direction to cast each shape.</param>
         /// <param name="distance">Maximum distance over which to cast the Collider(s).</param>
-        public int Cast(IEnumerable<ICollisionActor> actors, Vector2 move, List<CollisionEventArgs> hitBuffer, float distance)
+        public int Cast(IEnumerable<ICollisionActor> actors, List<CollisionEventArgs> hitBuffer, Vector2 move, float distance)
         {
             hitBuffer.Clear();
             Vector2 offset = move.NormalizedCopy() * distance;
-            return Cast(actors, offset, hitBuffer);
+            return Cast(actors, hitBuffer, offset);
         }
-
 
         /// <summary>
         /// Cast an actor's colliders in a direction and check for collisions.
         /// </summary>
         /// <param name="actors">The list of actor colliders to cast.</param>
-        /// <param name="offset">Vector representing the translation to use for each cast.</param>
         /// <param name="hitBuffer">Buffer to receive results.</param>
-        public int Cast(IEnumerable<ICollisionActor> actors, Vector2 offset, List<CollisionEventArgs> hitBuffer)
+        /// <param name="offset">Vector representing the translation to use for each cast.</param>
+        public int Cast(IEnumerable<ICollisionActor> actors, List<CollisionEventArgs> hitBuffer, Vector2 offset)
         {
             foreach (ICollisionActor actor in actors)
             {
                 try
                 {
                     actor.Bounds.Position += offset;
-                    foreach ((_, Layer secondLayer) in _layerCollision)
+                    foreach ((Layer firstLayer, Layer secondLayer) in _layerCollision)
                     {
-                        if (!secondLayer.Space.Contains(actor)) continue;
+                        if (!firstLayer.Space.Contains(actor)) continue;
                         foreach (ICollisionActor other in secondLayer.Space.Query(actor.Bounds.BoundingRectangle))
                             if (actor != other && actor.Bounds.Intersects(other.Bounds))
                             {
@@ -136,6 +135,74 @@ namespace MonoGame.Extended.Collisions
                                 hitBuffer.Add(collisionInfo);
                             }
                     }
+                }
+                finally { actor.Bounds.Position -= offset; }
+            }
+            return hitBuffer.Count;
+        }
+
+
+        /// <summary>
+        /// Cast an actor's colliders in a direction and check for collisions.
+        /// Checks against the specified layer regardless of layer membership.
+        /// </summary>
+        /// <param name="actors">The list of actor colliders to cast.</param>
+        /// <param name="hitBuffer">Buffer to receive results.</param>
+        /// <param name="layer">The name of the layer to cast on.</param>
+        /// <param name="direction">Normalized vector representing the direction to cast each shape.</param>
+        /// <param name="distance">Maximum distance over which to cast the Collider(s).</param>
+        public int Cast(IEnumerable<ICollisionActor> actors, List<CollisionEventArgs> hitBuffer, string layer, Vector2 direction, float distance)
+            => Cast(actors, hitBuffer, _layers[layer], direction, distance);
+
+
+        /// <summary>
+        /// Cast an actor's colliders in a direction and check for collisions.
+        /// Checks against the specified layer regardless of layer membership.
+        /// </summary>
+        /// <param name="actors">The list of actor colliders to cast.</param>
+        /// <param name="hitBuffer">Buffer to receive results.</param>
+        /// <param name="layer">The layer to cast on.</param>
+        /// <param name="direction">Normalized vector representing the direction to cast each shape.</param>
+        /// <param name="distance">Maximum distance over which to cast the Collider(s).</param>
+        public int Cast(IEnumerable<ICollisionActor> actors, List<CollisionEventArgs> hitBuffer, Layer layer, Vector2 direction, float distance)
+        {
+            hitBuffer.Clear();
+            Vector2 offset = direction.NormalizedCopy() * distance;
+            return Cast(actors, hitBuffer, layer, offset);
+        }
+
+        /// <summary>
+        /// Cast an actor's colliders in a direction and check for collisions.
+        /// Checks against the specified layer regardless of layer membership.
+        /// </summary>
+        /// <param name="actors">The name of the list of actor colliders to cast.</param>
+        /// <param name="hitBuffer">Buffer to receive results.</param>
+        /// <param name="layer">The name of the layer to cast on.</param>
+        /// <param name="offset">Vector representing the translation to use for each cast.</param>
+        public int Cast(IEnumerable<ICollisionActor> actors, List<CollisionEventArgs> hitBuffer, string layer, Vector2 offset)
+            => Cast(actors, hitBuffer, _layers[layer], offset);
+
+        /// <summary>
+        /// Cast an actor's colliders in a direction and check for collisions.
+        /// Checks against the specified layer regardless of layer membership.
+        /// </summary>
+        /// <param name="actors">The name of the list of actor colliders to cast.</param>
+        /// <param name="hitBuffer">Buffer to receive results.</param>
+        /// <param name="layer">The layer to cast on.</param>
+        /// <param name="offset">Vector representing the translation to use for each cast.</param>
+        public int Cast(IEnumerable<ICollisionActor> actors, List<CollisionEventArgs> hitBuffer, Layer layer, Vector2 offset)
+        {
+            foreach (ICollisionActor actor in actors)
+            {
+                try
+                {
+                    actor.Bounds.Position += offset;
+                    foreach (ICollisionActor other in layer.Space.Query(actor.Bounds.BoundingRectangle))
+                        if (actor != other && actor.Bounds.Intersects(other.Bounds))
+                        {
+                            CollisionEventArgs collisionInfo = new() { Other = other, PenetrationVector = CalculatePenetrationVector(actor.Bounds, other.Bounds) };
+                            hitBuffer.Add(collisionInfo);
+                        }
                 }
                 finally { actor.Bounds.Position -= offset; }
             }
