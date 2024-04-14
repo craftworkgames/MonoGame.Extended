@@ -9,7 +9,7 @@ namespace MonoGame.Extended
     // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.2; Bounding Volumes - Axis-aligned Bounding Boxes (AABBs). pg 77
 
     /// <summary>
-    ///     An axis-aligned, four sided, two dimensional box defined by a top-left position (<see cref="X" /> and
+    ///     An axis-aligned, four sided, two-dimensional box defined by a top-left position (<see cref="X" /> and
     ///     <see cref="Y" />) and a size (<see cref="Width" /> and <see cref="Height" />).
     /// </summary>
     /// <remarks>
@@ -85,7 +85,7 @@ namespace MonoGame.Extended
         public bool IsEmpty => Width.Equals(0) && Height.Equals(0) && X.Equals(0) && Y.Equals(0);
 
         /// <summary>
-        ///     Gets the <see cref="Point2" /> representing the the top-left of this <see cref="RectangleF" />.
+        ///     Gets the <see cref="Point2" /> representing the top-left of this <see cref="RectangleF" />.
         /// </summary>
         public Point2 Position
         {
@@ -477,7 +477,7 @@ namespace MonoGame.Extended
         /// </summary>
         /// <param name="point">The point.</param>
         /// <returns>
-        ///     <c>true</c> if the this <see cref="RectangleF"/> contains the <paramref name="point" />; otherwise,
+        ///     <c>true</c> if this <see cref="RectangleF"/> contains the <paramref name="point" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
         public bool Contains(Point2 point)

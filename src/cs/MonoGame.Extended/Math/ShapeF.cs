@@ -32,26 +32,31 @@
         /// <returns>True if the two shapes intersect.</returns>
         public static bool Intersects(this IShapeF shapeA, IShapeF shapeB)
         {
-            var intersects = false;
+            switch (shapeA)
+            {
+                case RectangleF a when shapeB is RectangleF b:
+                    return a.Intersects(b);
+                case RectangleF a when shapeB is CircleF b:
+                    return Intersects(b, a);
+                case RectangleF a when shapeB is TriangleF b:
+                    return Intersects(b, a);
 
-            if (shapeA is RectangleF rectangleA && shapeB is RectangleF rectangleB)
-            {
-                intersects = rectangleA.Intersects(rectangleB);
-            }
-            else if (shapeA is CircleF circleA && shapeB is CircleF circleB)
-            {
-                intersects = circleA.Intersects(circleB);
-            }
-            else if (shapeA is RectangleF rect1 && shapeB is CircleF circ1)
-            {
-                return Intersects(circ1, rect1);
-            }
-            else if (shapeA is CircleF circ2 && shapeB is RectangleF rect2)
-            {
-                return Intersects(circ2, rect2);
+                case CircleF a when shapeB is RectangleF b:
+                    return Intersects(a, b);
+                case CircleF a when shapeB is CircleF b:
+                    return a.Intersects(b);
+                case CircleF a when shapeB is TriangleF b:
+                    return Intersects(b, a);
+
+                case TriangleF a when shapeB is RectangleF b:
+                    return Intersects(a, b);
+                case TriangleF a when shapeB is CircleF b:
+                    return Intersects(a, b);
+                case TriangleF a when shapeB is TriangleF b:
+                    return a.Intersects(b);
             }
 
-            return intersects;
+            return false;
         }
 
         /// <summary>
@@ -64,6 +69,30 @@
         {
             var closestPoint = rectangle.ClosestPointTo(circle.Center);
             return circle.Contains(closestPoint);
+        }
+
+        /// <summary>
+        ///     Checks if a triangle and rectangle intersect.
+        /// </summary>
+        /// <param name="triangle">Triangle to check intersection with rectangle.</param>
+        /// <param name="rectangle">Rectangle to check intersection with triangle.</param>
+        /// <returns>True if the triangle and rectangle intersect.</returns>
+        public static bool Intersects(TriangleF triangle, RectangleF rectangle)
+        {
+            var closestPoint = rectangle.ClosestPointTo(triangle.Center);
+            return triangle.Contains(closestPoint);
+        }
+
+        /// <summary>
+        ///     Checks if a triangle and rectangle intersect.
+        /// </summary>
+        /// <param name="triangle">Triangle to check intersection with rectangle.</param>
+        /// <param name="circle">Rectangle to check intersection with triangle.</param>
+        /// <returns>True if the triangle and rectangle intersect.</returns>
+        public static bool Intersects(TriangleF triangle, CircleF circle)
+        {
+            var closestPoint = circle.ClosestPointTo(triangle.Center);
+            return triangle.Contains(closestPoint);
         }
     }
 }
