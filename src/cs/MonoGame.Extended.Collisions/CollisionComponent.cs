@@ -310,9 +310,11 @@ namespace MonoGame.Extended.Collisions
                     return PenetrationVector(a, b);
                 case TriangleF a when shapeB is TriangleF b:
                     return PenetrationVector(a, b);
+
+                //todo ellipses are hard!
             }
 
-            throw new NotSupportedException("Shapes must be either a CircleF or RectangleF");
+            throw new NotSupportedException("Shapes must be either a CircleF, RectangleF, or TriangleF.");
         }
 
         private static Vector2 PenetrationVector(RectangleF rect1, RectangleF rect2)

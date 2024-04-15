@@ -87,10 +87,13 @@ namespace MonoGame.Extended
             return result;
         }
 
+        [Pure]
         private TriangleF Conjugate => new(new(-A.X, A.Y), new(-B.X, B.Y), new(-C.X, C.Y));
 
+        [Pure]
         public Vector2[] GetPoints() => new Vector2[]{A,B,C};
 
+        [Pure]
         public Vector2[] GetRelativePoints()
         {
             Point2 center = Center;
