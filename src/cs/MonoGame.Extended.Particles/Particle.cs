@@ -10,6 +10,7 @@ namespace MonoGame.Extended.Particles
         public float Inception;
         public float Age;
         public Vector2 Position;
+        public Vector2 Offset;
         public Vector2 TriggerPos;
         public Vector2 Velocity;
         public HslColor Color;
