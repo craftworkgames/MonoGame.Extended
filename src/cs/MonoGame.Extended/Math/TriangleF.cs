@@ -256,14 +256,16 @@ namespace MonoGame.Extended
         /// </returns>
         public static bool Contains(ref TriangleF triangle, ref Point2 point)
         {
-            var areaABC = GetArea(triangle.A, triangle.B, triangle.C);
-            var areaPBC = GetArea(point, triangle.B, triangle.C);
-            var areaAPC = GetArea(triangle.A, point, triangle.C);
-            var areaABP = GetArea(triangle.A, triangle.B, point);
+            const float EPSILON = 0.001f;
+
+            float areaABC = GetArea(triangle.A, triangle.B, triangle.C);
+            float areaPBC = GetArea(point, triangle.B, triangle.C);
+            float areaAPC = GetArea(triangle.A, point, triangle.C);
+            float areaABP = GetArea(triangle.A, triangle.B, point);
 
             // If the sum of the areas of the sub-triangles equals the area of the main triangle,
             // then the point is inside the triangle.
-            return Math.Abs(areaABC - (areaPBC + areaAPC + areaABP)) < double.Epsilon;
+            return MathF.Abs(areaABC - (areaPBC + areaAPC + areaABP)) < EPSILON;
         }
 
         /// <summary>
