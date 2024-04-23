@@ -4,6 +4,10 @@ namespace MonoGame.Extended
 {
     public abstract class Camera<T> where T : struct
     {
+        /// <summary>
+        /// Returns position of the camera in real world position.
+        /// Defaults to Vector2.Zero. 
+        /// </summary>
         public abstract T Position { get; set; }
         public abstract float Rotation { get; set; }
         public abstract float Zoom { get; set; }
@@ -11,6 +15,10 @@ namespace MonoGame.Extended
         public abstract float MaximumZoom { get; set; }
         public abstract RectangleF BoundingRectangle { get; }
         public abstract T Origin { get; set; }
+
+        /// <summary>
+        /// Provides the center of the camera in real world coordinates. To center use <see cref="LookAt" /> method.
+        /// </summary>
         public abstract T Center { get; }
 
         public abstract void Move(T direction);

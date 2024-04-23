@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace MonoGame.Extended
+namespace MonoGame.Extended.Cameras
 {
     public sealed class OrthographicCamera : Camera<Vector2>, IMovable, IRotatable
     {
@@ -23,13 +23,15 @@ namespace MonoGame.Extended
 
             Rotation = 0;
             Zoom = 1;
-            Origin = new Vector2(viewportAdapter.VirtualWidth/2f, viewportAdapter.VirtualHeight/2f);
+            Origin = new Vector2(viewportAdapter.VirtualWidth / 2f, viewportAdapter.VirtualHeight / 2f);
             Position = Vector2.Zero;
         }
 
+        /// <inheritdoc />
         public override Vector2 Position { get; set; }
         public override float Rotation { get; set; }
         public override Vector2 Origin { get; set; }
+        /// <inheritdoc/>
         public override Vector2 Center => Position + Origin;
 
         public override float Zoom
@@ -37,7 +39,7 @@ namespace MonoGame.Extended
             get => _zoom;
             set
             {
-                if ((value < MinimumZoom) || (value > MaximumZoom))
+                if (value < MinimumZoom || value > MaximumZoom)
                     throw new ArgumentException("Zoom must be between MinimumZoom and MaximumZoom");
 
                 _zoom = value;
@@ -87,7 +89,7 @@ namespace MonoGame.Extended
                 return new RectangleF(topLeft.X, topLeft.Y, width, height);
             }
         }
-        
+
         public override void Move(Vector2 direction)
         {
             Position += Vector2.Transform(direction, Matrix.CreateRotationZ(-Rotation));
@@ -118,7 +120,7 @@ namespace MonoGame.Extended
 
         public override void LookAt(Vector2 position)
         {
-            Position = position - new Vector2(_viewportAdapter.VirtualWidth/2f, _viewportAdapter.VirtualHeight/2f);
+            Position = position - new Vector2(_viewportAdapter.VirtualWidth / 2f, _viewportAdapter.VirtualHeight / 2f);
         }
 
         public Vector2 WorldToScreen(float x, float y)
@@ -143,19 +145,19 @@ namespace MonoGame.Extended
             return Vector2.Transform(screenPosition - new Vector2(viewport.X, viewport.Y),
                 Matrix.Invert(GetViewMatrix()));
         }
-
+        
         public Matrix GetViewMatrix(Vector2 parallaxFactor)
         {
-            return GetVirtualViewMatrix(parallaxFactor)*_viewportAdapter.GetScaleMatrix();
+            return GetVirtualViewMatrix(parallaxFactor) * _viewportAdapter.GetScaleMatrix();
         }
 
         private Matrix GetVirtualViewMatrix(Vector2 parallaxFactor)
         {
             return
-                Matrix.CreateTranslation(new Vector3(-Position*parallaxFactor, 0.0f))*
-                Matrix.CreateTranslation(new Vector3(-Origin, 0.0f))*
-                Matrix.CreateRotationZ(Rotation)*
-                Matrix.CreateScale(Zoom, Zoom, 1)*
+                Matrix.CreateTranslation(new Vector3(-Position * parallaxFactor, 0.0f)) *
+                Matrix.CreateTranslation(new Vector3(-Origin, 0.0f)) *
+                Matrix.CreateRotationZ(Rotation) *
+                Matrix.CreateScale(Zoom, Zoom, 1) *
                 Matrix.CreateTranslation(new Vector3(Origin, 0.0f));
         }
 
