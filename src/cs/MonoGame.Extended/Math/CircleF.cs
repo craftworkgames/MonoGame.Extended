@@ -234,7 +234,7 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Determines whether the specified <see cref="CircleF" /> intersects with this <see cref="BoundingRectangle" />.
+        ///     Determines whether the specified <see cref="BoundingRectangle" /> intersects with this <see cref="CircleF" />.
         /// </summary>
         /// <param name="rectangle">The rectangle.</param>
         /// <returns>
@@ -247,7 +247,7 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Determines whether the specified <see cref="CircleF" /> intersects with this <see cref="BoundingRectangle" />.
+        ///     Determines whether the specified <see cref="BoundingRectangle" /> intersects with this <see cref="CircleF" />.
         /// </summary>
         /// <param name="rectangle">The rectangle.</param>
         /// <returns>
@@ -257,6 +257,36 @@ namespace MonoGame.Extended
         public bool Intersects(BoundingRectangle rectangle)
         {
             return Intersects(ref this, ref rectangle);
+        }
+
+
+        /// <summary>
+        ///     Determines whether the line that intersects the two specified <see cref="Point2" /> parameters intersects with this <see cref="CircleF" />.
+        /// </summary>
+        /// <param name="p1">The first of the two points that determine the line being tested for intersection.</param>
+        /// <param name="p2">The second of the two points that determine the line being tested for intersection.</param>
+        /// <returns>
+        ///     <c>true</c> if the specified line intersects with this <see cref="CircleF" />; otherwise,
+        ///     <c>false</c>.
+        /// </returns>
+        public bool Intersects(Point2 p1, Point2 p2)
+        {
+            float dx = p2.X - p1.X;
+            float dy = p2.Y - p1.Y;
+            float a = dx * dx + dy * dy;
+            float b = 2 * (dx * (p1.X - Center.X) + dy * (p1.Y - Center.Y));
+            float c = (p1.X - Center.X) * (p1.X - Center.X) +
+                      (p1.Y - Center.Y) * (p1.Y - Center.Y) -
+                      Radius * Radius;
+            float discriminant = b * b - 4 * a * c;
+
+            if (discriminant < 0) return false;
+
+            discriminant = MathF.Sqrt(discriminant);
+            float t1 = (-b + discriminant) / (2 * a);
+            float t2 = (-b - discriminant) / (2 * a);
+
+            return (t1 is >= 0 and <= 1) || (t2 is >= 0 and <= 1);
         }
 
         /// <summary>
