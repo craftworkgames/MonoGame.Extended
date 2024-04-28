@@ -23,6 +23,14 @@ namespace MonoGame.Extended.Tiled
             CurrentAnimationFrame = AnimationFrames[0];
         }
 
+        public void CreateTextureRotations(TiledMapTileset tileset, TiledMapTileFlipFlags flipFlags)
+        {
+            for (int i = 0; i < AnimationFrames.Count; i++)
+            {
+                AnimationFrames[i].CreateTextureRotations(tileset, flipFlags);
+            }
+        }
+
         public void Update(GameTime gameTime)
         {
             _timer += gameTime.ElapsedGameTime;

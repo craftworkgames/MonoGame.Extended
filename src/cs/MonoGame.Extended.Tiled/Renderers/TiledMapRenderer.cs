@@ -62,9 +62,9 @@ namespace MonoGame.Extended.Tiled.Renderers
                 {
                     var verticesPointer = fixedVerticesPointer;
 
-                    foreach (var animatedTile in animatedModel.AnimatedTilesetTiles)
+                    for (int i = 0; i < animatedModel.AnimatedTilesetTiles.Length; i++)
                     {
-                        var currentFrameTextureCoordinates = animatedTile.CurrentAnimationFrame.TextureCoordinates;
+                        var currentFrameTextureCoordinates = animatedModel.AnimatedTilesetTiles[i].CurrentAnimationFrame.GetTextureCoordinates(animatedModel.AnimatedTilesetFlipFlags[i]);
 
                         // ReSharper disable ArrangeRedundantParentheses
                         (*verticesPointer++).TextureCoordinate = currentFrameTextureCoordinates[0];

@@ -4,15 +4,17 @@ namespace MonoGame.Extended.Tiled.Renderers
 {
     public sealed class TiledMapAnimatedLayerModel : TiledMapLayerModel
     {
-        public TiledMapAnimatedLayerModel(GraphicsDevice graphicsDevice, Texture2D texture, VertexPositionTexture[] vertices, ushort[] indices, TiledMapTilesetAnimatedTile[] animatedTilesetTiles) 
+        public TiledMapAnimatedLayerModel(GraphicsDevice graphicsDevice, Texture2D texture, VertexPositionTexture[] vertices, ushort[] indices, TiledMapTilesetAnimatedTile[] animatedTilesetTiles, TiledMapTileFlipFlags[] animatedTilesetTileFlipFlags)
             : base(graphicsDevice, texture, vertices, indices)
         {
             Vertices = vertices;
             AnimatedTilesetTiles = animatedTilesetTiles;
+            AnimatedTilesetFlipFlags = animatedTilesetTileFlipFlags;
         }
 
         public VertexPositionTexture[] Vertices { get; }
         public TiledMapTilesetAnimatedTile[] AnimatedTilesetTiles { get; }
+        public TiledMapTileFlipFlags[] AnimatedTilesetFlipFlags { get; }
 
         protected override VertexBuffer CreateVertexBuffer(GraphicsDevice graphicsDevice, int vertexCount)
         {
