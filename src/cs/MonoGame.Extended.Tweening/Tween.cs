@@ -3,10 +3,10 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tweening
 {
-    public class Tween<T> : Tween
-        where T : struct 
+    public abstract class Tween<T> : Tween
+        where T : struct
     {
-        internal Tween(object target, float duration, float delay, TweenMember<T> member, T endValue) 
+        internal Tween(object target, float duration, float delay, TweenMember<T> member, T endValue)
             : base(target, duration, delay)
         {
             Member = member;
@@ -16,20 +16,12 @@ namespace MonoGame.Extended.Tweening
         public TweenMember<T> Member { get; }
         public override string MemberName => Member.Name;
 
-        private T _startValue;
-        private T _endValue;
-        private T _range;
+        protected T _startValue;
+        protected T _endValue;
 
         protected override void Initialize()
         {
             _startValue = Member.Value;
-            _range = TweenMember<T>.Subtract(_endValue, _startValue);
-        }
-
-        protected override void Interpolate(float n)
-        {
-            var value = TweenMember<T>.Add(_startValue, TweenMember<T>.Multiply(_range, n));
-            Member.Value = value;
         }
 
         protected override void Swap()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tweening
 {
@@ -27,6 +28,21 @@ namespace MonoGame.Extended.Tweening
             where TTarget : class
             where TMember : struct
         {
+            switch (toValue)
+            {
+                case Color toValueColor:
+                    return (Tween<TMember>)(object)TweenTo<TTarget, Color, ColorTween>(target, expression as Expression<Func<TTarget, Color>>, toValueColor, duration, delay);
+                default:
+                    return TweenTo<TTarget, TMember, LinearTween<TMember>>(target, expression, toValue, duration, delay);
+            }
+
+        }
+
+        public Tween<TMember> TweenTo<TTarget, TMember, TTween>(TTarget target, Expression<Func<TTarget, TMember>> expression, TMember toValue, float duration, float delay = 0f)
+            where TTarget : class
+            where TMember : struct
+            where TTween : Tween<TMember>
+        {
             var memberExpression = (MemberExpression)expression.Body;
             var memberInfo = memberExpression.Member;
             var member = GetMember<TMember>(target, memberInfo.Name);
@@ -35,7 +51,9 @@ namespace MonoGame.Extended.Tweening
             activeTween?.Cancel();
 
             AllocationCount++;
-            var tween = new Tween<TMember>(target, duration, delay, member, toValue);
+            var tween = (TTween)Activator.CreateInstance(typeof(TTween),
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null,
+                new object?[]{target, duration, delay, member, toValue}, null);
             _activeTweens.Add(tween);
             return tween;
         }

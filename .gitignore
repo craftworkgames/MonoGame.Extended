@@ -9,3 +9,9 @@
 # macOS
 .DS_Store
 *.user
+
+# cake build output
+artifacts
+
+# Visual Studio
+.vs/*

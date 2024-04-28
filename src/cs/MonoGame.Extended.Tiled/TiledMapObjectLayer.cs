@@ -4,9 +4,9 @@ namespace MonoGame.Extended.Tiled
 {
     public class TiledMapObjectLayer : TiledMapLayer
     {
-        public TiledMapObjectLayer(string name, TiledMapObject[] objects, Color? color = null, TiledMapObjectDrawOrder drawOrder = TiledMapObjectDrawOrder.TopDown,
+        public TiledMapObjectLayer(string name, string type, TiledMapObject[] objects, Color? color = null, TiledMapObjectDrawOrder drawOrder = TiledMapObjectDrawOrder.TopDown,
             Vector2? offset = null, Vector2? parallaxFactor = null, float opacity = 1.0f, bool isVisible = true)
-            : base(name, offset, parallaxFactor, opacity, isVisible)
+            : base(name, type, offset, parallaxFactor, opacity, isVisible)
         {
             Color = color;
             DrawOrder = drawOrder;

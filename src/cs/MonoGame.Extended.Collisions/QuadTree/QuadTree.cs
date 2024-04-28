@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MonoGame.Extended.Collisions
+namespace MonoGame.Extended.Collisions.QuadTree
 {
     /// <summary>
     /// Class for doing collision handling with a quad tree.
     /// </summary>
-    public class Quadtree
+    public class QuadTree
     {
         /// <summary>
         /// The default maximum depth.
@@ -21,7 +21,7 @@ namespace MonoGame.Extended.Collisions
         /// <summary>
         /// Contains the children of this node.
         /// </summary>
-        protected List<Quadtree> Children = new List<Quadtree>();
+        protected List<QuadTree> Children = new List<QuadTree>();
 
         /// <summary>
         /// Contains the data for this node in the quadtree.
@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Collisions
         /// Creates a quad tree with the given bounds.
         /// </summary>
         /// <param name="bounds">The bounds of the new quad tree.</param>
-        public Quadtree(RectangleF bounds)
+        public QuadTree(RectangleF bounds)
         {
             CurrentDepth = 0;
             NodeBounds = bounds;
@@ -71,7 +71,7 @@ namespace MonoGame.Extended.Collisions
             var objectCount = 0;
 
             // Do BFS on nodes to count children.
-            var process = new Queue<Quadtree>();
+            var process = new Queue<QuadTree>();
             process.Enqueue(this);
             while (process.Count > 0)
             {
@@ -148,7 +148,7 @@ namespace MonoGame.Extended.Collisions
             }
             else
             {
-                throw new InvalidOperationException($"Cannot remove from a non leaf {nameof(Quadtree)}");
+                throw new InvalidOperationException($"Cannot remove from a non leaf {nameof(QuadTree)}");
             }
         }
 
@@ -171,7 +171,7 @@ namespace MonoGame.Extended.Collisions
             }
             else if (numObjects < MaxObjectsPerNode)
             {
-                var process = new Queue<Quadtree>();
+                var process = new Queue<QuadTree>();
                 process.Enqueue(this);
                 while (process.Count > 0)
                 {
@@ -232,18 +232,28 @@ namespace MonoGame.Extended.Collisions
 
             for (var i = 0; i < childAreas.Length; ++i)
             {
-                var node = new Quadtree(childAreas[i]);
+                var node = new QuadTree(childAreas[i]);
                 Children.Add(node);
                 Children[i].CurrentDepth = CurrentDepth + 1;
             }
 
             foreach (QuadtreeData contentQuadtree in Contents)
             {
-                foreach (Quadtree childQuadtree in Children)
+                foreach (QuadTree childQuadtree in Children)
                 {
                     childQuadtree.Insert(contentQuadtree);
                 }
             }
+            Clear();
+        }
+
+        /// <summary>
+        /// Clear current node and all children
+        /// </summary>
+        public void ClearAll()
+        {
+            foreach (QuadTree childQuadtree in Children)
+                childQuadtree.ClearAll();
             Clear();
         }
 
@@ -261,10 +271,10 @@ namespace MonoGame.Extended.Collisions
         /// </summary>
         /// <param name="area">The area to query for overlapping targets</param>
         /// <returns>A unique list of targets intersected by area.</returns>
-        public List<QuadtreeData> Query(IShapeF area)
+        public List<QuadtreeData> Query(ref RectangleF area)
         {
             var recursiveResult = new List<QuadtreeData>();
-            QueryWithoutReset(area, recursiveResult);
+            QueryWithoutReset(ref area, recursiveResult);
             foreach (var quadtreeData in recursiveResult)
             {
                 quadtreeData.MarkClean();
@@ -272,7 +282,7 @@ namespace MonoGame.Extended.Collisions
             return recursiveResult;
         }
 
-        private void QueryWithoutReset(IShapeF area, List<QuadtreeData> recursiveResult)
+        private void QueryWithoutReset(ref RectangleF area, List<QuadtreeData> recursiveResult)
         {
             if (!NodeBounds.Intersects(area))
                 return;
@@ -292,7 +302,7 @@ namespace MonoGame.Extended.Collisions
             {
                 for (int i = 0, size = Children.Count; i < size; i++)
                 {
-                    Children[i].QueryWithoutReset(area, recursiveResult);
+                    Children[i].QueryWithoutReset(ref area, recursiveResult);
                 }
             }
         }

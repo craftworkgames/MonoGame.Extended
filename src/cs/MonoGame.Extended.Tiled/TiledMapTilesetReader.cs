@@ -18,6 +18,7 @@ namespace MonoGame.Extended.Tiled
 		public static TiledMapTileset ReadTileset(ContentReader reader)
 		{
 			var texture = reader.ReadExternalReference<Texture2D>();
+            var @class = reader.ReadString();
             var tileWidth = reader.ReadInt32();
             var tileHeight = reader.ReadInt32();
             var tileCount = reader.ReadInt32();
@@ -26,28 +27,38 @@ namespace MonoGame.Extended.Tiled
             var columns = reader.ReadInt32();
             var explicitTileCount = reader.ReadInt32();
 
-            var tileset = new TiledMapTileset(texture, tileWidth, tileHeight, tileCount, spacing, margin, columns);
+            var tileset = new TiledMapTileset(texture, @class, tileWidth, tileHeight, tileCount, spacing, margin, columns);
 
             for (var tileIndex = 0; tileIndex < explicitTileCount; tileIndex++)
-            {
-                var localTileIdentifier = reader.ReadInt32();
-                var type = reader.ReadString();
-                var animationFramesCount = reader.ReadInt32();
-                var tilesetTile = animationFramesCount <= 0 
-                    ? ReadTiledMapTilesetTile(reader, tileset, objects => 
-                        new TiledMapTilesetTile(localTileIdentifier, type, objects)) 
-                    : ReadTiledMapTilesetTile(reader, tileset, objects => 
-                        new TiledMapTilesetAnimatedTile(localTileIdentifier, ReadTiledMapTilesetAnimationFrames(reader, tileset, animationFramesCount), type, objects));
+                ReadTile(reader, tileset);
 
-                ReadProperties(reader, tilesetTile.Properties);
-                tileset.Tiles.Add(tilesetTile);
-            }
-
-            ReadProperties(reader, tileset.Properties);
+            reader.ReadTiledMapProperties(tileset.Properties);
             return tileset;
 		}
 
-		private static TiledMapTilesetTileAnimationFrame[] ReadTiledMapTilesetAnimationFrames(ContentReader reader, TiledMapTileset tileset, int animationFramesCount)
+        private static void ReadTile(ContentReader reader, TiledMapTileset tileset)
+        {
+            var texture = reader.ReadExternalReference<Texture2D>();
+
+            var localTileIdentifier = reader.ReadInt32();
+            var type = reader.ReadString();
+            var animationFramesCount = reader.ReadInt32();
+            var objectCount = reader.ReadInt32();
+            var objects = new TiledMapObject[objectCount];
+
+            for (var i = 0; i < objectCount; i++)
+                objects[i] = ReadTiledMapObject(reader, tileset);
+
+            var tilesetTile = animationFramesCount <= 0
+                ? new TiledMapTilesetTile(localTileIdentifier, type, objects, texture)
+                : new TiledMapTilesetAnimatedTile(localTileIdentifier,
+                    ReadTiledMapTilesetAnimationFrames(reader, tileset, animationFramesCount), type, objects, texture);
+
+            reader.ReadTiledMapProperties(tilesetTile.Properties);
+            tileset.Tiles.Add(tilesetTile);
+        }
+
+        private static TiledMapTilesetTileAnimationFrame[] ReadTiledMapTilesetAnimationFrames(ContentReader reader, TiledMapTileset tileset, int animationFramesCount)
 		{
 			var animationFrames = new TiledMapTilesetTileAnimationFrame[animationFramesCount];
 
@@ -64,6 +75,7 @@ namespace MonoGame.Extended.Tiled
 
 		private static TiledMapTilesetTile ReadTiledMapTilesetTile(ContentReader reader, TiledMapTileset tileset, Func<TiledMapObject[], TiledMapTilesetTile> createTile)
 		{
+            var texture = reader.ReadExternalReference<Texture2D>();
 			var objectCount = reader.ReadInt32();
 			var objects = new TiledMapObject[objectCount];
 
@@ -88,7 +100,7 @@ namespace MonoGame.Extended.Tiled
 			var properties = new TiledMapProperties();
 			const float opacity = 1.0f;
 
-			ReadProperties(reader, properties);
+            reader.ReadTiledMapProperties(properties);
 
 			TiledMapObject mapObject;
 
@@ -133,18 +145,6 @@ namespace MonoGame.Extended.Tiled
 			}
 
 			return points;
-		}
-
-		private static void ReadProperties(ContentReader reader, TiledMapProperties properties)
-		{
-			var count = reader.ReadInt32();
-
-			for (var i = 0; i < count; i++)
-			{
-				var key = reader.ReadString();
-				var value = reader.ReadString();
-				properties[key] = value;
-			}
 		}
 	}
 }

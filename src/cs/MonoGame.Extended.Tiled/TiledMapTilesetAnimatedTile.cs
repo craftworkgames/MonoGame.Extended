@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Tiled
 {
@@ -12,8 +13,9 @@ namespace MonoGame.Extended.Tiled
         public ReadOnlyCollection<TiledMapTilesetTileAnimationFrame> AnimationFrames { get; }
         public TiledMapTilesetTileAnimationFrame CurrentAnimationFrame { get; private set; }
 
-        public TiledMapTilesetAnimatedTile(int localTileIdentifier, TiledMapTilesetTileAnimationFrame[] frames, string type = null, TiledMapObject[] objects = null)
-            : base(localTileIdentifier, type, objects)
+        public TiledMapTilesetAnimatedTile(int localTileIdentifier,
+            TiledMapTilesetTileAnimationFrame[] frames, string type = null, TiledMapObject[] objects = null, Texture2D texture = null)
+            : base(localTileIdentifier, type, objects, texture)
         {
             if (frames.Length == 0) throw new InvalidOperationException("There must be at least one tileset animation frame");
 

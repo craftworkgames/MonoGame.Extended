@@ -9,11 +9,17 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
         // ReSharper disable once SuggestBaseTypeForParameter
         public static void WriteTiledMapProperties(this ContentWriter writer, IReadOnlyCollection<TiledMapPropertyContent> value)
         {
+            if (value == null)
+            {
+                writer.Write(0);
+                return;
+            }
             writer.Write(value.Count);
             foreach (var property in value)
             {
                 writer.Write(property.Name);
-                writer.Write(property.Value);
+                writer.Write(property.Value ?? string.Empty);
+                WriteTiledMapProperties(writer, property.Properties);
             }
         }
     }

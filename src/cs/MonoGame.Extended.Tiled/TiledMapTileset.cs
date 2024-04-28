@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
@@ -20,9 +21,10 @@ namespace MonoGame.Extended.Tiled
 
     public class TiledMapTileset : ITileset
     {
-        public TiledMapTileset(Texture2D texture, int tileWidth, int tileHeight, int tileCount, int spacing, int margin, int columns)
+        public TiledMapTileset(Texture2D texture, string type, int tileWidth, int tileHeight, int tileCount, int spacing, int margin, int columns)
         {
             Texture = texture;
+            Type = type;
             TileWidth = tileWidth;
             TileHeight = tileHeight;
             TileCount = tileCount;
@@ -43,6 +45,7 @@ namespace MonoGame.Extended.Tiled
             return new TextureRegion2D(Texture, x, y, TileWidth, TileHeight);
         }
 
+        public string Type { get; }
         public int TileWidth { get; }
         public int TileHeight { get; }
         public int Spacing { get; }
@@ -58,7 +61,10 @@ namespace MonoGame.Extended.Tiled
 
         public Rectangle GetTileRegion(int localTileIdentifier)
         {
-            return TiledMapHelper.GetTileSourceRectangle(localTileIdentifier, TileWidth, TileHeight, Columns, Margin, Spacing);
+            return Texture is not null
+                ? TiledMapHelper.GetTileSourceRectangle(localTileIdentifier, TileWidth, TileHeight, Columns, Margin,
+                    Spacing)
+                : Tiles.FirstOrDefault(x => x.LocalTileIdentifier == localTileIdentifier).Texture.Bounds;
         }
     }
 }

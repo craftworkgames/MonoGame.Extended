@@ -17,6 +17,7 @@ namespace MonoGame.Extended.Tiled
 		private readonly List<Tuple<TiledMapTileset, int>> _firstGlobalIdentifiers = new List<Tuple<TiledMapTileset, int>>();
 
         public string Name { get; }
+        public string Type { get; }
         public int Width { get; }
         public int Height { get; }
         public int TileWidth { get; }
@@ -44,10 +45,11 @@ namespace MonoGame.Extended.Tiled
             Properties = new TiledMapProperties();
         }
 
-        public TiledMap(string name, int width, int height, int tileWidth, int tileHeight, TiledMapTileDrawOrder renderOrder, TiledMapOrientation orientation, Color? backgroundColor = null)
+        public TiledMap(string name, string type, int width, int height, int tileWidth, int tileHeight, TiledMapTileDrawOrder renderOrder, TiledMapOrientation orientation, Color? backgroundColor = null)
             : this()
         {
             Name = name;
+            Type = type;
             Width = width;
             Height = height;
             TileWidth = tileWidth;

@@ -23,7 +23,8 @@ namespace MonoGame.Extended.Input
         public bool IsKeyDown(Keys key) => _currentKeyboardState.IsKeyDown(key);
         public bool IsKeyUp(Keys key) => _currentKeyboardState.IsKeyUp(key);
         public Keys[] GetPressedKeys() => _currentKeyboardState.GetPressedKeys();
-
+        public void GetPressedKeys(Keys[] keys) => _currentKeyboardState.GetPressedKeys(keys);
+      
         /// <summary>
         /// Gets whether the given key was down on the previous state, but is now up.
         /// </summary>
@@ -54,6 +55,6 @@ namespace MonoGame.Extended.Input
         /// <returns>true if the key was pressed this state-change, otherwise false.</returns>
         public readonly bool IsKeyPressed(Keys key) => _previousKeyboardState.IsKeyUp(key) && _currentKeyboardState.IsKeyDown(key);
 
-        public bool WasAnyKeyJustDown() => _previousKeyboardState.GetPressedKeys().Any();
+        public bool WasAnyKeyJustDown() => _previousKeyboardState.GetPressedKeyCount() > 0;
    }
 }

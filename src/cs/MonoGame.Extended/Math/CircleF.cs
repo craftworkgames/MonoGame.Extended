@@ -41,6 +41,16 @@ namespace MonoGame.Extended
             set => Center = value;
         }
 
+        public RectangleF BoundingRectangle
+        {
+            get
+            {
+                var minX = Center.X - Radius;
+                var minY = Center.Y - Radius;
+                return new RectangleF(minX, minY, Diameter, Diameter);
+            }
+        }
+
         /// <summary>
         ///     Gets the distance from a point to the opposite point, both on the boundary of this <see cref="CircleF" />.
         /// </summary>
@@ -415,13 +425,13 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Performs an implicit conversion from a <see cref="CircleF" /> to a <see cref="Rectangle" />.
+        ///     Performs an explicit conversion from a <see cref="CircleF" /> to a <see cref="Rectangle" />.
         /// </summary>
         /// <param name="circle">The circle.</param>
         /// <returns>
         ///     The resulting <see cref="Rectangle" />.
         /// </returns>
-        public static implicit operator Rectangle(CircleF circle)
+        public static explicit operator Rectangle(CircleF circle)
         {
             var diameter = (int) circle.Diameter;
             return new Rectangle((int) (circle.Center.X - circle.Radius), (int) (circle.Center.Y - circle.Radius),
@@ -436,17 +446,17 @@ namespace MonoGame.Extended
         /// </returns>
         public Rectangle ToRectangle()
         {
-            return this;
+            return (Rectangle)this;
         }
 
         /// <summary>
-        ///     Performs an implicit conversion from a <see cref="Rectangle" /> to a <see cref="CircleF" />.
+        ///     Performs an explicit conversion from a <see cref="Rectangle" /> to a <see cref="CircleF" />.
         /// </summary>
         /// <param name="rectangle">The rectangle.</param>
         /// <returns>
         ///     The resulting <see cref="CircleF" />.
         /// </returns>
-        public static implicit operator CircleF(Rectangle rectangle)
+        public static explicit operator CircleF(Rectangle rectangle)
         {
             var halfWidth = rectangle.Width / 2;
             var halfHeight = rectangle.Height / 2;
@@ -455,13 +465,13 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Performs an implicit conversion from a <see cref="CircleF" /> to a <see cref="RectangleF" />.
+        ///     Performs an explicit conversion from a <see cref="CircleF" /> to a <see cref="RectangleF" />.
         /// </summary>
         /// <param name="circle">The circle.</param>
         /// <returns>
         ///     The resulting <see cref="RectangleF" />.
         /// </returns>
-        public static implicit operator RectangleF(CircleF circle)
+        public static explicit operator RectangleF(CircleF circle)
         {
             var diameter = circle.Diameter;
             return new RectangleF(circle.Center.X - circle.Radius, circle.Center.Y - circle.Radius, diameter, diameter);
@@ -475,17 +485,17 @@ namespace MonoGame.Extended
         /// </returns>
         public RectangleF ToRectangleF()
         {
-            return this;
+            return (RectangleF)this;
         }
 
         /// <summary>
-        ///     Performs an implicit conversion from a <see cref="RectangleF" /> to a <see cref="CircleF" />.
+        ///     Performs an explicit conversion from a <see cref="RectangleF" /> to a <see cref="CircleF" />.
         /// </summary>
         /// <param name="rectangle">The rectangle.</param>
         /// <returns>
         ///     The resulting <see cref="CircleF" />.
         /// </returns>
-        public static implicit operator CircleF(RectangleF rectangle)
+        public static explicit operator CircleF(RectangleF rectangle)
         {
             var halfWidth = rectangle.Width * 0.5f;
             var halfHeight = rectangle.Height * 0.5f;
