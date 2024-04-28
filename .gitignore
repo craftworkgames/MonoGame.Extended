@@ -12,3 +12,6 @@
 
 # cake build output
 artifacts
+
+# Visual Studio
+.vs/*

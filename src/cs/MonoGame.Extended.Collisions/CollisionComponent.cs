@@ -181,44 +181,22 @@ namespace MonoGame.Extended.Collisions
         /// <returns>The distance vector from the edge of b to a's Position</returns>
         private static Vector2 CalculatePenetrationVector(IShapeF a, IShapeF b)
         {
-            switch (a)
-            {
-                case RectangleF rectA when b is RectangleF rectB:
-                    return PenetrationVector(rectA, rectB);
-                case CircleF circA when b is CircleF circB:
-                    return PenetrationVector(circA, circB);
-                case CircleF circA when b is RectangleF rectB:
-                    return PenetrationVector(circA, rectB);
-                case RectangleF rectA when b is CircleF circB:
-                    return PenetrationVector(rectA, circB);
-            }
+            return a switch
+                {
+                    CircleF circleA when b is CircleF circleB => PenetrationVector(circleA, circleB),
+                    CircleF circleA when b is RectangleF rectangleB => PenetrationVector(circleA, rectangleB),
+                    CircleF circleA when b is OrientedRectangle orientedRectangleB => PenetrationVector(circleA, orientedRectangleB),
 
-            throw new NotSupportedException("Shapes must be either a CircleF or RectangleF");
-        }
+                    RectangleF rectangleA when b is CircleF circleB => PenetrationVector(rectangleA, circleB),
+                    RectangleF rectangleA when b is RectangleF rectangleB => PenetrationVector(rectangleA, rectangleB),
+                    RectangleF rectangleA when b is OrientedRectangle orientedRectangleB => PenetrationVector(rectangleA, orientedRectangleB),
 
-        private static Vector2 PenetrationVector(RectangleF rect1, RectangleF rect2)
-        {
-            var intersectingRectangle = RectangleF.Intersection(rect1, rect2);
-            Debug.Assert(!intersectingRectangle.IsEmpty,
-                "Violation of: !intersect.IsEmpty; Rectangles must intersect to calculate a penetration vector.");
+                    OrientedRectangle orientedRectangleA when b is CircleF circleB => PenetrationVector(orientedRectangleA, circleB),
+                    OrientedRectangle orientedRectangleA when b is RectangleF rectangleB => PenetrationVector(orientedRectangleA, rectangleB),
+                    OrientedRectangle orientedRectangleA when b is OrientedRectangle orientedRectangleB => PenetrationVector(orientedRectangleA, orientedRectangleB),
 
-            Vector2 penetration;
-            if (intersectingRectangle.Width < intersectingRectangle.Height)
-            {
-                var d = rect1.Center.X < rect2.Center.X
-                    ? intersectingRectangle.Width
-                    : -intersectingRectangle.Width;
-                penetration = new Vector2(d, 0);
-            }
-            else
-            {
-                var d = rect1.Center.Y < rect2.Center.Y
-                    ? intersectingRectangle.Height
-                    : -intersectingRectangle.Height;
-                penetration = new Vector2(0, d);
-            }
-
-            return penetration;
+                    _ => throw new ArgumentOutOfRangeException(nameof(a))
+                };
         }
 
         private static Vector2 PenetrationVector(CircleF circ1, CircleF circ2)
@@ -293,9 +271,69 @@ namespace MonoGame.Extended.Collisions
             }
         }
 
+        private static Vector2 PenetrationVector(CircleF circleA, OrientedRectangle orientedRectangleB)
+        {
+            var rotation = Matrix2.CreateRotationZ(orientedRectangleB.Orientation.Rotation);
+            var circleCenterInRectangleSpace = rotation.Transform(circleA.Center - orientedRectangleB.Center);
+            var circleInRectangleSpace = new CircleF(circleCenterInRectangleSpace, circleA.Radius);
+            var boundingRectangle = new BoundingRectangle(new Point2(), orientedRectangleB.Radii);
+
+            var penetrationVector = PenetrationVector(circleInRectangleSpace, boundingRectangle);
+            var inverseRotation = Matrix2.CreateRotationZ(-orientedRectangleB.Orientation.Rotation);
+            var transformedPenetration = inverseRotation.Transform(penetrationVector);
+
+            return transformedPenetration;
+        }
+
         private static Vector2 PenetrationVector(RectangleF rect, CircleF circ)
         {
             return -PenetrationVector(circ, rect);
+        }
+
+        private static Vector2 PenetrationVector(RectangleF rect1, RectangleF rect2)
+        {
+            var intersectingRectangle = RectangleF.Intersection(rect1, rect2);
+            Debug.Assert(!intersectingRectangle.IsEmpty,
+                "Violation of: !intersect.IsEmpty; Rectangles must intersect to calculate a penetration vector.");
+
+            Vector2 penetration;
+            if (intersectingRectangle.Width < intersectingRectangle.Height)
+            {
+                var d = rect1.Center.X < rect2.Center.X
+                    ? intersectingRectangle.Width
+                    : -intersectingRectangle.Width;
+                penetration = new Vector2(d, 0);
+            }
+            else
+            {
+                var d = rect1.Center.Y < rect2.Center.Y
+                    ? intersectingRectangle.Height
+                    : -intersectingRectangle.Height;
+                penetration = new Vector2(0, d);
+            }
+
+            return penetration;
+        }
+
+        private static Vector2 PenetrationVector(RectangleF rectangleA, OrientedRectangle orientedRectangleB)
+        {
+            return PenetrationVector((OrientedRectangle)rectangleA, orientedRectangleB);
+        }
+
+        private static Vector2 PenetrationVector(OrientedRectangle orientedRectangleA, CircleF circleB)
+        {
+            return -PenetrationVector(circleB, orientedRectangleA);
+        }
+
+        private static Vector2 PenetrationVector(OrientedRectangle orientedRectangleA, RectangleF rectangleB)
+        {
+            return -PenetrationVector(rectangleB, orientedRectangleA);
+        }
+
+        private static Vector2 PenetrationVector(OrientedRectangle orientedRectangleA, OrientedRectangle orientedRectangleB)
+        {
+            return OrientedRectangle.Intersects(orientedRectangleA, orientedRectangleB)
+                .MinimumTranslationVector;
         }
 
         #endregion

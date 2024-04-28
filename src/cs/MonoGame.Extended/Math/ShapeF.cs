@@ -1,4 +1,7 @@
-﻿namespace MonoGame.Extended
+﻿using System;
+using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended
 {
     /// <summary>
     ///     Base class for shapes.
@@ -27,31 +30,28 @@
         /// <summary>
         ///     Check if two shapes intersect.
         /// </summary>
-        /// <param name="shapeA">The first shape.</param>
-        /// <param name="shapeB">The second shape.</param>
+        /// <param name="a">The first shape.</param>
+        /// <param name="b">The second shape.</param>
         /// <returns>True if the two shapes intersect.</returns>
-        public static bool Intersects(this IShapeF shapeA, IShapeF shapeB)
+        public static bool Intersects(this IShapeF a, IShapeF b)
         {
-            var intersects = false;
+            return a switch
+                {
+                    CircleF circleA when b is CircleF circleB => circleA.Intersects(circleB),
+                    CircleF circleA when b is RectangleF rectangleB => circleA.Intersects(rectangleB),
+                    CircleF circleA when b is OrientedRectangle orientedRectangleB => Intersects(circleA, orientedRectangleB),
 
-            if (shapeA is RectangleF rectangleA && shapeB is RectangleF rectangleB)
-            {
-                intersects = rectangleA.Intersects(rectangleB);
-            }
-            else if (shapeA is CircleF circleA && shapeB is CircleF circleB)
-            {
-                intersects = circleA.Intersects(circleB);
-            }
-            else if (shapeA is RectangleF rect1 && shapeB is CircleF circ1)
-            {
-                return Intersects(circ1, rect1);
-            }
-            else if (shapeA is CircleF circ2 && shapeB is RectangleF rect2)
-            {
-                return Intersects(circ2, rect2);
-            }
+                    RectangleF rectangleA when b is CircleF circleB => Intersects(circleB, rectangleA),
+                    RectangleF rectangleA when b is RectangleF rectangleB => Intersects(rectangleA, rectangleB),
+                    RectangleF rectangleA when b is OrientedRectangle orientedRectangleB => Intersects(rectangleA, orientedRectangleB).Intersects,
 
-            return intersects;
+                    OrientedRectangle orientedRectangleA when b is CircleF circleB => Intersects(circleB, orientedRectangleA),
+                    OrientedRectangle orientedRectangleA when b is RectangleF rectangleB => Intersects(rectangleB, orientedRectangleA).Intersects,
+                    OrientedRectangle orientedRectangleA when b is OrientedRectangle orientedRectangleB
+                        => OrientedRectangle.Intersects(orientedRectangleA, orientedRectangleB).Intersects,
+
+                    _ => throw new ArgumentOutOfRangeException(nameof(a))
+                };
         }
 
         /// <summary>
@@ -64,6 +64,32 @@
         {
             var closestPoint = rectangle.ClosestPointTo(circle.Center);
             return circle.Contains(closestPoint);
+        }
+
+        /// <summary>
+        /// Checks whether a <see cref="CircleF"/> and <see cref="OrientedRectangle"/> intersects.
+        /// </summary>
+        /// <param name="circle"><see cref="CircleF"/>to use in intersection test.</param>
+        /// <param name="orientedRectangle"><see cref="OrientedRectangle"/>to use in intersection test.</param>
+        /// <returns>True if the circle and oriented bounded rectangle intersects, otherwise false.</returns>
+        public static bool Intersects(CircleF circle, OrientedRectangle orientedRectangle)
+        {
+            var rotation = Matrix2.CreateRotationZ(orientedRectangle.Orientation.Rotation);
+            var circleCenterInRectangleSpace = rotation.Transform(circle.Center - orientedRectangle.Center);
+            var circleInRectangleSpace = new CircleF(circleCenterInRectangleSpace, circle.Radius);
+            var boundingRectangle = new BoundingRectangle(new Point2(), orientedRectangle.Radii);
+            return circleInRectangleSpace.Intersects(boundingRectangle);
+        }
+
+        /// <summary>
+        /// Checks if a <see cref="RectangleF"/> and <see cref="OrientedRectangle"/> intersects.
+        /// </summary>
+        /// <param name="rectangleF"></param>
+        /// <param name="orientedRectangle"></param>
+        /// <returns>True if objects are intersecting, otherwise false.</returns>
+        public static (bool Intersects, Vector2 MinimumTranslationVector) Intersects(RectangleF rectangleF, OrientedRectangle orientedRectangle)
+        {
+            return OrientedRectangle.Intersects(orientedRectangle, (OrientedRectangle)rectangleF);
         }
     }
 }
