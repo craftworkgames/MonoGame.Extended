@@ -104,7 +104,13 @@ namespace MonoGame.Extended.Collisions
         /// <param name="target">Target to insert.</param>
         public void Insert(ICollisionActor target)
         {
-            _layers[target.LayerName ?? DEFAULT_LAYER_NAME].Space.Insert(target);
+            var layerName = target.LayerName ?? DEFAULT_LAYER_NAME;
+            if (!_layers.TryGetValue(layerName, out var layer))
+            {
+                throw new UndefinedLayerException(layerName);
+            }
+
+            layer.Space.Insert(target);
         }
 
         /// <summary>
