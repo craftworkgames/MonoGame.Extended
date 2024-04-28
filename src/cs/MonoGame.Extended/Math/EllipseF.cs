@@ -53,6 +53,12 @@ namespace MonoGame.Extended
         }
 
         [Pure]
+        public bool Contains(Point2 point)
+        {
+            return Contains(point.X, point.Y);
+        }
+
+        [Pure]
         public bool Contains(Vector2 point)
         {
             return Contains(point.X, point.Y);

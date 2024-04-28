@@ -20,6 +20,13 @@
         /// At least 3 points on the shape should be on the returned rectangle.
         /// </remarks>
         RectangleF BoundingRectangle { get; }
+
+        /// <summary>
+        /// Checks whether a point is within the shape or not.
+        /// </summary>
+        /// <param name="point">The point to test.</param>
+        /// <returns>True if the point is within the bounds of the shape.</returns>
+        bool Contains(Point2 point);
     }
 
     /// <summary>
