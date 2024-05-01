@@ -419,52 +419,52 @@ namespace MonoGame.Extended.Collisions
             return -PenetrationVector(circ, rect);
         }
 
+        //apologies for the borderline-psychotic function nesting here
+        //figuring this out with triangles is really hard
+        //this function might be wrong???
         public static Vector2 PenetrationVector(TriangleF triangleA, TriangleF triangleB)
         {
-            // Calculate the normals of the first triangle
+            // normals of the first triangle
             Vector2 n1 = new(triangleA.B.Y - triangleA.A.Y, triangleA.A.X - triangleA.B.X);
             Vector2 n2 = new(triangleA.C.Y - triangleA.B.Y, triangleA.B.X - triangleA.C.X);
             Vector2 n3 = new(triangleA.A.Y - triangleA.C.Y, triangleA.C.X - triangleA.A.X);
 
-            // Calculate the penetration depth along each normal
-            float p1 = PenetrationDepth(triangleA, triangleB, n1);
-            float p2 = PenetrationDepth(triangleA, triangleB, n2);
-            float p3 = PenetrationDepth(triangleA, triangleB, n3);
+            // the penetration depth along each normal
+            float p1 = penetrationDepth(triangleA, triangleB, n1);
+            float p2 = penetrationDepth(triangleA, triangleB, n2);
+            float p3 = penetrationDepth(triangleA, triangleB, n3);
 
-            // Choose the smallest penetration depth and corresponding normal
-            float minPenetration = Math.Min(p1, Math.Min(p2, p3));
-            Vector2 minNormal = minPenetration switch
+            // pick smallest penetration depth and corresponding normal
+            float minPen = Math.Min(p1, Math.Min(p2, p3));
+            Vector2 minNormal = minPen switch
             {
-                _ when Math.Abs(p1 - minPenetration) < float.Epsilon => n1,
-                _ when Math.Abs(p2 - minPenetration) < float.Epsilon => n2,
+                _ when Math.Abs(p1 - minPen) == 0 => n1,
+                _ when Math.Abs(p2 - minPen) == 0 => n2,
                 _ => n3
             };
 
-            // Calculate the penetration vector (MTV) using the chosen normal and penetration depth
-            Vector2 penetrationVector = minNormal * minPenetration;
+            return minNormal * minPen;
 
-            return penetrationVector;
-
-            float PenetrationDepth(TriangleF triangleA, TriangleF triangleB, Vector2 normal)
+            float penetrationDepth(TriangleF triangleA, TriangleF triangleB, Vector2 normal)
             {
                 // Project the vertices of both triangles onto the normal and calculate the overlap
-                float minA = MinProjection(triangleA, normal);
-                float maxA = MaxProjection(triangleA, normal);
-                float minB = MinProjection(triangleB, normal);
-                float maxB = MaxProjection(triangleB, normal);
+                float minA = minProjection(triangleA, normal);
+                float maxA = maxProjection(triangleA, normal);
+                float minB = minProjection(triangleB, normal);
+                float maxB = maxProjection(triangleB, normal);
 
-                // Calculate the overlap (negative if separated)
+                // calculate overlap (negative if separated)
                 float overlap = Math.Min(maxA, maxB) - Math.Max(minA, minB);
 
                 return overlap;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                float MinProjection(TriangleF triangle, Vector2 normal)
+                float minProjection(TriangleF triangle, Vector2 normal)
                     => Math.Min(Vector2.Dot(triangle.A, normal),
                         Math.Min(Vector2.Dot(triangle.B, normal), Vector2.Dot(triangle.C, normal)));
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                float MaxProjection(TriangleF triangle, Vector2 normal)
+                float maxProjection(TriangleF triangle, Vector2 normal)
                     => Math.Max(Vector2.Dot(triangle.A, normal),
                         Math.Max(Vector2.Dot(triangle.B, normal), Vector2.Dot(triangle.C, normal)));
 
@@ -473,18 +473,18 @@ namespace MonoGame.Extended.Collisions
 
         public static Vector2 PenetrationVector(TriangleF triangle, CircleF circle)
         {
-            // Calculate the closest point on the triangle to the center of the circle
+            // closest point on the triangle to the center of the circle
             Point2 closestPoint = triangle.ClosestPointTo(circle.Center);
 
-            // Calculate the vector from the closest point on the triangle to the center of the circle
-            Vector2 penetrationVector = new(circle.Center.X - closestPoint.X, circle.Center.Y - closestPoint.Y);
+            // vector from the closest point on the triangle to the center of the circle
+            Vector2 pVector = circle.Center - closestPoint;
 
-            // Adjust the penetration vector by the radius of the circle
-            float penetrationDepth = penetrationVector.Length() - circle.Radius;
-            penetrationVector.Normalize();
-            penetrationVector *= penetrationDepth;
+            // depth is just radius minus distance from innermost point to center
+            float pDepth = pVector.Length() - circle.Radius;
+            pVector.Normalize();
+            pVector *= pDepth;
 
-            return penetrationVector;
+            return pVector;
         }
 
         public static Vector2 PenetrationVector(CircleF circle, TriangleF triangle)
@@ -494,20 +494,19 @@ namespace MonoGame.Extended.Collisions
 
         public static Vector2 PenetrationVector(TriangleF triangle, RectangleF rectangle)
         {
-            // Calculate the closest point on the rectangle to each vertex of the triangle
             Point2 rectNearest = rectangle.ClosestPointTo(triangle.Center);
             Point2 triangleNearest = triangle.ClosestPointTo(rectNearest);
 
-            // Calculate the vector from the closest point on the triangle to the closest point on the rectangle
-            Vector2 penetrationVector = new(rectNearest.X - triangleNearest.X, rectNearest.Y - triangleNearest.Y);
+            // closest point on the triangle to the closest point on the rectangle
+            Vector2 pVector = rectNearest - triangleNearest;
 
-            // Adjust the penetration vector by the dimensions of the rectangle
-            float penetrationDepthX = Math.Abs(penetrationVector.X) - rectangle.Width / 2;
-            float penetrationDepthY = Math.Abs(penetrationVector.Y) - rectangle.Height / 2;
-            penetrationVector.X = Math.Sign(penetrationVector.X) * Math.Max(penetrationDepthX, 0);
-            penetrationVector.Y = Math.Sign(penetrationVector.Y) * Math.Max(penetrationDepthY, 0);
+            // adjust penetration vector by the dimensions of the rectangle
+            float pDepthX = Math.Abs(pVector.X) - rectangle.Width / 2;
+            float pDepthY = Math.Abs(pVector.Y) - rectangle.Height / 2;
+            pVector.X = Math.Sign(pVector.X) * Math.Max(pDepthX, 0);
+            pVector.Y = Math.Sign(pVector.Y) * Math.Max(pDepthY, 0);
 
-            return penetrationVector;
+            return pVector;
         }
 
         public static Vector2 PenetrationVector(RectangleF rectangle, TriangleF triangle)

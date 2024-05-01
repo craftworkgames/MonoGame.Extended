@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using System.Drawing;
 using System.Runtime.Serialization;
 using Microsoft.Xna.Framework;
 
