@@ -1,7 +1,4 @@
-using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Build;
-using Cake.Common.Tools.DotNet.MSBuild;
-using Cake.Frosting;
 
 namespace BuildScripts;
 

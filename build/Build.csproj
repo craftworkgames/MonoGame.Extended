@@ -8,4 +8,18 @@
   <ItemGroup>
     <PackageReference Include="Cake.Frosting" Version="3.1.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Using Include="Cake.Frosting" />
+    <Using Include="Cake.Common.Build" />
+    <Using Include="Cake.Common.Diagnostics" />
+    <Using Include="Cake.Common.Tools.DotNet" />
+    <Using Include="Cake.Common.Tools.DotNet.MSBuild" />
+    <Using Include="Cake.Common.Tools.DotNet.Pack" />
+    <Using Include="Cake.Common.IO" />
+    <Using Include="Cake.Common" />
+    <Using Include="Cake.Core" />
+    <Using Include="Cake.Core.Diagnostics" />
+    <Using Include="Cake.Core.IO" />
+    <Using Include="Cake.FileHelpers" />
+  </ItemGroup>
 </Project>

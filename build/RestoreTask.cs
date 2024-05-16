@@ -1,6 +1,4 @@
-using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Restore;
-using Cake.Frosting;
 
 namespace BuildScripts;
 

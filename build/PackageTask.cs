@@ -1,11 +1,3 @@
-using Cake.Common.Build;
-using Cake.Common.IO;
-using Cake.Common.Tools.DotNet;
-using Cake.Common.Tools.DotNet.MSBuild;
-using Cake.Common.Tools.DotNet.Pack;
-using Cake.Core.IO;
-using Cake.Frosting;
-
 namespace BuildScripts;
 
 [TaskName(nameof(PackageTask))]

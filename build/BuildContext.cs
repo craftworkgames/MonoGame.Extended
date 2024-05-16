@@ -1,9 +1,4 @@
-using System.Linq;
-using Cake.Common;
-using Cake.Common.Build;
 using Cake.Common.Xml;
-using Cake.Core;
-using Cake.Frosting;
 
 namespace BuildScripts;
 

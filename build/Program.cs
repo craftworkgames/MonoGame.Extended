@@ -1,11 +1,3 @@
-using System.Threading.Tasks;
-using Cake.Common.Build;
-using Cake.Common.IO;
-using Cake.Common.Tools.ReportUnit;
-using Cake.Core;
-using Cake.Core.IO;
-using Cake.Frosting;
-
 namespace BuildScripts;
 
 public static class Program

@@ -1,6 +1,4 @@
-using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.NuGet.Push;
-using Cake.Frosting;
 
 namespace BuildScripts;
 
