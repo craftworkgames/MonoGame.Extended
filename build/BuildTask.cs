@@ -18,7 +18,6 @@ public sealed class BuildTask : FrostingTask<BuildContext>
             MSBuildSettings = msBuildSettings,
             Configuration = context.BuildConfiguration,
             Verbosity = DotNetVerbosity.Minimal,
-            NoRestore = true,
             NoLogo = true
         };
 
