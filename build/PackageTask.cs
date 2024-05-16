@@ -16,7 +16,7 @@ public sealed class PackageTask : FrostingTask<BuildContext>
         DotNetPackSettings packSettings = new DotNetPackSettings()
         {
             MSBuildSettings = msBuildSettings,
-            Configuration = "Release",
+            Configuration = context.BuildConfiguration,
             Verbosity = DotNetVerbosity.Minimal,
             NoLogo = true,
             OutputDirectory = context.ArtifactsDirectory,
