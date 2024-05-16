@@ -4,6 +4,7 @@ using Cake.Common.Tools.DotNet.Test;
 namespace BuildScripts;
 
 [TaskName(nameof(TestTask))]
+[IsDependeeOf(typeof(BuildTask))]
 public class TestTask : FrostingTask<BuildContext>
 {
     public override void Run(BuildContext context)
