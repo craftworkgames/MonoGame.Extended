@@ -7,9 +7,6 @@ public sealed class PackageTask : FrostingTask<BuildContext>
 {
     public override void Run(BuildContext context)
     {
-        context.CleanDirectories(context.ArtifactsDirectory);
-        context.CreateDirectory(context.ArtifactsDirectory);
-
         DotNetMSBuildSettings msBuildSettings = new DotNetMSBuildSettings();
         msBuildSettings.WithProperty("Version", context.Version);
 
