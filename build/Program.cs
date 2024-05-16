@@ -12,6 +12,7 @@ public static class Program
 }
 
 [TaskName("Default")]
+[IsDependentOn(typeof(PrepTask))]
 [IsDependentOn(typeof(RestoreTask))]
 [IsDependentOn(typeof(BuildTask))]
 [IsDependentOn(typeof(TestTask))]
