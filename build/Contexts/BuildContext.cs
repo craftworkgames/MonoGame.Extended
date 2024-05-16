@@ -5,6 +5,7 @@ namespace BuildScripts.Contexts;
 public sealed class BuildContext : FrostingContext
 {
     public string ArtifactsDirectory { get; }
+    public string BuildConfiguration { get; }
     public string Version { get; }
     public string SolutionPath { get; }
     public string? RepositoryOwner { get; }
@@ -18,6 +19,7 @@ public sealed class BuildContext : FrostingContext
     public BuildContext(ICakeContext context) : base(context)
     {
         ArtifactsDirectory = context.Argument(nameof(ArtifactsDirectory), "artifacts");
+        BuildConfiguration = context.Argument(nameof(BuildConfiguration), "Release");
         Version = context.XmlPeek("Directory.Build.targets", "/Project/PropertyGroup/Version");
         SolutionPath = "./MonoGame.Extended.sln";
         IsRunningOnGitHubActions = context.BuildSystem().IsRunningOnGitHubActions;
