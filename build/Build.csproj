@@ -20,6 +20,5 @@
     <Using Include="Cake.Core" />
     <Using Include="Cake.Core.Diagnostics" />
     <Using Include="Cake.Core.IO" />
-    <Using Include="Cake.FileHelpers" />
   </ItemGroup>
 </Project>
