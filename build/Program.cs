@@ -1,3 +1,5 @@
+using BuildScripts.Contexts;
+
 namespace BuildScripts;
 
 public static class Program

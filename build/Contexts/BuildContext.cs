@@ -1,6 +1,6 @@
 using Cake.Common.Xml;
 
-namespace BuildScripts;
+namespace BuildScripts.Contexts;
 
 public sealed class BuildContext : FrostingContext
 {
