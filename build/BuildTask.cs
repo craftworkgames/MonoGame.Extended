@@ -16,7 +16,7 @@ public sealed class BuildTask : FrostingTask<BuildContext>
         DotNetBuildSettings buildSettings = new DotNetBuildSettings()
         {
             MSBuildSettings = msBuildSettings,
-            Configuration = "Release",
+            Configuration = context.BuildConfiguration,
             Verbosity = DotNetVerbosity.Minimal,
             NoRestore = true,
             NoLogo = true
