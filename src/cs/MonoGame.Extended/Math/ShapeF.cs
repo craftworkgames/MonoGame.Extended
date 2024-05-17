@@ -42,7 +42,7 @@ namespace MonoGame.Extended
                     CircleF circleA when b is OrientedRectangle orientedRectangleB => Intersects(circleA, orientedRectangleB),
 
                     RectangleF rectangleA when b is CircleF circleB => Intersects(circleB, rectangleA),
-                    RectangleF rectangleA when b is RectangleF rectangleB => Intersects(rectangleA, rectangleB),
+                    RectangleF rectangleA when b is RectangleF rectangleB => rectangleA.Intersects(rectangleB),
                     RectangleF rectangleA when b is OrientedRectangle orientedRectangleB => Intersects(rectangleA, orientedRectangleB).Intersects,
 
                     OrientedRectangle orientedRectangleA when b is CircleF circleB => Intersects(circleB, orientedRectangleA),
