@@ -1,8 +1,11 @@
-﻿using Xunit;
+﻿using Microsoft.Xna.Framework;
+using Xunit;
 
-namespace MonoGame.Extended.Tests.Primitives
+namespace MonoGame.Extended.Tests.Primitives;
+
+public class ShapeTests
 {
-    public class ShapeTests
+    public class CircleFTests
     {
         [Fact]
         public void CircCircIntersectionSameCircleTest()
@@ -30,7 +33,10 @@ namespace MonoGame.Extended.Tests.Primitives
 
             Assert.False(shape1.Intersects(shape2));
         }
+    }
 
+    public class RectangleFTests
+    {
         [Fact]
         public void RectRectSameRectTest()
         {
@@ -68,7 +74,6 @@ namespace MonoGame.Extended.Tests.Primitives
             Assert.True(shape2.Intersects(shape1));
         }
 
-
         [Fact]
         public void RectCircOnEdgeTest()
         {
@@ -77,6 +82,99 @@ namespace MonoGame.Extended.Tests.Primitives
 
             Assert.True(shape1.Intersects(shape2));
             Assert.True(shape2.Intersects(shape1));
+        }
+    }
+
+    public class OrientedRectangleTests
+    {
+        [Fact]
+        public void Axis_aligned_rectangle_intersects_circle()
+        {
+            /*
+             *                    :
+             *                    :
+             *                   +*+
+             *        ...........* *.........
+             *                   +*+
+             *                    :
+             *                    :
+             */
+            IShapeF rectangle = new OrientedRectangle(Point2.Zero, new Size2(1, 1), Matrix2.Identity);
+            var circle = new CircleF(Point2.Zero, 1);
+
+            Assert.True(rectangle.Intersects(circle));
+        }
+
+        [Fact]
+        public void Axis_aligned_rectangle_does_not_intersect_circle_in_top_left()
+        {
+            /*
+             *                  * :
+             *                 * *:
+             *                  *+-+
+             *        ...........| |.........
+             *                   +-+
+             *                    :
+             *                    :
+             */
+            IShapeF rectangle = new OrientedRectangle(Point2.Zero, new Size2(1, 1), Matrix2.Identity);
+            var circle = new CircleF(new Point2(-2, 1), .99f);
+
+            Assert.False(rectangle.Intersects(circle));
+        }
+
+        [Fact]
+        public void Rectangle_rotated_45_degrees_does_not_intersect_circle_in_bottom_right()
+        {
+            /*
+             *                    :
+             *                    :
+             *                    +-.
+             *        .........../ / ........
+             *                  +./* *
+             *                    *   *
+             *                    :* *
+             */
+            IShapeF rectangle = new OrientedRectangle(new Point2(-1, 1), new Size2(1.42f, 1.42f), Matrix2.CreateRotationZ(-MathHelper.PiOver4));
+            var circle = new CircleF(new Point2(1, -1), 1.4f);
+
+            Assert.False(rectangle.Intersects(circle));
+        }
+
+        [Fact]
+        public void Axis_aligned_rectangle_does_not_intersect_rectangle()
+        {
+            /*
+             *                    :
+             *                    :
+             *                  +-+
+             *        ..........| |**.......
+             *                  +-+ *
+             *                    :**
+             *                    :
+             */
+            IShapeF rectangle = new OrientedRectangle(new Point2(-1, 0), new Size2(1, 1), Matrix2.Identity);
+            var rect = new RectangleF(new Point2(0.001f, 0), new Size2(2, 2));
+
+            Assert.False(rectangle.Intersects(rect));
+        }
+
+        [Fact]
+        public void Axis_aligned_rectangle_intersects_rectangle()
+        {
+            /*
+             *                    :
+             *                    :
+             *                  +-+
+             *        ..........| |**.......
+             *                  +-+ *
+             *                    :**
+             *                    :
+             */
+            IShapeF rectangle = new OrientedRectangle(new Point2(-1, 0), new Size2(1, 1), Matrix2.Identity);
+            var rect = new RectangleF(new Point2(0, 0), new Size2(2, 2));
+
+            Assert.True(rectangle.Intersects(rect));
         }
     }
 }
