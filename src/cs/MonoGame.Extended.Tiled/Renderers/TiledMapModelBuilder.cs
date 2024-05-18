@@ -66,7 +66,9 @@ namespace MonoGame.Extended.Tiled.Renderers
                     if (tilesetTile is TiledMapTilesetAnimatedTile animatedTilesetTile)
                     {
                         animatedLayerBuilder.AddSprite(texture, position, sourceRectangle, flipFlags);
+                        animatedTilesetTile.CreateTextureRotations(tileset, flipFlags);
                         animatedLayerBuilder.AnimatedTilesetTiles.Add(animatedTilesetTile);
+                        animatedLayerBuilder.AnimatedTilesetFlipFlags.Add(flipFlags);
 
                         if (animatedLayerBuilder.IsFull)
                             layerModels.Add(animatedLayerBuilder.Build(_graphicsDevice, texture));

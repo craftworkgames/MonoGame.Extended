@@ -61,10 +61,9 @@ namespace MonoGame.Extended.Tiled.Renderers
                 fixed (VertexPositionTexture* fixedVerticesPointer = animatedModel.Vertices)
                 {
                     var verticesPointer = fixedVerticesPointer;
-
-                    foreach (var animatedTile in animatedModel.AnimatedTilesetTiles)
-                    {
-                        var currentFrameTextureCoordinates = animatedTile.CurrentAnimationFrame.TextureCoordinates;
+                    for (int i = 0; i < animatedModel.AnimatedTilesetTiles.Length; i++)
+                    {                       
+                        var currentFrameTextureCoordinates = animatedModel.AnimatedTilesetTiles[i].CurrentAnimationFrame.GetTextureCoordinates(animatedModel.AnimatedTilesetFlipFlags[i]);
 
                         // ReSharper disable ArrangeRedundantParentheses
                         (*verticesPointer++).TextureCoordinate = currentFrameTextureCoordinates[0];
