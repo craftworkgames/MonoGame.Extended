@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace MonoGame.Extended.Tiled.Renderers
 {
@@ -9,12 +10,14 @@ namespace MonoGame.Extended.Tiled.Renderers
         {
             Vertices = vertices;
             AnimatedTilesetTiles = animatedTilesetTiles;
-            AnimatedTilesetFlipFlags = animatedTilesetTileFlipFlags;
+            _animatedTilesetFlipFlags = animatedTilesetTileFlipFlags;
         }
 
         public VertexPositionTexture[] Vertices { get; }
         public TiledMapTilesetAnimatedTile[] AnimatedTilesetTiles { get; }
-        public TiledMapTileFlipFlags[] AnimatedTilesetFlipFlags { get; }
+        private readonly TiledMapTileFlipFlags[] _animatedTilesetFlipFlags;
+
+        public ReadOnlySpan<TiledMapTileFlipFlags> AnimatedTilesetFlipFlags => _animatedTilesetFlipFlags;
 
         protected override VertexBuffer CreateVertexBuffer(GraphicsDevice graphicsDevice, int vertexCount)
         {
