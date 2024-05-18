@@ -19,6 +19,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             {
                 writer.Write(property.Name);
                 writer.Write(property.Value ?? string.Empty);
+                writer.Write(property.Type ?? string.Empty);
+                writer.Write(property.PropertyType ?? string.Empty);
                 WriteTiledMapProperties(writer, property.Properties);
             }
         }

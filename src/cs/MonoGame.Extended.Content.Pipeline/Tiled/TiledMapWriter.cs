@@ -97,6 +97,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             switch (layer.LayerType)
             {
                 case TiledMapLayerType.ImageLayer:
+                    writer.Write(((TiledMapImageLayerContent)layer).RepeatX);
+                    writer.Write(((TiledMapImageLayerContent)layer).RepeatY);
                     WriteImageLayer(writer, (TiledMapImageLayerContent)layer);
                     break;
                 case TiledMapLayerType.TileLayer:

@@ -16,6 +16,8 @@ public class SpatialHash: ISpaceAlgorithm
         _size = size;
     }
 
+    public bool Contains(ICollisionActor actor) => _actors.Contains(actor);
+
     public void Insert(ICollisionActor actor)
     {
         InsertToHash(actor);

@@ -95,7 +95,9 @@ namespace MonoGame.Extended.Tiled
             switch (layerType)
             {
                 case TiledMapLayerType.ImageLayer:
-                    layer = ReadImageLayer(reader, name, type, offset, parallaxFactor, opacity, isVisible);
+                    var repeatX = reader.ReadBoolean();
+                    var repeatY = reader.ReadBoolean();
+                    layer = ReadImageLayer(reader, name, type, offset, parallaxFactor, opacity, repeatX, repeatY, isVisible);
                     break;
                 case TiledMapLayerType.TileLayer:
                     layer = ReadTileLayer(reader, name, type, offset, parallaxFactor, opacity, isVisible, map);
@@ -195,13 +197,13 @@ namespace MonoGame.Extended.Tiled
             return points;
         }
 
-        private static TiledMapImageLayer ReadImageLayer(ContentReader reader, string name, string type, Vector2 offset, Vector2 parallaxFactor, float opacity, bool isVisible)
+        private static TiledMapImageLayer ReadImageLayer(ContentReader reader, string name, string type, Vector2 offset, Vector2 parallaxFactor, float opacity, bool repeatX, bool repeatY, bool isVisible)
         {
             var texture = reader.ReadExternalReference<Texture2D>();
             var x = reader.ReadSingle();
             var y = reader.ReadSingle();
             var position = new Vector2(x, y);
-            return new TiledMapImageLayer(name, type, texture, position, offset, parallaxFactor, opacity, isVisible);
+            return new TiledMapImageLayer(name, type, texture, position, offset, parallaxFactor, opacity, repeatX, repeatY, isVisible);
         }
 
         private static TiledMapTileLayer ReadTileLayer(ContentReader reader, string name, string type, Vector2 offset, Vector2 parallaxFactor, float opacity, bool isVisible, TiledMap map)

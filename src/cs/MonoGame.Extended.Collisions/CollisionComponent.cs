@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collisions.Layers;
 using MonoGame.Extended.Collisions.QuadTree;
+using Newtonsoft.Json.Linq;
 
 namespace MonoGame.Extended.Collisions
 {
@@ -95,6 +96,50 @@ namespace MonoGame.Extended.Collisions
                     }
 
             }
+        }
+
+        /// <summary>
+        /// Cast an actor's colliders in a direction and check for collisions.
+        /// </summary>
+        /// <param name="actors">The list of actor colliders to cast.</param>
+        /// <param name="move">Normalized vector representing the direction to cast each shape.</param>
+        /// <param name="hitBuffer">Buffer to receive results.</param>
+        /// <param name="distance">Maximum distance over which to cast the Collider(s).</param>
+        public int Cast(IEnumerable<ICollisionActor> actors, Vector2 move, List<CollisionEventArgs> hitBuffer, float distance)
+        {
+            hitBuffer.Clear();
+            Vector2 offset = move.NormalizedCopy() * distance;
+            return Cast(actors, offset, hitBuffer);
+        }
+
+
+        /// <summary>
+        /// Cast an actor's colliders in a direction and check for collisions.
+        /// </summary>
+        /// <param name="actors">The list of actor colliders to cast.</param>
+        /// <param name="offset">Vector representing the translation to use for each cast.</param>
+        /// <param name="hitBuffer">Buffer to receive results.</param>
+        public int Cast(IEnumerable<ICollisionActor> actors, Vector2 offset, List<CollisionEventArgs> hitBuffer)
+        {
+            foreach (ICollisionActor actor in actors)
+            {
+                try
+                {
+                    actor.Bounds.Position += offset;
+                    foreach ((_, Layer secondLayer) in _layerCollision)
+                    {
+                        if (!secondLayer.Space.Contains(actor)) continue;
+                        foreach (ICollisionActor other in secondLayer.Space.Query(actor.Bounds.BoundingRectangle))
+                            if (actor != other && actor.Bounds.Intersects(other.Bounds))
+                            {
+                                CollisionEventArgs collisionInfo = new() { Other = other, PenetrationVector = CalculatePenetrationVector(actor.Bounds, other.Bounds) };
+                                hitBuffer.Add(collisionInfo);
+                            }
+                    }
+                }
+                finally { actor.Bounds.Position -= offset; }
+            }
+            return hitBuffer.Count;
         }
 
         /// <summary>

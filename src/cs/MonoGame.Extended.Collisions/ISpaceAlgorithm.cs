@@ -21,10 +21,15 @@ public interface ISpaceAlgorithm
     bool Remove(ICollisionActor actor);
 
     /// <summary>
-    /// Removes the actor into the space.
-    /// The actor will have its OnCollision called when collisions occur.
+    /// Checks if an actor is within the space.
     /// </summary>
-    /// <param name="actor">Actor to remove.</param>
+    /// <param name="actor">Actor to check for.</param>
+    bool Contains(ICollisionActor actor);
+
+    /// <summary>
+    /// Queries the space for collisions within a bounding rectangle.
+    /// </summary>
+    /// <param name="boundsBoundingRectangle">Rectangle to check against.</param>
     IEnumerable<ICollisionActor> Query(RectangleF boundsBoundingRectangle);
 
     /// <summary>
