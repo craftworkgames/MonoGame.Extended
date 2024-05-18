@@ -14,7 +14,7 @@ public static class Program
     {
         return new CakeHost()
             .UseContext<BuildContext>()
-            .UseWorkingDirectory("../")
+            .UseWorkingDirectory("../../../")
             .Run(args);
     }
 }
@@ -29,6 +29,5 @@ public sealed class DefaultTask : FrostingTask {}
 
 [TaskName("Deploy")]
 [IsDependentOn(typeof(DeployToGitHubTask))]
-[IsDependentOn(typeof(DeployToMyGetTask))]
 [IsDependentOn(typeof(DeployToNuGetTask))]
 public sealed class DeployTask : FrostingTask {}
