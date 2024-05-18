@@ -17,7 +17,7 @@ jobs:
       - name: "Clone Repository"
         uses: actions/checkout@v4
       - name: "CAKE (Build -> Test -> Package)"
-        run: dotnet run --project ./src/cs/build/Build.csproj -- --target=Default
+        run: dotnet run --project ./src/cs/Build/Build.csproj -- --target=Default
       - name: "Upload Artifacts For Deploy"
         if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@main
