@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\cs\MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj" />
+      <ProjectReference Include="..\..\MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj" />
     </ItemGroup>
 
 </Project>
