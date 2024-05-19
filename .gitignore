@@ -10,8 +10,8 @@
 .DS_Store
 *.user
 
-# cake build output
-artifacts
+# build outputs
+.artifacts
 
 # Visual Studio
 .vs/*
