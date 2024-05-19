@@ -1,6 +1,6 @@
 > :warning: **If you are interested in helping out with the future and direction of this project**: Please direct message @lithiumtoast on Discord.
 
-![MonoGame.Extended Logo](Logos/logo-banner-800.png)
+![MonoGame.Extended Logo](logos/logo-banner-800.png)
 
 # MonoGame.Extended
 
@@ -12,9 +12,9 @@ MonoGame.Extended is a set of utilities (in the form of libraries/tools) to [Mon
 
 Code is distributed as NuGet packages in the form of libraries (`.dll` files). You can easily install the NuGet packages into your existing MonoGame project using the NuGet Package Manager UI in Visual Studio or by using the command line interface (CLI) in a terminal.
 
-> :wrench: CLI 
+> :wrench: CLI
     `dotnet add package MonoGame.Extended`
-    
+
 > :hammer: To use the content pipeline extensions, you will need to edit your `.mgcb` file to reference the `.dll`. To see an example of how to do this with NuGet see the samples at https://github.com/craftworkgames/MonoGame.Extended-samples. The important pieces are the `NuGet.config` file and the `.mgcb` file.
 
 > :eyes: To access pre-releases including rolling builds of the repository after every commit or PR commit, you can see add the NuGet feed `https://www.myget.org/F/lithiumtoast/api/v3/index.json`. See https://github.com/craftworkgames/MonoGame.Extended-samples with the `NuGet.config` file for an example of how to setup the feed.
