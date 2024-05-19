@@ -12,7 +12,4 @@
                       Version="3.1.0" />
   </ItemGroup>
 
-    <!-- Import the root prop last -->
-    <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
-
 </Project>
