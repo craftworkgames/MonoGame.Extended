@@ -22,7 +22,7 @@ public sealed class BuildContext : FrostingContext
 
     public BuildContext(ICakeContext context) : base(context)
     {
-        ArtifactsDirectory = context.Argument(nameof(ArtifactsDirectory), "artifacts");
+        ArtifactsDirectory = context.Argument(nameof(ArtifactsDirectory), ".artifacts");
         Version = context.XmlPeek("Directory.Build.props", "/Project/PropertyGroup/Version");
         SolutionPath = "./MonoGame.Extended.sln";
         IsRunningOnGitHubActions = context.BuildSystem().IsRunningOnGitHubActions;
