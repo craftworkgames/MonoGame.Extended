@@ -1,11 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Cake.Frosting" Version="3.1.0" />
+    <PackageReference Include="Cake.Frosting"
+                      Version="3.1.0" />
   </ItemGroup>
+
+    <!-- Import the root prop last -->
+    <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
+
 </Project>
