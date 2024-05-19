@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Graphics makes MonoGame more awesome.</Description>
+    <PackageTags>monogame graphics batcher effects</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Effects\Resources\DefaultEffect.dx11.mgfxo" />
+    <None Remove="Effects\Resources\DefaultEffect.fx" />
+    <None Remove="Effects\Resources\DefaultEffect.ogl.mgfxo" />
+    <None Remove="Effects\Resources\Macros.fxh" />
+    <None Remove="Effects\Resources\Structures.fxh" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Effects\Resources\DefaultEffect.dx11.mgfxo" />
+    <EmbeddedResource Include="Effects\Resources\DefaultEffect.fx" />
+    <EmbeddedResource Include="Effects\Resources\DefaultEffect.ogl.mgfxo" />
+    <EmbeddedResource Include="Effects\Resources\Macros.fxh" />
+    <EmbeddedResource Include="Effects\Resources\Structures.fxh" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj" />
+  </ItemGroup>
+
+</Project>

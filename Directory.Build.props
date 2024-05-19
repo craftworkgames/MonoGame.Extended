@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <SolutionDirectory>$(MSBuildThisFileDirectory)</SolutionDirectory>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <MonoGameExtendedVersion>3.9.0</MonoGameExtendedVersion>
+        <IsPrerelease Condition="'$(IS_PRERELEASE)' != ''">-prerelease</IsPrerelease>
+        <BuildNumber Condition="'$(BUILD_NUMBER)' != ''">.$(BUILD_NUMBER)</BuildNumber>
+        <Version>$(MonoGameExtendedVersion)$(IsPrerelease)$(BuildNumber)</Version>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Authors>craftworkgames and contributors</Authors>
+        <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryBranch>develop</RepositoryBranch>
+        <NeutralLanguage>en</NeutralLanguage>
+        <PackageIcon>logo-nuget-128.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- path must be relative to the individual csproj's not this .targets file -->
+        <None Include="../../logos/logo-nuget-128.png" Pack="true" PackagePath="" />
+        <None Include="../../README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+    <!-- Setup Code Analysis using the .editorconfig file -->
+    <PropertyGroup>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+        <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+        <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+        <WarningsAsErrors>nullable</WarningsAsErrors>
+    </PropertyGroup>
+
+</Project>

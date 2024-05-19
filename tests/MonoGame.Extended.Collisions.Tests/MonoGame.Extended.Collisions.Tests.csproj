@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\source\MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj" />
+  </ItemGroup>
+
+</Project>

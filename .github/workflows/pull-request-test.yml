@@ -1,0 +1,32 @@
+################################################################################
+### Pull Request Test
+### Executes tests to ensure that the pull request being submitted is valid.
+###     - Only runs on pull requests made to the `develop` branch
+###     - Only runs if the pull request was opened or synchronized
+################################################################################
+name: Pull Request Test
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
+
+      - name: Setup DotNet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Test MonoGame.Extended
+        run: dotnet test --nologo --verbosity minimal --configuration Release

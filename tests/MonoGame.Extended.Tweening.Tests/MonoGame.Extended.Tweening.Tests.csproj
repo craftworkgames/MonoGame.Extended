@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\source\MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj" />
+    </ItemGroup>
+
+</Project>
