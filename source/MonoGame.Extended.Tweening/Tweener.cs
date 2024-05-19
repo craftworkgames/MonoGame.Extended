@@ -53,7 +53,7 @@ namespace MonoGame.Extended.Tweening
             AllocationCount++;
             var tween = (TTween)Activator.CreateInstance(typeof(TTween),
                 BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null,
-                new object?[]{target, duration, delay, member, toValue}, null);
+                new object[]{target, duration, delay, member, toValue}, null);
             _activeTweens.Add(tween);
             return tween;
         }
