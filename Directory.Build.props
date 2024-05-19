@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <SolutionDirectory>$(MSBuildThisFileDirectory)</SolutionDirectory>
+        <ArtifactsPath>$(SolutionDirectory).artifacts/$(ProjectCategory)</ArtifactsPath>
+    </PropertyGroup>
+
+</Project>
