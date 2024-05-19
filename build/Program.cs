@@ -14,7 +14,7 @@ public static class Program
     {
         return new CakeHost()
             .UseContext<BuildContext>()
-            .UseWorkingDirectory("../../../")
+            .UseWorkingDirectory("../")
             .Run(args);
     }
 }
