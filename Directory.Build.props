@@ -4,8 +4,7 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <SolutionDirectory>$(MSBuildThisFileDirectory)</SolutionDirectory>
-        <ArtifactsPath>$(SolutionDirectory).artifacts/$(ProjectCategory)</ArtifactsPath>
-        <NoWarn>MSB4011</NoWarn>
+    </PropertyGroup>
     </PropertyGroup>
 
     <PropertyGroup>

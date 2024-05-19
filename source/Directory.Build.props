@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
+    <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
+
     <PropertyGroup>
-        <ProjectCategory>source</ProjectCategory>
+        <ArtifactsPath>$(SolutionDirectory).artifacts/source</ArtifactsPath>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <IsPackable>true</IsPackable>
         <NoWarn>NU1701</NoWarn>
@@ -14,8 +16,5 @@
                           Version="3.8.1.303"
                           PrivateAssets="All" />
     </ItemGroup>
-
-    <!-- Import the root prop last -->
-    <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
 
 </Project>

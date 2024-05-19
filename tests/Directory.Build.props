@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
+    <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
+
     <PropertyGroup>
+        <ArtifactsPath>$(SolutionDirectory).artifacts/tests</ArtifactsPath>
         <ProjectCategory>tests</ProjectCategory>
         <GenerateDocumentationFile>false</GenerateDocumentationFile>
         <IsPackable>false</IsPackable>
@@ -39,8 +42,5 @@
     <ItemGroup>
         <Using Include="Xunit" />
     </ItemGroup>
-
-    <!-- Import the root prop last -->
-    <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
 
 </Project>
