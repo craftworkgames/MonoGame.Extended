@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IS_PRERELEASE: true
-      BUILD_NUMBER: ${{ github.run_id }}
+      BUILD_NUMBER: ${{ github.run_number }}
 
     steps:
       - name: Clone Repository
@@ -70,6 +70,5 @@ jobs:
           run: |
             PACKAGES=(".artifacts/*.nupkg")
             for PACKAGE in "${PACKAGES[@]}"; do
-              dotnet nuget push "$PACKAGE" --source "https://nuget.pkg.github.com/craftworkgames/index.json" --skip-duplicate --api-key "${{ env.GITHUB_TOKEN }}"
               dotnet nuget push "$PACKAGE" --source "https://api.nuget.org/v3/index.json" --skip-duplicate --api-key "${{ secrets.NUGET_ACCESS_TOKEN }}"
             done
