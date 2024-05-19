@@ -5,10 +5,15 @@
         <TargetFramework>net6.0</TargetFramework>
         <SolutionDirectory>$(MSBuildThisFileDirectory)</SolutionDirectory>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <MonoGameExtendedVersion>3.9.0</MonoGameExtendedVersion>
+        <IsPrerelease Condition="'$(IS_PRERELEASE)' != ''">-prerelease</IsPrerelease>
+        <BuildNumber Condition="'$(BUILD_NUMBER)' != ''">.$(BUILD_NUMBER)</BuildNumber>
+        <Version>$(MonoGameExtendedVersion)$(IsPrerelease)$(BuildNumber)</Version>
     </PropertyGroup>
 
     <PropertyGroup>
-        <Version>3.9.0</Version>
         <Authors>craftworkgames and contributors</Authors>
         <PackageProjectUrl>https://github.com/craftworkgames/MonoGame.Extended</PackageProjectUrl>
         <RepositoryUrl>https://github.com/craftworkgames/MonoGame.Extended</RepositoryUrl>
