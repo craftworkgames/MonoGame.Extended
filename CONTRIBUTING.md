@@ -9,7 +9,7 @@ Please read this document completely before contributing.
 
 ## How To Contribute
 
-MonoGame.Extended has a `master` branch for stable releases and a `develop` branch for daily development.  New features and fixes are always submitted to the `develop` branch.
+MonoGame.Extended has a `main` branch for stable releases and a `develop` branch for daily development.  New features and fixes are always submitted to the `develop` branch.
 
 If you are looking for ways to help you should start by looking at the [Open Issues](https://github.com/craftworkgames/MonoGame.Extended/issues).  Please let us know if you plan to work on an issue so that others are not duplicating work.
 
