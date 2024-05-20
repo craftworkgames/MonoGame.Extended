@@ -15,6 +15,14 @@ on:
         description: 'Is this a prerelease?'
         required: true
         default: 'true'
+      build-number:
+        description: |
+          Optional build number for when you need to manually specify it.
+          Otherwise the GitHub Run Number is used.
+        required: false
+      nuget-source:
+        description: The source url to publish the NuGet packages too
+        required: false
 
 jobs:
   build:
@@ -22,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IS_PRERELEASE:  ${{ inputs.prerelease == 'true' }}
-      BUILD_NUMBER: ${{ inputs.prerelease == 'true' && github.run_number || '' }}
+      BUILD_NUMBER: ${{ inputs.build-number || (inputs.prerelease == 'true' && github.run_number || '' )}}
 
     steps:
       - name: Clone Repository
@@ -65,7 +73,7 @@ jobs:
 
       - name: "Push Packages"
         env:
-          SOURCE_URL: ${{ inputs.prerelease == 'true' && 'https://nuget.pkg.github.com/craftworkgames/index.json' || 'https://api.nuget.org/v3/index.json' }}
+          SOURCE_URL: ${{ inputs.nuget-source || (inputs.prerelease == 'true' && 'https://nuget.pkg.github.com/craftworkgames/index.json') || 'https://api.nuget.org/v3/index.json' }}
           API_KEY: ${{ inputs.prerelease == 'true' && secrets.GITHUB_TOKEN || secrets.NUGET_ACCESS_TOKEN }}
         run: |
           PACKAGES=(".artifacts/*.nupkg")
