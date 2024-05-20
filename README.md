@@ -15,8 +15,20 @@ MonoGame.Extended is a set of utilities (in the form of libraries/tools) to [Mon
 
 Code is distributed as NuGet packages in the form of libraries (`.dll` files). You can easily install the NuGet packages into your existing MonoGame project using the NuGet Package Manager UI in Visual Studio or by using the command line interface (CLI) in a terminal.
 
-> :wrench: CLI
-    `dotnet add package MonoGame.Extended`
+**Current Stable Release**
+> [!WARNING]
+> The current stable release is not compatible with MonoGame 3.8.1.303.
+
+```sh
+dotnet add package MonoGame.Extended --version 3.8.0
+```
+
+**Current Prerelease**
+> [!NOTE]
+> Prerelease is based on current `develop` branch snapshot.  There it is not considered stable and may contain bugs
+```sh
+dotnet add package MonoGame.Extended --version 3.9.0-prerelease.3
+```
 
 > :hammer: To use the content pipeline extensions, you will need to edit your `.mgcb` file to reference the `.dll`. To see an example of how to do this with NuGet see the samples at https://github.com/craftworkgames/MonoGame.Extended-samples. The important pieces are the `NuGet.config` file and the `.mgcb` file.
 
