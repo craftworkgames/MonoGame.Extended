@@ -48,21 +48,15 @@ To use the content pipeline extensions, you will need to edit your `.mgcb` file 
 We're in the process of developing MonoGame.Extended 4.0! Stay tuned.
 
 ## Patreon Supporters
+The patreon has been removed.  If you would like to support the maintainers of this project, please consider using the GitHub sponsors link for one of the maintainers.
 
-Thanks to all those that support the project on Patreon! You're helping to keep the project alive.
-[![image](https://cloud.githubusercontent.com/assets/3201643/17462536/f5608898-5cf3-11e6-8e81-47d6594a8d9c.png)](https://www.patreon.com/craftworkgames)
-
-## Special thanks
-
-As a reward to some of my patrons I've linked thier websites here:
+As a special thanks to those that supported this project through Patreon in the past, their websites were linked in this readme and have been preserved below:
 
 - [PRT Studios](http://prt-studios.com/)
 - [optimuspi](http://www.optimuspi.com/)
 
-If you're not on the list and you should be please let me know!
 
-Also thanks to:
-
+## Special Thanks
 - Matthew-Davey for letting us use the [Mercury Particle Engine](https://github.com/Matthew-Davey/mercury-particle-engine).
 - John McDonald for [2D XNA Primitives](https://bitbucket.org/C3/2d-xna-primitives/wiki/Home)
 - [LibGDX](https://libgdx.badlogicgames.com) for a whole lot of inspiration.
