@@ -1,4 +1,7 @@
-> :warning: **If you are interested in helping out with the future and direction of this project**: Please direct message @lithiumtoast on Discord.
+> [!NOTE]
+> Hi MonoGame community, MonoGame.Extended is currently being updated to resolve outstanding bug issues, included those surrounding Tiled, and to update for MonoGame 3.8.1.303.  Please bear with me as I work through the backlog.  You can follow the progress in the [v4.0.0 Milestones](https://github.com/craftworkgames/MonoGame.Extended/milestone/8) page.
+>
+> - AristurtleDev
 
 ![MonoGame.Extended Logo](logos/logo-banner-800.png)
 
