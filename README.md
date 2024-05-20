@@ -1,4 +1,7 @@
-> :warning: **If you are interested in helping out with the future and direction of this project**: Please direct message @lithiumtoast on Discord.
+> [!NOTE]
+> Hi MonoGame community, MonoGame.Extended is currently being updated to resolve outstanding bug issues, included those surrounding Tiled, and to update for MonoGame 3.8.1.303.  Please bear with me as I work through the backlog.  You can follow the progress in the [v4.0.0 Milestones](https://github.com/craftworkgames/MonoGame.Extended/milestone/8) page.
+>
+> - AristurtleDev
 
 ![MonoGame.Extended Logo](logos/logo-banner-800.png)
 
@@ -12,12 +15,23 @@ MonoGame.Extended is a set of utilities (in the form of libraries/tools) to [Mon
 
 Code is distributed as NuGet packages in the form of libraries (`.dll` files). You can easily install the NuGet packages into your existing MonoGame project using the NuGet Package Manager UI in Visual Studio or by using the command line interface (CLI) in a terminal.
 
-> :wrench: CLI
-    `dotnet add package MonoGame.Extended`
+**Current Stable Release**
+> [!WARNING]
+> The current stable release is not compatible with MonoGame 3.8.1.303.
 
-> :hammer: To use the content pipeline extensions, you will need to edit your `.mgcb` file to reference the `.dll`. To see an example of how to do this with NuGet see the samples at https://github.com/craftworkgames/MonoGame.Extended-samples. The important pieces are the `NuGet.config` file and the `.mgcb` file.
+```sh
+dotnet add package MonoGame.Extended --version 3.8.0
+```
 
-> :eyes: To access pre-releases including rolling builds of the repository after every commit or PR commit, you can see add the NuGet feed `https://www.myget.org/F/lithiumtoast/api/v3/index.json`. See https://github.com/craftworkgames/MonoGame.Extended-samples with the `NuGet.config` file for an example of how to setup the feed.
+**Current Prerelease**
+> [!NOTE]
+> Prerelease is based on current `develop` branch snapshot.  There it is not considered stable and may contain bugs
+```sh
+dotnet add package MonoGame.Extended --version 3.9.0-prerelease.3
+```
+
+### Using the Content Pipeline Extensions
+To use the content pipeline extensions, you will need to edit your `.mgcb` file to reference the `.dll`. To see an example of how to do this with NuGet see the samples at https://github.com/craftworkgames/MonoGame.Extended-samples. The important pieces are the `NuGet.config` file and the `.mgcb` file.
 
 ## Where to next?
 
@@ -34,21 +48,15 @@ Code is distributed as NuGet packages in the form of libraries (`.dll` files). Y
 We're in the process of developing MonoGame.Extended 4.0! Stay tuned.
 
 ## Patreon Supporters
+The patreon has been removed.  If you would like to support the maintainers of this project, please consider using the GitHub sponsors link for one of the maintainers.
 
-Thanks to all those that support the project on Patreon! You're helping to keep the project alive.
-[![image](https://cloud.githubusercontent.com/assets/3201643/17462536/f5608898-5cf3-11e6-8e81-47d6594a8d9c.png)](https://www.patreon.com/craftworkgames)
-
-## Special thanks
-
-As a reward to some of my patrons I've linked thier websites here:
+As a special thanks to those that supported this project through Patreon in the past, their websites were linked in this readme and have been preserved below:
 
 - [PRT Studios](http://prt-studios.com/)
 - [optimuspi](http://www.optimuspi.com/)
 
-If you're not on the list and you should be please let me know!
 
-Also thanks to:
-
+## Special Thanks
 - Matthew-Davey for letting us use the [Mercury Particle Engine](https://github.com/Matthew-Davey/mercury-particle-engine).
 - John McDonald for [2D XNA Primitives](https://bitbucket.org/C3/2d-xna-primitives/wiki/Home)
 - [LibGDX](https://libgdx.badlogicgames.com) for a whole lot of inspiration.
