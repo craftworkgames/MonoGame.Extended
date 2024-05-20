@@ -27,7 +27,7 @@ dotnet add package MonoGame.Extended --version 3.8.0
 > [!NOTE]
 > Prerelease is based on current `develop` branch snapshot.  There it is not considered stable and may contain bugs
 ```sh
-dotnet add package MonoGame.Extended --version 3.9.0-prerelease.3
+dotnet add package MonoGame.Extended --version 3.9.0-prerelease.4
 ```
 
 ### Using the Content Pipeline Extensions
