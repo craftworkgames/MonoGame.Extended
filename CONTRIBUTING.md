@@ -43,9 +43,9 @@ We prohibit tools like dotPeek, ILSpy, JustDecompiler, or .NET Reflector which c
 It is **NEVER ACCEPTABLE** to decompile copyrighted assemblies and submit that code to the MonoGame.Extended project.
 
 * It **DOES NOT** matter how much you change the code.
-* It **DOES NOT** matter what country you live in or what your local laws say.  
-* It **DOES NOT** matter that XNA is discontinued.  
-* It **DOES NOT** matter how small the bit of code you have stolen is.  
+* It **DOES NOT** matter what country you live in or what your local laws say.
+* It **DOES NOT** matter that XNA is discontinued.
+* It **DOES NOT** matter how small the bit of code you have stolen is.
 * It **DOES NOT** matter what your opinion is of stealing code.
 
 If you did not write the code, you do not have ownership of the code, and you shouldn't submit it to MonoGame.Extended.
@@ -62,7 +62,7 @@ We accept contributions in "good faith" that it isn't bound to a conflicting lic
 
 ## Need More Help?
 
-If you need help please ask questions on our [community forums](http://community.monogame.net/c/extended) or come [chat on Discord](https://discord.gg/xPUEkj9).
+If you need help, please ask questions in our [Discord](https://discord.gg/xPUEkj9), or you can ask questions in the official [MonoGame Discord](https://discord.gg/monogame).
 
 
 Thanks for reading this guide and helping make MonoGame.Extended great!
