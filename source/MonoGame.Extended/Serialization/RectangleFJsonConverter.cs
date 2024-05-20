@@ -1,24 +1,31 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MonoGame.Extended.Serialization;
 
-public class RectangleFJsonConverter: JsonConverter
+/// <summary>
+/// Converts a <see cref="RectangleF"/> value to or from JSON.
+/// </summary>
+public class RectangleFJsonConverter : JsonConverter<RectangleF>
 {
-    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-    {
-        var rect = (RectangleF)value;
-        writer.WriteValue($"{rect.Left} {rect.Top} {rect.Width} {rect.Height}");
-    }
+    /// <inheritdoc />
+    public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(RectangleF);
 
-    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    /// <inheritdoc />
+    public override RectangleF Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var values = reader.ReadAsMultiDimensional<float>();
         return new RectangleF(values[0], values[1], values[2], values[3]);
     }
 
-    public override bool CanConvert(Type objectType)
+    /// <inheritdoc />
+    /// <exception cref="ArgumentNullException">
+    /// Throw if <paramref name="writer"/> is <see langword="null"/>.
+    /// </exception>
+    public override void Write(Utf8JsonWriter writer, RectangleF value, JsonSerializerOptions options)
     {
-        return objectType == typeof(RectangleF);
+        ArgumentNullException.ThrowIfNull(writer);
+        writer.WriteStringValue($"{value.Left} {value.Top} {value.Width} {value.Height}");
     }
 }

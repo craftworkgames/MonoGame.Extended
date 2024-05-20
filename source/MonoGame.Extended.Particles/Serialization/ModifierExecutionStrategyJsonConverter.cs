@@ -1,27 +1,34 @@
 ﻿using System;
 using System.Reflection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace MonoGame.Extended.Particles.Serialization
+namespace MonoGame.Extended.Particles.Serialization;
+
+/// <summary>
+/// Converts a <see cref="ParticleModifierExecutionStrategy"/> value to or from JSON.
+/// </summary>
+public class ModifierExecutionStrategyJsonConverter : JsonConverter<ParticleModifierExecutionStrategy>
 {
-    public class ModifierExecutionStrategyJsonConverter : JsonConverter
+    /// <inheritdoc />
+    public override bool CanConvert(Type typeToConvert) =>
+        typeToConvert == typeof(ParticleModifierExecutionStrategy) ||
+        typeToConvert.GetTypeInfo().BaseType == typeof(ParticleModifierExecutionStrategy);
+
+    /// <inheritdoc />
+    public override ParticleModifierExecutionStrategy Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            writer.WriteValue(value.ToString());
-        }
+        var value = JsonSerializer.Deserialize<string>(ref reader, options);
+        return ParticleModifierExecutionStrategy.Parse(value);
+    }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var value = JToken.Load(reader).ToObject<string>();
-            return ParticleModifierExecutionStrategy.Parse(value);
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(ParticleModifierExecutionStrategy) 
-                || objectType.GetTypeInfo().BaseType == typeof(ParticleModifierExecutionStrategy);
-        }
+    /// <inheritdoc />
+    /// <exception cref="ArgumentNullException">
+    /// Throw if <paramref name="writer"/> is <see langword="null"/>.
+    /// </exception>
+    public override void Write(Utf8JsonWriter writer, ParticleModifierExecutionStrategy value, JsonSerializerOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(writer);
+        writer.WriteStringValue(value.ToString());
     }
 }

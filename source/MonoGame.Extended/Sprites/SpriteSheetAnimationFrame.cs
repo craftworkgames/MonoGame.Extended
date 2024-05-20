@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 
 namespace MonoGame.Extended.Sprites
 {
@@ -20,31 +22,31 @@ namespace MonoGame.Extended.Sprites
 
     public class SpriteSheetAnimationFrameJsonConverter : JsonConverter<SpriteSheetAnimationFrame>
     {
-        public override void WriteJson(JsonWriter writer, SpriteSheetAnimationFrame value, JsonSerializer serializer)
-        {
-            serializer.Serialize(writer, value);
-        }
-
-        public override SpriteSheetAnimationFrame ReadJson(JsonReader reader, Type objectType, SpriteSheetAnimationFrame existingValue, bool hasExistingValue, JsonSerializer serializer)
+        /// <inheritdoc />
+        public override SpriteSheetAnimationFrame Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             switch (reader.TokenType)
             {
-                case JsonToken.Integer:
-                {
-                    var index = serializer.Deserialize<int>(reader);
+                case JsonTokenType.Number:
+                    var index = reader.GetInt32();
                     return new SpriteSheetAnimationFrame(index);
-                }
-                case JsonToken.StartObject:
-                {
-                    var frame = new SpriteSheetAnimationFrame(0);
-                    serializer.Populate(reader, frame);
+
+                case JsonTokenType.StartObject:
+                    var frame = JsonSerializer.Deserialize<SpriteSheetAnimationFrame>(ref reader, options);
                     return frame;
-                }
-                case JsonToken.Null:
+
+                case JsonTokenType.Null:
                     return null;
+
                 default:
-                    throw new JsonSerializationException();
+                    throw new JsonException();
             }
+        }
+
+        public override void Write(Utf8JsonWriter writer, SpriteSheetAnimationFrame value, JsonSerializerOptions options)
+        {
+            ArgumentNullException.ThrowIfNull(writer);
+            JsonSerializer.Serialize(writer, value, options);
         }
     }
 }

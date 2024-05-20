@@ -1,34 +1,46 @@
 using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework;
-using Newtonsoft.Json;
 
-namespace MonoGame.Extended.Serialization
+namespace MonoGame.Extended.Serialization;
+
+/// <summary>
+/// Converts a <see cref="Vector2"/> value to or from JSON.
+/// </summary>
+public class Vector2JsonConverter : JsonConverter<Vector2>
 {
-    public class Vector2JsonConverter : JsonConverter
+    /// <inheritdoc />
+    public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(Vector2);
+
+    /// <inheritdoc />
+    /// <exception cref="JsonException">
+    /// Thrown if the JSON property does not contain a properly formatted <see cref="Vector2"/> value
+    /// </exception>
+    public override Vector2 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        var values = reader.ReadAsMultiDimensional<float>();
+
+        if (values.Length == 2)
         {
-            var vector2 = (Vector2) value;
-            writer.WriteValue($"{vector2.X} {vector2.Y}");
+            return new Vector2(values[0], values[1]);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-            JsonSerializer serializer)
+        if (values.Length == 1)
         {
-            var values = reader.ReadAsMultiDimensional<float>();
-
-            if(values.Length == 2)
-                return new Vector2(values[0], values[1]);
-
-            if (values.Length == 1)
-                return new Vector2(values[0]);
-
-            throw new InvalidOperationException("Invalid Vector2");
+            return new Vector2(values[0]);
         }
 
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(Vector2);
-        }
+        throw new JsonException("Invalid Size2 property value");
+    }
+
+    /// <inheritdoc />
+    /// <exception cref="ArgumentNullException">
+    /// Throw if <paramref name="writer"/> is <see langword="null"/>.
+    /// </exception>
+    public override void Write(Utf8JsonWriter writer, Vector2 value, JsonSerializerOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(writer);
+        writer.WriteStringValue($"{value.X} {value.Y}");
     }
 }

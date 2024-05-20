@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MonoGame.Extended.Serialization
 {
-    public abstract class BaseTypeJsonConverter<T> : JsonConverter
+    public abstract class BaseTypeJsonConverter<T> : JsonConverter<T>
     {
         private readonly string _suffix;
         private readonly Dictionary<string, Type> _namesToTypes;
         private readonly Dictionary<Type, string> _typesToNames;
-        private readonly CamelCaseNamingStrategy _namingStrategy = new CamelCaseNamingStrategy();
+        private readonly JsonSerializerOptions _serializerOptions;
+        private readonly JsonNamingPolicy _namingPolicy = JsonNamingPolicy.CamelCase;
 
         protected BaseTypeJsonConverter(IEnumerable<TypeInfo> supportedTypes, string suffix)
         {
@@ -21,50 +21,58 @@ namespace MonoGame.Extended.Serialization
             _namesToTypes = supportedTypes
                 .ToDictionary(t => TrimSuffix(t.Name, suffix), t => t.AsType(), StringComparer.OrdinalIgnoreCase);
             _typesToNames = _namesToTypes.ToDictionary(i => i.Value, i => i.Key);
+
+            _serializerOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = _namingPolicy,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+            _serializerOptions.Converters.Add(this);
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        /// <inheritdoc />
+        public override bool CanConvert(Type typeToConvert) =>
+            _namesToTypes.ContainsValue(typeToConvert) || typeof(T) == typeToConvert;
+
+        /// <inheritdoc />
+        /// <exception cref="InvalidOperationException" />
+        public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            using (JsonDocument doc = JsonDocument.ParseValue(ref reader))
+            {
+                var jObject = doc.RootElement;
+                var key = jObject.GetProperty("type").GetString();
+
+                if (_namesToTypes.TryGetValue(key, out Type type))
+                {
+                    var value = JsonSerializer.Deserialize(jObject.GetRawText(), type, options);
+                    return (T)value;
+                }
+
+                throw new InvalidOperationException($"Unknown {_suffix} type '{key}'");
+            }
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="ArgumentNullException">
+        /// Throw if <paramref name="writer"/> is <see langword="null"/>.
+        /// </exception>
+        public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
         {
             var type = value.GetType();
-            var properties = type.GetRuntimeProperties();
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             writer.WriteStartObject();
-            writer.WritePropertyName("type");
-            writer.WriteValue(_typesToNames[type]);
+            writer.WriteString("type", _typesToNames[type]);
 
-            foreach (var property in properties.Where(p => p.CanWrite)) // TODO: Technically an IList property is writable as well.
+            foreach (var property in properties)
             {
-                var propertyName = _namingStrategy.GetPropertyName(property.Name, false);
+                var propertyName = _namingPolicy.ConvertName(property.Name);
                 writer.WritePropertyName(propertyName);
-                serializer.Serialize(writer, property.GetValue(value));
+                JsonSerializer.Serialize(writer, property.GetValue(value), property.PropertyType, options);
             }
 
             writer.WriteEndObject();
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var jObject = JObject.Load(reader);
-            var key = jObject.GetValue("type", StringComparison.OrdinalIgnoreCase).ToObject<string>();
-            Type type;
-
-            if (_namesToTypes.TryGetValue(key, out type))
-            {
-                serializer.Converters.Remove(this);
-                var value = jObject.ToObject(type, serializer);
-                serializer.Converters.Add(this);
-                return value;
-            }
-
-            throw new InvalidOperationException($"Unknown {_suffix} type '{key}'");
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            if (_namesToTypes.ContainsValue(objectType))
-                return true;
-
-            return objectType == typeof(T);
         }
 
         private static string TrimSuffix(string input, string suffix)

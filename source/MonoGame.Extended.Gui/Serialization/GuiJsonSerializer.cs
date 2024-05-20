@@ -14,7 +14,7 @@ namespace MonoGame.Extended.Gui.Serialization
             Converters.Add(new Vector2JsonConverter());
             Converters.Add(new SizeJsonConverter());
             Converters.Add(new Size2JsonConverter());
-            Converters.Add(new ColorJsonConverter());
+            // Converters.Add(new ColorJsonConverter());
             Converters.Add(new ThicknessJsonConverter());
             Converters.Add(new ContentManagerJsonConverter<BitmapFont>(contentManager, font => font.Name));
             Converters.Add(new ControlStyleJsonConverter(customControlTypes));
