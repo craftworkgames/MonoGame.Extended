@@ -33,8 +33,6 @@ dotnet add package MonoGame.Extended --version 3.9.0-prerelease.3
 ### Using the Content Pipeline Extensions
 To use the content pipeline extensions, you will need to edit your `.mgcb` file to reference the `.dll`. To see an example of how to do this with NuGet see the samples at https://github.com/craftworkgames/MonoGame.Extended-samples. The important pieces are the `NuGet.config` file and the `.mgcb` file.
 
-> :eyes: To access pre-releases including rolling builds of the repository after every commit or PR commit, you can see add the NuGet feed `https://www.myget.org/F/lithiumtoast/api/v3/index.json`. See https://github.com/craftworkgames/MonoGame.Extended-samples with the `NuGet.config` file for an example of how to setup the feed.
-
 ## Where to next?
 
 - Check out [the samples](https://github.com/craftworkgames/MonoGame.Extended-samples)
