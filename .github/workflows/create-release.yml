@@ -15,6 +15,12 @@ on:
         description: 'Is this a prerelease?'
         required: true
         default: 'true'
+      source-feed:
+        description: |
+          Which source feed to publish to?
+          (Valid values are 'NuGet' or 'GitHub')
+        required: true
+        default: GitHub
 
 jobs:
   build:
@@ -65,8 +71,8 @@ jobs:
 
       - name: "Push Packages"
         env:
-          SOURCE_URL: ${{ inputs.prerelease == 'true' && 'https://nuget.pkg.github.com/craftworkgames/index.json' || 'https://api.nuget.org/v3/index.json' }}
-          API_KEY: ${{ inputs.prerelease == 'true' && secrets.GITHUB_TOKEN || secrets.NUGET_ACCESS_TOKEN }}
+          SOURCE_URL: ${{ inputs.source-feed == 'GitHub' && 'https://nuget.pkg.github.com/craftworkgames/index.json' || inputs.source-feed == 'NuGet' && 'https://api.nuget.org/v3/index.json' }}
+          API_KEY: ${{ inputs.source-feed == 'GitHub' && secrets.GITHUB_TOKEN || inputs.source-feed == 'NuGet' && secrets.NUGET_ACCESS_TOKEN }}
         run: |
           PACKAGES=(".artifacts/*.nupkg")
           for PACKAGE in "${PACKAGES[@]}"; do
