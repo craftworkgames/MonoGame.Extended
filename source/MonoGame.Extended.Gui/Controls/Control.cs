@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Input.InputListeners;
-using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -98,7 +98,7 @@ namespace MonoGame.Extended.Gui.Controls
         public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Stretch;
         public HorizontalAlignment HorizontalTextAlignment { get; set; } = HorizontalAlignment.Centre;
         public VerticalAlignment VerticalTextAlignment { get; set; } = VerticalAlignment.Centre;
-        
+
         public abstract Size GetContentSize(IGuiContext context);
 
         public virtual Size CalculateActualSize(IGuiContext context)
@@ -177,7 +177,7 @@ namespace MonoGame.Extended.Gui.Controls
         public virtual bool OnPointerDown(IGuiContext context, PointerEventArgs args) { return true; }
         public virtual bool OnPointerMove(IGuiContext context, PointerEventArgs args) { return true; }
         public virtual bool OnPointerUp(IGuiContext context, PointerEventArgs args) { return true; }
-        
+
         public virtual bool OnPointerEnter(IGuiContext context, PointerEventArgs args)
         {
             if (IsEnabled && !IsHovered)
@@ -220,7 +220,7 @@ namespace MonoGame.Extended.Gui.Controls
         {
             return Parent != null && (Parent == control || Parent.HasParent(control));
         }
-       
+
         protected TextInfo GetTextInfo(IGuiContext context, string text, Rectangle targetRectangle, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment)
         {
             var font = Font ?? context.DefaultFont;
@@ -230,7 +230,7 @@ namespace MonoGame.Extended.Gui.Controls
             var textInfo = new TextInfo(text, font, textPosition, textSize, TextColor, targetRectangle);
             return textInfo;
         }
-        
+
         public struct TextInfo
         {
             public TextInfo(string text, BitmapFont font, Vector2 position, Size size, Color color, Rectangle? clippingRectangle)

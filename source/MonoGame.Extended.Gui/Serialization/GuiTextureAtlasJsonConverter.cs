@@ -1,8 +1,8 @@
 using System;
+using System.Text.Json;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.TextureAtlases;
-using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui.Serialization
 {
@@ -16,12 +16,14 @@ namespace MonoGame.Extended.Gui.Serialization
             _textureRegionService = textureRegionService;
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        /// <inheritdoc />
+        public override TextureAtlas Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var textureAtlas = base.ReadJson(reader, objectType, existingValue, serializer) as TextureAtlas;
-
-            if (textureAtlas != null)
+            var textureAtlas = base.Read(ref reader, typeToConvert, options);
+            if (textureAtlas is not null)
+            {
                 _textureRegionService.TextureAtlases.Add(textureAtlas);
+            }
 
             return textureAtlas;
         }

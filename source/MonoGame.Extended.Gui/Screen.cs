@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Serialization;
-using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui
 {
@@ -21,7 +22,7 @@ namespace MonoGame.Extended.Gui
         }
 
         private Control _content;
-        [JsonProperty(Order = 1)]
+        [JsonPropertyOrder(1)]
         public Control Content
         {
             get { return _content; }
@@ -49,7 +50,7 @@ namespace MonoGame.Extended.Gui
 
         public virtual void Update(GameTime gameTime)
         {
-            
+
         }
 
         public void Show()
@@ -113,21 +114,10 @@ namespace MonoGame.Extended.Gui
             where TScreen : Screen
         {
             var skinService = new SkinService();
-            var serializer = new GuiJsonSerializer(contentManager, customControlTypes)
-            {
-                Converters =
-                {
-                    new SkinJsonConverter(contentManager, skinService, customControlTypes),
-                    new ControlJsonConverter(skinService, customControlTypes)
-                }
-            };
-
-            using (var streamReader = new StreamReader(stream))
-            using (var jsonReader = new JsonTextReader(streamReader))
-            {
-                var screen = serializer.Deserialize<TScreen>(jsonReader);
-                return screen;
-            }
+            var options = GuiJsonSerializerOptionsProvider.GetOptions(contentManager, customControlTypes);
+            options.Converters.Add(new SkinJsonConverter(contentManager, skinService, customControlTypes));
+            options.Converters.Add(new ControlJsonConverter(skinService, customControlTypes));
+            return JsonSerializer.Deserialize<TScreen>(stream, options);
         }
 
         public static Screen FromFile(ContentManager contentManager, string path, params Type[] customControlTypes)

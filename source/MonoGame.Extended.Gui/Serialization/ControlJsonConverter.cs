@@ -1,10 +1,11 @@
 using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using MonoGame.Extended.Gui.Controls;
-using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui.Serialization
 {
-    public class ControlJsonConverter : JsonConverter
+    public class ControlJsonConverter : JsonConverter<Control>
     {
         private readonly IGuiSkinService _guiSkinService;
         private readonly ControlStyleJsonConverter _styleConverter;
@@ -16,13 +17,13 @@ namespace MonoGame.Extended.Gui.Serialization
             _styleConverter = new ControlStyleJsonConverter(customControlTypes);
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-        }
+        /// <inheritdoc />
+        public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(Control);
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        /// <inheritdoc />
+        public override Control Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var style = (ControlStyle) _styleConverter.ReadJson(reader, objectType, existingValue, serializer);
+            var style = _styleConverter.Read(ref reader, typeToConvert, options);
             var template = GetControlTemplate(style);
             var skin = _guiSkinService.Skin;
             var control = skin.Create(style.TargetType, template);
@@ -48,10 +49,10 @@ namespace MonoGame.Extended.Gui.Serialization
             return control;
         }
 
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(Control);
-        }
+        /// <inheritdoc />
+        public override void Write(Utf8JsonWriter writer, Control value, JsonSerializerOptions options) { }
+
+
 
         private static string GetControlTemplate(ControlStyle style)
         {

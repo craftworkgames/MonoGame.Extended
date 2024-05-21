@@ -10,7 +10,8 @@ using MonoGame.Extended.Collections;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Serialization;
 using MonoGame.Extended.TextureAtlases;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace MonoGame.Extended.Gui
 {
@@ -24,25 +25,25 @@ namespace MonoGame.Extended.Gui
             Styles = new KeyedCollection<string, ControlStyle>(s => s.Name ?? s.TargetType.Name);
         }
 
-        [JsonProperty(Order = 0)]
+        [JsonPropertyOrder(0)]
         public string Name { get; set; }
 
-        [JsonProperty(Order = 1)]
+        [JsonPropertyOrder(1)]
         public IList<TextureAtlas> TextureAtlases { get; set; }
 
-        [JsonProperty(Order = 2)]
+        [JsonPropertyOrder(2)]
         public IList<BitmapFont> Fonts { get; set; }
 
-        [JsonProperty(Order = 3)]
+       [JsonPropertyOrder(3)]
         public IList<NinePatchRegion2D> NinePatches { get; set; }
 
-        [JsonProperty(Order = 4)]
+        [JsonPropertyOrder(4)]
         public BitmapFont DefaultFont => Fonts.FirstOrDefault();
 
-        [JsonProperty(Order = 5)]
+        [JsonPropertyOrder(5)]
         public Cursor Cursor { get; set; }
 
-        [JsonProperty(Order = 6)]
+        [JsonPropertyOrder(6)]
         public KeyedCollection<string, ControlStyle> Styles { get; private set; }
 
         public ControlStyle GetStyle(string name)
@@ -87,13 +88,8 @@ namespace MonoGame.Extended.Gui
 
         public static Skin FromStream(ContentManager contentManager, Stream stream, params Type[] customControlTypes)
         {
-            var skinSerializer = new GuiJsonSerializer(contentManager, customControlTypes);
-
-            using (var streamReader = new StreamReader(stream))
-            using (var jsonReader = new JsonTextReader(streamReader))
-            {
-                return skinSerializer.Deserialize<Skin>(jsonReader);
-            }
+            var options =  GuiJsonSerializerOptionsProvider.GetOptions(contentManager, customControlTypes);
+            return JsonSerializer.Deserialize<Skin>(stream, options);
         }
 
 
@@ -139,7 +135,7 @@ namespace MonoGame.Extended.Gui
                         {nameof(Control.Padding), new Thickness(5)},
                         {nameof(Control.DisabledStyle), new ControlStyle(typeof(Control)) {
                                 { nameof(Control.TextColor), new Color(78,78,80) }
-                            } 
+                            }
                         }
                     },
                     new ControlStyle(typeof(LayoutControl)) {

@@ -1,9 +1,9 @@
 using System.IO;
+using System.Text.Json;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
-using Newtonsoft.Json;
 using ContentReaderExtensions = MonoGame.Extended.Content.ContentReaderExtensions;
 
 namespace MonoGame.Extended.TextureAtlases
@@ -13,13 +13,7 @@ namespace MonoGame.Extended.TextureAtlases
         private static TexturePackerFile Load(ContentReader reader)
         {
             var json = reader.ReadString();
-
-            using (var stringReader = new StringReader(json))
-            using (var jsonReader = new JsonTextReader(stringReader))
-            {
-                var serializer = new JsonSerializer();
-                return serializer.Deserialize<TexturePackerFile>(jsonReader);
-            }
+            return JsonSerializer.Deserialize<TexturePackerFile>(json);
         }
 
         protected override TextureAtlas Read(ContentReader reader, TextureAtlas existingInstance)

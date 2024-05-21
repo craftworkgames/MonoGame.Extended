@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles.Serialization;
 using MonoGame.Extended.Serialization;
-using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Particles
 {
@@ -48,13 +48,8 @@ namespace MonoGame.Extended.Particles
 
         public static ParticleEffect FromStream(ITextureRegionService textureRegionService, Stream stream)
         {
-            var serializer = new ParticleJsonSerializer(textureRegionService);
-
-            using (var streamReader = new StreamReader(stream))
-            using (var jsonReader = new JsonTextReader(streamReader))
-            {
-                return serializer.Deserialize<ParticleEffect>(jsonReader);
-            }
+            var options =  ParticleJsonSerializerOptionsProvider.GetOptions(textureRegionService);
+            return JsonSerializer.Deserialize<ParticleEffect>(stream, options);
         }
 
         public void Update(float elapsedSeconds)

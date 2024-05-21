@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using MonoGame.Extended.Collections;
 using MonoGame.Extended.Gui.Controls;
-using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui.Serialization
 {
-    public class ControlStyleJsonConverter : JsonConverter
+    public class ControlStyleJsonConverter : JsonConverter<ControlStyle>
     {
         private readonly Dictionary<string, Type> _controlTypes;
         private const string _typeProperty = "Type";
@@ -26,27 +27,20 @@ namespace MonoGame.Extended.Gui.Serialization
                 .ToDictionary(t => t.Name);
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        /// <inheritdoc />
+        public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(ControlStyle);
+
+        /// <inheritdoc />
+        public override ControlStyle Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var style = (ControlStyle)value;
-            var dictionary = new Dictionary<string, object> { [_typeProperty] = style.TargetType.Name };
-
-            foreach (var keyValuePair in style)
-                dictionary.Add(keyValuePair.Key, keyValuePair.Value);
-
-            serializer.Serialize(writer, dictionary);
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var dictionary = serializer.Deserialize<Dictionary<string, object>>(reader);
+            var dictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(ref reader, options);
             var name = dictionary.GetValueOrDefault(_nameProperty) as string;
             var typeName = dictionary.GetValueOrDefault(_typeProperty) as string;
 
-            if (!_controlTypes.ContainsKey(typeName))
+            if (!_controlTypes.TryGetValue(typeName, out Type controlType))
                 throw new FormatException("invalid control type: " + typeName);
 
-            var targetType =  typeName != null ? _controlTypes[typeName] : typeof(Control);
+            var targetType = typeName != null ? controlType : typeof(Control);
             var properties = targetType
                 .GetRuntimeProperties()
                 .ToDictionary(p => p.Name);
@@ -59,8 +53,8 @@ namespace MonoGame.Extended.Gui.Serialization
 
                 PropertyInfo propertyInfo;
                 var value = properties.TryGetValue(propertyName, out propertyInfo)
-                    ? DeserializeValueAs(serializer, rawValue, propertyInfo.PropertyType)
-                    : DeserializeValueAs(serializer, rawValue, typeof(object));
+                    ? DeserializeValueAs(rawValue, propertyInfo.PropertyType)
+                    : DeserializeValueAs(rawValue, typeof(object));
 
                 style.Add(propertyName, value);
             }
@@ -68,20 +62,28 @@ namespace MonoGame.Extended.Gui.Serialization
             return style;
         }
 
-        private static object DeserializeValueAs(JsonSerializer serializer, object value, Type type)
+        private static object DeserializeValueAs(object value, Type type)
         {
-            var json = JsonConvert.SerializeObject(value);
-
-            using (var textReader = new StringReader(json))
-            using (var jsonReader = new JsonTextReader(textReader))
-            {
-                return serializer.Deserialize(jsonReader, type);
-            }
+            var json = JsonSerializer.Serialize(value, type);
+            return JsonSerializer.Deserialize(json, type);
         }
 
-        public override bool CanConvert(Type objectType)
+        /// <inheritdoc />
+        public override void Write(Utf8JsonWriter writer, ControlStyle value, JsonSerializerOptions options)
         {
-            return objectType == typeof(ControlStyle);
+            var style = (ControlStyle)value;
+            var dictionary = new Dictionary<string, object> { [_typeProperty] = style.TargetType.Name };
+
+            foreach (var keyValuePair in style)
+                dictionary.Add(keyValuePair.Key, keyValuePair.Value);
+
+            JsonSerializer.Serialize(writer, dictionary);
         }
+
+
+
+
+
+
     }
 }

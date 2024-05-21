@@ -1,6 +1,6 @@
 using System.IO;
+using System.Text.Json;
 using MonoGame.Extended.Serialization;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace MonoGame.Extended.Tests.Serialization;
@@ -18,12 +18,15 @@ public class RectangleFJsonConverterTest
     {
         var jsonData = @"
 {
-    box: ""1 1 10 10""
+    ""box"": ""1 1 10 10""
 }
 ";
-        var serializer = new JsonSerializer();
-        serializer.Converters.Add(new RectangleFJsonConverter());
-        var content = serializer.Deserialize<TestContent>(new JsonTextReader(new StringReader(jsonData)));
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        options.Converters.Add(new RectangleFJsonConverter());
+        var content = JsonSerializer.Deserialize<TestContent>(jsonData, options);
 
         Assert.Equal(1, content.Box.Left);
         Assert.Equal(1, content.Box.Top);

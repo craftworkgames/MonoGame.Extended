@@ -1,14 +1,15 @@
 using System;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
-using Newtonsoft.Json;
 
 namespace MonoGame.Extended.TextureAtlases
 {
-    public class TextureAtlasJsonConverter : JsonConverter
+    public class TextureAtlasJsonConverter : JsonConverter<TextureAtlas>
     {
         private readonly ContentManager _contentManager;
         private readonly string _path;
@@ -19,23 +20,16 @@ namespace MonoGame.Extended.TextureAtlases
             _path = path;
         }
 
-        // ReSharper disable once ClassNeverInstantiated.Local
-        private class InlineTextureAtlas
-        {
-            public string Texture { get; set; }
-            public int RegionWidth { get; set; }
-            public int RegionHeight { get; set; }
-        }
+        /// <inheritdoc />
+        public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(TextureAtlas);
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override TextureAtlas Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.ValueType == typeof(string))
+            if(reader.TokenType == JsonTokenType.String)
             {
-                var textureAtlasAssetName = reader.Value.ToString();
+                // TODO: (Aristurtle 05/20/2024) What is this for? It's just an if block that throws an exception. Need
+                // to investigate.
+                var textureAtlasAssetName = reader.GetString();
                 var contentPath = GetContentPath(textureAtlasAssetName);
                 var texturePackerFile = _contentManager.Load<TexturePackerFile>(contentPath, new JsonContentLoader());
                 var texture = _contentManager.Load<Texture2D>(texturePackerFile.Metadata.Image);
@@ -44,7 +38,7 @@ namespace MonoGame.Extended.TextureAtlases
             }
             else
             {
-                var metadata = serializer.Deserialize<InlineTextureAtlas>(reader);
+                var metadata = JsonSerializer.Deserialize<InlineTextureAtlas>(ref reader, options);
 
                 // TODO: When we get to .NET Standard 2.1 it would be more robust to use
                 // [Path.GetRelativePath](https://docs.microsoft.com/en-us/dotnet/api/system.io.path.getrelativepath?view=netstandard-2.1)
@@ -58,8 +52,9 @@ namespace MonoGame.Extended.TextureAtlases
                 {
                     texture = _contentManager.Load<Texture2D>(resolvedAssetName);
                 }
-                catch (Exception ex) {
-                    if (textureDirectory == null || textureDirectory == "") 
+                catch (Exception ex)
+                {
+                    if (textureDirectory == null || textureDirectory == "")
                         texture = _contentManager.Load<Texture2D>(textureName);
                     else
                         texture = _contentManager.Load<Texture2D>(textureDirectory + "/" + textureName);
@@ -68,15 +63,22 @@ namespace MonoGame.Extended.TextureAtlases
             }
         }
 
+        /// <inheritdoc />
+        public override void Write(Utf8JsonWriter writer, TextureAtlas value, JsonSerializerOptions options) { }
+
+
+        // ReSharper disable once ClassNeverInstantiated.Local
+        private class InlineTextureAtlas
+        {
+            public string Texture { get; set; }
+            public int RegionWidth { get; set; }
+            public int RegionHeight { get; set; }
+        }
+
         private string GetContentPath(string relativePath)
         {
             var directory = Path.GetDirectoryName(_path);
             return Path.Combine(directory, relativePath);
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(TextureAtlas);
         }
     }
 }
