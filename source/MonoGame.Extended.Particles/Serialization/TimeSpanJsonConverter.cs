@@ -1,30 +1,33 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace MonoGame.Extended.Particles.Serialization
+namespace MonoGame.Extended.Particles.Serialization;
+
+public class TimeSpanJsonConverter : JsonConverter<TimeSpan>
 {
-    public class TimeSpanJsonConverter : JsonConverter
+    /// <inheritdoc />
+    public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(TimeSpan);
+
+    /// <inheritdoc />
+    public override TimeSpan Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        if (reader.TokenType == JsonTokenType.Number)
         {
-            var timeSpan = (TimeSpan) value;
-            writer.WriteValue(timeSpan.TotalSeconds);
+            double seconds = reader.GetDouble();
+            return TimeSpan.FromSeconds(seconds);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.ValueType == typeof(double))
-            {
-                var seconds = (double) reader.Value;
-                return TimeSpan.FromSeconds(seconds);
-            }
+        return TimeSpan.Zero;
+    }
 
-            return TimeSpan.Zero;
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(TimeSpan);
-        }
+    /// <inheritdoc />
+    /// <exception cref="ArgumentNullException">
+    /// Throw if <paramref name="writer"/> is <see langword="null"/>.
+    /// </exception>
+    public override void Write(Utf8JsonWriter writer, TimeSpan value, JsonSerializerOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(writer);
+        writer.WriteNumberValue(value.TotalSeconds);
     }
 }

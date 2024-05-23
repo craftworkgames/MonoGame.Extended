@@ -1,28 +1,28 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace MonoGame.Extended.TextureAtlases
 {
     public class TexturePackerRegion
     {
-        [JsonProperty("filename")]
+        [JsonPropertyName("filename")]
         public string Filename { get; set; }
 
-        [JsonProperty("frame")]
+        [JsonPropertyName("frame")]
         public TexturePackerRectangle Frame { get; set; }
 
-        [JsonProperty("rotated")]
+        [JsonPropertyName("rotated")]
         public bool IsRotated { get; set; }
 
-        [JsonProperty("trimmed")]
+        [JsonPropertyName("trimmed")]
         public bool IsTrimmed { get; set; }
 
-        [JsonProperty("spriteSourceSize")]
+        [JsonPropertyName("spriteSourceSize")]
         public TexturePackerRectangle SourceRectangle { get; set; }
 
-        [JsonProperty("sourceSize")]
+        [JsonPropertyName("sourceSize")]
         public TexturePackerSize SourceSize { get; set; }
 
-        [JsonProperty("pivot")]
+        [JsonPropertyName("pivot")]
         public TexturePackerPoint PivotPoint { get; set; }
 
         public override string ToString()

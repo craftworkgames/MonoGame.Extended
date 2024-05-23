@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace MonoGame.Extended.TextureAtlases
 {
     public class TexturePackerFile
     {
-        [JsonProperty("frames")]
+        [JsonPropertyName("frames")]
         public List<TexturePackerRegion> Regions { get; set; }
 
-        [JsonProperty("meta")]
+        [JsonPropertyName("meta")]
         public TexturePackerMeta Metadata { get; set; }
     }
 }

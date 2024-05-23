@@ -1,7 +1,8 @@
 ﻿using System.IO;
+using System.Text.Json;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.TextureAtlases;
-using Newtonsoft.Json;
+
 
 namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {
@@ -10,14 +11,8 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
     {
         public override TexturePackerFile Import(string filename, ContentImporterContext context)
         {
-            using (var streamReader = new StreamReader(filename))
-            {
-                using (var jsonReader = new JsonTextReader(streamReader))
-                {
-                    var serializer = new JsonSerializer();
-                    return serializer.Deserialize<TexturePackerFile>(jsonReader);
-                }
-            }
+            var json = File.ReadAllText(filename);
+            return JsonSerializer.Deserialize<TexturePackerFile>(json);
         }
     }
 }

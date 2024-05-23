@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace MonoGame.Extended.TextureAtlases
 {
     public class TexturePackerPoint
     {
-        [JsonProperty("x")]
+        [JsonPropertyName("x")]
         public double X { get; set; }
 
-        [JsonProperty("y")]
+        [JsonPropertyName("y")]
         public double Y { get; set; }
 
         public override string ToString()

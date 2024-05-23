@@ -1,25 +1,34 @@
 using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework;
-using Newtonsoft.Json;
 
-namespace MonoGame.Extended.Serialization
+namespace MonoGame.Extended.Serialization;
+
+/// <summary>
+/// Converts a <see cref="Color"/> value to or from JSON.
+/// </summary>
+public class ColorJsonConverter : JsonConverter<Color>
 {
-    public class ColorJsonConverter : JsonConverter
+    /// <inheritdoc />
+    public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(Color);
+
+    /// <inheritdoc />
+    public override Color Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            writer.WriteValue(ColorHelper.ToHex((Color)value));
-        }
+        var value = reader.GetString();
+        return value[0] == '#' ? ColorHelper.FromHex(value) : ColorHelper.FromName(value);
+    }
 
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(Color);
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var value = (string)reader.Value;
-            return value.StartsWith("#") ? ColorHelper.FromHex(value) : ColorHelper.FromName(value);
-        }
+    /// <inheritdoc />
+    /// <exception cref="ArgumentNullException">
+    /// Throw if <paramref name="writer"/> is <see langword="null"/>.
+    /// </exception>
+    public override void Write(Utf8JsonWriter writer, Color value, JsonSerializerOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(writer);
+        var hexValue = ColorHelper.ToHex(value);
+        writer.WriteStringValue(hexValue);
     }
 }
+

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.TextureAtlases;
-using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui
 {

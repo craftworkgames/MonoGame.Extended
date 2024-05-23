@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended.TextureAtlases;
-using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Particles
 {
@@ -42,7 +42,7 @@ namespace MonoGame.Extended.Particles
             Buffer.Dispose();
             GC.SuppressFinalize(this);
         }
-        
+
         ~ParticleEmitter()
         {
             Dispose();
@@ -197,7 +197,7 @@ namespace MonoGame.Extended.Particles
                 _random.NextColor(out particle->Color, Parameters.Color);
 
                 particle->Opacity = _random.NextSingle(Parameters.Opacity);
-                
+
                 if(Parameters.MaintainAspectRatioOnScale)
                 {
                     var scale = _random.NextSingle(Parameters.Scale);
@@ -207,7 +207,7 @@ namespace MonoGame.Extended.Particles
                 {
                     particle->Scale = new Vector2(_random.NextSingle(Parameters.ScaleX), _random.NextSingle(Parameters.ScaleY));
                 }
-                
+
                 particle->Rotation = _random.NextSingle(Parameters.Rotation);
                 particle->Mass = _random.NextSingle(Parameters.Mass);
                 particle->LayerDepth = layerDepth;

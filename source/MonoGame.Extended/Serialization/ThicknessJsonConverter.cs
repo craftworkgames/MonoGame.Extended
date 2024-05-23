@@ -1,25 +1,31 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace MonoGame.Extended.Serialization
+namespace MonoGame.Extended.Serialization;
+
+/// <summary>
+/// Converts a <see cref="Thickness"/> value to or from JSON.
+/// </summary>
+public class ThicknessJsonConverter : JsonConverter<Thickness>
 {
-    public class ThicknessJsonConverter : JsonConverter
+    /// <inheritdoc />
+    public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(Thickness);
+
+    /// <inheritdoc />
+    public override Thickness Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            var thickness = (Thickness)value;
-            writer.WriteValue($"{thickness.Left} {thickness.Top} {thickness.Right} {thickness.Bottom}");
-        }
+        var values = reader.ReadAsMultiDimensional<int>();
+        return Thickness.FromValues(values);
+    }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var values = reader.ReadAsMultiDimensional<int>();
-            return Thickness.FromValues(values);
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(Thickness);
-        }
+    /// <inheritdoc />
+    /// <exception cref="ArgumentNullException">
+    /// Throw if <paramref name="writer"/> is <see langword="null"/>
+    /// </exception>
+    public override void Write(Utf8JsonWriter writer, Thickness value, JsonSerializerOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(writer);
+        writer.WriteStringValue($"{value.Left} {value.Top} {value.Right} {value.Bottom}");
     }
 }

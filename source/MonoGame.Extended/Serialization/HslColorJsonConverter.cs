@@ -1,28 +1,33 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace MonoGame.Extended.Serialization
+namespace MonoGame.Extended.Serialization;
+
+/// <summary>
+/// Converts a <see cref="HslColor"/> value to or from JSON.
+/// </summary>
+public class HslColorJsonConverter : JsonConverter<HslColor>
 {
-    public class HslColorJsonConverter : JsonConverter
+    private readonly ColorJsonConverter _colorConverter = new ColorJsonConverter();
+
+    /// <inheritdoc />
+    public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(HslColor);
+
+    /// <inheritdoc />
+    public override HslColor Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        private readonly ColorJsonConverter _colorConverter = new ColorJsonConverter();
+        var color = _colorConverter.Read(ref reader, typeToConvert, options);
+        return HslColor.FromRgb(color);
+    }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            var color = ((HslColor) value).ToRgb();
-            _colorConverter.WriteJson(writer, color, serializer);
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var color = (Color)_colorConverter.ReadJson(reader, objectType, existingValue, serializer);
-            return HslColor.FromRgb(color);
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(HslColor);
-        }
+    /// <inheritdoc />
+    /// <exception cref="ArgumentNullException">
+    /// Throw if <paramref name="writer"/> is <see langword="null"/>.
+    /// </exception>
+    public override void Write(Utf8JsonWriter writer, HslColor value, JsonSerializerOptions options)
+    {
+        var color = ((HslColor)value).ToRgb();
+        _colorConverter.Write(writer, color, options);
     }
 }

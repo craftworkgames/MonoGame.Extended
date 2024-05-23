@@ -30,10 +30,8 @@
 *.sln               text        eol=crlf        merge=union
 
 ################################################################################
-### imageln file behavior
+### image file behavior
 ###     - Treat as binary
-###     - Normalize to Windows-style line endings
-###     - Use a union merge when resolving conflicts
 ################################################################################
 *.bmp               binary
 *.gif               binary
@@ -42,3 +40,9 @@
 *.jpeg              binary
 *.png               binary
 *.webp              binary
+
+################################################################################
+### MGFXO file behavior
+###     - Treat as binary
+################################################################################
+*.mgfxo             binary

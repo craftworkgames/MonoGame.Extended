@@ -1,7 +1,4 @@
-using System;
 using MonoGame.Extended.Serialization;
-using MonoGame.Extended.TextureAtlases;
-using Newtonsoft.Json;
 
 namespace MonoGame.Extended.Gui.Serialization
 {
@@ -13,16 +10,6 @@ namespace MonoGame.Extended.Gui.Serialization
             : base(textureRegionService)
         {
             _textureRegionService = textureRegionService;
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var ninePatch = base.ReadJson(reader, objectType, existingValue, serializer) as NinePatchRegion2D;
-
-            if(ninePatch != null)
-                _textureRegionService.NinePatches.Add(ninePatch);
-
-            return ninePatch;
         }
     }
 }
