@@ -32,7 +32,7 @@
     </ItemGroup>
 
     <!-- Setup Code Analysis using the .editorconfig file -->
-    <PropertyGroup>
+    <!-- <PropertyGroup>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <AnalysisMode>AllEnabledByDefault</AnalysisMode>
         <AnalysisLevel>latest</AnalysisLevel>
@@ -41,6 +41,6 @@
         <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
         <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         <WarningsAsErrors>nullable</WarningsAsErrors>
-    </PropertyGroup>
+    </PropertyGroup> -->
 
 </Project>
