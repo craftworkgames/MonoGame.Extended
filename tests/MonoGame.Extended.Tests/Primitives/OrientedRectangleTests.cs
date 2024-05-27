@@ -10,11 +10,11 @@ public class OrientedRectangleTests
     [Fact]
     public void Initializes_oriented_rectangle()
     {
-        var rectangle = new OrientedRectangle(new Point2(1, 2), new Size2(3, 4), new Matrix2(5, 6, 7, 8, 9, 10));
+        var rectangle = new OrientedRectangle(new Point2(1, 2), new Size2(3, 4), new Matrix3x2(5, 6, 7, 8, 9, 10));
 
         Assert.Equal(new Point2(1, 2), rectangle.Center);
         Assert.Equal(new Vector2(3, 4), rectangle.Radii);
-        Assert.Equal(new Matrix2(5, 6, 7, 8, 9, 10), rectangle.Orientation);
+        Assert.Equal(new Matrix3x2(5, 6, 7, 8, 9, 10), rectangle.Orientation);
         CollectionAssert.Equal(
             new List<Vector2>
                 {
@@ -31,14 +31,14 @@ public class OrientedRectangleTests
             new object[]
                 {
                     "empty compared with empty is true",
-                    new OrientedRectangle(Point2.Zero, Size2.Empty, Matrix2.Identity),
-                    new OrientedRectangle(Point2.Zero, Size2.Empty, Matrix2.Identity)
+                    new OrientedRectangle(Point2.Zero, Size2.Empty, Matrix3x2.Identity),
+                    new OrientedRectangle(Point2.Zero, Size2.Empty, Matrix3x2.Identity)
                 },
             new object[]
                 {
                     "initialized compared with initialized true",
-                    new OrientedRectangle(new Point2(1, 2), new Size2(3, 4), new Matrix2(5, 6, 7, 8, 9, 10)),
-                    new OrientedRectangle(new Point2(1, 2), new Size2(3, 4), new Matrix2(5, 6, 7, 8, 9, 10))
+                    new OrientedRectangle(new Point2(1, 2), new Size2(3, 4), new Matrix3x2(5, 6, 7, 8, 9, 10)),
+                    new OrientedRectangle(new Point2(1, 2), new Size2(3, 4), new Matrix3x2(5, 6, 7, 8, 9, 10))
                 }
         };
 
@@ -57,8 +57,8 @@ public class OrientedRectangleTests
         [Fact]
         public void Center_point_is_not_translated()
         {
-            var rectangle = new OrientedRectangle(new Point2(1, 2), new Size2(), Matrix2.Identity);
-            var transform = Matrix2.Identity;
+            var rectangle = new OrientedRectangle(new Point2(1, 2), new Size2(), Matrix3x2.Identity);
+            var transform = Matrix3x2.Identity;
 
             var result = OrientedRectangle.Transform(rectangle, ref transform);
 
@@ -68,8 +68,8 @@ public class OrientedRectangleTests
         [Fact]
         public void Center_point_is_translated()
         {
-            var rectangle = new OrientedRectangle(new Point2(0, 0), new Size2(), new Matrix2());
-            var transform = Matrix2.CreateTranslation(1, 2);
+            var rectangle = new OrientedRectangle(new Point2(0, 0), new Size2(), new Matrix3x2());
+            var transform = Matrix3x2.CreateTranslation(1, 2);
 
             var result = OrientedRectangle.Transform(rectangle, ref transform);
 
@@ -79,8 +79,8 @@ public class OrientedRectangleTests
         [Fact]
         public void Radii_is_not_changed_by_identity_transform()
         {
-            var rectangle = new OrientedRectangle(new Point2(), new Size2(10, 20), new Matrix2());
-            var transform = Matrix2.Identity;
+            var rectangle = new OrientedRectangle(new Point2(), new Size2(10, 20), new Matrix3x2());
+            var transform = Matrix3x2.Identity;
 
             var result = OrientedRectangle.Transform(rectangle, ref transform);
 
@@ -90,8 +90,8 @@ public class OrientedRectangleTests
         [Fact]
         public void Radii_is_not_changed_by_translation()
         {
-            var rectangle = new OrientedRectangle(new Point2(1, 2), new Size2(10, 20), new Matrix2());
-            var transform = Matrix2.CreateTranslation(1, 2);
+            var rectangle = new OrientedRectangle(new Point2(1, 2), new Size2(10, 20), new Matrix3x2());
+            var transform = Matrix3x2.CreateTranslation(1, 2);
 
             var result = OrientedRectangle.Transform(rectangle, ref transform);
 
@@ -101,22 +101,22 @@ public class OrientedRectangleTests
         [Fact]
         public void Orientation_is_rotated_45_degrees_left()
         {
-            var rectangle = new OrientedRectangle(new Point2(), new Size2(), Matrix2.Identity);
-            var transform = Matrix2.CreateRotationZ(MathHelper.PiOver4);
+            var rectangle = new OrientedRectangle(new Point2(), new Size2(), Matrix3x2.Identity);
+            var transform = Matrix3x2.CreateRotationZ(MathHelper.PiOver4);
 
             var result = OrientedRectangle.Transform(rectangle, ref transform);
 
             Assert.Equal(new Point2(), result.Center);
             Assert.Equal(new Vector2(), result.Radii);
-            Assert.Equal(Matrix2.CreateRotationZ(MathHelper.PiOver4), result.Orientation);
+            Assert.Equal(Matrix3x2.CreateRotationZ(MathHelper.PiOver4), result.Orientation);
         }
 
         [Fact]
         public void Orientation_is_rotated_to_45_degrees_from_180()
         {
-            var rectangle = new OrientedRectangle(new Point2(), new Size2(), Matrix2.CreateRotationZ(MathHelper.Pi));
-            var transform = Matrix2.CreateRotationZ(-3 * MathHelper.PiOver4);
-            var expectedOrientation = Matrix2.CreateRotationZ(MathHelper.PiOver4);
+            var rectangle = new OrientedRectangle(new Point2(), new Size2(), Matrix3x2.CreateRotationZ(MathHelper.Pi));
+            var transform = Matrix3x2.CreateRotationZ(-3 * MathHelper.PiOver4);
+            var expectedOrientation = Matrix3x2.CreateRotationZ(MathHelper.PiOver4);
 
             var result = OrientedRectangle.Transform(rectangle, ref transform);
 
@@ -133,8 +133,8 @@ public class OrientedRectangleTests
         [Fact]
         public void Points_are_same_as_center()
         {
-            var rectangle = new OrientedRectangle(new Point2(1, 2), new Size2(), Matrix2.Identity);
-            var transform = Matrix2.Identity;
+            var rectangle = new OrientedRectangle(new Point2(1, 2), new Size2(), Matrix3x2.Identity);
+            var transform = Matrix3x2.Identity;
 
             var result = OrientedRectangle.Transform(rectangle, ref transform);
 
@@ -152,8 +152,8 @@ public class OrientedRectangleTests
         [Fact]
         public void Points_are_translated()
         {
-            var rectangle = new OrientedRectangle(new Point2(0, 0), new Size2(2, 4), Matrix2.Identity);
-            var transform = Matrix2.CreateTranslation(10, 20);
+            var rectangle = new OrientedRectangle(new Point2(0, 0), new Size2(2, 4), Matrix3x2.Identity);
+            var transform = Matrix3x2.CreateTranslation(10, 20);
 
             var result = OrientedRectangle.Transform(rectangle, ref transform);
 
@@ -207,11 +207,11 @@ public class OrientedRectangleTests
              *                    :
              *                    :
              */
-            var rectangle = new OrientedRectangle(new Point2(1, 2), new Size2(2, 4), Matrix2.Identity);
+            var rectangle = new OrientedRectangle(new Point2(1, 2), new Size2(2, 4), Matrix3x2.Identity);
             var transform =
-                Matrix2.CreateRotationZ(MathHelper.PiOver2)
+                Matrix3x2.CreateRotationZ(MathHelper.PiOver2)
                 *
-                Matrix2.CreateTranslation(10, 20);
+                Matrix3x2.CreateTranslation(10, 20);
 
             var result = OrientedRectangle.Transform(rectangle, ref transform);
 
@@ -219,7 +219,7 @@ public class OrientedRectangleTests
             Assert.Equal(21, result.Center.Y, 6);
             Assert.Equal(2, result.Radii.X, 6);
             Assert.Equal(4, result.Radii.Y, 6);
-            Assert.Equal(Matrix2.CreateRotationZ(MathHelper.PiOver2), result.Orientation);
+            Assert.Equal(Matrix3x2.CreateRotationZ(MathHelper.PiOver2), result.Orientation);
             CollectionAssert.Equal(
                 new List<Vector2>
                     {

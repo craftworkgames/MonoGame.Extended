@@ -45,10 +45,10 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets the model-to-local space <see cref="Matrix2" />.
+        ///     Gets the model-to-local space <see cref="Matrix3x2" />.
         /// </summary>
         /// <value>
-        ///     The model-to-local space <see cref="Matrix2" />.
+        ///     The model-to-local space <see cref="Matrix3x2" />.
         /// </value>
         public TMatrix LocalMatrix
         {
@@ -60,10 +60,10 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets the local-to-world space <see cref="Matrix2" />.
+        ///     Gets the local-to-world space <see cref="Matrix3x2" />.
         /// </summary>
         /// <value>
-        ///     The local-to-world space <see cref="Matrix2" />.
+        ///     The local-to-world space <see cref="Matrix3x2" />.
         /// </value>
         public TMatrix WorldMatrix
         {
@@ -106,9 +106,9 @@ namespace MonoGame.Extended
         public event Action TranformUpdated; // observer pattern for after the world (or local) matrix was re-calculated
 
         /// <summary>
-        ///     Gets the model-to-local space <see cref="Matrix2" />.
+        ///     Gets the model-to-local space <see cref="Matrix3x2" />.
         /// </summary>
-        /// <param name="matrix">The model-to-local space <see cref="Matrix2" />.</param>
+        /// <param name="matrix">The model-to-local space <see cref="Matrix3x2" />.</param>
         public void GetLocalMatrix(out TMatrix matrix)
         {
             RecalculateLocalMatrixIfNecessary();
@@ -116,9 +116,9 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets the local-to-world space <see cref="Matrix2" />.
+        ///     Gets the local-to-world space <see cref="Matrix3x2" />.
         /// </summary>
-        /// <param name="matrix">The local-to-world space <see cref="Matrix2" />.</param>
+        /// <param name="matrix">The local-to-world space <see cref="Matrix3x2" />.</param>
         public void GetWorldMatrix(out TMatrix matrix)
         {
             RecalculateWorldMatrixIfNecessary();
@@ -189,7 +189,7 @@ namespace MonoGame.Extended
     /// <summary>
     ///     Represents the position, rotation, and scale of a two-dimensional game object.
     /// </summary>
-    /// <seealso cref="BaseTransform{Matrix2D}" />
+    /// <seealso cref="BaseTransform{Matrix3x2D}" />
     /// <seealso cref="IMovable" />
     /// <seealso cref="IRotatable" />
     /// <seealso cref="IScalable" />
@@ -200,7 +200,7 @@ namespace MonoGame.Extended
     ///         objects hierarchically.
     ///     </para>
     /// </remarks>
-    public class Transform2 : BaseTransform<Matrix2>, IMovable, IRotatable, IScalable
+    public class Transform2 : BaseTransform<Matrix3x2>, IMovable, IRotatable, IScalable
     {
         private Vector2 _position;
         private float _rotation;
@@ -298,12 +298,12 @@ namespace MonoGame.Extended
             }
         }
 
-        protected internal override void RecalculateWorldMatrix(ref Matrix2 localMatrix, out Matrix2 matrix)
+        protected internal override void RecalculateWorldMatrix(ref Matrix3x2 localMatrix, out Matrix3x2 matrix)
         {
             if (Parent != null)
             {
                 Parent.GetWorldMatrix(out matrix);
-                Matrix2.Multiply(ref localMatrix, ref matrix, out matrix);
+                Matrix3x2.Multiply(ref localMatrix, ref matrix, out matrix);
             }
             else
             {
@@ -311,11 +311,11 @@ namespace MonoGame.Extended
             }
         }
 
-        protected internal override void RecalculateLocalMatrix(out Matrix2 matrix)
+        protected internal override void RecalculateLocalMatrix(out Matrix3x2 matrix)
         {
-            matrix = Matrix2.CreateScale(_scale) *
-                     Matrix2.CreateRotationZ(_rotation) *
-                     Matrix2.CreateTranslation(_position);
+            matrix = Matrix3x2.CreateScale(_scale) *
+                     Matrix3x2.CreateRotationZ(_rotation) *
+                     Matrix3x2.CreateTranslation(_position);
         }
 
         public override string ToString()

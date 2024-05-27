@@ -8,11 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="BenchmarkDotNet" Version="0.13.10" />
-      <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\src\cs\MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj" />
     </ItemGroup>
 

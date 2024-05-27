@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+    <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
+
+    <PropertyGroup>
+        <ArtifactsPath>$(SolutionDirectory).artifacts/benchmarks</ArtifactsPath>
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+        <IsPackable>false</IsPackable>
+        <NoWarn>NU1701</NoWarn>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MonoGame.Framework.DesktopGL"
+                          Version="3.8.1.303"
+                          PrivateAssets="All" />
+        <PackageReference Include="BenchmarkDotNet"
+                          Version="0.13.12" />
+    </ItemGroup>
+
+</Project>

@@ -74,7 +74,7 @@ namespace MonoGame.Extended
         /// <returns>True if the circle and oriented bounded rectangle intersects, otherwise false.</returns>
         public static bool Intersects(CircleF circle, OrientedRectangle orientedRectangle)
         {
-            var rotation = Matrix2.CreateRotationZ(orientedRectangle.Orientation.Rotation);
+            var rotation = Matrix3x2.CreateRotationZ(orientedRectangle.Orientation.Rotation);
             var circleCenterInRectangleSpace = rotation.Transform(circle.Center - orientedRectangle.Center);
             var circleInRectangleSpace = new CircleF(circleCenterInRectangleSpace, circle.Radius);
             var boundingRectangle = new BoundingRectangle(new Point2(), orientedRectangle.Radii);

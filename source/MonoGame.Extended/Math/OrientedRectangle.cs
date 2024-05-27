@@ -29,9 +29,9 @@ namespace MonoGame.Extended
         public Vector2 Radii;
 
         /// <summary>
-        /// The rotation matrix <see cref="Matrix2" /> of the bounding rectangle <see cref="OrientedRectangle" />.
+        /// The rotation matrix <see cref="Matrix3x2" /> of the bounding rectangle <see cref="OrientedRectangle" />.
         /// </summary>
-        public Matrix2 Orientation;
+        public Matrix3x2 Orientation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BoundingRectangle" /> structure from the specified centre
@@ -39,8 +39,8 @@ namespace MonoGame.Extended
         /// </summary>
         /// <param name="center">The centre <see cref="Point2" />.</param>
         /// <param name="radii">The radii <see cref="Vector2" />.</param>
-        /// <param name="orientation">The orientation <see cref="Matrix2" />.</param>
-        public OrientedRectangle(Point2 center, Size2 radii, Matrix2 orientation)
+        /// <param name="orientation">The orientation <see cref="Matrix3x2" />.</param>
+        public OrientedRectangle(Point2 center, Size2 radii, Matrix3x2 orientation)
         {
             Center = center;
             Radii = radii;
@@ -82,15 +82,15 @@ namespace MonoGame.Extended
         /// transformed by <paramref name="transformMatrix"/>.
         /// </summary>
         /// <param name="rectangle">The <see cref="OrientedRectangle"/> to transform.</param>
-        /// <param name="transformMatrix">The <see cref="Matrix2"/> transformation.</param>
+        /// <param name="transformMatrix">The <see cref="Matrix3x2"/> transformation.</param>
         /// <returns>A new <see cref="OrientedRectangle"/>.</returns>
-        public static OrientedRectangle Transform(OrientedRectangle rectangle, ref Matrix2 transformMatrix)
+        public static OrientedRectangle Transform(OrientedRectangle rectangle, ref Matrix3x2 transformMatrix)
         {
             Transform(ref rectangle, ref transformMatrix, out var result);
             return result;
         }
 
-        private static void Transform(ref OrientedRectangle rectangle, ref Matrix2 transformMatrix, out OrientedRectangle result)
+        private static void Transform(ref OrientedRectangle rectangle, ref Matrix3x2 transformMatrix, out OrientedRectangle result)
         {
             PrimitivesHelper.TransformOrientedRectangle(
                 ref rectangle.Center,
@@ -169,14 +169,14 @@ namespace MonoGame.Extended
             var radii = new Size2(rectangle.Width * 0.5f, rectangle.Height * 0.5f);
             var centre = new Point2(rectangle.X + radii.Width, rectangle.Y + radii.Height);
 
-            return new OrientedRectangle(centre, radii, Matrix2.Identity);
+            return new OrientedRectangle(centre, radii, Matrix3x2.Identity);
         }
 
         public static explicit operator RectangleF(OrientedRectangle orientedRectangle)
         {
             var topLeft = -orientedRectangle.Radii;
             var rectangle = new RectangleF(topLeft, orientedRectangle.Radii * 2);
-            var orientation = orientedRectangle.Orientation * Matrix2.CreateTranslation(orientedRectangle.Center);
+            var orientation = orientedRectangle.Orientation * Matrix3x2.CreateTranslation(orientedRectangle.Center);
             return RectangleF.Transform(rectangle, ref orientation);
         }
 
