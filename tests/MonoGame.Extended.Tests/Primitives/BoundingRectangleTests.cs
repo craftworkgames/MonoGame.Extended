@@ -5,7 +5,7 @@
 
 //namespace MonoGame.Extended.Tests.Primitives
 //{
-//    
+//
 //    public class BoundingRectangleTests
 //    {
 //        public IEnumerable<TestCaseData> ConstructorTestCases
@@ -88,11 +88,11 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(), Matrix2.Identity, new BoundingRectangle()).SetName(
+//                    new TestCaseData(new BoundingRectangle(), Matrix3x2.Identity, new BoundingRectangle()).SetName(
 //                        "The bounding rectangle created from the empty bounding rectangle transformed by the identity matrix is the empty bounding rectangle.")
 //                    ;
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(0, 0), new Size2(20, 20)), Matrix2.CreateScale(2), new BoundingRectangle(new Point2(0, 0), new Size2(40, 40))).SetName(
+//                    new TestCaseData(new BoundingRectangle(new Point2(0, 0), new Size2(20, 20)), Matrix3x2.CreateScale(2), new BoundingRectangle(new Point2(0, 0), new Size2(40, 40))).SetName(
 //                        "The bounding rectangle created from a non-empty bounding rectangle transformed by a non-identity matrix is the expected bounding rectangle.")
 //                    ;
 //            }
@@ -100,7 +100,7 @@
 
 //        [Fact]
 //        [TestCaseSource(nameof(CreateFromTransformedTestCases))]
-//        public void CreateFromTransformed(BoundingRectangle boundingRectangle, Matrix2 transformMatrix,
+//        public void CreateFromTransformed(BoundingRectangle boundingRectangle, Matrix3x2 transformMatrix,
 //            BoundingRectangle expectedBoundingRectangle)
 //        {
 //            var actualBoundingRectangle = BoundingRectangle.Transform(boundingRectangle, ref transformMatrix);

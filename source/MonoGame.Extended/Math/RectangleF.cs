@@ -223,7 +223,7 @@ namespace MonoGame.Extended
 
         /// <summary>
         ///     Computes the <see cref="RectangleF" /> from the specified <see cref="RectangleF" /> transformed by
-        ///     the specified <see cref="Matrix2" />.
+        ///     the specified <see cref="Matrix3x2" />.
         /// </summary>
         /// <param name="rectangle">The rectangle to be transformed.</param>
         /// <param name="transformMatrix">The transform matrix.</param>
@@ -240,7 +240,7 @@ namespace MonoGame.Extended
         ///     </para>
         /// </remarks>
         public static void Transform(ref RectangleF rectangle,
-            ref Matrix2 transformMatrix, out RectangleF result)
+            ref Matrix3x2 transformMatrix, out RectangleF result)
         {
             var center = rectangle.Center;
             var halfExtents = (Vector2)rectangle.Size * 0.5f;
@@ -256,7 +256,7 @@ namespace MonoGame.Extended
         /// <summary>
         ///     Computes the <see cref="RectangleF" /> from the specified <see cref="Extended.BoundingRectangle" /> transformed by
         ///     the
-        ///     specified <see cref="Matrix2" />.
+        ///     specified <see cref="Matrix3x2" />.
         /// </summary>
         /// <param name="rectangle">The bounding rectangle.</param>
         /// <param name="transformMatrix">The transform matrix.</param>
@@ -271,7 +271,7 @@ namespace MonoGame.Extended
         ///         not desired.
         ///     </para>
         /// </remarks>
-        public static RectangleF Transform(RectangleF rectangle, ref Matrix2 transformMatrix)
+        public static RectangleF Transform(RectangleF rectangle, ref Matrix3x2 transformMatrix)
         {
             RectangleF result;
             Transform(ref rectangle, ref transformMatrix, out result);

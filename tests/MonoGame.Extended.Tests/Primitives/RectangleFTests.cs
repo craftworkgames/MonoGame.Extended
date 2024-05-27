@@ -38,7 +38,7 @@ namespace MonoGame.Extended.Tests.Primitives
             public void Center_point_is_not_translated()
             {
                 var rectangle = new RectangleF(new Point2(0, 0), new Size2(20, 30));
-                var transform = Matrix2.Identity;
+                var transform = Matrix3x2.Identity;
 
                 var result = RectangleF.Transform(rectangle, ref transform);
 
@@ -49,7 +49,7 @@ namespace MonoGame.Extended.Tests.Primitives
             public void Center_point_is_translated()
             {
                 var rectangleF = new RectangleF(new Point2(0, 0), new Size2(20, 30));
-                var transform = Matrix2.CreateTranslation(1, 2);
+                var transform = Matrix3x2.CreateTranslation(1, 2);
 
                 var result = RectangleF.Transform(rectangleF, ref transform);
 
@@ -60,7 +60,7 @@ namespace MonoGame.Extended.Tests.Primitives
             public void Size_is_not_changed_by_identity_transform()
             {
                 var rectangle = new RectangleF(new Point2(0, 0), new Size2(20, 30));
-                var transform = Matrix2.Identity;
+                var transform = Matrix3x2.Identity;
 
                 var result = RectangleF.Transform(rectangle, ref transform);
 
@@ -71,7 +71,7 @@ namespace MonoGame.Extended.Tests.Primitives
             public void Size_is_not_changed_by_translation()
             {
                 var rectangle = new RectangleF(new Point2(0, 0), new Size2(20, 30));
-                var transform = Matrix2.CreateTranslation(1, 2);
+                var transform = Matrix3x2.CreateTranslation(1, 2);
 
                 var result = RectangleF.Transform(rectangle, ref transform);
 
@@ -119,9 +119,9 @@ namespace MonoGame.Extended.Tests.Primitives
                  */
                 var rectangle = new RectangleF(new Point2(0, 0), new Size2(2, 4));
                 var transform =
-                    Matrix2.CreateRotationZ(MathHelper.PiOver2)
+                    Matrix3x2.CreateRotationZ(MathHelper.PiOver2)
                     *
-                    Matrix2.CreateTranslation(10, 20);
+                    Matrix3x2.CreateTranslation(10, 20);
 
                 var result = RectangleF.Transform(rectangle, ref transform);
 

@@ -273,13 +273,13 @@ namespace MonoGame.Extended.Collisions
 
         private static Vector2 PenetrationVector(CircleF circleA, OrientedRectangle orientedRectangleB)
         {
-            var rotation = Matrix2.CreateRotationZ(orientedRectangleB.Orientation.Rotation);
+            var rotation = Matrix3x2.CreateRotationZ(orientedRectangleB.Orientation.Rotation);
             var circleCenterInRectangleSpace = rotation.Transform(circleA.Center - orientedRectangleB.Center);
             var circleInRectangleSpace = new CircleF(circleCenterInRectangleSpace, circleA.Radius);
             var boundingRectangle = new BoundingRectangle(new Point2(), orientedRectangleB.Radii);
 
             var penetrationVector = PenetrationVector(circleInRectangleSpace, boundingRectangle);
-            var inverseRotation = Matrix2.CreateRotationZ(-orientedRectangleB.Orientation.Rotation);
+            var inverseRotation = Matrix3x2.CreateRotationZ(-orientedRectangleB.Orientation.Rotation);
             var transformedPenetration = inverseRotation.Transform(penetrationVector);
 
             return transformedPenetration;

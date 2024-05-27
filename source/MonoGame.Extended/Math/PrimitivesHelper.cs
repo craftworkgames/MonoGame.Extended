@@ -60,7 +60,7 @@ namespace MonoGame.Extended
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void TransformRectangle(ref Point2 center, ref Vector2 halfExtents, ref Matrix2 transformMatrix)
+        internal static void TransformRectangle(ref Point2 center, ref Vector2 halfExtents, ref Matrix3x2 transformMatrix)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.2; Bounding Volumes - Axis-aligned Bounding Boxes (AABBs). pg 86-87
 
@@ -74,8 +74,8 @@ namespace MonoGame.Extended
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static void TransformOrientedRectangle(
             ref Point2 center,
-            ref Matrix2 orientation,
-            ref Matrix2 transformMatrix)
+            ref Matrix3x2 orientation,
+            ref Matrix3x2 transformMatrix)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.4; Oriented Bounding Boxes (OBBs), pg 101-105.
 

@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Graphics.Geometry
         {
         }
 
-        public void BuildSprite(int indexOffset, ref Matrix2 transformMatrix, Texture2D texture,
+        public void BuildSprite(int indexOffset, ref Matrix3x2 transformMatrix, Texture2D texture,
             ref Rectangle sourceRectangle,
             Color? color = null, FlipFlags flags = FlipFlags.None, float depth = 0)
         {
