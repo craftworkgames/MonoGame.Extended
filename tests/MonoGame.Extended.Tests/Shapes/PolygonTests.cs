@@ -4,7 +4,7 @@ using Xunit;
 
 namespace MonoGame.Extended.Tests.Shapes
 {
-    public class PolygonFTests
+    public class PolygonTests
     {
         [Fact]
         public void Polygon_Contains_Point_Test()
