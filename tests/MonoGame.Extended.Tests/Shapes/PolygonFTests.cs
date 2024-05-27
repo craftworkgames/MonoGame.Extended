@@ -24,6 +24,11 @@ namespace MonoGame.Extended.Tests.Shapes
             Assert.True(polygon.Contains(new Vector2(9.99f, 9.99f)));
             Assert.False(polygon.Contains(new Vector2(-1f, -1f)));
             Assert.False(polygon.Contains(new Vector2(-11f, -11f)));
+
+            //  Reference: https://github.com/craftworkgames/MonoGame.Extended/issues/214
+            //  To maintain consistency with behavior in MonoGame, a point that exists at the edge of a polygon is
+            //  -not- contained within the polygon and should return false
+            Assert.False(polygon.Contains(new Vector2(10.0f, 10.0f)));
         }
 
         [Fact]
