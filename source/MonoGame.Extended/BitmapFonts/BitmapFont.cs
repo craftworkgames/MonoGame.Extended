@@ -49,10 +49,10 @@ namespace MonoGame.Extended.BitmapFonts
 
         public RectangleF GetStringRectangle(string text)
         {
-            return GetStringRectangle(text, Point2.Zero);
+            return GetStringRectangle(text, Vector2.Zero);
         }
 
-        public RectangleF GetStringRectangle(string text, Point2 position)
+        public RectangleF GetStringRectangle(string text, Vector2 position)
         {
             var glyphs = GetGlyphs(text, position);
             var rectangle = new RectangleF(position.X, position.Y, 0, LineHeight);
@@ -74,9 +74,9 @@ namespace MonoGame.Extended.BitmapFonts
             return rectangle;
         }
 
-        public RectangleF GetStringRectangle(StringBuilder text, Point2? position = null)
+        public RectangleF GetStringRectangle(StringBuilder text, Vector2? position = null)
         {
-            var position1 = position ?? new Point2();
+            var position1 = position ?? new Vector2();
             var glyphs = GetGlyphs(text, position1);
             var rectangle = new RectangleF(position1.X, position1.Y, 0, LineHeight);
 
@@ -97,12 +97,12 @@ namespace MonoGame.Extended.BitmapFonts
             return rectangle;
         }
 
-        public StringGlyphEnumerable GetGlyphs(string text, Point2? position = null)
+        public StringGlyphEnumerable GetGlyphs(string text, Vector2? position = null)
         {
             return new StringGlyphEnumerable(this, text, position);
         }
 
-        public StringBuilderGlyphEnumerable GetGlyphs(StringBuilder text, Point2? position)
+        public StringBuilderGlyphEnumerable GetGlyphs(StringBuilder text, Vector2? position)
         {
             return new StringBuilderGlyphEnumerable(this, text, position);
         }
@@ -116,7 +116,7 @@ namespace MonoGame.Extended.BitmapFonts
         {
             private readonly StringGlyphEnumerator _enumerator;
 
-            public StringGlyphEnumerable(BitmapFont font, string text, Point2? position)
+            public StringGlyphEnumerable(BitmapFont font, string text, Vector2? position)
             {
                 _enumerator = new StringGlyphEnumerator(font, text, position);
             }
@@ -142,7 +142,7 @@ namespace MonoGame.Extended.BitmapFonts
             private readonly BitmapFont _font;
             private readonly string _text;
             private int _index;
-            private readonly Point2 _position;
+            private readonly Vector2 _position;
             private Vector2 _positionDelta;
             private BitmapFontGlyph _currentGlyph;
             private BitmapFontGlyph? _previousGlyph;
@@ -158,12 +158,12 @@ namespace MonoGame.Extended.BitmapFonts
 
             public BitmapFontGlyph Current => _currentGlyph;
 
-            public StringGlyphEnumerator(BitmapFont font, string text, Point2? position)
+            public StringGlyphEnumerator(BitmapFont font, string text, Vector2? position)
             {
                 _font = font;
                 _text = text;
                 _index = -1;
-                _position = position ?? new Point2();
+                _position = position ?? new Vector2();
                 _positionDelta = new Vector2();
                 _currentGlyph = new BitmapFontGlyph();
                 _previousGlyph = null;
@@ -220,7 +220,7 @@ namespace MonoGame.Extended.BitmapFonts
 
             public void Reset()
             {
-                _positionDelta = new Point2();
+                _positionDelta = new Vector2();
                 _index = -1;
                 _previousGlyph = null;
             }
@@ -230,7 +230,7 @@ namespace MonoGame.Extended.BitmapFonts
         {
             private readonly StringBuilderGlyphEnumerator _enumerator;
 
-            public StringBuilderGlyphEnumerable(BitmapFont font, StringBuilder text, Point2? position)
+            public StringBuilderGlyphEnumerable(BitmapFont font, StringBuilder text, Vector2? position)
             {
                 _enumerator = new StringBuilderGlyphEnumerator(font, text, position);
             }
@@ -256,7 +256,7 @@ namespace MonoGame.Extended.BitmapFonts
             private readonly BitmapFont _font;
             private readonly StringBuilder _text;
             private int _index;
-            private readonly Point2 _position;
+            private readonly Vector2 _position;
             private Vector2 _positionDelta;
             private BitmapFontGlyph _currentGlyph;
             private BitmapFontGlyph? _previousGlyph;
@@ -272,12 +272,12 @@ namespace MonoGame.Extended.BitmapFonts
 
             public BitmapFontGlyph Current => _currentGlyph;
 
-            public StringBuilderGlyphEnumerator(BitmapFont font, StringBuilder text, Point2? position)
+            public StringBuilderGlyphEnumerator(BitmapFont font, StringBuilder text, Vector2? position)
             {
                 _font = font;
                 _text = text;
                 _index = -1;
-                _position = position ?? new Point2();
+                _position = position ?? new Vector2();
                 _positionDelta = new Vector2();
                 _currentGlyph = new BitmapFontGlyph();
                 _previousGlyph = null;
@@ -338,7 +338,7 @@ namespace MonoGame.Extended.BitmapFonts
 
             public void Reset()
             {
-                _positionDelta = new Point2();
+                _positionDelta = new Vector2();
                 _index = -1;
                 _previousGlyph = null;
             }

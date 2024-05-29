@@ -34,7 +34,7 @@ namespace MonoGame.Extended.Tiled.Serialization
         {
         }
 
-        public void AddTileVertices(Point2 position, Rectangle? sourceRectangle = null, TiledMapTileFlipFlags flags = TiledMapTileFlipFlags.None)
+        public void AddTileVertices(Vector2 position, Rectangle? sourceRectangle = null, TiledMapTileFlipFlags flags = TiledMapTileFlipFlags.None)
         {
             float texelLeft, texelTop, texelRight, texelBottom;
             var sourceRectangle1 = sourceRectangle ?? new Rectangle(0, 0, (int)ImageSize.Width, (int)ImageSize.Height);

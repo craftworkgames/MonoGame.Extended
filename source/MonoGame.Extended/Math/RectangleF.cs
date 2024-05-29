@@ -85,11 +85,11 @@ namespace MonoGame.Extended
         public bool IsEmpty => Width.Equals(0) && Height.Equals(0) && X.Equals(0) && Y.Equals(0);
 
         /// <summary>
-        ///     Gets the <see cref="Point2" /> representing the the top-left of this <see cref="RectangleF" />.
+        ///     Gets the <see cref="Vector2" /> representing the the top-left of this <see cref="RectangleF" />.
         /// </summary>
-        public Point2 Position
+        public Vector2 Position
         {
-            get { return new Point2(X, Y); }
+            get { return new Vector2(X, Y); }
             set
             {
                 X = value.X;
@@ -113,29 +113,29 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Gets the <see cref="Point2" /> representing the center of this <see cref="RectangleF" />.
+        ///     Gets the <see cref="Vector2" /> representing the center of this <see cref="RectangleF" />.
         /// </summary>
-        public Point2 Center => new Point2(X + Width * 0.5f, Y + Height * 0.5f);
+        public Vector2 Center => new Vector2(X + Width * 0.5f, Y + Height * 0.5f);
 
         /// <summary>
-        ///     Gets the <see cref="Point2" /> representing the top-left of this <see cref="RectangleF" />.
+        ///     Gets the <see cref="Vector2" /> representing the top-left of this <see cref="RectangleF" />.
         /// </summary>
-        public Point2 TopLeft => new Point2(X, Y);
+        public Vector2 TopLeft => new Vector2(X, Y);
 
         /// <summary>
-        ///     Gets the <see cref="Point2" /> representing the top-right of this <see cref="RectangleF" />.
+        ///     Gets the <see cref="Vector2" /> representing the top-right of this <see cref="RectangleF" />.
         /// </summary>
-        public Point2 TopRight => new Point2(X + Width, Y);
+        public Vector2 TopRight => new Vector2(X + Width, Y);
 
         /// <summary>
-        ///     Gets the <see cref="Point2" /> representing the bottom-left of this <see cref="RectangleF" />.
+        ///     Gets the <see cref="Vector2" /> representing the bottom-left of this <see cref="RectangleF" />.
         /// </summary>
-        public Point2 BottomLeft => new Point2(X, Y + Height);
+        public Vector2 BottomLeft => new Vector2(X, Y + Height);
 
         /// <summary>
-        ///     Gets the <see cref="Point2" /> representing the bottom-right of this <see cref="RectangleF" />.
+        ///     Gets the <see cref="Vector2" /> representing the bottom-right of this <see cref="RectangleF" />.
         /// </summary>
-        public Point2 BottomRight => new Point2(X + Width, Y + Height);
+        public Vector2 BottomRight => new Vector2(X + Width, Y + Height);
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="RectangleF" /> structure from the specified top-left xy-coordinate
@@ -155,11 +155,11 @@ namespace MonoGame.Extended
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="RectangleF" /> structure from the specified top-left
-        ///     <see cref="Point2" /> and the extents <see cref="SizeF" />.
+        ///     <see cref="Vector2" /> and the extents <see cref="SizeF" />.
         /// </summary>
         /// <param name="position">The top-left point.</param>
         /// <param name="size">The extents.</param>
-        public RectangleF(Point2 position, SizeF size)
+        public RectangleF(Vector2 position, SizeF size)
         {
             X = position.X;
             Y = position.Y;
@@ -168,13 +168,13 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Computes the <see cref="RectangleF" /> from a minimum <see cref="Point2" /> and maximum
-        ///     <see cref="Point2" />.
+        ///     Computes the <see cref="RectangleF" /> from a minimum <see cref="Vector2" /> and maximum
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="minimum">The minimum point.</param>
         /// <param name="maximum">The maximum point.</param>
         /// <param name="result">The resulting rectangle.</param>
-        public static void CreateFrom(Point2 minimum, Point2 maximum, out RectangleF result)
+        public static void CreateFrom(Vector2 minimum, Vector2 maximum, out RectangleF result)
         {
             result.X = minimum.X;
             result.Y = minimum.Y;
@@ -183,13 +183,13 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Computes the <see cref="RectangleF" /> from a minimum <see cref="Point2" /> and maximum
-        ///     <see cref="Point2" />.
+        ///     Computes the <see cref="RectangleF" /> from a minimum <see cref="Vector2" /> and maximum
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="minimum">The minimum point.</param>
         /// <param name="maximum">The maximum point.</param>
         /// <returns>The resulting <see cref="RectangleF" />.</returns>
-        public static RectangleF CreateFrom(Point2 minimum, Point2 maximum)
+        public static RectangleF CreateFrom(Vector2 minimum, Vector2 maximum)
         {
             RectangleF result;
             CreateFrom(minimum, maximum, out result);
@@ -197,24 +197,24 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Computes the <see cref="RectangleF" /> from a list of <see cref="Point2" /> structures.
+        ///     Computes the <see cref="RectangleF" /> from a list of <see cref="Vector2" /> structures.
         /// </summary>
         /// <param name="points">The points.</param>
         /// <param name="result">The resulting rectangle.</param>
-        public static void CreateFrom(IReadOnlyList<Point2> points, out RectangleF result)
+        public static void CreateFrom(IReadOnlyList<Vector2> points, out RectangleF result)
         {
-            Point2 minimum;
-            Point2 maximum;
+            Vector2 minimum;
+            Vector2 maximum;
             PrimitivesHelper.CreateRectangleFromPoints(points, out minimum, out maximum);
             CreateFrom(minimum, maximum, out result);
         }
 
         /// <summary>
-        ///     Computes the <see cref="RectangleF" /> from a list of <see cref="Point2" /> structures.
+        ///     Computes the <see cref="RectangleF" /> from a list of <see cref="Vector2" /> structures.
         /// </summary>
         /// <param name="points">The points.</param>
         /// <returns>The resulting <see cref="RectangleF" />.</returns>
-        public static RectangleF CreateFrom(IReadOnlyList<Point2> points)
+        public static RectangleF CreateFrom(IReadOnlyList<Vector2> points)
         {
             RectangleF result;
             CreateFrom(points, out result);
@@ -342,8 +342,8 @@ namespace MonoGame.Extended
             var secondMinimum = second.TopLeft;
             var secondMaximum = second.BottomRight;
 
-            var minimum = Point2.Maximum(firstMinimum, secondMinimum);
-            var maximum = Point2.Minimum(firstMaximum, secondMaximum);
+            var minimum = MathExtended.CalculateMaximumVector2(firstMinimum, secondMinimum);
+            var maximum = MathExtended.CalculateMinimumVector2(firstMaximum, secondMaximum);
 
             if ((maximum.X < minimum.X) || (maximum.Y < minimum.Y))
                 result = new RectangleF();
@@ -443,7 +443,7 @@ namespace MonoGame.Extended
 
         /// <summary>
         ///     Determines whether the specified <see cref="RectangleF" /> contains the specified
-        ///     <see cref="Point2" />.
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="rectangle">The rectangle.</param>
         /// <param name="point">The point.</param>
@@ -451,14 +451,14 @@ namespace MonoGame.Extended
         ///     <c>true</c> if the <paramref name="rectangle" /> contains the <paramref name="point" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
-        public static bool Contains(ref RectangleF rectangle, ref Point2 point)
+        public static bool Contains(ref RectangleF rectangle, ref Vector2 point)
         {
             return rectangle.X <= point.X && point.X < rectangle.X + rectangle.Width && rectangle.Y <= point.Y && point.Y < rectangle.Y + rectangle.Height;
         }
 
         /// <summary>
         ///     Determines whether the specified <see cref="RectangleF" /> contains the specified
-        ///     <see cref="Point2" />.
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="rectangle">The rectangle.</param>
         /// <param name="point">The point.</param>
@@ -466,30 +466,30 @@ namespace MonoGame.Extended
         ///     <c>true</c> if the <paramref name="rectangle" /> contains the <paramref name="point" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
-        public static bool Contains(RectangleF rectangle, Point2 point)
+        public static bool Contains(RectangleF rectangle, Vector2 point)
         {
             return Contains(ref rectangle, ref point);
         }
 
         /// <summary>
         ///     Determines whether this <see cref="RectangleF" /> contains the specified
-        ///     <see cref="Point2" />.
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="point">The point.</param>
         /// <returns>
         ///     <c>true</c> if the this <see cref="RectangleF"/> contains the <paramref name="point" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
-        public bool Contains(Point2 point)
+        public bool Contains(Vector2 point)
         {
             return Contains(ref this, ref point);
         }
 
         /// <summary>
-        ///     Updates this <see cref="RectangleF" /> from a list of <see cref="Point2" /> structures.
+        ///     Updates this <see cref="RectangleF" /> from a list of <see cref="Vector2" /> structures.
         /// </summary>
         /// <param name="points">The points.</param>
-        public void UpdateFromPoints(IReadOnlyList<Point2> points)
+        public void UpdateFromPoints(IReadOnlyList<Vector2> points)
         {
             var rectangle = CreateFrom(points);
             X = rectangle.X;
@@ -499,34 +499,34 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Computes the squared distance from this <see cref="RectangleF"/> to a <see cref="Point2"/>.
+        ///     Computes the squared distance from this <see cref="RectangleF"/> to a <see cref="Vector2"/>.
         /// </summary>
         /// <param name="point">The point.</param>
         /// <returns>The squared distance from this <see cref="RectangleF"/> to the <paramref name="point"/>.</returns>
-        public float SquaredDistanceTo(Point2 point)
+        public float SquaredDistanceTo(Vector2 point)
         {
             return PrimitivesHelper.SquaredDistanceToPointFromRectangle(TopLeft, BottomRight, point);
         }
 
         /// <summary>
-        ///     Computes the distance from this <see cref="RectangleF"/> to a <see cref="Point2"/>.
+        ///     Computes the distance from this <see cref="RectangleF"/> to a <see cref="Vector2"/>.
         /// </summary>
         /// <param name="point">The point.</param>
         /// <returns>The distance from this <see cref="RectangleF"/> to the <paramref name="point"/>.</returns>
-        public float DistanceTo(Point2 point)
+        public float DistanceTo(Vector2 point)
         {
             return (float)Math.Sqrt(SquaredDistanceTo(point));
         }
 
         /// <summary>
-        ///     Computes the closest <see cref="Point2" /> on this <see cref="RectangleF" /> to a specified
-        ///     <see cref="Point2" />.
+        ///     Computes the closest <see cref="Vector2" /> on this <see cref="RectangleF" /> to a specified
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns>The closest <see cref="Point2" /> on this <see cref="RectangleF" /> to the <paramref name="point" />.</returns>
-        public Point2 ClosestPointTo(Point2 point)
+        /// <returns>The closest <see cref="Vector2" /> on this <see cref="RectangleF" /> to the <paramref name="point" />.</returns>
+        public Vector2 ClosestPointTo(Vector2 point)
         {
-            Point2 result;
+            Vector2 result;
             PrimitivesHelper.ClosestPointToPointFromRectangle(TopLeft, BottomRight, point, out result);
             return result;
         }

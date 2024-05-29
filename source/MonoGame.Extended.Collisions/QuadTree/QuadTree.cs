@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Collisions.QuadTree
 {
@@ -225,9 +226,9 @@ namespace MonoGame.Extended.Collisions.QuadTree
             RectangleF[] childAreas =
             {
                 RectangleF.CreateFrom(min, center),
-                RectangleF.CreateFrom(new Point2(center.X, min.Y), new Point2(max.X, center.Y)),
+                RectangleF.CreateFrom(new Vector2(center.X, min.Y), new Vector2(max.X, center.Y)),
                 RectangleF.CreateFrom(center, max),
-                RectangleF.CreateFrom(new Point2(min.X, center.Y), new Point2(center.X, max.Y))
+                RectangleF.CreateFrom(new Vector2(min.X, center.Y), new Vector2(center.X, max.Y))
             };
 
             for (var i = 0; i < childAreas.Length; ++i)

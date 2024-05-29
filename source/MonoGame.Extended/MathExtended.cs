@@ -37,14 +37,13 @@ public static class MathExtended
         result.Y = first.Y < second.Y ? first.Y : second.Y;
     }
 
-    // <summary>
-    /// Calculates a new <see cref="Vector2"/> with the component-wise maximum values from two given
+    /// <summary>
+    /// Calculates a new <see cref="Vector2"/> with the component-wise minimum values from two given
     /// <see cref="Vector2"/> values.
     /// </summary>
     /// <param name="first">The first Vector2 value.</param>
     /// <param name="second">The second Vector2 value.</param>
-    /// <returns>
-    /// The calculated <see cref="Vector2"/> value with the component-wise maximum values.</returns>
+    /// <returns>The calculated <see cref="Vector2"/> value with the component-wise maximum values.</returns>
     public static Vector2 CalculateMaximumVector2(Vector2 first, Vector2 second)
     {
         return new Vector2

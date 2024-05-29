@@ -14,7 +14,7 @@ namespace MonoGame.Extended
         /// <summary>
         /// Gets or sets the position of the shape.
         /// </summary>
-        Point2 Position { get; set; }
+        Vector2 Position { get; set; }
 
         /// <summary>
         /// Gets escribed rectangle, which lying outside the shape
@@ -77,7 +77,7 @@ namespace MonoGame.Extended
             var rotation = Matrix3x2.CreateRotationZ(orientedRectangle.Orientation.Rotation);
             var circleCenterInRectangleSpace = rotation.Transform(circle.Center - orientedRectangle.Center);
             var circleInRectangleSpace = new CircleF(circleCenterInRectangleSpace, circle.Radius);
-            var boundingRectangle = new BoundingRectangle(new Point2(), orientedRectangle.Radii);
+            var boundingRectangle = new BoundingRectangle(new Vector2(), orientedRectangle.Radii);
             return circleInRectangleSpace.Intersects(boundingRectangle);
         }
 

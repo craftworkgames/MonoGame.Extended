@@ -5,7 +5,7 @@
 
 //namespace MonoGame.Extended.Tests.Primitives
 //{
-//    
+//
 //    public class Size2Tests
 //    {
 //        public IEnumerable<TestCaseData> ConstructorTestCases
@@ -184,18 +184,18 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new Size2(), new Point2()).SetName("The empty size converted to a point is the zero point.");
+//                    new TestCaseData(new Size2(), new Vector2()).SetName("The empty size converted to a point is the zero point.");
 //                yield return
-//                    new TestCaseData(new Size2(float.MinValue, float.MaxValue), new Point2(float.MinValue, float.MaxValue)).SetName(
+//                    new TestCaseData(new Size2(float.MinValue, float.MaxValue), new Vector2(float.MinValue, float.MaxValue)).SetName(
 //                        "A non-empty size converted to a point is the expected point.");
 //            }
 //        }
 
 //        [Fact]
 //        [TestCaseSource(nameof(ToPointTestCases))]
-//        public void ToPoint(Size2 size, Point2 expectedPoint)
+//        public void ToPoint(Size2 size, Vector2 expectedPoint)
 //        {
-//            var actualPoint = (Point2)size;
+//            var actualPoint = (Vector2)size;
 //            Assert.Equal(expectedPoint, actualPoint);
 //        }
 
@@ -204,16 +204,16 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new Point2(), new Size2()).SetName("The zero point converted to a size is the empty size.");
+//                    new TestCaseData(new Vector2(), new Size2()).SetName("The zero point converted to a size is the empty size.");
 //                yield return
-//                    new TestCaseData(new Point2(float.MinValue, float.MaxValue), new Size2(float.MinValue, float.MaxValue)).SetName(
+//                    new TestCaseData(new Vector2(float.MinValue, float.MaxValue), new Size2(float.MinValue, float.MaxValue)).SetName(
 //                        "A non-zero point converted to a size is the expected size.");
 //            }
 //        }
 
 //        [Fact]
 //        [TestCaseSource(nameof(FromPointTestCases))]
-//        public void FromPoint(Point2 point, Size2 expectedSize)
+//        public void FromPoint(Vector2 point, Size2 expectedSize)
 //        {
 //            var actualSize = (Size2)point;
 //            Assert.Equal(expectedSize, actualSize);

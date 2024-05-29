@@ -37,14 +37,14 @@ namespace MonoGame.Extended
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void CreateRectangleFromPoints(IReadOnlyList<Point2> points, out Point2 minimum, out Point2 maximum)
+        internal static void CreateRectangleFromPoints(IReadOnlyList<Vector2> points, out Vector2 minimum, out Vector2 maximum)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.2; Bounding Volumes - Axis-aligned Bounding Boxes (AABBs). pg 82-84
 
             if (points == null || points.Count == 0)
             {
-                minimum = Point2.Zero;
-                maximum = Point2.Zero;
+                minimum = Vector2.Zero;
+                maximum = Vector2.Zero;
                 return;
             }
 
@@ -54,13 +54,13 @@ namespace MonoGame.Extended
             for (var index = points.Count - 1; index > 0; --index)
             {
                 var point = points[index];
-                minimum = Point2.Minimum(minimum, point);
-                maximum = Point2.Maximum(maximum, point);
+                minimum = MathExtended.CalculateMinimumVector2(minimum, point);
+                maximum = MathExtended.CalculateMaximumVector2(maximum, point);
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void TransformRectangle(ref Point2 center, ref Vector2 halfExtents, ref Matrix3x2 transformMatrix)
+        internal static void TransformRectangle(ref Vector2 center, ref Vector2 halfExtents, ref Matrix3x2 transformMatrix)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.2; Bounding Volumes - Axis-aligned Bounding Boxes (AABBs). pg 86-87
 
@@ -73,7 +73,7 @@ namespace MonoGame.Extended
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static void TransformOrientedRectangle(
-            ref Point2 center,
+            ref Vector2 center,
             ref Matrix3x2 orientation,
             ref Matrix3x2 transformMatrix)
         {
@@ -87,7 +87,7 @@ namespace MonoGame.Extended
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static float SquaredDistanceToPointFromRectangle(Point2 minimum, Point2 maximum, Point2 point)
+        internal static float SquaredDistanceToPointFromRectangle(Vector2 minimum, Vector2 maximum, Vector2 point)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.1.3.1; Basic Primitive Tests - Closest-point Computations - Distance of Point to AABB.  pg 130-131
             var squaredDistance = 0.0f;
@@ -121,7 +121,7 @@ namespace MonoGame.Extended
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void ClosestPointToPointFromRectangle(Point2 minimum, Point2 maximum, Point2 point, out Point2 result)
+        internal static void ClosestPointToPointFromRectangle(Vector2 minimum, Vector2 maximum, Vector2 point, out Vector2 result)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.1.2; Basic Primitive Tests - Closest-point Computations. pg 130-131
 

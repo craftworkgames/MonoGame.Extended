@@ -31,7 +31,7 @@ namespace MonoGame.Extended.Tiled.Renderers
             return model;
         }
 
-        public void AddSprite(Texture2D texture, Point2 position, Rectangle sourceRectangle, TiledMapTileFlipFlags flipFlags)
+        public void AddSprite(Texture2D texture, Vector2 position, Rectangle sourceRectangle, TiledMapTileFlipFlags flipFlags)
         {
             Indices.AddRange(CreateTileIndices(Vertices.Count));
             Debug.Assert(Indices.Count <= TiledMapHelper.MaximumIndicesPerModel);

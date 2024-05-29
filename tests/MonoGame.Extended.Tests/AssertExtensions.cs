@@ -1,10 +1,11 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tests
 {
     public static class AssertExtensions
     {
-        public static bool AreApproximatelyEqual(Point2 firstPoint, Point2 secondPoint)
+        public static bool AreApproximatelyEqual(Vector2 firstPoint, Vector2 secondPoint)
         {
             return Math.Abs(firstPoint.X - secondPoint.X) < float.Epsilon &&
                    Math.Abs(firstPoint.Y - secondPoint.Y) < float.Epsilon;

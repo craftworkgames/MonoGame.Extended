@@ -5,7 +5,7 @@
 
 //namespace MonoGame.Extended.Tests.Primitives
 //{
-//    
+//
 //    public class Ray2Tests
 //    {
 //        public IEnumerable<TestCaseData> ConstructorTestCases
@@ -13,17 +13,17 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new Point2(), new Vector2()).SetName(
+//                    new TestCaseData(new Vector2(), new Vector2()).SetName(
 //                        "The degenerate ray has the expected position and direction.");
 //                yield return
-//                    new TestCaseData(new Point2(5, 5), new Vector2(15, 15)).SetName(
+//                    new TestCaseData(new Vector2(5, 5), new Vector2(15, 15)).SetName(
 //                        "A non-degenerate ray has the expected position and direction.");
 //            }
 //        }
 
 //        [Fact]
 //        [TestCaseSource(nameof(ConstructorTestCases))]
-//        public void Constructor(Point2 position, Vector2 direction)
+//        public void Constructor(Vector2 position, Vector2 direction)
 //        {
 //            var ray = new Ray2(position, direction);
 //            Assert.Equal(position, ray.Position);
@@ -35,10 +35,10 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new Ray2(), new Point2(), new Vector2()).SetName(
+//                    new TestCaseData(new Ray2(), new Vector2(), new Vector2()).SetName(
 //                        "The degenerate ray has the expected position and direction.");
 //                yield return
-//                    new TestCaseData(new Ray2(new Point2(5, 5), new Vector2(15, 15)), new Point2(5, 5),
+//                    new TestCaseData(new Ray2(new Vector2(5, 5), new Vector2(15, 15)), new Vector2(5, 5),
 //                            new Vector2(15, 15)).SetName
 //                        (
 //                            "A non-degenerate ray has the expected position and direction.");
@@ -47,14 +47,14 @@
 
 //        [Fact]
 //        [TestCaseSource(nameof(PositionDirectionTestCases))]
-//        public void PositionDirection(Ray2 ray, Point2 expectedPosition, Vector2 expecetedDirection)
+//        public void PositionDirection(Ray2 ray, Vector2 expectedPosition, Vector2 expecetedDirection)
 //        {
 //            Assert.Equal(expectedPosition, ray.Position);
 //            Assert.Equal(expecetedDirection, ray.Direction);
 
 //            ray.Position.X = 10;
 //            ray.Position.Y = 10;
-//            Assert.Equal(new Point2(10, 10), ray.Position);
+//            Assert.Equal(new Vector2(10, 10), ray.Position);
 
 //            ray.Direction.X = -10.123f;
 //            ray.Direction.Y = 10.123f;
@@ -66,20 +66,20 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new Ray2(), new BoundingRectangle(), true, Point2.Zero, Point2.Zero).SetName(
+//                    new TestCaseData(new Ray2(), new BoundingRectangle(), true, Vector2.Zero, Vector2.Zero).SetName(
 //                        "The degenerate ray intersects the empty bounding box.");
 //                yield return
-//                    new TestCaseData(new Ray2(new Point2(-75, -75), new Vector2(75, -75)),
-//                        new BoundingRectangle(new Point2(), new Size2(50, 50)), false, Point2.NaN, Point2.NaN).SetName(
+//                    new TestCaseData(new Ray2(new Vector2(-75, -75), new Vector2(75, -75)),
+//                        new BoundingRectangle(new Vector2(), new Size2(50, 50)), false, Vector2.NaN, Vector2.NaN).SetName(
 //                        "A non-degenerate ray that does not cross a non-empty bounding box does not intersect the bounding box.");
 //                yield return
-//                    new TestCaseData(new Ray2(new Point2(0, 0), new Vector2(25, 0)), new BoundingRectangle(new Point2(), new Size2(50, 50)),
-//                        true, new Point2(0, 0), new Point2(50, 0)).SetName(
+//                    new TestCaseData(new Ray2(new Vector2(0, 0), new Vector2(25, 0)), new BoundingRectangle(new Vector2(), new Size2(50, 50)),
+//                        true, new Vector2(0, 0), new Vector2(50, 0)).SetName(
 //                        "A non-degenerate ray starting from inside a non-empty bounding box intersects the bounding box.");
 //                yield return
-//                    new TestCaseData(new Ray2(new Point2(-100, 0), new Vector2(100, 0)),
-//                        new BoundingRectangle(new Point2(), new Size2(50, 50)),
-//                        true, new Point2(-50, 0), new Point2(50, 0)).SetName(
+//                    new TestCaseData(new Ray2(new Vector2(-100, 0), new Vector2(100, 0)),
+//                        new BoundingRectangle(new Vector2(), new Size2(50, 50)),
+//                        true, new Vector2(-50, 0), new Vector2(50, 0)).SetName(
 //                        "A non-degenerate ray crossing a non-empty bounding box intersects the bounding box.");
 //            }
 //        }
@@ -87,7 +87,7 @@
 //        [Fact]
 //        [TestCaseSource(nameof(IntersectsBoundingRectangleTestCases))]
 //        public void IntersectsBoundingRectangle(Ray2 ray, BoundingRectangle boundingRectangle, bool expectedResult,
-//            Point2 firstExpectedIntersectionPoint, Point2 secondExpectedIntersectionPoint)
+//            Vector2 firstExpectedIntersectionPoint, Vector2 secondExpectedIntersectionPoint)
 //        {
 //            float rayNearDistance, rayFarDistance;
 //            var actualResult = ray.Intersects(boundingRectangle, out rayNearDistance, out rayFarDistance);
@@ -114,14 +114,14 @@
 //                yield return
 //                    new TestCaseData(new Ray2(), new Ray2(), true).SetName("Two degenerate rays are equal.");
 //                yield return
-//                    new TestCaseData(new Ray2(new Point2(float.MinValue, float.MaxValue),
-//                        new Vector2(float.MaxValue, float.MinValue)), new Ray2(new Point2(float.MaxValue, float.MinValue),
+//                    new TestCaseData(new Ray2(new Vector2(float.MinValue, float.MaxValue),
+//                        new Vector2(float.MaxValue, float.MinValue)), new Ray2(new Vector2(float.MaxValue, float.MinValue),
 //                        new Vector2(float.MaxValue, float.MinValue)), false).SetName(
 //                        "Two different non-degenerate rays are not equal.");
 //                yield return
 //                    new TestCaseData(
-//                            new Ray2(new Point2(float.MinValue, float.MaxValue),
-//                                new Vector2(float.MinValue, float.MaxValue)), new Ray2(new Point2(float.MinValue, float.MaxValue),
+//                            new Ray2(new Vector2(float.MinValue, float.MaxValue),
+//                                new Vector2(float.MinValue, float.MaxValue)), new Ray2(new Vector2(float.MinValue, float.MaxValue),
 //                                new Vector2(float.MinValue, float.MaxValue)), true)
 //                        .SetName(
 //                            "Two identical non-degenerate rays are equal.");
@@ -168,12 +168,12 @@
 //                    new TestCaseData(new Ray2(), new Ray2(), true).SetName(
 //                        "Two degenerate rays have the same hash code.");
 //                yield return
-//                    new TestCaseData(new Ray2(new Point2(50, 50), new Vector2(50, 50)),
-//                        new Ray2(new Point2(50, 50), new Vector2(50, 50)), true).SetName(
+//                    new TestCaseData(new Ray2(new Vector2(50, 50), new Vector2(50, 50)),
+//                        new Ray2(new Vector2(50, 50), new Vector2(50, 50)), true).SetName(
 //                        "Two indentical non-zero points have the same hash code.");
 //                yield return
-//                    new TestCaseData(new Ray2(new Point2(0, 0), new Vector2(50, 50)),
-//                        new Ray2(new Point2(50, 50), new Vector2(50, 50)), false).SetName(
+//                    new TestCaseData(new Ray2(new Vector2(0, 0), new Vector2(50, 50)),
+//                        new Ray2(new Vector2(50, 50), new Vector2(50, 50)), false).SetName(
 //                        "Two different non-zero points do not have the same hash code.");
 //            }
 //        }
@@ -196,11 +196,11 @@
 //            {
 //                yield return
 //                    new TestCaseData(new Ray2(),
-//                        string.Format(CultureInfo.CurrentCulture, "Position: {0}, Direction: {1}", new Point2(),
+//                        string.Format(CultureInfo.CurrentCulture, "Position: {0}, Direction: {1}", new Vector2(),
 //                            new Vector2())).SetName(
 //                        "The degenerate ray has the expected string representation using the current culture.");
-//                yield return new TestCaseData(new Ray2(new Point2(5.1f, -5.123f), new Vector2(0, 1)),
-//                    string.Format(CultureInfo.CurrentCulture, "Position: {0}, Direction: {1}", new Point2(5.1f, -5.123f),
+//                yield return new TestCaseData(new Ray2(new Vector2(5.1f, -5.123f), new Vector2(0, 1)),
+//                    string.Format(CultureInfo.CurrentCulture, "Position: {0}, Direction: {1}", new Vector2(5.1f, -5.123f),
 //                        new Vector2(0, 1))).SetName(
 //                    "A non-degenerate ray has the expected string representation using the current culture.");
 //            }

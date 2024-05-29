@@ -11,7 +11,7 @@ namespace MonoGame.Extended
         [DataMember] public float RadiusX { get; set; }
         [DataMember] public float RadiusY { get; set; }
 
-        public Point2 Position
+        public Vector2 Position
         {
             get => Center;
             set => Center = value;
@@ -23,7 +23,7 @@ namespace MonoGame.Extended
             RadiusX = radiusX;
             RadiusY = radiusY;
         }
-    
+
         public float Left => Center.X - RadiusX;
         public float Top => Center.Y - RadiusY;
         public float Right => Center.X + RadiusX;
@@ -62,8 +62,8 @@ namespace MonoGame.Extended
         public bool Equals(ref EllipseF ellispse)
         {
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return ellispse.Center == Center 
-                   && ellispse.RadiusX == RadiusX 
+            return ellispse.Center == Center
+                   && ellispse.RadiusX == RadiusX
                    && ellispse.RadiusY == RadiusY;
         }
 

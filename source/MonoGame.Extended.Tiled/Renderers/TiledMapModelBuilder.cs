@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Tiled.Renderers
@@ -110,7 +111,7 @@ namespace MonoGame.Extended.Tiled.Renderers
 				dictionary.Add(layer, CreateLayerModels(map, layer).ToArray());
 		}
 
-		private static Point2 GetTilePosition(TiledMap map, TiledMapTile mapTile)
+		private static Vector2 GetTilePosition(TiledMap map, TiledMapTile mapTile)
         {
             switch (map.Orientation)
             {

@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Tiled
         // 2 triangles per tile (mesh), with each triangle indexing 3 out of 4 vertices, so 6 vertices
         public const int IndicesPerTile = 6;
         // by using ushort type for indices we are limited to indexing vertices from 0 to 65535
-        // this limits us on how many vertices can fit inside a single vertex buffer (65536 vertices) 
+        // this limits us on how many vertices can fit inside a single vertex buffer (65536 vertices)
         public const int MaximumVerticesPerModel = ushort.MaxValue + 1;
         // and thus, we know how many tiles we can fit inside a vertex or index buffer (16384 tiles)
         public const int MaximumTilesPerGeometryContent = MaximumVerticesPerModel / VerticesPerTile;
@@ -25,20 +25,20 @@ namespace MonoGame.Extended.Tiled
             return new Rectangle(x, y, tileWidth, tileHeight);
         }
 
-        internal static Point2 GetOrthogonalPosition(int tileX, int tileY, int tileWidth, int tileHeight)
+        internal static Vector2 GetOrthogonalPosition(int tileX, int tileY, int tileWidth, int tileHeight)
         {
             var x = tileX * tileWidth;
             var y = tileY * tileHeight;
             return new Vector2(x, y);
         }
 
-        internal static Point2 GetIsometricPosition(int tileX, int tileY, int tileWidth, int tileHeight)
+        internal static Vector2 GetIsometricPosition(int tileX, int tileY, int tileWidth, int tileHeight)
         {
             // You can think of an isometric Tiled map as a regular orthogonal map that is rotated -45 degrees
-            // i.e.: the origin (0, 0) is the top tile of the diamond grid; 
+            // i.e.: the origin (0, 0) is the top tile of the diamond grid;
             //                  (mapWidth, 0) is the far right tile of the diamond grid
             //                  (0, mapHeight) is the far left tile of the diamond grid
-            //                  (mapWidth, mapHeight) is the bottom tile of the diamond grid 
+            //                  (mapWidth, mapHeight) is the bottom tile of the diamond grid
 
             var halfTileWidth = tileWidth * 0.5f;
             var halfTileHeight = tileHeight * 0.5f;
