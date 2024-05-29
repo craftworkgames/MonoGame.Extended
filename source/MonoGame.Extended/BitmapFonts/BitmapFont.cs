@@ -29,22 +29,22 @@ namespace MonoGame.Extended.BitmapFonts
             return _characterMap.TryGetValue(character, out var region) ? region : null;
         }
 
-        public Size2 MeasureString(string text)
+        public SizeF MeasureString(string text)
         {
             if (string.IsNullOrEmpty(text))
-                return Size2.Empty;
+                return SizeF.Empty;
 
             var stringRectangle = GetStringRectangle(text);
-            return new Size2(stringRectangle.Width, stringRectangle.Height);
+            return new SizeF(stringRectangle.Width, stringRectangle.Height);
         }
 
-        public Size2 MeasureString(StringBuilder text)
+        public SizeF MeasureString(StringBuilder text)
         {
             if (text == null || text.Length == 0)
-                return Size2.Empty;
+                return SizeF.Empty;
 
             var stringRectangle = GetStringRectangle(text);
-            return new Size2(stringRectangle.Width, stringRectangle.Height);
+            return new SizeF(stringRectangle.Width, stringRectangle.Height);
         }
 
         public RectangleF GetStringRectangle(string text)
@@ -189,7 +189,7 @@ namespace MonoGame.Extended.BitmapFonts
                 if (UseKernings && _previousGlyph?.FontRegion != null)
                 {
                     if (_previousGlyph.Value.FontRegion.Kernings.TryGetValue(character, out var amount))
-                    { 
+                    {
                         _positionDelta.X += amount;
                         _currentGlyph.Position.X += amount;
                     }
@@ -307,7 +307,7 @@ namespace MonoGame.Extended.BitmapFonts
                 {
                     int amount;
                     if (_previousGlyph.Value.FontRegion.Kernings.TryGetValue(character, out amount))
-                    { 
+                    {
                         _positionDelta.X += amount;
                         _currentGlyph.Position.X += amount;
                     }

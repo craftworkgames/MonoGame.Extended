@@ -9,9 +9,9 @@ public class SpatialHash: ISpaceAlgorithm
     private readonly Dictionary<int, List<ICollisionActor>> _dictionary = new();
     private readonly List<ICollisionActor> _actors = new();
 
-    private readonly Size2 _size;
+    private readonly SizeF _size;
 
-    public SpatialHash(Size2 size)
+    public SpatialHash(SizeF size)
     {
         _size = size;
     }

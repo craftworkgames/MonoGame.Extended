@@ -154,7 +154,7 @@ namespace MonoGame.Extended.Collisions.Tests
             Point2 pos2 = new Point2(-2, -1);
 
             IShapeF shape1 = new CircleF(pos1, 2.0f);
-            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+            IShapeF shape2 = new RectangleF(pos2, new SizeF(4, 2));
 
 
             var actor1 = new BasicActor()
@@ -183,7 +183,7 @@ namespace MonoGame.Extended.Collisions.Tests
             Point2 pos2 = new Point2(-2, -1);
 
             IShapeF shape1 = new CircleF(pos1, 1.0f);
-            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+            IShapeF shape2 = new RectangleF(pos2, new SizeF(4, 2));
 
 
             var actor1 = new BasicActor()
@@ -212,7 +212,7 @@ namespace MonoGame.Extended.Collisions.Tests
             Point2 pos2 = new Point2(-2, -1);
 
             IShapeF shape1 = new CircleF(pos1, 2.0f);
-            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+            IShapeF shape2 = new RectangleF(pos2, new SizeF(4, 2));
 
 
             var actor1 = new BasicActor()
@@ -244,8 +244,8 @@ namespace MonoGame.Extended.Collisions.Tests
             Point2 pos1 = new Point2(0, 0);
             Point2 pos2 = new Point2(-2, -1);
 
-            IShapeF shape1 = new RectangleF(pos1, new Size2(4, 2));
-            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+            IShapeF shape1 = new RectangleF(pos1, new SizeF(4, 2));
+            IShapeF shape2 = new RectangleF(pos2, new SizeF(4, 2));
 
 
             var actor1 = new BasicActor()
@@ -273,8 +273,8 @@ namespace MonoGame.Extended.Collisions.Tests
             Point2 pos1 = new Point2(4, 2);
             Point2 pos2 = new Point2(3, 1);
 
-            IShapeF shape1 = new RectangleF(pos1, new Size2(4, 2));
-            IShapeF shape2 = new RectangleF(pos2, new Size2(4, 2));
+            IShapeF shape1 = new RectangleF(pos1, new SizeF(4, 2));
+            IShapeF shape2 = new RectangleF(pos2, new SizeF(4, 2));
 
 
             var actor1 = new BasicActor()
@@ -303,8 +303,8 @@ namespace MonoGame.Extended.Collisions.Tests
             [Fact]
             public void Actors_is_colliding()
             {
-                var staticBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
-                var anotherStaticBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
+                var staticBounds = new RectangleF(new Point2(0, 0), new SizeF(1, 1));
+                var anotherStaticBounds = new RectangleF(new Point2(0, 0), new SizeF(1, 1));
                 var staticActor = new CollisionIndicatingActor(staticBounds);
                 var anotherStaticActor = new CollisionIndicatingActor(anotherStaticBounds);
                 _collisionComponent.Insert(staticActor);
@@ -319,8 +319,8 @@ namespace MonoGame.Extended.Collisions.Tests
             [Fact]
             public void Actors_is_not_colliding_when_dynamic_actor_is_moved_out_of_collision_bounds()
             {
-                var staticBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
-                var dynamicBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
+                var staticBounds = new RectangleF(new Point2(0, 0), new SizeF(1, 1));
+                var dynamicBounds = new RectangleF(new Point2(0, 0), new SizeF(1, 1));
                 var staticActor = new CollisionIndicatingActor(staticBounds);
                 var dynamicActor = new CollisionIndicatingActor(dynamicBounds);
                 _collisionComponent.Insert(staticActor);
@@ -336,17 +336,17 @@ namespace MonoGame.Extended.Collisions.Tests
             [Fact]
             public void Actors_is_colliding_when_dynamic_actor_is_moved_after_update()
             {
-                var staticBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
+                var staticBounds = new RectangleF(new Point2(0, 0), new SizeF(1, 1));
                 var staticActor = new CollisionIndicatingActor(staticBounds);
                 _collisionComponent.Insert(staticActor);
                 for (int i = 0; i < QuadTree.QuadTree.DefaultMaxObjectsPerNode; i++)
                 {
-                    var fillerBounds = new RectangleF(new Point2(0, 2), new Size2(.1f, .1f));
+                    var fillerBounds = new RectangleF(new Point2(0, 2), new SizeF(.1f, .1f));
                     var fillerActor = new CollisionIndicatingActor(fillerBounds);
                     _collisionComponent.Insert(fillerActor);
                 }
 
-                var dynamicBounds = new RectangleF(new Point2(2, 2), new Size2(1, 1));
+                var dynamicBounds = new RectangleF(new Point2(2, 2), new SizeF(1, 1));
                 var dynamicActor = new CollisionIndicatingActor(dynamicBounds);
                 _collisionComponent.Insert(dynamicActor);
 
@@ -364,8 +364,8 @@ namespace MonoGame.Extended.Collisions.Tests
             [Fact]
             public void Actors_is_colliding_when_dynamic_actor_is_moved_into_collision_bounds()
             {
-                var staticBounds = new RectangleF(new Point2(0, 0), new Size2(1, 1));
-                var dynamicBounds = new RectangleF(new Point2(2, 2), new Size2(1, 1));
+                var staticBounds = new RectangleF(new Point2(0, 0), new SizeF(1, 1));
+                var dynamicBounds = new RectangleF(new Point2(2, 2), new SizeF(1, 1));
                 var staticActor = new CollisionIndicatingActor(staticBounds);
                 var dynamicActor = new CollisionIndicatingActor(dynamicBounds);
                 _collisionComponent.Insert(staticActor);

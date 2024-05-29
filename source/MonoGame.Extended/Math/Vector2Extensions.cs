@@ -14,16 +14,16 @@ namespace MonoGame.Extended
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 Translate(this Vector2 vector2, float x, float y) => new Vector2(vector2.X + x, vector2.Y + y);
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Size2 ToSize(this Vector2 value) => new Size2(value.X, value.Y);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Size2 ToAbsoluteSize(this Vector2 value)
+        public static SizeF ToSize(this Vector2 value) => new SizeF(value.X, value.Y);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SizeF ToAbsoluteSize(this Vector2 value)
         {
             var x = Math.Abs(value.X);
             var y = Math.Abs(value.Y);
-            return new Size2(x, y);
+            return new SizeF(x, y);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

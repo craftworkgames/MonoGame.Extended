@@ -226,53 +226,53 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Translates a <see cref='Point2' /> by a given <see cref='Size2' />.
+        ///     Translates a <see cref='Point2' /> by a given <see cref='SizeF' />.
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="size">The size.</param>
         /// <returns>
         ///     The result of the operator.
         /// </returns>
-        public static Point2 operator +(Point2 point, Size2 size)
+        public static Point2 operator +(Point2 point, SizeF size)
         {
             return Add(point, size);
         }
 
         /// <summary>
-        ///     Translates a <see cref='Point2' /> by a given <see cref='Size2' />.
+        ///     Translates a <see cref='Point2' /> by a given <see cref='SizeF' />.
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="size">The size.</param>
         /// <returns>
         ///     The result of the operator.
         /// </returns>
-        public static Point2 Add(Point2 point, Size2 size)
+        public static Point2 Add(Point2 point, SizeF size)
         {
             return new Point2(point.X + size.Width, point.Y + size.Height);
         }
 
         /// <summary>
-        ///     Translates a <see cref='Point2' /> by the negative of a given <see cref='Size2' />.
+        ///     Translates a <see cref='Point2' /> by the negative of a given <see cref='SizeF' />.
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="size">The size.</param>
         /// <returns>
         ///     The result of the operator.
         /// </returns>
-        public static Point2 operator -(Point2 point, Size2 size)
+        public static Point2 operator -(Point2 point, SizeF size)
         {
             return Subtract(point, size);
         }
 
         /// <summary>
-        ///     Translates a <see cref='Point2' /> by the negative of a given <see cref='Size2' /> .
+        ///     Translates a <see cref='Point2' /> by the negative of a given <see cref='SizeF' /> .
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="size">The size.</param>
         /// <returns>
         ///     The result of the operator.
         /// </returns>
-        public static Point2 Subtract(Point2 point, Size2 size)
+        public static Point2 Subtract(Point2 point, SizeF size)
         {
             return new Point2(point.X - size.Width, point.Y - size.Height);
         }

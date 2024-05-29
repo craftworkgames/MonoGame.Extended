@@ -231,7 +231,7 @@ namespace MonoGame.Extended
             return new Point(size.Width, size.Height);
         }
 
-        public static explicit operator Size(Size2 size)
+        public static explicit operator Size(SizeF size)
         {
             return new Size((int) size.Width, (int) size.Height);
         }
