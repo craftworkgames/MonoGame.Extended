@@ -59,6 +59,22 @@ namespace MonoGame.Extended.Tests.BitmapFonts
             Assert.Equal(0, size.Height);
         }
 
+        //  Test added for issue #695
+        //  https://github.com/craftworkgames/MonoGame.Extended/issues/695
+        //
+        //  Issue claims measure string does not account for space at the end of string.
+        [Fact]
+        public void BitmapFont_MeasureString_SpaceAtEnd_Test()
+        {
+            var font = CreateTestFont();
+
+            var noSpaceAtEnd = font.MeasureString("Hello World");
+            var spaceAtEnd = font.MeasureString("Hello World ");
+
+            Assert.NotEqual(noSpaceAtEnd, spaceAtEnd);
+
+        }
+
         private static BitmapFont CreateTestFont()
         {
             var textureRegion = new TextureRegion2D(null, x: 219, y: 61, width: 16, height: 18);
