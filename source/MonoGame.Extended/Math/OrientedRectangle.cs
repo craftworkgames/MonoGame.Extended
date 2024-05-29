@@ -35,12 +35,12 @@ namespace MonoGame.Extended
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BoundingRectangle" /> structure from the specified centre
-        /// <see cref="Point2" /> and the radii <see cref="Size2" />.
+        /// <see cref="Point2" /> and the radii <see cref="SizeF" />.
         /// </summary>
         /// <param name="center">The centre <see cref="Point2" />.</param>
         /// <param name="radii">The radii <see cref="Vector2" />.</param>
         /// <param name="orientation">The orientation <see cref="Matrix3x2" />.</param>
-        public OrientedRectangle(Point2 center, Size2 radii, Matrix3x2 orientation)
+        public OrientedRectangle(Point2 center, SizeF radii, Matrix3x2 orientation)
         {
             Center = center;
             Radii = radii;
@@ -166,7 +166,7 @@ namespace MonoGame.Extended
         /// <returns>The resulting <see cref="OrientedRectangle" />.</returns>
         public static explicit operator OrientedRectangle(RectangleF rectangle)
         {
-            var radii = new Size2(rectangle.Width * 0.5f, rectangle.Height * 0.5f);
+            var radii = new SizeF(rectangle.Width * 0.5f, rectangle.Height * 0.5f);
             var centre = new Point2(rectangle.X + radii.Width, rectangle.Y + radii.Height);
 
             return new OrientedRectangle(centre, radii, Matrix3x2.Identity);

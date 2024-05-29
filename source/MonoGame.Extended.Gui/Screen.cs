@@ -41,7 +41,7 @@ namespace MonoGame.Extended.Gui
 
         public float Width { get; private set; }
         public float Height { get; private set; }
-        public Size2 Size => new Size2(Width, Height);
+        public SizeF Size => new SizeF(Width, Height);
         public bool IsVisible { get; set; } = true;
 
         private bool _isLayoutRequired;

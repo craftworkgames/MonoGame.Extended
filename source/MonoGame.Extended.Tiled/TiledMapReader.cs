@@ -138,7 +138,7 @@ namespace MonoGame.Extended.Tiled
             var position = new Vector2(reader.ReadSingle(), reader.ReadSingle());
             var width = reader.ReadSingle();
             var height = reader.ReadSingle();
-            var size = new Size2(width, height);
+            var size = new SizeF(width, height);
             var rotation = reader.ReadSingle();
             var isVisible = reader.ReadBoolean();
             var properties = new TiledMapProperties();

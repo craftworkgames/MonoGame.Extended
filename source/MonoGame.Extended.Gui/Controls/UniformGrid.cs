@@ -57,10 +57,10 @@ namespace MonoGame.Extended.Gui.Controls
             public float MaxCellHeight;
             public float Columns;
             public float Rows;
-            public Size2 MinCellSize => new Size2(MinCellWidth * Columns, MinCellHeight * Rows);
+            public SizeF MinCellSize => new SizeF(MinCellWidth * Columns, MinCellHeight * Rows);
         }
-        
-        private GridInfo CalculateGridInfo(IGuiContext context, Size2 availableSize)
+
+        private GridInfo CalculateGridInfo(IGuiContext context, SizeF availableSize)
         {
             var columns = Columns == 0 ? (int)Math.Ceiling(Math.Sqrt(Items.Count)) : Columns;
             var rows = Rows == 0 ? (int)Math.Ceiling((float)Items.Count / columns) : Rows;

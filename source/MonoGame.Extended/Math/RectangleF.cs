@@ -100,11 +100,11 @@ namespace MonoGame.Extended
         public RectangleF BoundingRectangle => this;
 
         /// <summary>
-        ///     Gets the <see cref="Size2" /> representing the extents of this <see cref="RectangleF" />.
+        ///     Gets the <see cref="SizeF" /> representing the extents of this <see cref="RectangleF" />.
         /// </summary>
-        public Size2 Size
+        public SizeF Size
         {
-            get { return new Size2(Width, Height); }
+            get { return new SizeF(Width, Height); }
             set
             {
                 Width = value.Width;
@@ -155,11 +155,11 @@ namespace MonoGame.Extended
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="RectangleF" /> structure from the specified top-left
-        ///     <see cref="Point2" /> and the extents <see cref="Size2" />.
+        ///     <see cref="Point2" /> and the extents <see cref="SizeF" />.
         /// </summary>
         /// <param name="position">The top-left point.</param>
         /// <param name="size">The extents.</param>
-        public RectangleF(Point2 position, Size2 size)
+        public RectangleF(Point2 position, SizeF size)
         {
             X = position.X;
             Y = position.Y;

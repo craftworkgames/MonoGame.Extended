@@ -6,7 +6,7 @@ namespace MonoGame.Extended.Collisions.Tests;
 
 public class SpatialHashTests
 {
-    private SpatialHash generateSpatialHash() => new SpatialHash(new Size2(64, 64));
+    private SpatialHash generateSpatialHash() => new SpatialHash(new SizeF(64, 64));
     private readonly RectangleF RECT = new RectangleF(10, 10, 20, 20);
 
     [Fact]
