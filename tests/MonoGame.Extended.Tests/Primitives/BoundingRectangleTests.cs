@@ -13,17 +13,17 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new Point2(), new Vector2()).SetName(
+//                    new TestCaseData(new Vector2(), new Vector2()).SetName(
 //                        "The empty bounding rectangle has the expected position and radii.");
 //                yield return
-//                    new TestCaseData(new Point2(5, 5), new Vector2(15, 15)).SetName(
+//                    new TestCaseData(new Vector2(5, 5), new Vector2(15, 15)).SetName(
 //                        "A non-empty bounding rectangle has the expected position and radii.");
 //            }
 //        }
 
 //        [Fact]
 //        [TestCaseSource(nameof(ConstructorTestCases))]
-//        public void Constructor(Point2 centre, Vector2 radii)
+//        public void Constructor(Vector2 centre, Vector2 radii)
 //        {
 //            var boundingRectangle = new BoundingRectangle(centre, radii);
 //            Assert.Equal(centre, boundingRectangle.Center);
@@ -35,12 +35,12 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new Point2(), new Point2(), new BoundingRectangle()).SetName(
+//                    new TestCaseData(new Vector2(), new Vector2(), new BoundingRectangle()).SetName(
 //                        "The bounding rectangle created from the zero minimum point and zero maximum point is the empty bounding rectangle.")
 //                    ;
 //                yield return
-//                    new TestCaseData(new Point2(5, 5), new Point2(15, 15),
-//                        new BoundingRectangle(new Point2(10, 10), new Size2(5, 5))).SetName(
+//                    new TestCaseData(new Vector2(5, 5), new Vector2(15, 15),
+//                        new BoundingRectangle(new Vector2(10, 10), new Size2(5, 5))).SetName(
 //                        "The bounding rectangle created from the non-zero minimum point and the non-zero maximum point is the expected bounding rectangle.")
 //                    ;
 //            }
@@ -48,7 +48,7 @@
 
 //        [Fact]
 //        [TestCaseSource(nameof(CreateFromMinimumMaximumTestCases))]
-//        public void CreateFromMinimumMaximum(Point2 minimum, Point2 maximum, BoundingRectangle expectedBoundingRectangle)
+//        public void CreateFromMinimumMaximum(Vector2 minimum, Vector2 maximum, BoundingRectangle expectedBoundingRectangle)
 //        {
 //            var actualBoundingRectangle = BoundingRectangle.CreateFrom(minimum, maximum);
 //            Assert.Equal(expectedBoundingRectangle, actualBoundingRectangle);
@@ -62,22 +62,22 @@
 //                    new TestCaseData(null, new BoundingRectangle()).SetName(
 //                        "The bounding rectangle created from null points is the empty bounding rectangle.");
 //                yield return
-//                    new TestCaseData(new Point2[0], new BoundingRectangle()).SetName(
+//                    new TestCaseData(new Vector2[0], new BoundingRectangle()).SetName(
 //                        "The bounding rectangle created from the empty set of points is the empty bounding rectangle.");
 //                yield return
 //                    new TestCaseData(
 //                        new[]
 //                        {
-//                            new Point2(5, 5), new Point2(10, 10), new Point2(15, 15), new Point2(-5, -5),
-//                            new Point2(-15, -15)
-//                        }, new BoundingRectangle(new Point2(0, 0), new Size2(15, 15))).SetName(
+//                            new Vector2(5, 5), new Vector2(10, 10), new Vector2(15, 15), new Vector2(-5, -5),
+//                            new Vector2(-15, -15)
+//                        }, new BoundingRectangle(new Vector2(0, 0), new Size2(15, 15))).SetName(
 //                        "The bounding rectangle created from a non-empty set of points is the expected bounding rectangle.");
 //            }
 //        }
 
 //        [Fact]
 //        [TestCaseSource(nameof(CreateFromPointsTestCases))]
-//        public void CreateFromPoints(Point2[] points, BoundingRectangle expectedBoundingRectangle)
+//        public void CreateFromPoints(Vector2[] points, BoundingRectangle expectedBoundingRectangle)
 //        {
 //            var actualBoundingRectangle = BoundingRectangle.CreateFrom(points);
 //            Assert.Equal(expectedBoundingRectangle, actualBoundingRectangle);
@@ -92,7 +92,7 @@
 //                        "The bounding rectangle created from the empty bounding rectangle transformed by the identity matrix is the empty bounding rectangle.")
 //                    ;
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(0, 0), new Size2(20, 20)), Matrix3x2.CreateScale(2), new BoundingRectangle(new Point2(0, 0), new Size2(40, 40))).SetName(
+//                    new TestCaseData(new BoundingRectangle(new Vector2(0, 0), new Size2(20, 20)), Matrix3x2.CreateScale(2), new BoundingRectangle(new Vector2(0, 0), new Size2(40, 40))).SetName(
 //                        "The bounding rectangle created from a non-empty bounding rectangle transformed by a non-identity matrix is the expected bounding rectangle.")
 //                    ;
 //            }
@@ -115,8 +115,8 @@
 //                    new TestCaseData(new BoundingRectangle(), new BoundingRectangle(), new BoundingRectangle()).SetName(
 //                        "The union of two empty bounding rectangles is the empty bounding rectangle.");
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(0, 0), new Size2(15, 15)),
-//                            new BoundingRectangle(new Point2(20, 20), new Size2(40, 40)), new BoundingRectangle(new Point2(20, 20), new Size2(40, 40)))
+//                    new TestCaseData(new BoundingRectangle(new Vector2(0, 0), new Size2(15, 15)),
+//                            new BoundingRectangle(new Vector2(20, 20), new Size2(40, 40)), new BoundingRectangle(new Vector2(20, 20), new Size2(40, 40)))
 //                        .SetName(
 //                            "The union of two non-empty bounding rectangles is the expected bounding rectangle.");
 //            }
@@ -138,13 +138,13 @@
 //                    new TestCaseData(new BoundingRectangle(), new BoundingRectangle(), new BoundingRectangle()).SetName(
 //                        "The intersection of two empty bounding rectangles is the empty bounding box.");
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(-10, -10), new Size2(15, 15)),
-//                        new BoundingRectangle(new Point2(20, 20), new Size2(40, 40)),
-//                        new BoundingRectangle(new Point2(-7.5f, -7.5f), new Size2(12.5f, 12.5f))).SetName(
+//                    new TestCaseData(new BoundingRectangle(new Vector2(-10, -10), new Size2(15, 15)),
+//                        new BoundingRectangle(new Vector2(20, 20), new Size2(40, 40)),
+//                        new BoundingRectangle(new Vector2(-7.5f, -7.5f), new Size2(12.5f, 12.5f))).SetName(
 //                        "The intersection of two overlapping non-empty bounding rectangles is the expected bounding rectangle.");
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(-30, -30), new Size2(15, 15)),
-//                        new BoundingRectangle(new Point2(20, 20), new Size2(10, 10)),
+//                    new TestCaseData(new BoundingRectangle(new Vector2(-30, -30), new Size2(15, 15)),
+//                        new BoundingRectangle(new Vector2(20, 20), new Size2(10, 10)),
 //                        BoundingRectangle.Empty).SetName(
 //                        "The intersection of two non-overlapping non-empty bounding rectangles is the empty bounding rectangle.");
 //            }
@@ -167,12 +167,12 @@
 //                    new TestCaseData(new BoundingRectangle(), new BoundingRectangle(), true).SetName(
 //                        "Two empty bounding rectangles intersect.");
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(-10, -10), new Size2(15, 15)),
-//                        new BoundingRectangle(new Point2(20, 20), new Size2(40, 40)), true).SetName(
+//                    new TestCaseData(new BoundingRectangle(new Vector2(-10, -10), new Size2(15, 15)),
+//                        new BoundingRectangle(new Vector2(20, 20), new Size2(40, 40)), true).SetName(
 //                        "Two overlapping non-empty bounding rectangles intersect.");
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(-40, -50), new Size2(15, 15)),
-//                        new BoundingRectangle(new Point2(20, 20), new Size2(15, 15)), false).SetName(
+//                    new TestCaseData(new BoundingRectangle(new Vector2(-40, -50), new Size2(15, 15)),
+//                        new BoundingRectangle(new Vector2(20, 20), new Size2(15, 15)), false).SetName(
 //                        "Two non-overlapping non-empty bounding rectangles do not intersect.");
 //            }
 //        }
@@ -190,14 +190,14 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(), new Point2(), true).SetName(
+//                    new TestCaseData(new BoundingRectangle(), new Vector2(), true).SetName(
 //                        "The empty bounding rectangle contains the zero point.");
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(0, 0), new Size2(15, 15)), new Point2(-15, -15), true)
+//                    new TestCaseData(new BoundingRectangle(new Vector2(0, 0), new Size2(15, 15)), new Vector2(-15, -15), true)
 //                        .SetName(
 //                            "A non-empty bounding rectangle contains a point inside it.");
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(0, 0), new Size2(15, 15)), new Point2(-16, 15), false)
+//                    new TestCaseData(new BoundingRectangle(new Vector2(0, 0), new Size2(15, 15)), new Vector2(-16, 15), false)
 //                        .SetName(
 //                            "A non-empty bounding rectangle does not contain a point outside it.");
 //            }
@@ -205,7 +205,7 @@
 
 //        [Fact]
 //        [TestCaseSource(nameof(ContainsPointTestCases))]
-//        public void ContainsPoint(BoundingRectangle boundingRectangle, Point2 point, bool expectedToContainPoint)
+//        public void ContainsPoint(BoundingRectangle boundingRectangle, Vector2 point, bool expectedToContainPoint)
 //        {
 //            Assert.Equal(expectedToContainPoint, boundingRectangle.Contains(point));
 //            Assert.Equal(expectedToContainPoint, BoundingRectangle.Contains(boundingRectangle, point));
@@ -216,16 +216,16 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(), new Point2(), new Point2()).SetName(
+//                    new TestCaseData(new BoundingRectangle(), new Vector2(), new Vector2()).SetName(
 //                        "The closest point on the empty bounding rectangle to the zero point is the zero point.");
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(0, 0), new Point2(50, 50)), new Point2(25, 25),
-//                        new Point2(25, 25)).SetName(
+//                    new TestCaseData(new BoundingRectangle(new Vector2(0, 0), new Vector2(50, 50)), new Vector2(25, 25),
+//                        new Vector2(25, 25)).SetName(
 //                        "The closest point on a non-empty bounding rectangle to a point which is inside the bounding rectangle is that point.")
 //                    ;
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(0, 0), new Point2(50, 50)), new Point2(400, 0),
-//                        new Point2(50, 0)).SetName(
+//                    new TestCaseData(new BoundingRectangle(new Vector2(0, 0), new Vector2(50, 50)), new Vector2(400, 0),
+//                        new Vector2(50, 0)).SetName(
 //                        "The closest point on a non-empty bounding rectangle to a point which is outside the bounding rectangle is the expected point.")
 //                    ;
 //            }
@@ -233,7 +233,7 @@
 
 //        [Fact]
 //        [TestCaseSource(nameof(ClosestPointTestCases))]
-//        public void ClosestPoint(BoundingRectangle boundingRectangle, Point2 point, Point2 expectedClosestPoint)
+//        public void ClosestPoint(BoundingRectangle boundingRectangle, Vector2 point, Vector2 expectedClosestPoint)
 //        {
 //            var actualClosestPoint = boundingRectangle.ClosestPointTo(point);
 //            Assert.Equal(expectedClosestPoint, actualClosestPoint);
@@ -249,14 +249,14 @@
 //                    ;
 //                yield return
 //                    new TestCaseData(
-//                        new BoundingRectangle(new Point2(0, 0), new Size2(float.MaxValue, float.MinValue)),
-//                        new BoundingRectangle(new Point2(0, 0),
-//                            new Point2(float.MinValue, float.MaxValue)), false).SetName(
+//                        new BoundingRectangle(new Vector2(0, 0), new Size2(float.MaxValue, float.MinValue)),
+//                        new BoundingRectangle(new Vector2(0, 0),
+//                            new Vector2(float.MinValue, float.MaxValue)), false).SetName(
 //                        "Two different non-empty bounding rectangles are not equal.");
 //                yield return
 //                    new TestCaseData(
-//                        new BoundingRectangle(new Point2(0, 0), new Size2(float.MinValue, float.MaxValue)),
-//                        new BoundingRectangle(new Point2(0, 0),
+//                        new BoundingRectangle(new Vector2(0, 0), new Size2(float.MinValue, float.MaxValue)),
+//                        new BoundingRectangle(new Vector2(0, 0),
 //                            new Size2(float.MinValue, float.MaxValue)), true).SetName(
 //                        "Two identical non-empty bounding rectangles are equal.");
 //            }
@@ -303,12 +303,12 @@
 //                    new TestCaseData(new BoundingRectangle(), new BoundingRectangle(), true).SetName(
 //                        "Two empty bounding rectangles have the same hash code.");
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(0, 0), new Size2(50, 50)),
-//                        new BoundingRectangle(new Point2(0, 0), new Size2(50, 50)), true).SetName(
+//                    new TestCaseData(new BoundingRectangle(new Vector2(0, 0), new Size2(50, 50)),
+//                        new BoundingRectangle(new Vector2(0, 0), new Size2(50, 50)), true).SetName(
 //                        "Two indentical non-empty bounding rectangles have the same hash code.");
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(0, 0), new Size2(50, 50)),
-//                        new BoundingRectangle(new Point2(50, 50), new Size2(50, 50)), false).SetName(
+//                    new TestCaseData(new BoundingRectangle(new Vector2(0, 0), new Size2(50, 50)),
+//                        new BoundingRectangle(new Vector2(50, 50), new Size2(50, 50)), false).SetName(
 //                        "Two different non-empty bounding rectangles do not have the same hash code.");
 //            }
 //        }
@@ -333,7 +333,7 @@
 //                    new TestCaseData(new BoundingRectangle(), new Rectangle()).SetName(
 //                        "The empty bounding rectangle point converted to a rectangle is the empty rectangle.");
 //                yield return
-//                    new TestCaseData(new BoundingRectangle(new Point2(25, 25), new Size2(25, 25)),
+//                    new TestCaseData(new BoundingRectangle(new Vector2(25, 25), new Size2(25, 25)),
 //                        new Rectangle(0, 0, 50, 50)).SetName(
 //                        "A non-empty bounding rectangle converted to a rectangle is the expected rectangle.");
 //            }
@@ -356,7 +356,7 @@
 //                        "The empty rectangle converted to a bounding rectangle is the empty bounding rectangle.");
 //                yield return
 //                    new TestCaseData(new Rectangle(0, 0, 50, 50),
-//                        new BoundingRectangle(new Point2(25, 25), new Size2(25, 25))).SetName(
+//                        new BoundingRectangle(new Vector2(25, 25), new Size2(25, 25))).SetName(
 //                        "A non-empty rectangle converted to a bounding rectangle is the expected bounding rectangle.");
 //            }
 //        }
@@ -375,11 +375,11 @@
 //            {
 //                yield return
 //                    new TestCaseData(new BoundingRectangle(),
-//                        string.Format(CultureInfo.CurrentCulture, "Centre: {0}, Radii: {1}", new Point2(),
+//                        string.Format(CultureInfo.CurrentCulture, "Centre: {0}, Radii: {1}", new Vector2(),
 //                            new Vector2())).SetName(
 //                        "The empty bounding rectangle has the expected string representation using the current culture.");
-//                yield return new TestCaseData(new BoundingRectangle(new Point2(5.1f, -5.123f), new Size2(5.4f, -5.4123f)),
-//                    string.Format(CultureInfo.CurrentCulture, "Centre: {0}, Radii: {1}", new Point2(5.1f, -5.123f),
+//                yield return new TestCaseData(new BoundingRectangle(new Vector2(5.1f, -5.123f), new Size2(5.4f, -5.4123f)),
+//                    string.Format(CultureInfo.CurrentCulture, "Centre: {0}, Radii: {1}", new Vector2(5.1f, -5.123f),
 //                        new Vector2(5.4f, -5.4123f))).SetName(
 //                    "A non-empty bounding rectangle has the expected string representation using the current culture.");
 //            }

@@ -206,7 +206,7 @@ namespace MonoGame.Extended.Collisions
                 return Vector2.Zero;
             }
 
-            var displacement = Point2.Displacement(circ1.Center, circ2.Center);
+            var displacement = circ1.Center - circ2.Center;
 
             Vector2 desiredDisplacement;
             if (displacement != Vector2.Zero)
@@ -230,7 +230,7 @@ namespace MonoGame.Extended.Collisions
 
             if (rect.Contains(circ.Center) || cToCollPoint.Equals(Vector2.Zero))
             {
-                var displacement = Point2.Displacement(circ.Center, rect.Center);
+                var displacement = circ.Center - rect.Center;
 
                 Vector2 desiredDisplacement;
                 if (displacement != Vector2.Zero)
@@ -276,7 +276,7 @@ namespace MonoGame.Extended.Collisions
             var rotation = Matrix3x2.CreateRotationZ(orientedRectangleB.Orientation.Rotation);
             var circleCenterInRectangleSpace = rotation.Transform(circleA.Center - orientedRectangleB.Center);
             var circleInRectangleSpace = new CircleF(circleCenterInRectangleSpace, circleA.Radius);
-            var boundingRectangle = new BoundingRectangle(new Point2(), orientedRectangleB.Radii);
+            var boundingRectangle = new BoundingRectangle(new Vector2(), orientedRectangleB.Radii);
 
             var penetrationVector = PenetrationVector(circleInRectangleSpace, boundingRectangle);
             var inverseRotation = Matrix3x2.CreateRotationZ(-orientedRectangleB.Orientation.Rotation);

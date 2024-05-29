@@ -11,19 +11,19 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new Point2(), new Point2()).SetName(
+//                    new TestCaseData(new Vector2(), new Vector2()).SetName(
 //                        "The empty segment has expected starting and ending points.");
 //                yield return
 //                    new TestCaseData(
-//                        new Point2(float.MaxValue, float.MinValue),
-//                        new Point2(int.MaxValue, int.MinValue)).SetName(
+//                        new Vector2(float.MaxValue, float.MinValue),
+//                        new Vector2(int.MaxValue, int.MinValue)).SetName(
 //                        "A non-empty segment has the expected starting and ending points.");
 //            }
 //        }
 
 //        [Fact]
 //        [TestCaseSource(nameof(ConstructorTestCases))]
-//        public void Constructor(Point2 startingPoint, Point2 endingPoint)
+//        public void Constructor(Vector2 startingPoint, Vector2 endingPoint)
 //        {
 //            var segment = new Segment2(startingPoint, endingPoint);
 //            Assert.Equal(startingPoint, segment.Start);
@@ -35,21 +35,21 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new Segment2(), new Point2(), new Point2()).SetName(
+//                    new TestCaseData(new Segment2(), new Vector2(), new Vector2()).SetName(
 //                        "The closest point on the empty segment to the zero point is the zero point.");
 //                yield return
-//                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(200, 0)), new Point2(-100, 200),
-//                        new Point2(0, 0)).SetName(
+//                    new TestCaseData(new Segment2(new Vector2(0, 0), new Vector2(200, 0)), new Vector2(-100, 200),
+//                        new Vector2(0, 0)).SetName(
 //                        "The closest point on a non-empty segment to a point which is projected beyond the start of the segment is the segment's starting point.")
 //                    ;
 //                yield return
-//                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(200, 0)), new Point2(400, 200),
-//                        new Point2(200, 0)).SetName(
+//                    new TestCaseData(new Segment2(new Vector2(0, 0), new Vector2(200, 0)), new Vector2(400, 200),
+//                        new Vector2(200, 0)).SetName(
 //                        "The closest point on a non-empty segment to a point which is projected beyond the end of the segment is the segment's ending point.")
 //                    ;
 //                yield return
-//                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(200, 0)), new Point2(100, 200),
-//                        new Point2(100, 0)).SetName(
+//                    new TestCaseData(new Segment2(new Vector2(0, 0), new Vector2(200, 0)), new Vector2(100, 200),
+//                        new Vector2(100, 0)).SetName(
 //                        "The closest point on a non-empty segment to a point which is projected inside the segment is the projected point.")
 //                    ;
 //            }
@@ -57,7 +57,7 @@
 
 //        [Fact]
 //        [TestCaseSource(nameof(ClosestPointTestCases))]
-//        public void ClosestPoint(Segment2 segment, Point2 point, Point2 expectedClosestPoint)
+//        public void ClosestPoint(Segment2 segment, Vector2 point, Vector2 expectedClosestPoint)
 //        {
 //            var actualClosestPoint = segment.ClosestPointTo(point);
 //            Assert.Equal(expectedClosestPoint, actualClosestPoint);
@@ -68,20 +68,20 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new Segment2(), new Point2(), 0).SetName(
+//                    new TestCaseData(new Segment2(), new Vector2(), 0).SetName(
 //                        "The squared distance of the zero point to the empty segment is 0.");
 //                yield return
-//                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(20, 0)), new Point2(-10, 20), 500)
+//                    new TestCaseData(new Segment2(new Vector2(0, 0), new Vector2(20, 0)), new Vector2(-10, 20), 500)
 //                        .SetName(
 //                            "The squared distance of a point projected beyond the start of a non-empty segment is the squared distance from the segment's starting point to the point.")
 //                    ;
 //                yield return
-//                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(20, 0)), new Point2(40, 20), 400)
+//                    new TestCaseData(new Segment2(new Vector2(0, 0), new Vector2(20, 0)), new Vector2(40, 20), 400)
 //                        .SetName(
 //                            "The squared distance of a point projected beyond the end of a non-empty segment is the squared distance from the segment's ending point to the point.")
 //                    ;
 //                yield return
-//                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(20, 0)), new Point2(10, 25), 625).SetName
+//                    new TestCaseData(new Segment2(new Vector2(0, 0), new Vector2(20, 0)), new Vector2(10, 25), 625).SetName
 //                    (
 //                        "The squared distance of a point projected inside a non-empty segment is the squared distance from the projected point to the point.")
 //                    ;
@@ -90,7 +90,7 @@
 
 //        [Fact]
 //        [TestCaseSource(nameof(SquaredDistanceToPointTestCases))]
-//        public void SquaredDistanceToPoint(Segment2 segment, Point2 point,
+//        public void SquaredDistanceToPoint(Segment2 segment, Vector2 point,
 //            float expectedDistance)
 //        {
 //            var actualDistance = segment.SquaredDistanceTo(point);
@@ -102,20 +102,20 @@
 //            get
 //            {
 //                yield return
-//                    new TestCaseData(new Segment2(), new BoundingRectangle(), true, Point2.Zero).SetName(
+//                    new TestCaseData(new Segment2(), new BoundingRectangle(), true, Vector2.Zero).SetName(
 //                        "The empty segment intersects the empty bounding box.");
 //                yield return
-//                    new TestCaseData(new Segment2(new Point2(-75, -75), new Point2(75, -75)),
-//                        new BoundingRectangle(new Point2(), new Size2(50, 50)), false, Point2.NaN).SetName(
+//                    new TestCaseData(new Segment2(new Vector2(-75, -75), new Vector2(75, -75)),
+//                        new BoundingRectangle(new Vector2(), new Size2(50, 50)), false, Vector2.NaN).SetName(
 //                        "A non-empty segment outside a non-empty bounding box does not intersect the bounding box.");
 //                yield return
-//                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(25, 0)), new BoundingRectangle(new Point2(), new Size2(50, 50)),
-//                        true, new Point2(0, 0)).SetName(
+//                    new TestCaseData(new Segment2(new Vector2(0, 0), new Vector2(25, 0)), new BoundingRectangle(new Vector2(), new Size2(50, 50)),
+//                        true, new Vector2(0, 0)).SetName(
 //                        "A non-empty segment inside a non-empty bounding box intersects the bounding box.");
 //                yield return
-//                    new TestCaseData(new Segment2(new Point2(-100, 0), new Point2(100, 0)),
-//                        new BoundingRectangle(new Point2(), new Size2(50, 50)),
-//                        true, new Point2(-50, 0)).SetName(
+//                    new TestCaseData(new Segment2(new Vector2(-100, 0), new Vector2(100, 0)),
+//                        new BoundingRectangle(new Vector2(), new Size2(50, 50)),
+//                        true, new Vector2(-50, 0)).SetName(
 //                        "A non-empty segment crossing a non-empty bounding box intersects the bounding box.");
 //            }
 //        }
@@ -123,9 +123,9 @@
 //        [Fact]
 //        [TestCaseSource(nameof(IntersectsBoundingRectangleTestCases))]
 //        public void IntersectsBoundingRectangle(Segment2 segment, BoundingRectangle boundingRectangle, bool expectedResult,
-//            Point2 expectedIntersectionPoint)
+//            Vector2 expectedIntersectionPoint)
 //        {
-//            Point2 actualIntersectionPoint;
+//            Vector2 actualIntersectionPoint;
 //            var actualResult = segment.Intersects(boundingRectangle, out actualIntersectionPoint);
 //            Assert.Equal(expectedResult, actualResult);
 
@@ -149,15 +149,15 @@
 //                    ;
 //                yield return
 //                    new TestCaseData(
-//                        new Segment2(new Point2(0, 0), new Point2(float.MaxValue, float.MinValue)),
-//                        new Segment2(new Point2(0, 0),
-//                            new Point2(float.MinValue, float.MaxValue)), false).SetName(
+//                        new Segment2(new Vector2(0, 0), new Vector2(float.MaxValue, float.MinValue)),
+//                        new Segment2(new Vector2(0, 0),
+//                            new Vector2(float.MinValue, float.MaxValue)), false).SetName(
 //                        "Two different non-empty segments are not equal.");
 //                yield return
 //                    new TestCaseData(
-//                        new Segment2(new Point2(0, 0), new Point2(float.MinValue, float.MaxValue)),
-//                        new Segment2(new Point2(0, 0),
-//                            new Point2(float.MinValue, float.MaxValue)), true).SetName(
+//                        new Segment2(new Vector2(0, 0), new Vector2(float.MinValue, float.MaxValue)),
+//                        new Segment2(new Vector2(0, 0),
+//                            new Vector2(float.MinValue, float.MaxValue)), true).SetName(
 //                        "Two identical non-empty segments are equal.");
 //            }
 //        }
@@ -202,12 +202,12 @@
 //                    new TestCaseData(new Segment2(), new Segment2(), true).SetName(
 //                        "Two empty segments have the same hash code.");
 //                yield return
-//                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(50, 50)),
-//                        new Segment2(new Point2(0, 0), new Point2(50, 50)), true).SetName(
+//                    new TestCaseData(new Segment2(new Vector2(0, 0), new Vector2(50, 50)),
+//                        new Segment2(new Vector2(0, 0), new Vector2(50, 50)), true).SetName(
 //                        "Two indentical non-empty segments have the same hash code.");
 //                yield return
-//                    new TestCaseData(new Segment2(new Point2(0, 0), new Point2(50, 50)),
-//                        new Segment2(new Point2(50, 50), new Point2(50, 50)), false).SetName(
+//                    new TestCaseData(new Segment2(new Vector2(0, 0), new Vector2(50, 50)),
+//                        new Segment2(new Vector2(50, 50), new Vector2(50, 50)), false).SetName(
 //                        "Two different non-empty segments do not have the same hash code.");
 //            }
 //        }
@@ -230,12 +230,12 @@
 //            {
 //                yield return
 //                    new TestCaseData(new Segment2(),
-//                        string.Format(CultureInfo.CurrentCulture, "{0} -> {1}", new Point2(),
-//                            new Point2())).SetName(
+//                        string.Format(CultureInfo.CurrentCulture, "{0} -> {1}", new Vector2(),
+//                            new Vector2())).SetName(
 //                        "The empty segment has the expected string representation using the current culture.");
-//                yield return new TestCaseData(new Segment2(new Point2(5.1f, -5.123f), new Point2(5.4f, -5.4123f)),
-//                    string.Format(CultureInfo.CurrentCulture, "{0} -> {1}", new Point2(5.1f, -5.123f),
-//                        new Point2(5.4f, -5.4123f))).SetName(
+//                yield return new TestCaseData(new Segment2(new Vector2(5.1f, -5.123f), new Vector2(5.4f, -5.4123f)),
+//                    string.Format(CultureInfo.CurrentCulture, "{0} -> {1}", new Vector2(5.1f, -5.123f),
+//                        new Vector2(5.4f, -5.4123f))).SetName(
 //                    "A non-empty segment has the expected string representation using the current culture.");
 //            }
 //        }

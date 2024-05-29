@@ -280,7 +280,7 @@ namespace MonoGame.Extended.Gui.Controls
                 //{
                 //    var start = 0;
                 //    var end = 0;
-                //    var point = Point2.Zero;
+                //    var point = Vector2.Zero;
                 //    if (_selectionIndexes.Last() > _selectionIndexes.Peek())
                 //    {
                 //        start = _selectionIndexes.Peek();

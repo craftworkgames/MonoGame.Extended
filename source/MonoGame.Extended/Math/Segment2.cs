@@ -1,10 +1,11 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
-    // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 3.5; A Math and Geometry Primer - Lines, Rays, and Segments. pg 53-54    
+    // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 3.5; A Math and Geometry Primer - Lines, Rays, and Segments. pg 53-54
     /// <summary>
-    ///     A two dimensional line segment defined by two <see cref="Point2" /> structures, a starting point and an ending
+    ///     A two dimensional line segment defined by two <see cref="Vector2" /> structures, a starting point and an ending
     ///     point.
     /// </summary>
     /// <seealso cref="IEquatable{T}" />
@@ -12,22 +13,22 @@ namespace MonoGame.Extended
     public struct Segment2 : IEquatable<Segment2>, IEquatableByRef<Segment2>
     {
         /// <summary>
-        ///     The starting <see cref="Point2" /> of this <see cref="Segment2" />.
+        ///     The starting <see cref="Vector2" /> of this <see cref="Segment2" />.
         /// </summary>
-        public Point2 Start;
+        public Vector2 Start;
 
         /// <summary>
-        ///     The ending <see cref="Point2" /> of this <see cref="Segment2" />.
+        ///     The ending <see cref="Vector2" /> of this <see cref="Segment2" />.
         /// </summary>
-        public Point2 End;
+        public Vector2 End;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Segment2" /> structure from the specified starting and ending
-        ///     <see cref="Point2" /> structures.
+        ///     <see cref="Vector2" /> structures.
         /// </summary>
         /// <param name="start">The starting point.</param>
         /// <param name="end">The ending point.</param>
-        public Segment2(Point2 start, Point2 end)
+        public Segment2(Vector2 start, Vector2 end)
         {
             Start = start;
             End = end;
@@ -41,17 +42,17 @@ namespace MonoGame.Extended
         /// <param name="x2">The ending x-coordinate.</param>
         /// <param name="y2">The ending y-coordinate.</param>
         public Segment2(float x1, float y1, float x2, float y2)
-            : this(new Point2(x1, y1), new Point2(x2, y2))
+            : this(new Vector2(x1, y1), new Vector2(x2, y2))
         {
         }
 
         // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.1.2; Basic Primitive Tests - Closest Point on Line Segment to Point. pg 127-130
         /// <summary>
-        ///     Computes the closest <see cref="Point2" /> on this <see cref="Segment2" /> to a specified <see cref="Point2" />.
+        ///     Computes the closest <see cref="Vector2" /> on this <see cref="Segment2" /> to a specified <see cref="Vector2" />.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns>The closest <see cref="Point2" /> on this <see cref="Segment2" /> to the <paramref name="point" />.</returns>
-        public Point2 ClosestPointTo(Point2 point)
+        /// <returns>The closest <see cref="Vector2" /> on this <see cref="Segment2" /> to the <paramref name="point" />.</returns>
+        public Vector2 ClosestPointTo(Vector2 point)
         {
             // Computes the parameterized position: d(t) = Start + t * (End – Start)
 
@@ -71,16 +72,16 @@ namespace MonoGame.Extended
             // The point projects inside the [Start, End] interval, must do deferred division now
             t /= denominator;
             startToEnd *= t;
-            return new Point2(Start.X + startToEnd.X, Start.Y + startToEnd.Y);
+            return new Vector2(Start.X + startToEnd.X, Start.Y + startToEnd.Y);
         }
 
-        // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.1.2.1; Basic Primitive Tests - Distance of Point to Segment. pg 127-130        
+        // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.1.2.1; Basic Primitive Tests - Distance of Point to Segment. pg 127-130
         /// <summary>
-        ///     Computes the squared distance from this <see cref="Segment2" /> to a specified <see cref="Point2" />.
+        ///     Computes the squared distance from this <see cref="Segment2" /> to a specified <see cref="Vector2" />.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns>The squared distance from this <see cref="Segment2" /> to a specified <see cref="Point2" />.</returns>
-        public float SquaredDistanceTo(Point2 point)
+        /// <returns>The squared distance from this <see cref="Segment2" /> to a specified <see cref="Vector2" />.</returns>
+        public float SquaredDistanceTo(Vector2 point)
         {
             var startToEnd = End - Start;
             var startToPoint = point - Start;
@@ -98,11 +99,11 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Computes the distance from this <see cref="Segment2" /> to a specified <see cref="Point2" />.
+        ///     Computes the distance from this <see cref="Segment2" /> to a specified <see cref="Vector2" />.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns>The distance from this <see cref="Segment2" /> to a specified <see cref="Point2" />.</returns>
-        public float DistanceTo(Point2 point)
+        /// <returns>The distance from this <see cref="Segment2" /> to a specified <see cref="Vector2" />.</returns>
+        public float DistanceTo(Vector2 point)
         {
             return (float) Math.Sqrt(SquaredDistanceTo(point));
         }
@@ -112,14 +113,14 @@ namespace MonoGame.Extended
         /// </summary>
         /// <param name="rectangle">The bounding box.</param>
         /// <param name="intersectionPoint">
-        ///     When this method returns, contains the <see cref="Point2" /> of intersection, if an
-        ///     intersection was found; otherwise, the <see cref="Point2.NaN" />. This parameter is passed uninitialized.
+        ///     When this method returns, contains the <see cref="Vector2" /> of intersection, if an
+        ///     intersection was found; otherwise, the <see cref="Vector2.NaN" />. This parameter is passed uninitialized.
         /// </param>
         /// <returns>
         ///     <c>true</c> if this <see cref="Segment2" /> intersects with <paramref name="rectangle" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
-        public bool Intersects(RectangleF rectangle, out Point2 intersectionPoint)
+        public bool Intersects(RectangleF rectangle, out Vector2 intersectionPoint)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.3; Basic Primitive Tests - Intersecting Lines, Rays, and (Directed Segments). pg 179-181
 
@@ -133,7 +134,7 @@ namespace MonoGame.Extended
                 !PrimitivesHelper.IntersectsSlab(Start.X, direction.X, minimumPoint.X, maximumPoint.X, ref minimumDistance,
                     ref maximumDistance))
             {
-                intersectionPoint = Point2.NaN;
+                intersectionPoint = new Vector2(float.NaN);
                 return false;
             }
 
@@ -141,7 +142,7 @@ namespace MonoGame.Extended
                 !PrimitivesHelper.IntersectsSlab(Start.Y, direction.Y, minimumPoint.Y, maximumPoint.Y, ref minimumDistance,
                     ref maximumDistance))
             {
-                intersectionPoint = Point2.NaN;
+                intersectionPoint = new Vector2(float.NaN);
                 return false;
             }
 
@@ -164,14 +165,14 @@ namespace MonoGame.Extended
         /// </summary>
         /// <param name="boundingRectangle">The bounding box.</param>
         /// <param name="intersectionPoint">
-        ///     When this method returns, contains the <see cref="Point2" /> of intersection, if an
-        ///     intersection was found; otherwise, the <see cref="Point2.NaN" />. This parameter is passed uninitialized.
+        ///     When this method returns, contains the <see cref="Vector2" /> of intersection, if an
+        ///     intersection was found; otherwise, the <see cref="Vector2.NaN" />. This parameter is passed uninitialized.
         /// </param>
         /// <returns>
         ///     <c>true</c> if this <see cref="Segment2" /> intersects with <paramref name="boundingRectangle" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
-        public bool Intersects(BoundingRectangle boundingRectangle, out Point2 intersectionPoint)
+        public bool Intersects(BoundingRectangle boundingRectangle, out Vector2 intersectionPoint)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 5.3; Basic Primitive Tests - Intersecting Lines, Rays, and (Directed Segments). pg 179-181
 
@@ -185,7 +186,7 @@ namespace MonoGame.Extended
                 !PrimitivesHelper.IntersectsSlab(Start.X, direction.X, minimumPoint.X, maximumPoint.X, ref minimumDistance,
                     ref maximumDistance))
             {
-                intersectionPoint = Point2.NaN;
+                intersectionPoint = new Vector2(float.NaN);
                 return false;
             }
 
@@ -193,7 +194,7 @@ namespace MonoGame.Extended
                 !PrimitivesHelper.IntersectsSlab(Start.Y, direction.Y, minimumPoint.Y, maximumPoint.Y, ref minimumDistance,
                     ref maximumDistance))
             {
-                intersectionPoint = Point2.NaN;
+                intersectionPoint = new Vector2(float.NaN);
                 return false;
             }
 

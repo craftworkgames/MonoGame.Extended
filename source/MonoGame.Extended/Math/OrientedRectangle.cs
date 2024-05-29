@@ -19,7 +19,7 @@ namespace MonoGame.Extended
         /// <summary>
         /// The centre position of this <see cref="OrientedRectangle" />.
         /// </summary>
-        public Point2 Center;
+        public Vector2 Center;
 
         /// <summary>
         /// The distance from the <see cref="Center" /> point along both axes to any point on the boundary of this
@@ -35,12 +35,12 @@ namespace MonoGame.Extended
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BoundingRectangle" /> structure from the specified centre
-        /// <see cref="Point2" /> and the radii <see cref="SizeF" />.
+        /// <see cref="Vector2" /> and the radii <see cref="SizeF" />.
         /// </summary>
-        /// <param name="center">The centre <see cref="Point2" />.</param>
+        /// <param name="center">The centre <see cref="Vector2" />.</param>
         /// <param name="radii">The radii <see cref="Vector2" />.</param>
         /// <param name="orientation">The orientation <see cref="Matrix3x2" />.</param>
-        public OrientedRectangle(Point2 center, SizeF radii, Matrix3x2 orientation)
+        public OrientedRectangle(Vector2 center, SizeF radii, Matrix3x2 orientation)
         {
             Center = center;
             Radii = radii;
@@ -56,7 +56,7 @@ namespace MonoGame.Extended
             {
                 var topLeft = -Radii;
                 var bottomLeft = -new Vector2(Radii.X, -Radii.Y);
-                var topRight = (Vector2)new Point2(Radii.X, -Radii.Y);
+                var topRight = (Vector2)new Vector2(Radii.X, -Radii.Y);
                 var bottomRight = Radii;
 
                 return new List<Vector2>
@@ -69,7 +69,7 @@ namespace MonoGame.Extended
             }
         }
 
-        public Point2 Position
+        public Vector2 Position
         {
             get => Vector2.Transform(-Radii, Orientation) + Center;
             set => throw new NotImplementedException();
@@ -167,7 +167,7 @@ namespace MonoGame.Extended
         public static explicit operator OrientedRectangle(RectangleF rectangle)
         {
             var radii = new SizeF(rectangle.Width * 0.5f, rectangle.Height * 0.5f);
-            var centre = new Point2(rectangle.X + radii.Width, rectangle.Y + radii.Height);
+            var centre = new Vector2(rectangle.X + radii.Width, rectangle.Y + radii.Height);
 
             return new OrientedRectangle(centre, radii, Matrix3x2.Identity);
         }

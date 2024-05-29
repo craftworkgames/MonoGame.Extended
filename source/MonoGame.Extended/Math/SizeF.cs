@@ -53,13 +53,13 @@ namespace MonoGame.Extended
         /// <summary>
         ///     Compares two <see cref="SizeF" /> structures. The result specifies
         ///     whether the values of the <see cref="Width" /> and <see cref="Height" />
-        ///     fields of the two <see cref="Point2" /> structures are equal.
+        ///     fields of the two <see cref="Vector2" /> structures are equal.
         /// </summary>
         /// <param name="first">The first size.</param>
         /// <param name="second">The second size.</param>
         /// <returns>
         ///     <c>true</c> if the <see cref="Width" /> and <see cref="Height" />
-        ///     fields of the two <see cref="Point2" /> structures are equal; otherwise, <c>false</c>.
+        ///     fields of the two <see cref="Vector2" /> structures are equal; otherwise, <c>false</c>.
         /// </returns>
         public static bool operator ==(SizeF first, SizeF second)
         {
@@ -71,7 +71,7 @@ namespace MonoGame.Extended
         /// </summary>
         /// <param name="size">The size.</param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="Point2" /> is equal to the <paramref name="size" /> parameter; otherwise,
+        ///     <c>true</c> if this <see cref="Vector2" /> is equal to the <paramref name="size" /> parameter; otherwise,
         ///     <c>false</c>.
         /// </returns>
         public bool Equals(SizeF size)
@@ -84,7 +84,7 @@ namespace MonoGame.Extended
         /// </summary>
         /// <param name="size">The size.</param>
         /// <returns>
-        ///     <c>true</c> if this <see cref="Point2" /> is equal to the <paramref name="size" />; otherwise,
+        ///     <c>true</c> if this <see cref="Vector2" /> is equal to the <paramref name="size" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
         public bool Equals(ref SizeF size)
@@ -200,7 +200,7 @@ namespace MonoGame.Extended
         ///     structures like a hash table.
         /// </summary>
         /// <returns>
-        ///     A hash code of this <see cref="Point2" />.
+        ///     A hash code of this <see cref="Vector2" />.
         /// </returns>
         public override int GetHashCode()
         {
@@ -211,13 +211,13 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Performs an implicit conversion from a <see cref="Point2" /> to a <see cref="SizeF" />.
+        ///     Performs an implicit conversion from a <see cref="Vector2" /> to a <see cref="SizeF" />.
         /// </summary>
         /// <param name="point">The point.</param>
         /// <returns>
         ///     The resulting <see cref="SizeF" />.
         /// </returns>
-        public static implicit operator SizeF(Point2 point)
+        public static implicit operator SizeF(Vector2 point)
         {
             return new SizeF(point.X, point.Y);
         }
@@ -236,19 +236,7 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Performs an implicit conversion from a <see cref="Point2" /> to a <see cref="SizeF" />.
-        /// </summary>
-        /// <param name="size">The size.</param>
-        /// <returns>
-        ///     The resulting <see cref="Point2" />.
-        /// </returns>
-        public static implicit operator Point2(SizeF size)
-        {
-            return new Point2(size.Width, size.Height);
-        }
-
-        /// <summary>
-        ///     Performs an implicit conversion from a <see cref="SizeF" /> to a <see cref="Vector2" />.
+        ///     Performs an implicit conversion from a <see cref="Vector2" /> to a <see cref="SizeF" />.
         /// </summary>
         /// <param name="size">The size.</param>
         /// <returns>
@@ -257,18 +245,6 @@ namespace MonoGame.Extended
         public static implicit operator Vector2(SizeF size)
         {
             return new Vector2(size.Width, size.Height);
-        }
-
-        /// <summary>
-        ///     Performs an implicit conversion from a <see cref="Vector2" /> to a <see cref="SizeF" />.
-        /// </summary>
-        /// <param name="vector">The vector.</param>
-        /// <returns>
-        ///     The resulting <see cref="SizeF" />.
-        /// </returns>
-        public static implicit operator SizeF(Vector2 vector)
-        {
-            return new SizeF(vector.X, vector.Y);
         }
 
         ///// <summary>

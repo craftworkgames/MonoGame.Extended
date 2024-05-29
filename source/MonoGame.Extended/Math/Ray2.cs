@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
-    // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 3.5; A Math and Geometry Primer - Lines, Rays, and Segments. pg 53-54    
+    // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 3.5; A Math and Geometry Primer - Lines, Rays, and Segments. pg 53-54
     /// <summary>
-    ///     A two dimensional ray defined by a starting <see cref="Point2" /> and a direction <see cref="Vector2" />.
+    ///     A two dimensional ray defined by a starting <see cref="Vector2" /> and a direction <see cref="Vector2" />.
     /// </summary>
     /// <seealso cref="IEquatable{T}" />
     /// <seealso cref="IEquatableByRef{Ray2}" />
@@ -14,9 +14,9 @@ namespace MonoGame.Extended
     public struct Ray2 : IEquatable<Ray2>, IEquatableByRef<Ray2>
     {
         /// <summary>
-        ///     The starting <see cref="Point2" /> of this <see cref="Ray2" />.
+        ///     The starting <see cref="Vector2" /> of this <see cref="Ray2" />.
         /// </summary>
-        public Point2 Position;
+        public Vector2 Position;
 
         /// <summary>
         ///     The direction <see cref="Vector2" /> of this <see cref="Ray2" />.
@@ -28,7 +28,7 @@ namespace MonoGame.Extended
         /// </summary>
         /// <param name="position">The starting point.</param>
         /// <param name="direction">The direction vector.</param>
-        public Ray2(Point2 position, Vector2 direction)
+        public Ray2(Vector2 position, Vector2 direction)
         {
             Position = position;
             Direction = direction;

@@ -8,7 +8,7 @@ namespace MonoGame.Extended
     // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.3; Bounding Volumes - Spheres. pg 88
 
     /// <summary>
-    ///     A two dimensional circle defined by a centre <see cref="Point2" /> and a radius <see cref="float" />.
+    ///     A two dimensional circle defined by a centre <see cref="Vector2" /> and a radius <see cref="float" />.
     /// </summary>
     /// <remarks>
     ///     <para>
@@ -25,7 +25,7 @@ namespace MonoGame.Extended
         /// <summary>
         ///     The centre position of this <see cref="CircleF" />.
         /// </summary>
-        [DataMember] public Point2 Center;
+        [DataMember] public Vector2 Center;
 
         /// <summary>
         ///     The distance from the <see cref="Center" /> point to any point on the boundary of this <see cref="CircleF" />.
@@ -35,7 +35,7 @@ namespace MonoGame.Extended
         /// <summary>
         /// Gets or sets the position of the circle.
         /// </summary>
-        public Point2 Position
+        public Vector2 Position
         {
             get => Center;
             set => Center = value;
@@ -63,38 +63,38 @@ namespace MonoGame.Extended
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="CircleF" /> structure from the specified centre
-        ///     <see cref="Point2" /> and the radius <see cref="float" />.
+        ///     <see cref="Vector2" /> and the radius <see cref="float" />.
         /// </summary>
         /// <param name="center">The centre point.</param>
         /// <param name="radius">The radius.</param>
-        public CircleF(Point2 center, float radius)
+        public CircleF(Vector2 center, float radius)
         {
             Center = center;
             Radius = radius;
         }
 
         /// <summary>
-        ///     Computes the bounding <see cref="CircleF" /> from a minimum <see cref="Point2" /> and maximum
-        ///     <see cref="Point2" />.
+        ///     Computes the bounding <see cref="CircleF" /> from a minimum <see cref="Vector2" /> and maximum
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="minimum">The minimum point.</param>
         /// <param name="maximum">The maximum point.</param>
         /// <param name="result">The resulting circle.</param>
-        public static void CreateFrom(Point2 minimum, Point2 maximum, out CircleF result)
+        public static void CreateFrom(Vector2 minimum, Vector2 maximum, out CircleF result)
         {
-            result.Center = new Point2((maximum.X + minimum.X) * 0.5f, (maximum.Y + minimum.Y) * 0.5f);
+            result.Center = new Vector2((maximum.X + minimum.X) * 0.5f, (maximum.Y + minimum.Y) * 0.5f);
             var distanceVector = maximum - minimum;
             result.Radius = distanceVector.X > distanceVector.Y ? distanceVector.X * 0.5f : distanceVector.Y * 0.5f;
         }
 
         /// <summary>
-        ///     Computes the bounding <see cref="CircleF" /> from a minimum <see cref="Point2" /> and maximum
-        ///     <see cref="Point2" />.
+        ///     Computes the bounding <see cref="CircleF" /> from a minimum <see cref="Vector2" /> and maximum
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="minimum">The minimum point.</param>
         /// <param name="maximum">The maximum point.</param>
         /// <returns>An <see cref="CircleF" />.</returns>
-        public static CircleF CreateFrom(Point2 minimum, Point2 maximum)
+        public static CircleF CreateFrom(Vector2 minimum, Vector2 maximum)
         {
             CircleF result;
             CreateFrom(minimum, maximum, out result);
@@ -102,11 +102,11 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Computes the bounding <see cref="CircleF" /> from a list of <see cref="Point2" /> structures.
+        ///     Computes the bounding <see cref="CircleF" /> from a list of <see cref="Vector2" /> structures.
         /// </summary>
         /// <param name="points">The points.</param>
         /// <param name="result">The resulting circle.</param>
-        public static void CreateFrom(IReadOnlyList<Point2> points, out CircleF result)
+        public static void CreateFrom(IReadOnlyList<Vector2> points, out CircleF result)
         {
             // Real-Time Collision Detection, Christer Ericson, 2005. Chapter 4.3; Bounding Volumes - Spheres. pg 89-90
 
@@ -116,26 +116,26 @@ namespace MonoGame.Extended
                 return;
             }
 
-            var minimum = new Point2(float.MaxValue, float.MaxValue);
-            var maximum = new Point2(float.MinValue, float.MinValue);
+            var minimum = new Vector2(float.MaxValue, float.MaxValue);
+            var maximum = new Vector2(float.MinValue, float.MinValue);
 
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = points.Count - 1; index >= 0; --index)
             {
                 var point = points[index];
-                minimum = Point2.Minimum(minimum, point);
-                maximum = Point2.Maximum(maximum, point);
+                minimum = MathExtended.CalculateMinimumVector2(minimum, point);
+                maximum = MathExtended.CalculateMaximumVector2(maximum, point);
             }
 
             CreateFrom(minimum, maximum, out result);
         }
 
         /// <summary>
-        ///     Computes the bounding <see cref="CircleF" /> from a list of <see cref="Point2" /> structures.
+        ///     Computes the bounding <see cref="CircleF" /> from a list of <see cref="Vector2" /> structures.
         /// </summary>
         /// <param name="points">The points.</param>
         /// <returns>An <see cref="CircleF" />.</returns>
-        public static CircleF CreateFrom(IReadOnlyList<Point2> points)
+        public static CircleF CreateFrom(IReadOnlyList<Vector2> points)
         {
             CircleF result;
             CreateFrom(points, out result);
@@ -261,7 +261,7 @@ namespace MonoGame.Extended
 
         /// <summary>
         ///     Determines whether the specified <see cref="CircleF" /> contains the specified
-        ///     <see cref="Point2" />.
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="circle">The circle.</param>
         /// <param name="point">The point.</param>
@@ -269,7 +269,7 @@ namespace MonoGame.Extended
         ///     <c>true</c> if the <paramref name="circle" /> contains the <paramref name="point" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
-        public static bool Contains(ref CircleF circle, Point2 point)
+        public static bool Contains(ref CircleF circle, Vector2 point)
         {
             var dx = circle.Center.X - point.X;
             var dy = circle.Center.Y - point.Y;
@@ -280,7 +280,7 @@ namespace MonoGame.Extended
 
         /// <summary>
         ///     Determines whether the specified <see cref="CircleF" /> contains the specified
-        ///     <see cref="Point2" />.
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="circle">The circle.</param>
         /// <param name="point">The point.</param>
@@ -288,31 +288,31 @@ namespace MonoGame.Extended
         ///     <c>true</c> if the <paramref name="circle" /> contains the <paramref name="point" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
-        public static bool Contains(CircleF circle, Point2 point)
+        public static bool Contains(CircleF circle, Vector2 point)
         {
             return Contains(ref circle, point);
         }
 
         /// <summary>
-        ///     Determines whether this <see cref="CircleF" /> contains the specified <see cref="Point2" />.
+        ///     Determines whether this <see cref="CircleF" /> contains the specified <see cref="Vector2" />.
         /// </summary>
         /// <param name="point">The point.</param>
         /// <returns>
         ///     <c>true</c> if this <see cref="BoundingRectangle" /> contains the <paramref name="point" />; otherwise,
         ///     <c>false</c>.
         /// </returns>
-        public bool Contains(Point2 point)
+        public bool Contains(Vector2 point)
         {
             return Contains(ref this, point);
         }
 
         /// <summary>
-        ///     Computes the closest <see cref="Point2" /> on this <see cref="CircleF" /> to a specified
-        ///     <see cref="Point2" />.
+        ///     Computes the closest <see cref="Vector2" /> on this <see cref="CircleF" /> to a specified
+        ///     <see cref="Vector2" />.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns>The closest <see cref="Point2" /> on this <see cref="CircleF" /> to the <paramref name="point" />.</returns>
-        public Point2 ClosestPointTo(Point2 point)
+        /// <returns>The closest <see cref="Vector2" /> on this <see cref="CircleF" /> to the <paramref name="point" />.</returns>
+        public Vector2 ClosestPointTo(Vector2 point)
         {
             var distanceVector = point - Center;
             var lengthSquared = distanceVector.Dot(distanceVector);
@@ -323,18 +323,18 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Computes the <see cref="Point2" /> on the boundary of of this <see cref="CircleF" /> using the specified angle.
+        ///     Computes the <see cref="Vector2" /> on the boundary of of this <see cref="CircleF" /> using the specified angle.
         /// </summary>
         /// <param name="angle">The angle in radians.</param>
-        /// <returns>The <see cref="Point2" /> on the boundary of this <see cref="CircleF" /> using <paramref name="angle" />.</returns>
-        public Point2 BoundaryPointAt(float angle)
+        /// <returns>The <see cref="Vector2" /> on the boundary of this <see cref="CircleF" /> using <paramref name="angle" />.</returns>
+        public Vector2 BoundaryPointAt(float angle)
         {
             var direction = new Vector2((float) Math.Cos(angle), (float) Math.Sin(angle));
             return Center + Radius * direction;
         }
 
         [Obsolete("Circle.GetPointAlongEdge() may be removed in the future. Use BoundaryPointAt() instead.")]
-        public Point2 GetPointAlongEdge(float angle)
+        public Vector2 GetPointAlongEdge(float angle)
         {
             return Center + new Vector2(Radius * (float) Math.Cos(angle), Radius * (float) Math.Sin(angle));
         }
@@ -460,7 +460,7 @@ namespace MonoGame.Extended
         {
             var halfWidth = rectangle.Width / 2;
             var halfHeight = rectangle.Height / 2;
-            return new CircleF(new Point2(rectangle.X + halfWidth, rectangle.Y + halfHeight),
+            return new CircleF(new Vector2(rectangle.X + halfWidth, rectangle.Y + halfHeight),
                 halfWidth > halfHeight ? halfWidth : halfHeight);
         }
 
@@ -499,7 +499,7 @@ namespace MonoGame.Extended
         {
             var halfWidth = rectangle.Width * 0.5f;
             var halfHeight = rectangle.Height * 0.5f;
-            return new CircleF(new Point2(rectangle.X + halfWidth, rectangle.Y + halfHeight),
+            return new CircleF(new Vector2(rectangle.X + halfWidth, rectangle.Y + halfHeight),
                 halfWidth > halfHeight ? halfWidth : halfHeight);
         }
 
