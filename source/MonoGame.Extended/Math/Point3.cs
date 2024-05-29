@@ -233,58 +233,6 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Translates a <see cref='Point3' /> by a given <see cref='Size3' />.
-        /// </summary>
-        /// <param name="point">The point.</param>
-        /// <param name="size">The size.</param>
-        /// <returns>
-        ///     The result of the operator.
-        /// </returns>
-        public static Point3 operator +(Point3 point, Size3 size)
-        {
-            return Add(point, size);
-        }
-
-        /// <summary>
-        ///     Translates a <see cref='Point3' /> by a given <see cref='Size3' />.
-        /// </summary>
-        /// <param name="point">The point.</param>
-        /// <param name="size">The size.</param>
-        /// <returns>
-        ///     The result of the operator.
-        /// </returns>
-        public static Point3 Add(Point3 point, Size3 size)
-        {
-            return new Point3(point.X + size.Width, point.Y + size.Height, point.Z + size.Depth);
-        }
-
-        /// <summary>
-        ///     Translates a <see cref='Point3' /> by the negative of a given <see cref='Size3' />.
-        /// </summary>
-        /// <param name="point">The point.</param>
-        /// <param name="size">The size.</param>
-        /// <returns>
-        ///     The result of the operator.
-        /// </returns>
-        public static Point3 operator -(Point3 point, Size3 size)
-        {
-            return Subtract(point, size);
-        }
-
-        /// <summary>
-        ///     Translates a <see cref='Point3' /> by the negative of a given <see cref='Size3' /> .
-        /// </summary>
-        /// <param name="point">The point.</param>
-        /// <param name="size">The size.</param>
-        /// <returns>
-        ///     The result of the operator.
-        /// </returns>
-        public static Point3 Subtract(Point3 point, Size3 size)
-        {
-            return new Point3(point.X - size.Width, point.Y - size.Height, point.Z - size.Depth);
-        }
-
-        /// <summary>
         ///     Returns a hash code of this <see cref="Point3" /> suitable for use in hashing algorithms and data
         ///     structures like a hash table.
         /// </summary>
