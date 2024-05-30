@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles.Serialization;
@@ -17,15 +19,41 @@ namespace MonoGame.Extended.Particles
             Emitters = new List<ParticleEmitter>();
         }
 
+        ~ParticleEffect() => Dispose(false);
+
         public void Dispose()
         {
-            foreach (var emitter in Emitters)
-                emitter.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if(IsDisposed)
+            {
+                return;
+            }
+
+            if(disposing)
+            {
+                foreach(var emitter in Emitters)
+                {
+                    emitter.Dispose();
+                }
+            }
+
+            IsDisposed = true;
         }
 
         public string Name { get; set; }
         public List<ParticleEmitter> Emitters { get; set; }
         public int ActiveParticles => Emitters.Sum(t => t.ActiveParticles);
+
+        /// <summary>
+        /// Gets a value that indicates whether this instance of the <see cref="ParticleEffect"/> class has been
+        /// disposed.
+        /// </summary>
+        public bool IsDisposed { get; private set; }
 
         public void FastForward(Vector2 position, float seconds, float triggerPeriod)
         {
@@ -54,6 +82,8 @@ namespace MonoGame.Extended.Particles
 
         public void Update(float elapsedSeconds)
         {
+            ThrowIfDisposed();
+
             for (var i = 0; i < Emitters.Count; i++)
                 Emitters[i].Update(elapsedSeconds, Position);
         }
@@ -65,14 +95,24 @@ namespace MonoGame.Extended.Particles
 
         public void Trigger(Vector2 position, float layerDepth = 0)
         {
+            ThrowIfDisposed();
             for (var i = 0; i < Emitters.Count; i++)
                 Emitters[i].Trigger(position, layerDepth);
         }
 
         public void Trigger(LineSegment line, float layerDepth = 0)
         {
+            ThrowIfDisposed();
             for (var i = 0; i < Emitters.Count; i++)
                 Emitters[i].Trigger(line, layerDepth);
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if(IsDisposed)
+            {
+                throw new ObjectDisposedException(nameof(ParticleBuffer));
+            }
         }
 
         public override string ToString()

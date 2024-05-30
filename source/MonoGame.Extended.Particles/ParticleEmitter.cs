@@ -39,13 +39,25 @@ namespace MonoGame.Extended.Particles
 
         public void Dispose()
         {
-            Buffer.Dispose();
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if(IsDisposed)
+            {
+                return;
+            }
+
+            Buffer.Dispose();
+            Buffer = null;
+            IsDisposed = true;
         }
 
         ~ParticleEmitter()
         {
-            Dispose();
+            Dispose(false);
         }
 
         public string Name { get; set; }
@@ -57,6 +69,12 @@ namespace MonoGame.Extended.Particles
         public ParticleReleaseParameters Parameters { get; set; }
         public TextureRegion2D TextureRegion { get; set; }
 
+        /// <summary>
+        /// Gets a value that indicates whether this instance of the <see cref="ParticleEmitter"/> class has been
+        /// disposed.
+        /// </summary>
+        public bool IsDisposed { get; private set;}
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         public ParticleModifierExecutionStrategy ModifierExecutionStrategy { get; set; }
 
@@ -64,9 +82,15 @@ namespace MonoGame.Extended.Particles
 
         public int Capacity
         {
-            get { return Buffer.Size; }
+            get
+            {
+                ThrowIfDisposed();
+                return Buffer.Size;
+            }
             set
             {
+                ThrowIfDisposed();
+
                 var oldBuffer = Buffer;
                 oldBuffer.Dispose();
                 Buffer = new ParticleBuffer(value);
@@ -125,6 +149,8 @@ namespace MonoGame.Extended.Particles
 
         public bool Update(float elapsedSeconds, Vector2 position = default(Vector2))
         {
+            ThrowIfDisposed();
+
             _totalSeconds += elapsedSeconds;
 
             if (_autoTrigger)
@@ -176,6 +202,8 @@ namespace MonoGame.Extended.Particles
 
         private void Release(Vector2 position, int numToRelease, float layerDepth)
         {
+            ThrowIfDisposed();
+
             var iterator = Buffer.Release(numToRelease);
 
             while (iterator.HasNext)
@@ -211,6 +239,14 @@ namespace MonoGame.Extended.Particles
                 particle->Rotation = _random.NextSingle(Parameters.Rotation);
                 particle->Mass = _random.NextSingle(Parameters.Mass);
                 particle->LayerDepth = layerDepth;
+            }
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if(IsDisposed)
+            {
+                throw new ObjectDisposedException(nameof(ParticleBuffer));
             }
         }
 

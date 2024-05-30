@@ -8,12 +8,22 @@ namespace MonoGame.Extended.Particles
     {
         public static void Draw(this SpriteBatch spriteBatch, ParticleEffect effect)
         {
+            if(effect.IsDisposed)
+            {
+                return;
+            }
+
             for (var i = 0; i < effect.Emitters.Count; i++)
                 UnsafeDraw(spriteBatch, effect.Emitters[i]);
         }
 
         public static void Draw(this SpriteBatch spriteBatch, ParticleEmitter emitter)
         {
+            if(emitter.IsDisposed)
+            {
+                return;
+            }
+
             UnsafeDraw(spriteBatch, emitter);
         }
 
