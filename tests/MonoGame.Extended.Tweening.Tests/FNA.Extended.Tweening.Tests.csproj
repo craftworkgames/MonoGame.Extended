@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+      <DefineConstants>$(DefineConstants);FNA</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\source\MonoGame.Extended.Tweening\FNA.Extended.Tweening.csproj" />
+    </ItemGroup>
+
+</Project>

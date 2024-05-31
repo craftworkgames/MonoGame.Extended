@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);FNA</DefineConstants>
+    <Description>A GUI system for FNA written from the ground up to make FNA more awesome.</Description>
+    <PackageTags>fna gui</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Extended.Input\FNA.Extended.Input.csproj" />
+    <ProjectReference Include="..\MonoGame.Extended\FNA.Extended.csproj" />
+  </ItemGroup>
+
+</Project>
