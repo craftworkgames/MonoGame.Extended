@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);KNI</DefineConstants>
+    <Description>A GUI system for KNI written from the ground up to make KNI more awesome.</Description>
+    <PackageTags>kni gui</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Extended.Input\KNI.Extended.Input.csproj" />
+    <ProjectReference Include="..\MonoGame.Extended\KNI.Extended.csproj" />
+  </ItemGroup>
+
+</Project>

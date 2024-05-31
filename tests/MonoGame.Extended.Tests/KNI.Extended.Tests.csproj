@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <DefineConstants>$(DefineConstants);KNI</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\source\MonoGame.Extended\KNI.Extended.csproj" />
+        <ProjectReference Include="..\..\source\MonoGame.Extended.Particles\KNI.Extended.Particles.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Content\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="BitmapFonts\files\**\*" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+</Project>

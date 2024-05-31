@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <Content Include="$(ArtifactsPath)/bin/Kni.Extended.Content.Pipeline/release/*.dll" Pack="True" PackagePath="tools" />
+    <Content Include="MonoGame.Extended.Content.Pipeline.targets" Pack="true" PackagePath="build" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);KNI</DefineConstants>
+    <Description>Content Pipeline importers and processors to make KNI more awesome.</Description>
+    <PackageTags>kni content importer processor reader tiled texturepacker bmfont animations</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="5.2.0" />
+
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline"
+                      Version="3.12.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Graphics"
+                      Version="3.12.9001" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Extended.Tiled\KNI.Extended.Tiled.csproj" />
+    <ProjectReference Include="..\MonoGame.Extended\KNI.Extended.csproj" />
+  </ItemGroup>
+
+</Project>

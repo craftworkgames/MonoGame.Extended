@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);KNI</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline"
+                      Version="3.12.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Graphics"
+                      Version="3.12.9001" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\source\MonoGame.Extended.Content.Pipeline\KNI.Extended.Content.Pipeline.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestData\astrid-animator-atlas.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="TestData\astrid-animator.aa" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="TestData\test-tileset.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
