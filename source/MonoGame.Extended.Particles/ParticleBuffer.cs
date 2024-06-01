@@ -11,7 +11,6 @@ namespace MonoGame.Extended.Particles
         // points to the first memory pos after the buffer
         protected readonly unsafe Particle* BufferEnd;
 
-        private bool _disposed;
         // points to the particle after the last active particle.
         protected unsafe Particle* Tail;
 
@@ -44,16 +43,28 @@ namespace MonoGame.Extended.Particles
         // total size of active particles
         public int ActiveSizeInBytes => Particle.SizeInBytes*Count;
 
+        /// <summary>
+        /// Gets a value that indicates whether this instance of the <see cref="ParticleBuffer"/> class has been
+        /// disposed.
+        /// </summary>
+        public bool IsDisposed { get; set; }
+
         public void Dispose()
         {
-            if (!_disposed)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if(IsDisposed)
             {
-                Marshal.FreeHGlobal(_nativePointer);
-                _disposed = true;
-                GC.RemoveMemoryPressure(SizeInBytes);
+                return;
             }
 
-            GC.SuppressFinalize(this);
+            Marshal.FreeHGlobal(_nativePointer);
+            GC.RemoveMemoryPressure(SizeInBytes);
+            IsDisposed = true;
         }
 
         /// <summary>
@@ -62,6 +73,8 @@ namespace MonoGame.Extended.Particles
         /// </summary>
         public unsafe ParticleIterator Release(int releaseQuantity)
         {
+            ThrowIfDisposed();
+
             var numToRelease = Math.Min(releaseQuantity, Available);
 
             var prevCount = Count;
@@ -75,6 +88,8 @@ namespace MonoGame.Extended.Particles
 
         public unsafe void Reclaim(int number)
         {
+            ThrowIfDisposed();
+
             Count -= number;
 
             Head += number;
@@ -82,27 +97,17 @@ namespace MonoGame.Extended.Particles
                 Head -= Size + 1;
         }
 
-        //public void CopyTo(IntPtr destination)
-        //{
-        //    memcpy(destination, _nativePointer, ActiveSizeInBytes);
-        //}
-
-        //public void CopyToReverse(IntPtr destination)
-        //{
-        //    var offset = 0;
-        //    for (var i = ActiveSizeInBytes - Particle.SizeInBytes; i >= 0; i -= Particle.SizeInBytes)
-        //    {
-        //        memcpy(IntPtr.Add(destination, offset), IntPtr.Add(_nativePointer, i), Particle.SizeInBytes);
-        //        offset += Particle.SizeInBytes;
-        //    }
-        //}
-
-        //[DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl, SetLastError = false)]
-        //public static extern void memcpy(IntPtr dest, IntPtr src, int count);
+        private void ThrowIfDisposed()
+        {
+            if(IsDisposed)
+            {
+                throw new ObjectDisposedException(nameof(ParticleBuffer));
+            }
+        }
 
         ~ParticleBuffer()
         {
-            Dispose();
+            Dispose(false);
         }
 
         public class ParticleIterator
