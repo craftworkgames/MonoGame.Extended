@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
-
-
-
+> [!NOTE]
+> Unreleased changes exist in the current `develop` branch but have not been pushed as either a stable or prerelease NuGet package.
+>
 ### Added
 - Added unit test for `PolyGon.Contains` to ensure consistency in expected return values for edge touching compared to MonoGame. (@AristurtleDev) [#871](https://github.com/craftworkgames/MonoGame.Extended/pull/871)
 - Added unit test for `BitmapFont.MeasureString` to validate that it correctly accounts for trailing whitespace. (@AristurtleDev) [#876](https://github.com/craftworkgames/MonoGame.Extended/pull/876)
@@ -21,8 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated solution (.sln) to Visual Studio 2022 (@nkast) [#880](https://github.com/craftworkgames/MonoGame.Extended/pull/880)
 - Updated project types to .Net.Sdk (@nkast) [#880](https://github.com/craftworkgames/MonoGame.Extended/pull/880)
 - Use `System.IO.Compression.ZLibStream` (@nkast) [#822](https://github.com/craftworkgames/MonoGame.Extended/pull/882)
-
-### Deprecated
 
 ### Removed
 - All projects now output build artifacts to a common `.artifacts` directory at the root of the repository. (@AristurtleDev) [#865](https://github.com/craftworkgames/MonoGame.Extended/pull/865)
@@ -36,9 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Resolved `Matrix3x2` (formally `Matrix2`) not accounting for negative when calculating scale. (@AristurtleDev) [#870](https://github.com/craftworkgames/MonoGame.Extended/pull/870)
 - Implemented standard `IDispose` pattern to resolve for particles (@AristurtleDev) [#879](https://github.com/craftworkgames/MonoGame.Extended/pull/879)
-
-### Security
-
 
 ## [3.9.0-prerelease.4]
 
