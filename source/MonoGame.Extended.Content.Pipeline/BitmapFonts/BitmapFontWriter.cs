@@ -43,12 +43,20 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
+#if KNI
+            return "MonoGame.Extended.BitmapFonts.BitmapFont, KNI.Extended";
+#else
             return "MonoGame.Extended.BitmapFonts.BitmapFont, MonoGame.Extended";
+#endif
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
+#if KNI
+            return "MonoGame.Extended.BitmapFonts.BitmapFontReader, KNI.Extended";
+#else
             return "MonoGame.Extended.BitmapFonts.BitmapFontReader, MonoGame.Extended";
+#endif
         }
     }
 }

@@ -220,8 +220,22 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
             return TiledMapObjectType.Rectangle;
         }
 
-        public override string GetRuntimeType(TargetPlatform targetPlatform) => "MonoGame.Extended.Tiled.TiledMap, MonoGame.Extended.Tiled";
+        public override string GetRuntimeType(TargetPlatform targetPlatform)
+        {
+#if KNI
+            return "MonoGame.Extended.Tiled.TiledMap, KNI.Extended.Tiled";
+#else
+            return "MonoGame.Extended.Tiled.TiledMap, MonoGame.Extended.Tiled";
+#endif
+        }
 
-        public override string GetRuntimeReader(TargetPlatform targetPlatform) => "MonoGame.Extended.Tiled.TiledMapReader, MonoGame.Extended.Tiled";
+        public override string GetRuntimeReader(TargetPlatform targetPlatform)
+        {
+#if KNI
+            return "MonoGame.Extended.Tiled.TiledMapReader, KNI.Extended.Tiled";
+#else
+            return "MonoGame.Extended.Tiled.TiledMapReader, MonoGame.Extended.Tiled";
+#endif
+        }
     }
 }

@@ -11,9 +11,23 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 	[ContentTypeWriter]
 	public class TiledMapTilesetWriter : ContentTypeWriter<TiledMapTilesetContentItem>
 	{
-		public override string GetRuntimeReader(TargetPlatform targetPlatform) => "MonoGame.Extended.Tiled.TiledMapTilesetReader, MonoGame.Extended.Tiled";
+		public override string GetRuntimeReader(TargetPlatform targetPlatform)
+        {
+#if KNI
+            return "MonoGame.Extended.Tiled.TiledMapTilesetReader, KNI.Extended.Tiled";
+#else
+            return "MonoGame.Extended.Tiled.TiledMapTilesetReader, MonoGame.Extended.Tiled";
+#endif
+        }
 
-	    public override string GetRuntimeType(TargetPlatform targetPlatform) => "MonoGame.Extended.Tiled.TiledMapTileset, MonoGame.Extended.Tiled";
+	    public override string GetRuntimeType(TargetPlatform targetPlatform)
+        {
+#if KNI
+            return "MonoGame.Extended.Tiled.TiledMapTileset, KNI.Extended.Tiled";
+#else
+            return "MonoGame.Extended.Tiled.TiledMapTileset, MonoGame.Extended.Tiled";
+#endif
+        }
 
 		protected override void Write(ContentWriter writer, TiledMapTilesetContentItem contentItem)
 		{
