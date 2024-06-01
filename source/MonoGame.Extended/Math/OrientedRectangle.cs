@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using SharpDX.Direct3D;
 
 namespace MonoGame.Extended
 {
