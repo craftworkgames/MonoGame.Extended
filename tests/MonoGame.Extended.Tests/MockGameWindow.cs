@@ -10,15 +10,19 @@ namespace MonoGame.Extended.Tests
     {
         public override bool AllowUserResizing { get; set; }
         public override Rectangle ClientBounds { get; }
-        public override Point Position { get; set; }
         public override DisplayOrientation CurrentOrientation { get; }
         public override IntPtr Handle { get; }
         public override string ScreenDeviceName { get; }
+
+#if !KNI
+        public override Point Position { get; set; }
+#endif
 
         public MockGameWindow()
         {
         }
 
+#if !KNI
         public override void BeginScreenDeviceChange(bool willBeFullScreen)
         {
         }
@@ -30,6 +34,7 @@ namespace MonoGame.Extended.Tests
         protected override void SetSupportedOrientations(DisplayOrientation orientations)
         {
         }
+#endif
 
         protected override void SetTitle(string title)
         {
