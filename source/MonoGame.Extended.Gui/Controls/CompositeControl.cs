@@ -51,7 +51,7 @@ namespace MonoGame.Extended.Gui.Controls
                 if (IsDirty)
                 {
                     control.Parent = this;
-                    control.ActualSize = ContentRectangle.Size;
+                    control.ActualSize = new Point(ContentRectangle.Width, ContentRectangle.Height);
                     control.Position = new Point(Padding.Left, Padding.Top);
                     control.InvalidateMeasure();
                     IsDirty = false;

@@ -23,7 +23,9 @@ namespace MonoGame.Extended.Input
 
         public static void SetPosition(int x, int y) => Mouse.SetPosition(x, y);
         public static void SetPosition(Point point) => Mouse.SetPosition(point.X, point.Y);
+#if !FNA
         public static void SetCursor(MouseCursor cursor) => Mouse.SetCursor(cursor);
+#endif
 
         public static IntPtr WindowHandle
         {

@@ -71,7 +71,7 @@ namespace MonoGame.Extended.Input.InputListeners
             RepeatDelay = settings.RepeatDelay;
 
             _previousGameTime = new GameTime();
-            _previousState = GamePadState.Default;
+            _previousState = new GamePadState();
         }
 
         /// <summary>
@@ -455,7 +455,7 @@ namespace MonoGame.Extended.Input.InputListeners
                 {
                     _gamePadConnections[(int) index] = !_gamePadConnections[(int) index];
                     ControllerConnectionChanged?.Invoke(null,
-                        new GamePadEventArgs(GamePadState.Default, GamePad.GetState(index), TimeSpan.Zero, index));
+                        new GamePadEventArgs(new GamePadState(), GamePad.GetState(index), TimeSpan.Zero, index));
                 }
             }
         }

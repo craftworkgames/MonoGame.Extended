@@ -17,8 +17,8 @@ namespace MonoGame.Extended.Input
 
         public int X => _currentMouseState.X;
         public int Y => _currentMouseState.Y;
-        public Point Position => _currentMouseState.Position;
-        public bool PositionChanged => _currentMouseState.Position != _previousMouseState.Position;
+        public Point Position => new Point(_currentMouseState.X, _currentMouseState.Y);
+        public bool PositionChanged => _currentMouseState.X != _previousMouseState.X || _currentMouseState.Y != _previousMouseState.Y;
 
         public int DeltaX => _previousMouseState.X - _currentMouseState.X;
         public int DeltaY => _previousMouseState.Y - _currentMouseState.Y;

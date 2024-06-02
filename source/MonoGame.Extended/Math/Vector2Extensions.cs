@@ -245,5 +245,29 @@ namespace MonoGame.Extended
             var lengthSquaredDenominator = vector2.X*vector2.X + vector2.Y*vector2.Y;
             return dotNumerator/lengthSquaredDenominator*vector2;
         }
+
+#if FNA
+        // MomoGame compatibility layer
+
+        /// <summary>
+        /// Gets a Point representation for this Vector2.
+        /// </summary>
+        /// <returns>A Point representation for this Vector2.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Point ToPoint(this Vector2 value)
+        {
+            return new Point((int)value.X, (int)value.Y);
+        }
+
+        /// <summary>
+        /// Gets a Vector2 representation for this Point.
+        /// </summary>
+        /// <returns>A Vector2 representation for this Point.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 ToVector2(this Point value)
+        {
+            return new Vector2(value.X, value.Y);
+        }
+#endif
     }
 }

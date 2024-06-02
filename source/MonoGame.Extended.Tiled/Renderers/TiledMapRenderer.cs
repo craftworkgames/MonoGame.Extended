@@ -169,15 +169,21 @@ namespace MonoGame.Extended.Tiled.Renderers
 					_graphicsDevice.SetVertexBuffer(layerModel.VertexBuffer);
 					_graphicsDevice.Indices = layerModel.IndexBuffer;
 
-					// for each pass in our effect
-					foreach (var pass in effect1.CurrentTechnique.Passes)
+                    // for each pass in our effect
+                    foreach (var pass in effect1.CurrentTechnique.Passes)
 					{
 						// apply the pass, effectively choosing which vertex shader and fragment (pixel) shader to use
 						pass.Apply();
 
-						// draw the geometry from the vertex buffer / index buffer
-						_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, layerModel.TriangleCount);
-					}
+                        // draw the geometry from the vertex buffer / index buffer
+#if FNA
+                        int minVertexIndex = 0;
+                        int numVertices = layerModel.VertexBuffer.VertexCount;
+                        _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, minVertexIndex, numVertices, 0, layerModel.TriangleCount);
+#else
+                        _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, layerModel.TriangleCount);
+#endif
+                    }
 				}
 			}
         }

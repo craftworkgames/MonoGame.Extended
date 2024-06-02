@@ -15,8 +15,22 @@ namespace MonoGame.Extended.Input
             _previousKeyboardState = previousKeyboardState;
         }
 
-        public bool CapsLock => _currentKeyboardState.CapsLock;
-        public bool NumLock => _currentKeyboardState.NumLock;
+        public bool CapsLock
+        {
+#if FNA
+            get { return _currentKeyboardState.IsKeyDown(Keys.CapsLock); }
+#else
+            get { return _currentKeyboardState.CapsLock; }
+#endif
+        }
+        public bool NumLock
+        {
+#if FNA
+            get { return _currentKeyboardState.IsKeyDown(Keys.NumLock); }
+#else
+            get { return _currentKeyboardState.NumLock; }
+#endif
+        }
         public bool IsShiftDown() => _currentKeyboardState.IsKeyDown(Keys.LeftShift) || _currentKeyboardState.IsKeyDown(Keys.RightShift);
         public bool IsControlDown() => _currentKeyboardState.IsKeyDown(Keys.LeftControl) || _currentKeyboardState.IsKeyDown(Keys.RightControl);
         public bool IsAltDown() => _currentKeyboardState.IsKeyDown(Keys.LeftAlt) || _currentKeyboardState.IsKeyDown(Keys.RightAlt);

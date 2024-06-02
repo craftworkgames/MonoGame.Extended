@@ -380,8 +380,11 @@ public sealed class BitmapFont
             if (!pages.ContainsKey(bmfFile.Pages[i]))
             {
                 string texturePath = Path.Combine(bmfFile.Path, bmfFile.Pages[i]);
-                Texture2D texture = Texture2D.FromFile(graphicsDevice, texturePath);
-                pages.Add(bmfFile.Pages[i], texture);
+                using (Stream textureStream = File.OpenRead(texturePath))
+                {
+                    Texture2D texture = Texture2D.FromStream(graphicsDevice, textureStream);
+                    pages.Add(bmfFile.Pages[i], texture);
+                }
             }
         }
 

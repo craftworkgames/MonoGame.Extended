@@ -118,7 +118,8 @@ namespace MonoGame.Extended.Gui
                 if (Parent != null)
                     offset = Parent.BoundingRectangle.Location;
 
-                return new Rectangle(offset + Position - ActualSize * Origin, ActualSize);
+                var position = offset + Position - ActualSize * Origin;
+                return new Rectangle(position.X, position.Y, ActualSize.Width, ActualSize.Height);
             }
         }
     }

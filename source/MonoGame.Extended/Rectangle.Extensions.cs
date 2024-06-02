@@ -68,11 +68,27 @@ public static class RectangleExtensions
         int absoluteY = source.Y + y;
 
         Rectangle relative;
-        relative.X = MathHelper.Clamp(absoluteX, source.Left, source.Right);
-        relative.Y = MathHelper.Clamp(absoluteY, source.Top, source.Bottom);
+        relative.X = (int)MathHelper.Clamp(absoluteX, source.Left, source.Right);
+        relative.Y = (int)MathHelper.Clamp(absoluteY, source.Top, source.Bottom);
         relative.Width = Math.Max(Math.Min(absoluteX + width, source.Right) - relative.X, 0);
         relative.Height = Math.Max(Math.Min(absoluteY + height, source.Bottom) - relative.Y, 0);
 
         return relative;
     }
+
+#if FNA
+    // MomoGame compatibility layer
+
+    /// <summary>
+    /// Deconstruction method for Rectangle.
+    /// </summary>
+    public static void Deconstruct(this Rectangle rectangle, out int x, out int y, out int width, out int height)
+    {
+        x = rectangle.X;
+        y = rectangle.Y;
+        width = rectangle.Width;
+        height = rectangle.Height;
+
+    }
+#endif
 }
