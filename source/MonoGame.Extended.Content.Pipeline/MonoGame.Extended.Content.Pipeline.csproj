@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <Content Include="$(ArtifactsPath)/bin/MonoGame.Extended.Content.Pipeline/release/*.dll" Pack="True" PackagePath="tools" />
+    <Content Include="$(ArtifactsPath)/bin/MonoGame.Extended.Content.Pipeline/release/*.dll" Pack="true" PackagePath="tools" />
+    <Content Include="MonoGame.Extended.Content.Pipeline.targets" Pack="true" PackagePath="build" />
   </ItemGroup>
 
   <PropertyGroup>
