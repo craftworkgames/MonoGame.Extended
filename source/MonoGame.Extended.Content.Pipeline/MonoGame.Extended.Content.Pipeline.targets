@@ -5,7 +5,7 @@
       <DLLsToCopy Include="$(MSBuildThisFileDirectory)\..\tools\*.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(DLLsToCopy)"
-          DestinationFolder="$(MSBuildProjectDirectory)Content/references"
+          DestinationFolder="$(MSBuildProjectDirectory)/Content/references"
           OverwriteReadOnlyFiles="true"
           SkipUnchangedFiles="true" />
   </Target>
