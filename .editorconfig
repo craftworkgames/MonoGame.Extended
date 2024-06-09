@@ -7,7 +7,7 @@
 indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
-file_header_template = Copyright (c) Christopher Whitley. All rights reserved.\nLicensed under the MIT license.\nSee LICENSE file in the project root for full license information.
+file_header_template = Copyright (c) Craftwork Games. All rights reserved.\nLicensed under the MIT license.\nSee LICENSE file in the project root for full license information.
 
 ################################################################################
 ### Xml files
