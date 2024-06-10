@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\source\MonoGame.Extended.BitmapFonts\MonoGame.Extended.BitmapFonts.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="files\**\*" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+</Project>

@@ -1,13 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <Description>Bitmap Fonts to make MonoGame more awesome.</Description>
+        <PackageTags>monogame;fonts</PackageTags>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\MonoGame.Extended\MonoGame.Extended.csproj" />
+    </ItemGroup>
 
 </Project>

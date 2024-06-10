@@ -5,7 +5,4 @@
     <PackageTags>monogame extended pipeline bmfont tiled texture atlas input viewport fps shapes sprite</PackageTags>
   </PropertyGroup>
 
-  <ItemGroup>
-  </ItemGroup>
-
 </Project>
