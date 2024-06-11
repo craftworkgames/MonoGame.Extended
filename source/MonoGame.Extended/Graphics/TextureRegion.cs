@@ -20,28 +20,34 @@ public class TextureRegion
     public float BottomUV {get;}
     public float LeftUV {get;}
 
-    public TextureRegion(Texture2D texture, int x, int y, int width, int height)
-        : this(null, texture, x, y, width, height)
-    {
-    }
+    public TextureRegion(Texture2D texture)
+        : this(texture, null, 0, 0, texture.Width, texture.Height) { }
+
+    public TextureRegion(Texture2D texture, string name)
+        : this(texture, name, texture.Bounds.X, texture.Bounds.Y, texture.Bounds.Width, texture.Bounds.Height) { }
 
     public TextureRegion(Texture2D texture, Rectangle region)
-        : this(null, texture, region.X, region.Y, region.Width, region.Height)
-    {
-    }
+        : this(texture, null, region.X, region.Y, region.Width, region.Height) { }
 
-    public TextureRegion(string name, Texture2D texture, Rectangle region)
-        : this(name, texture, region.X, region.Y, region.Width, region.Height)
-    {
-    }
+    public TextureRegion(Texture2D texture, int x, int y, int width, int height)
+        : this(texture, null, x, y, width, height) { }
 
-    public TextureRegion(Texture2D texture)
-        : this(texture.Name, texture, 0, 0, texture.Width, texture.Height)
-    {
-    }
+    public TextureRegion(Texture2D texture, string name, Rectangle region)
+        : this (texture, name, region.X, region.Y, region.Width, region.Height) { }
 
-    public TextureRegion(string name, Texture2D texture, int x, int y, int width, int height)
+    public TextureRegion(Texture2D texture, string name, int x, int y, int width, int height)
     {
+        ArgumentNullException.ThrowIfNull(texture);
+        if(texture.IsDisposed)
+        {
+            throw new ObjectDisposedException(nameof(texture));
+        }
+
+        if(string.IsNullOrEmpty(name))
+        {
+            name = $"{texture.Name}({x}, {y}, {width}, {height})";
+        }
+
         Name = name;
         Texture = texture;
         X = x;
