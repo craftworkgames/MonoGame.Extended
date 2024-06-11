@@ -15,6 +15,10 @@ public class TextureRegion
     public Size Size  { get; }
     public object Tag { get; set; }
     public Rectangle Bounds { get; }
+    public float TopUV {get;}
+    public float RightUV {get;}
+    public float BottomUV {get;}
+    public float LeftUV {get;}
 
     public TextureRegion(Texture2D texture, int x, int y, int width, int height)
         : this(null, texture, x, y, width, height)
@@ -46,6 +50,10 @@ public class TextureRegion
         Height = height;
         Bounds = new Rectangle(x, y, width, height);
         Size = new Size(width, height);
+        TopUV = Bounds.Top / (float)texture.Height;
+        RightUV = Bounds.Right / (float)texture.Width;
+        BottomUV = Bounds.Bottom / (float)texture.Height;
+        LeftUV = Bounds.Left / (float)texture.Width;
     }
 
     public override string ToString()
