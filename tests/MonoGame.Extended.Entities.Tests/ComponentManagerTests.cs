@@ -1,4 +1,5 @@
-﻿using MonoGame.Extended.Sprites;
+﻿using System.Collections.Generic;
+using MonoGame.Extended.Sprites;
 using Xunit;
 
 namespace MonoGame.Extended.Entities.Tests
@@ -43,5 +44,42 @@ namespace MonoGame.Extended.Entities.Tests
 
         //    Assert.Equal(0b101, identity);
         //}
+
+        
+        [Fact]
+        public void GetMapperForTypeByIndexer()
+        {
+            var componentManager = new ComponentManager();
+            var transformMapper = componentManager[typeof(Transform2)];
+            var spriteMapper = componentManager[typeof(Sprite)];
+
+            Assert.IsType<ComponentMapper<Transform2>>(transformMapper);
+            Assert.IsType<ComponentMapper<Sprite>>(spriteMapper);
+            Assert.Equal(0, transformMapper.Id);
+            Assert.Equal(1, spriteMapper.Id);
+            Assert.Same(spriteMapper, componentManager[typeof(Sprite)]);
+        }
+
+        [Fact]
+        public void EnumerateMappers()
+        {
+            var componentManager = new ComponentManager();
+
+            var transformMapper = componentManager.GetMapper<Transform2>();
+            var spriteMapper = componentManager.GetMapper<Sprite>();
+            var cameraMapper = componentManager.GetMapper<OrthographicCamera>();
+
+            List<ComponentMapper> enumeratedMappers = new List<ComponentMapper>();
+
+            foreach (ComponentMapper mapper in componentManager)
+            {
+                enumeratedMappers.Add(mapper);
+            }
+
+            Assert.Equal(3, enumeratedMappers.Count);
+            Assert.Contains(transformMapper, enumeratedMappers);
+            Assert.Contains(spriteMapper, enumeratedMappers);
+            Assert.Contains(cameraMapper, enumeratedMappers);
+        }
     }
 }

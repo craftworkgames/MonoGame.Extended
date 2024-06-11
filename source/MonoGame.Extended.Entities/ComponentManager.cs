@@ -1,18 +1,21 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
 using MonoGame.Extended.Entities.Systems;
 
 namespace MonoGame.Extended.Entities
 {
-    public interface IComponentMapperService
+    public interface IComponentMapperService : IEnumerable<ComponentMapper>
     {
         ComponentMapper<T> GetMapper<T>() where T : class;
+        ComponentMapper this[Type type] { get; }
     }
 
-    public class ComponentManager : UpdateSystem, IComponentMapperService
+    public class ComponentManager : UpdateSystem, IComponentMapperService, IEnumerable<ComponentMapper>
     {
         public ComponentManager()
         {
@@ -20,10 +23,25 @@ namespace MonoGame.Extended.Entities
             _componentTypes = new Dictionary<Type, int>();
         }
 
-        private readonly Bag<ComponentMapper> _componentMappers;
-        private readonly Dictionary<Type, int> _componentTypes;
+        internal readonly Bag<ComponentMapper> _componentMappers;
+        internal readonly Dictionary<Type, int> _componentTypes;
 
         public Action<int> ComponentsChanged;
+
+        private ComponentMapper CreateMapperForType(Type type, int componentTypeId)
+        {
+            if (!type.IsClass)
+                throw new ArgumentException("Type must be a class type.", nameof(type));
+
+            // TODO: We can probably do better than this without a huge performance penalty by creating our own bit vector that grows after the first 32 bits.
+            if (componentTypeId >= 32)
+                throw new InvalidOperationException("Component type limit exceeded. We currently only allow 32 component types for performance reasons.");
+
+            var mapperType = typeof(ComponentMapper<>).MakeGenericType(type);
+            var mapper = Activator.CreateInstance(mapperType, args: new object[] { componentTypeId, ComponentsChanged });
+            _componentMappers[componentTypeId] = (ComponentMapper)mapper;
+            return (ComponentMapper)mapper;
+        }
 
         private ComponentMapper<T> CreateMapperForType<T>(int componentTypeId)
             where T : class
@@ -85,6 +103,53 @@ namespace MonoGame.Extended.Entities
 
         public override void Update(GameTime gameTime)
         {
+        }
+
+        public ComponentMapper this[Type type]
+        {
+            get
+            {
+                var componentTypeId = GetComponentTypeId(type);
+
+                if (_componentMappers[componentTypeId] != null)
+                    return _componentMappers[componentTypeId];
+
+                return CreateMapperForType(type, componentTypeId);
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public IEnumerator<ComponentMapper> GetEnumerator() => new ComponentMapperEnumerator(this);
+        
+        public struct ComponentMapperEnumerator : IEnumerator<ComponentMapper>
+        {
+            private readonly ComponentManager _componentManager;
+            private IEnumerator<ComponentMapper> _enumerator;
+
+            internal ComponentMapperEnumerator(ComponentManager componentManager)
+            {
+                _componentManager = componentManager;
+                _enumerator = _componentManager._componentMappers.GetEnumerator();
+            }
+
+            public bool MoveNext()
+            {
+                return _enumerator.MoveNext();
+            }
+
+            public void Reset()
+            {
+                _enumerator.Reset();
+            }
+
+            object IEnumerator.Current => _enumerator.Current;
+            public ComponentMapper Current => _enumerator.Current;
+
+            public void Dispose()
+            {
+                _enumerator?.Dispose();
+            }
         }
     }
 }
