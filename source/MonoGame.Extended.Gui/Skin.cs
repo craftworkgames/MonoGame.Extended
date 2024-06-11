@@ -12,6 +12,7 @@ using MonoGame.Extended.Gui.Serialization;
 using MonoGame.Extended.TextureAtlases;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Gui
 {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Particles
 {

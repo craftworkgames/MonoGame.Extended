@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Extended.TextureAtlases
+namespace MonoGame.Extended.Graphics
 {
     public class TextureRegion2D
     {

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui

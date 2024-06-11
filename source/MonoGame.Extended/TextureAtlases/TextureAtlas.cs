@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.TextureAtlases
 {

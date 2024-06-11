@@ -3,7 +3,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.BitmapFonts;
 

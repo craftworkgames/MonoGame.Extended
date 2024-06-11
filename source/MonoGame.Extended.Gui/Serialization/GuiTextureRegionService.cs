@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.TextureAtlases;
 
