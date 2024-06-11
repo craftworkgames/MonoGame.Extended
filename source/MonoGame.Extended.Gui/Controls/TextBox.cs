@@ -126,7 +126,7 @@ namespace MonoGame.Extended.Gui.Controls
 
             foreach (var glyph in font.GetGlyphs(textInfo.Text, textInfo.Position))
             {
-                var fontRegionWidth = glyph.FontRegion?.Width ?? 0;
+                var fontRegionWidth = glyph.Character?.TextureRegion?.Width ?? 0;
                 var glyphMiddle = (int) (glyph.Position.X + fontRegionWidth * 0.5f);
 
                 if (position.X >= glyphMiddle)

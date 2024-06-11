@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated solution (.sln) to Visual Studio 2022 [@nkast](https://github.com/nkast) [#880](https://github.com/craftworkgames/MonoGame.Extended/pull/880)
 - Updated project types to .Net.Sdk [@nkast](https://github.com/nkast) [#880](https://github.com/craftworkgames/MonoGame.Extended/pull/880)
 - Use `System.IO.Compression.ZLibStream` [@nkast](https://github.com/nkast) [#822](https://github.com/craftworkgames/MonoGame.Extended/pull/882)
+- `BitmapFont` refactored. Now supports all three BMFont export types (XML, Text, and Binary). [@AristurtleDev](https://github.com/AristurtleDev) [#877](https://github.com/craftworkgames/MonoGame.Extended/pull/887)
 
 ### Removed
 - All projects now output build artifacts to a common `.artifacts` directory at the root of the repository. [@AristurtleDev](https://github.com/AristurtleDev) [#865](https://github.com/craftworkgames/MonoGame.Extended/pull/865)
@@ -29,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed `Size3`.  It was redundant since  `Microsoft.Xna.Framework.Vector3` exists. [@AristurtleDev](https://github.com/AristurtleDev) [#872](https://github.com/craftworkgames/MonoGame.Extended/pull/872)
 - Removed `Point3`.  It was redundant since `Microsoft.Xna.Framework.Vector3` exists. [@AristurtleDev](https://github.com/AristurtleDev) [#874](https://github.com/craftworkgames/MonoGame.Extended/pull/874)
 - Removed `Point2`.  It was redundant since `Microsoft.Xna.Framework.Vector2` exists. [@AristurtleDev](https://github.com/AristurtleDev) [#875](https://github.com/craftworkgames/MonoGame.Extended/pull/875)
-- Removed unneccessary dependency introduced by previous pull requests [@nkast](https://github.com/nkast) [#881](https://github.com/craftworkgames/MonoGame.Extended/pull/881)
+- Removed unnecessary dependency introduced by previous pull requests [@nkast](https://github.com/nkast) [#881](https://github.com/craftworkgames/MonoGame.Extended/pull/881)
 
 
 ### Fixed

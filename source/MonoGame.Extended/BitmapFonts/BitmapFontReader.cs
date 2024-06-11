@@ -1,3 +1,7 @@
+﻿// Copyright (c) Craftwork Games. All rights reserved.
+// Licensed under the MIT license.
+// See LICENSE file in the project root for full license information.
+
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework.Content;
@@ -24,23 +28,25 @@ namespace MonoGame.Extended.BitmapFonts
                 .Select(textureName => reader.ContentManager.Load<Texture2D>(reader.GetRelativeAssetName(textureName)))
                 .ToArray();
 
-            var lineHeight = reader.ReadInt32();
+            var face = reader.ReadString();
+            var fontSize = reader.ReadInt16();
+            var lineHeight = reader.ReadUInt16();
             var regionCount = reader.ReadInt32();
-            var regions = new BitmapFontRegion[regionCount];
+            var regions = new BitmapFontCharacter[regionCount];
 
             for (var r = 0; r < regionCount; r++)
             {
-                var character = reader.ReadInt32();
-                var textureIndex = reader.ReadInt32();
-                var x = reader.ReadInt32();
-                var y = reader.ReadInt32();
-                var width = reader.ReadInt32();
-                var height = reader.ReadInt32();
-                var xOffset = reader.ReadInt32();
-                var yOffset = reader.ReadInt32();
-                var xAdvance = reader.ReadInt32();
+                var character = reader.ReadUInt32();
+                var textureIndex = reader.ReadByte();
+                var x = reader.ReadUInt16();
+                var y = reader.ReadUInt16();
+                var width = reader.ReadUInt16();
+                var height = reader.ReadUInt16();
+                var xOffset = reader.ReadInt16();
+                var yOffset = reader.ReadInt16();
+                var xAdvance = reader.ReadInt16();
                 var textureRegion = new TextureRegion2D(textures[textureIndex], x, y, width, height);
-                regions[r] = new BitmapFontRegion(textureRegion, character, xOffset, yOffset, xAdvance);
+                regions[r] = new BitmapFontCharacter((int)character, textureRegion, xOffset, yOffset, xAdvance);
             }
 
             var characterMap = regions.ToDictionary(r => r.Character);
@@ -48,18 +54,18 @@ namespace MonoGame.Extended.BitmapFonts
 
             for (var k = 0; k < kerningsCount; k++)
             {
-                var first = reader.ReadInt32();
-                var second = reader.ReadInt32();
-                var amount = reader.ReadInt32();
+                var first = reader.ReadUInt32();
+                var second = reader.ReadUInt32();
+                var amount = reader.ReadInt16();
 
                 // Find region
-                if (!characterMap.TryGetValue(first, out var region))
+                if (!characterMap.TryGetValue((int)first, out var region))
                     continue;
 
-                region.Kernings[second] = amount;
+                region.Kernings[(int)second] = amount;
             }
 
-            return new BitmapFont(reader.AssetName, regions, lineHeight);
+            return new BitmapFont(face, fontSize, lineHeight, regions);
         }
     }
 }

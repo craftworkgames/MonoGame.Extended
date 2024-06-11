@@ -14,12 +14,14 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
                 writer.Write(textureAsset);
 
             var fontFile = result.FontFile;
+            writer.Write(fontFile.FontName);
+            writer.Write(fontFile.Info.FontSize);
             writer.Write(fontFile.Common.LineHeight);
-            writer.Write(fontFile.Chars.Count);
+            writer.Write(fontFile.Characters.Count);
 
-            foreach (var c in fontFile.Chars)
+            foreach (var c in fontFile.Characters)
             {
-                writer.Write(c.Id);
+                writer.Write(c.ID);
                 writer.Write(c.Page);
                 writer.Write(c.X);
                 writer.Write(c.Y);
