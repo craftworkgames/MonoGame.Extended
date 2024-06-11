@@ -12,7 +12,7 @@ public class TextureRegion
     public int Y { get; }
     public int Width { get; }
     public int Height { get; }
-    public SizeF Size  { get; }
+    public Size Size  { get; }
     public object Tag { get; set; }
     public Rectangle Bounds { get; }
 
@@ -45,7 +45,7 @@ public class TextureRegion
         Width = width;
         Height = height;
         Bounds = new Rectangle(x, y, width, height);
-        Size = new SizeF(width, height);
+        Size = new Size(width, height);
     }
 
     public override string ToString()
