@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added unit test for `BitmapFont.MeasureString` to validate that it correctly accounts for trailing whitespace. [@AristurtleDev](https://github.com/AristurtleDev) [#876](https://github.com/craftworkgames/MonoGame.Extended/pull/876)
 - Added unit test for `ContentReaderExtensions.GetRelativeAssetName` to validate that asset name sanitization resolves to correct path. [@AristurtleDev](https://github.com/AristurtleDev) [#877](https://github.com/craftworkgames/MonoGame.Extended/pull/877)
 - `MonoGame.Extended.Content.Pipeline.targets` was added to the **MonoGame.Extended.Content.Pipeline** nuget.  This target contains a task that will automatically copy the required dll references for the MGCB Editor to the `/Content/references` directory inside the project root for easier access. [@AristurtleDev](https://github.com/AristurtleDev) [#855] (https://github.com/craftworkgames/MonoGame.Extended/pull/885)
+- Updated `ComponentManager` to implement `IEnumerable<ComponentMapper>` [@mbowersjr](https://github.com/mbowersjr) [#888](https://github.com/craftworkgames/MonoGame.Extended/pull/888)
 
 ### Changed
 - `Matrix2` was renamed `Matrix3x2` to better reflect what it actually is. [@AristurtleDev](https://github.com/AristurtleDev) [#870](https://github.com/craftworkgames/MonoGame.Extended/pull/870)
