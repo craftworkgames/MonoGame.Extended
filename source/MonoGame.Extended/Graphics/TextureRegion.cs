@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Graphics;
 public class TextureRegion
 {
     public string Name { get; }
-    public Texture2D Texture { get; protected set; }
+    public Texture2D Texture { get; }
     public int X { get; }
     public int Y { get; }
     public int Width { get; }
