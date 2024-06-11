@@ -12,9 +12,9 @@ public class TextureRegion
     public int Y { get; }
     public int Width { get; }
     public int Height { get; }
-    public SizeF Size => new SizeF(Width, Height);
+    public SizeF Size  { get; }
     public object Tag { get; set; }
-    public Rectangle Bounds => new Rectangle(X, Y, Width, Height);
+    public Rectangle Bounds { get; }
 
     public TextureRegion(Texture2D texture, int x, int y, int width, int height)
         : this(null, texture, x, y, width, height)
@@ -44,6 +44,8 @@ public class TextureRegion
         Y = y;
         Width = width;
         Height = height;
+        Bounds = new Rectangle(x, y, width, height);
+        Size = new SizeF(width, height);
     }
 
     public override string ToString()
