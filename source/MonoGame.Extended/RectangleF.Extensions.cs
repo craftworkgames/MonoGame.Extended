@@ -33,7 +33,6 @@ public static class RectangleFExtensions
         return new Rectangle((int)rectangle.X, (int)rectangle.Y, (int)rectangle.Width, (int)rectangle.Height);
     }
 
-
     /// <summary>
     /// Clips the specified rectangle against the specified clipping rectangle.
     /// </summary>
