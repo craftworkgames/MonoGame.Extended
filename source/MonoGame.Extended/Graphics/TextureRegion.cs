@@ -6,6 +6,16 @@ namespace MonoGame.Extended.Graphics
 {
     public class TextureRegion
     {
+        public string Name { get; }
+        public Texture2D Texture { get; protected set; }
+        public int X { get; }
+        public int Y { get; }
+        public int Width { get; }
+        public int Height { get; }
+        public SizeF Size => new SizeF(Width, Height);
+        public object Tag { get; set; }
+        public Rectangle Bounds => new Rectangle(X, Y, Width, Height);
+
         public TextureRegion(Texture2D texture, int x, int y, int width, int height)
             : this(null, texture, x, y, width, height)
         {
@@ -35,16 +45,6 @@ namespace MonoGame.Extended.Graphics
             Width = width;
             Height = height;
         }
-
-        public string Name { get; }
-        public Texture2D Texture { get; protected set; }
-        public int X { get; }
-        public int Y { get; }
-        public int Width { get; }
-        public int Height { get; }
-        public SizeF Size => new SizeF(Width, Height);
-        public object Tag { get; set; }
-        public Rectangle Bounds => new Rectangle(X, Y, Width, Height);
 
         public override string ToString()
         {
