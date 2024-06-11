@@ -3,11 +3,16 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
+    /// <summary>
+    /// Provides extension methods for the <see cref="RectangleF"/> structure.
+    /// </summary>
     public static class RectangleFExtensions
     {
         /// <summary>
-        ///     Gets the corners of the rectangle in a clockwise direction starting at the top left.
+        /// Gets the corners of the rectangle in a clockwise direction starting at the top left.
         /// </summary>
+        /// <param name="rectangle">The rectangle to get the corners of.</param>
+        /// <returns>An array of <see cref="Vector2"/> elements representing the corners of the rectangle.</returns>
         public static Vector2[] GetCorners(this RectangleF rectangle)
         {
             var corners = new Vector2[4];
@@ -18,11 +23,23 @@ namespace MonoGame.Extended
             return corners;
         }
 
+        /// <summary>
+        /// Converts the specified <see cref="RectangleF"/> to a <see cref="Rectangle"/>.
+        /// </summary>
+        /// <param name="rectangle">The rectangle to convert.</param>
+        /// <returns>The converted <see cref="Rectangle"/>.</returns>
         public static Rectangle ToRectangle(this RectangleF rectangle)
         {
             return new Rectangle((int)rectangle.X, (int)rectangle.Y, (int)rectangle.Width, (int)rectangle.Height);
         }
 
+
+        /// <summary>
+        /// Clips the specified rectangle against the specified clipping rectangle.
+        /// </summary>
+        /// <param name="rectangle">The rectangle to clip.</param>
+        /// <param name="clippingRectangle">The rectangle to clip against.</param>
+        /// <returns>The clipped rectangle, or <see cref="RectangleF.Empty"/> if the rectangles do not intersect.</returns>
         public static RectangleF Clip(this RectangleF rectangle, RectangleF clippingRectangle)
         {
             var clip = clippingRectangle;
