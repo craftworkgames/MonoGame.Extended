@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 namespace MonoGame.Extended.BitmapFonts.BmfTypes;
 
 [StructLayout(LayoutKind.Explicit)]
-internal struct BmfHeader
+public struct BmfHeader
 {
     public const int StructSize = 4;
 

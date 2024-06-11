@@ -9,7 +9,7 @@ using MonoGame.Extended.BitmapFonts.Serialization;
 
 namespace MonoGame.Extended.BitmapFonts.BmfTypes;
 
-internal sealed class BitmapFontFile
+public sealed class BmfFile
 {
     public string Path;
     public BmfHeader Header;
@@ -20,7 +20,7 @@ internal sealed class BitmapFontFile
     public readonly List<BmfCharsBlock> Characters = new List<BmfCharsBlock>();
     public readonly List<BmfKerningPairsBlock> Kernings = new List<BmfKerningPairsBlock>();
 
-    public static BitmapFontFile FromStream(FileStream stream)
+    public static BmfFile FromStream(FileStream stream)
     {
         using BinaryReader reader = new BinaryReader(stream);
 
@@ -33,25 +33,25 @@ internal sealed class BitmapFontFile
         stream.Read(buffer);
         stream.Position = position;
 
-        BitmapFontFile bmfFile = new BitmapFontFile();
+        BmfFile bmfFile = new BmfFile();
         bmfFile.Path = stream.Name;
 
 
         if (buffer.SequenceEqual(binaryHeader))
         {
-            BMFBinaryLoader.Load(bmfFile, stream);
+            BmfBinaryLoader.Load(bmfFile, stream);
             return bmfFile;
         }
 
         if (buffer.SequenceEqual(xmlHeader))
         {
-            BMFXmlLoader.Load(bmfFile, stream);
+            BmfXmlLoader.Load(bmfFile, stream);
             return bmfFile;
         }
 
         if (buffer.SequenceEqual(textHeader))
         {
-            BMFTextLoader.Load(bmfFile, stream);
+            BmfTextLoader.Load(bmfFile, stream);
             return bmfFile;
         }
 

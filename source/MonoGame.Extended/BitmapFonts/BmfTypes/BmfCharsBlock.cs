@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 namespace MonoGame.Extended.BitmapFonts.BmfTypes;
 
 [StructLayout(LayoutKind.Explicit)]
-internal struct BmfCharsBlock
+public struct BmfCharsBlock
 {
     public const int StructSize = 20;
 

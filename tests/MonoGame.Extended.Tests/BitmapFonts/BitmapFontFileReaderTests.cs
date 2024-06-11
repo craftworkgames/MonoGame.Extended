@@ -13,16 +13,16 @@ namespace MonoGame.Extended.BitmapFonts.Tests;
 
 public class BitmapFontFileReaderTests
 {
-    private readonly BitmapFontFile _expected;
+    private readonly BmfFile _expected;
 
     public BitmapFontFileReaderTests()
     {
         _expected = CreateExpected();
     }
 
-    private static BitmapFontFile CreateExpected()
+    private static BmfFile CreateExpected()
     {
-        BitmapFontFile bmfFile = new BitmapFontFile()
+        BmfFile bmfFile = new BmfFile()
         {
             Header = new BmfHeader()
             {
@@ -104,8 +104,8 @@ public class BitmapFontFileReaderTests
     public void Read_BinaryFile_Test()
     {
         using FileStream stream = File.OpenRead("BitmapFonts/files/bmfont/test-font-binary.fnt");
-        BitmapFontFile actual = new BitmapFontFile();
-        BMFBinaryLoader.Load(actual, stream);
+        BmfFile actual = new BmfFile();
+        BmfBinaryLoader.Load(actual, stream);
         Assert.Equal(_expected.Header, actual.Header);
         Assert.Equal(_expected.Info, actual.Info);
         Assert.Equal(_expected.Common, actual.Common);
@@ -119,8 +119,8 @@ public class BitmapFontFileReaderTests
     public void Read_XmlFile_Test()
     {
         using FileStream stream = File.OpenRead("BitmapFonts/files/bmfont/test-font-xml.fnt");
-        BitmapFontFile actual = new BitmapFontFile();
-        BMFXmlLoader.Load(actual, stream);
+        BmfFile actual = new BmfFile();
+        BmfXmlLoader.Load(actual, stream);
         Assert.Equal(_expected.Header, actual.Header);
         Assert.Equal(_expected.Info, actual.Info);
         Assert.Equal(_expected.Common, actual.Common);
@@ -134,8 +134,8 @@ public class BitmapFontFileReaderTests
     public void Read_Text_Test()
     {
         using FileStream stream = File.OpenRead("BitmapFonts/files/bmfont/test-font-text.fnt");
-        BitmapFontFile actual = new BitmapFontFile();
-        BMFTextLoader.Load(actual, stream);
+        BmfFile actual = new BmfFile();
+        BmfTextLoader.Load(actual, stream);
         Assert.Equal(_expected.Header, actual.Header);
         Assert.Equal(_expected.Info, actual.Info);
         Assert.Equal(_expected.Common, actual.Common);

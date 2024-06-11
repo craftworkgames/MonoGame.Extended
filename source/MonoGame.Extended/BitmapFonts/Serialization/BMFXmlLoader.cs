@@ -8,9 +8,9 @@ using MonoGame.Extended.BitmapFonts.BmfTypes;
 
 namespace MonoGame.Extended.BitmapFonts.Serialization;
 
-internal static class BMFXmlLoader
+public static class BmfXmlLoader
 {
-    public static void Load(BitmapFontFile bmfFile, Stream stream)
+    public static void Load(BmfFile bmfFile, Stream stream)
     {
         // XML does not contain the header like binary so we manually create it
         bmfFile.Header = new BmfHeader() { B = (byte)'B', M = (byte)'M', F = (byte)'F', Version = 3 };
@@ -26,7 +26,7 @@ internal static class BMFXmlLoader
         LoadKerningNodes(bmfFile, root);
     }
 
-    private static void LoadInfoNode(BitmapFontFile bmfFile, XmlNode root)
+    private static void LoadInfoNode(BmfFile bmfFile, XmlNode root)
     {
         BmfInfoBlock info;
 
@@ -58,7 +58,7 @@ internal static class BMFXmlLoader
         bmfFile.Info.Outline = node.GetByteAttribute("outline");
     }
 
-    private static void LoadCommonNode(BitmapFontFile bmfFile, XmlNode root)
+    private static void LoadCommonNode(BmfFile bmfFile, XmlNode root)
     {
         BmfCommonBlock common;
 
@@ -78,7 +78,7 @@ internal static class BMFXmlLoader
         bmfFile.Common.BlueChnl = node.GetByteAttribute("blueChnl");
     }
 
-    private static void LoadPageNodes(BitmapFontFile bmfFile, XmlNode root)
+    private static void LoadPageNodes(BmfFile bmfFile, XmlNode root)
     {
         XmlNodeList nodes = root.SelectNodes("pages/page");
 
@@ -91,7 +91,7 @@ internal static class BMFXmlLoader
         }
     }
 
-    private static void LoadCharacterNodes(BitmapFontFile bmfFile, XmlNode root)
+    private static void LoadCharacterNodes(BmfFile bmfFile, XmlNode root)
     {
         XmlNodeList characterNodes = root.SelectNodes("chars/char");
 
@@ -115,7 +115,7 @@ internal static class BMFXmlLoader
         }
     }
 
-    private static void LoadKerningNodes(BitmapFontFile bmfFile, XmlNode root)
+    private static void LoadKerningNodes(BmfFile bmfFile, XmlNode root)
     {
         XmlNodeList kerningNodes = root.SelectNodes("kernings/kerning");
 

@@ -12,9 +12,9 @@ using MonoGame.Extended.BitmapFonts.BmfTypes;
 
 namespace MonoGame.Extended.BitmapFonts.Serialization;
 
-internal static class BMFTextLoader
+public static class BmfTextLoader
 {
-    public static void Load(BitmapFontFile bmfFile, Stream stream)
+    public static void Load(BmfFile bmfFile, Stream stream)
     {
         using StreamReader reader = new StreamReader(stream);
 
@@ -52,7 +52,7 @@ internal static class BMFTextLoader
     }
 
 
-    private static void LoadInfoLine(BitmapFontFile bmfFile, ReadOnlySpan<string> tokens)
+    private static void LoadInfoLine(BmfFile bmfFile, ReadOnlySpan<string> tokens)
     {
         for (int i = 0; i < tokens.Length; ++i)
         {
@@ -122,7 +122,7 @@ internal static class BMFTextLoader
         }
     }
 
-    private static void LoadCommonLine(BitmapFontFile bmfFile, ReadOnlySpan<string> tokens)
+    private static void LoadCommonLine(BmfFile bmfFile, ReadOnlySpan<string> tokens)
     {
         for (int i = 0; i < tokens.Length; ++i)
         {
@@ -170,7 +170,7 @@ internal static class BMFTextLoader
         }
     }
 
-    private static void LoadPageLine(BitmapFontFile bmfFile, ReadOnlySpan<string> tokens)
+    private static void LoadPageLine(BmfFile bmfFile, ReadOnlySpan<string> tokens)
     {
         for (int i = 0; i < tokens.Length; ++i)
         {
@@ -189,7 +189,7 @@ internal static class BMFTextLoader
         }
     }
 
-    private static void LoadCharacterLine(BitmapFontFile bmfFile, ReadOnlySpan<string> tokens)
+    private static void LoadCharacterLine(BmfFile bmfFile, ReadOnlySpan<string> tokens)
     {
         BmfCharsBlock character = default;
 
@@ -240,7 +240,7 @@ internal static class BMFTextLoader
         bmfFile.Characters.Add(character);
     }
 
-    private static void LoadKerningLine(BitmapFontFile bmfFile, ReadOnlySpan<string> tokens)
+    private static void LoadKerningLine(BmfFile bmfFile, ReadOnlySpan<string> tokens)
     {
         BmfKerningPairsBlock kerning = default;
 

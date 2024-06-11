@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <Description>It makes MonoGame more awesome.</Description>
@@ -10,6 +10,10 @@
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>MonoGame.Extended.Tests</_Parameter1>
         </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>MonoGame.Extended.Content.Pipeline</_Parameter1>
+        </AssemblyAttribute>
     </ItemGroup>
+
 
 </Project>

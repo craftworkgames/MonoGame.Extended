@@ -10,9 +10,9 @@ using MonoGame.Extended.BitmapFonts.BmfTypes;
 
 namespace MonoGame.Extended.BitmapFonts.Serialization;
 
-internal class BMFBinaryLoader
+public class BmfBinaryLoader
 {
-    public static void Load(BitmapFontFile bmfFile, Stream stream)
+    public static void Load(BmfFile bmfFile, Stream stream)
     {
         using BinaryReader reader = new BinaryReader(stream);
         bmfFile.Header = LoadHeader(reader);

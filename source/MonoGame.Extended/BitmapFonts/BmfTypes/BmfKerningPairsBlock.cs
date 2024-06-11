@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 namespace MonoGame.Extended.BitmapFonts.BmfTypes;
 
 [StructLayout(LayoutKind.Explicit)]
-internal struct BmfKerningPairsBlock
+public struct BmfKerningPairsBlock
 {
     public const int StructSize = 10;
 

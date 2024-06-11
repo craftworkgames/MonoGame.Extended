@@ -3,7 +3,7 @@
 namespace MonoGame.Extended.BitmapFonts.BmfTypes;
 
 [StructLayout(LayoutKind.Explicit)]
-internal struct BmfInfoBlock
+public struct BmfInfoBlock
 {
     public const int StructSize = 14;
 

@@ -370,7 +370,7 @@ public sealed class BitmapFont
 
     public static BitmapFont FromStream(GraphicsDevice graphicsDevice, FileStream stream)
     {
-        BitmapFontFile bmfFile = BitmapFontFile.FromStream(stream);
+        BmfFile bmfFile = BmfFile.FromStream(stream);
 
         //  Load page textures
         Dictionary<string, Texture2D> pages = new Dictionary<string, Texture2D>();
