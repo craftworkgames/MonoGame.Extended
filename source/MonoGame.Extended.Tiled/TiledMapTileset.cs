@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Tiled
         int TileWidth { get; }
         int TileHeight { get; }
         Texture2D Texture { get; }
-        TextureRegion2D GetRegion(int column, int row);
+        TextureRegion GetRegion(int column, int row);
     }
 
     public class TiledMapTileset : ITileset
@@ -38,11 +38,11 @@ namespace MonoGame.Extended.Tiled
         public string Name => Texture.Name;
         public Texture2D Texture { get; }
 
-        public TextureRegion2D GetRegion(int column, int row)
+        public TextureRegion GetRegion(int column, int row)
         {
             var x = Margin + column * (TileWidth + Spacing);
             var y = Margin + row * (TileHeight + Spacing);
-            return new TextureRegion2D(Texture, x, y, TileWidth, TileHeight);
+            return new TextureRegion(Texture, x, y, TileWidth, TileHeight);
         }
 
         public string Type { get; }

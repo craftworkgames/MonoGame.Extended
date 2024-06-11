@@ -6,9 +6,9 @@ using MonoGame.Extended.Graphics;
 namespace MonoGame.Extended.Serialization;
 
 /// <summary>
-/// Converts a <see cref="NinePatchRegion2D"/> value to or from JSON.
+/// Converts a <see cref="NinePatchRegion"/> value to or from JSON.
 /// </summary>
-public class NinePatchRegion2DJsonConverter : JsonConverter<NinePatchRegion2D>
+public class NinePatchRegion2DJsonConverter : JsonConverter<NinePatchRegion>
 {
     private readonly ITextureRegionService _textureRegionService;
 
@@ -22,13 +22,13 @@ public class NinePatchRegion2DJsonConverter : JsonConverter<NinePatchRegion2D>
     }
 
     /// <inheritdoc />
-    public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(NinePatchRegion2D);
+    public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(NinePatchRegion);
 
     /// <inheritdoc />
     /// <exception cref="JsonException">
-    /// Thrown if the JSON property does not contain a properly formatted <see cref="NinePatchRegion2D"/> value
+    /// Thrown if the JSON property does not contain a properly formatted <see cref="NinePatchRegion"/> value
     /// </exception>
-    public override NinePatchRegion2D Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override NinePatchRegion Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType != JsonTokenType.StartObject)
         {
@@ -69,14 +69,14 @@ public class NinePatchRegion2DJsonConverter : JsonConverter<NinePatchRegion2D>
         var thickness = Thickness.Parse(padding);
         var region = _textureRegionService.GetTextureRegion(regionName);
 
-        return new NinePatchRegion2D(region, thickness.Left, thickness.Top, thickness.Right, thickness.Bottom);
+        return new NinePatchRegion(region, thickness.Left, thickness.Top, thickness.Right, thickness.Bottom);
     }
 
     /// <inheritdoc />
     /// <exception cref="ArgumentNullException">
     /// Throw if <paramref name="writer"/> is <see langword="null"/>.
     /// </exception>
-    public override void Write(Utf8JsonWriter writer, NinePatchRegion2D value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, NinePatchRegion value, JsonSerializerOptions options)
     {
         ArgumentNullException.ThrowIfNull(writer);
 

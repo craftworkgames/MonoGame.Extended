@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics
 {
-    public class NinePatchRegion2D : TextureRegion2D
+    public class NinePatchRegion : TextureRegion
     {
         public Rectangle[] SourcePatches { get; } = new Rectangle[9];
         public Thickness Padding { get; }
@@ -12,30 +12,30 @@ namespace MonoGame.Extended.Graphics
         public int RightPadding => Padding.Right;
         public int BottomPadding => Padding.Bottom;
 
-        public NinePatchRegion2D(TextureRegion2D textureRegion, Thickness padding)
+        public NinePatchRegion(TextureRegion textureRegion, Thickness padding)
             : base(textureRegion.Name, textureRegion.Texture, textureRegion.X, textureRegion.Y, textureRegion.Width, textureRegion.Height)
         {
             Padding = padding;
             CachePatches(textureRegion.Bounds, SourcePatches);
         }
 
-        public NinePatchRegion2D(TextureRegion2D textureRegion, int padding)
+        public NinePatchRegion(TextureRegion textureRegion, int padding)
             : this(textureRegion, padding, padding, padding, padding)
         {
         }
 
-        public NinePatchRegion2D(TextureRegion2D textureRegion, int leftRightPadding, int topBottomPadding)
+        public NinePatchRegion(TextureRegion textureRegion, int leftRightPadding, int topBottomPadding)
             : this(textureRegion, leftRightPadding, topBottomPadding, leftRightPadding, topBottomPadding)
         {
         }
 
-        public NinePatchRegion2D(TextureRegion2D textureRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
+        public NinePatchRegion(TextureRegion textureRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
             : this(textureRegion, new Thickness(leftPadding, topPadding, rightPadding, bottomPadding))
         {
         }
 
-        public NinePatchRegion2D(Texture2D texture, Thickness thickness)
-            : this(new TextureRegion2D(texture), thickness)
+        public NinePatchRegion(Texture2D texture, Thickness thickness)
+            : this(new TextureRegion(texture), thickness)
         {
         }
 

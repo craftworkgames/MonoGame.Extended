@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated project types to .Net.Sdk [@nkast](https://github.com/nkast) [#880](https://github.com/craftworkgames/MonoGame.Extended/pull/880)
 - Use `System.IO.Compression.ZLibStream` [@nkast](https://github.com/nkast) [#822](https://github.com/craftworkgames/MonoGame.Extended/pull/882)
 - `BitmapFont` refactored. Now supports all three BMFont export types (XML, Text, and Binary). [@AristurtleDev](https://github.com/AristurtleDev) [#877](https://github.com/craftworkgames/MonoGame.Extended/pull/887)
+- `TextureRegion2D` and `NinePatchRegion2D` moved to `MonoGame.Exteneded.Graphics` namespace.  [@AristurtleDev](https://github.com/AristurtleDev)
+- `TextureREgion2D` and `NinePatchRegion2D` renamed to `TextureRegion` and `NinePatchRegion`. [@AristurtleDev](https://github.com/AristurtleDev)
 
 ### Removed
 - All projects now output build artifacts to a common `.artifacts` directory at the root of the repository. [@AristurtleDev](https://github.com/AristurtleDev) [#865](https://github.com/craftworkgames/MonoGame.Extended/pull/865)

@@ -30,8 +30,8 @@ namespace MonoGame.Extended.Gui
         public Color BorderColor { get; set; } = Color.White;
         public int BorderThickness { get; set; } = 0;
 
-        private TextureRegion2D _backgroundRegion;
-        public TextureRegion2D BackgroundRegion
+        private TextureRegion _backgroundRegion;
+        public TextureRegion BackgroundRegion
         {
             get => _backgroundRegion;
             set

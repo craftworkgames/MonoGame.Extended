@@ -6,12 +6,12 @@ namespace MonoGame.Extended.TextureAtlases
 {
     public static class TextureAtlasExtensions
     {
-        public static void Draw(this SpriteBatch spriteBatch, TextureRegion2D textureRegion, Vector2 position, Color color, Rectangle? clippingRectangle = null)
+        public static void Draw(this SpriteBatch spriteBatch, TextureRegion textureRegion, Vector2 position, Color color, Rectangle? clippingRectangle = null)
         {
             Draw(spriteBatch, textureRegion, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0, clippingRectangle);
         }
 
-        public static void Draw(this SpriteBatch spriteBatch, TextureRegion2D textureRegion, Vector2 position, Color color,
+        public static void Draw(this SpriteBatch spriteBatch, TextureRegion textureRegion, Vector2 position, Color color,
             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, Rectangle? clippingRectangle = null)
         {
             var sourceRectangle = textureRegion.Bounds;
@@ -35,9 +35,9 @@ namespace MonoGame.Extended.TextureAtlases
             spriteBatch.Draw(textureRegion.Texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
         }
 
-        public static void Draw(this SpriteBatch spriteBatch, TextureRegion2D textureRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
+        public static void Draw(this SpriteBatch spriteBatch, TextureRegion textureRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
         {
-            var ninePatchRegion = textureRegion as NinePatchRegion2D;
+            var ninePatchRegion = textureRegion as NinePatchRegion;
 
             if (ninePatchRegion != null)
                 Draw(spriteBatch, ninePatchRegion, destinationRectangle, color, clippingRectangle);
@@ -45,7 +45,7 @@ namespace MonoGame.Extended.TextureAtlases
                 Draw(spriteBatch, textureRegion.Texture, textureRegion.Bounds, destinationRectangle, color, clippingRectangle);
         }
         
-        public static void Draw(this SpriteBatch spriteBatch, NinePatchRegion2D ninePatchRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
+        public static void Draw(this SpriteBatch spriteBatch, NinePatchRegion ninePatchRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
         {
             var destinationPatches = ninePatchRegion.CreatePatches(destinationRectangle);
             var sourcePatches = ninePatchRegion.SourcePatches;

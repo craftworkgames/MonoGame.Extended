@@ -22,7 +22,7 @@ namespace MonoGame.Extended.Gui
         {
             TextureAtlases = new List<TextureAtlas>();
             Fonts = new List<BitmapFont>();
-            NinePatches = new List<NinePatchRegion2D>();
+            NinePatches = new List<NinePatchRegion>();
             Styles = new KeyedCollection<string, ControlStyle>(s => s.Name ?? s.TargetType.Name);
         }
 
@@ -36,7 +36,7 @@ namespace MonoGame.Extended.Gui
         public IList<BitmapFont> Fonts { get; set; }
 
        [JsonPropertyOrder(3)]
-        public IList<NinePatchRegion2D> NinePatches { get; set; }
+        public IList<NinePatchRegion> NinePatches { get; set; }
 
         [JsonPropertyOrder(4)]
         public BitmapFont DefaultFont => Fonts.FirstOrDefault();

@@ -8,9 +8,9 @@ namespace MonoGame.Extended.Sprites
 {
     public class Sprite : IColorable
     {
-        private TextureRegion2D _textureRegion;
+        private TextureRegion _textureRegion;
 
-        public Sprite(TextureRegion2D textureRegion)
+        public Sprite(TextureRegion textureRegion)
         {
             if (textureRegion == null) throw new ArgumentNullException(nameof(textureRegion));
 
@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Sprites
         }
 
         public Sprite(Texture2D texture)
-            : this(new TextureRegion2D(texture))
+            : this(new TextureRegion(texture))
         {
         }
 
@@ -58,7 +58,7 @@ namespace MonoGame.Extended.Sprites
         public Vector2 Origin { get; set; }
         public SpriteEffects Effect { get; set; }
 
-        public TextureRegion2D TextureRegion
+        public TextureRegion TextureRegion
         {
             get => _textureRegion;
             set

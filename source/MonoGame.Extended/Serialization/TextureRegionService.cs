@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Serialization
 {
     public interface ITextureRegionService
     {
-        TextureRegion2D GetTextureRegion(string name);
+        TextureRegion GetTextureRegion(string name);
     }
 
     public class TextureRegionService : ITextureRegionService
@@ -15,13 +15,13 @@ namespace MonoGame.Extended.Serialization
         public TextureRegionService()
         {
             TextureAtlases = new List<TextureAtlas>();
-            NinePatches = new List<NinePatchRegion2D>();
+            NinePatches = new List<NinePatchRegion>();
         }
 
         public IList<TextureAtlas> TextureAtlases { get; }
-        public IList<NinePatchRegion2D> NinePatches { get; }
+        public IList<NinePatchRegion> NinePatches { get; }
 
-        public TextureRegion2D GetTextureRegion(string name)
+        public TextureRegion GetTextureRegion(string name)
         {
             var ninePatch = NinePatches.FirstOrDefault(p => p.Name == name);
 

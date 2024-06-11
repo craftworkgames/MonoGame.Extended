@@ -27,7 +27,7 @@ namespace MonoGame.Extended.Gui.Controls
             }
         }
 
-        public TextureRegion2D BarRegion { get; set; }
+        public TextureRegion BarRegion { get; set; }
         public Color BarColor { get; set; } = Color.White;
 
         public event EventHandler ProgressChanged;

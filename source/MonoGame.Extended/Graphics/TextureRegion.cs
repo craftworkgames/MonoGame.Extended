@@ -4,29 +4,29 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics
 {
-    public class TextureRegion2D
+    public class TextureRegion
     {
-        public TextureRegion2D(Texture2D texture, int x, int y, int width, int height)
+        public TextureRegion(Texture2D texture, int x, int y, int width, int height)
             : this(null, texture, x, y, width, height)
         {
         }
 
-        public TextureRegion2D(Texture2D texture, Rectangle region)
+        public TextureRegion(Texture2D texture, Rectangle region)
             : this(null, texture, region.X, region.Y, region.Width, region.Height)
         {
         }
 
-        public TextureRegion2D(string name, Texture2D texture, Rectangle region)
+        public TextureRegion(string name, Texture2D texture, Rectangle region)
             : this(name, texture, region.X, region.Y, region.Width, region.Height)
         {
         }
 
-        public TextureRegion2D(Texture2D texture)
+        public TextureRegion(Texture2D texture)
             : this(texture.Name, texture, 0, 0, texture.Width, texture.Height)
         {
         }
 
-        public TextureRegion2D(string name, Texture2D texture, int x, int y, int width, int height)
+        public TextureRegion(string name, Texture2D texture, int x, int y, int width, int height)
         {
             Name = name;
             Texture = texture;

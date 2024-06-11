@@ -6,9 +6,9 @@ using MonoGame.Extended.Graphics;
 namespace MonoGame.Extended.Serialization;
 
 /// <summary>
-/// Converts a <see cref="TextureRegion2D"/> value to or from JSON.
+/// Converts a <see cref="TextureRegion"/> value to or from JSON.
 /// </summary>
-public class TextureRegion2DJsonConverter : JsonConverter<TextureRegion2D>
+public class TextureRegion2DJsonConverter : JsonConverter<TextureRegion>
 {
     private readonly ITextureRegionService _textureRegionService;
 
@@ -26,10 +26,10 @@ public class TextureRegion2DJsonConverter : JsonConverter<TextureRegion2D>
     }
 
     /// <inheritdoc />
-    public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(TextureRegion2D);
+    public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(TextureRegion);
 
     /// <inheritdoc />
-    public override TextureRegion2D Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override TextureRegion Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var regionName = reader.GetString();
         return string.IsNullOrEmpty(regionName) ? null : _textureRegionService.GetTextureRegion(regionName);
@@ -43,7 +43,7 @@ public class TextureRegion2DJsonConverter : JsonConverter<TextureRegion2D>
     ///
     /// Thrown if <paramref name="value"/> is <see langword="null"/>.
     /// </exception>
-    public override void Write(Utf8JsonWriter writer, TextureRegion2D value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, TextureRegion value, JsonSerializerOptions options)
     {
         ArgumentNullException.ThrowIfNull(writer);
         ArgumentNullException.ThrowIfNull(value);
