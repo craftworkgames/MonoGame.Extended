@@ -13,7 +13,7 @@ namespace MonoGame.Extended.Tests.BitmapFonts
         {
             var font = CreateTestFont();
 
-            Assert.Equal("Impact", font.Name);
+            Assert.Equal("Impact", font.Face);
             Assert.Equal(22, font.LineHeight);
         }
 
@@ -43,6 +43,7 @@ namespace MonoGame.Extended.Tests.BitmapFonts
         public void BitmapFont_MeasureString_MultipleLines_Test()
         {
             var font = CreateTestFont();
+            //var size = font.MeasureString("box fox\nbox of fox");
             var size = font.MeasureString("box fox\nbox of fox");
 
             Assert.Equal(123, size.Width);
@@ -68,8 +69,8 @@ namespace MonoGame.Extended.Tests.BitmapFonts
         {
             var font = CreateTestFont();
 
-            var noSpaceAtEnd = font.MeasureString("Hello World");
-            var spaceAtEnd = font.MeasureString("Hello World ");
+            var noSpaceAtEnd = font.MeasureString("bfox");
+            var spaceAtEnd = font.MeasureString("bfox ");
 
             Assert.NotEqual(noSpaceAtEnd, spaceAtEnd);
 
@@ -81,14 +82,14 @@ namespace MonoGame.Extended.Tests.BitmapFonts
             var regions = new[]
             {
                 // extracted from 'Impact' font. 'x' is particularly interesting because it has a negative x offset
-                new BitmapFontRegion(textureRegion, character: ' ', xOffset: 0, yOffset: 0, xAdvance: 6),
-                new BitmapFontRegion(textureRegion, character: 'b', xOffset: 0, yOffset: 7, xAdvance: 17),
-                new BitmapFontRegion(textureRegion, character: 'f', xOffset: 0, yOffset: 7, xAdvance: 9),
-                new BitmapFontRegion(textureRegion, character: 'o', xOffset: 0, yOffset: 11, xAdvance: 16),
-                new BitmapFontRegion(textureRegion, character: 'x', xOffset: -1, yOffset: 11, xAdvance: 13),
+                new BitmapFontCharacter(textureRegion: textureRegion, character: ' ', xOffset: 0, yOffset: 0, xAdvance: 6),
+                new BitmapFontCharacter(textureRegion: textureRegion, character: 'b', xOffset: 0, yOffset: 7, xAdvance: 17),
+                new BitmapFontCharacter(textureRegion: textureRegion, character: 'f', xOffset: 0, yOffset: 7, xAdvance: 9),
+                new BitmapFontCharacter(textureRegion: textureRegion, character: 'o', xOffset: 0, yOffset: 11, xAdvance: 16),
+                new BitmapFontCharacter(textureRegion: textureRegion, character: 'x', xOffset: -1, yOffset: 11, xAdvance: 13),
             };
 
-            var font = new BitmapFont("Impact", regions, lineHeight: 22);
+            var font = new BitmapFont("Impact", size: 32, lineHeight: 22, regions);
             return font;
         }
     }

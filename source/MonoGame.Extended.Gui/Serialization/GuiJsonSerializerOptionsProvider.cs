@@ -25,7 +25,7 @@ public static class GuiJsonSerializerOptionsProvider
         options.Converters.Add(new Size2JsonConverter());
         options.Converters.Add(new ColorJsonConverter());
         options.Converters.Add(new ThicknessJsonConverter());
-        options.Converters.Add(new ContentManagerJsonConverter<BitmapFont>(contentManager, font => font.Name));
+        options.Converters.Add(new ContentManagerJsonConverter<BitmapFont>(contentManager, font => font.Face));
         options.Converters.Add(new ControlStyleJsonConverter(customControlTypes));
         options.Converters.Add(new GuiTextureAtlasJsonConverter(contentManager, textureRegionService));
         options.Converters.Add(new GuiNinePatchRegion2DJsonConverter(textureRegionService));

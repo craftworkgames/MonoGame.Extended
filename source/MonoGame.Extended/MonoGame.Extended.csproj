@@ -1,8 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <Description>It makes MonoGame more awesome.</Description>
-    <PackageTags>monogame extended pipeline bmfont tiled texture atlas input viewport fps shapes sprite</PackageTags>
-  </PropertyGroup>
+    <PropertyGroup>
+        <Description>It makes MonoGame more awesome.</Description>
+        <PackageTags>monogame extended pipeline bmfont tiled texture atlas input viewport fps shapes sprite</PackageTags>
+    </PropertyGroup>
+
+    <!-- Allow Test project to access internals -->
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>MonoGame.Extended.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 
 </Project>

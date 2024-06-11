@@ -40,10 +40,10 @@ namespace MonoGame.Extended.BitmapFonts
             var glyphs = bitmapFont.GetGlyphs(text, position);
             foreach (var glyph in glyphs)
             {
-                if (glyph.FontRegion == null)
+                if (glyph.Character == null)
                     continue;
                 var characterOrigin = position - glyph.Position + origin;
-                spriteBatch.Draw(glyph.FontRegion.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
+                spriteBatch.Draw(glyph.Character.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
             }
         }
 
@@ -58,10 +58,10 @@ namespace MonoGame.Extended.BitmapFonts
             var glyphs = bitmapFont.GetGlyphs(text, position);
             foreach (var glyph in glyphs)
             {
-                if (glyph.FontRegion == null)
+                if (glyph.Character == null)
                     continue;
                 var characterOrigin = position - glyph.Position + origin;
-                spriteBatch.Draw(glyph.FontRegion.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
+                spriteBatch.Draw(glyph.Character.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
             }
         }
 
@@ -124,7 +124,7 @@ namespace MonoGame.Extended.BitmapFonts
         /// <param name="clippingRectangle">Clips the boundaries of the text so that it's not drawn outside the clipping rectangle</param>
         public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position, Color color, float layerDepth, Rectangle? clippingRectangle = null)
         {
-            DrawString(spriteBatch, font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: Vector2.One, effect: SpriteEffects.None, 
+            DrawString(spriteBatch, font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: Vector2.One, effect: SpriteEffects.None,
                 layerDepth: layerDepth, clippingRectangle: clippingRectangle);
         }
 
@@ -143,7 +143,7 @@ namespace MonoGame.Extended.BitmapFonts
         /// <param name="clippingRectangle">Clips the boundaries of the text so that it's not drawn outside the clipping rectangle</param>
         public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position, Color color, Rectangle? clippingRectangle = null)
         {
-            DrawString(spriteBatch, font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: Vector2.One, effect: SpriteEffects.None, 
+            DrawString(spriteBatch, font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: Vector2.One, effect: SpriteEffects.None,
                 layerDepth: 0, clippingRectangle: clippingRectangle);
         }
 

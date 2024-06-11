@@ -8,20 +8,16 @@ using System.Runtime.InteropServices;
 using System.Text;
 using MonoGame.Extended.BitmapFonts.BmfTypes;
 
-namespace MonoGame.Extended.BitmapFonts;
+namespace MonoGame.Extended.BitmapFonts.Serialization;
 
 internal class BMFBinaryLoader
 {
-    public static BitmapFontFile Load(Stream stream)
+    public static void Load(BitmapFontFile bmfFile, Stream stream)
     {
         using BinaryReader reader = new BinaryReader(stream);
-        BmfHeader header = LoadHeader(reader);
-        BmfInfoBlock info = default;
-        BmfCommonBlock common = default;
+        bmfFile.Header = LoadHeader(reader);
         BmfCharsBlock[] characters = Array.Empty<BmfCharsBlock>();
         BmfKerningPairsBlock[] kernings = Array.Empty<BmfKerningPairsBlock>();
-        string[] pages = Array.Empty<string>();
-        string fontName = string.Empty;
 
         while (reader.BaseStream.Position < reader.BaseStream.Length)
         {
@@ -31,25 +27,26 @@ internal class BMFBinaryLoader
             switch (blockType)
             {
                 case 1:
-                    info = AsType<BmfInfoBlock>(reader.ReadBytes(BmfInfoBlock.StructSize));
+                    bmfFile.Info = AsType<BmfInfoBlock>(reader.ReadBytes(BmfInfoBlock.StructSize));
                     int stringLen = blockSize - BmfInfoBlock.StructSize;
-                    fontName = Encoding.UTF8.GetString(reader.ReadBytes(stringLen)).Replace("\0", string.Empty);
+                    bmfFile.FontName = Encoding.UTF8.GetString(reader.ReadBytes(stringLen)).Replace("\0", string.Empty);
                     break;
 
                 case 2:
-                    common = AsType<BmfCommonBlock>(reader.ReadBytes(BmfCommonBlock.StructSize));
+                    bmfFile.Common = AsType<BmfCommonBlock>(reader.ReadBytes(BmfCommonBlock.StructSize));
                     break;
 
                 case 3:
-                    pages = Encoding.UTF8.GetString(reader.ReadBytes(blockSize)).Split('\0', StringSplitOptions.RemoveEmptyEntries);
+                    string[] pages = Encoding.UTF8.GetString(reader.ReadBytes(blockSize)).Split('\0', StringSplitOptions.RemoveEmptyEntries);
+                    bmfFile.Pages.AddRange(pages);
                     break;
 
                 case 4:
                     int count = blockSize / BmfCharsBlock.StructSize;
-                    characters = new BmfCharsBlock[count];
                     for (int c = 0; c < count; c++)
                     {
-                        characters[c] = AsType<BmfCharsBlock>(reader.ReadBytes(BmfCharsBlock.StructSize));
+                        BmfCharsBlock character = AsType<BmfCharsBlock>(reader.ReadBytes(BmfCharsBlock.StructSize));
+                        bmfFile.Characters.Add(character);
                     }
                     break;
 
@@ -58,7 +55,8 @@ internal class BMFBinaryLoader
                     kernings = new BmfKerningPairsBlock[kerningCount];
                     for (int k = 0; k < kerningCount; k++)
                     {
-                        kernings[k] = AsType<BmfKerningPairsBlock>(reader.ReadBytes(BmfKerningPairsBlock.StructSize));
+                        BmfKerningPairsBlock kerning = AsType<BmfKerningPairsBlock>(reader.ReadBytes(BmfKerningPairsBlock.StructSize));
+                        bmfFile.Kernings.Add(kerning);
                     }
                     break;
 
@@ -67,9 +65,6 @@ internal class BMFBinaryLoader
                     break;
             }
         }
-
-        BitmapFontFile file = new BitmapFontFile(header, common, info, fontName, pages, characters, kernings);
-        return file;
     }
 
     private static BmfHeader LoadHeader(BinaryReader reader)
