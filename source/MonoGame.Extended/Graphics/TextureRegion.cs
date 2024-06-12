@@ -4,46 +4,140 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics;
 
+/// <summary>
+/// Represents a region of a texture.
+/// </summary>
 public class TextureRegion
 {
+    /// <summary>
+    /// Gets the name assigned to this texture region when it was created.
+    /// </summary>
     public string Name { get; }
-    public Texture2D Texture { get; }
-    public int X { get; }
-    public int Y { get; }
-    public int Width { get; }
-    public int Height { get; }
-    public Size Size  { get; }
-    public object Tag { get; set; }
-    public Rectangle Bounds { get; }
-    public float TopUV {get;}
-    public float RightUV {get;}
-    public float BottomUV {get;}
-    public float LeftUV {get;}
 
+    /// <summary>
+    /// Gets the texture associated with this texture region.
+    /// </summary>
+    public Texture2D Texture { get; }
+
+    /// <summary>
+    /// Gets the top-left x-coordinate of the texture region within the texture.
+    /// </summary>
+    public int X { get; }
+
+    /// <summary>
+    /// Gets the top-left y-coordinate of the texture region within the texture.
+    /// </summary>
+    public int Y { get; }
+
+    /// <summary>
+    /// Gets the width, in pixels, of the texture region.
+    /// </summary>
+    public int Width { get; }
+
+    /// <summary>
+    /// Gets the height, in pixels,  of the texture region.
+    /// </summary>
+    public int Height { get; }
+
+    /// <summary>
+    /// Gets the size of the texture region.
+    /// </summary>
+    public Size Size { get; }
+
+    /// <summary>
+    /// Gets or sets the user-defined data associated with this texture region.
+    /// </summary>
+    public object Tag { get; set; }
+
+    /// <summary>
+    /// Gets the bounds of the texture region within the texture.
+    /// </summary>
+    public Rectangle Bounds { get; }
+
+    /// <summary>
+    /// Gets the top UV coordinate of the texture region.
+    /// </summary>
+    public float TopUV { get; }
+
+    /// <summary>
+    /// Gets the right UV coordinate of the texture region.
+    /// </summary>
+    public float RightUV { get; }
+
+    /// <summary>
+    /// Gets the bottom UV coordinate of the texture region.
+    /// </summary>
+    public float BottomUV { get; }
+
+    /// <summary>
+    /// Gets the left UV coordinate of the texture region.
+    /// </summary>
+    public float LeftUV { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TextureRegion"/> class representing the entire texture.
+    /// </summary>
+    /// <param name="texture">The texture to create the region from.</param>
     public TextureRegion(Texture2D texture)
         : this(texture, null, 0, 0, texture.Width, texture.Height) { }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TextureRegion"/> class representing the entire texture with the
+    /// specified name.
+    /// </summary>
+    /// <param name="texture">The texture to create the region from.</param>
+    /// <param name="name">The name of the texture region.</param>
     public TextureRegion(Texture2D texture, string name)
         : this(texture, name, texture.Bounds.X, texture.Bounds.Y, texture.Bounds.Width, texture.Bounds.Height) { }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TextureRegion"/> class with the specified region of the texture.
+    /// </summary>
+    /// <param name="texture">The texture to create the region from.</param>
+    /// <param name="region">The region of the texture to use.</param>
     public TextureRegion(Texture2D texture, Rectangle region)
         : this(texture, null, region.X, region.Y, region.Width, region.Height) { }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TextureRegion"/> class with the specified region of the texture.
+    /// </summary>
+    /// <param name="texture">The texture to create the region from.</param>
+    /// <param name="x">The top-left x-coordinate of the region within the texture.</param>
+    /// <param name="y">The top-left y-coordinate of the region within the texture.</param>
+    /// <param name="width">The width, in pixels, of the region.</param>
+    /// <param name="height">The height, in pixels, of the region.</param>
     public TextureRegion(Texture2D texture, int x, int y, int width, int height)
         : this(texture, null, x, y, width, height) { }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TextureRegion"/> class with the specified region of the texture and
+    /// name.
+    /// </summary>
+    /// <param name="texture">The texture to create the region from.</param>
+    /// <param name="name">The name of the texture region.</param>
+    /// <param name="region">The region of the texture to use.</param>
     public TextureRegion(Texture2D texture, string name, Rectangle region)
-        : this (texture, name, region.X, region.Y, region.Width, region.Height) { }
+        : this(texture, name, region.X, region.Y, region.Width, region.Height) { }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TextureRegion"/> class with the specified region of the texture and
+    /// name.
+    /// </summary>
+    /// <param name="texture">The texture to create the region from.</param>
+    /// <param name="name">The name of the texture region.</param>
+    /// <param name="x">The top-left x-coordinate of the region within the texture.</param>
+    /// <param name="y">The top-left y-coordinate of the region within the texture.</param>
+    /// <param name="width">The width, in pixels, of the region.</param>
+    /// <param name="height">The height, in pixels, of the region.</param>
     public TextureRegion(Texture2D texture, string name, int x, int y, int width, int height)
     {
         ArgumentNullException.ThrowIfNull(texture);
-        if(texture.IsDisposed)
+        if (texture.IsDisposed)
         {
             throw new ObjectDisposedException(nameof(texture));
         }
 
-        if(string.IsNullOrEmpty(name))
+        if (string.IsNullOrEmpty(name))
         {
             name = $"{texture.Name}({x}, {y}, {width}, {height})";
         }
@@ -62,6 +156,7 @@ public class TextureRegion
         LeftUV = Bounds.Left / (float)texture.Width;
     }
 
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"{Name ?? string.Empty} {Bounds}";
