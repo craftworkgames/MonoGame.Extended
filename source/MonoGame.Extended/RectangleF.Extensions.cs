@@ -62,7 +62,7 @@ public static class RectangleFExtensions
     /// <param name="width">The width, in pixels, of the relative rectangle.</param>
     /// <param name="height">The height, in pixels, of the relative rectangle.</param>
     /// <returns>The relative rectangle, clipped to the source rectangle.</returns>
-    public static RectangleF GetRelativeRectangle(RectangleF source, float x, float y, float width, float height)
+    public static RectangleF GetRelativeRectangle(this RectangleF source, float x, float y, float width, float height)
     {
         float absoluteX = source.X + x;
         float absoluteY = source.Y + y;

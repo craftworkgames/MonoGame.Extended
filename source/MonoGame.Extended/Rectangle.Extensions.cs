@@ -62,7 +62,7 @@ public static class RectangleExtensions
     /// <param name="width">The width, in pixels, of the relative rectangle.</param>
     /// <param name="height">The height, in pixels, of the relative rectangle.</param>
     /// <returns>The relative rectangle, clipped to the source rectangle.</returns>
-    public static Rectangle GetRelativeRectangle(Rectangle source, int x, int y, int width, int height)
+    public static Rectangle GetRelativeRectangle(this Rectangle source, int x, int y, int width, int height)
     {
         int absoluteX = source.X + x;
         int absoluteY = source.Y + y;
