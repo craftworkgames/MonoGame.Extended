@@ -10,6 +10,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts.BmfTypes;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.BitmapFonts;
@@ -390,7 +391,7 @@ public sealed class BitmapFont
         {
             BmfCharsBlock charBlock = bmfFile.Characters[i];
             Texture2D texture = pages[bmfFile.Pages[charBlock.Page]];
-            TextureRegion2D region = new TextureRegion2D(texture, charBlock.X, charBlock.Y, charBlock.Width, charBlock.Height);
+            TextureRegion region = new TextureRegion(texture, charBlock.X, charBlock.Y, charBlock.Width, charBlock.Height);
             BitmapFontCharacter character = new BitmapFontCharacter((int)charBlock.ID, region, charBlock.XOffset, charBlock.YOffset, charBlock.XAdvance);
             characters.Add(character.Character, character);
         }

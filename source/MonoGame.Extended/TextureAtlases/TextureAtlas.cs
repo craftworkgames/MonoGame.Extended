@@ -129,7 +129,7 @@ namespace MonoGame.Extended.TextureAtlases
             if (_regionsByName.ContainsKey(name))
                 throw new InvalidOperationException($"Region {name} already exists in the texture atlas");
 
-            var region = new TextureRegion(name, Texture, x, y, width, height);
+            var region = new TextureRegion(Texture, name, x, y, width, height);
             AddRegion(region);
             return region;
         }
@@ -149,7 +149,7 @@ namespace MonoGame.Extended.TextureAtlases
             if (_regionsByName.ContainsKey(name))
                 throw new InvalidOperationException($"Region {name} already exists in the texture atlas");
 
-            var textureRegion = new TextureRegion(name, Texture, x, y, width, height);
+            var textureRegion = new TextureRegion(Texture, name, x, y, width, height);
             var ninePatchRegion = new NinePatchRegion(textureRegion, thickness);
             AddRegion(ninePatchRegion);
             return ninePatchRegion;

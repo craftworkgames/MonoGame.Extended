@@ -23,7 +23,7 @@ namespace MonoGame.Extended.Graphics
         public int BottomPadding => Padding.Bottom;
 
         public NinePatchRegion(TextureRegion textureRegion, Thickness padding)
-            : base(textureRegion.Name, textureRegion.Texture, textureRegion.X, textureRegion.Y, textureRegion.Width, textureRegion.Height)
+            : base(textureRegion.Texture, textureRegion.Name, textureRegion.X, textureRegion.Y, textureRegion.Width, textureRegion.Height)
         {
             Padding = padding;
             CachePatches(textureRegion.Bounds, SourcePatches);
