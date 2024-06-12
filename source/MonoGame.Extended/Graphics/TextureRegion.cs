@@ -82,6 +82,12 @@ public class TextureRegion
     /// Initializes a new instance of the <see cref="TextureRegion"/> class representing the entire texture.
     /// </summary>
     /// <param name="texture">The texture to create the region from.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="texture"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if <paramref name="texture"/> has been disposed prior.
+    /// </exception>
     public TextureRegion(Texture2D texture)
         : this(texture, null, 0, 0, texture.Width, texture.Height) { }
 
@@ -91,6 +97,12 @@ public class TextureRegion
     /// </summary>
     /// <param name="texture">The texture to create the region from.</param>
     /// <param name="name">The name of the texture region.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="texture"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if <paramref name="texture"/> has been disposed prior.
+    /// </exception>
     public TextureRegion(Texture2D texture, string name)
         : this(texture, name, texture.Bounds.X, texture.Bounds.Y, texture.Bounds.Width, texture.Bounds.Height) { }
 
@@ -99,6 +111,12 @@ public class TextureRegion
     /// </summary>
     /// <param name="texture">The texture to create the region from.</param>
     /// <param name="region">The region of the texture to use.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="texture"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if <paramref name="texture"/> has been disposed prior.
+    /// </exception>
     public TextureRegion(Texture2D texture, Rectangle region)
         : this(texture, null, region.X, region.Y, region.Width, region.Height) { }
 
@@ -110,6 +128,12 @@ public class TextureRegion
     /// <param name="y">The top-left y-coordinate of the region within the texture.</param>
     /// <param name="width">The width, in pixels, of the region.</param>
     /// <param name="height">The height, in pixels, of the region.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="texture"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if <paramref name="texture"/> has been disposed prior.
+    /// </exception>
     public TextureRegion(Texture2D texture, int x, int y, int width, int height)
         : this(texture, null, x, y, width, height) { }
 
@@ -120,6 +144,12 @@ public class TextureRegion
     /// <param name="texture">The texture to create the region from.</param>
     /// <param name="name">The name of the texture region.</param>
     /// <param name="region">The region of the texture to use.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="texture"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if <paramref name="texture"/> has been disposed prior.
+    /// </exception>
     public TextureRegion(Texture2D texture, string name, Rectangle region)
         : this(texture, name, region.X, region.Y, region.Width, region.Height) { }
 
@@ -133,6 +163,12 @@ public class TextureRegion
     /// <param name="y">The top-left y-coordinate of the region within the texture.</param>
     /// <param name="width">The width, in pixels, of the region.</param>
     /// <param name="height">The height, in pixels, of the region.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="texture"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if <paramref name="texture"/> has been disposed prior.
+    /// </exception>
     public TextureRegion(Texture2D texture, string name, int x, int y, int width, int height)
     {
         ArgumentNullException.ThrowIfNull(texture);

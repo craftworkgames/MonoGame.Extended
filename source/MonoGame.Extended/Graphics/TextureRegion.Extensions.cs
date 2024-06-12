@@ -21,6 +21,9 @@ public static class TextureRegionExtensions
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="textureRegion"/> is <see langword="null"/>.
     /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
+    /// </exception>
     public static TextureRegion GetSubregion(this TextureRegion textureRegion, Rectangle region) =>
         textureRegion.GetSubregion(null, region.X, region.Y, region.Width, region.Height);
 
@@ -33,6 +36,9 @@ public static class TextureRegionExtensions
     /// <returns>A new <see cref="TextureRegion"/> representing the specified subregion.</returns>
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="textureRegion"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
     /// </exception>
     public static TextureRegion GetSubregion(this TextureRegion textureRegion, string name, Rectangle region) =>
         textureRegion.GetSubregion(name, region.X, region.Y, region.Width, region.Height);
@@ -49,6 +55,9 @@ public static class TextureRegionExtensions
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="textureRegion"/> is <see langword="null"/>.
     /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
+    /// </exception>
     public static TextureRegion GetSubregion(this TextureRegion textureRegion, int x, int y, int width, int height) =>
         textureRegion.GetSubregion(null, x, y, width, height);
 
@@ -64,6 +73,9 @@ public static class TextureRegionExtensions
     /// <returns>A new <see cref="TextureRegion"/> representing the specified subregion.</returns>
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="textureRegion"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
     /// </exception>
     public static TextureRegion GetSubregion(this TextureRegion textureRegion, string name, int x, int y, int width, int height)
     {
