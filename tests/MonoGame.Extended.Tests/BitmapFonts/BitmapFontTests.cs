@@ -79,7 +79,7 @@ namespace MonoGame.Extended.Tests.BitmapFonts
 
         private static BitmapFont CreateTestFont()
         {
-            var textureRegion = new TextureRegion(null, x: 219, y: 61, width: 16, height: 18);
+            var textureRegion = new TextureRegion("Test Font", x: 219, y: 61, width: 16, height: 18);
             var regions = new[]
             {
                 // extracted from 'Impact' font. 'x' is particularly interesting because it has a negative x offset

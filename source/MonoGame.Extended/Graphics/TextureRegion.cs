@@ -196,6 +196,26 @@ public class TextureRegion
         LeftUV = Bounds.Left / (float)texture.Width;
     }
 
+    //  Used for unit tests only
+    internal TextureRegion(string name, Rectangle bounds) : this(name, bounds.X, bounds.Y, bounds.Width, bounds.Height) { }
+
+    //  Used for unit tests only
+    internal TextureRegion(string name, int x, int y, int width, int height)
+    {
+        Name = name;
+        Texture = null;
+        X = x;
+        Y = y;
+        Width = width;
+        Height = height;
+        Bounds = new Rectangle(x, y, width, height);
+        Size = new Size(width, height);
+        TopUV = Bounds.Top / 1.0f;
+        RightUV = Bounds.Right / 1.0f;
+        BottomUV = Bounds.Bottom / 1.0f;
+        LeftUV = Bounds.Left / 1.0f;
+    }
+
     /// <inheritdoc/>
     public override string ToString()
     {
