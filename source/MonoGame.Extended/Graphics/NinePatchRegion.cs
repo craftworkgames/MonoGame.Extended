@@ -5,6 +5,16 @@ namespace MonoGame.Extended.Graphics
 {
     public class NinePatchRegion : TextureRegion
     {
+        public const int TopLeft = 0;
+        public const int TopMiddle = 1;
+        public const int TopRight = 2;
+        public const int MiddleLeft = 3;
+        public const int Middle = 4;
+        public const int MiddleRight = 5;
+        public const int BottomLeft = 6;
+        public const int BottomMiddle = 7;
+        public const int BottomRight = 8;
+
         public Rectangle[] SourcePatches { get; } = new Rectangle[9];
         public Thickness Padding { get; }
         public int LeftPadding => Padding.Left;
@@ -38,16 +48,6 @@ namespace MonoGame.Extended.Graphics
             : this(new TextureRegion(texture), thickness)
         {
         }
-
-        public const int TopLeft = 0;
-        public const int TopMiddle = 1;
-        public const int TopRight = 2;
-        public const int MiddleLeft = 3;
-        public const int Middle = 4;
-        public const int MiddleRight = 5;
-        public const int BottomLeft = 6;
-        public const int BottomMiddle = 7;
-        public const int BottomRight = 8;
 
         private readonly Rectangle[] _destinationPatches = new Rectangle[9];
 
