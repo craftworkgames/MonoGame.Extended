@@ -15,11 +15,11 @@ namespace MonoGame.Extended.Serialization
         public TextureRegionService()
         {
             TextureAtlases = new List<TextureAtlas>();
-            NinePatches = new List<NinePatchRegion>();
+            NinePatches = new List<NinePatch>();
         }
 
         public IList<TextureAtlas> TextureAtlases { get; }
-        public IList<NinePatchRegion> NinePatches { get; }
+        public IList<NinePatch> NinePatches { get; }
 
         public TextureRegion GetTextureRegion(string name)
         {

@@ -37,7 +37,7 @@ namespace MonoGame.Extended.TextureAtlases
 
         public static void Draw(this SpriteBatch spriteBatch, TextureRegion textureRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
         {
-            var ninePatchRegion = textureRegion as NinePatchRegion;
+            var ninePatchRegion = textureRegion as NinePatch;
 
             if (ninePatchRegion != null)
                 Draw(spriteBatch, ninePatchRegion, destinationRectangle, color, clippingRectangle);
@@ -45,7 +45,7 @@ namespace MonoGame.Extended.TextureAtlases
                 Draw(spriteBatch, textureRegion.Texture, textureRegion.Bounds, destinationRectangle, color, clippingRectangle);
         }
         
-        public static void Draw(this SpriteBatch spriteBatch, NinePatchRegion ninePatchRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
+        public static void Draw(this SpriteBatch spriteBatch, NinePatch ninePatchRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
         {
             var destinationPatches = ninePatchRegion.CreatePatches(destinationRectangle);
             var sourcePatches = ninePatchRegion.SourcePatches;

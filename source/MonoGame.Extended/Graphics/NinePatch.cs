@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics
 {
-    public class NinePatchRegion : TextureRegion
+    public class NinePatch
     {
         public const int TopLeft = 0;
         public const int TopMiddle = 1;
@@ -15,6 +15,8 @@ namespace MonoGame.Extended.Graphics
         public const int BottomMiddle = 7;
         public const int BottomRight = 8;
 
+        private TextureRegion _patches;
+
         public Rectangle[] SourcePatches { get; } = new Rectangle[9];
         public Thickness Padding { get; }
         public int LeftPadding => Padding.Left;
@@ -22,29 +24,34 @@ namespace MonoGame.Extended.Graphics
         public int RightPadding => Padding.Right;
         public int BottomPadding => Padding.Bottom;
 
-        public NinePatchRegion(TextureRegion textureRegion, Thickness padding)
+        public NinePatch(TextureRegion[] patches)
+        {
+
+        }
+
+        public NinePatch(TextureRegion textureRegion, Thickness padding)
             : base(textureRegion.Texture, textureRegion.Name, textureRegion.X, textureRegion.Y, textureRegion.Width, textureRegion.Height)
         {
             Padding = padding;
             CachePatches(textureRegion.Bounds, SourcePatches);
         }
 
-        public NinePatchRegion(TextureRegion textureRegion, int padding)
+        public NinePatch(TextureRegion textureRegion, int padding)
             : this(textureRegion, padding, padding, padding, padding)
         {
         }
 
-        public NinePatchRegion(TextureRegion textureRegion, int leftRightPadding, int topBottomPadding)
+        public NinePatch(TextureRegion textureRegion, int leftRightPadding, int topBottomPadding)
             : this(textureRegion, leftRightPadding, topBottomPadding, leftRightPadding, topBottomPadding)
         {
         }
 
-        public NinePatchRegion(TextureRegion textureRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
+        public NinePatch(TextureRegion textureRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
             : this(textureRegion, new Thickness(leftPadding, topPadding, rightPadding, bottomPadding))
         {
         }
 
-        public NinePatchRegion(Texture2D texture, Thickness thickness)
+        public NinePatch(Texture2D texture, Thickness thickness)
             : this(new TextureRegion(texture), thickness)
         {
         }

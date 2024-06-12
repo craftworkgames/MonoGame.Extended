@@ -129,7 +129,7 @@ namespace MonoGame.Extended.TextureAtlases
             if (_regionsByName.ContainsKey(name))
                 throw new InvalidOperationException($"Region {name} already exists in the texture atlas");
 
-            var region = new TextureRegion(Texture, name, x, y, width, height);
+            var region = new TextureRegion(name, Texture, x, y, width, height);
             AddRegion(region);
             return region;
         }
@@ -144,13 +144,13 @@ namespace MonoGame.Extended.TextureAtlases
         /// <param name="height">Height of the texture region.</param>
         /// <param name="thickness">Thickness of the nine patch region.</param>
         /// <returns>Created texture region.</returns>
-        public NinePatchRegion CreateNinePatchRegion(string name, int x, int y, int width, int height, Thickness thickness)
+        public NinePatch CreateNinePatchRegion(string name, int x, int y, int width, int height, Thickness thickness)
         {
             if (_regionsByName.ContainsKey(name))
                 throw new InvalidOperationException($"Region {name} already exists in the texture atlas");
 
-            var textureRegion = new TextureRegion(Texture, name, x, y, width, height);
-            var ninePatchRegion = new NinePatchRegion(textureRegion, thickness);
+            var textureRegion = new TextureRegion(name, Texture, x, y, width, height);
+            var ninePatchRegion = new NinePatch(textureRegion, thickness);
             AddRegion(ninePatchRegion);
             return ninePatchRegion;
         }
@@ -206,7 +206,7 @@ namespace MonoGame.Extended.TextureAtlases
 
         /// <summary>
         /// Gets a texture region from the <see cref="TextureAtlas" /> of a specified type.
-        /// This is can be useful if the atlas contains <see cref="NinePatchRegion"/>'s.
+        /// This is can be useful if the atlas contains <see cref="NinePatch"/>'s.
         /// </summary>
         /// <typeparam name="T">Type of the region to get</typeparam>
         /// <param name="name">Name of the region to get</param>

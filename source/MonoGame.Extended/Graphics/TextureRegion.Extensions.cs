@@ -89,4 +89,71 @@ public static class TextureRegionExtensions
         Rectangle region = textureRegion.Bounds.GetRelativeRectangle(x, y, width, height);
         return new TextureRegion(textureRegion.Texture, name, region);
     }
+
+    /// <summary>
+    /// Creates a nine-patch from the specified texture region with the specified padding.
+    /// </summary>
+    /// <param name="textureRegion">The texture region to create the nine-patch from.</param>
+    /// <param name="padding">The padding to apply to each side of the nine-patch.</param>
+    /// <returns>A new <see cref="NinePatch"/> representing the created nine-patch.</returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="textureRegion"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
+    /// </exception>
+    public static NinePatch CreateNinePatch(this TextureRegion textureRegion, Thickness padding) =>
+        textureRegion.CreateNinePatch(padding.Left, padding.Top, padding.Right, padding.Bottom);
+
+    /// <summary>
+    /// Creates a nine-patch from the specified texture region with uniform padding.
+    /// </summary>
+    /// <param name="textureRegion">The texture region to create the nine-patch from.</param>
+    /// <param name="padding">The padding to apply uniformly to all sides of the nine-patch.</param>
+    /// <returns>A new <see cref="NinePatch"/> representing the created nine-patch.</returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="textureRegion"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
+    /// </exception>
+    public static NinePatch CreateNinePatch(this TextureRegion textureRegion, int padding) =>
+        textureRegion.CreateNinePatch(padding, padding, padding, padding);
+
+    /// <summary>
+    /// Creates a nine-patch from the specified texture region with non-uniform padding.
+    /// </summary>
+    /// <param name="textureRegion">The texture region to create the nine-patch from.</param>
+    /// <param name="leftPadding">The padding on the left side of the nine-patch.</param>
+    /// <param name="topPadding">The padding on the top side of the nine-patch.</param>
+    /// <param name="rightPadding">The padding on the right side of the nine-patch.</param>
+    /// <param name="bottomPadding">The padding on the bottom side of the nine-patch.</param>
+    /// <returns>A new <see cref="NinePatch"/> representing the created nine-patch.</returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="textureRegion"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
+    /// </exception>
+    public static NinePatch CreateNinePatch(this TextureRegion textureRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
+    {
+        TextureRegion[] patches = new TextureRegion[9];
+
+        int middleWidth = textureRegion.Width - leftPadding - rightPadding;
+        int middleHeight = textureRegion.Height - topPadding - bottomPadding;
+
+        patches[NinePatch.TopLeft] = textureRegion.GetSubregion(0, 0, leftPadding, topPadding);
+        patches[NinePatch.TopMiddle] = textureRegion.GetSubregion(leftPadding, 0, middleWidth, topPadding);
+        patches[NinePatch.TopRight] = textureRegion.GetSubregion(middleWidth, 0, rightPadding, topPadding);
+
+        patches[NinePatch.MiddleLeft] = textureRegion.GetSubregion(0, topPadding, leftPadding, middleHeight);
+        patches[NinePatch.Middle] = textureRegion.GetSubregion(leftPadding, topPadding, middleWidth, middleHeight);
+        patches[NinePatch.MiddleRight] = textureRegion.GetSubregion(middleWidth, topPadding, rightPadding, middleHeight);
+
+        patches[NinePatch.BottomLeft] = textureRegion.GetSubregion(0, middleHeight, leftPadding, bottomPadding);
+        patches[NinePatch.BottomMiddle] = textureRegion.GetSubregion(leftPadding, middleHeight, middleWidth, bottomPadding);
+        patches[NinePatch.BottomRight] = textureRegion.GetSubregion(middleWidth, middleHeight, rightPadding, bottomPadding);
+
+        return new NinePatch(patches);
+    }
 }
