@@ -2,7 +2,7 @@ using MonoGame.Extended.Serialization;
 
 namespace MonoGame.Extended.Gui.Serialization
 {
-    public class GuiNinePatchRegion2DJsonConverter : NinePatchRegion2DJsonConverter
+    public class GuiNinePatchRegion2DJsonConverter : NinePatchJsonConverter
     {
         private readonly IGuiTextureRegionService _textureRegionService;
 
