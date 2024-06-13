@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.BitmapFonts
 {
@@ -43,7 +43,7 @@ namespace MonoGame.Extended.BitmapFonts
                 if (glyph.Character == null)
                     continue;
                 var characterOrigin = position - glyph.Position + origin;
-                spriteBatch.Draw(glyph.Character.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
+                spriteBatch.DrawTextureRegion(glyph.Character.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
             }
         }
 
@@ -61,7 +61,7 @@ namespace MonoGame.Extended.BitmapFonts
                 if (glyph.Character == null)
                     continue;
                 var characterOrigin = position - glyph.Position + origin;
-                spriteBatch.Draw(glyph.Character.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
+                spriteBatch.DrawTextureRegion(glyph.Character.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
             }
         }
 
