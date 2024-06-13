@@ -1,91 +1,115 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+// Copyright (c) Craftwork Games. All rights reserved.
+// Licensed under the MIT license.
+// See LICENSE file in the project root for full license information.
 
-namespace MonoGame.Extended.Graphics
+using System;
+
+namespace MonoGame.Extended.Graphics;
+
+/// <summary>
+/// Represents a nine-patch texture.
+/// </summary>
+/// <remarks>
+///     <para>
+///         A nine-patch texture is a specialized texture object used for rendering scalable graphical assets,
+///         particularly user interface (UI) elements.It consists of a single texture region subdivided into nine
+///         distinct subregions.  When rendered, the four corner subregions remain unscaled, preserving their original
+///         dimensions. The top and bottom edge subregions are stretched horizontally, while the left and right edge
+///         subregions are stretched vertically.  The central subregion is scaled along both axes to fill the desired
+///         dimensions.
+///     </para>
+///     <para>
+///         This approach is highly beneficial for UI components that require dynamic scaling, such as containers for
+///         menus, dialog boxes, or other resizable elements.  By leveraging the nine-patch texture, these graphical
+///         assets can be seamlessly scaled to different sizes while maintaining their visual integrity and preventing
+///         undesirable distortions or stretching artifacts.
+///     </para>
+/// </remarks>
+public class NinePatch
 {
-    public class NinePatch
+    /// <summary>The index representing the top-left patch.</summary>
+    public const int TopLeft = 0;
+
+    /// <summary>The index representing the top-middle patch.</summary>
+    public const int TopMiddle = 1;
+
+    /// <summary>The index representing the top-right patch.</summary>
+    public const int TopRight = 2;
+
+    /// <summary>The index representing the middle-left patch.</summary>
+    public const int MiddleLeft = 3;
+
+    /// <summary>The index representing the middle patch.</summary>
+    public const int Middle = 4;
+
+    /// <summary>The index representing the middle-right patch.</summary>
+    public const int MiddleRight = 5;
+
+    /// <summary>The index representing the bottom-left patch.</summary>
+    public const int BottomLeft = 6;
+
+    /// <summary>The index representing the bottom-middle patch.</summary>
+    public const int BottomMiddle = 7;
+
+    /// <summary>The index representing the bottom-right patch.</summary>
+    public const int BottomRight = 8;
+
+    private readonly TextureRegion[] _patches;
+
+    /// <summary>
+    /// Gets the name assigned to this nine-patch.
+    /// </summary>
+    public string Name { get; }
+
+    /// <summary>
+    /// Gets a read-only span of the texture regions that make up the nine-patch.
+    /// </summary>
+    /// <remarks>
+    /// Elements are in order of top-left, top-middle, top-right, middle-left, middle, middle-right, bottom-left,
+    /// bottom-middle, and bottom-right.
+    /// </remarks>
+    public ReadOnlySpan<TextureRegion> Patches => _patches;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NinePatch"/> class with the specified patches.
+    /// </summary>
+    /// <remarks>
+    /// The <paramref name="patches"/> array should contain the elements in the order of top-left, top-middle,
+    /// top-right, middle-left, middle, middle-right, bottom-left, bottom-middle, and bottom-right.
+    /// </remarks>
+    /// <param name="patches">An array of nine <see cref="TextureRegion"/> objects.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="patches"/> is null.</exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown if <paramref name="patches"/> does not contain exactly nine elements.
+    /// </exception>
+    public NinePatch(TextureRegion[] patches) : this(patches, null) { }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NinePatch"/> class with the specified patches and name.
+    /// </summary>
+    /// <param name="patches">An array of nine <see cref="TextureRegion"/> objects.</param>
+    /// <param name="name">
+    /// The name of the nine-patch. If null or empty, a default name will be generated based on the texture name of the
+    /// top-left patch.
+    /// </param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="patches"/> is null.</exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown if <paramref name="patches"/> does not contain exactly nine elements.
+    /// </exception>
+    public NinePatch(TextureRegion[] patches, string name)
     {
-        public const int TopLeft = 0;
-        public const int TopMiddle = 1;
-        public const int TopRight = 2;
-        public const int MiddleLeft = 3;
-        public const int Middle = 4;
-        public const int MiddleRight = 5;
-        public const int BottomLeft = 6;
-        public const int BottomMiddle = 7;
-        public const int BottomRight = 8;
-
-        private TextureRegion _patches;
-
-        public Rectangle[] SourcePatches { get; } = new Rectangle[9];
-        public Thickness Padding { get; }
-        public int LeftPadding => Padding.Left;
-        public int TopPadding => Padding.Top;
-        public int RightPadding => Padding.Right;
-        public int BottomPadding => Padding.Bottom;
-
-        public NinePatch(TextureRegion[] patches)
+        ArgumentNullException.ThrowIfNull(patches);
+        if (patches.Length != 9)
         {
-
+            throw new ArgumentException($"{nameof(patches)} must contain exactly 9 elements.", nameof(patches));
         }
 
-        public NinePatch(TextureRegion textureRegion, Thickness padding)
-            : base(textureRegion.Texture, textureRegion.Name, textureRegion.X, textureRegion.Y, textureRegion.Width, textureRegion.Height)
+        if (string.IsNullOrEmpty(name))
         {
-            Padding = padding;
-            CachePatches(textureRegion.Bounds, SourcePatches);
+            name = $"{patches[0].Texture.Name}-nine-patch";
         }
 
-        public NinePatch(TextureRegion textureRegion, int padding)
-            : this(textureRegion, padding, padding, padding, padding)
-        {
-        }
-
-        public NinePatch(TextureRegion textureRegion, int leftRightPadding, int topBottomPadding)
-            : this(textureRegion, leftRightPadding, topBottomPadding, leftRightPadding, topBottomPadding)
-        {
-        }
-
-        public NinePatch(TextureRegion textureRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
-            : this(textureRegion, new Thickness(leftPadding, topPadding, rightPadding, bottomPadding))
-        {
-        }
-
-        public NinePatch(Texture2D texture, Thickness thickness)
-            : this(new TextureRegion(texture), thickness)
-        {
-        }
-
-        private readonly Rectangle[] _destinationPatches = new Rectangle[9];
-
-        public Rectangle[] CreatePatches(Rectangle rectangle)
-        {
-            CachePatches(rectangle, _destinationPatches);
-            return _destinationPatches;
-        }
-
-        private void CachePatches(Rectangle sourceRectangle, Rectangle[] patchCache)
-        {
-            var x = sourceRectangle.X;
-            var y = sourceRectangle.Y;
-            var w = sourceRectangle.Width;
-            var h = sourceRectangle.Height;
-            var middleWidth = w - LeftPadding - RightPadding;
-            var middleHeight = h - TopPadding - BottomPadding;
-            var bottomY = y + h - BottomPadding;
-            var rightX = x + w - RightPadding;
-            var leftX = x + LeftPadding;
-            var topY = y + TopPadding;
-
-            patchCache[TopLeft] = new Rectangle(x, y, LeftPadding, TopPadding);
-            patchCache[TopMiddle] = new Rectangle(leftX, y, middleWidth, TopPadding);
-            patchCache[TopRight] = new Rectangle(rightX, y, RightPadding, TopPadding);
-            patchCache[MiddleLeft] = new Rectangle(x, topY, LeftPadding, middleHeight);
-            patchCache[Middle] = new Rectangle(leftX, topY, middleWidth, middleHeight);
-            patchCache[MiddleRight] = new Rectangle(rightX, topY, RightPadding, middleHeight);
-            patchCache[BottomLeft] = new Rectangle(x, bottomY, LeftPadding, BottomPadding);
-            patchCache[BottomMiddle] = new Rectangle(leftX, bottomY, middleWidth, BottomPadding);
-            patchCache[BottomRight] = new Rectangle(rightX, bottomY, RightPadding, BottomPadding);
-        }
+        _patches = patches;
+        Name = name;
     }
 }
