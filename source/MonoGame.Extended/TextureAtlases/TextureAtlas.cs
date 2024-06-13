@@ -174,32 +174,21 @@ namespace MonoGame.Extended.TextureAtlases
         }
 
         /// <summary>
-        ///     Gets a <see cref="TextureRegion" /> from the <see cref="TextureAtlas" />' list.
+        /// Gets a <see cref="TextureRegion" /> from the <see cref="TextureAtlas" />' list.
         /// </summary>
         /// <param name="name">Name of the <see cref="TextureRegion" /> to get.</param>
         /// <returns>The <see cref="TextureRegion" />.</returns>
-        public TextureRegion GetRegion(string name)
-        {
-            return GetRegion<TextureRegion>(name);
-        }
+        /// <exception cref="ArgumentNullException">
+        /// Throw if <paramref name="name"/> is <see langword="null"/> or an empty string.
+        /// </exception>
+        /// <exception cref="KeyNotFoundException">
+        /// Thrown if this atlas does not contain a texture region with name that matches <paramref name="name"/>.
+        /// </exception>
+        public TextureRegion GetRegion(string name) => _regionsByName[name];
+
 
         /// <summary>
-        /// Gets a texture region from the <see cref="TextureAtlas" /> of a specified type.
-        /// This is can be useful if the atlas contains <see cref="NinePatch"/>'s.
-        /// </summary>
-        /// <typeparam name="T">Type of the region to get</typeparam>
-        /// <param name="name">Name of the region to get</param>
-        /// <returns>The texture region</returns>
-        public T GetRegion<T>(string name) where T : TextureRegion
-        {
-            if (_regionsByName.TryGetValue(name, out var region))
-                return (T)region;
-
-            throw new KeyNotFoundException(name);
-        }
-
-        /// <summary>
-        ///     Creates a new <see cref="TextureAtlas" /> and populates it with a grid of <see cref="TextureRegion" />.
+        /// Creates a new <see cref="TextureAtlas" /> and populates it with a grid of <see cref="TextureRegion" />.
         /// </summary>
         /// <param name="name">The name of this texture atlas</param>
         /// <param name="texture">Source <see cref="Texture2D" /> image used to draw on screen</param>
