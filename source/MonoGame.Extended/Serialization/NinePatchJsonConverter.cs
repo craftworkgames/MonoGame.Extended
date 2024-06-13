@@ -8,15 +8,15 @@ namespace MonoGame.Extended.Serialization;
 /// <summary>
 /// Converts a <see cref="NinePatch"/> value to or from JSON.
 /// </summary>
-public class NinePatchRegion2DJsonConverter : JsonConverter<NinePatch>
+public class NinePatchJsonConverter : JsonConverter<NinePatch>
 {
     private readonly ITextureRegionService _textureRegionService;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="NinePatchRegion2DJsonConverter"/> class.
+    /// Initializes a new instance of the <see cref="NinePatchJsonConverter"/> class.
     /// </summary>
     /// <param name="textureRegionService">The texture region service used to retrieve texture regions.</param>
-    public NinePatchRegion2DJsonConverter(ITextureRegionService textureRegionService)
+    public NinePatchJsonConverter(ITextureRegionService textureRegionService)
     {
         _textureRegionService = textureRegionService;
     }
@@ -68,8 +68,7 @@ public class NinePatchRegion2DJsonConverter : JsonConverter<NinePatch>
 
         var thickness = Thickness.Parse(padding);
         var region = _textureRegionService.GetTextureRegion(regionName);
-
-        return new NinePatch(region, thickness.Left, thickness.Top, thickness.Right, thickness.Bottom);
+        return region.CreateNinePatch(thickness);
     }
 
     /// <inheritdoc />
