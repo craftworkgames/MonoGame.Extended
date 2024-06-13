@@ -135,27 +135,6 @@ namespace MonoGame.Extended.TextureAtlases
         }
 
         /// <summary>
-        ///     Creates a new nine patch texture region and adds it to the list of the <see cref="TextureAtlas" />' regions.
-        /// </summary>
-        /// <param name="name">Name of the texture region.</param>
-        /// <param name="x">X coordinate of the region's top left corner.</param>
-        /// <param name="y">Y coordinate of the region's top left corner.</param>
-        /// <param name="width">Width of the texture region.</param>
-        /// <param name="height">Height of the texture region.</param>
-        /// <param name="thickness">Thickness of the nine patch region.</param>
-        /// <returns>Created texture region.</returns>
-        public NinePatch CreateNinePatchRegion(string name, int x, int y, int width, int height, Thickness thickness)
-        {
-            if (_regionsByName.ContainsKey(name))
-                throw new InvalidOperationException($"Region {name} already exists in the texture atlas");
-
-            var textureRegion = new TextureRegion(name, Texture, x, y, width, height);
-            var ninePatchRegion = new NinePatch(textureRegion, thickness);
-            AddRegion(ninePatchRegion);
-            return ninePatchRegion;
-        }
-
-        /// <summary>
         ///     Removes a texture region from the <see cref="TextureAtlas" />
         /// </summary>
         /// <param name="index">An index of the <see cref="TextureRegion" /> in <see cref="Region" /> to remove</param>
