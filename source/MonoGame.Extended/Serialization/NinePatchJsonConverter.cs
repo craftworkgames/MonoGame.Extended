@@ -1,34 +1,34 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Serialization;
 
 /// <summary>
-/// Converts a <see cref="NinePatchRegion2D"/> value to or from JSON.
+/// Converts a <see cref="NinePatch"/> value to or from JSON.
 /// </summary>
-public class NinePatchRegion2DJsonConverter : JsonConverter<NinePatchRegion2D>
+public class NinePatchJsonConverter : JsonConverter<NinePatch>
 {
     private readonly ITextureRegionService _textureRegionService;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="NinePatchRegion2DJsonConverter"/> class.
+    /// Initializes a new instance of the <see cref="NinePatchJsonConverter"/> class.
     /// </summary>
     /// <param name="textureRegionService">The texture region service used to retrieve texture regions.</param>
-    public NinePatchRegion2DJsonConverter(ITextureRegionService textureRegionService)
+    public NinePatchJsonConverter(ITextureRegionService textureRegionService)
     {
         _textureRegionService = textureRegionService;
     }
 
     /// <inheritdoc />
-    public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(NinePatchRegion2D);
+    public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(NinePatch);
 
     /// <inheritdoc />
     /// <exception cref="JsonException">
-    /// Thrown if the JSON property does not contain a properly formatted <see cref="NinePatchRegion2D"/> value
+    /// Thrown if the JSON property does not contain a properly formatted <see cref="NinePatch"/> value
     /// </exception>
-    public override NinePatchRegion2D Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override NinePatch Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType != JsonTokenType.StartObject)
         {
@@ -68,15 +68,14 @@ public class NinePatchRegion2DJsonConverter : JsonConverter<NinePatchRegion2D>
 
         var thickness = Thickness.Parse(padding);
         var region = _textureRegionService.GetTextureRegion(regionName);
-
-        return new NinePatchRegion2D(region, thickness.Left, thickness.Top, thickness.Right, thickness.Bottom);
+        return region.CreateNinePatch(thickness);
     }
 
     /// <inheritdoc />
     /// <exception cref="ArgumentNullException">
     /// Throw if <paramref name="writer"/> is <see langword="null"/>.
     /// </exception>
-    public override void Write(Utf8JsonWriter writer, NinePatchRegion2D value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, NinePatch value, JsonSerializerOptions options)
     {
         ArgumentNullException.ThrowIfNull(writer);
 

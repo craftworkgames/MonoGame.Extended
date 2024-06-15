@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using Xunit;
@@ -20,8 +21,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [InlineData(1, 5f)]
         public void Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Not_Complete(int expectedTextureRegionIndex, float time)
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -48,8 +49,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [Fact]
         public void Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Not_Complete_Over_Multiple_Updates()
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -100,8 +101,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [InlineData(1, 1.9f)]
         public void Non_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Not_Complete(int expectedTextureRegionIndex, float time)
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -131,8 +132,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [InlineData(1, 4f)]
         public void Non_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Complete_When_AnimationDuration_Is_Reached(int expectedTextureRegionIndex, float time)
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -159,8 +160,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [Fact]
         public void Non_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Complete_When_AnimationDuration_Is_Reached_Over_Multiple_Updates()
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -218,8 +219,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [InlineData(0, 5f)]
         public void Reversed_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Not_Complete(int expectedTextureRegionIndex, float time)
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -247,8 +248,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [Fact]
         public void Reversed_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Not_Complete_Over_Multiple_Updates()
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -300,8 +301,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [InlineData(0, 1.9f)]
         public void Reversed_Non_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Not_Complete(int expectedTextureRegionIndex, float time)
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -332,8 +333,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [InlineData(0, 4f)]
         public void Reversed_Non_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Complete_When_AnimationDuration_Is_Reached(int expectedTextureRegionIndex, float time)
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -361,8 +362,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [Fact]
         public void Reversed_Non_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Complete_When_AnimationDuration_Is_Reached_Over_Multiple_Updates()
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -424,8 +425,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [InlineData(0, 8f)]
         public void PingPong_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Not_Complete(int expectedTextureRegionIndex, float time)
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -454,8 +455,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [Fact]
         public void PingPong_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Not_Complete_Over_Multiple_Updates()
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -523,8 +524,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [InlineData(0, 2.9f)]
         public void PingPong_Non_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Not_Complete(int expectedTextureRegionIndex, float time)
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -556,8 +557,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [InlineData(0, 5f)]
         public void PingPong_Non_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Complete_When_AnimationDuration_Is_Reached(int expectedTextureRegionIndex, float time)
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -586,9 +587,9 @@ namespace MonoGame.Extended.Tests.Sprites
         [Fact]
         public void PingPong_Non_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Complete_When_AnimationDuration_Is_Reached_Over_Multiple_Updates()
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
-            var textureRegion2D3 = new TextureRegion2D("Region 3", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
+            var textureRegion2D3 = new Texture2DRegion("Region 3", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2, textureRegion2D3 };
 
@@ -673,8 +674,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [InlineData(1, 8f)]
         public void Reversed_PingPong_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Not_Complete(int expectedTextureRegionIndex, float time)
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -703,8 +704,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [Fact]
         public void Reversed_PingPong_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Not_Complete_Over_Multiple_Updates()
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -772,8 +773,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [InlineData(1, 2.9f)]
         public void Reversed_PingPong_Non_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Not_Complete(int expectedTextureRegionIndex, float time)
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -805,8 +806,8 @@ namespace MonoGame.Extended.Tests.Sprites
         [InlineData(1, 5f)]
         public void Reversed_PingPong_Non_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Complete_When_AnimationDuration_Is_Reached(int expectedTextureRegionIndex, float time)
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2 };
 
@@ -835,9 +836,9 @@ namespace MonoGame.Extended.Tests.Sprites
         [Fact]
         public void Reversed_PingPong_Non_Looping_SpriteSheetAnimation_Should_Return_Correct_Frame_And_Complete_When_AnimationDuration_Is_Reached_Over_Multiple_Updates()
         {
-            var textureRegion2D1 = new TextureRegion2D("Region 1", null, new Rectangle());
-            var textureRegion2D2 = new TextureRegion2D("Region 2", null, new Rectangle());
-            var textureRegion2D3 = new TextureRegion2D("Region 3", null, new Rectangle());
+            var textureRegion2D1 = new Texture2DRegion("Region 1", new Rectangle());
+            var textureRegion2D2 = new Texture2DRegion("Region 2", new Rectangle());
+            var textureRegion2D3 = new Texture2DRegion("Region 3", new Rectangle());
 
             var textureRegions = new[] { textureRegion2D1, textureRegion2D2, textureRegion2D3 };
 

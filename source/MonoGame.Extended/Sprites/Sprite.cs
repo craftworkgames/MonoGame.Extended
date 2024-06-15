@@ -2,15 +2,15 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Sprites
 {
     public class Sprite : IColorable
     {
-        private TextureRegion2D _textureRegion;
+        private Texture2DRegion _textureRegion;
 
-        public Sprite(TextureRegion2D textureRegion)
+        public Sprite(Texture2DRegion textureRegion)
         {
             if (textureRegion == null) throw new ArgumentNullException(nameof(textureRegion));
 
@@ -25,7 +25,7 @@ namespace MonoGame.Extended.Sprites
         }
 
         public Sprite(Texture2D texture)
-            : this(new TextureRegion2D(texture))
+            : this(new Texture2DRegion(texture))
         {
         }
 
@@ -58,7 +58,7 @@ namespace MonoGame.Extended.Sprites
         public Vector2 Origin { get; set; }
         public SpriteEffects Effect { get; set; }
 
-        public TextureRegion2D TextureRegion
+        public Texture2DRegion TextureRegion
         {
             get => _textureRegion;
             set

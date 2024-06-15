@@ -1,8 +1,8 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Input.InputListeners;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Controls
 {
@@ -13,7 +13,7 @@ namespace MonoGame.Extended.Gui.Controls
         }
         
         public bool IsOpen { get; set; }
-        public TextureRegion2D DropDownRegion { get; set; }
+        public Texture2DRegion DropDownRegion { get; set; }
         public Color DropDownColor { get; set; } = Color.White;
 
         public override bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args)

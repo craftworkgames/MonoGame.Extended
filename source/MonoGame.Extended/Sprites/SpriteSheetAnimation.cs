@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Sprites
 {
@@ -8,13 +8,13 @@ namespace MonoGame.Extended.Sprites
     {
         public const float DefaultFrameDuration = 0.2f;
 
-        public SpriteSheetAnimation(string name, TextureAtlas textureAtlas, float frameDuration = DefaultFrameDuration,
+        public SpriteSheetAnimation(string name, Texture2DAtlas textureAtlas, float frameDuration = DefaultFrameDuration,
             bool isLooping = true, bool isReversed = false, bool isPingPong = false)
-            : this(name, textureAtlas.Regions.ToArray(), frameDuration, isLooping, isReversed, isPingPong)
+            : this(name, textureAtlas.ToArray(), frameDuration, isLooping, isReversed, isPingPong)
         {
         }
 
-        public SpriteSheetAnimation(string name, TextureRegion2D[] keyFrames, float frameDuration = DefaultFrameDuration,
+        public SpriteSheetAnimation(string name, Texture2DRegion[] keyFrames, float frameDuration = DefaultFrameDuration,
             bool isLooping = true, bool isReversed = false, bool isPingPong = false)
             : base(null, false)
         {
@@ -27,13 +27,13 @@ namespace MonoGame.Extended.Sprites
             CurrentFrameIndex = IsReversed ? KeyFrames.Length - 1 : 0;
         }
 
-        public SpriteSheetAnimation(string name, TextureRegion2D[] keyFrames, SpriteSheetAnimationData data)
+        public SpriteSheetAnimation(string name, Texture2DRegion[] keyFrames, SpriteSheetAnimationData data)
             : this(name, keyFrames, data.FrameDuration, data.IsLooping, data.IsReversed, data.IsPingPong)
         {
         }
 
         public string Name { get; }
-        public TextureRegion2D[] KeyFrames { get; }
+        public Texture2DRegion[] KeyFrames { get; }
         public float FrameDuration { get; set; }
         public bool IsLooping { get; set; }
         public bool IsReversed { get; set; }
@@ -44,7 +44,7 @@ namespace MonoGame.Extended.Sprites
             ? (KeyFrames.Length*2 - (IsLooping ? 2 : 1))*FrameDuration
             : KeyFrames.Length*FrameDuration;
 
-        public TextureRegion2D CurrentFrame => KeyFrames[CurrentFrameIndex];
+        public Texture2DRegion CurrentFrame => KeyFrames[CurrentFrameIndex];
         public int CurrentFrameIndex { get; private set; }
 
         public float FramesPerSecond

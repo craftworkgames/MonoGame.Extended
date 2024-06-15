@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
@@ -11,7 +12,7 @@ namespace MonoGame.Extended.Sprites
             Cycles = new Dictionary<string, SpriteSheetAnimationCycle>();
         }
 
-        public TextureAtlas TextureAtlas { get; set; }
+        public Texture2DAtlas TextureAtlas { get; set; }
         public Dictionary<string, SpriteSheetAnimationCycle> Cycles { get; set; }
 
         public SpriteSheetAnimation CreateAnimation(string name)

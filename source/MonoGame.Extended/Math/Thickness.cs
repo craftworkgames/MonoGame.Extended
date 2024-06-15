@@ -90,6 +90,9 @@ namespace MonoGame.Extended
             return FromValues(values);
         }
 
+        public void Deconstruct(out int top, out int right, out int bottom, out int left) =>
+            (top, right, bottom, left) = (Top, Right, Bottom, Left);
+
         public override string ToString()
         {
             if (Left == Right && Top == Bottom)

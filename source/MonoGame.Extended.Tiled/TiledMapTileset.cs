@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Tiled
 {
@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Tiled
         int TileWidth { get; }
         int TileHeight { get; }
         Texture2D Texture { get; }
-        TextureRegion2D GetRegion(int column, int row);
+        Texture2DRegion GetRegion(int column, int row);
     }
 
     public class TiledMapTileset : ITileset
@@ -38,11 +38,11 @@ namespace MonoGame.Extended.Tiled
         public string Name => Texture.Name;
         public Texture2D Texture { get; }
 
-        public TextureRegion2D GetRegion(int column, int row)
+        public Texture2DRegion GetRegion(int column, int row)
         {
             var x = Margin + column * (TileWidth + Spacing);
             var y = Margin + row * (TileHeight + Spacing);
-            return new TextureRegion2D(Texture, x, y, TileWidth, TileHeight);
+            return new Texture2DRegion(Texture, x, y, TileWidth, TileHeight);
         }
 
         public string Type { get; }

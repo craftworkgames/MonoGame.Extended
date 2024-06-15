@@ -34,12 +34,12 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            return "MonoGame.Extended.TextureAtlases.TextureAtlas, MonoGame.Extended";
+            return "MonoGame.Extended.Graphics.Texture2DAtlas, MonoGame.Extended";
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return "MonoGame.Extended.TextureAtlases.TextureAtlasReader, MonoGame.Extended";
+            return "MonoGame.Extended.Content.ContentReaders.Texture2DAtlasReader, MonoGame.Extended";
         }
     }
 }

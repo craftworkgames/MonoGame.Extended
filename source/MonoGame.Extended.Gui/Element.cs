@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.TextureAtlases;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Gui
 {
@@ -30,8 +30,8 @@ namespace MonoGame.Extended.Gui
         public Color BorderColor { get; set; } = Color.White;
         public int BorderThickness { get; set; } = 0;
 
-        private TextureRegion2D _backgroundRegion;
-        public TextureRegion2D BackgroundRegion
+        private Texture2DRegion _backgroundRegion;
+        public Texture2DRegion BackgroundRegion
         {
             get => _backgroundRegion;
             set
