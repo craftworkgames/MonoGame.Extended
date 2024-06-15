@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using MonoGame.Extended.Graphics;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Sprites
 {
@@ -9,9 +8,9 @@ namespace MonoGame.Extended.Sprites
     {
         public const float DefaultFrameDuration = 0.2f;
 
-        public SpriteSheetAnimation(string name, TextureAtlas textureAtlas, float frameDuration = DefaultFrameDuration,
+        public SpriteSheetAnimation(string name, Texture2DAtlas textureAtlas, float frameDuration = DefaultFrameDuration,
             bool isLooping = true, bool isReversed = false, bool isPingPong = false)
-            : this(name, textureAtlas.Regions.ToArray(), frameDuration, isLooping, isReversed, isPingPong)
+            : this(name, textureAtlas.ToArray(), frameDuration, isLooping, isReversed, isPingPong)
         {
         }
 

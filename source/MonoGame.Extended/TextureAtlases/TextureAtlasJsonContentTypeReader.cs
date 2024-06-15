@@ -3,12 +3,13 @@ using System.Text.Json;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Serialization;
 using ContentReaderExtensions = MonoGame.Extended.Content.ContentReaderExtensions;
 
 namespace MonoGame.Extended.TextureAtlases
 {
-    public class TextureAtlasJsonContentTypeReader : JsonContentTypeReader<TextureAtlas>
+    public class TextureAtlasJsonContentTypeReader : JsonContentTypeReader<Texture2DAtlas>
     {
         private static TexturePackerFile Load(ContentReader reader)
         {
@@ -16,12 +17,12 @@ namespace MonoGame.Extended.TextureAtlases
             return JsonSerializer.Deserialize<TexturePackerFile>(json);
         }
 
-        protected override TextureAtlas Read(ContentReader reader, TextureAtlas existingInstance)
+        protected override Texture2DAtlas Read(ContentReader reader, Texture2DAtlas existingInstance)
         {
             var texturePackerFile = Load(reader);
             var assetName = reader.GetRelativeAssetName(texturePackerFile.Metadata.Image);
             var texture = reader.ContentManager.Load<Texture2D>(assetName);
-            var atlas = new TextureAtlas(assetName, texture);
+            var atlas = new Texture2DAtlas(assetName, texture);
 
             var regionCount = texturePackerFile.Regions.Count;
 

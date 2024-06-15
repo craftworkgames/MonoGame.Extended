@@ -5,11 +5,12 @@ using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Serialization;
 
 namespace MonoGame.Extended.TextureAtlases
 {
-    public class TextureAtlasJsonConverter : JsonConverter<TextureAtlas>
+    public class TextureAtlasJsonConverter : JsonConverter<Texture2DAtlas>
     {
         private readonly ContentManager _contentManager;
         private readonly string _path;
@@ -21,9 +22,9 @@ namespace MonoGame.Extended.TextureAtlases
         }
 
         /// <inheritdoc />
-        public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(TextureAtlas);
+        public override bool CanConvert(Type typeToConvert) => typeToConvert == typeof(Texture2DAtlas);
 
-        public override TextureAtlas Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Texture2DAtlas Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if(reader.TokenType == JsonTokenType.String)
             {
@@ -59,12 +60,12 @@ namespace MonoGame.Extended.TextureAtlases
                     else
                         texture = _contentManager.Load<Texture2D>(textureDirectory + "/" + textureName);
                 }
-                return TextureAtlas.Create(resolvedAssetName, texture, metadata.RegionWidth, metadata.RegionHeight);
+                return Texture2DAtlas.Create(resolvedAssetName, texture, metadata.RegionWidth, metadata.RegionHeight);
             }
         }
 
         /// <inheritdoc />
-        public override void Write(Utf8JsonWriter writer, TextureAtlas value, JsonSerializerOptions options) { }
+        public override void Write(Utf8JsonWriter writer, Texture2DAtlas value, JsonSerializerOptions options) { }
 
 
         // ReSharper disable once ClassNeverInstantiated.Local

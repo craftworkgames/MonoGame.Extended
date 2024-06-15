@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using MonoGame.Extended.BitmapFonts;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collections;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Gui.Controls;
 using MonoGame.Extended.Gui.Serialization;
-using MonoGame.Extended.TextureAtlases;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Gui
 {
@@ -20,7 +19,7 @@ namespace MonoGame.Extended.Gui
     {
         public Skin()
         {
-            TextureAtlases = new List<TextureAtlas>();
+            TextureAtlases = new List<Texture2DAtlas>();
             Fonts = new List<BitmapFont>();
             NinePatches = new List<NinePatch>();
             Styles = new KeyedCollection<string, ControlStyle>(s => s.Name ?? s.TargetType.Name);
@@ -30,12 +29,12 @@ namespace MonoGame.Extended.Gui
         public string Name { get; set; }
 
         [JsonPropertyOrder(1)]
-        public IList<TextureAtlas> TextureAtlases { get; set; }
+        public IList<Texture2DAtlas> TextureAtlases { get; set; }
 
         [JsonPropertyOrder(2)]
         public IList<BitmapFont> Fonts { get; set; }
 
-       [JsonPropertyOrder(3)]
+        [JsonPropertyOrder(3)]
         public IList<NinePatch> NinePatches { get; set; }
 
         [JsonPropertyOrder(4)]
@@ -89,7 +88,7 @@ namespace MonoGame.Extended.Gui
 
         public static Skin FromStream(ContentManager contentManager, Stream stream, params Type[] customControlTypes)
         {
-            var options =  GuiJsonSerializerOptionsProvider.GetOptions(contentManager, customControlTypes);
+            var options = GuiJsonSerializerOptionsProvider.GetOptions(contentManager, customControlTypes);
             return JsonSerializer.Deserialize<Skin>(stream, options);
         }
 

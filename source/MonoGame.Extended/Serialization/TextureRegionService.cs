@@ -14,10 +14,10 @@ namespace MonoGame.Extended.Serialization
     {
         public TextureRegionService()
         {
-            TextureAtlases = new List<TextureAtlas>();
+            TextureAtlases = new List<Texture2DAtlas>();
         }
 
-        public IList<TextureAtlas> TextureAtlases { get; }
+        public IList<Texture2DAtlas> TextureAtlases { get; }
 
         public TextureRegion GetTextureRegion(string name)
         {

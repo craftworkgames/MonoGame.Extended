@@ -1,12 +1,12 @@
 using System;
 using System.Text.Json;
 using Microsoft.Xna.Framework.Content;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Serialization;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Gui.Serialization
 {
-    public class GuiTextureAtlasJsonConverter : ContentManagerJsonConverter<TextureAtlas>
+    public class GuiTextureAtlasJsonConverter : ContentManagerJsonConverter<Texture2DAtlas>
     {
         private readonly IGuiTextureRegionService _textureRegionService;
 
@@ -17,7 +17,7 @@ namespace MonoGame.Extended.Gui.Serialization
         }
 
         /// <inheritdoc />
-        public override TextureAtlas Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Texture2DAtlas Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var textureAtlas = base.Read(ref reader, typeToConvert, options);
             if (textureAtlas is not null)
