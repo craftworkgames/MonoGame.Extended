@@ -4,6 +4,7 @@
 
 
 using System;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -13,27 +14,30 @@ public static class SpriteBatchExtensions
 {
     #region ----------------------------NinePatch-----------------------------
     private static readonly Rectangle[] _patchCache = new Rectangle[9];
+    private static Rectangle _rect = default;
 
-    public static void DrawNinePatch(this SpriteBatch spriteBatch, NinePatch ninePatchRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
+    public static void Draw(this SpriteBatch spriteBatch, NinePatch ninePatchRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
     {
-        var destinationPatches = ninePatchRegion.CreatePatches(destinationRectangle);
-        var sourcePatches = ninePatchRegion.SourcePatches;
+        CreateDestinationPatches(ninePatchRegion, destinationRectangle);
+        ReadOnlySpan<TextureRegion> sourcePatches = ninePatchRegion.Patches;
 
-        for (var i = 0; i < sourcePatches.Length; i++)
+        for (int i = 0; i < sourcePatches.Length; i++)
         {
-            var sourcePatch = sourcePatches[i];
-            var destinationPatch = destinationPatches[i];
+            Rectangle source = sourcePatches[i].Bounds;
+            Rectangle destination = _patchCache[i];
 
             if (clippingRectangle.HasValue)
             {
-                sourcePatch = ClipSourceRectangle(sourcePatch, destinationPatch, clippingRectangle.Value);
-                destinationPatch = ClipDestinationRectangle(destinationPatch, clippingRectangle.Value);
-                Draw(spriteBatch, ninePatchRegion.Texture, sourcePatch, destinationPatch, color, clippingRectangle);
+                source = ClipSourceRectangle(source, destination, clippingRectangle.Value);
+                destination = ClipDestinationRectangle(destination, clippingRectangle.Value);
+                Draw(spriteBatch, sourcePatches[i].Texture, source, destination, color, clippingRectangle);
             }
             else
             {
-                if (destinationPatch.Width > 0 && destinationPatch.Height > 0)
-                    spriteBatch.Draw(ninePatchRegion.Texture, sourceRectangle: sourcePatch, destinationRectangle: destinationPatch, color: color);
+                if (destination.Width > 0 && destination.Height > 0)
+                {
+                    spriteBatch.Draw(sourcePatches[i].Texture, destination, source, color);
+                }
             }
         }
     }
@@ -57,12 +61,12 @@ public static class SpriteBatchExtensions
 
     #region ----------------------------TextureRegion-----------------------------
 
-    public static void DrawTextureRegion(this SpriteBatch spriteBatch, TextureRegion textureRegion, Vector2 position, Color color, Rectangle? clippingRectangle = null)
+    public static void Draw(this SpriteBatch spriteBatch, TextureRegion textureRegion, Vector2 position, Color color, Rectangle? clippingRectangle = null)
     {
-        DrawTextureRegion(spriteBatch, textureRegion, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0, clippingRectangle);
+        Draw(spriteBatch, textureRegion, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0, clippingRectangle);
     }
 
-    public static void DrawTextureRegion(this SpriteBatch spriteBatch, TextureRegion textureRegion, Vector2 position, Color color,
+    public static void Draw(this SpriteBatch spriteBatch, TextureRegion textureRegion, Vector2 position, Color color,
     float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, Rectangle? clippingRectangle = null)
     {
         var sourceRectangle = textureRegion.Bounds;
@@ -78,7 +82,7 @@ public static class SpriteBatchExtensions
             if (!ClipRectangles(ref sourceRectangle, ref destinationRectangle, clippingRectangle))
             {
                 // Clipped rectangle is empty, nothing to draw
-                return; 
+                return;
             }
 
             position.X = destinationRectangle.X + origin.X;
@@ -88,7 +92,7 @@ public static class SpriteBatchExtensions
         spriteBatch.Draw(textureRegion.Texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
     }
 
-    public static void DrawTextureRegion(this SpriteBatch spriteBatch, TextureRegion textureRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
+    public static void Draw(this SpriteBatch spriteBatch, TextureRegion textureRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
     {
         Draw(spriteBatch, textureRegion.Texture, textureRegion.Bounds, destinationRectangle, color, clippingRectangle);
     }
@@ -98,6 +102,28 @@ public static class SpriteBatchExtensions
     #endregion -------------------------TextureRegion-----------------------------
 
     #region ----------------------------Utilities-----------------------------
+    private static void CreateDestinationPatches(NinePatch ninePatch, Rectangle destinationRect)
+    {
+        destinationRect.Deconstruct(out int x, out int y, out int width, out int height);
+        ninePatch.Padding.Deconstruct(out int topPadding, out int rightPadding, out int bottomPadding, out int leftPadding);
+
+        int midWidth = width - leftPadding - rightPadding;
+        int midHeight = height - topPadding - bottomPadding;
+        int top = y + topPadding;
+        int right = x + width - rightPadding;
+        int bottom = y + height - bottomPadding;
+        int left = x + leftPadding;
+
+        _patchCache[NinePatch.TopLeft] = new Rectangle(x, y, leftPadding, topPadding);
+        _patchCache[NinePatch.TopMiddle] = new Rectangle(left, y, midWidth, topPadding);
+        _patchCache[NinePatch.TopRight] = new Rectangle(right, y, rightPadding, topPadding);
+        _patchCache[NinePatch.MiddleLeft] = new Rectangle(x, top, leftPadding, midHeight);
+        _patchCache[NinePatch.Middle] = new Rectangle(left, top, midWidth, midHeight);
+        _patchCache[NinePatch.MiddleRight] = new Rectangle(right, top, rightPadding, midHeight);
+        _patchCache[NinePatch.BottomLeft] = new Rectangle(x, bottom, leftPadding, bottomPadding);
+        _patchCache[NinePatch.BottomMiddle] = new Rectangle(left, bottom, midWidth, bottomPadding);
+        _patchCache[NinePatch.BottomRight] = new Rectangle(right, bottom, rightPadding, bottomPadding);
+    }
     private static bool ClipRectangles(ref Rectangle sourceRectangle, ref Rectangle destinationRectangle, Rectangle? clippingRectangle)
     {
         if (!clippingRectangle.HasValue)
@@ -121,6 +147,36 @@ public static class SpriteBatchExtensions
         sourceRectangle.Height = (int)(destinationRectangle.Height * scaleY);
 
         return true;
+    }
+
+    private static Rectangle ClipSourceRectangle(Rectangle sourceRectangle, Rectangle destinationRectangle, Rectangle clippingRectangle)
+    {
+        var left = (float)(clippingRectangle.Left - destinationRectangle.Left);
+        var right = (float)(destinationRectangle.Right - clippingRectangle.Right);
+        var top = (float)(clippingRectangle.Top - destinationRectangle.Top);
+        var bottom = (float)(destinationRectangle.Bottom - clippingRectangle.Bottom);
+        var x = left > 0 ? left : 0;
+        var y = top > 0 ? top : 0;
+        var w = (right > 0 ? right : 0) + x;
+        var h = (bottom > 0 ? bottom : 0) + y;
+
+        var scaleX = (float)destinationRectangle.Width / sourceRectangle.Width;
+        var scaleY = (float)destinationRectangle.Height / sourceRectangle.Height;
+        x /= scaleX;
+        y /= scaleY;
+        w /= scaleX;
+        h /= scaleY;
+
+        return new Rectangle((int)(sourceRectangle.X + x), (int)(sourceRectangle.Y + y), (int)(sourceRectangle.Width - w), (int)(sourceRectangle.Height - h));
+    }
+
+    private static Rectangle ClipDestinationRectangle(Rectangle destinationRectangle, Rectangle clippingRectangle)
+    {
+        var left = clippingRectangle.Left < destinationRectangle.Left ? destinationRectangle.Left : clippingRectangle.Left;
+        var top = clippingRectangle.Top < destinationRectangle.Top ? destinationRectangle.Top : clippingRectangle.Top;
+        var bottom = clippingRectangle.Bottom < destinationRectangle.Bottom ? clippingRectangle.Bottom : destinationRectangle.Bottom;
+        var right = clippingRectangle.Right < destinationRectangle.Right ? clippingRectangle.Right : destinationRectangle.Right;
+        return new Rectangle(left, top, right - left, bottom - top);
     }
 
     #endregion -------------------------Utilities-----------------------------

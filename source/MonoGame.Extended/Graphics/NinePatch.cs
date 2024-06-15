@@ -3,6 +3,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Graphics;
 
@@ -61,6 +62,8 @@ public class NinePatch
     /// </summary>
     public string Name { get; }
 
+    public Thickness Padding { get; }
+
     /// <summary>
     /// Gets a read-only span of the texture regions that make up the nine-patch.
     /// </summary>
@@ -110,6 +113,8 @@ public class NinePatch
         }
 
         _patches = patches;
+        Rectangle mid = patches[NinePatch.Middle].Bounds;
+        Padding = new Thickness(mid.Left, mid.Top, mid.Right, mid.Bottom);
         Name = name;
     }
 }

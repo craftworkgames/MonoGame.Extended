@@ -43,7 +43,7 @@ namespace MonoGame.Extended.BitmapFonts
                 if (glyph.Character == null)
                     continue;
                 var characterOrigin = position - glyph.Position + origin;
-                spriteBatch.DrawTextureRegion(glyph.Character.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
+                spriteBatch.Draw(glyph.Character.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
             }
         }
 
@@ -61,7 +61,7 @@ namespace MonoGame.Extended.BitmapFonts
                 if (glyph.Character == null)
                     continue;
                 var characterOrigin = position - glyph.Position + origin;
-                spriteBatch.DrawTextureRegion(glyph.Character.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
+                spriteBatch.Draw(glyph.Character.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
             }
         }
 
