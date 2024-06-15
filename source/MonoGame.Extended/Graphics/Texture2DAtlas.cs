@@ -29,10 +29,10 @@ namespace MonoGame.Extended.Graphics;
 ///         between tiles when using texture compression.
 ///     </para>
 /// </remarks>
-public class Texture2DAtlas : IEnumerable<TextureRegion>
+public class Texture2DAtlas : IEnumerable<Texture2DRegion>
 {
-    private readonly List<TextureRegion> _regionsByIndex = new List<TextureRegion>();
-    private readonly Dictionary<string, TextureRegion> _regionsByName = new Dictionary<string, TextureRegion>();
+    private readonly List<Texture2DRegion> _regionsByIndex = new List<Texture2DRegion>();
+    private readonly Dictionary<string, Texture2DRegion> _regionsByName = new Dictionary<string, Texture2DRegion>();
 
     /// <summary>
     /// Gets the name of the texture atlas.
@@ -50,7 +50,7 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     public int RegionCount => _regionsByIndex.Count;
 
     /// <summary>
-    /// Gets the <see cref="TextureRegion"/> at the specified index.
+    /// Gets the <see cref="Texture2DRegion"/> at the specified index.
     /// </summary>
     /// <param name="index">The index of the texture region.</param>
     /// <returns>The texture region at the specified index.</returns>
@@ -58,17 +58,17 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// Thrown if the value of the <paramref name="index"/> parameter is less than zero or greater than or equal to
     /// the total number of regions in this atlas.
     /// </exception>
-    public TextureRegion this[int index] => GetRegion(index);
+    public Texture2DRegion this[int index] => GetRegion(index);
 
     /// <summary>
-    /// Gets the <see cref="TextureRegion"/> with the specified name.
+    /// Gets the <see cref="Texture2DRegion"/> with the specified name.
     /// </summary>
     /// <param name="name">The name of the texture region.</param>
     /// <returns>The texture region with the specified name.</returns>
     /// <exception cref="KeyNotFoundException">
     /// Thrown if this atlas does not contain a region with a name that matches the <paramref name="name"/> parameter.
     /// </exception>
-    public TextureRegion this[string name] => GetRegion(name);
+    public Texture2DRegion this[string name] => GetRegion(name);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Texture2DAtlas"/> class with the specified texture.
@@ -110,7 +110,7 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// <param name="width">The width, in pixels, of the region.</param>
     /// <param name="height">The height, in pixels, of the region.</param>
     /// <returns>The created texture region.</returns>
-    public TextureRegion CreateRegion(int x, int y, int width, int height) => CreateRegion(null, new Rectangle(x, y, width, height));
+    public Texture2DRegion CreateRegion(int x, int y, int width, int height) => CreateRegion(null, new Rectangle(x, y, width, height));
 
     /// <summary>
     /// Creates a new texture region with the specified name and adds it to this atlas.
@@ -124,7 +124,7 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// <exception cref="InvalidOperationException">
     /// Thrown if a region with the same name as the <paramref name="name"/> parameter already exists in this atlas.
     /// </exception>
-    public TextureRegion CreateRegion(string name, int x, int y, int width, int height) => CreateRegion(name, new Rectangle(x, y, width, height));
+    public Texture2DRegion CreateRegion(string name, int x, int y, int width, int height) => CreateRegion(name, new Rectangle(x, y, width, height));
 
     /// <summary>
     /// Creates a new texture region and adds it to this atlas.
@@ -132,7 +132,7 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// <param name="location">The location of the region.</param>
     /// <param name="size">The size, in pixels, of the region.</param>
     /// <returns>The created texture region.</returns>
-    public TextureRegion CreateRegion(Point location, Size size) => CreateRegion(null, new Rectangle(location, size));
+    public Texture2DRegion CreateRegion(Point location, Size size) => CreateRegion(null, new Rectangle(location, size));
 
     /// <summary>
     /// Creates a new texture region with the specified name and adds it to this atlas.
@@ -144,14 +144,14 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// <exception cref="InvalidOperationException">
     /// Thrown if a region with the same name as the <paramref name="name"/> parameter already exists in this atlas.
     /// </exception>
-    public TextureRegion CreateRegion(string name, Point location, Size size) => CreateRegion(name, new Rectangle(location, size));
+    public Texture2DRegion CreateRegion(string name, Point location, Size size) => CreateRegion(name, new Rectangle(location, size));
 
     /// <summary>
     /// Creates a new texture region and adds it to this atlas.
     /// </summary>
     /// <param name="bounds">The bounds of the region.</param>
     /// <returns>The created texture region.</returns>
-    public TextureRegion CreateRegion(Rectangle bounds) => CreateRegion(null, bounds);
+    public Texture2DRegion CreateRegion(Rectangle bounds) => CreateRegion(null, bounds);
 
     /// <summary>
     /// Creates a new texture region with the specified name and adds it to this atlas.
@@ -162,9 +162,9 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// <exception cref="InvalidOperationException">
     /// Thrown if a region with the same name as the <paramref name="name"/> parameter already exists in this atlas.
     /// </exception>
-    public TextureRegion CreateRegion(string name, Rectangle bounds)
+    public Texture2DRegion CreateRegion(string name, Rectangle bounds)
     {
-        TextureRegion region = new TextureRegion(Texture, name, bounds);
+        Texture2DRegion region = new Texture2DRegion(Texture, name, bounds);
         AddRegion(region);
         return region;
     }
@@ -206,7 +206,7 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// Throw if the value of the <paramref name="index"/> is less than zero or is greater than or equal to the total
     /// number of regions in this atlas.
     /// </exception>
-    public TextureRegion GetRegion(int index) => _regionsByIndex[index];
+    public Texture2DRegion GetRegion(int index) => _regionsByIndex[index];
 
     /// <summary>
     /// Gets the region with the specified name.
@@ -216,7 +216,7 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// <exception cref="KeyNotFoundException">
     /// Thrown if this atlas does not contain a region with a name that matches the <paramref name="name"/> parameter.
     /// </exception>
-    public TextureRegion GetRegion(string name) => _regionsByName[name];
+    public Texture2DRegion GetRegion(string name) => _regionsByName[name];
 
     /// <summary>
     /// Tries to get the region at the specified index.
@@ -229,7 +229,7 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// <returns>
     /// <see langword="true"/> if the region is found at the specified index; otherwise, <see langword="false"/>.
     /// </returns>
-    public bool TryGetRegion(int index, out TextureRegion region)
+    public bool TryGetRegion(int index, out Texture2DRegion region)
     {
         region = default;
 
@@ -253,7 +253,7 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// <returns>
     /// <see langword="true"/> if the region is found with the specified name; otherwise, <see langword="false"/>.
     /// </returns>
-    public bool TryGetRegion(string name, out TextureRegion region) => _regionsByName.TryGetValue(name, out region);
+    public bool TryGetRegion(string name, out Texture2DRegion region) => _regionsByName.TryGetValue(name, out region);
 
     /// <summary>
     /// Gets the regions at the specified indexes.
@@ -264,9 +264,9 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// Thrown if the value of any index in the <paramref name="indexes"/> parameter is less than zero or is greater
     /// than or equal to the total number of regions in this atlas.
     /// </exception>
-    public TextureRegion[] GetRegions(params int[] indexes)
+    public Texture2DRegion[] GetRegions(params int[] indexes)
     {
-        TextureRegion[] regions = new TextureRegion[indexes.Length];
+        Texture2DRegion[] regions = new Texture2DRegion[indexes.Length];
         for (int i = 0; i < indexes.Length; i++)
         {
             regions[i] = GetRegion(indexes[i]);
@@ -284,9 +284,9 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// Thrown if a region is not found in this atlas with a name that matches any of the names in the
     /// <paramref name="names"/> parameter.
     /// </exception>
-    public TextureRegion[] GetRegions(params string[] names)
+    public Texture2DRegion[] GetRegions(params string[] names)
     {
-        TextureRegion[] regions = new TextureRegion[names.Length];
+        Texture2DRegion[] regions = new Texture2DRegion[names.Length];
 
         for (int i = 0; i < names.Length; i++)
         {
@@ -309,7 +309,7 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// </exception>
     public bool RemoveRegion(int index)
     {
-        if (TryGetRegion(index, out TextureRegion region))
+        if (TryGetRegion(index, out Texture2DRegion region))
         {
             return RemoveRegion(region);
         }
@@ -326,7 +326,7 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
     /// </returns>
     public bool RemoveRegion(string name)
     {
-        if (TryGetRegion(name, out TextureRegion region))
+        if (TryGetRegion(name, out Texture2DRegion region))
         {
             return RemoveRegion(region);
         }
@@ -343,24 +343,24 @@ public class Texture2DAtlas : IEnumerable<TextureRegion>
         _regionsByName.Clear();
     }
 
-    private void AddRegion(TextureRegion region)
+    private void AddRegion(Texture2DRegion region)
     {
         if (_regionsByName.ContainsKey(region.Name))
         {
-            throw new InvalidOperationException($"This {nameof(Texture2DAtlas)} already contains a {nameof(TextureRegion)} with the name '{region.Name}'");
+            throw new InvalidOperationException($"This {nameof(Texture2DAtlas)} already contains a {nameof(Texture2DRegion)} with the name '{region.Name}'");
         }
 
         _regionsByIndex.Add(region);
         _regionsByName.Add(region.Name, region);
     }
 
-    private bool RemoveRegion(TextureRegion region) => _regionsByIndex.Remove(region) && _regionsByName.Remove(region.Name);
+    private bool RemoveRegion(Texture2DRegion region) => _regionsByIndex.Remove(region) && _regionsByName.Remove(region.Name);
 
     /// <summary>
     /// Returns an enumerator that iterates through the collection of texture regions.
     /// </summary>
     /// <returns>An enumerator that can be used to iterate through the collection.</returns>
-    public IEnumerator<TextureRegion> GetEnumerator() => _regionsByIndex.GetEnumerator();
+    public IEnumerator<Texture2DRegion> GetEnumerator() => _regionsByIndex.GetEnumerator();
 
     /// <summary>
     /// Returns an enumerator that iterates through the collection of texture regions.

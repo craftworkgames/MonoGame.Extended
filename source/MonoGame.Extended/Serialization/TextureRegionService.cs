@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Serialization
 {
     public interface ITextureRegionService
     {
-        TextureRegion GetTextureRegion(string name);
+        Texture2DRegion GetTextureRegion(string name);
     }
 
     public class TextureRegionService : ITextureRegionService
@@ -19,7 +19,7 @@ namespace MonoGame.Extended.Serialization
 
         public IList<Texture2DAtlas> TextureAtlases { get; }
 
-        public TextureRegion GetTextureRegion(string name)
+        public Texture2DRegion GetTextureRegion(string name)
         {
             return TextureAtlases
                 .Select(textureAtlas => textureAtlas.GetRegion(name))

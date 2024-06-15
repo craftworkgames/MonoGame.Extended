@@ -391,7 +391,7 @@ public sealed class BitmapFont
         {
             BmfCharsBlock charBlock = bmfFile.Characters[i];
             Texture2D texture = pages[bmfFile.Pages[charBlock.Page]];
-            TextureRegion region = new TextureRegion(texture, charBlock.X, charBlock.Y, charBlock.Width, charBlock.Height);
+            Texture2DRegion region = new Texture2DRegion(texture, charBlock.X, charBlock.Y, charBlock.Width, charBlock.Height);
             BitmapFontCharacter character = new BitmapFontCharacter((int)charBlock.ID, region, charBlock.XOffset, charBlock.YOffset, charBlock.XAdvance);
             characters.Add(character.Character, character);
         }

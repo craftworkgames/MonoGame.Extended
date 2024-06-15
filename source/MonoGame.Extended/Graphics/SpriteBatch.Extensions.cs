@@ -19,7 +19,7 @@ public static class SpriteBatchExtensions
     public static void Draw(this SpriteBatch spriteBatch, NinePatch ninePatchRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
     {
         CreateDestinationPatches(ninePatchRegion, destinationRectangle);
-        ReadOnlySpan<TextureRegion> sourcePatches = ninePatchRegion.Patches;
+        ReadOnlySpan<Texture2DRegion> sourcePatches = ninePatchRegion.Patches;
 
         for (int i = 0; i < sourcePatches.Length; i++)
         {
@@ -61,12 +61,12 @@ public static class SpriteBatchExtensions
 
     #region ----------------------------TextureRegion-----------------------------
 
-    public static void Draw(this SpriteBatch spriteBatch, TextureRegion textureRegion, Vector2 position, Color color, Rectangle? clippingRectangle = null)
+    public static void Draw(this SpriteBatch spriteBatch, Texture2DRegion textureRegion, Vector2 position, Color color, Rectangle? clippingRectangle = null)
     {
         Draw(spriteBatch, textureRegion, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0, clippingRectangle);
     }
 
-    public static void Draw(this SpriteBatch spriteBatch, TextureRegion textureRegion, Vector2 position, Color color,
+    public static void Draw(this SpriteBatch spriteBatch, Texture2DRegion textureRegion, Vector2 position, Color color,
     float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, Rectangle? clippingRectangle = null)
     {
         var sourceRectangle = textureRegion.Bounds;
@@ -92,7 +92,7 @@ public static class SpriteBatchExtensions
         spriteBatch.Draw(textureRegion.Texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
     }
 
-    public static void Draw(this SpriteBatch spriteBatch, TextureRegion textureRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
+    public static void Draw(this SpriteBatch spriteBatch, Texture2DRegion textureRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
     {
         Draw(spriteBatch, textureRegion.Texture, textureRegion.Bounds, destinationRectangle, color, clippingRectangle);
     }

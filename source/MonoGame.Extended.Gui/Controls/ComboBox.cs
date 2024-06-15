@@ -13,7 +13,7 @@ namespace MonoGame.Extended.Gui.Controls
         }
         
         public bool IsOpen { get; set; }
-        public TextureRegion DropDownRegion { get; set; }
+        public Texture2DRegion DropDownRegion { get; set; }
         public Color DropDownColor { get; set; } = Color.White;
 
         public override bool OnKeyPressed(IGuiContext context, KeyboardEventArgs args)

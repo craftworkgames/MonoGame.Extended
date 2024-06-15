@@ -11,7 +11,7 @@ namespace MonoGame.Extended.Graphics;
 /// <summary>
 /// Represents a region of a texture.
 /// </summary>
-public class TextureRegion
+public class Texture2DRegion
 {
     /// <summary>
     /// Gets the name assigned to this texture region when it was created.
@@ -79,7 +79,7 @@ public class TextureRegion
     public float LeftUV { get; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TextureRegion"/> class representing the entire texture.
+    /// Initializes a new instance of the <see cref="Texture2DRegion"/> class representing the entire texture.
     /// </summary>
     /// <param name="texture">The texture to create the region from.</param>
     /// <exception cref="ArgumentNullException">
@@ -88,11 +88,11 @@ public class TextureRegion
     /// <exception cref="ObjectDisposedException">
     /// Thrown if <paramref name="texture"/> has been disposed prior.
     /// </exception>
-    public TextureRegion(Texture2D texture)
+    public Texture2DRegion(Texture2D texture)
         : this(texture, null, 0, 0, texture.Width, texture.Height) { }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TextureRegion"/> class representing the entire texture with the
+    /// Initializes a new instance of the <see cref="Texture2DRegion"/> class representing the entire texture with the
     /// specified name.
     /// </summary>
     /// <param name="texture">The texture to create the region from.</param>
@@ -103,11 +103,11 @@ public class TextureRegion
     /// <exception cref="ObjectDisposedException">
     /// Thrown if <paramref name="texture"/> has been disposed prior.
     /// </exception>
-    public TextureRegion(Texture2D texture, string name)
+    public Texture2DRegion(Texture2D texture, string name)
         : this(texture, name, texture.Bounds.X, texture.Bounds.Y, texture.Bounds.Width, texture.Bounds.Height) { }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TextureRegion"/> class with the specified region of the texture.
+    /// Initializes a new instance of the <see cref="Texture2DRegion"/> class with the specified region of the texture.
     /// </summary>
     /// <param name="texture">The texture to create the region from.</param>
     /// <param name="region">The region of the texture to use.</param>
@@ -117,11 +117,11 @@ public class TextureRegion
     /// <exception cref="ObjectDisposedException">
     /// Thrown if <paramref name="texture"/> has been disposed prior.
     /// </exception>
-    public TextureRegion(Texture2D texture, Rectangle region)
+    public Texture2DRegion(Texture2D texture, Rectangle region)
         : this(texture, null, region.X, region.Y, region.Width, region.Height) { }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TextureRegion"/> class with the specified region of the texture.
+    /// Initializes a new instance of the <see cref="Texture2DRegion"/> class with the specified region of the texture.
     /// </summary>
     /// <param name="texture">The texture to create the region from.</param>
     /// <param name="x">The top-left x-coordinate of the region within the texture.</param>
@@ -134,11 +134,11 @@ public class TextureRegion
     /// <exception cref="ObjectDisposedException">
     /// Thrown if <paramref name="texture"/> has been disposed prior.
     /// </exception>
-    public TextureRegion(Texture2D texture, int x, int y, int width, int height)
+    public Texture2DRegion(Texture2D texture, int x, int y, int width, int height)
         : this(texture, null, x, y, width, height) { }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TextureRegion"/> class with the specified region of the texture and
+    /// Initializes a new instance of the <see cref="Texture2DRegion"/> class with the specified region of the texture and
     /// name.
     /// </summary>
     /// <param name="texture">The texture to create the region from.</param>
@@ -150,11 +150,11 @@ public class TextureRegion
     /// <exception cref="ObjectDisposedException">
     /// Thrown if <paramref name="texture"/> has been disposed prior.
     /// </exception>
-    public TextureRegion(Texture2D texture, string name, Rectangle region)
+    public Texture2DRegion(Texture2D texture, string name, Rectangle region)
         : this(texture, name, region.X, region.Y, region.Width, region.Height) { }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TextureRegion"/> class with the specified region of the texture and
+    /// Initializes a new instance of the <see cref="Texture2DRegion"/> class with the specified region of the texture and
     /// name.
     /// </summary>
     /// <param name="texture">The texture to create the region from.</param>
@@ -169,7 +169,7 @@ public class TextureRegion
     /// <exception cref="ObjectDisposedException">
     /// Thrown if <paramref name="texture"/> has been disposed prior.
     /// </exception>
-    public TextureRegion(Texture2D texture, string name, int x, int y, int width, int height)
+    public Texture2DRegion(Texture2D texture, string name, int x, int y, int width, int height)
     {
         ArgumentNullException.ThrowIfNull(texture);
         if (texture.IsDisposed)
@@ -197,10 +197,10 @@ public class TextureRegion
     }
 
     //  Used for unit tests only
-    internal TextureRegion(string name, Rectangle bounds) : this(name, bounds.X, bounds.Y, bounds.Width, bounds.Height) { }
+    internal Texture2DRegion(string name, Rectangle bounds) : this(name, bounds.X, bounds.Y, bounds.Width, bounds.Height) { }
 
     //  Used for unit tests only
-    internal TextureRegion(string name, int x, int y, int width, int height)
+    internal Texture2DRegion(string name, int x, int y, int width, int height)
     {
         Name = name;
         Texture = null;

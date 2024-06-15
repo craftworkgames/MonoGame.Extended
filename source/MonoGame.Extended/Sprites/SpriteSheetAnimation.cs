@@ -14,7 +14,7 @@ namespace MonoGame.Extended.Sprites
         {
         }
 
-        public SpriteSheetAnimation(string name, TextureRegion[] keyFrames, float frameDuration = DefaultFrameDuration,
+        public SpriteSheetAnimation(string name, Texture2DRegion[] keyFrames, float frameDuration = DefaultFrameDuration,
             bool isLooping = true, bool isReversed = false, bool isPingPong = false)
             : base(null, false)
         {
@@ -27,13 +27,13 @@ namespace MonoGame.Extended.Sprites
             CurrentFrameIndex = IsReversed ? KeyFrames.Length - 1 : 0;
         }
 
-        public SpriteSheetAnimation(string name, TextureRegion[] keyFrames, SpriteSheetAnimationData data)
+        public SpriteSheetAnimation(string name, Texture2DRegion[] keyFrames, SpriteSheetAnimationData data)
             : this(name, keyFrames, data.FrameDuration, data.IsLooping, data.IsReversed, data.IsPingPong)
         {
         }
 
         public string Name { get; }
-        public TextureRegion[] KeyFrames { get; }
+        public Texture2DRegion[] KeyFrames { get; }
         public float FrameDuration { get; set; }
         public bool IsLooping { get; set; }
         public bool IsReversed { get; set; }
@@ -44,7 +44,7 @@ namespace MonoGame.Extended.Sprites
             ? (KeyFrames.Length*2 - (IsLooping ? 2 : 1))*FrameDuration
             : KeyFrames.Length*FrameDuration;
 
-        public TextureRegion CurrentFrame => KeyFrames[CurrentFrameIndex];
+        public Texture2DRegion CurrentFrame => KeyFrames[CurrentFrameIndex];
         public int CurrentFrameIndex { get; private set; }
 
         public float FramesPerSecond

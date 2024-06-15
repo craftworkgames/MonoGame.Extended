@@ -46,7 +46,7 @@ namespace MonoGame.Extended.BitmapFonts
                 var xOffset = reader.ReadInt16();
                 var yOffset = reader.ReadInt16();
                 var xAdvance = reader.ReadInt16();
-                var textureRegion = new TextureRegion(textures[textureIndex], x, y, width, height);
+                var textureRegion = new Texture2DRegion(textures[textureIndex], x, y, width, height);
                 regions[r] = new BitmapFontCharacter((int)character, textureRegion, xOffset, yOffset, xAdvance);
             }
 

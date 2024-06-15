@@ -20,7 +20,7 @@ public sealed class BitmapFontCharacter
     /// <summary>
     /// Gets the texture region that contains the character's image.
     /// </summary>
-    public TextureRegion TextureRegion { get; }
+    public Texture2DRegion TextureRegion { get; }
 
     /// <summary>
     /// Gets the horizontal offset for rendering the character.
@@ -50,7 +50,7 @@ public sealed class BitmapFontCharacter
     /// <param name="xOffset">The horizontal offset for rendering the character.</param>
     /// <param name="yOffset">The vertical offset for rendering the character.</param>
     /// <param name="xAdvance">The horizontal advance value for rendering the next character.</param>
-    public BitmapFontCharacter(int character, TextureRegion textureRegion, int xOffset, int yOffset, int xAdvance)
+    public BitmapFontCharacter(int character, Texture2DRegion textureRegion, int xOffset, int yOffset, int xAdvance)
     {
         Character = character;
         TextureRegion = textureRegion;

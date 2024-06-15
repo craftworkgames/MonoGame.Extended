@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 namespace MonoGame.Extended.Graphics;
 
 /// <summary>
-/// Provides extension methods for the <see cref="TextureRegion"/> class.
+/// Provides extension methods for the <see cref="Texture2DRegion"/> class.
 /// </summary>
 public static class TextureRegionExtensions
 {
@@ -17,14 +17,14 @@ public static class TextureRegionExtensions
     /// </summary>
     /// <param name="textureRegion">The texture region to get the subregion from.</param>
     /// <param name="region">The rectangle defining the subregion.</param>
-    /// <returns>A new <see cref="TextureRegion"/> representing the specified subregion.</returns>
+    /// <returns>A new <see cref="Texture2DRegion"/> representing the specified subregion.</returns>
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="textureRegion"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ObjectDisposedException">
     /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
     /// </exception>
-    public static TextureRegion GetSubregion(this TextureRegion textureRegion, Rectangle region) =>
+    public static Texture2DRegion GetSubregion(this Texture2DRegion textureRegion, Rectangle region) =>
         textureRegion.GetSubregion(null, region.X, region.Y, region.Width, region.Height);
 
     /// <summary>
@@ -33,14 +33,14 @@ public static class TextureRegionExtensions
     /// <param name="textureRegion">The texture region to get the subregion from.</param>
     /// <param name="name">The name of the new subregion.</param>
     /// <param name="region">The rectangle defining the subregion.</param>
-    /// <returns>A new <see cref="TextureRegion"/> representing the specified subregion.</returns>
+    /// <returns>A new <see cref="Texture2DRegion"/> representing the specified subregion.</returns>
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="textureRegion"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ObjectDisposedException">
     /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
     /// </exception>
-    public static TextureRegion GetSubregion(this TextureRegion textureRegion, string name, Rectangle region) =>
+    public static Texture2DRegion GetSubregion(this Texture2DRegion textureRegion, string name, Rectangle region) =>
         textureRegion.GetSubregion(name, region.X, region.Y, region.Width, region.Height);
 
     /// <summary>
@@ -51,14 +51,14 @@ public static class TextureRegionExtensions
     /// <param name="y">The top-left y-coordinate of the subregion within the texture region.</param>
     /// <param name="width">The width, in pixels, of the subregion.</param>
     /// <param name="height">The height, in pixels, of the subregion.</param>
-    /// <returns>A new <see cref="TextureRegion"/> representing the specified subregion.</returns>
+    /// <returns>A new <see cref="Texture2DRegion"/> representing the specified subregion.</returns>
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="textureRegion"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ObjectDisposedException">
     /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
     /// </exception>
-    public static TextureRegion GetSubregion(this TextureRegion textureRegion, int x, int y, int width, int height) =>
+    public static Texture2DRegion GetSubregion(this Texture2DRegion textureRegion, int x, int y, int width, int height) =>
         textureRegion.GetSubregion(null, x, y, width, height);
 
     /// <summary>
@@ -70,14 +70,14 @@ public static class TextureRegionExtensions
     /// <param name="y">The top-left y-coordinate of the subregion within the texture region.</param>
     /// <param name="width">The width, in pixels, of the subregion.</param>
     /// <param name="height">The height, in pixels, of the subregion.</param>
-    /// <returns>A new <see cref="TextureRegion"/> representing the specified subregion.</returns>
+    /// <returns>A new <see cref="Texture2DRegion"/> representing the specified subregion.</returns>
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="textureRegion"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ObjectDisposedException">
     /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
     /// </exception>
-    public static TextureRegion GetSubregion(this TextureRegion textureRegion, string name, int x, int y, int width, int height)
+    public static Texture2DRegion GetSubregion(this Texture2DRegion textureRegion, string name, int x, int y, int width, int height)
     {
         ArgumentNullException.ThrowIfNull(textureRegion);
 
@@ -87,7 +87,7 @@ public static class TextureRegionExtensions
         }
 
         Rectangle region = textureRegion.Bounds.GetRelativeRectangle(x, y, width, height);
-        return new TextureRegion(textureRegion.Texture, name, region);
+        return new Texture2DRegion(textureRegion.Texture, name, region);
     }
 
     /// <summary>
@@ -102,7 +102,7 @@ public static class TextureRegionExtensions
     /// <exception cref="ObjectDisposedException">
     /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
     /// </exception>
-    public static NinePatch CreateNinePatch(this TextureRegion textureRegion, Thickness padding) =>
+    public static NinePatch CreateNinePatch(this Texture2DRegion textureRegion, Thickness padding) =>
         textureRegion.CreateNinePatch(padding.Left, padding.Top, padding.Right, padding.Bottom);
 
     /// <summary>
@@ -117,7 +117,7 @@ public static class TextureRegionExtensions
     /// <exception cref="ObjectDisposedException">
     /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
     /// </exception>
-    public static NinePatch CreateNinePatch(this TextureRegion textureRegion, int padding) =>
+    public static NinePatch CreateNinePatch(this Texture2DRegion textureRegion, int padding) =>
         textureRegion.CreateNinePatch(padding, padding, padding, padding);
 
     /// <summary>
@@ -135,9 +135,9 @@ public static class TextureRegionExtensions
     /// <exception cref="ObjectDisposedException">
     /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
     /// </exception>
-    public static NinePatch CreateNinePatch(this TextureRegion textureRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
+    public static NinePatch CreateNinePatch(this Texture2DRegion textureRegion, int leftPadding, int topPadding, int rightPadding, int bottomPadding)
     {
-        TextureRegion[] patches = new TextureRegion[9];
+        Texture2DRegion[] patches = new Texture2DRegion[9];
 
         int middleWidth = textureRegion.Width - leftPadding - rightPadding;
         int middleHeight = textureRegion.Height - topPadding - bottomPadding;

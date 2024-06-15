@@ -55,7 +55,7 @@ public class NinePatch
     /// <summary>The index representing the bottom-right patch.</summary>
     public const int BottomRight = 8;
 
-    private readonly TextureRegion[] _patches;
+    private readonly Texture2DRegion[] _patches;
 
     /// <summary>
     /// Gets the name assigned to this nine-patch.
@@ -71,7 +71,7 @@ public class NinePatch
     /// Elements are in order of top-left, top-middle, top-right, middle-left, middle, middle-right, bottom-left,
     /// bottom-middle, and bottom-right.
     /// </remarks>
-    public ReadOnlySpan<TextureRegion> Patches => _patches;
+    public ReadOnlySpan<Texture2DRegion> Patches => _patches;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NinePatch"/> class with the specified patches.
@@ -80,17 +80,17 @@ public class NinePatch
     /// The <paramref name="patches"/> array should contain the elements in the order of top-left, top-middle,
     /// top-right, middle-left, middle, middle-right, bottom-left, bottom-middle, and bottom-right.
     /// </remarks>
-    /// <param name="patches">An array of nine <see cref="TextureRegion"/> objects.</param>
+    /// <param name="patches">An array of nine <see cref="Texture2DRegion"/> objects.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="patches"/> is null.</exception>
     /// <exception cref="ArgumentException">
     /// Thrown if <paramref name="patches"/> does not contain exactly nine elements.
     /// </exception>
-    public NinePatch(TextureRegion[] patches) : this(patches, null) { }
+    public NinePatch(Texture2DRegion[] patches) : this(patches, null) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NinePatch"/> class with the specified patches and name.
     /// </summary>
-    /// <param name="patches">An array of nine <see cref="TextureRegion"/> objects.</param>
+    /// <param name="patches">An array of nine <see cref="Texture2DRegion"/> objects.</param>
     /// <param name="name">
     /// The name of the nine-patch. If null or empty, a default name will be generated based on the texture name of the
     /// top-left patch.
@@ -99,7 +99,7 @@ public class NinePatch
     /// <exception cref="ArgumentException">
     /// Thrown if <paramref name="patches"/> does not contain exactly nine elements.
     /// </exception>
-    public NinePatch(TextureRegion[] patches, string name)
+    public NinePatch(Texture2DRegion[] patches, string name)
     {
         ArgumentNullException.ThrowIfNull(patches);
         if (patches.Length != 9)

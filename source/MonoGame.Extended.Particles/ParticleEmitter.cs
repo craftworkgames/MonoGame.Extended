@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Particles
         private float _totalSeconds;
 
         [JsonConstructor]
-        public ParticleEmitter(string name, TextureRegion textureRegion, int capacity, TimeSpan lifeSpan, Profile profile)
+        public ParticleEmitter(string name, Texture2DRegion textureRegion, int capacity, TimeSpan lifeSpan, Profile profile)
         {
             if (profile == null)
                 throw new ArgumentNullException(nameof(profile));
@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Particles
             Parameters = new ParticleReleaseParameters();
         }
 
-        public ParticleEmitter(TextureRegion textureRegion, int capacity, TimeSpan lifeSpan, Profile profile)
+        public ParticleEmitter(Texture2DRegion textureRegion, int capacity, TimeSpan lifeSpan, Profile profile)
             : this(null, textureRegion, capacity, lifeSpan, profile)
         {
         }
@@ -67,7 +67,7 @@ namespace MonoGame.Extended.Particles
         public Profile Profile { get; set; }
         public float LayerDepth { get; set; }
         public ParticleReleaseParameters Parameters { get; set; }
-        public TextureRegion TextureRegion { get; set; }
+        public Texture2DRegion TextureRegion { get; set; }
 
         /// <summary>
         /// Gets a value that indicates whether this instance of the <see cref="ParticleEmitter"/> class has been
