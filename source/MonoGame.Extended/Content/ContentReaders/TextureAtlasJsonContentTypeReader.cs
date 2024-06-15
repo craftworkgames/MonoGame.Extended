@@ -1,13 +1,10 @@
-using System.IO;
 using System.Text.Json;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Content;
 using MonoGame.Extended.Graphics;
-using MonoGame.Extended.Serialization;
-using ContentReaderExtensions = MonoGame.Extended.Content.ContentReaderExtensions;
+using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.TextureAtlases
+namespace MonoGame.Extended.Content.ContentReaders
 {
     public class TextureAtlasJsonContentTypeReader : JsonContentTypeReader<Texture2DAtlas>
     {

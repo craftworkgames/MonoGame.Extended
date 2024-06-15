@@ -3,7 +3,7 @@ using System.Text.Json;
 using Microsoft.Xna.Framework.Content;
 
 
-namespace MonoGame.Extended.Serialization
+namespace MonoGame.Extended.Content.ContentReaders
 {
     public class JsonContentTypeReader<T> : ContentTypeReader<T>
     {

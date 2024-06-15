@@ -1,9 +1,8 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Content;
 using MonoGame.Extended.Graphics;
 
-namespace MonoGame.Extended.TextureAtlases
+namespace MonoGame.Extended.Content.ContentReaders
 {
     public class TextureAtlasReader : ContentTypeReader<Texture2DAtlas>
     {
