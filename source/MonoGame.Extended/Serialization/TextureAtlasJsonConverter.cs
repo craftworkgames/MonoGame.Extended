@@ -6,9 +6,9 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Graphics;
-using MonoGame.Extended.Serialization;
+using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.TextureAtlases
+namespace MonoGame.Extended.Serialization
 {
     public class TextureAtlasJsonConverter : JsonConverter<Texture2DAtlas>
     {
@@ -26,7 +26,7 @@ namespace MonoGame.Extended.TextureAtlases
 
         public override Texture2DAtlas Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if(reader.TokenType == JsonTokenType.String)
+            if (reader.TokenType == JsonTokenType.String)
             {
                 // TODO: (Aristurtle 05/20/2024) What is this for? It's just an if block that throws an exception. Need
                 // to investigate.
