@@ -6,7 +6,7 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.Content.ContentReaders
 {
-    public class TextureAtlasJsonContentTypeReader : JsonContentTypeReader<Texture2DAtlas>
+    public class Texture2DAtlasJsonContentTypeReader : JsonContentTypeReader<Texture2DAtlas>
     {
         private static TexturePackerFile Load(ContentReader reader)
         {

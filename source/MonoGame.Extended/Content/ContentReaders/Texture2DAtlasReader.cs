@@ -4,7 +4,7 @@ using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Content.ContentReaders
 {
-    public class TextureAtlasReader : ContentTypeReader<Texture2DAtlas>
+    public class Texture2DAtlasReader : ContentTypeReader<Texture2DAtlas>
     {
         protected override Texture2DAtlas Read(ContentReader reader, Texture2DAtlas existingInstance)
         {
