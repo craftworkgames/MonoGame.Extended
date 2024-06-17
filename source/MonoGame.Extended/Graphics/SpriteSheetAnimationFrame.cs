@@ -25,11 +25,8 @@ namespace MonoGame.Extended.Graphics
             }
 
             FrameIndex = index;
-
             Duration = duration;
         }
-
-
     }
 
     public class SpriteSheetAnimationFrameJsonConverter : JsonConverter<SpriteSheetAnimationFrame>
