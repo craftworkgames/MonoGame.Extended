@@ -14,6 +14,11 @@ public class Sprite : IColorable
 {
     private Texture2DRegion _textureRegion;
 
+    public Sprite(Texture2D texture)
+        : this(new Texture2DRegion(texture))
+    {
+    }
+
     public Sprite(Texture2DRegion textureRegion)
     {
         if (textureRegion == null) throw new ArgumentNullException(nameof(textureRegion));
@@ -28,10 +33,6 @@ public class Sprite : IColorable
         Depth = 0.0f;
     }
 
-    public Sprite(Texture2D texture)
-        : this(new Texture2DRegion(texture))
-    {
-    }
 
     public float Alpha { get; set; }
     public float Depth { get; set; }
