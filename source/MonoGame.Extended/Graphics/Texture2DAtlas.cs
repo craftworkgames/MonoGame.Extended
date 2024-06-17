@@ -354,6 +354,35 @@ public class Texture2DAtlas : IEnumerable<Texture2DRegion>
         _regionsByName.Add(region.Name, region);
     }
 
+    /// <summary>
+    /// Creates a new <see cref="Sprite"/> using the region from this atlas at the specified index.
+    /// </summary>
+    /// <param name="regionIndex">The index of the region to use.</param>
+    /// <returns>The <see cref="Sprite"/> created using the region at the specified index.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Throw if the value of the <paramref name="regionIndex"/> is less than zero or is greater than or equal to the total
+    /// number of regions in this atlas.
+    /// </exception>
+    public Sprite CreateSprite(int regionIndex)
+    {
+        Texture2DRegion region = GetRegion(regionIndex);
+        return new Sprite(region);
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="Sprite"/> using the region from this atlas with the specified name.
+    /// </summary>
+    /// <param name="regionName">The name of the region to use.</param>
+    /// <returns>The <see cref="Sprite"/> created using the region with the specified name.</returns>
+    /// <exception cref="KeyNotFoundException">
+    /// Thrown if this atlas does not contain a region with a name that matches the <paramref name="regionName"/> parameter.
+    /// </exception>
+    public Sprite CreateSprite(string regionName)
+    {
+        Texture2DRegion region = GetRegion(regionName);
+        return new Sprite(region);
+    }
+
     private bool RemoveRegion(Texture2DRegion region) => _regionsByIndex.Remove(region) && _regionsByName.Remove(region.Name);
 
     /// <summary>
