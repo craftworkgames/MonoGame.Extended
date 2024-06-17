@@ -40,9 +40,7 @@ public class Sprite : IColorable
         get => _textureRegion;
         set
         {
-            if (value == null)
-                throw new InvalidOperationException("TextureRegion cannot be null");
-
+            ArgumentNullException.ThrowIfNull(value);
             _textureRegion = value;
         }
     }
