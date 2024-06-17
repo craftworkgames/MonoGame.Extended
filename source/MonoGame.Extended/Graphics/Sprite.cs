@@ -6,9 +6,8 @@ using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics;
 
-namespace MonoGame.Extended.Sprites;
+namespace MonoGame.Extended.Graphics;
 
 /// <summary>
 /// Represents a drawable 2D texture region with additional properties for rendering, such as position, scale,

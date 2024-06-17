@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using MonoGame.Extended.Sprites;
+using MonoGame.Extended.Graphics;
 using Xunit;
 
 namespace MonoGame.Extended.Entities.Tests
