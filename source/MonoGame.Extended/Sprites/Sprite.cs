@@ -52,8 +52,7 @@ public class Sprite : IColorable
 
     public Sprite(Texture2DRegion textureRegion)
     {
-        if (textureRegion == null) throw new ArgumentNullException(nameof(textureRegion));
-
+        ArgumentNullException.ThrowIfNull(textureRegion);
         _textureRegion = textureRegion;
 
         Alpha = 1.0f;
