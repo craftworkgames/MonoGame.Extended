@@ -13,6 +13,32 @@ namespace MonoGame.Extended.Sprites;
 public class Sprite : IColorable
 {
     private Texture2DRegion _textureRegion;
+    public bool IsVisible { get; set; }
+    public Color Color { get; set; }
+    public float Alpha { get; set; }
+    public float Depth { get; set; }
+    public SpriteEffects Effect { get; set; }
+    public object Tag { get; set; }
+    public Vector2 Origin { get; set; }
+    public Vector2 OriginNormalized
+    {
+        get => new Vector2(Origin.X/TextureRegion.Width, Origin.Y/TextureRegion.Height);
+        set => Origin = new Vector2(value.X*TextureRegion.Width, value.Y*TextureRegion.Height);
+    }
+    public Texture2DRegion TextureRegion
+    {
+        get => _textureRegion;
+        set
+        {
+            if (value == null)
+                throw new InvalidOperationException("TextureRegion cannot be null");
+
+            // preserve the origin if the texture size changes
+            var originNormalized = OriginNormalized;
+            _textureRegion = value;
+            OriginNormalized = originNormalized;
+        }
+    }
 
     public Sprite(Texture2D texture)
         : this(new Texture2DRegion(texture))
@@ -34,17 +60,8 @@ public class Sprite : IColorable
     }
 
 
-    public float Alpha { get; set; }
-    public float Depth { get; set; }
-    public object Tag { get; set; }
 
-    public Vector2 OriginNormalized
-    {
-        get => new Vector2(Origin.X/TextureRegion.Width, Origin.Y/TextureRegion.Height);
-        set => Origin = new Vector2(value.X*TextureRegion.Width, value.Y*TextureRegion.Height);
-    }
 
-    public Color Color { get; set; }
 
     public RectangleF GetBoundingRectangle(Transform2 transform)
     {
@@ -59,24 +76,7 @@ public class Sprite : IColorable
         return new RectangleF(min.X, min.Y, max.X - min.X, max.Y - min.Y);
     }
 
-    public bool IsVisible { get; set; }
-    public Vector2 Origin { get; set; }
-    public SpriteEffects Effect { get; set; }
 
-    public Texture2DRegion TextureRegion
-    {
-        get => _textureRegion;
-        set
-        {
-            if (value == null)
-                throw new InvalidOperationException("TextureRegion cannot be null");
-
-            // preserve the origin if the texture size changes
-            var originNormalized = OriginNormalized;
-            _textureRegion = value;
-            OriginNormalized = originNormalized;
-        }
-    }
 
     public Vector2[] GetCorners(Vector2 position, float rotation, Vector2 scale)
     {
