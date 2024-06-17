@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using MonoGame.Extended.Graphics;
 
-namespace MonoGame.Extended.Sprites
+namespace MonoGame.Extended.Graphics
 {
     public class SpriteSheetAnimationCycle
     {
