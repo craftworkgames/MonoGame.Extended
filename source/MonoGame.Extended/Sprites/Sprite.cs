@@ -106,11 +106,15 @@ public class Sprite : IColorable
             var matrix = Matrix.CreateRotationZ(rotation);
 
             for (var i = 0; i < 4; i++)
+            {
                 corners[i] = Vector2.Transform(corners[i], matrix);
+            }
         }
 
         for (var i = 0; i < 4; i++)
+        {
             corners[i] += offset;
+        }
 
         return corners;
     }
