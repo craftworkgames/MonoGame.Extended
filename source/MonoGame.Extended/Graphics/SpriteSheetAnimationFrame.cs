@@ -11,9 +11,9 @@ namespace MonoGame.Extended.Graphics
     public class SpriteSheetAnimationFrame
     {
         public int Index { get; set; }
-        public float Duration { get; set; }
+        public TimeSpan Duration { get; set; }
 
-        public SpriteSheetAnimationFrame(int index, float duration = 0.2f)
+        public SpriteSheetAnimationFrame(int index, TimeSpan duration)
         {
             Index = index;
             Duration = duration;
@@ -31,7 +31,7 @@ namespace MonoGame.Extended.Graphics
             {
                 case JsonTokenType.Number:
                     var index = reader.GetInt32();
-                    return new SpriteSheetAnimationFrame(index);
+                    return new SpriteSheetAnimationFrame(index, TimeSpan.FromSeconds(0.2f));
 
                 case JsonTokenType.StartObject:
                     var frame = JsonSerializer.Deserialize<SpriteSheetAnimationFrame>(ref reader, options);
