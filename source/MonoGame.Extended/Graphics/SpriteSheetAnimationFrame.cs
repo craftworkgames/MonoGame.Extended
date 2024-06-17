@@ -30,7 +30,7 @@ public class SpriteSheetAnimationFrame
     /// </summary>
     public Texture2DRegion TextureRegion { get; }
 
-    public SpriteSheetAnimationFrame(int index, Texture2DRegion region, TimeSpan duration)
+    internal SpriteSheetAnimationFrame(int index, Texture2DRegion region, TimeSpan duration)
     {
         ArgumentNullException.ThrowIfNull(region);
         if (region.Texture.IsDisposed)
