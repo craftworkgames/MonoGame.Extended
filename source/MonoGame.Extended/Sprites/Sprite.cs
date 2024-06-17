@@ -43,10 +43,7 @@ public class Sprite : IColorable
             if (value == null)
                 throw new InvalidOperationException("TextureRegion cannot be null");
 
-            // preserve the origin if the texture size changes
-            var originNormalized = OriginNormalized;
             _textureRegion = value;
-            OriginNormalized = originNormalized;
         }
     }
 
