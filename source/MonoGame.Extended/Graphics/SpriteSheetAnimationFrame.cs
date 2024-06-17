@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace MonoGame.Extended.Graphics
@@ -13,9 +14,18 @@ namespace MonoGame.Extended.Graphics
         public int FrameIndex { get; set; }
         public TimeSpan Duration { get; set; }
 
-        public SpriteSheetAnimationFrame(int index, TimeSpan duration)
+        public Texture2DRegion TextureRegion { get;}
+
+        public SpriteSheetAnimationFrame(int index, Texture2DRegion region, TimeSpan duration)
         {
+            ArgumentNullException.ThrowIfNull(region);
+            if(region.Texture.IsDisposed)
+            {
+                throw new ObjectDisposedException(nameof(region), $"The source {nameof(Texture2D)} of {nameof(region)} was disposed prior.");
+            }
+
             FrameIndex = index;
+
             Duration = duration;
         }
 
