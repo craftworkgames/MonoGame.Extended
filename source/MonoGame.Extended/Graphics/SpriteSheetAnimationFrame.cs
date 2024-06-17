@@ -1,7 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework.Graphics;
 
 
@@ -26,5 +24,5 @@ namespace MonoGame.Extended.Graphics
             FrameIndex = index;
             Duration = duration;
         }
-    }   
+    }
 }
