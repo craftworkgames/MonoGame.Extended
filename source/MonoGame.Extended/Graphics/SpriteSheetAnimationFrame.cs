@@ -2,15 +2,28 @@ using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
 
-
 namespace MonoGame.Extended.Graphics;
 
+/// <summary>
+/// Represents a single frame within a sprite sheet animation, including its index, display duration, and texture
+/// region.
+/// </summary>
 [DebuggerDisplay("{Index} {Duration}")]
 public class SpriteSheetAnimationFrame
 {
+    /// <summary>
+    /// Gets the index of the frame in the overall sprite sheet.
+    /// </summary>
     public int FrameIndex { get; }
+
+    /// <summary>
+    /// Gets the total duration this frame should be displayed during an animation.
+    /// </summary>
     public TimeSpan Duration { get; }
 
+    /// <summary>
+    /// Gets the source texture region that represents the texture to render during this frame of animation.
+    /// </summary>
     public Texture2DRegion TextureRegion { get; }
 
     public SpriteSheetAnimationFrame(int index, Texture2DRegion region, TimeSpan duration)
