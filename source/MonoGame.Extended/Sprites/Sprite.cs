@@ -98,12 +98,19 @@ public class Sprite : IColorable
     /// Gets or sets the source texture region of this sprite.
     /// </summary>
     /// <exception cref="ArgumentNullException">Thrown when setting to a null texture region.</exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if the source texture of the assigned <see cref="Texture2DRegion"/> has been disposed of when setting.
+    /// </exception>
     public Texture2DRegion TextureRegion
     {
         get => _textureRegion;
         set
         {
             ArgumentNullException.ThrowIfNull(value);
+            if (value.Texture.IsDisposed)
+            {
+                throw new ObjectDisposedException(nameof(value), $"The source {nameof(Texture2D)} of the {nameof(TextureRegion)} was disposed prior to setting this property.");
+            }
             _textureRegion = value;
         }
     }
@@ -114,6 +121,9 @@ public class Sprite : IColorable
     /// <param name="texture">The source texture of the sprite.</param>
     /// <exception cref="ArgumentNullException">
     /// Thrown if the <paramref name="texture"/> parameter is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if the <paramref name="texture"/> parameter was disposed of prior.
     /// </exception>
     public Sprite(Texture2D texture)
         : this(new Texture2DRegion(texture))
@@ -129,9 +139,17 @@ public class Sprite : IColorable
     /// <exception cref="ArgumentNullException">
     /// Thrown if the <paramref name="textureRegion"/> parameter is <see langword="null"/>.
     /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if the source texture of the <paramref name="textureRegion"/> parameter has been disposed of.
+    /// </exception>
     public Sprite(Texture2DRegion textureRegion)
     {
         ArgumentNullException.ThrowIfNull(textureRegion);
+        if (textureRegion.Texture.IsDisposed)
+        {
+            throw new ObjectDisposedException(nameof(textureRegion), $"The source {nameof(Texture2D)} of the {nameof(textureRegion)} was disposed prior.");
+        }
+
         _textureRegion = textureRegion;
 
         Alpha = 1.0f;
