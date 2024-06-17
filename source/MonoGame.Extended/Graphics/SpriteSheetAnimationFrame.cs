@@ -10,12 +10,12 @@ namespace MonoGame.Extended.Graphics
     [DebuggerDisplay("{Index} {Duration}")]
     public class SpriteSheetAnimationFrame
     {
-        public int Index { get; set; }
+        public int FrameIndex { get; set; }
         public TimeSpan Duration { get; set; }
 
         public SpriteSheetAnimationFrame(int index, TimeSpan duration)
         {
-            Index = index;
+            FrameIndex = index;
             Duration = duration;
         }
 

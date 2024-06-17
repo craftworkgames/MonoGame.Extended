@@ -19,7 +19,7 @@ namespace MonoGame.Extended.Sprites
         {
             var cycle = Cycles[name];
             var keyFrames = cycle.Frames
-                .Select(f => TextureAtlas[f.Index])
+                .Select(f => TextureAtlas[f.FrameIndex])
                 .ToArray();
 
             return new SpriteSheetAnimation(name, keyFrames, cycle.FrameDuration, cycle.IsLooping, cycle.IsReversed, cycle.IsPingPong);
