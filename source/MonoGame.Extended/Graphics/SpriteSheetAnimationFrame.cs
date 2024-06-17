@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 
-namespace MonoGame.Extended.Sprites
+namespace MonoGame.Extended.Graphics
 {
     [JsonConverter(typeof(SpriteSheetAnimationFrameJsonConverter))]
     [DebuggerDisplay("{Index} {Duration}")]

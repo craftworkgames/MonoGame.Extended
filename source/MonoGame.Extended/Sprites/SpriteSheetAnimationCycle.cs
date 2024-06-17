@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Sprites
 {
