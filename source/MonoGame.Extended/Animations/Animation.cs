@@ -27,10 +27,10 @@ public class Animation : IAnimation
 
     public bool IsPingPong { get; set; }
     public double Speed { get; set; }
-    public Action<Animation> OnFrameBegin { get; set; } = default;
-    public Action<Animation> OnFrameEnd { get; set; } = default;
-    public Action<Animation> OnAnimationLoop { get; set; } = default;
-    public Action<Animation> OnAnimationCompleted { get; set; } = default;
+    public Action<IAnimation> OnFrameBegin { get; set; } = default;
+    public Action<IAnimation> OnFrameEnd { get; set; } = default;
+    public Action<IAnimation> OnAnimationLoop { get; set; } = default;
+    public Action<IAnimation> OnAnimationCompleted { get; set; } = default;
 
     public TimeSpan CurrentFrameTimeRemaining { get; private set; }
 

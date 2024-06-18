@@ -5,6 +5,7 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Animations;
 
 namespace MonoGame.Extended.Graphics;
 
@@ -13,7 +14,7 @@ namespace MonoGame.Extended.Graphics;
 /// region.
 /// </summary>
 [DebuggerDisplay("{Index} {Duration}")]
-internal class SpriteSheetAnimationFrame
+internal class SpriteSheetAnimationFrame : IAnimationFrame
 {
     /// <summary>
     /// Gets the index of the frame in the overall sprite sheet.
