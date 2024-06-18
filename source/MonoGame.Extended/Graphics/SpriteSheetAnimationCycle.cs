@@ -21,7 +21,7 @@ public class SpriteSheetAnimationCycle
     public bool IsReversed { get; set; }
     public bool IsPingPong { get; set; }
 
-    public SpriteSheetAnimationCycle(string name, SpriteSheetAnimationFrame[] frames, bool isLooping, bool isReversed, bool isPingPong)
+    internal SpriteSheetAnimationCycle(string name, SpriteSheetAnimationFrame[] frames, bool isLooping, bool isReversed, bool isPingPong)
     {
         Name = name;
         IsLooping = isLooping;
