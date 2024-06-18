@@ -11,8 +11,6 @@ public class SpriteSheetAnimationCycle
 {
     private SpriteSheetAnimationFrame[] _frames;
 
-    public float FrameDuration { get; set; } = 0.2f;
-
     public ReadOnlySpan<SpriteSheetAnimationFrame> Frames => _frames;
 
     public bool IsLooping { get; set; }
