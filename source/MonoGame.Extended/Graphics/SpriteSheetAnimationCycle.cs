@@ -17,6 +17,7 @@ public class SpriteSheetAnimationCycle
     public string Name { get; }
     public ReadOnlySpan<SpriteSheetAnimationFrame> Frames => _frames;
 
+    public SpriteSheetAnimationFrame this[int index] => GetFrame(index);
 
     public int FrameCount => _frames.Length;
 
@@ -32,4 +33,7 @@ public class SpriteSheetAnimationCycle
         IsPingPong = isPingPong;
         _frames = frames;
     }
+
+    public SpriteSheetAnimationFrame GetFrame(int index) => _frames[index];
+
 }
