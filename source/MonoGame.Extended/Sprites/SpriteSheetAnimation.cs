@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using MonoGame.Extended.Animations;
 using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Sprites

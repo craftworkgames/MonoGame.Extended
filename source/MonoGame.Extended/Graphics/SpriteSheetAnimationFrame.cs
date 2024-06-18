@@ -13,7 +13,7 @@ namespace MonoGame.Extended.Graphics;
 /// region.
 /// </summary>
 [DebuggerDisplay("{Index} {Duration}")]
-public class SpriteSheetAnimationFrame
+internal class SpriteSheetAnimationFrame
 {
     /// <summary>
     /// Gets the index of the frame in the overall sprite sheet.
@@ -25,19 +25,8 @@ public class SpriteSheetAnimationFrame
     /// </summary>
     public TimeSpan Duration { get; }
 
-    /// <summary>
-    /// Gets the source texture region that represents the texture to render during this frame of animation.
-    /// </summary>
-    public Texture2DRegion TextureRegion { get; }
-
-    internal SpriteSheetAnimationFrame(int index, Texture2DRegion region, TimeSpan duration)
+    internal SpriteSheetAnimationFrame(int index, TimeSpan duration)
     {
-        ArgumentNullException.ThrowIfNull(region);
-        if (region.Texture.IsDisposed)
-        {
-            throw new ObjectDisposedException(nameof(region), $"The source {nameof(Texture2D)} of {nameof(region)} was disposed prior.");
-        }
-
         FrameIndex = index;
         Duration = duration;
     }

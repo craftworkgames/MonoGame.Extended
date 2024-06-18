@@ -278,6 +278,17 @@ public class Texture2DAtlas : IEnumerable<Texture2DRegion>
 
         return regions;
     }
+    
+    internal Texture2DRegion[] GetRegions(ReadOnlySpan<SpriteSheetAnimationFrame> frames)
+    {
+        Texture2DRegion[] regions = new Texture2DRegion[frames.Length];
+        for (int i = 0; i < frames.Length; i++)
+        {
+            regions[i] = GetRegion(frames[i].FrameIndex);
+        }
+
+        return regions;
+    }
 
     /// <summary>
     /// Gets the regions with the specified names.
