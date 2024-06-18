@@ -2,20 +2,26 @@
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 
 namespace MonoGame.Extended.Graphics;
 
 public class SpriteSheetAnimationCycle
 {
+    private SpriteSheetAnimationFrame[] _frames;
+
     public float FrameDuration { get; set; } = 0.2f;
-    public List<SpriteSheetAnimationFrame> Frames { get; set; }
+
+    public ReadOnlySpan<SpriteSheetAnimationFrame> Frames => _frames;
+
     public bool IsLooping { get; set; }
     public bool IsReversed { get; set; }
     public bool IsPingPong { get; set; }
-    public SpriteSheetAnimationCycle()
+
+    public SpriteSheetAnimationCycle(SpriteSheetAnimationFrame[] frames)
     {
-        Frames = new List<SpriteSheetAnimationFrame>();
+        _frames = frames;
     }
 
 }
