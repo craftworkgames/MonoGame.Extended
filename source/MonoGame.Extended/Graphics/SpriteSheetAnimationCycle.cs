@@ -28,7 +28,5 @@ public class SpriteSheetAnimationCycle
         IsReversed = isReversed;
         IsPingPong = isPingPong;
         _frames = frames;
-
     }
-
 }
