@@ -17,6 +17,9 @@ public class SpriteSheetAnimationCycle
     public string Name { get; }
     public ReadOnlySpan<SpriteSheetAnimationFrame> Frames => _frames;
 
+
+    public int FrameCount => _frames.Length;
+
     public bool IsLooping { get; set; }
     public bool IsReversed { get; set; }
     public bool IsPingPong { get; set; }
