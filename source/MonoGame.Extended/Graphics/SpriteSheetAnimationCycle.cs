@@ -11,14 +11,19 @@ public class SpriteSheetAnimationCycle
 {
     private SpriteSheetAnimationFrame[] _frames;
 
+    /// <summary>
+    /// Gets the name of this animation cycle.
+    /// </summary>
+    public string Name { get; }
     public ReadOnlySpan<SpriteSheetAnimationFrame> Frames => _frames;
 
     public bool IsLooping { get; set; }
     public bool IsReversed { get; set; }
     public bool IsPingPong { get; set; }
 
-    public SpriteSheetAnimationCycle(SpriteSheetAnimationFrame[] frames)
+    public SpriteSheetAnimationCycle(string name, SpriteSheetAnimationFrame[] frames)
     {
+        Name = name;
         _frames = frames;
     }
 
