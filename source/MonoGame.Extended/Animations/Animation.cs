@@ -4,37 +4,69 @@
 
 using System;
 using Microsoft.Xna.Framework;
+using static System.Net.WebRequestMethods;
 
 namespace MonoGame.Extended.Animations;
 
 public class Animation : IAnimation
 {
     private readonly IAnimationDefinition _definition;
-    private readonly IAnimationFrame[] _frames;
-    private int _currentIndex;
     private int _direction;
 
+    /// <summary>
+    /// Gets a value that indicates whether this animation has been disposed of.
+    /// </summary>
+    public bool IsDisposed { get; protected set; }
+
+    /// <inheritdoc />
     public bool IsPaused { get; private set; }
 
+    /// <inheritdoc />
     public bool IsAnimating { get; private set; }
 
+    /// <inheritdoc />
     public bool IsLooping { get; set; }
+
+    /// <inheritdoc />
     public bool IsReversed
     {
         get => _direction == -1;
         set => _direction = value ? -1 : 1;
     }
 
+    /// <inheritdoc />
     public bool IsPingPong { get; set; }
+
+    /// <inheritdoc />
     public double Speed { get; set; }
+
+    /// <inheritdoc />
     public Action<IAnimation> OnFrameBegin { get; set; } = default;
+
+    /// <inheritdoc />
     public Action<IAnimation> OnFrameEnd { get; set; } = default;
+
+    /// <inheritdoc />
     public Action<IAnimation> OnAnimationLoop { get; set; } = default;
+
+    /// <inheritdoc />
     public Action<IAnimation> OnAnimationCompleted { get; set; } = default;
 
+    /// <inheritdoc />
     public TimeSpan CurrentFrameTimeRemaining { get; private set; }
 
-    public IAnimationFrame CurrentFrame => _frames[_currentIndex];
+    /// <inheritdoc />
+    public int CurrentFrame { get; private set; }
+
+    public Animation(IAnimationDefinition definition)
+    {
+        _definition = definition;
+
+        //  Set initial properties but keep original values in the definition cached for Reset()
+        IsLooping = definition.IsLooping;
+        IsReversed = definition.IsReversed;
+        IsPingPong = definition.IsPingPong;
+    }
 
     /// <inheritdoc />
     public  bool Pause() => Pause(false);
@@ -53,7 +85,7 @@ public class Animation : IAnimation
 
         if(resetFrameDuration)
         {
-            CurrentFrameTimeRemaining = CurrentFrame.Duration;
+            CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
         }
 
         return true;
@@ -65,7 +97,7 @@ public class Animation : IAnimation
     /// <inheritdoc />
     public bool Play(int startingFrame)
     {
-        if(startingFrame < 0 || startingFrame >= _frames.Length)
+        if(startingFrame < 0 || startingFrame >= _definition.FrameCount)
         {
             throw new ArgumentOutOfRangeException(nameof(startingFrame), $"{nameof(startingFrame)} cannot be less than zero or greater than or equal to the total number of frames in this {nameof(Animation)}");
         }
@@ -77,8 +109,8 @@ public class Animation : IAnimation
         }
 
         IsAnimating = true;
-        _currentIndex = startingFrame;
-        CurrentFrameTimeRemaining = CurrentFrame.Duration;
+        CurrentFrame = startingFrame;
+        CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
         return true;       
     }
 
@@ -91,20 +123,20 @@ public class Animation : IAnimation
         IsAnimating = false;
         IsPaused = true;
         Speed = 1.0d;
-        _currentIndex = IsReversed ? _frames.Length - 1 : 0;
-        CurrentFrameTimeRemaining = CurrentFrame.Duration;
+        CurrentFrame = IsReversed ? _definition.FrameCount - 1 : 0;
+        CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
     }
 
     /// <inheritdoc />
     public void SetFrame(int index)
     {
-        if(index < 0 || index >= _frames.Length)
+        if(index < 0 || index >= _definition.FrameCount)
         {
             throw new ArgumentOutOfRangeException(nameof(index), $"{nameof(index)} cannot be less than zero or greater than or equal to the total number of frames in this {nameof(Animation)}");
         }
 
-        _currentIndex = index;
-        CurrentFrameTimeRemaining = CurrentFrame.Duration;
+        CurrentFrame = index;
+        CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
     }
 
     /// <inheritdoc />
@@ -146,20 +178,16 @@ public class Animation : IAnimation
     }
 
     /// <inheritdoc />
-    public void Update(double deltaTimeInSeonds) => Update(TimeSpan.FromSeconds(deltaTimeInSeonds));
-
-    /// <inheritdoc />
-    public void Update(GameTime gameTime) => Update(gameTime.ElapsedGameTime);
-
-    /// <inheritdoc />
-    public void Update(in TimeSpan elapsedTime)
+    public void Update(GameTime gameTime)
     {
+        TimeSpan elapsedTime = gameTime.ElapsedGameTime;
+
         if(!IsAnimating || IsPaused)
         {
             return;
         }
 
-        if(CurrentFrameTimeRemaining == CurrentFrame.Duration)
+        if(CurrentFrameTimeRemaining == _definition.Frames[CurrentFrame].Duration)
         {
             OnFrameBegin?.Invoke(this);
         }
@@ -176,9 +204,9 @@ public class Animation : IAnimation
     {
         OnFrameEnd?.Invoke(this);
 
-        _currentIndex += _direction;
+        CurrentFrame += _direction;
 
-        if(_currentIndex >= _frames.Length || _currentIndex < 0)
+        if(CurrentFrame >= _definition.FrameCount || CurrentFrame < 0)
         {
             if(IsLooping)
             {
@@ -188,22 +216,48 @@ public class Animation : IAnimation
 
                     //  Adjust the current index again after ping ponging so we don't repeat the same frame twice
                     //  in a row
-                    _currentIndex += _direction * 2;
+                    CurrentFrame += _direction * 2;
                 }
                 else
                 {
-                    _currentIndex = IsReversed ? _frames.Length - 1 : 0;
+                    CurrentFrame = IsReversed ? _definition.FrameCount - 1 : 0;
                 }
 
                 OnAnimationLoop?.Invoke(this);
             }
             else
             {
-                _currentIndex -= _direction;
+                CurrentFrame -= _direction;
                 Stop();
             }
         }
 
-        CurrentFrameTimeRemaining = CurrentFrame.Duration;
+        CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <inheritdoc cref="Dispose()"/>
+    /// <remarks>
+    ///     <para>
+    ///         When overriding this method, check if <paramref name="disposing"/> is <see langword="true"/> or
+    ///         <see langword="false"/>.  Only dispose of other managed resources when it is <see langword="true"/>.
+    ///     </para>
+    ///     <see href="https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/dispose-pattern#basic-dispose-pattern"/>
+    /// </remarks>
+    /// <param name="disposing">Indicates whether this was called from <see cref="Dispose()"/> or the finalizer.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if(IsDisposed)
+        {
+            return;
+        }
+
+        IsDisposed = true;
     }
 }

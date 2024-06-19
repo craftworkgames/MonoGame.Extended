@@ -3,8 +3,46 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Timers
 {
-    public abstract class GameTimer : IUpdate
+    public abstract class GameTimer : IUpdateable
     {
+        private bool _enabled;
+        private int _updateOrder;
+        /// <inheritdoc />
+        public bool Enabled
+        {
+            get => _enabled;
+            set
+            {
+                if (_enabled == value)
+                {
+                    return;
+                }
+                _enabled = value;
+                EnabledChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        /// <inheritdoc />
+        public int UpdateOrder
+        {
+            get => _updateOrder;
+            set
+            {
+                if (_updateOrder == value)
+                {
+                    return;
+                }
+                _updateOrder = value;
+                EnabledChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        /// <inheritdoc />
+        public event EventHandler<EventArgs> EnabledChanged;
+
+        /// <inheritdoc />
+        public event EventHandler<EventArgs> UpdateOrderChanged;
+
         protected GameTimer(double intervalSeconds)
             : this(TimeSpan.FromSeconds(intervalSeconds))
         {
@@ -20,6 +58,7 @@ namespace MonoGame.Extended.Timers
         public TimeSpan CurrentTime { get; protected set; }
         public TimerState State { get; protected set; }
 
+
         public void Update(GameTime gameTime)
         {
             if (State != TimerState.Started)
@@ -32,6 +71,7 @@ namespace MonoGame.Extended.Timers
         public event EventHandler Started;
         public event EventHandler Stopped;
         public event EventHandler Paused;
+
 
         public void Start()
         {

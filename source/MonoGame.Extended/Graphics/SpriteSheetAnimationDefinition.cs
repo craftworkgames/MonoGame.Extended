@@ -3,15 +3,16 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using MonoGame.Extended.Animations;
 
 namespace MonoGame.Extended.Graphics;
 
-internal class SpriteSheetAnimationDefinition
+internal class SpriteSheetAnimationDefinition : IAnimationDefinition
 {
     private readonly SpriteSheetAnimationFrame[] _frames;
 
     public string Name { get; }
-    public ReadOnlySpan<SpriteSheetAnimationFrame> Frames => _frames;
+    public ReadOnlySpan<IAnimationFrame> Frames => _frames;
     public int FrameCount => _frames.Length;
     public bool IsLooping { get; }
     public bool IsReversed { get; }

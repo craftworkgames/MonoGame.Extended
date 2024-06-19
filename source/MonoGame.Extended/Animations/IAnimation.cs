@@ -3,10 +3,11 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Animations;
 
-public interface IAnimation : IUpdate
+public interface IAnimation : IDisposable
 {
     /// <summary>
     /// Gets a value indicating whether the animation is paused.
@@ -65,9 +66,9 @@ public interface IAnimation : IUpdate
     TimeSpan CurrentFrameTimeRemaining { get; }
 
     /// <summary>
-    /// Gets the current frame of the animation.
+    /// Gets the index of the current frame of the animation.
     /// </summary>
-    IAnimationFrame CurrentFrame { get; }
+    int CurrentFrame { get; }
 
     /// <summary>
     /// Sets the animation to a specified frame.
@@ -133,6 +134,12 @@ public interface IAnimation : IUpdate
     /// <see langword="true"/> if the animation was successfully unpaused; otherwise, <see langword="false"/>.
     /// </returns>
     bool UnPause(bool advanceToNextFrame);
+
+    /// <summary>
+    /// Updates the animation.
+    /// </summary>
+    /// <param name="gameTime">A snapshot of the timing values for the current update cycle.</param>
+    void Update(GameTime gameTime);
 
     /// <summary>
     /// Stops the animation.
