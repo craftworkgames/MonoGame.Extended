@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Animations;
 
 namespace MonoGame.Extended.Graphics;
 
@@ -279,7 +280,7 @@ public class Texture2DAtlas : IEnumerable<Texture2DRegion>
         return regions;
     }
     
-    internal Texture2DRegion[] GetRegions(ReadOnlySpan<SpriteSheetAnimationFrame> frames)
+    internal Texture2DRegion[] GetRegions(ReadOnlySpan<IAnimationFrame> frames)
     {
         Texture2DRegion[] regions = new Texture2DRegion[frames.Length];
         for (int i = 0; i < frames.Length; i++)

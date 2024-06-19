@@ -3,6 +3,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using static System.Net.WebRequestMethods;
 
@@ -41,22 +42,16 @@ public class Animation : IAnimation
     public double Speed { get; set; }
 
     /// <inheritdoc />
-    public Action<IAnimation> OnFrameBegin { get; set; } = default;
-
-    /// <inheritdoc />
-    public Action<IAnimation> OnFrameEnd { get; set; } = default;
-
-    /// <inheritdoc />
-    public Action<IAnimation> OnAnimationLoop { get; set; } = default;
-
-    /// <inheritdoc />
-    public Action<IAnimation> OnAnimationCompleted { get; set; } = default;
+    public event Action<IAnimation, AnimationEventTrigger> OnAnimationEvent;
 
     /// <inheritdoc />
     public TimeSpan CurrentFrameTimeRemaining { get; private set; }
 
     /// <inheritdoc />
     public int CurrentFrame { get; private set; }
+
+    /// <inheritdoc />
+    public int FrameCount => _definition.FrameCount;
 
     public Animation(IAnimationDefinition definition)
     {
@@ -66,6 +61,7 @@ public class Animation : IAnimation
         IsLooping = definition.IsLooping;
         IsReversed = definition.IsReversed;
         IsPingPong = definition.IsPingPong;
+        Speed = 1.0f;
     }
 
     /// <inheritdoc />
@@ -140,17 +136,19 @@ public class Animation : IAnimation
     }
 
     /// <inheritdoc />
-    public bool Stop()
+    public bool Stop() => Stop(AnimationEventTrigger.AnimationStopped);
+
+    private bool Stop(AnimationEventTrigger trigger)
     {
         //  We can't stop something that's not animating.  This is to prevent accidentally invoking OnAnimationEnd
-        if(!IsAnimating)
+        if (!IsAnimating)
         {
             return false;
         }
 
         IsAnimating = false;
         IsPaused = true;
-        OnAnimationCompleted?.Invoke(this);
+        OnAnimationEvent?.Invoke(this, trigger);
         return true;
     }
 
@@ -171,7 +169,7 @@ public class Animation : IAnimation
 
         if(advanceToNextFrame)
         {
-            AdvanceFrame();
+            _ = AdvanceFrame();
         }
 
         return true;
@@ -181,41 +179,45 @@ public class Animation : IAnimation
     public void Update(GameTime gameTime)
     {
         TimeSpan elapsedTime = gameTime.ElapsedGameTime;
+        TimeSpan remainingTime = TimeSpan.Zero;
 
-        if(!IsAnimating || IsPaused)
+        if (!IsAnimating || IsPaused)
         {
             return;
         }
 
-        if(CurrentFrameTimeRemaining == _definition.Frames[CurrentFrame].Duration)
-        {
-            OnFrameBegin?.Invoke(this);
-        }
-
         CurrentFrameTimeRemaining -= elapsedTime * Speed;
 
-        if(CurrentFrameTimeRemaining <= TimeSpan.Zero)
+        while (CurrentFrameTimeRemaining <= TimeSpan.Zero)
         {
-            AdvanceFrame();
+            remainingTime += -CurrentFrameTimeRemaining;
+
+            //  End the current frame
+            OnAnimationEvent?.Invoke(this, AnimationEventTrigger.FrameEnd);
+
+            if (AdvanceFrame())
+            {
+                CurrentFrameTimeRemaining -= remainingTime;
+                remainingTime = TimeSpan.Zero;
+            }
         }
     }
 
-    private void AdvanceFrame()
+    private bool AdvanceFrame()
     {
-        OnFrameEnd?.Invoke(this);
-
+        //  Increment the current frame
         CurrentFrame += _direction;
 
-        if(CurrentFrame >= _definition.FrameCount || CurrentFrame < 0)
+        //  Ensure frame is in bounds
+        if (CurrentFrame < 0 || CurrentFrame >= _definition.FrameCount)
         {
-            if(IsLooping)
+            //  Is this a looping animation?
+            if (IsLooping)
             {
-                if(IsPingPong)
+                //  Is this a standard loop or is it a ping pong?
+                if (IsPingPong)
                 {
                     _direction = -_direction;
-
-                    //  Adjust the current index again after ping ponging so we don't repeat the same frame twice
-                    //  in a row
                     CurrentFrame += _direction * 2;
                 }
                 else
@@ -223,16 +225,21 @@ public class Animation : IAnimation
                     CurrentFrame = IsReversed ? _definition.FrameCount - 1 : 0;
                 }
 
-                OnAnimationLoop?.Invoke(this);
+                //   We looped
+                OnAnimationEvent?.Invoke(this, AnimationEventTrigger.AnimationLoop);
             }
             else
             {
+                //  No looping and we've reached the end, stop the animation
                 CurrentFrame -= _direction;
-                Stop();
+                Stop(AnimationEventTrigger.AnimationCompleted);
+                return false;
             }
         }
 
         CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
+        OnAnimationEvent?.Invoke(this, AnimationEventTrigger.FrameBegin);
+        return true;
     }
 
     /// <inheritdoc />

@@ -41,24 +41,29 @@ public interface IAnimation : IDisposable
     double Speed { get; set; }
 
     /// <summary>
-    /// Gets or sets the action to be performed at the beginning of each frame.
+    /// Gets or sets the action to perform when an animation event is triggered.
     /// </summary>
-    Action<IAnimation> OnFrameBegin { get; set; }
+    event Action<IAnimation, AnimationEventTrigger> OnAnimationEvent;
 
-    /// <summary>
-    /// Gets or sets the action to be performed at the end of each frame.
-    /// </summary>
-    Action<IAnimation> OnFrameEnd { get; set; }
+    ///// <summary>
+    ///// Gets or sets the action to be performed at the beginning of each frame.
+    ///// </summary>
+    //event Action<IAnimation> OnFrameBegin;
 
-    /// <summary>
-    /// Gets or sets the action to be performed when the animation loops.
-    /// </summary>
-    Action<IAnimation> OnAnimationLoop { get; set; }
+    ///// <summary>
+    ///// Gets or sets the action to be performed at the end of each frame.
+    ///// </summary>
+    //event Action<IAnimation> OnFrameEnd;
 
-    /// <summary>
-    /// Gets or sets the action to be performed when the animation completes.
-    /// </summary>
-    Action<IAnimation> OnAnimationCompleted { get; set; }
+    ///// <summary>
+    ///// Gets or sets the action to be performed when the animation loops.
+    ///// </summary>
+    //event Action<IAnimation> OnAnimationLoop;
+
+    ///// <summary>
+    ///// Gets or sets the action to be performed when the animation completes.
+    ///// </summary>
+    //event Action<IAnimation> OnAnimationCompleted;
 
     /// <summary>
     /// Gets the time remaining for the current frame.
@@ -69,6 +74,11 @@ public interface IAnimation : IDisposable
     /// Gets the index of the current frame of the animation.
     /// </summary>
     int CurrentFrame { get; }
+
+    /// <summary>
+    /// Gets the total number of frames in the animation.
+    /// </summary>
+    int FrameCount { get; }
 
     /// <summary>
     /// Sets the animation to a specified frame.

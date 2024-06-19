@@ -8,7 +8,7 @@ public class SpriteSheet
     private static readonly TimeSpan s_defaultDuration = TimeSpan.FromMinutes(100);
     private readonly Dictionary<string, SpriteSheetAnimationDefinition> _animations = new Dictionary<string, SpriteSheetAnimationDefinition>();
 
-    public int AnimationCycleCount => _animations.Count;
+    public int AnimationCount => _animations.Count;
 
     public string Name { get; }
 
