@@ -3,12 +3,14 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Threading;
 using Microsoft.Xna.Framework;
-using static System.Net.WebRequestMethods;
 
 namespace MonoGame.Extended.Animations;
 
+/// <summary>
+/// Represents an animation with various control features such as play, pause, stop, looping, reversing, and
+/// ping-pong effects.
+/// </summary>
 public class Animation : IAnimation
 {
     private readonly IAnimationDefinition _definition;
@@ -53,6 +55,10 @@ public class Animation : IAnimation
     /// <inheritdoc />
     public int FrameCount => _definition.FrameCount;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Animation"/> class with the specified definition.
+    /// </summary>
+    /// <param name="definition">The definition of the animation.</param>
     public Animation(IAnimationDefinition definition)
     {
         _definition = definition;
@@ -65,7 +71,7 @@ public class Animation : IAnimation
     }
 
     /// <inheritdoc />
-    public  bool Pause() => Pause(false);
+    public bool Pause() => Pause(false);
 
     /// <inheritdoc />
     public bool Pause(bool resetFrameDuration)
@@ -79,7 +85,7 @@ public class Animation : IAnimation
 
         IsPaused = true;
 
-        if(resetFrameDuration)
+        if (resetFrameDuration)
         {
             CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
         }
@@ -93,13 +99,13 @@ public class Animation : IAnimation
     /// <inheritdoc />
     public bool Play(int startingFrame)
     {
-        if(startingFrame < 0 || startingFrame >= _definition.FrameCount)
+        if (startingFrame < 0 || startingFrame >= _definition.FrameCount)
         {
             throw new ArgumentOutOfRangeException(nameof(startingFrame), $"{nameof(startingFrame)} cannot be less than zero or greater than or equal to the total number of frames in this {nameof(Animation)}");
         }
 
         //  Cannot play something that is already playing
-        if(IsAnimating)
+        if (IsAnimating)
         {
             return false;
         }
@@ -107,7 +113,7 @@ public class Animation : IAnimation
         IsAnimating = true;
         CurrentFrame = startingFrame;
         CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
-        return true;       
+        return true;
     }
 
     /// <inheritdoc />
@@ -126,13 +132,14 @@ public class Animation : IAnimation
     /// <inheritdoc />
     public void SetFrame(int index)
     {
-        if(index < 0 || index >= _definition.FrameCount)
+        if (index < 0 || index >= _definition.FrameCount)
         {
             throw new ArgumentOutOfRangeException(nameof(index), $"{nameof(index)} cannot be less than zero or greater than or equal to the total number of frames in this {nameof(Animation)}");
         }
 
         CurrentFrame = index;
         CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
+        OnAnimationEvent?.Invoke(this, AnimationEventTrigger.FrameBegin);
     }
 
     /// <inheritdoc />
@@ -153,21 +160,21 @@ public class Animation : IAnimation
     }
 
     /// <inheritdoc />
-    public bool UnPause() => UnPause(false);
+    public bool Unpause() => Unpause(false);
 
     /// <inheritdoc />
-    public bool UnPause(bool advanceToNextFrame)
+    public bool Unpause(bool advanceToNextFrame)
     {
         //  We can't unpause something that's not animating and also isn't paused. This is to prevent improper usage
         //  that could accidentally advance to the next frame if it was set to true.
-        if(!IsAnimating || !IsPaused)
+        if (!IsAnimating || !IsPaused)
         {
             return false;
         }
 
         IsPaused = false;
 
-        if(advanceToNextFrame)
+        if (advanceToNextFrame)
         {
             _ = AdvanceFrame();
         }
@@ -195,11 +202,13 @@ public class Animation : IAnimation
             //  End the current frame
             OnAnimationEvent?.Invoke(this, AnimationEventTrigger.FrameEnd);
 
-            if (AdvanceFrame())
+            if (!AdvanceFrame())
             {
-                CurrentFrameTimeRemaining -= remainingTime;
-                remainingTime = TimeSpan.Zero;
+                break;
             }
+
+            CurrentFrameTimeRemaining -= remainingTime;
+            remainingTime = TimeSpan.Zero;
         }
     }
 
@@ -260,7 +269,7 @@ public class Animation : IAnimation
     /// <param name="disposing">Indicates whether this was called from <see cref="Dispose()"/> or the finalizer.</param>
     protected virtual void Dispose(bool disposing)
     {
-        if(IsDisposed)
+        if (IsDisposed)
         {
             return;
         }

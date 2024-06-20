@@ -2,21 +2,41 @@
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MonoGame.Extended.Animations;
 
+/// <summary>
+/// Specifies the trigger for an animation event.
+/// </summary>
 public enum AnimationEventTrigger
 {
+    /// <summary>
+    /// Triggered at the beginning of a frame.
+    /// </summary>
     FrameBegin,
-    FrameEnd,
-    FrameSkipped,
-    AnimationLoop,
-    AnimationCompleted,
-    AnimationStopped,
 
+    /// <summary>
+    /// Triggered at the end of a frame.
+    /// </summary>
+    FrameEnd,
+
+    /// <summary>
+    /// Triggered when a frame is skipped.
+    /// </summary>
+    FrameSkipped,
+
+    /// <summary>
+    /// Triggered when the animation loops.
+    /// </summary>
+    AnimationLoop,
+
+    /// <summary>
+    /// Triggered when the animation completes.
+    /// </summary>
+    AnimationCompleted,
+
+    /// <summary>
+    /// Triggered when the animation stops.
+    /// </summary>
+    AnimationStopped,
 }
+

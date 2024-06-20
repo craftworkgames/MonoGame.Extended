@@ -95,7 +95,7 @@ public class AnimationTests
     {
         _animation.Play();
         _animation.Pause();
-        var result = _animation.UnPause();
+        var result = _animation.Unpause();
 
         Assert.True(result);
         Assert.False(_animation.IsPaused);
@@ -106,7 +106,7 @@ public class AnimationTests
     {
         _animation.Play();
         _animation.Pause();
-        var result = _animation.UnPause(true);
+        var result = _animation.Unpause(true);
 
         Assert.True(result);
         Assert.Equal(1, _animation.CurrentFrame);
@@ -169,7 +169,7 @@ public class AnimationTests
         Assert.True(animationLoopTriggered);
 
         _animation.IsLooping = false;
-        _animation.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(1.1)));
+        _animation.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(2)));
         Assert.True(animationCompletedTriggered);
     }
 

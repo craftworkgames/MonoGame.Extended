@@ -6,6 +6,10 @@ using System;
 
 namespace MonoGame.Extended.Animations;
 
+/// <summary>
+/// Defines the interface for an animation definition, specifying properties of the animation such as frames, looping,
+/// reversing, and ping-pong effects.
+/// </summary>
 public interface IAnimationDefinition
 {
     /// <summary>

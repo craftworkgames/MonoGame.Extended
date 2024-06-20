@@ -6,6 +6,9 @@ using System;
 
 namespace MonoGame.Extended.Animations;
 
+/// <summary>
+/// Defines the interface for an animation frame, specifying the frame index and its duration.
+/// </summary>
 public interface IAnimationFrame
 {
     /// <summary>

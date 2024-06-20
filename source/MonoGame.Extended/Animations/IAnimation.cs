@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Animations;
 
+/// <summary>
+/// Defines the interface for an animation with various control features such as play, pause, stop, looping, reversing, and ping-pong effects.
+/// </summary>
 public interface IAnimation : IDisposable
 {
     /// <summary>
@@ -44,26 +47,6 @@ public interface IAnimation : IDisposable
     /// Gets or sets the action to perform when an animation event is triggered.
     /// </summary>
     event Action<IAnimation, AnimationEventTrigger> OnAnimationEvent;
-
-    ///// <summary>
-    ///// Gets or sets the action to be performed at the beginning of each frame.
-    ///// </summary>
-    //event Action<IAnimation> OnFrameBegin;
-
-    ///// <summary>
-    ///// Gets or sets the action to be performed at the end of each frame.
-    ///// </summary>
-    //event Action<IAnimation> OnFrameEnd;
-
-    ///// <summary>
-    ///// Gets or sets the action to be performed when the animation loops.
-    ///// </summary>
-    //event Action<IAnimation> OnAnimationLoop;
-
-    ///// <summary>
-    ///// Gets or sets the action to be performed when the animation completes.
-    ///// </summary>
-    //event Action<IAnimation> OnAnimationCompleted;
 
     /// <summary>
     /// Gets the time remaining for the current frame.
@@ -134,7 +117,7 @@ public interface IAnimation : IDisposable
     /// <returns>
     /// <see langword="true"/> if the animation was successfully unpaused; otherwise, <see langword="false"/>.
     /// </returns>
-    bool UnPause();
+    bool Unpause();
 
     /// <summary>
     /// Unpauses the animation.
@@ -143,7 +126,7 @@ public interface IAnimation : IDisposable
     /// <returns>
     /// <see langword="true"/> if the animation was successfully unpaused; otherwise, <see langword="false"/>.
     /// </returns>
-    bool UnPause(bool advanceToNextFrame);
+    bool Unpause(bool advanceToNextFrame);
 
     /// <summary>
     /// Updates the animation.
