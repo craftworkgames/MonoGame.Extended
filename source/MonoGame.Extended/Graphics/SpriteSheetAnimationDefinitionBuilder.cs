@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace MonoGame.Extended.Graphics;
 
+/// <summary>
+/// A builder class for creating <see cref="SpriteSheetAnimationDefinition"/> instances.
+/// </summary>
 public sealed class SpriteSheetAnimationDefinitionBuilder
 {
     private readonly string _name;
@@ -22,6 +25,12 @@ public sealed class SpriteSheetAnimationDefinitionBuilder
         _spriteSheet = spriteSheet;
     }
 
+    /// <summary>
+    /// Adds a frame to the animation using the region index and duration.
+    /// </summary>
+    /// <param name="regionIndex">The index of the region in the sprite sheet.</param>
+    /// <param name="duration">The duration of the frame.</param>
+    /// <returns>The <see cref="SpriteSheetAnimationDefinitionBuilder"/> instance for chaining.</returns>
     public SpriteSheetAnimationDefinitionBuilder AddFrame(int regionIndex, TimeSpan duration)
     {
         SpriteSheetAnimationFrame frame = new SpriteSheetAnimationFrame(regionIndex, duration);
@@ -29,24 +38,45 @@ public sealed class SpriteSheetAnimationDefinitionBuilder
         return this;
     }
 
+    /// <summary>
+    /// Adds a frame to the animation using the region name and duration.
+    /// </summary>
+    /// <param name="regionName">The name of the region in the sprite sheet.</param>
+    /// <param name="duration">The duration of the frame.</param>
+    /// <returns>The <see cref="SpriteSheetAnimationDefinitionBuilder"/> instance for chaining.</returns>
     public SpriteSheetAnimationDefinitionBuilder AddFrame(string regionName, TimeSpan duration)
     {
         int index = _spriteSheet.TextureAtlas.GetIndexOfRegion(regionName);
         return AddFrame(index, duration);
     }
 
+    /// <summary>
+    /// Sets whether the animation should loop.
+    /// </summary>
+    /// <param name="isLooping">If set to <c>true</c>, the animation will loop.</param>
+    /// <returns>The <see cref="SpriteSheetAnimationDefinitionBuilder"/> instance for chaining.</returns>
     public SpriteSheetAnimationDefinitionBuilder IsLooping(bool isLooping)
     {
         _isLooping = isLooping;
         return this;
     }
 
+    /// <summary>
+    /// Sets whether the animation should be reversed.
+    /// </summary>
+    /// <param name="isReversed">If set to <c>true</c>, the animation will play in reverse.</param>
+    /// <returns>The <see cref="SpriteSheetAnimationDefinitionBuilder"/> instance for chaining.</returns>
     public SpriteSheetAnimationDefinitionBuilder IsReversed(bool isReversed)
     {
         _isReversed = isReversed;
         return this;
     }
 
+    /// <summary>
+    /// Sets whether the animation should ping-pong (reverse direction at the ends).
+    /// </summary>
+    /// <param name="isPingPong">If set to <c>true</c>, the animation will ping-pong.</param>
+    /// <returns>The <see cref="SpriteSheetAnimationDefinitionBuilder"/> instance for chaining.</returns>
     public SpriteSheetAnimationDefinitionBuilder IsPingPong(bool isPingPong)
     {
         _isPingPong = isPingPong;

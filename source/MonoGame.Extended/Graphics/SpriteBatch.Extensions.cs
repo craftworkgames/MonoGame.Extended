@@ -2,20 +2,29 @@
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
 
-
 using System;
-using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics;
 
+/// <summary>
+/// Provides extension methods for the <see cref="SpriteBatch"/> class.
+/// </summary>
 public static class SpriteBatchExtensions
 {
     #region ----------------------------NinePatch-----------------------------
     private static readonly Rectangle[] _patchCache = new Rectangle[9];
     private static Rectangle _rect = default;
 
+    /// <summary>
+    /// Draws a nine-patch region to the sprite batch.
+    /// </summary>
+    /// <param name="spriteBatch">The sprite batch.</param>
+    /// <param name="ninePatchRegion">The nine-patch region.</param>
+    /// <param name="destinationRectangle">The destination rectangle.</param>
+    /// <param name="color">The color to tint the nine-patch region.</param>
+    /// <param name="clippingRectangle">An optional clipping rectangle.</param>
     public static void Draw(this SpriteBatch spriteBatch, NinePatch ninePatchRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
     {
         CreateDestinationPatches(ninePatchRegion, destinationRectangle);
@@ -45,21 +54,50 @@ public static class SpriteBatchExtensions
     #endregion -------------------------NinePatch-----------------------------
 
     #region ----------------------------Sprite-----------------------------
+    /// <summary>
+    /// Draws a sprite to the sprite batch.
+    /// </summary>
+    /// <param name="sprite">The sprite to draw.</param>
+    /// <param name="spriteBatch">The sprite batch.</param>
+    /// <param name="position">The position to draw the sprite.</param>
+    /// <param name="rotation">The rotation of the sprite.</param>
+    /// <param name="scale">The scale of the sprite.</param>
     public static void Draw(this Sprite sprite, SpriteBatch spriteBatch, Vector2 position, float rotation, Vector2 scale)
     {
         Draw(spriteBatch, sprite, position, rotation, scale);
     }
 
+    /// <summary>
+    /// Draws a sprite to the sprite batch with a transform.
+    /// </summary>
+    /// <param name="spriteBatch">The sprite batch.</param>
+    /// <param name="sprite">The sprite to draw.</param>
+    /// <param name="transform">The transform to apply to the sprite.</param>
     public static void Draw(this SpriteBatch spriteBatch, Sprite sprite, Transform2 transform)
     {
         Draw(spriteBatch, sprite, transform.Position, transform.Rotation, transform.Scale);
     }
 
+    /// <summary>
+    /// Draws a sprite to the sprite batch.
+    /// </summary>
+    /// <param name="spriteBatch">The sprite batch.</param>
+    /// <param name="sprite">The sprite to draw.</param>
+    /// <param name="position">The position to draw the sprite.</param>
+    /// <param name="rotation">The rotation of the sprite.</param>
     public static void Draw(this SpriteBatch spriteBatch, Sprite sprite, Vector2 position, float rotation = 0)
     {
         Draw(spriteBatch, sprite, position, rotation, Vector2.One);
     }
 
+    /// <summary>
+    /// Draws a sprite to the sprite batch.
+    /// </summary>
+    /// <param name="spriteBatch">The sprite batch.</param>
+    /// <param name="sprite">The sprite to draw.</param>
+    /// <param name="position">The position to draw the sprite.</param>
+    /// <param name="rotation">The rotation of the sprite.</param>
+    /// <param name="scale">The scale of the sprite.</param>
     public static void Draw(this SpriteBatch spriteBatch, Sprite sprite, Vector2 position, float rotation, Vector2 scale)
     {
         if (sprite == null) throw new ArgumentNullException(nameof(sprite));
@@ -75,6 +113,15 @@ public static class SpriteBatchExtensions
 
     #region ----------------------------Texture2D-----------------------------
 
+    /// <summary>
+    /// Draws a texture to the sprite batch with optional clipping.
+    /// </summary>
+    /// <param name="spriteBatch">The sprite batch.</param>
+    /// <param name="texture">The texture to draw.</param>
+    /// <param name="sourceRectangle">The source rectangle.</param>
+    /// <param name="destinationRectangle">The destination rectangle.</param>
+    /// <param name="color">The color to tint the texture.</param>
+    /// <param name="clippingRectangle">An optional clipping rectangle.</param>
     public static void Draw(this SpriteBatch spriteBatch, Texture2D texture, Rectangle sourceRectangle, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle)
     {
         if (!ClipRectangles(ref sourceRectangle, ref destinationRectangle, clippingRectangle))
@@ -90,11 +137,32 @@ public static class SpriteBatchExtensions
 
     #region ----------------------------TextureRegion-----------------------------
 
+    /// <summary>
+    /// Draws a texture region to the sprite batch.
+    /// </summary>
+    /// <param name="spriteBatch">The sprite batch.</param>
+    /// <param name="textureRegion">The texture region to draw.</param>
+    /// <param name="position">The position to draw the texture region.</param>
+    /// <param name="color">The color to tint the texture region.</param>
+    /// <param name="clippingRectangle">An optional clipping rectangle.</param>
     public static void Draw(this SpriteBatch spriteBatch, Texture2DRegion textureRegion, Vector2 position, Color color, Rectangle? clippingRectangle = null)
     {
         Draw(spriteBatch, textureRegion, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0, clippingRectangle);
     }
 
+    /// <summary>
+    /// Draws a texture region to the sprite batch with specified parameters.
+    /// </summary>
+    /// <param name="spriteBatch">The sprite batch.</param>
+    /// <param name="textureRegion">The texture region to draw.</param>
+    /// <param name="position">The position to draw the texture region.</param>
+    /// <param name="color">The color to tint the texture region.</param>
+    /// <param name="rotation">The rotation of the texture region.</param>
+    /// <param name="origin">The origin of the texture region.</param>
+    /// <param name="scale">The scale of the texture region.</param>
+    /// <param name="effects">The sprite effects to apply.</param>
+    /// <param name="layerDepth">The layer depth.</param>
+    /// <param name="clippingRectangle">An optional clipping rectangle.</param>
     public static void Draw(this SpriteBatch spriteBatch, Texture2DRegion textureRegion, Vector2 position, Color color,
     float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, Rectangle? clippingRectangle = null)
     {
@@ -121,12 +189,18 @@ public static class SpriteBatchExtensions
         spriteBatch.Draw(textureRegion.Texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
     }
 
+    /// <summary>
+    /// Draws a texture region to the sprite batch.
+    /// </summary>
+    /// <param name="spriteBatch">The sprite batch.</param>
+    /// <param name="textureRegion">The texture region to draw.</param>
+    /// <param name="destinationRectangle">The destination rectangle.</param>
+    /// <param name="color">The color to tint the texture region.</param>
+    /// <param name="clippingRectangle">An optional clipping rectangle.</param>
     public static void Draw(this SpriteBatch spriteBatch, Texture2DRegion textureRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
     {
         Draw(spriteBatch, textureRegion.Texture, textureRegion.Bounds, destinationRectangle, color, clippingRectangle);
     }
-
-
 
     #endregion -------------------------TextureRegion-----------------------------
 
