@@ -29,4 +29,4 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Test MonoGame.Extended
-        run: dotnet test --nologo --verbosity minimal --configuration Release
+        run: dotnet test MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release
