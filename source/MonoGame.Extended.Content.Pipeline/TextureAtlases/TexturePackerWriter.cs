@@ -24,11 +24,11 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
                 var regionName = Path.ChangeExtension(region.Filename, null);
                 Debug.Assert(regionName != null, "regionName != null");
 
-                writer.Write(regionName);
                 writer.Write(region.Frame.X);
                 writer.Write(region.Frame.Y);
                 writer.Write(region.Frame.Width);
                 writer.Write(region.Frame.Height);
+                writer.Write(regionName);
             }
         }
 

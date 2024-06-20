@@ -115,21 +115,21 @@ public class Texture2DAtlas : IEnumerable<Texture2DRegion>
     /// <param name="width">The width, in pixels, of the region.</param>
     /// <param name="height">The height, in pixels, of the region.</param>
     /// <returns>The created texture region.</returns>
-    public Texture2DRegion CreateRegion(int x, int y, int width, int height) => CreateRegion(null, new Rectangle(x, y, width, height));
+    public Texture2DRegion CreateRegion(int x, int y, int width, int height) => CreateRegion(new Rectangle(x, y, width, height), null);
 
     /// <summary>
     /// Creates a new texture region with the specified name and adds it to this atlas.
     /// </summary>
-    /// <param name="name">The name of the texture region.</param>
     /// <param name="x">The x-coordinate of the region.</param>
     /// <param name="y">The y-coordinate of the region.</param>
     /// <param name="width">The width, in pixels, of the region.</param>
     /// <param name="height">The height, in pixels, of the region.</param>
+    /// <param name="name">The name of the texture region.</param>
     /// <returns>The created texture region.</returns>
     /// <exception cref="InvalidOperationException">
     /// Thrown if a region with the same name as the <paramref name="name"/> parameter already exists in this atlas.
     /// </exception>
-    public Texture2DRegion CreateRegion(string name, int x, int y, int width, int height) => CreateRegion(name, new Rectangle(x, y, width, height));
+    public Texture2DRegion CreateRegion(int x, int y, int width, int height, string name) => CreateRegion(new Rectangle(x, y, width, height), name);
 
     /// <summary>
     /// Creates a new texture region and adds it to this atlas.
@@ -137,39 +137,39 @@ public class Texture2DAtlas : IEnumerable<Texture2DRegion>
     /// <param name="location">The location of the region.</param>
     /// <param name="size">The size, in pixels, of the region.</param>
     /// <returns>The created texture region.</returns>
-    public Texture2DRegion CreateRegion(Point location, Size size) => CreateRegion(null, new Rectangle(location, size));
+    public Texture2DRegion CreateRegion(Point location, Size size) => CreateRegion(new Rectangle(location, size), null);
 
     /// <summary>
     /// Creates a new texture region with the specified name and adds it to this atlas.
     /// </summary>
-    /// <param name="name">The name of the texture region.</param>
     /// <param name="location">The location of the region.</param>
     /// <param name="size">The size, in pixels, of the region.</param>
+    /// <param name="name">The name of the texture region.</param>
     /// <returns>The created texture region.</returns>
     /// <exception cref="InvalidOperationException">
     /// Thrown if a region with the same name as the <paramref name="name"/> parameter already exists in this atlas.
     /// </exception>
-    public Texture2DRegion CreateRegion(string name, Point location, Size size) => CreateRegion(name, new Rectangle(location, size));
+    public Texture2DRegion CreateRegion(Point location, Size size, string name) => CreateRegion(new Rectangle(location, size), name);
 
     /// <summary>
     /// Creates a new texture region and adds it to this atlas.
     /// </summary>
     /// <param name="bounds">The bounds of the region.</param>
     /// <returns>The created texture region.</returns>
-    public Texture2DRegion CreateRegion(Rectangle bounds) => CreateRegion(null, bounds);
+    public Texture2DRegion CreateRegion(Rectangle bounds) => CreateRegion(bounds, null);
 
     /// <summary>
     /// Creates a new texture region with the specified name and adds it to this atlas.
     /// </summary>
-    /// <param name="name">The name of the texture region.</param>
     /// <param name="bounds">The bounds of the region.</param>
+    /// <param name="name">The name of the texture region.</param>
     /// <returns>The created texture region.</returns>
     /// <exception cref="InvalidOperationException">
     /// Thrown if a region with the same name as the <paramref name="name"/> parameter already exists in this atlas.
     /// </exception>
-    public Texture2DRegion CreateRegion(string name, Rectangle bounds)
+    public Texture2DRegion CreateRegion(Rectangle bounds, string name)
     {
-        Texture2DRegion region = new Texture2DRegion(Texture, name, bounds);
+        Texture2DRegion region = new Texture2DRegion(Texture, bounds, name);
         AddRegion(region);
         return region;
     }
