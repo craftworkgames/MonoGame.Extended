@@ -40,13 +40,13 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Build MonoGame.Extended
-        run: dotnet build --nologo --verbosity minimal --configuration Release
+        run: dotnet build MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release
 
       - name: Test MonoGame.Extended
-        run: dotnet test --nologo --verbosity minimal --configuration Release
+        run: dotnet test MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release
 
       - name: Pack MonoGame.Extended
-        run: dotnet pack --nologo --verbosity minimal --configuration Release
+        run: dotnet pack MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
