@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {
@@ -34,20 +35,12 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-#if KNI
-            return "MonoGame.Extended.Graphics.Texture2DAtlas, KNI.Extended";
-#else
-            return "MonoGame.Extended.Graphics.Texture2DAtlas, MonoGame.Extended";
-#endif
+            return typeof(Texture2DAtlas).AssemblyQualifiedName;
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-#if KNI
-            return "MonoGame.Extended.Content.ContentReaders.Texture2DAtlasReader, KNI.Extended";
-#else
-            return "MonoGame.Extended.Content.ContentReaders.Texture2DAtlasReader, MonoGame.Extended";
-#endif
+            return typeof(ContentReaders.Texture2DAtlasReader).AssemblyQualifiedName;
         }
     }
 }

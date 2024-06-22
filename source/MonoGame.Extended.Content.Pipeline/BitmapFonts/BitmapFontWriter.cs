@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
+using MonoGame.Extended.BitmapFonts;
 
 namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
@@ -43,20 +44,12 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-#if KNI
-            return "MonoGame.Extended.BitmapFonts.BitmapFont, KNI.Extended";
-#else
-            return "MonoGame.Extended.BitmapFonts.BitmapFont, MonoGame.Extended";
-#endif
+            return typeof(BitmapFont).AssemblyQualifiedName;
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-#if KNI
-            return "MonoGame.Extended.BitmapFonts.BitmapFontReader, KNI.Extended";
-#else
-            return "MonoGame.Extended.BitmapFonts.BitmapFontReader, MonoGame.Extended";
-#endif
+            return typeof(BitmapFontReader).AssemblyQualifiedName;
         }
     }
 }

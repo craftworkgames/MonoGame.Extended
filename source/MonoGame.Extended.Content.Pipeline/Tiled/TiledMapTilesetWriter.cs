@@ -13,20 +13,12 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 	{
 		public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-#if KNI
-            return "MonoGame.Extended.Tiled.TiledMapTilesetReader, KNI.Extended.Tiled";
-#else
-            return "MonoGame.Extended.Tiled.TiledMapTilesetReader, MonoGame.Extended.Tiled";
-#endif
+            return typeof(TiledMapTilesetReader).AssemblyQualifiedName;
         }
 
 	    public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-#if KNI
-            return "MonoGame.Extended.Tiled.TiledMapTileset, KNI.Extended.Tiled";
-#else
-            return "MonoGame.Extended.Tiled.TiledMapTileset, MonoGame.Extended.Tiled";
-#endif
+            return typeof(TiledMapTileset).AssemblyQualifiedName;
         }
 
 		protected override void Write(ContentWriter writer, TiledMapTilesetContentItem contentItem)
