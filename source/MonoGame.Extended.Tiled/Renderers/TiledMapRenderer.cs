@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Tiled.Renderers
 {
@@ -176,13 +177,7 @@ namespace MonoGame.Extended.Tiled.Renderers
 						pass.Apply();
 
                         // draw the geometry from the vertex buffer / index buffer
-#if FNA
-                        int minVertexIndex = 0;
-                        int numVertices = layerModel.VertexBuffer.VertexCount;
-                        _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, minVertexIndex, numVertices, 0, layerModel.TriangleCount);
-#else
                         _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, layerModel.TriangleCount);
-#endif
                     }
 				}
 			}
