@@ -48,11 +48,11 @@ namespace MonoGame.Extended.Particles
 
                 var position = new Vector2(particle->Position.X, particle->Position.Y);
                 var scale = particle->Scale;
-                var particleColor = new Color(color, particle->Opacity);
+                color.A = (byte)MathHelper.Clamp(particle->Opacity*255, 0, 255);
                 var rotation = particle->Rotation;
                 var layerDepth = particle->LayerDepth;
 
-                spriteBatch.Draw(textureRegion, position, particleColor, rotation, origin, scale, SpriteEffects.None, layerDepth);
+                spriteBatch.Draw(textureRegion, position, color, rotation, origin, scale, SpriteEffects.None, layerDepth);
             }
         }
     }

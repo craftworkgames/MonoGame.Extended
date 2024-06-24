@@ -34,7 +34,7 @@ namespace MonoGame.Extended.Screens.Transitions
             var height = _graphicsDevice.Viewport.Height * Value;
             var rectangle = new RectangleF(x, y, width, height);
 
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            _spriteBatch.Begin(SpriteSortMode.Deferred, null, samplerState: SamplerState.PointClamp, null, null);
             _spriteBatch.FillRectangle(rectangle, Color);
             _spriteBatch.End();
         }

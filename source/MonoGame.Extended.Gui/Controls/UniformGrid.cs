@@ -27,7 +27,7 @@ namespace MonoGame.Extended.Gui.Controls
 
         protected override void Layout(IGuiContext context, Rectangle rectangle)
         {
-            var gridInfo = CalculateGridInfo(context, rectangle.Size);
+            var gridInfo = CalculateGridInfo(context, new Point(rectangle.Width, rectangle.Height));
             var columnIndex = 0;
             var rowIndex = 0;
             var cellWidth = HorizontalAlignment == HorizontalAlignment.Stretch ? gridInfo.MaxCellWidth : gridInfo.MinCellWidth;

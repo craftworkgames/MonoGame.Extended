@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tests
@@ -14,7 +15,7 @@ namespace MonoGame.Extended.Tests
 
         protected override void Dispose(bool disposing)
         {
-            _graphicsDeviceManager.Dispose();
+            ((IDisposable)_graphicsDeviceManager).Dispose();
             base.Dispose(disposing);
         }
     }

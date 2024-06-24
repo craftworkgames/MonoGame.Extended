@@ -60,7 +60,7 @@ public sealed class ColorJsonConverterTests
     [Fact]
     public void Write_NullWrier_ThrowArgumentNullException()
     {
-        var color = Color.MonoGameOrange;
+        var color = Color.DarkOrange;
         Assert.Throws<ArgumentNullException>(() => _converter.Write(null, color, new JsonSerializerOptions()));
     }
 }

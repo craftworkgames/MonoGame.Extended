@@ -16,7 +16,7 @@ namespace MonoGame.Extended.Gui
             var alignedRectangle = AlignRectangle(control.HorizontalAlignment, control.VerticalAlignment, desiredSize, rectangle);
 
             control.Position = new Point(control.Margin.Left + alignedRectangle.X, control.Margin.Top + alignedRectangle.Y);
-            control.ActualSize = (Size)alignedRectangle.Size - control.Margin.Size;
+            control.ActualSize = new Size(alignedRectangle.Width, alignedRectangle.Height) - control.Margin.Size;
             control.InvalidateMeasure();
         }
 

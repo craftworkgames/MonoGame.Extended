@@ -11,13 +11,17 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
-    <ItemGroup Condition="!$(DefineConstants.Contains('KNI'))">
-        <PackageReference Include="MonoGame.Framework.DesktopGL"
+   <ItemGroup Condition="!$(DefineConstants.Contains('FNA')) AND !$(DefineConstants.Contains('KNI'))">
+       <PackageReference Include="MonoGame.Framework.DesktopGL"
                           Version="3.8.1.303"
                           PrivateAssets="All" />
     </ItemGroup>
 
-    <ItemGroup Condition="$(DefineConstants.Contains('KNI'))">
+   <ItemGroup Condition="$(DefineConstants.Contains('FNA'))">
+        <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\..\FNA\FNA.NetStandard.csproj" />
+    </ItemGroup>
+
+  <ItemGroup Condition="$(DefineConstants.Contains('KNI'))">
         <PackageReference Include="nkast.Xna.Framework"
                           Version="3.12.9001" />
         <PackageReference Include="nkast.Xna.Framework.Content"
@@ -28,6 +32,6 @@
                           Version="3.12.9001" />
         <PackageReference Include="nkast.Xna.Framework.Game"
                           Version="3.12.9001" />
-    </ItemGroup>
+   </ItemGroup>
 
 </Project>

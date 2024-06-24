@@ -30,6 +30,6 @@ namespace MonoGame.Extended.Input.InputListeners
         public int ScrollWheelValue { get; }
         public int ScrollWheelDelta { get; }
 
-        public Vector2 DistanceMoved => CurrentState.Position.ToVector2() - PreviousState.Position.ToVector2();
+        public Vector2 DistanceMoved => new Vector2(CurrentState.X, CurrentState.Y) - new Vector2(PreviousState.X, PreviousState.Y);
     }
 }

@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);FNA</DefineConstants>
+    <Description>Support for Tiled maps to make FNA more awesome. See http://www.mapeditor.org</Description>
+    <PackageTags>fna tiled maps orthographic isometric</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Extended.Graphics\FNA.Extended.Graphics.csproj" />
+    <ProjectReference Include="..\MonoGame.Extended\FNA.Extended.csproj" />
+  </ItemGroup>
+
+</Project>

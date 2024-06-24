@@ -11,10 +11,15 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
-    <ItemGroup Condition="!$(DefineConstants.Contains('KNI'))">
+    <ItemGroup Condition="!$(DefineConstants.Contains('FNA')) AND !$(DefineConstants.Contains('KNI'))">
         <PackageReference Include="MonoGame.Framework.DesktopGL"
                           Version="3.8.1.303"
                           PrivateAssets="All" />
+    </ItemGroup>
+
+
+    <ItemGroup Condition="$(DefineConstants.Contains('FNA'))">
+        <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\FNA\FNA.NetStandard.csproj" />
     </ItemGroup>
 
     <ItemGroup Condition="$(DefineConstants.Contains('KNI'))">

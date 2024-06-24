@@ -11,7 +11,7 @@
         <NoWarn>CA1707</NoWarn>
     </PropertyGroup>
 
-    <ItemGroup Condition="!$(DefineConstants.Contains('KNI'))">
+    <ItemGroup Condition="!$(DefineConstants.Contains('FNA')) AND !$(DefineConstants.Contains('KNI'))">
         <PackageReference Include="MonoGame.Framework.DesktopGL"
                           Version="3.8.1.303" />
     </ItemGroup>
@@ -30,9 +30,12 @@
         <PackageReference Include="MonoGame.Framework.DesktopGL.9000"
                           Version="3.12.9001" />
     </ItemGroup>
-    
-    <ItemGroup>
+  
+    <ItemGroup Condition="$(DefineConstants.Contains('FNA'))">
+        <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\FNA\FNA.NetStandard.csproj" />
+    </ItemGroup>
 
+    <ItemGroup>
         <PackageReference Include="NSubstitute"
                           Version="4.2.2" />
 

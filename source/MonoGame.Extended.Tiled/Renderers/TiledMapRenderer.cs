@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Tiled.Renderers
 {
@@ -169,15 +170,15 @@ namespace MonoGame.Extended.Tiled.Renderers
 					_graphicsDevice.SetVertexBuffer(layerModel.VertexBuffer);
 					_graphicsDevice.Indices = layerModel.IndexBuffer;
 
-					// for each pass in our effect
-					foreach (var pass in effect1.CurrentTechnique.Passes)
+                    // for each pass in our effect
+                    foreach (var pass in effect1.CurrentTechnique.Passes)
 					{
 						// apply the pass, effectively choosing which vertex shader and fragment (pixel) shader to use
 						pass.Apply();
 
-						// draw the geometry from the vertex buffer / index buffer
-						_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, layerModel.TriangleCount);
-					}
+                        // draw the geometry from the vertex buffer / index buffer
+                        _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, layerModel.TriangleCount);
+                    }
 				}
 			}
         }

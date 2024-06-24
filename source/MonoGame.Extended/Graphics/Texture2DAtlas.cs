@@ -132,7 +132,7 @@ public class Texture2DAtlas : IEnumerable<Texture2DRegion>
     /// <param name="location">The location of the region.</param>
     /// <param name="size">The size, in pixels, of the region.</param>
     /// <returns>The created texture region.</returns>
-    public Texture2DRegion CreateRegion(Point location, Size size) => CreateRegion(null, new Rectangle(location, size));
+    public Texture2DRegion CreateRegion(Point location, Size size) => CreateRegion(null, new Rectangle(location.X, location.Y, size.Width, size.Height));
 
     /// <summary>
     /// Creates a new texture region with the specified name and adds it to this atlas.
@@ -144,7 +144,7 @@ public class Texture2DAtlas : IEnumerable<Texture2DRegion>
     /// <exception cref="InvalidOperationException">
     /// Thrown if a region with the same name as the <paramref name="name"/> parameter already exists in this atlas.
     /// </exception>
-    public Texture2DRegion CreateRegion(string name, Point location, Size size) => CreateRegion(name, new Rectangle(location, size));
+    public Texture2DRegion CreateRegion(string name, Point location, Size size) => CreateRegion(name, new Rectangle(location.X, location.Y, size.Width, size.Height));
 
     /// <summary>
     /// Creates a new texture region and adds it to this atlas.

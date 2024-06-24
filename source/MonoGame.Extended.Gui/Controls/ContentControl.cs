@@ -43,7 +43,7 @@ namespace MonoGame.Extended.Gui.Controls
             if (_content is Control control && _contentChanged)
             {
                 control.Parent = this;
-                control.ActualSize = ContentRectangle.Size;
+                control.ActualSize = new Point(ContentRectangle.Width, ContentRectangle.Height);
                 control.Position = new Point(Padding.Left, Padding.Top);
                 control.InvalidateMeasure();
                 _contentChanged = false;
