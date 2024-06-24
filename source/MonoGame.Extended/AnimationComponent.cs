@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Sprites;
 
 namespace MonoGame.Extended.Animations
 {

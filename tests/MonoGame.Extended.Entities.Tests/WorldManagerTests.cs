@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Sprites;
-using Xunit;
 
 namespace MonoGame.Extended.Entities.Tests;
 
@@ -42,8 +40,8 @@ public class WorldManagerTests
 
     private class DummySystem : EntitySystem, IUpdateSystem, IDrawSystem
     {
-        public List<int> AddedEntitiesId { get; } = new ();
-        public List<int> RemovedEntitiesId { get; } = new ();
+        public List<int> AddedEntitiesId { get; } = new();
+        public List<int> RemovedEntitiesId { get; } = new();
 
         public DummySystem() : base(Aspect.All(typeof(DummyComponent))) { }
 

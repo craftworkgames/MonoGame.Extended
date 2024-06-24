@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Input.InputListeners
 {
-    public class InputListenerComponent : GameComponent, IUpdate
+    public class InputListenerComponent : GameComponent, IUpdateable
     {
         private readonly List<InputListener> _listeners;
 

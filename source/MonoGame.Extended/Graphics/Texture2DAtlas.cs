@@ -1,8 +1,13 @@
+// Copyright (c) Craftwork Games. All rights reserved.
+// Licensed under the MIT license.
+// See LICENSE file in the project root for full license information.
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Animations;
 
 namespace MonoGame.Extended.Graphics;
 
@@ -110,21 +115,21 @@ public class Texture2DAtlas : IEnumerable<Texture2DRegion>
     /// <param name="width">The width, in pixels, of the region.</param>
     /// <param name="height">The height, in pixels, of the region.</param>
     /// <returns>The created texture region.</returns>
-    public Texture2DRegion CreateRegion(int x, int y, int width, int height) => CreateRegion(null, new Rectangle(x, y, width, height));
+    public Texture2DRegion CreateRegion(int x, int y, int width, int height) => CreateRegion(new Rectangle(x, y, width, height), null);
 
     /// <summary>
     /// Creates a new texture region with the specified name and adds it to this atlas.
     /// </summary>
-    /// <param name="name">The name of the texture region.</param>
     /// <param name="x">The x-coordinate of the region.</param>
     /// <param name="y">The y-coordinate of the region.</param>
     /// <param name="width">The width, in pixels, of the region.</param>
     /// <param name="height">The height, in pixels, of the region.</param>
+    /// <param name="name">The name of the texture region.</param>
     /// <returns>The created texture region.</returns>
     /// <exception cref="InvalidOperationException">
     /// Thrown if a region with the same name as the <paramref name="name"/> parameter already exists in this atlas.
     /// </exception>
-    public Texture2DRegion CreateRegion(string name, int x, int y, int width, int height) => CreateRegion(name, new Rectangle(x, y, width, height));
+    public Texture2DRegion CreateRegion(int x, int y, int width, int height, string name) => CreateRegion(new Rectangle(x, y, width, height), name);
 
     /// <summary>
     /// Creates a new texture region and adds it to this atlas.
@@ -132,39 +137,47 @@ public class Texture2DAtlas : IEnumerable<Texture2DRegion>
     /// <param name="location">The location of the region.</param>
     /// <param name="size">The size, in pixels, of the region.</param>
     /// <returns>The created texture region.</returns>
+<<<<<<< HEAD
     public Texture2DRegion CreateRegion(Point location, Size size) => CreateRegion(null, new Rectangle(location.X, location.Y, size.Width, size.Height));
+=======
+    public Texture2DRegion CreateRegion(Point location, Size size) => CreateRegion(new Rectangle(location, size), null);
+>>>>>>> e7e4b44bc9cf6fb165966dd34806a9a080570abf
 
     /// <summary>
     /// Creates a new texture region with the specified name and adds it to this atlas.
     /// </summary>
-    /// <param name="name">The name of the texture region.</param>
     /// <param name="location">The location of the region.</param>
     /// <param name="size">The size, in pixels, of the region.</param>
+    /// <param name="name">The name of the texture region.</param>
     /// <returns>The created texture region.</returns>
     /// <exception cref="InvalidOperationException">
     /// Thrown if a region with the same name as the <paramref name="name"/> parameter already exists in this atlas.
     /// </exception>
+<<<<<<< HEAD
     public Texture2DRegion CreateRegion(string name, Point location, Size size) => CreateRegion(name, new Rectangle(location.X, location.Y, size.Width, size.Height));
+=======
+    public Texture2DRegion CreateRegion(Point location, Size size, string name) => CreateRegion(new Rectangle(location, size), name);
+>>>>>>> e7e4b44bc9cf6fb165966dd34806a9a080570abf
 
     /// <summary>
     /// Creates a new texture region and adds it to this atlas.
     /// </summary>
     /// <param name="bounds">The bounds of the region.</param>
     /// <returns>The created texture region.</returns>
-    public Texture2DRegion CreateRegion(Rectangle bounds) => CreateRegion(null, bounds);
+    public Texture2DRegion CreateRegion(Rectangle bounds) => CreateRegion(bounds, null);
 
     /// <summary>
     /// Creates a new texture region with the specified name and adds it to this atlas.
     /// </summary>
-    /// <param name="name">The name of the texture region.</param>
     /// <param name="bounds">The bounds of the region.</param>
+    /// <param name="name">The name of the texture region.</param>
     /// <returns>The created texture region.</returns>
     /// <exception cref="InvalidOperationException">
     /// Thrown if a region with the same name as the <paramref name="name"/> parameter already exists in this atlas.
     /// </exception>
-    public Texture2DRegion CreateRegion(string name, Rectangle bounds)
+    public Texture2DRegion CreateRegion(Rectangle bounds, string name)
     {
-        Texture2DRegion region = new Texture2DRegion(Texture, name, bounds);
+        Texture2DRegion region = new Texture2DRegion(Texture, bounds, name);
         AddRegion(region);
         return region;
     }
@@ -274,6 +287,17 @@ public class Texture2DAtlas : IEnumerable<Texture2DRegion>
 
         return regions;
     }
+    
+    internal Texture2DRegion[] GetRegions(ReadOnlySpan<IAnimationFrame> frames)
+    {
+        Texture2DRegion[] regions = new Texture2DRegion[frames.Length];
+        for (int i = 0; i < frames.Length; i++)
+        {
+            regions[i] = GetRegion(frames[i].FrameIndex);
+        }
+
+        return regions;
+    }
 
     /// <summary>
     /// Gets the regions with the specified names.
@@ -352,6 +376,35 @@ public class Texture2DAtlas : IEnumerable<Texture2DRegion>
 
         _regionsByIndex.Add(region);
         _regionsByName.Add(region.Name, region);
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="Sprite"/> using the region from this atlas at the specified index.
+    /// </summary>
+    /// <param name="regionIndex">The index of the region to use.</param>
+    /// <returns>The <see cref="Sprite"/> created using the region at the specified index.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Throw if the value of the <paramref name="regionIndex"/> is less than zero or is greater than or equal to the total
+    /// number of regions in this atlas.
+    /// </exception>
+    public Sprite CreateSprite(int regionIndex)
+    {
+        Texture2DRegion region = GetRegion(regionIndex);
+        return new Sprite(region);
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="Sprite"/> using the region from this atlas with the specified name.
+    /// </summary>
+    /// <param name="regionName">The name of the region to use.</param>
+    /// <returns>The <see cref="Sprite"/> created using the region with the specified name.</returns>
+    /// <exception cref="KeyNotFoundException">
+    /// Thrown if this atlas does not contain a region with a name that matches the <paramref name="regionName"/> parameter.
+    /// </exception>
+    public Sprite CreateSprite(string regionName)
+    {
+        Texture2DRegion region = GetRegion(regionName);
+        return new Sprite(region);
     }
 
     private bool RemoveRegion(Texture2DRegion region) => _regionsByIndex.Remove(region) && _regionsByName.Remove(region.Name);
