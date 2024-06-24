@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);KNI</DefineConstants>
+    <Description>Support for Tiled maps to make KNI more awesome. See http://www.mapeditor.org</Description>
+    <PackageTags>kni tiled maps orthographic isometric</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Extended.Graphics\KNI.Extended.Graphics.csproj" />
+    <ProjectReference Include="..\MonoGame.Extended\KNI.Extended.csproj" />
+  </ItemGroup>
+
+</Project>

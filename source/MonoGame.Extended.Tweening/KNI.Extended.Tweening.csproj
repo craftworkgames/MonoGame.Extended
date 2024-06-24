@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);KNI</DefineConstants>
+    <Description>A tweening system to make KNI more awesome.</Description>
+    <PackageTags>kni animations tweening</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Extended\KNI.Extended.csproj" />
+  </ItemGroup>
+
+</Project>
