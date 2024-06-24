@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);KNI</DefineConstants>
+  </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\source\MonoGame.Extended.Tweening\KNI.Extended.Tweening.csproj" />
+    </ItemGroup>
+
+</Project>

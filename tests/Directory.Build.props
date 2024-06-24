@@ -11,11 +11,26 @@
         <NoWarn>CA1707</NoWarn>
     </PropertyGroup>
 
-    <ItemGroup Condition="!$(DefineConstants.Contains('FNA'))">
+    <ItemGroup Condition="!$(DefineConstants.Contains('FNA')) AND !$(DefineConstants.Contains('KNI'))">
         <PackageReference Include="MonoGame.Framework.DesktopGL"
                           Version="3.8.1.303" />
     </ItemGroup>
 
+    <ItemGroup Condition="$(DefineConstants.Contains('KNI'))">
+        <PackageReference Include="nkast.Xna.Framework"
+                          Version="3.12.9001" />
+        <PackageReference Include="nkast.Xna.Framework.Content"
+                          Version="3.12.9001" />
+        <PackageReference Include="nkast.Xna.Framework.Graphics"
+                          Version="3.12.9001" />
+        <PackageReference Include="nkast.Xna.Framework.Input"
+                          Version="3.12.9001" />
+        <PackageReference Include="nkast.Xna.Framework.Game"
+                          Version="3.12.9001" />
+        <PackageReference Include="MonoGame.Framework.DesktopGL.9000"
+                          Version="3.12.9001" />
+    </ItemGroup>
+  
     <ItemGroup Condition="$(DefineConstants.Contains('FNA'))">
         <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\FNA\FNA.NetStandard.csproj" />
     </ItemGroup>
