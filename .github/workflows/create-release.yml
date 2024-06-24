@@ -48,6 +48,9 @@ jobs:
       - name: Pack MonoGame.Extended
         run: dotnet pack MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release
 
+      - name: Pack Kni.Extended
+        run: dotnet pack Kni.Extended.sln --nologo --verbosity minimal --configuration Release
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
