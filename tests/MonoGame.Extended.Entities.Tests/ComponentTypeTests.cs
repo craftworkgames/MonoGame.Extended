@@ -1,7 +1,4 @@
-﻿using MonoGame.Extended.Sprites;
-using Xunit;
-
-namespace MonoGame.Extended.Entities.Tests
+﻿namespace MonoGame.Extended.Entities.Tests
 {
     //public class ComponentTypeTests
     //{

@@ -25,14 +25,14 @@ public static class TextureRegionExtensions
     /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
     /// </exception>
     public static Texture2DRegion GetSubregion(this Texture2DRegion textureRegion, Rectangle region) =>
-        textureRegion.GetSubregion(null, region.X, region.Y, region.Width, region.Height);
+        textureRegion.GetSubregion(region.X, region.Y, region.Width, region.Height, null);
 
     /// <summary>
     /// Gets a subregion of the specified texture region using the provided rectangle and name.
     /// </summary>
     /// <param name="textureRegion">The texture region to get the subregion from.</param>
-    /// <param name="name">The name of the new subregion.</param>
     /// <param name="region">The rectangle defining the subregion.</param>
+    /// <param name="name">The name of the new subregion.</param>
     /// <returns>A new <see cref="Texture2DRegion"/> representing the specified subregion.</returns>
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="textureRegion"/> is <see langword="null"/>.
@@ -41,7 +41,7 @@ public static class TextureRegionExtensions
     /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
     /// </exception>
     public static Texture2DRegion GetSubregion(this Texture2DRegion textureRegion, string name, Rectangle region) =>
-        textureRegion.GetSubregion(name, region.X, region.Y, region.Width, region.Height);
+        textureRegion.GetSubregion(region.X, region.Y, region.Width, region.Height, name);
 
     /// <summary>
     /// Gets a subregion of the specified texture region using the provided coordinates and dimensions.
@@ -59,17 +59,17 @@ public static class TextureRegionExtensions
     /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
     /// </exception>
     public static Texture2DRegion GetSubregion(this Texture2DRegion textureRegion, int x, int y, int width, int height) =>
-        textureRegion.GetSubregion(null, x, y, width, height);
+        textureRegion.GetSubregion(x, y, width, height, null);
 
     /// <summary>
     /// Gets a subregion of the specified texture region using the provided name, coordinates, and dimensions.
     /// </summary>
     /// <param name="textureRegion">The texture region to get the subregion from.</param>
-    /// <param name="name">The name of the new subregion.</param>
     /// <param name="x">The top-left x-coordinate of the subregion within the texture region.</param>
     /// <param name="y">The top-left y-coordinate of the subregion within the texture region.</param>
     /// <param name="width">The width, in pixels, of the subregion.</param>
     /// <param name="height">The height, in pixels, of the subregion.</param>
+    /// <param name="name">The name of the new subregion.</param>
     /// <returns>A new <see cref="Texture2DRegion"/> representing the specified subregion.</returns>
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="textureRegion"/> is <see langword="null"/>.
@@ -77,7 +77,7 @@ public static class TextureRegionExtensions
     /// <exception cref="ObjectDisposedException">
     /// Thrown if source texture of the <paramref name="textureRegion"/> has been disposed prior.
     /// </exception>
-    public static Texture2DRegion GetSubregion(this Texture2DRegion textureRegion, string name, int x, int y, int width, int height)
+    public static Texture2DRegion GetSubregion(this Texture2DRegion textureRegion, int x, int y, int width, int height, string name)
     {
         ArgumentNullException.ThrowIfNull(textureRegion);
 
@@ -87,7 +87,7 @@ public static class TextureRegionExtensions
         }
 
         Rectangle region = textureRegion.Bounds.GetRelativeRectangle(x, y, width, height);
-        return new Texture2DRegion(textureRegion.Texture, name, region);
+        return new Texture2DRegion(textureRegion.Texture, region, name);
     }
 
     /// <summary>
