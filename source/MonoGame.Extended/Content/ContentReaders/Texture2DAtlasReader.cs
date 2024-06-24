@@ -17,11 +17,11 @@ namespace MonoGame.Extended.Content.ContentReaders
             for (var i = 0; i < regionCount; i++)
             {
                 atlas.CreateRegion(
-                    reader.ReadString(),
                     reader.ReadInt32(),
                     reader.ReadInt32(),
                     reader.ReadInt32(),
-                    reader.ReadInt32());
+                    reader.ReadInt32(),
+                    reader.ReadString());
             }
 
             return atlas;

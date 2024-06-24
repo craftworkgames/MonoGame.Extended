@@ -89,7 +89,7 @@ public class Texture2DRegion
     /// Thrown if <paramref name="texture"/> has been disposed prior.
     /// </exception>
     public Texture2DRegion(Texture2D texture)
-        : this(texture, null, 0, 0, texture.Width, texture.Height) { }
+        : this(texture, 0, 0, texture.Width, texture.Height, null) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Texture2DRegion"/> class representing the entire texture with the
@@ -104,7 +104,7 @@ public class Texture2DRegion
     /// Thrown if <paramref name="texture"/> has been disposed prior.
     /// </exception>
     public Texture2DRegion(Texture2D texture, string name)
-        : this(texture, name, texture.Bounds.X, texture.Bounds.Y, texture.Bounds.Width, texture.Bounds.Height) { }
+        : this(texture, 0, 0, texture.Bounds.Width, texture.Bounds.Height, null) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Texture2DRegion"/> class with the specified region of the texture.
@@ -118,7 +118,7 @@ public class Texture2DRegion
     /// Thrown if <paramref name="texture"/> has been disposed prior.
     /// </exception>
     public Texture2DRegion(Texture2D texture, Rectangle region)
-        : this(texture, null, region.X, region.Y, region.Width, region.Height) { }
+        : this(texture, region.X, region.Y, region.Width, region.Height, null) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Texture2DRegion"/> class with the specified region of the texture.
@@ -135,41 +135,41 @@ public class Texture2DRegion
     /// Thrown if <paramref name="texture"/> has been disposed prior.
     /// </exception>
     public Texture2DRegion(Texture2D texture, int x, int y, int width, int height)
-        : this(texture, null, x, y, width, height) { }
+        : this(texture, x, y, width, height, null) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Texture2DRegion"/> class with the specified region of the texture and
     /// name.
     /// </summary>
     /// <param name="texture">The texture to create the region from.</param>
-    /// <param name="name">The name of the texture region.</param>
     /// <param name="region">The region of the texture to use.</param>
+    /// <param name="name">The name of the texture region.</param>
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="texture"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ObjectDisposedException">
     /// Thrown if <paramref name="texture"/> has been disposed prior.
     /// </exception>
-    public Texture2DRegion(Texture2D texture, string name, Rectangle region)
-        : this(texture, name, region.X, region.Y, region.Width, region.Height) { }
+    public Texture2DRegion(Texture2D texture, Rectangle region, string name)
+        : this(texture, region.X, region.Y, region.Width, region.Height, name) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Texture2DRegion"/> class with the specified region of the texture and
     /// name.
     /// </summary>
     /// <param name="texture">The texture to create the region from.</param>
-    /// <param name="name">The name of the texture region.</param>
     /// <param name="x">The top-left x-coordinate of the region within the texture.</param>
     /// <param name="y">The top-left y-coordinate of the region within the texture.</param>
     /// <param name="width">The width, in pixels, of the region.</param>
     /// <param name="height">The height, in pixels, of the region.</param>
+    /// <param name="name">The name of the texture region.</param>
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="texture"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ObjectDisposedException">
     /// Thrown if <paramref name="texture"/> has been disposed prior.
     /// </exception>
-    public Texture2DRegion(Texture2D texture, string name, int x, int y, int width, int height)
+    public Texture2DRegion(Texture2D texture,int x, int y, int width, int height, string name)
     {
         ArgumentNullException.ThrowIfNull(texture);
         if (texture.IsDisposed)
