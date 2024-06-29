@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Collections
     public class ObjectPool<T> : IEnumerable<T>
         where T : class, IPoolable
     {
-        private readonly ReturnToPoolDelegate _returnToPoolDelegate;
+        private readonly Action<IPoolable> _returnToPoolDelegate;
 
         private readonly Deque<T> _freeItems; // circular buffer for O(1) operations
         private T _headNode; // linked list for iteration
