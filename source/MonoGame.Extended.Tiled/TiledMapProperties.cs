@@ -7,7 +7,7 @@ namespace MonoGame.Extended.Tiled
         public bool TryGetValue(string key, out string value)
         {
             bool result = TryGetValue(key, out TiledMapPropertyValue tmpVal);
-            value = result ? null : tmpVal.Value;
+            value = result ? tmpVal.Value : null;
             return result;
         }
     }
