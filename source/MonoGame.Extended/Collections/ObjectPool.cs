@@ -144,7 +144,13 @@ namespace MonoGame.Extended.Collections
         {
             item.Initialize(_returnToPoolDelegate);
             item.NextNode = null;
-            if (item != _tailNode)
+            if(_tailNode is null)
+            {
+                _headNode = item;
+                _tailNode = item;
+                item.PreviousNode = null;
+            }
+            else
             {
                 item.PreviousNode = _tailNode;
                 _tailNode.NextNode = item;
