@@ -14,6 +14,11 @@ namespace MonoGame.Extended.Animations;
 public interface IAnimationController : IDisposable
 {
     /// <summary>
+    /// Gets a value indicating whether this animation controller has been disposed of.
+    /// </summary>
+    bool IsDisposed { get; }
+
+    /// <summary>
     /// Gets a value indicating whether the animation is paused.
     /// </summary>
     bool IsPaused { get; }

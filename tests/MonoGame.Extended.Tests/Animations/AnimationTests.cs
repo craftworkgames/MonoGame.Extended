@@ -18,7 +18,7 @@ public class AnimationTests
         public TimeSpan Duration { get; set; }
     }
 
-    private class TestAnimationDefinition : IAnimationDefinition
+    private class TestAnimation : IAnimation
     {
         private readonly IAnimationFrame[] _frames;
         public string Name { get; set; }
@@ -28,11 +28,11 @@ public class AnimationTests
         public bool IsReversed { get; set; }
         public bool IsPingPong { get; set; }
 
-        public TestAnimationDefinition(IAnimationFrame[] frames) => _frames = frames;
+        public TestAnimation(IAnimationFrame[] frames) => _frames = frames;
     }
 
-    private readonly IAnimationDefinition _definition;
-    private readonly Animation _animation;
+    private readonly IAnimation _animation;
+    private readonly IAnimationController _animationController;
 
     public AnimationTests()
     {
@@ -41,94 +41,95 @@ public class AnimationTests
             new TestAnimationFrame { FrameIndex = 0, Duration = TimeSpan.FromSeconds(1) },
             new TestAnimationFrame { FrameIndex = 1, Duration = TimeSpan.FromSeconds(1) }
         };
-        _definition = new TestAnimationDefinition(frames)
+        _animation = new TestAnimation(frames)
         {
             FrameCount = frames.Length,
             IsLooping = false,
             IsReversed = false,
             IsPingPong = false
         };
-        _animation = new Animation(_definition);
+
+        _animationController = new AnimationController(_animation);
     }
 
     [Fact]
     public void Play_ShouldStartAnimation()
     {
-        var result = _animation.Play();
+        var result = _animationController.Play();
 
         Assert.True(result);
-        Assert.True(_animation.IsAnimating);
-        Assert.Equal(0, _animation.CurrentFrame);
+        Assert.True(_animationController.IsAnimating);
+        Assert.Equal(0, _animationController.CurrentFrame);
     }
 
     [Fact]
     public void Play_ShouldThrowException_ForInvalidFrame()
     {
-        Assert.Throws<ArgumentOutOfRangeException>(() => _animation.Play(-1));
-        Assert.Throws<ArgumentOutOfRangeException>(() => _animation.Play(10));
+        Assert.Throws<ArgumentOutOfRangeException>(() => _animationController.Play(-1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => _animationController.Play(10));
     }
 
     [Fact]
     public void Pause_ShouldPauseAnimation()
     {
-        _animation.Play();
-        var result = _animation.Pause();
+        _animationController.Play();
+        var result = _animationController.Pause();
 
         Assert.True(result);
-        Assert.True(_animation.IsPaused);
+        Assert.True(_animationController.IsPaused);
     }
 
     [Fact]
     public void Pause_ShouldResetFrameDuration_WhenSpecified()
     {
-        _animation.Play();
-        _animation.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(0.5)));
+        _animationController.Play();
+        _animationController.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(0.5)));
 
-        var result = _animation.Pause(true);
+        var result = _animationController.Pause(true);
 
         Assert.True(result);
-        Assert.Equal(_definition.Frames[0].Duration, _animation.CurrentFrameTimeRemaining);
+        Assert.Equal(_animation.Frames[0].Duration, _animationController.CurrentFrameTimeRemaining);
     }
 
     [Fact]
     public void UnPause_ShouldResumeAnimation()
     {
-        _animation.Play();
-        _animation.Pause();
-        var result = _animation.Unpause();
+        _animationController.Play();
+        _animationController.Pause();
+        var result = _animationController.Unpause();
 
         Assert.True(result);
-        Assert.False(_animation.IsPaused);
+        Assert.False(_animationController.IsPaused);
     }
 
     [Fact]
     public void UnPause_ShouldAdvanceFrame_WhenSpecified()
     {
-        _animation.Play();
-        _animation.Pause();
-        var result = _animation.Unpause(true);
+        _animationController.Play();
+        _animationController.Pause();
+        var result = _animationController.Unpause(true);
 
         Assert.True(result);
-        Assert.Equal(1, _animation.CurrentFrame);
+        Assert.Equal(1, _animationController.CurrentFrame);
     }
 
     [Fact]
     public void Stop_ShouldStopAnimation()
     {
-        _animation.Play();
-        var result = _animation.Stop();
+        _animationController.Play();
+        var result = _animationController.Stop();
 
         Assert.True(result);
-        Assert.False(_animation.IsAnimating);
+        Assert.False(_animationController.IsAnimating);
     }
 
     [Fact]
     public void Update_ShouldAdvanceFrame()
     {
-        _animation.Play();
-        _animation.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(1.1)));
+        _animationController.Play();
+        _animationController.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(1.1)));
 
-        Assert.Equal(1, _animation.CurrentFrame);
+        Assert.Equal(1, _animationController.CurrentFrame);
     }
 
     [Fact]
@@ -139,7 +140,7 @@ public class AnimationTests
         bool animationLoopTriggered = false;
         bool animationCompletedTriggered = false;
 
-        _animation.OnAnimationEvent += (anim, trigger) =>
+        _animationController.OnAnimationEvent += (anim, trigger) =>
         {
             switch (trigger)
             {
@@ -158,63 +159,63 @@ public class AnimationTests
             }
         };
 
-        _animation.Play();
-        _animation.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(1.1)));
+        _animationController.Play();
+        _animationController.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(1.1)));
 
         Assert.True(frameBeginTriggered);
         Assert.True(frameEndTriggered);
 
-        _animation.IsLooping = true;
-        _animation.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(1.1)));
+        _animationController.IsLooping = true;
+        _animationController.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(1.1)));
         Assert.True(animationLoopTriggered);
 
-        _animation.IsLooping = false;
-        _animation.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(2)));
+        _animationController.IsLooping = false;
+        _animationController.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(2)));
         Assert.True(animationCompletedTriggered);
     }
 
     [Fact]
     public void Update_ShouldLoopAnimation()
     {
-        _animation.IsLooping = true;
-        _animation.Play();
-        _animation.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(2.1)));
+        _animationController.IsLooping = true;
+        _animationController.Play();
+        _animationController.Update(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(2.1)));
 
-        Assert.Equal(0, _animation.CurrentFrame);
+        Assert.Equal(0, _animationController.CurrentFrame);
     }
 
     [Fact]
     public void Reset_ShouldResetAnimation()
     {
-        _animation.Play();
-        _animation.Reset();
+        _animationController.Play();
+        _animationController.Reset();
 
-        Assert.False(_animation.IsAnimating);
-        Assert.True(_animation.IsPaused);
-        Assert.Equal(0, _animation.CurrentFrame);
+        Assert.False(_animationController.IsAnimating);
+        Assert.True(_animationController.IsPaused);
+        Assert.Equal(0, _animationController.CurrentFrame);
     }
 
     [Fact]
     public void SetFrame_ShouldChangeCurrentFrame()
     {
-        _animation.SetFrame(1);
+        _animationController.SetFrame(1);
 
-        Assert.Equal(1, _animation.CurrentFrame);
-        Assert.Equal(_definition.Frames[1].Duration, _animation.CurrentFrameTimeRemaining);
+        Assert.Equal(1, _animationController.CurrentFrame);
+        Assert.Equal(_animation.Frames[1].Duration, _animationController.CurrentFrameTimeRemaining);
     }
 
     [Fact]
     public void SetFrame_ShouldThrowException_ForInvalidFrame()
     {
-        Assert.Throws<ArgumentOutOfRangeException>(() => _animation.SetFrame(-1));
-        Assert.Throws<ArgumentOutOfRangeException>(() => _animation.SetFrame(10));
+        Assert.Throws<ArgumentOutOfRangeException>(() => _animationController.SetFrame(-1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => _animationController.SetFrame(10));
     }
 
     [Fact]
     public void Dispose_ShouldDisposeAnimation()
     {
-        _animation.Dispose();
+        _animationController.Dispose();
 
-        Assert.True(_animation.IsDisposed);
+        Assert.True(_animationController.IsDisposed);
     }
 }
