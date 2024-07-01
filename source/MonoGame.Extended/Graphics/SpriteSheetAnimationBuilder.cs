@@ -8,9 +8,9 @@ using System.Collections.Generic;
 namespace MonoGame.Extended.Graphics;
 
 /// <summary>
-/// A builder class for creating <see cref="SpriteSheetAnimationDefinition"/> instances.
+/// A builder class for creating <see cref="SpriteSheetAnimation"/> instances.
 /// </summary>
-public sealed class SpriteSheetAnimationDefinitionBuilder
+public sealed class SpriteSheetAnimationBuilder
 {
     private readonly string _name;
     private readonly SpriteSheet _spriteSheet;
@@ -19,7 +19,7 @@ public sealed class SpriteSheetAnimationDefinitionBuilder
     private bool _isReversed;
     private bool _isPingPong;
 
-    internal SpriteSheetAnimationDefinitionBuilder(string name, SpriteSheet spriteSheet)
+    internal SpriteSheetAnimationBuilder(string name, SpriteSheet spriteSheet)
     {
         _name = name;
         _spriteSheet = spriteSheet;
@@ -30,8 +30,8 @@ public sealed class SpriteSheetAnimationDefinitionBuilder
     /// </summary>
     /// <param name="regionIndex">The index of the region in the sprite sheet.</param>
     /// <param name="duration">The duration of the frame.</param>
-    /// <returns>The <see cref="SpriteSheetAnimationDefinitionBuilder"/> instance for chaining.</returns>
-    public SpriteSheetAnimationDefinitionBuilder AddFrame(int regionIndex, TimeSpan duration)
+    /// <returns>The <see cref="SpriteSheetAnimationBuilder"/> instance for chaining.</returns>
+    public SpriteSheetAnimationBuilder AddFrame(int regionIndex, TimeSpan duration)
     {
         SpriteSheetAnimationFrame frame = new SpriteSheetAnimationFrame(regionIndex, duration);
         _frames.Add(frame);
@@ -43,8 +43,8 @@ public sealed class SpriteSheetAnimationDefinitionBuilder
     /// </summary>
     /// <param name="regionName">The name of the region in the sprite sheet.</param>
     /// <param name="duration">The duration of the frame.</param>
-    /// <returns>The <see cref="SpriteSheetAnimationDefinitionBuilder"/> instance for chaining.</returns>
-    public SpriteSheetAnimationDefinitionBuilder AddFrame(string regionName, TimeSpan duration)
+    /// <returns>The <see cref="SpriteSheetAnimationBuilder"/> instance for chaining.</returns>
+    public SpriteSheetAnimationBuilder AddFrame(string regionName, TimeSpan duration)
     {
         int index = _spriteSheet.TextureAtlas.GetIndexOfRegion(regionName);
         return AddFrame(index, duration);
@@ -54,8 +54,8 @@ public sealed class SpriteSheetAnimationDefinitionBuilder
     /// Sets whether the animation should loop.
     /// </summary>
     /// <param name="isLooping">If set to <c>true</c>, the animation will loop.</param>
-    /// <returns>The <see cref="SpriteSheetAnimationDefinitionBuilder"/> instance for chaining.</returns>
-    public SpriteSheetAnimationDefinitionBuilder IsLooping(bool isLooping)
+    /// <returns>The <see cref="SpriteSheetAnimationBuilder"/> instance for chaining.</returns>
+    public SpriteSheetAnimationBuilder IsLooping(bool isLooping)
     {
         _isLooping = isLooping;
         return this;
@@ -65,8 +65,8 @@ public sealed class SpriteSheetAnimationDefinitionBuilder
     /// Sets whether the animation should be reversed.
     /// </summary>
     /// <param name="isReversed">If set to <c>true</c>, the animation will play in reverse.</param>
-    /// <returns>The <see cref="SpriteSheetAnimationDefinitionBuilder"/> instance for chaining.</returns>
-    public SpriteSheetAnimationDefinitionBuilder IsReversed(bool isReversed)
+    /// <returns>The <see cref="SpriteSheetAnimationBuilder"/> instance for chaining.</returns>
+    public SpriteSheetAnimationBuilder IsReversed(bool isReversed)
     {
         _isReversed = isReversed;
         return this;
@@ -76,13 +76,13 @@ public sealed class SpriteSheetAnimationDefinitionBuilder
     /// Sets whether the animation should ping-pong (reverse direction at the ends).
     /// </summary>
     /// <param name="isPingPong">If set to <c>true</c>, the animation will ping-pong.</param>
-    /// <returns>The <see cref="SpriteSheetAnimationDefinitionBuilder"/> instance for chaining.</returns>
-    public SpriteSheetAnimationDefinitionBuilder IsPingPong(bool isPingPong)
+    /// <returns>The <see cref="SpriteSheetAnimationBuilder"/> instance for chaining.</returns>
+    public SpriteSheetAnimationBuilder IsPingPong(bool isPingPong)
     {
         _isPingPong = isPingPong;
         return this;
     }
 
-    internal SpriteSheetAnimationDefinition Build() =>
-        new SpriteSheetAnimationDefinition(_name, _frames.ToArray(), _isLooping, _isReversed, _isPingPong);
+    internal SpriteSheetAnimation Build() =>
+        new SpriteSheetAnimation(_name, _frames.ToArray(), _isLooping, _isReversed, _isPingPong);
 }

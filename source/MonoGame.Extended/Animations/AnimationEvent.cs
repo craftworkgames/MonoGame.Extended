@@ -12,14 +12,14 @@ namespace MonoGame.Extended.Animations;
 public class AnimationEvent : EventArgs
 {
     /// <summary>
-    /// Gets the animation associated with the event.
+    /// Gets the animation controller associated with the event.
     /// </summary>
-    public IAnimation Animation { get; }
+    public IAnimationController Animation { get; }
 
     /// <summary>
     /// Gets the trigger that caused the event.
     /// </summary>
     public AnimationEventTrigger Trigger { get; }
 
-    internal AnimationEvent(IAnimation animation, AnimationEventTrigger trigger) => (Animation, Trigger) = (animation, trigger);
+    internal AnimationEvent(IAnimationController animation, AnimationEventTrigger trigger) => (Animation, Trigger) = (animation, trigger);
 }

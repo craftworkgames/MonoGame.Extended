@@ -7,7 +7,7 @@ using MonoGame.Extended.Animations;
 
 namespace MonoGame.Extended.Graphics;
 
-internal class SpriteSheetAnimationDefinition : IAnimationDefinition
+public class SpriteSheetAnimation : IAnimation
 {
     private readonly SpriteSheetAnimationFrame[] _frames;
 
@@ -18,7 +18,7 @@ internal class SpriteSheetAnimationDefinition : IAnimationDefinition
     public bool IsReversed { get; }
     public bool IsPingPong { get; }
 
-    internal SpriteSheetAnimationDefinition(string name, SpriteSheetAnimationFrame[] frames, bool isLooping, bool isReversed, bool isPingPong)
+    internal SpriteSheetAnimation(string name, SpriteSheetAnimationFrame[] frames, bool isLooping, bool isReversed, bool isPingPong)
     {
         Name = name;
         IsLooping = isLooping;
