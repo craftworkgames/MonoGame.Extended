@@ -169,6 +169,11 @@ namespace MonoGame.Extended
             return Subtract(first, second);
         }
 
+        public static Vector2 operator -(Vector2 first, SizeF second)
+        {
+            return Subtract(first, second);
+        }
+
         public static SizeF operator /(SizeF size, float value)
         {
             return new SizeF(size.Width / value, size.Height / value);

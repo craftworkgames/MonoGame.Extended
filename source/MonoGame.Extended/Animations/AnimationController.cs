@@ -8,12 +8,12 @@ using Microsoft.Xna.Framework;
 namespace MonoGame.Extended.Animations;
 
 /// <summary>
-/// Represents an animation with various control features such as play, pause, stop, looping, reversing, and
-/// ping-pong effects.
+/// Represents an animation controller with features to play, pause, stop, reset, and set the state of
+/// animation playback such as looping, reversing, and ping-pong effects.
 /// </summary>
-public class Animation : IAnimation
+public class AnimationController : IAnimationController
 {
-    private readonly IAnimationDefinition _definition;
+    private readonly IAnimation _definition;
     private int _direction;
 
     /// <summary>
@@ -44,7 +44,7 @@ public class Animation : IAnimation
     public double Speed { get; set; }
 
     /// <inheritdoc />
-    public event Action<IAnimation, AnimationEventTrigger> OnAnimationEvent;
+    public event Action<IAnimationController, AnimationEventTrigger> OnAnimationEvent;
 
     /// <inheritdoc />
     public TimeSpan CurrentFrameTimeRemaining { get; private set; }
@@ -56,10 +56,10 @@ public class Animation : IAnimation
     public int FrameCount => _definition.FrameCount;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Animation"/> class with the specified definition.
+    /// Initializes a new instance of the <see cref="AnimationController"/> class with the specified definition.
     /// </summary>
     /// <param name="definition">The definition of the animation.</param>
-    public Animation(IAnimationDefinition definition)
+    public AnimationController(IAnimation definition)
     {
         _definition = definition;
 
@@ -101,7 +101,7 @@ public class Animation : IAnimation
     {
         if (startingFrame < 0 || startingFrame >= _definition.FrameCount)
         {
-            throw new ArgumentOutOfRangeException(nameof(startingFrame), $"{nameof(startingFrame)} cannot be less than zero or greater than or equal to the total number of frames in this {nameof(Animation)}");
+            throw new ArgumentOutOfRangeException(nameof(startingFrame), $"{nameof(startingFrame)} cannot be less than zero or greater than or equal to the total number of frames in this {nameof(AnimationController)}");
         }
 
         //  Cannot play something that is already playing
@@ -134,7 +134,7 @@ public class Animation : IAnimation
     {
         if (index < 0 || index >= _definition.FrameCount)
         {
-            throw new ArgumentOutOfRangeException(nameof(index), $"{nameof(index)} cannot be less than zero or greater than or equal to the total number of frames in this {nameof(Animation)}");
+            throw new ArgumentOutOfRangeException(nameof(index), $"{nameof(index)} cannot be less than zero or greater than or equal to the total number of frames in this {nameof(AnimationController)}");
         }
 
         CurrentFrame = index;

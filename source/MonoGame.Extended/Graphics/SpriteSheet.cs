@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Graphics;
 /// </summary>
 public class SpriteSheet
 {
-    private readonly Dictionary<string, SpriteSheetAnimationDefinition> _animations = new Dictionary<string, SpriteSheetAnimationDefinition>();
+    private readonly Dictionary<string, SpriteSheetAnimation> _animations = new Dictionary<string, SpriteSheetAnimation>();
 
     /// <summary>
     /// Gets the number of animations defined in the sprite sheet.
@@ -57,30 +57,21 @@ public class SpriteSheet
     /// <returns>A new <see cref="Sprite"/> instance.</returns>
     public Sprite CreateSprite(string regionName) => TextureAtlas.CreateSprite(regionName);
 
-    /// <summary>
-    /// Creates an animated sprite from the specified animation name.
-    /// </summary>
-    /// <param name="animationName">The name of the animation.</param>
-    /// <returns>A new <see cref="AnimatedSprite"/> instance.</returns>
-    public AnimatedSprite CreateAnimatedSprite(string animationName)
-    {
-        SpriteSheetAnimationDefinition animationDefinition = _animations[animationName];
-        Texture2DRegion[] regions = TextureAtlas.GetRegions(animationDefinition.Frames);
-        return new AnimatedSprite(animationDefinition, regions);
-    }
 
     /// <summary>
     /// Defines a new animation for the sprite sheet.
     /// </summary>
     /// <param name="name">The name of the animation.</param>
     /// <param name="buildAction">The action to build the animation definition.</param>
-    public void DefineAnimation(string name, Action<SpriteSheetAnimationDefinitionBuilder> buildAction)
+    public void DefineAnimation(string name, Action<SpriteSheetAnimationBuilder> buildAction)
     {
-        SpriteSheetAnimationDefinitionBuilder builder = new SpriteSheetAnimationDefinitionBuilder(name, this);
+        SpriteSheetAnimationBuilder builder = new SpriteSheetAnimationBuilder(name, this);
         buildAction(builder);
-        SpriteSheetAnimationDefinition definition = builder.Build();
+        SpriteSheetAnimation definition = builder.Build();
         _animations.Add(name, definition);
     }
+
+    public SpriteSheetAnimation GetAnimation(string name) => _animations[name];
 
     /// <summary>
     /// Removes the animation definition with the specified name.

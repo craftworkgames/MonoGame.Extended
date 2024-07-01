@@ -8,10 +8,10 @@ namespace MonoGame.Extended.Animations
         public AnimationComponent(Game game)
             : base(game)
         {
-            Animations = new List<Animation>();
+            Animations = new List<AnimationController>();
         }
 
-        public List<Animation> Animations { get; }
+        public List<AnimationController> Animations { get; }
 
         public override void Update(GameTime gameTime)
         {
