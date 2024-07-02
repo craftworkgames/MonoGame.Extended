@@ -78,7 +78,7 @@ namespace MonoGame.Extended
             }
         }
 
-        public float Pitch
+        public override float Pitch
         {
             get => _pitch;
             set
@@ -90,7 +90,7 @@ namespace MonoGame.Extended
             }
         }
 
-        public float MinimumPitch
+        public override float MinimumPitch
         {
             get => _minimumPitch;
             set
@@ -105,7 +105,7 @@ namespace MonoGame.Extended
             }
         }
 
-        public float MaximumPitch
+        public override float MaximumPitch
         {
             get => _maximumPitch;
             set
@@ -162,12 +162,12 @@ namespace MonoGame.Extended
                 Zoom = value > MaximumZoom ? MaximumZoom : value;
         }
 
-        public void PitchUp(float deltaPitch)
+        public override void PitchUp(float deltaPitch)
         {
             ClampPitch(Pitch + deltaPitch);
         }
 
-        public void PitchDown(float deltaPitch)
+        public override void PitchDown(float deltaPitch)
         {
             ClampPitch(Pitch - deltaPitch);
         }
