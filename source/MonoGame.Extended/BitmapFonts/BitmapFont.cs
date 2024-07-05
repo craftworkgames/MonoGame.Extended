@@ -9,7 +9,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.BitmapFonts.BmfTypes;
+using MonoGame.Extended.Content.BitmapFonts;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.TextureAtlases;
 
@@ -371,7 +371,7 @@ public sealed class BitmapFont
 
     public static BitmapFont FromStream(GraphicsDevice graphicsDevice, FileStream stream)
     {
-        BmfFile bmfFile = BmfFile.FromStream(stream);
+        BitmapFontFileContent bmfFile = BitmapFontFileContent.FromStream(stream);
 
         //  Load page textures
         Dictionary<string, Texture2D> pages = new Dictionary<string, Texture2D>();
@@ -392,7 +392,7 @@ public sealed class BitmapFont
         Dictionary<int, BitmapFontCharacter> characters = new Dictionary<int, BitmapFontCharacter>();
         for (int i = 0; i < bmfFile.Characters.Count; i++)
         {
-            BmfCharsBlock charBlock = bmfFile.Characters[i];
+            BitmapFontContentCharacterBlock charBlock = bmfFile.Characters[i];
             Texture2D texture = pages[bmfFile.Pages[charBlock.Page]];
             Texture2DRegion region = new Texture2DRegion(texture, charBlock.X, charBlock.Y, charBlock.Width, charBlock.Height);
             BitmapFontCharacter character = new BitmapFontCharacter((int)charBlock.ID, region, charBlock.XOffset, charBlock.YOffset, charBlock.XAdvance);

@@ -1,18 +1,18 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
-using MonoGame.Extended.BitmapFonts.BmfTypes;
+using MonoGame.Extended.Content.BitmapFonts;
 
 namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
     [ContentProcessor(DisplayName = "BMFont Processor - MonoGame.Extended")]
-    public class BitmapFontProcessor : ContentProcessor<ContentImporterResult<BmfFile>, BitmapFontProcessorResult>
+    public class BitmapFontProcessor : ContentProcessor<ContentImporterResult<BitmapFontFileContent>, BitmapFontProcessorResult>
     {
-        public override BitmapFontProcessorResult Process(ContentImporterResult<BmfFile> importerResult, ContentProcessorContext context)
+        public override BitmapFontProcessorResult Process(ContentImporterResult<BitmapFontFileContent> importerResult, ContentProcessorContext context)
         {
             try
             {
-                BmfFile bmfFile = importerResult.Data;
+                BitmapFontFileContent bmfFile = importerResult.Data;
                 context.Logger.LogMessage("Processing BMFont");
                 var result = new BitmapFontProcessorResult(bmfFile);
 

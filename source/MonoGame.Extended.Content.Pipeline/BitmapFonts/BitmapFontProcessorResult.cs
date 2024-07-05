@@ -1,14 +1,14 @@
 using System.Collections.Generic;
-using MonoGame.Extended.BitmapFonts.BmfTypes;
+using MonoGame.Extended.Content.BitmapFonts;
 
 namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
     public class BitmapFontProcessorResult
     {
         public List<string> TextureAssets { get; private set; }
-        public BmfFile FontFile { get; private set; }
+        public BitmapFontFileContent FontFile { get; private set; }
 
-        public BitmapFontProcessorResult(BmfFile fontFile)
+        public BitmapFontProcessorResult(BitmapFontFileContent fontFile)
         {
             FontFile = fontFile;
             TextureAssets = new List<string>();

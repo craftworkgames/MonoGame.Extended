@@ -1,22 +1,19 @@
 using System.IO;
-using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
-using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.BitmapFonts.BmfTypes;
+using MonoGame.Extended.Content.BitmapFonts;
 
 namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 {
-    [ContentImporter(".fnt", DefaultProcessor = "BitmapFontProcessor",
-         DisplayName = "BMFont Importer - MonoGame.Extended")]
-    public class BitmapFontImporter : ContentImporter<ContentImporterResult<BmfFile>>
+    [ContentImporter(".fnt", DefaultProcessor = "BitmapFontProcessor", DisplayName = "BMFont Importer - MonoGame.Extended")]
+    public class BitmapFontImporter : ContentImporter<ContentImporterResult<BitmapFontFileContent>>
     {
-        public override ContentImporterResult<BmfFile> Import(string filename, ContentImporterContext context)
+        public override ContentImporterResult<BitmapFontFileContent> Import(string filename, ContentImporterContext context)
         {
             context.Logger.LogMessage("Importing FNT file: {0}", filename);
 
             using FileStream stream = File.OpenRead(filename);
-            BmfFile file = BmfFile.FromStream(stream);
-            return new ContentImporterResult<BmfFile>(filename, file);
+            var bmfFile = BitmapFontFileReader.Read(stream);
+            return new ContentImporterResult<BitmapFontFileContent>(filename, bmfFile);
         }
     }
 }
