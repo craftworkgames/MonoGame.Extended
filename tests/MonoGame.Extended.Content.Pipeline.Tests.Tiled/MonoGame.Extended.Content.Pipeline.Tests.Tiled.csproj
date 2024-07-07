@@ -8,17 +8,4 @@
     <ProjectReference Include="..\..\source\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="TestData\isometric.tmx" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestData\isometric_tileset.png" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestData\level01.tmx" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestData\template.tx" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestData\test-object-layer.tmx" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestData\test-tileset-base64.tmx" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestData\test-tileset-csv.tmx" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestData\test-tileset-gzip.tmx" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestData\test-tileset-xml.tmx" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestData\test-tileset-zlib.tmx" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-
 </Project>
