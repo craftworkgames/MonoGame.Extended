@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework.Content;
 
-namespace MonoGame.Extended.Serialization;
+namespace MonoGame.Extended.Serialization.Json;
 
 /// <summary>
 /// Loads content from a JSON file into the <see cref="ContentManager"/> using the asset name
@@ -42,7 +42,7 @@ public class ContentManagerJsonConverter<T> : JsonConverter<T>
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
         ArgumentNullException.ThrowIfNull(writer);
-        var asset = (T)value;
+        var asset = value;
         var assetName = _getAssetName(asset);
         writer.WriteStringValue(assetName);
     }

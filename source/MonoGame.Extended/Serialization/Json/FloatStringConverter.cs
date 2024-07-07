@@ -2,7 +2,7 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace MonoGame.Extended.Serialization;
+namespace MonoGame.Extended.Serialization.Json;
 
 public class FloatStringConverter : JsonConverter<float>
 {

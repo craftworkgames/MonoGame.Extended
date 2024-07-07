@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace MonoGame.Extended.Serialization
+namespace MonoGame.Extended.Serialization.Json
 {
     public abstract class BaseTypeJsonConverter<T> : JsonConverter<T>
     {

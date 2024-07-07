@@ -3,7 +3,7 @@ using System.Linq;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.Serialization
+namespace MonoGame.Extended.Serialization.Json
 {
     public interface ITextureRegionService
     {

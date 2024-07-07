@@ -5,10 +5,10 @@ using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
+using MonoGame.Extended.Content.TexturePacker;
 using MonoGame.Extended.Graphics;
-using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.Serialization
+namespace MonoGame.Extended.Serialization.Json
 {
     public class TextureAtlasJsonConverter : JsonConverter<Texture2DAtlas>
     {
@@ -32,7 +32,7 @@ namespace MonoGame.Extended.Serialization
                 // to investigate.
                 var textureAtlasAssetName = reader.GetString();
                 var contentPath = GetContentPath(textureAtlasAssetName);
-                var texturePackerFile = _contentManager.Load<TexturePackerFile>(contentPath, new JsonContentLoader());
+                var texturePackerFile = _contentManager.Load<TexturePackerFileContent>(contentPath, new JsonContentLoader());
                 var texture = _contentManager.Load<Texture2D>(texturePackerFile.Metadata.Image);
                 //return TextureAtlas.Create(texturePackerFile.Metadata.Image, texture );
                 throw new NotImplementedException();

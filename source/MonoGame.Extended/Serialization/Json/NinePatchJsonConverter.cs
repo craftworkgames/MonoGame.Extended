@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using MonoGame.Extended.Graphics;
 
-namespace MonoGame.Extended.Serialization;
+namespace MonoGame.Extended.Serialization.Json;
 
 /// <summary>
 /// Converts a <see cref="NinePatch"/> value to or from JSON.

@@ -1,9 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework.Content;
-using MonoGame.Extended.TextureAtlases;
 
-namespace MonoGame.Extended.Serialization;
+namespace MonoGame.Extended.Serialization.Json;
 
 public static class MonoGameJsonSerializerOptionsProvider
 {

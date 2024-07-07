@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Content;
 
-namespace MonoGame.Extended.Serialization
+namespace MonoGame.Extended.Serialization.Json
 {
     public class TextContentLoader : IContentLoader<string>
     {
