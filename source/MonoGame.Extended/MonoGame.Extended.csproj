@@ -33,6 +33,4 @@
         </AssemblyAttribute>
     </ItemGroup>
 
-    <Import Project="CompileEffects.targets" />
-
 </Project>
