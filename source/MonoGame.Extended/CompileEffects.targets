@@ -1,0 +1,19 @@
+<Project>
+    <PropertyGroup>
+        <FxDir>$(MSBuildProjectDirectory)\Graphics\Effects\Resources</FxDir>
+        <MgfxcTool>dotnet mgfxc</MgfxcTool>
+    </PropertyGroup>
+
+    <Target Name="RestoreDotNetTools" BeforeTargets="CompileEffects">
+        <Exec Command="dotnet tool restore" StandardOutputImportance="Low" />
+    </Target>
+
+    <Target Name="CompileEffects" BeforeTargets="BeforeBuild" DependsOnTargets="RestoreDotNetTools">
+        <ItemGroup>
+            <FxFiles Include="$(FxDir)\*.fx" />
+        </ItemGroup>
+
+        <Exec Command="$(MgfxcTool) &quot;%(FxFiles.FullPath)&quot; &quot;$(FxDir)\%(FxFiles.Filename).ogl.mgfxo&quot; /Profile:OpenGL" />
+        <Exec Command="$(MgfxcTool) &quot;%(FxFiles.FullPath)&quot; &quot;$(FxDir)\%(FxFiles.Filename).dx11.mgfxo&quot; /Profile:DirectX_11" />
+    </Target>
+</Project>
