@@ -34,6 +34,6 @@ jobs:
           wget -qO- https://monogame.net/downloads/net6_mgfxc_wine_setup.sh | bash
 
       - name: Test MonoGame.Extended
-        run: dotnet test MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release
-        env:
-          MGFXC_WINE_PATH: $HOME/.winemonogame
+        run: |
+          export MGFXC_WINE_PATH="/home/runner/.winemonogame"
+          dotnet test MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release
