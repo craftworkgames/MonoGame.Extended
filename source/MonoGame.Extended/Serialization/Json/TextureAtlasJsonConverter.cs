@@ -33,7 +33,7 @@ namespace MonoGame.Extended.Serialization.Json
                 var textureAtlasAssetName = reader.GetString();
                 var contentPath = GetContentPath(textureAtlasAssetName);
                 var texturePackerFile = _contentManager.Load<TexturePackerFileContent>(contentPath, new JsonContentLoader());
-                var texture = _contentManager.Load<Texture2D>(texturePackerFile.Metadata.Image);
+                var texture = _contentManager.Load<Texture2D>(texturePackerFile.Meta.Image);
                 //return TextureAtlas.Create(texturePackerFile.Metadata.Image, texture );
                 throw new NotImplementedException();
             }
