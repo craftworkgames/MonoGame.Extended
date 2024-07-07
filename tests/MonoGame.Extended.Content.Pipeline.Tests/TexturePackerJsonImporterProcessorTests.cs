@@ -1,11 +1,10 @@
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.Content.Pipeline.TextureAtlases;
 using NSubstitute;
-using Xunit;
 
 namespace MonoGame.Extended.Content.Pipeline.Tests
 {
-    
+
     public class TexturePackerJsonImporterProcessorTests
     {
         [Fact]
