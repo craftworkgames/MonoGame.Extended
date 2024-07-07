@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Graphics;
 /// <summary>
 /// Provides extension methods for the <see cref="Texture2DRegion"/> class.
 /// </summary>
-public static class TextureRegionExtensions
+public static class Texture2DRegionExtensions
 {
     /// <summary>
     /// Gets a subregion of the specified texture region using the provided rectangle.
