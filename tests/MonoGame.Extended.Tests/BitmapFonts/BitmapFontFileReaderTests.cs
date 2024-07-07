@@ -6,8 +6,7 @@
 using System;
 using System.IO;
 using System.Linq;
-using MonoGame.Extended.BitmapFonts.BmfTypes;
-using MonoGame.Extended.BitmapFonts.Serialization;
+using MonoGame.Extended.Content.BitmapFonts;
 
 namespace MonoGame.Extended.BitmapFonts.Tests;
 
