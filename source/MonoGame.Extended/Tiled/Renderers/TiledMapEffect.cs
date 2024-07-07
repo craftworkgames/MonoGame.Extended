@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics.Effects;
 
 namespace MonoGame.Extended.Tiled.Renderers
 {
