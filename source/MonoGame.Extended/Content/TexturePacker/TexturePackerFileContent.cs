@@ -6,8 +6,8 @@ namespace MonoGame.Extended.Content.TexturePacker;
 
 public record TexturePackerFileContent([property: JsonPropertyName("frames")] List<TexturePackerFrame> Regions,
                                        [property: JsonPropertyName("meta")] TexturePackerMeta Meta);
-public record TexturePackerPoint([property: JsonPropertyName("x")] int X,
-                                 [property: JsonPropertyName("y")] int Y);
+public record TexturePackerPoint([property: JsonPropertyName("x")] double X,
+                                 [property: JsonPropertyName("y")] double Y);
 public record TexturePackerSize([property: JsonPropertyName("w")] int Width,
                                 [property: JsonPropertyName("h")] int Height);
 
@@ -20,7 +20,7 @@ public record TexturePackerFrame([property: JsonPropertyName("filename")] string
                                  [property: JsonPropertyName("frame")] TexturePackerRectangle Frame,
                                  [property: JsonPropertyName("rotated")] bool Rotated,
                                  [property: JsonPropertyName("trimmed")] bool Trimmed,
-                                 [property: JsonPropertyName("spriteSOurceSize")] TexturePackerRectangle SpriteSourceSize,
+                                 [property: JsonPropertyName("spriteSourceSize")] TexturePackerRectangle SpriteSourceSize,
                                  [property: JsonPropertyName("sourceSize")] TexturePackerSize SourceSize,
                                  [property: JsonPropertyName("pivot")] TexturePackerPoint PivotPoint);
 
