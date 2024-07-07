@@ -1,24 +1,17 @@
-﻿using System;
-using Microsoft.Xna.Framework.Content.Pipeline;
-using MonoGame.Extended.TextureAtlases;
+﻿// Copyright (c) Craftwork Games. All rights reserved.
+// Licensed under the MIT license.
+// See LICENSE file in the project root for full license information.
 
-namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
+using Microsoft.Xna.Framework.Content.Pipeline;
+using MonoGame.Extended.Content.TexturePacker;
+
+namespace MonoGame.Extended.Content.Pipeline.TextureAtlases;
+
+[ContentProcessor(DisplayName = "TexturePacker Processor - MonoGame.Extended")]
+public class TexturePackerProcessor : ContentProcessor<TexturePackerFileContent, TexturePackerProcessorResult>
 {
-    [ContentProcessor(DisplayName = "TexturePacker Processor - MonoGame.Extended")]
-    public class TexturePackerProcessor : ContentProcessor<TexturePackerFile, TexturePackerProcessorResult>
+    public override TexturePackerProcessorResult Process(TexturePackerFileContent input, ContentProcessorContext context)
     {
-        public override TexturePackerProcessorResult Process(TexturePackerFile input, ContentProcessorContext context)
-        {
-            try
-            {
-                var output = new TexturePackerProcessorResult {Data = input};
-                return output;
-            }
-            catch (Exception ex)
-            {
-                context.Logger.LogMessage("Error {0}", ex);
-                throw;
-            }
-        }
+        return new TexturePackerProcessorResult(input);
     }
 }

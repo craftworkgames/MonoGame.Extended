@@ -1,3 +1,7 @@
+// Copyright (c) Craftwork Games. All rights reserved.
+// Licensed under the MIT license.
+// See LICENSE file in the project root for full license information.
+
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
@@ -8,20 +12,20 @@ namespace MonoGame.Extended.Content.ContentReaders
     {
         protected override Texture2DAtlas Read(ContentReader reader, Texture2DAtlas existingInstance)
         {
-            var assetName = reader.GetRelativeAssetName(reader.ReadString());
-            var texture = reader.ContentManager.Load<Texture2D>(assetName);
-            var atlas = new Texture2DAtlas(assetName, texture);
+            var imageAssetName = reader.ReadString();
+            var texture = reader.ContentManager.Load<Texture2D>(reader.GetRelativeAssetName(imageAssetName));
+            var atlas = new Texture2DAtlas(imageAssetName, texture);
 
             var regionCount = reader.ReadInt32();
 
             for (var i = 0; i < regionCount; i++)
             {
-                atlas.CreateRegion(
-                    reader.ReadInt32(),
-                    reader.ReadInt32(),
-                    reader.ReadInt32(),
-                    reader.ReadInt32(),
-                    reader.ReadString());
+                int x = reader.ReadInt32();
+                int y = reader.ReadInt32();
+                int width = reader.ReadInt32();
+                int height = reader.ReadInt32();
+                string regionName = reader.ReadString();
+                atlas.CreateRegion(x, y, width, height, regionName);
             }
 
             return atlas;
