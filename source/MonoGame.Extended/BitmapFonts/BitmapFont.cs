@@ -370,7 +370,7 @@ public sealed class BitmapFont
 
     public static BitmapFont FromStream(GraphicsDevice graphicsDevice, FileStream stream)
     {
-        BitmapFontFileContent bmfFile = BitmapFontFileContent.FromStream(stream);
+        var bmfFile = BitmapFontFileReader.Read(stream);
 
         //  Load page textures
         Dictionary<string, Texture2D> pages = new Dictionary<string, Texture2D>();
@@ -391,7 +391,7 @@ public sealed class BitmapFont
         Dictionary<int, BitmapFontCharacter> characters = new Dictionary<int, BitmapFontCharacter>();
         for (int i = 0; i < bmfFile.Characters.Count; i++)
         {
-            BitmapFontContentCharacterBlock charBlock = bmfFile.Characters[i];
+            var charBlock = bmfFile.Characters[i];
             Texture2D texture = pages[bmfFile.Pages[charBlock.Page]];
             Texture2DRegion region = new Texture2DRegion(texture, charBlock.X, charBlock.Y, charBlock.Width, charBlock.Height);
             BitmapFontCharacter character = new BitmapFontCharacter((int)charBlock.ID, region, charBlock.XOffset, charBlock.YOffset, charBlock.XAdvance);
@@ -401,7 +401,7 @@ public sealed class BitmapFont
         //  Load kernings
         for (int i = 0; i < bmfFile.Kernings.Count; i++)
         {
-            BmfKerningPairsBlock kerningBlock = bmfFile.Kernings[i];
+            var kerningBlock = bmfFile.Kernings[i];
             if (characters.TryGetValue((int)kerningBlock.First, out BitmapFontCharacter character))
             {
                 character.Kernings.Add((int)kerningBlock.Second, kerningBlock.Amount);
