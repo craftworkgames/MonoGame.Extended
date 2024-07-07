@@ -1,9 +1,9 @@
-﻿using MonoGame.Extended.TextureAtlases;
+﻿// Copyright (c) Craftwork Games. All rights reserved.
+// Licensed under the MIT license.
+// See LICENSE file in the project root for full license information.
 
-namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
-{
-    public class TexturePackerProcessorResult
-    {
-        public TexturePackerFile Data { get; set; }
-    }
-}
+using MonoGame.Extended.Content.TexturePacker;
+
+namespace MonoGame.Extended.Content.Pipeline.TextureAtlases;
+
+public record TexturePackerProcessorResult(TexturePackerFileContent Data);

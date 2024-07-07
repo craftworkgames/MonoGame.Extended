@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Serialization;
+using MonoGame.Extended.Serialization.Json;
 
 namespace MonoGame.Extended.Tests.Serialization;
 

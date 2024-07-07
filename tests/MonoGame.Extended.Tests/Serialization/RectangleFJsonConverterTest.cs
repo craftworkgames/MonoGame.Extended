@@ -1,7 +1,5 @@
-using System.IO;
 using System.Text.Json;
-using MonoGame.Extended.Serialization;
-using Xunit;
+using MonoGame.Extended.Serialization.Json;
 
 namespace MonoGame.Extended.Tests.Serialization;
 

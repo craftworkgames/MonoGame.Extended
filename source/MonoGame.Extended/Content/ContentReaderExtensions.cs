@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Tiled;
 
 namespace MonoGame.Extended.Content
 {
@@ -39,6 +40,19 @@ namespace MonoGame.Extended.Content
             }
 
             return relativePath;
+        }
+
+        public static void ReadTiledMapProperties(this ContentReader reader, TiledMapProperties properties)
+        {
+            var count = reader.ReadInt32();
+
+            for (var i = 0; i < count; i++)
+            {
+                var key = reader.ReadString();
+                var value = new TiledMapPropertyValue(reader.ReadString());
+                ReadTiledMapProperties(reader, value.Properties);
+                properties[key] = value;
+            }
         }
     }
 }

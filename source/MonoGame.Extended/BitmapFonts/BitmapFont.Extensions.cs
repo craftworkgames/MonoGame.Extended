@@ -1,134 +1,156 @@
-﻿//// Copyright (c) Craftwork Games. All rights reserved.
-//// Licensed under the MIT license.
-//// See LICENSE file in the project root for full license information.
+using System;
+using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics;
 
-//using System;
-//using System.Text;
-//using Microsoft.Xna.Framework;
+namespace MonoGame.Extended.BitmapFonts
+{
+    public static class BitmapFontExtensions
+    {
+        /// <summary>
+        ///     Adds a string to a batch of sprites for rendering using the specified font, text, position, color, rotation,
+        ///     origin, scale, effects and layer.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="bitmapFont">A font for displaying text.</param>
+        /// <param name="text">The text message to display.</param>
+        /// <param name="position">The location (in screen coordinates) to draw the text.</param>
+        /// <param name="color">
+        ///     The <see cref="Color" /> to tint a sprite. Use <see cref="Color.White" /> for full color with no
+        ///     tinting.
+        /// </param>
+        /// <param name="rotation">Specifies the angle (in radians) to rotate the text about its origin.</param>
+        /// <param name="origin">The origin for each letter; the default is (0,0) which represents the upper-left corner.</param>
+        /// <param name="scale">Scale factor.</param>
+        /// <param name="effect">Effects to apply.</param>
+        /// <param name="layerDepth">
+        ///     The depth of a layer. By default, 0 represents the front layer and 1 represents a back layer.
+        ///     Use SpriteSortMode if you want sprites to be sorted during drawing.
+        /// </param>
+        /// <param name="clippingRectangle">Clips the boundaries of the text so that it's not drawn outside the clipping rectangle</param>
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont bitmapFont, string text, Vector2 position,
+            Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float layerDepth, Rectangle? clippingRectangle = null)
+        {
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+            if (effect != SpriteEffects.None)
+                throw new NotSupportedException($"{effect} is not currently supported for {nameof(BitmapFont)}");
 
-//namespace MonoGame.Extended.BitmapFonts;
+            var glyphs = bitmapFont.GetGlyphs(text, position);
+            foreach (var glyph in glyphs)
+            {
+                if (glyph.Character == null)
+                    continue;
+                var characterOrigin = position - glyph.Position + origin;
+                spriteBatch.Draw(glyph.Character.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
+            }
+        }
 
-///// <summary>
-///// Provides extension methods for <see cref="BitmapFont"/>.
-///// </summary>
-//public static class BitmapFontExtensions
-//{
-//    /// <summary>
-//    /// Measures the size of the given text when rendered with the specified font.
-//    /// </summary>
-//    /// <param name="font">The <see cref="BitmapFont"/> used to render the text.</param>
-//    /// <param name="text">The text to measure.</param>
-//    /// <returns>The size of the rendered text.</returns>
-//    public static SizeF MeasureString(this BitmapFont font, string text)
-//    {
-//        SizeF size = new SizeF(0, font.LineHeight);
-//        SizeF offset = new SizeF(0, 0);
-//        bool firstCharacterOfLine = true;
-//        MeasureStringInternal(font, text, ref size, ref offset, ref firstCharacterOfLine);
-//        return size;
-//    }
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont bitmapFont, StringBuilder text, Vector2 position,
+            Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float layerDepth, Rectangle? clippingRectangle = null)
+        {
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+            if (effect != SpriteEffects.None)
+                throw new NotSupportedException($"{effect} is not currently supported for {nameof(BitmapFont)}");
 
-//    /// <summary>
-//    /// Measures the size of the given text when rendered with the specified font.
-//    /// </summary>
-//    /// <param name="font">The <see cref="BitmapFont"/> used to render the text.</param>
-//    /// <param name="text">The text to measure.</param>
-//    /// <returns>The size of the rendered text.</returns>
-//    public static SizeF MeasureString(this BitmapFont font, StringBuilder text)
-//    {
-//        SizeF size = new SizeF(0, font.LineHeight);
-//        SizeF offset = new SizeF(0, 0);
-//        bool firstCharacterOfLine = true;
+            var glyphs = bitmapFont.GetGlyphs(text, position);
+            foreach (var glyph in glyphs)
+            {
+                if (glyph.Character == null)
+                    continue;
+                var characterOrigin = position - glyph.Position + origin;
+                spriteBatch.Draw(glyph.Character.TextureRegion, position, color, rotation, characterOrigin, scale, effect, layerDepth, clippingRectangle);
+            }
+        }
 
-//        foreach (ReadOnlyMemory<char> chunk in text.GetChunks())
-//        {
-//            MeasureStringInternal(font, chunk.Span, ref size, ref offset, ref firstCharacterOfLine);
-//        }
+        /// <summary>
+        ///     Adds a string to a batch of sprites for rendering using the specified font, text, position, color, rotation,
+        ///     origin, scale, effects and layer.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="font">A font for displaying text.</param>
+        /// <param name="text">The text message to display.</param>
+        /// <param name="position">The location (in screen coordinates) to draw the text.</param>
+        /// <param name="color">
+        ///     The <see cref="Color" /> to tint a sprite. Use <see cref="Color.White" /> for full color with no
+        ///     tinting.
+        /// </param>
+        /// <param name="rotation">Specifies the angle (in radians) to rotate the text about its origin.</param>
+        /// <param name="origin">The origin for each letter; the default is (0,0) which represents the upper-left corner.</param>
+        /// <param name="scale">Scale factor.</param>
+        /// <param name="effect">Effects to apply.</param>
+        /// <param name="layerDepth">
+        ///     The depth of a layer. By default, 0 represents the front layer and 1 represents a back layer.
+        ///     Use SpriteSortMode if you want sprites to be sorted during drawing.
+        /// </param>
+        /// <param name="clippingRectangle">Clips the boundaries of the text so that it's not drawn outside the clipping rectangle</param>
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position,
+            Color color, float rotation, Vector2 origin, float scale, SpriteEffects effect, float layerDepth, Rectangle? clippingRectangle = null)
+        {
+            spriteBatch.DrawString(font, text, position, color, rotation, origin, new Vector2(scale, scale), effect, layerDepth, clippingRectangle);
+        }
 
-//        return size;
-//    }
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, StringBuilder text, Vector2 position,
+            Color color, float rotation, Vector2 origin, float scale, SpriteEffects effect, float layerDepth, Rectangle? clippingRectangle = null)
+        {
+            spriteBatch.DrawString(font, text, position, color, rotation, origin, new Vector2(scale, scale), effect, layerDepth, clippingRectangle);
+        }
 
-//    /// <summary>
-//    /// Gets the rectangular bounds of the specified text when rendered with the specified font.
-//    /// </summary>
-//    /// <param name="font">The <see cref="BitmapFont"/> used to render the text.</param>
-//    /// <param name="text">The text to measure.</param>
-//    /// <param name="location">The top-left corner of the bounding rectangle.</param>
-//    /// <returns>The rectangular bounds of the rendered text.</returns>
-//    public static RectangleF GetStringBounds(this BitmapFont font, string text, Vector2 location)
-//    {
-//        SizeF size = font.MeasureString(text);
-//        return new RectangleF(location, size);
-//    }
+        /// <summary>
+        ///     Adds a string to a batch of sprites for rendering using the specified font, text, position, color, layer,
+        ///     and width (in pixels) where to wrap the text at.
+        /// </summary>
+        /// <remarks>
+        ///     <see cref="BitmapFont" /> objects are loaded from the Content Manager. See the <see cref="BitmapFont" /> class for
+        ///     more information.
+        ///     Before any calls to this method you must call <see cref="SpriteBatch.Begin" />. Once all calls 
+        ///     are complete, call <see cref="SpriteBatch.End" />.
+        ///     Use a newline character (\n) to draw more than one line of text.
+        /// </remarks>
+        /// <param name="spriteBatch"></param>
+        /// <param name="font">A font for displaying text.</param>
+        /// <param name="text">The text message to display.</param>
+        /// <param name="position">The location (in screen coordinates) to draw the text.</param>
+        /// <param name="color">
+        ///     The <see cref="Color" /> to tint a sprite. Use <see cref="Color.White" /> for full color with no
+        ///     tinting.
+        /// </param>
+        /// <param name="layerDepth">
+        ///     The depth of a layer. By default, 0 represents the front layer and 1 represents a back layer.
+        ///     Use SpriteSortMode if you want sprites to be sorted during drawing.
+        /// </param>
+        /// <param name="clippingRectangle">Clips the boundaries of the text so that it's not drawn outside the clipping rectangle</param>
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position, Color color, float layerDepth, Rectangle? clippingRectangle = null)
+        {
+            spriteBatch.DrawString(font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: Vector2.One, effect: SpriteEffects.None,
+                layerDepth: layerDepth, clippingRectangle: clippingRectangle);
+        }
 
-//    /// <summary>
-//    /// Gets the rectangular bounds of the specified text when rendered with the specified font.
-//    /// </summary>
-//    /// <param name="font">The <see cref="BitmapFont"/> used to render the text.</param>
-//    /// <param name="text">The text to measure.</param>
-//    /// <param name="location">The top-left corner of the bounding rectangle.</param>
-//    /// <returns>The rectangular bounds of the rendered text.</returns>
-//    public static RectangleF GetStringBounds(this BitmapFont font, StringBuilder text, Vector2 location)
-//    {
-//        SizeF size = font.MeasureString(text);
-//        return new RectangleF(location, size);
-//    }
+        /// <summary>
+        ///     Adds a string to a batch of sprites for rendering using the specified font, text, position, color,
+        ///     and width (in pixels) where to wrap the text at. The text is drawn on layer 0f.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="font">A font for displaying text.</param>
+        /// <param name="text">The text message to display.</param>
+        /// <param name="position">The location (in screen coordinates) to draw the text.</param>
+        /// <param name="color">
+        ///     The <see cref="Color" /> to tint a sprite. Use <see cref="Color.White" /> for full color with no
+        ///     tinting.
+        /// </param>
+        /// <param name="clippingRectangle">Clips the boundaries of the text so that it's not drawn outside the clipping rectangle</param>
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, string text, Vector2 position, Color color, Rectangle? clippingRectangle = null)
+        {
+            spriteBatch.DrawString(font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: Vector2.One, effect: SpriteEffects.None,
+                layerDepth: 0, clippingRectangle: clippingRectangle);
+        }
 
-//    private static void MeasureStringInternal(this BitmapFont font, ReadOnlySpan<char> text, ref SizeF size, ref SizeF offset, ref bool firstCharacterOfLine)
-//    {
-//        if (text.Length == 0)
-//        {
-//            return;
-//        }
-
-//        for (int i = 0; i < text.Length; i++)
-//        {
-//            char c = text[i];
-
-//            if (c == '\r')
-//            {
-//                continue;
-//            }
-
-//            if (c == '\n')
-//            {
-//                offset.Width = 0;
-//                offset.Height += font.LineHeight;
-//                firstCharacterOfLine = true;
-//                continue;
-//            }
-
-//            if (!font.Characters.TryGetValue(c, out BitmapFontCharacter? character))
-//            {
-//                continue;
-//            }
-
-//            if (firstCharacterOfLine)
-//            {
-//                offset.Width = Math.Max(character.XOffset, 0);
-//                firstCharacterOfLine = false;
-//            }
-//            else
-//            {
-//                offset.Width += character.XOffset;
-//            }
-
-//            offset.Width += character.TextureRegion.Width;
-
-//            float proposedWidth = offset.Width + character.XAdvance;
-//            if (proposedWidth > size.Width)
-//            {
-//                size.Width = proposedWidth;
-//            }
-
-//            offset.Width += character.XAdvance;
-
-//            if (character.TextureRegion.Height > size.Height)
-//            {
-//                size.Height = character.TextureRegion.Height;
-//            }
-//        }
-
-//        size.Height += offset.Height;
-//    }
-//}
+        public static void DrawString(this SpriteBatch spriteBatch, BitmapFont font, StringBuilder text, Vector2 position, Color color, Rectangle? clippingRectangle = null)
+        {
+            spriteBatch.DrawString(font, text, position, color, rotation: 0, origin: Vector2.Zero, scale: Vector2.One, effect: SpriteEffects.None,
+                layerDepth: 0, clippingRectangle: clippingRectangle);
+        }
+    }
+}

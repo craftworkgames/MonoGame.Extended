@@ -1,14 +1,14 @@
-﻿using Microsoft.Xna.Framework.Content.Pipeline;
-using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
-using MonoGame.Extended.Tiled;
-using System;
+﻿using System;
 using System.Globalization;
+using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
-using MonoGame.Extended.Tiled.Serialization;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
+using MonoGame.Extended.Content.Tiled;
+using MonoGame.Extended.Tiled;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
-	[ContentTypeWriter]
+    [ContentTypeWriter]
 	public class TiledMapTilesetWriter : ContentTypeWriter<TiledMapTilesetContentItem>
 	{
 		public override string GetRuntimeReader(TargetPlatform targetPlatform)
