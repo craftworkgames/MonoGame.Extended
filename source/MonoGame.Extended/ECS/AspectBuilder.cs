@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using MonoGame.Extended.Collections;
 
-namespace MonoGame.Extended.Entities
+namespace MonoGame.Extended.ECS
 {
     public class AspectBuilder
     {

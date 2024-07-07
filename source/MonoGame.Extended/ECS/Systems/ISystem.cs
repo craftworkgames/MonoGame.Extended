@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonoGame.Extended.Entities.Systems
+namespace MonoGame.Extended.ECS.Systems
 {
     public interface ISystem : IDisposable
     {

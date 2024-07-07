@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace MonoGame.Extended.Entities
+namespace MonoGame.Extended.ECS
 {
     public static class BitArrayExtensions
     {

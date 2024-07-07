@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 
-namespace MonoGame.Extended.Entities
+namespace MonoGame.Extended.ECS
 {
     public class Entity : IEquatable<Entity>
     {

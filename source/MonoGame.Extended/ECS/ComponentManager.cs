@@ -5,9 +5,9 @@ using System.Collections.Specialized;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
-using MonoGame.Extended.Entities.Systems;
+using MonoGame.Extended.ECS.Systems;
 
-namespace MonoGame.Extended.Entities
+namespace MonoGame.Extended.ECS
 {
     public interface IComponentMapperService : IEnumerable<ComponentMapper>
     {

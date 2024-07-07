@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MonoGame.Extended.Entities.Systems
+namespace MonoGame.Extended.ECS.Systems
 {
     public abstract class EntityUpdateSystem : EntitySystem, IUpdateSystem
     {

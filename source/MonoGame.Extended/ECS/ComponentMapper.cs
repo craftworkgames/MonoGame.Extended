@@ -1,7 +1,7 @@
 ﻿using System;
 using MonoGame.Extended.Collections;
 
-namespace MonoGame.Extended.Entities
+namespace MonoGame.Extended.ECS
 {
     public abstract class ComponentMapper
     {

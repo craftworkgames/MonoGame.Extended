@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonoGame.Extended.Entities
+namespace MonoGame.Extended.ECS
 {
     //public class ComponentType : IEquatable<ComponentType>
     //{

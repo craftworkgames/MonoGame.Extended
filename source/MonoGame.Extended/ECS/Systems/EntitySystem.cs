@@ -1,6 +1,6 @@
 ﻿using MonoGame.Extended.Collections;
 
-namespace MonoGame.Extended.Entities.Systems
+namespace MonoGame.Extended.ECS.Systems
 {
     public abstract class EntitySystem : ISystem
     {
