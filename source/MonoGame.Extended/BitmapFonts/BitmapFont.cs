@@ -11,7 +11,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content.BitmapFonts;
 using MonoGame.Extended.Graphics;
-using MonoGame.Extended.TextureAtlases;
 
 namespace MonoGame.Extended.BitmapFonts;
 
