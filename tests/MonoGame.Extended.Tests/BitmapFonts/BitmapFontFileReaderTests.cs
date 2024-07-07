@@ -12,25 +12,25 @@ namespace MonoGame.Extended.BitmapFonts.Tests;
 
 public class BitmapFontFileReaderTests
 {
-    private readonly BmfFile _expected;
+    private readonly BitmapFontFileContent _expected;
 
     public BitmapFontFileReaderTests()
     {
         _expected = CreateExpected();
     }
 
-    private static BmfFile CreateExpected()
+    private static BitmapFontFileContent CreateExpected()
     {
-        BmfFile bmfFile = new BmfFile()
+        BitmapFontFileContent bmfFile = new BitmapFontFileContent()
         {
-            Header = new BmfHeader()
+            Header = new()
             {
                 B = (byte)'B',
                 M = (byte)'M',
                 F = (byte)'F',
                 Version = 3
             },
-            Info = new BmfInfoBlock()
+            Info = new()
             {
                 FontSize = 32,
                 BitField = 0b1100_0000,
@@ -46,7 +46,7 @@ public class BitmapFontFileReaderTests
                 Outline = 2
             },
             FontName = "Cute Dino",
-            Common = new BmfCommonBlock()
+            Common = new()
             {
                 LineHeight = 16,
                 Base = 12,
@@ -62,7 +62,7 @@ public class BitmapFontFileReaderTests
         };
 
         bmfFile.Pages.Add("test-font_0.png");
-        bmfFile.Characters.Add(new BmfCharsBlock()
+        bmfFile.Characters.Add(new()
         {
             ID = 70,
             X = 34,
@@ -75,7 +75,7 @@ public class BitmapFontFileReaderTests
             Page = 0,
             Chnl = 15
         });
-        bmfFile.Characters.Add(new BmfCharsBlock()
+        bmfFile.Characters.Add(new()
         {
             ID = 74,
             X = 0,
@@ -89,7 +89,7 @@ public class BitmapFontFileReaderTests
             Chnl = 15,
         });
 
-        bmfFile.Kernings.Add(new BmfKerningPairsBlock()
+        bmfFile.Kernings.Add(new()
         {
             First = 70,
             Second = 74,
@@ -103,8 +103,7 @@ public class BitmapFontFileReaderTests
     public void Read_BinaryFile_Test()
     {
         using FileStream stream = File.OpenRead("BitmapFonts/files/bmfont/test-font-binary.fnt");
-        BmfFile actual = new BmfFile();
-        BmfBinaryLoader.Load(actual, stream);
+        var actual = BitmapFontFileReader.Read(stream);
         Assert.Equal(_expected.Header, actual.Header);
         Assert.Equal(_expected.Info, actual.Info);
         Assert.Equal(_expected.Common, actual.Common);
@@ -118,8 +117,7 @@ public class BitmapFontFileReaderTests
     public void Read_XmlFile_Test()
     {
         using FileStream stream = File.OpenRead("BitmapFonts/files/bmfont/test-font-xml.fnt");
-        BmfFile actual = new BmfFile();
-        BmfXmlLoader.Load(actual, stream);
+        var actual = BitmapFontFileReader.Read(stream);
         Assert.Equal(_expected.Header, actual.Header);
         Assert.Equal(_expected.Info, actual.Info);
         Assert.Equal(_expected.Common, actual.Common);
@@ -133,8 +131,7 @@ public class BitmapFontFileReaderTests
     public void Read_Text_Test()
     {
         using FileStream stream = File.OpenRead("BitmapFonts/files/bmfont/test-font-text.fnt");
-        BmfFile actual = new BmfFile();
-        BmfTextLoader.Load(actual, stream);
+        var actual = BitmapFontFileReader.Read(stream);
         Assert.Equal(_expected.Header, actual.Header);
         Assert.Equal(_expected.Info, actual.Info);
         Assert.Equal(_expected.Common, actual.Common);
