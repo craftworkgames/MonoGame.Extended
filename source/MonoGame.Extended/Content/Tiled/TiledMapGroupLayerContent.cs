@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using MonoGame.Extended.Tiled;
 
 namespace MonoGame.Extended.Content.Tiled;
 
