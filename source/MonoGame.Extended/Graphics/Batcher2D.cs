@@ -6,9 +6,9 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics.Effects;
 using MonoGame.Extended.Graphics.Geometry;
+using MonoGame.Extended.BitmapFonts;
 
 namespace MonoGame.Extended.Graphics
 {
