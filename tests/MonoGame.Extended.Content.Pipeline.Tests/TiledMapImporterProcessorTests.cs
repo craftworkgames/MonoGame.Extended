@@ -2,9 +2,8 @@
 using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using MonoGame.Extended.Content.Pipeline.Tiled;
-using MonoGame.Extended.Tiled.Serialization;
+using MonoGame.Extended.Content.Tiled;
 using NSubstitute;
-using Xunit;
 
 namespace MonoGame.Extended.Content.Pipeline.Tests.Tiled
 {
