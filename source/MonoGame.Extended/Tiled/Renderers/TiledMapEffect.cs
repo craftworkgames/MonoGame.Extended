@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics.Effects;
 
 namespace MonoGame.Extended.Tiled.Renderers
 {
@@ -10,19 +9,19 @@ namespace MonoGame.Extended.Tiled.Renderers
 
     public class TiledMapEffect : DefaultEffect, ITiledMapEffect
     {
-        public TiledMapEffect(GraphicsDevice graphicsDevice) 
+        public TiledMapEffect(GraphicsDevice graphicsDevice)
             : base(graphicsDevice)
         {
             Initialize();
         }
 
-        public TiledMapEffect(GraphicsDevice graphicsDevice, byte[] byteCode) 
+        public TiledMapEffect(GraphicsDevice graphicsDevice, byte[] byteCode)
             : base(graphicsDevice, byteCode)
         {
             Initialize();
         }
 
-        public TiledMapEffect(Effect cloneSource) 
+        public TiledMapEffect(Effect cloneSource)
             : base(cloneSource)
         {
             Initialize();
