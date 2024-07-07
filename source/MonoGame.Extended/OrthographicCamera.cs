@@ -11,6 +11,9 @@ namespace MonoGame.Extended
         private float _maximumZoom = float.MaxValue;
         private float _minimumZoom;
         private float _zoom;
+        private float _pitch;
+        private float _maximumPitch = float.MaxValue;
+        private float _minimumPitch;
 
         public OrthographicCamera(GraphicsDevice graphicsDevice)
             : this(new DefaultViewportAdapter(graphicsDevice))
@@ -23,6 +26,7 @@ namespace MonoGame.Extended
 
             Rotation = 0;
             Zoom = 1;
+            Pitch = 1;
             Origin = new Vector2(viewportAdapter.VirtualWidth/2f, viewportAdapter.VirtualHeight/2f);
             Position = Vector2.Zero;
         }
@@ -74,6 +78,48 @@ namespace MonoGame.Extended
             }
         }
 
+        public override float Pitch
+        {
+            get => _pitch;
+            set
+            {
+                if ((value < MinimumPitch) || (value > MaximumPitch))
+                    throw new ArgumentException("Pitch must be between MinimumPitch and MaximumPitch");
+
+                _pitch = value;
+            }
+        }
+
+        public override float MinimumPitch
+        {
+            get => _minimumPitch;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("MinimumPitch must be greater than zero");
+
+                if (Pitch < value)
+                    Pitch = MinimumPitch;
+
+                _minimumPitch = value;
+            }
+        }
+
+        public override float MaximumPitch
+        {
+            get => _maximumPitch;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("MaximumPitch must be greater than zero");
+
+                if (Pitch > value)
+                    Pitch = value;
+
+                _maximumPitch = value;
+            }
+        }
+
         public override RectangleF BoundingRectangle
         {
             get
@@ -116,6 +162,24 @@ namespace MonoGame.Extended
                 Zoom = value > MaximumZoom ? MaximumZoom : value;
         }
 
+        public override void PitchUp(float deltaPitch)
+        {
+            ClampPitch(Pitch + deltaPitch);
+        }
+
+        public override void PitchDown(float deltaPitch)
+        {
+            ClampPitch(Pitch - deltaPitch);
+        }
+
+        private void ClampPitch(float value)
+        {
+            if (value < MinimumPitch)
+                Pitch = MinimumPitch;
+            else
+                Pitch = value > MaximumPitch ? MaximumPitch : value;
+        }
+
         public override void LookAt(Vector2 position)
         {
             Position = position - new Vector2(_viewportAdapter.VirtualWidth/2f, _viewportAdapter.VirtualHeight/2f);
@@ -155,7 +219,7 @@ namespace MonoGame.Extended
                 Matrix.CreateTranslation(new Vector3(-Position*parallaxFactor, 0.0f))*
                 Matrix.CreateTranslation(new Vector3(-Origin, 0.0f))*
                 Matrix.CreateRotationZ(Rotation)*
-                Matrix.CreateScale(Zoom, Zoom, 1)*
+                Matrix.CreateScale(Zoom, Zoom * Pitch, 1)*
                 Matrix.CreateTranslation(new Vector3(Origin, 0.0f));
         }
 
