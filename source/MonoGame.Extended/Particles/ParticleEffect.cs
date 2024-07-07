@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles.Serialization;
-using MonoGame.Extended.Serialization;
+using MonoGame.Extended.Serialization.Json;
 
 namespace MonoGame.Extended.Particles
 {

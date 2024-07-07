@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using MonoGame.Extended.Particles.Profiles;
-using MonoGame.Extended.Serialization;
+using MonoGame.Extended.Serialization.Json;
 
 namespace MonoGame.Extended.Particles.Serialization
 {

@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using MonoGame.Extended.Serialization;
+using MonoGame.Extended.Serialization.Json;
 
 namespace MonoGame.Extended.Particles.Serialization;
 
