@@ -4,7 +4,6 @@
 
 using System;
 using System.Diagnostics;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Animations;
 
 namespace MonoGame.Extended.Graphics;
