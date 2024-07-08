@@ -18,7 +18,7 @@
     </ItemGroup>
 
    <ItemGroup Condition="$(DefineConstants.Contains('FNA'))">
-        <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\..\FNA\FNA.NetStandard.csproj" />
+        <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\FNA\FNA.NetStandard.csproj" />
     </ItemGroup>
 
   <ItemGroup Condition="$(DefineConstants.Contains('KNI'))">

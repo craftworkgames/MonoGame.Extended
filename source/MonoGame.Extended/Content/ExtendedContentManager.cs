@@ -42,7 +42,7 @@ public class ExtendedContentManager : ContentManager
         }
     }
 
-#if KNI
+#if KNI || FNA
     private Dictionary<string, object> _loadedAssets;
     public Dictionary<string, object> LoadedAssets
     {
@@ -74,7 +74,7 @@ public class ExtendedContentManager : ContentManager
     {
         _graphicsDeviceService = serviceProvider.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
     }
-#if KNI
+#if KNI || FNA
     /// <summary>
     /// Loads a <see cref="Texture2D"/> asset.
     /// </summary>
@@ -236,13 +236,13 @@ public class ExtendedContentManager : ContentManager
     /// Loads a <see cref="Texture2DAtlas"/> from a TexturePacker JSON file.
     /// </summary>
     /// <param name="path">The path to the TexturePacker JSON file</param>
-#if !KNI
+#if !KNI && !FNA
     /// <param name="premultiplyAlpha">
     /// Specifies whether the color data of the texture should be premultiplied by its alpha value.
     /// </param>
 #endif
     /// <returns>The <see cref="Texture2DAtlas"/> created from the TexturePacker JSON file content.</returns>
-#if KNI
+#if KNI || FNA
     public Texture2DAtlas LoadTexturePacker(string path)
 #else
     public Texture2DAtlas LoadTexturePacker(string path, bool premultiplyAlpha)
@@ -263,7 +263,7 @@ public class ExtendedContentManager : ContentManager
         var tpFile = TexturePackerFileReader.Read(stream);
         var dir = Path.GetDirectoryName(path);
         var imageAssetPath = Path.Combine(dir, tpFile.Meta.Image);
-#if KNI
+#if KNI || FNA
         var texture = LoadTexture2D(imageAssetPath);
 #else
         var texture = LoadTexture2D(imageAssetPath, premultiplyAlpha);
