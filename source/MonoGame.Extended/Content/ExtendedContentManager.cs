@@ -42,6 +42,29 @@ public class ExtendedContentManager : ContentManager
         }
     }
 
+
+#if KNI || FNA
+    private Dictionary<string, object> _loadedAssets;
+    public Dictionary<string, object> LoadedAssets
+    {
+        get
+        {
+            if(_loadedAssets is null)
+            {
+                //  KNI please make this public so I don't have to use reflection
+                FieldInfo field = typeof(ContentManager).GetField(nameof(_loadedAssets), BindingFlags.NonPublic | BindingFlags.Instance);
+                if (field is null)
+                {
+                    throw new InvalidOperationException("Unable to get source loaded assets field");
+                }
+                _loadedAssets = field.GetValue(this) as Dictionary<string, object>;
+            }
+
+            return _loadedAssets;
+        }
+    }
+#endif
+
     public ExtendedContentManager(IServiceProvider serviceProvider) : base(serviceProvider)
     {
         _graphicsDeviceService = serviceProvider.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
@@ -51,7 +74,40 @@ public class ExtendedContentManager : ContentManager
     {
         _graphicsDeviceService = serviceProvider.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
     }
+    
+#if KNI || FNA
+    /// <summary>
+    /// Loads a <see cref="Texture2D"/> asset.
+    /// </summary>
+    /// <remarks>
+    /// If the <paramref name="path"/> parameter is a relative path, it must be relative to the
+    /// <see cref="ContentManager.RootDirectory"/> path.
+    /// </remarks>
+    /// <param name="path">The path to the asset to load</param>
+    /// <param name="premultiplyAlpha">
+    /// Specifies whether the color data of the texture should be premultiplied by its alpha value.
+    /// </param>
+    /// <returns></returns>
+    public Texture2D LoadTexture2D(string path)
+    {
+        if (TryGetCachedAsset<Texture2D>(path, out Texture2D texture))
+        {
+            return texture;
+        }
 
+        if (NoExtension(path))
+        {
+            return Load<Texture2D>(path);
+        }
+
+        using Stream stream = GetStream(path);
+        texture = Texture2D.FromStream(_graphicsDeviceService.GraphicsDevice, stream);
+        texture.Name = path;
+        CacheAsset(path, texture);
+        return texture;
+    }
+
+#else
     /// <summary>
     /// Loads a <see cref="Texture2D"/> asset.
     /// </summary>
@@ -95,6 +151,7 @@ public class ExtendedContentManager : ContentManager
         CacheAsset(path, texture);
         return texture;
     }
+#endif
 
     /// <summary>
     /// Loads a <see cref="SoundEffect"/> asset.
@@ -178,11 +235,18 @@ public class ExtendedContentManager : ContentManager
     /// Loads a <see cref="Texture2DAtlas"/> from a TexturePacker JSON file.
     /// </summary>
     /// <param name="path">The path to the TexturePacker JSON file</param>
+
+#if !KNI && !FNA
     /// <param name="premultiplyAlpha">
     /// Specifies whether the color data of the texture should be premultiplied by its alpha value.
     /// </param>
+#endif
     /// <returns>The <see cref="Texture2DAtlas"/> created from the TexturePacker JSON file content.</returns>
+#if KNI || FNA
+    public Texture2DAtlas LoadTexturePacker(string path)
+#else
     public Texture2DAtlas LoadTexturePacker(string path, bool premultiplyAlpha)
+#endif
     {
         if (TryGetCachedAsset<Texture2DAtlas>(path, out var atlas))
         {
@@ -199,8 +263,12 @@ public class ExtendedContentManager : ContentManager
         var tpFile = TexturePackerFileReader.Read(stream);
         var dir = Path.GetDirectoryName(path);
         var imageAssetPath = Path.Combine(dir, tpFile.Meta.Image);
-        var texture = LoadTexture2D(imageAssetPath, premultiplyAlpha);
 
+#if KNI || FNA
+        var texture = LoadTexture2D(imageAssetPath);
+#else
+        var texture = LoadTexture2D(imageAssetPath, premultiplyAlpha);
+#endif
         atlas = new Texture2DAtlas(Path.GetFileNameWithoutExtension(tpFile.Meta.Image), texture);
 
         foreach(var region in tpFile.Regions)
