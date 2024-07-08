@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+    <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
+
+    <PropertyGroup>
+        <ArtifactsPath>$(SolutionDirectory).artifacts/source</ArtifactsPath>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <IsPackable>true</IsPackable>
+        <NoWarn>NU1701</NoWarn>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+   <ItemGroup Condition="!$(DefineConstants.Contains('FNA')) AND !$(DefineConstants.Contains('KNI'))">
+       <PackageReference Include="MonoGame.Framework.DesktopGL"
+                          Version="3.8.1.303"
+                          PrivateAssets="All" />
+    </ItemGroup>
+
+   <ItemGroup Condition="$(DefineConstants.Contains('FNA'))">
+        <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\..\FNA\FNA.NetStandard.csproj" />
+    </ItemGroup>
+
+  <ItemGroup Condition="$(DefineConstants.Contains('KNI'))">
+        <PackageReference Include="nkast.Xna.Framework"
+                          Version="3.12.9001" />
+        <PackageReference Include="nkast.Xna.Framework.Content"
+                          Version="3.12.9001" />
+        <PackageReference Include="nkast.Xna.Framework.Graphics"
+                          Version="3.12.9001" />
+        <PackageReference Include="nkast.Xna.Framework.Input"
+                          Version="3.12.9001" />
+        <PackageReference Include="nkast.Xna.Framework.Game"
+                          Version="3.12.9001" />
+   </ItemGroup>
+
+</Project>

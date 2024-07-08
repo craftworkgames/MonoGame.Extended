@@ -1,4 +1,0 @@
-next-version: 3.6.0
-mode: ContinuousDelivery
-assembly-versioning-scheme: MajorMinorPatchTag
-assembly-file-versioning-scheme: MajorMinorPatchTag

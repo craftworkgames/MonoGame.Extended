@@ -1,0 +1,420 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using Microsoft.Xna.Framework;
+using Xunit;
+
+namespace MonoGame.Extended.Tests.Primitives
+{
+
+public class CircleFTests
+{
+
+        [Fact]
+        public void CircCircIntersectionDiagonalCircleTest()
+        {
+            var circle = new CircleF(new Vector2(16.0f, 16.0f), 16.0f);
+            var point = new Vector2(0, 0);
+
+            Assert.False(circle.Contains(point));
+        }
+//        public IEnumerable<TestCaseData> ConstructorTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new Vector2(), 0.0f).SetName(
+//                        "The empty circle has the expected position and radius.");
+//                yield return
+//                    new TestCaseData(new Vector2(5, 5), 15f).SetName(
+//                        "A non-empty circle has the expected position and radius.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(ConstructorTestCases))]
+//        public void Constructor(Vector2 centre, float radius)
+//        {
+//            var circle = new CircleF(centre, radius);
+//            Assert.Equal(centre, circle.Center);
+//            Assert.Equal(radius, circle.Radius);
+//        }
+
+//        public IEnumerable<TestCaseData> CreateFromMinimumMaximumTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new Vector2(), new Vector2(), new CircleF()).SetName(
+//                        "The bounding circle created from the zero minimum point and zero maximum point is the empty bounding circle.")
+//                    ;
+//                yield return
+//                    new TestCaseData(new Vector2(5, 5), new Vector2(15, 15),
+//                        new CircleF(new Vector2(10, 10), 5f)).SetName(
+//                        "The bounding circle created from the non-zero minimum point and the non-zero maximum point is the expected bounding circle.")
+//                    ;
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(CreateFromMinimumMaximumTestCases))]
+//        public void CreateFromMinimumMaximum(Vector2 minimum, Vector2 maximum, CircleF expectedBoundingCircle)
+//        {
+//            var actualBoundingCircle = CircleF.CreateFrom(minimum, maximum);
+//            Assert.Equal(expectedBoundingCircle, actualBoundingCircle);
+//        }
+
+//        public IEnumerable<TestCaseData> CreateFromPointsTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(null, new CircleF()).SetName(
+//                        "The bounding circle created from null points is the empty bounding circle.");
+//                yield return
+//                    new TestCaseData(new Vector2[0], new CircleF()).SetName(
+//                        "The bounding circle created from the empty set of points is the empty bounding circle.");
+//                yield return
+//                    new TestCaseData(
+//                        new[]
+//                        {
+//                            new Vector2(5, 5), new Vector2(10, 10), new Vector2(15, 15), new Vector2(-5, -5),
+//                            new Vector2(-15, -15)
+//                        }, new CircleF(new Vector2(0, 0), 15)).SetName(
+//                        "The bounding circle created from a non-empty set of points is the expected bounding circle.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(CreateFromPointsTestCases))]
+//        public void CreateFromPoints(Vector2[] points, CircleF expectedCircle)
+//        {
+//            var actualCircle = CircleF.CreateFrom(points);
+//            Assert.Equal(expectedCircle, actualCircle);
+//        }
+
+//        public IEnumerable<TestCaseData> IntersectsCircleTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new CircleF(), new CircleF(), true).SetName(
+//                        "Two empty circles intersect.");
+//                yield return
+//                    new TestCaseData(new CircleF(new Vector2(-10, -10), 15),
+//                        new CircleF(new Vector2(20, 20), 40), true).SetName(
+//                        "Two overlapping non-empty circles intersect.");
+//                yield return
+//                    new TestCaseData(new CircleF(new Vector2(-40, -50), 15),
+//                        new CircleF(new Vector2(20, 20), 15), false).SetName(
+//                        "Two non-overlapping non-empty circles do not intersect.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(IntersectsCircleTestCases))]
+//        public void Intersects(CircleF circle, CircleF circle2, bool expectedToIntersect)
+//        {
+//            Assert.Equal(expectedToIntersect, circle.Intersects(circle2));
+//            Assert.Equal(expectedToIntersect, CircleF.Intersects(circle, circle2));
+//        }
+
+//        public IEnumerable<TestCaseData> IntersectsRectangleTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new CircleF(), new RectangleF(), true).SetName(
+//                        "The empty circle and the empty rectangle intersect.");
+//                yield return
+//                    new TestCaseData(new CircleF(new Vector2(0, 0), 15),
+//                        new RectangleF(new Vector2(0, 0), new Size2(40, 40)), true).SetName(
+//                        "The non-empty circle and a non-empty overlapping rectangle intersect.");
+//                yield return
+//                    new TestCaseData(new CircleF(new Vector2(-40, -50), 15),
+//                        new RectangleF(new Vector2(20, 20), new Size2(15, 15)), false).SetName(
+//                        "The non-empty circle and a non-empty non-overlapping rectangle do not intersect.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(IntersectsRectangleTestCases))]
+//        public void Intersects(CircleF circle, RectangleF rectangle, bool expectedToIntersect)
+//        {
+//            Assert.Equal(expectedToIntersect, circle.Intersects((BoundingRectangle)rectangle));
+//            Assert.Equal(expectedToIntersect, CircleF.Intersects(circle, (BoundingRectangle)rectangle));
+//        }
+
+//        public IEnumerable<TestCaseData> ContainsPointTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new CircleF(), new Vector2(), true).SetName(
+//                        "The empty circle contains the zero point.");
+//                yield return
+//                    new TestCaseData(new CircleF(new Vector2(0, 0), 15), new Vector2(-15, -15), true)
+//                        .SetName(
+//                            "A non-empty circle contains a point inside it.");
+//                yield return
+//                    new TestCaseData(new CircleF(new Vector2(0, 0), 15), new Vector2(-16, 15), false)
+//                        .SetName(
+//                            "A non-empty circle does not contain a point outside it.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(ContainsPointTestCases))]
+//        public void ContainsPoint(CircleF circle, Vector2 point, bool expectedToContainPoint)
+//        {
+//            Assert.Equal(expectedToContainPoint, circle.Contains(point));
+//            Assert.Equal(expectedToContainPoint, CircleF.Contains(circle, point));
+//        }
+
+//        public IEnumerable<TestCaseData> ClosestPointTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new CircleF(), new Vector2(), new Vector2()).SetName(
+//                        "The closest point on the empty circle to the zero point is the zero point.");
+//                yield return
+//                    new TestCaseData(new CircleF(new Vector2(0, 0), 50), new Vector2(25, 25),
+//                        new Vector2(25, 25)).SetName(
+//                        "The closest point on a non-empty circle to a point which is inside the circle is that point.")
+//                    ;
+//                yield return
+//                    new TestCaseData(new CircleF(new Vector2(0, 0), 50), new Vector2(400, 0),
+//                        new Vector2(50, 0)).SetName(
+//                        "The closest point on a non-empty circle to a point which is outside the circle is the expected point.")
+//                    ;
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(ClosestPointTestCases))]
+//        public void ClosestPoint(CircleF circle, Vector2 point, Vector2 expectedClosestPoint)
+//        {
+//            var actualClosestPoint = circle.ClosestPointTo(point);
+//            Assert.Equal(expectedClosestPoint, actualClosestPoint);
+//        }
+
+//        public IEnumerable<TestCaseData> BoundaryPointTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new CircleF(), 0.0f, new Vector2()).SetName(
+//                        "The boundary point on the empty circle at an angle is the zero point.");
+//                yield return
+//                    new TestCaseData(new CircleF(new Vector2(0, 0), 50), MathHelper.PiOver2,
+//                        new Vector2(0, 50)).SetName(
+//                        "The boundary point on a non-empty circle at an angle is the expected point.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(BoundaryPointTestCases))]
+//        public void BoundaryPointAt(CircleF circle, float angle, Vector2 expectedPoint)
+//        {
+//            var actualPoint = circle.BoundaryPointAt(angle);
+//            AssertExtensions.AreApproximatelyEqual(expectedPoint, actualPoint);
+//        }
+
+//        public IEnumerable<TestCaseData> EqualityTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new CircleF(), new CircleF(), true).SetName(
+//                        "Empty circles are equal.")
+//                    ;
+//                yield return
+//                    new TestCaseData(
+//                        new CircleF(new Vector2(0, 0), float.MaxValue),
+//                        new CircleF(new Vector2(0, 0), float.MinValue), false).SetName(
+//                        "Two different non-empty circles are not equal.");
+//                yield return
+//                    new TestCaseData(
+//                        new CircleF(new Vector2(0, 0), float.MinValue),
+//                        new CircleF(new Vector2(0, 0), float.MinValue), true).SetName(
+//                        "Two identical non-empty circles are equal.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(EqualityTestCases))]
+//        public void Equality(CircleF circle1, CircleF circle2, bool expectedToBeEqual)
+//        {
+//            Assert.IsTrue(Equals(circle1, circle2) == expectedToBeEqual);
+//            Assert.IsTrue(circle1 == circle2 == expectedToBeEqual);
+//            Assert.IsFalse(circle1 == circle2 != expectedToBeEqual);
+//            Assert.IsTrue(circle1.Equals(circle2) == expectedToBeEqual);
+
+//            if (expectedToBeEqual)
+//                Assert.Equal(circle1.GetHashCode(), circle2.GetHashCode());
+//        }
+
+//        public IEnumerable<TestCaseData> InequalityTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new CircleF(), null, false).SetName(
+//                        "A circle is not equal to a null object.");
+//                yield return
+//                    new TestCaseData(new CircleF(), new object(), false).SetName(
+//                        "A circle is not equal to an instantiated object.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(InequalityTestCases))]
+//        public void Inequality(CircleF circle, object obj, bool expectedToBeEqual)
+//        {
+//            Assert.IsTrue(circle.Equals(obj) == expectedToBeEqual);
+//        }
+
+//        public IEnumerable<TestCaseData> HashCodeTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new CircleF(), new CircleF(), true).SetName(
+//                        "Two empty circles have the same hash code.");
+//                yield return
+//                    new TestCaseData(new CircleF(new Vector2(0, 0), 50),
+//                        new CircleF(new Vector2(0, 0), 50), true).SetName(
+//                        "Two indentical non-empty circles have the same hash code.");
+//                yield return
+//                    new TestCaseData(new CircleF(new Vector2(0, 0), 50),
+//                        new CircleF(new Vector2(50, 50), 50), false).SetName(
+//                        "Two different non-empty circles do not have the same hash code.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(HashCodeTestCases))]
+//        public void HashCode(CircleF circle1, CircleF circle2, bool expectedThatHashCodesAreEqual)
+//        {
+//            var hashCode1 = circle1.GetHashCode();
+//            var hashCode2 = circle2.GetHashCode();
+//            if (expectedThatHashCodesAreEqual)
+//                Assert.Equal(hashCode1, hashCode2);
+//            else
+//                Assert.AreNotEqual(hashCode1, hashCode2);
+//        }
+
+//        public IEnumerable<TestCaseData> ToRectangleTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new CircleF(), new Rectangle()).SetName(
+//                        "The empty circle converted to a rectangle is the empty integer rectangle.");
+//                yield return
+//                    new TestCaseData(new CircleF(new Vector2(25, 25), 25),
+//                        new Rectangle(0, 0, 50, 50)).SetName(
+//                        "A non-empty circle converted to a rectangle is the expected integer rectangle.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(ToRectangleTestCases))]
+//        public void ToRectangle(CircleF circle, Rectangle expectedRectangle)
+//        {
+//            var actualRectangle = (Rectangle)circle;
+//            Assert.Equal(expectedRectangle, actualRectangle);
+//        }
+
+//        public IEnumerable<TestCaseData> ToRectangleFTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new CircleF(), new RectangleF()).SetName(
+//                        "The empty circle converted to a rectangle is the empty float rectangle.");
+//                yield return
+//                    new TestCaseData(new CircleF(new Vector2(25, 25), 25),
+//                        new RectangleF(0, 0, 50, 50)).SetName(
+//                        "A non-empty circle converted to a rectangle is the expected float rectangle.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(ToRectangleFTestCases))]
+//        public void ToRectangleF(CircleF circle, RectangleF expectedRectangle)
+//        {
+//            var actualRectangle = (RectangleF)circle;
+//            Assert.Equal(expectedRectangle, actualRectangle);
+//        }
+
+//        public IEnumerable<TestCaseData> FromRectangleTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new Rectangle(), new CircleF()).SetName(
+//                        "The empty rectangle converted to a circle is the empty circle.");
+//                yield return
+//                    new TestCaseData(new Rectangle(0, 0, 50, 50),
+//                        new CircleF(new Vector2(25, 25), 25)).SetName(
+//                        "A non-empty rectangle converted to a circle is the expected circle.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(FromRectangleTestCases))]
+//        public void FromRectangle(Rectangle rectangle, CircleF expectedCircle)
+//        {
+//            var actualCircle = (CircleF)rectangle;
+//            Assert.Equal(expectedCircle, actualCircle);
+//        }
+
+//        public IEnumerable<TestCaseData> FromRectangleFTestCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new RectangleF(), new CircleF()).SetName(
+//                        "The empty rectangle converted to a circle is the empty circle.");
+//                yield return
+//                    new TestCaseData(new RectangleF(0, 0, 50, 50),
+//                        new CircleF(new Vector2(25, 25), 25)).SetName(
+//                        "A non-empty rectangle converted to a circle is the expected circle.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(FromRectangleFTestCases))]
+//        public void FromRectangleF(RectangleF rectangle, CircleF expectedCircle)
+//        {
+//            var actualCircle = (CircleF)rectangle;
+//            Assert.Equal(expectedCircle, actualCircle);
+//        }
+
+//        public IEnumerable<TestCaseData> StringCases
+//        {
+//            get
+//            {
+//                yield return
+//                    new TestCaseData(new CircleF(),
+//                        string.Format(CultureInfo.CurrentCulture, "Centre: {0}, Radius: {1}", new Vector2(),
+//                            0)).SetName(
+//                        "The empty circle has the expected string representation using the current culture.");
+//                yield return new TestCaseData(new CircleF(new Vector2(5.1f, -5.123f), 5.4f),
+//                    string.Format(CultureInfo.CurrentCulture, "Centre: {0}, Radius: {1}", new Vector2(5.1f, -5.123f),
+//                        5.4f)).SetName(
+//                    "A non-empty circle has the expected string representation using the current culture.");
+//            }
+//        }
+
+//        [Fact]
+//        [TestCaseSource(nameof(StringCases))]
+//        public void String(CircleF circle, string expectedString)
+//        {
+//            var actualString = circle.ToString();
+//            Assert.Equal(expectedString, actualString);
+//        }
+    }
+}

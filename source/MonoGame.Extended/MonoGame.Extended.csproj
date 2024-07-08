@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Description>It makes MonoGame more awesome.</Description>
+        <PackageTags>monogame extended pipeline bmfont tiled texture atlas input viewport fps shapes sprite</PackageTags>
+    </PropertyGroup>
+
+    <!-- Remove the following dependency files from view in the Solution Explorer panel -->
+    <ItemGroup>
+      <None Remove="Graphics\Effects\Resources\DefaultEffect.dx11.mgfxo" />
+      <None Remove="Graphics\Effects\Resources\DefaultEffect.fx" />
+      <None Remove="Graphics\Effects\Resources\DefaultEffect.ogl.mgfxo" />
+      <None Remove="Graphics\Effects\Resources\Macros.fxh" />
+      <None Remove="Graphics\Effects\Resources\Structures.fxh" />
+    </ItemGroup>
+
+    <!-- Add the effects as embedded resources -->
+    <ItemGroup>
+        <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.dx11.mgfxo" />
+        <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.fx" />
+        <EmbeddedResource Include="Graphics\Effects\Resources\DefaultEffect.ogl.mgfxo" />
+        <EmbeddedResource Include="Graphics\Effects\Resources\Macros.fxh" />
+        <EmbeddedResource Include="Graphics\Effects\Resources\Structures.fxh" />
+    </ItemGroup>
+
+    <!-- Allow Test project to access internals -->
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>MonoGame.Extended.Tests</_Parameter1>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>MonoGame.Extended.Content.Pipeline</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+</Project>

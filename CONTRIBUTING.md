@@ -9,16 +9,15 @@ Please read this document completely before contributing.
 
 ## How To Contribute
 
-MonoGame.Extended has a `master` branch for stable releases and a `develop` branch for daily development.  New features and fixes are always submitted to the `develop` branch.
+MonoGame.Extended has a `main` branch for stable releases and a `develop` branch for daily development.  New features and fixes are always submitted to the `develop` branch.
 
 If you are looking for ways to help you should start by looking at the [Open Issues](https://github.com/craftworkgames/MonoGame.Extended/issues).  Please let us know if you plan to work on an issue so that others are not duplicating work.
 
 The MonoGame.Extended project follows standard [GitHub flow](https://guides.github.com/introduction/flow/index.html).  You should learn and be familiar with how to [use Git](https://help.github.com/articles/set-up-git/), how to [create a fork of MonoGame.Extended](https://help.github.com/articles/fork-a-repo/), and how to [submit a Pull Request](https://help.github.com/articles/using-pull-requests/).
 
-After you submit a PR the MonoGame.Extended [build server](http://build.craftworkgames.com/) will build your changes and verify all tests pass. Project maintainers and contributors will review your changes and provide constructive feedback to improve your submission.
+After you submit a PR the GitHub actions will trigger and build your changes and verify that all tests pass. Project maintainers and contributors will review your changes and provide constructive feedback to improve your submission.
 
 Once satisfied that your changes are good for MonoGame.Extended we will merge it.
-
 
 ## Quick Guidelines
 
@@ -37,7 +36,6 @@ Here are a few simple rules and suggestions to remember when contributing to Mon
 * **PLEASE** keep a civil and respectful tone when discussing and reviewing contributions.
 * **PLEASE** tell others about MonoGame.Extended and your contributions via social media.
 
-
 ## Decompiler Tools
 
 We prohibit tools like dotPeek, ILSpy, JustDecompiler, or .NET Reflector which convert compiled assemblies into readable code.
@@ -45,9 +43,9 @@ We prohibit tools like dotPeek, ILSpy, JustDecompiler, or .NET Reflector which c
 It is **NEVER ACCEPTABLE** to decompile copyrighted assemblies and submit that code to the MonoGame.Extended project.
 
 * It **DOES NOT** matter how much you change the code.
-* It **DOES NOT** matter what country you live in or what your local laws say.  
-* It **DOES NOT** matter that XNA is discontinued.  
-* It **DOES NOT** matter how small the bit of code you have stolen is.  
+* It **DOES NOT** matter what country you live in or what your local laws say.
+* It **DOES NOT** matter that XNA is discontinued.
+* It **DOES NOT** matter how small the bit of code you have stolen is.
 * It **DOES NOT** matter what your opinion is of stealing code.
 
 If you did not write the code, you do not have ownership of the code, and you shouldn't submit it to MonoGame.Extended.
@@ -64,7 +62,7 @@ We accept contributions in "good faith" that it isn't bound to a conflicting lic
 
 ## Need More Help?
 
-If you need help please ask questions on our [community forums](http://community.monogame.net/c/extended) or come [chat on Gitter](https://gitter.im/craftworkgames/MonoGame.Extended).
+If you need help, please ask questions in our [Discord](https://discord.gg/xPUEkj9), or you can ask questions in the official [MonoGame Discord](https://discord.gg/monogame).
 
 
 Thanks for reading this guide and helping make MonoGame.Extended great!

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+    <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
+
+    <PropertyGroup>
+        <ArtifactsPath>$(SolutionDirectory).artifacts/tests</ArtifactsPath>
+        <ProjectCategory>tests</ProjectCategory>
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+        <IsPackable>false</IsPackable>
+        <NoWarn>CA1707</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup Condition="!$(DefineConstants.Contains('FNA')) AND !$(DefineConstants.Contains('KNI'))">
+        <PackageReference Include="MonoGame.Framework.DesktopGL"
+                          Version="3.8.1.303" />
+    </ItemGroup>
+
+    <ItemGroup Condition="$(DefineConstants.Contains('KNI'))">
+        <PackageReference Include="nkast.Xna.Framework"
+                          Version="3.12.9001" />
+        <PackageReference Include="nkast.Xna.Framework.Content"
+                          Version="3.12.9001" />
+        <PackageReference Include="nkast.Xna.Framework.Graphics"
+                          Version="3.12.9001" />
+        <PackageReference Include="nkast.Xna.Framework.Input"
+                          Version="3.12.9001" />
+        <PackageReference Include="nkast.Xna.Framework.Game"
+                          Version="3.12.9001" />
+        <PackageReference Include="MonoGame.Framework.DesktopGL.9000"
+                          Version="3.12.9001" />
+    </ItemGroup>
+  
+    <ItemGroup Condition="$(DefineConstants.Contains('FNA'))">
+        <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\FNA\FNA.NetStandard.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="NSubstitute"
+                          Version="4.2.2" />
+
+        <PackageReference Include="xunit"
+                          Version="2.6.2"
+                          IsImplicitlyDefined="true" />
+
+        <PackageReference Include="Microsoft.NET.Test.Sdk"
+                          Version="17.6.0"
+                          IsImplicitlyDefined="true" />
+
+        <PackageReference Include="xunit.runner.visualstudio"
+                          Version="2.5.6"
+                          IsImplicitlyDefined="true"
+                          IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"
+                          PrivateAssets="all" />
+
+        <PackageReference Include="coverlet.collector"
+                          Version="6.0.0"
+                          IsImplicitlyDefined="true"
+                          IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"
+                          PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit" />
+    </ItemGroup>
+
+</Project>

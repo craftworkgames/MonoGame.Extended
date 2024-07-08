@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+      <Compile Remove="Sprites\**" />
+      <EmbeddedResource Remove="Sprites\**" />
+      <None Remove="Sprites\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\source\MonoGame.Extended\MonoGame.Extended.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Content\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="BitmapFonts\files\**\*" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+</Project>
