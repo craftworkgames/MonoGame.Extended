@@ -6,7 +6,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\source\MonoGame.Extended\FNA.Extended.csproj" />
-        <ProjectReference Include="..\..\source\MonoGame.Extended.Particles\FNA.Extended.Particles.csproj" />
     </ItemGroup>
 
     <ItemGroup>
