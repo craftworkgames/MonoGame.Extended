@@ -14,25 +14,30 @@ on:
       prerelease:
         description: 'Is this a prerelease?'
         required: true
-        default: 'true'
+        type: boolean
+        default: true
       source-feed:
-        description: |
-          Which source feed to publish to?
-          (Valid values are 'NuGet' or 'GitHub')
+        description: 'Which source feed to publish to?'
         required: true
-        default: GitHub
+        type: choice
+        options:
+          - GitHub
+          - NuGet
+        default: 'GitHub'
 
 jobs:
   build:
     name: "Build MonoGame.Extended"
     runs-on: ubuntu-latest
     env:
-      IS_PRERELEASE:  ${{ inputs.prerelease == 'true' }}
-      BUILD_NUMBER: ${{ inputs.prerelease == 'true' && github.run_number || '' }}
+      IS_PRERELEASE:  ${{ inputs.prerelease || '' }}
+      BUILD_NUMBER: ${{ inputs.prerelease && github.run_number || '' }}
 
     steps:
       - name: Clone Repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.prerelease && 'develop' || 'main' }}
 
       - name: Setup Dotnet
         uses: actions/setup-dotnet@v4
