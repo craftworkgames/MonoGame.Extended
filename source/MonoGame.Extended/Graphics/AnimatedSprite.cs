@@ -25,6 +25,11 @@ public class AnimatedSprite : Sprite
     public IAnimationController Controller { get; private set; }
 
     /// <summary>
+    /// Gets the name of the current animation playing.
+    /// </summary>
+    public string CurrentAnimation => _animation.Name;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="AnimatedSprite"/> class with the specified
     /// <see cref="SpriteSheet"/>.
     /// </summary>
@@ -44,8 +49,8 @@ public class AnimatedSprite : Sprite
     /// <param name="initialAnimation">The initial animation to play</param>
     public AnimatedSprite(SpriteSheet spriteSheet, string initialAnimation) :this(spriteSheet)
     {
-        SpriteSheetAnimation definition = spriteSheet.GetAnimation(initialAnimation);
-        Controller = new AnimationController(definition);
+        _animation = spriteSheet.GetAnimation(initialAnimation);
+        Controller = new AnimationController(_animation);
     }
 
     /// <summary>
@@ -72,8 +77,7 @@ public class AnimatedSprite : Sprite
         //  If the current frame changed during the update, change the texture region
         if (index != Controller.CurrentFrame)
         {
-            int regionIndex = _animation.Frames[Controller.CurrentFrame].FrameIndex;
-            TextureRegion = _spriteSheet.TextureAtlas[regionIndex];
+            TextureRegion = _spriteSheet.TextureAtlas[Controller.CurrentFrame];
         }
     }
 }
