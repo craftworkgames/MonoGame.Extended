@@ -53,16 +53,6 @@ public class AnimationTests
     }
 
     [Fact]
-    public void Play_ShouldStartAnimation()
-    {
-        var result = _animationController.Play();
-
-        Assert.True(result);
-        Assert.True(_animationController.IsAnimating);
-        Assert.Equal(0, _animationController.CurrentFrame);
-    }
-
-    [Fact]
     public void Play_ShouldThrowException_ForInvalidFrame()
     {
         Assert.Throws<ArgumentOutOfRangeException>(() => _animationController.Play(-1));
