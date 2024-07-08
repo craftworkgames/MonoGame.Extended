@@ -15,6 +15,9 @@
             <_Parameter1>Kni.Extended.Content.Pipeline</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="nkast.Xna.Framework.Audio" Version="3.12.9001" />
+    </ItemGroup>
 
 
 </Project>
