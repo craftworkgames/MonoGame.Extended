@@ -15,6 +15,7 @@ public class AnimationController : IAnimationController
 {
     private readonly IAnimation _definition;
     private int _direction;
+    private int _internalFrame;
 
     /// <summary>
     /// Gets a value that indicates whether this animation has been disposed of.
@@ -50,7 +51,7 @@ public class AnimationController : IAnimationController
     public TimeSpan CurrentFrameTimeRemaining { get; private set; }
 
     /// <inheritdoc />
-    public int CurrentFrame { get; private set; }
+    public int CurrentFrame => _definition.Frames[_internalFrame].FrameIndex;
 
     /// <inheritdoc />
     public int FrameCount => _definition.FrameCount;
@@ -87,7 +88,7 @@ public class AnimationController : IAnimationController
 
         if (resetFrameDuration)
         {
-            CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
+            CurrentFrameTimeRemaining = _definition.Frames[_internalFrame].Duration;
         }
 
         return true;
@@ -111,8 +112,8 @@ public class AnimationController : IAnimationController
         }
 
         IsAnimating = true;
-        CurrentFrame = startingFrame;
-        CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
+        _internalFrame = startingFrame;
+        CurrentFrameTimeRemaining = _definition.Frames[_internalFrame].Duration;
         return true;
     }
 
@@ -125,8 +126,8 @@ public class AnimationController : IAnimationController
         IsAnimating = false;
         IsPaused = true;
         Speed = 1.0d;
-        CurrentFrame = IsReversed ? _definition.FrameCount - 1 : 0;
-        CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
+        _internalFrame = IsReversed ? _definition.FrameCount - 1 : 0;
+        CurrentFrameTimeRemaining = _definition.Frames[_internalFrame].Duration;
     }
 
     /// <inheritdoc />
@@ -137,8 +138,8 @@ public class AnimationController : IAnimationController
             throw new ArgumentOutOfRangeException(nameof(index), $"{nameof(index)} cannot be less than zero or greater than or equal to the total number of frames in this {nameof(AnimationController)}");
         }
 
-        CurrentFrame = index;
-        CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
+        _internalFrame = index;
+        CurrentFrameTimeRemaining = _definition.Frames[_internalFrame].Duration;
         OnAnimationEvent?.Invoke(this, AnimationEventTrigger.FrameBegin);
     }
 
@@ -215,10 +216,10 @@ public class AnimationController : IAnimationController
     private bool AdvanceFrame()
     {
         //  Increment the current frame
-        CurrentFrame += _direction;
+        _internalFrame += _direction;
 
         //  Ensure frame is in bounds
-        if (CurrentFrame < 0 || CurrentFrame >= _definition.FrameCount)
+        if (_internalFrame < 0 || _internalFrame >= _definition.FrameCount)
         {
             //  Is this a looping animation?
             if (IsLooping)
@@ -227,11 +228,11 @@ public class AnimationController : IAnimationController
                 if (IsPingPong)
                 {
                     _direction = -_direction;
-                    CurrentFrame += _direction * 2;
+                    _internalFrame += _direction * 2;
                 }
                 else
                 {
-                    CurrentFrame = IsReversed ? _definition.FrameCount - 1 : 0;
+                    _internalFrame = IsReversed ? _definition.FrameCount - 1 : 0;
                 }
 
                 //   We looped
@@ -240,13 +241,13 @@ public class AnimationController : IAnimationController
             else
             {
                 //  No looping and we've reached the end, stop the animation
-                CurrentFrame -= _direction;
+                _internalFrame -= _direction;
                 Stop(AnimationEventTrigger.AnimationCompleted);
                 return false;
             }
         }
 
-        CurrentFrameTimeRemaining = _definition.Frames[CurrentFrame].Duration;
+        CurrentFrameTimeRemaining = _definition.Frames[_internalFrame].Duration;
         OnAnimationEvent?.Invoke(this, AnimationEventTrigger.FrameBegin);
         return true;
     }

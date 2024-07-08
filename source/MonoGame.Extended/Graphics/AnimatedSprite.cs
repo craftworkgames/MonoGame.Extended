@@ -60,6 +60,7 @@ public class AnimatedSprite : Sprite
     {
         _animation = _spriteSheet.GetAnimation(name);
         Controller = new AnimationController(_animation);
+        Controller.Play();
         return Controller;
     }
 
@@ -72,8 +73,7 @@ public class AnimatedSprite : Sprite
         //  If the current frame changed during the update, change the texture region
         if (index != Controller.CurrentFrame)
         {
-            int regionIndex = _animation.Frames[Controller.CurrentFrame].FrameIndex;
-            TextureRegion = _spriteSheet.TextureAtlas[regionIndex];
+            TextureRegion = _spriteSheet.TextureAtlas[Controller.CurrentFrame];
         }
     }
 }
