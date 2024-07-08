@@ -60,7 +60,6 @@ public class AnimatedSprite : Sprite
     {
         _animation = _spriteSheet.GetAnimation(name);
         Controller = new AnimationController(_animation);
-        Controller.Play();
         return Controller;
     }
 
