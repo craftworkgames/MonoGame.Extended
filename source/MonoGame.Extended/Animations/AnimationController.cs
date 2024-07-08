@@ -69,6 +69,9 @@ public class AnimationController : IAnimationController
         IsReversed = definition.IsReversed;
         IsPingPong = definition.IsPingPong;
         Speed = 1.0f;
+
+        //  Start off playing
+        Play();
     }
 
     /// <inheritdoc />
