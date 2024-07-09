@@ -4,7 +4,6 @@ namespace MonoGame.Extended.Input
 {
     public static class KeyboardExtended
     {
-        // TODO: This global static state was a horrible idea.
         private static KeyboardState _currentKeyboardState;
         private static KeyboardState _previousKeyboardState;
 
