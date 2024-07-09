@@ -13,14 +13,12 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
             try
             {
                 BitmapFontFileContent bmfFile = importerResult.Data;
-                context.Logger.LogMessage("Processing BMFont");
                 var result = new BitmapFontProcessorResult(bmfFile);
 
-                foreach (var fontPage in bmfFile.Pages)
+                foreach (var page in bmfFile.Pages)
                 {
-                    var assetName = Path.GetFileNameWithoutExtension(fontPage);
-                    context.Logger.LogMessage("Expected texture asset: {0}", assetName);
-                    result.TextureAssets.Add(assetName);
+                    context.AddDependency(Path.GetFileName(page));
+                    result.TextureAssets.Add(Path.GetFileNameWithoutExtension(page));
                 }
 
                 return result;

@@ -9,8 +9,6 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
     {
         public override ContentImporterResult<BitmapFontFileContent> Import(string filename, ContentImporterContext context)
         {
-            context.Logger.LogMessage("Importing FNT file: {0}", filename);
-
             using FileStream stream = File.OpenRead(filename);
             var bmfFile = BitmapFontFileReader.Read(stream);
             return new ContentImporterResult<BitmapFontFileContent>(filename, bmfFile);
