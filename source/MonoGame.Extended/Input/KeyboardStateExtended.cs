@@ -20,7 +20,7 @@ namespace MonoGame.Extended.Input
         private KeyboardState _previousKeyboardState;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KeyboardStateExtended"/> value.        
+        /// Initializes a new instance of the <see cref="KeyboardStateExtended"/> value.
         /// </summary>
         /// <param name="currentKeyboardState">The state of keyboard input during the current update cycle.</param>
         /// <param name="previousKeyboardState">The state of keyboard input during the previous update cycle.</param>
@@ -121,7 +121,7 @@ namespace MonoGame.Extended.Input
         /// pressed keys.  Use <see cref="GetPressedKeyCount"/> to determine the total number of elements.
         /// </exception>
         public void GetPressedKeys(Keys[] keys) => _currentKeyboardState.GetPressedKeys(keys);
-      
+
         /// <summary>
         /// Returns whether the given key was down during previous state, but is now up.
         /// </summary>

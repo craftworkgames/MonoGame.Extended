@@ -17,7 +17,6 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
 
                 foreach (var page in bmfFile.Pages)
                 {
-
                     context.AddDependency(Path.GetFileName(page));
                     result.TextureAssets.Add(Path.GetFileNameWithoutExtension(page));
                 }
