@@ -6,7 +6,6 @@ namespace MonoGame.Extended.Input;
 
 public static class MouseExtended
 {
-    // TODO: This global static state was a horrible idea.
     private static MouseState _currentMouseState;
     private static MouseState _previousMouseState;
 
