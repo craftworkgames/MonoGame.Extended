@@ -12,7 +12,7 @@ namespace MonoGame.Extended.Input
     /// </summary>
     /// <remarks>
     /// This is an extended version of the base <see cref="Microsoft.Xna.Framework.Input.KeyboardState"/> struct
-    /// that provides utility for checking key states between the previous and current keyboard states.
+    /// that provides utility for checking the state differences between the previous and current state.
     /// </remarks>
     public struct KeyboardStateExtended
     {
@@ -20,7 +20,7 @@ namespace MonoGame.Extended.Input
         private KeyboardState _previousKeyboardState;
 
         /// <summary>
-        /// Creates a new <see cref="KeyboardStateExtended"/> value.
+        /// Initializes a new instance of the <see cref="KeyboardStateExtended"/> value.        
         /// </summary>
         /// <param name="currentKeyboardState">The state of keyboard input during the current update cycle.</param>
         /// <param name="previousKeyboardState">The state of keyboard input during the previous update cycle.</param>

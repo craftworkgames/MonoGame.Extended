@@ -4,35 +4,107 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MonoGame.Extended.Input;
 
+/// <summary>
+/// Represents the state of mouse input.
+/// </summary>
+/// <remarks>
+/// This is an extended version of the base <see cref="Microsoft.Xna.Framework.Input.MouseState"/> struct
+/// that provides utility for checking state differences between the previous and current state.
+/// </remarks>
 public struct MouseStateExtended
 {
     private readonly MouseState _currentMouseState;
     private readonly MouseState _previousMouseState;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MouseStateExtended"/> value.
+    /// </summary>
+    /// <param name="currentMouseState">The state of mouse input during the current update cycle.</param>
+    /// <param name="previousMouseState">THe state of mouse input during hte previous update cycle.</param>
     public MouseStateExtended(MouseState currentMouseState, MouseState previousMouseState)
     {
         _currentMouseState = currentMouseState;
         _previousMouseState = previousMouseState;
     }
 
+    /// <summary>
+    /// Gets the current x-coordinate position of the mouse cursor relative to the game window.
+    /// </summary>
     public int X => _currentMouseState.X;
+
+    /// <summary>
+    /// Gets the current y-coordinate position of the mouse cursor relative to the game window.
+    /// </summary>
     public int Y => _currentMouseState.Y;
+
+    /// <summary>
+    /// Gets the current xy-coordinate position of the mouse cursor relative to the game window.
+    /// </summary>
     public Point Position => new Point(_currentMouseState.X, _currentMouseState.Y);
+
+    /// <summary>
+    /// Gets a value that indicates whether the position of the mouse cursor changes between the previous and current
+    /// states.
+    /// </summary>
     public bool PositionChanged => _currentMouseState.X != _previousMouseState.X || _currentMouseState.Y != _previousMouseState.Y;
 
+    /// <summary>
+    /// Gets the difference in the x-coordinate position change of the mouse between the previous and current state.
+    /// </summary>
     public int DeltaX => _previousMouseState.X - _currentMouseState.X;
+
+    /// <summary>
+    /// Gets the difference in the y-coordinate position change of the mouse between the previous and current state.
+    /// </summary>
     public int DeltaY => _previousMouseState.Y - _currentMouseState.Y;
+
+    /// <summary>
+    /// Gets the difference in the xy-coordinate position change of the mouse between the previous and curren state.
+    /// </summary>
     public Point DeltaPosition => new Point(DeltaX, DeltaY);
 
+    /// <summary>
+    /// Gets the current value of the mouse scroll wheel.
+    /// </summary>
     public int ScrollWheelValue => _currentMouseState.ScrollWheelValue;
+
+    /// <summary>
+    /// Gets the difference in the mouse scroll wheel value between the previous and current state.
+    /// </summary>
     public int DeltaScrollWheelValue => _previousMouseState.ScrollWheelValue - _currentMouseState.ScrollWheelValue;
 
+    /// <summary>
+    /// Gets the current state of the mouse left button.
+    /// </summary>
     public ButtonState LeftButton => _currentMouseState.LeftButton;
+
+    /// <summary>
+    /// Gets the current state of the mouse middle button.
+    /// </summary>
     public ButtonState MiddleButton => _currentMouseState.MiddleButton;
+
+    /// <summary>
+    /// Gets the current state of the mouse right button.
+    /// </summary>
     public ButtonState RightButton => _currentMouseState.RightButton;
+
+    /// <summary>
+    /// Gets the current state of the first mouse extra button.
+    /// </summary>
     public ButtonState XButton1 => _currentMouseState.XButton1;
+
+    /// <summary>
+    /// Gets the current state of the second mouse extra button.
+    /// </summary>
     public ButtonState XButton2 => _currentMouseState.XButton2;
 
+    /// <summary>
+    /// Returns a value that indicates whether the specified mouse button is down during the current state.
+    /// </summary>
+    /// <param name="button">The mouse button to check.</param>
+    /// <returns>
+    /// <see langword="true"/> if the mouse button is down during the current state; otherwise, <see langword="false"/>.
+    /// </returns>
     public bool IsButtonDown(MouseButton button)
     {
         // ReSharper disable once SwitchStatementMissingSomeCases
@@ -48,6 +120,13 @@ public struct MouseStateExtended
         return false;
     }
 
+    /// <summary>
+    /// Returns a value that indicates whether the specified mouse button is up during the current state.
+    /// </summary>
+    /// <param name="button">The mouse button to check.</param>
+    /// <returns>
+    /// <see langword="true"/> if the mouse button is up during the current state; otherwise, <see langword="false"/>.
+    /// </returns>
     public bool IsButtonUp(MouseButton button)
     {
         // ReSharper disable once SwitchStatementMissingSomeCases
@@ -69,7 +148,7 @@ public struct MouseStateExtended
     /// <param name="button"></param>
     /// <remarks>Deprecated because of inconsistency with <see cref="KeyboardStateExtended"/></remarks>
     /// <returns>The just-down state for the mouse on this state-change.</returns>
-    [Obsolete($"Deprecated in favor of {nameof(IsButtonPressed)}")]
+    [Obsolete($"Deprecated in favor of {nameof(WasButtonPressed)}")]
     public bool WasButtonJustDown(MouseButton button)
     {
         // ReSharper disable once SwitchStatementMissingSomeCases
@@ -91,7 +170,7 @@ public struct MouseStateExtended
     /// <param name="button"></param>
     /// <remarks>Deprecated because of inconsistency with <see cref="KeyboardStateExtended"/></remarks>
     /// <returns>The just-up state for the mouse on this state-change.</returns>
-    [Obsolete($"Deprecated in favor of {nameof(IsButtonReleased)}")]
+    [Obsolete($"Deprecated in favor of {nameof(WasButtonReleased)}")]
     public bool WasButtonJustUp(MouseButton button)
     {
         // ReSharper disable once SwitchStatementMissingSomeCases
@@ -108,11 +187,13 @@ public struct MouseStateExtended
     }
 
     /// <summary>
-    /// Get the pressed state of a mouse button, for this state-change.
+    /// Returns whether the specified mouse button was up during the previous, but is now down.
     /// </summary>
-    /// <param name="button">The button to check.</param>
-    /// <returns>true if the given mouse button was pressed this state-change, otherwise false</returns>
-    public readonly bool IsButtonPressed(MouseButton button) => button switch
+    /// <param name="button">The mouse button to check.</param>
+    /// <returns>
+    /// <see langword="true"/> if the mouse button was up pressed this state-change; otherwise, <see langword="false"/>.
+    /// </returns>
+    public readonly bool WasButtonPressed(MouseButton button) => button switch
     {
         MouseButton.Left => WasJustPressed(m => m.LeftButton),
         MouseButton.Middle => WasJustPressed(m => m.MiddleButton),
@@ -123,11 +204,13 @@ public struct MouseStateExtended
     };
 
     /// <summary>
-    /// Get the released state of a mouse button, for this state-change.
+    /// Returns whether the specified mouse button was down during the previous state, but is now up.
     /// </summary>
-    /// <param name="button">The button to check.</param>
-    /// <returns>true if the given mouse button was released this state-change, otherwise false</returns>
-    public readonly bool IsButtonReleased(MouseButton button) => button switch
+    /// <param name="button">The mouse button to check.</param>
+    /// <returns>
+    /// <see langword="true"/> if the mouse button was released this state-change; otherwise, <see langword="false"/>.
+    /// </returns>
+    public readonly bool WasButtonReleased(MouseButton button) => button switch
     {
         MouseButton.Left => WasJustReleased(m => m.LeftButton),
         MouseButton.Middle => WasJustReleased(m => m.MiddleButton),
