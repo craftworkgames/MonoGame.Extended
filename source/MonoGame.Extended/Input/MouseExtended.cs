@@ -14,7 +14,7 @@ public static class MouseExtended
         return new MouseStateExtended(_currentMouseState, _previousMouseState);
     }
 
-    public static void Refresh()
+    public static void Update()
     {
         _previousMouseState = _currentMouseState;
         _currentMouseState = Mouse.GetState();
