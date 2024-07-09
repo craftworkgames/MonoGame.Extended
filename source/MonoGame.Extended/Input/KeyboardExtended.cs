@@ -13,6 +13,7 @@ namespace MonoGame.Extended.Input
         }
 
         public static void Refresh()
+        public static void Update()
         {
             _previousKeyboardState = _currentKeyboardState;
             _currentKeyboardState = Keyboard.GetState();
