@@ -143,50 +143,6 @@ public struct MouseStateExtended
     }
 
     /// <summary>
-    /// Get the just-down state for the mouse on this state-change: true if the mouse button has just been pressed.
-    /// </summary>
-    /// <param name="button"></param>
-    /// <remarks>Deprecated because of inconsistency with <see cref="KeyboardStateExtended"/></remarks>
-    /// <returns>The just-down state for the mouse on this state-change.</returns>
-    [Obsolete($"Deprecated in favor of {nameof(WasButtonPressed)}")]
-    public bool WasButtonJustDown(MouseButton button)
-    {
-        // ReSharper disable once SwitchStatementMissingSomeCases
-        switch (button)
-        {
-            case MouseButton.Left: return WasJustPressed(m => m.LeftButton);
-            case MouseButton.Middle: return WasJustPressed(m => m.MiddleButton);
-            case MouseButton.Right: return WasJustPressed(m => m.RightButton);
-            case MouseButton.XButton1: return WasJustPressed(m => m.XButton1);
-            case MouseButton.XButton2: return WasJustPressed(m => m.XButton2);
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Get the just-up state for the mouse on this state-change: true if the mouse button has just been released.
-    /// </summary>
-    /// <param name="button"></param>
-    /// <remarks>Deprecated because of inconsistency with <see cref="KeyboardStateExtended"/></remarks>
-    /// <returns>The just-up state for the mouse on this state-change.</returns>
-    [Obsolete($"Deprecated in favor of {nameof(WasButtonReleased)}")]
-    public bool WasButtonJustUp(MouseButton button)
-    {
-        // ReSharper disable once SwitchStatementMissingSomeCases
-        switch (button)
-        {
-            case MouseButton.Left: return WasJustReleased(m => m.LeftButton);
-            case MouseButton.Middle: return WasJustReleased(m => m.MiddleButton);
-            case MouseButton.Right: return WasJustReleased(m => m.RightButton);
-            case MouseButton.XButton1: return WasJustReleased(m => m.XButton1);
-            case MouseButton.XButton2: return WasJustReleased(m => m.XButton2);
-        }
-
-        return false;
-    }
-
-    /// <summary>
     /// Returns whether the specified mouse button was up during the previous, but is now down.
     /// </summary>
     /// <param name="button">The mouse button to check.</param>
