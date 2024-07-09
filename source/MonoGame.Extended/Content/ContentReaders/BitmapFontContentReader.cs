@@ -17,11 +17,6 @@ public class BitmapFontContentReader : ContentTypeReader<BitmapFont>
 {
     protected override BitmapFont Read(ContentReader reader, BitmapFont existingInstance)
     {
-        if (existingInstance is not null)
-        {
-            return existingInstance;
-        }
-
         var bmfFile = BitmapFontFileReader.Read((FileStream)reader.BaseStream);
 
         var textures =
