@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.Xna.Framework.Input;
 
 namespace MonoGame.Extended.Input
