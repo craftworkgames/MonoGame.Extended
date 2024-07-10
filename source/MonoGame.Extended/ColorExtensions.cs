@@ -81,5 +81,26 @@ namespace MonoGame.Extended
 
             return new HslColor(h, s, l);
         }
+
+        /// <summary>
+        /// Returns a new <see cref="Color"/> value based on a packed value in the ABGR format.
+        /// </summary>
+        /// <remarks>
+        /// This is useful for when you have HTML hex style values such as #123456 and want to use it in hex format for
+        /// the parameter.  Since Color's standard format is RGBA, you would have to do new Color(0xFF563212) since R
+        /// is the LSB.  With this method, you can write it the same way it is written in HTML hex by doing
+        /// <c>>ColorExtensions.FromAbgr(0x123456FF);</c>
+        /// </remarks>
+        /// <param name="abgr">The packed color value in ABGR format</param>
+        /// <returns>The <see cref="Color"/> value created</returns>
+        public static Color FromAbgr(uint abgr)
+        {
+            uint rgba = (abgr & 0x000000FF) << 24 | // Alpha
+                        (abgr & 0x0000FF00) << 8  | // Blue
+                        (abgr & 0x00FF0000) >> 8  | // Green
+                        (abgr & 0xFF000000) >> 24;  // Red
+
+            return new Color(rgba);
+        }
 	}
 }
