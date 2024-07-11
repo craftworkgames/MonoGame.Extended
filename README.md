@@ -21,7 +21,7 @@ To use the content pipeline extension, please refer to the [Setup MGCB Edtior](h
 
 - Check out [the samples](https://github.com/craftworkgames/MonoGame.Extended-samples)
 - Join our live [Discord](https://discord.gg/FvZ8Z7EzPJ)
-- Read the [Documentation](http://www.monogameextended.net/docs)
+- Read the [Documentation](https://www.monogameextended.net/docs/about/introduction/)
 - Submit an [issue on GitHub](https://github.com/craftworkgames/MonoGame.Extended/issues)
 - Ask a question on [gamedev stack overflow](http://gamedev.stackexchange.com/questions/tagged/monogame-extended)
 - Post on our [MonoGame community forum](http://community.monogame.net/category/extended)
