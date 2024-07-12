@@ -60,6 +60,8 @@ public static class BitmapFontFileReader
             _ => throw new InvalidOperationException("This does not appear to be a valid BMFont file!")
         };
 
+        bmfFile.Path = stream.Name;
+
         return bmfFile;
     }
 
