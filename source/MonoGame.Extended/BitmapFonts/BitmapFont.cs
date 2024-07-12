@@ -38,7 +38,7 @@ public sealed class BitmapFont
         }
     }
 
-    public BitmapFontCharacter GetCharacter(int character) => _characters[character];
+    public BitmapFontCharacter GetCharacter(int character) => _characters.TryGetValue(character, out BitmapFontCharacter fontCharacter) ? fontCharacter : null;/*  _characters[character];*/
     public bool TryGetCharacter(int character, out BitmapFontCharacter value) => _characters.TryGetValue(character, out value);
 
     public SizeF MeasureString(string text)
@@ -378,7 +378,7 @@ public sealed class BitmapFont
         {
             if (!pages.ContainsKey(bmfFile.Pages[i]))
             {
-                string texturePath = Path.Combine(bmfFile.Path, bmfFile.Pages[i]);
+                string texturePath = Path.Combine(Path.GetDirectoryName(bmfFile.Path), bmfFile.Pages[i]);
                 using (Stream textureStream = File.OpenRead(texturePath))
                 {
                     Texture2D texture = Texture2D.FromStream(graphicsDevice, textureStream);
