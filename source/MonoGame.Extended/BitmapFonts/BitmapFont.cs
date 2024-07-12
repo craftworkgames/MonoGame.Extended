@@ -38,7 +38,7 @@ public sealed class BitmapFont
         }
     }
 
-    public BitmapFontCharacter GetCharacter(int character) => _characters[character];
+    public BitmapFontCharacter GetCharacter(int character) => _characters.TryGetValue(character, out BitmapFontCharacter fontCharacter) ? fontCharacter : null;/*  _characters[character];*/
     public bool TryGetCharacter(int character, out BitmapFontCharacter value) => _characters.TryGetValue(character, out value);
 
     public SizeF MeasureString(string text)
