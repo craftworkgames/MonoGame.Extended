@@ -23,7 +23,7 @@ namespace MonoGame.Extended
             if (rayNearDistance > rayFarDistance)
             {
                 // Swap near and far distance
-                var temp = rayFarDistance;
+                var temp = rayNearDistance;
                 rayNearDistance = rayFarDistance;
                 rayFarDistance = temp;
             }
