@@ -100,7 +100,9 @@ namespace MonoGame.Extended
                         (abgr & 0x00FF0000) >> 8  | // Green
                         (abgr & 0xFF000000) >> 24;  // Red
 
-            return new Color(rgba);
+            Color result = default;
+            result.PackedValue = rgba;
+            return result;
         }
 	}
 }
