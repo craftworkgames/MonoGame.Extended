@@ -164,7 +164,7 @@ namespace MonoGame.Extended.Tiled
                     mapObject = new TiledMapTileObject(identifier, name, tileset, tilesetTile, size, position, rotation, opacity, isVisible, type);
                     break;
                 case TiledMapObjectType.Ellipse:
-                    mapObject = new TiledMapEllipseObject(identifier, name, size, position, rotation, opacity, isVisible);
+                    mapObject = new TiledMapEllipseObject(identifier, name, size, position, rotation, opacity, isVisible, type);
                     break;
                 case TiledMapObjectType.Polygon:
                     mapObject = new TiledMapPolygonObject(identifier, name, ReadPoints(reader), size, position, rotation, opacity, isVisible, type);
