@@ -56,6 +56,7 @@ namespace MonoGame.Extended
             return Math.Abs(value.X - otherValue.X) <= tolerance && (Math.Abs(value.Y - otherValue.Y) <= tolerance);
         }
 
+#if FNA || KNI
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 Rotate(this Vector2 value, float radians)
         {
@@ -63,6 +64,7 @@ namespace MonoGame.Extended
             var sin = (float) Math.Sin(radians);
             return new Vector2(value.X*cos - value.Y*sin, value.X*sin + value.Y*cos);
         }
+#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 NormalizedCopy(this Vector2 value)
