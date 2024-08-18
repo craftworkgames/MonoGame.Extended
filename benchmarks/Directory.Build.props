@@ -13,7 +13,7 @@
 
     <ItemGroup Condition="!$(DefineConstants.Contains('FNA')) AND !$(DefineConstants.Contains('KNI'))">
         <PackageReference Include="MonoGame.Framework.DesktopGL"
-                          Version="3.8.1.303"
+                          Version="3.8.2.1105"
                           PrivateAssets="All" />
     </ItemGroup>
 
@@ -34,7 +34,7 @@
         <PackageReference Include="nkast.Xna.Framework.Game"
                           Version="3.12.9001" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <PackageReference Include="BenchmarkDotNet"
                           Version="0.13.12" />
