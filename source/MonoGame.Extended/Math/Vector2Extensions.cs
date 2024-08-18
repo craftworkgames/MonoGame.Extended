@@ -59,7 +59,7 @@ namespace MonoGame.Extended
 #if FNA || KNI
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #else
-        [Obsolete("Vector2.Rotate is now part of MonoGame", true)]
+        [Obsolete("Use native Vector2.Rotate provided by MonoGame instead.  This will be removed in a future release.", false)]
 #endif
         public static Vector2 Rotate(this Vector2 value, float radians)
         {
