@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <MonoGameExtendedVersion>4.0.0</MonoGameExtendedVersion>
+        <MonoGameExtendedVersion>4.0.1</MonoGameExtendedVersion>
         <IsPrerelease Condition="'$(IS_PRERELEASE)' != ''">-prerelease</IsPrerelease>
         <BuildNumber Condition="'$(BUILD_NUMBER)' != ''">.$(BUILD_NUMBER)</BuildNumber>
         <Version>$(MonoGameExtendedVersion)$(IsPrerelease)$(BuildNumber)</Version>
