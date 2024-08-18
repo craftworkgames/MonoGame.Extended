@@ -10,6 +10,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 > [!NOTE]
 > Unreleased changes exist in the current `develop` branch but have not been pushed as either a stable or prerelease NuGet package.
 >
+
+## [4.0.1]
+- `VortexModifier` now properly makes use of the `MaxSpeed` property. [@AristurtleDev](https://github.com/AristurtleDev)    [#921](https://github.com/craftworkgames/MonoGame.Extended/pull/921)
+- `rayNearDistance` and `rayFarDistance` are now properly swapped in `PrimitivesHelper.IntersectsSlab()`. [@AristurtleDev](https://github.com/AristurtleDev) [#922](https://github.com/craftworkgames/MonoGame.Extended/pull/922)
+- Resolved issue where an `ArgumentNullException` was thrown when loading BitmapFonts due to the `bmfFile.Path` value not being set. [@AristurtleDev](https://github.com/AristurtleDev) [#924](https://github.com/craftworkgames/MonoGame.Extended/pull/924)
+- Resolved issue for FNA in `ColorExtensions.FromArgb` due to FNA `Color` struct not having a constructor that accepts a uint packed value. [@ValorZard](https://github.com/ValorZard) [#925](https://github.com/craftworkgames/MonoGame.Extended/pull/925)
+- Updated for MonOGame 3.8.2.1105 release [@AristurtleDev](https://github.com/AristurtleDev) [#926](https://github.com/craftworkgames/MonoGame.Extended/pull/926)
+  - MonoGame References updated to 3.8.2.1105
+  - MonoGame.Extended target framework updated to net8.0
+- `Vector2Extensions.Rotate` has been marked deprecated for MonoGame targets only (KNI and FNA still use this). With the release of MonoGame 3.8.2.1105, MonoGame now has a built in method for rotating a `Vector2`. [@AristurtleDev](https://github.com/AristurtleDev) [#926](https://github.com/craftworkgames/MonoGame.Extended/pull/926)
+-
+
+## [4.0.0]
 ### Added
 - Added unit test for `PolyGon.Contains` to ensure consistency in expected return values for edge touching compared to MonoGame. [@AristurtleDev](https://github.com/AristurtleDev) [#871](https://github.com/craftworkgames/MonoGame.Extended/pull/871)
 - Added unit test for `BitmapFont.MeasureString` to validate that it correctly accounts for trailing whitespace. [@AristurtleDev](https://github.com/AristurtleDev) [#876](https://github.com/craftworkgames/MonoGame.Extended/pull/876)

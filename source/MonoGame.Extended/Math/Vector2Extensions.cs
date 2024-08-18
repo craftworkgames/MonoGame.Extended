@@ -56,7 +56,11 @@ namespace MonoGame.Extended
             return Math.Abs(value.X - otherValue.X) <= tolerance && (Math.Abs(value.Y - otherValue.Y) <= tolerance);
         }
 
+#if FNA || KNI
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#else
+        [Obsolete("Use native Vector2.Rotate provided by MonoGame instead.  This will be removed in a future release.", false)]
+#endif
         public static Vector2 Rotate(this Vector2 value, float radians)
         {
             var cos = (float) Math.Cos(radians);

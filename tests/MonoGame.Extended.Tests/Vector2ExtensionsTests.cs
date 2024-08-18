@@ -36,6 +36,7 @@ namespace MonoGame.Extended.Tests
             Assert.Equal(new Vector2(10, 5), c);
         }
 
+#if FNA || KNI
         [Fact]
         public void Vector2_Rotate_90_Degrees_Test()
         {
@@ -63,6 +64,7 @@ namespace MonoGame.Extended.Tests
             Assert.True(new Vector2(7.071068f, -7.071068f).EqualsWithTolerence(b));
         }
 
+#endif
         [Fact]
         public void Vector2_Truncate_Test()
         {
@@ -91,7 +93,12 @@ namespace MonoGame.Extended.Tests
         {
             var a = new Vector2(0, -10);
             var b = new Vector2(10, 0);
+#if FNA || KNI
             var c = -Vector2.UnitY.Rotate(MathHelper.ToRadians(45));
+#else
+            var c = -Vector2.UnitY;
+            c.Rotate(MathHelper.ToRadians(45));
+#endif
 
             Assert.Equal(MathHelper.ToRadians(0), a.ToAngle());
             Assert.Equal(MathHelper.ToRadians(90), b.ToAngle());

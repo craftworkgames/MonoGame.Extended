@@ -3,7 +3,7 @@
   "isRoot": true,
   "tools": {
     "dotnet-mgfxc": {
-      "version": "3.8.1.303",
+      "version": "3.8.2.1105",
       "commands": [
         "mgfxc"
       ],
