@@ -11,7 +11,7 @@ MonoGame.Extended is a set of utilities (in the form of libraries/tools) to [Mon
 Code is distributed as NuGet packages in the form of libraries (`.dll` files). You can easily install the NuGet packages into your existing MonoGame project using the NuGet Package Manager UI in Visual Studio or by using the command line interface (CLI) in a terminal.
 
 ```sh
-dotnet add package MonoGame.Extended --version 4.0.1
+dotnet add package MonoGame.Extended --version 4.0.2
 ```
 
 ### Using the Content Pipeline Extensions
