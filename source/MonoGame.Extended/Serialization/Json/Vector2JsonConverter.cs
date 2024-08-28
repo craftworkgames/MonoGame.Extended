@@ -19,7 +19,7 @@ public class Vector2JsonConverter : JsonConverter<Vector2>
     /// </exception>
     public override Vector2 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var values = reader.ReadAsMultiDimensional<float>();
+        var values = reader.ReadAsMultiDimensional<float>(options);
 
         if (values.Length == 2)
         {
@@ -31,7 +31,7 @@ public class Vector2JsonConverter : JsonConverter<Vector2>
             return new Vector2(values[0]);
         }
 
-        throw new JsonException("Invalid Size2 property value");
+        throw new JsonException("Invalid Vector2 property value");
     }
 
     /// <inheritdoc />

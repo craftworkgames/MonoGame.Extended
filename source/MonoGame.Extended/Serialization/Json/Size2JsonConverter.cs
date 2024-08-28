@@ -18,7 +18,7 @@ public class Size2JsonConverter : JsonConverter<SizeF>
     /// </exception>
     public override SizeF Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var values = reader.ReadAsMultiDimensional<float>();
+        var values = reader.ReadAsMultiDimensional<float>(options);
 
         if (values.Length == 2)
         {

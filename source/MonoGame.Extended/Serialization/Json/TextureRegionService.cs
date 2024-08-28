@@ -20,9 +20,14 @@ namespace MonoGame.Extended.Serialization.Json
 
         public Texture2DRegion GetTextureRegion(string name)
         {
-            return TextureAtlases
-                .Select(textureAtlas => textureAtlas.GetRegion(name))
-                .FirstOrDefault(region => region != null);
+            foreach (Texture2DAtlas atlas in TextureAtlases)
+            {
+                if (atlas.TryGetRegion(name, out Texture2DRegion region))
+                {
+                    return region;
+                }
+            }
+            return null;
         }
     }
 }

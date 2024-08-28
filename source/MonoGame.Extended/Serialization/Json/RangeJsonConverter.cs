@@ -15,7 +15,7 @@ public class RangeJsonConverter<T> : JsonConverter<Range<T>> where T : IComparab
     /// <inheritdoc />
     public override Range<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        Span<T> values = reader.ReadAsMultiDimensional<T>();
+        Span<T> values = reader.ReadAsMultiDimensional<T>(options);
 
         if (values.Length == 2)
         {
