@@ -15,7 +15,7 @@ public class ThicknessJsonConverter : JsonConverter<Thickness>
     /// <inheritdoc />
     public override Thickness Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var values = reader.ReadAsMultiDimensional<int>();
+        var values = reader.ReadAsMultiDimensional<int>(options);
         return Thickness.FromValues(values);
     }
 

@@ -22,36 +22,37 @@ public static class Utf8JsonReaderExtensions
     /// </summary>
     /// <typeparam name="T">The type of the array elements.</typeparam>
     /// <param name="reader">The <see cref="Utf8JsonReader"/> to read from.</param>
+    /// <param name="options">An object that specifies serialization options to use.</param>
     /// <returns>An array of the specified type.</returns>
     /// <exception cref="NotSupportedException">Thrown when the token type is not supported.</exception>
-    public static T[] ReadAsMultiDimensional<T>(this ref Utf8JsonReader reader)
+    public static T[] ReadAsMultiDimensional<T>(this ref Utf8JsonReader reader, JsonSerializerOptions options)
     {
         var tokenType = reader.TokenType;
 
         switch (tokenType)
         {
             case JsonTokenType.StartArray:
-                return reader.ReadAsJArray<T>();
+                return reader.ReadAsJArray<T>(options);
 
             case JsonTokenType.String:
                 return reader.ReadAsDelimitedString<T>();
 
             case JsonTokenType.Number:
-                return reader.ReadAsSingleValue<T>();
+                return reader.ReadAsSingleValue<T>(options);
 
             default:
                 throw new NotSupportedException($"{tokenType} is not currently supported in the multi-dimensional parser");
         }
     }
 
-    private static T[] ReadAsSingleValue<T>(this ref Utf8JsonReader reader)
+    private static T[] ReadAsSingleValue<T>(this ref Utf8JsonReader reader, JsonSerializerOptions options)
     {
         var token = JsonDocument.ParseValue(ref reader).RootElement;
-        var value = JsonSerializer.Deserialize<T>(token.GetRawText());
+        var value = JsonSerializer.Deserialize<T>(token.GetRawText(), options);
         return new T[] { value };
     }
 
-    private static T[] ReadAsJArray<T>(this ref Utf8JsonReader reader)
+    private static T[] ReadAsJArray<T>(this ref Utf8JsonReader reader, JsonSerializerOptions options)
     {
         var items = new List<T>();
         while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
@@ -61,7 +62,7 @@ public static class Utf8JsonReaderExtensions
                 break;
             }
 
-            items.Add(JsonSerializer.Deserialize<T>(ref reader));
+            items.Add(JsonSerializer.Deserialize<T>(ref reader, options));
         }
 
         return items.ToArray();

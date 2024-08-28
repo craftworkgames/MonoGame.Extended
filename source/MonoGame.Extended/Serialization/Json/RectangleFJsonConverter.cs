@@ -15,7 +15,7 @@ public class RectangleFJsonConverter : JsonConverter<RectangleF>
     /// <inheritdoc />
     public override RectangleF Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var values = reader.ReadAsMultiDimensional<float>();
+        var values = reader.ReadAsMultiDimensional<float>(options);
         return new RectangleF(values[0], values[1], values[2], values[3]);
     }
 
