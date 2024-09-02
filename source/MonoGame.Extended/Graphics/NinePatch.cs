@@ -62,6 +62,9 @@ public class NinePatch
     /// </summary>
     public string Name { get; }
 
+    /// <summary>
+    /// The size of the border patches around the middle patch.
+    /// </summary>
     public Thickness Padding { get; }
 
     /// <summary>
@@ -90,7 +93,11 @@ public class NinePatch
     /// <summary>
     /// Initializes a new instance of the <see cref="NinePatch"/> class with the specified patches and name.
     /// </summary>
-    /// <param name="patches">An array of nine <see cref="Texture2DRegion"/> objects.</param>
+    /// <param name="patches">
+    /// An array of nine <see cref="Texture2DRegion"/> objects.
+    /// The top, left, bottom and right regions must to be of exactly the same size.
+    /// Mid patches can be as small as 1x1.
+    /// </param>
     /// <param name="name">
     /// The name of the nine-patch. If null or empty, a default name will be generated based on the texture name of the
     /// top-left patch.
@@ -113,8 +120,11 @@ public class NinePatch
         }
 
         _patches = patches;
-        Rectangle mid = patches[NinePatch.Middle].Bounds;
-        Padding = new Thickness(mid.Left, mid.Top, mid.Right, mid.Bottom);
+
+        Size topLeft = patches[NinePatch.TopLeft].Size;
+        Size bottomRight = patches[NinePatch.BottomRight].Size;
+        Padding = new Thickness(topLeft.Width, topLeft.Height, bottomRight.Width, bottomRight.Height);
+
         Name = name;
     }
 }
