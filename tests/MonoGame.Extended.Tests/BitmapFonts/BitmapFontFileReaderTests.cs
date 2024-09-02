@@ -102,8 +102,9 @@ public class BitmapFontFileReaderTests
     [Fact]
     public void Read_BinaryFile_Test()
     {
-        using FileStream stream = File.OpenRead("BitmapFonts/files/bmfont/test-font-binary.fnt");
-        var actual = BitmapFontFileReader.Read(stream);
+        string path = "BitmapFonts/files/bmfont/test-font-binary.fnt";
+        using FileStream stream = File.OpenRead(path);
+        var actual = BitmapFontFileReader.Read(stream, path);
         Assert.Equal(_expected.Header, actual.Header);
         Assert.Equal(_expected.Info, actual.Info);
         Assert.Equal(_expected.Common, actual.Common);
@@ -116,8 +117,9 @@ public class BitmapFontFileReaderTests
     [Fact]
     public void Read_XmlFile_Test()
     {
-        using FileStream stream = File.OpenRead("BitmapFonts/files/bmfont/test-font-xml.fnt");
-        var actual = BitmapFontFileReader.Read(stream);
+        string path = "BitmapFonts/files/bmfont/test-font-xml.fnt";
+        using FileStream stream = File.OpenRead(path);
+        var actual = BitmapFontFileReader.Read(stream, path);
         Assert.Equal(_expected.Header, actual.Header);
         Assert.Equal(_expected.Info, actual.Info);
         Assert.Equal(_expected.Common, actual.Common);
@@ -130,8 +132,9 @@ public class BitmapFontFileReaderTests
     [Fact]
     public void Read_Text_Test()
     {
-        using FileStream stream = File.OpenRead("BitmapFonts/files/bmfont/test-font-text.fnt");
-        var actual = BitmapFontFileReader.Read(stream);
+        string path = "BitmapFonts/files/bmfont/test-font-text.fnt";
+        using FileStream stream = File.OpenRead(path);
+        var actual = BitmapFontFileReader.Read(stream, path);
         Assert.Equal(_expected.Header, actual.Header);
         Assert.Equal(_expected.Info, actual.Info);
         Assert.Equal(_expected.Common, actual.Common);

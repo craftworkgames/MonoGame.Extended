@@ -364,13 +364,19 @@ public sealed class BitmapFont
 
     public static BitmapFont FromFile(GraphicsDevice graphicsDevice, string path)
     {
-        using FileStream stream = File.OpenRead(path);
-        return FromStream(graphicsDevice, stream);
+        using Stream stream = TitleContainer.OpenStream(path);
+        return FromStream(graphicsDevice, stream, path);
     }
 
+    [Obsolete("Use the FromStream() overload that takes an explicit name.")]
     public static BitmapFont FromStream(GraphicsDevice graphicsDevice, FileStream stream)
     {
-        var bmfFile = BitmapFontFileReader.Read(stream);
+        return FromStream(graphicsDevice, stream, stream.Name);
+    }
+
+    public static BitmapFont FromStream(GraphicsDevice graphicsDevice, Stream stream, string name)
+    {
+        var bmfFile = BitmapFontFileReader.Read(stream, name);
 
         //  Load page textures
         Dictionary<string, Texture2D> pages = new Dictionary<string, Texture2D>();
@@ -379,7 +385,7 @@ public sealed class BitmapFont
             if (!pages.ContainsKey(bmfFile.Pages[i]))
             {
                 string texturePath = Path.Combine(Path.GetDirectoryName(bmfFile.Path), bmfFile.Pages[i]);
-                using (Stream textureStream = File.OpenRead(texturePath))
+                using (Stream textureStream = TitleContainer.OpenStream(texturePath))
                 {
                     Texture2D texture = Texture2D.FromStream(graphicsDevice, textureStream);
                     pages.Add(bmfFile.Pages[i], texture);
