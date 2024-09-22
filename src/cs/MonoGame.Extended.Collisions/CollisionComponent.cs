@@ -168,7 +168,9 @@ namespace MonoGame.Extended.Collisions
         public int Cast(IEnumerable<ICollisionActor> actors, List<CollisionEventArgs> hitBuffer, Layer layer, Vector2 direction, float distance)
         {
             hitBuffer.Clear();
-            Vector2 offset = direction.NormalizedCopy() * distance;
+            Vector2 offset;
+            if (direction == Vector2.Zero) offset = Vector2.Zero;
+            else offset = direction.NormalizedCopy() * distance;
             return Cast(actors, hitBuffer, layer, offset);
         }
 
