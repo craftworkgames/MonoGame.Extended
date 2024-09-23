@@ -141,18 +141,20 @@ public static class Texture2DRegionExtensions
 
         int middleWidth = textureRegion.Width - leftPadding - rightPadding;
         int middleHeight = textureRegion.Height - topPadding - bottomPadding;
+        int rightX = textureRegion.Width - rightPadding;
+        int bottomY = textureRegion.Height - bottomPadding;
 
         patches[NinePatch.TopLeft] = textureRegion.GetSubregion(0, 0, leftPadding, topPadding);
         patches[NinePatch.TopMiddle] = textureRegion.GetSubregion(leftPadding, 0, middleWidth, topPadding);
-        patches[NinePatch.TopRight] = textureRegion.GetSubregion(middleWidth, 0, rightPadding, topPadding);
+        patches[NinePatch.TopRight] = textureRegion.GetSubregion(rightX, 0, rightPadding, topPadding);
 
         patches[NinePatch.MiddleLeft] = textureRegion.GetSubregion(0, topPadding, leftPadding, middleHeight);
         patches[NinePatch.Middle] = textureRegion.GetSubregion(leftPadding, topPadding, middleWidth, middleHeight);
-        patches[NinePatch.MiddleRight] = textureRegion.GetSubregion(middleWidth, topPadding, rightPadding, middleHeight);
+        patches[NinePatch.MiddleRight] = textureRegion.GetSubregion(rightX, topPadding, rightPadding, middleHeight);
 
-        patches[NinePatch.BottomLeft] = textureRegion.GetSubregion(0, middleHeight, leftPadding, bottomPadding);
-        patches[NinePatch.BottomMiddle] = textureRegion.GetSubregion(leftPadding, middleHeight, middleWidth, bottomPadding);
-        patches[NinePatch.BottomRight] = textureRegion.GetSubregion(middleWidth, middleHeight, rightPadding, bottomPadding);
+        patches[NinePatch.BottomLeft] = textureRegion.GetSubregion(0, bottomY, leftPadding, bottomPadding);
+        patches[NinePatch.BottomMiddle] = textureRegion.GetSubregion(leftPadding, bottomY, middleWidth, bottomPadding);
+        patches[NinePatch.BottomRight] = textureRegion.GetSubregion(rightX, bottomY, rightPadding, bottomPadding);
 
         return new NinePatch(patches);
     }
