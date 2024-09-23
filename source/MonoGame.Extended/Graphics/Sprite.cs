@@ -79,18 +79,8 @@ public class Sprite : IColorable
     /// </remarks>
     public Vector2 OriginNormalized
     {
-        get
-        {
-            float normalizedX = (Origin.X - TextureRegion.LeftUV) / (TextureRegion.RightUV - TextureRegion.LeftUV);
-            float normalizedY = (Origin.Y - TextureRegion.TopUV) / (TextureRegion.BottomUV - TextureRegion.TopUV);
-            return new Vector2(normalizedX, normalizedY);
-        }
-        set
-        {
-            float actualX = value.X * (TextureRegion.RightUV - TextureRegion.LeftUV) + TextureRegion.LeftUV;
-            float actualY = value.Y * (TextureRegion.BottomUV - TextureRegion.TopUV) + TextureRegion.TopUV;
-            Origin = new Vector2(actualX, actualY);
-        }
+        get { return new Vector2(Origin.X / TextureRegion.Width, Origin.Y / TextureRegion.Height); }
+        set { Origin = new Vector2(value.X * TextureRegion.Width, value.Y * TextureRegion.Height); }
     }
 
     /// <summary>
