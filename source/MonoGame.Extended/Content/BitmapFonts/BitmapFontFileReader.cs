@@ -28,18 +28,33 @@ public static class BitmapFontFileReader
     public static BitmapFontFileContent Read(string path)
     {
         using var stream = File.OpenRead(path);
-        return Read(stream);
+        return Read(stream, path);
     }
 
     /// <summary>
     /// Reads the content of the font file at the path specified.
     /// </summary>
-    /// <param name="stream">A <see cref="FileStream"/> containing the font file contents to read.</param>
+    /// <param name="stream">A <see cref="Stream"/> containing the font file contents to read.</param>
     /// <returns>A <see cref="BitmapFontFileContent"/> instance containing the results of the read operation.</returns>
     /// <exception cref="InvalidOperationException">
     /// Thrown if the header for the file contents does not match a known header format.
     /// </exception>
+    [Obsolete("Use the overload that takes an explicit name parameter.")]
     public static BitmapFontFileContent Read(FileStream stream)
+    {
+        return Read(stream, stream.Name);
+    }
+
+    /// <summary>
+    /// Reads the content of the font file at the path specified.
+    /// </summary>
+    /// <param name="stream">A <see cref="Stream"/> containing the font file contents to read.</param>
+    /// <param name="name">The name or path that uniquely identifies this <see cref="BitmapFontFileContent"/>.</param>
+    /// <returns>A <see cref="BitmapFontFileContent"/> instance containing the results of the read operation.</returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the header for the file contents does not match a known header format.
+    /// </exception>
+    public static BitmapFontFileContent Read(Stream stream, string name)
     {
         long position = stream.Position;
         var sig = stream.ReadByte();
@@ -60,7 +75,7 @@ public static class BitmapFontFileReader
             _ => throw new InvalidOperationException("This does not appear to be a valid BMFont file!")
         };
 
-        bmfFile.Path = stream.Name;
+        bmfFile.Path = name;
 
         return bmfFile;
     }

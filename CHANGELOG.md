@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 > Unreleased changes exist in the current `develop` branch but have not been pushed as either a stable or prerelease NuGet package.
 >
 
+## [4.0.3]
+## Fixed
+- Resoled issue where `Matrix3x2.Decompose` returned incorrect values for transformation [@Std-Enigma](https://github.com/Std-Enigma) [#941](https://github.com/craftworkgames/MonoGame.Extended/pull/941)
+- Resolved bug in NinePatch where padding calculations were incorrect [@Dwergi](https://github.com/Dwergi) [#945](https://github.com/craftworkgames/MonoGame.Extended/pull/945)
+- Resoled bug in `Texture2DExtensions.CreateNinePatch` where source rectangles were calculated that overlapped. [@greenstack](https://github.com/greenstack) [#948](https://github.com/craftworkgames/MonoGame.Extended/pull/948)
+
+## Changed
+- `BitmapFont` uses `TitleContainer` to load stream of file [@Dwergi](https://github.com/Dwergi) [#946](https://github.com/craftworkgames/MonoGame.Extended/pull/946)
+- Revert UV code for `Sprite.OriginNormalize`, resolving incorrect calculations [@kaltinril](https://github.com/kaltinril) [#951](https://github.com/craftworkgames/MonoGame.Extended/pull/951)
+
+
 ## [4.0.2]
 ### Fixed
 - Resolved issue when reading .particle files for a ParticleEffect that cause a recursion loop bug creating a stack overflow exception [@AristurtleDev](https://github.com/AristurtleDev) [#938](https://github.com/craftworkgames/MonoGame.Extended/pull/938)

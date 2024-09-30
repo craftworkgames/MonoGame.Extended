@@ -298,7 +298,7 @@ public struct Matrix3x2 : IEquatable<Matrix3x2>
     public void Decompose(out Vector2 translation, out float rotation, out Vector2 scale)
     {
         translation.X = M31;
-        translation.Y = M31;
+        translation.Y = M32;
 
         rotation = (float)Math.Atan2(M21, M11);
 
