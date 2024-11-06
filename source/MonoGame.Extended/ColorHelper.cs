@@ -45,13 +45,45 @@ namespace MonoGame.Extended
         {
             if (string.IsNullOrEmpty(value))
                 return Color.Transparent;
-            var startIndex = 0;
-            if (value.StartsWith("#"))
-                startIndex++;
-            var r = int.Parse(value.Substring(startIndex, 2), NumberStyles.HexNumber);
-            var g = int.Parse(value.Substring(startIndex + 2, 2), NumberStyles.HexNumber);
-            var b = int.Parse(value.Substring(startIndex + 4, 2), NumberStyles.HexNumber);
-            var a = value.Length > 6 + startIndex ? int.Parse(value.Substring(startIndex + 6, 2), NumberStyles.HexNumber) : 255;
+
+            if (value[0] == '#')
+                value = value.Substring(1);
+
+            int r, g, b, a;
+            uint hexInt = uint.Parse(value, System.Globalization.NumberStyles.HexNumber);
+            switch (value.Length)
+            {
+                case 6:
+                    r = (byte)((hexInt & 0x00FF0000) >> 16);
+                    g = (byte)((hexInt & 0x0000FF00) >> 8);
+                    b = (byte)(hexInt & 0x000000FF);
+                    a = 255;
+                    break;
+
+                case 8:
+                    r = (byte)((hexInt & 0xFF000000) >> 24);
+                    g = (byte)((hexInt & 0x00FF0000) >> 16);
+                    b = (byte)((hexInt & 0x0000FF00) >> 8);
+                    a = (byte)(hexInt & 0x000000FF);
+                    break;
+
+                case 3:
+                    r = (byte)(((hexInt & 0x00000F00) | (hexInt & 0x00000F00) << 4) >> 8);
+                    g = (byte)(((hexInt & 0x000000F0) | (hexInt & 0x000000F0) << 4) >> 4);
+                    b = (byte)((hexInt & 0x0000000F) | (hexInt & 0x0000000F) << 4);
+                    a = 255;
+                    break;
+
+                case 4:
+                    r = (byte)(((hexInt & 0x0000F000) | (hexInt & 0x0000F000) << 4) >> 12);
+                    g = (byte)(((hexInt & 0x00000F00) | (hexInt & 0x00000F00) << 4) >> 8);
+                    b = (byte)(((hexInt & 0x000000F0) | (hexInt & 0x000000F0) << 4) >> 4);
+                    a = (byte)((hexInt & 0x0000000F) | (hexInt & 0x0000000F) << 4);
+                    break;
+
+                default:
+                    throw new ArgumentException($"Malformed hexadecimal color: {value}");
+            }
 
             return new Color(r, g, b, a);
         }
