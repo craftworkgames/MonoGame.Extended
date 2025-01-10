@@ -145,7 +145,7 @@ public class Sprite : IColorable
         Color = Color.White;
         IsVisible = true;
         Effect = SpriteEffects.None;
-        OriginNormalized = new Vector2(0.5f, 0.5f);
+        OriginNormalized = Vector2.Zero;
         Depth = 0.0f;
     }
 
