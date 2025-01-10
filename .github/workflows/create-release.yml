@@ -11,11 +11,6 @@ name: "Create Release"
 on:
   workflow_dispatch:
     inputs:
-      prerelease:
-        description: 'Is this a prerelease?'
-        required: true
-        type: boolean
-        default: true
       source-feed:
         description: 'Which source feed to publish to?'
         required: true
@@ -29,15 +24,12 @@ jobs:
   build:
     name: "Build MonoGame.Extended"
     runs-on: ubuntu-latest
-    env:
-      IS_PRERELEASE:  ${{ inputs.prerelease || '' }}
-      BUILD_NUMBER: ${{ inputs.prerelease && github.run_number || '' }}
 
     steps:
       - name: Clone Repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.prerelease && 'develop' || 'main' }}
+          ref: develop
 
       - name: Setup Dotnet
         uses: actions/setup-dotnet@v4
