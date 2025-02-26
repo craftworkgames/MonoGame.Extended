@@ -6,7 +6,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\source\MonoGame.Extended\KNI.Extended.csproj" />
-        <ProjectReference Include="..\..\source\MonoGame.Extended.Particles\KNI.Extended.Particles.csproj" />
     </ItemGroup>
 
     <ItemGroup>
