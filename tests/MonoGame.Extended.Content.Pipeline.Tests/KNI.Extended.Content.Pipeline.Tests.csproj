@@ -6,9 +6,9 @@
 
   <ItemGroup>
     <PackageReference Include="nkast.Xna.Framework.Content.Pipeline"
-                      Version="3.12.9001" />
+                      Version="4.0.9001" />
     <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Graphics"
-                      Version="3.12.9001" />
+                      Version="4.0.9001" />
   </ItemGroup>
 
   <ItemGroup>
