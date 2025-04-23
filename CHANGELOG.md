@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 > Unreleased changes exist in the current `develop` branch but have not been pushed as either a stable or prerelease NuGet package.
 >
 
+## [4.1.0]
+## Changed
+- Updated to reference current MonoGame 3.8.3
+
 ## [4.0.4]
 ## Fixed
 - Resolved issue where the `Sprite.Origin` property was incorrectly being set to the center origin of the sprite in the constructor. [@AristurtleDev](https://github.com/AristurtleDev) [#938](https://github.com/craftworkgames/MonoGame.Extended/pull/969)
