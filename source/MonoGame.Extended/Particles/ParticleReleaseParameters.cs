@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Particles
         {
             Quantity = 1;
             Speed = new Range<float>(-1f, 1f);
-            Color = new Range<HslColor>(Microsoft.Xna.Framework.Color.White.ToHsl(), Microsoft.Xna.Framework.Color.White.ToHsl());
+            Color = new Range<HslColor>(HslColor.FromRgb(Microsoft.Xna.Framework.Color.Wheat), HslColor.FromRgb(Microsoft.Xna.Framework.Color.White));
             Opacity = new Range<float>(0f, 1f);
             Scale = new Range<float>(1f, 1f);
             Rotation = new Range<float>(-MathHelper.Pi, MathHelper.Pi);

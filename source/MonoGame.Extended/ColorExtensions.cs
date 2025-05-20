@@ -44,7 +44,8 @@ namespace MonoGame.Extended
                 return m1 + (m2 - m1)*(2f/3f - h)*6f;
             return m1;
         }
-
+        
+        [Obsolete("Use HslColor.FromRgb instead.  This method will be removed in the next SemVer release")]
         public static HslColor ToHsl(this Color c)
         {
             var r = c.R/255f;
