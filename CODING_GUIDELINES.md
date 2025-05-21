@@ -57,6 +57,11 @@ These guidelines follow the general principle of "use Visual Studio defaults" an
 
 ### Extension Methods
 
+**Preferred Approach for MonoGame.Extended Types**:
+- For types that are part of MonoGame.Extended (where we control the source code), prefer static methods within the type itself rather than extension methods
+- Extension methods should primarily be used for extending types from MonoGame core or external libraries where we don't control the source
+
+**When Extension Methods Are Necessary**:
 - **Extension Class Naming**: `{TypeName}Extensions` (e.g., `ColorExtensions`, `Vector2Extensions`)
 - **One Extension Class Per Type**: Each type being extended should have its own extension class
 - **No Mixed Extensions**: Don't extend multiple types in a single extension class
