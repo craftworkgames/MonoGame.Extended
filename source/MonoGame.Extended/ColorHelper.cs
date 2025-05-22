@@ -133,8 +133,15 @@ namespace MonoGame.Extended
         }
 
 
-
-
+        /// <summary>
+        /// Creates a <see cref="Color"/> value from the specified name of a predefined color.
+        /// Gets a <see cref="Color"/> value from a p
+        /// </summary>
+        /// <param name="name">The name of the predefined color.</param>
+        /// <returns>
+        /// The <see cref="Color"/> value this method creates.
+        /// </returns>
+        /// <exception cref="InvalidOperationException"><paramref name="name"/> is not a valid color.</exception>
         public static Color FromName(string name)
         {
             Color color;
