@@ -15,6 +15,7 @@ namespace MonoGame.Extended
             return ColorHelper.FromHex(value);
         }
 
+        [Obsolete("Use HslColor.ToRgb instead.  This will be remove din the next major SemVer update")]
         public static Color ToRgb(this HslColor c)
         {
             var h = c.H;

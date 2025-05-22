@@ -310,6 +310,67 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        /// Convers a <see cref="HslColor"/> value to a <see cref="Microsoft.Xna.Framework.Color"/> value.
+        /// </summary>
+        /// <param name="hsl">The <see cref="HslColor"/> value to convert.</param>
+        /// <returns>
+        /// A <see cref="Microsoft.Xna.Framework.Color"/> value representing the RGB equivalent of the specified
+        /// <see cref="HslColor"/> value.
+        /// </returns>
+        public static Color ToRgb(HslColor hsl)
+        {
+            float h = hsl._h;
+            float s = hsl._s;
+            float l = hsl._l;
+
+            if (s < MathExtended.MachineEpsilon)
+            {
+                return new Color(l, l, l);
+            }
+
+            if (l <= MathExtended.MachineEpsilon)
+            {
+                return Color.Black;
+            }
+
+            h /= 360.0f;
+
+            float max = l < 0.5f ?
+                        l * (1 + s) :
+                        l + s - l * s;
+
+            float min = 2.0f * l - max;
+
+            float r = RgbFromHue(min, max, h + 0.3333333f);
+            float g = RgbFromHue(min, max, h);
+            float b = RgbFromHue(min, max, h - 0.3333333f);
+
+            return new Color(r, g, b);
+        }
+
+        private static float RgbFromHue(float min, float max, float hue)
+        {
+            hue = (hue + 1.0f) % 1.0f;
+
+            if (hue * 6.0f < 1.0f)
+            {
+                return min + (max - min) * 6.0f * hue;
+            }
+
+            if (hue * 2.0f < 1.0f)
+            {
+                return max;
+            }
+
+            if (hue * 3.0f < 2.0f)
+            {
+                return min + (max - min) * (2.0f / 3.0f - hue) * 6.0f;
+            }
+
+            return min;
+        }
+
+        /// <summary>
         /// Converts an RGB color to an HSL color.
         /// </summary>
         /// <param name="color">The RGB color to convert.</param>
