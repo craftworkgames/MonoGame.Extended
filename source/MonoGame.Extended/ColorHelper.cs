@@ -134,7 +134,6 @@ namespace MonoGame.Extended
             return new Color(r, g, b, a);
         }
 
-
         /// <summary>
         /// Creates a <see cref="Color"/> value from the specified name of a predefined color.
         /// Gets a <see cref="Color"/> value from a p
