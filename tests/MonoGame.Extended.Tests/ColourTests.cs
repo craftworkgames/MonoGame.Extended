@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Xunit;
 
-namespace MonoGame.Extended.Tests.Particles
+namespace MonoGame.Extended.Tests
 {
     public class ColourTests
     {
@@ -44,7 +44,7 @@ namespace MonoGame.Extended.Tests.Particles
             {
                 var x = new HslColor(360f, 1f, 1f);
 
-                Object y = new HslColor(360f, 1f, 1f);
+                object y = new HslColor(360f, 1f, 1f);
                 Assert.Equal(x, y);
             }
 
@@ -53,7 +53,7 @@ namespace MonoGame.Extended.Tests.Particles
             {
                 var x = new HslColor(360f, 1f, 1f);
 
-                Object y = new HslColor(0f, 1f, 0f);
+                object y = new HslColor(0f, 1f, 0f);
                 Assert.False(x.Equals(y));
             }
 
