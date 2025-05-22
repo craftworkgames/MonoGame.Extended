@@ -4,7 +4,7 @@ using Xunit;
 
 namespace MonoGame.Extended.Tests
 {
-    public class ColourTests
+    public class HslColorTests
     {
         public class Constructor
         {
