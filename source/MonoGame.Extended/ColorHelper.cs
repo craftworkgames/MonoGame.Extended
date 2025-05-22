@@ -20,12 +20,12 @@ namespace MonoGame.Extended
                 color.X = color.Y = color.Z = hsl.Z;
             else
             {
-                var q = hsl.Z < 0.5f ? hsl.Z*(1.0f + hsl.Y) : hsl.Z + hsl.Y - hsl.Z*hsl.Y;
-                var p = 2.0f*hsl.Z - q;
+                var q = hsl.Z < 0.5f ? hsl.Z * (1.0f + hsl.Y) : hsl.Z + hsl.Y - hsl.Z * hsl.Y;
+                var p = 2.0f * hsl.Z - q;
 
-                color.X = HueToRgb(p, q, hsl.X + 1.0f/3.0f);
+                color.X = HueToRgb(p, q, hsl.X + 1.0f / 3.0f);
                 color.Y = HueToRgb(p, q, hsl.X);
-                color.Z = HueToRgb(p, q, hsl.X - 1.0f/3.0f);
+                color.Z = HueToRgb(p, q, hsl.X - 1.0f / 3.0f);
             }
 
             return new Color(color);
@@ -35,9 +35,9 @@ namespace MonoGame.Extended
         {
             if (t < 0.0f) t += 1.0f;
             if (t > 1.0f) t -= 1.0f;
-            if (t < 1.0f/6.0f) return p + (q - p)*6.0f*t;
-            if (t < 1.0f/2.0f) return q;
-            if (t < 2.0f/3.0f) return p + (q - p)*(2.0f/3.0f - t)*6.0f;
+            if (t < 1.0f / 6.0f) return p + (q - p) * 6.0f * t;
+            if (t < 1.0f / 2.0f) return q;
+            if (t < 2.0f / 3.0f) return p + (q - p) * (2.0f / 3.0f - t) * 6.0f;
             return p;
         }
 
@@ -96,20 +96,50 @@ namespace MonoGame.Extended
             var ax = $"{color.A:x2}";
             return $"#{rx}{gx}{bx}{ax}";
         }
-        
+
         private static readonly Dictionary<string, Color> _colorsByName = typeof(Color)
             .GetRuntimeProperties()
             .Where(p => p.PropertyType == typeof(Color))
-            .ToDictionary(p => p.Name, p => (Color) p.GetValue(null), StringComparer.OrdinalIgnoreCase);
+            .ToDictionary(p => p.Name, p => (Color)p.GetValue(null), StringComparer.OrdinalIgnoreCase);
 
         public static Color FromName(string name)
         {
             Color color;
 
-            if(_colorsByName.TryGetValue(name, out color))
+            if (_colorsByName.TryGetValue(name, out color))
                 return color;
 
             throw new InvalidOperationException($"{name} is not a valid color");
+        }
+
+        /// <summary>
+        /// Returns a new <see cref="Color"/> value based on a packed value in the ABGR format.
+        /// </summary>
+        /// <remarks>
+        /// This is useful for when you have HTML hex style values such as #123456 and want to use it in hex format for
+        /// the parameter.  Since Color's standard format is RGBA, you would have to do new Color(0xFF563212) since R
+        /// is the LSB.  With this method, you can write it the same way it is written in HTML hex by doing
+        /// <c>>ColorExtensions.FromAbgr(0x123456FF);</c>
+        /// </remarks>
+        /// <param name="abgr">The packed color value in ABGR format</param>
+        /// <returns>The <see cref="Color"/> value created</returns>
+        public static Color FromAbgr(uint abgr)
+        {
+            uint rgba = (abgr & 0x000000FF) << 24 | // Alpha
+                        (abgr & 0x0000FF00) << 8 | // Blue
+                        (abgr & 0x00FF0000) >> 8 | // Green
+                        (abgr & 0xFF000000) >> 24;  // Red
+
+            Color result;
+
+#if FNA
+            result = default;
+            result.PackedValue = rgba;
+#else
+            result = new Color(rgba);
+#endif
+
+            return result;
         }
     }
 }

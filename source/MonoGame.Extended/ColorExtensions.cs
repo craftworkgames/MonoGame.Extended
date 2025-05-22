@@ -91,6 +91,7 @@ namespace MonoGame.Extended
         /// </remarks>
         /// <param name="abgr">The packed color value in ABGR format</param>
         /// <returns>The <see cref="Color"/> value created</returns>
+        [Obsolete("Use ColorHelper.FromAbgr instead.  This will be removed in the next major SemVer release.")]
         public static Color FromAbgr(uint abgr)
         {
             uint rgba = (abgr & 0x000000FF) << 24 | // Alpha
