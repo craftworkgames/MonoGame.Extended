@@ -9,6 +9,7 @@ namespace MonoGame.Extended
     /// </summary>
     public static class ColorExtensions
     {
+        [Obsolete("Use ColorHelper.FromHex instead. This will be removed in the next major SemVer release.")]
         public static Color FromHex(string value)
         {
             return ColorHelper.FromHex(value);
