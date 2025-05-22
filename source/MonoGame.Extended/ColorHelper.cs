@@ -9,6 +9,7 @@ namespace MonoGame.Extended
 {
     public static class ColorHelper
     {
+        [Obsolete("Use HslColor.ToRgb instead.  This will be removed in the next major SemVer release.")]
         //http://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
         public static Color FromHsl(float hue, float saturation, float lightness)
         {
@@ -31,6 +32,7 @@ namespace MonoGame.Extended
             return new Color(color);
         }
 
+        [Obsolete("This will be removed in the next major SemVer release")]
         private static float HueToRgb(float p, float q, float t)
         {
             if (t < 0.0f) t += 1.0f;
