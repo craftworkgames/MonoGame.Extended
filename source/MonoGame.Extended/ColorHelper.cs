@@ -9,7 +9,7 @@ namespace MonoGame.Extended
 
     public static class ColorHelper
     {
-        private static readonly Dictionary<string, Color> _colorsByName = typeof(Color)
+        private static readonly Dictionary<string, Color> s_colorsByName = typeof(Color)
             .GetRuntimeProperties()
             .Where(p => p.PropertyType == typeof(Color))
             .ToDictionary(p => p.Name, p => (Color)p.GetValue(null), StringComparer.OrdinalIgnoreCase);
@@ -139,7 +139,7 @@ namespace MonoGame.Extended
         {
             Color color;
 
-            if (_colorsByName.TryGetValue(name, out color))
+            if (s_colorsByName.TryGetValue(name, out color))
                 return color;
 
             throw new InvalidOperationException($"{name} is not a valid color");
