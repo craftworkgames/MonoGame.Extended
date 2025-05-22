@@ -88,6 +88,7 @@ namespace MonoGame.Extended
             return new Color(r, g, b, a);
         }
 
+        [Obsolete("Use ColorExtensions.ToHex instead.  This will be removed in the next major SemVer release.")]
         public static string ToHex(Color color)
         {
             var rx = $"{color.R:x2}";
