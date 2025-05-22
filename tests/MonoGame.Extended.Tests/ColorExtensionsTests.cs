@@ -10,19 +10,60 @@ public class ColorExtensionsTests
 {
     public class ToHex
     {
-        [Theory]
-        [InlineData(0, 0, 0, 0, "#00000000")]
-        [InlineData(255, 255, 255, 255, "#ffffffff")]
-        [InlineData(0, 0, 0, 255, "#000000ff")]
-        [InlineData(0, 0, 255, 0, "#0000ff00")]
-        [InlineData(0, 255, 0, 0, "#00ff0000")]
-        [InlineData(255, 0, 0, 0, "#ff000000")]
-        [InlineData(171, 205, 239, 128, "#abcdef80")]
-        public void ReturnsCorrectHex(int r, int g, int b, int a, string expected)
+        [Fact]
+        public void Color_Transparent_ReturnsCorrectHex()
         {
-            Color color = new Color(r, g, b, a);
-            string result = color.ToHex();
-            Assert.Equal(expected, result);
+            Color transparent = new Color(0, 0, 0, 0);
+            string hex = transparent.ToHex();
+            Assert.Equal("#00000000", hex);
+        }
+
+        [Fact]
+        public void Color_White_ReturnsCorrectHex()
+        {
+            Color white = new Color(255, 255, 255);
+            string hex = white.ToHex();
+            Assert.Equal("#ffffffff", hex);
+        }
+
+        [Fact]
+        public void Color_Black_ReturnsCorrectHex()
+        {
+            Color black = new Color(0, 0, 0);
+            string hex = black.ToHex();
+            Assert.Equal("#000000ff", hex);
+        }
+
+        [Fact]
+        public void Color_Red_ReturnsCorrectHex()
+        {
+            Color red = new Color(255, 0, 0);
+            string hex = red.ToHex();
+            Assert.Equal("#ff0000ff", hex);
+        }
+
+        [Fact]
+        public void Color_Green_ReturnsCorrectHex()
+        {
+            Color green = new Color(0, 255, 0);
+            string hex = green.ToHex();
+            Assert.Equal("#00ff00ff", hex);
+        }
+
+        [Fact]
+        public void Color_Blue_ReturnsCorrectHex()
+        {
+            Color blue = new Color(0, 0, 255);
+            string hex = blue.ToHex();
+            Assert.Equal("#0000ffff", hex);
+        }
+
+        [Fact]
+        public void Color_ReturnsCorrectHex()
+        {
+            Color color = new Color(170, 187, 204, 128);
+            string hex = color.ToHex();
+            Assert.Equal("#aabbcc80", hex);
         }
     }
 }
