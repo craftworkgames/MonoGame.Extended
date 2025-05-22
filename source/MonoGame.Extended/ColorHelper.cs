@@ -6,7 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
-
+    /// <summary>
+    /// Provides utility methods for working with <see cref="Color"/> values.
+    /// </summary>
     public static class ColorHelper
     {
         private static readonly Dictionary<string, Color> s_colorsByName = typeof(Color)
