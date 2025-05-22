@@ -144,10 +144,10 @@ namespace MonoGame.Extended
         /// <exception cref="InvalidOperationException"><paramref name="name"/> is not a valid color.</exception>
         public static Color FromName(string name)
         {
-            Color color;
-
-            if (s_colorsByName.TryGetValue(name, out color))
+            if (s_colorsByName.TryGetValue(name, out Color color))
+            {
                 return color;
+            }
 
             throw new InvalidOperationException($"{name} is not a valid color");
         }
