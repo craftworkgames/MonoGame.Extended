@@ -15,7 +15,7 @@ namespace MonoGame.Extended
             return ColorHelper.FromHex(value);
         }
 
-        [Obsolete("Use HslColor.ToRgb instead.  This will be remove din the next major SemVer update")]
+        [Obsolete("Use HslColor.ToRgb instead.  This will be removed in the next major SemVer update")]
         public static Color ToRgb(this HslColor c)
         {
             var h = c.H;
@@ -35,6 +35,7 @@ namespace MonoGame.Extended
                 ComponentFromHue(min, max, h - 1f/3f));
         }
 
+        [Obsolete("This will be removed in the next major SemVer release.")]
         private static float ComponentFromHue(float m1, float m2, float h)
         {
             h = (h + 1f)%1f;
