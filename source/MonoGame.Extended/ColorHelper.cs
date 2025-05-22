@@ -9,6 +9,11 @@ namespace MonoGame.Extended
 
     public static class ColorHelper
     {
+        private static readonly Dictionary<string, Color> _colorsByName = typeof(Color)
+            .GetRuntimeProperties()
+            .Where(p => p.PropertyType == typeof(Color))
+            .ToDictionary(p => p.Name, p => (Color)p.GetValue(null), StringComparer.OrdinalIgnoreCase);
+
         /// <summary>
         /// Converts a hexadecimal color string to a <see cref="Color"/> value.
         /// </summary>
@@ -128,10 +133,7 @@ namespace MonoGame.Extended
         }
 
 
-        private static readonly Dictionary<string, Color> _colorsByName = typeof(Color)
-            .GetRuntimeProperties()
-            .Where(p => p.PropertyType == typeof(Color))
-            .ToDictionary(p => p.Name, p => (Color)p.GetValue(null), StringComparer.OrdinalIgnoreCase);
+
 
         public static Color FromName(string name)
         {
