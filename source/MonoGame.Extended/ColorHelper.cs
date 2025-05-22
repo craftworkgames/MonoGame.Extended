@@ -150,7 +150,7 @@ namespace MonoGame.Extended
         /// This is useful for when you have HTML hex style values such as #123456 and want to use it in hex format for
         /// the parameter.  Since Color's standard format is RGBA, you would have to do new Color(0xFF563212) since R
         /// is the LSB.  With this method, you can write it the same way it is written in HTML hex by doing
-        /// <c>>ColorHelper.FromAbgr(0x123456FF);</c>
+        /// <c>ColorHelper.FromAbgr(0x123456FF);</c>
         /// </remarks>
         /// <param name="abgr">The packed color value in ABGR format</param>
         /// <returns>The <see cref="Color"/> value created</returns>
