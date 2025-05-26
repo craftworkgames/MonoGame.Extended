@@ -1,36 +1,95 @@
-﻿using System;
+// Copyright (c) Craftwork Games. All rights reserved.
+// Licensed under the MIT license.
+// See LICENSE file in the project root for full license information.
 
-namespace MonoGame.Extended.Particles.Modifiers
+using System;
+using Microsoft.Xna.Framework;
+using MonoGame.Extended.Particles.Data;
+
+namespace MonoGame.Extended.Particles.Modifiers;
+
+/// <summary>
+/// A modifier that changes particle colors based on their velocity.
+/// </summary>
+/// <remarks>
+/// The <see cref="VelocityColorModifier"/> adjusts particle colors dynamically according to their
+/// movement speed. Particles can transition smoothly between two defined colors:
+/// <list type="bullet">
+///   <item>A color for stationary or slow-moving particles (<see cref="StationaryColor"/>)</item>
+///   <item>A color for fast-moving particles (<see cref="VelocityColor"/>)</item>
+/// </list>
+///
+/// The color values are represented in HSL (Hue, Saturation, Lightness) format as a Vector3.
+/// </remarks>
+public class VelocityColorModifier : Modifier
 {
-    public class VelocityColorModifier : Modifier
+    /// <summary>
+    /// Gets or sets the color for particles that are stationary or moving slowly.
+    /// </summary>
+    /// <remarks>
+    /// This color is applied to particles with zero velocity and serves as the starting
+    /// point for color interpolation. The Vector3 components represent HSL values
+    /// (Hue, Saturation, Lightness).
+    /// </remarks>
+    public Vector3 StationaryColor;
+
+    /// <summary>
+    /// Gets or sets the color for particles that have reached or exceeded the velocity threshold.
+    /// </summary>
+    /// <remarks>
+    /// This color is applied to fast-moving particles and serves as the end point
+    /// for color interpolation. The Vector3 components represent HSL values
+    /// (Hue, Saturation, Lightness).
+    /// </remarks>
+    public Vector3 VelocityColor;
+
+    /// <summary>
+    /// Gets or sets the velocity magnitude at which particles fully transition to the velocity color.
+    /// </summary>
+    /// <remarks>
+    /// This value defines the speed threshold that determines when a particle should
+    /// display the full <see cref="VelocityColor"/>. Particles moving slower than this
+    /// threshold will display a color interpolated between <see cref="StationaryColor"/> and
+    /// <see cref="VelocityColor"/> based on their speed relative to this threshold.
+    /// </remarks>
+    public float VelocityThreshold;
+
+    /// <summary>
+    /// Updates all particles by changing their colors based on their current velocity.
+    /// </summary>
+    /// <param name="elapsedSeconds">The elapsed time, in seconds, since the last update.</param>
+    /// <param name="particle">A pointer to the first particle to update.</param>
+    /// <param name="count">The number of particles to update.</param>
+    public override unsafe void Update(float elapsedSeconds, Particle* particle, int count)
     {
-        public HslColor StationaryColor { get; set; }
-        public HslColor VelocityColor { get; set; }
-        public float VelocityThreshold { get; set; }
+        float velocityThreshold2 = VelocityThreshold * VelocityThreshold;
 
-        public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        while (count-- > 0)
         {
-            var velocityThreshold2 = VelocityThreshold*VelocityThreshold;
+            float velocitySquared = particle->Velocity[0] * particle->Velocity[0] +
+                                    particle->Velocity[1] * particle->Velocity[1];
 
-            while (iterator.HasNext)
+            if (velocitySquared >= velocityThreshold2)
             {
-                var particle = iterator.Next();
-                var velocity2 = particle->Velocity.X*particle->Velocity.X +
-                                particle->Velocity.Y*particle->Velocity.Y;
-                var deltaColor = VelocityColor - StationaryColor;
-
-                if (velocity2 >= velocityThreshold2)
-                    VelocityColor.CopyTo(out particle->Color);
-                else
-                {
-                    var t = (float) Math.Sqrt(velocity2)/VelocityThreshold;
-
-                    particle->Color = new HslColor(
-                        deltaColor.H*t + StationaryColor.H,
-                        deltaColor.S*t + StationaryColor.S,
-                        deltaColor.L*t + StationaryColor.L);
-                }
+                particle->Color[0] = VelocityColor.X;
+                particle->Color[1] = VelocityColor.Y;
+                particle->Color[2] = VelocityColor.Z;
             }
+            else
+            {
+                Vector3 deltaColor = VelocityColor - StationaryColor;
+                float t = MathF.Sqrt(velocitySquared) / VelocityThreshold;
+
+                float h = deltaColor.X * t + StationaryColor.X;
+                float s = deltaColor.Y * t + StationaryColor.Y;
+                float l = deltaColor.Z * t + StationaryColor.Z;
+
+                particle->Color[0] = h;
+                particle->Color[1] = s;
+                particle->Color[2] = l;
+            }
+
+            particle++;
         }
     }
 }

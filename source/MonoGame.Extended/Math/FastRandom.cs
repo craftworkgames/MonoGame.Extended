@@ -11,7 +11,7 @@ namespace MonoGame.Extended
     /// <remarks>
     /// <para>
     ///     This implementation uses the same constants as Microsoft Visual C++ rand() function:
-    /// 
+    ///
     ///     a=214013
     ///     c=2531011
     ///     m=2^31
@@ -183,6 +183,15 @@ namespace MonoGame.Extended
             _impl.NextUnitVector(out vector);
         }
 
+        /// <summary>
+        /// Gets a random unit vector.
+        /// </summary>
+        /// <param name="vector">A pointer to the Vector2 where the random unit vector will be stored.</param>
+        public unsafe void NextUnitVector(Vector2* vector)
+        {
+            _impl.NextUnitVector(vector);
+        }
+
         #region IFastRandomImplementation
         private interface IFastRandomImpl
         {
@@ -196,6 +205,7 @@ namespace MonoGame.Extended
             float NextSingle(Range<float> range);
             float NextAngle();
             void NextUnitVector(out Vector2 vector);
+            unsafe void NextUnitVector(Vector2* vector);
         }
         #endregion
 
@@ -270,6 +280,13 @@ namespace MonoGame.Extended
                 vector.X = MathF.Cos(angle);
                 vector.Y = MathF.Sin(angle);
             }
+
+            public unsafe void NextUnitVector(Vector2* vector)
+            {
+                float angle = NextAngle();
+                vector->X = MathF.Cos(angle);
+                vector->Y = MathF.Sin(angle);
+            }
         }
         #endregion
 
@@ -335,6 +352,11 @@ namespace MonoGame.Extended
             public void NextUnitVector(out Vector2 vector)
             {
                 LocalRandom.NextUnitVector(out vector);
+            }
+
+            public unsafe void NextUnitVector(Vector2* vector)
+            {
+                LocalRandom.NextUnitVector(vector);
             }
         }
         #endregion

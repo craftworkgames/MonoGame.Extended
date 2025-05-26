@@ -1,157 +1,191 @@
+﻿// Copyright (c) Craftwork Games. All rights reserved.
+// Licensed under the MIT license.
+// See LICENSE file in the project root for full license information.
+
 using System;
 using System.Runtime.InteropServices;
+using MonoGame.Extended.Particles.Data;
 
-namespace MonoGame.Extended.Particles
+namespace MonoGame.Extended.Particles;
+
+/// <summary>
+/// Represents a memory buffer that efficiently stores and manages particles in contiguous unmanaged memory.
+/// </summary>
+/// <remarks>
+/// The <see cref="ParticleBuffer"/> class provides high-performance memory management for particle systems by
+/// allocating an unmanaged memory block to store particle data. It handles allocation, deallocation, and compaction of
+/// the buffer as particles are added and removed.
+/// </remarks>
+public sealed class ParticleBuffer : IDisposable
 {
-    public class ParticleBuffer : IDisposable
+    private int _tail;
+
+    /// <summary>
+    /// Gets the native pointer to the unmanaged memory block where particles are stored.
+    /// </summary>
+    /// <remarks>
+    /// This pointer should be used carefully and only within unsafe code blocks. The memory it points to is
+    /// automatically freed when the <see cref="ParticleBuffer"/> is disposed.
+    /// </remarks>
+    public readonly IntPtr NativePointer;
+
+    /// <summary>
+    /// Gets the maximum number of particles that can be stored in this buffer.
+    /// </summary>
+    public readonly int Size;
+
+    /// <summary>
+    /// Gets the number of additional particles that can be added to the buffer before it is full.
+    /// </summary>
+    public int Available
     {
-        private readonly ParticleIterator _iterator;
-        private readonly IntPtr _nativePointer;
-
-        // points to the first memory pos after the buffer
-        protected readonly unsafe Particle* BufferEnd;
-
-        // points to the particle after the last active particle.
-        protected unsafe Particle* Tail;
-
-        public unsafe ParticleBuffer(int size)
+        get
         {
-            Size = size;
-            _nativePointer = Marshal.AllocHGlobal(SizeInBytes);
+            return Size - _tail;
+        }
+    }
 
-            BufferEnd = (Particle*) (_nativePointer + SizeInBytes);
-            Head = (Particle*) _nativePointer;
-            Tail = (Particle*) _nativePointer;
+    /// <summary>
+    /// Gets the current number of active particles in the buffer.
+    /// </summary>
+    public int Count
+    {
+        get
+        {
+            return _tail;
+        }
+    }
 
-            _iterator = new ParticleIterator(this);
+    /// <summary>
+    /// Gets the total size of the buffer in bytes.
+    /// </summary>
+    public int SizeInBytes
+    {
+        get
+        {
+            return Particle.SizeInBytes * Size;
+        }
+    }
 
-            GC.AddMemoryPressure(SizeInBytes);
+    /// <summary>
+    /// Gets the size of the currently active portion of the buffer in bytes.
+    /// </summary>
+    public int ActiveSizeInBytes
+    {
+        get
+        {
+            return Particle.SizeInBytes * _tail;
+        }
+    }
+
+    /// <summary>
+    /// Gets a value indicating whether this <see cref="ParticleBuffer"/> has been disposed.
+    /// </summary>
+    public bool IsDisposed { get; private set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ParticleBuffer"/> class with the specified capacity.
+    /// </summary>
+    /// <param name="size">The maximum number of particles that can be stored in the buffer.</param>
+    public ParticleBuffer(int size)
+    {
+        Size = size;
+        NativePointer = Marshal.AllocCoTaskMem(SizeInBytes);
+        GC.AddMemoryPressure(SizeInBytes);
+    }
+
+    /// <summary>Finalizer</summary>
+    ~ParticleBuffer()
+    {
+        Dispose(false);
+    }
+
+    /// <summary>
+    /// Allocates space in the buffer for a specified number of particles to be released.
+    /// </summary>
+    /// <remarks>
+    /// This method supports the particle emission process by reserving memory for new particles.
+    /// It's called by <see cref="ParticleEmitter.Release"/> when particles are being emitted.
+    /// </remarks>
+    /// <param name="releaseQuantity">The number of particles to allocate space for.</param>
+    /// <param name="first">When this method returns, contains a pointer to the first allocated particle.</param>
+    /// <returns>
+    /// The actual number of particles that were allocated, which may be less than requested if the buffer is nearly
+    /// full.
+    /// </returns>
+    public unsafe int Release(int releaseQuantity, out Particle* first)
+    {
+        int numToRelease = Math.Min(releaseQuantity, Available);
+        int oldTail = _tail;
+        _tail += numToRelease;
+        first = (Particle*)IntPtr.Add(NativePointer, oldTail * Particle.SizeInBytes);
+        return numToRelease;
+    }
+
+    /// <summary>
+    /// Removes a specified number of particles from the beginning of the buffer and compacts the remaining data.
+    /// </summary>
+    /// <param name="number">The number of particles to remove from the buffer.</param>
+    public unsafe void Reclaim(int number)
+    {
+        _tail -= number;
+        MemCpy(NativePointer, IntPtr.Add(NativePointer, number * Particle.SizeInBytes), ActiveSizeInBytes);
+    }
+
+    /// <summary>
+    /// Copies the active particle data to a specified destination in memory.
+    /// </summary>
+    /// <param name="destination">The destination memory address to copy the particle data to.</param>
+    public unsafe void CopyTo(IntPtr destination)
+    {
+        MemCpy(destination, NativePointer, ActiveSizeInBytes);
+    }
+
+    /// <summary>
+    /// Copies the active particle data to a specified destination in reverse order.
+    /// </summary>
+    /// <param name="destination">The destination memory address to copy the particle data to.</param>
+    public unsafe void CopyToReverse(IntPtr destination)
+    {
+        int offset = 0;
+
+        for (var i = ActiveSizeInBytes - Particle.SizeInBytes; i >= 0; i -= Particle.SizeInBytes)
+        {
+            MemCpy(IntPtr.Add(destination, offset), IntPtr.Add(NativePointer, i), Particle.SizeInBytes);
+            offset += Particle.SizeInBytes;
+        }
+    }
+
+    private static unsafe void MemCpy(IntPtr dest, IntPtr src, int count)
+    {
+        Buffer.MemoryCopy(
+           source: (void*)src,
+           destination: (void*)dest,
+           destinationSizeInBytes: count,
+           sourceBytesToCopy: count);
+    }
+
+    /// <summary>
+    /// Releases all resources used by the <see cref="ParticleBuffer"/>.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    private void Dispose(bool disposing)
+    {
+        if (IsDisposed) { return; }
+
+        if (disposing)
+        {
+            //  No managed resources to free.
         }
 
-        public int Size { get; }
+        Marshal.FreeHGlobal(NativePointer);
+        GC.RemoveMemoryPressure(Particle.SizeInBytes * Size);
 
-        public ParticleIterator Iterator => _iterator.Reset();
-        // pointer to the first particle
-        public unsafe Particle* Head { get; private set; }
-
-        // Number of available particle spots in the buffer
-        public int Available => Size - Count;
-        // current number of particles
-        public int Count { get; private set; }
-        // total size of the buffer (add one extra spot in memory for margin between head and tail so the iterator can see that it's at the end)
-        public int SizeInBytes => Particle.SizeInBytes*(Size + 1);
-        // total size of active particles
-        public int ActiveSizeInBytes => Particle.SizeInBytes*Count;
-
-        /// <summary>
-        /// Gets a value that indicates whether this instance of the <see cref="ParticleBuffer"/> class has been
-        /// disposed.
-        /// </summary>
-        public bool IsDisposed { get; set; }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if(IsDisposed)
-            {
-                return;
-            }
-
-            Marshal.FreeHGlobal(_nativePointer);
-            GC.RemoveMemoryPressure(SizeInBytes);
-            IsDisposed = true;
-        }
-
-        /// <summary>
-        ///     Release the given number of particles or the most available.
-        ///     Returns a started iterator to iterate over the new particles.
-        /// </summary>
-        public unsafe ParticleIterator Release(int releaseQuantity)
-        {
-            ThrowIfDisposed();
-
-            var numToRelease = Math.Min(releaseQuantity, Available);
-
-            var prevCount = Count;
-            Count += numToRelease;
-
-            Tail += numToRelease;
-            if (Tail >= BufferEnd) Tail -= Size + 1;
-
-            return Iterator.Reset(prevCount);
-        }
-
-        public unsafe void Reclaim(int number)
-        {
-            ThrowIfDisposed();
-
-            Count -= number;
-
-            Head += number;
-            if (Head >= BufferEnd)
-                Head -= Size + 1;
-        }
-
-        private void ThrowIfDisposed()
-        {
-            if(IsDisposed)
-            {
-                throw new ObjectDisposedException(nameof(ParticleBuffer));
-            }
-        }
-
-        ~ParticleBuffer()
-        {
-            Dispose(false);
-        }
-
-        public class ParticleIterator
-        {
-            private readonly ParticleBuffer _buffer;
-
-            private unsafe Particle* _current;
-
-            public int Total;
-
-            public ParticleIterator(ParticleBuffer buffer)
-            {
-                _buffer = buffer;
-            }
-
-            public unsafe bool HasNext => _current != _buffer.Tail;
-
-            public unsafe ParticleIterator Reset()
-            {
-                _current = _buffer.Head;
-                Total = _buffer.Count;
-                return this;
-            }
-
-            internal unsafe ParticleIterator Reset(int offset)
-            {
-                Total = _buffer.Count;
-
-                _current = _buffer.Head + offset;
-                if (_current >= _buffer.BufferEnd)
-                    _current -= _buffer.Size + 1;
-
-                return this;
-            }
-
-            public unsafe Particle* Next()
-            {
-                var p = _current;
-                _current++;
-                if (_current == _buffer.BufferEnd)
-                    _current = (Particle*) _buffer._nativePointer;
-
-                return p;
-            }
-        }
+        IsDisposed = true;
     }
 }

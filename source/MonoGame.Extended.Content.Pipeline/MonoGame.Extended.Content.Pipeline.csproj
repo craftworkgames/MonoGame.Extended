@@ -13,9 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.2.0" />
 
-    <PackageReference Include="MonoGame.Framework.Content.Pipeline"
-                      Version="3.8.3"
-                      PrivateAssets="All" />
+    <PackageReference Include="MonoGame.Framework.Content.Pipeline" Version="3.8.3" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
