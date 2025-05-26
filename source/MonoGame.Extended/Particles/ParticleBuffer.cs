@@ -90,7 +90,7 @@ public sealed class ParticleBuffer : IDisposable
     public ParticleBuffer(int size)
     {
         Size = size;
-        NativePointer = Marshal.AllocCoTaskMem(SizeInBytes);
+        NativePointer = Marshal.AllocHGlobal(SizeInBytes);
         GC.AddMemoryPressure(SizeInBytes);
     }
 
