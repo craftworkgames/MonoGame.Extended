@@ -579,7 +579,7 @@ public sealed class ParticleEffectReader : IDisposable
             return;
         }
 
-        _reader.Dispose();
+        _reader?.Dispose();
 
         IsDisposed = true;
         GC.SuppressFinalize(this);
