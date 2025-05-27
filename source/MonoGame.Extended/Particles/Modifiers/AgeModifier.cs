@@ -32,7 +32,7 @@ public class AgeModifier : Modifier
     /// Updates all particles by applying each interpolator in the collection to each particle.
     /// </summary>
     /// <inheritdoc/>
-    public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+    public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
     {
         while (iterator.HasNext)
         {

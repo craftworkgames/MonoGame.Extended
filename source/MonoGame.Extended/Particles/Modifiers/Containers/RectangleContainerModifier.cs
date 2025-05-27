@@ -51,7 +51,7 @@ public sealed class RectangleContainerModifier : Modifier
     /// Updates all particles by constraining them to the rectangular boundary.
     /// </summary>
     /// <inheritdoc/>
-    public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+    public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
     {
         while (iterator.HasNext)
         {

@@ -38,7 +38,7 @@ public class VelocityModifier : Modifier
     /// Updates all particles by applying interpolators with an amount based on each particle's velocity.
     /// </summary>
     /// <inheritdoc />
-    public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+    public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
     {
         float velocityThreshold2 = VelocityThreshold * VelocityThreshold;
 

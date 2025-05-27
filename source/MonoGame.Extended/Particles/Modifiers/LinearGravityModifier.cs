@@ -41,7 +41,7 @@ public class LinearGravityModifier : Modifier
     /// Updates all particles by applying a linear gravitational force.
     /// </summary>
     /// <inheritdoc/>
-    public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+    public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
     {
         Vector2 vector = Direction * (Strength * elapsedSeconds);
 

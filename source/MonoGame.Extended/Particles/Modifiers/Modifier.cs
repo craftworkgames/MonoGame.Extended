@@ -62,5 +62,5 @@ public abstract class Modifier
     /// </summary>
     /// <param name="elapsedSeconds">The elapsed time, in seconds, since the last update.</param>
     /// <param name="iterator">The iterator used to iterate the particles ot update.</param>
-    public abstract void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator);
+    public abstract void Update(float elapsedSeconds, ParticleIterator iterator);
 }

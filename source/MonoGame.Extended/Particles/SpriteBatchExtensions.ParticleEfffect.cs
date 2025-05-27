@@ -56,7 +56,7 @@ public static class SpriteBatchExtensions
                                        stackalloc IntPtr[count] :
                                        new IntPtr[count];
 
-            ParticleBuffer.ParticleIterator iterator = emitter.Buffer.Iterator;
+            ParticleIterator iterator = emitter.Buffer.Iterator;
             int index = 0;
 
             while (iterator.HasNext)
@@ -71,7 +71,7 @@ public static class SpriteBatchExtensions
         }
         else
         {
-            ParticleBuffer.ParticleIterator iterator = emitter.Buffer.Iterator;
+            ParticleIterator iterator = emitter.Buffer.Iterator;
 
             while (iterator.HasNext)
             {

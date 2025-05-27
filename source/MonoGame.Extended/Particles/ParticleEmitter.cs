@@ -280,7 +280,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
 
         if (Buffer.Count > 0)
         {
-            ParticleBuffer.ParticleIterator iterator = Buffer.Iterator;
+            ParticleIterator iterator = Buffer.Iterator;
             while (iterator.HasNext)
             {
                 Particle* particle = iterator.Next();
@@ -341,7 +341,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// </remarks>
     private void Release(Vector2 position, int numToRelease, float layerDepth)
     {
-        ParticleBuffer.ParticleIterator iterator = Buffer.Release(numToRelease);
+        ParticleIterator iterator = Buffer.Release(numToRelease);
 
         while (iterator.HasNext)
         {
@@ -386,7 +386,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
     private void ReclaimExpiredParticles()
     {
         int expired = 0;
-        ParticleBuffer.ParticleIterator iterator = Buffer.Iterator;
+        ParticleIterator iterator = Buffer.Iterator;
         while (iterator.HasNext)
         {
             Particle* particle = iterator.Next();

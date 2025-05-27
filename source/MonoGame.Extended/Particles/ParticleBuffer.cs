@@ -20,17 +20,46 @@ namespace MonoGame.Extended.Particles;
 public unsafe class ParticleBuffer : IDisposable
 {
     private readonly ParticleIterator _iterator;
-    private readonly IntPtr _nativePointer;
 
     /// <summary>
-    /// A pointer to the end of the allocated buffer memory, used for circular buffer bounds checking.
+    /// Gets the native pointer to the beginning of the unmanaged memory buffer that stores particle data.
     /// </summary>
-    protected readonly Particle* _bufferEnd;
+    /// <value>
+    /// An <see cref="IntPtr"/> pointing to the start of the allocated unmanaged memory block.
+    /// </value>
+    /// <remarks>
+    /// <para>
+    /// This property provides direct access to the underlying unmanaged memory used by the particle buffer.
+    /// The memory pointed to by this value contains particle data stored in a contiguous block, with each
+    /// particle occupying <see cref="Particle.SizeInBytes"/> bytes.
+    /// </para>
+    /// <para>
+    /// <strong>Warning:</strong> This pointer should be used with extreme caution and only within unsafe code blocks.
+    /// Improper use of this pointer can lead to memory corruption, access violations, or other undefined behavior.
+    /// The memory is automatically managed by this <see cref="ParticleBuffer"/> instance and should not be
+    /// manually freed or modified outside of the provided safe methods.
+    /// </para>
+    /// <para>
+    /// The memory layout is arranged as a circular buffer where particles are stored sequentially.
+    /// Use <see cref="Head"/> and the <see cref="Iterator"/> for safe access to active particles rather than
+    /// directly manipulating this pointer.
+    /// </para>
+    /// <para>
+    /// This pointer becomes invalid after the <see cref="ParticleBuffer"/> is disposed. Accessing it after
+    /// disposal will result in undefined behavior.
+    /// </para>
+    /// </remarks>
+    public IntPtr NativePointer { get; }
 
     /// <summary>
-    /// A pointer to the current tail position in the circular buffer where new particles are allocated.
+    /// Gets a pointer to the current tail position in the circular buffer where new particles are allocated.
     /// </summary>
-    protected unsafe Particle* _tail;
+    public unsafe Particle* Tail { get; private set; }
+
+    /// <summary>
+    /// Gets a pointer to the end fo the allocated buffer memory, used for circular buffer bounds checking.
+    /// </summary>
+    public Particle* BufferEnd { get; }
 
     /// <summary>
     /// Gets the maximum number of particles that can be stored in this buffer.
@@ -91,11 +120,11 @@ public unsafe class ParticleBuffer : IDisposable
     public unsafe ParticleBuffer(int size)
     {
         Size = size;
-        _nativePointer = Marshal.AllocHGlobal(SizeInBytes);
+        NativePointer = Marshal.AllocHGlobal(SizeInBytes);
 
-        _bufferEnd = (Particle*)(_nativePointer + SizeInBytes);
-        Head = (Particle*)_nativePointer;
-        _tail = (Particle*)_nativePointer;
+        BufferEnd = (Particle*)(NativePointer + SizeInBytes);
+        Head = (Particle*)NativePointer;
+        Tail = (Particle*)NativePointer;
 
         _iterator = new ParticleIterator(this);
 
@@ -125,11 +154,11 @@ public unsafe class ParticleBuffer : IDisposable
         int prevCount = Count;
         Count += numToRelease;
 
-        _tail += numToRelease;
+        Tail += numToRelease;
 
-        if (_tail >= _bufferEnd)
+        if (Tail >= BufferEnd)
         {
-            _tail -= Size + 1;
+            Tail -= Size + 1;
         }
 
         return Iterator.Reset(prevCount);
@@ -150,7 +179,7 @@ public unsafe class ParticleBuffer : IDisposable
 
         Head += number;
 
-        if (Head >= _bufferEnd)
+        if (Head >= BufferEnd)
         {
             Head -= Size + 1;
         }
@@ -166,90 +195,9 @@ public unsafe class ParticleBuffer : IDisposable
             return;
         }
 
-        Marshal.FreeHGlobal(_nativePointer);
+        Marshal.FreeHGlobal(NativePointer);
         GC.RemoveMemoryPressure(SizeInBytes);
         IsDisposed = true;
         GC.SuppressFinalize(this);
-    }
-
-    /// <summary>
-    /// Provides functionality for iterating through particles in the circular buffer.
-    /// </summary>
-    /// <remarks>
-    /// The <see cref="ParticleIterator"/> class enables safe traversal of active particles in the buffer,
-    /// automatically handling the circular nature of the buffer and wrapping around boundaries as needed.
-    /// </remarks>
-    public class ParticleIterator
-    {
-        private readonly ParticleBuffer _buffer;
-        private unsafe Particle* _current;
-
-        /// <summary>
-        /// Gets the total number of particles that can be iterated over.
-        /// </summary>
-        public int Total;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParticleIterator"/> class.
-        /// </summary>
-        /// <param name="buffer">The particle buffer to iterate over.</param>
-        public ParticleIterator(ParticleBuffer buffer)
-        {
-            _buffer = buffer;
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether there are more particles to iterate over.
-        /// </summary>
-        /// <value>
-        /// <see langword="true"/> if there are more particles available; otherwise, <see langword="false"/>.
-        /// </value>
-        public unsafe bool HasNext => _current != _buffer._tail;
-
-        /// <summary>
-        /// Resets the iterator to the beginning of the active particles in the buffer.
-        /// </summary>
-        /// <returns>This <see cref="ParticleIterator"/> instance for method chaining.</returns>
-        public unsafe ParticleIterator Reset()
-        {
-            _current = _buffer.Head;
-            Total = _buffer.Count;
-            return this;
-        }
-
-        /// <summary>
-        /// Resets the iterator to a specific offset position within the active particles.
-        /// </summary>
-        /// <param name="offset">The number of particles to offset from the head position.</param>
-        /// <returns>This <see cref="ParticleIterator"/> instance for method chaining.</returns>
-        internal unsafe ParticleIterator Reset(int offset)
-        {
-            Total = _buffer.Count;
-
-            _current = _buffer.Head + offset;
-
-            if (_current >= _buffer._bufferEnd)
-            {
-                _current -= _buffer.Size + 1;
-            }
-
-            return this;
-        }
-
-        /// <summary>
-        /// Advances the iterator to the next particle and returns a pointer to the current particle.
-        /// </summary>
-        /// <returns>A pointer to the current particle before advancing the iterator.</returns>
-        public unsafe Particle* Next()
-        {
-            Particle* p = _current;
-            _current++;
-            if (_current == _buffer._bufferEnd)
-            {
-                _current = (Particle*)_buffer._nativePointer;
-            }
-
-            return p;
-        }
     }
 }

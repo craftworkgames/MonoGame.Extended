@@ -58,7 +58,7 @@ public class VelocityColorModifier : Modifier
     /// Updates all particles by changing their colors based on their current velocity.
     /// </summary>
     /// <inheritdoc/>
-    public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+    public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
     {
         float velocityThreshold2 = VelocityThreshold * VelocityThreshold;
 

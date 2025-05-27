@@ -43,7 +43,7 @@ public abstract class ModifierExecutionStrategy
     /// <param name="modifiers">The collection of modifiers to execute.</param>
     /// <param name="elapsedSeconds">The elapsed time, in seconds, since the last update.</param>
     /// <param name="iterator">The iterator used to iterate the particles.</param>
-    internal abstract unsafe void ExecuteModifiers(List<Modifier> modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator);
+    internal abstract unsafe void ExecuteModifiers(List<Modifier> modifiers, float elapsedSeconds, ParticleIterator iterator);
 
     /// <summary>
     /// Implements a serial (single-threaded) execution strategy for particle modifiers.
@@ -55,7 +55,7 @@ public abstract class ModifierExecutionStrategy
     /// </remarks>
     internal class SerialModifierExecutionStrategy : ModifierExecutionStrategy
     {
-        internal override unsafe void ExecuteModifiers(List<Modifier> modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        internal override unsafe void ExecuteModifiers(List<Modifier> modifiers, float elapsedSeconds, ParticleIterator iterator)
         {
             for (int i = 0; i < modifiers.Count; i++)
             {
@@ -78,7 +78,7 @@ public abstract class ModifierExecutionStrategy
     /// </remarks>
     internal class ParallelModifierExecutionStrategy : ModifierExecutionStrategy
     {
-        internal override unsafe void ExecuteModifiers(List<Modifier> modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        internal override unsafe void ExecuteModifiers(List<Modifier> modifiers, float elapsedSeconds, ParticleIterator iterator)
         {
             TPL.ForEach(modifiers, modifier => modifier.Update(elapsedSeconds, iterator.Reset()));
         }
