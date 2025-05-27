@@ -280,20 +280,16 @@ public sealed unsafe class ParticleEmitter : IDisposable
 
         if (Buffer.Count > 0)
         {
-            Particle* particle = (Particle*)Buffer.NativePointer;
-            int count = Buffer.Count;
-
-            while (count-- > 0)
+            ParticleBuffer.ParticleIterator iterator = Buffer.Iterator;
+            while (iterator.HasNext)
             {
+                Particle* particle = iterator.Next();
                 particle->Age = (_totalSeconds - particle->Inception) / LifeSpan;
-
                 particle->Position[0] += particle->Velocity[0] * elapsedSeconds;
                 particle->Position[1] += particle->Velocity[1] * elapsedSeconds;
-
-                particle++;
             }
 
-            ModifierExecutionStrategy.ExecuteModifiers(Modifiers, elapsedSeconds, (Particle*)Buffer.NativePointer, Buffer.Count);
+            ModifierExecutionStrategy.ExecuteModifiers(Modifiers, elapsedSeconds, iterator);
         }
     }
 
@@ -345,10 +341,12 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// </remarks>
     private void Release(Vector2 position, int numToRelease, float layerDepth)
     {
-        int count = Buffer.Release(numToRelease, out Particle* particle);
+        ParticleBuffer.ParticleIterator iterator = Buffer.Release(numToRelease);
 
-        while (count-- > 0)
+        while (iterator.HasNext)
         {
+            Particle* particle = iterator.Next();
+
             Profile.GetOffsetAndHeading((Vector2*)particle->Position, (Vector2*)particle->Velocity);
 
             particle->Age = 0.0f;
@@ -375,8 +373,6 @@ public sealed unsafe class ParticleEmitter : IDisposable
             particle->Rotation = Parameters.Rotation.Value;
             particle->Mass = Parameters.Mass.Value;
             particle->LayerDepth = layerDepth;
-
-            particle++;
         }
     }
 
@@ -389,22 +385,23 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// </remarks>
     private void ReclaimExpiredParticles()
     {
-        Particle* particle = (Particle*)Buffer.NativePointer;
-        int count = Buffer.Count;
         int expired = 0;
-
-        while (count-- > 0)
+        ParticleBuffer.ParticleIterator iterator = Buffer.Iterator;
+        while (iterator.HasNext)
         {
+            Particle* particle = iterator.Next();
+
             if ((_totalSeconds - particle->Inception) < LifeSpan)
             {
                 break;
             }
-
             expired++;
-            particle++;
         }
 
-        Buffer.Reclaim(expired);
+        if (expired != 0)
+        {
+            Buffer.Reclaim(expired);
+        }
     }
 
     /// <summary>

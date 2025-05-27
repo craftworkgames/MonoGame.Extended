@@ -31,17 +31,16 @@ public class RotationModifier : Modifier
     /// <summary>
     /// Updates all particles by applying rotation based on the elapsed time.
     /// </summary>
-    /// <param name="elapsedSeconds">The elapsed time, in seconds, since the last update.</param>
-    /// <param name="particle">A pointer to the first particle to update.</param>
-    /// <param name="count">The number of particles to update.</param>
-    public override unsafe void Update(float elapsedSeconds, Particle* particle, int count)
+    /// <inheritdoc/>
+    public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
     {
         float rotationRateDelta = RotationRate * elapsedSeconds;
 
-        while (count-- > 0)
+        while (iterator.HasNext)
         {
+            Particle* particle = iterator.Next();
+
             particle->Rotation += rotationRateDelta;
-            particle++;
         }
     }
 }

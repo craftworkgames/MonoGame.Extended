@@ -31,25 +31,17 @@ public class AgeModifier : Modifier
     /// <summary>
     /// Updates all particles by applying each interpolator in the collection to each particle.
     /// </summary>
-    /// <param name="elapsedSeconds">The elapsed time, in seconds, since the last update.</param>
-    /// <param name="particle">A pointer to the first particle to update.</param>
-    /// <param name="count">The number of particles to update.</param>
-    /// <remarks>
-    /// This method iterates through all particles and applies each interpolator to every particle,
-    /// passing the particle's current age as the interpolation amount. The interpolators then
-    /// determine how to transform their respective particle properties based on this age value.
-    /// </remarks>
-    public override unsafe void Update(float elapsedSeconds, Particle* particle, int count)
+    /// <inheritdoc/>
+    public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
     {
-        while (count-- > 0)
+        while (iterator.HasNext)
         {
-            for (var i = 0; i < Interpolators.Count; i++)
-            {
-                Interpolator interpolator = Interpolators[i];
-                interpolator.Update(particle->Age, particle);
-            }
+            Particle* particle = iterator.Next();
 
-            particle++;
+            for (int i = 0; i < Interpolators.Count; i++)
+            {
+                Interpolators[i].Update(particle->Age, particle);
+            }
         }
     }
 }

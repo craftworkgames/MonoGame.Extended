@@ -29,13 +29,13 @@ public class RectangleLoopContainerModifier : Modifier
     /// <summary>
     /// Updates all particles by wrapping them around to the opposite side when they cross the rectangular boundary.
     /// </summary>
-    /// <param name="elapsedSeconds">The elapsed time, in seconds, since the last update.</param>
-    /// <param name="particle">A pointer to the first particle to update.</param>
-    /// <param name="count">The number of particles to update.</param>
-    public override unsafe void Update(float elapsedSeconds, Particle* particle, int count)
+    /// <inheritdoc/>
+    public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
     {
-        while (count-- > 0)
+        while (iterator.HasNext)
         {
+            Particle* particle = iterator.Next();
+
             var left = particle->TriggeredPos[0] + Width * -0.5f;
             var right = particle->TriggeredPos[0] + Width * 0.5f;
             var top = particle->TriggeredPos[1] + Height * -0.5f;
@@ -70,8 +70,6 @@ public class RectangleLoopContainerModifier : Modifier
 
             particle->Position[0] = xPos;
             particle->Position[1] = yPos;
-
-            particle++;
         }
     }
 }

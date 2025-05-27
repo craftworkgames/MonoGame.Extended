@@ -63,15 +63,15 @@ public class CircleContainerModifier : Modifier
     /// <summary>
     /// Updates all particles by constraining them to the circular boundary.
     /// </summary>
-    /// <param name="elapsedSeconds">The elapsed time, in seconds, since the last update.</param>
-    /// <param name="particle">A pointer to the first particle to update.</param>
-    /// <param name="count">The number of particles to update.</param>
-    public override unsafe void Update(float elapsedSeconds, Particle* particle, int count)
+    /// <inheritdoc/>
+    public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
     {
         float radiusSq = Radius * Radius;
 
-        while (count-- > 0)
+        while (iterator.HasNext)
         {
+            Particle* particle = iterator.Next();
+
             Vector2 localPos;
             localPos.X = particle->Position[0] - particle->TriggeredPos[0];
             localPos.Y = particle->Position[1] - particle->TriggeredPos[1];
@@ -89,8 +89,6 @@ public class CircleContainerModifier : Modifier
                 if (distSq > radiusSq) { continue; }
                 SetReflected(distSq, particle, -normal);
             }
-
-            particle++;
         }
     }
 

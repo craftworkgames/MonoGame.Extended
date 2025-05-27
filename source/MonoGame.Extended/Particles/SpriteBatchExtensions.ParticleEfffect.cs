@@ -48,27 +48,35 @@ public static class SpriteBatchExtensions
         Rectangle sourceRect = region.Bounds;
         Vector2 origin = new Vector2(region.Width, region.Height) * 0.5f;
 
-        Particle* particles;
-        int count = emitter.ActiveParticles;
-
         if (emitter.RenderingOrder == ParticleRenderingOrder.FrontToBack)
         {
-            particles = (Particle*)emitter.Buffer.NativePointer + count - 1;
+            int count = emitter.ActiveParticles;
 
-            for (int i = 0; i < count; i++)
+            Span<IntPtr> particlePtrs = count <= 1024 ?
+                                       stackalloc IntPtr[count] :
+                                       new IntPtr[count];
+
+            ParticleBuffer.ParticleIterator iterator = emitter.Buffer.Iterator;
+            int index = 0;
+
+            while (iterator.HasNext)
             {
-                RenderParticle(spriteBatch, particles, texture, sourceRect, origin);
-                particles--;
+                particlePtrs[index++] = (IntPtr)iterator.Next();
+            }
+
+            for (int i = count - 1; i >= 0; i--)
+            {
+                RenderParticle(spriteBatch, (Particle*)particlePtrs[i], texture, sourceRect, origin);
             }
         }
         else
         {
-            particles = (Particle*)emitter.Buffer.NativePointer;
+            ParticleBuffer.ParticleIterator iterator = emitter.Buffer.Iterator;
 
-            for (int i = 0; i < count; i++)
+            while (iterator.HasNext)
             {
-                RenderParticle(spriteBatch, particles, texture, sourceRect, origin);
-                particles++;
+                Particle* particle = iterator.Next();
+                RenderParticle(spriteBatch, particle, texture, sourceRect, origin);
             }
         }
     }

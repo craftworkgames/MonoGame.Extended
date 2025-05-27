@@ -2,9 +2,6 @@
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
 
-using System;
-using MonoGame.Extended.Particles.Data;
-
 namespace MonoGame.Extended.Particles.Modifiers;
 
 /// <summary>
@@ -64,51 +61,6 @@ public abstract class Modifier
     /// Updates the properties of particles according to this modifier's specific behavior.
     /// </summary>
     /// <param name="elapsedSeconds">The elapsed time, in seconds, since the last update.</param>
-    /// <param name="particle">A pointer to the first particle to update in the buffer.</param>
-    /// <param name="count">The number of particles to update.</param>
-    /// <remarks>
-    /// This method is called by <see cref="InternalUpdate"/> with an appropriate subset of particles.
-    /// Derived classes must implement this method to define how particles are modified.
-    /// The method operates directly on memory for performance reasons and should be implemented carefully.
-    /// </remarks>
-    public abstract unsafe void Update(float elapsedSeconds, Particle* particle, int count);
-
-    /// <summary>
-    /// Manages the update cycle for particles based on the modifier's frequency.
-    /// </summary>
-    /// <param name="elapsedSeconds">The elapsed time, in seconds, since the last update.</param>
-    /// <param name="buffer">A pointer to the beginning of the particle buffer.</param>
-    /// <param name="count">The total number of particles in the buffer.</param>
-    /// <remarks>
-    /// This method implements the frequency-based update distribution algorithm. Instead of
-    /// updating all particles every frame, it calculates how many particles should be
-    /// processed during the current frame based on:
-    ///
-    /// 1. The desired update frequency (<see cref="Frequency"/>)
-    /// 2. The elapsed time since the last frame
-    /// 3. The total number of particles
-    ///
-    /// This approach ensures that over time, each particle is updated at the specified
-    /// frequency regardless of the actual frame rate, while spreading the computational
-    /// load across multiple frames. The method tracks which particles have been updated
-    /// in the current cycle using <see cref="_particlesUpdatedThisCycle"/> and resets
-    /// once all particles have been processed.
-    /// </remarks>
-    internal unsafe void InternalUpdate(float elapsedSeconds, Particle* buffer, int count)
-    {
-        float cycleTime = 1.0f / Frequency;
-        int particlesRemaining = count - _particlesUpdatedThisCycle;
-        int particlesToUpdate = Math.Min(particlesRemaining, (int)Math.Ceiling((elapsedSeconds / cycleTime) * count));
-
-        if (particlesToUpdate > 0)
-        {
-            Update(cycleTime, buffer + _particlesUpdatedThisCycle, particlesToUpdate);
-            _particlesUpdatedThisCycle += particlesToUpdate;
-        }
-
-        if (_particlesUpdatedThisCycle >= count)
-        {
-            _particlesUpdatedThisCycle = 0;
-        }
-    }
+    /// <param name="iterator">The iterator used to iterate the particles ot update.</param>
+    public abstract void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator);
 }

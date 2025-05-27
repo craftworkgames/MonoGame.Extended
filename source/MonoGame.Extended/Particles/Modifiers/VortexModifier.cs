@@ -49,15 +49,15 @@ public unsafe class VortexModifier : Modifier
     public float MaxSpeed;
 
     /// <summary>
-    /// Updates all particles by applying a gravitational force toward the vortex center.
+    /// Updates all particles by applying a gravitational force towards the vortex center.
     /// </summary>
-    /// <param name="elapsedSeconds">The elapsed time, in seconds, since the last update.</param>
-    /// <param name="particle">A pointer to the first particle to update.</param>
-    /// <param name="count">The number of particles to update.</param>
-    public override unsafe void Update(float elapsedSeconds, Particle* particle, int count)
+    /// <inheritdoc/>
+    public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
     {
-        while (count-- > 0)
+        while (iterator.HasNext)
         {
+            Particle* particle = iterator.Next();
+
             float distx = Position.X - particle->Position[0];
             float disty = Position.Y - particle->Position[1];
 
@@ -72,8 +72,6 @@ public unsafe class VortexModifier : Modifier
 
             particle->Velocity[0] += distx;
             particle->Velocity[1] += disty;
-
-            particle++;
         }
     }
 }

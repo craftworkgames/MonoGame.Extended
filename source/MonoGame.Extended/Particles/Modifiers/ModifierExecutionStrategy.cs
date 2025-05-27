@@ -3,7 +3,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using MonoGame.Extended.Particles.Data;
 using TPL = System.Threading.Tasks.Parallel;
 
 namespace MonoGame.Extended.Particles.Modifiers;
@@ -43,9 +42,8 @@ public abstract class ModifierExecutionStrategy
     /// </summary>
     /// <param name="modifiers">The collection of modifiers to execute.</param>
     /// <param name="elapsedSeconds">The elapsed time, in seconds, since the last update.</param>
-    /// <param name="particle">A pointer to the beginning of the particle buffer.</param>
-    /// <param name="count">The total number of particles in the buffer.</param>
-    internal abstract unsafe void ExecuteModifiers(IEnumerable<Modifier> modifiers, float elapsedSeconds, Particle* particle, int count);
+    /// <param name="iterator">The iterator used to iterate the particles.</param>
+    internal abstract unsafe void ExecuteModifiers(List<Modifier> modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator);
 
     /// <summary>
     /// Implements a serial (single-threaded) execution strategy for particle modifiers.
@@ -57,11 +55,11 @@ public abstract class ModifierExecutionStrategy
     /// </remarks>
     internal class SerialModifierExecutionStrategy : ModifierExecutionStrategy
     {
-        internal override unsafe void ExecuteModifiers(IEnumerable<Modifier> modifiers, float elapsedSeconds, Particle* particle, int count)
+        internal override unsafe void ExecuteModifiers(List<Modifier> modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
-            foreach (var modifier in modifiers)
+            for (int i = 0; i < modifiers.Count; i++)
             {
-                modifier.InternalUpdate(elapsedSeconds, particle, count);
+                modifiers[i].Update(elapsedSeconds, iterator.Reset());
             }
         }
 
@@ -80,9 +78,9 @@ public abstract class ModifierExecutionStrategy
     /// </remarks>
     internal class ParallelModifierExecutionStrategy : ModifierExecutionStrategy
     {
-        internal override unsafe void ExecuteModifiers(IEnumerable<Modifier> modifiers, float elapsedSeconds, Particle* particle, int count)
+        internal override unsafe void ExecuteModifiers(List<Modifier> modifiers, float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
         {
-            TPL.ForEach(modifiers, modifier => modifier.InternalUpdate(elapsedSeconds, particle, count));
+            TPL.ForEach(modifiers, modifier => modifier.Update(elapsedSeconds, iterator.Reset()));
         }
 
         public override string ToString()
