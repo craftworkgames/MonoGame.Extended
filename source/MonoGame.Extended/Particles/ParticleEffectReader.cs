@@ -182,16 +182,64 @@ public sealed class ParticleEffectReader : IDisposable
             return null;
         }
 
+        Rectangle bounds = _reader.GetAttributeRectangle(nameof(Texture2DRegion.Bounds));
+
         try
         {
+            // Try loading directly though the content manager.  This should work, but there is a bug
+            // for relative paths which has been documented at
+            // https://github.com/MonoGame/MonoGame/issues/8786
+            // And a propsed fix at
+            // https://github.com/MonoGame/MonoGame/pull/8787
+            // But until that is merged and released, we'll attempt to load here, then fall back to direct load in
+            // the catch
             Texture2D texture = _content.Load<Texture2D>(name);
-            Rectangle bounds = _reader.GetAttributeRectangle(nameof(Texture2DRegion.Bounds));
             return new Texture2DRegion(texture, bounds);
         }
         catch (ContentLoadException)
         {
+            return TryLoadTextureDirectly(name, bounds);
+        }
+    }
+
+    private Texture2DRegion TryLoadTextureDirectly(string name, Rectangle bounds)
+    {
+        if(_content?.ServiceProvider == null)
+        {
             return null;
         }
+
+        IGraphicsDeviceService graphicsDeviceService = _content.ServiceProvider.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
+        if(graphicsDeviceService?.GraphicsDevice == null)
+        {
+            return null;
+        }
+
+        // Try common image extensions
+        string[] extensions = { ".png", ".jpg", ".jpeg", ".bmp" };
+        string baseDirectory = _content.RootDirectory;
+
+        foreach(string extension in extensions)
+        {
+            string filePath = Path.Combine(baseDirectory, name + extension);
+
+            if(File.Exists(filePath))
+            {
+                try
+                {
+                    Texture2D texture = Texture2D.FromFile(graphicsDeviceService.GraphicsDevice, filePath);
+                    texture.Name = name;
+                    return new Texture2DRegion(texture, bounds);
+                }
+                catch
+                {
+                    // Continue to next extension
+                    continue;
+                }
+            }
+        }
+
+        return null;
     }
 
     private ParticleReleaseParameters ReadParticleReleaseParameters(XmlReader reader)
