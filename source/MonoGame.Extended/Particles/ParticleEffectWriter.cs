@@ -139,7 +139,7 @@ public class ParticleEffectWriter : IDisposable
     private void WriteTexture2DRegion(Texture2DRegion region)
     {
         _writer.WriteAttributeString(nameof(Texture2DRegion.Texture.Name), region.Texture.Name);
-        _writer.WriteAttributeRectangle(nameof(Texture2DRegion.Texture.Bounds), region.Texture.Bounds);
+        _writer.WriteAttributeRectangle(nameof(Texture2DRegion.Bounds), region.Bounds);
 
     }
 
