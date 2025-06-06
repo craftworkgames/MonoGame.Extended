@@ -3,6 +3,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Drawing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -232,23 +233,26 @@ public static class SpriteBatchExtensions
         if (!clippingRectangle.HasValue)
             return true;
 
-        var originalDestination = destinationRectangle;
-        destinationRectangle = destinationRectangle.Clip(clippingRectangle.Value);
+        Rectangle originalDest = destinationRectangle;
+        Rectangle newDest = Rectangle.Intersect(destinationRectangle, clippingRectangle.Value);
+        if (newDest.Width <= 0 || newDest.Height <= 0)
+            return false;
 
-        if (destinationRectangle == Rectangle.Empty)
-            return false; // Clipped rectangle is empty, nothing to draw
+        int deltaLeft = newDest.Left - originalDest.Left;
+        int deltaTop = newDest.Top - originalDest.Top;
 
-        var scaleX = (float)sourceRectangle.Width / originalDestination.Width;
-        var scaleY = (float)sourceRectangle.Height / originalDestination.Height;
+        float scaleX = sourceRectangle.Width / (float)originalDest.Width;
+        float scaleY = sourceRectangle.Height / (float)originalDest.Height;
 
-        int leftDiff = destinationRectangle.Left - originalDestination.Left;
-        int topDiff = destinationRectangle.Top - originalDestination.Top;
+        float srcXf = sourceRectangle.X + deltaLeft * scaleX;
+        float srcYf = sourceRectangle.Y + deltaTop * scaleY;
 
-        sourceRectangle.X += (int)(leftDiff * scaleX);
-        sourceRectangle.Y += (int)(topDiff * scaleY);
-        sourceRectangle.Width = (int)(destinationRectangle.Width * scaleX);
-        sourceRectangle.Height = (int)(destinationRectangle.Height * scaleY);
+        sourceRectangle.X = (int)MathF.Floor(srcXf);
+        sourceRectangle.Y = (int)MathF.Floor(srcYf);
+        sourceRectangle.Width = (int)MathF.Ceiling(newDest.Width * scaleX);
+        sourceRectangle.Height = (int)MathF.Ceiling(newDest.Height * scaleY);
 
+        destinationRectangle = newDest;
         return true;
     }
 
