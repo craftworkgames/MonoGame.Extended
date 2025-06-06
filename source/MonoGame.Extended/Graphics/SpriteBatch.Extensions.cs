@@ -3,7 +3,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Drawing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
