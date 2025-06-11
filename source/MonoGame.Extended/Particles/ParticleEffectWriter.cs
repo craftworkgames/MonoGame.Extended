@@ -205,6 +205,8 @@ public class ParticleEffectWriter : IDisposable
             _writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.RandomMin), parameter.RandomMin);
             _writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.RandomMax), parameter.RandomMax);
         }
+
+        _writer.WriteEndElement();
     }
 
     private void WriteParticleColorParameter(string name, ParticleColorParameter parameter)
