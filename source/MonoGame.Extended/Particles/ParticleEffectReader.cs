@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -270,7 +271,7 @@ public sealed class ParticleEffectReader : IDisposable
                         break;
 
                     case nameof(ParticleReleaseParameters.Scale):
-                        parameters.Scale = ReadParticleFloatParameter(subtree);
+                        parameters.Scale = ReadParticleVector2Parameter(subtree);
                         break;
 
                     case nameof(ParticleReleaseParameters.Rotation):
@@ -323,6 +324,25 @@ public sealed class ParticleEffectReader : IDisposable
         }
 
         return new ParticleFloatParameter(0);
+    }
+
+    private ParticleVector2Parameter ReadParticleVector2Parameter(XmlReader reader)
+    {
+        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleVector2Parameter.Kind));
+
+        if(kind == ParticleValueKind.Constant)
+        {
+            Vector2 value = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.Constant));
+            return new ParticleVector2Parameter(value);
+        }
+        else if(kind == ParticleValueKind.Random)
+        {
+            Vector2 min = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMin));
+            Vector2 max = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMax));
+            return new ParticleVector2Parameter(min, max);
+        }
+
+        return new ParticleVector2Parameter(Vector2.Zero);
     }
 
     private ParticleColorParameter ReadParticleColorParameter(XmlReader reader)
@@ -604,8 +624,8 @@ public sealed class ParticleEffectReader : IDisposable
 
             case nameof(ScaleInterpolator):
                 ScaleInterpolator scaleInterpolator = new ScaleInterpolator();
-                scaleInterpolator.StartValue = reader.GetAttributeFloat(nameof(ScaleInterpolator.StartValue));
-                scaleInterpolator.EndValue = reader.GetAttributeFloat(nameof(ScaleInterpolator.EndValue));
+                scaleInterpolator.StartValue = reader.GetAttributeVector2(nameof(ScaleInterpolator.StartValue));
+                scaleInterpolator.EndValue = reader.GetAttributeVector2(nameof(ScaleInterpolator.EndValue));
                 return scaleInterpolator;
 
             case nameof(VelocityInterpolator):

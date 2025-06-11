@@ -369,7 +369,11 @@ public sealed unsafe class ParticleEmitter : IDisposable
             particle->Color[2] = color.Z;
 
             particle->Opacity = Parameters.Opacity.Value;
-            particle->Scale = Parameters.Scale.Value;
+
+            Vector2 scale = Parameters.Scale.Value;
+            particle->Scale[0] = scale.X;
+            particle->Scale[1] = scale.Y;
+
             particle->Rotation = Parameters.Rotation.Value;
             particle->Mass = Parameters.Mass.Value;
             particle->LayerDepth = layerDepth;

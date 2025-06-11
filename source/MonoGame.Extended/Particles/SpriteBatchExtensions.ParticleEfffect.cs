@@ -96,7 +96,7 @@ public static class SpriteBatchExtensions
         }
 
         Vector2 position = new Vector2(particle->Position[0], particle->Position[1]);
-        float scale = particle->Scale;
+        Vector2 scale = new Vector2(particle->Scale[0], particle->Scale[1]);
         float rotation = particle->Rotation;
         float layerDepth = particle->LayerDepth;
 

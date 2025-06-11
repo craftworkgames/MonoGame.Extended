@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
 
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Particles.Data;
 
 namespace MonoGame.Extended.Particles.Modifiers.Interpolators;
@@ -14,7 +15,7 @@ namespace MonoGame.Extended.Particles.Modifiers.Interpolators;
 /// <see cref="Interpolator{T}.StartValue"/> to <see cref="Interpolator{T}.EndValue"/> based on the
 /// provided interpolation amount (typically representing the particle's normalized age).
 /// </remarks>
-public class ScaleInterpolator : Interpolator<float>
+public class ScaleInterpolator : Interpolator<Vector2>
 {
     /// <summary>
     /// Updates a particle's scale by interpolating between the start and end values.
@@ -23,6 +24,7 @@ public class ScaleInterpolator : Interpolator<float>
     /// <param name="particle">A pointer to the particle to update.</param>
     public override unsafe void Update(float amount, Particle* particle)
     {
-        particle->Scale = StartValue + (EndValue - StartValue) * amount;
+        particle->Scale[0] = StartValue.X + (EndValue.X - StartValue.X) * amount;
+        particle->Scale[1] = StartValue.Y + (EndValue.Y - StartValue.Y) * amount;
     }
 }

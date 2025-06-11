@@ -44,7 +44,7 @@ public unsafe struct Particle
     /// <summary>
     /// The scale factor applied to this particle's visual representation.
     /// </summary>
-    public float Scale;
+    public fixed float Scale[2];
 
     /// <summary>
     /// The position where this particle was triggered or emitted from [X, Y].

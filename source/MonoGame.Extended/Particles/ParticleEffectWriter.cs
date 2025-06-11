@@ -149,7 +149,7 @@ public class ParticleEffectWriter : IDisposable
         WriteParticleFloatParameter(nameof(ParticleReleaseParameters.Speed), parameters.Speed);
         WriteParticleColorParameter(nameof(ParticleReleaseParameters.Color), parameters.Color);
         WriteParticleFloatParameter(nameof(ParticleReleaseParameters.Opacity), parameters.Opacity);
-        WriteParticleFloatParameter(nameof(ParticleReleaseParameters.Scale), parameters.Scale);
+        WriteParticleVector2Parameter(nameof(ParticleReleaseParameters.Scale), parameters.Scale);
         WriteParticleFloatParameter(nameof(ParticleReleaseParameters.Rotation), parameters.Rotation);
         WriteParticleFloatParameter(nameof(ParticleReleaseParameters.Mass), parameters.Mass);
 
@@ -189,6 +189,22 @@ public class ParticleEffectWriter : IDisposable
         }
 
         _writer.WriteEndElement();
+    }
+
+    private void WriteParticleVector2Parameter(string name, ParticleVector2Parameter parameter)
+    {
+        _writer.WriteStartElement(name);
+        _writer.WriteAttributeString(nameof(ParticleVector2Parameter.Kind), parameter.Kind.ToString());
+
+        if(parameter.Kind == ParticleValueKind.Constant)
+        {
+            _writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.Constant), parameter.Constant);
+        }
+        else
+        {
+            _writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.RandomMin), parameter.RandomMin);
+            _writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.RandomMax), parameter.RandomMax);
+        }
     }
 
     private void WriteParticleColorParameter(string name, ParticleColorParameter parameter)
@@ -403,8 +419,8 @@ public class ParticleEffectWriter : IDisposable
 
             case ScaleInterpolator scaleInterpolator:
                 _writer.WriteAttributeString(nameof(Type), nameof(ScaleInterpolator));
-                _writer.WriteAttributeFloat(nameof(ScaleInterpolator.StartValue), scaleInterpolator.StartValue);
-                _writer.WriteAttributeFloat(nameof(ScaleInterpolator.EndValue), scaleInterpolator.EndValue);
+                _writer.WriteAttributeVector2(nameof(ScaleInterpolator.StartValue), scaleInterpolator.StartValue);
+                _writer.WriteAttributeVector2(nameof(ScaleInterpolator.EndValue), scaleInterpolator.EndValue);
                 break;
 
             case VelocityInterpolator velocityInterpolator:

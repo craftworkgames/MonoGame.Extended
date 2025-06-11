@@ -54,7 +54,7 @@ public class ParticleReleaseParameters
     /// <remarks>
     /// Defaults to a random value between 0.0 (half scale) and 1.0 (full scale)
     /// </remarks>
-    public ParticleFloatParameter Scale = new ParticleFloatParameter(0.5f, 1.0f);
+    public ParticleVector2Parameter Scale = new ParticleVector2Parameter(new Vector2(0.5f, 0.5f), new Vector2(1.0f, 1.0f));
 
     /// <summary>
     /// Gets or sets the initial rotation (in radians) of particles when released.
