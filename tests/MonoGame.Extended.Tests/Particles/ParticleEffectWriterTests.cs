@@ -56,7 +56,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -90,7 +90,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -127,7 +127,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -161,7 +161,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -195,7 +195,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -229,7 +229,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -263,7 +263,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -297,7 +297,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -331,7 +331,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -365,7 +365,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -399,7 +399,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -435,7 +435,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -474,7 +474,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -513,7 +513,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -552,7 +552,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -591,7 +591,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -630,7 +630,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -669,7 +669,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -708,7 +708,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -747,7 +747,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -786,7 +786,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -825,7 +825,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -866,7 +866,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -911,7 +911,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -956,7 +956,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -1001,7 +1001,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -1046,7 +1046,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
@@ -1054,7 +1054,7 @@ public class ParticleEffectWriterTests
                   <Modifiers>
                     <Modifier Name="AgeModifier" Frequency="60" Type="AgeModifier">
                       <Interpolators>
-                        <Interpolator Name="ScaleInterpolator" Type="ScaleInterpolator" StartValue="0" EndValue="0" />
+                        <Interpolator Name="ScaleInterpolator" Type="ScaleInterpolator" StartValue="0,0" EndValue="0,0" />
                       </Interpolators>
                     </Modifier>
                   </Modifiers>
@@ -1091,7 +1091,7 @@ public class ParticleEffectWriterTests
                     <Speed Kind="Random" RandomMin="50" RandomMax="100" />
                     <Color Kind="Constant" Constant="1,1,1" />
                     <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
-                    <Scale Kind="Random" RandomMin="0.5" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
                     <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
                     <Mass Kind="Constant" Constant="1" />
                   </Parameters>
