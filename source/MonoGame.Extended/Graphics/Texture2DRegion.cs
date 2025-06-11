@@ -179,7 +179,7 @@ public class Texture2DRegion
 
         if (string.IsNullOrEmpty(name))
         {
-            name = $"{texture.Name}({x}, {y}, {width}, {height})";
+            name = $"{texture.Name}";
         }
 
         Name = name;
