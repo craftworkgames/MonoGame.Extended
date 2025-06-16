@@ -23,6 +23,15 @@ public abstract class Interpolator
     public string Name;
 
     /// <summary>
+    /// Indicates if this interpolator is enabled.
+    /// </summary>
+    /// <remarks>
+    /// This value determines if this interpolator is enabled.  When an interpolator is disabled, the interpolator is
+    /// not applied to the modifier.
+    /// </remarks>
+    public bool Enabled;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="Interpolator"/> class.
     /// </summary>
     protected Interpolator()

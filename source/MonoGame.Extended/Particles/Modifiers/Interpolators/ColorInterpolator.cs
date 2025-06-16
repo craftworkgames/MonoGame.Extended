@@ -29,6 +29,8 @@ public sealed class ColorInterpolator : Interpolator<Vector3>
     /// <param name="particle">A pointer to the particle to update.</param>
     public override unsafe void Update(float amount, Particle* particle)
     {
+        if (!Enabled) { return; }
+
         float h = StartValue.X + (EndValue.X - StartValue.X) * amount;
         float s = StartValue.Y + (EndValue.Y - StartValue.Y) * amount;
         float l = StartValue.Z + (EndValue.Z - StartValue.Z) * amount;

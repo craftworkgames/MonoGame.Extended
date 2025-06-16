@@ -23,6 +23,8 @@ public class RotationInterpolator : Interpolator<float>
     /// <param name="particle">A pointer to the particle to update.</param>
     public override unsafe void Update(float amount, Particle* particle)
     {
+        if (!Enabled) { return; }
+
         particle->Rotation = StartValue + (EndValue - StartValue) * amount;
     }
 }

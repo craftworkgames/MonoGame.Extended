@@ -24,6 +24,8 @@ public class VelocityInterpolator : Interpolator<Vector2>
     /// <param name="particle">A pointer to the particle to update.</param>
     public override unsafe void Update(float amount, Particle* particle)
     {
+        if (!Enabled) { return; }
+
         particle->Velocity[0] = StartValue.X + (EndValue.X - StartValue.X) * amount;
         particle->Velocity[1] = StartValue.Y + (EndValue.Y - StartValue.Y) * amount;
     }
