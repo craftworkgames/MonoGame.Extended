@@ -34,6 +34,8 @@ public class RotationModifier : Modifier
     /// <inheritdoc/>
     public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
     {
+        if (!Enabled) { return; }
+
         float rotationRateDelta = RotationRate * elapsedSeconds;
 
         while (iterator.HasNext)

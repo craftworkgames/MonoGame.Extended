@@ -43,6 +43,8 @@ public class LinearGravityModifier : Modifier
     /// <inheritdoc/>
     public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
     {
+        if (!Enabled) { return; }
+
         Vector2 vector = Direction * (Strength * elapsedSeconds);
 
         while (iterator.HasNext)

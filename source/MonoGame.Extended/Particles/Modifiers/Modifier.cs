@@ -45,6 +45,15 @@ public abstract class Modifier
     public float Frequency;
 
     /// <summary>
+    /// Indicates whether this modifier is enabled.
+    /// </summary>
+    /// <remarks>
+    /// This value determines if this modifier is enabled.  When a modifier is disabled, the modifier is not applied
+    /// to the particles.
+    /// </remarks>
+    public bool Enabled;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="Modifier"/> class.
     /// </summary>
     /// <remarks>

@@ -34,6 +34,8 @@ public sealed class OpacityFastFadeModifier : Modifier
     /// <inheritdoc/>
     public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
     {
+        if (!Enabled) { return; }
+
         while (iterator.HasNext)
         {
             Particle* particle = iterator.Next();

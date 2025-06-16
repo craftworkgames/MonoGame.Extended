@@ -66,6 +66,8 @@ public class CircleContainerModifier : Modifier
     /// <inheritdoc/>
     public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
     {
+        if (!Enabled) { return; }
+
         float radiusSq = Radius * Radius;
 
         while (iterator.HasNext)

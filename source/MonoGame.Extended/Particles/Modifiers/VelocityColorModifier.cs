@@ -60,6 +60,8 @@ public class VelocityColorModifier : Modifier
     /// <inheritdoc/>
     public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
     {
+        if (!Enabled) { return; }
+
         float velocityThreshold2 = VelocityThreshold * VelocityThreshold;
 
         while (iterator.HasNext)
