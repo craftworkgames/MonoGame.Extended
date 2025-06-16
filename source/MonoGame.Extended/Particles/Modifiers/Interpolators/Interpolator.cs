@@ -37,6 +37,7 @@ public abstract class Interpolator
     protected Interpolator()
     {
         Name = GetType().Name;
+        Enabled = true;
     }
 
     /// <summary>

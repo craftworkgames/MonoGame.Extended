@@ -64,6 +64,7 @@ public abstract class Modifier
     {
         Name = GetType().Name;
         Frequency = DEFAULT_MODIFIER_FREQUENCY;
+        Enabled = true;
     }
 
     /// <summary>
