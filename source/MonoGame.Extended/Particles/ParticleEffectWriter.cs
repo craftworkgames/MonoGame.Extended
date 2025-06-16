@@ -261,13 +261,6 @@ public class ParticleEffectWriter : IDisposable
                 _writer.WriteAttributeFloat(nameof(LineProfile.Length), lineProfile.Length);
                 break;
 
-            case LineUniformProfile lineUniformProfile:
-                _writer.WriteAttributeString(nameof(Type), nameof(LineUniformProfile));
-                _writer.WriteAttributeVector2(nameof(LineUniformProfile.Axis), lineUniformProfile.Axis);
-                _writer.WriteAttributeFloat(nameof(LineUniformProfile.Length), lineUniformProfile.Length);
-                _writer.WriteAttributeVector2(nameof(LineUniformProfile.PerpendicularDirection), lineUniformProfile.PerpendicularDirection);
-                break;
-
             case PointProfile:
                 _writer.WriteAttributeString(nameof(Type), nameof(PointProfile));
                 break;

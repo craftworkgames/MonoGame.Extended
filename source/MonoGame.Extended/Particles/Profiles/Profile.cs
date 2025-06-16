@@ -44,18 +44,6 @@ public abstract class Profile
     }
 
     /// <summary>
-    /// Creates a <see cref="LineUniformProfile"/> that emits particles uniformly along a line segment with a fixed heading.
-    /// </summary>
-    /// <param name="axis">The direction vector of the line axis.</param>
-    /// <param name="length">The length fo the line segment.</param>
-    /// <param name="perpendicularDirection">The fixed heading direction for all particles spawned from the profile.</param>
-    /// <returns></returns>
-    public static Profile LineUniform(Vector2 axis, float length, Vector2 perpendicularDirection)
-    {
-        return new LineUniformProfile { Axis = axis, Length = length, PerpendicularDirection = perpendicularDirection };
-    }
-
-    /// <summary>
     /// Creates a <see cref="RingProfile"/> that emits particles from the perimeter of a circle.
     /// </summary>
     /// <param name="radius">The radius of the ring.</param>

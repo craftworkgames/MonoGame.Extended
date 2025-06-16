@@ -401,13 +401,6 @@ public sealed class ParticleEffectReader : IDisposable
                 lineProfile.Length = reader.GetAttributeFloat(nameof(LineProfile.Length));
                 return lineProfile;
 
-            case nameof(LineUniformProfile):
-                LineUniformProfile lineUniformProfile = new LineUniformProfile();
-                lineUniformProfile.Axis = reader.GetAttributeVector2(nameof(LineUniformProfile.Axis));
-                lineUniformProfile.Length = reader.GetAttributeFloat(nameof(LineUniformProfile.Length));
-                lineUniformProfile.PerpendicularDirection = reader.GetAttributeVector2(nameof(LineUniformProfile.PerpendicularDirection));
-                return lineUniformProfile;
-
             case nameof(PointProfile):
                 return Profile.Point();
 
