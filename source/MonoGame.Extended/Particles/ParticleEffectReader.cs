@@ -34,12 +34,12 @@ public sealed class ParticleEffectReader : IDisposable
     public bool IsDisposed { get; private set; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ParticleEffectReader"/> class that reads from a file. 
+    /// Initializes a new instance of the <see cref="ParticleEffectReader"/> class that reads from a file.
     /// </summary>
     /// <param name="fileName">The file path to read the XMl from.</param>
     /// <param name="content">The <see cref="ContentManager"/> to use for loading textures.</param>
     /// <exception cref="ArgumentNullException"><paramref name="content"/> is <see langword="null"/></exception>
-    /// <exception cref="ArgumentException"><paramref name="fileName"/> is <see langword="null"/> or empty.</exception>  
+    /// <exception cref="ArgumentException"><paramref name="fileName"/> is <see langword="null"/> or empty.</exception>
     public ParticleEffectReader(string fileName, ContentManager content)
     {
         ArgumentNullException.ThrowIfNull(content);
@@ -97,8 +97,11 @@ public sealed class ParticleEffectReader : IDisposable
         string name = _reader.GetAttribute(nameof(ParticleEffect.Name)) ?? "Unnamed";
         ParticleEffect effect = new ParticleEffect(name);
 
+        effect.Position = _reader.GetAttributeVector2(nameof(ParticleEffect.Position));
         effect.Rotation = _reader.GetAttributeFloat(nameof(ParticleEffect.Rotation));
         effect.Scale = _reader.GetAttributeVector2(nameof(ParticleEffect.Scale));
+        effect.AutoTrigger = _reader.GetAttributeBool(nameof(ParticleEffect.AutoTrigger));
+        effect.AutoTriggerFrequency = _reader.GetAttributeFloat(nameof(ParticleEffect.AutoTriggerFrequency));
 
         if (_reader.ReadToDescendant(nameof(ParticleEffect.Emitters)))
         {
@@ -124,8 +127,6 @@ public sealed class ParticleEffectReader : IDisposable
         emitter.LifeSpan = _reader.GetAttributeFloat(nameof(ParticleEmitter.LifeSpan));
         emitter.Offset = _reader.GetAttributeVector2(nameof(ParticleEmitter.Offset));
         emitter.LayerDepth = _reader.GetAttributeFloat(nameof(ParticleEmitter.LayerDepth));
-        emitter.AutoTrigger = _reader.GetAttributeBool(nameof(ParticleEmitter.AutoTrigger));
-        emitter.AutoTriggerFrequency = _reader.GetAttributeFloat(nameof(ParticleEmitter.AutoTriggerFrequency));
         emitter.ReclaimFrequency = _reader.GetAttributeFloat(nameof(ParticleEmitter.ReclaimFrequency));
 
         string strategy = _reader.GetAttribute(nameof(ParticleEmitter.ModifierExecutionStrategy));

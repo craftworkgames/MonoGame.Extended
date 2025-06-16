@@ -75,6 +75,8 @@ public class ParticleEffectWriter : IDisposable
         _writer.WriteAttributeVector2(nameof(ParticleEffect.Position), effect.Position);
         _writer.WriteAttributeFloat(nameof(ParticleEffect.Rotation), effect.Rotation);
         _writer.WriteAttributeVector2(nameof(ParticleEffect.Scale), effect.Scale);
+        _writer.WriteAttributeBool(nameof(ParticleEffect.AutoTrigger), effect.AutoTrigger);
+        _writer.WriteAttributeFloat(nameof(ParticleEffect.AutoTriggerFrequency), effect.AutoTriggerFrequency);
 
         if (effect.Emitters.Count > 0)
         {
@@ -100,8 +102,6 @@ public class ParticleEffectWriter : IDisposable
         _writer.WriteAttributeFloat(nameof(ParticleEmitter.LifeSpan), emitter.LifeSpan);
         _writer.WriteAttributeVector2(nameof(ParticleEmitter.Offset), emitter.Offset);
         _writer.WriteAttributeFloat(nameof(ParticleEmitter.LayerDepth), emitter.LayerDepth);
-        _writer.WriteAttributeBool(nameof(ParticleEmitter.AutoTrigger), emitter.AutoTrigger);
-        _writer.WriteAttributeFloat(nameof(ParticleEmitter.AutoTriggerFrequency), emitter.AutoTriggerFrequency);
         _writer.WriteAttributeFloat(nameof(ParticleEmitter.ReclaimFrequency), emitter.ReclaimFrequency);
         _writer.WriteAttributeInt(nameof(ParticleEmitter.Capacity), emitter.Capacity);
         _writer.WriteAttributeString(nameof(ParticleEmitter.ModifierExecutionStrategy), emitter.ModifierExecutionStrategy.ToString());

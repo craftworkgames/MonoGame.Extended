@@ -26,7 +26,6 @@ public sealed unsafe class ParticleEmitter : IDisposable
 {
     private float _totalSeconds;
     private float _secondsSinceLastReclaim;
-    private float _nextAutoTrigger;
 
     /// <summary>
     /// Gets or sets the buffer that stores and manages the particles for this emitter.
@@ -89,23 +88,6 @@ public sealed unsafe class ParticleEmitter : IDisposable
     public float LayerDepth;
 
     /// <summary>
-    /// Gets or sets a value indicating whether this emitter should automatically trigger particle emissions.
-    /// </summary>
-    /// <remarks>
-    /// When set to <see langword="true"/>, the emitter will periodically emit particles based on the
-    /// <see cref="AutoTriggerFrequency"/> property, without requiring explicit calls to <see cref="Trigger(Vector2, float)"/>.
-    /// </remarks>
-    public bool AutoTrigger;
-
-    /// <summary>
-    /// Gets or sets the frequency, in seconds, at which this emitter automatically triggers particle emissions.
-    /// </summary>
-    /// <remarks>
-    /// This property only has an effect when <see cref="AutoTrigger"/> is set to <see langword="true"/>.
-    /// </remarks>
-    public float AutoTriggerFrequency;
-
-    /// <summary>
     /// Gets or sets the frequency, in times per second, at which expired particles are reclaimed.
     /// </summary>
     /// <remarks>
@@ -163,6 +145,11 @@ public sealed unsafe class ParticleEmitter : IDisposable
     public ParticleRenderingOrder RenderingOrder;
 
     /// <summary>
+    /// Indicates whether the particles emitted by this emitter are visible.
+    /// </summary>
+    public bool Visible;
+
+    /// <summary>
     /// Gets a value indicating whether this <see cref="ParticleEmitter"/> has been disposed.
     /// </summary>
     /// <value><see langword="true"/> if the emitter has been disposed; otherwise, <see langword="false"/>.</value>
@@ -197,8 +184,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
         ReclaimFrequency = 60.0f;
         Offset = Vector2.Zero;
         LayerDepth = 0.0f;
-        AutoTrigger = true;
-        AutoTriggerFrequency = 1.0f;
+        Visible = true;
     }
 
     /// <summary>
@@ -255,17 +241,6 @@ public sealed unsafe class ParticleEmitter : IDisposable
 
         _totalSeconds += elapsedSeconds;
         _secondsSinceLastReclaim += elapsedSeconds;
-
-        if (AutoTrigger)
-        {
-            _nextAutoTrigger -= elapsedSeconds;
-
-            if (_nextAutoTrigger <= 0)
-            {
-                Trigger(position, LayerDepth);
-                _nextAutoTrigger = AutoTriggerFrequency;
-            }
-        }
 
         if (Buffer.Count == 0)
         {
