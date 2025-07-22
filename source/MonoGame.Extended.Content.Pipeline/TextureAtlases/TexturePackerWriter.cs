@@ -15,14 +15,14 @@ public class TexturePackerWriter : ContentTypeWriter<TexturePackerProcessorResul
     protected override void Write(ContentWriter writer, TexturePackerProcessorResult result)
     {
         var tpFile = result.Data;
-        var imageAssetName = Path.GetFileNameWithoutExtension(tpFile.Meta.Image);
+        var imageAssetName = Path.ChangeExtension(tpFile.Meta.Image, null);
 
         writer.Write(imageAssetName);
         writer.Write(tpFile.Regions.Count);
 
         foreach (var region in tpFile.Regions)
         {
-            var regionName = Path.GetFileNameWithoutExtension(region.FileName);
+            var regionName = Path.ChangeExtension(region.FileName, null);
 
             writer.Write(region.Frame.X);
             writer.Write(region.Frame.Y);
