@@ -134,6 +134,12 @@ Need assistance or have questions about contributing?
 **Issues**: Use GitHub issues for bug reports and feature requests with our provided templates.
 **Discussions**: Start conversations about design decisions or general questions in GitHub Discussions.
 
+## Licensing
+
+MonoGame Extended is under the [MIT License](https://opensource.org/licenses/MIT) unless a portion of code is explicitly stated elsewhere. See the [LICENSE](LICENSE) for more details. Third-party libraries used by MonoGame Extended are under their own licenses, we always seek permission from the original author of those libraries.. Please refer to those libraries for details on the license they use.
+
+We accept contributions in "good faith" that it isn't bound to a conflicting license. By submitting a PR you agree to distribute your work under the MonoGame Extended license and copyright.
+
 ## Recognition and Community
 
 Contributors are recognized in our release notes and README. Significant contributors may be invited to join the maintainer team and help shape the future direction of MonoGame Extended.
