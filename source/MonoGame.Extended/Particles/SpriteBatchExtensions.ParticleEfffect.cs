@@ -43,6 +43,12 @@ public static class SpriteBatchExtensions
             return;
         }
 
+        // Early exit if the emitter is not visible
+        if (!emitter.Visible)
+        {
+            return;
+        }
+
         Texture2DRegion region = emitter.TextureRegion;
         Texture2D texture = region.Texture;
         Rectangle sourceRect = region.Bounds;
