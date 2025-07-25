@@ -150,6 +150,13 @@ public class ParticleEffect : IDisposable
         }
     }
 
+    /// <summary>
+    /// Updates the state of all emitters in this effect.
+    /// </summary>
+    /// <param name="gameTime">The timing values for the current update cycle.</param>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if this method is called after the effect has been disposed.
+    /// </exception>
     public void Update(GameTime gameTime)
     {
         Update((float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -159,10 +166,6 @@ public class ParticleEffect : IDisposable
     /// Updates the state of all emitters in this effect.
     /// </summary>
     /// <param name="elapsedSeconds">The elapsed time, in seconds, since the last update.</param>
-    /// <remarks>
-    /// This method propagates the update call to each emitter in the effect, passing along
-    /// the elapsed time and the current position of the effect.
-    /// </remarks>
     /// <exception cref="ObjectDisposedException">
     /// Thrown if this method is called after the effect has been disposed.
     /// </exception>
