@@ -1,5 +1,4 @@
 using System;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
@@ -7,8 +6,18 @@ using MonoGame.Extended.Particles.Data;
 
 namespace MonoGame.Extended.Particles;
 
+/// <summary>
+/// Provides extension methods for <see cref="SpriteBatch"/> to draw particle effects and emitters.
+/// </summary>
 public static class SpriteBatchExtensions
 {
+    /// <summary>
+    /// Draws a particle effect by rendering all of its active emitters.
+    /// </summary>
+    /// <param name="spriteBatch">The <see cref="SpriteBatch"/> used for drawing.</param>
+    /// <param name="effect">The <see cref="ParticleEffect"/> to draw.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="effect"/> is null.</exception>
+    /// <exception cref="ObjectDisposedException">Thrown when <paramref name="effect"/> is disposed.</exception>
     public static void Draw(this SpriteBatch spriteBatch, ParticleEffect effect)
     {
         ArgumentNullException.ThrowIfNull(effect);
@@ -20,6 +29,13 @@ public static class SpriteBatchExtensions
         }
     }
 
+    /// <summary>
+    /// Draws a particle emitter by rendering all of its active particles.
+    /// </summary>
+    /// <param name="spriteBatch">The <see cref="SpriteBatch"/> used for drawing.</param>
+    /// <param name="emitter">The <see cref="ParticleEmitter"/> to draw.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="emitter"/> is null.</exception>
+    /// <exception cref="ObjectDisposedException">Thrown when <paramref name="emitter"/> is disposed.</exception>
     public static void Draw(this SpriteBatch spriteBatch, ParticleEmitter emitter)
     {
         ArgumentNullException.ThrowIfNull(emitter);
