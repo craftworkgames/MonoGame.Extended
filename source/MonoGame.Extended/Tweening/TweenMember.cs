@@ -1,6 +1,8 @@
 using System;
 using System.Linq.Expressions;
 
+// TODO: THIS BITCH RIGHT HERE DOES A LOT OF BOXING. FIX IT!
+
 namespace MonoGame.Extended.Tweening
 {
     public abstract class TweenMember
@@ -18,19 +20,19 @@ namespace MonoGame.Extended.Tweening
     public abstract class TweenMember<T> : TweenMember
         where T : struct
     {
-        protected TweenMember(object target, Func<object, object> getMethod, Action<object, object> setMethod)
+        protected TweenMember(object target, Func<object, T> getMethod, Action<object, T> setMethod)
             : base(target)
         {
             _getMethod = getMethod;
             _setMethod = setMethod;
         }
 
-        private readonly Func<object, object> _getMethod;
-        private readonly Action<object, object> _setMethod;
+        private readonly Func<object, T> _getMethod;
+        private readonly Action<object, T> _setMethod;
 
         public T Value
         {
-            get { return (T) _getMethod(Target); }
+            get { return _getMethod(Target); }
             set { _setMethod(Target, value); }
         }
     }
