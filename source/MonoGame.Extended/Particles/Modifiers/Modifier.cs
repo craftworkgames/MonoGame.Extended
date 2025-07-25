@@ -17,8 +17,6 @@ public abstract class Modifier
 {
     private const float DEFAULT_MODIFIER_FREQUENCY = 60.0f;
 
-    private int _particlesUpdatedThisCycle;
-
     /// <summary>
     /// Gets or sets the display name of this modifier.
     /// </summary>
