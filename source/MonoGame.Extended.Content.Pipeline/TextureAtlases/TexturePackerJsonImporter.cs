@@ -13,7 +13,20 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
         public override TexturePackerFileContent Import(string filename, ContentImporterContext context)
         {
             var tpFile = TexturePackerFileReader.Read(filename);
-            context.AddDependency(tpFile.Meta.Image);
+
+            if (tpFile.Meta.Image != null)
+            {
+                context.AddDependency(tpFile.Meta.Image);
+            }
+            else if (tpFile.Meta.DataFormat == "monogame-extended")
+            {
+                // new format: textures are in the textures array
+                foreach (var texture in tpFile.Textures)
+                {
+                    context.AddDependency(texture.FileName);
+                }
+            }
+
             return tpFile;
         }
     }
