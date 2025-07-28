@@ -175,6 +175,23 @@ public class Texture2DAtlas : IEnumerable<Texture2DRegion>
     }
 
     /// <summary>
+    /// Creates a new texture region with the specified name and adds it to this atlas.
+    /// </summary>
+    /// <param name="bounds">The bounds of the region.</param>
+    /// <param name="name">The name of the texture region.</param>
+    /// <param name="isRotated">A value indicating whether this texture region is rotated 90 degrees clockwise in the atlas.</param>
+    /// <returns>The created texture region.</returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if a region with the same name as the <paramref name="name"/> parameter already exists in this atlas.
+    /// </exception>
+    public Texture2DRegion CreateRegion(Rectangle bounds, bool isRotated, Size originalSize, Vector2 trimOffset, Vector2? originNormalized, string name)
+    {
+        Texture2DRegion region = new Texture2DRegion(Texture, bounds.X, bounds.Y, bounds.Width, bounds.Height, isRotated, originalSize, trimOffset, originNormalized, name);
+        AddRegion(region);
+        return region;
+    }
+
+    /// <summary>
     /// Determines whether the atlas contains a region with the specified name.
     /// </summary>
     /// <param name="name">The name of the region.</param>

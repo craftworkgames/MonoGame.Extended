@@ -104,9 +104,17 @@ public static class SpriteBatchExtensions
 
         if (sprite.IsVisible)
         {
-            var texture = sprite.TextureRegion.Texture;
-            var sourceRectangle = sprite.TextureRegion.Bounds;
-            spriteBatch.Draw(texture, position, sourceRectangle, sprite.Color * sprite.Alpha, rotation, sprite.Origin, scale, sprite.Effect, sprite.Depth);
+            Draw(
+                spriteBatch,
+                sprite.TextureRegion,
+                position,
+                sprite.Color * sprite.Alpha,
+                rotation,
+                sprite.Origin,
+                scale,
+                sprite.Effect,
+                sprite.Depth
+            );
         }
     }
     #endregion -------------------------Sprite-----------------------------
@@ -164,29 +172,49 @@ public static class SpriteBatchExtensions
     /// <param name="layerDepth">The layer depth.</param>
     /// <param name="clippingRectangle">An optional clipping rectangle.</param>
     public static void Draw(this SpriteBatch spriteBatch, Texture2DRegion textureRegion, Vector2 position, Color color,
-    float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, Rectangle? clippingRectangle = null)
+                            float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, Rectangle? clippingRectangle = null)
     {
         var sourceRectangle = textureRegion.Bounds;
+        var offset = (textureRegion.Offset - origin) * scale;
+        Vector2 drawScale = scale;
+        float drawRotation = rotation;
+
+        // Handle rotated texture regions
+        if (textureRegion.IsRotated)
+        {
+            offset.Y += textureRegion.Width * scale.Y;
+
+            // Swap scale axes and adjust rotation for rotated regions
+            drawScale = new Vector2(scale.Y, scale.X);
+            drawRotation = rotation - (float)Math.PI / 2;
+        }
+
+        var drawPosition = position + RotateVector(offset, rotation);
 
         if (clippingRectangle.HasValue)
         {
-            var x = (int)(position.X - origin.X);
-            var y = (int)(position.Y - origin.Y);
-            var width = (int)(textureRegion.Width * scale.X);
-            var height = (int)(textureRegion.Height * scale.Y);
+            var x = (int)drawPosition.X;
+            var y = (int)drawPosition.Y;
+            var width = (int)(textureRegion.Width * drawScale.X);
+            var height = (int)(textureRegion.Height * drawScale.Y);
+            if (textureRegion.IsRotated)
+            {
+                (width, height) = (height, width);
+                y -= height;
+            }
             var destinationRectangle = new Rectangle(x, y, width, height);
 
-            if (!ClipRectangles(ref sourceRectangle, ref destinationRectangle, clippingRectangle))
+            if (!ClipRectangles(ref sourceRectangle, ref destinationRectangle, clippingRectangle, textureRegion.IsRotated))
             {
                 // Clipped rectangle is empty, nothing to draw
                 return;
             }
-
-            position.X = destinationRectangle.X + origin.X;
-            position.Y = destinationRectangle.Y + origin.Y;
+            drawPosition.X = destinationRectangle.X;
+            drawPosition.Y = textureRegion.IsRotated ? destinationRectangle.Y + destinationRectangle.Height
+                                                     : destinationRectangle.Y;
         }
 
-        spriteBatch.Draw(textureRegion.Texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
+        spriteBatch.Draw(textureRegion.Texture, drawPosition, sourceRectangle, color, drawRotation, Vector2.Zero, drawScale, effects, layerDepth);
     }
 
     /// <summary>
@@ -199,7 +227,9 @@ public static class SpriteBatchExtensions
     /// <param name="clippingRectangle">An optional clipping rectangle.</param>
     public static void Draw(this SpriteBatch spriteBatch, Texture2DRegion textureRegion, Rectangle destinationRectangle, Color color, Rectangle? clippingRectangle = null)
     {
-        Draw(spriteBatch, textureRegion.Texture, textureRegion.Bounds, destinationRectangle, color, clippingRectangle);
+        float scaleX = (float)destinationRectangle.Width / textureRegion.OriginalSize.Width;
+        float scaleY = (float)destinationRectangle.Height / textureRegion.OriginalSize.Height;
+        Draw(spriteBatch, textureRegion, new Vector2(destinationRectangle.X, destinationRectangle.Y), color, 0, Vector2.Zero, new Vector2(scaleX, scaleY), SpriteEffects.None, 0, clippingRectangle);
     }
 
     #endregion -------------------------TextureRegion-----------------------------
@@ -227,7 +257,7 @@ public static class SpriteBatchExtensions
         _patchCache[NinePatch.BottomMiddle] = new Rectangle(left, bottom, midWidth, bottomPadding);
         _patchCache[NinePatch.BottomRight] = new Rectangle(right, bottom, rightPadding, bottomPadding);
     }
-    private static bool ClipRectangles(ref Rectangle sourceRectangle, ref Rectangle destinationRectangle, Rectangle? clippingRectangle)
+    private static bool ClipRectangles(ref Rectangle sourceRectangle, ref Rectangle destinationRectangle, Rectangle? clippingRectangle, bool rotatedSource = false)
     {
         if (!clippingRectangle.HasValue)
             return true;
@@ -238,16 +268,30 @@ public static class SpriteBatchExtensions
         if (destinationRectangle == Rectangle.Empty)
             return false; // Clipped rectangle is empty, nothing to draw
 
-        var scaleX = (float)sourceRectangle.Width / originalDestination.Width;
-        var scaleY = (float)sourceRectangle.Height / originalDestination.Height;
-
         int leftDiff = destinationRectangle.Left - originalDestination.Left;
         int topDiff = destinationRectangle.Top - originalDestination.Top;
+        int bottomDiff = originalDestination.Bottom - destinationRectangle.Bottom;
 
-        sourceRectangle.X += (int)(leftDiff * scaleX);
-        sourceRectangle.Y += (int)(topDiff * scaleY);
-        sourceRectangle.Width = (int)(destinationRectangle.Width * scaleX);
-        sourceRectangle.Height = (int)(destinationRectangle.Height * scaleY);
+        if (rotatedSource)
+        {
+            var scaleX = (float)sourceRectangle.Height / originalDestination.Width;
+            var scaleY = (float)sourceRectangle.Width / originalDestination.Height;
+
+            sourceRectangle.X += (int)(bottomDiff * scaleY);
+            sourceRectangle.Y += (int)(leftDiff * scaleX);
+            sourceRectangle.Width = (int)(destinationRectangle.Height * scaleY);
+            sourceRectangle.Height = (int)(destinationRectangle.Width * scaleX);
+        }
+        else
+        {
+            var scaleX = (float)sourceRectangle.Width / originalDestination.Width;
+            var scaleY = (float)sourceRectangle.Height / originalDestination.Height;
+
+            sourceRectangle.X += (int)(leftDiff * scaleX);
+            sourceRectangle.Y += (int)(topDiff * scaleY);
+            sourceRectangle.Width = (int)(destinationRectangle.Width * scaleX);
+            sourceRectangle.Height = (int)(destinationRectangle.Height * scaleY);
+        }
 
         return true;
     }
@@ -280,6 +324,18 @@ public static class SpriteBatchExtensions
         var bottom = clippingRectangle.Bottom < destinationRectangle.Bottom ? clippingRectangle.Bottom : destinationRectangle.Bottom;
         var right = clippingRectangle.Right < destinationRectangle.Right ? clippingRectangle.Right : destinationRectangle.Right;
         return new Rectangle(left, top, right - left, bottom - top);
+    }
+
+    // Rotates a 2D vector by the specified angle in radians.
+    private static Vector2 RotateVector(Vector2 original, double rotation)
+    {
+        double cosTheta = Math.Cos(rotation);
+        double sinTheta = Math.Sin(rotation);
+
+        double rotatedX = original.X * cosTheta - original.Y * sinTheta;
+        double rotatedY = original.X * sinTheta + original.Y * cosTheta;
+
+        return new Vector2((float)rotatedX, (float)rotatedY);
     }
 
     #endregion -------------------------Utilities-----------------------------

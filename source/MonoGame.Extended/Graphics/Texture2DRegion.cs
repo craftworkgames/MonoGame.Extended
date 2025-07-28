@@ -79,6 +79,26 @@ public class Texture2DRegion
     public float LeftUV { get; }
 
     /// <summary>
+    /// Gets a value indicating whether this texture region is rotated 90 degrees clockwise in the atlas.
+    /// </summary>
+    public bool IsRotated { get; }
+
+    /// <summary>
+    /// Gets the original size of the texture region before trimming.
+    /// </summary>
+    public Size OriginalSize { get; }
+
+    /// <summary>
+    /// Gets the offset between the top-left corner of the original sprite and the top-left corner of the trimmed sprite.
+    /// </summary>
+    public Vector2 Offset { get; }
+
+    /// <summary>
+    /// Gets the normalized origin point of the texture region, or null if no origin is specified.
+    /// </summary>
+    public Vector2? OriginNormalized { get; }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="Texture2DRegion"/> class representing the entire texture.
     /// </summary>
     /// <param name="texture">The texture to create the region from.</param>
@@ -170,6 +190,29 @@ public class Texture2DRegion
     /// Thrown if <paramref name="texture"/> has been disposed prior.
     /// </exception>
     public Texture2DRegion(Texture2D texture,int x, int y, int width, int height, string name)
+            : this(texture, x, y, width, height, false, new Size(width, height), Vector2.Zero, null, name) { }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Texture2DRegion"/> class with the specified region of the texture,
+    /// original size, offset, origin, and name.
+    /// </summary>
+    /// <param name="texture">The texture to create the region from.</param>
+    /// <param name="x">The top-left x-coordinate of the region within the texture.</param>
+    /// <param name="y">The top-left y-coordinate of the region within the texture.</param>
+    /// <param name="width">The width, in pixels, of the region.</param>
+    /// <param name="height">The height, in pixels, of the region.</param>
+    /// <param name="isRotated">A value indicating whether this texture region is rotated 90 degrees clockwise in the atlas.</param>
+    /// <param name="originalSize">The original size of the texture region before trimming.</param>
+    /// <param name="offset">The offset between the top-left corner of the original sprite and the top-left corner of the trimmed sprite.</param>
+    /// <param name="originNormalized">The origin point of the texture region, or null if no origin is specified.</param>
+    /// <param name="name">The name of the texture region.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="texture"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if <paramref name="texture"/> has been disposed prior.
+    /// </exception>
+    public Texture2DRegion(Texture2D texture, int x, int y, int width, int height, bool isRotated, Size originalSize, Vector2 offset, Vector2? originNormalized, string name)
     {
         ArgumentNullException.ThrowIfNull(texture);
         if (texture.IsDisposed)
@@ -188,6 +231,10 @@ public class Texture2DRegion
         Y = y;
         Width = width;
         Height = height;
+        IsRotated = isRotated;
+        OriginalSize = originalSize;
+        Offset = offset;
+        OriginNormalized = originNormalized;
         Bounds = new Rectangle(x, y, width, height);
         Size = new Size(width, height);
         TopUV = Bounds.Top / (float)texture.Height;
@@ -210,6 +257,9 @@ public class Texture2DRegion
         Height = height;
         Bounds = new Rectangle(x, y, width, height);
         Size = new Size(width, height);
+        OriginalSize = Size;
+        Offset = Vector2.Zero;
+        OriginNormalized = null;
         TopUV = Bounds.Top / 1.0f;
         RightUV = Bounds.Right / 1.0f;
         BottomUV = Bounds.Bottom / 1.0f;
