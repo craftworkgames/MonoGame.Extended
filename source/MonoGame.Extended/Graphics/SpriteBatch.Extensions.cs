@@ -32,21 +32,17 @@ public static class SpriteBatchExtensions
 
         for (int i = 0; i < sourcePatches.Length; i++)
         {
-            Rectangle source = sourcePatches[i].Bounds;
-            Rectangle destination = _patchCache[i];
+            Texture2DRegion sourceRegion = sourcePatches[i];
+            Rectangle destinationRect = _patchCache[i];
 
             if (clippingRectangle.HasValue)
             {
-                source = ClipSourceRectangle(source, destination, clippingRectangle.Value);
-                destination = ClipDestinationRectangle(destination, clippingRectangle.Value);
-                Draw(spriteBatch, sourcePatches[i].Texture, source, destination, color, clippingRectangle);
+                sourceRegion = ClipSourceRegion(sourceRegion, destinationRect, clippingRectangle.Value);
+                destinationRect = ClipDestinationRectangle(destinationRect, clippingRectangle.Value);
             }
-            else
+            if (sourceRegion != null && !destinationRect.IsEmpty)
             {
-                if (destination.Width > 0 && destination.Height > 0)
-                {
-                    spriteBatch.Draw(sourcePatches[i].Texture, destination, source, color);
-                }
+                Draw(spriteBatch, sourceRegion, destinationRect, color);
             }
         }
     }
@@ -296,7 +292,7 @@ public static class SpriteBatchExtensions
         return true;
     }
 
-    private static Rectangle ClipSourceRectangle(Rectangle sourceRectangle, Rectangle destinationRectangle, Rectangle clippingRectangle)
+    private static Texture2DRegion ClipSourceRegion(Texture2DRegion sourceRegion, Rectangle destinationRectangle, Rectangle clippingRectangle)
     {
         var left = (float)(clippingRectangle.Left - destinationRectangle.Left);
         var right = (float)(destinationRectangle.Right - clippingRectangle.Right);
@@ -307,23 +303,19 @@ public static class SpriteBatchExtensions
         var w = (right > 0 ? right : 0) + x;
         var h = (bottom > 0 ? bottom : 0) + y;
 
-        var scaleX = (float)destinationRectangle.Width / sourceRectangle.Width;
-        var scaleY = (float)destinationRectangle.Height / sourceRectangle.Height;
+        var scaleX = (float)destinationRectangle.Width / sourceRegion.OriginalSize.Width;
+        var scaleY = (float)destinationRectangle.Height / sourceRegion.OriginalSize.Height;
         x /= scaleX;
         y /= scaleY;
         w /= scaleX;
         h /= scaleY;
 
-        return new Rectangle((int)(sourceRectangle.X + x), (int)(sourceRectangle.Y + y), (int)(sourceRectangle.Width - w), (int)(sourceRectangle.Height - h));
+        return sourceRegion.GetSubregion((int)x, (int)y, (int)(sourceRegion.OriginalSize.Width - w), (int)(sourceRegion.OriginalSize.Height - h));
     }
 
     private static Rectangle ClipDestinationRectangle(Rectangle destinationRectangle, Rectangle clippingRectangle)
     {
-        var left = clippingRectangle.Left < destinationRectangle.Left ? destinationRectangle.Left : clippingRectangle.Left;
-        var top = clippingRectangle.Top < destinationRectangle.Top ? destinationRectangle.Top : clippingRectangle.Top;
-        var bottom = clippingRectangle.Bottom < destinationRectangle.Bottom ? clippingRectangle.Bottom : destinationRectangle.Bottom;
-        var right = clippingRectangle.Right < destinationRectangle.Right ? clippingRectangle.Right : destinationRectangle.Right;
-        return new Rectangle(left, top, right - left, bottom - top);
+        return destinationRectangle.Clip(clippingRectangle);
     }
 
     // Rotates a 2D vector by the specified angle in radians.
