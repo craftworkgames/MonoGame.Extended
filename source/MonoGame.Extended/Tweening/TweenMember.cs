@@ -1,8 +1,6 @@
 using System;
 using System.Linq.Expressions;
 
-// TODO: THIS BITCH RIGHT HERE DOES A LOT OF BOXING. FIX IT!
-
 namespace MonoGame.Extended.Tweening
 {
     public abstract class TweenMember
