@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
+using Microsoft.VisualBasic;
 
 namespace MonoGame.Extended.Tweening
 {
@@ -21,8 +22,7 @@ namespace MonoGame.Extended.Tweening
             var entityType = fieldInfo.DeclaringType!;
             var parameter = Expression.Parameter(typeof(object), "entity");
             var property = Expression.Field(Expression.Convert(parameter, entityType), fieldInfo);
-            var funcType = typeof(Func<,>).MakeGenericType(typeof(object), fieldInfo.FieldType);
-            return (Func<object, T>)Expression.Lambda(funcType, property, parameter).Compile();
+            return Expression.Lambda<Func<object, T>>(property, parameter).Compile();
         }
 
         private static Action<object, T> CompileSetMethod(FieldInfo fieldInfo)

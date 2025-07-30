@@ -27,8 +27,7 @@ namespace MonoGame.Extended.Tweening
             var entityType = propertyInfo.DeclaringType!;
             var parameter = Expression.Parameter(typeof(object), "entity");
             var property = Expression.Property(Expression.Convert(parameter, entityType), propertyInfo);
-            var funcType = typeof(Func<,>).MakeGenericType(typeof(object), propertyInfo.PropertyType);
-            return (Func<object, T>)Expression.Lambda(funcType, property, parameter).Compile();
+            return Expression.Lambda<Func<object, T>>(property, parameter).Compile();
         }
 
         private static Action<object, T> CompileSetMethod(PropertyInfo propertyInfo)
