@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using MonoGame.Extended.Collections;
 
 namespace MonoGame.Extended.ECS
@@ -49,6 +50,26 @@ namespace MonoGame.Extended.ECS
         public T Get(int entityId)
         {
             return Components[entityId];
+        }
+
+        public bool TryGet(Entity entity, [NotNullWhen(true)] out T result)
+        {
+            return TryGet(entity.Id, out result);
+        }
+
+        public bool TryGet(int entityId, [NotNullWhen(true)] out T result)
+        {
+            var component = Get(entityId);
+
+            if (component == null)
+            {
+                result = default(T);
+                return false;
+            }
+
+            result = component;
+
+            return true;
         }
 
         public override bool Has(int entityId)
