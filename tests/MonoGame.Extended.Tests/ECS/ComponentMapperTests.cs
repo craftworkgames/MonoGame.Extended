@@ -46,6 +46,31 @@ namespace MonoGame.Extended.ECS.Tests
         }
 
         [Fact]
+        public void PutAndTryGetComponent()
+        {
+            // Arrange
+            const int entityId = 4;
+            const int entityIdNotAdded = 100;
+
+            var mapper = new ComponentMapper<Transform2>(1, _ => { });
+            var component = new Transform2();
+
+            mapper.Put(entityId, component);
+
+            // Act
+            bool foundAdded = mapper.TryGet(entityId, out Transform2 transformFromAdded);
+            bool foundNotAdded = mapper.TryGet(entityIdNotAdded, out Transform2 transformFromNotAdded);
+
+            // Assert
+            Assert.Equal(typeof(Transform2), mapper.ComponentType);
+            Assert.True(mapper.Components.Count >= 1);
+            Assert.True(foundAdded);
+            Assert.Same(component, transformFromAdded);
+            Assert.False(foundNotAdded);
+            Assert.Equal(default(Transform2), transformFromNotAdded);
+        }
+
+        [Fact]
         public void OnDelete()
         {
             const int entityId = 1;
