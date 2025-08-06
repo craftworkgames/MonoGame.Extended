@@ -185,6 +185,13 @@ public static class SpriteBatchExtensions
             // Swap scale axes and adjust rotation for rotated regions
             sourceScale = new Vector2(scale.Y, scale.X);
             rotation -= (float)Math.PI / 2;
+
+            switch (effects)
+            {
+                case SpriteEffects.FlipHorizontally: effects = SpriteEffects.FlipVertically; break;
+                case SpriteEffects.FlipVertically: effects = SpriteEffects.FlipHorizontally; break;
+                default: break; // nothing to do if flipped in both directions
+            }
         }
 
         if (clippingRectangle.HasValue)
