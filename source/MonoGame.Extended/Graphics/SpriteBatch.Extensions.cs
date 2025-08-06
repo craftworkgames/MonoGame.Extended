@@ -171,32 +171,35 @@ public static class SpriteBatchExtensions
                             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, Rectangle? clippingRectangle = null)
     {
         var sourceRectangle = textureRegion.Bounds;
-        var offset = (textureRegion.Offset - origin) * scale;
-        Vector2 drawScale = scale;
-        float drawRotation = rotation;
+        var offset = origin - textureRegion.Offset;
+        Vector2 sourceScale = scale;
 
         // Handle rotated texture regions
         if (textureRegion.IsRotated)
         {
-            offset.Y += textureRegion.Width * scale.Y;
+            var rotatedOrigin = new Vector2(origin.Y, -origin.X);
+            var rotatedTrimOffset = new Vector2(textureRegion.Offset.Y, -textureRegion.Offset.X);
+            var shiftByWidth = new Vector2(textureRegion.Size.Width, 0);
+            offset = rotatedTrimOffset - rotatedOrigin + shiftByWidth;
 
             // Swap scale axes and adjust rotation for rotated regions
-            drawScale = new Vector2(scale.Y, scale.X);
-            drawRotation = rotation - (float)Math.PI / 2;
+            sourceScale = new Vector2(scale.Y, scale.X);
+            rotation -= (float)Math.PI / 2;
         }
-
-        var drawPosition = position + RotateVector(offset, rotation);
 
         if (clippingRectangle.HasValue)
         {
-            var x = (int)drawPosition.X;
-            var y = (int)drawPosition.Y;
-            var width = (int)(textureRegion.Width * drawScale.X);
-            var height = (int)(textureRegion.Height * drawScale.Y);
+            float scaledOffsetX = (origin.X - textureRegion.Offset.X) * scale.X;
+            float scaledOffsetY = (origin.Y - textureRegion.Offset.Y) * scale.Y;
+
+            var x = (int)(position.X - scaledOffsetX);
+            var y = (int)(position.Y - scaledOffsetY);
+
+            var width = (int)(textureRegion.Width * sourceScale.X);
+            var height = (int)(textureRegion.Height * sourceScale.Y);
             if (textureRegion.IsRotated)
             {
                 (width, height) = (height, width);
-                y -= height;
             }
             var destinationRectangle = new Rectangle(x, y, width, height);
 
@@ -205,12 +208,20 @@ public static class SpriteBatchExtensions
                 // Clipped rectangle is empty, nothing to draw
                 return;
             }
-            drawPosition.X = destinationRectangle.X;
-            drawPosition.Y = textureRegion.IsRotated ? destinationRectangle.Y + destinationRectangle.Height
-                                                     : destinationRectangle.Y;
+            
+            if (textureRegion.IsRotated)
+            {
+                offset.X -= (y + height - destinationRectangle.Bottom) / sourceScale.X;
+                offset.Y += (position.X - (destinationRectangle.X + scaledOffsetX)) / sourceScale.Y;
+            }
+            else
+            {
+                offset.X += (position.X - (destinationRectangle.X + scaledOffsetX)) / sourceScale.X;
+                offset.Y += (position.Y - (destinationRectangle.Y + scaledOffsetY)) / sourceScale.Y;
+            }
         }
 
-        spriteBatch.Draw(textureRegion.Texture, drawPosition, sourceRectangle, color, drawRotation, Vector2.Zero, drawScale, effects, layerDepth);
+        spriteBatch.Draw(textureRegion.Texture, position, sourceRectangle, color, rotation, offset, sourceScale, effects, layerDepth);
     }
 
     /// <summary>
@@ -316,18 +327,6 @@ public static class SpriteBatchExtensions
     private static Rectangle ClipDestinationRectangle(Rectangle destinationRectangle, Rectangle clippingRectangle)
     {
         return destinationRectangle.Clip(clippingRectangle);
-    }
-
-    // Rotates a 2D vector by the specified angle in radians.
-    private static Vector2 RotateVector(Vector2 original, double rotation)
-    {
-        double cosTheta = Math.Cos(rotation);
-        double sinTheta = Math.Sin(rotation);
-
-        double rotatedX = original.X * cosTheta - original.Y * sinTheta;
-        double rotatedY = original.X * sinTheta + original.Y * cosTheta;
-
-        return new Vector2((float)rotatedX, (float)rotatedY);
     }
 
     #endregion -------------------------Utilities-----------------------------
