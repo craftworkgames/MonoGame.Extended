@@ -59,17 +59,8 @@ namespace MonoGame.Extended.ECS
 
         public bool TryGet(int entityId, [NotNullWhen(true)] out T result)
         {
-            var component = Get(entityId);
-
-            if (component == null)
-            {
-                result = default(T);
-                return false;
-            }
-
-            result = component;
-
-            return true;
+            result = Get(entityId);
+            return result != null;
         }
 
         public override bool Has(int entityId)
