@@ -229,7 +229,12 @@ public sealed class ParticleEffectReader : IDisposable
             {
                 try
                 {
+#if KNI
+                    using FileStream stream = File.OpenRead(filePath);
+                    Texture2D texture = Texture2D.FromStream(graphicsDeviceService.GraphicsDevice, stream);
+#else
                     Texture2D texture = Texture2D.FromFile(graphicsDeviceService.GraphicsDevice, filePath);
+#endif
                     texture.Name = name;
                     return new Texture2DRegion(texture, bounds);
                 }
