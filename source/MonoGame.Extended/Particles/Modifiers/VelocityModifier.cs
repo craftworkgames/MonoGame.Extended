@@ -1,41 +1,72 @@
-﻿using System;
+// Copyright (c) Craftwork Games. All rights reserved.
+// Licensed under the MIT license.
+// See LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
+using MonoGame.Extended.Particles.Data;
 using MonoGame.Extended.Particles.Modifiers.Interpolators;
 
-namespace MonoGame.Extended.Particles.Modifiers
+namespace MonoGame.Extended.Particles.Modifiers;
+
+/// <summary>
+/// A modifier that applies interpolators to particles based on their velocity magnitude.
+/// </summary>
+/// <remarks>
+/// The <see cref="VelocityModifier"/> controls how particle properties change based on their speed
+/// by applying a collection of <see cref="Interpolator"/> objects to each particle. The intensity
+/// of the effect is determined by comparing the particle's velocity magnitude to a threshold value.
+/// </remarks>
+public class VelocityModifier : Modifier
 {
-    public class VelocityModifier : Modifier
+    /// <summary>
+    /// Gets or sets the collection of interpolators that will be applied to particles.
+    /// </summary>
+    public List<Interpolator> Interpolators { get; set; } = new List<Interpolator>();
+
+    /// <summary>
+    /// Gets or sets the velocity magnitude at which particles reach the maximum interpolation effect.
+    /// </summary>
+    /// <remarks>
+    /// This value defines the speed threshold that determines when a particle should
+    /// receive the full interpolation effect (amount = 1.0). Particles moving slower than this
+    /// threshold will receive a proportionally reduced effect based on their velocity magnitude.
+    /// </remarks>
+    public float VelocityThreshold;
+
+    /// <summary>
+    /// Updates all particles by applying interpolators with an amount based on each particle's velocity.
+    /// </summary>
+    /// <inheritdoc />
+    public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
     {
-        public List<Interpolator> Interpolators { get; set; } = new List<Interpolator>();
+        if (!Enabled) { return; }
 
-        public float VelocityThreshold { get; set; }
+        float velocityThreshold2 = VelocityThreshold * VelocityThreshold;
 
-        public override unsafe void Update(float elapsedSeconds, ParticleBuffer.ParticleIterator iterator)
+        while (iterator.HasNext)
         {
-            var velocityThreshold2 = VelocityThreshold*VelocityThreshold;
-            var n = Interpolators.Count;
+            Particle* particle = iterator.Next();
 
-            while (iterator.HasNext)
+            float velocitySquared = particle->Velocity[0] * particle->Velocity[0] +
+                                    particle->Velocity[1] * particle->Velocity[1];
+
+            if (velocitySquared >= velocityThreshold2)
             {
-                var particle = iterator.Next();
-                var velocity2 = particle->Velocity.LengthSquared();
-
-                if (velocity2 >= velocityThreshold2)
+                for (int i = 0; i < Interpolators.Count; i++)
                 {
-                    for (var i = 0; i < n; i++)
-                    {
-                        var interpolator = Interpolators[i];
-                        interpolator.Update(1, particle);
-                    }
+                    Interpolator interpolator = Interpolators[i];
+                    interpolator.Update(1, particle);
                 }
-                else
+            }
+            else
+            {
+                float t = (float)Math.Sqrt(velocitySquared) / VelocityThreshold;
+
+                for (int i = 0; i < Interpolators.Count; i++)
                 {
-                    var t = (float) Math.Sqrt(velocity2)/VelocityThreshold;
-                    for (var i = 0; i < n; i++)
-                    {
-                        var interpolator = Interpolators[i];
-                        interpolator.Update(t, particle);
-                    }
+                    Interpolator interpolator = Interpolators[i];
+                    interpolator.Update(t, particle);
                 }
             }
         }

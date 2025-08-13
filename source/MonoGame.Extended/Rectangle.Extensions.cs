@@ -41,16 +41,18 @@ public static class RectangleExtensions
     /// <returns>The clipped rectangle, or <see cref="Rectangle.Empty"/> if the rectangles do not intersect.</returns>
     public static Rectangle Clip(this Rectangle rectangle, Rectangle clippingRectangle)
     {
-        var clip = clippingRectangle;
-        rectangle.X = clip.X > rectangle.X ? clip.X : rectangle.X;
-        rectangle.Y = clip.Y > rectangle.Y ? clip.Y : rectangle.Y;
-        rectangle.Width = rectangle.Right > clip.Right ? clip.Right - rectangle.X : rectangle.Width;
-        rectangle.Height = rectangle.Bottom > clip.Bottom ? clip.Bottom - rectangle.Y : rectangle.Height;
+        int left = Math.Max(rectangle.Left, clippingRectangle.Left);
+        int top = Math.Max(rectangle.Top, clippingRectangle.Top);
+        int right = Math.Min(rectangle.Right, clippingRectangle.Right);
+        int bottom = Math.Min(rectangle.Bottom, clippingRectangle.Bottom);
 
-        if (rectangle.Width <= 0 || rectangle.Height <= 0)
+        int width = right - left;
+        int height = bottom - top;
+
+        if (width <= 0 || height <= 0)
             return Rectangle.Empty;
 
-        return rectangle;
+        return new Rectangle(left, top, width, height);
     }
 
     /// <summary>

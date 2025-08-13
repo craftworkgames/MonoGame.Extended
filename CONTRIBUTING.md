@@ -1,70 +1,151 @@
-# Contributing to MonoGame.Extended
+# Contributing to MonoGame Extended
 
-We're happy that you have chosen to contribute to the MonoGame Extended project.
+Welcome to MonoGame Extended! We're excited that you want to help expand the MonoGame ecosystem with additional functionality and tools.
 
-You are joining a team of dedicated volunteers that are building an extension library to the game framework [MonoGame](http://www.monogame.net/).
+MonoGame Extended is a community-driven extension library that adds features like sprite batching, input management, collision detection, content pipeline extensions, and much more to MonoGame. As an extension library, we have different priorities and workflows compared to the core MonoGame framework.
 
-Please read this document completely before contributing.
+## Understanding Our Mission
 
+MonoGame Extended is a collection of practical utilities designed to help you **prototype quickly and evolve into production** without throwing away your work. We're guided by four core principles:
 
-## How To Contribute
+**Prototype to Production**: Our tools help you manifest early prototypes and evolve them into working games without starting over. We focus on solving present-day pain points rather than anticipating future needs.
 
-MonoGame.Extended has a `main` branch for stable releases and a `develop` branch for daily development.  New features and fixes are always submitted to the `develop` branch.
+**Pragmatic, Not Opinionated**: We're not an engine or framework - we're decoupled utilities that solve specific game development problems. There's no "one right way" to make games, so we provide flexible tools that adapt to your constraints.
 
-If you are looking for ways to help you should start by looking at the [Open Issues](https://github.com/craftworkgames/MonoGame.Extended/issues).  Please let us know if you plan to work on an issue so that others are not duplicating work.
+**Hardware-Aware**: When beneficial, our code leverages platform-specific capabilities rather than abstracting them away. Different hardware has different strengths, and good game development tools should respect that.
 
-The MonoGame.Extended project follows standard [GitHub flow](https://guides.github.com/introduction/flow/index.html).  You should learn and be familiar with how to [use Git](https://help.github.com/articles/set-up-git/), how to [create a fork of MonoGame.Extended](https://help.github.com/articles/fork-a-repo/), and how to [submit a Pull Request](https://help.github.com/articles/using-pull-requests/).
+**Expert-Enabling**: We help you become a better game developer by providing well-documented, understandable solutions. Our goal is to save you time and share knowledge, not replace your expertise.
 
-After you submit a PR the GitHub actions will trigger and build your changes and verify that all tests pass. Project maintainers and contributors will review your changes and provide constructive feedback to improve your submission.
+## Important Restrictions
 
-Once satisfied that your changes are good for MonoGame.Extended we will merge it.
+Before you start contributing, please understand these critical limitations:
 
-## Quick Guidelines
+**Intellectual Property**: Only submit code you wrote personally or that you have explicit permission to contribute. Never use decompiled code from any source, including XNA, MonoGame, or other game engines. If you want to integrate external code, discuss it in an issue first. Your contributions will be distributed under the MIT License.
 
-Here are a few simple rules and suggestions to remember when contributing to MonoGame.Extended.
+**What We Don't Accept**: We won't merge decompiled or reverse-engineered code, large PRs that change unrelated parts of the codebase, style-only changes without functional improvements, features that duplicate core MonoGame functionality, or breaking changes without prior discussion and approval.
 
-* :bangbang: **NEVER** commit code that you didn't personally write.
-* :bangbang: **NEVER** use decompiler tools to steal code and submit them as your own work.
-* :bangbang: **NEVER** decompile XNA assemblies and steal Microsoft's copyrighted code.
-* **PLEASE** try keep your PRs focused on a single topic and of a reasonable size or we may ask you to break it up.
-* **PLEASE** be sure to write simple and descriptive commit messages.
-* **DO NOT** surprise us with new APIs or big new features. Open an issue to discuss your ideas first.
-* **DO NOT** reorder type members as it makes it difficult to compare code changes in a PR.
-* **DO** give priority to the existing style of the file you're changing.
-* **DO** try to add to our [unit tests](Source/MonoGame.Extended.Tests) when adding new features or fixing bugs.
-* **DO NOT** send PRs for code style changes or make code changes just for the sake of style.
-* **PLEASE** keep a civil and respectful tone when discussing and reviewing contributions.
-* **PLEASE** tell others about MonoGame.Extended and your contributions via social media.
+## Getting Started Locally
 
-## Decompiler Tools
+Setting up your development environment is straightforward:
 
-We prohibit tools like dotPeek, ILSpy, JustDecompiler, or .NET Reflector which convert compiled assemblies into readable code.
+```bash
+git clone https://github.com/MonoGame-Extended/MonoGame.Extended.git
+cd MonoGame.Extended
+dotnet restore
+dotnet build
+dotnet test
+```
 
-It is **NEVER ACCEPTABLE** to decompile copyrighted assemblies and submit that code to the MonoGame.Extended project.
+**Prerequisites**: You'll need .NET SDK 8.0 or later and MonoGame 3.8.* or compatible version. If you're working on content pipeline extensions, test your changes with sample content and document any new processor parameters.
 
-* It **DOES NOT** matter how much you change the code.
-* It **DOES NOT** matter what country you live in or what your local laws say.
-* It **DOES NOT** matter that XNA is discontinued.
-* It **DOES NOT** matter how small the bit of code you have stolen is.
-* It **DOES NOT** matter what your opinion is of stealing code.
+**Development Workflow**: We use a feature branch workflow with `main` for stable releases and `develop` for active development. **All contributions should target the `develop` branch.**
 
-If you did not write the code, you do not have ownership of the code, and you shouldn't submit it to MonoGame.Extended.
+## Ways to Contribute
 
-If we find a contribution in violation of copyright it will be immediately removed.  We will bar that contributor from the MonoGame.Extended project.
+### Bug Reports and Fixes
 
+Found a bug? First check our [existing issues](https://github.com/MonoGame-Extended/MonoGame.Extended/issues) to avoid duplicates. When creating a bug report, provide a clear description of the problem, step-by-step reproduction instructions, expected versus actual behavior, configuration details, and error messages when available. Include a minimal code example or link to a reproduction repository when possible—text is preferred over screenshots for searchability.
+
+### Feature Requests and Implementation
+
+Feature requests require thoughtful consideration since they affect the entire community. Before implementing any new feature, submit a feature request using our template explaining what problem the feature solves and why it's important for game developers. Wait for community discussion and approval, ensure the scope aligns with our utility-focused approach, and plan for comprehensive test coverage.
+
+### Documentation and Examples
+
+Help other developers by improving API documentation, creating usage examples, writing tutorials or guides, and updating the wiki. Clear documentation is just as valuable as code contributions.
+
+## Code Quality and Standards
+
+We maintain consistent standards to ensure the codebase remains readable, maintainable, and performant across the entire MonoGame Extended ecosystem.
+
+### Architecture and Design
+
+Follow MonoGame's existing patterns and conventions while designing for extensibility—other developers should be able to build on your work. Prefer composition over inheritance where appropriate, keep dependencies minimal and well-justified, and ensure new features integrate well with existing components. Don't break existing APIs without strong justification, and consider deprecation paths for necessary breaking changes.
+
+### Performance Considerations
+
+Game development demands performance-conscious code. Minimize allocations in hot code paths, use object pooling for frequently created and destroyed objects, and prefer `Span<T>` and `ReadOnlySpan<T>` for memory-efficient operations. Consider cache-friendly data layouts for performance-critical components and profile your code when it affects game loop performance. Document any performance implications of new features.
+
+### Testing Requirements
+
+All new functionality needs comprehensive test coverage. Write unit tests that cover both happy paths and edge cases, test error conditions and parameter validation, and verify cross-platform compatibility when possible. Update existing tests if your changes affect them, and include manual testing instructions when automated testing isn't sufficient.
+
+For complete coding standards including naming conventions, code organization, and documentation requirements, refer to our comprehensive [CODING_GUIDELINES](CODING_GUIDELINES.md) document.
+
+## Pull Request Process
+
+### Before You Submit
+
+Fork the repository and create a branch from `develop` with a descriptive name. Make focused commits with clear, descriptive messages that explain what changed and why. Ensure your code follows our standards and includes appropriate test coverage.
+
+### The Pull Request
+
+Complete our PR checklist. **We won't review incomplete submissions**. Verify no overlapping PRs exist, follow our contribution guidelines and code of conduct, and write a descriptive title that summarizes your changes. Fill out the PR template with a clear description of the purpose and problem solved, links to related issues (use "closes #123" to auto-close issues), and a high-level overview of technical changes.
+
+Keep PRs reasonably sized and focused on a single concern. Include tests that verify your changes work correctly, update documentation for any API changes, and ensure our GitHub Actions CI passes. Be patient during review—we're all volunteers with varying availability.
+
+## Code Review Process
+
+Understanding our review process helps set proper expectations and ensures smoother collaboration.
+
+### What to Expect
+
+We aim to acknowledge new PRs within 3-5 business days, though initial response times may vary during holidays or when maintainers have competing priorities. Simple fixes typically get reviewed within 1-2 weeks, while complex features may take longer. Other community members may provide feedback before maintainer review.
+
+### Review Focus Areas
+
+Our reviewers evaluate contributions across several dimensions. Code quality includes adherence to established coding standards, proper error handling and input validation, performance considerations for game development scenarios, and clear, self-documenting code. We look for adequate test coverage of new functionality, tests that cover edge cases and error conditions, and verification that existing tests still pass.
+
+Documentation requirements include XML documentation for public APIs, updated README or wiki pages for new features, clear commit messages and PR descriptions, and migration notes for breaking changes. Integration aspects cover how well changes work with existing MonoGame Extended components, avoiding unnecessary breaking changes to public APIs, consistency with the library's architectural patterns, and proper namespace and assembly organization.
+
+### During Review
+
+Address all reviewer comments, even if just to explain your reasoning. Make requested changes in new commits rather than force-pushing during review, ask questions if feedback isn't clear, and be open to alternative approaches suggested by reviewers. Our reviewers focus on the code rather than the person, provide constructive feedback with explanations, and may offer mentoring for newer contributors.
+
+## Version Compatibility
+
+As an extension library, MonoGame Extended must maintain compatibility with specific MonoGame versions while supporting contributors working across different environments.
+
+We currently target MonoGame 3.8.* as our stable baseline and track MonoGame development releases without guaranteeing compatibility until official release. When contributing code that affects dependencies, new features should target the current supported MonoGame version, avoid using MonoGame APIs introduced in development builds, and discuss version bumps in an issue before implementation.
+
+Minimize new external dependencies and justify why existing .NET or MonoGame functionality isn't sufficient. Use conditional compilation for platform-specific features and test compatibility across target platforms when possible. If your contribution requires a MonoGame version bump, discuss the necessity first, document the impact on affected APIs, update documentation to reflect new minimum requirements, and consider whether alternatives might work with current versions.
+
+MonoGame Extended follows [semantic versioning](https://semver.org/) with major versions for breaking changes, minor versions for new features, and patch versions for bug fixes. We maintain compatibility with the latest stable MonoGame release and typically support one previous major version.
+
+## Platform Considerations
+
+MonoGame Extended runs across Windows, macOS, Linux, and mobile platforms. When writing platform-specific code, use conditional compilation directives:
+
+```csharp
+#if WINDOWS
+// Windows-specific implementation
+#elif LINUX
+// Linux-specific implementation
+#endif
+```
+
+Test your changes on multiple platforms when possible, be mindful of platform-specific limitations, and document any platform restrictions in your code and PR description.
+
+## Getting Help
+
+Need assistance or have questions about contributing?
+
+**Discord**: Join our [Discord server](https://discord.gg/xPUEkj9) for real-time discussion and community support.
+**Issues**: Use GitHub issues for bug reports and feature requests with our provided templates.
+**Discussions**: Start conversations about design decisions or general questions in GitHub Discussions.
 
 ## Licensing
 
-The MonoGame.Extended project is under the [MIT License](https://opensource.org/licenses/MIT) unless a portion of code is explicitly stated elsewhere. See the [LICENSE](LICENSE) for more details. Third-party libraries used by MonoGame.Extended are under their own licenses, we always seek permission from the original author of those libraries.. Please refer to those libraries for details on the license they use.
+MonoGame Extended is under the [MIT License](https://opensource.org/licenses/MIT) unless a portion of code is explicitly stated elsewhere. See the [LICENSE](LICENSE) for more details. Third-party libraries used by MonoGame Extended are under their own licenses, we always seek permission from the original author of those libraries.. Please refer to those libraries for details on the license they use.
 
-We accept contributions in "good faith" that it isn't bound to a conflicting license.  By submitting a PR you agree to distribute your work under the MonoGame.Extended license and copyright.
+We accept contributions in "good faith" that it isn't bound to a conflicting license. By submitting a PR you agree to distribute your work under the MonoGame Extended license and copyright.
 
+## Recognition and Community
 
-## Need More Help?
+Contributors are recognized in our release notes and README. Significant contributors may be invited to join the maintainer team and help shape the future direction of MonoGame Extended.
 
-If you need help, please ask questions in our [Discord](https://discord.gg/xPUEkj9), or you can ask questions in the official [MonoGame Discord](https://discord.gg/monogame).
+---
 
+Thank you for helping make MonoGame Extended better for the entire game development community!
 
-Thanks for reading this guide and helping make MonoGame.Extended great!
-
- :heart: The MonoGame.Extended Team
+💖 The MonoGame Extended Team

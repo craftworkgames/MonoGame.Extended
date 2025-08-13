@@ -686,7 +686,7 @@ namespace MonoGame.Extended
         /// </returns>
         public override string ToString()
         {
-            return $"{{X: {X}, Y: {Y}, Width: {Width}, Height: {Height}";
+            return $"X: {X}, Y: {Y}, Width: {Width}, Height: {Height}";
         }
 
         internal string DebugDisplayString => string.Concat(X, "  ", Y, "  ", Width, "  ", Height);

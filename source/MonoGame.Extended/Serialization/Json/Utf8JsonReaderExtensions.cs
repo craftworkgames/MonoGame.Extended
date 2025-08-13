@@ -14,7 +14,7 @@ public static class Utf8JsonReaderExtensions
     {
         {typeof(int), s => int.Parse(s, CultureInfo.InvariantCulture.NumberFormat)},
         {typeof(float), s => float.Parse(s, CultureInfo.InvariantCulture.NumberFormat)},
-        {typeof(HslColor), s => ColorExtensions.FromHex(s).ToHsl() }
+        {typeof(HslColor), s => HslColor.FromRgb(ColorExtensions.FromHex(s))}
     };
 
     /// <summary>

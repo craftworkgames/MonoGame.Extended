@@ -1,32 +1,79 @@
-﻿using Microsoft.Xna.Framework;
+﻿// Copyright (c) Craftwork Games. All rights reserved.
+// Licensed under the MIT license.
+// See LICENSE file in the project root for full license information.
 
-namespace MonoGame.Extended.Particles.Profiles
+using Microsoft.Xna.Framework;
+
+namespace MonoGame.Extended.Particles.Profiles;
+
+/// <summary>
+/// A profile that distributes particles along the edges of a rectangular boundary with uniform density.
+/// </summary>
+/// <remarks>
+///     <para>
+///         The <see cref="BoxUniformProfile"/> positions new particles on the perimeter of a rectangle centered at the
+///         emitter's position. Unlike <see cref="BoxProfile"/> which gives equal probability to each side, this profile
+///         allocates probability proportional to the length of each side, ensuring a uniform distribution of particles
+///         around the entire perimeter.
+///     </para>
+///     <para>
+///         This means longer sides will receive more particles than shorter sides, creating a visually balanced
+///         distribution regardless of the rectangle's dimensions.
+///     </para>
+///     <para>
+///         Particles are given random unit vector headings, allowing them to move in any direction regardless of their
+///         starting edge.
+///     </para>
+/// </remarks>
+public class BoxUniformProfile : Profile
 {
-    public class BoxUniformProfile : Profile
+    /// <summary>
+    /// The width of the rectangular perimeter.
+    /// </summary>
+    public float Width;
+
+    /// <summary>
+    /// The height of the rectangular perimeter.
+    /// </summary>
+    public float Height;
+
+    /// <summary>
+    /// Computes the offset and heading for a new particle.
+    /// </summary>
+    /// <param name="offset">A pointer to the Vector2 where the offset from the emitter position will be stored.</param>
+    /// <param name="heading">A pointer to the Vector2 where the unit direction vector will be stored.</param>
+    public override unsafe void GetOffsetAndHeading(Vector2* offset, Vector2* heading)
     {
-        public float Width { get; set; }
-        public float Height { get; set; }
+        int perimeter = (int)(2 * Width + 2 * Height);
+        int value = FastRandom.Shared.Next(perimeter);
 
-        public override void GetOffsetAndHeading(out Vector2 offset, out Vector2 heading)
+        switch (value)
         {
-            var value = Random.Next((int) (2*Width + 2*Height));
+            //  Top
+            case var _ when value < Width:
+                offset->X = FastRandom.Shared.NextSingle(Width * -0.5f, Width * 0.5f);
+                offset->Y = Height * -0.5f;
+                break;
 
-            if (value < Width) // Top
-                offset = new Vector2(Random.NextSingle(Width*-0.5f, Width*0.5f), Height*-0.5f);
-            else
-            {
-                if (value < 2*Width) // Bottom
-                    offset = new Vector2(Random.NextSingle(Width*-0.5f, Width*0.5f), Height*0.5f);
-                else
-                {
-                    if (value < 2*Width + Height) // Left
-                        offset = new Vector2(Width*-0.5f, Random.NextSingle(Height*-0.5f, Height*0.5f));
-                    else // Right
-                        offset = new Vector2(Width*0.5f, Random.NextSingle(Height*-0.5f, Height*0.5f));
-                }
-            }
+            //  Bottom
+            case var _ when value < 2 * Width:
+                offset->X = FastRandom.Shared.NextSingle(Width * -0.5f, Width * 0.5f);
+                offset->Y = Height * 0.5f;
+                break;
 
-            Random.NextUnitVector(out heading);
+            //  Left
+            case var _ when value < 2 * Width + Height:
+                offset->X = Width * -0.5f;
+                offset->Y = FastRandom.Shared.NextSingle(Height * -0.5f, Height * 0.5f);
+                break;
+
+            // Right
+            default:
+                offset->X = Width * 0.5f;
+                offset->Y = FastRandom.Shared.NextSingle(Height * -0.5f, Height * 0.5f);
+                break;
         }
+
+        FastRandom.Shared.NextUnitVector(heading);
     }
 }

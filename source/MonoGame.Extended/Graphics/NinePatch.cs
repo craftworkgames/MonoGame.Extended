@@ -121,8 +121,8 @@ public class NinePatch
 
         _patches = patches;
 
-        Size topLeft = patches[NinePatch.TopLeft].Size;
-        Size bottomRight = patches[NinePatch.BottomRight].Size;
+        Size topLeft = patches[NinePatch.TopLeft].OriginalSize;
+        Size bottomRight = patches[NinePatch.BottomRight].OriginalSize;
         Padding = new Thickness(topLeft.Width, topLeft.Height, bottomRight.Width, bottomRight.Height);
 
         Name = name;
