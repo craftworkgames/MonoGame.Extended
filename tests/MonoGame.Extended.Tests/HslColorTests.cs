@@ -2,9 +2,9 @@
 using Microsoft.Xna.Framework;
 using Xunit;
 
-namespace MonoGame.Extended.Tests.Particles
+namespace MonoGame.Extended.Tests
 {
-    public class ColourTests
+    public class HslColorTests
     {
         public class Constructor
         {
@@ -44,7 +44,7 @@ namespace MonoGame.Extended.Tests.Particles
             {
                 var x = new HslColor(360f, 1f, 1f);
 
-                Object y = new HslColor(360f, 1f, 1f);
+                object y = new HslColor(360f, 1f, 1f);
                 Assert.Equal(x, y);
             }
 
@@ -53,7 +53,7 @@ namespace MonoGame.Extended.Tests.Particles
             {
                 var x = new HslColor(360f, 1f, 1f);
 
-                Object y = new HslColor(0f, 1f, 0f);
+                object y = new HslColor(0f, 1f, 0f);
                 Assert.False(x.Equals(y));
             }
 
@@ -89,7 +89,7 @@ namespace MonoGame.Extended.Tests.Particles
         public class ToStringMethod
         {
             [Theory]
-            [InlineData(360f, 1f, 1f, "H:0.0° S:100.0 L:100.0")]
+            [InlineData(360f, 1f, 1f, "H:360.0° S:100.0 L:100.0")]
             [InlineData(180f, 0.5f, 0.5f, "H:180.0° S:50.0 L:50.0")]
             [InlineData(0f, 0f, 0f, "H:0.0° S:0.0 L:0.0")]
             public void ReturnsCorrectValue(float h, float s, float l, string expected)

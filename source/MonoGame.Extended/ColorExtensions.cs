@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
@@ -9,11 +8,28 @@ namespace MonoGame.Extended
     /// </summary>
     public static class ColorExtensions
     {
+        /// <summary>
+        /// Converts a <see cref="Color"/> to its hexadecimal string representation in RGBA format.
+        /// </summary>
+        /// <param name="color">The <see cref="Color"/> to convert.</param>
+        /// <returns>A hexadecimal string representation of the color in the format #RRGGBBAA.</returns>
+        public static string ToHex(this Color color)
+        {
+            string rx = $"{color.R:x2}";
+            string gx = $"{color.G:x2}";
+            string bx = $"{color.B:x2}";
+            string ax = $"{color.A:x2}";
+
+            return $"#{rx}{gx}{bx}{ax}";
+        }
+
+        [Obsolete("Use ColorHelper.FromHex instead. This will be removed in the next major SemVer release.")]
         public static Color FromHex(string value)
         {
             return ColorHelper.FromHex(value);
         }
 
+        [Obsolete("Use HslColor.ToRgb instead.  This will be removed in the next major SemVer update")]
         public static Color ToRgb(this HslColor c)
         {
             var h = c.H;
@@ -33,6 +49,7 @@ namespace MonoGame.Extended
                 ComponentFromHue(min, max, h - 1f/3f));
         }
 
+        [Obsolete("This will be removed in the next major SemVer release.")]
         private static float ComponentFromHue(float m1, float m2, float h)
         {
             h = (h + 1f)%1f;
@@ -44,7 +61,8 @@ namespace MonoGame.Extended
                 return m1 + (m2 - m1)*(2f/3f - h)*6f;
             return m1;
         }
-
+        
+        [Obsolete("Use HslColor.FromRgb instead.  This method will be removed in the next SemVer release")]
         public static HslColor ToHsl(this Color c)
         {
             var r = c.R/255f;
@@ -89,6 +107,7 @@ namespace MonoGame.Extended
         /// </remarks>
         /// <param name="abgr">The packed color value in ABGR format</param>
         /// <returns>The <see cref="Color"/> value created</returns>
+        [Obsolete("Use ColorHelper.FromAbgr instead.  This will be removed in the next major SemVer release.")]
         public static Color FromAbgr(uint abgr)
         {
             uint rgba = (abgr & 0x000000FF) << 24 | // Alpha

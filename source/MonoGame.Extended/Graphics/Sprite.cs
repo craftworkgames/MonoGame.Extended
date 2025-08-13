@@ -62,6 +62,11 @@ public class Sprite : IColorable
     public object Tag { get; set; }
 
     /// <summary>
+    /// Gets the size of the sprite.
+    /// </summary>
+    public Point Size => TextureRegion.OriginalSize;
+
+    /// <summary>
     /// Gets or sets the origin of this sprite.
     /// </summary>
     /// <remarks>
@@ -79,8 +84,8 @@ public class Sprite : IColorable
     /// </remarks>
     public Vector2 OriginNormalized
     {
-        get { return new Vector2(Origin.X / TextureRegion.Width, Origin.Y / TextureRegion.Height); }
-        set { Origin = new Vector2(value.X * TextureRegion.Width, value.Y * TextureRegion.Height); }
+        get { return new Vector2(Origin.X / TextureRegion.OriginalSize.Width, Origin.Y / TextureRegion.OriginalSize.Height); }
+        set { Origin = new Vector2(value.X * TextureRegion.OriginalSize.Width, value.Y * TextureRegion.OriginalSize.Height); }
     }
 
     /// <summary>
@@ -101,6 +106,11 @@ public class Sprite : IColorable
                 throw new ObjectDisposedException(nameof(value), $"The source {nameof(Texture2D)} of the {nameof(TextureRegion)} was disposed prior to setting this property.");
             }
             _textureRegion = value;
+            
+            if (value.OriginNormalized.HasValue)
+            {
+                OriginNormalized = value.OriginNormalized.Value;
+            }
         }
     }
 
@@ -145,7 +155,7 @@ public class Sprite : IColorable
         Color = Color.White;
         IsVisible = true;
         Effect = SpriteEffects.None;
-        OriginNormalized = Vector2.Zero;
+        OriginNormalized = textureRegion.OriginNormalized ?? Vector2.Zero;
         Depth = 0.0f;
     }
 
@@ -184,7 +194,7 @@ public class Sprite : IColorable
     public Vector2[] GetCorners(Vector2 position, float rotation, Vector2 scale)
     {
         var min = -Origin;
-        var max = min + new Vector2(TextureRegion.Width, TextureRegion.Height);
+        var max = min + new Vector2(TextureRegion.OriginalSize.Width, TextureRegion.OriginalSize.Height);
         var offset = position;
 
         if (scale != Vector2.One)

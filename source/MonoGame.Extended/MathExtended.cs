@@ -5,6 +5,12 @@ namespace MonoGame.Extended;
 public static class MathExtended
 {
     /// <summary>
+    /// Represents the smallest positive value that can be added to 1.0 to produce a distinguishable result.
+    /// This value is approximately 1.19209290e-7 and is useful for floating-point comparisons.
+    /// </summary>
+    public const float MachineEpsilon = 1.19209290e-7f;
+
+    /// <summary>
     /// Calculates a new <see cref="Vector2"/> with the component-wise minimum values from two given
     /// <see cref="Vector2"/> values.
     /// </summary>

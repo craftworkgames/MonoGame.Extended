@@ -65,8 +65,8 @@ public static class Texture2DRegionExtensions
     /// Gets a subregion of the specified texture region using the provided name, coordinates, and dimensions.
     /// </summary>
     /// <param name="textureRegion">The texture region to get the subregion from.</param>
-    /// <param name="x">The top-left x-coordinate of the subregion within the texture region.</param>
-    /// <param name="y">The top-left y-coordinate of the subregion within the texture region.</param>
+    /// <param name="x">The top-left x-coordinate of the subregion within the original sprite.</param>
+    /// <param name="y">The top-left y-coordinate of the subregion within the original sprite.</param>
     /// <param name="width">The width, in pixels, of the subregion.</param>
     /// <param name="height">The height, in pixels, of the subregion.</param>
     /// <param name="name">The name of the new subregion.</param>
@@ -86,8 +86,47 @@ public static class Texture2DRegionExtensions
             name = $"{textureRegion.Texture.Name}({x}, {y}, {width}, {height})";
         }
 
-        Rectangle region = textureRegion.Bounds.GetRelativeRectangle(x, y, width, height);
-        return new Texture2DRegion(textureRegion.Texture, region, name);
+        // The requested subregion is in original sprite coordinates
+        Rectangle requestedRegion = new Rectangle(x, y, width, height);
+
+        // Calculate the bounds of the trimmed region in original sprite coordinates
+        Rectangle trimmedBounds = new Rectangle(
+            (int)textureRegion.Offset.X,
+            (int)textureRegion.Offset.Y,
+            textureRegion.IsRotated ? textureRegion.Height : textureRegion.Width,
+            textureRegion.IsRotated ? textureRegion.Width : textureRegion.Height);
+
+        // Find intersection between requested subregion and the actual trimmed region
+        Rectangle intersection = Rectangle.Intersect(requestedRegion, trimmedBounds);
+
+        if (intersection.IsEmpty)
+        {
+            return null;
+        }
+
+        // The subregion offset must include the existing offset of the input region
+        Vector2 subregionOffset = new Vector2(Math.Max(0, textureRegion.Offset.X - x),
+                                              Math.Max(0, textureRegion.Offset.Y - y));
+
+        if (textureRegion.IsRotated)
+        {
+            // Calculate the actual texture coordinates
+            int textureX = textureRegion.X + (textureRegion.Width + (int)textureRegion.Offset.Y - intersection.Bottom);
+            int textureY = textureRegion.Y + (intersection.X - (int)textureRegion.Offset.X);
+
+            return new Texture2DRegion(textureRegion.Texture, textureX, textureY, intersection.Height, intersection.Width,
+                                       textureRegion.IsRotated, new Size(width, height), subregionOffset, textureRegion.OriginNormalized, name);
+        }
+        else
+        {
+            // Calculate the actual texture coordinates
+            int textureX = textureRegion.X + (intersection.X - (int)textureRegion.Offset.X);
+            int textureY = textureRegion.Y + (intersection.Y - (int)textureRegion.Offset.Y);
+
+            return new Texture2DRegion(textureRegion.Texture, textureX, textureY, intersection.Width, intersection.Height,
+                                       textureRegion.IsRotated, new Size(width, height), subregionOffset, textureRegion.OriginNormalized, name);
+
+        }
     }
 
     /// <summary>
@@ -139,10 +178,11 @@ public static class Texture2DRegionExtensions
     {
         Texture2DRegion[] patches = new Texture2DRegion[9];
 
-        int middleWidth = textureRegion.Width - leftPadding - rightPadding;
-        int middleHeight = textureRegion.Height - topPadding - bottomPadding;
-        int rightX = textureRegion.Width - rightPadding;
-        int bottomY = textureRegion.Height - bottomPadding;
+        // Use original sprite dimensions for calculations
+        int middleWidth = textureRegion.OriginalSize.Width - leftPadding - rightPadding;
+        int middleHeight = textureRegion.OriginalSize.Height - topPadding - bottomPadding;
+        int rightX = textureRegion.OriginalSize.Width - rightPadding;
+        int bottomY = textureRegion.OriginalSize.Height - bottomPadding;
 
         patches[NinePatch.TopLeft] = textureRegion.GetSubregion(0, 0, leftPadding, topPadding);
         patches[NinePatch.TopMiddle] = textureRegion.GetSubregion(leftPadding, 0, middleWidth, topPadding);

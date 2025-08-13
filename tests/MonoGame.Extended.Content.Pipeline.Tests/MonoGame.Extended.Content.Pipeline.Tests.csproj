@@ -12,6 +12,7 @@
         <Content Include="TestData\astrid-animator-atlas.json" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="TestData\astrid-animator.aa" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="TestData\test-tileset.json" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="TestData\test-atlas.json" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="TestData\isometric.tmx" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="TestData\isometric_tileset.png" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="TestData\level01.tmx" CopyToOutputDirectory="PreserveNewest" />
