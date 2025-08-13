@@ -1,10 +1,13 @@
 ################################################################################
-### Build MonoGame.Extended (Develop)
-### Clones the `develop` branch and performs a build, test, then pack of the
-### Monogame.Extended source code.  Once the build job is finished, the deploy
-### job will upload the nupkg files created to the MonoGame.Extended GitHub
+### Build MonoGame.Extended (Release)
+### Clones a specified release tag or the `develop` branch and performs a build,
+### test, then pack of the Monogame.Extended source code. Once the build job is
+### finished, the deploy job will upload the nupkg files created to the specified
+### package source (GitHub or NuGet).
 ###
-###     - Only runs on a push to the `develop` branch
+###     - Can be triggered manually with workflow_dispatch
+###     - Allows specifying a release tag or defaults to develop branch
+###     - Allows choosing between GitHub Packages or NuGet as deployment target
 ################################################################################
 name: "Create Release"
 
@@ -19,6 +22,11 @@ on:
           - GitHub
           - NuGet
         default: 'GitHub'
+      release-tag:
+        description: 'Release tag to build from (e.g., v1.0.0). Leave empty to use develop branch.'
+        required: false
+        type: string
+        default: ''
 
 jobs:
   build:
@@ -29,7 +37,7 @@ jobs:
       - name: Clone Repository
         uses: actions/checkout@v4
         with:
-          ref: develop
+          ref: ${{ inputs.release-tag || 'develop' }}
 
       - name: Setup Dotnet
         uses: actions/setup-dotnet@v4
