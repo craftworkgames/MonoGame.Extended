@@ -5,6 +5,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Animations;
@@ -445,38 +446,70 @@ public class Texture2DAtlas : IEnumerable<Texture2DRegion>
     /// </param>
     /// <param name="spacing">The spacing, in pixels, between regions. Defaults to <c>0</c>.</param>
     /// <returns>A <see cref="Texture2DAtlas"/> containing the created regions.</returns>
+    /// <remarks>
+    /// Region names are automatically generated using the pattern <c>{name}_{index}</c>, where <paramref name="name"/>
+    /// is the atlas name and <c>index</c> is the sequential region number starting from 0. For example, if the atlas
+    /// is named "spritesheet", the regions will be named "spritesheet_0", "spritesheet_1", "spritesheet_2", etc.
+    /// Regions are created in row-major order (left-to-right, top-to-bottom).
+    /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="texture"/> is null.</exception>
     /// <exception cref="ObjectDisposedException">Thrown if <paramref name="texture"/> is disposed.</exception>
     public static Texture2DAtlas Create(string name, Texture2D texture, int regionWidth, int regionHeight,
     int maxRegionCount = int.MaxValue, int margin = 0, int spacing = 0)
     {
-        var textureAtlas = new Texture2DAtlas(name, texture);
-        var count = 0;
-        var width = texture.Width - margin;
-        var height = texture.Height - margin;
-        var xIncrement = regionWidth + spacing;
-        var yIncrement = regionHeight + spacing;
+        ReadOnlySpan<CalculatedRegion> regions = CalculateRegions(name, texture.Width, texture.Height, regionWidth, regionHeight, maxRegionCount, margin, spacing);
+        Texture2DAtlas textureAtlas = new(name, texture);
 
-        var columns = (width - margin + spacing) / xIncrement;
-        var rows = (height - margin + spacing) / yIncrement;
-        var totalRegions = columns * rows;
-
-        for (var i = 0; i < totalRegions; i++)
+        for (int i = 0; i < regions.Length; i++)
         {
-            var x = margin + (i % columns) * xIncrement;
-            var y = margin + (i / columns) * yIncrement;
-
-            if (x >= width || y >= height)
-                break;
-
-            textureAtlas.CreateRegion(x, y, regionWidth, regionHeight);
-            count++;
-
-            if (count >= maxRegionCount)
-                return textureAtlas;
+            CalculatedRegion region = regions[i];
+            textureAtlas.CreateRegion(region.bounds, region.Name);
         }
 
         return textureAtlas;
     }
 
+    internal readonly record struct CalculatedRegion(Rectangle bounds, string Name);
+
+    internal static ReadOnlySpan<CalculatedRegion> CalculateRegions(string atlasName, int textureWidth, int textureHeight, int regionWidth, int regionHeight, int maxRegionCount, int margin, int spacing)
+    {
+        int width = textureWidth - margin;
+        int height = textureHeight - margin;
+        int xIncrement = regionWidth + spacing;
+        int yIncrement = regionHeight + spacing;
+
+        int columns = (width - margin + spacing) / xIncrement;
+        int rows = (height - margin + spacing) / yIncrement;
+        int totalRegions = columns * rows;
+
+        // We know what the final size of the collection will be so calculate it
+        // and use it to prevent reallocations as items are added to the list
+        int capacity = Math.Min(totalRegions, maxRegionCount);
+
+        List<CalculatedRegion> regions = new List<CalculatedRegion>(capacity);
+
+        for (int i = 0; i < totalRegions; i++)
+        {
+            int x = margin + (i % columns) * xIncrement;
+            int y = margin + (i / columns) * yIncrement;
+
+            if (x >= width || y >= height)
+            {
+                break;
+            }
+
+            Rectangle bounds = new Rectangle(x, y, regionWidth, regionHeight);
+            string name = $"{atlasName}_{i}";
+            CalculatedRegion region = new(bounds, name);
+            regions.Add(region);
+
+            if (regions.Count >= maxRegionCount)
+            {
+                break;
+            }
+
+        }
+
+        return CollectionsMarshal.AsSpan(regions);
+    }
 }
