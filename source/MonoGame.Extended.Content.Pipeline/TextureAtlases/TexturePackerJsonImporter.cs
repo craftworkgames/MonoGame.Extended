@@ -8,9 +8,9 @@ using MonoGame.Extended.Content.TexturePacker;
 namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
 {
     [ContentImporter(".json", DefaultProcessor = "TexturePackerProcessor", DisplayName = "TexturePacker JSON Importer - MonoGame.Extended")]
-    public class TexturePackerJsonImporter : ContentImporter<TexturePackerFileContent>
+    public class TexturePackerJsonImporter : ContentImporter<ContentImporterResult<TexturePackerFileContent>>
     {
-        public override TexturePackerFileContent Import(string filename, ContentImporterContext context)
+        public override ContentImporterResult<TexturePackerFileContent> Import(string filename, ContentImporterContext context)
         {
             var tpFile = TexturePackerFileReader.Read(filename);
 
@@ -27,7 +27,7 @@ namespace MonoGame.Extended.Content.Pipeline.TextureAtlases
                 }
             }
 
-            return tpFile;
+            return new ContentImporterResult<TexturePackerFileContent>(filename, tpFile);
         }
     }
 }
