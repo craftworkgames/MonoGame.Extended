@@ -12,19 +12,19 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         {
             var filePath = PathExtensions.GetApplicationFullPath(@"TestData/test-tileset.json");
             var importer = new TexturePackerJsonImporter();
-            var data = importer.Import(filePath, Substitute.For<ContentImporterContext>());
+            var importResult = importer.Import(filePath, Substitute.For<ContentImporterContext>());
 
-            Assert.NotNull(data);
+            Assert.NotNull(importResult);
 
             // Check meta.image contains image name
-            Assert.Equal("test-tileset.png", data.Meta.Image);
+            Assert.Equal("test-tileset.png", importResult.Data.Meta.Image);
 
             // Check regions count and textures
-            Assert.Equal(9, data.Regions.Count);
-            Assert.Null(data.Textures);  // only used by new MonoGame.Extended JSON format
+            Assert.Equal(9, importResult.Data.Regions.Count);
+            Assert.Null(importResult.Data.Textures);  // only used by new MonoGame.Extended JSON format
 
             // Check first region
-            var firstRegion = data.Regions[0];
+            var firstRegion = importResult.Data.Regions[0];
             Assert.Equal("1.png", firstRegion.FileName);
             Assert.Equal(2, firstRegion.Frame.X);
             Assert.Equal(2, firstRegion.Frame.Y);
@@ -54,16 +54,16 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
         {
             var filePath = PathExtensions.GetApplicationFullPath(@"TestData/test-atlas.json");
             var importer = new TexturePackerJsonImporter();
-            var data = importer.Import(filePath, Substitute.For<ContentImporterContext>());
+            var importResult = importer.Import(filePath, Substitute.For<ContentImporterContext>());
 
             // Regions must be null (only used by old generic json format)
-            Assert.Null(data.Regions);
+            Assert.Null(importResult.Data.Regions);
 
             // Textures contains 1 texture
-            Assert.NotNull(data.Textures);
-            Assert.Single(data.Textures);
+            Assert.NotNull(importResult.Data.Textures);
+            Assert.Single(importResult.Data.Textures);
 
-            var texture = data.Textures[0];
+            var texture = importResult.Data.Textures[0];
             Assert.Equal("test-atlas-texture.png", texture.FileName);
 
             // The first texture contains frames
