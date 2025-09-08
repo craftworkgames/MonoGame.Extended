@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Particles.Primitives;
 
 namespace MonoGame.Extended.Particles;
@@ -238,32 +239,28 @@ public class ParticleEffect : IDisposable
     /// Creates a new instance of the <see cref="ParticleEffect"/> class from a file.
     /// </summary>
     /// <param name="path">The path to the file containing the serialized effect data.</param>
+    /// <param name="content">The content manager used to load graphical assets.</param>
     /// <returns>A new <see cref="ParticleEffect"/> instance with properties and emitters as defined in the file.</returns>
-    /// <exception cref="NotImplementedException">
-    /// This method is not yet implemented.
-    /// </exception>
-    /// <remarks>
-    /// This method is intended to deserialize effect data from a file, but has not been implemented in this version.
-    /// </remarks>
-    public static ParticleEffect FromFile(string path)
+    /// <exception cref="ArgumentNullException"><paramref name="content"/> is <see langword="null"/></exception>
+    /// <exception cref="ArgumentException"><paramref name="path"/> is <see langword="null"/> or empty.</exception>
+    public static ParticleEffect FromFile(string path, ContentManager content)
     {
-        throw new NotImplementedException();
+        using ParticleEffectReader reader = new(path, content);
+        return reader.ReadParticleEffect();
     }
 
     /// <summary>
     /// Creates a new instance of the <see cref="ParticleEffect"/> class from a stream.
     /// </summary>
-    /// <param name="stream">The stream containing the serialized effect data.</param>
+    /// <param name="stream">The stream to read from.</param>
+    /// <param name="content">The <see cref="ContentManager"/> to use for loading textures.</param>
+    /// <param name="baseDirectory">The base directory to use for resolving relative texture paths. If null, uses the ContentManager's RootDirectory.</param>
     /// <returns>A new <see cref="ParticleEffect"/> instance with properties and emitters as defined in the stream.</returns>
-    /// <exception cref="NotImplementedException">
-    /// This method is not yet implemented.
-    /// </exception>
-    /// <remarks>
-    /// This method is intended to deserialize effect data from a stream, but has not been implemented in this version.
-    /// </remarks>
-    public static ParticleEffect FromStream(Stream stream)
+    /// <exception cref="ArgumentNullException"><paramref name="stream"/> or <paramref name="content"/> is <see langword="null"/></exception>
+    public static ParticleEffect FromStream(Stream stream, ContentManager content, string baseDirectory)
     {
-        throw new NotImplementedException();
+        using ParticleEffectReader reader = new(stream, content);
+        return reader.ReadParticleEffect();
     }
 
     /// <summary>
