@@ -27,6 +27,7 @@ public sealed class ParticleEffectReader : IDisposable
 {
     private readonly XmlReader _reader;
     private readonly ContentManager _content;
+    private readonly string _baseDirectory;
 
     /// <summary>
     /// Gets a value that indicates whether this <see cref="ParticleEffectReader"/> has been disposed of.
@@ -52,6 +53,8 @@ public sealed class ParticleEffectReader : IDisposable
 
         _content = content;
         _reader = XmlReader.Create(fileName, settings);
+
+        _baseDirectory = Path.GetDirectoryName(Path.GetFullPath(fileName));
     }
 
     /// <summary>
@@ -61,6 +64,18 @@ public sealed class ParticleEffectReader : IDisposable
     /// <param name="content">The <see cref="ContentManager"/> to use for loading textures.</param>
     /// <exception cref="ArgumentNullException"><paramref name="stream"/> or <paramref name="content"/> is <see langword="null"/></exception>
     public ParticleEffectReader(Stream stream, ContentManager content)
+        : this(stream, content, null)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ParticleEffectReader"/> class that reads from a stream.
+    /// </summary>
+    /// <param name="stream">The stream to read from.</param>
+    /// <param name="content">The <see cref="ContentManager"/> to use for loading textures.</param>
+    /// <param name="baseDirectory">The base directory to use for resolving relative texture paths. If null, uses the ContentManager's RootDirectory.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="stream"/> or <paramref name="content"/> is <see langword="null"/></exception>
+    public ParticleEffectReader(Stream stream, ContentManager content, string baseDirectory)
     {
         ArgumentNullException.ThrowIfNull(stream);
         ArgumentNullException.ThrowIfNull(content);
@@ -72,6 +87,8 @@ public sealed class ParticleEffectReader : IDisposable
 
         _content = content;
         _reader = XmlReader.Create(stream, settings);
+
+        _baseDirectory = baseDirectory ?? content.RootDirectory;
     }
 
     /// <summary/>
@@ -218,31 +235,31 @@ public sealed class ParticleEffectReader : IDisposable
         }
 
         // Try common image extensions
-        string[] extensions = { ".png", ".jpg", ".jpeg", ".bmp" };
-        string baseDirectory = _content.RootDirectory;
+        string filePath = Path.Combine(_baseDirectory, name);
 
-        foreach(string extension in extensions)
+        if (File.Exists(filePath))
         {
-            string filePath = Path.Combine(baseDirectory, name + extension);
-
-            if(File.Exists(filePath))
+            try
             {
-                try
-                {
 #if KNI
-                    using FileStream stream = File.OpenRead(filePath);
-                    Texture2D texture = Texture2D.FromStream(graphicsDeviceService.GraphicsDevice, stream);
+                using FileStream stream = File.OpenRead(filePath);
+                Texture2D texture = Texture2D.FromStream(graphicsDeviceService.GraphicsDevice, stream);
 #else
-                    Texture2D texture = Texture2D.FromFile(graphicsDeviceService.GraphicsDevice, filePath);
+                Texture2D texture = Texture2D.FromFile(graphicsDeviceService.GraphicsDevice, filePath);
 #endif
-                    texture.Name = name;
-                    return new Texture2DRegion(texture, bounds);
-                }
-                catch
-                {
-                    // Continue to next extension
-                    continue;
-                }
+                texture.Name = name;
+                return new Texture2DRegion(texture, bounds);
+            }
+            catch
+            {
+                // TODO: 6.0.0
+                // Since the file name is baked into the .ember file including
+                // the extension, we no longer check extensions in a for each
+                // loop.  This means we can't just "continue" in the catch.
+                // We'll need to throw an exception, but doing so would be
+                // a breaking change, so we'll return null for now, document
+                // it and update it for 6.0.0
+                return null;
             }
         }
 
