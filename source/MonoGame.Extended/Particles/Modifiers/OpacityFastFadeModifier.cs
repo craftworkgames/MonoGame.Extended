@@ -32,11 +32,11 @@ public sealed class OpacityFastFadeModifier : Modifier
     /// Updates all particles by setting their opacity based on their age.
     /// </summary>
     /// <inheritdoc/>
-    public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
+    protected internal override unsafe void Update(float elapsedSeconds, ParticleIterator iterator, int particleCount)
     {
         if (!Enabled) { return; }
 
-        while (iterator.HasNext)
+        for (int i = 0; i < particleCount && iterator.HasNext; i++)
         {
             Particle* particle = iterator.Next();
 

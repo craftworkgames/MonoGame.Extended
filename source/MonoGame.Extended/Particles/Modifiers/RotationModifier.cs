@@ -32,13 +32,13 @@ public class RotationModifier : Modifier
     /// Updates all particles by applying rotation based on the elapsed time.
     /// </summary>
     /// <inheritdoc/>
-    public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
+    protected internal override unsafe void Update(float elapsedSeconds, ParticleIterator iterator, int particleCount)
     {
         if (!Enabled) { return; }
 
         float rotationRateDelta = RotationRate * elapsedSeconds;
 
-        while (iterator.HasNext)
+        for (int i = 0; i < particleCount && iterator.HasNext; i++)
         {
             Particle* particle = iterator.Next();
 

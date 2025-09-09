@@ -2,6 +2,8 @@
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
 
+using System;
+
 namespace MonoGame.Extended.Particles.Modifiers;
 
 /// <summary>
@@ -16,6 +18,10 @@ namespace MonoGame.Extended.Particles.Modifiers;
 public abstract class Modifier
 {
     private const float DEFAULT_MODIFIER_FREQUENCY = 60.0f;
+
+    private float _frequency;
+    private float _cycleTime;
+    private int _particlesUpdatedThisCycle;
 
     /// <summary>
     /// Gets or sets the display name of this modifier.
@@ -40,7 +46,18 @@ public abstract class Modifier
     /// cost of performance. Lower values reduce CPU usage but may make particle changes appear
     /// less fluid.
     /// </remarks>
-    public float Frequency;
+    public float Frequency
+    {
+        get => _frequency;
+        set
+        {
+            if (value <= 0.0f)
+                throw new ArgumentOutOfRangeException(nameof(value), "Frequency must be greater than zero.");
+
+            _frequency = value;
+            _cycleTime = 1f / _frequency;
+        }
+    }
 
     /// <summary>
     /// Indicates whether this modifier is enabled.
@@ -65,10 +82,32 @@ public abstract class Modifier
         Enabled = true;
     }
 
+    internal void InternalUpdate(float elapsedSeconds, ParticleIterator iterator)
+    {
+        if (!Enabled || iterator.Total == 0)
+            return;
+
+        var particlesRemaining = iterator.Total - _particlesUpdatedThisCycle;
+        var particlesToUpdate = Math.Min(particlesRemaining, (int)Math.Ceiling((elapsedSeconds / _cycleTime) * iterator.Total));
+
+        if (particlesToUpdate > 0)
+        {
+            // Create a new iterator starting from the offset position
+            var offsetIterator = iterator.Reset(_particlesUpdatedThisCycle);
+
+            Update(_cycleTime, offsetIterator, particlesToUpdate);
+
+            _particlesUpdatedThisCycle += particlesToUpdate;
+        }
+
+        if (_particlesUpdatedThisCycle >= iterator.Total)
+            _particlesUpdatedThisCycle = 0;
+    }
+
     /// <summary>
     /// Updates the properties of particles according to this modifier's specific behavior.
     /// </summary>
     /// <param name="elapsedSeconds">The elapsed time, in seconds, since the last update.</param>
     /// <param name="iterator">The iterator used to iterate the particles ot update.</param>
-    public abstract void Update(float elapsedSeconds, ParticleIterator iterator);
+    protected internal abstract void Update(float elapsedSeconds, ParticleIterator iterator, int particleCount);
 }

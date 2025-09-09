@@ -38,13 +38,13 @@ public class VelocityModifier : Modifier
     /// Updates all particles by applying interpolators with an amount based on each particle's velocity.
     /// </summary>
     /// <inheritdoc />
-    public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
+    protected internal override unsafe void Update(float elapsedSeconds, ParticleIterator iterator, int particleCount)
     {
         if (!Enabled) { return; }
 
         float velocityThreshold2 = VelocityThreshold * VelocityThreshold;
 
-        while (iterator.HasNext)
+        for (int i = 0; i < particleCount && iterator.HasNext; i++)
         {
             Particle* particle = iterator.Next();
 
@@ -53,9 +53,9 @@ public class VelocityModifier : Modifier
 
             if (velocitySquared >= velocityThreshold2)
             {
-                for (int i = 0; i < Interpolators.Count; i++)
+                for (int j = 0; j < Interpolators.Count; j++)
                 {
-                    Interpolator interpolator = Interpolators[i];
+                    Interpolator interpolator = Interpolators[j];
                     interpolator.Update(1, particle);
                 }
             }
@@ -63,9 +63,9 @@ public class VelocityModifier : Modifier
             {
                 float t = (float)Math.Sqrt(velocitySquared) / VelocityThreshold;
 
-                for (int i = 0; i < Interpolators.Count; i++)
+                for (int j = 0; j < Interpolators.Count; j++)
                 {
-                    Interpolator interpolator = Interpolators[i];
+                    Interpolator interpolator = Interpolators[j];
                     interpolator.Update(t, particle);
                 }
             }

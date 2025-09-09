@@ -64,13 +64,13 @@ public class CircleContainerModifier : Modifier
     /// Updates all particles by constraining them to the circular boundary.
     /// </summary>
     /// <inheritdoc/>
-    public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
+    protected internal override unsafe void Update(float elapsedSeconds, ParticleIterator iterator, int particleCount)
     {
         if (!Enabled) { return; }
 
         float radiusSq = Radius * Radius;
 
-        while (iterator.HasNext)
+        for (int i = 0; i < particleCount && iterator.HasNext; i++)
         {
             Particle* particle = iterator.Next();
 

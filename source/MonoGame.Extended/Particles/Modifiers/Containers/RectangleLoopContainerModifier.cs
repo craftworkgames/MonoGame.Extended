@@ -30,11 +30,11 @@ public class RectangleLoopContainerModifier : Modifier
     /// Updates all particles by wrapping them around to the opposite side when they cross the rectangular boundary.
     /// </summary>
     /// <inheritdoc/>
-    public override unsafe void Update(float elapsedSeconds, ParticleIterator iterator)
+    protected internal override unsafe void Update(float elapsedSeconds, ParticleIterator iterator, int particleCount)
     {
         if (!Enabled) { return; }
 
-        while (iterator.HasNext)
+        for (int i = 0; i < particleCount && iterator.HasNext; i++)
         {
             Particle* particle = iterator.Next();
 

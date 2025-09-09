@@ -59,7 +59,7 @@ public abstract class ModifierExecutionStrategy
         {
             for (int i = 0; i < modifiers.Count; i++)
             {
-                modifiers[i].Update(elapsedSeconds, iterator.Reset());
+                modifiers[i].InternalUpdate(elapsedSeconds, iterator);
             }
         }
 
@@ -80,7 +80,7 @@ public abstract class ModifierExecutionStrategy
     {
         internal override unsafe void ExecuteModifiers(List<Modifier> modifiers, float elapsedSeconds, ParticleIterator iterator)
         {
-            TPL.ForEach(modifiers, modifier => modifier.Update(elapsedSeconds, iterator.Reset()));
+            TPL.ForEach(modifiers, modifier => modifier.InternalUpdate(elapsedSeconds, iterator));
         }
 
         public override string ToString()
