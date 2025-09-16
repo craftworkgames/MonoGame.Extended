@@ -49,6 +49,18 @@ public abstract class Profile
     /// <param name="axis">The direction vector of the line.</param>
     /// <param name="length">The length of the line segment.</param>
     /// <param name="radiate">The radiation mode that determines how particle headings are calculated.</param>
+    /// <returns>A new <see cref="LineProfile"/> instance.</returns>
+    public static Profile Line(Vector2 axis, float length, LineRadiation radiate)
+    {
+        return new LineProfile { Axis = axis, Length = length, Radiate = radiate, Direction = Vector2.Zero };
+    }
+
+    /// <summary>
+    /// Creates a <see cref="LineProfile"/> that emits particles along a line segment.
+    /// </summary>
+    /// <param name="axis">The direction vector of the line.</param>
+    /// <param name="length">The length of the line segment.</param>
+    /// <param name="radiate">The radiation mode that determines how particle headings are calculated.</param>
     /// <param name="direction">
     /// The emission direction vector used when <paramref name="radiate"/> is <see cref="LineRadiation.Directional"/>
     /// or as a scale factor when <paramref name="radiate"/> is <see cref="LineRadiation.NormalUp"/> or

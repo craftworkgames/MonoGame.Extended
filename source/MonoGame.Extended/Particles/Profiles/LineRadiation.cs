@@ -34,7 +34,7 @@ public enum LineRadiation
     /// In this mode, particles are given initial headings perpendicular to the line's axis, pointing upward in screen
     /// coordinates (negative Y direction).
     /// </remarks>
-    NormalUp,
+    PerpendicularUp,
 
     /// <summary>
     /// Particles move perpendicular to the line axis in the downward screen direction.
@@ -43,5 +43,5 @@ public enum LineRadiation
     /// In this mode, particles are given initial headings perpendicular to the line's axis, pointing downward in screen
     /// coordinates (positive Y direction).
     /// </remarks>
-    NormalDown
+    PerpendicularDown
 }

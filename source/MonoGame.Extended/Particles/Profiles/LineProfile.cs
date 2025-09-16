@@ -71,32 +71,16 @@ public sealed class LineProfile : Profile
                 heading->Y = normalizedDirection.Y;
                 break;
 
-            case LineRadiation.NormalUp:
-                Vector2 normalizedAxis = Vector2.Normalize(Axis);
-                Vector2 normalUp = new Vector2(-normalizedAxis.Y, -normalizedAxis.X);
-
-                float scaleUp = Direction.Length();
-                if (Direction.X < 0 || Direction.Y < 0)
-                {
-                    scaleUp = -scaleUp;
-                }
-
-                heading->X = normalUp.X * MathF.Sign(scaleUp);
-                heading->Y = normalUp.Y * MathF.Sign(scaleUp);
+            case LineRadiation.PerpendicularUp:
+                Vector2 normalizedAxisUp = Vector2.Normalize(Axis);
+                heading->X = normalizedAxisUp.Y;
+                heading->Y = -normalizedAxisUp.X;
                 break;
 
-            case LineRadiation.NormalDown:
+            case LineRadiation.PerpendicularDown:
                 Vector2 normalizedAxisDown = Vector2.Normalize(Axis);
-                Vector2 normalDown = new Vector2(normalizedAxisDown.Y, normalizedAxisDown.X);
-
-                float scaleDown = Direction.Length();
-                if (Direction.X < 0 || Direction.Y < 0)
-                {
-                    scaleDown = -scaleDown;
-                }
-
-                heading->X = normalDown.X * MathF.Sign(scaleDown);
-                heading->Y = normalDown.Y * MathF.Sign(scaleDown);
+                heading->X = -normalizedAxisDown.Y;
+                heading->Y = normalizedAxisDown.X;
                 break;
 
             default:
