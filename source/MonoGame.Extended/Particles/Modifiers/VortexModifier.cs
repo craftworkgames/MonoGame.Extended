@@ -38,7 +38,7 @@ public unsafe class VortexModifier : Modifier
     /// Particles closer to the center experience proportionally stronger forces. The scaling
     /// follows the formula: <c>actualForce = Strength × (OuterRadius / particleDistance)</c>.
     /// </remarks>
-    public float Strength { get; set; } = 100.0f;
+    public float Strength { get; set; }
 
     /// <summary>
     /// Gets or sets the maximum distance from the vortex center where forces are applied.
@@ -48,7 +48,7 @@ public unsafe class VortexModifier : Modifier
     /// as the reference point for force strength calculations, where particles at this exact
     /// distance experience the base <see cref="Strength"/> value.
     /// </remarks>
-    public float OuterRadius { get; set; } = 300.0f;
+    public float OuterRadius { get; set; }
 
     /// <summary>
     /// Gets or sets the minimum distance from the vortex center where forces are applied.
@@ -58,7 +58,7 @@ public unsafe class VortexModifier : Modifier
     /// Prevents extreme force magnitudes and simulation instability when particles
     /// get very close to the center point.
     /// </remarks>
-    public float InnerRadius { get; set; } = 10.0f;
+    public float InnerRadius { get; set; }
 
     /// <summary>
     /// Gets or sets the maximum velocity magnitude that particles can reach under vortex influence.
@@ -69,7 +69,7 @@ public unsafe class VortexModifier : Modifier
     /// Prevents runaway acceleration and maintains visual stability when particles
     /// accumulate high velocities through repeated vortex acceleration.
     /// </remarks>
-    public float MaxVelocity = 300.0f;
+    public float MaxVelocity { get; set; }
 
     /// <summary>
     /// Gets or sets the rotation angle, in radians, applied to gravitational force vectors.
@@ -109,7 +109,7 @@ public unsafe class VortexModifier : Modifier
     /// </summary>
     public VortexModifier()
     {
-        RotationAngle = 45.0f;
+        RotationAngle = 0.0f;
     }
 
     /// <inheritdoc />
