@@ -840,7 +840,7 @@ public class ParticleEffectReaderTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="VortexModifier" Frequency="60" Type="VortexModifier" Position="0,0" Mass="0" MaxSpeed="0" />
+                    <Modifier Name="VortexModifier" Frequency="60" Type="VortexModifier" Position="0,0" Strength="1" OuterRadius="2" InnerRadius="3" MaxVelocity="4" RotationAngle="5" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -858,8 +858,11 @@ public class ParticleEffectReaderTests
         Assert.Equal(60.0f, modifier.Frequency);
         Assert.Equal("VortexModifier", modifier.Name);
         Assert.Equal(Vector2.Zero, modifier.Position);
-        Assert.Equal(0.0f, modifier.Mass);
-        Assert.Equal(0.0f, modifier.MaxSpeed);
+        Assert.Equal(1.0f, modifier.Strength);
+        Assert.Equal(2.0f, modifier.OuterRadius);
+        Assert.Equal(3.0f, modifier.InnerRadius);
+        Assert.Equal(4.0f, modifier.MaxVelocity);
+        Assert.Equal(5.0f, modifier.RotationAngle);
     }
 
     [Fact]

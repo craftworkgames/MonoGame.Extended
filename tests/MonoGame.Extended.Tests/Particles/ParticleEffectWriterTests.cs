@@ -797,7 +797,7 @@ public class ParticleEffectWriterTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="VortexModifier" Frequency="60" Type="VortexModifier" Position="0,0" Mass="0" MaxSpeed="0" />
+                    <Modifier Name="VortexModifier" Frequency="60" Type="VortexModifier" Position="0,0" Strength="0" OuterRadius="0" InnerRadius="0" MaxVelocity="0" RotationAngle="0" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
