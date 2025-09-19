@@ -559,8 +559,12 @@ public sealed class ParticleEffectReader : IDisposable
     private Modifier ReadVortexModifier(XmlReader reader)
     {
         VortexModifier modifier = new VortexModifier();
-        modifier.Mass = reader.GetAttributeFloat(nameof(VortexModifier.Mass));
-        modifier.MaxSpeed = reader.GetAttributeFloat(nameof(VortexModifier.MaxSpeed));
+        modifier.Position = reader.GetAttributeVector2(nameof(VortexModifier.Position));
+        modifier.Strength = reader.GetAttributeFloat(nameof(VortexModifier.Strength));
+        modifier.OuterRadius = reader.GetAttributeFloat(nameof(VortexModifier.OuterRadius));
+        modifier.InnerRadius = reader.GetAttributeFloat(nameof(VortexModifier.InnerRadius));
+        modifier.MaxVelocity = reader.GetAttributeFloat(nameof(VortexModifier.MaxVelocity));
+        modifier.RotationAngle = reader.GetAttributeFloat(nameof(VortexModifier.RotationAngle));
         return modifier;
     }
 

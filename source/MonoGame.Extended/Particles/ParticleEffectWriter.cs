@@ -372,8 +372,11 @@ public class ParticleEffectWriter : IDisposable
             case VortexModifier vortexModifier:
                 _writer.WriteAttributeString(nameof(Type), nameof(VortexModifier));
                 _writer.WriteAttributeVector2(nameof(VortexModifier.Position), vortexModifier.Position);
-                _writer.WriteAttributeFloat(nameof(VortexModifier.Mass), vortexModifier.Mass);
-                _writer.WriteAttributeFloat(nameof(VortexModifier.MaxSpeed), vortexModifier.MaxSpeed);
+                _writer.WriteAttributeFloat(nameof(VortexModifier.Strength), vortexModifier.Strength);
+                _writer.WriteAttributeFloat(nameof(VortexModifier.OuterRadius), vortexModifier.OuterRadius);
+                _writer.WriteAttributeFloat(nameof(VortexModifier.InnerRadius), vortexModifier.InnerRadius);
+                _writer.WriteAttributeFloat(nameof(VortexModifier.MaxVelocity), vortexModifier.MaxVelocity);
+                _writer.WriteAttributeFloat(nameof(VortexModifier.RotationAngle), vortexModifier.RotationAngle);
                 break;
 
             default:
