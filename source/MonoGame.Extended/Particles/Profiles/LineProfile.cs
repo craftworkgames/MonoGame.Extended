@@ -17,18 +17,19 @@ namespace MonoGame.Extended.Particles.Profiles;
 public sealed class LineProfile : Profile
 {
     /// <summary>
-    /// The direction vector of the line axis.
+    /// Gets or sets the direction vector of the line axis.
     /// </summary>
-    public Vector2 Axis;
+    public Vector2 Axis { get; set; }
 
     /// <summary>
-    /// The length of the line segment.
+    /// Gets or sets the length of the line segment.
     /// </summary>
-    public float Length;
+    public float Length { get; set; }
 
     /// <summary>
-    /// The emission direction vector used when <see cref="Radiate"/> is <see cref="LineRadiation.Directional"/>
-    /// or as a scale factor when <see cref="Radiate"/> is <see cref="LineRadiation.NormalUp"/> or <see cref="LineRadiation.NormalDown"/>.
+    /// Gets or sets the emission direction vector used when <see cref="Radiate"/> is
+    /// <see cref="LineRadiation.Directional"/> or as a scale factor when <see cref="Radiate"/> is
+    /// <see cref="LineRadiation.NormalUp"/> or <see cref="LineRadiation.NormalDown"/>.
     /// </summary>
     /// <remarks>
     /// For <see cref="LineRadiation.Directional"/>, this vector directly specifies the particle heading direction.
@@ -37,12 +38,12 @@ public sealed class LineProfile : Profile
     /// flip to the opposite direction.
     /// This property is ignored when <see cref="Radiate"/> is <see cref="LineRadiation.None"/>.
     /// </remarks>
-    public Vector2 Direction = Vector2.UnitY;
+    public Vector2 Direction { get; set; }= Vector2.UnitY;
 
     /// <summary>
-    /// The radiation mode that determines how particle headings are calculated.
+    /// Gets or sets the radiation mode that determines how particle headings are calculated.
     /// </summary>
-    public LineRadiation Radiate = LineRadiation.None;
+    public LineRadiation Radiate { get; set; } = LineRadiation.None;
 
     /// <summary>
     /// Computes the offset and heading for a new particle.

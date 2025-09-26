@@ -24,14 +24,14 @@ namespace MonoGame.Extended.Particles.Profiles;
 public sealed class RingProfile : Profile
 {
     /// <summary>
-    /// The radius if the ring.
+    /// Gets or sets the radius if the ring.
     /// </summary>
-    public float Radius;
+    public float Radius { get; set; }
 
     /// <summary>
-    /// The radiation mode that determines how particle headings are calculated.
+    /// Gets or sets the radiation mode that determines how particle headings are calculated.
     /// </summary>
-    public CircleRadiation Radiate;
+    public CircleRadiation Radiate { get; set; }
 
     /// <summary>
     /// Computes the offset and heading for a new particle.

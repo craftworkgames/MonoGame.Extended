@@ -18,12 +18,12 @@ namespace MonoGame.Extended.Particles.Profiles;
 public sealed class SprayProfile : Profile
 {
     /// <summary>
-    /// The central direction vector of the spray.
+    /// Gets or sets the central direction vector of the spray.
     /// </summary>
-    public Vector2 Direction;
+    public Vector2 Direction { get; set; }
 
     /// <summary>
-    /// The angular spread of the spray cone (in radians).
+    /// Gets or sets the angular spread of the spray cone (in radians).
     /// </summary>
     /// <remarks>
     /// This value determines how wide the spray cone is.  For example:
@@ -34,7 +34,7 @@ public sealed class SprayProfile : Profile
     ///     <item>A value of 2π will emit in all directions (similar to <see cref="PointProfile"/>).</item>
     /// </list>
     /// </remarks>
-    public float Spread;
+    public float Spread { get; set; }
 
     /// <summary>
     /// Computes the offset and heading for a new particle.

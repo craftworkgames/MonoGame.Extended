@@ -32,7 +32,7 @@ public class VelocityModifier : Modifier
     /// receive the full interpolation effect (amount = 1.0). Particles moving slower than this
     /// threshold will receive a proportionally reduced effect based on their velocity magnitude.
     /// </remarks>
-    public float VelocityThreshold;
+    public float VelocityThreshold { get; set; }
 
     /// <summary>
     /// Updates all particles by applying interpolators with an amount based on each particle's velocity.

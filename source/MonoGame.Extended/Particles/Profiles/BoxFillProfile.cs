@@ -17,14 +17,14 @@ namespace MonoGame.Extended.Particles.Profiles;
 public sealed class BoxFillProfile : Profile
 {
     /// <summary>
-    /// The width of the rectangular area.
+    /// Gets or sets the width of the rectangular area.
     /// </summary>
-    public float Width;
+    public float Width { get; set; }
 
     /// <summary>
-    /// The height of the rectangular area.
+    /// Gets or sets the height of the rectangular area.
     /// </summary>
-    public float Height;
+    public float Height { get; set; }
 
     /// <summary>
     /// Computes the offset and heading for a new particle.

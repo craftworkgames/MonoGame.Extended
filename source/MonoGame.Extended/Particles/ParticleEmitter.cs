@@ -26,16 +26,17 @@ public sealed unsafe class ParticleEmitter : IDisposable
 {
     private float _totalSeconds;
     private float _secondsSinceLastReclaim;
+    private ParticleBuffer _buffer;
 
     /// <summary>
-    /// Gets or sets the buffer that stores and manages the particles for this emitter.
+    /// Gets the buffer that stores and manages the particles for this emitter.
     /// </summary>
-    public ParticleBuffer Buffer;
+    public ParticleBuffer Buffer => _buffer;
 
     /// <summary>
     /// Gets or sets the name of this emitter, used for identification and debugging.
     /// </summary>
-    public string Name;
+    public string Name { get; set; }
 
     /// <summary>
     /// Gets the maximum number of particles that this emitter can manage.
@@ -67,7 +68,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// <remarks>
     /// After a particle's age exceeds this value, it will be automatically reclaimed during the next cleanup cycle.
     /// </remarks>
-    public float LifeSpan;
+    public float LifeSpan { get; set; }
 
     /// <summary>
     /// Gets or sets the position offset applied to this emitter.
@@ -76,7 +77,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// This offset is applied to the emitter's position when triggering particles, allowing for fine adjustment
     /// of the emission point without changing the overall position passed to the <see cref="Update"/> method.
     /// </remarks>
-    public Vector2 Offset;
+    public Vector2 Offset { get; set; }
 
     /// <summary>
     /// Gets or sets the default layer depth for particles emitted by this emitter.
@@ -85,7 +86,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// This value determines the rendering order of particles relative to other sprites and particles.
     /// Values range from 0.0 (front) to 1.0 (back).
     /// </remarks>
-    public float LayerDepth;
+    public float LayerDepth { get; set; }
 
     /// <summary>
     /// Gets or sets the frequency, in times per second, at which expired particles are reclaimed.
@@ -94,7 +95,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// Higher values result in more frequent cleanup of expired particles, potentially improving memory
     /// utilization at the cost of slightly increased CPU usage.
     /// </remarks>
-    public float ReclaimFrequency;
+    public float ReclaimFrequency { get; set; }
 
     /// <summary>
     /// Gets or sets the parameters that control the physical and visual properties of emitted particles.
@@ -102,7 +103,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// <remarks>
     /// These parameters include properties such as initial speed, color, opacity, scale, rotation, and mass.
     /// </remarks>
-    public ParticleReleaseParameters Parameters;
+    public ParticleReleaseParameters Parameters { get; set; }
 
     /// <summary>
     /// Gets or sets the strategy used to execute modifiers on particles.
@@ -111,7 +112,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// This determines whether modifiers are executed serially (single-threaded) or in parallel (multi-threaded),
     /// affecting performance characteristics based on the system's capabilities and the number of particles.
     /// </remarks>
-    public ModifierExecutionStrategy ModifierExecutionStrategy;
+    public ModifierExecutionStrategy ModifierExecutionStrategy { get; set; }
 
     /// <summary>
     /// Gets or sets the list of modifiers that affect particles emitted by this emitter.
@@ -120,7 +121,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// Modifiers alter particle properties over time, creating effects such as gravity, color changes,
     /// rotation, and containment within boundaries.
     /// </remarks>
-    public List<Modifier> Modifiers;
+    public List<Modifier> Modifiers { get; set; }
 
     /// <summary>
     /// Gets or sets the profile that determines the initial position and heading of emitted particles.
@@ -128,12 +129,12 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// <remarks>
     /// Profiles define the emission pattern, such as points, lines, rings, or areas from which particles originate.
     /// </remarks>
-    public Profile Profile;
+    public Profile Profile { get; set; }
 
     /// <summary>
     /// The <see cref="Texture2DRegion"/> to use when rendering particles from this emitter.
     /// </summary>
-    public Texture2DRegion TextureRegion;
+    public Texture2DRegion TextureRegion { get; set; }
 
     /// <summary>
     /// Gets or sets the order in which particles are rendered within this emitter.
@@ -142,12 +143,12 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// This property determines whether particles are drawn front-to-back or back-to-front,
     /// affecting how they visually overlap when using alpha blending.
     /// </remarks>
-    public ParticleRenderingOrder RenderingOrder;
+    public ParticleRenderingOrder RenderingOrder { get; set; }
 
     /// <summary>
-    /// Indicates whether the particles emitted by this emitter are visible.
+    /// Get or sets a value that indicates whether the particles emitted by this emitter are visible.
     /// </summary>
-    public bool Visible;
+    public bool Visible { get; set; }
 
     /// <summary>
     /// Gets a value indicating whether this <see cref="ParticleEmitter"/> has been disposed.
@@ -176,7 +177,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
         LifeSpan = 1.0f;
         Name = nameof(ParticleEmitter);
         TextureRegion = null;
-        Buffer = new ParticleBuffer(initialCapacity);
+        _buffer = new ParticleBuffer(initialCapacity);
         Profile = Profile.Point();
         Modifiers = new List<Modifier>();
         ModifierExecutionStrategy = ModifierExecutionStrategy.Serial;
@@ -220,7 +221,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
             oldBuffer.Dispose();
         }
 
-        Buffer = new ParticleBuffer(size);
+        _buffer = new ParticleBuffer(size);
     }
 
     /// <summary>

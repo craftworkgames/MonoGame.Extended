@@ -18,14 +18,14 @@ namespace MonoGame.Extended.Particles.Profiles;
 public sealed class CircleProfile : Profile
 {
     /// <summary>
-    /// The radius of the circular area.
+    /// Gets or sets the radius of the circular area.
     /// </summary>
-    public float Radius;
+    public float Radius { get; set; }
 
     /// <summary>
-    /// The radiation mode that determines how particle headings are calculated.
+    /// Gets or sets the radiation mode that determines how particle headings are calculated.
     /// </summary>
-    public CircleRadiation Radiate;
+    public CircleRadiation Radiate { get; set; }
 
     /// <summary>
     /// Computes the offset and heading for a new particle.

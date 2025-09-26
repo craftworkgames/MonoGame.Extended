@@ -29,7 +29,7 @@ public class ParticleEffect : IDisposable
     /// <summary>
     /// Gets or sets the name of this effect, used for identification and debugging.
     /// </summary>
-    public string Name;
+    public string Name { get; set; }
 
     /// <summary>
     /// Gets or sets the position of this effect in 2D space.
@@ -38,7 +38,7 @@ public class ParticleEffect : IDisposable
     /// This position is used as the reference point for all emitters in the effect.
     /// When the effect is updated, this position is passed to each emitter's update method.
     /// </remarks>
-    public Vector2 Position;
+    public Vector2 Position { get; set; }
 
     /// <summary>
     /// Gets or sets the rotation of this effect, in radians.
@@ -47,7 +47,7 @@ public class ParticleEffect : IDisposable
     /// This property can be used to rotate the entire effect around its position.
     /// Note that rotation is not automatically applied to emitters and must be handled by the rendering system.
     /// </remarks>
-    public float Rotation;
+    public float Rotation { get; set; }
 
     /// <summary>
     /// Gets or sets the scale factor of this effect.
@@ -56,25 +56,25 @@ public class ParticleEffect : IDisposable
     /// This property can be used to uniformly or non-uniformly scale the entire effect.
     /// Note that scaling is not automatically applied to emitters and must be handled by the rendering system.
     /// </remarks>
-    public Vector2 Scale;
+    public Vector2 Scale { get; set; }
 
     /// <summary>
-    /// A value indicating whether this particle effect should automatically trigger its particle emitters.
+    /// Gets or sets a value indicating whether this particle effect should automatically trigger its particle emitters.
     /// </summary>
     /// <remarks>
     /// When <see langword="true"/>, all emitters of this <see cref="ParticleEffect"/> will be triggered  at the same
     /// based on the <see cref="AutoTriggerFrequency"/>.  When <see langword="false"/>, users will need to manually call
     /// the <see cref="Trigger()"/> method to trigger emitters.
     /// </remarks>
-    public bool AutoTrigger;
+    public bool AutoTrigger { get; set; }
 
     /// <summary>
-    /// The frequency, in seconds, at which this <see cref="ParticleEffect"/> automatically triggers emitters.
+    /// Gets or sets the frequency, in seconds, at which this <see cref="ParticleEffect"/> automatically triggers emitters.
     /// </summary>
     /// <remarks>
     /// If <see cref="AutoTrigger"/> is <see langword="false"/>, this value is ignored.
     /// </remarks>
-    public float AutoTriggerFrequency;
+    public float AutoTriggerFrequency { get; set; }
 
     /// <summary>
     /// Gets or sets the collection of emitters that compose this effect.
@@ -83,7 +83,7 @@ public class ParticleEffect : IDisposable
     /// Each emitter in this collection contributes to the overall visual appearance of the effect,
     /// potentially with different behaviors, textures, and particle properties.
     /// </remarks>
-    public List<ParticleEmitter> Emitters;
+    public List<ParticleEmitter> Emitters { get; set; }
 
     /// <summary>
     /// Gets a value indicating whether this <see cref="ParticleEffect"/> has been disposed.

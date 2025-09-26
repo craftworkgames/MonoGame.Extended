@@ -26,7 +26,7 @@ public abstract class Modifier
     /// <summary>
     /// Gets or sets the display name of this modifier.
     /// </summary>
-    public string Name;
+    public string Name { get; set; }
 
     /// <summary>
     /// Gets or sets the update frequency of this modifier.
@@ -60,13 +60,13 @@ public abstract class Modifier
     }
 
     /// <summary>
-    /// Indicates whether this modifier is enabled.
+    /// Gets or sets a value that indicates whether this modifier is enabled.
     /// </summary>
     /// <remarks>
     /// This value determines if this modifier is enabled.  When a modifier is disabled, the modifier is not applied
     /// to the particles.
     /// </remarks>
-    public bool Enabled;
+    public bool Enabled { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Modifier"/> class.

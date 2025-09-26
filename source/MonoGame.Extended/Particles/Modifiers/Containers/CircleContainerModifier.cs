@@ -19,12 +19,12 @@ namespace MonoGame.Extended.Particles.Modifiers.Containers;
 public class CircleContainerModifier : Modifier
 {
     /// <summary>
-    /// The radius of the circular container.
+    /// Gets or sets the radius of the circular container.
     /// </summary>
-    public float Radius;
+    public float Radius { get; set; }
 
     /// <summary>
-    /// Indicates whether particles should be contained inside the circle.
+    /// Gets or sets a value that indicates whether particles should be contained inside the circle.
     /// </summary>
     /// <remarks>
     /// <list type="bullet">
@@ -38,7 +38,7 @@ public class CircleContainerModifier : Modifier
     ///
     /// The default value is <see langword="true"/>.
     /// </remarks>
-    public bool Inside = true;
+    public bool Inside { get; set; } = true;
 
     /// <summary>
     /// Gets or sets the coefficient of restitution (bounciness) for particle collisions with the boundary.
@@ -58,7 +58,7 @@ public class CircleContainerModifier : Modifier
     ///
     /// The default value is 1.0.
     /// </remarks>
-    public float RestitutionCoefficient = 1;
+    public float RestitutionCoefficient { get; set; } = 1;
 
     /// <summary>
     /// Updates all particles by constraining them to the circular boundary.

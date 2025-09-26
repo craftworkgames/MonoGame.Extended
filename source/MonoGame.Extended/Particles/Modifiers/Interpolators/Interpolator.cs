@@ -20,16 +20,16 @@ public abstract class Interpolator
     /// <summary>
     /// Gets or sets the display name of this interpolator.
     /// </summary>
-    public string Name;
+    public string Name { get; set; }
 
     /// <summary>
-    /// Indicates if this interpolator is enabled.
+    /// Gets or sets a value that indicates if this interpolator is enabled.
     /// </summary>
     /// <remarks>
     /// This value determines if this interpolator is enabled.  When an interpolator is disabled, the interpolator is
     /// not applied to the modifier.
     /// </remarks>
-    public bool Enabled;
+    public bool Enabled { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Interpolator"/> class.

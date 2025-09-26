@@ -29,7 +29,7 @@ public class DragModifier : Modifier
     ///
     /// The default value is 0.47.
     /// </remarks>
-    public float DragCoefficient = 0.47f;
+    public float DragCoefficient  { get; set; } = 0.47f;
 
     /// <summary>
     /// Gets or sets the density of the fluid medium, affecting the strength of the drag force.
@@ -43,7 +43,7 @@ public class DragModifier : Modifier
     ///
     /// The default value is 0.5.
     /// </remarks>
-    public float Density = .5f;
+    public float Density  { get; set; } = .5f;
 
     /// <summary>
     /// Updates all particles by applying drag forces based on their velocity.

@@ -19,12 +19,12 @@ public class RectangleLoopContainerModifier : Modifier
     /// <summary>
     /// Gets or sets the width of the rectangular container, in units.
     /// </summary>
-    public int Width;
+    public int Width { get; set; }
 
     /// <summary>
     /// Gets or sets the height of the rectangular container, in units.
     /// </summary>
-    public int Height;
+    public int Height { get; set; }
 
     /// <summary>
     /// Updates all particles by wrapping them around to the opposite side when they cross the rectangular boundary.

@@ -13,10 +13,10 @@ public abstract class Interpolator<T> : Interpolator where T : struct
     /// <summary>
     /// Gets or sets the starting value for the interpolation.
     /// </summary>
-    public T StartValue;
+    public T StartValue  { get; set; }
 
     /// <summary>
     /// Gets or sets the ending value for the interpolation.
     /// </summary>
-    public T EndValue;
+    public T EndValue  { get; set; }
 }

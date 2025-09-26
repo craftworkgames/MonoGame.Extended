@@ -31,7 +31,7 @@ public class VelocityColorModifier : Modifier
     /// point for color interpolation. The Vector3 components represent HSL values
     /// (Hue, Saturation, Lightness).
     /// </remarks>
-    public Vector3 StationaryColor;
+    public Vector3 StationaryColor { get; set; }
 
     /// <summary>
     /// Gets or sets the color for particles that have reached or exceeded the velocity threshold.
@@ -41,7 +41,7 @@ public class VelocityColorModifier : Modifier
     /// for color interpolation. The Vector3 components represent HSL values
     /// (Hue, Saturation, Lightness).
     /// </remarks>
-    public Vector3 VelocityColor;
+    public Vector3 VelocityColor { get; set; }
 
     /// <summary>
     /// Gets or sets the velocity magnitude at which particles fully transition to the velocity color.
@@ -52,7 +52,7 @@ public class VelocityColorModifier : Modifier
     /// threshold will display a color interpolated between <see cref="StationaryColor"/> and
     /// <see cref="VelocityColor"/> based on their speed relative to this threshold.
     /// </remarks>
-    public float VelocityThreshold;
+    public float VelocityThreshold { get; set; }
 
     /// <summary>
     /// Updates all particles by changing their colors based on their current velocity.

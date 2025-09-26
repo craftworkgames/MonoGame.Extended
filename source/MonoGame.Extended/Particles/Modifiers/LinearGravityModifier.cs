@@ -26,7 +26,7 @@ public class LinearGravityModifier : Modifier
     /// <remarks>
     /// This vector defines both the direction and the relative magnitude of the force.
     /// </remarks>
-    public Vector2 Direction;
+    public Vector2 Direction { get; set; }
 
     /// <summary>
     /// Gets or sets the strength of the gravitational force, in units per second squared.
@@ -35,7 +35,7 @@ public class LinearGravityModifier : Modifier
     /// This value scales the overall magnitude of the force. Higher values create
     /// stronger acceleration effects, causing particles to change velocity more rapidly.
     /// </remarks>
-    public float Strength;
+    public float Strength { get; set; }
 
     /// <summary>
     /// Updates all particles by applying a linear gravitational force.

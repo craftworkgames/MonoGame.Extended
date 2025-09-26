@@ -26,7 +26,7 @@ public class RotationModifier : Modifier
     /// Positive values cause clockwise rotation, while negative values cause
     /// counter-clockwise rotation.
     /// </remarks>
-    public float RotationRate;
+    public float RotationRate { get; set; }
 
     /// <summary>
     /// Updates all particles by applying rotation based on the elapsed time.
