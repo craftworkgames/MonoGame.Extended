@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Xml;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Particles.Data;
 using MonoGame.Extended.Particles.Modifiers;
@@ -149,81 +150,33 @@ public class ParticleEffectWriter : IDisposable
         WriteParticleFloatParameter(nameof(ParticleReleaseParameters.Speed), parameters.Speed);
         WriteParticleColorParameter(nameof(ParticleReleaseParameters.Color), parameters.Color);
         WriteParticleFloatParameter(nameof(ParticleReleaseParameters.Opacity), parameters.Opacity);
-        WriteParticleVector2Parameter(nameof(ParticleReleaseParameters.Scale), parameters.Scale);
+        WriteParticleFloatParameter(nameof(ParticleReleaseParameters.ScaleX), parameters.ScaleX);
+        WriteParticleFloatParameter(nameof(ParticleReleaseParameters.ScaleY), parameters.ScaleY);
         WriteParticleFloatParameter(nameof(ParticleReleaseParameters.Rotation), parameters.Rotation);
         WriteParticleFloatParameter(nameof(ParticleReleaseParameters.Mass), parameters.Mass);
-
     }
 
-    private void WriteParticleInt32Parameter(string name, ParticleInt32Parameter parameter)
+    private void WriteParticleInt32Parameter(string name, Interval<int> parameter)
     {
         _writer.WriteStartElement(name);
-        _writer.WriteAttributeString(nameof(ParticleInt32Parameter.Kind), parameter.Kind.ToString());
-
-        if (parameter.Kind == ParticleValueKind.Constant)
-        {
-            _writer.WriteAttributeInt(nameof(ParticleInt32Parameter.Constant), parameter.Constant);
-        }
-        else
-        {
-            _writer.WriteAttributeInt(nameof(ParticleInt32Parameter.RandomMin), parameter.RandomMin);
-            _writer.WriteAttributeInt(nameof(ParticleInt32Parameter.RandomMax), parameter.RandomMax);
-        }
-
+        _writer.WriteAttributeInt(nameof(Interval<int>.Min), parameter.Min);
+        _writer.WriteAttributeInt(nameof(Interval<int>.Max), parameter.Max);
         _writer.WriteEndElement();
     }
 
-    private void WriteParticleFloatParameter(string name, ParticleFloatParameter parameter)
+    private void WriteParticleFloatParameter(string name, Interval<float> parameter)
     {
         _writer.WriteStartElement(name);
-        _writer.WriteAttributeString(nameof(ParticleFloatParameter.Kind), parameter.Kind.ToString());
-
-        if (parameter.Kind == ParticleValueKind.Constant)
-        {
-            _writer.WriteAttributeFloat(nameof(ParticleFloatParameter.Constant), parameter.Constant);
-        }
-        else
-        {
-            _writer.WriteAttributeFloat(nameof(ParticleFloatParameter.RandomMin), parameter.RandomMin);
-            _writer.WriteAttributeFloat(nameof(ParticleFloatParameter.RandomMax), parameter.RandomMax);
-        }
-
+        _writer.WriteAttributeFloat(nameof(Interval<float>.Min), parameter.Min);
+        _writer.WriteAttributeFloat(nameof(Interval<float>.Max), parameter.Max);
         _writer.WriteEndElement();
     }
 
-    private void WriteParticleVector2Parameter(string name, ParticleVector2Parameter parameter)
+    private void WriteParticleColorParameter(string name, Interval<HslColor> parameter)
     {
         _writer.WriteStartElement(name);
-        _writer.WriteAttributeString(nameof(ParticleVector2Parameter.Kind), parameter.Kind.ToString());
-
-        if(parameter.Kind == ParticleValueKind.Constant)
-        {
-            _writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.Constant), parameter.Constant);
-        }
-        else
-        {
-            _writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.RandomMin), parameter.RandomMin);
-            _writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.RandomMax), parameter.RandomMax);
-        }
-
-        _writer.WriteEndElement();
-    }
-
-    private void WriteParticleColorParameter(string name, ParticleColorParameter parameter)
-    {
-        _writer.WriteStartElement(name);
-        _writer.WriteAttributeString(nameof(ParticleColorParameter.Kind), parameter.Kind.ToString());
-
-        if (parameter.Kind == ParticleValueKind.Constant)
-        {
-            _writer.WriteAttributeVector3(nameof(ParticleColorParameter.Constant), parameter.Constant);
-        }
-        else
-        {
-            _writer.WriteAttributeVector3(nameof(ParticleColorParameter.RandomMin), parameter.RandomMin);
-            _writer.WriteAttributeVector3(nameof(ParticleColorParameter.RandomMax), parameter.RandomMax);
-        }
-
+        _writer.WriteAttributeVector3(nameof(Interval<HslColor>.Min), new Vector3(parameter.Min.H, parameter.Min.S, parameter.Min.L));
+        _writer.WriteAttributeVector3(nameof(Interval<HslColor>.Max), new Vector3(parameter.Max.H, parameter.Max.S, parameter.Max.L));
         _writer.WriteEndElement();
     }
 

@@ -280,9 +280,10 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// </remarks>
     public void Trigger(Vector2 position, float layerDepth = 0)
     {
-        int numToRelease = Parameters.Quantity.Value;
+        int numToRelease = FastRandom.Shared.Next(Parameters.Quantity);
         Release(position, numToRelease, layerDepth);
     }
+
 
     /// <summary>
     /// Triggers the emission of particles along a line segment.
@@ -295,7 +296,7 @@ public sealed unsafe class ParticleEmitter : IDisposable
     /// </remarks>
     public void Trigger(LineSegment line, float layerDepth = 0)
     {
-        int numToRelease = Parameters.Quantity.Value;
+        int numToRelease = FastRandom.Shared.Next(Parameters.Quantity);
         Vector2 lineVector = line.ToVector2();
 
         for (int i = 0; i < numToRelease; i++)
@@ -334,24 +335,22 @@ public sealed unsafe class ParticleEmitter : IDisposable
             particle->TriggeredPos[0] = position.X;
             particle->TriggeredPos[1] = position.Y;
 
-            float speed = Parameters.Speed.Value;
+            float speed = FastRandom.Shared.NextSingle(Parameters.Speed);
 
             particle->Velocity[0] *= speed;
             particle->Velocity[1] *= speed;
 
-            Vector3 color = Parameters.Color.Value;
-            particle->Color[0] = color.X;
-            particle->Color[1] = color.Y;
-            particle->Color[2] = color.Z;
+            particle->Color[0] = FastRandom.Shared.NextSingle(Parameters.Color.Min.H, Parameters.Color.Max.H);
+            particle->Color[1] = FastRandom.Shared.NextSingle(Parameters.Color.Min.S, Parameters.Color.Max.S);
+            particle->Color[2] = FastRandom.Shared.NextSingle(Parameters.Color.Min.L, Parameters.Color.Max.L);
 
-            particle->Opacity = Parameters.Opacity.Value;
+            particle->Opacity = FastRandom.Shared.NextSingle(Parameters.Opacity);
 
-            Vector2 scale = Parameters.Scale.Value;
-            particle->Scale[0] = scale.X;
-            particle->Scale[1] = scale.Y;
+            particle->Scale[0] = FastRandom.Shared.NextSingle(Parameters.ScaleX);
+            particle->Scale[1] = FastRandom.Shared.NextSingle(Parameters.ScaleY);
 
-            particle->Rotation = Parameters.Rotation.Value;
-            particle->Mass = Parameters.Mass.Value;
+            particle->Rotation = FastRandom.Shared.NextSingle(Parameters.Rotation);
+            particle->Mass = FastRandom.Shared.NextSingle(Parameters.Mass);
             particle->LayerDepth = layerDepth;
         }
     }
