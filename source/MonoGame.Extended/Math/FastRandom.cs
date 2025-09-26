@@ -104,9 +104,25 @@ namespace MonoGame.Extended
         /// A 32-bit signed integer that is greater than or equal to the <see cref="Range{T}.Min"/> and less than or
         /// equal to the <see cref="Range{T}.Max"/> value of <paramref name="range"/>.
         /// </returns>
+        [Obsolete("Use Next(Interval<int>).  Range<T> will be removed in 6.0")]
         public int Next(Range<int> range)
         {
             return _impl.Next(range);
+        }
+
+        /// <summary>
+        /// Returns a random integer that is within a closed interval.
+        /// </summary>
+        /// <param name="interval">
+        /// A closed interval representing the lower and upper bounds of the random number to return.
+        /// </param>
+        /// <returns>
+        /// A 32-bit signed integer that is greater than or equal to the <see cref="Interval{T}.Min"/> value and less
+        /// than or equal to the <see cref="Interval{T}.Max"/> value of <paramref name="interval"/>.
+        /// </returns>
+        public int Next(Interval<int> interval)
+        {
+            return _impl.Next(interval);
         }
 
         /// <summary>
@@ -158,9 +174,25 @@ namespace MonoGame.Extended
         /// A single-precision floating point number that is greater than or equal to the <see cref="Range{T}.Min"/>
         /// and less than the <see cref="Range{T}.Max"/> value of <paramref name="range"/>
         /// </returns>
+        [Obsolete("Use Next(Interval<float>).  Range<T> will be removed in 6.0")]
         public float NextSingle(Range<float> range)
         {
             return _impl.NextSingle(range);
+        }
+
+        /// <summary>
+        /// Returns a random floating-point number that is within a closed interval.
+        /// </summary>
+        /// <param name="interval">
+        /// A closed interval representing the lower and upper bounds of the random number to return.
+        /// </param>
+        /// <returns>
+        /// A single-precision floating point number that is greater than or equal to the <see cref="Interval{T}.Min"/>
+        /// value and less than or equal to the <see cref="Interval{T}.Max"/> value of <paramref name="interval"/>.
+        /// </returns>
+        public float NextSingle(Interval<float> interval)
+        {
+            return _impl.NextSingle(interval);
         }
 
         /// <summary>
@@ -198,11 +230,15 @@ namespace MonoGame.Extended
             int Next();
             int Next(int max);
             int Next(int min, int max);
+            [Obsolete("Use Next(Interval<int>).  Range<T> will be removed in 6.0")]
             int Next(Range<int> range);
+            int Next(Interval<int> interval);
             float NextSingle();
             float NextSingle(float max);
             float NextSingle(float min, float max);
+            [Obsolete("Use Next(Interval<float>).  Range<T> will be removed in 6.0")]
             float NextSingle(Range<float> range);
+            float NextSingle(Interval<float> interval);
             float NextAngle();
             void NextUnitVector(out Vector2 vector);
             unsafe void NextUnitVector(Vector2* vector);
@@ -244,9 +280,15 @@ namespace MonoGame.Extended
                 return (int)((max - min) * NextSingle() + 0.5f) + min;
             }
 
+            [Obsolete("Use Next(Interval<int>).  Range<T> will be removed in 6.0")]
             public int Next(Range<int> range)
             {
                 return Next(range.Min, range.Max);
+            }
+
+            public int Next(Interval<int> interval)
+            {
+                return Next(interval.Min, interval.Max);
             }
 
             public float NextSingle()
@@ -264,9 +306,15 @@ namespace MonoGame.Extended
                 return (max - min) * NextSingle() + min;
             }
 
+            [Obsolete("Use Next(Interval<float>).  Range<T> will be removed in 6.0")]
             public float NextSingle(Range<float> range)
             {
                 return NextSingle(range.Min, range.Max);
+            }
+
+            public float NextSingle(Interval<float> interval)
+            {
+                return NextSingle(interval.Min, interval.Max);
             }
 
             public float NextAngle()
@@ -320,10 +368,17 @@ namespace MonoGame.Extended
                 return LocalRandom.Next(min, max);
             }
 
+            [Obsolete("Use Next(Interval<int>).  Range<T> will be removed in 6.0")]
             public int Next(Range<int> range)
             {
                 return LocalRandom.Next(range.Min, range.Max);
             }
+
+            public int Next(Interval<int> interval)
+            {
+                return LocalRandom.Next(interval.Min, interval.Max);
+            }
+
             public float NextSingle()
             {
                 return LocalRandom.NextSingle();
@@ -339,9 +394,15 @@ namespace MonoGame.Extended
                 return LocalRandom.NextSingle(min, max);
             }
 
+            [Obsolete("Use Next(Interval<float>).  Range<T> will be removed in 6.0")]
             public float NextSingle(Range<float> range)
             {
                 return LocalRandom.NextSingle(range.Min, range.Max);
+            }
+
+            public float NextSingle(Interval<float> interval)
+            {
+                return LocalRandom.NextSingle(interval.Min, interval.Max);
             }
 
             public float NextAngle()

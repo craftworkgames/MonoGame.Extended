@@ -5,6 +5,7 @@ namespace MonoGame.Extended
     /// <summary>
     ///     Represents a closed interval defined by a minimum and a maximum value of a give type.
     /// </summary>
+    [Obsolete("Use new Interval<T> struct.  Range<T> will be removed in 6.0")]
     public struct Range<T> : IEquatable<Range<T>> where T : IComparable<T>
     {
         public Range(T min, T max)
