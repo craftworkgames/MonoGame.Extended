@@ -929,8 +929,8 @@ public class ParticleEffectReaderTests
         Assert.Single(modifier.Interpolators);
 
         ColorInterpolator interpolator = Assert.IsType<ColorInterpolator>(modifier.Interpolators[0]);
-        Assert.Equal(Vector3.Zero, interpolator.StartValue);
-        Assert.Equal(Vector3.Zero, interpolator.EndValue);
+        Assert.Equal(new HslColor(0, 0, 0), interpolator.StartValue);
+        Assert.Equal(new HslColor(0, 0, 0), interpolator.EndValue);
     }
 
     [Fact]

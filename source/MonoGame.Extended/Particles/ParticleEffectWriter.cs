@@ -301,8 +301,10 @@ public class ParticleEffectWriter : IDisposable
 
             case VelocityColorModifier velocityColorModifier:
                 _writer.WriteAttributeString(nameof(Type), nameof(VelocityColorModifier));
-                _writer.WriteAttributeVector3(nameof(VelocityColorModifier.StationaryColor), velocityColorModifier.StationaryColor);
-                _writer.WriteAttributeVector3(nameof(VelocityColorModifier.VelocityColor), velocityColorModifier.VelocityColor);
+                Vector3 stationaryColor = new(velocityColorModifier.StationaryColor.H, velocityColorModifier.StationaryColor.S, velocityColorModifier.StationaryColor.L);
+                _writer.WriteAttributeVector3(nameof(VelocityColorModifier.StationaryColor), stationaryColor);
+                Vector3 velocityColor = new(velocityColorModifier.VelocityColor.H, velocityColorModifier.VelocityColor.S, velocityColorModifier.VelocityColor.L);
+                _writer.WriteAttributeVector3(nameof(VelocityColorModifier.VelocityColor), velocityColor);
                 _writer.WriteAttributeFloat(nameof(VelocityColorModifier.VelocityThreshold), velocityColorModifier.VelocityThreshold);
                 break;
 
@@ -346,8 +348,10 @@ public class ParticleEffectWriter : IDisposable
         {
             case ColorInterpolator colorInterpolator:
                 _writer.WriteAttributeString(nameof(Type), nameof(ColorInterpolator));
-                _writer.WriteAttributeVector3(nameof(ColorInterpolator.StartValue), colorInterpolator.StartValue);
-                _writer.WriteAttributeVector3(nameof(ColorInterpolator.EndValue), colorInterpolator.EndValue);
+                Vector3 startValue = new Vector3(colorInterpolator.StartValue.H, colorInterpolator.StartValue.S, colorInterpolator.StartValue.L);
+                Vector3 endValue = new Vector3(colorInterpolator.EndValue.H, colorInterpolator.EndValue.S, colorInterpolator.EndValue.L);
+                _writer.WriteAttributeVector3(nameof(ColorInterpolator.StartValue), startValue);
+                _writer.WriteAttributeVector3(nameof(ColorInterpolator.EndValue), endValue);
                 break;
 
             case HueInterpolator hueInterpolator:

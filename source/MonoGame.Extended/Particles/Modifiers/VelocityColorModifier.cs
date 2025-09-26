@@ -28,20 +28,18 @@ public class VelocityColorModifier : Modifier
     /// </summary>
     /// <remarks>
     /// This color is applied to particles with zero velocity and serves as the starting
-    /// point for color interpolation. The Vector3 components represent HSL values
-    /// (Hue, Saturation, Lightness).
+    /// point for color interpolation.
     /// </remarks>
-    public Vector3 StationaryColor { get; set; }
+    public HslColor StationaryColor { get; set; }
 
     /// <summary>
     /// Gets or sets the color for particles that have reached or exceeded the velocity threshold.
     /// </summary>
     /// <remarks>
     /// This color is applied to fast-moving particles and serves as the end point
-    /// for color interpolation. The Vector3 components represent HSL values
-    /// (Hue, Saturation, Lightness).
+    /// for color interpolation.
     /// </remarks>
-    public Vector3 VelocityColor { get; set; }
+    public HslColor VelocityColor { get; set; }
 
     /// <summary>
     /// Gets or sets the velocity magnitude at which particles fully transition to the velocity color.
@@ -73,18 +71,18 @@ public class VelocityColorModifier : Modifier
 
             if (velocitySquared >= velocityThreshold2)
             {
-                particle->Color[0] = VelocityColor.X;
-                particle->Color[1] = VelocityColor.Y;
-                particle->Color[2] = VelocityColor.Z;
+                particle->Color[0] = VelocityColor.H;
+                particle->Color[1] = VelocityColor.S;
+                particle->Color[2] = VelocityColor.L;
             }
             else
             {
-                Vector3 deltaColor = VelocityColor - StationaryColor;
+                HslColor deltaColor = VelocityColor - StationaryColor;
                 float t = MathF.Sqrt(velocitySquared) / VelocityThreshold;
 
-                float h = deltaColor.X * t + StationaryColor.X;
-                float s = deltaColor.Y * t + StationaryColor.Y;
-                float l = deltaColor.Z * t + StationaryColor.Z;
+                float h = deltaColor.H * t + StationaryColor.H;
+                float s = deltaColor.S * t + StationaryColor.S;
+                float l = deltaColor.L * t + StationaryColor.L;
 
                 particle->Color[0] = h;
                 particle->Color[1] = s;

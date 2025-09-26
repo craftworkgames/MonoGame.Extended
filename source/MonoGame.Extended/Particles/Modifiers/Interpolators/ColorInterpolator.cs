@@ -20,7 +20,7 @@ namespace MonoGame.Extended.Particles.Modifiers.Interpolators;
 ///         Color values are represented in the HSL (Hue, Saturation, Lightness) color space as a Vector3.
 ///     </para>
 /// </remarks>
-public sealed class ColorInterpolator : Interpolator<Vector3>
+public sealed class ColorInterpolator : Interpolator<HslColor>
 {
     /// <summary>
     /// Updates a particle's color by interpolating between the start and end values.
@@ -31,9 +31,9 @@ public sealed class ColorInterpolator : Interpolator<Vector3>
     {
         if (!Enabled) { return; }
 
-        float h = StartValue.X + (EndValue.X - StartValue.X) * amount;
-        float s = StartValue.Y + (EndValue.Y - StartValue.Y) * amount;
-        float l = StartValue.Z + (EndValue.Z - StartValue.Z) * amount;
+        float h = StartValue.H + (EndValue.H - StartValue.H) * amount;
+        float s = StartValue.S + (EndValue.S - StartValue.S) * amount;
+        float l = StartValue.L + (EndValue.L - StartValue.L) * amount;
 
         particle->Color[0] = h;
         particle->Color[1] = s;

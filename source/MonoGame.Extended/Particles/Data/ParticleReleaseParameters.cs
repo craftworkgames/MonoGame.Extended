@@ -21,7 +21,7 @@ public class ParticleReleaseParameters
     /// <remarks>
     /// Defaults to a random value between 5 and 100 particles per emission.
     /// </remarks>
-    public Interval<int> Quantity = new(5, 100);
+    public Interval<int> Quantity { get; set; } = new(5, 100);
 
     /// <summary>
     /// Gets or sets the initial speed of particles when released.
@@ -29,7 +29,7 @@ public class ParticleReleaseParameters
     /// <remarks>
     /// Defaults to a random value between 50.0 and 100.0 units per second.
     /// </remarks>
-    public Interval<float> Speed = new(50.0f, 100.0f);
+    public Interval<float> Speed { get; set; }= new(50.0f, 100.0f);
 
     /// <summary>
     /// Gets or sets the initial color of particles when released.
@@ -37,7 +37,7 @@ public class ParticleReleaseParameters
     /// <remarks>
     /// Defaults to white (1.0f, 1.0f, 1.0f).
     /// </remarks>
-    public Interval<HslColor> Color = new(HslColor.FromRgb(Microsoft.Xna.Framework.Color.White));
+    public Interval<HslColor> Color { get; set; }= new(HslColor.FromRgb(Microsoft.Xna.Framework.Color.White));
 
     /// <summary>
     /// Gets or sets the initial opacity of particles when released.
@@ -45,7 +45,7 @@ public class ParticleReleaseParameters
     /// <remarks>
     /// Defaults to a random value between 0.0 (transparent) and 1.0 (opaque).
     /// </remarks>
-    public Interval<float> Opacity = new(0.0f, 1.0f);
+    public Interval<float> Opacity { get; set; }= new(0.0f, 1.0f);
 
     /// <summary>
     /// Gets or sets the initial y-axis scale of particles when released.
@@ -69,7 +69,7 @@ public class ParticleReleaseParameters
     /// <remarks>
     /// Defaults to a random value between -π and π radians (a full 360° range).
     /// </remarks>
-    public Interval<float> Rotation = new(-MathF.PI, MathF.PI);
+    public Interval<float> Rotation { get; set; }= new(-MathF.PI, MathF.PI);
 
     /// <summary>
     /// Gets or sets the mass of particles when released.
@@ -77,7 +77,7 @@ public class ParticleReleaseParameters
     /// <remarks>
     /// Defaults to a constant value of 1.0.
     /// </remarks>
-    public Interval<float> Mass = new(1.0f);
+    public Interval<float> Mass { get; set; }= new(1.0f);
 
 
     /// <summary>
