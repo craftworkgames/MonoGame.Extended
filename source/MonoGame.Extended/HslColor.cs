@@ -161,24 +161,34 @@ namespace MonoGame.Extended
 
         /// <inheritdoc/>
         /// <remarks>
-        /// This comparison uses a weighted approach that establishes a hierarchy of importance among the HSL components:
+        /// This comparison uses a lexicographic approach that establishes a hierarchy among the HSL components:
         ///
         /// <list type="bullet">
-        ///   <item>Hue is the primary sorting factor (weighted by 100)</item>
-        ///   <item>Saturation is the secondary sorting factor (weighted by 10)</item>
-        ///   <item>Lightness is the tertiary sorting factor (weight of 1)</item>
+        ///   <item>Hue is the primary sorting factor</item>
+        ///   <item>Lightness is the secondary sorting factor</item>
+        ///   <item>Saturation is the tertiary sorting factor</item>
         /// </list>
         ///
-        /// This weighting ensures that differences in hue will dominate the comparison result, followed by
-        /// saturation, and then lightness, creating a sorting order that aligns with the perceptual importance
-        /// of each component in the HSL color space.
+        /// The comparison returns the result of the first differing component, ensuring that hue differences
+        /// take precedence over lightness differences, which in turn take precedence over saturation differences.
+        /// This creates a consistent and predictable ordering for color intervals while prioritizing the most
+        /// visually significant color properties.
         /// </remarks>
         public readonly int CompareTo(HslColor other)
         {
+            int result = _h.CompareTo(other._h);
+            if (result != 0)
+            {
+                return result;
+            }
 
-            return _h.CompareTo(other._h) * 100 +
-                   _s.CompareTo(other._s) * 10 +
-                   _l.CompareTo(other._l);
+            result = _l.CompareTo(other._l);
+            if (result != 0)
+            {
+                return result;
+            }
+
+            return _s.CompareTo(other._s);
         }
 
         /// <inheritdoc/>
