@@ -29,13 +29,13 @@ public sealed class LineProfile : Profile
     /// <summary>
     /// Gets or sets the emission direction vector used when <see cref="Radiate"/> is
     /// <see cref="LineRadiation.Directional"/> or as a scale factor when <see cref="Radiate"/> is
-    /// <see cref="LineRadiation.NormalUp"/> or <see cref="LineRadiation.NormalDown"/>.
+    /// <see cref="LineRadiation.PerpendicularUp"/> or <see cref="LineRadiation.PerpendicularDown"/>.
     /// </summary>
     /// <remarks>
     /// For <see cref="LineRadiation.Directional"/>, this vector directly specifies the particle heading direction.
-    /// For <see cref="LineRadiation.NormalUp"/> and <see cref="LineRadiation.NormalDown"/>, this vector's magnitude and sign
-    /// control the normal emission behavior. Positive values emit in the specified normal direction, while negative values
-    /// flip to the opposite direction.
+    /// For <see cref="LineRadiation.PerpendicularUp"/> and <see cref="LineRadiation.PerpendicularDown"/>, this vector's
+    /// magnitude and sign control the normal emission behavior. Positive values emit in the specified normal direction,
+    /// while negative values flip to the opposite direction.
     /// This property is ignored when <see cref="Radiate"/> is <see cref="LineRadiation.None"/>.
     /// </remarks>
     public Vector2 Direction { get; set; }= Vector2.UnitY;
@@ -56,8 +56,9 @@ public sealed class LineProfile : Profile
     public override unsafe void GetOffsetAndHeading(Vector2* offset, Vector2* heading)
     {
         float value = FastRandom.Shared.NextSingle(Length * -0.5f, Length * 0.5f);
-        offset->X = Axis.X * value;
-        offset->Y = Axis.Y * value;
+        Vector2 normalizedAxis = Vector2.Normalize(Axis);
+        offset->X = normalizedAxis.X * value;
+        offset->Y = normalizedAxis.Y * value;
 
         // Calculate heading based on radiation mode
         switch (Radiate)
@@ -73,15 +74,13 @@ public sealed class LineProfile : Profile
                 break;
 
             case LineRadiation.PerpendicularUp:
-                Vector2 normalizedAxisUp = Vector2.Normalize(Axis);
-                heading->X = normalizedAxisUp.Y;
-                heading->Y = -normalizedAxisUp.X;
+                heading->X = normalizedAxis.Y;
+                heading->Y = -normalizedAxis.X;
                 break;
 
             case LineRadiation.PerpendicularDown:
-                Vector2 normalizedAxisDown = Vector2.Normalize(Axis);
-                heading->X = -normalizedAxisDown.Y;
-                heading->Y = normalizedAxisDown.X;
+                heading->X = -normalizedAxis.Y;
+                heading->Y = normalizedAxis.X;
                 break;
 
             default:
