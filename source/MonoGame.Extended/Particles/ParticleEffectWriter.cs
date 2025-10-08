@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Xml;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Particles.Data;
 using MonoGame.Extended.Particles.Modifiers;
