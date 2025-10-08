@@ -85,14 +85,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="EmptyModifiers" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                 </ParticleEmitter>
@@ -118,14 +117,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -155,14 +153,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="BoxFillProfile" Width="1" Height="1" />
                 </ParticleEmitter>
@@ -190,14 +187,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="BoxProfile" Width="1" Height="1" />
                 </ParticleEmitter>
@@ -225,14 +221,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="BoxUniformProfile" Width="1" Height="1" />
                 </ParticleEmitter>
@@ -260,14 +255,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="CircleProfile" Radius="1" Radiate="Out" />
                 </ParticleEmitter>
@@ -295,14 +289,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="LineProfile" Axis="1,1" Length="1" />
                 </ParticleEmitter>
@@ -330,14 +323,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                 </ParticleEmitter>
@@ -363,14 +355,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="RingProfile" Radius="1" Radiate="In" />
                 </ParticleEmitter>
@@ -398,14 +389,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="SprayProfile" Direction="1,1" Spread="1" />
                 </ParticleEmitter>
@@ -433,14 +423,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -473,14 +462,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -516,14 +504,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -558,14 +545,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -600,14 +586,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -640,14 +625,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -683,14 +667,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -725,14 +708,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -766,14 +748,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -809,14 +790,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -850,14 +830,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -896,14 +875,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -943,14 +921,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -990,14 +967,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -1037,14 +1013,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -1084,14 +1059,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0,0" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
@@ -1131,14 +1105,13 @@ public class ParticleEffectReaderTests
               <Emitters>
                 <ParticleEmitter Name="TestEmitter" LifeSpan="1" Offset="0,0" LayerDepth="0" ReclaimFrequency="60" Capacity="1" ModifierExecutionStrategy="Serial" RenderingOrder="FrontToBack">
                   <Parameters>
-                    <Quantity Min="5" Max="100" />
-                    <Speed Min="50" Max="100" />
-                    <Color Min="0,0,1" Max="0,0,1" />
-                    <Opacity Min="0" Max="1" />
-                    <ScaleX Min="0.5" Max="1" />
-                    <ScaleY Min="0.5" Max="1" />
-                    <Rotation Min="{-MathF.PI}" Max="{MathF.PI}" />
-                    <Mass Min="1" Max="1" />
+                    <Quantity Kind="Random" RandomMin="5" RandomMax="100" />
+                    <Speed Kind="Random" RandomMin="50" RandomMax="100" />
+                    <Color Kind="Constant" Constant="1,1,1" />
+                    <Opacity Kind="Random" RandomMin="0" RandomMax="1" />
+                    <Scale Kind="Random" RandomMin="0.5,0.5" RandomMax="1,1" />
+                    <Rotation Kind="Random" RandomMin="{-MathF.PI}" RandomMax="{MathF.PI}" />
+                    <Mass Kind="Constant" Constant="1" />
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>

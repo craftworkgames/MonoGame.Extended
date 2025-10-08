@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -222,13 +223,13 @@ public sealed class ParticleEffectReader : IDisposable
 
     private Texture2DRegion TryLoadTextureDirectly(string name, Rectangle bounds)
     {
-        if (_content?.ServiceProvider == null)
+        if(_content?.ServiceProvider == null)
         {
             return null;
         }
 
         IGraphicsDeviceService graphicsDeviceService = _content.ServiceProvider.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
-        if (graphicsDeviceService?.GraphicsDevice == null)
+        if(graphicsDeviceService?.GraphicsDevice == null)
         {
             return null;
         }
@@ -292,12 +293,8 @@ public sealed class ParticleEffectReader : IDisposable
                         parameters.Opacity = ReadParticleFloatParameter(subtree);
                         break;
 
-                    case nameof(ParticleReleaseParameters.ScaleX):
-                        parameters.ScaleX = ReadParticleFloatParameter(subtree);
-                        break;
-
-                    case nameof(ParticleReleaseParameters.ScaleY):
-                        parameters.ScaleY = ReadParticleFloatParameter(subtree);
+                    case nameof(ParticleReleaseParameters.Scale):
+                        parameters.Scale = ReadParticleVector2Parameter(subtree);
                         break;
 
                     case nameof(ParticleReleaseParameters.Rotation):
@@ -314,27 +311,80 @@ public sealed class ParticleEffectReader : IDisposable
         return parameters;
     }
 
-    private Interval<int> ReadParticleInt32Parameter(XmlReader reader)
+    private ParticleInt32Parameter ReadParticleInt32Parameter(XmlReader reader)
     {
-        int min = reader.GetAttributeInt(nameof(Interval<int>.Min));
-        int max = reader.GetAttributeInt(nameof(Interval<int>.Max));
-        return new Interval<int>(min, max);
+        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleInt32Parameter.Kind));
+
+        if (kind == ParticleValueKind.Constant)
+        {
+            int value = reader.GetAttributeInt(nameof(ParticleInt32Parameter.Constant));
+            return new ParticleInt32Parameter(value);
+        }
+        else if (kind == ParticleValueKind.Random)
+        {
+            int min = reader.GetAttributeInt(nameof(ParticleInt32Parameter.RandomMin));
+            int max = reader.GetAttributeInt(nameof(ParticleInt32Parameter.RandomMax));
+            return new ParticleInt32Parameter(min, max);
+        }
+
+        return new ParticleInt32Parameter(0);
     }
 
-    private Interval<float> ReadParticleFloatParameter(XmlReader reader)
+    private ParticleFloatParameter ReadParticleFloatParameter(XmlReader reader)
     {
-        float min = reader.GetAttributeFloat(nameof(Interval<float>.Min));
-        float max = reader.GetAttributeFloat(nameof(Interval<float>.Max));
-        return new Interval<float>(min, max);
+        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleFloatParameter.Kind));
+
+        if (kind == ParticleValueKind.Constant)
+        {
+            float value = reader.GetAttributeFloat(nameof(ParticleFloatParameter.Constant));
+            return new ParticleFloatParameter(value);
+        }
+        else if (kind == ParticleValueKind.Random)
+        {
+            float min = reader.GetAttributeFloat(nameof(ParticleFloatParameter.RandomMin));
+            float max = reader.GetAttributeFloat(nameof(ParticleFloatParameter.RandomMax));
+            return new ParticleFloatParameter(min, max);
+        }
+
+        return new ParticleFloatParameter(0);
     }
 
-    private Interval<HslColor> ReadParticleColorParameter(XmlReader reader)
+    private ParticleVector2Parameter ReadParticleVector2Parameter(XmlReader reader)
     {
-        Vector3 min = reader.GetAttributeVector3(nameof(Interval<HslColor>.Min));
-        Vector3 max = reader.GetAttributeVector3(nameof(Interval<HslColor>.Max));
-        HslColor minColor = new HslColor(min.X, min.Y, min.X);
-        HslColor maxColor = new HslColor(max.X, max.Y, max.Z);
-        return new Interval<HslColor>(minColor, maxColor);
+        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleVector2Parameter.Kind));
+
+        if(kind == ParticleValueKind.Constant)
+        {
+            Vector2 value = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.Constant));
+            return new ParticleVector2Parameter(value);
+        }
+        else if(kind == ParticleValueKind.Random)
+        {
+            Vector2 min = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMin));
+            Vector2 max = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMax));
+            return new ParticleVector2Parameter(min, max);
+        }
+
+        return new ParticleVector2Parameter(Vector2.Zero);
+    }
+
+    private ParticleColorParameter ReadParticleColorParameter(XmlReader reader)
+    {
+        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleColorParameter.Kind));
+
+        if (kind == ParticleValueKind.Constant)
+        {
+            Vector3 value = reader.GetAttributeVector3(nameof(ParticleColorParameter.Constant));
+            return new ParticleColorParameter(value);
+        }
+        else if (kind == ParticleValueKind.Random)
+        {
+            Vector3 min = reader.GetAttributeVector3(nameof(ParticleColorParameter.RandomMin));
+            Vector3 max = reader.GetAttributeVector3(nameof(ParticleColorParameter.RandomMax));
+            return new ParticleColorParameter(min, max);
+        }
+
+        return new ParticleColorParameter(Vector3.Zero);
     }
 
     private Profile ReadProfile(XmlReader reader)

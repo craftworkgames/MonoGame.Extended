@@ -3,6 +3,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Particles.Data;
 
@@ -21,7 +22,7 @@ public class ParticleReleaseParameters
     /// <remarks>
     /// Defaults to a random value between 5 and 100 particles per emission.
     /// </remarks>
-    public Interval<int> Quantity { get; set; } = new(5, 100);
+    public ParticleInt32Parameter Quantity = new ParticleInt32Parameter(5, 100);
 
     /// <summary>
     /// Gets or sets the initial speed of particles when released.
@@ -29,7 +30,7 @@ public class ParticleReleaseParameters
     /// <remarks>
     /// Defaults to a random value between 50.0 and 100.0 units per second.
     /// </remarks>
-    public Interval<float> Speed { get; set; }= new(50.0f, 100.0f);
+    public ParticleFloatParameter Speed = new ParticleFloatParameter(50.0f, 100.0f);
 
     /// <summary>
     /// Gets or sets the initial color of particles when released.
@@ -37,7 +38,7 @@ public class ParticleReleaseParameters
     /// <remarks>
     /// Defaults to white (1.0f, 1.0f, 1.0f).
     /// </remarks>
-    public Interval<HslColor> Color { get; set; }= new(HslColor.FromRgb(Microsoft.Xna.Framework.Color.White));
+    public ParticleColorParameter Color = new ParticleColorParameter(new Vector3(1.0f, 1.0f, 1.0f));
 
     /// <summary>
     /// Gets or sets the initial opacity of particles when released.
@@ -45,23 +46,15 @@ public class ParticleReleaseParameters
     /// <remarks>
     /// Defaults to a random value between 0.0 (transparent) and 1.0 (opaque).
     /// </remarks>
-    public Interval<float> Opacity { get; set; }= new(0.0f, 1.0f);
+    public ParticleFloatParameter Opacity = new ParticleFloatParameter(0.0f, 1.0f);
 
     /// <summary>
-    /// Gets or sets the initial y-axis scale of particles when released.
+    /// Gets or sets the initial scale of particles when released.
     /// </summary>
     /// <remarks>
-    /// Defaults to a random between 0.5f (half scale) and 1.0 (full scale)
+    /// Defaults to a random value between 0.0 (half scale) and 1.0 (full scale)
     /// </remarks>
-    public Interval<float> ScaleX { get; set; } = new(0.5f, 1.0f);
-
-    /// <summary>
-    /// Gets or sets the initial y-axis scale of particles when released.
-    /// </summary>
-    /// <remarks>
-    /// Defaults to a random between 0.5f (half scale) and 1.0 (full scale)
-    /// </remarks>
-    public Interval<float> ScaleY { get; set; } = new(0.5f, 1.0f);
+    public ParticleVector2Parameter Scale = new ParticleVector2Parameter(new Vector2(0.5f, 0.5f), new Vector2(1.0f, 1.0f));
 
     /// <summary>
     /// Gets or sets the initial rotation (in radians) of particles when released.
@@ -69,7 +62,7 @@ public class ParticleReleaseParameters
     /// <remarks>
     /// Defaults to a random value between -π and π radians (a full 360° range).
     /// </remarks>
-    public Interval<float> Rotation { get; set; }= new(-MathF.PI, MathF.PI);
+    public ParticleFloatParameter Rotation = new ParticleFloatParameter(-MathF.PI, MathF.PI);
 
     /// <summary>
     /// Gets or sets the mass of particles when released.
@@ -77,7 +70,7 @@ public class ParticleReleaseParameters
     /// <remarks>
     /// Defaults to a constant value of 1.0.
     /// </remarks>
-    public Interval<float> Mass { get; set; }= new(1.0f);
+    public ParticleFloatParameter Mass = new ParticleFloatParameter(1.0f);
 
 
     /// <summary>
@@ -108,11 +101,7 @@ public class ParticleReleaseParameters
     ///     <description>Random: 0.0-1.0</description>
     ///   </item>
     ///   <item>
-    ///     <term>ScaleX</term>
-    ///     <description>Random: 0.5-1.0</description>
-    ///   </item>
-    ///   <item>
-    ///     <term>ScaleY</term>
+    ///     <term>Scale</term>
     ///     <description>Random: 0.5-1.0</description>
     ///   </item>
     ///   <item>
