@@ -88,7 +88,7 @@ public static class SpriteBatchExtensions
 
             for (int i = count - 1; i >= 0; i--)
             {
-                RenderParticle(spriteBatch, (Particle*)particlePtrs[i], texture, sourceRect, origin);
+                RenderParticle(spriteBatch, (Particle*)particlePtrs[i], texture, sourceRect, origin, emitter.Offset);
             }
         }
         else
@@ -98,12 +98,12 @@ public static class SpriteBatchExtensions
             while (iterator.HasNext)
             {
                 Particle* particle = iterator.Next();
-                RenderParticle(spriteBatch, particle, texture, sourceRect, origin);
+                RenderParticle(spriteBatch, particle, texture, sourceRect, origin, emitter.Offset);
             }
         }
     }
 
-    private static unsafe void RenderParticle(SpriteBatch spriteBatch, Particle* particle, Texture2D texture, Rectangle sourceRect, Vector2 origin)
+    private static unsafe void RenderParticle(SpriteBatch spriteBatch, Particle* particle, Texture2D texture, Rectangle sourceRect, Vector2 origin, Vector2 offset)
     {
         HslColor hsl = new HslColor(particle->Color[0], particle->Color[1], particle->Color[2]);
         Color color = HslColor.ToRgb(hsl);
@@ -117,7 +117,7 @@ public static class SpriteBatchExtensions
             color.A = (byte)MathHelper.Clamp(particle->Opacity * 255, 0, 255);
         }
 
-        Vector2 position = new Vector2(particle->Position[0], particle->Position[1]);
+        Vector2 position = new Vector2(particle->Position[0], particle->Position[1]) + offset;
         Vector2 scale = new Vector2(particle->Scale[0], particle->Scale[1]);
         float rotation = particle->Rotation;
         float layerDepth = particle->LayerDepth;
