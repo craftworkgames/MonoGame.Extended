@@ -2,7 +2,6 @@ using System;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using MonoGame.Extended.Particles;
-using SharpDX;
 
 namespace MonoGame.Extended.Content.Pipeline.Particles;
 
