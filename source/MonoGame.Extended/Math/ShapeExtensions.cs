@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,7 +15,7 @@ namespace MonoGame.Extended
 
         private static Texture2D GetTexture(SpriteBatch spriteBatch)
         {
-            if (_whitePixelTexture == null)
+            if (_whitePixelTexture == null || _whitePixelTexture.IsDisposed)
             {
                 _whitePixelTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
                 _whitePixelTexture.SetData(new[] { Color.White });
