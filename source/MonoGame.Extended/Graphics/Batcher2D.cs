@@ -17,9 +17,6 @@ namespace MonoGame.Extended.Graphics
     ///     frequently between frames such as sprites and shapes.
     /// </summary>
     /// <seealso cref="IDisposable" />
-    /// <remarks>
-    ///     <para>For drawing user interfaces, consider using <see cref="UIBatcher(ref Matrix, ref Matrix, BlendState, SamplerState, DepthStencilState, RasterizerState, Effect)" /> instead because it supports scissor rectangles.</para>
-    /// </remarks>
     public sealed class Batcher2D : Batcher<Batcher2D.DrawCallInfo>
     {
 
