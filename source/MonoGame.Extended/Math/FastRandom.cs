@@ -69,11 +69,11 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        /// Returns a non-negative random integer that is less than or equal to the specified maximum.
+        /// Returns a non-negative random integer that is less than the specified maximum.
         /// </summary>
-        /// <param name="max">The inclusive upper bound of the random number to be generated.</param>
+        /// <param name="max">The exclusive upper bound of the random number to be generated.</param>
         /// <returns>
-        /// A 32-bit signed integer that is greater than or equal to 0 and less than or equal to <paramref name="max"/>.
+        /// A 32-bit signed integer that is greater than or equal to 0 and less than <paramref name="max"/>
         /// </returns>
         public int Next(int max)
         {
@@ -84,7 +84,7 @@ namespace MonoGame.Extended
         /// Returns a random integer that is within a specified range.
         /// </summary>
         /// <param name="min">The inclusive lower bound of the random number returned.</param>
-        /// <param name="max">The inclusive upper bound of the random number returned.</param>
+        /// <param name="max">The exclusive upper bound of the random number returned.</param>
         /// <returns>
         /// A 32-bit signed integer that is greater than or equal to <paramref name="min"/> and less than or equal to
         /// <paramref name="max"/>.
@@ -272,12 +272,12 @@ namespace MonoGame.Extended
 
             public int Next(int max)
             {
-                return (int)(max * NextSingle() + 0.5f);
+                return (int)(max * NextSingle());
             }
 
             public int Next(int min, int max)
             {
-                return (int)((max - min) * NextSingle() + 0.5f) + min;
+                return (int)((max - min) * NextSingle()) + min;
             }
 
             [Obsolete("Use Next(Interval<int>).  Range<T> will be removed in 6.0")]
