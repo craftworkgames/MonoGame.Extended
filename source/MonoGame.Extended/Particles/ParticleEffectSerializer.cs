@@ -1,0 +1,646 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Particles.Data;
+using MonoGame.Extended.Particles.Modifiers;
+using MonoGame.Extended.Particles.Modifiers.Containers;
+using MonoGame.Extended.Particles.Modifiers.Interpolators;
+using MonoGame.Extended.Particles.Profiles;
+using MonoGame.Extended.Serialization.Xml;
+
+namespace MonoGame.Extended.Particles;
+
+/// <summary>
+/// Provides static methods for serializing and deserializing <see cref="ParticleEffect"/> instances to and from XML.
+/// </summary>
+public static class ParticleEffectSerializer
+{
+    /// <summary>
+    /// Deserializes a <see cref="ParticleEffect"/> from an XML file.
+    /// </summary>
+    /// <param name="fileName">The file path to read the XML from</param>
+    /// <param name="content">The <see cref="ContentManager"/> to use for loading texture.</param>
+    /// <returns>The deserialized <see cref="ParticleEffect"/>.</returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="content"/> or <paramref name="fileName"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="fileName"/> is empty.</exception>
+    /// <exception cref="XmlException">Thrown when the XMl format is invalid.</exception>
+    public static ParticleEffect Deserialize(string fileName, ContentManager content)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+        ArgumentException.ThrowIfNullOrEmpty(fileName);
+
+        XmlReaderSettings settings = new XmlReaderSettings();
+        settings.CloseInput = true;
+        settings.IgnoreComments = true;
+        settings.IgnoreWhitespace = true;
+
+        string fullPath = Path.GetFullPath(fileName);
+        string baseDirectory = Path.GetDirectoryName(fullPath);
+
+        using XmlReader reader = XmlReader.Create(fileName, settings);
+        return Deserialize(reader, content, baseDirectory);
+    }
+
+    /// <summary>
+    /// Deserializes a <see cref="ParticleEffect"/> from a stream containing XML data.
+    /// </summary>
+    /// <param name="stream">The stream to read from.</param>
+    /// <param name="content">The <see cref="ContentManager"/> to use for loading textures.</param>
+    /// <param name="baseDirectory">
+    /// The base directory to use for resolving relative texture paths.
+    /// If <see langword="null"/>, uses the <see cref="ContentManager.RootDirectory"/> property of <paramref name="content"/>.
+    /// </param>
+    /// <returns>The deserialized <see cref="ParticleEffect"/>.</returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="stream"/> or <paramref name="content"/> are <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="XmlException">Thrown when the XMl format is invalid.</exception>
+    public static ParticleEffect Deserialize(Stream stream, ContentManager content, string baseDirectory = null)
+    {
+        ArgumentNullException.ThrowIfNull(stream);
+        ArgumentNullException.ThrowIfNull(content);
+
+        XmlReaderSettings settings = new XmlReaderSettings();
+        settings.CloseInput = false;
+        settings.IgnoreComments = true;
+        settings.IgnoreWhitespace = true;
+
+        if (string.IsNullOrEmpty(baseDirectory))
+        {
+            baseDirectory = content.RootDirectory;
+        }
+
+        using XmlReader reader = XmlReader.Create(stream, settings);
+        return Deserialize(reader, content, baseDirectory);
+    }
+
+    private static ParticleEffect Deserialize(XmlReader reader, ContentManager content, string baseDirectory)
+    {
+        reader.MoveToContent();
+
+        if (reader.NodeType != XmlNodeType.Element || reader.LocalName != nameof(ParticleEffect))
+        {
+            throw new XmlException($"Expected {nameof(ParticleEffect)} root element");
+        }
+
+        string name = reader.GetAttribute(nameof(ParticleEffect.Name)) ?? nameof(ParticleEffect);
+        ParticleEffect effect = new ParticleEffect(name);
+
+        effect.Position = reader.GetAttributeVector2(nameof(ParticleEffect.Position));
+        effect.Rotation = reader.GetAttributeFloat(nameof(ParticleEffect.Rotation));
+        effect.Scale = reader.GetAttributeVector2(nameof(ParticleEffect.Scale));
+        effect.AutoTrigger = reader.GetAttributeBool(nameof(ParticleEffect.AutoTrigger));
+        effect.AutoTriggerFrequency = reader.GetAttributeFloat(nameof(ParticleEffect.AutoTriggerFrequency));
+
+        if (reader.ReadToDescendant(nameof(ParticleEffect.Emitters)))
+        {
+            if (reader.ReadToDescendant(nameof(ParticleEmitter)))
+            {
+                do
+                {
+                    ParticleEmitter emitter = ReadParticleEmitter(reader, content, baseDirectory);
+                    effect.Emitters.Add(emitter);
+                } while (reader.ReadToNextSibling(nameof(ParticleEmitter)));
+            }
+        }
+
+        return effect;
+    }
+
+    private static ParticleEmitter ReadParticleEmitter(XmlReader reader, ContentManager content, string baseDirectory)
+    {
+        int capacity = reader.GetAttributeInt(nameof(ParticleEmitter.Capacity));
+
+        ParticleEmitter emitter = new ParticleEmitter(capacity);
+        emitter.Name = reader.GetAttribute(nameof(ParticleEmitter.Name)) ?? nameof(ParticleEmitter);
+        emitter.LifeSpan = reader.GetAttributeFloat(nameof(ParticleEmitter.LifeSpan));
+        emitter.Offset = reader.GetAttributeVector2(nameof(ParticleEmitter.Offset));
+        emitter.LayerDepth = reader.GetAttributeFloat(nameof(ParticleEmitter.LayerDepth));
+        emitter.ReclaimFrequency = reader.GetAttributeFloat(nameof(ParticleEmitter.ReclaimFrequency));
+
+        string strategy = reader.GetAttribute(nameof(ParticleEmitter.ModifierExecutionStrategy));
+
+        if (strategy.Equals(nameof(ModifierExecutionStrategy.Serial)))
+        {
+            emitter.ModifierExecutionStrategy = ModifierExecutionStrategy.Serial;
+        }
+        else if (strategy.Equals(nameof(ModifierExecutionStrategy.Parallel)))
+        {
+            emitter.ModifierExecutionStrategy = ModifierExecutionStrategy.Parallel;
+        }
+        else
+        {
+            emitter.ModifierExecutionStrategy = ModifierExecutionStrategy.Serial;
+        }
+
+        emitter.RenderingOrder = reader.GetAttributeEnum<ParticleRenderingOrder>(nameof(ParticleEmitter.RenderingOrder));
+
+        using XmlReader subtree = reader.ReadSubtree();
+        while (subtree.Read())
+        {
+            if (subtree.NodeType == XmlNodeType.Element)
+            {
+                switch (subtree.LocalName)
+                {
+                    case nameof(ParticleEmitter.TextureRegion):
+                        emitter.TextureRegion = ReadTexture2DRegion(subtree, content, baseDirectory);
+                        break;
+
+                    case nameof(ParticleEmitter.Parameters):
+                        emitter.Parameters = ReadParticleReleaseParameters(subtree);
+                        break;
+
+                    case nameof(ParticleEmitter.Profile):
+                        emitter.Profile = ReadProfile(subtree);
+                        break;
+
+                    case nameof(ParticleEmitter.Modifiers):
+                        ReadModifiers(subtree, emitter.Modifiers);
+                        break;
+                }
+            }
+        }
+
+        return emitter;
+    }
+
+    private static Texture2DRegion ReadTexture2DRegion(XmlReader reader, ContentManager content, string baseDirectory)
+    {
+        string name = reader.GetAttribute(nameof(Texture2DRegion.Texture.Name));
+
+        if (string.IsNullOrEmpty(name))
+        {
+            return null;
+        }
+
+        string path = Path.Combine(baseDirectory, name);
+        Texture2D texture = content.Load<Texture2D>(path);
+
+        Rectangle bounds = reader.GetAttributeRectangle(nameof(Texture2DRegion.Bounds));
+
+        if (bounds.IsEmpty)
+        {
+            bounds = texture.Bounds;
+        }
+
+        return new Texture2DRegion(texture, bounds);
+    }
+
+    private static ParticleReleaseParameters ReadParticleReleaseParameters(XmlReader reader)
+    {
+        ParticleReleaseParameters parameters = new ParticleReleaseParameters();
+
+        using XmlReader subtree = reader.ReadSubtree();
+        while (subtree.Read())
+        {
+            if (subtree.NodeType == XmlNodeType.Element)
+            {
+                switch (subtree.LocalName)
+                {
+                    case nameof(ParticleReleaseParameters.Quantity):
+                        parameters.Quantity = ReadParticleInt32Parameter(subtree);
+                        break;
+
+                    case nameof(ParticleReleaseParameters.Speed):
+                        parameters.Speed = ReadParticleFloatParameter(subtree);
+                        break;
+
+                    case nameof(ParticleReleaseParameters.Color):
+                        parameters.Color = ReadParticleColorParameter(subtree);
+                        break;
+
+                    case nameof(ParticleReleaseParameters.Opacity):
+                        parameters.Opacity = ReadParticleFloatParameter(subtree);
+                        break;
+
+                    case nameof(ParticleReleaseParameters.Scale):
+                        parameters.Scale = ReadParticleVector2Parameter(subtree);
+                        break;
+
+                    case nameof(ParticleReleaseParameters.Rotation):
+                        parameters.Rotation = ReadParticleFloatParameter(subtree);
+                        break;
+
+                    case nameof(ParticleReleaseParameters.Mass):
+                        parameters.Mass = ReadParticleFloatParameter(subtree);
+                        break;
+                }
+            }
+        }
+
+        return parameters;
+    }
+
+    private static ParticleInt32Parameter ReadParticleInt32Parameter(XmlReader reader)
+    {
+        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleInt32Parameter.Kind));
+
+        if (kind == ParticleValueKind.Constant)
+        {
+            int value = reader.GetAttributeInt(nameof(ParticleInt32Parameter.Constant));
+            return new ParticleInt32Parameter(value);
+        }
+        else if (kind == ParticleValueKind.Random)
+        {
+            int min = reader.GetAttributeInt(nameof(ParticleInt32Parameter.RandomMin));
+            int max = reader.GetAttributeInt(nameof(ParticleInt32Parameter.RandomMax));
+            return new ParticleInt32Parameter(min, max);
+        }
+
+        return new ParticleInt32Parameter(0);
+    }
+
+    private static ParticleFloatParameter ReadParticleFloatParameter(XmlReader reader)
+    {
+        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleFloatParameter.Kind));
+
+        if (kind == ParticleValueKind.Constant)
+        {
+            float value = reader.GetAttributeFloat(nameof(ParticleFloatParameter.Constant));
+            return new ParticleFloatParameter(value);
+        }
+        else if (kind == ParticleValueKind.Random)
+        {
+            float min = reader.GetAttributeFloat(nameof(ParticleFloatParameter.RandomMin));
+            float max = reader.GetAttributeFloat(nameof(ParticleFloatParameter.RandomMax));
+            return new ParticleFloatParameter(min, max);
+        }
+
+        return new ParticleFloatParameter(0);
+    }
+
+    private static ParticleVector2Parameter ReadParticleVector2Parameter(XmlReader reader)
+    {
+        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleVector2Parameter.Kind));
+
+        if (kind == ParticleValueKind.Constant)
+        {
+            Vector2 value = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.Constant));
+            return new ParticleVector2Parameter(value);
+        }
+        else if (kind == ParticleValueKind.Random)
+        {
+            Vector2 min = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMin));
+            Vector2 max = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMax));
+            return new ParticleVector2Parameter(min, max);
+        }
+
+        return new ParticleVector2Parameter(Vector2.Zero);
+    }
+
+    private static ParticleColorParameter ReadParticleColorParameter(XmlReader reader)
+    {
+        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleColorParameter.Kind));
+
+        if (kind == ParticleValueKind.Constant)
+        {
+            Vector3 value = reader.GetAttributeVector3(nameof(ParticleColorParameter.Constant));
+            return new ParticleColorParameter(value);
+        }
+        else if (kind == ParticleValueKind.Random)
+        {
+            Vector3 min = reader.GetAttributeVector3(nameof(ParticleColorParameter.RandomMin));
+            Vector3 max = reader.GetAttributeVector3(nameof(ParticleColorParameter.RandomMax));
+            return new ParticleColorParameter(min, max);
+        }
+
+        return new ParticleColorParameter(Vector3.Zero);
+    }
+
+    private static Profile ReadProfile(XmlReader reader)
+    {
+        string type = reader.GetAttribute(nameof(Type));
+
+        return type switch
+        {
+            nameof(BoxProfile) => ReadBoxProfile(reader),
+            nameof(BoxFillProfile) => ReadBoxFillProfile(reader),
+            nameof(BoxUniformProfile) => ReadBoxUniformProfile(reader),
+            nameof(CircleProfile) => ReadCircleProfile(reader),
+            nameof(LineProfile) => ReadLineProfile(reader),
+            nameof(PointProfile) => ReadPointProfile(reader),
+            nameof(RingProfile) => ReadRingProfile(reader),
+            nameof(SprayProfile) => ReadSprayProfile(reader),
+            _ => ReadPointProfile(reader)
+        };
+    }
+
+    private static BoxProfile ReadBoxProfile(XmlReader reader)
+    {
+        float width = reader.GetAttributeFloat(nameof(BoxProfile.Width));
+        float height = reader.GetAttributeFloat(nameof(BoxProfile.Height));
+
+        return new BoxProfile { Width = width, Height = height };
+    }
+
+    private static BoxFillProfile ReadBoxFillProfile(XmlReader reader)
+    {
+        float width = reader.GetAttributeFloat(nameof(BoxFillProfile.Width));
+        float height = reader.GetAttributeFloat(nameof(BoxFillProfile.Height));
+
+        return new BoxFillProfile { Width = width, Height = height };
+    }
+
+    private static BoxUniformProfile ReadBoxUniformProfile(XmlReader reader)
+    {
+        float width = reader.GetAttributeFloat(nameof(BoxUniformProfile.Width));
+        float height = reader.GetAttributeFloat(nameof(BoxUniformProfile.Height));
+
+        return new BoxUniformProfile { Width = width, Height = height };
+    }
+
+    private static CircleProfile ReadCircleProfile(XmlReader reader)
+    {
+        float radius = reader.GetAttributeFloat(nameof(CircleProfile.Radius));
+        CircleRadiation radiation = reader.GetAttributeEnum<CircleRadiation>(nameof(CircleProfile.Radiate));
+
+        return new CircleProfile { Radius = radius, Radiate = radiation };
+    }
+
+    private static LineProfile ReadLineProfile(XmlReader reader)
+    {
+        Vector2 axis = reader.GetAttributeVector2(nameof(LineProfile.Axis));
+        float length = reader.GetAttributeFloat(nameof(LineProfile.Length));
+        Vector2 direction = reader.GetAttributeVector2(nameof(LineProfile.Direction));
+        LineRadiation radiate = reader.GetAttributeEnum<LineRadiation>(nameof(LineProfile.Radiate));
+
+        return new LineProfile { Axis = axis, Length = length, Direction = direction, Radiate = radiate };
+    }
+
+    private static PointProfile ReadPointProfile(XmlReader reader)
+    {
+        return new PointProfile();
+    }
+
+    private static RingProfile ReadRingProfile(XmlReader reader)
+    {
+        float radius = reader.GetAttributeFloat(nameof(RingProfile.Radius));
+        CircleRadiation radiation = reader.GetAttributeEnum<CircleRadiation>(nameof(RingProfile.Radiate));
+
+        return new RingProfile { Radius = radius, Radiate = radiation };
+    }
+
+    private static SprayProfile ReadSprayProfile(XmlReader reader)
+    {
+        Vector2 direction = reader.GetAttributeVector2(nameof(SprayProfile.Direction));
+        float spread = reader.GetAttributeFloat(nameof(SprayProfile.Spread));
+
+        return new SprayProfile { Direction = direction, Spread = spread };
+    }
+
+    private static void ReadModifiers(XmlReader reader, List<Modifier> modifiers)
+    {
+        using XmlReader subtree = reader.ReadSubtree();
+        while (subtree.Read())
+        {
+            if (subtree.NodeType == XmlNodeType.Element && subtree.LocalName == nameof(Modifier))
+            {
+                Modifier modifier = ReadModifier(subtree);
+
+                if (modifier != null)
+                {
+                    modifiers.Add(modifier);
+                }
+            }
+        }
+    }
+
+    private static Modifier ReadModifier(XmlReader reader)
+    {
+        string type = reader.GetAttribute(nameof(Type));
+        string name = reader.GetAttribute(nameof(Modifier.Name));
+        float frequency = reader.GetAttributeFloat(nameof(Modifier.Frequency));
+        bool enabled = reader.GetAttributeBool(nameof(Modifier.Enabled));
+
+        Modifier modifier = type switch
+        {
+            nameof(AgeModifier) => ReadAgeModifier(reader),
+            nameof(DragModifier) => ReadDragModifier(reader),
+            nameof(LinearGravityModifier) => ReadLinearGravityModifier(reader),
+            nameof(OpacityFastFadeModifier) => new OpacityFastFadeModifier(),
+            nameof(RotationModifier) => ReadRotationModifier(reader),
+            nameof(VelocityColorModifier) => ReadVelocityColorModifier(reader),
+            nameof(VelocityModifier) => ReadVelocityModifier(reader),
+            nameof(VortexModifier) => ReadVortexModifier(reader),
+            nameof(CircleContainerModifier) => ReadCircleContainerModifier(reader),
+            nameof(RectangleContainerModifier) => ReadRectangleContainerModifier(reader),
+            nameof(RectangleLoopContainerModifier) => ReadRectangleLoopContainerModifier(reader),
+            _ => null
+        };
+
+        if (modifier != null)
+        {
+            modifier.Name = name;
+            modifier.Frequency = frequency;
+            modifier.Enabled = enabled;
+        }
+
+        return modifier;
+    }
+
+    private static AgeModifier ReadAgeModifier(XmlReader reader)
+    {
+        AgeModifier modifier = new AgeModifier();
+
+        using XmlReader subtree = reader.ReadSubtree();
+        while (subtree.Read())
+        {
+            if (subtree.NodeType == XmlNodeType.Element && subtree.LocalName == nameof(AgeModifier.Interpolators))
+            {
+                ReadInterpolators(subtree, modifier.Interpolators);
+            }
+        }
+
+        return modifier;
+    }
+
+    private static DragModifier ReadDragModifier(XmlReader reader)
+    {
+        float dragCoefficient = reader.GetAttributeFloat(nameof(DragModifier.DragCoefficient));
+        float density = reader.GetAttributeFloat(nameof(DragModifier.Density));
+
+        return new DragModifier() { DragCoefficient = dragCoefficient, Density = density };
+    }
+
+    private static LinearGravityModifier ReadLinearGravityModifier(XmlReader reader)
+    {
+        Vector2 direction = reader.GetAttributeVector2(nameof(LinearGravityModifier.Direction));
+        float strength = reader.GetAttributeFloat(nameof(LinearGravityModifier.Strength));
+
+        return new LinearGravityModifier() { Direction = direction, Strength = strength };
+    }
+
+    private static RotationModifier ReadRotationModifier(XmlReader reader)
+    {
+        float rotationRate = reader.GetAttributeFloat(nameof(RotationModifier.RotationRate));
+
+        return new RotationModifier() { RotationRate = rotationRate };
+    }
+
+    private static VelocityColorModifier ReadVelocityColorModifier(XmlReader reader)
+    {
+        Vector3 stationaryColorValue = reader.GetAttributeVector3(nameof(VelocityColorModifier.StationaryColor));
+        Vector3 velocityColorValue = reader.GetAttributeVector3(nameof(VelocityColorModifier.VelocityColor));
+        float velocityThreshold = reader.GetAttributeFloat(nameof(VelocityColorModifier.VelocityThreshold));
+
+        HslColor stationaryColor = new HslColor(stationaryColorValue.X, stationaryColorValue.Y, stationaryColorValue.Z);
+        HslColor velocityColor = new HslColor(velocityColorValue.X, velocityColorValue.Y, velocityColorValue.Z);
+
+        return new VelocityColorModifier() { StationaryColor = stationaryColor, VelocityColor = velocityColor, VelocityThreshold = velocityThreshold };
+    }
+
+    private static VelocityModifier ReadVelocityModifier(XmlReader reader)
+    {
+        float velocityThreshold = reader.GetAttributeFloat(nameof(VelocityModifier.VelocityThreshold));
+
+        VelocityModifier modifier = new VelocityModifier() { VelocityThreshold = velocityThreshold };
+
+        using XmlReader subtree = reader.ReadSubtree();
+        while (subtree.Read())
+        {
+            if (subtree.NodeType == XmlNodeType.Element && subtree.LocalName == nameof(VelocityModifier.Interpolators))
+            {
+                ReadInterpolators(subtree, modifier.Interpolators);
+            }
+        }
+
+        return modifier;
+    }
+
+    private static VortexModifier ReadVortexModifier(XmlReader reader)
+    {
+        Vector2 position = reader.GetAttributeVector2(nameof(VortexModifier.Position));
+        float strength = reader.GetAttributeFloat(nameof(VortexModifier.Strength));
+        float outerRadius = reader.GetAttributeFloat(nameof(VortexModifier.OuterRadius));
+        float innerRadius = reader.GetAttributeFloat(nameof(VortexModifier.InnerRadius));
+        float maxVelocity = reader.GetAttributeFloat(nameof(VortexModifier.MaxVelocity));
+        float rotationAngle = reader.GetAttributeFloat(nameof(VortexModifier.RotationAngle));
+
+        return new VortexModifier { Position = position, Strength = strength, OuterRadius = outerRadius, InnerRadius = innerRadius, MaxVelocity = maxVelocity, RotationAngle = rotationAngle };
+    }
+
+    private static CircleContainerModifier ReadCircleContainerModifier(XmlReader reader)
+    {
+        float radius = reader.GetAttributeFloat(nameof(CircleContainerModifier.Radius));
+        bool inside = reader.GetAttributeBool(nameof(CircleContainerModifier.Inside));
+        float restitutionCoefficient = reader.GetAttributeFloat(nameof(CircleContainerModifier.RestitutionCoefficient));
+
+        return new CircleContainerModifier() { Radius = radius, Inside = inside, RestitutionCoefficient = restitutionCoefficient };
+    }
+
+    private static RectangleContainerModifier ReadRectangleContainerModifier(XmlReader reader)
+    {
+        int width = reader.GetAttributeInt(nameof(RectangleContainerModifier.Width));
+        int height = reader.GetAttributeInt(nameof(RectangleContainerModifier.Height));
+        float restitutionCoefficient = reader.GetAttributeFloat(nameof(RectangleContainerModifier.RestitutionCoefficient));
+
+        return new RectangleContainerModifier() { Width = width, Height = height, RestitutionCoefficient = restitutionCoefficient };
+    }
+
+    private static RectangleLoopContainerModifier ReadRectangleLoopContainerModifier(XmlReader reader)
+    {
+        int width = reader.GetAttributeInt(nameof(RectangleLoopContainerModifier.Width));
+        int height = reader.GetAttributeInt(nameof(RectangleLoopContainerModifier.Height));
+
+        return new RectangleLoopContainerModifier() { Width = width, Height = height };
+    }
+
+    private static void ReadInterpolators(XmlReader reader, List<Interpolator> interpolators)
+    {
+        using XmlReader subtree = reader.ReadSubtree();
+        while (subtree.Read())
+        {
+            if (subtree.NodeType == XmlNodeType.Element && subtree.LocalName == nameof(Interpolator))
+            {
+                Interpolator interpolator = ReadInterpolator(subtree);
+
+                if (interpolator != null)
+                {
+                    interpolators.Add(interpolator);
+                }
+            }
+        }
+    }
+
+    private static Interpolator ReadInterpolator(XmlReader reader)
+    {
+        string type = reader.GetAttribute(nameof(Type));
+        string name = reader.GetAttribute(nameof(Interpolator.Name));
+
+        Interpolator interpolator = type switch
+        {
+            nameof(ColorInterpolator) => ReadColorInterpolator(reader),
+            nameof(HueInterpolator) => ReadHueInterpolator(reader),
+            nameof(OpacityInterpolator) => ReadOpacityInterpolator(reader),
+            nameof(RotationInterpolator) => ReadRotationInterpolator(reader),
+            nameof(ScaleInterpolator) => ReadScaleInterpolator(reader),
+            nameof(VelocityInterpolator) => ReadVelocityInterpolator(reader),
+            _ => null
+        };
+
+        if (interpolator != null)
+        {
+            interpolator.Name = name;
+        }
+
+        return interpolator;
+    }
+
+    private static ColorInterpolator ReadColorInterpolator(XmlReader reader)
+    {
+        Vector3 start = reader.GetAttributeVector3(nameof(ColorInterpolator.StartValue));
+        Vector3 end = reader.GetAttributeVector3(nameof(ColorInterpolator.EndValue));
+
+        HslColor startValue = new HslColor(start.X, start.Y, start.Z);
+        HslColor endValue = new HslColor(end.X, end.Y, end.Z);
+
+        return new ColorInterpolator() { StartValue = startValue, EndValue = endValue };
+    }
+
+    private static HueInterpolator ReadHueInterpolator(XmlReader reader)
+    {
+        float startValue = reader.GetAttributeFloat(nameof(HueInterpolator.StartValue));
+        float endValue = reader.GetAttributeFloat(nameof(HueInterpolator.EndValue));
+
+        return new HueInterpolator() { StartValue = startValue, EndValue = endValue };
+    }
+
+    private static OpacityInterpolator ReadOpacityInterpolator(XmlReader reader)
+    {
+        float startValue = reader.GetAttributeFloat(nameof(OpacityInterpolator.StartValue));
+        float endValue = reader.GetAttributeFloat(nameof(OpacityInterpolator.EndValue));
+
+        return new OpacityInterpolator() { StartValue = startValue, EndValue = endValue };
+    }
+
+    private static RotationInterpolator ReadRotationInterpolator(XmlReader reader)
+    {
+        float startValue = reader.GetAttributeFloat(nameof(RotationInterpolator.StartValue));
+        float endValue = reader.GetAttributeFloat(nameof(RotationInterpolator.EndValue));
+
+        return new RotationInterpolator() { StartValue = startValue, EndValue = endValue };
+    }
+
+    private static ScaleInterpolator ReadScaleInterpolator(XmlReader reader)
+    {
+        Vector2 startValue = reader.GetAttributeVector2(nameof(ScaleInterpolator.StartValue));
+        Vector2 endValue = reader.GetAttributeVector2(nameof(ScaleInterpolator.EndValue));
+
+        return new ScaleInterpolator() { StartValue = startValue, EndValue = endValue };
+    }
+
+    private static VelocityInterpolator ReadVelocityInterpolator(XmlReader reader)
+    {
+        Vector2 startValue = reader.GetAttributeVector2(nameof(VelocityInterpolator.StartValue));
+        Vector2 endValue = reader.GetAttributeVector2(nameof(VelocityInterpolator.EndValue));
+
+        return new VelocityInterpolator() { StartValue = startValue, EndValue = endValue };
+    }
+}
