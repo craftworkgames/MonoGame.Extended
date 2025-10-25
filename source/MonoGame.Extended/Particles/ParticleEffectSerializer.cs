@@ -20,6 +20,8 @@ namespace MonoGame.Extended.Particles;
 /// </summary>
 public static class ParticleEffectSerializer
 {
+    # region Deserialize
+
     /// <summary>
     /// Deserializes a <see cref="ParticleEffect"/> from an XML file.
     /// </summary>
@@ -643,4 +645,555 @@ public static class ParticleEffectSerializer
 
         return new VelocityInterpolator() { StartValue = startValue, EndValue = endValue };
     }
+
+    #endregion Deserialize
+
+    #region Serialize
+
+    /// <summary>
+    /// Serializes a <see cref="ParticleEffect"/> to an XML file.
+    /// </summary>
+    /// <param name="fileName">The file path to write the XML to.</param>
+    /// <param name="effect">The <see cref="ParticleEffect"/> to serialize.</param>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="fileName"/> is an empty string.</exception>
+    /// <exception cref="ArgumentNullException">
+    /// Throw if either <paramref name="fileName"/> or <paramref name="effect"/> are <see langword="null"/>.
+    /// </exception>
+    public static void Serialize(string fileName, ParticleEffect effect)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(fileName);
+        ArgumentNullException.ThrowIfNull(effect);
+
+        XmlWriterSettings settings = new XmlWriterSettings();
+        settings.Indent = true;
+        settings.IndentChars = "  ";
+        settings.CloseOutput = true;
+        settings.NewLineChars = "\n";
+
+        using XmlWriter writer = XmlWriter.Create(fileName, settings);
+        Serialize(writer, effect);
+    }
+
+    /// <summary>
+    /// Serializes a <see cref="ParticleEffect"/> to a stream as XML data.
+    /// </summary>
+    /// <param name="stream">The stream to write to.</param>
+    /// <param name="effect">The <see cref="ParticleEffect"/> to serialize.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Throw if either <paramref name="stream"/> or <paramref name="effect"/> are <see langword="null"/>.
+    /// </exception>
+    public static void Serialize(Stream stream, ParticleEffect effect)
+    {
+        ArgumentNullException.ThrowIfNull(stream);
+        ArgumentNullException.ThrowIfNull(effect);
+
+        XmlWriterSettings settings = new XmlWriterSettings();
+        settings.Indent = true;
+        settings.IndentChars = "  ";
+        settings.CloseOutput = false;
+        settings.NewLineChars = "\n";
+
+        using XmlWriter writer = XmlWriter.Create(stream, settings);
+        Serialize(writer, effect);
+    }
+
+    private static void Serialize(XmlWriter writer, ParticleEffect effect)
+    {
+        writer.WriteStartDocument();
+        writer.WriteStartElement(nameof(ParticleEffect));
+
+        writer.WriteAttributeString(nameof(ParticleEffect.Name), effect.Name);
+        writer.WriteAttributeVector2(nameof(ParticleEffect.Position), effect.Position);
+        writer.WriteAttributeFloat(nameof(ParticleEffect.Rotation), effect.Rotation);
+        writer.WriteAttributeVector2(nameof(ParticleEffect.Scale), effect.Scale);
+        writer.WriteAttributeBool(nameof(ParticleEffect.AutoTrigger), effect.AutoTrigger);
+        writer.WriteAttributeFloat(nameof(ParticleEffect.AutoTriggerFrequency), effect.AutoTriggerFrequency);
+
+        if (effect.Emitters.Count > 0)
+        {
+            writer.WriteStartElement(nameof(ParticleEffect.Emitters));
+            foreach (ParticleEmitter emitter in effect.Emitters)
+            {
+                writer.WriteStartElement(nameof(ParticleEmitter));
+                WriteParticleEmitter(writer, emitter);
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+        }
+
+        writer.WriteEndElement();
+        writer.WriteEndDocument();
+
+        writer.Flush();
+    }
+
+    private static void WriteParticleEmitter(XmlWriter writer, ParticleEmitter emitter)
+    {
+        writer.WriteAttributeString(nameof(ParticleEmitter.Name), emitter.Name);
+        writer.WriteAttributeFloat(nameof(ParticleEmitter.LifeSpan), emitter.LifeSpan);
+        writer.WriteAttributeVector2(nameof(ParticleEmitter.Offset), emitter.Offset);
+        writer.WriteAttributeFloat(nameof(ParticleEmitter.LayerDepth), emitter.LayerDepth);
+        writer.WriteAttributeFloat(nameof(ParticleEmitter.ReclaimFrequency), emitter.ReclaimFrequency);
+        writer.WriteAttributeInt(nameof(ParticleEmitter.Capacity), emitter.Capacity);
+        writer.WriteAttributeString(nameof(ParticleEmitter.ModifierExecutionStrategy), emitter.ModifierExecutionStrategy.ToString());
+        writer.WriteAttributeString(nameof(ParticleEmitter.RenderingOrder), emitter.RenderingOrder.ToString());
+
+        if (emitter.TextureRegion is Texture2DRegion region)
+        {
+            writer.WriteStartElement(nameof(ParticleEmitter.TextureRegion));
+            WriteTexture2DRegion(writer, region);
+            writer.WriteEndElement();
+        }
+
+        writer.WriteStartElement(nameof(ParticleEmitter.Parameters));
+        WriteParticleReleaseParameters(writer, emitter.Parameters);
+        writer.WriteEndElement();
+
+        writer.WriteStartElement(nameof(ParticleEmitter.Profile));
+        WriteProfile(writer, emitter.Profile);
+        writer.WriteEndElement();
+
+
+        if (emitter.Modifiers.Count > 0)
+        {
+            writer.WriteStartElement(nameof(ParticleEmitter.Modifiers));
+            foreach (Modifier modifier in emitter.Modifiers)
+            {
+                writer.WriteStartElement(nameof(Modifier));
+                WriteModifier(writer, modifier);
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+        }
+    }
+
+    private static void WriteTexture2DRegion(XmlWriter writer, Texture2DRegion region)
+    {
+        writer.WriteAttributeString(nameof(Texture2DRegion.Texture.Name), region.Texture.Name);
+        writer.WriteAttributeRectangle(nameof(Texture2DRegion.Bounds), region.Bounds);
+    }
+
+    private static void WriteParticleReleaseParameters(XmlWriter writer, ParticleReleaseParameters parameters)
+    {
+        WriteParticleInt32Parameter(writer, nameof(ParticleReleaseParameters.Quantity), parameters.Quantity);
+        WriteParticleFloatParameter(writer, nameof(ParticleReleaseParameters.Speed), parameters.Speed);
+        WriteParticleColorParameter(writer, nameof(ParticleReleaseParameters.Color), parameters.Color);
+        WriteParticleFloatParameter(writer, nameof(ParticleReleaseParameters.Opacity), parameters.Opacity);
+        WriteParticleVector2Parameter(writer, nameof(ParticleReleaseParameters.Scale), parameters.Scale);
+        WriteParticleFloatParameter(writer, nameof(ParticleReleaseParameters.Rotation), parameters.Rotation);
+        WriteParticleFloatParameter(writer, nameof(ParticleReleaseParameters.Mass), parameters.Mass);
+    }
+
+    private static void WriteParticleInt32Parameter(XmlWriter writer, string name, ParticleInt32Parameter parameter)
+    {
+        writer.WriteStartElement(name);
+        writer.WriteAttributeString(nameof(ParticleInt32Parameter.Kind), parameter.Kind.ToString());
+
+        if (parameter.Kind == ParticleValueKind.Constant)
+        {
+            writer.WriteAttributeInt(nameof(ParticleInt32Parameter.Constant), parameter.Constant);
+        }
+        else
+        {
+            writer.WriteAttributeInt(nameof(ParticleInt32Parameter.RandomMin), parameter.RandomMin);
+            writer.WriteAttributeInt(nameof(ParticleInt32Parameter.RandomMax), parameter.RandomMax);
+        }
+
+        writer.WriteEndElement();
+    }
+
+    private static void WriteParticleFloatParameter(XmlWriter writer, string name, ParticleFloatParameter parameter)
+    {
+        writer.WriteStartElement(name);
+        writer.WriteAttributeString(nameof(ParticleFloatParameter.Kind), parameter.Kind.ToString());
+
+        if (parameter.Kind == ParticleValueKind.Constant)
+        {
+            writer.WriteAttributeFloat(nameof(ParticleFloatParameter.Constant), parameter.Constant);
+        }
+        else
+        {
+            writer.WriteAttributeFloat(nameof(ParticleFloatParameter.RandomMin), parameter.RandomMin);
+            writer.WriteAttributeFloat(nameof(ParticleFloatParameter.RandomMax), parameter.RandomMax);
+        }
+
+        writer.WriteEndElement();
+    }
+
+    private static void WriteParticleVector2Parameter(XmlWriter writer, string name, ParticleVector2Parameter parameter)
+    {
+        writer.WriteStartElement(name);
+        writer.WriteAttributeString(nameof(ParticleVector2Parameter.Kind), parameter.Kind.ToString());
+
+        if (parameter.Kind == ParticleValueKind.Constant)
+        {
+            writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.Constant), parameter.Constant);
+        }
+        else
+        {
+            writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.RandomMin), parameter.RandomMin);
+            writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.RandomMax), parameter.RandomMax);
+        }
+
+        writer.WriteEndElement();
+    }
+
+    private static void WriteParticleColorParameter(XmlWriter writer, string name, ParticleColorParameter parameter)
+    {
+        writer.WriteStartElement(name);
+        writer.WriteAttributeString(nameof(ParticleColorParameter.Kind), parameter.Kind.ToString());
+
+        if (parameter.Kind == ParticleValueKind.Constant)
+        {
+            writer.WriteAttributeVector3(nameof(ParticleColorParameter.Constant), parameter.Constant);
+        }
+        else
+        {
+            writer.WriteAttributeVector3(nameof(ParticleColorParameter.RandomMin), parameter.RandomMin);
+            writer.WriteAttributeVector3(nameof(ParticleColorParameter.RandomMax), parameter.RandomMax);
+        }
+
+        writer.WriteEndElement();
+    }
+
+    private static void WriteProfile(XmlWriter writer, Profile profile)
+    {
+        switch (profile)
+        {
+            case BoxFillProfile boxFillProfile:
+                WriteBoxFillProfile(writer, boxFillProfile);
+                break;
+
+            case BoxProfile boxProfile:
+                WriteBoxProfile(writer, boxProfile);
+                break;
+
+            case BoxUniformProfile boxUniformProfile:
+                WriteBoxUniformProfile(writer, boxUniformProfile);
+                break;
+
+            case CircleProfile circleProfile:
+                WriteCircleProfile(writer, circleProfile);
+                break;
+
+            case LineProfile lineProfile:
+                WriteLineProfile(writer, lineProfile);
+                break;
+
+            case PointProfile pointProfile:
+                WritePointProfile(writer, pointProfile);
+                break;
+
+            case RingProfile ringProfile:
+                WriteRingProfile(writer, ringProfile);
+                break;
+
+            case SprayProfile sprayProfile:
+                WriteSprayProfile(writer, sprayProfile);
+                break;
+
+            default:
+                writer.WriteAttributeString(nameof(Type), profile.GetType().ToString());
+                break;
+        }
+    }
+
+    private static void WriteBoxFillProfile(XmlWriter writer, BoxFillProfile profile)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(BoxFillProfile));
+        writer.WriteAttributeFloat(nameof(BoxFillProfile.Width), profile.Width);
+        writer.WriteAttributeFloat(nameof(BoxFillProfile.Height), profile.Height);
+    }
+
+    private static void WriteBoxProfile(XmlWriter writer, BoxProfile profile)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(BoxProfile));
+        writer.WriteAttributeFloat(nameof(BoxProfile.Width), profile.Width);
+        writer.WriteAttributeFloat(nameof(BoxProfile.Height), profile.Height);
+    }
+
+    private static void WriteBoxUniformProfile(XmlWriter writer, BoxUniformProfile profile)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(BoxUniformProfile));
+        writer.WriteAttributeFloat(nameof(BoxUniformProfile.Width), profile.Width);
+        writer.WriteAttributeFloat(nameof(BoxUniformProfile.Height), profile.Height);
+    }
+
+    private static void WriteCircleProfile(XmlWriter writer, CircleProfile profile)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(CircleProfile));
+        writer.WriteAttributeFloat(nameof(CircleProfile.Radius), profile.Radius);
+        writer.WriteAttributeString(nameof(CircleProfile.Radiate), profile.Radiate.ToString());
+    }
+
+    private static void WriteLineProfile(XmlWriter writer, LineProfile profile)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(LineProfile));
+        writer.WriteAttributeVector2(nameof(LineProfile.Axis), profile.Axis);
+        writer.WriteAttributeFloat(nameof(LineProfile.Length), profile.Length);
+        writer.WriteAttributeString(nameof(LineProfile.Radiate), profile.Radiate.ToString());
+        writer.WriteAttributeVector2(nameof(LineProfile.Direction), profile.Direction);
+    }
+
+    private static void WritePointProfile(XmlWriter writer, PointProfile profile)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(PointProfile));
+    }
+
+    private static void WriteRingProfile(XmlWriter writer, RingProfile profile)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(RingProfile));
+        writer.WriteAttributeFloat(nameof(RingProfile.Radius), profile.Radius);
+        writer.WriteAttributeString(nameof(RingProfile.Radiate), profile.Radiate.ToString());
+    }
+
+    private static void WriteSprayProfile(XmlWriter writer, SprayProfile profile)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(SprayProfile));
+        writer.WriteAttributeVector2(nameof(SprayProfile.Direction), profile.Direction);
+        writer.WriteAttributeFloat(nameof(SprayProfile.Spread), profile.Spread);
+    }
+
+    private static void WriteModifier(XmlWriter writer, Modifier modifier)
+    {
+        writer.WriteAttributeString(nameof(Modifier.Name), modifier.Name);
+        writer.WriteAttributeFloat(nameof(Modifier.Frequency), modifier.Frequency);
+
+        switch (modifier)
+        {
+            case AgeModifier ageModifier:
+                WriteAgeModifier(writer, ageModifier);
+                break;
+
+            case CircleContainerModifier circleContainerModifier:
+                WriteCircleContainerModifier(writer, circleContainerModifier);
+                break;
+
+            case DragModifier dragModifier:
+                WriteDragModifier(writer, dragModifier);
+                break;
+
+            case LinearGravityModifier linearGravityModifier:
+                WriteLinearGravityModifier(writer, linearGravityModifier);
+                break;
+
+            case OpacityFastFadeModifier opacityFastFadeModifier:
+                WriteOpacityFastFadeModifier(writer, opacityFastFadeModifier);
+                break;
+
+            case RectangleContainerModifier rectangleContainerModifier:
+                WriteRectangleContainerModifier(writer, rectangleContainerModifier);
+                break;
+
+            case RectangleLoopContainerModifier rectangleLoopContainerModifier:
+                WriteRectangleLoopContainerModifier(writer, rectangleLoopContainerModifier);
+                break;
+
+            case RotationModifier rotationModifier:
+                WriteRotationModifier(writer, rotationModifier);
+                break;
+
+            case VelocityColorModifier velocityColorModifier:
+                WriteVelocityColorModifier(writer, velocityColorModifier);
+                break;
+
+            case VelocityModifier velocityModifier:
+                WriteVelocityModifier(writer, velocityModifier);
+                break;
+
+            case VortexModifier vortexModifier:
+                WriteVortexModifier(writer, vortexModifier);
+                break;
+
+            default:
+                writer.WriteAttributeString(nameof(Type), modifier.GetType().Name);
+                break;
+        }
+    }
+
+    private static void WriteAgeModifier(XmlWriter writer, AgeModifier modifier)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(AgeModifier));
+        if (modifier.Interpolators.Count > 0)
+        {
+            writer.WriteStartElement(nameof(AgeModifier.Interpolators));
+            foreach (Interpolator interpolator in modifier.Interpolators)
+            {
+                writer.WriteStartElement(nameof(Interpolator));
+                WriteInterpolator(writer, interpolator);
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+        }
+    }
+
+    private static void WriteCircleContainerModifier(XmlWriter writer, CircleContainerModifier modifier)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(CircleContainerModifier));
+        writer.WriteAttributeFloat(nameof(CircleContainerModifier.Radius), modifier.Radius);
+        writer.WriteAttributeBool(nameof(CircleContainerModifier.Inside), modifier.Inside);
+        writer.WriteAttributeFloat(nameof(CircleContainerModifier.RestitutionCoefficient), modifier.RestitutionCoefficient);
+    }
+
+    private static void WriteDragModifier(XmlWriter writer, DragModifier modifier)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(DragModifier));
+        writer.WriteAttributeFloat(nameof(DragModifier.DragCoefficient), modifier.DragCoefficient);
+        writer.WriteAttributeFloat(nameof(DragModifier.Density), modifier.Density);
+    }
+
+    private static void WriteLinearGravityModifier(XmlWriter writer, LinearGravityModifier modifier)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(LinearGravityModifier));
+        writer.WriteAttributeVector2(nameof(LinearGravityModifier.Direction), modifier.Direction);
+        writer.WriteAttributeFloat(nameof(LinearGravityModifier.Strength), modifier.Strength);
+    }
+
+    private static void WriteOpacityFastFadeModifier(XmlWriter writer, OpacityFastFadeModifier modifier)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(OpacityFastFadeModifier));
+    }
+
+    private static void WriteRectangleContainerModifier(XmlWriter writer, RectangleContainerModifier modifier)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(RectangleContainerModifier));
+        writer.WriteAttributeInt(nameof(RectangleContainerModifier.Width), modifier.Width);
+        writer.WriteAttributeInt(nameof(RectangleContainerModifier.Height), modifier.Height);
+        writer.WriteAttributeFloat(nameof(RectangleContainerModifier.RestitutionCoefficient), modifier.RestitutionCoefficient);
+    }
+
+    private static void WriteRectangleLoopContainerModifier(XmlWriter writer, RectangleLoopContainerModifier modifier)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(RectangleLoopContainerModifier));
+        writer.WriteAttributeInt(nameof(RectangleLoopContainerModifier.Width), modifier.Width);
+        writer.WriteAttributeInt(nameof(RectangleLoopContainerModifier.Height), modifier.Height);
+    }
+
+    private static void WriteRotationModifier(XmlWriter writer, RotationModifier modifier)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(RotationModifier));
+        writer.WriteAttributeFloat(nameof(RotationModifier.RotationRate), modifier.RotationRate);
+    }
+
+    private static void WriteVelocityColorModifier(XmlWriter writer, VelocityColorModifier modifier)
+    {
+        Vector3 stationaryColor = new Vector3(modifier.StationaryColor.H, modifier.StationaryColor.S, modifier.StationaryColor.L);
+        Vector3 velocityColor = new Vector3(modifier.VelocityColor.H, modifier.VelocityColor.S, modifier.VelocityColor.L);
+
+        writer.WriteAttributeString(nameof(Type), nameof(VelocityColorModifier));
+        writer.WriteAttributeVector3(nameof(VelocityColorModifier.StationaryColor), stationaryColor);
+        writer.WriteAttributeVector3(nameof(VelocityColorModifier.VelocityColor), velocityColor);
+        writer.WriteAttributeFloat(nameof(VelocityColorModifier.VelocityThreshold), modifier.VelocityThreshold);
+    }
+
+    private static void WriteVelocityModifier(XmlWriter writer, VelocityModifier modifier)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(VelocityModifier));
+        writer.WriteAttributeFloat(nameof(VelocityModifier.VelocityThreshold), modifier.VelocityThreshold);
+        if (modifier.Interpolators.Count > 0)
+        {
+            writer.WriteStartElement(nameof(VelocityModifier.Interpolators));
+            foreach (Interpolator interpolator in modifier.Interpolators)
+            {
+                writer.WriteStartElement(nameof(Interpolator));
+                WriteInterpolator(writer, interpolator);
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+        }
+    }
+
+    private static void WriteVortexModifier(XmlWriter writer, VortexModifier modifier)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(VortexModifier));
+        writer.WriteAttributeVector2(nameof(VortexModifier.Position), modifier.Position);
+        writer.WriteAttributeFloat(nameof(VortexModifier.Strength), modifier.Strength);
+        writer.WriteAttributeFloat(nameof(VortexModifier.OuterRadius), modifier.OuterRadius);
+        writer.WriteAttributeFloat(nameof(VortexModifier.InnerRadius), modifier.InnerRadius);
+        writer.WriteAttributeFloat(nameof(VortexModifier.MaxVelocity), modifier.MaxVelocity);
+        writer.WriteAttributeFloat(nameof(VortexModifier.RotationAngle), modifier.RotationAngle);
+    }
+
+    private static void WriteInterpolator(XmlWriter writer, Interpolator interpolator)
+    {
+        writer.WriteAttributeString(nameof(interpolator.Name), interpolator.Name);
+
+        switch (interpolator)
+        {
+            case ColorInterpolator colorInterpolator:
+                WriteColorInterpolator(writer, colorInterpolator);
+                break;
+
+            case HueInterpolator hueInterpolator:
+                WriteHueInterpolator(writer, hueInterpolator);
+                break;
+
+            case OpacityInterpolator opacityInterpolator:
+                WriteOpacityInterpolator(writer, opacityInterpolator);
+                break;
+
+            case RotationInterpolator rotationInterpolator:
+                WriteRotationInterpolator(writer, rotationInterpolator);
+                break;
+
+            case ScaleInterpolator scaleInterpolator:
+                WriteScaleInterpolator(writer, scaleInterpolator);
+                break;
+
+            case VelocityInterpolator velocityInterpolator:
+                WriteVelocityInterpolator(writer, velocityInterpolator);
+                break;
+
+            default:
+                writer.WriteAttributeString(nameof(Type), interpolator.GetType().Name);
+                break;
+        }
+    }
+
+    private static void WriteColorInterpolator(XmlWriter writer, ColorInterpolator interpolator)
+    {
+        Vector3 startValue = new Vector3(interpolator.StartValue.H, interpolator.StartValue.S, interpolator.StartValue.L);
+        Vector3 endValue = new Vector3(interpolator.EndValue.H, interpolator.EndValue.S, interpolator.EndValue.L);
+
+        writer.WriteAttributeString(nameof(Type), nameof(ColorInterpolator));
+        writer.WriteAttributeVector3(nameof(ColorInterpolator.StartValue), startValue);
+        writer.WriteAttributeVector3(nameof(ColorInterpolator.EndValue), endValue);
+    }
+
+    private static void WriteHueInterpolator(XmlWriter writer, HueInterpolator interpolator)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(HueInterpolator));
+        writer.WriteAttributeFloat(nameof(HueInterpolator.StartValue), interpolator.StartValue);
+        writer.WriteAttributeFloat(nameof(HueInterpolator.EndValue), interpolator.EndValue);
+    }
+
+    private static void WriteOpacityInterpolator(XmlWriter writer, OpacityInterpolator interpolator)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(OpacityInterpolator));
+        writer.WriteAttributeFloat(nameof(OpacityInterpolator.StartValue), interpolator.StartValue);
+        writer.WriteAttributeFloat(nameof(OpacityInterpolator.EndValue), interpolator.EndValue);
+    }
+
+    private static void WriteRotationInterpolator(XmlWriter writer, RotationInterpolator interpolator)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(RotationInterpolator));
+        writer.WriteAttributeFloat(nameof(RotationInterpolator.StartValue), interpolator.StartValue);
+        writer.WriteAttributeFloat(nameof(RotationInterpolator.EndValue), interpolator.EndValue);
+    }
+
+    private static void WriteScaleInterpolator(XmlWriter writer, ScaleInterpolator interpolator)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(ScaleInterpolator));
+        writer.WriteAttributeVector2(nameof(ScaleInterpolator.StartValue), interpolator.StartValue);
+        writer.WriteAttributeVector2(nameof(ScaleInterpolator.EndValue), interpolator.EndValue);
+    }
+
+    private static void WriteVelocityInterpolator(XmlWriter writer, VelocityInterpolator interpolator)
+    {
+        writer.WriteAttributeString(nameof(Type), nameof(VelocityInterpolator));
+        writer.WriteAttributeVector2(nameof(VelocityInterpolator.StartValue), interpolator.StartValue);
+        writer.WriteAttributeVector2(nameof(VelocityInterpolator.EndValue), interpolator.EndValue);
+    }
+
+    #endregion Serialize
 }
