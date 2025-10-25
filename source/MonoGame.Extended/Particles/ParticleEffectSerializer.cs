@@ -183,6 +183,13 @@ public static class ParticleEffectSerializer
         }
 
         string path = Path.Combine(baseDirectory, name);
+
+        // Content manager will throw exception if the path given is a rooted path
+        if (Path.IsPathRooted(path))
+        {
+            path = Path.GetRelativePath(baseDirectory, path);
+        }
+
         Texture2D texture = content.Load<Texture2D>(path);
 
         Rectangle bounds = reader.GetAttributeRectangle(nameof(Texture2DRegion.Bounds));
