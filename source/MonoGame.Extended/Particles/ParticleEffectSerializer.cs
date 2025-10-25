@@ -20,7 +20,7 @@ namespace MonoGame.Extended.Particles;
 /// </summary>
 public static class ParticleEffectSerializer
 {
-    # region Deserialize
+    #region Deserialize
 
     /// <summary>
     /// Deserializes a <see cref="ParticleEffect"/> from an XML file.
