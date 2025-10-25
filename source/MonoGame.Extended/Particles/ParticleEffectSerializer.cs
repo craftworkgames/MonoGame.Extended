@@ -95,11 +95,11 @@ public static class ParticleEffectSerializer
         string name = reader.GetAttribute(nameof(ParticleEffect.Name)) ?? nameof(ParticleEffect);
         ParticleEffect effect = new ParticleEffect(name);
 
-        effect.Position = reader.GetAttributeVector2(nameof(ParticleEffect.Position));
-        effect.Rotation = reader.GetAttributeFloat(nameof(ParticleEffect.Rotation));
-        effect.Scale = reader.GetAttributeVector2(nameof(ParticleEffect.Scale));
-        effect.AutoTrigger = reader.GetAttributeBool(nameof(ParticleEffect.AutoTrigger));
-        effect.AutoTriggerFrequency = reader.GetAttributeFloat(nameof(ParticleEffect.AutoTriggerFrequency));
+        effect.Position = reader.GetAttributeVector2(nameof(ParticleEffect.Position), default);
+        effect.Rotation = reader.GetAttributeFloat(nameof(ParticleEffect.Rotation), default);
+        effect.Scale = reader.GetAttributeVector2(nameof(ParticleEffect.Scale), default);
+        effect.AutoTrigger = reader.GetAttributeBool(nameof(ParticleEffect.AutoTrigger), default);
+        effect.AutoTriggerFrequency = reader.GetAttributeFloat(nameof(ParticleEffect.AutoTriggerFrequency), default);
 
         if (reader.ReadToDescendant(nameof(ParticleEffect.Emitters)))
         {
@@ -118,14 +118,14 @@ public static class ParticleEffectSerializer
 
     private static ParticleEmitter ReadParticleEmitter(XmlReader reader, ContentManager content, string baseDirectory)
     {
-        int capacity = reader.GetAttributeInt(nameof(ParticleEmitter.Capacity));
+        int capacity = reader.GetAttributeInt(nameof(ParticleEmitter.Capacity), default);
 
         ParticleEmitter emitter = new ParticleEmitter(capacity);
         emitter.Name = reader.GetAttribute(nameof(ParticleEmitter.Name)) ?? nameof(ParticleEmitter);
-        emitter.LifeSpan = reader.GetAttributeFloat(nameof(ParticleEmitter.LifeSpan));
-        emitter.Offset = reader.GetAttributeVector2(nameof(ParticleEmitter.Offset));
-        emitter.LayerDepth = reader.GetAttributeFloat(nameof(ParticleEmitter.LayerDepth));
-        emitter.ReclaimFrequency = reader.GetAttributeFloat(nameof(ParticleEmitter.ReclaimFrequency));
+        emitter.LifeSpan = reader.GetAttributeFloat(nameof(ParticleEmitter.LifeSpan), default);
+        emitter.Offset = reader.GetAttributeVector2(nameof(ParticleEmitter.Offset), default);
+        emitter.LayerDepth = reader.GetAttributeFloat(nameof(ParticleEmitter.LayerDepth), default);
+        emitter.ReclaimFrequency = reader.GetAttributeFloat(nameof(ParticleEmitter.ReclaimFrequency), default);
 
         string strategy = reader.GetAttribute(nameof(ParticleEmitter.ModifierExecutionStrategy));
 
@@ -142,7 +142,7 @@ public static class ParticleEffectSerializer
             emitter.ModifierExecutionStrategy = ModifierExecutionStrategy.Serial;
         }
 
-        emitter.RenderingOrder = reader.GetAttributeEnum<ParticleRenderingOrder>(nameof(ParticleEmitter.RenderingOrder));
+        emitter.RenderingOrder = reader.GetAttributeEnum<ParticleRenderingOrder>(nameof(ParticleEmitter.RenderingOrder), default);
 
         using XmlReader subtree = reader.ReadSubtree();
         while (subtree.Read())
@@ -192,7 +192,7 @@ public static class ParticleEffectSerializer
 
         Texture2D texture = content.Load<Texture2D>(path);
 
-        Rectangle bounds = reader.GetAttributeRectangle(nameof(Texture2DRegion.Bounds));
+        Rectangle bounds = reader.GetAttributeRectangle(nameof(Texture2DRegion.Bounds), default);
 
         if (bounds.IsEmpty)
         {
@@ -249,17 +249,17 @@ public static class ParticleEffectSerializer
 
     private static ParticleInt32Parameter ReadParticleInt32Parameter(XmlReader reader)
     {
-        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleInt32Parameter.Kind));
+        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleInt32Parameter.Kind), default);
 
         if (kind == ParticleValueKind.Constant)
         {
-            int value = reader.GetAttributeInt(nameof(ParticleInt32Parameter.Constant));
+            int value = reader.GetAttributeInt(nameof(ParticleInt32Parameter.Constant), default);
             return new ParticleInt32Parameter(value);
         }
         else if (kind == ParticleValueKind.Random)
         {
-            int min = reader.GetAttributeInt(nameof(ParticleInt32Parameter.RandomMin));
-            int max = reader.GetAttributeInt(nameof(ParticleInt32Parameter.RandomMax));
+            int min = reader.GetAttributeInt(nameof(ParticleInt32Parameter.RandomMin), default);
+            int max = reader.GetAttributeInt(nameof(ParticleInt32Parameter.RandomMax), default);
             return new ParticleInt32Parameter(min, max);
         }
 
@@ -268,17 +268,17 @@ public static class ParticleEffectSerializer
 
     private static ParticleFloatParameter ReadParticleFloatParameter(XmlReader reader)
     {
-        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleFloatParameter.Kind));
+        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleFloatParameter.Kind), default);
 
         if (kind == ParticleValueKind.Constant)
         {
-            float value = reader.GetAttributeFloat(nameof(ParticleFloatParameter.Constant));
+            float value = reader.GetAttributeFloat(nameof(ParticleFloatParameter.Constant), default);
             return new ParticleFloatParameter(value);
         }
         else if (kind == ParticleValueKind.Random)
         {
-            float min = reader.GetAttributeFloat(nameof(ParticleFloatParameter.RandomMin));
-            float max = reader.GetAttributeFloat(nameof(ParticleFloatParameter.RandomMax));
+            float min = reader.GetAttributeFloat(nameof(ParticleFloatParameter.RandomMin), default);
+            float max = reader.GetAttributeFloat(nameof(ParticleFloatParameter.RandomMax), default);
             return new ParticleFloatParameter(min, max);
         }
 
@@ -287,17 +287,17 @@ public static class ParticleEffectSerializer
 
     private static ParticleVector2Parameter ReadParticleVector2Parameter(XmlReader reader)
     {
-        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleVector2Parameter.Kind));
+        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleVector2Parameter.Kind), default);
 
         if (kind == ParticleValueKind.Constant)
         {
-            Vector2 value = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.Constant));
+            Vector2 value = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.Constant), default);
             return new ParticleVector2Parameter(value);
         }
         else if (kind == ParticleValueKind.Random)
         {
-            Vector2 min = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMin));
-            Vector2 max = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMax));
+            Vector2 min = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMin), default);
+            Vector2 max = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMax), default);
             return new ParticleVector2Parameter(min, max);
         }
 
@@ -306,17 +306,17 @@ public static class ParticleEffectSerializer
 
     private static ParticleColorParameter ReadParticleColorParameter(XmlReader reader)
     {
-        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleColorParameter.Kind));
+        ParticleValueKind kind = reader.GetAttributeEnum<ParticleValueKind>(nameof(ParticleColorParameter.Kind), default);
 
         if (kind == ParticleValueKind.Constant)
         {
-            Vector3 value = reader.GetAttributeVector3(nameof(ParticleColorParameter.Constant));
+            Vector3 value = reader.GetAttributeVector3(nameof(ParticleColorParameter.Constant), default);
             return new ParticleColorParameter(value);
         }
         else if (kind == ParticleValueKind.Random)
         {
-            Vector3 min = reader.GetAttributeVector3(nameof(ParticleColorParameter.RandomMin));
-            Vector3 max = reader.GetAttributeVector3(nameof(ParticleColorParameter.RandomMax));
+            Vector3 min = reader.GetAttributeVector3(nameof(ParticleColorParameter.RandomMin), default);
+            Vector3 max = reader.GetAttributeVector3(nameof(ParticleColorParameter.RandomMax), default);
             return new ParticleColorParameter(min, max);
         }
 
@@ -343,42 +343,42 @@ public static class ParticleEffectSerializer
 
     private static BoxProfile ReadBoxProfile(XmlReader reader)
     {
-        float width = reader.GetAttributeFloat(nameof(BoxProfile.Width));
-        float height = reader.GetAttributeFloat(nameof(BoxProfile.Height));
+        float width = reader.GetAttributeFloat(nameof(BoxProfile.Width), default);
+        float height = reader.GetAttributeFloat(nameof(BoxProfile.Height), default);
 
         return new BoxProfile { Width = width, Height = height };
     }
 
     private static BoxFillProfile ReadBoxFillProfile(XmlReader reader)
     {
-        float width = reader.GetAttributeFloat(nameof(BoxFillProfile.Width));
-        float height = reader.GetAttributeFloat(nameof(BoxFillProfile.Height));
+        float width = reader.GetAttributeFloat(nameof(BoxFillProfile.Width), default);
+        float height = reader.GetAttributeFloat(nameof(BoxFillProfile.Height), default);
 
         return new BoxFillProfile { Width = width, Height = height };
     }
 
     private static BoxUniformProfile ReadBoxUniformProfile(XmlReader reader)
     {
-        float width = reader.GetAttributeFloat(nameof(BoxUniformProfile.Width));
-        float height = reader.GetAttributeFloat(nameof(BoxUniformProfile.Height));
+        float width = reader.GetAttributeFloat(nameof(BoxUniformProfile.Width), default);
+        float height = reader.GetAttributeFloat(nameof(BoxUniformProfile.Height), default);
 
         return new BoxUniformProfile { Width = width, Height = height };
     }
 
     private static CircleProfile ReadCircleProfile(XmlReader reader)
     {
-        float radius = reader.GetAttributeFloat(nameof(CircleProfile.Radius));
-        CircleRadiation radiation = reader.GetAttributeEnum<CircleRadiation>(nameof(CircleProfile.Radiate));
+        float radius = reader.GetAttributeFloat(nameof(CircleProfile.Radius), default);
+        CircleRadiation radiation = reader.GetAttributeEnum<CircleRadiation>(nameof(CircleProfile.Radiate), default);
 
         return new CircleProfile { Radius = radius, Radiate = radiation };
     }
 
     private static LineProfile ReadLineProfile(XmlReader reader)
     {
-        Vector2 axis = reader.GetAttributeVector2(nameof(LineProfile.Axis));
-        float length = reader.GetAttributeFloat(nameof(LineProfile.Length));
-        Vector2 direction = reader.GetAttributeVector2(nameof(LineProfile.Direction));
-        LineRadiation radiate = reader.GetAttributeEnum<LineRadiation>(nameof(LineProfile.Radiate));
+        Vector2 axis = reader.GetAttributeVector2(nameof(LineProfile.Axis), default);
+        float length = reader.GetAttributeFloat(nameof(LineProfile.Length), default);
+        Vector2 direction = reader.GetAttributeVector2(nameof(LineProfile.Direction), default);
+        LineRadiation radiate = reader.GetAttributeEnum<LineRadiation>(nameof(LineProfile.Radiate), default);
 
         return new LineProfile { Axis = axis, Length = length, Direction = direction, Radiate = radiate };
     }
@@ -390,16 +390,16 @@ public static class ParticleEffectSerializer
 
     private static RingProfile ReadRingProfile(XmlReader reader)
     {
-        float radius = reader.GetAttributeFloat(nameof(RingProfile.Radius));
-        CircleRadiation radiation = reader.GetAttributeEnum<CircleRadiation>(nameof(RingProfile.Radiate));
+        float radius = reader.GetAttributeFloat(nameof(RingProfile.Radius), default);
+        CircleRadiation radiation = reader.GetAttributeEnum<CircleRadiation>(nameof(RingProfile.Radiate), default);
 
         return new RingProfile { Radius = radius, Radiate = radiation };
     }
 
     private static SprayProfile ReadSprayProfile(XmlReader reader)
     {
-        Vector2 direction = reader.GetAttributeVector2(nameof(SprayProfile.Direction));
-        float spread = reader.GetAttributeFloat(nameof(SprayProfile.Spread));
+        Vector2 direction = reader.GetAttributeVector2(nameof(SprayProfile.Direction), default);
+        float spread = reader.GetAttributeFloat(nameof(SprayProfile.Spread), default);
 
         return new SprayProfile { Direction = direction, Spread = spread };
     }
@@ -425,8 +425,8 @@ public static class ParticleEffectSerializer
     {
         string type = reader.GetAttribute(nameof(Type));
         string name = reader.GetAttribute(nameof(Modifier.Name));
-        float frequency = reader.GetAttributeFloat(nameof(Modifier.Frequency));
-        bool enabled = reader.GetAttributeBool(nameof(Modifier.Enabled));
+        float frequency = reader.GetAttributeFloat(nameof(Modifier.Frequency), default);
+        bool enabled = reader.GetAttributeBool(nameof(Modifier.Enabled), default);
 
         Modifier modifier = type switch
         {
@@ -472,32 +472,32 @@ public static class ParticleEffectSerializer
 
     private static DragModifier ReadDragModifier(XmlReader reader)
     {
-        float dragCoefficient = reader.GetAttributeFloat(nameof(DragModifier.DragCoefficient));
-        float density = reader.GetAttributeFloat(nameof(DragModifier.Density));
+        float dragCoefficient = reader.GetAttributeFloat(nameof(DragModifier.DragCoefficient), default);
+        float density = reader.GetAttributeFloat(nameof(DragModifier.Density), default);
 
         return new DragModifier() { DragCoefficient = dragCoefficient, Density = density };
     }
 
     private static LinearGravityModifier ReadLinearGravityModifier(XmlReader reader)
     {
-        Vector2 direction = reader.GetAttributeVector2(nameof(LinearGravityModifier.Direction));
-        float strength = reader.GetAttributeFloat(nameof(LinearGravityModifier.Strength));
+        Vector2 direction = reader.GetAttributeVector2(nameof(LinearGravityModifier.Direction), default);
+        float strength = reader.GetAttributeFloat(nameof(LinearGravityModifier.Strength), default);
 
         return new LinearGravityModifier() { Direction = direction, Strength = strength };
     }
 
     private static RotationModifier ReadRotationModifier(XmlReader reader)
     {
-        float rotationRate = reader.GetAttributeFloat(nameof(RotationModifier.RotationRate));
+        float rotationRate = reader.GetAttributeFloat(nameof(RotationModifier.RotationRate), default);
 
         return new RotationModifier() { RotationRate = rotationRate };
     }
 
     private static VelocityColorModifier ReadVelocityColorModifier(XmlReader reader)
     {
-        Vector3 stationaryColorValue = reader.GetAttributeVector3(nameof(VelocityColorModifier.StationaryColor));
-        Vector3 velocityColorValue = reader.GetAttributeVector3(nameof(VelocityColorModifier.VelocityColor));
-        float velocityThreshold = reader.GetAttributeFloat(nameof(VelocityColorModifier.VelocityThreshold));
+        Vector3 stationaryColorValue = reader.GetAttributeVector3(nameof(VelocityColorModifier.StationaryColor), default);
+        Vector3 velocityColorValue = reader.GetAttributeVector3(nameof(VelocityColorModifier.VelocityColor), default);
+        float velocityThreshold = reader.GetAttributeFloat(nameof(VelocityColorModifier.VelocityThreshold), default);
 
         HslColor stationaryColor = new HslColor(stationaryColorValue.X, stationaryColorValue.Y, stationaryColorValue.Z);
         HslColor velocityColor = new HslColor(velocityColorValue.X, velocityColorValue.Y, velocityColorValue.Z);
@@ -507,7 +507,7 @@ public static class ParticleEffectSerializer
 
     private static VelocityModifier ReadVelocityModifier(XmlReader reader)
     {
-        float velocityThreshold = reader.GetAttributeFloat(nameof(VelocityModifier.VelocityThreshold));
+        float velocityThreshold = reader.GetAttributeFloat(nameof(VelocityModifier.VelocityThreshold), default);
 
         VelocityModifier modifier = new VelocityModifier() { VelocityThreshold = velocityThreshold };
 
@@ -525,38 +525,38 @@ public static class ParticleEffectSerializer
 
     private static VortexModifier ReadVortexModifier(XmlReader reader)
     {
-        Vector2 position = reader.GetAttributeVector2(nameof(VortexModifier.Position));
-        float strength = reader.GetAttributeFloat(nameof(VortexModifier.Strength));
-        float outerRadius = reader.GetAttributeFloat(nameof(VortexModifier.OuterRadius));
-        float innerRadius = reader.GetAttributeFloat(nameof(VortexModifier.InnerRadius));
-        float maxVelocity = reader.GetAttributeFloat(nameof(VortexModifier.MaxVelocity));
-        float rotationAngle = reader.GetAttributeFloat(nameof(VortexModifier.RotationAngle));
+        Vector2 position = reader.GetAttributeVector2(nameof(VortexModifier.Position), default);
+        float strength = reader.GetAttributeFloat(nameof(VortexModifier.Strength), default);
+        float outerRadius = reader.GetAttributeFloat(nameof(VortexModifier.OuterRadius), default);
+        float innerRadius = reader.GetAttributeFloat(nameof(VortexModifier.InnerRadius), default);
+        float maxVelocity = reader.GetAttributeFloat(nameof(VortexModifier.MaxVelocity), default);
+        float rotationAngle = reader.GetAttributeFloat(nameof(VortexModifier.RotationAngle), default);
 
         return new VortexModifier { Position = position, Strength = strength, OuterRadius = outerRadius, InnerRadius = innerRadius, MaxVelocity = maxVelocity, RotationAngle = rotationAngle };
     }
 
     private static CircleContainerModifier ReadCircleContainerModifier(XmlReader reader)
     {
-        float radius = reader.GetAttributeFloat(nameof(CircleContainerModifier.Radius));
-        bool inside = reader.GetAttributeBool(nameof(CircleContainerModifier.Inside));
-        float restitutionCoefficient = reader.GetAttributeFloat(nameof(CircleContainerModifier.RestitutionCoefficient));
+        float radius = reader.GetAttributeFloat(nameof(CircleContainerModifier.Radius), default);
+        bool inside = reader.GetAttributeBool(nameof(CircleContainerModifier.Inside), default);
+        float restitutionCoefficient = reader.GetAttributeFloat(nameof(CircleContainerModifier.RestitutionCoefficient), default);
 
         return new CircleContainerModifier() { Radius = radius, Inside = inside, RestitutionCoefficient = restitutionCoefficient };
     }
 
     private static RectangleContainerModifier ReadRectangleContainerModifier(XmlReader reader)
     {
-        int width = reader.GetAttributeInt(nameof(RectangleContainerModifier.Width));
-        int height = reader.GetAttributeInt(nameof(RectangleContainerModifier.Height));
-        float restitutionCoefficient = reader.GetAttributeFloat(nameof(RectangleContainerModifier.RestitutionCoefficient));
+        int width = reader.GetAttributeInt(nameof(RectangleContainerModifier.Width), default);
+        int height = reader.GetAttributeInt(nameof(RectangleContainerModifier.Height), default);
+        float restitutionCoefficient = reader.GetAttributeFloat(nameof(RectangleContainerModifier.RestitutionCoefficient), default);
 
         return new RectangleContainerModifier() { Width = width, Height = height, RestitutionCoefficient = restitutionCoefficient };
     }
 
     private static RectangleLoopContainerModifier ReadRectangleLoopContainerModifier(XmlReader reader)
     {
-        int width = reader.GetAttributeInt(nameof(RectangleLoopContainerModifier.Width));
-        int height = reader.GetAttributeInt(nameof(RectangleLoopContainerModifier.Height));
+        int width = reader.GetAttributeInt(nameof(RectangleLoopContainerModifier.Width), default);
+        int height = reader.GetAttributeInt(nameof(RectangleLoopContainerModifier.Height), default);
 
         return new RectangleLoopContainerModifier() { Width = width, Height = height };
     }
@@ -604,8 +604,8 @@ public static class ParticleEffectSerializer
 
     private static ColorInterpolator ReadColorInterpolator(XmlReader reader)
     {
-        Vector3 start = reader.GetAttributeVector3(nameof(ColorInterpolator.StartValue));
-        Vector3 end = reader.GetAttributeVector3(nameof(ColorInterpolator.EndValue));
+        Vector3 start = reader.GetAttributeVector3(nameof(ColorInterpolator.StartValue), default);
+        Vector3 end = reader.GetAttributeVector3(nameof(ColorInterpolator.EndValue), default);
 
         HslColor startValue = new HslColor(start.X, start.Y, start.Z);
         HslColor endValue = new HslColor(end.X, end.Y, end.Z);
@@ -615,40 +615,40 @@ public static class ParticleEffectSerializer
 
     private static HueInterpolator ReadHueInterpolator(XmlReader reader)
     {
-        float startValue = reader.GetAttributeFloat(nameof(HueInterpolator.StartValue));
-        float endValue = reader.GetAttributeFloat(nameof(HueInterpolator.EndValue));
+        float startValue = reader.GetAttributeFloat(nameof(HueInterpolator.StartValue), default);
+        float endValue = reader.GetAttributeFloat(nameof(HueInterpolator.EndValue), default);
 
         return new HueInterpolator() { StartValue = startValue, EndValue = endValue };
     }
 
     private static OpacityInterpolator ReadOpacityInterpolator(XmlReader reader)
     {
-        float startValue = reader.GetAttributeFloat(nameof(OpacityInterpolator.StartValue));
-        float endValue = reader.GetAttributeFloat(nameof(OpacityInterpolator.EndValue));
+        float startValue = reader.GetAttributeFloat(nameof(OpacityInterpolator.StartValue), default);
+        float endValue = reader.GetAttributeFloat(nameof(OpacityInterpolator.EndValue), default);
 
         return new OpacityInterpolator() { StartValue = startValue, EndValue = endValue };
     }
 
     private static RotationInterpolator ReadRotationInterpolator(XmlReader reader)
     {
-        float startValue = reader.GetAttributeFloat(nameof(RotationInterpolator.StartValue));
-        float endValue = reader.GetAttributeFloat(nameof(RotationInterpolator.EndValue));
+        float startValue = reader.GetAttributeFloat(nameof(RotationInterpolator.StartValue), default);
+        float endValue = reader.GetAttributeFloat(nameof(RotationInterpolator.EndValue), default);
 
         return new RotationInterpolator() { StartValue = startValue, EndValue = endValue };
     }
 
     private static ScaleInterpolator ReadScaleInterpolator(XmlReader reader)
     {
-        Vector2 startValue = reader.GetAttributeVector2(nameof(ScaleInterpolator.StartValue));
-        Vector2 endValue = reader.GetAttributeVector2(nameof(ScaleInterpolator.EndValue));
+        Vector2 startValue = reader.GetAttributeVector2(nameof(ScaleInterpolator.StartValue), default);
+        Vector2 endValue = reader.GetAttributeVector2(nameof(ScaleInterpolator.EndValue), default);
 
         return new ScaleInterpolator() { StartValue = startValue, EndValue = endValue };
     }
 
     private static VelocityInterpolator ReadVelocityInterpolator(XmlReader reader)
     {
-        Vector2 startValue = reader.GetAttributeVector2(nameof(VelocityInterpolator.StartValue));
-        Vector2 endValue = reader.GetAttributeVector2(nameof(VelocityInterpolator.EndValue));
+        Vector2 startValue = reader.GetAttributeVector2(nameof(VelocityInterpolator.StartValue), default);
+        Vector2 endValue = reader.GetAttributeVector2(nameof(VelocityInterpolator.EndValue), default);
 
         return new VelocityInterpolator() { StartValue = startValue, EndValue = endValue };
     }
