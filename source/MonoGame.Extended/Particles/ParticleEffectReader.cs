@@ -23,6 +23,7 @@ namespace MonoGame.Extended.Particles;
 /// <summary>
 /// Represents a reader that deserializes a <see cref="ParticleEffect"/> from an XML configuration.
 /// </summary>
+[Obsolete("Use ParticleEffectSerializer.Deserialize.  ParticleEffectReader will be removed in 6.0.0")]
 public sealed class ParticleEffectReader : IDisposable
 {
     private readonly XmlReader _reader;

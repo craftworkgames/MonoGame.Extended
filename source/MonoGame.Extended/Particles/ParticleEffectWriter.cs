@@ -15,6 +15,7 @@ namespace MonoGame.Extended.Particles;
 /// <summary>
 /// Represents a writer that serializes a <see cref="ParticleEffect"/> to an XML configuration.
 /// </summary>
+[Obsolete("Use ParticleEffectSerializer.Serialize.  ParticleEffectWriter will be removed in 6.0.0")]
 public class ParticleEffectWriter : IDisposable
 {
     private readonly XmlWriter _writer;
