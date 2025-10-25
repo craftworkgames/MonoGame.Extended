@@ -245,8 +245,7 @@ public class ParticleEffect : IDisposable
     /// <exception cref="ArgumentException"><paramref name="path"/> is <see langword="null"/> or empty.</exception>
     public static ParticleEffect FromFile(string path, ContentManager content)
     {
-        using ParticleEffectReader reader = new(path, content);
-        return reader.ReadParticleEffect();
+        return ParticleEffectSerializer.Deserialize(path, content);
     }
 
     /// <summary>
@@ -259,8 +258,7 @@ public class ParticleEffect : IDisposable
     /// <exception cref="ArgumentNullException"><paramref name="stream"/> or <paramref name="content"/> is <see langword="null"/></exception>
     public static ParticleEffect FromStream(Stream stream, ContentManager content, string baseDirectory)
     {
-        using ParticleEffectReader reader = new(stream, content);
-        return reader.ReadParticleEffect();
+        return ParticleEffectSerializer.Deserialize(stream, content, baseDirectory);
     }
 
     /// <summary>

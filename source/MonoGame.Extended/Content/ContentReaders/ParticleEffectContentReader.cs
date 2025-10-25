@@ -13,7 +13,6 @@ public sealed class ParticleEffectContentReader : ContentTypeReader<ParticleEffe
 
         byte[] xmlBytes = Encoding.UTF8.GetBytes(xmlContent);
         using Stream stream = new MemoryStream(xmlBytes);
-        using ParticleEffectReader reader = new ParticleEffectReader(stream, input.ContentManager);
-        return reader.ReadParticleEffect();
+        return ParticleEffectSerializer.Deserialize(stream, input.ContentManager);
     }
 }
