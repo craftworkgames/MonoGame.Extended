@@ -38,16 +38,57 @@ public static class ParticleEffectSerializer
         ArgumentNullException.ThrowIfNull(content);
         ArgumentException.ThrowIfNullOrEmpty(fileName);
 
+        string fullPath = Path.GetFullPath(fileName);
+        string baseDirectory = Path.GetDirectoryName(fullPath);
+
+        Func<string, Texture2D> textureLoader = path =>
+        {
+            string combinedPath = Path.GetFullPath(path, baseDirectory);
+
+            // Content manager will throw exception if the path given is a rooted path
+            if (Path.IsPathRooted(combinedPath))
+            {
+                combinedPath = Path.GetRelativePath(baseDirectory, path);
+            }
+
+            Texture2D texture = content.Load<Texture2D>(combinedPath);
+
+            if (string.IsNullOrEmpty(texture.Name))
+            {
+                texture.Name = Path.GetFileName(path);
+            }
+
+            return texture;
+        };
+
+        return Deserialize(fileName, textureLoader);
+    }
+
+    /// <summary>
+    /// Deserializes a <see cref="ParticleEffect"/> from an XML file using a custom texture loading function.
+    /// </summary>
+    /// <param name="fileName">The file path to read the XML from.</param>
+    /// <param name="textureLoader">
+    /// A function that loads a <see cref="Texture2D"/> given a texture path.
+    /// The path provided to this function will be relative to the XML file's directory.
+    /// </param>
+    /// <returns>The deserialized <see cref="ParticleEffect"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="fileName"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="fileName"/> is empty.</exception>
+    /// <exception cref="XmlException">Thrown when the XMl format is invalid.</exception>
+    public static ParticleEffect Deserialize(string fileName, Func<string, Texture2D> textureLoader)
+    {
+        ArgumentNullException.ThrowIfNull(textureLoader);
+        ArgumentException.ThrowIfNullOrEmpty(fileName);
+
         XmlReaderSettings settings = new XmlReaderSettings();
         settings.CloseInput = true;
         settings.IgnoreComments = true;
         settings.IgnoreWhitespace = true;
 
-        string fullPath = Path.GetFullPath(fileName);
-        string baseDirectory = Path.GetDirectoryName(fullPath);
-
         using XmlReader reader = XmlReader.Create(fileName, settings);
-        return Deserialize(reader, content, baseDirectory);
+        return Deserialize(reader, textureLoader);
+
     }
 
     /// <summary>
@@ -69,21 +110,62 @@ public static class ParticleEffectSerializer
         ArgumentNullException.ThrowIfNull(stream);
         ArgumentNullException.ThrowIfNull(content);
 
-        XmlReaderSettings settings = new XmlReaderSettings();
-        settings.CloseInput = false;
-        settings.IgnoreComments = true;
-        settings.IgnoreWhitespace = true;
-
         if (string.IsNullOrEmpty(baseDirectory))
         {
             baseDirectory = content.RootDirectory;
         }
 
-        using XmlReader reader = XmlReader.Create(stream, settings);
-        return Deserialize(reader, content, baseDirectory);
+        Func<string, Texture2D> textureLoader = path =>
+        {
+            string combinedPath = Path.GetFullPath(path, baseDirectory);
+
+            // Content manager will throw exception if the path given is a rooted path
+            if (Path.IsPathRooted(combinedPath))
+            {
+                combinedPath = Path.GetRelativePath(baseDirectory, path);
+            }
+
+            Texture2D texture = content.Load<Texture2D>(combinedPath);
+
+            if (string.IsNullOrEmpty(texture.Name))
+            {
+                texture.Name = Path.GetFileName(path);
+            }
+
+            return texture;
+        };
+
+        return Deserialize(stream, textureLoader);
     }
 
-    private static ParticleEffect Deserialize(XmlReader reader, ContentManager content, string baseDirectory)
+    /// <summary>
+    /// Deserializes a <see cref="ParticleEffect"/> from a stream containing XML data using a custom texture loading function.
+    /// </summary>
+    /// <param name="stream">The stream to read from.</param>
+    /// <param name="textureLoader">
+    /// A function that loads a <see cref="Texture2D"/> given a texture path.
+    /// The path provided to this function will be relative to the XML file's directory.
+    /// </param>
+    /// <returns>The deserialized <see cref="ParticleEffect"/>.</returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="stream"/> or <paramref name="textureLoader"/> are <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="XmlException">Thrown when the XML format is invalid.</exception>
+    public static ParticleEffect Deserialize(Stream stream, Func<string, Texture2D> textureLoader)
+    {
+        ArgumentNullException.ThrowIfNull(stream);
+        ArgumentNullException.ThrowIfNull(textureLoader);
+
+        XmlReaderSettings settings = new XmlReaderSettings();
+        settings.CloseInput = true;
+        settings.IgnoreComments = true;
+        settings.IgnoreWhitespace = true;
+
+        using XmlReader reader = XmlReader.Create(stream, settings);
+        return Deserialize(reader, textureLoader);
+    }
+
+    private static ParticleEffect Deserialize(XmlReader reader, Func<string, Texture2D> textureLoader)
     {
         reader.MoveToContent();
 
@@ -107,7 +189,7 @@ public static class ParticleEffectSerializer
             {
                 do
                 {
-                    ParticleEmitter emitter = ReadParticleEmitter(reader, content, baseDirectory);
+                    ParticleEmitter emitter = ReadParticleEmitter(reader, textureLoader);
                     effect.Emitters.Add(emitter);
                 } while (reader.ReadToNextSibling(nameof(ParticleEmitter)));
             }
@@ -116,7 +198,7 @@ public static class ParticleEffectSerializer
         return effect;
     }
 
-    private static ParticleEmitter ReadParticleEmitter(XmlReader reader, ContentManager content, string baseDirectory)
+    private static ParticleEmitter ReadParticleEmitter(XmlReader reader, Func<string, Texture2D> textureLoader)
     {
         int capacity = reader.GetAttributeInt(nameof(ParticleEmitter.Capacity), default);
 
@@ -152,7 +234,7 @@ public static class ParticleEffectSerializer
                 switch (subtree.LocalName)
                 {
                     case nameof(ParticleEmitter.TextureRegion):
-                        emitter.TextureRegion = ReadTexture2DRegion(subtree, content, baseDirectory);
+                        emitter.TextureRegion = ReadTexture2DRegion(subtree, textureLoader);
                         break;
 
                     case nameof(ParticleEmitter.Parameters):
@@ -173,7 +255,7 @@ public static class ParticleEffectSerializer
         return emitter;
     }
 
-    private static Texture2DRegion ReadTexture2DRegion(XmlReader reader, ContentManager content, string baseDirectory)
+    private static Texture2DRegion ReadTexture2DRegion(XmlReader reader, Func<string, Texture2D> textureLoader)
     {
         string name = reader.GetAttribute(nameof(Texture2DRegion.Texture.Name));
 
@@ -182,20 +264,7 @@ public static class ParticleEffectSerializer
             return null;
         }
 
-        string path = Path.Combine(baseDirectory, name);
-
-        // Content manager will throw exception if the path given is a rooted path
-        if (Path.IsPathRooted(path))
-        {
-            path = Path.GetRelativePath(baseDirectory, path);
-        }
-
-        Texture2D texture = content.Load<Texture2D>(path);
-        if(string.IsNullOrEmpty(texture.Name))
-        {
-            texture.Name = Path.GetFileName(path);
-        }
-
+        Texture2D texture = textureLoader(name);
         Rectangle bounds = reader.GetAttributeRectangle(nameof(Texture2DRegion.Bounds), default);
 
         if (bounds.IsEmpty)
