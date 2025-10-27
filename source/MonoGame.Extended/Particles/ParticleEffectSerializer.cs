@@ -586,6 +586,7 @@ public static class ParticleEffectSerializer
     {
         string type = reader.GetAttribute(nameof(Type));
         string name = reader.GetAttribute(nameof(Interpolator.Name));
+        bool enabled = reader.GetAttributeBool(nameof(Interpolator.Enabled), default);
 
         Interpolator interpolator = type switch
         {
@@ -602,6 +603,8 @@ public static class ParticleEffectSerializer
         {
             interpolator.Name = name;
         }
+
+        interpolator.Enabled = enabled;
 
         return interpolator;
     }
