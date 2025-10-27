@@ -971,6 +971,7 @@ public static class ParticleEffectSerializer
     private static void WriteModifier(XmlWriter writer, Modifier modifier)
     {
         writer.WriteAttributeString(nameof(Modifier.Name), modifier.Name);
+        writer.WriteAttributeBool(nameof(Modifier.Enabled), modifier.Enabled);
         writer.WriteAttributeFloat(nameof(Modifier.Frequency), modifier.Frequency);
 
         switch (modifier)
@@ -1130,7 +1131,8 @@ public static class ParticleEffectSerializer
 
     private static void WriteInterpolator(XmlWriter writer, Interpolator interpolator)
     {
-        writer.WriteAttributeString(nameof(interpolator.Name), interpolator.Name);
+        writer.WriteAttributeString(nameof(Interpolator.Name), interpolator.Name);
+        writer.WriteAttributeBool(nameof(Interpolator.Enabled), interpolator.Enabled);
 
         switch (interpolator)
         {
