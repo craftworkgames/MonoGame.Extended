@@ -392,7 +392,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Enabled="true" Frequency="60" Type="AgeModifier" />
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -432,7 +432,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="CircleContainerModifier" Enabled="true" Frequency="60" Type="CircleContainerModifier" Radius="0" Inside="True" RestitutionCoefficient="1" />
+                    <Modifier Name="CircleContainerModifier" Enabled="True" Frequency="60" Type="CircleContainerModifier" Radius="0" Inside="True" RestitutionCoefficient="1" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -475,7 +475,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="DragModifier" Enabled="true" Frequency="60" Type="DragModifier" DragCoefficient="0.47" Density="0.5" />
+                    <Modifier Name="DragModifier" Enabled="True" Frequency="60" Type="DragModifier" DragCoefficient="0.47" Density="0.5" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -517,7 +517,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="LinearGravityModifier" Enabled="true" Frequency="60" Type="LinearGravityModifier" Direction="0,0" Strength="0" />
+                    <Modifier Name="LinearGravityModifier" Enabled="True" Frequency="60" Type="LinearGravityModifier" Direction="0,0" Strength="0" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -559,7 +559,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="OpacityFastFadeModifier" Enabled="true" Frequency="60" Type="OpacityFastFadeModifier" />
+                    <Modifier Name="OpacityFastFadeModifier" Enabled="True" Frequency="60" Type="OpacityFastFadeModifier" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -599,7 +599,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="RectangleContainerModifier" Enabled="true" Frequency="60" Type="RectangleContainerModifier" Width="0" Height="0" RestitutionCoefficient="1" />
+                    <Modifier Name="RectangleContainerModifier" Enabled="True" Frequency="60" Type="RectangleContainerModifier" Width="0" Height="0" RestitutionCoefficient="1" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -642,7 +642,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="RectangleLoopContainerModifier" Enabled="true" Frequency="60" Type="RectangleLoopContainerModifier" Width="0" Height="0" />
+                    <Modifier Name="RectangleLoopContainerModifier" Enabled="True" Frequency="60" Type="RectangleLoopContainerModifier" Width="0" Height="0" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -684,7 +684,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="RotationModifier" Enabled="true" Frequency="60" Type="RotationModifier" RotationRate="0" />
+                    <Modifier Name="RotationModifier" Enabled="True" Frequency="60" Type="RotationModifier" RotationRate="0" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -725,7 +725,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="VelocityColorModifier" Enabled="true" Frequency="60" Type="VelocityColorModifier" StationaryColor="0,0,0" VelocityColor="0,0,0" VelocityThreshold="0" />
+                    <Modifier Name="VelocityColorModifier" Enabled="True" Frequency="60" Type="VelocityColorModifier" StationaryColor="0,0,0" VelocityColor="0,0,0" VelocityThreshold="0" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -768,7 +768,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="VelocityModifier" Enabled="true" Frequency="60" Type="VelocityModifier" VelocityThreshold="0" />
+                    <Modifier Name="VelocityModifier" Enabled="True" Frequency="60" Type="VelocityModifier" VelocityThreshold="0" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -808,7 +808,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="VortexModifier" Enabled="true" Frequency="60" Type="VortexModifier" Position="0,0" Strength="1" OuterRadius="2" InnerRadius="3" MaxVelocity="4" RotationAngle="5" />
+                    <Modifier Name="VortexModifier" Enabled="True" Frequency="60" Type="VortexModifier" Position="0,0" Strength="1" OuterRadius="2" InnerRadius="3" MaxVelocity="4" RotationAngle="5" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -853,9 +853,9 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Enabled="true" Frequency="60" Type="AgeModifier">
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier">
                       <Interpolators>
-                        <Interpolator Name="ColorInterpolator" Type="ColorInterpolator" Enabled="true" StartValue="0,0,0" EndValue="0,0,0" />
+                        <Interpolator Name="ColorInterpolator" Type="ColorInterpolator" Enabled="True" StartValue="0,0,0" EndValue="0,0,0" />
                       </Interpolators>
                     </Modifier>
                   </Modifiers>
@@ -900,9 +900,9 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Enabled="true" Frequency="60" Type="AgeModifier">
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier">
                       <Interpolators>
-                        <Interpolator Name="HueInterpolator" Type="HueInterpolator" Enabled="true" StartValue="0" EndValue="0" />
+                        <Interpolator Name="HueInterpolator" Type="HueInterpolator" Enabled="True" StartValue="0" EndValue="0" />
                       </Interpolators>
                     </Modifier>
                   </Modifiers>
@@ -947,9 +947,9 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Enabled="true" Frequency="60" Type="AgeModifier">
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier">
                       <Interpolators>
-                        <Interpolator Name="OpacityInterpolator" Type="OpacityInterpolator" Enabled="true" StartValue="0" EndValue="0" />
+                        <Interpolator Name="OpacityInterpolator" Type="OpacityInterpolator" Enabled="True" StartValue="0" EndValue="0" />
                       </Interpolators>
                     </Modifier>
                   </Modifiers>
@@ -994,9 +994,9 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Enabled="true" Frequency="60" Type="AgeModifier">
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier">
                       <Interpolators>
-                        <Interpolator Name="RotationInterpolator" Type="RotationInterpolator" Enabled="true" StartValue="0" EndValue="0" />
+                        <Interpolator Name="RotationInterpolator" Type="RotationInterpolator" Enabled="True" StartValue="0" EndValue="0" />
                       </Interpolators>
                     </Modifier>
                   </Modifiers>
@@ -1041,9 +1041,9 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Enabled="true" Frequency="60" Type="AgeModifier">
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier">
                       <Interpolators>
-                        <Interpolator Name="ScaleInterpolator" Type="ScaleInterpolator" Enabled="true" StartValue="0,0" EndValue="1,1" />
+                        <Interpolator Name="ScaleInterpolator" Type="ScaleInterpolator" Enabled="True" StartValue="0,0" EndValue="1,1" />
                       </Interpolators>
                     </Modifier>
                   </Modifiers>
@@ -1088,9 +1088,9 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Enabled="true" Frequency="60" Type="AgeModifier">
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier">
                       <Interpolators>
-                        <Interpolator Name="VelocityInterpolator" Type="VelocityInterpolator" Enabled="true" StartValue="0,0" EndValue="0,0" />
+                        <Interpolator Name="VelocityInterpolator" Type="VelocityInterpolator" Enabled="True" StartValue="0,0" EndValue="0,0" />
                       </Interpolators>
                     </Modifier>
                   </Modifiers>
@@ -1196,7 +1196,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Frequency="60" Type="AgeModifier" />
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -1507,7 +1507,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Frequency="60" Type="AgeModifier" />
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -1546,7 +1546,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="CircleContainerModifier" Frequency="60" Type="CircleContainerModifier" Radius="0" Inside="True" RestitutionCoefficient="1" />
+                    <Modifier Name="CircleContainerModifier" Enabled="True" Frequency="60" Type="CircleContainerModifier" Radius="0" Inside="True" RestitutionCoefficient="1" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -1585,7 +1585,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="DragModifier" Frequency="60" Type="DragModifier" DragCoefficient="0.47" Density="0.5" />
+                    <Modifier Name="DragModifier" Enabled="True" Frequency="60" Type="DragModifier" DragCoefficient="0.47" Density="0.5" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -1624,7 +1624,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="LinearGravityModifier" Frequency="60" Type="LinearGravityModifier" Direction="0,0" Strength="0" />
+                    <Modifier Name="LinearGravityModifier" Enabled="True" Frequency="60" Type="LinearGravityModifier" Direction="0,0" Strength="0" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -1663,7 +1663,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="OpacityFastFadeModifier" Frequency="60" Type="OpacityFastFadeModifier" />
+                    <Modifier Name="OpacityFastFadeModifier" Enabled="True" Frequency="60" Type="OpacityFastFadeModifier" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -1702,7 +1702,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="RectangleContainerModifier" Frequency="60" Type="RectangleContainerModifier" Width="0" Height="0" RestitutionCoefficient="1" />
+                    <Modifier Name="RectangleContainerModifier" Enabled="True" Frequency="60" Type="RectangleContainerModifier" Width="0" Height="0" RestitutionCoefficient="1" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -1741,7 +1741,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="RectangleLoopContainerModifier" Frequency="60" Type="RectangleLoopContainerModifier" Width="0" Height="0" />
+                    <Modifier Name="RectangleLoopContainerModifier" Enabled="True" Frequency="60" Type="RectangleLoopContainerModifier" Width="0" Height="0" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -1780,7 +1780,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="RotationModifier" Frequency="60" Type="RotationModifier" RotationRate="0" />
+                    <Modifier Name="RotationModifier" Enabled="True" Frequency="60" Type="RotationModifier" RotationRate="0" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -1819,7 +1819,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="VelocityColorModifier" Frequency="60" Type="VelocityColorModifier" StationaryColor="0,0,0" VelocityColor="0,0,0" VelocityThreshold="0" />
+                    <Modifier Name="VelocityColorModifier" Enabled="True" Frequency="60" Type="VelocityColorModifier" StationaryColor="0,0,0" VelocityColor="0,0,0" VelocityThreshold="0" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -1858,7 +1858,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="VelocityModifier" Frequency="60" Type="VelocityModifier" VelocityThreshold="0" />
+                    <Modifier Name="VelocityModifier" Enabled="True" Frequency="60" Type="VelocityModifier" VelocityThreshold="0" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -1897,7 +1897,7 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="VortexModifier" Frequency="60" Type="VortexModifier" Position="0,0" Strength="0" OuterRadius="0" InnerRadius="0" MaxVelocity="0" RotationAngle="0" />
+                    <Modifier Name="VortexModifier" Enabled="True" Frequency="60" Type="VortexModifier" Position="0,0" Strength="0" OuterRadius="0" InnerRadius="0" MaxVelocity="0" RotationAngle="0" />
                   </Modifiers>
                 </ParticleEmitter>
               </Emitters>
@@ -1938,9 +1938,9 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Frequency="60" Type="AgeModifier">
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier">
                       <Interpolators>
-                        <Interpolator Name="ColorInterpolator" Type="ColorInterpolator" StartValue="0,0,0" EndValue="0,0,0" />
+                        <Interpolator Name="ColorInterpolator" Enabled="True" Type="ColorInterpolator" StartValue="0,0,0" EndValue="0,0,0" />
                       </Interpolators>
                     </Modifier>
                   </Modifiers>
@@ -1983,9 +1983,9 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Frequency="60" Type="AgeModifier">
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier">
                       <Interpolators>
-                        <Interpolator Name="HueInterpolator" Type="HueInterpolator" StartValue="0" EndValue="0" />
+                        <Interpolator Name="HueInterpolator" Enabled="True" Type="HueInterpolator" StartValue="0" EndValue="0" />
                       </Interpolators>
                     </Modifier>
                   </Modifiers>
@@ -2028,9 +2028,9 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Frequency="60" Type="AgeModifier">
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier">
                       <Interpolators>
-                        <Interpolator Name="OpacityInterpolator" Type="OpacityInterpolator" StartValue="0" EndValue="0" />
+                        <Interpolator Name="OpacityInterpolator" Enabled="True" Type="OpacityInterpolator" StartValue="0" EndValue="0" />
                       </Interpolators>
                     </Modifier>
                   </Modifiers>
@@ -2073,9 +2073,9 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Frequency="60" Type="AgeModifier">
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier">
                       <Interpolators>
-                        <Interpolator Name="RotationInterpolator" Type="RotationInterpolator" StartValue="0" EndValue="0" />
+                        <Interpolator Name="RotationInterpolator" Enabled="True" Type="RotationInterpolator" StartValue="0" EndValue="0" />
                       </Interpolators>
                     </Modifier>
                   </Modifiers>
@@ -2118,9 +2118,9 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Frequency="60" Type="AgeModifier">
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier">
                       <Interpolators>
-                        <Interpolator Name="ScaleInterpolator" Type="ScaleInterpolator" StartValue="0,0" EndValue="0,0" />
+                        <Interpolator Name="ScaleInterpolator" Enabled="True" Type="ScaleInterpolator" StartValue="0,0" EndValue="0,0" />
                       </Interpolators>
                     </Modifier>
                   </Modifiers>
@@ -2163,9 +2163,9 @@ public sealed class ParticleEffectSerializerTests
                   </Parameters>
                   <Profile Type="PointProfile" />
                   <Modifiers>
-                    <Modifier Name="AgeModifier" Frequency="60" Type="AgeModifier">
+                    <Modifier Name="AgeModifier" Enabled="True" Frequency="60" Type="AgeModifier">
                       <Interpolators>
-                        <Interpolator Name="VelocityInterpolator" Type="VelocityInterpolator" StartValue="0,0" EndValue="0,0" />
+                        <Interpolator Name="VelocityInterpolator" Enabled="True" Type="VelocityInterpolator" StartValue="0,0" EndValue="0,0" />
                       </Interpolators>
                     </Modifier>
                   </Modifiers>
