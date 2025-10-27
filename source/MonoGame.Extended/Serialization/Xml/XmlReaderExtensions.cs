@@ -46,6 +46,32 @@ public static class XmlReaderExtensions
     }
 
     /// <summary>
+    /// Reads an XML attribute as an <see langword="int"/> value, returning a default value if the attribute is missing or invalid.
+    /// </summary>
+    /// <param name="reader">The XML reader instance.</param>
+    /// <param name="attributeName">The name of the attribute to read.</param>
+    /// <param name="defaultValue">The default value to return if the attribute is missing or cannot be parsed.</param>
+    /// <returns>The <see langword="int"/> value parsed from the value of the specified attribute, or the default value if parsing fails.</returns>
+    public static int GetAttributeInt(this XmlReader reader, string attributeName, int defaultValue)
+    {
+        string value = reader.GetAttribute(attributeName);
+
+        if (value == null)
+        {
+            return defaultValue;
+        }
+
+        try
+        {
+            return int.Parse(value);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    /// <summary>
     /// Reads an XML attribute as a <see langword="float"/> value.
     /// </summary>
     /// <param name="reader">The XML reader instance.</param>
@@ -73,6 +99,32 @@ public static class XmlReaderExtensions
                 $"Invalid float format for attribute '{attributeName}'. Expected float, but got '{value}'",
                 ex
             );
+        }
+    }
+
+    /// <summary>
+    /// Reads an XML attribute as a <see langword="float"/> value, returning a default value if the attribute is missing or invalid.
+    /// </summary>
+    /// <param name="reader">The XML reader instance.</param>
+    /// <param name="attributeName">The name of the attribute to read.</param>
+    /// <param name="defaultValue">The default value to return if the attribute is missing or cannot be parsed.</param>
+    /// <returns>The <see langword="float"/> value parsed from the specified attribute, or the default value if parsing fails.</returns>
+    public static float GetAttributeFloat(this XmlReader reader, string attributeName, float defaultValue)
+    {
+        string value = reader.GetAttribute(attributeName);
+
+        if (value == null)
+        {
+            return defaultValue;
+        }
+
+        try
+        {
+            return float.Parse(value);
+        }
+        catch
+        {
+            return defaultValue;
         }
     }
 
@@ -108,6 +160,32 @@ public static class XmlReaderExtensions
     }
 
     /// <summary>
+    /// Reads an XML attribute as a <see langword="bool"/> value, returning a default value if the attribute is missing or invalid.
+    /// </summary>
+    /// <param name="reader">The XML reader instance.</param>
+    /// <param name="attributeName">The name of the attribute to read.</param>
+    /// <param name="defaultValue">The default value to return if the attribute is missing or cannot be parsed.</param>
+    /// <returns>The <see langword="bool"/> value parsed from the value of the specified attribute, or the default value if parsing fails.</returns>
+    public static bool GetAttributeBool(this XmlReader reader, string attributeName, bool defaultValue)
+    {
+        string value = reader.GetAttribute(attributeName);
+
+        if (value == null)
+        {
+            return defaultValue;
+        }
+
+        try
+        {
+            return bool.Parse(value);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    /// <summary>
     /// Reads an XML attribute as an enumeration value.
     /// </summary>
     /// <typeparam name="T">The enumeration type to parse.</typeparam>
@@ -136,6 +214,33 @@ public static class XmlReaderExtensions
                 $"Invalid {typeof(T).Name} format for attribute '{attributeName}'. Expected a {typeof(T).Name} value but got '{value}'",
                 ex
             );
+        }
+    }
+
+    /// <summary>
+    /// Reads an XML attribute as an enumeration value, returning a default value if the attribute is missing or invalid.
+    /// </summary>
+    /// <typeparam name="T">The enumeration type to parse.</typeparam>
+    /// <param name="reader">The XML reader instance.</param>
+    /// <param name="attributeName">The name of the attribute to read.</param>
+    /// <param name="defaultValue">The default value to return if the attribute is missing or cannot be parsed.</param>
+    /// <returns>The enumeration value parsed from the value of the specified attribute, or the default value if parsing fails.</returns>
+    public static T GetAttributeEnum<T>(this XmlReader reader, string attributeName, T defaultValue) where T : struct, Enum
+    {
+        string value = reader.GetAttribute(attributeName);
+
+        if (value == null)
+        {
+            return defaultValue;
+        }
+
+        try
+        {
+            return Enum.Parse<T>(value);
+        }
+        catch
+        {
+            return defaultValue;
         }
     }
 
@@ -183,6 +288,44 @@ public static class XmlReaderExtensions
     }
 
     /// <summary>
+    /// Reads an XML attribute as a <see cref="Rectangle"/> value, returning a default value if the attribute is missing or invalid.
+    /// </summary>
+    /// <param name="reader">The XML reader instance.</param>
+    /// <param name="attributeName">The name of the attribute to read.</param>
+    /// <param name="defaultValue">The default value to return if the attribute is missing or cannot be parsed.</param>
+    /// <returns>The <see cref="Rectangle"/> value parsed from the value of the specified attribute, or the default value if parsing fails.</returns>
+    public static Rectangle GetAttributeRectangle(this XmlReader reader, string attributeName, Rectangle defaultValue)
+    {
+        string value = reader.GetAttribute(attributeName);
+
+        if (value == null)
+        {
+            return defaultValue;
+        }
+
+        string[] split = value.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+        try
+        {
+            if (split.Length != 4)
+            {
+                return defaultValue;
+            }
+
+            int x = int.Parse(split[0]);
+            int y = int.Parse(split[1]);
+            int width = int.Parse(split[2]);
+            int height = int.Parse(split[3]);
+
+            return new Rectangle(x, y, width, height);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    /// <summary>
     /// Reads an XML attribute as a <see cref="Vector2"/> value.
     /// </summary>
     /// <param name="reader">The XML reader instance.</param>
@@ -220,6 +363,42 @@ public static class XmlReaderExtensions
                 $"Invalid {nameof(Vector2)} format for attribute '{attributeName}'. Expected 'x,y', but got '{value}'",
                 ex
             );
+        }
+    }
+
+    /// <summary>
+    /// Reads an XML attribute as a <see cref="Vector2"/> value, returning a default value if the attribute is missing or invalid.
+    /// </summary>
+    /// <param name="reader">The XML reader instance.</param>
+    /// <param name="attributeName">The name of the attribute to read.</param>
+    /// <param name="defaultValue">The default value to return if the attribute is missing or cannot be parsed.</param>
+    /// <returns>The <see cref="Vector2"/> value parsed from the value of the specified attribute, or the default value if parsing fails.</returns>
+    public static Vector2 GetAttributeVector2(this XmlReader reader, string attributeName, Vector2 defaultValue)
+    {
+        string value = reader.GetAttribute(attributeName);
+
+        if (value == null)
+        {
+            return defaultValue;
+        }
+
+        string[] split = value.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+        try
+        {
+            if (split.Length != 2)
+            {
+                return defaultValue;
+            }
+
+            float x = float.Parse(split[0]);
+            float y = float.Parse(split[1]);
+
+            return new Vector2(x, y);
+        }
+        catch
+        {
+            return defaultValue;
         }
     }
 
@@ -262,6 +441,43 @@ public static class XmlReaderExtensions
                 $"Invalid {nameof(Vector3)} format for attribute '{attributeName}'. Expected 'x,y,z', but got '{value}'",
                 ex
             );
+        }
+    }
+
+    /// <summary>
+    /// Reads an XML attribute as a <see cref="Vector3"/> value, returning a default value if the attribute is missing or invalid.
+    /// </summary>
+    /// <param name="reader">The XML reader instance.</param>
+    /// <param name="attributeName">The name of the attribute to read.</param>
+    /// <param name="defaultValue">The default value to return if the attribute is missing or cannot be parsed.</param>
+    /// <returns>The <see cref="Vector3"/> value parsed from the value of the specified attribute, or the default value if parsing fails.</returns>
+    public static Vector3 GetAttributeVector3(this XmlReader reader, string attributeName, Vector3 defaultValue)
+    {
+        string value = reader.GetAttribute(attributeName);
+
+        if (value == null)
+        {
+            return defaultValue;
+        }
+
+        string[] split = value.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+        try
+        {
+            if (split.Length != 3)
+            {
+                return defaultValue;
+            }
+
+            float x = float.Parse(split[0]);
+            float y = float.Parse(split[1]);
+            float z = float.Parse(split[2]);
+
+            return new Vector3(x, y, z);
+        }
+        catch
+        {
+            return defaultValue;
         }
     }
 }
