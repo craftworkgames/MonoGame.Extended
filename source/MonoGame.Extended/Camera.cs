@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
@@ -9,9 +10,16 @@ namespace MonoGame.Extended
         public abstract float Zoom { get; set; }
         public abstract float MinimumZoom { get; set; }
         public abstract float MaximumZoom { get; set; }
+
+        [Obsolete("Pitch will be removed in the next major version")]
         public abstract float Pitch { get; set; }
+
+        [Obsolete("Pitch will be removed in the next major version")]
         public abstract float MinimumPitch { get; set; }
+
+        [Obsolete("Pitch will be removed in the next major version")]
         public abstract float MaximumPitch { get; set; }
+
         public abstract RectangleF BoundingRectangle { get; }
         public abstract T Origin { get; set; }
         public abstract T Center { get; }
