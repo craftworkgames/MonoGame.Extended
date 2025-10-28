@@ -28,7 +28,9 @@ namespace MonoGame.Extended
         public abstract void Rotate(float deltaRadians);
         public abstract void ZoomIn(float deltaZoom);
         public abstract void ZoomOut(float deltaZoom);
+        [Obsolete("Pitch will be removed in the next major version")]
         public abstract void PitchUp(float deltaZoom);
+        [Obsolete("Pitch will be removed in the next major version")]
         public abstract void PitchDown(float deltaZoom);
         public abstract void LookAt(T position);
 
