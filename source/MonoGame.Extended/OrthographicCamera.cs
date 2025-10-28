@@ -18,44 +18,6 @@ namespace MonoGame.Extended
         private Rectangle _worldBounds;
         private bool _worldBoundsEnabled;
 
-        public Rectangle WorldBounds
-        {
-            get => _worldBounds;
-            set
-            {
-                _worldBounds = value;
-                ClampZoomToWorldBounds();
-                ClampPositionToWorldBounds();
-            }
-        }
-
-        public bool WorldBoundsEnabled
-        {
-            get => _worldBoundsEnabled;
-            set
-            {
-                _worldBoundsEnabled = value;
-                ClampZoomToWorldBounds();
-                ClampPositionToWorldBounds();
-            }
-        }
-
-        public OrthographicCamera(GraphicsDevice graphicsDevice)
-            : this(new DefaultViewportAdapter(graphicsDevice))
-        {
-        }
-
-        public OrthographicCamera(ViewportAdapter viewportAdapter)
-        {
-            _viewportAdapter = viewportAdapter;
-
-            Rotation = 0;
-            Zoom = 1;
-            Pitch = 1;
-            Origin = new Vector2(viewportAdapter.VirtualWidth / 2f, viewportAdapter.VirtualHeight / 2f);
-            Position = Vector2.Zero;
-        }
-
         public override Vector2 Position
         {
             get => _position;
@@ -69,9 +31,8 @@ namespace MonoGame.Extended
                 ClampPositionToWorldBounds();
             }
         }
+
         public override float Rotation { get; set; }
-        public override Vector2 Origin { get; set; }
-        public override Vector2 Center => Position + Origin;
 
         public override float Zoom
         {
@@ -174,6 +135,47 @@ namespace MonoGame.Extended
                 var height = bottomRight.Y - topLeft.Y;
                 return new RectangleF(topLeft.X, topLeft.Y, width, height);
             }
+        }
+
+        public override Vector2 Origin { get; set; }
+        public override Vector2 Center => Position + Origin;
+
+        public Rectangle WorldBounds
+        {
+            get => _worldBounds;
+            set
+            {
+                _worldBounds = value;
+                ClampZoomToWorldBounds();
+                ClampPositionToWorldBounds();
+            }
+        }
+
+        public bool WorldBoundsEnabled
+        {
+            get => _worldBoundsEnabled;
+            set
+            {
+                _worldBoundsEnabled = value;
+                ClampZoomToWorldBounds();
+                ClampPositionToWorldBounds();
+            }
+        }
+
+        public OrthographicCamera(GraphicsDevice graphicsDevice)
+            : this(new DefaultViewportAdapter(graphicsDevice))
+        {
+        }
+
+        public OrthographicCamera(ViewportAdapter viewportAdapter)
+        {
+            _viewportAdapter = viewportAdapter;
+
+            Rotation = 0;
+            Zoom = 1;
+            Pitch = 1;
+            Origin = new Vector2(viewportAdapter.VirtualWidth / 2f, viewportAdapter.VirtualHeight / 2f);
+            Position = Vector2.Zero;
         }
 
         public override void Move(Vector2 direction)
