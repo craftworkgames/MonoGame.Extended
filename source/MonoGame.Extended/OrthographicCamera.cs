@@ -14,6 +14,31 @@ namespace MonoGame.Extended
         private float _pitch;
         private float _maximumPitch = float.MaxValue;
         private float _minimumPitch;
+        private Vector2 _position;
+        private Rectangle _worldBounds;
+        private bool _worldBoundsEnabled;
+
+        public Rectangle WorldBounds
+        {
+            get => _worldBounds;
+            set
+            {
+                _worldBounds = value;
+                ClampZoomToWorldBounds();
+                ClampPositionToWorldBounds();
+            }
+        }
+
+        public bool WorldBoundsEnabled
+        {
+            get => _worldBoundsEnabled;
+            set
+            {
+                _worldBoundsEnabled = value;
+                ClampZoomToWorldBounds();
+                ClampPositionToWorldBounds();
+            }
+        }
 
         public OrthographicCamera(GraphicsDevice graphicsDevice)
             : this(new DefaultViewportAdapter(graphicsDevice))
@@ -31,7 +56,19 @@ namespace MonoGame.Extended
             Position = Vector2.Zero;
         }
 
-        public override Vector2 Position { get; set; }
+        public override Vector2 Position
+        {
+            get => _position;
+            set
+            {
+                if (_position == value)
+                {
+                    return;
+                }
+                _position = value;
+                ClampPositionToWorldBounds();
+            }
+        }
         public override float Rotation { get; set; }
         public override Vector2 Origin { get; set; }
         public override Vector2 Center => Position + Origin;
@@ -45,6 +82,8 @@ namespace MonoGame.Extended
                     throw new ArgumentException("Zoom must be between MinimumZoom and MaximumZoom");
 
                 _zoom = value;
+                ClampZoomToWorldBounds();
+                ClampPositionToWorldBounds();
             }
         }
 
@@ -165,11 +204,13 @@ namespace MonoGame.Extended
                 Zoom = value > MaximumZoom ? MaximumZoom : value;
         }
 
+        [Obsolete("Pitch will be removed in the next major version")]
         public override void PitchUp(float deltaPitch)
         {
             ClampPitch(Pitch + deltaPitch);
         }
 
+        [Obsolete("Pitch will be removed in the next major version")]
         public override void PitchDown(float deltaPitch)
         {
             ClampPitch(Pitch - deltaPitch);
@@ -271,6 +312,54 @@ namespace MonoGame.Extended
             var min = new Vector3(rectangle.X, rectangle.Y, 0.5f);
             var boundingBox = new BoundingBox(min, max);
             return GetBoundingFrustum().Contains(boundingBox);
+        }
+
+        private void ClampZoomToWorldBounds()
+        {
+            if (!CanLimitToWorldBounds())
+            {
+                return;
+            }
+
+            float minZoomX = (float)_viewportAdapter.VirtualWidth / _worldBounds.Width;
+            float minZoomY = (float)_viewportAdapter.VirtualHeight / _worldBounds.Height;
+            float minZoom = MathHelper.Max(minZoomX, minZoomY);
+
+            if (_zoom < minZoom)
+            {
+                _zoom = minZoom;
+            }
+        }
+
+        private void ClampPositionToWorldBounds()
+        {
+            if (!CanLimitToWorldBounds())
+            {
+                return;
+            }
+
+            // Get the camera's top-left corner in world space
+            Matrix inverseViewMatrix = GetInverseViewMatrix();
+            Vector2 cameraWorldMin = Vector2.Transform(Vector2.Zero, inverseViewMatrix);
+
+            // Calculate the size of the area the camera can see
+            Vector2 cameraSize = new Vector2(_viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight) / _zoom;
+
+            Vector2 worldBoundsMin = new Vector2(_worldBounds.Left, _worldBounds.Top);
+            Vector2 worldBoundsMax = new Vector2(_worldBounds.Right, _worldBounds.Bottom);
+
+            // Calculate difference between position and world-space top-left.
+            Vector2 positionOffset = _position - cameraWorldMin;
+
+            // Clamp the camera's world-space top-left corner, then apply the offset
+            _position = Vector2.Clamp(cameraWorldMin, worldBoundsMin, worldBoundsMax - cameraSize) + positionOffset;
+        }
+
+        private bool CanLimitToWorldBounds()
+        {
+            return _worldBoundsEnabled
+                   && MathHelper.Distance(Rotation, 0.0f) < 0.001f
+                   && MathHelper.Distance(Pitch, 1.0f) < 0.001f;
         }
     }
 }
