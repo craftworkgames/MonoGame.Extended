@@ -5,6 +5,10 @@ using MonoGame.Extended.ViewportAdapters;
 
 namespace MonoGame.Extended
 {
+    /// <summary>
+    /// Represents an orthographic (2D) camera that provides view and projection transformations for rendering
+    /// within a 2D world.
+    /// </summary>
     public sealed class OrthographicCamera : Camera<Vector2>, IMovable, IRotatable
     {
         private readonly ViewportAdapter _viewportAdapter;
@@ -18,6 +22,11 @@ namespace MonoGame.Extended
         private Rectangle _worldBounds;
         private bool _worldBoundsEnabled;
 
+        /// <inheritdoc/>
+        /// <remarks>
+        /// When <see cref="WorldBoundsEnabled"/> is <see langword="true"/>, the camera position is clamped so that its
+        /// view remains within the defined <see cref="WorldBounds"/>.
+        /// </remarks>
         public override Vector2 Position
         {
             get => _position;
@@ -32,8 +41,14 @@ namespace MonoGame.Extended
             }
         }
 
+        /// <inheritdoc/>
         public override float Rotation { get; set; }
 
+        /// <inheritdoc/>
+        /// <remarks>
+        /// When <see cref="WorldBoundsEnabled"/> is <see langword="true"/>, the camera zoom is clamped so that its
+        /// view remains within the defined <see cref="WorldBounds"/>.
+        /// </remarks>
         public override float Zoom
         {
             get => _zoom;
@@ -48,6 +63,7 @@ namespace MonoGame.Extended
             }
         }
 
+        /// <inheritdoc/>
         public override float MinimumZoom
         {
             get => _minimumZoom;
@@ -63,6 +79,7 @@ namespace MonoGame.Extended
             }
         }
 
+        /// <inheritdoc/>
         public override float MaximumZoom
         {
             get => _maximumZoom;
@@ -78,6 +95,7 @@ namespace MonoGame.Extended
             }
         }
 
+        /// <inheritdoc/>
         [Obsolete("Pitch will be removed in the next major version")]
         public override float Pitch
         {
@@ -91,6 +109,7 @@ namespace MonoGame.Extended
             }
         }
 
+        /// <inheritdoc/>
         [Obsolete("Pitch will be removed in the next major version")]
         public override float MinimumPitch
         {
@@ -107,6 +126,7 @@ namespace MonoGame.Extended
             }
         }
 
+        /// <inheritdoc/>
         [Obsolete("Pitch will be removed in the next major version")]
         public override float MaximumPitch
         {
@@ -123,6 +143,7 @@ namespace MonoGame.Extended
             }
         }
 
+        /// <inheritdoc/>
         public override RectangleF BoundingRectangle
         {
             get
@@ -137,9 +158,19 @@ namespace MonoGame.Extended
             }
         }
 
+        /// <inheritdoc/>
         public override Vector2 Origin { get; set; }
+
+        /// <inheritdoc/>
         public override Vector2 Center => Position + Origin;
 
+        /// <summary>
+        /// Gets or sets the bounding rectangle that defines the limits of the camera’s movement.
+        /// </summary>
+        /// <remarks>
+        /// When <see cref="WorldBoundsEnabled"/> is <see langword="true"/>, the camera position and zoom are clamped to
+        /// ensure the visible area does not extend beyond these bounds.
+        /// </remarks>
         public Rectangle WorldBounds
         {
             get => _worldBounds;
@@ -151,6 +182,9 @@ namespace MonoGame.Extended
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the camera should be constrained within <see cref="WorldBounds"/>.
+        /// </summary>
         public bool WorldBoundsEnabled
         {
             get => _worldBoundsEnabled;
@@ -162,11 +196,24 @@ namespace MonoGame.Extended
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrthographicCamera"/> class.
+        /// </summary>
+        /// <remarks>
+        /// This constructor uses the <see cref="DefaultViewportAdapter"/>.
+        /// </remarks>
+        /// <param name="graphicsDevice">The graphics device to associate with this camera.</param>
         public OrthographicCamera(GraphicsDevice graphicsDevice)
             : this(new DefaultViewportAdapter(graphicsDevice))
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrthographicCamera"/> class using the specified viewport adapter.
+        /// </summary>
+        /// <param name="viewportAdapter">
+        /// The viewport adapter that defines how world and screen coordinates are transformed.
+        /// </param>
         public OrthographicCamera(ViewportAdapter viewportAdapter)
         {
             _viewportAdapter = viewportAdapter;
@@ -178,21 +225,25 @@ namespace MonoGame.Extended
             Position = Vector2.Zero;
         }
 
+        /// <inheritdoc/>
         public override void Move(Vector2 direction)
         {
             Position += Vector2.Transform(direction, Matrix.CreateRotationZ(-Rotation));
         }
 
+        /// <inheritdoc/>
         public override void Rotate(float deltaRadians)
         {
             Rotation += deltaRadians;
         }
 
+        /// <inheritdoc/>
         public override void ZoomIn(float deltaZoom)
         {
             ClampZoom(Zoom + deltaZoom);
         }
 
+        /// <inheritdoc/>
         public override void ZoomOut(float deltaZoom)
         {
             ClampZoom(Zoom - deltaZoom);
@@ -206,12 +257,14 @@ namespace MonoGame.Extended
                 Zoom = value > MaximumZoom ? MaximumZoom : value;
         }
 
+        /// <inheritdoc/>
         [Obsolete("Pitch will be removed in the next major version")]
         public override void PitchUp(float deltaPitch)
         {
             ClampPitch(Pitch + deltaPitch);
         }
 
+        /// <inheritdoc/>
         [Obsolete("Pitch will be removed in the next major version")]
         public override void PitchDown(float deltaPitch)
         {
@@ -226,27 +279,46 @@ namespace MonoGame.Extended
                 Pitch = value > MaximumPitch ? MaximumPitch : value;
         }
 
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The camera is positioned so that the specified <paramref name="position"/> appears at the center of
+        /// the viewport.
+        /// </remarks>
         public override void LookAt(Vector2 position)
         {
             Position = position - new Vector2(_viewportAdapter.VirtualWidth / 2f, _viewportAdapter.VirtualHeight / 2f);
         }
 
+        /// <summary>
+        /// Converts a position from world coordinates to screen coordinates.
+        /// </summary>
+        /// <param name="x">The x-position in world coordinates.</param>
+        /// <param name="y">The y-position in world coordinates.</param>
+        /// <returns>The corresponding position in screen coordinates.</returns>
         public Vector2 WorldToScreen(float x, float y)
         {
             return WorldToScreen(new Vector2(x, y));
         }
 
+        /// <inheritdoc/>
         public override Vector2 WorldToScreen(Vector2 worldPosition)
         {
             var viewport = _viewportAdapter.Viewport;
             return Vector2.Transform(worldPosition + new Vector2(viewport.X, viewport.Y), GetViewMatrix());
         }
 
+        /// <summary>
+        /// Converts a position from screen coordinates to world coordinates.
+        /// </summary>
+        /// <param name="x">The x-position in screen coordinates.</param>
+        /// <param name="y">The y-position in screen coordinates.</param>
+        /// <returns>The corresponding position in world coordinates.</returns>
         public Vector2 ScreenToWorld(float x, float y)
         {
             return ScreenToWorld(new Vector2(x, y));
         }
 
+        /// <inheritdoc/>
         public override Vector2 ScreenToWorld(Vector2 screenPosition)
         {
             var viewport = _viewportAdapter.Viewport;
@@ -254,6 +326,17 @@ namespace MonoGame.Extended
                 Matrix.Invert(GetViewMatrix()));
         }
 
+        /// <summary>
+        /// Gets the view transformation matrix for the camera, applying a parallax factor.
+        /// </summary>
+        /// <param name="parallaxFactor">
+        /// The parallax factor to apply to the camera position. A value of (1,1) applies no parallax,
+        /// while values closer to (0,0) create a stronger parallax effect for background layers.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Matrix"/> representing the camera's view transformation with the specified
+        /// parallax factor applied.
+        /// </returns>
         public Matrix GetViewMatrix(Vector2 parallaxFactor)
         {
             return GetVirtualViewMatrix(parallaxFactor) * _viewportAdapter.GetScaleMatrix();
@@ -274,11 +357,13 @@ namespace MonoGame.Extended
             return GetVirtualViewMatrix(Vector2.One);
         }
 
+        /// <inheritdoc/>
         public override Matrix GetViewMatrix()
         {
             return GetViewMatrix(Vector2.One);
         }
 
+        /// <inheritdoc/>
         public override Matrix GetInverseViewMatrix()
         {
             return Matrix.Invert(GetViewMatrix());
@@ -291,6 +376,7 @@ namespace MonoGame.Extended
             return projection;
         }
 
+        /// <inheritdoc/>
         public override BoundingFrustum GetBoundingFrustum()
         {
             var viewMatrix = GetVirtualViewMatrix();
@@ -298,16 +384,26 @@ namespace MonoGame.Extended
             return new BoundingFrustum(projectionMatrix);
         }
 
+        /// <summary>
+        /// Determines whether the camera's view contains the specified point.
+        /// </summary>
+        /// <param name="point">The point to test, in world coordinates.</param>
+        /// <returns>
+        /// A <see cref="ContainmentType"/> indicating whether the point is inside, outside, or
+        /// intersects the camera's view.
+        /// </returns>
         public ContainmentType Contains(Point point)
         {
             return Contains(point.ToVector2());
         }
 
+        /// <inheritdoc/>
         public override ContainmentType Contains(Vector2 vector2)
         {
             return GetBoundingFrustum().Contains(new Vector3(vector2.X, vector2.Y, 0));
         }
 
+        /// <inheritdoc/>
         public override ContainmentType Contains(Rectangle rectangle)
         {
             var max = new Vector3(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height, 0.5f);
