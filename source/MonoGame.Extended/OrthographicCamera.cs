@@ -21,6 +21,7 @@ namespace MonoGame.Extended
         private Vector2 _position;
         private Rectangle _worldBounds;
         private bool _worldBoundsEnabled;
+        private bool _clampZoomToWorldBounds;
 
         /// <inheritdoc/>
         /// <remarks>
@@ -165,34 +166,43 @@ namespace MonoGame.Extended
         public override Vector2 Center => Position + Origin;
 
         /// <summary>
-        /// Gets or sets the bounding rectangle that defines the limits of the camera’s movement.
+        /// Gets the bounding rectangle that defines the limits of the camera's movement.
         /// </summary>
         /// <remarks>
-        /// When <see cref="WorldBoundsEnabled"/> is <see langword="true"/>, the camera position and zoom are clamped to
-        /// ensure the visible area does not extend beyond these bounds.
+        /// Use <see cref="EnableWorldBounds(Rectangle)"/> to set world bounds and enable constraints,
+        /// or <see cref="DisableWorldBounds()"/> to remove constraints.
         /// </remarks>
-        public Rectangle WorldBounds
-        {
-            get => _worldBounds;
-            set
-            {
-                _worldBounds = value;
-                ClampZoomToWorldBounds();
-                ClampPositionToWorldBounds();
-            }
-        }
+        public Rectangle WorldBounds => _worldBounds;
+
 
         /// <summary>
-        /// Gets or sets a value indicating whether the camera should be constrained within <see cref="WorldBounds"/>.
+        /// Gets a value indicating whether the camera is currently constrained within world bounds.
         /// </summary>
-        public bool WorldBoundsEnabled
+        /// <remarks>
+        /// Use <see cref="EnableWorldBounds(Rectangle)"/> to enable world bounds constraints,
+        /// or <see cref="DisableWorldBounds()"/> to disable them.
+        /// </remarks>
+        public bool WorldBoundsEnabled => _worldBoundsEnabled;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the camera zoom should be clamped to world bounds.
+        /// </summary>
+        /// <remarks>
+        /// When <see langword="true"/>, the camera zoom is constrained so that the view cannot extend
+        /// beyond the world bounds. When <see langword="false"/>, zoom is only constrained by
+        /// <see cref="MinimumZoom"/> and <see cref="MaximumZoom"/>.
+        /// This property only has effect when <see cref="WorldBoundsEnabled"/> is <see langword="true"/>.
+        /// </remarks>
+        public bool IsZoomClampedToWorldBounds
         {
-            get => _worldBoundsEnabled;
+            get => _clampZoomToWorldBounds;
             set
             {
-                _worldBoundsEnabled = value;
-                ClampZoomToWorldBounds();
-                ClampPositionToWorldBounds();
+                _clampZoomToWorldBounds = value;
+                if (value)
+                {
+                    ClampZoomToWorldBounds();
+                }
             }
         }
 
@@ -412,21 +422,69 @@ namespace MonoGame.Extended
             return GetBoundingFrustum().Contains(boundingBox);
         }
 
+        /// <summary>
+        /// Enables world bounds constraint for the camera and sets the bounding rectangle.
+        /// </summary>
+        /// <param name="worldBounds">
+        /// The bounding rectangle that defines the limits of the camera's movement and zoom.
+        /// </param>
+        /// <remarks>
+        /// When world bounds are enabled, the camera position and zoom are automatically clamped to
+        /// ensure the visible area does not extend beyond the specified bounds. This only applies
+        /// when the camera has no rotation and the pitch is 1.0.
+        /// </remarks>
+        public void EnableWorldBounds(Rectangle worldBounds)
+        {
+            _worldBounds = worldBounds;
+            _worldBoundsEnabled = true;
+            ClampZoomToWorldBounds();
+            ClampPositionToWorldBounds();
+        }
+
+        /// <summary>
+        /// Disables world bounds constraint for the camera.
+        /// </summary>
+        /// <remarks>
+        /// When world bounds are disabled, the camera can move and zoom freely without any constraints.
+        /// The world bounds rectangle is reset to <see cref="Rectangle.Empty"/>.
+        /// </remarks>
+        public void DisableWorldBounds()
+        {
+            _worldBounds = Rectangle.Empty;
+            _worldBoundsEnabled = false;
+        }
+
         private void ClampZoomToWorldBounds()
         {
-            if (!CanLimitToWorldBounds())
+            if (!CanLimitToWorldBounds() || !_clampZoomToWorldBounds)
             {
                 return;
             }
 
-            float minZoomX = (float)_viewportAdapter.VirtualWidth / _worldBounds.Width;
-            float minZoomY = (float)_viewportAdapter.VirtualHeight / _worldBounds.Height;
-            float minZoom = MathHelper.Max(minZoomX, minZoomY);
+            // Calculate the size of the area the camera can see
+            Vector2 cameraSize = new Vector2(_viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight) / _zoom;
 
-            if (_zoom < minZoom)
+            // Only enforce minimum zoom if the camera view is larger than world bounds
+            if (cameraSize.X > _worldBounds.Width || cameraSize.Y > _worldBounds.Height)
             {
-                _zoom = minZoom;
+                float minZoomX = (float)_viewportAdapter.VirtualWidth / _worldBounds.Width;
+                float minZoomY = (float)_viewportAdapter.VirtualHeight / _worldBounds.Height;
+                float minZoom = MathHelper.Max(minZoomX, minZoomY);
+
+                if (_zoom < minZoom)
+                {
+                    _zoom = minZoom;
+                }
             }
+
+            // float minZoomX = (float)_viewportAdapter.VirtualWidth / _worldBounds.Width;
+            // float minZoomY = (float)_viewportAdapter.VirtualHeight / _worldBounds.Height;
+            // float minZoom = MathHelper.Max(minZoomX, minZoomY);
+
+            // if (_zoom < minZoom)
+            // {
+            //     _zoom = minZoom;
+            // }
         }
 
         private void ClampPositionToWorldBounds()
@@ -436,12 +494,19 @@ namespace MonoGame.Extended
                 return;
             }
 
+            // Calculate the size of the area the camera can see
+            Vector2 cameraSize = new Vector2(_viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight) / _zoom;
+
+            // If the world bounds are smaller than the camera view, then we center the camera in the world bounds.
+            if (_worldBounds.Width < cameraSize.X || _worldBounds.Height < cameraSize.Y)
+            {
+                _position = new Vector2(_worldBounds.Center.X, _worldBounds.Center.Y) - Origin;
+                return;
+            }
+
             // Get the camera's top-left corner in world space
             Matrix inverseViewMatrix = GetInverseViewMatrix();
             Vector2 cameraWorldMin = Vector2.Transform(Vector2.Zero, inverseViewMatrix);
-
-            // Calculate the size of the area the camera can see
-            Vector2 cameraSize = new Vector2(_viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight) / _zoom;
 
             Vector2 worldBoundsMin = new Vector2(_worldBounds.Left, _worldBounds.Top);
             Vector2 worldBoundsMax = new Vector2(_worldBounds.Right, _worldBounds.Bottom);
@@ -455,9 +520,17 @@ namespace MonoGame.Extended
 
         private bool CanLimitToWorldBounds()
         {
-            return _worldBoundsEnabled
-                   && MathHelper.Distance(Rotation, 0.0f) < 0.001f
-                   && MathHelper.Distance(Pitch, 1.0f) < 0.001f;
+            if (!_worldBoundsEnabled || _worldBounds.Width <= 0 || _worldBounds.Height <= 0)
+            {
+                return false;
+            }
+
+            if (MathHelper.Distance(Rotation, 0.0f) >= 0.001f || MathHelper.Distance(Pitch, 1.0f) >= 0.001f)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
