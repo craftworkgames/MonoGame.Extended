@@ -469,15 +469,6 @@ namespace MonoGame.Extended
                     _zoom = minZoom;
                 }
             }
-
-            // float minZoomX = (float)_viewportAdapter.VirtualWidth / _worldBounds.Width;
-            // float minZoomY = (float)_viewportAdapter.VirtualHeight / _worldBounds.Height;
-            // float minZoom = MathHelper.Max(minZoomX, minZoomY);
-
-            // if (_zoom < minZoom)
-            // {
-            //     _zoom = minZoom;
-            // }
         }
 
         private void ClampPositionToWorldBounds()
