@@ -185,7 +185,6 @@ namespace MonoGame.Extended
         /// </remarks>
         public Rectangle WorldBounds => _worldBounds;
 
-
         /// <summary>
         /// Gets a value indicating whether the camera is currently constrained within world bounds.
         /// </summary>
