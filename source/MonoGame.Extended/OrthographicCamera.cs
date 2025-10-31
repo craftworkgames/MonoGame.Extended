@@ -506,7 +506,7 @@ namespace MonoGame.Extended
             _position = Vector2.Clamp(cameraWorldMin, worldBoundsMin, worldBoundsMax - cameraSize) + positionOffset;
         }
 
-        private bool CanLimitToWorldBounds()
+        private bool CanClampToWorldBounds()
         {
             if (!IsClampedToWorldBounds || _worldBounds.Width <= 0 || _worldBounds.Height <= 0)
             {
