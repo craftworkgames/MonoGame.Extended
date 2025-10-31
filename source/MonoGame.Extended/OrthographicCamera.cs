@@ -32,12 +32,12 @@ namespace MonoGame.Extended
             get => _position;
             set
             {
-                if (_position == value)
-                {
-                    return;
-                }
                 _position = value;
-                ClampPositionToWorldBounds();
+
+                if (IsClampedToWorldBounds)
+                {
+                    ClampPositionToWorldBounds();
+                }
             }
         }
 
@@ -58,8 +58,20 @@ namespace MonoGame.Extended
                     throw new ArgumentException("Zoom must be between MinimumZoom and MaximumZoom");
 
                 _zoom = value;
-                ClampZoomToWorldBounds();
-                ClampPositionToWorldBounds();
+
+                bool canClampToWorldBounds = CanClampToWorldBounds();
+
+                if (IsZoomClampedToWorldBounds && canClampToWorldBounds)
+                {
+                    ClampZoomToWorldBounds();
+                }
+
+                _zoom = MathHelper.Clamp(_zoom, _minimumZoom, _maximumZoom);
+
+                if (canClampToWorldBounds)
+                {
+                    ClampPositionToWorldBounds();
+                }
             }
         }
 
@@ -76,6 +88,20 @@ namespace MonoGame.Extended
                     Zoom = MinimumZoom;
 
                 _minimumZoom = value;
+
+                bool canClampToWorldBounds = CanClampToWorldBounds();
+
+                if (IsZoomClampedToWorldBounds && canClampToWorldBounds)
+                {
+                    ClampZoomToWorldBounds();
+                }
+
+                _zoom = MathHelper.Clamp(_zoom, _minimumZoom, _maximumZoom);
+
+                if (canClampToWorldBounds)
+                {
+                    ClampPositionToWorldBounds();
+                }
             }
         }
 
@@ -92,6 +118,19 @@ namespace MonoGame.Extended
                     Zoom = value;
 
                 _maximumZoom = value;
+                bool canClampToWorldBounds = CanClampToWorldBounds();
+
+                if (IsZoomClampedToWorldBounds && canClampToWorldBounds)
+                {
+                    ClampZoomToWorldBounds();
+                }
+
+                _zoom = MathHelper.Clamp(_zoom, _minimumZoom, _maximumZoom);
+
+                if (canClampToWorldBounds)
+                {
+                    ClampPositionToWorldBounds();
+                }
             }
         }
 
@@ -198,9 +237,12 @@ namespace MonoGame.Extended
             set
             {
                 _clampZoomToWorldBounds = value;
+
                 if (value)
                 {
                     ClampZoomToWorldBounds();
+                    _zoom = MathHelper.Clamp(_zoom, _minimumZoom, _maximumZoom);
+                    ClampPositionToWorldBounds();
                 }
             }
         }
