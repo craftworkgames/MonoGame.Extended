@@ -28,5 +28,11 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Setup xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+
       - name: Test MonoGame.Extended
-        run: dotnet test MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release
+        run: |
+          xvfb-run -a -s "-screen 0 1024x768x24" dotnet test MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release
