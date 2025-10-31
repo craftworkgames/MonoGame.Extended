@@ -20,7 +20,6 @@ namespace MonoGame.Extended
         private float _minimumPitch;
         private Vector2 _position;
         private Rectangle _worldBounds;
-        private bool _worldBoundsEnabled;
         private bool _clampZoomToWorldBounds;
 
         /// <inheritdoc/>
@@ -182,7 +181,7 @@ namespace MonoGame.Extended
         /// Use <see cref="EnableWorldBounds(Rectangle)"/> to enable world bounds constraints,
         /// or <see cref="DisableWorldBounds()"/> to disable them.
         /// </remarks>
-        public bool WorldBoundsEnabled => _worldBoundsEnabled;
+        public bool IsClampedToWorldBounds { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the camera zoom should be clamped to world bounds.
@@ -436,8 +435,7 @@ namespace MonoGame.Extended
         public void EnableWorldBounds(Rectangle worldBounds)
         {
             _worldBounds = worldBounds;
-            _worldBoundsEnabled = true;
-            ClampZoomToWorldBounds();
+            IsClampedToWorldBounds = true;
             ClampPositionToWorldBounds();
         }
 
@@ -451,7 +449,7 @@ namespace MonoGame.Extended
         public void DisableWorldBounds()
         {
             _worldBounds = Rectangle.Empty;
-            _worldBoundsEnabled = false;
+            IsClampedToWorldBounds = false;
         }
 
         private void ClampZoomToWorldBounds()
