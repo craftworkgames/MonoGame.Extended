@@ -81,8 +81,6 @@ public sealed class GraphicsTestFixture : IDisposable
 
             // Configure for headless testing
             GraphicsDeviceManager.GraphicsProfile = GraphicsProfile.Reach;
-            GraphicsDeviceManager.PreferredBackBufferWidth = 800;
-            GraphicsDeviceManager.PreferredBackBufferHeight = 600;
 
             // Don't sync with vertical retrace for faster test execution
             GraphicsDeviceManager.SynchronizeWithVerticalRetrace = false;
