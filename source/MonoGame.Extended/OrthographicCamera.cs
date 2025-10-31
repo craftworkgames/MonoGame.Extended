@@ -78,12 +78,7 @@ namespace MonoGame.Extended
             get => _minimumZoom;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException("MinimumZoom must be greater than zero");
-
-                if (Zoom < value)
-                    Zoom = MinimumZoom;
-
+                ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
                 _minimumZoom = value;
 
                 bool canClampToWorldBounds = CanClampToWorldBounds();
@@ -108,12 +103,7 @@ namespace MonoGame.Extended
             get => _maximumZoom;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException("MaximumZoom must be greater than zero");
-
-                if (Zoom > value)
-                    Zoom = value;
-
+                ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
                 _maximumZoom = value;
                 bool canClampToWorldBounds = CanClampToWorldBounds();
 
@@ -152,12 +142,7 @@ namespace MonoGame.Extended
             get => _minimumPitch;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException("MinimumPitch must be greater than zero");
-
-                if (Pitch < value)
-                    Pitch = MinimumPitch;
-
+                ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
                 _minimumPitch = value;
             }
         }
@@ -169,12 +154,7 @@ namespace MonoGame.Extended
             get => _maximumPitch;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException("MaximumPitch must be greater than zero");
-
-                if (Pitch > value)
-                    Pitch = value;
-
+                ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
                 _maximumPitch = value;
             }
         }
