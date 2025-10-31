@@ -242,7 +242,7 @@ public sealed class ParticleEffectReader : IDisposable
         {
             try
             {
-#if KNI
+#if KNI || FNA
                 using FileStream stream = File.OpenRead(filePath);
                 Texture2D texture = Texture2D.FromStream(graphicsDeviceService.GraphicsDevice, stream);
 #else
