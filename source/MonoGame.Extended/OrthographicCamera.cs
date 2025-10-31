@@ -126,13 +126,7 @@ namespace MonoGame.Extended
         public override float Pitch
         {
             get => _pitch;
-            set
-            {
-                if ((value < MinimumPitch) || (value > MaximumPitch))
-                    throw new ArgumentException("Pitch must be between MinimumPitch and MaximumPitch");
-
-                _pitch = value;
-            }
+            set => _pitch = MathHelper.Clamp(value, _minimumPitch, _maximumPitch);
         }
 
         /// <inheritdoc/>
@@ -144,6 +138,7 @@ namespace MonoGame.Extended
             {
                 ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
                 _minimumPitch = value;
+                _pitch = MathHelper.Clamp(_pitch, _minimumPitch, _maximumPitch);
             }
         }
 
@@ -156,6 +151,7 @@ namespace MonoGame.Extended
             {
                 ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
                 _maximumPitch = value;
+                _pitch = MathHelper.Clamp(_pitch, _minimumPitch, _maximumPitch);
             }
         }
 
