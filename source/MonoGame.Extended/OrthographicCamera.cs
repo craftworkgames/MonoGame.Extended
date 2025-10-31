@@ -488,7 +488,7 @@ namespace MonoGame.Extended
             // If the world bounds are smaller than the camera view, then we center the camera in the world bounds.
             if (_worldBounds.Width < cameraSize.X || _worldBounds.Height < cameraSize.Y)
             {
-                _position = new Vector2(_worldBounds.Center.X, _worldBounds.Center.Y) - Origin;
+                _position = _worldBounds.Center.ToVector2() - Origin;
                 return;
             }
 
