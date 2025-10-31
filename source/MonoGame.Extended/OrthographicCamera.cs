@@ -54,9 +54,6 @@ namespace MonoGame.Extended
             get => _zoom;
             set
             {
-                if ((value < MinimumZoom) || (value > MaximumZoom))
-                    throw new ArgumentException("Zoom must be between MinimumZoom and MaximumZoom");
-
                 _zoom = value;
 
                 bool canClampToWorldBounds = CanClampToWorldBounds();
