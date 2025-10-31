@@ -24,7 +24,7 @@ namespace MonoGame.Extended
 
         /// <inheritdoc/>
         /// <remarks>
-        /// When <see cref="WorldBoundsEnabled"/> is <see langword="true"/>, the camera position is clamped so that its
+        /// When <see cref="IsClampedToWorldBounds"/> is <see langword="true"/>, the camera position is clamped so that its
         /// view remains within the defined <see cref="WorldBounds"/>.
         /// </remarks>
         public override Vector2 Position
@@ -46,7 +46,7 @@ namespace MonoGame.Extended
 
         /// <inheritdoc/>
         /// <remarks>
-        /// When <see cref="WorldBoundsEnabled"/> is <see langword="true"/>, the camera zoom is clamped so that its
+        /// When <see cref="IsClampedToWorldBounds"/> is <see langword="true"/>, the camera zoom is clamped so that its
         /// view remains within the defined <see cref="WorldBounds"/>.
         /// </remarks>
         public override float Zoom
@@ -190,7 +190,7 @@ namespace MonoGame.Extended
         /// When <see langword="true"/>, the camera zoom is constrained so that the view cannot extend
         /// beyond the world bounds. When <see langword="false"/>, zoom is only constrained by
         /// <see cref="MinimumZoom"/> and <see cref="MaximumZoom"/>.
-        /// This property only has effect when <see cref="WorldBoundsEnabled"/> is <see langword="true"/>.
+        /// This property only has effect when <see cref="IsClampedToWorldBounds"/> is <see langword="true"/>.
         /// </remarks>
         public bool IsZoomClampedToWorldBounds
         {
@@ -508,7 +508,7 @@ namespace MonoGame.Extended
 
         private bool CanLimitToWorldBounds()
         {
-            if (!_worldBoundsEnabled || _worldBounds.Width <= 0 || _worldBounds.Height <= 0)
+            if (!IsClampedToWorldBounds || _worldBounds.Width <= 0 || _worldBounds.Height <= 0)
             {
                 return false;
             }
