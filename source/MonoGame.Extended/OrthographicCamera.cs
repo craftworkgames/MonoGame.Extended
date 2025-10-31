@@ -264,43 +264,27 @@ namespace MonoGame.Extended
         /// <inheritdoc/>
         public override void ZoomIn(float deltaZoom)
         {
-            ClampZoom(Zoom + deltaZoom);
+            Zoom += deltaZoom;
         }
 
         /// <inheritdoc/>
         public override void ZoomOut(float deltaZoom)
         {
-            ClampZoom(Zoom - deltaZoom);
-        }
-
-        private void ClampZoom(float value)
-        {
-            if (value < MinimumZoom)
-                Zoom = MinimumZoom;
-            else
-                Zoom = value > MaximumZoom ? MaximumZoom : value;
+            Zoom -= deltaZoom;
         }
 
         /// <inheritdoc/>
         [Obsolete("Pitch will be removed in the next major version")]
         public override void PitchUp(float deltaPitch)
         {
-            ClampPitch(Pitch + deltaPitch);
+            Pitch += deltaPitch;
         }
 
         /// <inheritdoc/>
         [Obsolete("Pitch will be removed in the next major version")]
         public override void PitchDown(float deltaPitch)
         {
-            ClampPitch(Pitch - deltaPitch);
-        }
-
-        private void ClampPitch(float value)
-        {
-            if (value < MinimumPitch)
-                Pitch = MinimumPitch;
-            else
-                Pitch = value > MaximumPitch ? MaximumPitch : value;
+            Pitch -= deltaPitch;
         }
 
         /// <inheritdoc/>
