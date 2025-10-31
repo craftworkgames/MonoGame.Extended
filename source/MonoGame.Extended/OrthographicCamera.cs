@@ -454,11 +454,6 @@ namespace MonoGame.Extended
 
         private void ClampZoomToWorldBounds()
         {
-            if (!CanLimitToWorldBounds() || !_clampZoomToWorldBounds)
-            {
-                return;
-            }
-
             // Calculate the size of the area the camera can see
             Vector2 cameraSize = new Vector2(_viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight) / _zoom;
 
@@ -487,11 +482,6 @@ namespace MonoGame.Extended
 
         private void ClampPositionToWorldBounds()
         {
-            if (!CanLimitToWorldBounds())
-            {
-                return;
-            }
-
             // Calculate the size of the area the camera can see
             Vector2 cameraSize = new Vector2(_viewportAdapter.VirtualWidth, _viewportAdapter.VirtualHeight) / _zoom;
 
