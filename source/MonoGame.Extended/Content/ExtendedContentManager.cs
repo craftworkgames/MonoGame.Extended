@@ -256,20 +256,22 @@ public class ExtendedContentManager : ContentManager
         return font;
     }
 
+#if KNI || FNA
+    /// <summary>
+    /// Loads a <see cref="Texture2DAtlas"/> from a TexturePacker JSON file.
+    /// <summary>
+    /// <param name="path">The path to the TexturePacker JSON file</param>
+    /// <returns>The <see cref="Texture2DAtlas"/> created from the TexturePacker JSON file content.</returns>
+    public Texture2DAtlas LoadTexturePacker(string path)
+#else
     /// <summary>
     /// Loads a <see cref="Texture2DAtlas"/> from a TexturePacker JSON file.
     /// </summary>
     /// <param name="path">The path to the TexturePacker JSON file</param>
-
-#if !KNI && !FNA
     /// <param name="premultiplyAlpha">
     /// Specifies whether the color data of the texture should be premultiplied by its alpha value.
     /// </param>
-#endif
     /// <returns>The <see cref="Texture2DAtlas"/> created from the TexturePacker JSON file content.</returns>
-#if KNI || FNA
-    public Texture2DAtlas LoadTexturePacker(string path)
-#else
     public Texture2DAtlas LoadTexturePacker(string path, bool premultiplyAlpha)
 #endif
     {
