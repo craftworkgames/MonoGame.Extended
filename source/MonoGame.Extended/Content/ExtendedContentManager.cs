@@ -283,7 +283,7 @@ public class ExtendedContentManager : ContentManager
 
 
 
-    private FileStream GetStream(string path)
+    protected FileStream GetStream(string path)
     {
         if (Path.IsPathRooted(path))
         {
@@ -293,7 +293,7 @@ public class ExtendedContentManager : ContentManager
         return (FileStream)TitleContainer.OpenStream(path);
     }
 
-    private void CacheAsset(string name, object obj)
+    protected void CacheAsset(string name, object obj)
     {
         LoadedAssets.Add(name, obj);
         if (obj is IDisposable disposable)
@@ -302,8 +302,8 @@ public class ExtendedContentManager : ContentManager
         }
     }
 
-    private bool NoExtension(string name) => string.IsNullOrEmpty(Path.GetExtension(name));
-    private bool TryGetCachedAsset<T>(string name, out T asset)
+    protected bool NoExtension(string name) => string.IsNullOrEmpty(Path.GetExtension(name));
+    protected bool TryGetCachedAsset<T>(string name, out T asset)
     {
         asset = default;
 
