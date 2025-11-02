@@ -106,7 +106,7 @@ public class Sprite : IColorable
                 throw new ObjectDisposedException(nameof(value), $"The source {nameof(Texture2D)} of the {nameof(TextureRegion)} was disposed prior to setting this property.");
             }
             _textureRegion = value;
-            
+
             if (value.OriginNormalized.HasValue)
             {
                 OriginNormalized = value.OriginNormalized.Value;
@@ -157,6 +157,33 @@ public class Sprite : IColorable
         Effect = SpriteEffects.None;
         OriginNormalized = textureRegion.OriginNormalized ?? Vector2.Zero;
         Depth = 0.0f;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Sprite"/> class by copying property values from an existing sprite.
+    /// </summary>
+    /// <remarks>
+    /// Creates a shallow copy where the new sprite shares the same <see cref="TextureRegion"/> reference.
+    /// The <see cref="Tag"/> reference is copied but the object itself is not cloned.
+    /// </remarks>
+    /// <param name="source">The sprite to copy from.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if the source texture of the <see cref="TextureRegion"/> of the provided source sprite has been disposed of.
+    /// </exception>
+    public Sprite(Sprite source)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        ObjectDisposedException.ThrowIf(source.TextureRegion.Texture.IsDisposed, source.TextureRegion.Texture);
+
+        _textureRegion = source._textureRegion;
+        Alpha = source.Alpha;
+        Color = source.Color;
+        IsVisible = source.IsVisible;
+        Effect = source.Effect;
+        Depth = source.Depth;
+        Origin = source.Origin;
+        Tag = source.Tag;
     }
 
     /// <summary>
@@ -225,5 +252,21 @@ public class Sprite : IColorable
         }
 
         return corners;
+    }
+
+    /// <summary>
+    /// Creates a shallow copy of this sprite with the same texture region and property values.
+    /// </summary>
+    /// <remarks>
+    /// The returned sprite shares the same <see cref="TextureRegion"/> reference.
+    /// The <see cref="Tag"/> reference is copied but the object itself is not cloned.
+    /// </remarks>
+    /// <returns>A new <see cref="Sprite"/> instance with copied property values.</returns>
+    /// <exception cref="ObjectDisposedException">
+    /// Thrown if the source texture of the <see cref="TextureRegion"/> of this sprite has been disposed of.
+    /// </exception>
+    public Sprite Clone()
+    {
+        return new Sprite(this);
     }
 }
