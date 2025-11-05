@@ -308,7 +308,7 @@ public sealed class OrthographicCameraTests
     public void ContainsPoint_WithDefaultCamera_ReturnsCorrectContainment()
     {
         OrthographicCamera camera = new OrthographicCamera(_graphicsFixture.GraphicsDevice);
-        var viewport = _graphicsFixture.GraphicsDevice.Viewport;
+        Viewport viewport = _graphicsFixture.GraphicsDevice.Viewport;
 
         Assert.Equal(ContainmentType.Contains, camera.Contains(new Point(1, 1)));
         Assert.Equal(ContainmentType.Contains, camera.Contains(new Point(viewport.Width - 1, viewport.Height - 1)));
@@ -320,7 +320,7 @@ public sealed class OrthographicCameraTests
     public void ContainsVector2_WithDefaultCamera_ReturnsCorrectContainment()
     {
         OrthographicCamera camera = new OrthographicCamera(_graphicsFixture.GraphicsDevice);
-        var viewport = _graphicsFixture.GraphicsDevice.Viewport;
+        Viewport viewport = _graphicsFixture.GraphicsDevice.Viewport;
 
         Assert.Equal(ContainmentType.Contains, camera.Contains(new Vector2(viewport.Width - 0.5f, viewport.Height - 0.5f)));
         Assert.Equal(ContainmentType.Contains, camera.Contains(new Vector2(0.5f, 0.5f)));
@@ -642,10 +642,10 @@ public sealed class OrthographicCameraTests
     public void GetBoundingFrustum_ReturnsValidFrustum()
     {
         var camera = new OrthographicCamera(_graphicsFixture.GraphicsDevice);
-        var viewport = _graphicsFixture.GraphicsDevice.Viewport;
+        Viewport viewport = _graphicsFixture.GraphicsDevice.Viewport;
 
-        var boundingFrustum = camera.GetBoundingFrustum();
-        var corners = boundingFrustum.GetCorners();
+        BoundingFrustum boundingFrustum = camera.GetBoundingFrustum();
+        Vector3[] corners = boundingFrustum.GetCorners();
 
         // Verify we have 8 corners (standard frustum)
         Assert.Equal(8, corners.Length);
@@ -683,6 +683,200 @@ public sealed class OrthographicCameraTests
         Assert.Equal(0, corners[7].X, 2);
         Assert.Equal(viewport.Height, corners[7].Y, 2);
         Assert.Equal(0, corners[7].Z, 2);
+    }
+
+    // -----------------------------------------------------------------------------
+    // Tests for issue #793
+    // OrthographicCamera.ScreenToWorld and similar methods interact poorly with
+    // window not at (0,0)
+    // https://github.com/MonoGame-Extended/Monogame-Extended/issues/793
+    // -----------------------------------------------------------------------------
+    //
+    // The goal of these tests is to verify that coordinate transformations between
+    // world-space and screen-space behave correctly when the viewport has a non-zero
+    // origin (e.g. the window is offset or letterboxed).
+    //
+    // Specifically:
+    // - DefaultViewportAdapter: viewport offset should NOT affect transformations.
+    // - ScalingViewportAdapter/BoxingViewportAdapter:  offset IS part of transformation.
+    //
+    // Each test ensures that ScreenToWorld() and WorldToScreen() remain consistent
+    // inverses of one another under these different scenarios.
+    //
+    [Trait("Issue", "#793")]
+    [Collection("GraphicsTest")]
+    public class OrthographicCameraIssue793Tests
+    {
+        private readonly GraphicsTestFixture _graphicsFixture;
+
+        public OrthographicCameraIssue793Tests(GraphicsTestFixture graphicsTestFixture)
+        {
+            _graphicsFixture = graphicsTestFixture;
+        }
+
+        // -------------------------------------------------------------------------
+        // Test 1: DefaultViewportAdapter (non-scaling)
+        // -------------------------------------------------------------------------
+        // Verifies that for a simple viewport offset (e.g., window not at (0,0)),
+        // the ScreenToWorld transformation ignores viewport origin and maps directly.
+        // Mouse/touch input coordinates (from MouseState) are already window-relative,
+        // so no offset adjustment should occur.
+        [Fact]
+        public void ScreenToWorld_WithNonZeroViewportOrigin_TransformsCorrectly()
+        {
+            Viewport originalViewport = _graphicsFixture.GraphicsDevice.Viewport;
+
+            try
+            {
+                _graphicsFixture.GraphicsDevice.Viewport = new Viewport(100, 50, 800, 480);
+
+                OrthographicCamera camera = new OrthographicCamera(_graphicsFixture.GraphicsDevice);
+
+                Vector2 screenPosition = new Vector2(200, 150);
+                Vector2 worldPosition = camera.ScreenToWorld(screenPosition);
+
+                // Expectation:
+                // With viewport origin offset, but no scaling or zoom,
+                // the mapping should remain 1:1 with window coordinates.
+                Assert.Equal(200, worldPosition.X, 2);
+                Assert.Equal(150, worldPosition.Y, 2);
+            }
+            finally
+            {
+                _graphicsFixture.GraphicsDevice.Viewport = originalViewport;
+            }
+        }
+
+        // -------------------------------------------------------------------------
+        // Test 2: Round-trip transformation with DefaultViewportAdapter
+        // -------------------------------------------------------------------------
+        // Ensures that WorldToScreen() and ScreenToWorld() are true inverses even when
+        // the viewport has a non-zero origin. The result after round-tripping should
+        // return to the original world position (within floating-point tolerance).
+        [Fact]
+        public void WorldToScreen_RoundTrip_WithNonZeroViewportOrigin_ReturnsOriginalPosition()
+        {
+            Viewport originalViewport = _graphicsFixture.GraphicsDevice.Viewport;
+
+            try
+            {
+                _graphicsFixture.GraphicsDevice.Viewport = new Viewport(100, 50, 800, 480);
+
+                OrthographicCamera camera = new OrthographicCamera(_graphicsFixture.GraphicsDevice);
+                camera.Position = new Vector2(100, 200);
+                camera.Zoom = 1.5f;
+
+                Vector2 originalWorld = new Vector2(250, 350);
+
+                Vector2 screen = camera.WorldToScreen(originalWorld);
+                Vector2 backToWorld = camera.ScreenToWorld(screen);
+
+                Assert.Equal(originalWorld.X, backToWorld.X, 2);
+                Assert.Equal(originalWorld.Y, backToWorld.Y, 2);
+            }
+            finally
+            {
+                _graphicsFixture.GraphicsDevice.Viewport = originalViewport;
+            }
+        }
+
+        // -------------------------------------------------------------------------
+        // Test 3: BoxingViewportAdapter (scaling)
+        // -------------------------------------------------------------------------
+        // Verifies that when using a scaling viewport adapter (BoxingViewportAdapter),
+        // ScreenToWorld() correctly accounts for the viewport offset, which defines
+        // where the virtual coordinate system is drawn inside the window.
+        //
+        // In this case, the viewport offset IS part of the coordinate transformation.
+        [Fact]
+        public void ScreenToWorld_WithBoxingViewportAdapter_TransformsCorrectly()
+        {
+            Viewport originalViewport = _graphicsFixture.GraphicsDevice.Viewport;
+
+            try
+            {
+                int virtualWidth = 400;
+                int virtualHeight = 240;
+
+                // Create a boxing viewport adapter with a virtual resolution smaller
+                // than the actual window. This will introduce a viewport offset
+                BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(
+                    _graphicsFixture.Game.Window,
+                    _graphicsFixture.GraphicsDevice,
+                    virtualWidth,
+                    virtualHeight);
+
+                // Forces recalculation of the viewport region inside the window.
+                viewportAdapter.Reset();
+
+                OrthographicCamera camera = new OrthographicCamera(viewportAdapter);
+
+                // Retrieve the actual viewport dimensions and offset
+                Viewport viewport = _graphicsFixture.GraphicsDevice.Viewport;
+                float scaleX = (float)viewport.Width / virtualWidth;
+                float scaleY = (float)viewport.Height / virtualHeight;
+
+                // The center of the viewport in window space
+                Vector2 windowPosition = new Vector2(viewport.X + viewport.Width * 0.5f,
+                                                     viewport.Y + viewport.Height * 0.5f);
+
+
+                Vector2 worldPosition = camera.ScreenToWorld(windowPosition);
+
+                // Should map to center of virtual space (200, 120)
+                Assert.Equal(virtualWidth * 0.5f, worldPosition.X, 2);
+                Assert.Equal(virtualHeight * 0.5f, worldPosition.Y, 2);
+            }
+            finally
+            {
+                _graphicsFixture.GraphicsDevice.Viewport = originalViewport;
+            }
+        }
+
+        // -------------------------------------------------------------------------
+        // Test 4: Round-trip transformation with BoxingViewportAdapter
+        // -------------------------------------------------------------------------
+        // Ensures that WorldToScreen() and ScreenToWorld() remain perfect inverses
+        // when scaling and offset are both involved.
+        //
+        // This confirms that the viewport offset and scaling transformations
+        // are correctly applied and undone in opposite order.
+        [Fact]
+        public void WorldToScreen_RoundTrip_WithBoxingViewportAdapter_ReturnsOriginalPosition()
+        {
+            Viewport originalViewport = _graphicsFixture.GraphicsDevice.Viewport;
+
+            try
+            {
+                int virtualWidth = 400;
+                int virtualHeight = 240;
+
+                BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(_graphicsFixture.Game.Window,
+                                                                                  _graphicsFixture.GraphicsDevice,
+                                                                                  virtualWidth,
+                                                                                  virtualHeight);
+
+                viewportAdapter.Reset();
+
+                OrthographicCamera camera = new OrthographicCamera(viewportAdapter);
+                camera.Position = new Vector2(50, 100);
+                camera.Zoom = 1.5f;
+
+                Vector2 originalWorld = new Vector2(125, 175);
+
+                // Round trip world -> screen -> world
+                Vector2 screen = camera.WorldToScreen(originalWorld);
+                Vector2 backToWorld = camera.ScreenToWorld(screen);
+
+                // Expect round-trip consistency
+                Assert.Equal(originalWorld.X, backToWorld.X, 2);
+                Assert.Equal(originalWorld.Y, backToWorld.Y, 2);
+            }
+            finally
+            {
+                _graphicsFixture.GraphicsDevice.Viewport = originalViewport;
+            }
+        }
     }
 
 }
