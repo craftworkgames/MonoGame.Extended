@@ -73,7 +73,7 @@ namespace MonoGame.Extended.ECS
 
             EntityManager.EntityAdded += OnEntityAdded;
             EntityManager.EntityRemoved += OnEntityRemoved;
-            EntityManager.EntityRemoved += OnEntityChanged;
+            EntityManager.EntityChanged += OnEntityChanged;
         }
 
         private void OnEntityAdded(int entityId)
