@@ -17,8 +17,13 @@ public class WorldManagerTests
         worldBuilder.AddSystem(dummySystem);
         var world = worldBuilder.Build();
 
+        var addedEntities = new List<int>();
+        var removedEntities = new List<int>();
+        var changedEntities = new List<int>();
+
         world.Initialize();
 
+        world.EntityAdded += entityId => addedEntities.Add(entityId);
         var entity = world.CreateEntity();
         entity.Attach(new Transform2());
         world.Update(_gameTime);
@@ -27,15 +32,27 @@ public class WorldManagerTests
         Assert.Equal(entity, otherEntity);
         Assert.True(otherEntity.Has<Transform2>());
         Assert.Contains(entity.Id, dummySystem.AddedEntitiesId);
+        Assert.Single(addedEntities);
+        Assert.Equal(entity.Id, addedEntities[0]);
 
+        world.EntityChanged += entityId => changedEntities.Add(entityId);
+        entity.Attach(new TestComponent());
+        world.Update(_gameTime);
+        Assert.Single(changedEntities);
+        Assert.Equal(entity.Id, changedEntities[0]);
+
+        world.EntityRemoved += entityId => removedEntities.Add(entityId);
         entity.Destroy();
         world.Update(_gameTime);
         world.Draw(_gameTime);
         otherEntity = world.GetEntity(entity.Id);
         Assert.Null(otherEntity);
         Assert.Contains(entity.Id, dummySystem.RemovedEntitiesId);
+        Assert.Single(removedEntities);
+        Assert.Equal(entity.Id, removedEntities[0]);
     }
 
+    private class TestComponent { }
     private class DummyComponent { }
 
     private class DummySystem : EntitySystem, IUpdateSystem, IDrawSystem
