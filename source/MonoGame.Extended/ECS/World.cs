@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
 using MonoGame.Extended.ECS.Systems;
 
@@ -12,6 +13,10 @@ namespace MonoGame.Extended.ECS
         internal EntityManager EntityManager { get; }
         internal ComponentManager ComponentManager { get; }
 
+        public event Action<int> EntityAdded;
+        public event Action<int> EntityRemoved;
+        public event Action<int> EntityChanged;
+
         public int EntityCount => EntityManager.ActiveCount;
 
         internal World()
@@ -21,10 +26,18 @@ namespace MonoGame.Extended.ECS
 
             RegisterSystem(ComponentManager = new ComponentManager());
             RegisterSystem(EntityManager = new EntityManager(ComponentManager));
+
+            EntityManager.EntityAdded += OnEntityAdded;
+            EntityManager.EntityRemoved += OnEntityRemoved;
+            EntityManager.EntityRemoved += OnEntityChanged;
         }
 
         public override void Dispose()
         {
+            EntityManager.EntityAdded -= OnEntityAdded;
+            EntityManager.EntityRemoved -= OnEntityRemoved;
+            EntityManager.EntityChanged -= OnEntityChanged;
+
             foreach (var updateSystem in _updateSystems)
             {
                 updateSystem.Dispose();
@@ -90,6 +103,30 @@ namespace MonoGame.Extended.ECS
             foreach (var system in _drawSystems)
             {
                 system.Draw(gameTime);
+            }
+        }
+
+        private void OnEntityAdded(int entityId)
+        {
+            if (EntityAdded != null)
+            {
+                EntityAdded.Invoke(entityId);
+            }
+        }
+
+        private void OnEntityRemoved(int entityId)
+        {
+            if (EntityRemoved != null)
+            {
+                EntityRemoved.Invoke(entityId);
+            }
+        }
+
+        private void OnEntityChanged(int entityId)
+        {
+            if(EntityChanged != null)
+            {
+                EntityChanged.Invoke(entityId);
             }
         }
     }
