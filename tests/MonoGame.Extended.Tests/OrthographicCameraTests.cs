@@ -685,6 +685,153 @@ public sealed class OrthographicCameraTests
         Assert.Equal(0, corners[7].Z, 2);
     }
 
+    [Fact]
+    public void ZoomIn_WithZoomCenter_KeepsZoomCenterFixedOnScreen()
+    {
+        OrthographicCamera camera = new OrthographicCamera(_graphicsFixture.GraphicsDevice);
+        camera.Position = Vector2.Zero;
+        camera.Zoom = 1.0f;
+
+        Vector2 zoomCenter = new Vector2(100, 100);
+        Vector2 screenBefore = camera.WorldToScreen(zoomCenter);
+
+        camera.ZoomIn(0.5f, zoomCenter);
+        Vector2 screenAfter = camera.WorldToScreen(zoomCenter);
+
+        Assert.Equal(screenBefore.X, screenAfter.X, 1);
+        Assert.Equal(screenBefore.Y, screenAfter.Y, 1);
+    }
+
+    [Fact]
+    public void ZoomOut_WithZoomCenter_KeepsZoomCenterFixedOnScreen()
+    {
+        OrthographicCamera camera = new OrthographicCamera(_graphicsFixture.GraphicsDevice);
+        camera.Position = Vector2.Zero;
+        camera.Zoom = 2.0f;
+
+        Vector2 zoomCenter = new Vector2(100, 100);
+        Vector2 screenBefore = camera.WorldToScreen(zoomCenter);
+
+        camera.ZoomOut(0.5f, zoomCenter);
+        Vector2 screenAfter = camera.WorldToScreen(zoomCenter);
+
+        Assert.Equal(screenBefore.X, screenAfter.X, 1);
+        Assert.Equal(screenBefore.Y, screenAfter.Y, 1);
+    }
+
+    [Fact]
+    public void ZoomIn_WithZoomCenter_ClampedByMinimumZoom_DoesNotAdjustPosition()
+    {
+        OrthographicCamera camera = new OrthographicCamera(_graphicsFixture.GraphicsDevice);
+        camera.MaximumZoom = 2.0f;
+        camera.Zoom = camera.MaximumZoom;
+        camera.Position = new Vector2(50, 50);
+
+        Vector2 zoomCenter = new Vector2(100, 100);
+        Vector2 positionBefore = camera.Position;
+
+        camera.ZoomIn(1.0f, zoomCenter);
+
+        Assert.Equal(2.0f, camera.Zoom);
+        Assert.Equal(positionBefore, camera.Position);
+    }
+
+    [Fact]
+    public void ZoomOut_WithZoomCenter_ClampedByMinimumZoom_DoesNotAdjustPosition()
+    {
+        OrthographicCamera camera = new OrthographicCamera(_graphicsFixture.GraphicsDevice);
+        camera.MinimumZoom = 0.5f;
+        camera.Zoom = camera.MinimumZoom;
+        camera.Position = new Vector2(50, 50);
+
+        Vector2 zoomCenter = new Vector2(100, 100);
+        Vector2 positionBefore = camera.Position;
+
+        camera.ZoomOut(1.0f, zoomCenter);
+
+        Assert.Equal(0.5f, camera.Zoom);
+        Assert.Equal(positionBefore, camera.Position);
+    }
+
+
+    [Fact]
+    public void ZoomIn_WithZoomCenter_AtOrigin_AdjustsPositionCorrectly()
+    {
+        OrthographicCamera camera = new OrthographicCamera(_graphicsFixture.GraphicsDevice);
+
+        camera.Position = new Vector2(100, 100);
+        camera.Zoom = 1.0f;
+
+        Vector2 zoomCenter = camera.Origin;
+        Vector2 screenBefore = camera.WorldToScreen(zoomCenter);
+
+        camera.ZoomIn(0.5f, zoomCenter);
+        Vector2 screenAfter = camera.WorldToScreen(zoomCenter);
+
+        Assert.Equal(screenBefore.X, screenAfter.X, 1);
+        Assert.Equal(screenBefore.Y, screenAfter.Y, 1);
+    }
+
+    [Fact]
+    public void ZoomOut_WithZoomCenter_AtOrigin_AdjustsPositionCorrectly()
+    {
+        OrthographicCamera camera = new OrthographicCamera(_graphicsFixture.GraphicsDevice);
+
+        camera.Position = new Vector2(100, 100);
+        camera.Zoom = 2.0f;
+
+        Vector2 zoomCenter = camera.Origin;
+        Vector2 screenBefore = camera.WorldToScreen(zoomCenter);
+
+        camera.ZoomOut(0.5f, zoomCenter);
+        Vector2 screenAfter = camera.WorldToScreen(zoomCenter);
+
+        Assert.Equal(screenBefore.X, screenAfter.X, 1);
+        Assert.Equal(screenBefore.Y, screenAfter.Y, 1);
+    }
+
+    [Fact]
+    public void ZoomIn_WithZoomCenter_WorldBoundsEnabled_RespectsBounds()
+    {
+        OrthographicCamera camera = new OrthographicCamera(_graphicsFixture.GraphicsDevice);
+        Viewport viewport = _graphicsFixture.GraphicsDevice.Viewport;
+        Rectangle worldBounds = new Rectangle(0, 0, viewport.Width * 2, viewport.Height * 2);
+
+        camera.EnableWorldBounds(worldBounds);
+        camera.Position = new Vector2(viewport.Width / 2, viewport.Height / 2);
+        camera.Zoom = 1.0f;
+
+        Vector2 zoomCenter = new Vector2(200, 200);
+
+        camera.ZoomIn(0.5f, zoomCenter);
+
+        Assert.True(camera.Position.X >= 0);
+        Assert.True(camera.Position.Y >= 0);
+        Assert.True(camera.Position.X <= worldBounds.Right - viewport.Width / camera.Zoom);
+        Assert.True(camera.Position.Y <= worldBounds.Bottom - viewport.Height / camera.Zoom);
+    }
+
+    [Fact]
+    public void ZoomOut_WithZoomCenter_WorldBoundsEnabled_RespectsBounds()
+    {
+        OrthographicCamera camera = new OrthographicCamera(_graphicsFixture.GraphicsDevice);
+        Viewport viewport = _graphicsFixture.GraphicsDevice.Viewport;
+        Rectangle worldBounds = new Rectangle(0, 0, viewport.Width * 2, viewport.Height * 2);
+
+        camera.EnableWorldBounds(worldBounds);
+        camera.Position = new Vector2(viewport.Width / 2, viewport.Height / 2);
+        camera.Zoom = 2.0f;
+
+        Vector2 zoomCenter = new Vector2(200, 200);
+
+        camera.ZoomOut(0.5f, zoomCenter);
+
+        Assert.True(camera.Position.X >= 0);
+        Assert.True(camera.Position.Y >= 0);
+        Assert.True(camera.Position.X <= worldBounds.Right - viewport.Width / camera.Zoom);
+        Assert.True(camera.Position.Y <= worldBounds.Bottom - viewport.Height / camera.Zoom);
+    }
+
     // -----------------------------------------------------------------------------
     // Tests for issue #793
     // OrthographicCamera.ScreenToWorld and similar methods interact poorly with
