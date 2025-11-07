@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
 
 namespace MonoGame.Extended.ECS
 {
@@ -17,8 +16,8 @@ namespace MonoGame.Extended.ECS
         }
 
         public int Id { get; }
-        
-        public BitVector32 ComponentBits => _entityManager.GetComponentBits(Id);
+
+        public ComponentBits ComponentBits => _entityManager.GetComponentBits(Id);
 
         public void Attach<T>(T component)
             where T : class 

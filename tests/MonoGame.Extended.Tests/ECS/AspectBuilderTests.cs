@@ -62,9 +62,9 @@ namespace MonoGame.Extended.ECS.Tests
 
             var aspect = builder.Build(componentManager);
 
-            Assert.True(aspect.AllSet.Data != 0);
-            Assert.True(aspect.OneSet.Data != 0);
-            Assert.True(aspect.ExclusionSet.Data != 0);
+            Assert.False(aspect.AllSet.IsEmpty);
+            Assert.False(aspect.OneSet.IsEmpty);
+            Assert.False(aspect.ExclusionSet.IsEmpty);
         }
     }
 }

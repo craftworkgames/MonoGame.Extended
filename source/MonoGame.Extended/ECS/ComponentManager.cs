@@ -17,6 +17,8 @@ namespace MonoGame.Extended.ECS
 
     public class ComponentManager : UpdateSystem, IComponentMapperService, IEnumerable<ComponentMapper>
     {
+        private const int MAX_COMPONENT_TYPES = 256;
+
         public ComponentManager()
         {
             _componentMappers = new Bag<ComponentMapper>();
@@ -33,9 +35,8 @@ namespace MonoGame.Extended.ECS
             if (!type.IsClass)
                 throw new ArgumentException("Type must be a class type.", nameof(type));
 
-            // TODO: We can probably do better than this without a huge performance penalty by creating our own bit vector that grows after the first 32 bits.
-            if (componentTypeId >= 32)
-                throw new InvalidOperationException("Component type limit exceeded. We currently only allow 32 component types for performance reasons.");
+            if (componentTypeId >= MAX_COMPONENT_TYPES)
+                throw new InvalidOperationException($"Component type limit exceeded. Maximum of {MAX_COMPONENT_TYPES} component types are supported.");
 
             var mapperType = typeof(ComponentMapper<>).MakeGenericType(type);
             var mapper = Activator.CreateInstance(mapperType, args: new object[] { componentTypeId, ComponentsChanged });
@@ -46,9 +47,8 @@ namespace MonoGame.Extended.ECS
         private ComponentMapper<T> CreateMapperForType<T>(int componentTypeId)
             where T : class
         {
-            // TODO: We can probably do better than this without a huge performance penalty by creating our own bit vector that grows after the first 32 bits.
-            if (componentTypeId >= 32)
-                throw new InvalidOperationException("Component type limit exceeded. We currently only allow 32 component types for performance reasons.");
+            if (componentTypeId >= MAX_COMPONENT_TYPES)
+                throw new InvalidOperationException($"Component type limit exceeded. Maximum of {MAX_COMPONENT_TYPES} component types are supported.");
 
             var mapper = new ComponentMapper<T>(componentTypeId, ComponentsChanged);
             _componentMappers[componentTypeId] = mapper;
@@ -81,15 +81,13 @@ namespace MonoGame.Extended.ECS
             return id;
         }
 
-        public BitVector32 CreateComponentBits(int entityId)
+        public ComponentBits CreateComponentBits(int entityId)
         {
-            var componentBits = new BitVector32();
-            var mask = BitVector32.CreateMask();
+            var componentBits = new ComponentBits();
 
             for (var componentId = 0; componentId < _componentMappers.Count; componentId++)
             {
-                componentBits[mask] = _componentMappers[componentId]?.Has(entityId) ?? false;
-                mask = BitVector32.CreateMask(mask);
+                componentBits[componentId] = _componentMappers[componentId]?.Has(entityId) ?? false;
             }
 
             return componentBits;

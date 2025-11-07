@@ -51,12 +51,12 @@ namespace MonoGame.Extended.ECS
         }
 
         // ReSharper disable once ParameterTypeCanBeEnumerable.Local
-        private static void Associate(ComponentManager componentManager, Bag<Type> types, ref BitVector32 bits)
+        private static void Associate(ComponentManager componentManager, Bag<Type> types, ref ComponentBits bits)
         {
             foreach (var type in types)
             {
                 var id = componentManager.GetComponentTypeId(type);
-                bits[1 << id] = true;
+                bits[id] = true;
             }
         }
     }
