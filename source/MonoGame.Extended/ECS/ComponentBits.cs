@@ -42,14 +42,16 @@ public struct ComponentBits : IEquatable<ComponentBits>
             ArgumentOutOfRangeException.ThrowIfLessThan(bitIndex, 0);
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(bitIndex, MAX_BITS);
 
-            int segmentIndex = bitIndex / BITS_PER_SEGMENT;
-            int bitPosition = bitIndex % BITS_PER_SEGMENT;
+            // bitIndex / BITS_PER_SEGMENT;
+            int segmentIndex = bitIndex >> 6;
+
+            // bitIndex % BITS_PER_SEGMENT;
+            int bitPosition = bitIndex & 63;
+
             ulong mask = 1UL << bitPosition;
 
-            fixed (ulong* bits = &_bits0)
-            {
-                return (bits[segmentIndex] & mask) != 0;
-            }
+            ref ulong segment = ref Unsafe.Add(ref _bits0, segmentIndex);
+            return (segment & mask) != 0;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -58,20 +60,22 @@ public struct ComponentBits : IEquatable<ComponentBits>
             ArgumentOutOfRangeException.ThrowIfLessThan(bitIndex, 0);
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(bitIndex, MAX_BITS);
 
-            int segmentIndex = bitIndex / BITS_PER_SEGMENT;
-            int bitPosition = bitIndex % BITS_PER_SEGMENT;
+            // bitIndex / BITS_PER_SEGMENT;
+            int segmentIndex = bitIndex >> 6;
+
+            // bitIndex % BITS_PER_SEGMENT;
+            int bitPosition = bitIndex & 63;
+
             ulong mask = 1UL << bitPosition;
 
-            fixed (ulong* bits = &_bits0)
+            ref ulong segment = ref Unsafe.Add(ref _bits0, segmentIndex);
+            if (value)
             {
-                if (value)
-                {
-                    bits[segmentIndex] |= mask;
-                }
-                else
-                {
-                    bits[segmentIndex] &= ~mask;
-                }
+                segment |= mask;
+            }
+            else
+            {
+                segment &= ~mask;
             }
         }
     }
