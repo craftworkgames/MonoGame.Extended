@@ -81,11 +81,15 @@ namespace MonoGame.Extended.ECS.Tests
             mapper.OnDelete += (entId) =>
             {
                 Assert.Equal(entityId, entId);
-                Assert.False(mapper.Has(entityId));
+                Assert.True(mapper.Has(entityId));
+                Assert.NotNull(mapper.Get(entityId));
             };
 
             mapper.Put(entityId, component);
             mapper.Delete(entityId);
+
+            // Component should be removed after Delete completes
+            Assert.False(mapper.Has(entityId));
         }
 
         [Fact]
