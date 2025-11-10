@@ -73,9 +73,9 @@ namespace MonoGame.Extended.ECS
 
         public override void Delete(int entityId)
         {
+            OnDelete?.Invoke(entityId);
             Components[entityId] = null;
             _onCompositionChanged(entityId);
-            OnDelete?.Invoke(entityId);
         }
     }
 }
