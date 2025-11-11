@@ -326,21 +326,60 @@ namespace MonoGame.Extended
             return result;
         }
 
-        /// <summary>
-        ///     Computes the <see cref="RectangleF" /> that is in common between the two specified
-        ///     <see cref="RectangleF" /> structures.
-        /// </summary>
-        /// <param name="first">The first rectangle.</param>
-        /// <param name="second">The second rectangle.</param>
-        /// <param name="result">The resulting rectangle that is in common between both the <paramref name="first" /> and
-        ///     the <paramref name="second" />, if they intersect; otherwise, <see cref="Empty"/>.</param>
+        [Obsolete("RectangleF.Intersection() will be removed in the next update. Use Intersect() instead.")]
         public static void Intersection(ref RectangleF first,
             ref RectangleF second, out RectangleF result)
         {
-            var firstMinimum = first.TopLeft;
-            var firstMaximum = first.BottomRight;
-            var secondMinimum = second.TopLeft;
-            var secondMaximum = second.BottomRight;
+            Intersect(ref first, ref second, out result);
+        }
+
+        [Obsolete("RectangleF.Intersection() will be removed in the next update. Use Intersect() instead.")]
+        public static RectangleF Intersection(RectangleF first,
+            RectangleF second)
+        {
+            return Intersect(first, second);
+        }
+
+        [Obsolete("RectangleF.Intersection() will be removed in the next update. Use Intersect() instead.")]
+        public RectangleF Intersection(RectangleF rectangle)
+        {
+            return Intersect(rectangle);
+        }
+
+        /// <summary>
+        /// Computes the <see cref="RectangleF"/> that represents the intersection of two <see cref="RectangleF"/>
+        /// structures.
+        /// </summary>
+        /// <param name="value1">The first rectangle to intersect.</param>
+        /// <param name="value2">The second rectangle to intersect.</param>
+        /// <returns>
+        /// A <see cref="RectangleF"/> that represents the intersection of <paramref name="value1"/> and
+        /// <paramref name="value2"/>, if there is an intersection; otherwise, <see cref="RectangleF.Empty"/>.
+        /// </returns>
+        public static RectangleF Intersect(RectangleF value1, RectangleF value2)
+        {
+            RectangleF rectangle;
+            Intersect(ref value1, ref value2, out rectangle);
+            return rectangle;
+        }
+
+        /// <summary>
+        /// Computes the <see cref="RectangleF"/> that represents the intersection of two <see cref="RectangleF"/>
+        /// structures.
+        /// </summary>
+        /// <param name="value1">The first rectangle to intersect.</param>
+        /// <param name="value2">The second rectangle to intersect.</param>
+        /// <param name="result">
+        /// When this method returns, contains the <see cref="RectangleF"/> that represents the intersection of
+        /// <paramref name="value1"/> and <paramref name="value2"/>, if there is an intersection; otherwise,
+        /// <see cref="RectangleF.Empty"/>
+        /// </param>
+        public static void Intersect(ref RectangleF value1, ref RectangleF value2, out RectangleF result)
+        {
+            var firstMinimum = value1.TopLeft;
+            var firstMaximum = value1.BottomRight;
+            var secondMinimum = value2.TopLeft;
+            var secondMaximum = value2.BottomRight;
 
             var minimum = MathExtended.CalculateMaximumVector2(firstMinimum, secondMinimum);
             var maximum = MathExtended.CalculateMinimumVector2(firstMaximum, secondMaximum);
@@ -352,51 +391,19 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        ///     Computes the <see cref="RectangleF" /> that is in common between the two specified
-        ///     <see cref="RectangleF" /> structures.
+        /// Computes the <see cref="RectangleF"/> that represents the intersection of this <see cref="RectangleF"/> and
+        /// another.
         /// </summary>
-        /// <param name="first">The first rectangle.</param>
-        /// <param name="second">The second rectangle.</param>
+        /// <param name="rectangle">The other <see cref="RectangleF"/> to intersect.</param>
         /// <returns>
-        ///     A <see cref="RectangleF" /> that is in common between both the <paramref name="first" /> and
-        ///     the <paramref name="second" />, if they intersect; otherwise, <see cref="Empty"/>.
+        /// A <see cref="RectangleF"/> that represents the intersection of this <see cref="RectangleF"/> and
+        /// <paramref name="rectangle"/>, if there is an intersection; otherwise, <see cref="RectangleF.Empty"/>.
         /// </returns>
-        public static RectangleF Intersection(RectangleF first,
-            RectangleF second)
+        public RectangleF Intersect(RectangleF rectangle)
         {
             RectangleF result;
-            Intersection(ref first, ref second, out result);
+            Intersect(ref this, ref rectangle, out result);
             return result;
-        }
-
-        /// <summary>
-        ///     Computes the <see cref="RectangleF" /> that is in common between the specified
-        ///     <see cref="RectangleF" /> and this <see cref="RectangleF" />.
-        /// </summary>
-        /// <param name="rectangle">The rectangle.</param>
-        /// <returns>
-        ///     A <see cref="RectangleF" /> that is in common between both the <paramref name="rectangle" /> and
-        ///     this <see cref="RectangleF"/>, if they intersect; otherwise, <see cref="Empty"/>.
-        /// </returns>
-        public RectangleF Intersection(RectangleF rectangle)
-        {
-            RectangleF result;
-            Intersection(ref this, ref rectangle, out result);
-            return result;
-        }
-
-        [Obsolete("RectangleF.Intersect() may be removed in the future. Use Intersection() instead.")]
-        public static RectangleF Intersect(RectangleF value1, RectangleF value2)
-        {
-            RectangleF rectangle;
-            Intersection(ref value1, ref value2, out rectangle);
-            return rectangle;
-        }
-
-        [Obsolete("RectangleF.Intersect() may be removed in the future. Use Intersection() instead.")]
-        public static void Intersect(ref RectangleF value1, ref RectangleF value2, out RectangleF result)
-        {
-            Intersection(ref value1, ref value2, out result);
         }
 
         /// <summary>

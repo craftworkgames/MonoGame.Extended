@@ -292,7 +292,7 @@ namespace MonoGame.Extended.Collisions
 
         private static Vector2 PenetrationVector(RectangleF rect1, RectangleF rect2)
         {
-            var intersectingRectangle = RectangleF.Intersection(rect1, rect2);
+            var intersectingRectangle = RectangleF.Intersect(rect1, rect2);
             Debug.Assert(!intersectingRectangle.IsEmpty,
                 "Violation of: !intersect.IsEmpty; Rectangles must intersect to calculate a penetration vector.");
 
