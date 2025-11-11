@@ -79,8 +79,6 @@ namespace MonoGame.Extended.ECS
         private void OnComponentsChanged(int entityId)
         {
             _changedEntities.Add(entityId);
-            // TODO: Do we need to call create component bits here when it's called again
-            //       during the next update cycle?
             _entityToComponentBits[entityId] = _componentManager.CreateComponentBits(entityId);
         }
 
@@ -95,7 +93,6 @@ namespace MonoGame.Extended.ECS
 
             foreach (var entityId in _changedEntities)
             {
-                _entityToComponentBits[entityId] = _componentManager.CreateComponentBits(entityId);
                 EntityChanged?.Invoke(entityId);
             }
 
