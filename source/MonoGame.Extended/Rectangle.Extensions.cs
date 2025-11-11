@@ -93,4 +93,56 @@ public static class RectangleExtensions
 
     }
 #endif
+
+    /// <summary>
+    /// Normalizes the specified <see cref="Rectangle"/> so that the <see cref="Rectangle.Width"/> and
+    /// <see cref="Rectangle.Height"/> are positive without changing the location of the rectangle.
+    /// </summary>
+    /// <param name="rectangle">The <see cref="Rectangle"/> to normalize.</param>
+    /// <returns>A <see cref="Rectangle"/> with positive width and height.</returns>
+    public static Rectangle Normalize(Rectangle rectangle)
+    {
+        if (rectangle.Width < 0)
+        {
+            rectangle.X += rectangle.Width;
+            rectangle.Width = -rectangle.Width;
+        }
+
+        if (rectangle.Height < 0)
+        {
+            rectangle.Y += rectangle.Height;
+            rectangle.Height = -rectangle.Height;
+        }
+
+        return rectangle;
+    }
+
+    /// <summary>
+    /// Normalizes a <see cref="Rectangle"/> so that the <see cref="Rectangle.Width"/> and
+    /// <see cref="Rectangle.Height"/> are positive without changing the location of the rectangle.
+    /// </summary>
+    /// <param name="rectangle">The source <see cref="Rectangle"/>.</param>
+    /// <param name="result">
+    /// When this method returns, contains the a normalized <see cref="Rectangle"/> with positive width and height.
+    /// </param>
+    public static void Normalize(ref this Rectangle rectangle, out Rectangle result)
+    {
+        result.X = rectangle.X;
+        result.Width = rectangle.Width;
+
+        if (result.Width < 0)
+        {
+            result.X += result.Width;
+            result.Width = -result.Width;
+        }
+
+        result.Y = rectangle.Y;
+        result.Height = rectangle.Height;
+
+        if (result.Height < 0)
+        {
+            result.Y += result.Height;
+            result.Height = -result.Height;
+        }
+    }
 }

@@ -442,6 +442,77 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        /// Normalizes this <see cref="RectangleF"/> so that the <see cref="Width"/> and <see cref="Height"/> are
+        /// positive without changing the location of the rectangle.
+        /// </summary>
+        public void Normalize()
+        {
+            if (Width < 0)
+            {
+                X += Width;
+                Width = -Width;
+            }
+
+            if (Height < 0)
+            {
+                Y += Height;
+                Height = -Height;
+            }
+        }
+
+        /// <summary>
+        /// Normalizes the specified <see cref="RectangleF"/> so that the <see cref="Width"/> and <see cref="Height"/>
+        /// are positive without changing the location of the rectangle.
+        /// </summary>
+        /// <param name="rectangle">The <see cref="RectangleF"/> to normalize.</param>
+        /// <returns>A <see cref="RectangleF"/> with positive width and height.</returns>
+        public static RectangleF Normalize(RectangleF rectangle)
+        {
+            if (rectangle.Width < 0)
+            {
+                rectangle.X += rectangle.Width;
+                rectangle.Width = -rectangle.Width;
+            }
+
+            if (rectangle.Height < 0)
+            {
+                rectangle.Y += rectangle.Height;
+                rectangle.Height = -rectangle.Height;
+            }
+
+            return rectangle;
+        }
+
+        /// <summary>
+        /// Normalizes a <see cref="RectangleF"/> so that the <see cref="Width"/> and <see cref="Height"/> are positive
+        /// without changing the location of the rectangle.
+        /// </summary>
+        /// <param name="rectangle">The source <see cref="RectangleF"/>.</param>
+        /// <param name="result">
+        /// When this method returns, contains the a normalized <see cref="RectangleF"/> with positive width and height.
+        /// </param>
+        public static void Normalize(ref RectangleF rectangle, out RectangleF result)
+        {
+            result.X = rectangle.X;
+            result.Width = rectangle.Width;
+
+            if (result.Width < 0)
+            {
+                result.X += result.Width;
+                result.Width = -result.Width;
+            }
+
+            result.Y = rectangle.Y;
+            result.Height = rectangle.Height;
+
+            if (result.Height < 0)
+            {
+                result.Y += result.Height;
+                result.Height = -result.Height;
+            }
+        }
+
+        /// <summary>
         ///     Determines whether the specified <see cref="RectangleF" /> contains the specified
         ///     <see cref="Vector2" />.
         /// </summary>
