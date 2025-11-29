@@ -22,17 +22,23 @@ public sealed class BitmapFont
     public int LineHeight { get; }
 
     public int LetterSpacing { get; set; }
+    public int LineSpacing {get; set;}
 
     public bool UseKernings { get; set; } = true;
 
     public BitmapFont(string face, int size, int lineHeight, IEnumerable<BitmapFontCharacter> characters)
+        :this(face, size, lineHeight, 0, 0, characters) { }
+
+    public BitmapFont(string face, int size, int lineHeight, int letterSpacing, int lineSpacing, IEnumerable<BitmapFontCharacter> characters)
     {
         Face = face;
         Size = size;
         LineHeight = lineHeight;
+        LetterSpacing = letterSpacing;
+        LineSpacing = lineSpacing;
         _characters = new Dictionary<int, BitmapFontCharacter>();
 
-        foreach (BitmapFontCharacter character in characters)
+        foreach(BitmapFontCharacter character in characters)
         {
             _characters.Add(character.Character, character);
         }
@@ -103,7 +109,7 @@ public sealed class BitmapFont
             }
 
             if (glyph.CharacterID == '\n')
-                rectangle.Height += LineHeight;
+                rectangle.Height += LineHeight + LineSpacing;
         }
 
         return rectangle;
@@ -213,7 +219,7 @@ public sealed class BitmapFont
             if (character != '\n')
                 return true;
 
-            _positionDelta.Y += _font.LineHeight;
+            _positionDelta.Y += _font.LineHeight + _font.LineSpacing;
             _positionDelta.X = 0;
             _previousGlyph = null;
 
@@ -331,7 +337,7 @@ public sealed class BitmapFont
             if (character != '\n')
                 return true;
 
-            _positionDelta.Y += _font.LineHeight;
+            _positionDelta.Y += _font.LineHeight + _font.LineSpacing;
             _positionDelta.X = _position.X;
             _previousGlyph = null;
 
@@ -414,6 +420,13 @@ public sealed class BitmapFont
             }
         }
 
-        return new BitmapFont(bmfFile.FontName, bmfFile.Info.FontSize, bmfFile.Common.LineHeight, characters.Values);
+        return new BitmapFont(
+            bmfFile.FontName,
+            bmfFile.Info.FontSize,
+            bmfFile.Common.LineHeight,
+            bmfFile.Info.SpacingHoriz,
+            bmfFile.Info.SpacingVert,
+            characters.Values
+        );
     }
 }

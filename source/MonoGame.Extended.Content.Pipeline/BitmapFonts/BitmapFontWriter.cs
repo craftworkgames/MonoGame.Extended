@@ -19,6 +19,8 @@ namespace MonoGame.Extended.Content.Pipeline.BitmapFonts
             writer.Write(fontFile.FontName);
             writer.Write(fontFile.Info.FontSize);
             writer.Write(fontFile.Common.LineHeight);
+            writer.Write(fontFile.Info.SpacingHoriz);
+            writer.Write(fontFile.Info.SpacingVert);
             writer.Write(fontFile.Characters.Count);
 
             foreach (var c in fontFile.Characters)
