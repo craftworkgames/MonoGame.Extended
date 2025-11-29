@@ -237,7 +237,7 @@ public static class BitmapFontFileReader
         bmfFile.Info.PaddingDown = paddingValues[2];
         bmfFile.Info.PaddingLeft = paddingValues[3];
 
-        var spacingValues = node.GetByteDelimitedAttribute("spacing", 2);
+        var spacingValues = node.GetSignedByteDelimitedAttribute("spacing", 2);
         bmfFile.Info.SpacingHoriz = spacingValues[0];
         bmfFile.Info.SpacingVert = spacingValues[1];
 
@@ -415,8 +415,8 @@ public static class BitmapFontFileReader
                     var spacingValues = split[1].Split(',');
                     if (spacingValues.Length == 2)
                     {
-                        bmfFile.Info.SpacingHoriz = Convert.ToByte(spacingValues[0], CultureInfo.InvariantCulture);
-                        bmfFile.Info.SpacingVert = Convert.ToByte(spacingValues[1], CultureInfo.InvariantCulture);
+                        bmfFile.Info.SpacingHoriz = Convert.ToSByte(spacingValues[0], CultureInfo.InvariantCulture);
+                        bmfFile.Info.SpacingVert = Convert.ToSByte(spacingValues[1], CultureInfo.InvariantCulture);
                     }
                     break;
                 case "outline":

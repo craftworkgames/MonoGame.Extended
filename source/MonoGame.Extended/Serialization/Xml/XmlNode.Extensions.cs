@@ -205,4 +205,30 @@ public static class XmlNodeExtensions
 
         return result;
     }
+
+    /// <summary>
+    /// Retrieves the signed byte values from the specified delimited attribute and returns them in an array.
+    /// </summary>
+    /// <param name="node">The XML node.</param>
+    /// <param name="attribute">The name of the attribute.</param>
+    /// <param name="expectedCount">The expected number of signed byte values.</param>
+    /// <returns>
+    /// An array of signed byte values parsed from the attribute, or an array of default values if the attribute is not found
+    /// or is empty.
+    /// </returns>
+    public static sbyte[] GetSignedByteDelimitedAttribute(this XmlNode node, string attribute, int expectedCount)
+    {
+        sbyte[] result = new sbyte[expectedCount];
+
+        if (node.GetAttributeValue(attribute, out string value))
+        {
+            string[] split = value.Split(',');
+            for (int i = 0; i < expectedCount; ++i)
+            {
+                result[i] = Convert.ToSByte(split[i], CultureInfo.InvariantCulture);
+            }
+        }
+
+        return result;
+    }
 }

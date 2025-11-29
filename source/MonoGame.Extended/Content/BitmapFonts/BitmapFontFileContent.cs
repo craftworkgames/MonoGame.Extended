@@ -47,8 +47,8 @@ public sealed class BitmapFontFileContent
         [FieldOffset(8)] public byte PaddingRight;
         [FieldOffset(9)] public byte PaddingDown;
         [FieldOffset(10)] public byte PaddingLeft;
-        [FieldOffset(11)] public byte SpacingHoriz;
-        [FieldOffset(12)] public byte SpacingVert;
+        [FieldOffset(11)] public sbyte SpacingHoriz;
+        [FieldOffset(12)] public sbyte SpacingVert;
         [FieldOffset(13)] public byte Outline;
     }
 
