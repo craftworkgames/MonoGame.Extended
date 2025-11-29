@@ -279,7 +279,7 @@ public static class BitmapFontFileReader
         {
             var character = new BitmapFontFileContent.CharacterBlock
             {
-                ID = node.GetUInt32Attribute("id"),
+                ID = node.GetInt32Attribute("id"),
                 X = node.GetUInt16Attribute("x"),
                 Y = node.GetUInt16Attribute("y"),
                 Width = node.GetUInt16Attribute("width"),
@@ -509,7 +509,7 @@ public static class BitmapFontFileReader
             switch (split[0])
             {
                 case "id":
-                    character.ID = Convert.ToUInt32(split[1], CultureInfo.InvariantCulture);
+                    character.ID = Convert.ToInt32(split[1], CultureInfo.InvariantCulture);
                     break;
                 case "x":
                     character.X = Convert.ToUInt16(split[1], CultureInfo.InvariantCulture);

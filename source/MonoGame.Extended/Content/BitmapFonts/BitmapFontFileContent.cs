@@ -57,7 +57,7 @@ public sealed class BitmapFontFileContent
     {
         public const int StructSize = 20;
 
-        [FieldOffset(0)] public uint ID;
+        [FieldOffset(0)] public int ID;
         [FieldOffset(4)] public ushort X;
         [FieldOffset(6)] public ushort Y;
         [FieldOffset(8)] public ushort Width;
