@@ -57,8 +57,31 @@ public static class BitmapFontFileReader
     public static BitmapFontFileContent Read(Stream stream, string name)
     {
         long position = stream.Position;
-        var sig = stream.ReadByte();
-        stream.Position = position;
+
+        // Issue: MonoGame.Extended won't load XML format .fnt files if they begin with the byte order mark.
+        // https://github.com/MonoGame-Extended/Monogame-Extended/issues/1073
+        // It's possible that a consumer might edit the BMFont file using a different library such as SharpFNT.BitmapFont
+        // which could save it with UTF-8 Byte Order Mark (BOM) preamble at the start of the file.
+        // To get around this, we need to detect if the preamble is there and advance the stream past it if so.
+
+        Span<byte> buffer = stackalloc byte[3];
+        int bytesRead = stream.Read(buffer);
+        if (bytesRead < 1)
+        {
+            throw new InvalidOperationException("Stream is empty or unreadable");
+        }
+
+        int sig;
+        if (buffer.SequenceEqual(Encoding.UTF8.GetPreamble()))
+        {
+            sig = stream.ReadByte();
+            stream.Seek(-1, SeekOrigin.Current);
+        }
+        else
+        {
+            sig = buffer[0];
+            stream.Position = position;
+        }
 
         var bmfFile = sig switch
         {

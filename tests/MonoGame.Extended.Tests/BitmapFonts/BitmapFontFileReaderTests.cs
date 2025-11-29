@@ -129,6 +129,25 @@ public class BitmapFontFileReaderTests
         Assert.True(_expected.Kernings.SequenceEqual(actual.Kernings));
     }
 
+    // Issue: MonoGame.Extended won't load XML format .fnt files if they begin with the byte order mark.
+    // https://github.com/MonoGame-Extended/Monogame-Extended/issues/1073
+    // It's possible that a consumer might edit the BMFont file using a different library such as SharpFNT.BitmapFont
+    // which could save it with UTF-8 Byte Order Mark (BOM) preamble at the start of the file.
+    [Fact]
+    public void Read_XmlFile_With_UTF8_BOM_Test()
+    {
+        string path = "BitmapFonts/files/bmfont/test-font-xml-utf8-bom.fnt";
+        using FileStream stream = File.OpenRead(path);
+        var actual = BitmapFontFileReader.Read(stream, path);
+        Assert.Equal(_expected.Header, actual.Header);
+        Assert.Equal(_expected.Info, actual.Info);
+        Assert.Equal(_expected.Common, actual.Common);
+        Assert.Equal(_expected.FontName, actual.FontName);
+        Assert.True(_expected.Pages.SequenceEqual(actual.Pages));
+        Assert.True(_expected.Characters.SequenceEqual(actual.Characters));
+        Assert.True(_expected.Kernings.SequenceEqual(actual.Kernings));
+    }
+
     [Fact]
     public void Read_Text_Test()
     {
