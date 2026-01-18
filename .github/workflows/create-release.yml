@@ -38,7 +38,7 @@ on:
         type: string
         default: 'preview.1'
       monogame-version:
-        description: 'MonoGame version to target. Leave empty to use defaults (3.8.4 for Stable, 3.8.5.2001-preview for Preview).'
+        description: 'MonoGame version to target. Leave empty to use defaults (3.8.4 for Stable, 3.8.5.-preview.# for Preview).'
         required: false
         type: string
         default: ''
@@ -78,7 +78,7 @@ jobs:
         run: |
           BUILD_ARGS="--nologo --verbosity minimal --configuration Release -p:IsPreviewBuild=true -p:PreviewLabel=${{ inputs.preview-label }}"
           if [ -n "${{ inputs.monogame-version }}" ]; then
-            BUILD_ARGS="$BUILD_ARGS /p:MonoGameVersion=${{ inputs.monogame-version }}"
+            BUILD_ARGS="$BUILD_ARGS -p:MonoGameVersion=${{ inputs.monogame-version }}"
           fi
           dotnet build MonoGame.Extended.sln $BUILD_ARGS
 
@@ -96,7 +96,7 @@ jobs:
         run: |
           TEST_ARGS="--nologo --verbosity minimal --configuration Release -p:IsPreviewBuild=true -p:PreviewLabel=${{ inputs.preview-label }}"
           if [ -n "${{ inputs.monogame-version }}" ]; then
-            TEST_ARGS="$TEST_ARGS /p:MonoGameVersion=${{ inputs.monogame-version }}"
+            TEST_ARGS="$TEST_ARGS -p:MonoGameVersion=${{ inputs.monogame-version }}"
           fi
           xvfb-run -a -s "-screen 0 1024x768x24" dotnet test MonoGame.Extended.sln $TEST_ARGS
 
@@ -114,7 +114,7 @@ jobs:
         run: |
           PACK_ARGS="--nologo --verbosity minimal --configuration Release -p:IsPreviewBuild=true -p:PreviewLabel=${{ inputs.preview-label }}"
           if [ -n "${{ inputs.monogame-version }}" ]; then
-            PACK_ARGS="$PACK_ARGS /p:MonoGameVersion=${{ inputs.monogame-version }}"
+            PACK_ARGS="$PACK_ARGS -p:MonoGameVersion=${{ inputs.monogame-version }}"
           fi
           dotnet pack MonoGame.Extended.sln $PACK_ARGS
 
@@ -132,7 +132,7 @@ jobs:
         run: |
           PACK_ARGS="--nologo --verbosity minimal --configuration Release -p:IsPreviewBuild=true -p:PreviewLabel=${{ inputs.preview-label }}"
           if [ -n "${{ inputs.monogame-version }}" ]; then
-            PACK_ARGS="$PACK_ARGS /p:MonoGameVersion=${{ inputs.monogame-version }}"
+            PACK_ARGS="$PACK_ARGS -p:MonoGameVersion=${{ inputs.monogame-version }}"
           fi
           dotnet pack KNI.Extended.sln $PACK_ARGS
 
