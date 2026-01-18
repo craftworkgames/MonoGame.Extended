@@ -5,6 +5,8 @@ using NSubstitute;
 namespace MonoGame.Extended.Content.Pipeline.Tests
 {
 
+    // TODO: Testing for ew content builder project type
+#if !MONOGAME_385_OR_NEWER
     public class TexturePackerJsonImporterProcessorTests
     {
         [Fact]
@@ -92,4 +94,5 @@ namespace MonoGame.Extended.Content.Pipeline.Tests
             Assert.Equal(1.0, frame.Pivot.Y);
         }
     }
+#endif
 }
