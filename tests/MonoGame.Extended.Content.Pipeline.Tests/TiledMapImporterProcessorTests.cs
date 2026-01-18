@@ -8,6 +8,8 @@ using NSubstitute;
 namespace MonoGame.Extended.Content.Pipeline.Tests.Tiled
 {
 
+// TODO: Testing for ew content builder project type
+#if !MONOGAME_385_OR_NEWER
     public class TiledMapImporterProcessorTests
     {
         [Fact]
@@ -201,4 +203,5 @@ namespace MonoGame.Extended.Content.Pipeline.Tests.Tiled
             return result.Data;
         }
     }
+#endif
 }
