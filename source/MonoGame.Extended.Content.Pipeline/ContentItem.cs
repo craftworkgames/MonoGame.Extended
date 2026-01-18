@@ -29,7 +29,7 @@ namespace MonoGame.Extended.Content.Pipeline
         {
             var sourceAsset = new ExternalReference<TInput>(source);
 
-#if MONOGAME_385_OR_NEWER
+#if MONOGAME_385_OR_NEWER && !KNI && !FNA
             // MonoGame 3.8.5+ uses the new API with importer/processor instances
             var (importer, processor) = GetImporterAndProcessor<TInput>(parameters);
             var externalReference = context.BuildAsset<TInput, TInput>(sourceAsset, importer, processor, null);

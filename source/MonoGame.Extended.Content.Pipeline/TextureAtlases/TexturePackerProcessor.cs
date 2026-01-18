@@ -28,7 +28,7 @@ public class TexturePackerProcessor : ContentProcessor<ContentImporterResult<Tex
             {
                 string texturePath = Path.Combine(Path.GetDirectoryName(input.FilePath), texture.FileName);
                 var externalRef = new ExternalReference<Texture2DContent>(texturePath);
-#if MONOGAME_385_OR_NEWER
+#if MONOGAME_385_OR_NEWER && !KNI && !FNA
                 context.BuildAndLoadAsset<Texture2DContent, Texture2DContent>(externalRef, new TextureImporter(), new TextureProcessor());
 #else
                 context.BuildAndLoadAsset<Texture2DContent, Texture2DContent>(externalRef, nameof(TextureProcessor));
