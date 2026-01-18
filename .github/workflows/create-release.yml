@@ -1,29 +1,44 @@
 ################################################################################
 ### Build MonoGame.Extended (Release)
-### Clones a specified release tag or the `develop` branch and performs a build,
-### test, then pack of the Monogame.Extended source code. Once the build job is
-### finished, the deploy job will upload the nupkg files created to the specified
-### package source (GitHub or NuGet).
+### Performs a build, test, then pack of the Monogame.Extended source code
+### from a specified branch or release tag. Once the build job is finished,
+### the deploy job will upload the nupkg files to NuGet.
 ###
 ###     - Can be triggered manually with workflow_dispatch
-###     - Allows specifying a release tag or defaults to develop branch
-###     - Allows choosing between GitHub Packages or NuGet as deployment target
+###     - Allows specifying a branch (defaults to develop)
+###     - Allows specifying a release tag (overrides branch if provided)
+###     - Supports both stable and preview builds
 ################################################################################
 name: "Create Release"
 
 on:
   workflow_dispatch:
     inputs:
-      source-feed:
-        description: 'Which source feed to publish to?'
+      branch:
+        description: 'Branch to build from (e.g., develop, v5.3.2-preview-1). Ignored if release-tag is provided.'
+        required: false
+        type: string
+        default: 'develop'
+      release-tag:
+        description: 'Release tag to build from (e.g., v5.3.1). Overrides branch if provided.'
+        required: false
+        type: string
+        default: ''
+      build-type:
+        description: 'Build type (Stable or Preview)'
         required: true
         type: choice
         options:
-          - GitHub
-          - NuGet
-        default: 'GitHub'
-      release-tag:
-        description: 'Release tag to build from (e.g., v1.0.0). Leave empty to use develop branch.'
+          - Stable
+          - Preview
+        default: 'Stable'
+      preview-label:
+        description: 'Preview label (e.g., preview.1, alpha.1). Only used for Preview builds.'
+        required: false
+        type: string
+        default: 'preview.1'
+      monogame-version:
+        description: 'MonoGame version to target. Leave empty to use defaults (3.8.4 for Stable, 3.8.5.2001-preview for Preview).'
         required: false
         type: string
         default: ''
@@ -37,7 +52,7 @@ jobs:
       - name: Clone Repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.release-tag || 'develop' }}
+          ref: ${{ inputs.release-tag != '' && inputs.release-tag || inputs.branch }}
 
       - name: Setup Dotnet
         uses: actions/setup-dotnet@v4
@@ -49,18 +64,77 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb
 
-      - name: Build MonoGame.Extended
-        run: dotnet build MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release
-
-      - name: Test MonoGame.Extended
+      - name: Build MonoGame.Extended (Stable)
+        if: ${{ inputs.build-type == 'Stable' }}
         run: |
-          xvfb-run -a -s "-screen 0 1024x768x24" dotnet test MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release
+          BUILD_ARGS="--nologo --verbosity minimal --configuration Release"
+          if [ -n "${{ inputs.monogame-version }}" ]; then
+            BUILD_ARGS="$BUILD_ARGS -p:MonoGameVersion=${{ inputs.monogame-version }}"
+          fi
+          dotnet build MonoGame.Extended.sln $BUILD_ARGS
 
-      - name: Pack MonoGame.Extended
-        run: dotnet pack MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release
+      - name: Build MonoGame.Extended (Preview)
+        if: ${{ inputs.build-type == 'Preview' }}
+        run: |
+          BUILD_ARGS="--nologo --verbosity minimal --configuration Release -p:IsPreviewBuild=true -p:PreviewLabel=${{ inputs.preview-label }}"
+          if [ -n "${{ inputs.monogame-version }}" ]; then
+            BUILD_ARGS="$BUILD_ARGS /p:MonoGameVersion=${{ inputs.monogame-version }}"
+          fi
+          dotnet build MonoGame.Extended.sln $BUILD_ARGS
 
-      - name: Pack Kni.Extended
-        run: dotnet pack KNI.Extended.sln --nologo --verbosity minimal --configuration Release
+      - name: Test MonoGame.Extended (Stable)
+        if: ${{ inputs.build-type == 'Stable' }}
+        run: |
+          TEST_ARGS="--nologo --verbosity minimal --configuration Release"
+          if [ -n "${{ inputs.monogame-version }}" ]; then
+            TEST_ARGS="$TEST_ARGS -p:MonoGameVersion=${{ inputs.monogame-version }}"
+          fi
+          xvfb-run -a -s "-screen 0 1024x768x24" dotnet test MonoGame.Extended.sln $TEST_ARGS
+
+      - name: Test MonoGame.Extended (Preview)
+        if: ${{ inputs.build-type == 'Preview' }}
+        run: |
+          TEST_ARGS="--nologo --verbosity minimal --configuration Release -p:IsPreviewBuild=true -p:PreviewLabel=${{ inputs.preview-label }}"
+          if [ -n "${{ inputs.monogame-version }}" ]; then
+            TEST_ARGS="$TEST_ARGS /p:MonoGameVersion=${{ inputs.monogame-version }}"
+          fi
+          xvfb-run -a -s "-screen 0 1024x768x24" dotnet test MonoGame.Extended.sln $TEST_ARGS
+
+      - name: Pack MonoGame.Extended (Stable)
+        if: ${{ inputs.build-type == 'Stable' }}
+        run: |
+          PACK_ARGS="--nologo --verbosity minimal --configuration Release"
+          if [ -n "${{ inputs.monogame-version }}" ]; then
+            PACK_ARGS="$PACK_ARGS -p:MonoGameVersion=${{ inputs.monogame-version }}"
+          fi
+          dotnet pack MonoGame.Extended.sln $PACK_ARGS
+
+      - name: Pack MonoGame.Extended (Preview)
+        if: ${{ inputs.build-type == 'Preview' }}
+        run: |
+          PACK_ARGS="--nologo --verbosity minimal --configuration Release -p:IsPreviewBuild=true -p:PreviewLabel=${{ inputs.preview-label }}"
+          if [ -n "${{ inputs.monogame-version }}" ]; then
+            PACK_ARGS="$PACK_ARGS /p:MonoGameVersion=${{ inputs.monogame-version }}"
+          fi
+          dotnet pack MonoGame.Extended.sln $PACK_ARGS
+
+      - name: Pack Kni.Extended (Stable)
+        if: ${{ inputs.build-type == 'Stable' }}
+        run: |
+          PACK_ARGS="--nologo --verbosity minimal --configuration Release"
+          if [ -n "${{ inputs.monogame-version }}" ]; then
+            PACK_ARGS="$PACK_ARGS -p:MonoGameVersion=${{ inputs.monogame-version }}"
+          fi
+          dotnet pack KNI.Extended.sln $PACK_ARGS
+
+      - name: Pack Kni.Extended (Preview)
+        if: ${{ inputs.build-type == 'Preview' }}
+        run: |
+          PACK_ARGS="--nologo --verbosity minimal --configuration Release -p:IsPreviewBuild=true -p:PreviewLabel=${{ inputs.preview-label }}"
+          if [ -n "${{ inputs.monogame-version }}" ]; then
+            PACK_ARGS="$PACK_ARGS /p:MonoGameVersion=${{ inputs.monogame-version }}"
+          fi
+          dotnet pack KNI.Extended.sln $PACK_ARGS
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -73,7 +147,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ build ]
     permissions:
-      packages: write
       contents: write
 
     steps:
@@ -83,12 +156,11 @@ jobs:
           name: build-artifacts
           path: ./.artifacts
 
-      - name: "Push Packages"
+      - name: "Push Packages to NuGet"
         env:
-          SOURCE_URL: ${{ inputs.source-feed == 'GitHub' && 'https://nuget.pkg.github.com/craftworkgames/index.json' || inputs.source-feed == 'NuGet' && 'https://api.nuget.org/v3/index.json' }}
-          API_KEY: ${{ inputs.source-feed == 'GitHub' && secrets.GITHUB_TOKEN || inputs.source-feed == 'NuGet' && secrets.NUGET_ACCESS_TOKEN }}
+          NUGET_API_KEY: ${{ secrets.NUGET_ACCESS_TOKEN }}
         run: |
           PACKAGES=(".artifacts/*.nupkg")
           for PACKAGE in "${PACKAGES[@]}"; do
-            dotnet nuget push "$PACKAGE" --source "$SOURCE_URL" --skip-duplicate --api-key "$API_KEY"
+            dotnet nuget push "$PACKAGE" --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key "$NUGET_API_KEY"
           done
