@@ -11,6 +11,11 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
+    <!-- Define compilation constant for MonoGame 3.8.5+ preview builds -->
+    <PropertyGroup Condition="'$(IsPreviewBuild)' == 'true'">
+        <DefineConstants>$(DefineConstants);MONOGAME_385_OR_NEWER</DefineConstants>
+    </PropertyGroup>
+
     <!--
         MonoGame Version Selection
         - Stable build (IsPreviewBuild=false): use MonoGame 3.8.4
