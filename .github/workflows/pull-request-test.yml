@@ -1,7 +1,8 @@
 ################################################################################
 ### Pull Request Test
 ### Executes tests to ensure that the pull request being submitted is valid.
-###     - Only runs on pull requests made to the `develop` branch
+###     - Runs on pull requests to develop, main, and preview branches
+###     - Automatically detects preview branches and tests with appropriate MonoGame version
 ###     - Only runs if the pull request was opened or synchronized
 ################################################################################
 name: Pull Request Test
@@ -11,6 +12,7 @@ on:
     branches:
       - develop
       - main
+      - 'v*-preview.*'
     types:
       - opened
       - synchronize
@@ -33,6 +35,27 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb
 
-      - name: Test MonoGame.Extended
+      - name: Detect Build Type
+        id: detect
+        run: |
+          TARGET_BRANCH="${{ github.base_ref }}"
+          echo "Target branch: $TARGET_BRANCH"
+
+          # Check if target branch is a preview branch using simple wildcard matching
+          if [[ "$TARGET_BRANCH" == v*-preview.* ]]; then
+            echo "is_preview=true" >> $GITHUB_OUTPUT
+            echo "Detected preview branch - will use preview MonoGame version"
+          else
+            echo "is_preview=false" >> $GITHUB_OUTPUT
+            echo "Detected stable branch - will use stable MonoGame version"
+          fi
+
+      - name: Test MonoGame.Extended (Stable)
+        if: steps.detect.outputs.is_preview == 'false'
         run: |
           xvfb-run -a -s "-screen 0 1024x768x24" dotnet test MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release
+
+      - name: Test MonoGame.Extended (Preview)
+        if: steps.detect.outputs.is_preview == 'true'
+        run: |
+          xvfb-run -a -s "-screen 0 1024x768x24" dotnet test MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release -p:IsPreviewBuild=true
