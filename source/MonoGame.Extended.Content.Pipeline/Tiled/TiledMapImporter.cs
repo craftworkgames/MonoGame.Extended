@@ -44,7 +44,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
                 var mapSerializer = new XmlSerializer(typeof(TiledMapContent));
                 var map = (TiledMapContent)mapSerializer.Deserialize(reader);
 
-                map.FilePath = mapFilePath;
+                map.FilePath = Path.GetFullPath(mapFilePath);
 
                 for (var i = 0; i < map.Tilesets.Count; i++)
                 {
