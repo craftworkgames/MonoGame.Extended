@@ -51,10 +51,22 @@ namespace MonoGame.Extended.Tiled
 
         private static TiledMapTileset ReadTileset(ContentReader reader, TiledMap map)
         {
-            var external = reader.ReadBoolean();
-			var tileset = external ? reader.ReadExternalReference<TiledMapTileset>() : TiledMapTilesetReader.ReadTileset(reader);
+            TiledMapTileset result;
 
-			return tileset;
+            var external = reader.ReadBoolean();
+            if (external)
+            {
+                var tileset = reader.ReadExternalReference<TiledMapTileset>();
+
+                result = tileset
+                         ?? throw new InvalidOperationException($"Failed to load tileset: {nameof(reader.ReadExternalReference)} returned null.");
+            }
+            else
+            {
+                result = TiledMapTilesetReader.ReadTileset(reader);
+            }
+
+            return result;
         }
 
         private static void ReadLayers(ContentReader reader, TiledMap map)
