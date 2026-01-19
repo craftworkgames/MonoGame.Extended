@@ -62,8 +62,16 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 			if (!string.IsNullOrWhiteSpace(tileset.Source))
 			{
 				writer.Write(true);
-				writer.WriteExternalReference(_contentItem.GetExternalReference<TiledMapTilesetContent>(tileset.Source));
-			}
+
+                var externalReference = _contentItem.GetExternalReference<TiledMapTilesetContentItem>(tileset.Source);
+                if (externalReference == null)
+                {
+                    ContentLogger.Logger.Log(
+                        LogLevel.Error,
+                        $"{nameof(externalReference)} is null in {nameof(TiledMapWriter)}.{nameof(WriteTileset)}! {nameof(tileset.Source)}: '{tileset.Source}'");
+                }
+                writer.WriteExternalReference(externalReference);
+            }
 			else
 			{
 				writer.Write(false);
