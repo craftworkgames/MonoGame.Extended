@@ -6,6 +6,42 @@ namespace MonoGame.Extended
 {
     public static class Vector2Extensions
     {
+        /// <summary>
+        /// Computes the 2D pseudo cross product (perp-dot product) of two vectors.
+        /// </summary>
+        /// <param name="value1">The first vector.</param>
+        /// <param name="value2">The second vector.</param>
+        /// <returns>
+        /// A scalar value representing twice the signed area of the parallelogram formed by the vectors.
+        /// Positive if <paramref name="value2"/> is clockwise from <paramref name="value1"/>,
+        /// negative if clockwise, zero if parallel.
+        /// </returns>
+        public static float PerpDot(Vector2 value1, Vector2 value2)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 3.3.5 The Cross Product
+
+            return (value1.X * value2.Y) - (value1.Y * value2.X);
+        }
+
+        /// <summary>
+        /// Computes the 2D pseudo cross products (perp-dot product) of two vectors.
+        /// </summary>
+        /// <param name="value1">The first vector.</param>
+        /// <param name="value2">The second vector.</param>
+        /// <param name="result">
+        /// A scalar value representing twice the signed area of the parallelogram formed by the vectors.
+        /// Positive if <paramref name="value2"/> is clockwise from <paramref name="value1"/>,
+        /// negative if clockwise, zero if parallel.
+        /// </param>
+        public static void PerpDot(ref Vector2 value1, ref Vector2 value2, out float result)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 3.3.5 The Cross Product
+
+            result = (value1.X * value2.Y) - (value1.Y * value2.X);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 SetX(this Vector2 vector2, float x) => new Vector2(x, vector2.Y);
 
