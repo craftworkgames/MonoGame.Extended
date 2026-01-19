@@ -96,6 +96,8 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
 
             var sourceAsset = new ExternalReference<TiledMapTilesetContentItem>(source);
             var externalReference = context.BuildAsset<TiledMapTilesetContentItem, TiledMapTilesetContentItem>(sourceAsset, tilesetImporter, tilesetProcessor, assetName: null);
+
+            repository.StoreExternalReference(source, externalReference);
         }
 
         /// <summary>
