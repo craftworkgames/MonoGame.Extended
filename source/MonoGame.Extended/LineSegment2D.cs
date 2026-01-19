@@ -499,7 +499,7 @@ namespace MonoGame.Extended
         /// For degenerate segments (zero length), returns <see langword="true"/> with tSegmentMin = tSegmentMax = 0
         /// if the start point is inside the circle.
         /// </remarks>
-        public readonly bool Intersects(BoundingCircle circle, out float? tSegmentMin, out float? tSegmentMax)
+        public readonly bool Intersects(BoundingCircle2D circle, out float? tSegmentMin, out float? tSegmentMax)
         {
             // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
             // Parametric intersection of a segment with a circle (2D reduction)
@@ -547,7 +547,7 @@ namespace MonoGame.Extended
         /// <returns>
         /// <see langword="true"/> if the segment intersects the circle; otherwise, <see langword="false"/>.
         /// </returns>
-        public readonly bool Intersects(BoundingCircle circle)
+        public readonly bool Intersects(BoundingCircle2D circle)
         {
             return Intersects(circle, out _, out _);
         }

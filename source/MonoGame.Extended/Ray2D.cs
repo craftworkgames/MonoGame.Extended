@@ -450,7 +450,7 @@ namespace MonoGame.Extended
         /// <see langword="true"/> if the ray intersects the circle in its forward direction;
         /// otherwise, <see langword="false"/>.
         /// </returns>
-        public readonly bool Intersects(BoundingCircle circle, out float? tRayMin, out float? tRayMax)
+        public readonly bool Intersects(BoundingCircle2D circle, out float? tRayMin, out float? tRayMax)
         {
 
             if (!Collision2D.RayCircleIntersectionInterval(Origin, Direction, circle.Center, circle.Radius, out float tMin, out float tMax))
@@ -478,7 +478,7 @@ namespace MonoGame.Extended
         /// <see langword="true"/> if the ray intersects the circle in its forward direction;
         /// otherwise, <see langword="false"/>.
         /// </returns>
-        public readonly bool Intersects(BoundingCircle circle)
+        public readonly bool Intersects(BoundingCircle2D circle)
         {
             return Intersects(circle, out _, out _);
         }

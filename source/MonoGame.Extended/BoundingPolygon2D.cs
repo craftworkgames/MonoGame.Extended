@@ -363,7 +363,7 @@ namespace MonoGame.Extended
         /// <see cref="ContainmentType.Intersects"/> if they partially overlap;
         /// or <see cref="ContainmentType.Disjoint"/> if they do not touch.
         /// </returns>
-        public readonly ContainmentType Contains(BoundingCircle circle)
+        public readonly ContainmentType Contains(BoundingCircle2D circle)
         {
             return Collision2D.ContainsConvexPolygonCircle(Vertices, Normals, circle.Center, circle.Radius);
         }
@@ -417,7 +417,7 @@ namespace MonoGame.Extended
         /// <returns>
         /// <see langword="true"/> if the polygon and circle overlap or touch; otherwise, <see langword="false"/>.
         /// </returns>
-        public readonly bool Intersects(BoundingCircle circle)
+        public readonly bool Intersects(BoundingCircle2D circle)
         {
             return Collision2D.IntersectsCircleConvexPolygon(circle.Center, circle.Radius, Vertices, Normals);
         }

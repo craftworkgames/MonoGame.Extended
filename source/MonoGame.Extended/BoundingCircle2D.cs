@@ -14,7 +14,7 @@ namespace MonoGame.Extended
     /// </summary>
     [DataContract]
     [DebuggerDisplay("{DebugDisplayString,nq}")]
-    public struct BoundingCircle : IEquatable<BoundingCircle>
+    public struct BoundingCircle2D : IEquatable<BoundingCircle2D>
     {
         #region Public Fields
 
@@ -69,11 +69,11 @@ namespace MonoGame.Extended
         #region Public Constructors
 
         /// <summary>
-        /// Creates a new <see cref="BoundingCircle"/> with the specified center and radius.
+        /// Creates a new <see cref="BoundingCircle2D"/> with the specified center and radius.
         /// </summary>
         /// <param name="center">The center position of the circle in 2D space.</param>
         /// <param name="radius">The radius of the circle in. Should be non-negative.</param>
-        public BoundingCircle(Vector2 center, float radius)
+        public BoundingCircle2D(Vector2 center, float radius)
         {
             Center = center;
             Radius = radius;
@@ -84,11 +84,11 @@ namespace MonoGame.Extended
         #region Public Methods
 
         /// <summary>
-        /// Creates a <see cref="BoundingCircle"/> that encloses all specified points.
+        /// Creates a <see cref="BoundingCircle2D"/> that encloses all specified points.
         /// </summary>
         /// <param name="points">The array of points to enclose within the circle.</param>
         /// <returns>
-        /// A <see cref="BoundingCircle"/> that contains all the specified points.
+        /// A <see cref="BoundingCircle2D"/> that contains all the specified points.
         /// The circle is computed using an approximation algorithm and may not be the absolute minimal bounding circle.
         /// </returns>
         /// <exception cref="ArgumentNullException">
@@ -101,7 +101,7 @@ namespace MonoGame.Extended
         /// Uses Ritter's algorithm for efficient approximate bounding circle computation.
         /// For a single point, returns a circle with radius <c>0</c> centered at that point.
         /// </remarks>
-        public static BoundingCircle CreateFromPoints(Vector2[] points)
+        public static BoundingCircle2D CreateFromPoints(Vector2[] points)
         {
             // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
             // Section 4.3.2 "Computing a Bounding Sphere"
@@ -119,7 +119,7 @@ namespace MonoGame.Extended
 
             if (points.Length == 1)
             {
-                return new BoundingCircle(points[0], 0.0f);
+                return new BoundingCircle2D(points[0], 0.0f);
             }
 
             // Find the most separate point pair along the principle axis
@@ -174,37 +174,37 @@ namespace MonoGame.Extended
                 }
             }
 
-            return new BoundingCircle(center, radius);
+            return new BoundingCircle2D(center, radius);
         }
 
         /// <summary>
-        /// Creates a <see cref="BoundingCircle"/> that completely encloses the specified bounding box.
+        /// Creates a <see cref="BoundingCircle2D"/> that completely encloses the specified bounding box.
         /// </summary>
         /// <param name="box">The bounding box to enclose within a circle.</param>
         /// <returns>
-        /// A <see cref="BoundingCircle"/> centered at the bounding box's center with radius equal to half the diagonal of the box.
+        /// A <see cref="BoundingCircle2D"/> centered at the bounding box's center with radius equal to half the diagonal of the box.
         /// </returns>
-        public static BoundingCircle CreateFromBoundingBox2D(BoundingBox2D box)
+        public static BoundingCircle2D CreateFromBoundingBox2D(BoundingBox2D box)
         {
             Vector2 center = box.Center;
             Vector2 halfExtents = box.HalfExtents;
             float radius = halfExtents.Length();
 
-            return new BoundingCircle(center, radius);
+            return new BoundingCircle2D(center, radius);
         }
 
         /// <summary>
-        /// Creates a <see cref="BoundingCircle"/> that completely encloses the specified capsule.
+        /// Creates a <see cref="BoundingCircle2D"/> that completely encloses the specified capsule.
         /// </summary>
         /// <param name="capsule">The capsule to enclose within a circle.</param>
         /// <returns>
-        /// A <see cref="BoundingCircle"/> centered at the capsule's center with radius sufficient to contain both endpoint caps.
+        /// A <see cref="BoundingCircle2D"/> centered at the capsule's center with radius sufficient to contain both endpoint caps.
         /// </returns>
         /// <remarks>
         /// The radius is computed as half the capsule's length plus the capsule's radius, ensuring that
         /// the circle reaches the farthest points on both circular caps.
         /// </remarks>
-        public static BoundingCircle CreateFromBoundingCapsule2D(BoundingCapsule2D capsule)
+        public static BoundingCircle2D CreateFromBoundingCapsule2D(BoundingCapsule2D capsule)
         {
             // The bounding circle center is at the capsule's midpoint
             Vector2 center = capsule.Center;
@@ -213,22 +213,22 @@ namespace MonoGame.Extended
             // This is half the capsule length plus the cap radius
             float radius = (capsule.Length * 0.5f) + capsule.Radius;
 
-            return new BoundingCircle(center, radius);
+            return new BoundingCircle2D(center, radius);
         }
 
         /// <summary>
-        /// Creates a <see cref="BoundingCircle"/> that encloses two bounding circles.
+        /// Creates a <see cref="BoundingCircle2D"/> that encloses two bounding circles.
         /// </summary>
         /// <param name="original">The first bounding circle to enclose.</param>
         /// <param name="additional">The second bounding circle to enclose.</param>
         /// <returns>
-        /// A <see cref="BoundingCircle"/> with the smallest radius that completely contains both input circles.
+        /// A <see cref="BoundingCircle2D"/> with the smallest radius that completely contains both input circles.
         /// </returns>
         /// <remarks>
         /// If one circle completely contains the other, the larger circle is returned.
         /// Otherwise, computes the optimal merged circle that tightly encloses both.
         /// </remarks>
-        public static BoundingCircle CreateMerged(BoundingCircle original, BoundingCircle additional)
+        public static BoundingCircle2D CreateMerged(BoundingCircle2D original, BoundingCircle2D additional)
         {
             // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
             // Section 6.5.2 "Merging Two Spheres" (2D circle adaptation)
@@ -263,7 +263,7 @@ namespace MonoGame.Extended
                 center += ((radius - original.Radius) / dist) * centerDiff;
             }
 
-            return new BoundingCircle(center, radius);
+            return new BoundingCircle2D(center, radius);
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace MonoGame.Extended
         /// <see cref="ContainmentType.Intersects"/> if they partially overlap;
         /// or <see cref="ContainmentType.Disjoint"/> if they do not touch.
         /// </returns>
-        public readonly ContainmentType Contains(BoundingCircle other)
+        public readonly ContainmentType Contains(BoundingCircle2D other)
         {
             return Collision2D.ContainsCircleCircle(Center, Radius, other.Center, other.Radius);
         }
@@ -356,7 +356,7 @@ namespace MonoGame.Extended
         /// <returns>
         /// <see langword="true"/> if the circles overlap or touch; otherwise, <see langword="false"/>.
         /// </returns>
-        public readonly bool Intersects(BoundingCircle other)
+        public readonly bool Intersects(BoundingCircle2D other)
         {
             return Collision2D.IntersectsCircleCircle(Center, Radius, other.Center, other.Radius);
         }
@@ -414,7 +414,7 @@ namespace MonoGame.Extended
         /// </summary>
         /// <param name="matrix">The transformation matrix to apply.</param>
         /// <returns>
-        /// A new <see cref="BoundingCircle"/> with the center transformed by the matrix and the radius
+        /// A new <see cref="BoundingCircle2D"/> with the center transformed by the matrix and the radius
         /// scaled by the maximum scale factor to ensure the transformed shape remains enclosed.
         /// </returns>
         /// <remarks>
@@ -422,9 +422,9 @@ namespace MonoGame.Extended
         /// This ensures that the resulting circle fully encloses the transformed original circle, even if
         /// the transformation includes non-uniform scaling or rotation.
         /// </remarks>
-        public readonly BoundingCircle Transform(Matrix matrix)
+        public readonly BoundingCircle2D Transform(Matrix matrix)
         {
-            BoundingCircle circle = new BoundingCircle();
+            BoundingCircle2D circle = new BoundingCircle2D();
             circle.Center = Vector2.Transform(Center, matrix);
 
             // Scale radius by maximum scale component
@@ -436,15 +436,15 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        /// Creates a new <see cref="BoundingCircle"/> by translating this circle by the specified offset.
+        /// Creates a new <see cref="BoundingCircle2D"/> by translating this circle by the specified offset.
         /// </summary>
         /// <param name="translation">The offset to translate the circle by in 2D space.</param>
         /// <returns>
-        /// A new <see cref="BoundingCircle"/> at the translated position with the same radius.
+        /// A new <see cref="BoundingCircle2D"/> at the translated position with the same radius.
         /// </returns>
-        public readonly BoundingCircle Translate(Vector2 translation)
+        public readonly BoundingCircle2D Translate(Vector2 translation)
         {
-            return new BoundingCircle(Center + translation, Radius);
+            return new BoundingCircle2D(Center + translation, Radius);
         }
 
         /// <summary>
@@ -463,7 +463,7 @@ namespace MonoGame.Extended
         }
 
         /// <inheritdoc/>
-        public readonly bool Equals(BoundingCircle other)
+        public readonly bool Equals(BoundingCircle2D other)
         {
             return Center.Equals(other.Center) && Radius.Equals(other.Radius);
         }
@@ -471,7 +471,7 @@ namespace MonoGame.Extended
         /// <inheritdoc/>
         public override readonly bool Equals(object obj)
         {
-            return obj is BoundingCircle other && Equals(other);
+            return obj is BoundingCircle2D other && Equals(other);
         }
 
         /// <inheritdoc/>
@@ -487,13 +487,13 @@ namespace MonoGame.Extended
         }
 
         /// <summary/>
-        public static bool operator ==(BoundingCircle left, BoundingCircle right)
+        public static bool operator ==(BoundingCircle2D left, BoundingCircle2D right)
         {
             return left.Equals(right);
         }
 
         /// <summary/>
-        public static bool operator !=(BoundingCircle left, BoundingCircle right)
+        public static bool operator !=(BoundingCircle2D left, BoundingCircle2D right)
         {
             return !left.Equals(right);
         }

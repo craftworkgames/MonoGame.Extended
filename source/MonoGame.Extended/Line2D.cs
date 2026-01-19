@@ -433,7 +433,7 @@ namespace MonoGame.Extended
         /// <see langword="true"/> if the line passes through or is tangent to the circle;
         /// otherwise, <see langword="false"/>.
         /// </returns>
-        public readonly bool Intersects(BoundingCircle circle)
+        public readonly bool Intersects(BoundingCircle2D circle)
         {
             // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
             // Distance‑based intersection of implicit line with circle
