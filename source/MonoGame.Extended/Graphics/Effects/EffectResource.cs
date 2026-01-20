@@ -59,13 +59,30 @@ namespace MonoGame.Extended.Graphics.Effects
             switch (value)
             {
                 case 0:
+                {
                     // OpenGL
                     _shaderExtension = "ogl";
                     break;
+                }
                 case 1:
-                    // DirectX
+                {
+                    // DirectX 11
                     _shaderExtension = "dx11";
                     break;
+                }
+                case 2:
+                {
+                    // DirectX 12
+                    // Note: ShaderProfile/PlatformProfile for Xbox One and Xbox Series X/S is 21, not 2
+                    _shaderExtension = "dx12";
+                    break;
+                }
+                case 80:
+                {
+                    // Vulkan
+                    _shaderExtension = "vlkn";
+                    break;
+                }
                 default:
                     throw new InvalidOperationException("Unknown shader profile.");
             }
