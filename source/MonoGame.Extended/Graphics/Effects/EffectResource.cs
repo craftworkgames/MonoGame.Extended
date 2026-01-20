@@ -84,7 +84,9 @@ namespace MonoGame.Extended.Graphics.Effects
                     break;
                 }
                 default:
+                {
                     throw new InvalidOperationException("Unknown shader profile.");
+                }
             }
         }
 
