@@ -10,6 +10,19 @@ namespace MonoGame.Extended.Tiled
 {
     public class TiledMapReader : ContentTypeReader<TiledMap>
     {
+        /// <summary>
+        /// Registers this <see cref="ContentTypeReader"/> with the <see cref="ContentTypeReaderManager"/>
+        /// so it is resolved without reflection.
+        /// </summary>
+        /// <remarks>
+        /// Call this method once during application startup when publishing with
+        /// <c>PublishAot</c> or <c>PublishTrimmed</c>.
+        /// </remarks>
+        public static void Register() =>
+            ContentTypeReaderManager.AddTypeCreator(
+                typeof(TiledMapReader).AssemblyQualifiedName,
+                () => new TiledMapReader());
+
         protected override TiledMap Read(ContentReader reader, TiledMap existingInstance)
         {
             if (existingInstance != null)

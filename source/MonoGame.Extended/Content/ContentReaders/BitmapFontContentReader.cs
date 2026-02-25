@@ -12,6 +12,19 @@ namespace MonoGame.Extended.Content.ContentReaders;
 
 public class BitmapFontContentReader : ContentTypeReader<BitmapFont>
 {
+    /// <summary>
+    /// Registers this <see cref="ContentTypeReader"/> with the <see cref="ContentTypeReaderManager"/>
+    /// so it is resolved without reflection.
+    /// </summary>
+    /// <remarks>
+    /// Call this method once during application startup when publishing with
+    /// <c>PublishAot</c> or <c>PublishTrimmed</c>.
+    /// </remarks>
+    public static void Register() =>
+        ContentTypeReaderManager.AddTypeCreator(
+            typeof(BitmapFontContentReader).AssemblyQualifiedName,
+            () => new BitmapFontContentReader());
+
     protected override BitmapFont Read(ContentReader reader, BitmapFont existingInstance)
     {
         var textureCount = reader.ReadInt32();

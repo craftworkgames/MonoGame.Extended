@@ -8,6 +8,20 @@ namespace MonoGame.Extended.Tiled
 {
 	public class TiledMapTilesetReader : ContentTypeReader<TiledMapTileset>
 	{
+		/// <summary>
+		/// Registers this <see cref="ContentTypeReader"/> with the <see cref="ContentTypeReaderManager"/>
+		/// so it is resolved without reflection.
+		/// </summary>
+		/// <remarks>
+		/// Call this method once during application startup when publishing with
+		/// <c>PublishAot</c> or <c>PublishTrimmed</c>.
+		/// </remarks>
+		public static void Register() =>
+			ContentTypeReaderManager.AddTypeCreator(
+				typeof(TiledMapTilesetReader).AssemblyQualifiedName,
+				() => new TiledMapTilesetReader());
+
+
 		protected override TiledMapTileset Read(ContentReader reader, TiledMapTileset existingInstance)
 		{
 			if (existingInstance != null)
