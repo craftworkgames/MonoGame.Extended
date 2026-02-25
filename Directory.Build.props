@@ -9,7 +9,7 @@
     <!-- Version Configuration -->
     <PropertyGroup>
         <!-- Base version for stable releases -->
-        <VersionPrefix>5.3.3</VersionPrefix>
+        <VersionPrefix>5.4.0</VersionPrefix>
 
         <!--
             IsPreviewBuild: Set to 'true' for preview builds targeting MonoGame 3.8.5
