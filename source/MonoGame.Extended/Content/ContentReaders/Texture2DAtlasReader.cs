@@ -15,7 +15,7 @@ namespace MonoGame.Extended.Content.ContentReaders
         {
             var imageAssetName = reader.ReadString();
             var texture = reader.ContentManager.Load<Texture2D>(reader.GetRelativeAssetName(imageAssetName));
-            var atlas = new Texture2DAtlas(imageAssetName, texture);
+            var atlas = new Texture2DAtlas(reader.AssetName, texture);
 
             var regionCount = reader.ReadInt32();
 
