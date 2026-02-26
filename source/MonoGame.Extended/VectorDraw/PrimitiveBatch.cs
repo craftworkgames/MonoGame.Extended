@@ -29,6 +29,7 @@ namespace MonoGame.Extended.VectorDraw
         private readonly GraphicsDevice _device;
         private readonly VertexPositionColor[] _lineVertices;
         private readonly VertexPositionColor[] _triangleVertices;
+        private BlendState _previousBlendState;
         private bool _hasBegun;
         private bool _isDisposed;
         private int _lineVertsCount;
@@ -85,15 +86,23 @@ namespace MonoGame.Extended.VectorDraw
         /// </summary>
         /// <param name="projection">The projection matrix.</param>
         /// <param name="view">The view matrix.</param>
+        /// <param name="blendState">
+        /// The <see cref="BlendState"/> to use while drawing. Defaults to
+        /// <see cref="BlendState.NonPremultiplied"/>, which correctly blends vertex colors specified
+        /// as straight (non-premultiplied) alpha. Pass <see langword="null"/> to use the default.
+        /// </param>
         /// <exception cref="InvalidOperationException">
         /// <see cref="End"/> must be called before <see cref="Begin"/> can be called again.
         /// </exception>
-        public void Begin(ref Matrix projection, ref Matrix view)
+        public void Begin(ref Matrix projection, ref Matrix view, BlendState blendState = null)
         {
             if (_hasBegun)
             {
                 throw new InvalidOperationException("End must be called before Begin can be called again.");
             }
+
+            _previousBlendState = _device.BlendState;
+            _device.BlendState = blendState ?? BlendState.NonPremultiplied;
 
             _basicEffect.Projection = projection;
             _basicEffect.View = view;
@@ -165,6 +174,7 @@ namespace MonoGame.Extended.VectorDraw
 
             FlushTriangles();
             FlushLines();
+            _device.BlendState = _previousBlendState;
             _hasBegun = false;
         }
 
