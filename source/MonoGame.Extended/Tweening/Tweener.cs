@@ -1,18 +1,30 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tweening
 {
+    /// <summary>
+    /// Manages a collection of active tween animations and drives their updates each frame.
+    /// Create animations using <see cref="TweenTo{TTarget,TMember}(TTarget,Expression{Func{TTarget,TMember}},TMember,float,float)"/>,
+    /// then call <see cref="Update"/> once per frame. Completed animations are removed automatically.
+    /// </summary>
     public class Tweener : IDisposable
     {
+        /// <summary>
+        /// Initializes a new instance with no active animations.
+        /// </summary>
         public Tweener()
         {
         }
 
+        /// <summary>
+        /// Cancels all active animations, clears internal state, and releases resources.
+        /// </summary>
         public void Dispose()
         {
             CancelAll();
@@ -20,10 +32,28 @@ namespace MonoGame.Extended.Tweening
             _memberCache.Clear();
         }
 
+        /// <summary>
+        /// Gets the total number of tween and member allocations made since this instance was created.
+        /// Useful for tracking and debugging allocation behavior.
+        /// </summary>
         public long AllocationCount { get; private set; }
 
         private readonly List<Tween> _activeTweens = new List<Tween>();
 
+        /// <summary>
+        /// Creates and starts an animation that interpolates the specified member of
+        /// <paramref name="target"/> from its current value to <paramref name="toValue"/> over
+        /// <paramref name="duration"/> seconds. If an animation is already running on the same
+        /// member it is cancelled before the new one begins.
+        /// </summary>
+        /// <typeparam name="TTarget">The type of the target object.</typeparam>
+        /// <typeparam name="TMember">The value type of the member being animated.</typeparam>
+        /// <param name="target">The object whose member will be animated.</param>
+        /// <param name="expression">A member-access expression identifying the property or field to animate.</param>
+        /// <param name="toValue">The target value to animate towards.</param>
+        /// <param name="duration">The duration of the animation in seconds.</param>
+        /// <param name="delay">An optional delay before the animation begins, in seconds.</param>
+        /// <returns>The created <see cref="Tween{TMember}"/> for fluent configuration.</returns>
         public Tween<TMember> TweenTo<TTarget, TMember>(TTarget target, Expression<Func<TTarget, TMember>> expression, TMember toValue, float duration, float delay = 0f)
             where TTarget : class
             where TMember : struct
@@ -38,6 +68,20 @@ namespace MonoGame.Extended.Tweening
 
         }
 
+        /// <summary>
+        /// Creates and starts a tween of a specific <typeparamref name="TTween"/> type that
+        /// interpolates the specified member of <paramref name="target"/> from its current value
+        /// to <paramref name="toValue"/> over <paramref name="duration"/> seconds.
+        /// </summary>
+        /// <typeparam name="TTarget">The type of the target object.</typeparam>
+        /// <typeparam name="TMember">The value type of the member being animated.</typeparam>
+        /// <typeparam name="TTween">The concrete <see cref="Tween{TMember}"/> type to create.</typeparam>
+        /// <param name="target">The object whose member will be animated.</param>
+        /// <param name="expression">A member-access expression identifying the property or field to animate.</param>
+        /// <param name="toValue">The target value to animate towards.</param>
+        /// <param name="duration">The duration of the animation in seconds.</param>
+        /// <param name="delay">An optional delay before the animation begins, in seconds.</param>
+        /// <returns>The created <typeparamref name="TTween"/> instance for fluent configuration.</returns>
         public Tween<TMember> TweenTo<TTarget, TMember, TTween>(TTarget target, Expression<Func<TTarget, TMember>> expression, TMember toValue, float duration, float delay = 0f)
             where TTarget : class
             where TMember : struct
@@ -58,6 +102,11 @@ namespace MonoGame.Extended.Tweening
             return tween;
         }
 
+        /// <summary>
+        /// Advances all active animations by <paramref name="elapsedSeconds"/> and removes
+        /// any that have completed.
+        /// </summary>
+        /// <param name="elapsedSeconds">The time elapsed since the last update, in seconds.</param>
         public void Update(float elapsedSeconds)
         {
             for (var i = _activeTweens.Count - 1; i >= 0; i--)
@@ -71,17 +120,30 @@ namespace MonoGame.Extended.Tweening
             }
         }
 
+        /// <summary>
+        /// Finds and returns an active animation targeting the specified member on the given object,
+        /// or <c>null</c> if no matching animation exists.
+        /// </summary>
+        /// <param name="target">The object to search for.</param>
+        /// <param name="memberName">The name of the member to search for.</param>
+        /// <returns>The matching <see cref="Tween"/>, or <c>null</c> if not found.</returns>
         public Tween FindTween(object target, string memberName)
         {
             return _activeTweens.FirstOrDefault(t => t.Target == target && t.MemberName == memberName);
         }
 
+        /// <summary>
+        /// Cancels all active animations immediately without applying their final values.
+        /// </summary>
         public void CancelAll()
         {
             foreach (var tween in _activeTweens)
                 tween.Cancel();
         }
 
+        /// <summary>
+        /// Cancels all active animations, applying the final value of each before stopping.
+        /// </summary>
         public void CancelAndCompleteAll()
         {
             foreach (var tween in _activeTweens)
