@@ -7,8 +7,30 @@ using MonoGame.Extended.Shapes;
 namespace MonoGame.Extended
 {
     /// <summary>
-    ///     Sprite batch extensions for drawing primitive shapes
+    /// Provides <see cref="SpriteBatch"/> extension methods for drawing primitive shape outlines.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// These methods are intended for <b>prototyping and debug visualization only</b>. They rely on
+    /// <see cref="SpriteBatch"/> and a 1×1 white pixel texture to approximate shapes, which has the following
+    /// known limitations:
+    /// </para>
+    /// <list type="bullet">
+    ///   <item>
+    ///     <description>
+    ///     Outline joints (corners) physically overlap. With semi-transparent colors this causes visible
+    ///     double-blending artifacts at each joint.
+    ///     </description>
+    ///   </item>
+    ///   <item>
+    ///     <description>
+    ///     Filled shape drawing is not supported here. For filled shapes with correct alpha blending use
+    ///     <see cref="MonoGame.Extended.VectorDraw.PrimitiveDrawing"/> with a
+    ///     <see cref="MonoGame.Extended.VectorDraw.PrimitiveBatch"/>.
+    ///     </description>
+    ///   </item>
+    /// </list>
+    /// </remarks>
     public static class ShapeExtensions
     {
         private static Texture2D _whitePixelTexture;
