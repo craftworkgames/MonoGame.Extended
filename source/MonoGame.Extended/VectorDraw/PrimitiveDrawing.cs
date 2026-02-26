@@ -96,14 +96,19 @@ namespace MonoGame.Extended.VectorDraw
         }
 
         /// <summary>
-        /// Draws a solid (filled) rectangle.
+        /// Draws a solid (filled) rectangle with an optional outline.
         /// </summary>
         /// <param name="location">The top-left position of the rectangle in world space.</param>
         /// <param name="width">The width of the rectangle.</param>
         /// <param name="height">The height of the rectangle.</param>
-        /// <param name="color">The fill color.</param>
+        /// <param name="color">
+        /// The fill color. When <paramref name="outline"/> is <see langword="true"/>, also used for the outline.
+        /// </param>
+        /// <param name="outline">
+        /// When <see langword="true"/>, an outline is drawn over the filled rectangle. Defaults to <see langword="true"/>.
+        /// </param>
         /// <exception cref="InvalidOperationException"><see cref="PrimitiveBatch.Begin"/> must be called first.</exception>
-        public void DrawSolidRectangle(Vector2 location, float width, float height, Color color)
+        public void DrawSolidRectangle(Vector2 location, float width, float height, Color color, bool outline = true)
         {
             if (!_primitiveBatch.IsReady())
             {
@@ -118,7 +123,7 @@ namespace MonoGame.Extended.VectorDraw
                 new Vector2(0, height)
             };
 
-            DrawSolidPolygon(location, rectVerts, color);
+            DrawSolidPolygon(location, rectVerts, color, outline);
         }
 
         /// <summary>
@@ -151,27 +156,33 @@ namespace MonoGame.Extended.VectorDraw
         }
 
         /// <summary>
-        /// Draws a solid (filled) circle with an outline using <see cref="CircleSegments"/> segments.
+        /// Draws a solid (filled) circle with an optional outline using <see cref="CircleSegments"/> segments.
         /// The fill and outline use the same color.
         /// </summary>
         /// <param name="center">The center of the circle.</param>
         /// <param name="radius">The radius of the circle.</param>
         /// <param name="color">The color used for both the fill and the outline.</param>
+        /// <param name="outline">
+        /// When <see langword="true"/>, an outline is drawn over the filled circle. Defaults to <see langword="true"/>.
+        /// </param>
         /// <exception cref="InvalidOperationException"><see cref="PrimitiveBatch.Begin"/> must be called first.</exception>
-        public void DrawSolidCircle(Vector2 center, float radius, Color color)
+        public void DrawSolidCircle(Vector2 center, float radius, Color color, bool outline = true)
         {
-            DrawSolidCircle(center, radius, color, color);
+            DrawSolidCircle(center, radius, color, color, outline);
         }
 
         /// <summary>
-        /// Draws a solid (filled) circle with an outline using <see cref="CircleSegments"/> segments.
+        /// Draws a solid (filled) circle with an optional outline using <see cref="CircleSegments"/> segments.
         /// </summary>
         /// <param name="center">The center of the circle.</param>
         /// <param name="radius">The radius of the circle.</param>
         /// <param name="color">The color of the outline.</param>
         /// <param name="fillColor">The color of the fill.</param>
+        /// <param name="outline">
+        /// When <see langword="true"/>, an outline is drawn over the filled circle. Defaults to <see langword="true"/>.
+        /// </param>
         /// <exception cref="InvalidOperationException"><see cref="PrimitiveBatch.Begin"/> must be called first.</exception>
-        public void DrawSolidCircle(Vector2 center, float radius, Color color, Color fillColor)
+        public void DrawSolidCircle(Vector2 center, float radius, Color color, Color fillColor, bool outline = true)
         {
             if (!_primitiveBatch.IsReady())
             {
@@ -196,7 +207,10 @@ namespace MonoGame.Extended.VectorDraw
                 theta += increment;
             }
 
-            DrawCircle(center, radius, color);
+            if (outline)
+            {
+                DrawCircle(center, radius, color);
+            }
         }
 
         /// <summary>
