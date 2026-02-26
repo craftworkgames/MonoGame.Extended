@@ -320,6 +320,67 @@ namespace MonoGame.Extended
             DrawPolygon(spriteBatch, center, CreateEllipse(radius.X, radius.Y, sides), color, thickness, layerDepth);
         }
 
+        /// <summary>
+        /// Draws an arc outline.
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface.</param>
+        /// <param name="center">The center point of the arc.</param>
+        /// <param name="radius">The radius of the arc.</param>
+        /// <param name="startAngle">The starting angle in radians.</param>
+        /// <param name="sweepAngle">
+        /// The sweep angle in radians. Positive values sweep counter-clockwise.
+        /// Use <c>MathHelper.TwoPi</c> to draw a full circle.
+        /// </param>
+        /// <param name="sides">The number of line segments used to approximate the arc.</param>
+        /// <param name="color">The color of the arc.</param>
+        /// <param name="thickness">The thickness of the lines used.</param>
+        /// <param name="layerDepth">The depth of the layer of this shape.</param>
+        public static void DrawArc(this SpriteBatch spriteBatch, Vector2 center, float radius, float startAngle, float sweepAngle, int sides, Color color, float thickness = 1f, float layerDepth = 0)
+        {
+            Texture2D texture = GetTexture(spriteBatch);
+            Vector2[] arc = CreateArc(radius, sides, startAngle, sweepAngle);
+
+            for (int i = 0; i < arc.Length - 1; i++)
+            {
+                DrawPolygonEdge(spriteBatch, texture, center + arc[i], center + arc[i + 1], color, thickness, layerDepth);
+            }
+        }
+
+        /// <summary>
+        /// Draws an arc outline.
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface.</param>
+        /// <param name="x">The center X of the arc.</param>
+        /// <param name="y">The center Y of the arc.</param>
+        /// <param name="radius">The radius of the arc.</param>
+        /// <param name="startAngle">The starting angle in radians.</param>
+        /// <param name="sweepAngle">
+        /// The sweep angle in radians. Positive values sweep counter-clockwise.
+        /// Use <c>MathHelper.TwoPi</c> to draw a full circle.
+        /// </param>
+        /// <param name="sides">The number of line segments used to approximate the arc.</param>
+        /// <param name="color">The color of the arc.</param>
+        /// <param name="thickness">The thickness of the lines used.</param>
+        /// <param name="layerDepth">The depth of the layer of this shape.</param>
+        public static void DrawArc(this SpriteBatch spriteBatch, float x, float y, float radius, float startAngle, float sweepAngle, int sides, Color color, float thickness = 1f, float layerDepth = 0)
+        {
+            DrawArc(spriteBatch, new Vector2(x, y), radius, startAngle, sweepAngle, sides, color, thickness, layerDepth);
+        }
+
+        private static Vector2[] CreateArc(float radius, int sides, float startAngle, float sweepAngle)
+        {
+            Vector2[] points = new Vector2[sides + 1];
+            float step = sweepAngle / sides;
+            float theta = startAngle;
+
+            for (int i = 0; i <= sides; i++, theta += step)
+            {
+                points[i] = new Vector2((float)(radius * Math.Cos(theta)), (float)(radius * Math.Sin(theta)));
+            }
+
+            return points;
+        }
+
         private static Vector2[] CreateCircle(double radius, int sides)
         {
             const double max = 2.0 * Math.PI;
