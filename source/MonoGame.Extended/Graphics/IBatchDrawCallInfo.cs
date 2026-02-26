@@ -1,3 +1,5 @@
+using System;
+
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics
