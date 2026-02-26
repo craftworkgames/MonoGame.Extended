@@ -5,6 +5,7 @@ namespace MonoGame.Extended.Graphics
     /// <summary>
     ///     Defines the for a deferred draw call when batching.
     /// </summary>
+    [Obsolete("IBatchDrawCallInfo is part of an incomplete implementation that was never finished. It will be removed in a future major release.")]
     public interface IBatchDrawCallInfo<TDrawCallInfo> where TDrawCallInfo : IBatchDrawCallInfo<TDrawCallInfo>
     {
         /// <summary>

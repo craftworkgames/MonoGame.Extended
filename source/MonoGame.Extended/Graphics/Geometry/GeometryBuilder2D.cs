@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Geometry
 {
+    [Obsolete("GeometryBuilder2D is part of an incomplete implementation that was never finished. It will be removed in a future major release.")]
     public class GeometryBuilder2D : GeometryBuilder<VertexPositionColorTexture, ushort>
     {
         public GeometryBuilder2D(int maximumVerticesCount, int maximumIndicesCount)

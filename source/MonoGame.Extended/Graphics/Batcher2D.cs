@@ -17,6 +17,7 @@ namespace MonoGame.Extended.Graphics
     ///     frequently between frames such as sprites and shapes.
     /// </summary>
     /// <seealso cref="IDisposable" />
+    [Obsolete("Batcher2D is an incomplete implementation that was never finished. Use SpriteBatch with MonoGame.Extended's extension methods instead. It will be removed in a future major release.")]
     public sealed class Batcher2D : Batcher<Batcher2D.DrawCallInfo>
     {
 
