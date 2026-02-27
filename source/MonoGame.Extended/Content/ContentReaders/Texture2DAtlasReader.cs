@@ -11,6 +11,7 @@ namespace MonoGame.Extended.Content.ContentReaders
 {
     public class Texture2DAtlasReader : ContentTypeReader<Texture2DAtlas>
     {
+#if !FNA && !KNI
         /// <summary>
         /// Registers this <see cref="ContentTypeReader"/> with the <see cref="ContentTypeReaderManager"/>
         /// so it is resolved without reflection.
@@ -23,6 +24,7 @@ namespace MonoGame.Extended.Content.ContentReaders
             ContentTypeReaderManager.AddTypeCreator(
                 typeof(Texture2DAtlasReader).AssemblyQualifiedName,
                 () => new Texture2DAtlasReader());
+#endif
 
         protected override Texture2DAtlas Read(ContentReader reader, Texture2DAtlas existingInstance)
         {

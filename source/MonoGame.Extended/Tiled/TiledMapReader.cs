@@ -10,6 +10,7 @@ namespace MonoGame.Extended.Tiled
 {
     public class TiledMapReader : ContentTypeReader<TiledMap>
     {
+#if !FNA && !KNI
         /// <summary>
         /// Registers this <see cref="ContentTypeReader"/> with the <see cref="ContentTypeReaderManager"/>
         /// so it is resolved without reflection.
@@ -22,6 +23,7 @@ namespace MonoGame.Extended.Tiled
             ContentTypeReaderManager.AddTypeCreator(
                 typeof(TiledMapReader).AssemblyQualifiedName,
                 () => new TiledMapReader());
+#endif
 
         protected override TiledMap Read(ContentReader reader, TiledMap existingInstance)
         {

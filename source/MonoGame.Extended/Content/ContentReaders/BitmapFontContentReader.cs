@@ -12,6 +12,7 @@ namespace MonoGame.Extended.Content.ContentReaders;
 
 public class BitmapFontContentReader : ContentTypeReader<BitmapFont>
 {
+#if !FNA && !KNI
     /// <summary>
     /// Registers this <see cref="ContentTypeReader"/> with the <see cref="ContentTypeReaderManager"/>
     /// so it is resolved without reflection.
@@ -24,6 +25,7 @@ public class BitmapFontContentReader : ContentTypeReader<BitmapFont>
         ContentTypeReaderManager.AddTypeCreator(
             typeof(BitmapFontContentReader).AssemblyQualifiedName,
             () => new BitmapFontContentReader());
+#endif
 
     protected override BitmapFont Read(ContentReader reader, BitmapFont existingInstance)
     {

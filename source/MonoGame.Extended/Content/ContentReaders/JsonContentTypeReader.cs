@@ -7,6 +7,7 @@ namespace MonoGame.Extended.Content.ContentReaders
 {
     public class JsonContentTypeReader<T> : ContentTypeReader<T>
     {
+#if !FNA && !KNI
         /// <summary>
         /// Registers <see cref="JsonContentTypeReader{T}"/> for the type <typeparamref name="T"/> with the
         /// <see cref="ContentTypeReaderManager"/> so it is resolved without reflection.
@@ -22,6 +23,7 @@ namespace MonoGame.Extended.Content.ContentReaders
             ContentTypeReaderManager.AddTypeCreator(
                 typeof(JsonContentTypeReader<T>).AssemblyQualifiedName,
                 () => new JsonContentTypeReader<T>());
+#endif
 
         protected override T Read(ContentReader reader, T existingInstance)
         {

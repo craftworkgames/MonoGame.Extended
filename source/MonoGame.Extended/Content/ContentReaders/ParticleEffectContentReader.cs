@@ -7,6 +7,7 @@ namespace MonoGame.Extended.Content.ContentReaders;
 
 public sealed class ParticleEffectContentReader : ContentTypeReader<ParticleEffect>
 {
+#if !FNA && !KNI
     /// <summary>
     /// Registers this <see cref="ContentTypeReader"/> with the <see cref="ContentTypeReaderManager"/>
     /// so it is resolved without reflection.
@@ -19,6 +20,7 @@ public sealed class ParticleEffectContentReader : ContentTypeReader<ParticleEffe
         ContentTypeReaderManager.AddTypeCreator(
             typeof(ParticleEffectContentReader).AssemblyQualifiedName,
             () => new ParticleEffectContentReader());
+#endif
 
     protected override ParticleEffect Read(ContentReader input, ParticleEffect existingInstance)
     {

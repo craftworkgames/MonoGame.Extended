@@ -1,13 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
-using System;
 
 namespace MonoGame.Extended.Tiled
 {
 	public class TiledMapTilesetReader : ContentTypeReader<TiledMapTileset>
 	{
+#if !FNA && !KNI
 		/// <summary>
 		/// Registers this <see cref="ContentTypeReader"/> with the <see cref="ContentTypeReaderManager"/>
 		/// so it is resolved without reflection.
@@ -20,6 +21,7 @@ namespace MonoGame.Extended.Tiled
 			ContentTypeReaderManager.AddTypeCreator(
 				typeof(TiledMapTilesetReader).AssemblyQualifiedName,
 				() => new TiledMapTilesetReader());
+#endif
 
 
 		protected override TiledMapTileset Read(ContentReader reader, TiledMapTileset existingInstance)
