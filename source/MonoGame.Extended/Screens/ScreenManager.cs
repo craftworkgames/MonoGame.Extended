@@ -78,12 +78,14 @@ public class ScreenManager : SimpleDrawableGameComponent
         if (_activeScreen != null)
         {
             _activeScreen.IsActive = false;
+            _activeScreen.OnDeactivated();
         }
 
         screen.ScreenManager = this;
         screen.IsActive = true;
         screen.Initialize();
         screen.LoadContent();
+        screen.OnActivated();
 
         _screens.Push(screen);
         _activeScreen = screen;
@@ -128,6 +130,7 @@ public class ScreenManager : SimpleDrawableGameComponent
         }
 
         screen.IsActive = false;
+        screen.OnDeactivated();
         screen.UnloadContent();
         screen.Dispose();
 
@@ -136,6 +139,7 @@ public class ScreenManager : SimpleDrawableGameComponent
         if (_screens.TryPeek(out _activeScreen))
         {
             _activeScreen.IsActive = true;
+            _activeScreen.OnActivated();
         }
     }
 
@@ -226,7 +230,12 @@ public class ScreenManager : SimpleDrawableGameComponent
     {
         while (_screens.TryPop(out Screen screen))
         {
+            bool wasActive = screen.IsActive;
             screen.IsActive = false;
+            if (wasActive)
+            {
+                screen.OnDeactivated();
+            }
             screen.UnloadContent();
             screen.Dispose();
         }

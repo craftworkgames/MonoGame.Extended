@@ -316,6 +316,84 @@ public sealed class ScreenManagerTests
 
     #endregion
 
+    #region OnActivated / OnDeactivated Tests
+
+    [Fact]
+    public void ShowScreen_FirstScreen_CallsOnActivated()
+    {
+        ScreenManager manager = new ScreenManager();
+        TestScreen screen = new TestScreen("Screen1");
+
+        manager.ShowScreen(screen);
+
+        Assert.Equal(1, screen.ActivatedCallCount);
+        Assert.Equal(0, screen.DeactivatedCallCount);
+    }
+
+    [Fact]
+    public void ShowScreen_SecondScreen_CallsOnDeactivatedOnFirstAndOnActivatedOnSecond()
+    {
+        ScreenManager manager = new ScreenManager();
+        TestScreen screen1 = new TestScreen("Screen1");
+        TestScreen screen2 = new TestScreen("Screen2");
+
+        manager.ShowScreen(screen1);
+        manager.ShowScreen(screen2);
+
+        Assert.Equal(1, screen1.ActivatedCallCount);
+        Assert.Equal(1, screen1.DeactivatedCallCount);
+        Assert.Equal(1, screen2.ActivatedCallCount);
+        Assert.Equal(0, screen2.DeactivatedCallCount);
+    }
+
+    [Fact]
+    public void CloseScreen_CallsOnDeactivatedOnClosedScreen_AndOnActivatedOnRevealed()
+    {
+        ScreenManager manager = new ScreenManager();
+        TestScreen screen1 = new TestScreen("Screen1");
+        TestScreen screen2 = new TestScreen("Screen2");
+        manager.ShowScreen(screen1);
+        manager.ShowScreen(screen2);
+
+        manager.CloseScreen();
+
+        Assert.Equal(1, screen2.DeactivatedCallCount);
+        Assert.Equal(2, screen1.ActivatedCallCount); // once on show, once on re-activation
+    }
+
+    [Fact]
+    public void CloseScreen_LastScreen_CallsOnDeactivatedButNotOnActivated()
+    {
+        ScreenManager manager = new ScreenManager();
+        TestScreen screen = new TestScreen("Screen1");
+        manager.ShowScreen(screen);
+
+        manager.CloseScreen();
+
+        Assert.Equal(1, screen.DeactivatedCallCount);
+        Assert.Equal(1, screen.ActivatedCallCount);
+    }
+
+    [Fact]
+    public void ClearScreens_CallsOnDeactivatedOnlyOnActiveScreen()
+    {
+        ScreenManager manager = new ScreenManager();
+        TestScreen screen1 = new TestScreen("Screen1");
+        TestScreen screen2 = new TestScreen("Screen2");
+        TestScreen screen3 = new TestScreen("Screen3");
+        manager.ShowScreen(screen1);
+        manager.ShowScreen(screen2);
+        manager.ShowScreen(screen3);
+
+        manager.ClearScreens();
+
+        Assert.Equal(0, screen1.DeactivatedCallCount);
+        Assert.Equal(0, screen2.DeactivatedCallCount);
+        Assert.Equal(1, screen3.DeactivatedCallCount);
+    }
+
+    #endregion
+
     #region Stack Ordering Tests
 
     [Fact]
