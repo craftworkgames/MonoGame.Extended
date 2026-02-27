@@ -17,10 +17,12 @@ namespace MonoGame.Extended.Triangulation
 	/// in Debug mode. This is quite useful for debugging purposes, but can slow the process down
 	/// quite a bit. For optimal performance, build the library in Release mode.
 	/// 
-	/// The triangulation is also not optimized for garbage sensitive processing. The point of the
+	/// The triangulation is not designed for garbage-sensitive processing. The point of the
 	/// library is a robust, yet simple, system for triangulating 2D shapes. It is intended to be
-	/// used as part of your content pipeline or at load-time. It is not something you want to be
-	/// using each and every frame unless you really don't care about garbage.
+	/// used as part of your content pipeline or at load-time. Per-call allocations have been
+	/// significantly reduced (see issue #930), but the underlying linked-list structure still
+	/// allocates one heap node per vertex. It is not something you want to be using each and
+	/// every frame unless you really don't care about garbage.
 	/// </summary>
 	public static class Triangulator
     {
