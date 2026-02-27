@@ -336,27 +336,17 @@ namespace MonoGame.Extended.Triangulation
         /// <returns>The calculated winding order of the polygon.</returns>
         public static WindingOrder DetermineWindingOrder(Vector2[] vertices)
         {
-            int clockWiseCount = 0;
-            int counterClockWiseCount = 0;
-            Vector2 p1 = vertices[0];
+            float sum = 0;
+            Vector2 v1 = vertices[vertices.Length - 1];
 
-            for (int i = 1; i < vertices.Length; i++)
+            for (int i = 0; i < vertices.Length; i++)
             {
-                Vector2 p2 = vertices[i];
-                Vector2 p3 = vertices[(i + 1) % vertices.Length];
-
-                Vector2 e1 = p1 - p2;
-                Vector2 e2 = p3 - p2;
-
-                if (e1.X * e2.Y - e1.Y * e2.X >= 0)
-                    clockWiseCount++;
-                else
-                    counterClockWiseCount++;
-
-                p1 = p2;
+                Vector2 v2 = vertices[i];
+                sum += (v2.X - v1.X) * (v2.Y + v1.Y);
+                v1 = v2;
             }
 
-            return (clockWiseCount > counterClockWiseCount)
+            return sum > 0
                 ? WindingOrder.Clockwise
                 : WindingOrder.CounterClockwise;
         }
