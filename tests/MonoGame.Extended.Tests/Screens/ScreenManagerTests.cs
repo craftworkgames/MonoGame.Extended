@@ -6,7 +6,6 @@ using MonoGame.Extended.Screens;
 
 namespace MonoGame.Extended.Tests.Screens;
 
-[Collection("GraphicsTest")]
 public sealed class ScreenManagerTests
 {
     #region ShowScreen Tests
