@@ -30,6 +30,7 @@ namespace MonoGame.Extended.Triangulation
         static readonly IndexableCyclicalLinkedList<Vertex> earVertices = new IndexableCyclicalLinkedList<Vertex>();
         static readonly CyclicalList<Vertex> convexVertices = new CyclicalList<Vertex>();
         static readonly CyclicalList<Vertex> reflexVertices = new CyclicalList<Vertex>();
+        static readonly List<Triangle> _trianglesBuffer = new List<Triangle>();
 
         #endregion
 
@@ -52,13 +53,14 @@ namespace MonoGame.Extended.Triangulation
         {
             Log("\nBeginning triangulation...");
 
-            List<Triangle> triangles = new List<Triangle>();
+            var triangles = _trianglesBuffer;
+            triangles.Clear();
 
             //make sure we have our vertices wound properly
             if (DetermineWindingOrder(inputVertices) == WindingOrder.Clockwise)
                 outputVertices = ReverseWindingOrder(inputVertices);
             else
-                outputVertices = (Vector2[])inputVertices.Clone();
+                outputVertices = inputVertices;
 
             //clear all of the lists
             polygonVertices.Clear();
