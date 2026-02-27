@@ -385,10 +385,16 @@ public sealed class ScreenManagerTests
         manager.ShowScreen(screen2);
         manager.ShowScreen(screen3);
 
+        // Snapshot counts before clear — inactive screens already received
+        // OnDeactivated when a new screen was pushed on top of them.
+        int screen1CountBefore = screen1.DeactivatedCallCount;
+        int screen2CountBefore = screen2.DeactivatedCallCount;
+
         manager.ClearScreens();
 
-        Assert.Equal(0, screen1.DeactivatedCallCount);
-        Assert.Equal(0, screen2.DeactivatedCallCount);
+        // ClearScreens must not trigger additional OnDeactivated on already-inactive screens.
+        Assert.Equal(screen1CountBefore, screen1.DeactivatedCallCount);
+        Assert.Equal(screen2CountBefore, screen2.DeactivatedCallCount);
         Assert.Equal(1, screen3.DeactivatedCallCount);
     }
 
