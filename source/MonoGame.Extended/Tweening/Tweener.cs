@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 using Microsoft.Xna.Framework;
 
@@ -34,9 +35,28 @@ namespace MonoGame.Extended.Tweening
 
         /// <summary>
         /// Gets the total number of tween and member allocations made since this instance was created.
-        /// Useful for tracking and debugging allocation behavior.
         /// </summary>
+        /// <remarks>
+        /// This counter only increments and never decrements, making it unreliable for tracking how
+        /// many tweens are currently active. Use <see cref="ActiveTweens"/> and its <c>Length</c>
+        /// property instead.
+        /// </remarks>
+        [Obsolete("AllocationCount is a broken cumulative counter that never decrements. Use ActiveTweens.Length to get the number of currently active tweens. This property will be removed in the next major version.")]
         public long AllocationCount { get; private set; }
+
+        /// <summary>
+        /// Returns a read-only view of the currently active tweens as a <see cref="ReadOnlySpan{T}"/>.
+        /// This is a zero-allocation snapshot: it does not copy the list and cannot be used to modify
+        /// tween state. Use <c>ActiveTweens.Length</c> to check how many tweens are running, or
+        /// iterate with a <c>foreach</c> to inspect them.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if (tweener.ActiveTweens.Length == 0)
+        ///     OnAllTweensComplete();
+        /// </code>
+        /// </example>
+        public ReadOnlySpan<Tween> ActiveTweens => CollectionsMarshal.AsSpan(_activeTweens);
 
         private readonly List<Tween> _activeTweens = new List<Tween>();
 
@@ -94,7 +114,9 @@ namespace MonoGame.Extended.Tweening
 
             activeTween?.Cancel();
 
+#pragma warning disable CS0618
             AllocationCount++;
+#pragma warning restore CS0618
             var tween = (TTween)Activator.CreateInstance(typeof(TTween),
                 BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null,
                 new object[]{target, duration, delay, member, toValue}, null);
@@ -176,7 +198,9 @@ namespace MonoGame.Extended.Tweening
         private TweenMember<T> CreateMember<T>(object target, string memberName)
             where T : struct
         {
+#pragma warning disable CS0618
             AllocationCount++;
+#pragma warning restore CS0618
 
             var type = target.GetType();
             var property = type.GetTypeInfo().GetProperty(memberName);
