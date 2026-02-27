@@ -144,6 +144,7 @@ namespace MonoGame.Extended.Tweening
         private int _remainingRepeats;
         private Action<Tween> _onBegin;
         private Action<Tween> _onEnd;
+        private Action<Tween> _onUpdate;
 
         /// <summary>
         /// Sets the easing function applied to the animation progress each frame.
@@ -157,6 +158,8 @@ namespace MonoGame.Extended.Tweening
 
         /// <summary>
         /// Registers a callback to invoke when the animation begins its first cycle.
+        /// Cast the <see cref="Tween"/> argument to <see cref="Tween{T}"/> and read
+        /// <c>Member.Value</c> to retrieve the typed current value.
         /// </summary>
         /// <param name="action">The callback to invoke, receiving this tween as its argument.</param>
         /// <returns>This tween instance, for fluent chaining.</returns>
@@ -164,10 +167,22 @@ namespace MonoGame.Extended.Tweening
 
         /// <summary>
         /// Registers a callback to invoke when the animation completes each cycle.
+        /// Cast the <see cref="Tween"/> argument to <see cref="Tween{T}"/> and read
+        /// <c>Member.Value</c> to retrieve the typed current value.
         /// </summary>
         /// <param name="action">The callback to invoke, receiving this tween as its argument.</param>
         /// <returns>This tween instance, for fluent chaining.</returns>
         public Tween OnEnd(Action<Tween> action) { _onEnd = action; return this; }
+
+        /// <summary>
+        /// Registers a callback to invoke after each update step, once the interpolated value
+        /// has been applied to the target member.
+        /// Cast the <see cref="Tween"/> argument to <see cref="Tween{T}"/> and read
+        /// <c>Member.Value</c> to retrieve the typed current value.
+        /// </summary>
+        /// <param name="action">The callback to invoke, receiving this tween as its argument.</param>
+        /// <returns>This tween instance, for fluent chaining.</returns>
+        public Tween OnUpdate(Action<Tween> action) { _onUpdate = action; return this; }
 
         /// <summary>
         /// Pauses the animation. Has no effect if already paused.
@@ -324,6 +339,7 @@ namespace MonoGame.Extended.Tweening
             }
 
             Interpolate(n);
+            _onUpdate?.Invoke(this);
 
             if (IsComplete)
                 _onEnd?.Invoke(this);

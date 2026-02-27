@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Xunit;
 
@@ -45,6 +46,26 @@ public class TweenerTests
         // Advance past the duration so the tween is removed on Update.
         tweener.Update(2f);
         Assert.Equal(0, tweener.ActiveTweens.Length);
+    }
+
+    [Fact]
+    public void OnUpdate_FiresAfterEachUpdateWithInterpolatedValue()
+    {
+        var tweener = new Tweener();
+        var obj = new FloatHandler();
+        var callCount = 0;
+        var recordedValues = new List<float>();
+
+        tweener.TweenTo(obj, x => x.Value, 10f, 1f)
+            .OnUpdate(_ => { callCount++; recordedValues.Add(obj.Value); });
+
+        tweener.Update(0.5f);
+        Assert.Equal(1, callCount);
+        Assert.Equal(5f, recordedValues[0]);
+
+        tweener.Update(0.5f);
+        Assert.Equal(2, callCount);
+        Assert.Equal(10f, recordedValues[1]);
     }
 
     [Fact]
