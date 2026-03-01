@@ -32,7 +32,7 @@
     <PropertyGroup>
         <Authors>MonoGame Extended and contributors</Authors>
         <PackageProjectUrl>https://github.com/MonoGame-Extended/MonoGame-Extended</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/MonGame-Extended/MonoGame-Extended</RepositoryUrl>
+        <RepositoryUrl>https://github.com/MonoGame-Extended/MonoGame-Extended</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <RepositoryBranch>develop</RepositoryBranch>
         <NeutralLanguage>en</NeutralLanguage>
