@@ -20,5 +20,6 @@
 
     <ItemGroup>
         <None Update="BitmapFonts\files\**\*" CopyToOutputDirectory="PreserveNewest" />
+        <None Include="TestData\**\*" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 </Project>

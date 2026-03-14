@@ -7,6 +7,7 @@ using MonoGame.Extended.Graphics;
 
 namespace MonoGame.Extended.Tiled
 {
+    [Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
     public interface ITileset
     {
         int ActualWidth { get; }
@@ -19,6 +20,7 @@ namespace MonoGame.Extended.Tiled
         Texture2DRegion GetRegion(int column, int row);
     }
 
+    [Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
     public class TiledMapTileset : ITileset
     {
         public TiledMapTileset(Texture2D texture, string type, int tileWidth, int tileHeight, int tileCount, int spacing, int margin, int columns)

@@ -11,6 +11,7 @@ namespace MonoGame.Extended.Graphics
     /// </summary>
     /// <typeparam name="TDrawCallInfo">The type of the information for a draw call.</typeparam>
     /// <seealso cref="IDisposable" />
+    [Obsolete("Batcher is part of an incomplete implementation that was never finished. It will be removed in a future major release.")]
     public abstract class Batcher<TDrawCallInfo> : IDisposable
         where TDrawCallInfo : struct, IBatchDrawCallInfo<TDrawCallInfo>, IComparable<TDrawCallInfo>
     {

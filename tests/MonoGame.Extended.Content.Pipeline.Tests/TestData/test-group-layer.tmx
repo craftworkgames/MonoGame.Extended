@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="2" height="2" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="test-tileset" tilewidth="32" tileheight="32" spacing="2" margin="2">
+  <image source="test-tileset.png" width="104" height="104"/>
+ </tileset>
+ <group id="1" name="World">
+  <group id="2" name="Background">
+   <layer id="3" name="Sky" width="2" height="2">
+    <data encoding="csv">1,2,3,4</data>
+   </layer>
+   <layer id="4" name="Mountains" width="2" height="2">
+    <data encoding="csv">1,2,3,4</data>
+   </layer>
+  </group>
+  <layer id="5" name="Ground" width="2" height="2">
+   <data encoding="csv">1,2,3,4</data>
+  </layer>
+ </group>
+ <layer id="6" name="HUD" width="2" height="2">
+  <data encoding="csv">1,2,3,4</data>
+ </layer>
+</map>

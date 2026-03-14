@@ -90,6 +90,28 @@ public abstract class Screen : IDisposable
     public virtual void UnloadContent() { }
 
     /// <summary>
+    /// Called every time this screen becomes the active (top) screen.
+    /// </summary>
+    /// <remarks>
+    /// Unlike <see cref="Initialize"/>, this method is called every time the screen becomes active, including when
+    /// it is returned to after being cached in the screen stack.  Use this for logic that should run on every
+    /// activation, such as refreshing UI state or clearing transient data.
+    /// The base implementation does nothing.
+    /// </remarks>
+    public virtual void OnActivated() { }
+
+    /// <summary>
+    /// Called every time this screen is no longer the active (top) screen.
+    /// </summary>
+    /// <remarks>
+    /// This is called both when another screen is pushed on top of this screen and when this screen is closed or
+    /// removed from the screen stack.  Use this for logic that should run on every deactivation, such as pausing
+    /// audio or clearing UI state.
+    /// The base implementation does nothing.
+    /// </remarks>
+    public virtual void OnDeactivated() { }
+
+    /// <summary>
     /// Updates the screen's logic.
     /// </summary>
     /// <param name="gameTime">Provides a snapshot of timing values.</param>

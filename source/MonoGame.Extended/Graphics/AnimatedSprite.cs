@@ -74,8 +74,14 @@ public class AnimatedSprite : Sprite
     /// <inheritdoc />
     public void Update(GameTime gameTime)
     {
+        Update(gameTime.ElapsedGameTime);
+    }
+
+    /// <inheritdoc />
+    public void Update(TimeSpan elapsedTime)
+    {
         int index = Controller.CurrentFrame;
-        Controller.Update(gameTime);
+        Controller.Update(elapsedTime);
 
         //  If the current frame changed during the update, change the texture region
         if (index != Controller.CurrentFrame)

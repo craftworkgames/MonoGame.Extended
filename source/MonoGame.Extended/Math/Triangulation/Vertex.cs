@@ -8,7 +8,7 @@ namespace MonoGame.Extended.Triangulation
     /// <summary>
     /// MIT Licensed: https://github.com/nickgravelyn/Triangulator
     /// </summary>
-    struct Vertex
+    struct Vertex : IEquatable<Vertex>
     {
         public readonly Vector2 Position;
         public readonly int Index;

@@ -189,7 +189,12 @@ public class AnimationController : IAnimationController
     /// <inheritdoc />
     public void Update(GameTime gameTime)
     {
-        TimeSpan elapsedTime = gameTime.ElapsedGameTime;
+        Update(gameTime.ElapsedGameTime);
+    }
+
+    /// <inheritdoc />
+    public void Update(TimeSpan elapsedTime)
+    {
         TimeSpan remainingTime = TimeSpan.Zero;
 
         if (!IsAnimating || IsPaused)
