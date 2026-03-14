@@ -1,0 +1,139 @@
+{
+  "name": "TestProject",
+  "ogmoVersion": "3.4.0",
+  "levelPaths": ["."],
+  "backgroundColor": "#282c34ff",
+  "gridColor": "#3c4049cc",
+  "anglesRadians": true,
+  "directoryDepth": 5,
+  "layerGridDefaultSize": {"x": 16, "y": 16},
+  "levelDefaultSize": {"x": 320, "y": 240},
+  "levelMinSize": {"x": 128, "y": 128},
+  "levelMaxSize": {"x": 4096, "y": 4096},
+  "levelValues": [],
+  "defaultExportMode": ".json",
+  "compactExport": false,
+  "externalScript": "",
+  "playCommand": "",
+  "entityTags": [],
+  "layers": [
+    {
+      "definition": "tile",
+      "name": "Ground",
+      "gridSize": {"x": 16, "y": 16},
+      "exportID": "00904539",
+      "exportMode": 0,
+      "arrayMode": 0,
+      "defaultTileset": "TestTileset"
+    },
+    {
+      "definition": "grid",
+      "name": "Collision",
+      "gridSize": {"x": 16, "y": 16},
+      "exportID": "00917769",
+      "arrayMode": 0,
+      "legend": {"0": "#00000000", "1": "#000000ff", "2": "#ff0000ff"}
+    },
+    {
+      "definition": "entity",
+      "name": "Entities",
+      "gridSize": {"x": 16, "y": 16},
+      "exportID": "00931515",
+      "requiredTags": [],
+      "excludedTags": []
+    },
+    {
+      "definition": "decal",
+      "name": "Decals",
+      "gridSize": {"x": 16, "y": 16},
+      "exportID": "00938735",
+      "folder": "decals",
+      "includeImageSequence": true,
+      "scaleable": true,
+      "rotatable": true,
+      "values": []
+    }
+  ],
+  "entities": [
+    {
+      "exportID": "00943236",
+      "name": "Player",
+      "limit": -1,
+      "size": {"x": 16, "y": 16},
+      "origin": {"x": 0, "y": 0},
+      "originAnchored": true,
+      "shape": {
+        "label": "Rectangle",
+        "points": [
+          {"x": -1, "y": -1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": 1}
+        ]
+      },
+      "color": "#00ff00ff",
+      "tileX": false,
+      "tileY": false,
+      "tileSize": {"x": 16, "y": 16},
+      "resizeableX": false,
+      "resizeableY": false,
+      "rotatable": true,
+      "rotationDegrees": 360,
+      "canFlipX": true,
+      "canFlipY": true,
+      "canSetColor": false,
+      "hasNodes": false,
+      "nodeLimit": 0,
+      "nodeDisplay": 0,
+      "nodeGhost": true,
+      "tags": [],
+      "values": [
+        {"name": "health", "definition": "Integer", "display": 2, "defaults": 100, "bounded": true, "min": 0, "max": 200},
+        {"name": "speed", "definition": "Float", "display": 2, "defaults": 5.5, "bounded": true, "min": 0, "max": 10}
+      ]
+    },
+    {
+      "exportID": "00991027",
+      "name": "Enemy",
+      "limit": -1,
+      "size": {"x": 16, "y": 16},
+      "origin": {"x": 0, "y": 0},
+      "originAnchored": true,
+      "shape": {
+        "label": "Rectangle",
+        "points": [
+          {"x": -1, "y": -1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": 1}
+        ]
+      },
+      "color": "#ff0000ff",
+      "tileX": false,
+      "tileY": false,
+      "tileSize": {"x": 16, "y": 16},
+      "resizeableX": false,
+      "resizeableY": false,
+      "rotatable": false,
+      "rotationDegrees": 360,
+      "canFlipX": false,
+      "canFlipY": false,
+      "canSetColor": false,
+      "hasNodes": false,
+      "nodeLimit": 0,
+      "nodeDisplay": 0,
+      "nodeGhost": true,
+      "tags": [],
+      "values": [
+        {"name": "enemyType", "definition": "String", "display": 2, "defaults": "basic", "maxLength": 50, "trimWhitespace": false}
+      ]
+    }
+  ],
+  "tilesets": [
+    {"label": "TestTileset", "path": "test-tileset.png", "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAOxJREFUeJzt27Ftw0AQBdE9QUWoBufK1YebkVWMoQZUhWLVcy7iBw8w/+TLGwwuWYJce2ZPwLon0zNzj46fvVc0f4qm/wENoAU0DaAFNA2gBTQNoAU0DaAFNA2gBTQNoAU057XDfTxbx8O3ETMrPP/wN6ABtICmAbSApgG0gKYBtICmAbSApgG0gKYBtIBm7We4kV/e0fjP7RXNT/h9wuFvQANoAU0DaAFNA2gBTQNoAU0DaAFNA2gBTQNoAc359/EVPeD7cw0V0h8OMg5/AxpAC2gaQAtoGkALaBpAC2gaQAtoGkALaBpAC2j+AF3QEzaz4+u5AAAAAElFTkSuQmCC", "tileWidth": 16, "tileHeight": 16, "tileSeparationX": 0, "tileSeparationY": 0, "tileMarginX": 0, "tileMarginY": 0}
+  ]
+}

@@ -144,7 +144,10 @@ namespace MonoGame.Extended.Collisions
                 throw new DuplicateNameException(name);
 
             if (name != DEFAULT_LAYER_NAME)
+            {
+                AddCollisionBetweenLayer(layer, layer);
                 AddCollisionBetweenLayer(_layers[DEFAULT_LAYER_NAME], layer);
+            }
         }
 
         /// <summary>

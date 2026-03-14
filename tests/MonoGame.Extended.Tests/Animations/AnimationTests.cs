@@ -208,4 +208,45 @@ public class AnimationTests
 
         Assert.True(_animationController.IsDisposed);
     }
+
+    [Fact]
+    public void Update_WithTimeSpan_ShouldAdvanceFrame()
+    {
+        _animationController.Play();
+        _animationController.Update(TimeSpan.FromSeconds(1.1));
+
+        Assert.Equal(1, _animationController.CurrentFrame);
+    }
+
+    [Fact]
+    public void Update_WithGameTime_ShouldProduceSameResultAsTimeSpan()
+    {
+        var frames = new IAnimationFrame[]
+        {
+            new TestAnimationFrame { FrameIndex = 0, Duration = TimeSpan.FromSeconds(1) },
+            new TestAnimationFrame { FrameIndex = 1, Duration = TimeSpan.FromSeconds(1) }
+        };
+        var animation = new TestAnimation(frames)
+        {
+            FrameCount = frames.Length,
+            IsLooping = false,
+            IsReversed = false,
+            IsPingPong = false
+        };
+
+        var controller1 = new AnimationController(animation);
+        var controller2 = new AnimationController(animation);
+
+        controller1.Play();
+        controller2.Play();
+
+        var elapsed = TimeSpan.FromSeconds(0.5);
+        var gameTime = new GameTime(TimeSpan.Zero, elapsed);
+
+        controller1.Update(gameTime);
+        controller2.Update(elapsed);
+
+        Assert.Equal(controller1.CurrentFrame, controller2.CurrentFrame);
+        Assert.Equal(controller1.CurrentFrameTimeRemaining, controller2.CurrentFrameTimeRemaining);
+    }
 }

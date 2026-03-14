@@ -1,3 +1,4 @@
+#if !KNI && !FNA
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -1027,3 +1028,4 @@ public sealed class OrthographicCameraTests
     }
 
 }
+#endif

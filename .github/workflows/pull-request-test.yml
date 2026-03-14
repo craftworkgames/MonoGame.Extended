@@ -59,3 +59,7 @@ jobs:
         if: steps.detect.outputs.is_preview == 'true'
         run: |
           xvfb-run -a -s "-screen 0 1024x768x24" dotnet test MonoGame.Extended.sln --nologo --verbosity minimal --configuration Release -p:IsPreviewBuild=true
+
+      - name: Test KNI.Extended
+        run: |
+          dotnet test KNI.Extended.sln --nologo --verbosity minimal --configuration Release

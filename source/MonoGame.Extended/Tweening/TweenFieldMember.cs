@@ -6,11 +6,21 @@ using Microsoft.VisualBasic;
 
 namespace MonoGame.Extended.Tweening
 {
+    /// <summary>
+    /// Provides access to a public field on a target object using expression-tree compiled
+    /// delegates for efficient get and set operations.
+    /// </summary>
+    /// <typeparam name="T">The value type of the field being accessed.</typeparam>
     public sealed class TweenFieldMember<T> : TweenMember<T>
         where T : struct
     {
         private readonly FieldInfo _fieldInfo;
 
+        /// <summary>
+        /// Initializes a new instance targeting the specified field on the given object.
+        /// </summary>
+        /// <param name="target">The object that owns the field.</param>
+        /// <param name="fieldInfo">Reflection metadata for the field to access.</param>
         public TweenFieldMember(object target, FieldInfo fieldInfo)
             : base(target, CompileGetMethod(fieldInfo), CompileSetMethod(fieldInfo))
         {
@@ -40,7 +50,14 @@ namespace MonoGame.Extended.Tweening
             return Expression.Lambda<Action<object, T>>(assignation, targetParam, valueParam).Compile();
         }
 
+        /// <summary>
+        /// Gets the declared type of the field.
+        /// </summary>
         public override Type Type => _fieldInfo.FieldType;
+
+        /// <summary>
+        /// Gets the name of the field.
+        /// </summary>
         public override string Name => _fieldInfo.Name;
     }
 }

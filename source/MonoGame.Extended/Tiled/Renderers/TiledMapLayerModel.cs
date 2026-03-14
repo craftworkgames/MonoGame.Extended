@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Tiled.Renderers
 {
+    [Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
     public abstract class TiledMapLayerModel : IDisposable
     {
         protected TiledMapLayerModel(GraphicsDevice graphicsDevice, Texture2D texture, VertexPositionTexture[] vertices, ushort[] indices)

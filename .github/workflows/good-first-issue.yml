@@ -1,0 +1,43 @@
+name: Add comment on good first issue
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  add-comment:
+    if: github.event.label.name == 'Good first issue'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - name: Add comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh issue comment "$ISSUE_NUMBER" --repo "$REPO" --body "$(cat << 'EOF'
+          <!-- good-first-issue-comment -->
+
+          ### Good First Issue
+
+          This issue is suited to new contributes because it does not require
+          understanding of MonoGame.Extended internals.
+
+          This is a non-urgent task intended for human contributors to learn
+          how to contribute; therefore please do not try to automate a solution
+          using AI.
+
+          To get started, please see our [Contributing Guide](https://github.com/MonoGame-Extended/Monogame-Extended/blob/develop/CONTRIBUTING.md)
+
+          **We do not assign issues**.
+          Check the *Development* section in the sidebar for linked pull
+          requests (PRs).  If there are none, feel free to start working on it.
+          If there is an open PR, please collaborate by reviewing it rather than
+          opening a competing PR
+
+          If something is unclear, please reach out on the [MonoGame.Extended Discord](https://discord.gg/FvZ8Z7EzPJ).
+          EOF
+          )"

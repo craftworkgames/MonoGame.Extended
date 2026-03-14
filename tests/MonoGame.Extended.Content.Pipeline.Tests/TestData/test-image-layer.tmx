@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" orientation="orthogonal" renderorder="right-down" width="4" height="4" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="1">
+ <tileset firstgid="1" name="test-tileset" tilewidth="32" tileheight="32" spacing="2" margin="2">
+  <image source="test-tileset.png" width="104" height="104"/>
+ </tileset>
+ <imagelayer id="1" name="Background" repeatx="1" repeaty="0">
+  <image source="test-tileset.png" width="104" height="104"/>
+ </imagelayer>
+ <layer id="2" name="Tiles" width="4" height="4">
+  <data encoding="csv">
+1,2,3,1,
+2,3,1,2,
+3,1,2,3,
+1,2,3,1
+</data>
+ </layer>
+ <imagelayer id="3" name="Overlay" repeatx="0" repeaty="0">
+  <image source="test-tileset.png" width="104" height="104"/>
+ </imagelayer>
+</map>

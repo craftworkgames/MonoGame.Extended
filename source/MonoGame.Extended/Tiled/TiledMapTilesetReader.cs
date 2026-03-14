@@ -1,13 +1,30 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
-using System;
 
 namespace MonoGame.Extended.Tiled
 {
+	[Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
 	public class TiledMapTilesetReader : ContentTypeReader<TiledMapTileset>
 	{
+#if !FNA && !KNI
+		/// <summary>
+		/// Registers this <see cref="ContentTypeReader"/> with the <see cref="ContentTypeReaderManager"/>
+		/// so it is resolved without reflection.
+		/// </summary>
+		/// <remarks>
+		/// Call this method once during application startup when publishing with
+		/// <c>PublishAot</c> or <c>PublishTrimmed</c>.
+		/// </remarks>
+		public static void Register() =>
+			ContentTypeReaderManager.AddTypeCreator(
+				typeof(TiledMapTilesetReader).AssemblyQualifiedName,
+				() => new TiledMapTilesetReader());
+#endif
+
+
 		protected override TiledMapTileset Read(ContentReader reader, TiledMapTileset existingInstance)
 		{
 			if (existingInstance != null)

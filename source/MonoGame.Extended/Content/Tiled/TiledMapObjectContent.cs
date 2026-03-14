@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using MonoGame.Extended.Content.Tiled;
@@ -13,8 +14,9 @@ namespace MonoGame.Extended.Content.Tiled;
 // object. The value in the object file overrides any value specified in the
 // template. All values have to be able to store a null value so we know if the
 // XML parser actually found a value for the property and not just a default
-// value. Default values are used when the object and any templates don't 
+// value. Default values are used when the object and any templates don't
 // specify a value.
+[Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
 public class TiledMapObjectContent
 {
     // TODO: HACK These shouldn't be public

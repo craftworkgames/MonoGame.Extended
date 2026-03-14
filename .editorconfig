@@ -461,3 +461,12 @@ dotnet_naming_style.s_camelcase.capitalization = camel_case
 ###
 ################################################################################
 [*.{cs,vb}]
+
+### Use collection initializers or expressions (IDE0028)
+### https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0028
+dotnet_diagnostic.IDE0028.severity = none
+
+### Simplify new expression (IDE0090)
+### https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0090
+dotnet_diagnostic.IDE0090.severity = none
+

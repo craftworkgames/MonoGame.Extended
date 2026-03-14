@@ -6,6 +6,7 @@ using MonoGame.Extended.Content.Tiled;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
+    [Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
     [ContentImporter(".tsx", DefaultProcessor = "TiledMapTilesetProcessor", DisplayName = "Tiled Map Tileset Importer - MonoGame.Extended")]
     public class TiledMapTilesetImporter : ContentImporter<TiledMapTilesetContentItem>
     {
