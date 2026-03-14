@@ -12,28 +12,6 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
-    <!-- Define compilation constant for MonoGame 3.8.5+ preview builds -->
-    <PropertyGroup Condition="'$(IsPreviewBuild)' == 'true'">
-        <DefineConstants>$(DefineConstants);MONOGAME_385_OR_NEWER</DefineConstants>
-    </PropertyGroup>
-
-    <!--
-        MonoGame Version Selection
-        - Stable build (IsPreviewBuild=false): use MonoGame 3.8.4
-        - Preview Build (IsPreviewBuild=true): Use MonoGame 3.8.5-preview.#
-
-        MonogameVersion can be overridden via command line:
-        dotnet build /p:MonoGameVersion=3.8.5-preview.3
-    -->
-    <PropertyGroup>
-        <MonogameStableVersion>3.8.4.1</MonogameStableVersion>
-        <MonoGamePreviewVersion Condition="'$(MonoGamePreviewVersion)' == ''">3.8.5-preview.3</MonoGamePreviewVersion>
-
-        <!-- Select version based on build type -->
-        <MonoGameVersion Condition="'$(MonoGameVersion)' == '' AND '$(IsPreviewBuild)' == 'true'">$(MonoGamePreviewVersion)</MonoGameVersion>
-        <MonoGameVersion Condition="'$(MonoGameVersion)' == '' AND '$(IsPreviewBuild)' != 'true'">$(MonoGameStableVersion)</MonoGameVersion>
-    </PropertyGroup>
-
     <!-- MonoGame Framework References (Standard) -->
     <ItemGroup
         Condition="!$(DefineConstants.Contains('FNA')) AND !$(DefineConstants.Contains('KNI'))">

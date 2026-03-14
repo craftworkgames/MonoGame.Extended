@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="MonoGame.Framework.Content.Pipeline" Version="3.8.4" />
+        <PackageReference Include="MonoGame.Framework.Content.Pipeline" Version="$(MonoGameVersion)" />
     </ItemGroup>
 
     <ItemGroup>
