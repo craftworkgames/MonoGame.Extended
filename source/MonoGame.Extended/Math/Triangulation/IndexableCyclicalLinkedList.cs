@@ -52,8 +52,9 @@ namespace MonoGame.Extended.Triangulation
         /// <returns>The index of the item if found; -1 if the item is not found.</returns>
         public int IndexOf(T item)
         {
+            var comparer = EqualityComparer<T>.Default;
             for (int i = 0; i < Count; i++)
-                if (this[i].Value.Equals(item))
+                if (comparer.Equals(this[i].Value, item))
                     return i;
 
             return -1;

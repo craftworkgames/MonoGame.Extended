@@ -7,7 +7,7 @@
         <ArtifactsPath>$(SolutionDirectory).artifacts/source</ArtifactsPath>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <IsPackable>true</IsPackable>
-        <NoWarn>NU1701</NoWarn>
+        <NoWarn>NU1701;CS0067;CS0168;CS0414;CS0618;CS0169;CS1591;CS1723;CS8632;CA2200;CS1574;CS1572;CS1573</NoWarn>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 

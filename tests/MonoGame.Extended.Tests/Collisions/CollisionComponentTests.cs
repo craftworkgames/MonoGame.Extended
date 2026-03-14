@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Collisions.QuadTree;
 using Xunit;
 
 namespace MonoGame.Extended.Collisions.Tests
@@ -388,14 +389,57 @@ namespace MonoGame.Extended.Collisions.Tests
                 Assert.Throws<UndefinedLayerException>(act);
             }
 
+            [Fact]
+            public void Actors_In_Same_Named_Layer_Collide()
+            {
+                var namedLayer = new Layer(new QuadTreeSpace(new RectangleF(Vector2.Zero, new Vector2(10, 10))));
+                _collisionComponent.Add("testLayer", namedLayer);
+
+                var bounds1 = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
+                var bounds2 = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
+                var actor1 = new CollisionIndicatingActor(bounds1, "testLayer");
+                var actor2 = new CollisionIndicatingActor(bounds2, "testLayer");
+                _collisionComponent.Insert(actor1);
+                _collisionComponent.Insert(actor2);
+
+                _collisionComponent.Update(_gameTime);
+
+                Assert.True(actor1.IsColliding);
+                Assert.True(actor2.IsColliding);
+            }
+
+            [Fact]
+            public void Actors_In_Named_Layer_Do_Not_Collide_With_Actors_In_Different_Named_Layer_By_Default()
+            {
+                var layerA = new Layer(new QuadTreeSpace(new RectangleF(Vector2.Zero, new Vector2(10, 10))));
+                var layerB = new Layer(new QuadTreeSpace(new RectangleF(Vector2.Zero, new Vector2(10, 10))));
+                _collisionComponent.Add("layerA", layerA);
+                _collisionComponent.Add("layerB", layerB);
+
+                var bounds1 = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
+                var bounds2 = new RectangleF(new Vector2(0, 0), new SizeF(1, 1));
+                var actor1 = new CollisionIndicatingActor(bounds1, "layerA");
+                var actor2 = new CollisionIndicatingActor(bounds2, "layerB");
+                _collisionComponent.Insert(actor1);
+                _collisionComponent.Insert(actor2);
+
+                _collisionComponent.Update(_gameTime);
+
+                Assert.False(actor1.IsColliding);
+                Assert.False(actor2.IsColliding);
+            }
+
             private class CollisionIndicatingActor : ICollisionActor
             {
                 private RectangleF _bounds;
 
-                public CollisionIndicatingActor(RectangleF bounds)
+                public CollisionIndicatingActor(RectangleF bounds, string layerName = null)
                 {
                     _bounds = bounds;
+                    LayerName = layerName;
                 }
+
+                public string LayerName { get; }
 
                 public IShapeF Bounds => _bounds;
 

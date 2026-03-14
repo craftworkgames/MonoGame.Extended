@@ -1,0 +1,163 @@
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace MonoGame.Extended.Tilemaps;
+
+/// <summary>
+/// Represents a collection of tiles from a single texture atlas.
+/// </summary>
+public class TilemapTileset
+{
+    private readonly Dictionary<int, TilemapTileData> _tileData = new Dictionary<int, TilemapTileData>();
+    private readonly List<TilemapTileData> _animatedTileData = new List<TilemapTileData>();
+
+    /// <summary>
+    /// Gets the name of the tileset.
+    /// </summary>
+    public string Name { get; }
+
+    /// <summary>
+    /// Gets the width of each tile in pixels.
+    /// </summary>
+    public int TileWidth { get; }
+
+    /// <summary>
+    /// Gets the height of each tile in pixels.
+    /// </summary>
+    public int TileHeight { get; }
+
+    /// <summary>
+    /// Gets the total number of tiles in the tileset.
+    /// </summary>
+    public int TileCount { get; }
+
+    /// <summary>
+    /// Gets the number of columns in the tileset.
+    /// </summary>
+    public int Columns { get; }
+
+    /// <summary>
+    /// Gets the spacing between tiles in pixels.
+    /// </summary>
+    public int Spacing { get; }
+
+    /// <summary>
+    /// Gets the margin around the tileset in pixels.
+    /// </summary>
+    public int Margin { get; }
+
+    /// <summary>
+    /// Gets the first global tile ID for tiles in this tileset.
+    /// </summary>
+    /// <remarks>
+    /// This value determines the range of global IDs this tileset covers.
+    /// Tiles in this tileset have IDs from FirstGlobalId to FirstGlobalId + TileCount - 1.
+    /// </remarks>
+    public int FirstGlobalId { get; set; }
+
+    /// <summary>
+    /// Gets the texture atlas.
+    /// </summary>
+    public Texture2D Texture { get; }
+
+    /// <summary>
+    /// Gets or sets the offset applied when rendering tiles from this tileset.
+    /// </summary>
+    public Vector2 TileOffset { get; set; }
+
+    /// <summary>
+    /// Gets the custom properties of the tileset.
+    /// </summary>
+    public TilemapProperties Properties { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TilemapTileset"/> class.
+    /// </summary>
+    /// <param name="name">The name of the tileset.</param>
+    /// <param name="texture">The texture atlas.</param>
+    /// <param name="tileWidth">The width of each tile in pixels.</param>
+    /// <param name="tileHeight">The height of each tile in pixels.</param>
+    /// <param name="tileCount">The total number of tiles.</param>
+    /// <param name="columns">The number of columns in the tileset.</param>
+    /// <param name="spacing">The spacing between tiles in pixels.</param>
+    /// <param name="margin">The margin around the tileset in pixels.</param>
+    public TilemapTileset(string name, Texture2D texture, int tileWidth, int tileHeight, int tileCount, int columns, int spacing = 0, int margin = 0)
+    {
+        Name = name;
+        Texture = texture;
+        TileWidth = tileWidth;
+        TileHeight = tileHeight;
+        TileCount = tileCount;
+        Columns = columns;
+        Spacing = spacing;
+        Margin = margin;
+        Properties = new TilemapProperties();
+    }
+
+    /// <summary>
+    /// Adds tile data for a specified local tile ID.
+    /// </summary>
+    /// <param name="tileData">The tile data to add.</param>
+    public void AddTileData(TilemapTileData tileData)
+    {
+        _tileData[tileData.LocalId] = tileData;
+        if (tileData.Animation != null && tileData.Animation.Frames.Length > 0)
+        {
+            _animatedTileData.Add(tileData);
+        }
+    }
+
+    /// <summary>
+    /// Gets the tile data for a specific local tile ID.
+    /// </summary>
+    /// <param name="localId">The local tile ID within this tileset.</param>
+    /// <returns>The tile data, or <see langword="null"/> if not found.</returns>
+    public TilemapTileData GetTileData(int localId)
+    {
+        if (_tileData.TryGetValue(localId, out TilemapTileData data))
+        {
+            return data;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Determines whether this tileset contains the specified global tile ID.
+    /// </summary>
+    /// <param name="globalTileId">The global tile ID to check.</param>
+    /// <returns>
+    /// <see langword="true"/> if the ID is within this tileset's range; otherwise, <see langword="false"/>.
+    /// </returns>
+    public bool ContainsGlobalId(int globalTileId)
+    {
+        return globalTileId >= FirstGlobalId &&
+               globalTileId < FirstGlobalId + TileCount;
+    }
+
+    /// <summary>
+    /// Returns all tile data entries that have an animation defined.
+    /// </summary>
+    /// <returns>A cached list of animated tile data entries. Empty if no animated tiles exist.</returns>
+    public IReadOnlyList<TilemapTileData> GetAnimatedTiles() => _animatedTileData;
+
+    /// <summary>
+    /// Gets the source rectangle for a tile within the texture atlas.
+    /// </summary>
+    /// <param name="localId">The local tile ID within this tileset.</param>
+    /// <returns>The source rectangle for the tile.</returns>
+    /// <remarks>
+    /// This method accounts for spacing and margin when calculating the tile position.
+    /// </remarks>
+    public Rectangle GetTileRegion(int localId)
+    {
+        int column = localId % Columns;
+        int row = localId / Columns;
+
+        int x = Margin + column * (TileWidth + Spacing);
+        int y = Margin + row * (TileHeight + Spacing);
+
+        return new Rectangle(x, y, TileWidth, TileHeight);
+    }
+}

@@ -9,6 +9,8 @@ public class TestScreen : Screen
     public bool DisposeCalled { get; private set; }
     public int UpdateCallCount { get; private set; }
     public int DrawCallCount { get; private set; }
+    public int ActivatedCallCount { get; private set; }
+    public int DeactivatedCallCount { get; private set; }
     public GameTime LastUpdateGameTime { get; private set; }
     public GameTime LastDrawGameTime { get; private set; }
 
@@ -27,6 +29,16 @@ public class TestScreen : Screen
     {
         DisposeCalled = true;
         base.Dispose();
+    }
+
+    public override void OnActivated()
+    {
+        ActivatedCallCount++;
+    }
+
+    public override void OnDeactivated()
+    {
+        DeactivatedCallCount++;
     }
 
     public override void Update(GameTime gameTime)
@@ -48,6 +60,8 @@ public class TestScreen : Screen
         DisposeCalled = false;
         UpdateCallCount = 0;
         DrawCallCount = 0;
+        ActivatedCallCount = 0;
+        DeactivatedCallCount = 0;
         LastUpdateGameTime = null;
         LastDrawGameTime = null;
         OnUpdate = null;

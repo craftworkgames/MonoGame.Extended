@@ -4,6 +4,7 @@ using System;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
+	[Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
 	[ContentProcessor(DisplayName = "Tiled Map Tileset Processor - MonoGame.Extended")]
 	public class TiledMapTilesetProcessor : ContentProcessor<TiledMapTilesetContentItem, TiledMapTilesetContentItem>
 	{

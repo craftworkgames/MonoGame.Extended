@@ -8,7 +8,7 @@
         <ProjectCategory>tests</ProjectCategory>
         <GenerateDocumentationFile>false</GenerateDocumentationFile>
         <IsPackable>false</IsPackable>
-        <NoWarn>CA1707</NoWarn>
+        <NoWarn>NU1701;CA1707;CS0067;CS0168;CS0414;CS0618;CS0169;CS1591;CS1723;CS8632;CA2200;CS1574;CS1572;CS1573;xUnit2013;xUnit2000;CS0693</NoWarn>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 

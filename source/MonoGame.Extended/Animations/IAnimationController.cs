@@ -141,6 +141,12 @@ public interface IAnimationController : IDisposable
     void Update(GameTime gameTime);
 
     /// <summary>
+    /// Updates the animation.
+    /// </summary>
+    /// <param name="elapsedTime">The elapsed time since the last update.</param>
+    void Update(TimeSpan elapsedTime);
+
+    /// <summary>
     /// Stops the animation.
     /// </summary>
     /// <returns>

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Graphics.Geometry
 {
+    [Obsolete("GeometryBuilder is part of an incomplete implementation that was never finished. It will be removed in a future major release.")]
     public abstract class GeometryBuilder<TVertexType, TIndexType>
         where TVertexType : struct, IVertexType
         where TIndexType : struct

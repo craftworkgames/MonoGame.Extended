@@ -1,5 +1,8 @@
-﻿namespace MonoGame.Extended.Tiled
+﻿using System;
+
+namespace MonoGame.Extended.Tiled
 {
+    [Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
     public struct TiledMapTile
     {
         public readonly ushort X;

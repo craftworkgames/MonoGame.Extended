@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tiled
 {
+    [Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
     public class TiledMapTileLayer : TiledMapLayer
     {
         public TiledMapTileLayer(string name, string type, int width, int height, int tileWidth, int tileHeight, Vector2? offset = null,

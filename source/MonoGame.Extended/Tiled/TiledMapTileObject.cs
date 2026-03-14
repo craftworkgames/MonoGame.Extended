@@ -1,7 +1,9 @@
+using System;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tiled
 {
+    [Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
     public sealed class TiledMapTileObject : TiledMapObject
     {
         public TiledMapTileObject(int identifier, string name, TiledMapTileset tileset, TiledMapTilesetTile tile,

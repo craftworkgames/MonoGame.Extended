@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.Tiled.Renderers
 {
+    [Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
     public class TiledMapModelBuilder
     {
         private readonly GraphicsDevice _graphicsDevice;

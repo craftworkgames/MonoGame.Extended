@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended.Tiled
 {
+    [Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
     public sealed class TiledMap
     {
         private readonly List<TiledMapImageLayer> _imageLayers = new List<TiledMapImageLayer>();

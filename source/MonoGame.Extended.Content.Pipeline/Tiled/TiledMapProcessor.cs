@@ -10,6 +10,7 @@ using MonoGame.Extended.Tiled;
 
 namespace MonoGame.Extended.Content.Pipeline.Tiled
 {
+    [Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
     public static class TiledMapContentHelper
     {
         public static void Process(TiledMapObjectContent obj, ContentProcessorContext context)
@@ -75,6 +76,7 @@ namespace MonoGame.Extended.Content.Pipeline.Tiled
     }
 
 
+    [Obsolete("The MonoGame.Extended.Tiled namespace is deprecated. Use MonoGame.Extended.Tilemaps instead. This will be removed in the next major SemVer release.")]
     [ContentProcessor(DisplayName = "Tiled Map Processor - MonoGame.Extended")]
     public class TiledMapProcessor : ContentProcessor<TiledMapContentItem, TiledMapContentItem>
     {

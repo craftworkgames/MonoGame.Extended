@@ -17,10 +17,12 @@ namespace MonoGame.Extended.Triangulation
 	/// in Debug mode. This is quite useful for debugging purposes, but can slow the process down
 	/// quite a bit. For optimal performance, build the library in Release mode.
 	/// 
-	/// The triangulation is also not optimized for garbage sensitive processing. The point of the
+	/// The triangulation is not designed for garbage-sensitive processing. The point of the
 	/// library is a robust, yet simple, system for triangulating 2D shapes. It is intended to be
-	/// used as part of your content pipeline or at load-time. It is not something you want to be
-	/// using each and every frame unless you really don't care about garbage.
+	/// used as part of your content pipeline or at load-time. Per-call allocations have been
+	/// significantly reduced (see issue #930), but the underlying linked-list structure still
+	/// allocates one heap node per vertex. It is not something you want to be using each and
+	/// every frame unless you really don't care about garbage.
 	/// </summary>
 	public static class Triangulator
     {
@@ -30,6 +32,7 @@ namespace MonoGame.Extended.Triangulation
         static readonly IndexableCyclicalLinkedList<Vertex> earVertices = new IndexableCyclicalLinkedList<Vertex>();
         static readonly CyclicalList<Vertex> convexVertices = new CyclicalList<Vertex>();
         static readonly CyclicalList<Vertex> reflexVertices = new CyclicalList<Vertex>();
+        static readonly List<Triangle> _trianglesBuffer = new List<Triangle>();
 
         #endregion
 
@@ -52,13 +55,14 @@ namespace MonoGame.Extended.Triangulation
         {
             Log("\nBeginning triangulation...");
 
-            List<Triangle> triangles = new List<Triangle>();
+            var triangles = _trianglesBuffer;
+            triangles.Clear();
 
             //make sure we have our vertices wound properly
             if (DetermineWindingOrder(inputVertices) == WindingOrder.Clockwise)
                 outputVertices = ReverseWindingOrder(inputVertices);
             else
-                outputVertices = (Vector2[])inputVertices.Clone();
+                outputVertices = inputVertices;
 
             //clear all of the lists
             polygonVertices.Clear();
@@ -336,27 +340,17 @@ namespace MonoGame.Extended.Triangulation
         /// <returns>The calculated winding order of the polygon.</returns>
         public static WindingOrder DetermineWindingOrder(Vector2[] vertices)
         {
-            int clockWiseCount = 0;
-            int counterClockWiseCount = 0;
-            Vector2 p1 = vertices[0];
+            float sum = 0;
+            Vector2 v1 = vertices[vertices.Length - 1];
 
-            for (int i = 1; i < vertices.Length; i++)
+            for (int i = 0; i < vertices.Length; i++)
             {
-                Vector2 p2 = vertices[i];
-                Vector2 p3 = vertices[(i + 1) % vertices.Length];
-
-                Vector2 e1 = p1 - p2;
-                Vector2 e2 = p3 - p2;
-
-                if (e1.X * e2.Y - e1.Y * e2.X >= 0)
-                    clockWiseCount++;
-                else
-                    counterClockWiseCount++;
-
-                p1 = p2;
+                Vector2 v2 = vertices[i];
+                sum += (v2.X - v1.X) * (v2.Y + v1.Y);
+                v1 = v2;
             }
 
-            return (clockWiseCount > counterClockWiseCount)
+            return sum > 0
                 ? WindingOrder.Clockwise
                 : WindingOrder.CounterClockwise;
         }
