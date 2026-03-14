@@ -8,25 +8,9 @@
 
     <!-- Version Configuration -->
     <PropertyGroup>
-        <!-- Base version for stable releases -->
-        <VersionPrefix>5.4.0</VersionPrefix>
-
-        <!--
-            IsPreviewBuild: Set to 'true' for preview builds targeting MonoGame 3.8.5
-            Can be overridden via command line: dotnet build /p:IsPreviewBuild=true
-        -->
-        <IsPreviewBuild Condition="'$(IsPreviewBuild)' == ''">false</IsPreviewBuild>
-
-        <!--
-            PreviewLabel: The preview label to append (e.g., "preview.1", "alpha.1")
-            Only used when IsPreviewBuild=true
-        -->
-        <PreviewLabel Condition="'$(PreviewLabel)' == ''">preview.1</PreviewLabel>
-
-        <!-- Build the final version string -->
-        <VersionSuffix Condition="'$(IsPreviewBuild)' == 'true'">$(PreviewLabel)</VersionSuffix>
-        <Version Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</Version>
-        <Version Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</Version>
+        <Version>5.4.0</Version>
+        <MonoGameVersion>3.8.4.1</MonoGameVersion>
+        <KNIVersion>4.0.9001</KNIVersion>
     </PropertyGroup>
 
     <PropertyGroup>

@@ -11,26 +11,8 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
-    <!--
-        MonoGame Version Selection
-        - Stable build (IsPreviewBuild=false): use MonoGame 3.8.4
-        - Preview Build (IsPreviewBuild=true): Use MonoGame 3.8.5-preview.#
-
-        MonogameVersion can be overridden via command line:
-        dotnet build /p:MonoGameVersion=3.8.5-preview.3
-    -->
-    <PropertyGroup>
-        <MonogameStableVersion>3.8.4.1</MonogameStableVersion>
-        <MonoGamePreviewVersion Condition="'$(MonoGamePreviewVersion)' == ''">3.8.5-preview.3</MonoGamePreviewVersion>
-
-        <!-- Select version based on build type -->
-        <MonoGameVersion Condition="'$(MonoGameVersion)' == '' AND '$(IsPreviewBuild)' == 'true'">$(MonoGamePreviewVersion)</MonoGameVersion>
-        <MonoGameVersion Condition="'$(MonoGameVersion)' == '' AND '$(IsPreviewBuild)' != 'true'">$(MonoGameStableVersion)</MonoGameVersion>
-    </PropertyGroup>
-
     <!-- MonoGame Framework References (Standard) -->
-    <ItemGroup
-        Condition="!$(DefineConstants.Contains('FNA')) AND !$(DefineConstants.Contains('KNI'))">
+    <ItemGroup Condition="!$(DefineConstants.Contains('FNA')) AND !$(DefineConstants.Contains('KNI'))">
         <PackageReference Include="MonoGame.Framework.DesktopGL"
                           Version="$(MonoGameVersion)"
                           PrivateAssets="All" />
@@ -44,17 +26,17 @@
     <!-- KNI Framework References -->
     <ItemGroup Condition="$(DefineConstants.Contains('KNI'))">
         <PackageReference Include="nkast.Xna.Framework"
-                          Version="4.0.9001" />
+                          Version="$(KNIVersion)" />
         <PackageReference Include="nkast.Xna.Framework.Content"
-                          Version="4.0.9001" />
+                          Version="$(KNIVersion)" />
         <PackageReference Include="nkast.Xna.Framework.Graphics"
-                          Version="4.0.9001" />
+                          Version="$(KNIVersion)" />
         <PackageReference Include="nkast.Xna.Framework.Audio"
-                          Version="4.0.9001" />
+                          Version="$(KNIVersion)" />
         <PackageReference Include="nkast.Xna.Framework.Input"
-                          Version="4.0.9001" />
+                          Version="$(KNIVersion)" />
         <PackageReference Include="nkast.Xna.Framework.Game"
-                          Version="4.0.9001" />
+                          Version="$(KNIVersion)" />
     </ItemGroup>
 
 </Project>
