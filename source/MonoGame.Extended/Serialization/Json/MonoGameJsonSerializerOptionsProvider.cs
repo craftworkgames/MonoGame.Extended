@@ -15,12 +15,6 @@ public static class MonoGameJsonSerializerOptionsProvider
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
-        // TODO: 6.0
-        // Remove RangeJsonConverter usage
-
-        options.Converters.Add(new RangeJsonConverter<int>());
-        options.Converters.Add(new RangeJsonConverter<float>());
-        options.Converters.Add(new RangeJsonConverter<HslColor>());
         options.Converters.Add(new IntervalJsonConverter<int>());
         options.Converters.Add(new IntervalJsonConverter<float>());
         options.Converters.Add(new IntervalJsonConverter<HslColor>());

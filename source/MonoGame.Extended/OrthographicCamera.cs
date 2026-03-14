@@ -15,9 +15,6 @@ namespace MonoGame.Extended
         private float _maximumZoom = float.MaxValue;
         private float _minimumZoom;
         private float _zoom;
-        private float _pitch;
-        private float _maximumPitch = float.MaxValue;
-        private float _minimumPitch;
         private Vector2 _position;
         private Rectangle _worldBounds;
         private bool _clampZoomToWorldBounds;
@@ -122,40 +119,6 @@ namespace MonoGame.Extended
         }
 
         /// <inheritdoc/>
-        [Obsolete("Pitch will be removed in the next major version")]
-        public override float Pitch
-        {
-            get => _pitch;
-            set => _pitch = MathHelper.Clamp(value, _minimumPitch, _maximumPitch);
-        }
-
-        /// <inheritdoc/>
-        [Obsolete("Pitch will be removed in the next major version")]
-        public override float MinimumPitch
-        {
-            get => _minimumPitch;
-            set
-            {
-                ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
-                _minimumPitch = value;
-                _pitch = MathHelper.Clamp(_pitch, _minimumPitch, _maximumPitch);
-            }
-        }
-
-        /// <inheritdoc/>
-        [Obsolete("Pitch will be removed in the next major version")]
-        public override float MaximumPitch
-        {
-            get => _maximumPitch;
-            set
-            {
-                ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
-                _maximumPitch = value;
-                _pitch = MathHelper.Clamp(_pitch, _minimumPitch, _maximumPitch);
-            }
-        }
-
-        /// <inheritdoc/>
         public override RectangleF BoundingRectangle
         {
             get
@@ -243,7 +206,6 @@ namespace MonoGame.Extended
 
             Rotation = 0;
             Zoom = 1;
-            Pitch = 1;
             Origin = new Vector2(viewportAdapter.VirtualWidth / 2f, viewportAdapter.VirtualHeight / 2f);
             Position = Vector2.Zero;
         }
@@ -308,20 +270,6 @@ namespace MonoGame.Extended
             {
                 Position += (zoomCenter - Origin - Position) * ((Zoom - previousZoom) / Zoom);
             }
-        }
-
-        /// <inheritdoc/>
-        [Obsolete("Pitch will be removed in the next major version")]
-        public override void PitchUp(float deltaPitch)
-        {
-            Pitch += deltaPitch;
-        }
-
-        /// <inheritdoc/>
-        [Obsolete("Pitch will be removed in the next major version")]
-        public override void PitchDown(float deltaPitch)
-        {
-            Pitch -= deltaPitch;
         }
 
         /// <inheritdoc/>
@@ -406,7 +354,7 @@ namespace MonoGame.Extended
                 Matrix.CreateTranslation(new Vector3(-Position * parallaxFactor, 0.0f)) *
                 Matrix.CreateTranslation(new Vector3(-Origin, 0.0f)) *
                 Matrix.CreateRotationZ(Rotation) *
-                Matrix.CreateScale(Zoom, Zoom * Pitch, 1) *
+                Matrix.CreateScale(Zoom, Zoom, 1) *
                 Matrix.CreateTranslation(new Vector3(Origin, 0.0f));
         }
 
@@ -479,7 +427,7 @@ namespace MonoGame.Extended
         /// <remarks>
         /// When world bounds are enabled, the camera position and zoom are automatically clamped to
         /// ensure the visible area does not extend beyond the specified bounds. This only applies
-        /// when the camera has no rotation and the pitch is 1.0.
+        /// when the camera has no rotation.
         /// </remarks>
         public void EnableWorldBounds(Rectangle worldBounds)
         {
@@ -553,7 +501,7 @@ namespace MonoGame.Extended
                 return false;
             }
 
-            if (MathHelper.Distance(Rotation, 0.0f) >= 0.001f || MathHelper.Distance(Pitch, 1.0f) >= 0.001f)
+            if (MathHelper.Distance(Rotation, 0.0f) >= 0.001f)
             {
                 return false;
             }

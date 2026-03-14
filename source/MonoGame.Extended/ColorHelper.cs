@@ -183,49 +183,5 @@ namespace MonoGame.Extended
             return result;
         }
 
-        [Obsolete("Use HslColor.ToRgb instead.  This will be removed in the next major SemVer release.")]
-        //http://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
-        public static Color FromHsl(float hue, float saturation, float lightness)
-        {
-            var hsl = new Vector4(hue, saturation, lightness, 1);
-            var color = new Vector4(0, 0, 0, hsl.W);
-
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (hsl.Y == 0.0f)
-                color.X = color.Y = color.Z = hsl.Z;
-            else
-            {
-                var q = hsl.Z < 0.5f ? hsl.Z * (1.0f + hsl.Y) : hsl.Z + hsl.Y - hsl.Z * hsl.Y;
-                var p = 2.0f * hsl.Z - q;
-
-                color.X = HueToRgb(p, q, hsl.X + 1.0f / 3.0f);
-                color.Y = HueToRgb(p, q, hsl.X);
-                color.Z = HueToRgb(p, q, hsl.X - 1.0f / 3.0f);
-            }
-
-            return new Color(color);
-        }
-
-        [Obsolete("This will be removed in the next major SemVer release")]
-        private static float HueToRgb(float p, float q, float t)
-        {
-            if (t < 0.0f) t += 1.0f;
-            if (t > 1.0f) t -= 1.0f;
-            if (t < 1.0f / 6.0f) return p + (q - p) * 6.0f * t;
-            if (t < 1.0f / 2.0f) return q;
-            if (t < 2.0f / 3.0f) return p + (q - p) * (2.0f / 3.0f - t) * 6.0f;
-            return p;
-        }
-
-        [Obsolete("Use ColorExtensions.ToHex instead.  This will be removed in the next major SemVer release.")]
-        public static string ToHex(Color color)
-        {
-            var rx = $"{color.R:x2}";
-            var gx = $"{color.G:x2}";
-            var bx = $"{color.B:x2}";
-            var ax = $"{color.A:x2}";
-            return $"#{rx}{gx}{bx}{ax}";
-        }
-
     }
 }

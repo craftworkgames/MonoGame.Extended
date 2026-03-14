@@ -27,7 +27,7 @@ public class HslColorJsonConverter : JsonConverter<HslColor>
     /// </exception>
     public override void Write(Utf8JsonWriter writer, HslColor value, JsonSerializerOptions options)
     {
-        var color = ((HslColor)value).ToRgb();
+        var color = HslColor.ToRgb(value);
         _colorConverter.Write(writer, color, options);
     }
 }

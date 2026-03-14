@@ -5,12 +5,6 @@ namespace MonoGame.Extended
 {
     public static class RandomExtensions
     {
-        [Obsolete("Use Next(Random, Interval<int>).  Range<T> will be removed in 6.0")]
-        public static int Next(this Random random, Range<int> range)
-        {
-            return random.Next(range.Min, range.Max);
-        }
-
         public static int Next(this Random random, Interval<int> interval)
         {
             return random.Next(interval.Min, interval.Max);
@@ -29,12 +23,6 @@ namespace MonoGame.Extended
         public static float NextSingle(this Random random)
         {
             return (float)random.NextDouble();
-        }
-
-        [Obsolete("Use Next(Random, Interval<float>).  Range<T> will be removed in 6.0")]
-        public static float NextSingle(this Random random, Range<float> range)
-        {
-            return NextSingle(random, range.Min, range.Max);
         }
 
         public static float NextSingle(this Random random, Interval<float> interval)

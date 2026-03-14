@@ -326,26 +326,6 @@ namespace MonoGame.Extended
             return result;
         }
 
-        [Obsolete("RectangleF.Intersection() will be removed in the next update. Use Intersect() instead.")]
-        public static void Intersection(ref RectangleF first,
-            ref RectangleF second, out RectangleF result)
-        {
-            Intersect(ref first, ref second, out result);
-        }
-
-        [Obsolete("RectangleF.Intersection() will be removed in the next update. Use Intersect() instead.")]
-        public static RectangleF Intersection(RectangleF first,
-            RectangleF second)
-        {
-            return Intersect(first, second);
-        }
-
-        [Obsolete("RectangleF.Intersection() will be removed in the next update. Use Intersect() instead.")]
-        public RectangleF Intersection(RectangleF rectangle)
-        {
-            return Intersect(rectangle);
-        }
-
         /// <summary>
         /// Computes the <see cref="RectangleF"/> that represents the intersection of two <see cref="RectangleF"/>
         /// structures.

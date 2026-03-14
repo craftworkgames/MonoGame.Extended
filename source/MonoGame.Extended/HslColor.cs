@@ -66,16 +66,6 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
-        /// Copies the values of this <see cref="HslColor"/> struct to a new instance.
-        /// </summary>
-        /// <param name="destination">When this method returns, contains a copy of this <see cref="HslColor"/>.</param>
-        [Obsolete("Use CopyToRef instead.  This will be removed in the next major SemVer release.")]
-        public readonly void CopyTo(out HslColor destination)
-        {
-            destination = new HslColor(H, S, L);
-        }
-
-        /// <summary>
         /// Copies the value of this <see cref="HslColor"/> struct to an existing destination.
         /// </summary>
         /// <param name="destination">A reference to the destination <see cref="HslColor"/> struct where values will be copied to.</param>
@@ -97,14 +87,6 @@ namespace MonoGame.Extended
         /// <param name="h">When this method returns, contains the hue component value of this <see cref="HslColor"/>.</param>
         /// <param name="s">When this method returns, contains the saturation component value of this <see cref="HslColor"/>.</param>
         /// <param name="l">When this method returns, contains the lightness component value of this <see cref="HslColor"/>.</param>
-        [Obsolete("Will be removed in next major SemVer release.  Use Deconstruct instead.")]
-        public readonly void Destructure(out float h, out float s, out float l)
-        {
-            h = H;
-            s = S;
-            l = L;
-        }
-
         /// <summary>
         /// Deconstructs this <see cref="HslColor"/>  into its hue, saturation, and lightness component values.
         /// </summary>
@@ -146,17 +128,6 @@ namespace MonoGame.Extended
         {
             ArgumentNullException.ThrowIfNull(map);
             return map(H, S, L);
-        }
-
-        /// <summary>
-        /// Implicitly converts a string to an <see cref="HslColor"/>.
-        /// </summary>
-        /// <param name="value">The string to convert.</param>
-        /// <returns>The <see cref="HslColor"/> represented by the string.</returns>
-        [Obsolete("Use HslColor.Parse instead to make string parsing explicit and improve code readability.  This method will be removed in the next major SemVer release.")]
-        public static implicit operator HslColor(string value)
-        {
-            return Parse(value);
         }
 
         /// <inheritdoc/>

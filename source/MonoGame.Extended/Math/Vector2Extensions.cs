@@ -94,15 +94,13 @@ namespace MonoGame.Extended
 
 #if FNA || KNI
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-        [Obsolete("Use native Vector2.Rotate provided by MonoGame instead.  This will be removed in a future release.", false)]
-#endif
         public static Vector2 Rotate(this Vector2 value, float radians)
         {
             var cos = (float) Math.Cos(radians);
             var sin = (float) Math.Sin(radians);
             return new Vector2(value.X*cos - value.Y*sin, value.X*sin + value.Y*cos);
         }
+#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 NormalizedCopy(this Vector2 value)

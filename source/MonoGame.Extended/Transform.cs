@@ -229,7 +229,14 @@ namespace MonoGame.Extended
         /// <value>
         ///     The world position.
         /// </value>
-        public Vector2 WorldPosition => WorldMatrix.Translation;
+        public Vector2 WorldPosition
+        {
+            get
+            {
+                WorldMatrix.Decompose(out Vector2 translation, out _, out _);
+                return translation;
+            }
+        }
 
         /// <summary>
         ///     Gets the world scale.
@@ -237,7 +244,14 @@ namespace MonoGame.Extended
         /// <value>
         ///     The world scale.
         /// </value>
-        public Vector2 WorldScale => WorldMatrix.Scale;
+        public Vector2 WorldScale
+        {
+            get
+            {
+                WorldMatrix.Decompose(out _, out _, out Vector2 scale);
+                return scale;
+            }
+        }
 
         /// <summary>
         ///     Gets the world rotation angle in radians.
@@ -245,7 +259,14 @@ namespace MonoGame.Extended
         /// <value>
         ///     The world rotation angle in radians.
         /// </value>
-        public float WorldRotation => WorldMatrix.Rotation;
+        public float WorldRotation
+        {
+            get
+            {
+                WorldMatrix.Decompose(out _, out float rotation, out _);
+                return rotation;
+            }
+        }
 
         /// <summary>
         ///     Gets or sets the local position.

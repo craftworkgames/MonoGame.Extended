@@ -27,7 +27,7 @@ public class ColorJsonConverter : JsonConverter<Color>
     public override void Write(Utf8JsonWriter writer, Color value, JsonSerializerOptions options)
     {
         ArgumentNullException.ThrowIfNull(writer);
-        var hexValue = ColorHelper.ToHex(value);
+        string hexValue = value.ToHex();
         writer.WriteStringValue(hexValue);
     }
 }

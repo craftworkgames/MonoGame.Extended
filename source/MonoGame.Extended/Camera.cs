@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace MonoGame.Extended
 {
@@ -40,33 +39,6 @@ namespace MonoGame.Extended
         /// Gets or sets the maximum allowed zoom level.
         /// </summary>
         public abstract float MaximumZoom { get; set; }
-
-        /// <summary>
-        /// Gets or sets the vertical scale multiplier applied to the camera's zoom.
-        /// </summary>
-        /// <remarks>
-        /// This property is deprecated and will be removed in the next major version.
-        /// </remarks>
-        [Obsolete("Pitch will be removed in the next major version")]
-        public abstract float Pitch { get; set; }
-
-        /// <summary>
-        /// Gets or sets the minimum allowed pitch value.
-        /// </summary>
-        /// <remarks>
-        /// This property is deprecated and will be removed in the next major version.
-        /// </remarks>
-        [Obsolete("Pitch will be removed in the next major version")]
-        public abstract float MinimumPitch { get; set; }
-
-        /// <summary>
-        /// Gets or Sets the maximum allowed pitch value.
-        /// </summary>
-        /// <remarks>
-        /// This property is deprecated and will be removed in the next major version.
-        /// </remarks>
-        [Obsolete("Pitch will be removed in the next major version")]
-        public abstract float MaximumPitch { get; set; }
 
         /// <summary>
         /// Gets the axis-aligned bounding rectangle of the camera's view in world coordinates.
@@ -110,26 +82,6 @@ namespace MonoGame.Extended
         /// </summary>
         /// <param name="deltaZoom">The amount to decrease the zoom by.</param>
         public abstract void ZoomOut(float deltaZoom);
-
-        /// <summary>
-        /// Increases the pitch value by the specified amount.
-        /// </summary>
-        /// <param name="deltaZoom">The amount to increase the pitch by.</param>
-        /// <remarks>
-        /// This method is deprecated and will be removed in the next major version.
-        /// </remarks>
-        [Obsolete("Pitch will be removed in the next major version")]
-        public abstract void PitchUp(float deltaZoom);
-
-        /// <summary>
-        /// Decreases the pitch value by the specified amount.
-        /// </summary>
-        /// <param name="deltaZoom">The amount to decrease the pitch by.</param>
-        /// <remarks>
-        /// This method is deprecated and will be removed in the next major version.
-        /// </remarks>
-        [Obsolete("Pitch will be removed in the next major version")]
-        public abstract void PitchDown(float deltaZoom);
 
         /// <summary>
         /// Positions the camera to look at the specified position.

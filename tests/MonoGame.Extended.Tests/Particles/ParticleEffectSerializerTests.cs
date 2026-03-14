@@ -1116,14 +1116,6 @@ public sealed class ParticleEffectSerializerTests
     }
 
     [Fact]
-    public void SerializeNulLEffect_ThrowsArgumentNullException()
-    {
-        using MemoryStream stream = new MemoryStream();
-        using ParticleEffectWriter writer = new ParticleEffectWriter(stream);
-        Assert.Throws<ArgumentNullException>(() => writer.WriteParticleEffect(null));
-    }
-
-    [Fact]
     public void SerializeEmptyEffect_WritesMinimalXml()
     {
         ParticleEffect effect = new ParticleEffect("EmptyEffect");

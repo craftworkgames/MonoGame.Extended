@@ -228,7 +228,7 @@ public class ExtendedContentManager : ContentManager
         }
 
         using FileStream stream = GetStream(path);
-        var bmfFile = BitmapFontFileReader.Read(stream);
+        var bmfFile = BitmapFontFileReader.Read(stream, stream.Name);
 
         var textures =
             bmfFile.Pages.Select(page => LoadTexture2D(Path.GetRelativePath(path, page)))

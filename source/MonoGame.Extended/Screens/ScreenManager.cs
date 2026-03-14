@@ -203,27 +203,6 @@ public class ScreenManager : SimpleDrawableGameComponent
         };
     }
     /// <summary>
-    /// Loads a screen, replacing any existing screens.
-    /// </summary>
-    /// <param name="screen">The screen to load</param>
-    [Obsolete("This method is provided for backward compatibility and will be removed in the next major release. For new code, use ShowScreen(Screen), CloseScreen(), or ReplaceScreen(Screen).")]
-    public void LoadScreen(Screen screen)
-    {
-        ReplaceScreen(screen);
-    }
-
-    /// <summary>
-    /// Loads a screen with a transition effect, replacing any existing screens.
-    /// </summary>
-    /// <param name="screen">The screen to load</param>
-    /// <param name="transition">The transition effect to use.</param>
-    [Obsolete("This method is provided for backward compatibility and will be removed in the next major release. For new code, use ShowScreen(Screen), CloseScreen(), or ReplaceScreen(Screen).")]
-    public void LoadScreen(Screen screen, Transition transition)
-    {
-        ReplaceScreen(screen, transition);
-    }
-
-    /// <summary>
     /// Clears all screens from the stack, disposing them and setting no active screen.
     /// </summary>
     public void ClearScreens()

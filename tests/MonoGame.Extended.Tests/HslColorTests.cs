@@ -108,7 +108,7 @@ namespace MonoGame.Extended.Tests
             public void ReturnsCorrectValue(float h, float s, float l, string expected)
             {
                 var hslColour = new HslColor(h, s, l);
-                Color rgbColor = hslColour.ToRgb();
+                Color rgbColor = HslColor.ToRgb(hslColour);
 
                 Assert.Equal(expected, rgbColor.ToString());
             }
@@ -117,7 +117,7 @@ namespace MonoGame.Extended.Tests
             public void FromRgbAndToRgbWorksCorrectly()
             {
                 HslColor blueHsl = HslColor.FromRgb(Color.Blue);
-                Color blueRgb = blueHsl.ToRgb();
+                Color blueRgb = HslColor.ToRgb(blueHsl);
 
                 Assert.Equal(Color.Blue, blueRgb);
             }

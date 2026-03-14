@@ -125,58 +125,6 @@ public struct Matrix3x2 : IEquatable<Matrix3x2>
     public static readonly Matrix3x2 Identity = new Matrix3x2(Vector2.UnitX, Vector2.UnitY, Vector2.Zero);
 
     /// <summary>
-    /// Gets the translation component of this <see cref="Matrix3x2"/>.
-    /// </summary>
-    /// <remarks>
-    /// The translation is equal to the third row vector <see cref="Z"/> composed of the <see cref="M31"/> and
-    /// <see cref="M32"/> values.
-    /// </remarks>
-    [Obsolete("Use Decompose method.  This property will be removed in 4.0")]
-    public readonly Vector2 Translation
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => Z;
-    }
-
-    /// <summary>
-    /// Gets the rotation component of this <see cref="Matrix3x2"/>.
-    /// </summary>
-    /// <remarks>
-    /// The rotation is equal to the arctangent of the <see cref="M21"/> and <see cref="M11"/>.
-    /// <code>Math.Atan2(M21, M11);</code>
-    /// </remarks>
-    [Obsolete("Use Decompose method.  This property will be removed in 4.0")]
-    public readonly float Rotation
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => (float)Math.Atan2(M21, M11);
-    }
-
-    /// <summary>
-    /// Gets the scale component of this <see cref="Matrix3x2"/>.
-    /// </summary>
-    /// <remarks>
-    /// The scale is equal to equal to the square root of the sum of the squares of matrix elements, with sign
-    /// adjustment.
-    /// </remarks>
-    [Obsolete("Use Decompose method.  This property will be removed in 4.0")]
-    public readonly Vector2 Scale
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get
-        {
-            var xSign = Math.Sign((M11 * M11) + (M21 * M21)) < 0 ? -1 : 1;
-            var ySign = Math.Sign((M11 * M12) + (M22 * M22)) < 0 ? -1 : 1;
-
-            Vector2 scale;
-            scale.X = xSign * (float)Math.Sqrt((M11 * M11) + (M21 * M21));
-            scale.Y = ySign * (float)Math.Sqrt((M11 * M12) + (M22 * M22));
-
-            return scale;
-        }
-    }
-
-    /// <summary>
     /// Creates a 3x2 matrix from the specified components.
     /// </summary>
     /// <param name="m11">The value to assign to the first element of the first row.</param>

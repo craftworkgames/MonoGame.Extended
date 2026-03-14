@@ -374,12 +374,6 @@ public sealed class BitmapFont
         return FromStream(graphicsDevice, stream, path);
     }
 
-    [Obsolete("Use the FromStream() overload that takes an explicit name.")]
-    public static BitmapFont FromStream(GraphicsDevice graphicsDevice, FileStream stream)
-    {
-        return FromStream(graphicsDevice, stream, stream.Name);
-    }
-
     public static BitmapFont FromStream(GraphicsDevice graphicsDevice, Stream stream, string name)
     {
         var bmfFile = BitmapFontFileReader.Read(stream, name);
