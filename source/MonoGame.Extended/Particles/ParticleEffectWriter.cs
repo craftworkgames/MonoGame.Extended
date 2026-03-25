@@ -206,6 +206,11 @@ public class ParticleEffectWriter : IDisposable
         {
             _writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.RandomMin), parameter.RandomMin);
             _writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.RandomMax), parameter.RandomMax);
+
+            if (parameter.Uniform)
+            {
+                _writer.WriteAttributeString(nameof(ParticleVector2Parameter.Uniform), "true");
+            }
         }
 
         _writer.WriteEndElement();

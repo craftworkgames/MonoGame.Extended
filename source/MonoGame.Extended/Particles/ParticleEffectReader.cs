@@ -363,7 +363,8 @@ public sealed class ParticleEffectReader : IDisposable
         {
             Vector2 min = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMin));
             Vector2 max = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMax));
-            return new ParticleVector2Parameter(min, max);
+            bool uniform = reader.GetAttributeBool(nameof(ParticleVector2Parameter.Uniform), false);
+            return new ParticleVector2Parameter(min, max) { Uniform = uniform };
         }
 
         return new ParticleVector2Parameter(Vector2.Zero);

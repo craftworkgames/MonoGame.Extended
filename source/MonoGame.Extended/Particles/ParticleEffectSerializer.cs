@@ -302,7 +302,8 @@ public static class ParticleEffectSerializer
         {
             Vector2 min = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMin), default);
             Vector2 max = reader.GetAttributeVector2(nameof(ParticleVector2Parameter.RandomMax), default);
-            return new ParticleVector2Parameter(min, max);
+            bool uniform = reader.GetAttributeBool(nameof(ParticleVector2Parameter.Uniform), false);
+            return new ParticleVector2Parameter(min, max) { Uniform = uniform };
         }
 
         return new ParticleVector2Parameter(Vector2.Zero);
@@ -847,6 +848,11 @@ public static class ParticleEffectSerializer
         {
             writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.RandomMin), parameter.RandomMin);
             writer.WriteAttributeVector2(nameof(ParticleVector2Parameter.RandomMax), parameter.RandomMax);
+
+            if (parameter.Uniform)
+            {
+                writer.WriteAttributeString(nameof(ParticleVector2Parameter.Uniform), "true");
+            }
         }
 
         writer.WriteEndElement();
