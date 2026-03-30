@@ -193,7 +193,7 @@ public static class ParticleEffectSerializer
         Texture2D texture = content.Load<Texture2D>(path);
         if(string.IsNullOrEmpty(texture.Name))
         {
-            texture.Name = Path.GetFileName(path);
+            texture.Name = name;
         }
 
         Rectangle bounds = reader.GetAttributeRectangle(nameof(Texture2DRegion.Bounds), default);
