@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -19,7 +18,7 @@ namespace MonoGame.Extended.ECS
             _addedEntities = new Bag<int>(_defaultBagSize);
             _removedEntities = new Bag<int>(_defaultBagSize);
             _changedEntities = new Bag<int>(_defaultBagSize);
-            _entityToComponentBits = new Bag<BitVector32>(_defaultBagSize);
+            _entityToComponentBits = new Bag<ComponentBits>(_defaultBagSize);
             _componentManager.ComponentsChanged += OnComponentsChanged;
 
             _entityBag = new Bag<Entity>(_defaultBagSize);
@@ -38,7 +37,7 @@ namespace MonoGame.Extended.ECS
         private readonly Bag<int> _addedEntities;
         private readonly Bag<int> _removedEntities;
         private readonly Bag<int> _changedEntities;
-        private readonly Bag<BitVector32> _entityToComponentBits;
+        private readonly Bag<ComponentBits> _entityToComponentBits;
 
         public event Action<int> EntityAdded;
         public event Action<int> EntityRemoved;
@@ -51,7 +50,7 @@ namespace MonoGame.Extended.ECS
             Debug.Assert(_entityBag[id] == null);
             _entityBag[id] = entity;
             _addedEntities.Add(id);
-            _entityToComponentBits[id] = new BitVector32(0);
+            _entityToComponentBits[id] = new ComponentBits();
             return entity;
         }
 
@@ -71,7 +70,7 @@ namespace MonoGame.Extended.ECS
             return _entityBag[entityId];
         }
 
-        public BitVector32 GetComponentBits(int entityId)
+        public ComponentBits GetComponentBits(int entityId)
         {
             return _entityToComponentBits[entityId];
         }
@@ -105,7 +104,7 @@ namespace MonoGame.Extended.ECS
                 var entity = _entityBag[entityId];
                 _entityBag[entityId] = null;
                 _componentManager.Destroy(entityId);
-                _entityToComponentBits[entityId] = default(BitVector32);
+                _entityToComponentBits[entityId] = default(ComponentBits);
                 ActiveCount--;
                 _entityPool.Free(entity);
             }

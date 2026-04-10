@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
 
 namespace MonoGame.Extended.ECS
 {
@@ -7,14 +6,14 @@ namespace MonoGame.Extended.ECS
     {
         internal Aspect()
         {
-            AllSet = new BitVector32();
-            ExclusionSet = new BitVector32();
-            OneSet = new BitVector32();
+            AllSet = new ComponentBits();
+            ExclusionSet = new ComponentBits();
+            OneSet = new ComponentBits();
         }
 
-        public BitVector32 AllSet;
-        public BitVector32 ExclusionSet;
-        public BitVector32 OneSet;
+        public ComponentBits AllSet;
+        public ComponentBits ExclusionSet;
+        public ComponentBits OneSet;
 
         public static AspectBuilder All(params Type[] types)
         {
@@ -31,16 +30,22 @@ namespace MonoGame.Extended.ECS
             return new AspectBuilder().Exclude(types);
         }
 
-        public bool IsInterested(BitVector32 componentBits)
+        public bool IsInterested(ComponentBits componentBits)
         {
-            if (AllSet.Data != 0 && (componentBits.Data & AllSet.Data) != AllSet.Data)
+            if (!AllSet.IsEmpty && !componentBits.HasAll(AllSet))
+            {
                 return false;
+            }
 
-            if (ExclusionSet.Data != 0 && (componentBits.Data & ExclusionSet.Data) != 0)
+            if (!ExclusionSet.IsEmpty && componentBits.HasAny(ExclusionSet))
+            {
                 return false;
+            }
 
-            if (OneSet.Data != 0 && (componentBits.Data & OneSet.Data) == 0)
+            if (!OneSet.IsEmpty && !componentBits.HasAny(OneSet))
+            {
                 return false;
+            }
 
             return true;
         }

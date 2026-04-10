@@ -1,5 +1,4 @@
-﻿using System.Collections.Specialized;
-using MonoGame.Extended.Graphics;
+﻿using MonoGame.Extended.Graphics;
 using Xunit;
 
 namespace MonoGame.Extended.ECS.Tests
@@ -11,23 +10,23 @@ namespace MonoGame.Extended.ECS.Tests
     public class AspectTests
     {
         private readonly ComponentManager _componentManager;
-        private readonly BitVector32 _entityA;
-        private readonly BitVector32 _entityB;
+        private readonly ComponentBits _entityA;
+        private readonly ComponentBits _entityB;
 
         public AspectTests()
         {
             _componentManager = new ComponentManager();
-            _entityA = new BitVector32
-            {
-                [1 << _componentManager.GetComponentTypeId(typeof(Transform2))] = true,
-                [1 << _componentManager.GetComponentTypeId(typeof(Sprite))] = true,
-                [1 << _componentManager.GetComponentTypeId(typeof(DummyComponent))] = true
-            };
-            _entityB = new BitVector32
-            {
-                [1 << _componentManager.GetComponentTypeId(typeof(Transform2))] = true,
-                [1 << _componentManager.GetComponentTypeId(typeof(Sprite))] = true,
-            };
+
+            // EntityA has Transform2, Sprite, and DummyComponent
+            _entityA = new ComponentBits();
+            _entityA[_componentManager.GetComponentTypeId(typeof(Transform2))] = true;
+            _entityA[_componentManager.GetComponentTypeId(typeof(Sprite))] = true;
+            _entityA[_componentManager.GetComponentTypeId(typeof(DummyComponent))] = true;
+
+            // EntityB has Transform2 and Sprite only
+            _entityB = new ComponentBits();
+            _entityB[_componentManager.GetComponentTypeId(typeof(Transform2))] = true;
+            _entityB[_componentManager.GetComponentTypeId(typeof(Sprite))] = true;
         }
 
         [Fact]
