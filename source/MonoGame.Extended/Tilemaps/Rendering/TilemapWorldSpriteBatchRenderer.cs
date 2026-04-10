@@ -143,15 +143,22 @@ public sealed class TilemapWorldSpriteBatchRenderer
                         }
                     }
 
-                    Rectangle sourceRect = tileset.GetTileRegion(localId);
+                    tileset.GetRenderSource(localId, out Texture2D tileTexture, out Rectangle sourceRect);
+
+                    if (tileTexture == null)
+                    {
+                        continue;
+                    }
+
                     Point tilePos = tilemap.TileToWorldPosition(entry.X, entry.Y);
                     Vector2 drawPosition = new Vector2(tilePos.X, tilePos.Y) + worldPos + tileLayer.Offset + tileset.TileOffset;
-                    drawPosition.Y -= Math.Max(0, tileset.TileHeight - tileLayer.TileHeight);
+                    // Tiled bottom-aligns all tiles: shifts oversized tiles up and undersized tiles down.
+                    drawPosition.Y += tileLayer.TileHeight - sourceRect.Height;
 
                     roomBatch.Tiles.Add(new WorldTileSprite(
-                        tileset.Texture, sourceRect, animatedData, tileset,
+                        tileTexture, sourceRect, animatedData, tileset,
                         drawPosition, entry.Tile.FlipFlags,
-                        tileset.TileWidth, tileset.TileHeight, layerColor));
+                        sourceRect.Width, sourceRect.Height, layerColor));
                 }
             }
         }
@@ -287,12 +294,26 @@ public sealed class TilemapWorldSpriteBatchRenderer
                         continue;
                     }
 
-                    Rectangle src = tile.AnimatedTileData?.Animation != null
-                        ? tile.Tileset.GetTileRegion(tile.AnimatedTileData.Animation.CurrentFrame.TileId)
-                        : tile.SourceRect;
+                    Texture2D drawTexture;
+                    Rectangle src;
 
-                    DrawTile(spriteBatch, tile.Texture, pos, src,
-                             tile.FlipFlags, tile.TileWidth, tile.TileHeight, tile.Color);
+                    if (tile.AnimatedTileData?.Animation != null)
+                    {
+                        tile.Tileset.GetRenderSource(tile.AnimatedTileData.LocalId, out drawTexture, out src);
+
+                        if (drawTexture == null)
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        drawTexture = tile.Texture;
+                        src = tile.SourceRect;
+                    }
+
+                    DrawTile(spriteBatch, drawTexture, pos, src,
+                             tile.FlipFlags, src.Width, src.Height, tile.Color);
                 }
             }
 

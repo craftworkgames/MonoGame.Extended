@@ -43,7 +43,7 @@ public sealed class TilemapTilesetWriter : ContentTypeWriter<TilemapTilesetConte
         writer.Write(tileset.DrawOffsetY);
 
         TilemapWriteHelper.WriteProperties(writer, tileset.Properties);
-        TilemapWriteHelper.WriteTileEntries(writer, tileset.Tiles);
+        TilemapWriteHelper.WriteTileEntries(writer, tileset.Tiles, references);
     }
 
     /// <inheritdoc/>

@@ -242,6 +242,15 @@ public sealed class TilemapTileEntryData
     /// Gets the collision objects defined for this tile.
     /// </summary>
     public List<TilemapObjectData> CollisionObjects { get; } = new List<TilemapObjectData>();
+
+    /// <summary>
+    /// Gets or sets the path to the image for this tile.
+    /// </summary>
+    /// <remarks>
+    /// Only populated for image collection tilesets where each tile has its own source image.
+    /// Empty for standard atlas-based tilesets.
+    /// </remarks>
+    public string ImagePath { get; set; } = string.Empty;
 }
 
 /// <summary>

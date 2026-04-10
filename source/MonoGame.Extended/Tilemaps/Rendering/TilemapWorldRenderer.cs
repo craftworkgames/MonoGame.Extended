@@ -187,24 +187,31 @@ public sealed class TilemapWorldRenderer : IDisposable
                         continue;
                     }
 
-                    TileBatchKey key = new TileBatchKey(depth, tileset.Texture, tileLayer.ParallaxFactor);
+                    int localId = entry.Tile.GlobalId - tileset.FirstGlobalId;
+                    tileset.GetRenderSource(localId, out Texture2D tileTexture, out Rectangle sourceRect);
+
+                    if (tileTexture == null)
+                    {
+                        continue;
+                    }
+
+                    TileBatchKey key = new TileBatchKey(depth, tileTexture, tileLayer.ParallaxFactor);
                     if (!groups.TryGetValue(key, out TileAccumulator group))
                     {
                         group = new TileAccumulator();
                         groups[key] = group;
                     }
 
-                    int localId = entry.Tile.GlobalId - tileset.FirstGlobalId;
-                    Rectangle sourceRect = tileset.GetTileRegion(localId);
                     Point tilePos = tilemap.TileToWorldPosition(entry.X, entry.Y);
                     Vector2 position = new Vector2(tilePos.X, tilePos.Y) + worldPos + tileLayer.Offset + tileset.TileOffset;
-                    position.Y -= Math.Max(0, tileset.TileHeight - tileLayer.TileHeight);
+                    // Tiled bottom-aligns all tiles: shifts oversized tiles up and undersized tiles down.
+                    position.Y += tileLayer.TileHeight - sourceRect.Height;
 
                     Color tileColor = new Color(1f, 1f, 1f, tileLayer.Opacity);
                     TilemapRendererShared.AddTileQuad(
                         group.Vertices, group.Indices,
-                        position, tileset.TileWidth, tileset.TileHeight,
-                        sourceRect, entry.Tile.FlipFlags, tileset.Texture, tileColor);
+                        position, sourceRect.Width, sourceRect.Height,
+                        sourceRect, entry.Tile.FlipFlags, tileTexture, tileColor);
                 }
             }
         }

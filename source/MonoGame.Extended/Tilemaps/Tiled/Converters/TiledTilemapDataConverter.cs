@@ -101,12 +101,6 @@ public static class TiledTilemapDataConverter
             {
                 TiledTilesetXml tilesetXml = tilesetRef.TilesetData ?? tilesetRef;
 
-                if (tilesetXml.Image == null || string.IsNullOrWhiteSpace(tilesetXml.Image.Source))
-                {
-                    // Image collection tilesets are not supported.
-                    continue;
-                }
-
                 entry.IsExternal = false;
                 entry.InlineData = ConvertTilesetData(tilesetXml);
             }
@@ -148,6 +142,7 @@ public static class TiledTilemapDataConverter
             entry.LocalId = tile.Id;
             entry.Class = tile.Class ?? tile.Type ?? string.Empty;
             entry.Probability = tile.Probability <= 0f ? 1.0f : tile.Probability;
+            entry.ImagePath = tile.Image?.Source ?? string.Empty;
 
             ConvertProperties(tile.Properties, entry.Properties);
 

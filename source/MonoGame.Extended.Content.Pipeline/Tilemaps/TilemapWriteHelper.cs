@@ -258,7 +258,7 @@ internal static class TilemapWriteHelper
         }
     }
 
-    internal static void WriteTileEntries(ContentWriter writer, IReadOnlyList<TilemapTileEntryData> tiles)
+    internal static void WriteTileEntries(ContentWriter writer, IReadOnlyList<TilemapTileEntryData> tiles, IExternalReferenceRepository refs)
     {
         if (tiles == null || tiles.Count == 0)
         {
@@ -270,11 +270,11 @@ internal static class TilemapWriteHelper
 
         foreach (TilemapTileEntryData tile in tiles)
         {
-            WriteTileEntry(writer, tile);
+            WriteTileEntry(writer, tile, refs);
         }
     }
 
-    private static void WriteTileEntry(ContentWriter writer, TilemapTileEntryData tile)
+    private static void WriteTileEntry(ContentWriter writer, TilemapTileEntryData tile, IExternalReferenceRepository refs)
     {
         writer.Write(tile.LocalId);
         writer.Write(tile.Class ?? string.Empty);
@@ -282,6 +282,16 @@ internal static class TilemapWriteHelper
         WriteProperties(writer, tile.Properties);
         WriteAnimation(writer, tile.Animation);
         WriteCollisionObjects(writer, tile.CollisionObjects);
+
+        bool hasTileImage = !string.IsNullOrEmpty(tile.ImagePath);
+        writer.Write(hasTileImage);
+
+        if (hasTileImage)
+        {
+            ExternalReference<Texture2DContent> tileTexRef =
+                refs.GetExternalReference<Texture2DContent>(tile.ImagePath);
+            writer.WriteExternalReference(tileTexRef);
+        }
     }
 
     private static void WriteAnimation(ContentWriter writer, TilemapAnimationData animation)
