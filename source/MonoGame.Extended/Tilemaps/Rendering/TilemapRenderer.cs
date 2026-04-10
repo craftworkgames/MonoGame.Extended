@@ -39,7 +39,7 @@ public sealed class TilemapRenderer : IDisposable
 
     private readonly Dictionary<string, LayerGroup> _layerGroups;
     private readonly Dictionary<TilemapLayer, string> _layerToGroup;
-    private readonly Dictionary<TilemapTileLayer, LayerModel> _layerModels;
+    private readonly Dictionary<TilemapTileLayer, List<LayerModel>> _layerModels;
     private readonly Dictionary<TilemapImageLayer, LayerModel> _imageLayerModels;
     private readonly Dictionary<TilemapImageLayer, RepeatImageLayerModel> _repeatImageLayerModels;
     private readonly Dictionary<TilemapObjectLayer, List<LayerModel>> _objectLayerModels;
@@ -200,7 +200,7 @@ public sealed class TilemapRenderer : IDisposable
 
         _layerGroups = new Dictionary<string, LayerGroup>();
         _layerToGroup = new Dictionary<TilemapLayer, string>();
-        _layerModels = new Dictionary<TilemapTileLayer, LayerModel>();
+        _layerModels = new Dictionary<TilemapTileLayer, List<LayerModel>>();
         _imageLayerModels = new Dictionary<TilemapImageLayer, LayerModel>();
         _repeatImageLayerModels = new Dictionary<TilemapImageLayer, RepeatImageLayerModel>();
         _objectLayerModels = new Dictionary<TilemapObjectLayer, List<LayerModel>>();
@@ -237,9 +237,12 @@ public sealed class TilemapRenderer : IDisposable
     {
         ThrowIfDisposed();
 
-        foreach (LayerModel model in _layerModels.Values)
+        foreach (List<LayerModel> models in _layerModels.Values)
         {
-            model.Dispose();
+            foreach (LayerModel model in models)
+            {
+                model.Dispose();
+            }
         }
         _layerModels.Clear();
 
@@ -889,10 +892,10 @@ public sealed class TilemapRenderer : IDisposable
         {
             if (layer is TilemapTileLayer tileLayer)
             {
-                LayerModel model = BuildLayerModel(tileLayer);
-                if (model != null)
+                List<LayerModel> models = BuildLayerModels(tileLayer);
+                if (models.Count > 0)
                 {
-                    _layerModels[tileLayer] = model;
+                    _layerModels[tileLayer] = models;
                 }
             }
             else if (layer is TilemapImageLayer imageLayer)
@@ -1013,32 +1016,18 @@ public sealed class TilemapRenderer : IDisposable
                 continue;
             }
 
-            TilemapTileData tileData = tileObj.Tile.GetTileData(_tilemap.Tilesets);
+            int localId = tileObj.Tile.GetLocalId(_tilemap.Tilesets, out TilemapTileset tileset);
 
-            Texture2D texture;
-            Rectangle sourceRect;
-
-            if (tileData?.CustomImage != null)
+            if (tileset == null)
             {
-                texture = tileData.CustomImage;
-                sourceRect = new Rectangle(0, 0, texture.Width, texture.Height);
+                continue;
             }
-            else
+
+            tileset.GetRenderSource(localId, out Texture2D texture, out Rectangle sourceRect);
+
+            if (texture == null)
             {
-                int localId = tileObj.Tile.GetLocalId(_tilemap.Tilesets, out TilemapTileset tileset);
-
-                if (tileset?.Texture == null)
-                {
-                    continue;
-                }
-
-                if (tileData?.Animation != null)
-                {
-                    localId = tileData.Animation.CurrentFrame.TileId;
-                }
-
-                texture = tileset.Texture;
-                sourceRect = tileset.GetTileRegion(localId);
+                continue;
             }
 
             if (currentTexture != null && currentTexture != texture)
@@ -1098,11 +1087,11 @@ public sealed class TilemapRenderer : IDisposable
         indices.Add(vertexOffset + 2);
     }
 
-    private LayerModel BuildLayerModel(TilemapTileLayer tileLayer)
+    private List<LayerModel> BuildLayerModels(TilemapTileLayer tileLayer)
     {
-        List<VertexPositionColorTexture> vertices = new List<VertexPositionColorTexture>();
-        List<int> indices = new List<int>();
-        Texture2D currentTexture = null;
+        List<TileBatch> batches = new List<TileBatch>();
+        Color layerColor = new Color(1f, 1f, 1f, tileLayer.Opacity);
+        Vector2 layerParallax = tileLayer.ParallaxFactor;
 
         foreach (TilemapTileEntry entry in tileLayer.GetTiles())
         {
@@ -1113,32 +1102,45 @@ public sealed class TilemapRenderer : IDisposable
                 continue;
             }
 
-            if (currentTexture == null)
+            tileset.GetRenderSource(localId, out Texture2D texture, out Rectangle sourceRect);
+
+            if (texture == null)
             {
-                currentTexture = tileset.Texture;
+                continue;
             }
 
-            Rectangle sourceRect = tileset.GetTileRegion(localId);
             Point worldPos = _tilemap.TileToWorldPosition(entry.X, entry.Y);
-            Vector2 position = new Vector2(worldPos.X, worldPos.Y) + tileLayer.Offset;
-            position += tileset.TileOffset;
-            // Tiled bottom-aligns oversized tiles: shift up by the amount the sprite exceeds the grid cell.
-            position.Y -= Math.Max(0, tileset.TileHeight - tileLayer.TileHeight);
+            Vector2 position = new Vector2(worldPos.X, worldPos.Y) + tileLayer.Offset + tileset.TileOffset;
+            // Tiled bottom-aligns all tiles: shifts oversized tiles up and undersized tiles down.
+            position.Y += tileLayer.TileHeight - sourceRect.Height;
 
-            // Bake layer opacity into vertex color so grouped and ungrouped paths use the same mechanism.
-            Color tileColor = new Color(1f, 1f, 1f, tileLayer.Opacity);
-            TilemapRendererShared.AddTileQuad(vertices, indices, position, tileset.TileWidth, tileset.TileHeight,
-                        sourceRect, entry.Tile.FlipFlags, tileset.Texture, tileColor);
+            TileBatch last = batches.Count > 0 ? batches[batches.Count - 1] : null;
+            if (last == null || last.Texture != texture || last.ParallaxFactor != layerParallax)
+            {
+                last = new TileBatch(texture, layerParallax, new List<VertexPositionColorTexture>(), new List<int>());
+                batches.Add(last);
+            }
+
+            TilemapRendererShared.AddTileQuad(last.Vertices, last.Indices, position,
+                sourceRect.Width, sourceRect.Height,
+                sourceRect, entry.Tile.FlipFlags, texture, layerColor);
         }
 
-        if (vertices.Count == 0)
+        List<LayerModel> result = new List<LayerModel>();
+
+        foreach (TileBatch batch in batches)
         {
-            return null;
+            if (batch.Vertices.Count == 0)
+            {
+                continue;
+            }
+
+            LayerModel model = TilemapRendererShared.CreateLayerModel(_graphicsDevice, batch.Vertices.ToArray(), batch.Indices.ToArray(), batch.Texture);
+            model.ParallaxFactor = layerParallax;
+            result.Add(model);
         }
 
-        LayerModel model = TilemapRendererShared.CreateLayerModel(_graphicsDevice, vertices.ToArray(), indices.ToArray(), currentTexture);
-        model.ParallaxFactor = tileLayer.ParallaxFactor;
-        return model;
+        return result;
     }
 
     private void ApplyParallaxWorld(Vector2 parallaxFactor)
@@ -1214,13 +1216,17 @@ public sealed class TilemapRenderer : IDisposable
 
         if (layer is TilemapTileLayer tileLayer)
         {
-            // Find the corresponding layer model by layer identity, not by index.
+            // Find the corresponding layer models by layer identity, not by index.
             // Index-based lookup breaks when non-tile layers are interleaved with tile layers
             // because _layerModels only contains entries for layers that produced at least one tile.
-            if (_layerModels.TryGetValue(tileLayer, out LayerModel tileModel))
+            if (_layerModels.TryGetValue(tileLayer, out List<LayerModel> tileModels))
             {
                 ApplyParallaxWorld(tileLayer.ParallaxFactor);
-                DrawLayerModel(tileModel);
+
+                foreach (LayerModel tileModel in tileModels)
+                {
+                    DrawLayerModel(tileModel);
+                }
             }
 
             return;
@@ -1298,18 +1304,17 @@ public sealed class TilemapRenderer : IDisposable
                     continue;
                 }
 
-                TilemapTileData tileData = tileset.GetTileData(localId);
-                if (tileData?.Animation != null)
+                tileset.GetRenderSource(localId, out Texture2D texture, out Rectangle sourceRect);
+
+                if (texture == null)
                 {
-                    localId = tileData.Animation.CurrentFrame.TileId;
+                    continue;
                 }
 
-                Texture2D texture = tileset.Texture;
-                Rectangle sourceRect = tileset.GetTileRegion(localId);
                 Point worldPos = _tilemap.TileToWorldPosition(entry.X, entry.Y);
                 Vector2 position = new Vector2(worldPos.X, worldPos.Y) + tileLayer.Offset + tileset.TileOffset;
-                // Tiled bottom-aligns oversized tiles: shift up by the amount the sprite exceeds the grid cell.
-                position.Y -= Math.Max(0, tileset.TileHeight - tileLayer.TileHeight);
+                // Tiled bottom-aligns all tiles: shifts oversized tiles up and undersized tiles down.
+                position.Y += tileLayer.TileHeight - sourceRect.Height;
 
                 TileBatch last = orderedBatches.Count > 0 ? orderedBatches[orderedBatches.Count - 1] : null;
                 if (last == null || last.Texture != texture || last.ParallaxFactor != layerParallax)
@@ -1319,7 +1324,7 @@ public sealed class TilemapRenderer : IDisposable
                 }
 
                 TilemapRendererShared.AddTileQuad(last.Vertices, last.Indices, position,
-                    tileset.TileWidth, tileset.TileHeight,
+                    sourceRect.Width, sourceRect.Height,
                     sourceRect, entry.Tile.FlipFlags, texture, layerColor);
             }
         }
@@ -1373,19 +1378,18 @@ public sealed class TilemapRenderer : IDisposable
                     continue;
                 }
 
-                TilemapTileData tileData = tileset.GetTileData(localId);
-                if (tileData?.Animation != null)
+                tileset.GetRenderSource(localId, out Texture2D texture, out Rectangle sourceRect);
+
+                if (texture == null)
                 {
-                    localId = tileData.Animation.CurrentFrame.TileId;
+                    continue;
                 }
 
-                Texture2D texture = tileset.Texture;
-                Rectangle sourceRect = tileset.GetTileRegion(localId);
                 Point worldPos = _tilemap.TileToWorldPosition(entry.X, entry.Y);
                 Vector2 position = new Vector2(worldPos.X, worldPos.Y) + tileLayer.Offset + tileset.TileOffset;
 
-                // Tiled bottom-aligns oversized tiles: shift up by the amount the sprite exceeds the grid cell.
-                position.Y -= Math.Max(0, tileset.TileHeight - tileLayer.TileHeight);
+                // Tiled bottom-aligns all tiles: shifts oversized tiles up and undersized tiles down.
+                position.Y += tileLayer.TileHeight - sourceRect.Height;
 
                 TileBatch last = batches.Count > 0 ? batches[batches.Count - 1] : null;
                 if (last == null || last.Texture != texture || last.ParallaxFactor != layerParallax)
@@ -1395,7 +1399,7 @@ public sealed class TilemapRenderer : IDisposable
                 }
 
                 TilemapRendererShared.AddTileQuad(last.Vertices, last.Indices, position,
-                    tileset.TileWidth, tileset.TileHeight,
+                    sourceRect.Width, sourceRect.Height,
                     sourceRect, entry.Tile.FlipFlags, texture, layerColor);
             }
         }

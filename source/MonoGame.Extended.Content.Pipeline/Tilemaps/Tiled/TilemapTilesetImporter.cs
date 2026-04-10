@@ -56,8 +56,7 @@ public sealed class TilemapTilesetImporter : ContentImporter<TilemapTilesetConte
     {
         if (tileset.Image == null)
         {
-            // Image collection tilesets define per-tile images rather than a shared atlas.
-            // Per-tile images are registered during processing once individual tile data is available.
+            RegisterCollectionTileImageDependencies(tileset, sourceDirectory, filePath, context);
             return;
         }
 
@@ -74,5 +73,28 @@ public sealed class TilemapTilesetImporter : ContentImporter<TilemapTilesetConte
 
         // Store the absolute path so ConvertTilesetData picks it up directly.
         tileset.Image.Source = absoluteImagePath;
+    }
+
+    private static void RegisterCollectionTileImageDependencies(TiledTilesetXml tileset, string sourceDirectory, string filePath, ContentImporterContext context)
+    {
+        if (tileset.Tiles == null)
+        {
+            return;
+        }
+
+        foreach (TiledTileXml tile in tileset.Tiles)
+        {
+            if (tile.Image == null || string.IsNullOrWhiteSpace(tile.Image.Source))
+            {
+                continue;
+            }
+
+            string absoluteTileImagePath = Path.GetFullPath(Path.Combine(sourceDirectory, tile.Image.Source));
+            ContentLogger.Log($"Adding dependency '{absoluteTileImagePath}'");
+            context.AddDependency(absoluteTileImagePath);
+
+            // Store the absolute path so ConvertTileEntries picks it up directly.
+            tile.Image.Source = absoluteTileImagePath;
+        }
     }
 }

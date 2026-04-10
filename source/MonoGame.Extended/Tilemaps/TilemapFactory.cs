@@ -102,16 +102,19 @@ public static class TilemapFactory
     private static TilemapTileset BuildTileset(TilemapTilesetEntry entry, GraphicsDevice graphicsDevice, string baseDirectory)
     {
         TilemapTilesetData tilesetData = entry.InlineData;
-        Texture2D texture;
+        Texture2D texture = null;
 
-        try
+        if (!string.IsNullOrEmpty(tilesetData.TexturePath))
         {
-            texture = LoadTexture(tilesetData.TexturePath, graphicsDevice, baseDirectory);
-        }
-        catch (TilemapParseException ex)
-        {
-            throw new TilemapParseException(
-                $"Failed to load texture for tileset '{tilesetData.Name}': {ex.Message}", ex);
+            try
+            {
+                texture = LoadTexture(tilesetData.TexturePath, graphicsDevice, baseDirectory);
+            }
+            catch (TilemapParseException ex)
+            {
+                throw new TilemapParseException(
+                    $"Failed to load texture for tileset '{tilesetData.Name}': {ex.Message}", ex);
+            }
         }
 
         TilemapTileset tileset = new TilemapTileset(
@@ -132,20 +135,33 @@ public static class TilemapFactory
 
         foreach (TilemapTileEntryData tileEntry in tilesetData.Tiles)
         {
-            TilemapTileData tileData = BuildTileData(tileEntry);
+            TilemapTileData tileData = BuildTileData(tileEntry, graphicsDevice, baseDirectory);
             tileset.AddTileData(tileData);
         }
 
         return tileset;
     }
 
-    private static TilemapTileData BuildTileData(TilemapTileEntryData entryData)
+    private static TilemapTileData BuildTileData(TilemapTileEntryData entryData, GraphicsDevice graphicsDevice, string baseDirectory)
     {
         TilemapTileData tileData = new TilemapTileData(entryData.LocalId);
         tileData.Class = entryData.Class ?? string.Empty;
         tileData.Probability = entryData.Probability;
 
         ApplyProperties(entryData.Properties, tileData.Properties);
+
+        if (!string.IsNullOrEmpty(entryData.ImagePath))
+        {
+            try
+            {
+                tileData.CustomImage = LoadTexture(entryData.ImagePath, graphicsDevice, baseDirectory);
+            }
+            catch (TilemapParseException ex)
+            {
+                throw new TilemapParseException(
+                    $"Failed to load image for tile {entryData.LocalId}: {ex.Message}", ex);
+            }
+        }
 
         if (entryData.Animation != null && entryData.Animation.Frames.Count > 0)
         {

@@ -125,6 +125,13 @@ namespace MonoGame.Extended.Tilemaps.Content
                 tileData.CollisionObjects.Add(obj);
             }
 
+            bool hasTileImage = reader.ReadBoolean();
+
+            if (hasTileImage)
+            {
+                tileData.CustomImage = reader.ReadExternalReference<Texture2D>();
+            }
+
             return tileData;
         }
 

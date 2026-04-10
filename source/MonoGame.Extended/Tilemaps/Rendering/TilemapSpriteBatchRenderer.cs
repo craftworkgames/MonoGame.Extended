@@ -441,32 +441,18 @@ public sealed class TilemapSpriteBatchRenderer
                 continue;
             }
 
-            TilemapTileData tileData = tileObj.Tile.GetTileData(_tilemap.Tilesets);
+            int localId = tileObj.Tile.GetLocalId(_tilemap.Tilesets, out TilemapTileset tileset);
 
-            Texture2D texture;
-            Rectangle sourceRect;
-
-            if (tileData?.CustomImage != null)
+            if (tileset == null)
             {
-                texture = tileData.CustomImage;
-                sourceRect = new Rectangle(0, 0, texture.Width, texture.Height);
+                continue;
             }
-            else
+
+            tileset.GetRenderSource(localId, out Texture2D texture, out Rectangle sourceRect);
+
+            if (texture == null)
             {
-                int localId = tileObj.Tile.GetLocalId(_tilemap.Tilesets, out TilemapTileset tileset);
-
-                if (tileset?.Texture == null)
-                {
-                    continue;
-                }
-
-                if (tileData?.Animation != null)
-                {
-                    localId = tileData.Animation.CurrentFrame.TileId;
-                }
-
-                texture = tileset.Texture;
-                sourceRect = tileset.GetTileRegion(localId);
+                continue;
             }
 
             Vector2 scale = new Vector2(
@@ -552,22 +538,21 @@ public sealed class TilemapSpriteBatchRenderer
                 continue;
             }
 
-            // If this tile has an animation, use the current frame's tile ID for the source rect.
-            TilemapTileData tileData = tileset.GetTileData(localId);
-            if (tileData?.Animation != null)
+            tileset.GetRenderSource(localId, out Texture2D tileTexture, out Rectangle sourceRect);
+
+            if (tileTexture == null)
             {
-                localId = tileData.Animation.CurrentFrame.TileId;
+                continue;
             }
 
-            Rectangle sourceRect = tileset.GetTileRegion(localId);
             Point worldPos = _tilemap.TileToWorldPosition(entry.X, entry.Y);
             Vector2 drawPosition = new Vector2(worldPos.X, worldPos.Y) + tileLayer.Offset + tileset.TileOffset;
 
-            // Tiled bottom-aligns oversized tiles: shift up by the amount the sprite exceeds the grid cell.
-            drawPosition.Y -= Math.Max(0, tileset.TileHeight - tileLayer.TileHeight);
+            // Tiled bottom-aligns all tiles: shifts oversized tiles up and undersized tiles down.
+            drawPosition.Y += tileLayer.TileHeight - sourceRect.Height;
 
-            DrawTile(spriteBatch, tileset.Texture, drawPosition, sourceRect,
-                entry.Tile.FlipFlags, tileset.TileWidth, tileset.TileHeight, layerColor);
+            DrawTile(spriteBatch, tileTexture, drawPosition, sourceRect,
+                entry.Tile.FlipFlags, sourceRect.Width, sourceRect.Height, layerColor);
         }
     }
 

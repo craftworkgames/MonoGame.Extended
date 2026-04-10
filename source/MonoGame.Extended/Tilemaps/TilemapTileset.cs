@@ -143,6 +143,40 @@ public class TilemapTileset
     public IReadOnlyList<TilemapTileData> GetAnimatedTiles() => _animatedTileData;
 
     /// <summary>
+    /// Resolves the texture and source rectangle to use when rendering a tile.
+    /// </summary>
+    /// <param name="localId">The local tile ID within this tileset.</param>
+    /// <param name="texture">The texture to draw from.</param>
+    /// <param name="sourceRect">The source rectangle within the texture.</param>
+    /// <remarks>
+    /// For image collection tilesets each tile has its own image; the resolved texture will
+    /// differ per tile and the source rectangle will cover the full image. For atlas-based
+    /// tilesets the shared atlas texture and a sub-rectangle are returned. Current animation
+    /// frame advancement is also applied automatically.
+    /// </remarks>
+    public void GetRenderSource(int localId, out Texture2D texture, out Rectangle sourceRect)
+    {
+        TilemapTileData data = GetTileData(localId);
+        int renderLocalId = localId;
+
+        if (data?.Animation != null)
+        {
+            renderLocalId = data.Animation.CurrentFrame.TileId;
+            data = GetTileData(renderLocalId);
+        }
+
+        if (data?.CustomImage != null)
+        {
+            texture = data.CustomImage;
+            sourceRect = new Rectangle(0, 0, texture.Width, texture.Height);
+            return;
+        }
+
+        texture = Texture;
+        sourceRect = GetTileRegion(renderLocalId);
+    }
+
+    /// <summary>
     /// Gets the source rectangle for a tile within the texture atlas.
     /// </summary>
     /// <param name="localId">The local tile ID within this tileset.</param>
