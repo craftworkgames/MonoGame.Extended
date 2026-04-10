@@ -38,12 +38,24 @@ public struct ParticleVector2Parameter : IEquatable<ParticleVector2Parameter>
     public Vector2 RandomMax;
 
     /// <summary>
+    /// When <see langword="true"/> and <see cref="Kind"/> is <see cref="ParticleValueKind.Random"/>, a single random
+    /// value is sampled and applied to both X and Y, preserving the aspect ratio of each particle.
+    /// </summary>
+    /// <remarks>
+    /// The X components of <see cref="RandomMin"/> and <see cref="RandomMax"/> define the uniform range.
+    /// When <see langword="false"/>, X and Y are sampled independently.
+    /// </remarks>
+    public bool Uniform;
+
+    /// <summary>
     /// Gets the current value of this parameter based on its <see cref="Kind"/>
     /// </summary>
     /// <remarks>
     /// If <see cref="Kind"/> is <see cref="ParticleValueKind.Constant"/>, returns <see cref="Constant"/>.
-    /// If <see cref="Kind"/> is <see cref="ParticleValueKind.Random"/>, returns a random value between
-    /// <see cref="RandomMin"/> and <see cref="RandomMax"/>.
+    /// If <see cref="Kind"/> is <see cref="ParticleValueKind.Random"/> and <see cref="Uniform"/> is
+    /// <see langword="false"/>, returns a random value with X and Y sampled independently from their respective ranges.
+    /// If <see cref="Kind"/> is <see cref="ParticleValueKind.Random"/> and <see cref="Uniform"/> is
+    /// <see langword="true"/>, returns a random value with a single sample applied to both X and Y using the X range.
     /// </remarks>
     public Vector2 Value
     {
@@ -53,6 +65,12 @@ public struct ParticleVector2Parameter : IEquatable<ParticleVector2Parameter>
             if (Kind == ParticleValueKind.Constant)
             {
                 return Constant;
+            }
+
+            if (Uniform)
+            {
+                float s = FastRandom.Shared.NextSingle(RandomMin.X, RandomMax.X);
+                return new Vector2(s, s);
             }
 
             Vector2 v;
