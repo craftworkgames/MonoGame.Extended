@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tests.Fixtures;
@@ -158,6 +159,15 @@ public sealed class TilemapTilesetTests
         {
             texture.Dispose();
         }
+    }
+
+    [Fact]
+    public void GetTileRegion_OnCollectionTileset_ThrowsInvalidOperationException()
+    {
+        // Regression test: collection tilesets have Columns=0, which caused a DivideByZeroException.
+        TilemapTileset tileset = new TilemapTileset("Collection", null, 128, 108, 7, 0);
+
+        Assert.Throws<InvalidOperationException>(() => tileset.GetTileRegion(0));
     }
 }
 

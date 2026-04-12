@@ -74,24 +74,15 @@ public class TilemapTilesetCollection : IReadOnlyList<TilemapTileset>
     /// <returns>The tileset containing the tile, or <see langword="null"/> if not found.</returns>
     public TilemapTileset GetTilesetForGid(int globalTileId)
     {
-        TilemapTileset result = null;
-
         for (int i = 0; i < _tilesets.Count; i++)
         {
-            TilemapTileset tileset = _tilesets[i];
-
-            if (globalTileId >= tileset.FirstGlobalId)
+            if (_tilesets[i].ContainsGlobalId(globalTileId))
             {
-                int localId = globalTileId - tileset.FirstGlobalId;
-                if (localId < tileset.TileCount)
-                {
-                    result = tileset;
-                    break;
-                }
+                return _tilesets[i];
             }
         }
 
-        return result;
+        return null;
     }
 
     /// <summary>

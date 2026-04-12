@@ -170,4 +170,29 @@ public sealed class TilemapTilesetCollectionTests
         Assert.Throws<InvalidOperationException>(() => collection.GetLocalId(5, out _));
     }
 
+    [Fact]
+    public void GetTilesetForGid_WithCollectionTilesetNonSequentialIds_ReturnsCorrectTileset()
+    {
+        // Regression test: collection tilesets assign arbitrary tile IDs that can be much larger
+        // than tileCount, so the lookup must use the tracked max local ID, not tileCount.
+        // The data for this test mirrors a real world case that was given by a user on discord.
+        TilemapTilesetCollection collection = new TilemapTilesetCollection();
+        TilemapTileset tileset = new TilemapTileset("Props", CreateDummyTexture(), 56, 63, 35, 0)
+        {
+            FirstGlobalId = 6106
+        };
+        tileset.AddTileData(new TilemapTileData(86));
+        tileset.AddTileData(new TilemapTileData(87));
+        tileset.AddTileData(new TilemapTileData(187));
+        collection.Add(tileset);
+
+        // GlobalId 6192 = firstGid(6106) + localId(86)
+        TilemapTileset foundTileset = collection.GetTilesetForGid(6192);
+        int localId = collection.GetLocalId(6192, out TilemapTileset outTileset);
+
+        Assert.Equal(tileset, foundTileset);
+        Assert.Equal(86, localId);
+        Assert.Equal(tileset, outTileset);
+    }
+
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,6 +12,7 @@ public class TilemapTileset
 {
     private readonly Dictionary<int, TilemapTileData> _tileData = new Dictionary<int, TilemapTileData>();
     private readonly List<TilemapTileData> _animatedTileData = new List<TilemapTileData>();
+    private int _maxLocalId;
 
     /// <summary>
     /// Gets the name of the tileset.
@@ -93,6 +95,10 @@ public class TilemapTileset
         Spacing = spacing;
         Margin = margin;
         Properties = new TilemapProperties();
+
+        // For atlas tilesets tile IDs are sequential 0..tileCount-1, so the max is known upfront.
+        // For collection tilesets tile IDs are arbitrary; AddTileData updates _maxLocalId as tiles are registered.
+        _maxLocalId = columns > 0 ? tileCount - 1 : -1;
     }
 
     /// <summary>
@@ -105,6 +111,11 @@ public class TilemapTileset
         if (tileData.Animation != null && tileData.Animation.Frames.Length > 0)
         {
             _animatedTileData.Add(tileData);
+        }
+
+        if (tileData.LocalId > _maxLocalId)
+        {
+            _maxLocalId = tileData.LocalId;
         }
     }
 
@@ -132,8 +143,8 @@ public class TilemapTileset
     /// </returns>
     public bool ContainsGlobalId(int globalTileId)
     {
-        return globalTileId >= FirstGlobalId &&
-               globalTileId < FirstGlobalId + TileCount;
+        int localId = globalTileId - FirstGlobalId;
+        return localId >= 0 && localId <= _maxLocalId;
     }
 
     /// <summary>
@@ -181,11 +192,19 @@ public class TilemapTileset
     /// </summary>
     /// <param name="localId">The local tile ID within this tileset.</param>
     /// <returns>The source rectangle for the tile.</returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if this tileset is an image collection tileset. Use <see cref="GetRenderSource"/> instead.
+    /// </exception>
     /// <remarks>
     /// This method accounts for spacing and margin when calculating the tile position.
     /// </remarks>
     public Rectangle GetTileRegion(int localId)
     {
+        if (Columns == 0)
+        {
+            throw new InvalidOperationException("GetTileRegion is not valid for image collection tilesets. Use GetRenderSource instead.");
+        }
+
         int column = localId % Columns;
         int row = localId / Columns;
 
