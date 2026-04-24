@@ -588,6 +588,61 @@ public class TilemapIntegrationTests
         Assert.True(AnyPixelNotBlack(pixels));
     }
 
+    [Fact]
+    // Added while investigating issue #1139:
+    // https://github.com/MonoGame-Extended/Monogame-Extended/issues/1139
+    public void SbRenderer_WideImageCollectionTile_RemainsVisibleAtLeftEdge()
+    {
+        TilemapSpriteBatchRenderer renderer = new TilemapSpriteBatchRenderer();
+        Tilemap tilemap = CreateSingleImageCollectionTileMap(
+            mapWidth: 4,
+            mapHeight: 4,
+            tileX: 0,
+            tileY: 0,
+            imageWidth: TileSize * 2,
+            imageHeight: TileSize,
+            tileColor: Color.White);
+        renderer.LoadTilemap(tilemap);
+
+        var (pixels, width) = RenderToPixels(() =>
+        {
+            OrthographicCamera camera = new OrthographicCamera(_graphicsDevice);
+            camera.Position = new Vector2(TileSize + TileSize / 2f, 0f);
+            renderer.Draw(_spriteBatch, camera);
+        });
+
+        Assert.Equal(Color.White, GetPixel(pixels, width, 8, TileCenterY));
+    }
+
+    [Fact]
+    // Added while investigating issue #1139:
+    // https://github.com/MonoGame-Extended/Monogame-Extended/issues/1139
+    public void SbRenderer_TallImageCollectionTile_RemainsVisibleAtBottomEdge()
+    {
+        TilemapSpriteBatchRenderer renderer = new TilemapSpriteBatchRenderer();
+        int viewportHeight = _graphicsDevice.Viewport.Height;
+        int tileY = (int)Math.Ceiling(viewportHeight / (float)TileSize);
+
+        Tilemap tilemap = CreateSingleImageCollectionTileMap(
+            mapWidth: 4,
+            mapHeight: tileY + 2,
+            tileX: 0,
+            tileY: tileY,
+            imageWidth: TileSize,
+            imageHeight: TileSize * 2,
+            tileColor: Color.White);
+        renderer.LoadTilemap(tilemap);
+
+        var (pixels, width) = RenderToPixels(() =>
+        {
+            OrthographicCamera camera = new OrthographicCamera(_graphicsDevice);
+            renderer.Draw(_spriteBatch, camera);
+        });
+
+        int height = pixels.Length / width;
+        Assert.Equal(Color.White, GetPixel(pixels, width, TileCenterX, height - 8));
+    }
+
     // ---- Infrastructure ----
 
     private (Color[] Pixels, int Width) RenderToPixels(Action render)
@@ -757,6 +812,46 @@ public class TilemapIntegrationTests
             tileHeight: TileSize);
 
         layer.SetTile(0, 0, new TilemapTile(tileset.FirstGlobalId, flags));
+        tilemap.Layers.Add(layer);
+        return tilemap;
+    }
+
+    private Tilemap CreateSingleImageCollectionTileMap(int mapWidth, int mapHeight, int tileX, int tileY, int imageWidth, int imageHeight, Color tileColor)
+    {
+        Tilemap tilemap = new Tilemap(
+            name: "ImageCollectionMap",
+            width: mapWidth,
+            height: mapHeight,
+            tileWidth: TileSize,
+            tileHeight: TileSize,
+            orientation: TilemapOrientation.Orthogonal);
+
+        TilemapTileset tileset = new TilemapTileset(
+            name: "ImageCollectionTileset",
+            texture: null,
+            tileWidth: imageWidth,
+            tileHeight: imageHeight,
+            tileCount: 1,
+            columns: 0,
+            spacing: 0,
+            margin: 0);
+        tileset.FirstGlobalId = 1;
+
+        TilemapTileData tileData = new TilemapTileData(localId: 0)
+        {
+            CustomImage = CreateFilledTexture(imageWidth, imageHeight, tileColor)
+        };
+        tileset.AddTileData(tileData);
+        tilemap.Tilesets.Add(tileset);
+
+        TilemapTileLayer layer = new TilemapTileLayer(
+            name: "Layer",
+            width: mapWidth,
+            height: mapHeight,
+            tileWidth: TileSize,
+            tileHeight: TileSize);
+
+        layer.SetTile(tileX, tileY, new TilemapTile(tileset.FirstGlobalId));
         tilemap.Layers.Add(layer);
         return tilemap;
     }

@@ -25,6 +25,7 @@ public sealed class TilemapSpriteBatchRenderer
 {
     private Tilemap _tilemap;
     private readonly List<TilemapTileData> _animatedTiles = new List<TilemapTileData>();
+    private TileRenderPadding _tileRenderPadding;
 
     /// <summary>
     /// Gets or sets the blend state used when drawing tiles.
@@ -74,6 +75,7 @@ public sealed class TilemapSpriteBatchRenderer
     {
         _tilemap = tilemap ?? throw new ArgumentNullException(nameof(tilemap));
         BuildAnimatedTilesList();
+        _tileRenderPadding = ComputeTileRenderPadding(tilemap);
     }
 
     /// <summary>
@@ -83,6 +85,7 @@ public sealed class TilemapSpriteBatchRenderer
     {
         _tilemap = null;
         _animatedTiles.Clear();
+        _tileRenderPadding = default;
     }
 
     /// <summary>
@@ -568,12 +571,40 @@ public sealed class TilemapSpriteBatchRenderer
         float worldLeft = parallaxOrigin.X + (camBounds.X - parallaxOrigin.X) * parallax.X - tileLayer.Offset.X;
         float worldTop = parallaxOrigin.Y + (camBounds.Y - parallaxOrigin.Y) * parallax.Y - tileLayer.Offset.Y;
 
-        int startX = Math.Max(0, (int)Math.Floor(worldLeft / tileLayer.TileWidth));
-        int startY = Math.Max(0, (int)Math.Floor(worldTop / tileLayer.TileHeight));
-        int endX = Math.Min(tileLayer.Width, (int)Math.Ceiling((worldLeft + camBounds.Width) / tileLayer.TileWidth));
-        int endY = Math.Min(tileLayer.Height, (int)Math.Ceiling((worldTop + camBounds.Height) / tileLayer.TileHeight));
+        // Oversized tiles can render outside their owning cell, especially image-collection
+        // tiles and tilesets with tile offsets. Expand the queried tile region by the maximum
+        // render overhang so partially visible tiles are not culled too early at the viewport edge.
+        // https://github.com/MonoGame-Extended/Monogame-Extended/issues/1139
+        int startX = Math.Max(0, (int)Math.Floor((worldLeft - _tileRenderPadding.Right) / tileLayer.TileWidth));
+        int startY = Math.Max(0, (int)Math.Floor((worldTop - _tileRenderPadding.Bottom) / tileLayer.TileHeight));
+        int endX = Math.Min(tileLayer.Width, (int)Math.Ceiling((worldLeft + camBounds.Width + _tileRenderPadding.Left) / tileLayer.TileWidth));
+        int endY = Math.Min(tileLayer.Height, (int)Math.Ceiling((worldTop + camBounds.Height + _tileRenderPadding.Top) / tileLayer.TileHeight));
 
         return new Rectangle(startX, startY, endX - startX, endY - startY);
+    }
+
+    // https://github.com/MonoGame-Extended/Monogame-Extended/issues/1139
+    private static TileRenderPadding ComputeTileRenderPadding(Tilemap tilemap)
+    {
+        float left = 0f;
+        float top = 0f;
+        float right = 0f;
+        float bottom = 0f;
+
+        foreach (TilemapTileset tileset in tilemap.Tilesets)
+        {
+            float tileLeft = tileset.TileOffset.X;
+            float tileTop = tileset.TileOffset.Y + tilemap.TileHeight - tileset.TileHeight;
+            float tileRight = tileset.TileOffset.X + tileset.TileWidth;
+            float tileBottom = tileset.TileOffset.Y + tilemap.TileHeight;
+
+            left = Math.Max(left, Math.Max(0f, -tileLeft));
+            top = Math.Max(top, Math.Max(0f, -tileTop));
+            right = Math.Max(right, Math.Max(0f, tileRight - tilemap.TileWidth));
+            bottom = Math.Max(bottom, Math.Max(0f, tileBottom - tilemap.TileHeight));
+        }
+
+        return new TileRenderPadding(left, top, right, bottom);
     }
 
     private static Color ComputeLayerColor(TilemapLayer layer)
@@ -675,4 +706,6 @@ public sealed class TilemapSpriteBatchRenderer
             throw new InvalidOperationException("No tilemap loaded. Call LoadTilemap first.");
         }
     }
+
+    private readonly record struct TileRenderPadding(float Left, float Top, float Right, float Bottom);
 }
