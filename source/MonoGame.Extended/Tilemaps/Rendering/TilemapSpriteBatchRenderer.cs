@@ -618,8 +618,8 @@ public sealed class TilemapSpriteBatchRenderer
         {
             // Diagonal flip encodes 90-degree rotations per Tiled's convention.
             // The four diagonal combinations map to specific rotation + flip pairs:
-            //   H=0 V=1 D=1  -> rotate 90 degrees clockwise
-            //   H=1 V=0 D=1  -> rotate 90 degrees counterclockwise
+            //   H=0 V=1 D=1  -> rotate 90 degrees counterclockwise
+            //   H=1 V=0 D=1  -> rotate 90 degrees clockwise
             //   H=1 V=1 D=1  -> rotate 90 degrees clockwise, flip horizontal
             //   H=0 V=0 D=1  -> rotate 90 degrees counterclockwise, flip horizontal
             float rotation;
@@ -627,12 +627,12 @@ public sealed class TilemapSpriteBatchRenderer
 
             if (!flipH && flipV)
             {
-                rotation = MathHelper.PiOver2;
+                rotation = -MathHelper.PiOver2;
                 effects = SpriteEffects.None;
             }
             else if (flipH && !flipV)
             {
-                rotation = -MathHelper.PiOver2;
+                rotation = MathHelper.PiOver2;
                 effects = SpriteEffects.None;
             }
             else if (flipH && flipV)

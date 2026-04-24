@@ -512,6 +512,54 @@ public class TiledTmxParserTests
         Assert.Contains("sky.png", ex.Message);
     }
 
+    // Added while investigating issue #1138:
+    // https://github.com/MonoGame-Extended/Monogame-Extended/issues/1138
+    [Fact]
+    public void Parse_TmxWithDiagonalAndVerticalFlips_PreservesFlipFlags()
+    {
+        string xml = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<map version=""1.10"" tiledversion=""1.11.0"" orientation=""orthogonal"" renderorder=""right-down""
+     width=""2"" height=""2"" tilewidth=""16"" tileheight=""16"" infinite=""0"" nextlayerid=""8"" nextobjectid=""8"">
+ <tileset firstgid=""1"" name=""TiledIcons"" tilewidth=""16"" tileheight=""16"" tilecount=""1024"" columns=""32""/>
+ <tileset firstgid=""1025"" name=""sheet"" tilewidth=""16"" tileheight=""16"" tilecount=""136"" columns=""17""/>
+ <layer id=""7"" name=""Tree"" width=""2"" height=""2"">
+  <data encoding=""csv"">
+1610613767,1610613784,
+1610613766,1610613783
+</data>
+ </layer>
+</map>";
+        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(xml);
+        using MemoryStream stream = new MemoryStream(bytes);
+
+        Tilemap tilemap = _parser.ParseFromStream(stream, _graphicsDevice);
+        TilemapTileLayer layer = Assert.IsType<TilemapTileLayer>(Assert.Single(tilemap.Layers));
+
+        TilemapTile? topLeft = layer.GetTile(0, 0);
+        TilemapTile? topRight = layer.GetTile(1, 0);
+        TilemapTile? bottomLeft = layer.GetTile(0, 1);
+        TilemapTile? bottomRight = layer.GetTile(1, 1);
+
+        Assert.NotNull(topLeft);
+        Assert.NotNull(topRight);
+        Assert.NotNull(bottomLeft);
+        Assert.NotNull(bottomRight);
+
+        TilemapTileFlipFlags expectedFlags = TilemapTileFlipFlags.FlipVertically | TilemapTileFlipFlags.FlipDiagonally;
+
+        Assert.Equal(1031, topLeft.Value.GlobalId);
+        Assert.Equal(expectedFlags, topLeft.Value.FlipFlags);
+
+        Assert.Equal(1048, topRight.Value.GlobalId);
+        Assert.Equal(expectedFlags, topRight.Value.FlipFlags);
+
+        Assert.Equal(1030, bottomLeft.Value.GlobalId);
+        Assert.Equal(expectedFlags, bottomLeft.Value.FlipFlags);
+
+        Assert.Equal(1047, bottomRight.Value.GlobalId);
+        Assert.Equal(expectedFlags, bottomRight.Value.FlipFlags);
+    }
+
     private string GetTestDataPath()
     {
         // The test data is in the MonoGame.Extended.Content.Pipeline.Tests project

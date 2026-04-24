@@ -179,8 +179,8 @@ public class TilemapIntegrationTests
 
         Color pixel = GetPixel(pixels, width, TileCenterX, TileCenterY);
         Assert.True(pixel.R > 200, $"Expected high red component, got {pixel}");
-        Assert.True(pixel.G < 10,  $"Expected near-zero green component, got {pixel}");
-        Assert.True(pixel.B < 10,  $"Expected near-zero blue component, got {pixel}");
+        Assert.True(pixel.G < 10, $"Expected near-zero green component, got {pixel}");
+        Assert.True(pixel.B < 10, $"Expected near-zero blue component, got {pixel}");
     }
 
     // ---- Camera transformations ----
@@ -305,11 +305,11 @@ public class TilemapIntegrationTests
         });
 
         Color before = GetPixel(frame0Pixels, frame0Width, TileCenterX, TileCenterY);
-        Color after  = GetPixel(frame1Pixels, frame1Width, TileCenterX, TileCenterY);
+        Color after = GetPixel(frame1Pixels, frame1Width, TileCenterX, TileCenterY);
 
         // Frame 0 = red; frame 1 = blue. Colors must be visibly different.
         Assert.True(before.R > 200, $"Expected red pixel before animation advance, got {before}");
-        Assert.True(after.B  > 200, $"Expected blue pixel after animation advance, got {after}");
+        Assert.True(after.B > 200, $"Expected blue pixel after animation advance, got {after}");
         Assert.NotEqual(before, after);
     }
 
@@ -335,10 +335,10 @@ public class TilemapIntegrationTests
         });
 
         Color before = GetPixel(frame0Pixels, frame0Width, TileCenterX, TileCenterY);
-        Color after  = GetPixel(frame1Pixels, frame1Width, TileCenterX, TileCenterY);
+        Color after = GetPixel(frame1Pixels, frame1Width, TileCenterX, TileCenterY);
 
         Assert.True(before.R > 200, $"Expected red pixel before animation advance, got {before}");
-        Assert.True(after.B  > 200, $"Expected blue pixel after animation advance, got {after}");
+        Assert.True(after.B > 200, $"Expected blue pixel after animation advance, got {after}");
         Assert.NotEqual(before, after);
     }
 
@@ -390,6 +390,60 @@ public class TilemapIntegrationTests
         Assert.True(AnyPixelNotBlack(pixels), $"Expected tile to be drawn for flip flags {flags}");
     }
 
+    [Theory]
+    // Added while investigating issue #1138:
+    // https://github.com/MonoGame-Extended/Monogame-Extended/issues/1138
+    // These assertions verify the exact orientation Tiled expects for every
+    // diagonal/horizontal/vertical flag combination, not just that some pixels draw.
+    [InlineData(TilemapTileFlipFlags.None)]
+    [InlineData(TilemapTileFlipFlags.FlipHorizontally)]
+    [InlineData(TilemapTileFlipFlags.FlipVertically)]
+    [InlineData(TilemapTileFlipFlags.FlipHorizontally | TilemapTileFlipFlags.FlipVertically)]
+    [InlineData(TilemapTileFlipFlags.FlipDiagonally)]
+    [InlineData(TilemapTileFlipFlags.FlipDiagonally | TilemapTileFlipFlags.FlipHorizontally)]
+    [InlineData(TilemapTileFlipFlags.FlipDiagonally | TilemapTileFlipFlags.FlipVertically)]
+    [InlineData(TilemapTileFlipFlags.FlipDiagonally | TilemapTileFlipFlags.FlipHorizontally | TilemapTileFlipFlags.FlipVertically)]
+    public void SbRenderer_AllFlipFlagCombinations_MatchTiledOrientation(TilemapTileFlipFlags flags)
+    {
+        TilemapSpriteBatchRenderer renderer = new TilemapSpriteBatchRenderer();
+        Tilemap tilemap = CreateSingleTileMap(CreateQuadrantTexture(), flags);
+        renderer.LoadTilemap(tilemap);
+
+        var (pixels, width) = RenderToPixels(() =>
+        {
+            renderer.Draw(_spriteBatch, new OrthographicCamera(_graphicsDevice));
+        });
+
+        AssertTileQuadrantsMatchExpected(pixels, width, flags);
+    }
+
+    [Theory]
+    // Added while investigating issue #1138:
+    // https://github.com/MonoGame-Extended/Monogame-Extended/issues/1138
+    // This mirrors the SpriteBatch test above so both renderers are held to the
+    // same Tiled orientation rules for diagonal flip combinations.
+    [InlineData(TilemapTileFlipFlags.None)]
+    [InlineData(TilemapTileFlipFlags.FlipHorizontally)]
+    [InlineData(TilemapTileFlipFlags.FlipVertically)]
+    [InlineData(TilemapTileFlipFlags.FlipHorizontally | TilemapTileFlipFlags.FlipVertically)]
+    [InlineData(TilemapTileFlipFlags.FlipDiagonally)]
+    [InlineData(TilemapTileFlipFlags.FlipDiagonally | TilemapTileFlipFlags.FlipHorizontally)]
+    [InlineData(TilemapTileFlipFlags.FlipDiagonally | TilemapTileFlipFlags.FlipVertically)]
+    [InlineData(TilemapTileFlipFlags.FlipDiagonally | TilemapTileFlipFlags.FlipHorizontally | TilemapTileFlipFlags.FlipVertically)]
+    public void GdRenderer_AllFlipFlagCombinations_MatchTiledOrientation(TilemapTileFlipFlags flags)
+    {
+        using TilemapRenderer renderer = new TilemapRenderer(_graphicsDevice);
+        Tilemap tilemap = CreateSingleTileMap(CreateQuadrantTexture(), flags);
+        renderer.LoadTilemap(tilemap);
+
+        var (pixels, width) = RenderToPixels(() =>
+        {
+            renderer.Draw(new OrthographicCamera(_graphicsDevice));
+        });
+
+        AssertTileQuadrantsMatchExpected(pixels, width, flags);
+    }
+
     // ---- Vic's scenario: many layers with groups ----
 
     [Fact]
@@ -400,7 +454,7 @@ public class TilemapIntegrationTests
         renderer.LoadTilemap(tilemap);
 
         renderer.DefineLayerGroup("Background", startIndex: 0, count: 10);
-        renderer.DefineLayerGroup("Midground",  startIndex: 10, count: 10);
+        renderer.DefineLayerGroup("Midground", startIndex: 10, count: 10);
         renderer.DefineLayerGroup("Foreground", startIndex: 20, count: 10);
 
         var (pixels, _) = RenderToPixels(() =>
@@ -480,7 +534,7 @@ public class TilemapIntegrationTests
     {
         using TilemapRenderer renderer = new TilemapRenderer(_graphicsDevice);
 
-        Tilemap firstMap  = CreateOrthogonalMap(Color.White);
+        Tilemap firstMap = CreateOrthogonalMap(Color.White);
         Tilemap secondMap = CreateManyLayerTilemap(layerCount: 3, tileColor: Color.White);
 
         renderer.LoadTilemap(firstMap);
@@ -501,7 +555,7 @@ public class TilemapIntegrationTests
     {
         TilemapSpriteBatchRenderer renderer = new TilemapSpriteBatchRenderer();
 
-        Tilemap firstMap  = CreateOrthogonalMap(Color.White);
+        Tilemap firstMap = CreateOrthogonalMap(Color.White);
         Tilemap secondMap = CreateManyLayerTilemap(layerCount: 3, tileColor: Color.White);
 
         renderer.LoadTilemap(firstMap);
@@ -563,6 +617,63 @@ public class TilemapIntegrationTests
     private static bool AllPixelsBlack(Color[] pixels) =>
         Array.TrueForAll(pixels, p => p.R == 0 && p.G == 0 && p.B == 0);
 
+    private static Color[] GetExpectedQuadrantColors(TilemapTileFlipFlags flags)
+    {
+        Color[] sourceColors =
+        {
+            Color.Red,
+            Color.Green,
+            Color.Blue,
+            Color.Yellow
+        };
+
+        Color[] destinationColors = new Color[4];
+
+        for (int sourceIndex = 0; sourceIndex < sourceColors.Length; sourceIndex++)
+        {
+            int x = sourceIndex % 2;
+            int y = sourceIndex / 2;
+
+            if ((flags & TilemapTileFlipFlags.FlipDiagonally) != 0)
+            {
+                (x, y) = (y, x);
+            }
+
+            if ((flags & TilemapTileFlipFlags.FlipHorizontally) != 0)
+            {
+                x = 1 - x;
+            }
+
+            if ((flags & TilemapTileFlipFlags.FlipVertically) != 0)
+            {
+                y = 1 - y;
+            }
+
+            destinationColors[y * 2 + x] = sourceColors[sourceIndex];
+        }
+
+        return destinationColors;
+    }
+
+    private static void AssertColorEquals(string label, Color expected, Color actual)
+    {
+        Assert.True(
+            actual == expected,
+            $"{label} expected {expected} but got {actual}");
+    }
+
+    private static void AssertTileQuadrantsMatchExpected(Color[] pixels, int width, TilemapTileFlipFlags flags)
+    {
+        Color[] expected = GetExpectedQuadrantColors(flags);
+        int quarter = TileSize / 4;
+        int threeQuarter = quarter * 3;
+
+        AssertColorEquals("top-left", expected[0], GetPixel(pixels, width, quarter, quarter));
+        AssertColorEquals("top-right", expected[1], GetPixel(pixels, width, threeQuarter, quarter));
+        AssertColorEquals("bottom-left", expected[2], GetPixel(pixels, width, quarter, threeQuarter));
+        AssertColorEquals("bottom-right", expected[3], GetPixel(pixels, width, threeQuarter, threeQuarter));
+    }
+
     // ---- Tilemap factories ----
 
     // 10x10 tilemap with one tileset and all cells filled with a single tile.
@@ -613,6 +724,11 @@ public class TilemapIntegrationTests
     // Tilemap with one tile at cell (0,0) using the specified flip flags.
     private Tilemap CreateSingleTileMap(Color tileColor, TilemapTileFlipFlags flags)
     {
+        return CreateSingleTileMap(CreateFilledTexture(TileSize, TileSize, tileColor), flags);
+    }
+
+    private Tilemap CreateSingleTileMap(Texture2D texture, TilemapTileFlipFlags flags)
+    {
         Tilemap tilemap = new Tilemap(
             name: "SingleTileMap",
             width: 5,
@@ -621,7 +737,6 @@ public class TilemapIntegrationTests
             tileHeight: TileSize,
             orientation: TilemapOrientation.Orthogonal);
 
-        Texture2D texture = CreateFilledTexture(TileSize, TileSize, tileColor);
         TilemapTileset tileset = new TilemapTileset(
             name: "Tileset",
             texture: texture,
@@ -783,6 +898,38 @@ public class TilemapIntegrationTests
         return texture;
     }
 
+    // The quadrant texture is:
+    //
+    //   top-left = red
+    //   top-right = green
+    //   bottom-left = blue
+    //   bottom-right = yellow
+    //
+    // Using four distinct corners we can sample each qudrant after rendeirng and
+    // tell whether the diagonal, horizontal, and vertical flips were applied in
+    // the same order Tiled does.
+    private Texture2D CreateQuadrantTexture()
+    {
+        Texture2D texture = new Texture2D(_graphicsDevice, TileSize, TileSize);
+        Color[] data = new Color[TileSize * TileSize];
+
+        for (int y = 0; y < TileSize; y++)
+        {
+            for (int x = 0; x < TileSize; x++)
+            {
+                Color color =
+                    x < TileCenterX
+                        ? y < TileCenterY ? Color.Red : Color.Blue
+                        : y < TileCenterY ? Color.Green : Color.Yellow;
+
+                data[y * TileSize + x] = color;
+            }
+        }
+
+        texture.SetData(data);
+        return texture;
+    }
+
     // A 64x32 texture: left 32x32 = frame0Color, right 32x32 = frame1Color.
     private Texture2D CreateTwoFrameTexture(Color frame0Color, Color frame1Color)
     {
@@ -793,7 +940,7 @@ public class TilemapIntegrationTests
         {
             for (int x = 0; x < TileSize; x++)
             {
-                data[y * (TileSize * 2) + x]          = frame0Color;  // left tile
+                data[y * (TileSize * 2) + x] = frame0Color;  // left tile
                 data[y * (TileSize * 2) + x + TileSize] = frame1Color; // right tile
             }
         }

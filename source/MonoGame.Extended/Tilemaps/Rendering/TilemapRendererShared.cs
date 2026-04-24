@@ -68,36 +68,35 @@ internal static class TilemapRendererShared
         float right = sourceRect.Right / (float)texture.Width;
         float top = sourceRect.Top / (float)texture.Height;
         float bottom = sourceRect.Bottom / (float)texture.Height;
+        Vector2[] destinationUvs = new Vector2[4];
 
-        if ((flipFlags & TilemapTileFlipFlags.FlipHorizontally) != 0)
+        for (int sourceIndex = 0; sourceIndex < 4; sourceIndex++)
         {
-            (left, right) = (right, left);
-        }
+            int x = sourceIndex % 2;
+            int y = sourceIndex / 2;
+            float u = x == 0 ? left : right;
+            float v = y == 0 ? top : bottom;
 
-        if ((flipFlags & TilemapTileFlipFlags.FlipVertically) != 0)
-        {
-            (top, bottom) = (bottom, top);
-        }
-
-        // Diagonal flip swaps U and V axes.
-        if ((flipFlags & TilemapTileFlipFlags.FlipDiagonally) != 0)
-        {
-            return new Vector2[]
+            // Tiled applies the diagonal flip first, then horizontal and vertical flips.
+            if ((flipFlags & TilemapTileFlipFlags.FlipDiagonally) != 0)
             {
-                new Vector2(left,  bottom),
-                new Vector2(left,  top),
-                new Vector2(right, bottom),
-                new Vector2(right, top)
-            };
+                (x, y) = (y, x);
+            }
+
+            if ((flipFlags & TilemapTileFlipFlags.FlipHorizontally) != 0)
+            {
+                x = 1 - x;
+            }
+
+            if ((flipFlags & TilemapTileFlipFlags.FlipVertically) != 0)
+            {
+                y = 1 - y;
+            }
+
+            destinationUvs[y * 2 + x] = new Vector2(u, v);
         }
 
-        return new Vector2[]
-        {
-            new Vector2(left,  top),
-            new Vector2(right, top),
-            new Vector2(left,  bottom),
-            new Vector2(right, bottom)
-        };
+        return destinationUvs;
     }
 
     internal static SamplerState GetWrapSamplerState(SamplerState samplerState)
