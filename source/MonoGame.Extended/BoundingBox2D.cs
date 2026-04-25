@@ -430,6 +430,83 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        /// Tests whether this bounding box intersects with another bounding box, and returns collision resolution data
+        /// when they intersect.
+        /// </summary>
+        /// <param name="other">The other bounding box to test against.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves this bounding box out of <paramref name="other"/>. When this method returns <see langword="false"/>,
+        /// contains <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the bounding boxes overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        public readonly bool TryGetCollision(BoundingBox2D other, out CollisionResult2D result)
+        {
+            return Collision2D.TryGetCollisionAabbAabb(Min, Max, other.Min, other.Max, out result);
+        }
+
+        /// <summary>
+        /// Tests whether this bounding box intersects with a circle, and returns collision resolution data when they intersect.
+        /// </summary>
+        /// <param name="circle">The circle to test against.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves this bounding box out of <paramref name="circle"/>. When this method returns <see langword="false"/>,
+        /// contains <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the bounding box and circle overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        public readonly bool TryGetCollision(BoundingCircle2D circle, out CollisionResult2D result)
+        {
+            if (!Collision2D.TryGetCollisionCircleAabb(circle.Center, circle.Radius, Min, Max, out CollisionResult2D circleResult))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            result = circleResult.Invert();
+            return true;
+        }
+
+        /// <summary>
+        /// Tests whether this bounding box intersects with an oriented bounding box, and returns collision resolution data
+        /// when they intersect.
+        /// </summary>
+        /// <param name="obb">The oriented bounding box to test against.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves this bounding box out of <paramref name="obb"/>. When this method returns <see langword="false"/>,
+        /// contains <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the boxes overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        public readonly bool TryGetCollision(OrientedBoundingBox2D obb, out CollisionResult2D result)
+        {
+            return Collision2D.TryGetCollisionAabbObb(Center, HalfExtents, obb.Center, obb.AxisX, obb.AxisY, obb.HalfExtents, out result);
+        }
+
+        /// <summary>
+        /// Tests whether this bounding box intersects with a polygon, and returns collision resolution data when they intersect.
+        /// </summary>
+        /// <param name="polygon">The polygon to test against.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves this bounding box out of <paramref name="polygon"/>. When this method returns <see langword="false"/>,
+        /// contains <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the box and polygon overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        public readonly bool TryGetCollision(BoundingPolygon2D polygon, out CollisionResult2D result)
+        {
+            return Collision2D.TryGetCollisionAabbConvexPolygon(Center, HalfExtents, polygon.Vertices, polygon.Normals, out result);
+        }
+
+        /// <summary>
         /// Deconstructs this bounding box into its component values.
         /// </summary>
         /// <param name="min">
@@ -481,6 +558,5 @@ namespace MonoGame.Extended
         }
 
         #endregion
-
     }
 }

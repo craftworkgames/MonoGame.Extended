@@ -163,6 +163,106 @@ namespace MonoGame.Extended
             return true;
         }
 
+        /// <summary>
+        /// Computes the scalar overlap between two projected intervals for separating-axis tests.
+        /// </summary>
+        /// <param name="minA">The lower bound of the first projected interval.</param>
+        /// <param name="maxA">The upper bound of the first projected interval.</param>
+        /// <param name="minB">The lower bound of the second projected interval.</param>
+        /// <param name="maxB">The upper bound of the second projected interval.</param>
+        /// <param name="overlap">
+        /// When this method returns <see langword="true"/>, contains the non-negative scalar overlap between the intervals.
+        /// When the intervals are separated, contains <c>0</c>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the intervals overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// Intervals that touch at a boundary return <see langword="true"/> with an overlap of <c>0</c>. This matches the
+        /// collision system's convention that touching shapes intersect but have zero penetration depth.
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool TryGetProjectionOverlap(float minA, float maxA, float minB, float maxB, out float overlap)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 5.2.1 "Separating-axis Test" (interval overlap reasoning for projected axes)
+            // Project-level adaptation: packages overlap depth for result-returning queries.
+            float lower = MathF.Max(minA, minB);
+            float upper = MathF.Min(maxA, maxB);
+            float depth = upper - lower;
+
+            if (depth < -Epsilon)
+            {
+                overlap = 0.0f;
+                return false;
+            }
+
+            overlap = MathF.Max(0.0f, depth);
+            return true;
+        }
+
+        /// <summary>
+        /// Updates the smallest overlap tracked during a separating-axis test.
+        /// </summary>
+        /// <param name="overlap">The candidate overlap depth for the tested axis.</param>
+        /// <param name="axis">The axis that produced <paramref name="overlap"/>.</param>
+        /// <param name="minimumOverlap">
+        /// On input, the smallest overlap found so far. On output, the updated smallest overlap.
+        /// </param>
+        /// <param name="minimumOverlapAxis">
+        /// On input, the axis that produced the current smallest overlap. On output, the updated axis.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the tracked overlap was updated; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// This helper assumes <paramref name="overlap"/> was computed from overlapping or touching intervals. Separated
+        /// intervals should be handled before this method is called.
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool UpdateMinimumOverlap(float overlap, Vector2 axis, ref float minimumOverlap, ref Vector2 minimumOverlapAxis)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 5.2.1 "Separating-axis Test" (track minimum overlap across tested axes)
+            // Project-level adaptation: stores the axis used to build CollisionResult2D.
+            if (overlap >= minimumOverlap)
+            {
+                return false;
+            }
+
+            minimumOverlap = overlap;
+            minimumOverlapAxis = axis;
+            return true;
+        }
+
+        /// <summary>
+        /// Orients a collision normal so it points from the second shape toward the first shape.
+        /// </summary>
+        /// <param name="normal">The candidate collision normal.</param>
+        /// <param name="centerA">The center of the first shape.</param>
+        /// <param name="centerB">The center of the second shape.</param>
+        /// <returns>
+        /// The candidate normal, or its inverse, oriented in the same general direction as <c>centerA - centerB</c>.
+        /// </returns>
+        /// <remarks>
+        /// This helper supports the collision result convention that static <see cref="Collision2D"/> methods return a
+        /// minimum translation vector that moves the first shape out of the second shape.
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 OrientNormal(Vector2 normal, Vector2 centerA, Vector2 centerB)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 5.2.1 "Separating-axis Test" (choose the separating axis direction for response)
+            // Project-level adaptation: orients the normal to move the first shape out of the second shape.
+            Vector2 centerDelta = centerA - centerB;
+            if (Vector2.Dot(centerDelta, normal) < 0.0f)
+            {
+                return -normal;
+            }
+
+            return normal;
+        }
+
         #endregion
 
         #region Containment
@@ -2497,6 +2597,71 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        /// Determines whether two axis-aligned bounding boxes (AABBs) intersect, and returns collision resolution data
+        /// when they intersect.
+        /// </summary>
+        /// <param name="aMin">The minimum corner of the first AABB.</param>
+        /// <param name="aMax">The maximum corner of the first AABB.</param>
+        /// <param name="bMin">The minimum corner of the second AABB.</param>
+        /// <param name="bMax">The maximum corner of the second AABB.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves the first AABB out of the second AABB. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the AABBs overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// The result is computed from the shortest axis-aligned translation that separates the intervals.
+        /// Boundary contact returns <see langword="true"/> with zero penetration depth.
+        /// </remarks>
+        public static bool TryGetCollisionAabbAabb(Vector2 aMin, Vector2 aMax, Vector2 bMin, Vector2 bMax, out CollisionResult2D result)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 4.2.1 "AABB-AABB Intersection" (2D interval-overlap test)
+            // Project-level adaptation: computes MTV from the shortest axis-aligned separating translation.
+            if (aMax.X < bMin.X || aMin.X > bMax.X || aMax.Y < bMin.Y || aMin.Y > bMax.Y)
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            float moveLeft = bMin.X - aMax.X;
+            float moveRight = bMax.X - aMin.X;
+            float moveDown = bMin.Y - aMax.Y;
+            float moveUp = bMax.Y - aMin.Y;
+
+            float penetrationDepth = MathF.Abs(moveLeft);
+            Vector2 normal = -Vector2.UnitX;
+
+            float candidateDepth = MathF.Abs(moveRight);
+            if (candidateDepth < penetrationDepth)
+            {
+                penetrationDepth = candidateDepth;
+                normal = Vector2.UnitX;
+            }
+
+            candidateDepth = MathF.Abs(moveDown);
+            if (candidateDepth < penetrationDepth)
+            {
+                penetrationDepth = candidateDepth;
+                normal = -Vector2.UnitY;
+            }
+
+            candidateDepth = MathF.Abs(moveUp);
+            if (candidateDepth < penetrationDepth)
+            {
+                penetrationDepth = candidateDepth;
+                normal = Vector2.UnitY;
+            }
+
+            Vector2 minimumTranslationVector = normal * penetrationDepth;
+            result = new CollisionResult2D(true, normal, penetrationDepth, minimumTranslationVector);
+            return true;
+        }
+
+        /// <summary>
         /// Determines whether an axis-aligned bounding box (AABB) intersects a capsule.
         /// </summary>
         /// <param name="boxMin">The minimum corner of the AABB.</param>
@@ -2561,6 +2726,160 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        /// Determines whether an axis-aligned bounding box (AABB) intersects a convex polygon, and returns collision
+        /// resolution data when they intersect.
+        /// </summary>
+        /// <param name="aabbCenter">The center of the AABB.</param>
+        /// <param name="aabbHalfExtents">The half-widths of the AABB along the world X and Y axes.</param>
+        /// <param name="pVertices">The polygon vertices in winding order. A valid polygon requires at least three vertices.</param>
+        /// <param name="pNormals">
+        /// The per-edge outward unit normals. The array length must match <paramref name="pVertices"/> so that
+        /// <c>pNormals[i]</c> corresponds to the edge from <c>pVertices[i]</c> to <c>pVertices[(i + 1) % pVertices.Length]</c>.
+        /// </param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves the AABB out of the polygon. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the shapes overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// Separating-axis test (SAT) is performed using all polygon edge normals and the two AABB axes. If the projections are
+        /// disjoint on any tested axis, the shapes do not intersect.
+        /// </remarks>
+        public static bool TryGetCollisionAabbConvexPolygon(Vector2 aabbCenter, Vector2 aabbHalfExtents, Vector2[] pVertices, Vector2[] pNormals, out CollisionResult2D result)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 5.2.1 "Separating-axis Test" (2D adaptation)
+            // Project-level adaptation: computes MTV and normal from the minimum-overlap axis.
+            if (!IsValidPolygon(pVertices, pNormals))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            float minimumOverlap = float.MaxValue;
+            Vector2 minimumOverlapAxis = Vector2.Zero;
+
+            for (int i = 0; i < pNormals.Length; i++)
+            {
+                Vector2 axis = pNormals[i];
+                ProjectAabbOntoAxis(aabbCenter, aabbHalfExtents, axis, out float minA, out float maxA);
+                ProjectOntoAxis(pVertices, axis, out float minB, out float maxB);
+                if (!TryGetProjectionOverlap(minA, maxA, minB, maxB, out float overlap))
+                {
+                    result = CollisionResult2D.None;
+                    return false;
+                }
+
+                UpdateMinimumOverlap(overlap, axis, ref minimumOverlap, ref minimumOverlapAxis);
+            }
+
+            ProjectAabbOntoAxis(aabbCenter, aabbHalfExtents, Vector2.UnitX, out float aabbMin, out float aabbMax);
+            ProjectOntoAxis(pVertices, Vector2.UnitX, out float polygonMin, out float polygonMax);
+            if (!TryGetProjectionOverlap(aabbMin, aabbMax, polygonMin, polygonMax, out float axisOverlap))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+            UpdateMinimumOverlap(axisOverlap, Vector2.UnitX, ref minimumOverlap, ref minimumOverlapAxis);
+
+            ProjectAabbOntoAxis(aabbCenter, aabbHalfExtents, Vector2.UnitY, out aabbMin, out aabbMax);
+            ProjectOntoAxis(pVertices, Vector2.UnitY, out polygonMin, out polygonMax);
+            if (!TryGetProjectionOverlap(aabbMin, aabbMax, polygonMin, polygonMax, out axisOverlap))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+            UpdateMinimumOverlap(axisOverlap, Vector2.UnitY, ref minimumOverlap, ref minimumOverlapAxis);
+
+            Vector2 polygonCenter = Vector2.Zero;
+            for (int i = 0; i < pVertices.Length; i++)
+            {
+                polygonCenter += pVertices[i];
+            }
+            polygonCenter /= pVertices.Length;
+
+            Vector2 normal = OrientNormal(minimumOverlapAxis, aabbCenter, polygonCenter);
+            Vector2 minimumTranslationVector = normal * minimumOverlap;
+            result = new CollisionResult2D(true, normal, minimumOverlap, minimumTranslationVector);
+            return true;
+        }
+
+        /// <summary>
+        /// Determines whether an axis-aligned bounding box (AABB) intersects an oriented bounding box (OBB), and returns
+        /// collision resolution data when they intersect.
+        /// </summary>
+        /// <param name="aabbCenter">The center of the AABB.</param>
+        /// <param name="aabbHalfExtents">The half-widths of the AABB along the world X and Y axes.</param>
+        /// <param name="obbCenter">The center of the OBB.</param>
+        /// <param name="obbAxisX">The OBB local X axis direction.</param>
+        /// <param name="obbAxisY">The OBB local Y axis direction.</param>
+        /// <param name="obbHalfExtents">The half-widths of the OBB along <paramref name="obbAxisX"/> and <paramref name="obbAxisY"/>.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves the AABB out of the OBB. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the boxes overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// Separating-axis test (SAT) is performed using the two AABB axes and the two OBB axes. If the projections are
+        /// disjoint on any tested axis, the boxes do not intersect.
+        /// </remarks>
+        public static bool TryGetCollisionAabbObb(Vector2 aabbCenter, Vector2 aabbHalfExtents, Vector2 obbCenter, Vector2 obbAxisX, Vector2 obbAxisY, Vector2 obbHalfExtents, out CollisionResult2D result)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 5.2.1 "Separating-axis Test" (2D adaptation)
+            // Project-level adaptation: computes MTV and normal from the minimum-overlap axis.
+            float minimumOverlap = float.MaxValue;
+            Vector2 minimumOverlapAxis = Vector2.Zero;
+
+            ProjectAabbOntoAxis(aabbCenter, aabbHalfExtents, Vector2.UnitX, out float minA, out float maxA);
+            ProjectObbOntoAxis(obbCenter, obbAxisX, obbAxisY, obbHalfExtents, Vector2.UnitX, out float minB, out float maxB);
+            if (!TryGetProjectionOverlap(minA, maxA, minB, maxB, out float overlap))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+            UpdateMinimumOverlap(overlap, Vector2.UnitX, ref minimumOverlap, ref minimumOverlapAxis);
+
+            ProjectAabbOntoAxis(aabbCenter, aabbHalfExtents, Vector2.UnitY, out minA, out maxA);
+            ProjectObbOntoAxis(obbCenter, obbAxisX, obbAxisY, obbHalfExtents, Vector2.UnitY, out minB, out maxB);
+            if (!TryGetProjectionOverlap(minA, maxA, minB, maxB, out overlap))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+            UpdateMinimumOverlap(overlap, Vector2.UnitY, ref minimumOverlap, ref minimumOverlapAxis);
+
+            ProjectAabbOntoAxis(aabbCenter, aabbHalfExtents, obbAxisX, out minA, out maxA);
+            ProjectObbOntoAxis(obbCenter, obbAxisX, obbAxisY, obbHalfExtents, obbAxisX, out minB, out maxB);
+            if (!TryGetProjectionOverlap(minA, maxA, minB, maxB, out overlap))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+            UpdateMinimumOverlap(overlap, obbAxisX, ref minimumOverlap, ref minimumOverlapAxis);
+
+            ProjectAabbOntoAxis(aabbCenter, aabbHalfExtents, obbAxisY, out minA, out maxA);
+            ProjectObbOntoAxis(obbCenter, obbAxisX, obbAxisY, obbHalfExtents, obbAxisY, out minB, out maxB);
+            if (!TryGetProjectionOverlap(minA, maxA, minB, maxB, out overlap))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+            UpdateMinimumOverlap(overlap, obbAxisY, ref minimumOverlap, ref minimumOverlapAxis);
+
+            Vector2 normal = OrientNormal(minimumOverlapAxis, aabbCenter, obbCenter);
+            Vector2 minimumTranslationVector = normal * minimumOverlap;
+            result = new CollisionResult2D(true, normal, minimumOverlap, minimumTranslationVector);
+            return true;
+        }
+
+        /// <summary>
         /// Determines whether an axis-aligned bounding box (AABB) intersects an oriented bounding box (OBB).
         /// </summary>
         /// <param name="aabbCenter">The center of the AABB.</param>
@@ -2601,6 +2920,80 @@ namespace MonoGame.Extended
             ProjectObbOntoAxis(obbCenter, obbAxisX, obbAxisY, obbHalfExtents, obbAxisY, out minB, out maxB);
             if (!IntervalsOverlap(minA, maxA, minB, maxB)) return false;
 
+            return true;
+        }
+
+        /// <summary>
+        /// Determines whether two oriented bounding boxes (OBBs) intersect, and returns collision resolution data when they
+        /// intersect.
+        /// </summary>
+        /// <param name="aCenter">The center of the first OBB.</param>
+        /// <param name="aAxisX">The first OBB local X axis direction.</param>
+        /// <param name="aAxisY">The first OBB local Y axis direction.</param>
+        /// <param name="aHalf">The half-widths of the first OBB along <paramref name="aAxisX"/> and <paramref name="aAxisY"/>.</param>
+        /// <param name="bCenter">The center of the second OBB.</param>
+        /// <param name="bAxisX">The second OBB local X axis direction.</param>
+        /// <param name="bAxisY">The second OBB local Y axis direction.</param>
+        /// <param name="bHalf">The half-widths of the second OBB along <paramref name="bAxisX"/> and <paramref name="bAxisY"/>.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves the first OBB out of the second OBB. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the boxes overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// Separating-axis test (SAT) is performed using the two axes from each box. If the projections are disjoint on any
+        /// tested axis, the boxes are disjoint.
+        /// </remarks>
+        public static bool TryGetCollisionObbObb(Vector2 aCenter, Vector2 aAxisX, Vector2 aAxisY, Vector2 aHalf, Vector2 bCenter, Vector2 bAxisX, Vector2 bAxisY, Vector2 bHalf, out CollisionResult2D result)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 5.2.1 "Separating-axis Test" (2D adaptation)
+            // Project-level adaptation: computes MTV and normal from the minimum-overlap axis.
+            float minimumOverlap = float.MaxValue;
+            Vector2 minimumOverlapAxis = Vector2.Zero;
+
+            ProjectObbOntoAxis(aCenter, aAxisX, aAxisY, aHalf, aAxisX, out float minA, out float maxA);
+            ProjectObbOntoAxis(bCenter, bAxisX, bAxisY, bHalf, aAxisX, out float minB, out float maxB);
+            if (!TryGetProjectionOverlap(minA, maxA, minB, maxB, out float overlap))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+            UpdateMinimumOverlap(overlap, aAxisX, ref minimumOverlap, ref minimumOverlapAxis);
+
+            ProjectObbOntoAxis(aCenter, aAxisX, aAxisY, aHalf, aAxisY, out minA, out maxA);
+            ProjectObbOntoAxis(bCenter, bAxisX, bAxisY, bHalf, aAxisY, out minB, out maxB);
+            if (!TryGetProjectionOverlap(minA, maxA, minB, maxB, out overlap))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+            UpdateMinimumOverlap(overlap, aAxisY, ref minimumOverlap, ref minimumOverlapAxis);
+
+            ProjectObbOntoAxis(aCenter, aAxisX, aAxisY, aHalf, bAxisX, out minA, out maxA);
+            ProjectObbOntoAxis(bCenter, bAxisX, bAxisY, bHalf, bAxisX, out minB, out maxB);
+            if (!TryGetProjectionOverlap(minA, maxA, minB, maxB, out overlap))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+            UpdateMinimumOverlap(overlap, bAxisX, ref minimumOverlap, ref minimumOverlapAxis);
+
+            ProjectObbOntoAxis(aCenter, aAxisX, aAxisY, aHalf, bAxisY, out minA, out maxA);
+            ProjectObbOntoAxis(bCenter, bAxisX, bAxisY, bHalf, bAxisY, out minB, out maxB);
+            if (!TryGetProjectionOverlap(minA, maxA, minB, maxB, out overlap))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+            UpdateMinimumOverlap(overlap, bAxisY, ref minimumOverlap, ref minimumOverlapAxis);
+
+            Vector2 normal = OrientNormal(minimumOverlapAxis, aCenter, bCenter);
+            Vector2 minimumTranslationVector = normal * minimumOverlap;
+            result = new CollisionResult2D(true, normal, minimumOverlap, minimumTranslationVector);
             return true;
         }
 
@@ -2687,6 +3080,90 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        /// Determines whether an oriented bounding box (OBB) intersects a convex polygon, and returns collision resolution
+        /// data when they intersect.
+        /// </summary>
+        /// <param name="obbCenter">The center of the OBB.</param>
+        /// <param name="obbAxisX">The OBB local X axis direction.</param>
+        /// <param name="obbAxisY">The OBB local Y axis direction.</param>
+        /// <param name="obbHalfExtents">The half-widths of the OBB along <paramref name="obbAxisX"/> and <paramref name="obbAxisY"/>.</param>
+        /// <param name="pVertices">The polygon vertices in winding order. A valid polygon requires at least three vertices.</param>
+        /// <param name="pNormals">
+        /// The per-edge outward unit normals. The array length must match <paramref name="pVertices"/> so that
+        /// <c>pNormals[i]</c> corresponds to the edge from <c>pVertices[i]</c> to <c>pVertices[(i + 1) % pVertices.Length]</c>.
+        /// </param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves the OBB out of the polygon. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the shapes overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// Separating-axis test (SAT) is performed using all polygon edge normals and the two OBB axes. If the projections are
+        /// disjoint on any tested axis, the shapes are disjoint.
+        /// </remarks>
+        public static bool TryGetCollisionObbConvexPolygon(Vector2 obbCenter, Vector2 obbAxisX, Vector2 obbAxisY, Vector2 obbHalfExtents, Vector2[] pVertices, Vector2[] pNormals, out CollisionResult2D result)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 5.2.1 "Separating-axis Test" (2D adaptation)
+            // Project-level adaptation: computes MTV and normal from the minimum-overlap axis.
+            if (!IsValidPolygon(pVertices, pNormals))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            float minimumOverlap = float.MaxValue;
+            Vector2 minimumOverlapAxis = Vector2.Zero;
+
+            for (int i = 0; i < pNormals.Length; i++)
+            {
+                Vector2 axis = pNormals[i];
+                ProjectObbOntoAxis(obbCenter, obbAxisX, obbAxisY, obbHalfExtents, axis, out float minA, out float maxA);
+                ProjectOntoAxis(pVertices, axis, out float minB, out float maxB);
+                if (!TryGetProjectionOverlap(minA, maxA, minB, maxB, out float overlap))
+                {
+                    result = CollisionResult2D.None;
+                    return false;
+                }
+
+                UpdateMinimumOverlap(overlap, axis, ref minimumOverlap, ref minimumOverlapAxis);
+            }
+
+            ProjectObbOntoAxis(obbCenter, obbAxisX, obbAxisY, obbHalfExtents, obbAxisX, out float obbMin, out float obbMax);
+            ProjectOntoAxis(pVertices, obbAxisX, out float polygonMin, out float polygonMax);
+            if (!TryGetProjectionOverlap(obbMin, obbMax, polygonMin, polygonMax, out float axisOverlap))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+            UpdateMinimumOverlap(axisOverlap, obbAxisX, ref minimumOverlap, ref minimumOverlapAxis);
+
+            ProjectObbOntoAxis(obbCenter, obbAxisX, obbAxisY, obbHalfExtents, obbAxisY, out obbMin, out obbMax);
+            ProjectOntoAxis(pVertices, obbAxisY, out polygonMin, out polygonMax);
+            if (!TryGetProjectionOverlap(obbMin, obbMax, polygonMin, polygonMax, out axisOverlap))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+            UpdateMinimumOverlap(axisOverlap, obbAxisY, ref minimumOverlap, ref minimumOverlapAxis);
+
+            Vector2 polygonCenter = Vector2.Zero;
+            for (int i = 0; i < pVertices.Length; i++)
+            {
+                polygonCenter += pVertices[i];
+            }
+            polygonCenter /= pVertices.Length;
+
+            Vector2 normal = OrientNormal(minimumOverlapAxis, obbCenter, polygonCenter);
+            Vector2 minimumTranslationVector = normal * minimumOverlap;
+            result = new CollisionResult2D(true, normal, minimumOverlap, minimumTranslationVector);
+            return true;
+        }
+
+        /// <summary>
         /// Determines whether an oriented bounding box (OBB) intersects a convex polygon.
         /// </summary>
         /// <param name="obbCenter">The center of the OBB.</param>
@@ -2764,6 +3241,58 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        /// Determines whether two circles intersect, and returns collision resolution data when they intersect.
+        /// </summary>
+        /// <param name="aCenter">The center of the first circle.</param>
+        /// <param name="aRadius">The radius of the first circle. Must be non-negative.</param>
+        /// <param name="bCenter">The center of the second circle.</param>
+        /// <param name="bRadius">The radius of the second circle. Must be non-negative.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves the first circle out of the second circle. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the circles overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// The collision normal points from the second circle center toward the first circle center. When both centers are
+        /// coincident, the normal is <see cref="Vector2.UnitX"/> because no unique geometric direction exists.
+        /// </remarks>
+        public static bool TryGetCollisionCircleCircle(Vector2 aCenter, float aRadius, Vector2 bCenter, float bRadius, out CollisionResult2D result)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 4.3.1 "Sphere-sphere Intersection" (2D reduction: circle-circle)
+            // Project-level adaptation: computes MTV and normal for CollisionResult2D.
+            if (aRadius < 0.0f || bRadius < 0.0f)
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            float radiusSum = aRadius + bRadius;
+            Vector2 centerDelta = aCenter - bCenter;
+            float distanceSquared = centerDelta.LengthSquared();
+            if (distanceSquared > radiusSum * radiusSum)
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            float distance = MathF.Sqrt(distanceSquared);
+            Vector2 normal = Vector2.UnitX;
+            if (distance > Epsilon)
+            {
+                normal = centerDelta / distance;
+            }
+
+            float penetrationDepth = MathF.Max(0.0f, radiusSum - distance);
+            Vector2 minimumTranslationVector = normal * penetrationDepth;
+            result = new CollisionResult2D(true, normal, penetrationDepth, minimumTranslationVector);
+            return true;
+        }
+
+        /// <summary>
         /// Determines whether two circles intersect.
         /// </summary>
         /// <param name="aCenter">The center of the first circle.</param>
@@ -2778,6 +3307,93 @@ namespace MonoGame.Extended
             float r = aRadius + bRadius;
             float sqDist = Vector2.DistanceSquared(aCenter, bCenter);
             return sqDist <= r * r;
+        }
+
+        /// <summary>
+        /// Determines whether a circle intersects an axis-aligned bounding box (AABB), and returns collision resolution
+        /// data when they intersect.
+        /// </summary>
+        /// <param name="cCenter">The center of the circle.</param>
+        /// <param name="cRadius">The radius of the circle. Must be non-negative.</param>
+        /// <param name="boxMin">The minimum corner of the AABB.</param>
+        /// <param name="boxMax">The maximum corner of the AABB.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves the circle out of the AABB. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the circle overlaps or touches the AABB; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// When the circle center is outside the AABB, the collision normal points from the closest point on the AABB toward
+        /// the circle center. When the circle center is inside the AABB, the normal points through the nearest face.
+        /// </remarks>
+        public static bool TryGetCollisionCircleAabb(Vector2 cCenter, float cRadius, Vector2 boxMin, Vector2 boxMax, out CollisionResult2D result)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 5.1.3 "Closest Point on AABB to Point"
+            // Related: Section 5.2.5 "Testing Sphere Against AABB" (2D reduction: circle vs AABB)
+            if (cRadius < 0.0f)
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            float closestX = MathHelper.Clamp(cCenter.X, boxMin.X, boxMax.X);
+            float closestY = MathHelper.Clamp(cCenter.Y, boxMin.Y, boxMax.Y);
+            Vector2 closestPoint = new Vector2(closestX, closestY);
+            Vector2 delta = cCenter - closestPoint;
+            float distanceSquared = delta.LengthSquared();
+
+            if (distanceSquared > cRadius * cRadius)
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            Vector2 normal;
+            float penetrationDepth;
+            if (distanceSquared > EpsilonSq)
+            {
+                float distance = MathF.Sqrt(distanceSquared);
+                normal = delta / distance;
+                penetrationDepth = MathF.Max(0.0f, cRadius - distance);
+            }
+            else
+            {
+                float distanceToLeft = cCenter.X - boxMin.X;
+                float distanceToRight = boxMax.X - cCenter.X;
+                float distanceToBottom = cCenter.Y - boxMin.Y;
+                float distanceToTop = boxMax.Y - cCenter.Y;
+
+                normal = -Vector2.UnitX;
+                float distanceToNearestFace = distanceToLeft;
+
+                if (distanceToRight < distanceToNearestFace)
+                {
+                    normal = Vector2.UnitX;
+                    distanceToNearestFace = distanceToRight;
+                }
+
+                if (distanceToBottom < distanceToNearestFace)
+                {
+                    normal = -Vector2.UnitY;
+                    distanceToNearestFace = distanceToBottom;
+                }
+
+                if (distanceToTop < distanceToNearestFace)
+                {
+                    normal = Vector2.UnitY;
+                    distanceToNearestFace = distanceToTop;
+                }
+
+                penetrationDepth = cRadius + distanceToNearestFace;
+            }
+
+            Vector2 minimumTranslationVector = normal * penetrationDepth;
+            result = new CollisionResult2D(true, normal, penetrationDepth, minimumTranslationVector);
+            return true;
         }
 
         /// <summary>
@@ -2798,6 +3414,98 @@ namespace MonoGame.Extended
         {
             float d2 = DistanceSquaredPointAabb(cCenter, boxMin, boxMax);
             return d2 <= cRadius * cRadius;
+        }
+
+        /// <summary>
+        /// Determines whether a circle intersects an oriented bounding box (OBB), and returns collision resolution data
+        /// when they intersect.
+        /// </summary>
+        /// <param name="cCenter">The center of the circle.</param>
+        /// <param name="cRadius">The radius of the circle. Must be non-negative.</param>
+        /// <param name="obbCenter">The center of the OBB.</param>
+        /// <param name="obbAxisX">The OBB local X axis direction.</param>
+        /// <param name="obbAxisY">The OBB local Y axis direction.</param>
+        /// <param name="obbHalfExtents">The half-widths of the OBB along <paramref name="obbAxisX"/> and <paramref name="obbAxisY"/>.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves the circle out of the OBB. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the circle overlaps or touches the OBB; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// When the circle center is outside the OBB, the collision normal points from the closest point on the OBB toward
+        /// the circle center. When the circle center is inside the OBB, the normal points through the nearest face.
+        /// </remarks>
+        public static bool TryGetCollisionCircleObb(Vector2 cCenter, float cRadius, Vector2 obbCenter, Vector2 obbAxisX, Vector2 obbAxisY, Vector2 obbHalfExtents, out CollisionResult2D result)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 5.1.4 "Closest Point on OBB to Point"
+            // Related: Section 5.2.6 "Testing Sphere Against OBB" (2D reduction: circle vs OBB)
+            if (cRadius < 0.0f)
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            Vector2 offset = cCenter - obbCenter;
+            float localX = Vector2.Dot(offset, obbAxisX);
+            float localY = Vector2.Dot(offset, obbAxisY);
+            float closestX = MathHelper.Clamp(localX, -obbHalfExtents.X, obbHalfExtents.X);
+            float closestY = MathHelper.Clamp(localY, -obbHalfExtents.Y, obbHalfExtents.Y);
+
+            Vector2 localDelta = new Vector2(localX - closestX, localY - closestY);
+            float distanceSquared = localDelta.LengthSquared();
+            if (distanceSquared > cRadius * cRadius)
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            Vector2 normal;
+            float penetrationDepth;
+            if (distanceSquared > EpsilonSq)
+            {
+                float distance = MathF.Sqrt(distanceSquared);
+                Vector2 localNormal = localDelta / distance;
+                normal = obbAxisX * localNormal.X + obbAxisY * localNormal.Y;
+                penetrationDepth = MathF.Max(0.0f, cRadius - distance);
+            }
+            else
+            {
+                float distanceToLeft = localX + obbHalfExtents.X;
+                float distanceToRight = obbHalfExtents.X - localX;
+                float distanceToBottom = localY + obbHalfExtents.Y;
+                float distanceToTop = obbHalfExtents.Y - localY;
+
+                normal = -obbAxisX;
+                float distanceToNearestFace = distanceToLeft;
+
+                if (distanceToRight < distanceToNearestFace)
+                {
+                    normal = obbAxisX;
+                    distanceToNearestFace = distanceToRight;
+                }
+
+                if (distanceToBottom < distanceToNearestFace)
+                {
+                    normal = -obbAxisY;
+                    distanceToNearestFace = distanceToBottom;
+                }
+
+                if (distanceToTop < distanceToNearestFace)
+                {
+                    normal = obbAxisY;
+                    distanceToNearestFace = distanceToTop;
+                }
+
+                penetrationDepth = cRadius + distanceToNearestFace;
+            }
+
+            Vector2 minimumTranslationVector = normal * penetrationDepth;
+            result = new CollisionResult2D(true, normal, penetrationDepth, minimumTranslationVector);
+            return true;
         }
 
         /// <summary>
@@ -2849,6 +3557,75 @@ namespace MonoGame.Extended
         }
 
         /// <summary>
+        /// Determines whether a circle intersects a capsule, and returns collision resolution data when they intersect.
+        /// </summary>
+        /// <param name="circleCenter">The center of the circle.</param>
+        /// <param name="circleRadius">The radius of the circle. Must be non-negative.</param>
+        /// <param name="capsuleA">The first endpoint of the capsule line segment.</param>
+        /// <param name="capsuleB">The second endpoint of the capsule line segment.</param>
+        /// <param name="capsuleRadius">The capsule radius. Must be non-negative.</param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves the circle out of the capsule. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the circle overlaps or touches the capsule; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// The capsule is treated as the Minkowski sum of its line segment and a circle with radius
+        /// <paramref name="capsuleRadius"/>. When the circle center lies exactly on the capsule segment, the normal is
+        /// perpendicular to the segment. Degenerate capsule segments use <see cref="Vector2.UnitX"/>.
+        /// </remarks>
+        public static bool TryGetCollisionCircleCapsule(Vector2 circleCenter, float circleRadius, Vector2 capsuleA, Vector2 capsuleB, float capsuleRadius, out CollisionResult2D result)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 4.5.1 "Sphere-swept Volume Intersection" (sphere-swept line / capsule framing)
+            // Related: Section 5.1.2 "Closest Point on Line Segment to Point" (distance to capsule medial segment)
+            if (circleRadius < 0.0f || capsuleRadius < 0.0f)
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            float radiusSum = circleRadius + capsuleRadius;
+            float distanceSquared = DistanceSquaredPointSegment(circleCenter, capsuleA, capsuleB, out _, out Vector2 closestPoint);
+            if (distanceSquared > radiusSum * radiusSum)
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            Vector2 normal;
+            float distance;
+            if (distanceSquared > EpsilonSq)
+            {
+                distance = MathF.Sqrt(distanceSquared);
+                normal = (circleCenter - closestPoint) / distance;
+            }
+            else
+            {
+                distance = 0.0f;
+                Vector2 segment = capsuleB - capsuleA;
+                float segmentLengthSquared = segment.LengthSquared();
+                if (segmentLengthSquared > EpsilonSq)
+                {
+                    float inverseLength = 1.0f / MathF.Sqrt(segmentLengthSquared);
+                    normal = new Vector2(-segment.Y * inverseLength, segment.X * inverseLength);
+                }
+                else
+                {
+                    normal = Vector2.UnitX;
+                }
+            }
+
+            float penetrationDepth = MathF.Max(0.0f, radiusSum - distance);
+            Vector2 minimumTranslationVector = normal * penetrationDepth;
+            result = new CollisionResult2D(true, normal, penetrationDepth, minimumTranslationVector);
+            return true;
+        }
+
+        /// <summary>
         /// Determines whether a circle intersects a capsule.
         /// </summary>
         /// <param name="circleCenter">The center of the circle.</param>
@@ -2893,6 +3670,93 @@ namespace MonoGame.Extended
 
             float d2 = DistanceSquaredSegmentSegment(a0, a1, b0, b1, out _, out _, out _, out _);
             return d2 <= rr;
+        }
+
+        /// <summary>
+        /// Determines whether two convex polygons intersect, and returns collision resolution data when they intersect.
+        /// </summary>
+        /// <param name="aVertices">The first polygon vertices in winding order. A valid polygon requires at least three vertices.</param>
+        /// <param name="aNormals">
+        /// The per-edge outward unit normals for the first polygon. The array length must match <paramref name="aVertices"/> so that
+        /// <c>aNormals[i]</c> corresponds to the edge from <c>aVertices[i]</c> to <c>aVertices[(i + 1) % aVertices.Length]</c>.
+        /// </param>
+        /// <param name="bVertices">The second polygon vertices in winding order. A valid polygon requires at least three vertices.</param>
+        /// <param name="bNormals">
+        /// The per-edge outward unit normals for the second polygon. The array length must match <paramref name="bVertices"/> so that
+        /// <c>bNormals[i]</c> corresponds to the edge from <c>bVertices[i]</c> to <c>bVertices[(i + 1) % bVertices.Length]</c>.
+        /// </param>
+        /// <param name="result">
+        /// When this method returns <see langword="true"/>, contains the collision result whose minimum translation vector
+        /// moves the first polygon out of the second polygon. When this method returns <see langword="false"/>, contains
+        /// <see cref="CollisionResult2D.None"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the polygons overlap or touch; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// Separating-axis test (SAT) is performed using the edge normals of both polygons. If the projections are disjoint on
+        /// any tested axis, the polygons are disjoint.
+        /// </remarks>
+        public static bool TryGetCollisionConvexPolygonConvexPolygon(Vector2[] aVertices, Vector2[] aNormals, Vector2[] bVertices, Vector2[] bNormals, out CollisionResult2D result)
+        {
+            // C. Ericson, Real-Time Collision Detection, Morgan Kaufmann, 2005
+            // Section 5.2.1 "Separating-axis Test" (2D adaptation)
+            // Project-level adaptation: computes MTV and normal from the minimum-overlap axis.
+            if (!IsValidPolygon(aVertices, aNormals) || !IsValidPolygon(bVertices, bNormals))
+            {
+                result = CollisionResult2D.None;
+                return false;
+            }
+
+            float minimumOverlap = float.MaxValue;
+            Vector2 minimumOverlapAxis = Vector2.Zero;
+
+            for (int i = 0; i < aNormals.Length; i++)
+            {
+                Vector2 axis = aNormals[i];
+                ProjectOntoAxis(aVertices, axis, out float minA, out float maxA);
+                ProjectOntoAxis(bVertices, axis, out float minB, out float maxB);
+                if (!TryGetProjectionOverlap(minA, maxA, minB, maxB, out float overlap))
+                {
+                    result = CollisionResult2D.None;
+                    return false;
+                }
+
+                UpdateMinimumOverlap(overlap, axis, ref minimumOverlap, ref minimumOverlapAxis);
+            }
+
+            for (int i = 0; i < bNormals.Length; i++)
+            {
+                Vector2 axis = bNormals[i];
+                ProjectOntoAxis(aVertices, axis, out float minA, out float maxA);
+                ProjectOntoAxis(bVertices, axis, out float minB, out float maxB);
+                if (!TryGetProjectionOverlap(minA, maxA, minB, maxB, out float overlap))
+                {
+                    result = CollisionResult2D.None;
+                    return false;
+                }
+
+                UpdateMinimumOverlap(overlap, axis, ref minimumOverlap, ref minimumOverlapAxis);
+            }
+
+            Vector2 centerA = Vector2.Zero;
+            for (int i = 0; i < aVertices.Length; i++)
+            {
+                centerA += aVertices[i];
+            }
+            centerA /= aVertices.Length;
+
+            Vector2 centerB = Vector2.Zero;
+            for (int i = 0; i < bVertices.Length; i++)
+            {
+                centerB += bVertices[i];
+            }
+            centerB /= bVertices.Length;
+
+            Vector2 normal = OrientNormal(minimumOverlapAxis, centerA, centerB);
+            Vector2 minimumTranslationVector = normal * minimumOverlap;
+            result = new CollisionResult2D(true, normal, minimumOverlap, minimumTranslationVector);
+            return true;
         }
 
         /// <summary>
